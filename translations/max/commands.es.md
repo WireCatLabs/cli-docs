@@ -5171,6 +5171,7 @@ max bot uploads put <file> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--type <type>` |subirlo como este tipo en lugar de adivinar por extensión. Uno de: `image`, `video`, `audio`, `file`.|
+| `--allow-any-file` | subir un archivo incluso desde carpetas de credenciales o de aplicaciones WireCat. |
 
 ### `max bot api`
 

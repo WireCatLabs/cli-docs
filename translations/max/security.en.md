@@ -87,7 +87,7 @@ Account changes — contacts, profile, folders and sessions — also respect rea
 
 The recipient list is optional: before anything is added, any chat is allowed. An enabled but empty list allows no destinations. When enabled, `chats create <название> <люди…>` and `chats members add` accept only people whose direct chat is listed. New group members cannot see older messages unless `--history` is supplied. Scheduled messages count in their send hour. Simultaneous commands cannot exceed the limit: capacity is held from checking until MAX responds. Clearing departed-chat data does not touch the send journal.
 
-⚠ **What these checks cannot prevent.** The checks are inside `max` itself: an agent with shell access can remove them. Which external boundary to set is described on the [shared page](https://wirecat.dev/ru/docs/security). For `max`: `MAX_PROFILE_LOCK` fixes the profile, not `MAX_PROFILE`; `--file` rejects known credential files and folders, `max` directories and the message store unless `--allow-any-file` is set. Ordinary hidden working folders are allowed; MCP offers no bypass.
+⚠ **What these checks cannot prevent.** The checks are inside `max` itself: an agent with shell access can remove them. Which external boundary to set is described on the [shared page](https://wirecat.dev/ru/docs/security). For `max`: `MAX_PROFILE_LOCK` fixes the profile, not `MAX_PROFILE`; `--file` and `bot uploads put` reject known credential files and folders, `max` directories and the message store unless `--allow-any-file` is set. Ordinary hidden working folders are allowed; MCP offers no bypass.
 
 ## Actions the tool never takes on its own
 
@@ -123,7 +123,7 @@ Tokens are not passed as arguments, but message text is, and it is visible in `p
 
 `max personal messages download` uses HTTP(S) and ordinary redirects without checking DNS addresses. The command does not prohibit VPNs, proxies or local addresses. Files are limited to 4 GiB; voice audio for transcription to 32 MiB.
 
-`max sales bot` requests identify themselves as `max-cli/<версия>`, since MAX already recognizes the bot by token. `platform-api2.max.ru` uses a Russian Ministry of Digital Development root certificate absent from Node. `max` adds it only to its own Bot API requests, without changing the system.
+`max sales bot` requests identify themselves as `max-cli/<версия>`, since MAX already recognizes the bot by token. `platform-api2.max.ru` uses a Russian Ministry of Digital Development root certificate absent from Node. In Node, `max` adds it to the trusted certificates for the whole process: after the first bot request, every TLS connection in that `max` invocation trusts it, not only Bot API requests. In Bun it is added only for Bot API requests. The system is unchanged.
 
 Personal-account traffic contains no tool name or custom user-agent; the user-agent and device description come from the MAX web client. Frames use its address, binary format and compression. `max personal serve` mimics hidden-tab telemetry: one “chat list shown” event 20 seconds after login, containing only account ID and time, never messages or chat titles. One-off commands send no telemetry. After login, `max personal serve` requests the same read-only data as a tab: folders, banners, call history, stickers and reactions. Responses are neither displayed nor saved. One-off commands do not request these. Differences remain: the web tab also requests contacts, stories and push subscriptions, while `max` does not. MAX can therefore distinguish `max` from its web client.
 

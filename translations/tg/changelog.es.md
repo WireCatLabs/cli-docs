@@ -4,6 +4,27 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.56.0 — 14.10.2026
+
+### Cambios que pueden afectar a los scripts
+
+- **`store export` guarda archivos con la misma estructura que imprime** (cli-core 0.276.0): los archivos
+  `--output` y las carpetas `--to` contienen las mismas entradas (`chat_id`, `sender_name`, `ref`…). Una carpeta
+  de una versión anterior se rechaza con "export into a new folder".
+
+### Novedades
+
+- **`config set` y `config unset` aceptan nombres de ajustes en camelCase** (cli-core 0.279.0): `tg <profile> config set senderColors false`
+  se guarda como `sender_colors`, igual que la escritura snake_case.
+- **Sincronizaciones reanudables** (cli-core 0.276.0): una sincronización interrumpida conserva lo guardado
+  y la siguiente ejecución continúa desde ahí.
+
+### Correcciones
+
+- **Un envío rechazado por Telegram por flooding indica que se puede repetir**: cuando `messages send`, `messages forward` o
+  `polls create` recibe FLOOD_WAIT antes de que Telegram acepte el mensaje, `retry.safe` es `true` e incluye
+  `after_ms`. Si Telegram ya lo aceptó y el límite llega al consultar el resultado, `retry.safe` sigue siendo `false`.
+
 ## 0.55.0 — 14.10.2026
 
 ### Novedades

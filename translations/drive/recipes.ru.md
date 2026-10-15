@@ -206,14 +206,14 @@ drive personal session start --client-file /path/to/desktop-client.json --activi
 drive personal documents history DOC_ID --activity --json
 ```
 
-Для продолжения передайте полученный токен в `--cursor` той же команды. Видимые Google
+Для продолжения передайте `page.next_cursor` в `--cursor` той же команды. Видимые Google
 версии/события могут быть неполными; это не посимвольная история правок. Комментарии доступны
 для просмотра, но не входят в поиск документов.
 
 ## Передать Markdown другому инструменту
 
 ```sh
-drive personal documents export DOC_ID --out ./decision.md
+drive personal documents export DOC_ID --output ./decision.md
 ```
 
 Откройте файл или передайте путь инструменту на том же компьютере. Экспорт читает локальный
@@ -234,7 +234,7 @@ drive personal files move NEW_DOC_ID --parent FOLDER_ID --old-parent OLD_PARENT_
 drive personal sync --json
 ```
 
-Замените `NEW_DOC_ID` значением `documentId` ответа создания. Docs создаёт его в корне My Drive.
+Замените `NEW_DOC_ID` значением `document_id` ответа создания. Docs создаёт его в корне My Drive.
 Прочитайте `parents` через `files get` и замените `OLD_PARENT_ID` этим ID; `--old-parent` удаляет прежнего
 родителя при добавлении нового. У файла Google один родитель; см.
 [официальную инструкцию перемещения](https://developers.google.com/workspace/drive/api/guides/folder#move-files-between-folders).

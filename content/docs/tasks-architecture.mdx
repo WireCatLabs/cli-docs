@@ -1,20 +1,21 @@
 ---
 title: How tasks work
-description: "The technical side of tasks: one table, keys, relations, claiming and the planned duplicate check."
+description: "The technical side of tasks: one table, keys, relations, claiming and the duplicate check."
 ---
 
-Understand how a task is stored, how it gets its key and how the tool will find tasks that may be
+Understand how a task is stored, how it gets its key and how the tool finds tasks that may be
 the same. This helps developers and agent authors who read the local store or build on tasks. The data
-comes first, then the planned parts: keys per type, claiming and the duplicate check with a worked
-example. For everyday use, start with [Tasks](./tasks.md).
+comes first, then keys per type, claiming and the duplicate check with a worked example. For everyday
+use, start with [Tasks](./tasks.md).
 
 The design comes from the approved tasks plan in cli-core
-([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). Each section says
-whether it describes what exists now or what is **planned**.
+([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). All of it is built
+in cli-core except the parts marked **not built yet**. `tg`, `max` and `memo` get it when they move to
+the newest cli-core.
 
 ## The data
 
-**Now.** One table, `tasks`, holds every task in the local store. The full column list is in the
+One table, `tasks`, holds every task in the local store. The full column list is in the
 [data model](./data-model.mdx#tasks-1).
 
 | What | How it is kept |
@@ -35,28 +36,28 @@ or `created-from`. A relation between two tasks is also a `links` row, with the 
 you apply them. Before a `blocked-by` or `follow-up-of` row is written, a recursive query checks
 that it does not close a loop.
 
-**Planned.** New fields: `category`, `claimed_by`, `claimed_until`. A task becomes one more taggable
-type in the existing `taggings` table, so the `tags` commands and filters work on tasks. New relation kinds:
-`duplicate-of` and `discovered-from`. Two new full-text tables, `task_words` and `task_stems`,
-built like the ones for notes. Every category change becomes a `task_events` row of kind
-`category`.
+A task also has a `category` and a claim (`claimed_by`, `claimed_until`). A task is one more
+taggable type in the `taggings` table, so the `tags` commands and filters work on tasks. Two more
+relation kinds exist: `duplicate-of`, which joins two tasks found in messages of one account, and
+`discovered-from`. Two full-text tables, `task_words` and `task_stems`, hold each task's title and
+description, built like the ones for notes. Every category change is a `task_events` row of kind
+`category`. The table `task_pairs` keeps each pair of tasks that may be one job and what was decided
+about it.
 
 ## Ids and keys
 
-**Now.** A project task has a key made of the project key and a number: `HRB-12`. The number comes
+A project task has a key made of the project key and a number: `HRB-12`. The number comes
 from a counter on the project row, taken in the same write as the insert:
 
 ```sql
 UPDATE projects SET tasks_count = tasks_count + 1 WHERE id = ? RETURNING key, tasks_count
 ```
 
-A task found in a message has an internal id (a UUID) and a key from its account's inbox project:
-`IN`, 8 hexadecimal characters and a number, such as `IN1A2B3C4D-17`.
-`tasks list` shows the start of the id; `tasks show` and `tasks agenda` show the key.
-
-**Planned.** A new task found in a message gets a readable key per type in place of the inbox key:
-`Q-15` question, `REQ-22` request, `M-7` mention, `PR-4` promise. Older tasks keep their `IN…` key. Each type has its own counter row, taken in the same write as the
-insert, as for projects. The UUID and both kinds of key resolve as `task:<…>`. The category is a field, not
+A task found in a message has an internal id (a UUID) and a readable key per type: `Q-15` question,
+`REQ-22` request, `M-7` mention, `PR-4` promise. Each type has its own counter row, taken in the same
+write as the insert, as for projects. Tasks made before keep their key from the account's inbox
+project: `IN`, 8 hexadecimal characters and a number, such as `IN1A2B3C4D-17`. The UUID and both
+kinds of key resolve as `task:<…>`. `tasks show` and `tasks agenda` show the key. The category is a field, not
 part of the key, so correcting a category never breaks a key quoted in a chat or a note.
 
 **Why not hash ids.** [beads](https://github.com/gastownhall/beads) uses hash ids such as `bd-a3f8`
@@ -65,31 +66,70 @@ Hashes solve many writers on many copies that merge later. Here there is one sto
 and one writer at a time, so a counter gives short keys a person can read. If stores ever sync
 between devices, keys get a device prefix; that is a later decision.
 
-## Claiming (planned)
+## Claiming
 
 Two agents, or an agent and you, must not work on one task at the same time. `tasks claim` runs one
 statement inside `BEGIN IMMEDIATE`:
 
 ```sql
-UPDATE tasks SET claimed_by = ?, claimed_until = ?
-WHERE id = ? AND status = 'open' AND (claimed_by IS NULL OR claimed_until < ?)
+UPDATE tasks SET claimed_by = ?, claimed_until = ?, updated_at = ?
+WHERE id = ? AND status = 'open' AND (claimed_by IS NULL OR claimed_until < ? OR claimed_by = ?)
 RETURNING id
 ```
 
-No row back means that someone else holds the task; the error names who and until when. SQLite
+No row back means that someone else holds the task; the error names who and until when. The holder
+can claim again to extend its own claim. SQLite
 lets one writer in at a time across processes, so the claim is atomic between `tg`, `max`, `memo`
 and agents on the same computer. The claim is a **lease**: it ends by itself (30 minutes by default),
-so a crashed agent never holds a task forever. `tasks release` gives it back early; closing a task
-releases it. `tasks agenda` hides tasks claimed by someone else unless `--claimed` asks for them.
+so a crashed agent never holds a task forever. `tasks release` gives it back early, and the owner
+may release any claim; closing a task releases it. `tasks agenda` shows each task's holder and hides
+tasks claimed by someone else unless `--claimed` asks for them. MCP has `tasks_claim` and
+`tasks_release`.
 
-## The duplicate check (planned)
+**The holder** is one agent session, so two sessions of one agent do not share a claim. The first
+that is set wins: `--holder <name>`, the `WIRECAT_HOLDER` variable, `claude-code:<session id>` from
+`CLAUDE_CODE_SESSION_ID` (Claude Code sets it in every process it starts), the agent's name from
+`AI_AGENT`, then `owner`. An agent with no environment, such as a web agent, passes its chat id with
+`--holder`.
 
-The check runs on every new task and on every new message linked to a task. It runs in cli-core, on
-SQLite, with no embeddings and no call to an AI provider.
+## Categories
+
+The category list is one list per store, kept in the store file, not in a profile, because the
+rules run in `tg`, `max`, `memo` and `messages sync` and must agree. The owner edits it:
+
+| Command | What it does |
+| --- | --- |
+| `config set task_categories.<name> "<meaning> \| <words>"` | adds or replaces a category; a word may name its language (`es:vuelo`), otherwise Cyrillic reads as Russian and the rest as English |
+| `config unset task_categories.<name>` | removes a category; `other` cannot be removed |
+| `config unset task_categories` | goes back to the default list |
+| `config show` | lists the categories with the other settings |
+
+The default list is `money`, `documents`, `meeting`, `delivery`, `access`, `personal` and `other`.
+`tasks add` needs a category from the list (MCP `tasks_add` needs `category`), and an unknown name is
+refused with the list. A rule matches the source message's stems against each category's words: the
+most hits wins, and no hit is `other`. `tasks categories` (MCP `tasks_categories`) prints the list
+with meanings and words. `tasks agenda --category <name> --tag <name>` filters the agenda. Changing the
+list does not change the category of existing tasks.
+
+## Rules on sync
+
+`messages sync` runs the task rules over the chats it stored into, from a stop point per account kept
+in the store. The first pass reads only chats with a message in the last 14 days, so a store with
+years of chats opens no task for an old question. The answer carries `tasks: {added, closed, review}`;
+`review` counts the new tasks whose candidates went to the review list. A failed pass is a note, never
+a failed sync. Nothing is attached on its own beyond a certain match (step 2 below).
+
+## The duplicate check
+
+The check runs on every new task. It runs in cli-core, on SQLite, with no embeddings and no call to
+an AI provider. **Not built yet:** the check on a new message linked to an existing task. The
+comparison reads only a task's title, description and source message, so a linked message changes no
+score until the comparison reads linked messages too. `tasks similar <task>` (MCP `tasks_similar`)
+runs steps 3 to 5 for one stored task and prints the result; it changes nothing.
 
 ```mermaid How a new task is checked for duplicates
 graph TD
-  New("New task or message") --> Norm("1. Normalize<br>stems, trigrams, signature")
+  New("New task") --> Norm("1. Normalize<br>stems, trigrams, signature")
   Norm --> Certain{"2. Certain match?"}
   Certain -->|"yes"| Attach("Attach to that task")
   Certain -->|"no"| Cand("3. Candidates<br>union of lookups")
@@ -98,13 +138,13 @@ graph TD
   Score --> Decide{"6. Band"}
   Decide -->|"likely or maybe"| Ask("Agent chooses, or review list")
   Decide -->|"different"| Create("Create the task")
-  Ask --> Learn("7. Learn from the answer")
+  Ask --> Learn("7. Keep the answer")
 ```
 
 In words: the new task is normalized; a certain match attaches it at once; otherwise a set of
 candidates is collected, each candidate is compared field by field, the weights are added up, and
 the total decides: create, or ask. A score never merges two tasks; an agent or a person decides.
-Each answer is kept to tune the weights later.
+Each answer is kept, so the weights can be tuned later.
 
 ### 1. Normalize
 
@@ -116,15 +156,18 @@ Each answer is kept to tune the weights later.
   catch typos and forms that a stemmer misses.
 - Patterns extract the **signature**: an amount with its currency (a number beside `₽`, `руб`, `€`,
   `$`, `usd`), a due date (dates and phrases such as `by Friday` or `до пятницы`) and the person
-  (`person:<id>` of the source message's sender, through `identities`). An agent can pass them
-  itself (`--amount`, `--due`, `--person`).
+  (`person:<id>` of the source message's sender, through `identities`). A due date that an agent
+  passes with `--due` is used instead of the one in the text.
 
-The stems and the normalized text go to `task_words` and `task_stems`, kept by the same writes.
+The stems and the normalized text go to `task_words` and `task_stems`. Digit groups are joined and
+stop words are left out. A task write queues the task, and the next lookup indexes it, as for
+notes.
 
 ### 2. Certain matches
 
-Only one match attaches with no score: the **same rule on the same message**, kept by a unique index
-on source and rule. Nothing new is created, and the answer says which task and why.
+Only one match attaches with no score: the **same message** already has a task of that type. Nothing
+new is created, and the answer shows that task (`created: false`). A rule also opens no task for a
+message that is linked to a task as `evidence`, which is what `--attach` and `tasks merge` write.
 
 A reply and the same title were certain matches in the first draft. On the test set they were wrong
 6 times in 11: a reply that adds a new request, another person's "+1", the same title for a
@@ -160,7 +203,7 @@ Two rules keep good candidates in:
 | Text | Jaccard (shared items divided by all distinct items) on the stem sets of title and description, and on the title trigrams; the higher value counts | 0.6 or more · 0.3 to 0.6 · under 0.3 |
 | Person | `person:<id>` | same · different · unknown |
 | Amount | value and currency | equal · different · missing |
-| Category | name | same · different |
+| Category | name | same · different · unknown |
 | Due date | days apart | 2 or fewer · more · missing |
 | Reply chain | the source messages reply to one another | yes · no |
 | Time | days between the two tasks | 3 or fewer · 4 to 14 · more |
@@ -180,7 +223,7 @@ The first weights were set by hand, then tuned on a synthetic test set:
 | Text: 0.6 or more / 0.3 to 0.6 / under 0.3 | +5 / +5 / −2 |
 | Person: same / different / unknown | +1 / −3 / 0 |
 | Amount: equal / different / missing | +6 / −4 / 0 |
-| Category: same / different | +1 / −1 |
+| Category: same / different / unknown | +1 / −1 / 0 |
 | Due date: 2 days or fewer / more / missing | +4 / −1 / 0 |
 | Reply chain: yes / no | +6 / 0 |
 | Time: 3 days or fewer / 4 to 14 days / more | +2 / −2 / −3 |
@@ -212,9 +255,9 @@ across languages are weak (2 of 5 scored "different"). There is no measurement o
 
 | Band | Task added by an agent | Task opened by a rule |
 | --- | --- | --- |
-| Certain (step 2) | does not apply | nothing new |
-| Likely | listed first; the agent must choose | to the review list |
-| Maybe | `tasks add` refuses and lists up to 5 candidates with score and reasons; the agent repeats with `--attach <task>` or `--new` | to the review list |
+| Certain (step 2) | nothing new; the answer shows that task (`created: false`) | nothing new |
+| Likely | listed first; the agent must choose | created; the pair goes to the review list |
+| Maybe | `tasks add` refuses (exit code 2, reason `task.duplicate-candidates`) and lists up to 5 candidates with score and reasons; the agent repeats with `--attach <task>` or `--new` | created; the pair goes to the review list |
 | Different | created | created |
 
 The tool refuses instead of warning: an agent can skip a warning, but not an exit code. Asking the
@@ -223,21 +266,31 @@ judge. Mem0 works the same way: the agent that writes a memory chooses to add it
 existing one, delete one or do nothing
 ([Mem0, arXiv 2504.19413](https://arxiv.org/abs/2504.19413)).
 
-**The review list.** `tasks duplicates` lists the pairs a rule left in "likely" or "maybe", newest
-first, with reasons. `tasks merge <dup> --into <task>` links every message of the duplicate to the
-kept task, closes the duplicate as `dismissed` with a `duplicate-of` relation, and records the
-decision. `tasks duplicates reject <dup> <task>` records "not the same", so the pair does not come
-back.
+**Who reviews.** The owner's ruling: the agent that goes through tasks after `sync` decides each
+pair a rule left in "likely" or "maybe". It reads the meaning that the fields miss. The owner sees only
+the pairs that agent marks unsure. The agent's merges can be undone like any other.
+
+**The review list.** The pairs live in `task_pairs`. `tasks duplicates` lists the pairs a rule left in
+"likely" or "maybe", newest first, with score, band, levels and reasons. `tasks merge <dup> --into
+<task>` links every message of the duplicate to the kept task, closes the duplicate as `dismissed`
+with a `duplicate-of` relation, and records the decision. `tasks duplicates reject <dup> <task>`
+records "not the same", so the pair does not come back. `tasks duplicates unsure <dup> <task>` leaves
+the pair to the owner, and `tasks duplicates --unsure` lists those pairs. MCP has the same tools:
+`tasks_duplicates`, `tasks_merge`, `tasks_unmerge`, `tasks_duplicates_reject` and
+`tasks_duplicates_unsure`.
 
 **A merge can be undone.** `tasks unmerge <dup>` reopens the duplicate and removes the relation. Links
 stay where they are until they are moved. A merge never deletes anything.
 
 ### 7. Learn from answers
 
-Every merge, rejection, `--attach` and `--new` after a candidate list is a labelled pair. With
-enough pairs, `m` and `u` for each level are counted again from them, the same counting estimate
-that Splink uses, with no training step, and the bands move. A score never merges on its own. If
-real answers show that you almost always accept "likely" pairs, merging them is your decision.
+**Now.** Every merge, rejection, `--attach` and `--new` after a candidate list is kept as a labelled
+pair in `task_pairs`.
+
+**Not built yet.** With enough pairs, `m` and `u` for each level are counted again from them, the
+same counting estimate that Splink uses, with no training step, and the bands move. A score never
+merges on its own. If real answers show that you almost always accept "likely" pairs, merging them is
+your decision.
 
 ## A worked example
 
@@ -262,8 +315,9 @@ lower than the stem value for both pairs, so the stem value counts.
 | **Total** | | **15: likely** | | **1: different** |
 
 A rule found this request, so the tool creates it as REQ-23 and puts the pair REQ-23 and REQ-22 on
-the review list. Nothing merges on the score: your agent or you run
-`tasks merge REQ-23 --into REQ-22` after checking. If an agent had added the task, `tasks add` would
+the review list. Nothing merges on the score: the agent that reviews after the sync reads both tasks
+and runs `tasks merge REQ-23 --into REQ-22`. If it could not tell, it would mark the pair unsure for
+you. If an agent had added the task, `tasks add` would
 refuse, show REQ-22 first with 15 points and
 "same person, same amount, 3 of 4 stems shared", and the agent would repeat with `--attach REQ-22`.
 REQ-19 shares the person and the words "send invoice", but the amount and the age pull it down: it
@@ -277,9 +331,9 @@ are taken here, some are not.
 | beads | Here |
 | --- | --- |
 | Hash ids `bd-a3f8` | Readable keys from a counter: one store, one writer at a time |
-| [Labels](https://github.com/gastownhall/beads/blob/main/docs/core-concepts/labels.md) for everything that is not a field | One category from a fixed list, plus the existing tags |
+| [Labels](https://github.com/gastownhall/beads/blob/main/docs/core-concepts/labels.md) for everything that is not a field | One category from one list per store, plus the existing tags |
 | Edge types such as `duplicates` and `discovered-from` | `duplicate-of` and `discovered-from` join the relation kinds |
-| `bd ready`: open, unblocked work | `tasks agenda`, with a category and a tag filter planned |
+| `bd ready`: open, unblocked work | `tasks agenda`, with a category and a tag filter |
 | `bd update --claim`: an atomic claim | `tasks claim`, a lease that ends by itself |
 | `external_ref` to one outside item | Every task links to all of its messages |
 | `bd duplicates` merges exact copies; `bd find-duplicates` scores word overlap and only reports | A check before creating, field weights, and a choice by the agent or on a review list |
@@ -296,6 +350,9 @@ of text plus fields, with weights that are counted, not trained.
 
 ## What is not done
 
+- **The check on a message linked to an existing task.** It needs the comparison to read linked
+  messages first.
+- **Tuning the weights from saved pairs.** The pairs are kept; nothing recounts the weights yet.
 - **No embeddings and no call to an AI provider** to compare tasks. If the test set shows that the
   text field is too weak, a local embedding is the next step, measured against this check.
 - **No deletes.** A duplicate is closed and linked; it is never removed.
