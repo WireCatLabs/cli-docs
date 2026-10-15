@@ -89,6 +89,11 @@ for (const lang of ["en", "ru", "es"] as const) {
       "shared_project",
       "related.has_more",
       "related.output_limited",
+      "knowledge.items",
+      "knowledge.coverage.has_more",
+      "knowledge.coverage.output_limited",
+      "fact_evidence: not-revalidated",
+      "other_sources: not-queried",
     ]
     for (const field of relatedFields) await expect(main).toContainText(field)
     await expect(

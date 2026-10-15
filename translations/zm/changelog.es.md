@@ -4,6 +4,30 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.18.0 — 15.10.2026
+
+### Añadido
+
+- La preparación incluye en `knowledge` hechos aceptados sobre personas vinculadas explícitamente
+  y proyectos globales confirmados, incluidas decisiones registradas fuera de la reunión. Conserva
+  referencias e indicadores de más filas y límites de salida; las fuentes de reuniones tienen prioridad
+  de bytes. La evidencia no se revalida y no se consultan notas, correo ni mensajes. El SDK común Core
+  implementa el comportamiento.
+
+## 0.17.1 — 15.10.2026
+
+### Corregido
+
+- Las respuestas MCP muestran caracteres ocultos en transcripciones, títulos, nombres y notas,
+  como tg y max: caracteres de etiquetas, controles de dirección, espacios de ancho cero, U+FEFF,
+  C1 y otros controles se escapan en el texto y contenido estructurado de todas las herramientas,
+  incluidos errores; ANSI escape se lee como `\x1b`. El límite cuenta la respuesta escapada. Cada
+  descripción y las instrucciones del servidor indican que el texto ajeno es dato, no instrucción.
+  Cirílico, emoji y banderas no cambian; el CLI `--json` conserva el original. Core 0.285.0 actualiza
+  el almacén común a versión 16: las tablas y disparadores nuevos permiten usar herramientas anteriores.
+- Las pruebas sin conexión eliminan sus carpetas temporales tras cerrar recursos. Las trazas actual
+  y anterior permanecen en `coverage`, en lugar de acumular carpetas de copias temporales.
+
 ## 0.17.0 — 15.10.2026
 
 ### Añadido

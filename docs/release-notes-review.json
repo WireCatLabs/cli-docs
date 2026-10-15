@@ -12,9 +12,9 @@
     "conclusion": "Reviewed 0.53.0: camelCase config set/unset names write snake_case settings; bot uploads obey credential/keyring/browser/WireCat file restrictions with the explicit CLI override; pre-acknowledgement MAX rate refusals are safe to retry while uncertain outcomes remain unsafe. Bot/security guides correctly distinguish Node process-wide trust of the extra root from Bun per-request trust; the system certificate store is unchanged. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
   },
   "zm": {
-    "version": "v0.17.0",
-    "roadmapSha256": "f8f934c8be998a19d2ee62f91690a8d96d5cc83028ae5cee093015fea4cc3190",
+    "version": "v0.18.0",
+    "roadmapSha256": "cdb9b75f66b9196456864f0d8d469dc299696bdb7c4bf85bb2e4fb5a1fcd3a9c",
     "reviewedAt": "2026-10-15",
-    "conclusion": "Reviewed0.15–0.17: shared nested projection/search source context, canonical snake_case settings with explicit manual renaming, startup folder behavior and output-dir/pause vocabulary are documented. Related preparation now returns cited same-account calls through current person links or confirmed global projects, with independent lookahead and exact-series output priority. Nonmeeting sources and project-name/alias candidates remain unqueried; broader discovery, reviewed idempotent findings intake and shared native archive storage remain planned. Preparation does not generate summaries, accept findings, create tasks or infer links from names."
+    "conclusion": "Reviewed0.17.1 and0.18.0: MCP escapes hidden/control characters while retaining data/instruction boundaries; selected-series preparation now includes cited accepted global person/project facts through explicit links and confirmed projects. Knowledge coverage survives field selection, retains independent bounds and yields bytes to meeting evidence. Notes, mail, messages and alias candidates remain unqueried; no automatic summaries, findings, tasks or link inference. Broader discovery, reviewed intake and shared native archive storage remain future work."
   }
 }
