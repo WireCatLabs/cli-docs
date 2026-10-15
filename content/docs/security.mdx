@@ -3,7 +3,7 @@ title: Security
 description: Control the agent’s access, understand where your messages go, and know the limits of those controls.
 ---
 
-WireCat takes security seriously. We use automated security checks and manual audits to review the tools, their dependencies and how AI agents use them. This guide explains what those checks cover, where your data goes and which controls you can set for your own account.
+When you connect an AI agent to your account, choose what it may read, change or share. This guide helps you set those controls, understand where your data goes and recognize the limits of the tools' security checks.
 
 ## What security covers
 
@@ -31,6 +31,10 @@ and permission before retrying. Do not tell an agent to bypass the restriction t
 
 For important replies, ask for a draft and review the recipient and text before sending.
 Reading messages does not mark them as read; that is a separate action.
+
+An agent started by a tg or max schedule runs with the tool's read-only lock. Through that tool,
+it can read and prepare reply text, but it cannot send or change settings, permissions, recipients
+or schedules to arrange a later send. This lock does not restrict other programs the agent can run.
 
 ## Where your information goes
 
@@ -79,9 +83,13 @@ Attachments come from other people. Downloaded files, extracted text and transcr
 
 The audit checks file names, paths, overwriting, archive extraction and resource use while parsing documents or audio. These checks are separate from sending permissions: permission to read a chat does not mean the agent should read unrelated folders or upload local files.
 
+Sending a local file refuses known login and credential locations — SSH and cloud keys, `.netrc`, Git and GitHub credentials, browser profiles, password stores and the folders of the WireCat tools themselves — unless you add `--allow-any-file`. Other files, including ordinary hidden folders, can be sent.
+
 ## Dependencies and releases
 
 Security reviews cover third-party packages, installation and update commands, and the workflows that build and publish the tools. Automated scans help detect known vulnerabilities and risky package or workflow behaviour. Manual review checks how a flagged component is used and whether a finding affects the shipped tool.
+
+Every release passes a production dependency audit, a scan of the full history for secrets, a review of the publishing workflows and source analysis. A critical finding stops the release. Packages are published from the build workflow with npm provenance, without a stored publishing token.
 
 Use the [installation guide](./installation.mdx) to keep your tool current. A clean dependency scan does not establish that every package or execution path is safe.
 
@@ -137,6 +145,6 @@ you do not need sending. Stop the server or tunnel to pause access; `tg personal
 ## Report a problem
 
 Do not put credentials or private messages in a public issue. For a security problem, contact
-[the maintainer](mailto:hello@wirecat.dev) or use private vulnerability reporting on the
-[Telegram repository](https://github.com/WireCatLabs/tg-cli/security/advisories/new) or
-[MAX repository](https://github.com/WireCatLabs/max-cli/security/advisories/new).
+[the maintainer](mailto:hello@wirecat.dev) or use private vulnerability reporting (**Security → Report a vulnerability**) in the repository of the
+tool concerned, for example [Telegram](https://github.com/WireCatLabs/tg-cli/security/advisories/new) or
+[MAX](https://github.com/WireCatLabs/max-cli/security/advisories/new).
