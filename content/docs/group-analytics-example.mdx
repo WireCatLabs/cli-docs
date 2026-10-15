@@ -8,6 +8,69 @@ This is the report that [Group and channel analytics](./group-analytics.md) prod
 @AI_DeepLearning. Read it to see what your agent will give you before you run the recipe on your own channel.
 Readers are only counted, never named.
 
+To make a report like this on your own channel, copy this request into your AI agent. It says which data to read
+with tg, what to measure and how to lay out the page. Replace `@example_channel` with your channel.
+
+```text prompt collapsed
+Make an analytics report on the Telegram channel @example_channel, like the example at https://wirecat.dev/en/docs/group-analytics-example.
+First ask me which tg profile to use. Put it in every command as tg <profile> …; never pick a profile yourself.
+Read only: do not join the channel, react, vote, comment or mark anything as read.
+
+1. Collect the data
+- Make a folder channel-report/example_channel/ with raw/ inside. Keep all raw data on this computer. Do not upload it anywhere.
+- Profile: tg <profile> --json chats show @example_channel. Keep the title, the description, participants_count (subscribers) and today's date.
+- Posts: tg <profile> --json messages list @example_channel --limit 100 gives the newest 100. For older posts, run it again with 'id<N', where N is the oldest id on the previous page. Stop when a page is empty. Save each page in raw/ as you go, so you can continue from the last id after a stop.
+- Check the fields on the first page before you go on: views, forwards, comments and groupedId in provider_metadata, reactions in reactions, a poll in provider_metadata.poll. If a name is different, use the one you see.
+- Comments: for posts of the last 12 months that have comments, run tg <profile> --json messages comments @example_channel <post id> --limit 100, with 'id<N' for the next page. For a channel with many comments, keep it to the last 3 months.
+- Polls: for each poll, run tg <profile> --json polls show @example_channel <post id>. Telegram shows each answer's votes only for polls this account voted in; the total shows for all.
+- Be gentle with Telegram: one request at a time, and a pause of 1 to 2 seconds between pages. If tg says to wait, wait that long, then continue. Reading takes about 1 minute per 1,000 posts and about 1 minute per 15 posts with comments.
+
+2. Clean the data
+- An album is several messages with the same groupedId. Count it as one post: take the highest views of its parts and the text of the part that has text.
+- Leave out service messages and posts without views. Write down how many posts are left and the date of the first one.
+- Use UTC for all times.
+
+3. Measure
+- Reach: median views of the posts of the last 90 days, divided by subscribers. Median views per post by month and by year, with the number of posts.
+- Lift: a post's views divided by the median views of the 40 nearest posts by date. A post with lift 1.5 or more breaks out. Use lift, not raw views, to compare old and new posts.
+- Engagement: forwards, reactions and comments per 1,000 views, for the channel and for each group below.
+- Formats: text only, photo, video, album, poll, link, file. Length: no text, under 300, 300 to 800, over 800 characters.
+- Themes: read about 50 posts first. Then write 4 to 8 themes for this channel, each with its keywords, and check a few posts in each theme. Also group posts by how they open (the first words) and find sponsored or referral posts (ad labels, promo codes, partner links). Put the keyword lists in the report.
+- Rhythm: posts by weekday and by hour. Lift by time since the previous post (under 3 hours, 3 to 24 hours, 1 to 2 days, over 2 days) and by posts on the same day (1, 2, 3 or more). Find breaks of 14 days or more and compare median views in the 60 days before and after each one.
+- Polls: votes divided by views for each poll, by year, and the biggest polls with their answers.
+- Comments: the number of comments and of different people who wrote them, the share written by the top 10% of people, the share of people who wrote only once, and how often the channel answered and under how many posts. Count people; never name them.
+- Links: the sites the channel links to, direct links against short links (bit.ly and similar), and the @accounts its posts mention.
+- Breakouts: the top posts by lift, by forwards per 1,000 views and by comments, each with its date, first line, format and theme.
+- Compare periods: the last 90 days against the 90 days before, and this year against last year.
+
+4. Write the report
+Write one HTML file, channel-report/example_channel/report.html, that opens on its own. Use these sections, in this order:
+- The channel: name, description, subscribers, posts read, the period and the date of the data. Then a row of 4 to 6 key numbers.
+- What the numbers say: 6 to 8 findings. Each starts with one bold sentence that has the number, then one line of detail.
+- What it means and what to do: the channel as the data shows it, its readers, what works, what could be better, and 3 to 5 experiments. Each point gives the number behind it, and each experiment says how to measure it.
+- Over time: a chart of posts per month and median views, and a table by year.
+- Rhythm: lift by time since the previous post and by posts per day; weekdays and hours.
+- Content: per 1,000 views by format and by length; themes and how the theme mix changed; openings; sponsored posts.
+- Top posts: tables of breakouts, most forwarded and most discussed, each linked to https://t.me/example_channel/<post id>.
+- Readers: comments, polls and reactions.
+- Links: linked sites and mentioned accounts.
+- How this was measured: the source, the dates, what was left out, the theme keywords and what Telegram does not show.
+Design:
+- It must read well on a phone: no sideways scrolling at 400 px width; wide tables scroll inside their own box.
+- Support light and dark mode with prefers-color-scheme. Use one clear sans-serif font and tabular figures for numbers.
+- Draw charts as inline SVG, or load Chart.js from one pinned version (for example https://cdn.jsdelivr.net/npm/chart.js@4.5.1). No other external scripts, fonts or trackers.
+- Give every chart a title and a one-line caption that says what to see.
+- Keep facts and guesses apart. A number from the data is a fact. Start each guess with "Our guess:". Telegram does not show subscriber history, where subscribers come from or why readers act, so do not state these as facts.
+- Privacy: no names, usernames, profile links, phone numbers or email addresses of readers. You may quote the channel's own posts; do not quote comments.
+
+5. Finish
+- Keep any script you wrote next to the report, so I can run it again later.
+- Open the report and check that every section has data, and that the post count and dates match what you read.
+- Search the report for "@", "t.me/" and phone numbers, and remove anything that points to a reader. The channel and the accounts its posts mention may stay.
+- Then tell me where the files are, how many posts and comments you read, and the 3 most important findings. Do not share or upload the report: I will review it first.
+```
+
 <ChannelReport />
 
-To make a report like this on your own channel, follow [Group and channel analytics](./group-analytics.md).
+For what each step does, how long it takes and what Telegram does not show, read
+[Group and channel analytics](./group-analytics.md).
