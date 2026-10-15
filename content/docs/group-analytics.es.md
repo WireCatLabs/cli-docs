@@ -47,6 +47,9 @@ Usa tg CLI. Haz un informe de analítica del canal de Telegram @example_channel.
 Cambia `@example_channel` por el canal que quieras. Si el canal trata de otro tema, dile al agente cuáles son sus
 temas; consulta [Ajusta los temas](#adapt-the-themes).
 
+Para un informe completo como el del ejemplo, copia la petición detallada al principio del
+[informe de ejemplo](./group-analytics-example.mdx). Incluye cada comando, cada medida y cada sección.
+
 ## Qué pasa
 
 1. **El agente abre el canal.** Pide a Telegram el título, la descripción y el número de suscriptores.

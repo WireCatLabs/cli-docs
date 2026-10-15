@@ -9,6 +9,69 @@ Este es el informe que produce la receta [Analítica de grupos y canales](./grou
 público @AI_DeepLearning. Míralo para saber qué te dará tu agente antes de usar la receta en tu propio canal. El
 informe está en inglés. Los lectores solo se cuentan, nunca se nombran.
 
+Para hacer un informe así sobre tu propio canal, copia esta petición en tu agente de IA. Dice qué datos leer con tg,
+qué medir y cómo organizar la página. Cambia `@example_channel` por tu canal.
+
+```text prompt collapsed
+Haz un informe de analítica del canal de Telegram @example_channel, como el ejemplo de https://wirecat.dev/es/docs/group-analytics-example. Escribe el informe en español.
+Primero pregúntame qué perfil de tg usar. Ponlo en cada comando como tg <perfil> …; nunca elijas un perfil por tu cuenta.
+Solo lectura: no te unas al canal, no reacciones, no votes, no comentes y no marques nada como leído.
+
+1. Reúne los datos
+- Crea una carpeta channel-report/example_channel/ con raw/ dentro. Guarda todos los datos sin procesar en este ordenador. No los subas a ningún sitio.
+- Perfil del canal: tg <perfil> --json chats show @example_channel. Guarda el título, la descripción, participants_count (suscriptores) y la fecha de hoy.
+- Publicaciones: tg <perfil> --json messages list @example_channel --limit 100 da las 100 más recientes. Para las más antiguas, ejecútalo otra vez con 'id<N', donde N es el id más antiguo de la página anterior. Para cuando una página venga vacía. Guarda cada página en raw/ al momento, para poder seguir desde el último id si algo se detiene.
+- Antes de seguir, comprueba los campos en la primera página: views, forwards, comments y groupedId en provider_metadata, las reacciones en reactions, una encuesta en provider_metadata.poll. Si un nombre es distinto, usa el que veas.
+- Comentarios: para las publicaciones de los últimos 12 meses que tengan comentarios, ejecuta tg <perfil> --json messages comments @example_channel <id de la publicación> --limit 100, con 'id<N' para la página siguiente. Si el canal tiene muchísimos comentarios, limítate a los últimos 3 meses.
+- Encuestas: para cada encuesta, ejecuta tg <perfil> --json polls show @example_channel <id de la publicación>. Telegram muestra los votos de cada respuesta solo en las encuestas en las que votó esta cuenta; el total se ve siempre.
+- Cuida a Telegram: una petición cada vez y una pausa de 1 a 2 segundos entre páginas. Si tg dice que esperes, espera ese tiempo y continúa. Leer lleva cerca de 1 minuto por cada 1.000 publicaciones y cerca de 1 minuto por cada 15 publicaciones con comentarios.
+
+2. Limpia los datos
+- Un álbum son varios mensajes con el mismo groupedId. Cuéntalo como una publicación: toma las vistas más altas de sus partes y el texto de la parte que lo tenga.
+- Quita los mensajes de servicio y las publicaciones sin vistas. Anota cuántas publicaciones quedan y la fecha de la primera.
+- Usa UTC para todas las horas.
+
+3. Mide
+- Alcance: la mediana de vistas de las publicaciones de los últimos 90 días, dividida entre los suscriptores. La mediana de vistas por publicación por mes y por año, con el número de publicaciones.
+- Lift: las vistas de una publicación divididas entre la mediana de vistas de las 40 publicaciones más cercanas en fecha. Una publicación con lift de 1,5 o más destaca. Compara publicaciones antiguas y nuevas por el lift, no por las vistas.
+- Interacción: reenvíos, reacciones y comentarios por cada 1.000 vistas, para el canal y para cada grupo de abajo.
+- Formatos: solo texto, foto, vídeo, álbum, encuesta, enlace, archivo. Longitud: sin texto, menos de 300, de 300 a 800, más de 800 caracteres.
+- Temas: primero lee unas 50 publicaciones. Después escribe de 4 a 8 temas de este canal, cada uno con sus palabras clave, y revisa unas cuantas publicaciones de cada tema. Agrupa también las publicaciones por cómo empiezan (las primeras palabras) y busca las publicaciones patrocinadas o de referidos (marcas de publicidad, códigos promocionales, enlaces de socios). Pon las listas de palabras clave en el informe.
+- Ritmo: publicaciones por día de la semana y por hora. Lift según el tiempo desde la publicación anterior (menos de 3 horas, de 3 a 24 horas, de 1 a 2 días, más de 2 días) y según las publicaciones del mismo día (1, 2, 3 o más). Busca pausas de 14 días o más y compara la mediana de vistas en los 60 días antes y después de cada una.
+- Encuestas: votos divididos entre vistas para cada encuesta, por año, y las encuestas más grandes con sus respuestas.
+- Comentarios: el número de comentarios y de personas distintas que los escribieron, la parte escrita por el 10% más activo, la parte de personas que escribió solo una vez, y cuántas veces respondió el canal y bajo cuántas publicaciones. Cuenta a las personas; nunca las nombres.
+- Enlaces: los sitios a los que enlaza el canal, enlaces directos frente a enlaces cortos (bit.ly y similares), y las @cuentas que mencionan sus publicaciones.
+- Publicaciones destacadas: las mejores por lift, por reenvíos por cada 1.000 vistas y por comentarios, cada una con su fecha, primera línea, formato y tema.
+- Compara periodos: los últimos 90 días frente a los 90 días anteriores, y este año frente al año pasado.
+
+4. Escribe el informe
+Escribe un único archivo HTML, channel-report/example_channel/report.html, que se abra por sí solo. Usa estas secciones, en este orden:
+- El canal: nombre, descripción, suscriptores, publicaciones leídas, el periodo y la fecha de los datos. Después, una fila de 4 a 6 cifras clave.
+- Qué dicen los números: de 6 a 8 conclusiones. Cada una empieza con una frase en negrita con la cifra, y luego una línea de detalle.
+- Qué significa y qué hacer: el canal según los datos, sus lectores, qué funciona, qué podría mejorar y de 3 a 5 experimentos. Cada punto da la cifra en la que se basa, y cada experimento dice cómo medir el resultado.
+- En el tiempo: un gráfico de publicaciones por mes y mediana de vistas, y una tabla por año.
+- Ritmo: lift según el tiempo desde la publicación anterior y según las publicaciones por día; días de la semana y horas.
+- Contenido: por cada 1.000 vistas por formato y por longitud; temas y cómo cambió su mezcla; aperturas; publicaciones patrocinadas.
+- Publicaciones destacadas: tablas de las que destacan, las más reenviadas y las más comentadas, cada una enlazada a https://t.me/example_channel/<id de la publicación>.
+- Lectores: comentarios, encuestas y reacciones.
+- Enlaces: sitios enlazados y cuentas mencionadas.
+- Cómo se midió: la fuente, las fechas, lo que quedó fuera, las palabras clave de los temas y lo que Telegram no muestra.
+Diseño:
+- Debe leerse bien en un móvil: sin desplazamiento lateral a 400 px de ancho; las tablas anchas se desplazan dentro de su propio recuadro.
+- Admite modo claro y oscuro con prefers-color-scheme. Usa una fuente sans-serif clara y cifras tabulares para los números.
+- Dibuja los gráficos como SVG en línea, o carga Chart.js de una versión fija (por ejemplo, https://cdn.jsdelivr.net/npm/chart.js@4.5.1). Ningún otro script, fuente o rastreador externo.
+- Dale a cada gráfico un título y un pie de una línea que diga qué hay que ver.
+- Separa hechos y suposiciones. Una cifra de los datos es un hecho. Empieza cada suposición con «Nuestra suposición:». Telegram no muestra el historial de suscriptores, de dónde vienen ni por qué actúan los lectores, así que no lo presentes como hechos.
+- Privacidad: ni nombres, ni nombres de usuario, ni enlaces a perfiles, ni teléfonos, ni correos de los lectores. Puedes citar las publicaciones del propio canal; no cites comentarios.
+
+5. Termina
+- Guarda junto al informe el script que hayas escrito, para que pueda ejecutarlo de nuevo.
+- Abre el informe y comprueba que cada sección tiene datos y que el número de publicaciones y las fechas coinciden con lo que leíste.
+- Busca en el informe «@», «t.me/» y números de teléfono, y quita todo lo que apunte a un lector. El canal y las cuentas que mencionan sus publicaciones pueden quedarse.
+- Después dime dónde están los archivos, cuántas publicaciones y comentarios leíste y las 3 conclusiones más importantes. No compartas ni subas el informe: primero lo revisaré yo.
+```
+
 <ChannelReport />
 
-Para hacer un informe así sobre tu propio canal, sigue la receta [Analítica de grupos y canales](./group-analytics.md).
+Qué hace cada paso, cuánto tarda y qué no muestra Telegram está en la receta
+[Analítica de grupos y canales](./group-analytics.md).

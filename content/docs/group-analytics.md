@@ -45,6 +45,9 @@ Use tg CLI. Make an analytics report on the Telegram channel @example_channel. R
 Replace `@example_channel` with the channel you want. For a channel on another subject, tell the agent its themes;
 see [Adapt the themes](#adapt-the-themes).
 
+For a full report like the example, copy the detailed request at the top of the
+[example report](./group-analytics-example.mdx). It lists every command, measure and section.
+
 ## What happens
 
 1. **The agent reads the channel.** It asks Telegram for the channel's title, description and subscriber count.
