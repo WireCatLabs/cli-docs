@@ -135,7 +135,7 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
         node.children[0].data = { hName: "summary" }
       }
       node.children = node.children.flatMap((child) => {
-        if (child.type === "code" && ["prompt", "prompt compact"].includes(child.meta ?? "")) {
+        if (child.type === "code" && ["prompt", "prompt compact", "prompt collapsed"].includes(child.meta ?? "")) {
           return [
             {
               type: "blockquote",
@@ -145,6 +145,7 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
                   text: child.value ?? "",
                   language,
                   ...(child.meta === "prompt compact" ? { compact: true } : {}),
+                  ...(child.meta === "prompt collapsed" ? { collapsed: true } : {}),
                 },
               },
               children: [child],
