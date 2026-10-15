@@ -141,8 +141,8 @@ The same request often comes in several messages: "can you send the invoice?", t
 new task before it creates it:
 
 - **Sure it is the same task:** this happens only when the same message already has a task of that
-  type, or is already linked to a task as `evidence`. Nothing new is made, and the answer shows that
-  task.
+  type. A rule also opens nothing for a message that is linked to a task as `evidence`. Nothing new
+  is made, and the answer shows that task.
 - **Not sure:** the tool does not guess. When your agent adds the task, `tasks add` refuses and lists
   up to five similar tasks with the reasons ("same person, same amount"). The agent repeats the
   command with `--attach <task>` to link the message to one of them, or with `--new` to make a new
@@ -229,8 +229,8 @@ tasks release REQ-22
 tasks agenda --claimed
 ```
 
-Agents that use the MCP server have the same tools: `tasks_claim`, `tasks_release`,
-`tasks_categories`, `tasks_similar`, `tasks_duplicates` and `tasks_merge`.
+Agents that use the MCP server have the same tools, such as `tasks_claim`, `tasks_release`,
+`tasks_categories`, `tasks_similar`, `tasks_duplicates`, `tasks_merge` and `tasks_unmerge`.
 
 ## Not built yet
 

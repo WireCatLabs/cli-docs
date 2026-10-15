@@ -165,9 +165,9 @@ notes.
 
 ### 2. Certain matches
 
-Only one match attaches with no score: the **same message** already has a task of that type, or is
-linked to a task as `evidence` (what `--attach` and `tasks merge` write). Nothing new is created, and
-the answer shows that task (`created: false`).
+Only one match attaches with no score: the **same message** already has a task of that type. Nothing
+new is created, and the answer shows that task (`created: false`). A rule also opens no task for a
+message that is linked to a task as `evidence`, which is what `--attach` and `tasks merge` write.
 
 A reply and the same title were certain matches in the first draft. On the test set they were wrong
 6 times in 11: a reply that adds a new request, another person's "+1", the same title for a
@@ -255,7 +255,7 @@ across languages are weak (2 of 5 scored "different"). There is no measurement o
 
 | Band | Task added by an agent | Task opened by a rule |
 | --- | --- | --- |
-| Certain (step 2) | does not apply | nothing new |
+| Certain (step 2) | nothing new; the answer shows that task (`created: false`) | nothing new |
 | Likely | listed first; the agent must choose | created; the pair goes to the review list |
 | Maybe | `tasks add` refuses (exit code 2, reason `task.duplicate-candidates`) and lists up to 5 candidates with score and reasons; the agent repeats with `--attach <task>` or `--new` | created; the pair goes to the review list |
 | Different | created | created |

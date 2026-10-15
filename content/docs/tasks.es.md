@@ -147,8 +147,8 @@ La misma petición llega a menudo en varios mensajes: «¿me mandas la factura?�
 herramienta comprueba cada tarea nueva antes de crearla:
 
 - **Segura de que es la misma tarea:** solo ocurre cuando el mismo mensaje ya tiene una tarea de ese
-  tipo, o ya está vinculado a una tarea como `evidence`. No se crea nada nuevo, y la respuesta
-  muestra esa tarea.
+  tipo. Una regla tampoco abre nada para un mensaje vinculado a una tarea como `evidence`. No se crea
+  nada nuevo, y la respuesta muestra esa tarea.
 - **No está segura:** la herramienta no adivina. Si la tarea la añade tu agente, `tasks add` se niega
   y lista hasta cinco tareas parecidas con los motivos («misma persona, mismo importe»). El agente
   repite el comando con `--attach <task>` para unir el mensaje a una de ellas, o con `--new` para crear
@@ -239,8 +239,8 @@ tasks release REQ-22
 tasks agenda --claimed
 ```
 
-Los agentes que usan el servidor MCP tienen las mismas herramientas: `tasks_claim`, `tasks_release`,
-`tasks_categories`, `tasks_similar`, `tasks_duplicates` y `tasks_merge`.
+Los agentes que usan el servidor MCP tienen las mismas herramientas, como `tasks_claim`,
+`tasks_release`, `tasks_categories`, `tasks_similar`, `tasks_duplicates`, `tasks_merge` y `tasks_unmerge`.
 
 ## Aún no está hecho
 

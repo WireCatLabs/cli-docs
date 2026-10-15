@@ -173,9 +173,10 @@ indexa, como con las notas.
 
 ### 2. Coincidencias seguras
 
-Solo una coincidencia une sin puntuar: **el mismo mensaje** ya tiene una tarea de ese tipo, o está
-vinculado a una tarea como `evidence` (lo que escriben `--attach` y `tasks merge`). No se crea nada
-nuevo, y la respuesta muestra esa tarea (`created: false`).
+Solo una coincidencia une sin puntuar: **el mismo mensaje** ya tiene una tarea de ese tipo. No se crea
+nada nuevo, y la respuesta muestra esa tarea (`created: false`). Una regla tampoco abre ninguna tarea
+para un mensaje vinculado a una tarea como `evidence`, que es lo que escriben `--attach` y
+`tasks merge`.
 
 En el primer borrador también eran seguras una respuesta y el mismo título. En el conjunto de pruebas
 se equivocaron 6 veces de 11: una respuesta que añade una petición nueva, el «+1» de otra persona, el
@@ -265,7 +266,7 @@ reales.
 
 | Banda | Tarea añadida por un agente | Tarea abierta por una regla |
 | --- | --- | --- |
-| Segura (paso 2) | no se aplica | nada nuevo |
+| Segura (paso 2) | nada nuevo; la respuesta muestra esa tarea (`created: false`) | nada nuevo |
 | Probable | aparece primero; el agente debe elegir | se crea; el par va a la lista de revisión |
 | Quizá | `tasks add` se niega (código de salida 2, motivo `task.duplicate-candidates`) y lista hasta 5 candidatas con puntuación y motivos; el agente repite con `--attach <task>` o `--new` | se crea; el par va a la lista de revisión |
 | Distinta | se crea | se crea |
