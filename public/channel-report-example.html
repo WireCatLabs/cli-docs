@@ -1,0 +1,829 @@
+<title>AI with Papers - Artificial Intelligence & Deep Learning Channel Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* html-report base: one reading column with wide figures, both themes, numbers that line up.
+   Inline this file into the page (an artifact admits no external stylesheet but Google Fonts). */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --ink: #14202e;
+  --muted: #56636f;
+  --line: #d9dfe7;
+  --accent: #2346c8;
+  --accent-soft: #e1e7fb;
+  --warm: #c46f1b;
+  --good: #1d7f53;
+  --bad: #bb3a33;
+  --display: "Unbounded", "Archivo Black", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e141c;
+    --surface: #151d28;
+    --ink: #e6ebf2;
+    --muted: #9aa7b8;
+    --line: #2a3647;
+    --accent: #8aa2ff;
+    --accent-soft: #1f2b4d;
+    --warm: #f0a25a;
+    --good: #4cc38a;
+    --bad: #f07a72;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e141c;
+  --surface: #151d28;
+  --ink: #e6ebf2;
+  --muted: #9aa7b8;
+  --line: #2a3647;
+  --accent: #8aa2ff;
+  --accent-soft: #1f2b4d;
+  --warm: #f0a25a;
+  --good: #4cc38a;
+  --bad: #f07a72;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px / 1.6 var(--body);
+  font-variant-numeric: tabular-nums;
+}
+::selection {
+  background: var(--accent);
+  color: var(--surface);
+}
+:focus-visible {
+  outline: 2px solid var(--warm);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+html {
+  scrollbar-color: var(--line) var(--bg);
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-inline: 20px;
+  padding-block: 40px 80px;
+  display: grid;
+  gap: 64px;
+}
+h1,
+h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  text-wrap: balance;
+  margin: 0;
+  line-height: 1.15;
+}
+h1 {
+  font-size: clamp(30px, 5vw, 50px);
+  letter-spacing: -0.015em;
+}
+h2 {
+  font-size: clamp(21px, 3vw, 27px);
+  letter-spacing: -0.01em;
+}
+h3 {
+  font-size: 15px;
+  line-height: 1.35;
+  margin: 0;
+  font-weight: 600;
+}
+p {
+  margin: 0;
+  max-width: 70ch;
+}
+a {
+  color: var(--accent);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+code {
+  font: 0.92em var(--mono);
+}
+.muted {
+  color: var(--muted);
+}
+
+header {
+  display: grid;
+  gap: 14px;
+}
+.meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+section {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+  scroll-margin-top: 16px;
+}
+section > h2 {
+  padding-top: 18px;
+  border-top: 2px solid var(--ink);
+}
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 13.5px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.toc a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.toc a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.kpi {
+  background: var(--surface);
+  padding: 16px;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+.kpi b {
+  font: 600 26px / 1.1 var(--mono);
+  letter-spacing: -0.02em;
+}
+.kpi span {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+@media (max-width: 640px) {
+  .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .kpi b {
+    font-size: 21px;
+  }
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+  gap: 28px 32px;
+}
+.fig {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  align-content: start;
+}
+.cap {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.chart {
+  position: relative;
+  height: 280px;
+}
+.chart.tall {
+  height: 340px;
+}
+
+.tbl {
+  overflow-x: auto;
+  min-width: 0;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13.5px;
+}
+th,
+td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+th {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom-color: var(--muted);
+  white-space: nowrap;
+}
+td.n,
+th.n {
+  text-align: right;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+td.txt {
+  min-width: 260px;
+}
+tbody tr:hover td,
+table tr:hover td {
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 20px;
+}
+
+.tag {
+  display: inline-block;
+  font: 600 11px / 1 var(--body);
+  letter-spacing: 0.02em;
+  padding: 4px 7px;
+  border-radius: 4px;
+  margin-right: 6px;
+  vertical-align: 1px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.tag.good {
+  background: color-mix(in srgb, var(--good) 16%, transparent);
+  color: var(--good);
+}
+.tag.bad {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--bad);
+}
+.up {
+  color: var(--good);
+}
+.down {
+  color: var(--bad);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tabs button {
+  font: 500 13px var(--body);
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.tabs button:hover {
+  border-color: var(--accent);
+}
+.tabs button[aria-selected="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chips span {
+  font: 13px var(--mono);
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.chips span b {
+  color: var(--muted);
+  font-weight: 400;
+  margin-left: 6px;
+}
+
+dl.facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 18px;
+  margin: 0;
+  font-size: 14px;
+}
+dl.facts dt {
+  color: var(--muted);
+}
+dl.facts dd {
+  margin: 0;
+  min-width: 0;
+}
+
+.notes {
+  font-size: 13.5px;
+  color: var(--muted);
+  display: grid;
+  gap: 6px;
+  padding-left: 18px;
+  margin: 0;
+}
+
+.handle { color: var(--accent); }
+.lede { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.lede .panel { gap: 10px; }
+@media (max-width: 760px) { .lede { grid-template-columns: 1fr; } }
+.findings { display: grid; gap: 12px; padding: 0; margin: 0; list-style: none; counter-reset: f; }
+.findings li { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; }
+.findings li::before { counter-increment: f; content: counter(f); font: 600 13px/26px var(--mono); text-align: center;
+  width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); }
+.findings li p { max-width: none; }
+.findings b { font-weight: 600; }
+.heat { display: grid; grid-template-columns: 36px repeat(24, minmax(0, 1fr)); gap: 2px; font: 10.5px var(--mono); color: var(--muted); }
+.heat div { aspect-ratio: 1; border-radius: 2px; display: grid; place-items: center; }
+.heat .c { background: var(--accent); }
+.heat .lbl { aspect-ratio: auto; justify-content: start; }
+@media (max-width: 600px) { .heat { grid-template-columns: 28px repeat(24, minmax(0, 1fr)); font-size: 8px; } }
+.poll { display: grid; gap: 8px; padding-block: 12px; border-bottom: 1px solid var(--line); }
+.poll:last-child { border-bottom: 0; }
+.bar { display: grid; grid-template-columns: minmax(0, 1fr) 64px; gap: 10px; font-size: 13px; align-items: center; }
+.bar i { display: block; height: 6px; border-radius: 3px; background: var(--accent); margin-top: 3px; }
+.bar .n { font-family: var(--mono); text-align: right; }
+.insight { gap: 10px; }
+.insight h3 { font-family: var(--display); font-size: 16px; font-weight: 500; }
+.insight ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+.insight li { max-width: 70ch; }
+.pill { display: inline-block; font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="meta">Telegram channel audit · data pulled 2026-10-15</p>
+    <h1>Inside <span class="handle">@AI_DeepLearning</span></h1>
+    <div class="lede">
+      <p id="about"></p>
+      <div class="panel">
+        <h3>The channel</h3>
+        <dl class="facts" id="profile"></dl>
+      </div>
+    </div>
+    <ul class="toc">
+      <li><a href="#numbers">What the numbers say</a></li>
+      <li><a href="#reading">What to do</a></li>
+      <li><a href="#growth">Over time</a></li>
+      <li><a href="#rhythm">Rhythm</a></li>
+      <li><a href="#content">Content</a></li>
+      <li><a href="#posts">Top posts</a></li>
+      <li><a href="#readers">Readers</a></li>
+      <li><a href="#method">Method</a></li>
+    </ul>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section id="numbers">
+    <h2>What the numbers say</h2>
+    <ol class="findings facts"><li><p><b>23.9% of subscribers see a typical post.</b> The median post of the last 90 days got 4.1k views; the channel has 17.3k subscribers.</p></li><li><p><b>Median views per post peaked in 2024 at 8.1k; 2026 stands at 4.8k.</b> Posts per year: 2017 89, 2020 31, 2021 172, 2022 445, 2023 249, 2024 220, 2025 203, 2026 151 (busiest: 2022).</p></li><li><p><b>Posts that follow another within &lt; 3 h average 1.0× lift; after 2+ days of quiet, 1.03×.</b> 0.0% against 2.4% break out (1.5× or more).</p></li><li><p><b>Long posts get shared most.</b> Posts of 300–800 characters get 4.6 forwards per 1,000 views; posts of no text get 2.7.</p></li><li><p><b>Polls (10) trade sharing for talk.</b> 0.0 forwards per 1,000 views against 1.2 for text posts; 1.4 comments against 0.3. 0.0% of polls break out.</p></li><li><p><b>Strongest theme: Vision-language & LLMs</b> (1.3% of 78 posts break out). <b>Weakest: Robots & driving</b> (0.0% of 86).</p></li><li><p><b>Best opening: «Code released» / repo under a licence</b>, 2.5% break out against 0.9% for all posts (197 posts).</p></li><li><p><b>26 people wrote 144 comments under posts since 2025-10-16.</b> The top 10% of them wrote 55%; 54% commented once. The author replied 49 times, under 34 of 71 posts.</p></li></ol>
+  </section>
+
+  <section id="reading">
+    <h2>What we think it means, and what to do</h2>
+    <p class="muted">Written by an outside reader from public data only. The numbers are measured; lines marked <b>our guess</b> are interpretation, and you know the reasons better than we do.</p>
+
+<div class="split">
+  <div class="panel insight">
+    <h3>Your channel, as the data shows it</h3>
+    <ul>
+      <li>One author, one format, nine years. Since 2022 almost every post is the same card: an emoji-framed title, two lines on a new paper, then Review, Paper, Project and Code links. 1,218 of 1,582 posts open this way, and 1,112 carry a short video.</li>
+      <li>Readers keep and pass on more than they react. The channel has 26.3k forwards against 20.1k reactions: 1.3 forwards for every reaction. For a paper digest this is the signal that counts. People save a paper or send it to a colleague.</li>
+      <li>The subject is still computer vision first. Pose, motion and avatars (496 posts) and 3D reconstruction (432) lead. Vision-language models and LLMs are a small theme, but they grew from 12 posts in 2022 to 22 in 2025.</li>
+    </ul>
+  </div>
+  <div class="panel insight">
+    <h3>Your readers</h3>
+    <ul>
+      <li>For them Telegram is the main source, not a copy of LinkedIn. In your January 2025 poll, 297 of 573 voters picked Telegram as their favourite source of AI updates, and 185 picked LinkedIn.</li>
+      <li>A typical post now reaches 24% of the 17.3k subscribers: 4.1k views at the median over the last 90 days.</li>
+      <li>The comment section is small by design. Comments are open only to members you accept into the discussion group (your September 2025 poll asked about this and got 524 votes). From 16 Oct 2025 on, 26 people wrote 144 comments under 71 posts. One reader wrote 52 of them, more than a third. You answered 49 times, under 34 posts. The first comment usually comes 45 minutes after the post.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="panel insight">
+  <h3>What works</h3>
+  <ul>
+    <li><span class="tag good">works</span><b>Code that is out today.</b> 197 posts say the code is released or name its licence ("Repo under Apache 2.0💙"). 2.5% of them break out, almost three times the channel's 0.9%, and they get 5.3 forwards per 1,000 views against 4.0. The 108 posts where the code is only "announced" got no breakout at all.</li>
+    <li><span class="tag good">works</span><b>Big learning resources travel furthest.</b> The four most-forwarded posts are not single papers. They are a guide to modern computer vision (160 forwards), a Stanford course on generative AI (139), Meta's Segment Anything (126) and this month's "Computer Vision ultimate collection" (122). The last one is already the most-forwarded post of 2026, at a time when views are at their lowest.</li>
+    <li><span class="tag good">works</span><b>Vision-language and LLM posts get shared.</b> They have the highest forwards per reaction of any theme (1.69) and 4.9 forwards per 1,000 views. There are only 78 of them, so there is room to grow.</li>
+    <li><span class="tag good">works</span><b>Your own voice.</b> The 17 posts where you write as yourself ("Dear friends", "Hi everyone") get 11.4 reactions per 1,000 views, almost four times the channel's 3.0. Readers care about the person behind the digest. These posts are rarely forwarded (0.6 per 1,000 views), which is expected: they are for the people already here.</li>
+    <li><span class="tag good">works</span><b>One post a day.</b> On days with a single post, 2.1% of posts break out and readers forward 4.5 per 1,000 views. On days with two or more posts, none of 877 broke out, and forwards drop to 3.0–3.5.</li>
+  </ul>
+</div>
+
+<div class="panel insight">
+  <h3>What could be better</h3>
+  <ul>
+    <li><span class="tag bad">fix</span><b>Reach never came back after the 2025 break.</b> From May to July 2025 the channel posted 3 times. In the six months before the break, the median post got 8.4k views, 17 reactions and 36 forwards. In the six months after it, 5.0k views, 11 reactions and 22 forwards: about 40% less on every count. September 2026 is lower still, at 4.0k. <b>Our guess:</b> during the quiet months some readers muted the channel or left, and the posts since then reach a smaller active audience. The subscriber history that would show it is in Telegram's admin statistics, which we can't see.</li>
+    <li><span class="tag bad">fix</span><b>Your October post is half right for this channel.</b> You wrote that engagement grew while impressions fell. Here, the median engagement rate did rise, from 0.6% in 2022–2024 to 0.8% in 2026. But that is because views fell faster than reactions, not because more people react. The fall starts at the 2025 break, not slowly with the flood of viral posts. On Telegram there is no feed algorithm to win back. Readers see a post if they still open the channel.</li>
+    <li><span class="tag bad">fix</span><b>Most links hide where they go.</b> The posts carry 1,845 short or LinkedIn links (t.ly 643, bit.ly 524, lnkd.in 466, linkedin.com 212), against 178 direct arXiv links and 143 direct GitHub links. A Telegram reader who taps "Review" lands on LinkedIn. <b>Our guess:</b> that is the point, since LinkedIn is your main platform. But the readers who voted for Telegram want the paper and the code, and a forward with a bare t.ly link tells the next person nothing.</li>
+    <li><span class="tag bad">fix</span><b>Bursts of live posts fall flat.</b> On 24–25 September 2025 the channel sent 39 messages, most of them photos from an Nvidia event in Milan. All 8 of the weakest posts of the last two years come from those two days, at 0.67–0.82× their period's views.</li>
+    <li><span class="tag bad">fix</span><b>Bare links did nothing.</b> The 139 link-only posts of 2021–22 got 0.7 forwards and 0.2 reactions per 1,000 views. The channel grew only after the move to the paper card in 2022, when median views went from 232 to 2.8k.</li>
+  </ul>
+</div>
+
+<div class="panel insight">
+  <h3>Experiments worth running</h3>
+  <ul>
+    <li><span class="tag">try</span><b>Direct links first for four weeks.</b> Put the arXiv and GitHub links at the top and the LinkedIn review last. Compare forwards per 1,000 views with the four weeks before.</li>
+    <li><span class="tag">try</span><b>Wait for the code.</b> Post a paper when its code is out, and put "code + licence" in the first line. Keep "announced" papers for a weekly round-up. The data shows that released code is what readers pass on.</li>
+    <li><span class="tag">try</span><b>A monthly resource post.</b> Courses, surveys and collections are the four most-forwarded posts ever. One a month, with the best papers of the month, costs little and fits the format that travels.</li>
+    <li><span class="tag">try</span><b>Turn events into one post.</b> Cover a conference in one album or one evening summary instead of a stream of photos.</li>
+    <li><span class="tag">try</span><b>Ask the quiet majority again.</b> 524 people voted on the comment setting and 433 on what to post next. A short "what did you build with a paper from here?" post, with comments open for a week, would show whether the readers who forward also want to talk.</li>
+  </ul>
+</div>
+
+  </section>
+
+  <section id="growth">
+    <h2>Output and views over time</h2>
+    <div class="fig">
+      <h3>Posts per month and median views per post</h3>
+      <div class="chart tall"><canvas id="cMonthly"></canvas></div>
+      <p class="cap">Bars: posts in the month. Line: median current views of those posts. The last month is still collecting views.</p>
+    </div>
+    <div class="fig">
+      <h3>Year by year</h3>
+      <div class="tbl"><table id="tYearly"></table></div>
+      <p class="cap">ER (engagement rate) = (reactions + forwards + comments) ÷ views, median per post. Negative = share of 💩 👎 🤬 🤡 🤮 😡 among all reactions that year.</p>
+    </div>
+  </section>
+
+  <section id="rhythm">
+    <h2>Does posting more often cost views?</h2>
+    <div class="grid2">
+      <div class="fig">
+        <h3>Lift by time since the previous post</h3>
+        <div class="chart"><canvas id="cGap"></canvas></div>
+        <p class="cap">Lift = a post's views ÷ the median views of its 40 nearest posts; 1.0 is a normal post for its period. Line: share of posts that reach 1.5× or more.</p>
+      </div>
+      <div class="fig">
+        <h3>Lift by posts on the same day</h3>
+        <div class="chart"><canvas id="cLoad"></canvas></div>
+        <p class="cap">Every post of a busy day counts toward that day's bucket.</p>
+      </div>
+    </div>
+    <div class="fig">
+      <h3>When posts go out (UTC)</h3>
+      <div class="heat" id="heat"></div>
+      <p class="cap">Darker cell = more posts in that slot. Madrid is UTC+1 in winter and UTC+2 in summer.</p>
+    </div>
+    <div class="grid2">
+      <div class="fig">
+        <h3>Lift by weekday</h3>
+        <div class="chart"><canvas id="cWeekday"></canvas></div>
+      </div>
+      <div class="fig">
+        <h3>Lift by hour (UTC)</h3>
+        <div class="chart"><canvas id="cHour"></canvas></div>
+        <p class="cap">Hours with fewer than 15 posts are hidden: too few to trust.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="content">
+    <h2>What earns attention</h2>
+    <div class="grid2">
+      <div class="fig">
+        <h3>Per 1,000 views, by format</h3>
+        <div class="chart"><canvas id="cKind"></canvas></div>
+      </div>
+      <div class="fig">
+        <h3>By text length</h3>
+        <div class="chart"><canvas id="cLen"></canvas></div>
+        <p class="cap">Characters of text, polls left out. Bars: forwards per 1,000 views. Line: share of posts reaching 1.5× lift.</p>
+      </div>
+    </div>
+    <div class="fig">
+      <h3>Themes</h3>
+      <div class="tbl"><table id="tThemes"></table></div>
+      <p class="cap">Keyword matching on the text, so a post can count toward several themes. Hit rate = share of posts with lift ≥ 1.5. Forwards per reaction: above 1, readers pass the post on more than they react to it, which usually means a useful post rather than a pleasant one.</p>
+    </div>
+    <div class="fig">
+      <h3>Theme mix over time</h3>
+      <div class="chart tall"><canvas id="cThemeYears"></canvas></div>
+      <p class="cap" id="themeCap"></p>
+    </div>
+    <div class="fig">
+      <h3>How a post opens</h3>
+      <div class="tbl"><table id="tOpeners"></table></div>
+      <p class="cap">Patterns in the first line. The last row is the whole channel, for comparison.</p>
+    </div>
+    <div class="fig">
+      <h3>Referral and sponsored posts</h3>
+      <p id="promo"></p>
+      <div class="tbl"><table id="tPromo"></table></div>
+    </div>
+  </section>
+
+  <section id="posts">
+    <h2>The posts that mattered</h2>
+    <div class="fig">
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="tbl"><table id="tTop"></table></div>
+      <p class="cap" id="tabCap"></p>
+    </div>
+  </section>
+
+  <section id="readers">
+    <h2>Who is reading, and how they take part</h2>
+    <div class="fig" id="communityFig">
+      <h3>The comment section, posts since 2025-10-16</h3>
+      <div class="kpis" id="communityKpis"></div>
+      <div class="chart"><canvas id="cCommenters"></canvas></div>
+      <p class="cap" id="communityCap"></p>
+    </div>
+    <div class="grid2">
+      <div class="fig">
+        <h3>Polls: how many viewers vote</h3>
+        <div class="chart"><canvas id="cPollRate"></canvas></div>
+        <p class="cap">Median votes ÷ views per poll, by year. Bars: polls that year.</p>
+      </div>
+      <div class="fig">
+        <h3>Reactions, all time</h3>
+        <div class="chart tall"><canvas id="cReact"></canvas></div>
+      </div>
+    </div>
+    <div class="fig">
+      <h3>Biggest polls</h3>
+      <div id="polls"></div>
+      <p class="cap">Each answer's count shows only for polls this account voted in; the total shows for all.</p>
+    </div>
+  </section>
+
+  <section id="links">
+    <h2>Where the channel points</h2>
+    <div class="grid2">
+      <div class="fig"><h3>Linked sites</h3><div class="chips" id="domains"></div></div>
+      <div class="fig"><h3>Mentioned accounts</h3><div class="chips" id="handles"></div></div>
+    </div>
+  </section>
+
+  <section id="method">
+    <h2>How this was measured</h2>
+    <ul class="notes">
+      <li>Source: every post the channel returns today, read with the tg CLI from a member account. Deleted posts are gone. Posts without a view count (the earliest ones and service messages) are left out. An album counts as one post.</li>
+      <li>Views, reactions, forwards and comments are today's totals. Old posts reached a smaller audience, so comparisons use lift (views ÷ median of the 40 nearest posts), not raw views.</li>
+      <li>Telegram gives the subscriber count only for today, and the channel's official statistics only to its admins. So there is no subscriber growth curve, no source of new subscribers and no view-through rate per hour.</li>
+      <li>Themes, openers and sponsored posts come from keyword matching. They are rough.</li>
+      <li>Comments: every comment under posts since 2025-10-16. Readers are counted, never named.</li>
+      <li>Times are UTC. Made with our internal script on the public <code>tg</code> commands; the recipe is in the cli-docs guide "Group and channel analytics".</li>
+    </ul>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const DATA = {"channel": "AI_DeepLearning", "title": "AI with Papers - Artificial Intelligence & Deep Learning", "about": "All the AI with papers. Every day fresh updates about #DeepLearning #MachineLearning #LLM & #ComputerVision\n\nCurated by Alessandro Ferrari | https://www.linkedin.com/in/visionarynet/\n\n#AI #chatGPT", "pulled": "2026-10-15", "overview": {"subs": 17253, "posts": 1582, "first": "2017-09-07", "last": "2026-10-14", "totalViews": 6620202, "totalReact": 20126, "totalFwd": 26337, "totalCom": 848, "recentPosts": 42, "recentMedViews": 4118.5, "recentReach": 23.9, "recentER": 1.0, "polls": 10, "perWeek": 3.2}, "monthly": [{"m": "2017-09", "n": 47, "views": 267, "er": 0.0}, {"m": "2017-10", "n": 12, "views": 221.5, "er": 0.0}, {"m": "2017-11", "n": 0, "views": null, "er": null}, {"m": "2017-12", "n": 30, "views": 203.0, "er": 0.0}, {"m": "2018-01", "n": 7, "views": 216, "er": 0.0}, {"m": "2018-02", "n": 4, "views": 224.5, "er": 0.0}, {"m": "2018-03", "n": 0, "views": null, "er": null}, {"m": "2018-04", "n": 1, "views": 287, "er": 0.3}, {"m": "2018-05", "n": 0, "views": null, "er": null}, {"m": "2018-06", "n": 0, "views": null, "er": null}, {"m": "2018-07", "n": 0, "views": null, "er": null}, {"m": "2018-08", "n": 0, "views": null, "er": null}, {"m": "2018-09", "n": 0, "views": null, "er": null}, {"m": "2018-10", "n": 0, "views": null, "er": null}, {"m": "2018-11", "n": 2, "views": 279.5, "er": 0.2}, {"m": "2018-12", "n": 0, "views": null, "er": null}, {"m": "2019-01", "n": 2, "views": 255.5, "er": 0.0}, {"m": "2019-02", "n": 1, "views": 249, "er": 0.0}, {"m": "2019-03", "n": 2, "views": 292.0, "er": 0.0}, {"m": "2019-04", "n": 1, "views": 337, "er": 0.0}, {"m": "2019-05", "n": 0, "views": null, "er": null}, {"m": "2019-06", "n": 1, "views": 300, "er": 0.0}, {"m": "2019-07", "n": 0, "views": null, "er": null}, {"m": "2019-08", "n": 0, "views": null, "er": null}, {"m": "2019-09", "n": 0, "views": null, "er": null}, {"m": "2019-10", "n": 0, "views": null, "er": null}, {"m": "2019-11", "n": 1, "views": 307, "er": 0.0}, {"m": "2019-12", "n": 0, "views": null, "er": null}, {"m": "2020-01", "n": 0, "views": null, "er": null}, {"m": "2020-02", "n": 0, "views": null, "er": null}, {"m": "2020-03", "n": 4, "views": 211.0, "er": 0.2}, {"m": "2020-04", "n": 1, "views": 192, "er": 0.0}, {"m": "2020-05", "n": 2, "views": 205.0, "er": 0.0}, {"m": "2020-06", "n": 0, "views": null, "er": null}, {"m": "2020-07", "n": 0, "views": null, "er": null}, {"m": "2020-08", "n": 0, "views": null, "er": null}, {"m": "2020-09", "n": 0, "views": null, "er": null}, {"m": "2020-10", "n": 0, "views": null, "er": null}, {"m": "2020-11", "n": 16, "views": 180.5, "er": 0.0}, {"m": "2020-12", "n": 8, "views": 168.0, "er": 0.0}, {"m": "2021-01", "n": 5, "views": 169, "er": 0.0}, {"m": "2021-02", "n": 19, "views": 176, "er": 0.0}, {"m": "2021-03", "n": 7, "views": 198, "er": 0.0}, {"m": "2021-04", "n": 11, "views": 201, "er": 0.0}, {"m": "2021-05", "n": 4, "views": 211.0, "er": 0.2}, {"m": "2021-06", "n": 4, "views": 213.5, "er": 0.2}, {"m": "2021-07", "n": 1, "views": 205, "er": 0.5}, {"m": "2021-08", "n": 9, "views": 209, "er": 0.0}, {"m": "2021-09", "n": 27, "views": 225, "er": 0.0}, {"m": "2021-10", "n": 31, "views": 241, "er": 0.0}, {"m": "2021-11", "n": 33, "views": 379, "er": 0.0}, {"m": "2021-12", "n": 21, "views": 574, "er": 0.0}, {"m": "2022-01", "n": 28, "views": 1284.5, "er": 0.3}, {"m": "2022-02", "n": 29, "views": 1590, "er": 0.6}, {"m": "2022-03", "n": 47, "views": 1795, "er": 0.7}, {"m": "2022-04", "n": 53, "views": 2015, "er": 0.8}, {"m": "2022-05", "n": 33, "views": 2352, "er": 0.8}, {"m": "2022-06", "n": 32, "views": 2844.0, "er": 0.9}, {"m": "2022-07", "n": 31, "views": 2946, "er": 0.7}, {"m": "2022-08", "n": 36, "views": 3099.5, "er": 0.6}, {"m": "2022-09", "n": 40, "views": 3200.5, "er": 0.6}, {"m": "2022-10", "n": 36, "views": 3114.0, "er": 0.6}, {"m": "2022-11", "n": 38, "views": 3289.0, "er": 0.5}, {"m": "2022-12", "n": 42, "views": 3646.0, "er": 0.6}, {"m": "2023-01", "n": 38, "views": 4369.0, "er": 0.8}, {"m": "2023-02", "n": 25, "views": 4871, "er": 0.6}, {"m": "2023-03", "n": 22, "views": 5358.0, "er": 0.7}, {"m": "2023-04", "n": 12, "views": 6864.0, "er": 1.0}, {"m": "2023-05", "n": 13, "views": 6053, "er": 0.7}, {"m": "2023-06", "n": 13, "views": 5938, "er": 0.8}, {"m": "2023-07", "n": 23, "views": 5028, "er": 0.7}, {"m": "2023-08", "n": 26, "views": 5388.0, "er": 0.5}, {"m": "2023-09", "n": 18, "views": 6273.5, "er": 0.3}, {"m": "2023-10", "n": 18, "views": 6139.5, "er": 0.3}, {"m": "2023-11", "n": 22, "views": 6322.0, "er": 0.4}, {"m": "2023-12", "n": 19, "views": 7180, "er": 0.7}, {"m": "2024-01", "n": 28, "views": 6591.5, "er": 0.8}, {"m": "2024-02", "n": 19, "views": 8138, "er": 0.5}, {"m": "2024-03", "n": 17, "views": 8313, "er": 0.7}, {"m": "2024-04", "n": 21, "views": 7753, "er": 0.6}, {"m": "2024-05", "n": 23, "views": 8038, "er": 0.6}, {"m": "2024-06", "n": 21, "views": 7961, "er": 0.6}, {"m": "2024-07", "n": 22, "views": 8293.5, "er": 0.6}, {"m": "2024-08", "n": 8, "views": 10022.0, "er": 0.6}, {"m": "2024-09", "n": 9, "views": 8549, "er": 0.4}, {"m": "2024-10", "n": 21, "views": 8257, "er": 0.9}, {"m": "2024-11", "n": 19, "views": 8445, "er": 0.7}, {"m": "2024-12", "n": 12, "views": 8998.5, "er": 0.7}, {"m": "2025-01", "n": 29, "views": 7709, "er": 0.7}, {"m": "2025-02", "n": 17, "views": 8970, "er": 0.6}, {"m": "2025-03", "n": 20, "views": 8327.5, "er": 0.6}, {"m": "2025-04", "n": 22, "views": 7999.0, "er": 0.6}, {"m": "2025-05", "n": 2, "views": 14080.0, "er": 0.2}, {"m": "2025-06", "n": 1, "views": 13110, "er": 3.6}, {"m": "2025-07", "n": 0, "views": null, "er": null}, {"m": "2025-08", "n": 18, "views": 5348.0, "er": 0.8}, {"m": "2025-09", "n": 38, "views": 4746.5, "er": 0.8}, {"m": "2025-10", "n": 19, "views": 5913, "er": 0.7}, {"m": "2025-11", "n": 21, "views": 5072, "er": 0.9}, {"m": "2025-12", "n": 16, "views": 5521.0, "er": 0.8}, {"m": "2026-01", "n": 27, "views": 4885, "er": 0.8}, {"m": "2026-02", "n": 20, "views": 4995.5, "er": 0.7}, {"m": "2026-03", "n": 20, "views": 5051.5, "er": 0.8}, {"m": "2026-04", "n": 21, "views": 5180, "er": 0.5}, {"m": "2026-05", "n": 5, "views": 8091, "er": 0.6}, {"m": "2026-06", "n": 5, "views": 4697, "er": 1.1}, {"m": "2026-07", "n": 23, "views": 4648, "er": 0.9}, {"m": "2026-08", "n": 3, "views": 4969, "er": 0.9}, {"m": "2026-09", "n": 19, "views": 4004, "er": 1.1}, {"m": "2026-10", "n": 8, "views": 2735.0, "er": 1.7}], "yearly": [{"y": 2017, "n": 89, "views": 251, "er": 0.0, "fwd": 35, "com": 0, "polls": 0, "avgLen": 117, "neg": 0.0}, {"y": 2018, "n": 14, "views": 219.5, "er": 0.0, "fwd": 2, "com": 0, "polls": 0, "avgLen": 121, "neg": 0.0}, {"y": 2019, "n": 8, "views": 287.5, "er": 0.0, "fwd": 0, "com": 0, "polls": 0, "avgLen": 176, "neg": 0.0}, {"y": 2020, "n": 31, "views": 186, "er": 0.0, "fwd": 5, "com": 0, "polls": 0, "avgLen": 108, "neg": 0.0}, {"y": 2021, "n": 172, "views": 231.5, "er": 0.0, "fwd": 51, "com": 0, "polls": 0, "avgLen": 128, "neg": 0.0}, {"y": 2022, "n": 445, "views": 2826, "er": 0.6, "fwd": 2981, "com": 0, "polls": 1, "avgLen": 265, "neg": 0.52}, {"y": 2023, "n": 249, "views": 5727, "er": 0.6, "fwd": 4723, "com": 170, "polls": 0, "avgLen": 265, "neg": 0.64}, {"y": 2024, "n": 220, "views": 8144.0, "er": 0.6, "fwd": 8137, "com": 266, "polls": 0, "avgLen": 345, "neg": 1.22}, {"y": 2025, "n": 203, "views": 6377, "er": 0.7, "fwd": 6474, "com": 293, "polls": 5, "avgLen": 342, "neg": 0.17}, {"y": 2026, "n": 151, "views": 4832, "er": 0.8, "fwd": 3929, "com": 119, "polls": 4, "avgLen": 335, "neg": 0.29}], "heat": [[0, 0, 0, 0, 1, 2, 29, 28, 25, 17, 12, 15, 36, 39, 20, 19, 13, 4, 1, 2, 3, 0, 0, 0], [1, 0, 0, 0, 0, 2, 36, 48, 24, 20, 8, 16, 33, 29, 20, 25, 11, 10, 4, 3, 0, 1, 0, 0], [0, 0, 0, 0, 0, 2, 38, 42, 34, 12, 13, 18, 29, 32, 22, 10, 11, 4, 2, 0, 2, 2, 0, 0], [0, 0, 0, 2, 0, 2, 25, 46, 37, 19, 9, 24, 22, 34, 18, 11, 8, 9, 4, 1, 3, 0, 0, 0], [2, 0, 0, 0, 0, 0, 28, 54, 33, 18, 14, 13, 29, 22, 20, 17, 8, 2, 3, 0, 0, 2, 1, 0], [0, 0, 0, 0, 0, 0, 19, 29, 32, 31, 8, 4, 5, 8, 4, 1, 3, 0, 2, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 2, 4, 13, 13, 10, 4, 2, 5, 3, 4, 1, 1, 2, 1, 1, 0, 0, 0, 0]], "byWeekday": [{"d": 0, "n": 266, "lift": 0.99, "hit": 0.4, "er": 0.6, "reactPer1k": 3.0, "fwdPer1k": 3.9, "comPer1k": 0.1}, {"d": 1, "n": 291, "lift": 1.02, "hit": 2.1, "er": 0.6, "reactPer1k": 2.8, "fwdPer1k": 4.0, "comPer1k": 0.1}, {"d": 2, "n": 273, "lift": 1.0, "hit": 0.7, "er": 0.6, "reactPer1k": 2.9, "fwdPer1k": 3.7, "comPer1k": 0.1}, {"d": 3, "n": 274, "lift": 1.03, "hit": 1.1, "er": 0.6, "reactPer1k": 3.3, "fwdPer1k": 4.0, "comPer1k": 0.1}, {"d": 4, "n": 266, "lift": 1.04, "hit": 0.8, "er": 0.6, "reactPer1k": 2.9, "fwdPer1k": 4.3, "comPer1k": 0.1}, {"d": 5, "n": 146, "lift": 1.02, "hit": 0.7, "er": 0.6, "reactPer1k": 3.6, "fwdPer1k": 4.3, "comPer1k": 0.2}, {"d": 6, "n": 66, "lift": 1.0, "hit": 0.0, "er": 0.5, "reactPer1k": 3.1, "fwdPer1k": 3.5, "comPer1k": 0.3}], "byHour": [{"h": 0, "n": 3, "lift": 1.01, "hit": 0.0, "er": 0.0, "reactPer1k": 0.0, "fwdPer1k": 0.0, "comPer1k": 0.0}, {"h": 1, "n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null}, {"h": 2, "n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null}, {"h": 3, "n": 2, "lift": 0.96, "hit": 0.0, "er": 0.0, "reactPer1k": 0.0, "fwdPer1k": 0.0, "comPer1k": 0.0}, {"h": 4, "n": 1, "lift": 0.94, "hit": 0.0, "er": 0.7, "reactPer1k": 3.3, "fwdPer1k": 3.3, "comPer1k": 0.0}, {"h": 5, "n": 10, "lift": 1.0, "hit": 0.0, "er": 0.7, "reactPer1k": 2.8, "fwdPer1k": 5.1, "comPer1k": 0.1}, {"h": 6, "n": 179, "lift": 1.03, "hit": 2.2, "er": 0.7, "reactPer1k": 3.4, "fwdPer1k": 4.5, "comPer1k": 0.1}, {"h": 7, "n": 260, "lift": 1.03, "hit": 1.2, "er": 0.7, "reactPer1k": 2.7, "fwdPer1k": 4.5, "comPer1k": 0.1}, {"h": 8, "n": 198, "lift": 1.01, "hit": 0.5, "er": 0.6, "reactPer1k": 2.9, "fwdPer1k": 4.0, "comPer1k": 0.1}, {"h": 9, "n": 127, "lift": 1.04, "hit": 1.6, "er": 0.6, "reactPer1k": 3.0, "fwdPer1k": 4.2, "comPer1k": 0.1}, {"h": 10, "n": 68, "lift": 1.02, "hit": 1.5, "er": 0.6, "reactPer1k": 3.2, "fwdPer1k": 3.4, "comPer1k": 0.1}, {"h": 11, "n": 92, "lift": 1.0, "hit": 1.1, "er": 0.6, "reactPer1k": 2.8, "fwdPer1k": 3.7, "comPer1k": 0.1}, {"h": 12, "n": 159, "lift": 1.01, "hit": 0.0, "er": 0.6, "reactPer1k": 3.0, "fwdPer1k": 3.9, "comPer1k": 0.2}, {"h": 13, "n": 167, "lift": 1.01, "hit": 0.6, "er": 0.6, "reactPer1k": 2.8, "fwdPer1k": 3.6, "comPer1k": 0.1}, {"h": 14, "n": 108, "lift": 1.03, "hit": 1.9, "er": 0.5, "reactPer1k": 3.8, "fwdPer1k": 3.4, "comPer1k": 0.2}, {"h": 15, "n": 84, "lift": 1.01, "hit": 0.0, "er": 0.4, "reactPer1k": 3.1, "fwdPer1k": 3.1, "comPer1k": 0.1}, {"h": 16, "n": 55, "lift": 1.0, "hit": 0.0, "er": 0.5, "reactPer1k": 3.3, "fwdPer1k": 2.6, "comPer1k": 0.1}, {"h": 17, "n": 31, "lift": 0.99, "hit": 0.0, "er": 0.1, "reactPer1k": 3.4, "fwdPer1k": 2.7, "comPer1k": 0.0}, {"h": 18, "n": 17, "lift": 1.01, "hit": 0.0, "er": 0.5, "reactPer1k": 4.3, "fwdPer1k": 2.9, "comPer1k": 0.3}, {"h": 19, "n": 7, "lift": 0.99, "hit": 0.0, "er": 0.7, "reactPer1k": 3.7, "fwdPer1k": 2.1, "comPer1k": 0.0}, {"h": 20, "n": 8, "lift": 1.01, "hit": 0.0, "er": 0.5, "reactPer1k": 4.4, "fwdPer1k": 2.0, "comPer1k": 0.0}, {"h": 21, "n": 5, "lift": 0.98, "hit": 0.0, "er": 0.2, "reactPer1k": 2.2, "fwdPer1k": 0.6, "comPer1k": 0.3}, {"h": 22, "n": 1, "lift": 1.12, "hit": 0.0, "er": 0.7, "reactPer1k": 0.7, "fwdPer1k": 4.0, "comPer1k": 1.8}, {"h": 23, "n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null}], "byGap": [{"b": "< 3 h", "n": 214, "lift": 1.0, "hit": 0.0, "er": 0.4, "reactPer1k": 3.3, "fwdPer1k": 3.0, "comPer1k": 0.2}, {"b": "3–12 h", "n": 284, "lift": 1.01, "hit": 0.0, "er": 0.6, "reactPer1k": 3.1, "fwdPer1k": 3.3, "comPer1k": 0.1}, {"b": "12–24 h", "n": 450, "lift": 1.02, "hit": 1.3, "er": 0.6, "reactPer1k": 3.0, "fwdPer1k": 4.3, "comPer1k": 0.1}, {"b": "1–2 days", "n": 305, "lift": 1.02, "hit": 0.3, "er": 0.6, "reactPer1k": 2.8, "fwdPer1k": 4.2, "comPer1k": 0.2}, {"b": "2+ days", "n": 328, "lift": 1.03, "hit": 2.4, "er": 0.6, "reactPer1k": 3.2, "fwdPer1k": 4.2, "comPer1k": 0.1}], "byDayLoad": [{"b": "1 post that day", "n": 705, "lift": 1.05, "hit": 2.1, "er": 0.6, "reactPer1k": 3.1, "fwdPer1k": 4.5, "comPer1k": 0.1}, {"b": "2 posts", "n": 608, "lift": 0.99, "hit": 0.0, "er": 0.6, "reactPer1k": 2.8, "fwdPer1k": 3.5, "comPer1k": 0.1}, {"b": "3+ posts", "n": 269, "lift": 0.99, "hit": 0.0, "er": 0.5, "reactPer1k": 3.8, "fwdPer1k": 3.0, "comPer1k": 0.1}], "byKind": [{"k": "video", "n": 1112, "lift": 1.02, "hit": 1.0, "er": 0.7, "reactPer1k": 3.0, "fwdPer1k": 4.1, "comPer1k": 0.1}, {"k": "link", "n": 273, "lift": 1.03, "hit": 0.7, "er": 0.0, "reactPer1k": 1.0, "fwdPer1k": 1.6, "comPer1k": 0.2}, {"k": "photo", "n": 128, "lift": 0.99, "hit": 0.8, "er": 0.6, "reactPer1k": 3.2, "fwdPer1k": 4.1, "comPer1k": 0.1}, {"k": "text", "n": 59, "lift": 0.99, "hit": 1.7, "er": 0.0, "reactPer1k": 8.4, "fwdPer1k": 1.2, "comPer1k": 0.3}, {"k": "poll", "n": 10, "lift": 1.02, "hit": 0.0, "er": 0.1, "reactPer1k": 1.1, "fwdPer1k": 0.0, "comPer1k": 1.4}], "byLength": [{"b": "no text", "n": 46, "lift": 0.95, "hit": 0.0, "er": 0.0, "reactPer1k": 2.6, "fwdPer1k": 2.7, "comPer1k": 0.0}, {"b": "<300", "n": 871, "lift": 1.01, "hit": 0.6, "er": 0.5, "reactPer1k": 3.3, "fwdPer1k": 3.2, "comPer1k": 0.1}, {"b": "300–800", "n": 653, "lift": 1.03, "hit": 1.5, "er": 0.7, "reactPer1k": 2.9, "fwdPer1k": 4.6, "comPer1k": 0.1}, {"b": "800–1.5k", "n": 2, "lift": 1.04, "hit": 0.0, "er": 1.8, "reactPer1k": 7.7, "fwdPer1k": 11.5, "comPer1k": 0.8}, {"b": "1.5k–2.5k", "n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null}, {"b": "2.5k+", "n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null}], "themes": [{"name": "3D & scene reconstruction", "n": 432, "lift": 1.02, "hit": 0.9, "er": 0.6, "reactPer1k": 2.7, "fwdPer1k": 4.0, "comPer1k": 0.1, "fwdPerReact": 1.49, "byYear": {"2017": 6, "2018": 0, "2019": 0, "2020": 1, "2021": 14, "2022": 146, "2023": 73, "2024": 72, "2025": 62, "2026": 58}}, {"name": "Humans: pose, motion, avatars", "n": 496, "lift": 1.02, "hit": 1.0, "er": 0.6, "reactPer1k": 2.9, "fwdPer1k": 4.1, "comPer1k": 0.1, "fwdPerReact": 1.43, "byYear": {"2017": 20, "2018": 1, "2019": 0, "2020": 3, "2021": 11, "2022": 143, "2023": 86, "2024": 95, "2025": 76, "2026": 61}}, {"name": "Segmentation & detection", "n": 329, "lift": 1.04, "hit": 1.2, "er": 0.7, "reactPer1k": 3.1, "fwdPer1k": 4.8, "comPer1k": 0.1, "fwdPerReact": 1.58, "byYear": {"2017": 11, "2018": 0, "2019": 1, "2020": 2, "2021": 7, "2022": 91, "2023": 66, "2024": 63, "2025": 50, "2026": 38}}, {"name": "Image & video generation", "n": 372, "lift": 1.02, "hit": 1.1, "er": 0.6, "reactPer1k": 2.8, "fwdPer1k": 3.8, "comPer1k": 0.1, "fwdPerReact": 1.35, "byYear": {"2017": 7, "2018": 0, "2019": 0, "2020": 1, "2021": 8, "2022": 137, "2023": 75, "2024": 59, "2025": 55, "2026": 30}}, {"name": "Vision-language & LLMs", "n": 78, "lift": 1.04, "hit": 1.3, "er": 0.7, "reactPer1k": 2.9, "fwdPer1k": 4.9, "comPer1k": 0.1, "fwdPerReact": 1.69, "byYear": {"2017": 1, "2018": 1, "2019": 0, "2020": 0, "2021": 0, "2022": 12, "2023": 15, "2024": 14, "2025": 22, "2026": 13}}, {"name": "Robots & driving", "n": 86, "lift": 1.0, "hit": 0.0, "er": 0.6, "reactPer1k": 2.8, "fwdPer1k": 3.6, "comPer1k": 0.1, "fwdPerReact": 1.31, "byYear": {"2017": 3, "2018": 0, "2019": 0, "2020": 0, "2021": 8, "2022": 31, "2023": 12, "2024": 13, "2025": 9, "2026": 10}}, {"name": "Speed & mobile", "n": 192, "lift": 1.04, "hit": 1.0, "er": 0.7, "reactPer1k": 3.7, "fwdPer1k": 4.7, "comPer1k": 0.1, "fwdPerReact": 1.25, "byYear": {"2017": 8, "2018": 0, "2019": 0, "2020": 4, "2021": 12, "2022": 77, "2023": 22, "2024": 29, "2025": 24, "2026": 16}}], "openers": [{"name": "Starts with a flag", "n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null}, {"name": "«Что не так с …»", "n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null}, {"name": "Starts with «Про …»", "n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null}, {"name": "Question in the first line", "n": 24, "lift": 1.03, "hit": 0.0, "er": 0.2, "reactPer1k": 2.4, "fwdPer1k": 2.0, "comPer1k": 0.2}, {"name": "Starts with an emoji", "n": 1247, "lift": 1.02, "hit": 1.0, "er": 0.7, "reactPer1k": 3.0, "fwdPer1k": 4.1, "comPer1k": 0.1}, {"name": "Numbered list inside", "n": 1, "lift": 1.14, "hit": 0.0, "er": 0.5, "reactPer1k": 4.8, "fwdPer1k": 0.0, "comPer1k": 0.0}, {"name": "Emoji-sandwich title (🔥Title🔥)", "n": 1218, "lift": 1.02, "hit": 1.0, "er": 0.7, "reactPer1k": 3.0, "fwdPer1k": 4.1, "comPer1k": 0.1}, {"name": "2017–21 one-liner with #hashtags", "n": 42, "lift": 1.03, "hit": 0.0, "er": 0.0, "reactPer1k": 0.3, "fwdPer1k": 2.0, "comPer1k": 0.0}, {"name": "Bare link, no text", "n": 139, "lift": 1.0, "hit": 0.0, "er": 0.0, "reactPer1k": 0.2, "fwdPer1k": 0.7, "comPer1k": 0.0}, {"name": "«Code released» / repo under a licence", "n": 197, "lift": 1.04, "hit": 2.5, "er": 0.8, "reactPer1k": 2.7, "fwdPer1k": 5.3, "comPer1k": 0.1}, {"name": "«Code announced», not yet released", "n": 108, "lift": 1.01, "hit": 0.0, "er": 0.7, "reactPer1k": 2.1, "fwdPer1k": 4.6, "comPer1k": 0.2}, {"name": "Names a big lab (#Nvidia, Meta, Google…)", "n": 341, "lift": 1.03, "hit": 1.8, "er": 0.6, "reactPer1k": 3.0, "fwdPer1k": 4.0, "comPer1k": 0.1}, {"name": "Tags a conference (#CVPR, #NeurIPS…)", "n": 31, "lift": 0.99, "hit": 0.0, "er": 0.7, "reactPer1k": 3.3, "fwdPer1k": 4.6, "comPer1k": 0.1}, {"name": "Personal note from the author", "n": 17, "lift": 1.05, "hit": 5.9, "er": 0.7, "reactPer1k": 11.4, "fwdPer1k": 0.6, "comPer1k": 0.3}, {"name": "All posts", "n": 1582, "lift": 1.02, "hit": 0.9, "er": 0.6, "reactPer1k": 3.0, "fwdPer1k": 4.0, "comPer1k": 0.1}], "promo": {"n": 0, "lift": null, "hit": null, "er": null, "reactPer1k": null, "fwdPer1k": null, "comPer1k": null, "rows": []}, "reactions": [{"e": "🔥", "n": 5957}, {"e": "❤", "n": 5194}, {"e": "👍", "n": 3537}, {"e": "🤯", "n": 2694}, {"e": "👏", "n": 637}, {"e": "🤩", "n": 374}, {"e": "🤣", "n": 359}, {"e": "😱", "n": 357}, {"e": "🥰", "n": 329}, {"e": "😍", "n": 144}, {"e": "⚡", "n": 142}, {"e": "🍾", "n": 136}], "topViews": [{"id": 1440, "date": "2025-05-16", "kind": "video", "text": "🧞‍♀️GENMO: Generalist Human Motion 🧞‍♀️ 👉#Nvidia presents GENMO, a unified Generalist Model for Human Motion that bridges motion estimation …", "views": 15423, "react": 21, "fwd": 20, "com": 0, "lift": 2.23, "er": 0.27, "link": "https://t.me/AI_DeepLearning/1440"}, {"id": 1360, "date": "2025-01-21", "kind": "video", "text": "🧽 Diffusion Video Inpainting 🧽 👉#Alibaba unveils a technical report about DiffuEraser, a video inpainting model based on stable diffusion, d…", "views": 15344, "react": 21, "fwd": 74, "com": 1, "lift": 1.9, "er": 0.63, "link": "https://t.me/AI_DeepLearning/1360"}, {"id": 1438, "date": "2025-04-29", "kind": "video", "text": "🔥 Diffusion Model <-> Depth 🔥 👉ETH & CMU on how to turn a single-image latent diffusion model (LDM) into the SOTA video depth estimator: vid…", "views": 13343, "react": 22, "fwd": 47, "com": 1, "lift": 1.89, "er": 0.52, "link": "https://t.me/AI_DeepLearning/1438"}, {"id": 1442, "date": "2025-06-05", "kind": "text", "text": "Dear friends, I’m truly sorry for being away from the group for so long. I know: no updates so far while AI is running faster than speed of …", "views": 13110, "react": 455, "fwd": 2, "com": 12, "lift": 1.92, "er": 3.58, "link": "https://t.me/AI_DeepLearning/1442"}, {"id": 1439, "date": "2025-05-15", "kind": "video", "text": "🩷Dance vs. #ComputerVision🩷 👉The Saint-Etienne university proposed a new 3D human body pose estimation pipeline to deal with dance analysis.…", "views": 12737, "react": 12, "fwd": 14, "com": 0, "lift": 1.82, "er": 0.2, "link": "https://t.me/AI_DeepLearning/1439"}, {"id": 1393, "date": "2025-03-01", "kind": "video", "text": "🏉MITracker: Multi-View Track🏉 👉MITracker is a novel Multi-View Integration Tracker to efficiently integrate multi-view object features and p…", "views": 11694, "react": 22, "fwd": 73, "com": 0, "lift": 1.37, "er": 0.81, "link": "https://t.me/AI_DeepLearning/1393"}, {"id": 1391, "date": "2025-02-20", "kind": "video", "text": "🔥 YOLOv12 is out (new SOTA) 🔥 👉YOLOv12 is a novel attention-centric YOLO framework that matches the speed of previous CNN-based ones while h…", "views": 11521, "react": 49, "fwd": 95, "com": 0, "lift": 1.35, "er": 1.25, "link": "https://t.me/AI_DeepLearning/1391"}, {"id": 1269, "date": "2024-07-30", "kind": "video", "text": "🔥🔥 SAM v2 is out! 🔥🔥 👉#Meta announced SAM 2, the novel unified model for real-time promptable segmentation in images and videos. 6x faster, …", "views": 11499, "react": 44, "fwd": 74, "com": 9, "lift": 1.34, "er": 1.1, "link": "https://t.me/AI_DeepLearning/1269"}, {"id": 1274, "date": "2024-08-23", "kind": "video", "text": "🦧Sapiens: SOTA ViTs for human🦧 👉META unveils Sapiens, a family of models for human-centric vision tasks: 2D pose estimation, body-part segme…", "views": 11434, "react": 30, "fwd": 103, "com": 5, "lift": 1.36, "er": 1.21, "link": "https://t.me/AI_DeepLearning/1274"}, {"id": 1379, "date": "2025-02-06", "kind": "video", "text": "👗3D Dynamic Garments👗 👉UCLA introduces Dress-1-to-3, a novel pipeline that reconstructs physics-plausible, simulation-ready separated garmen…", "views": 11304, "react": 18, "fwd": 50, "com": 0, "lift": 1.33, "er": 0.6, "link": "https://t.me/AI_DeepLearning/1379"}], "topLift": [{"id": 162, "date": "2021-01-05", "kind": "link", "text": "the new Compatible & Reusable #neuralnetwork components from Google #AI: https://www.linkedin.com/posts/argo-vision_neuralnetwork-ai-google-…", "views": 413, "react": 0, "fwd": 2, "com": 0, "lift": 2.46, "er": 0.48, "link": "https://t.me/AI_DeepLearning/162"}, {"id": 1440, "date": "2025-05-16", "kind": "video", "text": "🧞‍♀️GENMO: Generalist Human Motion 🧞‍♀️ 👉#Nvidia presents GENMO, a unified Generalist Model for Human Motion that bridges motion estimation …", "views": 15423, "react": 21, "fwd": 20, "com": 0, "lift": 2.23, "er": 0.27, "link": "https://t.me/AI_DeepLearning/1440"}, {"id": 1442, "date": "2025-06-05", "kind": "text", "text": "Dear friends, I’m truly sorry for being away from the group for so long. I know: no updates so far while AI is running faster than speed of …", "views": 13110, "react": 455, "fwd": 2, "com": 12, "lift": 1.92, "er": 3.58, "link": "https://t.me/AI_DeepLearning/1442"}, {"id": 1360, "date": "2025-01-21", "kind": "video", "text": "🧽 Diffusion Video Inpainting 🧽 👉#Alibaba unveils a technical report about DiffuEraser, a video inpainting model based on stable diffusion, d…", "views": 15344, "react": 21, "fwd": 74, "com": 1, "lift": 1.9, "er": 0.63, "link": "https://t.me/AI_DeepLearning/1360"}, {"id": 1438, "date": "2025-04-29", "kind": "video", "text": "🔥 Diffusion Model <-> Depth 🔥 👉ETH & CMU on how to turn a single-image latent diffusion model (LDM) into the SOTA video depth estimator: vid…", "views": 13343, "react": 22, "fwd": 47, "com": 1, "lift": 1.89, "er": 0.52, "link": "https://t.me/AI_DeepLearning/1438"}, {"id": 1439, "date": "2025-05-15", "kind": "video", "text": "🩷Dance vs. #ComputerVision🩷 👉The Saint-Etienne university proposed a new 3D human body pose estimation pipeline to deal with dance analysis.…", "views": 12737, "react": 12, "fwd": 14, "com": 0, "lift": 1.82, "er": 0.2, "link": "https://t.me/AI_DeepLearning/1439"}, {"id": 1693, "date": "2026-05-12", "kind": "video", "text": "🍒Count Anything, Any Granularity🍒 👉Open-world counting as multi-grained counting, where visual exemplars specify target appearance and fine-…", "views": 8887, "react": 25, "fwd": 43, "com": 0, "lift": 1.82, "er": 0.77, "link": "https://t.me/AI_DeepLearning/1693"}, {"id": 1694, "date": "2026-05-25", "kind": "video", "text": "🪔Latent Decoding Pixel Diffusion🪔 👉PiD by Nvidia is a plug-and-play diffusion decoder that replaces VAE/RAE decoders, turning latent represe…", "views": 8434, "react": 19, "fwd": 28, "com": 0, "lift": 1.73, "er": 0.56, "link": "https://t.me/AI_DeepLearning/1694"}, {"id": 1490, "date": "2025-09-23", "kind": "video", "text": "🫓 WINNER of LSVOS Challenge 🫓 👉SaSaSa2VA introduces Segmentation Augmentation to improve global video understanding while remaining efficien…", "views": 7932, "react": 12, "fwd": 28, "com": 1, "lift": 1.62, "er": 0.52, "link": "https://t.me/AI_DeepLearning/1490"}, {"id": 1692, "date": "2026-05-08", "kind": "video", "text": "🦄Unified Correspondence Transformer🦄 👉UniCorrn is the first correspondence model with shared weights that unifies 2D-2D, 2D-3D, and 3D-3D ge…", "views": 8091, "react": 21, "fwd": 44, "com": 0, "lift": 1.62, "er": 0.8, "link": "https://t.me/AI_DeepLearning/1692"}], "topFwd": [{"id": 1267, "date": "2024-07-27", "kind": "video", "text": "🎁 A guide for modern CV 🎁 👉In the last 18 months I received 1,100+ applications for research roles. The majority part of the applicants does…", "views": 9543, "react": 53, "fwd": 160, "com": 11, "lift": 1.12, "er": 2.35, "link": "https://t.me/AI_DeepLearning/1267"}, {"id": 1291, "date": "2024-10-04", "kind": "photo", "text": "🔥 \"Deep Gen-AI\" Full Course 🔥 👉A fresh course from Stanford about the probabilistic foundations and algorithms for deep generative models. A…", "views": 9517, "react": 33, "fwd": 139, "com": 0, "lift": 1.11, "er": 1.81, "link": "https://t.me/AI_DeepLearning/1291"}, {"id": 933, "date": "2023-04-05", "kind": "video", "text": "🔥 \"Segmenting Anything\". CRAZY! 🔥 👉#Meta unveils a novel model and (1B+) dataset for neural segmentation 🤯 😎Review https://bit.ly/3nM2uXx 😎P…", "views": 9654, "react": 59, "fwd": 126, "com": 0, "lift": 1.59, "er": 1.92, "link": "https://t.me/AI_DeepLearning/933"}, {"id": 1750, "date": "2026-10-02", "kind": "photo", "text": "🔥The Computer Vision ultimate collection🔥 👉Stan Birchfield (#Nvidia) just dropped this on arXiv. From classical image processing and 3D geom…", "views": 4519, "react": 41, "fwd": 122, "com": 0, "lift": 1.19, "er": 3.61, "link": "https://t.me/AI_DeepLearning/1750"}, {"id": 952, "date": "2023-05-19", "kind": "video", "text": "🀄 Drag-GAN: user-friendly image-manipulation 🀄 👉 Manual deforming of (real and generated) images over pose, shape, expression and layout. 😎R…", "views": 6751, "react": 63, "fwd": 116, "com": 0, "lift": 1.11, "er": 2.65, "link": "https://t.me/AI_DeepLearning/952"}, {"id": 849, "date": "2023-01-14", "kind": "photo", "text": "📶 Dense Pose from WiFi 📶 👉AI able to map phase/amplitude of WiFi signals for human sensing application 😎Review https://bit.ly/3QDeFQC 😎Paper…", "views": 6808, "react": 42, "fwd": 113, "com": 0, "lift": 1.56, "er": 2.28, "link": "https://t.me/AI_DeepLearning/849"}, {"id": 1274, "date": "2024-08-23", "kind": "video", "text": "🦧Sapiens: SOTA ViTs for human🦧 👉META unveils Sapiens, a family of models for human-centric vision tasks: 2D pose estimation, body-part segme…", "views": 11434, "react": 30, "fwd": 103, "com": 5, "lift": 1.36, "er": 1.21, "link": "https://t.me/AI_DeepLearning/1274"}, {"id": 1410, "date": "2025-03-21", "kind": "video", "text": "🥎LLM Spatial Understanding🥎 👉SpatialLM by Manycore: novel LLM designed to process 3D point cloud data and generate structured 3D scene under…", "views": 10611, "react": 40, "fwd": 100, "com": 0, "lift": 1.28, "er": 1.32, "link": "https://t.me/AI_DeepLearning/1410"}, {"id": 1391, "date": "2025-02-20", "kind": "video", "text": "🔥 YOLOv12 is out (new SOTA) 🔥 👉YOLOv12 is a novel attention-centric YOLO framework that matches the speed of previous CNN-based ones while h…", "views": 11521, "react": 49, "fwd": 95, "com": 0, "lift": 1.35, "er": 1.25, "link": "https://t.me/AI_DeepLearning/1391"}, {"id": 934, "date": "2023-04-07", "kind": "video", "text": "💦 SegGPT: Segmenting Everything (In Context) 💦 👉BAAI unveils SegGPT, a generalist model for segmenting everything in context 😎Review https:/…", "views": 9180, "react": 26, "fwd": 94, "com": 0, "lift": 1.49, "er": 1.31, "link": "https://t.me/AI_DeepLearning/934"}], "topCom": [{"id": 1346, "date": "2025-01-05", "kind": "poll", "text": "What is your favorite source for the AI updates?", "views": 8483, "react": 15, "fwd": 0, "com": 55, "lift": 1.04, "er": 0.83, "link": "https://t.me/AI_DeepLearning/1346"}, {"id": 1100, "date": "2023-12-16", "kind": "video", "text": "💃Outfit Anyone: Ultra-HQ VTO💃 👉Alibaba unveils Outfit Anyone: a two-stream conditional diffusion able to adeptly handle garment deformation …", "views": 7345, "react": 19, "fwd": 70, "com": 31, "lift": 1.06, "er": 1.63, "link": "https://t.me/AI_DeepLearning/1100"}, {"id": 1442, "date": "2025-06-05", "kind": "text", "text": "Dear friends, I’m truly sorry for being away from the group for so long. I know: no updates so far while AI is running faster than speed of …", "views": 13110, "react": 455, "fwd": 2, "com": 12, "lift": 1.92, "er": 3.58, "link": "https://t.me/AI_DeepLearning/1442"}, {"id": 1267, "date": "2024-07-27", "kind": "video", "text": "🎁 A guide for modern CV 🎁 👉In the last 18 months I received 1,100+ applications for research roles. The majority part of the applicants does…", "views": 9543, "react": 53, "fwd": 160, "com": 11, "lift": 1.12, "er": 2.35, "link": "https://t.me/AI_DeepLearning/1267"}, {"id": 1350, "date": "2025-01-08", "kind": "poll", "text": "🔥 \"Nuclear\" AI vs. Hyper-Cheap Inference 🔥 ⭐ What do you expect in 2025 after the #Nvidia announcements at CES 2025? Free to comment :)", "views": 7446, "react": 8, "fwd": 1, "com": 11, "lift": 0.91, "er": 0.27, "link": "https://t.me/AI_DeepLearning/1350"}, {"id": 1473, "date": "2025-09-05", "kind": "photo", "text": "Friends, I’ve just open my IG account: https://www.instagram.com/aleferra.ig | Feel free to add me What about posting stuff about AI on IG? …", "views": 4476, "react": 13, "fwd": 0, "com": 11, "lift": 0.92, "er": 0.54, "link": "https://t.me/AI_DeepLearning/1473"}, {"id": 1606, "date": "2026-01-15", "kind": "video", "text": "🎇 Multi-target SAM3 🎇 👉SAM3-DMS is a novel training-free decoupled strategy that utilizes fine-grained memory selection on individual object…", "views": 4857, "react": 9, "fwd": 24, "com": 11, "lift": 0.95, "er": 0.91, "link": "https://t.me/AI_DeepLearning/1606"}, {"id": 1607, "date": "2026-01-16", "kind": "video", "text": "🍿100M Video Action Dataset🍿 👉Action100M by META is a large-scale dataset w/ 1.2M instructional videos (14.6 years of duration), yielding O(1…", "views": 5022, "react": 15, "fwd": 32, "com": 11, "lift": 0.98, "er": 1.15, "link": "https://t.me/AI_DeepLearning/1607"}, {"id": 1643, "date": "2026-02-19", "kind": "video", "text": "🚤Video Neural Compression🚤 👉TeCoNeRV: adapting INR hypernetworks to compress videos efficiently at higher resolutions. Impressive: +5.35dB P…", "views": 6035, "react": 17, "fwd": 27, "com": 11, "lift": 1.19, "er": 0.91, "link": "https://t.me/AI_DeepLearning/1643"}, {"id": 1625, "date": "2026-01-30", "kind": "link", "text": "The hottest website on Earth right now: https://www.moltbook.com What do you think about it?", "views": 5482, "react": 4, "fwd": 22, "com": 10, "lift": 1.12, "er": 0.66, "link": "https://t.me/AI_DeepLearning/1625"}], "controversial": [{"id": 1240, "date": "2024-06-21", "kind": "video", "text": "🤓Glasses-Removal in Videos🤓 👉Lightricks unveils a novel method able to receive an input video of a person wearing glasses, and removes the g…", "views": 8684, "react": 31, "fwd": 20, "com": 9, "lift": 1.08, "er": 0.69, "link": "https://t.me/AI_DeepLearning/1240", "neg": 52}, {"id": 707, "date": "2022-10-07", "kind": "video", "text": "🔥 #AIwithPapers: we are 4,500+! 🔥 💙💛 Someone put the smiling 💩 under a few recent posts. But I still love you! 💙💛 😈 Invite your friends -> h…", "views": 3247, "react": 34, "fwd": 0, "com": 0, "lift": 1.03, "er": 1.05, "link": "https://t.me/AI_DeepLearning/707", "neg": 21}, {"id": 918, "date": "2023-03-14", "kind": "photo", "text": "🎀 The baby is born: GPT-4 is out! 🎀 👉GPT-4 is the new LLM (accepting image and text inputs, emitting text outputs) with human-level performa…", "views": 6625, "react": 63, "fwd": 44, "com": 0, "lift": 1.18, "er": 1.62, "link": "https://t.me/AI_DeepLearning/918", "neg": 8}, {"id": 944, "date": "2023-05-04", "kind": "photo", "text": "🦒 Look mom, I'm a giraffe 🦒 👉 A patent to transpose adversarial patches onto a knitted fabric. Be undetectable or associated with incorrect …", "views": 6690, "react": 36, "fwd": 12, "com": 0, "lift": 1.03, "er": 0.72, "link": "https://t.me/AI_DeepLearning/944", "neg": 8}, {"id": 948, "date": "2023-05-14", "kind": "video", "text": "🍿 De-Aging Harrison Ford via SD 🍿 👉Stable Diffusion for Hollywood: preview of the next autotune of entertainment industry. A discussion👇 😎 M…", "views": 5829, "react": 40, "fwd": 29, "com": 0, "lift": 0.92, "er": 1.18, "link": "https://t.me/AI_DeepLearning/948", "neg": 8}, {"id": 1223, "date": "2024-06-02", "kind": "video", "text": "🎭New 2D Landmarks SOTA🎭 👉Flawless AI unveils FaceLift, a novel semi-supervised approach that learns 3D landmarks by directly lifting (visibl…", "views": 7735, "react": 32, "fwd": 26, "com": 0, "lift": 0.96, "er": 0.75, "link": "https://t.me/AI_DeepLearning/1223", "neg": 6}, {"id": 1391, "date": "2025-02-20", "kind": "video", "text": "🔥 YOLOv12 is out (new SOTA) 🔥 👉YOLOv12 is a novel attention-centric YOLO framework that matches the speed of previous CNN-based ones while h…", "views": 11521, "react": 49, "fwd": 95, "com": 0, "lift": 1.35, "er": 1.25, "link": "https://t.me/AI_DeepLearning/1391", "neg": 6}, {"id": 963, "date": "2023-06-19", "kind": "video", "text": "👁️ Scene Five: Through Her Eyes 👁️ 👉 #3D scene reconstruction of what a person is observing using only the reflections of their eyes 😎Review…", "views": 6936, "react": 43, "fwd": 39, "com": 0, "lift": 1.21, "er": 1.18, "link": "https://t.me/AI_DeepLearning/963", "neg": 5}], "flops": [{"id": 1516, "date": "2025-09-25", "kind": "text", "text": "Slides about CUDA-Q & Nvidia quantum 👇 (coming in 10 mins)", "views": 3367, "react": 12, "fwd": 4, "com": 1, "lift": 0.67, "er": 0.5, "link": "https://t.me/AI_DeepLearning/1516"}, {"id": 1517, "date": "2025-09-25", "kind": "photo", "text": "[photo]", "views": 3466, "react": 8, "fwd": 4, "com": 0, "lift": 0.68, "er": 0.35, "link": "https://t.me/AI_DeepLearning/1517"}, {"id": 1503, "date": "2025-09-25", "kind": "photo", "text": "[photo]", "views": 3496, "react": 8, "fwd": 4, "com": 0, "lift": 0.69, "er": 0.34, "link": "https://t.me/AI_DeepLearning/1503"}, {"id": 1515, "date": "2025-09-25", "kind": "text", "text": "A few “leaks” for you from the #Nvidia presentation I’m right now in Milan. Impressive stuff. Ps: sorry for the shitty quality of the pics ♥…", "views": 3447, "react": 28, "fwd": 3, "com": 0, "lift": 0.7, "er": 0.9, "link": "https://t.me/AI_DeepLearning/1515"}, {"id": 1493, "date": "2025-09-25", "kind": "photo", "text": "[photo]", "views": 3633, "react": 10, "fwd": 3, "com": 0, "lift": 0.74, "er": 0.36, "link": "https://t.me/AI_DeepLearning/1493"}, {"id": 1491, "date": "2025-09-24", "kind": "video", "text": "🏆MOSEv2 Challenge Winner🏆 👉A practical solution for complex segmentation based on the Segment Concept (SeC), a concept-driven segmentation f…", "views": 3714, "react": 7, "fwd": 24, "com": 0, "lift": 0.75, "er": 0.83, "link": "https://t.me/AI_DeepLearning/1491"}, {"id": 1527, "date": "2025-09-25", "kind": "photo", "text": "[photo]", "views": 4035, "react": 15, "fwd": 5, "com": 0, "lift": 0.79, "er": 0.5, "link": "https://t.me/AI_DeepLearning/1527"}, {"id": 1492, "date": "2025-09-24", "kind": "video", "text": "🌀 CLOPS: Vision-Driven Avatar 🌀 👉CLOPS is the first human avatar solely uses egocentric vision to perceive its surroundings and navigate. CL…", "views": 4031, "react": 19, "fwd": 25, "com": 2, "lift": 0.82, "er": 1.14, "link": "https://t.me/AI_DeepLearning/1492"}], "polls": {"n": 10, "counted": 10, "voters": 3949, "medVoters": 393.0, "medRate": 7.2, "byYear": [{"y": 2017, "n": 0, "rate": null}, {"y": 2018, "n": 0, "rate": null}, {"y": 2019, "n": 0, "rate": null}, {"y": 2020, "n": 0, "rate": null}, {"y": 2021, "n": 0, "rate": null}, {"y": 2022, "n": 1, "rate": 9.0}, {"y": 2023, "n": 0, "rate": null}, {"y": 2024, "n": 0, "rate": null}, {"y": 2025, "n": 5, "rate": 5.1}, {"y": 2026, "n": 4, "rate": 7.8}], "top": [{"id": 1346, "date": "2025-01-05", "kind": "poll", "text": "What is your favorite source for the AI updates?", "views": 8483, "react": 15, "fwd": 0, "com": 55, "lift": 1.04, "er": 0.83, "link": "https://t.me/AI_DeepLearning/1346", "voters": 573, "rate": 6.8, "answers": [["Telegram", 297], ["Linkedin", 185], ["Others ( comment here: https://t.ly/chQWq  )", 50], ["Instagram", 21], ["Reddit", 20]]}, {"id": 1484, "date": "2025-09-17", "kind": "poll", "text": "I’m keeping the channel free from interaction to avoid SPAM. The only way to interact is commenting the post after being accepted in the sub…", "views": 5129, "react": 6, "fwd": 0, "com": 0, "lift": 1.08, "er": 0.12, "link": "https://t.me/AI_DeepLearning/1484", "voters": 524, "rate": 10.2, "answers": []}, {"id": 1387, "date": "2025-02-15", "kind": "poll", "text": "Hi friends, what other kind of content would you like to *OCCASIONALLY* see in this group?", "views": 8523, "react": 1, "fwd": 0, "com": 6, "lift": 1.0, "er": 0.08, "link": "https://t.me/AI_DeepLearning/1387", "voters": 433, "rate": 5.1, "answers": []}, {"id": 1715, "date": "2026-07-21", "kind": "poll", "text": "What about more posts about Robotics?", "views": 4174, "react": 3, "fwd": 0, "com": 1, "lift": 0.9, "er": 0.1, "link": "https://t.me/AI_DeepLearning/1715", "voters": 420, "rate": 10.1, "answers": []}, {"id": 1373, "date": "2025-01-29", "kind": "poll", "text": "Social feed of everyone is broken because of unnecessary/not required opinions about DeepSeek. Your wish:", "views": 8541, "react": 1, "fwd": 0, "com": 3, "lift": 1.02, "er": 0.05, "link": "https://t.me/AI_DeepLearning/1373", "voters": 414, "rate": 4.8, "answers": []}, {"id": 1624, "date": "2026-01-30", "kind": "poll", "text": "Still in love with this channel?", "views": 4940, "react": 8, "fwd": 0, "com": 4, "lift": 1.01, "er": 0.24, "link": "https://t.me/AI_DeepLearning/1624", "voters": 372, "rate": 7.5, "answers": []}, {"id": 1652, "date": "2026-03-05", "kind": "poll", "text": "Could be useful for you seeing a few (verified) job posting about AI in this channel?", "views": 4602, "react": 5, "fwd": 0, "com": 3, "lift": 0.92, "er": 0.17, "link": "https://t.me/AI_DeepLearning/1652", "voters": 370, "rate": 8.0, "answers": []}, {"id": 791, "date": "2022-12-03", "kind": "poll", "text": "Should I write a book (no technicalities, for everyone) about the evolution of the modern Computer Vision / AI ?", "views": 3507, "react": 13, "fwd": 0, "com": 0, "lift": 0.99, "er": 0.37, "link": "https://t.me/AI_DeepLearning/791", "voters": 317, "rate": 9.0, "answers": []}, {"id": 1691, "date": "2026-05-07", "kind": "poll", "text": "About the frequency of posting in the channel:", "views": 6566, "react": 7, "fwd": 0, "com": 1, "lift": 1.33, "er": 0.12, "link": "https://t.me/AI_DeepLearning/1691", "voters": 280, "rate": 4.3, "answers": []}, {"id": 1350, "date": "2025-01-08", "kind": "poll", "text": "🔥 \"Nuclear\" AI vs. Hyper-Cheap Inference 🔥 ⭐ What do you expect in 2025 after the #Nvidia announcements at CES 2025? Free to comment :)", "views": 7446, "react": 8, "fwd": 1, "com": 11, "lift": 0.91, "er": 0.27, "link": "https://t.me/AI_DeepLearning/1350", "voters": 246, "rate": 3.3, "answers": []}], "themes": [{"name": "Robots & driving", "n": 1, "rate": 10.1}, {"name": "Speed & mobile", "n": 1, "rate": 3.3}]}, "community": {"since": "2025-10-16", "posts": 71, "comments": 144, "people": 26, "perPerson": 5.5, "top10Share": 55, "onceShare": 54, "returning": 6, "returningShare": 23, "replyShare": 19, "authorComments": 49, "authorPosts": 34, "firstMinutes": 45.4, "busiest": 52, "bots": 0, "botComments": 0, "distribution": [14, 3, 6, 2, 1]}, "domains": [["t.ly", 643], ["bit.ly", 524], ["lnkd.in", 466], ["linkedin.com", 212], ["arxiv.org", 178], ["github.com", 143], ["t.me", 13], ["huggingface.co", 13], ["youtube.com", 9], ["youtu.be", 6], ["shorturl.at", 6], ["drive.google.com", 3]], "handles": [["nvidia", 2], ["pytorch", 1], ["reuters", 1], ["amazon", 1], ["facebook", 1], ["magicleap", 1], ["google", 1], ["baiduresearch", 1], ["snapchat", 1], ["microsoft", 1]], "profile": {"created": "2017-09-02", "firstPost": {"id": 4, "date": "2017-09-07", "kind": "link", "text": "GANs for celebrity face generation | #deeplearning #sourcecode https://github.com/danielmachinelearning/GANs_for_Celebrity_Face_Generation?f…", "views": 360, "react": 0, "fwd": 2, "com": 0, "lift": 1.34, "er": 0.56, "link": "https://t.me/AI_DeepLearning/4"}, "years": 9.1, "pauseDays": 212, "pauseEnded": "2018-11-01", "calls": 0, "lastCall": null, "links": ["https://www.linkedin.com/in/visionarynet/"]}, "medGapHours": 21.4}
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim()
+const fmt = n => n == null ? "—" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e4 ? Math.round(n / 1e3) + "k" : n.toLocaleString("en-US")
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c])
+// Single-quoted href: the cli-docs link checker reads double-quoted hrefs in the page source as local links.
+const anchor = (url, text) => `<a href='${esc(url)}' target="_blank" rel="noopener">${text}</a>`
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+const o = DATA.overview
+const tiles = list => list.map(([b, s]) => `<div class="kpi"><b>${b}</b><span>${s}</span></div>`).join("")
+const table = (head, rows) => `<tr>${head.map(([h, n]) => `<th${n ? ' class="n"' : ""}>${h}</th>`).join("")}</tr>` +
+  rows.map(r => `<tr>${r.map((c, i) => `<td${head[i][1] ? ' class="n"' : ""}>${c}</td>`).join("")}</tr>`).join("")
+const pct = v => v == null ? "—" : v + "%"
+
+document.getElementById("about").textContent = `${DATA.about.split("\n")[0]} This report reads every post from ${o.first} to ${o.last}.`
+const pf = DATA.profile
+const link = s => s.startsWith("@") ? `<a href="https://t.me/${s.slice(1)}" target="_blank" rel="noopener">${esc(s)}</a>`
+  : anchor(s, esc(s.replace(/^https?:\/\//, "")))
+document.getElementById("profile").innerHTML = [
+  ["Created", pf.created ? `${pf.created}, ${pf.years} years ago` : null],
+  ["Earliest post", pf.created && pf.firstPost.date.slice(0, 4) !== pf.created.slice(0, 4)
+    ? `${anchor(pf.firstPost.link, pf.firstPost.date)}; nothing older survives`
+    : anchor(pf.firstPost.link, pf.firstPost.date)],
+  ["Longest silence", `${pf.pauseDays} days, until ${pf.pauseEnded}`],
+  ["Live voice chats", pf.calls ? `${pf.calls}, the last on ${pf.lastCall}` : null],
+  ["Links", pf.links.length ? pf.links.map(link).join(" · ") : null],
+].filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")
+document.getElementById("kpis").innerHTML = tiles([
+  [fmt(o.subs), "subscribers today"],
+  [fmt(o.posts), "posts analysed"],
+  [o.perWeek, "posts a week, last 90 days"],
+  [fmt(o.recentMedViews), "median views, last 90 days"],
+  [pct(o.recentReach), "of subscribers see a typical post"],
+  [pct(o.recentER), "median engagement, last 90 days"],
+  [fmt(o.totalFwd), "forwards, all time"],
+  [fmt(o.totalCom), "comments, all time"],
+])
+
+document.getElementById("tYearly").innerHTML = table(
+  [["Year"], ["Posts", 1], ["Median views", 1], ["Median ER", 1], ["Forwards", 1], ["Comments", 1], ["Polls", 1], ["Avg length", 1], ["Negative", 1]],
+  DATA.yearly.map(y => [y.y, y.n, fmt(y.views), pct(y.er), fmt(y.fwd), fmt(y.com), y.polls, fmt(y.avgLen), pct(y.neg)]))
+
+const heatMax = Math.max(...DATA.heat.flat())
+document.getElementById("heat").innerHTML = `<div class="lbl"></div>` +
+  Array.from({ length: 24 }, (_, h) => `<div>${h % 3 === 0 ? h : ""}</div>`).join("") +
+  DATA.heat.map((row, d) => `<div class="lbl">${DAYS[d]}</div>` + row.map((n, h) =>
+    `<div class="c" style="opacity:${n ? 0.08 + 0.92 * n / heatMax : 0.03}" title="${DAYS[d]} ${h}:00 UTC: ${n} posts"></div>`).join("")).join("")
+
+document.getElementById("tThemes").innerHTML = table(
+  [["Theme"], ["Posts", 1], ["Avg lift", 1], ["Hit rate", 1], ["Median ER", 1], ["Forwards / 1k views", 1], ["Comments / 1k views", 1], ["Forwards per reaction", 1]],
+  DATA.themes.filter(t => t.n >= 3).sort((a, b) => b.hit - a.hit).map(t => [t.name, t.n, t.lift, pct(t.hit), pct(t.er), t.fwdPer1k, t.comPer1k, t.fwdPerReact]))
+document.getElementById("tOpeners").innerHTML = table(
+  [["Opening"], ["Posts", 1], ["Avg lift", 1], ["Hit rate", 1], ["Forwards / 1k", 1], ["Comments / 1k", 1]],
+  DATA.openers.filter(t => t.n).map(t => [t.name, t.n, t.lift ?? "—", pct(t.hit), t.fwdPer1k ?? "—", t.comPer1k ?? "—"]))
+
+const pr = DATA.promo
+document.getElementById("promo").textContent = pr.n
+  ? `${pr.n} posts carry an ad mark, a promo code or a referral link. Their average lift is ${pr.lift} against 1.0 for a normal post. Telegram's own sponsored messages are not part of a channel's history, so they cannot be counted.`
+  : "No post carries an ad mark, a promo code or a referral link. Telegram's own sponsored messages are not part of a channel's history, so they cannot be counted."
+const linkRow = r => `<span class="pill">${r.kind}</span> ${anchor(r.link, esc(r.text))}`
+document.getElementById("tPromo").innerHTML = pr.n ? table(
+  [["Date", 1], ["Post"], ["Views", 1], ["Lift", 1], ["Forwards", 1]],
+  pr.rows.map(r => [r.date, linkRow(r), fmt(r.views), r.lift + "×", fmt(r.fwd)])) : ""
+
+const TABS = {
+  topLift: ["Beat their period", "Views ÷ the median of the 40 nearest posts: posts that reached beyond the usual audience. The last 14 days are left out."],
+  topViews: ["Most viewed", "Raw views."],
+  topFwd: ["Most forwarded", "Forwards: readers found the post useful enough to pass on."],
+  topCom: ["Most discussed", "Comments in the linked discussion group."],
+  controversial: ["Most divisive", "Share of 💩 👎 🤬 🤡 🤮 😡 among reactions, posts with 30+ reactions."],
+  flops: ["Underperformed", "Lowest lift in the last two years, the last 14 days left out."],
+}
+const tabs = document.getElementById("tabs")
+const showTab = key => {
+  tabs.querySelectorAll("button").forEach(b => { b.setAttribute("aria-selected", b.dataset.k === key) })
+  const neg = key === "controversial"
+  document.getElementById("tTop").innerHTML = table(
+    [["Date", 1], ["Post"], ["Views", 1], ["Lift", 1], ["Reactions", 1], ["Forwards", 1], ["Comments", 1], ...(neg ? [["Negative", 1]] : [])],
+    DATA[key].map(r => [r.date, linkRow(r), fmt(r.views), `<span class="${r.lift >= 1.5 ? "up" : r.lift < 0.8 ? "down" : ""}">${r.lift}×</span>`,
+      fmt(r.react), fmt(r.fwd), fmt(r.com), ...(neg ? [`<span class="down">${r.neg}%</span>`] : [])]))
+  document.getElementById("tabCap").textContent = TABS[key][1]
+}
+tabs.innerHTML = Object.entries(TABS).map(([k, [l]]) => `<button role="tab" data-k="${k}">${l}</button>`).join("")
+tabs.addEventListener("click", e => e.target.dataset.k && showTab(e.target.dataset.k))
+showTab("topLift")
+
+const c = DATA.community
+if (c) {
+  document.getElementById("communityKpis").innerHTML = tiles([
+    [fmt(c.comments), `comments under ${c.posts} posts`],
+    [fmt(c.people), "different people commented"],
+    [pct(c.onceShare), "of them commented only once"],
+    [pct(c.top10Share), "of comments come from the top 10% of commenters"],
+    [fmt(c.returning), "came back under 3+ posts"],
+    [`${c.authorComments}`, `author replies, under ${c.authorPosts} posts`],
+    [c.firstMinutes == null ? "—" : c.firstMinutes + " min", "median wait for the first comment"],
+    [pct(c.replyShare), "of comments answer another comment"],
+  ])
+  document.getElementById("communityCap").textContent = "Bars: commenters by how many comments each wrote in the period. Readers are counted, never named."
+} else {
+  document.getElementById("communityFig").hidden = true
+}
+
+const p = DATA.polls
+document.getElementById("polls").innerHTML = p.top.map(q => {
+  const max = Math.max(1, ...q.answers.map(a => a[1]))
+  const answers = q.answers.length
+    ? q.answers.map(([t, n]) => `<div class="bar"><div>${esc(t)}<i style="width:${n / max * 100}%"></i></div><span class="n">${fmt(n)}</span></div>`).join("")
+    : `<div class="muted">Answer counts hidden until this account votes.</div>`
+  return `<div class="poll"><div>${anchor(q.link, esc(q.text))} <span class="muted">· ${q.date} · ${fmt(q.voters)} votes · ${q.rate}% of viewers voted</span></div>${answers}</div>`
+}).join("")
+
+document.getElementById("domains").innerHTML = DATA.domains.map(([d, n]) => `<span>${esc(d)}<b>${n}</b></span>`).join("")
+document.getElementById("handles").innerHTML = DATA.handles.map(([h, n]) => `<span>@${esc(h)}<b>${n}</b></span>`).join("")
+
+const charts = []
+const draw = () => {
+  for (const ch of charts) ch.destroy()
+  charts.length = 0
+  const ink = css("--ink"), muted = css("--muted"), line = css("--line"), acc = css("--accent"), warm = css("--warm"), good = css("--good")
+  Chart.defaults.color = muted
+  Chart.defaults.borderColor = line
+  Chart.defaults.font.family = css("--body")
+  Chart.defaults.font.size = 12
+  const base = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: ink, boxWidth: 12 } } } }
+  const mk = (id, cfg) => charts.push(new Chart(document.getElementById(id), { ...cfg, options: { ...base, ...cfg.options } }))
+  const liftHit = (id, rows, label) => mk(id, {
+    data: {
+      labels: rows.map(r => `${r[label]} (${r.n})`),
+      datasets: [
+        { type: "bar", label: "Avg lift", data: rows.map(r => r.lift), backgroundColor: acc, yAxisID: "y" },
+        { type: "line", label: "Hit rate %", data: rows.map(r => r.hit), borderColor: warm, backgroundColor: warm, yAxisID: "y1" },
+      ],
+    },
+    options: { scales: { y: { min: 0.6 }, y1: { position: "right", beginAtZero: true, grid: { display: false } } } },
+  })
+
+  mk("cMonthly", {
+    data: {
+      labels: DATA.monthly.map(m => m.m),
+      datasets: [
+        { type: "bar", label: "Posts", data: DATA.monthly.map(m => m.n), backgroundColor: acc + "55", yAxisID: "y" },
+        { type: "line", label: "Median views", data: DATA.monthly.map(m => m.views), borderColor: warm, backgroundColor: warm, pointRadius: 0, tension: 0.3, spanGaps: true, yAxisID: "y1" },
+      ],
+    },
+    options: { scales: { x: { ticks: { maxTicksLimit: 12 } }, y: { title: { display: true, text: "posts" } }, y1: { position: "right", grid: { display: false }, title: { display: true, text: "views" } } } },
+  })
+  liftHit("cGap", DATA.byGap.filter(r => r.n), "b")
+  liftHit("cLoad", DATA.byDayLoad.filter(r => r.n), "b")
+  const days = DATA.byWeekday.map(d => ({ ...d, b: DAYS[d.d] }))
+  liftHit("cWeekday", days, "b")
+  liftHit("cHour", DATA.byHour.filter(h => h.n >= 15).map(h => ({ ...h, b: String(h.h) })), "b")
+  mk("cKind", {
+    type: "bar",
+    data: {
+      labels: DATA.byKind.map(k => `${k.k} (${k.n})`),
+      datasets: [
+        { label: "Reactions", data: DATA.byKind.map(k => k.reactPer1k), backgroundColor: acc },
+        { label: "Forwards", data: DATA.byKind.map(k => k.fwdPer1k), backgroundColor: warm },
+        { label: "Comments", data: DATA.byKind.map(k => k.comPer1k), backgroundColor: good },
+      ],
+    },
+  })
+  const len = DATA.byLength.filter(b => b.n >= 20)
+  mk("cLen", {
+    data: {
+      labels: len.map(b => `${b.b} (${b.n})`),
+      datasets: [
+        { type: "bar", label: "Forwards / 1k views", data: len.map(b => b.fwdPer1k), backgroundColor: warm, yAxisID: "y" },
+        { type: "line", label: "Hit rate %", data: len.map(b => b.hit), borderColor: acc, backgroundColor: acc, yAxisID: "y1" },
+      ],
+    },
+    options: { scales: { y: { beginAtZero: true }, y1: { position: "right", beginAtZero: true, grid: { display: false } } } },
+  })
+  const palette = [acc, warm, good, css("--bad"), muted, "#8e5bd6", "#2aa3b5", "#b5892a", "#d65b9e"]
+  const yrs = Object.keys(DATA.themes[0].byYear)
+  const perYear = Object.fromEntries(DATA.yearly.map(y => [String(y.y), y.n]))
+  const open = o.last.slice(0, 4)
+  mk("cThemeYears", {
+    type: "line",
+    data: {
+      labels: yrs.map(y => y === open ? `${y} (to ${o.last.slice(5)})` : y),
+      datasets: DATA.themes.filter(t => t.n >= 3).map((t, i) => ({ label: t.name, data: yrs.map(y => perYear[y] ? Math.round(t.byYear[y] / perYear[y] * 100) : null),
+        borderColor: palette[i % palette.length], backgroundColor: palette[i % palette.length], tension: 0.25 })),
+    },
+    options: { scales: { y: { beginAtZero: true, ticks: { callback: v => v + "%" } } } },
+  })
+  document.getElementById("themeCap").textContent = "Share of the year's posts that touch each theme. A post can touch several, so a year adds up to more than 100%."
+  if (c) mk("cCommenters", {
+    type: "bar",
+    data: { labels: ["1 comment", "2–3", "4–9", "10–29", "30+"], datasets: [{ label: "Commenters", data: c.distribution, backgroundColor: acc }] },
+    options: { plugins: { legend: { display: false } } },
+  })
+  const py = p.byYear.filter(y => y.n)
+  mk("cPollRate", {
+    data: {
+      labels: py.map(y => y.y),
+      datasets: [
+        { type: "bar", label: "Polls", data: py.map(y => y.n), backgroundColor: acc + "55", yAxisID: "y" },
+        { type: "line", label: "Median % of viewers voting", data: py.map(y => y.rate), borderColor: warm, backgroundColor: warm, yAxisID: "y1" },
+      ],
+    },
+    options: { scales: { y: { beginAtZero: true }, y1: { position: "right", beginAtZero: true, grid: { display: false } } } },
+  })
+  mk("cReact", {
+    type: "bar",
+    data: { labels: DATA.reactions.map(r => r.e), datasets: [{ label: "Reactions", data: DATA.reactions.map(r => r.n), backgroundColor: acc }] },
+    options: { indexAxis: "y", plugins: { legend: { display: false } } },
+  })
+}
+draw()
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw)
+new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] })
+</script>

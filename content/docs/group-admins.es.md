@@ -35,6 +35,9 @@ Revisa mensajes, participantes activos y preguntas respondidas. Descarga más hi
 de concluir si faltan datos. Pocos mensajes guardados no demuestran que alguien nunca participe.
 Usa [búsqueda](./search.md) para una discusión concreta.
 
+Para un informe completo de un canal, con alcance, lo que los lectores reenvían, temas y comentarios, sigue
+[Analítica de grupos y canales](./group-analytics.md).
+
 ## Revisar miembros
 
 Una auditoría muestra señales y razones, no un veredicto sobre una persona. Revisa las pruebas

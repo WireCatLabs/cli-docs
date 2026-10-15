@@ -50,6 +50,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How are tasks stored and how are duplicates found? | `tasks-architecture.mdx` | Technical explanation | Move planned sections to current behaviour as cli-core ships them |
 | What sources and integrations come next? | `roadmap.md` | Planned work | Keep planned items separate from available features; update when a source ships |
 | How do I check questions and activity in my group? | `group-admins.md` | Task guide | Start with a request and sources; inspect coverage before changes |
+| How do I get a full report on a Telegram channel? | `group-analytics.md` | Task guide | Recipe with an example report; privacy of readers before publishing |
 | How do I save or override settings? | `configuration.mdx` | Configuration guide | Explain when settings matter and how to verify the effective value |
 | What may the agent change? | `permissions.mdx` | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
 | Which account or bot will run the task? | `profiles.md` | Account selection | Explain named profiles before configuration syntax |

@@ -35,6 +35,9 @@ Look at messages, active participants and questions answered. Missing history li
 report; fetch more before drawing conclusions. Low activity does not prove someone is inactive
 outside the messages you hold. Try [search](./search.md) for a particular discussion.
 
+For a full report on a channel, with reach, what readers share, themes and comments, follow
+[Group and channel analytics](./group-analytics.md).
+
 ## Review membership
 
 A member audit shows signals and reasons, not a verdict about a person. Review the evidence
