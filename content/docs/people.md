@@ -40,7 +40,7 @@ tg personal mentions list
 tg personal mentions confirm 1 person:7
 ```
 
-`mentions confirm` records that the value belongs to the person (or to an organization with `organization:`). After that, `contacts timeline` and searches such as `mentions:"person:7"` include those messages. A wrong value can be dismissed with `mentions reject`. More: [Phones, links and names](./mentions.md) and [How things are linked](./how-things-are-linked.md#mentions).
+`mentions confirm` records that the value belongs to the person (or to an organization with `organization:`). After that, a search such as `mentions:"person:7"` finds those messages. A wrong value can be dismissed with `mentions reject`. More: [Phones, links and names](./mentions.md) and [How things are linked](./how-things-are-linked.md#mentions).
 
 ## Ask your agent
 

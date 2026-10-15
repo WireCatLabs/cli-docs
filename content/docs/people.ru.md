@@ -40,7 +40,7 @@ tg personal mentions list
 tg personal mentions confirm 1 person:7
 ```
 
-`mentions confirm` записывает, что значение принадлежит человеку (или организации через `organization:`). После этого `contacts timeline` и поиск вроде `mentions:"person:7"` включают эти сообщения. Ошибочное значение отклоняется командой `mentions reject`. Подробнее: [Телефоны, ссылки и имена](./mentions.md) и [Как всё связано](./how-things-are-linked.md#упоминания).
+`mentions confirm` записывает, что значение принадлежит человеку (или организации через `organization:`). После этого поиск вроде `mentions:"person:7"` находит эти сообщения. Ошибочное значение отклоняется командой `mentions reject`. Подробнее: [Телефоны, ссылки и имена](./mentions.md) и [Как всё связано](./how-things-are-linked.md#упоминания).
 
 ## Попросите агента
 
