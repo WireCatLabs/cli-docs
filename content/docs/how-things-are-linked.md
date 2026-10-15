@@ -26,6 +26,7 @@ Every result carries a reference: a short typed name for the record. Copy it int
 | `person:7` | A person, with all the accounts you linked to them |
 | `organization:3`, `project:4`, `task:5` | Your organizations, projects and tasks |
 | `note:12`, `document:3` | A note, or a file from a notes folder or Drive |
+| `meeting:1/7/3/4` | A retained transcript cue: account, meeting, transcript, cue position |
 | `memory:8`, `fact:9` | A memory or a fact |
 
 A message reference includes the account, so the same message number in another account is a different message. The field that holds the reference is `ref` in most answers. A few answers call it `locator`, and one Drive list calls it `reference`. Copy the value, not the field name.
@@ -61,6 +62,8 @@ Every message can point at the earlier message it answers. Each pointer says whe
 - **Your agent.** An answer it stored after reading the chat. Storing it needs the profile permission `conversations.links`.
 
 `conversations build` joins these pointers into conversations for one chat. `messages context` with `--thread` follows the chain from a message instead of showing its neighbours in time. A link that went out of date after an edit or a deletion is shown but never followed. A rebuild gives conversations new ids, so keep the `msg:` reference of the message, not the conversation id. How the graph is built: [How search works](./search-architecture.mdx#3-reconstruct-discussions-with-a-message-graph).
+
+The person timeline follows recorded participation and explicit message links. Confirming a found phone, email or name mention makes it searchable with `mentions:`, but does not by itself add a timeline entry.
 
 ## Files, voice notes and pictures
 

@@ -26,6 +26,7 @@ Cada resultado lleva una referencia: un nombre corto y con tipo del registro. Ú
 | `person:7` | Una persona, con todas las cuentas que vinculaste a ella |
 | `organization:3`, `project:4`, `task:5` | Tus organizaciones, proyectos y tareas |
 | `note:12`, `document:3` | Una nota, o un archivo de una carpeta de notas o de Drive |
+| `meeting:1/7/3/4` | Un fragmento de transcripción conservado: cuenta, reunión, transcripción y posición |
 | `memory:8`, `fact:9` | Un recuerdo o un hecho |
 
 Una referencia de mensaje incluye la cuenta, así que el mismo número en otra cuenta es otro mensaje. El campo que contiene la referencia se llama `ref` en la mayoría de las respuestas. Algunas lo llaman `locator`, y una lista de Drive lo llama `reference`. Copia el valor, no el nombre del campo.
@@ -61,6 +62,8 @@ Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dic
 - **Tu agente.** Una respuesta que guardó tras leer el chat. Guardarla requiere el permiso de perfil `conversations.links`.
 
 `conversations build` une esos punteros en conversaciones de un chat. `messages context` con `--thread` sigue la cadena desde un mensaje en lugar de mostrar sus vecinos en el tiempo. Un vínculo que quedó desactualizado tras una edición o un borrado se muestra, pero no se sigue. Al reconstruir, las conversaciones reciben ids nuevos, así que conserva la referencia `msg:` del mensaje, no el id de la conversación. Cómo se construye el grafo: [Cómo funciona la búsqueda](./search-architecture.mdx#3-reconstruir-conversaciones-con-un-grafo-de-mensajes).
+
+La cronología de una persona sigue la participación guardada y los vínculos explícitos de mensajes. Confirmar una mención de teléfono, correo o nombre permite buscarla con `mentions:`, pero no añade por sí solo una entrada a la cronología.
 
 ## Archivos, notas de voz e imágenes
 
