@@ -10,7 +10,7 @@ close it when it is done. Tasks stay on your computer, in the local store of `tg
 Nothing on this page sends a message.
 
 Categories, tags on tasks, keys per type, claiming and the duplicate check are built in the shared
-core of the tools (cli-core). `tg`, `max` and `memo` get them when they move to its newest version.
+core of the tools (cli-core). `tg`, `max` and `memo` have them.
 [How tasks work](./tasks-architecture.mdx) gives the technical detail.
 
 ## Where tasks come from
@@ -78,7 +78,7 @@ tg personal tasks list 'chat:"Renovation" state:open'
 Add a task for a message, then plan it:
 
 ```sh
-tg personal tasks add msg:telegram/1/77/42 --type promise --title "Send Bob Sample the signed contract" --due 3d
+tg personal tasks add msg:telegram/1/77/42 --type promise --category documents --title "Send Bob Sample the signed contract" --due 3d
 tg personal tasks plan <task> --description "Done when Bob confirms he has it." --remind-time 2d
 ```
 
@@ -103,7 +103,7 @@ same commands.
 
 - **agenda** lists tasks that are overdue, due soon or due for a check, then chats where you owe an
   answer and chats where you wait for one. It warns when the store has not saved anything for a while.
-- **add** needs a type. With the newest cli-core it also needs a category (`--category`), and it
+- **add** needs a type. It also needs a category (`--category`), and it
   refuses when a similar task exists; see [No duplicate tasks](#no-duplicate-tasks).
 - **plan** sets the title, the description, the due date and the next check. The next check is when
   your agent should look at the task again; it does not remind you.

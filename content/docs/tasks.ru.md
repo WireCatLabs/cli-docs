@@ -10,7 +10,7 @@ description: "Вопросы, просьбы и обещания из ваших
 `memo`. Ничто на этой странице не отправляет сообщений.
 
 Категории, теги на задачах, ключи по типам, бронь задачи и проверка на дубликаты уже есть в общем
-ядре инструментов (cli-core). `tg`, `max` и `memo` получат их, когда перейдут на его новую версию.
+ядре инструментов (cli-core). Они есть в `tg`, `max` и `memo`.
 Технические подробности — на странице [Как устроены задачи](./tasks-architecture.mdx).
 
 ## Откуда берутся задачи
@@ -78,7 +78,7 @@ tg personal tasks list 'chat:"Renovation" state:open'
 Добавить задачу для сообщения и спланировать её:
 
 ```sh
-tg personal tasks add msg:telegram/1/77/42 --type promise --title "Send Bob Sample the signed contract" --due 3d
+tg personal tasks add msg:telegram/1/77/42 --type promise --category documents --title "Send Bob Sample the signed contract" --due 3d
 tg personal tasks plan <task> --description "Done when Bob confirms he has it." --remind-time 2d
 ```
 
@@ -102,7 +102,7 @@ tg personal tasks close <task> --as dismissed --reason no-reply-needed
 
 - **agenda** показывает просроченные задачи, задачи со скорым сроком или пора проверить, затем чаты,
   где ответа ждут от вас, и чаты, где ждёте вы. Предупреждает, если хранилище давно ничего не сохраняло.
-- **add** требует тип. С новой версией cli-core она требует и категорию (`--category`) и
+- **add** требует тип и категорию (`--category`) и
   отказывает, если уже есть похожая задача; см. [Без дубликатов](#без-дубликатов).
 - **plan** задаёт название, описание, срок и следующую проверку. Следующая проверка — когда агенту
   стоит снова посмотреть на задачу; вам она не напоминает.
