@@ -5,7 +5,7 @@ references and revision numbers, distinguish them from accepted facts, and inves
 
 ## Source boundary
 
-- Documentation base: origin/main `0f2bffc`, preserving the newer Telegram0.60/Memo0.41 reviews
+- Documentation base: origin/main `00568d0`, preserving the newer Telegram0.60/Memo0.41 reviews
   and task category example. The original draft began at `ba70b2b`; no other tool pin is changed.
 - Current Zoom pin is verified **v0.20.1**, source `bc91018482ddfa0a136aa94c49cfe2aa2b46f431`,
   [release38798750377](https://github.com/WireCatLabs/zoom-cli/actions/runs/38798750377).
@@ -27,7 +27,7 @@ references and revision numbers, distinguish them from accepted facts, and inves
 ## Reader review inventory
 
 The changed capability paragraphs, retained openings/endings, links and task boundaries were inspected
-against owning native code and the preceding reviewed guides. Final immutable sync, translation review and the targeted Zoom browser/export suite passed. Generated English command content is source-owned; its changed literal
+against owning native code and the preceding reviewed guides. Final immutable sync and translation review passed; browser scope and timing findings are recorded below. Generated English command content is source-owned; its changed literal
 row is copied from native generation rather than invented by the portal.
 
 | Page and locale | Reader task | Behavior checked | Final released source / exports | Reviewer |
@@ -53,9 +53,9 @@ row is copied from native generation rather than invented by the portal.
 | Zoom changelog, en | Understand the release and required script update | Separate0.19 standards,0.20 notes and0.20.1 MCP budget entries; old --target-accounts has no alias. | Native/translation/contract matched; browser scope below | Codex |
 | Zoom changelog, ru | Understand the release and required script update | Separate0.19 standards,0.20 notes and0.20.1 MCP budget entries; old --target-accounts has no alias. | Native/translation/contract matched; browser scope below | Codex |
 | Zoom changelog, es | Understand the release and required script update | Separate0.19 standards,0.20 notes and0.20.1 MCP budget entries; old --target-accounts has no alias. | Native/translation/contract matched; browser scope below | Codex |
-| Shared Meetings, en | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Pending final release and HTML/Markdown checks | Codex |
-| Shared Meetings, ru | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Pending final release and HTML/Markdown checks | Codex |
-| Shared Meetings, es | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Pending final release and HTML/Markdown checks | Codex |
+| Shared Meetings, en | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Native/translation/contract matched; browser scope below | Codex |
+| Shared Meetings, ru | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Native/translation/contract matched; browser scope below | Codex |
+| Shared Meetings, es | Prepare from linked saved context | Separate notes from accepted facts; retain note refs/revisions and investigate unqueried documents/communications. | Native/translation/contract matched; browser scope below | Codex |
 
 ## Findings corrected
 
@@ -75,6 +75,12 @@ The published0.20 regression grew a37,982-byte item to81,982 bytes under a64KiB 
 actual installed0.20.1 package returns4,852 bytes for the same synthetic MCP request while preserving
 the raw CLI note. Core owns the shared trimming policy; original source text and citations stay intact.
 
+The initial36-case development run passed functionally but two cases exceeded the80% timing
+headroom guard (26.606s and24.123s against30s). A retained two-case trace located13.9/14.2s in
+first-request Markdown compilation. The existing server readiness probe warmed only HTML. A bounded
+shared Markdown readiness check now runs before development tests, skips static export runs and
+retains every test assertion, deadline and timing threshold. The final rerun is pending.
+
 The discovery capture now explicitly sets WIRECAT_STATE_DIR in both source-build and subprocess
 environments, alongside temporary HOME/store paths. Final contracts were recaptured after that change.
 
@@ -83,7 +89,7 @@ environments, alongside temporary HOME/store paths. Final contracts were recaptu
 - [x] Native456 tests, TypeScript, docs and command lint passed.
 - [x] All four release-installed SDK proofs passed notes/revision/projection, framing budgets and resource/scoping assertions.
 - [x] All14 final translated structures match; reviewed source fingerprints are accepted.
-- [x] Verify the immutable Zoom0.20 release, tarball/SRI/tag and four installed-platform proofs.
+- [x] Verify the immutable Zoom0.20.1 release, tarball/SRI/tag and four installed-platform proofs.
 - [x] Capture final native sources, review translations in full and accept their matching fingerprints.
 - [x] Refresh exact command contracts; run strict localization, quality and release-note checks.
 - [x] Run the affected Zoom browser suite against HTML and Markdown:36 passed.
