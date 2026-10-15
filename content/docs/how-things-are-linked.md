@@ -7,7 +7,7 @@ You can ask your agent for everything about one person, or for the messages behi
 
 ## The idea
 
-`tg`, `max`, `memo` and `drive` keep their records in one local store on your computer. A record from one tool can link to a record from another. A link is one of two things:
+`tg`, `max`, `memo` and `drive` can share records when explicitly configured to use the same compatible local database. Drive uses a separate database by default; choose [shared storage](./drive/configuration.md#where-the-files-live) before linking its records to another tool. A link is one of two things:
 
 - **Part of the record.** A message has a chat and a sender.
 - **A stored link between two records.** A note is about a person. A fact is backed by messages.
@@ -92,7 +92,7 @@ Search finds mentions however they were written: `phone:`, `email:`, `url:` and 
 
 ## Tags
 
-A tag goes on any record: a message, a chat, a person, a document, a note, a task. `tag:work` finds a message that has the tag, a message in a chat that has it, and a message from a person that has it. A tag on a Drive folder reaches every document inside it.
+A tag goes on any record: a message, a chat, a person, a document, a note, a task. `tag:work` finds a message that has the tag, a message in a chat that has it, and a message from a person that has it. A tag on a Drive folder applies to that folder; tag its documents separately.
 
 ```sh
 tg personal tags add work --chat "Book club"
@@ -100,7 +100,7 @@ tg personal tags add work --chat "Book club"
 
 ## Drive documents
 
-`drive` imports documents into the same store. A document can carry tags, notes, facts and memories, and link to a person (`drive relationships`, `drive tags`). `drive documents list --person person:7` lists the documents linked to that person.
+`drive` imports documents into its configured local store. A document can carry tags, notes, facts and memories, and link to a person (`drive personal relationships`, `drive personal tags`). `drive personal documents list person:7` lists the documents linked to that person.
 
 ## Who makes a link
 

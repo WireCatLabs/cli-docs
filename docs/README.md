@@ -56,8 +56,8 @@ These pages and shared interface/Markdown behavior belong to this repository.
 
 ## Messenger pages
 
-Google Drive uses the same source-owned structure under `drive/`, pinned to a reviewed source
-installation commit. Its compact reader path is overview → installation → usage/search/recipes;
+Google Drive uses the same source-owned structure under `drive/`, pinned to its reviewed npm
+release. Its compact reader path is overview → installation → usage/search/recipes;
 configuration, security, troubleshooting and generated commands remain discoverable references.
 It is listed next to Telegram/MAX under Tools, without implying it has messenger capabilities.
 

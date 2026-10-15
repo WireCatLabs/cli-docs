@@ -4,6 +4,58 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.11.1 — 2026-10-15
+
+### Fixed
+
+- `documents list --json=reference,tabs` selects the fields the list answers again. 0.11.0 refused them, because
+  the list's query named the shared `document` entity, whose fields drive's list does not use.
+
+## 0.11.0 — 2026-10-15
+
+### Changed — may break callers
+
+- **`documents list` takes a query the store applies, not `--tag` and `--person`.** The shared store narrows the
+  imported documents; drive no longer checks each one after reading.
+  - `documents list --tag budget` → `documents list tag:budget`; the tag is an owner tag, by name or alias.
+  - `documents list --person person:PERSON_UID` → `documents list person:PERSON_UID`.
+  - The list is paged: `--limit` (default 50) and `--page`. Documents come in import order, also without a query.
+  - The MCP tool takes `query`, `limit` and `page` instead of `tag` and `person`.
+- Built on `@wirecat/cli-base` 0.33.0 and `@wirecat/cli-core` 0.288.0.
+
+## 0.10.0 — 2026-10-15
+
+### Changed — may break callers
+
+- **Lists take a query, not filter flags.** The store or the method table applies it; nothing is filtered after
+  reading. The old flags are refused.
+  - `facts list DOC_ID --type decision --status proposed` → `facts list DOC_ID kind:decision status:proposed`
+  - `memories list DOC_ID --scope work --kind preference` → `memories list DOC_ID scope:work kind:preference`;
+    `status:` is new.
+  - `memories search DOC_ID budget --scope work` → `memories search DOC_ID budget scope:work`. The scope is now
+    optional: without it both personal and work memories are searched.
+  - `api list --service docs` → `api list service:docs`.
+  - The MCP tools take the same terms as one `query` string; `catalog list` and `catalog search` too, which took
+    a list of words.
+- Facts and memories answer with the shared `fact` and `memory` fields, in every command that returns them and
+  in `documents context`: a fact's `type` is `kind`, its `statement` is `text`, its `source` is `origin`; a
+  memory's `body` is `text`. `--json=kind,text` selects them.
+
+## 0.9.0 — 2026-10-15
+
+### Changed
+
+- **Breaking:** `session start --write`, `--activity` and `--apps` are one `--grant <scopes>`, comma-separated:
+  `drive personal session start --grant write,activity`. An unknown scope is refused before the browser opens.
+- **Breaking:** `memories extract --save` is `--yes`, on the CLI and as the MCP tool's `yes` argument. Without it
+  the command only proposes. `--yes` also answers the profile policy's confirmation, as it does for every command.
+- Built on `@wirecat/cli-base` 0.32.0 and `@wirecat/cli-core` 0.287.0; a clean install still holds one cli-base.
+
+### Fixed
+
+- A document whose name has Cyrillic or other non-Latin capitals comes first for a search by its name, and
+  `title:` finds it in any case (cli-core 0.285.0).
+
 ## 0.8.1 — 2026-10-15
 
 - Maintainers can set `WIRECAT_RELEASE_WAIT_SECONDS` when using `bin/release` to wait for the

@@ -23,7 +23,7 @@ Show the matching passage and original Google link. Tell me which selected sourc
 | Одну из двух тем | `drive personal search 'budget OR launch' --exact --json` |
 | Помеченный вопрос для проверки | `drive personal search 'budget AND tag:follow-up' --exact --json` |
 | Вопрос, а не точную формулировку | Подготовьте локальные эмбеддинги и ищите обычным вопросом |
-| Человека, связанного с источником | Используйте `documents list --person person:PERSON_ID`, затем прочитайте источники |
+| Человека, связанного с источником | Используйте `documents list person:PERSON_UID`, затем прочитайте источники |
 
 Метаданные доступны в деталях и списках документов; это не универсальный API поиска по полям.
 Используйте локальные теги и поддерживаемые фильтры людей/списков, а не выдуманные поля Google

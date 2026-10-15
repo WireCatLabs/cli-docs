@@ -149,6 +149,12 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(markdown).toContain("drive personal --offline documents context DOC_ID --json")
     expect(markdown).toContain("drive personal files get FILE_ID --json > ./file-metadata.json")
     expect(markdown).toContain("drive personal catalog tags add FOLDER_ID follow-up --offline")
+    expect(markdown).toContain("drive personal documents list tag:follow-up --json")
+    expect(markdown).toContain("drive personal memories extract DOC_ID --scope work --yes")
+    expect(markdown).toContain("drive personal memories list DOC_ID scope:work --json")
+    expect(markdown).toContain("drive personal facts list DOC_ID status:proposed --json")
+    expect(markdown).toContain("session start --client-file /path/to/desktop-client.json --grant activity")
+    expect(markdown).toContain("session start --client-file /path/to/desktop-client.json --grant write")
   })
 
   test(`${lang}: organization guide links source-specific actions`, async ({ page }) => {

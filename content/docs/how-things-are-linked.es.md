@@ -7,7 +7,7 @@ Puedes pedirle a tu agente todo sobre una persona, o los mensajes que respaldan 
 
 ## La idea
 
-`tg`, `max`, `memo` y `drive` guardan sus registros en un único almacén local en tu ordenador. Un registro de una herramienta puede vincularse con uno de otra. Un vínculo es una de dos cosas:
+`tg`, `max`, `memo` y `drive` pueden compartir registros cuando se configuran explícitamente para usar la misma base local compatible. Drive usa una base separada por defecto; elige [almacenamiento compartido](./drive/configuration.md#where-the-files-live) antes de vincular sus registros con otra herramienta. Un vínculo es una de dos cosas:
 
 - **Parte del propio registro.** Un mensaje tiene un chat y un remitente.
 - **Un vínculo guardado entre dos registros.** Una nota trata de una persona. Un hecho se respalda con mensajes.
@@ -92,7 +92,7 @@ La búsqueda encuentra las menciones como se hayan escrito: `phone:`, `email:`, 
 
 ## Etiquetas
 
-Una etiqueta se pone en cualquier registro: un mensaje, un chat, una persona, un documento, una nota, una tarea. `tag:work` encuentra un mensaje que tiene la etiqueta, un mensaje en un chat que la tiene y un mensaje de una persona que la tiene. Una etiqueta en una carpeta de Drive llega a cada documento de dentro.
+Una etiqueta se pone en cualquier registro: un mensaje, un chat, una persona, un documento, una nota, una tarea. `tag:work` encuentra un mensaje que tiene la etiqueta, un mensaje en un chat que la tiene y un mensaje de una persona que la tiene. Una etiqueta en una carpeta de Drive se aplica a esa carpeta; etiqueta sus documentos por separado.
 
 ```sh
 tg personal tags add work --chat "Book club"
@@ -100,7 +100,7 @@ tg personal tags add work --chat "Book club"
 
 ## Documentos de Drive
 
-`drive` importa documentos al mismo almacén. Un documento puede llevar etiquetas, notas, hechos y recuerdos, y vincularse con una persona (`drive relationships`, `drive tags`). `drive documents list --person person:7` lista los documentos vinculados a esa persona.
+`drive` importa documentos a su almacén local configurado. Un documento puede llevar etiquetas, notas, hechos y recuerdos, y vincularse con una persona (`drive personal relationships`, `drive personal tags`). `drive personal documents list person:7` lista los documentos vinculados a esa persona.
 
 ## Quién crea un vínculo
 

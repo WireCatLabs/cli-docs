@@ -34,7 +34,7 @@ sign in to Google and manage local profiles
 
 ### `drive session start`
 
-sign in to Google in the browser; read-only unless you pass --write
+sign in to Google in the browser; read-only unless you pass --grant write
 
 This command can change Google data or send data to the configured model.
 
@@ -47,9 +47,7 @@ drive <profile> session start [options]
 | `--client-file <file>` | path to your own Desktop OAuth client JSON, used instead of WireCat's. |
 | `--credential-storage <storage>` | where the sign-in is kept: keyring, or file for a private file. Default: `keyring`. |
 | `--no-browser` | print the sign-in URL instead of opening a browser. |
-| `--write` | also ask for permission to change Drive files and Docs. |
-| `--activity` | also ask for permission to read Drive Activity history. |
-| `--apps` | also ask for permission to see installed Drive apps. |
+| `--grant <scopes>` | also ask for these permissions, comma-separated: write (change Drive files and Docs), activity (read Drive Activity history), apps (see installed Drive apps). |
 
 ### `drive session list`
 
@@ -142,13 +140,17 @@ read imported documents and Google Docs
 list imported documents with their Google URLs
 
 ```sh
-drive <profile> documents list [options]
+drive <profile> documents list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--tag <tag>` | only documents with this tag. |
-| `--person <uid>` | only documents linked to this person, by uid or person:<uid>. |
+| `--limit <n>` | how many documents to return. Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
 
 ### `drive documents show`
 
@@ -252,7 +254,7 @@ drive <profile> documents history <document> [options]
 |---|---|
 | `--limit <n>` | how many items one page holds. Default: `100`. |
 | `--cursor <cursor>` | continue from page.next_cursor of the previous answer. |
-| `--activity` | list activity events instead of revisions; needs session start --activity. |
+| `--activity` | list activity events instead of revisions; needs session start --grant activity. |
 
 ## `drive search`
 
@@ -611,17 +613,16 @@ drive <profile> memories add <document> <text> [options]
 list a document's memories
 
 ```sh
-drive <profile> memories list <document> [options]
+drive <profile> memories list <document> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--scope <scope>` | only personal or only work memories. One of: `personal`, `work`. |
-| `--kind <kind>` | only memories of this kind. One of: `summary`, `digest`, `preference`. |
 | `--limit <n>` | how many memories to return. Default: `50`. |
 
 ### `drive memories show`
@@ -672,17 +673,13 @@ drive <profile> memories stale <document> <memory>
 search a document's memories by words
 
 ```sh
-drive <profile> memories search <document> <query> [options]
+drive <profile> memories search <document> <query>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog. |
-| `query` | required | words to look for. |
-
-| Option | What it does |
-|---|---|
-| `--scope <scope>` | search personal or work memories. One of: `personal`, `work`. |
+| `query` | required | words to look for, and scope:personal or scope:work — the fields are below. |
 
 ### `drive memories extract`
 
@@ -702,7 +699,7 @@ drive <profile> memories extract <document> [options]
 |---|---|
 | `--scope <scope>` | whose memories they become: personal or work. One of: `personal`, `work`. |
 | `--tab <id>` | send only this tab of the document. |
-| `--save` | save the proposals, each with its quote and the document's version. |
+| `--yes` | save the proposals, each with its quote and the document's version. |
 
 ## `drive facts`
 
@@ -733,17 +730,16 @@ drive <profile> facts add <document> <statement> [options]
 list a document's facts
 
 ```sh
-drive <profile> facts list <document> [options]
+drive <profile> facts list <document> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--type <type>` | only facts of this kind. One of: `fact`, `statement`, `question`, `decision`, `promise`. |
-| `--status <status>` | only facts in this state. One of: `proposed`, `accepted`, `superseded`, `reversed`. |
 | `--limit <n>` | how many facts to return. Default: `50`. |
 
 ### `drive facts show`
@@ -815,12 +811,12 @@ discover and call the official Drive, Docs and Activity API methods
 list the Google API methods drive can call
 
 ```sh
-drive api list [options]
+drive api list [query]
 ```
 
-| Option | What it does |
-|---|---|
-| `--service <name>` | only the methods of this service: drive, docs or driveactivity. |
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 ### `drive api show`
 

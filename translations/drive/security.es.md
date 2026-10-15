@@ -10,7 +10,7 @@ para elegir el alcance, saber dónde van los datos y distinguir desconectar de b
 
 La autorización predeterminada es `drive.readonly` sobre el Drive de la cuenta. Las carpetas
 seleccionadas limitan la importación, no el permiso de Google. Siguen aplicándose las funciones
-del archivo y las políticas de la organización. Editar requiere conectar con `--write` y permiso
+del archivo y las políticas de la organización. Editar requiere conectar con `--grant write` y permiso
 del comando. La actividad y los metadatos de aplicaciones instaladas tienen permisos opcionales separados.
 
 ```sh

@@ -23,7 +23,7 @@ Show the matching passage and original Google link. Tell me which selected sourc
 | Una de dos cuestiones | `drive personal search 'budget OR launch' --exact --json` |
 | Un seguimiento etiquetado | `drive personal search 'budget AND tag:follow-up' --exact --json` |
 | La pregunta, no su formulación | Prepara embeddings locales y busca con una pregunta natural |
-| Una persona vinculada a la fuente | Usa `documents list --person person:PERSON_ID` y revisa las fuentes |
+| Una persona vinculada a la fuente | Usa `documents list person:PERSON_UID` y revisa las fuentes |
 
 Los metadatos están en detalles y listados; no son una API universal de búsqueda por campos.
 Usa etiquetas y filtros de personas/listados compatibles, sin inventar campos de Google en
