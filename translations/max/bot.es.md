@@ -319,7 +319,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.52.0/docs/dev/bot-api-coverage.md).
+Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.53.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
@@ -340,7 +340,7 @@ Todos los códigos están en la [referencia de comandos](./commands.md). `--trac
 
 ## Certificado
 
-`platform-api2.max.ru` utiliza una raíz del Ministerio ruso de Desarrollo Digital ausente en Node. `max` la añade solo a sus solicitudes, sin modificar el sistema. Se identifica como `max-cli/<версия>`.
+`platform-api2.max.ru` utiliza una raíz del Ministerio ruso de Desarrollo Digital ausente en Node. En Node, `max` la añade a los certificados de confianza de todo el proceso: desde la primera solicitud del bot, todas las conexiones TLS de esa ejecución de `max` confían en ella, no solo las de Bot API. En Bun se aplica únicamente a las solicitudes de Bot API. El sistema no cambia. Se identifica como `max-cli/<версия>`.
 
 ## Bot para un agente (MCP)
 
