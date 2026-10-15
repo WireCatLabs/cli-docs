@@ -32,6 +32,9 @@ and permission before retrying. Do not tell an agent to bypass the restriction t
 For important replies, ask for a draft and review the recipient and text before sending.
 Reading messages does not mark them as read; that is a separate action.
 
+An agent started on a schedule runs read-only. It can read and draft, but it cannot send, and it
+cannot change settings, permissions, recipients or schedules, so it cannot arrange a later send.
+
 ## Where your information goes
 
 The tools run on your computer and connect to your messenger. They keep <DocTerm term="local-archive" lang="en" label="a local store" /> of the
@@ -79,9 +82,13 @@ Attachments come from other people. Downloaded files, extracted text and transcr
 
 The audit checks file names, paths, overwriting, archive extraction and resource use while parsing documents or audio. These checks are separate from sending permissions: permission to read a chat does not mean the agent should read unrelated folders or upload local files.
 
+Sending a local file refuses known login and credential locations — SSH and cloud keys, `.netrc`, Git and GitHub credentials, browser profiles, password stores and the folders of the WireCat tools themselves — unless you add `--allow-any-file`. Other files, including ordinary hidden folders, can be sent.
+
 ## Dependencies and releases
 
 Security reviews cover third-party packages, installation and update commands, and the workflows that build and publish the tools. Automated scans help detect known vulnerabilities and risky package or workflow behaviour. Manual review checks how a flagged component is used and whether a finding affects the shipped tool.
+
+Every release passes a production dependency audit, a scan of the full history for secrets, a review of the publishing workflows and source analysis. A critical finding stops the release. Packages are published from the build workflow with npm provenance, without a stored publishing token.
 
 Use the [installation guide](./installation.mdx) to keep your tool current. A clean dependency scan does not establish that every package or execution path is safe.
 
@@ -137,6 +144,6 @@ you do not need sending. Stop the server or tunnel to pause access; `tg personal
 ## Report a problem
 
 Do not put credentials or private messages in a public issue. For a security problem, contact
-[the maintainer](mailto:hello@wirecat.dev) or use private vulnerability reporting on the
-[Telegram repository](https://github.com/WireCatLabs/tg-cli/security/advisories/new) or
-[MAX repository](https://github.com/WireCatLabs/max-cli/security/advisories/new).
+[the maintainer](mailto:hello@wirecat.dev) or use private vulnerability reporting (**Security → Report a vulnerability**) in the repository of the
+tool concerned, for example [Telegram](https://github.com/WireCatLabs/tg-cli/security/advisories/new) or
+[MAX](https://github.com/WireCatLabs/max-cli/security/advisories/new).

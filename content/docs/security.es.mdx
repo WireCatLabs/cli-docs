@@ -31,6 +31,9 @@ y los permisos antes de repetirla. No pidas al agente que evite la restricción 
 Para respuestas importantes, pide un borrador y revisa destinatario y texto. Leer no marca los
 mensajes como leídos; eso es una acción distinta.
 
+Un agente iniciado por una programación funciona solo en lectura. Puede leer y preparar borradores, pero
+no envía ni cambia ajustes, permisos, destinatarios o programaciones, así que no puede dejar un envío para después.
+
 ## Adónde va tu información
 
 Las herramientas se ejecutan en tu ordenador y conectan con el mensajero. Guardan una copia
@@ -90,9 +93,13 @@ Los adjuntos vienen de otras personas. Los archivos descargados, el texto extra�
 
 La auditoría revisa nombres, rutas, sobrescritura, extracción de archivos comprimidos y consumo de recursos al procesar documentos o audio. Estas comprobaciones son distintas de los permisos de envío: poder leer un chat no implica que el agente deba leer carpetas ajenas a la tarea ni subir archivos locales.
 
+Enviar un archivo local se rechaza en las ubicaciones conocidas de credenciales — claves SSH y de la nube, `.netrc`, credenciales de Git y GitHub, perfiles del navegador, gestores de contraseñas y las carpetas de las propias herramientas WireCat — salvo que añadas `--allow-any-file`. El resto de archivos, también los de carpetas ocultas normales, se puede enviar.
+
 ## Dependencias y publicaciones
 
 Las revisiones cubren paquetes externos, comandos de instalación y actualización y los procesos que construyen y publican las herramientas. Los escáneres automáticos ayudan a detectar vulnerabilidades conocidas y comportamientos arriesgados de paquetes o procesos. La revisión manual comprueba cómo se usa un componente señalado y si el hallazgo afecta a la herramienta publicada.
+
+Cada publicación pasa una auditoría de dependencias, una búsqueda de secretos en todo el historial, una revisión de los procesos de publicación y un análisis del código. Un hallazgo crítico detiene la publicación. Los paquetes se publican desde el proceso de compilación con procedencia de npm, sin un token de publicación guardado.
 
 Mantén la herramienta actualizada con la [guía de instalación](./installation.mdx). Un análisis de dependencias sin hallazgos no demuestra que todos los paquetes o rutas de ejecución sean seguros.
 
@@ -139,6 +146,6 @@ antes de tomar decisiones importantes.
 ## Informar de un problema
 
 No publiques credenciales ni conversaciones privadas en una incidencia. Para un problema de
-seguridad, contacta con [el mantenedor](mailto:hello@wirecat.dev) o usa informes privados en
-[Telegram](https://github.com/WireCatLabs/tg-cli/security/advisories/new) o
+seguridad, contacta con [el mantenedor](mailto:hello@wirecat.dev) o usa informes privados (**Security → Report a vulnerability**) en el repositorio de la
+herramienta, por ejemplo [Telegram](https://github.com/WireCatLabs/tg-cli/security/advisories/new) o
 [MAX](https://github.com/WireCatLabs/max-cli/security/advisories/new).
