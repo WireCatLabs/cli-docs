@@ -9,9 +9,9 @@ understand what an agent can find in it. It explains the entities first, then ho
 then how a search finds context, and only at the end the columns worth querying by. How the
 store is opened, migrated and locked is in [the local store](./architecture.mdx#the-local-store).
 
-It describes the schema as read on 10 October 2026, at a fixed commit of cli-messaging, the
+It describes the schema as read on 15 October 2026, at a fixed commit of cli-core, the
 package that owns the file. Every column with its meaning is in the
-[schema reference](https://github.com/WireCatLabs/cli-messaging/blob/v0.223.0/docs/storage/schema.md).
+[schema reference](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md).
 
 ## Key entities
 
@@ -186,7 +186,7 @@ and confirmed links, and holds nothing they do not.
 
 ## Tables
 
-Every table of the store, by area, with each column's type and meaning. Times are epoch milliseconds. The [schema reference](https://github.com/WireCatLabs/cli-messaging/blob/v0.223.0/docs/storage/schema.md) also lists every constraint and index.
+Every table of the store, by area, with each column's type and meaning. Times are epoch milliseconds. The [schema reference](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md) also lists every constraint and index.
 
 **Naming conventions**
 
@@ -418,6 +418,20 @@ A company, team, family or community the owner deals with. Projects, work accoun
 | `created_at` | integer, not null | when this row was saved here |
 | `updated_at` | integer, not null | when this row last changed here |
 | `deleted_at` | integer | gone at the source; sync never hard-deletes |
+
+#### `organization_identities`
+
+A phone, an address or an account an organization owns: a shop's number, `info@`. Apart from `identity_links`, which says which person an identity is: one identity may be both someone's and an organization's.
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `id` | integer, PK | Primary key. |
+| `identity_id` | integer, not null → `identities.id` | the `identity` it belongs to |
+| `organization_id` | integer, not null → `organizations.id` | the `organization` it belongs to |
+| `method` | text, not null | how it was decided: `mention`, `owner`, an import |
+| `author` | text, not null | `owner`, an agent by name, `rules` |
+| `created_at` | integer, not null | when this row was saved here |
+| `updated_at` | integer, not null | when this row last changed here |
 
 #### `bots`
 
@@ -706,6 +720,24 @@ One email.
 | `created_at` | integer, not null | when this row was saved here |
 | `updated_at` | integer, not null | when this row last changed here |
 | `deleted_at` | integer | gone at the source; sync never hard-deletes |
+| `mail_rule_id` | integer | the `mail_rules` row that decided how this email is stored; no constraint, removing the rule clears it |
+
+#### `mail_rules`
+
+A mail rule of one account: conditions an email must match, and what to do with it (store in full, as an envelope, skip, tag).
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `id` | integer, PK | Primary key. |
+| `account_id` | integer, not null → `accounts.id` | the integration account it came through |
+| `conditions` | text, not null | JSON with sorted keys: sender, domain, List-Id and more; all must match |
+| `actions` | text, not null | JSON: `store` (`full`, `envelope`, `skip`), `tags` |
+| `protected` | integer, not null | 1: no cleanup may cut, archive or trash what it matches |
+| `source` | text, not null | `owner`, `preset:&lt;name>`, `probe`, `gmail-filter` |
+| `reason` | text | why, in the owner's or the proposer's words |
+| `decided_at` | integer, not null |  |
+| `created_at` | integer, not null | when this row was saved here |
+| `updated_at` | integer, not null | when this row last changed here |
 
 #### `email_recipients`
 
@@ -798,10 +830,16 @@ A file of a message, an email or a meeting, with its extracted text.
 | `extracted_at` | integer | When the attachment's text (or its error) was written (epoch ms). |
 | `created_at` | integer, not null | when this row was saved here |
 | `updated_at` | integer, not null | when this row last changed here |
+| `name_folded` | text | `fold(name)`, which `attachments list name:` compares: SQLite's `lower()` folds ASCII only |
+| `local_path_folded` | text | `fold(local_path)`, for `local_path:` |
 
 #### `attachment_words`
 
 Full-text index over `normalized_text`.
+
+#### `attachment_name_words`
+
+Full-text index over `name`.
 
 ### Documents, notes and memories
 
@@ -1040,6 +1078,7 @@ One occurrence: it happened once, at one time.
 | `created_at` | integer, not null | when this row was saved here |
 | `updated_at` | integer, not null | when this row last changed here |
 | `deleted_at` | integer | gone at the source; sync never hard-deletes |
+| `title_folded` | text | `fold(title)`, which `meetings list title:` compares |
 
 #### `meeting_participants`
 
@@ -1236,6 +1275,20 @@ A task or ticket, for people and agents alike. Everything it concerns — people
 | `updated_at` | integer, not null | when this row last changed here |
 | `deleted_at` | integer | gone at the source; sync never hard-deletes |
 | `next_check_at` | integer | when an agent should look at the open task again; the agenda lists it from then. Not a reminder: nothing reaches the owner |
+| `title_folded` | text | `fold(title)`, which `tasks list title:` compares |
+| `close_reason_folded` | text | `fold(close_reason)`, for `reason:` |
+| `category` | text | a name from the list `tasks categories` prints; null on a project task |
+| `claimed_by` | text | who works on it now: `owner` or an agent's name |
+| `claimed_until` | integer | when the claim lapses; a lapsed claim holds nothing |
+
+#### `task_key_counters`
+
+The last number given out per key prefix of a task found in a message (`Q`, `REQ`, `M`, `PR`).
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `prefix` | text, PK |  |
+| `tasks_count` | integer, not null |  |
 
 #### `task_assignments`
 
@@ -1264,6 +1317,44 @@ The history of a task: created, status changed, assigned, due date moved.
 | `kind` | text, not null | what happened: created, status, assigned, unassigned, due, priority, moved |
 | `changes` | text | JSON: \{field: [from, to]} |
 | `created_at` | integer, not null | when this row was saved here |
+
+#### `task_pairs`
+
+Two tasks that may be one job, and what was decided about them: the review list the duplicate check leaves, and every merge, rejection, `--into` and `--new` as a labelled pair. A merge never deletes; `tasks unmerge` undoes one.
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `id` | integer, PK | Primary key. |
+| `task_id` | integer → `tasks.id` | the newer task, the one that would be the duplicate; null for an `--into`, which made none |
+| `source_locator` | text | the message an `--into` linked to `other_id` instead of opening a task |
+| `other_id` | integer, not null → `tasks.id` | the task it may duplicate |
+| `score` | integer, not null | the comparison's sum of weights when the pair was recorded |
+| `band` | text, not null | likely, maybe or different |
+| `levels` | text, not null | JSON: the level of each field, which the weights are recounted from |
+| `reasons` | text, not null | JSON: the reasons shown with the score |
+| `decision` | text, not null | review, unsure, merged, rejected, unmerged, attached, new |
+| `decided_by_type` | text | `person` or `bot` |
+| `decided_by_id` | integer | the row in the `decided_by_type` table |
+| `decided_at` | integer |  |
+| `created_at` | integer, not null | when this row was saved here |
+| `updated_at` | integer, not null | when this row last changed here |
+
+#### `task_words`
+
+Full-text index over `normalized_text`, `scope`.
+
+#### `task_stems`
+
+Full-text index over `stems`, `scope`.
+
+#### `task_index_pending`
+
+Rows of tasks waiting to be indexed: triggers enqueue, JS normalizes, stems and writes the index.
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `id` | integer, not null | The row waiting to be indexed. |
+| `indexable_type` | text, not null | which table the waiting row belongs to |
 
 #### `decisions`
 
@@ -1404,7 +1495,7 @@ Every connection between two things that no column holds. Kinds: `blocked-by` (a
 | `to_id` | integer | null while the link names nobody yet |
 | `kind` | text, not null | the connection; the kinds are listed in the table's description |
 | `anchor` | text | The heading or block fragment the link points at inside its target, like `#Heading` or `#^block`; NULL for the whole target. |
-| `source` | text, not null | Where the link came from: `file` (written in a note file), `owner` (added by the owner) or `suggested` (proposed, not yet confirmed). |
+| `source` | text, not null | Where the link came from: `file` (written in a note file), `owner` (added by the owner), `suggested` (proposed, not yet confirmed) or `message` (written in a stored message's text). |
 | `target_text` | text | The target as written (e.g. a name in a note), kept while the link resolves to nobody; up to 500 characters. |
 | `target_folded` | text | target_text case- and accent-folded with any leading `@` removed, matched against new person names and aliases to resolve the link. |
 | `role` | text | The role the relation states, such as a job title in a `member-of` link; free text up to 200 characters. |
@@ -1597,6 +1688,40 @@ Which messages a conversation's chunk is cut from. One row per `conversation` ro
 | `last_message_id` | integer, not null → `messages.id` | the `message` it belongs to |
 | `text_start` | integer | where the piece starts inside the first message's text, when it begins mid-message |
 | `text_end` | integer | where it ends inside the last message's text |
+
+#### `mentions`
+
+A phone, e-mail address, link, Google document or known person's name found in one place of one stored text. Derived: `mentions rebuild` finds them again, and a `linked` or `dismissed` decision moves to the new row with the same kind and value.
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `id` | integer, PK | Primary key. |
+| `kind` | text, not null | `phone`, `email`, `url`, `document` |
+| `source_type` | text, not null | the text's row: `message`, `attachment` (its file), `document`, `note` or `email` |
+| `source_id` | integer, not null | the row in the `source_type` table |
+| `source_field` | text, not null | which text of that row: a message's `text`, an attachment's `file_text` or `transcript` |
+| `start_offset` | integer, not null | where it is written in that text, in UTF-16 units |
+| `end_offset` | integer, not null | where it ends, exclusive; what was written is read back from the source, never copied |
+| `value` | text, not null | normalized: `+` and digits for a phone with a known country, digits alone otherwise; a lower-case address; a link without tracking parameters or fragment; a Google file id |
+| `domain` | text | `url` and `email`: the site from the public suffix list, `google.com` for `docs.google.com` |
+| `method` | text, not null | what found it: `rules` |
+| `version` | integer, not null | the kind's rule version, so a changed rule redoes its kind alone |
+| `confidence` | real, not null | the rule's own score, 0–1 |
+| `status` | text, not null | `found`, then `linked` or `dismissed` |
+| `target_type` | text | once linked: what it names, a singular table name |
+| `target_id` | integer | the row in the `target_type` table |
+| `author` | text | who linked or dismissed it: `owner` or an agent by name |
+| `created_at` | integer, not null | when this row was saved here |
+| `updated_at` | integer, not null | when this row last changed here |
+
+#### `mention_pending`
+
+Texts written or edited since their mentions were found: triggers enqueue, the store's next write finds them.
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `source_type` | text, not null | `message`, `attachment`, `document`, `note` or `email` |
+| `source_id` | integer, not null | the row in the `source_type` table |
 
 ### Store
 

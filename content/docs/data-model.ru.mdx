@@ -10,9 +10,9 @@ description: Какие сущности инструменты WireCat хран
 стоит искать. Как хранилище открывается, обновляется и блокируется, описано в разделе
 [локальное хранилище](./architecture.mdx#локальное-хранилище).
 
-Страница описывает схему по состоянию на 10 октября 2026 года, на фиксированном коммите
-cli-messaging — пакета, которому принадлежит файл. Все столбцы с их значением перечислены в
-[справочнике схемы](https://github.com/WireCatLabs/cli-messaging/blob/v0.223.0/docs/storage/schema.md).
+Страница описывает схему по состоянию на 15 октября 2026 года, на фиксированном коммите
+cli-core — пакета, которому принадлежит файл. Все столбцы с их значением перечислены в
+[справочнике схемы](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md).
 
 ## Ключевые сущности
 
@@ -191,7 +191,7 @@ LIMIT 50
 
 ## Таблицы
 
-Все таблицы хранилища по областям, с типом и значением каждого столбца. Время — в миллисекундах эпохи. В [справочнике схемы](https://github.com/WireCatLabs/cli-messaging/blob/v0.223.0/docs/storage/schema.md) есть ещё все ограничения и индексы.
+Все таблицы хранилища по областям, с типом и значением каждого столбца. Время — в миллисекундах эпохи. В [справочнике схемы](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md) есть ещё все ограничения и индексы.
 
 **Соглашения об именах**
 
@@ -425,6 +425,20 @@ LIMIT 50
 | `created_at` | integer, not null | когда эта строка была сохранена здесь |
 | `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 | `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+
+#### `organization_identities`
+
+Телефон, адрес или аккаунт, который принадлежит организации: номер магазина, `info@`. Отдельно от `identity_links`, где сказано, чья это учётная запись: одна учётная запись может принадлежать и человеку, и организации.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `identity_id` | integer, not null → `identities.id` | `identity`, к которой это относится |
+| `organization_id` | integer, not null → `organizations.id` | `organization`, к которой это относится |
+| `method` | text, not null | как это решено: `mention`, `owner`, импорт |
+| `author` | text, not null | `owner`, агент по имени, `rules` |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 
 #### `bots`
 
@@ -713,6 +727,24 @@ LIMIT 50
 | `created_at` | integer, not null | когда эта строка была сохранена здесь |
 | `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 | `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+| `mail_rule_id` | integer | строка `mail_rules`, которая решила, как хранить это письмо; без ограничения, удаление правила очищает поле |
+
+#### `mail_rules`
+
+Почтовое правило одного аккаунта: условия, под которые должно подойти письмо, и что с ним делать (хранить целиком, только конверт, пропустить, поставить метку).
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `account_id` | integer, not null → `accounts.id` | аккаунт интеграции, через который это пришло |
+| `conditions` | text, not null | JSON с отсортированными ключами: отправитель, домен, List-Id и другие; должны совпасть все |
+| `actions` | text, not null | JSON: `store` (`full`, `envelope`, `skip`), `tags` |
+| `protected` | integer, not null | 1: никакая очистка не может обрезать, архивировать или удалить то, что подходит под правило |
+| `source` | text, not null | `owner`, `preset:&lt;name>`, `probe`, `gmail-filter` |
+| `reason` | text | почему, словами владельца или того, кто предложил правило |
+| `decided_at` | integer, not null |  |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 
 #### `email_recipients`
 
@@ -805,10 +837,16 @@ LIMIT 50
 | `extracted_at` | integer | Когда был записан текст вложения (или его ошибка) (миллисекунды эпохи). |
 | `created_at` | integer, not null | когда эта строка была сохранена здесь |
 | `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+| `name_folded` | text | `fold(name)`, с ним сравнивает `attachments list name:`: `lower()` в SQLite приводит к нижнему регистру только ASCII |
+| `local_path_folded` | text | `fold(local_path)`, для `local_path:` |
 
 #### `attachment_words`
 
 Полнотекстовый индекс по `normalized_text`.
+
+#### `attachment_name_words`
+
+Полнотекстовый индекс по `name`.
 
 ### Документы, заметки и память
 
@@ -1047,6 +1085,7 @@ LIMIT 50
 | `created_at` | integer, not null | когда эта строка была сохранена здесь |
 | `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 | `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
+| `title_folded` | text | `fold(title)`, с ним сравнивает `meetings list title:` |
 
 #### `meeting_participants`
 
@@ -1243,6 +1282,20 @@ LIMIT 50
 | `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
 | `deleted_at` | integer | исчезло в источнике; синхронизация никогда не удаляет строки физически |
 | `next_check_at` | integer | когда агенту снова посмотреть на открытую задачу; с этого момента её показывает повестка. Не напоминание: владельцу ничего не приходит |
+| `title_folded` | text | `fold(title)`, с ним сравнивает `tasks list title:` |
+| `close_reason_folded` | text | `fold(close_reason)`, для `reason:` |
+| `category` | text | имя из списка, который печатает `tasks categories`; null у задачи проекта |
+| `claimed_by` | text | кто сейчас работает над задачей: `owner` или имя агента |
+| `claimed_until` | integer | когда бронь истекает; истёкшая бронь ничего не держит |
+
+#### `task_key_counters`
+
+Последний выданный номер для каждого префикса ключа задачи, найденной в сообщении (`Q`, `REQ`, `M`, `PR`).
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `prefix` | text, PK |  |
+| `tasks_count` | integer, not null |  |
 
 #### `task_assignments`
 
@@ -1271,6 +1324,44 @@ LIMIT 50
 | `kind` | text, not null | что произошло: created, status, assigned, unassigned, due, priority, moved |
 | `changes` | text | JSON: \{field: [from, to]} |
 | `created_at` | integer, not null | когда эта строка была сохранена здесь |
+
+#### `task_pairs`
+
+Две задачи, которые могут быть одним делом, и что о них решено: список на проверку, который оставляет проверка дублей, и каждое объединение, отказ, `--into` и `--new` как размеченная пара. Объединение ничего не удаляет; `tasks unmerge` его отменяет.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `task_id` | integer → `tasks.id` | более новая задача, та, что была бы дублем; null для `--into`, который задачу не создал |
+| `source_locator` | text | сообщение, которое `--into` привязал к `other_id` вместо новой задачи |
+| `other_id` | integer, not null → `tasks.id` | задача, дублем которой она может быть |
+| `score` | integer, not null | сумма весов сравнения, когда пара была записана |
+| `band` | text, not null | likely, maybe или different |
+| `levels` | text, not null | JSON: уровень каждого поля; по ним заново считают веса |
+| `reasons` | text, not null | JSON: причины, которые показаны вместе со счётом |
+| `decision` | text, not null | review, unsure, merged, rejected, unmerged, attached, new |
+| `decided_by_type` | text | `person` или `bot` |
+| `decided_by_id` | integer | строка в таблице `decided_by_type` |
+| `decided_at` | integer |  |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `task_words`
+
+Полнотекстовый индекс по `normalized_text`, `scope`.
+
+#### `task_stems`
+
+Полнотекстовый индекс по `stems`, `scope`.
+
+#### `task_index_pending`
+
+Строки задач, ждущие индексации: триггеры ставят в очередь, JS нормализует, выделяет основы и пишет индекс.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, not null | Строка, ждущая индексации. |
+| `indexable_type` | text, not null | к какой таблице относится ждущая строка |
 
 #### `decisions`
 
@@ -1411,7 +1502,7 @@ LIMIT 50
 | `to_id` | integer | null, пока связь ещё никого не называет |
 | `kind` | text, not null | связь; виды перечислены в описании таблицы |
 | `anchor` | text | Заголовок или фрагмент блока внутри цели, на который указывает связь, например `#Heading` или `#^block`; NULL для всей цели. |
-| `source` | text, not null | Откуда взялась связь: `file` (написана в файле заметки), `owner` (добавлена владельцем) или `suggested` (предложена, ещё не подтверждена). |
+| `source` | text, not null | Откуда взялась связь: `file` (написана в файле заметки), `owner` (добавлена владельцем), `suggested` (предложена, ещё не подтверждена) или `message` (написана в тексте сохранённого сообщения). |
 | `target_text` | text | Цель, как написана (например имя в заметке); хранится, пока связь никого не называет; до 500 символов. |
 | `target_folded` | text | target_text, приведённый по регистру и диакритике, без начального `@`; его сравнивают с новыми именами людей и псевдонимами, чтобы найти цель связи. |
 | `role` | text | Роль, которую называет отношение, например должность в связи `member-of`; свободный текст до 200 символов. |
@@ -1604,6 +1695,40 @@ LIMIT 50
 | `last_message_id` | integer, not null → `messages.id` | `message`, к которому это относится |
 | `text_start` | integer | где кусок начинается внутри текста первого сообщения, если он начинается посреди сообщения |
 | `text_end` | integer | где он заканчивается внутри текста последнего сообщения |
+
+#### `mentions`
+
+Телефон, адрес почты, ссылка, документ Google или имя известного человека, найденные в одном месте одного сохранённого текста. Производные данные: `mentions rebuild` находит их заново, а решение `linked` или `dismissed` переходит на новую строку с тем же видом и значением.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `id` | integer, PK | Первичный ключ. |
+| `kind` | text, not null | `phone`, `email`, `url`, `document` |
+| `source_type` | text, not null | строка текста: `message`, `attachment` (его файл), `document`, `note` или `email` |
+| `source_id` | integer, not null | строка в таблице `source_type` |
+| `source_field` | text, not null | какой текст этой строки: `text` сообщения, `file_text` или `transcript` вложения |
+| `start_offset` | integer, not null | где это написано в тексте, в единицах UTF-16 |
+| `end_offset` | integer, not null | где заканчивается, не включая; написанное читается из источника, а не копируется |
+| `value` | text, not null | в нормальной форме: `+` и цифры для телефона с известной страной, иначе только цифры; адрес в нижнем регистре; ссылка без параметров отслеживания и фрагмента; id файла Google |
+| `domain` | text | для `url` и `email`: сайт по списку публичных суффиксов, `google.com` для `docs.google.com` |
+| `method` | text, not null | чем найдено: `rules` |
+| `version` | integer, not null | версия правила для этого вида, чтобы изменённое правило пересчитывало только свой вид |
+| `confidence` | real, not null | собственная оценка правила, 0–1 |
+| `status` | text, not null | `found`, затем `linked` или `dismissed` |
+| `target_type` | text | после привязки: что это называет, имя таблицы в единственном числе |
+| `target_id` | integer | строка в таблице `target_type` |
+| `author` | text | кто привязал или отклонил: `owner` или агент по имени |
+| `created_at` | integer, not null | когда эта строка была сохранена здесь |
+| `updated_at` | integer, not null | когда эта строка последний раз изменилась здесь |
+
+#### `mention_pending`
+
+Тексты, записанные или изменённые после поиска упоминаний: триггеры ставят их в очередь, следующая запись в хранилище находит упоминания.
+
+| Столбец | Тип | Значение |
+| --- | --- | --- |
+| `source_type` | text, not null | `message`, `attachment`, `document`, `note` или `email` |
+| `source_id` | integer, not null | строка в таблице `source_type` |
 
 ### Хранилище
 

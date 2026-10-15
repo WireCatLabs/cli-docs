@@ -10,9 +10,9 @@ entidades, después cómo se conectan, después cómo una búsqueda encuentra co
 las columnas por las que vale la pena consultar. Cómo se abre, migra y bloquea el almacén está en
 [el almacén local](./architecture.mdx#el-almacén-local).
 
-Describe el esquema tal como se leyó el 10 de octubre de 2026, en un commit fijo de cli-messaging,
+Describe el esquema tal como se leyó el 15 de octubre de 2026, en un commit fijo de cli-core,
 el paquete dueño del archivo. Cada columna con su significado está en la
-[referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/v0.223.0/docs/storage/schema.md).
+[referencia del esquema](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md).
 
 ## Entidades clave
 
@@ -200,7 +200,7 @@ participantes, responsables y vínculos confirmados, y no contiene nada que ello
 
 ## Tablas
 
-Todas las tablas del almacén por área, con el tipo y el significado de cada columna. Los tiempos son milisegundos de época. La [referencia del esquema](https://github.com/WireCatLabs/cli-messaging/blob/v0.223.0/docs/storage/schema.md) lista además cada restricción e índice.
+Todas las tablas del almacén por área, con el tipo y el significado de cada columna. Los tiempos son milisegundos de época. La [referencia del esquema](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md) lista además cada restricción e índice.
 
 **Convenciones de nombres**
 
@@ -434,6 +434,20 @@ Una empresa, equipo, familia o comunidad con la que trata el dueño. Los proyect
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 | `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 | `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+
+#### `organization_identities`
+
+Un teléfono, una dirección o una cuenta que pertenece a una organización: el número de una tienda, `info@`. Aparte de `identity_links`, que dice de qué persona es una identidad: una identidad puede ser a la vez de alguien y de una organización.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `identity_id` | integer, not null → `identities.id` | la `identity` a la que pertenece |
+| `organization_id` | integer, not null → `organizations.id` | la `organization` a la que pertenece |
+| `method` | text, not null | cómo se decidió: `mention`, `owner`, una importación |
+| `author` | text, not null | `owner`, un agente por su nombre, `rules` |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 
 #### `bots`
 
@@ -722,6 +736,24 @@ Un correo.
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 | `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 | `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+| `mail_rule_id` | integer | la fila de `mail_rules` que decidió cómo se guarda este correo; sin restricción, borrar la regla lo vacía |
+
+#### `mail_rules`
+
+Una regla de correo de una cuenta: las condiciones que debe cumplir un correo y qué hacer con él (guardarlo entero, solo el sobre, omitirlo, etiquetarlo).
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `account_id` | integer, not null → `accounts.id` | la cuenta de integración por la que llegó |
+| `conditions` | text, not null | JSON con las claves ordenadas: remitente, dominio, List-Id y más; deben cumplirse todas |
+| `actions` | text, not null | JSON: `store` (`full`, `envelope`, `skip`), `tags` |
+| `protected` | integer, not null | 1: ninguna limpieza puede recortar, archivar ni enviar a la papelera lo que cumple la regla |
+| `source` | text, not null | `owner`, `preset:&lt;name>`, `probe`, `gmail-filter` |
+| `reason` | text | por qué, con las palabras del dueño o de quien la propuso |
+| `decided_at` | integer, not null |  |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 
 #### `email_recipients`
 
@@ -814,10 +846,16 @@ Un archivo de un mensaje, un correo o una reunión, con su texto extraído.
 | `extracted_at` | integer | Cuándo se escribió el texto del adjunto (o su error) (milisegundos de época). |
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 | `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+| `name_folded` | text | `fold(name)`, lo que compara `attachments list name:`: `lower()` de SQLite solo pasa a minúsculas el ASCII |
+| `local_path_folded` | text | `fold(local_path)`, para `local_path:` |
 
 #### `attachment_words`
 
 Índice de texto completo sobre `normalized_text`.
+
+#### `attachment_name_words`
+
+Índice de texto completo sobre `name`.
 
 ### Documentos, notas y memorias
 
@@ -1056,6 +1094,7 @@ Una ocurrencia: pasó una vez, en un momento.
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
 | `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 | `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
+| `title_folded` | text | `fold(title)`, lo que compara `meetings list title:` |
 
 #### `meeting_participants`
 
@@ -1252,6 +1291,20 @@ Una tarea o ticket, para personas y agentes por igual. Todo lo que le concierne 
 | `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
 | `deleted_at` | integer | desaparecido en la fuente; la sincronización nunca borra de verdad |
 | `next_check_at` | integer | cuándo un agente debe volver a mirar la tarea abierta; desde entonces la agenda la muestra. No es un recordatorio: al dueño no le llega nada |
+| `title_folded` | text | `fold(title)`, lo que compara `tasks list title:` |
+| `close_reason_folded` | text | `fold(close_reason)`, para `reason:` |
+| `category` | text | un nombre de la lista que imprime `tasks categories`; null en una tarea de proyecto |
+| `claimed_by` | text | quién trabaja en ella ahora: `owner` o el nombre de un agente |
+| `claimed_until` | integer | cuándo vence la reserva; una reserva vencida no retiene nada |
+
+#### `task_key_counters`
+
+El último número asignado por prefijo de clave de una tarea encontrada en un mensaje (`Q`, `REQ`, `M`, `PR`).
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `prefix` | text, PK |  |
+| `tasks_count` | integer, not null |  |
 
 #### `task_assignments`
 
@@ -1280,6 +1333,44 @@ El historial de una tarea: creada, cambio de estado, asignada, fecha límite mov
 | `kind` | text, not null | qué pasó: created, status, assigned, unassigned, due, priority, moved |
 | `changes` | text | JSON: \{field: [from, to]} |
 | `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+
+#### `task_pairs`
+
+Dos tareas que pueden ser el mismo trabajo, y lo que se decidió sobre ellas: la lista de revisión que deja la comprobación de duplicados, y cada fusión, rechazo, `--into` y `--new` como un par etiquetado. Una fusión nunca borra; `tasks unmerge` la deshace.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `task_id` | integer → `tasks.id` | la tarea más nueva, la que sería el duplicado; null para un `--into`, que no creó ninguna |
+| `source_locator` | text | el mensaje que un `--into` unió a `other_id` en vez de abrir una tarea |
+| `other_id` | integer, not null → `tasks.id` | la tarea que puede duplicar |
+| `score` | integer, not null | la suma de pesos de la comparación cuando se registró el par |
+| `band` | text, not null | likely, maybe o different |
+| `levels` | text, not null | JSON: el nivel de cada campo, a partir del cual se vuelven a contar los pesos |
+| `reasons` | text, not null | JSON: los motivos que se muestran con la puntuación |
+| `decision` | text, not null | review, unsure, merged, rejected, unmerged, attached, new |
+| `decided_by_type` | text | `person` o `bot` |
+| `decided_by_id` | integer | la fila en la tabla `decided_by_type` |
+| `decided_at` | integer |  |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `task_words`
+
+Índice de texto completo sobre `normalized_text`, `scope`.
+
+#### `task_stems`
+
+Índice de texto completo sobre `stems`, `scope`.
+
+#### `task_index_pending`
+
+Filas de tareas que esperan ser indexadas: los triggers las encolan, JS normaliza, extrae las raíces y escribe el índice.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, not null | La fila que espera ser indexada. |
+| `indexable_type` | text, not null | a qué tabla pertenece la fila en espera |
 
 #### `decisions`
 
@@ -1420,7 +1511,7 @@ Cada conexión entre dos cosas que no guarda ninguna columna. Tipos: `blocked-by
 | `to_id` | integer | null mientras el vínculo aún no nombra a nadie |
 | `kind` | text, not null | la conexión; los tipos se listan en la descripción de la tabla |
 | `anchor` | text | El encabezado o fragmento de bloque al que apunta el vínculo dentro de su destino, como `#Heading` o `#^block`; NULL para el destino entero. |
-| `source` | text, not null | De dónde salió el vínculo: `file` (escrito en un archivo de nota), `owner` (añadido por el dueño) o `suggested` (propuesto, aún sin confirmar). |
+| `source` | text, not null | De dónde salió el vínculo: `file` (escrito en un archivo de nota), `owner` (añadido por el dueño), `suggested` (propuesto, aún sin confirmar) o `message` (escrito en el texto de un mensaje guardado). |
 | `target_text` | text | El destino tal como está escrito (p. ej. un nombre en una nota), guardado mientras el vínculo no apunta a nadie; hasta 500 caracteres. |
 | `target_folded` | text | target_text normalizado en mayúsculas y acentos, sin un `@` inicial, comparado con nombres y alias de personas nuevas para resolver el vínculo. |
 | `role` | text | El rol que declara la relación, p. ej. un cargo en un vínculo `member-of`; texto libre de hasta 200 caracteres. |
@@ -1613,6 +1704,40 @@ De qué mensajes se corta el fragmento de una conversación. Una fila por cada f
 | `last_message_id` | integer, not null → `messages.id` | el `message` al que pertenece |
 | `text_start` | integer | dónde empieza el fragmento dentro del texto del primer mensaje, cuando empieza a mitad de mensaje |
 | `text_end` | integer | dónde termina dentro del texto del último mensaje |
+
+#### `mentions`
+
+Un teléfono, una dirección de correo, un enlace, un documento de Google o el nombre de una persona conocida, encontrado en un lugar de un texto guardado. Derivado: `mentions rebuild` los vuelve a encontrar, y una decisión `linked` o `dismissed` pasa a la nueva fila con el mismo tipo y valor.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `id` | integer, PK | Clave primaria. |
+| `kind` | text, not null | `phone`, `email`, `url`, `document` |
+| `source_type` | text, not null | la fila del texto: `message`, `attachment` (su archivo), `document`, `note` o `email` |
+| `source_id` | integer, not null | la fila en la tabla `source_type` |
+| `source_field` | text, not null | qué texto de esa fila: el `text` de un mensaje, el `file_text` o el `transcript` de un adjunto |
+| `start_offset` | integer, not null | dónde está escrito en ese texto, en unidades UTF-16 |
+| `end_offset` | integer, not null | dónde termina, sin incluirlo; lo escrito se lee de la fuente, nunca se copia |
+| `value` | text, not null | normalizado: `+` y dígitos para un teléfono con país conocido, solo dígitos si no; una dirección en minúsculas; un enlace sin parámetros de seguimiento ni fragmento; un id de archivo de Google |
+| `domain` | text | en `url` y `email`: el sitio según la lista de sufijos públicos, `google.com` para `docs.google.com` |
+| `method` | text, not null | qué lo encontró: `rules` |
+| `version` | integer, not null | la versión de la regla de ese tipo, para que una regla cambiada rehaga solo su tipo |
+| `confidence` | real, not null | la puntuación propia de la regla, 0–1 |
+| `status` | text, not null | `found`, luego `linked` o `dismissed` |
+| `target_type` | text | una vez unido: lo que nombra, un nombre de tabla en singular |
+| `target_id` | integer | la fila en la tabla `target_type` |
+| `author` | text | quién lo unió o descartó: `owner` o un agente por su nombre |
+| `created_at` | integer, not null | cuándo se guardó esta fila aquí |
+| `updated_at` | integer, not null | cuándo cambió esta fila aquí por última vez |
+
+#### `mention_pending`
+
+Textos escritos o editados desde que se buscaron sus menciones: los triggers los encolan y la siguiente escritura del almacén las encuentra.
+
+| Columna | Tipo | Significado |
+| --- | --- | --- |
+| `source_type` | text, not null | `message`, `attachment`, `document`, `note` o `email` |
+| `source_id` | integer, not null | la fila en la tabla `source_type` |
 
 ### Almacén
 
