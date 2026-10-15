@@ -9,11 +9,7 @@ Comprende por qué una búsqueda encuentra un resultado o lo omite: qué se inde
 
 ### Qué se puede buscar y conectar
 
-| Contenido | Datos que se pueden buscar | Conexión con la fuente |
-| --- | --- | --- |
-| Mensajes y correo | Texto guardado, remitente, chat, fechas y metadatos de adjuntos | Una referencia identifica el proveedor, la cuenta y el mensaje |
-| Notas | Texto guardado, títulos y filtros compatibles | Una referencia de nota; los enlaces guardados pueden conectarla con otros registros |
-| Archivos y transcripciones de reuniones | Texto extraído o aportado, una vez guardado | El texto del adjunto sigue vinculado al mensaje; una transcripción guardada como nota se busca como nota |
+Se pueden buscar mensajes, correo, notas, archivos y transcripciones de reuniones, y cada resultado conserva una referencia a su fuente. Qué registros se conectan con cuáles y quién crea cada enlace está en [Cómo se vincula todo](./how-things-are-linked.md).
 
 `search all` consulta mensajes y notas en `tg` y `max`, y mensajes, correo y notas en `memo`, y combina sus listas ordenadas. Informa de las fuentes omitidas; no convierte todos los tipos de contenido en un único índice de mensajes. Los archivos necesitan extracción de texto y las grabaciones necesitan transcripción antes de buscar su contenido.
 

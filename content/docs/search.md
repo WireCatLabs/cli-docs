@@ -121,12 +121,7 @@ You can also filter by person, date or attachments. The [Telegram](./tg/search.m
 
 ## Which search should I choose?
 
-- **You remember words:** search messages. It is the quickest starting point.
-- **You remember the subject:** use topic search to find related discussions by meaning.
-- **You already found a message:** ask for its context or conversation to understand the exchange.
-- **You need a count:** use statistics instead of reading every result.
-
-[Telegram topic search](./tg/topic-search.md) · [MAX topic search](./max/topic-search.md)
+Words, a subject, a person, a picture, a decision or a Drive file each have their own command: [Search efficiently](./search-efficiently.md#choose-the-command).
 
 ## If a result is missing
 
@@ -144,3 +139,10 @@ Use the [search playground](./search-playground.mdx) with built-in messages. It 
 Learn filters and operators in the [Telegram query guide](./tg/query-language.md) or
 [MAX query guide](./max/query-language.md). [How search works](./search-architecture.mdx)
 explains indexing, conversations and ranking after the practical guides.
+
+## Search pages
+
+- [What gets indexed](./what-is-indexed.md): what can be found and what each kind of content needs.
+- [How things are linked](./how-things-are-linked.md): how messages, people, files, notes and tasks connect.
+- [Search efficiently](./search-efficiently.md): choose the command, narrow, page and trim the output.
+- [Search playground](./search-playground.mdx): try search on built-in messages.

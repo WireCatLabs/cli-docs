@@ -32,6 +32,17 @@ Consulta [la misma persona en los dos mensajeros](#link-your-accounts).
 
 <a id="pídeselo-a-tu-agente" />
 
+## Teléfonos y correos en mensajes
+
+Un número de teléfono o una dirección de correo en un mensaje pertenece a alguien, pero las herramientas no adivinan a quién. Cada uno aparece como una mención y tú indicas de quién es. Sustituye `1` por un id de la lista:
+
+```sh
+tg personal mentions list
+tg personal mentions confirm 1 person:7
+```
+
+`mentions confirm` registra que el valor pertenece a la persona (o a una organización con `organization:`). Después, `contacts timeline` y búsquedas como `mentions:"person:7"` incluyen esos mensajes. Un valor equivocado se descarta con `mentions reject`. Más: [Teléfonos, enlaces y nombres](./mentions.md) y [Cómo se vincula todo](./how-things-are-linked.md#menciones).
+
 ## Pide al agente
 
 ```text prompt

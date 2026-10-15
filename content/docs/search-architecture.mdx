@@ -9,11 +9,7 @@ Understand why a search finds a result or misses it: what gets indexed, how matc
 
 ### What can be searched and connected
 
-| Content | Searchable data | Connection to the source |
-| --- | --- | --- |
-| Messages and email | Saved text, sender, chat, dates and attachment metadata | A reference identifies the provider, account and message |
-| Notes | Saved note text, titles and supported filters | A note reference; stored links can connect notes to other records |
-| Files and meeting transcripts | Extracted or supplied text, once saved | Attachment text stays linked to its message; a transcript saved as a note is searched as a note |
+Messages, email, notes, files and meeting transcripts are searchable, and each result keeps a reference to its source. Which records connect to which, and who creates each link, is on [How things are linked](./how-things-are-linked.md).
 
 `search all` queries messages and notes in `tg` and `max`, and messages, email and notes in `memo`, then merges their ranked lists. It reports sources it skipped; it does not turn every content type into one message index. Files need text extraction, and recordings need transcription before their contents can be searched.
 

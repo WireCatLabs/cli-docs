@@ -120,12 +120,7 @@ También puedes filtrar por persona, fecha o adjuntos. Las guías de
 
 ## Qué búsqueda elegir
 
-- **Recuerdas palabras:** busca mensajes, el primer paso más sencillo.
-- **Recuerdas el tema:** busca discusiones por significado.
-- **Encontraste un mensaje:** lee el contexto o conversación.
-- **Quieres un recuento:** usa estadísticas en vez de leer cada resultado.
-
-[Búsqueda por temas de Telegram](./tg/topic-search.md) · [MAX](./max/topic-search.md)
+Palabras, un tema, una persona, una imagen, una decisión o un archivo de Drive tienen cada uno su comando: [Busca con eficacia](./search-efficiently.md#elige-el-comando).
 
 ## Si falta un resultado
 
@@ -143,3 +138,10 @@ Usa el [buscador de muestra](./search-playground.mdx) con mensajes integrados. N
 Aprende filtros y operadores en la guía de consultas de [Telegram](./tg/query-language.md) o
 [MAX](./max/query-language.md). [Cómo funciona la búsqueda](./search-architecture.mdx) explica
 la indexación, las conversaciones y el orden de los resultados.
+
+## Páginas de búsqueda
+
+- [Qué se indexa](./what-is-indexed.md): qué se puede encontrar y qué necesita cada tipo de contenido.
+- [Cómo se vincula todo](./how-things-are-linked.md): cómo se conectan mensajes, personas, archivos, notas y tareas.
+- [Busca con eficacia](./search-efficiently.md): elegir el comando, acotar, paginar y reducir la salida.
+- [Prueba la búsqueda de mensajes](./search-playground.mdx): prueba la búsqueda con mensajes incluidos.
