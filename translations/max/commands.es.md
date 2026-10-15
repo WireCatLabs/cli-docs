@@ -1420,7 +1420,6 @@ max messages download <chat> [message] [options]
 | `--all` |cada archivo del chat, el más nuevo primero; ejecútelo nuevamente para continuar donde se detuvo.|
 | `--pause <duration>` |con --all, una pausa entre páginas, para permanecer por debajo de los límites del proveedor. Por defecto: `5s`.|
 | `--extract` | leer las capas de texto de los archivos que esta descarga vincula al índice de contenido local. |
-| `--output <dir>` |alias de compatibilidad para --output-dir.|
 
 ### `max messages evidence`
 
@@ -2349,6 +2348,9 @@ max tasks add <message> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--type <name>` |Tipo de tarea: pregunta, petición, mención o promesa.|
+| `--category <name>` | de qué trata, de la lista que imprime tasks categories: money, documents, meeting, …. |
+| `--attach <task>` | cuando tasks add mostró tareas que pueden ser el mismo trabajo: vincular el mensaje a esta en lugar de abrir una tarea. |
+| `--new` | cuando tasks add mostró tareas que pueden ser el mismo trabajo: abrir la tarea de todos modos. |
 | `--title <text>` | una línea: la acción y su objeto, p. ej. send Alex the API token. |
 | `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo se da por hecha, siguiente paso, palabras clave. |
 | `--due <when>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
@@ -2356,7 +2358,7 @@ max tasks add <message> [options]
 
 ### `max tasks plan`
 
-establecer el título, la descripción, la fecha límite y la próxima revisión de una tarea; nada llega al servicio de mensajería
+establecer el título, la descripción, la fecha límite, la próxima revisión y la categoría de una tarea; nada llega al servicio de mensajería
 
 **Cambia algo solo en este ordenador.**
 
@@ -2370,6 +2372,7 @@ max tasks plan <task> [options]
 
 | Opción | Para qué sirve |
 |---|---|
+| `--category <name>` | de qué trata, de la lista que imprime tasks categories: money, documents, meeting, …; el cambio queda en el historial de la tarea. |
 | `--title <text>` | una línea: la acción y su objeto, p. ej. send Alex the API token. |
 | `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo se da por hecha, siguiente paso, palabras clave. |
 | `--due <when>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
@@ -2393,7 +2396,7 @@ max tasks link <task> [targets] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | un chat al que se refiere, se puede repetir; un chat: su ID o parte de su título. |
-| `--kind <kind>` | related-to (por defecto), evidence (muestra que la tarea es real) o created-from; para task:<id>, related-to, blocked-by o follow-up-of. |
+| `--kind <kind>` | related-to (por defecto), evidence —muestra que la tarea es real— o created-from; para task:<id>, related-to, blocked-by, follow-up-of, duplicate-of o discovered-from. |
 
 ### `max tasks show`
 
@@ -2406,6 +2409,97 @@ max tasks show <task>
 | Argumento | | Qué es |
 |---|---|---|
 | `task` | obligatorio | el ID o la clave de la tarea, tal como lo muestra tasks list. |
+
+### `max tasks similar`
+
+tareas que pueden ser el mismo trabajo que esta, las mejores primero, cada una con un nivel —likely, maybe, different— y los motivos; no fusiona nada
+
+```sh
+max tasks similar <task> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el id o la clave de la tarea, como la muestra tasks list. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--limit <n>` | cuántos, como máximo 40 (por defecto 10). |
+
+### `max tasks duplicates`
+
+pares de tareas que abrió una regla y que pueden ser un solo trabajo, las más recientes primero, con puntuación y motivos: fusiona, rechaza o marca cada par como dudoso; --unsure lista los que quedan para el propietario
+
+```sh
+max tasks duplicates [options]
+```
+
+| Opción | Para qué sirve |
+|---|---|
+| `--unsure` | solo los pares que el agente revisor marcó como dudosos. |
+| `--limit <n>` | cuántos. |
+
+#### `max tasks duplicates reject`
+
+dos tareas no son el mismo trabajo: el par sale de la lista y no se vuelve a ofrecer
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max tasks duplicates reject <dup> <task>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `dup` | obligatorio | la tarea listada como duplicado, por su id o clave. |
+| `task` | obligatorio | la tarea con la que se emparejó. |
+
+#### `max tasks duplicates unsure`
+
+ni los campos ni el texto lo aclaran: dejar el par al propietario, que lo lista con --unsure
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max tasks duplicates unsure <dup> <task>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `dup` | obligatorio | la tarea listada como duplicado, por su id o clave. |
+| `task` | obligatorio | la tarea con la que se emparejó. |
+
+### `max tasks merge`
+
+un trabajo visto dos veces: vincular cada mensaje del duplicado a la tarea y cerrar el duplicado como dismissed, duplicate-of la tarea; no se borra nada y tasks unmerge lo deshace
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max tasks merge <dup> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `dup` | obligatorio | el duplicado, por su id o clave; debe estar abierto. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--into <task>` | la tarea que se queda. |
+
+### `max tasks unmerge`
+
+deshacer una fusión: reabrir la tarea y quitar su vínculo duplicate-of; los mensajes que vinculó la fusión siguen vinculados
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max tasks unmerge <dup>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `dup` | obligatorio | la tarea fusionada, por su id o clave. |
 
 ### `max tasks agenda`
 
@@ -2425,10 +2519,59 @@ max tasks agenda [query] [options]
 | `--unanswered <span>` | listar los chats donde otra persona escribió lo último hace al menos este tiempo (por defecto 1d). |
 | `--waiting <span>` | listar los chats donde tú escribiste lo último hace al menos este tiempo (por defecto 7d). |
 | `--within <span>` | omitir los chats sin actividad durante más tiempo: ya terminaron (por defecto 30d). |
+| `--claimed` | listar también las tareas que tiene otra persona (tasks claim); por defecto están ocultas. |
+| `--category <name>` | solo las tareas de esta categoría, de la lista que imprime tasks categories. |
+| `--tag <name>` | solo las tareas con esta etiqueta (tags add --task). |
+| `--holder <name>` | quién eres para las reservas: un id de sesión o un id de chat; por defecto WIRECAT_HOLDER, si no la sesión de Claude Code, si no el nombre del agente. |
+
+### `max tasks categories`
+
+las categorías que puede tener una tarea, con lo que significa cada una y las palabras por las que una regla la elige
+
+```sh
+max tasks categories
+```
+
+### `max tasks claim`
+
+tomar una tarea abierta para que ningún otro agente trabaje en ella a la vez; la reserva caduca sola
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max tasks claim <task> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el id o la clave de la tarea, como la muestra tasks list. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--for <span>` | cuánto dura la reserva: 30m, 2h (por defecto 30m); si la tomas otra vez, se alarga. |
+| `--holder <name>` | quién eres para las reservas: un id de sesión o un id de chat; por defecto WIRECAT_HOLDER, si no la sesión de Claude Code, si no el nombre del agente. |
+
+### `max tasks release`
+
+devolver una tarea que reservaste, antes de que caduque la reserva; el propietario puede liberar cualquiera
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max tasks release <task> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el id o la clave de la tarea, como la muestra tasks list. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--holder <name>` | quién eres para las reservas: un id de sesión o un id de chat; por defecto WIRECAT_HOLDER, si no la sesión de Claude Code, si no el nombre del agente. |
 
 ### `max tasks close`
 
-cerrar una tarea: done o dismissed si no necesita respuesta; una tarea cerrada permanece cerrada
+cerrar una tarea: done o dismissed si no necesita respuesta; una tarea cerrada permanece cerrada, salvo que tasks unmerge reabra una fusionada
 
 **Cambia algo solo en este ordenador.**
 
@@ -2644,7 +2787,6 @@ max conversations embed [options]
 | `--provider <provider>` | proveedor de vectores: local u openai; las opciones prevalecen sobre los ajustes del perfil. |
 | `--base-url <url>` | un servidor con /v1/embeddings de OpenAI: Gemini, Jina, u Ollama y LM Studio en este comando. |
 | `--dims <n>` | remoto: el tamaño del vector — necesario con --base-url; acorta el de un modelo de OpenAI. |
-| `--workers <n>` |local: sesiones en paralelo, cada una con su propia copia del modelo (\~0,7 GB cada una).|
 | `--threads <n>` |local: subprocesos en total (predeterminado: min(8, núcleos)).|
 | `--concurrency <n>` | remoto: solicitudes a la vez (predeterminado: 4). |
 | `--max-tokens <n>` |remoto: deténgase antes de una ejecución que podría enviar más tokens que este.|
@@ -2775,7 +2917,7 @@ max attachments text set <chat> [message] [options]
 
 ## `max tags`
 
-tus propias etiquetas en chats, personas y mensajes, guardadas en el archivo local y nunca enviadas; etiqueta: en una búsqueda los encuentra
+tus propias etiquetas en chats, personas, mensajes y tareas, guardadas en el almacén local y nunca enviadas; tag: en una búsqueda las encuentra
 
 ### `max tags auto`
 
@@ -2796,7 +2938,7 @@ max tags auto [options]
 
 ### `max tags add`
 
-poner etiquetas en un chat, persona o mensaje
+poner etiquetas en un chat, persona, mensaje o tarea
 
 **Cambia algo solo en este ordenador.**
 
@@ -2813,10 +2955,11 @@ max tags add <tag> [options]
 | `--chat <chat>` |el chat para etiquetar, o el chat de --message; un chat: su id, o parte de su título.|
 | `--contact <person>` |la persona a etiquetar: su id, @nombredeusuario o nombre, como lo conoce el archivo local.|
 | `--message <message>` |el mensaje a etiquetar: su id en --chat, o un localizador msg: solo.|
+| `--task <task>` | la tarea que se etiqueta: su id o clave, como la muestra tasks list. |
 
 ### `max tags remove`
 
-quitar etiquetas de un chat, persona o mensaje
+quitar etiquetas de un chat, persona, mensaje o tarea
 
 **Cambia algo solo en este ordenador.**
 
@@ -2833,11 +2976,12 @@ max tags remove <tag> [options]
 | `--chat <chat>` |el chat para desetiquetar, o el chat de --message; un chat: su id, o parte de su título.|
 | `--contact <person>` |la persona a desetiquetar: su id, @nombredeusuario o nombre, como lo conoce el archivo local.|
 | `--message <message>` |el mensaje a desetiquetar: su id en --chat, o un mensaje: localizador solo.|
+| `--task <task>` | la tarea a la que se quitan etiquetas: su id o clave, como la muestra tasks list. |
 | `--source <manual\|auto>` | eliminar solo la atribución a este origen. |
 
 ### `max tags list`
 
-qué está etiquetado: los chats y mensajes de esta cuenta, y las personas de su messenger
+qué está etiquetado: los chats, mensajes y tareas de esta cuenta, y las personas de su servicio de mensajería
 
 ```sh
 max tags list [query]
@@ -2853,7 +2997,7 @@ teléfonos, correos electrónicos, enlaces, documentos y nombres de personas enc
 
 ### `max mentions list`
 
-las menciones de esta cuenta que coinciden con la consulta, las más recientes primero; solo el almacén local
+las menciones de esta cuenta que coinciden con la consulta, las más recientes primero; --new para las halladas desde la última revisión
 
 ```sh
 max mentions list [query] [options]
@@ -2862,6 +3006,24 @@ max mentions list [query] [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `query` | opcional | los campos de abajo; una palabra sola es un valor, así que un teléfono escrito con 8 lo encuentra también escrito con +7. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--limit <n>` | cuántos mostrar. |
+| `--page <n>` | qué página, empezando por 1. |
+| `--new` | menciones sin decidir halladas desde la última ejecución de --new que las mostró todas; la primera ejecución muestra todas. |
+
+### `max mentions domains`
+
+los sitios a los que apuntan los enlaces de esta cuenta, los más enlazados primero, con los chats y la primera y la última vez
+
+```sh
+max mentions domains [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | acota los enlaces que se cuentan: los campos están abajo; los enlaces descartados nunca se cuentan. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -2897,6 +3059,7 @@ max mentions confirm <id> [person] [options]
 
 | Opción | Para qué sirve |
 |---|---|
+| `--all-in-chat` | un nombre: también cada lugar sin decidir con el mismo nombre en su chat. |
 | `--as-owner` | registrarlo como tuyo aunque la herramienta se ejecute en el terminal de un agente (AI_AGENT o CLAUDECODE definidas). |
 
 ### `max mentions reject`
@@ -2915,6 +3078,7 @@ max mentions reject <id> [options]
 
 | Opción | Para qué sirve |
 |---|---|
+| `--all-in-chat` | un nombre: también cada lugar sin decidir con el mismo nombre en su chat. |
 | `--as-owner` | registrarlo como tuyo aunque la herramienta se ejecute en el terminal de un agente (AI_AGENT o CLAUDECODE definidas). |
 
 ### `max mentions rebuild`
@@ -3014,11 +3178,11 @@ max metadata refresh [options]
 
 ## `max search`
 
-buscar por texto: en un recurso si sabes cuál (mail, messages, notes), o con search all en mensajes, correo y notas a la vez
+buscar por texto: un recurso si lo conoces (messages, notes), o search all en mensajes y notas; el correo se busca con memo search mail
 
 ### `max search all`
 
-buscar mensajes del servicio de mensajería, correo y notas en el almacén local, y mensajes en el servidor del servicio (--backend; el correo y las notas solo son locales), y transcripciones de una cuenta de reuniones cuando --source la nombra; primero la mejor coincidencia; no tareas, personas, recuerdos ni proyectos. Úsalo cuando no sepas dónde se escribió algo; search mail, messages o notes lee un solo tipo con todos sus campos
+buscar mensajes del servicio de mensajería y notas en el almacén local, y mensajes en el servidor del servicio (--backend; las notas solo son locales), y transcripciones de una cuenta de reuniones cuando --source la nombra; primero la mejor coincidencia; no correo (memo search mail), tareas, personas, recuerdos ni proyectos. Úsalo cuando no sepas dónde se escribió algo; search messages o notes lee un solo tipo con todos sus campos
 
 ```sh
 max search all <query> [options]
@@ -3030,7 +3194,7 @@ max search all <query> [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--only <resources>` | solo estos recursos, separados por comas: messages, mail, notes; meetings cuando --source nombra una cuenta de reuniones. |
+| `--only <resources>` | solo estos recursos, separados por comas: messages, notes; meetings cuando --source nombra una cuenta de reuniones. |
 | `--source <accounts>` | solo estas cuentas, separadas por comas: provider:account tal como lo muestra un resultado, un proveedor, un tipo o group:<name>; cada recurso lee las de su tipo, y las reuniones solo cuando se nombra una. |
 | `--max-meetings <n\|all>` | cuántas reuniones de la cuenta de reuniones revisar, de la más reciente a la más antigua; all las revisa todas (por defecto 100). |
 | `--limit <n>` | cuántos resultados. |
@@ -3050,7 +3214,7 @@ max search messages [query] [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | opcional |consulta estricta de Lucene: palabras, "frases", Y/O/NO, grupos de campos y rangos de fechas; --el legado del lenguaje mantiene el descubrimiento; con --saved, más palabras AND-ed.|
+| `query` | opcional | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, grupos de campos y rangos de fechas; con --saved, más palabras unidas a ella con AND. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -3065,39 +3229,15 @@ max search messages [query] [options]
 | `--thread-within <duration>` | mensajes dentro de este tiempo antes y después de la coincidencia (predeterminado: 1d). |
 | `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). Discovery usa solo el archivo. |
 | `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
-| `--source <accounts>` | cada cuenta de este servicio de mensajería guardada en el almacén; personal, bots o all, igual que in: en la consulta; o una lista: group:work,telegram:Alice,email:me@example.com. |
+| `--source <accounts>` | cada cuenta de este servicio de mensajería guardada en el almacén; personal, bots o all, igual que in: en la consulta; o una lista: group:work,telegram:Alice. |
 | `--limit <n>` | cuántos resultados. |
 | `--page <n>` | qué página, empezando por 1. |
 | `--newest` | primero los más recientes en lugar de los mejores. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
 | `--context <n>` |mensajes antes y después de cada resultado; 2 en la terminal, 0 en caso contrario.|
 | `--discover` | encuentra coincidencias parciales y respuestas directas válidas en el archivo local; son evidencia, no respuestas confirmadas. |
-| `--language <lucene\|legacy>` | el lenguaje de consulta: Lucene estricto o la búsqueda anterior legacy. |
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
-| `--regex` | las palabras forman una expresión regular, sin distinguir mayúsculas, que se prueba con todo el texto guardado. |
 | `--saved <name\|id>` |ejecutar una búsqueda guardada o una ejecución anterior; Las opciones escritas aquí reemplazan las suyas.|
-
-### `max search mail`
-
-buscar en el correo importado al almacén local; memo sync --mail lo trae
-
-```sh
-max search mail [query] [options]
-```
-
-| Argumento | | Qué es |
-|---|---|---|
-| `query` | opcional | consulta Lucene estricta: palabras, "frases", AND/OR/NOT, grupos de campos y rangos de fechas. |
-
-| Opción | Para qué sirve |
-|---|---|
-| `--source <accounts>` | solo estas cuentas de correo, separadas por comas: email:<address> tal como lo muestra un resultado, email, mail o group:<name>; todas las cuentas de correo si no se indica. |
-| `--limit <n>` | cuántos resultados. |
-| `--page <n>` | qué página, empezando por 1. |
-| `--newest` | primero los más recientes en lugar de los mejores. |
-| `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
-| `--context <n>` |mensajes antes y después de cada resultado; 2 en la terminal, 0 en caso contrario.|
-| `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
 
 ### `max search notes`
 
@@ -3179,9 +3319,7 @@ max searches create <name> [query] [options]
 | `--newest` | primero los más recientes en lugar de los mejores. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
 | `--context <n>` |mensajes antes y después de cada resultado.|
-| `--language <lucene\|legacy>` | el lenguaje de consulta: Lucene estricto o la búsqueda anterior legacy. |
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
-| `--regex` | las palabras forman una expresión regular, sin distinguir mayúsculas, que se prueba con todo el texto guardado. |
 | `--by <chat\|sender\|day\|hour>` |por qué criterio agrupa el recuento stats messages show --saved.|
 | `--selection <json>` | guardar la consulta de clasificación principal resuelta y sus opciones a partir de una vista detallada. |
 | `--replace` |sobrescribir una búsqueda guardada con el mismo nombre.|
@@ -4022,20 +4160,6 @@ max config show [options]
 |---|---|
 | `--bot` |la configuración que obtiene un comando `max bot` en este perfil, en lugar de la de la cuenta personal.|
 
-### `max config migrate`
-
-reemplazar la configuración de acceso heredada con permisos, preservando los niveles efectivos
-
-**Cambia algo solo en este ordenador.**
-
-```sh
-max config migrate [options]
-```
-
-| Opción | Para qué sirve |
-|---|---|
-| `--dry-run` |muestra la migración sin escribir el archivo.|
-
 ### `max config set`
 
 guardar una configuración en el archivo de configuración
@@ -4048,8 +4172,8 @@ max config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
-| `value` | obligatorio |un número, verdadero o falso, o para permitir una lista como enviar, reacción.|
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `value` | obligatorio | un número, true o false, o una lista como contacts,polls. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -4069,7 +4193,7 @@ max config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -4260,14 +4384,7 @@ max mcp [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` |obsoleto: usa permissions.messages.send en la configuración; no concede acceso.|
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-mark-read` |obsoleto: usa permissions.chats.mark-read en la configuración; no concede acceso.|
-| `--allow-delete` |obsoleto: usa permissions.messages.delete en la configuración; no concede acceso.|
-| `--allow-moderate` |obsoleto: usa permissions.chats.moderate y las reglas del grupo; no concede acceso.|
 | `--http` | ofrece el servidor HTTP en 127.0.0.1 para ChatGPT y Claude en el navegador a través de tu túnel; se aplican los permisos del perfil. |
-| `--http-confirmation <mode>` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
 | `--port <port>` |el puerto local para --http (predeterminado 8765).|
 | `--public-url <url>` |la dirección https del túnel que utilizan las aplicaciones del navegador, p. https://<name>.ts.net.|
 | `--revoke` |olvide cada inicio de sesión proporcionado a una aplicación de navegador; cada uno debe iniciar sesión nuevamente.|
@@ -4283,12 +4400,6 @@ max mcp config [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` |obsoleto: usa permissions.messages.send en la configuración; no concede acceso.|
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-mark-read` |obsoleto: usa permissions.chats.mark-read en la configuración; no concede acceso.|
-| `--allow-delete` |obsoleto: usa permissions.messages.delete en la configuración; no concede acceso.|
-| `--allow-moderate` |obsoleto: usa permissions.chats.moderate y las reglas del grupo; no concede acceso.|
 
 ### `max mcp setup`
 
@@ -4308,12 +4419,6 @@ max mcp setup <client> [options]
 |---|---|
 | `--allow-writes` |Reconocer que este perfil ofrece herramientas de escritura.|
 | `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` |obsoleto: usa permissions.messages.send en la configuración; no concede acceso.|
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-mark-read` |obsoleto: usa permissions.chats.mark-read en la configuración; no concede acceso.|
-| `--allow-delete` |obsoleto: usa permissions.messages.delete en la configuración; no concede acceso.|
-| `--allow-moderate` |obsoleto: usa permissions.chats.moderate y las reglas del grupo; no concede acceso.|
 
 ### `max mcp doctor`
 
@@ -4326,12 +4431,6 @@ max mcp doctor [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` |obsoleto: usa permissions.messages.send en la configuración; no concede acceso.|
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-mark-read` |obsoleto: usa permissions.chats.mark-read en la configuración; no concede acceso.|
-| `--allow-delete` |obsoleto: usa permissions.messages.delete en la configuración; no concede acceso.|
-| `--allow-moderate` |obsoleto: usa permissions.chats.moderate y las reglas del grupo; no concede acceso.|
 
 ## `max bot`
 
@@ -4767,7 +4866,7 @@ encontrar por texto lo que guarda el archivo local de este bot
 
 #### `max bot search messages`
 
-buscar los mensajes que este robot ha leído, enviado o recibido en esta máquina: solo la copia local, la mejor coincidencia primero; cada palabra debe aparecer; "una frase", -palabra, a OR b, de: chat: después: antes: tiene:; por texto, por --from o ambos
+buscar los mensajes que este robot ha leído, enviado o recibido en esta máquina: solo la copia local, la mejor coincidencia primero; una consulta Lucene: cada palabra debe aparecer; "una frase", -palabra, a OR b, from: chat: date: has:; por texto, por --from o ambos
 
 ```sh
 max bot search messages [query] [options]

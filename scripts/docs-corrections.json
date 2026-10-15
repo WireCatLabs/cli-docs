@@ -1921,36 +1921,36 @@
   {
     "tool": "max",
     "slug": "search",
-    "reason": "Memo 0.41.0 syncs mail and notes through --only; preserve the separately pinned MAX search behavior while updating cross-tool import instructions.",
+    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. MAX 0.54.0 still names memo import. MAX 0.54.0 has no search mail subcommand (it answers with a Memo hint), so the prose names it without a runnable invocation.",
     "replacements": {
       "ru": [
         {
-          "before": "`memo sync --mail` и `memo import`",
-          "after": "`memo sync --only mail` и `memo sync --only notes`"
+          "before": "`memo import`",
+          "after": "`memo sync --only notes`"
         },
         {
-          "before": "# только почта, которую привёл memo sync --mail",
-          "after": "# только почта, которую привёл memo sync --only mail"
+          "before": "`max personal search mail` отвечает",
+          "after": "команда `search mail` у `max` отвечает"
         }
       ],
       "en": [
         {
-          "before": "`memo sync --mail` and `memo import`",
-          "after": "`memo sync --only mail` and `memo sync --only notes`"
+          "before": "`memo import`",
+          "after": "`memo sync --only notes`"
         },
         {
-          "before": "# только почта, которую привёл memo sync --mail",
-          "after": "# только почта, которую привёл memo sync --only mail"
+          "before": "`max personal search mail` answers with a hint",
+          "after": "the `search mail` command of `max` answers with a hint"
         }
       ],
       "es": [
         {
-          "before": "`memo sync --mail` y `memo import`",
-          "after": "`memo sync --only mail` y `memo sync --only notes`"
+          "before": "`memo import`",
+          "after": "`memo sync --only notes`"
         },
         {
-          "before": "# только почта, которую привёл memo sync --mail",
-          "after": "# только почта, которую привёл memo sync --only mail"
+          "before": "`max personal search mail` responde con una indicación",
+          "after": "el comando `search mail` de `max` responde con una indicación"
         }
       ]
     }

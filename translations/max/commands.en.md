@@ -1413,7 +1413,6 @@ max messages download <chat> [message] [options]
 | `--all` | every file of the chat, newest first; run it again to continue where it stopped. |
 | `--pause <duration>` | with --all, a pause between pages, to stay under the provider's limits. Default: `5s`. |
 | `--extract` | read text layers from the files this download maps into the local content index. |
-| `--output <dir>` | compatibility alias for --output-dir. |
 
 ### `max messages evidence`
 
@@ -2342,6 +2341,9 @@ max tasks add <message> [options]
 | Option | Purpose |
 |---|---|
 | `--type <name>` | the task's type: question, request, mention or promise. |
+| `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …. |
+| `--attach <task>` | when tasks add listed tasks that may be the same job: link the message to this one instead of opening a task. |
+| `--new` | when tasks add listed tasks that may be the same job: open the task anyway. |
 | `--title <text>` | one line: the action and its object — send Alex the API token. |
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
 | `--due <when>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
@@ -2349,7 +2351,7 @@ max tasks add <message> [options]
 
 ### `max tasks plan`
 
-set a task's title, description, due date and next check; nothing reaches the messenger
+set a task's title, description, due date, next check and category; nothing reaches the messenger
 
 **Changes something on this computer only.**
 
@@ -2363,6 +2365,7 @@ max tasks plan <task> [options]
 
 | Option | Purpose |
 |---|---|
+| `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …; a change is kept in the task's history. |
 | `--title <text>` | one line: the action and its object — send Alex the API token. |
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
 | `--due <when>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
@@ -2386,7 +2389,7 @@ max tasks link <task> [targets] [options]
 | Option | Purpose |
 |---|---|
 | `--chat <chat>` | a chat it concerns, repeatable; a chat: its id, or part of its title. |
-| `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by or follow-up-of. |
+| `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by, follow-up-of, duplicate-of or discovered-from. |
 
 ### `max tasks show`
 
@@ -2399,6 +2402,97 @@ max tasks show <task>
 | Argument | | Meaning |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
+
+### `max tasks similar`
+
+tasks that may be the same job as this one, best first, each with a band — likely, maybe, different — and the reasons; merges nothing
+
+```sh
+max tasks similar <task> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+
+| Option | Purpose |
+|---|---|
+| `--limit <n>` | how many, at most 40 (default 10). |
+
+### `max tasks duplicates`
+
+pairs of tasks a rule opened that may be one job, newest first, with score and reasons: merge, reject or mark each unsure; --unsure lists the ones left for the owner
+
+```sh
+max tasks duplicates [options]
+```
+
+| Option | Purpose |
+|---|---|
+| `--unsure` | only the pairs the reviewing agent marked unsure. |
+| `--limit <n>` | how many. |
+
+#### `max tasks duplicates reject`
+
+two tasks are not the same job: the pair leaves the list and is never offered again
+
+**Changes something on this computer only.**
+
+```sh
+max tasks duplicates reject <dup> <task>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `dup` | required | the task listed as the duplicate, by its id or key. |
+| `task` | required | the task it was paired with. |
+
+#### `max tasks duplicates unsure`
+
+the fields and the text cannot tell: leave the pair to the owner, who lists it with --unsure
+
+**Changes something on this computer only.**
+
+```sh
+max tasks duplicates unsure <dup> <task>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `dup` | required | the task listed as the duplicate, by its id or key. |
+| `task` | required | the task it was paired with. |
+
+### `max tasks merge`
+
+one job seen twice: link every message of the duplicate to the task and close the duplicate dismissed, duplicate-of the task; nothing is deleted, and tasks unmerge undoes it
+
+**Changes something on this computer only.**
+
+```sh
+max tasks merge <dup> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `dup` | required | the duplicate, by its id or key; it must be open. |
+
+| Option | Purpose |
+|---|---|
+| `--into <task>` | the task that stays. |
+
+### `max tasks unmerge`
+
+undo a merge: reopen the task and remove its duplicate-of relation; messages the merge linked stay linked
+
+**Changes something on this computer only.**
+
+```sh
+max tasks unmerge <dup>
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `dup` | required | the merged task, by its id or key. |
 
 ### `max tasks agenda`
 
@@ -2418,10 +2512,59 @@ max tasks agenda [query] [options]
 | `--unanswered <span>` | list chats where someone else wrote last this long ago (default 1d). |
 | `--waiting <span>` | list chats where you wrote last this long ago (default 7d). |
 | `--within <span>` | leave out chats silent longer than this: they ended (default 30d). |
+| `--claimed` | also list tasks someone else holds (tasks claim); hidden by default. |
+| `--category <name>` | only tasks of this category, from the list tasks categories prints. |
+| `--tag <name>` | only tasks with this tag (tags add --task). |
+| `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
+
+### `max tasks categories`
+
+the categories a task takes, with what each means and the words a rule picks it by
+
+```sh
+max tasks categories
+```
+
+### `max tasks claim`
+
+take an open task so no other agent works it at once; the claim lapses by itself
+
+**Changes something on this computer only.**
+
+```sh
+max tasks claim <task> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+
+| Option | Purpose |
+|---|---|
+| `--for <span>` | how long the claim lasts: 30m, 2h (default 30m); claiming again extends it. |
+| `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
+
+### `max tasks release`
+
+give back a task you claimed, before the claim lapses; the owner may release any
+
+**Changes something on this computer only.**
+
+```sh
+max tasks release <task> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+
+| Option | Purpose |
+|---|---|
+| `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
 
 ### `max tasks close`
 
-close a task: done, or dismissed when it needs no answer; a closed task stays closed
+close a task: done, or dismissed when it needs no answer; a closed task stays closed, unless tasks unmerge reopens a merged one
 
 **Changes something on this computer only.**
 
@@ -2637,7 +2780,6 @@ max conversations embed [options]
 | `--provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
-| `--workers <n>` | local: sessions in parallel, each with its own copy of the model (\~0.7 GB each). |
 | `--threads <n>` | local: threads in all (default: min(8, cores)). |
 | `--concurrency <n>` | remote: requests at once (default: 4). |
 | `--max-tokens <n>` | remote: stop before a run that could send more tokens than this. |
@@ -2768,7 +2910,7 @@ max attachments text set <chat> [message] [options]
 
 ## `max tags`
 
-your own labels on chats, people and messages, kept in the local store and never sent; tag: in a search finds them
+your own labels on chats, people, messages and tasks, kept in the local store and never sent; tag: in a search finds them
 
 ### `max tags auto`
 
@@ -2789,7 +2931,7 @@ max tags auto [options]
 
 ### `max tags add`
 
-put tags on one chat, person or message
+put tags on one chat, person, message or task
 
 **Changes something on this computer only.**
 
@@ -2806,10 +2948,11 @@ max tags add <tag> [options]
 | `--chat <chat>` | the chat to tag, or the chat of --message; a chat: its id, or part of its title. |
 | `--contact <person>` | the person to tag: their id, @username or name, as the local store knows them. |
 | `--message <message>` | the message to tag: its id in --chat, or a msg: locator alone. |
+| `--task <task>` | the task to tag: its id or key, as tasks list shows it. |
 
 ### `max tags remove`
 
-take tags off one chat, person or message
+take tags off one chat, person, message or task
 
 **Changes something on this computer only.**
 
@@ -2826,11 +2969,12 @@ max tags remove <tag> [options]
 | `--chat <chat>` | the chat to untag, or the chat of --message; a chat: its id, or part of its title. |
 | `--contact <person>` | the person to untag: their id, @username or name, as the local store knows them. |
 | `--message <message>` | the message to untag: its id in --chat, or a msg: locator alone. |
+| `--task <task>` | the task to untag: its id or key, as tasks list shows it. |
 | `--source <manual\|auto>` | remove only this ownership claim. |
 
 ### `max tags list`
 
-what is tagged: this account's chats and messages, and the people of its messenger
+what is tagged: this account's chats, messages and tasks, and the people of its messenger
 
 ```sh
 max tags list [query]
@@ -2846,7 +2990,7 @@ phones, e-mail, links, documents and people's names found in stored messages
 
 ### `max mentions list`
 
-this account's mentions matching the query, newest first; local store only
+this account's mentions matching the query, newest first; --new for those found since the last review
 
 ```sh
 max mentions list [query] [options]
@@ -2855,6 +2999,24 @@ max mentions list [query] [options]
 | Argument | | Meaning |
 |---|---|---|
 | `query` | optional | fields below; a bare word is a value, so a phone typed with 8 finds it written with +7. |
+
+| Option | Purpose |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--new` | undecided mentions found since the last --new run that showed them all; the first run shows every one. |
+
+### `max mentions domains`
+
+the sites this account's links point to, most linked first, with chats and first and last time
+
+```sh
+max mentions domains [query] [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `query` | optional | narrows the links counted: the fields below; dismissed links are never counted. |
 
 | Option | Purpose |
 |---|---|
@@ -2890,6 +3052,7 @@ max mentions confirm <id> [person] [options]
 
 | Option | Purpose |
 |---|---|
+| `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
 ### `max mentions reject`
@@ -2908,6 +3071,7 @@ max mentions reject <id> [options]
 
 | Option | Purpose |
 |---|---|
+| `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
 ### `max mentions rebuild`
@@ -3007,11 +3171,11 @@ max metadata refresh [options]
 
 ## `max search`
 
-find things by text: one resource when you know it (mail, messages, notes), or search all across messages, mail and notes
+find things by text: one resource when you know it (messages, notes), or search all across messages and notes; mail is memo search mail
 
 ### `max search all`
 
-search messenger messages, mail and notes in the local store, and the messenger's server for messages (--backend; mail and notes are local only), and a meeting account's transcripts when --source names one — best match first; not tasks, people, memories or projects. Use it when you do not know where something was written; search mail, messages or notes reads one kind with all its fields
+search messenger messages and notes in the local store, and the messenger's server for messages (--backend; notes are local only), and a meeting account's transcripts when --source names one — best match first; not mail (memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
 
 ```sh
 max search all <query> [options]
@@ -3023,7 +3187,7 @@ max search all <query> [options]
 
 | Option | Purpose |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: messages, mail, notes; meetings when --source names a meeting account. |
+| `--only <resources>` | only these resources, separated by commas: messages, notes; meetings when --source names a meeting account. |
 | `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
 | `--max-meetings <n\|all>` | how many of the meeting account's meetings to look through, newest first; all looks through every one (default 100). |
 | `--limit <n>` | how many. |
@@ -3043,7 +3207,7 @@ max search messages [query] [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `query` | optional | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; --language legacy keeps discovery; with --saved, more words AND-ed to it. |
+| `query` | optional | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; with --saved, more words AND-ed to it. |
 
 | Option | Purpose |
 |---|---|
@@ -3058,39 +3222,15 @@ max search messages [query] [options]
 | `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both). Discovery uses the archive only. |
 | `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
-| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice,email:me@example.com. |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice. |
 | `--limit <n>` | how many. |
 | `--page <n>` | which page, starting at 1. |
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
 | `--discover` | find partial lexical matches and eligible replies in the local archive; results are evidence, not confirmed answers. |
-| `--language <lucene\|legacy>` | the query language: strict Lucene or legacy discovery. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--regex` | the words are one regular expression, case-insensitive, tested against every stored text. |
 | `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
-
-### `max search mail`
-
-search the mail imported into the local store — memo sync --mail brings it in
-
-```sh
-max search mail [query] [options]
-```
-
-| Argument | | Meaning |
-|---|---|---|
-| `query` | optional | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges. |
-
-| Option | Purpose |
-|---|---|
-| `--source <accounts>` | only these mail accounts, separated by commas: email:<address> as a hit shows it, email, mail or group:<name>; every mail account when unset. |
-| `--limit <n>` | how many. |
-| `--page <n>` | which page, starting at 1. |
-| `--newest` | newest first instead of best first. |
-| `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
-| `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
-| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
 ### `max search notes`
 
@@ -3172,9 +3312,7 @@ max searches create <name> [query] [options]
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit. |
-| `--language <lucene\|legacy>` | the query language: strict Lucene or legacy discovery. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--regex` | the words are one regular expression, case-insensitive, tested against every stored text. |
 | `--by <chat\|sender\|day\|hour>` | what stats messages show --saved counts by. |
 | `--selection <json>` | save the resolved parent ranking query and options from a drilldown. |
 | `--replace` | overwrite a saved search of the same name. |
@@ -4015,20 +4153,6 @@ max config show [options]
 |---|---|
 | `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
-### `max config migrate`
-
-replace legacy access settings with permissions, preserving effective levels
-
-**Changes something on this computer only.**
-
-```sh
-max config migrate [options]
-```
-
-| Option | Purpose |
-|---|---|
-| `--dry-run` | show the migration without writing the file. |
-
 ### `max config set`
 
 save a setting to the configuration file
@@ -4041,8 +4165,8 @@ max config set <setting> <value> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
-| `value` | required | a number, true or false, or for allow a list like send,reaction. |
+| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `value` | required | a number, true or false, or a list like contacts,polls. |
 
 | Option | Purpose |
 |---|---|
@@ -4062,7 +4186,7 @@ max config unset <setting> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
 
 | Option | Purpose |
 |---|---|
@@ -4253,14 +4377,7 @@ max mcp [options]
 | Option | Purpose |
 |---|---|
 | `--permission <key=level>` | override a permission for this server only; repeat for more keys. |
-| `--allow-dangerous` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-send` | deprecated: use permissions.messages.send in config; does not grant access. |
-| `--confirm-send` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-mark-read` | deprecated: use permissions.chats.mark-read in config; does not grant access. |
-| `--allow-delete` | deprecated: use permissions.messages.delete in config; does not grant access. |
-| `--allow-moderate` | deprecated: use permissions.chats.moderate and group rules; does not grant access. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
-| `--http-confirmation <mode>` | no longer used — writes show no form; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
 | `--revoke` | forget every login given to a browser app; each must log in again. |
@@ -4276,12 +4393,6 @@ max mcp config [options]
 | Option | Purpose |
 |---|---|
 | `--permission <key=level>` | override a permission for this server only; repeat for more keys. |
-| `--allow-dangerous` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-send` | deprecated: use permissions.messages.send in config; does not grant access. |
-| `--confirm-send` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-mark-read` | deprecated: use permissions.chats.mark-read in config; does not grant access. |
-| `--allow-delete` | deprecated: use permissions.messages.delete in config; does not grant access. |
-| `--allow-moderate` | deprecated: use permissions.chats.moderate and group rules; does not grant access. |
 
 ### `max mcp setup`
 
@@ -4301,12 +4412,6 @@ max mcp setup <client> [options]
 |---|---|
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
 | `--permission <key=level>` | override a permission for this server only; repeat for more keys. |
-| `--allow-dangerous` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-send` | deprecated: use permissions.messages.send in config; does not grant access. |
-| `--confirm-send` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-mark-read` | deprecated: use permissions.chats.mark-read in config; does not grant access. |
-| `--allow-delete` | deprecated: use permissions.messages.delete in config; does not grant access. |
-| `--allow-moderate` | deprecated: use permissions.chats.moderate and group rules; does not grant access. |
 
 ### `max mcp doctor`
 
@@ -4319,12 +4424,6 @@ max mcp doctor [options]
 | Option | Purpose |
 |---|---|
 | `--permission <key=level>` | override a permission for this server only; repeat for more keys. |
-| `--allow-dangerous` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-send` | deprecated: use permissions.messages.send in config; does not grant access. |
-| `--confirm-send` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-mark-read` | deprecated: use permissions.chats.mark-read in config; does not grant access. |
-| `--allow-delete` | deprecated: use permissions.messages.delete in config; does not grant access. |
-| `--allow-moderate` | deprecated: use permissions.chats.moderate and group rules; does not grant access. |
 
 ## `max bot`
 
@@ -4760,7 +4859,7 @@ find what this bot's local copy holds, by text
 
 #### `max bot search messages`
 
-search the messages this bot has read, sent or received on this machine — the local copy only, best match first; every word must appear; "a phrase", -word, a OR b, from: chat: after: before: has:; by text, by --from, or both
+search the messages this bot has read, sent or received on this machine — the local copy only, best match first; a Lucene query: every word must appear; "a phrase", -word, a OR b, from: chat: date: has:; by text, by --from, or both
 
 ```sh
 max bot search messages [query] [options]

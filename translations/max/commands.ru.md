@@ -1420,7 +1420,6 @@ max messages download <chat> [message] [options]
 | `--all` | every file of the chat, newest first; run it again to continue where it stopped. |
 | `--pause <duration>` | with --all, a pause between pages, to stay under the provider's limits. По умолчанию: `5s`. |
 | `--extract` | прочитать текстовые слои файлов, которые эта загрузка сопоставляет с локальным индексом содержимого. |
-| `--output <dir>` | compatibility alias for --output-dir. |
 
 ### `max messages evidence`
 
@@ -2349,6 +2348,9 @@ max tasks add <message> [options]
 | Опция | Что делает |
 |---|---|
 | `--type <name>` | тип задачи: question, request, mention или promise. |
+| `--category <name>` | о чём задача, из списка, который выводит tasks categories: money, documents, meeting, …. |
+| `--attach <task>` | если tasks add показал задачи, которые могут быть той же работой: привязать сообщение к этой задаче, а не открывать новую. |
+| `--new` | если tasks add показал задачи, которые могут быть той же работой: всё равно открыть задачу. |
 | `--title <text>` | одна строка: действие и его объект — send Alex the API token. |
 | `--description <text>` | подробности в Markdown: кто кому должен, когда считать выполненной, следующий шаг, ключевые слова. |
 | `--due <when>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
@@ -2356,7 +2358,7 @@ max tasks add <message> [options]
 
 ### `max tasks plan`
 
-задать название, описание, срок и следующую проверку задачи; в мессенджер ничего не уходит
+задать название, описание, срок, следующую проверку и категорию задачи; в мессенджер ничего не уходит
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2370,6 +2372,7 @@ max tasks plan <task> [options]
 
 | Опция | Что делает |
 |---|---|
+| `--category <name>` | о чём задача, из списка, который выводит tasks categories: money, documents, meeting, …; изменение сохраняется в истории задачи. |
 | `--title <text>` | одна строка: действие и его объект — send Alex the API token. |
 | `--description <text>` | подробности в Markdown: кто кому должен, когда считать выполненной, следующий шаг, ключевые слова. |
 | `--due <when>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
@@ -2393,7 +2396,7 @@ max tasks link <task> [targets] [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | чат, к которому она относится, можно повторять; чат: его ID или часть названия. |
-| `--kind <kind>` | related-to (по умолчанию), evidence — подтверждает, что задача настоящая, — или created-from; для task:<id> — related-to, blocked-by или follow-up-of. |
+| `--kind <kind>` | related-to (по умолчанию), evidence — показывает, что задача настоящая — или created-from; для task:<id> — related-to, blocked-by, follow-up-of, duplicate-of или discovered-from. |
 
 ### `max tasks show`
 
@@ -2406,6 +2409,97 @@ max tasks show <task>
 | Аргумент | | Что это |
 |---|---|---|
 | `task` | обязательный | ID или ключ задачи, как его показывает tasks list. |
+
+### `max tasks similar`
+
+задачи, которые могут быть той же работой, что и эта, лучшие первыми, каждая с уровнем — likely, maybe, different — и причинами; ничего не объединяет
+
+```sh
+max tasks similar <task> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `task` | обязательный | id или ключ задачи, как показывает tasks list. |
+
+| Опция | Что делает |
+|---|---|
+| `--limit <n>` | сколько, не больше 40 (по умолчанию 10). |
+
+### `max tasks duplicates`
+
+пары задач, открытых правилом, которые могут быть одной работой, новые первыми, с оценкой и причинами: объединить, отклонить или пометить каждую как неясную; --unsure показывает пары, оставленные владельцу
+
+```sh
+max tasks duplicates [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--unsure` | только пары, которые агент-проверяющий счёл неясными. |
+| `--limit <n>` | сколько. |
+
+#### `max tasks duplicates reject`
+
+две задачи — не одна работа: пара уходит из списка и больше не предлагается
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max tasks duplicates reject <dup> <task>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `dup` | обязательный | задача, показанная как дубликат, по её id или ключу. |
+| `task` | обязательный | задача, с которой её сопоставили. |
+
+#### `max tasks duplicates unsure`
+
+поля и текст не дают ответа: оставить пару владельцу, который покажет её через --unsure
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max tasks duplicates unsure <dup> <task>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `dup` | обязательный | задача, показанная как дубликат, по её id или ключу. |
+| `task` | обязательный | задача, с которой её сопоставили. |
+
+### `max tasks merge`
+
+одна работа, замеченная дважды: привязать все сообщения дубликата к задаче и закрыть дубликат как dismissed, duplicate-of этой задачи; ничего не удаляется, а tasks unmerge отменяет объединение
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max tasks merge <dup> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `dup` | обязательный | дубликат, по его id или ключу; он должен быть открыт. |
+
+| Опция | Что делает |
+|---|---|
+| `--into <task>` | задача, которая остаётся. |
+
+### `max tasks unmerge`
+
+отменить объединение: открыть задачу заново и убрать её связь duplicate-of; сообщения, привязанные при объединении, остаются привязанными
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max tasks unmerge <dup>
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `dup` | обязательный | объединённая задача, по её id или ключу. |
 
 ### `max tasks agenda`
 
@@ -2425,10 +2519,59 @@ max tasks agenda [query] [options]
 | `--unanswered <span>` | показать чаты, где последним написал кто-то другой не меньше этого времени назад (по умолчанию 1d). |
 | `--waiting <span>` | показать чаты, где последним написали вы не меньше этого времени назад (по умолчанию 7d). |
 | `--within <span>` | не показывать чаты, молчащие дольше этого: разговор закончился (по умолчанию 30d). |
+| `--claimed` | показать также задачи, которые держит кто-то другой (tasks claim); по умолчанию они скрыты. |
+| `--category <name>` | только задачи этой категории, из списка, который выводит tasks categories. |
+| `--tag <name>` | только задачи с этим тегом (tags add --task). |
+| `--holder <name>` | кто вы для захватов: id сессии или id чата; по умолчанию WIRECAT_HOLDER, иначе сессия Claude Code, иначе имя агента. |
+
+### `max tasks categories`
+
+категории задачи: что означает каждая и по каким словам её выбирает правило
+
+```sh
+max tasks categories
+```
+
+### `max tasks claim`
+
+занять открытую задачу, чтобы другой агент не работал над ней одновременно; захват истекает сам
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max tasks claim <task> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `task` | обязательный | id или ключ задачи, как показывает tasks list. |
+
+| Опция | Что делает |
+|---|---|
+| `--for <span>` | как долго действует захват: 30m, 2h (по умолчанию 30m); повторный захват продлевает его. |
+| `--holder <name>` | кто вы для захватов: id сессии или id чата; по умолчанию WIRECAT_HOLDER, иначе сессия Claude Code, иначе имя агента. |
+
+### `max tasks release`
+
+вернуть задачу, которую вы заняли, до окончания захвата; владелец может освободить любую
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max tasks release <task> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `task` | обязательный | id или ключ задачи, как показывает tasks list. |
+
+| Опция | Что делает |
+|---|---|
+| `--holder <name>` | кто вы для захватов: id сессии или id чата; по умолчанию WIRECAT_HOLDER, иначе сессия Claude Code, иначе имя агента. |
 
 ### `max tasks close`
 
-закрыть задачу: done либо dismissed, если ответ не нужен; закрытая задача остаётся закрытой
+закрыть задачу: done либо dismissed, если ответ не нужен; закрытая задача остаётся закрытой, если только tasks unmerge не откроет объединённую заново
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2644,7 +2787,6 @@ max conversations embed [options]
 | `--provider <provider>` | провайдер векторов: local или openai; опции важнее настроек профиля. |
 | `--base-url <url>` | сервер с /v1/embeddings как у OpenAI: Gemini, Jina или Ollama и LM Studio на этом компьютере. |
 | `--dims <n>` | удалённо: размер вектора — нужен с --base-url; укорачивает вектор модели OpenAI. |
-| `--workers <n>` | local: sessions in parallel, each with its own copy of the model (\~0.7 GB each). |
 | `--threads <n>` | local: threads in all (default: min(8, cores)). |
 | `--concurrency <n>` | удалённо: запросов одновременно (по умолчанию: 4). |
 | `--max-tokens <n>` | remote: stop before a run that could send more tokens than this. |
@@ -2775,7 +2917,7 @@ max attachments text set <chat> [message] [options]
 
 ## `max tags`
 
-your own labels on chats, people and messages, kept in the local store and never sent; tag: in a search finds them
+ваши собственные теги на чатах, людях, сообщениях и задачах; хранятся в локальном хранилище и никуда не отправляются; tag: в поиске их находит
 
 ### `max tags auto`
 
@@ -2796,7 +2938,7 @@ max tags auto [options]
 
 ### `max tags add`
 
-put tags on one chat, person or message
+поставить теги на один чат, человека, сообщение или задачу
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2813,10 +2955,11 @@ max tags add <tag> [options]
 | `--chat <chat>` | the chat to tag, or the chat of --message; a chat: its id, or part of its title. |
 | `--contact <person>` | the person to tag: their id, @username or name, as the local store knows them. |
 | `--message <message>` | the message to tag: its id in --chat, or a msg: locator alone. |
+| `--task <task>` | задача, которую нужно пометить: её id или ключ, как показывает tasks list. |
 
 ### `max tags remove`
 
-take tags off one chat, person or message
+снять теги с одного чата, человека, сообщения или задачи
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2833,11 +2976,12 @@ max tags remove <tag> [options]
 | `--chat <chat>` | the chat to untag, or the chat of --message; a chat: its id, or part of its title. |
 | `--contact <person>` | the person to untag: their id, @username or name, as the local store knows them. |
 | `--message <message>` | the message to untag: its id in --chat, or a msg: locator alone. |
+| `--task <task>` | задача, с которой снимают теги: её id или ключ, как показывает tasks list. |
 | `--source <manual\|auto>` | удалить только отметку о принадлежности к этому источнику. |
 
 ### `max tags list`
 
-what is tagged: this account's chats and messages, and the people of its messenger
+что помечено тегами: чаты, сообщения и задачи этого аккаунта и люди его мессенджера
 
 ```sh
 max tags list [query]
@@ -2853,7 +2997,7 @@ max tags list [query]
 
 ### `max mentions list`
 
-упоминания этого аккаунта, подходящие под запрос, новые первыми; только локальное хранилище
+упоминания этого аккаунта, подходящие под запрос, новые первыми; --new — те, что найдены после последней проверки
 
 ```sh
 max mentions list [query] [options]
@@ -2862,6 +3006,24 @@ max mentions list [query] [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `query` | необязательный | поля ниже; слово без поля — это значение, поэтому телефон, набранный с 8, найдётся и записанный с +7. |
+
+| Опция | Что делает |
+|---|---|
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+| `--new` | нерешённые упоминания, найденные после последнего запуска --new, который показал их все; первый запуск показывает все. |
+
+### `max mentions domains`
+
+сайты, на которые ведут ссылки этого аккаунта, самые частые первыми, с чатами, временем первой и последней ссылки
+
+```sh
+max mentions domains [query] [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | сужает считаемые ссылки: поля перечислены ниже; отклонённые ссылки не считаются. |
 
 | Опция | Что делает |
 |---|---|
@@ -2897,6 +3059,7 @@ max mentions confirm <id> [person] [options]
 
 | Опция | Что делает |
 |---|---|
+| `--all-in-chat` | имя: также каждое нерешённое место с тем же именем в его чате. |
 | `--as-owner` | записать решение как ваше, хотя программу запускает терминал агента (задана AI_AGENT или CLAUDECODE). |
 
 ### `max mentions reject`
@@ -2915,6 +3078,7 @@ max mentions reject <id> [options]
 
 | Опция | Что делает |
 |---|---|
+| `--all-in-chat` | имя: также каждое нерешённое место с тем же именем в его чате. |
 | `--as-owner` | записать решение как ваше, хотя программу запускает терминал агента (задана AI_AGENT или CLAUDECODE). |
 
 ### `max mentions rebuild`
@@ -3014,11 +3178,11 @@ max metadata refresh [options]
 
 ## `max search`
 
-поиск по тексту: в одном ресурсе, если он известен (mail, messages, notes), или search all — сразу по сообщениям, почте и заметкам
+искать по тексту: один ресурс, если вы его знаете (messages, notes), либо search all по сообщениям и заметкам; почту ищет memo search mail
 
 ### `max search all`
 
-искать сообщения мессенджера, письма и заметки в локальном хранилище, сообщения — и на сервере мессенджера (--backend; почта и заметки только локально), и расшифровки аккаунта встреч, если --source его называет, — лучшие совпадения первыми; не задачи, людей, записи памяти или проекты. Нужна, когда неизвестно, где что-то было написано; search mail, messages или notes читает один вид со всеми полями
+искать сообщения мессенджера и заметки в локальном хранилище, сообщения — и на сервере мессенджера (--backend; заметки только локально), и расшифровки аккаунта встреч, если --source его называет, — лучшие совпадения первыми; не почту (memo search mail), не задачи, людей, записи памяти или проекты. Используйте, когда не знаете, где что-то написано; search messages или notes читает один вид со всеми его полями
 
 ```sh
 max search all <query> [options]
@@ -3030,7 +3194,7 @@ max search all <query> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--only <resources>` | только эти ресурсы через запятую: messages, mail, notes; meetings, если --source называет аккаунт встреч. |
+| `--only <resources>` | только эти ресурсы через запятую: messages, notes; meetings, если --source называет аккаунт встреч. |
 | `--source <accounts>` | только эти аккаунты через запятую: provider:account, как его показывает найденное, провайдер, вид или group:<name>; каждый ресурс читает аккаунты своего вида, а встречи — только если аккаунт встреч назван. |
 | `--max-meetings <n\|all>` | сколько встреч аккаунта встреч просмотреть, начиная с новых; all — все (по умолчанию 100). |
 | `--limit <n>` | сколько результатов. |
@@ -3050,7 +3214,7 @@ max search messages [query] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `query` | необязательный | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; --language legacy keeps discovery; with --saved, more words AND-ed to it. |
+| `query` | необязательный | строгий запрос Lucene: слова, "фразы", AND/OR/NOT, группы полей и диапазоны дат; с --saved — ещё слова, присоединённые к нему через AND. |
 
 | Опция | Что делает |
 |---|---|
@@ -3065,39 +3229,15 @@ max search messages [query] [options]
 | `--thread-within <duration>` | сообщения в пределах этого времени до и после совпадения (по умолчанию: 1d). |
 | `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). Discovery читает только архив. |
 | `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
-| `--source <accounts>` | каждый аккаунт этого мессенджера в хранилище; personal, bots или all — то же, что in: в запросе; или список: group:work,telegram:Alice,email:me@example.com. |
+| `--source <accounts>` | каждый аккаунт этого мессенджера в хранилище; personal, bots или all — то же, что in: в запросе; или список: group:work,telegram:Alice. |
 | `--limit <n>` | сколько результатов. |
 | `--page <n>` | какая страница, начиная с 1. |
 | `--newest` | сначала новые, а не лучшие совпадения. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
 | `--discover` | частичные совпадения слов и подходящие прямые ответы в локальном архиве; это свидетельства, а не подтверждённые ответы. |
-| `--language <lucene\|legacy>` | язык запроса: строгий Lucene или прежний поиск legacy. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--regex` | слова — одно регулярное выражение без учёта регистра, проверяется по всем сохранённым текстам. |
 | `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
-
-### `max search mail`
-
-искать в почте, импортированной в локальное хранилище, — её приносит memo sync --mail
-
-```sh
-max search mail [query] [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `query` | необязательный | строгий запрос Lucene: слова, "фразы", AND/OR/NOT, группы полей и диапазоны дат. |
-
-| Опция | Что делает |
-|---|---|
-| `--source <accounts>` | только эти почтовые аккаунты через запятую: email:<address>, как его показывает найденное, email, mail или group:<name>; если не задано — все почтовые аккаунты. |
-| `--limit <n>` | сколько результатов. |
-| `--page <n>` | какая страница, начиная с 1. |
-| `--newest` | сначала новые, а не лучшие совпадения. |
-| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
-| `--context <n>` | сколько сообщений показать до и после каждого совпадения; 2 в терминале, иначе 0. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
 
 ### `max search notes`
 
@@ -3179,9 +3319,7 @@ max searches create <name> [query] [options]
 | `--newest` | сначала новые, а не лучшие совпадения. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
 | `--context <n>` | messages before and after each hit. |
-| `--language <lucene\|legacy>` | язык запроса: строгий Lucene или прежний поиск legacy. |
 | `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--regex` | слова — одно регулярное выражение без учёта регистра, проверяется по всем сохранённым текстам. |
 | `--by <chat\|sender\|day\|hour>` | по чему группирует подсчёт stats messages show --saved. |
 | `--selection <json>` | сохранить полностью определённый исходный запрос рейтинга и параметры из детализации. |
 | `--replace` | overwrite a saved search of the same name. |
@@ -4022,20 +4160,6 @@ max config show [options]
 |---|---|
 | `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
-### `max config migrate`
-
-replace legacy access settings with permissions, preserving effective levels
-
-**Меняет что-то только на этом компьютере.**
-
-```sh
-max config migrate [options]
-```
-
-| Опция | Что делает |
-|---|---|
-| `--dry-run` | show the migration without writing the file. |
-
 ### `max config set`
 
 save a setting to the configuration file
@@ -4048,8 +4172,8 @@ max config set <setting> <value> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
-| `value` | обязательный | a number, true or false, or for allow a list like send,reaction. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `value` | обязательный | число, true или false либо список вроде contacts,polls. |
 
 | Опция | Что делает |
 |---|---|
@@ -4069,7 +4193,7 @@ max config unset <setting> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, read_only, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, mcp_tools, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, searchStemmers.cyrillic, searchStemmers.latin. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
 
 | Опция | Что делает |
 |---|---|
@@ -4260,14 +4384,7 @@ max mcp [options]
 | Опция | Что делает |
 |---|---|
 | `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
-| `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | устарело: используйте permissions.messages.send в настройках; доступа не даёт. |
-| `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-mark-read` | устарело: используйте permissions.chats.mark-read в настройках; доступа не даёт. |
-| `--allow-delete` | устарело: используйте permissions.messages.delete в настройках; доступа не даёт. |
-| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; доступа не даёт. |
 | `--http` | предоставлять HTTP-сервер на 127.0.0.1 для ChatGPT и Claude в браузере через ваш туннель; действуют права профиля. |
-| `--http-confirmation <mode>` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
 | `--port <port>` | the local port for --http (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
 | `--revoke` | forget every login given to a browser app; each must log in again. |
@@ -4283,12 +4400,6 @@ max mcp config [options]
 | Опция | Что делает |
 |---|---|
 | `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
-| `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | устарело: используйте permissions.messages.send в настройках; доступа не даёт. |
-| `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-mark-read` | устарело: используйте permissions.chats.mark-read в настройках; доступа не даёт. |
-| `--allow-delete` | устарело: используйте permissions.messages.delete в настройках; доступа не даёт. |
-| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; доступа не даёт. |
 
 ### `max mcp setup`
 
@@ -4308,12 +4419,6 @@ max mcp setup <client> [options]
 |---|---|
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
 | `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
-| `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | устарело: используйте permissions.messages.send в настройках; доступа не даёт. |
-| `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-mark-read` | устарело: используйте permissions.chats.mark-read в настройках; доступа не даёт. |
-| `--allow-delete` | устарело: используйте permissions.messages.delete в настройках; доступа не даёт. |
-| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; доступа не даёт. |
 
 ### `max mcp doctor`
 
@@ -4326,12 +4431,6 @@ max mcp doctor [options]
 | Опция | Что делает |
 |---|---|
 | `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
-| `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | устарело: используйте permissions.messages.send в настройках; доступа не даёт. |
-| `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-mark-read` | устарело: используйте permissions.chats.mark-read в настройках; доступа не даёт. |
-| `--allow-delete` | устарело: используйте permissions.messages.delete в настройках; доступа не даёт. |
-| `--allow-moderate` | устарело: используйте permissions.chats.moderate и правила группы; доступа не даёт. |
 
 ## `max bot`
 
@@ -4767,7 +4866,7 @@ max bot messages between <people> [options]
 
 #### `max bot search messages`
 
-search the messages this bot has read, sent or received on this machine — the local copy only, best match first; every word must appear; "a phrase", -word, a OR b, from: chat: after: before: has:; by text, by --from, or both
+искать сообщения, которые этот бот прочитал, отправил или получил на этом компьютере, — только локальная копия, лучшие совпадения первыми; запрос Lucene: каждое слово должно встретиться; "фраза", -слово, a OR b, from: chat: date: has:; по тексту, по --from или по обоим
 
 ```sh
 max bot search messages [query] [options]

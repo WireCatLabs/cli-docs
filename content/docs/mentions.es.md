@@ -12,7 +12,8 @@ Necesitas el historial de los chats que quieres buscar guardado en tu ordenador.
 
 Una **mención** es un valor que las herramientas encontraron en un mensaje: un número de teléfono, una dirección de
 correo, un enlace, un enlace a un documento de Google o el nombre de alguien que conoces. Las herramientas lo buscan en el texto del mensaje, en el texto de sus archivos y en las transcripciones de
-sus notas de voz.
+sus notas de voz. También leen tus notas, documentos y correo guardados; en ellos se busca con
+[memo](#buscar-en-el-correo).
 
 Cada mención se guarda en una forma estándar, así que la búsqueda encuentra un valor se haya escrito como se haya
 escrito. `+1 (555) 010-0100` y `+1 555 010 0100` son un mismo número; también los rusos `8 900 000-00-01` y
@@ -21,8 +22,8 @@ escrito. `+1 (555) 010-0100` y `+1 555 010 0100` son un mismo número; también 
 Las menciones se encuentran con reglas fijas en tu ordenador. Ningún proveedor de IA lee tus mensajes para esto y no
 se envía nada al servicio de mensajería. Las reglas buscan lo que «parece un teléfono»: se omiten fechas, importes,
 números de tarjeta y números después de palabras como «pedido» o «factura», pero algunos códigos aparecerán igualmente
-como teléfonos. Se descartan una vez. Un número de otro país escrito sin `+` solo se encuentra después de una palabra
-como «tel» o «phone», y entonces se guarda solo como dígitos.
+como teléfonos. Se descartan una vez. Un número escrito sin `+` se lee como un número de
+[tus países](#números-sin-prefijo-de-país).
 
 ## Pídeselo a tu agente
 
@@ -52,8 +53,9 @@ max personal search messages 'domain:example.com'
 max personal search messages 'url:"https://example.com/price"'
 ```
 
-- `phone:` encuentra un número con cualquier espacio, guion o paréntesis. Escríbelo con el código de país y `+`. Sin
-  `+`, solo se reconocen números rusos: `8 900…` y `9…` de diez dígitos se leen como `+7`.
+- `phone:` encuentra un número con cualquier espacio, guion o paréntesis. Escríbelo con el código de país y `+`. Un
+  número escrito sin `+` se lee en [tus países](#números-sin-prefijo-de-país). Un número de ocho dígitos o más
+  también encuentra un número guardado que termina con esos dígitos.
 - `email:` encuentra una dirección en mayúsculas o minúsculas. Ponla entre comillas, porque `@` tiene su propio
   significado en una consulta.
 - `domain:` encuentra todos los enlaces y direcciones de ese sitio, incluidos sus subdominios.
@@ -62,6 +64,29 @@ max personal search messages 'url:"https://example.com/price"'
 Un valor encontrado en un archivo o una nota de voz encuentra el mensaje con el que llegó el archivo. Los campos se
 combinan con el resto del [lenguaje de consultas](./tg/query-language.md), por ejemplo
 `domain:example.com AND date>=2026-09-01`.
+
+### Números sin prefijo de país
+
+La gente escribe un número local a la manera local: `612 345 678` en España, `8 900 000-00-01` en Rusia. Indica a las
+herramientas en qué países están tus contactos, el más probable primero:
+
+```sh
+tg personal config set phone_countries es,ru
+```
+
+Entonces un número sin `+` se lee como número del primer país al que corresponde. El ajuste cubre la mayor parte de
+Europa, Estados Unidos y Canadá, y vale para todas las herramientas que comparten el almacén local. Sin él, un número
+sin `+` se lee como ruso. Después de cambiarlo, vuelve a leer los números guardados con `mentions rebuild phone`; las
+decisiones que tomaste se quedan con sus números.
+
+### Buscar en el correo
+
+El correo guardado admite los mismos campos. La búsqueda de correo es de [memo](./email.mdx):
+
+```sh
+memo search mail 'domain:example.com'
+memo search mail 'phone:"+1 555 010 0100"'
+```
 
 ## Revisar lo encontrado
 
@@ -74,7 +99,25 @@ tg personal mentions show 12
 ```
 
 `list` da a cada mención un ID, la fecha, el tipo (`phone`, `email`, `url`, `document`, `person-name`), el valor, su
-estado y el mensaje. `show` añade el texto alrededor y en cuántos otros lugares aparece el mismo valor.
+estado y el mensaje. `show` añade el texto alrededor y en cuántos otros lugares aparece el mismo valor. `list` solo
+muestra menciones en mensajes; las menciones en notas, documentos y correo se pueden buscar, pero aún no se listan.
+
+Para ver solo lo encontrado desde la última vez que miraste:
+
+```sh
+tg personal mentions list --new
+```
+
+`--new` avanza tu punto de revisión solo cuando lo mostró todo, así que una página cortada no se salta ninguna
+mención. Cuando `messages sync` guarda mensajes con menciones nuevas, su respuesta dice cuántas hay y sugiere este
+comando.
+
+Para ver a qué sitios te envían enlaces, primero los más enlazados, con el número de chats y el primer y último
+enlace:
+
+```sh
+max personal mentions domains
+```
 
 Una mención tiene uno de tres estados:
 
@@ -96,6 +139,7 @@ tg personal mentions reject 14
   que pertenece a una organización, como el teléfono de una tienda o la dirección `info@` de una empresa.
 - `reject 14` descarta un valor que no es una mención real, como un número de pedido que parece un teléfono.
 - Un enlace a un documento se confirma sin propietario cuando el documento está en el almacén local: `confirm 15`.
+- Un enlace `t.me` a un chat o a una persona de tu historial se vincula a ese chat o cuenta sin ti.
 
 Una decisión se aplica al valor, no a un mensaje. Confirma un número una vez y todos los mensajes que lo contienen
 quedan vinculados a esa persona, también los que lleguen después. Recházalo y queda descartado en todas partes. Un
@@ -123,8 +167,12 @@ partes:
 ```sh
 tg personal mentions list kind:person-name status:found
 tg personal mentions confirm 31 person:7
+tg personal mentions confirm 31 person:7 --all-in-chat
 tg personal search messages 'mentions:"person:7"'
 ```
+
+`--all-in-chat` decide el nombre también en todos los demás lugares del mismo chat donde nadie lo ha decidido aún. En
+un chat de equipo, una Olga suele ser una sola persona.
 
 `show` enumera las personas que puede ser un nombre. Un nombre se vincula a una persona sin ti solo cuando en ese chat
 escribió exactamente una persona con ese nombre. `mentions:"person:7"` encuentra los mensajes que nombran a la persona
@@ -146,8 +194,8 @@ tg personal mentions rebuild
 max personal mentions rebuild
 ```
 
-Lee cada mensaje guardado, el texto de los archivos y las transcripciones, muestra su progreso y conserva todas tus
-decisiones. Puedes ejecutarlo de nuevo en cualquier momento.
+Lee cada mensaje guardado, el texto de los archivos, las transcripciones, las notas, los documentos y los correos,
+muestra su progreso y conserva todas tus decisiones. Puedes ejecutarlo de nuevo en cualquier momento.
 
 ## Números de teléfono y privacidad
 
@@ -157,8 +205,9 @@ registros, mensajes de error ni registros de ejecución. Nunca se abre un enlace
 ## Lo que aún no existe
 
 - Nombres de personas que las herramientas aún no conocen.
-- Menciones en [notas y archivos](./memo/notes.md) y en el [correo](./email.mdx).
-- Vincular un enlace con el chat o el documento guardado al que apunta. Por ahora un enlace solo se puede descartar.
+- Una lista de las menciones en [notas y documentos](./memo/notes.md) y en el [correo](./email.mdx): se encuentran y
+  se pueden buscar, pero `mentions list` no las muestra.
+- Vincular un enlace a un sitio web corriente con algo. Ese enlace solo se puede descartar.
 - Direcciones postales.
 
 Cuando sepas dónde apareció un número, un sitio o un nombre, [recupera el contexto con esa persona](./people.md) antes de

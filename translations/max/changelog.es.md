@@ -4,6 +4,79 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.54.0 — 15.10.2026
+
+### Novedades
+
+- **Las tareas se pueden reservar, etiquetar y repartir en categorías**: `tasks claim <задача> [--for 30m]`,
+  `tasks release`, `tasks categories`, `tags add|remove --task`, `tasks agenda --claimed` (cli-core 0.282.0).
+- **Tareas que pueden ser el mismo trabajo** (cli-core 0.285.0): `tasks similar <задача>` valora las tareas
+  parecidas; `tasks duplicates [--unsure]` muestra los pares que encontraron las reglas, `tasks merge <задача> --into <другая>`
+  los fusiona, `tasks unmerge` deshace la fusión, `tasks duplicates reject|unsure` resuelve un par. `tasks agenda`
+  acepta `--category` y `--tag`, y `config set task_categories.<имя>` cambia la lista de categorías de toda la base.
+- **Menciones** (cli-core 0.285.0): `mentions domains` muestra los sitios a los que llevan los enlaces;
+  `mentions list --new`, lo encontrado desde la última consulta; `mentions confirm|reject <id> --all-in-chat` resuelve un nombre en
+  todo el chat. `config set phone_countries es,ru` lee los números escritos sin `+`.
+- **Versión de la base 16**: las reglas de menciones leen el texto de las notas y de los documentos guardados, y un único
+  `mentions rebuild` lee los guardados antes; `mentions list` sigue mostrando solo las menciones en mensajes. La
+  actualización añade solo disparadores, así que una versión anterior de max sigue abriendo la base.
+
+### Cambios — pueden romper scripts
+
+- **Los ajustes se nombran solo en snake_case** (cli-core 0.283.0): `config set` y `config unset` ya no entienden
+  camelCase, y una clave en camelCase en el archivo de ajustes se considera desconocida. Los ajustes comunes del almacén
+  ahora son `search_stemmers.cyrillic`, `search_stemmers.latin` y `account_groups.<имя>`.
+- **`tasks add` exige `--category <имя>`** de la lista de `tasks categories` (`money`, `documents`, `meeting` y otras);
+  si ninguna encaja, usa `--category other`.
+- **`MAX_READ_ONLY` ahora prohíbe también escribir en max**: antes esta variable no llegaba a la comprobación de escritura.
+- **`tasks add` se niega si la tarea puede ser el mismo trabajo** que una abierta o cerrada en los últimos 14 días
+  (cli-core 0.285.0): salida 2, motivo `task.duplicate-candidates`, candidatas en `details.candidates`. Repite con
+  `--attach <задача>` para vincularle el mensaje, o con `--new` para abrir una nueva; por MCP, `tasks add`
+  se comporta igual.
+- **`phone:` y `value:` también encuentran un número guardado que termina en las cifras nacionales del escrito** (desde 8;
+  cli-core 0.285.0), así que un número guardado antes de `phone_countries` se encuentra en cualquier forma. Un número
+  urbano ruso escrito en grupos, `(812) 000-00-01`, ahora se guarda como `+78120000001`, no como cifras sueltas.
+- **`max search mail` ya no existe: el correo lo busca memo** (decisión del propietario del 14.10.2026, cli-core 0.285.0,
+  cli-core#1121). MCP no tiene `search_mail`. `max search all` busca mensajes y notas (y reuniones, si `--source`
+  las nombra), pero nunca correo; `--only mail` se rechaza. En lugar de «unknown command», `max search mail …` responde con
+  una pista: ``mail is memo's: install @wirecat/cli-memo, then `memo search mail …` ``. Las tareas, las notas de contactos,
+  las etiquetas, `search notes` y `search all` se quedan en `max`.
+
+### Correcciones
+
+- Un título con letras cirílicas mayúsculas se encuentra con una consulta en minúsculas (cli-core 0.285.0).
+- **El HTML dañino en un adjunto ya no cuelga la lectura** (cli-core 0.285.0): una página de etiquetas o comentarios sin
+  cerrar se lee en un tiempo lineal respecto a su tamaño.
+
+### Seguridad
+
+- **`messages send --file`, el envío desde MCP y las fotos de perfil o de grupo no toman archivos de lugares con credenciales**
+  (cli-core 0.283.0): la misma lista que `bot uploads put` desde 0.53.0: claves SSH y de la nube, `.netrc`,
+  `.git-credentials`, ajustes de gh, docker y kube, credenciales de Claude y Codex, llaveros, perfiles de navegador,
+  almacenes de contraseñas y carpetas de las aplicaciones de WireCat; en macOS y Windows sin distinguir mayúsculas. Antes se negaban
+  solo con `.ssh`, `.gnupg`, `.aws`, `.env` y similares, y con las carpetas de max. Si necesitas justo ese archivo, usa `--allow-any-file`.
+- **La lista de lugares de los que no se envía un archivo ahora es una para todas las aplicaciones de WireCat**: max la toma de
+  cli-core y ya no guarda su propia copia. Si el archivo aún no existe, también se resuelven los enlaces en las carpetas que lo contienen.
+- **Con `MAX_READ_ONLY` no se puede cambiar lo que permitiría escribir más tarde** (cli-core 0.281.0): `schedule
+  command|agent|remove`, `config set|unset`, `recipients add|remove|clear`, `flood clear`, `server
+  install|uninstall`, `mcp setup`, `skill install`, `upgrade`, las claves de modelos y `bot auth` responden
+  `permission_error`. Un agente programado se ejecuta con esta variable y antes podía programarse un envío para después;
+  ahora no puede, y una programación guardada bajo ella también se ejecuta solo en lectura. La lectura, la sincronización,
+  las tareas y las notas funcionan como antes.
+
+### Eliminaciones
+
+- **Código de compatibilidad.** `max mcp` y `mcp config|setup|doctor` ya no aceptan `--allow-send`, `--confirm-send`,
+  `--allow-mark-read`, `--allow-delete`, `--allow-moderate`, `--allow-dangerous` y `--http-confirmation`; el acceso se
+  define con `permissions`. Se quita `messages download --output`; queda `--output-dir`. El comando `config migrate` ya no
+  existe. Los ajustes `read_only`, `allow` y `mcp_tools` se eliminan: un archivo que los contenga no se lee; en su lugar define
+  `permissions.<ресурс> readonly`. `doctor` no busca el antiguo archivo de caché (`legacy_cache`), e `inbox` ya no traslada
+  la antigua marca `lastCheckAt`.
+- **Traslado de carpetas al arrancar** (desde `~/Library` y a la carpeta de WireCat): ya está hecho.
+- **El antiguo lenguaje de búsqueda**: `search messages` y `searches create` ya no tienen `--language` ni `--regex`. Guarda
+  de nuevo una búsqueda guardada en el lenguaje antiguo.
+- **`conversations embed --workers`.**
+
 ## 0.53.0 — 15.10.2026
 
 ### Novedades
@@ -1143,7 +1216,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.53.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.54.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

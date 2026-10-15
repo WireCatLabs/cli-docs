@@ -116,7 +116,7 @@ window.WireScenarioVariants = {
           "ask": "Use tg cli, find SQL course recommendations across Telegram and MAX. I want exercises and feedback."
         },
         {
-          "tool": "tg search messages \"SQL\" --source all --limit 10 --language legacy",
+          "tool": "tg search messages \"SQL\" --source all --limit 10",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"chatId\": \"601\",\n      \"chat\": \"Analytics · community\",\n      \"messenger\": \"tg\",\n      \"date\": \"2026-10-02T09:00:00Z\",\n      \"text\": \"Took a SQL workshop: weekly exercises and feedback from the instructor.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\",\n      \"senderName\": \"Daria\"\n    },\n    {\n      \"id\": \"67210\",\n      \"chatId\": \"701\",\n      \"chat\": \"Team · learning\",\n      \"messenger\": \"max\",\n      \"date\": \"2026-10-02T12:00:00Z\",\n      \"text\": \"The SQL video course helped with basics, but nobody reviewed my work.\",\n      \"timestamp\": \"2026-10-02T12:00:00Z\",\n      \"senderName\": \"Alex\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -824,7 +824,7 @@ window.WireScenarioVariants = {
           "ask": "Usa tg cli, busca recomendaciones de cursos de SQL en Telegram y MAX. Quiero ejercicios y comentarios del profesor."
         },
         {
-          "tool": "tg search messages \"SQL\" --source all --limit 10 --language legacy",
+          "tool": "tg search messages \"SQL\" --source all --limit 10",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"chatId\": \"601\",\n      \"chat\": \"Analistas · comunidad\",\n      \"messenger\": \"tg\",\n      \"date\": \"2026-10-02T09:00:00Z\",\n      \"text\": \"Hice un taller de SQL: ejercicios semanales y comentarios del profesor.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\",\n      \"senderName\": \"Daria\"\n    },\n    {\n      \"id\": \"67210\",\n      \"chatId\": \"701\",\n      \"chat\": \"Equipo · formación\",\n      \"messenger\": \"max\",\n      \"date\": \"2026-10-02T12:00:00Z\",\n      \"text\": \"El curso de vídeos de SQL me ayudó con lo básico, pero nadie revisaba los ejercicios.\",\n      \"timestamp\": \"2026-10-02T12:00:00Z\",\n      \"senderName\": \"Álex\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {
@@ -1548,7 +1548,7 @@ window.WireScenarioVariants = {
           "ask": "Используй tg cli, найди в Telegram и MAX рекомендации курса SQL с практикой и обратной связью."
         },
         {
-          "tool": "tg search messages \"SQL\" --source all --limit 10 --language legacy",
+          "tool": "tg search messages \"SQL\" --source all --limit 10",
           "out": "{\n  \"items\": [\n    {\n      \"id\": \"48210\",\n      \"chatId\": \"601\",\n      \"chat\": \"Аналитики · сообщество\",\n      \"messenger\": \"tg\",\n      \"date\": \"2026-10-02T09:00:00Z\",\n      \"text\": \"Проходил практикум SQL: каждую неделю задания и комментарии преподавателя.\",\n      \"timestamp\": \"2026-10-02T09:00:00Z\",\n      \"senderName\": \"Дарья\"\n    },\n    {\n      \"id\": \"67210\",\n      \"chatId\": \"701\",\n      \"chat\": \"Команда · обучение\",\n      \"messenger\": \"max\",\n      \"date\": \"2026-10-02T12:00:00Z\",\n      \"text\": \"Видеокурс SQL помог с базой, но работы никто не проверял.\",\n      \"timestamp\": \"2026-10-02T12:00:00Z\",\n      \"senderName\": \"Алексей\"\n    }\n  ],\n  \"hasMore\": false\n}"
         },
         {

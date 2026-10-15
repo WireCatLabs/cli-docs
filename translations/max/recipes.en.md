@@ -62,7 +62,7 @@ max personal config set sends_per_hour 5          # или: не больше п
 max personal recipients add "Иван Петров"       # и писать только в эти чаты
 ```
 
-`readonly` restricts only its named resource: restricting `messages` does not block reactions, voting or chat changes. The loop sets every resource. A more specific key such as `permissions.messages.send: allow` takes precedence; remove such allowances for a read-only profile. After migration, legacy `read_only` cannot be changed.
+`readonly` restricts only its named resource: restricting `messages` does not block reactions, voting or chat changes. The loop sets every resource. A more specific key such as `permissions.messages.send: allow` takes precedence; remove such allowances for a read-only profile.
 
 `permissions` also affects your own commands until removed with `max personal config unset permissions.<ресурс>`, restoring inherited settings and defaults. Use a separate profile to restrict only the agent. `max personal sends list` records every send attempt, including rejected ones. See [send protections](./security.md#защита-от-отправки-не-туда) and [permissions](./configuration-reference.md#права-доступа).
 

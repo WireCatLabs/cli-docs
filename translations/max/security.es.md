@@ -79,7 +79,7 @@ Por qué hace falta la protección de envíos y cómo funciona se explica en la 
 | máximo por hora: mensajes, reenvíos, ediciones, fijados con aviso, eliminados y personas añadidas; no reacciones | `sends_per_hour`, predeterminado `30` | código `8`, indica cuándo reintentar |
 | registro de cada intento, sin texto | siempre; `max personal sends list` | — |
 
-**Los bots tienen claves propias `bot.*`, como `bot.messages.send`.** Usan los mismos niveles. Los ajustes comunes y las capas `bot.defaults`/`bot.profiles` se resuelven en el mismo orden; `config show --bot` muestra los permisos efectivos. Los antiguos `read_only` y `allow` siguen siendo compatibles antes de migrar.
+**Los bots tienen claves propias `bot.*`, como `bot.messages.send`.** Usan los mismos niveles. Los ajustes comunes y las capas `bot.defaults`/`bot.profiles` se resuelven en el mismo orden; `config show --bot` muestra los permisos efectivos. El antiguo `allow` todavía se lee.
 
 Cada bot tiene destinatarios (`max <имя> bot recipients add <чат>`) y registro (`max <имя> bot sends list`) propios. **Toda** escritura pasa por ellos, incluidos `messages send`, `messages pin` y `bot api`, para evitar eludir controles con API genérica. Edición y eliminación reciben primero el chat; `max` consulta el mensaje y rechaza si pertenece a otro. No hace esa comprobación para `user:<id>`. Registra chat, tipo, resultado y longitud, nunca texto. No hay límite por hora de bots hasta definirlo en `bot`: `max <имя> config set --bot sends_per_hour 200`.
 

@@ -484,7 +484,7 @@ max personal contacts list name:петров            # люди по имен
 ```
 
 ```sh
-max personal search all "договор"                 # сообщения, почта и заметки на этом компьютере
+max personal search all "договор"                 # сообщения и заметки на этом компьютере
 ```
 
 ```sh
@@ -507,7 +507,7 @@ max personal messages list 42 --limit 20
 max personal messages send 42 "текст"
 ```
 
-Part of the name is also accepted there - and in `chat:` of `max personal search messages`: the chat name is searched among the saved ones, and without `--discover`, a search in one chat also asks the MAX server (`--backend archive` - archive only). The search uses [search query language](./query-language.md): the word also finds its other forms, the beginning of the word is the explicit pattern `квартир*`, only the exact form is `exact:квартира`. `--regex` - separate mode: words - one JavaScript regular expression, case insensitive. More details: [search](./search.md).
+Part of the name is also accepted there - and in `chat:` of `max personal search messages`: the chat name is searched among the saved ones, and without `--discover`, a search in one chat also asks the MAX server (`--backend archive` - archive only). The search uses [search query language](./query-language.md): the word also finds its other forms, the beginning of the word is the explicit pattern `квартир*`, only the exact form is `exact:квартира`, a Lucene regular expression is `text:/pass(port)?/`. More details: [search](./search.md).
 
 ### How many messages matched
 
@@ -543,7 +543,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.53.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.54.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -1229,7 +1229,7 @@ max work config set permissions.messages.delete allow
 max config set --defaults permissions.contacts readonly
 ```
 
-Levels `deny`, `readonly`, `ask`, `allow` are used in both CLI and MCP. The more precise key takes precedence: a separately allowed delete does not allow sending. When `ask` the terminal asks; JSON requires an explicit confirmation flag. `allow` does not ask. Other resources and limits are not changed by this example. Old `read_only`, `allow`, `mcp_tools` are transferred through `config migrate`; preview - `config migrate --dry-run`. More details - [settings](./configuration.md).
+Levels `deny`, `readonly`, `ask`, `allow` are used in both CLI and MCP. The more precise key takes precedence: a separately allowed delete does not allow sending. When `ask` the terminal asks; JSON requires an explicit confirmation flag. `allow` does not ask. Other resources and limits are not changed by this example. More details - [settings](./configuration.md).
 
 ## One person
 
