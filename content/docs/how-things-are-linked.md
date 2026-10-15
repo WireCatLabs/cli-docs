@@ -26,6 +26,7 @@ Every result carries a reference: a short typed name for the record. Copy it int
 | `person:7` | A person, with all the accounts you linked to them |
 | `organization:3`, `project:4`, `task:5` | Your organizations, projects and tasks |
 | `note:12`, `document:3` | A note, or a file from a notes folder or Drive |
+| `meeting:1/7/3/4` | A retained transcript cue: account, meeting, transcript, cue position |
 | `memory:8`, `fact:9` | A memory or a fact |
 
 A message reference includes the account, so the same message number in another account is a different message. The field that holds the reference is `ref` in most answers. A few answers call it `locator`, and one Drive list calls it `reference`. Copy the value, not the field name.
@@ -52,6 +53,8 @@ tg personal contacts timeline "Kai Sample" --since-time 2026-10-01 --limit 20
 
 The tool also records who took part in what (sender, recipient, participant, assignee, author, mentioned, linked). That record is why "everything about Kai" is one lookup and not a scan of every message.
 
+The person timeline follows recorded participation and explicit message links. Confirming a found phone, email or name mention makes it searchable with `mentions:`, but does not by itself add a timeline entry.
+
 ## Replies and conversations
 
 Every message can point at the earlier message it answers. Each pointer says where it came from:
@@ -67,6 +70,10 @@ Every message can point at the earlier message it answers. Each pointer says whe
 - A file belongs to a message, an email or a meeting. Its extracted text stays with it, so `content:` finds the message that carried the file.
 - A voice note's transcript belongs to the message, so `transcript:` finds that message.
 - A picture is found through the chat around it or through what it shows. Both are explained in [What gets indexed](./what-is-indexed.md#pictures).
+
+## Meeting transcripts
+
+A transcript cue has a `meeting:` reference that retains its meeting and transcript revision. Use it to read the surrounding passage and keep its coverage. A participant can be explicitly linked to a person, and a meeting can have confirmed project membership; a name match alone creates neither link. A participant link does not establish who spoke a cue. [Meeting evidence and links](./zoom.mdx) explains how to inspect these associations before saving a sourced finding.
 
 ## Mentions
 

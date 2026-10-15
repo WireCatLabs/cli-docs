@@ -26,6 +26,7 @@ Cada resultado lleva una referencia: un nombre corto y con tipo del registro. Ú
 | `person:7` | Una persona, con todas las cuentas que vinculaste a ella |
 | `organization:3`, `project:4`, `task:5` | Tus organizaciones, proyectos y tareas |
 | `note:12`, `document:3` | Una nota, o un archivo de una carpeta de notas o de Drive |
+| `meeting:1/7/3/4` | Un fragmento de transcripción conservado: cuenta, reunión, transcripción y posición |
 | `memory:8`, `fact:9` | Un recuerdo o un hecho |
 
 Una referencia de mensaje incluye la cuenta, así que el mismo número en otra cuenta es otro mensaje. El campo que contiene la referencia se llama `ref` en la mayoría de las respuestas. Algunas lo llaman `locator`, y una lista de Drive lo llama `reference`. Copia el valor, no el nombre del campo.
@@ -52,6 +53,8 @@ tg personal contacts timeline "Kai Sample" --since-time 2026-10-01 --limit 20
 
 La herramienta también anota quién participó en qué (remitente, destinatario, participante, responsable, autor, mencionado, vinculado). Por eso «todo sobre Kai» es una sola consulta y no un recorrido por todos los mensajes.
 
+La cronología de una persona sigue la participación guardada y los vínculos explícitos de mensajes. Confirmar una mención de teléfono, correo o nombre permite buscarla con `mentions:`, pero no añade por sí solo una entrada a la cronología.
+
 ## Respuestas y conversaciones
 
 Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dice de dónde viene:
@@ -67,6 +70,10 @@ Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dic
 - Un archivo pertenece a un mensaje, un correo o una reunión. Su texto extraído se queda con él, así que `content:` encuentra el mensaje que llevaba el archivo.
 - La transcripción de una nota de voz pertenece al mensaje, así que `transcript:` encuentra ese mensaje.
 - Una imagen se encuentra por el chat que la rodea o por lo que muestra. Ambas vías se explican en [Qué se indexa](./what-is-indexed.md#imágenes).
+
+## Transcripciones de reuniones
+
+Un fragmento de transcripción tiene una referencia `meeting:` que conserva su reunión y revisión. Úsala para leer el contexto y conservar la cobertura. Un participante puede vincularse explícitamente a una persona y una reunión puede pertenecer a un proyecto confirmado; coincidir en el nombre no crea esos vínculos. Vincular un participante no demuestra quién pronunció un fragmento. [Evidencia y vínculos de reuniones](./zoom.mdx) explica cómo comprobar esas asociaciones antes de guardar un hallazgo con fuentes.
 
 ## Menciones
 
