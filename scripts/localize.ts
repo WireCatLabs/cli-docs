@@ -100,7 +100,7 @@ const fencedCode = (text: string) =>
       node.lang === "mermaid" ? null : node.meta,
       node.lang === "mermaid"
         ? diagramStructure(node.value ?? "")
-        : node.lang === "text" && node.meta === "prompt"
+        : node.lang === "text" && /^prompt\b/.test(node.meta ?? "")
           ? null
           : node.value,
     ])

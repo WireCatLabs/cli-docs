@@ -27,6 +27,8 @@ export type Words = {
     copy: string
     copied: string
     copyFailed: string
+    expand: string
+    collapse: string
     browser: string
     nodeHelp: string
     nodePrompt: string
@@ -73,6 +75,8 @@ export const words: Record<string, Words> = {
       copy: "Copy",
       copied: "Copied",
       copyFailed: "Copy failed. Select and copy the text below.",
+      expand: "Show the whole request",
+      collapse: "Collapse",
       browser: "The browser gives you the instructions; your agent or terminal runs the installation on your computer.",
       nodeHelp: "Need Node.js? Ask your agent to prepare your computer.",
       nodePrompt: `Check whether Node.js and npm are installed.
@@ -118,6 +122,8 @@ At the end, offer to install the ${tool} skill for my agent.`,
       copy: "Скопировать",
       copied: "Скопировано",
       copyFailed: "Не удалось скопировать. Выделите и скопируйте текст ниже.",
+      expand: "Показать запрос целиком",
+      collapse: "Свернуть",
       browser: "Браузер показывает инструкцию; установку на вашем компьютере выполняет агент или терминал.",
       nodeHelp: "Если Node.js ещё нет, попросите агента подготовить компьютер.",
       nodePrompt: `Проверь, установлены ли Node.js и npm.
@@ -164,6 +170,8 @@ At the end, offer to install the ${tool} skill for my agent.`,
       copy: "Copiar",
       copied: "Copiado",
       copyFailed: "No se pudo copiar. Selecciona y copia el texto de abajo.",
+      expand: "Ver la petición completa",
+      collapse: "Contraer",
       browser: "El navegador muestra las instrucciones; tu agente o terminal ejecuta la instalación en tu ordenador.",
       nodeHelp: "¿Falta Node.js? Pide al agente que prepare tu ordenador.",
       nodePrompt: `Comprueba si Node.js y npm están instalados.

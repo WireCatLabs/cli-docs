@@ -74,6 +74,14 @@ describe("documentation command references", () => {
       children: [{ type: "code", value: "Find the agreement and show its source.", meta: "prompt compact" }],
     })
   })
+  it("marks long prompts as collapsed while keeping their full copyable text", () => {
+    const text = "Make a report.\nAsk for the profile.\nRead only.\nCollect the data."
+    const tree = fromMarkdown(`\`\`\`text prompt collapsed\n${text}\n\`\`\``)
+    remarkDocUsability(new Map())(tree, { path: "/project/content/docs/group-analytics-example.mdx" })
+    expect(tree.children[0]).toMatchObject({
+      data: { hName: "agent-prompt", hProperties: { text, language: "en", collapsed: true } },
+    })
+  })
   it("keeps browser-login screenshots in an accessible closed disclosure", () => {
     const tree = fromMarkdown(
       "> **See the my.telegram.org login screen**\n>\n> ![Empty login form](/telegram-app-login.png)\n>\n> Website login comes before account authorization.\n",
