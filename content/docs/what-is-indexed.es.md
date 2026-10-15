@@ -98,7 +98,7 @@ tg personal search messages 'email:"ana@example.com"'
 tg personal search messages 'domain:example.com'
 ```
 
-`phone:` encuentra igual `+1 555 010 0100` y `+1 (555) 010-0100`; sin `+`, solo se reconocen números rusos. `domain:` encuentra todos los enlaces y direcciones de ese sitio. Las menciones se encuentran con reglas, sin modelo. Una mención que rechazas sigue descartada. Cómo revisar menciones y registrar quién es: [Teléfonos, enlaces y nombres](./mentions.md).
+`phone:` encuentra igual `+1 555 010 0100` y `+1 (555) 010-0100`; sin `+`, solo se reconocen números rusos. `domain:` encuentra todos los enlaces y direcciones de ese sitio. Las menciones se encuentran con reglas, sin modelo. Una mención que rechazas sigue descartada. Cómo revisar menciones y registrar quién es: [Teléfonos, enlaces y nombres](./mentions.md). Cómo se conectan las menciones con personas y organizaciones: [Cómo se vincula todo](./how-things-are-linked.md#menciones).
 
 ## Imágenes
 

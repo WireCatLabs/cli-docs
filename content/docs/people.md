@@ -31,6 +31,17 @@ until you **link** them: you record on your computer that both accounts belong t
 an overview of what they wrote includes their messages from both messengers. See
 [the same person in both messengers](#link-your-accounts).
 
+## Phones and emails in messages
+
+A phone number or an email address in a message belongs to someone, but the tools do not guess who. They list each one as a mention, and you say whose it is. Replace `1` with an id from the list:
+
+```sh
+tg personal mentions list
+tg personal mentions confirm 1 person:7
+```
+
+`mentions confirm` records that the value belongs to the person (or to an organization with `organization:`). After that, `contacts timeline` and searches such as `mentions:"person:7"` include those messages. A wrong value can be dismissed with `mentions reject`. More: [Phones, links and names](./mentions.md) and [How things are linked](./how-things-are-linked.md#mentions).
+
 ## Ask your agent
 
 ```text prompt
