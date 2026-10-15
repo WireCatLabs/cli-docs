@@ -144,7 +144,7 @@ memo skill install --for all   # a global npm install does this for you; pnpm an
 
 Una vez al día Memo pregunta a npm si existe una versión nueva y, si la hay, escribe una línea en stderr tras el comando. Solo aparece ante una persona en el terminal: no con `--json`, en una tubería ni en ejecuciones periódicas. Desactívala con `"update_check": false` en los ajustes o `MEMO_NO_UPDATE_CHECK=1`. Memo nunca se actualiza por sí solo.
 
-- **El temporizador** usa el Memo actualizado en su siguiente ejecución, sin reiniciarlo. Tras cambiar de Node.js (por ejemplo con nvm) e instalar Memo allí, el siguiente comando `memo` actualiza la ruta del temporizador, de modo que eliminar el Node.js anterior no lo rompe. Un Memo ejecutado desde el código o con `npx` no cambia el temporizador.
+- **El temporizador** usa el Memo actualizado en su siguiente ejecución, sin reiniciarlo. Tras cambiar de Node.js (por ejemplo con nvm) e instalar Memo allí, el siguiente comando `memo` actualiza la ruta del temporizador, de modo que eliminar el Node.js anterior no lo rompe. Solo una instalación global cambia la ruta del temporizador: ejecutarlo desde el código, con `npx` o desde los `node_modules` de otra herramienta no lo modifica.
 - **`memo mcp`** conserva la versión anterior hasta que el agente lo reinicie. Reinicia el agente o su servidor MCP.
 
 Desde el código fuente: `git pull && pnpm install && pnpm build`.

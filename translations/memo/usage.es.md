@@ -82,7 +82,7 @@ Cada resultado nombra su fuente con una **referencia**, como `note:12`, `documen
 nota sobre ella o usarla como evidencia. [Cómo funciona Memo](./how-it-works.md#references) explica
 cada tipo.
 
-Las respuestas JSON comparten una forma. Un objeto está en `item`; una lista en `items`, con `page` indicando si hay más (`page.has_more`). `meta` identifica la ejecución y cuentas leídas; `missing`, cuando existe, explica lo que no se pudo cubrir. `--json=a,b` conserva esos campos del objeto o de cada elemento. Las rutas con puntos recorren objetos y arrays anidados: `--json=ref,excerpt,tasks.id` para `memo search all`. Parten del contenido de la respuesta; se conservan paginación, cobertura, siguientes pasos, datos ausentes y metadatos. Elegir campos reduce la salida, no el trabajo examinado.
+Las respuestas JSON comparten una forma. Un objeto está en `item`; una lista en `items`, con `page` indicando si hay más (`page.has_more`). `meta` identifica la ejecución y cuentas leídas; `missing`, cuando existe, explica lo que no se pudo cubrir. `--json=a,b` conserva esos campos del objeto o de cada elemento. Las rutas con puntos recorren objetos y arrays anidados. Usa `--json=ref,excerpt` para resultados compactos de `memo search all`. Parten del contenido de la respuesta; se conservan paginación, cobertura, siguientes pasos, datos ausentes y metadatos. Elegir campos reduce la salida, no el trabajo examinado.
 
 Dónde están las referencias de búsqueda:
 

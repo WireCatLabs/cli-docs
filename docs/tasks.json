@@ -29,7 +29,7 @@
     "families": {
       "tg": ["contacts", "chats", "messages"],
       "max": ["contacts", "chats", "messages"],
-      "zm": ["meetings", "remote-meetings", "events"]
+      "zm": ["meetings", "remote-meetings", "events", "batch"]
     }
   },
   {

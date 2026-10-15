@@ -10,6 +10,84 @@ title: "История изменений"
 
 ## Не выпущено
 
+## 0.45.0 — 16.10.2026
+
+### Исправлено
+
+- **The `memo auto` timer follows only a global install of memo.** A memo run from another tool's own
+  `node_modules` (a docs build, a test tool) used to point the timer at that folder, and once the folder was
+  deleted every timer run failed with `MODULE_NOT_FOUND`. A checkout and `npx` were already ignored.
+
+## 0.44.0 — 15.10.2026
+
+### Исправлено
+
+- **`memo sync --retry-attachments` reads again only the emails it has to.** It finds the stored emails whose
+  attachment a missing reader left unread (`engine-missing`), looks them up by Gmail id and reads those, up to
+  `--limit`. Before, it listed the whole window and re-read its newest `--limit` emails, so older unread
+  attachments were never reached. `--json` reports `retried: {emails, extracted, still_failed, missing}`. Mail
+  read from an mbox file or plain IMAP has no Gmail id, so the flag refuses there.
+- cli-core 0.293.0 and cli-base 0.35.0.
+
+## 0.43.0 — 15.10.2026
+
+### Изменено
+
+- **`--json=<field>` is checked on memo's own lists too.** `tags list`, `vocabulary list`, `actions list`,
+  `agents log`, `projects meetings list` and `folders list` refuse a field their rows lack
+  (`output.unknown-field`, with the fields they have) instead of printing empty rows; known fields project as
+  before.
+- cli-core 0.292.0.
+
+## 0.42.0 — 15.10.2026
+
+### Документация
+
+- Correct the Takeout resume guidance: completed, unchanged snapshots are skipped; incomplete imports scan again. Replace the retired `tasks.id` search projection example with supported compact hit fields.
+
+### Добавлено
+
+- **Mail rules match more than the sender.** `memo mail rules add|remove --filter <query>` takes `subject:<word>`
+  (or bare words), `older:<n>d`, `larger:<size>`, `has:attachment`, `label:<name>`, `is:unread`, `is:bulk` and
+  `score:<n>`; `--kind social|newsletters|developer|shopping|alerts` matches a built-in kind of mail. Every
+  condition given must hold. `memo mail probe` ends with how much mail each kind would match.
+- **`--do protect`** keeps mail whole and out of every cleanup, whatever else matches; `memo mail rules list
+  --filter is:protected` lists those rules, and protected rules list first as `PROTECTED`. `rules apply` reports
+  `protected_kept`.
+- **`--do <action>,tag:<name>`** tags the mail a rule matches; a sync tags what it stores, `rules apply` tags what
+  is stored (`tagged`).
+- **`memo mail rules import-filters <account> <Filters.json>`** proposes rules from a Takeout export's Gmail
+  filters; `--yes` adds them. It reads Takeout's `{"filter": [{query, labelsToAdd, labelsToRemove}]}`: each
+  `from:` or `to:` term becomes its own rule, and words become subject words.
+- **`--filter` takes `from:<address|domain|word>` and `to:<address>`**: `from:sample` matches a sender whose
+  address or display name contains the word.
+- **Two more spam signals in the sender score:** `never_opened` (+2, you opened none of a sender's mail) and
+  `dkim_not_passed` (+2, Gmail's DKIM check did not pass on most of it). On the owner's mailbox they raised the
+  share of Gmail Spam reaching score 3 from 22.9% to 84.2%, with the same 1 of 63 replied-to senders flagged
+  ([cli-testing](https://github.com/WireCatLabs/cli-testing/tree/main/performance/mail/spam-scoring)).
+
+### Изменено — может затронуть скрипты
+
+- `memo mail rules add --do` takes a comma list: one of `skip`, `envelope`, `keep`, `protect`, plus any
+  `tag:<name>`. A rules file may hold the new conditions; `rules remove` drops the rule with exactly the
+  conditions given.
+- **Mail sent to many is marked**: import puts mail with a List-Id, List-Unsubscribe or `Precedence: bulk`
+  header in the mailbox `memo:bulk` (accounts with rules), so `memo search mail '… NOT mailbox:bulk'`
+  leaves newsletters out. Search keeps them by default: bills and bookings carry the same headers.
+
+### Исправлено
+
+- **A rule's tag never fails the mail sync.** A Gmail label the store refused as too similar to an existing label
+  stopped the whole account's sync ("similar labels exist"). memo now puts the mail under the label the store
+  points to and rewrites the rule to it (`tags_reused`), or skips a tag with nothing to reuse (`tags_skipped`,
+  also shown by `memo mail rules list`). `memo mail rules import-filters` maps Gmail labels to existing memo labels
+  before proposing, and lists the mapping. Labels stored with capitals or a slash need cli-core's matching fix.
+
+- **An HTML page sent as the text part is read as text.** Some senders (airline itineraries among them) put HTML
+  in text/plain, and memo stored the markup. The next `memo sync` converts mail already stored, once per account.
+- HTML comments no longer leave their text and a stray `-->` in an email's text.
+- `memo search mail --account` takes the account's name, as the rules and `memo mail status` do, or its address.
+
 ## 0.41.0 — 15.10.2026
 
 ### Изменено — может затронуть скрипты

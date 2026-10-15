@@ -77,6 +77,8 @@ Cada grupo recibe una **puntuación** de parecido con spam, estafa o robot, con 
 | `brand_spoof` | 3 | Una marca como PayPal o Apple en el nombre visible, enviada desde otro dominio |
 | `young_domain` | 3 | El dominio tenía menos de 180 días al llegar el primer correo |
 | `reply_to_elsewhere` | 2 | Las respuestas van a un dominio distinto |
+| `never_opened` | 2 | No abriste ningún correo del grupo |
+| `dkim_not_passed` | 2 | La comprobación DKIM de Gmail falló en la mayoría del grupo |
 | `disposable_domain` | 2 | Dominio de correo desechable |
 | `bulk_never_replied` | 1 | Al menos un 80% de correo masivo y nunca escribiste al remitente |
 | `replied` | −5 | Escribiste al remitente |
@@ -105,6 +107,89 @@ El `--do` de una regla elige una de tres acciones:
 - `keep`: importa el correo aunque coincida con una regla de omisión o sobre.
 
 Conservar tiene prioridad sobre el sobre, y el sobre sobre omitir. Si eliminas una regla de sobre o la cambias por conservar, la siguiente sincronización leerá esos correos completos. El correo guardado antes de una regla permanece intacto.
+
+### Más condiciones, etiquetas y protección
+
+Además de `--sender`, `--domain` y `--list-id`, una regla admite una consulta `--filter` y un `--kind`.
+Deben cumplirse todas las condiciones indicadas:
+
+| En `--filter` | Correo que coincide |
+|---|---|
+| `from:<address>`, `from:<domain>` | de ese remitente o de ese dominio y sus subdominios |
+| `from:<word>` | la dirección o el nombre visible contiene la palabra, sin distinguir mayúsculas |
+| `to:<address>` | enviado a esa dirección en To o Cc |
+| `subject:<word>` o una palabra sola | el asunto contiene cada palabra, sin distinguir mayúsculas |
+| `older:<n>d` | recibido hace más de n días |
+| `larger:<size>` | tamaño en origen mayor que `5MB`, `300KB` o un número de bytes |
+| `has:attachment` | enviado como `multipart/mixed`: una estimación de adjuntos por la cabecera |
+| `label:<name>` | con esa etiqueta Gmail, como `label:Promotions` o `label:"Two words"` |
+| `is:unread` | nunca abierto |
+| `is:bulk` | masivo: tiene List-Id, List-Unsubscribe o `Precedence: bulk` |
+| `score:<n>` | la puntuación del remitente de arriba es al menos n |
+
+`--do` acepta una acción y cualquier número de etiquetas, separadas por comas: `skip`, `envelope`,
+`keep` o `protect`, más `tag:<name>`.
+
+```sh
+memo mail rules add work --filter 'label:Promotions older:365d' --do envelope
+memo mail rules add work --domain shop.example --do keep,tag:shopping
+memo mail rules add work --domain tax.gov.example --do protect
+memo mail rules list work --filter is:protected
+```
+
+- **`tag:<name>`** etiqueta cada correo coincidente, sea cual sea la regla que decida la acción. La sincronización
+  etiqueta el correo que guarda o registra; `memo mail rules apply`, el guardado antes. Si el almacén rechaza
+  una etiqueta por parecerse a otra, reutiliza esa y actualiza la regla (`tags_reused` en `--json`). Si no hay
+  ninguna que reutilizar, omite la etiqueta, guarda el correo y muestra `tags skipped` (`tags_skipped`) en la regla.
+  Una etiqueta rechazada nunca detiene la sincronización.
+- **`protect`** conserva el correo completo y fuera de toda limpieza, independientemente de otras reglas o tipos.
+  Una regla protegida tiene prioridad y siempre guarda todo: `memo mail rules apply` nunca recorta ese correo
+  y una limpieza posterior del buzón debe rechazarlo. Úsala para correo oficial, fiscal o bancario.
+  `memo mail rules list` muestra primero las reglas protegidas, como `PROTECTED`.
+- **`score:` y `--kind`** evalúan al remitente por el correo del mismo listado: si una sincronización solo enumera
+  correo nuevo, lo evalúan con ese correo.
+
+### Tipos de correo
+
+`--kind` nombra un tipo incorporado, por quién envía y cómo, en lugar de por tu lista de remitentes:
+
+| Tipo | Coincide con |
+|---|---|
+| `social` | notificaciones de redes sociales |
+| `newsletters` | listas con List-Id y List-Unsubscribe y servicios de boletines |
+| `developer` | notificaciones de alojamiento de código, CI, paquetes y seguimiento de errores |
+| `shopping` | tiendas y lo que Gmail clasifica como Promotions |
+| `alerts` | avisos de monitorización y disponibilidad |
+
+`memo mail probe` termina mostrando cuánto correo coincidiría con cada tipo. Nada se aplica hasta añadir una regla:
+
+```sh
+memo mail rules add work --kind social --do envelope
+```
+
+El correo de alguien a quien escribiste nunca coincide con un tipo, y una regla explícita gana a una de `--kind`.
+
+### Filtros de Gmail
+
+La exportación Mail de Google Takeout incluye los filtros de Gmail en `Mail/User settings/Filters.json`.
+Memo propone una regla por cada filtro que puede expresar:
+
+```sh
+memo mail rules import-filters work Filters.json        # shows the proposed rules and the skipped filters
+memo mail rules import-filters work Filters.json --yes  # adds them
+```
+
+Primero compara las etiquetas Gmail que añade el filtro con las de Memo: reutiliza el mismo nombre con otras
+mayúsculas y propone una etiqueta parecida en lugar de crear otra. La propuesta muestra cada cambio como `label … → …`.
+
+Un filtro que omite Recibidos, marca como leído o elimina se convierte en una regla de sobre; uno que solo añade
+una etiqueta, en una regla de conservación con esa etiqueta. Varios remitentes o destinatarios
+(`from:a from:b`, `from:(a OR b)`) se convierten en reglas separadas: un correo no puede proceder de ambos.
+Las palabras del filtro pasan a buscarse en el asunto: Gmail buscaba en todo el correo, Memo solo en el asunto,
+y el motivo de la regla lo indica. Los filtros que excluyen palabras o usan campos no admitidos (`list:`, `size:`)
+se omiten y enumeran. Lee Takeout `{"filter": [{query, labelsToAdd, labelsToRemove}]}`, la forma de la API Gmail
+(`criteria` y `action`) y las propiedades planas de la exportación de ajustes (`from`, `shouldArchive`, `label`).
+Una etiqueta indicada solo por su id Gmail se etiqueta con ese id.
 
 El correo guardado completo antes de una regla de sobre sigue completo hasta que lo recortes:
 
@@ -136,16 +221,19 @@ Gmail limita la descarga diaria por IMAP; para años de correo es más rápido u
 memo sync --account archive --since-time 2000-01-01 --limit 5000
 ```
 
-El archivo solo se lee al nombrar esa cuenta; cada ejecución lo lee entero. Solo añade correo: lo que falta en el archivo no se elimina del almacén, y se omiten Spam y Papelera.
+El archivo solo se lee al nombrar esa cuenta. Una importación incompleta lo vuelve a recorrer; un archivo completado se omite hasta que cambie su tamaño o fecha de modificación. `--rescan` fuerza otro recorrido. Solo añade correo: lo que falta en el archivo no se elimina del almacén, y se omiten Spam y Papelera.
 
 ## Encontrar tu correo
 
 ```sh
 memo search mail 'invoice'
 memo search mail 'from:kai subject:budget'
-memo search mail 'mailbox:starred' --account you@example.com
+memo search mail 'mailbox:starred' --account work
+memo search mail 'trip NOT mailbox:bulk'
 memo search all 'budget'
 ```
+
+El correo masivo — boletines, avisos y listas con List-Id, List-Unsubscribe o `Precedence: bulk` — está en la carpeta `bulk` (`memo:bulk`). `NOT mailbox:bulk` lo excluye de la búsqueda. Se incluye por defecto porque facturas y reservas llevan las mismas cabeceras. Memo lo marca al leer cabeceras de una cuenta con reglas; un listado completo, al menos diario, marca también correo guardado antes. `--account` acepta el nombre de la cuenta o su dirección.
 
 Las etiquetas de Gmail, como Recibidos, Importantes, Destacados y tus propias etiquetas, se convierten
 en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
@@ -157,7 +245,7 @@ en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
 - Si un correo está leído o destacado, tal como lo muestra tu buzón.
 - El texto de los adjuntos legibles, que se busca junto con el correo. Los adjuntos PDF y Word
   necesitan los [lectores opcionales](./notes.md#files-memo-can-read). Después de instalarlos,
-  ejecuta `memo sync --account work --retry-attachments` para leer los adjuntos que se omitieron.
+  ejecuta `memo sync --account work --retry-attachments` para leer los adjuntos que se omitieron. Solo vuelve a leer, por id Gmail, los correos cuyo adjunto quedó sin leer por falta de lector, hasta `--limit`. No lista el buzón; al repetir continúa con el resto.
 - Hasta 1.000.000 de caracteres de cada correo y 200.000 de cada adjunto
   ([cambiar los límites](./configuration.md#mail)).
 

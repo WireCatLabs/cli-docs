@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en las guías correspondientes.
+
+## 0.21.0 — 15.10.2026
+
+### Añadido
+
+- `batch <file>` runs bounded stored word searches and passage reads with one store connection and
+  one bounded index pass. JSON/JSONL keeps independent request IDs, answers, errors, cursors and
+  coverage; text and Markdown reuse compact passages. File and stdin input are validated before
+  the store opens. Read and output budgets retain every input, including those not run.
+
 ## 0.20.1 — 15.10.2026
 
 ### Corregido
