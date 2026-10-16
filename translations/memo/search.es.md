@@ -58,12 +58,12 @@ están escritas.
 
 ```sh
 memo search notes 'budget' --filter 'tag:work'          # only notes with a tag
-memo search notes 'budget' --folder /path/to/notes       # only one folder
-memo search notes 'budget' --type internal               # only notes you wrote in Memo
+memo search notes 'budget' --source notes:2              # only one folder, by the id a hit shows
+memo search notes 'budget source:internal'               # only notes you wrote in Memo
 memo search notes 'budget' --filter 'date:2026-10-08'    # and a second condition
 ```
 
-`--type file` muestra solo notas de archivos. Los resultados llegan de 20 en 20; si hay más, `--page 2` abre la siguiente página, cuyo número figura en `page.next_page`.
+`source:file` muestra solo notas de archivos. El campo de consulta `source:` indica el origen de la nota; la opción `--source` elige las carpetas donde buscar. Los resultados llegan de 20 en 20; `--page 2` abre la siguiente página y `page.next_page` indica su número.
 
 ## Buscar en el correo
 

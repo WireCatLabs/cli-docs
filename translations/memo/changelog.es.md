@@ -10,6 +10,152 @@ Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las
 
 ## Sin publicar
 
+## 0.55.0 — 17.10.2026
+
+### Fixed
+
+- **Import, `memo mail inspect` and `memo mail rules apply` find Gmail's All Mail by its role**, as cleanup already
+  did: Gmail names it in the account's language (`[Gmail]/Todos` in Spanish), so an account not in English failed
+  with a missing folder. A `folders` list in the config still wins.
+
+## 0.54.0 — 16.10.2026
+
+### Changed — may break scripts
+
+- **`memo search notes` takes the note's source in the query: `'budget source:internal'`, not `--type internal`.**
+  `source:file` keeps the notes from folders. `--type` is gone, with no alias. The field is named `source:` as in
+  `memo notes list` and the note's `source` in `--json`. It works under OR and NOT and in `--filter` too. The
+  `--source notes:<folder id>` option still chooses which folders are read. 0.53.0 on npm still has `--type`: it was
+  published before this change.
+- cli-core 0.303.0.
+
+### Fixed
+
+- **`bin/release` restarts itself once when the release brings a newer `bin/release`**: folding the changelog and
+  raising the version both fast-forward `main`, and the shell went on reading the old script from the byte it had
+  reached, so the rest of the run was a mix of old and new text. It now starts the new script over with the same
+  arguments; a second change during that run stops it with `run it again`. The restart also works when
+  `bin/release` was started from another folder by a relative path. Only the repository's own release is affected;
+  the published package does not change.
+
+## 0.53.0 — 16.10.2026
+
+### Changed — may break scripts
+
+- **`memo search notes` takes the note type in the query: `'budget type:internal'`, not `--type internal`.**
+  `type:file` keeps the notes from folders. `--type` is gone, with no alias. The field works under OR and NOT and
+  in `--filter` too.
+- cli-core 0.302.0.
+
+### Fixed
+
+- **`memo mail restore` counts the mail it brings back in the store again.** It left the mail marked deleted, so the
+  next `memo mail trash` could not see it and picked other mail, and a new protect rule did not apply to it. Restore
+  now also counts again a run's mail found back in All Mail, so a run restored by an older memo or by hand in Gmail
+  is set right by running restore once more.
+- cli-core 0.301.0.
+
+## 0.52.1 — 16.10.2026
+
+### Changed
+
+- **memo starts about a fifth faster after its first run.** It keeps Node's compiled code in a cache, in the
+  system's temporary folder (`NODE_COMPILE_CACHE` moves it): `memo --help` went from about 0.70 to 0.54 seconds.
+- cli-core 0.299.0.
+
+## 0.52.0 — 16.10.2026
+
+### Added
+
+- **`memo mail trash --since-time <time>` leaves older mail in Gmail, whatever its rule says.** For keeping old
+  years while newer junk is cleaned up; such mail is counted as kept `before_since`, and JSON adds `since`.
+
+## 0.51.0 — 16.10.2026
+
+### Fixed
+
+- **`memo mail trash` and `restore` find Gmail's Trash by its role, not its English name.** Gmail names folders in
+  the account's language, so in UK English Trash is `[Gmail]/Bin`; every move to `[Gmail]/Trash` failed and nothing
+  moved. memo now asks Gmail which folders are All Mail and Trash (RFC 6154 `\All`, `\Trash`).
+- **A missing folder is reported as missing, not as Gmail throttling.** Gmail adds `[THROTTLED]` to answers that
+  fail for other reasons (`NO [NONEXISTENT] Unknown Mailbox … [THROTTLED]`), so memo said "try again in an hour"
+  for a folder that does not exist.
+
+## 0.50.0 — 16.10.2026
+
+### Fixed
+
+- **`memo mail trash` decides from the store and asks Gmail only about the emails it moves.** It re-read every
+  header in All Mail first (about 260k emails), which took minutes and twice ran the account into Gmail's IMAP
+  throttle before one email moved. Rules and replied-to senders now come from the store (cli-core
+  `mail.emailFacts`); the picked emails' labels and stars are read again just before the move, and a batch is
+  checked with one `UID SEARCH` instead of one lookup per email.
+- **`memo mail restore` brings back a batch Gmail moved without confirming it.** It restored only batches whose
+  move was answered OK; a move Gmail made but answered with a throttle could not be undone by memo.
+
+## 0.49.0 — 16.10.2026
+
+### Added
+
+- **`memo messages show` gives each attachment's extracted text**, next to the name the email lists, so a bill's
+  amount reads in one call. Each text is cut at the first 4,000 characters; `--full` gives the whole of it. JSON
+  adds `text`, `text_chars` and `text_cut` to each attachment, or `extraction` (why there is no text: a scan
+  `needs-agent`, `unsupported`, …).
+
+### Fixed
+
+- **`memo search mail` with `mailbox:` or `NOT mailbox:bulk` answers in under a second**: on a 257k-email store
+  `London NOT mailbox:bulk` took 67 s and failed with `query.too-large` (cli-core 0.295.0).
+- **An email address works unquoted**: `from:alice@example.com`, `to:` and `cc:` failed with
+  `query.unsupported-operator`; cli-base 0.40.0 reads `user@host.tld` as one word.
+
+## 0.48.0 — 16.10.2026
+
+### Added
+
+- **`memo mail trash <account>` moves envelope mail to Gmail's Trash**, after deciding each email again with today's
+  rules and labels. It keeps mail a protected or keep rule matches, mail from senders you replied to, starred,
+  important, sent and labelled mail, and mail under 30 days old. A preview unless `--yes`; a first run moves at most
+  100, later runs 5,000; `--yes` needs a store backup under 8 days old (`backups/last.json` beside the store). Every
+  moved email's labels go to a restore log first. **`memo mail restore <account> --run <id>`** moves a run back
+  within Gmail's 30 days, and **`memo mail runs <account>`** lists runs. `memo doctor` shows the backup, whether a
+  Takeout mbox is imported, and runs that stopped or are close to their 30 days.
+
+### Fixed
+
+- **Release scripts report observed lock holders separately from stale release labels.** Shared
+  diagnostics no longer attribute a live lock to a previous run; wait for the holders to finish, then
+  retry.
+
+## 0.47.0 — 16.10.2026
+
+### Added
+
+- **`memo search mail` finds a letter by its whole link and by a part of a link**, also a tracking link that mail
+  keeps only as its site: `url:"https://news.example.com/click?id=1"`, `link:"/click?id=1"`. Quote both: `?`, `/`
+  and `=` mean something else in a query. cli-core 0.294.0.
+
+## 0.46.0 — 16.10.2026
+
+### Changed
+
+- **`memo mail probe` is now `memo mail inspect`.** Same command and output; `inspect` is the shared word for
+  looking at a source before taking anything from it, as `tg chats inspect` looks at a link before joining.
+- **`memo search notes` names folders with `--source`, as `tg search notes` does.** `--source notes:<folder id>`
+  (the id a hit shows), `notes:internal` for notes written in Memo, comma-separated for more. `--folder` is gone,
+  and a folder path is no longer accepted: use its id from `memo folders list`. An entry naming no notes account
+  is reported on stderr and the rest is still searched.
+- **`memo search memories` narrows by scope in the query: `memo search memories friday scope:work`.** `--scope` is
+  gone. The query is words and at most one `scope:`, joined by AND; `OR`, `NOT` and other fields are refused
+  rather than filtered after the search. The MCP `search memories` tool lost its `scope` argument the same way.
+
+### Fixed
+
+- **A failed mail listing says why.** himalaya 2.2 prints its error on stdout, so memo reported "no error text"; the
+  failed line now carries himalaya's `Error:` report, and a `[THROTTLED]` in it is `mail.throttled`.
+- **A read that fails once is tried again** after 15 s (`MEMO_HIMALAYA_RETRY_MS`); IMAP commands that write are never
+  repeated.
+
 ## 0.45.0 — 16.10.2026
 
 ### Corregido

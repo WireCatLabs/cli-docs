@@ -221,7 +221,7 @@ stored emails; tg and max read messenger messages
 
 ### `memo messages show`
 
-one stored email, whole, and the emails of its thread around it
+one stored email whole, with its attachments' text and nearby thread emails
 
 ```sh
 memo messages show <message> [options]
@@ -235,18 +235,19 @@ memo messages show <message> [options]
 |---|---|
 | `--before-n <n>` | also this many earlier emails of its thread. Default: `0`. |
 | `--after-n <n>` | also this many later emails of its thread. Default: `0`. |
+| `--full` | whole attachment text, not the first 4000 characters of each. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 ## `memo mail`
 
 look at a mail account before importing it, and the owner's rules
 
-### `memo mail probe`
+### `memo mail inspect`
 
 group an account's mail by sender and list, to decide what to keep or skip
 
 ```sh
-memo mail probe <account> [options]
+memo mail inspect <account> [options]
 ```
 
 | Argument | | What it is |
@@ -266,6 +267,63 @@ how far an account's import is: mail stored, recorded, and left to read
 
 ```sh
 memo mail status <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo mail trash`
+
+move envelope mail to Gmail's Trash, decided again; dry run unless --yes
+
+This command can send data to the configured AI provider.
+
+```sh
+memo mail trash <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | most emails to move this run (default 5000; a first run moves at most 100). |
+| `--since-time <time>` | only mail received from this time, ISO 8601 or 30d ago; older mail stays. |
+| `--yes` | move the mail; without it, only say what would move. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo mail restore`
+
+move a cleanup run's mail back from Gmail's Trash; dry run unless --yes
+
+This command can send data to the configured AI provider.
+
+```sh
+memo mail restore <account> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | required | the account's name in mail.accounts, or its address. |
+
+| Option | What it does |
+|---|---|
+| `--run <id>` | the run, as memo mail runs lists it. |
+| `--yes` | move the mail back; without it, only say what would move. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo mail runs`
+
+an account's cleanup runs, how much moved, and until when restorable
+
+```sh
+memo mail runs <account> [options]
 ```
 
 | Argument | | What it is |
@@ -1771,9 +1829,8 @@ memo search notes <query> [options]
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
 | `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
-| `--type <type>` | file or internal. |
 | `--filter <query>` | another query every note must match. |
-| `--folder <folder>` | only this folder, by its id or path; repeat for more. |
+| `--source <accounts>` | only these notes accounts, separated by commas: notes:internal for notes written in memo, notes:<folder id> as a hit shows it, notes or group:<name>. |
 | `--page <n>` | which page, from 1. Default: `1`. |
 | `--project <project>` | rank the key documents of this project (id, key or project:<id>) first, labelled key; nothing is left out. |
 
@@ -1782,16 +1839,15 @@ memo search notes <query> [options]
 memories holding every word, best first
 
 ```sh
-memo search memories <words> [options]
+memo search memories <query> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `words` | required | the words to find. |
+| `query` | required | the words to find; scope:personal or scope:work narrows them. |
 
 | Option | What it does |
 |---|---|
-| `--scope <scope>` | personal or work. |
 | `--limit <n>` | most memories, up to 500. Default: `20`. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 

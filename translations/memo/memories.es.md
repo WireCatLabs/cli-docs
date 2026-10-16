@@ -42,7 +42,7 @@ reuniones que lo demuestran. Tiene un tipo y un ámbito:
 memo memories add 'Kai Sample prefers Friday meetings' --kind preference --scope work --evidence note:12
 memo memories list kind:preference scope:work
 memo memories show memory:3
-memo search memories friday meetings
+memo search memories friday meetings scope:work
 memo memories confirm memory:3
 memo memories stale memory:3
 ```

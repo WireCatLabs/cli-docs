@@ -2027,30 +2027,5 @@
         }
       ]
     }
-  },
-  {
-    "tool": "memo",
-    "slug": "mail",
-    "reason": "Memo 0.45.0 adds protect and tags in the following section; the earlier three-actions sentence otherwise falsely excludes the released fourth action. Exact released mail rules add help lists skip, envelope, keep and protect.",
-    "replacements": {
-      "en": [
-        {
-          "before": "A rule's `--do` is one of three actions:",
-          "after": "The basic `--do` actions are listed below; protection and tags follow in the next section:"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`--do` правила задаёт одно из трёх действий:",
-          "after": "Основные действия `--do` перечислены ниже; защита и теги описаны в следующем разделе:"
-        }
-      ],
-      "es": [
-        {
-          "before": "El `--do` de una regla elige una de tres acciones:",
-          "after": "Las acciones básicas de `--do` se muestran abajo; la protección y las etiquetas se explican en la siguiente sección:"
-        }
-      ]
-    }
   }
 ]

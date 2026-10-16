@@ -2,18 +2,18 @@
 title: "Seguridad"
 ---
 
-Esta página explica qué lee Memo, qué escribe y qué puede salir de tu ordenador, para que decidas a
-qué le das acceso. En resumen: Memo lee tus fuentes y nunca las cambia, todo lo que añade se queda en
-un archivo de tu ordenador, y tu texto solo va a un proveedor de IA cuando configuras uno y lo
-permites.
+Aquí verás qué lee y escribe Memo y qué puede salir del ordenador, para elegir tus fuentes. La importación las deja intactas; los comandos de limpieza de Gmail pueden mover correo con `--yes`. Memo guarda sus registros en tu ordenador y envía texto a un proveedor de IA solo cuando lo configuras y lo permites.
 
-## Tus fuentes solo se leen
+<a id="your-sources-are-only-read"></a>
+<a id="tus-fuentes-solo-se-leen"></a>
+
+## La importación deja intactas tus fuentes
 
 - Las **carpetas de notas** solo se leen. Las carpetas ocultas como `.obsidian` se omiten. Memo solo
   escribe archivos cuando exportas notas, en la carpeta que indiques, y nunca sobrescribe un archivo
   que editaste.
-- **Tu buzón** se abre solo para lectura. Memo nunca envía, mueve, borra ni marca con indicadores el
-  correo, y no lo marca como leído.
+- **La importación de correo** abre el buzón solo para lectura y no marca correo como leído. Memo nunca envía correo.
+- **La limpieza de Gmail** es independiente: `memo mail trash` y `memo mail restore` muestran una vista previa sin `--yes`. La limpieza mueve el correo elegido a la Papelera de Gmail; Gmail lo elimina definitivamente a los 30 días. La restauración devuelve el correo de una ejecución registrada mientras siga en la Papelera. La limpieza requiere una copia reciente del almacén y nunca se ejecuta desde el temporizador. Consulta [la limpieza de Gmail](./mail.md#clean-up-gmail).
 - Las **etiquetas** dejan tus archivos, las etiquetas de Gmail y los indicadores del buzón tal como
   están.
 
@@ -42,4 +42,4 @@ carpeta o de un buzón, no borra nada y te avisa.
 
 - `memo ask` prepara fuentes para tu agente. Solo las envía a un proveedor con `--analyze` y, si es externo al equipo, también `--allow-remote`. La respuesta generada debe comprobarse con las fuentes.
 - Lo que tu agente haga con el texto depende de él y su proveedor; Memo no puede controlarlo. Dale acceso solo a fuentes que quieras compartir.
-- `memo mail probe --domain-age` consulta a los registros cuándo se registró un dominio remitente. Cada consulta comunica un nombre de dominio a un registro; la respuesta se guarda en el equipo. Sin el indicador, probe no consulta a nadie.
+- `memo mail inspect --domain-age` consulta a los registros cuándo se registró un dominio remitente. Cada consulta comunica un nombre de dominio a un registro; la respuesta se guarda en el equipo. Sin el indicador, inspect no consulta a nadie.

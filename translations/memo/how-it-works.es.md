@@ -20,8 +20,9 @@ mensajes, correo y notas a la vez.
 | Archivos de tus carpetas de notas | `memo sync --only notes` o `memo sync` |
 | Tus propias notas, etiquetas, tareas, recuerdos y hechos | Memo, cuando tú o tu agente los añadís |
 
-Memo nunca cambia el original: tus archivos se quedan como están, y tu buzón se abre solo para
-lectura. El almacén local guarda una copia de su texto.
+La importación deja los originales intactos: los archivos no cambian y el buzón se abre solo para lectura.
+El almacén local conserva una copia del texto. Los [comandos de limpieza de Gmail](./mail.md#clean-up-gmail)
+mueven el correo elegido a la Papelera o lo restauran solo con `--yes`; el temporizador nunca ejecuta la limpieza.
 
 ## Qué hace una importación
 
