@@ -10,10 +10,7 @@ duplicados con un ejemplo resuelto. Para el uso diario, empieza por [Tareas](./t
 
 El diseño viene del plan de tareas aprobado en cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). Todo está ya hecho
-en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` lo tiene todo. `max` lo tiene todo
-salvo los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías
-fuera de la lista y la lectura de los mensajes vinculados en la detección de duplicados. `memo` tampoco
-tiene eso; tiene categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
+en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` y `max` lo tienen todo. `memo` no tiene los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías fuera de la lista ni la lectura de mensajes vinculados en la detección de duplicados; tiene categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
 aún no `tasks categories`, la reserva, `tasks related`, `tasks duplicates` ni `tasks merge`.
 
 ## Los datos
@@ -105,7 +102,7 @@ agente web, pasa el id de su chat con `--holder`.
 
 ## Cierres de un agente
 
-Por ahora solo `tg` tiene los cierres de agente por certeza.
+Los cierres de agente por certeza están disponibles en `tg` y `max`.
 
 Un cierre no se puede deshacer (solo `tasks unmerge` reabre una tarea, y solo una que cerró una
 fusión), así que un cierre del que un agente no está seguro espera al propietario. `tasks close`
@@ -168,7 +165,7 @@ actual. Una categoría que salió de la lista mientras las tareas aún la llevan
 líneas, y `tasks agenda` nombra las que llevan las tareas abiertas (`unlisted_categories`).
 `tasks list category:<name>` encuentra sus tareas, y `tasks plan <task> --category <name>` mueve una.
 
-La lista por defecto en `tg`:
+La lista por defecto en `tg` y `max`:
 
 | Categoría | Significado |
 | --- | --- |

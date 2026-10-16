@@ -10,9 +10,7 @@ use, start with [Tasks](./tasks.md).
 
 The design comes from the approved tasks plan in cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). All of it is built
-in cli-core except the parts marked **not built yet**. `tg` has all of it. `max` has all of it except
-agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and the
-duplicate check's reading of linked messages. `memo` lacks those too; it has categories
+in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
 (`tasks plan --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
 `tasks categories`, claims, `tasks related`, `tasks duplicates` or `tasks merge`.
 
@@ -100,7 +98,7 @@ that is set wins: `--holder <name>`, the `WIRECAT_HOLDER` variable, `claude-code
 
 ## Agent closes
 
-Only `tg` has agent closes by certainty so far.
+Both `tg` and `max` support agent closes by certainty.
 
 A close cannot be undone (only `tasks unmerge` reopens a task, and only one a merge closed), so a close
 that an agent is unsure of waits for the owner. `tasks close` tells an agent from the owner as
@@ -156,7 +154,7 @@ total task counts (MCP `tasks_categories` too), a `config set` or `unset` of `ta
 note with the same lines, and `tasks agenda` names the ones open tasks carry (`unlisted_categories`).
 `tasks list category:<name>` finds their tasks, and `tasks plan <task> --category <name>` moves one.
 
-The default list in `tg`:
+The default list in `tg` and `max`:
 
 | Category | Meaning |
 | --- | --- |

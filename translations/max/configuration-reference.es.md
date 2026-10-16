@@ -53,7 +53,7 @@ El comando imprime el perfil seleccionado **y de dónde vino**, la ruta al archi
 
 Cada ajuste indica su origen: `flag`, `default` o `config file:` con la clave, como `config file: bot.profiles.test`. El perfil muestra `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: default_profile` o `none named`: no se nombró ningún perfil, y entonces `profile` es `null`.
 
-Con `--json`, la respuesta también incluye `store_settings`: los ajustes del archivo compartido (`search_stemmers.*`) y su origen, `store` o `default`.
+Con `--json`, la respuesta también incluye `store_settings`: los ajustes del archivo compartido (`search_stemmers.*`, `task_agent_close*`) y su origen, `store` o `default`.
 
 `--bot` muestra las configuraciones tal como las recibirá `max <имя> bot …`: el bot tiene su propia sección y su propio límite de envío. Si el archivo no existe, al cargar la configuración primero se crea uno con los valores predeterminados habituales. El archivo existente no se sobrescribe. Si se configura una de las variables `MAX_*_DIR`, el comando lo dirá en stderr: con ellas, el perfil tiene una entrada diferente en el llavero, y un inicio de sesión realizado sin ellas parece "sin sesión".
 
@@ -121,6 +121,7 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_ru
 | `analysis_base_url` |dirección API de análisis| `build --base-url` |por servicio|
 | `models` |modelos externos por propósito ([abajo](#модели-по-назначению))|variables `MAX_MODELS_*`|No|
 | `search_stemmers.cyrillic`, `search_stemmers.latin` |Lenguajes de raíces de palabras para buscar en todo el archivo general ([abajo](#языки-поиска))| — | `russian`, `english,spanish` |
+| `task_agent_close`, `task_agent_close_min` | Si un agente cierra tareas y con qué confianza de `--certainty`; por debajo del umbral queda abierta con una sugerencia de cierre ([tareas](./groups.md#что-ждёт-вашего-ответа)). Compartidos por todo el archivo | — | `on`, `0.8` |
 
 ⚠ **`timeout_ms` y `--timeout` son distintos.** `timeout_ms` limita la espera de **una respuesta** de MAX. `--timeout` limita **todo el comando**. Una lectura incluye conexión, INIT, LOGIN, resolución del nombre del chat y la propia petición, por lo que su duración puede ser varias veces `timeout_ms`.
 
@@ -276,6 +277,8 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 | `models` |objeto de asignación de modelo; Los campos se describen a continuación.|perfil|
 | `search_stemmers.cyrillic` | `russian`, `none` |archivo general, vía `config set`|
 | `search_stemmers.latin` |`english`, `spanish`, ambos separados por comas, `none`|archivo general, vía `config set`|
+| `task_agent_close` | `on`, `off` | archivo compartido, mediante `config set` |
+| `task_agent_close_min` | un número de 0 a 1 | archivo compartido, mediante `config set` |
 
 ### Modelos por tarea
 

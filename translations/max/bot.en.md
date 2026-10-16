@@ -316,7 +316,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.55.0/docs/dev/bot-api-coverage.md).
+Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.56.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
@@ -354,9 +354,6 @@ The agent can access what the bot profile permits: the bot, chats it has seen, m
 - to allow only sends and comments, set `permissions.bot: readonly`, then `permissions.bot.messages.send: allow`; check for other more specific permissions;
 - Deleting a message or comment defaults to level `ask`: the requested write is allowed without a server confirmation form; `deny` and `readonly` forbid it.
 - Actions that chat rules require you to confirm remain plans for the owner.
-- Older confirmation flags do not change access.
-
-`--allow-send`, `--allow-delete` and `--allow-moderate` do not control permissions; the server accepts them with a warning.
 
 Every write runs the command you would type yourself and checks the bot's recipient list, `permissions` and journal. The agent cannot access the token or webhooks. It can read the recipient list, command menu and administrators but cannot change them; leaving chats, sending files and `bot api` are also unavailable to it.
 

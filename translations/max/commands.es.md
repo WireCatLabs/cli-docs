@@ -2571,7 +2571,7 @@ max tasks release <task> [options]
 
 ### `max tasks close`
 
-cerrar una tarea: done o dismissed si no necesita respuesta; una tarea cerrada permanece cerrada, salvo que tasks unmerge reabra una fusionada
+cerrar una tarea: done o dismissed si no necesita respuesta. Un agente (AI_AGENT o CLAUDECODE definidos) indica --certainty; por debajo de task_agent_close_min, o con task_agent_close off, la tarea queda abierta hasta que el propietario confirme con tasks close o rechace con tasks reject. Una tarea cerrada permanece cerrada, salvo que tasks unmerge reabra una fusionada
 
 **Cambia algo solo en este ordenador.**
 
@@ -2581,12 +2581,32 @@ max tasks close <task> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `task` | obligatorio |ID de la tarea, como aparece en tasks list.|
+| `task` | obligatorio | el id o la clave de la tarea, como la muestra tasks list. |
 
 | Opción | Para qué sirve |
 |---|---|
-| `--as <state>` | cómo se cierra: done o dismissed — no necesita respuesta. |
+| `--as <state>` | cómo se cierra: done o dismissed — no necesita respuesta; el propietario puede omitir el estado para confirmar el cierre del agente. |
 | `--reason <text>` | el motivo, guardado con la tarea — no-reply-needed, por ejemplo. |
+| `--certainty <n>` | confianza del agente, de 0 a 1, en que la tarea no necesita nada más. |
+| `--as-owner` | cerrar como propietario aunque se ejecute desde la terminal del agente (AI_AGENT o CLAUDECODE definidos). |
+
+### `max tasks reject`
+
+rechazar el cierre sugerido por un agente: la tarea queda abierta y sale de close:suggested; el agente puede volver a proponer su cierre
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max tasks reject <task> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el id o la clave de la tarea, como la muestra tasks list. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--as-owner` | rechazar como propietario aunque se ejecute desde la terminal del agente (AI_AGENT o CLAUDECODE definidos). |
 
 ## `max conversations`
 
@@ -4172,7 +4192,7 @@ max config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
 | `value` | obligatorio | un número, true o false, o una lista como contacts,polls. |
 
 | Opción | Para qué sirve |
@@ -4193,7 +4213,7 @@ max config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -5118,37 +5138,15 @@ max bot store fetch <chat> [options]
 
 ### `max bot mcp`
 
-servir este bot a un agente a través de MCP, en stdin y stdout - `claude mcp add sales-bot -- max sales bot mcp`
-
-**Cambia algo en MAX.**
-
-```sh
-max bot mcp [options]
-```
-
-| Opción | Para qué sirve |
-|---|---|
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` | ya no se usa — deciden los permisos del perfil; se mantiene para que una configuración antigua siga arrancando. |
-| `--allow-delete` | ya no se usa — deciden los permisos del perfil. |
-| `--allow-moderate` | ya no se usa — deciden los permisos del perfil. |
+ofrecer este bot a un agente mediante MCP por entrada y salida estándar — `claude mcp add sales-bot -- max sales bot mcp`
 
 #### `max bot mcp config`
 
-imprima la entrada mcpServers para Claude Desktop, Cursor y otros, con las rutas completas; no escribe nada
+mostrar la entrada mcpServers para Claude Desktop, Cursor y otros, con rutas completas; no escribe nada
 
 ```sh
-max bot mcp config [options]
+max bot mcp config
 ```
-
-| Opción | Para qué sirve |
-|---|---|
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` | ya no se usa — deciden los permisos del perfil; se mantiene para que una configuración antigua siga arrancando. |
-| `--allow-delete` | ya no se usa — deciden los permisos del perfil. |
-| `--allow-moderate` | ya no se usa — deciden los permisos del perfil. |
 
 ### `max bot me`
 

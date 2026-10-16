@@ -74,10 +74,10 @@ max work mcp config
 ```json
 {
   "mcpServers": {
-    "max": {
+    "max-personal": {
       "type": "stdio",
       "command": "C:\\Program Files\\nodejs\\node.exe",
-      "args": ["C:\\Users\\you\\AppData\\Roaming\\npm\\node_modules\\@wirecat\\max-cli\\dist\\bin\\max.js", "mcp"]
+      "args": ["C:\\Users\\you\\AppData\\Roaming\\npm\\node_modules\\@wirecat\\max-cli\\dist\\bin\\max.js", "personal", "mcp"]
     }
   }
 }
@@ -85,13 +85,13 @@ max work mcp config
 
 Check profile permissions before connecting the agent, then insert the entry into the application's `mcpServers` configuration. Claude Desktop uses `%APPDATA%\Claude\claude_desktop_config.json` on Windows and `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS; Cursor uses `~/.cursor/mcp.json`. The command writes nothing itself.
 
-Entries use full paths because an application launched outside a terminal does not inherit its `PATH`. On Windows, `max` is `max.cmd`, which cannot run without a shell. The `--permission` and `--yes` flags are included. `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE` and `XDG_RUNTIME_DIR` are included only when set; tokens are never included. `MAX_CACHE_DIR` covers only the old cache; `MESSAGING_STORE` sets the shared local archive. Passing the archive and keyring communication paths lets desktop applications use the same login and saved messages as the terminal.
+Entries use full paths because an application launched outside a terminal does not inherit its `PATH`. On Windows, `max` is `max.cmd`, which cannot run without a shell. The `--permission` flags are included, with the profile before `mcp`. `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE`, `XDG_RUNTIME_DIR` and the file limits `MESSAGING_ATTACHMENT_MAX_MIB`, `MESSAGING_PDF_PREVIEW_MAX_PIXELS`, `MESSAGING_PDF_PREVIEW_MAX_MIB`, `MESSAGING_BATCH_MAX_ERROR_PERCENT` are included only when set; tokens are never included. `MAX_CACHE_DIR` covers only the old cache; `MESSAGING_STORE` sets the shared local archive. Passing the archive and keyring communication paths lets desktop applications use the same login and saved messages as the terminal.
 
 With nvm, fnm or Volta, the Node path points to one version. Run `max personal mcp config` again after changing that version. The command refuses to run from `npx`, whose cache cleanup would remove the saved path.
 
 ⚠ **`MAX_CONFIG_DIR`, `MAX_STATE_DIR` and `MAX_CACHE_DIR` change where login data is found.** If set in the terminal but not in the MCP application, or vice versa, the server can report “no session” while terminal `max` works. Set them consistently or leave them unset everywhere.
 
-Bots have their own server, `max <имя> bot mcp`; see [a bot for your agent](./bot.md#бот-для-агента-mcp). Bot-profile `permissions` controls access. Its legacy `--allow-send`, `--allow-delete` and `--allow-moderate` flags produce a warning and enable nothing.
+Bots have their own server, `max <имя> bot mcp`; see [a bot for your agent](./bot.md#бот-для-агента-mcp). Bot-profile `permissions` controls access.
 
 ## What your agent may do
 
@@ -144,9 +144,9 @@ The `link-conversations` request lets an agent link replies into discussions. It
 
 ## Files and saved messages
 
-`max_read` (`command: "attachments list"`) shows saved file paths and text status; `max_write` (`command: "attachments text set"`) saves text read by the agent for `content:` search. Extraction runs only in the terminal. `max_read` with `command: "messages context"` and `arguments: { offline: true }` reads only the local archive.
+`max_read` (`command: "attachments list"`) shows saved-file paths and text status; `max_write` (`command: "attachments text set"`) saves text the agent read from a file for `content:` search. `max_write` (`command: "attachments extract"`) extracts text from saved files in batches through `cursor`, without returning that text in its answer. `max_read` with `command: "messages context"` and `arguments: { offline: true }` reads only the local archive.
 
-MAX has no Telegram-style topics, so there are no `max_topics_*` tools. Direct transcription can return a saved transcript from the same model. Photos use MAX previews selected by `index`, limited to 512 KB. Models never download automatically. The server releases its connection before local recognition; it closes the search component on shutdown.
+MAX has no Telegram-style topics, so there are no `topics …` commands. Voice is transcribed by a model on this computer. A photo is selected through `index` and returned only if it is no larger than 512 KB. Models never download automatically. The server releases its connection before local recognition; the search model closes on server shutdown.
 
 ## Connection lifecycle
 

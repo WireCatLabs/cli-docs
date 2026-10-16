@@ -2564,7 +2564,7 @@ max tasks release <task> [options]
 
 ### `max tasks close`
 
-close a task: done, or dismissed when it needs no answer; a closed task stays closed, unless tasks unmerge reopens a merged one
+close a task: done, or dismissed when it needs no answer. An agent (AI_AGENT or CLAUDECODE set) states its --certainty; below config task_agent_close_min, or with task_agent_close off, the task stays open and the close waits on the owner, who confirms it with tasks close or refuses it with tasks reject. A closed task stays closed, unless tasks unmerge reopens a merged one
 
 **Changes something on this computer only.**
 
@@ -2574,12 +2574,32 @@ max tasks close <task> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `task` | required | the task's id, as tasks list shows it. |
+| `task` | required | the task's id or key, as tasks list shows it. |
 
 | Option | Purpose |
 |---|---|
-| `--as <state>` | how it is closed: done, or dismissed — it needs no answer. |
+| `--as <state>` | how it is closed: done, or dismissed — it needs no answer; the owner may leave it out to confirm an agent's close. |
 | `--reason <text>` | why, kept with the task — no-reply-needed, for example. |
+| `--certainty <n>` | an agent's: how sure it is, 0 to 1, that the task needs nothing more. |
+| `--as-owner` | close it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
+
+### `max tasks reject`
+
+refuse the close an agent suggested: the task stays open and leaves close:suggested; the agent may close it again
+
+**Changes something on this computer only.**
+
+```sh
+max tasks reject <task> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `task` | required | the task's id or key, as tasks list shows it. |
+
+| Option | Purpose |
+|---|---|
+| `--as-owner` | refuse it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
 ## `max conversations`
 
@@ -4165,7 +4185,7 @@ max config set <setting> <value> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
 | `value` | required | a number, true or false, or a list like contacts,polls. |
 
 | Option | Purpose |
@@ -4186,7 +4206,7 @@ max config unset <setting> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
 
 | Option | Purpose |
 |---|---|
@@ -5113,35 +5133,13 @@ max bot store fetch <chat> [options]
 
 serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- max sales bot mcp`
 
-**Changes something in MAX.**
-
-```sh
-max bot mcp [options]
-```
-
-| Option | Purpose |
-|---|---|
-| `--confirm-send` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-dangerous` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-send` | no longer used — the profile's permissions decide; kept so an old setup still starts. |
-| `--allow-delete` | no longer used — the profile's permissions decide. |
-| `--allow-moderate` | no longer used — the profile's permissions decide. |
-
 #### `max bot mcp config`
 
 print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes nothing
 
 ```sh
-max bot mcp config [options]
+max bot mcp config
 ```
-
-| Option | Purpose |
-|---|---|
-| `--confirm-send` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-dangerous` | no longer used — writes show no form; the profile's permissions decide. |
-| `--allow-send` | no longer used — the profile's permissions decide; kept so an old setup still starts. |
-| `--allow-delete` | no longer used — the profile's permissions decide. |
-| `--allow-moderate` | no longer used — the profile's permissions decide. |
 
 ### `max bot me`
 

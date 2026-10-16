@@ -225,7 +225,7 @@ Agrega algo que las reglas no ven, como tu promesa, o cierra una tarea que no ne
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other
 ```
 
-Si una tarea puede ser el mismo trabajo que una abierta o cerrada en los últimos 14 días, `tasks add` la rechaza con código de salida 2 y nombra a los candidatos. Repite con `--into <задача>` para vincular el mensaje a ella, o con `--new` para abrir una nueva de todos modos. `tasks duplicates` muestra los pares que encontraron las reglas, y `tasks merge <задача> --into <другая>` los une:
+Si una tarea puede ser el mismo trabajo que otra abierta, `tasks add` rechaza la operación con código 2 y muestra las candidatas. Repite con `--into <задача>` para vincular el mensaje a ella, o con `--new` para abrir una nueva. Si solo se parece a una tarea cerrada en los últimos 14 días, `tasks add` abre una nueva y la vincula a la cerrada mediante `follow-up-of`; la cerrada sigue cerrada y `tasks show` muestra el vínculo. `tasks duplicates` muestra los pares que encuentran las reglas y `tasks merge <задача> --into <другая>` los une:
 
 ```sh
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --into <задача>
@@ -233,6 +233,15 @@ max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promi
 
 ```sh
 max personal tasks close <задача> --as dismissed --reason no-reply-needed
+```
+
+Un agente — un programa con `AI_AGENT` o `CLAUDECODE` — solo cierra una tarea con `--certainty`: su confianza, de 0 a 1. Por debajo del umbral, la tarea queda abierta con una sugerencia de cierre. `tasks list close:suggested` muestra esas tareas y `tasks agenda` indica el motivo `close-suggested`. Confirma la sugerencia con `tasks close <задача>` o recházala con `tasks reject <задача>`. El umbral predeterminado es 0.8 y se cambia con `config set task_agent_close_min`; `config set task_agent_close off` deja abierta cada tarea que cierre un agente:
+
+```sh
+max personal tasks list close:suggested
+max personal tasks close <задача>
+max personal tasks reject <задача>
+max config set task_agent_close_min 0.9
 ```
 
 Un par que no es una sola tarea lo quita para siempre `tasks duplicates reject`; `tasks duplicates defer` te lo deja a ti, y lo muestra `tasks duplicates decision:unsure`. `tasks related <задача>` puntúa las tareas parecidas sin cambiar nada, y `tasks unmerge` deshace una unión:
@@ -244,19 +253,27 @@ max personal tasks duplicates reject <дубль> <задача>
 max personal tasks unmerge <дубль>
 ```
 
-La agenda del día se filtra con campos de consulta. Cuando trabajan dos agentes, uno reserva antes la tarea; la reserva termina sola a los 30 minutos, `--lease` cambia el plazo y `tasks release` devuelve la tarea antes:
+`tasks agenda` y `tasks duplicates` se filtran con campos de consulta:
+
+- `tag:` y `category:` dejan las tareas con esa etiqueta o categoría: `tag:urgent`, `category:money`.
+- `claimed:` elige de quién es la reserva: `none`, `mine`, `others` o `any`. Sin este campo, la agenda muestra las tareas libres y las tuyas; `claimed:any` muestra todas.
+- `decision:` elige los pares de duplicados: `review`, el valor predeterminado, espera al agente revisor; `unsure` te espera a ti: `decision:unsure`.
+
+Cuando trabajan dos agentes, uno reserva antes la tarea; la reserva termina sola a los 30 minutos, `--lease` cambia el plazo y `tasks release` la devuelve antes:
 
 ```sh
-max personal tasks agenda category:money tag:urgent
+max personal tasks agenda category:money tag:urgent claimed:any
 max personal tasks claim <задача> --lease 2h
 max personal tasks release <задача>
 ```
 
-`tasks categories` muestra la lista de categorías. Es una sola para todo el almacén y la comparten `tg`, `max` y `memo`; `config set task_categories.<имя>` añade o cambia una categoría: su significado y luego las palabras por las que la elige la regla:
+`tasks categories` muestra la lista de categorías. Es una sola para todo el almacén y la comparten `tg`, `max` y `memo`. Tiene 59 categorías por defecto y admite hasta 80. `config set task_categories.<имя>` añade o cambia una categoría: su significado y luego las palabras que usa la regla en inglés, ruso y español (`es:`):
 
 ```sh
 max config set task_categories.travel "поездки и билеты | рейс, отель, es:vuelo"
 ```
+
+Una tarea conserva su categoría aunque se quite de la lista. `tasks categories` muestra esas categorías y cuenta sus tareas; `tasks list category:<имя>` las encuentra y `tasks plan <задача> --category <имя>` mueve la tarea a otra categoría.
 
 Más en la página [Tareas](https://wirecat.dev/ru/docs/tasks).
 
