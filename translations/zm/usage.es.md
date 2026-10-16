@@ -36,7 +36,7 @@ Tienes una próxima llamada en Zoom y quieres tener a mano la conversación ante
 ```text prompt
 Prepárame para la próxima llamada de Research Example en Zoom. Identifica primero la serie correcta.
 Muestra la próxima hora, pasajes citados de llamadas anteriores, vínculos confirmados al proyecto,
-decisiones guardadas, notas de personas/proyectos vinculados y tareas con origen directo en esas reuniones. Si encajan varias series,
+decisiones guardadas, notas sobre llamadas anteriores y personas/proyectos vinculados, y tareas con origen directo en esas reuniones. Si encajan varias series,
 muestra candidatas. Indica qué falta o no está confirmado. No cambies nada.
 ```
 
@@ -74,12 +74,14 @@ permite recuperar el registro completo y su evidencia mediante Memo antes de usa
 contiene hechos aceptados; `knowledge.coverage` conserva `fact_evidence: not-revalidated`
 y `other_sources: not-queried`.
 
-`notes.items` añade notas y anotaciones escritas por el dueño sobre esas personas vinculadas y
-proyectos globales confirmados. Cada una incluye referencia `note:`, título/texto, revisión, fecha
-de actualización y una referencia a la persona/proyecto que la relaciona. Son comentarios guardados,
-separados de los hechos aceptados. Usa revisiones actuales y vínculos confirmados; excluye notas
-eliminadas, notas de bots, sujetos limitados a una cuenta y revisiones actualizadas después del inicio
-de la preparación. Recupera la nota por su referencia en Memo para ver todas sus asociaciones.
+`notes.items` añade notas y anotaciones escritas por el dueño sobre las llamadas anteriores incluidas,
+las personas vinculadas explícitamente a ellas y los proyectos globales confirmados. Cada una incluye
+referencia `note:`, título/texto, revisión, fecha de actualización y una referencia a la reunión/persona/proyecto
+que la relaciona. Son comentarios guardados, separados de los hechos aceptados. Usa revisiones actuales
+y vínculos confirmados. Una nota sobre una reunión debe enlazar una llamada incluida de este perfil;
+compartir un proyecto no basta para incluir notas de otras reuniones. Excluye notas eliminadas, notas
+de bots, personas/proyectos limitados a una cuenta y revisiones actualizadas después del inicio de la
+preparación. Recupera la nota por su referencia en Memo para ver todas sus asociaciones.
 
 Comprueba `notes.coverage.has_more` y `notes.coverage.output_limited` para saber si hay notas adicionales u omitidas.
 `source_evidence: not-revalidated` indica que no se han vuelto a comprobar sus fuentes;

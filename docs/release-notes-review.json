@@ -12,9 +12,9 @@
     "conclusion": "Reviewed MAX 0.56.0 with Core 0.296.0/Base 0.40.0: shared MCP and retired bot flags, attachments extraction and local voice, no old moderation checkpoint migration, setup next envelope, media provider_ref and voice kind, watch rendering, diagnostic reply/write ID labeling, agent task close certainty/reject, follow-ups and 59 categories. Shared task guides now include MAX suggested closes. Roadmap unchanged: optional local-copy mode, event actions, video circles/cloud password and standalone installers remain future work."
   },
   "zm": {
-    "version": "v0.21.3",
-    "roadmapSha256": "866a2d00ff86c94f379d8530f1cd99333f585209a188e657edf631587e137e0c",
-    "reviewedAt": "2026-10-16",
-    "conclusion": "Reviewed Zoom 0.21.3 on verified registry Core 0.304.0/Base 0.40.0: publication journals, verified no-overwrite final linking and interruption recovery are shared while Zoom preserves archive metadata and legacy bytes. The roadmap now marks this delivered. Scheduled meeting instance resolution, compact safe config diagnostics, token outcome logs and startup cache changes are reflected in native and translated guides. Broader preparation and reviewed findings intake remain planned; no additional production provider is implied."
+    "version": "v0.22.0",
+    "roadmapSha256": "ca6afc9359e2307178f241f46a9a90af658bbac72588393ab5279eeed6aee5ba",
+    "reviewedAt": "2026-10-17",
+    "conclusion": "Reviewed Zoom 0.22.0 on registry Core 0.306.0/Base 0.40.0: preparation includes owner notes directly linked to included earlier calls, with meeting references and the extended native selection. Core owns scope, storage reads, budgets and CLI/MCP schemas; legacy custom hosts keep their shape. Shared Meetings and native/translated usage and MCP guides explain the direct-note boundary. The roadmap marks this delivered while project-alias candidates in preparation, broader communications/calendar discovery and reviewed findings intake remain planned. Existing standalone project alias evidence and Memo note writes are reused."
   }
 }
