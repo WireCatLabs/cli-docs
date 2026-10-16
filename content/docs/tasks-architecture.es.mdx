@@ -10,8 +10,10 @@ duplicados con un ejemplo resuelto. Para el uso diario, empieza por [Tareas](./t
 
 El diseño viene del plan de tareas aprobado en cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). Todo está ya hecho
-en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` y `max` lo tienen todo. `memo` tiene
-categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
+en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` lo tiene todo. `max` lo tiene todo
+salvo los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías
+fuera de la lista y la lectura de los mensajes vinculados en la detección de duplicados. `memo` tampoco
+tiene eso; tiene categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
 aún no `tasks categories`, la reserva, `tasks related`, `tasks duplicates` ni `tasks merge`.
 
 ## Los datos
@@ -23,7 +25,7 @@ columnas está en el [modelo de datos](./data-model.mdx#tasks).
 | --- | --- |
 | Tipo | `question`, `request`, `mention`, `promise` para tareas encontradas en mensajes; `bug`, `feature`, `chore` para tareas de proyecto |
 | Plan | título, descripción, prioridad de 0 (urgente) a 4 (baja), fecha límite, próxima revisión, tarea padre |
-| Estado | `open`, `done` o `dismissed`, con quién la cerró y por qué |
+| Estado | `open`, `done` o `dismissed`, con quién la cerró y por qué; el cierre de un agente guarda su certeza, y uno dudoso queda en la tarea abierta como sugerencia de cierre |
 | Fuente | un localizador de mensaje o nota, nunca el texto del mensaje, así que un mensaje borrado no deja nada |
 | Valoración | `useful` o `not_useful`, según valoraste una tarea que planteó un agente |
 | Personas | asignaciones con un rol: responsable, revisor, observador |
@@ -33,8 +35,10 @@ columnas está en el [modelo de datos](./data-model.mdx#tasks).
 Cada tarea pertenece a un proyecto. Una tarea encontrada en un mensaje va al proyecto de entrada de su
 cuenta; una tarea de proyecto va a un proyecto que creaste tú. Un vínculo a un mensaje tiene el tipo
 `related-to`, `evidence` o `created-from`. Un vínculo entre dos tareas también es una fila de
-`links`, con el tipo `blocked-by`, `follow-up-of` o `related-to`. Estos vínculos solo funcionan entre
-tareas de tus propios proyectos, y solo tú los aplicas. Antes de escribir un `blocked-by` o un
+`links`, con el tipo `blocked-by`, `follow-up-of` o `related-to`. Tú aplicas estos vínculos entre
+tareas de tus propios proyectos. La detección de duplicados también escribe `follow-up-of` entre tareas
+encontradas en mensajes, de una tarea nueva a una tarea cerrada en los últimos 14 días
+([paso 6](#6-decidir)). Antes de escribir un `blocked-by` o un
 `follow-up-of`, una consulta recursiva comprueba que no cierra un ciclo.
 
 Una tarea tiene además una `category` y una reserva (`claimed_by`, `claimed_until`). Una tarea es un
@@ -43,7 +47,9 @@ tipos de vínculo más: `duplicate-of`, que une dos tareas encontradas en mensaj
 y `discovered-from`. Dos tablas de texto completo, `task_words` y `task_stems`, guardan el título y la
 descripción de cada tarea, hechas como las de las notas. Cada cambio de categoría es una fila de
 `task_events` del tipo `category`. La tabla `task_pairs` guarda cada par de tareas que pueden ser el
-mismo trabajo y lo que se decidió sobre él.
+mismo trabajo y lo que se decidió sobre él. La versión 17 del almacén añade las columnas del cierre:
+`close_certainty` y, para una sugerencia de cierre, `close_suggested_as`, `close_suggested_by_type`,
+`close_suggested_by_id`, `close_suggested_certainty`, `close_suggested_reason` y `close_suggested_at`.
 
 ## Identificadores y claves
 
@@ -97,6 +103,39 @@ reserva. Gana lo primero que esté definido: `--holder <name>`, la variable `WIR
 inicia), el nombre del agente de `AI_AGENT` y, al final, `owner`. Un agente sin entorno, como un
 agente web, pasa el id de su chat con `--holder`.
 
+## Cierres de un agente
+
+Por ahora solo `tg` tiene los cierres de agente por certeza.
+
+Un cierre no se puede deshacer (solo `tasks unmerge` reabre una tarea, y solo una que cerró una
+fusión), así que un cierre del que un agente no está seguro espera al propietario. `tasks close`
+distingue a un agente del propietario igual que `mentions confirm`: es un agente cuando están
+definidas `AI_AGENT` o `CLAUDECODE`, y si no, el propietario. `--as-owner` cierra como el propietario
+desde la terminal de un agente. MCP `tasks_close` es siempre un agente.
+
+Un agente debe pasar `--certainty <0..1>` (en MCP, `certainty`); sin ella, el cierre se rechaza con
+`task.certainty-required`. Lo que pasa después lo deciden dos ajustes de todo el almacén, guardados en
+el almacén como la lista de categorías porque las reglas y los cierres de `tg`, `max` y `memo` tienen
+que coincidir:
+
+| Ajuste | Por defecto | Qué hace |
+| --- | --- | --- |
+| `task_agent_close` | `on` | `off` convierte cada cierre de un agente en una sugerencia |
+| `task_agent_close_min` | `0.8` | la certeza mínima que cierra la tarea |
+
+Con una certeza igual o superior al umbral y los cierres de agente activados, la tarea se cierra y
+guarda `close_certainty`. Si no, la respuesta trae `state: open` y `close_suggestion`: cómo cerrarla,
+quién (el nombre del agente), la certeza, el motivo y la hora. La reserva se libera. `tasks agenda`
+muestra la tarea con el motivo `close-suggested`, y `tasks list close:suggested` la encuentra. El
+propietario confirma con `tasks close <task>` (`--as` se puede omitir: se toman el estado y el motivo
+de la sugerencia) o rechaza con `tasks reject <task>`. Una sugerencia posterior sustituye a la
+anterior, y cada sugerencia es un evento `close-suggestion`.
+
+Por qué 0.8: los agentes se puntúan alto y a saltos gruesos, así que la línea cae donde termina
+«probablemente» y empieza «quizá». Más alto, cada cierre recae en el propietario; más bajo, pasa un
+cierre con reservas. La regla que cierra una pregunta que el propietario respondió no es un cierre de
+agente: vio la respuesta del propietario y cierra sin certeza.
+
 ## Categorías
 
 La lista de categorías es una por almacén y se guarda en el archivo del almacén, no en un perfil,
@@ -110,13 +149,88 @@ propietario la edita:
 | `config unset task_categories` | vuelve a la lista por defecto |
 | `config show` | muestra las categorías con los demás ajustes |
 
-La lista por defecto es `money`, `documents`, `meeting`, `delivery`, `access`, `personal` y `other`.
 `tasks add` necesita una categoría de la lista (MCP `tasks_add` necesita `category`), y un nombre
 desconocido se rechaza junto con la lista. Una regla compara las raíces del mensaje de origen con las
-palabras de cada categoría: gana la que tiene más coincidencias, y sin coincidencias es `other`.
+palabras de cada categoría: gana la que tiene más coincidencias, un empate va a la categoría anterior,
+y sin coincidencias es `other`. Por eso la lista pone primero las concretas, después las acciones
+genéricas (`money`, `documents`, `meeting`) y al final `work` y `personal`. Una palabra `es:` también
+coincide por su raíz española cuando el mensaje se lee como español: una tilde, `ñ`, `¿` o `¡`, o una
+palabra como `la`, `que` o `para`. Una lista admite hasta 80 categorías.
 `tasks categories` (MCP `tasks_categories`) imprime la lista con significados y palabras.
 `tasks agenda category:<name> tag:<name>` filtra la agenda con campos de consulta (MCP `tasks_agenda` los recibe en `query`). Cambiar la lista no cambia la
 categoría de las tareas que ya existen.
+
+Un almacén sin lista guardada usa la lista por defecto de la herramienta que lo abre, y un almacén
+que guardó su propia lista la conserva; `config unset task_categories` toma la lista por defecto
+actual. Una categoría que salió de la lista mientras las tareas aún la llevan se nombra:
+`tasks categories` la lista en `unlisted` con el número de tareas abiertas y el total (también MCP
+`tasks_categories`), un `config set` o `unset` de `task_categories` termina su nota con las mismas
+líneas, y `tasks agenda` nombra las que llevan las tareas abiertas (`unlisted_categories`).
+`tasks list category:<name>` encuentra sus tareas, y `tasks plan <task> --category <name>` mueve una.
+
+La lista por defecto en `tg`:
+
+| Categoría | Significado |
+| --- | --- |
+| `taxes` | declaraciones de impuestos, el gestor, Hacienda |
+| `investments` | acciones, fondos, criptomonedas, un bróker |
+| `subscriptions` | una suscripción a un servicio: darse de alta, cancelar o renovar |
+| `bills` | una factura periódica: suministros, teléfono, internet |
+| `donations` | una donación, una recaudación de fondos, una ONG |
+| `insurance` | una póliza de seguro o un siniestro |
+| `bank` | tarjetas, cuentas bancarias, transferencias, una petición del banco |
+| `civic` | votar, una petición, un censo, un jurado, el ayuntamiento |
+| `government` | un visado, la residencia, un permiso, una cita en una oficina pública |
+| `legal` | un abogado, un notario, un juzgado o un litigio |
+| `hiring` | candidatos, entrevistas, ofertas de empleo |
+| `sales` | leads, acuerdos, presupuestos |
+| `partners` | una alianza o una integración con otra empresa |
+| `support` | un problema de un usuario o cliente que resolver |
+| `security` | una cuenta robada, una estafa, 2FA, una filtración |
+| `access` | un acceso, una contraseña, una llave, una invitación o un permiso que dar o conseguir |
+| `tech` | código, servidores, fallos, compilaciones, despliegues |
+| `media` | la prensa, un periodista, un podcast o una entrevista para medios |
+| `marketing` | campañas, anuncios, SEO, boletines, redes sociales |
+| `design` | interfaz, maquetas, un logotipo o una marca que diseñar o revisar |
+| `research` | una investigación, una encuesta, un análisis o un benchmark |
+| `content` | publicaciones, artículos, vídeos que escribir, grabar o revisar |
+| `vendors` | un proveedor, contratista o agencia a quien pagas un servicio |
+| `car` | el coche: reparaciones, aparcamiento, multas, ITV |
+| `travel` | vuelos, trenes, hoteles, viajes |
+| `pets` | una mascota: el veterinario, la comida, un cuidador, paseos |
+| `fitness` | el gimnasio, entrenamientos, un deporte |
+| `beauty` | un corte de pelo, uñas, cosmética, un salón |
+| `health` | médicos, recetas, medicamentos |
+| `education` | cursos, libros, idiomas, estudios en el colegio o la universidad |
+| `celebrations` | un cumpleaños, una boda, un aniversario o una fiesta que preparar o celebrar |
+| `childcare` | una niñera, un canguro, la guardería, extraescolares |
+| `elder-care` | el cuidado de un familiar mayor: un cuidador, una residencia |
+| `family` | hijos, colegio, padres y familiares |
+| `real-estate` | comprar, vender o alquilar un inmueble; una hipoteca |
+| `moving` | una mudanza: transportistas, cajas, una dirección nueva |
+| `home` | el piso: reparaciones, alquiler, el casero, los vecinos |
+| `delivery` | un paquete, pedido o mensajero que enviar, seguir o recoger |
+| `devices` | un teléfono, portátil o aparato que comprar, arreglar o configurar |
+| `food` | la compra de comida, cocinar, un restaurante |
+| `shopping` | cosas que comprar |
+| `hobbies` | una afición: música, fotografía, manualidades, un juego al que juegas |
+| `entertainment` | películas, series, conciertos, juegos, espectáculos |
+| `events` | un evento, entradas, un local, una confirmación de asistencia |
+| `religion` | la iglesia, una misa, una fiesta o un rito religioso |
+| `community` | un grupo o club que llevas o ayudas: miembros, moderación, administración |
+| `intro` | presentar a personas o pedir una presentación |
+| `money` | pagar, facturar, reembolsar, un precio o una deuda |
+| `documents` | un contrato, escaneo, formulario o firma que enviar o recibir |
+| `admin` | gestiones de oficina: material, recados, papeleo sin un área más concreta |
+| `meeting` | una llamada, reunión o cita que organizar o a la que ir |
+| `clients` | la petición de un cliente, una propuesta, un seguimiento a un cliente |
+| `projects` | resultados que entregar, plazos, lanzamientos |
+| `team` | compañeros, revisiones, reuniones individuales, vacaciones |
+| `follow-up` | esperas a alguien: recuérdaselo |
+| `reply` | alguien espera tu respuesta |
+| `work` | una tarea de trabajo sin una categoría más concreta |
+| `personal` | amigos, regalos, favores |
+| `other` | ninguna de las anteriores |
 
 ## Reglas al sincronizar
 
@@ -130,10 +244,7 @@ sincronización. Nada se une por su cuenta salvo una coincidencia segura (paso 2
 ## La detección de duplicados
 
 La comprobación se ejecuta con cada tarea nueva. Corre en cli-core, sobre SQLite, sin embeddings y
-sin llamar a un proveedor de IA. **Aún no está hecho:** la comprobación de un mensaje nuevo vinculado
-a una tarea existente. La comparación lee solo el título, la descripción y el mensaje de origen de una
-tarea, así que un mensaje vinculado no cambia la puntuación hasta que la comparación lea también los
-mensajes vinculados. `tasks related <task>` (MCP `tasks_related`) hace los pasos 3 a 5 para una tarea
+sin llamar a un proveedor de IA. `tasks related <task>` (MCP `tasks_related`) hace los pasos 3 a 5 para una tarea
 guardada e imprime el resultado; no cambia nada.
 
 ```mermaid Cómo se comprueba si una tarea nueva es un duplicado
@@ -147,13 +258,30 @@ graph TD
   Score --> Decide{"6. Banda"}
   Decide -->|"probable o quizá"| Ask("Elige el agente, o lista de revisión")
   Decide -->|"distinta"| Create("Crear la tarea")
+  Decide -->|"solo candidatas cerradas"| Follow("Crearla, vinculada follow-up-of")
   Ask --> Learn("7. Guardar la respuesta")
 ```
 
 En palabras: la tarea nueva se normaliza; una coincidencia segura la une enseguida; si no, se reúnen
 candidatas, cada una se compara campo a campo, se suman los pesos y el total decide: crear o
-preguntar. Una puntuación nunca fusiona dos tareas; decide un agente o una persona. Cada respuesta se
+preguntar. Cuando las únicas candidatas probables o quizá son tareas cerradas en los últimos 14 días,
+la tarea se crea como su seguimiento. Una puntuación nunca fusiona dos tareas; decide un agente o una persona. Cada respuesta se
 guarda, para poder ajustar los pesos más adelante.
+
+**Los mensajes en los que se apoya una tarea.** Una tarea se compara a través de vistas: su título y
+su descripción, y ese mismo texto más un mensaje, para su mensaje de origen y cada uno de sus 5
+mensajes vinculados más recientes (tipos `related-to`, `evidence` o `created-from`; no `answered-by`,
+la respuesta del propio propietario). Dos tareas puntúan como su mejor par de vistas, cada vista
+entera, así que el texto, la persona, el importe y la fecha límite salen del mismo mensaje. Un mensaje
+puede subir la puntuación de un par, nunca bajarla. El importe y la fecha límite de un mensaje solo
+cuentan cuando el texto de la tarea no los tiene, y su «mañana» se cuenta desde cuándo se envió. Los
+mensajes se leen del almacén al comparar; una tarea no guarda el texto de los mensajes.
+
+**Después de un vínculo.** `tasks link <task> msg:…` (MCP `tasks_link`), `tasks add --into` y
+`tasks merge` repiten la comprobación para la tarea que recibió el mensaje. Los nuevos pares probables
+o quizá van a la lista de revisión, con la tarea más nueva como posible duplicado, y el `review` de la
+respuesta los cuenta. El vínculo se mantiene siempre, nada se fusiona por una puntuación y una tarea
+cerrada no se comprueba.
 
 ### 1. Normalizar
 
@@ -164,7 +292,8 @@ guarda, para poder ajustar los pesos más adelante.
 - El título normalizado también se corta en **trigramas de caracteres**, todas las ventanas de tres
   letras. Atrapan errores de escritura y formas que el lematizador no ve.
 - Unos patrones extraen la **firma**: un importe con su moneda (un número junto a `₽`, `руб`, `€`,
-  `$`, `usd`), una fecha límite (fechas y frases como `by Friday` o `до пятницы`) y la persona
+  `$`, `usd`), una fecha límite (fechas y frases en inglés, ruso y español, como `by Friday`, `до пятницы`
+  o `el viernes`) y la persona
   (`person:<id>` de quien envió el mensaje de origen, a través de `identities`). Una fecha límite que
   un agente pasa con `--due` se usa en lugar de la del texto.
 
@@ -271,6 +400,7 @@ reales.
 | Probable | aparece primero; el agente debe elegir | se crea; el par va a la lista de revisión |
 | Quizá | `tasks add` se niega (código de salida 2, motivo `task.duplicate-candidates`) y lista hasta 5 candidatas con puntuación y motivos; el agente repite con `--into <task>` o `--new` | se crea; el par va a la lista de revisión |
 | Distinta | se crea | se crea |
+| Probable o quizá, pero cerrada en los últimos 14 días | se crea, vinculada `follow-up-of` a la cerrada | se crea, vinculada `follow-up-of` a la cerrada |
 
 La herramienta se niega en lugar de avisar: un agente puede pasar por alto un aviso, pero no un código
 de salida. Preguntar al agente que crea la tarea no cuesta una llamada extra a un proveedor de IA,
@@ -291,6 +421,13 @@ cierra el duplicado como `dismissed` con un vínculo `duplicate-of` y registra l
 `tasks duplicates defer <dup> <task>` deja el par al propietario, guardado como `unsure`, y `tasks duplicates decision:unsure` lista
 esos pares. MCP tiene las mismas herramientas: `tasks_duplicates`, `tasks_merge`, `tasks_unmerge`,
 `tasks_duplicates_reject` y `tasks_duplicates_defer`.
+
+**Seguimientos.** Cuando todas las candidatas probables o quizá son tareas cerradas en los últimos 14
+días, `tasks add` abre la tarea y la vincula `follow-up-of` a la cerrada con mejor puntuación
+(`follow_up_of` en la respuesta); una regla hace lo mismo. Se sigue negando mientras una tarea abierta
+pueda ser el mismo trabajo, porque solo una tarea abierta puede ser el trabajo que aún espera. La
+tarea cerrada sigue cerrada, y el par no va ni a la lista de revisión ni a `task_pairs`: una fusión
+metería trabajo nuevo en una tarea cerrada. `tasks show` y la ficha de MCP muestran el vínculo.
 
 **Una fusión se puede deshacer.** `tasks unmerge <dup>` reabre el duplicado y quita el vínculo. Los
 vínculos a mensajes se quedan donde están hasta que se muevan. Una fusión nunca borra nada.
@@ -365,8 +502,6 @@ misma idea de texto más campos, con pesos que se cuentan, no que se entrenan.
 
 ## Lo que no se hace
 
-- **La comprobación de un mensaje vinculado a una tarea existente.** Primero la comparación tiene que
-  leer los mensajes vinculados.
 - **Ajustar los pesos con los pares guardados.** Los pares se guardan; todavía nada vuelve a contar
   los pesos.
 - **Ni embeddings ni llamadas a un proveedor de IA** para comparar tareas. Si el conjunto de pruebas
@@ -375,5 +510,3 @@ misma idea de texto más campos, con pesos que se cuentan, no que se entrenan.
 - **Nada se borra.** Un duplicado se cierra y se vincula; nunca se elimina.
 - **Ningún límite de una tarea por chat o por persona.**
 - **Ningún identificador hash**, hasta que los almacenes se sincronicen entre dispositivos.
-- **Preguntas abiertas:** la lista de categorías por defecto, y si un mensaje que coincide con una
-  tarea cerrada en los últimos 14 días la reabre o abre una tarea nueva vinculada con `follow-up-of`.

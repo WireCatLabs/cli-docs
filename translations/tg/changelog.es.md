@@ -4,6 +4,45 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.62.0 — 16.10.2026
+
+### Novedades
+
+- **El cierre de un agente puede esperarte** (cli-core 0.295.0): `tasks close` ejecutado por un agente de IA
+  (con `AI_AGENT` o `CLAUDECODE` definida) indica su certeza con `--certainty <0..1>`. Por debajo del umbral del
+  almacén (`config set task_agent_close_min`, 0.8 por defecto), o con `config set task_agent_close off`, la tarea
+  sigue abierta con una sugerencia de cierre; `tasks list close:suggested` y `tasks agenda` la muestran. Confírmala
+  con `tasks close <task>` o recházala con el nuevo `tasks reject <task>`. `--as-owner` cierra en tu nombre.
+- **Una tarea nueva sobre una tarea cerrada en los últimos 14 días se abre como su seguimiento**, enlazada
+  `follow-up-of` a la cerrada, en lugar de rechazarse como duplicado. Se sigue rechazando mientras una tarea
+  abierta pueda ser el mismo trabajo.
+- **`tasks categories` nombra las categorías que salieron de la lista** mientras las tareas aún las llevan, con
+  el número de tareas abiertas y el total (`unlisted`); `tasks agenda` enumera las que llevan las tareas abiertas
+  (`unlisted_categories`).
+
+### Cambios — pueden romper scripts
+
+- **El `tasks close` de un agente debe pasar `--certainty`** (MCP `tasks_close`: el `certainty` obligatorio), o
+  falla con `task.certainty-required`. Por debajo del umbral, la respuesta tiene `state: open` y `close_suggestion`
+  en lugar de una tarea cerrada. Un script que cierra tareas desde la terminal de un agente necesita `--certainty`,
+  o `--as-owner` cuando el propietario pidió el cierre.
+- **`tasks add` puede rechazar ahora una tarea cuyo mensaje comparte palabras con el mensaje de una tarea abierta**
+  (código de salida 2, `task.duplicate-candidates`): la comprobación de duplicados también lee el mensaje de
+  origen de una tarea y sus mensajes enlazados más recientes, así que una tarea de regla con el título vacío se
+  compara por su mensaje. Repite con `--into <task>` o `--new`.
+- **59 categorías de tareas por defecto en lugar de 7**, como `bills`, `health`, `travel`, `fitness` y
+  `subscriptions`; `tasks categories` muestra cada una con su significado y sus palabras clave. Las siete antiguas
+  conservan sus nombres, así que las tareas guardadas siguen siendo válidas, pero una regla elige ahora el nombre
+  más concreto: una factura de suministros es `bills`, no `money`. Por eso un filtro como `category:personal`
+  recoge menos tareas nuevas. Un almacén que guardó su propia lista la conserva; `config unset task_categories`
+  toma la nueva lista por defecto. Una lista admite hasta 80 categorías.
+
+### Corregido
+
+- **El texto de las tareas en español se lee mejor**: la categoría de una regla coincide con otras formas de una
+  palabra clave española (`pagues` coincide con `pagar`), y la comprobación de duplicados lee fechas límite en
+  español como `mañana` o `el viernes`.
+
 ## 0.61.0 — 16.10.2026
 
 ### Cambios que pueden afectar a los scripts

@@ -249,7 +249,7 @@ tg personal tasks list chat:<chat id> "(kind:question OR kind:mention)"
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other
 ```
 
-Если задача может совпадать с открытой или закрытой за последние 14 дней, `tasks add` отклоняет добавление с кодом 2 и показывает кандидатов. Повторите с `--into <task>`, чтобы связать сообщение с этой задачей, либо с `--new`, чтобы создать отдельную. `tasks duplicates` показывает найденные правилами пары, а `tasks merge <task> --into <other>` объединяет задачи:
+Если задача может совпадать с открытой, `tasks add` отклоняет добавление с кодом 2 и показывает кандидатов. Повторите с `--into <task>`, чтобы связать сообщение с этой задачей, либо с `--new`, чтобы создать отдельную. Если она совпадает только с задачей, закрытой за последние 14 дней, `tasks add` открывает её как продолжение, связанное `follow-up-of` с закрытой. `tasks duplicates` показывает найденные правилами пары, а `tasks merge <task> --into <other>` объединяет задачи:
 
 ```sh
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other --into <task>
@@ -257,6 +257,16 @@ tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --categ
 
 ```sh
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
+```
+
+ИИ-агент, который закрывает задачу, указывает свою уверенность через `--certainty`, от 0 до 1. Ниже порога хранилища (`task_agent_close_min`, по умолчанию 0.8) задача остаётся открытой с предложением закрыть; `config set task_agent_close off` превращает любое закрытие агентом в предложение. `tasks list close:suggested` находит их. Подтвердите предложение командой `tasks close <task>` или отклоните его командой `tasks reject <task>`:
+
+```sh
+tg personal tasks list close:suggested
+```
+
+```sh
+tg personal tasks reject <task>
 ```
 
 Дайте задаче название, срок и дату, когда к ней вернуться, и свяжите с ней сообщения и чаты, к которым

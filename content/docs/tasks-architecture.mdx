@@ -10,8 +10,10 @@ use, start with [Tasks](./tasks.md).
 
 The design comes from the approved tasks plan in cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). All of it is built
-in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it. `memo` has
-categories (`tasks plan --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
+in cli-core except the parts marked **not built yet**. `tg` has all of it. `max` has all of it except
+agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and the
+duplicate check's reading of linked messages. `memo` lacks those too; it has categories
+(`tasks plan --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
 `tasks categories`, claims, `tasks related`, `tasks duplicates` or `tasks merge`.
 
 ## The data
@@ -23,7 +25,7 @@ One table, `tasks`, holds every task in the local store. The full column list is
 | --- | --- |
 | Type | `question`, `request`, `mention`, `promise` for tasks found in messages; `bug`, `feature`, `chore` for project tasks |
 | Plan | title, description, priority 0 (urgent) to 4 (low), due time, next check time, parent task |
-| State | `open`, `done` or `dismissed`, with who closed it and why |
+| State | `open`, `done` or `dismissed`, with who closed it and why; an agent's close keeps its certainty, and an unsure one stays on the open task as a close suggestion |
 | Source | one message or note locator, never the message text, so a deleted message leaves nothing behind |
 | Verdict | `useful` or `not_useful`, as you judged a task an agent raised |
 | People | assignments in a role: assignee, reviewer, watcher |
@@ -33,8 +35,9 @@ One table, `tasks`, holds every task in the local store. The full column list is
 Every task belongs to a project. A task found in a message goes to the inbox project of its account;
 a project task goes to a project you made. A link to a message has the kind `related-to`, `evidence`
 or `created-from`. A relation between two tasks is also a `links` row, with the kind `blocked-by`,
-`follow-up-of` or `related-to`. Relations work only between tasks of your own projects, and only
-you apply them. Before a `blocked-by` or `follow-up-of` row is written, a recursive query checks
+`follow-up-of` or `related-to`. You apply these between tasks of your own projects. The duplicate check
+also writes `follow-up-of` between tasks found in messages, from a new task to a task closed in the last
+14 days ([step 6](#6-decide)). Before a `blocked-by` or `follow-up-of` row is written, a recursive query checks
 that it does not close a loop.
 
 A task also has a `category` and a claim (`claimed_by`, `claimed_until`). A task is one more
@@ -43,7 +46,9 @@ relation kinds exist: `duplicate-of`, which joins two tasks found in messages of
 `discovered-from`. Two full-text tables, `task_words` and `task_stems`, hold each task's title and
 description, built like the ones for notes. Every category change is a `task_events` row of kind
 `category`. The table `task_pairs` keeps each pair of tasks that may be one job and what was decided
-about it.
+about it. Store version 17 adds the close columns: `close_certainty`, and for a close suggestion
+`close_suggested_as`, `close_suggested_by_type`, `close_suggested_by_id`, `close_suggested_certainty`,
+`close_suggested_reason` and `close_suggested_at`.
 
 ## Ids and keys
 
@@ -93,6 +98,36 @@ that is set wins: `--holder <name>`, the `WIRECAT_HOLDER` variable, `claude-code
 `AI_AGENT`, then `owner`. An agent with no environment, such as a web agent, passes its chat id with
 `--holder`.
 
+## Agent closes
+
+Only `tg` has agent closes by certainty so far.
+
+A close cannot be undone (only `tasks unmerge` reopens a task, and only one a merge closed), so a close
+that an agent is unsure of waits for the owner. `tasks close` tells an agent from the owner as
+`mentions confirm` does: an agent when `AI_AGENT` or `CLAUDECODE` is set, otherwise the owner.
+`--as-owner` closes as the owner from an agent's terminal. MCP `tasks_close` is always an agent.
+
+An agent must pass `--certainty <0..1>` (MCP: `certainty`); without it the close is refused with
+`task.certainty-required`. Two store-wide settings decide what happens, kept in the store like the
+category list because rules and closes in `tg`, `max` and `memo` must agree:
+
+| Setting | Default | What it does |
+| --- | --- | --- |
+| `task_agent_close` | `on` | `off` makes every agent close a suggestion |
+| `task_agent_close_min` | `0.8` | the least certainty that closes the task |
+
+At or above the threshold, with agent closes on, the task closes and keeps `close_certainty`. Otherwise
+the answer has `state: open` and `close_suggestion`: as, by (the agent's name), certainty, reason and
+time. The claim is released. `tasks agenda` lists the task with the reason `close-suggested`, and
+`tasks list close:suggested` finds it. The owner confirms with `tasks close <task>` (`--as` may be left
+out; the suggestion's state and reason are taken) or refuses with `tasks reject <task>`. A later
+suggestion replaces the earlier one, and every suggestion is a `close-suggestion` event.
+
+Why 0.8: agents rate themselves high and in coarse steps, so the line falls where "probably" ends and
+"maybe" begins. Higher, every close lands on the owner; lower, a hedged close passes. The rule that
+closes a question the owner answered is not an agent close: it saw the owner's reply, and it closes
+with no certainty.
+
 ## Categories
 
 The category list is one list per store, kept in the store file, not in a profile, because the
@@ -105,12 +140,86 @@ rules run in `tg`, `max`, `memo` and `messages sync` and must agree. The owner e
 | `config unset task_categories` | goes back to the default list |
 | `config show` | lists the categories with the other settings |
 
-The default list is `money`, `documents`, `meeting`, `delivery`, `access`, `personal` and `other`.
 `tasks add` needs a category from the list (MCP `tasks_add` needs `category`), and an unknown name is
 refused with the list. A rule matches the source message's stems against each category's words: the
-most hits wins, and no hit is `other`. `tasks categories` (MCP `tasks_categories`) prints the list
+most hits wins, a tie goes to the earlier category, and no hit is `other`. That is why the list is
+ordered narrow first, the generic actions (`money`, `documents`, `meeting`) after them, and `work` and
+`personal` last. An `es:` word also matches by its Spanish stem when the message reads as Spanish: an
+accent, `ñ`, `¿` or `¡`, or a word such as `la`, `que` or `para`. A list holds up to 80 categories. `tasks categories` (MCP `tasks_categories`) prints the list
 with meanings and words. `tasks agenda category:<name> tag:<name>` filters the agenda with query fields (MCP `tasks_agenda` takes them in `query`). Changing the
 list does not change the category of existing tasks.
+
+A store with no saved list uses the default list of the tool that opens it, and a store that saved
+its own list keeps it; `config unset task_categories` takes the current default. A category that left
+the list while tasks still carry it is named: `tasks categories` lists it under `unlisted` with open and
+total task counts (MCP `tasks_categories` too), a `config set` or `unset` of `task_categories` ends its
+note with the same lines, and `tasks agenda` names the ones open tasks carry (`unlisted_categories`).
+`tasks list category:<name>` finds their tasks, and `tasks plan <task> --category <name>` moves one.
+
+The default list in `tg`:
+
+| Category | Meaning |
+| --- | --- |
+| `taxes` | tax returns, the accountant, the tax office |
+| `investments` | stocks, funds, crypto, a broker |
+| `subscriptions` | a service subscription to start, cancel or renew |
+| `bills` | a recurring bill: utilities, phone, internet |
+| `donations` | a donation, a fundraiser, a charity |
+| `insurance` | an insurance policy or claim |
+| `bank` | cards, bank accounts, wire transfers, a bank's request |
+| `civic` | voting, a petition, a census, jury duty, the local council |
+| `government` | a visa, residence, a permit, an appointment at a public office |
+| `legal` | a lawyer, a notary, a court or a dispute |
+| `hiring` | candidates, interviews, job offers |
+| `sales` | leads, deals, quotes |
+| `partners` | a partnership or an integration with another company |
+| `support` | a user's or customer's problem to solve |
+| `security` | a hacked account, a scam, 2FA, a leak or breach |
+| `access` | a login, password, key, invite or permission to give or get |
+| `tech` | code, servers, bugs, builds, deploys |
+| `media` | the press, a journalist, a podcast or an interview for the media |
+| `marketing` | campaigns, ads, SEO, newsletters, social media |
+| `design` | UI, mockups, a logo or a brand to design or review |
+| `research` | research, a survey, an analysis or a benchmark |
+| `content` | posts, articles, videos to write, film or review |
+| `vendors` | a supplier, contractor or agency you pay for a service |
+| `car` | the car: repairs, parking, fines, inspection |
+| `travel` | flights, trains, hotels, trips |
+| `pets` | a pet: the vet, food, a sitter, walks |
+| `fitness` | the gym, training, a sport |
+| `beauty` | a haircut, nails, cosmetics, a salon |
+| `health` | doctors, prescriptions, medicines |
+| `education` | courses, books, languages, studies at school or university |
+| `celebrations` | a birthday, wedding, anniversary or holiday to plan or mark |
+| `childcare` | a nanny, a babysitter, kindergarten, kids' clubs |
+| `elder-care` | care for an older relative: a carer, a care home |
+| `family` | kids, school, parents and relatives |
+| `real-estate` | buying, selling or letting a property; a mortgage |
+| `moving` | moving house: movers, boxes, a new address |
+| `home` | the flat: repairs, rent, the landlord, neighbours |
+| `delivery` | a parcel, order or courier to send, track or collect |
+| `devices` | a phone, laptop or gadget to buy, fix or set up |
+| `food` | groceries, cooking, a restaurant |
+| `shopping` | things to buy |
+| `hobbies` | a hobby: music, photography, crafts, a game you play |
+| `entertainment` | films, series, concerts, games, shows |
+| `events` | an event, tickets, a venue, an RSVP |
+| `religion` | church, a service, a religious holiday or rite |
+| `community` | a group or club you run or help: members, moderation, admin work |
+| `intro` | introduce people, or ask for an introduction |
+| `money` | pay, invoice, refund, a price or a debt |
+| `documents` | a contract, scan, form or signature to send or receive |
+| `admin` | office admin: supplies, errands, paperwork with no closer area |
+| `meeting` | a call, meeting or appointment to arrange or attend |
+| `clients` | a client's request, a proposal, a client follow-up |
+| `projects` | deliverables, deadlines, launches |
+| `team` | colleagues, reviews, one-to-ones, time off |
+| `follow-up` | you wait for someone: chase them |
+| `reply` | someone waits for your answer |
+| `work` | a job task with no closer category |
+| `personal` | friends, gifts, favours |
+| `other` | none of the above |
+
 
 ## Rules on sync
 
@@ -123,9 +232,7 @@ a failed sync. Nothing is attached on its own beyond a certain match (step 2 bel
 ## The duplicate check
 
 The check runs on every new task. It runs in cli-core, on SQLite, with no embeddings and no call to
-an AI provider. **Not built yet:** the check on a new message linked to an existing task. The
-comparison reads only a task's title, description and source message, so a linked message changes no
-score until the comparison reads linked messages too. `tasks related <task>` (MCP `tasks_related`)
+an AI provider. `tasks related <task>` (MCP `tasks_related`)
 runs steps 3 to 5 for one stored task and prints the result; it changes nothing.
 
 ```mermaid How a new task is checked for duplicates
@@ -139,13 +246,28 @@ graph TD
   Score --> Decide{"6. Band"}
   Decide -->|"likely or maybe"| Ask("Agent chooses, or review list")
   Decide -->|"different"| Create("Create the task")
+  Decide -->|"only closed candidates"| Follow("Create it, linked follow-up-of")
   Ask --> Learn("7. Keep the answer")
 ```
 
 In words: the new task is normalized; a certain match attaches it at once; otherwise a set of
 candidates is collected, each candidate is compared field by field, the weights are added up, and
-the total decides: create, or ask. A score never merges two tasks; an agent or a person decides.
+the total decides: create, or ask. When the only likely or maybe candidates are tasks closed in the
+last 14 days, the task is created as their follow-up. A score never merges two tasks; an agent or a person decides.
 Each answer is kept, so the weights can be tuned later.
+
+**The messages a task stands on.** A task is compared through views: its title and description,
+and the same text plus one message, for its source message and each of its 5 newest linked messages
+(kinds `related-to`, `evidence` or `created-from`; not `answered-by`, the owner's own answer). Two
+tasks score as their best pair of views, each view taken whole, so text, person, amount and due date
+come from the same message. A message can raise a pair's score, never lower it. A message's amount and
+due date count only when the task's own text has none, and its "tomorrow" is read from when it was
+sent. Messages are read from the store at compare time; a task stores no message text.
+
+**After a link.** `tasks link <task> msg:…` (MCP `tasks_link`), `tasks add --into` and `tasks merge`
+run the check again for the task that got the message. New likely or maybe pairs go to the review
+list, with the newer task as the would-be duplicate, and the answer's `review` counts them. The link
+always stands, nothing merges on a score, and a closed task is not checked.
 
 ### 1. Normalize
 
@@ -156,7 +278,8 @@ Each answer is kept, so the weights can be tuned later.
 - The normalized title is also cut into **character trigrams**, every window of three letters. They
   catch typos and forms that a stemmer misses.
 - Patterns extract the **signature**: an amount with its currency (a number beside `₽`, `руб`, `€`,
-  `$`, `usd`), a due date (dates and phrases such as `by Friday` or `до пятницы`) and the person
+  `$`, `usd`), a due date (dates and phrases in English, Russian and Spanish, such as `by Friday`,
+  `до пятницы` or `el viernes`) and the person
   (`person:<id>` of the source message's sender, through `identities`). A due date that an agent
   passes with `--due` is used instead of the one in the text.
 
@@ -260,6 +383,7 @@ across languages are weak (2 of 5 scored "different"). There is no measurement o
 | Likely | listed first; the agent must choose | created; the pair goes to the review list |
 | Maybe | `tasks add` refuses (exit code 2, reason `task.duplicate-candidates`) and lists up to 5 candidates with score and reasons; the agent repeats with `--into <task>` or `--new` | created; the pair goes to the review list |
 | Different | created | created |
+| Likely or maybe, but closed in the last 14 days | created, linked `follow-up-of` the closed task | created, linked `follow-up-of` the closed task |
 
 The tool refuses instead of warning: an agent can skip a warning, but not an exit code. Asking the
 agent that creates the task costs no extra call to an AI provider, because that agent is already the
@@ -279,6 +403,13 @@ records "not the same", so the pair does not come back. `tasks duplicates defer 
 the pair to the owner, stored as `unsure`, and `tasks duplicates decision:unsure` lists those pairs. MCP has the same tools:
 `tasks_duplicates`, `tasks_merge`, `tasks_unmerge`, `tasks_duplicates_reject` and
 `tasks_duplicates_defer`.
+
+**Follow-ups.** When every likely or maybe candidate is a task closed in the last 14 days, `tasks add`
+opens the task and links it `follow-up-of` the best-scoring closed one (`follow_up_of` in the answer);
+a rule does the same. It still refuses while an open task may be the same job, since only an open task
+can be the job still waiting. The closed task stays closed, and the pair goes neither to the review list
+nor to `task_pairs`: a merge would fold new work into a closed task. `tasks show` and the MCP card list
+the link.
 
 **A merge can be undone.** `tasks unmerge <dup>` reopens the duplicate and removes the relation. Links
 stay where they are until they are moved. A merge never deletes anything.
@@ -351,13 +482,9 @@ of text plus fields, with weights that are counted, not trained.
 
 ## What is not done
 
-- **The check on a message linked to an existing task.** It needs the comparison to read linked
-  messages first.
 - **Tuning the weights from saved pairs.** The pairs are kept; nothing recounts the weights yet.
 - **No embeddings and no call to an AI provider** to compare tasks. If the test set shows that the
   text field is too weak, a local embedding is the next step, measured against this check.
 - **No deletes.** A duplicate is closed and linked; it is never removed.
 - **No limit of one task per chat or per person.**
 - **No hash ids**, until stores sync between devices.
-- **Open questions:** the default category list, and whether a message that matches a task closed in
-  the last 14 days reopens it or opens a new task linked `follow-up-of`.

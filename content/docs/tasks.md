@@ -12,6 +12,8 @@ Nothing on this page sends a message.
 Categories, tags on tasks, keys per type, claiming and the duplicate check are built in the shared
 core of the tools (cli-core). `tg` and `max` have all of them; `memo` does not have claiming and the
 duplicate review yet.
+Closes that wait for you when an agent is unsure, follow-up tasks, the list of 59 categories and the
+duplicate check that reads linked messages are in `tg`; `max` and `memo` do not have them yet.
 [How tasks work](./tasks-architecture.mdx) gives the technical detail.
 
 ## Where tasks come from
@@ -42,6 +44,10 @@ Each task points to its messages, so you can check why it exists. For MAX, write
 
 ```text prompt
 Use tg CLI. In my chat with Bob Sample, I promised to send the signed contract by Friday. Add a promise task for that message, due Friday, with a clear title. Link the earlier messages where we agreed the price.
+```
+
+```text prompt
+Use tg CLI. Show me the tasks an agent suggested closing, with its reason and how sure it was. Don't close or reject anything yet.
 ```
 
 ```text prompt
@@ -97,8 +103,16 @@ tg personal tasks close <task> --as done --reason "contract sent"
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
+See the closes an agent suggested, then confirm or refuse one:
+
+```sh
+tg personal tasks list close:suggested
+tg personal tasks close <task>
+tg personal tasks reject <task>
+```
+
 `<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the
-same commands.
+same commands, except the suggested closes, which only `tg` has so far.
 
 </details>
 
@@ -111,13 +125,18 @@ same commands.
 - **link** adds messages, chats, people, documents, notes or addresses to a task.
 - **show** prints one task with its plan and everything linked to it.
 - **close** closes a task as `done` or `dismissed`. A closed task stays closed. Only `tasks unmerge`
-  reopens a task, and only one that a merge closed.
+  reopens a task, and only one that a merge closed. An agent's close may wait for you; see
+  [When an agent closes a task](#when-an-agent-closes-a-task).
+- **reject** refuses a close that an agent suggested. The task stays open.
 
 ## Relations between tasks
 
 One project task can wait for another (`blocked-by`), continue another (`follow-up-of`) or simply
 relate to it (`related-to`). Only you apply these relations; an agent can suggest them. They work
 between project tasks in `memo`: see [What to do first](./memo/tasks.md#what-to-do-first).
+
+The tool also writes `follow-up-of` itself between tasks found in messages: a new task about a task
+closed in the last 14 days is linked to it as a follow-up (see [No duplicate tasks](#no-duplicate-tasks)).
 
 Two more kinds exist. `duplicate-of` says that a task is the same job as another. A merge writes it,
 and it joins tasks found in messages of one account. `discovered-from` says that a task was found
@@ -131,9 +150,37 @@ while working on another.
    closed and how many went to the review list.
 2. It reads the agenda and checks each new task against its messages.
 3. It sets a title, a due date and the right category, links the messages that belong together, and
-   closes what is done.
+   closes what is done. When it is not sure that a task is done, its close waits for you.
 4. It goes through the review list of possible duplicates (see below).
 5. It shows you what it changed and asks before anything leaves your computer.
+
+## When an agent closes a task
+
+Only `tg` has this so far; in `max` and `memo`, an agent's close still closes the task.
+
+An agent that closes a task says how sure it is that nothing more is needed, as a number from 0 to 1
+(`--certainty`). At or above the store's threshold (0.8 by default), the task closes. Below it, the
+task stays open with a close suggestion: which agent made it, how sure it was and why. The agenda
+lists these tasks, and `tasks list close:suggested` finds them. You confirm a suggestion with
+`tasks close <task>`, or refuse it with `tasks reject <task>`; the agent may suggest closing it again
+later. A close cannot be undone, so an unsure one waits for you.
+
+Two settings for the whole store control this: `task_agent_close` (`on` by default; `off` makes every
+agent close a suggestion) and `task_agent_close_min` (0.8 by default).
+
+The tool knows that an agent runs it from the `AI_AGENT` or `CLAUDECODE` environment variable. An
+agent's close without `--certainty` is refused with `task.certainty-required`. When you asked the agent
+to close a task, it closes it as you with `--as-owner`. A rule that closes a question you answered in
+the chat is not an agent close and needs no certainty.
+
+```text
+tasks close REQ-22 --as done --certainty 0.9 --reason "invoice sent"
+tasks list close:suggested
+tasks close REQ-22
+tasks reject REQ-22
+config set task_agent_close_min 0.9
+config set task_agent_close off
+```
 
 ## No duplicate tasks
 
@@ -149,15 +196,23 @@ new task before it creates it:
   command with `--into <task>` to link the message to one of them, or with `--new` to make a new
   task. When a rule finds the task, the task is made and the similar pairs go to a review list.
 - **Clearly different:** a new task is made.
+- **Like a task closed in the last 14 days:** a new task is made and linked `follow-up-of` the closed
+  one. The closed task stays closed. `tasks add` refuses only while an open task may be the same job.
 
 The check compares words (including other forms of a word and typos), the person, the amount of
-money, the due date, the category, replies and the time. A chat alone never makes two tasks "the
+money, the due date, the category, replies and the time. It reads each task's title and description,
+its source message and its 5 newest linked messages, so a task that a rule opened with an empty title
+is compared by its message. It reads due dates in English, Russian and Spanish, such as `by Friday`,
+`до пятницы` or `el viernes`. A chat alone never makes two tasks "the
 same". **The tool never merges tasks on a score alone.** Some similar tasks, such as a gift for mum
 and a gift for dad with the same amount, differ in one word's meaning, so an agent or you decide.
 
 **Who decides.** The agent that reviews your chats after a sync goes through the review list. It
 merges the pairs that are one job and rejects the pairs that are not. When it cannot tell, it marks
 the pair unsure. You see only the unsure pairs, with `tasks duplicates decision:unsure`.
+
+When you or your agent link a message to a task (`tasks link`, `tasks add --into` or `tasks merge`), the
+check runs again for that task. New possible pairs go to the review list. The link always stays.
 
 A merge links every message of the duplicate to the kept task and closes the duplicate as
 `dismissed`, with a `duplicate-of` relation. **A merge can be undone**, and nothing is deleted. A
@@ -178,14 +233,27 @@ tasks unmerge REQ-23
 
 ## Categories, tags and keys
 
-- **A category** says what a task is about. The default list is `money`, `documents`, `meeting`,
-  `delivery`, `access`, `personal` and `other`. There is one list for the whole store, shared by
-  `tg`, `max` and `memo`, so "finance" and "payments" never live side by side. `tasks add` needs a
-  category, and refuses a name that is not on the list. A rule picks the category from the words of
-  the message, or `other` when no word matches; your agent corrects it with `tasks plan --category`.
+- **A category** says what a task is about. The default list has 59 categories: narrow ones such as
+  `taxes`, `bills`, `health`, `travel` and `fitness` come first, broad ones such as `money`,
+  `documents` and `meeting` after them, and `work`, `personal` and `other` last. `tasks categories`
+  prints each one with its meaning and its words. `tasks add` needs a category, and refuses a name
+  that is not on the list. A rule picks the category from the words of the message, the narrower one
+  when two fit (a utility bill is `bills`, not `money`), or `other` when no word matches; your agent
+  corrects it with `tasks plan --category`.
+- **One list for the store.** A list you save is kept in the store and shared by `tg`, `max` and
+  `memo`, so "finance" and "payments" never live side by side. Until you save one, each tool uses its
+  own default list: `max` and `memo` still have the earlier seven (`money`, `documents`, `meeting`,
+  `delivery`, `access`, `personal` and `other`).
 - **You can change the list.** Each category has a meaning and the words a rule picks it by. A word
-  can name its language, such as `es:vuelo`. You can add or change a category, remove one, or go
-  back to the default list. `other` cannot be removed. Tasks keep the category they already have.
+  matches its other forms too; a word can name its language, such as `es:vuelo`, and a Spanish word
+  such as `es:pagar` then also matches `pagues` in a Spanish message. You can add or change a category,
+  remove one, or go back to the default list; a list holds up to 80 categories. `other` cannot be
+  removed. A store that saved its own list keeps it, and `config unset task_categories` gives it the
+  current default list.
+- **A category that left the list.** Tasks keep their category when it leaves the list.
+  `tasks categories` names such categories under `unlisted`, with their open and total tasks, and
+  `tasks agenda` names the ones open tasks still carry (`unlisted_categories`). Find their tasks with
+  `tasks list category:<name>`, and move one with `tasks plan <task> --category <name>`.
 - **Tags** such as `urgent` or `waiting-for-them` work on tasks too: `tags add urgent --task REQ-22`.
   Tags are for filtering only; the duplicate check ignores them.
 - **Keys per type:** a task found in a message gets a short key, such as `Q-15` for a question,
@@ -198,6 +266,7 @@ tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
 tasks agenda category:money tag:urgent
 tasks list category:money
+tasks plan REQ-22 --category bills
 config set task_categories.travel "trips and tickets | flight, hotel, es:vuelo"
 config unset task_categories.travel
 config unset task_categories
@@ -232,11 +301,10 @@ tasks agenda claimed:any
 
 Agents that use the MCP server have the same tools, such as `tasks_claim`, `tasks_release`,
 `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` and `tasks_unmerge`.
+In `tg`, `tasks_close` needs `certainty`, as an agent's `tasks close` does.
 
 ## Not built yet
 
-- **A check when a message is linked to an existing task.** The check reads only a task's title,
-  description and source message. It must first learn to read the linked messages too.
 - **Tuning the weights from your answers.** Every merge, rejection, `--into` and `--new` is kept,
   but nothing uses them yet to change the weights.
 

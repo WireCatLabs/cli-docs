@@ -245,7 +245,7 @@ Agregue lo que las reglas no pueden ver, como una promesa que hizo, o cierre una
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other
 ```
 
-Si la tarea puede ser el mismo trabajo que una abierta o cerrada en los últimos 14 días, `tasks add` rechaza la creación con código 2 y muestra los candidatos. Repite con `--into <task>` para vincular el mensaje con esa tarea, o con `--new` para crear otra. `tasks duplicates` muestra los pares encontrados por las reglas y `tasks merge <task> --into <other>` los une:
+Si la tarea puede ser el mismo trabajo que una abierta, `tasks add` rechaza la creación con código 2 y muestra los candidatos. Repite con `--into <task>` para vincular el mensaje con esa tarea, o con `--new` para crear otra. Si solo coincide con una tarea cerrada en los últimos 14 días, `tasks add` la abre como seguimiento, enlazada `follow-up-of` a la cerrada. `tasks duplicates` muestra los pares encontrados por las reglas y `tasks merge <task> --into <other>` los une:
 
 ```sh
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other --into <task>
@@ -253,6 +253,16 @@ tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --categ
 
 ```sh
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
+```
+
+Un agente de IA que cierra una tarea indica su certeza con `--certainty`, de 0 a 1. Por debajo del umbral del almacén (`task_agent_close_min`, 0.8 por defecto) la tarea sigue abierta con una sugerencia de cierre; `config set task_agent_close off` convierte cada cierre de un agente en una sugerencia. `tasks list close:suggested` las encuentra. Confirma una con `tasks close <task>` o recházala con `tasks reject <task>`:
+
+```sh
+tg personal tasks list close:suggested
+```
+
+```sh
+tg personal tasks reject <task>
 ```
 
 Ponle a una tarea un título, una fecha límite y una fecha para volver a mirarla, y vincúlale los
