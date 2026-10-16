@@ -48,7 +48,12 @@ for (const lang of ["en", "ru", "es"]) {
           expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
         })
         await test.step("Accessibility", async () => {
-          const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze()
+          // Keep all unique page content, including the native reference body, in every scan.
+          // Site-quality covers the shared navigation/footer without repeating them on all 24 guides.
+          const scan = await new AxeBuilder({ page })
+            .include("main")
+            .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+            .analyze()
           expect(scan.violations).toEqual([])
         })
         await test.step("Direct reference anchor", async () => {

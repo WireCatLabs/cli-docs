@@ -35,6 +35,36 @@ CI and deployment retain that report, failed traces/screenshots and generated Ab
 screenshots as `playwright-<job>-<attempt>` artifacts for seven days. Artifact upload is
 diagnostic only; a failed test still prevents publication.
 
+## Coverage by responsibility
+
+Every public, non-documentation page participates in the shared-shell browser contract in all
+three locales at desktop and mobile widths. The route inventory comes from the app's page files,
+including About, Features, Examples, Privacy and Terms. A new dynamic or unlocalized route needs an
+explicit fixture instead of silently escaping coverage. Each page checks header/footer navigation
+against its localized homepage, landmarks, branding, legal links, language/theme controls, mobile
+menu dismissal and horizontal overflow.
+
+Homepage tests keep their complete interaction, responsive, theme and accessibility coverage.
+Their exhaustive shared-link hover/focus checks stay on each localized homepage. Other public pages
+verify the shared structure and controls, plus one visible shared link per header/content/footer
+region on desktop, without replaying the same animation on every link. Focus checks move the pointer
+away and use keyboard modality so hover cannot conceal a broken focus state.
+About's own content, keyboard, screenshot and accessibility matrix remains separate.
+
+Reader-guide cases scan each localized page's `main`, including the complete guide and native
+reference body. All guide variants retain their rendering, reference-anchor and Markdown checks.
+The existing full-page `site-quality` matrix covers shared navigation/footer and generated
+reference-table layouts. Keep content/translation contracts and semantic prose review alongside
+browser checks.
+
+When changing coverage, map each moved assertion to its remaining protection and compare timings
+against the same frozen export with the same worker count. Test count alone is not the performance
+budget. Keep the existing timeout and headroom guards.
+
+Use source/contract or exported-content checks for text, literals, links and translation structure
+when a browser adds no evidence. Browser cases should establish visibility, layout, interaction or
+other rendering behavior. Semantic translation and instruction review remains a separate requirement.
+
 Keep independent guide routes and viewport/theme cases as separate tests. Do not place
 several full-page accessibility scans under one timeout. Shared browser/server setup is
 already reused; sharing mutable page state can hide ordering bugs. Static reader-guide

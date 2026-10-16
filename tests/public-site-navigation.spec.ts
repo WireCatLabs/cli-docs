@@ -99,37 +99,31 @@ for (const lang of ["en", "ru", "es"]) {
 }
 
 for (const lang of ["en", "ru", "es"]) {
-  test(`${lang}: public pages share their shell and single link underline`, async ({ page }) => {
+  test(`${lang}: homepage shell and all shared links preserve their styling`, async ({ page }) => {
     test.setTimeout(120000)
-    let sharedLinks: string[] | undefined
-    for (const suffix of ["", "/about", "/features", "/examples"]) {
-      await page.setViewportSize({ width: 1440, height: 900 })
-      await page.goto(lang === "en" && !suffix ? "/" : `/${lang}${suffix}`)
-      await expect(page.locator("header.site-header")).toHaveCount(1)
-      await expect(page.locator("footer")).toHaveCount(1)
-      await expect(page.locator("main#main")).toHaveCount(1)
-      await expect(page.locator("[data-copy-feedback]")).toHaveCount(1)
-      await expect(page.locator('.toast[role="status"]')).toHaveCount(0)
-      const links = await page
-        .locator(".public-site-menu > a, footer a:not([data-language-switcher] a)")
-        .evaluateAll((nodes) => nodes.map((node) => `${node.textContent?.trim()}:${node.getAttribute("href")}`))
-      if (sharedLinks) expect(links).toEqual(sharedLinks)
-      else sharedLinks = links
-      for (const selector of [".public-site-menu > a", "main a.animated-text-link", "footer a.animated-text-link"]) {
-        for (const link of await page.locator(`${selector}:visible`).all()) {
-          await link.hover()
-          await expect(link).toHaveCSS("text-decoration-line", "none")
-          await expect(link.locator(".link-label")).toHaveCSS("background-size", "100% 2px")
-          await link.focus()
-          await expect(link).toHaveCSS("text-decoration-line", "none")
-          await expect(link.locator(".link-label")).toHaveCSS("background-size", "100% 2px")
-        }
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await page.goto(lang === "en" ? "/" : `/${lang}`)
+    await expect(page.locator("header.site-header")).toHaveCount(1)
+    await expect(page.locator("footer")).toHaveCount(1)
+    await expect(page.locator("main#main")).toHaveCount(1)
+    await expect(page.locator("[data-copy-feedback]")).toHaveCount(1)
+    await expect(page.locator('.toast[role="status"]')).toHaveCount(0)
+    // Preserve exhaustive homepage hover/focus coverage. Other public routes check their
+    // shared shell independently, without replaying this same animation on every link.
+    for (const selector of [".public-site-menu > a", "main a.animated-text-link", "footer a.animated-text-link"]) {
+      for (const link of await page.locator(`${selector}:visible`).all()) {
+        await link.hover()
+        await expect(link).toHaveCSS("text-decoration-line", "none")
+        await expect(link.locator(".link-label")).toHaveCSS("background-size", "100% 2px")
+        await link.focus()
+        await expect(link).toHaveCSS("text-decoration-line", "none")
+        await expect(link.locator(".link-label")).toHaveCSS("background-size", "100% 2px")
       }
-      await page.setViewportSize({ width: 390, height: 844 })
-      await expect(page.locator(".site-menu-toggle")).toBeVisible()
-      await expect(page.locator(".site-header .editorial-language summary")).toBeVisible()
-      await expect(page.locator(".site-header .theme-switch")).toBeVisible()
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
     }
+    await page.setViewportSize({ width: 390, height: 844 })
+    await expect(page.locator(".site-menu-toggle")).toBeVisible()
+    await expect(page.locator(".site-header .editorial-language summary")).toBeVisible()
+    await expect(page.locator(".site-header .theme-switch")).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
 }
