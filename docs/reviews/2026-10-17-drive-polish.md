@@ -23,5 +23,7 @@ Translation fingerprints accepted after prose review and structural checks, not 
 Source contracts refreshed against the exact reviewed npm releases. Focused Drive executable evidence
 is in [cli-testing](https://github.com/WireCatLabs/cli-testing/tree/main/performance/documents/drive-release-polish).
 Local strict docs passed: 1,333 reference entries, zero gaps and zero invalid examples; 306 unit tests passed.
-Drive browser results will be recorded in the PR once complete.
+All 24 Drive browser checks passed across EN/RU/ES, including installation, Markdown examples,
+settings sections, cached content and source links. The existing Sidebar React key warning remains;
+this documentation-only change does not modify the sidebar implementation.
 Full export and broader browser coverage remain CI deployment gates. No Google access or owner data used.
