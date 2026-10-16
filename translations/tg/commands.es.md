@@ -4450,13 +4450,7 @@ tg mcp [options]
 | Opción | Qué hace |
 |---|---|
 | `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
-| `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
-| `--allow-delete` | obsoleta: deciden los permisos del perfil. |
 | `--http` | servir mediante HTTP en 127.0.0.1 para ChatGPT y Claude en el navegador, detrás de tu túnel. |
-| `--http-confirmation <mode>` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
 | `--port <port>` | puerto local para --http (predeterminado 8765). |
 | `--public-url <url>` | dirección https del túnel que usan las aplicaciones del navegador, p. ej. https://<name>.ts.net. |
 | `--revoke` | olvida todos los inicios de sesión concedidos a aplicaciones del navegador; cada una debe volver a iniciar sesión. |
@@ -4472,11 +4466,6 @@ tg mcp config [options]
 | Opción | Qué hace |
 |---|---|
 | `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
-| `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
-| `--allow-delete` | obsoleta: deciden los permisos del perfil. |
 
 ### `tg mcp setup`
 
@@ -4496,11 +4485,6 @@ tg mcp setup <client> [options]
 |---|---|
 | `--allow-writes` | confirma que este perfil ofrece herramientas de escritura. |
 | `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
-| `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
-| `--allow-delete` | obsoleta: deciden los permisos del perfil. |
 
 ### `tg mcp doctor`
 
@@ -4513,11 +4497,6 @@ tg mcp doctor [options]
 | Opción | Qué hace |
 |---|---|
 | `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
-| `--allow-mark-read` | obsoleta: deciden los permisos del perfil. |
-| `--allow-delete` | obsoleta: deciden los permisos del perfil. |
 
 ## `tg bot`
 
@@ -5181,35 +5160,13 @@ tg bot store fetch <chat> [options]
 
 ofrece el bot por MCP mediante stdin y stdout: `claude mcp add sales-bot -- tg sales bot mcp`
 
-**Changes something in Telegram.**
-
-```sh
-tg bot mcp [options]
-```
-
-| Opción | Qué hace |
-|---|---|
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
-| `--allow-delete` | obsoleta: deciden los permisos del perfil. |
-| `--allow-moderate` | obsoleta: deciden los permisos del perfil. |
-
 #### `tg bot mcp config`
 
 imprime la entrada mcpServers para Claude Desktop, Cursor y otros con rutas completas, sin escribir
 
 ```sh
-tg bot mcp config [options]
+tg bot mcp config
 ```
-
-| Opción | Qué hace |
-|---|---|
-| `--confirm-send` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-dangerous` | ya no se usa — las operaciones de escritura no muestran un formulario; deciden los permisos del perfil. |
-| `--allow-send` | obsoleta: deciden los permisos del perfil; se conserva para compatibilidad. |
-| `--allow-delete` | obsoleta: deciden los permisos del perfil. |
-| `--allow-moderate` | obsoleta: deciden los permisos del perfil. |
 
 ### `tg bot api`
 

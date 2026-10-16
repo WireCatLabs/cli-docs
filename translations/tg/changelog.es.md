@@ -4,6 +4,24 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.61.0 — 16.10.2026
+
+### Cambios que pueden afectar a los scripts
+
+- **`tg mcp` y `tg bot mcp` ya no aceptan las antiguas banderas de acceso** `--allow-send`, `--allow-mark-read`,
+  `--allow-delete`, `--allow-moderate`, `--confirm-send`, `--allow-dangerous` y `--http-confirmation` (cli-core
+  0.292.0). Una entrada de aplicación que aún pase una deja de arrancar con «unknown option»: quita la bandera;
+  deciden los permisos del perfil, como ya hacían.
+
+### Corregido
+
+- **Los scripts de publicación muestran los procesos que tienen el bloqueo aparte de las etiquetas de
+  publicaciones antiguas.** El diagnóstico compartido ya no atribuye un bloqueo vivo a una ejecución anterior;
+  espera a que terminen y vuelve a intentarlo.
+
+- **Un inicio de sesión que falla al abrirse ya no deja abierto el cliente de Telegram**: cuando falla la carga del
+  usuario conectado, el adaptador cierra el cliente y el archivo de sesión antes de que el error llegue al comando.
+
 ## 0.60.0 — 15.10.2026
 
 ### Cambios que pueden afectar a los scripts

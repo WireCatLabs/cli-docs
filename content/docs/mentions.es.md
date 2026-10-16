@@ -86,7 +86,15 @@ El correo guardado admite los mismos campos. La búsqueda de correo es de [memo]
 ```sh
 memo search mail 'domain:example.com'
 memo search mail 'phone:"+1 555 010 0100"'
+memo search mail 'url:"https://news.example.com/click?id=1"'
+memo search mail 'link:"/click?id=1"'
 ```
+
+El correo está lleno de enlaces de seguimiento, cada uno en una sola carta. memo guarda ese enlace una vez por
+carta, como su sitio, así que `domain:` sigue encontrando todas las cartas. `url:` sigue encontrando una carta por
+el enlace completo: lee el texto de la carta. `link:` encuentra las cartas cuyos enlaces contienen una parte, como
+una ruta o `id=1`; las letras latinas coinciden sin importar mayúsculas. Pon un enlace o una parte entre comillas:
+`?`, `/` y `=` significan otra cosa en una consulta.
 
 ## Revisar lo encontrado
 

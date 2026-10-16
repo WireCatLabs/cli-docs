@@ -278,6 +278,22 @@ tg personal tasks link <task> msg:telegram/<you>/<chat>/<message> --chat "Hiking
 tg personal tasks agenda
 ```
 
+`tasks agenda` и `tasks duplicates` принимают поля запроса:
+
+- `tag:` и `category:` оставляют задачи с этой меткой или категорией: `tag:urgent`, `category:money`.
+- `claimed:` говорит, кто взял задачу: `none`, `mine`, `others` или `any`. Без него в списке дел видны задачи,
+  которые никто не взял, и ваши; `claimed:any` показывает все.
+- `decision:` выбирает пары дублей: `review` (по умолчанию) ждут проверяющего агента, а
+  `unsure` ждут вас: `decision:unsure`.
+
+```sh
+tg personal tasks agenda category:money tag:urgent claimed:any
+```
+
+```sh
+tg personal tasks duplicates decision:unsure
+```
+
 `tg skill show follow-ups` выводит ежедневный порядок работы для ИИ-агента: он готовит черновики
 ответов по этому списку и ничего не отправляет.
 
