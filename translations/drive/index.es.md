@@ -83,8 +83,10 @@ Sustituye `FOLDER_ID` y el perfil. Continúa sincronizando mientras quede trabaj
 ## Contenido y conexiones compatibles
 
 La indexación local admite Google Docs y Sheets, Markdown/texto subido, PDF con capa de texto,
-Word `.docx`, Excel `.xlsx` y CSV. PDF escaneado, Slides, imágenes, audio y accesos directos se omiten
-con su razón. Docs incluye cuerpo, tablas y notas al pie de todas las pestañas; excluye imágenes,
+Word `.docx`, Excel `.xlsx`, CSV y TSV. Sheets se importa para lectura y búsqueda; no se pueden editar
+celdas, fórmulas ni formato. Los PDF escaneados, Slides, audio y accesos directos no aportan texto indexado.
+Las imágenes se encuentran por nombre o por contenido al activar la
+[búsqueda de imágenes](./search.md#search-images-by-what-they-show). Docs incluye cuerpo, tablas y notas al pie de todas las pestañas; excluye imágenes,
 encabezados, pies, comentarios y sugerencias. Consultar metadatos mediante la API es distinto de importar contenido.
 
 La conexión abre la pantalla de consentimiento de Google. Cada usuario autoriza su cuenta;
