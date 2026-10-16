@@ -2,7 +2,46 @@ import { expect, test } from "@playwright/test"
 
 const titles = { en: "Meetings", ru: "Встречи", es: "Reuniones" }
 const startTitles = { en: "Zoom — start here", ru: "Zoom — начало работы", es: "Zoom — empieza aquí" }
+const ownershipRecovery = {
+  en: "lost or changed writer ownership",
+  ru: "процесс потерял блокировку",
+  es: "perdió el bloqueo de escritura",
+}
 for (const lang of ["en", "ru", "es"] as const) {
+  test(`${lang}: batch reads retain independent answers and budget limits in HTML and Markdown`, async ({
+    page,
+    request,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto(`/${lang}/docs/zm/search`)
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const response = await request.get(`/llms.mdx/docs/${prefix}zm/search/content.md`)
+    expect(response.ok()).toBe(true)
+    const markdown = await response.text()
+    for (const literal of [
+      "zm batch requests.json --json",
+      "cat requests.json | zm batch - --jsonl",
+      "not_run",
+      "meta.complete",
+      "--max-read-bytes",
+      "--max-output-bytes",
+    ]) {
+      await expect(page.locator("main")).toContainText(literal)
+      expect(markdown).toContain(literal)
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+  })
+
+  test(`${lang}: archive recovery retains lost-ownership guidance in HTML and Markdown`, async ({ page, request }) => {
+    await page.goto(`/${lang}/docs/zm/archive#locks-and-recovery`)
+    await expect(page.locator("main #locks-and-recovery")).toHaveCount(1)
+    await expect(page.locator("main")).toContainText(ownershipRecovery[lang])
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const response = await request.get(`/llms.mdx/docs/${prefix}zm/archive/content.md`)
+    expect(response.ok()).toBe(true)
+    expect(await response.text()).toContain(ownershipRecovery[lang])
+  })
+
   test(`${lang}: Zoom sits beside Drive and opens its setup guide`, async ({ page }) => {
     await page.goto(`/${lang}/docs/zm`)
     await expect(page.getByRole("heading", { level: 1, name: startTitles[lang], exact: true })).toBeVisible()

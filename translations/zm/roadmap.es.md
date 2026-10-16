@@ -13,7 +13,7 @@ Un agente puede combinar esas fuentes con proyectos, notas y personas de Memo. E
 
 - Análisis revisable de resultados: el agente propone hechos, decisiones y tareas con fuentes; repetirlo evita registros duplicados.
 - Preparación más amplia: descubrir series candidatas, consultar documentos importados, correo, mensajes y candidatos por nombre/alias, y elaborar un informe con pruebas y lagunas explícitas. El comando actual incluye hechos globales aceptados de personas/proyectos y notas del dueño, pero no consulta esas otras fuentes y devuelve contexto guardado sin generar resúmenes.
-- Más almacenamiento común para que otros proveedores reutilicen descargas parciales, puntos de control y recuperación sin copiar la implementación de Zoom.
+- Más almacenamiento nativo común para que otros proveedores reutilicen descargas parciales y recuperación de publicación. Los bloqueos de escritura y la recuperación de bloqueos obsoletos ya usan la capacidad compartida; las estructuras de archivos parciales y publicación siguen a cargo del proveedor.
 
 Los nombres alternativos de proyectos, etiquetas y notas ya pertenecen a Memo y al almacén común.
 Otros proveedores usan las capacidades compartidas; esta herramienta no incluye conectores de

@@ -152,6 +152,11 @@ Para los demás casos, inspecciona `recordings archive locks` y revisa `recordin
 y desconocidos. Solo elimina marcadores. La continuación recupera una publicación completa si
 coinciden diario propio, parte verificada y archivo final; archivos ajenos quedan protegidos.
 
+Si el archivado informa de que perdió el bloqueo de escritura o cambió su propietario, revisa
+el destino y los registros de bloqueo antes de reintentar. Verifica las sumas de los archivos
+completados: la limpieza puede fallar después de guardar archivos, aunque no se devuelva una
+confirmación de descarga correcta.
+
 ## Copias diarias
 
 Elige destino absoluto y zona del temporizador:
