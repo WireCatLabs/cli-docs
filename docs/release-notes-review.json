@@ -12,9 +12,9 @@
     "conclusion": "Reviewed MAX 0.56.0 with Core 0.296.0/Base 0.40.0: shared MCP and retired bot flags, attachments extraction and local voice, no old moderation checkpoint migration, setup next envelope, media provider_ref and voice kind, watch rendering, diagnostic reply/write ID labeling, agent task close certainty/reject, follow-ups and 59 categories. Shared task guides now include MAX suggested closes. Roadmap unchanged: optional local-copy mode, event actions, video circles/cloud password and standalone installers remain future work."
   },
   "zm": {
-    "version": "v0.21.2",
-    "roadmapSha256": "7dcf3fa84fdc6e9692a0272cde291b59cfea98485dd90722679dab9d85fd534d",
+    "version": "v0.21.3",
+    "roadmapSha256": "866a2d00ff86c94f379d8530f1cd99333f585209a188e657edf631587e137e0c",
     "reviewedAt": "2026-10-16",
-    "conclusion": "Reviewed Zoom 0.21.2 on verified Core 0.299.0/Base 0.40.0: native partial storage is shared while Zoom preserves compatible archive names, checkpoint bytes, defaults and cancellation mapping. Final-sync cancellation cannot acknowledge completion; publication-journal recovery sharing remains planned. Agent guidance now accurately describes existing verified range resume. Broader preparation and reviewed findings intake remain planned; no additional production provider is implied."
+    "conclusion": "Reviewed Zoom 0.21.3 on verified registry Core 0.304.0/Base 0.40.0: publication journals, verified no-overwrite final linking and interruption recovery are shared while Zoom preserves archive metadata and legacy bytes. The roadmap now marks this delivered. Scheduled meeting instance resolution, compact safe config diagnostics, token outcome logs and startup cache changes are reflected in native and translated guides. Broader preparation and reviewed findings intake remain planned; no additional production provider is implied."
   }
 }

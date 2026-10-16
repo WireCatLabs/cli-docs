@@ -95,7 +95,7 @@ nombrado: autoriza una llamada API, pero no garantiza que existan los datos soli
 | Permiso | Uso |
 |---|---|
 | `meeting:read:list_meetings` | Reuniones del anfitrión y agenda futura |
-| `meeting:read:list_past_instances` | Ocurrencias separadas de reuniones recurrentes |
+| `meeting:read:list_past_instances` | Encontrar la ocurrencia realizada de cada reunión listada, recurrente o no |
 | `cloud_recording:read:meeting_transcript` | Transcripción disponible |
 | `meeting:read:list_past_participants` | Participantes y sesiones de entrada/salida |
 | `meeting:read:summary` | Resumen disponible de Zoom AI |

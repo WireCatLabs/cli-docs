@@ -4,6 +4,41 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.21.3 — 16.10.2026
+
+### Añadido
+
+- Se adopta Core 0.304.0 publicado con Base 0.40.0. Los errores de configuración indican la
+  primera clave incorrecta, un motivo fijo y cuántos problemas quedan, sin mostrar valores.
+  Si falla una parte de una reunión, la sincronización conserva las partes disponibles y el cursor para reintentar.
+- **zm arranca aproximadamente un quinto más rápido después de su primera ejecución.** Guarda
+  el código compilado de Node en la carpeta temporal del sistema; `NODE_COMPILE_CACHE` cambia su
+  ubicación. Es el mismo cambio de tg 0.62.0, memo 0.52.1 y drive 0.14.1.
+- **Las solicitudes de token registran su resultado.** Cada inicio o actualización escribe en
+  `<state dir>/runs/<date>/<run>/events.jsonl`: estado HTTP, si llegó un token de actualización
+  nuevo, si se guardó en el llavero, tiempo agotado o cancelación e identificador del proceso.
+  No registra el token, su hash ni una parte. Una orden que no pide tokens no crea una ejecución.
+
+### Corregido
+
+- Las descargas usan el adaptador compartido de Core para publicar archivos y recuperar
+  interrupciones. Los formatos existentes de diarios y archivos Zoom siguen siendo compatibles;
+  los archivos finales se verifican y sincronizan antes de guardar el manifiesto, y la recuperación
+  conserva los archivos ajenos.
+- **Una configuración inválida indica su archivo y primera clave incorrecta.** Antes todas las
+  órdenes solo mostraban `zm config is invalid`. Ahora el mensaje indica archivo y clave, por
+  ejemplo `client_id` en un archivo camelCase antiguo, nunca el valor. `doctor` sigue respondiendo
+  con el problema en `config.error`; `config show` falla con el mismo mensaje.
+- **`meetings sync` conserva las reuniones programadas.** Antes solo buscaba ocurrencias de
+  reuniones recurrentes: guardaba la programada con el identificador de la lista y no encontraba
+  participantes, transcripción ni resumen. Ahora resuelve cada reunión mediante las ocurrencias
+  pasadas de Zoom y su inicio real. Si Zoom ya no devuelve ocurrencias, la omite y continúa.
+  Añade una petición por reunión y requiere `meeting:read:list_past_instances` para todas.
+- **`bin/release` se reinicia una vez cuando la publicación incorpora una versión nueva del propio
+  script.** Unificar el historial adelanta `main`, y antes el intérprete mezclaba texto antiguo y
+  nuevo. Ahora ejecuta la versión nueva; un segundo cambio lo detiene con `run it again`.
+  Solo afecta a la publicación del repositorio, no al paquete publicado.
+
 ## 0.21.2 — 16.10.2026
 
 ### Añadido
