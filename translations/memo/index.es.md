@@ -37,8 +37,9 @@ Tres palabras aparecen en todas las páginas:
 
 1. **Tú eliges tus fuentes.** Añades una carpeta de notas, conectas una cuenta de correo o usas tg y
    max para guardar tus chats. No se lee nada hasta que tú lo eliges.
-2. **Memo copia el texto en el almacén local.** Lee tus archivos y tu correo y nunca los cambia.
-   En Linux, un temporizador puede volver a ejecutarlo solo.
+2. **Memo copia el texto en el almacén local.** La importación deja archivos y correo intactos.
+   En Linux, un temporizador puede repetir la importación. Los [comandos de limpieza de Gmail](./mail.md#clean-up-gmail)
+   mueven el correo elegido a la Papelera o lo restauran solo con `--yes`.
 3. **Tú o tu agente preguntáis.** Memo responde con el texto que coincide y una referencia a cada
    fuente, para que puedas abrir el original y comprobarlo.
 4. **Tu agente puede sugerir, pero tú decides.** Lo que una aplicación añade a través de MCP, y cada

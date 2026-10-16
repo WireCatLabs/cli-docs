@@ -5,8 +5,9 @@ title: "Correo"
 Esta página te ayuda a traer tu correo a Memo. Así el correo está junto a tus notas y mensajes en la
 búsqueda, en el contexto de una persona y en las fuentes que lee tu agente. Memo lee el correo a
 través de [Himalaya](https://github.com/pimalaya/himalaya), un programa de correo que configuras
-primero. Tu buzón se abre solo para lectura: Memo nunca envía, mueve ni borra correo, y no lo marca
-como leído.
+primero. La importación lee el buzón sin cambiarlo ni marcar correo como leído. Los comandos de
+[limpieza de Gmail](#clean-up-gmail) mueven el correo elegido a la Papelera o lo restauran solo con
+`--yes`. Memo nunca envía correo.
 
 ## Antes de empezar
 
@@ -63,7 +64,7 @@ La primera línea cuenta la ventana más amplia importada, por ejemplo todo desd
 Un buzón grande contiene muchas suscripciones y notificaciones. Revísalo antes de una primera importación grande:
 
 ```sh
-memo mail probe work
+memo mail inspect work
 ```
 
 Lee solo las cabeceras (aproximadamente 1 KB por correo) y agrupa por remitente y lista: cantidad, espacio, correo sin leer o masivo, años y si escribiste al remitente. Sugiere `skip` para grupos de al menos 20 correos, con un 80% o más de correo masivo y sin mensajes tuyos al remitente.
@@ -86,7 +87,7 @@ Cada grupo recibe una **puntuación** de parecido con spam, estafa o robot, con 
 `young_domain` necesita la fecha de registro del dominio. memo solo la consulta con `--domain-age`:
 
 ```sh
-memo mail probe work --domain-age
+memo mail inspect work --domain-age
 ```
 
 Consulta mediante RDAP el registro del dominio remitente de cada grupo mostrado, usando la lista de IANA, a un dominio por segundo, y conserva la respuesta en el equipo. **Cada consulta comunica al registro el nombre del dominio**: este sabe que alguien revisa correo procedente de él. No consulta grandes proveedores como gmail.com ni remitentes a los que escribiste. La mayoría de dominios territoriales, como .ru, .de, .es y .io, carece de RDAP: su edad queda desconocida y no suma puntos. Sin `--domain-age` solo usa fechas ya guardadas.
@@ -100,7 +101,7 @@ memo mail rules add work --sender orders@shop.example --do keep
 memo mail rules list work
 ```
 
-El `--do` de una regla elige una de tres acciones:
+Las acciones básicas de `--do` se muestran abajo; la protección y las etiquetas se explican en la siguiente sección:
 
 - `skip`: `memo sync` no lee ni guarda el correo y lo cuenta como omitido.
 - `envelope`: `memo sync` guarda remitente, fecha, tamaño, etiquetas e id de Gmail, sin texto ni adjuntos. El asunto queda en los metadatos, por lo que el correo no aparece en búsquedas. `memo mail rules list` muestra cantidad y tamaño por regla para valorar una limpieza. El sobre no pide a Gmail más datos que omitir: sus campos vienen con el listado.
@@ -161,7 +162,7 @@ memo mail rules list work --filter is:protected
 | `shopping` | tiendas y lo que Gmail clasifica como Promotions |
 | `alerts` | avisos de monitorización y disponibilidad |
 
-`memo mail probe` termina mostrando cuánto correo coincidiría con cada tipo. Nada se aplica hasta añadir una regla:
+`memo mail inspect` termina mostrando cuánto correo coincidiría con cada tipo. Nada se aplica hasta añadir una regla:
 
 ```sh
 memo mail rules add work --kind social --do envelope
@@ -209,6 +210,27 @@ memo mail rules import work rules.json   # a rule with the same sender, domain o
 
 Antes de 0.32.0 las reglas estaban en `config.json`. El primer comando memo que las lee las mueve al almacén, comprueba la copia y solo entonces las quita de los ajustes. Conserva al lado `config.json.<time>.before-rules-in-store`, legible solo por ti, y lo comunica una vez por stderr. Una regla de conservación con «never remove» en el motivo queda protegida: ninguna limpieza puede recortar ni eliminar lo que coincida.
 
+## Limpia Gmail
+
+`memo mail trash` mueve a la Papelera de Gmail los correos de los que decidiste conservar solo el sobre. Gmail los conserva allí 30 días y después los elimina definitivamente.
+
+```sh
+memo mail trash work                  # says what would move, per rule, and what stays and why
+memo mail trash work --yes            # a first run moves at most 100, to check by hand in Gmail's Trash
+memo mail trash work --yes            # later runs move up to 5,000, oldest first (--limit changes it)
+memo mail trash work --yes --since-time 2012-01-01   # only mail from 2012 on; older mail stays for now
+memo mail runs work                   # each run: how much moved, and until when it can be restored
+memo mail restore work --run <id> --yes   # moves a run back, to the inbox if it was there, with its labels
+```
+
+Cada correo se evalúa otra vez con las reglas actuales y los datos de la última sincronización. Antes de moverlo, Memo consulta en Gmail las etiquetas y marcas actuales solo de los correos elegidos. Se conserva si coincide con una regla de protección o conservación, alguna vez respondiste al remitente, tiene estrella o está marcado como importante, es enviado o borrador, tiene una etiqueta tuya que su regla no añade, o tiene menos de 30 días. `--since-time` deja intacto el correo anterior a esa fecha.
+
+Sin `--yes`, el comando muestra el plan. La primera ejecución con `--yes` mueve como máximo 100 correos para revisarlos en la Papelera; las siguientes, hasta 5 000, del más antiguo al más reciente, salvo otro `--limit`. Se necesita una copia verificada del almacén de menos de 8 días: el script de copia registra `backups/last.json` junto al almacén. Se aconseja un archivo Google Takeout `mbox` para conservar el texto completo, pero no es obligatorio; la vista previa y `memo doctor` indican si se ha importado.
+
+Antes de cada lote, los identificadores Gmail, etiquetas y marcas se escriben en el registro de restauración `mail-trash/<account>/<run>.jsonl` en la carpeta de estado de Memo. La Papelera quita el correo de Todos y la etiqueta Recibidos; conserva las demás etiquetas. memo mail runs muestra las ejecuciones y hasta cuándo se pueden restaurar. memo mail restore muestra el plan sin `--yes`; con él devuelve de la Papelera los correos de la ejecución indicada con sus etiquetas anteriores, incluida Recibidos si la tenían. También restaura un lote que Gmail movió sin confirmar la operación.
+
+El correo movido queda marcado como eliminado en el almacén; la siguiente sincronización tras restaurarlo lo importa según las reglas actuales. El temporizador nunca ejecuta la limpieza.
+
 ## Correo antiguo de Google Takeout
 
 Gmail limita la descarga diaria por IMAP; para años de correo es más rápido usar una exportación de Mail de [Google Takeout](https://takeout.google.com/). Añade el archivo como segunda cuenta con la misma dirección para que sus correos y los de Gmail formen un solo conjunto:
@@ -238,6 +260,8 @@ El correo masivo — boletines, avisos y listas con List-Id, List-Unsubscribe o 
 Las etiquetas de Gmail, como Recibidos, Importantes, Destacados y tus propias etiquetas, se convierten
 en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
 [Búsqueda](./search.md#search-mail).
+
+`memo messages show <msg:email/…>` muestra un correo entero y el texto extraído de cada adjunto, como una factura PDF: los primeros 4 000 caracteres, o todo con `--full`. Si no hay texto, indica el motivo, por ejemplo `needs-agent` para una página escaneada.
 
 ## Qué se guarda
 

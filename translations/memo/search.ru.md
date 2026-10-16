@@ -57,12 +57,12 @@ Quote the matching text, show the source of each result and tell me what you cou
 
 ```sh
 memo search notes 'budget' --filter 'tag:work'          # only notes with a tag
-memo search notes 'budget' --folder /path/to/notes       # only one folder
-memo search notes 'budget' --type internal               # only notes you wrote in Memo
+memo search notes 'budget' --source notes:2              # only one folder, by the id a hit shows
+memo search notes 'budget source:internal'               # only notes you wrote in Memo
 memo search notes 'budget' --filter 'date:2026-10-08'    # and a second condition
 ```
 
-`--type file` показывает только заметки из файлов. Выдаётся по 20 результатов; если есть ещё, `--page 2` открывает следующую страницу, номер которой указан в `page.next_page`.
+`source:file` показывает только заметки из файлов. Поле запроса `source:` обозначает источник самой заметки; параметр `--source` выбирает папки для поиска. Выдаётся по 20 результатов; `--page 2` открывает следующую страницу, а `page.next_page` указывает её номер.
 
 ## Поиск в почте
 
