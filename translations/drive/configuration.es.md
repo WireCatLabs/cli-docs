@@ -77,6 +77,9 @@ drive work config set read_only false
 drive personal config show --json
 ```
 
+La primera línea cambia el valor compartido; la segunda lo sustituye para `work`. La última
+imprime ambas secciones, no una lista combinada de valores efectivos.
+
 `drive personal config set picture_search true` activa imágenes solo para `personal`.
 Prepara primero el modelo local compartido `clip-b32` (unos 160 MB) y escribe consultas en inglés.
 Un agente con terminal puede usar el instalador de modelos verificado del SDK instalado:
@@ -91,12 +94,10 @@ El SDK público exporta `modelsCommand` mediante `@wirecat/cli-core/cli`; el age
 esa API. Drive ofrece configuración y búsqueda; la preparación del modelo usa el SDK compartido
 o una herramienta WireCat con soporte de modelos de imagen.
 
-La primera línea cambia el valor compartido; la segunda lo sustituye para `work`. La última
-imprime ambas secciones, no una lista combinada de valores efectivos. Omitir el perfil es un
-error: `DRIVE_PROFILE` y un antiguo perfil predeterminado guardado no lo seleccionan.
-
 `drive personal config set max_text_chars 500000` omite textos más largos con su razón; se leen
 en el siguiente sync después de aumentar el límite.
+
+Omitir el perfil es un error: `DRIVE_PROFILE` y un antiguo perfil predeterminado guardado no lo seleccionan.
 
 ## Variables de entorno
 
