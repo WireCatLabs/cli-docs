@@ -12,9 +12,9 @@
     "conclusion": "Reviewed 0.54.0: task claims, categories, tags and duplicate review; mentions domains, list --new, --all-in-chat and phone_countries; store version 16 reads notes and documents; snake_case settings only; mail search moved to Memo; MAX_READ_ONLY now blocks writes that enable later writes. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
   },
   "zm": {
-    "version": "v0.21.0",
-    "roadmapSha256": "a20d838cc5b4155b13c2dca9b4bc75ed0686e07fefcf0ef9953f6e698e57f257",
+    "version": "v0.21.1",
+    "roadmapSha256": "7a392c96015179ebfd58732c37537152c90b467f0eb7ea4e45edaa5c782ebda2",
     "reviewedAt": "2026-10-16",
-    "conclusion": "Reviewed 0.21.0: bounded stored word-search and passage batches share one store connection and index pass, retaining independent IDs, errors, continuations and coverage. JSON/JSONL and compact text/Markdown expose partial results and budgets. Roadmap unchanged: reviewed findings intake, broader meeting preparation and further shared native archive storage remain planned. No model execution or automatic fact/task creation in batches."
+    "conclusion": "Reviewed0.21.1: archive writer ownership, inspection and dead-local recovery now use Core native leases while Zoom retains compatible marker names and provider transport; missing/replaced ownership is refused before transfer, and owned cleanup runs after cancellation. The publishing workflow verifies the checked source commit. Partial-file and publication storage remain provider-owned and planned for extraction; broader preparation and reviewed findings intake remain planned. Existing0.21 bounded batch guidance is preserved."
   }
 }

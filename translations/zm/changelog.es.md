@@ -4,16 +4,26 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
-Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en las guías correspondientes.
+## 0.21.1 — 16.10.2026
+
+### Corregido
+
+- El flujo de publicación comprueba el commit exacto enviado por `bin/release` antes de compilar:
+  una fusión concurrente no puede sustituir silenciosamente el código elegido para publicar.
+- El archivo de grabaciones usa los bloqueos de escritura nativos compartidos de Core, conservando
+  los nombres de marcadores y los comandos de consulta/recuperación. Rechaza un marcador propio
+  ausente o sustituido antes de descargar archivos; la liberación a cargo de la operación termina
+  incluso tras la cancelación y conserva los registros sustituidos.
 
 ## 0.21.0 — 15.10.2026
 
 ### Añadido
 
-- `batch <file>` runs bounded stored word searches and passage reads with one store connection and
-  one bounded index pass. JSON/JSONL keeps independent request IDs, answers, errors, cursors and
-  coverage; text and Markdown reuse compact passages. File and stdin input are validated before
-  the store opens. Read and output budgets retain every input, including those not run.
+- `batch <file>` ejecuta búsquedas por palabras y lecturas de pasajes en un lote limitado, con
+  una conexión al almacén y una pasada limitada de indexación. JSON/JSONL conserva por separado
+  los ID, respuestas, errores, cursores y cobertura; texto y Markdown usan pasajes compactos.
+  El archivo y stdin se validan antes de abrir el almacén. Los presupuestos de lectura y salida
+  conservan una entrada para cada petición, incluidas las que no llegaron a ejecutarse.
 
 ## 0.20.1 — 15.10.2026
 
