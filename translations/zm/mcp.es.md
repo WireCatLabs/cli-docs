@@ -109,7 +109,11 @@ conserva citas, reuniones relacionadas acotadas por vínculos explícitos a pers
 confirmados y cobertura explícita. Los hechos aceptados sobre personas/proyectos aparecen en
 `knowledge`, con referencias y límites explícitos de evidencia y fuentes no consultadas.
 Las notas y anotaciones del dueño aparecen por separado en `notes`, con referencias `note:`,
-revisiones y límites explícitos de fuentes y cobertura. No consulta documentos importados, correo ni mensajes.
+revisiones y límites explícitos de fuentes y cobertura. El almacén nativo usa la selección
+`owner-written-meeting/person/project-notes` y una referencia `meeting` a una llamada anterior incluida,
+o null. Las notas cuyo sujeto principal es una reunión necesitan una llamada incluida;
+compartir un proyecto no basta.
+No consulta documentos importados, correo ni mensajes.
 Las lecturas relacionadas se limitan a la cuenta y periodo
 elegidos, sin escrituras. Consulta [preparación](./usage.md#prepare-for-an-upcoming-meeting)
 para ver qué incluye, qué no consulta y cómo comprobar el resultado.

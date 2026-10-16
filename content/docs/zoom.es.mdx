@@ -69,8 +69,10 @@ o proyectos confirmados, dentro de la cuenta y el periodo elegidos. Usa el ID nu
 del proveedor, no el ID interno de la reunión guardada. `knowledge.items` añade hechos aceptados sobre
 esas personas vinculadas y proyectos confirmados, incluidas decisiones registradas fuera de las
 reuniones. Conserva las referencias `fact:` para que el agente pueda recuperar y comprobar la evidencia.
-`notes.items` añade por separado notas y anotaciones del dueño sobre esas personas/proyectos, con
-referencias `note:`, revisiones y cobertura. Distingue esos comentarios de los hechos aceptados y
+`notes.items` añade por separado notas y anotaciones del dueño sobre las llamadas anteriores incluidas
+y esas personas/proyectos vinculados, con referencias `note:`, asociaciones a reuniones, revisiones
+y cobertura. Una nota cuyo sujeto principal es una reunión debe enlazar una llamada incluida de
+esta cuenta; compartir proyecto no basta para incluir notas de otra reunión. Distingue esos comentarios de los hechos aceptados y
 comprueba `notes.coverage` para ver notas omitidas y fuentes que no se han vuelto a comprobar.
 Los documentos importados, el correo, los mensajes y los candidatos por nombre/alias quedan como
 no consultados; el agente puede investigarlos aparte. La preparación no descarga transcripciones ausentes ni vincula personas por

@@ -4,6 +4,20 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.22.0 — 17.10.2026
+
+### Añadido
+
+- La preparación incluye notas y anotaciones del dueño vinculadas directamente a las llamadas
+  anteriores incluidas, mediante el servicio compartido de Core. Las notas de otras cuentas o
+  reuniones no seleccionadas no se añaden solo por compartir proyecto.
+
+### Cambiado — puede afectar a los clientes
+
+- El almacén nativo devuelve la selección de notas `owner-written-meeting/person/project-notes`
+  y una referencia `meeting` que puede ser null. Los almacenes personalizados anteriores conservan
+  su selección y forma de respuesta.
+
 ## 0.21.3 — 16.10.2026
 
 ### Añadido

@@ -69,7 +69,9 @@ within the selected account and history window. Use the provider's numeric serie
 internal stored meeting ID. `knowledge.items` adds accepted facts about those linked people and
 confirmed projects, including decisions recorded outside the meetings. Keep their `fact:` references
 so the agent can retrieve and check the evidence. `notes.items` separately adds owner-written notes
-and annotations about those people/projects, retaining `note:` references, revisions and coverage.
+and annotations about included earlier calls and those linked people/projects, retaining `note:`
+references, meeting associations, revisions and coverage. A meeting-scoped note must link to an
+included call in this account; sharing a project alone does not include another meeting's notes.
 Keep these comments distinct from accepted facts, and check `notes.coverage` for omitted notes and
 sources that were not rechecked. Imported documents, mail, messages and project-name/alias candidates
 are not queried; the agent can investigate those separately. Missing
