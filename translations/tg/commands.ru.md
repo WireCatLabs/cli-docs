@@ -3698,7 +3698,7 @@ tg tasks release <task> [options]
 
 ### `tg tasks close`
 
-закрыть задачу как done или dismissed, если ответ не нужен; закрытая остаётся закрытой, кроме повторного открытия объединённой через tasks unmerge
+закрыть задачу как done или dismissed, если ответ не нужен. Агент (задана AI_AGENT или CLAUDECODE) указывает --certainty; ниже config task_agent_close_min или при task_agent_close off задача остаётся открытой, и закрытие ждёт владельца, который подтверждает его через tasks close или отклоняет через tasks reject. Закрытая задача остаётся закрытой, кроме повторного открытия объединённой через tasks unmerge
 
 **Изменяет данные только на этом компьютере.**
 
@@ -3708,12 +3708,32 @@ tg tasks close <task> [options]
 
 | Аргумент | | Описание |
 |---|---|---|
-| `task` | обязательный | идентификатор задачи, как показывает tasks list. |
+| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
 
 | Параметр | Назначение |
 |---|---|
-| `--as <state>` | как закрыть: done или dismissed — ответ не требуется. |
+| `--as <state>` | как закрыть: done или dismissed — ответ не требуется; владелец может не указывать его, чтобы подтвердить закрытие агентом. |
 | `--reason <text>` | причина, сохраняемая с задачей — например, no-reply-needed. |
+| `--certainty <n>` | для агента: насколько он уверен, от 0 до 1, что задаче больше ничего не нужно. |
+| `--as-owner` | закрыть от вашего имени, хотя инструмент запущен в терминале агента (задана AI_AGENT или CLAUDECODE). |
+
+### `tg tasks reject`
+
+отклонить закрытие, предложенное агентом: задача остаётся открытой и уходит из close:suggested; агент может снова её закрыть
+
+**Изменяет данные только на этом компьютере.**
+
+```sh
+tg tasks reject <task> [options]
+```
+
+| Аргумент | | Описание |
+|---|---|---|
+| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
+
+| Параметр | Назначение |
+|---|---|
+| `--as-owner` | отклонить от вашего имени, хотя инструмент запущен в терминале агента (задана AI_AGENT или CLAUDECODE). |
 
 ## `tg search`
 
@@ -4330,7 +4350,7 @@ tg config set <setting> <value> [options]
 
 | Аргумент | | Описание |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, account_groups.<name>. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, account_groups.<name>. |
 | `value` | обязательный | число, true, false или список allow, например send,reaction; для группы — tg:work,max:Alice,email:me@x. |
 
 | Параметр | Назначение |
@@ -4351,7 +4371,7 @@ tg config unset <setting> [options]
 
 | Аргумент | | Описание |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, account_groups.<name>. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, account_groups.<name>. |
 
 | Параметр | Назначение |
 |---|---|

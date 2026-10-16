@@ -3703,7 +3703,7 @@ tg tasks release <task> [options]
 
 ### `tg tasks close`
 
-cerrar una tarea como done o dismissed si no necesita respuesta; sigue cerrada salvo que tasks unmerge reabra una unida
+cerrar una tarea como done o dismissed si no necesita respuesta. Un agente (con AI_AGENT o CLAUDECODE definida) indica su --certainty; por debajo de config task_agent_close_min, o con task_agent_close off, la tarea sigue abierta y el cierre espera al propietario, que lo confirma con tasks close o lo rechaza con tasks reject. Una tarea cerrada sigue cerrada, salvo que tasks unmerge reabra una unida
 
 **Solo hace cambios en este equipo.**
 
@@ -3713,12 +3713,32 @@ tg tasks close <task> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `task` | obligatorio | el identificador de la tarea tal como lo muestra tasks list. |
+| `task` | obligatorio | el identificador o la clave de la tarea tal como lo muestra tasks list. |
 
 | Opción | Qué hace |
 |---|---|
-| `--as <state>` | cómo se cierra: done o dismissed — no necesita respuesta. |
+| `--as <state>` | cómo se cierra: done o dismissed — no necesita respuesta; el propietario puede omitirlo para confirmar el cierre de un agente. |
 | `--reason <text>` | el motivo, guardado con la tarea — no-reply-needed, por ejemplo. |
+| `--certainty <n>` | de un agente: su certeza, de 0 a 1, de que la tarea no necesita nada más. |
+| `--as-owner` | cerrarla en tu nombre aunque la herramienta se ejecute en la terminal de un agente (con AI_AGENT o CLAUDECODE definida). |
+
+### `tg tasks reject`
+
+rechazar el cierre que sugirió un agente: la tarea sigue abierta y sale de close:suggested; el agente puede volver a cerrarla
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg tasks reject <task> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `task` | obligatorio | el identificador o la clave de la tarea tal como lo muestra tasks list. |
+
+| Opción | Qué hace |
+|---|---|
+| `--as-owner` | rechazarlo en tu nombre aunque la herramienta se ejecute en la terminal de un agente (con AI_AGENT o CLAUDECODE definida). |
 
 ## `tg search`
 
@@ -4335,7 +4355,7 @@ tg config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, account_groups.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, account_groups.<name>. |
 | `value` | obligatorio | número, true o false; para allow, lista como send,reaction; para un grupo, tg:work,max:Alice,email:me@x. |
 
 | Opción | Qué hace |
@@ -4356,7 +4376,7 @@ tg config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, account_groups.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, account_groups.<name>. |
 
 | Opción | Qué hace |
 |---|---|

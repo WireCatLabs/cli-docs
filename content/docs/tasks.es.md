@@ -11,8 +11,10 @@ y `memo`. Nada de esta página envía mensajes.
 
 Las categorías, las etiquetas en las tareas, las claves por tipo, la reserva de tareas y la detección
 de duplicados ya están en el núcleo común de las herramientas (cli-core). `tg` y `max` las tienen
-todas; `memo` aún no tiene la reserva ni la revisión de duplicados. [Cómo funcionan las tareas](./tasks-architecture.mdx)
-da el detalle técnico.
+todas; `memo` aún no tiene la reserva ni la revisión de duplicados. Los cierres que te esperan cuando
+un agente no está seguro, las tareas de seguimiento, la lista de 59 categorías y la detección de
+duplicados que lee los mensajes vinculados están en `tg`; `max` y `memo` aún no los tienen.
+[Cómo funcionan las tareas](./tasks-architecture.mdx) da el detalle técnico.
 
 ## De dónde salen las tareas
 
@@ -44,6 +46,10 @@ MAX, escribe «max CLI».
 
 ```text prompt
 Usa tg CLI. En mi chat con Bob Sample prometí enviar el contrato firmado antes del viernes. Añade una tarea de promesa para ese mensaje, con fecha límite el viernes y un título claro. Vincula los mensajes anteriores donde acordamos el precio.
+```
+
+```text prompt
+Usa tg CLI. Muéstrame las tareas que un agente sugirió cerrar, con su motivo y su certeza. No cierres ni rechaces nada todavía.
 ```
 
 ```text prompt
@@ -99,7 +105,15 @@ tg personal tasks close <task> --as done --reason "contract sent"
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
-`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos.
+Ver los cierres que sugirió un agente y confirmar o rechazar uno:
+
+```sh
+tg personal tasks list close:suggested
+tg personal tasks close <task>
+tg personal tasks reject <task>
+```
+
+`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos, salvo los cierres sugeridos, que por ahora solo tiene `tg`.
 
 </details>
 
@@ -114,7 +128,9 @@ tg personal tasks close <task> --as dismissed --reason no-reply-needed
 - **link** añade a una tarea mensajes, chats, personas, documentos, notas o direcciones.
 - **show** muestra una tarea con su plan y todo lo vinculado.
 - **close** cierra una tarea como `done` o `dismissed`. Una tarea cerrada se queda cerrada. Solo
-  `tasks unmerge` vuelve a abrir una tarea, y solo una que cerró una fusión.
+  `tasks unmerge` vuelve a abrir una tarea, y solo una que cerró una fusión. El cierre de un agente
+  puede esperarte; consulta [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea).
+- **reject** rechaza un cierre que sugirió un agente. La tarea sigue abierta.
 
 ## Vínculos entre tareas
 
@@ -122,6 +138,10 @@ Una tarea de proyecto puede esperar a otra (`blocked-by`), continuar otra (`foll
 simplemente estar relacionada con ella (`related-to`). Solo tú aplicas estos vínculos; un agente
 puede proponerlos. Funcionan entre tareas de proyecto en `memo`: consulta
 [Qué hacer primero](./memo/tasks.md#qué-hacer-primero).
+
+La herramienta también escribe `follow-up-of` por sí misma entre tareas encontradas en mensajes: una
+tarea nueva sobre una tarea cerrada en los últimos 14 días se vincula a ella como seguimiento
+(consulta [Sin tareas duplicadas](#sin-tareas-duplicadas)).
 
 Hay dos tipos más. `duplicate-of` dice que una tarea es el mismo trabajo que otra. Lo escribe una
 fusión, y une tareas encontradas en mensajes de una misma cuenta. `discovered-from` dice que una tarea
@@ -136,9 +156,37 @@ apareció mientras se trabajaba en otra.
    lista de revisión.
 2. Lee la agenda y contrasta cada tarea nueva con sus mensajes.
 3. Pone un título, una fecha límite y la categoría correcta, vincula los mensajes que van juntos y
-   cierra lo que está hecho.
+   cierra lo que está hecho. Si no está seguro de que una tarea esté hecha, su cierre te espera.
 4. Revisa la lista de posibles duplicados (ver abajo).
 5. Te muestra lo que cambió y pregunta antes de que algo salga de tu ordenador.
+
+## Cuando un agente cierra una tarea
+
+Por ahora solo `tg` tiene esto; en `max` y `memo`, el cierre de un agente sigue cerrando la tarea.
+
+Un agente que cierra una tarea indica su certeza de que no hace falta nada más, con un número de 0 a 1
+(`--certainty`). Si llega al umbral del almacén (0.8 por defecto), la tarea se cierra. Por debajo, la
+tarea sigue abierta con una sugerencia de cierre: qué agente la hizo, qué certeza tenía y por qué. La
+agenda muestra estas tareas, y `tasks list close:suggested` las encuentra. Confirmas una sugerencia
+con `tasks close <task>` o la rechazas con `tasks reject <task>`; más tarde el agente puede volver a
+sugerir el cierre. Un cierre no se puede deshacer, así que uno dudoso te espera.
+
+Dos ajustes de todo el almacén lo controlan: `task_agent_close` (`on` por defecto; `off` convierte
+cada cierre de un agente en una sugerencia) y `task_agent_close_min` (0.8 por defecto).
+
+La herramienta sabe que la ejecuta un agente por la variable de entorno `AI_AGENT` o `CLAUDECODE`. El
+cierre de un agente sin `--certainty` se rechaza con `task.certainty-required`. Cuando tú le pediste
+cerrar la tarea, el agente la cierra en tu nombre con `--as-owner`. Una regla que cierra una pregunta
+que respondiste en el chat no es un cierre de agente y no necesita certeza.
+
+```text
+tasks close REQ-22 --as done --certainty 0.9 --reason "invoice sent"
+tasks list close:suggested
+tasks close REQ-22
+tasks reject REQ-22
+config set task_agent_close_min 0.9
+config set task_agent_close off
+```
 
 ## Sin tareas duplicadas
 
@@ -155,9 +203,15 @@ herramienta comprueba cada tarea nueva antes de crearla:
   una tarea nueva. Si la tarea la encontró una regla, la tarea se crea y los pares parecidos van a una
   lista de revisión.
 - **Claramente distinta:** se crea una tarea nueva.
+- **Parecida a una tarea cerrada en los últimos 14 días:** se crea una tarea nueva, vinculada
+  `follow-up-of` a la cerrada. La cerrada sigue cerrada. `tasks add` se niega solo mientras una tarea
+  abierta pueda ser el mismo trabajo.
 
 La comprobación compara las palabras (también otras formas de una palabra y errores de escritura), la
-persona, el importe, la fecha límite, la categoría, las respuestas y el tiempo. Compartir un chat no
+persona, el importe, la fecha límite, la categoría, las respuestas y el tiempo. Lee el título y la
+descripción de cada tarea, su mensaje de origen y sus 5 mensajes vinculados más recientes, así que una
+tarea que una regla abrió con el título vacío se compara por su mensaje. Lee fechas límite en inglés,
+ruso y español, como `by Friday`, `до пятницы` o `el viernes`. Compartir un chat no
 basta nunca para que dos tareas sean «la misma». **La herramienta nunca fusiona tareas solo por una
 puntuación.** Algunas tareas parecidas, como un regalo para mamá y otro para papá por el mismo importe,
 se distinguen por el sentido de una palabra, así que decide un agente o tú.
@@ -165,6 +219,10 @@ se distinguen por el sentido de una palabra, así que decide un agente o tú.
 **Quién decide.** El agente que revisa tus chats después de sincronizar recorre la lista de revisión.
 Fusiona los pares que son el mismo trabajo y rechaza los que no lo son. Cuando no puede decidir, marca
 el par como dudoso. Tú ves solo los pares dudosos, con `tasks duplicates decision:unsure`.
+
+Cuando se vincula un mensaje a una tarea (`tasks link`, `tasks add --into` o `tasks merge`), la
+comprobación se repite para esa tarea. Los nuevos pares posibles van a la lista de
+revisión. El vínculo se mantiene siempre.
 
 Una fusión vincula todos los mensajes del duplicado a la tarea que se queda y cierra el duplicado como
 `dismissed`, con un vínculo `duplicate-of`. **Una fusión se puede deshacer**, y no se borra nada. Un
@@ -185,15 +243,27 @@ primero, cada una con una banda (`likely`, `maybe` o `different`) y los motivos.
 
 ## Categorías, etiquetas y claves
 
-- **Una categoría** dice de qué trata una tarea. La lista por defecto es `money`, `documents`,
-  `meeting`, `delivery`, `access`, `personal` y `other`. Hay una sola lista para todo el almacén,
-  común a `tg`, `max` y `memo`, así que «finanzas» y «pagos» nunca conviven. `tasks add` necesita una
-  categoría y rechaza un nombre que no está en la lista. Una regla elige la categoría por las palabras
-  del mensaje, u `other` si ninguna coincide; tu agente la corrige con `tasks plan --category`.
+- **Una categoría** dice de qué trata una tarea. La lista por defecto tiene 59 categorías: primero
+  las concretas, como `taxes`, `bills`, `health`, `travel` y `fitness`; después las amplias, como
+  `money`, `documents` y `meeting`; y al final `work`, `personal` y `other`. `tasks categories` muestra
+  cada una con su significado y sus palabras. `tasks add` necesita una categoría y rechaza un nombre
+  que no está en la lista. Una regla elige la categoría por las palabras del mensaje, la más concreta
+  si encajan dos (una factura de suministros es `bills`, no `money`), u `other` si ninguna coincide; tu
+  agente la corrige con `tasks plan --category`.
+- **Una lista para el almacén.** La lista que guardas se queda en el almacén y es común a `tg`, `max`
+  y `memo`, así que «finanzas» y «pagos» nunca conviven. Mientras no guardes una, cada herramienta usa
+  su propia lista por defecto: `max` y `memo` aún tienen las siete anteriores (`money`, `documents`,
+  `meeting`, `delivery`, `access`, `personal` y `other`).
 - **Puedes cambiar la lista.** Cada categoría tiene un significado y las palabras por las que la elige
-  una regla. Una palabra puede indicar su idioma, como `es:vuelo`. Puedes añadir o cambiar una
-  categoría, quitar una o volver a la lista por defecto. `other` no se puede quitar. Las tareas
-  conservan la categoría que ya tienen.
+  una regla. Una palabra coincide también con sus otras formas; una palabra puede indicar su idioma,
+  como `es:vuelo`, y entonces una palabra española como `es:pagar` coincide también con `pagues` en un
+  mensaje en español. Puedes añadir o cambiar una categoría, quitar una o volver a la lista por
+  defecto; una lista admite hasta 80 categorías. `other` no se puede quitar. Un almacén que guardó su
+  propia lista la conserva, y `config unset task_categories` le da la lista por defecto actual.
+- **Una categoría que salió de la lista.** Las tareas conservan su categoría cuando sale de la lista.
+  `tasks categories` nombra esas categorías en `unlisted`, con sus tareas abiertas y el total, y
+  `tasks agenda` nombra las que aún llevan tareas abiertas (`unlisted_categories`). Encuentra sus
+  tareas con `tasks list category:<name>` y mueve una con `tasks plan <task> --category <name>`.
 - **Las etiquetas**, como `urgent` o `waiting-for-them`, también sirven en las tareas:
   `tags add urgent --task REQ-22`. Las etiquetas solo sirven para filtrar; la detección de duplicados
   no las tiene en cuenta.
@@ -207,6 +277,7 @@ tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
 tasks agenda category:money tag:urgent
 tasks list category:money
+tasks plan REQ-22 --category bills
 config set task_categories.travel "trips and tickets | flight, hotel, es:vuelo"
 config unset task_categories.travel
 config unset task_categories
@@ -241,12 +312,10 @@ tasks agenda claimed:any
 
 Los agentes que usan el servidor MCP tienen las mismas herramientas, como `tasks_claim`,
 `tasks_release`, `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` y `tasks_unmerge`.
+En `tg`, `tasks_close` necesita `certainty`, igual que el `tasks close` de un agente.
 
 ## Aún no está hecho
 
-- **Una comprobación cuando un mensaje se vincula a una tarea existente.** La comprobación lee solo el
-  título, la descripción y el mensaje de origen de una tarea. Primero tiene que aprender a leer
-  también los mensajes vinculados.
 - **Ajustar los pesos con tus respuestas.** Cada fusión, rechazo, `--into` y `--new` se guarda,
   pero todavía nada los usa para cambiar los pesos.
 
