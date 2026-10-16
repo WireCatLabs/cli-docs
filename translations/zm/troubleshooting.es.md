@@ -52,6 +52,16 @@ usuario/sesión del sistema donde esté disponible; un entorno sin escritorio pu
 No se guarda el token en un archivo de texto. Tras repararlo, repite login y comprueba
 `zm session status --json`.
 
+### Las órdenes terminan con "Zoom token request failed"
+
+Cada solicitud de token registra su resultado en `~/.local/share/zm/runs/<date>/<run>/events.jsonl`
+(la carpeta `runs` dentro de `ZM_STATE_DIR` cuando está definida). El registro contiene el estado HTTP,
+si llegó un nuevo token de actualización, si se guardó en el llavero, un tiempo de espera agotado o
+cancelación y el identificador del proceso. Nunca contiene el token. Dos registros cercanos con
+identificadores de proceso distintos sugieren dos órdenes actualizando a la vez. Léelos con
+`cat ~/.local/share/zm/runs/*/*/events.jsonl` y vuelve a ejecutar `zm session start`.
+Los registros de ejecuciones de más de 30 días se eliminan.
+
 ### Falta un permiso necesario
 
 El error indica el nombre exacto. El dueño lo añade en **Scopes** y guarda; el usuario repite
@@ -62,7 +72,8 @@ necesitan [permisos distintos](./zoom-app.md#add-archive-or-management-access).
 ## Configuración
 
 Comprueba cliente, fuente y perfil con `zm config show`. Una configuración dañada no impide
-`--help` o `--version`, pero sus órdenes informan del error. Cambiar la etiqueta no cambia el usuario.
+`--help` o `--version`; `zm config show` indica el archivo y la primera clave incorrecta, y
+`zm doctor` informa en `config.error`. Cambiar la etiqueta no cambia el usuario.
 Si terminal y MCP ven datos distintos, compara `ZM_CONFIG_DIR` y `MESSAGING_STORE`.
 
 ## Respuestas de Zoom

@@ -99,7 +99,7 @@ zm session start
 | Разрешение | Назначение |
 |---|---|
 | `meeting:read:list_meetings` | Встречи организатора и ближайшее расписание |
-| `meeting:read:list_past_instances` | Отдельные сеансы повторяющихся встреч |
+| `meeting:read:list_past_instances` | Найти прошедший сеанс для каждой встречи из списка, повторяющейся или нет |
 | `cloud_recording:read:meeting_transcript` | Доступная расшифровка |
 | `meeting:read:list_past_participants` | Участники и время входа/выхода |
 | `meeting:read:summary` | Доступное резюме Zoom AI |
