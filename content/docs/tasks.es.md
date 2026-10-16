@@ -13,7 +13,8 @@ Las categorías, las etiquetas en las tareas, las claves por tipo, la reserva de
 de duplicados ya están en el núcleo común de las herramientas (cli-core). `tg` y `max` las tienen
 todas; `memo` aún no tiene la reserva ni la revisión de duplicados. Los cierres que te esperan cuando
 un agente no está seguro, las tareas de seguimiento, la lista de 59 categorías y la detección de
-duplicados que lee los mensajes vinculados están en `tg` y `max`; `memo` aún no los tiene.
+duplicados que lee los mensajes vinculados están en `tg` y `max`; `memo` aún no los tiene. Por ahora
+solo `tg` lee la lista de categorías del archivo de ajustes compartido.
 [Cómo funcionan las tareas](./tasks-architecture.mdx) da el detalle técnico.
 
 ## De dónde salen las tareas
