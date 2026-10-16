@@ -88,13 +88,42 @@ Comprueba `notes.coverage.has_more` y `notes.coverage.output_limited` para saber
 `other_sources: not-queried` deja fuera de la cobertura los documentos importados, el correo y los
 mensajes. Seleccionar `--json=notes.items.ref` conserva esa cobertura junto a las referencias.
 
+Si sabes qué proyecto existente quieres investigar, pide al agente que lo seleccione por su nombre,
+clave o alias guardado. Por ejemplo:
+
+```text prompt
+Prepara la próxima llamada de planificación de Research Example. Busca también menciones citadas
+de nuestro proyecto existente Research Example y sus alias guardados en reuniones anteriores de
+este perfil. Separa las coincidencias de palabras de los vínculos confirmados e indica dónde quedan resultados.
+```
+
+En el terminal, añade `--project`:
+
+```sh
+zm meetings prepare 123456789 --project RES --json
+```
+
+`project_evidence.pages` conserva cada nombre o alias coincidente junto a los pasajes citados,
+los desplazamientos y los títulos de las reuniones de origen. Busca en el mismo perfil y periodo,
+incluidas llamadas sin vínculo al proyecto. Una coincidencia es una candidata para revisar; no
+demuestra que una reunión pertenezca al proyecto. Un pasaje puede coincidir con varios nombres,
+lo que no aporta corroboración adicional.
+
+Se incluyen como máximo cuatro páginas de búsqueda. Una página vacía puede llevar a un alias con
+coincidencias. Si aparece `project_evidence.continuation`, usa su proyecto, consulta fijada, límite
+y presupuesto de lectura con `meetings projects evidence`; pasa el cursor cuando no sea null.
+Un cursor null significa empezar sin `--cursor`. Así continúas la búsqueda guardada sin volver a
+leer la agenda próxima de Zoom. Revisa la indexación pendiente y la cobertura desconocida aunque
+las páginas estén vacías. Los cambios de vocabulario o ámbito invalidan el cursor; reinicia la
+búsqueda del proyecto elegido en vez de inventar otro cursor.
+
 Si aparece la próxima hora sin reuniones anteriores, descarga el periodo pertinente mediante la
 API de Zoom para guardar sus vínculos exactos a la serie. Un archivo de transcripción importado
 puede carecer de ese ID del proveedor. La preparación no une llamadas por títulos o nombres parecidos.
 
 La cobertura distingue historial ausente, reuniones sin fecha, filas adicionales y límites de salida.
 No se conoce si el archivo incluye todo el historial. Los documentos importados, el correo,
-los mensajes y las candidatas por nombre/alias quedan sin consultar; sin reuniones anteriores
+los mensajes y los proyectos que no seleccionaste quedan sin consultar; sin reuniones anteriores
 utilizables, tampoco se consulta el historial relacionado. La evidencia de los hechos guardados
 no se vuelve a comprobar. Usa [búsqueda y fuentes](./search.md) para investigar esas lagunas.
 La preparación no genera un resumen, acepta hallazgos ni crea tareas.
@@ -106,6 +135,9 @@ el elemento completo. Las fuentes de la serie tienen prioridad; `related.has_mor
 `related.output_limited` indican contexto relacionado adicional u omitido.
 Los hechos aceptados tienen indicadores independientes `knowledge.coverage.has_more` y `knowledge.coverage.output_limited`;
 se devuelven hasta veinte (o un `--context-limit` menor), cediendo bytes a las fuentes de reuniones.
+Las páginas opcionales de coincidencias del proyecto ceden espacio primero, antes que notas, hechos aceptados y fuentes de reuniones.
+Cada una de las cuatro páginas como máximo lee vocabulario y palabras por separado, con
+`--max-read-bytes` para cada lectura; estos límites no acotan el escaneo y ordenación en la base.
 Las notas tienen sus propios indicadores de más filas y límites de salida, con hasta veinte entradas
 (o un `--context-limit` menor). Usan el espacio restante tras los hechos aceptados y las fuentes de
 reuniones. Pueden quedar filas fuera del límite. Las fuentes omitidas dan `meta.complete=false`: revisa sus referencias antes de

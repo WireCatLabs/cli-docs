@@ -73,8 +73,15 @@ and annotations about included earlier calls and those linked people/projects, r
 references, meeting associations, revisions and coverage. A meeting-scoped note must link to an
 included call in this account; sharing a project alone does not include another meeting's notes.
 Keep these comments distinct from accepted facts, and check `notes.coverage` for omitted notes and
-sources that were not rechecked. Imported documents, mail, messages and project-name/alias candidates
-are not queried; the agent can investigate those separately. Missing
+sources that were not rechecked.
+
+For one existing project you choose, add `--project RES` using its saved name, key or alias.
+`project_evidence.pages` then adds cited word matches from this account and history window,
+including unlinked meetings, separately from confirmed project membership. Repeated passage refs
+across aliases are the same evidence. Check pending indexing, output limits and
+`project_evidence.continuation`; continue with the existing project-evidence search even after an
+empty page when more remains. This does not infer or confirm the upcoming call's project.
+Imported documents, mail, messages and unselected project vocabularies are not queried; the agent can investigate those separately. Missing
 transcripts are not downloaded by preparation, and matching names never creates a person link.
 
 ## Keep useful findings afterwards

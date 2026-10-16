@@ -101,7 +101,7 @@ Para contexto entre proyectos, notas y documentos, continúa con
 [búsqueda y fuentes](./search.md#notes-tags-and-memories-with-memo); conecta Memo por separado cuando haga falta.
 
 Con `zm serve --mcp --meeting-preparation`, el agente llama a `meeting_prepare` con `series_id`,
-fechas ISO opcionales `after`, `until`, `history_after` y límites `meetings`, `cues`, `context_limit`,
+el `project` opcional, fechas ISO opcionales `after`, `until`, `history_after` y límites `meetings`, `cues`, `context_limit`,
 `max_read_bytes` y `bytes`. El servidor elige la cuenta y lee el calendario Zoom; necesita
 `meeting:read:meeting`. Esta herramienta opcional no funciona con `--offline`, no cambia la app
 Zoom, no descarga transcripciones ausentes ni acepta hallazgos. El elemento `meeting_preparation`
@@ -118,9 +118,22 @@ Las lecturas relacionadas se limitan a la cuenta y periodo
 elegidos, sin escrituras. Consulta [preparación](./usage.md#prepare-for-an-upcoming-meeting)
 para ver qué incluye, qué no consulta y cómo comprobar el resultado.
 
+El argumento opcional `project` selecciona un proyecto existente por nombre, clave o alias.
+`project_evidence` devuelve hasta cuatro páginas acotadas de búsqueda de palabras en esta cuenta
+y periodo. Conserva nombres coincidentes, referencias a pasajes/reuniones y títulos de origen
+por separado de las asociaciones confirmadas; no crea ningún vínculo. Las referencias repetidas
+entre nombres son la misma evidencia.
+`project_evidence.continuation` da argumentos para la herramienta existente `meeting_project_evidence`:
+conserva `project`, la consulta fijada `query`, `limit`, `max_read_bytes` y un `cursor` no nulo;
+omite `cursor` cuando sea null. El campo `command` nombra el equivalente CLI, no otro argumento MCP.
+Continúa aunque la última página esté vacía si la cobertura indica más resultados. Cada página
+lee vocabulario y palabras por separado dentro de `max_read_bytes`; añade como máximo ocho lecturas.
+No actualiza el índice. No deduce un proyecto no elegido a partir de títulos, nombres o pasajes.
+La cobertura general de proyectos sigue sin consultarse porque solo se eligió uno.
+
 El parámetro de preparación `bytes` limita el elemento después de hacer visibles los caracteres
-ocultos, que pueden ocupar más espacio que en el JSON del CLI. Primero se reducen notas, después
-hechos aceptados, llamadas relacionadas e historial de la serie. Comprueba `meta.truncated` y la
+ocultos, que pueden ocupar más espacio que en el JSON del CLI. Primero se reducen las páginas opcionales de coincidencias del proyecto, después las notas,
+los hechos aceptados, llamadas relacionadas e historial de la serie. Comprueba `meta.truncated` y la
 cobertura de cada sección. `content_bytes` cuenta los bytes de los pasajes escapados que recibe
 el cliente MCP. Si los propios metadatos no caben, devuelve `validation_error`: aumenta `bytes`
 o reduce el contexto elegido.
