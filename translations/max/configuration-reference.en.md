@@ -51,7 +51,7 @@ The command prints the selected profile **and where it came from**, the path to 
 
 Each setting shows its source: `flag`, `default` or `config file:` with its key, such as `config file: bot.profiles.test`. The profile source is `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: default_profile` or `none named`: no profile was named, and `profile` is then `null`.
 
-With `--json`, the response also includes `store_settings`: shared archive settings (`search_stemmers.*`) and their origin, `store` or `default`.
+With `--json`, the response also includes `store_settings`: shared archive settings (`search_stemmers.*`, `task_agent_close*`) and their origin, `store` or `default`.
 
 `--bot` shows the settings as `max <имя> bot …` will receive them: the bot has its own section and its own sending limit. If the file does not exist, loading settings first creates one with the usual default values. The existing file is not overwritten. If one of the `MAX_*_DIR` variables is set, command will say this in stderr: with them, the profile has a different entry in the keyring, and login made without them looks like “no session”.
 
@@ -119,6 +119,7 @@ Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`,
 | `analysis_base_url` | Analysis API URL | `build --base-url` | Provider-dependent |
 | `models` | External AI configuration by purpose ([below](#модели-по-назначению)) | `MAX_MODELS_*` variables | Unset |
 | `search_stemmers.cyrillic`, `search_stemmers.latin` | Word-stem languages for the shared archive ([below](#языки-поиска)) | None | `russian`, `english,spanish` |
+| `task_agent_close`, `task_agent_close_min` | Whether an agent closes a task and the confidence from `--certainty`; below the threshold it stays open with a suggested close ([tasks](./groups.md#что-ждёт-вашего-ответа)). Shared across the archive | — | `on`, `0.8` |
 
 ⚠ **`timeout_ms` and `--timeout` are different things, and it’s expensive to confuse them.** `timeout_ms` is how long to wait **one answer** from MAX. `--timeout` - how much is allocated to **command entirely**. One read is a connection, INIT, LOGIN, parsing the chat name and the request itself, so the operating time is a multiple of `timeout_ms` and is never equal to it.
 
@@ -274,6 +275,8 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 | `models` | model assignment object; fields are described below | profile |
 | `search_stemmers.cyrillic` | `russian`, `none` | general archive, via `config set` |
 | `search_stemmers.latin` | `english`, `spanish`, both separated by commas, `none` | general archive, via `config set` |
+| `task_agent_close` | `on`, `off` | shared archive, through `config set` |
+| `task_agent_close_min` | a number from 0 to 1 | shared archive, through `config set` |
 
 ### Models by task
 

@@ -75,10 +75,10 @@ max work mcp config
 ```json
 {
   "mcpServers": {
-    "max": {
+    "max-personal": {
       "type": "stdio",
       "command": "C:\\Program Files\\nodejs\\node.exe",
-      "args": ["C:\\Users\\you\\AppData\\Roaming\\npm\\node_modules\\@wirecat\\max-cli\\dist\\bin\\max.js", "mcp"]
+      "args": ["C:\\Users\\you\\AppData\\Roaming\\npm\\node_modules\\@wirecat\\max-cli\\dist\\bin\\max.js", "personal", "mcp"]
     }
   }
 }
@@ -86,13 +86,13 @@ max work mcp config
 
 Verifique los permisos de su perfil antes de conectar a un agente. Luego inserte una entrada en el archivo de configuración de la aplicación `mcpServers`. Claude Desktop tiene `%APPDATA%\Claude\claude_desktop_config.json` en Windows y `~/Library/Application Support/Claude/claude_desktop_config.json` en macOS, Cursor tiene `~/.cursor/mcp.json`. El comando en sí no registra nada.
 
-Las rutas en las entradas están completas, porque una aplicación que no se inicia desde el terminal no ve el terminal `PATH`. En Windows, `max` es el archivo `max.cmd`, que una aplicación sin shell no puede ejecutar. Las banderas `--permission` y `--yes` se transfieren al registro. Las variables `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE` y `XDG_RUNTIME_DIR` se incluyen en él sólo si se especifican; ficha - nunca. `MAX_CACHE_DIR` se refiere únicamente al caché antiguo y el archivo local compartida de los mensajes se especifica mediante `MESSAGING_STORE`. El comando transfiere la ruta a esta copia y el directorio para comunicarse con el llavero para que una aplicación iniciada desde el escritorio utilice la misma entrada y mensajes guardados que el terminal.
+Las rutas son completas porque una aplicación iniciada fuera de la terminal no hereda su `PATH`. En Windows, `max` es el archivo `max.cmd`, que no puede ejecutarse sin un shell. Los indicadores `--permission` se incluyen en la entrada, con el perfil antes de `mcp`. `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR`, `MESSAGING_STORE`, `XDG_RUNTIME_DIR` y los límites de archivos `MESSAGING_ATTACHMENT_MAX_MIB`, `MESSAGING_PDF_PREVIEW_MAX_PIXELS`, `MESSAGING_PDF_PREVIEW_MAX_MIB`, `MESSAGING_BATCH_MAX_ERROR_PERCENT` solo se incluyen si están definidos; el token nunca se incluye. `MAX_CACHE_DIR` corresponde a la caché antigua y `MESSAGING_STORE` define el archivo local compartido. La ruta del archivo y el directorio de comunicación con el llavero permiten a la aplicación usar el mismo inicio de sesión y los mismos mensajes guardados que la terminal.
 
 Si Node se entrega a través de nvm, fnm o Volta, la ruta hacia él se refiere a una versión de Node. Después de cambiar la versión, ejecute `max personal mcp config` nuevamente. Desde `npx` el comando se niega a funcionar: `npx` borra su caché y la ruta dejará de existir.
 
 ⚠ **Las variables `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR` cambian dónde buscar la entrada.** Si están configuradas en el terminal, pero no para la aplicación MCP (o viceversa), el servidor responderá "sin sesión", aunque `max` funcione en el terminal. Pregúntales lo mismo o no les preguntes en ningún lado.
 
-El bot tiene su propio servidor, `max <имя> bot mcp`; consulte [bot para agente](./bot.md#бот-для-агента-mcp). Su acceso está determinado por `permissions` del perfil del bot. Sus flags `--allow-send`, `--allow-delete` y `--allow-moderate` se aceptan con una advertencia y no incluyen nada.
+El bot tiene su propio servidor, `max <имя> bot mcp`; consulta [bot para agente](./bot.md#бот-для-агента-mcp). El acceso depende de `permissions` en el perfil del bot.
 
 ## Qué puede hacer un agente
 
@@ -145,9 +145,9 @@ La solicitud preparada `link-conversations` permite al agente vincular respuesta
 
 ## Archivos y mensajes guardados
 
-`max_read` (`command: "attachments list"`) muestra las rutas de los archivos guardados y el estado de su texto; `max_write` (`command: "attachments text set"`) almacena el texto que el agente lee del archivo para buscar por `content:`. Extracción de texto: solo en la terminal. `max_read` con `command: "messages context"` y `arguments: { offline: true }` solo lee el archivo local.
+`max_read` (`command: "attachments list"`) muestra las rutas de los archivos guardados y el estado de su texto; `max_write` (`command: "attachments text set"`) guarda el texto que el agente leyó de un archivo para buscarlo mediante `content:`. `max_write` (`command: "attachments extract"`) extrae el texto de los archivos guardados por lotes mediante `cursor`, sin devolver ese texto en la respuesta. `max_read` con `command: "messages context"` y `arguments: { offline: true }` solo lee el archivo local.
 
-No hay temas de Telegram en MAX, por lo que no hay herramientas `max_topics_*`. El reconocimiento directo puede devolver una transcripción almacenada del mismo modelo. La foto utiliza la vista previa MAX, seleccionada mediante `index` y limitada a 512 KB. Los modelos nunca se descargan solos. Antes del reconocimiento local, el servidor libera la conexión; El modelo de búsqueda se cierra cuando se apaga el servidor.
+MAX no tiene los temas de Telegram, por lo que no hay comandos `topics …`. El audio se transcribe con un modelo en este ordenador. La foto se elige mediante `index` y solo se devuelve si no supera 512 KB. Los modelos nunca se descargan solos. Antes del reconocimiento local, el servidor libera la conexión; el modelo de búsqueda se cierra al finalizar el servidor.
 
 ## Cómo mantiene la conexión
 

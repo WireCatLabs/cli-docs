@@ -543,7 +543,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.55.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.56.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -1072,7 +1072,7 @@ The check reads messages and joins since the previous check, or the past day ini
 
 Rules and consent determine the action. Everything is reported by default. Each result identifies the issue, person, rule, action and outcome: `reported`, flagged; `done`, completed; `planned`, awaiting a flag or approval, with a manual command; `forbidden`, disallowed by rules; `declined`, rejected by you; `refused`, blocked by profile safeguards or hourly limits; `skipped`, not reached yet.
 
-In JSON, the response is `{ item: { chat_id, rows } }`. Each check reads up to 1000 messages. Its saved position is in the rules file; an older position from the session is migrated automatically. `--since-time` and `--dry-run` do not advance it. Personal-account MCP uses the same position when saving `max_write` (`command: "chats check"`).
+In JSON, the response is `{ item: { chat_id, rows } }`. Each check reads up to 1000 messages. Its saved position is in the rules file. `--since-time` and `--dry-run` do not advance it. Personal-account MCP uses the same position: `max_write` (`command: "chats moderate"`).
 
 A check performs at most 10 actions (`--max-actions`). Deletions count toward the hourly limit; remaining actions are deferred. The next check starts from the first unperformed message. Removed people may return through invite links because personal accounts cannot ban.
 

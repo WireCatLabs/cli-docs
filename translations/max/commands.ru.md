@@ -2571,7 +2571,7 @@ max tasks release <task> [options]
 
 ### `max tasks close`
 
-закрыть задачу: done либо dismissed, если ответ не нужен; закрытая задача остаётся закрытой, если только tasks unmerge не откроет объединённую заново
+закрыть задачу: done либо dismissed, если ответ не нужен. Агент (заданы AI_AGENT или CLAUDECODE) указывает --certainty; ниже task_agent_close_min либо при task_agent_close off задача остаётся открытой и ждёт владельца: tasks close подтверждает закрытие, tasks reject отклоняет. Закрытая задача остаётся закрытой, если только tasks unmerge не откроет объединённую заново
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2581,12 +2581,32 @@ max tasks close <task> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `task` | обязательный | ID задачи из вывода tasks list. |
+| `task` | обязательный | id или ключ задачи из вывода tasks list. |
 
 | Опция | Что делает |
 |---|---|
-| `--as <state>` | как закрыть: done или dismissed — ответ не требуется. |
+| `--as <state>` | как закрыть: done либо dismissed — ответ не требуется; владелец может не указывать состояние, подтверждая закрытие агента. |
 | `--reason <text>` | причина, сохраняемая с задачей — например, no-reply-needed. |
+| `--certainty <n>` | уверенность агента от 0 до 1, что задача больше ничего не требует. |
+| `--as-owner` | закрыть как владелец, хотя команда запущена из терминала агента (заданы AI_AGENT или CLAUDECODE). |
+
+### `max tasks reject`
+
+отклонить предложенное агентом закрытие: задача остаётся открытой и уходит из close:suggested; агент может снова предложить закрыть её
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max tasks reject <task> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `task` | обязательный | id или ключ задачи из вывода tasks list. |
+
+| Опция | Что делает |
+|---|---|
+| `--as-owner` | отклонить как владелец, хотя команда запущена из терминала агента (заданы AI_AGENT или CLAUDECODE). |
 
 ## `max conversations`
 
@@ -4172,7 +4192,7 @@ max config set <setting> <value> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
 | `value` | обязательный | число, true или false либо список вроде contacts,polls. |
 
 | Опция | Что делает |
@@ -4193,7 +4213,7 @@ max config unset <setting> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
 
 | Опция | Что делает |
 |---|---|
@@ -5118,37 +5138,15 @@ max bot store fetch <chat> [options]
 
 ### `max bot mcp`
 
-serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- max sales bot mcp`
-
-**Меняет что-то в MAX.**
-
-```sh
-max bot mcp [options]
-```
-
-| Опция | Что делает |
-|---|---|
-| `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | больше не используется — решают права профиля; оставлено, чтобы старая настройка запускалась. |
-| `--allow-delete` | больше не используется — решают права профиля. |
-| `--allow-moderate` | больше не используется — решают права профиля. |
+предоставить бота агенту по MCP через stdin и stdout — `claude mcp add sales-bot -- max sales bot mcp`
 
 #### `max bot mcp config`
 
-print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes nothing
+показать запись mcpServers для Claude Desktop, Cursor и других с полными путями; ничего не записывает
 
 ```sh
-max bot mcp config [options]
+max bot mcp config
 ```
-
-| Опция | Что делает |
-|---|---|
-| `--confirm-send` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-dangerous` | больше не используется — операции записи не показывают форму; решение определяют разрешения профиля. |
-| `--allow-send` | больше не используется — решают права профиля; оставлено, чтобы старая настройка запускалась. |
-| `--allow-delete` | больше не используется — решают права профиля. |
-| `--allow-moderate` | больше не используется — решают права профиля. |
 
 ### `max bot me`
 

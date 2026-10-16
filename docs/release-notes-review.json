@@ -6,10 +6,10 @@
     "conclusion": "Reviewed 0.62.0 (cli-core 0.296.0): an agent's tasks close states --certainty and below task_agent_close_min becomes a close suggestion the owner confirms or refuses with tasks reject; a task matching one closed in the last 14 days opens linked follow-up-of; 59 default categories with unlisted ones named; the duplicate check reads source and linked messages and Spanish due dates. Roadmap unchanged: multi-photo sending, private chat notes and the listed MAX-only capabilities remain future work."
   },
   "max": {
-    "version": "v0.55.0",
+    "version": "v0.56.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
     "reviewedAt": "2026-10-16",
-    "conclusion": "Reviewed 0.55.0: shared flag names without the old aliases (--max-pages, --sync-first, --catch-up, --expected-fingerprint, --allow/--deny-chats and -people, --at-time, --no-block, --until-id, --remind-time, --into, --lease, --due-within, --limit, --start, --output-dir/--include); tasks related and tasks duplicates defer; agenda and duplicates filter with category:, tag:, claimed: and decision: query fields; every --json answer is an item/items envelope; a damaged local copy is an error. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
+    "conclusion": "Reviewed MAX 0.56.0 with Core 0.296.0/Base 0.40.0: shared MCP and retired bot flags, attachments extraction and local voice, no old moderation checkpoint migration, setup next envelope, media provider_ref and voice kind, watch rendering, diagnostic reply/write ID labeling, agent task close certainty/reject, follow-ups and 59 categories. Shared task guides now include MAX suggested closes. Roadmap unchanged: optional local-copy mode, event actions, video circles/cloud password and standalone installers remain future work."
   },
   "zm": {
     "version": "v0.21.1",

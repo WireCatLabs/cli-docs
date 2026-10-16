@@ -13,7 +13,7 @@ Categories, tags on tasks, keys per type, claiming and the duplicate check are b
 core of the tools (cli-core). `tg` and `max` have all of them; `memo` does not have claiming and the
 duplicate review yet.
 Closes that wait for you when an agent is unsure, follow-up tasks, the list of 59 categories and the
-duplicate check that reads linked messages are in `tg`; `max` and `memo` do not have them yet.
+duplicate check that reads linked messages are in `tg` and `max`; `memo` does not have them yet.
 [How tasks work](./tasks-architecture.mdx) gives the technical detail.
 
 ## Where tasks come from
@@ -111,8 +111,7 @@ tg personal tasks close <task>
 tg personal tasks reject <task>
 ```
 
-`<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the
-same commands, except the suggested closes, which only `tg` has so far.
+`<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the same commands, including suggested closes.
 
 </details>
 
@@ -156,7 +155,7 @@ while working on another.
 
 ## When an agent closes a task
 
-Only `tg` has this so far; in `max` and `memo`, an agent's close still closes the task.
+Both `tg` and `max` support this. In `memo`, an agent's close still closes the task.
 
 An agent that closes a task says how sure it is that nothing more is needed, as a number from 0 to 1
 (`--certainty`). At or above the store's threshold (0.8 by default), the task closes. Below it, the

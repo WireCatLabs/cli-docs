@@ -226,7 +226,7 @@ Add something that the rules don't see, like your promise, or close a task that 
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other
 ```
 
-If a task may be the same work as one opened or closed in the last 14 days, `tasks add` refuses with exit code 2 and names the candidates. Repeat with `--into <задача>` to attach the message to it, or with `--new` to open a new task anyway. `tasks duplicates` shows the pairs the rules found, and `tasks merge <задача> --into <другая>` merges them:
+If a task may be the same work as an open task, `tasks add` refuses with exit code 2 and names the candidates. Repeat with `--into <задача>` to attach the message to it, or with `--new` to open a new task anyway. If it only resembles a task closed in the last 14 days, `tasks add` opens a new task linked to the closed one by `follow-up-of`; the closed task stays closed, and `tasks show` displays the link. `tasks duplicates` shows the pairs found by the rules, and `tasks merge <задача> --into <другая>` merges them:
 
 ```sh
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --into <задача>
@@ -234,6 +234,15 @@ max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promi
 
 ```sh
 max personal tasks close <задача> --as dismissed --reason no-reply-needed
+```
+
+An agent — a program with `AI_AGENT` or `CLAUDECODE` set — closes a task only with `--certainty`: its confidence from 0 to 1. Below the threshold, the task stays open with a suggested close. `tasks list close:suggested` lists these tasks, and `tasks agenda` shows the reason `close-suggested`. Confirm the suggestion with `tasks close <задача>` or refuse it with `tasks reject <задача>`. The default threshold is 0.8, changed by `config set task_agent_close_min`; `config set task_agent_close off` keeps every task an agent closes open:
+
+```sh
+max personal tasks list close:suggested
+max personal tasks close <задача>
+max personal tasks reject <задача>
+max config set task_agent_close_min 0.9
 ```
 
 A pair that is not one task is removed for good by `tasks duplicates reject`; `tasks duplicates defer` leaves it to you, and `tasks duplicates decision:unsure` lists it. `tasks related <задача>` scores similar tasks and changes nothing, and `tasks unmerge` undoes a merge:
@@ -245,19 +254,27 @@ max personal tasks duplicates reject <дубль> <задача>
 max personal tasks unmerge <дубль>
 ```
 
-Query fields filter today's agenda. When two agents work, one claims the task first; the claim ends by itself after 30 minutes, `--lease` changes the term, and `tasks release` gives the task back early:
+`tasks agenda` and `tasks duplicates` use query fields:
+
+- `tag:` and `category:` keep tasks with that tag or category: `tag:urgent`, `category:money`.
+- `claimed:` selects whose claim is on a task: `none`, `mine`, `others` or `any`. Without this field, the agenda shows unclaimed tasks and yours; `claimed:any` shows all.
+- `decision:` selects duplicate pairs: `review`, the default, waits for a reviewing agent; `unsure` waits for you: `decision:unsure`.
+
+When two agents work, one claims the task first; the claim ends by itself after 30 minutes, `--lease` changes the term, and `tasks release` gives the task back early:
 
 ```sh
-max personal tasks agenda category:money tag:urgent
+max personal tasks agenda category:money tag:urgent claimed:any
 max personal tasks claim <задача> --lease 2h
 max personal tasks release <задача>
 ```
 
-`tasks categories` shows the list of categories. It is one list for the whole store, shared by `tg`, `max` and `memo`; `config set task_categories.<имя>` adds or changes a category — its meaning, then the words the rule picks it by:
+`tasks categories` shows the category list. One list serves the whole store, shared by `tg`, `max` and `memo`. It has 59 categories by default and supports up to 80. `config set task_categories.<имя>` adds or changes a category — its meaning, then words used by the rule in English, Russian and Spanish (`es:`):
 
 ```sh
 max config set task_categories.travel "поездки и билеты | рейс, отель, es:vuelo"
 ```
+
+A task keeps its category even after it is removed from the list. `tasks categories` names these categories and counts their tasks, `tasks list category:<имя>` finds them, and `tasks plan <задача> --category <имя>` moves a task to a different category.
 
 More on the [Tasks](https://wirecat.dev/ru/docs/tasks) page.
 

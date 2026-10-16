@@ -13,7 +13,7 @@ Las categorías, las etiquetas en las tareas, las claves por tipo, la reserva de
 de duplicados ya están en el núcleo común de las herramientas (cli-core). `tg` y `max` las tienen
 todas; `memo` aún no tiene la reserva ni la revisión de duplicados. Los cierres que te esperan cuando
 un agente no está seguro, las tareas de seguimiento, la lista de 59 categorías y la detección de
-duplicados que lee los mensajes vinculados están en `tg`; `max` y `memo` aún no los tienen.
+duplicados que lee los mensajes vinculados están en `tg` y `max`; `memo` aún no los tiene.
 [Cómo funcionan las tareas](./tasks-architecture.mdx) da el detalle técnico.
 
 ## De dónde salen las tareas
@@ -113,7 +113,7 @@ tg personal tasks close <task>
 tg personal tasks reject <task>
 ```
 
-`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos, salvo los cierres sugeridos, que por ahora solo tiene `tg`.
+`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos, incluidos los cierres sugeridos.
 
 </details>
 
@@ -162,7 +162,7 @@ apareció mientras se trabajaba en otra.
 
 ## Cuando un agente cierra una tarea
 
-Por ahora solo `tg` tiene esto; en `max` y `memo`, el cierre de un agente sigue cerrando la tarea.
+Lo admiten `tg` y `max`. En `memo`, el cierre de un agente sigue cerrando la tarea.
 
 Un agente que cierra una tarea indica su certeza de que no hace falta nada más, con un número de 0 a 1
 (`--certainty`). Si llega al umbral del almacén (0.8 por defecto), la tarea se cierra. Por debajo, la

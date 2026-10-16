@@ -319,7 +319,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.55.0/docs/dev/bot-api-coverage.md).
+Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.56.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
@@ -357,9 +357,6 @@ El agente puede acceder a lo que permita el perfil del bot: el bot, los chats qu
 - para permitir solo envíos y comentarios, establece `permissions.bot: readonly` y después `permissions.bot.messages.send: allow`; comprueba que no haya otros permisos más específicos;
 - La eliminación de mensajes o comentarios tiene el nivel `ask` de forma predeterminada: se permite la operación solicitada sin un formulario de confirmación del servidor; `deny` y `readonly` la prohíben.
 - Las acciones que las reglas del chat exigen confirmar permanecen como planes para el propietario.
-- Las opciones antiguas de confirmación no cambian el acceso.
-
-`--allow-send`, `--allow-delete` y `--allow-moderate` no modifican los permisos: el servidor inicia con esas opciones y muestra una advertencia.
 
 Cada escritura ejecuta el mismo comando que escribirías tú y comprueba la lista de destinatarios del bot, `permissions` y el registro. El agente no puede acceder al token ni a los webhooks. Puede leer la lista de destinatarios, el menú de comandos y los administradores, pero no cambiarlos; tampoco puede salir del chat, enviar archivos ni usar `bot api`.
 

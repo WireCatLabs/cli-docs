@@ -4,6 +4,37 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.56.0 — 16.10.2026
+
+### Added
+
+- **`tasks reject` refuses an agent's suggested task close, and `tasks list close:suggested` finds those tasks** (cli-core 0.295.0). `tasks agenda` shows the reason `close-suggested`; the owner confirms with `tasks close <задача>`, without needing `--as`. Shared-store settings `task_agent_close` (`on` by default) and `task_agent_close_min` (0.8) control agent closes; `config show` displays them.
+- **A new task about one closed in the last 14 days becomes its follow-up** (cli-core 0.295.0): `review` and `tasks add` link it to the closed task with `follow-up-of`. The closed task stays closed and does not enter `tasks duplicates`; `tasks show` displays the link.
+- **59 default task categories instead of 7, with up to 80 in the list** (cli-core 0.295.0 and 0.296.0): `bills`, `health`, `travel`, `fitness`, `subscriptions` and more. `tasks categories` prints each meaning and its English, Russian and Spanish rule words. A store whose list was saved with `config set task_categories.*` keeps its own; `config unset task_categories` selects the new defaults.
+- **Categories removed from the list remain visible** (cli-core 0.296.0): `tasks categories` names them and counts their open/total tasks (`unlisted` in JSON); `tasks agenda` names categories still carried by open tasks (`unlisted_categories`).
+- **Spanish task support** (cli-core 0.296.0): an `es:` trigger matches other forms of a word (`pagues` — `pagar`) for Spanish messages, and duplicate checks understand dates such as `mañana`, `el viernes`, `15 de noviembre`.
+- **Duplicate checks run again after linking a message** (cli-core 0.295.0): after `tasks link <задача> msg:…`, `tasks add --into` and `tasks merge`, similar tasks appear in `tasks duplicates`; the response's `review` field counts them. The link remains, and nothing merges automatically.
+- **`commands --json` states a command's lifetime** (cli-base 0.38.0): `serve` and `watch` have `lifetime` — `persistent`, while `setup` and `session start` are `interactive`. Previously the program inferred them from their names.
+
+### Changed — may break callers
+
+- **An agent closes a task only with `--certainty <0..1>`, and an uncertain close waits for the owner** (cli-core 0.295.0). `AI_AGENT` or `CLAUDECODE` identifies an agent; `--as-owner` closes as the owner. An agent can be wrong, and closed tasks disappear from the owner's agenda. An agent's `tasks close` without `--certainty` refuses with `task.certainty-required`; MCP `tasks_close` requires the new `certainty` argument. Below `task_agent_close_min` (0.8 by default), or with `task_agent_close off`, the answer has `state: open` and `close_suggestion`, and the task stays open.
+- **`tasks add` no longer refuses when only closed tasks match** (cli-core 0.295.0): it opens a new task with `follow-up-of` (`follow_up_of` in the answer). Exit code 2 still applies when an open task matches. A script expecting code 2 for a closed match now receives a new task.
+- **Rules choose narrower categories: electricity bills become `bills` instead of `money`, and a doctor becomes `health` instead of `personal`** (cli-core 0.295.0 and 0.296.0). The original seven categories keep their names/meaning; stored tasks do not change. A filter such as `tasks agenda category:personal` catches fewer new tasks. Some words move to narrower categories: `gym` to `fitness`, `restaurant` to `food`, `переезд` to `moving`.
+- **Duplicate checks read the task's underlying messages** (cli-core 0.295.0): the source and five most recently linked messages. A rule-created task without its own text is compared by message words, so `tasks add` can refuse with code 2 where it previously opened a task.
+- **`max mcp` and `max <бот> bot mcp` now use the shared MCP server, like `tg`.** Tools remain `max_read`, `max_tools_search` and `max_write`. `chats check` in `max_write` is replaced by `chats moderate`; the `chats rules` alias is gone, leaving `chats rules show`. `max bot mcp` no longer accepts `--allow-send`, `--allow-delete`, `--allow-moderate`, `--confirm-send` or `--allow-dangerous`. MAX and TG share the same tested behavior. These old `bot mcp` flags previously enabled nothing; now they prevent startup with exit code 2 and “unknown option”. Remove them from application settings; `max <бот> bot mcp config` prints the replacement. Agents using `chats check` or `chats rules` need the new names. `max mcp config` no longer includes `--yes`: MCP writes at `ask` already run without a question. Voice over MCP is downloaded, then transcribed on this computer, as in `tg`. `chats moderate` reads its checkpoint only from the rules file; very old session checkpoints are no longer migrated.
+- **`setup --json` puts next commands in the envelope's `next`, not `item.next`.** The `item.next` object with `instructions`, `chats`, `history` and `skill` becomes two top-level read steps: `skill show` and `chats list --limit 5`. All commands put next steps in one place for agents. Scripts reading `item.next` must read `next`. History download and skill installation remain in human output only.
+- **`chats media` returns messages with the same shape as chat history.** Voice is now `voice`, rather than `audio`, as in `messages list`. MAX file/video IDs are inside the attachment's `provider_ref` (`provider_ref.file_id`, `provider_ref.video_id`), not at its top level. Previously `chats media` returned MAX-specific attachments. Scripts that expected `audio` must look for `voice` and read `file_id`/`video_id` inside `provider_ref`; `--type audio` still selects voice.
+- **`max watch` renders messages through the same code as `messages list`.** Polls show the question, answers and vote counts. JSON and `--jsonl` stay unchanged. Human output may look slightly different from 0.55.0; scripts should use `--jsonl`.
+
+### Fixed
+
+- **`doctor report create` also labels reply-target message IDs and write-attempt IDs.** Labels correlate records within one report and change for the next report.
+
+### Security
+
+- **Every write is checked in one shared guard, through the terminal, `max serve` and MCP.** Sends, edits, deletions, reactions, mark-read, forwarding, moderation and chat/contact/account changes share permission levels, `MAX_READ_ONLY`, recipient lists and the send journal. Writes visible to others (messages, forwards, edits, deletions, new groups and adding people) also share the hourly limit. `deny` and `readonly` refuse writes. At `ask`, the terminal asks or waits for `--yes` (`--allow-dangerous` for deletion); `--json` without a flag refuses. MCP writes at `ask` run as before, governed by profile permissions, including server `--permission` overrides. `MAX_READ_ONLY=1` refuses any write, including MCP. Previously MCP checks used a separate MAX path; now that path is shared with `tg`. Terminal commands keep their behavior. To prevent an agent deleting or sending without you, set the action to `deny` or `readonly`, rather than `ask`: these tools are not offered to the agent.
+
 ## 0.55.0 — 15.10.2026
 
 ### Changed — may break scripts
@@ -1284,7 +1315,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.55.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.56.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).
