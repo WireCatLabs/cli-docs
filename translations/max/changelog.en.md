@@ -4,6 +4,65 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.55.0 — 15.10.2026
+
+### Changed — may break scripts
+
+- **Flags of shared commands follow the shared vocabulary; the old names are no longer accepted** (cli-core 0.288.0):
+  `--budget` → `--max-pages`; `messages sync --estimate` → `--dry-run` (max still rejects it: MAX message ids do not
+  tell how many are missing); `contacts context --refresh`, `bot contacts show --refresh` and
+  `tags auto --refresh-metadata` → `--sync-first`; `search conversations --refresh` → `--catch-up`;
+  `attachments show --if-sha256` → `--expected-fingerprint`; in `replies edit`, `--chats`, `--not-chats`, `--people`,
+  `--not-people` → `--allow-chats`, `--deny-chats`, `--allow-people`, `--deny-people` (the rules file does not change);
+  `schedule --once` → `--at-time`; `bot chats moderate --no-ban` → `--no-block`; `chats mark-read --until` →
+  `--until-id`; `tasks add|plan --check` → `--remind-time`; `tasks add --attach` → `--into`; `tasks claim --for` →
+  `--lease`; `tasks agenda --due` → `--due-within`; `server logs --lines` → `--limit` (`-n` stays); in `chats start`,
+  `--payload` → `--start`, as in `chats app`; `store export --to/--kind` → `--output-dir/--include`.
+  Why: in max, tg and the other WireCat CLIs one word means one thing, and an agent does not have to remember a flag
+  name for each program.
+  What to check: an old name ends the command with exit code 2 ("unknown option") before connecting to MAX — check
+  scripts and schedules (`schedule list`). In MCP the argument is the new flag name in snake_case, for example
+  `max_pages`, `until_id`, `expected_fingerprint`, `output_dir`, `allow_chats`, `at_time`. In `search conversations`, do
+  not change `--refresh` to `--sync-first`: that flag already existed and first reads new messages from MAX, while the
+  former search preparation is now `--catch-up`.
+- **`tasks similar` is now `tasks related`, and `tasks duplicates unsure` is `tasks duplicates defer`**, without the old names.
+  Why: the same shared vocabulary.
+  What to check: in MCP, find the commands `tasks related` and `tasks duplicates defer` through `max_tools_search`. The
+  permission key is `tasks.duplicates.defer`. The old key `tasks.duplicates.unsure` in the settings file now only
+  warns in stderr and has no effect, so the command gets the `tasks` level: remove it with `config unset` and give
+  the same level to the key `tasks.duplicates.defer`. In the database the decision is still called `unsure`.
+- **`tasks agenda` and `tasks duplicates` filter with query fields, not flags**: `tasks agenda --tag <имя>` →
+  `tag:<имя>`, `--category <имя>` → `category:<имя>`, `--claimed` → `claimed:any` (also `none`, `mine`, `others`; by
+  default, as before, unclaimed and your own); `tasks duplicates --unsure` → `decision:unsure` (by default
+  `decision:review`).
+  Why: the database filters the list, as with the other lists, not the program after reading.
+  What to check: an OR or NOT that mixes task fields with `chat_kind:` is rejected (`query.unsupported-placement`).
+  In MCP these commands take `query` instead of `tag`, `category`, `claimed` and `unsure`.
+- **Every `--json` answer is an envelope: `item` for one thing, or `items` + `page` for a list, and `meta`.** Now the
+  ones that returned a bare object answer this way too: the `--dry-run --json` preview (under `item`, snake_case keys:
+  `business_rules`, `action_invoked`, `write_reserved`, `messenger_contacted`, `configuration_read`),
+  `mentions confirm|reject` and `images embed --json`, `max_tools_search` in MCP (`{items, more}` →
+  `{items, page, meta}`) and the MCP resource `max://chat/<id>` (the chat and messages under `item`), as well as `bot me`, `bot api …` (the Bot API answer is inside `item` unchanged, an empty answer is
+  `null`), `contacts sync`, `contacts lookup` (`displayName` → `display_name`, `lastMessagedAt` → `last_messaged_at`),
+  `doctor report`, `doctor report create` (`sendTo` → `send_to`) and `setup` (`chats.hasMore` → `chats.has_more`).
+  Why: an agent parses any answer the same way.
+  What to check: read fields from `.item`; instead of `more`, use `page.has_more`.
+- **A damaged local copy of the messages is an error, not an empty copy** (cli-core 0.286.0). Before, a command that
+  connects to MAX silently went on without it. The copy is skipped only if it does not exist, if the account is not
+  recorded yet, or if another process (`serve`) holds it for more than 5 seconds.
+  Why: an answer without the copy looked complete, although it lacked what was saved.
+  What to check: such an error is a reason for `max <профиль> store repair --dry-run`.
+
+### Fixed
+
+- **The next-step hint includes the profile** (cli-core 0.286.0): after `max personal …` the `→ …` line also
+  starts with `max personal`, and pasted as is it works instead of asking to choose a profile.
+
+### Removed
+
+- **Opening the database no longer deletes the old `messages.db` file** and no longer says so in stderr (cli-core 0.286.0).
+  If the file is left over from old versions, delete it yourself.
+
 ## 0.54.0 — 15.10.2026
 
 ### What's new
@@ -1225,7 +1284,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.54.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.55.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

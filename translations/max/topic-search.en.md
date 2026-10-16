@@ -29,7 +29,7 @@ Topic search differs from the `topic:` field in [message search](./search.md). T
 | Open entire conversation that contains a message | `max personal conversations show <чат> <сообщение>` |
 | Find other conversations about the same thing in all chats | `max personal conversations related <чат> <сообщение>` |
 | Limit result to person, period or word | `max personal search conversations "<вопрос>" --filter '<запрос>'` |
-| Find out what's outdated and catch up | `max personal conversations status`, `max personal search conversations "<вопрос>" --refresh` |
+| Find out what's outdated and catch up | `max personal conversations status`, `max personal search conversations "<вопрос>" --catch-up` |
 | Ask your AI agent to link messages more accurately | `max skill show link-conversations` |
 
 ## Search by topic or search by word?
@@ -185,10 +185,10 @@ New messages enter a conversation only after the next `build`, and enter vectors
 max personal conversations status                         # что отстало, по чатам
 max personal conversations build                          # все изменившиеся чаты и группы, ни разу не построенные
 max personal conversations embed                          # все построенные чаты, где остались куски
-max personal search conversations "аренда квартиры" --refresh   # сначала догнать, потом искать
+max personal search conversations "аренда квартиры" --catch-up  # сначала догнать, потом искать
 ```
 
-For every built chat, `status` counts unseen new/edited/deleted messages, chunks with current/stale/missing vectors, and groups never built. Without `--chat`, `build`, `embed` and `search --refresh` process at most 20 chats (`--max-chats`) and 2,000 chunks (`--max-chunks`); repeat to continue. They never download recognition files automatically. `--refresh` cannot combine with `--filter` or `--source`; prepare the required chats separately.
+For every built chat, `status` counts unseen new/edited/deleted messages, chunks with current/stale/missing vectors, and groups never built. Without `--chat`, `build`, `embed` and `search conversations --catch-up` process at most 20 chats (`--max-chats`) and 2,000 chunks (`--max-chunks`); repeat to continue. They never download recognition files automatically. `--catch-up` cannot combine with `--filter` or `--source`; prepare the required chats separately.
 
 If an update changes grouping rules, `status` and `max personal store check` identify chats built with older rules. Build them again.
 

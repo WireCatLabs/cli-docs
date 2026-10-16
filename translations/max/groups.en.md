@@ -226,15 +226,40 @@ Add something that the rules don't see, like your promise, or close a task that 
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other
 ```
 
-If a task may be the same work as one opened or closed in the last 14 days, `tasks add` refuses with exit code 2 and names the candidates. Repeat with `--attach <задача>` to attach the message to it, or with `--new` to open a new task anyway. `tasks duplicates` shows the pairs the rules found, and `tasks merge <задача> --into <другая>` merges them:
+If a task may be the same work as one opened or closed in the last 14 days, `tasks add` refuses with exit code 2 and names the candidates. Repeat with `--into <задача>` to attach the message to it, or with `--new` to open a new task anyway. `tasks duplicates` shows the pairs the rules found, and `tasks merge <задача> --into <другая>` merges them:
 
 ```sh
-max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --attach <задача>
+max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --into <задача>
 ```
 
 ```sh
 max personal tasks close <задача> --as dismissed --reason no-reply-needed
 ```
+
+A pair that is not one task is removed for good by `tasks duplicates reject`; `tasks duplicates defer` leaves it to you, and `tasks duplicates decision:unsure` lists it. `tasks related <задача>` scores similar tasks and changes nothing, and `tasks unmerge` undoes a merge:
+
+```sh
+max personal tasks related <задача>
+max personal tasks duplicates decision:unsure
+max personal tasks duplicates reject <дубль> <задача>
+max personal tasks unmerge <дубль>
+```
+
+Query fields filter today's agenda. When two agents work, one claims the task first; the claim ends by itself after 30 minutes, `--lease` changes the term, and `tasks release` gives the task back early:
+
+```sh
+max personal tasks agenda category:money tag:urgent
+max personal tasks claim <задача> --lease 2h
+max personal tasks release <задача>
+```
+
+`tasks categories` shows the list of categories. It is one list for the whole store, shared by `tg`, `max` and `memo`; `config set task_categories.<имя>` adds or changes a category — its meaning, then the words the rule picks it by:
+
+```sh
+max config set task_categories.travel "поездки и билеты | рейс, отель, es:vuelo"
+```
+
+More on the [Tasks](https://wirecat.dev/ru/docs/tasks) page.
 
 See open tasks by chat, the oldest and median time until closed:
 
@@ -358,7 +383,7 @@ Without `--offline`, the CLI also fetches joining and leaving events. Saved dail
 
 ### Member snapshots
 
-`max personal chats members fetch` reads participants into a local copy: saves their profiles, changes, number of participants per day and the result of the completeness check. `--budget` limits the number of pages. If the list is incomplete, no one is recorded as having left: this requires the entire available list and a known number of group members, not exceeding the number of people read. In MAX, lists are often partial; increasing the budget only helps where the server actually serves the remaining pages.
+`max personal chats members fetch` reads participants into a local copy: saves their profiles, changes, number of participants per day and the result of the completeness check. `--max-pages` limits the number of pages. If the list is incomplete, no one is recorded as having left: this requires the entire available list and a known number of group members, not exceeding the number of people read. In MAX, lists are often partial; increasing the budget only helps where the server actually serves the remaining pages.
 
 <a id="ежедневная-история-состава"></a>
 
@@ -368,7 +393,7 @@ Tracking does not start the server or prolong its idle timeout: for daily histor
 
 `max personal chats members history` lists saved joins, departures and profile changes chronologically; the query `time>=7d` limits the period. It never contacts MAX. A join uses MAX's timestamp when available, otherwise first observation. Departure time is the first complete snapshot missing the person, rather than their exact departure. The initial list does not mean everyone joined that day. `chats members list --offline` shows the latest complete saved membership; partial reads do not replace it. Without a complete snapshot, the list can be empty even when individual profiles and events exist. Profiles and history remain beside messages in the local archive.
 
-`max personal chats members audit` reads members and shows signals of suspicious accounts. `--budget` limits pages, and `--min-score` sets the minimum score. This is a hint for human review: nobody is removed, administrators and the owner are excluded, `more` means an incomplete list, and `unknown` means unknown signals. MAX does not provide every Telegram signal. This check is unavailable with `--offline`. “Never wrote” means no messages from the person were found in local history; it does not prove they never posted in the group.
+`max personal chats members audit` reads members and shows signals of suspicious accounts. `--max-pages` limits pages, and `--min-score` sets the minimum score. This is a hint for human review: nobody is removed, administrators and the owner are excluded, `more` means an incomplete list, and `unknown` means unknown signals. MAX does not provide every Telegram signal. This check is unavailable with `--offline`. “Never wrote” means no messages from the person were found in local history; it does not prove they never posted in the group.
 
 `--deep <n>` additionally checks the first n members in full, one per second: their profile and up to 1000 saved messages each. Public spammer lists cover only Telegram accounts, so they are not queried for MAX, as the response explains.
 

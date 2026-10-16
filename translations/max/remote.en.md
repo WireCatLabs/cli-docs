@@ -190,15 +190,15 @@ The command reads only a saved attachment belonging to the active account. It do
 
 One response carries 512 KiB by default; `--chunk-bytes` allows up to 1 MiB. The file default is 50 MiB, configurable through `MESSAGING_ATTACHMENT_MAX_MIB`. JSON is `{item}` with the fields `base64`, `offset_bytes`, `read_bytes`, `total_bytes`, `next_offset_bytes`, `complete` and the whole file's SHA256. `complete: true` means the entire file fits in this response, not that its text has been recognised.
 
-Decode each base64 chunk, join the chunks at their offsets and follow `next_offset_bytes` until it is null. On later requests, pass the first SHA256 as `--if-sha256`: if the source file changes, the request fails without returning changed bytes. Compare the assembled file with that hash.
+Decode each base64 chunk, join the chunks at their offsets and follow `next_offset_bytes` until it is null. On later requests, pass the first SHA256 as `--expected-fingerprint`: if the source file changes, the request fails without returning changed bytes. Compare the assembled file with that hash.
 
 ```sh
-max personal attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --if-sha256 <sha256> --json
+max personal attachments show msg:max/511/7/204 --attachment 1 --offset-bytes 524288 --expected-fingerprint <sha256> --json
 ```
 
 ### Through MCP
 
-Find `attachments show` through the usual three tools. Its arguments are `message` (a locator, or an ID with `chat`), `attachment`, `offset_bytes`, `chunk_bytes` and `if_sha256`. A complete PNG, JPEG or WebP image up to 8000 pixels per side and 20 million pixels overall arrives as an image; other files arrive as an embedded binary resource. A partial resource is a chunk of bytes, not a complete PDF or image. The resource URI is a name, not a download address.
+Find `attachments show` through the usual three tools. Its arguments are `message` (a locator, or an ID with `chat`), `attachment`, `offset_bytes`, `chunk_bytes` and `expected_fingerprint`. A complete PNG, JPEG or WebP image up to 8000 pixels per side and 20 million pixels overall arrives as an image; other files arrive as an embedded binary resource. A partial resource is a chunk of bytes, not a complete PDF or image. The resource URI is a name, not a download address.
 
 The app must pass these bytes to the agent's file tools. Whether the agent can open a PDF or save a file depends on the app. If it does not expose embedded resources, request `format: "base64"` and decode the JSON with the agent's tools. A profile denying `messages` or `attachments.show` refuses transfer; `readonly` allows reading saved files.
 
@@ -220,7 +220,7 @@ max personal attachments show msg:max/511/7/204 --attachment 1 --page 1 --json
 
 In MCP, call `max_read`, command `attachments show`, with `page: 1` and the message locator. The page arrives as an image by default. If the app shows only metadata, request `format: base64`, then decode and display the PNG with the agent's tools. Receiving a base64 string does not mean the page has been viewed. Read pages from 1 to `pdf.page_count`. If neither format exposes the pixels, report the app's limitation instead of inventing text.
 
-`pdf.source_sha256` and `pdf.source_bytes` describe the source PDF; the top-level `sha256` and `total_bytes` describe the page image. `--if-sha256` checks the source PDF. `--page` cannot be combined with `--offset-bytes` or `--chunk-bytes`. By default, the PDF can be up to 50 MiB without a separate page-count limit; a PNG allows 4000 pixels per side and 8 MiB per page. All three values are configurable.
+`pdf.source_sha256` and `pdf.source_bytes` describe the source PDF; the top-level `sha256` and `total_bytes` describe the page image. `--expected-fingerprint` checks the source PDF. `--page` cannot be combined with `--offset-bytes` or `--chunk-bytes`. By default, the PDF can be up to 50 MiB without a separate page-count limit; a PNG allows 4000 pixels per side and 8 MiB per page. All three values are configurable.
 
 Rendering a page image does not call an external OCR service or add text to the index. After viewing every page, the agent calls `attachments text set` and checks a `content:` search. Verify numbers and complex layouts against the images; quality depends on the source document and the agent's tools.
 

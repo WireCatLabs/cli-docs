@@ -6,10 +6,10 @@
     "conclusion": "Reviewed 0.61.0: tg mcp and tg bot mcp drop the retired access flags; tasks agenda and duplicates take tag:, category:, claimed: and decision:; the query language lists the mention fields. Roadmap unchanged: multi-photo sending, private chat notes and the listed MAX-only capabilities remain future work."
   },
   "max": {
-    "version": "v0.54.0",
+    "version": "v0.55.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
-    "reviewedAt": "2026-10-15",
-    "conclusion": "Reviewed 0.54.0: task claims, categories, tags and duplicate review; mentions domains, list --new, --all-in-chat and phone_countries; store version 16 reads notes and documents; snake_case settings only; mail search moved to Memo; MAX_READ_ONLY now blocks writes that enable later writes. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
+    "reviewedAt": "2026-10-16",
+    "conclusion": "Reviewed 0.55.0: shared flag names without the old aliases (--max-pages, --sync-first, --catch-up, --expected-fingerprint, --allow/--deny-chats and -people, --at-time, --no-block, --until-id, --remind-time, --into, --lease, --due-within, --limit, --start, --output-dir/--include); tasks related and tasks duplicates defer; agenda and duplicates filter with category:, tag:, claimed: and decision: query fields; every --json answer is an item/items envelope; a damaged local copy is an error. Roadmap unchanged: optional no-local-copy mode, event actions, video circles, cloud password and standalone installers remain future work."
   },
   "zm": {
     "version": "v0.21.1",

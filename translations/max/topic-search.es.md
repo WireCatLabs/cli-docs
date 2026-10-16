@@ -32,7 +32,7 @@ La búsqueda por tema no es un campo `topic:` [búsqueda de mensajes](./search.m
 |Abrir toda la conversación que contiene un mensaje.| `max personal conversations show <чат> <сообщение>` |
 |Encuentra otras conversaciones sobre lo mismo en todos los chats| `max personal conversations related <чат> <сообщение>` |
 |Limitar el resultado a una persona, punto o palabra| `max personal search conversations "<вопрос>" --filter '<запрос>'` |
-|Descubra qué está desactualizado y póngase al día| `max personal conversations status`, `max personal search conversations "<вопрос>" --refresh` |
+|Descubra qué está desactualizado y póngase al día| `max personal conversations status`, `max personal search conversations "<вопрос>" --catch-up` |
 |Pídale a su agente de IA que vincule mensajes con mayor precisión| `max skill show link-conversations` |
 
 ## ¿Buscar por tema o buscar por palabra?
@@ -188,10 +188,10 @@ Los mensajes nuevos se incorporan a una conversación solo tras el siguiente `bu
 max personal conversations status                         # что отстало, по чатам
 max personal conversations build                          # все изменившиеся чаты и группы, ни разу не построенные
 max personal conversations embed                          # все построенные чаты, где остались куски
-max personal search conversations "аренда квартиры" --refresh   # сначала догнать, потом искать
+max personal search conversations "аренда квартиры" --catch-up  # сначала догнать, потом искать
 ```
 
-`status` cuenta para cada mensaje de chat creado que `build` aún no ha visto (nuevo, modificado, eliminado), piezas con un vector actual, desactualizado o faltante, y cuántos grupos nunca se han creado. Sin `--chat`, los comandos `build`, `embed` y `search --refresh` no toman más de 20 chats a la vez (`--max-chats`) y no cuentan más de 2000 piezas (`--max-chunks`); ejecutar de nuevo para continuar. No descargan el modelo. `--refresh` no se puede combinar con `--filter` y `--source`: primero cree y cuente los chats necesarios.
+`status` cuenta para cada mensaje de chat creado que `build` aún no ha visto (nuevo, modificado, eliminado), piezas con un vector actual, desactualizado o faltante, y cuántos grupos nunca se han creado. Sin `--chat`, los comandos `build`, `embed` y `search conversations --catch-up` no toman más de 20 chats a la vez (`--max-chats`) y no cuentan más de 2000 piezas (`--max-chunks`); ejecutar de nuevo para continuar. No descargan el modelo. `--catch-up` no se puede combinar con `--filter` y `--source`: primero cree y cuente los chats necesarios.
 
 Cuando las reglas cambian en la nueva versión, `status` y `max personal store check` llaman a los chats creados según los antiguos; constrúyanlos nuevamente.
 

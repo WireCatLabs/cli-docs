@@ -4,6 +4,66 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.55.0 — 15.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Las opciones de los comandos comunes siguen el vocabulario común; los nombres antiguos ya no se aceptan** (cli-core 0.288.0):
+  `--budget` → `--max-pages`; `messages sync --estimate` → `--dry-run` (max lo sigue rechazando: los id de mensaje de
+  MAX no dicen cuántos faltan); `contacts context --refresh`, `bot contacts show --refresh` y
+  `tags auto --refresh-metadata` → `--sync-first`; `search conversations --refresh` → `--catch-up`;
+  `attachments show --if-sha256` → `--expected-fingerprint`; en `replies edit`, `--chats`, `--not-chats`, `--people`,
+  `--not-people` → `--allow-chats`, `--deny-chats`, `--allow-people`, `--deny-people` (el archivo de reglas no cambia);
+  `schedule --once` → `--at-time`; `bot chats moderate --no-ban` → `--no-block`; `chats mark-read --until` →
+  `--until-id`; `tasks add|plan --check` → `--remind-time`; `tasks add --attach` → `--into`; `tasks claim --for` →
+  `--lease`; `tasks agenda --due` → `--due-within`; `server logs --lines` → `--limit` (`-n` se mantiene); en `chats start`,
+  `--payload` → `--start`, como en `chats app`; `store export --to/--kind` → `--output-dir/--include`.
+  Por qué: en max, tg y las demás CLI de WireCat una palabra significa una sola cosa, y un agente no tiene que recordar
+  el nombre de la opción en cada programa.
+  Qué tener en cuenta: un nombre antiguo termina el comando con código 2 («unknown option») antes de conectar con MAX;
+  revisa los scripts y las programaciones (`schedule list`). En MCP el argumento es el nombre nuevo en snake_case, por
+  ejemplo `max_pages`, `until_id`, `expected_fingerprint`, `output_dir`, `allow_chats`, `at_time`. En
+  `search conversations` no cambies `--refresh` por `--sync-first`: esa opción ya existía y primero lee los mensajes
+  nuevos de MAX; la antigua preparación de la búsqueda es ahora `--catch-up`.
+- **`tasks similar` es ahora `tasks related`, y `tasks duplicates unsure` es `tasks duplicates defer`**, sin los nombres antiguos.
+  Por qué: el mismo vocabulario común.
+  Qué tener en cuenta: en MCP busca los comandos `tasks related` y `tasks duplicates defer` con `max_tools_search`. La
+  clave de permisos es `tasks.duplicates.defer`. La clave antigua `tasks.duplicates.unsure` en el archivo de ajustes
+  ahora solo avisa en stderr y no tiene efecto, así que el comando recibe el nivel de `tasks`: quítala con
+  `config unset` y da el mismo nivel a la clave `tasks.duplicates.defer`. En la base de datos la decisión sigue
+  llamándose `unsure`.
+- **`tasks agenda` y `tasks duplicates` filtran con campos de consulta, no con opciones**: `tasks agenda --tag <имя>` →
+  `tag:<имя>`, `--category <имя>` → `category:<имя>`, `--claimed` → `claimed:any` (también `none`, `mine`, `others`; por
+  defecto, como antes, las sin reservar y las tuyas); `tasks duplicates --unsure` → `decision:unsure` (por defecto
+  `decision:review`).
+  Por qué: la lista la filtra la base de datos, como las demás listas, y no el programa después de leer.
+  Qué tener en cuenta: un OR o NOT que mezcla campos de tarea con `chat_kind:` se rechaza (`query.unsupported-placement`).
+  En MCP estos comandos aceptan `query` en lugar de `tag`, `category`, `claimed` y `unsure`.
+- **Toda respuesta `--json` es un sobre: `item` para una cosa, o `items` + `page` para una lista, y `meta`.** Ahora
+  responden así también los que devolvían un objeto suelto: la vista previa `--dry-run --json` (bajo `item`, claves en
+  snake_case: `business_rules`, `action_invoked`, `write_reserved`, `messenger_contacted`, `configuration_read`),
+  `mentions confirm|reject` e `images embed --json`, `max_tools_search` en MCP (`{items, more}` →
+  `{items, page, meta}`) y el recurso MCP `max://chat/<id>` (el chat y los mensajes bajo `item`), además de `bot me`, `bot api …` (la respuesta de la Bot API va dentro de `item` sin cambios; una respuesta vacía es
+  `null`), `contacts sync`, `contacts lookup` (`displayName` → `display_name`, `lastMessagedAt` → `last_messaged_at`),
+  `doctor report`, `doctor report create` (`sendTo` → `send_to`) y `setup` (`chats.hasMore` → `chats.has_more`).
+  Por qué: un agente lee cualquier respuesta de la misma forma.
+  Qué tener en cuenta: lee los campos de `.item`; en lugar de `more`, usa `page.has_more`.
+- **Una copia local de los mensajes dañada es un error, no una copia vacía** (cli-core 0.286.0). Antes, un comando que
+  conecta con MAX seguía sin ella en silencio. La copia solo se omite si no existe, si la cuenta aún no está registrada
+  o si otro proceso (`serve`) la retiene más de 5 segundos.
+  Por qué: una respuesta sin la copia parecía completa, aunque le faltaba lo guardado.
+  Qué tener en cuenta: ese error es motivo para `max <профиль> store repair --dry-run`.
+
+### Correcciones
+
+- **La sugerencia del siguiente paso incluye el perfil** (cli-core 0.286.0): después de `max personal …` la línea
+  `→ …` también empieza por `max personal`, y pegada tal cual funciona en lugar de pedir que elijas un perfil.
+
+### Eliminaciones
+
+- **Abrir la base de datos ya no borra el archivo antiguo `messages.db`** ni lo anuncia en stderr (cli-core 0.286.0).
+  Si el archivo quedó de versiones antiguas, bórralo tú.
+
 ## 0.54.0 — 15.10.2026
 
 ### Novedades
@@ -1216,7 +1276,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.54.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.55.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

@@ -543,7 +543,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.54.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.55.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -762,7 +762,7 @@ max personal chats mark-read "Иван Петров"                  # до п�
 ```
 
 ```sh
-max personal chats mark-read "Иван Петров" --until 100000000000000001   # до этого сообщения включительно
+max personal chats mark-read "Иван Петров" --until-id 100000000000000001   # до этого сообщения включительно
 ```
 
 ```sh
@@ -906,7 +906,7 @@ max personal chats start <бот>                                 # запуст
 ```
 
 ```sh
-max personal chats start <бот> --payload ref1                  # с параметром, как ссылка max.ru/<бот>?start=ref1
+max personal chats start <бот> --start ref1                    # с параметром, как ссылка max.ru/<бот>?start=ref1
 ```
 
 ```sh

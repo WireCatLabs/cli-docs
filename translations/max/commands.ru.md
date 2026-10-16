@@ -319,7 +319,7 @@ max chats mark-read <chat> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--until <message>` | only up to this message id; the newest by default. |
+| `--until-id <id>` | only up to this message id; the newest by default. |
 | `--topic <id>` | mark only this forum topic read; unsupported by messengers without topics. |
 
 ### `max chats leave`
@@ -393,7 +393,7 @@ max chats members audit <chat> [query] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--budget <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
+| `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
 | `--deep <n>` | также полностью проверить первых n человек — профиль, фотографии и все их сообщения — по одному человеку в секунду; публичные списки блокировок относятся только к Telegram, поэтому ничего не отправляется. |
 
 #### `max chats members history`
@@ -426,7 +426,7 @@ max chats members fetch <chat> [options]
 | Опция | Что делает |
 |---|---|
 | `--track` | также загружать его ежедневно, пока работает serve; chats tracking показывает и изменяет список таких чатов. |
-| `--budget <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
+| `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
 
 #### `max chats members add`
 
@@ -933,7 +933,7 @@ max chats start <bot> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--payload <text>` | параметр запуска, который читает бот; если не задан — собственный ?start= ссылки. |
+| `--start <param>` | параметр запуска, который читает бот; если не задан — собственный ?start= ссылки. |
 
 ### `max chats app`
 
@@ -1107,7 +1107,7 @@ max contacts notes edit <person> <id> [options]
 | Опция | Что делает |
 |---|---|
 | `--file <path>` | читать текст заметки из файла; без параметра или с - читать stdin. |
-| `--revision <number>` | номер ревизии, которую вы прочитали перед редактированием. |
+| `--revision <n>` | номер ревизии, которую вы прочитали перед редактированием. |
 
 #### `max contacts notes remove`
 
@@ -1245,7 +1245,7 @@ max contacts context <person> [options]
 | `--limit <n>` | at most this many messages in each list; 10 if not given. |
 | `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
-| `--refresh` | with --chat, read their newest messages in each from the messenger first. |
+| `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
 
 ### `max contacts timeline`
 
@@ -1261,7 +1261,7 @@ max contacts timeline <person> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--scope <personal\|work>` | only what belongs to personal or to work accounts. |
+| `--scope <scope>` | only what belongs to personal or to work accounts: personal or work. |
 | `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
 | `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
 | `--limit <n>` | at most this many; 50 if not given. |
@@ -1466,7 +1466,7 @@ max messages sync [chat] [options]
 | `--catch-up-messages <n>` | пропустить перестроение графа, если число сообщений превышает это значение. |
 | `--catch-up-time <duration>` | лимит времени локальной подготовки, по умолчанию 30s. |
 | `--background` | run as a job that outlives this command; `store jobs show` follows it. |
-| `--estimate` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
+| `--dry-run` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
 ### `max messages transcribe`
 
@@ -1790,16 +1790,16 @@ max store export [chats] [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `chats` | необязательный | a chat: its id, or part of its title; several with --to. |
+| `chats` | необязательный | a chat: its id, or part of its title; several with --output-dir. |
 
 | Опция | Что делает |
 |---|---|
 | `--format <format>` | jsonl: одно сообщение на строку, по умолчанию с --output; markdown: стенограмма с заголовком на каждый день, ответы и пересылки цитируются. |
 | `--since-time <time>` | only from this ISO 8601 time, or 30m / 2h / 1d ago, on. |
 | `--output <file>` | write JSON lines, or the transcript, to this new file, readable only by you. |
-| `--to <dir>` | write into this folder, a file per chat and a manifest; run again on it for only what changed since. |
-| `--kind <kinds>` | with --to: every stored chat of these kinds, comma-separated: dialog, group, channel, saved. |
-| `--all` | with --to: every stored chat of this account. |
+| `--output-dir <dir>` | write into this folder, a file per chat and a manifest; run again on it for only what changed since. |
+| `--include <kinds>` | with --output-dir: every stored chat of these kinds, comma-separated: dialog, group, channel, saved. |
+| `--all` | with --output-dir: every stored chat of this account. |
 | `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
 ### `max store clear`
@@ -2287,7 +2287,7 @@ max stats tasks show [options]
 | Опция | Что делает |
 |---|---|
 | `--chat <chat>` | только этот чат; укажите его ID или часть названия. |
-| `--type <name>` | только этот тип: question, request, mention или promise. |
+| `--type <type>` | только этот тип: question, request, mention или promise. |
 
 ### `max stats charts`
 
@@ -2347,14 +2347,14 @@ max tasks add <message> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--type <name>` | тип задачи: question, request, mention или promise. |
+| `--type <type>` | тип задачи: question, request, mention или promise. |
 | `--category <name>` | о чём задача, из списка, который выводит tasks categories: money, documents, meeting, …. |
-| `--attach <task>` | если tasks add показал задачи, которые могут быть той же работой: привязать сообщение к этой задаче, а не открывать новую. |
+| `--into <id>` | если tasks add показал задачи, которые могут быть той же работой: привязать сообщение к этой задаче, а не открывать новую. |
 | `--new` | если tasks add показал задачи, которые могут быть той же работой: всё равно открыть задачу. |
-| `--title <text>` | одна строка: действие и его объект — send Alex the API token. |
+| `--title <title>` | одна строка: действие и его объект — send Alex the API token. |
 | `--description <text>` | подробности в Markdown: кто кому должен, когда считать выполненной, следующий шаг, ключевые слова. |
-| `--due <when>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
-| `--check <when>` | когда посмотреть на неё снова: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+| `--due <time>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+| `--remind-time <time>` | когда посмотреть на неё снова: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
 
 ### `max tasks plan`
 
@@ -2373,10 +2373,10 @@ max tasks plan <task> [options]
 | Опция | Что делает |
 |---|---|
 | `--category <name>` | о чём задача, из списка, который выводит tasks categories: money, documents, meeting, …; изменение сохраняется в истории задачи. |
-| `--title <text>` | одна строка: действие и его объект — send Alex the API token. |
+| `--title <title>` | одна строка: действие и его объект — send Alex the API token. |
 | `--description <text>` | подробности в Markdown: кто кому должен, когда считать выполненной, следующий шаг, ключевые слова. |
-| `--due <when>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
-| `--check <when>` | когда посмотреть на неё снова: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+| `--due <time>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+| `--remind-time <time>` | когда посмотреть на неё снова: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
 
 ### `max tasks link`
 
@@ -2410,12 +2410,12 @@ max tasks show <task>
 |---|---|---|
 | `task` | обязательный | ID или ключ задачи, как его показывает tasks list. |
 
-### `max tasks similar`
+### `max tasks related`
 
 задачи, которые могут быть той же работой, что и эта, лучшие первыми, каждая с уровнем — likely, maybe, different — и причинами; ничего не объединяет
 
 ```sh
-max tasks similar <task> [options]
+max tasks related <task> [options]
 ```
 
 | Аргумент | | Что это |
@@ -2428,15 +2428,18 @@ max tasks similar <task> [options]
 
 ### `max tasks duplicates`
 
-пары задач, открытых правилом, которые могут быть одной работой, новые первыми, с оценкой и причинами: объединить, отклонить или пометить каждую как неясную; --unsure показывает пары, оставленные владельцу
+пары задач, открытых правилом, которые могут быть одной работой, новые первыми, с оценкой и причинами: объединить, отклонить или отложить каждую; decision:unsure показывает пары, отложенные для владельца
 
 ```sh
-max tasks duplicates [options]
+max tasks duplicates [query] [options]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
 
 | Опция | Что делает |
 |---|---|
-| `--unsure` | только пары, которые агент-проверяющий счёл неясными. |
 | `--limit <n>` | сколько. |
 
 #### `max tasks duplicates reject`
@@ -2454,14 +2457,14 @@ max tasks duplicates reject <dup> <task>
 | `dup` | обязательный | задача, показанная как дубликат, по её id или ключу. |
 | `task` | обязательный | задача, с которой её сопоставили. |
 
-#### `max tasks duplicates unsure`
+#### `max tasks duplicates defer`
 
-поля и текст не дают ответа: оставить пару владельцу, который покажет её через --unsure
+поля и текст не дают ответа: оставить пару владельцу, который покажет её через decision:unsure
 
 **Меняет что-то только на этом компьютере.**
 
 ```sh
-max tasks duplicates unsure <dup> <task>
+max tasks duplicates defer <dup> <task>
 ```
 
 | Аргумент | | Что это |
@@ -2485,7 +2488,7 @@ max tasks merge <dup> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--into <task>` | задача, которая остаётся. |
+| `--into <id>` | задача, которая остаётся, по её id или ключу. |
 
 ### `max tasks unmerge`
 
@@ -2515,13 +2518,10 @@ max tasks agenda [query] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--due <span>` | показать задачи со сроком в пределах этого: 30m, 2h, 1d (по умолчанию 1d). |
-| `--unanswered <span>` | показать чаты, где последним написал кто-то другой не меньше этого времени назад (по умолчанию 1d). |
-| `--waiting <span>` | показать чаты, где последним написали вы не меньше этого времени назад (по умолчанию 7d). |
-| `--within <span>` | не показывать чаты, молчащие дольше этого: разговор закончился (по умолчанию 30d). |
-| `--claimed` | показать также задачи, которые держит кто-то другой (tasks claim); по умолчанию они скрыты. |
-| `--category <name>` | только задачи этой категории, из списка, который выводит tasks categories. |
-| `--tag <name>` | только задачи с этим тегом (tags add --task). |
+| `--due-within <duration>` | показать задачи со сроком в пределах этого: 30m, 2h, 1d (по умолчанию 1d). |
+| `--unanswered <duration>` | показать чаты, где последним написал кто-то другой не меньше этого времени назад (по умолчанию 1d). |
+| `--waiting <duration>` | показать чаты, где последним написали вы не меньше этого времени назад (по умолчанию 7d). |
+| `--within <duration>` | не показывать чаты, молчащие дольше этого: разговор закончился (по умолчанию 30d). |
 | `--holder <name>` | кто вы для захватов: id сессии или id чата; по умолчанию WIRECAT_HOLDER, иначе сессия Claude Code, иначе имя агента. |
 
 ### `max tasks categories`
@@ -2548,7 +2548,7 @@ max tasks claim <task> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--for <span>` | как долго действует захват: 30m, 2h (по умолчанию 30m); повторный захват продлевает его. |
+| `--lease <duration>` | как долго действует захват: 30m, 2h (по умолчанию 30m); повторный захват продлевает его. |
 | `--holder <name>` | кто вы для захватов: id сессии или id чата; по умолчанию WIRECAT_HOLDER, иначе сессия Claude Code, иначе имя агента. |
 
 ### `max tasks release`
@@ -2889,7 +2889,7 @@ max attachments show <chat> [message] [options]
 | `--page <n>` | отрисовать одну страницу PDF в PNG, начиная с 1; необязательные unpdf/canvas, без OCR. |
 | `--offset-bytes <n>` | смещение в байтах от 0. |
 | `--chunk-bytes <n>` | сколько байт вернуть, 1–1048576 (по умолчанию 524288). |
-| `--if-sha256 <hash>` | требовать SHA-256 всего файла из предыдущего фрагмента. |
+| `--expected-fingerprint <hash>` | требовать SHA-256 всего файла из предыдущего фрагмента. |
 
 ### `max attachments text`
 
@@ -2933,7 +2933,7 @@ max tags auto [options]
 |---|---|
 | `--chat <chat>` | сохранённая группа или канал; повторите параметр для нескольких. По умолчанию: ``. |
 | `--limit <number>` | обработать не более указанного числа чатов (1–500). По умолчанию: `50`. |
-| `--refresh-metadata` | прочитать текущие описания из мессенджера перед классификацией. |
+| `--sync-first` | прочитать текущие описания из мессенджера перед классификацией. |
 | `--dry-run` | предварительно показать классификацию по кешу без изменения хранилища. |
 
 ### `max tags add`
@@ -2955,7 +2955,7 @@ max tags add <tag> [options]
 | `--chat <chat>` | the chat to tag, or the chat of --message; a chat: its id, or part of its title. |
 | `--contact <person>` | the person to tag: their id, @username or name, as the local store knows them. |
 | `--message <message>` | the message to tag: its id in --chat, or a msg: locator alone. |
-| `--task <task>` | задача, которую нужно пометить: её id или ключ, как показывает tasks list. |
+| `--task <id>` | задача, которую нужно пометить: её id или ключ, как показывает tasks list. |
 
 ### `max tags remove`
 
@@ -2976,7 +2976,7 @@ max tags remove <tag> [options]
 | `--chat <chat>` | the chat to untag, or the chat of --message; a chat: its id, or part of its title. |
 | `--contact <person>` | the person to untag: their id, @username or name, as the local store knows them. |
 | `--message <message>` | the message to untag: its id in --chat, or a msg: locator alone. |
-| `--task <task>` | задача, с которой снимают теги: её id или ключ, как показывает tasks list. |
+| `--task <id>` | задача, с которой снимают теги: её id или ключ, как показывает tasks list. |
 | `--source <manual\|auto>` | удалить только отметку о принадлежности к этому источнику. |
 
 ### `max tags list`
@@ -3196,7 +3196,7 @@ max search all <query> [options]
 |---|---|
 | `--only <resources>` | только эти ресурсы через запятую: messages, notes; meetings, если --source называет аккаунт встреч. |
 | `--source <accounts>` | только эти аккаунты через запятую: provider:account, как его показывает найденное, провайдер, вид или group:<name>; каждый ресурс читает аккаунты своего вида, а встречи — только если аккаунт встреч назван. |
-| `--max-meetings <n\|all>` | сколько встреч аккаунта встреч просмотреть, начиная с новых; all — все (по умолчанию 100). |
+| `--max-meetings <n>` | сколько встреч аккаунта встреч просмотреть, начиная с новых, или all — все (по умолчанию 100). |
 | `--limit <n>` | сколько результатов. |
 | `--page <n>` | какая страница, начиная с 1. |
 | `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word. |
@@ -3279,7 +3279,7 @@ max search conversations <query> [options]
 | `--provider <provider>` | провайдер векторов: local или openai; опции важнее настроек профиля. |
 | `--base-url <url>` | сервер с /v1/embeddings как у OpenAI: Gemini, Jina или Ollama и LM Studio на этом компьютере. |
 | `--dims <n>` | удалённо: размер вектора — нужен с --base-url; укорачивает вектор модели OpenAI. |
-| `--max-chats <n>` | at most this many chats; 5 with --sync-first, 20 with --refresh if not given. |
+| `--max-chats <n>` | at most this many chats; 5 with --sync-first, 20 with --catch-up if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
 | `--sync-first` | сначала скачать новые сообщения в пределах чата, времени и числа сообщений. |
 | `--sync-time <duration>` | прекратить скачивание через это время (по умолчанию: 30s). |
@@ -3290,7 +3290,7 @@ max search conversations <query> [options]
 | `--source <accounts>` | аккаунты для поиска: personal, bots, all, провайдер или список вроде group:work,telegram:Alice,email:me@example.com; по умолчанию активный аккаунт. |
 | `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
 | `--limit <n>` | сколько результатов. |
-| `--refresh` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
+| `--catch-up` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
 
 ## `max searches`
 
@@ -3791,15 +3791,15 @@ max replies edit <id> [options]
 |---|---|
 | `--do <actions>` | действия: reply, task или оба через запятую. |
 | `--kinds <kinds>` | типы чатов: dialog, group; через запятую, пустое значение — любые. |
-| `--chats <ids>` | только эти идентификаторы чатов через запятую; пустое значение — любые. |
-| `--not-chats <ids>` | исключить эти идентификаторы чатов через запятую; пустое значение очищает список. |
+| `--allow-chats <ids>` | только эти идентификаторы чатов через запятую; пустое значение — любые. |
+| `--deny-chats <ids>` | исключить эти идентификаторы чатов через запятую; пустое значение очищает список. |
 | `--words <words>` | совпадение с любым из этих целых слов через запятую; пустое значение очищает список. |
 | `--question` | совпадать только с вопросами. |
 | `--no-question` | не требовать вопроса. |
 | `--mentions-me` | требовать упоминания вас или ответа на ваше сообщение. |
 | `--no-mentions-me` | не требовать упоминания вас или ответа на ваше сообщение. |
-| `--people <ids>` | только эти идентификаторы отправителей через запятую; пустое значение — любые. |
-| `--not-people <ids>` | исключить эти идентификаторы отправителей через запятую; пустое значение очищает список. |
+| `--allow-people <ids>` | только эти идентификаторы отправителей через запятую; пустое значение — любые. |
+| `--deny-people <ids>` | исключить эти идентификаторы отправителей через запятую; пустое значение очищает список. |
 | `--contacts-only` | совпадать только с контактами. |
 | `--no-contacts-only` | не требовать, чтобы отправитель был контактом. |
 | `--template <text>` | шаблон ответа. |
@@ -4012,7 +4012,7 @@ max server logs [options]
 
 | Опция | Что делает |
 |---|---|
-| `-n, --lines <n>` | how many lines. По умолчанию: `50`. |
+| `-n, --limit <n>` | how many lines. По умолчанию: `50`. |
 
 ### `max server install`
 
@@ -4057,7 +4057,7 @@ max schedule command <name> <args> [options]
 |---|---|
 | `--every <duration>` | повторять: 30m, 2h, 1d. |
 | `--at <HH:MM>` | каждый день в это местное время. |
-| `--once <when>` | один запуск: через 30m, 2d или во время ISO; после него расписание удаляется само. |
+| `--at-time <time>` | один запуск: через 30m, 2d или во время ISO; после него расписание удаляется само. |
 
 ### `max schedule agent`
 
@@ -4080,7 +4080,7 @@ max schedule agent <name> <harness> <prompt> [options]
 | `--max-cost <usd>` | только claude: остановить запуск, который стоит больше этого, в долларах США. |
 | `--every <duration>` | повторять: 30m, 2h, 1d. |
 | `--at <HH:MM>` | каждый день в это местное время. |
-| `--once <when>` | один запуск: через 30m, 2d или во время ISO; после него расписание удаляется само. |
+| `--at-time <time>` | один запуск: через 30m, 2d или во время ISO; после него расписание удаляется само. |
 
 ### `max schedule list`
 
@@ -4705,7 +4705,7 @@ max bot chats moderate <chat> [options]
 | `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
 | `--dry-run` | оценить и составить план; ничего не делать. |
 | `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
-| `--no-ban` | remove without banning; by default a removed person cannot come back by the link. |
+| `--no-block` | remove without banning; by default a removed person cannot come back by the link. |
 | `--max-actions <n>` | не больше стольких действий за один запуск; если не указано — 10. |
 
 ### `max bot messages`
@@ -5088,7 +5088,7 @@ max bot contacts show <who> [options]
 | `--all-bots` | также читать копии всех других ботов на этом компьютере, которые разрешает read_other_bots. |
 | `--bots <profiles>` | также читать копии этих ботов, через запятую — каждый должен быть разрешён в read_other_bots. |
 | `--limit <n>` | how many messages from the private chat. |
-| `--refresh` | read the private chat with them again from the messenger first — one request. |
+| `--sync-first` | read the private chat with them again from the messenger first — one request. |
 
 ### `max bot store`
 

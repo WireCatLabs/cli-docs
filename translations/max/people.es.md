@@ -89,7 +89,7 @@ Con `--chat`, muestra los últimos mensajes de la persona en cada chat indicado,
 
 ```sh
 max personal contacts context 20000002 --chat "Книжный клуб" --chat "Работа" --limit 10
-max personal contacts context 20000002 --chat "Книжный клуб" --refresh
+max personal contacts context 20000002 --chat "Книжный клуб" --sync-first
 ```
 
 ```json
@@ -111,7 +111,7 @@ max personal contacts context 20000002 --chat "Книжный клуб" --refres
 ```
 
 - De forma predeterminada, los mensajes solo incluyen fecha y texto para que un agente pueda leer muchos a la vez. `-v` añade el ID, el enlace, el remitente y a qué mensaje responde; `-vv` añade todo.
-- `--refresh` obtiene primero de MAX la última página de cada chat y selecciona de ella los mensajes de la persona: MAX no puede buscar por remitente. Sin `--refresh`, los resultados proceden de el archivo local.
+- `--sync-first` obtiene primero de MAX la última página de cada chat y selecciona de ella los mensajes de la persona: MAX no puede buscar por remitente. Sin `--sync-first`, los resultados proceden de el archivo local.
 - `more: true` indica que hay mensajes más antiguos que los incluidos por el límite; `complete: false` indica que el archivo local no contiene el chat desde el principio.
 - Un mensaje de voz incluye `transcript` cuando se ha transcrito.
 

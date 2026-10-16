@@ -70,9 +70,9 @@ max personal serve
 | Fields | Options |
 |---|---|
 | Actions | `--do reply,task`: reply, task or both |
-| Chats | `--kinds dialog,group`, `--chats`, `--not-chats` |
+| Chats | `--kinds dialog,group`, `--allow-chats`, `--deny-chats` |
 | Conditions | `--words`, `--question` / `--no-question`, `--mentions-me` / `--no-mentions-me` |
-| Senders | `--people`, `--not-people`, `--contacts-only` / `--no-contacts-only` |
+| Senders | `--allow-people`, `--deny-people`, `--contacts-only` / `--no-contacts-only` |
 | Reply | `--template`, `--as-reply` / `--no-as-reply` |
 | Limits | `--per-chat`, `--per-person`, for example `1/12h` |
 | Working hours | `--outside`, `--days`, `--timezone`, `--no-hours` |

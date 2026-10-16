@@ -10,7 +10,8 @@ close it when it is done. Tasks stay on your computer, in the local store of `tg
 Nothing on this page sends a message.
 
 Categories, tags on tasks, keys per type, claiming and the duplicate check are built in the shared
-core of the tools (cli-core). `tg`, `max` and `memo` have them.
+core of the tools (cli-core). `tg` and `max` have all of them; `memo` does not have claiming and the
+duplicate review yet.
 [How tasks work](./tasks-architecture.mdx) gives the technical detail.
 
 ## Where tasks come from
@@ -97,8 +98,7 @@ tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
 `<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the
-same commands; some newer names below (`tasks related`, `duplicates defer`, `--into`, `--lease` and the
-agenda's query fields) still have their earlier names in `max`.
+same commands.
 
 </details>
 

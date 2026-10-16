@@ -163,7 +163,7 @@ Una [medición sintética](https://github.com/WireCatLabs/cli-messaging/blob/v0.
 
 Las dos listas se combinan con reciprocal rank fusion: cada lista suma `1 / (60 + puesto)` a una conversación, con puestos desde uno. Un resultado indica `by: ["meaning"]`, `["words"]` o ambos. Su `score` es la similitud coseno del mejor fragmento, no la puntuación combinada ni la probabilidad de que responda; un resultado encontrado solo por palabras tiene `score: null`. Su `summary` son metadatos (identificadores, fechas, número de mensajes y remitentes), no texto generado.
 
-`--filter 'from:me date:7d'` limita las conversaciones antes de ordenarlas: al menos un mensaje de la conversación debe cumplir toda la consulta estricta. `--source personal|bots|all|<provider>` amplía el alcance más allá de la cuenta activa. Ninguno de los dos se puede combinar con `--catch-up` (`--refresh` en `max`).
+`--filter 'from:me date:7d'` limita las conversaciones antes de ordenarlas: al menos un mensaje de la conversación debe cumplir toda la consulta estricta. `--source personal|bots|all|<provider>` amplía el alcance más allá de la cuenta activa. Ninguno de los dos se puede combinar con `--catch-up`.
 
 Sin un modelo local descargado, la búsqueda responde solo por palabras e indica `"meaning": "unavailable"`; nunca descarga un modelo ni cambia a uno remoto. Un chat con vectores solo de otro modelo queda fuera de la rama de significado y aparece en `embeddedOnlyElsewhere`. Un chat nunca construido no devuelve nada aquí.
 
@@ -182,7 +182,7 @@ max personal conversations related "Project team" 4521 --json
 
 - **Ediciones.** Un resultado cuyo fragmento cambió después de calcular el vector se marca `stale: true`; su puntuación corresponde al texto anterior hasta la siguiente construcción y cálculo.
 - **Eliminaciones.** Un mensaje eliminado conserva su fila, para que una sincronización posterior no lo traiga de vuelta, pero pierde su texto: en la fila, en la copia de búsqueda, en el historial de ediciones, en las transcripciones y en todos los vectores de los fragmentos que lo contenían, salvo que un fragmento actual sin mensajes eliminados use el mismo texto.
-- **Puesta al día.** `conversations build` y `embed` sin `--chat`, y `search conversations --catch-up` (`--refresh` en `max`), construyen y calculan en este equipo los chats que cambiaron o nunca se construyeron: por defecto, como mucho 20 chats y 2000 fragmentos por ejecución (`--max-chats`, `--max-chunks`). Nunca descargan un modelo; un modelo remoto solo se usa por chat y con el sí del dueño. MCP ofrece la misma puesta al día como el comando de escritura `conversations refresh`.
+- **Puesta al día.** `conversations build` y `embed` sin `--chat`, y `search conversations --catch-up`, construyen y calculan en este equipo los chats que cambiaron o nunca se construyeron: por defecto, como mucho 20 chats y 2000 fragmentos por ejecución (`--max-chats`, `--max-chunks`). Nunca descargan un modelo; un modelo remoto solo se usa por chat y con el sí del dueño. MCP ofrece la misma puesta al día como el comando de escritura `conversations refresh`.
 
 ## 7. Pruebas y contexto para un agente
 

@@ -338,7 +338,7 @@ max personal tags list sources:auto                  # только автома
 
 El etiquetado automático conserva tus etiquetas: al repetirlo, solo elimina las etiquetas automáticas obsoletas. Si añades manualmente una etiqueta que ya se había añadido de forma automática, pasa a ser tuya.
 
-`max personal tags auto` procesa hasta 50 chats por ejecución; `--limit` sube el límite a 500 y `--chat` elige los chats (se puede repetir). `--dry-run` usa las descripciones guardadas. Para leer las actuales antes de etiquetar, añade `--refresh-metadata` sin `--dry-run`. `max personal metadata get --chat <чат>` muestra la descripción guardada.
+`max personal tags auto` procesa hasta 50 chats por ejecución; `--limit` sube el límite a 500 y `--chat` elige los chats (se puede repetir). `--dry-run` usa las descripciones guardadas. Para leer las actuales antes de etiquetar, añade `--sync-first` sin `--dry-run`. `max personal metadata get --chat <чат>` muestra la descripción guardada.
 
 ## Búsquedas guardadas e historial
 

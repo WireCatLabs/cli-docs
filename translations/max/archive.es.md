@@ -103,7 +103,7 @@ max personal messages sync --all                    # все чаты, самы�
 
 Recorre el historial hacia atrás como al desplazarte hacia arriba en la versión web: 30 mensajes por página, desde el mensaje descargado más antiguo. Entre páginas espera desde `--pause` hasta el doble de ese tiempo (valor predeterminado `5s`, es decir, de 5 a 10 segundos, aproximadamente el ritmo de una persona que recorre el chat en una pestaña). Cada ejecución descarga como máximo `--limit` mensajes (1200 de forma predeterminada, o 40 páginas). Al repetir el mismo comando, continúa donde se detuvo y omite los mensajes ya descargados. Sin `--since-time` ni `--last`, las ejecuciones continúan hasta el principio del chat; `--since-time` y `--last` no se pueden combinar. `--since-time` acepta una fecha ISO 8601 o una duración relativa (`30d`). Ctrl-C o `--timeout` detienen la descarga después de la página actual y conservan lo descargado.
 
-Si MAX responde que hay demasiadas peticiones, el comando se detiene: MAX no indica cuánto esperar, por lo que `max` no espera ni reintenta. También se detiene ante cualquier otro error. Lo descargado se conserva y la siguiente ejecución continúa desde el mismo punto ([límites de MAX](./limits.md)). `messages sync` no lee reacciones ni marca nada como leído. `--estimate` no funciona con MAX: sus identificadores de mensaje no permiten contar lo que falta.
+Si MAX responde que hay demasiadas peticiones, el comando se detiene: MAX no indica cuánto esperar, por lo que `max` no espera ni reintenta. También se detiene ante cualquier otro error. Lo descargado se conserva y la siguiente ejecución continúa desde el mismo punto ([límites de MAX](./limits.md)). `messages sync` no lee reacciones ni marca nada como leído. `--dry-run` no funciona con MAX: sus identificadores de mensaje no permiten contar lo que falta.
 
 La sección [si no hay resultados](./search.md#если-ничего-не-нашлось) explica cómo completar huecos y preparar la búsqueda por temas a la vez (`--catch-up`).
 
@@ -171,25 +171,25 @@ La exportación **no se conecta a nada**; solo incluye datos leídos o descargad
 
 ### Exportar a una carpeta y añadir solo lo nuevo
 
-`--to <папка>` escribe los chats en una carpeta: un archivo JSONL por chat y `manifest.json`. Al repetir en la misma carpeta, solo se añade lo que ha cambiado desde la vez anterior: mensajes nuevos, ediciones (también de mensajes antiguos) y borrados. Un mensaje borrado se escribe sin texto: `{ "id", "chat_id", "deleted": true }`.
+`--output-dir <папка>` escribe los chats en una carpeta: un archivo JSONL por chat y `manifest.json`. Al repetir en la misma carpeta, solo se añade lo que ha cambiado desde la vez anterior: mensajes nuevos, ediciones (también de mensajes antiguos) y borrados. Un mensaje borrado se escribe sin texto: `{ "id", "chat_id", "deleted": true }`.
 
 ```sh
-max personal store export Друзья Работа --to ~/max-архив
+max personal store export Друзья Работа --output-dir ~/max-архив
 ```
 
 ```sh
-max personal store export --kind group --to ~/max-группы
+max personal store export --include group --output-dir ~/max-группы
 ```
 
 ```sh
-max personal store export --all --to ~/max-всё
+max personal store export --all --output-dir ~/max-всё
 ```
 
 `max` no toca una carpeta con archivos ajenos ni la exportación de otra cuenta. Un cambio solo en las reacciones no cuenta como cambio.
 
 ### Contraseña
 
-`--encrypt` en `store export` (con `--output` o `--to`) y en `store backup` comprime el archivo y lo cifra con una contraseña. No hacen falta programas externos. Para abrir ese archivo: `max personal store decrypt <файл> --output <новый файл>`; `max personal store restore` pide por sí mismo la contraseña de una copia cifrada.
+`--encrypt` en `store export` (con `--output` o `--output-dir`) y en `store backup` comprime el archivo y lo cifra con una contraseña. No hacen falta programas externos. Para abrir ese archivo: `max personal store decrypt <файл> --output <новый файл>`; `max personal store restore` pide por sí mismo la contraseña de una copia cifrada.
 
 - **La contraseña no se guarda en ningún sitio**: ni en la configuración, ni en el almacén de contraseñas, ni en el registro. Si la olvidas, el archivo no se puede abrir.
 - Si la escribes tú en el terminal, no se muestra y se pide dos veces. Un agente al que hayas dado la contraseña la pasa por stdin, no como argumento de la orden, porque otros programas pueden ver los argumentos:
@@ -246,7 +246,7 @@ max personal server start            # то же, но в фоне; ответ �
 max personal server status           # работает ли, с какого времени, какой версии, подключён ли к MAX
 max personal server restart          # остановить и запустить снова — например, после обновления max
 max personal server stop             # остановить сервер профиля, как бы он ни был запущен
-max personal server logs             # последние строки его журнала; --lines 200 — больше
+max personal server logs             # последние строки его журнала; --limit 200 — больше
 max personal server install          # служба systemd (Linux) или launchd (macOS) для профиля; ничего не запускает
 max personal server uninstall        # убрать службу; сначала max personal server stop
 max personal watch                   # в другом: новые сообщения по мере прихода

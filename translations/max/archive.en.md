@@ -103,7 +103,7 @@ max personal messages sync --all                    # все чаты, самы�
 
 It pages backwards like the web client's scroll-up behavior: 30 messages at a time, starting from the oldest already downloaded. Each page is followed by a pause between `--pause` and twice that duration (default `5s`, giving 5–10 seconds, similar to a person scrolling). A run downloads at most `--limit` messages (default 1,200, or 40 pages). Running the same command again resumes where it stopped and skips downloaded data. Without `--since-time` or `--last`, repeated runs continue to the beginning. `--since-time` and `--last` cannot be combined. `--since-time` accepts ISO 8601 or a relative time (`30d`). Ctrl-C or `--timeout` stops after the current page, preserving downloaded data.
 
-If MAX reports too many requests, the command stops. MAX's response does not tell `max` how long to wait, so it neither waits nor retries. It also stops on any other error. Downloaded history is preserved and the next run resumes from the same point ([MAX limits](./limits.md)). `messages sync` does not read reactions or mark anything as read. `--estimate` is unavailable for MAX: MAX message ids cannot tell you how much history is missing.
+If MAX reports too many requests, the command stops. MAX's response does not tell `max` how long to wait, so it neither waits nor retries. It also stops on any other error. Downloaded history is preserved and the next run resumes from the same point ([MAX limits](./limits.md)). `messages sync` does not read reactions or mark anything as read. `--dry-run` is unavailable for MAX: MAX message ids cannot tell you how much history is missing.
 
 See [if nothing was found](./search.md#если-ничего-не-нашлось) to find and fill gaps within saved history and prepare topic search at the same time (`--catch-up`).
 
@@ -171,25 +171,25 @@ Export **never connects to the network** and includes only downloaded or previou
 
 ### Exporting to a folder and adding only what is new
 
-`--to <папка>` writes chats to a folder: one JSONL file per chat and `manifest.json`. Running it again into the same folder adds only what has changed since the last run: new messages, edits (including edits to old messages) and deletions. A deleted message is written without its text — `{ "id", "chat_id", "deleted": true }`.
+`--output-dir <папка>` writes chats to a folder: one JSONL file per chat and `manifest.json`. Running it again into the same folder adds only what has changed since the last run: new messages, edits (including edits to old messages) and deletions. A deleted message is written without its text — `{ "id", "chat_id", "deleted": true }`.
 
 ```sh
-max personal store export Друзья Работа --to ~/max-архив
+max personal store export Друзья Работа --output-dir ~/max-архив
 ```
 
 ```sh
-max personal store export --kind group --to ~/max-группы
+max personal store export --include group --output-dir ~/max-группы
 ```
 
 ```sh
-max personal store export --all --to ~/max-всё
+max personal store export --all --output-dir ~/max-всё
 ```
 
 `max` does not touch a folder with other files in it or an export from another account. A change to reactions alone does not count as a change.
 
 ### Password
 
-`--encrypt` on `store export` (with `--output` or `--to`) and on `store backup` compresses the file and encrypts it with a password. No external programs are needed. To open such a file, use `max personal store decrypt <файл> --output <новый файл>`; `max personal store restore` asks for the password of an encrypted copy itself.
+`--encrypt` on `store export` (with `--output` or `--output-dir`) and on `store backup` compresses the file and encrypts it with a password. No external programs are needed. To open such a file, use `max personal store decrypt <файл> --output <новый файл>`; `max personal store restore` asks for the password of an encrypted copy itself.
 
 - **The password is not saved anywhere** — not in the settings, not in the password store, not in the log. If you forget it, the file cannot be opened.
 - Enter the password yourself in the terminal: it is not shown and is asked for twice. An agent that you gave the password to passes it through stdin, not as a command argument — an argument is visible to other programs:
@@ -246,7 +246,7 @@ max personal server start            # то же, но в фоне; ответ �
 max personal server status           # работает ли, с какого времени, какой версии, подключён ли к MAX
 max personal server restart          # остановить и запустить снова — например, после обновления max
 max personal server stop             # остановить сервер профиля, как бы он ни был запущен
-max personal server logs             # последние строки его журнала; --lines 200 — больше
+max personal server logs             # последние строки его журнала; --limit 200 — больше
 max personal server install          # служба systemd (Linux) или launchd (macOS) для профиля; ничего не запускает
 max personal server uninstall        # убрать службу; сначала max personal server stop
 max personal watch                   # в другом: новые сообщения по мере прихода

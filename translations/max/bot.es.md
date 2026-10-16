@@ -181,7 +181,7 @@ Busca personas por ID, `@username` o nombre parcial. Si coinciden dos, `max` mue
 
 ```sh
 max sales bot contacts show @ann                 # где писала, и её личный чат с ботом
-max sales bot contacts show @ann --refresh       # сначала перечитать личный чат у MAX
+max sales bot contacts show @ann --sync-first    # сначала перечитать личный чат у MAX
 max sales bot search messages --from @ann        # всё, что она написала
 max sales bot search messages "счёт" --from @ann --from Борис
 max sales bot messages between @ann Борис --limit 20
@@ -225,7 +225,7 @@ max sales bot chats moderate -72894839451 --dry-run              # только 
 
 La comprobación revisa los mensajes desde la última comprobación (la primera vez, los de las últimas 24 horas) y las personas que han entrado, y hace lo que permitan las reglas y el nivel de consentimiento. Diferencias respecto a una cuenta personal:
 
-- **Las expulsiones impiden volver por invitación.** Para la persona, el enlace parece caducado; para otros funciona. Un administrador puede añadirla manualmente (`max personal chats members add`). `--no-ban` evita ese bloqueo. Solo funciona donde hay enlace de invitación.
+- **Las expulsiones impiden volver por invitación.** Para la persona, el enlace parece caducado; para otros funciona. Un administrador puede añadirla manualmente (`max personal chats members add`). `--no-block` evita ese bloqueo. Solo funciona donde hay enlace de invitación.
 - **El bot solo sabe quién ha entrado gracias a `watch`.** MAX entrega cada evento a un único lector, por lo que la comprobación obtiene las entradas de lo que guardó `watch`. Si `watch` no está en marcha, solo evalúa los mensajes y lo indica.
 - **El bot no dispone de la antigüedad de la cuenta**: la Bot API no la proporciona, por lo que esa regla no se aplica mediante el bot.
 
@@ -319,7 +319,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.54.0/docs/dev/bot-api-coverage.md).
+Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.55.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
