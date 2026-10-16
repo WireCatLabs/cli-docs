@@ -1,0 +1,74 @@
+{
+  "export_source": "5125677b1b6565d7b650a95874cd49161383abdc",
+  "export_run": 38827285878,
+  "test_base": "c7a8cc8af7c1f15baa82397f884efee5d8030a7f",
+  "workers": 2,
+  "browser": "Chromium",
+  "before": {
+    "stats": {
+      "startTime": "2026-10-16T12:59:23.204Z",
+      "duration": 136264.57200000001,
+      "expected": 32,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "files": {
+      "public-site-navigation.spec.ts": {
+        "cases": 8,
+        "summed_ms": 180518,
+        "max_ms": 57326
+      },
+      "reader-guides.spec.ts": {
+        "cases": 24,
+        "summed_ms": 86893,
+        "max_ms": 8579
+      }
+    }
+  },
+  "after": {
+    "stats": {
+      "startTime": "2026-10-16T13:28:13.781Z",
+      "duration": 92398.381,
+      "expected": 68,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "files": {
+      "public-page-shell.spec.ts": {
+        "cases": 36,
+        "summed_ms": 43025,
+        "max_ms": 3369
+      },
+      "public-site-navigation.spec.ts": {
+        "cases": 8,
+        "summed_ms": 60522,
+        "max_ms": 17539
+      },
+      "reader-guides.spec.ts": {
+        "cases": 24,
+        "summed_ms": 78068,
+        "max_ms": 6811
+      }
+    }
+  },
+  "wall_reduction_percent": 32.2,
+  "negative_control": {
+    "fault": "Hide About desktop navigation with CSS in an isolated export copy",
+    "expected_failure_detected": true,
+    "checked_at": "2026-10-16T13:12:38.343204+00:00"
+  },
+  "after_source_sha256": {
+    "public-site-navigation.spec.ts": "189216043d19b929134d6dd5b53315510208e0a23aa4051f430c58f42fa97792",
+    "public-page-shell.spec.ts": "66f2c0484ce65ba9b2fefc0d38872cbdbe40c6a39bbe2c17df0ea660a604cbd9",
+    "reader-guides.spec.ts": "4b7b3eb66fb5b858d5db501358f69346e91e61e49952de8211306669c5d97706"
+  },
+  "preserved_home_about": {
+    "expected": 67,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0,
+    "duration": 102275.425
+  }
+}
