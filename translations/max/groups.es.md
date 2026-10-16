@@ -225,15 +225,40 @@ Agrega algo que las reglas no ven, como tu promesa, o cierra una tarea que no ne
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other
 ```
 
-Si una tarea puede ser el mismo trabajo que una abierta o cerrada en los últimos 14 días, `tasks add` la rechaza con código de salida 2 y nombra a los candidatos. Repite con `--attach <задача>` para vincular el mensaje a ella, o con `--new` para abrir una nueva de todos modos. `tasks duplicates` muestra los pares que encontraron las reglas, y `tasks merge <задача> --into <другая>` los une:
+Si una tarea puede ser el mismo trabajo que una abierta o cerrada en los últimos 14 días, `tasks add` la rechaza con código de salida 2 y nombra a los candidatos. Repite con `--into <задача>` para vincular el mensaje a ella, o con `--new` para abrir una nueva de todos modos. `tasks duplicates` muestra los pares que encontraron las reglas, y `tasks merge <задача> --into <другая>` los une:
 
 ```sh
-max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --attach <задача>
+max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --into <задача>
 ```
 
 ```sh
 max personal tasks close <задача> --as dismissed --reason no-reply-needed
 ```
+
+Un par que no es una sola tarea lo quita para siempre `tasks duplicates reject`; `tasks duplicates defer` te lo deja a ti, y lo muestra `tasks duplicates decision:unsure`. `tasks related <задача>` puntúa las tareas parecidas sin cambiar nada, y `tasks unmerge` deshace una unión:
+
+```sh
+max personal tasks related <задача>
+max personal tasks duplicates decision:unsure
+max personal tasks duplicates reject <дубль> <задача>
+max personal tasks unmerge <дубль>
+```
+
+La agenda del día se filtra con campos de consulta. Cuando trabajan dos agentes, uno reserva antes la tarea; la reserva termina sola a los 30 minutos, `--lease` cambia el plazo y `tasks release` devuelve la tarea antes:
+
+```sh
+max personal tasks agenda category:money tag:urgent
+max personal tasks claim <задача> --lease 2h
+max personal tasks release <задача>
+```
+
+`tasks categories` muestra la lista de categorías. Es una sola para todo el almacén y la comparten `tg`, `max` y `memo`; `config set task_categories.<имя>` añade o cambia una categoría: su significado y luego las palabras por las que la elige la regla:
+
+```sh
+max config set task_categories.travel "поездки и билеты | рейс, отель, es:vuelo"
+```
+
+Más en la página [Tareas](https://wirecat.dev/ru/docs/tasks).
 
 Ver tareas abiertas por chat, el tiempo más antiguo y medio hasta el cierre:
 
@@ -357,7 +382,7 @@ Sin `--offline`, el CLI también descarga eventos de entrada y salida. Las obser
 
 ### Instantáneas de miembros
 
-`max personal chats members fetch` lee los miembros en una archivo local: guarda sus perfiles, cambios, número de miembros por día y el resultado de la verificación de integridad. `--budget` limita el número de páginas. Si la lista está incompleta, no se registra que nadie se haya ido: esto requiere toda la lista disponible y un número conocido de miembros del grupo, que no exceda el número de personas leídas. En MAX, las listas suelen ser parciales; aumentar el presupuesto sólo ayuda cuando el servidor realmente sirve las páginas restantes.
+`max personal chats members fetch` lee los miembros en una archivo local: guarda sus perfiles, cambios, número de miembros por día y el resultado de la verificación de integridad. `--max-pages` limita el número de páginas. Si la lista está incompleta, no se registra que nadie se haya ido: esto requiere toda la lista disponible y un número conocido de miembros del grupo, que no exceda el número de personas leídas. En MAX, las listas suelen ser parciales; aumentar el presupuesto sólo ayuda cuando el servidor realmente sirve las páginas restantes.
 
 <a id="ежедневная-история-состава"></a>
 
@@ -367,7 +392,7 @@ El seguimiento no inicia el servidor ni extiende su tiempo de inactividad: para 
 
 `max personal chats members history` muestra entradas, salidas y cambios de perfil guardados en orden temporal; la consulta `time>=7d` limita el período. No consulta MAX. Usa la hora de entrada de MAX si se conoce; si no, la primera vez que se observó a la persona. La salida corresponde a la primera instantánea completa sin ella, no a la hora exacta. La primera lectura crea la lista inicial: esas personas no necesariamente entraron ese día. `chats members list --offline` muestra la última lista completa; una lectura parcial no la sustituye. Sin ninguna instantánea completa puede estar vacía aunque existan perfiles y eventos individuales. Los perfiles y el historial se conservan junto a tus mensajes en el archivo local.
 
-`max personal chats members audit` consulta los miembros y muestra señales de cuentas sospechosas. `--budget` limita las páginas y `--min-score` establece la puntuación mínima. Es una pista para que una persona la revise: no se elimina a nadie, se excluyen los administradores y el propietario, `more` indica una lista incompleta y `unknown` indica señales desconocidas. MAX no proporciona todas las señales de Telegram. Esta comprobación no está disponible con `--offline`. «No escribió» significa que no se encontraron mensajes de esa persona en el historial local; no demuestra que nunca escribiera en el grupo.
+`max personal chats members audit` consulta los miembros y muestra señales de cuentas sospechosas. `--max-pages` limita las páginas y `--min-score` establece la puntuación mínima. Es una pista para que una persona la revise: no se elimina a nadie, se excluyen los administradores y el propietario, `more` indica una lista incompleta y `unknown` indica señales desconocidas. MAX no proporciona todas las señales de Telegram. Esta comprobación no está disponible con `--offline`. «No escribió» significa que no se encontraron mensajes de esa persona en el historial local; no demuestra que nunca escribiera en el grupo.
 
 `--deep <n>` comprueba además en profundidad a los primeros n miembros, uno por segundo: su perfil y hasta 1000 mensajes guardados de cada uno. Las listas públicas de spam solo cubren cuentas de Telegram, por lo que no se consultan para MAX, y la respuesta lo explica.
 

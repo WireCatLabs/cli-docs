@@ -106,6 +106,8 @@ Put a value with `+` or `@` in quotes: both signs are operators. A phone number 
 reference to a person, organization or document; the field finds the messages whose mentions you linked to it with
 `max mentions confirm`.
 
+`max mentions list --new` shows what is unresolved since the last `--new`, and `max mentions domains` shows the sites links lead to, most frequent first. `confirm` and `reject` with `--all-in-chat` resolve a name across the whole chat at once.
+
 ## Presets
 
 Preset finds text based on its type. With it you can find a password, code or card number that someone sent.

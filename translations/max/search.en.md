@@ -339,7 +339,7 @@ max personal tags list sources:auto                  # только автома
 
 Automatic tagging leaves your tags intact: rerunning it removes only outdated automatic tags. If you manually add a tag that was already added automatically, it becomes your own tag.
 
-`max personal tags auto` processes up to 50 chats per run; `--limit` raises the cap to 500, and `--chat` selects chats (repeatable). `--dry-run` uses the saved descriptions. To read fresh ones before tagging, add `--refresh-metadata` without `--dry-run`. `max personal metadata get --chat <чат>` shows the saved description.
+`max personal tags auto` processes up to 50 chats per run; `--limit` raises the cap to 500, and `--chat` selects chats (repeatable). `--dry-run` uses the saved descriptions. To read fresh ones before tagging, add `--sync-first` without `--dry-run`. `max personal metadata get --chat <чат>` shows the saved description.
 
 ## Saved searches and history
 

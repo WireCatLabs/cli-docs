@@ -178,7 +178,7 @@ People are found in the same copy. Use an ID, `@username` or part of a name. If 
 
 ```sh
 max sales bot contacts show @ann                 # где писала, и её личный чат с ботом
-max sales bot contacts show @ann --refresh       # сначала перечитать личный чат у MAX
+max sales bot contacts show @ann --sync-first    # сначала перечитать личный чат у MAX
 max sales bot search messages --from @ann        # всё, что она написала
 max sales bot search messages "счёт" --from @ann --from Борис
 max sales bot messages between @ann Борис --limit 20
@@ -222,7 +222,7 @@ max sales bot chats moderate -72894839451 --dry-run              # только 
 
 The check examines messages since the previous check (the past day on its first run) and new members, then performs actions allowed by rules and consent. Differences from personal accounts:
 
-- **Removed members are banned** and cannot return through the invite link. The link appears expired or invalid to them but keeps working for everyone else. An admin can add them back manually (`max personal chats members add`). Use `--no-ban` to remove without banning. Bans work only in chats with an invite link.
+- **Removed members are banned** and cannot return through the invite link. The link appears expired or invalid to them but keeps working for everyone else. An admin can add them back manually (`max personal chats members add`). Use `--no-block` to remove without banning. Bans work only in chats with an invite link.
 - **The bot learns about joins only from `watch`.** MAX delivers each event to one reader, so checks use joins saved by `watch`. Without `watch`, the check examines only messages and reports that limitation.
 - **Bots cannot see account ages.** The Bot API does not provide them, so the account-age rule does not apply.
 
@@ -316,7 +316,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.54.0/docs/dev/bot-api-coverage.md).
+Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.55.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 

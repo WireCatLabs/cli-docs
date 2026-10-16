@@ -105,7 +105,7 @@ Cada mensaje es solo su hora y su texto, para que un agente lea muchos a la vez 
 `-v` añade ids y enlaces de los mensajes; `-vv`, el mensaje completo.
 
 La respuesta sale del historial guardado y no se conecta al mensajero. Que falten mensajes no
-demuestra que nunca hablarais de algo. Con `--chat`, `--sync-first` (`--refresh` en `max`) pregunta antes al mensajero:
+demuestra que nunca hablarais de algo. Con `--chat`, `--sync-first` pregunta antes al mensajero:
 Telegram busca en cada chat los mensajes de esa persona; MAX lee la página más reciente de cada
 chat, porque no puede buscar por remitente. Para más historial, consulta
 [el archivo de Telegram](./tg/archive.md) o [el de MAX](./max/archive.md).
@@ -182,7 +182,7 @@ personas vinculadas y mensajes. Las órdenes de notas del mensajero se describen
 |---|---|---|
 | Fecha de registro | el mes de Telegram tras un primer contacto; si no, un cálculo | el día exacto, cuando MAX lo proporciona |
 | Marcas como estafa, falsa, verificada, premium | se muestran | MAX no las envía para cuentas personales |
-| `--sync-first` (`max`: `--refresh`) | busca en cada chat los mensajes de la persona | lee la página más reciente de cada chat |
+| `--sync-first` | busca en cada chat los mensajes de la persona | lee la página más reciente de cada chat |
 | Listas públicas de spam | se consultan, salvo con `--no-registries` | no se consultan |
 | Peticiones extra por perfil | ninguna aparte de las de `contacts show` | una por persona |
 

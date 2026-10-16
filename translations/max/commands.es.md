@@ -319,7 +319,7 @@ max chats mark-read <chat> [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--until <message>` |sólo hasta esta identificación de mensaje; el más nuevo por defecto.|
+| `--until-id <id>` |sólo hasta esta identificación de mensaje; el más nuevo por defecto.|
 | `--topic <id>` |marcar sólo este tema del foro como leído; no soportado por servicios de mensajería sin temas.|
 
 ### `max chats leave`
@@ -393,7 +393,7 @@ max chats members audit <chat> [query] [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--budget <pages>` |como máximo esta cantidad de páginas de 200 miembros, una pausa entre ellas (predeterminado: 10).|
+| `--max-pages <pages>` |como máximo esta cantidad de páginas de 200 miembros, una pausa entre ellas (predeterminado: 10).|
 | `--deep <n>` | comprueba también a las primeras n personas en detalle — perfil, fotos y todo lo que escribieron — a una persona por segundo; las listas públicas de bloqueos solo cubren Telegram, por lo que no se envía nada. |
 
 #### `max chats members history`
@@ -426,7 +426,7 @@ max chats members fetch <chat> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--track` |descargarla también a diario mientras se ejecuta serve; chats tracking enumera y modifica esos chats.|
-| `--budget <pages>` |como máximo esta cantidad de páginas de 200 miembros, una pausa entre ellas (predeterminado: 10).|
+| `--max-pages <pages>` |como máximo esta cantidad de páginas de 200 miembros, una pausa entre ellas (predeterminado: 10).|
 
 #### `max chats members add`
 
@@ -933,7 +933,7 @@ max chats start <bot> [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--payload <text>` |parámetro de inicio que lee el bot; usa ?start= del enlace si se omite.|
+| `--start <param>` |parámetro de inicio que lee el bot; usa ?start= del enlace si se omite.|
 
 ### `max chats app`
 
@@ -1107,7 +1107,7 @@ max contacts notes edit <person> <id> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--file <path>` | leer el texto de la nota desde un archivo; si se omite o se indica -, leer stdin. |
-| `--revision <number>` | la revisión que leíste antes de editar. |
+| `--revision <n>` | la revisión que leíste antes de editar. |
 
 #### `max contacts notes remove`
 
@@ -1245,7 +1245,7 @@ max contacts context <person> [options]
 | `--limit <n>` |como máximo esta cantidad de mensajes en cada lista; 10 si no se da.|
 | `--since-time <time>` |nada más antiguo que este tiempo ISO 8601, o hace 2 h / 1 d.|
 | `--chat <chat>` |un chat, por id o nombre; repítalo para más, luego sus mensajes más nuevos en cada uno, 20 a menos que --limit, breve a menos que -v.|
-| `--refresh` |Con --chat, lee primero los mensajes más recientes del Messenger en cada uno.|
+| `--sync-first` |Con --chat, lee primero los mensajes más recientes del Messenger en cada uno.|
 
 ### `max contacts timeline`
 
@@ -1261,7 +1261,7 @@ max contacts timeline <person> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--scope <personal\|work>` | only what belongs to personal or to work accounts. |
+| `--scope <scope>` | solo lo que pertenece a cuentas personales o de trabajo: personal o work. |
 | `--since-time <time>` |nada más antiguo que este tiempo ISO 8601, o hace 2 h / 1 d.|
 | `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
 | `--limit <n>` | at most this many; 50 if not given. |
@@ -1466,7 +1466,7 @@ max messages sync [chat] [options]
 | `--catch-up-messages <n>` | omitir una reconstrucción del grafo con más mensajes que este número. |
 | `--catch-up-time <duration>` | tiempo disponible para la preparación local, 30s de forma predeterminada. |
 | `--background` |ejecutar como un trabajo que sobrevive a este comando; `store jobs show` lo sigue.|
-| `--estimate` |Solo calcule cuántos mensajes, solicitudes y minutos aún tomaría una recuperación completa: desde el archivo, sin solicitud.|
+| `--dry-run` |Solo calcule cuántos mensajes, solicitudes y minutos aún tomaría una recuperación completa: desde el archivo, sin solicitud.|
 
 ### `max messages transcribe`
 
@@ -1790,16 +1790,16 @@ max store export [chats] [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `chats` | opcional |un chat: su id, o parte de su título; varios con --to.|
+| `chats` | opcional |un chat: su id, o parte de su título; varios con --output-dir.|
 
 | Opción | Para qué sirve |
 |---|---|
 | `--format <format>` | jsonl: un mensaje por línea, el valor predeterminado con --output; markdown: una transcripción con un encabezado por día, respuestas y reenvíos citados. |
 | `--since-time <time>` |solo a partir de esta hora ISO 8601, o hace 30 m/2 h/1 d en adelante.|
 | `--output <file>` |escriba líneas JSON, o la transcripción, en este nuevo archivo, que solo usted podrá leer.|
-| `--to <dir>` |escribe en esta carpeta, un archivo por chat y un manifiesto; ejecútelo nuevamente para ver solo lo que cambió desde entonces.|
-| `--kind <kinds>` |con --to: cada chat almacenado de este tipo, separado por comas: diálogo, grupo, canal, guardado.|
-| `--all` |con --to: cada chat almacenado de esta cuenta.|
+| `--output-dir <dir>` |escribe en esta carpeta, un archivo por chat y un manifiesto; ejecútelo nuevamente para ver solo lo que cambió desde entonces.|
+| `--include <kinds>` |con --output-dir: cada chat almacenado de este tipo, separado por comas: diálogo, grupo, canal, guardado.|
+| `--all` |con --output-dir: cada chat almacenado de esta cuenta.|
 | `--encrypt` |comprimir y cifrar con una contraseña, escrita en un mensaje oculto o canalizada en stdin; nunca se conserva; si se pierde, el archivo no se podrá abrir.|
 
 ### `max store clear`
@@ -2287,7 +2287,7 @@ max stats tasks show [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
-| `--type <name>` |sólo este tipo: pregunta, petición, mención o promesa.|
+| `--type <type>` |sólo este tipo: pregunta, petición, mención o promesa.|
 
 ### `max stats charts`
 
@@ -2347,14 +2347,14 @@ max tasks add <message> [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--type <name>` |Tipo de tarea: pregunta, petición, mención o promesa.|
+| `--type <type>` |Tipo de tarea: pregunta, petición, mención o promesa.|
 | `--category <name>` | de qué trata, de la lista que imprime tasks categories: money, documents, meeting, …. |
-| `--attach <task>` | cuando tasks add mostró tareas que pueden ser el mismo trabajo: vincular el mensaje a esta en lugar de abrir una tarea. |
+| `--into <id>` | cuando tasks add mostró tareas que pueden ser el mismo trabajo: vincular el mensaje a esta en lugar de abrir una tarea. |
 | `--new` | cuando tasks add mostró tareas que pueden ser el mismo trabajo: abrir la tarea de todos modos. |
-| `--title <text>` | una línea: la acción y su objeto, p. ej. send Alex the API token. |
+| `--title <title>` | una línea: la acción y su objeto, p. ej. send Alex the API token. |
 | `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo se da por hecha, siguiente paso, palabras clave. |
-| `--due <when>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
-| `--check <when>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+| `--due <time>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+| `--remind-time <time>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
 
 ### `max tasks plan`
 
@@ -2373,10 +2373,10 @@ max tasks plan <task> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--category <name>` | de qué trata, de la lista que imprime tasks categories: money, documents, meeting, …; el cambio queda en el historial de la tarea. |
-| `--title <text>` | una línea: la acción y su objeto, p. ej. send Alex the API token. |
+| `--title <title>` | una línea: la acción y su objeto, p. ej. send Alex the API token. |
 | `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo se da por hecha, siguiente paso, palabras clave. |
-| `--due <when>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
-| `--check <when>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+| `--due <time>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+| `--remind-time <time>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
 
 ### `max tasks link`
 
@@ -2410,12 +2410,12 @@ max tasks show <task>
 |---|---|---|
 | `task` | obligatorio | el ID o la clave de la tarea, tal como lo muestra tasks list. |
 
-### `max tasks similar`
+### `max tasks related`
 
 tareas que pueden ser el mismo trabajo que esta, las mejores primero, cada una con un nivel —likely, maybe, different— y los motivos; no fusiona nada
 
 ```sh
-max tasks similar <task> [options]
+max tasks related <task> [options]
 ```
 
 | Argumento | | Qué es |
@@ -2428,15 +2428,18 @@ max tasks similar <task> [options]
 
 ### `max tasks duplicates`
 
-pares de tareas que abrió una regla y que pueden ser un solo trabajo, las más recientes primero, con puntuación y motivos: fusiona, rechaza o marca cada par como dudoso; --unsure lista los que quedan para el propietario
+pares de tareas que abrió una regla y que pueden ser un solo trabajo, las más recientes primero, con puntuación y motivos: fusiona, rechaza o aplaza cada par; decision:unsure lista los aplazados para el propietario
 
 ```sh
-max tasks duplicates [options]
+max tasks duplicates [query] [options]
 ```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | opcional | condiciones campo:valor que acotan la lista; los campos están abajo. |
 
 | Opción | Para qué sirve |
 |---|---|
-| `--unsure` | solo los pares que el agente revisor marcó como dudosos. |
 | `--limit <n>` | cuántos. |
 
 #### `max tasks duplicates reject`
@@ -2454,14 +2457,14 @@ max tasks duplicates reject <dup> <task>
 | `dup` | obligatorio | la tarea listada como duplicado, por su id o clave. |
 | `task` | obligatorio | la tarea con la que se emparejó. |
 
-#### `max tasks duplicates unsure`
+#### `max tasks duplicates defer`
 
-ni los campos ni el texto lo aclaran: dejar el par al propietario, que lo lista con --unsure
+ni los campos ni el texto lo aclaran: dejar el par al propietario, que lo lista con decision:unsure
 
 **Cambia algo solo en este ordenador.**
 
 ```sh
-max tasks duplicates unsure <dup> <task>
+max tasks duplicates defer <dup> <task>
 ```
 
 | Argumento | | Qué es |
@@ -2485,7 +2488,7 @@ max tasks merge <dup> [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--into <task>` | la tarea que se queda. |
+| `--into <id>` | la tarea que se queda, por su id o clave. |
 
 ### `max tasks unmerge`
 
@@ -2515,13 +2518,10 @@ max tasks agenda [query] [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--due <span>` | listar las tareas que vencen dentro de este plazo: 30m, 2h, 1d (por defecto 1d). |
-| `--unanswered <span>` | listar los chats donde otra persona escribió lo último hace al menos este tiempo (por defecto 1d). |
-| `--waiting <span>` | listar los chats donde tú escribiste lo último hace al menos este tiempo (por defecto 7d). |
-| `--within <span>` | omitir los chats sin actividad durante más tiempo: ya terminaron (por defecto 30d). |
-| `--claimed` | listar también las tareas que tiene otra persona (tasks claim); por defecto están ocultas. |
-| `--category <name>` | solo las tareas de esta categoría, de la lista que imprime tasks categories. |
-| `--tag <name>` | solo las tareas con esta etiqueta (tags add --task). |
+| `--due-within <duration>` | listar las tareas que vencen dentro de este plazo: 30m, 2h, 1d (por defecto 1d). |
+| `--unanswered <duration>` | listar los chats donde otra persona escribió lo último hace al menos este tiempo (por defecto 1d). |
+| `--waiting <duration>` | listar los chats donde tú escribiste lo último hace al menos este tiempo (por defecto 7d). |
+| `--within <duration>` | omitir los chats sin actividad durante más tiempo: ya terminaron (por defecto 30d). |
 | `--holder <name>` | quién eres para las reservas: un id de sesión o un id de chat; por defecto WIRECAT_HOLDER, si no la sesión de Claude Code, si no el nombre del agente. |
 
 ### `max tasks categories`
@@ -2548,7 +2548,7 @@ max tasks claim <task> [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--for <span>` | cuánto dura la reserva: 30m, 2h (por defecto 30m); si la tomas otra vez, se alarga. |
+| `--lease <duration>` | cuánto dura la reserva: 30m, 2h (por defecto 30m); si la tomas otra vez, se alarga. |
 | `--holder <name>` | quién eres para las reservas: un id de sesión o un id de chat; por defecto WIRECAT_HOLDER, si no la sesión de Claude Code, si no el nombre del agente. |
 
 ### `max tasks release`
@@ -2889,7 +2889,7 @@ max attachments show <chat> [message] [options]
 | `--page <n>` | representar una página del PDF como PNG, desde 1; unpdf/canvas opcionales, sin OCR. |
 | `--offset-bytes <n>` | desplazamiento en bytes desde 0. |
 | `--chunk-bytes <n>` | bytes que devolver, 1–1048576 (por defecto524288). |
-| `--if-sha256 <hash>` | exigir el SHA-256 del archivo completo de la porción anterior. |
+| `--expected-fingerprint <hash>` | exigir el SHA-256 del archivo completo de la porción anterior. |
 
 ### `max attachments text`
 
@@ -2933,7 +2933,7 @@ max tags auto [options]
 |---|---|
 | `--chat <chat>` | Grupo/canal guardado; repite para elegir varios. Por defecto: ``. |
 | `--limit <number>` |Procesar 1–500 chats como máximo. Por defecto: `50`.|
-| `--refresh-metadata` | Leer descripciones actuales del servicio antes de clasificar. |
+| `--sync-first` | Leer descripciones actuales del servicio antes de clasificar. |
 | `--dry-run` | Previsualizar la clasificación guardada sin modificar el archivo. |
 
 ### `max tags add`
@@ -2955,7 +2955,7 @@ max tags add <tag> [options]
 | `--chat <chat>` |el chat para etiquetar, o el chat de --message; un chat: su id, o parte de su título.|
 | `--contact <person>` |la persona a etiquetar: su id, @nombredeusuario o nombre, como lo conoce el archivo local.|
 | `--message <message>` |el mensaje a etiquetar: su id en --chat, o un localizador msg: solo.|
-| `--task <task>` | la tarea que se etiqueta: su id o clave, como la muestra tasks list. |
+| `--task <id>` | la tarea que se etiqueta: su id o clave, como la muestra tasks list. |
 
 ### `max tags remove`
 
@@ -2976,7 +2976,7 @@ max tags remove <tag> [options]
 | `--chat <chat>` |el chat para desetiquetar, o el chat de --message; un chat: su id, o parte de su título.|
 | `--contact <person>` |la persona a desetiquetar: su id, @nombredeusuario o nombre, como lo conoce el archivo local.|
 | `--message <message>` |el mensaje a desetiquetar: su id en --chat, o un mensaje: localizador solo.|
-| `--task <task>` | la tarea a la que se quitan etiquetas: su id o clave, como la muestra tasks list. |
+| `--task <id>` | la tarea a la que se quitan etiquetas: su id o clave, como la muestra tasks list. |
 | `--source <manual\|auto>` | eliminar solo la atribución a este origen. |
 
 ### `max tags list`
@@ -3196,7 +3196,7 @@ max search all <query> [options]
 |---|---|
 | `--only <resources>` | solo estos recursos, separados por comas: messages, notes; meetings cuando --source nombra una cuenta de reuniones. |
 | `--source <accounts>` | solo estas cuentas, separadas por comas: provider:account tal como lo muestra un resultado, un proveedor, un tipo o group:<name>; cada recurso lee las de su tipo, y las reuniones solo cuando se nombra una. |
-| `--max-meetings <n\|all>` | cuántas reuniones de la cuenta de reuniones revisar, de la más reciente a la más antigua; all las revisa todas (por defecto 100). |
+| `--max-meetings <n>` | cuántas reuniones de la cuenta de reuniones revisar, de la más reciente a la más antigua, o all para todas (por defecto 100). |
 | `--limit <n>` | cuántos resultados. |
 | `--page <n>` | qué página, empezando por 1. |
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word.|
@@ -3279,7 +3279,7 @@ max search conversations <query> [options]
 | `--provider <provider>` | proveedor de vectores: local u openai; las opciones prevalecen sobre los ajustes del perfil. |
 | `--base-url <url>` | un servidor con /v1/embeddings de OpenAI: Gemini, Jina, u Ollama y LM Studio en este comando. |
 | `--dims <n>` | remoto: el tamaño del vector — necesario con --base-url; acorta el de un modelo de OpenAI. |
-| `--max-chats <n>` |como máximo esta cantidad de chats; 5 con --sync-first, 20 con --refresh si no se proporciona.|
+| `--max-chats <n>` |como máximo esta cantidad de chats; 5 con --sync-first, 20 con --catch-up si no se proporciona.|
 | `--max-chunks <n>` |como máximo esta cantidad de fragmentos incrustados en una sola ejecución; 2000 si no se da.|
 | `--sync-first` | primero descargar mensajes nuevos dentro de los límites de chat, tiempo y mensajes. |
 | `--sync-time <duration>` | dejar de descargar tras este tiempo (predeterminado: 30s). |
@@ -3290,7 +3290,7 @@ max search conversations <query> [options]
 | `--source <accounts>` | cuentas en las que buscar: personal, bots, all, un proveedor o una lista como group:work,telegram:Alice,email:me@example.com; por defecto, la cuenta activa. |
 | `--timezone <zone>` |Zona horaria de IANA para fechas de filtrado; zona horaria del sistema de forma predeterminada.|
 | `--limit <n>` | cuántos resultados. |
-| `--refresh` |Primero construya e incruste, en esta máquina, los chats en el alcance que cambiaron o que nunca se crearon, dentro de --max-chats y --max-chunks.|
+| `--catch-up` |Primero construya e incruste, en esta máquina, los chats en el alcance que cambiaron o que nunca se crearon, dentro de --max-chats y --max-chunks.|
 
 ## `max searches`
 
@@ -3791,15 +3791,15 @@ max replies edit <id> [options]
 |---|---|
 | `--do <actions>` | acciones: reply, task o ambas, separadas por comas. |
 | `--kinds <kinds>` | tipos de chat: dialog, group; separados por comas, vacío para cualquiera. |
-| `--chats <ids>` | solo estos identificadores de chat, separados por comas; vacío para cualquiera. |
-| `--not-chats <ids>` | excluir estos identificadores de chat, separados por comas; vacío borra la lista. |
+| `--allow-chats <ids>` | solo estos identificadores de chat, separados por comas; vacío para cualquiera. |
+| `--deny-chats <ids>` | excluir estos identificadores de chat, separados por comas; vacío borra la lista. |
 | `--words <words>` | coincidir con cualquiera de estas palabras completas, separadas por comas; vacío borra la lista. |
 | `--question` | coincidir solo con preguntas. |
 | `--no-question` | no exigir una pregunta. |
 | `--mentions-me` | exigir que te mencionen o que respondan a tu mensaje. |
 | `--no-mentions-me` | no exigir que te mencionen ni que respondan a tu mensaje. |
-| `--people <ids>` | solo estos identificadores de remitentes, separados por comas; vacío para cualquiera. |
-| `--not-people <ids>` | excluir estos identificadores de remitentes, separados por comas; vacío borra la lista. |
+| `--allow-people <ids>` | solo estos identificadores de remitentes, separados por comas; vacío para cualquiera. |
+| `--deny-people <ids>` | excluir estos identificadores de remitentes, separados por comas; vacío borra la lista. |
 | `--contacts-only` | coincidir solo con contactos. |
 | `--no-contacts-only` | no exigir que el remitente sea un contacto. |
 | `--template <text>` | la plantilla de respuesta. |
@@ -4012,7 +4012,7 @@ max server logs [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `-n, --lines <n>` | how many lines. Por defecto: `50`. |
+| `-n, --limit <n>` | how many lines. Por defecto: `50`. |
 
 ### `max server install`
 
@@ -4057,7 +4057,7 @@ max schedule command <name> <args> [options]
 |---|---|
 | `--every <duration>` | repetir: 30m, 2h, 1d. |
 | `--at <HH:MM>` | cada día a esta hora local. |
-| `--once <when>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; después la programación se elimina sola. |
+| `--at-time <time>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; después la programación se elimina sola. |
 
 ### `max schedule agent`
 
@@ -4080,7 +4080,7 @@ max schedule agent <name> <harness> <prompt> [options]
 | `--max-cost <usd>` | solo claude: detener una ejecución que cueste más que esto, en dólares estadounidenses. |
 | `--every <duration>` | repetir: 30m, 2h, 1d. |
 | `--at <HH:MM>` | cada día a esta hora local. |
-| `--once <when>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; después la programación se elimina sola. |
+| `--at-time <time>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; después la programación se elimina sola. |
 
 ### `max schedule list`
 
@@ -4705,7 +4705,7 @@ max bot chats moderate <chat> [options]
 | `--since-time <time>` |juzgue lo que vino después de este tiempo ISO 8601, o hace 2 h / 1 d; el punto guardado permanece.|
 | `--dry-run` | evaluar y planificar; no hacer nada. |
 | `--allow-dangerous` |sí a toda acción cuyo nivel en las reglas del grupo sea preguntar.|
-| `--no-ban` |eliminar sin prohibir; De forma predeterminada, una persona eliminada no puede regresar mediante el enlace.|
+| `--no-block` |eliminar sin prohibir; De forma predeterminada, una persona eliminada no puede regresar mediante el enlace.|
 | `--max-actions <n>` | como máximo este número de acciones por ejecución; 10 si no se indica. |
 
 ### `max bot messages`
@@ -5088,7 +5088,7 @@ max bot contacts show <who> [options]
 | `--all-bots` | leer también la copia de cualquier otro bot en este ordenador que permita read_other_bots. |
 | `--bots <profiles>` | leer también las copias de estos bots, separados por comas — cada uno permitido por read_other_bots. |
 | `--limit <n>` |cuantos mensajes del chat privado.|
-| `--refresh` |Primero lea el chat privado con ellos nuevamente desde el Messenger: una solicitud.|
+| `--sync-first` |Primero lea el chat privado con ellos nuevamente desde el Messenger: una solicitud.|
 
 ### `max bot store`
 

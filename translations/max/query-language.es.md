@@ -107,6 +107,8 @@ escrito: `+34 600 000 000` y `600000000` son el mismo teléfono, y un número si
 referencia a una persona, organización o documento; el campo encuentra los mensajes cuyas menciones vinculaste a ella
 con `max mentions confirm`.
 
+`max mentions list --new` muestra lo pendiente desde el último `--new`, y `max mentions domains`, los sitios a los que llevan los enlaces, los más frecuentes primero. `confirm` y `reject` con `--all-in-chat` resuelven un nombre en todo el chat a la vez.
+
 ## Filtros preparados
 
 Preset busca texto según su tipo. Con él podrás encontrar una contraseña, código o número de tarjeta que alguien envió.

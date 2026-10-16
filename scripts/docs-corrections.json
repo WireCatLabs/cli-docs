@@ -712,7 +712,7 @@
   {
     "tool": "max",
     "slug": "commands",
-    "reason": "`max messages search`, `max conversations search` and `max bot messages search` were replaced by `max search messages`, `max search conversations` and `max bot search messages`. Keep the old anchors so existing links land on the replacement.",
+    "reason": "`max messages search`, `max conversations search` and `max bot messages search` were replaced by `max search messages`, `max search conversations` and `max bot search messages`. Keep the old anchors so existing links land on the replacement. In 0.55.0 `max tasks similar` became `max tasks related` and `max tasks duplicates unsure` became `max tasks duplicates defer`; their old anchors are kept the same way.",
     "replacements": {
       "en": [
         {
@@ -726,6 +726,14 @@
         {
           "before": "\n#### `max bot search messages`\n",
           "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
+        },
+        {
+          "before": "\n### `max tasks related`\n",
+          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
+        },
+        {
+          "before": "\n#### `max tasks duplicates defer`\n",
+          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
         }
       ],
       "ru": [
@@ -740,6 +748,14 @@
         {
           "before": "\n#### `max bot search messages`\n",
           "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
+        },
+        {
+          "before": "\n### `max tasks related`\n",
+          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
+        },
+        {
+          "before": "\n#### `max tasks duplicates defer`\n",
+          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
         }
       ],
       "es": [
@@ -754,6 +770,14 @@
         {
           "before": "\n#### `max bot search messages`\n",
           "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
+        },
+        {
+          "before": "\n### `max tasks related`\n",
+          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
+        },
+        {
+          "before": "\n#### `max tasks duplicates defer`\n",
+          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
         }
       ]
     }

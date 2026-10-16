@@ -10,8 +10,8 @@ cerrarla cuando esté hecha. Las tareas se quedan en tu ordenador, en el almacé
 y `memo`. Nada de esta página envía mensajes.
 
 Las categorías, las etiquetas en las tareas, las claves por tipo, la reserva de tareas y la detección
-de duplicados ya están en el núcleo común de las herramientas (cli-core). Las tienen `tg`, `max`
-y `memo`. [Cómo funcionan las tareas](./tasks-architecture.mdx)
+de duplicados ya están en el núcleo común de las herramientas (cli-core). `tg` y `max` las tienen
+todas; `memo` aún no tiene la reserva ni la revisión de duplicados. [Cómo funcionan las tareas](./tasks-architecture.mdx)
 da el detalle técnico.
 
 ## De dónde salen las tareas
@@ -99,9 +99,7 @@ tg personal tasks close <task> --as done --reason "contract sent"
 tg personal tasks close <task> --as dismissed --reason no-reply-needed
 ```
 
-`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos;
-algunos nombres nuevos de abajo (`tasks related`, `duplicates defer`, `--into`, `--lease` y los campos de consulta
-de la agenda) aún tienen en `max` sus nombres anteriores.
+`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos.
 
 </details>
 
