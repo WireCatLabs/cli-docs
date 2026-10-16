@@ -4,6 +4,29 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.63.0 — 16.10.2026
+
+### Novedades
+
+- **tg arranca alrededor de una quinta parte más rápido después de la primera vez.** Guarda el código compilado de
+  Node en una caché, en la carpeta temporal del sistema (`NODE_COMPILE_CACHE` la cambia de sitio): `tg --help` pasó
+  de unos 0.60 a 0.49 segundos.
+- **La lista de categorías de tareas está en un archivo que comparten tg, MAX y memo** (cli-core 0.298.0):
+  `~/.config/WireCat/config.json`, sección `task_categories`. Solo guarda tus cambios a la lista por defecto:
+  `"garden": "plants | seedling, es:planta"` añade o sustituye una categoría, `"religion": null` quita una de la
+  lista por defecto, y las categorías que añada una versión posterior siguen llegando. `tasks categories` (MCP
+  `tasks_categories`) indica el archivo en `file`, y `config show` marca las categorías que vienen de él. Un archivo
+  que no es JSON válido o que nombra una categoría incorrecta se rechaza indicando su ruta. Un almacén movido con
+  `MESSAGING_STORE` lee el `config.json` que está a su lado; `WIRECAT_CONFIG_DIR` cambia el archivo de sitio.
+
+### Cambios — pueden romper scripts
+
+- **`config set task_categories.<name>` y `config unset task_categories.<name>` ahora escriben en
+  `~/.config/WireCat/config.json` en lugar del almacén**, y conservan las otras secciones del archivo;
+  `config unset task_categories` quita la sección. Una lista que una versión anterior de tg guardó en el almacén pasa
+  al archivo con el siguiente `config set` o `unset` de una categoría; hasta entonces sigue valiendo la lista del
+  almacén. Las versiones anteriores de tg no leen el archivo.
+
 ## 0.62.0 — 16.10.2026
 
 ### Novedades

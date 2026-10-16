@@ -106,8 +106,8 @@ that an agent is unsure of waits for the owner. `tasks close` tells an agent fro
 `--as-owner` closes as the owner from an agent's terminal. MCP `tasks_close` is always an agent.
 
 An agent must pass `--certainty <0..1>` (MCP: `certainty`); without it the close is refused with
-`task.certainty-required`. Two store-wide settings decide what happens, kept in the store like the
-category list because rules and closes in `tg`, `max` and `memo` must agree:
+`task.certainty-required`. Two store-wide settings decide what happens, kept in the store, not in a
+profile, because rules and closes in `tg`, `max` and `memo` must agree:
 
 | Setting | Default | What it does |
 | --- | --- | --- |
@@ -128,15 +128,26 @@ with no certainty.
 
 ## Categories
 
-The category list is one list per store, kept in the store file, not in a profile, because the
-rules run in `tg`, `max`, `memo` and `messages sync` and must agree. The owner edits it:
+The category list is one list for every tool, not one per profile or per app, because the rules run in
+`tg`, `max`, `memo` and `messages sync` and must agree. `tg` reads the owner's changes from a shared
+settings file, `~/.config/WireCat/config.json` (on Windows, `%APPDATA%\WireCat\Config\config.json`),
+section `task_categories`. The section holds only changes on top of the default list:
+`"<name>": "<meaning> | <words>"` adds or replaces a category (a new one goes before `other`), and `null`
+drops a default one, so categories a later release adds still arrive. The owner edits the file or uses
+these commands, which write the same file and keep its other keys:
 
 | Command | What it does |
 | --- | --- |
 | `config set task_categories.<name> "<meaning> \| <words>"` | adds or replaces a category; a word may name its language (`es:vuelo`), otherwise Cyrillic reads as Russian and the rest as English |
 | `config unset task_categories.<name>` | removes a category; `other` cannot be removed |
-| `config unset task_categories` | goes back to the default list |
-| `config show` | lists the categories with the other settings |
+| `config unset task_categories` | drops the section and goes back to the default list |
+| `config show` | lists the categories with the other settings; `from` names the file for the categories it changes |
+
+The file is read only where a category is needed (rules, `tasks add`, `plan`, `categories`, `agenda`
+and `config show`), and read again only when it changed. A file that is not valid JSON, or names a bad
+category, is refused with its path; the list never falls back to the default without a word. A store
+moved by `MESSAGING_STORE` reads the `config.json` beside it, and `WIRECAT_CONFIG_DIR` moves the file,
+so a test never reads the owner's file.
 
 `tasks add` needs a category from the list (MCP `tasks_add` needs `category`), and an unknown name is
 refused with the list. A rule matches the source message's stems against each category's words: the
@@ -147,8 +158,12 @@ accent, `ñ`, `¿` or `¡`, or a word such as `la`, `que` or `para`. A list hold
 with meanings and words. `tasks agenda category:<name> tag:<name>` filters the agenda with query fields (MCP `tasks_agenda` takes them in `query`). Changing the
 list does not change the category of existing tasks.
 
-A store with no saved list uses the default list of the tool that opens it, and a store that saved
-its own list keeps it; `config unset task_categories` takes the current default. A category that left
+Before `tg` read the file, the list was saved in the store (`store_settings`). Such a saved list is
+still the base under the file's changes until the next `config set` or `unset` of a category moves it
+into the file and drops it from the store. `max` and `memo` do not read the file yet: they use a list
+saved in the store, or the default list of the tool that opens the store. So after `tg` moves a saved
+list into the file, `max` and `memo` use their own default list. `tasks categories` (MCP
+`tasks_categories`) names the file in `file`. A category that left
 the list while tasks still carry it is named: `tasks categories` lists it under `unlisted` with open and
 total task counts (MCP `tasks_categories` too), a `config set` or `unset` of `task_categories` ends its
 note with the same lines, and `tasks agenda` names the ones open tasks carry (`unlisted_categories`).

@@ -1,9 +1,9 @@
 {
   "tg": {
-    "version": "v0.62.0",
+    "version": "v0.63.0",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
     "reviewedAt": "2026-10-16",
-    "conclusion": "Reviewed 0.62.0 (cli-core 0.296.0): an agent's tasks close states --certainty and below task_agent_close_min becomes a close suggestion the owner confirms or refuses with tasks reject; a task matching one closed in the last 14 days opens linked follow-up-of; 59 default categories with unlisted ones named; the duplicate check reads source and linked messages and Spanish due dates. Roadmap unchanged: multi-photo sending, private chat notes and the listed MAX-only capabilities remain future work."
+    "conclusion": "Reviewed 0.63.0 (cli-core 0.298.0): the task category list takes the owner's changes from the shared ~/.config/WireCat/config.json section task_categories (a name with meaning and words adds or replaces, null drops a default); config set/unset task_categories write that file, tasks categories reports it in file, config show marks file-sourced categories, and a list saved in the store moves into the file on the next change; Node compile cache speeds start. Roadmap unchanged: multi-photo sending, private chat notes and the listed MAX-only capabilities remain future work."
   },
   "max": {
     "version": "v0.56.0",

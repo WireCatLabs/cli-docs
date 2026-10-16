@@ -245,6 +245,19 @@ Agregue lo que las reglas no pueden ver, como una promesa que hizo, o cierre una
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other
 ```
 
+`tasks categories` muestra las categorías que puede tener una tarea. Para cambiar la lista, edita la sección `task_categories` de `~/.config/WireCat/config.json`, un archivo que comparten tg, MAX y memo. Solo guarda tus cambios a la lista por defecto: un nombre con su significado y sus palabras clave añade o sustituye una categoría, y `null` quita una de la lista por defecto:
+
+```json
+{
+  "task_categories": {
+    "garden": "plants | seedling, es:planta",
+    "religion": null
+  }
+}
+```
+
+`config set task_categories.garden "plants | seedling"` y `config unset task_categories.garden` escriben en el mismo archivo y conservan sus otras secciones; `config unset task_categories` vuelve a la lista por defecto. Un almacén movido con `MESSAGING_STORE` lee el `config.json` que está a su lado.
+
 Si la tarea puede ser el mismo trabajo que una abierta, `tasks add` rechaza la creación con código 2 y muestra los candidatos. Repite con `--into <task>` para vincular el mensaje con esa tarea, o con `--new` para crear otra. Si solo coincide con una tarea cerrada en los últimos 14 días, `tasks add` la abre como seguimiento, enlazada `follow-up-of` a la cerrada. `tasks duplicates` muestra los pares encontrados por las reglas y `tasks merge <task> --into <other>` los une:
 
 ```sh

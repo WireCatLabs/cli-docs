@@ -249,6 +249,19 @@ tg personal tasks list chat:<chat id> "(kind:question OR kind:mention)"
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other
 ```
 
+`tasks categories` показывает категории, которые может получить задача. Чтобы изменить список, измените раздел `task_categories` в `~/.config/WireCat/config.json` — общем файле tg, MAX и memo. В нём только ваши изменения списка по умолчанию: имя со смыслом и словами-признаками добавляет или заменяет категорию, а `null` убирает категорию из списка по умолчанию:
+
+```json
+{
+  "task_categories": {
+    "garden": "plants | seedling, es:planta",
+    "religion": null
+  }
+}
+```
+
+`config set task_categories.garden "plants | seedling"` и `config unset task_categories.garden` пишут в тот же файл и сохраняют его другие разделы; `config unset task_categories` возвращает список по умолчанию. Хранилище, перенесённое через `MESSAGING_STORE`, читает `config.json` рядом с собой.
+
 Если задача может совпадать с открытой, `tasks add` отклоняет добавление с кодом 2 и показывает кандидатов. Повторите с `--into <task>`, чтобы связать сообщение с этой задачей, либо с `--new`, чтобы создать отдельную. Если она совпадает только с задачей, закрытой за последние 14 дней, `tasks add` открывает её как продолжение, связанное `follow-up-of` с закрытой. `tasks duplicates` показывает найденные правилами пары, а `tasks merge <task> --into <other>` объединяет задачи:
 
 ```sh

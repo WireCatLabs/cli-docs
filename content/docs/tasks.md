@@ -239,16 +239,23 @@ tasks unmerge REQ-23
   that is not on the list. A rule picks the category from the words of the message, the narrower one
   when two fit (a utility bill is `bills`, not `money`), or `other` when no word matches; your agent
   corrects it with `tasks plan --category`.
-- **One list for the store.** A list you save is kept in the store and shared by `tg`, `max` and
-  `memo`, so "finance" and "payments" never live side by side. Until you save one, each tool uses its
-  own default list: `max` and `memo` still have the earlier seven (`money`, `documents`, `meeting`,
-  `delivery`, `access`, `personal` and `other`).
+- **One list in a shared settings file.** `tg` reads your changes to the list from
+  `~/.config/WireCat/config.json`, section `task_categories`. This file is not a profile's settings
+  file, so the list is the same in every profile, and "finance" and "payments" never live side by
+  side. `max` and `memo` do not read this file yet. They use a list saved in the store, or their own
+  default list: `max` has the same 59 categories, and `memo` still has the earlier seven (`money`,
+  `documents`, `meeting`, `delivery`, `access`, `personal` and `other`).
 - **You can change the list.** Each category has a meaning and the words a rule picks it by. A word
   matches its other forms too; a word can name its language, such as `es:vuelo`, and a Spanish word
   such as `es:pagar` then also matches `pagues` in a Spanish message. You can add or change a category,
   remove one, or go back to the default list; a list holds up to 80 categories. `other` cannot be
-  removed. A store that saved its own list keeps it, and `config unset task_categories` gives it the
-  current default list.
+  removed. The file holds only your changes, so categories that a later release adds still arrive.
+  `tasks categories` names the file in `file`, and `config show` marks the categories that come from
+  it. A file that is not valid JSON, or names a bad category, is refused with its path.
+- **A list saved in the store moves to the file.** A list that `tg` saved in the store before it used
+  the file still applies. The next `config set` or `config unset` of a category moves it into the file
+  and removes it from the store; after that, `max` and `memo` use their own default list again.
+  `config unset task_categories` removes the section from the file and gives the current default list.
 - **A category that left the list.** Tasks keep their category when it leaves the list.
   `tasks categories` names such categories under `unlisted`, with their open and total tasks, and
   `tasks agenda` names the ones open tasks still carry (`unlisted_categories`). Find their tasks with
@@ -272,7 +279,21 @@ config unset task_categories
 config show
 ```
 
-The `config` commands change the store, not one profile: the list is the same in every profile.
+In `tg`, you can also edit the file yourself. A name with its meaning and words adds or replaces a
+category, and `null` removes a default one:
+
+```json
+{
+  "task_categories": {
+    "garden": "plants | seedling, es:planta",
+    "religion": null
+  }
+}
+```
+
+The `config set task_categories…` and `config unset task_categories…` commands write the same file
+and keep its other sections. No `config` command on this page changes one profile: the task settings
+in [When an agent closes a task](#when-an-agent-closes-a-task) stay in the store.
 
 ## Claiming a task
 
