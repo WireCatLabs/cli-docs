@@ -4,6 +4,25 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.15.0 — 2026-10-16
+
+### Changed
+
+- Documents now use the shared WireCat database. `MESSAGING_STORE` replaces `DRIVE_STORE`. Existing document references rebuild offline from snapshots; legacy annotations stop the switch rather than being stranded.
+
+### Added
+
+- Shared search uses cli-core 0.301.0 with cli-base 0.40.0: imported documents keep their Google URL, Google edit time and recorded Drive profile.
+- Sync connects imported documents to stored messages containing their Google links, including later messages about unchanged documents. Interrupted linking retries before its watermark advances.
+
+## 0.14.1 — 2026-10-16
+
+### Changed
+
+- **drive starts about a fifth faster after its first run.** It keeps Node's compiled code in a cache, in the
+  system's temporary folder (`NODE_COMPILE_CACHE` moves it): `drive --help` went from about 0.54 to 0.43 seconds.
+- Uses `@wirecat/cli-core` 0.299.0.
+
 ## 0.14.0 — 2026-10-16
 
 ### Changed

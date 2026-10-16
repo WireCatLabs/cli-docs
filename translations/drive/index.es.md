@@ -10,6 +10,7 @@ podrás decidir qué conectar, qué conservar sin conexión y qué tarea probar 
 ## Qué puedes hacer
 
 - Encontrar una decisión entre documentos importados y obtener el fragmento, título y enlace original de Google.
+- Encontrar documentos importados junto a mensajes y notas guardados mediante Memo, Telegram y MAX.
 - Leer texto y metadatos guardados, explorar árboles de carpetas y encontrar archivos ilegibles sin abrir Drive.
 - Actualizar las carpetas elegidas mediante sincronizaciones repetibles, incluidas sus subcarpetas.
 - Añadir etiquetas, notas y recuerdos con fuentes que se conservan tras renombrar y actualizar documentos.

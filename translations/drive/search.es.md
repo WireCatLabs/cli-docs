@@ -67,7 +67,9 @@ drive personal search 'what did we agree to spend?' --json
 ```
 
 La descarga utiliza internet; la generación de vectores es local. Drive no descarga automáticamente
-un componente ausente. La búsqueda por palabras funciona sin él. Cero resultados significa que
+un componente ausente. La generación procesa notas y documentos pendientes de toda la base
+compartida, incluidos otros perfiles; la búsqueda Drive sigue leyendo solo la cuenta Google
+seleccionada. La búsqueda por palabras funciona sin él. Cero resultados significa que
 no hubo coincidencias en lo importado, no que el documento no exista en Google Drive.
 Consulta [problemas de sincronización](./troubleshooting.md).
 

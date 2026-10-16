@@ -22,7 +22,7 @@ una **opción** afecta a una ejecución. Son formas distintas de controlar la he
 Son los valores del sistema; las variables de abajo pueden moverlos. La configuración contiene
 ID de carpetas seleccionadas, identidad de la cuenta y ajustes, no tokens OAuth. Los tokens se
 guardan en el almacén de credenciales, salvo que elijas explícitamente un archivo al conectar.
-La base predeterminada es `drive.db` en el directorio de datos; las copias y puntos de control
+En Linux, la base predeterminada es `~/.local/share/WireCat/wirecat.db`; las copias y puntos de control
 están en `profiles/PROFILE_NAME/`. Lee sobre [almacenamiento local](./usage.md#disk-use-index-without-an-export-directory)
 antes de moverlos o borrarlos.
 
@@ -105,10 +105,10 @@ Afectan al proceso que ejecuta Drive; `config set` no las guarda.
 | Variable | Para qué sirve |
 | --- | --- |
 | `DRIVE_CONFIG_DIR` | Mover `config.json` y el espacio asociado de credenciales |
-| `DRIVE_STATE_DIR` | Mover copias, puntos de control y directorio de la base predeterminada |
+| `DRIVE_STATE_DIR` | Mover copias y puntos de control |
 | `DRIVE_CACHE_DIR` | Mover la caché de la herramienta; no mueve las copias de documentos |
-| `DRIVE_STORE` | Elegir un archivo de base explícito en lugar de `drive.db` |
-| `WIRECAT_STATE_DIR` | Mueve la carpeta WireCat de modelos compartidos; por defecto `~/.local/share/WireCat/` |
+| `MESSAGING_STORE` | Elegir el archivo de la base compartida en lugar de la base WireCat predeterminada |
+| `WIRECAT_STATE_DIR` | Mueve la carpeta WireCat con la base y los modelos compartidos; por defecto `~/.local/share/WireCat/` |
 | `DRIVE_GOOGLE_CLIENT_ID`, `DRIVE_GOOGLE_CLIENT_SECRET` | Usar tu aplicación Desktop OAuth en lugar de la incluida de WireCat; configura el ID antes de su secret |
 | `DRIVE_MODELS_MEMORIES_PROVIDER`, `DRIVE_MODELS_MEMORIES_MODEL`, `DRIVE_MODELS_MEMORIES_BASE_URL` | Sustituir los ajustes de extracción de recuerdos para el proceso |
 | `DRIVE_OPENAI_API_KEY`, `DRIVE_ANTHROPIC_API_KEY` | Proporcionar la clave del proveedor; también se acepta la variable correspondiente sin prefijo |
@@ -150,9 +150,25 @@ no en el chat del agente. La extracción envía el texto local seleccionado a es
 La búsqueda por palabras y los embeddings locales son operaciones separadas sin clave de IA.
 Consulta [extraer recuerdos](./recipes.md#remember-a-source-backed-decision) para revisar y guardar.
 
-## Compartir un almacén explícitamente
+<a id="share-a-store-deliberately"></a>
 
-Para usar personas, proyectos y evidencia compartidos, apunta `DRIVE_STORE` a una base compatible
-elegida. Las bases separadas no comparten referencias. Haz una copia y comprueba la compatibilidad
-de las versiones de la biblioteca común antes de abrirla con otro CLI. Compartir almacenamiento
-no comparte conexiones ni permisos de Google. Continúa con [vincular documentos con personas y proyectos](./recipes.md#link-a-document-to-a-person-or-project).
+## Documentos y mensajes compartidos
+
+Drive usa la misma base WireCat que Memo, Telegram y MAX. Los documentos importados aparecen en
+sus búsquedas locales con su enlace de Google y la última fecha de edición en Google. Una
+sincronización correcta registra el perfil Drive seleccionado junto a su colección importada.
+La búsqueda Drive lee la cuenta Google elegida; las búsquedas combinadas de otras herramientas
+pueden cubrir varias fuentes guardadas. Las copias y los puntos de control siguen en
+`DRIVE_STATE_DIR`; `MESSAGING_STORE` selecciona la base. Compartir almacenamiento no comparte
+conexiones ni permisos de Google.
+
+Al pasar de una base separada antigua, Drive reconstruye las referencias desde las copias locales
+y conserva el archivo original. Puedes repetir una reconstrucción interrumpida. Si faltan copias,
+ejecuta `drive personal sync --rescan` para volver a descargar las fuentes seleccionadas.
+
+Drive se detiene si la base anterior contiene anotaciones que quedarían fuera de la nueva base.
+Para seguir usándolas, apunta `MESSAGING_STORE` al archivo anterior; no lo borres. `DRIVE_STORE`
+ya no se admite y genera un error en lugar de seleccionar otro archivo silenciosamente. No hay
+transferencia automática de anotaciones del usuario entre bases.
+
+Continúa con [vincular documentos con personas y proyectos](./recipes.md#link-a-document-to-a-person-or-project).

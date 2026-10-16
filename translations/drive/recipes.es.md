@@ -164,8 +164,8 @@ drive personal documents context DOC_ID --json
 
 Utiliza referencias de la misma base. Drive enlaza registros existentes; no crea proyectos o
 tareas. Los propietarios/últimos editores observados no son un historial completo de colaboradores.
-Para vincular registros del servicio de mensajería, elige explícitamente una base compartida
-compatible. Bases separadas no comparten IDs. Consulta [configuración](./configuration.md) y
+Para vincular registros del servicio de mensajería, usa el mismo `MESSAGING_STORE` en todas las
+herramientas si cambias la ruta predeterminada. Las bases separadas no comparten IDs. Consulta [configuración](./configuration.md) y
 [organizar fuentes](https://wirecat.dev/en/docs/organize).
 
 ## Recordar una decisión con evidencia
@@ -186,7 +186,8 @@ drive personal memories confirm DOC_ID memory:MEMORY_ID
 drive personal facts confirm DOC_ID fact:FACT_ID
 ```
 
-La extracción muestra una vista previa; `--yes` guarda propuestas. Sustituye `MEMORY_ID` por una
+La extracción muestra una vista previa. `--yes` genera un lote nuevo y guarda todas sus propuestas
+válidas; no guarda la vista previa anterior. Revisa las propuestas guardadas antes de confirmarlas. Sustituye `MEMORY_ID` por una
 referencia devuelta solo tras revisarla. Cambiar o retirar la fuente marca los recuerdos activos
 como obsoletos. La extracción envía texto local seleccionado al proveedor; búsqueda por vectores
 es una operación distinta. Para escribirlo tú: `memories add DOC_ID 'Your fact' --scope work`.
@@ -288,3 +289,31 @@ drive personal --read-only mcp
 Revisa los tools del primer comando antes de iniciar el servidor stdio. Usa el mismo árbol de
 comandos, perfil y controles. No es un conector HTTP alojado para navegador. Consulta
 [la referencia completa](./commands.md) para otras operaciones.
+
+## Encontrar un documento y la conversación donde se compartió
+
+Después de importar una carpeta, usa Memo, Telegram o MAX para encontrar sus documentos junto a
+mensajes y notas guardados. Pide a tu agente:
+
+```text prompt
+Usa Drive CLI para sincronizar las carpetas seleccionadas de mi perfil personal. Encuentra el
+documento de presupuesto en la búsqueda compartida de WireCat, muestra su enlace de Google y
+las conversaciones guardadas donde se compartió.
+```
+
+La sincronización Drive vincula documentos importados con URL de Google visibles en mensajes
+ya guardados por las herramientas de mensajería. Las siguientes sincronizaciones también vinculan
+mensajes nuevos aunque el documento no cambie. No descarga historial del servicio de mensajería
+ni marca mensajes como leídos. No detecta enlaces ocultos tras texto con formato sin una URL de Google visible.
+
+Para los comandos exactos, sustituye `CHAT_ID` por un chat elegido en tu perfil Telegram:
+
+```sh
+drive personal sync
+tg personal search all budget --exact
+tg personal chats documents list CHAT_ID
+```
+
+La búsqueda de Drive incluye la referencia del documento, su URL de Google y la última fecha de edición
+en Google. La lista del chat muestra el título del documento importado cuando se ha establecido
+el vínculo. Un resultado vacío puede indicar que los documentos o mensajes aún no se han importado.

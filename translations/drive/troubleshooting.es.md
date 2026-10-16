@@ -16,7 +16,7 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 | Se omitió un archivo | Revisa tipo y permiso de descarga. Se importan Docs, Sheets, Markdown/TXT, PDF, `.docx`, `.xlsx` y CSV; PDF escaneados, Slides y accesos directos no se leen. |
 | Sync se detuvo con errores | Repítelo: se reanuda el trabajo pendiente. No trates una importación parcial como completa. |
 | Falta el componente de búsqueda semántica | Prepara la caché compartida según [búsqueda](./search.md#search-by-meaning) o usa `--exact`. |
-| No se encuentra el destino del vínculo | Usa una referencia de la base seleccionada. Comprueba el almacenamiento compartido antes de vincular personas/proyectos del servicio de mensajería. |
+| No se encuentra el destino del vínculo | Usa una referencia de la base seleccionada. Comprueba que todas las herramientas usan el mismo MESSAGING_STORE antes de vincular personas/proyectos del servicio de mensajería. |
 
 ```sh
 drive personal status --json
@@ -63,3 +63,14 @@ Si un comando informa de un resultado incierto tras un tiempo de espera o respue
 revisa el archivo en Google antes de repetirlo. Crear o copiar de nuevo puede duplicar una
 operación que sí se completó. La [referencia de comandos](./commands.md) explica los errores;
 comparte el código de error sin datos privados, no respuestas del SDK ni contenido sensible.
+
+## La actualización del almacén encuentra anotaciones
+
+Drive conserva la base anterior si la reconstrucción dejaría fuera etiquetas, notas, recuerdos,
+hechos o vínculos. Apunta `MESSAGING_STORE` al archivo anterior para seguir usando esas anotaciones.
+Usa la misma ruta en las demás herramientas WireCat si deben buscar esos datos. No borres el archivo
+anterior ni reinicies su punto de control para saltarte esta protección. No hay transferencia
+automática de anotaciones entre archivos de base de datos.
+
+Si el error indica que falta una copia, ejecuta `drive personal sync --rescan` para volver
+a descargar el árbol seleccionado. Esto no omite la protección de las anotaciones.
