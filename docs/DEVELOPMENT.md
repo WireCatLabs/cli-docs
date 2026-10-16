@@ -14,8 +14,9 @@ Run an affected test file separately when changing behavior outside the smoke su
 already-built export, use `PLAYWRIGHT_EXPORT=1 pnpm test:browser` (or the full
 command). Without that environment variable, Playwright starts its own dev server.
 The smoke config uses the same tests and assertions as the full suite.
-The server readiness checks compile the shared HTML and Markdown routes before
-reader test deadlines begin. Production export runs skip development compilation setup.
+The server readiness checks compile the shared HTML/Markdown routes and the three landing
+locales before reader test deadlines begin. This keeps first-request development compilation
+out of navigation assertions. Production export runs skip development compilation setup.
 
 CI and deployment invoke the full Playwright config directly. They run individual
 tests in parallel with four workers. Local runs use two workers to leave resources
