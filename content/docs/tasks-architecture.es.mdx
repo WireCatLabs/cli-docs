@@ -10,7 +10,7 @@ duplicados con un ejemplo resuelto. Para el uso diario, empieza por [Tareas](./t
 
 El diseño viene del plan de tareas aprobado en cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). Todo está ya hecho
-en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` y `max` lo tienen todo. `memo` no tiene los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías fuera de la lista ni la lectura de mensajes vinculados en la detección de duplicados; tiene categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
+en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` y `max` lo tienen todo, salvo que solo `tg` lee la lista de categorías del archivo de ajustes compartido. `memo` no tiene los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías fuera de la lista ni la lectura de mensajes vinculados en la detección de duplicados; tiene categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
 aún no `tasks categories`, la reserva, `tasks related`, `tasks duplicates` ni `tasks merge`.
 
 ## Los datos
@@ -112,8 +112,8 @@ desde la terminal de un agente. MCP `tasks_close` es siempre un agente.
 
 Un agente debe pasar `--certainty <0..1>` (en MCP, `certainty`); sin ella, el cierre se rechaza con
 `task.certainty-required`. Lo que pasa después lo deciden dos ajustes de todo el almacén, guardados en
-el almacén como la lista de categorías porque las reglas y los cierres de `tg`, `max` y `memo` tienen
-que coincidir:
+el almacén y no en un perfil, porque las reglas y los cierres de `tg`, `max` y `memo` tienen que
+coincidir:
 
 | Ajuste | Por defecto | Qué hace |
 | --- | --- | --- |
@@ -135,16 +135,28 @@ agente: vio la respuesta del propietario y cierra sin certeza.
 
 ## Categorías
 
-La lista de categorías es una por almacén y se guarda en el archivo del almacén, no en un perfil,
-porque las reglas se ejecutan en `tg`, `max`, `memo` y `messages sync` y tienen que coincidir. El
-propietario la edita:
+La lista de categorías es una para todas las herramientas, no una por perfil ni por aplicación, porque
+las reglas se ejecutan en `tg`, `max`, `memo` y `messages sync` y tienen que coincidir. `tg` lee los
+cambios del propietario de un archivo de ajustes compartido, `~/.config/WireCat/config.json` (en
+Windows, `%APPDATA%\WireCat\Config\config.json`), sección `task_categories`. La sección solo guarda
+cambios sobre la lista por defecto: `"<name>": "<meaning> | <words>"` añade o sustituye una categoría
+(una nueva va antes de `other`), y `null` quita una por defecto, así que las categorías que añada una
+versión posterior siguen llegando. El propietario edita el archivo o usa estos comandos, que escriben
+en el mismo archivo y conservan sus otras claves:
 
 | Comando | Qué hace |
 | --- | --- |
 | `config set task_categories.<name> "<meaning> \| <words>"` | añade o sustituye una categoría; una palabra puede indicar su idioma (`es:vuelo`), si no, el cirílico se lee como ruso y lo demás como inglés |
 | `config unset task_categories.<name>` | quita una categoría; `other` no se puede quitar |
-| `config unset task_categories` | vuelve a la lista por defecto |
-| `config show` | muestra las categorías con los demás ajustes |
+| `config unset task_categories` | quita la sección y vuelve a la lista por defecto |
+| `config show` | muestra las categorías con los demás ajustes; `from` indica el archivo en las categorías que cambia |
+
+El archivo solo se lee donde hace falta una categoría (reglas, `tasks add`, `plan`, `categories`,
+`agenda` y `config show`), y se vuelve a leer solo cuando cambió. Un archivo que no es JSON válido o
+que nombra una categoría incorrecta se rechaza indicando su ruta; la lista nunca vuelve a la lista por
+defecto sin avisar. Un almacén movido con `MESSAGING_STORE` lee el `config.json` que está a su lado, y
+`WIRECAT_CONFIG_DIR` cambia el archivo de sitio, así que una prueba nunca lee el archivo del
+propietario.
 
 `tasks add` necesita una categoría de la lista (MCP `tasks_add` necesita `category`), y un nombre
 desconocido se rechaza junto con la lista. Una regla compara las raíces del mensaje de origen con las
@@ -157,9 +169,12 @@ palabra como `la`, `que` o `para`. Una lista admite hasta 80 categorías.
 `tasks agenda category:<name> tag:<name>` filtra la agenda con campos de consulta (MCP `tasks_agenda` los recibe en `query`). Cambiar la lista no cambia la
 categoría de las tareas que ya existen.
 
-Un almacén sin lista guardada usa la lista por defecto de la herramienta que lo abre, y un almacén
-que guardó su propia lista la conserva; `config unset task_categories` toma la lista por defecto
-actual. Una categoría que salió de la lista mientras las tareas aún la llevan se nombra:
+Antes de que `tg` leyera el archivo, la lista se guardaba en el almacén (`store_settings`). Esa lista
+guardada sigue siendo la base bajo los cambios del archivo hasta que el siguiente `config set` o
+`unset` de una categoría la pasa al archivo y la quita del almacén. `max` y `memo` aún no leen el
+archivo: usan una lista guardada en el almacén o la lista por defecto de la herramienta que abre el
+almacén. Así que, después de que `tg` pase una lista guardada al archivo, `max` y `memo` usan su propia
+lista por defecto. `tasks categories` (MCP `tasks_categories`) indica el archivo en `file`. Una categoría que salió de la lista mientras las tareas aún la llevan se nombra:
 `tasks categories` la lista en `unlisted` con el número de tareas abiertas y el total (también MCP
 `tasks_categories`), un `config set` o `unset` de `task_categories` termina su nota con las mismas
 líneas, y `tasks agenda` nombra las que llevan las tareas abiertas (`unlisted_categories`).

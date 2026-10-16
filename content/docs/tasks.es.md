@@ -13,7 +13,8 @@ Las categorías, las etiquetas en las tareas, las claves por tipo, la reserva de
 de duplicados ya están en el núcleo común de las herramientas (cli-core). `tg` y `max` las tienen
 todas; `memo` aún no tiene la reserva ni la revisión de duplicados. Los cierres que te esperan cuando
 un agente no está seguro, las tareas de seguimiento, la lista de 59 categorías y la detección de
-duplicados que lee los mensajes vinculados están en `tg` y `max`; `memo` aún no los tiene.
+duplicados que lee los mensajes vinculados están en `tg` y `max`; `memo` aún no los tiene. Por ahora
+solo `tg` lee la lista de categorías del archivo de ajustes compartido.
 [Cómo funcionan las tareas](./tasks-architecture.mdx) da el detalle técnico.
 
 ## De dónde salen las tareas
@@ -250,16 +251,24 @@ primero, cada una con una banda (`likely`, `maybe` o `different`) y los motivos.
   que no está en la lista. Una regla elige la categoría por las palabras del mensaje, la más concreta
   si encajan dos (una factura de suministros es `bills`, no `money`), u `other` si ninguna coincide; tu
   agente la corrige con `tasks plan --category`.
-- **Una lista para el almacén.** La lista que guardas se queda en el almacén y es común a `tg`, `max`
-  y `memo`, así que «finanzas» y «pagos» nunca conviven. Mientras no guardes una, cada herramienta usa
-  su propia lista por defecto: `max` y `memo` aún tienen las siete anteriores (`money`, `documents`,
+- **Una lista en un archivo de ajustes compartido.** `tg` lee tus cambios a la lista de
+  `~/.config/WireCat/config.json`, sección `task_categories`. No es el archivo de ajustes de un perfil,
+  así que la lista es la misma en todos los perfiles, y «finanzas» y «pagos» nunca conviven. `max` y
+  `memo` aún no leen este archivo. Usan una lista guardada en el almacén o su propia lista por defecto:
+  `max` tiene las mismas 59 categorías, y `memo` aún tiene las siete anteriores (`money`, `documents`,
   `meeting`, `delivery`, `access`, `personal` y `other`).
 - **Puedes cambiar la lista.** Cada categoría tiene un significado y las palabras por las que la elige
   una regla. Una palabra coincide también con sus otras formas; una palabra puede indicar su idioma,
   como `es:vuelo`, y entonces una palabra española como `es:pagar` coincide también con `pagues` en un
   mensaje en español. Puedes añadir o cambiar una categoría, quitar una o volver a la lista por
-  defecto; una lista admite hasta 80 categorías. `other` no se puede quitar. Un almacén que guardó su
-  propia lista la conserva, y `config unset task_categories` le da la lista por defecto actual.
+  defecto; una lista admite hasta 80 categorías. `other` no se puede quitar. El archivo solo guarda tus
+  cambios, así que las categorías que añada una versión posterior siguen llegando. `tasks categories`
+  indica el archivo en `file`, y `config show` marca las categorías que vienen de él. Un archivo que no
+  es JSON válido o que nombra una categoría incorrecta se rechaza indicando su ruta.
+- **Una lista guardada en el almacén pasa al archivo.** Una lista que `tg` guardó en el almacén antes de
+  usar el archivo sigue valiendo. El siguiente `config set` o `config unset` de una categoría la pasa
+  al archivo y la quita del almacén; desde entonces, `max` y `memo` vuelven a usar su propia lista por
+  defecto. `config unset task_categories` quita la sección del archivo y da la lista por defecto actual.
 - **Una categoría que salió de la lista.** Las tareas conservan su categoría cuando sale de la lista.
   `tasks categories` nombra esas categorías en `unlisted`, con sus tareas abiertas y el total, y
   `tasks agenda` nombra las que aún llevan tareas abiertas (`unlisted_categories`). Encuentra sus
@@ -284,7 +293,22 @@ config unset task_categories
 config show
 ```
 
-Los comandos `config` cambian el almacén, no un perfil: la lista es la misma en todos los perfiles.
+En `tg` también puedes editar el archivo a mano. Un nombre con su significado y sus palabras añade o
+sustituye una categoría, y `null` quita una de la lista por defecto:
+
+```json
+{
+  "task_categories": {
+    "garden": "plants | seedling, es:planta",
+    "religion": null
+  }
+}
+```
+
+Los comandos `config set task_categories…` y `config unset task_categories…` escriben en el mismo
+archivo y conservan sus otras secciones. Ningún comando `config` de esta página cambia un perfil: los
+ajustes de [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea) siguen en el
+almacén.
 
 ## Reservar una tarea
 
