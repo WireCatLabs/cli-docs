@@ -1,7 +1,7 @@
 # Zoom native archive ownership review
 
-Reviewer: Codex root, 16 October 2026. Base: `1433067` after preserving the incoming
-Zoom batch and Memo release review in PR260. This is a focused release delta, not a
+Reviewer: Codex root, 16 October 2026. Base: `03e5547` after preserving the incoming
+Zoom batch/Memo review in PR260 and Drive0.13 review in PR262. This is a focused release delta, not a
 new audit of historical changelogs or the whole documentation corpus.
 
 Readers recovering an interrupted archive get a concrete next step: inspect the
@@ -57,7 +57,7 @@ HTML/Markdown regression coverage for that released workflow without replacing t
 - Final pinned-source sync/localization and six translation structures/fingerprints match.
 - Exact offline contracts, release-note review, strict documentation checks, typecheck,
   lint and all306 unit tests pass. Lint retains three existing warnings.
-- Strict quality:1329 reference entries, zero reference gaps/invalid examples,17 task
+- Strict quality:1331 reference entries, zero reference gaps/invalid examples,17 task
   mappings and144 syntax/manual cases. Those manual cases are not claimed executed
   or fully audited.
 - All42 Zoom browser cases pass, including the six new HTML/Markdown checks; no skips,
@@ -66,6 +66,9 @@ HTML/Markdown regression coverage for that released workflow without replacing t
   remains outside this change.
 - The initial pre-sync unit failures were missing generated files; final capture and
   rerun passed. The roadmap review hash uses the checker's normalized, trimmed source.
-- Incoming Drive0.13 pin preservation and its combined checks follow this initial
-  Zoom-only validation. Remaining merge gates are the PR checks; production deployment
-  and live localized routes are verified after merge, not claimed complete here.
+- Rebase preserved Drive0.13 and its immutable recipes override. Its sources/contracts
+  were refreshed; combined strict checks, release-note review, all306 unit tests and
+  search-bundle verification pass. The42-case Zoom run preceded that unrelated pin
+  rebase; full production browser coverage remains a deployment gate.
+- Remaining merge gates are the PR checks; production deployment and live localized
+  routes are verified after merge, not claimed complete here.
