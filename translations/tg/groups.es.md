@@ -274,6 +274,22 @@ respuesta y chats donde tú esperas la suya. Lee el archivo local, no el texto d
 tg personal tasks agenda
 ```
 
+`tasks agenda` y `tasks duplicates` admiten campos de consulta:
+
+- `tag:` y `category:` dejan las tareas con esa etiqueta o categoría: `tag:urgent`, `category:money`.
+- `claimed:` dice de quién es una tarea: `none`, `mine`, `others` o `any`. Sin él, la agenda muestra las
+  tareas que nadie tomó y las tuyas; `claimed:any` las muestra todas.
+- `decision:` elige los pares de duplicados: `review`, el valor por defecto, espera al agente revisor, y
+  `unsure` te espera a ti: `decision:unsure`.
+
+```sh
+tg personal tasks agenda category:money tag:urgent claimed:any
+```
+
+```sh
+tg personal tasks duplicates decision:unsure
+```
+
 `tg skill show follow-ups` muestra una rutina diaria para un agente de IA que redacta borradores de
 respuesta a partir de esta lista y no envía nada.
 

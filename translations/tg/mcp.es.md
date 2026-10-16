@@ -107,8 +107,6 @@ tg agent config set permissions.messages.send allow
 
 Aquí `agent` es el nombre de un perfil. Las escrituras mantienen los límites de destinatarios, los límites por hora y el diario de envío (`tg personal sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`. Al eliminar a través de MCP, se eliminan los mensajes solo para usted, como máximo diez a la vez; Se rechazan los canales y supergrupos que no lo permiten. `--permission key=level` cambia un nivel solo para este proceso de servidor.
 
-Las banderas antiguas `--confirm-send`, `--allow-send`, `--allow-mark-read`, `--allow-delete`, `--allow-dangerous` y `--http-confirmation` se aceptan con una advertencia y no cambian lo que puede hacer el agente. Elimínelos de las entradas guardadas de la aplicación.
-
 ## Herramientas
 
 | Herramienta | Qué hace |

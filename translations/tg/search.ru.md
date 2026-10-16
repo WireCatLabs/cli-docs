@@ -233,7 +233,9 @@ tg personal search messages 'has:link AND "github.com"'  # a link to a site
 Файл находится по имени, размеру и типу, даже если в сообщении нет текста. `filename:` сравнивает
 имя целиком, без учёта регистра и диакритических знаков. Размеры — в KB, MB и GB по 1024. `has:` также принимает `attachment`,
 `video`, `audio`, `voice`, `sticker`, `contact`, `location` и `poll`. Ссылка учитывается, если она есть в
-тексте или только в карточке предпросмотра.
+тексте или только в карточке предпросмотра. Чтобы найти телефон, адрес почты, сайт ссылки или подтверждённого человека,
+упомянутых в тексте, используйте `phone:`, `email:`, `url:`, `domain:` и `mentions:`; см.
+[Упоминания](./query-language.md#mentions).
 
 <a id="files-preparation-and-archive-gaps"></a>
 

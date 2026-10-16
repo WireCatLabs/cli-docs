@@ -228,7 +228,7 @@ tg personal search messages 'has:photo chat:"Book club"'
 tg personal search messages 'has:link AND "github.com"'  # a link to a site
 ```
 
-Un archivo se encuentra por su nombre, tamaño y tipo aunque el mensaje no tenga texto. `filename:` compara el nombre completo, sin distinguir mayúsculas ni tildes. Los tamaños usan KB, MB y GB de 1024. `has:` también admite `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` y `poll`. Un enlace cuenta tanto si está en el texto como si solo aparece en su vista previa.
+Un archivo se encuentra por su nombre, tamaño y tipo aunque el mensaje no tenga texto. `filename:` compara el nombre completo, sin distinguir mayúsculas ni tildes. Los tamaños usan KB, MB y GB de 1024. `has:` también admite `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` y `poll`. Un enlace cuenta tanto si está en el texto como si solo aparece en su vista previa. Para encontrar un teléfono, una dirección de correo, el sitio de un enlace o una persona confirmada mencionados en el texto, usa `phone:`, `email:`, `url:`, `domain:` y `mentions:`; consulta [Menciones](./query-language.md#mentions).
 
 <a id="files-preparation-and-archive-gaps"></a>
 

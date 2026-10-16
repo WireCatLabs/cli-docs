@@ -79,10 +79,33 @@ Las palabras y frases sin campo coinciden con las formas de las palabras. `--exa
 | `mime` | el tipo de un archivo adjunto; un valor sin `/` coincide con la primera parte | `mime:image` |
 | `size` | el tamaño de un archivo adjunto, en bytes o en KB/MB/GB de 1024 | `size>10MB` |
 | `tag` | tu propia etiqueta local en el mensaje, su chat o su remitente | `tag:work` |
+| `phone` | un número de teléfono en el texto, escrito de cualquier forma | `phone:"+34 600 000 000"` |
+| `email` | una dirección de correo en el texto | `email:"ana@example.com"` |
+| `url` | un enlace en el texto, sin parámetros de seguimiento | `url:"https://example.com/a"` |
+| `domain` | el sitio de un enlace o de una dirección en el texto | `domain:example.com` |
+| `mentions` | una persona, organización o documento al que vinculaste una mención encontrada | `mentions:"person:12"` |
 
 Los nombres de los campos distinguen entre mayúsculas y minúsculas. Un campo, valor o combinación desconocidos es un error, nunca una respuesta vacía y nunca texto sin formato. Un nombre que el archivo local no conoce no se busca en Telegram.
 
 `kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de las cuentas de `tg personal bot`. `topic:` necesita exactamente un chat en `chat:` o `--chat`, porque los números de tema se repiten entre grupos. `filename`, `mime` y `size` coinciden con un mensaje cuando al menos uno de sus archivos coincide. `/` inicia una expresión regular, así que pon un tipo completo entre comillas: `mime:"application/pdf"`.
+
+## Menciones
+
+`tg` encuentra teléfonos, direcciones de correo, enlaces, documentos y nombres de personas en los mensajes
+guardados. Usa estos campos para encontrar los mensajes que los contienen. Los hallazgos en sí los lista
+`tg mentions list`.
+
+```sh
+tg personal search messages 'phone:"+34 600 000 000"'
+tg personal search messages 'email:"ana@example.com" OR domain:example.com'
+tg personal search messages 'mentions:"person:12"'
+```
+
+Pon entre comillas un valor con `+` o `@`, porque ambos son operadores. Un teléfono se encuentra se escriba
+como se escriba: `+34 600 000 000` y `600000000` son un mismo teléfono, y un número sin `+` se lee con los
+países del ajuste `phone_countries`. `domain:` trata `docs.example.com` como `example.com`. `mentions:` toma la
+referencia de una persona, una organización o un documento, y encuentra los mensajes cuyas menciones
+vinculaste con ella mediante `tg mentions confirm`.
 
 ## Filtros preparados
 

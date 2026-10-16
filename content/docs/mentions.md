@@ -84,7 +84,14 @@ Your saved mail takes the same fields. Mail search belongs to [memo](./email.mdx
 ```sh
 memo search mail 'domain:example.com'
 memo search mail 'phone:"+1 555 010 0100"'
+memo search mail 'url:"https://news.example.com/click?id=1"'
+memo search mail 'link:"/click?id=1"'
 ```
+
+Mail is full of tracking links, each in one letter. memo keeps such a link once per letter, as its site, so
+`domain:` still finds every letter. `url:` still finds a letter by the whole link: it reads the letter's text.
+`link:` finds the letters whose links contain a part, such as a path or `id=1`; Latin letters match in any case.
+Put a link or a part of one in quotes: `?`, `/` and `=` mean something else in a query.
 
 ## Review what was found
 
