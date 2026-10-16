@@ -4,6 +4,24 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.15.1 — 2026-10-17
+
+### Fixed
+
+- Documentation lint uses patched TOML and math-rendering dependencies; runtime dependency pins are unchanged.
+- Import recovery messages now include the required profile and use the `max_text_chars` setting name.
+  The overview clarifies Sheets import versus editing and optional image search.
+- Google listings and MCP argument construction append values without spreading unbounded arrays into calls.
+
+- **`bin/release` restarts itself once when the release brings a newer `bin/release`**: folding the changelog
+  fast-forwards `main`, and the shell went on reading the old script from the byte it had reached, so the rest of the
+  run was a mix of old and new text. It now starts the new script over; a second change during that run stops it
+  with `run it again`. Only the repository's own release is affected; the published package does not change.
+- **A broken config file now says which key is wrong.** Instead of only "drive configuration is invalid",
+  drive names the first bad key and why: `profiles.work.principal is missing`, `colour is not a known setting`,
+  `profiles.work.read_only has the wrong type or is out of range`. An old camelCase key set beside its new
+  snake_case name says which one to keep. The message never shows a value from the file.
+
 ## 0.15.0 — 2026-10-16
 
 ### Changed
