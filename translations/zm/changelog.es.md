@@ -4,6 +4,26 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.21.2 — 16.10.2026
+
+### Añadido
+
+- Se adoptan Core 0.299.0 y Base 0.40.0 con una única copia de Base. El catálogo de comandos
+  declara watch/MCP como persistentes y el inicio de sesión como interactivo; los plazos usan
+  esos metadatos compartidos. Se conservan los límites de comandos finitos y el plazo explícito.
+
+### Corregido
+
+- Los archivos parciales de grabaciones usan el adaptador nativo compartido de Core. Conservan
+  nombres, formato de puntos de control, opciones de reanudación y errores de cancelación de Zoom.
+  Una cancelación durante la última sincronización a disco no devuelve confirmación de finalización.
+  Otros proveedores de reuniones pueden usar el mismo adaptador.
+- Las instrucciones del agente describen correctamente la reanudación de un rango verificado
+  y el reinicio seguro de la descarga.
+- **El diagnóstico de publicación distingue los propietarios actuales del bloqueo de una etiqueta antigua.**
+  Ya no atribuye un bloqueo activo a una ejecución anterior; espera a que terminen sus propietarios
+  y vuelve a intentarlo.
+
 ## 0.21.1 — 16.10.2026
 
 ### Corregido
