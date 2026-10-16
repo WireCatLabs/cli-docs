@@ -37,7 +37,7 @@ prioridad sobre la identidad incluida de WireCat. Consulta [la explicación de O
 | --- | --- |
 | Tokens de Google | Almacén de credenciales del sistema; archivo privado solo si lo eliges explícitamente |
 | Perfiles y raíces elegidas | `config.json` en el directorio de configuración |
-| Texto, fragmentos, vectores y contexto local | La base elegida; por defecto `drive.db` |
+| Texto, fragmentos, vectores y contexto local | La base WireCat compartida, seleccionada por `MESSAGING_STORE` |
 | Copias de fuentes y relaciones de carpetas | Documentos del perfil y estado de sincronización en el directorio de datos |
 | Exportaciones Markdown adicionales | La ruta solicitada; no sobrescribe archivos existentes |
 

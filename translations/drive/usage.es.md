@@ -185,8 +185,8 @@ no existe modo descargar→indexar→descartar ni limpieza automática de copias
 rompe esas funciones aunque quede texto buscable. Para evitar duplicados, lee/busca la caché y
 exporta solo los documentos necesarios para otra herramienta.
 
-La base usa por defecto el directorio de estado aislado de Drive. `DRIVE_STATE_DIR` controla copias
-y puntos de sincronización; `DRIVE_STORE` elige la base. `DRIVE_CACHE_DIR` no reubica las copias.
+La base predeterminada se comparte con las demás herramientas WireCat. `DRIVE_STATE_DIR` controla copias
+y puntos de sincronización; `MESSAGING_STORE` elige la base. `DRIVE_CACHE_DIR` no reubica las copias.
 Consulta [almacenamiento](./configuration.md). Texto y vectores siguen ocupando disco aunque no
 exportes; conservar búsqueda requiere almacenar contenido localmente.
 
