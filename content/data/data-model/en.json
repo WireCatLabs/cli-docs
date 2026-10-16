@@ -39,5 +39,7 @@
   "col:search_terms.term": "the word as indexed",
   "col:involvements.scope": "`personal` or `work`, from the subject's account, chat or project",
   "col:schema_migrations.version": "the migration's number",
-  "col:store_settings.key": "the setting's name"
+  "col:store_settings.key": "the setting's name",
+  "col:tasks.close_suggested_reason": "why the agent would close it, in a few words",
+  "col:tasks.close_suggested_at": "when the agent suggested closing it"
 }
