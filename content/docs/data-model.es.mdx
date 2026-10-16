@@ -10,9 +10,9 @@ entidades, después cómo se conectan, después cómo una búsqueda encuentra co
 las columnas por las que vale la pena consultar. Cómo se abre, migra y bloquea el almacén está en
 [el almacén local](./architecture.mdx#el-almacén-local).
 
-Describe el esquema tal como se leyó el 15 de octubre de 2026, en un commit fijo de cli-core,
+Describe el esquema tal como se leyó el 16 de octubre de 2026, en un commit fijo de cli-core,
 el paquete dueño del archivo. Cada columna con su significado está en la
-[referencia del esquema](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md).
+[referencia del esquema](https://github.com/WireCatLabs/cli-core/blob/v0.303.0/docs/storage/schema.md).
 
 ## Entidades clave
 
@@ -200,7 +200,7 @@ participantes, responsables y vínculos confirmados, y no contiene nada que ello
 
 ## Tablas
 
-Todas las tablas del almacén por área, con el tipo y el significado de cada columna. Los tiempos son milisegundos de época. La [referencia del esquema](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md) lista además cada restricción e índice.
+Todas las tablas del almacén por área, con el tipo y el significado de cada columna. Los tiempos son milisegundos de época. La [referencia del esquema](https://github.com/WireCatLabs/cli-core/blob/v0.303.0/docs/storage/schema.md) lista además cada restricción e índice.
 
 **Convenciones de nombres**
 
@@ -1296,6 +1296,13 @@ Una tarea o ticket, para personas y agentes por igual. Todo lo que le concierne 
 | `category` | text | un nombre de la lista que imprime `tasks categories`; null en una tarea de proyecto |
 | `claimed_by` | text | quién trabaja en ella ahora: `owner` o el nombre de un agente |
 | `claimed_until` | integer | cuándo vence la reserva; una reserva vencida no retiene nada |
+| `close_certainty` | real | 0–1, qué tan seguro dijo estar el agente que la cerró; null si la cerró el dueño o una regla |
+| `close_suggested_as` | text | done o dismissed: cómo cerraría un agente la tarea abierta; espera al dueño porque el agente no estaba lo bastante seguro o no puede cerrar; null si nada espera |
+| `close_suggested_by_type` | text | `person` o `bot` |
+| `close_suggested_by_id` | integer | la fila en la tabla `close_suggested_by_type` |
+| `close_suggested_certainty` | real | 0–1, según lo valoró el agente que lo sugiere |
+| `close_suggested_reason` | text | por qué la cerraría el agente, en pocas palabras |
+| `close_suggested_at` | integer | cuándo sugirió el agente cerrarla |
 
 #### `task_key_counters`
 

@@ -9,9 +9,9 @@ understand what an agent can find in it. It explains the entities first, then ho
 then how a search finds context, and only at the end the columns worth querying by. How the
 store is opened, migrated and locked is in [the local store](./architecture.mdx#the-local-store).
 
-It describes the schema as read on 15 October 2026, at a fixed commit of cli-core, the
+It describes the schema as read on 16 October 2026, at a fixed commit of cli-core, the
 package that owns the file. Every column with its meaning is in the
-[schema reference](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md).
+[schema reference](https://github.com/WireCatLabs/cli-core/blob/v0.303.0/docs/storage/schema.md).
 
 ## Key entities
 
@@ -186,7 +186,7 @@ and confirmed links, and holds nothing they do not.
 
 ## Tables
 
-Every table of the store, by area, with each column's type and meaning. Times are epoch milliseconds. The [schema reference](https://github.com/WireCatLabs/cli-core/blob/v0.288.0/docs/storage/schema.md) also lists every constraint and index.
+Every table of the store, by area, with each column's type and meaning. Times are epoch milliseconds. The [schema reference](https://github.com/WireCatLabs/cli-core/blob/v0.303.0/docs/storage/schema.md) also lists every constraint and index.
 
 **Naming conventions**
 
@@ -1280,6 +1280,13 @@ A task or ticket, for people and agents alike. Everything it concerns — people
 | `category` | text | a name from the list `tasks categories` prints; null on a project task |
 | `claimed_by` | text | who works on it now: `owner` or an agent's name |
 | `claimed_until` | integer | when the claim lapses; a lapsed claim holds nothing |
+| `close_certainty` | real | 0–1, how sure the agent that closed it said it was; null when the owner or a rule closed it |
+| `close_suggested_as` | text | done or dismissed: how an agent would close the open task, waiting on the owner because it was not sure enough or may not close; null when nothing waits |
+| `close_suggested_by_type` | text | `person` or `bot` |
+| `close_suggested_by_id` | integer | the row in the `close_suggested_by_type` table |
+| `close_suggested_certainty` | real | 0–1, as the suggesting agent rated it |
+| `close_suggested_reason` | text | why the agent would close it, in a few words |
+| `close_suggested_at` | integer | when the agent suggested closing it |
 
 #### `task_key_counters`
 
