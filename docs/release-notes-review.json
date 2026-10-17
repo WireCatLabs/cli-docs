@@ -12,9 +12,9 @@
     "conclusion": "Reviewed MAX 0.56.0 with Core 0.296.0/Base 0.40.0: shared MCP and retired bot flags, attachments extraction and local voice, no old moderation checkpoint migration, setup next envelope, media provider_ref and voice kind, watch rendering, diagnostic reply/write ID labeling, agent task close certainty/reject, follow-ups and 59 categories. Shared task guides now include MAX suggested closes. Roadmap unchanged: optional local-copy mode, event actions, video circles/cloud password and standalone installers remain future work."
   },
   "zm": {
-    "version": "v0.23.0",
-    "roadmapSha256": "ca879cc4bc8e8f6cdcb1aac3952850068f6d7eaa5aece525981a3b6ee4b193ae",
+    "version": "v0.23.1",
+    "roadmapSha256": "d9aa3810894e1cfc7d7b93f6629f7dd6ffd4db72b2c783ee9778f59791eee707",
     "reviewedAt": "2026-10-17",
-    "conclusion": "Reviewed Zoom 0.23.0 on registry Core 0.309.0/Base 0.40.0: selected-series preparation can include bounded cited word evidence for one existing project name/key/alias, including unlinked same-account meetings; candidates stay unconfirmed, preserve empty-page continuation, index gaps and final output priority. Shared Core owns traversal, scope and strict CLI/MCP schemas; Zoom only binds its ports. Roadmap marks selected-project context delivered while broader communications, upcoming discovery, reverse project inference and dedicated Zoom findings intake remain planned. The incoming modularity/atomic-write refactor retains the published checkpoint lease protocol after the independently reproduced mixed-version compatibility fix. Native, RU/ES and shared Meetings guides plus generated reference delta reviewed."
+    "conclusion": "Reviewed registry Zoom0.23.1 at86f26d1 with Core0.315.0/Base0.40.2: failed participant retrieval preserves stored counts; shared output redaction/read-only serve and pnpm upgrade corrections adopted. Reader guides and command surface unchanged. Roadmap-only override a232f7e (#149) marks published Memo0.58 reviewed findings available, retaining confirmed-project/cited-passage/owner-review boundaries. Broader communications, inferred projects and upcoming inventory remain planned. Six EN/RU/ES changelog/roadmap page reviews and four translation fingerprints reviewed; other tools pins unchanged."
   }
 }

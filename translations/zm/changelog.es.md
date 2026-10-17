@@ -4,6 +4,13 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.23.1 — 17.10.2026
+
+### Corregido
+
+- La adopción de Core 0.315.0 y Base 0.40.2 publicados incorpora el filtrado compartido de datos internos de adjuntos en las respuestas y la protección del modo de solo lectura de serve. Las instrucciones de actualización con pnpm eximen a los paquetes de la herramienta de la antigüedad mínima para poder instalar la versión actual.
+- **Si falla la consulta de participantes, la sincronización conserva el número de participantes de la reunión.** Core 0.311.0 corrige `meetings sync` y `watch`: antes borraban el número guardado cuando no se podía leer la lista de participantes de Zoom.
+
 ## 0.23.0 — 17.10.2026
 
 ### Corregido
