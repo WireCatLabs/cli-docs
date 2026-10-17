@@ -299,5 +299,8 @@ Antes de guardar notas, etiquetas o hechos, pide al agente los alias existentes 
 etiquetas actuales, y después sus propuestas de vínculos. Revisa posibles sinónimos antes de crear otra
 etiqueta para el mismo tema. Memo se instala por separado y debe usar la misma ruta de base de datos.
 
-La búsqueda por significado se explica en [su guía](./topic-search.md). Para preparar una llamada,
-combina los pasajes citados con [el calendario de Zoom](./remote-meetings.md).
+La búsqueda por significado se explica en [su guía](./topic-search.md).
+Para una próxima llamada, selecciona la serie del proveedor en [el calendario de Zoom](./remote-meetings.md)
+y [prepara su contexto](./usage.md#prepare-for-an-upcoming-meeting). Añade `--project RES` para un proyecto
+existente e incluye candidatos citados por nombre/alias separados de los vínculos confirmados;
+revisa la continuación y la cobertura antes de considerar completo el resultado.
