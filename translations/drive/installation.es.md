@@ -194,10 +194,11 @@ Busca cada API, abre su página y pulsa **Enable**. Comprueba **Enabled APIs & s
 | --- | --- | --- |
 | [Google Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com) | Carpetas, archivos, exportación, comentarios, revisiones y permisos | Siempre |
 | [Google Docs API](https://console.cloud.google.com/apis/library/docs.googleapis.com) | Leer todas las pestañas y crear/editar Docs nativos | Siempre |
+| [Google Sheets API](https://console.cloud.google.com/apis/library/sheets.googleapis.com) | Leer pestañas/rangos actuales y actualizar celdas/fórmulas | Comandos Sheets opcionales; no hace falta para importar mediante XLSX |
 | [Google Drive Activity API](https://console.cloud.google.com/apis/library/driveactivity.googleapis.com) | Historial de actores y actividad | Opcional `--grant activity`; habilítala para todas las funciones de la app compartida |
 
 Habilitar una API la hace disponible para el proyecto; no concede acceso a ningún usuario.
-El conector actual no utiliza las APIs Sheets, Slides, People ni Gmail.
+Sheets utiliza los permisos existentes de Drive para lectura/escritura. El conector actual no utiliza las APIs Slides, People ni Gmail.
 
 ### 2. Configurar la pantalla de consentimiento: Branding
 

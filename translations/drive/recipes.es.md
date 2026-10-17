@@ -317,3 +317,121 @@ tg personal chats documents list CHAT_ID
 La búsqueda de Drive incluye la referencia del documento, su URL de Google y la última fecha de edición
 en Google. La lista del chat muestra el título del documento importado cuando se ha establecido
 el vínculo. Un resultado vacío puede indicar que los documentos o mensajes aún no se han importado.
+
+## Leer y cambiar celdas de una hoja
+
+Usa comandos actuales de Sheets cuando necesites celdas o fórmulas vigentes. Importar una hoja
+permite buscar su texto guardado; leer un rango no la importa, y una escritura llega al índice
+local tras la siguiente sincronización. Los comandos actuales requieren Google Sheets API en el
+proyecto OAuth de la aplicación. Con tu propia app, [habilita Google Sheets API](https://console.cloud.google.com/apis/library/sheets.googleapis.com)
+en ese proyecto; WireCat mantiene la configuración de la app compartida.
+
+```text prompt
+Usa drive CLI con el perfil personal. Inspecciona las pestañas de la hoja que seleccione y lee
+Budget!A1:C4. Muéstrame los valores y fórmulas actuales antes de proponer cambios. Si te pido
+aplicarlos, cambia solo las celdas acordadas, muestra el rango devuelto y actualiza la copia para búsqueda.
+```
+
+Empieza con la conexión de solo lectura:
+
+```sh
+drive personal sheets info SHEET_ID --json
+drive personal sheets show SHEET_ID 'Budget!A1:C4' --json
+drive personal sheets show SHEET_ID 'Budget!C1:C4' --render formula --json
+```
+
+Sustituye `SHEET_ID` por el identificador de la hoja o su URL de Google Sheets. La notación A1
+indica pestaña y celdas: `Budget!A1:C4` selecciona columnas A–C y filas 1–4. Si la pestaña contiene
+espacios, pasa `"'Quarter 1'!A1:C4"`. `--render unformatted` devuelve valores sin formato; por defecto
+Google devuelve los valores con formato visible. Las filas y celdas vacías finales pueden no aparecer.
+
+Para cambiar celdas, vuelve a conectar con permiso explícito de escritura:
+
+```sh
+drive personal session start --grant write
+drive personal sheets update SHEET_ID 'Budget!A2:B2' --values '[["Travel",250]]' --json
+drive personal sheets update SHEET_ID 'Budget!C2' --input user-entered --values '[["=B2*1.2"]]' --json
+drive personal sheets add SHEET_ID 'Budget!A1:C20' --values '[["Supplies",40,48]]' --json
+drive personal sheets clear SHEET_ID 'Budget!A3:C3' --json
+```
+
+Las actualizaciones interpretan las cadenas literalmente por defecto, incluidas las que empiezan
+con `=`. Elige `--input user-entered` para fórmulas y el análisis de números/fechas según la
+configuración regional de la hoja. Envía identificadores largos como cadenas entre comillas.
+Los valores son filas JSON de cadenas, números finitos, booleanos o `null`, con un máximo de
+10 000 celdas suministradas. `null` omite una celda; `""` borra su valor. Las filas deben caber en
+el rectángulo seleccionado; las celdas omitidas no cambian.
+
+Los comandos de escritura simplificados requieren una pestaña y un rectángulo finito. Al añadir,
+ese rectángulo permite encontrar la tabla existente de Google, y se insertan filas **después de
+la tabla detectada**; pueden quedar fuera del rango de búsqueda. Comprueba `updates.updated_range`
+y los valores devueltos en lugar de suponer dónde se insertaron. Vaciar elimina valores y fórmulas,
+conservando el formato. Actualizar/añadir devuelve los valores cambiados; usa una lectura posterior
+para comprobarlos independientemente. Otros colaboradores pueden editar entre comandos.
+
+`--dry-run` muestra método y rango sin contactar con Google; `--read-only` rechaza escrituras y
+`--offline` rechaza operaciones actuales de Sheets. Comprueba en Google cualquier escritura con
+`outcome_unknown` antes de repetirla, especialmente al añadir filas que podrían duplicarse.
+El CLI no repite automáticamente estas escrituras. Usa `sync` para actualizar la copia local importada.
+
+Para crear pestañas, insertar y dar formato acotado, sigue
+[Organizar pestañas y dar formato a celdas](#organize-tabs-and-format-selected-cells) más abajo.
+Para otras operaciones o varios rangos en una petición, usa los comandos generados de Sheets API
+en la [referencia de comandos](./commands.md). Usan los esquemas JSON de Google y los mismos
+controles de permisos, offline y solo lectura, sin los límites de rango finito o 10 000 celdas de
+los comandos simplificados. Las escrituras mediante `api call` también requieren `--allow-writes`.
+Los `--ranges` repetidos se separan con comas; usa un array JSON en `api call --params` cuando el
+nombre de la pestaña incluya una coma. Algunos métodos POST de consulta requieren el permiso
+amplio de Drive aunque solo lean; revisa el contrato y la autorización de Google antes de reconectar.
+
+## Organizar pestañas y dar formato a celdas
+
+Usa identificadores de pestaña de `sheets info` para cambiar una pestaña concreta dentro de una
+hoja existente. Estos comandos requieren la misma conexión explícita de escritura que las
+actualizaciones de celdas. Cambian datos en Google; actualiza la copia importada con `sync` cuando
+la búsqueda local necesite la fuente vigente.
+
+```text prompt
+Usa drive CLI con el perfil personal. Inspecciona las pestañas de la hoja seleccionada. Crea una
+pestaña Quarter 2, renombra la que indique y pon en negrita solo su cabecera A1:C1. Muestra los
+identificadores devueltos y el rango cambiado. Conserva los valores y el resto del formato.
+```
+
+```sh
+drive personal sheets info SHEET_ID --json
+drive personal sheets create SHEET_ID 'Quarter 2' --json
+drive personal sheets rename SHEET_ID 101 'Quarter 1' --json
+drive personal sheets insert SHEET_ID 101 rows 1 3 --json
+drive personal sheets insert SHEET_ID 101 columns 0 1 --json
+drive personal sheets format SHEET_ID 101 A1:C1 --body '{"textFormat":{"bold":true}}' --json
+drive personal sheets format SHEET_ID 101 B2:B10 --body '{"numberFormat":{"type":"NUMBER","pattern":"0.00"}}' --json
+```
+
+`create` añade una pestaña vacía a la hoja existente, en lugar de crear otro archivo.
+Sustituye `101` por el identificador numérico devuelto por Google. Permanece estable al renombrar;
+solo cambia el título. Los nombres deben tener 1–100 caracteres; Google también comprueba validez
+y que no estén duplicados.
+
+Insertar recibe `rows` o `columns`, un **índice desde cero delante del cual insertar** y una
+cantidad de 1–1 000. `0` indica la primera fila/columna; el índice de fila `1` inserta antes de
+la segunda fila. Las posteriores se desplazan. Google valida los límites actuales de la cuadrícula
+y de la hoja; usa la API generada para añadir dimensiones al final. El comando hereda el formato
+de la dimensión posterior al punto de inserción.
+
+El formato usa un identificador explícito de pestaña y un rango finito **sin prefijo de pestaña**,
+como `A1:C4`. Se pueden seleccionar hasta 10 000 celdas. El JSON admite negrita/cursiva/subrayado/
+tachado, familia/tamaño de fuente, colores de texto/fondo, alineación horizontal/vertical, ajuste
+de texto y formato numérico. Los campos siguen el JSON `CellFormat` de Google. Se rechazan campos
+desconocidos, objetos vacíos, valores de celda y fórmulas.
+
+La máscara de campos incluye solo las propiedades de formato suministradas. `textFormat.bold`
+conserva cursiva, formato numérico y valores; usa `false` para quitar la negrita. Se admiten los
+canales (`red`, `green`, `blue`, `alpha`) y colores del tema. Para otros campos o varias operaciones
+en una petición, usa `api sheets-spreadsheets-batch-update`. El lote genérico puede producir
+cambios más amplios y no tiene los límites de 10 000 celdas ni de campos del formateador simplificado.
+
+Todas las rutas mantienen la política del perfil, permiso OAuth de escritura, offline/solo
+lectura, dry-run y gestión de resultados inciertos. Una denegación como `sheets.rename` también
+se aplica al lote bruto/generado equivalente. Comprueba las celdas antes de repetir un cambio
+estructural incierto: podrías duplicar pestañas o insertar más filas. Los colaboradores pueden
+hacer cambios entre comandos.
