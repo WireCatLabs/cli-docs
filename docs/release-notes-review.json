@@ -1,15 +1,15 @@
 {
   "tg": {
-    "version": "v0.66.0",
+    "version": "v0.67.0",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
     "reviewedAt": "2026-10-17",
-    "conclusion": "Reviewed 0.64.0-0.66.0 (cli-core 0.311.0): a first sync opens no task from history (task_first_pass_per_chat, store-wide, default 0, up to 1000; the sync answer counts held and held_chats and names tasks apply); tasks apply <chat...> --last (default 50, at most 1000) and MCP tasks_apply list what the rules would open and open it only with --yes; a later pass skips a chat with nothing sent since; the duplicate check compares tasks by when their source messages were sent; a closed task shows its follow-up (linked_from); mentions find names and street addresses with mentions places; search notes takes source: in the query instead of --type; messages delete takes comma-separated ids; setup --app auto reads the redesigned my.telegram.org; tg upgrade through pnpm skips the release-age wait for @wirecat packages. Roadmap unchanged: multi-photo sending, private chat notes and the listed MAX-only capabilities remain future work."
+    "conclusion": "Reviewed Telegram0.67.0 with Core0.315.0/Base0.40.2: opaque attachment credentials stay out of JSON/JSONL/MCP and event streams; protected WhatsApp state files cannot be uploaded. Native reader guides and command reference are unchanged from0.66. Roadmap unchanged: multi-photo sending, private chat notes and listed MAX-only capabilities remain planned."
   },
   "max": {
-    "version": "v0.56.0",
+    "version": "v0.58.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
-    "reviewedAt": "2026-10-16",
-    "conclusion": "Reviewed MAX 0.56.0 with Core 0.296.0/Base 0.40.0: shared MCP and retired bot flags, attachments extraction and local voice, no old moderation checkpoint migration, setup next envelope, media provider_ref and voice kind, watch rendering, diagnostic reply/write ID labeling, agent task close certainty/reject, follow-ups and 59 categories. Shared task guides now include MAX suggested closes. Roadmap unchanged: optional local-copy mode, event actions, video circles/cloud password and standalone installers remain future work."
+    "reviewedAt": "2026-10-17",
+    "conclusion": "Reviewed MAX0.57-0.58 with Core0.315.0/Base0.40.2: attachment provider credentials are removed from read/event output; protected WhatsApp state uploads are refused. Updated command references cover stored Drive links, tasks apply and first-pass settings, names/places, comma-separated deletes, and supported MAX-only flags. Search notes uses source query terms; configuration errors omit values and doctor can report invalid settings. Roadmap unchanged: optional local-copy mode, event actions, video circles/cloud password and standalone installers remain planned."
   },
   "zm": {
     "version": "v0.23.1",

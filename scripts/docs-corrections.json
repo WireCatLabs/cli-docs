@@ -2052,5 +2052,31 @@
         }
       ]
     }
+  },
+  {
+    "tool": "max",
+    "slug": "troubleshooting",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/b471dd3a7fc2cdd2750c9e732069dd22dcbbcb77/docs/troubleshooting.md",
+    "reason": "Preserve the previous configuration-error incoming anchor after the released error heading changed.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "### «is an unknown setting»",
+          "after": "<a id=\"is-not-a-valid-config\" />\n\n### «is an unknown setting»"
+        }
+      ],
+      "en": [
+        {
+          "before": "### \"is an unknown setting\"",
+          "after": "<a id=\"is-not-a-valid-config\" />\n\n### \"is an unknown setting\""
+        }
+      ],
+      "es": [
+        {
+          "before": "### «is an unknown setting»",
+          "after": "<a id=\"is-not-a-valid-config\" />\n\n### «is an unknown setting»"
+        }
+      ]
+    }
   }
 ]

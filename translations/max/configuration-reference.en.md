@@ -203,11 +203,10 @@ Values are checked with the same schema used for reading, **before writing**: `m
 An unknown field is rejected by name with `configuration_error` (exit code `3`):
 
 ```json
-{"error":{"code":"configuration_error","reason":"config.invalid","message":"/home/you/.config/max-cli/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve"}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"/home/you/.config/max-cli/config.json: profiles.default.limitt is an unknown setting","retry":{"safe":false}}}
 ```
 
-An incorrect type names the field and accepted value: `profiles.default.limit: has to be a
-whole number, 1 or more, not "20"`.
+An incorrect type names the field without repeating its value, which could contain a token: `profiles.default.limit has the wrong type`. If several fields are invalid, the error names the first and counts the rest: `(and 2 more problems)`.
 
 This is intentional. Silently discarding an unknown field turns a typo into hours spent wondering why a setting has no effect.
 

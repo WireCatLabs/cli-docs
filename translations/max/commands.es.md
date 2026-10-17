@@ -264,6 +264,27 @@ max chats show <chat>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 
+### `max chats documents`
+
+los documentos de Google Docs y Drive enlazados en los mensajes guardados de un chat
+
+#### `max chats documents list`
+
+cada enlace a un documento del chat, del más reciente al más antiguo, e indica si está en el almacén
+
+```sh
+max chats documents list <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--limit <n>` | cuántos mostrar. |
+| `--page <n>` | qué página, empezando por 1. |
+
 ### `max chats events`
 
 quién entró, salió, fue añadido o eliminado, y por quién — a partir de los mensajes de servicio del chat; los últimos 7 días, salvo que la consulta indique una fecha
@@ -320,7 +341,6 @@ max chats mark-read <chat> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--until-id <id>` |sólo hasta esta identificación de mensaje; el más nuevo por defecto.|
-| `--topic <id>` |marcar sólo este tema del foro como leído; no soportado por servicios de mensajería sin temas.|
 
 ### `max chats leave`
 
@@ -636,18 +656,13 @@ aceptar; el grupo ve la entrada
 **Cambia algo en MAX.**
 
 ```sh
-max chats requests accept <chat> [person] [options]
+max chats requests accept <chat> <person>
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
-| `person` | opcional | quién lo solicitó: un ID de `chats requests list`. |
-
-| Opción | Para qué sirve |
-|---|---|
-| `--all` |MAX no lo admite; elige una persona de chats requests list.|
-| `--link <link>` |MAX no lo admite; elige una persona de chats requests list.|
+| `person` | obligatorio | quién lo solicitó: un ID de `chats requests list`. |
 
 #### `max chats requests decline`
 
@@ -656,18 +671,13 @@ rechazar la solicitud
 **Cambia algo en MAX.**
 
 ```sh
-max chats requests decline <chat> [person] [options]
+max chats requests decline <chat> <person>
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
-| `person` | opcional | quién lo solicitó: un ID de `chats requests list`. |
-
-| Opción | Para qué sirve |
-|---|---|
-| `--all` |MAX no lo admite; elige una persona de chats requests list.|
-| `--link <link>` |MAX no lo admite; elige una persona de chats requests list.|
+| `person` | obligatorio | quién lo solicitó: un ID de `chats requests list`. |
 
 ### `max chats folders`
 
@@ -1327,7 +1337,7 @@ max messages list <chat> [query] [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
-| `query` | opcional | dónde empezar y qué tema: id<42, date>2026-10-01, topic:12. |
+| `query` | opcional | por dónde empezar: id<42, date>2026-10-01. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -1502,7 +1512,6 @@ max messages send <chat> [text] [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--topic <id>` |enviar a este tema del foro; no soportado por servicios de mensajería sin temas.|
 | `--reply-to <message>` |Responde este mensaje, por su id en el mismo chat.|
 | `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as`; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--operation-id <id>` |repetir un envío cuyo resultado se desconocía, sin arriesgarse a una segunda copia.|
@@ -1562,7 +1571,7 @@ max messages delete <chat> <messages> [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
-| `messages` | obligatorio |los ID de los mensajes, como máximo 10.|
+| `messages` | obligatorio | los ID de los mensajes, separados por espacios o comas, como máximo 10. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -2532,6 +2541,24 @@ las categorías que puede tener una tarea, con lo que significa cada una y las p
 max tasks categories
 ```
 
+### `max tasks apply`
+
+aplica las reglas de tareas a los mensajes guardados más recientes de un chat: una pregunta sin respuesta o una mención tuya abre una tarea y tu respuesta la cierra, para un chat que la primera sincronización dejó sin procesar (ajuste task_first_pass_per_chat). Muestra lo que abriría y no cambia nada sin --yes; con --yes comprueba duplicados como en una sincronización. Solo lee el almacén local
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max tasks apply <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+| Opción | Para qué sirve |
+|---|---|
+| `--last <n>` | lee los n mensajes guardados más recientes de cada chat (50 por defecto, como máximo 1000). |
+
 ### `max tasks claim`
 
 tomar una tarea abierta para que ningún otro agente trabaje en ella a la vez; la reserva caduca sola
@@ -3013,7 +3040,7 @@ max tags list [query]
 
 ## `max mentions`
 
-teléfonos, correos electrónicos, enlaces, documentos y nombres de personas encontrados en los mensajes guardados
+teléfonos, correos, enlaces, documentos, nombres y direcciones en los mensajes guardados
 
 ### `max mentions list`
 
@@ -3050,6 +3077,19 @@ max mentions domains [query] [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | qué página, empezando por 1. |
 
+### `max mentions places`
+
+direcciones confirmadas en todas las cuentas, primero las más mencionadas; `mentions confirm <id>` añade una
+
+```sh
+max mentions places [options]
+```
+
+| Opción | Para qué sirve |
+|---|---|
+| `--limit <n>` | cuántos mostrar. |
+| `--page <n>` | qué página, empezando por 1. |
+
 ### `max mentions show`
 
 una mención, el texto que la rodea y en cuántos otros sitios aparece su valor
@@ -3064,7 +3104,7 @@ max mentions show <id>
 
 ### `max mentions confirm`
 
-indicar qué es una mención: el dueño de un teléfono en todos los sitios donde aparece, el documento guardado, a quién se refiere un nombre
+indica qué representa una mención: el propietario de un teléfono donde aparezca, el documento guardado, a quién corresponde un nombre o una dirección como lugar
 
 **Cambia algo solo en este ordenador.**
 
@@ -3075,7 +3115,7 @@ max mentions confirm <id> [person] [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `id` | obligatorio | el ID de la mención, de mentions list. |
-| `person` | opcional | person:<uid> u organization:<id>, dueño del teléfono o de la dirección; person:<uid>, a quién se refiere un nombre; un documento no lo necesita. |
+| `person` | opcional | person:<uid> u organization:<id> a quien pertenece el teléfono o correo; person:<uid> a quien corresponde un nombre; un documento o una dirección postal no lo necesita. |
 
 | Opción | Para qué sirve |
 |---|---|
@@ -3113,7 +3153,7 @@ max mentions rebuild [kind]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `kind` | opcional | solo este tipo: person-name después de añadir o renombrar personas. Uno de: `phone`, `email`, `url`, `document`, `person-name`. |
+| `kind` | opcional | solo este tipo: person-name después de añadir o renombrar personas. Uno de: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
 
 ## `max images`
 
@@ -3269,11 +3309,10 @@ max search notes <query> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | obligatorio | consulta Lucene estricta: palabras, "frases", AND/OR/NOT, tag: y rangos de fechas. |
+| `query` | obligatorio | consulta Lucene estricta: palabras, "frases", AND/OR/NOT, tag:, source:internal (escritas en memo) o source:file (desde una carpeta de notas) y rangos de fechas. |
 
 | Opción | Para qué sirve |
 |---|---|
-| `--type <internal\|file>` | solo notas escritas en memo, o solo notas de una carpeta. |
 | `--source <accounts>` | solo estas cuentas de notas, separadas por comas: notes:internal para las notas escritas en memo, notes:<folder id> tal como lo muestra un resultado, notes, documents o group:<name>. |
 | `--filter <query>` | una consulta que también debe cumplir cada resultado; no cambia la búsqueda por significado. |
 | `--limit <n>` | cuántos resultados. |
@@ -3590,7 +3629,6 @@ max polls create <chat> <question> <answers> [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--topic <id>` |enviar a este tema del foro; no soportado por servicios de mensajería sin temas.|
 | `--multiple` | people may pick several answers. |
 | `--anonymous` |nadie ve qué opción eligió cada persona.|
 | `--revote` | people may change their vote. |
@@ -4192,7 +4230,7 @@ max config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 | `value` | obligatorio | un número, true o false, o una lista como contacts,polls. |
 
 | Opción | Para qué sirve |
@@ -4213,7 +4251,7 @@ max config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 
 | Opción | Para qué sirve |
 |---|---|

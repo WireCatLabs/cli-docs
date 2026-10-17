@@ -56,14 +56,14 @@ memo search mail 'счёт'                                  # почта — э
 ```
 
 ```sh
-max personal search notes 'бюджет' --type internal       # только заметки, написанные в memo
+max personal search notes 'бюджет source:internal'       # только заметки, написанные в memo
 ```
 
 ```sh
 max personal search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
 ```
 
-`search all` labels each match as a message (`msg:…`) or note (`note:…`). `max` does not search mail: neither `search messages` nor `search all` does; `max personal search mail` answers with a hint, “mail is memo's: install @wirecat/cli-memo, then `memo search mail …`”. In `search messages`, `NOT has:attachment`, `has:voice` and `has:file` in the query keep only text, voice messages or files; `--type` in `search notes` selects memo or folder notes (`internal|file`). When a field does not apply, for example `chat:`/`from:` for notes, `search all` skips that source and explains why.
+`search all` labels each match as a message (`msg:…`) or note (`note:…`). `max` does not search mail: neither `search messages` nor `search all` does; `max personal search mail` answers with a hint, “mail is memo's: install @wirecat/cli-memo, then `memo search mail …`”. In `search messages`, `NOT has:attachment`, `has:voice` and `has:file` in the query keep only text, voice messages or files; `source:internal` and `source:file` in the `search notes` query select memo or folder notes. When a field does not apply, for example `chat:`/`from:` for notes, `search all` skips that source and explains why.
 
 Notes are archived via memo: `memo import`. Without them, `search all` only looks for messages.
 

@@ -4,6 +4,47 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.58.0 — 17.10.2026
+
+### Security
+
+- **Internal attachment data stays out of output**, including the bot event stream (cli-core 0.315.0). Media keys and the token stay inside the client.
+
+- **WhatsApp state files cannot be sent as attachments** (cli-core 0.314.0). The guard checks default directories, environment overrides and symbolic links; ordinary neighboring files remain allowed.
+
+### Added
+
+- **Names and addresses can be reviewed as mentions** (cli-core 0.311.0). `mentions rebuild person-name` and `mentions rebuild place` find them in stored text; `mentions places` lists confirmed addresses.
+- **`tasks apply <chat...>` lists tasks from selected stored history.** `--yes` creates them with duplicate checks.
+
+### Changed — may break scripts
+
+- **The first sync opens no tasks from old messages by default** (cli-core 0.311.0). `task_first_pass_per_chat` enables their creation; `tasks apply` lets you review selected chats separately. Later syncs continue processing new messages.
+
+### Fixed
+
+- **`max doctor report create` writes a report even when settings are invalid.** Previously it stopped with `configuration_error`, leaving no report to share. The report now records the settings error instead of a profile check, naming the invalid setting without its value, and includes the last failed run.
+
+## 0.57.0 — 17.10.2026
+
+### Added
+
+- **Drive documents appear in shared local search** (cli-core 0.301.0), with their Google URL and modification time. `--source drive:<профиль>` selects an imported profile. `chats documents list <чат>` lists documents shared in stored messages without requesting MAX.
+
+- **The MCP server loads only when max runs as MCP** (cli-core 0.300.0): other commands load about a tenth fewer files at startup.
+- **A task card shows tasks pointing back to it** (cli-core 0.304.0): `tasks show` prints `task:<id> follow-up-of this task`, while `--json` and MCP return `linked_from`. Previously only the new task showed the relation, not the closed task.
+- **max starts about a quarter faster after its first run.** Compiled Node code is cached in the system temporary directory, configurable with `NODE_COMPILE_CACHE`: `max --help` takes about 0.42 seconds instead of 0.56.
+
+### Changed — may break scripts
+
+- **Settings errors fit on one line without repeating the value** (cli-core 0.304.0): the first invalid field, reason and number of further errors, such as `config.json: profiles.default.limitt is an unknown setting (and 2 more
+  problems)`. An old field (`clientId`) suggests its new name (`rename it to client_id`, cli-core 0.307.0). Previously errors listed every problem and accepted field and quoted the value, which could accidentally contain a token.
+- **`search notes` selects notes with `source:internal` or `source:file` in its query** (cli-core 0.303.0). The `--type` flag and the `type` field of MCP `search_notes` are removed. The name matches the note's `source` field. `--source notes:<папка>` still selects which accounts to read.
+- **The daily update hint stays silent for `--timeout=5`, `--help=…` and other arguments separated by `=`**, as it does for `--timeout 5`. The check now comes from shared cli-core.
+- **Commands unsupported by MAX are hidden** (cli-core 0.299.0). `messages send`, `chats mark-read` and `polls create` have no `--topic`, because MAX has no forum topics. `messages list` rejects `topic:`; `chats requests
+  accept` and `decline` have no `--all` or `--link`, so a person is always required. Previously these options were shown but refused.
+- **`max doctor` responds even when settings are invalid.** Previously it returned `configuration_error` and exit 3; it now returns `config: {error: …}`, naming the invalid setting, and exits 0. `doctor` is used precisely when settings are broken. Scripts that checked its exit code for invalid settings must inspect `config.error` instead.
+
 ## 0.56.0 — 16.10.2026
 
 ### Added
@@ -1315,7 +1356,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.56.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.58.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).
