@@ -12,9 +12,9 @@
     "conclusion": "Reviewed MAX0.57-0.58 with Core0.315.0/Base0.40.2: attachment provider credentials are removed from read/event output; protected WhatsApp state uploads are refused. Updated command references cover stored Drive links, tasks apply and first-pass settings, names/places, comma-separated deletes, and supported MAX-only flags. Search notes uses source query terms; configuration errors omit values and doctor can report invalid settings. Roadmap unchanged: optional local-copy mode, event actions, video circles/cloud password and standalone installers remain planned."
   },
   "zm": {
-    "version": "v0.23.1",
+    "version": "v0.23.2",
     "roadmapSha256": "d9aa3810894e1cfc7d7b93f6629f7dd6ffd4db72b2c783ee9778f59791eee707",
     "reviewedAt": "2026-10-17",
-    "conclusion": "Reviewed registry Zoom0.23.1 at86f26d1 with Core0.315.0/Base0.40.2: failed participant retrieval preserves stored counts; shared output redaction/read-only serve and pnpm upgrade corrections adopted. Reader guides and command surface unchanged. Roadmap-only override a232f7e (#149) marks published Memo0.58 reviewed findings available, retaining confirmed-project/cited-passage/owner-review boundaries. Broader communications, inferred projects and upcoming inventory remain planned. Six EN/RU/ES changelog/roadmap page reviews and four translation fingerprints reviewed; other tools pins unchanged."
+    "conclusion": "Reviewed registry Zoom0.23.2 at42b2a55 with Core0.322.0/Base0.40.4 and a single runtime Base identity. Commands and reader guides are unchanged; native roadmap now includes the already-reviewed Memo0.58 findings workflow, retiring roadmap override a232f7e. Read EN/RU/ES new changelog entries and matching roadmap source; preserve confirmed-project/cited-passage/owner-review boundaries. Optional communications host PR156 remains unreleased and is not documented as available. Other tool pins unchanged."
   }
 }

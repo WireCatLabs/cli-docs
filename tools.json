@@ -42,14 +42,11 @@
     "repo": "WireCatLabs/zoom-cli",
     "package": "@wirecat/zoom-cli",
     "lang": "en",
-    "docsRef": "v0.23.1",
+    "docsRef": "v0.23.2",
     "summary": {
       "en": "Keep Zoom transcripts and recordings, search meeting evidence and give your agent context for the next call.",
       "ru": "Сохраняйте расшифровки и записи Zoom, ищите обсуждения и давайте агенту контекст для следующего созвона.",
       "es": "Guarda transcripciones y grabaciones de Zoom, busca lo hablado y da contexto al agente para la próxima llamada."
-    },
-    "guideRefs": {
-      "roadmap": "a232f7e88ff65bc1870b7aff04303c3241c5aacc"
     }
   },
   {

@@ -4,6 +4,14 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.23.2 — 17.10.2026
+
+### Corregido
+
+- La capa compartida adopta Core 0.322.0 y Base 0.40.4 publicados; la validación y la salida usan una sola instancia de Base.
+- La guía de arquitectura obtiene la versión del vocabulario compartido de la dependencia de ejecución en lugar de indicar una versión antigua de Base.
+- La hoja de ruta enlaza el flujo ya disponible de revisión y registro de hallazgos de reuniones en Memo 0.58.0, en lugar de presentarlo como una función futura.
+
 ## 0.23.1 — 17.10.2026
 
 ### Corregido
