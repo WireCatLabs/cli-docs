@@ -5,7 +5,7 @@ title: "Все команды"
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
 
 
-Здесь собраны все команды и параметры Memo. Описания отдельных операций сохранены на языке справки инструмента. Команда, которая читает, называет аккаунты через `--source <accounts>`: один аккаунт как сервис:аккаунт, например telegram:1, все аккаунты сервиса, например telegram, все аккаунты одного вида, например mail, или сохранённую группу, например group:work. Команда, которая что-то меняет, называет через `--account` один аккаунт, от которого действует, тоже как сервис:аккаунт. Memo никогда не выбирает аккаунт за вас. Старая запись `--provider` с отдельным `--account` ещё работает один выпуск и показывает новую. Добавьте `--json`, чтобы получить ответ, который может прочитать скрипт или агент. Готовые задачи целиком описаны в [рецептах](./recipes.md), а обычный день — на странице [работа с Memo](./usage.md).
+Здесь собраны все команды и параметры Memo. Описания отдельных операций сохранены на языке справки инструмента. Команда, которая читает, называет свои аккаунты через `--source`: один — как `telegram:1` или `email:work`, все аккаунты провайдера, вид или `group:<name>`. Команда, которая пишет, называет единственный аккаунт, от имени которого действует, через `--account telegram:1`. Memo никогда не выбирает аккаунт за вас. Добавьте `--json`, чтобы получить ответ, который может прочитать скрипт или агент. Готовые задачи целиком описаны в [рецептах](./recipes.md), а обычный день — на странице [работа с Memo](./usage.md).
 
 ## Общие параметры
 
@@ -751,7 +751,7 @@ memo tasks assign <id> <person> [options]
 
 ### `memo tasks agenda`
 
-what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one
+what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one, open tasks someone else does
 
 ```sh
 memo tasks agenda [query] [options]
@@ -1965,6 +1965,7 @@ memo search all <query> [options]
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
 | `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
 | `--only <resources>` | messages,mail,notes, separated by commas. |
+| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 | `--project <project>` | rank the key documents of this project (id, key or project:<id>) first; nothing is left out. |
 
 ### `memo search messages`
@@ -2009,6 +2010,7 @@ memo search mail <query> [options]
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
 | `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
 | `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |
+| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 | `--account <account>` | deprecated: --source email:<account>. |
 
 ### `memo search notes`
