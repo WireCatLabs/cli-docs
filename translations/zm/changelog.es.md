@@ -4,6 +4,30 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.23.0 — 17.10.2026
+
+### Añadido
+
+- `meetings prepare --project <name-key-or-alias>` y el argumento MCP `project` añaden coincidencias
+  citadas de palabras para un proyecto existente, incluidas reuniones sin vínculo del perfil y
+  periodo elegidos. Hasta cuatro páginas acotadas de nombres conservan el estado sin confirmar,
+  la cobertura del índice y la continuación; las coincidencias nunca asignan pertenencia al proyecto.
+
+### Cambiado — puede afectar a los clientes
+
+- Las aplicaciones que usan la biblioteca y actualizan desde 0.22.0 pasan los métodos de búsqueda
+  de personas en `people` al llamar a `createMeetingContextCapabilities`. Sigue la adopción de áreas
+  del almacén Core introducida en 0.22.1; no cambian los comandos ni las reglas de la cuenta elegida.
+
+## 0.22.1 — 17.10.2026
+
+### Corregido
+
+- **Una configuración antigua camelCase indica qué clave renombrar.** Se adopta Core 0.307.0:
+  zm responde `clientId is an unknown setting; rename it to client_id (and 3 more problems)`
+  en lugar de `client_id is missing`, que no explicaba la corrección. Sigue mostrando una sola
+  clave y nunca su valor.
+
 ## 0.22.0 — 17.10.2026
 
 ### Añadido
