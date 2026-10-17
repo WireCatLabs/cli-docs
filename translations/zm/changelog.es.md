@@ -16,6 +16,7 @@ Las entradas nuevas están traducidas; el historial anterior conserva su inglés
 
 ### Corregido
 
+- La publicación puede esperar el bloqueo compartido con `WIRECAT_RELEASE_WAIT_SECONDS`; por defecto sigue rechazando inmediatamente un bloqueo ocupado.
 - La adopción de Core 0.326.0 y Base 0.43.1 publicados y compatibles incorpora contratos compartidos acotados de preparación, apertura del almacén de solo lectura y roles registrados para los indicadores de fuentes. Usa una sola instancia de Base.
 
 ## 0.23.2 — 17.10.2026
