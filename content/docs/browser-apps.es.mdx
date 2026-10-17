@@ -38,7 +38,7 @@ Usaremos **Tailscale**, un programa que hace accesible por internet la conexión
 
 Elige tu sistema operativo y <DocTerm term="terminal" lang="es" label="abre dos ventanas de terminal" />. **Pega el primer bloque en la ventana 1**: mostrará una dirección como `https://ordenador.red.ts.net`. Si primero muestra un enlace de autorización, completa el punto 4 anterior y vuelve aquí.
 
-**Pega el segundo bloque en la ventana 2** e introduce la dirección HTTPS cuando la pida, sin `/mcp`. Conserva `:8443` si aparece. Deja ambas ventanas abiertas. Estos comandos permiten enviar durante la conexión; [cómo elegir los permisos](#elegir-qué-puede-hacer-el-asistente) se explica abajo.
+**Pega el segundo bloque en la ventana 2** e introduce la dirección HTTPS cuando la pida, sin `/mcp`. Conserva `:8443` si aparece. Deja ambas ventanas abiertas. Los permisos del perfil deciden lo que puede hacer el agente; [cómo elegir los permisos](#elegir-qué-puede-hacer-el-asistente) se explica abajo.
 
 <PlatformSetupTabs>
 
@@ -61,7 +61,7 @@ Ejecuta **la ventana 2 con tu usuario habitual**, que inició sesión en el serv
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
+tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Para MAX, cambia `tg.cmd` por `max.cmd` en la ventana 2. Ejecuta ambos procesos en Windows.
@@ -83,7 +83,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Para MAX, cambia `tg` por `max` en la ventana 2.
@@ -105,7 +105,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del servicio de mensajería con `sudo`.
@@ -192,9 +192,11 @@ Después pide un borrador o, cuando quieras enviar, indica el destinatario y el 
 
 ## Elegir qué puede hacer el agente
 
-Los comandos permiten enviar durante este proceso con `--permission messages.send=allow`, sin
-cambiar los ajustes guardados. La app controla sus aprobaciones. Por MCP, `ask` no fuerza una
-confirmación del servidor. Para solo leer, elige un perfil de solo lectura y quita `--permission messages.send=allow` del comando de inicio.
+El servidor puede hacer lo que permiten los permisos guardados del perfil. Para restringirlos solo en este proceso,
+añade `--permission messages.send=deny` o `--permission messages=readonly` al comando de inicio; en `tg` la opción
+solo endurece, y una anulación que aflojaría el perfil se rechaza al iniciar. Para permitir el envío, cambia los
+permisos del perfil. La app controla sus aprobaciones. Por MCP, `ask` no fuerza una confirmación del servidor. Para
+solo leer, elige un perfil de solo lectura.
 
 Los ajustes de aprobación de la aplicación y las comprobaciones de permisos del servidor son controles separados. Si permites una herramienta
 en la aplicación y el servidor autoriza el envío, otra llamada puede enviar sin volver a preguntar. Pide un borrador para revisar

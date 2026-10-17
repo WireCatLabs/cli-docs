@@ -38,7 +38,7 @@ We use **Tailscale**, a program that makes the connection on your computer reach
 
 Choose your operating system and <DocTerm term="terminal" lang="en" label="open two terminal windows" />. **Paste the first block into window 1**: it prints an address such as `https://computer.network.ts.net`. If it first shows an approval link, complete item 4 above and return here.
 
-**Paste the second block into window 2** and supply the printed HTTPS address when asked, without `/mcp`. Keep `:8443` if the address contains it. Leave both windows open. These commands allow sending while the connection runs; [choosing permissions](#choose-what-the-assistant-may-do) is explained below.
+**Paste the second block into window 2** and supply the printed HTTPS address when asked, without `/mcp`. Keep `:8443` if the address contains it. Leave both windows open. The profile's permissions decide what the agent may do; [choosing permissions](#choose-what-the-assistant-may-do) is explained below.
 
 <PlatformSetupTabs>
 
@@ -61,7 +61,7 @@ who logged into the messenger.
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
+tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 For MAX, replace `tg.cmd` with `max.cmd` in window 2. Run both processes in native Windows.
@@ -83,7 +83,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 For MAX, replace `tg` with `max` in window 2.
@@ -105,7 +105,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 For MAX, replace `tg` with `max` in window 2. Do not run the messenger server with `sudo`.
@@ -192,9 +192,11 @@ Then ask for a draft or, when you intend to send, name the recipient and exact t
 
 ## Choose what the agent may do
 
-The examples above allow sending for this running server with `--permission messages.send=allow`.
-Your saved settings stay the same. The app controls its own approval prompts. Over MCP,
-`ask` does not force a server confirmation. For a connection that only reads, use a read-only profile and remove `--permission messages.send=allow` from the startup command.
+The server can do what the profile's saved permissions allow. To narrow them for this running server only, add
+`--permission messages.send=deny` or `--permission messages=readonly` to the startup command; in `tg` the flag only
+tightens, and an override that would loosen the profile is refused at startup. To allow sending, change the profile's
+permissions. The app controls its own approval prompts. Over MCP, `ask` does not force a server confirmation. For a
+connection that only reads, use a read-only profile.
 
 The app's approval settings and the server's permission checks are separate controls. If you always allow a tool in the
 app and the server permits it, another call can send without asking again. Ask for a draft when

@@ -168,8 +168,8 @@ En el nivel `ask`, `tg` muestra qué cambiará y pregunta `go ahead? [y/N]`. Una
 ### Sobre MCP
 
 MCP no tiene formularios de confirmación del servidor. `deny` y `readonly` bloquean las escrituras; `ask` y `allow`
-permiten la escritura solicitada. Repite `--permission key=level` para los permisos temporales del servidor
-([configuración en el navegador](./remote.md)). La confirmación en la CLI con `ask` sigue aplicándose.
+permiten la escritura solicitada. Repite `--permission key=level` para endurecer los permisos de un solo proceso del servidor;
+nunca los afloja ([configuración en el navegador](./remote.md)). La confirmación en la CLI con `ask` sigue aplicándose.
 
 `replies.send` por defecto es `deny`; habilitar una regla de respuesta por sí sola no permite el envío. `tg personal replies audience` puede limitar las respuestas a personas seleccionadas o excluir algunas.
 

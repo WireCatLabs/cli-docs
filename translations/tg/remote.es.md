@@ -58,7 +58,7 @@ Instale [Tailscale](https://tailscale.com/download), inicie sesión y habilite [
 
 Mantenga dos ventanas de terminal abiertas. El primero recorre el túnel. Copie el origen HTTPS que imprime en la segunda ventana cuando se le solicite. El origen es la dirección sin `/mcp` ni ninguna otra ruta. Mantenga un puerto público explícito como `:8443` en él.
 
-El servidor escucha en `127.0.0.1:8765` e imprime un código de inicio de sesión único. Nunca necesita derechos de administrador; Sólo el túnel puede necesitarlos. Los siguientes comandos permiten el envío únicamente para este proceso de servidor, con `--permission messages.send=allow`; consulte [permisos para este proceso de servidor](#permissions-for-this-server-process).
+El servidor escucha en `127.0.0.1:8765` e imprime un código de inicio de sesión único. Nunca necesita derechos de administrador; Sólo el túnel puede necesitarlos. Los permisos del perfil deciden lo que puede hacer el agente; para restringirlos solo para este proceso de servidor, consulte [permisos para este proceso de servidor](#permissions-for-this-server-process).
 
 ### Windows (PowerShell)
 
@@ -74,7 +74,7 @@ Segunda ventana: PowerShell normal, como el usuario que inició sesión en Teleg
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Paste the HTTPS origin printed by Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Ejecute ambos procesos en el propio Windows. WSL es un entorno separado: un túnel de Windows que apunta a la dirección de bucle invertido de Windows puede no llegar a un servidor dentro de WSL.
@@ -92,7 +92,7 @@ Segunda ventana de Terminal, como el mismo usuario que ejecutó `tg personal set
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Terminal)
@@ -108,7 +108,7 @@ Segunda ventana de terminal: su usuario normal, sin `sudo`, por lo que `tg` encu
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## Ejecutar MAX y Telegram juntos
@@ -150,7 +150,7 @@ MCP hace visibles los controles Unicode ocultos en los resultados de texto; los 
 
 El servidor no puede ver si la aplicación le preguntó antes de una llamada. Si la aplicación siempre permite una herramienta, la siguiente llamada puede realizarse sin una nueva pregunta.
 
-Repita `--permission key=level` para cambiar los permisos solo para este proceso de servidor. Los niveles son `deny`, `readonly`, `ask` y `allow`. Por ejemplo, agregue `--permission messages.send=allow` para permitir el envío desde un perfil de solo lectura. `--permission messages=allow` reemplaza los permisos guardados para todo el recurso de mensajes; la eliminación se permite por separado con `--permission messages.delete=allow`. La configuración guardada, las restricciones de destinatarios y los límites horarios no cambian. Para levantar un rechazo de lectura, nombre su recurso o comando con el nivel `allow`. Las claves de permiso se enumeran en la [guía de configuración](./configuration.md).
+Repita `--permission key=level` para endurecer los permisos solo para este proceso de servidor. Los niveles son `deny`, `readonly`, `ask` y `allow`. Por ejemplo, agregue `--permission messages.send=deny` para rechazar el envío, o `--permission messages=readonly` para que el agente solo pueda leer mensajes. Una anulación solo puede endurecer: una que aflojaría el nivel del perfil, como `messages.send=allow` en un perfil de solo lectura, se rechaza al iniciar. Para permitir más, cambie los permisos del perfil. La configuración guardada, las restricciones de destinatarios y los límites horarios no cambian. Las claves de permiso se enumeran en la [guía de configuración](./configuration.md).
 
 ## Detener o revocar el acceso
 

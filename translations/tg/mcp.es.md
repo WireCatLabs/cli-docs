@@ -105,7 +105,7 @@ tg agent config set permissions.messages readonly
 tg agent config set permissions.messages.send allow
 ```
 
-Aquí `agent` es el nombre de un perfil. Las escrituras mantienen los límites de destinatarios, los límites por hora y el diario de envío (`tg personal sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`. Al eliminar a través de MCP, se eliminan los mensajes solo para usted, como máximo diez a la vez; Se rechazan los canales y supergrupos que no lo permiten. `--permission key=level` cambia un nivel solo para este proceso de servidor.
+Aquí `agent` es el nombre de un perfil. Las escrituras mantienen los límites de destinatarios, los límites por hora y el diario de envío (`tg personal sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`. Al eliminar a través de MCP, se eliminan los mensajes solo para usted, como máximo diez a la vez; un agente nunca elimina para todos, y se rechazan los canales y supergrupos que no permiten eliminar solo para uno mismo. `--permission key=level` endurece un nivel solo para este proceso de servidor; nunca lo afloja.
 
 ## Herramientas
 

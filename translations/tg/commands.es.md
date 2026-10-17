@@ -16,9 +16,8 @@ tg [profile] [options] <resource> <verb> [arguments]
 ```
 
 **La primera palabra es el perfil** si no es un comando: `tg work chats list` muestra los chats del
-perfil `work`. `TG_PROFILE` lo selecciona para toda la sesión de terminal, y `defaultProfile` en el
-archivo de configuración, de forma permanente. **No se supone ningún perfil**, ni siquiera el único: sin
-ninguno de ellos, un comando que usa una cuenta se detiene con el código de salida 2 y enumera los
+perfil `work`. `TG_PROFILE` lo selecciona para toda la sesión de terminal. **No se supone ningún perfil**, ni siquiera el único: sin
+ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida 2 y enumera los
 perfiles de este equipo. Los comandos que no usan ninguna cuenta (`--help`, `--version`, `commands`,
 `skill show`, `account list`, `config show`) funcionan sin perfil.
 
@@ -1016,7 +1015,7 @@ tg contacts link <person> <other>
 | Argumento | | Qué es |
 |---|---|---|
 | `person` | obligatorio | identificador, @username o parte del nombre. |
-| `other` | obligatorio | la misma persona en otro servicio de mensajería del archivo local, como <messenger>:<person>: max:Ana. |
+| `other` | obligatorio | la misma persona en otro servicio de mensajería del archivo local, como <messenger>:<person>: max:Ana; me: eres tú, como zoom:<id> me. |
 
 ### `tg contacts unlink`
 
@@ -1276,7 +1275,7 @@ tg messages list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | cuántos. |
 | `--cursor <cursor>` | sigue desde donde se detuvo la última página; lo da page.next. |
-| `--transcribe` | transcribe notas de voz pendientes mediante el servicio o un modelo local; puede tardar minutos. |
+| `--transcribe` | transcribe notas de voz pendientes mediante el servicio de mensajería cuando puede, si no con un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
 | `--mark-read` | también marca como leído hasta el mensaje más reciente mostrado; la otra persona lo ve. |
 
@@ -1831,7 +1830,7 @@ tg inbox [query] [options]
 | `--limit <n>` | máximo por chat, los más recientes. |
 | `--all` | incluye silenciados y archivados; por defecto los omite salvo menciones o respuestas a ti. |
 | `--kind <kinds>` | solo chats de estos tipos, separados por comas: dialog, group, channel, saved. |
-| `--transcribe` | transcribe notas de voz pendientes mediante el servicio o un modelo local; puede tardar minutos. |
+| `--transcribe` | transcribe notas de voz pendientes mediante el servicio de mensajería cuando puede, si no con un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
 | `--mark-read` | además marca como leído cada chat mostrado, hasta el mensaje más reciente mostrado; la otra persona lo ve. |
 | `--no-mark-read` | no lo hace, diga lo que diga el ajuste catch_up_marks_read. |
@@ -1853,7 +1852,7 @@ tg review [query] [options]
 | `--kind <kinds>` | solo chats de estos tipos, separados por comas: dialog, group, channel, saved. |
 | `--unanswered [duration]` | solo preguntas para ti o administradores sin respuesta y anteriores a este intervalo: 4h, 1d; 24h por defecto. |
 | `--all` | incluye silenciados y archivados; por defecto los omite salvo menciones o respuestas a ti. |
-| `--transcribe` | transcribe notas de voz pendientes mediante el servicio o un modelo local; puede tardar minutos. |
+| `--transcribe` | transcribe notas de voz pendientes mediante el servicio de mensajería cuando puede, si no con un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
 | `--new` | lo que cambió desde el último `review --new`, con un punto por chat; para tareas programadas. |
 | `--mark-read` | además marca como leído cada chat mostrado, hasta el mensaje más reciente mostrado; la otra persona lo ve. |
@@ -4387,7 +4386,7 @@ tg config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | obligatorio | número, true o false; para allow, lista como send,reaction; para un grupo, tg:work,max:Alice,email:me@x. |
 
 | Opción | Qué hace |
@@ -4501,7 +4500,7 @@ tg mcp [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 | `--http` | servir mediante HTTP en 127.0.0.1 para ChatGPT y Claude en el navegador, detrás de tu túnel. |
 | `--port <port>` | puerto local para --http (predeterminado 8765). |
 | `--public-url <url>` | dirección https del túnel que usan las aplicaciones del navegador, p. ej. https://<name>.ts.net. |
@@ -4517,7 +4516,7 @@ tg mcp config [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
 ### `tg mcp setup`
 
@@ -4536,7 +4535,7 @@ tg mcp setup <client> [options]
 | Opción | Qué hace |
 |---|---|
 | `--allow-writes` | confirma que este perfil ofrece herramientas de escritura. |
-| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
 ### `tg mcp doctor`
 
@@ -4548,7 +4547,7 @@ tg mcp doctor [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
 ## `tg bot`
 

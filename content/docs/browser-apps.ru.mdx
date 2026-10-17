@@ -38,7 +38,7 @@ description: "Подключите Telegram и MAX к AI-чату, наприм�
 
 Выберите свою ОС. <DocTerm term="terminal" lang="ru" label="Откройте два окна терминала" />. **Первый блок вставьте в окно 1**: он выдаст адрес вида `https://имя-компьютера.имя-сети.ts.net`. Если сначала появилась ссылка для разрешения доступа, выполните пункт 4 выше и вернитесь сюда.
 
-**Второй блок вставьте в окно 2** и, когда он спросит адрес, скопируйте выданный HTTPS-адрес без `/mcp`. Если адрес содержит `:8443`, сохраните эту часть. Оставьте оба окна открытыми. Эти команды разрешают отправку сообщений на время работы подключения; [как выбрать права](#выбрать-права-ассистента) описано ниже.
+**Второй блок вставьте в окно 2** и, когда он спросит адрес, скопируйте выданный HTTPS-адрес без `/mcp`. Если адрес содержит `:8443`, сохраните эту часть. Оставьте оба окна открытыми. Что может делать агент, решают права профиля; [как выбрать права](#выбрать-права-ассистента) описано ниже.
 
 <PlatformSetupTabs>
 
@@ -61,7 +61,7 @@ description: "Подключите Telegram и MAX к AI-чату, наприм�
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
+tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Для MAX замените `tg.cmd` на `max.cmd` в окне 2. Оба процесса запускайте в Windows.
@@ -84,7 +84,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Для MAX замените `tg` на `max` в окне 2.
@@ -106,7 +106,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Для MAX замените `tg` на `max` в окне 2. Не запускайте сервер мессенджера с `sudo`.
@@ -193,9 +193,11 @@ tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission mes
 
 ## Выбрать права агента
 
-Команды выше разрешают отправку этому процессу через `--permission messages.send=allow`.
-Сохранённые настройки не меняются. Приложение управляет собственными подтверждениями.
-Через MCP уровень `ask` не требует подтверждения сервера. Для подключения только на чтение выберите профиль с такими правами и уберите из команды запуска `--permission messages.send=allow`.
+Сервер может делать то, что разрешают сохранённые права профиля. Чтобы сузить их только для этого процесса, добавьте
+в команду запуска `--permission messages.send=deny` или `--permission messages=readonly`; в `tg` флаг только
+ужесточает, а переопределение, которое ослабило бы профиль, отклоняется при запуске. Чтобы разрешить отправку,
+измените права профиля. Приложение управляет собственными подтверждениями. Через MCP уровень `ask` не требует
+подтверждения сервера. Для подключения только на чтение выберите профиль с такими правами.
 
 Настройки подтверждения в приложении и проверки прав на сервере — разные ограничения. Если инструмент разрешён
 в приложении, а сервер разрешает отправку, следующий вызов может отправить без нового вопроса. Просите черновик,

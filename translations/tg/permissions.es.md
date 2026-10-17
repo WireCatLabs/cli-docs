@@ -57,8 +57,8 @@ Una lista de destinatarios limita a qué chats puede enviar el perfil. Un límit
 
 ## Un cambio temporal para un servidor MCP
 
-Añade `--permission messages.send=allow` al comando de inicio del servidor para permitir los envíos de ese
-proceso. Los ajustes guardados no cambian. Mediante MCP, `ask` no exige un formulario del servidor: la aplicación controla
+Añade `--permission messages.send=deny` al comando de inicio del servidor para rechazar los envíos de ese
+proceso. Los ajustes guardados no cambian. La opción solo endurece: una anulación que aflojaría el nivel del perfil se rechaza al iniciar. Mediante MCP, `ask` no exige un formulario del servidor: la aplicación controla
 sus propias aprobaciones y puede permitir una llamada sin volver a preguntar. Usa `deny` o `readonly` para rechazar los cambios. [Configuración en el navegador](./remote.md) explica la conexión completa.
 
 ## Límites y reglas detalladas

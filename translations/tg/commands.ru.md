@@ -15,7 +15,7 @@ title: "Команды"
 tg [profile] [options] <resource> <verb> [arguments]
 ```
 
-**Первое слово — профиль**, если это не команда: `tg work chats list` показывает чаты профиля `work`. `TG_PROFILE` задаёт профиль для всей сессии оболочки, а `defaultProfile` в файле настроек — постоянно. **Профиль не подразумевается**, даже если он единственный: без всего этого команда, которая использует аккаунт, останавливается с кодом выхода 2 и перечисляет профили на этом компьютере. Команды, которые не используют аккаунт (`--help`, `--version`, `commands`, `skill show`, `account list`, `config show`), работают без профиля.
+**Первое слово — профиль**, если это не команда: `tg work chats list` показывает чаты профиля `work`. `TG_PROFILE` задаёт профиль для всей сессии оболочки. **Профиль не подразумевается**, даже если он единственный: без того и другого команда, которая использует аккаунт, останавливается с кодом выхода 2 и перечисляет профили на этом компьютере. Команды, которые не используют аккаунт (`--help`, `--version`, `commands`, `skill show`, `account list`, `config show`), работают без профиля.
 
 ## Общие параметры
 
@@ -1011,7 +1011,7 @@ tg contacts link <person> <other>
 | Аргумент | | Описание |
 |---|---|---|
 | `person` | обязателен | идентификатор, @username или часть имени. |
-| `other` | обязателен | тот же человек в другом мессенджере базы, в виде <messenger>:<person> — max:Ana. |
+| `other` | обязателен | тот же человек в другом мессенджере базы, в виде <messenger>:<person> — max:Ana; me: это вы, в виде zoom:<id> me. |
 
 ### `tg contacts unlink`
 
@@ -1271,7 +1271,7 @@ tg messages list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | количество. |
 | `--cursor <cursor>` | продолжить с места, где остановилась предыдущая страница; его даёт page.next. |
-| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер или локальную модель; может занять минуты. |
+| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер, где он это умеет, иначе локальной моделью; может занять минуты. |
 | `--model <id>` | скачанная модель для --transcribe; список в `models audio list`. |
 | `--mark-read` | также отметить чат прочитанным до последнего показанного сообщения; собеседник видит это. |
 
@@ -1826,7 +1826,7 @@ tg inbox [query] [options]
 | `--limit <n>` | максимум на чат, самые новые. |
 | `--all` | включить чаты без уведомлений и архив; иначе только упоминания и ответы вам. |
 | `--kind <kinds>` | только чаты этих типов через запятую: dialog, group, channel, saved. |
-| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер или локальную модель; может занять минуты. |
+| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер, где он это умеет, иначе локальной моделью; может занять минуты. |
 | `--model <id>` | скачанная модель для --transcribe; список в `models audio list`. |
 | `--mark-read` | также отметить каждый показанный чат прочитанным до последнего показанного сообщения; собеседник это видит. |
 | `--no-mark-read` | не отмечать, независимо от настройки catch_up_marks_read. |
@@ -1848,7 +1848,7 @@ tg review [query] [options]
 | `--kind <kinds>` | только чаты этих типов через запятую: dialog, group, channel, saved. |
 | `--unanswered [duration]` | вопросы вам или администраторам без ответа старше срока: 4h, 1d; по умолчанию 24h. |
 | `--all` | включить чаты без уведомлений и архив; иначе только упоминания и ответы вам. |
-| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер или локальную модель; может занять минуты. |
+| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер, где он это умеет, иначе локальной моделью; может занять минуты. |
 | `--model <id>` | скачанная модель для --transcribe; список в `models audio list`. |
 | `--new` | изменения после прошлого `review --new`, с позицией для каждого чата; для запусков по расписанию. |
 | `--mark-read` | также отметить каждый показанный чат прочитанным до последнего показанного сообщения; собеседник это видит. |
@@ -4382,7 +4382,7 @@ tg config set <setting> <value> [options]
 
 | Аргумент | | Описание |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | обязательный | число, true, false или список allow, например send,reaction; для группы — tg:work,max:Alice,email:me@x. |
 
 | Параметр | Назначение |
@@ -4496,7 +4496,7 @@ tg mcp [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
+| `--permission <key=level>` | сделать разрешение строже только для этого сервера, например messages.send=deny; профиль оно никогда не ослабляет; повторите для нескольких ключей. |
 | `--http` | обслуживать через HTTP на 127.0.0.1 для ChatGPT и Claude в браузере, за вашим туннелем. |
 | `--port <port>` | локальный порт для --http (по умолчанию 8765). |
 | `--public-url <url>` | https-адрес туннеля для браузерных приложений, например https://<name>.ts.net. |
@@ -4512,7 +4512,7 @@ tg mcp config [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
+| `--permission <key=level>` | сделать разрешение строже только для этого сервера, например messages.send=deny; профиль оно никогда не ослабляет; повторите для нескольких ключей. |
 
 ### `tg mcp setup`
 
@@ -4531,7 +4531,7 @@ tg mcp setup <client> [options]
 | Параметр | Назначение |
 |---|---|
 | `--allow-writes` | подтвердить, что профиль предоставляет инструменты изменения данных. |
-| `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
+| `--permission <key=level>` | сделать разрешение строже только для этого сервера, например messages.send=deny; профиль оно никогда не ослабляет; повторите для нескольких ключей. |
 
 ### `tg mcp doctor`
 
@@ -4543,7 +4543,7 @@ tg mcp doctor [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
+| `--permission <key=level>` | сделать разрешение строже только для этого сервера, например messages.send=deny; профиль оно никогда не ослабляет; повторите для нескольких ключей. |
 
 ## `tg bot`
 

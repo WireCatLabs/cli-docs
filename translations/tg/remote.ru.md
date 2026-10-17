@@ -58,7 +58,7 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ tg personal 
 
 Держите два окна терминала открытыми. Первый управляет туннелем. Скопируйте базовый HTTPS-адрес, который он печатает, во второе окно, когда его спросят. Базовый адресом является адрес без `/mcp` или любого другого пути. Сохраните в нем явный общедоступный порт, например `:8443`.
 
-Сервер прослушивает `127.0.0.1:8765` и печатает одноразовый код доступа. Ему никогда не нужны права администратора; они могут понадобиться только туннелю. Приведенные ниже команды позволяют отправлять только этот процесс сервера с помощью `--permission messages.send=allow`; см. [разрешения для этого серверного процесса](#permissions-for-this-server-process).
+Сервер прослушивает `127.0.0.1:8765` и печатает одноразовый код доступа. Ему никогда не нужны права администратора; они могут понадобиться только туннелю. Что может делать агент, решают разрешения профиля; чтобы сузить их только для этого процесса сервера, см. [разрешения для этого серверного процесса](#permissions-for-this-server-process).
 
 ### Windows (PowerShell)
 
@@ -74,7 +74,7 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ tg personal 
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Paste the HTTPS origin printed by Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
+tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Запустите оба процесса в самой Windows. WSL — это отдельная среда: туннель Windows, указывающий на адрес обратной связи Windows, может не достигать сервера внутри WSL.
@@ -92,7 +92,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Терминал)
@@ -108,7 +108,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## Запустить MAX и Telegram вместе
@@ -150,7 +150,7 @@ tg personal mcp --http --port 8765 --public-url https://mcp.example.com
 
 Сервер не может видеть, спрашивало ли вас приложение перед вызовом. Если приложение всегда разрешает использование инструмента, следующий вызов может пройти без нового вопроса.
 
-Повторите `--permission key=level`, чтобы изменить разрешения только для этого серверного процесса. Уровни: `deny`, `readonly`, `ask` и `allow`. Например, добавьте `--permission messages.send=allow`, чтобы разрешить отправку из профиля, доступного только для чтения. `--permission messages=allow` заменяет сохраненные разрешения для всего ресурса сообщений; удаление разрешено отдельно с помощью `--permission messages.delete=allow`. Сохраненная конфигурация, ограничения получателей и почасовые лимиты не изменяются. Чтобы отменить отказ на чтение, назовите его ресурс или команду с уровнем `allow`. Ключи разрешений перечислены в [руководстве по настройке](./configuration.md).
+Повторите `--permission key=level`, чтобы ужесточить разрешения только для этого серверного процесса. Уровни: `deny`, `readonly`, `ask` и `allow`. Например, добавьте `--permission messages.send=deny`, чтобы запретить отправку, или `--permission messages=readonly`, чтобы агент мог только читать сообщения. Переопределение может только ужесточать: то, которое ослабило бы уровень профиля, например `messages.send=allow` для профиля только для чтения, отклоняется при запуске. Чтобы разрешить больше, измените разрешения профиля. Сохраненная конфигурация, ограничения получателей и почасовые лимиты не изменяются. Ключи разрешений перечислены в [руководстве по настройке](./configuration.md).
 
 ## Остановка и отзыв доступа
 
