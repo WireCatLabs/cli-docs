@@ -28,6 +28,8 @@ memo actions list status:proposed
 Abre cada fuente, luego confirma lo que es correcto y deja o rechaza el resto. El resto de esta página
 explica cómo.
 
+Para un lote de hechos y tareas con citas de reuniones, usa la [revisión de conclusiones de reuniones](#meeting-findings) de abajo.
+
 **Qué espera tu decisión.** Una acción propuesta siempre espera aprobación o rechazo. Un recuerdo o hecho espera cuando lo añade un agente: mediante [MCP](./mcp.md) o `memo` en su terminal (con `AI_AGENT` o `CLAUDECODE`), que registra al agente como autor. Lo que añades personalmente se confirma al instante; en un terminal de agente, `--as-owner` lo atribuye a ti. El agente también puede pasar `--as-owner`; indícale que no lo haga.
 
 ## Recuerdos
@@ -65,6 +67,31 @@ Un hecho que añades con `memo` se acepta al instante. El de un agente queda `pr
 Una decisión puede sustituir a otra anterior: añade `--supersedes fact:2`. Cuando aceptas la nueva
 decisión, la antigua deja de ser válida. Cuando una decisión ya no es válida y nada la sustituyó,
 ejecuta `memo facts reverse fact:4`.
+
+## Conclusiones de reuniones
+
+Tras leer las fuentes de una reunión, pide al agente que proponga las decisiones y tareas siguientes que quieras conservar. Revisa los pasajes citados antes de crear registros. Una coincidencia del nombre del proyecto no establece una relación: la reunión ya debe tener un vínculo confirmado con el proyecto.
+
+El agente prepara un lote JSON con `memo meetings actions add`. Cada propuesta indica un ID, un proyecto y referencias exactas a pasajes con las huellas que devuelve `zm meetings evidence`. Los hechos conservan su tipo, como `decision` o `promise`; las tareas distinguen un compromiso explícito de un posible seguimiento inferido. Las fechas y personas asignadas desconocidas quedan sin completar; los valores indicados necesitan sus propios pasajes de apoyo.
+
+```sh
+memo meetings actions add findings.json --provider zoom --account me@example.com
+memo meetings actions list status:proposed --provider zoom --account me@example.com
+memo meetings actions show 5 --provider zoom --account me@example.com
+```
+
+El archivo contiene `schema_version: 1`, una `key` estable, `extractor` y `findings`. Cada propuesta tiene `id`, `kind`, `project` y `evidence` (objetos con `reference` y `fingerprint`). Un hecho añade `type` y `statement`. Una tarea añade `type` (`bug`, `chore` o `feature`), `title`, `reason` y `commitment` (`explicit` o `inferred`). El campo opcional `due_at` es una fecha y hora ISO con zona horaria y necesita `due_evidence`; el opcional `assignee` es una referencia `person:<id>` y necesita `assignee_evidence`, ambos con referencias a pasajes de apoyo. `-` lee JSON de la entrada estándar. El lote admite hasta 16 propuestas y 65.536 bytes UTF-8.
+
+Preparar el lote no crea hechos ni tareas. La vista previa muestra decisiones anteriores sobre propuestas sin cambios. Abre las fuentes y confirma personalmente los ID que quieras conservar, o rechaza el lote. Sustituye el hash siguiente por la huella exacta de la vista previa:
+
+```sh
+memo meetings actions confirm 5 decision followup --fingerprint <hash> --provider zoom --account me@example.com
+memo meetings actions reject 5 --fingerprint <hash> --provider zoom --account me@example.com
+```
+
+La confirmación crea juntos los hechos y tareas de proyecto seleccionados y rechaza las demás propuestas nuevas. No envía nada. Una terminal identificada como agente no puede confirmar ni rechazar estos lotes; el propietario ejecuta esas órdenes directamente. La vía general `memo actions confirm` rechaza las conclusiones de reuniones.
+
+Repetir la misma clave y contenido devuelve el lote existente. Repetir una revisión devuelve su resultado. Un lote posterior reutiliza las referencias aceptadas y mantiene rechazadas las propuestas rechazadas sin cambios; omitir una propuesta aceptada no la revoca. Esto evita duplicados por repeticiones exactas, no por propuestas redactadas de otra forma ni por registros añadidos por otra vía. Los cambios en fuentes o vínculos de proyecto invalidan una revisión pendiente: pide otra vista previa. Las revisiones terminadas conservan sus citas originales tras nuevas versiones de la transcripción.
 
 ## Acciones propuestas
 
