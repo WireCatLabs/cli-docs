@@ -1,6 +1,6 @@
 ---
-title: "Teléfonos, enlaces y nombres"
-description: "Encuentra todos los mensajes con un número de teléfono, una dirección de correo, un enlace, un documento de Google o el nombre de alguien que conoces, se haya escrito como se haya escrito, y registra quién es."
+title: "Teléfonos, enlaces, nombres y direcciones"
+description: "Encuentra todos los mensajes con un número de teléfono, una dirección de correo, un enlace, un documento de Google, el nombre de una persona o una dirección postal, se haya escrito como se haya escrito, y registra qué es."
 ---
 
 Encuentra dónde alguien envió un número de teléfono, todos los enlaces a un sitio, todos los chats que mencionan un
@@ -11,7 +11,7 @@ Necesitas el historial de los chats que quieres buscar guardado en tu ordenador.
 ## Qué es una mención
 
 Una **mención** es un valor que las herramientas encontraron en un mensaje: un número de teléfono, una dirección de
-correo, un enlace, un enlace a un documento de Google o el nombre de alguien que conoces. Las herramientas lo buscan en el texto del mensaje, en el texto de sus archivos y en las transcripciones de
+correo, un enlace, un enlace a un documento de Google, el nombre de una persona o una dirección postal. Las herramientas lo buscan en el texto del mensaje, en el texto de sus archivos y en las transcripciones de
 sus notas de voz. También leen tus notas, documentos y correo guardados; en ellos se busca con
 [memo](#buscar-en-el-correo).
 
@@ -106,7 +106,7 @@ tg personal mentions list domain:example.com status:found
 tg personal mentions show 12
 ```
 
-`list` da a cada mención un ID, la fecha, el tipo (`phone`, `email`, `url`, `document`, `person-name`), el valor, su
+`list` da a cada mención un ID, la fecha, el tipo (`phone`, `email`, `url`, `document`, `person-name`, `place`), el valor, su
 estado y el mensaje. `show` añade el texto alrededor y en cuántos otros lugares aparece el mismo valor. `list` solo
 muestra menciones en mensajes; las menciones en notas, documentos y correo se pueden buscar, pero aún no se listan.
 
@@ -148,6 +148,7 @@ tg personal mentions reject 14
 - `reject 14` descarta un valor que no es una mención real, como un número de pedido que parece un teléfono.
 - Un enlace a un documento se confirma sin propietario cuando el documento está en el almacén local: `confirm 15`.
 - Un enlace `t.me` a un chat o a una persona de tu historial se vincula a ese chat o cuenta sin ti.
+- Una dirección postal se confirma sin propietario: `confirm 40` la guarda como lugar. Consulta [Direcciones postales](#direcciones-postales).
 
 Una decisión se aplica al valor, no a un mensaje. Confirma un número una vez y todos los mensajes que lo contienen
 quedan vinculados a esa persona, también los que lleguen después. Recházalo y queda descartado en todas partes. Un
@@ -186,12 +187,41 @@ un chat de equipo, una Olga suele ser una sola persona.
 escribió exactamente una persona con ese nombre. `mentions:"person:7"` encuentra los mensajes que nombran a la persona
 7 o contienen su número o dirección confirmados.
 
+También se encuentran nombres de personas que las herramientas no conocen, y esperan a que los revises. Un nombre
+así es un nombre de pila común en cualquier caso gramatical («Ольге», «Sarah») o un patronímico con el nombre delante
+(«Анзор Мамедович»), junto con el apellido o el segundo nombre que lo acompañe («Ольга Смирнова», «John Smith»). Un
+nombre que también es una palabra corriente, como «Вера», «Rosa» o «Grace», solo cuenta junto a un segundo nombre.
+Las reglas nunca vinculan estos nombres; `show` y `confirm` dicen quién es.
+
 Cuando aparezcan personas nuevas en tu historial, vuelve a leer los nombres:
 
 ```sh
 tg personal mentions rebuild person-name
 max personal mentions rebuild person-name
 ```
+
+## Direcciones postales
+
+Una dirección postal se reconoce por su forma: una palabra de calle junto a un nombre y un número. Se leen direcciones
+de Rusia, del resto de Europa, del Reino Unido y de Estados Unidos: «ул. Ленина, д. 5», «Calle Mayor, 12», «C/ Colón 5»,
+«12 rue de la Paix», «Hauptstraße 5», «221B Baker Street». Un número solo, un precio o un código postal nunca son una
+dirección.
+
+La mención toma también el resto de la dirección: el piso o la oficina, el código postal, la ciudad, la región y el
+país, también de las líneas siguientes de una firma de correo. La coincidencia usa solo la calle y el número, así que
+«C/ Colón 5» y «Calle Colón, 5, 46004 Valencia» son una dirección. Dos calles con el mismo nombre en dos ciudades
+también son una, por ahora.
+
+```sh
+tg personal mentions list kind:place
+tg personal mentions confirm 40
+tg personal mentions places
+```
+
+`confirm` guarda la dirección como un lugar propio, con todo lo que estaba escrito. Todas las menciones de la misma
+dirección lo siguen, y las nuevas se vinculan sin ti. `mentions places` lista los lugares, los más mencionados
+primero. La mayoría de las direcciones están en firmas de correo; [memo](./email.mdx) aún no lista las menciones del
+correo, así que se encuentran y se pueden buscar, pero solo se revisan desde los mensajes.
 
 ## Mensajes guardados antes
 
@@ -212,11 +242,11 @@ registros, mensajes de error ni registros de ejecución. Nunca se abre un enlace
 
 ## Lo que aún no existe
 
-- Nombres de personas que las herramientas aún no conocen.
 - Una lista de las menciones en [notas y documentos](./memo/notes.md) y en el [correo](./email.mdx): se encuentran y
   se pueden buscar, pero `mentions list` no las muestra.
 - Vincular un enlace a un sitio web corriente con algo. Ese enlace solo se puede descartar.
-- Direcciones postales.
+- Lugares que no son direcciones postales: una ciudad sola, el nombre de un edificio, un lugar descrito con palabras.
+- Direcciones fuera de Europa, el Reino Unido y Estados Unidos: puede que se encuentren solo en parte.
 
 Cuando sepas dónde apareció un número, un sitio o un nombre, [recupera el contexto con esa persona](./people.md) antes de
 responder.
