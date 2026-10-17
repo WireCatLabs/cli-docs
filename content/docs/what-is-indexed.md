@@ -82,7 +82,7 @@ max personal search messages 'transcript:invoice'
 
 - A speech model runs on your computer. The recording does not leave it. Download a model once, with `models audio download`; no model is downloaded on its own.
 - Models: `parakeet-v3` covers 25 languages, `gigaam-v3` is best for Russian.
-- `tg` can also use Telegram's own transcription where your account has it (`transcribeWith`: `auto`, `messenger` or `local`). `max` always uses the model on your computer.
+- `tg` can also use Telegram's own transcription where your account has it (`transcribe_with`: `auto`, `messenger` or `local`). `max` always uses the model on your computer.
 - Local transcription reads a complete Ogg Opus recording. Longer recordings need more memory and time.
 - Transcribing is not instant. `--transcribe` on `messages list` transcribes the voice notes it shows that have no text yet.
 

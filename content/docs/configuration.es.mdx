@@ -25,7 +25,7 @@ La herramienta crea el archivo con valores habituales la primera vez que un coma
 tg config show
 tg personal config set limit 50
 tg work config set limit 10
-tg config set sendsPerHour 10 --defaults
+tg config set sends_per_hour 10 --defaults
 tg personal config unset limit
 ```
 
@@ -39,7 +39,7 @@ Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="
 
 ```json
 {
-  "defaults": { "limit": 20, "sendsPerHour": 30 },
+  "defaults": { "limit": 20, "sends_per_hour": 30 },
   "profiles": { "work": { "limit": 50 } }
 }
 ```
@@ -51,13 +51,13 @@ Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="
 
 ```json
 {
-  "defaults": { "limit": 20, "keepRunsForDays": 14, "updateCheck": true },
+  "defaults": { "limit": 20, "keep_runs_for_days": 14, "update_check": true },
   "profiles": {
     "personal": { "limit": 50, "color": true },
     "work": { "limit": 10, "record": true, "permissions": { "messages": "readonly" } }
   },
-  "personal": { "defaults": { "sendsPerHour": 30 } },
-  "bot": { "profiles": { "shop": { "sendsPerHour": 200 } } }
+  "personal": { "defaults": { "sends_per_hour": 30 } },
+  "bot": { "profiles": { "shop": { "sends_per_hour": 200 } } }
 }
 ```
 
@@ -69,7 +69,7 @@ Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="
 
 ## Todos los ajustes de Telegram y MAX
 
-Las dos herramientas comparten la mayoría de los ajustes, como `limit`, `sendsPerHour`, `record` y `permissions`. Algunos existen solo en una: por ejemplo, `proxy` en Telegram y `serve` en MAX. Cada servicio de mensajería documenta los suyos:
+Las dos herramientas comparten la mayoría de los ajustes, como `limit`, `sends_per_hour`, `record` y `permissions`. Algunos existen solo en una: por ejemplo, `proxy` en Telegram y `serve` en MAX. Cada servicio de mensajería documenta los suyos:
 
 - **Telegram:** [guía de configuración de Telegram](./tg/configuration.md) · [todos los ajustes de Telegram, sus valores predeterminados y variables de entorno](./tg/configuration-reference.md).
 - **MAX:** [guía de configuración de MAX](./max/configuration.md) · [todos los ajustes de MAX, sus valores predeterminados y variables de entorno](./max/configuration-reference.md).

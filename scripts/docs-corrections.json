@@ -2078,5 +2078,140 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "configuration-reference",
+    "reason": "cli-core reads the store-wide stemmer settings as search_stemmers.cyrillic and search_stemmers.latin (src/cli/store-settings.ts); the camelCase name is refused.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| `searchStemmers.cyrillic`, `searchStemmers.latin` |",
+          "after": "| `search_stemmers.cyrillic`, `search_stemmers.latin` |"
+        },
+        {
+          "before": "`searchStemmers.cyrillic` (`russian`",
+          "after": "`search_stemmers.cyrillic` (`russian`"
+        },
+        {
+          "before": "`searchStemmers.latin` (`english`",
+          "after": "`search_stemmers.latin` (`english`"
+        },
+        {
+          "before": "| `searchStemmers.cyrillic` | `russian`, `none` |",
+          "after": "| `search_stemmers.cyrillic` | `russian`, `none` |"
+        },
+        {
+          "before": "| `searchStemmers.latin` | `english`, `spanish`,",
+          "after": "| `search_stemmers.latin` | `english`, `spanish`,"
+        }
+      ],
+      "es": [
+        {
+          "before": "| `searchStemmers.cyrillic`, `searchStemmers.latin` |",
+          "after": "| `search_stemmers.cyrillic`, `search_stemmers.latin` |"
+        },
+        {
+          "before": "`searchStemmers.cyrillic` (`russian`",
+          "after": "`search_stemmers.cyrillic` (`russian`"
+        },
+        {
+          "before": "`searchStemmers.latin` (`english`",
+          "after": "`search_stemmers.latin` (`english`"
+        },
+        {
+          "before": "| `searchStemmers.cyrillic` | `russian`, `none` |",
+          "after": "| `search_stemmers.cyrillic` | `russian`, `none` |"
+        },
+        {
+          "before": "| `searchStemmers.latin` | `english`, `spanish`,",
+          "after": "| `search_stemmers.latin` | `english`, `spanish`,"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `searchStemmers.cyrillic`, `searchStemmers.latin` |",
+          "after": "| `search_stemmers.cyrillic`, `search_stemmers.latin` |"
+        },
+        {
+          "before": "`searchStemmers.cyrillic` (`russian`",
+          "after": "`search_stemmers.cyrillic` (`russian`"
+        },
+        {
+          "before": "`searchStemmers.latin` (`english`",
+          "after": "`search_stemmers.latin` (`english`"
+        },
+        {
+          "before": "| `searchStemmers.cyrillic` | `russian`, `none` |",
+          "after": "| `search_stemmers.cyrillic` | `russian`, `none` |"
+        },
+        {
+          "before": "| `searchStemmers.latin` | `english`, `spanish`,",
+          "after": "| `search_stemmers.latin` | `english`, `spanish`,"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "archive",
+    "reason": "cli-core reads the store-wide stemmer settings as search_stemmers.cyrillic and search_stemmers.latin (src/cli/store-settings.ts); the camelCase name is refused.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg config set searchStemmers.cyrillic russian`",
+          "after": "`tg config set search_stemmers.cyrillic russian`"
+        },
+        {
+          "before": "`searchStemmers.latin english,spanish`",
+          "after": "`search_stemmers.latin english,spanish`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg config set searchStemmers.cyrillic russian`",
+          "after": "`tg config set search_stemmers.cyrillic russian`"
+        },
+        {
+          "before": "`searchStemmers.latin english,spanish`",
+          "after": "`search_stemmers.latin english,spanish`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg config set searchStemmers.cyrillic russian`",
+          "after": "`tg config set search_stemmers.cyrillic russian`"
+        },
+        {
+          "before": "`searchStemmers.latin english,spanish`",
+          "after": "`search_stemmers.latin english,spanish`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "commands",
+    "reason": "default_profile is gone: cli-core refuses to set it and a command always names its profile, so the defaultProfile setting no longer exists.",
+    "replacements": {
+      "en": [
+        {
+          "before": ", and `defaultProfile` in the settings file sets it permanently (`max config set defaultProfile personal`).",
+          "after": "."
+        }
+      ],
+      "es": [
+        {
+          "before": ", y `defaultProfile` en el archivo de configuración lo fija de forma permanente (`max config set defaultProfile personal`).",
+          "after": "."
+        }
+      ],
+      "ru": [
+        {
+          "before": ", а `defaultProfile` в файле настроек — насовсем (`max config set defaultProfile personal`).",
+          "after": "."
+        }
+      ]
+    }
   }
 ]

@@ -220,7 +220,7 @@ tg nunca elige una cuenta por sí mismo: cada comando que usa tu cuenta empieza 
 
 **Con tu agente:** dile el nombre del perfil. Si configuraste tg antes sin nombrar un perfil, se llama `default`.
 
-**A mano:** escribe el nombre primero (`tg default chats list`) o fíjalo una vez: `export TG_PROFILE=default` en el perfil de tu shell, o `tg config set defaultProfile default`. Si añadiste tg a una aplicación MCP, vuelve a crear esa entrada con `tg default mcp config`. Cualquier otra cosa que inicie `tg serve` o `tg mcp` por ti, como una tarea programada, también necesita el perfil en su comando: `tg default serve`.
+**A mano:** escribe el nombre primero (`tg default chats list`) o fíjalo una vez: `export TG_PROFILE=default` en el perfil de tu shell. Si añadiste tg a una aplicación MCP, vuelve a crear esa entrada con `tg default mcp config`. Cualquier otra cosa que inicie `tg serve` o `tg mcp` por ti, como una tarea programada, también necesita el perfil en su comando: `tg default serve`.
 
 ### Tras actualizar, tg se detiene y nombra dos archivos de mensajes
 
