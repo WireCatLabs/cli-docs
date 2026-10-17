@@ -89,8 +89,17 @@ comparte el código de error sin datos privados, no respuestas del SDK ni conten
 Drive conserva la base anterior si la reconstrucción dejaría fuera etiquetas, notas, recuerdos,
 hechos o vínculos. Apunta `MESSAGING_STORE` al archivo anterior para seguir usando esas anotaciones.
 Usa la misma ruta en las demás herramientas WireCat si deben buscar esos datos. No borres el archivo
-anterior ni reinicies su punto de control para saltarte esta protección. No hay transferencia
-automática de anotaciones entre archivos de base de datos.
+anterior ni reinicies su punto de control para saltarte esta protección. Para copiar el contexto, ejecuta `drive personal status --json`: `store.checkpoint` muestra la
+base anterior. Sigue [la receta de copia](./recipes.md#keep-notes-when-changing-databases).
+`store check` previsualiza recuentos y conflictos sin cambiar archivos. `store import` exige su
+fingerprint y solo guarda el punto de control después de confirmar la copia. Conserva el original.
+Los proyectos/tareas ausentes necesitan correspondencias explícitas; resuelve primero las diferencias
+de contenido, identidades o alias. Una copia interrumpida y sin cambios se reintenta sin duplicar notas.
+
+Si el esquema de origen es anterior a la versión 2, actualiza primero una copia separada; la
+transferencia no migra el original. Puedes indicar esa copia si sus hashes coinciden con la caché del
+perfil. Los grafos grandes se rechazan sin copia parcial. Detén otros escritores del origen durante
+el cambio: esta operación no mantiene sincronizadas dos bases.
 
 Si el error indica que falta una copia, ejecuta `drive personal sync --rescan` para volver
 a descargar el árbol seleccionado. Esto no omite la protección de las anotaciones.

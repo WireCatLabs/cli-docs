@@ -188,7 +188,10 @@ exporta solo los documentos necesarios para otra herramienta.
 La base predeterminada se comparte con las demás herramientas WireCat. `DRIVE_STATE_DIR` controla copias
 y puntos de sincronización; `MESSAGING_STORE` elige la base. `DRIVE_CACHE_DIR` no reubica las copias.
 Consulta [almacenamiento](./configuration.md). Texto y vectores siguen ocupando disco aunque no
-exportes; conservar búsqueda requiere almacenar contenido localmente.
+exportes; conservar búsqueda requiere almacenar contenido localmente. Al cambiar de base,
+[previsualiza y copia el contexto](./recipes.md#keep-notes-when-changing-databases) en lugar de borrar el
+archivo anterior. Se conservan relaciones estructuradas y anotaciones; las referencias dentro de
+texto libre no se reescriben.
 
 <a id="add-local-context"></a>
 
