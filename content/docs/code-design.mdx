@@ -27,7 +27,8 @@ The page describes the code as read on 14 October 2026, at
 [cli-core a3b5b3c](https://github.com/WireCatLabs/cli-core/tree/a3b5b3c47792d5e2df6529642e907ee32783e66a),
 [max-cli 0536988](https://github.com/WireCatLabs/max-cli/tree/0536988bb3a9ae5aed40cdd12e572a72dd2564a1) and
 [tg-cli faea191](https://github.com/WireCatLabs/tg-cli/tree/faea191a76ea40f3159e865cf5c17f99163c4104).
-Counts of files and lines are from those commits.
+Counts of files and lines are from those commits. The store, the tg adapter and the limits at the end were
+read again on 17 October 2026, at [cli-core 9be2271](https://github.com/WireCatLabs/cli-core/tree/9be227198793fabf506ee946b10aaad94d84d519), [tg-cli 868b433](https://github.com/WireCatLabs/tg-cli/tree/868b43356065170eeb923c648082e8ee03b0f349) and [max-cli 606bba4](https://github.com/WireCatLabs/max-cli/tree/606bba4a4fadd989e1b9300f273789487b8a9063).
 
 ## Packages
 
@@ -90,7 +91,7 @@ graph TB
 | --- | --- | --- | --- |
 | `domain/` | Messenger-neutral types and values: `Chat`, `Message`, `Person`, locators, formatting spans, the fact, memory and task value sets. No behaviour that needs a network or a file. It sits almost at the bottom: it reads two types from `search/` and the task kinds from `tasks/`. | 29 files | `cli/`, any messenger library or adapter. |
 | `ports/` | The contract every messenger implements (`messenger.ts`), what a service reads of the messenger (`traits.ts`) and who the app is (`app.ts`). | 3 files | Same as above. |
-| `store/` | The local archive: one `MessageStore` interface, opened by `openStore`, over SQLite modules, migrations and the search indexes. | 101 files | Nothing outside `store/` may import a module under `store/sqlite/`. |
+| `store/` | The local archive: `MessageStore`, opened by `openStore`, is 31 areas such as `messages`, `chats`, `people` and `mail`, each its own file built on first use, over SQLite table modules, migrations and the search indexes. | 150 files (17 October) | A command, a service, a send or an MCP tool may not import a table module under `store/sqlite/`; it goes through `store.ts`. |
 | `services/` | Use cases: messages, chats, people, search, embeddings, mentions, moderation. | 87 files | Commander, anything under `cli/`, a SQLite module. The same holds for `replies/`, `attachments/`, `moderation/`, `models/` and `analysis/`. |
 | `sends/` | Every write: the send guard, operation ids, the send journal, uploads. | 14 files | Same as services. |
 | `cli/`, `mcp/` | Presentation: commands, the JSON envelope, settings and profiles; MCP tools over the same services. | 168 + 51 files | A SQLite module. |
@@ -122,8 +123,10 @@ graph LR
 ```
 
 **tg** uses [mtcute](https://github.com/mtcute/mtcute). Only `src/telegram/` may import it, and commands
-may not reach its mapping or error translation directly. The adapter is one class in
-[telegram/adapter.ts](https://github.com/WireCatLabs/tg-cli/blob/faea191a76ea40f3159e865cf5c17f99163c4104/src/telegram/adapter.ts).
+may not reach its mapping or error translation directly. The class in
+[telegram/adapter.ts](https://github.com/WireCatLabs/tg-cli/blob/868b43356065170eeb923c648082e8ee03b0f349/src/telegram/adapter.ts)
+delegates each port method to a feature module beside it: `messages.ts`, `chats.ts`, `groups.ts`, `topics.ts`,
+`polls.ts` and six more, which share one context from `feature.ts`.
 
 ## How a module talks to the rest
 
@@ -265,11 +268,12 @@ rule or a test keeps it that way.
 | A meeting provider | Small | Implement `MeetingSource` in the provider's package. |
 | A new messenger | Moderate | Implement `MessengerCore` and the groups the messenger has, and write a descriptor. The commands, MCP tools, store, search and send guard come with the core. |
 | A new front end beside the CLI and MCP | Moderate | Build `ServiceDeps`, call `servicesFor(deps)` and render. Services import nothing from `cli/`; the front end writes its own way to connect and resolve settings. |
-| The storage engine | Hard | Reimplement `MessageStore`: about 140 methods, including full-text, stemming and vector search. The boundary holds, but the interface is one wide surface. |
+| The storage engine | Hard | Reimplement every area of `MessageStore`, including full-text, stemming and vector search. Callers depend on the area interfaces, but all 31 areas are built on the same SQLite context, so the engine changes in all of them at once. |
 
 ## Keeping the shape
 
-Most of the design is checked by machines. Lint and type checks, and in most tools the command lint, run on every
+The rules themselves, with their ids, are in the [WireCat CLI standards handbook](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/README.md); this section
+shows how cli-core and the tools check them. Most of the design is checked by machines. Lint and type checks, and in most tools the command lint, run on every
 pull request, so a change that breaks them fails before review. Parity, the command contracts and the generated-file
 tests run in full validation on each merge to `main` ([CI rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/ci.md)), so a break there shows up right after the merge,
 not at the next release.
@@ -299,9 +303,9 @@ Conventions for new code:
    and search services do: it is the easier one to test and to move. One that also needs the messenger, the
    send guard or lazy opening takes `ServiceDeps`. Of the 87 service files, 25 take only the store and 36 take
    `ServiceDeps`. The command and the MCP tool both call the service; a command file holds no business logic.
-3. **A new store query** is a module under `store/sqlite/`, exposed only through `store.ts`. A service reads
-   through `accountStore(deps)`; a read across accounts on purpose names itself with
-   `crossAccount(deps, reason)`.
+3. **A new kind of record** is a new store area: its own file under `store/`, built on first use, with its SQL in
+   table modules under `store/sqlite/` ([WC-STORE-2](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md)). A service of one account reads through
+   `accountStore(deps)`; a read across accounts on purpose names itself with `crossAccount(deps, reason)`.
 4. **Every write** goes through the send guard: checked before, journaled after, with an operation id.
 5. **A provider type** stops at the adapter.
 6. **A breaking change to the core** is listed under "Changed — may break callers" in its changelog, with
@@ -311,14 +315,38 @@ Conventions for new code:
 
 ## Limits of the current design
 
-- **The store is one wide interface.** `MessageStore` has about 140 methods over one `openStore`, and
-  `store.ts` is 2,042 lines. Most features touch it. A split is useful only along a real seam: resources
-  that open and close separately.
+The [handbook](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/README.md) states the rules; this list says where the code stands against them on 17 October
+2026.
+
+- **The store is split into areas, but one engine runs them all.** `MessageStore` is 31 areas, such as `messages`,
+  `chats`, `people`, `mail` and `meetings`. Each is built on first use from its own file, so a new kind of
+  record becomes a new area instead of more methods on one interface ([WC-STORE-2](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md)).
+  [`store.ts`](https://github.com/WireCatLabs/cli-core/blob/9be227198793fabf506ee946b10aaad94d84d519/src/store/store.ts) only wires the areas: it is 301 lines, and lint caps it at 438 so it does
+  not grow back. Every area runs on the same SQLite context, so changing the storage engine still means changing
+  all of them.
+- **Binding a service to one account is half done.** `store.forAccount(key)` binds the 12 areas that hold one
+  account's data, so a call through it cannot reach another account's row. Five service files work through the
+  bound store; 24 still pair `deps.store()` with `deps.account()` ([WC-STORE-3](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md)).
 - **The CLI-only parts of `Messenger` take a commander `Command`.** `connect`, `accountOf`, `guard` and
   `diagnose` read the command's options themselves. Services never see them, but a second front end would
   write its own versions.
-- **The tg adapter is one large class**: 2,312 lines and about 110 methods, readable per method but the
-  place every Telegram feature lands.
+- **The tg adapter is a thin class over feature modules.** [telegram/adapter.ts](https://github.com/WireCatLabs/tg-cli/blob/868b43356065170eeb923c648082e8ee03b0f349/src/telegram/adapter.ts)
+  is 625 lines: each port method is one line that calls one of 11 feature modules, so a new Telegram feature
+  lands in its module, not in the class. Error hints name a check, and tg's commands turn it into words, so
+  nothing below the commands names a command ([WC-ARCH-16](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/architecture.md)). The largest file left is
+  `map.ts`, 576 lines that turn mtcute's types into cli-core's.
+- **Search queries compile one field at a time.** Each field of the query language has its own compiler in
+  `store/sqlite/lucene-fields.ts`, and a test keeps that list equal to the registry of fields. `lucene.ts` is
+  still 710 lines.
+- **The import rules hold only while each override is complete.** Biome does not merge two `overrides`
+  entries that set `noRestrictedImports`: for a file both match, the later one replaces the earlier one. So
+  every entry carries the whole list for its paths, and an entry that leaves part of it out turns those rules off
+  without an error. That happened in cli-core until [cli-core #1467](https://github.com/WireCatLabs/cli-core/pull/1467)
+  ([WC-TOOL-15](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/toolchain.md)).
+- **MCP tools are still written by hand beside the commands.** A command and its MCP tool are two pieces of code
+  over the same service. Generating the tools from the command tree, so that a call runs the command itself, is
+  approved and being built in cli-core; until a release says it is done, the [MCP rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md) describe what
+  runs.
 - **max's `client/values.ts`** holds 59 exports used by 20 modules.
 - **Some large files still hold several jobs.** Lint stops the ones over 1,000 lines from growing; the
   [architecture checks](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) record names the seam each would split along.
