@@ -1,6 +1,6 @@
 ---
-title: "Phones, links and names"
-description: "Find every message with a phone number, email address, link, Google document or the name of someone you know, however it was written, and record who it is."
+title: "Phones, links, names and addresses"
+description: "Find every message with a phone number, email address, link, Google document, a person's name or a street address, however it was written, and record what it is."
 ---
 
 Find where someone sent a phone number, every link to one site, every chat that mentions a document, or every message
@@ -12,7 +12,7 @@ history you want to search saved on your computer.
 ## What a mention is
 
 A **mention** is a value the tools found in a message: a phone number, an email address, a link or a link to a Google
-document, or the name of someone you know. The tools look in the message text, in the text
+document, a person's name, or a street address. The tools look in the message text, in the text
 of its files and in its voice note transcripts. They also read your saved notes, documents and email; you search
 those through [memo](#search-your-mail).
 
@@ -103,7 +103,7 @@ tg personal mentions list domain:example.com status:found
 tg personal mentions show 12
 ```
 
-`list` gives each mention an ID, the date, the kind (`phone`, `email`, `url`, `document`, `person-name`), the value,
+`list` gives each mention an ID, the date, the kind (`phone`, `email`, `url`, `document`, `person-name`, `place`), the value,
 its status and
 the message. `show` adds the text around it and how many other places hold the same value. `list` shows mentions
 in messages only; mentions in notes, documents and mail are searchable but not listed yet.
@@ -145,6 +145,7 @@ tg personal mentions reject 14
 - `reject 14` dismisses a value that is not a real mention, such as an order number that looks like a phone.
 - A document link is confirmed without an owner once the document is in the local store: `confirm 15`.
 - A `t.me` link to a chat or a person you have in your history is linked to that chat or account without you.
+- A street address is confirmed with no owner: `confirm 40` keeps it as a place. See [Street addresses](#street-addresses).
 
 A decision covers the value, not one message. Confirm a number once and every message with it is linked to that
 person, including messages that arrive later. Reject it and it stays dismissed everywhere. A number or an address
@@ -182,12 +183,41 @@ team chat, one Olga is usually one person.
 that name wrote in that chat. `mentions:"person:7"` finds the messages that name person 7, or contain their confirmed
 phone number or address.
 
+Names of people the tools do not know are found too, and wait for you. Such a name is a common first name in any
+case («Ольге», «Sarah»), or a patronymic with the name before it («Анзор Мамедович»), with the surname or second name
+beside it («Ольга Смирнова», «John Smith»). A first name that is also an ordinary word, such as «Вера», «Надежда» or
+«Grace», counts only next to a second name. These names are never linked by the rules; `show` and `confirm` say who
+it is.
+
 When new people appear in your history, read the names again:
 
 ```sh
 tg personal mentions rebuild person-name
 max personal mentions rebuild person-name
 ```
+
+## Street addresses
+
+A street address is found by its shape: a street word next to a name and a house number. Addresses in Russia, the
+rest of Europe, the United Kingdom and the United States are read: «ул. Ленина, д. 5», «Невский проспект 28»,
+«Calle Mayor, 12», «12 rue de la Paix», «Hauptstraße 5», «221B Baker Street». A number alone, a price or a postcode is
+never an address.
+
+The mention takes the rest of the address too: the flat or suite, the postcode, the city, the region and the country,
+also from the next lines of an email signature. The match uses only the street and the house, so «C/ Colón 5» and
+«Calle Colón, 5, 46004 Valencia» are one address. Two streets of the same name in two cities are one address too, for
+now.
+
+```sh
+tg personal mentions list kind:place
+tg personal mentions confirm 40
+tg personal mentions places
+```
+
+`confirm` keeps the address as a place of its own, with everything written there. Every mention of the same
+address follows, and later ones are linked without you. `mentions places` lists the places, most mentioned first.
+Most addresses are in email signatures; [memo](./email.mdx) does not list mentions in mail yet, so they are found and
+searchable but reviewed from messages only.
 
 ## Messages saved earlier
 
@@ -208,10 +238,11 @@ logs, error messages or run records. A link is never opened and a site is never 
 
 ## What is not there yet
 
-- Names of people the tools do not know yet.
 - A list of the mentions in [notes and documents](./memo/notes.md) and in [email](./email.mdx): they are found and
   searchable, but `mentions list` does not show them.
 - A link to an ordinary website tied to anything. Such a link can only be dismissed.
-- Street addresses.
+- Places other than street addresses: a city alone, a building's name, a place described in words.
+- Addresses outside Europe, the United Kingdom and the United States: they may be found with only part of the
+  address.
 
 Once you know where a number, a site or a name came up, [recall the context with that person](./people.md) before you reply.
