@@ -10,6 +10,25 @@ Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las
 
 ## Unreleased
 
+## 0.65.1 — 18.10.2026
+
+### Documentation
+
+- The command reference lists `--plain-order` on `memo search mail` and `memo search all`; 0.65.0 shipped it
+  without, as the reference had not been generated again.
+- The command reference's opening says reads take `--source` and writes take `--account provider:account`; it
+  still named `--provider` and `--account`.
+
+## 0.65.0 — 18.10.2026
+
+### Fixed
+
+- **A sync step that fails unexpectedly says why.** The timer's log showed only "the command failed; this is a bug";
+  it now adds the error's first line, such as `TypeError: fetch failed`, so a dropped network can be told from a
+  real fault. `--debug` still shows the whole message.
+- **`memo search mail` fills a page past mail it moves down.** It reads 20 more results than asked, so mail from
+  senders with signs of fraud gives its place to the next best result instead of only moving to the end.
+
 ## 0.64.0 — 18.10.2026
 
 ### Changed — may change search results

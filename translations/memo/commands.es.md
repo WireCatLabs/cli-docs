@@ -5,7 +5,7 @@ title: "Todos los comandos"
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
 
 
-Consulta aquí todos los comandos y opciones de Memo. Una lectura indica sus cuentas con `--source <accounts>`: una cuenta con el proveedor y la cuenta separados por dos puntos, todas las cuentas de un proveedor, todas las de un tipo o un grupo guardado. Una escritura indica la única cuenta con la que actúa con `--account <account>`, en la misma forma de proveedor y cuenta. El antiguo `--provider` con un `--account` simple sigue funcionando durante una versión más. Memo nunca elige una cuenta por ti. Añade `--json` para obtener una respuesta que un script o un agente puedan leer. Consulta las [recetas](./recipes.md) para tareas completas y [usar Memo](./usage.md) para un día normal. Las descripciones de las operaciones conservan el idioma de la ayuda de la herramienta.
+Consulta aquí todos los comandos y opciones de Memo. Un comando que lee nombra sus cuentas con `--source`: una como `telegram:1` o `email:work`, todas las cuentas de un proveedor, un tipo o `group:<name>`. Un comando que escribe nombra la única cuenta con la que actúa con `--account telegram:1`. Memo nunca elige una cuenta por ti. Añade `--json` para obtener una respuesta que un script o un agente puedan leer. Consulta las [recetas](./recipes.md) para tareas completas y [usar Memo](./usage.md) para un día normal. Las descripciones de las operaciones conservan el idioma de la ayuda de la herramienta.
 
 ## Opciones generales
 
@@ -751,7 +751,7 @@ memo tasks assign <id> <person> [options]
 
 ### `memo tasks agenda`
 
-what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one
+what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one, open tasks someone else does
 
 ```sh
 memo tasks agenda [query] [options]
@@ -1965,6 +1965,7 @@ memo search all <query> [options]
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
 | `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
 | `--only <resources>` | messages,mail,notes, separated by commas. |
+| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 | `--project <project>` | rank the key documents of this project (id, key or project:<id>) first; nothing is left out. |
 
 ### `memo search messages`
@@ -2009,6 +2010,7 @@ memo search mail <query> [options]
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
 | `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
 | `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |
+| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 | `--account <account>` | deprecated: --source email:<account>. |
 
 ### `memo search notes`
