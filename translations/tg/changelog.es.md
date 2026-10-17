@@ -4,6 +4,63 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.71.0 — 17.10.2026
+
+### Cambios — pueden romper scripts
+
+- **En un grupo con la etiqueta `watch-tasks`, la respuesta de cualquier miembro cierra una pregunta** (cli-core
+  0.325.0): una respuesta directa de alguien que no sea quien preguntó la resuelve; un mensaje posterior que no
+  responde no cierra nada.
+- **Las herramientas de `tg <bot> bot mcp` son los propios comandos del bot** (cli-core 0.325.0): los argumentos de un
+  agente son los del comando, en snake_case: `messages send` y `messages edit` reciben `md` o `html` en lugar de
+  `format`, `messages delete` recibe `messages` (una lista), `search messages` recibe `query`, `chats members remove`
+  recibe `person`. Nuevo: `chats rules show`, y `offline` en cada lectura. Enviar archivos, `--allow-dangerous` y
+  `chats moderate --max-actions` quedan para el propietario. El catálogo está fijado en `contracts/bot-catalogue.snap`.
+
+## 0.70.0 — 17.10.2026
+
+### Novedades
+
+- **`tg <profile> contacts link <person> me`** (cli-core 0.323.0): indica que un contacto eres tú, para una cuenta tuya
+  que el almacén no puede emparejar por sí solo, como `zoom:<id>`.
+
+### Corregido
+
+- **Las menciones encuentran menos nombres equivocados** (cli-core 0.323.0). Una palabra del nombre de un contacto
+  cuenta por sí sola solo como nombre o apellido; un contacto con nombre de empresa («Smart Agents») se encuentra solo
+  por el nombre completo, y los corteses «Ваш», «Вам», «Вас» nunca cuentan. El nombre de un santo en un lugar («Saint
+  Michael's Bridge») y una ciudad tras «в»/«во» («во Владимире») tampoco son nombres.
+- **Tus propias cuentas eres tú** (cli-core 0.323.0): la identidad propia de una cuenta se vincula contigo en su
+  siguiente sincronización, así que tu nombre en tus mensajes ya no es el de otra persona.
+- **Una dirección conserva su ciudad** (cli-core 0.323.0): la misma calle en dos ciudades son dos lugares; una
+  dirección escrita sin ciudad sigue coincidiendo con su lugar en esa calle.
+
+Después de actualizar, vuelve a leer los mensajes antiguos una vez: `tg <profile> mentions rebuild person-name place`.
+
+### Seguridad
+
+- **`TG_READ_ONLY` ahora impide iniciar y cerrar sesión, y los cambios en el almacén de mensajes**: `session start`,
+  `session end` y `setup` se niegan con `permission_error` antes de conectarse, igual que `store reset`, `restore`,
+  `clear`, `migrate`, `repair`, `copies delete` y `decrypt`. Antes, `session end` cerraba la sesión y la borraba
+  bajo el bloqueo.
+
+## 0.69.0 — 17.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Un agente ya no puede eliminar para todos** (cli-core 0.321.0). El `messages delete` de MCP no acepta
+  `for_everyone`, y pasarlo se rechaza como argumento desconocido; el propietario sigue teniendo
+  `tg <profile> messages delete --for-everyone`.
+- **`mcp --permission` solo endurece** (cli-core 0.321.0). Una anulación que aflojaría el nivel del perfil, como
+  `messages.send=allow` en un perfil de solo lectura, se rechaza al iniciar indicando la clave; para permitir más,
+  cambia los permisos del perfil. `--permission messages.send=deny` y otras anulaciones que restringen funcionan como
+  antes.
+
+### Corregido
+
+- **La denegación de un agente en `chats send-as` y `chats members list` ahora se aplica** (cli-core 0.321.0). Mediante
+  MCP estos comandos leían sus niveles de otras claves, así que `chats.send-as` y `chats.members.list` no les llegaban.
+
 ## 0.68.0 — 17.10.2026
 
 ### Cambios — pueden romper scripts

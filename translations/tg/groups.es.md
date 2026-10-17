@@ -237,7 +237,10 @@ Tu respuesta cierra la tarea. Para registrar cada pregunta de un grupo, sea para
 
 ```sh
 tg personal tags add --chat <group> watch-tasks
+tg personal tags remove --chat <group> watch-tasks
 ```
+
+En un grupo con esta etiqueta, cada pregunta que no respondiste abre una tarea: un mensaje con signo de interrogación o una respuesta a uno tuyo. Solo cuentan los mensajes nuevos; para los anteriores usa `tasks scan`. Una petición o una promesa sin signo de interrogación no es una tarea de una regla: tu agente la agrega con `tasks add`. Tu respuesta cierra la pregunta, y también una respuesta a ella de cualquier miembro que no sea quien preguntó. Un mensaje posterior que no responde a la pregunta no cierra nada; esa tarea la cierras tú o tu agente. Pon la etiqueta solo en grupos donde las respuestas te tocan a ti.
 
 La primera sincronización de una cuenta no abre tareas de tu historial; las siguientes abren tareas a partir de mensajes nuevos. Para convertir el historial de un chat en tareas, mira lo que se abriría y luego ábrelo:
 
