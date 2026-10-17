@@ -86,5 +86,10 @@ states that boundary; older changelog sections remain unchanged.
 
 The updated suite passes 486 tests across 58 files (98.46% lines, 93.77% branches), 29 focused
 lease/sync/cancellation tests, types/docs and generated CLI/MCP contracts. Legacy upgrade and
-no-leak checks pass with harness 0.5.2. Stock `bin/release` folds the pending Fixed note through
-PR144, then captures its exact current source. Final artifact/platform/registry proof remains required.
+no-leak checks pass with harness 0.5.2. Stock `bin/release` folded the Fixed note through PR144 and run `38987578041` captured exact
+source `664739e007dd053d27672721c56daca3dc6d5d9e`. The complete isolated Linux/Node24 packed
+acceptance passes, including all eighteen preparation fields, native persistence/recovery, scoped
+meeting links, transcript search, strict MCP and preview/model boundaries. External access is
+blocked except its isolated loopback model fixture. All ten native translation structures pass
+against this final source; fingerprints deliberately await the released-tag capture. Final
+four-platform/registry proof remains required.
