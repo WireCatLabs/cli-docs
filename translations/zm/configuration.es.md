@@ -16,6 +16,7 @@ Configura con `zm config set <key> <value>` y consulta los valores con `zm confi
 | `account.profile` | [Etiqueta local](./sessions.md#select-a-local-profile) de reuniones; sin valor inicial, necesaria para la base |
 | `source` | Fuente de `meetings sync` y `watch`: `api` predeterminada o `files` |
 | `files.folder` | Carpeta para obtención/observación de archivos; sin valor inicial |
+| `context.sources` | Array JSON de cuentas de mensajes/correo o carpetas de documentos elegidas para este perfil; vacío por defecto ([configuración abajo](#select-communications-for-preparation)) |
 | `files.timezone` | Zona IANA de nombres, por ejemplo `Europe/Madrid`; UTC predeterminado |
 
 Comprueba `zm config show` tras editar. Cambiar `account.profile` no cambia el usuario de Zoom.
@@ -58,3 +59,34 @@ Ajustes públicos, tokens del almacén y base de reuniones son datos separados.
 Los directorios siguen la convención de plataforma. La base predeterminada es `wirecat.db`
 ([almacenamiento](./archive.md#where-meetings-are-stored)). Usa el mismo entorno en terminal y MCP,
 o verán perfiles/bases distintos. En [sesiones](./sessions.md) comprueba autorización aparte de estos ajustes.
+
+## Elige fuentes para la preparación
+
+La preparación puede buscar en cuentas y carpetas ya importadas al almacén compartido. Elige primero
+el perfil local de Zoom y guarda hasta ocho fuentes para él. Cada entrada necesita ID, tipo kind,
+proveedor provider y cuenta account. Para mensajes y correo usa las identidades guardadas exactas;
+cópialas de los ajustes del programa de origen o de sus referencias. El nombre visible no sustituye
+la identidad de la cuenta.
+
+```sh
+zm config set account.profile research
+zm config set context.sources '[{"id":"project-notes","kind":"document","provider":"folder","account":"notes:5"}]'
+zm config show
+```
+
+El ejemplo usa un ID de carpeta inventado. Ejecuta `memo folders list` y sustituye el ID de la
+carpeta que elijas. `notes:5` resuelve su identidad guardada; no crea ni importa una carpeta.
+Una fuente de documentos selecciona una carpeta; una de mensajes, una cuenta de mensajería; una
+de correo, una cuenta de correo. El permiso cubre toda la cuenta o carpeta: todavía no permite
+restringir chats, remitentes o rutas dentro de ella. Elige un alcance adecuado para tu tarea.
+
+El ajuste reemplaza las fuentes del perfil actual y conserva los otros perfiles. Usa `[]` para
+revocar las de este perfil. Se rechazan los ID e identidades duplicados, los campos desconocidos y
+más de ocho entradas. El archivo JSON guarda el array en `context_sources`, con `profile` en cada
+entrada. Usa `config set` para no editar ese formato a mano.
+
+Solo una petición explícita de preparación resuelve y consulta las fuentes solicitadas. Una fuente
+configurada que no pediste y no está disponible no bloquea las demás. Las lecturas normales de
+reuniones no adquieren acceso a otras cuentas. El servidor MCP captura las definiciones al arrancar
+y fija la identidad de cada fuente solicitada en su primer uso. Reinícialo tras cambiar o revocar
+selecciones. Una identidad ausente o distinta produce un error; no se eligen fuentes automáticamente.

@@ -73,6 +73,7 @@ propuestos, revocados, eliminados o actualizados después del inicio de la prepa
 permite recuperar el registro completo y su evidencia mediante Memo antes de usarlo. Esta sección
 contiene hechos aceptados; `knowledge.coverage` conserva `fact_evidence: not-revalidated`
 y `other_sources: not-queried`.
+Si se piden fuentes explícitamente, `other_sources: see-communications` señala su cobertura separada.
 
 `notes.items` añade notas y anotaciones escritas por el dueño sobre las llamadas anteriores incluidas,
 las personas vinculadas explícitamente a ellas y los proyectos globales confirmados. Cada una incluye
@@ -86,7 +87,8 @@ preparación. Recupera la nota por su referencia en Memo para ver todas sus asoc
 Comprueba `notes.coverage.has_more` y `notes.coverage.output_limited` para saber si hay notas adicionales u omitidas.
 `source_evidence: not-revalidated` indica que no se han vuelto a comprobar sus fuentes;
 `other_sources: not-queried` deja fuera de la cobertura los documentos importados, el correo y los
-mensajes. Seleccionar `--json=notes.items.ref` conserva esa cobertura junto a las referencias.
+mensajes, salvo que los pidas explícitamente. Entonces `other_sources: see-communications` señala
+su cobertura separada; esos pasajes no se convierten en notas del dueño. Seleccionar `--json=notes.items.ref` conserva esa cobertura junto a las referencias.
 
 Si sabes qué proyecto existente quieres investigar, pide al agente que lo seleccione por su nombre,
 clave o alias guardado. Por ejemplo:
@@ -122,8 +124,9 @@ API de Zoom para guardar sus vínculos exactos a la serie. Un archivo de transcr
 puede carecer de ese ID del proveedor. La preparación no une llamadas por títulos o nombres parecidos.
 
 La cobertura distingue historial ausente, reuniones sin fecha, filas adicionales y límites de salida.
-No se conoce si el archivo incluye todo el historial. Los documentos importados, el correo,
-los mensajes y los proyectos que no seleccionaste quedan sin consultar; sin reuniones anteriores
+No se conoce si el archivo incluye todo el historial. Los documentos, el correo y los mensajes
+no se consultan salvo que pidas fuentes configuradas explícitamente. Los proyectos no elegidos
+quedan sin consultar; sin reuniones anteriores
 utilizables, tampoco se consulta el historial relacionado. La evidencia de los hechos guardados
 no se vuelve a comprobar. Usa [búsqueda y fuentes](./search.md) para investigar esas lagunas.
 La preparación no genera un resumen, acepta hallazgos ni crea tareas.
@@ -142,6 +145,51 @@ Las notas tienen sus propios indicadores de más filas y límites de salida, con
 (o un `--context-limit` menor). Usan el espacio restante tras los hechos aceptados y las fuentes de
 reuniones. Pueden quedar filas fuera del límite. Las fuentes omitidas dan `meta.complete=false`: revisa sus referencias antes de
 usar el informe. Si la cobertura señala un recorte, aumenta el límite correspondiente.
+
+## Incluye mensajes, correo y documentos elegidos
+
+Primero [elige las cuentas o carpetas](./configuration.md#select-communications-for-preparation).
+Después pide al agente que incluya esas fuentes:
+
+```text prompt
+Prepara la próxima reunión de planificación de Research Example con las fuentes de mensajes,
+correo y documentos que configuré para este perfil. Busca la palabra "launch". Conserva la fecha
+y fuente de cada afirmación, muestra los desacuerdos e indica qué fuentes o índices estaban incompletos.
+```
+
+En el terminal, indica cada fuente y una consulta de palabras literales:
+
+```sh
+zm meetings prepare 123456789 --context-source project-notes --context-query "launch" --json
+```
+
+Repite `--context-source` para otros ID configurados. La consulta admite hasta dieciséis palabras
+literales; no busca por significado ni deduce un proyecto. La ventana predeterminada cubre los
+catorce días anteriores al inicio de la preparación. Usa `--context-since-time` y
+`--context-before-time` con horas ISO y zona para otra ventana: como máximo noventa días y sin
+terminar después del inicio de preparación. Las filas sin fecha no se consultan.
+
+`communications.items` contiene hasta veinte pasajes citados, repartidos entre las fuentes.
+Cada afirmación conserva fecha y referencia: la posterior no sustituye automáticamente a la anterior,
+y una palabra coincidente no confirma un vínculo con un proyecto o una persona.
+`communications.coverage` conserva consulta, ventana, identidades, estado de índices, avisos de
+filas sin fecha, uso de lectura y continuación, incluso al seleccionar campos JSON. Compruébalo
+cuando no haya pasajes: una respuesta vacía o limitada no demuestra que no se habló del tema.
+
+Cada fuente lee una página acotada. Si su cobertura incluye `next_cursor`, repite la petición con
+`--context-source ID=CURSOR` para ella. Conserva consulta, ventana e identidad. Copia
+`coverage.window.after` y `coverage.window.before` a `--context-since-time` y `--context-before-time`
+explícitos: una nueva ventana predeterminada usa la hora actual y no corresponde al cursor anterior.
+Si `restart_required` es true o se rechaza el cursor, reinicia esa fuente sin él; un pasaje omitido
+no cuenta como leído. Los errores y límites aparecen en cobertura, con `meta.complete=false` cuando
+corresponda. Se desconoce si el archivo incluye todo el historial.
+
+Las fuentes comparten un presupuesto de 512 KiB y dieciséis consultas, limitado además por
+`--max-read-bytes`. El límite de respuesta puede quitar pasajes conservando la cobertura.
+La preparación abre un almacén existente compatible en modo de solo lectura: no completa índices,
+no migra una versión antigua del esquema, no importa registros ausentes ni guarda hallazgos.
+Si faltan índices, ejecuta por separado la importación o indexación del programa de origen.
+Si el esquema es demasiado antiguo, actualízalo normalmente antes de repetir la preparación.
 
 ## Elige datos locales o remotos
 

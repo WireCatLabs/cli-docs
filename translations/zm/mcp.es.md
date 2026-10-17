@@ -113,7 +113,7 @@ revisiones y límites explícitos de fuentes y cobertura. El almacén nativo usa
 `owner-written-meeting/person/project-notes` y una referencia `meeting` a una llamada anterior incluida,
 o null. Las notas cuyo sujeto principal es una reunión necesitan una llamada incluida;
 compartir un proyecto no basta.
-No consulta documentos importados, correo ni mensajes.
+No consulta documentos, correo ni mensajes salvo que pidas ID de fuentes configuradas explícitamente.
 Las lecturas relacionadas se limitan a la cuenta y periodo
 elegidos, sin escrituras. Consulta [preparación](./usage.md#prepare-for-an-upcoming-meeting)
 para ver qué incluye, qué no consulta y cómo comprobar el resultado.
@@ -137,3 +137,29 @@ los hechos aceptados, llamadas relacionadas e historial de la serie. Comprueba `
 cobertura de cada sección. `content_bytes` cuenta los bytes de los pasajes escapados que recibe
 el cliente MCP. Si los propios metadatos no caben, devuelve `validation_error`: aumenta `bytes`
 o reduce el contexto elegido.
+
+## Fuentes elegidas para preparar una reunión
+
+[Configura las fuentes](./configuration.md#select-communications-for-preparation) antes de arrancar
+`zm serve --mcp --meeting-preparation`. El catálogo solo muestra los ID capturados para el perfil
+elegido, sin abrir el almacén. Omite la entrada communications cuando no hay fuentes configuradas.
+Reinicia el servidor tras cambiar o revocar selecciones.
+
+Por ejemplo, envía esta petición a `meeting_prepare`:
+
+```json
+{
+  "series_id": "123456789",
+  "communications": {
+    "sources": [{ "id": "project-notes" }],
+    "query": "launch"
+  }
+}
+```
+
+Los campos opcionales `communications.after` y `communications.before` aceptan horas ISO con zona. Cada fuente
+puede incluir `cursor` de su cobertura anterior. Al continuar, fija ambos límites explícitos con
+la ventana devuelta, incluso si la primera petición usó valores predeterminados: una nueva ventana
+no coincide con el cursor anterior. El manejador compartido valida campos desconocidos e ID antes
+de acceder a credenciales, abrir el almacén o consultar Zoom. Comprueba `communications.coverage`
+junto a los pasajes; consulta [límites y continuación](./usage.md#include-selected-messages-mail-and-documents).

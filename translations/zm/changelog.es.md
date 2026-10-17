@@ -4,6 +4,12 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## Unreleased
+
+### Añadido
+
+- `meetings prepare` incluye coincidencias literales citadas de fuentes de mensajes, correo y documentos configuradas explícitamente. La selección pertenece al perfil local; MCP captura los ID al arrancar, las páginas son acotadas y la cobertura se conserva. La preparación abre el almacén existente en modo de solo lectura.
+
 ## 0.23.2 — 17.10.2026
 
 ### Corregido

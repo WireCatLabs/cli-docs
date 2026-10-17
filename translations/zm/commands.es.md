@@ -243,6 +243,10 @@ zm meetings prepare <series-id> [options]
 
 | Option | What it does |
 |---|---|
+| `--context-source <id[=cursor]>` | ID autorizado de fuente, opcionalmente ID=cursor; repetir. Predeterminado: ``. |
+| `--context-query <words>` | palabras literales que buscar en las fuentes elegidas. |
+| `--context-since-time <time>` | inicio de ventana ISO con zona; por defecto catorce días antes del final. |
+| `--context-before-time <time>` | final exclusivo de ventana ISO con zona; por defecto el inicio de preparación. |
 | `--project <project>` | incluir coincidencias de palabras sin confirmar de un proyecto existente por nombre, clave o alias. |
 | `--since-time <time>` | window start as ISO timestamp with zone (default now). |
 | `--before-time <time>` | exclusive window end as ISO timestamp (default seven days after start). |
