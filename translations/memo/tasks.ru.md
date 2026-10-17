@@ -20,13 +20,13 @@ Show them to me first. Make a task only for the ones I choose.
 
 ```sh
 memo tasks add 'msg:telegram/1/77/42' --type request
-memo tasks add note:12 --provider telegram --account 1 --type promise
-memo tasks list --provider telegram --account 1
+memo tasks add note:12 --account telegram:1 --type promise
+memo tasks list --source telegram:1
 ```
 
 У задачи из источника есть тип: `request` (по умолчанию), `question`, `mention` или `promise`. Она
 относится к одному аккаунту мессенджера. Ссылка на сообщение уже содержит аккаунт; для заметки или
-файла добавьте `--provider` и `--account`. Если добавить ту же задачу дважды, вы получите уже
+файла добавьте `--account`, например `--account telegram:1`. Если добавить ту же задачу дважды, вы получите уже
 существующую.
 
 ## Что требует внимания сегодня
@@ -34,13 +34,13 @@ memo tasks list --provider telegram --account 1
 Повестка, план и карточка — те же команды, что в tg и max; укажите аккаунт мессенджера:
 
 ```sh
-memo tasks agenda --provider telegram --account 1           # overdue, due, owed and waiting chats
-memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --provider telegram --account 1
-memo tasks show 1a2b3c4d --provider telegram --account 1
-memo stats tasks show --provider telegram --account 1       # open tasks per chat
+memo tasks agenda --source telegram:1           # overdue, due, owed and waiting chats
+memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
+memo tasks show 1a2b3c4d --source telegram:1
+memo stats tasks show --source telegram:1       # open tasks per chat
 ```
 
-Без `--provider` и `--account` команда перечисляет аккаунты в хранилище. tg и max открывают эти задачи при синхронизации; memo читает то же хранилище.
+Без `--source` или `--account` команда перечисляет аккаунты в хранилище. tg и max открывают эти задачи при синхронизации; memo читает то же хранилище.
 
 ## Задачи в проекте
 
@@ -78,7 +78,7 @@ memo tasks assign HRB-1 PERSON_UID --role reviewer
 
 ```sh
 memo tasks close HRB-1 --reason booked
-memo tasks close 7 --provider telegram --account 1 --as dismissed
+memo tasks close 7 --account telegram:1 --as dismissed
 ```
 
 Закройте задачу через `--as done` (по умолчанию) или `--as dismissed`. `memo tasks list state:done` показывает закрытые задачи; с `--project` поле `kind:bug` сужает вид. `source:"note:12"` оставляет задачи аккаунта из одного сообщения, заметки или документа — этот шаг `memo search all` предлагает для результата, на который ссылаются задачи. Каждое изменение статуса, приоритета или исполнителя сохраняется с задачей.
@@ -95,10 +95,10 @@ memo tasks relations HRB-2
 memo tasks unlink HRB-2 HRB-1 --kind blocked-by
 ```
 
-`tasks link` также принимает другую задачу как `task:HRB-1`. Иная цель — сообщение, чат, человек или URL — связывает задачу аккаунта с её предметом и требует `--provider` и `--account`:
+`tasks link` также принимает другую задачу как `task:HRB-1`. Иная цель — сообщение, чат, человек или URL — связывает задачу аккаунта с её предметом и требует `--account`:
 
 ```sh
-memo tasks link 12 msg:telegram/500/7/101 --provider telegram --account 500
+memo tasks link 12 msg:telegram/500/7/101 --account telegram:500
 ```
 
 Задача становится готовой, только когда выполнены все задачи, которые она ждёт. Если одна из
@@ -112,21 +112,21 @@ memo tasks link 12 msg:telegram/500/7/101 --provider telegram --account 500
 срок которых наступил, и показывает их вам.
 
 ```sh
-memo reminders add 7 --at-time 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --provider telegram --account 1
-memo reminders list --provider telegram --account 1
-memo reminders update 3 --revision 1 --at-time 2026-10-21T09:00:00+02:00 --provider telegram --account 1
-memo reminders cancel 3 --provider telegram --account 1
+memo reminders add 7 --at-time 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --account telegram:1
+memo reminders list --source telegram:1
+memo reminders update 3 --revision 1 --at-time 2026-10-21T09:00:00+02:00 --account telegram:1
+memo reminders cancel 3 --account telegram:1
 ```
 
 Указывайте время со смещением от UTC, например `+02:00` для Мадрида летом. Напоминание относится к
-аккаунту, поэтому ему нужны `--provider` и `--account`. Когда задача закрывается, её напоминания
+аккаунту, поэтому для его добавления или изменения нужен `--account`. Когда задача закрывается, её напоминания
 отменяются.
 
 Для программы, которая показывает напоминания:
 
 ```sh
-memo reminders poll --provider telegram --account 1 --json
-memo reminders ack REMINDER_ID RECEIPT --provider telegram --account 1
+memo reminders poll --account telegram:1 --json
+memo reminders ack REMINDER_ID RECEIPT --account telegram:1
 ```
 
 `poll` выдаёт напоминания, срок которых наступил, каждое с квитанцией. `ack` с этой квитанцией

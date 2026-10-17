@@ -38,8 +38,8 @@ memo context max:'Kai Sample' --limit 50
 ([почему](./how-it-works.md#links-between-notes-and-people)). Если какая-то часть ничего не дала, ответ
 объясняет почему. `--limit` показывает больше 20 пунктов каждого вида, а `--json` передаёт ответ агенту.
 
-Если у вас несколько аккаунтов в одном мессенджере, добавьте `--account`, например
-`memo context telegram:101 --account 1`.
+Если у вас несколько аккаунтов в одном мессенджере, добавьте `--source`, например
+`memo context telegram:101 --source telegram:1`.
 
 ## Свяжите аккаунты человека
 
@@ -108,7 +108,7 @@ memo relationships remove 4
 Memo может предложить связи на основе почты: люди, которые пишут вам с одного и того же домена компании.
 
 ```sh
-memo relationships suggest --provider email --account you@example.com
+memo relationships suggest --source email:you@example.com
 memo relationships confirm 4
 ```
 
@@ -120,8 +120,8 @@ memo relationships confirm 4
 Если ваши встречи сохранены в локальном хранилище, встречу можно связать с проектом:
 
 ```sh
-memo projects meetings link HRB 5 --provider zoom --account ACCOUNT
-memo projects meetings list HRB --provider zoom --account ACCOUNT
+memo projects meetings link HRB 5 --account zoom:ACCOUNT
+memo projects meetings list HRB --source zoom:ACCOUNT
 ```
 
 Точно укажите аккаунт встречи. `confirmed:false` показывает связи, которые предложил агент; чтобы подтвердить

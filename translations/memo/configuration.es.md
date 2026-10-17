@@ -46,7 +46,7 @@ Consulta [usar las mismas notas en otro ordenador](./notes.md#use-the-same-notes
 
 | Clave | Significado |
 |---|---|
-| `name` | Nombre de la cuenta en Himalaya; lo acepta `memo sync --account`. |
+| `name` | Nombre de la cuenta en Himalaya; lo acepta `memo sync --source email:<name>`. |
 | `address` | Dirección de correo. |
 | `mode` | `gmail` (predeterminado), `imap` o `mbox` para un archivo de Google Takeout. |
 | `path` | Para `mbox`: archivo Takeout, como `~/Takeout/Mail/All mail Including Spam and Trash.mbox`. |

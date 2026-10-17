@@ -41,10 +41,10 @@ carpetas que quieres leer:
 ## Sincronizar correo
 
 ```sh
-memo sync --account work --since-time 2026-09-01
+memo sync --source email:work --since-time 2026-09-01
 ```
 
-`work` es el `name` de la cuenta en los ajustes; también puedes usar su dirección. Sin `--account`, Memo lee todas las cuentas configuradas e identifica cada una en el informe. Si el nombre es incorrecto, muestra las cuentas conocidas.
+`work` es el `name` de la cuenta en los ajustes; también puedes usar su dirección; separa varias con comas. Sin `--source`, Memo lee todas las cuentas configuradas e identifica cada una en el informe. Si el nombre es incorrecto, muestra las cuentas conocidas.
 
 - Sin `--since-time`, Memo lee los últimos 30 días. Acepta una fecha, hora ISO 8601 o `30d` atrás.
 - Cada ejecución lee hasta 200 correos nuevos por cuenta (`--limit` cambia el límite). Repítela para continuar: enumera solo el correo no completado antes, sin volver a listar todo un buzón grande.
@@ -74,23 +74,21 @@ Cada grupo recibe una **puntuación** de parecido con spam, estafa o robot, con 
 | Indicio | Suma | Origen |
 |---|---:|---|
 | `spam_folder` | 4 | La mayoría del grupo está en Spam de Gmail |
-| `dmarc_fail` | 3 | Falló la comprobación DMARC de Gmail al recibirlo (`Authentication-Results: mx.google.com`), en correo de 2022 en adelante, sin firma DKIM válida, de un remitente que nunca supera DMARC |
-| `brand_spoof` | 3 | Una marca como PayPal o Apple en el nombre visible, enviada desde otro dominio; se excluyen «Google via LinkedIn» desde el dominio de LinkedIn, cursos de Coursera y espacios de Quora con nombre de empresa |
-| `young_domain` | 3 | El dominio tenía menos de 180 días al llegar el primer correo |
-| `reply_to_elsewhere` | 2 | Las respuestas van a un dominio distinto |
+| `dmarc_fail` | 3 | Falló la comprobación DMARC de Gmail (`Authentication-Results: mx.google.com`), sin firma DKIM válida, de un remitente que nunca supera DMARC, en correo de 2022 en adelante; solo cuenta junto a otro indicio de fraude |
+| `brand_spoof` | 3 | Una marca como PayPal o Apple en el nombre visible, enviada desde otro dominio |
+| `young_domain` | 5 | El dominio tenía menos de 180 días al llegar el primer correo |
+| `reply_to_elsewhere` | 1 | Las respuestas van a un dominio distinto |
 | `never_opened` | 2 | No abriste ningún correo del grupo |
 | `dkim_not_passed` | 2 | La comprobación DKIM de Gmail falló en la mayoría del grupo |
 | `disposable_domain` | 2 | Dominio de correo desechable |
 | `bulk_never_replied` | 1 | Al menos un 80% de correo masivo y nunca escribiste al remitente |
 | `replied` | −5 | Escribiste al remitente |
 
-`young_domain` necesita la fecha de registro del dominio. memo solo la consulta con `--domain-age`:
+`brand_spoof`, `young_domain`, `disposable_domain` y `dmarc_fail` apuntan a un remitente falsificado o fraudulento; un fallo de DMARC por sí solo suele indicar un remitente real mal configurado o correo que llegó por un reenvío o una lista. Los demás son habituales en correo masivo real, también en facturas y reservas: una puntuación de 3 solo por `never_opened` y `bulk_never_replied` es un boletín que ignoras, no una estafa, y muchas empresas responden desde un dominio de atención al cliente. Una plataforma que pasa nombres de otros no es una suplantación: «Google via LinkedIn» desde LinkedIn, un curso de Coursera o un espacio de Quora con nombre de empresa. Los fallos de DMARC anteriores a 2022 se excluyen: entonces muchos remitentes reales no superaban la comprobación.
 
-```sh
-memo mail inspect work --domain-age
-```
+`young_domain` necesita la fecha de registro del dominio. Cada sync que puntúa remitentes, como máximo una vez al día, consulta las fechas que aún no tiene, para remitentes a los que nunca escribiste y de los que recibiste correo en los últimos dos años: el dominio de un remitente más antiguo puede haber caducado o cambiado de dueño. `memo mail inspect work --domain-age` consulta las de los grupos que muestra. Un dominio registrado de nuevo después de llegar un correo no es reciente para ese correo.
 
-Consulta mediante RDAP el registro del dominio remitente de cada grupo mostrado, usando la lista de IANA, a un dominio por segundo, y conserva la respuesta en el equipo. **Cada consulta comunica al registro el nombre del dominio**: este sabe que alguien revisa correo procedente de él. No consulta grandes proveedores como gmail.com ni remitentes a los que escribiste. La mayoría de dominios territoriales, como .ru, .de, .es y .io, carece de RDAP: su edad queda desconocida y no suma puntos. Sin `--domain-age` solo usa fechas ya guardadas.
+memo consulta mediante RDAP el registro propio de cada dominio, usando la lista de IANA, a un dominio por segundo, y conserva la respuesta en el equipo. **Cada consulta comunica al registro el nombre del dominio**: este sabe que alguien revisa correo procedente de él. No consulta grandes proveedores como gmail.com. La mayoría de dominios territoriales, como .ru, .de, .es y .io, carece de RDAP: su edad queda desconocida y no suma puntos.
 
 Tú decides:
 
@@ -240,7 +238,7 @@ Gmail limita la descarga diaria por IMAP; para años de correo es más rápido u
 ```
 
 ```sh
-memo sync --account archive --since-time 2000-01-01 --limit 5000
+memo sync --source email:archive --since-time 2000-01-01 --limit 5000
 ```
 
 El archivo solo se lee al nombrar esa cuenta. Una importación incompleta lo vuelve a recorrer; un archivo completado se omite hasta que cambie su tamaño o fecha de modificación. `--rescan` fuerza otro recorrido. Solo añade correo: lo que falta en el archivo no se elimina del almacén, y se omiten Spam y Papelera.
@@ -250,14 +248,18 @@ El archivo solo se lee al nombrar esa cuenta. Una importación incompleta lo vue
 ```sh
 memo search mail 'invoice'
 memo search mail 'from:kai subject:budget'
-memo search mail 'mailbox:starred' --account work
+memo search mail 'mailbox:starred' --source email:work
 memo search mail 'trip NOT mailbox:bulk'
 memo search all 'budget'
 ```
 
-El correo masivo — boletines, avisos y listas con List-Id, List-Unsubscribe o `Precedence: bulk` — está en la carpeta `bulk` (`memo:bulk`). `NOT mailbox:bulk` lo excluye de la búsqueda. Se incluye por defecto porque facturas y reservas llevan las mismas cabeceras. Memo lo marca al leer cabeceras de una cuenta con reglas; un listado completo, al menos diario, marca también correo guardado antes. `--account` acepta el nombre de la cuenta o su dirección.
+El correo masivo — boletines, avisos y listas con List-Id, List-Unsubscribe o `Precedence: bulk` — está en la carpeta `bulk` (`memo:bulk`). `NOT mailbox:bulk` lo excluye de la búsqueda. Se incluye por defecto porque facturas y reservas llevan las mismas cabeceras. Memo lo marca al leer cabeceras de una cuenta con reglas; un listado completo, al menos diario, marca también correo guardado antes. `--source email:<account>` acepta el nombre de la cuenta o su dirección; `--source email:work,email:personal` busca en ambas.
 
-Cada sync también puntúa a todos los remitentes a partir del correo ya guardado, como máximo una vez al día, igual que `memo mail inspect` puntúa un grupo. Un resultado de un remitente evaluado incluye `sender_score` en `--json`, con la puntuación y sus señales. El orden de resultados aún no cambia: la puntuación está para comprobarla antes de usarla para ordenar.
+Cada sync también puntúa a todos los remitentes a partir del correo ya guardado, como máximo una vez al día, igual que `memo mail inspect` puntúa un grupo. Un resultado de un remitente evaluado incluye `sender_score` en `--json`, con la puntuación y sus señales. El correo de un remitente cuyos indicios de fraude suman 3 o más aparece después del resto de la página en `memo search mail` y `memo search all`, y su `sender_score` indica `demoted: true`; no se excluye nada. Lo tuyo nunca se mueve: un dominio en el que escribiste a alguien, el dominio de tu buzón y un remitente que mantiene una regla de protección. `--plain-order` deja ese correo donde lo ponen las palabras, para encontrarlo:
+
+```sh
+memo search mail 'invoice' --plain-order
+```
 
 Las etiquetas de Gmail, como Recibidos, Importantes, Destacados y tus propias etiquetas, se convierten
 en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
@@ -271,7 +273,7 @@ en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
 - Si un correo está leído o destacado, tal como lo muestra tu buzón.
 - El texto de los adjuntos legibles, que se busca junto con el correo. Los adjuntos PDF y Word
   necesitan los [lectores opcionales](./notes.md#files-memo-can-read). Después de instalarlos,
-  ejecuta `memo sync --account work --retry-attachments` para leer los adjuntos que se omitieron. Solo vuelve a leer, por id Gmail, los correos cuyo adjunto quedó sin leer por falta de lector, hasta `--limit`. No lista el buzón; al repetir continúa con el resto.
+  ejecuta `memo sync --source email:work --retry-attachments` para leer los adjuntos que se omitieron. Solo vuelve a leer, por id Gmail, los correos cuyo adjunto quedó sin leer por falta de lector, hasta `--limit`. No lista el buzón; al repetir continúa con el resto.
 - Hasta 1.000.000 de caracteres de cada correo y 200.000 de cada adjunto
   ([cambiar los límites](./configuration.md#mail)).
 
@@ -291,5 +293,18 @@ correo movido a Spam cuenta como borrado. Para protegerte de errores:
 
 Para incluir el correo de una persona en [su contexto](./people.md#everything-about-a-person), vincula
 la dirección a esa persona en tg o max: `tg contacts link 'Kai Sample' email:kai@example.com`.
+
+## Teléfonos y enlaces en el correo
+
+Memo encuentra teléfonos, direcciones de correo, enlaces, nombres y direcciones postales en cada correo, nota y documento guardados. Enuméralos e indica qué son:
+
+```sh
+memo mentions list kind:phone --source email:personal
+memo mentions show 40 --source email:personal
+memo mentions confirm 40 person:7 --source email:personal
+memo mentions reject 41 --source email:personal
+```
+
+`--source` indica qué leer, de la misma forma en todas las herramientas de WireCat: `email:personal` un buzón, `email:personal,email:work` varios, `mail` todos los buzones (la respuesta dice cuáles), `notes` las notas de memo, `documents` los documentos importados y `group:<name>` un grupo guardado. `show` enumera los remitentes que pueden ser dueños de un teléfono, pero no vincula nada hasta que lo confirmes.
 
 Siguiente: [mantener el correo y las notas al día con un temporizador](./archive.md).

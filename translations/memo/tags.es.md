@@ -35,16 +35,16 @@ así que `Work` y `work` son la misma etiqueta. Añadir una etiqueta que ya est�
 | Un archivo de una carpeta de notas | `--note document:3` |
 | Todas las notas de una carpeta, o de una carpeta que hay dentro | `--folder 1` o `--folder 1 --subfolder Projects` |
 | Un mensaje o un correo | `--message 'msg:telegram/1/77/42'` (la referencia completa) |
-| Un chat o un hilo de correo | `--chat 77 --provider telegram --account 1` |
-| Un contacto en una cuenta | `--contact 101 --provider telegram --account 1` |
+| Un chat o un hilo de correo | `--chat 77 --account telegram:1` |
+| Un contacto en una cuenta | `--contact 101 --account telegram:1` |
 | Una persona cuyas cuentas enlazaste | `--person PERSON_UID` |
 | Una organización, un proyecto o una tarea | `--organization 2`, `--project 1`, `--task HRB-1` |
-| Una reunión | `--meeting 5 --provider zoom --account ACCOUNT` |
+| Una reunión | `--meeting 5 --account zoom:ACCOUNT` |
 
 El ID de la carpeta sale de `memo folders list`. Una etiqueta en una carpeta se aplica a todas las
 notas que contiene, a cualquier profundidad, incluidas las notas que añadas más tarde.
 
-Un chat, un contacto y una reunión pertenecen a una cuenta, así que necesitan `--provider` y
+Un chat, un contacto y una reunión pertenecen a una cuenta, así que necesitan
 `--account`. Una persona, una organización, un proyecto o una tarea te pertenecen a ti, así que no
 necesitan cuenta.
 

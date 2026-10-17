@@ -36,16 +36,16 @@ memo tags add work follow-up --note note:12      # two tags at once
 | Файл из папки заметок | `--note document:3` |
 | Все заметки в папке или в одной из вложенных папок | `--folder 1` или `--folder 1 --subfolder Projects` |
 | Сообщение или письмо | `--message 'msg:telegram/1/77/42'` (полная ссылка на источник) |
-| Чат или цепочку писем | `--chat 77 --provider telegram --account 1` |
-| Контакт в одном аккаунте | `--contact 101 --provider telegram --account 1` |
+| Чат или цепочку писем | `--chat 77 --account telegram:1` |
+| Контакт в одном аккаунте | `--contact 101 --account telegram:1` |
 | Человека, чьи аккаунты вы связали | `--person PERSON_UID` |
 | Организацию, проект или задачу | `--organization 2`, `--project 1`, `--task HRB-1` |
-| Встречу | `--meeting 5 --provider zoom --account ACCOUNT` |
+| Встречу | `--meeting 5 --account zoom:ACCOUNT` |
 
 ID папки можно узнать через `memo folders list`. Тег на папке действует на каждую заметку в ней на любой
 глубине, включая заметки, которые вы добавите позже.
 
-Чат, контакт и встреча принадлежат одному аккаунту, поэтому для них нужны `--provider` и `--account`.
+Чат, контакт и встреча принадлежат одному аккаунту, поэтому для них нужен `--account`.
 Человек, организация, проект или задача принадлежат вам, поэтому аккаунт для них не нужен.
 
 ## Теги в ваших файлах

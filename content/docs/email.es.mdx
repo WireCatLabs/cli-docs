@@ -135,9 +135,10 @@ Deja fuera a los remitentes que puntúan solo porque nunca abro sus boletines.
 
 `memo mail inspect gmail` lista los remitentes con su puntuación y sus señales. Cada importación puntúa
 también a los remitentes del correo guardado, como mucho una vez al día, y un resultado de búsqueda en
-`--json` lleva el `sender_score` de su remitente. La puntuación no cambia el orden de los resultados. Una
-marca en el nombre enviada desde otro dominio apunta a fraude; una puntuación por correo que nunca abres solo
-indica un boletín. Consulta [qué significa cada señal](./memo/mail.md#choose-what-to-import).
+`--json` lleva el `sender_score` de su remitente. El correo de un
+remitente con indicios de fraude, como una marca en el nombre enviada desde otro dominio o un dominio registrado
+en los últimos seis meses, aparece después del resto; un dominio al que has escrito nunca se mueve, y
+`--plain-order` mantiene el orden normal. Una puntuación por correo que nunca abres solo indica un boletín. Consulta [qué significa cada señal](./memo/mail.md#choose-what-to-import).
 
 ## Etiqueta correos y guarda notas sobre ellos
 

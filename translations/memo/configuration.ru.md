@@ -45,7 +45,7 @@ title: "Настройки"
 
 | Ключ | Значение |
 |---|---|
-| `name` | Имя аккаунта в Himalaya; его принимает `memo sync --account`. |
+| `name` | Имя аккаунта в Himalaya; его принимает `memo sync --source email:<name>`. |
 | `address` | Адрес электронной почты. |
 | `mode` | `gmail` (по умолчанию), `imap` или `mbox` для файла Google Takeout. |
 | `path` | Для `mbox`: файл Takeout, например `~/Takeout/Mail/All mail Including Spam and Trash.mbox`. |

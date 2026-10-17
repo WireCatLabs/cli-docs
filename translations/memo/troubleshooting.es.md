@@ -56,7 +56,7 @@ funciona, y luego importa de nuevo.
 `no mail account` significa que el archivo de configuración todavía no tiene cuentas de correo. Añade
 una en `mail.accounts` ([correo](./mail.md#add-the-account-to-memo)).
 
-`memo sync --account work` acepta el nombre de cuenta: el `name` de `mail.accounts` en los ajustes. Si es incorrecto, Memo enumera las cuentas conocidas. Sin `--account`, lee todas.
+`memo sync --source email:work` acepta el nombre de cuenta: el `name` de `mail.accounts` en los ajustes. Si es incorrecto, Memo enumera las cuentas conocidas. Sin `--source`, lee todas.
 
 ## Se rechaza la edición de una nota
 
@@ -67,13 +67,14 @@ La revisión que indicaste no es la actual: la nota cambió después de que la l
 
 - Los chats de la persona todavía no están descargados. Descárgalos con tg o max.
 - Las cuentas no están vinculadas. Vincúlalas con `tg contacts link` ([detalles](./people.md#link-a-persons-accounts)).
-- Si tienes varias cuentas en un servicio de mensajería, añade `--account`.
+- Si tienes varias cuentas en un servicio de mensajería, añade `--source`, como `--source telegram:1`.
 - Una nota que solo menciona el nombre en su texto no se incluye; enlázala en su lugar.
 
-## Aparece "select --provider and, when several accounts exist, --account"
+## Aparece "give --account", "give --source" o "names 2 accounts; give one"
 
-El comando trabaja en una sola cuenta y Memo no elige una por ti. Añade `--provider`, como
-`telegram`, y `--account` con el ID de la cuenta.
+El comando trabaja en una sola cuenta y Memo no elige una por ti. Un comando que cambia algo
+acepta `--account` con el proveedor y el ID de la cuenta, como `--account telegram:1`; uno que lee
+acepta `--source` con la misma forma. El error enumera las cuentas guardadas.
 
 ## Faltan datos de una versión anterior
 

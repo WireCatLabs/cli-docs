@@ -20,13 +20,13 @@ Show them to me first. Make a task only for the ones I choose.
 
 ```sh
 memo tasks add 'msg:telegram/1/77/42' --type request
-memo tasks add note:12 --provider telegram --account 1 --type promise
-memo tasks list --provider telegram --account 1
+memo tasks add note:12 --account telegram:1 --type promise
+memo tasks list --source telegram:1
 ```
 
 Una tarea creada a partir de una fuente tiene un tipo: `request` (el predeterminado), `question`,
 `mention` o `promise`. Pertenece a una cuenta de un servicio de mensajería. Una referencia de mensaje
-ya indica su cuenta; para una nota o un archivo, añade `--provider` y `--account`. Si añades la misma
+ya indica su cuenta; para una nota o un archivo, añade `--account`, como `--account telegram:1`. Si añades la misma
 tarea dos veces, obtienes la que ya existe.
 
 ## Qué revisar hoy
@@ -34,13 +34,13 @@ tarea dos veces, obtienes la que ya existe.
 La agenda, el plan y la ficha son los mismos comandos de tg y max; indica la cuenta:
 
 ```sh
-memo tasks agenda --provider telegram --account 1           # overdue, due, owed and waiting chats
-memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --provider telegram --account 1
-memo tasks show 1a2b3c4d --provider telegram --account 1
-memo stats tasks show --provider telegram --account 1       # open tasks per chat
+memo tasks agenda --source telegram:1           # overdue, due, owed and waiting chats
+memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
+memo tasks show 1a2b3c4d --source telegram:1
+memo stats tasks show --source telegram:1       # open tasks per chat
 ```
 
-Sin `--provider` y `--account`, el comando enumera las cuentas guardadas. tg y max abren estas tareas al sincronizar; memo lee el mismo almacén.
+Sin `--source` ni `--account`, el comando enumera las cuentas guardadas. tg y max abren estas tareas al sincronizar; memo lee el mismo almacén.
 
 ## Tareas en un proyecto
 
@@ -79,7 +79,7 @@ contexto (`memo context … --json`). Las tareas asignadas a alguien aparecen en
 
 ```sh
 memo tasks close HRB-1 --reason booked
-memo tasks close 7 --provider telegram --account 1 --as dismissed
+memo tasks close 7 --account telegram:1 --as dismissed
 ```
 
 Cierra una tarea con `--as done` (predeterminado) o `--as dismissed`. `memo tasks list state:done` muestra las cerradas; con `--project`, `kind:bug` filtra la clase. `source:"note:12"` conserva tareas de una cuenta procedentes de un mensaje, nota o documento: es el paso que propone `memo search all` para un resultado con tareas vinculadas. Cada cambio de estado, prioridad o responsable queda registrado.
@@ -96,10 +96,10 @@ memo tasks relations HRB-2
 memo tasks unlink HRB-2 HRB-1 --kind blocked-by
 ```
 
-`tasks link` también acepta otra tarea como `task:HRB-1`. Un destino distinto —mensaje, chat, persona o URL— vincula la tarea de una cuenta con su tema y requiere `--provider` y `--account`:
+`tasks link` también acepta otra tarea como `task:HRB-1`. Un destino distinto —mensaje, chat, persona o URL— vincula la tarea de una cuenta con su tema y requiere `--account`:
 
 ```sh
-memo tasks link 12 msg:telegram/500/7/101 --provider telegram --account 500
+memo tasks link 12 msg:telegram/500/7/101 --account telegram:500
 ```
 
 Una tarea solo está lista cuando todas las tareas a las que espera están hechas. Si una de las tareas
@@ -113,21 +113,21 @@ ordenador; otro programa que tú eliges, como tu agente o un script, pide a Memo
 pendientes y te los muestra.
 
 ```sh
-memo reminders add 7 --at-time 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --provider telegram --account 1
-memo reminders list --provider telegram --account 1
-memo reminders update 3 --revision 1 --at-time 2026-10-21T09:00:00+02:00 --provider telegram --account 1
-memo reminders cancel 3 --provider telegram --account 1
+memo reminders add 7 --at-time 2026-10-20T09:00:00+02:00 --timezone Europe/Madrid --account telegram:1
+memo reminders list --source telegram:1
+memo reminders update 3 --revision 1 --at-time 2026-10-21T09:00:00+02:00 --account telegram:1
+memo reminders cancel 3 --account telegram:1
 ```
 
 Escribe la hora con su diferencia respecto a UTC, como `+02:00` para Madrid en verano. Un recordatorio
-pertenece a una cuenta, así que necesita `--provider` y `--account`. Al cerrar una tarea se cancelan
+pertenece a una cuenta, así que para añadirlo o cambiarlo necesitas `--account`. Al cerrar una tarea se cancelan
 sus recordatorios.
 
 Para el programa que muestra los recordatorios:
 
 ```sh
-memo reminders poll --provider telegram --account 1 --json
-memo reminders ack REMINDER_ID RECEIPT --provider telegram --account 1
+memo reminders poll --account telegram:1 --json
+memo reminders ack REMINDER_ID RECEIPT --account telegram:1
 ```
 
 `poll` entrega los recordatorios pendientes, cada uno con un recibo. `ack` con ese recibo confirma que

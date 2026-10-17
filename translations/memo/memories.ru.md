@@ -75,9 +75,9 @@ memo facts confirm fact:4
 Агент подготавливает пакет JSON через `memo meetings actions add`. В каждом предложении указаны ID, проект и точные ссылки на отрывки с отпечатками из `zm meetings evidence`. Факты сохраняют свой вид, например `decision` или `promise`; задачи различают явное обязательство и предполагаемое следующее действие. Неизвестные даты и исполнители остаются незаполненными; указанные значения требуют собственных подтверждающих отрывков.
 
 ```sh
-memo meetings actions add findings.json --provider zoom --account me@example.com
-memo meetings actions list status:proposed --provider zoom --account me@example.com
-memo meetings actions show 5 --provider zoom --account me@example.com
+memo meetings actions add findings.json --account zoom:me@example.com
+memo meetings actions list status:proposed --source zoom:me@example.com
+memo meetings actions show 5 --source zoom:me@example.com
 ```
 
 Файл содержит `schema_version: 1`, постоянный `key`, `extractor` и `findings`. Каждое предложение содержит `id`, `kind`, `project` и `evidence` (объекты с `reference` и `fingerprint`). Факт добавляет `type` и `statement`. Задача добавляет `type` (`bug`, `chore` или `feature`), `title`, `reason` и `commitment` (`explicit` или `inferred`). Необязательный `due_at` — дата и время ISO с часовым поясом, требующие `due_evidence`; необязательный `assignee` — ссылка `person:<id>`, требующая `assignee_evidence`: оба списка содержат ссылки на подтверждающие отрывки. `-` читает JSON из стандартного ввода. Допускается до 16 предложений и 65 536 байт UTF-8 на пакет.
@@ -85,8 +85,8 @@ memo meetings actions show 5 --provider zoom --account me@example.com
 Подготовка пакета не создаёт фактов и задач. Предварительный просмотр показывает прежние решения по неизменённым предложениям. Откройте источники, затем лично подтвердите ID предложений, которые хотите сохранить, или отклоните весь пакет. Замените хеш ниже точным отпечатком из предварительного просмотра:
 
 ```sh
-memo meetings actions confirm 5 decision followup --fingerprint <hash> --provider zoom --account me@example.com
-memo meetings actions reject 5 --fingerprint <hash> --provider zoom --account me@example.com
+memo meetings actions confirm 5 decision followup --fingerprint <hash> --account zoom:me@example.com
+memo meetings actions reject 5 --fingerprint <hash> --account zoom:me@example.com
 ```
 
 Подтверждение создаёт выбранные факты и задачи проекта вместе и отклоняет остальные новые предложения. Ничего не отправляется. Терминал, обозначенный как агент, не может подтверждать или отклонять эти пакеты; владелец выполняет команды сам. Общий путь `memo actions confirm` отказывается обрабатывать итоги встреч.
@@ -112,7 +112,7 @@ memo actions reject 5
 Агент предлагает действие так:
 
 ```sh
-memo actions add reply --reason 'Kai asked twice' --provider telegram --target 'msg:telegram/1/77/42' --payload '{"text":"Friday works"}'
+memo actions add reply --reason 'Kai asked twice' --account telegram:1 --target 'msg:telegram/1/77/42' --payload '{"text":"Friday works"}'
 ```
 
 ## Что делали агенты

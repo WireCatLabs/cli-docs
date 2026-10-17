@@ -96,6 +96,13 @@ Dónde están las referencias de búsqueda:
 
 ## Elegir una cuenta
 
-Cuando tienes varias cuentas de Telegram, MAX o correo, Memo no elige una por ti. Los comandos que
-trabajan en una sola cuenta la piden con `--provider` y `--account`, y te dicen qué cuentas existen
-cuando falta. Una búsqueda sin cuenta busca en todas y lo indica.
+Cuando tienes varias cuentas de Telegram, MAX o correo, Memo no elige una por ti. Indica las cuentas
+con `--source`: una cuenta como `telegram:1` o `email:work`, todas las cuentas de un servicio de mensajería como `telegram`,
+todas las cuentas de un tipo como `mail`, o un grupo guardado como `group:work`; separa varias con comas. Una lista
+lee todas las cuentas que indicas y dice cuáles. Una búsqueda sin cuenta busca en todas y lo indica.
+
+Un comando que cambia algo, como añadir una tarea o un recordatorio, actúa como una sola cuenta. Indícala con
+`--account`, con el proveedor y la cuenta juntos: `--account telegram:1`, `--account email:work`. Sin ella,
+Memo te dice qué cuentas existen.
+
+El antiguo `--provider` con un `--account 1` sin proveedor sigue funcionando durante una versión y muestra la nueva forma.

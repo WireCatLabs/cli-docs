@@ -70,11 +70,11 @@ memo search notes 'budget' --filter 'date:2026-10-08'    # and a second conditio
 ```sh
 memo search mail 'from:kai subject:invoice'
 memo search mail 'mailbox:important budget'
-memo search mail 'budget' --account you@example.com
+memo search mail 'budget' --source email:you@example.com
 ```
 
 `mailbox:` encuentra una carpeta de correo o una etiqueta de Gmail, como `inbox`, `important` o
-`starred`. Sin `--account`, Memo busca en todas las cuentas de correo. También se busca el texto
+`starred`. Sin `--source`, Memo busca en todas las cuentas de correo; `--source email:work,email:personal` busca en esas dos. También se busca el texto
 dentro de los adjuntos (`filename:` y `content:`).
 
 ## Búsqueda por significado
@@ -116,7 +116,7 @@ enlaces y cómo se encontró.
 memo ask 'What is the Harbour budget?' 'Harbour budget' --all
 ```
 
-Las palabras después de la pregunta indican qué buscar; sin ellas, Memo busca toda la pregunta y cada palabra debe coincidir. `--all` busca en todas las cuentas; `--provider telegram --account 1` elige una. La respuesta enumera fuentes con referencia y texto, el ámbito buscado y lo omitido. Memo no responde a la pregunta ni guarda la respuesta por sí solo.
+Las palabras después de la pregunta indican qué buscar; sin ellas, Memo busca toda la pregunta y cada palabra debe coincidir. `--all` busca en todas las cuentas; `--source telegram:1` elige una. La respuesta enumera fuentes con referencia y texto, el ámbito buscado y lo omitido. Memo no responde a la pregunta ni guarda la respuesta por sí solo.
 
 Memo también puede enviar las fuentes a un proveedor de IA que hayas configurado y devolver su
 respuesta: añade `--analyze`, y `--allow-remote` para un proveedor fuera de tu ordenador. Consulta la
