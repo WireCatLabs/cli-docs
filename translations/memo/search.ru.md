@@ -69,11 +69,11 @@ memo search notes 'budget' --filter 'date:2026-10-08'    # and a second conditio
 ```sh
 memo search mail 'from:kai subject:invoice'
 memo search mail 'mailbox:important budget'
-memo search mail 'budget' --account you@example.com
+memo search mail 'budget' --source email:you@example.com
 ```
 
 `mailbox:` находит почтовую папку или ярлык Gmail, например `inbox`, `important` или `starred`. Без
-`--account` Memo ищет во всех почтовых аккаунтах. Текст внутри вложений тоже ищется
+`--source` Memo ищет во всех почтовых аккаунтах; `--source email:work,email:personal` ищет в этих двух. Текст внутри вложений тоже ищется
 (`filename:` и `content:`).
 
 ## Поиск по смыслу
@@ -115,7 +115,7 @@ Linked from these notes
 memo ask 'What is the Harbour budget?' 'Harbour budget' --all
 ```
 
-Слова после вопроса задают поиск. Без них Memo ищет весь вопрос, и каждое слово должно совпасть. `--all` ищет во всех аккаунтах; `--provider telegram --account 1` выбирает один. Ответ перечисляет источники с ссылками и текстом, область поиска и пропуски. Memo сам не отвечает на вопрос и не сохраняет ответ.
+Слова после вопроса задают поиск. Без них Memo ищет весь вопрос, и каждое слово должно совпасть. `--all` ищет во всех аккаунтах; `--source telegram:1` выбирает один. Ответ перечисляет источники с ссылками и текстом, область поиска и пропуски. Memo сам не отвечает на вопрос и не сохраняет ответ.
 
 Memo может также отправить источники настроенному вами провайдеру ИИ и вернуть его ответ: добавьте
 `--analyze`, а для провайдера за пределами вашего компьютера — ещё и `--allow-remote`. См.

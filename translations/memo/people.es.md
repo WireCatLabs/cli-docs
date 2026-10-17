@@ -40,8 +40,8 @@ Una nota que solo menciona el nombre en su texto no se incluye; solo cuentan los
 dice por qué. `--limit` muestra más de 20 elementos de cada tipo, y `--json` da la respuesta a un
 agente.
 
-Si tienes varias cuentas en el mismo servicio de mensajería, añade `--account`, por ejemplo
-`memo context telegram:101 --account 1`.
+Si tienes varias cuentas en el mismo servicio de mensajería, añade `--source`, por ejemplo
+`memo context telegram:101 --source telegram:1`.
 
 ## Enlazar las cuentas de una persona
 
@@ -112,7 +112,7 @@ Memo puede sugerir relaciones a partir del correo: personas que te escriben desd
 empresa.
 
 ```sh
-memo relationships suggest --provider email --account you@example.com
+memo relationships suggest --source email:you@example.com
 memo relationships confirm 4
 ```
 
@@ -124,8 +124,8 @@ persona. Los dominios de correo gratuito habituales, como Gmail, nunca se usan p
 Si tus reuniones están guardadas en el almacén local, puedes enlazar una reunión a un proyecto:
 
 ```sh
-memo projects meetings link HRB 5 --provider zoom --account ACCOUNT
-memo projects meetings list HRB --provider zoom --account ACCOUNT
+memo projects meetings link HRB 5 --account zoom:ACCOUNT
+memo projects meetings list HRB --source zoom:ACCOUNT
 ```
 
 Nombra exactamente la cuenta de la reunión. `confirmed:false` muestra los enlaces que sugirió un agente;

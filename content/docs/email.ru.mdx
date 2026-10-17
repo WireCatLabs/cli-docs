@@ -70,7 +70,7 @@ Memo читает почту через [Himalaya](https://github.com/pimalaya/h
 ваши собственные — импортируются как почтовые ящики и обновляются при каждом запуске.
 
 ```sh
-memo sync --only mail --account gmail --since-time 2026-09-01 --json
+memo sync --only mail --source email:gmail --since-time 2026-09-01 --json
 ```
 
 Выберите начальную дату. По умолчанию за один запуск читается не более 200 новых писем.
@@ -99,7 +99,7 @@ memo context telegram:"Rin Example" --json
 Для MAX используйте `max personal contacts link` с ID или именем человека в MAX. Проверьте возвращённые
 учётные записи и источники. Похожее имя не доказывает, что это один человек. Если сохранено
 несколько аккаунтов нужного провайдера, используйте
-`memo context telegram:"Rin Example" --account 1 --json` со своим ID аккаунта.
+`memo context telegram:"Rin Example" --source telegram:1 --json` со своим ID аккаунта.
 См. [связь и разделение аккаунтов людей](./people.md#link-your-accounts).
 
 ## Ищите в почте
@@ -147,12 +147,12 @@ Gmail отсеивает большую часть спама, но часть �
 
 ```sh
 memo tags add follow-up --message 'msg:email/you%40example.com/12345/67890'
-memo tags add work --chat 12345 --provider email --account you@example.com
-memo tags list --provider email --account you@example.com --json
+memo tags add work --chat 12345 --account email:you@example.com
+memo tags list --source email:you@example.com --json
 ```
 
 Полная ссылка на письмо содержит ящик, переписку и ID сообщения. Для метки переписки
-`--provider` и `--account` вместе указывают, к какому ящику она относится. Эти метки не меняют
+`--account email:<адрес>` указывает, к какому ящику она относится. Эти метки не меняют
 ярлыки Gmail и флаги почты. Чтобы сохранить оценку, связанную с одним письмом:
 
 ```sh
