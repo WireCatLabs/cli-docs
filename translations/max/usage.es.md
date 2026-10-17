@@ -158,7 +158,7 @@ max work chats list         # профиль work
 
 **La primera palabra es el perfil si no coincide con un comando.** Por eso no puedes llamar `chats` a un perfil; se rechaza explicando la causa.
 
-`max` nunca elige un perfil por sí mismo, aunque solo haya uno: sin nombre, el comando se detiene y enumera los perfiles de este ordenador. El nombre lo da la primera palabra, `MAX_PROFILE` o `default_profile`.
+`max` nunca elige un perfil por sí mismo, aunque solo haya uno: sin nombre, el comando se detiene y enumera los perfiles de este ordenador. El nombre lo da la primera palabra o `MAX_PROFILE`.
 
 Para toda la sesión de terminal:
 
@@ -559,7 +559,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 El JSON es `{item}` con la descripción del gráfico y, al guardar la imagen, también `file` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.58.0/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.60.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 
@@ -1223,14 +1223,13 @@ Archivo opcional `~/.config/max-cli/config.json`:
 
 ```json
 {
-  "default_profile": "personal",
   "profiles": {
     "personal": { "limit": 50, "timeout_ms": 20000, "color": true, "record": false, "keep_runs_for_days": 30 }
   }
 }
 ```
 
-El orden en el que se resuelve cualquier configuración es: **bandera → variable de entorno → archivo → valor incorporado**. En el archivo, el perfil es más fuerte que el `defaults` general, y las secciones `personal` y `bot` establecen valores por separado para una cuenta personal y para bots (`max personal config set --personal …`, `--bot …`). Todos los campos, incluidos `default_profile` y `permissions`, son [ajustes](./configuration.md). Un error tipográfico en el nombre del campo es un error con el nombre del campo, no con el valor predeterminado silencioso.
+El orden en el que se resuelve cualquier configuración es: **bandera → variable de entorno → archivo → valor incorporado**. En el archivo, el perfil es más fuerte que el `defaults` general, y las secciones `personal` y `bot` establecen valores por separado para una cuenta personal y para bots (`max personal config set --personal …`, `--bot …`). Todos los campos, incluido `permissions`, son [ajustes](./configuration.md). Un error tipográfico en el nombre del campo es un error con el nombre del campo, no con el valor predeterminado silencioso.
 
 **No admite secretos:** el esquema no tiene campos para ellos.
 

@@ -18,7 +18,7 @@ max [профиль] [опции] <команда> <действие> [аргу�
 
 **Первое слово — профиль**, если оно не совпадает с именем команды: `max personal chats list`
 читает чаты профиля `personal`. То же самое говорит переменная `MAX_PROFILE` на весь сеанс
-оболочки, а `defaultProfile` в файле настроек — насовсем (`max config set defaultProfile personal`).
+оболочки.
 **Профиль никогда не подразумевается**: если его не назвать, команда, которой нужен аккаунт,
 останавливается и перечисляет профили этого компьютера — даже если профиль один. Первый вход тоже
 с именем: `max personal setup`. Без профиля работают только команды, которым аккаунт не нужен:
@@ -1306,7 +1306,7 @@ max contacts link <person> <other>
 | Аргумент | | Что это |
 |---|---|---|
 | `person` | обязательный | ID, @username или часть имени. |
-| `other` | обязательный | the same in another messenger of the store, as <messenger>:<person> — max:Ana. |
+| `other` | обязательный | the same in another messenger of the store, as <messenger>:<person> — max:Ana; me: it is you, as zoom:<id> me. |
 
 ### `max contacts unlink`
 
@@ -1343,7 +1343,7 @@ max messages list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | сколько результатов. |
 | `--cursor <cursor>` | продолжить с места, где остановилась прошлая страница; его даёт page.next. |
-| `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark the chat read up to the newest message shown; the other person sees it. |
 
@@ -2364,10 +2364,11 @@ max tasks add <message> [options]
 | `--description <text>` | подробности в Markdown: кто кому должен, когда считать выполненной, следующий шаг, ключевые слова. |
 | `--due <time>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
 | `--remind-time <time>` | когда посмотреть на неё снова: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+| `--assignee <person...>` | кто выполняет: sender (тот, кто отправил сообщение задачи) или person:<id>; none очищает. Если не уверены, не указывайте: задача без исполнителя лучше, чем никакой. |
 
 ### `max tasks plan`
 
-задать название, описание, срок, следующую проверку и категорию задачи; в мессенджер ничего не уходит
+задать название, описание, срок, следующую проверку, категорию и исполнителя задачи; в мессенджер ничего не уходит
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2386,6 +2387,7 @@ max tasks plan <task> [options]
 | `--description <text>` | подробности в Markdown: кто кому должен, когда считать выполненной, следующий шаг, ключевые слова. |
 | `--due <time>` | когда она должна быть выполнена: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
 | `--remind-time <time>` | когда посмотреть на неё снова: время ISO 8601 или 2h, 3d от текущего момента; none очищает. |
+| `--assignee <person...>` | кто выполняет: sender (тот, кто отправил сообщение задачи) или person:<id>; none очищает. Если не уверены, не указывайте: задача без исполнителя лучше, чем никакой. |
 
 ### `max tasks link`
 
@@ -2541,14 +2543,14 @@ max tasks agenda [query] [options]
 max tasks categories
 ```
 
-### `max tasks apply`
+### `max tasks scan`
 
-правила задач для последних сохранённых сообщений чата: вопрос без ответа и упоминание вас открывают задачу, ваш ответ закрывает её — для чата, который первый sync не обработал (настройка task_first_pass_per_chat). Показывает, что откроется, и ничего не меняет без --yes; с --yes проверяет дубликаты как при sync. Читает только локальное хранилище
+правила задач для последних сохранённых сообщений чата: в личном чате вопрос, на который вы не ответили, а в группе только вопрос в ответ вам и упоминание вас открывают задачу, ваш ответ закрывает её; канал задач не открывает — для чата, который первый sync не обработал (настройка task_first_pass_per_chat). Показывает, что откроется, и ничего не меняет без --yes; с --yes проверяет дубликаты как при sync. Читает только локальное хранилище
 
 **Меняет что-то только на этом компьютере.**
 
 ```sh
-max tasks apply <chat> [options]
+max tasks scan <chat> [options]
 ```
 
 | Аргумент | | Что это |
@@ -3757,7 +3759,7 @@ max inbox [query] [options]
 | `--limit <n>` | at most this many per chat, the newest. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
-| `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark each chat shown read, up to the newest message shown; the other side sees it. |
 | `--no-mark-read` | do not, whatever the catch_up_marks_read setting says. |
@@ -3779,7 +3781,7 @@ max review [query] [options]
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
 | `--unanswered [duration]` | only questions to you or a group's admins that nobody answered, asked at least this long ago — 4h, 1d; 24h if not given. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
-| `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--new` | what changed since the last `review --new`, a point per chat — for scheduled runs. |
 | `--mark-read` | also mark each chat shown read, up to the newest message shown; the other side sees it. |
@@ -4441,7 +4443,7 @@ max mcp [options]
 
 | Опция | Что делает |
 |---|---|
-| `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
+| `--permission <key=level>` | ужесточить разрешение только для этого сервера, например messages.send=deny; права профиля никогда не ослабляет; повторите для нескольких ключей. |
 | `--http` | предоставлять HTTP-сервер на 127.0.0.1 для ChatGPT и Claude в браузере через ваш туннель; действуют права профиля. |
 | `--port <port>` | the local port for --http (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
@@ -4457,7 +4459,7 @@ max mcp config [options]
 
 | Опция | Что делает |
 |---|---|
-| `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
+| `--permission <key=level>` | ужесточить разрешение только для этого сервера, например messages.send=deny; права профиля никогда не ослабляет; повторите для нескольких ключей. |
 
 ### `max mcp setup`
 
@@ -4476,7 +4478,7 @@ max mcp setup <client> [options]
 | Опция | Что делает |
 |---|---|
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
-| `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
+| `--permission <key=level>` | ужесточить разрешение только для этого сервера, например messages.send=deny; права профиля никогда не ослабляет; повторите для нескольких ключей. |
 
 ### `max mcp doctor`
 
@@ -4488,7 +4490,7 @@ max mcp doctor [options]
 
 | Опция | Что делает |
 |---|---|
-| `--permission <key=level>` | переопределить разрешение только для этого сервера; повторите для нескольких ключей. |
+| `--permission <key=level>` | ужесточить разрешение только для этого сервера, например messages.send=deny; права профиля никогда не ослабляет; повторите для нескольких ключей. |
 
 ## `max bot`
 

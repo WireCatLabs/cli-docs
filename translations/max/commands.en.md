@@ -15,7 +15,7 @@ Command syntax:
 max [профиль] [опции] <команда> <действие> [аргументы]
 ```
 
-**The first word is a profile name** unless it matches a command name: `max personal chats list` reads chats for the `personal` profile. The `MAX_PROFILE` environment variable sets the profile for the whole shell session, and `defaultProfile` in the settings file sets it permanently (`max config set defaultProfile personal`).
+**The first word is a profile name** unless it matches a command name: `max personal chats list` reads chats for the `personal` profile. The `MAX_PROFILE` environment variable sets the profile for the whole shell session.
 **A profile is never assumed**: without one, a command that needs an account stops and lists the profiles on this computer, even when there is only one. The first login names one too: `max personal setup`. Without a profile, only commands that need no account work: `--help`, `--version`, `commands`, `skill show`, `account list`, `config show`.
 
 ⚠ Command and option descriptions below match `max --help` exactly. They come from the program itself, ensuring that help and this reference stay consistent.
@@ -1299,7 +1299,7 @@ max contacts link <person> <other>
 | Argument | | Meaning |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
-| `other` | required | the same in another messenger of the store, as <messenger>:<person> — max:Ana. |
+| `other` | required | the same in another messenger of the store, as <messenger>:<person> — max:Ana; me: it is you, as zoom:<id> me. |
 
 ### `max contacts unlink`
 
@@ -1336,7 +1336,7 @@ max messages list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | how many. |
 | `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
-| `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark the chat read up to the newest message shown; the other person sees it. |
 
@@ -2357,10 +2357,11 @@ max tasks add <message> [options]
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
 | `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
 | `--remind-time <time>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
 
 ### `max tasks plan`
 
-set a task's title, description, due date, next check and category; nothing reaches the messenger
+set a task's title, description, due date, next check, category and assignee; nothing reaches the messenger
 
 **Changes something on this computer only.**
 
@@ -2379,6 +2380,7 @@ max tasks plan <task> [options]
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
 | `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
 | `--remind-time <time>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
 
 ### `max tasks link`
 
@@ -2534,14 +2536,14 @@ the categories a task takes, with what each means and the words a rule picks it 
 max tasks categories
 ```
 
-### `max tasks apply`
+### `max tasks scan`
 
-the task rules over a chat's newest stored messages: a question nobody answered and a mention of you open a task, and your answer closes one — for a chat the first sync left alone (config task_first_pass_per_chat). Lists what would open and changes nothing unless --yes; with --yes the duplicate check runs as on a sync. Reads only the local store
+the task rules over a chat's newest stored messages: in a one-to-one chat a question you did not answer, in a group only a question in reply to you and a mention of you, open a task, and your answer closes one; a channel opens none — for a chat the first sync left alone (config task_first_pass_per_chat). Lists what would open and changes nothing unless --yes; with --yes the duplicate check runs as on a sync. Reads only the local store
 
 **Changes something only on this computer.**
 
 ```sh
-max tasks apply <chat> [options]
+max tasks scan <chat> [options]
 ```
 
 | Argument | | Meaning |
@@ -3750,7 +3752,7 @@ max inbox [query] [options]
 | `--limit <n>` | at most this many per chat, the newest. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
-| `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--mark-read` | also mark each chat shown read, up to the newest message shown; the other side sees it. |
 | `--no-mark-read` | do not, whatever the catch_up_marks_read setting says. |
@@ -3772,7 +3774,7 @@ max review [query] [options]
 | `--kind <kinds>` | only chats of these kinds, comma-separated: dialog, group, channel, saved. |
 | `--unanswered [duration]` | only questions to you or a group's admins that nobody answered, asked at least this long ago — 4h, 1d; 24h if not given. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
-| `--transcribe` | turn voice messages not heard yet into text — by the messenger, or a model on this machine; can take minutes. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <id>` | which downloaded speech model hears them, with --transcribe; `models audio list` shows them. |
 | `--new` | what changed since the last `review --new`, a point per chat — for scheduled runs. |
 | `--mark-read` | also mark each chat shown read, up to the newest message shown; the other side sees it. |
@@ -4434,7 +4436,7 @@ max mcp [options]
 
 | Option | Purpose |
 |---|---|
-| `--permission <key=level>` | override a permission for this server only; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
@@ -4450,7 +4452,7 @@ max mcp config [options]
 
 | Option | Purpose |
 |---|---|
-| `--permission <key=level>` | override a permission for this server only; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
 ### `max mcp setup`
 
@@ -4469,7 +4471,7 @@ max mcp setup <client> [options]
 | Option | Purpose |
 |---|---|
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
-| `--permission <key=level>` | override a permission for this server only; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
 ### `max mcp doctor`
 
@@ -4481,7 +4483,7 @@ max mcp doctor [options]
 
 | Option | Purpose |
 |---|---|
-| `--permission <key=level>` | override a permission for this server only; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
 ## `max bot`
 

@@ -579,7 +579,7 @@
   {
     "tool": "max",
     "slug": "changelog",
-    "reason": "The source placeholders <слова>, <состояние> and <операция> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
+    "reason": "The source placeholders <слова>, <состояние>, <операция> and <профиль> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
     "replacements": {
       "en": [
         {
@@ -593,6 +593,14 @@
         {
           "before": "`max bot api <операция>` calls",
           "after": "`max bot api <operation>` calls"
+        },
+        {
+          "before": "— `max <профиль> …` —",
+          "after": "— `max <profile> …` —"
+        },
+        {
+          "before": "`max <профиль> messages delete --for-everyone`",
+          "after": "`max <profile> messages delete --for-everyone`"
         }
       ],
       "es": [
@@ -607,6 +615,14 @@
         {
           "before": "`max bot api <операция>` ejecuta",
           "after": "`max bot api <operación>` ejecuta"
+        },
+        {
+          "before": "(`max <профиль> …`)",
+          "after": "(`max <perfil> …`)"
+        },
+        {
+          "before": "`max <профиль> messages delete --for-everyone`",
+          "after": "`max <perfil> messages delete --for-everyone`"
         }
       ]
     }
@@ -2160,31 +2176,6 @@
         {
           "before": "`searchStemmers.latin english,spanish`",
           "after": "`search_stemmers.latin english,spanish`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "commands",
-    "reason": "default_profile is gone: cli-core refuses to set it and a command always names its profile, so the defaultProfile setting no longer exists.",
-    "replacements": {
-      "en": [
-        {
-          "before": ", and `defaultProfile` in the settings file sets it permanently (`max config set defaultProfile personal`).",
-          "after": "."
-        }
-      ],
-      "es": [
-        {
-          "before": ", y `defaultProfile` en el archivo de configuración lo fija de forma permanente (`max config set defaultProfile personal`).",
-          "after": "."
-        }
-      ],
-      "ru": [
-        {
-          "before": ", а `defaultProfile` в файле настроек — насовсем (`max config set defaultProfile personal`).",
-          "after": "."
         }
       ]
     }

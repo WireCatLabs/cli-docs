@@ -51,7 +51,7 @@ max config show --json     # то же одним объектом
 
 El comando imprime el perfil seleccionado **y de dónde vino**, la ruta al archivo de configuración y si existe, los perfiles y valores efectivos de todas las configuraciones con el origen de cada uno.
 
-Cada ajuste indica su origen: `flag`, `default` o `config file:` con la clave, como `config file: bot.profiles.test`. El perfil muestra `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: default_profile` o `none named`: no se nombró ningún perfil, y entonces `profile` es `null`.
+Cada ajuste indica su origen: `flag`, `default` o `config file:` con la clave, como `config file: bot.profiles.test`. El perfil muestra `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK` o `none named`: no se nombró ningún perfil, y entonces `profile` es `null`.
 
 Con `--json`, la respuesta también incluye `store_settings`: los ajustes del archivo compartido (`search_stemmers.*`, `task_agent_close*`) y su origen, `store` o `default`.
 
@@ -71,7 +71,6 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_ru
 
 ```json
 {
-  "default_profile": "personal",
   "defaults": { "keep_runs_for_days": 14 },
   "profiles": {
     "personal": { "limit": 50, "timeout_ms": 20000, "color": true },
@@ -94,7 +93,6 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_ru
 
 |Campo|¿Qué hace?|Qué se superpone para un ejecución|Por defecto|
 |---|---|---|---|
-| `default_profile` |¿Qué perfil si la primera palabra no es nada y no se especifica `MAX_PROFILE`?|primera palabra (`max work …`), `MAX_PROFILE`| ninguno: sin nombre, el comando enumera los perfiles |
 | `limit` |¿Cuántos registros mostrar cuando no se transmite `--limit`?| `--limit` | `20` |
 | `timeout_ms` |cuánto tiempo esperar para recibir una respuesta a **una solicitud**|— (`--timeout` — otro, ver más abajo)|tomado del transporte|
 | `color` |color en terminal; sin un campo se decide en función de si es una terminal|—; sin color de campo se apaga `NO_COLOR`|por terminal|
@@ -175,7 +173,7 @@ Con `ask`, el terminal pide confirmación con «no» por defecto. `--allow-dange
 
 ### A través de MCP
 
-MCP no muestra formularios de confirmación: `ask` permite la escritura invocada; `deny` y `readonly` siguen bloqueándola. `--permission ключ=уровень` modifica temporalmente los permisos del proceso. En la CLI, `ask` sigue requiriendo una respuesta o una opción explícita. Consulta la conexión en la [guía MCP](./mcp.md).
+MCP no muestra formularios de confirmación: `ask` permite la escritura invocada; `deny` y `readonly` siguen bloqueándola. `--permission ключ=уровень` endurece temporalmente los permisos del proceso, pero no los relaja. En la CLI, `ask` sigue requiriendo una respuesta o una opción explícita. Consulta la conexión en la [guía MCP](./mcp.md).
 
 ### Ajuste antiguo `allow`
 
@@ -191,7 +189,7 @@ max work config unset limit             # убрать; снова решает 
 max agent config set permissions.messages readonly  # чтение сообщений без записи
 max shop config set --bot sends_per_hour 200    # только боту shop
 max config set --personal --defaults limit 30 # всем личным аккаунтам
-max config set default_profile work      # какой профиль без первого слова
+max config unset default_profile         # убрать старую настройку: профиль больше не подразумевается
 ```
 
 Los valores se comprueban con el mismo esquema usado para leer, **antes de escribir**: `max personal config set limit 0` se rechaza y el archivo queda igual. `serve`, `sender_colors`, `catch_up_marks_read` y `search_catch_up` no se admiten con `--bot`: los bots no tienen servidor, colores de autores ni estado de no leído.
@@ -258,7 +256,7 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 
 |Llave|Tipo o valor válido|Región|
 |---|---|---|
-| `default_profile` |línea con nombre de perfil|raíz del archivo|
+| `default_profile` |no se lee: un comando sin nombre de perfil se detiene — `max config unset default_profile`|raíz del archivo|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` |entero ≥ 1|perfil|
 | `requests_per_minute` |entero ≥ 0|perfil|
 | `color`, `record` | boolean |perfil|

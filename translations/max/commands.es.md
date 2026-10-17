@@ -18,7 +18,7 @@ max [профиль] [опции] <команда> <действие> [аргу�
 
 **La primera palabra es el perfil** si no coincide con un comando: `max personal chats list`
 consulta los chats del perfil `personal`. La variable `MAX_PROFILE` fija el perfil para toda la sesión
-de la terminal, y `defaultProfile` en el archivo de configuración lo fija de forma permanente (`max config set defaultProfile personal`).
+de la terminal.
 **El perfil nunca se da por supuesto**: si no lo indicas, un comando que necesita una cuenta se detiene
 y enumera los perfiles de este ordenador, aunque solo haya uno. El primer inicio de sesión también lleva
 nombre: `max personal setup`. Sin perfil solo funcionan los comandos que no necesitan una cuenta:
@@ -1306,7 +1306,7 @@ max contacts link <person> <other>
 | Argumento | | Qué es |
 |---|---|---|
 | `person` | obligatorio | su ID, @username o parte de su nombre. |
-| `other` | obligatorio |lo mismo en otro messenger de el archivo, como <messenger>:<person> — max:Ana.|
+| `other` | obligatorio |lo mismo en otro messenger de el archivo, como <messenger>:<person> — max:Ana; me: eres tú, como zoom:<id> me.|
 
 ### `max contacts unlink`
 
@@ -1343,7 +1343,7 @@ max messages list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | cuántos resultados. |
 | `--cursor <cursor>` | continuar desde donde se detuvo la última página; lo da page.next. |
-| `--transcribe` |convertir los mensajes de voz que aún no se han escuchado en texto, ya sea por el servicio de mensajería o por un modelo de esta máquina; puede tardar unos minutos.|
+| `--transcribe` |convertir los mensajes de voz que aún no se han escuchado en texto, por el servicio de mensajería cuando puede o, si no, por un modelo de esta máquina; puede tardar unos minutos.|
 | `--model <id>` |qué modelo de voz descargado los escucha, con --transcribe; `models audio list` se los muestra.|
 | `--mark-read` |también marque el chat leído hasta el mensaje más reciente mostrado; la otra persona lo ve.|
 
@@ -2364,10 +2364,11 @@ max tasks add <message> [options]
 | `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo se da por hecha, siguiente paso, palabras clave. |
 | `--due <time>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
 | `--remind-time <time>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+| `--assignee <person...>` | quién la hace: sender (quien envió el mensaje de la tarea) o person:<id>; none lo borra. Si no estás seguro, omítelo: más vale una tarea sin responsable que ninguna. |
 
 ### `max tasks plan`
 
-establecer el título, la descripción, la fecha límite, la próxima revisión y la categoría de una tarea; nada llega al servicio de mensajería
+establecer el título, la descripción, la fecha límite, la próxima revisión, la categoría y el responsable de una tarea; nada llega al servicio de mensajería
 
 **Cambia algo solo en este ordenador.**
 
@@ -2386,6 +2387,7 @@ max tasks plan <task> [options]
 | `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo se da por hecha, siguiente paso, palabras clave. |
 | `--due <time>` | cuándo debe estar hecha: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
 | `--remind-time <time>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
+| `--assignee <person...>` | quién la hace: sender (quien envió el mensaje de la tarea) o person:<id>; none lo borra. Si no estás seguro, omítelo: más vale una tarea sin responsable que ninguna. |
 
 ### `max tasks link`
 
@@ -2541,14 +2543,14 @@ las categorías que puede tener una tarea, con lo que significa cada una y las p
 max tasks categories
 ```
 
-### `max tasks apply`
+### `max tasks scan`
 
-aplica las reglas de tareas a los mensajes guardados más recientes de un chat: una pregunta sin respuesta o una mención tuya abre una tarea y tu respuesta la cierra, para un chat que la primera sincronización dejó sin procesar (ajuste task_first_pass_per_chat). Muestra lo que abriría y no cambia nada sin --yes; con --yes comprueba duplicados como en una sincronización. Solo lee el almacén local
+aplica las reglas de tareas a los mensajes guardados más recientes de un chat: en un chat uno a uno, una pregunta que no respondiste, y en un grupo, solo una pregunta en respuesta a ti y una mención tuya, abren una tarea, y tu respuesta la cierra; un canal no abre ninguna, para un chat que la primera sincronización dejó sin procesar (ajuste task_first_pass_per_chat). Muestra lo que abriría y no cambia nada sin --yes; con --yes comprueba duplicados como en una sincronización. Solo lee el almacén local
 
 **Cambia algo solo en este ordenador.**
 
 ```sh
-max tasks apply <chat> [options]
+max tasks scan <chat> [options]
 ```
 
 | Argumento | | Qué es |
@@ -3757,7 +3759,7 @@ max inbox [query] [options]
 | `--limit <n>` |como máximo estos tantos por chat, los más nuevos.|
 | `--all` |Chats silenciados y archivados también: excluidos a menos que te mencionen o te respondan.|
 | `--kind <kinds>` |solo chats de este tipo, separados por comas: diálogo, grupo, canal, guardados.|
-| `--transcribe` |convertir los mensajes de voz que aún no se han escuchado en texto, ya sea por el servicio de mensajería o por un modelo de esta máquina; puede tardar unos minutos.|
+| `--transcribe` |convertir los mensajes de voz que aún no se han escuchado en texto, por el servicio de mensajería cuando puede o, si no, por un modelo de esta máquina; puede tardar unos minutos.|
 | `--model <id>` |qué modelo de voz descargado los escucha, con --transcribe; `models audio list` se los muestra.|
 | `--mark-read` |también marque cada chat mostrado como leído, hasta el mensaje más reciente mostrado; el otro lado lo ve.|
 | `--no-mark-read` | no lo hagas, independientemente de lo que diga la configuración catch_up_marks_read. |
@@ -3779,7 +3781,7 @@ max review [query] [options]
 | `--kind <kinds>` |solo chats de este tipo, separados por comas: diálogo, grupo, canal, guardados.|
 | `--unanswered [duration]` |sólo preguntas para usted o los administradores de un grupo que nadie respondió, formuladas al menos hace tanto tiempo: 4 h, 1 d; 24h si no se da.|
 | `--all` |Chats silenciados y archivados también: excluidos a menos que te mencionen o te respondan.|
-| `--transcribe` |convertir los mensajes de voz que aún no se han escuchado en texto, ya sea por el servicio de mensajería o por un modelo de esta máquina; puede tardar unos minutos.|
+| `--transcribe` |convertir los mensajes de voz que aún no se han escuchado en texto, por el servicio de mensajería cuando puede o, si no, por un modelo de esta máquina; puede tardar unos minutos.|
 | `--model <id>` |qué modelo de voz descargado los escucha, con --transcribe; `models audio list` se los muestra.|
 | `--new` |Lo que cambió desde el último `review --new`, un punto por chat, para ejecuciones programadas.|
 | `--mark-read` |también marque cada chat mostrado como leído, hasta el mensaje más reciente mostrado; el otro lado lo ve.|
@@ -4441,7 +4443,7 @@ max mcp [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 | `--http` | ofrece el servidor HTTP en 127.0.0.1 para ChatGPT y Claude en el navegador a través de tu túnel; se aplican los permisos del perfil. |
 | `--port <port>` |el puerto local para --http (predeterminado 8765).|
 | `--public-url <url>` |la dirección https del túnel que utilizan las aplicaciones del navegador, p. https://<name>.ts.net.|
@@ -4457,7 +4459,7 @@ max mcp config [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
 ### `max mcp setup`
 
@@ -4476,7 +4478,7 @@ max mcp setup <client> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--allow-writes` |Reconocer que este perfil ofrece herramientas de escritura.|
-| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
 ### `max mcp doctor`
 
@@ -4488,7 +4490,7 @@ max mcp doctor [options]
 
 | Opción | Para qué sirve |
 |---|---|
-| `--permission <key=level>` | sobrescribir un permiso solo para este servidor; repetir para más claves. |
+| `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
 ## `max bot`
 

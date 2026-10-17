@@ -59,9 +59,8 @@ for the commands to manage these controls.
 ## A temporary change for an MCP server
 
 Add `--permission messages.send=deny` to the server startup command to refuse sending for that
-process. Saved settings stay the same. In `tg` the flag only tightens: an override that would loosen the profile's
-level is refused at startup, so to allow more, change the profile's permissions. `max` still accepts a looser level
-for one process, such as `--permission messages.send=allow`. Over MCP, `ask` does not require a confirmation form on the server: the app controls
+process. Saved settings stay the same. The flag only tightens: an override that would loosen the profile's
+level is refused at startup, so to allow more, change the profile's permissions. Over MCP, `ask` does not require a confirmation form on the server: the app controls
 its own approvals and may allow a call without asking again. Use `deny` or `readonly` to refuse changes. [Browser setup](./browser-apps.mdx) explains the full connection.
 
 ## Limits and detailed rules
