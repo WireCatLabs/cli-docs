@@ -22,8 +22,11 @@ registry tar/SRI equals its validated CI artifact, and the annotated tag resolve
 Zoom #139 merged at `27184e414773e9aa16d6814237f1e3a782759e28`; release preparation #140 is
 `818347486c479cdadf0cc28d90b0c86bf127cca0`. The source review uses that immutable commit;
 portal runtime pin remains unchanged until actual publication and artifact verification.
-The capture-only CLI currently treats a raw commit as a branch and refused the preview before
-writing output. No generated source was edited; released-tag capture remains required.
+The initial capture-only CLI refused a raw commit before writing output. Separate tooling fix
+#282 is now merged at `bac5397a0b265d0cf12575735f4b36cf966674fa`; it fetches and detaches
+immutable commits through the existing source helper. Eleven focused tests, types and a real
+sixteen-page capture match the immutable converted source, leaving runtime pins and reader pages
+unchanged. Released-tag capture remains required for publication.
 
 ## Page and locale review
 
