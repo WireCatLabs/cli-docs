@@ -6,6 +6,13 @@ Las entradas nuevas están traducidas; el historial anterior conserva su inglés
 
 ## 0.23.0 — 17.10.2026
 
+### Corregido
+
+- Las reservas de la posición de sincronización conservan el protocolo publicado `.lock/owner.json`
+  y la recuperación de bloqueos locales obsoletos, para impedir que escritores anteriores y nuevos
+  posean la misma posición a la vez. La escritura atómica compartida conserva las correcciones de
+  limpieza y de carpetas accesibles mediante enlaces simbólicos.
+
 ### Añadido
 
 - `meetings prepare --project <name-key-or-alias>` y el argumento MCP `project` añaden coincidencias

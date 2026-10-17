@@ -59,7 +59,7 @@ HTML and Markdown evidence will be recorded after source capture from the releas
 
 ## Validation boundary
 
-Registry Core consumer checks pass 483 tests across 57 files, 98.44% line and 93.79% branch coverage,
+Initial registry Core consumer checks passed 483 tests across 57 files, 98.44% line and 93.79% branch coverage,
 full types, docs, generated reference, five CLI/MCP contracts and command lint (26 baseline, zero
 new). The packed package with registry dependencies passes all eighteen preparation flags, including
 cited aliases, continuation without another Zoom read and scoped no writes. This source package
@@ -68,3 +68,23 @@ check does not substitute for the stock four-platform release acceptance or fina
 Release publication, portal pin/source capture, ten translation fingerprints, all five offline
 contracts, strict content checks, local smoke, CI export/production browsers and live-route checks
 remain pending. No UI, navigation, browser test, timeout, worker or performance guard changes are planned.
+
+
+## Incoming modularity refactor and independent compatibility correction
+
+Zoom #141 splits program/watch/store/setup, manifest and schedule modules, consolidates download
+redirect handling and adopts shared atomic file writes. #142 updates only the development security
+harness to registry 0.5.2. Those changes landed before the publisher captured its source.
+Independent review caught a checkpoint-lock protocol regression: `.locks` did not exclude a live
+published `.lock/owner.json` holder. The isolated negative test fails on #141. Follow-up #143 at
+`dbf4db9` retains the published host-format lease and stale-local recovery while keeping shared
+atomic writes and the other refactor improvements. This compatibility adapter is the remaining
+exception to generic checkpoint-lock reuse, not a claim that every native lock can already share
+one codec. Actual installed 0.22.1/Core307 and the fixed candidate exclude each other and read/write
+one checkpoint in sequence, using temporary state only. The native/translated new Fixed entry
+states that boundary; older changelog sections remain unchanged.
+
+The updated suite passes 486 tests across 58 files (98.46% lines, 93.77% branches), 29 focused
+lease/sync/cancellation tests, types/docs and generated CLI/MCP contracts. Legacy upgrade and
+no-leak checks pass with harness 0.5.2. Stock `bin/release` folds the pending Fixed note through
+PR144, then captures its exact current source. Final artifact/platform/registry proof remains required.
