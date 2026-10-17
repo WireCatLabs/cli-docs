@@ -4,6 +4,21 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.24.0 — 18.10.2026
+
+### Añadido
+
+- `meetings prepare` incluye coincidencias literales citadas de fuentes de mensajes, correo y documentos configuradas explícitamente. La selección pertenece al perfil local; MCP captura los ID al arrancar, las páginas son acotadas y la cobertura se conserva. La preparación abre el almacén existente en modo de solo lectura.
+
+### Cambios — pueden afectar a los consumidores
+
+- La preparación abre un almacén compartido existente compatible en modo de solo lectura y rechaza esquemas ausentes o antiguos. Actualiza el almacén mediante una lectura normal de reuniones guardadas antes de repetirla. Los conectores propios reciben la intención `preparation` y el contexto de fuentes capturado opcional; conserva el modo de solo lectura y cierra la conexión en todas las salidas.
+
+### Corregido
+
+- La publicación puede esperar el bloqueo compartido con `WIRECAT_RELEASE_WAIT_SECONDS`; por defecto sigue rechazando inmediatamente un bloqueo ocupado.
+- La adopción de Core 0.332.0 y Base 0.43.2 publicados y compatibles incorpora contratos compartidos acotados de preparación, apertura del almacén de solo lectura y roles registrados para los indicadores de fuentes. Usa una sola instancia de Base. Los parámetros de correo compatibles de Core mantienen la preparación con fuentes seleccionadas en Node 22.16; Zoom habilita explícitamente la capacidad compartida de comunicaciones para CLI y MCP.
+
 ## 0.23.2 — 17.10.2026
 
 ### Corregido

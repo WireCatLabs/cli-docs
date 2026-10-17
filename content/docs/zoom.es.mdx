@@ -82,9 +82,18 @@ no aporta otra prueba. Revisa indexación pendiente, límites de salida y
 `project_evidence.continuation`; continúa con la búsqueda existente del proyecto incluso tras una
 página vacía si quedan resultados. Esto no deduce ni confirma el proyecto de la próxima llamada.
 
-Los documentos importados, el correo, los mensajes y los vocabularios de proyectos no elegidos quedan como
-no consultados; el agente puede investigarlos aparte. La preparación no descarga transcripciones ausentes ni vincula personas por
-coincidencia de nombres.
+También puedes [elegir cuentas de mensajes/correo y carpetas de documentos guardadas](./zm/configuration.md#select-communications-for-preparation)
+para este perfil. Pide al agente que incluya esas fuentes con palabras literales; ninguna se elige
+automáticamente. El permiso cubre toda la cuenta o carpeta, así que elige el alcance adecuado.
+Los pasajes aparecen separados en `communications.items`; `communications.coverage` conserva
+identidades, fechas, lagunas del índice, límites y continuación. Las afirmaciones contradictorias
+con fecha mantienen sus propias citas, sin convertirse silenciosamente en una nueva decisión aceptada.
+
+Los documentos, el correo y los mensajes no se consultan sin pedir las fuentes configuradas
+explícitamente. Los vocabularios de proyectos no elegidos siguen sin consultar; el agente puede
+investigarlos aparte. La preparación no completa índices ni descarga transcripciones ausentes,
+y coincidir nombres no vincula personas. Si hay lagunas, comprueba los
+[límites y continuación](./zm/usage.md#include-selected-messages-mail-and-documents).
 
 ## Guardar los resultados útiles
 
