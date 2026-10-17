@@ -21,7 +21,7 @@ Core 0.309.0 is published from checked `5de98447a6596b3b3fbdfbd96894f4d14d8b3832
 registry tar/SRI equals its validated CI artifact, and the annotated tag resolves to that source.
 Zoom #139 merged at `27184e414773e9aa16d6814237f1e3a782759e28`; release preparation #140 is
 `818347486c479cdadf0cc28d90b0c86bf127cca0`. The source review uses that immutable commit;
-portal runtime pin remains unchanged until actual publication and artifact verification.
+The portal now pins the published v0.23.0 after actual artifact/tag verification.
 The initial capture-only CLI refused a raw commit before writing output. Separate tooling fix
 #282 is now merged at `bac5397a0b265d0cf12575735f4b36cf966674fa`; it fetches and detaches
 immutable commits through the existing source helper. Eleven focused tests, types and a real
@@ -56,6 +56,9 @@ HTML and Markdown evidence will be recorded after source capture from the releas
 | changelog, en | Understand feature and library-host compatibility. | New 0.23.0 and previously unreviewed 0.22.1 entries read; earlier reviewed history retained. | Feature #139; 0.22.1 store areas/config fix; checked source 8183474. | No published historical source section rewritten; translated literals preserved. | Prose reviewed, Codex root; final exports pending. |
 | changelog, ru | Understand feature and library-host compatibility. | New 0.23.0 and previously unreviewed 0.22.1 entries read; earlier reviewed history retained. | Feature #139; 0.22.1 store areas/config fix; checked source 8183474. | No published historical source section rewritten; translated literals preserved. | Prose reviewed, Codex root; final exports pending. |
 | changelog, es | Understand feature and library-host compatibility. | New 0.23.0 and previously unreviewed 0.22.1 entries read; earlier reviewed history retained. | Feature #139; 0.22.1 store areas/config fix; checked source 8183474. | No published historical source section rewritten; translated literals preserved. | Prose reviewed, Codex root; final exports pending. |
+| commands, en | Discover the optional project flag. | Existing localized opening and reference structure retained. | The exact native generated diff adds only --project on meetings prepare; signature copied from the released generator output, prose localized. | Existing commands, examples, headings and defaults preserved; strict contract checks follow. | Generated delta reviewed, Codex root; final export pending. |
+| commands, ru | Discover the optional project flag. | Existing localized opening and reference structure retained. | The exact native generated diff adds only --project on meetings prepare; signature copied from the released generator output, prose localized. | Existing commands, examples, headings and defaults preserved; strict contract checks follow. | Generated delta reviewed, Codex root; final export pending. |
+| commands, es | Discover the optional project flag. | Existing localized opening and reference structure retained. | The exact native generated diff adds only --project on meetings prepare; signature copied from the released generator output, prose localized. | Existing commands, examples, headings and defaults preserved; strict contract checks follow. | Generated delta reviewed, Codex root; final export pending. |
 
 ## Validation boundary
 
@@ -65,9 +68,9 @@ new). The packed package with registry dependencies passes all eighteen preparat
 cited aliases, continuation without another Zoom read and scoped no writes. This source package
 check does not substitute for the stock four-platform release acceptance or final registry proof.
 
-Release publication, portal pin/source capture, ten translation fingerprints, all five offline
-contracts, strict content checks, local smoke, CI export/production browsers and live-route checks
-remain pending. No UI, navigation, browser test, timeout, worker or performance guard changes are planned.
+Release publication, final tag capture, all twelve translation fingerprints and all five exact
+offline command captures are complete. Strict content checks, local smoke, CI export/production
+browsers and live-route checks follow this final source synchronization. No UI, navigation, browser test, timeout, worker or performance guard changes are planned.
 
 
 ## Incoming modularity refactor and independent compatibility correction
@@ -88,11 +91,33 @@ The updated suite passes 486 tests across 58 files (98.46% lines, 93.77% branche
 lease/sync/cancellation tests, types/docs and generated CLI/MCP contracts. Legacy upgrade and
 no-leak checks pass with harness 0.5.2. Stock `bin/release` folded the Fixed note through PR144 and run `38987578041` captured exact
 source `664739e007dd053d27672721c56daca3dc6d5d9e`. The complete isolated Linux/Node24 packed
-acceptance passes, including all eighteen preparation fields, native persistence/recovery, scoped
+acceptance passes, including all eighteen preparation checks, native persistence/recovery, scoped
 meeting links, transcript search, strict MCP and preview/model boundaries. External access is
-blocked except its isolated loopback model fixture. All ten native translation structures pass
-against this final source; fingerprints deliberately await the released-tag capture. Final
-four-platform/registry proof remains required.
+blocked except its isolated loopback model fixture. The ten guide translation structures pass
+against this final source; fingerprints deliberately await the released-tag capture. All four Linux/Windows Node 22.16.0/24.19.0 installed jobs succeeded in run `38987578041`. Registry tar/SRI
+matches the validated artifact (SHA-256 a832c649df92ef518dc79c937b988cbe2667d2f6a02d4a81045a3d5bdde61016),
+and the annotated v0.23.0 tag resolves to checked `664739e0`. Global discovery verifies version 0.23.0,
+Core 0.309.0/Base 0.40.0, one Base identity and --project. Both managed skills match the artifact hash
+9b7feee73a7053663c1b9d2af767583b60844a3c1d457cb403814443376dd364.
 
 The new ES checkpoint note uses the existing archive term “punto de control”; RU retains
 “контрольная точка” and “блокировка”, avoiding a second reader term for the same persisted state.
+
+Source sync also correctly stopped at two stale generated-reference translations. Their released
+native delta is exactly the added `--project` row; the maintained RU/ES translations receive its
+generated signature and localized description. No generated reader page is edited. This makes
+21 page/locale review rows and twelve accepted translation fingerprints, rather than eighteen/ten.
+
+
+## Final local portal checks
+
+All five exact pinned command captures pass with external network/keyring access blocked during
+discovery. All twelve changed translation fingerprints are accepted after structural and prose
+review. Source sync/localization is complete for MAX 0.56.0, Telegram 0.63.0, Drive 0.15.1, Zoom 0.23.0
+and Memo 0.55.0, preserving Memo's four reviewed guide overrides. Strict checks report 1,336 command
+reference entries, zero reference gaps, zero invalid examples, 144 separately identified manual
+cases and 17 task mappings. Release-note/roadmap checks, 309 unit tests, typecheck and lint pass;
+three existing lint warnings remain. All seven local browser smoke cases pass on the first run (1.1 minutes), with the existing Sidebar
+key warnings retained in the log. Full export,
+link/SEO, production browsers and deployment run in CI; their actual closeout belongs in the private
+delivery proof. No public UI/test/timeout/worker/performance guard changed.

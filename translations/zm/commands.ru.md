@@ -243,6 +243,7 @@ zm meetings prepare <series-id> [options]
 
 | Option | What it does |
 |---|---|
+| `--project <project>` | добавить неподтверждённые совпадения слов для существующего проекта по названию, ключу или псевдониму. |
 | `--since-time <time>` | window start as ISO timestamp with zone (default now). |
 | `--before-time <time>` | exclusive window end as ISO timestamp (default seven days after start). |
 | `--history-since-time <time>` | history start as ISO timestamp (default thirty days before start). |
