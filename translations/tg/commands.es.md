@@ -379,7 +379,7 @@ tg chats mark-read <chat> [options]
 | Opción | Qué hace |
 |---|---|
 | `--until-id <id>` | solo hasta este identificador de mensaje; hasta el más reciente por defecto. |
-| `--topic <id>` | marca como leído solo este tema del foro; no disponible en servicios de mensajería sin temas. |
+| `--topic <id>` | marca como leído solo este tema del foro. |
 
 ### `tg chats tracking`
 
@@ -1297,7 +1297,7 @@ tg messages send <chat> [text] [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--topic <id>` | envía a este tema de foro; no disponible en servicios de mensajería sin temas. |
+| `--topic <id>` | envía a este tema de foro. |
 | `--reply-to <message>` | responde al mensaje indicado por su identificador dentro del mismo chat. |
 | `--comment-to <post>` | comentar esta publicación del canal; el comentario va a su grupo de discusión. |
 | `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as`; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
@@ -1426,7 +1426,7 @@ tg messages delete <chat> <messages> [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `messages` | obligatorio | identificadores de mensajes, máximo 10. |
+| `messages` | obligatorio | identificadores de mensajes, separados por espacios o comas, máximo 10. |
 
 | Opción | Qué hace |
 |---|---|
@@ -1701,7 +1701,7 @@ tg polls create <chat> <question> <answers> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--topic <id>` | envía a este tema de foro; no disponible en servicios de mensajería sin temas. |
+| `--topic <id>` | envía a este tema de foro. |
 | `--multiple` | permite elegir varias respuestas. |
 | `--anonymous` | oculta quién votó por cada opción. |
 | `--revote` | permite cambiar el voto. |
@@ -2890,7 +2890,7 @@ tg tags list [query]
 
 ## `tg mentions`
 
-teléfonos, correos electrónicos, enlaces, documentos y nombres de personas encontrados en los mensajes guardados
+teléfonos, correos electrónicos, enlaces, documentos, nombres y direcciones en los mensajes guardados
 
 ### `tg mentions list`
 
@@ -2927,6 +2927,19 @@ tg mentions domains [query] [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | número de página, desde 1. |
 
+### `tg mentions places`
+
+direcciones confirmadas, en todas las cuentas, primero las más mencionadas; `mentions confirm <id>` añade una
+
+```sh
+tg mentions places [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | cuántos mostrar. |
+| `--page <n>` | número de página, desde 1. |
+
 ### `tg mentions show`
 
 una mención, el texto a su alrededor y cuántos otros lugares contienen su valor
@@ -2941,7 +2954,7 @@ tg mentions show <id>
 
 ### `tg mentions confirm`
 
-indica qué es una mención: el dueño de un teléfono allí donde esté escrito, el documento guardado, a quién se refiere un nombre
+indica qué es una mención: el dueño de un teléfono allí donde esté escrito, el documento guardado, a quién se refiere un nombre, una dirección como lugar
 
 **Solo hace cambios en este equipo.**
 
@@ -2952,7 +2965,7 @@ tg mentions confirm <id> [person] [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `id` | obligatorio | el id de la mención, de mentions list. |
-| `person` | opcional | person:<uid> u organization:<id> dueño del teléfono o la dirección; person:<uid> al que se refiere un nombre; un documento no necesita nada. |
+| `person` | opcional | person:<uid> u organization:<id> dueño del teléfono o la dirección de correo; person:<uid> al que se refiere un nombre; un documento o una dirección postal no necesitan nada. |
 
 | Opción | Qué hace |
 |---|---|
@@ -2990,7 +3003,7 @@ tg mentions rebuild [kind]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `kind` | opcional | solo este tipo: person-name después de añadir o renombrar personas. Uno de: `phone`, `email`, `url`, `document`, `person-name`. |
+| `kind` | opcional | solo este tipo: person-name después de añadir o renombrar personas. Uno de: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
 
 ## `tg images`
 
@@ -3664,6 +3677,24 @@ categorías de tareas, su significado y las palabras que usa una regla para eleg
 tg tasks categories
 ```
 
+### `tg tasks apply`
+
+las reglas de tareas sobre los mensajes guardados más recientes de un chat: una pregunta que nadie respondió y una mención tuya abren una tarea, y tu respuesta la cierra — para un chat que la primera sincronización dejó sin tocar (config task_first_pass_per_chat). Muestra lo que se abriría y no cambia nada sin --yes; con --yes la comprobación de duplicados funciona igual que en una sincronización. Solo lee el almacén local
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg tasks apply <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+|---|---|
+| `--last <n>` | lee los n mensajes guardados más recientes de cada chat (50 por defecto, como mucho 1000). |
+
 ### `tg tasks claim`
 
 reservar una tarea abierta para que otro agente no trabaje en ella a la vez; la reserva caduca sola
@@ -3813,11 +3844,10 @@ tg search notes <query> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, tag: e intervalos de fechas. |
+| `query` | obligatorio | consulta estricta de Lucene: palabras, "frases", AND/OR/NOT, tag:, source:internal (escritas en memo) o source:file (de una carpeta de notas) e intervalos de fechas. |
 
 | Opción | Qué hace |
 |---|---|
-| `--type <internal\|file>` | solo notas escritas en memo, o solo notas de una carpeta. |
 | `--source <accounts>` | solo estas cuentas de notas, separadas por comas: notes:internal para las notas escritas en memo, notes:<folder id> tal como lo muestra un resultado, notes, documents o group:<name>. |
 | `--filter <query>` | una consulta que también debe cumplir cada resultado; no cambia la búsqueda por significado. |
 | `--limit <n>` | cuántos. |
@@ -4355,7 +4385,7 @@ tg config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, account_groups.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | obligatorio | número, true o false; para allow, lista como send,reaction; para un grupo, tg:work,max:Alice,email:me@x. |
 
 | Opción | Qué hace |
@@ -4376,7 +4406,7 @@ tg config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, account_groups.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
 | Opción | Qué hace |
 |---|---|

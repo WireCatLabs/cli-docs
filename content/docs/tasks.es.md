@@ -14,7 +14,9 @@ de duplicados ya están en el núcleo común de las herramientas (cli-core). `tg
 todas; `memo` aún no tiene la reserva ni la revisión de duplicados. Los cierres que te esperan cuando
 un agente no está seguro, las tareas de seguimiento, la lista de 59 categorías y la detección de
 duplicados que lee los mensajes vinculados están en `tg` y `max`; `memo` aún no los tiene. Por ahora
-solo `tg` lee la lista de categorías del archivo de ajustes compartido.
+solo `tg` lee la lista de categorías del archivo de ajustes compartido. Solo en `tg` la primera
+sincronización no abre tareas de tu historial, y solo `tg` crea las tareas de un chat cuando lo pides
+(`tasks apply`).
 [Cómo funcionan las tareas](./tasks-architecture.mdx) da el detalle técnico.
 
 ## De dónde salen las tareas
@@ -26,6 +28,10 @@ solo `tg` lee la lista de categorías del archivo de ajustes compartido.
   ([Telegram](./tg/replies.md), [MAX](./max/replies.md)). Las reglas se ejecutan cuando tu agente
   sincroniza o revisa tus chats y mientras la herramienta funciona en segundo plano (`messages sync`,
   `review` y `serve`). Una regla elige la categoría de la tarea por las palabras del mensaje.
+- **Tus mensajes antiguos esperan tu decisión.** En `tg`, la primera sincronización de una cuenta no
+  abre tareas de tu historial. Las sincronizaciones siguientes abren tareas a partir de mensajes nuevos.
+  Si quieres las tareas del historial de un chat, tu agente te muestra primero lo que se abriría y lo
+  abre cuando estés de acuerdo; consulta [Tareas del historial de un chat](#tareas-del-historial-de-un-chat).
 - **Las añade tu agente o tú.** Una promesa («te mando el contrato el lunes») o una petición que
   ninguna regla detectó se añade a mano, con el tipo `promise` o `request` y una categoría.
 - **Las tareas de proyecto** viven en un proyecto y tienen una clave: la clave del proyecto y un
@@ -47,6 +53,10 @@ MAX, escribe «max CLI».
 
 ```text prompt
 Usa tg CLI. En mi chat con Bob Sample prometí enviar el contrato firmado antes del viernes. Añade una tarea de promesa para ese mensaje, con fecha límite el viernes y un título claro. Vincula los mensajes anteriores donde acordamos el precio.
+```
+
+```text prompt
+Usa tg CLI. Muéstrame qué tareas se abrirían con los últimos 300 mensajes de mi chat con Bob Sample. No abras nada todavía.
 ```
 
 ```text prompt
@@ -99,6 +109,13 @@ tg personal tasks link <task> msg:telegram/1/77/45 msg:telegram/1/77/51 --kind e
 tg personal tasks show <task>
 ```
 
+Ver qué tareas abriría el historial de un chat y abrirlas:
+
+```sh
+tg personal tasks apply "Renovation"
+tg personal tasks apply "Renovation" --last 300 --yes
+```
+
 Cerrarla:
 
 ```sh
@@ -128,6 +145,9 @@ tg personal tasks reject <task>
   es cuándo tu agente debe volver a mirar la tarea; no te avisa a ti.
 - **link** añade a una tarea mensajes, chats, personas, documentos, notas o direcciones.
 - **show** muestra una tarea con su plan y todo lo vinculado.
+- **apply** (solo `tg`) ejecuta las reglas de tareas sobre los mensajes guardados más recientes de un
+  chat y lista las tareas que abrirían. Solo las abre con `--yes`. Consulta
+  [Tareas del historial de un chat](#tareas-del-historial-de-un-chat).
 - **close** cierra una tarea como `done` o `dismissed`. Una tarea cerrada se queda cerrada. Solo
   `tasks unmerge` vuelve a abrir una tarea, y solo una que cerró una fusión. El cierre de un agente
   puede esperarte; consulta [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea).
@@ -142,7 +162,8 @@ puede proponerlos. Funcionan entre tareas de proyecto en `memo`: consulta
 
 La herramienta también escribe `follow-up-of` por sí misma entre tareas encontradas en mensajes: una
 tarea nueva sobre una tarea cerrada en los últimos 14 días se vincula a ella como seguimiento
-(consulta [Sin tareas duplicadas](#sin-tareas-duplicadas)).
+(consulta [Sin tareas duplicadas](#sin-tareas-duplicadas)). En `tg`, `tasks show` sobre la tarea cerrada
+también nombra la tarea que le da seguimiento.
 
 Hay dos tipos más. `duplicate-of` dice que una tarea es el mismo trabajo que otra. Lo escribe una
 fusión, y une tareas encontradas en mensajes de una misma cuenta. `discovered-from` dice que una tarea
@@ -152,14 +173,44 @@ apareció mientras se trabajaba en otra.
 
 1. Tu agente descarga los mensajes nuevos (`messages sync`). La sincronización ejecuta las reglas de
    tareas sobre lo que guardó, desde donde se detuvo la vez anterior. La primera vez lee solo los
-   chats con algún mensaje de los últimos 14 días, así que las preguntas antiguas no se convierten en
-   tareas. La respuesta dice cuántas tareas se abrieron, cuántas se cerraron y cuántas fueron a la
-   lista de revisión.
+   chats con algún mensaje de los últimos 14 días. En `tg`, además, la primera vez no abre ninguna
+   tarea de esos mensajes: la respuesta cuenta las tareas que dejó sin abrir y nombra `tasks apply`.
+   Una sincronización posterior se salta un chat en el que no se envió nada nuevo, así que los mensajes
+   antiguos que descarga no abren tareas. La respuesta dice cuántas tareas se abrieron, cuántas se
+   cerraron y cuántas fueron a la lista de revisión.
 2. Lee la agenda y contrasta cada tarea nueva con sus mensajes.
 3. Pone un título, una fecha límite y la categoría correcta, vincula los mensajes que van juntos y
    cierra lo que está hecho. Si no está seguro de que una tarea esté hecha, su cierre te espera.
 4. Revisa la lista de posibles duplicados (ver abajo).
 5. Te muestra lo que cambió y pregunta antes de que algo salga de tu ordenador.
+
+## Tareas del historial de un chat
+
+La primera sincronización de una cuenta en `tg` lee tu historial, pero no abre tareas a partir de él:
+las preguntas antiguas a menudo ya se respondieron en otro sitio, o ya no importan. Tú decides qué
+chats merecen el trabajo.
+
+1. Pregunta a tu agente qué tareas abriría el historial de un chat. Ejecuta `tasks apply` con ese
+   chat, que lee los 50 mensajes guardados más recientes (`--last` lee hasta 1000). La respuesta
+   lista el tipo, la categoría y el mensaje de cada tarea. No cambia nada.
+2. Revisa la lista. Si estás de acuerdo, el agente ejecuta el mismo comando con `--yes`. Las tareas se
+   abren pasando por la comprobación de duplicados, como en una sincronización, y se cierra la tarea
+   abierta de una pregunta que ya respondiste.
+
+`tasks apply` lee solo los mensajes guardados en tu ordenador y no envía nada. Los agentes que usan el
+servidor MCP tienen la misma herramienta, `tasks_apply`, con `yes` en lugar de `--yes`.
+
+Si quieres que la primera sincronización abra tareas del historial,
+`config set task_first_pass_per_chat <n>` le permite abrir hasta n tareas por chat, primero las más
+recientes (0 por defecto, como mucho 1000). Este ajuste vale para todo el almacén, como los ajustes de
+[Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea).
+
+```text
+tasks apply "Renovation"
+tasks apply "Renovation" --last 300 --yes
+config set task_first_pass_per_chat 20
+config unset task_first_pass_per_chat
+```
 
 ## Cuando un agente cierra una tarea
 
@@ -209,7 +260,9 @@ herramienta comprueba cada tarea nueva antes de crearla:
   abierta pueda ser el mismo trabajo.
 
 La comprobación compara las palabras (también otras formas de una palabra y errores de escritura), la
-persona, el importe, la fecha límite, la categoría, las respuestas y el tiempo. Lee el título y la
+persona, el importe, la fecha límite, la categoría, las respuestas y el tiempo. En `tg`, el tiempo es
+cuándo se enviaron los mensajes de las tareas, no cuándo se escribieron las tareas, así que las tareas
+escritas de una vez a partir del historial no parecen iguales. Lee el título y la
 descripción de cada tarea, su mensaje de origen y sus 5 mensajes vinculados más recientes, así que una
 tarea que una regla abrió con el título vacío se compara por su mensaje. Lee fechas límite en inglés,
 ruso y español, como `by Friday`, `до пятницы` o `el viernes`. Compartir un chat no
@@ -307,8 +360,8 @@ sustituye una categoría, y `null` quita una de la lista por defecto:
 
 Los comandos `config set task_categories…` y `config unset task_categories…` escriben en el mismo
 archivo y conservan sus otras secciones. Ningún comando `config` de esta página cambia un perfil: los
-ajustes de [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea) siguen en el
-almacén.
+ajustes de [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea) y
+`task_first_pass_per_chat` siguen en el almacén.
 
 ## Reservar una tarea
 
@@ -336,7 +389,8 @@ tasks agenda claimed:any
 
 Los agentes que usan el servidor MCP tienen las mismas herramientas, como `tasks_claim`,
 `tasks_release`, `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` y `tasks_unmerge`.
-En `tg`, `tasks_close` necesita `certainty`, igual que el `tasks close` de un agente.
+En `tg`, `tasks_close` necesita `certainty`, igual que el `tasks close` de un agente, y `tasks_apply`
+crea las tareas de un chat a partir de su historial.
 
 ## Aún no está hecho
 

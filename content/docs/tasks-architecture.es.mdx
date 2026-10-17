@@ -10,7 +10,9 @@ duplicados con un ejemplo resuelto. Para el uso diario, empieza por [Tareas](./t
 
 El diseño viene del plan de tareas aprobado en cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). Todo está ya hecho
-en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` y `max` lo tienen todo, salvo que solo `tg` lee la lista de categorías del archivo de ajustes compartido. `memo` no tiene los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías fuera de la lista ni la lectura de mensajes vinculados en la detección de duplicados; tiene categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
+en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` y `max` lo tienen todo, salvo que solo `tg` lee la lista de categorías del archivo de ajustes compartido,
+retiene las tareas del historial en una primera sincronización, tiene `tasks apply` y compara las tareas por
+cuándo se enviaron sus mensajes. `memo` no tiene los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías fuera de la lista ni la lectura de mensajes vinculados en la detección de duplicados; tiene categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
 aún no `tasks categories`, la reserva, `tasks related`, `tasks duplicates` ni `tasks merge`.
 
 ## Los datos
@@ -253,6 +255,32 @@ antiguas. La respuesta lleva `tasks: {added, closed, review}`; `review` cuenta l
 candidatas fueron a la lista de revisión. Una pasada fallida es una nota, nunca un fallo de la
 sincronización. Nada se une por su cuenta salvo una coincidencia segura (paso 2, abajo).
 
+En `tg`, la primera pasada de una cuenta además abre como mucho `task_first_pass_per_chat` tareas por
+chat, primero las más recientes; por defecto, 0. Una primera sincronización lee el historial, y qué
+chats merece la pena convertir en tareas lo decide el propietario. Las tareas retenidas se cuentan en `tasks`
+como `held`, en `held_chats` chats, y una nota nombra `tasks apply`. Los cierres siguen funcionando:
+una pregunta que el propietario respondió cierra su tarea abierta. El ajuste vale para todo el almacén y se
+guarda en `store_settings`, como los ajustes de cierre de agente; es un número entero de 0 a 1000, y
+`config unset task_first_pass_per_chat` vuelve a 0.
+
+Después de la primera pasada, una pasada se salta un chat en el que no se envió nada desde el punto de
+parada. Así, una sincronización que descarga historial antiguo en un chat tranquilo no abre tareas por
+preguntas de hace meses.
+
+**`tasks apply <chat...>`** (MCP `tasks_apply`) ejecuta las mismas reglas sobre los mensajes guardados
+más recientes de cada chat indicado: 50 por defecto, `--last` hasta 1000 (MCP `last`). Solo lee el
+almacén local. Sin el `--yes` global (MCP `yes`) no cambia nada y lista, por chat, los mensajes leídos
+y cada tarea que se abriría, con su origen, tipo y categoría; con él, las tareas se abren pasando por la
+detección de duplicados, como en una sincronización, y las preguntas respondidas se cierran. Un mensaje
+que ya tiene tarea no se vuelve a listar. La descripción de la herramienta MCP pide al agente que
+pregunte al propietario antes de crear las tareas de un chat.
+
+| Comando | Qué hace |
+| --- | --- |
+| `tasks apply <chat>` | lista las tareas que las reglas abrirían con los 50 mensajes guardados más recientes |
+| `tasks apply <chat> --last 300 --yes` | las abre con los 300 más recientes |
+| `config set task_first_pass_per_chat <n>` | permite que la primera pasada de una cuenta abra hasta n tareas por chat |
+
 ## La detección de duplicados
 
 La comprobación se ejecuta con cada tarea nueva. Corre en cli-core, sobre SQLite, sin embeddings y
@@ -288,6 +316,12 @@ entera, así que el texto, la persona, el importe y la fecha límite salen del m
 puede subir la puntuación de un par, nunca bajarla. El importe y la fecha límite de un mensaje solo
 cuentan cuando el texto de la tarea no los tiene, y su «mañana» se cuenta desde cuándo se envió. Los
 mensajes se leen del almacén al comparar; una tarea no guarda el texto de los mensajes.
+
+**El tiempo es el del mensaje.** En `tg`, el campo de tiempo y la lectura de «mañana» en el propio
+texto de una tarea usan cuándo se envió su mensaje de origen, no cuándo se escribió la tarea. Un agente
+que recorre el historial escribe muchas tareas en pocos minutos; comparadas por la hora de escritura,
+cada par parecía «creado a la vez» (+2), y «mañana» en cada una era el mismo día (+4). Una tarea sin
+mensaje de origen conserva su hora de creación.
 
 **Después de un vínculo.** `tasks link <task> msg:…` (MCP `tasks_link`), `tasks add --into` y
 `tasks merge` repiten la comprobación para la tarea que recibió el mensaje. Los nuevos pares probables
@@ -357,7 +391,7 @@ Dos reglas evitan perder buenas candidatas:
 | Categoría | nombre | misma · distinta · desconocida |
 | Fecha límite | días de diferencia | 2 o menos · más · falta |
 | Cadena de respuestas | los mensajes de origen se responden entre sí | sí · no |
-| Tiempo | días entre las dos tareas | 3 o menos · de 4 a 14 · más |
+| Tiempo | días entre las dos tareas: en `tg`, entre el envío de sus mensajes de origen | 3 o menos · de 4 a 14 · más |
 
 ### 5. Sumar los pesos
 
@@ -401,8 +435,13 @@ de FTS5 y el lematizador de cli-core; los pesos se ajustaron con una mitad y se 
   palabra, que ningún campo ve.
 
 Límites: los datos son sintéticos, la misma persona escribió los datos y la puntuación, y los
-duplicados entre idiomas se detectan mal (2 de 5 salieron «distinta»). Aún no hay medidas sobre chats
-reales.
+duplicados entre idiomas se detectan mal (2 de 5 salieron «distinta»).
+
+**En chats reales.** Una prueba posterior repitió 148 tareas que un agente redactó a partir de 1104
+mensajes reales de 7 chats ([seguimiento con chats reales](https://github.com/WireCatLabs/cli-testing/tree/main/performance/tasks/duplicates#follow-up-real-chats-2026-10-17)).
+Comparando por cuándo se escribieron las tareas, `tasks add` rechazó 74, y «probable» acertó el 27% de
+las veces. Comparando por cuándo se enviaron los mensajes, rechazó 36, y «probable» acertó el 50%. Los
+pesos no cambiaron: 85 pares etiquetados son muy pocos para ajustarlos.
 
 ### 6. Decidir
 

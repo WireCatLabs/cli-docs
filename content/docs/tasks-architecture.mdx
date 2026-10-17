@@ -10,7 +10,8 @@ use, start with [Tasks](./tasks.md).
 
 The design comes from the approved tasks plan in cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). All of it is built
-in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it, except that only `tg` reads the category list from the shared settings file. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
+in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it, except that only `tg` reads the category list from the shared settings file,
+holds back tasks from history on a first sync, has `tasks apply`, and compares tasks by when their messages were sent. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
 (`tasks plan --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
 `tasks categories`, claims, `tasks related`, `tasks duplicates` or `tasks merge`.
 
@@ -242,6 +243,30 @@ years of chats opens no task for an old question. The answer carries `tasks: {ad
 `review` counts the new tasks whose candidates went to the review list. A failed pass is a note, never
 a failed sync. Nothing is attached on its own beyond a certain match (step 2 below).
 
+In `tg`, the first pass of an account also opens at most `task_first_pass_per_chat` tasks per chat,
+the newest first; the default is 0. A first sync reads history, and which chats are worth turning into
+tasks is the owner's choice. The tasks it held back are counted in `tasks` as `held`, in `held_chats`
+chats, and a note names `tasks apply`. Closes still run: a question the owner answered closes its open
+task. The setting is store-wide, kept in `store_settings` like the agent-close settings, a whole number
+from 0 to 1000; `config unset task_first_pass_per_chat` goes back to 0.
+
+After the first pass, a pass skips a chat where nothing was sent since the stop point. A sync that
+fetches old history into a quiet chat therefore opens no task for a question asked months ago.
+
+**`tasks apply <chat...>`** (MCP `tasks_apply`) runs the same rules over the newest stored messages
+of each named chat: 50 by default, `--last` up to 1000 (MCP `last`). It reads only the local store.
+Without the global `--yes` (MCP `yes`) it changes nothing and lists, per chat, the messages read and
+each task that would open, with its source, type and category; with it, the tasks open through the
+duplicate check, as on a sync, and answered questions close. A message that already has a task is not
+listed again. The MCP tool's description tells an agent to ask the owner before it builds a chat's
+tasks.
+
+| Command | What it does |
+| --- | --- |
+| `tasks apply <chat>` | lists the tasks the rules would open from the newest 50 stored messages |
+| `tasks apply <chat> --last 300 --yes` | opens them from the newest 300 |
+| `config set task_first_pass_per_chat <n>` | lets an account's first pass open up to n tasks per chat |
+
 ## The duplicate check
 
 The check runs on every new task. It runs in cli-core, on SQLite, with no embeddings and no call to
@@ -276,6 +301,11 @@ tasks score as their best pair of views, each view taken whole, so text, person,
 come from the same message. A message can raise a pair's score, never lower it. A message's amount and
 due date count only when the task's own text has none, and its "tomorrow" is read from when it was
 sent. Messages are read from the store at compare time; a task stores no message text.
+
+**Time is message time.** In `tg`, the time field and the reading of "tomorrow" in a task's own text
+use when its source message was sent, not when the task was written. An agent that goes through history
+writes many tasks within minutes; compared by write time, every pair looked "created together" (+2) and
+"tomorrow" in each meant the same day (+4). A task with no source message keeps its creation time.
 
 **After a link.** `tasks link <task> msg:…` (MCP `tasks_link`), `tasks add --into` and `tasks merge`
 run the check again for the task that got the message. New likely or maybe pairs go to the review
@@ -343,7 +373,7 @@ Two rules keep good candidates in:
 | Category | name | same · different · unknown |
 | Due date | days apart | 2 or fewer · more · missing |
 | Reply chain | the source messages reply to one another | yes · no |
-| Time | days between the two tasks | 3 or fewer · 4 to 14 · more |
+| Time | days between the two tasks: in `tg`, between when their source messages were sent | 3 or fewer · 4 to 14 · more |
 
 ### 5. Add up the weights
 
@@ -386,7 +416,13 @@ FTS5 `bm25()` and the cli-core stemmer; the weights were tuned on one half and t
   dad with the same amount two days apart, differ in the meaning of one word, which no field sees.
 
 Limits: the data is synthetic, the same author wrote the data and the scorer, and duplicates
-across languages are weak (2 of 5 scored "different"). There is no measurement on real chats yet.
+across languages are weak (2 of 5 scored "different").
+
+**On real chats.** A later run replayed 148 tasks that an agent drafted from 1,104 real messages of
+7 chats ([real chats follow-up](https://github.com/WireCatLabs/cli-testing/tree/main/performance/tasks/duplicates#follow-up-real-chats-2026-10-17)).
+Compared by when the tasks were written, `tasks add` refused 74 of them, and "likely" was right 27% of
+the time. Compared by when their messages were sent, it refused 36, and "likely" was right 50% of the
+time. The weights did not change: 85 labelled pairs are too few to tune them.
 
 ### 6. Decide
 

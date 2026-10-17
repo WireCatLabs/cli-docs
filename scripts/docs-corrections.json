@@ -2027,5 +2027,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "groups",
+    "reason": "Public guides carry no release numbers (AUTHORING: current capabilities). tg v0.66.0 docs/groups.md names cli-core 0.298.0 and tg 0.63.0 for the shared category file; at the current pins only tg reads it (memo v0.58.0 has no tasks categories), so the shared Tasks page states which tools read it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "section of `~/.config/WireCat/config.json`. Every WireCat tool built on cli-core 0.298.0 or newer reads this file\n(tg since 0.63.0), so one edit changes the list in all of them. It holds only your changes to the",
+          "after": "section of `~/.config/WireCat/config.json`, a settings file for all WireCat tools; [Tasks](/en/docs/tasks) says which\ntools read it. It holds only your changes to the"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Этот файл читает каждый инструмент WireCat на cli-core 0.298.0 или новее (tg — с 0.63.0), поэтому одна правка меняет список во всех них.",
+          "after": "Это файл настроек для всех инструментов WireCat; какие из них его читают, сказано на странице [Задачи](/ru/docs/tasks)."
+        }
+      ],
+      "es": [
+        {
+          "before": "Todas las herramientas de WireCat con cli-core 0.298.0 o posterior leen este archivo (tg desde 0.63.0), así que un solo cambio modifica la lista en todas.",
+          "after": "Es un archivo de ajustes para todas las herramientas de WireCat; [Tareas](/es/docs/tasks) indica cuáles lo leen."
+        }
+      ]
+    }
   }
 ]

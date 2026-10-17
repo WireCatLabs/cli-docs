@@ -59,7 +59,7 @@ tg personal search messages 'lease chat:"Book club"'  # Telegram messages only, 
 
 
 ```sh
-tg personal search notes 'budget' --type internal  # only notes written in memo
+tg personal search notes 'budget source:internal'  # only notes written in memo
 ```
 
 ```sh
@@ -70,7 +70,7 @@ tg personal search conversations 'moving to the country'  # conversations close 
 tg personal search topics "Hiking" "gear"         # topic titles in one forum group
 ```
 
-`search all` сообщает тип результата — сообщение (`msg:…`) или заметку (`note:…`). tg не ищет почту: `tg personal search mail` отвечает "mail is memo's: install @wirecat/cli-memo, then `memo search mail …`", а `search all --only mail` отклоняется так же. `--type` выбирает текст, голос или файлы в `search messages` (`text|voice|file`), а в `search notes` — заметки memo или импортированные файлы (`internal|file`). Неподходящие поля — `chat:`/`from:` для заметок — заставляют `search all` пропустить источник и объяснить причину.
+`search all` сообщает тип результата — сообщение (`msg:…`) или заметку (`note:…`). tg не ищет почту: `tg personal search mail` отвечает "mail is memo's: install @wirecat/cli-memo, then `memo search mail …`", а `search all --only mail` отклоняется так же. В `search messages` условия `NOT has:attachment`, `has:voice` и `has:file` в запросе оставляют только текст, голос или файлы; в `search notes` условия `source:internal` и `source:file` оставляют заметки, написанные в memo или импортированные из папки. Неподходящие поля — `chat:`/`from:` для заметок — заставляют `search all` пропустить источник и объяснить причину.
 
 Почта и заметки попадают в архив через memo: `memo sync --mail` и `memo import`. Без них `search all` ищет только сообщения.
 

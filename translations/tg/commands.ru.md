@@ -374,7 +374,7 @@ tg chats mark-read <chat> [options]
 | Параметр | Назначение |
 |---|---|
 | `--until-id <id>` | до указанного идентификатора сообщения; по умолчанию до последнего. |
-| `--topic <id>` | отметить прочитанной только эту тему форума; в мессенджерах без тем не поддерживается. |
+| `--topic <id>` | отметить прочитанной только эту тему форума. |
 
 ### `tg chats tracking`
 
@@ -1292,7 +1292,7 @@ tg messages send <chat> [text] [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--topic <id>` | отправить в эту тему форума; не поддерживается мессенджерами без тем. |
+| `--topic <id>` | отправить в эту тему форума. |
 | `--reply-to <message>` | ответить на сообщение по идентификатору в том же чате. |
 | `--comment-to <post>` | комментарий к этой публикации канала; отправляется в группу обсуждения публикации. |
 | `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as`; обязательно, если чат по умолчанию публикует от другого имени. |
@@ -1421,7 +1421,7 @@ tg messages delete <chat> <messages> [options]
 | Аргумент | | Описание |
 |---|---|---|
 | `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `messages` | обязателен | идентификаторы сообщений, максимум 10. |
+| `messages` | обязателен | идентификаторы сообщений через пробел или запятую, максимум 10. |
 
 | Параметр | Назначение |
 |---|---|
@@ -1696,7 +1696,7 @@ tg polls create <chat> <question> <answers> [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--topic <id>` | отправить в эту тему форума; не поддерживается мессенджерами без тем. |
+| `--topic <id>` | отправить в эту тему форума. |
 | `--multiple` | разрешить несколько вариантов. |
 | `--anonymous` | скрыть, кто как голосовал. |
 | `--revote` | разрешить менять голос. |
@@ -2885,7 +2885,7 @@ tg tags list [query]
 
 ## `tg mentions`
 
-телефоны, e-mail, ссылки, документы и имена людей, найденные в сохранённых сообщениях
+телефоны, e-mail, ссылки, документы, имена и адреса в сохранённых сообщениях
 
 ### `tg mentions list`
 
@@ -2922,6 +2922,19 @@ tg mentions domains [query] [options]
 | `--limit <n>` | количество результатов. |
 | `--page <n>` | номер страницы, начиная с 1. |
 
+### `tg mentions places`
+
+подтверждённые адреса во всех аккаунтах, сначала самые упоминаемые; `mentions confirm <id>` добавляет адрес
+
+```sh
+tg mentions places [options]
+```
+
+| Параметр | Назначение |
+|---|---|
+| `--limit <n>` | количество результатов. |
+| `--page <n>` | номер страницы, начиная с 1. |
+
 ### `tg mentions show`
 
 одно упоминание, текст вокруг него и сколько ещё мест содержат его значение
@@ -2936,7 +2949,7 @@ tg mentions show <id>
 
 ### `tg mentions confirm`
 
-указать, что такое упоминание: владелец телефона везде, где он записан, сохранённый документ, кого означает имя
+указать, что такое упоминание: владелец телефона везде, где он записан, сохранённый документ, кого означает имя, адрес как место
 
 **Изменяет данные только на этом компьютере.**
 
@@ -2947,7 +2960,7 @@ tg mentions confirm <id> [person] [options]
 | Аргумент | | Описание |
 |---|---|---|
 | `id` | обязательный | идентификатор упоминания из mentions list. |
-| `person` | необязательный | person:<uid> или organization:<id>, которому принадлежит телефон или адрес; person:<uid>, которого означает имя; документу ничего не нужно. |
+| `person` | необязательный | person:<uid> или organization:<id>, которому принадлежит телефон или адрес e-mail; person:<uid>, которого означает имя; документу или почтовому адресу ничего не нужно. |
 
 | Параметр | Назначение |
 |---|---|
@@ -2985,7 +2998,7 @@ tg mentions rebuild [kind]
 
 | Аргумент | | Описание |
 |---|---|---|
-| `kind` | необязателен | только этот вид: person-name после того, как людей добавили или переименовали. Одно из: `phone`, `email`, `url`, `document`, `person-name`. |
+| `kind` | необязателен | только этот вид: person-name после того, как людей добавили или переименовали. Одно из: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
 
 ## `tg images`
 
@@ -3659,6 +3672,24 @@ tg tasks agenda [query] [options]
 tg tasks categories
 ```
 
+### `tg tasks apply`
+
+правила задач над последними сохранёнными сообщениями чата: вопрос, на который никто не ответил, и упоминание вас открывают задачу, а ваш ответ закрывает её — для чата, который первая синхронизация не тронула (config task_first_pass_per_chat). Показывает, что откроется, и ничего не меняет без --yes; с --yes проверка дубликатов работает так же, как при синхронизации. Читает только локальное хранилище
+
+**Изменяет данные только на этом компьютере.**
+
+```sh
+tg tasks apply <chat> [options]
+```
+
+| Аргумент | | Описание |
+|---|---|---|
+| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+
+| Параметр | Назначение |
+|---|---|
+| `--last <n>` | прочитать n последних сохранённых сообщений каждого чата (по умолчанию 50, не больше 1000). |
+
 ### `tg tasks claim`
 
 занять открытую задачу, чтобы другой агент не делал её одновременно; занятие истекает само
@@ -3808,11 +3839,10 @@ tg search notes <query> [options]
 
 | Аргумент | | Описание |
 |---|---|---|
-| `query` | обязателен | строгий запрос Lucene: слова, «фразы», AND/OR/NOT, tag: и диапазоны дат. |
+| `query` | обязателен | строгий запрос Lucene: слова, «фразы», AND/OR/NOT, tag:, source:internal (написано в memo) или source:file (из папки заметок) и диапазоны дат. |
 
 | Параметр | Назначение |
 |---|---|
-| `--type <internal\|file>` | только заметки, написанные в memo, или только заметки из папки. |
 | `--source <accounts>` | только эти аккаунты заметок через запятую: notes:internal — заметки, написанные в memo, notes:<folder id>, как его показывает результат, notes, documents или group:<name>. |
 | `--filter <query>` | запрос, которому должен соответствовать каждый результат; поиск по смыслу он не меняет. |
 | `--limit <n>` | количество. |
@@ -4350,7 +4380,7 @@ tg config set <setting> <value> [options]
 
 | Аргумент | | Описание |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, account_groups.<name>. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | обязательный | число, true, false или список allow, например send,reaction; для группы — tg:work,max:Alice,email:me@x. |
 
 | Параметр | Назначение |
@@ -4371,7 +4401,7 @@ tg config unset <setting> [options]
 
 | Аргумент | | Описание |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, account_groups.<name>. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
 | Параметр | Назначение |
 |---|---|

@@ -1,9 +1,9 @@
 {
   "tg": {
-    "version": "v0.63.0",
+    "version": "v0.66.0",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
-    "reviewedAt": "2026-10-16",
-    "conclusion": "Reviewed 0.63.0 (cli-core 0.298.0): the task category list takes the owner's changes from the shared ~/.config/WireCat/config.json section task_categories (a name with meaning and words adds or replaces, null drops a default); config set/unset task_categories write that file, tasks categories reports it in file, config show marks file-sourced categories, and a list saved in the store moves into the file on the next change; Node compile cache speeds start. Roadmap unchanged: multi-photo sending, private chat notes and the listed MAX-only capabilities remain future work."
+    "reviewedAt": "2026-10-17",
+    "conclusion": "Reviewed 0.64.0-0.66.0 (cli-core 0.311.0): a first sync opens no task from history (task_first_pass_per_chat, store-wide, default 0, up to 1000; the sync answer counts held and held_chats and names tasks apply); tasks apply <chat...> --last (default 50, at most 1000) and MCP tasks_apply list what the rules would open and open it only with --yes; a later pass skips a chat with nothing sent since; the duplicate check compares tasks by when their source messages were sent; a closed task shows its follow-up (linked_from); mentions find names and street addresses with mentions places; search notes takes source: in the query instead of --type; messages delete takes comma-separated ids; setup --app auto reads the redesigned my.telegram.org; tg upgrade through pnpm skips the release-age wait for @wirecat packages. Roadmap unchanged: multi-photo sending, private chat notes and the listed MAX-only capabilities remain future work."
   },
   "max": {
     "version": "v0.56.0",
