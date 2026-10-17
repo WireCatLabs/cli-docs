@@ -439,7 +439,7 @@ The first weights were set by hand, then tuned on a synthetic test set:
 | Amount: equal / different / missing | +6 / −4 / 0 |
 | Category: same / different / unknown | +1 / −1 / 0 |
 | Due date: 2 days or fewer / more / missing | +4 / −1 / 0 |
-| Reply chain: yes / no | +6 / 0 |
+| Reply chain: yes / no | +2 / 0 |
 | Time: 3 days or fewer / 4 to 14 days / more | +2 / −2 / −3 |
 
 No duplicate in the test set had a different person, amount or category, so counting would give
@@ -469,7 +469,9 @@ across languages are weak (2 of 5 scored "different").
 7 chats ([real chats follow-up](https://github.com/WireCatLabs/cli-testing/tree/main/performance/tasks/duplicates#follow-up-real-chats-2026-10-17)).
 Compared by when the tasks were written, `tasks add` refused 74 of them, and "likely" was right 27% of
 the time. Compared by when their messages were sent, it refused 36, and "likely" was right 50% of the
-time. The weights did not change: 85 labelled pairs are too few to tune them.
+time. A second set brought the labels to 213 pairs ([second labelled set](https://github.com/WireCatLabs/cli-testing/tree/main/performance/tasks/duplicates#follow-up-a-second-labelled-set-2026-10-17)). Among the pairs shown as
+"maybe" or "likely", the ones in one reply chain were wrong 11 times in 13, so the reply chain now counts +2, not
++6. The other weights did not change.
 
 ### 6. Decide
 
