@@ -11,7 +11,7 @@ use, start with [Tasks](./tasks.md).
 The design comes from the approved tasks plan in cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). All of it is built
 in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it, except that only `tg` reads the category list from the shared settings file,
-holds back tasks from history on a first sync, has `tasks apply`, and compares tasks by when their messages were sent. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
+holds back tasks from history on a first sync, skips quiet chats on later passes, has `tasks apply`, and compares tasks by when their messages were sent. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
 (`tasks plan --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
 `tasks categories`, claims, `tasks related`, `tasks duplicates` or `tasks merge`.
 
@@ -250,7 +250,7 @@ chats, and a note names `tasks apply`. Closes still run: a question the owner an
 task. The setting is store-wide, kept in `store_settings` like the agent-close settings, a whole number
 from 0 to 1000; `config unset task_first_pass_per_chat` goes back to 0.
 
-After the first pass, a pass skips a chat where nothing was sent since the stop point. A sync that
+In `tg`, after the first pass, a pass skips a chat where nothing was sent since the stop point. A sync that
 fetches old history into a quiet chat therefore opens no task for a question asked months ago.
 
 **`tasks apply <chat...>`** (MCP `tasks_apply`) runs the same rules over the newest stored messages

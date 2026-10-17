@@ -175,7 +175,7 @@ apareció mientras se trabajaba en otra.
    tareas sobre lo que guardó, desde donde se detuvo la vez anterior. La primera vez lee solo los
    chats con algún mensaje de los últimos 14 días. En `tg`, además, la primera vez no abre ninguna
    tarea de esos mensajes: la respuesta cuenta las tareas que dejó sin abrir y nombra `tasks apply`.
-   Una sincronización posterior se salta un chat en el que no se envió nada nuevo, así que los mensajes
+   En `tg`, una sincronización posterior se salta un chat en el que no se envió nada nuevo, así que los mensajes
    antiguos que descarga no abren tareas. La respuesta dice cuántas tareas se abrieron, cuántas se
    cerraron y cuántas fueron a la lista de revisión.
 2. Lee la agenda y contrasta cada tarea nueva con sus mensajes.

@@ -166,8 +166,8 @@ while working on another.
 1. Your agent fetches new messages (`messages sync`). The sync runs the task rules on what it stored,
    from where the last run stopped. The first run reads only chats with a message in the last 14 days.
    In `tg`, the first run also opens no task from those messages: the answer counts the tasks it held
-   back and names `tasks apply`. A later sync skips a chat where nothing new was sent, so old messages
-   that it fetches open no tasks. The answer says how many tasks were opened, how many were closed and
+   back and names `tasks apply`. In `tg`, a later sync skips a chat where nothing new was sent, so old
+   messages that it fetches open no tasks. The answer says how many tasks were opened, how many were closed and
    how many went to the review list.
 2. It reads the agenda and checks each new task against its messages.
 3. It sets a title, a due date and the right category, links the messages that belong together, and
