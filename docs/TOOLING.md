@@ -85,7 +85,8 @@ Markdown lint checks tabs, excessive blank lines, fence languages and empty link
 require generic headings, a minimum length or a fixed page template. Heading-depth lint is
 disabled because MDX Steps supply structure that the plain Markdown parser cannot see.
 Spelling is an editorial report with EN/RU/ES dictionaries; technical and inflected words still
-need review. It is not a CI blocker. Review genuine typos before adding dictionary exceptions.
+need review. No workflow runs it, so it does not block CI. The shared spelling rule is
+[WC-TOOL-17](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/toolchain.md). Review genuine typos before adding dictionary exceptions.
 
 Use fenced `mermaid` with a caption after the language:
 

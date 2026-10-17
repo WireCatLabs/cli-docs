@@ -13,7 +13,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 Before writing or reviewing documentation, read [docs/AUTHORING.md](docs/AUTHORING.md). Also read [docs/TERMINOLOGY.md](docs/TERMINOLOGY.md) and follow [docs/REVIEWING.md](docs/REVIEWING.md) for every documentation PR or release update. Every user guide opens with its use case and the result the reader will get. Keep titles short, preserve reviewed release facts, and give every sidebar page a relevant decorative icon. Read [docs/STRUCTURE.md](docs/STRUCTURE.md) for source ownership; generated messenger pages are not edited directly.
 
 For routine local documentation edits, follow [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md):
-use the browser smoke suite and targeted checks. Full export and browser coverage run in CI.
+use the browser smoke suite and targeted checks. Full export and browser coverage run before each
+deployment and monthly, not on pull requests.
 
 ## Security
 

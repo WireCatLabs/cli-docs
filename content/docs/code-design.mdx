@@ -269,13 +269,16 @@ rule or a test keeps it that way.
 
 ## Keeping the shape
 
-Most of the design is checked by machines, so a change that breaks it fails before review.
+Most of the design is checked by machines. Lint and type checks, and in most tools the command lint, run on every
+pull request, so a change that breaks them fails before review. Parity, the command contracts and the generated-file
+tests run in full validation on each merge to `main` ([CI rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/ci.md)), so a break there shows up right after the merge,
+not at the next release.
 
 | Check | What it stops | Where |
 | --- | --- | --- |
 | Restricted imports | An import across a layer boundary in the table above or across a tool's boundaries, or a provider SDK imported outside the module that owns it. | Each repository's `biome.json`, run by `pnpm lint`. |
-| Import loops | Two modules that import each other at run time, directly or through others. Type-only imports are allowed. | `noImportCycles` in the top-level lint rules of every repository. |
-| File size | A file over 1,000 lines. A file already over it may not grow: its exception is capped at its current size. Tests and generated code are exempt. | `noExcessiveLinesPerFile` in every repository's `biome.json`. |
+| Import loops | Two modules that import each other at run time, directly or through others. Type-only imports are allowed. | `noImportCycles` in the top-level lint rules of cli-core and every tool. |
+| File size | A file over 1,000 lines (zoom sets 500). A file already over it, or one that was split, may not grow: its exception is capped at its current size. Tests and generated code are exempt. | `noExcessiveLinesPerFile` in the `biome.json` of cli-core and every tool. |
 | Parity | A core change that breaks either tool's build. A branch of the same name in a tool lets a breaking change go green before the tools adopt it. | cli-core's Parity workflow. |
 | Command contract | The `commands --json` shape, declared effects on every command, the help snapshot. | Each tool's `contracts:check` and `cli-dev lint`. |
 | Type checks | Code, tests and scripts as three projects. | `pnpm typecheck`. |
@@ -284,7 +287,7 @@ Most of the design is checked by machines, so a change that breaks it fails befo
 Biome builds the import graph for `noImportCycles` only when the rule is switched on in the top-level
 rules. Inside an `overrides` entry it reports nothing, so the rule stays at the top level.
 
-Each month the [architecture checks](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) record re-measures these rules in every repository, lists
+Each month the [architecture checks](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) record re-measures these rules in cli-core and every tool, lists
 the files over 500 lines with a verdict on each, and keeps the trend.
 
 Conventions for new code:
