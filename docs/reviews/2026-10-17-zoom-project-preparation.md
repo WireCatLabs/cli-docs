@@ -93,3 +93,6 @@ meeting links, transcript search, strict MCP and preview/model boundaries. Exter
 blocked except its isolated loopback model fixture. All ten native translation structures pass
 against this final source; fingerprints deliberately await the released-tag capture. Final
 four-platform/registry proof remains required.
+
+The new ES checkpoint note uses the existing archive term “punto de control”; RU retains
+“контрольная точка” and “блокировка”, avoiding a second reader term for the same persisted state.
