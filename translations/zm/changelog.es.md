@@ -4,7 +4,7 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
-## 0.24.0 — 17.10.2026
+## 0.24.0 — 18.10.2026
 
 ### Añadido
 
@@ -17,7 +17,7 @@ Las entradas nuevas están traducidas; el historial anterior conserva su inglés
 ### Corregido
 
 - La publicación puede esperar el bloqueo compartido con `WIRECAT_RELEASE_WAIT_SECONDS`; por defecto sigue rechazando inmediatamente un bloqueo ocupado.
-- La adopción de Core 0.326.0 y Base 0.43.1 publicados y compatibles incorpora contratos compartidos acotados de preparación, apertura del almacén de solo lectura y roles registrados para los indicadores de fuentes. Usa una sola instancia de Base.
+- La adopción de Core 0.332.0 y Base 0.43.2 publicados y compatibles incorpora contratos compartidos acotados de preparación, apertura del almacén de solo lectura y roles registrados para los indicadores de fuentes. Usa una sola instancia de Base. Los parámetros de correo compatibles de Core mantienen la preparación con fuentes seleccionadas en Node 22.16; Zoom habilita explícitamente la capacidad compartida de comunicaciones para CLI y MCP.
 
 ## 0.23.2 — 17.10.2026
 
