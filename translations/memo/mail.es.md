@@ -74,8 +74,8 @@ Cada grupo recibe una **puntuación** de parecido con spam, estafa o robot, con 
 | Indicio | Suma | Origen |
 |---|---:|---|
 | `spam_folder` | 4 | La mayoría del grupo está en Spam de Gmail |
-| `dmarc_fail` | 3 | Falló la comprobación DMARC de Gmail al recibirlo (`Authentication-Results: mx.google.com`) |
-| `brand_spoof` | 3 | Una marca como PayPal o Apple en el nombre visible, enviada desde otro dominio |
+| `dmarc_fail` | 3 | Falló la comprobación DMARC de Gmail al recibirlo (`Authentication-Results: mx.google.com`), en correo de 2022 en adelante, sin firma DKIM válida, de un remitente que nunca supera DMARC |
+| `brand_spoof` | 3 | Una marca como PayPal o Apple en el nombre visible, enviada desde otro dominio; se excluyen «Google via LinkedIn» desde el dominio de LinkedIn, cursos de Coursera y espacios de Quora con nombre de empresa |
 | `young_domain` | 3 | El dominio tenía menos de 180 días al llegar el primer correo |
 | `reply_to_elsewhere` | 2 | Las respuestas van a un dominio distinto |
 | `never_opened` | 2 | No abriste ningún correo del grupo |
@@ -256,6 +256,8 @@ memo search all 'budget'
 ```
 
 El correo masivo — boletines, avisos y listas con List-Id, List-Unsubscribe o `Precedence: bulk` — está en la carpeta `bulk` (`memo:bulk`). `NOT mailbox:bulk` lo excluye de la búsqueda. Se incluye por defecto porque facturas y reservas llevan las mismas cabeceras. Memo lo marca al leer cabeceras de una cuenta con reglas; un listado completo, al menos diario, marca también correo guardado antes. `--account` acepta el nombre de la cuenta o su dirección.
+
+Cada sync también puntúa a todos los remitentes a partir del correo ya guardado, como máximo una vez al día, igual que `memo mail inspect` puntúa un grupo. Un resultado de un remitente evaluado incluye `sender_score` en `--json`, con la puntuación y sus señales. El orden de resultados aún no cambia: la puntuación está para comprobarla antes de usarla para ordenar.
 
 Las etiquetas de Gmail, como Recibidos, Importantes, Destacados y tus propias etiquetas, se convierten
 en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
