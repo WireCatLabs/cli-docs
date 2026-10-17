@@ -10,9 +10,7 @@ use, start with [Tasks](./tasks.md).
 
 The design comes from the approved tasks plan in cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). All of it is built
-in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it, except that only `tg` reads the category list from the shared settings file,
-opens tasks in a group only for what is addressed to the owner (and every question in a group tagged `watch-tasks`), has assignees on tasks
-found in messages, and compares two tasks from one message by their own words. `max` names the history scan `tasks apply`; in `tg` it is `tasks scan`. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
+in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it, except that `serve` in `max` opens only the tasks of auto-reply rules. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
 (`tasks plan --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
 `tasks categories`, claims, `tasks related`, `tasks duplicates` or `tasks merge`.
 
@@ -131,7 +129,7 @@ with no certainty.
 ## Categories
 
 The category list is one list for every tool, not one per profile or per app, because the rules run in
-`tg`, `max`, `memo` and `messages sync` and must agree. `tg` reads the owner's changes from a shared
+`tg`, `max`, `memo` and `messages sync` and must agree. `tg` and `max` read the owner's changes from a shared
 settings file, `~/.config/WireCat/config.json` (on Windows, `%APPDATA%\WireCat\Config\config.json`),
 section `task_categories`. The section holds only changes on top of the default list:
 `"<name>": "<meaning> | <words>"` adds or replaces a category (a new one goes before `other`), and `null`
@@ -160,11 +158,11 @@ accent, `ñ`, `¿` or `¡`, or a word such as `la`, `que` or `para`. A list hold
 with meanings and words. `tasks agenda category:<name> tag:<name>` filters the agenda with query fields (MCP `tasks_agenda` takes them in `query`). Changing the
 list does not change the category of existing tasks.
 
-Before `tg` read the file, the list was saved in the store (`store_settings`). Such a saved list is
+Before the tools read the file, the list was saved in the store (`store_settings`). Such a saved list is
 still the base under the file's changes until the next `config set` or `unset` of a category moves it
-into the file and drops it from the store. `max` and `memo` do not read the file yet: they use a list
-saved in the store, or the default list of the tool that opens the store. So after `tg` moves a saved
-list into the file, `max` and `memo` use their own default list. `tasks categories` (MCP
+into the file and drops it from the store. `memo` does not read the file yet: it uses a list saved in
+the store, or its own default list. So after `tg` or `max` moves a saved list into the file, `memo` uses
+its own default list. `tasks categories` (MCP
 `tasks_categories`) names the file in `file`. A category that left
 the list while tasks still carry it is named: `tasks categories` lists it under `unlisted` with open and
 total task counts (MCP `tasks_categories` too), a `config set` or `unset` of `task_categories` ends its
@@ -239,7 +237,7 @@ The default list in `tg` and `max`:
 ## Where the rules open tasks
 
 A task is what the owner must do or what someone owes the owner, not every question in every chat. In
-`tg`, the rules open tasks by the kind of chat:
+`tg` and `max`, the rules open tasks by the kind of chat:
 
 | Chat kind | What opens a task |
 | --- | --- |
@@ -249,20 +247,22 @@ A task is what the owner must do or what someone owes the owner, not every quest
 | Channel, Saved Messages | nothing |
 
 The tag is an ordinary chat tag: `tags add --chat <group> watch-tasks`. It changes nothing in a
-one-to-one chat or a channel. `review`, `serve`, the pass on sync and `tasks scan` all read it. A rule
+one-to-one chat or a channel. `review`, `serve` in `tg`, the pass on sync and `tasks scan` all read it. A rule
 closes a task only in a chat where it may open one, on the owner's answer. In a watched group, a direct
 reply to the question from any member other than the asker also closes it, with the resolution "answered
 in the group"; a later message that does not reply to the question closes nothing. A question is a
 message with a question mark, or a reply to the owner's message; a request or promise without one is
-an agent's to add. In `max`, every question the owner did not answer
-opens a task, in any chat.
+an agent's to add. `max` reads MAX's dialogs as one-to-one chats, its group chats as groups and its
+channels as channels; any other chat is of a kind the store does not know. In `max`, `serve` runs only
+the auto-reply rules' `task` action, so a question that arrives while it runs opens its task on the
+next sync or `review`.
 
 Why: on a real store, the newest 300 posts of one channel would have opened 85 tasks under the
 earlier rule, which opened a task for any unanswered question in any chat. Now a channel opens none.
 
 ## Assignees
 
-In `tg`, a task found in a message can name who should do it, through the same assignment rows as
+In `tg` and `max`, a task found in a message can name who should do it, through the same assignment rows as
 project tasks (role `assignee`). An open task with an assignee is what that person owes the owner.
 
 | Command | What it does |
@@ -288,7 +288,7 @@ a failed sync. Nothing is attached on its own beyond a certain match (step 2 bel
 In `tg` and `max`, the first pass of an account also opens at most `task_first_pass_per_chat` tasks
 per chat, the newest first; the default is 0. A first sync reads history, and which chats are worth
 turning into tasks is the owner's choice. The tasks it held back are counted in `tasks` as `held`, in
-`held_chats` chats, and a note names `tasks scan` (`tasks apply` in `max`). In `tg`, `held` does not
+`held_chats` chats, and a note names `tasks scan`. `held` does not
 count a chat where the rules open nothing, such as a channel. Closes still run: a question the owner answered closes its open
 task. The setting is store-wide, kept in `store_settings` like the agent-close settings, a whole number
 from 0 to 1000; `config unset task_first_pass_per_chat` goes back to 0.
@@ -302,7 +302,7 @@ Without the global `--yes` (MCP `yes`) it changes nothing and lists, per chat, t
 each task that would open, with its source, type and category; with it, the tasks open through the
 duplicate check, as on a sync, and answered questions close. A message that already has a task is not
 listed again. The MCP tool's description tells an agent to ask the owner before it builds a chat's
-tasks. In `max` the command is still `tasks apply` (MCP `tasks_apply`); `tg` keeps no old name.
+tasks. Neither `tg` nor `max` keeps the old name `tasks apply`.
 
 | Command | What it does |
 | --- | --- |
@@ -345,7 +345,7 @@ come from the same message. A message can raise a pair's score, never lower it. 
 due date count only when the task's own text has none, and its "tomorrow" is read from when it was
 sent. Messages are read from the store at compare time; a task stores no message text.
 
-**Two tasks from one message.** In `tg`, when two tasks have the same source message, such as a
+**Two tasks from one message.** In `tg` and `max`, when two tasks have the same source message, such as a
 promise and a request an agent took from one long message, they are compared by their own title and
 description only. The shared message would make two different jobs look like one.
 
