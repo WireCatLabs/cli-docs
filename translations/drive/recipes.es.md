@@ -357,7 +357,9 @@ las conversaciones guardadas donde se compartió.
 
 La sincronización Drive vincula documentos importados con URL de Google visibles en mensajes
 ya guardados por las herramientas de mensajería. Las siguientes sincronizaciones también vinculan
-mensajes nuevos aunque el documento no cambie. No descarga historial del servicio de mensajería
+mensajes nuevos y URL de documentos añadidas al editar mensajes antiguos guardados, aunque el
+documento no cambie. La herramienta de mensajería debe guardar primero el mensaje editado localmente.
+No descarga historial del servicio de mensajería
 ni marca mensajes como leídos. No detecta enlaces ocultos tras texto con formato sin una URL de Google visible.
 
 Para los comandos exactos, sustituye `CHAT_ID` por un chat elegido en tu perfil Telegram:
