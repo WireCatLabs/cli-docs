@@ -108,7 +108,8 @@ found in a message can have assignees; project tasks in `memo` have their own.
 A task with no assignee is fine: it is better than a missed task. If the tool knows no person for the
 sender, the task is still added, with no assignee.
 
-`tasks list "assignee:any state:open"` lists the open tasks that others owe you. `assignee:none` finds
+`tasks agenda` lists the open tasks that others owe you under "assigned", oldest first;
+`tasks list "assignee:any state:open"` lists them too. `assignee:none` finds
 tasks with no assignee, and `assignee:person:<id>` the tasks of one person. Agents that use the MCP
 server pass `assignee` to `tasks_add` and `tasks_plan`.
 
@@ -166,7 +167,7 @@ tasks.
   the chats where you wrote last and nobody answered. These are there even when no task is.
 - Ask your agent to read each day's new messages and add what the rules cannot see: requests and
   promises without a question mark, yours and other people's.
-- Keep what others owe you as tasks with an assignee, and check `tasks list "assignee:any state:open"`.
+- Keep what others owe you as tasks with an assignee. The agenda lists them under "assigned", oldest first.
 
 ```text prompt
 Use tg CLI. Sync my chats and show my task agenda. Then read today's new messages in my one-to-one chats and in the groups tagged watch-tasks, and add a task for each request or promise the rules missed, with the sender as assignee when it is their promise. Show me the list before you add anything. Don't send anything.
@@ -238,7 +239,8 @@ tg personal tasks reject <task>
 </details>
 
 - **agenda** lists tasks that are overdue, due soon or due for a check, then chats where you owe an
-  answer and chats where you wait for one. It warns when the store has not saved anything for a while.
+  answer and chats where you wait for one, then what others owe you: open tasks with an assignee, oldest
+  first. It warns when the store has not saved anything for a while.
 - **add** needs a type. It also needs a category (`--category`), and it
   refuses when a similar task exists; see [No duplicate tasks](#no-duplicate-tasks).
 - **plan** sets the title, the description, the due date, the next check and the assignees.
