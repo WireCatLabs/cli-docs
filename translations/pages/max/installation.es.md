@@ -199,7 +199,7 @@ max nunca elige una cuenta por sí mismo: cada comando que usa tu cuenta empieza
 
 **Con tu agente:** dile el nombre del perfil. Si configuraste max antes sin nombrar un perfil, se llama `default`.
 
-**A mano:** escribe el nombre primero (`max default chats list`) o fíjalo una vez: `export MAX_PROFILE=default` en el perfil de tu shell, o `max config set defaultProfile default`. Si añadiste max a una aplicación MCP con `max mcp config`, vuelve a ejecutar ese comando.
+**A mano:** escribe el nombre primero (`max default chats list`) o fíjalo una vez: `export MAX_PROFILE=default` en el perfil de tu shell. Si añadiste max a una aplicación MCP con `max mcp config`, vuelve a ejecutar ese comando.
 
 ### Tras actualizar, max se detiene y nombra dos archivos de mensajes
 

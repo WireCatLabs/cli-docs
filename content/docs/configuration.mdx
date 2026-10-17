@@ -25,7 +25,7 @@ The tool creates the file with common defaults the first time a command reads se
 tg config show
 tg personal config set limit 50
 tg work config set limit 10
-tg config set sendsPerHour 10 --defaults
+tg config set sends_per_hour 10 --defaults
 tg personal config unset limit
 ```
 
@@ -39,7 +39,7 @@ A command option such as `--limit 5` (a <DocTerm term="flag" lang="en" label="fl
 
 ```json
 {
-  "defaults": { "limit": 20, "sendsPerHour": 30 },
+  "defaults": { "limit": 20, "sends_per_hour": 30 },
   "profiles": { "work": { "limit": 50 } }
 }
 ```
@@ -51,13 +51,13 @@ A command option such as `--limit 5` (a <DocTerm term="flag" lang="en" label="fl
 
 ```json
 {
-  "defaults": { "limit": 20, "keepRunsForDays": 14, "updateCheck": true },
+  "defaults": { "limit": 20, "keep_runs_for_days": 14, "update_check": true },
   "profiles": {
     "personal": { "limit": 50, "color": true },
     "work": { "limit": 10, "record": true, "permissions": { "messages": "readonly" } }
   },
-  "personal": { "defaults": { "sendsPerHour": 30 } },
-  "bot": { "profiles": { "shop": { "sendsPerHour": 200 } } }
+  "personal": { "defaults": { "sends_per_hour": 30 } },
+  "bot": { "profiles": { "shop": { "sends_per_hour": 200 } } }
 }
 ```
 
@@ -69,7 +69,7 @@ A command option such as `--limit 5` (a <DocTerm term="flag" lang="en" label="fl
 
 ## All settings for Telegram and MAX
 
-The two tools share most settings, such as `limit`, `sendsPerHour`, `record` and `permissions`. Some exist in only one of them: for example, `proxy` in Telegram and `serve` in MAX. Each messenger documents its own:
+The two tools share most settings, such as `limit`, `sends_per_hour`, `record` and `permissions`. Some exist in only one of them: for example, `proxy` in Telegram and `serve` in MAX. Each messenger documents its own:
 
 - **Telegram:** [Telegram configuration guide](./tg/configuration.md) · [every Telegram setting, default and environment variable](./tg/configuration-reference.md).
 - **MAX:** [MAX configuration guide](./max/configuration.md) · [every MAX setting, default and environment variable](./max/configuration-reference.md).

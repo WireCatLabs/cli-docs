@@ -25,7 +25,7 @@ description: "Где лежит файл настроек, как посмотр
 tg config show
 tg personal config set limit 50
 tg work config set limit 10
-tg config set sendsPerHour 10 --defaults
+tg config set sends_per_hour 10 --defaults
 tg personal config unset limit
 ```
 
@@ -39,7 +39,7 @@ tg personal config unset limit
 
 ```json
 {
-  "defaults": { "limit": 20, "sendsPerHour": 30 },
+  "defaults": { "limit": 20, "sends_per_hour": 30 },
   "profiles": { "work": { "limit": 50 } }
 }
 ```
@@ -51,13 +51,13 @@ tg personal config unset limit
 
 ```json
 {
-  "defaults": { "limit": 20, "keepRunsForDays": 14, "updateCheck": true },
+  "defaults": { "limit": 20, "keep_runs_for_days": 14, "update_check": true },
   "profiles": {
     "personal": { "limit": 50, "color": true },
     "work": { "limit": 10, "record": true, "permissions": { "messages": "readonly" } }
   },
-  "personal": { "defaults": { "sendsPerHour": 30 } },
-  "bot": { "profiles": { "shop": { "sendsPerHour": 200 } } }
+  "personal": { "defaults": { "sends_per_hour": 30 } },
+  "bot": { "profiles": { "shop": { "sends_per_hour": 200 } } }
 }
 ```
 
@@ -69,7 +69,7 @@ tg personal config unset limit
 
 ## Все настройки Telegram и MAX
 
-Большинство настроек у двух инструментов общие: `limit`, `sendsPerHour`, `record`, `permissions` и другие. Некоторые есть только у одного: например, `proxy` у Telegram и `serve` у MAX. Каждый мессенджер описывает свои:
+Большинство настроек у двух инструментов общие: `limit`, `sends_per_hour`, `record`, `permissions` и другие. Некоторые есть только у одного: например, `proxy` у Telegram и `serve` у MAX. Каждый мессенджер описывает свои:
 
 - **Telegram:** [руководство по настройкам Telegram](./tg/configuration.md) · [все настройки Telegram, значения по умолчанию и переменные окружения](./tg/configuration-reference.md).
 - **MAX:** [руководство по настройкам MAX](./max/configuration.md) · [все настройки MAX, значения по умолчанию и переменные окружения](./max/configuration-reference.md).

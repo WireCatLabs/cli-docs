@@ -201,7 +201,7 @@ max never chooses an account by itself: every command that uses your account sta
 
 **With your agent:** tell it the profile name. If you set max up earlier without naming a profile, it is called `default`.
 
-**By hand:** put the name first (`max default chats list`), or set it once: `export MAX_PROFILE=default` in your shell profile, or `max config set defaultProfile default`. If you added max to an MCP app with `max mcp config`, run that command again.
+**By hand:** put the name first (`max default chats list`), or set it once: `export MAX_PROFILE=default` in your shell profile. If you added max to an MCP app with `max mcp config`, run that command again.
 
 ### After an update, max stops and names two archive files
 

@@ -220,7 +220,7 @@ tg never chooses an account by itself: every command that uses your account star
 
 **With your agent:** tell it the profile name. If you set tg up earlier without naming a profile, it is called `default`.
 
-**By hand:** put the name first (`tg default chats list`), or set it once: `export TG_PROFILE=default` in your shell profile, or `tg config set defaultProfile default`. If you added tg to an MCP app, create that entry again with `tg default mcp config`. Anything else that starts `tg serve` or `tg mcp` for you, such as a scheduled job, needs the profile in its command too: `tg default serve`.
+**By hand:** put the name first (`tg default chats list`), or set it once: `export TG_PROFILE=default` in your shell profile. If you added tg to an MCP app, create that entry again with `tg default mcp config`. Anything else that starts `tg serve` or `tg mcp` for you, such as a scheduled job, needs the profile in its command too: `tg default serve`.
 
 ### After an update, tg stops and names two archive files
 
