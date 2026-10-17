@@ -128,12 +128,56 @@ tasks list "assignee:any state:open"
 
 En un grupo, las reglas abren una tarea solo por una pregunta que te responde a ti y por una mención
 tuya. En un grupo pequeño donde respondes de todo, como un grupo con un cliente o el de la familia,
-quizá quieras todas las preguntas. Ponle a ese grupo la etiqueta `watch-tasks`: desde entonces, cada
-pregunta que nadie respondió abre una tarea, sea para quien sea. La etiqueta funciona en `tg` y solo
-en grupos; un canal nunca abre tareas.
+quizá quieras todas las preguntas. Ponle a ese grupo la etiqueta `watch-tasks`:
 
 ```sh
 tg personal tags add --chat "Renovation" watch-tasks
+tg personal tags remove --chat "Renovation" watch-tasks
+```
+
+La etiqueta funciona en `tg` y solo en grupos; un canal nunca abre tareas. Lo que cambia:
+
+- **Cada pregunta que no respondiste abre una tarea, sea para quien sea.** Una regla reconoce una
+  pregunta por su signo de interrogación o por una respuesta a tu mensaje.
+- **Solo mensajes nuevos.** Las tareas se abren después de cada sincronización, en `review` y mientras
+  `serve` está en marcha. Para los mensajes antiguos del grupo, usa
+  [`tasks scan`](#tareas-del-historial-de-un-chat).
+- **Preguntas, no todos los mensajes.** Una petición o una promesa sin signo de interrogación, como
+  «mándame el archivo» o «lo hago mañana», no es tarea de una regla. Tu agente la añade con
+  `tasks add`, con `--assignee sender` cuando es una promesa del propio remitente.
+- **Solo tu respuesta cierra una pregunta.** Cuando responde otro miembro, la tarea sigue abierta.
+  Ciérrala tú o deja que tu agente la cierre indicando su certeza; consulta
+  [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea).
+- **Sin responsable.** Una tarea que abre una regla no tiene responsable; tu agente puede añadirlo con
+  `tasks plan`.
+
+Pon la etiqueta solo en grupos donde las respuestas te tocan a ti. Un grupo muy activo con la etiqueta
+te da muchas tareas.
+
+## Usar las tareas de forma fiable
+
+**Para recibir pocas tareas que no necesitas:**
+
+- Las reglas abren tareas solo donde te piden algo: en los chats uno a uno y, en los grupos, solo una
+  respuesta a ti o una mención tuya. Los canales no abren nada.
+- La primera sincronización no abre tareas de tu historial. Revisa el historial de un chat solo
+  cuando tú lo decidas, y lee la lista antes de añadir `--yes`.
+- Pon la etiqueta `watch-tasks` solo en grupos pequeños de los que te encargas.
+- La comprobación de duplicados frena una tarea que puede ser el mismo trabajo que una abierta; tu
+  agente vincula el mensaje a esa tarea.
+
+**Para no perder nada:**
+
+- La agenda (`tasks agenda`) muestra los chats donde otra persona escribió la última y no
+  respondiste, y los chats donde escribiste tú la última y nadie respondió. Aparecen aunque no haya
+  tarea.
+- Pide a tu agente que lea los mensajes nuevos de cada día y añada lo que las reglas no ven: peticiones
+  y promesas sin signo de interrogación, tuyas y de otras personas.
+- Guarda lo que otros te deben como tareas con responsable y revisa
+  `tasks list "assignee:any state:open"`.
+
+```text prompt
+Usa tg CLI. Sincroniza mis chats y muéstrame la agenda de tareas. Después lee los mensajes nuevos de hoy en mis chats uno a uno y en los grupos con la etiqueta watch-tasks, y añade una tarea por cada petición o promesa que las reglas no detectaron, con el remitente como responsable cuando sea su promesa. Muéstrame la lista antes de añadir nada. No envíes nada.
 ```
 
 ## Comandos
@@ -466,6 +510,9 @@ En `tg` y `max`, `tasks_close` necesita `certainty`, igual que el `tasks close` 
 
 ## Aún no está hecho
 
+- **Las respuestas de otros miembros en un grupo vigilado.** En un grupo con la etiqueta
+  `watch-tasks`, solo tu respuesta cierra una pregunta; la respuesta de otro miembro deja la tarea
+  abierta.
 - **Ajustar los pesos con tus respuestas.** Cada fusión, rechazo, `--into` y `--new` se guarda,
   pero todavía nada los usa para cambiar los pesos.
 
