@@ -140,8 +140,9 @@ The tag works in `tg`, on groups only; a channel never opens tasks. What it chan
 - **Questions, not every message.** A request or a promise without a question mark, such as "send me
   the file" or "I will do it tomorrow", is not a rule's task. Your agent adds it with `tasks add`, with
   `--assignee sender` when it is the sender's own promise.
-- **Only your answer closes a question.** When another member answers, the task stays open. Close it
-  yourself, or let your agent close it with a certainty; see
+- **Any member's reply closes a question.** Your answer closes it, and so does a reply to the question
+  from any member other than the one who asked. A later message that does not reply to the question
+  closes nothing: close that task yourself, or let your agent close it with a certainty; see
   [When an agent closes a task](#when-an-agent-closes-a-task).
 - **No assignee.** A task a rule opens has no assignee; your agent can add one with `tasks plan`.
 
@@ -488,8 +489,6 @@ In `tg` and `max`, `tasks_close` needs `certainty`, as an agent's `tasks close` 
 
 ## Not built yet
 
-- **Other members' answers in a watched group.** In a group tagged `watch-tasks`, only your answer
-  closes a question; an answer from another member leaves the task open.
 - **Tuning the weights from your answers.** Every merge, rejection, `--into` and `--new` is kept,
   but nothing uses them yet to change the weights.
 
