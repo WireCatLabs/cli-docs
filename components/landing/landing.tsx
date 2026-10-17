@@ -609,8 +609,8 @@ export function Landing({ lang }: { lang: string }) {
                 <span className="slash">/find</span>
               </div>
               <span className="cmd">
-                <code>{c("tg mcp config")}</code>
-                <button className="copy" type="button" data-copy="tg mcp config">
+                <code>{c("tg personal mcp config")}</code>
+                <button className="copy" type="button" data-copy="tg personal mcp config">
                   {t("Copy")}
                 </button>
               </span>
