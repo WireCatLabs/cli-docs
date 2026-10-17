@@ -1611,6 +1611,115 @@ memo facts reverse <ref> [options]
 |---|---|
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
+## `memo meetings`
+
+stored meeting evidence and reviewed findings
+
+### `memo meetings actions`
+
+cited meeting facts and project tasks waiting for owner review
+
+#### `memo meetings actions add`
+
+stage cited findings; facts and tasks wait for owner confirmation
+
+This command changes the local store or your files.
+
+```sh
+memo meetings actions add <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | JSON proposal file, or - for stdin; at most 65536 UTF-8 bytes. |
+
+| Option | What it does |
+|---|---|
+| `--provider <provider>` | meeting provider. |
+| `--account <account>` | exact stored meeting account. |
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+
+#### `memo meetings actions show`
+
+one findings preview, prior decisions and its review receipt
+
+```sh
+memo meetings actions show <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | stored findings batch ID. |
+
+| Option | What it does |
+|---|---|
+| `--provider <provider>` | meeting provider. |
+| `--account <account>` | exact stored meeting account. |
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+
+#### `memo meetings actions list`
+
+findings batches in one meeting account, newest first
+
+```sh
+memo meetings actions list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--provider <provider>` | meeting provider. |
+| `--account <account>` | exact stored meeting account. |
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+| `--limit <n>` | batches per page, at most 50. Default: `20`. |
+| `--page <n>` | which page, from 1. Default: `1`. |
+
+#### `memo meetings actions confirm`
+
+owner only: create selected findings and reject the other new candidates
+
+This command changes the local store or your files.
+
+```sh
+memo meetings actions confirm <id> <ids> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | stored findings batch ID. |
+| `ids` | required | candidate IDs to accept; other new candidates are rejected. |
+
+| Option | What it does |
+|---|---|
+| `--provider <provider>` | meeting provider. |
+| `--account <account>` | exact stored meeting account. |
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+| `--fingerprint <hash>` | the exact fingerprint shown in the preview. |
+
+#### `memo meetings actions reject`
+
+owner only: reject every new candidate in this batch
+
+This command changes the local store or your files.
+
+```sh
+memo meetings actions reject <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | stored findings batch ID. |
+
+| Option | What it does |
+|---|---|
+| `--provider <provider>` | meeting provider. |
+| `--account <account>` | exact stored meeting account. |
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+| `--fingerprint <hash>` | the exact fingerprint shown in the preview. |
+
 ## `memo actions`
 
 what an agent proposes to do; confirming one makes it your task, nothing is sent

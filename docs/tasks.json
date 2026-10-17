@@ -123,7 +123,7 @@
     "id": "memo-review",
     "pages": ["memo/tasks.md", "memo/memories.md", "memo/mcp.md"],
     "families": {
-      "memo": ["tasks", "reminders", "memories", "facts", "actions", "agents", "mcp"]
+      "memo": ["tasks", "reminders", "memories", "facts", "actions", "agents", "mcp", "meetings"]
     }
   },
   {

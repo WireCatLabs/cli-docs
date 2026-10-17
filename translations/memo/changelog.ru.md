@@ -8,7 +8,52 @@ title: "История изменений"
 
 Точные технические записи новых выпусков сохранены на английском; инструкции по использованию переведены в соответствующих руководствах.
 
-## Не выпущено
+## 0.58.0 — 17.10.2026
+
+### Added
+
+- `memo meetings actions` stages cited meeting facts and project tasks for owner review. Confirmation creates selected records atomically, keeps review receipts and prevents exact retries from duplicating accepted work. Missing dates and assignees stay unknown; stale evidence is refused.
+- **Every sender gets its spam score in the store, and search shows it.** Each sync scores the account's senders
+  from the stored mail, at most once a day, as `memo mail inspect` scores a group; a hit from a scored sender
+  carries `sender_score` (score and signals) in `--json`. Results are not reordered by it. On the owner's mailbox:
+  5,789 senders in 15 seconds. cli-core 0.311.0 (store version 19).
+
+## 0.57.0 — 17.10.2026
+
+### Fixed
+
+- **The sender score counts a failed DMARC check only on mail from 2022 on.** Before that, senders often published a
+  policy their own mail did not meet yet; on the owner's mailbox every failure was from 2018 to March 2021, all from
+  real senders. Senders at 3 or more on the strong signals: 20 → 2, both look-alike domains.
+- **A broken config file is reported in one line** (cli-core 0.304.0, 0.307.0): the first bad key, a fixed reason
+  and a count of the rest, never a value — `config.json: updateCheck is an unknown setting; rename it to
+  update_check (and 1 more problem)`. An old camelCase key is named with its new name first.
+- **`memo mail status` finishes on a large mailbox** (cli-core 0.307.0): the per-folder count read every email
+  again for each one, minutes on a few hundred thousand emails; now seconds.
+
+### Changed — may break scripts
+
+- **The daily "a newer memo exists" line now comes from cli-core, shared with tg and max, and is quieter.** It
+  needs stdout to be a terminal as well as stderr: `memo … | less` no longer shows it. Any quiet option written
+  with `=` silences it (`--help=…`, `--quiet=…`), not only `--json=…`. `MEMO_AUTO` with any value silences it, not
+  only `1`. `--json`, `--jsonl` and `--quiet` silence it anywhere in the command, also after `--`. `--jsonl` is new
+  among them.
+- cli-core 0.307.0.
+
+## 0.56.0 — 17.10.2026
+
+### Fixed
+
+- **The sender score in `memo mail inspect` no longer flags LinkedIn, Coursera, Quora or Dropbox Sign as brand
+  spoofs, nor senders whose DMARC failed only because they signed for another domain.** "Google via LinkedIn" from
+  LinkedIn's own domain is LinkedIn passing a page on; Coursera and Quora name courses and spaces after companies;
+  hellosign, dropboxmail, onedrive and microsoftadvertising are the brands' own domains. A DMARC failure counts only
+  without a valid DKIM signature, and not for a sender that passes DMARC on other mail. On the owner's mailbox the
+  senders at 3 or more on these signals went from 71 to 20.
+
+### Documentation
+
+- Distinguish read-only imports from explicit Gmail cleanup and restore throughout the guides and README.
 
 ## 0.55.0 — 17.10.2026
 
