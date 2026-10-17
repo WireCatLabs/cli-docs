@@ -15,29 +15,28 @@ core of the tools (cli-core). `tg` and `max` have all of them; `memo` does not h
 duplicate review yet.
 Closes that wait for you when an agent is unsure, follow-up tasks, the list of 59 categories and the
 duplicate check that reads linked messages are in `tg` and `max`; `memo` does not have them yet.
-Only `tg` reads the category list from the shared settings file so far. `tg` and `max` keep a first
-sync from opening tasks from your history, and build a chat's tasks when you ask (`tasks scan` in
-`tg`; `max` still calls it `tasks apply`). Only `tg` opens tasks in a group just for what is asked of
-you, and records who should do a task found in a message.
+`tg` and `max` read the category list from the shared settings file. They keep a first sync from
+opening tasks from your history, and build a chat's tasks when you ask (`tasks scan`). They open tasks
+in a group just for what is asked of you, and record who should do a task found in a message.
 [How tasks work](./tasks-architecture.mdx) gives the technical detail.
 
 ## Where tasks come from
 
-- **Rules find them in messages, where something is asked of you.** In `tg`, the kind of chat decides:
+- **Rules find them in messages, where something is asked of you.** In `tg` and `max`, the kind of chat decides:
   - **A one-to-one chat:** every question you did not answer becomes a task of type `question`.
   - **A group:** only a question that replies to your message. Other people's questions are not
     your tasks.
-  - **A channel or Saved Messages:** nothing.
+  - **A channel, or Saved Messages in Telegram:** nothing.
 
   A message that mentions you becomes a `mention` task, in a one-to-one chat or a group; the
   messenger must mark the mention, a typed name alone is not seen. A chat whose kind the tool does
-  not know counts as a group. In `max`, every question you did not answer still opens a task, in any
-  chat. An auto-reply rule with the `task` action opens a `request` task for each
+  not know counts as a group. An auto-reply rule with the `task` action opens a `request` task for each
   matching message ([Telegram](./tg/replies.md), [MAX](./max/replies.md)). The rules run when your
   agent syncs or reviews your chats, and while the tool runs in the background (`messages sync`,
-  `review` and `serve`). A rule picks the task's category from the words of the message.
+  `review` and `serve`). In `max`, `serve` opens only the tasks of auto-reply rules; the other rules
+  run on the next sync or review. A rule picks the task's category from the words of the message.
 - **A group you watch gives you every question.** When you want every unanswered question of a group
-  as a task, whoever it is for, tag the group `watch-tasks` (`tg`; see
+  as a task, whoever it is for, tag the group `watch-tasks` (see
   [Watch every question in a group](#watch-every-question-in-a-group)).
 - **Old messages wait for your choice.** In `tg` and `max`, the first sync of an account opens no task
   from your history. Later syncs open tasks from new messages. When you want a chat's history as tasks, your agent
@@ -97,8 +96,8 @@ three tasks. A task is about one thing, not about one chat or one person.
 
 A task is not only what you must do. When someone promises you something, such as "I will send the
 photos tomorrow", keep it as a task too, with that person as its **assignee**: the person who should
-do it. Then you can ask your agent what others owe you and chase what is late. In `tg`, a task found
-in a message can have assignees; project tasks in `memo` have their own.
+do it. Then you can ask your agent what others owe you and chase what is late. In `tg` and `max`, a task
+found in a message can have assignees; project tasks in `memo` have their own.
 
 `tasks add` and `tasks plan` take `--assignee`:
 
@@ -131,11 +130,11 @@ tg personal tags add --chat "Renovation" watch-tasks
 tg personal tags remove --chat "Renovation" watch-tasks
 ```
 
-The tag works in `tg`, on groups only; a channel never opens tasks. What it changes:
+The tag works in `tg` and `max`, on groups only; a channel never opens tasks. What it changes:
 
 - **Every question you did not answer opens a task, whoever it is for.** A rule sees a question by its
   question mark, or by a reply to your message.
-- **New messages only.** Tasks open after each sync, in `review` and while `serve` runs. For the
+- **New messages only.** Tasks open after each sync, in `review` and, in `tg`, while `serve` runs. For the
   group's older messages, use [`tasks scan`](#tasks-from-a-chats-history).
 - **Questions, not every message.** A request or a promise without a question mark, such as "send me
   the file" or "I will do it tomorrow", is not a rule's task. Your agent adds it with `tasks add`, with
@@ -234,7 +233,7 @@ tg personal tasks close <task>
 tg personal tasks reject <task>
 ```
 
-`<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the same commands, including suggested closes, except `--assignee`.
+`<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the same commands, including suggested closes and `--assignee`.
 
 </details>
 
@@ -242,12 +241,12 @@ tg personal tasks reject <task>
   answer and chats where you wait for one. It warns when the store has not saved anything for a while.
 - **add** needs a type. It also needs a category (`--category`), and it
   refuses when a similar task exists; see [No duplicate tasks](#no-duplicate-tasks).
-- **plan** sets the title, the description, the due date, the next check and, in `tg`, the assignees.
+- **plan** sets the title, the description, the due date, the next check and the assignees.
   The next check is when your agent should look at the task again; it does not remind you.
 - **link** adds messages, chats, people, documents, notes or addresses to a task.
 - **show** prints one task with its plan and everything linked to it.
 - **scan** runs the task rules over a chat's newest stored messages and lists the tasks they would
-  open. It opens them only with `--yes`. In `max` this command is `tasks apply`. See
+  open. It opens them only with `--yes`. See
   [Tasks from a chat's history](#tasks-from-a-chats-history).
 - **close** closes a task as `done` or `dismissed`. A closed task stays closed. Only `tasks unmerge`
   reopens a task, and only one that a merge closed. An agent's close may wait for you; see
@@ -273,7 +272,7 @@ while working on another.
 1. Your agent fetches new messages (`messages sync`). The sync runs the task rules on what it stored,
    from where the last run stopped. The first run reads only chats with a message in the last 14 days.
    In `tg` and `max`, the first run also opens no task from those messages: the answer counts the
-   tasks it held back and names `tasks scan` (`tasks apply` in `max`). A later sync skips a chat where
+   tasks it held back and names `tasks scan`. A later sync skips a chat where
    nothing new was sent, so old messages that it fetches open no tasks. The answer says how many tasks were opened, how many were closed and
    how many went to the review list.
 2. It reads the agenda and checks each new task against its messages.
@@ -294,10 +293,10 @@ the work.
 2. Check the list. If you agree, the agent runs the same command with `--yes`. The tasks open through
    the duplicate check, as on a sync, and an open task whose question you have already answered closes.
 
-The scan uses the same rules as a sync: in `tg`, a channel opens nothing, and a group opens only what
+The scan uses the same rules as a sync: a channel opens nothing, and a group opens only what
 is asked of you unless you tagged it `watch-tasks`. `tasks scan` reads only the messages stored on
 your computer and sends nothing. Agents that use the MCP server have the same tool, `tasks_scan`, with
-`yes` in place of `--yes`. In `max`, the command is `tasks apply` and the tool is `tasks_apply`.
+`yes` in place of `--yes`.
 
 If you want the first sync to open tasks from history, `config set task_first_pass_per_chat <n>` lets
 it open up to n tasks per chat, the newest first (0 by default, at most 1000). This setting is for the
@@ -358,7 +357,7 @@ new task before it creates it:
 The check compares words (including other forms of a word and typos), the person, the amount of
 money, the due date, the category, replies and the time. In `tg` and `max`, the time is when the tasks'
 messages were sent, not when the tasks were written, so tasks written from history in one go do not
-look alike. In `tg`, two tasks taken from one message, such as a promise and a request in one long
+look alike. In `tg` and `max`, two tasks taken from one message, such as a promise and a request in one long
 message, are compared by their own title and description only: the shared message says nothing about
 whether they are one job.
 It reads each task's title and description,
@@ -401,12 +400,12 @@ tasks unmerge REQ-23
   that is not on the list. A rule picks the category from the words of the message, the narrower one
   when two fit (a utility bill is `bills`, not `money`), or `other` when no word matches; your agent
   corrects it with `tasks plan --category`.
-- **One list in a shared settings file.** `tg` reads your changes to the list from
+- **One list in a shared settings file.** `tg` and `max` read your changes to the list from
   `~/.config/WireCat/config.json`, section `task_categories`. This file is not a profile's settings
   file, so the list is the same in every profile, and "finance" and "payments" never live side by
-  side. `max` and `memo` do not read this file yet. They use a list saved in the store, or their own
-  default list: `max` has the same 59 categories, and `memo` still has the earlier seven (`money`,
-  `documents`, `meeting`, `delivery`, `access`, `personal` and `other`).
+  side. `memo` does not read this file yet. It uses a list saved in the store, or its own default list,
+  which still has the earlier seven categories (`money`, `documents`, `meeting`, `delivery`, `access`,
+  `personal` and `other`).
 - **You can change the list.** Each category has a meaning and the words a rule picks it by. A word
   matches its other forms too; a word can name its language, such as `es:vuelo`, and a Spanish word
   such as `es:pagar` then also matches `pagues` in a Spanish message. You can add or change a category,
@@ -416,7 +415,7 @@ tasks unmerge REQ-23
   it. A file that is not valid JSON, or names a bad category, is refused with its path.
 - **A list saved in the store moves to the file.** A list that `tg` saved in the store before it used
   the file still applies. The next `config set` or `config unset` of a category moves it into the file
-  and removes it from the store; after that, `max` and `memo` use their own default list again.
+  and removes it from the store; after that, `memo` uses its own default list again.
   `config unset task_categories` removes the section from the file and gives the current default list.
 - **A category that left the list.** Tasks keep their category when it leaves the list.
   `tasks categories` names such categories under `unlisted`, with their open and total tasks, and
@@ -441,7 +440,7 @@ config unset task_categories
 config show
 ```
 
-In `tg`, you can also edit the file yourself. A name with its meaning and words adds or replaces a
+In `tg` and `max`, you can also edit the file yourself. A name with its meaning and words adds or replaces a
 category, and `null` removes a default one:
 
 ```json
@@ -485,7 +484,7 @@ tasks agenda claimed:any
 Agents that use the MCP server have the same tools, such as `tasks_claim`, `tasks_release`,
 `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` and `tasks_unmerge`.
 In `tg` and `max`, `tasks_close` needs `certainty`, as an agent's `tasks close` does. `tasks_scan`
-(`tasks_apply` in `max`) builds a chat's tasks from its history.
+builds a chat's tasks from its history.
 
 ## Not built yet
 
