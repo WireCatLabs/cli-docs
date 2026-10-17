@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 import { structureProblems } from "@wirecat/cli-base/release"
 import { captureUpstream, localizeTool } from "./localize.ts"
-import { checkoutSource, sourceInstallation } from "./source-install.ts"
+import { checkoutCommit, checkoutSource, sourceInstallation } from "./source-install.ts"
 
 export type Tool = {
   name: string
@@ -144,7 +144,8 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
   if (!tag) throw new Error(`${tool.repo}: no vX.Y.Z tag`)
   const checkout = mkdtempSync(join(tmpdir(), `cli-docs-${tool.name}-`))
   try {
-    if (!ref && sourceInstallation(tool)) checkoutSource(tool, checkout)
+    if (ref && /^[a-f0-9]{40}$/.test(ref)) checkoutCommit(tool.repo, ref, checkout)
+    else if (!ref && sourceInstallation(tool)) checkoutSource(tool, checkout)
     else
       run("git", [
         "-c",

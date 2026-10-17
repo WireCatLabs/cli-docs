@@ -50,6 +50,11 @@ reference entries/options, invalid command examples and missing task destination
 authored shared pages, synced localized tool guides and the homepage fixtures used in Demo, including inline command mentions and
 shell/PowerShell fences. It never executes an example. A stale or missing contract is an error.
 
+For an unreleased source review, `pnpm sync --tool zm --ref <full-40-character-commit> --capture-only`
+fetches that exact commit into the upstream snapshot without changing `tools.json` or localized
+reader pages. Branch and release-tag previews still work. This is source-review evidence only;
+publication still requires the reviewed released tag and its matching npm contract.
+
 Inspect `.docs-tooling/reports/quality.json` for four distinct results:
 
 - **References:** released command paths and their own options in generated command sections.
