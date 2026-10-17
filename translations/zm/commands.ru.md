@@ -243,6 +243,10 @@ zm meetings prepare <series-id> [options]
 
 | Option | What it does |
 |---|---|
+| `--context-source <id[=cursor]>` | разрешённый ID источника, при необходимости ID=cursor; повторяйте. По умолчанию: ``. |
+| `--context-query <words>` | буквальные слова для поиска в выбранных источниках. |
+| `--context-since-time <time>` | начало окна источников в ISO-времени с часовым поясом; по умолчанию за четырнадцать дней до конца. |
+| `--context-before-time <time>` | исключительная верхняя граница окна в ISO-времени с часовым поясом; по умолчанию начало подготовки. |
 | `--project <project>` | добавить неподтверждённые совпадения слов для существующего проекта по названию, ключу или псевдониму. |
 | `--since-time <time>` | window start as ISO timestamp with zone (default now). |
 | `--before-time <time>` | exclusive window end as ISO timestamp (default seven days after start). |

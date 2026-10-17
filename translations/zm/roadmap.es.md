@@ -8,6 +8,8 @@ la próxima cita de una serie elegida con contexto guardado acotado, incluidas l
 hechos aceptados de personas/proyectos y notas del dueño sobre llamadas anteriores incluidas,
 personas vinculadas explícitamente y proyectos confirmados. Elegir opcionalmente un proyecto existente
 añade coincidencias citadas de nombre, clave y alias, separadas de la pertenencia confirmada.
+Las fuentes configuradas explícitamente añaden coincidencias literales acotadas de mensajes,
+correo y carpetas guardadas, con citas, cobertura y continuación.
 Un agente puede combinar esas fuentes con proyectos, notas y personas de Memo. Empieza con
 [preparación](./usage.md#prepare-for-an-upcoming-meeting) o [búsqueda y fuentes](./search.md).
 
@@ -27,7 +29,7 @@ lee contexto guardado; no acepta estos resultados ni genera un resumen.
 
 ## Trabajo previsto
 
-- Preparación más amplia: descubrir series candidatas, consultar documentos importados, correo, mensajes y posibles proyectos sin tener que elegir uno, y elaborar un informe con pruebas y lagunas explícitas. El comando actual incluye hechos globales aceptados de personas/proyectos y notas del dueño, pero no consulta esas otras fuentes ni vocabularios de proyectos no elegidos y devuelve contexto guardado sin generar resúmenes.
+- Preparación más amplia: descubrir series candidatas, consultar documentos importados, correo, mensajes y posibles proyectos sin tener que elegir uno, y elaborar un informe con pruebas y lagunas explícitas. El comando actual incluye hechos globales aceptados de personas/proyectos, notas del dueño y fuentes elegidas explícitamente, pero no consulta fuentes ni vocabularios de proyectos no elegidos y devuelve contexto guardado sin generar resúmenes.
 
 Los nombres alternativos de proyectos, etiquetas y notas ya pertenecen a Memo y al almacén común.
 Otros proveedores usan las capacidades compartidas; esta herramienta no incluye conectores de
