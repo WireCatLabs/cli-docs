@@ -81,8 +81,18 @@ including unlinked meetings, separately from confirmed project membership. Repea
 across aliases are the same evidence. Check pending indexing, output limits and
 `project_evidence.continuation`; continue with the existing project-evidence search even after an
 empty page when more remains. This does not infer or confirm the upcoming call's project.
-Imported documents, mail, messages and unselected project vocabularies are not queried; the agent can investigate those separately. Missing
-transcripts are not downloaded by preparation, and matching names never creates a person link.
+You can also [choose stored message accounts, mail accounts and document folders](./zm/configuration.md#select-communications-for-preparation)
+for this profile. Ask the agent to include those sources with a literal word query; no source is
+selected automatically. A grant covers a whole account or folder, so choose the scope you intend.
+Preparation returns the excerpts separately in `communications.items`; `communications.coverage`
+keeps the selected identities, dates, indexing gaps, read limits and continuation. Conflicting dated
+statements stay separately cited rather than silently becoming a new accepted decision.
+
+Documents, mail and messages remain unqueried unless explicitly requested through those configured
+sources. Unselected project vocabularies remain unqueried; the agent can investigate them separately.
+Preparation neither fills missing indexes nor downloads absent transcripts, and matching names
+never creates a person link. See [source limits and continuation](./zm/usage.md#include-selected-messages-mail-and-documents)
+when the brief has gaps.
 
 ## Keep useful findings afterwards
 

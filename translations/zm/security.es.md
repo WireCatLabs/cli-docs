@@ -31,7 +31,13 @@ IA. Esta guía los explica antes de conectar o archivar.
 
 ## Qué pueden los agentes
 
-- MCP solo lee la cuenta elegida: no escribe exportaciones ni cambios remotos, ni genera vectores o crea tareas.
+- MCP solo lee: no escribe exportaciones ni cambios remotos, ni genera vectores o crea tareas.
+  Las lecturas de reuniones usan el perfil de Zoom elegido.
+- La preparación opcional también puede leer cuentas de mensajes/correo y carpetas de documentos
+  que [selecciones explícitamente para ese perfil](./configuration.md#select-communications-for-preparation).
+  El permiso cubre toda la cuenta o carpeta; solo se resuelven y consultan los ID solicitados.
+  Reinicia MCP tras cambiar o revocar selecciones. La preparación abre el almacén existente
+  compatible en modo de solo lectura, sin migraciones ni mantenimiento del índice.
 - La transcripción local usa un componente instalado en el equipo y no descarga ninguno.
 - Cambios remotos, vínculos, transcripción, trabajos, generación explícita mediante `meetings embeddings` y recuperación primero muestran un plan
   y requieren `--yes`; `--dry-run` prevalece donde está disponible. Las escrituras remotas no se reintentan.
