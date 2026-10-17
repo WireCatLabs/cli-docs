@@ -277,13 +277,17 @@ y una regla de lint o una prueba lo mantiene así.
 
 ## Cómo se mantiene el diseño
 
-La mayor parte del diseño la comprueban máquinas, así que un cambio que lo rompe falla antes de la revisión.
+La mayor parte del diseño la comprueban máquinas. El lint y la comprobación de tipos, y en la mayoría de las
+herramientas el lint de comandos, se ejecutan en cada pull request, así que un cambio que los rompe falla antes de la
+revisión. Parity, los contratos de comandos y las pruebas de archivos generados se ejecutan en la validación completa
+tras cada fusión en `main` ([reglas de CI](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/ci.md)), así que un fallo ahí aparece justo después de la fusión, no en la
+siguiente versión.
 
 | Comprobación | Qué detiene | Dónde |
 | --- | --- | --- |
 | Importaciones restringidas | Una importación que cruza un límite de capa de la tabla anterior o los límites de una herramienta, o un SDK de proveedor importado fuera del módulo al que pertenece. | El `biome.json` de cada repositorio, ejecutado por `pnpm lint`. |
-| Ciclos de importación | Dos módulos que se importan entre sí en ejecución, directamente o a través de otros. Las importaciones solo de tipos están permitidas. | `noImportCycles` en las reglas de nivel superior del lint de cada repositorio. |
-| Tamaño de archivo | Un archivo de más de 1000 líneas. Un archivo que ya las supera no puede crecer: su excepción está limitada a su tamaño actual. Las pruebas y el código generado están exentos. | `noExcessiveLinesPerFile` en el `biome.json` de cada repositorio. |
+| Ciclos de importación | Dos módulos que se importan entre sí en ejecución, directamente o a través de otros. Las importaciones solo de tipos están permitidas. | `noImportCycles` en las reglas de nivel superior del lint de cli-core y de cada herramienta. |
+| Tamaño de archivo | Un archivo de más de 1000 líneas (zoom fija 500). Un archivo que ya las supera, o que se ha dividido, no puede crecer: su excepción está limitada a su tamaño actual. Las pruebas y el código generado están exentos. | `noExcessiveLinesPerFile` en el `biome.json` de cli-core y de cada herramienta. |
 | Parity | Un cambio del núcleo que rompe la compilación de cualquiera de las herramientas. Una rama con el mismo nombre en una herramienta permite que un cambio incompatible pase las comprobaciones antes de que las herramientas lo adopten. | El workflow Parity de cli-core. |
 | Contrato de comandos | La forma de `commands --json`, los efectos declarados en cada comando, la captura de la ayuda. | `contracts:check` y `cli-dev lint` de cada herramienta. |
 | Comprobación de tipos | Código, pruebas y scripts como tres proyectos. | `pnpm typecheck`. |
@@ -293,8 +297,8 @@ Biome construye el grafo de importaciones para `noImportCycles` solo cuando la r
 reglas de nivel superior. Dentro de una entrada `overrides` no informa de nada, así que la regla se queda
 arriba.
 
-Cada mes, el registro de [comprobaciones de arquitectura](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) vuelve a medir estas reglas en todos los
-repositorios, lista los archivos de más de 500 líneas con un veredicto sobre cada uno y guarda la tendencia.
+Cada mes, el registro de [comprobaciones de arquitectura](https://github.com/WireCatLabs/cli-testing/blob/main/performance/engineering/architecture-checks/README.md) vuelve a medir estas reglas en cli-core y
+en cada herramienta, lista los archivos de más de 500 líneas con un veredicto sobre cada uno y guarda la tendencia.
 
 Convenciones para el código nuevo:
 

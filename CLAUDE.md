@@ -2,9 +2,9 @@
 
 ## Development check budget
 
-Local commits check only staged lint and secrets. There is no pre-push check.
-Config integrity, repository lint, Markdown, and secret detection run in PR CI.
-The bounded `ci:quick` step adds typechecking for CLI packages or synthetic unit tests for the docs site.
-Full tests, coverage, builds, parity, browser and platform suites run for releases,
-explicit manual validation, and monthly nonpublishing validation. See the
-[shared policy](https://github.com/WireCatLabs/community/blob/main/standards/README.md#ci-and-hooks).
+The shared rules for hooks and CI are in the [CI page](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/ci.md) of the WireCat CLI standards
+handbook. For this site: commits check only staged lint and secrets, and there is no push hook. A pull
+request runs config integrity, lint, Markdown lint, the secret scan and `ci:quick` (the unit tests without
+the one that needs generated pages). Full tests, the export, link, SEO and browser suites run in the
+deployment workflow on each merge to `main` and daily, and in the monthly full validation.
+How long each check takes is in [community's check guide](https://github.com/WireCatLabs/community/blob/main/standards/CHECKS.md).

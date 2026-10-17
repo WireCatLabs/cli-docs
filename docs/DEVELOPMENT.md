@@ -1,5 +1,9 @@
 # Local documentation checks
 
+The rules every WireCat repository shares (hooks, the pull request budget, full validation and monthly
+runs) are in the [CI page](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/ci.md) of the WireCat CLI standards handbook. This page covers only
+what the site adds.
+
 Use `pnpm dev` for everyday copy edits. It compiles requested routes on demand;
 you do not need to sync tool sources or export the whole site after each edit.
 
@@ -7,7 +11,7 @@ Run `pnpm test:browser` for the local smoke suite. It checks the home page,
 navigation, the query playground, localized term explanations, installation guide navigation
 and Markdown output. It excludes production redirect rules, full documentation
 search indexing, repeated full-page accessibility scans, font matrices and analytics
-checks. Those checks remain in the full CI suite.
+checks. Those run in full validation, before each deployment and monthly.
 Run an affected test file separately when changing behavior outside the smoke suite.
 
 `pnpm test:browser:full` runs the complete browser suite when needed. For an
@@ -24,10 +28,12 @@ for the dev server; `--workers` can override either setting. Four workers share 
 standard public GitHub runner's four CPUs. Each worker reuses its browser and the suite
 shares one server; each test keeps an isolated page/context so state cannot leak between cases.
 
-Git hooks do not run browsers. Pre-commit checks staged code and secrets, and
-pre-push runs type checking. `pnpm build` is a separate production check: it syncs
-tool documentation and exports the entire site. Keep full export, link, SEO and
-browser coverage in CI; use targeted local checks for routine edits.
+Git hooks do not run browsers. The commit hook checks staged code and secrets;
+there is no push hook. A pull request runs the shared fast job: lint, Markdown lint,
+the secret scan and the unit tests. `pnpm build` is a separate production check: it
+syncs tool documentation and exports the entire site. Full export, link, SEO and
+browser coverage run in the deployment workflow on each merge to `main`, daily, and
+in the monthly full validation; use targeted local checks for routine edits.
 
 Browser runs write test durations to `playwright-report/results.json`. Reader-guide and
 About cases also name their rendering, accessibility and Markdown/screenshot phases.
