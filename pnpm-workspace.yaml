@@ -12,3 +12,8 @@ minimumReleaseAgeExclude:
   - '@wirecat/cli-tasks@0.2.0'
 patchedDependencies:
   '@fumadocs/base-ui@16.15.17': patches/@fumadocs__base-ui@16.15.17.patch
+
+overrides:
+  serve>compression: 1.8.2
+  markdownlint-cli2>smol-toml: 1.9.0
+  micromark-extension-math>katex: 0.18.2
