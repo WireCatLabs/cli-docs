@@ -27,7 +27,7 @@ En la salida `--json`, un error que termina el comando es una línea en stderr, 
 | `1` | `internal_error` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |
 | `2` | `validation_error` | un valor o una combinación de opciones que `tg` no acepta; un nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |
 | `3` | `configuration_error` | `config.json` incorrecto, el proxy rechazó la conexión o no responde, o archivo local más reciente que este `tg` | [configuración](#-is-not-a-valid-config), [proxy](#the-proxy--cannot-be-reached-or--refused), [archivo local](#the-message-store-was-written-by-a-newer-version-) |
-| `4` | `authentication_error` | sin sesión, sesión finalizada o llavero inaccesible | [sin sesión](#no-session-for-profile-default--run-tg-setup) |
+| `4` | `authentication_error` | sin sesión, sesión finalizada o llavero inaccesible | [sin sesión](#no-session-for-profile-personal--run-tg-personal-setup-in-a-local-terminal) |
 | `5` | `permission_error` | rechazado por `permissions` o por Telegram | [no permitido](#profile--does-not-let--write-or-profile--denies-), [rechazo de Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
 | `6` | `not_found` | chat, mensaje o persona inexistentes; archivo local vacío | [sin chat](#no-chat-matches-), [sin datos guardados](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
 | `7` | `confirmation_required` | chat fuera de destinatarios permitidos o cambio que requiere aprobación sin nadie que responda | [destinatarios](#chat--is-not-on-the-recipient-list-of-profile-), [confirmación](#-asks-before-it-acts) |
@@ -79,16 +79,16 @@ npx conserva lo descargado. Solicita la última: `npx @wirecat/tg-cli@latest`.
 
 ### "name a profile: `tg <profile> …` — profiles here: …"
 
-Código de salida `2`. El comando usa una cuenta y nada indica el perfil: ni una primera palabra, ni `TG_PROFILE`, ni `default_profile` en el archivo de configuración. `tg` nunca elige uno por su cuenta, aunque solo exista uno. El mensaje enumera los perfiles de este equipo; pon uno delante del comando:
+Código de salida `2`. El comando usa una cuenta y nada indica el perfil: ni una primera palabra ni `TG_PROFILE`. `tg` nunca elige uno por su cuenta, aunque solo exista uno. El mensaje enumera los perfiles de este equipo; pon uno delante del comando:
 
 ```sh
 tg personal chats list         # the profile named in the message
 export TG_PROFILE=personal     # or for the whole shell session
 ```
 
-Para usar siempre un mismo perfil, define `"default_profile": "personal"` al principio del archivo de configuración ([configuración](./configuration.md)). En un equipo que todavía no tiene ningún perfil, el mensaje indica que ejecutes `tg personal setup`; cualquier nombre sirve en lugar de `personal`.
+En un equipo que todavía no tiene ningún perfil, el mensaje indica que ejecutes `tg personal setup`; cualquier nombre sirve en lugar de `personal`. Si el mensaje dice `default_profile is no longer read`, el archivo de configuración aún tiene ese ajuste de un `tg` anterior: nombra el perfil, y `tg config unset default_profile` lo elimina.
 
-### "no session for profile "default" — run `tg setup`"
+### "no session for profile "personal" — run `tg personal setup` in a local terminal"
 
 Código de salida `4`. Este perfil nunca inició sesión en esta máquina o cerró sesión. Compruebe a qué perfil se refería: la primera palabra del comando, o `TG_PROFILE` ([perfiles](./sessions.md#profiles)).
 

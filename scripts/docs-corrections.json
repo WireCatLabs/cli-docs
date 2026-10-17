@@ -1521,24 +1521,24 @@
   {
     "tool": "tg",
     "slug": "commands",
-    "reason": "The released 0.60 manifest uses Core 0.288.0 and strict snake_case settings; fix the stale introductory setting name.",
+    "reason": "The generated introduction still names `defaultProfile` in the config file; since tg 0.68.0 (Core 0.319.0) no setting picks a profile and a leftover `default_profile` stops the command (configuration-reference, sessions, troubleshooting). Drop the clause.",
     "replacements": {
       "en": [
         {
-          "before": "`defaultProfile`",
-          "after": "`default_profile`"
+          "before": "`TG_PROFILE` does the same for a whole shell session, and `defaultProfile` in the\nconfig file for good.",
+          "after": "`TG_PROFILE` does the same for a whole shell session; no setting in the\nconfig file picks one."
         }
       ],
       "ru": [
         {
-          "before": "`defaultProfile`",
-          "after": "`default_profile`"
+          "before": "`TG_PROFILE` задаёт профиль для всей сессии оболочки, а `defaultProfile` в файле настроек — постоянно.",
+          "after": "`TG_PROFILE` задаёт профиль для всей сессии оболочки; ни одна настройка в файле настроек его не выбирает."
         }
       ],
       "es": [
         {
-          "before": "`defaultProfile`",
-          "after": "`default_profile`"
+          "before": "`TG_PROFILE` lo selecciona para toda la sesión de terminal, y `defaultProfile` en el\narchivo de configuración, de forma permanente.",
+          "after": "`TG_PROFILE` lo selecciona para toda la sesión de terminal; ningún ajuste del\narchivo de configuración lo elige."
         }
       ]
     }

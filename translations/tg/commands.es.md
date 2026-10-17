@@ -1997,7 +1997,7 @@ tg watch [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--events` | incluye ediciones, eliminaciones y reacciones; cada línea indica su evento. |
+| `--events` | incluye ediciones, eliminaciones, reacciones y votos en encuestas; cada línea indica su evento. |
 
 ## `tg serve`
 
@@ -3500,10 +3500,11 @@ tg tasks add <message> [options]
 | `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo está hecha, el siguiente paso, palabras clave. |
 | `--due <time>` | cuándo debe estar hecha: una hora ISO 8601 o dentro de 2h, 3d; none la borra. |
 | `--remind-time <time>` | cuándo revisarla de nuevo: una hora ISO 8601 o dentro de 2h, 3d; none la borra. |
+| `--assignee <person...>` | quién la hace: sender (quien envió el mensaje de la tarea) o person:<id>; none lo borra. Omítelo si no estás seguro: una tarea sin responsable es mejor que ninguna. |
 
 ### `tg tasks plan`
 
-fijar título, descripción, plazo, próxima revisión y categoría; no se envía nada al servicio de mensajería
+fijar título, descripción, plazo, próxima revisión, categoría y responsable; no se envía nada al servicio de mensajería
 
 **Solo hace cambios en este equipo.**
 
@@ -3522,6 +3523,7 @@ tg tasks plan <task> [options]
 | `--description <text>` | el detalle, en Markdown: quién debe qué a quién, cuándo está hecha, el siguiente paso, palabras clave. |
 | `--due <time>` | cuándo debe estar hecha: una hora ISO 8601 o dentro de 2h, 3d; none la borra. |
 | `--remind-time <time>` | cuándo revisarla de nuevo: una hora ISO 8601 o dentro de 2h, 3d; none la borra. |
+| `--assignee <person...>` | quién la hace: sender (quien envió el mensaje de la tarea) o person:<id>; none lo borra. Omítelo si no estás seguro: una tarea sin responsable es mejor que ninguna. |
 
 ### `tg tasks link`
 
@@ -3677,14 +3679,14 @@ categorías de tareas, su significado y las palabras que usa una regla para eleg
 tg tasks categories
 ```
 
-### `tg tasks apply`
+### `tg tasks scan`
 
-las reglas de tareas sobre los mensajes guardados más recientes de un chat: una pregunta que nadie respondió y una mención tuya abren una tarea, y tu respuesta la cierra — para un chat que la primera sincronización dejó sin tocar (config task_first_pass_per_chat). Muestra lo que se abriría y no cambia nada sin --yes; con --yes la comprobación de duplicados funciona igual que en una sincronización. Solo lee el almacén local
+las reglas de tareas sobre los mensajes guardados más recientes de un chat: en un chat individual una pregunta que no respondiste, en un grupo solo una pregunta en respuesta a ti y una mención tuya, abren una tarea, y tu respuesta la cierra; un canal no abre ninguna — para un chat que la primera sincronización dejó sin tocar (config task_first_pass_per_chat). Muestra lo que se abriría y no cambia nada sin --yes; con --yes la comprobación de duplicados funciona igual que en una sincronización. Solo lee el almacén local
 
 **Solo hace cambios en este equipo.**
 
 ```sh
-tg tasks apply <chat> [options]
+tg tasks scan <chat> [options]
 ```
 
 | Argumento | | Qué es |

@@ -53,6 +53,7 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Action to track | task | задача | tarea | An action with its own state, distinct from a note or tag. |
 | Tie between two tasks | task relation; relation | отношение между задачами; отношение | vínculo entre tareas; vínculo | `blocked-by`, `follow-up-of`, `related-to` between tasks. Not a relationship (person and organization) and not a link inside a note. |
 | What a task is about | category | категория | categoría | One name from a fixed list in the settings. Distinct from a tag and from a task's type. |
+| Who should do a task | assignee | исполнитель | responsable | The person a task waits on. An open task with an assignee other than the owner is what that person owes the owner. A task may have none. |
 | Temporary hold on a task | claim | бронь | reserva | Marks who works on a task now; it ends by itself after a set time. |
 | Second task for the same thing | duplicate; merge | дубликат; объединить | duplicado; fusionar | A merge moves messages to the kept task and closes the duplicate; it can be undone and deletes nothing. |
 | Source collection | folder | папка | carpeta | Explain whether it is a local file folder, Google folder or messenger chat folder. |

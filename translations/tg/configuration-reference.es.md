@@ -59,7 +59,6 @@ Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en
 
 ```json
 {
-  "default_profile": "default",
   "defaults": {
     "sends_per_hour": 10,
     "update_check": false
@@ -78,7 +77,7 @@ Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en
 - `personal.defaults`, `personal.profiles.<name>`: solo comandos de cuenta personal.
 - `bot.defaults`, `bot.profiles.<name>`: sólo comandos `tg <name> bot …`.
 
-`default_profile` en la parte superior nombra el perfil utilizado cuando ni la primera palabra ni `TG_PROFILE` nombran uno. La primera palabra (`tg work …`) y `TG_PROFILE` la anulan. Sin ninguno de ellos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles de este equipo.
+Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `TG_PROFILE`. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles de este equipo. Un archivo que aún conserva `default_profile` de un `tg` anterior también detiene ese comando; `tg config unset default_profile` lo elimina.
 
 | Configuración | Predeterminado | Qué hace | Anulado por uno ejecutado por |
 |---|---|---|---|
@@ -268,7 +267,6 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 
 | Clave | Tipo/valor aceptado | Alcance |
 |---|---|---|
-| `default_profile` | cadena de nombre de perfil | raíz del archivo |
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | entero ≥ 1 | perfil |
 | `requests_per_minute` | entero ≥ 0 | perfil |
 | `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record` | booleano | perfil |

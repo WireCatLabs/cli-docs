@@ -54,7 +54,7 @@ title: "Решение проблем"
 | `1` | `internal_error` | опечатка в команде или сбой `tg` | [неизвестная команда](#error-unknown-command-), [сообщить](#report-a-problem) |
 | `2` | `validation_error` | значение или сочетание параметров, которое `tg` не принимает; имя, совпадающее с несколькими чатами | [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |
 | `3` | `configuration_error` | ошибка `config.json`, прокси отказал или недоступен, либо база новее `tg` | [настройки](#-is-not-a-valid-config), [прокси](#the-proxy--cannot-be-reached-or--refused), [база](#the-message-store-was-written-by-a-newer-version-) |
-| `4` | `authentication_error` | нет входа, сессия завершена или хранилище ключей недоступно | [нет сессии](#no-session-for-profile-default--run-tg-setup) |
+| `4` | `authentication_error` | нет входа, сессия завершена или хранилище ключей недоступно | [нет сессии](#no-session-for-profile-personal--run-tg-personal-setup-in-a-local-terminal) |
 | `5` | `permission_error` | отказ `permissions` профиля или Telegram | [разрешения](#profile--does-not-let--write-or-profile--denies-), [Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
 | `6` | `not_found` | чат, сообщение или человек не найден; база пустая | [чат](#no-chat-matches-), [база](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
 | `7` | `confirmation_required` | чат отсутствует в получателях или некому подтвердить действие | [получатели](#chat--is-not-on-the-recipient-list-of-profile-), [подтверждение](#-asks-before-it-acts) |
@@ -106,16 +106,16 @@ npx сохраняет скачанное. Запросите новую вер�
 
 ### "укажите профиль: `tg <profile> …` — профили на этом компьютере: …"
 
-Код выхода `2`. Команда работает с аккаунтом, но профиль ничем не указан: нет первого слова, нет `TG_PROFILE`, нет `default_profile` в файле настроек. `tg` никогда не выбирает профиль сам, даже если он всего один. Сообщение перечисляет профили на этом компьютере; поставьте один из них перед командой:
+Код выхода `2`. Команда работает с аккаунтом, но профиль ничем не указан: нет первого слова, нет `TG_PROFILE`. `tg` никогда не выбирает профиль сам, даже если он всего один. Сообщение перечисляет профили на этом компьютере; поставьте один из них перед командой:
 
 ```sh
 tg personal chats list         # the profile named in the message
 export TG_PROFILE=personal     # or for the whole shell session
 ```
 
-Чтобы всегда использовать один профиль, задайте `"default_profile": "personal"` в начале файла настроек ([настройка](./configuration.md)). На компьютере, где ещё нет ни одного профиля, сообщение предлагает выполнить `tg personal setup`; вместо `personal` подойдёт любое имя.
+На компьютере, где ещё нет ни одного профиля, сообщение предлагает выполнить `tg personal setup`; вместо `personal` подойдёт любое имя. Если в сообщении сказано `default_profile is no longer read`, в файле настроек осталась эта настройка от старой версии `tg`: назовите профиль, а `tg config unset default_profile` уберёт настройку.
 
-### "нет сессии для профиля "по умолчанию" — запустите `tg setup`"
+### "нет сессии для профиля "personal" — запустите `tg personal setup` в локальном терминале"
 
 Код выхода `4`. Этот профиль ещё не входил в систему на этом компьютере или вышел из системы. Проверьте, какой профиль вы имели в виду: первое слово команды или `TG_PROFILE` ([profiles](./sessions.md#profiles)).
 
