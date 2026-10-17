@@ -80,6 +80,13 @@
     }
   },
   {
+    "id": "drive-store-transfer",
+    "pages": ["drive/recipes.md", "drive/troubleshooting.md", "drive/commands.md"],
+    "families": {
+      "drive": ["store"]
+    }
+  },
+  {
     "id": "drive-spreadsheets",
     "pages": ["drive/recipes.md", "drive/installation.md", "drive/commands.md"],
     "families": {

@@ -4,6 +4,18 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.17.0 — 2026-10-17
+
+### Added
+
+- `store check SOURCE_DB` previews copying this profile's document context to the selected shared
+  database; `store import SOURCE_DB --fingerprint HASH` applies it and rewrites cached references.
+  Tags and aliases, notes/revisions, memories, decisions, editor identities and links are retained.
+  Copies use Core's bounded, read-only-source transfer and durable receipts; unresolved references
+  refuse, interrupted unchanged copies can be retried, and the original file is never removed.
+- `status` shows the selected database and checkpoint database so store-recovery steps can name the
+  right source and destination without opening either database.
+
 ## 0.16.0 — 2026-10-17
 
 ### Added

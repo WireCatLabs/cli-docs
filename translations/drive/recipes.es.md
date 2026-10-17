@@ -15,11 +15,13 @@ archivo de Google. [Importación y almacenamiento](./usage.md) explica la copia 
 | --- | --- | --- | --- |
 | Importar o actualizar un proyecto | Sí | Índice y copias | No |
 | Preparar un informe con la copia guardada | No | No | No |
+| Explorar y organizar el árbol guardado | No | Etiquetas/notas cuando se solicitan | No |
 | Añadir etiquetas, notas o vínculos | No | Sí | No |
 | Proponer recuerdos con IA | Envía texto local al proveedor configurado | Solo con `--yes` o confirmación | No |
 | Consultar comentarios o historial | Sí | Sin importación automática | No |
 | Crear o editar un Doc | Sí | Se importa al sincronizar después | Sí |
-| Explorar y organizar el árbol guardado | No | Etiquetas/notas cuando se solicitan | No |
+| Leer o editar celdas de una hoja | Sí | Se importa al sincronizar después | Solo al cambiar celdas explícitamente |
+| Organizar pestañas y formato de una hoja | Sí | Se importa al sincronizar después | Sí |
 
 ## Primera carpeta buscable sin exportaciones extra
 
@@ -167,6 +169,58 @@ tareas. Los propietarios/últimos editores observados no son un historial comple
 Para vincular registros del servicio de mensajería, usa el mismo `MESSAGING_STORE` en todas las
 herramientas si cambias la ruta predeterminada. Las bases separadas no comparten IDs. Consulta [configuración](./configuration.md) y
 [organizar fuentes](https://wirecat.dev/en/docs/organize).
+
+## Conservar las notas al cambiar de base
+
+Copia un archivo antiguo de Drive al almacén local compartido conservando etiquetas, notas,
+recuerdos, decisiones y enlaces. La base anterior sigue disponible. Los archivos de Google no cambian.
+
+```text prompt
+Usa drive CLI con el perfil personal y muestra las rutas de la base seleccionada y del punto de control.
+Previsualiza la copia del contexto de la base anterior al almacén compartido seleccionado.
+Muestra las referencias sin resolver antes de aplicar el fingerprint revisado. Conserva el original,
+luego comprueba mis notas y la búsqueda sin conexión en el destino.
+```
+
+1. Ejecuta `drive personal status --json`. `store.selected` es el destino elegido mediante
+   `MESSAGING_STORE` o el almacén compartido predeterminado. `store.checkpoint` indica a qué base
+   pertenecen las referencias del perfil guardado. Si `MESSAGING_STORE` apunta al archivo antiguo,
+   selecciona primero el destino deseado. Usa el mismo destino para las dos órdenes siguientes.
+2. Previsualiza el archivo antiguo. Sustituye `SOURCE_DB` por su ruta:
+
+   ```sh
+   drive personal store check SOURCE_DB --offline --json
+   ```
+
+3. Revisa los recuentos, `missing_bindings` y `conflicts`. Si `ready` es true, copia el
+   `fingerprint` devuelto en la orden de importación:
+
+   ```sh
+   drive personal store import SOURCE_DB --fingerprint FINGERPRINT --offline --json
+   drive personal documents context DOC_ID --offline --json
+   drive personal search 'tag:YOUR_TAG' --exact --offline --json
+   ```
+
+Sustituye `DOC_ID` y `YOUR_TAG` por un documento y una etiqueta de la copia.
+El éxito devuelve `checkpoint_updated: true` y `source_retained: true`. El perfil usa el destino y
+sus referencias apuntan a los nuevos ID. Las notas conservan revisiones; los recuerdos, ámbito y
+estado; las decisiones aceptadas siguen aceptadas. Los nombres iguales nunca fusionan personas.
+Las demás herramientas WireCat deben elegir la misma base para leer esos registros.
+
+Un proyecto, tarea u otro destino sin resolver necesita una referencia explícita del destino.
+Un JSON opcional puede relacionarlas, por ejemplo `{"project:1":"project:7"}`. Pásalo como último
+argumento posicional a ambas órdenes: `store check SOURCE_DB bindings.json` y
+`store import SOURCE_DB bindings.json --fingerprint FINGERPRINT`. Revisa siempre el nuevo fingerprint.
+Resuelve antes las decisiones contradictorias sobre identidades, vocabulario o contenido.
+
+Si la copia se confirmó pero falló el guardado del punto de control, repite `store check` e importa
+su nuevo fingerprint. `already_transferred: true` reutiliza la copia sin duplicarla. Detén otros
+escritores de la base anterior durante el cambio. Es una copia puntual, no sincronización continua.
+Si el origen cambia después, se rechaza otra copia en lugar de sobrescribir ediciones del destino.
+No se borran archivos. Se rechazan más de 1 000 documentos/anotaciones o 16 MiB; los índices por
+significado y las imágenes en caché necesitan indexación explícita. Para copias ausentes o esquemas
+antiguos, consulta
+[recuperación del almacén](./troubleshooting.md#the-store-upgrade-reports-existing-annotations).
 
 ## Recordar una decisión con evidencia
 

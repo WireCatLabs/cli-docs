@@ -131,6 +131,42 @@ show the last sync, imported documents and pending work
 drive <profile> status
 ```
 
+## `drive store`
+
+check and import this profile's previous document database
+
+### `drive store check`
+
+preview documents, annotations and unresolved references without changing either database
+
+```sh
+drive <profile> store check <source> [bindings]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `source` | required | previous Drive database file. |
+| `bindings` | optional | optional JSON file mapping source references to destination references. |
+
+### `drive store import`
+
+copy the reviewed document annotations and bind this profile to the selected store; retain the source
+
+This command changes local state.
+
+```sh
+drive <profile> store import <source> [bindings] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `source` | required | previous Drive database file. |
+| `bindings` | optional | the same optional reference mapping JSON file used for store check. |
+
+| Option | What it does |
+|---|---|
+| `--fingerprint <hash>` | refuse if the reviewed source, destination or reference decisions changed. |
+
 ## `drive documents`
 
 read imported documents and Google Docs
