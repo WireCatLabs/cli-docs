@@ -262,7 +262,10 @@ chat. En `tg`, las reglas abren tareas según el tipo de chat:
 
 Es una etiqueta de chat normal: `tags add --chat <group> watch-tasks`. En un chat individual o en un
 canal no cambia nada. La leen `review`, `serve`, la pasada al sincronizar y `tasks scan`. Una regla
-cierra una tarea solo en un chat donde puede abrirla. En `max`, cada pregunta que el propietario no
+cierra una tarea solo en un chat donde puede abrirla, y solo con la respuesta del propietario: en un grupo
+vigilado, la respuesta de otro miembro deja la pregunta abierta (`questions()` no cuenta a nadie más
+como quien responde). Una pregunta es un mensaje con signo de interrogación o una respuesta a un
+mensaje del propietario; una petición o promesa sin él la añade el agente. En `max`, cada pregunta que el propietario no
 respondió abre una tarea en cualquier chat.
 
 Por qué: en un almacén real, las 300 publicaciones más recientes de un canal habrían abierto 85 tareas

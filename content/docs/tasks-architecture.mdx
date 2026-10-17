@@ -250,7 +250,10 @@ A task is what the owner must do or what someone owes the owner, not every quest
 
 The tag is an ordinary chat tag: `tags add --chat <group> watch-tasks`. It changes nothing in a
 one-to-one chat or a channel. `review`, `serve`, the pass on sync and `tasks scan` all read it. A rule
-closes a task only in a chat where it may open one. In `max`, every question the owner did not answer
+closes a task only in a chat where it may open one, and only on the owner's answer: in a watched group,
+another member's answer leaves the question open (`questions()` counts no other answerer). A question is a
+message with a question mark, or a reply to the owner's message; a request or promise without one is
+an agent's to add. In `max`, every question the owner did not answer
 opens a task, in any chat.
 
 Why: on a real store, the newest 300 posts of one channel would have opened 85 tasks under the

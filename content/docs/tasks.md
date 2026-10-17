@@ -124,12 +124,52 @@ tasks list "assignee:any state:open"
 
 In a group, the rules open a task only for a question that replies to you and for a mention of you.
 In a small group where you answer for everything, such as a group with a client or a family group,
-you may want every question. Tag that group `watch-tasks`: from then on, every question nobody
-answered opens a task, whoever it is for. The tag works in `tg`, on groups only; a channel never
-opens tasks.
+you may want every question. Tag that group `watch-tasks`:
 
 ```sh
 tg personal tags add --chat "Renovation" watch-tasks
+tg personal tags remove --chat "Renovation" watch-tasks
+```
+
+The tag works in `tg`, on groups only; a channel never opens tasks. What it changes:
+
+- **Every question you did not answer opens a task, whoever it is for.** A rule sees a question by its
+  question mark, or by a reply to your message.
+- **New messages only.** Tasks open after each sync, in `review` and while `serve` runs. For the
+  group's older messages, use [`tasks scan`](#tasks-from-a-chats-history).
+- **Questions, not every message.** A request or a promise without a question mark, such as "send me
+  the file" or "I will do it tomorrow", is not a rule's task. Your agent adds it with `tasks add`, with
+  `--assignee sender` when it is the sender's own promise.
+- **Only your answer closes a question.** When another member answers, the task stays open. Close it
+  yourself, or let your agent close it with a certainty; see
+  [When an agent closes a task](#when-an-agent-closes-a-task).
+- **No assignee.** A task a rule opens has no assignee; your agent can add one with `tasks plan`.
+
+Tag only groups where you are responsible for the answers. A busy group with the tag gives you many
+tasks.
+
+## Use tasks reliably
+
+**Get few tasks you do not need:**
+
+- Rules open tasks only where something is asked of you: one-to-one chats, and in groups only a
+  reply to you or a mention of you. Channels open nothing.
+- The first sync opens no task from your history. Scan a chat's history only when you choose, and
+  read the list before you add `--yes`.
+- Tag `watch-tasks` only on small groups you are responsible for.
+- The duplicate check stops a task that may be the same job as an open one; your agent links the
+  message to that task instead.
+
+**Miss nothing:**
+
+- The agenda (`tasks agenda`) lists the chats where someone wrote last and you have not answered, and
+  the chats where you wrote last and nobody answered. These are there even when no task is.
+- Ask your agent to read each day's new messages and add what the rules cannot see: requests and
+  promises without a question mark, yours and other people's.
+- Keep what others owe you as tasks with an assignee, and check `tasks list "assignee:any state:open"`.
+
+```text prompt
+Use tg CLI. Sync my chats and show my task agenda. Then read today's new messages in my one-to-one chats and in the groups tagged watch-tasks, and add a task for each request or promise the rules missed, with the sender as assignee when it is their promise. Show me the list before you add anything. Don't send anything.
 ```
 
 ## Commands
@@ -448,6 +488,8 @@ In `tg` and `max`, `tasks_close` needs `certainty`, as an agent's `tasks close` 
 
 ## Not built yet
 
+- **Other members' answers in a watched group.** In a group tagged `watch-tasks`, only your answer
+  closes a question; an answer from another member leaves the task open.
 - **Tuning the weights from your answers.** Every merge, rejection, `--into` and `--new` is kept,
   but nothing uses them yet to change the weights.
 
