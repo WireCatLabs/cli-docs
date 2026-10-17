@@ -4,6 +4,17 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.17.1 — 2026-10-18
+
+### Fixed
+
+- Sync links document URLs introduced by edits to previously stored messages, including text edits
+  saved by older messaging SDKs. Unchanged documents do not need another download; repeated sync
+  keeps one link per message. The messenger must have saved the edit locally first.
+- The first sync with the new linker repairs earlier missed message links, even if an older sync
+  already advanced its checkpoint. The local pass is retried on failure and does not redownload
+  unchanged document content.
+
 ## 0.17.0 — 2026-10-17
 
 ### Added
