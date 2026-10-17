@@ -4,10 +4,103 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.66.0 — 17.10.2026
+
+### Cambios — pueden romper scripts
+
+- **La primera sincronización no abre tareas del historial** (cli-core 0.309.0). Tras la primera sincronización de
+  una cuenta, las reglas de tareas abren como mucho `task_first_pass_per_chat` tareas por chat, y por defecto son 0.
+  En la respuesta de la sincronización, `tasks` cuenta lo que se dejó sin abrir (`held`, `held_chats`) y una nota
+  indica `tasks apply`. Las sincronizaciones siguientes siguen abriendo tareas a partir de mensajes nuevos.
+  `tg <profile> config set task_first_pass_per_chat 50` recupera el comportamiento anterior.
+
+### Novedades
+
+- **`tg <profile> tasks apply <chat...>`** (cli-core 0.309.0): las reglas de tareas sobre los mensajes guardados más
+  recientes de un chat (`--last`, 50 por defecto), para un chat cuyo historial quieres convertir en tareas. Muestra
+  lo que se abriría y no cambia nada sin `--yes`. Solo el almacén local. MCP: `tasks_apply`.
+
+- **Las menciones encuentran direcciones postales y nombres de personas que el almacén aún no conoce** (cli-core
+  0.308.0). `tg <profile> mentions places` muestra las direcciones confirmadas de todas las cuentas. El almacén pasa
+  a la versión 18, con una tabla `places`, la primera vez que un comando lo abre.
+
+### Correcciones
+
+- **`tg upgrade` con pnpm instala la versión más reciente** (cli-base 0.40.2). pnpm 11 solo instala versiones con al
+  menos un día, así que la actualización podía instalar un `tg` más antiguo que el que tenías. Ahora `@wirecat/*`
+  queda fuera de esa espera; el resto de paquetes la mantiene.
+- Los resúmenes de la ayuda de `mentions` caben en el límite común de 80 caracteres (cli-core 0.311.0).
+- **La comprobación de duplicados compara las tareas por la fecha de envío de sus mensajes** (cli-core 0.310.0), no
+  por cuándo se escribió la tarea. Las tareas escritas de una vez a partir del historial ya no parecen iguales.
+- **Los mensajes antiguos descargados en un chat tranquilo no abren tareas** (cli-core 0.309.0): una pasada de
+  sincronización se salta un chat en el que no se envió nada desde la anterior.
+- **Sin líneas `[client] cannot reach Telegram` mientras tg no puede conectarse.** Desde 0.64.0, tg mostraba cada
+  error en segundo plano de mtcute en una línea; sin red, eso es una línea por intento de conexión. Ahora solo se
+  ven con `--verbose`. Una petición que falla sigue informando de su propio error.
+
+## 0.65.0 — 17.10.2026
+
+### Novedades
+
+- **La ficha de una tarea cerrada muestra la tarea que le da seguimiento** (cli-core 0.305.0). `tasks show` imprime
+  `task:<id> follow-up-of this task`, y `--json` y MCP devuelven `linked_from`. Antes, solo la tarea nueva nombraba
+  la cerrada.
+
+### Cambios — pueden romper scripts
+
+- **El aviso diario de «hay una versión nueva» también calla con `--json=…`, `--timeout=…` y las demás opciones
+  silenciosas escritas con `=`** (cli-core 0.307.0). Antes solo lo silenciaba la opción sin valor. tg toma ahora este
+  aviso de cli-core, compartido con max y memo.
+
+### Correcciones
+
+- **`tg setup --app auto` lee las claves de la app en el my.telegram.org rediseñado.** El sitio muestra ahora el
+  api_hash como puntos y guarda su valor en los botones de copiar y mostrar, así que 0.64.0 se detenía con «could not
+  read its keys». Ahora las claves se leen de ahí (comprobado en la página real), la creación se da por hecha cuando
+  el sitio responde OK y se muestra el texto de error del propio sitio en lugar de su JSON.
+
+- **Un archivo de configuración roto se nombra en un error breve** (cli-core 0.304.0): la primera clave incorrecta,
+  nunca su valor.
+
+## 0.64.0 — 16.10.2026
+
+### Novedades
+
+- **Los documentos importados de Drive conservan su URL de Google y su fecha de edición en la búsqueda común**
+  (cli-core 0.301.0). `--source drive:<profile>` elige un perfil de Drive registrado; las listas de documentos de un
+  chat pueden mostrar el título importado después de que la sincronización de Drive enlace los mensajes guardados.
+
+- **El servidor MCP solo se carga cuando se sirve MCP** (cli-core 0.300.0), así que los demás comandos arrancan
+  cargando alrededor de una décima parte menos de archivos.
+
+### Correcciones
+
+- **`tg setup --app auto` ya no intenta crear una segunda app cuando la cuenta ya tiene una.** Leía las claves de la
+  app solo con una disposición exacta de la página; cuando my.telegram.org mostraba la página de la app de otra
+  forma, tomaba la cuenta por una sin app y pedía al sitio crear otra (Telegram permite una por número). Ahora las
+  claves se leen del texto de la página, y una página de app cuyas claves no se pueden leer se detiene con «use
+  `--app browser`». Un error del sitio ya no cita la página entera, que podía contener el `api_hash` de la app, sino
+  solo su título. La pista tras un paso de app fallido nombra el comando que se ejecutó
+  (`tg <profile> setup --app browser`), y demasiados intentos con el código del sitio dan `rate_limited`.
+
+- **Un inicio de sesión con contraseña 2FA ya no imprime la traza de mtcute «unhandled error: ConnectionClosedError».**
+  Cuando el inicio de sesión funciona, mtcute sustituye sus conexiones a propósito. La conexión antigua avisaba de que
+  se había cerrado y, sin nadie escuchando, mtcute lo imprimía como una traza roja, con el id de la cuenta, justo
+  después de pedir la contraseña oculta. Ahora tg escucha estos errores en segundo plano: el cierre esperado solo se
+  ve con `--verbose`, y cualquier otro aparece en una línea con las palabras de tg.
+
+- **`bin/release` se reinicia una vez cuando la versión trae un `bin/release` más nuevo**: plegar el historial de
+  cambios y subir la versión avanzan `main`, y el intérprete seguía leyendo el script antiguo desde el byte al que
+  había llegado, así que el resto de la ejecución mezclaba texto antiguo y nuevo. Ahora arranca el script nuevo
+  desde el principio con los mismos argumentos; un segundo cambio durante esa ejecución lo detiene con
+  `run it again`. El reinicio también funciona cuando `bin/release` se lanzó desde otra carpeta con una ruta
+  relativa. Solo afecta a la publicación del propio repositorio; el paquete publicado no cambia.
+
 ## 0.63.0 — 16.10.2026
 
 ### Novedades
 
+- **`messages delete` acepta los ids de los mensajes separados por comas, además de por espacios** (cli-core 0.299.0).
 - **tg arranca alrededor de una quinta parte más rápido después de la primera vez.** Guarda el código compilado de
   Node en una caché, en la carpeta temporal del sistema (`NODE_COMPILE_CACHE` la cambia de sitio): `tg --help` pasó
   de unos 0.60 a 0.49 segundos.

@@ -229,6 +229,15 @@ Un agente conectado a través del [servidor MCP](./mcp.md) puede ejecutar los mi
 
 `review` y `serve` mantienen una lista de tareas en el archivo local. Una pregunta que nadie respondió y un mensaje que lo menciona por su nombre abre una tarea; tu respuesta lo cierra. Una tarea apunta a su mensaje y nunca lo copia.
 
+La primera sincronización de una cuenta no abre tareas de tu historial; las siguientes abren tareas a partir de mensajes nuevos. Para convertir el historial de un chat en tareas, mira lo que se abriría y luego ábrelo:
+
+```sh
+tg personal tasks apply <chat>
+tg personal tasks apply <chat> --last 300 --yes
+```
+
+`config set task_first_pass_per_chat <n>` permite que la primera sincronización abra hasta n tareas por chat.
+
 Vea lo que le espera, primero el mayor, luego solo preguntas y menciones en un grupo:
 
 ```sh
@@ -245,7 +254,7 @@ Agregue lo que las reglas no pueden ver, como una promesa que hizo, o cierre una
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other
 ```
 
-`tasks categories` muestra las categorías que puede tener una tarea. Para cambiar la lista, edita la sección `task_categories` de `~/.config/WireCat/config.json`, un archivo que comparten tg, MAX y memo. Solo guarda tus cambios a la lista por defecto: un nombre con su significado y sus palabras clave añade o sustituye una categoría, y `null` quita una de la lista por defecto:
+`tasks categories` muestra las categorías que puede tener una tarea. Para cambiar la lista, edita la sección `task_categories` de `~/.config/WireCat/config.json`. Todas las herramientas de WireCat con cli-core 0.298.0 o posterior leen este archivo (tg desde 0.63.0), así que un solo cambio modifica la lista en todas. Solo guarda tus cambios a la lista por defecto: un nombre con su significado y sus palabras clave añade o sustituye una categoría, y `null` quita una de la lista por defecto:
 
 ```json
 {
