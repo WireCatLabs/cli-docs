@@ -51,7 +51,6 @@ A command option such as `--limit 5` (a <DocTerm term="flag" lang="en" label="fl
 
 ```json
 {
-  "defaultProfile": "personal",
   "defaults": { "limit": 20, "keepRunsForDays": 14, "updateCheck": true },
   "profiles": {
     "personal": { "limit": 50, "color": true },
@@ -62,7 +61,6 @@ A command option such as `--limit 5` (a <DocTerm term="flag" lang="en" label="fl
 }
 ```
 
-- `defaultProfile` is used when a command names no profile.
 - `defaults` apply to every profile; `profiles.<name>` to one profile.
 - `personal` applies only to commands for your own account; `bot` only to `tg <name> bot …` and `max <name> bot …` commands.
 - `work` keeps a record of every run and may only read messages.

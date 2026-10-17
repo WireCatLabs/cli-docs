@@ -51,7 +51,6 @@ Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="
 
 ```json
 {
-  "defaultProfile": "personal",
   "defaults": { "limit": 20, "keepRunsForDays": 14, "updateCheck": true },
   "profiles": {
     "personal": { "limit": 50, "color": true },
@@ -62,7 +61,6 @@ Una opción del comando como `--limit 5` (<DocTerm term="flag" lang="es" label="
 }
 ```
 
-- `defaultProfile` se usa cuando un comando no indica perfil.
 - `defaults` se aplica a todos los perfiles; `profiles.<nombre>`, a uno.
 - `personal` se aplica solo a los comandos de tu propia cuenta; `bot`, solo a los comandos `tg <nombre> bot …` y `max <nombre> bot …`.
 - `work` guarda un registro de cada ejecución y solo puede leer mensajes.
