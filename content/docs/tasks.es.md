@@ -145,9 +145,10 @@ La etiqueta funciona en `tg` y solo en grupos; un canal nunca abre tareas. Lo qu
 - **Preguntas, no todos los mensajes.** Una petición o una promesa sin signo de interrogación, como
   «mándame el archivo» o «lo hago mañana», no es tarea de una regla. Tu agente la añade con
   `tasks add`, con `--assignee sender` cuando es una promesa del propio remitente.
-- **Solo tu respuesta cierra una pregunta.** Cuando responde otro miembro, la tarea sigue abierta.
-  Ciérrala tú o deja que tu agente la cierre indicando su certeza; consulta
-  [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea).
+- **La respuesta de cualquier miembro cierra una pregunta.** La cierra tu respuesta y también una
+  respuesta a la pregunta de cualquier miembro que no sea quien preguntó. Un mensaje posterior que no
+  responde a la pregunta no cierra nada: cierra esa tarea tú o deja que tu agente la cierre indicando su
+  certeza; consulta [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea).
 - **Sin responsable.** Una tarea que abre una regla no tiene responsable; tu agente puede añadirlo con
   `tasks plan`.
 
@@ -510,9 +511,6 @@ En `tg` y `max`, `tasks_close` necesita `certainty`, igual que el `tasks close` 
 
 ## Aún no está hecho
 
-- **Las respuestas de otros miembros en un grupo vigilado.** En un grupo con la etiqueta
-  `watch-tasks`, solo tu respuesta cierra una pregunta; la respuesta de otro miembro deja la tarea
-  abierta.
 - **Ajustar los pesos con tus respuestas.** Cada fusión, rechazo, `--into` y `--new` se guarda,
   pero todavía nada los usa para cambiar los pesos.
 
