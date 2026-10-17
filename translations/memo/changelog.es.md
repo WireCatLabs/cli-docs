@@ -8,6 +8,118 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
+## Unreleased
+
+## 0.64.0 — 18.10.2026
+
+### Changed — may change search results
+
+- **Mail from senders with signs of fraud comes after the rest of the page** in `memo search mail` and
+  `memo search all`: a sender whose fraud signals add up to 3 or more, such as a brand name from another domain or a
+  domain under 180 days old. Your own are never moved: a domain you wrote to anyone at, your mailbox's domain, a
+  sender a protect rule keeps. `--plain-order` keeps the plain order, to find such mail. The sync log says how many
+  senders are ranked lower.
+
+### Changed
+
+- **A read names its accounts with `--source`**, as `memo mentions` and `memo search mail` already do:
+  `provider:account` (`telegram:1`, `email:personal`), a provider, a kind or `group:<name>`. `memo tasks list`,
+  `memo reminders list`, `memo tags list` and `memo ask` read every account named and say which in
+  `meta.accounts`. A read bound to one account (`tasks agenda|show`, `stats tasks show`, `relationships suggest`,
+  `context`, `meetings actions list|show`, `projects meetings list`) takes a `--source` that names exactly one.
+  `memo sync --source email:work,email:personal` names mailboxes.
+- **A write names the one account it acts as with `--account provider:account`**: `memo tasks add|close|plan|link`,
+  `memo reminders add|poll|ack|cancel|update`, `memo tags add|remove`, `memo notes add --meeting`,
+  `memo actions add`, `memo meetings actions add|confirm|reject`, `memo projects meetings link`. A bare
+  `--account 1` without `--provider` is refused. No account, or one that names several, is an error listing the
+  choices.
+
+### Deprecated
+
+- `--provider` with a bare `--account` keeps working for one release and prints the new spelling on stderr:
+  `--source telegram:1` on a read, `--account telegram:1` on a write. Giving both spellings is an error.
+  `memo context --account 1` is `--source telegram:1`; `memo sync --account work` is `--source email:work`.
+
+### Changed — may break scripts
+
+- The `search all` step that lists a hit's tasks carries `args.source` (`telegram:1`) instead of `args.provider`
+  and `args.account`; `meetings actions list` and `projects meetings list` name `source` in their page args too.
+- `memo ask` takes `--source notes` where it took `--provider notes`.
+
+## 0.63.0 — 17.10.2026
+
+### Changed — may change scores and rules
+
+- **A new domain counts most, and a failed DMARC check only beside another sign of fraud.** `young_domain` adds 5
+  (was 3); `dmarc_fail` counts only with `brand_spoof`, `young_domain` or `disposable_domain`, since alone it
+  more often marks a real sender's broken setup or a forwarded mail; `reply_to_elsewhere` adds 1 (was 2), as many
+  companies answer from a help-desk domain. A `score:` rule can match other senders than before. Every sender is
+  scored again on the next sync.
+- **Each sync's sender scoring looks up the domain ages it lacks**, for senders you never wrote to and heard from in
+  the last two years, so `young_domain` works without running `memo mail inspect --domain-age`. Each lookup tells
+  that domain's registry its name.
+
+### Fixed
+
+- **A domain registered again after an email came no longer makes that email's sender young.** The registry gives
+  the newest registration, so an old sender whose domain lapsed and was taken by someone else looked new.
+
+## 0.62.0 — 17.10.2026
+
+### Changed
+
+- **cli-core 0.323.0.** An address keeps its city in its value, so the same street in two cities is two places; a
+  word of a contact's name counts alone only as a first name or a surname, so a contact named like a company no
+  longer turns ordinary words into names; the owner's own accounts belong to the owner. After the upgrade,
+  `tg <profile> mentions rebuild person-name place` reads the old texts again.
+- memo reads `--source` lists and mention queries through cli-core instead of its own copies.
+
+## 0.60.0 — 17.10.2026
+
+### Fixed
+
+- **The sync timer no longer stops when a sync takes longer than its interval.** The interval counted from when a
+  sync started, so a 6-minute sync on a 5-minute timer left no next run. It now counts from when a sync ends.
+  The first sync after updating rewrites the timer.
+- **`memo tasks show HRB-12` shows a project's task without `--provider` and `--account`** (cli-core 0.320.0),
+  with its evidence links — a task made from reviewed meeting findings, for example. A task of a messenger account
+  still needs its account; a bare number is never taken for a project task.
+- **memo's MCP tools refuse an argument they do not take**, as every other CLI's tools do: all 22 answer
+  `validation_error` (reason `input.invalid`, `param` naming the argument) instead of dropping it, so a misspelled
+  filter no longer runs unfiltered. Their advertised input schemas now say `additionalProperties: false`.
+- **`memo mcp` is listed as `lifetime: "persistent"`** in `memo commands --json`, like `tg mcp` and `max mcp`: it
+  serves until stdin closes. No other command's entry changes.
+
+### Documentation
+
+- **How to read a sender score** in the mail guide: which signals point at a forged sender and which bills share
+  with newsletters, and why a platform passing on other names is not a spoof.
+
+### Changed — may break scripts
+
+- **cli-core 0.320.0, the version tg and max pin.** `tasks plan --assignee` names who does a task. Tasks open
+  only for questions asked of the owner: every unanswered one in a one-to-one chat, in a group only a reply to the
+  owner or a mention.
+- **`memo mentions` names what it reads with `--source`, as every WireCat tool does.** `memo mentions list kind:phone
+  --source email:personal,email:work`; `--source mail` reads every mailbox and the answer lists them in
+  `meta.accounts`; `notes`, `documents` and `group:<name>` work too. The kind argument (`email`, `note`, `document`)
+  and `--account` are gone: `memo mentions list email --account personal` is now `--source email:personal`.
+  `show`, `confirm` and `reject` take `--source email:<account>` for a mail mention.
+
+### Deprecated
+
+- **`memo search mail --account <account>` is now `--source email:<account>`**, which also takes several mailboxes
+  and groups. `--account` still works in this version and prints the new spelling.
+
+## 0.59.0 — 17.10.2026
+
+### Added
+
+- **Mail stored before memo kept Reply-To and Gmail's SPF, DKIM and DMARC verdicts gets them.** Each sync reads
+  the header lines of up to 2,000 such emails from Gmail, newest first, until none is left; the text is not read
+  again. The sender score then sees these signals on all mail: on the owner's mailbox 57,000 of 92,000 emails
+  stored in full had none.
+
 ## 0.58.0 — 17.10.2026
 
 ### Added
@@ -17,6 +129,10 @@ Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las
   from the stored mail, at most once a day, as `memo mail inspect` scores a group; a hit from a scored sender
   carries `sender_score` (score and signals) in `--json`. Results are not reordered by it. On the owner's mailbox:
   5,789 senders in 15 seconds. cli-core 0.311.0 (store version 19).
+- **`memo mentions list|show|confirm|reject`: phones, e-mail addresses, links, documents, names and street addresses in
+  documents, notes and mail.** `memo mentions list note kind:phone`; mail is read only from the accounts named by
+  `--account` (repeatable), never every mailbox by default. `show` names the senders of received mail that may own a
+  phone or an address (`candidates`), offered and never linked.
 
 ## 0.57.0 — 17.10.2026
 

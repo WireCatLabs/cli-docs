@@ -70,7 +70,7 @@ de las carpetas de tu buzón. Las etiquetas de Gmail (Inbox, Important, Sent, St
 se importan como buzones y se actualizan en cada ejecución.
 
 ```sh
-memo sync --only mail --account gmail --since-time 2026-09-01 --json
+memo sync --only mail --source email:gmail --since-time 2026-09-01 --json
 ```
 
 Elige la fecha inicial que quieras incluir. Cada ejecución lee hasta 200 mensajes nuevos
@@ -98,7 +98,7 @@ memo context telegram:"Rin Example" --json
 
 Para MAX, usa `max personal contacts link` con el ID o nombre de la persona. Comprueba las identidades
 y referencias devueltas. Un nombre parecido no demuestra identidad. Si hay varias cuentas
-del proveedor, usa `memo context telegram:"Rin Example" --account 1 --json` con el ID de cuenta
+del proveedor, usa `memo context telegram:"Rin Example" --source telegram:1 --json` con el ID de cuenta
 que utilizas. Consulta [vincular y separar personas](./people.md#link-your-accounts).
 
 ## Busca en tu correo
@@ -146,12 +146,12 @@ Ambas son locales. Sustituye la referencia completa del mensaje y los IDs de con
 
 ```sh
 memo tags add follow-up --message 'msg:email/you%40example.com/12345/67890'
-memo tags add work --chat 12345 --provider email --account you@example.com
-memo tags list --provider email --account you@example.com --json
+memo tags add work --chat 12345 --account email:you@example.com
+memo tags list --source email:you@example.com --json
 ```
 
 Una referencia completa lleva el buzón y los IDs de conversación y mensaje. Para etiquetar
-una conversación, `--provider` y `--account` indican a qué buzón pertenece. Estas etiquetas
+una conversación, `--account email:<dirección>` indica a qué buzón pertenece. Estas etiquetas
 no cambian las de Gmail ni los indicadores del buzón. Para guardar una valoración de un correo:
 
 ```sh

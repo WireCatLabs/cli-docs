@@ -2188,5 +2188,46 @@
         }
       ]
     }
+  },
+  {
+    "tool": "memo",
+    "slug": "commands",
+    "reason": "v0.64.0 deprecated --provider/--account; the generated intro still names them. Fixed upstream in cli-memo#291; drop this correction when the pin includes it. v0.64.0 also shipped --plain-order on search all and search mail without regenerating the reference; cli-memo#291 regenerates it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Commands that work in one messenger or mail account take `--provider` and `--account`; Memo never chooses an account for you.",
+          "after": "A command that reads names its accounts with `--source`: one as `telegram:1` or `email:work`, every account of a provider, a kind, or `group:<name>`. A command that writes names the one account it acts as with `--account telegram:1`. Memo never chooses an account for you."
+        },
+        {
+          "before": "| `--only <resources>` | messages,mail,notes, separated by commas. |\n",
+          "after": "| `--only <resources>` | messages,mail,notes, separated by commas. |\n| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |\n"
+        },
+        {
+          "before": "| `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |\n",
+          "after": "| `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |\n| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `--only <resources>` | messages,mail,notes, separated by commas. |\n",
+          "after": "| `--only <resources>` | messages,mail,notes, separated by commas. |\n| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |\n"
+        },
+        {
+          "before": "| `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |\n",
+          "after": "| `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |\n| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "| `--only <resources>` | messages,mail,notes, separated by commas. |\n",
+          "after": "| `--only <resources>` | messages,mail,notes, separated by commas. |\n| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |\n"
+        },
+        {
+          "before": "| `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |\n",
+          "after": "| `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |\n| `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |\n"
+        }
+      ]
+    }
   }
 ]

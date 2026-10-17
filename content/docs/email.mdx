@@ -70,7 +70,7 @@ mailbox's actual folder names. Gmail labels — Inbox, Important, Sent, Starred 
 imported as mailboxes and refreshed on every run.
 
 ```sh
-memo sync --only mail --account gmail --since-time 2026-09-01 --json
+memo sync --only mail --source email:gmail --since-time 2026-09-01 --json
 ```
 
 Choose the first date you want to include. Each run reads at most 200 new messages by default;
@@ -95,7 +95,7 @@ memo context telegram:"Rin Example" --json
 
 For MAX, use `max personal contacts link` with that person's MAX ID or name. Check the returned identities
 and source references. A similar display name is not proof of identity. If several accounts of
-the requested provider are stored, use `memo context telegram:"Rin Example" --account 1 --json`
+the requested provider are stored, use `memo context telegram:"Rin Example" --source telegram:1 --json`
 with the account ID you actually use. See [linking and unlinking people](./people.md#link-your-accounts).
 
 ## Search your mail
@@ -141,12 +141,12 @@ Replace the full message reference and thread/account IDs with values from your 
 
 ```sh
 memo tags add follow-up --message 'msg:email/you%40example.com/12345/67890'
-memo tags add work --chat 12345 --provider email --account you@example.com
-memo tags list --provider email --account you@example.com --json
+memo tags add work --chat 12345 --account email:you@example.com
+memo tags list --source email:you@example.com --json
 ```
 
-A full message reference carries its mailbox, thread and message IDs. For a thread label, both
-`--provider` and `--account` identify where the thread belongs. These labels do not change Gmail
+A full message reference carries its mailbox, thread and message IDs. For a thread label,
+`--account email:<address>` names the mailbox the thread belongs to. These labels do not change Gmail
 labels or mailbox flags. To save an assessment linked to one email:
 
 ```sh

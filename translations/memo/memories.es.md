@@ -75,9 +75,9 @@ Tras leer las fuentes de una reunión, pide al agente que proponga las decisione
 El agente prepara un lote JSON con `memo meetings actions add`. Cada propuesta indica un ID, un proyecto y referencias exactas a pasajes con las huellas que devuelve `zm meetings evidence`. Los hechos conservan su tipo, como `decision` o `promise`; las tareas distinguen un compromiso explícito de un posible seguimiento inferido. Las fechas y personas asignadas desconocidas quedan sin completar; los valores indicados necesitan sus propios pasajes de apoyo.
 
 ```sh
-memo meetings actions add findings.json --provider zoom --account me@example.com
-memo meetings actions list status:proposed --provider zoom --account me@example.com
-memo meetings actions show 5 --provider zoom --account me@example.com
+memo meetings actions add findings.json --account zoom:me@example.com
+memo meetings actions list status:proposed --source zoom:me@example.com
+memo meetings actions show 5 --source zoom:me@example.com
 ```
 
 El archivo contiene `schema_version: 1`, una `key` estable, `extractor` y `findings`. Cada propuesta tiene `id`, `kind`, `project` y `evidence` (objetos con `reference` y `fingerprint`). Un hecho añade `type` y `statement`. Una tarea añade `type` (`bug`, `chore` o `feature`), `title`, `reason` y `commitment` (`explicit` o `inferred`). El campo opcional `due_at` es una fecha y hora ISO con zona horaria y necesita `due_evidence`; el opcional `assignee` es una referencia `person:<id>` y necesita `assignee_evidence`, ambos con referencias a pasajes de apoyo. `-` lee JSON de la entrada estándar. El lote admite hasta 16 propuestas y 65.536 bytes UTF-8.
@@ -85,8 +85,8 @@ El archivo contiene `schema_version: 1`, una `key` estable, `extractor` y `findi
 Preparar el lote no crea hechos ni tareas. La vista previa muestra decisiones anteriores sobre propuestas sin cambios. Abre las fuentes y confirma personalmente los ID que quieras conservar, o rechaza el lote. Sustituye el hash siguiente por la huella exacta de la vista previa:
 
 ```sh
-memo meetings actions confirm 5 decision followup --fingerprint <hash> --provider zoom --account me@example.com
-memo meetings actions reject 5 --fingerprint <hash> --provider zoom --account me@example.com
+memo meetings actions confirm 5 decision followup --fingerprint <hash> --account zoom:me@example.com
+memo meetings actions reject 5 --fingerprint <hash> --account zoom:me@example.com
 ```
 
 La confirmación crea juntos los hechos y tareas de proyecto seleccionados y rechaza las demás propuestas nuevas. No envía nada. Una terminal identificada como agente no puede confirmar ni rechazar estos lotes; el propietario ejecuta esas órdenes directamente. La vía general `memo actions confirm` rechaza las conclusiones de reuniones.
@@ -112,7 +112,7 @@ se cierra y no se hace nada.
 Un agente propone una acción así:
 
 ```sh
-memo actions add reply --reason 'Kai asked twice' --provider telegram --target 'msg:telegram/1/77/42' --payload '{"text":"Friday works"}'
+memo actions add reply --reason 'Kai asked twice' --account telegram:1 --target 'msg:telegram/1/77/42' --payload '{"text":"Friday works"}'
 ```
 
 ## Qué hicieron los agentes
