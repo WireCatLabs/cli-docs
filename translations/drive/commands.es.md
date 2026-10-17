@@ -821,7 +821,7 @@ drive <profile> identities link <document> <google-id> <person>
 
 ## `drive api`
 
-discover and call the official Drive, Docs and Activity API methods
+discover and call the official Drive, Docs, Sheets and Activity API methods
 
 ### `drive api list`
 
@@ -2396,6 +2396,540 @@ drive <profile> api driveactivity-activity-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
+### `drive api sheets-spreadsheets-batch-update`
+
+Applies one or more updates to the spreadsheet. Each request is validated before being applied. If any request is not valid then the entire request will fail and nothing will be applied. Some requests have replies to give you some information about how they are applied. The replies will mirror the requests. For example, if you applied 4 updates and the 3rd one had a reply, then the response will have 2 empty replies, the actual reply, and another empty reply, in that order. Due to the collaborative nature of spreadsheets, it is not guaranteed that the spreadsheet will reflect exactly your changes after this completes, however it is guaranteed that the updates in the request will be applied together atomically. Your changes may be altered with respect to collaborator changes. If there are no collaborators, the spreadsheet should reflect your changes. — write (POST v4/spreadsheets/{spreadsheetId}:batchUpdate)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-batch-update [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The spreadsheet to apply the updates to. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-create`
+
+Creates a spreadsheet, returning the newly created spreadsheet. — write (POST v4/spreadsheets)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-developer-metadata-get`
+
+Returns the developer metadata with the specified ID. The caller must specify the spreadsheet ID and the developer metadata's unique metadataId. For more information, see [Read, write, and search metadata](https://developers.google.com/workspace/sheets/api/guides/metadata). — read (GET v4/spreadsheets/{spreadsheetId}/developerMetadata/{metadataId})
+
+```sh
+drive <profile> api sheets-spreadsheets-developer-metadata-get [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--metadata-id <value>` | The ID of the developer metadata to retrieve. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve metadata from. |
+
+### `drive api sheets-spreadsheets-developer-metadata-search`
+
+Returns all developer metadata matching the specified DataFilter. For more information, see [Read, write, and search metadata](https://developers.google.com/workspace/sheets/api/guides/metadata). If the provided DataFilter represents a DeveloperMetadataLookup object, this will return all DeveloperMetadata entries selected by it. If the DataFilter represents a location in a spreadsheet, this will return all developer metadata associated with locations intersecting that region. — read (POST v4/spreadsheets/{spreadsheetId}/developerMetadata:search)
+
+```sh
+drive <profile> api sheets-spreadsheets-developer-metadata-search [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve metadata from. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-get`
+
+Returns the spreadsheet at the given ID. The caller must specify the spreadsheet ID. By default, data within grids is not returned. You can include grid data in one of 2 ways: * Specify a [field mask](https://developers.google.com/workspace/sheets/api/guides/field-masks) listing your desired fields using the `fields` URL parameter in HTTP * Set the includeGridData URL parameter to true. If a field mask is set, the `includeGridData` parameter is ignored For large spreadsheets, as a best practice, retrieve only the specific spreadsheet fields that you want. To retrieve only subsets of spreadsheet data, use the ranges URL parameter. Ranges are specified using [A1 notation](https://developers.google.com/workspace/sheets/api/guides/concepts#cell). You can define a single cell (for example, `A1`) or multiple cells (for example, `A1:D5`). You can also get cells from other sheets within the same spreadsheet (for example, `Sheet2!A1:C4`) or retrieve multiple ranges at once (for example, `?ranges=A1:D5&ranges=Sheet2!A1:C4`). Limiting the range returns only the portions of the spreadsheet that intersect the requested ranges. — read (GET v4/spreadsheets/{spreadsheetId})
+
+```sh
+drive <profile> api sheets-spreadsheets-get [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--comments-view-mode <value>` | The comments view mode to apply to the spreadsheet. This allows viewing the spreadsheet with comments omitted or included. If one is not specified, COMMENTS_VIEW_MODE_OMITTED is used. |
+| `--spreadsheet-id <value>` | The spreadsheet to request. |
+| `--exclude-tables-in-banded-ranges <value>` | True if tables should be excluded in the banded ranges. False if not set. |
+| `--ranges <value>` | The ranges to retrieve from the spreadsheet. |
+| `--include-grid-data <value>` | True if grid data should be returned. This parameter is ignored if a field mask was set in the request. |
+
+### `drive api sheets-spreadsheets-get-by-data-filter`
+
+Returns the spreadsheet at the given ID. The caller must specify the spreadsheet ID. For more information, see [Read, write, and search metadata](https://developers.google.com/workspace/sheets/api/guides/metadata). This method differs from GetSpreadsheet in that it allows selecting which subsets of spreadsheet data to return by specifying a dataFilters parameter. Multiple DataFilters can be specified. Specifying one or more data filters returns the portions of the spreadsheet that intersect ranges matched by any of the filters. By default, data within grids is not returned. You can include grid data in one of two ways: * Specify a [field mask](https://developers.google.com/workspace/sheets/api/guides/field-masks) listing your desired fields using the `fields` URL parameter in HTTP. * Set the includeGridData parameter to `true`. If a field mask is set, the `includeGridData` parameter is ignored. For large spreadsheets, as a best practice, retrieve only the specific spreadsheet fields that you want. — read (POST v4/spreadsheets/{spreadsheetId}:getByDataFilter)
+
+```sh
+drive <profile> api sheets-spreadsheets-get-by-data-filter [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The spreadsheet to request. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-sheets-copy-to`
+
+Copies a single sheet from a spreadsheet to another spreadsheet. Returns the properties of the newly created sheet. — write (POST v4/spreadsheets/{spreadsheetId}/sheets/{sheetId}:copyTo)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-sheets-copy-to [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--sheet-id <value>` | The ID of the sheet to copy. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet containing the sheet to copy. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-values-append`
+
+Appends values to a spreadsheet. The input range is used to search for existing data and find a "table" within that range. Values will be appended to the next row of the table, starting with the first column of the table. See the [guide](https://developers.google.com/workspace/sheets/api/guides/values#appending_values) and [sample code](https://developers.google.com/workspace/sheets/api/samples/writing#append_values) for specific details of how tables are detected and data is appended. The caller must specify the spreadsheet ID, range, and a valueInputOption. The `valueInputOption` only controls how the input data will be added to the sheet (column-wise or row-wise), it does not influence what cell the data starts being written to. — write (POST v4/spreadsheets/{spreadsheetId}/values/{range}:append)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-values-append [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--insert-data-option <value>` | How the input data should be inserted. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
+| `--response-value-render-option <value>` | Determines how values in the response should be rendered. The default render option is FORMATTED_VALUE. |
+| `--value-input-option <value>` | How the input data should be interpreted. |
+| `--response-date-time-render-option <value>` | Determines how dates, times, and durations in the response should be rendered. This is ignored if response_value_render_option is FORMATTED_VALUE. The default dateTime render option is SERIAL_NUMBER. |
+| `--range <value>` | The [A1 notation](https://developers.google.com/workspace/sheets/api/guides/concepts#cell) of a range to search for a logical table of data. Values are appended after the last row of the table. |
+| `--include-values-in-response <value>` | Determines if the update response should include the values of the cells that were appended. By default, responses do not include the updated values. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-values-batch-clear`
+
+Clears one or more ranges of values from a spreadsheet. The caller must specify the spreadsheet ID and one or more ranges. Only values are cleared -- all other properties of the cell (such as formatting and data validation) are kept. — write (POST v4/spreadsheets/{spreadsheetId}/values:batchClear)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-values-batch-clear [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-values-batch-clear-by-data-filter`
+
+Clears one or more ranges of values from a spreadsheet. For more information, see [Read, write, and search metadata](https://developers.google.com/workspace/sheets/api/guides/metadata). The caller must specify the spreadsheet ID and one or more DataFilters. Ranges matching any of the specified data filters will be cleared. Only values are cleared -- all other properties of the cell (such as formatting, data validation, etc.) are kept. — write (POST v4/spreadsheets/{spreadsheetId}/values:batchClearByDataFilter)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-values-batch-clear-by-data-filter [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-values-batch-get`
+
+Returns one or more ranges of values from a spreadsheet. The caller must specify the spreadsheet ID and one or more ranges. — read (GET v4/spreadsheets/{spreadsheetId}/values:batchGet)
+
+```sh
+drive <profile> api sheets-spreadsheets-values-batch-get [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--value-render-option <value>` | How values should be represented in the output. The default render option is ValueRenderOption.FORMATTED_VALUE. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve data from. |
+| `--date-time-render-option <value>` | How dates, times, and durations should be represented in the output. This is ignored if value_render_option is FORMATTED_VALUE. The default dateTime render option is SERIAL_NUMBER. |
+| `--major-dimension <value>` | The major dimension that results should use. For example, if the spreadsheet data is: `A1=1,B1=2,A2=3,B2=4`, then requesting `ranges=["A1:B2"],majorDimension=ROWS` returns `[[1,2],[3,4]]`, whereas requesting `ranges=["A1:B2"],majorDimension=COLUMNS` returns `[[1,3],[2,4]]`. |
+| `--ranges <value>` | The [A1 notation or R1C1 notation](https://developers.google.com/workspace/sheets/api/guides/concepts#cell) of the range to retrieve values from. |
+
+### `drive api sheets-spreadsheets-values-batch-get-by-data-filter`
+
+Returns one or more ranges of values that match the specified data filters. For more information, see [Read, write, and search metadata](https://developers.google.com/workspace/sheets/api/guides/metadata). The caller must specify the spreadsheet ID and one or more DataFilters. Ranges that match any of the data filters in the request will be returned. — read (POST v4/spreadsheets/{spreadsheetId}/values:batchGetByDataFilter)
+
+```sh
+drive <profile> api sheets-spreadsheets-values-batch-get-by-data-filter [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve data from. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-values-batch-update`
+
+Sets values in one or more ranges of a spreadsheet. The caller must specify the spreadsheet ID, a valueInputOption, and one or more ValueRanges. — write (POST v4/spreadsheets/{spreadsheetId}/values:batchUpdate)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-values-batch-update [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-values-batch-update-by-data-filter`
+
+Sets values in one or more ranges of a spreadsheet. For more information, see [Read, write, and search metadata](https://developers.google.com/workspace/sheets/api/guides/metadata). The caller must specify the spreadsheet ID, a valueInputOption, and one or more DataFilterValueRanges. — write (POST v4/spreadsheets/{spreadsheetId}/values:batchUpdateByDataFilter)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-values-batch-update-by-data-filter [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-values-clear`
+
+Clears values from a spreadsheet. The caller must specify the spreadsheet ID and range. Only values are cleared -- all other properties of the cell (such as formatting, data validation, etc..) are kept. — write (POST v4/spreadsheets/{spreadsheetId}/values/{range}:clear)
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-values-clear [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
+| `--range <value>` | The [A1 notation or R1C1 notation](https://developers.google.com/workspace/sheets/api/guides/concepts#cell) of the values to clear. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+### `drive api sheets-spreadsheets-values-get`
+
+Returns a range of values from a spreadsheet. The caller must specify the spreadsheet ID and a range. — read (GET v4/spreadsheets/{spreadsheetId}/values/{range})
+
+```sh
+drive <profile> api sheets-spreadsheets-values-get [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--range <value>` | The [A1 notation or R1C1 notation](https://developers.google.com/workspace/sheets/api/guides/concepts#cell) of the range to retrieve values from. |
+| `--major-dimension <value>` | The major dimension that results should use. For example, if the spreadsheet data in Sheet1 is: `A1=1,B1=2,A2=3,B2=4`, then requesting `range=Sheet1!A1:B2?majorDimension=ROWS` returns `[[1,2],[3,4]]`, whereas requesting `range=Sheet1!A1:B2?majorDimension=COLUMNS` returns `[[1,3],[2,4]]`. |
+| `--value-render-option <value>` | How values should be represented in the output. The default render option is FORMATTED_VALUE. |
+| `--date-time-render-option <value>` | How dates, times, and durations should be represented in the output. This is ignored if value_render_option is FORMATTED_VALUE. The default dateTime render option is SERIAL_NUMBER. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve data from. |
+
+### `drive api sheets-spreadsheets-values-update`
+
+Sets values in a range of a spreadsheet. The caller must specify the spreadsheet ID, range, and a valueInputOption. — write (PUT v4/spreadsheets/{spreadsheetId}/values/{range})
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> api sheets-spreadsheets-values-update [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--$.xgafv <value>` | V1 error format. |
+| `--alt <value>` | Data format for response. |
+| `--fields <value>` | Selector specifying which fields to include in a partial response. |
+| `--callback <value>` | JSONP. |
+| `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
+| `--pretty-print <value>` | Returns response with indentations and line breaks. |
+| `--value-input-option <value>` | How the input data should be interpreted. |
+| `--include-values-in-response <value>` | Determines if the update response should include the values of the cells that were updated. By default, responses do not include the updated values. If the range to write was larger than the range actually written, the response includes all values in the requested range (excluding trailing empty rows and columns). |
+| `--response-date-time-render-option <value>` | Determines how dates, times, and durations in the response should be rendered. This is ignored if response_value_render_option is FORMATTED_VALUE. The default dateTime render option is SERIAL_NUMBER. |
+| `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
+| `--range <value>` | The [A1 notation](https://developers.google.com/workspace/sheets/api/guides/concepts#cell) of the values to update. |
+| `--response-value-render-option <value>` | Determines how values in the response should be rendered. The default render option is FORMATTED_VALUE. |
+| `--body <json>` | the request body as JSON; - reads it from stdin. |
+| `--body-file <path>` | the request body from a JSON file; - is stdin. |
+
+## `drive sheets`
+
+read spreadsheet tabs and ranges, or change cells live in Google Sheets
+
+### `drive sheets create`
+
+create an empty tab inside an existing spreadsheet
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> sheets create <spreadsheet> <title>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+| `title` | required | name of the new tab. |
+
+### `drive sheets rename`
+
+rename one tab while preserving its ID and other properties
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> sheets rename <spreadsheet> <sheet-id> <title>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+| `sheet-id` | required | numeric tab ID from sheets info. |
+| `title` | required | new tab name. |
+
+### `drive sheets insert`
+
+insert bounded rows or columns before a zero-based index
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> sheets insert <spreadsheet> <sheet-id> <axis> <index> <count>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+| `sheet-id` | required | numeric tab ID from sheets info. |
+| `axis` | required | rows or columns. |
+| `index` | required | zero-based index to insert before. |
+| `count` | required | number to insert, from 1 to 1000. |
+
+### `drive sheets format`
+
+change only supplied formatting fields in at most 10000 cells
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> sheets format <spreadsheet> <sheet-id> <range> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+| `sheet-id` | required | numeric tab ID from sheets info. |
+| `range` | required | finite cells within that tab, such as A1:C4; no tab prefix. |
+
+| Option | What it does |
+|---|---|
+| `--body <json>` | supported CellFormat fields as JSON; values and formulas are refused. |
+
+### `drive sheets info`
+
+list spreadsheet properties and tabs without downloading grid data
+
+```sh
+drive <profile> sheets info <spreadsheet>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+
+### `drive sheets show`
+
+read a live A1 range; choose formatted values, raw values or formulas
+
+```sh
+drive <profile> sheets show <spreadsheet> <range> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+| `range` | required | A1 range, such as Budget!A1:C4. |
+
+| Option | What it does |
+|---|---|
+| `--render <mode>` | how Google renders cell values. One of: `formatted`, `unformatted`, `formula`. Default: `formatted`. |
+
+### `drive sheets update`
+
+set cells within a finite A1 rectangle; literal values by default
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> sheets update <spreadsheet> <range> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+| `range` | required | tab and finite A1 rectangle, such as Budget!A1:C4. |
+
+| Option | What it does |
+|---|---|
+| `--values <json>` | JSON rows; null skips a cell and an empty string clears its value. |
+| `--input <mode>` | raw literals, or user-entered formulas/numbers using spreadsheet locale. One of: `raw`, `user-entered`. Default: `raw`. |
+
+### `drive sheets add`
+
+append rows after Google's detected table within a finite A1 range
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> sheets add <spreadsheet> <range> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+| `range` | required | tab and finite A1 rectangle, such as Budget!A1:C4. |
+
+| Option | What it does |
+|---|---|
+| `--values <json>` | JSON rows; null skips a cell and an empty string clears its value. |
+| `--input <mode>` | raw literals, or user-entered formulas/numbers using spreadsheet locale. One of: `raw`, `user-entered`. Default: `raw`. |
+
+### `drive sheets clear`
+
+clear cell values in a finite A1 rectangle; formatting remains
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> sheets clear <spreadsheet> <range>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
+| `range` | required | tab and finite A1 rectangle, such as Budget!A1:C4. |
+
 ## `drive files`
 
 read and change files in Google Drive; nothing is imported
@@ -2733,6 +3267,8 @@ drive <profile> models set [options]
 ## `drive mcp`
 
 serve drive's commands to an agent over MCP on stdio
+
+This command can change Google data or send data to the configured model.
 
 ```sh
 drive <profile> mcp [options]

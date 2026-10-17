@@ -80,6 +80,13 @@
     }
   },
   {
+    "id": "drive-spreadsheets",
+    "pages": ["drive/recipes.md", "drive/installation.md", "drive/commands.md"],
+    "families": {
+      "drive": ["sheets"]
+    }
+  },
+  {
     "id": "organize-sources",
     "pages": ["organize.md", "memo/notes.md", "people.md", "drive/recipes.md"],
     "families": {

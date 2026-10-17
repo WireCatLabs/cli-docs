@@ -195,10 +195,11 @@ JSON Desktop-клиента определяет приложение, а сог
 | --- | --- | --- |
 | [Google Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com) | Папки, файлы, экспорт, комментарии, версии и разрешения | Всегда |
 | [Google Docs API](https://console.cloud.google.com/apis/library/docs.googleapis.com) | Все вкладки документов, создание и редактирование Google Docs | Всегда |
+| [Google Sheets API](https://console.cloud.google.com/apis/library/sheets.googleapis.com) | Чтение актуальных вкладок/диапазонов и изменение ячеек/формул | Необязательные команды Sheets; не нужен для импорта через XLSX |
 | [Google Drive Activity API](https://console.cloud.google.com/apis/library/driveactivity.googleapis.com) | События и участники изменений | Необязательный `--grant activity`; включите для всех функций общего приложения |
 
 Включение API делает его доступным проекту, но не предоставляет доступ пользователю.
-Текущий коннектор не использует API Sheets, Slides, People и Gmail.
+Sheets использует существующие разрешения Drive на чтение и запись. Текущий коннектор не использует API Slides, People и Gmail.
 
 ### 2. Настроить экран согласия: Branding
 

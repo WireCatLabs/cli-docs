@@ -4,6 +4,43 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.16.0 — 2026-10-17
+
+### Added
+
+- Native Sheets structure commands create/rename tabs, insert bounded rows/columns and format
+  at most 10,000 cells. Formatting masks only supplied leaf properties and preserves cell values.
+  Equivalent raw/generated batch requests check the same profile permission keys.
+
+- Live Sheets commands inspect tabs, read ranges or formulas, update finite ranges, append rows
+  and clear values. Writes require the explicit Drive write grant and reuse profile policy guards.
+  Values default to literals; formula parsing is opt-in. Enable Sheets API for these commands.
+- Generated commands now cover the committed Sheets v4 Discovery contract, including batch
+  operations and spreadsheet structure. POST-based lookup methods retain read-only effects;
+  some of those Google endpoints require the broader Drive grant even when they only read.
+
+### Changed
+
+- Uses exact `@wirecat/cli-base` 0.40.3 with the existing compatible Core pin. All Sheets naming
+  exceptions are removed; the command lint baseline does not grow.
+
+- Uses `@wirecat/cli-core` 0.307.0.
+
+- **Over MCP, a write whose permission level is `ask` now goes ahead** instead of failing with
+  `confirmation_required`, as in tg and max: no one is at a terminal to answer, and MCP shows no approval
+  forms. This includes deletions, whose built-in level is `ask`. The read-only lock, `deny` and the send journal still
+  apply. If you relied on `ask` to keep an agent from writing, set that permission to `deny` or `readonly`.
+
+### Fixed
+
+- A disabled Google API reports `google-api.disabled` with an application-setup remedy instead
+  of a generic permissions error. No provider messages, activation links or project identifiers
+  are included; troubleshooting separates API enablement from account grants and file access.
+
+- `commands --json` now lists `mcp` as a persistent command that writes to Google and on this machine
+  (`effects: { remote: "write", local: "write" }`, `lifetime: "persistent"`), instead of a local read: the
+  server it starts runs drive's writing commands. No other command changes.
+
 ## 0.15.1 — 2026-10-17
 
 ### Fixed
