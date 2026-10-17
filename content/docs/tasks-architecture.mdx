@@ -11,7 +11,8 @@ use, start with [Tasks](./tasks.md).
 The design comes from the approved tasks plan in cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). All of it is built
 in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it, except that only `tg` reads the category list from the shared settings file,
-holds back tasks from history on a first sync, skips quiet chats on later passes, has `tasks apply`, and compares tasks by when their messages were sent. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
+opens tasks in a group only for what is addressed to the owner (and every question in a group tagged `watch-tasks`), has assignees on tasks
+found in messages, and compares two tasks from one message by their own words. `max` names the history scan `tasks apply`; in `tg` it is `tasks scan`. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
 (`tasks plan --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
 `tasks categories`, claims, `tasks related`, `tasks duplicates` or `tasks merge`.
 
@@ -235,6 +236,43 @@ The default list in `tg` and `max`:
 | `other` | none of the above |
 
 
+## Where the rules open tasks
+
+A task is what the owner must do or what someone owes the owner, not every question in every chat. In
+`tg`, the rules open tasks by the kind of chat:
+
+| Chat kind | What opens a task |
+| --- | --- |
+| One-to-one chat | every question the owner did not answer, and a mention of the owner |
+| Group, and a chat whose kind the store does not know | only a question (a message with `?`) that replies to the owner's message, and a mention of the owner |
+| Group tagged `watch-tasks` | every question the owner did not answer, whoever it is for, and a mention of the owner |
+| Channel, Saved Messages | nothing |
+
+The tag is an ordinary chat tag: `tags add --chat <group> watch-tasks`. It changes nothing in a
+one-to-one chat or a channel. `review`, `serve`, the pass on sync and `tasks scan` all read it. A rule
+closes a task only in a chat where it may open one. In `max`, every question the owner did not answer
+opens a task, in any chat.
+
+Why: on a real store, the newest 300 posts of one channel would have opened 85 tasks under the
+earlier rule, which opened a task for any unanswered question in any chat. Now a channel opens none.
+
+## Assignees
+
+In `tg`, a task found in a message can name who should do it, through the same assignment rows as
+project tasks (role `assignee`). An open task with an assignee is what that person owes the owner.
+
+| Command | What it does |
+| --- | --- |
+| `tasks add <message> … --assignee sender` | the person who sent the task's message |
+| `tasks add <message> … --assignee person:<id>` | a named person; several values name several people |
+| `tasks plan <task> --assignee none` | removes the assignees |
+| `tasks list "assignee:any state:open"` | open tasks with any assignee: what others owe the owner |
+| `tasks list assignee:none`, `tasks list assignee:person:<id>` | tasks with no assignee, or one person's tasks |
+
+MCP `tasks_add` and `tasks_plan` take `assignee`, and the task card prints each assignee. When the
+store knows no person for the sender, `--assignee sender` leaves the task unassigned instead of
+refusing it: a task with no assignee is better than a missed one.
+
 ## Rules on sync
 
 `messages sync` runs the task rules over the chats it stored into, from a stop point per account kept
@@ -243,28 +281,29 @@ years of chats opens no task for an old question. The answer carries `tasks: {ad
 `review` counts the new tasks whose candidates went to the review list. A failed pass is a note, never
 a failed sync. Nothing is attached on its own beyond a certain match (step 2 below).
 
-In `tg`, the first pass of an account also opens at most `task_first_pass_per_chat` tasks per chat,
-the newest first; the default is 0. A first sync reads history, and which chats are worth turning into
-tasks is the owner's choice. The tasks it held back are counted in `tasks` as `held`, in `held_chats`
-chats, and a note names `tasks apply`. Closes still run: a question the owner answered closes its open
+In `tg` and `max`, the first pass of an account also opens at most `task_first_pass_per_chat` tasks
+per chat, the newest first; the default is 0. A first sync reads history, and which chats are worth
+turning into tasks is the owner's choice. The tasks it held back are counted in `tasks` as `held`, in
+`held_chats` chats, and a note names `tasks scan` (`tasks apply` in `max`). In `tg`, `held` does not
+count a chat where the rules open nothing, such as a channel. Closes still run: a question the owner answered closes its open
 task. The setting is store-wide, kept in `store_settings` like the agent-close settings, a whole number
 from 0 to 1000; `config unset task_first_pass_per_chat` goes back to 0.
 
-In `tg`, after the first pass, a pass skips a chat where nothing was sent since the stop point. A sync that
+In `tg` and `max`, after the first pass, a pass skips a chat where nothing was sent since the stop point. A sync that
 fetches old history into a quiet chat therefore opens no task for a question asked months ago.
 
-**`tasks apply <chat...>`** (MCP `tasks_apply`) runs the same rules over the newest stored messages
+**`tasks scan <chat...>`** (MCP `tasks_scan`, permission key `tasks.scan`) runs the same rules over the newest stored messages
 of each named chat: 50 by default, `--last` up to 1000 (MCP `last`). It reads only the local store.
 Without the global `--yes` (MCP `yes`) it changes nothing and lists, per chat, the messages read and
 each task that would open, with its source, type and category; with it, the tasks open through the
 duplicate check, as on a sync, and answered questions close. A message that already has a task is not
 listed again. The MCP tool's description tells an agent to ask the owner before it builds a chat's
-tasks.
+tasks. In `max` the command is still `tasks apply` (MCP `tasks_apply`); `tg` keeps no old name.
 
 | Command | What it does |
 | --- | --- |
-| `tasks apply <chat>` | lists the tasks the rules would open from the newest 50 stored messages |
-| `tasks apply <chat> --last 300 --yes` | opens them from the newest 300 |
+| `tasks scan <chat>` | lists the tasks the rules would open from the newest 50 stored messages |
+| `tasks scan <chat> --last 300 --yes` | opens them from the newest 300 |
 | `config set task_first_pass_per_chat <n>` | lets an account's first pass open up to n tasks per chat |
 
 ## The duplicate check
@@ -302,7 +341,11 @@ come from the same message. A message can raise a pair's score, never lower it. 
 due date count only when the task's own text has none, and its "tomorrow" is read from when it was
 sent. Messages are read from the store at compare time; a task stores no message text.
 
-**Time is message time.** In `tg`, the time field and the reading of "tomorrow" in a task's own text
+**Two tasks from one message.** In `tg`, when two tasks have the same source message, such as a
+promise and a request an agent took from one long message, they are compared by their own title and
+description only. The shared message would make two different jobs look like one.
+
+**Time is message time.** In `tg` and `max`, the time field and the reading of "tomorrow" in a task's own text
 use when its source message was sent, not when the task was written. An agent that goes through history
 writes many tasks within minutes; compared by write time, every pair looked "created together" (+2) and
 "tomorrow" in each meant the same day (+4). A task with no source message keeps its creation time.
@@ -373,7 +416,7 @@ Two rules keep good candidates in:
 | Category | name | same · different · unknown |
 | Due date | days apart | 2 or fewer · more · missing |
 | Reply chain | the source messages reply to one another | yes · no |
-| Time | days between the two tasks: in `tg`, between when their source messages were sent | 3 or fewer · 4 to 14 · more |
+| Time | days between the two tasks: in `tg` and `max`, between when their source messages were sent | 3 or fewer · 4 to 14 · more |
 
 ### 5. Add up the weights
 

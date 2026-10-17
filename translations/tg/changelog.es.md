@@ -4,6 +4,32 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.68.0 — 17.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Las tareas se abren solo donde se te pide algo** (cli-core 0.318.0). En un chat individual cada pregunta que no
+  respondiste abre una, como antes; en un grupo solo una pregunta en respuesta a tu mensaje y una mención tuya; en un
+  canal o en Mensajes guardados, nada. En el almacén del propietario, 300 publicaciones de un canal habrían abierto 85.
+- **`tasks apply` ahora es `tasks scan`** (cli-core 0.320.0); MCP `tasks_scan`, clave de permiso `tasks.scan`.
+- **Ningún ajuste elige ya un perfil** (cli-core 0.319.0). Un comando nombra su perfil con la primera palabra o con
+  `TG_PROFILE`. Un archivo de configuración que aún tiene `default_profile` detiene un comando que no nombra perfil,
+  con el perfil que hay que escribir y `tg config unset default_profile`; `tg config set default_profile` se rechaza.
+  Un perfil llamado `default` es un nombre normal: `tg default mcp config` llama a su servidor `tg-default`, no `tg`.
+
+### Novedades
+
+- **Las tareas tienen responsables** (cli-core 0.320.0): `tasks add` y `tasks plan` aceptan `--assignee sender` (quien
+  envió el mensaje) o `--assignee person:<id>`; `none` lo quita. `tasks list "assignee:any state:open"` es lo que otros
+  te deben.
+- **`tg <profile> tags add --chat <group> watch-tasks`** registra cada pregunta de ese grupo como tarea, sea para quien
+  sea.
+
+### Corregido
+
+- **La pista de `tg upgrade` sobre una versión retenida nombra el paquete y conserva la exención de antigüedad de pnpm**
+  (cli-core 0.320.0).
+
 ## 0.67.0 — 17.10.2026
 
 ### Seguridad

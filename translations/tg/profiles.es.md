@@ -2,7 +2,7 @@
 title: "Perfiles y bots"
 ---
 
-Un **perfil** es el nombre de un inicio de sesión de `tg` en esta computadora: una cuenta de Telegram o un bot, con su propia sesión y su propia configuración. `tg` nunca elige uno por ti: un comando que usa una cuenta nombra su perfil como primera palabra (`tg personal chats list`), mediante `TG_PROFILE` o mediante `default_profile` en el archivo de configuración. Con una sola cuenta, define `default_profile` una vez y olvídate.
+Un **perfil** es el nombre de un inicio de sesión de `tg` en esta computadora: una cuenta de Telegram o un bot, con su propia sesión y su propia configuración. `tg` nunca elige uno por ti: un comando que usa una cuenta nombra su perfil como primera palabra (`tg personal chats list`) o mediante `TG_PROFILE`, siempre, incluso con una sola cuenta.
 
 Lea esta página cuando desee una segunda cuenta, desee que su agente de IA tenga menos derechos que usted o desee ejecutar un bot. Al final, sabrás cómo elegir un perfil para un comando, cómo darle su propia configuración y cómo cambiar a un bot.
 

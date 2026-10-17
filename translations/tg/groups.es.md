@@ -227,16 +227,35 @@ Un agente conectado a través del [servidor MCP](./mcp.md) puede ejecutar los mi
 
 ## Lo que te espera
 
-`review` y `serve` mantienen una lista de tareas en el archivo local. Una pregunta que nadie respondió y un mensaje que lo menciona por su nombre abre una tarea; tu respuesta lo cierra. Una tarea apunta a su mensaje y nunca lo copia.
+`review` y `serve` mantienen una lista de tareas en el archivo local: lo que tienes que hacer y lo que alguien te debe. Una tarea apunta a su mensaje y nunca lo copia. Dónde abre una tarea una regla:
+
+- **Un chat individual:** una pregunta que no respondiste y un mensaje que te menciona.
+- **Un grupo:** solo una pregunta que responde a tu mensaje y una mención tuya. Las preguntas de otras personas no son tus tareas.
+- **Un canal o Mensajes guardados:** nada.
+
+Tu respuesta cierra la tarea. Para registrar cada pregunta de un grupo, sea para quien sea, ponle una etiqueta al grupo:
+
+```sh
+tg personal tags add --chat <group> watch-tasks
+```
 
 La primera sincronización de una cuenta no abre tareas de tu historial; las siguientes abren tareas a partir de mensajes nuevos. Para convertir el historial de un chat en tareas, mira lo que se abriría y luego ábrelo:
 
 ```sh
-tg personal tasks apply <chat>
-tg personal tasks apply <chat> --last 300 --yes
+tg personal tasks scan <chat>
+tg personal tasks scan <chat> --last 300 --yes
 ```
 
 `config set task_first_pass_per_chat <n>` permite que la primera sincronización abra hasta n tareas por chat.
+
+Cuando alguien te promete algo, guárdalo como tarea suya y consulta lo que otros te deben:
+
+```sh
+tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other --assignee sender
+tg personal tasks list "assignee:any state:open"
+```
+
+`--assignee sender` es quien envió el mensaje; `--assignee person:<id>` nombra a otra persona, y `tasks plan <task> --assignee none` quita el responsable. Una tarea sin responsable está bien: mejor eso que una tarea perdida.
 
 Vea lo que le espera, primero el mayor, luego solo preguntas y menciones en un grupo:
 

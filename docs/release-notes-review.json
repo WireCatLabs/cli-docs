@@ -1,9 +1,9 @@
 {
   "tg": {
-    "version": "v0.67.0",
+    "version": "v0.68.0",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
     "reviewedAt": "2026-10-17",
-    "conclusion": "Reviewed Telegram0.67.0 with Core0.315.0/Base0.40.2: opaque attachment credentials stay out of JSON/JSONL/MCP and event streams; protected WhatsApp state files cannot be uploaded. Native reader guides and command reference are unchanged from0.66. Roadmap unchanged: multi-photo sending, private chat notes and listed MAX-only capabilities remain planned."
+    "conclusion": "Reviewed Telegram0.68.0 with Core0.320.0/Base0.40.4: task rules open tasks only where something is asked of the owner (one-to-one chats; replies to the owner and mentions in groups; nothing in channels or Saved Messages), watch-tasks groups record every question, tasks gain assignees (--assignee, assignee: filters, MCP assignee), tasks apply is renamed tasks scan (MCP tasks_scan, tasks.scan), and no setting picks a profile (default_profile stops commands). Roadmap unchanged: multi-photo sending, private chat notes and listed MAX-only capabilities remain planned."
   },
   "max": {
     "version": "v0.58.0",

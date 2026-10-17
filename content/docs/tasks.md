@@ -1,12 +1,13 @@
 ---
 title: "Tasks"
-description: "Questions, requests and promises from your chats, kept as tasks your agent can plan, link and close."
+description: "Questions, requests and promises from your chats, yours and the ones others owe you, kept as tasks your agent can plan, link and close."
 ---
 
-A task is one thing that waits on you: a question nobody answered, a request, a promise you made.
-This page helps you keep those things from getting lost in your chats. After reading it, you can ask
-your agent for today's agenda, turn a message into a task, link the messages that belong to it and
-close it when it is done. Tasks stay on your computer, in the local store of `tg`, `max` and `memo`.
+A task is one thing you must do, or one thing someone owes you: a question you did not answer, a
+request, a promise you made or a promise made to you. This page helps you keep those things from
+getting lost in your chats. After reading it, you can ask your agent for today's agenda, turn a
+message into a task, say who should do it, link the messages that belong to it and close it when it
+is done. Tasks stay on your computer, in the local store of `tg`, `max` and `memo`.
 Nothing on this page sends a message.
 
 Categories, tags on tasks, keys per type, claiming and the duplicate check are built in the shared
@@ -14,24 +15,38 @@ core of the tools (cli-core). `tg` and `max` have all of them; `memo` does not h
 duplicate review yet.
 Closes that wait for you when an agent is unsure, follow-up tasks, the list of 59 categories and the
 duplicate check that reads linked messages are in `tg` and `max`; `memo` does not have them yet.
-Only `tg` reads the category list from the shared settings file so far. Only `tg` keeps a first
-sync from opening tasks from your history, and builds a chat's tasks when you ask (`tasks apply`).
+Only `tg` reads the category list from the shared settings file so far. `tg` and `max` keep a first
+sync from opening tasks from your history, and build a chat's tasks when you ask (`tasks scan` in
+`tg`; `max` still calls it `tasks apply`). Only `tg` opens tasks in a group just for what is asked of
+you, and records who should do a task found in a message.
 [How tasks work](./tasks-architecture.mdx) gives the technical detail.
 
 ## Where tasks come from
 
-- **Rules find them in messages.** A question that nobody answered becomes a task of type `question`.
-  A message that mentions you becomes a `mention` task; the messenger must mark the mention, a typed
-  name alone is not seen. An auto-reply rule with the `task` action opens a `request` task for each
+- **Rules find them in messages, where something is asked of you.** In `tg`, the kind of chat decides:
+  - **A one-to-one chat:** every question you did not answer becomes a task of type `question`.
+  - **A group:** only a question that replies to your message. Other people's questions are not
+    your tasks.
+  - **A channel or Saved Messages:** nothing.
+
+  A message that mentions you becomes a `mention` task, in a one-to-one chat or a group; the
+  messenger must mark the mention, a typed name alone is not seen. A chat whose kind the tool does
+  not know counts as a group. In `max`, every question you did not answer still opens a task, in any
+  chat. An auto-reply rule with the `task` action opens a `request` task for each
   matching message ([Telegram](./tg/replies.md), [MAX](./max/replies.md)). The rules run when your
   agent syncs or reviews your chats, and while the tool runs in the background (`messages sync`,
   `review` and `serve`). A rule picks the task's category from the words of the message.
-- **Old messages wait for your choice.** In `tg`, the first sync of an account opens no task from your
-  history. Later syncs open tasks from new messages. When you want a chat's history as tasks, your agent
+- **A group you watch gives you every question.** When you want every unanswered question of a group
+  as a task, whoever it is for, tag the group `watch-tasks` (`tg`; see
+  [Watch every question in a group](#watch-every-question-in-a-group)).
+- **Old messages wait for your choice.** In `tg` and `max`, the first sync of an account opens no task
+  from your history. Later syncs open tasks from new messages. When you want a chat's history as tasks, your agent
   first shows you what would open, and opens it after you agree; see
   [Tasks from a chat's history](#tasks-from-a-chats-history).
 - **Your agent or you add them.** A promise ("I will send the contract on Monday") or a request that
-  no rule caught is added by hand, with type `promise` or `request` and a category.
+  no rule caught is added by hand, with type `promise` or `request` and a category. A promise someone
+  made to you is added the same way, with that person as its assignee; see
+  [What others owe you](#what-others-owe-you).
 - **Project tasks** live in a project and have a key: the project's key and a number, such as
   `HRB-12`. Their types are `chore`, `bug` and `feature`. You make them with `memo`; see
   [Tasks and reminders in Memo](./memo/tasks.md).
@@ -53,6 +68,10 @@ Use tg CLI. In my chat with Bob Sample, I promised to send the signed contract b
 ```
 
 ```text prompt
+Use tg CLI. In my chat with Bob Sample, he promised to send me the signed invoice by Friday. Add it as his task, due Friday. Then show me everything that others owe me.
+```
+
+```text prompt
 Use tg CLI. Show me which tasks would open from the last 300 messages of my chat with Bob Sample. Don't open anything yet.
 ```
 
@@ -71,8 +90,47 @@ so the task holds the whole story. A link has a kind: `related-to` (the default)
 message shows the task is real) or `created-from`. A task can also point to a chat, a person, a
 document, a note or a web address.
 
-A chat can hold many tasks. Three different questions from Alice Example in one group are three
-tasks. A task is about one thing, not about one chat or one person.
+A chat can hold many tasks. Three different questions that Alice Example asks you in one chat are
+three tasks. A task is about one thing, not about one chat or one person.
+
+## What others owe you
+
+A task is not only what you must do. When someone promises you something, such as "I will send the
+photos tomorrow", keep it as a task too, with that person as its **assignee**: the person who should
+do it. Then you can ask your agent what others owe you and chase what is late. In `tg`, a task found
+in a message can have assignees; project tasks in `memo` have their own.
+
+`tasks add` and `tasks plan` take `--assignee`:
+
+- `--assignee sender`: whoever sent the task's message.
+- `--assignee person:<id>`: a person you name. Give several values to name several people.
+- `--assignee none`: removes the assignees.
+
+A task with no assignee is fine: it is better than a missed task. If the tool knows no person for the
+sender, the task is still added, with no assignee.
+
+`tasks list "assignee:any state:open"` lists the open tasks that others owe you. `assignee:none` finds
+tasks with no assignee, and `assignee:person:<id>` the tasks of one person. Agents that use the MCP
+server pass `assignee` to `tasks_add` and `tasks_plan`.
+
+```text
+tasks add msg:telegram/1/77/42 --type promise --category documents --assignee sender
+tasks plan PR-4 --assignee person:12
+tasks plan PR-4 --assignee none
+tasks list "assignee:any state:open"
+```
+
+## Watch every question in a group
+
+In a group, the rules open a task only for a question that replies to you and for a mention of you.
+In a small group where you answer for everything, such as a group with a client or a family group,
+you may want every question. Tag that group `watch-tasks`: from then on, every question nobody
+answered opens a task, whoever it is for. The tag works in `tg`, on groups only; a channel never
+opens tasks.
+
+```sh
+tg personal tags add --chat "Renovation" watch-tasks
+```
 
 ## Commands
 
@@ -109,8 +167,15 @@ tg personal tasks show <task>
 See which tasks a chat's history would open, then open them:
 
 ```sh
-tg personal tasks apply "Renovation"
-tg personal tasks apply "Renovation" --last 300 --yes
+tg personal tasks scan "Renovation"
+tg personal tasks scan "Renovation" --last 300 --yes
+```
+
+Keep a promise made to you as the sender's task, then list what others owe you:
+
+```sh
+tg personal tasks add msg:telegram/1/77/48 --type promise --category documents --assignee sender
+tg personal tasks list "assignee:any state:open"
 ```
 
 Close it:
@@ -128,7 +193,7 @@ tg personal tasks close <task>
 tg personal tasks reject <task>
 ```
 
-`<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the same commands, including suggested closes.
+`<task>` is the task's key, as `tasks agenda` prints it, or its full id. `max` has the same commands, including suggested closes, except `--assignee`.
 
 </details>
 
@@ -136,12 +201,13 @@ tg personal tasks reject <task>
   answer and chats where you wait for one. It warns when the store has not saved anything for a while.
 - **add** needs a type. It also needs a category (`--category`), and it
   refuses when a similar task exists; see [No duplicate tasks](#no-duplicate-tasks).
-- **plan** sets the title, the description, the due date and the next check. The next check is when
-  your agent should look at the task again; it does not remind you.
+- **plan** sets the title, the description, the due date, the next check and, in `tg`, the assignees.
+  The next check is when your agent should look at the task again; it does not remind you.
 - **link** adds messages, chats, people, documents, notes or addresses to a task.
 - **show** prints one task with its plan and everything linked to it.
-- **apply** (`tg` only) runs the task rules over a chat's newest stored messages and lists the tasks
-  they would open. It opens them only with `--yes`. See [Tasks from a chat's history](#tasks-from-a-chats-history).
+- **scan** runs the task rules over a chat's newest stored messages and lists the tasks they would
+  open. It opens them only with `--yes`. In `max` this command is `tasks apply`. See
+  [Tasks from a chat's history](#tasks-from-a-chats-history).
 - **close** closes a task as `done` or `dismissed`. A closed task stays closed. Only `tasks unmerge`
   reopens a task, and only one that a merge closed. An agent's close may wait for you; see
   [When an agent closes a task](#when-an-agent-closes-a-task).
@@ -155,7 +221,7 @@ between project tasks in `memo`: see [What to do first](./memo/tasks.md#what-to-
 
 The tool also writes `follow-up-of` itself between tasks found in messages: a new task about a task
 closed in the last 14 days is linked to it as a follow-up (see [No duplicate tasks](#no-duplicate-tasks)).
-In `tg`, `tasks show` on the closed task also names the task that follows it up.
+In `tg` and `max`, `tasks show` on the closed task also names the task that follows it up.
 
 Two more kinds exist. `duplicate-of` says that a task is the same job as another. A merge writes it,
 and it joins tasks found in messages of one account. `discovered-from` says that a task was found
@@ -165,9 +231,9 @@ while working on another.
 
 1. Your agent fetches new messages (`messages sync`). The sync runs the task rules on what it stored,
    from where the last run stopped. The first run reads only chats with a message in the last 14 days.
-   In `tg`, the first run also opens no task from those messages: the answer counts the tasks it held
-   back and names `tasks apply`. In `tg`, a later sync skips a chat where nothing new was sent, so old
-   messages that it fetches open no tasks. The answer says how many tasks were opened, how many were closed and
+   In `tg` and `max`, the first run also opens no task from those messages: the answer counts the
+   tasks it held back and names `tasks scan` (`tasks apply` in `max`). A later sync skips a chat where
+   nothing new was sent, so old messages that it fetches open no tasks. The answer says how many tasks were opened, how many were closed and
    how many went to the review list.
 2. It reads the agenda and checks each new task against its messages.
 3. It sets a title, a due date and the right category, links the messages that belong together, and
@@ -177,25 +243,28 @@ while working on another.
 
 ## Tasks from a chat's history
 
-The first sync of an account in `tg` reads your history, but it opens no tasks from it: old questions
-are often answered somewhere else, or no longer matter. You decide which chats are worth the work.
+The first sync of an account in `tg` and `max` reads your history, but it opens no tasks from it: old
+questions are often answered somewhere else, or no longer matter. You decide which chats are worth
+the work.
 
-1. Ask your agent which tasks a chat's history would open. It runs `tasks apply` with the chat, which
+1. Ask your agent which tasks a chat's history would open. It runs `tasks scan` with the chat, which
    reads the newest 50 stored messages (`--last` reads up to 1000). The answer lists each task's type,
    category and message. Nothing changes.
 2. Check the list. If you agree, the agent runs the same command with `--yes`. The tasks open through
    the duplicate check, as on a sync, and an open task whose question you have already answered closes.
 
-`tasks apply` reads only the messages stored on your computer and sends nothing. Agents that use the
-MCP server have the same tool, `tasks_apply`, with `yes` in place of `--yes`.
+The scan uses the same rules as a sync: in `tg`, a channel opens nothing, and a group opens only what
+is asked of you unless you tagged it `watch-tasks`. `tasks scan` reads only the messages stored on
+your computer and sends nothing. Agents that use the MCP server have the same tool, `tasks_scan`, with
+`yes` in place of `--yes`. In `max`, the command is `tasks apply` and the tool is `tasks_apply`.
 
 If you want the first sync to open tasks from history, `config set task_first_pass_per_chat <n>` lets
 it open up to n tasks per chat, the newest first (0 by default, at most 1000). This setting is for the
 whole store, like the settings in [When an agent closes a task](#when-an-agent-closes-a-task).
 
 ```text
-tasks apply "Renovation"
-tasks apply "Renovation" --last 300 --yes
+tasks scan "Renovation"
+tasks scan "Renovation" --last 300 --yes
 config set task_first_pass_per_chat 20
 config unset task_first_pass_per_chat
 ```
@@ -246,8 +315,11 @@ new task before it creates it:
   one. The closed task stays closed. `tasks add` refuses only while an open task may be the same job.
 
 The check compares words (including other forms of a word and typos), the person, the amount of
-money, the due date, the category, replies and the time. In `tg`, the time is when the tasks' messages
-were sent, not when the tasks were written, so tasks written from history in one go do not look alike.
+money, the due date, the category, replies and the time. In `tg` and `max`, the time is when the tasks'
+messages were sent, not when the tasks were written, so tasks written from history in one go do not
+look alike. In `tg`, two tasks taken from one message, such as a promise and a request in one long
+message, are compared by their own title and description only: the shared message says nothing about
+whether they are one job.
 It reads each task's title and description,
 its source message and its 5 newest linked messages, so a task that a rule opened with an empty title
 is compared by its message. It reads due dates in English, Russian and Spanish, such as `by Friday`,
@@ -371,8 +443,8 @@ tasks agenda claimed:any
 
 Agents that use the MCP server have the same tools, such as `tasks_claim`, `tasks_release`,
 `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` and `tasks_unmerge`.
-In `tg`, `tasks_close` needs `certainty`, as an agent's `tasks close` does, and `tasks_apply` builds a
-chat's tasks from its history.
+In `tg` and `max`, `tasks_close` needs `certainty`, as an agent's `tasks close` does. `tasks_scan`
+(`tasks_apply` in `max`) builds a chat's tasks from its history.
 
 ## Not built yet
 

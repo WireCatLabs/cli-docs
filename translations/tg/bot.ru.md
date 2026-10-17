@@ -71,7 +71,7 @@ tg support bot auth set
 tg personal bot list --check  # every name with a bot token, and which bot each is
 ```
 
-Без имени используется `TG_PROFILE`, а если он не задан — настройка `default_profile`; если нет ни того, ни другого, команда останавливается и перечисляет профили.
+Без имени используется `TG_PROFILE`; если он не задан, команда останавливается и перечисляет профили.
 
 ## Хранение токена
 

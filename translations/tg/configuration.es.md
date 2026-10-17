@@ -38,7 +38,6 @@ Algunas palabras que utiliza esta página:
 | `proxy` | un servidor proxy para acceder a Telegram, donde está bloqueado ([configuración de proxy](./configuration-reference.md#through-a-proxy)) | ninguno |
 | `transcribe_with` | quién convierte mensajes de voz en texto: `auto`, `messenger` o `local` | `auto` |
 | `update_check` | una vez al día, avise cuando exista un `tg` más nuevo | `true` |
-| `default_profile` | qué perfil utiliza un comando cuando no nombras uno | ninguno: un comando que usa una cuenta se detiene y muestra la lista de perfiles |
 
 El archivo no guarda secretos. No tiene lugar para su sesión, el hash de la aplicación, un número de teléfono o una contraseña de proxy. La sesión es un archivo propio y el hash de la aplicación y una contraseña de proxy van al llavero de su sistema o, cuando no hay ninguno, a un archivo que solo usted puede leer ([donde reside el inicio de sesión](./security.md#where-the-login-lives)).
 
@@ -64,7 +63,6 @@ Entonces, `tg work chats list` muestra 50 filas y `tg personal chats list` muest
 
 ```json
 {
-  "default_profile": "personal",
   "defaults": {
     "limit": 20,
     "keep_runs_for_days": 14,
@@ -101,7 +99,6 @@ Entonces, `tg work chats list` muestra 50 filas y `tg personal chats list` muest
 
 Qué hace cada parte:
 
-- `default_profile`: `tg chats list` sin nombre de perfil utiliza `personal`.
 - `defaults`: cada perfil obtiene estos valores a menos que establezca los suyos propios. `update_check` y `skill_hint` solo se permiten aquí, porque hay una copia de `tg` para todos los perfiles.
 - `profiles.personal`: más filas, colores y un registro de cada ejecución, sólo para `personal`.
 - `profiles.work`: se permite la lectura de mensajes, se permite el envío, se rechaza cualquier otro cambio en los mensajes. Como máximo 10 envíos por hora. Se accede a Telegram a través de un proxy SOCKS5. Los mensajes de voz se convierten en texto en esta computadora.
