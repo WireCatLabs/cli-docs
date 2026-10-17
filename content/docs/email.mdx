@@ -12,6 +12,7 @@ After following the guide, you will be able to:
 - connect the mailboxes you choose and import the period you need;
 - link an email address to a person you already know;
 - search and label mail with source references and check import coverage.
+- spot senders that look like spam or scams.
 
 WireCat uses Memo for these tasks. Memo is a tool that runs on your computer and imports
 email into a local, searchable copy. Your agent can use that mail together with notes and
@@ -116,6 +117,22 @@ person, `subject:` for words of the subject only and `mailbox:` for a folder or 
 source reference and ask your agent to keep the results from the address you choose.
 `search all` also searches messages and notes; `skipped` identifies any kind it could not search.
 Missing hits outside the imported date window do not establish that no email exists there.
+
+## Spot spam and look-alike senders
+
+Gmail filters most spam, but some scams and automated senders still reach your mail. Memo gives each sender
+a score from signs in its mail, so your agent can point out a sender that only pretends to be a known brand.
+
+```text prompt
+Use Memo to check which senders in the mail account I choose look like scams.
+Show each suspicious sender with its score, the signals behind it and one example email.
+Leave out senders that score only because I never open their newsletters.
+```
+
+`memo mail inspect gmail` lists senders with their score and signals. Each import also scores the senders of
+stored mail, at most once a day, and a search hit in `--json` carries its sender's `sender_score`. The score
+does not change the order of search results. A brand name sent from another domain points at fraud; a score
+from mail you never open only marks a newsletter. See [what each signal means](./memo/mail.md#choose-what-to-import).
 
 ## Label emails and keep notes about them
 

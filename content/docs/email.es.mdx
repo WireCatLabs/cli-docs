@@ -12,6 +12,7 @@ Después de seguir la guía, podrás:
 - conectar los buzones que elijas e importar el periodo necesario;
 - vincular una dirección a una persona que ya conoces;
 - buscar y etiquetar correo con fuentes y comprobar la cobertura de importación.
+- detectar remitentes que parecen spam o estafas.
 
 WireCat utiliza Memo para estas tareas. Memo es una herramienta de tu ordenador que importa
 el correo a una copia local en la que puedes buscar. Tu agente puede usarla junto con notas
@@ -119,6 +120,24 @@ para una persona, `subject:` para palabras solo del asunto y `mailbox:` para una
 comprueba sus referencias y pide al agente que conserve los de la dirección que elijas.
 `search all` también busca mensajes y notas; `skipped` indica qué tipo no se pudo buscar.
 Que falten resultados fuera del periodo importado no demuestra que no exista correo allí.
+
+## Detecta spam y remitentes que se hacen pasar por otros
+
+Gmail filtra la mayor parte del spam, pero algunas estafas y envíos automáticos llegan igualmente. Memo da a
+cada remitente una puntuación según señales de su correo, para que tu agente señale a quien solo finge ser
+una marca conocida.
+
+```text prompt
+Usa Memo para comprobar qué remitentes de la cuenta de correo que elija parecen estafas.
+Muestra cada remitente sospechoso con su puntuación, las señales que la forman y un correo de ejemplo.
+Deja fuera a los remitentes que puntúan solo porque nunca abro sus boletines.
+```
+
+`memo mail inspect gmail` lista los remitentes con su puntuación y sus señales. Cada importación puntúa
+también a los remitentes del correo guardado, como mucho una vez al día, y un resultado de búsqueda en
+`--json` lleva el `sender_score` de su remitente. La puntuación no cambia el orden de los resultados. Una
+marca en el nombre enviada desde otro dominio apunta a fraude; una puntuación por correo que nunca abres solo
+indica un boletín. Consulta [qué significa cada señal](./memo/mail.md#choose-what-to-import).
 
 ## Etiqueta correos y guarda notas sobre ellos
 
