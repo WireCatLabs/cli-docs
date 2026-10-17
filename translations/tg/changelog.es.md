@@ -4,6 +4,14 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.67.0 — 17.10.2026
+
+### Seguridad
+
+- Las referencias internas de los adjuntos quedan fuera de JSON, JSON lines, MCP y la salida de eventos (Core0.315.0); las claves multimedia y credenciales del proveedor permanecen dentro del cliente.
+
+- Los archivos de estado de WhatsApp no se pueden subir como adjuntos (Core 0.314.0), incluso con rutas de estado configuradas o mediante enlaces simbólicos. Los archivos normales contiguos siguen permitidos.
+
 ## 0.66.0 — 17.10.2026
 
 ### Cambios — pueden romper scripts

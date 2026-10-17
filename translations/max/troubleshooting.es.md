@@ -27,7 +27,7 @@ En la salida de `--json`, un error que termina el comando es una línea en stder
 |---|---|---|---|
 | `1` | `internal_error` |un error tipográfico en el nombre del comando o un fallo en el propio `max`|[perfil incorrecto](#команда-отвечает-но-профиль-не-тот), [informe](#как-сообщить-о-проблеме)|
 | `2` | `validation_error` |un valor o combinación de opciones que `max` no acepta; el nombre se adapta a varios chats|[valores](#--limit-takes-a-whole-number-from-1-upwards-not-abc), [varios chats](#matches-n-chats)|
-| `3` | `configuration_error` |error en `config.json`, o una versión más reciente registró el archivo local|[configuración](#is-not-a-valid-config), [archivo local](#the-message-store-was-written-by-a-newer-version-)|
+| `3` | `configuration_error` |error en `config.json`, o una versión más reciente registró el archivo local|[configuración](#is-an-unknown-setting), [archivo local](#the-message-store-was-written-by-a-newer-version-)|
 | `4` | `authentication_error` |no hay inicio de sesión, la sesión finalizó o el llavero no está disponible|[sin sesión](#no-session-for-profile-default), [token ilegible](#no-token-found-for-profile-default-although-it-has-logged-in-on-this-machine)|
 | `5` | `permission_error` |Acción prohibida del perfil `permissions`|[no permitido](#profile--does-not-let--write-или-profile--denies-)|
 | `6` | `not_found` |no existe tal chat, mensaje o persona; el archivo local todavía está vacía|[sin chat](#no-chat-matches), [nada guardado](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline)|
@@ -156,10 +156,10 @@ Es `chats`, plural. Consulta `max --help`.
 
 ## Configuraciones y valores de opciones
 
-### «is not a valid config»
+### «is an unknown setting»
 
 ```json
-{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve"}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json: profiles.default.limitt is an unknown setting","retry":{"safe":false}}}
 ```
 
 Código `3`. En un archivo de configuración, un campo que no está en el esquema casi siempre es un error tipográfico y el mensaje indica su ruta. Rechazado a propósito: un campo silenciosamente ignorado vale medio día de desconcierto. Todos los campos están en [referencia de configuración](./configuration-reference.md).

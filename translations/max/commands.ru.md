@@ -264,6 +264,27 @@ max chats show <chat>
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
 
+### `max chats documents`
+
+документы Google Docs и Drive из ссылок в сохранённых сообщениях чата
+
+#### `max chats documents list`
+
+все ссылки на документы в чате, новые первыми, и есть ли документ в хранилище
+
+```sh
+max chats documents list <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: его ID или часть названия. |
+
+| Опция | Что делает |
+|---|---|
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+
 ### `max chats events`
 
 кто вошёл, вышел, был добавлен или удалён и кем — по служебным сообщениям чата; за последние 7 дней, если запрос не задаёт время
@@ -320,7 +341,6 @@ max chats mark-read <chat> [options]
 | Опция | Что делает |
 |---|---|
 | `--until-id <id>` | only up to this message id; the newest by default. |
-| `--topic <id>` | mark only this forum topic read; unsupported by messengers without topics. |
 
 ### `max chats leave`
 
@@ -636,18 +656,13 @@ max chats requests list <chat> [query] [options]
 **Меняет что-то в MAX.**
 
 ```sh
-max chats requests accept <chat> [person] [options]
+max chats requests accept <chat> <person>
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
-| `person` | необязательный | кто подал заявку: ID из `chats requests list`. |
-
-| Опция | Что делает |
-|---|---|
-| `--all` | MAX не поддерживает; выберите одного человека из chats requests list. |
-| `--link <link>` | MAX не поддерживает; выберите одного человека из chats requests list. |
+| `person` | обязательный | кто подал заявку: ID из `chats requests list`. |
 
 #### `max chats requests decline`
 
@@ -656,18 +671,13 @@ max chats requests accept <chat> [person] [options]
 **Меняет что-то в MAX.**
 
 ```sh
-max chats requests decline <chat> [person] [options]
+max chats requests decline <chat> <person>
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
-| `person` | необязательный | кто подал заявку: ID из `chats requests list`. |
-
-| Опция | Что делает |
-|---|---|
-| `--all` | MAX не поддерживает; выберите одного человека из chats requests list. |
-| `--link <link>` | MAX не поддерживает; выберите одного человека из chats requests list. |
+| `person` | обязательный | кто подал заявку: ID из `chats requests list`. |
 
 ### `max chats folders`
 
@@ -1327,7 +1337,7 @@ max messages list <chat> [query] [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
-| `query` | необязательный | откуда начать и какая тема: id<42, date>2026-10-01, topic:12. |
+| `query` | необязательный | откуда начать: id<42, date>2026-10-01. |
 
 | Опция | Что делает |
 |---|---|
@@ -1502,7 +1512,6 @@ max messages send <chat> [text] [options]
 
 | Опция | Что делает |
 |---|---|
-| `--topic <id>` | send to this forum topic; unsupported by messengers without topics. |
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as`; обязательно, если чат по умолчанию публикует от другого имени. |
 | `--operation-id <id>` | повторить отправку с неизвестным исходом, не рискуя второй копией. |
@@ -1562,7 +1571,7 @@ max messages delete <chat> <messages> [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `chat` | обязательный | чат: его ID или часть названия. |
-| `messages` | обязательный | the message ids, at most 10. |
+| `messages` | обязательный | ID сообщений через пробелы или запятые, не больше 10. |
 
 | Опция | Что делает |
 |---|---|
@@ -2532,6 +2541,24 @@ max tasks agenda [query] [options]
 max tasks categories
 ```
 
+### `max tasks apply`
+
+правила задач для последних сохранённых сообщений чата: вопрос без ответа и упоминание вас открывают задачу, ваш ответ закрывает её — для чата, который первый sync не обработал (настройка task_first_pass_per_chat). Показывает, что откроется, и ничего не меняет без --yes; с --yes проверяет дубликаты как при sync. Читает только локальное хранилище
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max tasks apply <chat> [options]
+```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `chat` | обязательный | чат: его ID или часть названия. |
+
+| Опция | Что делает |
+|---|---|
+| `--last <n>` | прочитать последние n сохранённых сообщений каждого чата (по умолчанию 50, не больше 1000). |
+
 ### `max tasks claim`
 
 занять открытую задачу, чтобы другой агент не работал над ней одновременно; захват истекает сам
@@ -3013,7 +3040,7 @@ max tags list [query]
 
 ## `max mentions`
 
-телефоны, e-mail, ссылки, документы и имена людей, найденные в сохранённых сообщениях
+телефоны, e-mail, ссылки, документы, имена и адреса в сохранённых сообщениях
 
 ### `max mentions list`
 
@@ -3050,6 +3077,19 @@ max mentions domains [query] [options]
 | `--limit <n>` | сколько показать. |
 | `--page <n>` | какая страница, начиная с 1. |
 
+### `max mentions places`
+
+подтверждённые адреса во всех аккаунтах, часто упоминаемые первыми; `mentions confirm <id>` добавляет адрес
+
+```sh
+max mentions places [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--limit <n>` | сколько показать. |
+| `--page <n>` | какая страница, начиная с 1. |
+
 ### `max mentions show`
 
 одно упоминание, текст вокруг него и сколько ещё мест содержат то же значение
@@ -3064,7 +3104,7 @@ max mentions show <id>
 
 ### `max mentions confirm`
 
-указать, что это за упоминание: владельца телефона везде, где он записан, сохранённый документ, кого означает имя
+указать, что означает упоминание: владелец телефона везде, где он встречается, сохранённый документ, кому соответствует имя или адрес как место
 
 **Меняет что-то только на этом компьютере.**
 
@@ -3075,7 +3115,7 @@ max mentions confirm <id> [person] [options]
 | Аргумент | | Что это |
 |---|---|---|
 | `id` | обязательный | ID упоминания из mentions list. |
-| `person` | необязательный | person:<uid> или organization:<id> — владелец телефона или адреса; person:<uid> — тот, кого означает имя; документу он не нужен. |
+| `person` | необязательный | person:<uid> или organization:<id> — владелец телефона или e-mail; person:<uid> — кому соответствует имя; документу и почтовому адресу не нужен. |
 
 | Опция | Что делает |
 |---|---|
@@ -3113,7 +3153,7 @@ max mentions rebuild [kind]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `kind` | необязательный | только этот вид: person-name — после того как люди добавлены или переименованы. Одно из: `phone`, `email`, `url`, `document`, `person-name`. |
+| `kind` | необязательный | только этот вид: person-name — после того как люди добавлены или переименованы. Одно из: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
 
 ## `max images`
 
@@ -3269,11 +3309,10 @@ max search notes <query> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `query` | обязательный | строгий запрос Lucene: слова, "фразы", AND/OR/NOT, tag: и диапазоны дат. |
+| `query` | обязательный | строгий запрос Lucene: слова, "фразы", AND/OR/NOT, tag:, source:internal (написаны в memo), source:file (из папки заметок) и диапазоны дат. |
 
 | Опция | Что делает |
 |---|---|
-| `--type <internal\|file>` | только заметки, написанные в memo, или только заметки из папки. |
 | `--source <accounts>` | только эти аккаунты заметок через запятую: notes:internal для заметок, написанных в memo, notes:<folder id>, как его показывает найденное, notes, documents или group:<name>. |
 | `--filter <query>` | запрос, которому должно также соответствовать каждое совпадение; на поиск по смыслу он не влияет. |
 | `--limit <n>` | сколько результатов. |
@@ -3590,7 +3629,6 @@ max polls create <chat> <question> <answers> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--topic <id>` | send to this forum topic; unsupported by messengers without topics. |
 | `--multiple` | people may pick several answers. |
 | `--anonymous` | nobody sees who voted for what. |
 | `--revote` | people may change their vote. |
@@ -4192,7 +4230,7 @@ max config set <setting> <value> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 | `value` | обязательный | число, true или false либо список вроде contacts,polls. |
 
 | Опция | Что делает |
@@ -4213,7 +4251,7 @@ max config unset <setting> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
+| `setting` | обязательный | одно из: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 
 | Опция | Что делает |
 |---|---|

@@ -205,11 +205,10 @@ Los valores se comprueban con el mismo esquema usado para leer, **antes de escri
 Un campo desconocido se rechaza con su nombre y `configuration_error`, código `3`:
 
 ```json
-{"error":{"code":"configuration_error","reason":"config.invalid","message":"/home/you/.config/max-cli/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve"}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"/home/you/.config/max-cli/config.json: profiles.default.limitt is an unknown setting","retry":{"safe":false}}}
 ```
 
-Un tipo incorrecto identifica el campo y lo admitido: `profiles.default.limit: has to be a
-whole number, 1 or more, not "20"`.
+Un tipo incorrecto identifica el campo sin repetir su valor, que podría contener un token: `profiles.default.limit has the wrong type`. Si hay varios campos incorrectos, el error nombra el primero y cuenta los demás: `(and 2 more problems)`.
 
 Ignorar campos desconocidos ocultaría erratas y haría perder tiempo buscando por qué no funciona un ajuste.
 

@@ -20,7 +20,7 @@ In the output of `--json`, an error that ends the command is one line in stderr,
 |---|---|---|---|
 | `1` | `internal_error` | typo in the command name or failure in `max` itself | [wrong profile](#команда-отвечает-но-профиль-не-тот), [report](#как-сообщить-о-проблеме) |
 | `2` | `validation_error` | a value or combination of options that `max` does not accept; name matches multiple chats | [values](#--limit-takes-a-whole-number-from-1-upwards-not-abc), [multiple chats](#matches-n-chats) |
-| `3` | `configuration_error` | error in `config.json`, or a newer version recorded the local copy | [settings](#is-not-a-valid-config), [local copy](#the-message-store-was-written-by-a-newer-version-) |
+| `3` | `configuration_error` | error in `config.json`, or a newer version recorded the local copy | [settings](#is-an-unknown-setting), [local copy](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | no login, session ended, or keyring is unavailable | [no session](#no-session-for-profile-default), [token not readable](#no-token-found-for-profile-default-although-it-has-logged-in-on-this-machine) |
 | `5` | `permission_error` | `permissions` profile banned | [not allowed](#profile--does-not-let--write-или-profile--denies-) |
 | `6` | `not_found` | there is no such chat, message or person; the local copy is still empty | [no chat](#no-chat-matches), [nothing saved](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
@@ -149,10 +149,10 @@ The command is `chats`, plural. `max --help` lists all commands.
 
 ## Settings and option values
 
-### "is not a valid config"
+### "is an unknown setting"
 
 ```json
-{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json is not a valid config:\n  profiles.default.limitt: unknown setting — the known ones are limit, timeout_ms, color, record, keep_runs_for_days, allow, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve"}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json: profiles.default.limitt is an unknown setting","retry":{"safe":false}}}
 ```
 
 Code `3`. In a settings file, a field that is not in the schema is almost always a typo, and the message states its path. Rejected on purpose: a silently ignored field is worth half a day of bewilderment. All fields are in the [configuration reference](./configuration-reference.md).

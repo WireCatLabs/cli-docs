@@ -257,6 +257,27 @@ max chats show <chat>
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
 
+### `max chats documents`
+
+the Google Docs and Drive documents linked in a chat's stored messages
+
+#### `max chats documents list`
+
+every document link in the chat, newest first, and whether the store has it
+
+```sh
+max chats documents list <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+
 ### `max chats events`
 
 who joined, left, was added or removed, and by whom — from the chat's service messages; the last 7 days unless the query names time
@@ -313,7 +334,6 @@ max chats mark-read <chat> [options]
 | Option | Purpose |
 |---|---|
 | `--until-id <id>` | only up to this message id; the newest by default. |
-| `--topic <id>` | mark only this forum topic read; unsupported by messengers without topics. |
 
 ### `max chats leave`
 
@@ -629,18 +649,13 @@ let them in; the group sees them join
 **Changes something in MAX.**
 
 ```sh
-max chats requests accept <chat> [person] [options]
+max chats requests accept <chat> <person>
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
-| `person` | optional | who asked: an id from `chats requests list`. |
-
-| Option | Purpose |
-|---|---|
-| `--all` | not supported by MAX; select one person from chats requests list. |
-| `--link <link>` | not supported by MAX; select one person from chats requests list. |
+| `person` | required | who asked: an id from `chats requests list`. |
 
 #### `max chats requests decline`
 
@@ -649,18 +664,13 @@ turn the request away
 **Changes something in MAX.**
 
 ```sh
-max chats requests decline <chat> [person] [options]
+max chats requests decline <chat> <person>
 ```
 
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
-| `person` | optional | who asked: an id from `chats requests list`. |
-
-| Option | Purpose |
-|---|---|
-| `--all` | not supported by MAX; select one person from chats requests list. |
-| `--link <link>` | not supported by MAX; select one person from chats requests list. |
+| `person` | required | who asked: an id from `chats requests list`. |
 
 ### `max chats folders`
 
@@ -1320,7 +1330,7 @@ max messages list <chat> [query] [options]
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
-| `query` | optional | where to start and which topic: id<42, date>2026-10-01, topic:12. |
+| `query` | optional | where to start: id<42, date>2026-10-01. |
 
 | Option | Purpose |
 |---|---|
@@ -1495,7 +1505,6 @@ max messages send <chat> [text] [options]
 
 | Option | Purpose |
 |---|---|
-| `--topic <id>` | send to this forum topic; unsupported by messengers without topics. |
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--send-as <id>` | post as one of the identities `chats send-as` lists; required where the chat posts as someone else by default. |
 | `--operation-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
@@ -1555,7 +1564,7 @@ max messages delete <chat> <messages> [options]
 | Argument | | Meaning |
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
-| `messages` | required | the message ids, at most 10. |
+| `messages` | required | the message ids, by spaces or commas, at most 10. |
 
 | Option | Purpose |
 |---|---|
@@ -2525,6 +2534,24 @@ the categories a task takes, with what each means and the words a rule picks it 
 max tasks categories
 ```
 
+### `max tasks apply`
+
+the task rules over a chat's newest stored messages: a question nobody answered and a mention of you open a task, and your answer closes one — for a chat the first sync left alone (config task_first_pass_per_chat). Lists what would open and changes nothing unless --yes; with --yes the duplicate check runs as on a sync. Reads only the local store
+
+**Changes something only on this computer.**
+
+```sh
+max tasks apply <chat> [options]
+```
+
+| Argument | | Meaning |
+|---|---|---|
+| `chat` | required | a chat: its id, or part of its title. |
+
+| Option | What it does |
+|---|---|
+| `--last <n>` | read the newest n stored messages of each chat (default 50, at most 1000). |
+
 ### `max tasks claim`
 
 take an open task so no other agent works it at once; the claim lapses by itself
@@ -3006,7 +3033,7 @@ max tags list [query]
 
 ## `max mentions`
 
-phones, e-mail, links, documents and people's names found in stored messages
+phones, e-mail, links, documents, names and addresses in stored messages
 
 ### `max mentions list`
 
@@ -3043,6 +3070,19 @@ max mentions domains [query] [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 
+### `max mentions places`
+
+confirmed addresses, in every account, most mentioned first; `mentions confirm <id>` adds one
+
+```sh
+max mentions places [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+
 ### `max mentions show`
 
 one mention, the text around it, and how many other places hold its value
@@ -3057,7 +3097,7 @@ max mentions show <id>
 
 ### `max mentions confirm`
 
-say what a mention is: a phone's owner everywhere it is written, the stored document, who a name means
+say what a mention is: a phone's owner everywhere it is written, the stored document, who a name means, an address as a place
 
 **Changes something on this computer only.**
 
@@ -3068,7 +3108,7 @@ max mentions confirm <id> [person] [options]
 | Argument | | Meaning |
 |---|---|---|
 | `id` | required | the mention's id, from mentions list. |
-| `person` | optional | person:<uid> or organization:<id> that owns the phone or the address; person:<uid> a name means; a document needs none. |
+| `person` | optional | person:<uid> or organization:<id> that owns the phone or the e-mail address; person:<uid> a name means; a document or a street address needs none. |
 
 | Option | Purpose |
 |---|---|
@@ -3106,7 +3146,7 @@ max mentions rebuild [kind]
 
 | Argument | | Meaning |
 |---|---|---|
-| `kind` | optional | only this kind: person-name after people were added or renamed. One of: `phone`, `email`, `url`, `document`, `person-name`. |
+| `kind` | optional | only this kind: person-name after people were added or renamed. One of: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
 
 ## `max images`
 
@@ -3262,11 +3302,10 @@ max search notes <query> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, tag: and date ranges. |
+| `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, tag:, source:internal (written in memo) or source:file (from a notes folder) and date ranges. |
 
 | Option | Purpose |
 |---|---|
-| `--type <internal\|file>` | only notes written in memo, or only notes from a folder. |
 | `--source <accounts>` | only these notes accounts, separated by commas: notes:internal for notes written in memo, notes:<folder id> as a hit shows it, notes, documents or group:<name>. |
 | `--filter <query>` | a query every hit must also match; it does not change the search by meaning. |
 | `--limit <n>` | how many. |
@@ -3583,7 +3622,6 @@ max polls create <chat> <question> <answers> [options]
 
 | Option | Purpose |
 |---|---|
-| `--topic <id>` | send to this forum topic; unsupported by messengers without topics. |
 | `--multiple` | people may pick several answers. |
 | `--anonymous` | nobody sees who voted for what. |
 | `--revote` | people may change their vote. |
@@ -4185,7 +4223,7 @@ max config set <setting> <value> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
+| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 | `value` | required | a number, true or false, or a list like contacts,polls. |
 
 | Option | Purpose |
@@ -4206,7 +4244,7 @@ max config unset <setting> [options]
 
 | Argument | | Meaning |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min. |
+| `setting` | required | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, sender_colors, catch_up_marks_read, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 
 | Option | Purpose |
 |---|---|

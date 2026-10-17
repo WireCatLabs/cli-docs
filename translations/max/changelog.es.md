@@ -4,6 +4,47 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.58.0 — 17.10.2026
+
+### Seguridad
+
+- **Los datos internos de los adjuntos quedan fuera de la salida**, incluido el flujo de eventos del bot (cli-core 0.315.0). Las claves multimedia y el token permanecen dentro del cliente.
+
+- **Los archivos de estado de WhatsApp no se pueden enviar como adjuntos** (cli-core 0.314.0). La protección comprueba los directorios predeterminados, las variables de entorno y los enlaces simbólicos; los archivos normales contiguos siguen permitidos.
+
+### Novedades
+
+- **Los nombres y las direcciones se pueden revisar como menciones** (cli-core 0.311.0). `mentions rebuild person-name` y `mentions rebuild place` los encuentran en el texto guardado; `mentions places` muestra las direcciones confirmadas.
+- **`tasks apply <chat...>` muestra las tareas del historial guardado seleccionado.** `--yes` las crea con comprobación de duplicados.
+
+### Cambios — pueden romper scripts
+
+- **La primera sincronización no abre tareas de mensajes antiguos por defecto** (cli-core 0.311.0). `task_first_pass_per_chat` activa su creación; `tasks apply` permite revisar los chats elegidos por separado. Las siguientes sincronizaciones siguen procesando mensajes nuevos.
+
+### Correcciones
+
+- **`max doctor report create` escribe un informe incluso con ajustes incorrectos.** Antes se detenía con `configuration_error` y no dejaba ningún informe que compartir. Ahora el informe muestra el error de ajustes en lugar de la comprobación del perfil, nombra el ajuste incorrecto sin su valor e incluye la última ejecución fallida.
+
+## 0.57.0 — 17.10.2026
+
+### Novedades
+
+- **Los documentos de Drive aparecen en la búsqueda local compartida** (cli-core 0.301.0), con su enlace de Google y fecha de modificación. `--source drive:<профиль>` elige el perfil importado. `chats documents list <чат>` muestra los documentos compartidos en mensajes guardados sin consultar MAX.
+
+- **El servidor MCP solo se carga cuando max se ejecuta como MCP** (cli-core 0.300.0): las demás órdenes cargan aproximadamente una décima parte menos de archivos al arrancar.
+- **La ficha de una tarea muestra las tareas que apuntan a ella** (cli-core 0.304.0): `tasks show` imprime `task:<id> follow-up-of this task`, mientras que `--json` y MCP devuelven `linked_from`. Antes solo la tarea nueva mostraba el vínculo, no la cerrada.
+- **max arranca aproximadamente un cuarto más rápido después de la primera ejecución.** El código compilado de Node se guarda en la carpeta temporal del sistema, configurable con `NODE_COMPILE_CACHE`: `max --help` tarda unos 0,42 segundos en lugar de 0,56.
+
+### Cambios — pueden romper scripts
+
+- **Los errores de ajustes ocupan una línea sin repetir el valor** (cli-core 0.304.0): el primer campo incorrecto, el motivo y el número de errores adicionales, como `config.json: profiles.default.limitt is an unknown setting (and 2 more
+  problems)`. Un campo antiguo (`clientId`) indica su nuevo nombre (`rename it to client_id`, cli-core 0.307.0). Antes se enumeraban todos los errores y campos admitidos y se citaba el valor, que podía contener un token por accidente.
+- **`search notes` selecciona notas mediante `source:internal` o `source:file` en la consulta** (cli-core 0.303.0). Se eliminan la opción `--type` y el campo `type` de MCP `search_notes`. El nombre coincide con el campo `source` de la nota. `--source notes:<папка>` sigue eligiendo qué cuentas leer.
+- **El aviso diario de actualizaciones también queda en silencio con `--timeout=5`, `--help=…` y otros argumentos separados por `=`**, como ya ocurría con `--timeout 5`. La comprobación ahora procede de cli-core compartido.
+- **Se ocultan las órdenes que MAX no admite** (cli-core 0.299.0). `messages send`, `chats mark-read` y `polls create` no tienen `--topic`, porque MAX no tiene temas de foro. `messages list` no acepta `topic:`; `chats requests
+  accept` y `decline` no tienen `--all` ni `--link`, por lo que siempre requieren una persona. Antes se mostraban esas opciones, pero se rechazaban.
+- **`max doctor` responde incluso con ajustes incorrectos.** Antes devolvía `configuration_error` y código 3; ahora devuelve `config: {error: …}`, nombra el ajuste incorrecto y sale con código 0. `doctor` se usa precisamente cuando los ajustes fallan. Los scripts que detectaban ajustes incorrectos por su código de salida deben consultar `config.error`.
+
 ## 0.56.0 — 16.10.2026
 
 ### Añadido
@@ -1307,7 +1348,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.56.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.58.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
