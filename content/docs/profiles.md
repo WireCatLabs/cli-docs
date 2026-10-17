@@ -11,14 +11,15 @@ Put the profile before the command:
 
 ```sh
 tg work config show
-max work config show
 drive personal config show
 ```
 
-Always name the intended profile in commands and agent requests. Drive account commands require
-it explicitly; an omitted name is an error. The reviewed Telegram/MAX releases retain default
-selection when a name is omitted, so keep specifying it there too. A setting under `profiles.work`
-applies to that profile; `defaults` supplies values it has not set.
+Name the profile in every command and agent request: `tg work …`, or `TG_PROFILE=work` for a whole
+session (each tool reads its own `<CLI>_PROFILE`). No profile is ever picked for you. A command
+that needs one and names none stops with an error that lists the profiles on this computer. A
+`default_profile` left in the settings file by an older version also stops the command;
+`tg config unset default_profile` removes it. A setting under `profiles.work` applies to that
+profile; `defaults` supplies values it has not set.
 Profiles are not separate operating-system users: an agent with unrestricted file access
 can still reach other data on that computer.
 

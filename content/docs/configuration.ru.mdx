@@ -51,7 +51,6 @@ tg personal config unset limit
 
 ```json
 {
-  "defaultProfile": "personal",
   "defaults": { "limit": 20, "keepRunsForDays": 14, "updateCheck": true },
   "profiles": {
     "personal": { "limit": 50, "color": true },
@@ -62,7 +61,6 @@ tg personal config unset limit
 }
 ```
 
-- `defaultProfile` используется, когда команда не называет профиль.
 - `defaults` действуют для всех профилей, `profiles.<имя>` — для одного.
 - `personal` действует только для команд вашего аккаунта, `bot` — только для команд `tg <имя> bot …` и `max <имя> bot …`.
 - `work` записывает каждый запуск и может только читать сообщения.

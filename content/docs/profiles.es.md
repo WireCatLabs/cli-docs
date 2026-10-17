@@ -11,14 +11,15 @@ Pon el nombre antes del comando:
 
 ```sh
 tg work config show
-max work config show
 drive personal config show
 ```
 
-Indica siempre el perfil previsto en comandos y peticiones al agente. Los comandos de cuenta
-Drive lo requieren explícitamente; omitirlo es un error. Las versiones revisadas de Telegram/MAX
-conservan la selección predeterminada sin nombre, así que indícalo también allí. `profiles.work`
-se aplica a ese perfil y `defaults` aporta valores ausentes. Un perfil no es otro usuario del SO: un agente con acceso
+Indica el perfil en cada comando y petición al agente: `tg work …`, o `TG_PROFILE=work` para toda
+una sesión (cada herramienta lee su propio `<CLI>_PROFILE`). Nunca se elige un perfil por ti. Un
+comando que necesita perfil y no lo indica se detiene con un error que lista los perfiles de este
+ordenador. Un `default_profile` que dejó una versión anterior en el archivo de ajustes también
+detiene el comando; `tg config unset default_profile` lo quita. `profiles.work` se aplica a ese
+perfil y `defaults` aporta valores ausentes. Un perfil no es otro usuario del SO: un agente con acceso
 completo a archivos puede acceder a otros datos del mismo ordenador.
 
 ## Cambiar a un bot
