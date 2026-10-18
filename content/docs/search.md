@@ -97,11 +97,11 @@ Message search offers several approaches:
 - **A word or exact phrase:** when you remember the wording. Use `exact:` for literal matching.
 - **Part of a word:** `flat*` finds words starting with that part, such as “flat” and “flats”.
 - **Word forms and shared stems:** “invoice” can find “invoices”. Which forms match depends on the archive's language settings.
-- **Typos:** the default search does not correct typos. Ask your agent to allow misspellings: it can select `--language legacy` for typo-tolerant discovery, or search by the start of the word.
+- **Typos:** the default search does not correct typos. Ask your agent to allow misspellings: it can add `--discover`, which also tries close spellings of the words in the local archive, or search by the start of the word.
 - **Meaning:** when you remember the subject, such as “the renovation deadline we agreed”, rather than the words. This needs a prepared discussion index.
 
 Word forms, exact matching, indexes and meaning-based search: **[How search works](./search-architecture.mdx)**.
-Detailed syntax: [Telegram](./tg/query-language.md) and [MAX](./max/query-language.md). The `--language legacy` option is listed in the command references for [Telegram](./tg/commands.md#tg-search-messages) and [MAX](./max/commands.md#max-search-messages). These modes describe message search;
+Detailed syntax: [Telegram](./tg/query-language.md) and [MAX](./max/query-language.md). The `--discover` option is listed in the command references for [Telegram](./tg/commands.md#tg-search-messages) and [MAX](./max/commands.md#max-search-messages). These modes describe message search;
 chat-title and person-name lookup can behave differently.
 
 ## Narrow the conversation

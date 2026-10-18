@@ -263,11 +263,11 @@ La extracción de PDF necesita el paquete opcional `unpdf`; Word necesita `mammo
 **Muchos escaneos a la vez** pueden ir al servicio modelo que usted elija. Configure un modelo de visión en `models.ocr` y mantenga su clave con el `models text key set` habitual. Reemplace `your-vision-model` con el nombre de su modelo.
 
 ```sh
-tg config set models.ocr.provider openai
+tg personal config set models.ocr.provider openai
 ```
 
 ```sh
-tg config set models.ocr.model your-vision-model
+tg personal config set models.ocr.model your-vision-model
 ```
 
 ```sh

@@ -2069,5 +2069,31 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "commands",
+    "reason": "The Bot API getFile text carries a URL template with <token> and <file_path>; unquoted, the page reads them as HTML tags and the link stops at /file/bot, which is a 404.",
+    "source": "https://core.telegram.org/bots/api#getfile",
+    "replacements": {
+      "en": [
+        {
+          "before": "via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken",
+          "after": "via the link `https://api.telegram.org/file/bot<token>/<file_path>`, where `<file_path>` is taken"
+        }
+      ],
+      "ru": [
+        {
+          "before": "via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken",
+          "after": "via the link `https://api.telegram.org/file/bot<token>/<file_path>`, where `<file_path>` is taken"
+        }
+      ],
+      "es": [
+        {
+          "before": "via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken",
+          "after": "via the link `https://api.telegram.org/file/bot<token>/<file_path>`, where `<file_path>` is taken"
+        }
+      ]
+    }
   }
 ]

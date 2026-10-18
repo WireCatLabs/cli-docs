@@ -223,7 +223,7 @@ Code `7`. The command level is `ask`, but there is no one to answer: there is no
 
 If the messenger specifies a wait time, `max` remembers it for the operation and chat. A retry before it expires immediately returns code `8` without contacting the messenger. MAX does not currently specify such times, so no hold is recorded for a personal MAX account and sends are not held. A sign-in cooldown in `max` protects against frequent sign-ins; `max personal doctor` shows its duration.
 
-Remembered waits and send holds appear in `max personal server status` (`flood`). `max flood
+Remembered waits and send holds appear in `max personal server status` (`flood`). `max personal flood
 clear` forgets them without changing anything in MAX. Run it only when MAX is no longer limiting the account. MCP has no such command: an agent must not clear a limit to retry.
 
 ## MAX and network

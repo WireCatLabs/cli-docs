@@ -119,7 +119,7 @@ Qué hace cada parte:
 
 ## Tres formas de establecer un valor
 
-- **En el archivo:** el valor permanece para comandos posteriores. `tg config set limit 50` lo guarda.
+- **En el archivo:** el valor permanece para comandos posteriores. `tg personal config set limit 50` lo guarda.
 - **Con una variable de entorno:** el valor es válido para un terminal o un proceso de agente.   Por ejemplo, `TG_PROFILE` elige un perfil y `TG_TIMEOUT` limita cuánto tiempo se puede ejecutar un comando.   Sólo algunas configuraciones tienen una variable.
 - **Con una opción:** `--limit 5` cambia solo este comando.
 
@@ -132,11 +132,11 @@ Una opción gana a una variable de entorno. Luego viene el valor propio del perf
 Puede editar el archivo en cualquier editor de texto o dejar que `tg` lo haga. `config set` comprueba el valor antes de escribirlo, por lo que nunca guarda un archivo que un comando posterior rechace.
 
 ```sh
-tg config set limit 50                 # the profile you use now
+tg personal config set limit 50        # the profile "personal"
 tg work config set limit 50            # the profile "work"
 tg config set sends_per_hour 10 --defaults   # every profile
-tg config unset limit                  # back to the default
-tg config show                         # check what is in force, and where each value came from
+tg personal config unset limit         # back to the default
+tg personal config show                # check what is in force, and where each value came from
 ```
 
 Una configuración mal escrita en el archivo es un error, no un valor predeterminado silencioso: cada comando se detiene y nombra la clave incorrecta ([errores tipográficos en el archivo](./configuration-reference.md#a-typo-is-an-error-not-a-default)).

@@ -21,7 +21,7 @@ Algunas palabras que utiliza esta página:
 | Vea cada solicitud a medida que sucede | `tg --trace …` | no, imprime solo en stderr |
 | Mantenga un registro de una ejecución | `tg --record …` | sí, un registro de ejecución |
 | Encuentra una ejecución fallida más tarde | `tg personal runs list` | una ejecución fallida se mantiene sola |
-| Mantenga un registro de cada ejecución | `tg config set record true` | sí, cada ejecución |
+| Mantenga un registro de cada ejecución | `tg personal config set record true` | sí, cada ejecución |
 | Verifique la instalación | `tg personal doctor`, `tg personal doctor --online` | no |
 | Hacer un informe de problema | `tg personal doctor report create` | sí, un archivo que envías |
 
@@ -65,8 +65,8 @@ Las búsquedas y consultas de estadísticas exitosas mantienen su propio histori
 ## Cuándo registrar todas las ejecuciones
 
 ```sh
-tg config set record true          # this profile
-tg --no-record chats list          # but not this one
+tg personal config set record true          # profile "personal"
+tg personal --no-record chats list          # but not this one
 ```
 
 Luego se mantiene cada ejecución. De forma predeterminada, una ejecución que funcionó no se escribe hasta que usted la solicita. Una herramienta de mensajería que guarda una carpeta de a quién lees y cuándo sería un diario de tu vida que nadie pidió.

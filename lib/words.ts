@@ -38,6 +38,56 @@ export type Words = {
   }
 }
 
+// drive, memo and zm have no `setup`; each request follows that tool's own first steps.
+const toolPrompts: Record<string, Record<string, (pkg: string) => string>> = {
+  en: {
+    drive: (pkg) => `Install drive with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
+Read drive personal session start --help (personal is a profile name; any name works), then help me run it.
+Warn me first: Google may show an "unverified app" screen. Read https://wirecat.dev/en/docs/drive/installation for what to do.
+Check the sign-in with drive personal session list --json.
+Then help me choose a first folder (drive personal folders --help) and import it with drive personal sync.`,
+    memo: (pkg) => `Install memo with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
+Run memo doctor: it lists what needs attention and the command that fixes each. Help me work through it.
+Read memo --help and suggest next steps for my notes and mail.
+At the end, offer to install the memo skill for my agent: memo skill install --for all.`,
+    zm: (pkg) => `Install zm with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
+Run zm doctor. Read https://wirecat.dev/en/docs/zm/installation and zm session start --help, then help me log in with zm session start.
+At the end, offer to install the zm skill for my agent: zm skill install --for all.`,
+  },
+  ru: {
+    drive: (
+      pkg,
+    ) => `Установи drive через npm install -g ${pkg}. Перед этим проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
+Прочитай drive personal session start --help (personal — имя профиля, подойдёт любое), затем помоги выполнить эту команду.
+Сначала предупреди: Google может показать экран «непроверенное приложение». Что делать — на https://wirecat.dev/ru/docs/drive/installation.
+Проверь вход командой drive personal session list --json.
+Затем помоги выбрать первую папку (drive personal folders --help) и импортировать её командой drive personal sync.`,
+    memo: (
+      pkg,
+    ) => `Установи memo через npm install -g ${pkg}. Перед этим проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
+Выполни memo doctor: он перечисляет, что требует внимания, и команду, которая это исправляет. Помоги пройти по списку.
+Прочитай memo --help и предложи следующие шаги для моих заметок и почты.
+В конце предложи установить memo skill для моего агента: memo skill install --for all.`,
+    zm: (pkg) => `Установи zm через npm install -g ${pkg}. Перед этим проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
+Выполни zm doctor. Прочитай https://wirecat.dev/ru/docs/zm/installation и zm session start --help, затем помоги войти командой zm session start.
+В конце предложи установить zm skill для моего агента: zm skill install --for all.`,
+  },
+  es: {
+    drive: (pkg) => `Instala drive con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
+Lee drive personal session start --help (personal es un nombre de perfil; sirve cualquiera) y ayúdame a ejecutarlo.
+Avísame antes: Google puede mostrar una pantalla de «aplicación no verificada». Qué hacer: https://wirecat.dev/es/docs/drive/installation.
+Comprueba el acceso con drive personal session list --json.
+Después ayúdame a elegir una primera carpeta (drive personal folders --help) e importarla con drive personal sync.`,
+    memo: (pkg) => `Instala memo con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
+Ejecuta memo doctor: indica lo que necesita atención y el comando que lo arregla. Ayúdame a recorrer la lista.
+Lee memo --help y propone los siguientes pasos para mis notas y mi correo.
+Al terminar, ofrece instalar el skill de memo para mi agente: memo skill install --for all.`,
+    zm: (pkg) => `Instala zm con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
+Ejecuta zm doctor. Lee https://wirecat.dev/es/docs/zm/installation y zm session start --help, y ayúdame a iniciar sesión con zm session start.
+Al terminar, ofrece instalar el skill de zm para mi agente: zm skill install --for all.`,
+  },
+}
+
 const languageName: Record<string, Record<string, string>> = {
   en: { en: "English", ru: "Russian", es: "Spanish" },
   ru: { en: "английском", ru: "русском", es: "испанском" },
@@ -85,9 +135,10 @@ Verify node --version and npm --version, then continue setting up the messenger.
       login: "Log in",
       timing: "Allow about 5 minutes for setup. Downloading chat history is a separate step and may take longer.",
       prompt: (tool, pkg) =>
+        toolPrompts.en[tool]?.(pkg) ??
         `Install ${tool} with npm install -g ${pkg}.
-Read ${tool} setup --help, explain the setup steps and allow about five minutes, then help me run ${tool} setup.
-Run ${tool} doctor and suggest next steps.
+Read ${tool} setup --help, explain the steps and allow about five minutes, then help me run ${tool} personal setup (personal is a profile name; any name works).
+Run ${tool} personal doctor and suggest next steps.
 Before installation, check Node.js 22.16+ (22.x) or 24+ and npm; help me install them if needed.
 At the end, offer to install the ${tool} skill for my agent.`,
     },
@@ -133,9 +184,10 @@ At the end, offer to install the ${tool} skill for my agent.`,
       timing:
         "На настройку заложите около 5 минут. Скачивание истории чатов — отдельный шаг, который может занять больше времени.",
       prompt: (tool, pkg) =>
+        toolPrompts.ru[tool]?.(pkg) ??
         `Установи ${tool} через npm install -g ${pkg}.
-Прочитай ${tool} setup --help, предупреди о шагах настройки и что понадобится около пяти минут, затем помоги выполнить ${tool} setup.
-Выполни ${tool} doctor и предложи следующие шаги.
+Прочитай ${tool} setup --help, предупреди о шагах и что понадобится около пяти минут, затем помоги выполнить ${tool} personal setup (personal — имя профиля, подойдёт любое).
+Выполни ${tool} personal doctor и предложи следующие шаги.
 Перед установкой проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm; если нужно, помоги их установить.
 В конце предложи установить ${tool} skill для моего агента.`,
     },
@@ -181,9 +233,10 @@ Verifica node --version y npm --version y continúa con la configuración del se
       timing:
         "Reserva unos 5 minutos para la configuración. Descargar el historial es un paso separado y puede tardar más.",
       prompt: (tool, pkg) =>
+        toolPrompts.es[tool]?.(pkg) ??
         `Instala ${tool} con npm install -g ${pkg}.
-Lee ${tool} setup --help, explica los pasos y que harán falta unos cinco minutos, y ayúdame a ejecutar ${tool} setup.
-Ejecuta ${tool} doctor y propone los siguientes pasos.
+Lee ${tool} setup --help, explica los pasos y que harán falta unos cinco minutos, y ayúdame a ejecutar ${tool} personal setup (personal es un nombre de perfil; sirve cualquiera).
+Ejecuta ${tool} personal doctor y propone los siguientes pasos.
 Antes de instalar, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm; ayúdame a instalarlos si hace falta.
 Al terminar, ofrece instalar el skill de ${tool} para mi agente.`,
     },

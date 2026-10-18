@@ -144,7 +144,7 @@ Aquí `chat` se interpretó como perfil y `list` no es un comando. El correcto e
 
 ### "… is not a valid config"
 
-Código de salida `3`. `config.json` tiene una configuración que `tg` no conoce o un valor del tipo incorrecto. El error nombra la configuración y el perfil en el que se encuentra. Se rechaza a propósito: un escenario ignorado silenciosamente cuesta medio día. Arréglelo a mano o elimínelo con `tg config unset <setting>` ([un error tipográfico es un error](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
+Código de salida `3`. `config.json` tiene una configuración que `tg` no conoce o un valor del tipo incorrecto. El error nombra la configuración y el perfil en el que se encuentra. Se rechaza a propósito: un escenario ignorado silenciosamente cuesta medio día. Arréglelo a mano o elimínelo con `tg personal config unset <setting>` ([un error tipográfico es un error](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
 
 ### "--limit takes a whole number from 1 upwards"
 
@@ -197,7 +197,7 @@ Código `5`. Telegram limita una cuenta que ha escrito a demasiadas personas que
 
 ### "profile … has sent N messages in the hour …"
 
-Código `8`. Límite por hora del perfil (`sends_per_hour`, 30 por defecto). El error indica cuándo podrá enviar de nuevo. Auméntalo solo si pretendías enviar esa cantidad: `tg config set sends_per_hour <n>`.
+Código `8`. Límite por hora del perfil (`sends_per_hour`, 30 por defecto). El error indica cuándo podrá enviar de nuevo. Auméntalo solo si pretendías enviar esa cantidad: `tg personal config set sends_per_hour <n>`.
 
 ### "chat … is not on the recipient list of profile …"
 
@@ -240,10 +240,10 @@ Código de salida `10`. No pudo establecerse la conexión o se interrumpió: no 
 Código `3`. El fallo está en el proxy, no en Telegram: nada llegó a Telegram, así que ni siquiera un envío salió. `tg` se detiene en la primera conexión fallida en lugar de esperar al límite de tiempo.
 
 - **cannot be reached (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`)**: el proxy no funciona o su host o puerto son incorrectos.
-- **refused: … auth …** o **refused the tunnel (HTTP 407)**: usuario o contraseña incorrectos. Vuelve a configurarlo con `tg config set proxy -`.
+- **refused: … auth …** o **refused the tunnel (HTTP 407)**: usuario o contraseña incorrectos. Vuelve a configurarlo con `tg personal config set proxy -`.
 - **refused the tunnel (HTTP 403 or 502)**: el proxy no quiere o no puede llegar a Telegram.
 
-`tg personal doctor` muestra el proxy en uso, de dónde viene (`TG_PROXY` o la configuración) y si la Bot API pasa por él. Para probar sin él, `tg config unset proxy`. Un MTProxy con un secreto incorrecto suele parecer un bloqueo más que un rechazo: limítalo con `--timeout 30s`.
+`tg personal doctor` muestra el proxy en uso, de dónde viene (`TG_PROXY` o la configuración) y si la Bot API pasa por él. Para probar sin él, `tg personal config unset proxy`. Un MTProxy con un secreto incorrecto suele parecer un bloqueo más que un rechazo: limítalo con `--timeout 30s`.
 
 ### Un comando se bloquea
 

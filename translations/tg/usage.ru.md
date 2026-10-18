@@ -1068,7 +1068,7 @@ tg config show                                 # every setting, and where it cam
 ```
 
 ```sh
-tg config set limit 50
+tg personal config set limit 50
 ```
 
 ```sh
@@ -1076,11 +1076,11 @@ tg work config set permissions.messages readonly   # profile "work" changes no m
 ```
 
 ```sh
-tg config set permissions.messages.send ask        # a yes or no before each send
+tg personal config set permissions.messages.send ask  # a yes or no before each send
 ```
 
 ```sh
-tg config set sends_per_hour 10
+tg personal config set sends_per_hour 10
 ```
 
 `permissions` сообщает, что профиль может делать для каждой команды: `deny`, `readonly`, `ask` или `allow`. По умолчанию все разрешено, а удаление сообщений и завершение сессий спрашивается в первую очередь. Отказ — это код выхода `5`, а в ошибке указывается команда, которая это разрешает. **В файле нет поля для секрета.** Каждая настройка и переменная: [конфигурация](./configuration.md).

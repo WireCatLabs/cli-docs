@@ -92,7 +92,7 @@ answer and never plain text. A name that the archive does not know is not looked
 ## Mentions
 
 `max` finds phone numbers, email addresses, links, documents and names of people in the saved messages. These fields
-find the messages that contain them. `max mentions list` shows the findings themselves.
+find the messages that contain them. `max personal mentions list` shows the findings themselves.
 
 ```sh
 max personal search messages 'phone:"+34 600 000 000"'
@@ -106,7 +106,7 @@ Put a value with `+` or `@` in quotes: both signs are operators. A phone number 
 reference to a person, organization or document; the field finds the messages whose mentions you linked to it with
 `max mentions confirm`.
 
-`max mentions list --new` shows what is unresolved since the last `--new`, and `max mentions domains` shows the sites links lead to, most frequent first. `confirm` and `reject` with `--all-in-chat` resolve a name across the whole chat at once.
+`max personal mentions list --new` shows what is unresolved since the last `--new`, and `max personal mentions domains` shows the sites links lead to, most frequent first. `confirm` and `reject` with `--all-in-chat` resolve a name across the whole chat at once.
 
 ## Presets
 

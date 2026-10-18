@@ -21,7 +21,7 @@ title: "Диагностика: что сделала команда"
 | Просматривайте каждый запрос в реальном времени | `tg --trace …` | нет, печатает только в stderr |
 | Запишите один запуск | `tg --record …` | да, запись запуска |
 | Найти неудачный запуск позже | `tg personal runs list` | неудачный запуск сохраняется сам по себе |
-| Записывайте каждый запуск | `tg config set record true` | да, каждый запуск |
+| Записывайте каждый запуск | `tg personal config set record true` | да, каждый запуск |
 | Проверьте установку | `tg personal doctor`, `tg personal doctor --online` | нет |
 | Сообщить о проблеме | `tg personal doctor report create` | да, один файл вы отправите |
 
@@ -65,8 +65,8 @@ tg personal runs path <run-id>  # the folder that holds it
 ## Как записывать каждый запуск
 
 ```sh
-tg config set record true          # this profile
-tg --no-record chats list          # but not this one
+tg personal config set record true          # profile "personal"
+tg personal --no-record chats list          # but not this one
 ```
 
 Тогда каждый запуск сохраняется. По умолчанию полностью успешный запуск не записывается, пока вы не спросите. Если инструмент мессенджера хранит сведения о том, чьи сообщения вы читали и когда, он ведёт дневник вашей жизни, о котором никто не просил.

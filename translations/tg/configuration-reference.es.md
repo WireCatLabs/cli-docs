@@ -146,9 +146,9 @@ Funciona en ambos sentidos: `messages: allow` en un perfil también oculta `mess
 **Los valores predeterminados permiten todo excepto algunos cambios que son difíciles de revertir.** Estos preguntan: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` y `account.sessions.end`. Es posible que las reglas de respuesta no se envíen hasta que usted lo permita: `replies.send` es `deny`. Un valor predeterminado incorporado solo endurece: `messages: readonly` aún rechaza una eliminación, y `messages: allow` mantiene la pregunta antes de una eliminación hasta que usted configure `messages.delete`.
 
 ```sh
-tg config set permissions.messages.delete allow     # delete without the question
-tg config set permissions.messages.send ask         # ask before every send
-tg config unset permissions.messages.delete         # back to the default
+tg personal config set permissions.messages.delete allow  # delete without the question
+tg personal config set permissions.messages.send ask      # ask before every send
+tg personal config unset permissions.messages.delete      # back to the default
 ```
 
 Para rechazar cada cambio en Telegram desde un perfil (aquí el perfil `agent`), configure cada recurso:
@@ -180,13 +180,13 @@ nunca los afloja ([configuración en el navegador](./remote.md)). La confirmaci�
 ## Cambiar ajustes sin abrir el archivo
 
 ```sh
-tg config set limit 50                        # this profile
+tg personal config set limit 50               # profile "personal"
 tg work config set permissions.contacts readonly   # profile "work"; one key at a time
 tg config set sends_per_hour 10 --defaults      # every profile
 tg config set limit 30 --personal --defaults  # every personal account
 tg shop config set sends_per_hour 200 --bot     # only the bot "shop"
 tg config set update_check false --defaults    # a setting that exists only under defaults
-tg config unset sends_per_hour                  # back to the default
+tg personal config unset sends_per_hour         # back to the default
 ```
 
 `config set` valida el valor con las mismas reglas que el lector, por lo que no genera un archivo que los siguientes comandos rechacen.
@@ -211,11 +211,11 @@ Si se ignorase un ajuste mal escrito, el programa usaría el valor predeterminad
 Donde Telegram está bloqueado, `tg` puede llegar a él a través de un proxy: SOCKS5, un proxy HTTP que admita `CONNECT` o un MTProxy. Un ajuste `proxy` por perfil, o para todos los perfiles con `--defaults`. Configúralo antes de `tg personal setup`: el inicio de sesión también pasa por él.
 
 ```sh
-tg config set proxy socks5://proxy.example:1080       # no password: on the command line
-tg config set proxy http://alice@proxy.example:3128   # a user without a password
-tg config set proxy -                                 # with a password or an MTProxy secret
+tg personal config set proxy socks5://proxy.example:1080      # no password: on the command line
+tg personal config set proxy http://alice@proxy.example:3128  # a user without a password
+tg personal config set proxy -                                # with a password or an MTProxy secret
 proxy URL, hidden as you type: tg://proxy?server=mt.example&port=443&secret=ee…
-tg config unset proxy
+tg personal config unset proxy
 ```
 
 | Forma | Tipo |

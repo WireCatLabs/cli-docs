@@ -59,7 +59,7 @@ Después, consulta qué habría respondido, actívala e inicia el servidor:
 ```sh
 tg personal replies test --since-time 7d
 tg personal replies on away
-tg config set permissions.replies.send allow
+tg personal config set permissions.replies.send allow
 tg personal serve
 ```
 

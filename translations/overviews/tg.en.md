@@ -57,7 +57,7 @@ First, the command asks for your phone number and a code sent in Telegram to obt
 Reading **does not mark messages as read**. Sending, deleting and other changes require separate
 commands. You can restrict the agent's access: see [access and safety](/en/docs/tg/security).
 
-Word search asks both the local archive and the messenger by default (`--backend both`); use `--backend archive` for local-only results. Strict Lucene is the default query language; `--language legacy` restores the previous matching and typo correction. Prepare saved history before archive-only search, counting or rankings, and check coverage before treating an empty result as proof that a message is absent. See [search](/en/docs/tg/search).
+Word search asks both the local archive and the messenger by default (`--backend both`); use `--backend archive` for local-only results. The query language is strict Lucene and does not correct typos; `--discover` also tries close spellings in the local archive. Prepare saved history before archive-only search, counting or rankings, and check coverage before treating an empty result as proof that a message is absent. See [search](/en/docs/tg/search).
 
 ## Find the guide for your task
 
