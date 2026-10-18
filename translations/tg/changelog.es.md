@@ -4,6 +4,41 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.72.0 — 18.10.2026
+
+### Novedades
+
+- **`tg tasks agenda` muestra lo que otros te deben** (cli-core 0.328.0): las tareas abiertas que hace otra persona, de
+  la más antigua a la más reciente, con sus responsables, en una sección «assigned» y en `assigned` en JSON.
+
+### Cambios — pueden romper scripts
+
+- **Una ruta de comando dada como un solo argumento falla** (cli-core 0.328.0): `tg 'chats list' --help` imprimía la
+  ayuda general y salía con 0; ahora falla e indica la línea de comandos que hay que ejecutar.
+- **Un comando interactivo sin terminal espera 5 minutos por defecto, no 30 segundos** (cli-core 0.328.0), para que el
+  `tg session start --qr-file` de un agente no se corte antes de escanear el código. `--timeout` y `TG_TIMEOUT` siguen
+  decidiendo cuando se indican.
+- **Con `TG_READ_ONLY`, una escritura que pregunta primero se detiene con salida 5 antes de preguntar, no con salida 7**
+  (cli-core 0.329.0): `messages delete`, `topics delete`, `account sessions end`, `chats delete` y `chats clear`
+  decían «pregunta antes de actuar», como si `--allow-dangerous` los dejara pasar. Ahora dicen «este proceso es de solo
+  lectura», como cualquier otra escritura. Sin el bloqueo preguntan como antes.
+
+### Correcciones
+
+- **Menos sugerencias falsas de duplicados por cadenas de respuestas** (cli-core 0.331.0): una respuesta que pide algo
+  nuevo ya no marca dos tareas como posiblemente la misma.
+- **`tg chats list --json | head` termina sin ruido** (cli-core 0.328.0), también a través de un `serve` en marcha, en
+  lugar de imprimir una traza de pila cuando el lector se detiene.
+
+### Seguridad
+
+- **`tg session end` ya no cierra la sesión de un `tg serve` en marcha** (cli-core 0.328.0): con `serve` en marcha para
+  el perfil, `session end` se le pasaba a `serve` para que lo ejecutara. Cerraba la conexión que usaba `serve` y
+  borraba el archivo de sesión que `serve` aún tenía abierto. Ahora `session start`, `session end` y `setup` nunca se
+  ejecutan a través de `serve`, y `session end` se detiene con salida 2 y pide ejecutar antes
+  `tg <profile> server stop`. Con `TG_READ_ONLY` los tres siguen deteniéndose con salida 5, ahora con «no puede iniciar
+  ni cerrar sesión».
+
 ## 0.71.0 — 17.10.2026
 
 ### Cambios — pueden romper scripts

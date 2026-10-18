@@ -107,7 +107,7 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `analysis_model` | ninguno; requerido para `--analyze` | modelo de análisis | `build --model` |
 | `analysis_base_url` | predeterminado del proveedor | punto final API de análisis | `build --base-url` |
 | `models` | ninguno | modelos externos por finalidad ([abajo](#models-by-purpose)) | Variables `TG_MODELS_*` |
-| `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `english,spanish` | los idiomas de raíz de palabras para buscar en todal archivo local ([abajo](#search-languages)) | ninguno |
+| `search_stemmers.cyrillic`, `search_stemmers.latin` | `russian`, `english,spanish` | los idiomas de raíz de palabras para buscar en todal archivo local ([abajo](#search-languages)) | ninguno |
 
 El archivo se escribe `0600` cuando se creó por primera vez y `0644` por `config set`. No guarda ningún secreto.
 
@@ -193,7 +193,7 @@ tg config unset sends_per_hour                  # back to the default
 
 ### Idiomas de búsqueda
 
-`searchStemmers.cyrillic` (`russian` o `none`) y `searchStemmers.latin` (`english`, `spanish`, ambos separados por comas (el valor predeterminado) o `none`) se mantienen en el almacén local compartido, no en el archivo de configuración: un valor para cada perfil y para ambas CLI. Por lo tanto, `--defaults`, `--personal` y `--bot` no se aceptan con ellos, y un proceso bajo `TG_PROFILE_LOCK` no puede cambiarlos. `config unset` restaura el valor incorporado. Después de un cambio, reconstruya el índice de búsqueda ([mantenimiento del índice](./archive.md#repair-and-index-maintenance)).
+`search_stemmers.cyrillic` (`russian` o `none`) y `search_stemmers.latin` (`english`, `spanish`, ambos separados por comas (el valor predeterminado) o `none`) se mantienen en el almacén local compartido, no en el archivo de configuración: un valor para cada perfil y para ambas CLI. Por lo tanto, `--defaults`, `--personal` y `--bot` no se aceptan con ellos, y un proceso bajo `TG_PROFILE_LOCK` no puede cambiarlos. `config unset` restaura el valor incorporado. Después de un cambio, reconstruya el índice de búsqueda ([mantenimiento del índice](./archive.md#repair-and-index-maintenance)).
 
 ## Los errores de escritura no se ignoran
 
@@ -282,8 +282,8 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 | `embedding_dims` | entero 1–65,536 | perfil |
 | `analysis_provider` | `agent`, `openai`, `anthropic` | perfil |
 | `models` | objetos de propósito descritos a continuación | perfil |
-| `searchStemmers.cyrillic` | `russian`, `none` | archivo compartido, a través de `config set` |
-| `searchStemmers.latin` | `english`, `spanish`, ambos separados por comas, `none` | archivo compartido, a través de `config set` |
+| `search_stemmers.cyrillic` | `russian`, `none` | archivo compartido, a través de `config set` |
+| `search_stemmers.latin` | `english`, `spanish`, ambos separados por comas, `none` | archivo compartido, a través de `config set` |
 
 ### Modelos por finalidad
 

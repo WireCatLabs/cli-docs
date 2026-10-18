@@ -112,7 +112,8 @@ tarea encontrada en un mensaje puede tener responsables; las tareas de proyecto 
 Una tarea sin responsable está bien: es mejor que una tarea perdida. Si la herramienta no conoce a la
 persona que envió el mensaje, la tarea se añade igualmente, sin responsable.
 
-`tasks list "assignee:any state:open"` lista las tareas abiertas que otros te deben. `assignee:none`
+`tasks agenda` lista las tareas abiertas que otros te deben en "assigned", primero las más antiguas;
+`tasks list "assignee:any state:open"` también las lista. `assignee:none`
 encuentra las tareas sin responsable, y `assignee:person:<id>` las de una persona. Los agentes que usan
 el servidor MCP pasan `assignee` a `tasks_add` y `tasks_plan`.
 
@@ -173,8 +174,8 @@ te da muchas tareas.
   tarea.
 - Pide a tu agente que lea los mensajes nuevos de cada día y añada lo que las reglas no ven: peticiones
   y promesas sin signo de interrogación, tuyas y de otras personas.
-- Guarda lo que otros te deben como tareas con responsable y revisa
-  `tasks list "assignee:any state:open"`.
+- Guarda lo que otros te deben como tareas con responsable. La agenda las lista en "assigned", primero
+  las más antiguas.
 
 ```text prompt
 Usa tg CLI. Sincroniza mis chats y muéstrame la agenda de tareas. Después lee los mensajes nuevos de hoy en mis chats uno a uno y en los grupos con la etiqueta watch-tasks, y añade una tarea por cada petición o promesa que las reglas no detectaron, con el remitente como responsable cuando sea su promesa. Muéstrame la lista antes de añadir nada. No envíes nada.
@@ -246,7 +247,8 @@ tg personal tasks reject <task>
 </details>
 
 - **agenda** lista las tareas vencidas, las que vencen pronto o toca revisar, y después los chats
-  donde debes una respuesta y los chats donde la esperas tú. Avisa si el almacén lleva tiempo sin
+  donde debes una respuesta y los chats donde la esperas tú, y por último lo que otros te deben: las
+  tareas abiertas con responsable, primero las más antiguas. Avisa si el almacén lleva tiempo sin
   guardar nada.
 - **add** necesita un tipo. También necesita una categoría
   (`--category`), y se niega si ya existe una tarea parecida; consulta

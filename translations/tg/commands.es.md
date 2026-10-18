@@ -3652,7 +3652,7 @@ tg tasks unmerge <dup>
 
 ### `tg tasks agenda`
 
-lo que necesita una revisión hoy, desde el almacén local y sin texto de mensajes: tareas vencidas, con fecha límite o por revisar, chats donde debes una respuesta y chats donde esperas una
+lo que necesita una revisión hoy, desde el almacén local y sin texto de mensajes: tareas vencidas, con fecha límite o por revisar, chats donde debes una respuesta, chats donde esperas una y tareas abiertas que hace otra persona
 
 ```sh
 tg tasks agenda [query] [options]
