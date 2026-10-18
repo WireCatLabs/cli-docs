@@ -106,7 +106,10 @@ for (const lang of ["en", "ru", "es"] as const) {
     const text = await markdown.text()
     expect(text).toContain("Research Example")
     expect(text).toContain("zm meetings transcript 1 --json")
-    expect(text).toContain("zm remote-meetings list --json")
+    expect(text).toContain("zm meetings scheduled --limit 20 --json")
+    expect(text).toContain("zm meetings projects scan meeting:1/2 --cues 20 --json")
+    await expect(page.locator("main")).toContainText("zm meetings scheduled --limit 20 --json")
+    await expect(page.locator(`main a[href="/${lang}/docs/zm/usage#find-a-scheduled-meeting-series"]`)).toBeVisible()
     expect(text).toContain("zm meetings prepare <series-id> --json")
     expect(text).toContain('zm search meetings "launch decision" --json')
     expect(text).toContain("zm meetings passage meeting:3/15/20/4")
@@ -318,9 +321,9 @@ for (const lang of ["en", "ru", "es"] as const) {
   test(`${lang}: hosted calendar coverage and unverified dates survive Markdown export`, async ({ page, request }) => {
     await page.goto(`/${lang}/docs/zm/remote-meetings`)
     const limits = {
-      en: ["not list every invitation", "mark its date as unverified"],
-      ru: ["не включает все приглашения", "отметьте дату как неподтверждённую"],
-      es: ["No incluye todas las invitaciones", "marca la fecha como no verificada"],
+      en: ["not list every invitation", "rather than treating a listed date as proof of a future call"],
+      ru: ["не включает все приглашения", "дата в списке не доказывает будущий созвон"],
+      es: ["No incluye todas las invitaciones", "una fecha listada no prueba una futura llamada"],
     }[lang]
     for (const limit of limits) await expect(page.locator("main")).toContainText(limit)
     const prefix = lang === "en" ? "" : `${lang}/`
@@ -328,6 +331,10 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(response.ok()).toBe(true)
     const markdown = await response.text()
     for (const limit of limits) expect(markdown).toContain(limit)
+    for (const command of ["meetings scheduled", "meetings prepare <series-id>"]) {
+      await expect(page.locator("main")).toContainText(command)
+      expect(markdown).toContain(command)
+    }
     expect(markdown).toContain("meeting:read:list_meetings")
     expect(markdown).toContain("zm remote-meetings list --json")
   })
