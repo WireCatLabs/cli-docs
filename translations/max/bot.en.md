@@ -15,26 +15,26 @@ Terms used below:
 
 | Task | Command |
 | --- | --- |
-| Connect a bot and check which bot it is | `max <bot> bot auth set`, `max <bot> bot me` |
-| Send, edit, delete and pin messages and files | `max <bot> bot messages send\|edit\|delete\|pin` |
-| See new messages, button clicks and entries | `max <bot> bot watch` |
-| Read and search what the bot saw | `max <bot> bot messages list`, `max <bot> bot search messages` |
-| Download old chat history | `max <bot> bot store fetch` |
-| Manage members and admins | `max <bot> bot chats members`, `max <bot> bot chats admins` |
-| Bring order to the group according to your own rules | `max <bot> bot chats moderate` |
-| Reply in the comments under channel posts | `max <bot> bot comments` |
-| Respond to buttons, set command menus and webhooks | `max <bot> bot callbacks`, `commands`, `webhooks` |
-| Limit chats where the bot can write | `max <bot> bot recipients` |
-| Call any Bot API operation | `max <bot> bot api <operation>` |
-| Transfer bot to AI agent | `max <bot> bot mcp` |
+| Connect a bot and check which bot it is | `max <бот> bot auth set`, `max <бот> bot me` |
+| Send, edit, delete and pin messages and files | `max <бот> bot messages send\|edit\|delete\|pin` |
+| See new messages, button clicks and entries | `max <бот> bot watch` |
+| Read and search what the bot saw | `max <бот> bot messages list`, `max <бот> bot search messages` |
+| Download old chat history | `max <бот> bot store fetch` |
+| Manage members and admins | `max <бот> bot chats members`, `max <бот> bot chats admins` |
+| Bring order to the group according to your own rules | `max <бот> bot chats moderate` |
+| Reply in the comments under channel posts | `max <бот> bot comments` |
+| Respond to buttons, set command menus and webhooks | `max <бот> bot callbacks`, `commands`, `webhooks` |
+| Limit chats where the bot can write | `max <бот> bot recipients` |
+| Call any Bot API operation | `max <бот> bot api <операция>` |
+| Transfer bot to AI agent | `max <бот> bot mcp` |
 
 A complete list of commands and options is in the [command reference](./commands.md).
 
 ## Your first minute
 
 ```sh
-max sales bot auth set                                  # the token goes in hidden input
-max sales bot me                                        # which bot this is
+max sales bot auth set                                  # токен — в скрытом вводе
+max sales bot me                                        # какой это бот
 ```
 
 `auth set` asks MAX who the token belongs to before saving it. A typo cannot overwrite a working token.
@@ -43,7 +43,7 @@ max sales bot me                                        # which bot this is
 
 MAX has no list of all chats a bot belongs to, so obtain IDs from what the bot has done or received.
 
-- **A conversation with a person.** Address them as `user:<number>`. The send response includes the destination chat ID in `chat_id`.
+- **A conversation with a person.** Address them as `user:<номер>`. The send response includes the destination chat ID in `chat_id`.
 - **A group or channel.** Add the bot, then request the latest updates from MAX:
 
   ```sh
@@ -55,7 +55,7 @@ MAX has no list of all chats a bot belongs to, so obtain IDs from what the bot h
 Open the chat with `max sales bot chats show` and its ID. The bot then knows its title, which you can use in subsequent commands. `chats list` shows every chat the bot has already seen.
 
 - Group and channel IDs are **negative**.
-- A positive ID usually identifies a person. Use `user:<number>` for a person; without `user:`, MAX treats the ID as a chat and returns “chat not found” (code `6`), and `max` explains the correct form.
+- A positive ID usually identifies a person. Use `user:<номер>` for a person; without `user:`, MAX treats the ID as a chat and returns “chat not found” (code `6`), and `max` explains the correct form.
 
 ## Multiple bots
 
@@ -64,36 +64,36 @@ A bot is stored under a name you choose, used as the command's **first word**, j
 ```sh
 max sales bot auth set
 max support bot auth set
-max support bot messages send user:4815162342 "Your request is accepted"
-max sales bot list --check          # all names with a bot token, and the bot behind each
+max support bot messages send user:4815162342 "Ваша заявка принята"
+max sales bot list --check          # все имена с токеном бота и какой бот за каждым
 ```
 
 A profile name is required: the first word or `MAX_PROFILE` for the whole shell session. Without one, a bot command stops and lists the profiles.
 
 ## Token storage
 
-The token is stored in the system password store, under `bot:<name>`, separately from the personal-account token. If no password store is available, it goes into a file with permissions `0600`, just like a personal token.
+The token is stored in the system password store, under `bot:<имя>`, separately from the personal-account token. If no password store is available, it goes into a file with permissions `0600`, just like a personal token.
 
 ```sh
-max sales bot auth show       # where the token came from and which bot it is
-max sales bot auth remove     # forget the token
+max sales bot auth show       # откуда взят токен и какой это бот
+max sales bot auth remove     # забыть токен
 ```
 
 `MAX_BOT_TOKEN` takes precedence over stored credentials, which is useful in CI. `auth set` does not save a token from this variable.
 
 ## Messages
 
-Identify a chat by number and a person by `user:<number>`; a previously seen chat also accepts its name. Always name the chat with the message, keeping `max` and `tg` commands consistent where message numbers are chat-specific. `max` does not change a message from another chat.
+Identify a chat by number and a person by `user:<номер>`; a previously seen chat also accepts its name. Always name the chat with the message, keeping `max` and `tg` commands consistent where message numbers are chat-specific. `max` does not change a message from another chat.
 
 ```sh
-max sales bot messages send "Команда продаж" "Build is ready"
-max sales bot messages send user:4815162342 "Hello"
-max sales bot messages send "Команда продаж" "**Weekly summary** is pinned" --md
-max sales bot messages send "Команда продаж" "Accepted" --reply-to mid.0000019a7f3c21de
-echo "Text from a pipe" | max sales bot messages send "Команда продаж" -
+max sales bot messages send "Команда продаж" "Сборка готова"
+max sales bot messages send user:4815162342 "Здравствуйте"
+max sales bot messages send "Команда продаж" "**Итоги недели** в закрепе" --md
+max sales bot messages send "Команда продаж" "Принято" --reply-to mid.0000019a7f3c21de
+echo "Текст из трубы" | max sales bot messages send "Команда продаж" -
 max sales bot messages list "Команда продаж" --limit 20
 max sales bot messages show "Команда продаж" mid.0000019a7f3c21de
-max sales bot messages edit "Команда продаж" mid.0000019a7f3c21de "Corrected text"
+max sales bot messages edit "Команда продаж" mid.0000019a7f3c21de "Исправленный текст"
 max sales bot messages delete "Команда продаж" mid.0000019a7f3c21de --allow-dangerous
 max sales bot messages pin "Команда продаж" mid.0000019a7f3c21de --notify
 max sales bot messages unpin "Команда продаж" mid.0000019a7f3c21de
@@ -108,7 +108,7 @@ If the connection drops during a send, `max` does not retry automatically. It re
 `--file` attaches a file from disk. Images, video and audio are detected by extension; other files are sent as documents. `--photo` sends an image as a photo, `--voice` sends Ogg Opus as a voice message, and `--as-file` sends video as a document. Known credential files, `max`'s own directories and the message store require `--allow-any-file`; ordinary hidden working directories are allowed. Text is optional when sending a file:
 
 ```sh
-max sales bot messages send "Команда продаж" "Weekly report" --file report.pdf
+max sales bot messages send "Команда продаж" "Отчёт за неделю" --file report.pdf
 max sales bot messages send "Команда продаж" --file screenshot.png
 ```
 
@@ -128,7 +128,7 @@ MAX has no “all bot chats” endpoint. `chats list` therefore shows **chats th
 max sales bot chats list
 max sales bot chats show "Команда продаж"
 max sales bot chats action "Команда продаж" typing    # typing, photo, video, voice, file
-max sales bot chats leave "Команда продаж"    # only a chat admin can bring the bot back
+max sales bot chats leave "Команда продаж"    # вернуть бота может только админ чата
 ```
 
 ### Members and admins
@@ -137,14 +137,14 @@ The bot must be a chat admin with permission for the action.
 
 An administrator bot can add members through `bot chats members add`. [MAX documentation](https://dev.max.ru/docs-api) marks this method removed, but the MAX server executes it; the server determines availability.
 
-First allow the bot to join groups. By default, MAX prevents bots from being added to group chats, whether through the app or `max personal chats members add` (response `participants.filter.out`). Enable this at [business.max.ru](https://business.max.ru/self): bot → **⋮ → Settings → Privacy** ([MAX documentation](https://dev.max.ru/docs/chatbots/bots-create/manage)). Then add it to the group and make it an admin in the MAX app. Group checks require permission to read messages; without it, MAX returns no group messages. You can also grant it with your own account: `max personal chats admins add "Поход" <bot number> --can read,members,delete`.
+First allow the bot to join groups. By default, MAX prevents bots from being added to group chats, whether through the app or `max personal chats members add` (response `participants.filter.out`). Enable this at [business.max.ru](https://business.max.ru/self): bot → **⋮ → Settings → Privacy** ([MAX documentation](https://dev.max.ru/docs/chatbots/bots-create/manage)). Then add it to the group and make it an admin in the MAX app. Group checks require permission to read messages; without it, MAX returns no group messages. You can also grant it with your own account: `max personal chats admins add "Поход" <номер бота> --can read,members,delete`.
 
 ```sh
 max sales bot chats members list "Команда продаж" --limit 50
 max sales bot chats members add "Команда продаж" 4815162342 2342481516
 max sales bot chats members remove "Команда продаж" 4815162342 --block
 max sales bot chats admins list "Команда продаж"
-max sales bot chats admins add "Команда продаж" 4815162342 --can read,pin --title "On duty"
+max sales bot chats admins add "Команда продаж" 4815162342 --can read,pin --title "Дежурный"
 max sales bot chats admins remove "Команда продаж" 4815162342
 ```
 
@@ -160,14 +160,14 @@ max sales bot messages show "Команда продаж" mid.0000019a7f3c21de -
 max sales bot search messages "итоги недели"
 ```
 
-Search - by words, best matches on top; `--newest` - new on top. All the words are needed; `"phrase"`, `-word`, `a OR b` and filters `from:`, `chat:`, `after:`, `before:`, `has:` work, and the typo is corrected. To strictly search the general archive, use [regular search](./search.md) with `in:bots`.
+Search - by words, best matches on top; `--newest` - new on top. All the words are needed; `"фраза"`, `-слово`, `а OR б` and filters `from:`, `chat:`, `after:`, `before:`, `has:` work, and the typo is corrected. To strictly search the general archive, use [regular search](./search.md) with `in:bots`.
 
 Download older chat history into the local store:
 
 ```sh
-max sales bot store fetch "Команда продаж"                 # up to 1000 messages, newest first
-max sales bot store fetch "Команда продаж" --last 500      # until the last 500 are stored
-max sales bot store fetch "Команда продаж" --since-time 7d # over the last seven days
+max sales bot store fetch "Команда продаж"                 # до 1000 сообщений, новые сначала
+max sales bot store fetch "Команда продаж" --last 500      # пока не будет 500 последних
+max sales bot store fetch "Команда продаж" --since-time 7d # за последние семь дней
 ```
 
 Repeated runs resume where the previous run stopped without refetching downloaded messages. Requests pause one second (`--pause`) and fetch 100 messages each (`--page-size`).
@@ -177,9 +177,9 @@ Normal commands still query MAX, which has the full chat history. A message the 
 People are found in the same copy. Use an ID, `@username` or part of a name. If two people match, `max` shows both and asks for an ID.
 
 ```sh
-max sales bot contacts show @ann                 # where she wrote, and her private chat with the bot
-max sales bot contacts show @ann --sync-first    # first re-read the private chat from MAX
-max sales bot search messages --from @ann        # everything she wrote
+max sales bot contacts show @ann                 # где писала, и её личный чат с ботом
+max sales bot contacts show @ann --sync-first    # сначала перечитать личный чат у MAX
+max sales bot search messages --from @ann        # всё, что она написала
 max sales bot search messages "счёт" --from @ann --from Борис
 max sales bot messages between @ann Борис --limit 20
 ```
@@ -189,19 +189,19 @@ max sales bot messages between @ann Борис --limit 20
 **Each bot sees only its own local copy.** Reading another bot's copy requires both permission in configuration and an explicit request in the command:
 
 ```sh
-max shop config set --bot read_other_bots true          # the bot shop may read all bots
-max shop config set --bot read_other_bots news,support  # or only these
-max shop bot search messages заказ --bots news        # and then, explicitly, in the command
-max shop bot contacts show @ann --all-bots            # everyone it is allowed
+max shop config set --bot read_other_bots true          # боту shop можно читать всех ботов
+max shop config set --bot read_other_bots news,support  # или только этих
+max shop bot search messages заказ --bots news        # и тогда — явно, в команде
+max shop bot contacts show @ann --all-bots            # все, кого разрешено
 ```
 
-`--all-bots` and `--bots` are supported by `search messages`, `contacts show` and `messages between`. Without `read_other_bots`, both refuse with code `5` and name the command that enables access. Through `max <name> bot mcp`, the equivalent fields (`all_bots`, `bots`) are offered only when access is permitted.
+`--all-bots` and `--bots` are supported by `search messages`, `contacts show` and `messages between`. Without `read_other_bots`, both refuse with code `5` and name the command that enables access. Through `max <имя> bot mcp`, the equivalent fields (`all_bots`, `bots`) are offered only when access is permitted.
 
 ## Updates
 
 ```sh
-max sales bot watch                       # new messages, until Ctrl-C or --timeout
-max sales bot watch --events --jsonl       # and everything else: edits, deletions, buttons, who joined and left
+max sales bot watch                       # новые сообщения, до Ctrl-C или --timeout
+max sales bot watch --events --jsonl       # и всё остальное: правки, удаления, кнопки, кто вошёл и вышел
 max sales bot watch --types message_created,message_edited
 ```
 
@@ -214,10 +214,10 @@ Updates received by `watch` are no longer delivered to another reader using this
 A bot can follow a group where he is an admin, according to the same rules as `max personal chats moderate` for a personal account (see [rules in groups that you manage](./groups.md#правила)). Each bot has its own rules:
 
 ```sh
-max sales bot chats rules set -72894839451 invites remove        # invitations to other chats: delete the author
-max sales bot chats rules set -72894839451 consent.remove allow  # without asking
-max sales bot chats moderate -72894839451                        # check what is new
-max sales bot chats moderate -72894839451 --dry-run              # only show
+max sales bot chats rules set -72894839451 invites remove        # приглашения в чужие чаты — удалять автора
+max sales bot chats rules set -72894839451 consent.remove allow  # без вопросов
+max sales bot chats moderate -72894839451                        # проверить, что нового
+max sales bot chats moderate -72894839451 --dry-run              # только показать
 ```
 
 The check examines messages since the previous check (the past day on its first run) and new members, then performs actions allowed by rules and consent. Differences from personal accounts:
@@ -235,8 +235,8 @@ Comments appear under channel posts. Specify the post ID (`mid.…`) first, then
 ```sh
 max sales bot comments list mid.0000019a7f3c21de --limit 20
 max sales bot comments get mid.0000019a7f3c21de 42
-max sales bot comments send mid.0000019a7f3c21de "Thanks for the question"
-max sales bot comments edit mid.0000019a7f3c21de 42 "Fixed"
+max sales bot comments send mid.0000019a7f3c21de "Спасибо за вопрос"
+max sales bot comments edit mid.0000019a7f3c21de 42 "Исправлено"
 max sales bot comments delete mid.0000019a7f3c21de 42
 ```
 
@@ -247,8 +247,8 @@ Comments use the same recipient allowlist as messages sent to that channel.
 When someone presses a button under a bot message, the bot receives a callback ID (`callback_id`) and can answer it:
 
 ```sh
-max sales bot callbacks answer f9LHodD0cOL5 --notification "Done"
-max sales bot callbacks answer f9LHodD0cOL5 --text "Order confirmed"
+max sales bot callbacks answer f9LHodD0cOL5 --notification "Готово"
+max sales bot callbacks answer f9LHodD0cOL5 --text "Заказ подтверждён"
 ```
 
 `--notification` displays a short notice only to the person who pressed the button; `--text` replaces the message containing it. The response goes to the chat where the button was pressed, but the callback ID does not reveal that chat, so the recipient allowlist does not apply.
@@ -259,11 +259,11 @@ The menu is what someone sees when typing `/` in a bot chat.
 
 ```sh
 max sales bot commands list
-max sales bot commands set start=Start help=Help "report=Daily report"
+max sales bot commands set start=Начать help=Помощь "report=Отчёт за день"
 max sales bot commands clear
 ```
 
-`set` replaces the entire menu. Each entry is `name=description`; the description is optional.
+`set` replaces the entire menu. Each entry is `имя=описание`; the description is optional.
 
 ## Webhooks
 
@@ -292,7 +292,7 @@ Each bot has its own list of chats it may write to:
 max sales bot recipients add "Команда продаж"
 max sales bot recipients list
 max sales bot recipients remove "Команда продаж"
-max sales bot recipients clear            # writing to any chat is allowed again
+max sales bot recipients clear            # писать можно снова в любой чат
 ```
 
 Without a list, the bot may write anywhere. With one, sending to another chat refuses with code `7` and shows a command to add it.
@@ -303,16 +303,16 @@ Every bot write — send, edit, delete or pin — is logged:
 max sales bot sends list
 ```
 
-The journal records the chat, action type, outcome and text length, but no text. Recipient restrictions and journalling apply to **every** bot write, including `bot api`. A bot has no hourly send limit until one is set in configuration section `bot` (`max <name> config set --bot sends_per_hour 200`; see [configuration](./configuration.md)).
+The journal records the chat, action type, outcome and text length, but no text. Recipient restrictions and journalling apply to **every** bot write, including `bot api`. A bot has no hourly send limit until one is set in configuration section `bot` (`max <имя> config set --bot sends_per_hour 200`; see [configuration](./configuration.md)).
 
 ## Any API operation
 
-`max sales bot api <operation>` exposes all Bot API operations, including those without convenient commands above. Commands are generated from the official API schema; new operations appear after a schema update. Operation help lists accepted fields:
+`max sales bot api <операция>` exposes all Bot API operations, including those without convenient commands above. Commands are generated from the official API schema; new operations appear after a schema update. Operation help lists accepted fields:
 
 ```sh
 max sales bot api get-my-info
 max sales bot api get-subscriptions
-max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notification": "Done"}'
+max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notification": "Готово"}'
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
@@ -328,7 +328,7 @@ The failure or error is explained in the error message, and the command exits wi
 |---|---|---|
 | `4` | there is no bot token or MAX did not accept it | rerun `bot auth set` |
 | `5` | read-only profile or action not allowed `allow` | change permissions only if you want to allow it |
-| `6` | chat not found - for example, by name, which the bot has not yet seen, or a person without `user:` | indicate the chat number or `user:<number>`, or open the chat via `bot chats show` |
+| `6` | chat not found - for example, by name, which the bot has not yet seen, or a person without `user:` | indicate the chat number or `user:<номер>`, or open the chat via `bot chats show` |
 | `7` | chat is not in the list of bot recipients | add chat via `bot recipients add` |
 | `8` | exhausted `sends_per_hour` bot | wait or raise the limit |
 | `14` | no response received: unknown whether MAX completed the write | check chat before repeating |
@@ -337,15 +337,15 @@ The [command reference](./commands.md) lists all codes. Bot `--trace` and `--rec
 
 ## Certificate
 
-The `platform-api2.max.ru` certificate is signed by a Russian Ministry of Digital Development root certificate absent from Node. In Node, `max` adds it to the trusted certificates for the whole process: after the first bot request, every TLS connection in that `max` invocation trusts it, not only Bot API requests. In Bun it applies only to Bot API requests. The system is unchanged. Bot requests identify themselves as `max-cli/<version>`.
+The `platform-api2.max.ru` certificate is signed by a Russian Ministry of Digital Development root certificate absent from Node. In Node, `max` adds it to the trusted certificates for the whole process: after the first bot request, every TLS connection in that `max` invocation trusts it, not only Bot API requests. In Bun it applies only to Bot API requests. The system is unchanged. Bot requests identify themselves as `max-cli/<версия>`.
 
 ## Connecting a bot to an agent (MCP)
 
-`max <name> bot mcp` gives your AI agent access to a bot, just as `max personal mcp` exposes your personal account:
+`max <имя> bot mcp` gives your AI agent access to a bot, just as `max personal mcp` exposes your personal account:
 
 ```sh
 claude mcp add sales-bot -- max sales bot mcp
-max sales bot mcp config          # an entry for Claude Desktop, Cursor and other apps
+max sales bot mcp config          # запись для Claude Desktop, Cursor и других приложений
 ```
 
 The agent can access what the bot profile permits: the bot, chats it has seen, messages, search, people, members and administrators, comments, command menus, the log and recipient list. If the profile is not read-only, it can also write as the bot: send, edit, pin, indicate typing, comment, answer buttons, delete, add or remove members, and check a chat against its rules (`max_bot_write` (`command: "chats moderate"`)). `max_bot_read` (`command: "status"`) shows which profile the server represents, where the token comes from, which bot it is and which write tools are enabled.
@@ -357,4 +357,4 @@ The agent can access what the bot profile permits: the bot, chats it has seen, m
 
 Every write runs the command you would type yourself and checks the bot's recipient list, `permissions` and journal. The agent cannot access the token or webhooks. It can read the recipient list, command menu and administrators but cannot change them; leaving chats, sending files and `bot api` are also unavailable to it.
 
-With `--md`, the bot uses MAX rules: `__bold__`, `++underline++`, `^^highlighted^^`, links, code, headings and quotations. The formatter creates safe HTML with escaped text and addresses; this is an internal representation, and the --md argument remains Markdown.
+With `--md`, the bot uses MAX rules: `__жирный__`, `++подчёркнутый++`, `^^выделенный^^`, links, code, headings and quotations. The formatter creates safe HTML with escaped text and addresses; this is an internal representation, and the --md argument remains Markdown.

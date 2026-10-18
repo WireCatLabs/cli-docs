@@ -35,32 +35,32 @@ The entire search is in one command group, `max personal search`. If you don't k
 
 | Task | Command |
 |---|---|
-| Search immediately in messages and notes | `max personal search all '<query>'` |
-| Search messenger messages; without `--discover`, also on the MAX server in one chat | `max personal search messages '<query>'` |
-| Search mail | `memo search mail '<query>'` — `max` has no such command |
-| Search notes from memo or folder | `max personal search notes '<query>'` |
-| Find a discussion by what it was about | `max personal search conversations '<question>'` ([search by topic](./topic-search.md)) |
-| Count matches by chats, people, days or hours | `max personal stats messages show '<query>'` |
-| Save search and run it again | `max personal searches create`, `max personal search messages --saved <name>` |
+| Search immediately in messages and notes | `max personal search all '<запрос>'` |
+| Search messenger messages; without `--discover`, also on the MAX server in one chat | `max personal search messages '<запрос>'` |
+| Search mail | `memo search mail '<запрос>'` — `max` has no such command |
+| Search notes from memo or folder | `max personal search notes '<запрос>'` |
+| Find a discussion by what it was about | `max personal search conversations '<вопрос>'` ([search by topic](./topic-search.md)) |
+| Count matches by chats, people, days or hours | `max personal stats messages show '<запрос>'` |
+| Save search and run it again | `max personal searches create`, `max personal search messages --saved <имя>` |
 
 ```sh
-max personal search all 'договор аренды'                 # messages and notes, best first
+max personal search all 'договор аренды'                 # сообщения и заметки, лучшее первым
 ```
 
 ```sh
-max personal search messages 'договор chat:Друзья'     # messenger messages only
+max personal search messages 'договор chat:Друзья'     # только сообщения мессенджеров
 ```
 
 ```sh
-memo search mail 'счёт'                                  # mail is memo's; max search mail points you to it
+memo search mail 'счёт'                                  # почта — это memo; max search mail подскажет его
 ```
 
 ```sh
-max personal search notes 'бюджет source:internal'       # notes written in memo only
+max personal search notes 'бюджет source:internal'       # только заметки, написанные в memo
 ```
 
 ```sh
-max personal search conversations 'переезд на дачу'      # conversations close in meaning
+max personal search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
 ```
 
 `search all` labels each match as a message (`msg:…`) or note (`note:…`). `max` does not search mail: neither `search messages` nor `search all` does; `max personal search mail` answers with a hint, “mail is memo's: install @wirecat/cli-memo, then `memo search mail …`”. In `search messages`, `NOT has:attachment`, `has:voice` and `has:file` in the query keep only text, voice messages or files; `source:internal` and `source:file` in the `search notes` query select memo or folder notes. When a field does not apply, for example `chat:`/`from:` for notes, `search all` skips that source and explains why.
@@ -100,11 +100,11 @@ An empty result is not proof that the message never existed. Check the reported 
 Good search requires downloaded chats. The MAX server searches only one specified chat. Everything else uses only the archive: searching all chats, counting with `stats`, topic search, `has:`, `filename:`, regex, presets, tags and word forms. Start by downloading all chats:
 
 ```sh
-max personal messages sync --all --background     # the last 90 days of every chat, in the background
+max personal messages sync --all --background     # последние 90 дней каждого чата, в фоне
 ```
 
 ```sh
-max personal store jobs show                    # how much is already downloaded
+max personal store jobs show                    # сколько уже скачано
 ```
 
 By default, a run downloads at most 1,200 messages per chat; repeat to continue. Use `--since-time 365d` for older history or `max personal messages sync Друзья` for one chat ([download history](./archive.md#скачать-историю)). `max personal serve` then keeps the archive current.
@@ -127,7 +127,7 @@ max personal search messages счёт
 ```
 
 ```sh
-max personal search messages '"счёт оплачен"'             # words in a row
+max personal search messages '"счёт оплачен"'             # слова подряд
 ```
 
 ```sh
@@ -139,7 +139,7 @@ max personal search messages '(кафе OR библиотека) NOT шумно'
 ```
 
 ```sh
-max personal search messages 'квартир*'                   # all words that start with "квартир"
+max personal search messages 'квартир*'                   # все слова, которые начинаются на «квартир»
 ```
 
 All adjacent query words must appear in the message. Search matches word forms: `квартира` finds «квартиру». Quotes preserve word order but also allow other forms. For an exact form, use `exact:квартира` or add `--exact` for words without an explicit field. An explicit `text:` still matches word forms. Case, stress marks, `ё` and `е` are treated alike. Typos are not corrected automatically. Word forms depend on the archive language settings.
@@ -155,7 +155,7 @@ max personal search messages 'from:("Алиса Тестова" OR "Борис �
 ```
 
 ```sh
-max personal search messages 'from:me date:7d'            # what you wrote over the week
+max personal search messages 'from:me date:7d'            # что вы писали за неделю
 ```
 
 ```sh
@@ -163,7 +163,7 @@ max personal search messages 'chat:"Книжный клуб" библиотек�
 ```
 
 ```sh
-max personal search messages 'паспорт kind:private'       # private conversations only
+max personal search messages 'паспорт kind:private'       # только личные переписки
 ```
 
 `kind:` accepts `private` (Personal), `group`, `channel`, `saved` (Favorites) and `bot`. Search in all archive accounts - `--source all`.
@@ -179,7 +179,7 @@ max personal search messages 'библиотека date:yesterday'
 ```
 
 ```sh
-max personal search messages 'счёт date:7d'               # from 7 days ago until now; also 30m, 2h
+max personal search messages 'счёт date:7d'               # от 7 дней назад до сейчас; также 30m, 2h
 ```
 
 ```sh
@@ -200,7 +200,7 @@ max personal search messages 'filename:*.pdf'
 ```
 
 ```sh
-max personal search messages 'filename:*договор*'         # part of the name
+max personal search messages 'filename:*договор*'         # часть имени
 ```
 
 ```sh
@@ -216,7 +216,7 @@ max personal search messages 'has:photo chat:"Книжный клуб"'
 ```
 
 ```sh
-max personal search messages 'has:link AND "github.com"'  # a link to a site
+max personal search messages 'has:link AND "github.com"'  # ссылка на сайт
 ```
 
 A file is found by name and size even when the message has no text. `filename:` compares the whole name, ignoring case, accents and `ё`. Sizes use KB, MB and GB of 1,024. MAX does not report the file type, so search by extension: `filename:*.pdf`, rather than `mime:`. `has:` also accepts `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` and `poll`. A link counts whether it appears in the text or only in a link card. A phone number, an email address, the site of a link or a confirmed person from the text are found by the fields `phone:`, `email:`, `url:`, `domain:` and `mentions:`; see [Mentions](./query-language.md#упоминания).
@@ -269,14 +269,14 @@ max personal attachments extract --chat "Книжный клуб" --ocr --concur
 
 `--ocr` sends images to the chosen service; otherwise no AI call occurs. Parallelism is 1–8, default 4; file limit is 1–500, default 100. Continue with the returned `cursor`. PDF scans require optional `unpdf` and `@napi-rs/canvas`, with at most 20 pages per document. Text-layer pages stay local. File hashes and the selected model allow reuse. Agent text and prior indexed text survive errors or cancellation. Check `failed` and each file status; provider rate limits stop further calls in that run. `--offline` cannot combine with `--ocr`.
 
-**Files already saved.** `max personal attachments extract --chat <chat> --from-dir ./files` reads one folder without subfolders. It requires one uniquely matching source file or a complete set with downloader filenames. Do not combine `--from-dir` with `--download` or `--output-dir`. `max personal messages download <chat> <id> --extract` reads only files downloaded in this run; `--all --extract` does this for the entire run. Hashes detect changed files; agent text stays protected. Bounded MCP extraction returns a continuation `cursor` and file information, not text.
+**Files already saved.** `max personal attachments extract --chat <чат> --from-dir ./files` reads one folder without subfolders. It requires one uniquely matching source file or a complete set with downloader filenames. Do not combine `--from-dir` with `--download` or `--output-dir`. `max personal messages download <чат> <id> --extract` reads only files downloaded in this run; `--all --extract` does this for the entire run. Hashes detect changed files; agent text stays protected. Bounded MCP extraction returns a continuation `cursor` and file information, not text.
 
 `--from-dir` refuses known credential files and folders, the CLI’s own folders and the message store; ordinary hidden working folders are allowed. MCP extraction downloads require `output_dir` outside protected locations. PDF text extraction has no separate page-count limit or 30-second timer; command cancellation and file-size and text-size limits still apply.
 
 ## Passwords, codes and cards
 
 ```sh
-max personal search messages 'preset:secret kind:saved'   # something that looks like a password or token in Saved Messages
+max personal search messages 'preset:secret kind:saved'   # что-то похожее на пароль или токен в Избранном
 ```
 
 ```sh
@@ -313,33 +313,33 @@ max personal search messages 'счёт NOT tag:work'
 max personal tags remove work --chat "Книжный клуб"
 ```
 
-A tag is your own label on a chat, a person or one message (`--message <id> --chat <chat>`). It stays in the local archive and is never sent to MAX. `tag:work` finds messages tagged `work`, messages in a chat with that tag and messages from a person with that tag. A tag is 1–32 characters: Latin letters a–z, digits and hyphens.
+A tag is your own label on a chat, a person or one message (`--message <id> --chat <чат>`). It stays in the local archive and is never sent to MAX. `tag:work` finds messages tagged `work`, messages in a chat with that tag and messages from a person with that tag. A tag is 1–32 characters: Latin letters a–z, digits and hyphens.
 
 Group and channel tags can be generated automatically from their title, username and description, without reading messages or using a model:
 
 ```sh
-max personal metadata refresh --chat "Книжный клуб"   # read the chat description from MAX (the chat itself is not changed)
+max personal metadata refresh --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
 ```
 
 ```sh
-max personal metadata refresh --only-missing          # all saved groups and channels whose description has not been read yet
+max personal metadata refresh --only-missing          # все сохранённые группы и каналы, у которых описание ещё не читалось
 ```
 
 ```sh
-max personal tags auto --dry-run                      # what would result, without writing
+max personal tags auto --dry-run                      # что получилось бы, без записи
 ```
 
 ```sh
-max personal tags auto                                # write the automatic labels
+max personal tags auto                                # записать автоматические метки
 ```
 
 ```sh
-max personal tags list sources:auto                  # automatic ones only
+max personal tags list sources:auto                  # только автоматические
 ```
 
 Automatic tagging leaves your tags intact: rerunning it removes only outdated automatic tags. If you manually add a tag that was already added automatically, it becomes your own tag.
 
-`max personal tags auto` processes up to 50 chats per run; `--limit` raises the cap to 500, and `--chat` selects chats (repeatable). `--dry-run` uses the saved descriptions. To read fresh ones before tagging, add `--sync-first` without `--dry-run`. `max personal metadata get --chat <chat>` shows the saved description.
+`max personal tags auto` processes up to 50 chats per run; `--limit` raises the cap to 500, and `--chat` selects chats (repeatable). `--dry-run` uses the saved descriptions. To read fresh ones before tagging, add `--sync-first` without `--dry-run`. `max personal metadata get --chat <чат>` shows the saved description.
 
 ## Saved searches and history
 
@@ -352,7 +352,7 @@ max personal search messages --saved meetings
 ```
 
 ```sh
-max personal search messages --saved meetings 'date:today'   # the words are added with AND
+max personal search messages --saved meetings 'date:today'   # слова добавляются через AND
 ```
 
 ```sh
@@ -368,7 +368,7 @@ max personal searches history --limit 10
 ```
 
 ```sh
-max personal search messages --saved 42                   # a history entry, by its number
+max personal search messages --saved 42                   # строка истории, по её номеру
 ```
 
 `searches create` saves a query with its options and runs nothing; an existing name needs `--replace`.
@@ -382,7 +382,7 @@ Saved searches and history live in the archive shared by `max` and `tg`: both se
 ## Count messages: `stats messages show`
 
 ```sh
-max personal stats messages show счёт                          # how many in each chat
+max personal stats messages show счёт                          # сколько в каждом чате
 ```
 
 ```sh
@@ -394,7 +394,7 @@ max personal stats messages show 'from:me' --by day --timezone Europe/Madrid
 ```
 
 ```sh
-max personal stats messages show --by hour                     # all saved messages
+max personal stats messages show --by hour                     # все сохранённые сообщения
 ```
 
 `stats messages show` counts each message that `search messages` would find with the same query once. `--by chat` (the default) and `--by sender` sort the highest counts first; `--by day` and `--by hour` use chronological order. If some chats are only partly saved, the counts are lower bounds, and stderr reports how many chats are incomplete.
@@ -406,22 +406,22 @@ When a query contains words and `--discover` is not set, `max` queries both the 
 With a chat (`chat:` in the query), the server searches that chat. Without a chat, the server searches all chats the way the search bar on web.max.ru does: in one request, returning one message from each chat — the best match. The archive finds the other matches in those chats if it has them. Chat titles and public channels are not included in the answer.
 
 ```sh
-max personal search messages 'счёт chat:"Книжный клуб"'                    # archive and the MAX server, one chat
+max personal search messages 'счёт chat:"Книжный клуб"'                    # архив и сервер MAX, один чат
 ```
 
 ```sh
-max personal search messages 'счёт'                                          # archive and the MAX server, all chats
+max personal search messages 'счёт'                                          # архив и сервер MAX, все чаты
 ```
 
 ```sh
-max personal search messages 'счёт chat:"Книжный клуб"' --backend server   # only what the server found
+max personal search messages 'счёт chat:"Книжный клуб"' --backend server   # только то, что нашёл сервер
 ```
 
 ```sh
-max personal search messages 'счёт' --backend archive                        # archive only
+max personal search messages 'счёт' --backend archive                        # только архив
 ```
 
-The server also matches word prefixes, but not other word forms: `книгу` will not find «книга». `max` therefore treats its results as candidates: it saves them in the archive and checks them against your query using the archive rules. `exact:`, `-word`, quotes and result ordering work as they do without the server, and messages are not duplicated. `max` waits at most 5 seconds for the server (`--server-time`, up to 60 seconds) and marks nothing as read.
+The server also matches word prefixes, but not other word forms: `книгу` will not find «книга». `max` therefore treats its results as candidates: it saves them in the archive and checks them against your query using the archive rules. `exact:`, `-слово`, quotes and result ordering work as they do without the server, and messages are not duplicated. `max` waits at most 5 seconds for the server (`--server-time`, up to 60 seconds) and marks nothing as read.
 
 With `--json`, each message has `found_in` (`archive`, `server` or `both`). When searching both sources, an unavailable server or a read-only profile still allows archive results. An explicit `--backend server` fails if the profile does not allow server search. The required permission is `messages.server-search`.
 
@@ -447,9 +447,9 @@ A terminal shows a message feed. `--json` returns one object with messages and s
 
 An empty answer means “not in the archive you searched”, not “never sent”. `max personal store status` shows what is stored; `max personal messages sync` adds history. With `--json`, the answer reports which chats were searched and how complete they are, even without matches. If `max` asks for `max personal store migrate`, the word index is still being built; searches without words (`has:file`, `date:today`) already work.
 
-**Gaps in history.** `max personal store gaps plan <chat>` locally identifies gaps between saved ranges. Missing message ids and quiet periods alone do not prove missing history; archive edges remain `unknown`. Review the plan, then `max personal store gaps repair <chat> --fingerprint <hash>` downloads gaps. Defaults: 5 gaps, 500 messages, 30 seconds; adjust through `--max-gaps`, `--limit`, `--repair-time`, `--page-size` and `--pause`. A repeated run checks remaining gaps and never deletes a message just because MAX omitted it. Ambiguous same-time pages remain incomplete. `--background` starts a job managed through `store jobs show`, `store jobs list` and `store jobs cancel`. Repair requires `store.gaps.repair` and read permission; planning never connects. MCP discovers commands through `max_tools_search`, reads plans/jobs through `max_read`, and repairs through `max_write`.
+**Gaps in history.** `max personal store gaps plan <чат>` locally identifies gaps between saved ranges. Missing message ids and quiet periods alone do not prove missing history; archive edges remain `unknown`. Review the plan, then `max personal store gaps repair <чат> --fingerprint <хеш>` downloads gaps. Defaults: 5 gaps, 500 messages, 30 seconds; adjust through `--max-gaps`, `--limit`, `--repair-time`, `--page-size` and `--pause`. A repeated run checks remaining gaps and never deletes a message just because MAX omitted it. Ambiguous same-time pages remain incomplete. `--background` starts a job managed through `store jobs show`, `store jobs list` and `store jobs cancel`. Repair requires `store.gaps.repair` and read permission; planning never connects. MCP discovers commands through `max_tools_search`, reads plans/jobs through `max_read`, and repairs through `max_write`.
 
-**Prepare topic search while downloading.** `max personal messages sync <chat> --catch-up` builds discussions and local vectors for only that chat after download ([topic search](./topic-search.md)). It is off by default; `search_catch_up: true` enables it and `--no-catch-up` disables it for one run. Limits: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. It neither downloads recognition files automatically nor calls a remote service. `prepared` reports preparation separately; downloaded history survives regardless.
+**Prepare topic search while downloading.** `max personal messages sync <чат> --catch-up` builds discussions and local vectors for only that chat after download ([topic search](./topic-search.md)). It is off by default; `search_catch_up: true` enables it and `--no-catch-up` disables it for one run. Limits: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. It neither downloads recognition files automatically nor calls a remote service. `prepared` reports preparation separately; downloaded history survives regardless.
 
 ## Next steps
 
@@ -472,7 +472,7 @@ max personal images embed
 ```
 
 `images models download clip-b32` downloads the model once (about 155 MB). `images embed` processes pictures that do
-not have a vector yet and continues from where it stopped. `--chat <chat>` and `--limit <n>` limit the amount. Nothing
+not have a vector yet and continues from where it stopped. `--chat <чат>` and `--limit <n>` limit the amount. Nothing
 is marked as read.
 
 After this, a word search returns a `pictures` list next to the results: messages whose picture is closest to the query
