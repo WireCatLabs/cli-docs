@@ -8,6 +8,49 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
+## Unreleased
+
+## 0.68.0 — 18.10.2026
+
+### Fixed
+
+- **Tasks and reminders work in a store that holds only notes.** A notes folder is an account: `--account` and
+  `--source` take it as `notes:<number>` (the `folder_id` search gives) or as the `folder:<id>` Memo's own errors
+  show, and `--source notes` names your folder when you have one. Every spelling was refused before, so a task
+  could not be made from a note and a reminder needed a mail account. `memo tasks add document:<id>` takes the
+  file's folder as its account without `--account`.
+- `memo tasks list` and `memo reminders list` without `--source` read every stored account and name them in
+  `meta.accounts`, as a search does; they refused before. `memo tasks agenda` still reads one account; the README
+  said it covered every account.
+- A reminder for a task in a project is refused with the reason: such a task belongs to no account. The message
+  said the task was not open. A read given `--account provider:account` is told to use `--source` with that value.
+
+## 0.67.0 — 18.10.2026
+
+### Fixed
+
+- **A store with notes only gets a plain answer from `tasks` and `reminders`.** `tasks list`, `tasks agenda`,
+  `reminders list` and `reminders poll` offered a `folder:<id>` value that then failed, and `notes:1` failed with
+  "the account is not in the local store". They now list only the accounts that can hold tasks, and with none say
+  that a task from a message, email or note, and a reminder, need a tg, max or mail account, and that a project's
+  tasks need none.
+- `memo search notes` labels a note found by its title as a plain hit, not "(by meaning)".
+- `memo tasks list --project SYNT` says to write `memo tasks list project:SYNT`; it failed with a bare syntax error.
+- `memo tasks add --project` with an unknown project names `memo projects add`; it pointed to a `vocabulary
+  resolve` command that does not exist.
+- The README names `vocabulary show` and `vocabulary check`, and the MCP tool `vocabulary_check`; it named
+  `resolve` and `preflight`, which do not exist. It links memo's own pages on wirecat.dev, says that search by
+  meaning needs tg-cli or max-cli to download the model, and that macOS and Windows are not tested yet.
+
+### Added
+
+- `search meetings` and `meetings passage`, with MCP `search_meetings` and `meeting_passage`, read
+  archived meeting evidence through shared Core readers. Explicit source selection, project/label
+  aliases, dates and scoped cursors keep searches bounded; MCP also has label, participant, event and
+  series selectors. Passages
+  include fingerprints for reviewed findings; unknown speakers and archive coverage stay explicit.
+  `search all` continues to combine messages, mail and notes.
+
 ## 0.66.0 — 18.10.2026
 
 ### Added

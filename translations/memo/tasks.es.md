@@ -25,19 +25,26 @@ memo tasks list --source telegram:1
 ```
 
 Una tarea creada a partir de una fuente tiene un tipo: `request` (el predeterminado), `question`,
-`mention` o `promise`. Pertenece a una cuenta de un servicio de mensajería. Una referencia de mensaje
-ya indica su cuenta; para una nota o un archivo, añade `--account`, como `--account telegram:1`. Si añades la
-misma tarea dos veces, obtienes la que ya existe.
+`mention` o `promise`. Pertenece a una cuenta. Una referencia de mensaje
+ya indica su cuenta, y un archivo de una carpeta de notas (`document:<id>`) pertenece a esa carpeta. Para una nota
+que escribiste con `memo notes add`, añade `--account`, como `--account telegram:1` o una carpeta de notas,
+`--account notes:1`. Si añades la misma tarea dos veces, obtienes la que ya existe.
+
+Una carpeta de notas también es una cuenta: la búsqueda da su número como `folder_id`, y Memo lo acepta como
+`notes:<number>` o como el `folder:<id>` que muestran sus mensajes. `--source notes` indica tu carpeta cuando
+tienes una. `memo tasks list` y `memo reminders list` sin `--source` leen todas las cuentas y las nombran en
+`meta.accounts`.
 
 ## Qué revisar hoy
 
-La agenda, el plan y la ficha son los mismos comandos de tg y max; indica la cuenta:
+La agenda, el plan y la ficha son los mismos comandos de tg y max. Cada uno lee una cuenta; indícala:
 
 ```sh
 memo tasks agenda --source telegram:1           # overdue, due, owed and waiting chats
 memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
 memo tasks show 1a2b3c4d --source telegram:1
 memo stats tasks show --source telegram:1       # open tasks per chat
+memo tasks agenda --source notes                # tasks from your notes folder
 ```
 
 Sin `--source` ni `--account`, el comando enumera las cuentas guardadas. tg y max abren estas tareas al sincronizar; memo lee el mismo almacén.
@@ -120,8 +127,11 @@ memo reminders cancel 3 --account telegram:1
 ```
 
 Escribe la hora con su diferencia respecto a UTC, como `+02:00` para Madrid en verano. Un recordatorio
-pertenece a una cuenta, así que para añadir o cambiar uno necesitas `--account`. Al cerrar una tarea
-se cancelan sus recordatorios.
+pertenece a una cuenta, así que para añadir o cambiar uno necesitas `--account`; para una tarea de una carpeta de
+notas, esa carpeta, como `--account notes:1`. Al cerrar una tarea se cancelan sus recordatorios.
+
+Una tarea de un proyecto, como `HRB-1`, no pertenece a ninguna cuenta, así que todavía no puede tener un
+recordatorio. Tampoco una tarea de una nota que escribiste con `memo notes add` cuando el almacén no tiene ninguna cuenta.
 
 Para el programa que muestra los recordatorios:
 

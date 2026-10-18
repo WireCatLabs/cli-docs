@@ -1,6 +1,6 @@
 {
   "kind": "real-cli-recorded-choice-replay",
-  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/real-history-baseline",
+  "baseline": "~/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/real-history-baseline",
   "launcher": "/tmp/wirecat-cold-real-023-replay-flush/history/tg",
   "versions": {
     "tg-cli": "0.23.0",

@@ -12,9 +12,9 @@
     "conclusion": "Reviewed MAX 0.61.0-0.62.0 with Core 0.342.0/Base 0.45.0: max mcp builds its tools from the commands (181, limited by the profile's levels); an agent's search messages takes text only (no ast) and cannot mark read, act as owner or send any file; conversations rebuild replaces conversations_refresh; session end refuses (exit 2) while a manual or service serve runs; bot message ids must be mid.…; MAX_READ_ONLY refuses local writes that delete or overwrite saved data; agents can mute and unmute; commands that change MAX are now marked as changing something outside this computer. Changed native pages: archive, sessions, query-language, commands, changelog, and release links in bot/usage/cli-contract; EN/ES (and RU commands) updated. All three max guideRefs retired: the released pages contain the pinned content. Roadmap unchanged: optional local copy, event actions, video circles, cloud password and native installers remain planned."
   },
   "zm": {
-    "version": "v0.27.0",
+    "version": "v0.27.1",
     "roadmapSha256": "5be0930bce0fb23f985da3be45a72eb16d4757afd4deb73017b45f31bfecf191",
     "reviewedAt": "2026-10-18",
-    "conclusion": "Reviewed Zoom 0.27.0: adopts Core 0.342.0/Base 0.45.0 as one runtime identity; Base standards tables moved to @wirecat/cli-base/standards/tables for SDK consumers; command effects and output unchanged. Only the changelog changed; RU/ES updated. Roadmap unchanged: broader reviewed meeting preparation remains planned."
+    "conclusion": "Reviewed Zoom 0.27.0-0.27.1: adopts Core 0.342.0/Base 0.45.0 as one runtime identity; Base standards tables moved to @wirecat/cli-base/standards/tables for SDK consumers; 0.27.1 reports a missing, non-folder or unreadable import/watch folder by name and shows what was wrong for a mistyped command or option (exit codes unchanged); troubleshooting names exit 3 for an empty meeting list. Changed pages: changelog, troubleshooting; RU/ES updated. Roadmap unchanged: broader reviewed meeting preparation remains planned."
   }
 }

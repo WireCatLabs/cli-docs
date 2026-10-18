@@ -17,7 +17,7 @@ La instalación no inicia sesión, no arranca un servicio en segundo plano ni le
 ## Qué necesita
 
 - **Node.js 22.16+ (rama 22.x) o 24+**, con npm. Si no lo tienes, pide ayuda a tu agente o descárgalo de [nodejs.org](https://nodejs.org).
-- Linux, macOS o Windows.
+- Linux. macOS y Windows aún no se han probado: las pruebas de Memo solo se ejecutan en Linux.
 
 Cada fuente necesita algo más, solo cuando vayas a utilizarla:
 

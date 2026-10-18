@@ -99,7 +99,7 @@ Dónde están las referencias de búsqueda:
 Cuando tienes varias cuentas de Telegram, MAX o correo, Memo no elige una por ti. Indica las cuentas
 con `--source`: una cuenta como `telegram:1` o `email:work`, todas las cuentas de un servicio de
 mensajería como `telegram`, todas las cuentas de un tipo como `mail`, o un grupo guardado como
-`group:work`; separa varias con comas. Una lista lee todas las cuentas que indicas y dice cuáles. Una búsqueda sin cuenta busca en todas y lo indica.
+`group:work`; separa varias con comas. Una lista lee todas las cuentas que indicas y dice cuáles. Una búsqueda sin cuenta busca en todas y lo indica, igual que `memo tasks list` y `memo reminders list`. Una carpeta de notas también es una cuenta: `notes:<number>`, con el número que dan los resultados de búsqueda como `folder_id`.
 
 Un comando que cambia algo, como añadir una tarea o un recordatorio, actúa como una sola cuenta. Indícala con
 `--account`, con el proveedor y la cuenta juntos: `--account telegram:1`, `--account email:work`. Si falta,

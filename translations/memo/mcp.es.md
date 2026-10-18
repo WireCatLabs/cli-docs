@@ -4,7 +4,7 @@ title: "El servidor MCP"
 
 Esta página te ayuda a conectar Memo a una aplicación de IA que no tiene terminal, como Claude Desktop
 o Cursor. MCP (Model Context Protocol) es la forma en que estas aplicaciones usan un programa de tu
-ordenador. Una vez conectada, la aplicación puede leer tus mensajes, tu correo y tus notas, y lo que
+ordenador. Una vez conectada, la aplicación puede leer tus mensajes, tu correo, tus notas y tus reuniones archivadas, y lo que
 Memo sabe de una persona. También puede guardar recuerdos, registrar hechos y proponer acciones. Lo
 que guarda espera tu revisión.
 
@@ -21,8 +21,7 @@ que guarda espera tu revisión.
 | Buscar proyectos, etiquetas y temas por su nombre, y ver qué tareas están listas | Crear o vincular tareas |
 
 Solo tres herramientas escriben: `memories_add`, `facts_add` y `actions_add`. Lo que añaden queda
-como propuesta hasta que lo confirmas, y una acción nunca se envía. Todas las demás herramientas solo
-leen. Conecta Memo solo a una aplicación en la que confíes para leer tus mensajes, tu correo y tus notas.
+como propuesta hasta que lo confirmas, y una acción nunca se envía. Las demás herramientas no modifican los registros de origen; la búsqueda de reuniones puede actualizar su índice de texto local. Conecta Memo solo a una aplicación en la que confíes para leer tus mensajes, tu correo y tus notas.
 
 ## Conectar una aplicación
 
@@ -57,6 +56,7 @@ Use the memo tools to list the memories waiting for my review.
 |---|---|
 | `search_all` | Buscar mensajes de todos los servicios, correo y notas; solo lectura |
 | `search_messages`, `search_mail`, `search_notes` | Buscar un tipo con todos sus campos; solo lectura |
+| `search_meetings`, `meeting_passage` | Buscar en reuniones guardadas de una cuenta de origen elegida explícitamente y leer pasajes citados de la transcripción |
 | `person_context` | Una persona entre servicios y correo, con notas y tareas enlazadas; solo lectura |
 | `memories_add`, `memories_list`, `memories_show`, `search_memories` | Guardar y leer recuerdos |
 | `facts_add`, `facts_list`, `facts_show` | Registrar y leer hechos |
@@ -78,5 +78,8 @@ memo agents log agent:memo-mcp --limit 20
 ```
 
 El registro muestra la herramienta, el resultado y la hora, nunca lo que envió la aplicación.
+
+Para la evidencia de reuniones, consulta la [búsqueda de reuniones](./search.md#search-stored-meetings). Los lotes de
+hallazgos de reuniones se crean por ahora desde la línea de comandos (`memo meetings actions add`), no con una herramienta MCP por lotes.
 
 Siguiente: [revisar lo que guardó la aplicación](./memories.md).

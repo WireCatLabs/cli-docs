@@ -19,6 +19,44 @@ Tu agente ejecuta `memo context` para la persona y lee las fuentes. Comprueba lo
 fuentes que muestra. Si una parte está vacía, puede que los chats no estén descargados o que las
 cuentas no estén vinculadas ([personas](./people.md)).
 
+## Revisar las decisiones y los seguimientos de una reunión
+
+Úsalo cuando tus transcripciones de reuniones ya estén archivadas. Tu agente puede leer la evidencia en Memo,
+sugerir qué importa y dejar el resultado para tu decisión:
+
+```text prompt
+Review the recent Harbour meetings in my selected Zoom account. Look up the project's existing
+aliases and tags first. Search the stored transcripts and read the surrounding passages.
+Show observed attendees separately from people merely mentioned. Propose decisions, key statements
+and follow-up tasks, citing each exact passage. Leave unknown dates and assignees blank, distinguish
+explicit commitments from inferred tasks, and leave everything proposed for my review.
+```
+
+Para las listas de asistentes, el agente lee los metadatos archivados de la reunión con `zm meetings show`; las
+etiquetas de hablante de la transcripción por sí solas no son una lista de asistencia. El agente usa
+`memo search meetings` y `memo meetings passage`, y luego prepara un lote con `memo meetings actions add` usando
+las referencias de intervención y las huellas. Esto crea una propuesta de revisión; no crea de inmediato hechos ni
+tareas aceptados. Los vínculos confirmados entre reuniones y proyectos deben existir ya para los hallazgos del
+proyecto. Si faltan, el agente debe mostrar los vínculos candidatos para revisarlos. Usa etiquetas existentes en
+lugar de crear sinónimos; `memo vocabulary check` puede sugerir nombres parecidos, pero la similitud no establece
+que dos etiquetas signifiquen lo mismo.
+
+Revisa el lote con `memo meetings actions list status:proposed` y `memo meetings actions show`. Comprueba cada
+afirmación con su fuente antes de confirmar los identificadores de hallazgo elegidos con la huella actual del lote.
+Solo tú puedes confirmar o rechazar un lote de hallazgos de reunión; un agente no puede aprobar su propio trabajo.
+Las tareas aceptadas usan las claves numeradas del proyecto. Repetir una clave de lote idéntica lo reintenta sin
+duplicar la propuesta; cambiar el contenido requiere una clave nueva.
+
+Para preparar, pide al agente que combine los pasajes de reuniones anteriores con los hechos aceptados y las
+tareas abiertas del proyecto (`memo projects context`) y con los mensajes, el correo y las notas de los
+participantes (`memo context`). El lector de preparación de reuniones de Zoom también puede reunir el historial
+guardado de la serie. El nuevo lector de pasajes de Memo no localiza por sí mismo un evento de calendario próximo
+ni deduce la pertenencia a un proyecto. La respuesta debe mostrar sus fuentes y el historial que falta antes de
+sugerir una agenda.
+
+Si no aparece ningún pasaje, comprueba la cuenta seleccionada y la cobertura del archivo, y prueba los alias del
+proyecto sin filtro de proyecto. La [búsqueda de reuniones](./search.md#search-stored-meetings) explica estos límites.
+
 ## Encontrar dónde se decidió algo
 
 ```text prompt

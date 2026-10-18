@@ -1,6 +1,6 @@
 {
   "kind": "real-cli-recorded-choice-replay",
-  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-max-meeting",
+  "baseline": "~/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-max-meeting",
   "launcher": "/tmp/wirecat-max-lockfix-replay/meeting/max",
   "versions": {
     "max-cli": "0.24.0",

@@ -1,6 +1,6 @@
 {
   "kind": "real-cli-recorded-choice-replay",
-  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-tg-history",
+  "baseline": "~/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-tg-history",
   "launcher": "/tmp/wirecat-tg-lockfix-replay/history/tg",
   "versions": {
     "tg-cli": "0.23.0",

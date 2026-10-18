@@ -26,8 +26,9 @@ cada una con `memo notes show` o en la aplicación original.
 | Tus notas y archivos | `memo search notes 'budget'` |
 | Tu correo | `memo search mail 'budget'` |
 | Mensajes de Telegram o MAX | `memo search messages 'budget'` |
+| Transcripciones y resúmenes de reuniones guardados | `memo search meetings 'budget' --source zoom:work` |
 
-`search all` busca en mensajes, correo y notas a la vez. No busca personas, recuerdos, proyectos ni
+`search all` busca en mensajes, correo y notas a la vez. No busca reuniones, personas, recuerdos, proyectos ni
 tareas; para eso usa `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
 está algo, su propia búsqueda es mejor, porque entiende más palabras de búsqueda.
 
@@ -76,6 +77,42 @@ memo search mail 'budget' --source email:you@example.com
 `mailbox:` encuentra una carpeta de correo o una etiqueta de Gmail, como `inbox`, `important` o
 `starred`. Sin `--source`, Memo busca en todas las cuentas de correo; `--source email:work,email:personal`
 busca en esas dos. También se busca el texto dentro de los adjuntos (`filename:` y `content:`).
+
+## Buscar en reuniones guardadas
+
+Cuando Zoom ya ha archivado tus reuniones en el almacén compartido, Memo puede encontrar localmente pasajes de
+transcripciones, títulos de reuniones, resúmenes y texto del chat. No contacta con Zoom ni envía texto a un modelo.
+Usa el nombre de tu cuenta guardada en lugar de `zoom:work`. `--source zoom` también funciona si el almacén tiene
+exactamente una cuenta de Zoom; una selección ambigua muestra las cuentas entre las que elegir:
+
+```sh
+memo search meetings 'budget' --source zoom:work --project HRB --since-time 2026-10-01 --limit 10 --json
+memo meetings passage 'meeting:1/42/3/0' --source zoom:work --before-n 2 --after-n 2 --json
+```
+
+Copia el `ref` de un resultado en el comando del pasaje. Un resultado de transcripción tiene una referencia de
+intervención como `meeting:1/42/3/0`, la referencia de su reunión y `offset_ms`. Un resultado de título, resumen o
+chat apunta a la reunión; para leer un pasaje hace falta una intervención de la transcripción. El pasaje incluye
+las intervenciones cercanas, las etiquetas de hablante, la revisión y las huellas para que un agente pueda citar
+exactamente lo que leyó. Conserva un hablante nulo como desconocido; una etiqueta por sí sola no establece la
+identidad de una persona.
+
+`--project` acepta la clave, el nombre o un alias registrado de un proyecto y selecciona los vínculos de reuniones
+confirmados. La herramienta MCP `search_meetings` también acepta `tag` y `topic` con etiquetas existentes y sus
+alias. Una palabra de proyecto en una transcripción no vincula la reunión con ese proyecto. Para descubrir reuniones
+sin vincular, busca por separado los distintos nombres del proyecto sin `--project` y revisa las coincidencias.
+`identity_id` y `person_id` de MCP seleccionan reuniones con participantes observados; no limitan los resultados a
+lo que dijo esa persona.
+
+La búsqueda de reuniones usa su propia consulta de palabras y sus propias opciones; los campos de consulta de
+correo y mensajes de arriba no se aplican. Usa `memo search meetings --help` para las opciones de fecha y proyecto;
+MCP también tiene selectores de evento y serie. Las respuestas JSON tienen los estándar `items`, `page`, `next` y
+`meta.accounts`; usa el cursor devuelto con la misma cuenta y los mismos filtros. El campo `missing` indica que la
+integridad del archivo es desconocida. Aunque la indexación esté lista, una búsqueda vacía no puede demostrar que
+ninguna reunión trató el tema. Si los pasajes cambiaron durante la indexación, repite la búsqueda como indica el
+siguiente paso. Una transcripción sin archivar o ausente debe obtenerse antes con Zoom.
+
+Siguiente: [convierte pasajes citados de reuniones en hallazgos para revisar](./recipes.md#review-a-meetings-decisions-and-follow-ups).
 
 ## Búsqueda por significado
 
