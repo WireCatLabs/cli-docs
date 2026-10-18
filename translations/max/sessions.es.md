@@ -84,7 +84,7 @@ max personal account sessions list    # все устройства и прил�
 max personal session end              # выйти из MAX и забыть токен на этой машине
 ```
 
-`session end` primero termina la sesión en el servidor de MAX y después borra el token de este ordenador. La respuesta indica el resultado:
+`session end` primero termina la sesión en el servidor de MAX y después borra el token de este ordenador. Si `max serve` está en marcha para el perfil, iniciado a mano o por un servicio, `session end` se niega (código 2): antes ejecuta `max personal server stop`. La respuesta indica el resultado:
 
 ```json
 { "item": { "profile": "default", "forgotten": true, "revoked_on_server": true }, "meta": { … } }

@@ -4,6 +4,14 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.27.0 — 18.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- Adopta Core 0.342.0 y Base 0.45.0 publicados como una sola identidad de ejecución. Base movió sus tablas de lint, auditoría y
+  vocabulario de `@wirecat/cli-base/standards` a `@wirecat/cli-base/standards/tables`; un consumidor del SDK que importe esas
+  tablas, o que fije Core o Base junto a zoom, pasa a estas versiones a la vez. Los efectos y la salida de los comandos no cambian.
+
 ## 0.26.0 — 18.10.2026
 
 ### Añadido

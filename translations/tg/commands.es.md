@@ -1736,7 +1736,7 @@ tg models audio list [query]
 
 descarga un modelo y verifica el sha256 esperado por esta versión
 
-**Solo hace cambios en este equipo.**
+**Lee de un servicio externo.**
 
 ```sh
 tg models audio download <model>
@@ -1766,7 +1766,7 @@ tg models text list [query]
 
 descarga un modelo vectorial y comprueba el sha256 esperado por la versión
 
-**Solo hace cambios en este equipo.**
+**Lee de un servicio externo.**
 
 ```sh
 tg models text download <model> [options]
@@ -1996,7 +1996,7 @@ tg watch [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--events` | incluye ediciones, eliminaciones, reacciones y votos en encuestas; cada línea indica su evento. |
+| `--events` | incluye ediciones, eliminaciones, reacciones, votos en encuestas y eventos del chat; cada línea indica su evento. |
 
 ## `tg serve`
 
@@ -2496,7 +2496,7 @@ conversaciones dentro de un chat, identificadas por respuestas, menciones y turn
 
 identifica conversaciones en el archivo local, sustituyendo el análisis anterior; sin --chat, cada chat que cambió desde su análisis y cada grupo nunca analizado; nunca consulta el servicio
 
-**Solo hace cambios en este equipo.**
+**Envía texto a un servicio externo.**
 
 ```sh
 tg conversations build [options]
@@ -2643,6 +2643,22 @@ tg conversations links clear [options]
 | `--chat <chat>` | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `--model <model>` | solo respuestas de este modelo. |
 
+### `tg conversations rebuild`
+
+construye y después vectoriza con el modelo de este equipo los chats que cambiaron desde su análisis y los grupos nunca analizados, o solo --chat; cada ejecución tiene un límite, así que vuelve a ejecutarlo para el resto; nunca consulta el servicio, no descarga modelos y no envía texto a ninguna parte
+
+**Solo hace cambios en este equipo.**
+
+```sh
+tg conversations rebuild [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--chat <chat>` | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `--max-chats <n>` | como máximo este número de chats por ejecución; 20 por defecto. |
+| `--max-chunks <n>` | como máximo este número de fragmentos vectorizados por ejecución; 2000 por defecto. |
+
 ### `tg conversations consents`
 
 permisos de análisis recordados para los chats de esta cuenta y las direcciones de los proveedores
@@ -2670,7 +2686,7 @@ tg conversations consents revoke [options]
 
 calcula vectores de cada fragmento de conversaciones para búsqueda semántica, localmente o con --provider y tu clave; puede reanudarse; sin --chat, cada chat analizado con fragmentos pendientes, solo en este equipo
 
-**Solo hace cambios en este equipo.**
+**Envía texto a un servicio externo.**
 
 ```sh
 tg conversations embed [options]
@@ -3043,7 +3059,7 @@ tg images models list [query]
 
 descarga un modelo de imágenes una vez y verifica el sha256 esperado por esta versión
 
-**Solo hace cambios en este equipo.**
+**Lee de un servicio externo.**
 
 ```sh
 tg images models download <model>
@@ -3059,6 +3075,8 @@ descripciones de grupos y canales en caché para las etiquetas automáticas loca
 
 ### `tg metadata get`
 
+la descripción en caché de un chat almacenado, tal como la leen las etiquetas automáticas
+
 ```sh
 tg metadata get [options]
 ```
@@ -3068,6 +3086,8 @@ tg metadata get [options]
 | `--chat <chat>` | un chat almacenado. |
 
 ### `tg metadata refresh`
+
+vuelve a obtener las descripciones de grupos y canales y las guarda en caché
 
 **Solo hace cambios en este equipo.**
 
@@ -3860,6 +3880,8 @@ tg search notes <query> [options]
 
 conversaciones más próximas por significado y palabras, mejores primero, en uno o todos los chats; significado tras `conversations embed`, en este equipo
 
+**Lee de un servicio externo.**
+
 ```sh
 tg search conversations <query> [options]
 ```
@@ -4490,7 +4512,7 @@ tg upgrade [options]
 
 ## `tg mcp`
 
-ofrece el perfil a un agente por MCP mediante stdin y stdout: `claude mcp add tg -- tg mcp`
+ofrece el perfil a un agente por MCP mediante stdin y stdout: `claude mcp add tg -- tg <profile> mcp`
 
 **Changes something in Telegram.**
 
