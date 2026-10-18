@@ -90,6 +90,10 @@
   font-weight: 400;
   color: var(--muted);
 }
+.wirecat-about .about-tool-sources {
+  display: flex;
+  gap: 18px;
+}
 .wirecat-about .about-tool-source {
   display: inline-flex;
   align-items: center;

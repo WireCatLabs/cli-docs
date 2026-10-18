@@ -30,6 +30,7 @@ export default async function AboutPage({ params }: Props) {
       description: words.toolDescriptions.tg,
       docs: `/${lang}/docs/tg`,
       source: "https://github.com/WireCatLabs/tg-cli",
+      npm: "https://www.npmjs.com/package/@wirecat/tg-cli",
     },
     {
       name: "MAX",
@@ -37,6 +38,7 @@ export default async function AboutPage({ params }: Props) {
       description: words.toolDescriptions.max,
       docs: `/${lang}/docs/max`,
       source: "https://github.com/WireCatLabs/max-cli",
+      npm: "https://www.npmjs.com/package/@wirecat/max-cli",
     },
     {
       name: words.emailTool,
@@ -44,6 +46,7 @@ export default async function AboutPage({ params }: Props) {
       description: words.toolDescriptions.memo,
       docs: `/${lang}/docs/memo`,
       source: "https://github.com/WireCatLabs/cli-memo",
+      npm: "https://www.npmjs.com/package/@wirecat/cli-memo",
     },
   ]
   const contacts = () => (
@@ -110,16 +113,24 @@ export default async function AboutPage({ params }: Props) {
                       <code>{product.command}</code>
                     </a>
                     <p>{product.description}</p>
-                    <a
-                      className="about-tool-source animated-text-link text-link"
-                      href={product.source}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${product.name}: GitHub`}
-                    >
-                      <span className="link-label">GitHub</span>
-                      <ArrowRight aria-hidden="true" />
-                    </a>
+                    <span className="about-tool-sources">
+                      {[
+                        ["GitHub", product.source],
+                        ["npm", product.npm],
+                      ].map(([label, href]) => (
+                        <a
+                          key={label}
+                          className="about-tool-source animated-text-link text-link"
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${product.name}: ${label}`}
+                        >
+                          <span className="link-label">{label}</span>
+                          <ArrowRight aria-hidden="true" />
+                        </a>
+                      ))}
+                    </span>
                   </div>
                 ))}
               </nav>

@@ -64,7 +64,14 @@ export function GET() {
     `- [Terms of Service](${siteUrl}/llms.mdx/legal/en/terms/content.md): Account permissions, your content and third-party services.`,
     "",
     "",
-    ...tools.flatMap((tool) => [section(tool.name, toolPages(tool.name), tool.summary.en), ""]),
+    ...tools.flatMap((tool) => [
+      section(
+        tool.name,
+        toolPages(tool.name),
+        `${tool.summary.en}\n\nPackage: [${tool.package}](https://www.npmjs.com/package/${tool.package}). Source: https://github.com/${tool.repo}`,
+      ),
+      "",
+    ]),
     "## Optional",
     "",
     ...ordered
