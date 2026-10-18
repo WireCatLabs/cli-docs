@@ -10,6 +10,15 @@ title: "История изменений"
 
 ## Unreleased
 
+## 0.65.2 — 18.10.2026
+
+### Changed — may break scripts
+
+- **memo's MCP tools name accounts as the CLI does.** `actions_add` takes `account` as `provider:account`
+  (`telegram:1`) in place of `provider` and a bare `account`; `search_mail` takes `source` (`email:work`, several
+  separated by commas) in place of `account`; `person_context` takes `source` (`telegram:1`) in place of `account`.
+  An old argument is refused, as any argument a tool does not take.
+
 ## 0.65.1 — 18.10.2026
 
 ### Documentation
@@ -92,6 +101,10 @@ title: "История изменений"
   longer turns ordinary words into names; the owner's own accounts belong to the owner. After the upgrade,
   `tg <profile> mentions rebuild person-name place` reads the old texts again.
 - memo reads `--source` lists and mention queries through cli-core instead of its own copies.
+
+## 0.61.0 — 17.10.2026
+
+The same code as 0.60.0, published again under a new number. Nothing changed for callers.
 
 ## 0.60.0 — 17.10.2026
 
@@ -1202,6 +1215,26 @@ title: "История изменений"
 - **Старый `messages.db` удаляется**, когда хранилище открывается по пути по умолчанию: это незашифрованный файл,
   который использовался до `wirecat.db`, вместе с его `-wal` и `-shm`. Одна строка в stderr называет его. Он
   сохраняется, если задан `MESSAGING_STORE`, и пока другой процесс держит его открытым.
+
+## 0.6.1 — 11.10.2026
+
+### Fixed
+
+- Package references, documentation and fixtures use the WireCat namespace throughout.
+- The printed Memo version matches the published package version.
+
+### Changed
+
+- **memo runs on `@wirecat/cli-messaging` 0.221.0.** The store prunes its growing logs on open, at most once a
+  day: agent tool calls older than 90 days are deleted, and a handled bot update older than 30 days loses its
+  payload. Upgrade tg-cli and max-cli first, as all three share the store.
+- **`organizations add --kind`, `projects add --type` and `--scope` take their allowed values from the store**
+  and refuse any other value before the store is opened, naming the allowed ones.
+
+### Fixed
+
+- **`memo --version` prints the package's version.** It printed 0.4.0 since 0.5.0: the number lived in a file the
+  release did not update. A test now fails when that file and `package.json` disagree.
 
 ## 0.6.0 — 10.10.2026
 

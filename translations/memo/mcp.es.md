@@ -4,23 +4,25 @@ title: "El servidor MCP"
 
 Esta página te ayuda a conectar Memo a una aplicación de IA que no tiene terminal, como Claude Desktop
 o Cursor. MCP (Model Context Protocol) es la forma en que estas aplicaciones usan un programa de tu
-ordenador. Una vez conectada, la aplicación puede guardar recuerdos, registrar hechos, proponer
-acciones y leer el registro de agentes. Lo que guarda espera tu revisión.
+ordenador. Una vez conectada, la aplicación puede leer tus mensajes, tu correo y tus notas, y lo que
+Memo sabe de una persona. También puede guardar recuerdos, registrar hechos y proponer acciones. Lo
+que guarda espera tu revisión.
 
 ## Qué puede hacer la aplicación a través de MCP
 
 | La aplicación puede | La aplicación no puede |
 |---|---|
+| Buscar y leer tus mensajes, correo y notas guardados | Enviar un mensaje o un correo |
+| Leer el contexto de una persona en los mensajeros y el correo | Cambiar tus notas, tu correo o tus mensajes |
 | Añadir, listar, mostrar y buscar recuerdos | Confirmar un recuerdo |
 | Añadir, listar y mostrar hechos | Aceptar un hecho |
 | Proponer acciones y listarlas | Aprobar o rechazar una acción |
-| Leer el registro de agentes | Cambiar tus notas, tu correo o tus mensajes |
+| Leer el registro de agentes | Borrar nada |
 | Buscar proyectos, etiquetas y temas por su nombre, y ver qué tareas están listas | Crear o vincular tareas |
 
-La búsqueda, el contexto de una persona y las notas no forman parte del servidor MCP de Memo. Una
-aplicación llega a ellos a través del servidor MCP de tg o de max (consulta
-[el servidor MCP de tg](https://wirecat.dev/en/docs/tg/mcp)), o un agente con terminal ejecuta `memo`
-con `--json`.
+Solo tres herramientas escriben: `memories_add`, `facts_add` y `actions_add`. Lo que añaden queda
+como propuesta hasta que lo confirmas, y una acción nunca se envía. Todas las demás herramientas solo
+leen. Conecta Memo solo a una aplicación en la que confíes para leer tus mensajes, tu correo y tus notas.
 
 ## Conectar una aplicación
 

@@ -71,9 +71,9 @@ Cuando esas comprobaciones funcionen, sigue con el [paso 2](#connect-your-accoun
 
 ## 2. Conectar tu cuenta
 
-**La aplicación Google de WireCat está lista para usar.** Esta opción no requiere crear un
-proyecto Google Cloud ni descargar un archivo de credenciales. Cada usuario autoriza su propia
-cuenta en el navegador.
+Con la aplicación Google de WireCat no necesitas crear un proyecto Google Cloud ni descargar un
+archivo de credenciales. Cada usuario autoriza su propia cuenta en el navegador. Antes de empezar,
+lee sobre [el aviso de Google «aplicación no verificada»](#google-shows-an-unverified-app-warning).
 
 Si prefieres tu propia aplicación Google, completa primero la [configuración opcional de la app](#prepare-google-sign-in).
 Su último comando inicia el acceso con tu archivo de cliente y te devuelve a la aprobación en
@@ -89,6 +89,24 @@ Ejecuta este comando o pide al agente que lo haga. Mantén abierto el proceso de
 ```sh
 drive personal session start
 ```
+
+<a id="google-shows-an-unverified-app-warning"></a>
+
+### Google muestra el aviso «aplicación no verificada»
+
+Google aún no ha terminado de revisar los permisos de Drive que pide la aplicación de WireCat.
+Hasta que termine, Google puede mostrar una pantalla de «aplicación no verificada» antes de la
+pantalla de permisos. La pantalla es de Google y dice que Google no ha verificado la aplicación.
+
+- Para continuar, usa el enlace de la pantalla de Google que sigue hacia la aplicación y después
+  aprueba el acceso como se indica abajo. Hazlo solo si confías a drive el acceso de lectura a tu Drive.
+- Si prefieres no hacerlo, o si Google bloquea el acceso, detente y usa
+  [tu propia aplicación Google](#prepare-google-sign-in).
+- Google limita una aplicación no verificada a 100 usuarios nuevos en total. Cuando la aplicación
+  de WireCat llegue a ese límite, los usuarios nuevos no podrán acceder con ella hasta que Google
+  termine la revisión. Tu propia aplicación tiene sus propios límites, aparte.
+
+Consulta [la página de Google sobre aplicaciones no verificadas](https://support.google.com/cloud/answer/7454865).
 
 ### Aprobar el acceso en el navegador
 
