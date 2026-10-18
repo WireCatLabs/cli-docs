@@ -8,7 +8,7 @@ export const privacyCopy: Record<
     title: "Privacy Policy",
     intro:
       "How WireCat handles Google account data, local documents, optional AI processing and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
-    updated: "Last updated: 11 October 2026",
+    updated: "Last updated: 18 October 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
@@ -33,7 +33,7 @@ export const privacyCopy: Record<
         id: "sharing-ai",
         title: "Sharing and optional AI processing",
         paragraphs: [
-          "WireCat does not sell Google user data, use it for advertising or use it to train general-purpose AI models. Project maintainers do not receive or routinely inspect your documents or tokens. If you contact support, share only what you choose to disclose; never include tokens or private documents unless needed for your request.",
+          "WireCat does not sell Google user data, use it for advertising or use it to train general-purpose AI models. WireCat Drive's use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements. Project maintainers do not receive or routinely inspect your documents or tokens. If you contact support, share only what you choose to disclose; never include tokens or private documents unless needed for your request.",
           "When you explicitly request AI memory extraction, selected cached document text is sent to the AI provider you configured, using your provider credentials. That provider receives the text and extraction request; its processing, retention and data-use settings apply. Choose a provider and settings that do not use Google data to train general-purpose models. Local keyword search and local embeddings do not require this transfer.",
           "An agent or MCP application you connect can receive the document passages and metadata returned by the commands it calls. Its provider and settings control any further processing. Review those settings before giving an agent access to sensitive sources.",
         ],
@@ -112,7 +112,7 @@ export const privacyCopy: Record<
     title: "Политика конфиденциальности",
     intro:
       "Как WireCat обрабатывает данные аккаунта Google, локальные документы, дополнительные ИИ-запросы и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
-    updated: "Обновлено: 11 октября 2026 г.",
+    updated: "Обновлено: 18 октября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
@@ -137,7 +137,7 @@ export const privacyCopy: Record<
         id: "sharing-ai",
         title: "Передача данных и дополнительные ИИ-запросы",
         paragraphs: [
-          "WireCat не продаёт данные пользователей Google, не использует их для рекламы или обучения универсальных ИИ-моделей. Сопровождающие проекта не получают и не просматривают ваши документы или токены в обычной работе. При обращении в поддержку передавайте только выбранные вами сведения; не включайте токены или приватные документы без необходимости для запроса.",
+          "WireCat не продаёт данные пользователей Google, не использует их для рекламы или обучения универсальных ИИ-моделей. Использование и передача WireCat Drive сведений, полученных через API Google, соответствуют Правилам в отношении пользовательских данных в сервисах Google API (Google API Services User Data Policy), включая требования об ограниченном использовании (Limited Use). Сопровождающие проекта не получают и не просматривают ваши документы или токены в обычной работе. При обращении в поддержку передавайте только выбранные вами сведения; не включайте токены или приватные документы без необходимости для запроса.",
           "При явном запросе извлечения записей памяти с помощью ИИ выбранный текст из локальных документов отправляется настроенному вами провайдеру ИИ с вашими учётными данными провайдера. Он получает текст и запрос; действуют его правила обработки, хранения и использования данных. Выбирайте провайдера и настройки, которые не используют данные Google для обучения универсальных моделей. Поиск по словам и локальные эмбеддинги не требуют такой передачи.",
           "Подключённый агент или MCP-приложение может получать фрагменты документов и метаданные, возвращаемые вызываемыми командами. Дальнейшая обработка определяется его провайдером и настройками. Проверьте их, прежде чем дать агенту доступ к чувствительным источникам.",
         ],
@@ -216,7 +216,7 @@ export const privacyCopy: Record<
     title: "Política de privacidad",
     intro:
       "Cómo WireCat trata los datos de Google, los documentos locales, el procesamiento opcional con IA y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
-    updated: "Última actualización: 11 de octubre de 2026",
+    updated: "Última actualización: 18 de octubre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
@@ -241,7 +241,7 @@ export const privacyCopy: Record<
         id: "sharing-ai",
         title: "Datos compartidos y procesamiento opcional con IA",
         paragraphs: [
-          "WireCat no vende datos de usuarios de Google, no los usa para publicidad ni para entrenar modelos de IA de propósito general. Los responsables del proyecto no reciben ni inspeccionan habitualmente tus documentos o tokens. Si contactas con soporte, comparte solo lo que decidas revelar; no incluyas tokens ni documentos privados salvo que sean necesarios para tu petición.",
+          "WireCat no vende datos de usuarios de Google, no los usa para publicidad ni para entrenar modelos de IA de propósito general. El uso y la transferencia por WireCat Drive de la información recibida de las API de Google cumplen la Política de datos de usuario de los servicios de API de Google (Google API Services User Data Policy), incluidos los requisitos de uso limitado (Limited Use). Los responsables del proyecto no reciben ni inspeccionan habitualmente tus documentos o tokens. Si contactas con soporte, comparte solo lo que decidas revelar; no incluyas tokens ni documentos privados salvo que sean necesarios para tu petición.",
           "Cuando solicitas explícitamente extraer recuerdos con IA, el texto local seleccionado se envía al proveedor de IA que configuraste, con tus credenciales del proveedor. Este recibe el texto y la petición; se aplican sus reglas de procesamiento, conservación y uso de datos. Elige un proveedor y ajustes que no utilicen datos de Google para entrenar modelos de propósito general. La búsqueda por palabras y los embeddings locales no requieren esta transferencia.",
           "Un agente o una aplicación MCP conectados pueden recibir los fragmentos y metadatos devueltos por los comandos que ejecutan. Su proveedor y ajustes controlan el procesamiento posterior. Revísalos antes de dar al agente acceso a fuentes sensibles.",
         ],
