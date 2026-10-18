@@ -69,7 +69,7 @@ describe("exported Markdown destinations", () => {
     expect(text).toContain("[#tg]")
     expect(text).toContain("[#max]")
     expect(text).toContain("tg setup --help")
-    expect(text).toContain("max doctor")
+    expect(text).toContain("max personal doctor")
     expect(text).not.toContain("https://wirecat.dev/llms.mdx/docs/")
     expect(text).not.toContain("<InstallationGuide")
   })
