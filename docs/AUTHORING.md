@@ -151,7 +151,7 @@ agents can read it. Keep technical reference discoverable through `/llms.txt` an
 
 ## Review and checks
 
-Use the [documentation plan](plans/2026-10-07-documentation-system.md) for existing gates and
+Use the [documentation plan](https://github.com/WireCatLabs/cli-private/blob/main/archive/public-repo-workfiles/cli-docs/docs/plans/2026-10-07-documentation-system.md) (private) for existing gates and
 proposed gaps. Check meaningful properties automatically: valid syntax, links/anchors, sidebar
 reachability, locale completeness, source fingerprints, command contracts and diagram/export
 behavior. Assess orientation, clarity, appropriate scope and task usefulness through editorial
