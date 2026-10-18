@@ -460,7 +460,7 @@ Los primeros pesos se fijaron a mano y después se ajustaron con un conjunto de 
 | Importe: igual / distinto / falta | +6 / −4 / 0 |
 | Categoría: misma / distinta / desconocida | +1 / −1 / 0 |
 | Fecha límite: 2 días o menos / más / falta | +4 / −1 / 0 |
-| Cadena de respuestas: sí / no | +6 / 0 |
+| Cadena de respuestas: sí / no | +2 / 0 |
 | Tiempo: 3 días o menos / de 4 a 14 días / más | +2 / −2 / −3 |
 
 Ningún duplicado del conjunto tenía otra persona, otro importe u otra categoría, así que contar daría
@@ -490,8 +490,10 @@ duplicados entre idiomas se detectan mal (2 de 5 salieron «distinta»).
 **En chats reales.** Una prueba posterior repitió 148 tareas que un agente redactó a partir de 1104
 mensajes reales de 7 chats ([seguimiento con chats reales](https://github.com/WireCatLabs/cli-testing/tree/main/performance/tasks/duplicates#follow-up-real-chats-2026-10-17)).
 Comparando por cuándo se escribieron las tareas, `tasks add` rechazó 74, y «probable» acertó el 27% de
-las veces. Comparando por cuándo se enviaron los mensajes, rechazó 36, y «probable» acertó el 50%. Los
-pesos no cambiaron: 85 pares etiquetados son muy pocos para ajustarlos.
+las veces. Comparando por cuándo se enviaron los mensajes, rechazó 36, y «probable» acertó el 50%. Un
+segundo conjunto llevó las etiquetas a 213 pares ([segundo conjunto etiquetado](https://github.com/WireCatLabs/cli-testing/tree/main/performance/tasks/duplicates#follow-up-a-second-labelled-set-2026-10-17)). Entre los pares mostrados
+como «quizá» o «probable», los de una misma cadena de respuestas fallaron 11 veces de 13, así que la cadena de
+respuestas ahora cuenta +2, no +6. Los demás pesos no cambiaron.
 
 ### 6. Decidir
 
