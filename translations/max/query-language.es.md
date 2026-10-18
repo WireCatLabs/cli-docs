@@ -158,7 +158,7 @@ Un error incluye la posición del problema en la consulta y una pista.
 
 ## A través de MCP
 
-Mediante MCP, `max_read` (`command: "search messages"`) acepta la consulta como `text` o como árbol de sintaxis con versión en `ast`, nunca ambos; `timezone` elige la zona del calendario. `chat:` se escribe en la propia consulta; `source`, `newest`, `context` y `limit` corresponden a las opciones del comando. `saved` ejecuta una búsqueda guardada. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first` corresponden a `--thread…` y `--sync-first`; `sync_first` requiere `messages.sync-first: allow`. Devuelve el mismo objeto que `--json`. `max_read` (`command: "stats messages show"`) cuenta las mismas consultas. `record: false` evita registrar la llamada en el historial.
+Mediante MCP, `max_read` (`command: "search messages"`) acepta la consulta como texto en `query`; `timezone` elige la zona del calendario. `chat:` se escribe en la propia consulta; `source`, `newest`, `context` y `limit` corresponden a las opciones del comando. `saved` ejecuta una búsqueda guardada. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` y `sync_first` corresponden a `--thread…` y `--sync-first`; `sync_first` requiere `messages.sync-first: allow`. Devuelve el mismo objeto que `--json`. `max_read` (`command: "stats messages show"`) cuenta las mismas consultas. `record: false` evita registrar la llamada en el historial.
 
 ## Más
 

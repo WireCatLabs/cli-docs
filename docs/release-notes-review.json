@@ -1,20 +1,20 @@
 {
   "tg": {
-    "version": "v0.72.0",
+    "version": "v0.73.1",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
     "reviewedAt": "2026-10-18",
-    "conclusion": "Reviewed Telegram0.72.0 with Core0.331.0/Base0.43.5: tasks agenda lists what others owe you (an assigned section, assigned in JSON); the duplicate check weighs a shared reply chain less, so fewer false duplicate suggestions; a command path given as one argument fails; interactive commands without a terminal wait 5 minutes; under TG_READ_ONLY writes that ask first stop with exit 5 before asking; session start, session end and setup never run through serve, and session end with serve running stops with exit 2; the stemmer settings are spelled search_stemmers.* in the native pages. Roadmap unchanged: multi-photo sending, private chat notes and listed MAX-only capabilities remain planned."
+    "conclusion": "Reviewed Telegram 0.73.0-0.73.1 with Core 0.342.0/Base 0.45.0: tg mcp builds its tools from the commands (188, limited by the profile's levels; arguments are option names in snake_case); an agent's search messages takes text in query only (no ast); an agent cannot mark read or act as owner; conversations rebuild replaces conversations_refresh; TG_READ_ONLY refuses local writes that delete or overwrite saved data; no write goes out while Telegram holds the account; a send blocked on a lock exits 9; upgrade --offline exits 2; conversations build/embed and search conversations are marked as sending text out; model downloads read from an outside service. Changed native pages: query-language, commands, changelog, cli-contract link; RU/ES updated. The getFile URL correction stays: the released commands page still has the bare URL. All ten tg guideRefs retired: the released pages contain the pinned content. Roadmap unchanged: multi-photo sending, private chat notes and listed MAX-only capabilities remain planned."
   },
   "max": {
-    "version": "v0.60.0",
+    "version": "v0.62.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
     "reviewedAt": "2026-10-18",
-    "conclusion": "Reviewed MAX0.59-0.60 at c41c9ea with Core0.326.0/Base0.43.5: tasks open only where something was asked of you; tasks apply is tasks scan and tasks take an assignee; default_profile is no longer read and a profile is never assumed; mcp --permission only tightens and an agent never deletes for everyone; bot MCP tools are built from the bot commands; MAX_READ_ONLY refuses login/logout, bot writes and store changes. Shared Tasks, Permissions and browser pages and the command-rules block updated; defaultProfile correction retired. Roadmap unchanged."
+    "conclusion": "Reviewed MAX 0.61.0-0.62.0 with Core 0.342.0/Base 0.45.0: max mcp builds its tools from the commands (181, limited by the profile's levels); an agent's search messages takes text only (no ast) and cannot mark read, act as owner or send any file; conversations rebuild replaces conversations_refresh; session end refuses (exit 2) while a manual or service serve runs; bot message ids must be mid.…; MAX_READ_ONLY refuses local writes that delete or overwrite saved data; agents can mute and unmute; commands that change MAX are now marked as changing something outside this computer. Changed native pages: archive, sessions, query-language, commands, changelog, and release links in bot/usage/cli-contract; EN/ES (and RU commands) updated. All three max guideRefs retired: the released pages contain the pinned content. Roadmap unchanged: optional local copy, event actions, video circles, cloud password and native installers remain planned."
   },
   "zm": {
-    "version": "v0.26.0",
+    "version": "v0.27.0",
     "roadmapSha256": "5be0930bce0fb23f985da3be45a72eb16d4757afd4deb73017b45f31bfecf191",
     "reviewedAt": "2026-10-18",
-    "conclusion": "Reviewed published Zoom0.26.0 source a087a544 with registry Core0.336.0/Base0.44.2 and one Base identity. Bounded scheduled series CLI/MCP reads preserve unverified old/undated hints and unknown calendar coverage; no SQLite opens. Native MCP requires an explicit inventory reader/flag. Read all eight changed native pages and sixteen RU/ES translations: usage, MCP, search, app scopes, management, roadmap, commands, changelog. Parent scan references come from search meeting, not cue ref. Roadmap separates delivered discovery from future reviewed brief assembly within explicit grants. All530 source cases,267 matrix cases and six installed platform proofs pass; registry/validated/publish artifacts match and tag peels to captured source. Other tool pins unchanged."
+    "conclusion": "Reviewed Zoom 0.27.0: adopts Core 0.342.0/Base 0.45.0 as one runtime identity; Base standards tables moved to @wirecat/cli-base/standards/tables for SDK consumers; command effects and output unchanged. Only the changelog changed; RU/ES updated. Roadmap unchanged: broader reviewed meeting preparation remains planned."
   }
 }

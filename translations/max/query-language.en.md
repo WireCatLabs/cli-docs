@@ -169,7 +169,7 @@ An error carries the position of the problem in the query and a hint.
 
 ## Via MCP
 
-Through the `max` MCP server, `max_read` (`command: "search messages"`) accepts either `text` or a versioned syntax tree in `ast`, not both. `timezone` sets the calendar zone. `chat:` goes in the query itself; `source`, `newest`, `context` and `limit` match command options; `saved` runs a saved search. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` and `sync_first` match `--thread…` and `--sync-first`; `sync_first` requires `messages.sync-first: allow`. The response is the same object as `--json`. `max_read` (`command: "stats messages show"`) counts the same queries. `record: false` disables request-history recording.
+Through the `max` MCP server, `max_read` (`command: "search messages"`) accepts the query as text in `query`. `timezone` sets the calendar zone. `chat:` goes in the query itself; `source`, `newest`, `context` and `limit` match command options; `saved` runs a saved search. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` and `sync_first` match `--thread…` and `--sync-first`; `sync_first` requires `messages.sync-first: allow`. The response is the same object as `--json`. `max_read` (`command: "stats messages show"`) counts the same queries. `record: false` disables request-history recording.
 
 ## Next steps
 

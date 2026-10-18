@@ -63,6 +63,7 @@ Use the memo tools to list the memories waiting for my review.
 | `actions_add`, `actions_list`, `actions_show` | Предложение и чтение действий |
 | `agents_log` | Чтение журнала агента |
 | `vocabulary_list`, `vocabulary_show`, `vocabulary_check` | Просмотр проектов, тегов и тем; только чтение |
+| `vocabulary_inspect` | Проверить два выбранных тега перед объединением: счётчики, пересечения и ограниченные примеры; ничего не объединяет |
 | `tasks_relations`, `tasks_status`, `tasks_list` | Зависимости задач; только чтение |
 
 Всё, что добавляет приложение, сохраняется под именем агента `memo-mcp` и ждёт со статусом «предложено».

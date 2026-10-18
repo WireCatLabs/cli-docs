@@ -80,6 +80,48 @@ memo tags remove follow-up --note document:3
 Quitar una etiqueta deja la nota, el mensaje o la persona como estaban. Quitar una etiqueta que no
 está no cambia nada. Una etiqueta que viene de un archivo se quita editando el archivo.
 
+## Revisar etiquetas duplicadas
+
+Pide a tu agente que busque etiquetas probablemente duplicadas y muestre las pruebas antes de cambiar ninguna:
+
+```text prompt
+Revisa nuestras etiquetas en busca de posibles sinónimos. Muestra primero los nombres canónicos y los
+alias. Para cada par que elija, examina sus asignaciones y coincidencias. No crees alias ni fusiones nada.
+```
+
+`memo vocabulary check --limit 20 --json` sugiere coincidencias por escritura. Los nombres parecidos son
+candidatos a revisar; no prueban que dos conceptos sean el mismo. Los alias existentes son nombres
+alternativos de un mismo registro canónico, así que reutilízalos antes de crear otra etiqueta.
+
+Ejecuta `memo vocabulary list --json` para leer los ID canónicos y la huella actual. Después elige
+explícitamente dos entradas de **etiqueta**. Abajo, sustituye `FINGERPRINT` por la huella de esa lista sin
+filtrar, `tag:1` por el duplicado que revisas y `tag:2` por el nombre que conservarías:
+
+```sh
+memo vocabulary inspect tag:1 tag:2 --fingerprint FINGERPRINT --limit 5 --json
+```
+
+Muestra las asignaciones de cada etiqueta por tipo de destino, los destinos en común, los alias, las
+asignaciones automáticas y los chats compartidos, además de los enlaces en ambos sentidos. Las muestras
+de asignaciones incluyen ID de fuentes y autores. No lee el texto de las transcripciones ni llama a un
+modelo. No cambia etiquetas ni alias. `--limit` limita las muestras por tabla, no los recuentos completos.
+`coverage.samples_complete` indica si se recortaron las muestras; `preview_fingerprint` cubre igualmente
+todas las filas examinadas.
+
+Por defecto la lectura se limita a 5.000 filas de dependencias y 1 MiB de entrada. `--max-rows` admite
+hasta 20.000; `--max-read-bytes`, hasta 16 MiB; `--limit`, hasta 100 muestras por tabla. El catálogo tiene
+un límite aparte. Si las dependencias son demasiado grandes, falla toda la vista previa en lugar de
+devolver un recuento parcial. Una estimación prudente del tamaño puede rechazarla antes de llegar al
+límite real del JSON. Si el vocabulario cambió, vuelve a listarlo y elige el par de nuevo; no reutilices
+la huella caducada.
+
+`coverage.inspected_tables` nombra las cuatro tablas cubiertas: asignaciones, alias, asignaciones
+automáticas y enlaces. El texto de búsquedas guardadas, el historial de propuestas y las referencias
+serializadas arbitrarias quedan fuera de esta vista previa. `coverage.apply_supported` es false: es una
+ayuda para revisar, no un plan de fusión ejecutable. Se rechazan temas y proyectos. No hay comando para
+aplicar, y una huella de vista previa no da permiso para fusionar. Los comandos de alias que revisa el
+propietario siguen siendo aparte.
+
 ## Etiquetas en tg y max
 
 tg y max leen las mismas etiquetas: `tg search messages 'tag:follow-up'` encuentra mensajes de Telegram etiquetados y `memo search mail 'tag:follow-up'` encuentra correo etiquetado. Las etiquetas de contactos también están disponibles con `tg tags` y `max tags`.

@@ -4,6 +4,66 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.73.1 — 18.10.2026
+
+### Correcciones
+
+- **tg arranca un poco más rápido.** Compilado sobre cli-core 0.342.0 y cli-base 0.45.0: un comando ya no analiza las
+  tablas de reglas que solo usan las comprobaciones de desarrollo, lo que ahorró unos 7–12 ms por arranque en la
+  [medición](https://github.com/WireCatLabs/cli-testing/tree/main/performance/startup/standards-split-before/README.md).
+
+## 0.73.0 — 18.10.2026
+
+### Novedades
+
+- **Los agentes reciben por `tg mcp` todos los comandos que permiten los niveles del perfil** (cli-core 0.341.0). El
+  servidor ofrecía herramientas escritas a mano; ahora las construye a partir de los propios comandos y las ejecuta en
+  este proceso, 188 comandos en total, entre los nuevos `messages sync`, `contacts sync`, `mentions confirm`,
+  `conversations embed` e `images embed`. Lo que un agente no puede hacer lo deciden los niveles del perfil: pon el área
+  en `readonly` o `deny`. La lista completa está fijada en `contracts/mcp-catalogue.json`.
+- **`tg conversations rebuild`** vuelve a construir las conversaciones de los chats que cambiaron y las incrusta con el
+  modelo de este equipo; nunca consulta a Telegram, no descarga ningún modelo y no envía texto a ninguna parte.
+  Sustituye a la herramienta `conversations_refresh`, que solo tenía el agente.
+
+### Cambios — pueden romper scripts
+
+- **Los argumentos de las herramientas de `tg mcp` son las opciones del comando en snake_case**: `chat`, `limit`,
+  `query`, `sync_first`, etc. Un agente que recordaba los nombres antiguos vuelve a consultar `tg_tools_search`.
+- **`search messages` de un agente acepta la consulta solo como texto**; la entrada estructurada `ast` desaparece.
+- **Un agente no puede marcar como leído ni actuar como el propietario**: no se le ofrecen `--mark-read` en
+  `messages list`, `inbox` y `review` ni `--as-owner`, el ajuste `catch_up_marks_read` no se aplica a sus ejecuciones y
+  sus puntos de control `--new` son propios.
+- **Con `TG_READ_ONLY` se rechazan las escrituras locales que borran o sobrescriben lo que guardaste** (cli-core
+  0.336.0, 0.337.0): `searches create`, `searches delete`, `searches clear`, `contacts alias set|rm`, `contacts notes
+  add|edit|remove`, `contacts link|unlink`, `tags add|auto|remove`, `mentions confirm|reject`, `attachments text set`,
+  `chats tracking add|remove`, `conversations links add|clear`, `conversations consents revoke` y `tasks reject`, y sus
+  herramientas de agente, salen con 5. Lo que el archivo reconstruye por sí mismo, la sincronización, `serve` y el
+  registro de tareas siguen funcionando.
+- **Mientras Telegram retiene la cuenta, no sale ninguna escritura** (cli-core 0.334.0): también se rechazan
+  reacciones, marcar como leído, fijados silenciosos y cambios de título y de perfil; la lectura funciona. Un bloqueo
+  sin fin retiene las escrituras hasta que `tg flood clear` o `tg doctor --online` encuentre bien la cuenta
+  (`until: null` en JSON).
+- **Un envío bloqueado por el cerrojo de otro proceso sale con 9 (`timeout`), no con 1** (cli-core 0.338.0); no se envió
+  nada, así que es seguro reintentarlo. También `flood clear`.
+- **`tg upgrade --offline` sale con 2** (cli-core 0.338.0) en lugar de consultar npm de todos modos.
+- **`conversations build`, `conversations embed` y `search conversations` avisan de que pueden enviar texto fuera**
+  (cli-core 0.334.0, 0.336.0): con `--analyze`, `--provider` o un modelo de embeddings remoto. Con `TG_READ_ONLY` se
+  niegan antes de enviar; un modelo local sigue funcionando. Nunca se ejecutan a través de `serve`.
+
+### Correcciones
+
+- **`tg mcp` responde a cada llamada recibida antes de que se cierre stdin** en lugar de salir con una todavía en curso.
+  `tg bot mcp` aún no.
+- **A un agente no se le ofrece `offline` en un comando que lo rechaza** (cli-core 0.335.0): `topics`, `chats events`,
+  `chats inspect`, `chats members audit`, `chats members fetch` y los comandos `chats folders`.
+- **Un cerrojo ocupado ya no detiene `tg serve`** (cli-core 0.340.0) hasta 5 segundos.
+- **Dos cambios a la vez en la lista de destinatarios ya no se anulan entre sí** (cli-core 0.338.0).
+- **`tg store gaps repair --background` ejecuta su tarea** en lugar de fallar al instante (cli-core 0.339.0).
+- **Las pistas de `server` y de los comandos de mantenimiento del archivo nombran el perfil** (cli-core 0.339.0).
+- **`tg upgrade --check` funciona con `TG_READ_ONLY`** (cli-core 0.338.0).
+- **Las descargas de modelos nunca pasan por `tg serve`** (cli-core 0.336.0).
+- **Un archivo que no se pudo abrir se cierra** (cli-core 0.332.0), así que su carpeta se puede borrar en Windows.
+
 ## 0.72.0 — 18.10.2026
 
 ### Novedades

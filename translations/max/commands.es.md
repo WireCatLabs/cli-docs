@@ -62,7 +62,7 @@ la sesión MAX almacenada para este perfil
 
 inicie sesión en este perfil en MAX
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max session start [method]
@@ -76,7 +76,7 @@ max session start [method]
 
 cerrar la sesión de este perfil en MAX y eliminar la sesión guardada aquí
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max session end
@@ -86,7 +86,7 @@ max session end
 
 configure su cuenta MAX personal y conecte a su agente
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max setup [options]
@@ -125,7 +125,7 @@ max account show [options]
 
 cambia el nombre, la descripción o la foto que todos ven en tu perfil
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max account update [options]
@@ -158,7 +158,7 @@ max account sessions list [query]
 
 cierre sesión en todos los demás dispositivos, incluido su teléfono; este se queda
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max account sessions end [options]
@@ -184,7 +184,7 @@ max account privacy show
 
 cambiar quién puede encontrar la cuenta, llamar o añadirla; los demás ajustes se conservan
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max account privacy set [options]
@@ -194,7 +194,7 @@ max account privacy set [options]
 |---|---|
 | `--find-by-phone <who>` |quién encuentra la cuenta por su número: everyone, contacts o nobody; MAX admite everyone y contacts.|
 | `--phone-number <who>` |quién ve el número: everyone, contacts o nobody.|
-| `--calls <who>` |quién puede llamar: everyone, contacts o nobody.|
+| `--calls <who>` | de quién suenan las llamadas: everyone, contacts o nobody. |
 | `--chat-invites <who>` |quién puede añadir la cuenta a grupos y canales: everyone, contacts o nobody.|
 | `--hide-online <on\|off>` | ocultar el estado en línea y la última conexión. |
 
@@ -314,7 +314,7 @@ max chats inspect <link>
 
 unirse a un grupo o canal mediante su enlace; los demás en él ven que te uniste
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats join <link>
@@ -328,7 +328,7 @@ max chats join <link>
 
 marcar un chat como leído; el otro lado ve que lo lees
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats mark-read <chat> [options]
@@ -346,7 +346,7 @@ max chats mark-read <chat> [options]
 
 abandonar un grupo o canal; los demás en él ven que te fuiste
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats leave <chat>
@@ -360,7 +360,7 @@ max chats leave <chat>
 
 crear un grupo o un canal; a las personas agregadas se les dice
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats create <title> [person] [options]
@@ -452,7 +452,7 @@ max chats members fetch <chat> [options]
 
 agregar personas; se les dice
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats members add <chat> <person> [options]
@@ -471,7 +471,7 @@ max chats members add <chat> <person> [options]
 
 eliminar personas; sus mensajes permanecen
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats members remove <chat> <person>
@@ -542,7 +542,7 @@ dar o recuperar los derechos de administrador de un miembro
 
 convertir a un miembro en administrador con estos derechos
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats admins add <chat> <person> [options]
@@ -561,7 +561,7 @@ max chats admins add <chat> <person> [options]
 
 retirar los permisos de un administrador; ellos siguen siendo miembros
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats admins remove <chat> <person>
@@ -576,7 +576,7 @@ max chats admins remove <chat> <person>
 
 cambiar el nombre de un grupo o canal, cambiar su descripción o activar o desactivar una de sus configuraciones
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats update <chat> [options]
@@ -617,7 +617,7 @@ max chats link show <chat>
 
 reemplace el enlace de invitación; el viejo deja de funcionar
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats link reset <chat>
@@ -653,7 +653,7 @@ max chats requests list <chat> [query] [options]
 
 aceptar; el grupo ve la entrada
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats requests accept <chat> <person>
@@ -668,7 +668,7 @@ max chats requests accept <chat> <person>
 
 rechazar la solicitud
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats requests decline <chat> <person>
@@ -711,7 +711,7 @@ max chats folders show <folder>
 
 crear una carpeta de chat
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats folders create <title> [options]
@@ -729,7 +729,7 @@ max chats folders create <title> [options]
 
 cambiar el nombre de una carpeta o cambiar los chats que contiene
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats folders update <folder> [options]
@@ -749,7 +749,7 @@ max chats folders update <folder> [options]
 
 eliminar una carpeta; los chats en el se quedan
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats folders delete <folder>
@@ -763,7 +763,7 @@ max chats folders delete <folder>
 
 colocar las carpetas en este orden; las que no se nombran conservan su orden después de ellas
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats folders order <folders>
@@ -824,7 +824,7 @@ max chats rules unset <chat> <key>
 
 Juzgar los nuevos mensajes y miembros de un grupo según sus reglas y actuar según lo permitan.
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats moderate <chat> [options]
@@ -863,7 +863,7 @@ max chats media <chat> [options]
 
 silenciar el chat para siempre o hasta una fecha; no se avisa a sus miembros
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats mute <chat> [options]
@@ -881,7 +881,7 @@ max chats mute <chat> [options]
 
 volver a activar las notificaciones del chat
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats unmute <chat>
@@ -895,7 +895,7 @@ max chats unmute <chat>
 
 eliminar el chat para esta cuenta; los demás conservan el chat y sus mensajes
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats delete <chat> [options]
@@ -913,7 +913,7 @@ max chats delete <chat> [options]
 
 eliminar todos los mensajes del chat para esta cuenta; los demás conservan los suyos
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats clear <chat> [options]
@@ -931,7 +931,7 @@ max chats clear <chat> [options]
 
 iniciar un bot como su botón Inicio; el bot ve que lo iniciaste
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats start <bot> [options]
@@ -949,7 +949,7 @@ max chats start <bot> [options]
 
 dirección de la miniaplicación del bot con tu sesión; mantenla privada
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max chats app <bot> [options]
@@ -1156,7 +1156,7 @@ max contacts lookup
 
 agregue una persona a sus contactos: `contacts list` todavía muestra solo las personas con las que tiene un diálogo
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max contacts add <person>
@@ -1170,7 +1170,7 @@ max contacts add <person>
 
 eliminar a una persona de tus contactos; el chat permanece, un nombre que les diste puede no
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max contacts remove <person>
@@ -1184,7 +1184,7 @@ max contacts remove <person>
 
 evitar que una persona le escriba; no es necesario que sea un contacto
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max contacts block <person>
@@ -1198,7 +1198,7 @@ max contacts block <person>
 
 deja que una persona bloqueada te vuelva a escribir
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max contacts unblock <person>
@@ -1212,7 +1212,7 @@ max contacts unblock <person>
 
 renombrar el contacto en la libreta de direcciones del servicio de mensajería; usa contacts alias para un nombre local privado
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max contacts rename <person> <first-name> [last-name]
@@ -1228,7 +1228,7 @@ max contacts rename <person> <first-name> [last-name]
 
 cargue números de teléfono y agregue las personas que el servicio de mensajería tiene debajo de ellos
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max contacts import <file>
@@ -1499,7 +1499,7 @@ max messages transcribe <chat> <message> [options]
 
 enviar un mensaje de texto; sin [texto], el texto se lee desde stdin
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max messages send <chat> [text] [options]
@@ -1542,7 +1542,7 @@ max messages scheduled <chat>
 
 cambiar el texto de su propio mensaje; Es posible que el otro lado ya lo haya leído.
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max messages edit <chat> <message> [text] [options]
@@ -1562,7 +1562,7 @@ max messages edit <chat> <message> [text] [options]
 
 eliminar mensajes solo para usted; con --for-everyone, para todos en el chat
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max messages delete <chat> <messages> [options]
@@ -1582,7 +1582,7 @@ max messages delete <chat> <messages> [options]
 
 reenviar un mensaje a otro chat
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max messages forward <chat> <message> [options]
@@ -1604,7 +1604,7 @@ max messages forward <chat> <message> [options]
 
 fijar un mensaje en un chat, en silencio a menos que --notify
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max messages pin <chat> <message> [options]
@@ -1623,7 +1623,7 @@ max messages pin <chat> <message> [options]
 
 desanclar un mensaje en un chat
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max messages unpin <chat> <message>
@@ -1638,7 +1638,7 @@ max messages unpin <chat> <message>
 
 pulsar un botón del bot bajo un mensaje; el bot ve la pulsación
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max messages press <chat> <message> <button>
@@ -2322,7 +2322,7 @@ max stats charts <chat> [options]
 
 ## `max tasks`
 
-lo que requiere tu atención —preguntas sin respuesta, menciones, peticiones y promesas— guardado en el almacenamiento local; review y serve lo añaden
+lo que requiere tu atención —preguntas sin respuesta, menciones, peticiones y promesas— guardado en el almacenamiento local; lo añaden review, inbox y messages sync, y serve solo las peticiones de las reglas de respuesta automática
 
 ### `max tasks list`
 
@@ -2517,7 +2517,7 @@ max tasks unmerge <dup>
 
 ### `max tasks agenda`
 
-lo que hay que revisar hoy, desde el almacén local y sin texto de mensajes: tareas vencidas, por vencer o por revisar, chats donde debes una respuesta y chats donde esperas una
+lo que hay que revisar hoy, desde el almacén local y sin texto de mensajes: tareas vencidas, por vencer o por revisar, chats donde debes una respuesta, chats donde esperas una y tareas abiertas que hace otra persona
 
 ```sh
 max tasks agenda [query] [options]
@@ -2645,7 +2645,7 @@ las conversaciones dentro de un chat, que se encuentran en los mensajes almacena
 
 encontrar conversaciones de chat en lo que tiene el archivo, reemplazando la última compilación; sin --chat, cada chat que cambió desde su creación y cada grupo que nunca se creó; nunca le pregunta al servicio de mensajería
 
-**Cambia algo solo en este ordenador.**
+**Envía texto a un servicio externo.**
 
 ```sh
 max conversations build [options]
@@ -2792,6 +2792,22 @@ max conversations links clear [options]
 | `--chat <chat>` | un chat: su ID o parte de su título. |
 | `--model <model>` |sólo las respuestas que dio este modelo.|
 
+### `max conversations rebuild`
+
+construye y después vectoriza con el modelo de este equipo los chats que cambiaron desde su análisis y los grupos nunca analizados, o solo --chat; cada ejecución tiene un límite, así que vuelve a ejecutarlo para el resto; nunca consulta el servicio, no descarga modelos y no envía texto a ninguna parte
+
+**Cambia algo solo en este ordenador.**
+
+```sh
+max conversations rebuild [options]
+```
+
+| Opción | Para qué sirve |
+|---|---|
+| `--chat <chat>` | un chat: su ID o parte de su título. |
+| `--max-chats <n>` | como máximo este número de chats por ejecución; 20 por defecto. |
+| `--max-chunks <n>` | como máximo este número de fragmentos vectorizados por ejecución; 2000 por defecto. |
+
 ### `max conversations consents`
 
 Permisos de análisis recordados para los chats de esta cuenta y los puntos finales del proveedor.
@@ -2823,7 +2839,7 @@ max conversations consents revoke [options]
 
 calcular un vector para cada parte de las conversaciones de un chat para buscar por significado, en esta máquina o con el proveedor a través de un servicio y su clave; continúa donde se detuvo; sin --chat, a cada chat creado le quedan fragmentos, solo en esta máquina
 
-**Cambia algo solo en este ordenador.**
+**Envía texto a un servicio externo.**
 
 ```sh
 max conversations embed [options]
@@ -3196,7 +3212,7 @@ max images models list [query]
 
 descargar un modelo de imágenes una vez, comprobado contra el sha256 que espera esta versión
 
-**Cambia algo solo en este ordenador.**
+**Lee de un servicio externo.**
 
 ```sh
 max images models download <model>
@@ -3212,7 +3228,7 @@ descripciones de grupos y canales en caché para las etiquetas automáticas loca
 
 ### `max metadata get`
 
-
+la descripción en caché de un chat almacenado, tal como la leen las etiquetas automáticas
 
 ```sh
 max metadata get [options]
@@ -3224,7 +3240,7 @@ max metadata get [options]
 
 ### `max metadata refresh`
 
-
+vuelve a obtener las descripciones de grupos y canales y las guarda en caché
 
 **Cambia algo solo en este ordenador.**
 
@@ -3325,6 +3341,8 @@ max search notes <query> [options]
 ### `max search conversations`
 
 las conversaciones más cercanas a una consulta por significado y por palabras, las mejores primero, en un chat o en todos — por significado tras `conversations embed`; se ejecuta en este comando
+
+**Lee de un servicio externo.**
 
 ```sh
 max search conversations <query> [options]
@@ -3485,7 +3503,7 @@ max models audio list [query]
 
 descargue un modelo de voz una vez, comparado con el sha256 que espera esta versión
 
-**Cambia algo solo en este ordenador.**
+**Lee de un servicio externo.**
 
 ```sh
 max models audio download <model>
@@ -3515,7 +3533,7 @@ max models text list [query]
 
 descargue un modelo de incrustación una vez, comparado con el sha256 que espera esta versión
 
-**Cambia algo solo en este ordenador.**
+**Lee de un servicio externo.**
 
 ```sh
 max models text download <model> [options]
@@ -3582,7 +3600,7 @@ max polls show <chat> <message>
 
 votar en una encuesta o retirar su voto; los demás lo ven a menos que la encuesta sea anónima
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max polls vote <chat> <message> [answers] [options]
@@ -3602,7 +3620,7 @@ max polls vote <chat> <message> [answers] [options]
 
 cierra tu propia encuesta; nadie puede votar después de eso y no se puede reabrir
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max polls close <chat> <message>
@@ -3617,7 +3635,7 @@ max polls close <chat> <message>
 
 enviar una encuesta a un chat, como mensaje propio; público a menos que --anónimo
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max polls create <chat> <question> <answers> [options]
@@ -3646,7 +3664,7 @@ reaccionar a los mensajes
 
 pon tu reacción en un mensaje; reemplaza el que tenias
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max reactions add <chat> <message> <emoji>
@@ -3662,7 +3680,7 @@ max reactions add <chat> <message> <emoji>
 
 quita tu reacción de un mensaje
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max reactions remove <chat> <message>
@@ -4000,7 +4018,7 @@ max replies status
 
 manténgase conectado a MAX y transmita nuevos mensajes a `max watch`, hasta Ctrl-C
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max serve [options]
@@ -4154,7 +4172,7 @@ max schedule list
 
 ejecutar una programación ahora, como lo haría su temporizador, y esperar a que termine
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max schedule run <name>
@@ -4182,7 +4200,7 @@ max schedule remove <name>
 
 lo que ejecuta un temporizador, a partir del archivo de la programación; para ejecutarla a mano, usa run
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max schedule exec <file>
@@ -4433,9 +4451,9 @@ max complete [words]
 
 ## `max mcp`
 
-servir este perfil a un agente a través de MCP, en stdin y stdout - `claude mcp add max -- max mcp`
+servir este perfil a un agente a través de MCP, en stdin y stdout - `claude mcp add max -- max <profile> mcp`
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max mcp [options]
@@ -4568,7 +4586,7 @@ max bot chats show <chat>
 
 sacar al bot de un chat; sólo un administrador del chat puede recuperarlo
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot chats leave <chat>
@@ -4582,7 +4600,7 @@ max bot chats leave <chat>
 
 muestra lo que el bot está haciendo en un chat (escribiendo, enviando una foto) durante unos segundos
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot chats action <chat> <action>
@@ -4613,7 +4631,7 @@ max bot chats admins list <chat>
 
 convertir a un miembro en administrador con estos derechos
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot chats admins add <chat> <person> [options]
@@ -4633,7 +4651,7 @@ max bot chats admins add <chat> <person> [options]
 
 retirar los permisos de un administrador; ellos siguen siendo miembros
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot chats admins remove <chat> <person>
@@ -4652,7 +4670,7 @@ las personas en un chat en el que el bot es administrador
 
 sacar a una persona de un chat; sus mensajes permanecen
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot chats members remove <chat> <person> [options]
@@ -4688,7 +4706,7 @@ max bot chats members list <chat> [options]
 
 añadir personas a un chat por ID de usuario, 100 como máximo; el bot debe ser un administrador con permiso para añadir miembros
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot chats members add <chat> <users>
@@ -4750,7 +4768,7 @@ max bot chats rules unset <chat> <key>
 
 Juzga los nuevos mensajes de un grupo y las uniones según sus reglas, y actúa según lo permitan, como el bot.
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot chats moderate <chat> [options]
@@ -4776,7 +4794,7 @@ los mensajes en los chats en los que se encuentra este bot
 
 enviar un mensaje como bot; sin [texto], el texto se lee desde stdin
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot messages send <chat> [text] [options]
@@ -4832,7 +4850,7 @@ max bot messages show <chat> <message>
 
 reemplazar el texto de un mensaje que envió el bot
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot messages edit <chat> <message> <text> [options]
@@ -4853,7 +4871,7 @@ max bot messages edit <chat> <message> <text> [options]
 
 eliminar mensajes en un chat en el que el bot puede eliminar; no se puede deshacer
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot messages delete <chat> <messages> [options]
@@ -4872,7 +4890,7 @@ max bot messages delete <chat> <messages> [options]
 
 fijar un mensaje en un chat; silenciosamente a menos que --notifique
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot messages pin <chat> <message> [options]
@@ -4891,7 +4909,7 @@ max bot messages pin <chat> <message> [options]
 
 desanclar un mensaje en un chat
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot messages unpin <chat> <message>
@@ -5011,7 +5029,7 @@ max bot sends list
 
 imprima mensajes nuevos a medida que lleguen y guárdelos, hasta Ctrl-C o --timeout (cualquiera de los dos finaliza normalmente)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot watch [options]
@@ -5030,7 +5048,7 @@ respuestas a los botones que la gente presiona debajo de los mensajes del bot
 
 responder a un botón presionado por su ID de devolución de llamada: --la notificación muestra a la persona una nota única, --el texto reemplaza el mensaje en el que estaba el botón
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot callbacks answer <callback> [options]
@@ -5061,7 +5079,7 @@ max bot commands list
 
 reemplace todo el menú: cada comando como nombre = descripción, p. inicio=comenzar
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot commands set <commands>
@@ -5075,7 +5093,7 @@ max bot commands set <commands>
 
 vaciar el menú
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot commands clear
@@ -5097,7 +5115,7 @@ max bot webhooks list
 
 enviar las actualizaciones de este bot a una dirección HTTPS; rechazado mientras se establece otro
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot webhooks set <url> [options]
@@ -5117,7 +5135,7 @@ max bot webhooks set <url> [options]
 
 dejar de enviar actualizaciones a esta dirección; sin nada restante, `bot watch` vuelve a funcionar
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot webhooks delete <url>
@@ -5233,7 +5251,7 @@ max bot comments get <message> <comment>
 
 comentar debajo de una publicación como el bot; - lee la entrada estándar
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot comments send <message> <text> [options]
@@ -5252,7 +5270,7 @@ max bot comments send <message> <text> [options]
 
 reemplazar el texto de un comentario que escribió el bot; - lee la entrada estándar
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot comments edit <message> <comment> <text> [options]
@@ -5272,7 +5290,7 @@ max bot comments edit <message> <comment> <text> [options]
 
 eliminar un comentario debajo de una publicación
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot comments delete <message> <comment> [options]
@@ -5295,7 +5313,7 @@ archivos subidos a MAX, para adjuntar a un mensaje
 
 cargue un archivo desde el disco e imprimal archivo adjunto para colocar el `attachments` de un mensaje: `messages send --file` realiza ambos pasos a la vez
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot uploads put <file> [options]
@@ -5334,7 +5352,7 @@ max bot api get-my-info
 
 Editar comandos de bot actuales: escribir (PATCH /me/commands)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api edit-my-commands [options]
@@ -5361,7 +5379,7 @@ max bot api get-chat [options]
 
 Editar información del chat o del canal: escribir (PATCH /chats/{chatId})
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api edit-chat [options]
@@ -5377,7 +5395,7 @@ max bot api edit-chat [options]
 
 Enviar acción – escribir (POST /chats/{chatId}/actions)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api send-action [options]
@@ -5405,7 +5423,7 @@ max bot api get-pinned-message [options]
 
 Fijar mensaje: escribir (PUT /chats/{chatId}/pin)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api pin-message [options]
@@ -5421,7 +5439,7 @@ max bot api pin-message [options]
 
 Desanclar mensaje: escribir (BORRAR /chats/{chatId}/pin)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api unpin-message [options]
@@ -5447,7 +5465,7 @@ max bot api get-membership [options]
 
 Abandonar el chat: destructivo (BORRAR /chats/{chatId}/members/me)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api leave-chat [options]
@@ -5473,7 +5491,7 @@ max bot api get-admins [options]
 
 Establecer administradores de chat o canal: escriba (POST /chats/{chatId}/members/admins)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api post-admins [options]
@@ -5489,7 +5507,7 @@ max bot api post-admins [options]
 
 Revocar derechos de administrador: escriba (BORRAR /chats/{chatId}/members/admins/{userId})
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api delete-admins [options]
@@ -5519,7 +5537,7 @@ max bot api get-members [options]
 
 Agregar miembros: escriba (POST /chats/{chatId}/members)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api add-members [options]
@@ -5535,7 +5553,7 @@ max bot api add-members [options]
 
 Eliminar miembro: escriba (BORRAR /chats/{chatId}/members)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api remove-member [options]
@@ -5559,7 +5577,7 @@ max bot api get-subscriptions
 
 Suscribirse — escritura (POST /subscriptions)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api subscribe [options]
@@ -5574,7 +5592,7 @@ max bot api subscribe [options]
 
 Cancelar suscripción — escritura (DELETE /subscriptions)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api unsubscribe [options]
@@ -5588,7 +5606,7 @@ max bot api unsubscribe [options]
 
 Obtener URL de carga: escribir (POST /uploads)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api get-upload-url [options]
@@ -5620,7 +5638,7 @@ max bot api get-messages [options]
 
 Enviar mensaje - escribir (POST /mensajes)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api send-message [options]
@@ -5638,7 +5656,7 @@ max bot api send-message [options]
 
 Editar mensaje - escribir (PUT /mensajes)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api edit-message [options]
@@ -5654,7 +5672,7 @@ max bot api edit-message [options]
 
 Eliminar mensaje: destructivo (BORRAR /mensajes)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api delete-message [options]
@@ -5697,7 +5715,7 @@ max bot api get-comments [options]
 
 Enviar comentario - escribir (POST /messages/{messageId}/comments)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api send-comment [options]
@@ -5714,7 +5732,7 @@ max bot api send-comment [options]
 
 Editar comentario: escribir (PUT /messages/{messageId}/comments)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api edit-comment [options]
@@ -5731,7 +5749,7 @@ max bot api edit-comment [options]
 
 Eliminar comentario: destructivo (BORRAR /messages/{messageId}/comments)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api delete-comment [options]
@@ -5772,7 +5790,7 @@ max bot api get-video-attachment-details [options]
 
 Responder a un callback — escritura (POST /answers)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api answer-on-callback [options]
@@ -5789,7 +5807,7 @@ max bot api answer-on-callback [options]
 
 Obtener actualizaciones — escritura (GET /updates)
 
-**Cambia algo en MAX.**
+**Cambia algo fuera de este ordenador: en MAX o en un servicio externo.**
 
 ```sh
 max bot api get-updates [options]

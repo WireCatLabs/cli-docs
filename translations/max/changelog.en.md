@@ -4,6 +4,136 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.62.0 — 18.10.2026
+
+### New
+
+- **Over `max mcp` an agent gets every command the profile's levels allow** (cli-core 0.341.0). The server used to
+  offer 141 hand-written tools; now the tools are built from the commands themselves, and the agent has 181
+  commands, among them `messages sync`, `contacts sync`, `chats members fetch`, `chats tracking add/remove`,
+  `contacts link/unlink`, `mentions confirm/reject/rebuild`, `conversations embed`, `images embed`, `tasks reject`,
+  `contacts import`, `account privacy set` and `chats app`. What the agent may not do is decided by the profile's
+  levels: set the area to `readonly` or `deny`. The full list is pinned in `contracts/mcp-catalogue.json`.
+- **`conversations rebuild`** builds again the conversations of chats that changed and computes their vectors with the
+  model on this computer; it does not ask MAX, downloads no model and sends no text anywhere. It replaces the agent
+  tool `conversations_refresh`.
+
+### Changed — may break scripts
+
+- **`max mcp` tool arguments are named as the command options**, in snake_case: `chat`, `limit`, `query`,
+  `sync_first` and so on. An agent that remembered the old names needs to ask `max_tools_search` again.
+- **An agent's `search messages` no longer takes the structured `ast` query**, only the query text, as on the
+  command line.
+- **An agent cannot mark read or act on the owner's behalf**: `--mark-read` on `messages list`, `inbox` and
+  `review`, `--as-owner` and `messages send --allow-any-file` are not offered to the agent, and the `catch_up_marks_read` setting does not
+  apply to its runs. Its `--new` checkpoints are separate from yours.
+
+### Fixed
+
+- **`max mcp` answers every call received before stdin closed**, instead of exiting and dropping one still
+  running. `max bot mcp` does not do this yet.
+- **`max tasks --help` no longer promises that `serve` opens tasks.** The help said "review and serve add
+  them". Now it says that tasks are opened by `review`, `inbox` and `messages sync`, and `serve` opens only requests
+  from auto-reply rules.
+  Why: `serve` in MAX does not check questions and mentions as they arrive. Anyone who kept `serve` running and waited
+  for tasks saw an empty list until the next `review` or `messages sync`.
+  What to consider: the behaviour has not changed. An empty `tasks list` now says the same (cli-core 0.341.0).
+- **`max mcp --help` suggests `claude mcp add max -- max <profile> mcp`** (cli-core 0.341.0). The old hint without
+  a profile always failed with "name a profile", and the agent got a server that did not work.
+- **On Node 22, commands that open the store no longer print `ExperimentalWarning: SQLite is an
+  experimental feature`** (cli-core 0.341.0). Agents took these two lines in stderr for an error. Other warnings are
+  printed as before.
+- **`tags remove` by a tag alias removes it the same way `tags add` sets it** (cli-core 0.341.0).
+- **Startup is a little faster** (cli-base 0.45.0): the vocabulary and rule tables are no longer parsed on every
+  start, only when the server for the agent starts.
+
+### Security
+
+- **`attachments extract --output-dir` refuses key folders, `max`'s own folders and the store folder**
+  (cli-core 0.341.0), as the agent tool already did.
+
+## 0.61.0 — 18.10.2026
+
+### New
+
+- **`tasks agenda` shows what others owe you** (cli-core 0.328.0): open tasks that someone else is doing, in a
+  separate section and as `assigned` in `--json`, oldest first.
+- **An agent can mute and unmute a chat** (cli-core 0.338.0): `chats mute` and `chats unmute` are now among the
+  `max mcp` tools. Each is checked against its own key (`chats.mute`, `chats.unmute`); nobody in the chat is told.
+- **Examples in the help** for `account privacy show`, `account privacy set`, `chats mute`, `chats unmute`,
+  `messages pin`, `messages unpin`, `metadata get` and `metadata refresh` (cli-core 0.336.0, 0.339.0).
+
+### Changed — may break scripts
+
+- **`bot messages send --reply-to` accepts only a MAX message id, `mid.…`**, and so does an agent with `reply_to`.
+  Any other value is refused before sending (exit code 2). It used to go to MAX as it was.
+- **`bot messages show`, `edit`, `delete`, `pin` and `unpin` also accept only `mid.…`**, and so does an agent. Any
+  other value is refused before the first request (exit code 2). Before, `delete` with several ids deleted messages up
+  to the first wrong one and only failed on it (`not_found`).
+- **A command without a terminal that waits for a person gets 5 minutes, not 30 seconds** (cli-core 0.328.0), for
+  example an agent's `session start`. `--timeout` and `MAX_TIMEOUT` still decide when set.
+- **A command path given as one argument is an error** (cli-core 0.328.0): `max 'chats list' --help` used to print
+  the general help with exit code 0; now it answers `validation_error` and shows how to write it correctly.
+- **An agent no longer sees `offline` on `bot me`, `bot comments list`, `bot comments get` and `bot chats members list`.**
+  These commands always ask MAX and refused `offline`; now the argument is not in the tool description (cli-core 0.335.0).
+- **`conversations build` and `conversations embed` are marked as changing something outside this computer** (cli-core
+  0.334.0, 0.336.0): with `--analyze` and `--provider` they send conversation text to an external service, and `search
+  conversations` with a remote model sends the query there. Under `MAX_READ_ONLY` all three refuse before sending;
+  a model on this computer or on a local server works as before. They do not run through `max serve`. In `docs/commands.md` this mark now
+  reads "outside this computer: in MAX or in an external service", not "in MAX".
+- **Under `MAX_READ_ONLY`, `session start`, `session end` and `setup` refuse before they start** (exit code 5, "it cannot
+  log in or out"), not from inside the command.
+- **Under `MAX_READ_ONLY`, local writes that delete or overwrite what you saved are refused**
+  (cli-core 0.336.0, 0.337.0): `searches create`, `searches delete`, `searches clear`, `contacts alias set`,
+  `contacts alias rm`, `contacts notes add`, `contacts notes edit`, `contacts notes remove`, `contacts link`,
+  `contacts unlink`, `tags add`, `tags auto`, `tags remove`, `mentions confirm`, `mentions reject`,
+  `attachments text set`, `chats tracking add`, `chats tracking remove`, `conversations links add`,
+  `conversations links clear`, `conversations consents revoke`, `tasks reject` and their agent tools exit with code 5,
+  `permission_error`. What the store rebuilds itself still works (`images embed`, `mentions rebuild`,
+  `conversations embed clear`, `store jobs …`), as do sync, `serve` and task bookkeeping (`tasks add`, `scan`, `close`
+  and others). Under the lock, `tasks close` only proposes closing the task, and `--as-owner` is refused.
+- **While MAX restricts the account, no write goes out** (cli-core 0.334.0): a reaction, reading a chat, a quiet
+  pin, changing a title or profile are refused too (`permission_error`); reading works. A ban with no end holds
+  writes until you run `flood clear` or `doctor --online` finds the account well; in `--json` such a ban has
+  `until: null`.
+- **A send that did not get a file lock held by another process exits with code 9 (`timeout`), not 1**
+  (cli-core 0.338.0): nothing was sent, so it is safe to retry. The same for `flood clear`.
+- **`upgrade --offline` exits with code 2** (cli-core 0.338.0): `upgrade` asks npm, so with `--offline`
+  (and with `--check`) it now refuses instead of going to the network against the flag.
+- **The agent tool `messages list` no longer offers `topic:`** (cli-core 0.340.0): MAX has no topics, and such a
+  condition is refused, as it already was on the command line.
+
+### Fixed
+
+- **A store that failed to open is closed** (cli-core 0.332.0): on Windows the folder with such a file can be deleted.
+- **`doctor report create` works under `MAX_READ_ONLY` again.** cli-core 0.337.0 forbids under this lock any
+  local write not marked as safe; the report only adds a new file, and now it is marked.
+- **Another process's file lock no longer stops `max serve`** (cli-core 0.340.0): serve used to wait for it up to 5
+  seconds, and all commands through it and the keep-alive with MAX stalled for that time.
+- **Two changes to the recipient list at once no longer undo each other** (cli-core 0.338.0):
+  `recipients add`, `remove` and `clear` read and write the list under one lock.
+- **`store gaps repair --background` runs its job** instead of failing at once (cli-core 0.339.0).
+- **Hints from `server status`, `server …` and store maintenance name the profile**: `max <profile> session
+  start`, not `max session start` (cli-core 0.339.0).
+- **`upgrade --check` works under `MAX_READ_ONLY`** (cli-core 0.338.0): it only asks npm about a new version.
+- **Model downloads do not go through `max serve`** (cli-core 0.336.0): `models … download` and `images models download`
+  download from the model server, not from MAX.
+- **With serve running, `images embed` reads images through its connection**, as other reads do (cli-core
+  0.337.0).
+- **A restriction or ban that stopped `watch` or `serve` is remembered** (cli-core 0.334.0):
+  the next command waits, as after the same error in an ordinary command.
+
+### Security
+
+- **`session end` no longer logs out of the account that `max serve` uses.** If serve was started manually or by a
+  service, `session end` used to log out of the same MAX session serve runs on and delete its token. Now
+  the command refuses (exit code 2) and asks you to run `max <profile> server stop` first. A serve started by another command
+  it still stops itself. `session start`, `session end` and `setup` never run through serve
+  (cli-core 0.333.0, `logsInOrOut`).
+- **`chats.unmute: readonly` now stops `chats unmute`** (cli-core 0.336.0). Before, unmuting was
+  checked against the `chats.mute` key, and its own key had no effect. A setting that has only `chats.mute`
+  works as before until `chats.unmute` is set.
+
 ## 0.60.0 — 17.10.2026
 
 ### Added
@@ -1445,7 +1575,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.60.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.62.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

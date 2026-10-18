@@ -63,6 +63,7 @@ Use the memo tools to list the memories waiting for my review.
 | `actions_add`, `actions_list`, `actions_show` | Proponer y leer acciones |
 | `agents_log` | Leer el registro del agente |
 | `vocabulary_list`, `vocabulary_show`, `vocabulary_check` | Consultar proyectos, etiquetas y temas; solo lectura |
+| `vocabulary_inspect` | Examinar dos etiquetas elegidas antes de unirlas: recuentos, coincidencias y muestras limitadas; no fusiona nada |
 | `tasks_relations`, `tasks_status`, `tasks_list` | Consultar dependencias entre tareas; solo lectura |
 
 Todo lo que añade la aplicación se guarda con el nombre de agente `memo-mcp` y espera como propuesto. Lo revisas
