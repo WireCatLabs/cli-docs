@@ -10,6 +10,9 @@ personas vinculadas explícitamente y proyectos confirmados. Elegir opcionalment
 añade coincidencias citadas de nombre, clave y alias, separadas de la pertenencia confirmada.
 Las fuentes configuradas explícitamente añaden coincidencias literales acotadas de mensajes,
 correo y carpetas guardadas, con citas, cobertura y continuación.
+`meetings scheduled` descubre una página acotada de posibles series; `meetings projects scan`
+compara fuentes de una reunión guardada con nombres, claves y alias de proyectos existentes.
+Ambos conservan la incertidumbre y no guardan asociaciones.
 Un agente puede combinar esas fuentes con proyectos, notas y personas de Memo. Empieza con
 [preparación](./usage.md#prepare-for-an-upcoming-meeting) o [búsqueda y fuentes](./search.md).
 
@@ -29,7 +32,10 @@ lee contexto guardado; no acepta estos resultados ni genera un resumen.
 
 ## Trabajo previsto
 
-- Preparación más amplia: descubrir series candidatas, consultar documentos importados, correo, mensajes y posibles proyectos sin tener que elegir uno, y elaborar un informe con pruebas y lagunas explícitas. El comando actual incluye hechos globales aceptados de personas/proyectos, notas del dueño y fuentes elegidas explícitamente, pero no consulta fuentes ni vocabularios de proyectos no elegidos y devuelve contexto guardado sin generar resúmenes.
+- Preparación más amplia: combinar descubrimiento de series, sugerencias de proyectos y contexto
+  de la serie elegida en un informe revisado con fuentes y lagunas explícitas. Una investigación
+  más amplia debe respetar los permisos explícitos del dueño. Los lectores actuales devuelven
+  contexto guardado y candidatas sin generar resúmenes ni consultar fuentes no elegidas.
 
 Los nombres alternativos de proyectos, etiquetas y notas ya pertenecen a Memo y al almacén común.
 Otros proveedores usan las capacidades compartidas; esta herramienta no incluye conectores de

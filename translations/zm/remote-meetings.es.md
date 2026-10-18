@@ -29,9 +29,12 @@ Los identificadores remotos son IDs numéricos de Zoom; `meetings` usa IDs de la
 La lista requiere añadir manualmente `meeting:read:list_meetings`; detalles e invitaciones necesitan
 permisos opcionales de [la guía](./zoom-app.md#add-archive-or-management-access).
 
-En una serie recurrente, la hora inicial de la lista no verifica la próxima ocurrencia. La CLI
-aún no expone lecturas de agenda por ocurrencia. Confirma la ocurrencia en Zoom antes de confiar
-en un informe de preparación; si no puedes comprobarla, marca la fecha como no verificada.
+Para una búsqueda acotada con continuación vinculada a cuenta y ventana, usa
+[`meetings scheduled`](./usage.md#find-a-scheduled-meeting-series). La fecha inicial de una serie
+recurrente no verifica por sí sola su próxima ocurrencia. Tras elegir el ID del proveedor,
+[`meetings prepare <series-id>`](./usage.md#prepare-for-an-upcoming-meeting) comprueba la agenda
+y devuelve el estado de verificación con contexto guardado y fuentes. Conserva la cobertura
+incompleta o no verificada: una fecha listada no prueba una futura llamada.
 
 ## Crear, modificar o cancelar
 

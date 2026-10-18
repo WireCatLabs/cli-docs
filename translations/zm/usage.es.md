@@ -29,6 +29,37 @@ zm meetings export <meeting-id> --format markdown --json
 Lee el resultado antes de guardarlo en un archivo. MCP devuelve exportaciones como texto, pero no
 escribe archivos. [Búsqueda y fuentes](./search.md) conserva referencias exactas para citar pasajes.
 
+<a id="find-a-scheduled-meeting-series" />
+
+## Encontrar una serie programada
+
+Si conoces el tema de la próxima llamada pero no su ID de serie, pide al agente que busque
+candidatas. Lee las reuniones programadas de la cuenta de Zoom elegida, sin importar
+transcripciones ni abrir la base local.
+
+```text prompt
+Busca posibles series para mi próxima reunión de proyecto. Muestra títulos e ID, explica fechas
+antiguas o inciertas y verifica la próxima ocurrencia de la serie que elija antes de preparar contexto.
+```
+
+```sh
+zm meetings scheduled --limit 20 --json
+```
+
+La respuesta conserva cuenta, títulos, ID `meeting_id`, ventana absoluta y cobertura. Por defecto,
+la ventana va desde ahora hasta siete días después. Una fecha inicial antigua de una serie
+recurrente o la ausencia de fecha son pistas, no pruebas de una llamada futura. Conserva
+`calendar_completeness: unknown` y `occurrence_proof: not-read`: no demuestra que se hayan revisado todos los calendarios.
+
+Con `item.page.has_more`, repite `item.after`/`item.until` como `--since-time`/`--before-time` y
+`item.page.next_cursor` como `--cursor`. El cursor pertenece a esa cuenta y ventana. Cada llamada
+lee una página con hasta 100 candidatas y 64 KiB de lectura/salida por defecto. `--max-read-bytes`
+y `--bytes` permiten límites hasta 1 MiB; una página demasiado grande se rechaza entera, sin
+omitir series silenciosamente. Requiere `meeting:read:list_meetings` y red; `--offline` rechaza
+antes de leer credenciales. Elige un ID del proveedor y sigue con
+[la preparación](#prepare-for-an-upcoming-meeting) para verificar la próxima ocurrencia y reunir
+contexto. El ID local de una reunión guardada es distinto.
+
 ## Prepara una próxima reunión
 
 Tienes una próxima llamada en Zoom y quieres tener a mano la conversación anterior. Pide al agente:
@@ -223,6 +254,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `meetings summary <meeting>` | leer resúmenes guardados |
 | `meetings export <meeting> --format markdown\|vtt` | exportar contenido guardado |
 | `search meetings <query>`, `meetings people <query>` | buscar texto o participantes |
+| `meetings scheduled` | una página acotada de posibles series; fechas sin verificar |
 | `meetings prepare <series-id>` | reunir la próxima cita y el contexto guardado con fuentes de una serie elegida |
 | `meetings projects scan <ref>` | sugerir proyectos existentes a partir de una página acotada de evidencia local; no guarda vínculos |
 | `meetings projects evidence <project> [query...]` | leer evidencia acotada del nombre, clave y alias de un proyecto existente |

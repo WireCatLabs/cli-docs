@@ -94,15 +94,16 @@ nombrado: autoriza una llamada API, pero no garantiza que existan los datos soli
 
 | Permiso | Uso |
 |---|---|
-| `meeting:read:list_meetings` | Reuniones del anfitrión y agenda futura |
+| `meeting:read:list_meetings` | Encontrar reuniones propias y posibles series programadas |
 | `meeting:read:list_past_instances` | Encontrar la ocurrencia realizada de cada reunión listada, recurrente o no |
 | `cloud_recording:read:meeting_transcript` | Transcripción disponible |
 | `meeting:read:list_past_participants` | Participantes y sesiones de entrada/salida |
 | `meeting:read:summary` | Resumen disponible de Zoom AI |
 
 Configura los cinco para `zm meetings sync`: la obtención lee esas partes aunque falte texto o resumen.
-El plan, ajustes del anfitrión y retención determinan qué existe. Para solo listar la agenda basta
-el permiso de lista de reuniones.
+El plan, ajustes del anfitrión y retención determinan qué existe. Para listar series con
+`meetings scheduled` basta su permiso de lista. Verificar una serie elegida mediante preparación
+también requiere `meeting:read:meeting`, indicado abajo.
 
 ## Añadir archivo o gestión
 

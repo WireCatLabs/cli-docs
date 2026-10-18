@@ -4,6 +4,21 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.26.0 — 18.10.2026
+
+### Añadido
+
+- `meetings scheduled` lee una página acotada de posibles series Zoom con cobertura del calendario desconocida y fechas sin verificar. `serve --mcp --meeting-inventory` concede la herramienta separada de lectura `meeting_series_inventory`. El perfil elegido y la conexión de credenciales se fijan antes de leer al proveedor; ninguna ruta abre la base de reuniones ni infiere la próxima ocurrencia.
+
+### Cambiado — puede romper la compatibilidad
+
+- Adopta Core0.336.0/Base0.44.2 publicados con una única instancia de Base. El modo compartido de solo lectura rechaza más escrituras guardadas; conserva los metadatos de efectos y acceso sin conexión al leer el catálogo. Registrar el indicador no activa la herramienta sin que la aplicación la conecte. La nueva migración de Core exige el esquema actual para preparación de solo lectura; una lectura normal actualiza primero una base compatible anterior.
+
+### Corregido
+
+- La guía de gestión enlaza el descubrimiento de series con la verificación de ocurrencias al preparar; la guía de aplicación indica los permisos exactos para leer la agenda.
+- La guía de proyectos indica la referencia principal en `meeting` del resultado de búsqueda; su propia `ref` de transcripción señala un pasaje y no sirve como entrada de esta revisión.
+
 ## 0.25.0 — 18.10.2026
 
 ### Añadido

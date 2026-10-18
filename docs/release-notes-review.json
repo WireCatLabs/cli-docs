@@ -12,9 +12,9 @@
     "conclusion": "Reviewed MAX0.59-0.60 at c41c9ea with Core0.326.0/Base0.43.5: tasks open only where something was asked of you; tasks apply is tasks scan and tasks take an assignee; default_profile is no longer read and a profile is never assumed; mcp --permission only tightens and an agent never deletes for everyone; bot MCP tools are built from the bot commands; MAX_READ_ONLY refuses login/logout, bot writes and store changes. Shared Tasks, Permissions and browser pages and the command-rules block updated; defaultProfile correction retired. Roadmap unchanged."
   },
   "zm": {
-    "version": "v0.25.0",
-    "roadmapSha256": "f7b6b53430a33dde307b912aa83eca799a48942ac70952b8e19ab8fdadfc6180",
+    "version": "v0.26.0",
+    "roadmapSha256": "5be0930bce0fb23f985da3be45a72eb16d4757afd4deb73017b45f31bfecf191",
     "reviewedAt": "2026-10-18",
-    "conclusion": "Reviewed published Zoom 0.25.0 source 55956cc with Core 0.334.0/Base 0.44.1. Project scan compares one bounded stored meeting page with existing project names/keys/aliases, retains ambiguity and separate evidence/output coverage, and saves no association. MCP access is explicit. SDK inventory is one bounded candidate series page; CLI/MCP inventory remains planned. Read changed EN guides and ten RU/ES translations, including command and changelog additions. Existing Memo vocabulary preflight/audit is reused; no label merge is claimed. Roadmap unchanged: broader preparation and unselected source research remain future work. All six installed platform proofs and 522 source cases pass; npm/validated/publish artifacts match. Other tool pins unchanged."
+    "conclusion": "Reviewed published Zoom0.26.0 source a087a544 with registry Core0.336.0/Base0.44.2 and one Base identity. Bounded scheduled series CLI/MCP reads preserve unverified old/undated hints and unknown calendar coverage; no SQLite opens. Native MCP requires an explicit inventory reader/flag. Read all eight changed native pages and sixteen RU/ES translations: usage, MCP, search, app scopes, management, roadmap, commands, changelog. Parent scan references come from search meeting, not cue ref. Roadmap separates delivered discovery from future reviewed brief assembly within explicit grants. All530 source cases,267 matrix cases and six installed platform proofs pass; registry/validated/publish artifacts match and tag peels to captured source. Other tool pins unchanged."
   }
 }

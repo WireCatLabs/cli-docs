@@ -284,8 +284,9 @@ en la transcripción y deja los vínculos con proyectos pendientes de revisión.
 ```
 
 La revisión lee la reunión local del perfil elegido y el catálogo compartido de nombres de
-proyectos. No contacta con Zoom ni necesita un componente de búsqueda por significado. Toma
-la referencia `ref` de la reunión principal de un resultado de búsqueda. Ejemplo ficticio:
+proyectos. No contacta con Zoom ni necesita un componente de búsqueda por significado. Usa el
+campo `meeting` del resultado como referencia principal de la reunión. La `ref` de un resultado
+de transcripción apunta a un pasaje y no se acepta aquí. Ejemplo de referencia principal ficticia:
 
 ```sh
 zm meetings projects scan meeting:1/2 --cues 20 --json
