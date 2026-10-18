@@ -82,7 +82,7 @@ La **puntuación** asigna una posición relativa al candidato. La cobertura de p
 
 `query.discovery` describe las búsquedas ejecutadas y el truncamiento. Cada resultado indica términos coincidentes y ausentes; `parent` enlaza una respuesta con su mensaje correspondiente. Son pistas para comprobar la evidencia, no probabilidades de una respuesta correcta. Una pregunta, propuesta, opción rechazada o decisión antigua puede aparecer primero. Lee los mensajes, su contexto y la cobertura del archivo antes de responder. Este modo siempre usa el archivo; rechaza `--backend server`.
 
-Consulta el [planificador de preguntas](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/question-plan.ts), el [servicio de recuperación y ordenación](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/messages-discovery.ts) y la [evaluación sintética](https://github.com/WireCatLabs/cli-testing/blob/63de1d7870e5d983bbc05dd253cdb66d0bbfd7cd/performance/search/model-free/FRESH-VALIDATION.md) para la implementación, medidas y límites.
+Consulta el [planificador de preguntas](https://github.com/WireCatLabs/cli-core/blob/v0.217.1/src/search/question-plan.ts), el [servicio de recuperación y ordenación](https://github.com/WireCatLabs/cli-core/blob/v0.217.1/src/services/messages-discovery.ts) y la [evaluación sintética](https://github.com/WireCatLabs/cli-testing/blob/63de1d7870e5d983bbc05dd253cdb66d0bbfd7cd/performance/search/model-free/FRESH-VALIDATION.md) para la implementación, medidas y límites.
 
 ### Formas de las palabras
 
@@ -152,7 +152,7 @@ Antes de calcular, el texto de cada fragmento se reconstruye a partir de los men
 
 ### Mediciones
 
-Una [medición sintética](https://github.com/WireCatLabs/cli-messaging/blob/v0.148.2/bench/embeddings/README.md) con 100 000 mensajes evaluó por separado la construcción, los vectores y la búsqueda. Calcular vectores fue la preparación más costosa; más procesos aumentaron la memoria y aportaron poca velocidad. Mantener el modelo abierto redujo el tiempo de inicio de búsqueda. Los resultados dependen del equipo, el tamaño del archivo y el modelo; consulta [Pruebas](./testing.mdx) para la metodología.
+Una [medición sintética](https://github.com/WireCatLabs/cli-core/blob/v0.148.2/bench/embeddings/README.md) con 100 000 mensajes evaluó por separado la construcción, los vectores y la búsqueda. Calcular vectores fue la preparación más costosa; más procesos aumentaron la memoria y aportaron poca velocidad. Mantener el modelo abierto redujo el tiempo de inicio de búsqueda. Los resultados dependen del equipo, el tamaño del archivo y el modelo; consulta [Pruebas](./testing.mdx) para la metodología.
 
 ## 5. Búsqueda híbrida de conversaciones
 
@@ -200,19 +200,19 @@ El navegador no abre ninguna cuenta ni ejecuta construcción de conversaciones, 
 
 ## Mapa del código
 
-Código del motor en [`cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/v0.211.0), la biblioteca compartida de tg y max. Son referencias a una instantánea revisada, no a la versión instalada ni promesas de rendimiento.
+Código del motor en [`cli-messaging`](https://github.com/WireCatLabs/cli-core/tree/v0.211.0), la biblioteca compartida de tg y max. Son referencias a una instantánea revisada, no a la versión instalada ni promesas de rendimiento.
 
 | Responsabilidad | Implementación |
 | --- | --- |
-| Búsqueda entre fuentes y erratas | [Search all](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/search-all.ts), [búsqueda de notas](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/notes-search.ts), [corrección de erratas](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/correct.ts) y [búsqueda legacy](https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/search/search.ts) |
-| Preparación del archivo y cobertura | [Servicio del archivo](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/archive.ts), [comando de descarga](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/backfill-command.ts) y [resumen de cobertura](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
-| Análisis, validación, alcance y cobertura | [Analizador de consultas](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/query.ts), [servicio de búsqueda de mensajes](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/messages-search.ts) y [ejecutor Lucene para SQLite](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/lucene.ts) |
-| Índice de palabras, vocabulario y raíces | [Coincidencia de palabras](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/words.ts), [llenado del índice](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/search-index.ts) y [raíces de palabras](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/search/stem.ts) |
-| Candidatos del servidor | [Búsqueda en el servidor](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/server-search.ts) |
-| Vínculos del grafo y ciclo de construcción | [Reglas de vínculos](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/conversations/link.ts), [servicio de conversaciones](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/conversations.ts) y [persistencia de construcciones](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/conversations.ts) |
-| Fragmentos y almacenamiento de vectores | [Fragmentación](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/conversations/chunks.ts) y [almacenamiento y puntuación de vectores](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/store/sqlite/vectors.ts) |
-| Modelos, combinación y frescura | [Servicio de vectores](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/embeddings.ts), [catálogo de modelos](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/embeddings/models.ts) y [grupo de procesos](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/embeddings/pool.ts) |
-| Contrato del paquete de pruebas | [Servicio de pruebas](https://github.com/WireCatLabs/cli-messaging/blob/v0.211.0/src/services/evidence.ts) |
+| Búsqueda entre fuentes y erratas | [Search all](https://github.com/WireCatLabs/cli-core/blob/v0.217.1/src/services/search-all.ts), [búsqueda de notas](https://github.com/WireCatLabs/cli-core/blob/v0.217.1/src/services/notes-search.ts), [corrección de erratas](https://github.com/WireCatLabs/cli-core/blob/v0.217.1/src/search/correct.ts) y [búsqueda legacy](https://github.com/WireCatLabs/cli-core/blob/v0.217.1/src/search/search.ts) |
+| Preparación del archivo y cobertura | [Servicio del archivo](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/services/archive.ts), [comando de descarga](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/cli/messenger/backfill-command.ts) y [resumen de cobertura](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/cli/messenger/archive-summary.ts) |
+| Análisis, validación, alcance y cobertura | [Analizador de consultas](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/search/query.ts), [servicio de búsqueda de mensajes](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/services/messages-search.ts) y [ejecutor Lucene para SQLite](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/store/sqlite/lucene.ts) |
+| Índice de palabras, vocabulario y raíces | [Coincidencia de palabras](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/store/sqlite/words.ts), [llenado del índice](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/store/sqlite/search-index.ts) y [raíces de palabras](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/search/stem.ts) |
+| Candidatos del servidor | [Búsqueda en el servidor](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/services/server-search.ts) |
+| Vínculos del grafo y ciclo de construcción | [Reglas de vínculos](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/conversations/link.ts), [servicio de conversaciones](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/services/conversations.ts) y [persistencia de construcciones](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/store/sqlite/conversations.ts) |
+| Fragmentos y almacenamiento de vectores | [Fragmentación](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/conversations/chunks.ts) y [almacenamiento y puntuación de vectores](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/store/sqlite/vectors.ts) |
+| Modelos, combinación y frescura | [Servicio de vectores](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/services/embeddings.ts), [catálogo de modelos](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/embeddings/models.ts) y [grupo de procesos](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/embeddings/pool.ts) |
+| Contrato del paquete de pruebas | [Servicio de pruebas](https://github.com/WireCatLabs/cli-core/blob/v0.211.0/src/services/evidence.ts) |
 
 La gramática exacta, los campos, los presets y los límites están en la referencia del lenguaje de consulta de [Telegram](./tg/query-language.md) o [MAX](./max/query-language.md). La preparación y las opciones están en las guías del archivo de [Telegram](./tg/archive.md) y [MAX](./max/archive.md).
 

@@ -16,7 +16,7 @@ Las capas tal como son ahora, los límites que imponen las reglas de lint y qué
 [diseño del código](./code-design.mdx), que describe un estado posterior.
 
 
-Las referencias a paquetes y capas describen la instantánea fechada. El ejemplo MCP utiliza la interfaz compacta actual: [implementación MCP](https://github.com/WireCatLabs/cli-messaging/blob/v0.213.0/src/mcp/surface.ts).
+Las referencias a paquetes y capas describen la instantánea fechada. El ejemplo MCP utiliza la interfaz compacta actual: [implementación MCP](https://github.com/WireCatLabs/cli-core/blob/v0.213.0/src/mcp/surface.ts).
 
 Los nombres de paquetes usan el ámbito actual `@wirecat`; los enlaces de implementación conservan la instantánea de código indicada arriba.
 
@@ -29,7 +29,7 @@ Cuatro paquetes propios y dos builds fijados, todos publicados en npm bajo `@wir
 | Paquete | De qué se ocupa |
 | --- | --- |
 | [`@wirecat/cli-base`](https://github.com/WireCatLabs/cli-base/tree/8648e39) | Lo que necesita cualquier herramienta de línea de comandos y ningún mensajero: modos de salida, el renderizado en terminal, la lista cerrada de errores y sus códigos de salida, el llavero, archivos de configuración, relojes, reintentos, un cliente HTTP, un generador de código para APIs HTTP, la autoactualización. También lo usa `braze-cli`, que no tiene nada que ver con mensajería. |
-| [`@wirecat/cli-messaging`](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479) | Todo lo de mensajería que no es de un mensajero concreto: el modelo de dominio, la resolución de nombres, el almacén local SQLite, la protección de envíos, los servicios (casos de uso), el árbol de comandos, el servidor MCP, el reconocimiento de voz, los procesos en segundo plano. |
+| [`@wirecat/cli-messaging`](https://github.com/WireCatLabs/cli-core/tree/c7cd479) | Todo lo de mensajería que no es de un mensajero concreto: el modelo de dominio, la resolución de nombres, el almacén local SQLite, la protección de envíos, los servicios (casos de uso), el árbol de comandos, el servidor MCP, el reconocimiento de voz, los procesos en segundo plano. |
 | `@wirecat/cli-messaging-sqlite` | Builds de SQLite 3.53, cargados solo donde el SQLite del entorno es demasiado antiguo (Bun en macOS, el Node de una distribución Linux). |
 | `@wirecat/cli-messaging-onnx` | ONNX Runtime como WebAssembly, para los modelos locales de embeddings. El reconocimiento de voz usa `sherpa-onnx`. |
 | [`@wirecat/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | El adaptador de Telegram sobre [mtcute](https://github.com/mtcute/mtcute), la sesión de Telegram, la configuración guiada. Casi todos los comandos de `tg` vienen de cli-messaging. |
@@ -41,7 +41,7 @@ dos suelen salir el mismo día.
 
 **La regla del paquete común: nada en él conoce un mensajero.** Una regla del linter rechaza cualquier
 import de `@mtcute/*`, `ws` o de una carpeta de adaptador dentro de `src/` de cli-messaging
-([la configuración del linter](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/biome.json)). Lo que solo tiene un
+([la configuración del linter](https://github.com/WireCatLabs/cli-core/blob/c7cd479/biome.json)). Lo que solo tiene un
 mensajero viaja en un campo `providerMetadata` de los tipos comunes.
 
 ## Un comando, de principio a fin
@@ -50,12 +50,12 @@ mensajero viaja en un campo `providerMetadata` de los tipos comunes.
 
 Toma `tg work messages send "Book club" "See you at 7"`:
 
-1. **`run()`** ([program.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/cli/program.ts))
+1. **`run()`** ([program.ts](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/cli/program.ts))
    toma `work` como perfil, resuelve los ajustes en un orden fijo (opción → entorno → archivo → valor
    por defecto), empieza el registro de la ejecución y arma el plazo de `--timeout`. Nunca lanza una
    excepción: cada resultado se convierte en un código de salida.
 2. **El comando** analiza sus propias opciones y pide servicios. No sabe nada de Telegram.
-3. **La protección de envíos** ([guard.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/sends/guard.ts))
+3. **La protección de envíos** ([guard.ts](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/sends/guard.ts))
    comprueba `permissions`, la lista de destinatarios y el límite por hora, antes de conectar. Las
    lecturas no pasan por ella. Cada intento de escritura — enviado, rechazado, fallido o desconocido —
    queda en el registro de envíos, sin su texto.
@@ -77,15 +77,15 @@ Un comando puntual que imprime su resultado y sigue en marcha se considera un de
 
 Cinco capas, cada una llama solo a las de abajo:
 
-- **Dominio** ([models.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/domain/models.ts)) —
+- **Dominio** ([models.ts](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/domain/models.ts)) —
   `Chat`, `Message`, `Person`, `Page` y el resto. Solo tipos, sin comportamiento, sin mensajero.
 - **Adaptadores** — uno por mensajero, en su propio repositorio:
   [TelegramAdapter](https://github.com/WireCatLabs/tg-cli/blob/4a36e85/src/telegram/adapter.ts) en tg,
   [maxAdapter](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/adapter/max-adapter.ts) en max.
 - **Puertos** — las dos interfaces de las que dependen los servicios:
-  [`MessengerAdapter`](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/cli/messenger/port.ts)
-  y [`MessageStore`](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/store/store.ts).
-- **Servicios** ([services/](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/services/index.ts)) —
+  [`MessengerAdapter`](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/cli/messenger/port.ts)
+  y [`MessageStore`](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/store/store.ts).
+- **Servicios** ([services/](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/services/index.ts)) —
   messages, chats, people, inbox, archive, conversations, moderation y más; cada uno es un objeto
   simple creado por una fábrica.
 - **Interfaz** — los comandos CLI y las herramientas MCP.
@@ -97,7 +97,7 @@ especificaciones de operaciones ni el código generado. Un import prohibido romp
 una frase que explica por qué.
 
 **Los servicios abren lo que necesitan al primer uso.** Un servicio obtiene su conexión, su almacén y
-su cuenta de forma perezosa ([deps.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/services/deps.ts)),
+su cuenta de forma perezosa ([deps.ts](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/services/deps.ts)),
 así que una lectura respondida desde el almacén local nunca conecta. Un comando obtiene los servicios
 con `withServices`, que cierra lo abierto; una herramienta MCP los construye sobre la conexión de su
 sesión.
@@ -116,7 +116,7 @@ services: (base) => ({
 Un mensajero se incorpora escribiendo dos cosas: un **adaptador**, que habla con el mensajero, y una
 descripción **`Messenger`**, que se lo presenta a los comandos comunes — el nombre de la aplicación,
 el nombre del proveedor en el almacén, cómo conectar, cómo paginar el historial. No se modifica
-cli-messaging. La guía completa es la [guía de adaptadores](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md).
+cli-messaging. La guía completa es la [guía de adaptadores](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ADAPTERS.md).
 
 **Un núcleo obligatorio y grupos opcionales.** `MessengerCore` — `self`, `me`, `resolve`, `chat`,
 `send`, `logout`, `close` — es obligatorio. Todo lo demás va en grupos: `ServerReads`,
@@ -179,14 +179,14 @@ los perfiles de tg, la cuenta de max y sus bots — con clave por proveedor y cu
   búsqueda de texto completo que necesita el esquema; el número de versión no basta. Donde falta, el
   build fijado ocupa su lugar: siempre en Bun para macOS, y en el Node de una distribución Linux el
   comando se reinicia con la biblioteca fijada primero, antes de leer o enviar nada
-  ([sqlite-runtime.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/sqlite-runtime.ts)).
+  ([sqlite-runtime.ts](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/sqlite-runtime.ts)).
 - **Un método, una transacción.** Cada método del almacén es una operación completa: un
   `BEGIN IMMEDIATE` … `COMMIT` síncrono, sin `await` en medio. Dos llamadas en el mismo proceso de
   larga duración no se mezclan dentro de una transacción. La única excepción deliberada es reconstruir
   las conversaciones de un chat: escribe una versión nueva en transacciones cortas y cambia a ella en
   una más, así nunca se lee una versión a medio escribir.
 - **Migraciones solo hacia delante.** Numeradas, aditivas, nunca editadas una vez publicadas
-  ([manifest.ts](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/src/store/sqlite/manifest.ts)).
+  ([manifest.ts](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/store/sqlite/manifest.ts)).
   Una versión `min_compatible` permite que una herramienta antigua siga usando un archivo que migró una
   nueva; subirla requiere una publicación que cambie la compatibilidad y actualizaciones coordinadas de ambas herramientas.
 - **Consultas con Drizzle, empaquetado.** El constructor de consultas va empaquetado dentro del
@@ -245,7 +245,7 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
 - **Los tests nunca tocan tus datos.** Configuración, estado, caché y la carpeta temporal viven en un
   sandbox durante la ejecución ([sandbox.ts](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/testing/sandbox.ts)).
 - **Casos de contrato para adaptadores.** cli-messaging incluye una semilla fija, un adaptador falso y
-  los casos de contrato ([src/kit](https://github.com/WireCatLabs/cli-messaging/tree/c7cd479/src/kit)). El
+  los casos de contrato ([src/kit](https://github.com/WireCatLabs/cli-core/tree/c7cd479/src/kit)). El
   adaptador de un mensajero ejecuta los mismos casos sobre su propio cliente falso; ningún caso habla
   con un servicio real.
 - **Los comandos se prueban de extremo a extremo** con `run(argv, environment)`: un mensajero con guion,
@@ -275,9 +275,9 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
 
 ## Contribuir: por dónde empezar
 
-- Un mensajero nuevo: la [guía de adaptadores](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/docs/dev/ADAPTERS.md),
+- Un mensajero nuevo: la [guía de adaptadores](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ADAPTERS.md),
   y después los casos de contrato.
-- El código común: las [notas de arquitectura de cli-messaging](https://github.com/WireCatLabs/cli-messaging/blob/c7cd479/docs/dev/ARCHITECTURE.md).
+- El código común: las [notas de arquitectura de cli-messaging](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ARCHITECTURE.md).
 - Telegram: las [notas de arquitectura de tg](https://github.com/WireCatLabs/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md).
 - MAX: las [notas de arquitectura de max](https://github.com/WireCatLabs/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md)
   y las [notas del protocolo](https://github.com/WireCatLabs/max-cli/blob/fff19ff/docs/dev/protocol.md).
@@ -291,7 +291,7 @@ observaciones CLI/MCP. Seis contextos contienen 38 resultados evaluados; las tar
 hacen que estén correlacionados. No demuestran conformidad general del agente ni del adaptador
 real de red. No se registró el modelo exacto original y MCP se accedió mediante un proxy de shell.
 
-Las [herramientas de reproducción](https://github.com/WireCatLabs/cli-messaging/tree/main/scripts/evals) pertenecen a cli-messaging. Para comparar otra ejecución,
+Las [herramientas de reproducción](https://github.com/WireCatLabs/cli-core/tree/main/scripts/evals) pertenecen a cli-messaging. Para comparar otra ejecución,
 registra el modelo, runner, SDK, reloj/semilla, prompts y primeros fallos. Las pruebas deterministas
 del transporte y los fixtures se distinguen de las pruebas independientes del modelo. La [guía de seguridad](./security.mdx)
 explica qué comprobar antes de confiar en una respuesta estadística del agente.

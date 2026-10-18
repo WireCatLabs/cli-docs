@@ -31,17 +31,25 @@ for (const lang of ["en", "ru", "es"]) {
             .locator(".about-tool-row")
             .filter({ has: page.locator('a[href="https://github.com/WireCatLabs/tg-cli"]') })
           await expect(telegram.locator(".about-tool-docs")).toHaveAttribute("href", `/${lang}/docs/tg`)
-          await expect(telegram.locator(".about-tool-source")).toHaveAttribute(
+          await expect(telegram.locator(".about-tool-source").first()).toHaveAttribute(
             "href",
             "https://github.com/WireCatLabs/tg-cli",
+          )
+          await expect(telegram.locator(".about-tool-source").last()).toHaveAttribute(
+            "href",
+            "https://www.npmjs.com/package/@wirecat/tg-cli",
           )
           const max = page
             .locator(".about-tool-row")
             .filter({ has: page.locator('a[href="https://github.com/WireCatLabs/max-cli"]') })
           await expect(max.locator(".about-tool-docs")).toHaveAttribute("href", `/${lang}/docs/max`)
-          await expect(max.locator(".about-tool-source")).toHaveAttribute(
+          await expect(max.locator(".about-tool-source").first()).toHaveAttribute(
             "href",
             "https://github.com/WireCatLabs/max-cli",
+          )
+          await expect(max.locator(".about-tool-source").last()).toHaveAttribute(
+            "href",
+            "https://www.npmjs.com/package/@wirecat/max-cli",
           )
           await expect(page.locator('.about-tool-source[href="https://github.com/WireCatLabs/cli-memo"]')).toBeVisible()
         })
