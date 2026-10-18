@@ -47,7 +47,7 @@ Cambia `codex` por `cursor`, `claude` o `gemini`. Sin `--agent`, la configuraci�
 
 ### La cuenta ya está conectada
 
-Una instalación global con npm suele instalar ya el skill, si npm ejecuta los scripts de instalación del paquete. Si tu agente ya ve `tg-cli`, puedes saltarte este paso. Para añadir o actualizar las instrucciones sin repetir el inicio de sesión:
+El comando de instalación de la [página de instalación](./installation.mdx) ya ejecutó `tg skill install --for all` (`tg`, `max` y `memo` también tienen un script de instalación, que npm 12 bloquea; el comando explícito hace el mismo trabajo). Si tu agente ya ve `tg-cli`, puedes saltarte este paso. `zm` no instala el skill por sí solo: tras `npm install -g`, ejecuta `zm skill install`. `drive` no tiene skill; da al agente la [documentación en Markdown](./mcp.mdx#documentación-para-tu-agente). Para añadir o actualizar las instrucciones sin repetir el inicio de sesión:
 
 ```sh
 tg skill install

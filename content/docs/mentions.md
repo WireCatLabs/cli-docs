@@ -105,8 +105,8 @@ tg personal mentions show 12
 
 `list` gives each mention an ID, the date, the kind (`phone`, `email`, `url`, `document`, `person-name`, `place`), the value,
 its status and
-the message. `show` adds the text around it and how many other places hold the same value. `list` shows mentions
-in messages only; mentions in notes, documents and mail are searchable but not listed yet.
+the message. `show` adds the text around it and how many other places hold the same value. `list` in tg and max shows mentions
+in messages only; `memo mentions list --source email:<name>` lists those in mail, and `--source notes` or `--source documents` those in notes and documents.
 
 To see only what was found since you last looked:
 
@@ -216,8 +216,7 @@ tg personal mentions places
 
 `confirm` keeps the address as a place of its own, with everything written there. Every mention of the same
 address follows, and later ones are linked without you. `mentions places` lists the places, most mentioned first.
-Most addresses are in email signatures; [memo](./email.mdx) does not list mentions in mail yet, so they are found and
-searchable but reviewed from messages only.
+Most addresses are in email signatures; [memo](./email.mdx) lists mentions in mail with `memo mentions list --source email:<name>`.
 
 ## Messages saved earlier
 

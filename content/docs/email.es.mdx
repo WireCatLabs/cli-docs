@@ -59,8 +59,8 @@ El ejemplo usa una cuenta de Himalaya llamada `gmail`; sustituye el nombre y la 
 ```
 
 `name` es el nombre de la cuenta en Himalaya; `address` es la dirección de tu buzón en Memo.
-Para varios buzones, añade una entrada por cuenta en `mail.accounts`. Al importar, la palabra después de `memo mail`
-es el nombre de Himalaya, como `gmail`. Los resultados de búsqueda identifican el buzón por su dirección,
+Para varios buzones, añade una entrada por cuenta en `mail.accounts`. Para importar, ejecuta `memo sync --source email:<nombre>`,
+donde `<nombre>` es el nombre de Himalaya, como `gmail`. Los resultados de búsqueda identifican el buzón por su dirección,
 como `you@example.com`. Las direcciones que vinculas a personas son las de remitentes o
 destinatarios, no otras cuentas en las que tengas que iniciar sesión.
 
@@ -172,7 +172,7 @@ Un resultado vacío de una importación parcial no demuestra que no hubiera acue
 ## Si falta correo
 
 - **No hay cuenta:** comprueba el nombre de Himalaya y su entrada en `mail.accounts`.
-- **Solo se importó parte del periodo:** repite la importación; `--max` limita los mensajes nuevos por ejecución.
+- **Solo se importó parte del periodo:** repite la importación; `--limit` limita los mensajes nuevos por ejecución.
 - **Hay resultados de otro buzón:** comprueba las referencias y conserva la dirección correcta.
 - **Falta correo en el contexto de una persona:** comprueba la dirección exacta, su enlace y el historial importado.
 

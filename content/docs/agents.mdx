@@ -45,7 +45,7 @@ Replace `codex` with `cursor`, `claude` or `gemini` for your agent. Without `--a
 
 ### Account already connected
 
-A global npm installation usually installs the skill already, when npm runs the package's installation scripts. If your agent already sees `tg-cli`, you can skip this step. To add or update the instructions without repeating login:
+The install command on the [installation page](./installation.mdx) already ran `tg skill install --for all` (`tg`, `max` and `memo` also have an install script, which npm 12 blocks; the explicit command does the same work). If your agent already sees `tg-cli`, you can skip this step. `zm` does not install a skill by itself: run `zm skill install` after `npm install -g`. `drive` has no skill; give the agent the [Markdown documentation](./mcp.mdx#documentation-for-your-agent). To add or update the instructions without repeating login:
 
 ```sh
 tg skill install

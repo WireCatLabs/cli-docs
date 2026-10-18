@@ -36,8 +36,9 @@ Do not merge people based only on names or create a task without asking me what 
 
 Para historial MAX, sustituye «Use tg CLI» por «Use max CLI». El agente puede leer herramientas
 separadas y preparar una respuesta, pero **un vínculo en la base exige ambos registros en la misma
-base**. Drive usa una base separada por defecto. [Sus ajustes](./drive/configuration.md) explican
-cómo compartirla explícitamente; compartir no combina accesos ni concede permisos remotos.
+base**. Drive usa por defecto la misma
+base compartida (`~/.local/share/WireCat/wirecat.db` en Linux). [Sus ajustes](./drive/configuration.md) explican
+cómo cambiarla; compartir no combina accesos ni concede permisos remotos.
 
 Comprueba IDs de fuentes y personas. Un vínculo describe una relación; no copia todo el contenido
 del destino al documento. Para un hecho reutilizable conserva la fuente y revisa el recuerdo

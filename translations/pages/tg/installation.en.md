@@ -57,10 +57,10 @@ Open Terminal on macOS or Linux, or PowerShell on Windows.
 2. **Install tg:**
 
    ```sh
-   npm install -g --allow-scripts=@wirecat/tg-cli --foreground-scripts @wirecat/tg-cli
+   npm install -g @wirecat/tg-cli && tg skill install --for all
    ```
 
-   The `--allow-scripts` part lets npm install the tg instructions for your agents; newer npm versions skip that step without it.
+   npm 12 may print "install scripts blocked". This is harmless: the second command installs the instructions for your agents, which is what the install script would do. On Windows, open a new terminal if `tg` is not found.
 
    On Windows, you can use one command instead. It installs tg, adds it to `PATH` (the folders where the terminal looks for commands) and connects all supported agents:
 
@@ -115,7 +115,7 @@ Telegram asks for two confirmations. First, tg registers its own Telegram app fo
 
 ## 3. Connect your agent
 
-The agent needs instructions to use tg. These instructions are called a skill. Setup asks which agent you use and installs the skill for it. A global npm install with `--allow-scripts` already installs the skill for every supported agent.
+The agent needs instructions to use tg. These instructions are called a skill. Setup asks which agent you use and installs the skill for it. The install command above already runs `tg skill install --for all`.
 
 To install it again:
 
@@ -286,6 +286,7 @@ tg personal server uninstall          # only if you installed the background ser
 tg personal session end               # log out on Telegram's side and delete the session file
 npm uninstall -g @wirecat/tg-cli
 rm -rf ~/.config/tg-cli ~/.local/share/tg-cli ~/.cache/tg-cli
+rm -rf ~/.claude/skills/tg-cli ~/.agents/skills/tg-cli
 ```
 
 If you connected bots, also run `tg <profile> bot auth remove` for each bot profile. Logging out keeps the App api_id and App api_hash in the keyring, under the service `tg-cli`; remove that entry with your system's keyring tool if you want them gone. Remove `~/.local/share/WireCat/` only if no other tool, such as max, still needs the saved messages.

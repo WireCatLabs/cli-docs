@@ -107,8 +107,8 @@ tg personal mentions show 12
 ```
 
 `list` da a cada mención un ID, la fecha, el tipo (`phone`, `email`, `url`, `document`, `person-name`, `place`), el valor, su
-estado y el mensaje. `show` añade el texto alrededor y en cuántos otros lugares aparece el mismo valor. `list` solo
-muestra menciones en mensajes; las menciones en notas, documentos y correo se pueden buscar, pero aún no se listan.
+estado y el mensaje. `show` añade el texto alrededor y en cuántos otros lugares aparece el mismo valor. `list` en tg y max solo
+muestra menciones en mensajes; `memo mentions list --source email:<nombre>` lista las del correo, y `--source notes` o `--source documents` las de notas y documentos.
 
 Para ver solo lo encontrado desde la última vez que miraste:
 
@@ -220,8 +220,8 @@ tg personal mentions places
 
 `confirm` guarda la dirección como un lugar propio, con todo lo que estaba escrito. Todas las menciones de la misma
 dirección lo siguen, y las nuevas se vinculan sin ti. `mentions places` lista los lugares, los más mencionados
-primero. La mayoría de las direcciones están en firmas de correo; [memo](./email.mdx) aún no lista las menciones del
-correo, así que se encuentran y se pueden buscar, pero solo se revisan desde los mensajes.
+primero. La mayoría de las direcciones están en firmas de correo; [memo](./email.mdx) lista las menciones del
+correo con `memo mentions list --source email:<nombre>`.
 
 ## Mensajes guardados antes
 

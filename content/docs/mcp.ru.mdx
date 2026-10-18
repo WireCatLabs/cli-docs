@@ -83,9 +83,11 @@ ChatGPT, Claude и другие веб-чаты подключаются чер�
 В терминале, где установленная команда уже работает:
 
 ```sh
-codex mcp add tg -- tg personal mcp
+tg personal mcp setup codex
 codex mcp list
 ```
+
+Setup использует собственную команду Codex и не трогает другие серверы. Вручную то же делает `codex mcp add tg -- tg personal mcp`.
 
 Подключите только нужные мессенджеры. Codex хранит MCP в `~/.codex/config.toml`.
 Для Windows или IDE с другим PATH возьмите `command`, `args` и `env` из `mcp config`
@@ -95,9 +97,11 @@ codex mcp list
 ### Claude Code
 
 ```sh
-claude mcp add --scope user tg -- tg personal mcp
+tg personal mcp setup claude-code
 claude mcp list
 ```
+
+Вручную то же делает `claude mcp add --scope user tg -- tg personal mcp`. Если профиль даёт инструменты записи, setup просит сначала проверить его [разрешения](./permissions.mdx) и повторить с `--allow-writes`. Флаг только подтверждает установку; разрешения он не меняет.
 
 В сессии проверьте состояние через `/mcp`. Для полных путей используйте значения из `mcp config`.
 [Официальная инструкция Claude Code MCP](https://code.claude.com/docs/en/mcp).
@@ -135,6 +139,14 @@ Hermes использует `mcp_servers` в `~/.hermes/config.yaml`. Добав
 Перезапустите Hermes. [Официальный старт Hermes](https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/).
 
 <a id="что-агенту-разрешено" />
+
+## Zoom, Google Drive и Memo
+
+Каждый инструмент запускает свой сервер. Подключите его командой, которой ваш клиент добавляет MCP-серверы:
+
+- **Zoom:** `zm serve --mcp` (только чтение).
+- **Google Drive:** `drive personal --read-only mcp`.
+- **Memo:** `memo mcp`.
 
 ## Что агент может делать
 

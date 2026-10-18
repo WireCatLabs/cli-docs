@@ -7,7 +7,7 @@ You can ask your agent for everything about one person, or for the messages behi
 
 ## The idea
 
-`tg`, `max`, `memo` and `drive` can share records when explicitly configured to use the same compatible local database. Drive uses a separate database by default; choose [shared storage](./drive/configuration.md#where-the-files-live) before linking its records to another tool. A link is one of two things:
+`tg`, `max`, `memo` and `drive` can share records when explicitly configured to use the same compatible local database. Drive uses the shared database by default (see [where the files live](./drive/configuration.md#where-the-files-live)), so its records can be linked to the other tools unless you moved it. A link is one of two things:
 
 - **Part of the record.** A message has a chat and a sender.
 - **A stored link between two records.** A note is about a person. A fact is backed by messages.

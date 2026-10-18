@@ -59,8 +59,8 @@ The example uses a Himalaya account named `gmail`; replace the name and address 
 ```
 
 `name` is the account label in Himalaya; `address` is your mailbox's address in Memo's store.
-To use several mailboxes, add one entry per account to `mail.accounts`. On import, the word after `memo mail`
-is the Himalaya name, such as `gmail`. Search results identify mailboxes by their addresses,
+To use several mailboxes, add one entry per account to `mail.accounts`. To import, run `memo sync --source email:<name>`,
+where `<name>` is the Himalaya name, such as `gmail`. Search results identify mailboxes by their addresses,
 such as `you@example.com`. Addresses you link to people later are the senders/recipients,
 not additional accounts you must log into.
 
@@ -167,7 +167,7 @@ An empty result from a partial import does not prove there were no agreements.
 ## If mail is missing
 
 - **No mail account:** check the Himalaya account name and its entry in `mail.accounts`.
-- **Only part of the period imported:** rerun the import; `--max` bounds new messages per run.
+- **Only part of the period imported:** rerun the import; `--limit` bounds new messages per run.
 - **Results include another mailbox:** check the source references and keep the intended address.
 - **Mail is missing from person context:** check the exact email identity link and imported history.
 

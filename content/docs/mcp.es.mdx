@@ -81,9 +81,11 @@ El PATH de una aplicación de escritorio puede ser diferente del de la terminal.
 En una terminal donde ya funcione el comando:
 
 ```sh
-codex mcp add tg -- tg personal mcp
+tg personal mcp setup codex
 codex mcp list
 ```
+
+Setup usa el comando propio de Codex y deja intactos los demás servidores. A mano, el equivalente es `codex mcp add tg -- tg personal mcp`.
 
 Conecta solo los mensajeros que uses. Codex guarda MCP en `~/.codex/config.toml`.
 Para Windows o un IDE con otro PATH, toma `command`, `args` y `env` de `mcp config` y añádelos
@@ -93,9 +95,11 @@ en `[mcp_servers.tg]` o `[mcp_servers.max]`. Codex utiliza TOML.
 ### Claude Code
 
 ```sh
-claude mcp add --scope user tg -- tg personal mcp
+tg personal mcp setup claude-code
 claude mcp list
 ```
+
+A mano, el equivalente es `claude mcp add --scope user tg -- tg personal mcp`. Si el perfil ofrece herramientas de escritura, setup te pide revisar antes sus [permisos](./permissions.mdx) y repetir con `--allow-writes`. Esa opción solo confirma la instalación; no cambia los permisos.
 
 Comprueba el estado con `/mcp` en la sesión. Para rutas completas, usa los valores de `mcp config`.
 [Guía oficial de Claude Code MCP](https://code.claude.com/docs/en/mcp).
@@ -131,6 +135,14 @@ Hermes usa `mcp_servers` en `~/.hermes/config.yaml`. Añade `tg` o `max` con `co
 y `env` de la configuración generada, conservando tus ajustes. Utiliza YAML: no pegues el objeto
 JSON `mcpServers` entero. Reinicia Hermes.
 [Inicio oficial de Hermes](https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/).
+
+## Zoom, Google Drive y Memo
+
+Cada herramienta inicia su propio servidor. Conéctalo con el comando que tu cliente usa para servidores MCP:
+
+- **Zoom:** `zm serve --mcp` (solo lectura).
+- **Google Drive:** `drive personal --read-only mcp`.
+- **Memo:** `memo mcp`.
 
 ## Qué puede hacer el agente
 

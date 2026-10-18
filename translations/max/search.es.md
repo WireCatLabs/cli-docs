@@ -38,32 +38,32 @@ Toda la búsqueda se realiza en un grupo de comandos, `max personal search`. Si 
 
 |Tarea|Comando|
 |---|---|
-|Busque inmediatamente en mensajes y notas.| `max personal search all '<запрос>'` |
-|Buscar solo mensajes del servicio; sin `--discover`, también en el servidor MAX en un chat| `max personal search messages '<запрос>'` |
-|Buscar en el correo| `memo search mail '<запрос>'`: `max` no tiene este comando |
-|Buscar notas desde una nota o carpeta| `max personal search notes '<запрос>'` |
-|Encuentre una discusión basada en su tema.|`max personal search conversations '<вопрос>'` ([búsqueda por temas](./topic-search.md))|
-|Contar coincidencias por chats, personas, días u horas| `max personal stats messages show '<запрос>'` |
-|Guarde la búsqueda y ejecútela nuevamente.| `max personal searches create`, `max personal search messages --saved <имя>` |
+|Busque inmediatamente en mensajes y notas.| `max personal search all '<consulta>'` |
+|Buscar solo mensajes del servicio; sin `--discover`, también en el servidor MAX en un chat| `max personal search messages '<consulta>'` |
+|Buscar en el correo| `memo search mail '<consulta>'`: `max` no tiene este comando |
+|Buscar notas desde una nota o carpeta| `max personal search notes '<consulta>'` |
+|Encuentre una discusión basada en su tema.|`max personal search conversations '<pregunta>'` ([búsqueda por temas](./topic-search.md))|
+|Contar coincidencias por chats, personas, días u horas| `max personal stats messages show '<consulta>'` |
+|Guarde la búsqueda y ejecútela nuevamente.| `max personal searches create`, `max personal search messages --saved <nombre>` |
 
 ```sh
-max personal search all 'договор аренды'                 # сообщения и заметки, лучшее первым
+max personal search all 'договор аренды'                 # mensajes y notas, la mejor coincidencia primero
 ```
 
 ```sh
-max personal search messages 'договор chat:Друзья'     # только сообщения мессенджеров
+max personal search messages 'договор chat:Друзья'     # solo mensajes de mensajería
 ```
 
 ```sh
-memo search mail 'счёт'                                  # почта — это memo; max search mail подскажет его
+memo search mail 'счёт'                                  # el correo es de memo; max search mail te remite a él
 ```
 
 ```sh
-max personal search notes 'бюджет source:internal'       # только заметки, написанные в memo
+max personal search notes 'бюджет source:internal'       # solo notas escritas en memo
 ```
 
 ```sh
-max personal search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
+max personal search conversations 'переезд на дачу'      # conversaciones cercanas en significado
 ```
 
 `search all` escribe para cada hallazgo que se trata de un mensaje (`msg:…`) o una nota (`note:…`). `max` no busca en el correo: ni `search messages` ni `search all`; `max personal search mail` responde con una indicación, «mail is memo's: install @wirecat/cli-memo, then `memo search mail …`». En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; `source:internal` y `source:file` en la consulta de `search notes` seleccionan notas de memo o de una carpeta. Si un campo no corresponde, por ejemplo `chat:`/`from:` para las notas, `search all` omite esa fuente y explica por qué.
@@ -103,11 +103,11 @@ Un resultado vacío no demuestra que el mensaje nunca existiera. Revisa las lagu
 Para obtener buenos resultados, necesitas descargar los chats. El servidor de MAX solo busca en un chat concreto. Todo lo demás utiliza únicamente el archivo: buscar en todos los chats, contar con `stats`, buscar por temas, `has:`, `filename:`, regex, presets, etiquetas y formas de palabras. Empieza por descargar todos los chats:
 
 ```sh
-max personal messages sync --all --background     # последние 90 дней каждого чата, в фоне
+max personal messages sync --all --background     # los últimos 90 días de cada chat, en segundo plano
 ```
 
 ```sh
-max personal store jobs show                    # сколько уже скачано
+max personal store jobs show                    # cuánto se ha descargado ya
 ```
 
 Un inicio descarga no más de 1200 mensajes por chat de forma predeterminada; repita el comando para continuar. `--since-time 365d` - más en el pasado; un chat: `max personal messages sync Друзья` ([descargar historial de chat](./archive.md#скачать-историю)). Además, `max personal serve` mantiene actualizado el archivo.
@@ -129,7 +129,7 @@ max personal search messages счёт
 ```
 
 ```sh
-max personal search messages '"счёт оплачен"'             # слова подряд
+max personal search messages '"счёт оплачен"'             # palabras seguidas
 ```
 
 ```sh
@@ -141,7 +141,7 @@ max personal search messages '(кафе OR библиотека) NOT шумно'
 ```
 
 ```sh
-max personal search messages 'квартир*'                   # все слова, которые начинаются на «квартир»
+max personal search messages 'квартир*'                   # todas las palabras que empiezan por "квартир"
 ```
 
 Todas las palabras consecutivas de la consulta deben aparecer en el mensaje. La búsqueda reconoce formas de palabras: `квартира` encuentra «квартиру». Las comillas conservan el orden de las palabras, pero también permiten otras formas. Para buscar una forma exacta, usa `exact:квартира` o añade `--exact` para las palabras sin un campo explícito. Un `text:` explícito sigue buscando formas de palabras. No se distingue entre mayúsculas y minúsculas, marcas de acento, `ё` y `е`. Las erratas no se corrigen automáticamente. Las formas dependen de la configuración de idioma del archivo.
@@ -157,7 +157,7 @@ max personal search messages 'from:("Алиса Тестова" OR "Борис �
 ```
 
 ```sh
-max personal search messages 'from:me date:7d'            # что вы писали за неделю
+max personal search messages 'from:me date:7d'            # lo que escribiste en la semana
 ```
 
 ```sh
@@ -165,7 +165,7 @@ max personal search messages 'chat:"Книжный клуб" библиотек�
 ```
 
 ```sh
-max personal search messages 'паспорт kind:private'       # только личные переписки
+max personal search messages 'паспорт kind:private'       # solo conversaciones privadas
 ```
 
 `kind:` acepta `private` (Personal), `group`, `channel`, `saved` (Favoritos) y `bot`. Buscar todas las cuentas de archivo: `--source all`.
@@ -181,7 +181,7 @@ max personal search messages 'библиотека date:yesterday'
 ```
 
 ```sh
-max personal search messages 'счёт date:7d'               # от 7 дней назад до сейчас; также 30m, 2h
+max personal search messages 'счёт date:7d'               # desde hace 7 días hasta ahora; también 30m, 2h
 ```
 
 ```sh
@@ -201,7 +201,7 @@ max personal search messages 'filename:*.pdf'
 ```
 
 ```sh
-max personal search messages 'filename:*договор*'         # часть имени
+max personal search messages 'filename:*договор*'         # parte del nombre
 ```
 
 ```sh
@@ -217,7 +217,7 @@ max personal search messages 'has:photo chat:"Книжный клуб"'
 ```
 
 ```sh
-max personal search messages 'has:link AND "github.com"'  # ссылка на сайт
+max personal search messages 'has:link AND "github.com"'  # un enlace a un sitio
 ```
 
 Un archivo se encuentra por su nombre y tamaño aunque el mensaje no tenga texto. `filename:` compara el nombre completo sin distinguir mayúsculas, acentos ni `ё`. Los tamaños usan KB, MB y GB de 1024. MAX no indica el tipo de archivo, así que busca por extensión: `filename:*.pdf`, en vez de `mime:`. `has:` también admite `attachment`, `video`, `audio`, `voice`, `sticker`, `contact`, `location` y `poll`. Un enlace cuenta tanto si aparece en el texto como si solo está en su tarjeta. Un teléfono, una dirección de correo, el sitio de un enlace o una persona confirmada del texto se encuentran con los campos `phone:`, `email:`, `url:`, `domain:` y `mentions:`; consulta [Menciones](./query-language.md#упоминания).
@@ -270,14 +270,14 @@ max personal attachments extract --chat "Книжный клуб" --ocr --concur
 
 `--ocr` transfiere imágenes al servicio seleccionado; sin él, el modelo no se llama. Simultáneamente: de 1 a 8 solicitudes, por defecto 4. Límite de archivos: de 1 a 500, por defecto 100; `cursor` de la respuesta continúa con el bypass limitado. Los escaneos de PDF requieren `unpdf` y `@napi-rs/canvas` opcionales; no se procesan más de 20 páginas por documento. Las páginas con una capa de texto siguen siendo locales. La repetición utiliza el hash del archivo y el modelo seleccionado. El texto del agente y el índice anterior se conservan en caso de error o cancelación del OCR. Verifique `failed` y los estados de archivos individuales; Una vez que el proveedor está limitado, se detienen las nuevas solicitudes de esa ejecución. `--offline` no es compatible con `--ocr`.
 
-**Archivos que ya tienes.** `max personal attachments extract --chat <чат> --from-dir ./files` lee una carpeta, sin subcarpetas. Necesita un archivo fuente que coincida de forma única o un conjunto completo de archivos con nombres de cargador. No combine `--from-dir` con `--download` o `--output-dir`. `max personal messages download <чат> <id> --extract` solo extrae texto de los archivos descargados en esta ejecución; `--all --extract` hace lo mismo durante todo el ejecución. Los archivos modificados son visibles mediante hash y el texto registrado por el agente se guarda. A través de MCP, la recuperación limitada devuelve `cursor` para continuación e información sobre los archivos, sin su texto.
+**Archivos que ya tienes.** `max personal attachments extract --chat <chat> --from-dir ./files` lee una carpeta, sin subcarpetas. Necesita un archivo fuente que coincida de forma única o un conjunto completo de archivos con nombres de cargador. No combine `--from-dir` con `--download` o `--output-dir`. `max personal messages download <chat> <id> --extract` solo extrae texto de los archivos descargados en esta ejecución; `--all --extract` hace lo mismo durante todo el ejecución. Los archivos modificados son visibles mediante hash y el texto registrado por el agente se guarda. A través de MCP, la recuperación limitada devuelve `cursor` para continuación e información sobre los archivos, sin su texto.
 
 `--from-dir` rechaza archivos y carpetas conocidos de credenciales, las carpetas de la CLI y el almacén de mensajes; se permiten las carpetas de trabajo ocultas normales. Las descargas de extracción por MCP requieren `output_dir` fuera de los lugares protegidos. La extracción de texto PDF no tiene un límite independiente de páginas ni un plazo de 30 segundos; se mantienen la cancelación del comando y los límites de tamaño del archivo y del texto.
 
 ## Contraseñas, códigos y tarjetas
 
 ```sh
-max personal search messages 'preset:secret kind:saved'   # что-то похожее на пароль или токен в Избранном
+max personal search messages 'preset:secret kind:saved'   # algo que parece una contraseña o un token en Mensajes guardados
 ```
 
 ```sh
@@ -312,33 +312,33 @@ max personal search messages 'счёт NOT tag:work'
 max personal tags remove work --chat "Книжный клуб"
 ```
 
-Una etiqueta es tu propia marca en un chat, una persona o un mensaje (`--message <id> --chat <чат>`). Se guarda en el archivo local y nunca se envía a MAX. `tag:work` encuentra los mensajes con la etiqueta `work`, los mensajes de un chat con esa etiqueta y los mensajes de una persona con esa etiqueta. Tiene entre 1 y 32 caracteres: letras latinas a–z, números y guiones.
+Una etiqueta es tu propia marca en un chat, una persona o un mensaje (`--message <id> --chat <chat>`). Se guarda en el archivo local y nunca se envía a MAX. `tag:work` encuentra los mensajes con la etiqueta `work`, los mensajes de un chat con esa etiqueta y los mensajes de una persona con esa etiqueta. Tiene entre 1 y 32 caracteres: letras latinas a–z, números y guiones.
 
 Puedes generar etiquetas de grupos y canales automáticamente a partir de su título, nombre de usuario y descripción, sin leer mensajes ni utilizar un modelo:
 
 ```sh
-max personal metadata refresh --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
+max personal metadata refresh --chat "Книжный клуб"   # leer la descripción del chat desde MAX (el chat no cambia)
 ```
 
 ```sh
-max personal metadata refresh --only-missing          # все сохранённые группы и каналы, у которых описание ещё не читалось
+max personal metadata refresh --only-missing          # todos los grupos y canales guardados cuya descripción aún no se ha leído
 ```
 
 ```sh
-max personal tags auto --dry-run                      # что получилось бы, без записи
+max personal tags auto --dry-run                      # qué resultaría, sin escribir
 ```
 
 ```sh
-max personal tags auto                                # записать автоматические метки
+max personal tags auto                                # escribir las etiquetas automáticas
 ```
 
 ```sh
-max personal tags list sources:auto                  # только автоматические
+max personal tags list sources:auto                  # solo las automáticas
 ```
 
 El etiquetado automático conserva tus etiquetas: al repetirlo, solo elimina las etiquetas automáticas obsoletas. Si añades manualmente una etiqueta que ya se había añadido de forma automática, pasa a ser tuya.
 
-`max personal tags auto` procesa hasta 50 chats por ejecución; `--limit` sube el límite a 500 y `--chat` elige los chats (se puede repetir). `--dry-run` usa las descripciones guardadas. Para leer las actuales antes de etiquetar, añade `--sync-first` sin `--dry-run`. `max personal metadata get --chat <чат>` muestra la descripción guardada.
+`max personal tags auto` procesa hasta 50 chats por ejecución; `--limit` sube el límite a 500 y `--chat` elige los chats (se puede repetir). `--dry-run` usa las descripciones guardadas. Para leer las actuales antes de etiquetar, añade `--sync-first` sin `--dry-run`. `max personal metadata get --chat <chat>` muestra la descripción guardada.
 
 ## Búsquedas guardadas e historial
 
@@ -351,7 +351,7 @@ max personal search messages --saved meetings
 ```
 
 ```sh
-max personal search messages --saved meetings 'date:today'   # слова добавляются через AND
+max personal search messages --saved meetings 'date:today'   # las palabras se añaden con AND
 ```
 
 ```sh
@@ -367,7 +367,7 @@ max personal searches history --limit 10
 ```
 
 ```sh
-max personal search messages --saved 42                   # строка истории, по её номеру
+max personal search messages --saved 42                   # una entrada del historial, por su número
 ```
 
 `searches create` guarda una consulta con sus opciones y no ejecuta nada; un nombre que ya existe necesita `--replace`. Las opciones que escribes con `--saved` sustituyen a las guardadas. El texto guardado se vuelve a leer en cada ejecución, así que `date:7d` siempre significa los últimos 7 días. `searches show` muestra una y `searches delete` elimina una.
@@ -379,7 +379,7 @@ Las búsquedas guardadas y el historial están en el archivo compartido por `max
 ## Contar mensajes: `stats messages show`
 
 ```sh
-max personal stats messages show счёт                          # сколько в каждом чате
+max personal stats messages show счёт                          # cuántos hay en cada chat
 ```
 
 ```sh
@@ -391,7 +391,7 @@ max personal stats messages show 'from:me' --by day --timezone Europe/Madrid
 ```
 
 ```sh
-max personal stats messages show --by hour                     # все сохранённые сообщения
+max personal stats messages show --by hour                     # todos los mensajes guardados
 ```
 
 `stats messages show` cuenta una sola vez cada mensaje que encontraría `search messages` con la misma consulta. `--by chat` (la opción predeterminada) y `--by sender` muestran primero los recuentos más altos; `--by day` y `--by hour` usan el orden cronológico. Si algunos chats solo están guardados en parte, las cifras son un límite inferior, y stderr indica cuántos chats están incompletos.
@@ -403,22 +403,22 @@ Cuando la consulta incluye palabras y no se indica `--discover`, `max` consulta 
 Con un chat (`chat:` en la consulta), el servidor busca en ese chat. Sin chat, el servidor busca en todos los chats igual que la barra de búsqueda de web.max.ru: con una sola solicitud, y devuelve un mensaje de cada chat, la mejor coincidencia. El archivo encuentra las demás coincidencias de esos chats si las tiene. Los nombres de los chats y los canales públicos no se incluyen en la respuesta.
 
 ```sh
-max personal search messages 'счёт chat:"Книжный клуб"'                    # архив и сервер MAX, один чат
+max personal search messages 'счёт chat:"Книжный клуб"'                    # archivo y servidor de MAX, un chat
 ```
 
 ```sh
-max personal search messages 'счёт'                                          # архив и сервер MAX, все чаты
+max personal search messages 'счёт'                                          # archivo y servidor de MAX, todos los chats
 ```
 
 ```sh
-max personal search messages 'счёт chat:"Книжный клуб"' --backend server   # только то, что нашёл сервер
+max personal search messages 'счёт chat:"Книжный клуб"' --backend server   # solo lo que encontró el servidor
 ```
 
 ```sh
-max personal search messages 'счёт' --backend archive                        # только архив
+max personal search messages 'счёт' --backend archive                        # solo el archivo
 ```
 
-El servidor también busca por el comienzo de una palabra, pero no reconoce otras formas: `книгу` no encuentra «книга». Por eso, `max` trata sus resultados como candidatos: los guarda en el archivo y los comprueba con tu consulta según las reglas del archivo. `exact:`, `-слово`, las comillas y el orden de los resultados funcionan igual que sin el servidor, y los mensajes no se duplican. `max` espera al servidor como máximo 5 segundos (`--server-time`, hasta 60 segundos) y no marca nada como leído.
+El servidor también busca por el comienzo de una palabra, pero no reconoce otras formas: `книгу` no encuentra «книга». Por eso, `max` trata sus resultados como candidatos: los guarda en el archivo y los comprueba con tu consulta según las reglas del archivo. `exact:`, `-palabra`, las comillas y el orden de los resultados funcionan igual que sin el servidor, y los mensajes no se duplican. `max` espera al servidor como máximo 5 segundos (`--server-time`, hasta 60 segundos) y no marca nada como leído.
 
 Con `--json`, cada mensaje tiene un `found_in` (`archive`, `server` o `both`). Al buscar en ambas fuentes, si el servidor no está disponible o el perfil es de solo lectura, se mantienen los resultados del archivo. Un `--backend server` explícito falla si el perfil no permite buscar en el servidor. El permiso necesario es `messages.server-search`.
 
@@ -444,9 +444,9 @@ En la terminal, `max` imprime una cinta de lectura. `--json` devuelve un objeto 
 
 Una respuesta vacía significa «no está en el archivo en el que buscaste», no «nunca se envió». `max personal store status` muestra lo guardado; `max personal messages sync` añade historial. Con `--json`, la respuesta indica los chats examinados y su integridad incluso sin coincidencias. Si `max` pide `max personal store migrate`, el índice de palabras aún se está construyendo; las búsquedas sin palabras (`has:file`, `date:today`) ya funcionan.
 
-**Huecos en el historial.** `max personal store gaps plan <чат>` muestra localmente los huecos entre períodos guardados. La falta de números consecutivos o el silencio no prueban que falten mensajes; los extremos del historial siguen siendo `unknown`. Revisa el plan y usa `max personal store gaps repair <чат> --fingerprint <хеш>` para descargarlos. Por defecto procesa hasta 5 huecos, 500 mensajes y 30 segundos; ajusta `--max-gaps`, `--limit`, `--repair-time`, `--page-size` y `--pause`. Al repetir comprueba lo pendiente; no elimina un mensaje solo porque MAX no lo devolvió. Las páginas ambiguas con la misma fecha siguen incompletas. `--background` crea una tarea consultable con `store jobs show`, `store jobs list` y `store jobs cancel`. La reparación requiere `store.gaps.repair` y lectura de mensajes; el plan no se conecta. En MCP, encuentra los comandos con `max_tools_search`, lee planes y tareas con `max_read` y repara con `max_write`.
+**Huecos en el historial.** `max personal store gaps plan <chat>` muestra localmente los huecos entre períodos guardados. La falta de números consecutivos o el silencio no prueban que falten mensajes; los extremos del historial siguen siendo `unknown`. Revisa el plan y usa `max personal store gaps repair <chat> --fingerprint <hash>` para descargarlos. Por defecto procesa hasta 5 huecos, 500 mensajes y 30 segundos; ajusta `--max-gaps`, `--limit`, `--repair-time`, `--page-size` y `--pause`. Al repetir comprueba lo pendiente; no elimina un mensaje solo porque MAX no lo devolvió. Las páginas ambiguas con la misma fecha siguen incompletas. `--background` crea una tarea consultable con `store jobs show`, `store jobs list` y `store jobs cancel`. La reparación requiere `store.gaps.repair` y lectura de mensajes; el plan no se conecta. En MCP, encuentra los comandos con `max_tools_search`, lee planes y tareas con `max_read` y repara con `max_write`.
 
-**Prepare una búsqueda por tema al descargar.** `max personal messages sync <чат> --catch-up` inmediatamente después de la descarga crea conversaciones y vectores locales solo de este chat - para [búsqueda por tema](./topic-search.md). Esto está deshabilitado de forma predeterminada; La configuración del perfil `search_catch_up: true` se activa y `--no-catch-up` se desactiva para una ejecución. Fronteras: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. El modelo no se descarga automáticamente y no se llama al servicio remoto. El campo `prepared` informa por separado si se ha completado la preparación; el historial descargado se guarda en cualquier caso.
+**Prepare una búsqueda por tema al descargar.** `max personal messages sync <chat> --catch-up` inmediatamente después de la descarga crea conversaciones y vectores locales solo de este chat - para [búsqueda por tema](./topic-search.md). Esto está deshabilitado de forma predeterminada; La configuración del perfil `search_catch_up: true` se activa y `--no-catch-up` se desactiva para una ejecución. Fronteras: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. El modelo no se descarga automáticamente y no se llama al servicio remoto. El campo `prepared` informa por separado si se ha completado la preparación; el historial descargado se guarda en cualquier caso.
 
 ## Más
 
@@ -464,6 +464,6 @@ max personal images models download clip-b32
 max personal images embed
 ```
 
-`images models download clip-b32` descarga el modelo una sola vez (unos 155 MB). `images embed` procesa las imágenes que aún no tienen vector y sigue desde donde se detuvo; `--chat <чат>` y `--limit <n>` limitan el volumen. No marca nada como leído.
+`images models download clip-b32` descarga el modelo una sola vez (unos 155 MB). `images embed` procesa las imágenes que aún no tienen vector y sigue desde donde se detuvo; `--chat <chat>` y `--limit <n>` limitan el volumen. No marca nada como leído.
 
 Después, la búsqueda por palabras devuelve, junto a los resultados, la lista `pictures`: los mensajes cuya imagen está más cerca de la consulta (`ref`, `score`). Esta lista no se mezcla con el orden de los resultados de texto. La consulta para imágenes debe estar **en inglés**: la parte de texto del modelo no conoce otros idiomas, por eso el agente traduce primero la consulta. Sin `picture_search` no hay lista `pictures`; si el ajuste está activado pero falta el modelo, `pictures_skipped` lo indica.

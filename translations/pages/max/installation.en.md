@@ -63,8 +63,10 @@ Open Terminal on macOS or Linux, or PowerShell on Windows.
 2. **Install max:**
 
    ```sh
-   npm install -g @wirecat/max-cli
+   npm install -g @wirecat/max-cli && max skill install --for all
    ```
+
+   npm 12 may print "install scripts blocked". This is harmless: the second command installs the instructions for your agents, which is what the install script would do. On Windows, open a new terminal if `max` is not found.
 
    On Windows, you can use one command instead. It installs max, adds it to `PATH` (the folders where the terminal looks for commands) and connects all supported agents:
 
@@ -116,7 +118,7 @@ Login adds your computer as a new device on your MAX account, like the MAX deskt
 
 ## 3. Connect your agent
 
-The agent needs instructions to use max. These instructions are called a skill. Setup asks which agent you use and installs the skill for it. A global npm install already installs the skill for every supported agent.
+The agent needs instructions to use max. These instructions are called a skill. Setup asks which agent you use and installs the skill for it. The install command above already runs `max skill install --for all`.
 
 To install it again, or for another agent:
 
@@ -281,6 +283,7 @@ max personal server uninstall          # only if you installed the background se
 max personal session end               # log out and forget the login
 npm uninstall -g @wirecat/max-cli
 rm -rf ~/.config/max-cli ~/.local/share/max-cli ~/.cache/max-cli
+rm -rf ~/.claude/skills/max-cli ~/.agents/skills/max-cli
 ```
 
 If you connected bots, also run `max <profile> bot auth remove` for each bot profile. Remove `~/.local/share/WireCat/` only if no other tool, such as tg, still needs the saved messages.

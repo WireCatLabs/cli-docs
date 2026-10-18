@@ -7,7 +7,7 @@ Puedes pedirle a tu agente todo sobre una persona, o los mensajes que respaldan 
 
 ## La idea
 
-`tg`, `max`, `memo` y `drive` pueden compartir registros cuando se configuran explícitamente para usar la misma base local compatible. Drive usa una base separada por defecto; elige [almacenamiento compartido](./drive/configuration.md#where-the-files-live) antes de vincular sus registros con otra herramienta. Un vínculo es una de dos cosas:
+`tg`, `max`, `memo` y `drive` pueden compartir registros cuando se configuran explícitamente para usar la misma base local compatible. Drive usa por defecto la base compartida (consulta [dónde están los archivos](./drive/configuration.md#where-the-files-live)), así que sus registros se pueden vincular con las demás herramientas salvo que la hayas movido. Un vínculo es una de dos cosas:
 
 - **Parte del propio registro.** Un mensaje tiene un chat y un remitente.
 - **Un vínculo guardado entre dos registros.** Una nota trata de una persona. Un hecho se respalda con mensajes.
