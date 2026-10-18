@@ -657,7 +657,8 @@
     "Memory for your messages, notes, and meetings. CLI access for your AI agent.": "Память для ваших сообщений, заметок и встреч. Доступ через CLI для вашего ИИ-агента.",
     "Your data stays yours": "Данные только ваши",
     "Your messaging archive stays on your computer. WireCat has no servers to send it to. Only your AI agent receives your data, and only for your task. You choose where its model runs.": "Архив переписки хранится на вашем компьютере. У WireCat нет серверов, куда бы он отправлялся. Данные получает только ваш ИИ-агент — и только для вашей задачи. Где работает его модель, выбираете вы.",
-    "MCP & CLI for your Agent": "MCP & CLI для вашего агента"
+    "MCP & CLI for your Agent": "MCP & CLI для вашего агента",
+    "drive · your Google folders, searched locally": "drive · ваши папки Google, поиск на компьютере"
   },
   "es": {
     "Put the context from your chats to work — for you, your bots and the groups you run.": "Aprovecha el contexto de tus chats: para ti, tus bots y los grupos que administras.",
@@ -1316,6 +1317,7 @@
     "Memory for your messages, notes, and meetings. CLI access for your AI agent.": "Memoria para tus mensajes, notas y reuniones. Acceso por CLI para tu agente de IA.",
     "Your data stays yours": "Tus datos son solo tuyos",
     "Your messaging archive stays on your computer. WireCat has no servers to send it to. Only your AI agent receives your data, and only for your task. You choose where its model runs.": "El archivo de mensajes se queda en tu ordenador. WireCat no tiene servidores a los que enviarlo. Solo tu agente de IA recibe tus datos, y solo para tu tarea. Tú eliges dónde funciona su modelo.",
-    "MCP & CLI for your Agent": "MCP & CLI para tu agente"
+    "MCP & CLI for your Agent": "MCP & CLI para tu agente",
+    "drive · your Google folders, searched locally": "drive · tus carpetas de Google, búsqueda local"
   }
 }

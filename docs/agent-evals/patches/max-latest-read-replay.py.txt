@@ -11,4 +11,4 @@ for case in ['history','meeting','contact']:
   p=subprocess.run([cfg['node'],'--import',cfg['guard'],cfg['cli'],*a],env=cfg['env'],text=True,capture_output=True,timeout=20)
   records.append({'case':case,'index':i,'argv':a,'originalExit':original['exitCode'],'exit':p.returncode,'stderr':p.stderr})
 print(json.dumps({'replayed':len(records),'nonzero':[r for r in records if r['exit']],'originalLockRetries':[r for r in records if r['originalExit']==1]},indent=2))
-pathlib.Path('/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/max-latest-read-replay.json').write_text(json.dumps({'records':records,'kind':'recorded-read-choices replay; no new agent decisions or byte equality assertion'},indent=2)+'\n')
+pathlib.Path('~/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/max-latest-read-replay.json').write_text(json.dumps({'records':records,'kind':'recorded-read-choices replay; no new agent decisions or byte equality assertion'},indent=2)+'\n')

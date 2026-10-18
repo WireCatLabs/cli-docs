@@ -1,6 +1,6 @@
 {
   "kind": "real-cli-recorded-choice-replay",
-  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/real-meeting-baseline",
+  "baseline": "~/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/real-meeting-baseline",
   "launcher": "/tmp/wirecat-cold-real-023-replay-v1/meeting/tg",
   "versions": {
     "tg-cli": "0.23.0",
