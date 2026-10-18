@@ -270,11 +270,11 @@ tg personal attachments text set "Book club" 204 --text-file ./scan.txt
 **Многие сканы одновременно** могут быть отправлены в выбранную вами провайдеру ИИ. Настройте модель для обработки изображений под `models.ocr` и сохраните ее ключ с обычным `models text key set`. Замените `your-vision-model` на название вашей модели.
 
 ```sh
-tg config set models.ocr.provider openai
+tg personal config set models.ocr.provider openai
 ```
 
 ```sh
-tg config set models.ocr.model your-vision-model
+tg personal config set models.ocr.model your-vision-model
 ```
 
 ```sh

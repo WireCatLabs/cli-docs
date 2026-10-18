@@ -58,8 +58,8 @@ Si pierdes el equipo, cierra la sesión desde otro dispositivo: Telegram → Aju
 Todos los comandos y herramientas MCP que cambian algo en Telegram pasan por la protección común: `permissions`, la lista de destinatarios, `sends_per_hour` (30 por defecto) y un registro sin texto. Cómo funciona cada control, su código de salida y lo que no puede impedir: la [página común](https://wirecat.dev/en/docs/security).
 
 ```sh
-tg config set permissions.messages readonly  # no change to messages from this profile
-tg config set permissions.messages.send ask  # a question before each send
+tg personal config set permissions.messages readonly  # no change to messages from this profile
+tg personal config set permissions.messages.send ask  # a question before each send
 tg personal recipients add "Book club"       # the first add turns the list on
 tg personal sends list                       # every attempt: sent, refused, failed, or not known
 ```

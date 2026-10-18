@@ -66,16 +66,16 @@ claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg personal inbo
 
 ```sh
 for key in messages reactions polls topics chats contacts account conversations tags searches replies attachments bot; do
-  tg config set permissions.$key readonly
+  tg personal config set permissions.$key readonly
 done
-tg config show                       # check the permissions in force
-tg config set sends_per_hour 5         # or: at most five sends an hour
+tg personal config show                # check the permissions in force
+tg personal config set sends_per_hour 5  # or: at most five sends an hour
 tg personal recipients add "Book club"  # and only to the chats on this list
 ```
 
 `readonly` на одном ресурсе не распространяется на остальные: `messages` сам по себе позволяет агенту реагировать, голосовать или менять чаты. Вот почему цикл устанавливает каждый ресурс. Более точный ключ, например `permissions.messages.send: allow`, выигрывает у своего ресурса: удаляйте такие ключи, если профиль нужно только читать.
 
-`permissions` также ограничивает ваши собственные команды, пока вы не измените их обратно: `tg config unset permissions.messages`. Чтобы ограничить только агента, дайте ему собственный профиль. Все попытки отправки, включая отклоненные, записываются в `tg personal sends list`. См. [защиту отправки](./security.md#the-send-guard) и [что может делать профиль](./configuration-reference.md#what-a-profile-may-do).
+`permissions` также ограничивает ваши собственные команды, пока вы не измените их обратно: `tg personal config unset permissions.messages`. Чтобы ограничить только агента, дайте ему собственный профиль. Все попытки отправки, включая отклоненные, записываются в `tg personal sends list`. См. [защиту отправки](./security.md#the-send-guard) и [что может делать профиль](./configuration-reference.md#what-a-profile-may-do).
 
 **Чтение незаметно для собеседников.** Ни одна команда в сценариях ниже не отмечает прочитанное: никто не увидит, что агент открыл чат.
 

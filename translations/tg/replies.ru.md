@@ -59,7 +59,7 @@ ID правил состоят из строчных букв, цифр и `-`; 
 ```sh
 tg personal replies test --since-time 7d
 tg personal replies on away
-tg config set permissions.replies.send allow
+tg personal config set permissions.replies.send allow
 tg personal serve
 ```
 

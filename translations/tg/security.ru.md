@@ -58,8 +58,8 @@ title: "Безопасность: хранение данных и защита 
 Все команды и инструменты MCP, изменяющие что-либо в Telegram, проходят общую защиту: `permissions`, список получателей, `sends_per_hour` (по умолчанию 30) и журнал без текста. Как работает каждая проверка, её код завершения и чего она не может удержать: [общая страница](https://wirecat.dev/en/docs/security).
 
 ```sh
-tg config set permissions.messages readonly  # no change to messages from this profile
-tg config set permissions.messages.send ask  # a question before each send
+tg personal config set permissions.messages readonly  # no change to messages from this profile
+tg personal config set permissions.messages.send ask  # a question before each send
 tg personal recipients add "Book club"       # the first add turns the list on
 tg personal sends list                       # every attempt: sent, refused, failed, or not known
 ```

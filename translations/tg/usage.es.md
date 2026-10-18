@@ -1064,7 +1064,7 @@ tg config show                                 # every setting, and where it cam
 ```
 
 ```sh
-tg config set limit 50
+tg personal config set limit 50
 ```
 
 ```sh
@@ -1072,11 +1072,11 @@ tg work config set permissions.messages readonly   # profile "work" changes no m
 ```
 
 ```sh
-tg config set permissions.messages.send ask        # a yes or no before each send
+tg personal config set permissions.messages.send ask  # a yes or no before each send
 ```
 
 ```sh
-tg config set sends_per_hour 10
+tg personal config set sends_per_hour 10
 ```
 
 `permissions` dice lo que puede hacer un perfil, por comando: `deny`, `readonly`, `ask` o `allow`. Por defecto se permite todo, salvo algunos cambios irreversibles: eliminar mensajes y cerrar sesiones piden confirmación antes de actuar. Un rechazo es el código de salida `5` y el error nombra el comando que lo permite. **El archivo no tiene ningún campo para un secreto.** Cada configuración y variable: [configuración](./configuration.md).

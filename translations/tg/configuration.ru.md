@@ -120,7 +120,7 @@ title: "Настройки"
 
 ## Три способа задать значение
 
-- **В файле:** значение сохраняется для последующих команд. `tg config set limit 50` сохраняет его.
+- **В файле:** значение сохраняется для последующих команд. `tg personal config set limit 50` сохраняет его.
 - **С переменной среды:** значение сохраняется для одного терминала или одного процесса агента.   Например, `TG_PROFILE` выбирает профиль, а `TG_TIMEOUT` ограничивает продолжительность выполнения команды.   Только некоторые настройки имеют переменную.
 - **С опцией:** `--limit 5` изменяет только эту команду.
 
@@ -133,11 +133,11 @@ title: "Настройки"
 Вы можете редактировать файл в любом текстовом редакторе или позволить `tg` сделать это. `config set` проверяет значение перед записью, поэтому никогда не сохраняет файл, который отклоняется более поздней командой.
 
 ```sh
-tg config set limit 50                 # the profile you use now
+tg personal config set limit 50        # the profile "personal"
 tg work config set limit 50            # the profile "work"
 tg config set sends_per_hour 10 --defaults   # every profile
-tg config unset limit                  # back to the default
-tg config show                         # check what is in force, and where each value came from
+tg personal config unset limit         # back to the default
+tg personal config show                # check what is in force, and where each value came from
 ```
 
 Параметр с ошибкой в ​​файле является ошибкой, а не молчаливым значением по умолчанию: каждая команда останавливается и называет неправильный ключ ([опечатки в файле](./configuration-reference.md#a-typo-is-an-error-not-a-default)).

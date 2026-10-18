@@ -229,7 +229,7 @@ Código `7`. El nivel de comando es `ask`, pero no hay nadie que responda: no ha
 
 Si el servicio de mensajería indica cuánto debes esperar, `max` recuerda ese tiempo para la operación y el chat. Un reintento antes de que termine devuelve inmediatamente el código `8` sin contactar con el servicio de mensajería. Actualmente MAX no indica esos tiempos, por lo que no se registra un bloqueo para una cuenta personal de MAX ni se retienen los envíos. Una pausa de inicio de sesión de `max` protege frente a los inicios frecuentes; `max personal doctor` muestra su duración.
 
-Las esperas recordadas y las retenciones de envíos aparecen en `max personal server status` (`flood`). `max flood
+Las esperas recordadas y las retenciones de envíos aparecen en `max personal server status` (`flood`). `max personal flood
 clear` las olvida sin cambiar nada en MAX. Ejecútalo solo cuando MAX ya no limite la cuenta. MCP no ofrece este comando: el agente no debe quitar un límite para reintentar.
 
 ## MAX y red

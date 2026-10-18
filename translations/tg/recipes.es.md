@@ -64,16 +64,16 @@ El Codex no tiene tal lista. Su entorno aislado bloquea la red y la escritura de
 
 ```sh
 for key in messages reactions polls topics chats contacts account conversations tags searches replies attachments bot; do
-  tg config set permissions.$key readonly
+  tg personal config set permissions.$key readonly
 done
-tg config show                       # check the permissions in force
-tg config set sends_per_hour 5         # or: at most five sends an hour
+tg personal config show                # check the permissions in force
+tg personal config set sends_per_hour 5  # or: at most five sends an hour
 tg personal recipients add "Book club"  # and only to the chats on this list
 ```
 
 `readonly` en un recurso no cubre los demás: `messages` por sí solo aún permite al agente reaccionar, votar o cambiar de chat. Por eso el bucle establece cada recurso. Una clave más precisa, como `permissions.messages.send: allow`, gana su recurso: elimine dichas claves si el perfil solo debe leer.
 
-`permissions` también limita sus propios comandos, hasta que los vuelva a cambiar: `tg config unset permissions.messages`. Para limitar solo al agente, asígnele un perfil propio. Cada intento de envío, incluidos los rechazados, está en `tg personal sends list`. Consulte [el control de envío](./security.md#the-send-guard) y [lo que puede hacer un perfil](./configuration-reference.md#what-a-profile-may-do).
+`permissions` también limita sus propios comandos, hasta que los vuelva a cambiar: `tg personal config unset permissions.messages`. Para limitar solo al agente, asígnele un perfil propio. Cada intento de envío, incluidos los rechazados, está en `tg personal sends list`. Consulte [el control de envío](./security.md#the-send-guard) y [lo que puede hacer un perfil](./configuration-reference.md#what-a-profile-may-do).
 
 **La lectura no revela nada.** Ningún comando en las recetas siguientes marca nada leído: nadie ve que el agente abrió un chat.
 

@@ -146,9 +146,9 @@ tg shop config show --bot
 **Значения по умолчанию позволяют все, кроме нескольких изменений, которые трудно отменить.** Они задают вопросы: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` и `account.sessions.end`. Правила ответа не могут отправлять сообщения, пока вы не разрешите это: `replies.send` — `deny`. Встроенное значение по умолчанию только усиливает ограничения: `messages: readonly` по-прежнему отказывается от удаления, а `messages: allow` сохраняет вопрос перед удалением, пока вы не установите сам `messages.delete`.
 
 ```sh
-tg config set permissions.messages.delete allow     # delete without the question
-tg config set permissions.messages.send ask         # ask before every send
-tg config unset permissions.messages.delete         # back to the default
+tg personal config set permissions.messages.delete allow  # delete without the question
+tg personal config set permissions.messages.send ask      # ask before every send
+tg personal config unset permissions.messages.delete      # back to the default
 ```
 
 Чтобы отказаться от каждого изменения в Telegram из профиля — здесь профиль `agent` — установите каждый ресурс:
@@ -180,13 +180,13 @@ done
 ## Изменение через команду
 
 ```sh
-tg config set limit 50                        # this profile
+tg personal config set limit 50               # profile "personal"
 tg work config set permissions.contacts readonly   # profile "work"; one key at a time
 tg config set sends_per_hour 10 --defaults      # every profile
 tg config set limit 30 --personal --defaults  # every personal account
 tg shop config set sends_per_hour 200 --bot     # only the bot "shop"
 tg config set update_check false --defaults    # a setting that exists only under defaults
-tg config unset sends_per_hour                  # back to the default
+tg personal config unset sends_per_hour         # back to the default
 ```
 
 `config set` проверяет значения по тем же правилам, что и чтение настроек, и не записывает файл, который другая команда затем отклонит.
@@ -211,11 +211,11 @@ config.json is not a valid config:
 Если Telegram заблокирован, `tg` может подключаться к нему через прокси: SOCKS5, HTTP-прокси с поддержкой `CONNECT` или MTProxy. Одна настройка `proxy` на профиль или для всех профилей с `--defaults`. Задайте её до `tg personal setup`: вход тоже идёт через прокси.
 
 ```sh
-tg config set proxy socks5://proxy.example:1080       # no password: on the command line
-tg config set proxy http://alice@proxy.example:3128   # a user without a password
-tg config set proxy -                                 # with a password or an MTProxy secret
+tg personal config set proxy socks5://proxy.example:1080      # no password: on the command line
+tg personal config set proxy http://alice@proxy.example:3128  # a user without a password
+tg personal config set proxy -                                # with a password or an MTProxy secret
 proxy URL, hidden as you type: tg://proxy?server=mt.example&port=443&secret=ee…
-tg config unset proxy
+tg personal config unset proxy
 ```
 
 | Формат | Вид |

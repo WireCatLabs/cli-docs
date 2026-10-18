@@ -93,7 +93,7 @@ Los nombres de los campos distinguen entre mayúsculas y minúsculas. Un campo, 
 
 `tg` encuentra teléfonos, direcciones de correo, enlaces, documentos y nombres de personas en los mensajes
 guardados. Usa estos campos para encontrar los mensajes que los contienen. Los hallazgos en sí los lista
-`tg mentions list`.
+`tg personal mentions list`.
 
 ```sh
 tg personal search messages 'phone:"+34 600 000 000"'

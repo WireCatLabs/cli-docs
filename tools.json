@@ -9,7 +9,12 @@
       "ru": "MAX в терминале: боты через официальный Bot API и ваш личный аккаунт.",
       "es": "MAX Messenger desde la terminal: bots con la Bot API oficial y tu cuenta personal."
     },
-    "docsRef": "v0.60.0"
+    "docsRef": "v0.60.0",
+    "guideRefs": {
+      "query-language": "7d7b0f1ee76a811a4d2c7987f3beae44ba6dad2e",
+      "recipes": "7d7b0f1ee76a811a4d2c7987f3beae44ba6dad2e",
+      "troubleshooting": "7d7b0f1ee76a811a4d2c7987f3beae44ba6dad2e"
+    }
   },
   {
     "name": "tg",
@@ -21,7 +26,19 @@
       "ru": "Клиент Telegram для терминала и ИИ-агентов, с вашим собственным аккаунтом.",
       "es": "Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta."
     },
-    "docsRef": "v0.72.0"
+    "docsRef": "v0.72.0",
+    "guideRefs": {
+      "configuration-reference": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "configuration": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "diagnostics": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "query-language": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "recipes": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "replies": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "search": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "security": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "troubleshooting": "35ff83ac5dd45c399d77df4851f2e209933cf005",
+      "usage": "35ff83ac5dd45c399d77df4851f2e209933cf005"
+    }
   },
   {
     "name": "drive",

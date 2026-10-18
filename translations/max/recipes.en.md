@@ -133,7 +133,7 @@ None of them mark messages as read. If needed, add `--mark-read` or enable `catc
 
 Writes to MAX: **no**. Permit: `Bash(max personal messages list:*)`.
 
-> Read the past 7 days in the Project Alpha chat: `max messages list "Проект Альфа"
+> Read the past 7 days in the Project Alpha chat: `max personal messages list "Проект Альфа"
 > 'date>7d' --limit 200 --json`. If the response has a `page.next` step, continue reading with its `--cursor`. Report decisions, responsibilities and deadlines, and unanswered questions. Include the date and author for each item.
 
 ## Commitments and follow-ups
@@ -172,8 +172,8 @@ When you agree, the agent sends himself: `max personal messages send "Иван �
 
 Writes to MAX: **only as permitted by group rules**. Permit: `Bash(max personal review:*)`, `Bash(max personal chats events:*)`, `Bash(max personal chats members list:*)`, `Bash(max personal chats moderate:*)`.
 
-> Run `max personal review 'chat:"Поход"' --unanswered 4h --json`, `max chats events "Поход"
-> 'time>=7d' --json` and `max chats moderate "Поход" --dry-run --json`. Summarise questions awaiting replies, authors and waiting times; joins/additions this week and who added them; and rule violations with proposed actions. Send no replies and remove nobody: list commands for my approval.
+> Run `max personal review 'chat:"Поход"' --unanswered 4h --json`, `max personal chats events "Поход"
+> 'time>=7d' --json` and `max personal chats moderate "Поход" --dry-run --json`. Summarise questions awaiting replies, authors and waiting times; joins/additions this week and who added them; and rule violations with proposed actions. Send no replies and remove nobody: list commands for my approval.
 
 With `--dry-run` command `chats moderate` only makes a plan. Without it, it acts within the group rules, so remove `Bash(max personal chats moderate:*)` from the list if the agent should never act. All scenarios and rules are [groups that you lead](./groups.md).
 

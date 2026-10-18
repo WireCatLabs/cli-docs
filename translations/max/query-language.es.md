@@ -93,7 +93,7 @@ Los nombres de campo distinguen mayúsculas. Un campo, valor o combinación desc
 ## Menciones
 
 `max` encuentra en los mensajes guardados teléfonos, direcciones de correo, enlaces, documentos y nombres de personas.
-Estos campos buscan los mensajes que los contienen. Los hallazgos en sí los muestra `max mentions list`.
+Estos campos buscan los mensajes que los contienen. Los hallazgos en sí los muestra `max personal mentions list`.
 
 ```sh
 max personal search messages 'phone:"+34 600 000 000"'
@@ -107,7 +107,7 @@ escrito: `+34 600 000 000` y `600000000` son el mismo teléfono, y un número si
 referencia a una persona, organización o documento; el campo encuentra los mensajes cuyas menciones vinculaste a ella
 con `max mentions confirm`.
 
-`max mentions list --new` muestra lo pendiente desde el último `--new`, y `max mentions domains`, los sitios a los que llevan los enlaces, los más frecuentes primero. `confirm` y `reject` con `--all-in-chat` resuelven un nombre en todo el chat a la vez.
+`max personal mentions list --new` muestra lo pendiente desde el último `--new`, y `max personal mentions domains`, los sitios a los que llevan los enlaces, los más frecuentes primero. `confirm` y `reject` con `--all-in-chat` resuelven un nombre en todo el chat a la vez.
 
 ## Filtros preparados
 

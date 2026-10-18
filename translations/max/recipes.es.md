@@ -134,7 +134,7 @@ Ninguno de ellos marca los mensajes como leídos. Si es necesario, agregue `--ma
 
 Escribe: **no**. Permite `Bash(max personal messages list:*)`.
 
-> Leer mensajes en el chat "Proyecto Alfa" de los últimos 7 días: `max messages list "Проект Альфа"
+> Leer mensajes en el chat "Proyecto Alfa" de los últimos 7 días: `max personal messages list "Проект Альфа"
 > 'date>7d' --limit 200 --json`. Si en la respuesta
 > hay un paso `page.next`, sigue leyendo con su `--cursor`. Hacer un informe: qué se decidió, quién asumió qué y para qué
 > plazo, qué preguntas quedaron sin respuesta. Cada artículo tiene una fecha y un autor.
@@ -184,8 +184,8 @@ Tras tu aprobación, el agente envía el texto con `max personal messages send "
 
 Escribe: **solo según las reglas**. Permite `Bash(max personal review:*)`, `Bash(max personal chats events:*)`, `Bash(max personal chats members list:*)`, `Bash(max personal chats moderate:*)`.
 
-> Ejecute `max personal review 'chat:"Поход"' --unanswered 4h --json`, `max chats events "Поход"
-> 'time>=7d' --json` и `max chats moderate "Поход" --dry-run --json`. Brevemente: de qué preguntas esperan respuestas
+> Ejecute `max personal review 'chat:"Поход"' --unanswered 4h --json`, `max personal chats events "Поход"
+> 'time>=7d' --json` y `max personal chats moderate "Поход" --dry-run --json`. Brevemente: de qué preguntas esperan respuestas
 > quién y desde qué hora; quién se unió o fue agregado durante la semana y por quién; lo que encontró el cheque
 > reglas del grupo y lo que se propone hacer. No respondas a nadie ni elimines a nadie tú mismo: enuméralo
 > equipos que lo harán si estoy de acuerdo.
