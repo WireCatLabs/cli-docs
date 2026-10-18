@@ -107,7 +107,7 @@ tg shop config show --bot
 | `analysis_model` | нет; требуется для `--analyze` | модель анализа | `build --model` |
 | `analysis_base_url` | провайдер по умолчанию | конечная точка API анализа | `build --base-url` |
 | `models` | нет | внешние модели по назначению ([ниже](#models-by-purpose)) | `TG_MODELS_*` переменные |
-| `searchStemmers.cyrillic`, `searchStemmers.latin` | `russian`, `english,spanish` | языки-основы слов для поиска по всему архиву ([ниже](#search-languages)) | нет |
+| `search_stemmers.cyrillic`, `search_stemmers.latin` | `russian`, `english,spanish` | языки-основы слов для поиска по всему архиву ([ниже](#search-languages)) | нет |
 
 При первом создании файл создаётся с правами `0600`, а `config set` пишет его с правами `0644`. Секретов в нём нет.
 
@@ -193,7 +193,7 @@ tg config unset sends_per_hour                  # back to the default
 
 ### Языки поиска
 
-`searchStemmers.cyrillic` (`russian` или `none`) и `searchStemmers.latin` (`english`, `spanish`, оба разделены запятыми — по умолчанию — или `none`) хранятся в общем локальном хранилище, а не в файле настроек: одно значение для каждого профиля и для обоих CLI. Поэтому `--defaults`, `--personal` и `--bot` с ними не принимаются, и процесс под `TG_PROFILE_LOCK` не может их изменить. `config unset` восстанавливает встроенное значение. После изменения перестройте индекс поиска ([обслуживание индекса](./archive.md#repair-and-index-maintenance)).
+`search_stemmers.cyrillic` (`russian` или `none`) и `search_stemmers.latin` (`english`, `spanish`, оба разделены запятыми — по умолчанию — или `none`) хранятся в общем локальном хранилище, а не в файле настроек: одно значение для каждого профиля и для обоих CLI. Поэтому `--defaults`, `--personal` и `--bot` с ними не принимаются, и процесс под `TG_PROFILE_LOCK` не может их изменить. `config unset` восстанавливает встроенное значение. После изменения перестройте индекс поиска ([обслуживание индекса](./archive.md#repair-and-index-maintenance)).
 
 ## Опечатки вызывают ошибку
 
@@ -283,8 +283,8 @@ tg personal setup
 | `embedding_dims` | целое число 1–65 536 | профиль |
 | `analysis_provider` | `agent`, `openai`, `anthropic` | профиль |
 | `models` | объекты назначения, описанные ниже | профиль |
-| `searchStemmers.cyrillic` | `russian`, `none` | общий архив через `config set` |
-| `searchStemmers.latin` | `english`, `spanish`, оба через запятую, `none` | общий архив через `config set` |
+| `search_stemmers.cyrillic` | `russian`, `none` | общий архив через `config set` |
+| `search_stemmers.latin` | `english`, `spanish`, оба через запятую, `none` | общий архив через `config set` |
 
 ### Модели по назначению
 

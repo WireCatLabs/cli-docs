@@ -1,9 +1,9 @@
 {
   "tg": {
-    "version": "v0.71.0",
+    "version": "v0.72.0",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
     "reviewedAt": "2026-10-18",
-    "conclusion": "Reviewed Telegram0.69-0.71 with Core0.326.0/Base0.43.0: an agent can no longer delete for everyone; mcp --permission only tightens (a looser override is refused at startup, so shared browser and permission pages no longer start tg with messages.send=allow); TG_READ_ONLY also stops login/logout and store changes; contacts link <person> me; fewer wrong mention names, own accounts linked, addresses keep their city; in a watch-tasks group any member's reply closes a question while a later non-reply closes nothing; bot MCP tools are the bot commands with their own snake_case arguments. Roadmap unchanged: multi-photo sending, private chat notes and listed MAX-only capabilities remain planned."
+    "conclusion": "Reviewed Telegram0.72.0 with Core0.331.0/Base0.43.5: tasks agenda lists what others owe you (an assigned section, assigned in JSON); the duplicate check weighs a shared reply chain less, so fewer false duplicate suggestions; a command path given as one argument fails; interactive commands without a terminal wait 5 minutes; under TG_READ_ONLY writes that ask first stop with exit 5 before asking; session start, session end and setup never run through serve, and session end with serve running stops with exit 2; the stemmer settings are spelled search_stemmers.* in the native pages. Roadmap unchanged: multi-photo sending, private chat notes and listed MAX-only capabilities remain planned."
   },
   "max": {
     "version": "v0.60.0",
