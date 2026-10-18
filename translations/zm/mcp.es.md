@@ -93,12 +93,22 @@ de éxito/error. El manejador rechaza argumentos desconocidos antes de abrir el 
 ## Herramientas opcionales
 
 Los indicadores amplían el conjunto: `--meeting-context` añade pasajes citados, fuentes, contexto personal y propuestas
-de tareas; `--meeting-preparation`, `meeting_prepare` con calendario remoto y contexto guardado con fuentes; `--unified-search`, búsqueda compartida solo de reuniones; `--semantic --model <model>`, la búsqueda `search_meetings` en vectores existentes mediante `by_meaning`. Los componentes remotos necesitan `--base-url` y `--dims`. El servidor fija el
+de tareas; `--meeting-preparation`, `meeting_prepare` con calendario remoto y contexto guardado con fuentes; `--meeting-project-candidates`, `meeting_project_candidates` para comparar
+una reunión guardada con los nombres, claves y alias del catálogo compartido; `--unified-search`, búsqueda compartida solo de reuniones; `--semantic --model <model>`, la búsqueda `search_meetings` en vectores existentes mediante `by_meaning`. Los componentes remotos necesitan `--base-url` y `--dims`. El servidor fija el
 componente al iniciar y el perfil al leer por primera vez. Reinícialo para cambiar la selección;
 los clientes no pueden hacerlo. Generar vectores y crear tareas no son herramientas MCP.
 
 Para contexto entre proyectos, notas y documentos, continúa con
 [búsqueda y fuentes](./search.md#notes-tags-and-memories-with-memo); conecta Memo por separado cuando haga falta.
+
+Con `zm serve --mcp --meeting-project-candidates`, el agente puede llamar a
+`meeting_project_candidates` con la referencia principal `ref` de una reunión y los campos
+opcionales `limit`, `cues`, `bytes`, `max_read_bytes` y `cursor`. Compara la reunión elegida con
+el catálogo compartido de nombres, claves y alias de proyectos, por lo que requiere activación
+separada. Abre el almacén existente en modo de solo lectura, funciona sin conexión y no guarda
+vínculos con proyectos. Conserva la ambigüedad y la cobertura de candidatos y evidencia; continúa
+con `item.evidence.coverage.next_cursor` y la misma `ref`. Consulta los límites y la revisión en
+[sugerir proyectos para una reunión](./search.md#suggest-projects-for-one-meeting).
 
 Con `zm serve --mcp --meeting-preparation`, el agente llama a `meeting_prepare` con `series_id`,
 el `project` opcional, fechas ISO opcionales `after`, `until`, `history_after` y límites `meetings`, `cues`, `context_limit`,

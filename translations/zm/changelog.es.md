@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.25.0 — 18.10.2026
+
+### Añadido
+
+- `meetings projects scan <ref>` propone proyectos existentes a partir de un fragmento acotado del título y la transcripción guardados. Conserva citas, ambigüedad y cobertura separada de evidencia y salida; abre la cuenta seleccionada en modo de solo lectura y no guarda vínculos. MCP expone `meeting_project_candidates` solo con `serve --mcp --meeting-project-candidates`.
+- El SDK exporta `createZoomSeriesInventoryReader` para una página acotada de reuniones programadas, reutilizando el contrato de Core vinculado a la cuenta y la ventana temporal. Conserva fechas antiguas de series recurrentes como pistas, limita los bytes HTTP antes de analizarlos y descarta enlaces de acceso; elegir una serie exacta sigue requiriendo comprobar su próxima ocurrencia. La exposición del inventario por CLI/MCP queda para otro cambio.
+
+### Cambiado — puede romper la compatibilidad
+
+- Adopta Core 0.334.0 y Base 0.44.1 publicados con una única instancia compatible en ejecución. El catálogo de comandos puede incluir `runnable` para grupos y `offline: false` para comandos que requieren red; los clientes estrictos deben aceptar esos campos opcionales. Cada comando ejecutable declara sus efectos conforme a los estándares compartidos.
+
 ## 0.24.0 — 18.10.2026
 
 ### Añadido
