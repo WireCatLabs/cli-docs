@@ -70,7 +70,7 @@ The JSON answer includes the language, field and preset versions, the time zone,
 
 `stats messages show` runs the same query and counts each matching message once, grouped by chat, sender, calendar day or hour. It counts the archive only. A successful search or count writes its query and options, never its results, to a local history of the newest 1,000 runs; saved searches are named entries that are parsed again on every run.
 
-Legacy discovery (`--language legacy`) and the legacy JavaScript `--regex` mode remain explicit and separate from strict semantics.
+Strict Lucene is the only query language. The old `--language legacy` and JavaScript `--regex` modes were removed; write a Lucene regular expression such as `body:/.*invoice.*/` instead.
 
 ### Questions and partial evidence
 
@@ -88,9 +88,9 @@ See the [question planner](https://github.com/WireCatLabs/cli-messaging/blob/v0.
 
 Words and quoted phrases in `text`, the default field, match every form of their words. `квартира` finds `квартиру` and `квартиры`, and `piso` finds `pisos`. Each word is compared by its Snowball stem, taken before the word is folded (ё→е, accents removed). Quotes keep words together but still allow every form: `"оплатил счёт"` finds `оплатила счета`. Messages that contain the exact form you typed come first. For the exact form only, write `exact:квартира` or `exact:"оплатил счёт"`, or add `--exact` (MCP: `exact: true`) to treat every word without a field that way. `-квартира` excludes every form; `-exact:квартира` only the exact one. A wildcard such as `квартир*` and a `text:` regular expression still read whole words, without stems.
 
-Word forms are not typo correction. Strict search, the default, does not correct misspellings in Telegram or MAX: `presentaion` does not find `presentation`. Try a wildcard on the part you are sure of (`present*`), or topic search by meaning. Automatic typo correction is available in `--language legacy` and in discovery for ordinary keyword queries. Natural-question discovery preserves unknown terms. When you ask an agent, describe what you remember; it can choose these approaches for you.
+Word forms are not typo correction. Strict search, the default, does not correct misspellings in Telegram or MAX: `presentaion` does not find `presentation`. Try a wildcard on the part you are sure of (`present*`), or topic search by meaning. Automatic typo correction is available only in discovery (`--discover`) for ordinary keyword queries. Natural-question discovery preserves unknown terms. When you ask an agent, describe what you remember; it can choose these approaches for you.
 
-Snowball stems recover more word forms than exact matching, but can also join unrelated words. See the [word-form benchmark](https://github.com/WireCatLabs/cli-messaging/blob/bench/stemming-vs-trigrams/bench/stemming/results.md) for the comparison with spelling-based trigram neighbors. Use `exact:` when that distinction matters.
+Snowball stems recover more word forms than exact matching, but can also join unrelated words. See the [word-form benchmark](https://github.com/WireCatLabs/cli-core/blob/ca0ae248b4f743e395c5b022f742250876bbb818/bench/stemming/results.md) for the comparison with spelling-based trigram neighbors. Use `exact:` when that distinction matters.
 
 The stemmers are a store-wide setting, shared by every profile, tg and MAX: `search_stemmers.cyrillic` (`russian` or `none`) and `search_stemmers.latin` (`english`, `spanish`, both — the default — or `none`). `store reindex` applies your own change. While the stem index is being built, a search matches exact word forms and says so; `serve` finishes the stems in the background and `store migrate` at once. Some different words share a stem — `часть`/`часто`, `caso`/`casa` — and `exact:` or `--exact` separates them. The JSON answer says whether stems were used: `query.stemming` names the stemmer and each word's stem, `stemsReady` sits beside `wordsReady`, and each hit carries `exact: false` when only another form matched.
 

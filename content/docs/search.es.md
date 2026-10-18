@@ -96,11 +96,11 @@ Hay varias formas de buscar mensajes:
 - **Palabra o frase exacta:** si recuerdas cómo se escribió. Usa `exact:` para una coincidencia literal.
 - **Parte de una palabra:** `piso*` encuentra palabras que empiezan así, como «piso» y «pisos».
 - **Formas y raíces compartidas:** «piso» puede encontrar «pisos». Qué formas coinciden depende de la configuración de idioma del archivo.
-- **Errores de escritura:** la búsqueda normal no corrige errores. Pide al agente que admita escritura aproximada: puede elegir `--language legacy` para buscar con corrección de errores o buscar por el comienzo de la palabra.
+- **Errores de escritura:** la búsqueda normal no corrige errores. Pide al agente que admita escritura aproximada: puede añadir `--discover`, que también prueba escrituras parecidas de las palabras en el archivo local, o buscar por el comienzo de la palabra.
 - **Significado:** si recuerdas el tema, como «el plazo de la reforma que acordamos», pero no las palabras. Necesita un índice de discusiones preparado.
 
 Formas, coincidencias exactas, índices y búsqueda por significado: **[Cómo funciona la búsqueda](./search-architecture.mdx)**.
-Sintaxis detallada: [Telegram](./tg/query-language.md) y [MAX](./max/query-language.md). Las referencias de comandos de [Telegram](./tg/commands.md#tg-search-messages) y [MAX](./max/commands.md#max-search-messages) describen `--language legacy`. Estos modos describen la búsqueda de mensajes;
+Sintaxis detallada: [Telegram](./tg/query-language.md) y [MAX](./max/query-language.md). Las referencias de comandos de [Telegram](./tg/commands.md#tg-search-messages) y [MAX](./max/commands.md#max-search-messages) describen `--discover`. Estos modos describen la búsqueda de mensajes;
 buscar nombres de chats o personas puede funcionar de otra forma.
 
 ## Limitar el chat

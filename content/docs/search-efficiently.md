@@ -71,7 +71,7 @@ Three rules prevent most surprises:
 
 ## Words, forms and meaning
 
-A plain word finds its other forms: "invoice" finds "invoices". For the exact form only, use `exact:invoice`. For typos, use `--language legacy`. Words inside files and transcripts match the exact form only.
+A plain word finds its other forms: "invoice" finds "invoices". For the exact form only, use `exact:invoice`. Search does not correct typos: use the part you are sure of (`invoi*`), or add `--discover` to also try close spellings in the local archive. Words inside files and transcripts match the exact form only.
 
 Use `search conversations` when you remember what a discussion was about and not which words were used. Ask in your own words, in any language the model reads. It always returns the nearest conversations, even when none of them answers, so open the messages before you rely on one. For an exact name, number or id, use a field search instead. More: [Topic search](./tg/topic-search.md).
 

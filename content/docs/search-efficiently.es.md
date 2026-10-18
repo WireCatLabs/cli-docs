@@ -71,7 +71,7 @@ Tres reglas evitan la mayoría de las sorpresas:
 
 ## Palabras, formas y significado
 
-Una palabra normal encuentra sus otras formas: «invoice» encuentra «invoices». Para la forma exacta, usa `exact:invoice`. Para erratas, usa `--language legacy`. Las palabras de archivos y transcripciones solo coinciden en su forma exacta.
+Una palabra normal encuentra sus otras formas: «invoice» encuentra «invoices». Para la forma exacta, usa `exact:invoice`. La búsqueda no corrige erratas: usa la parte de la que estás seguro (`invoi*`) o añade `--discover` para probar también escrituras parecidas en el archivo local. Las palabras de archivos y transcripciones solo coinciden en su forma exacta.
 
 Usa `search conversations` cuando recuerdas de qué trataba una conversación y no con qué palabras. Pregunta con tus propias palabras, en cualquier idioma que lea el modelo. Siempre devuelve las conversaciones más cercanas, aunque ninguna responda, así que abre los mensajes antes de fiarte de una. Para un nombre, número o id exactos, usa una búsqueda por campos. Más: [Búsqueda por tema](./tg/topic-search.md).
 
