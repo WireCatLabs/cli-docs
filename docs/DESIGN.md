@@ -8,8 +8,8 @@ reader, and every page serves both:
 - **agents** — models that read the docs as Markdown, and MCP clients that use the tools.
 
 This page is the design: what pages exist, what each one shows, and the rules behind them. How each
-part gets built is in the plans ([portal v1](plans/2026-10-01-portal-v1.md),
-[landing page](plans/2026-10-02-landing.md)). The pages inside a tool's section are laid out by
+part gets built is in the private plans ([portal v1](https://github.com/WireCatLabs/cli-private/blob/main/archive/public-repo-workfiles/cli-docs/docs/plans/2026-10-01-portal-v1.md),
+[landing page](https://github.com/WireCatLabs/cli-private/blob/main/archive/public-repo-workfiles/cli-docs/docs/plans/2026-10-02-landing.md)). The pages inside a tool's section are laid out by
 [STRUCTURE.md](STRUCTURE.md).
 
 Status marks: ✅ live · 🟡 planned · ⚪ later.

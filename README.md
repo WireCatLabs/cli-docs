@@ -5,8 +5,8 @@ The documentation site for the owner's command line tools, at [wirecat.dev](http
 [Fumadocs](https://fumadocs.dev) as a static site, in English, Russian and Spanish, and readable by
 agents: `/llms.txt`, `/llms-full.txt` and a Markdown copy of every page.
 
-How the site is laid out: [docs/DESIGN.md](docs/DESIGN.md). Picking up the work:
-[HANDOFF.md](HANDOFF.md).
+How the site is laid out: [docs/DESIGN.md](docs/DESIGN.md). Picking up the work: `HANDOFF.md`, kept on the
+working machine and git-ignored.
 
 Each tool keeps its reference pages in its repository's `docs/`, laid out by
 [STRUCTURE.md](docs/STRUCTURE.md); `pnpm sync` copies them at the reviewed release tag in `tools.json` (`docsRef`).
@@ -190,5 +190,5 @@ unauthenticated browser. No phone number, login code, API credentials or account
 Its localized captions are reviewed portal corrections for the Telegram sessions page.
 
 Documentation authoring: [rules](docs/AUTHORING.md), [task index](docs/README.md) and
-[tooling](docs/TOOLING.md). The [implementation plan](docs/plans/2026-10-07-documentation-system.md)
-records the source baseline and validation.
+[tooling](docs/TOOLING.md). The [implementation plan](https://github.com/WireCatLabs/cli-private/blob/main/archive/public-repo-workfiles/cli-docs/docs/plans/2026-10-07-documentation-system.md)
+(private) records the source baseline and validation.

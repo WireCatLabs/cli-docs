@@ -6,7 +6,7 @@ Work is based on merged main `6726feb` (local merge `713cf3a`), with reviewed Te
 and MAX v0.34.0 guides. This incorporates the other guide review instead of maintaining the old
 v0.28/v0.29 snapshot. Security already has the requested simple title on that main; it is retained.
 
-The active content plan is [reader documentation refresh](../plans/2026-10-08-reader-documentation-refresh.md).
+The active content plan is [reader documentation refresh](https://github.com/WireCatLabs/cli-private/blob/main/archive/public-repo-workfiles/cli-docs/docs/plans/2026-10-08-reader-documentation-refresh.md) (private).
 It names pages, reader questions, concrete changes and acceptance criteria. The authoring standard
 now explicitly captures the owner's requirements: explain the feature, benefit and result before
 instructions; define CLI/login/practice data; put capabilities before method lists; assess changes

@@ -54,3 +54,8 @@ __pycache__/
 /.docs-tooling
 # Local archives of old checkouts; never published
 /archive-*/
+
+# The working trail, kept on the machine doing the work; archived in the private repository.
+/CLEANUP.md
+/HANDOFF.md
+/docs/plans/

@@ -1,6 +1,6 @@
 # Reviewed Telegram and MAX guide update — 2026-10-08
 
-This completes the guide follow-up to [archive preparation](../plans/2026-10-08-archive-preparation.md).
+This completes the guide follow-up to [archive preparation](https://github.com/WireCatLabs/cli-private/blob/main/archive/public-repo-workfiles/cli-docs/docs/plans/2026-10-08-archive-preparation.md) (private).
 The website now reviews Telegram v0.35.0 and MAX v0.34.0 in English, Russian and Spanish.
 
 ## Source boundary
