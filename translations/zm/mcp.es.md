@@ -101,6 +101,16 @@ los clientes no pueden hacerlo. Generar vectores y crear tareas no son herramien
 Para contexto entre proyectos, notas y documentos, continúa con
 [búsqueda y fuentes](./search.md#notes-tags-and-memories-with-memo); conecta Memo por separado cuando haga falta.
 
+Con `zm serve --mcp --meeting-inventory`, el agente llama a `meeting_series_inventory` para
+una página de series de la cuenta fijada al iniciar. Acepta ISO opcionales `after`/`until`, `limit`,
+`max_read_bytes`, `bytes` y `cursor`; no permite elegir cuenta. La ventana predeterminada va desde
+ahora hasta siete días después. Continúa `item.page.next_cursor` con la ventana absoluta devuelta.
+Los títulos y fechas iniciales antiguas son pistas, no pruebas de una próxima ocurrencia; la
+cobertura del calendario sigue desconocida. Es un permiso explícito separado de lectura remota,
+requiere `meeting:read:list_meetings` y rechaza el inicio con `--offline`. No abre la base ni guarda
+nada. Usa el ID elegido con `meeting_prepare` para verificar la próxima ocurrencia. Consulta
+[encontrar una serie](./usage.md#find-a-scheduled-meeting-series).
+
 Con `zm serve --mcp --meeting-project-candidates`, el agente puede llamar a
 `meeting_project_candidates` con la referencia principal `ref` de una reunión y los campos
 opcionales `limit`, `cues`, `bytes`, `max_read_bytes` y `cursor`. Compara la reunión elegida con

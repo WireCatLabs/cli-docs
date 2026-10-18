@@ -42,6 +42,10 @@ encontrar pasajes con fuentes, incluso en reuniones aún sin vincular. También 
 confirmadas y etiquetas junto con otras fuentes. Revisa los pasajes antes de aceptar una asociación.
 La búsqueda de alias lee el índice existente: tras importar transcripciones, ejecuta primero una
 búsqueda normal de palabras para indexarlas. Revisas los vínculos dudosos y las nuevas etiquetas.
+Si partes de una reunión y no conoces su proyecto, [sugiere proyectos existentes](./zm/search.md#suggest-projects-for-one-meeting)
+a partir del título y pasajes citados. Usa `meeting` del resultado como referencia principal;
+la `ref` de transcripción señala un pasaje. Las sugerencias siguen sin confirmar hasta revisarlas.
+
 Usa [Memo](./memo/index.md) para notas, etiquetas, hechos y proyectos, [organizar fuentes](./organize.md)
 para el enfoque común y [Google Drive](./drive/index.md) para importar los documentos elegidos.
 Puedes vincular un evento de calendario existente; una próxima reunión de Zoom no implica
@@ -53,8 +57,9 @@ sincronización con un calendario de Google u Outlook.
 Busca mi próxima reunión Zoom con Alice Example. Prepara un informe con reuniones anteriores de la serie, fuentes del proyecto y contexto de participantes. Lista decisiones confirmadas, preguntas abiertas y posibles seguimientos con evidencia. Si proyecto o persona es incierto, muestra candidatos y motivos. No cambies reunión ni vínculos guardados.
 ```
 
-El agente lee la agenda de reuniones de Zoom donde tu cuenta es anfitriona y busca el contexto guardado.
-La lista no incluye todas las invitaciones del calendario. Comprueba que el resumen se refiere
+El agente primero [descubre una página acotada de posibles series](./zm/usage.md#find-a-scheduled-meeting-series)
+en Zoom, verifica la serie elegida y busca contexto guardado. Fechas antiguas o ausentes son pistas,
+no pruebas de una llamada futura. La lista no incluye todas las invitaciones del calendario. Comprueba que el resumen se refiere
 a la reunión correcta y separa decisiones confirmadas de sugerencias. Pide que indique períodos,
 transcripciones o documentos ausentes. [Próximas reuniones de Zoom](./zm/remote-meetings.md) describe
 la agenda y las invitaciones; el agente prepara el resumen con las fuentes que eliges.
@@ -117,8 +122,9 @@ zm meetings show 1 --json
 zm meetings transcript 1 --json
 zm search meetings "launch decision" --json
 zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
+zm meetings projects scan meeting:1/2 --cues 20 --json
 zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
-zm remote-meetings list --json
+zm meetings scheduled --limit 20 --json
 ```
 
 La búsqueda usa los datos disponibles en el perfil elegido. Si faltan, [descarga o importa las
