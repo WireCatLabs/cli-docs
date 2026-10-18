@@ -4,6 +4,95 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.60.0 — 17.10.2026
+
+### Added
+
+- **`stats messages top --measure reactions` shows reactions by emoji** (cli-core 0.324.0): next to the total —
+  `👍 4 · 😂 3` (up to five emoji, then `+N`), and in `--json` each row has `reactions: [{reaction, count}]`.
+- **`max <profile> contacts link <person> me`** (cli-core 0.323.0): mark a contact as you, for an account of yours
+  that the store does not recognise by itself, such as `zoom:<id>`.
+
+### Changed — may break scripts
+
+- **`max bot mcp` tools are now built from the `max bot` commands themselves** (cli-core 0.325.0) and run through
+  them. Arguments are named as the command's: `messages send` and `messages edit` take `md` / `html` instead of
+  `format`, `messages delete` a list `messages`, `search messages` `query`, `chats members remove` `person`.
+  New: `chats rules show`, `offline` on commands that read MAX, and the arguments `page`, `newest`, `notify`,
+  `no_block`, `sync_first`. A write at level `ask` is allowed for the agent: there is nobody to answer the question.
+- **Not offered to the agent**: `session`, `setup`, `config`, `doctor report`, `bot uploads`, and
+  `--allow-dangerous` on `bot comments delete` and on `bot api`. Only the owner still runs them.
+
+### Fixed
+
+- **Mentions find fewer false names** (cli-core 0.323.0). A word from a contact's name counts on its own only as
+  a first or last name; a contact named like a company ("Smart Agents") is found only by the whole name, and the
+  polite «Ваш», «Вам», «Вас» never count. A saint's name in a place name ("Saint Michael's Bridge") and a city after
+  «в»/«во» («во Владимире») are not names either.
+- **Your accounts are you** (cli-core 0.323.0): an account's own identity is linked to you on the next sync, and your
+  name in your messages no longer belongs to another person.
+- **An address keeps its city** (cli-core 0.323.0): one street in two cities is two places; an address without a
+  city still finds its place on that street.
+- **In a group tagged `watch-tasks`, any member's reply closes a question** (cli-core 0.325.0). A direct reply to the
+  question (a reply with a quote) from anyone other than the asker closes the task marked "answered in the group".
+  Before, only your reply closed it, and questions others had already answered stayed open. A message that does not
+  reply to the question closes nothing. In one-to-one chats and untagged groups only your reply still counts.
+
+After updating, re-read old messages once: `max <profile> mentions rebuild person-name place`.
+
+### Security
+
+- **`MAX_READ_ONLY` now refuses login and logout, writes as the bot and store changes**: `session start`,
+  `session end` and `setup` refuse with `permission_error` before connecting. So do `bot api` (every operation that
+  changes something, and `get-updates`), `bot comments send|edit|delete`, `bot chats members add`,
+  `bot uploads put`, and `store reset`, `restore`, `clear`, `migrate`, `repair`, `copies delete` and `decrypt`.
+  Before, `session end` under this guard logged out of MAX and forgot the session, and these bot commands sent a
+  request to MAX. `store repair --dry-run` under the guard still shows what would be repaired.
+- **A Bot API write that max does not know how to journal is refused** with `configuration_error` instead of going
+  to MAX past the recipient list and the send journal. So an operation that a future Bot API schema update adds
+  cannot slip past the checks. Only `get-updates` passes without a journal: it sends nothing to anyone.
+
+## 0.59.0 — 17.10.2026
+
+### Added
+
+- **A task has an assignee** (cli-core 0.320.0): `tasks add --assignee`, `tasks plan --assignee` and the
+  `assignee:` filter in `tasks list` — a task can also be something someone owes you. A group tagged `watch-tasks`
+  gets a task for every unanswered question, whoever it was asked of.
+
+### Changed — may break scripts
+
+- **No default profile is chosen any more** (cli-core 0.319.0). The `default_profile` setting is not read:
+  if it is still in the settings file, a command without a profile name stops and suggests what to type.
+  Name the profile as the first word — `max <профиль> …` — or set `MAX_PROFILE`, and remove the old setting:
+  `max config unset default_profile`. `max config set default_profile` now refuses.
+- **A profile named `default` is an ordinary name.** `max default mcp config` names the MCP server `max-default`,
+  not `max`; an entry written earlier works until `mcp setup` rewrites it under the new name.
+- **`tasks apply` is now `tasks scan`** (cli-core 0.320.0). The MCP tool is `tasks_scan`, the permission key
+  `tasks.scan`. It works the same: it shows which tasks a chat's history would open and creates them only with `--yes`.
+- **An agent can no longer delete a message for everyone** (cli-core 0.321.0). The MCP tool `messages delete` does
+  not accept `for_everyone`: the argument is rejected as unknown. The owner still deletes for everyone with
+  `max <профиль> messages delete --for-everyone`.
+- **`mcp --permission` only tightens permissions** (cli-core 0.321.0). An override that would loosen the profile's
+  level, such as `messages.send=allow` for a profile with `readonly`, is refused at server startup, naming the key.
+  To allow more, change the profile's permissions; `--permission messages.send=deny` and other narrowings work
+  as before.
+
+### Fixed
+
+- **Denying an agent `chats members list` now takes effect** (cli-core 0.321.0). Over MCP the command took its level
+  from the `chats.members` key, and a denial on `chats.members.list` did not reach it.
+- **`tasks show HRB-12` shows a project task** (cli-core 0.320.0). Before, a task of a project rather than an
+  account was reported as not found.
+- **Tasks open only where something was asked of you** (cli-core 0.317.0). In a one-to-one chat, as before, every
+  unanswered question; in a group only a reply to your message and a mention of you; in a channel and Saved
+  messages nothing. Before, any unanswered question in any chat became your task.
+- **Editing a message does not erase what the edit lacks** (cli-core 0.317.0): the send time, reactions and service
+  fields of the stored message stay as they were.
+- **`max bot mcp` tools respect the server's environment.** Before, a call bypassed the variables the server was
+  started with: for example, with `MAX_READ_ONLY=1` the bot still sent a message. Now a call over MCP behaves the
+  same as the same command in a terminal.
+
 ## 0.58.0 — 17.10.2026
 
 ### Security
@@ -1356,7 +1445,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.58.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.60.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

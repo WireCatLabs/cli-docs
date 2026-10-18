@@ -193,7 +193,7 @@ Then ask for a draft or, when you intend to send, name the recipient and exact t
 ## Choose what the agent may do
 
 The server can do what the profile's saved permissions allow. To narrow them for this running server only, add
-`--permission messages.send=deny` or `--permission messages=readonly` to the startup command; in `tg` the flag only
+`--permission messages.send=deny` or `--permission messages=readonly` to the startup command; the flag only
 tightens, and an override that would loosen the profile is refused at startup. To allow sending, change the profile's
 permissions. The app controls its own approval prompts. Over MCP, `ask` does not force a server confirmation. For a
 connection that only reads, use a read-only profile.

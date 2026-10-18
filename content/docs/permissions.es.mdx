@@ -57,9 +57,8 @@ Las instrucciones están en la seguridad de [Telegram](./tg/security.md) y [MAX]
 ## Cambiar temporalmente un servidor MCP
 
 Añade `--permission messages.send=deny` al inicio del servidor para impedir enviar durante
-ese proceso. No cambia los ajustes guardados. En `tg` la opción solo endurece: una anulación que aflojaría el nivel
-del perfil se rechaza al iniciar, así que para permitir más cambia los permisos del perfil. `max` todavía acepta un
-nivel más permisivo para un proceso, como `--permission messages.send=allow`. Por MCP, `ask` no exige un formulario de confirmación en el servidor: la app
+ese proceso. No cambia los ajustes guardados. La opción solo endurece: una anulación que aflojaría el nivel
+del perfil se rechaza al iniciar, así que para permitir más cambia los permisos del perfil. Por MCP, `ask` no exige un formulario de confirmación en el servidor: la app
 controla sus aprobaciones y puede permitir otra llamada sin preguntar. Usa `deny` o `readonly` para impedir cambios. Consulta [la conexión web](./browser-apps.mdx).
 
 ## Límites y reglas detalladas

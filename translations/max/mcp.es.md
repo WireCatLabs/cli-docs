@@ -96,7 +96,7 @@ El bot tiene su propio servidor, `max <имя> bot mcp`; consulta [bot para agen
 
 ## Qué puede hacer un agente
 
-El acceso está determinado por el perfil `permissions` ([derechos de acceso en el directorio de configuración](./configuration-reference.md#права-доступа)). `deny` niega el comando, `readonly` permite solo lectura y `ask` y `allow` permiten la escritura que solicitó el agente. No hay formularios de confirmación en el servidor: la aprobación se configura en la aplicación del agente. En la terminal, el comando en el nivel `ask` aún requiere una respuesta o un indicador explícito. `--permission ключ=уровень` cambia el nivel solo para el proceso del servidor. El perfil se puede proteger mediante `MAX_PROFILE_LOCK`.
+El acceso está determinado por el perfil `permissions` ([derechos de acceso en el directorio de configuración](./configuration-reference.md#права-доступа)). `deny` niega el comando, `readonly` permite solo lectura y `ask` y `allow` permiten la escritura que solicitó el agente. No hay formularios de confirmación en el servidor: la aprobación se configura en la aplicación del agente. En la terminal, el comando en el nivel `ask` aún requiere una respuesta o un indicador explícito. El agente elimina mensajes solo para sí mismo, nunca para todos. `--permission ключ=уровень` endurece el nivel solo para el proceso del servidor y nunca lo relaja. El perfil se puede proteger mediante `MAX_PROFILE_LOCK`.
 
 ## Herramientas
 

@@ -34,7 +34,6 @@ These settings are changed most often. The [configuration reference](./configura
 | `serve` | Start background `max personal serve` when a command needs MAX ([one shared login](./limits.md#один-вход-на-всё)) | `true` |
 | `transcribe_model` | Speech-recognition model for voice messages | `gigaam-v3` |
 | `update_check` | Report new `max` versions once a day | `true` |
-| `default_profile` | Profile used when none is named | none: without a name the command lists the profiles |
 
 There is no place for secrets in this file: no token, phone number or chat id. Tokens use the system keyring or, if unavailable, a file only you can read ([token storage](./security.md#где-живёт-токен)).
 
@@ -60,7 +59,6 @@ Thus `max work chats list` shows 50 rows, while `max personal chats list` shows 
 
 ```json
 {
-  "default_profile": "personal",
   "defaults": {
     "limit": 20,
     "keep_runs_for_days": 14,
@@ -97,8 +95,6 @@ Thus `max work chats list` shows 50 rows, while `max personal chats list` shows 
 
 What each part does:
 
-- `default_profile`: `max chats list` without a profile name uses `personal`. Without this setting and
-  without `MAX_PROFILE`, such a command stops and lists the profiles.
 - `defaults`: every profile receives these values unless it overrides them. `update_check`, `skill_hint` and `transcribe_model` are allowed only here because the program and speech-recognition downloads are shared by all profiles.
 - `profiles.personal`: more rows, colours and recording every run, only for `personal`.
 - `profiles.work`: reading and sending messages are allowed; other message changes are denied. At most 10 sends per hour. No background server starts: each command connects to MAX itself.

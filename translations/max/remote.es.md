@@ -54,7 +54,7 @@ Deje dos ventanas de terminal abiertas. En el primero hay un túnel. Copie su di
 
 ## 2. Iniciar el túnel y el servidor
 
-El servidor escucha `127.0.0.1:8765` e imprime un código de inicio de sesión único. No necesita derechos de administrador; Sólo el túnel puede necesitarlos. Los siguientes comandos permiten enviar sólo mientras se ejecuta este proceso: `--permission messages.send=allow`; consulte [permisos solo durante el tiempo que el servidor esté ejecutando](#права-только-на-время-работы-сервера).
+El servidor escucha `127.0.0.1:8765` e imprime un código de inicio de sesión único. No necesita derechos de administrador; Sólo el túnel puede necesitarlos. Lo que puede hacer el agente lo deciden los permisos del perfil; para restringirlos solo mientras se ejecuta este proceso, consulte [permisos solo durante el tiempo que el servidor esté ejecutando](#права-только-на-время-работы-сервера).
 
 ### Windows (PowerShell)
 
@@ -70,7 +70,7 @@ Segunda ventana: PowerShell normal con el usuario que inició sesión en MAX:
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Вставьте HTTPS origin из Funnel (без /mcp)'
-max.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
+max.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Ejecute ambos procesos en el propio Windows. WSL es un entorno independiente: es posible que un túnel de Windows dirigido a una dirección local de Windows no llegue al servidor dentro de WSL.
@@ -88,7 +88,7 @@ Segunda ventana, con el usuario que ejecutó `max personal setup --agent none`. 
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+max personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Terminal)
@@ -104,7 +104,7 @@ Segunda ventana: un usuario normal sin `sudo`, para que `max` encuentre una sesi
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+max personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## MAX y Telegram al mismo tiempo
@@ -144,7 +144,7 @@ Los comandos disponibles los decide el perfil `permissions`. No hay formularios 
 
 El servidor no ve si la aplicación le preguntó antes de llamar. Si la aplicación siempre permite la herramienta, la siguiente llamada puede realizarse sin una nueva pregunta.
 
-`--permission ключ=уровень` repetido cambia los derechos solo para este proceso de servidor. Niveles: `deny`, `readonly`, `ask`, `allow`. Por ejemplo, `--permission messages.send=allow` permitirá enviar desde un perfil con `readonly`. `--permission messages=allow` reemplazará los derechos guardados para todo el recurso de mensajes; la eliminación se permite por separado a través de `--permission messages.delete=allow`. El archivo de configuración, la lista de destinatarios y el límite de envío por hora no cambian. Para eliminar la prohibición de lectura, asigne un nombre a su recurso o comando con el nivel `allow`. Las claves de permiso se enumeran en la [Guía de configuración de](./configuration.md).
+`--permission ключ=уровень` repetido endurece los derechos solo para este proceso de servidor. Niveles: `deny`, `readonly`, `ask`, `allow`. Por ejemplo, `--permission messages.send=deny` prohibirá enviar, y `--permission messages=readonly` dejará al agente solo la lectura de mensajes. La opción no puede relajar los derechos: un servidor con `messages.send=allow` para un perfil con `readonly` no se iniciará y nombrará la clave. Para permitir más, cambie los derechos del perfil. El archivo de configuración, la lista de destinatarios y el límite de envío por hora no cambian. Las claves de permiso se enumeran en la [Guía de configuración de](./configuration.md).
 
 Con permisos sustituidos temporalmente, MCP se conecta directamente a MAX: una instancia de `max personal serve` ya en marcha sigue utilizando los permisos guardados de su perfil.
 

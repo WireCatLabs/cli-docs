@@ -95,7 +95,7 @@ Bots have their own server, `max <имя> bot mcp`; see [a bot for your agent](.
 
 ## What your agent may do
 
-Profile `permissions` controls access ([permissions reference](./configuration-reference.md#права-доступа)). `deny` blocks a command; `readonly` allows reading; `ask` and `allow` permit the requested write. The server has no confirmation form: configure approval in the agent application. Terminal commands at `ask` still require an answer or explicit flag. `--permission ключ=уровень` changes permissions only for this server process. `MAX_PROFILE_LOCK` can fix the profile.
+Profile `permissions` controls access ([permissions reference](./configuration-reference.md#права-доступа)). `deny` blocks a command; `readonly` allows reading; `ask` and `allow` permit the requested write. The server has no confirmation form: configure approval in the agent application. Terminal commands at `ask` still require an answer or explicit flag. An agent deletes messages only for itself, never for everyone. `--permission ключ=уровень` tightens permissions only for this server process and never loosens them. `MAX_PROFILE_LOCK` can fix the profile.
 
 ## Tools
 

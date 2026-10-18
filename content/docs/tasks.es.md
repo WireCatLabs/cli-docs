@@ -14,33 +14,32 @@ Las categorías, las etiquetas en las tareas, las claves por tipo, la reserva de
 de duplicados ya están en el núcleo común de las herramientas (cli-core). `tg` y `max` las tienen
 todas; `memo` aún no tiene la reserva ni la revisión de duplicados. Los cierres que te esperan cuando
 un agente no está seguro, las tareas de seguimiento, la lista de 59 categorías y la detección de
-duplicados que lee los mensajes vinculados están en `tg` y `max`; `memo` aún no los tiene. Por ahora
-solo `tg` lee la lista de categorías del archivo de ajustes compartido. En `tg` y `max` la primera
+duplicados que lee los mensajes vinculados están en `tg` y `max`; `memo` aún no los tiene. `tg` y
+`max` leen la lista de categorías del archivo de ajustes compartido. En ellos la primera
 sincronización no abre tareas de tu historial, y las tareas de un chat se crean cuando lo pides
-(`tasks scan` en `tg`; en `max` el comando aún se llama `tasks apply`). Solo `tg` abre tareas en un
-grupo únicamente por lo que te preguntan a ti, y registra quién debe hacer una tarea encontrada en un
-mensaje.
+(`tasks scan`). Abren tareas en un grupo únicamente por lo que te preguntan a ti, y registran quién
+debe hacer una tarea encontrada en un mensaje.
 [Cómo funcionan las tareas](./tasks-architecture.mdx) da el detalle técnico.
 
 ## De dónde salen las tareas
 
-- **Las reglas las encuentran en los mensajes, donde se te pide algo.** En `tg` decide el tipo de chat:
+- **Las reglas las encuentran en los mensajes, donde se te pide algo.** En `tg` y `max` decide el tipo de chat:
   - **Un chat individual:** cada pregunta que no respondiste se convierte en una tarea de tipo
     `question`.
   - **Un grupo:** solo una pregunta que responde a tu mensaje. Las preguntas de otras personas no
     son tus tareas.
-  - **Un canal o Mensajes guardados:** nada.
+  - **Un canal, o Mensajes guardados en Telegram:** nada.
 
   Un mensaje que te menciona se convierte en una tarea `mention`, en un chat individual o en un grupo;
   la mención la debe marcar el servicio de mensajería, un nombre escrito sin más no cuenta. Un chat
-  cuyo tipo la herramienta no conoce cuenta como grupo. En `max`, cada pregunta que no respondiste
-  sigue abriendo una tarea en cualquier chat. Una regla de
+  cuyo tipo la herramienta no conoce cuenta como grupo. Una regla de
   respuesta automática con la acción `task` abre una tarea `request` por cada mensaje que coincide
   ([Telegram](./tg/replies.md), [MAX](./max/replies.md)). Las reglas se ejecutan cuando tu agente
   sincroniza o revisa tus chats y mientras la herramienta funciona en segundo plano (`messages sync`,
-  `review` y `serve`). Una regla elige la categoría de la tarea por las palabras del mensaje.
+  `review` y `serve`). En `max`, `serve` abre solo las tareas de las reglas de respuesta automática; las
+  demás reglas se ejecutan en la siguiente sincronización o revisión. Una regla elige la categoría de la tarea por las palabras del mensaje.
 - **Un grupo vigilado te da todas las preguntas.** Si quieres como tarea cada pregunta sin respuesta de
-  un grupo, sea para quien sea, ponle al grupo la etiqueta `watch-tasks` (`tg`; consulta
+  un grupo, sea para quien sea, ponle al grupo la etiqueta `watch-tasks` (consulta
   [Todas las preguntas de un grupo](#todas-las-preguntas-de-un-grupo)).
 - **Tus mensajes antiguos esperan tu decisión.** En `tg` y `max`, la primera sincronización de una
   cuenta no abre tareas de tu historial. Las sincronizaciones siguientes abren tareas a partir de mensajes nuevos.
@@ -101,8 +100,8 @@ tres tareas. Una tarea trata de una cosa, no de un chat ni de una persona.
 
 Una tarea no es solo lo que tienes que hacer tú. Cuando alguien te promete algo, como «mañana te mando
 las fotos», guárdalo también como tarea, con esa persona como su **responsable**: quien debe hacerla.
-Así puedes preguntar a tu agente qué te deben otros y reclamar lo que se retrasa. En `tg`, una tarea
-encontrada en un mensaje puede tener responsables; las tareas de proyecto de `memo` tienen los suyos.
+Así puedes preguntar a tu agente qué te deben otros y reclamar lo que se retrasa. En `tg` y `max`, una
+tarea encontrada en un mensaje puede tener responsables; las tareas de proyecto de `memo` tienen los suyos.
 
 `tasks add` y `tasks plan` aceptan `--assignee`:
 
@@ -135,12 +134,12 @@ tg personal tags add --chat "Renovation" watch-tasks
 tg personal tags remove --chat "Renovation" watch-tasks
 ```
 
-La etiqueta funciona en `tg` y solo en grupos; un canal nunca abre tareas. Lo que cambia:
+La etiqueta funciona en `tg` y `max`, y solo en grupos; un canal nunca abre tareas. Lo que cambia:
 
 - **Cada pregunta que no respondiste abre una tarea, sea para quien sea.** Una regla reconoce una
   pregunta por su signo de interrogación o por una respuesta a tu mensaje.
-- **Solo mensajes nuevos.** Las tareas se abren después de cada sincronización, en `review` y mientras
-  `serve` está en marcha. Para los mensajes antiguos del grupo, usa
+- **Solo mensajes nuevos.** Las tareas se abren después de cada sincronización, en `review` y, en
+  `tg`, mientras `serve` está en marcha. Para los mensajes antiguos del grupo, usa
   [`tasks scan`](#tareas-del-historial-de-un-chat).
 - **Preguntas, no todos los mensajes.** Una petición o una promesa sin signo de interrogación, como
   «mándame el archivo» o «lo hago mañana», no es tarea de una regla. Tu agente la añade con
@@ -242,7 +241,7 @@ tg personal tasks close <task>
 tg personal tasks reject <task>
 ```
 
-`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos, incluidos los cierres sugeridos, salvo `--assignee`.
+`<task>` es la clave de la tarea, tal como la imprime `tasks agenda`, o su id completo. `max` tiene los mismos comandos, incluidos los cierres sugeridos y `--assignee`.
 
 </details>
 
@@ -252,13 +251,13 @@ tg personal tasks reject <task>
 - **add** necesita un tipo. También necesita una categoría
   (`--category`), y se niega si ya existe una tarea parecida; consulta
   [Sin tareas duplicadas](#sin-tareas-duplicadas).
-- **plan** fija el título, la descripción, la fecha límite, la próxima revisión y, en `tg`, los
+- **plan** fija el título, la descripción, la fecha límite, la próxima revisión y los
   responsables. La próxima revisión
   es cuándo tu agente debe volver a mirar la tarea; no te avisa a ti.
 - **link** añade a una tarea mensajes, chats, personas, documentos, notas o direcciones.
 - **show** muestra una tarea con su plan y todo lo vinculado.
 - **scan** ejecuta las reglas de tareas sobre los mensajes guardados más recientes de un chat y lista
-  las tareas que abrirían. Solo las abre con `--yes`. En `max` este comando es `tasks apply`. Consulta
+  las tareas que abrirían. Solo las abre con `--yes`. Consulta
   [Tareas del historial de un chat](#tareas-del-historial-de-un-chat).
 - **close** cierra una tarea como `done` o `dismissed`. Una tarea cerrada se queda cerrada. Solo
   `tasks unmerge` vuelve a abrir una tarea, y solo una que cerró una fusión. El cierre de un agente
@@ -287,7 +286,7 @@ apareció mientras se trabajaba en otra.
    tareas sobre lo que guardó, desde donde se detuvo la vez anterior. La primera vez lee solo los
    chats con algún mensaje de los últimos 14 días. En `tg` y `max`, además, la primera vez no abre
    ninguna tarea de esos mensajes: la respuesta cuenta las tareas que dejó sin abrir y nombra
-   `tasks scan` (`tasks apply` en `max`). Una sincronización posterior se salta un chat en el que no se envió nada nuevo, así que los mensajes
+   `tasks scan`. Una sincronización posterior se salta un chat en el que no se envió nada nuevo, así que los mensajes
    antiguos que descarga no abren tareas. La respuesta dice cuántas tareas se abrieron, cuántas se
    cerraron y cuántas fueron a la lista de revisión.
 2. Lee la agenda y contrasta cada tarea nueva con sus mensajes.
@@ -309,11 +308,10 @@ chats merecen el trabajo.
    abren pasando por la comprobación de duplicados, como en una sincronización, y se cierra la tarea
    abierta de una pregunta que ya respondiste.
 
-La revisión usa las mismas reglas que una sincronización: en `tg`, un canal no abre nada, y un grupo
+La revisión usa las mismas reglas que una sincronización: un canal no abre nada, y un grupo
 solo lo que te preguntan a ti, salvo que le pusieras la etiqueta `watch-tasks`. `tasks scan` lee solo
 los mensajes guardados en tu ordenador y no envía nada. Los agentes que usan el servidor MCP tienen la
-misma herramienta, `tasks_scan`, con `yes` en lugar de `--yes`. En `max`, el comando es `tasks apply`
-y la herramienta, `tasks_apply`.
+misma herramienta, `tasks_scan`, con `yes` en lugar de `--yes`.
 
 Si quieres que la primera sincronización abra tareas del historial,
 `config set task_first_pass_per_chat <n>` le permite abrir hasta n tareas por chat, primero las más
@@ -377,7 +375,7 @@ herramienta comprueba cada tarea nueva antes de crearla:
 La comprobación compara las palabras (también otras formas de una palabra y errores de escritura), la
 persona, el importe, la fecha límite, la categoría, las respuestas y el tiempo. En `tg` y `max`, el
 tiempo es cuándo se enviaron los mensajes de las tareas, no cuándo se escribieron las tareas, así que
-las tareas escritas de una vez a partir del historial no parecen iguales. En `tg`, dos tareas sacadas
+las tareas escritas de una vez a partir del historial no parecen iguales. En `tg` y `max`, dos tareas sacadas
 de un mismo mensaje, como una promesa y una petición en un mensaje largo, se comparan solo por su
 título y su descripción: el mensaje compartido no dice si son el mismo trabajo. Lee el título y la
 descripción de cada tarea, su mensaje de origen y sus 5 mensajes vinculados más recientes, así que una
@@ -421,12 +419,12 @@ primero, cada una con una banda (`likely`, `maybe` o `different`) y los motivos.
   que no está en la lista. Una regla elige la categoría por las palabras del mensaje, la más concreta
   si encajan dos (una factura de suministros es `bills`, no `money`), u `other` si ninguna coincide; tu
   agente la corrige con `tasks plan --category`.
-- **Una lista en un archivo de ajustes compartido.** `tg` lee tus cambios a la lista de
+- **Una lista en un archivo de ajustes compartido.** `tg` y `max` leen tus cambios a la lista de
   `~/.config/WireCat/config.json`, sección `task_categories`. No es el archivo de ajustes de un perfil,
-  así que la lista es la misma en todos los perfiles, y «finanzas» y «pagos» nunca conviven. `max` y
-  `memo` aún no leen este archivo. Usan una lista guardada en el almacén o su propia lista por defecto:
-  `max` tiene las mismas 59 categorías, y `memo` aún tiene las siete anteriores (`money`, `documents`,
-  `meeting`, `delivery`, `access`, `personal` y `other`).
+  así que la lista es la misma en todos los perfiles, y «finanzas» y «pagos» nunca conviven. `memo`
+  aún no lee este archivo. Usa una lista guardada en el almacén o su propia lista por defecto, que aún
+  tiene las siete categorías anteriores (`money`, `documents`, `meeting`, `delivery`, `access`,
+  `personal` y `other`).
 - **Puedes cambiar la lista.** Cada categoría tiene un significado y las palabras por las que la elige
   una regla. Una palabra coincide también con sus otras formas; una palabra puede indicar su idioma,
   como `es:vuelo`, y entonces una palabra española como `es:pagar` coincide también con `pagues` en un
@@ -437,7 +435,7 @@ primero, cada una con una banda (`likely`, `maybe` o `different`) y los motivos.
   es JSON válido o que nombra una categoría incorrecta se rechaza indicando su ruta.
 - **Una lista guardada en el almacén pasa al archivo.** Una lista que `tg` guardó en el almacén antes de
   usar el archivo sigue valiendo. El siguiente `config set` o `config unset` de una categoría la pasa
-  al archivo y la quita del almacén; desde entonces, `max` y `memo` vuelven a usar su propia lista por
+  al archivo y la quita del almacén; desde entonces, `memo` vuelve a usar su propia lista por
   defecto. `config unset task_categories` quita la sección del archivo y da la lista por defecto actual.
 - **Una categoría que salió de la lista.** Las tareas conservan su categoría cuando sale de la lista.
   `tasks categories` nombra esas categorías en `unlisted`, con sus tareas abiertas y el total, y
@@ -463,7 +461,7 @@ config unset task_categories
 config show
 ```
 
-En `tg` también puedes editar el archivo a mano. Un nombre con su significado y sus palabras añade o
+En `tg` y `max` también puedes editar el archivo a mano. Un nombre con su significado y sus palabras añade o
 sustituye una categoría, y `null` quita una de la lista por defecto:
 
 ```json
@@ -507,7 +505,7 @@ tasks agenda claimed:any
 Los agentes que usan el servidor MCP tienen las mismas herramientas, como `tasks_claim`,
 `tasks_release`, `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` y `tasks_unmerge`.
 En `tg` y `max`, `tasks_close` necesita `certainty`, igual que el `tasks close` de un agente.
-`tasks_scan` (`tasks_apply` en `max`) crea las tareas de un chat a partir de su historial.
+`tasks_scan` crea las tareas de un chat a partir de su historial.
 
 ## Aún no está hecho
 

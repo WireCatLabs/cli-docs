@@ -141,7 +141,7 @@ max work chats list         # профиль work
 
 **The first word is a profile unless it matches a command name.** A profile named `chats` is therefore rejected during creation, with an explanation.
 
-`max` never picks a profile by itself, even when there is only one: without a name, the command stops and lists the profiles on this computer. The name comes from the first word, `MAX_PROFILE` or `default_profile`.
+`max` never picks a profile by itself, even when there is only one: without a name, the command stops and lists the profiles on this computer. The name comes from the first word or `MAX_PROFILE`.
 
 For a whole shell session, use a variable:
 
@@ -543,7 +543,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.58.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.60.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -1204,14 +1204,13 @@ An optional `~/.config/max-cli/config.json` file:
 
 ```json
 {
-  "default_profile": "personal",
   "profiles": {
     "personal": { "limit": 50, "timeout_ms": 20000, "color": true, "record": false, "keep_runs_for_days": 30 }
   }
 }
 ```
 
-The order in which any setting is resolved is: **flag → environment variable → file → built-in value**. In the file, the profile is stronger than the general `defaults`, and sections `personal` and `bot` set values separately for personal accounts and for bots (`max personal config set --personal …`, `--bot …`). All fields, including `default_profile` and `permissions`, are [settings](./configuration.md). A typo in field name is an error with the field name, not the silent default.
+The order in which any setting is resolved is: **flag → environment variable → file → built-in value**. In the file, the profile is stronger than the general `defaults`, and sections `personal` and `bot` set values separately for personal accounts and for bots (`max personal config set --personal …`, `--bot …`). All fields, including `permissions`, are [settings](./configuration.md). A typo in field name is an error with the field name, not the silent default.
 
 **This file cannot contain secrets:** its schema has no secret fields.
 

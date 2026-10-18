@@ -54,7 +54,7 @@ The recipient list restricts the chats a profile can send to. The hourly limit h
 
 ## Temporarily change MCP server permissions
 
-Add `--permission messages.send=allow` when starting the server to allow that process to send messages. Saved settings are unchanged. Through MCP, `ask` does not require a server confirmation form: the application manages its own confirmations and may allow a call without another prompt. To forbid changes, use `deny` or `readonly`. [Browser setup](./remote.md) explains the full connection process.
+Add `--permission messages.send=deny` when starting the server to forbid that process to send messages. Saved settings are unchanged. The flag only tightens permissions: a server with an override that would loosen the profile's level does not start. Through MCP, `ask` does not require a server confirmation form: the application manages its own confirmations and may allow a call without another prompt. To forbid changes, use `deny` or `readonly`. [Browser setup](./remote.md) explains the full connection process.
 
 ## Limitations and detailed rules
 

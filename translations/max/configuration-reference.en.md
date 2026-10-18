@@ -49,7 +49,7 @@ max config show --json     # то же одним объектом
 
 The command prints the selected profile **and where it came from**, the path to the settings file and whether it exists, the profiles and effective values of all settings with the source of each.
 
-Each setting shows its source: `flag`, `default` or `config file:` with its key, such as `config file: bot.profiles.test`. The profile source is `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK`, `config file: default_profile` or `none named`: no profile was named, and `profile` is then `null`.
+Each setting shows its source: `flag`, `default` or `config file:` with its key, such as `config file: bot.profiles.test`. The profile source is `first word`, `MAX_PROFILE`, `MAX_PROFILE_LOCK` or `none named`: no profile was named, and `profile` is then `null`.
 
 With `--json`, the response also includes `store_settings`: shared archive settings (`search_stemmers.*`, `task_agent_close*`) and their origin, `store` or `default`.
 
@@ -69,7 +69,6 @@ Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`,
 
 ```json
 {
-  "default_profile": "personal",
   "defaults": { "keep_runs_for_days": 14 },
   "profiles": {
     "personal": { "limit": 50, "timeout_ms": 20000, "color": true },
@@ -92,7 +91,6 @@ Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`,
 
 | Field | Purpose | Override for one run | Default |
 | --- | --- | --- | --- |
-| `default_profile` | Profile when no first-word profile or `MAX_PROFILE` is supplied | First word (`max work …`), `MAX_PROFILE` | none: without a name the command lists the profiles |
 | `limit` | Rows shown without `--limit` | `--limit` | `20` |
 | `timeout_ms` | Milliseconds to wait for **one request** | None (`--timeout` is different; see below) | Transport-dependent |
 | `color` | Terminal colours; otherwise based on terminal detection | None; without the field, `NO_COLOR` disables colour | Terminal-dependent |
@@ -173,7 +171,7 @@ At level `ask` a question appears in the terminal with the default answer being 
 
 ### Via MCP
 
-MCP has no confirmation forms: `ask` permits the requested write; `deny` and `readonly` still block it. `--permission ключ=уровень` overrides permissions only for this process. In the CLI, `ask` still needs an answer or explicit confirmation flag. See [MCP](./mcp.md).
+MCP has no confirmation forms: `ask` permits the requested write; `deny` and `readonly` still block it. `--permission ключ=уровень` temporarily tightens permissions for this process but never loosens them. In the CLI, `ask` still needs an answer or explicit confirmation flag. See [MCP](./mcp.md).
 
 ### Old `allow` setting
 
@@ -189,7 +187,7 @@ max work config unset limit             # убрать; снова решает 
 max agent config set permissions.messages readonly  # чтение сообщений без записи
 max shop config set --bot sends_per_hour 200    # только боту shop
 max config set --personal --defaults limit 30 # всем личным аккаунтам
-max config set default_profile work      # какой профиль без первого слова
+max config unset default_profile         # убрать старую настройку: профиль больше не подразумевается
 ```
 
 Values are checked with the same schema used for reading, **before writing**: `max personal config set limit 0` is refused and the file stays unchanged. `serve`, `sender_colors`, `catch_up_marks_read` and `search_catch_up` are not accepted with `--bot`: bots have no server, sender colors or unread state.
@@ -256,7 +254,7 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 
 | Key | Valid type or value | Scope |
 |---|---|---|
-| `default_profile` | string containing a profile name | file root |
+| `default_profile` | not read: a command without a profile name stops — `max config unset default_profile` | file root |
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | integer ≥ 1 | profile |
 | `requests_per_minute` | integer ≥ 0 | profile |
 | `color`, `record` | boolean | profile |

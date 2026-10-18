@@ -54,7 +54,7 @@ Leave two terminal windows open. The tunnel runs in the first. Copy its HTTPS ad
 
 ## 2. Start the tunnel and server
 
-The server listens on `127.0.0.1:8765` and prints a one-time login code. It does not need administrator rights; the tunnel may. The commands below allow sending only while this process runs, through `--permission messages.send=allow`; see [permissions for the server process](#права-только-на-время-работы-сервера).
+The server listens on `127.0.0.1:8765` and prints a one-time login code. It does not need administrator rights; the tunnel may. The profile's permissions decide what the agent may do; to narrow them only while this process runs, see [permissions for the server process](#права-только-на-время-работы-сервера).
 
 ### Windows (PowerShell)
 
@@ -70,7 +70,7 @@ Second window: ordinary PowerShell as the user who signed in to MAX:
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Вставьте HTTPS origin из Funnel (без /mcp)'
-max.cmd mcp --http --port 8765 --public-url $mcpPublicUrl --permission messages.send=allow
+max.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Run both processes in Windows itself. WSL is a separate environment: a Windows tunnel targeting a local Windows address may not reach a server inside WSL.
@@ -88,7 +88,7 @@ Second window, as the user who ran `max personal setup --agent none`. Works in z
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+max personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Terminal)
@@ -104,7 +104,7 @@ Second window: an ordinary user without `sudo`, so `max` finds the session creat
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max personal mcp --http --port 8765 --public-url "$mcpPublicUrl" --permission messages.send=allow
+max personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## MAX and Telegram at the same time
@@ -144,7 +144,7 @@ The profile's `permissions` determine which commands are available. The server h
 
 The server cannot see whether the app asked you before calling a tool. If you always allow the tool in the app, the next call can proceed without a new question.
 
-Repeat `--permission ключ=уровень` to change permissions only for this server process. The levels are `deny`, `readonly`, `ask` and `allow`. For example, `--permission messages.send=allow` permits sending from a profile with `readonly`. `--permission messages=allow` overrides saved permissions for the entire messages resource; deletion is enabled separately with `--permission messages.delete=allow`. The settings file, recipient list and hourly send limit do not change. To lift a reading prohibition, name the resource or command with level `allow`. Permission keys are listed in the [configuration guide](./configuration.md).
+Repeat `--permission ключ=уровень` to tighten permissions only for this server process. The levels are `deny`, `readonly`, `ask` and `allow`. For example, `--permission messages.send=deny` forbids sending, and `--permission messages=readonly` leaves the agent only reading messages. The flag cannot loosen permissions: a server with `messages.send=allow` for a profile with `readonly` does not start and names the key. To allow more, change the profile's permissions. The settings file, recipient list and hourly send limit do not change. Permission keys are listed in the [configuration guide](./configuration.md).
 
 With temporary permission overrides, MCP connects directly to MAX: an existing `max personal serve` service continues using its profile’s saved permissions.
 

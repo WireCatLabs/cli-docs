@@ -36,7 +36,6 @@ Estas son las configuraciones que se cambian con más frecuencia. Una descripci�
 | `serve` |ejecute el servidor en segundo plano `max personal serve` cuando el comando necesite MAX ([una entrada para todos los](./limits.md#один-вход-на-всё))| `true` |
 | `transcribe_model` |qué modelo reconocer mensajes de voz| `gigaam-v3` |
 | `update_check` |una vez al día para informar que se ha lanzado una nueva versión de `max`| `true` |
-| `default_profile` |¿Qué perfil toma el comando si el perfil no se nombra?| ninguno: sin nombre, el comando enumera los perfiles |
 
 No hay ningún secreto en un archivo. No hay lugar en él para un token, un número de teléfono o una identificación de chat: el token se almacena en el llavero del sistema y, donde no está, en un archivo que solo usted puede leer ([donde vive token](./security.md#где-живёт-токен)).
 
@@ -62,7 +61,6 @@ Por lo tanto, `max work chats list` mostrará 50 líneas y `max personal chats l
 
 ```json
 {
-  "default_profile": "personal",
   "defaults": {
     "limit": 20,
     "keep_runs_for_days": 14,
@@ -99,8 +97,6 @@ Por lo tanto, `max work chats list` mostrará 50 líneas y `max personal chats l
 
 Qué hace cada parte:
 
-- `default_profile`: `max chats list` sin nombre de perfil funciona con `personal`. Sin este ajuste y
-  sin `MAX_PROFILE`, ese comando se detiene y enumera los perfiles.
 - `defaults`: cada perfil recibe estos valores si no ha especificado los suyos propios. `update_check`, `skill_hint` y `transcribe_model` sólo son válidos aquí: el programa y los modelos de voz son los mismos para todos los perfiles.
 - `profiles.personal`: más líneas, colores y grabación de cada ejecución - sólo para `personal`.
 - `profiles.work`: se pueden leer mensajes, se pueden enviar mensajes, se prohíben otros cambios en los mensajes. No más de 10 envíos por hora. El servidor en segundo plano no se inicia: cada comando ingresa MAX.

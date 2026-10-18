@@ -15,7 +15,7 @@ Terms used below:
 - **Token** — the credential MAX issues at login. It can read your chats; treat it as a password. `max` keeps it in the keyring.
 - **Device identity** — how `max` identifies itself to MAX, consistently across commands. It is saved beside other state files.
 - **Keyring** — the operating system's password storage: Keychain on macOS, Secret Service (GNOME Keyring, KWallet) on Linux, Credential Manager on Windows.
-- **Profile** — a named login with its own token, state and settings. The name is given in every command (`max personal …`), by `MAX_PROFILE` or by `default_profile`; `max` never picks a profile by itself. You need another profile for another account or separate restrictions ([profiles](#профили)).
+- **Profile** — a named login with its own token, state and settings. The name is given in every command (`max personal …`) or by `MAX_PROFILE`; `max` never picks a profile by itself. You need another profile for another account or separate restrictions ([profiles](#профили)).
 
 Do not confuse `max personal session` and `max personal account sessions`. `max personal session` — login of `max` itself; `max personal account sessions` lists all other devices and applications signed into your account.
 
@@ -108,7 +108,7 @@ export MAX_PROFILE=personal # или на всю сессию оболочки
 
 Rule: **The first word is profile unless it matches the name command.** Therefore a profile cannot be named `chats`, `runs` or `session` - `max personal session start` and `max personal setup` reject such a name. Otherwise, `max personal chats` would silently mean “chats profile without command”. The name consists of Latin letters, numbers, periods, hyphens and underscores and begins with a letter or number.
 
-Order, first match wins: first word, `MAX_PROFILE`, `default_profile` in the settings file. If none of these is set, a command that needs an account exits with code `2` and lists the profiles on this computer — even when there is only one:
+Order, first match wins: first word, `MAX_PROFILE`. If none of these is set, a command that needs an account exits with code `2` and lists the profiles on this computer — even when there is only one:
 
 ```text
 ✗ name a profile: `max <profile> …` — profiles here: personal (or set MAX_PROFILE)

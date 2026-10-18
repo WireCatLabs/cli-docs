@@ -6,10 +6,10 @@
     "conclusion": "Reviewed Telegram0.69-0.71 with Core0.326.0/Base0.43.0: an agent can no longer delete for everyone; mcp --permission only tightens (a looser override is refused at startup, so shared browser and permission pages no longer start tg with messages.send=allow); TG_READ_ONLY also stops login/logout and store changes; contacts link <person> me; fewer wrong mention names, own accounts linked, addresses keep their city; in a watch-tasks group any member's reply closes a question while a later non-reply closes nothing; bot MCP tools are the bot commands with their own snake_case arguments. Roadmap unchanged: multi-photo sending, private chat notes and listed MAX-only capabilities remain planned."
   },
   "max": {
-    "version": "v0.58.0",
+    "version": "v0.60.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
-    "reviewedAt": "2026-10-17",
-    "conclusion": "Reviewed MAX0.57-0.58 with Core0.315.0/Base0.40.2: attachment provider credentials are removed from read/event output; protected WhatsApp state uploads are refused. Updated command references cover stored Drive links, tasks apply and first-pass settings, names/places, comma-separated deletes, and supported MAX-only flags. Search notes uses source query terms; configuration errors omit values and doctor can report invalid settings. Roadmap unchanged: optional local-copy mode, event actions, video circles/cloud password and standalone installers remain planned."
+    "reviewedAt": "2026-10-18",
+    "conclusion": "Reviewed MAX0.59-0.60 at c41c9ea with Core0.326.0/Base0.43.5: tasks open only where something was asked of you; tasks apply is tasks scan and tasks take an assignee; default_profile is no longer read and a profile is never assumed; mcp --permission only tightens and an agent never deletes for everyone; bot MCP tools are built from the bot commands; MAX_READ_ONLY refuses login/logout, bot writes and store changes. Shared Tasks, Permissions and browser pages and the command-rules block updated; defaultProfile correction retired. Roadmap unchanged."
   },
   "zm": {
     "version": "v0.24.0",
