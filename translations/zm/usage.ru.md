@@ -222,6 +222,7 @@ zm meetings prepare 123456789 --context-source project-notes --context-query "la
 | `meetings export <meeting> --format markdown\|vtt` | экспортировать данные встреч |
 | `search meetings <query>`, `meetings people <query>` | найти сохранённый текст или участников |
 | `meetings prepare <series-id>` | получить время предстоящего созвона и сохранённый контекст с источниками для выбранной серии |
+| `meetings projects scan <ref>` | предложить существующие проекты по ограниченной странице доказательств встречи; связи не сохраняются |
 | `meetings projects evidence <project> [query...]` | прочитать ограниченные источники по названию, ключу и псевдонимам существующего проекта |
 | `meetings update <reference>`, `meetings link <reference>` | просмотреть или применить выбранные связи |
 | `meetings transcribe <meeting> <file> --model <model>` | просмотреть или локально распознать WAV в отдельную расшифровку |

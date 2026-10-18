@@ -12,9 +12,9 @@
     "conclusion": "Reviewed MAX0.59-0.60 at c41c9ea with Core0.326.0/Base0.43.5: tasks open only where something was asked of you; tasks apply is tasks scan and tasks take an assignee; default_profile is no longer read and a profile is never assumed; mcp --permission only tightens and an agent never deletes for everyone; bot MCP tools are built from the bot commands; MAX_READ_ONLY refuses login/logout, bot writes and store changes. Shared Tasks, Permissions and browser pages and the command-rules block updated; defaultProfile correction retired. Roadmap unchanged."
   },
   "zm": {
-    "version": "v0.24.0",
+    "version": "v0.25.0",
     "roadmapSha256": "f7b6b53430a33dde307b912aa83eca799a48942ac70952b8e19ab8fdadfc6180",
     "reviewedAt": "2026-10-18",
-    "conclusion": "Reviewed published Zoom0.24.0 source5a891e9 with registry Core0.332.0/Base0.43.2 and one Base identity. Explicit profile-local message/mail/document grants add cited literal context, frozen-window continuation and retained coverage through native read-only preparation. All500 source tests and the four Linux/Windows Node22.16/24.19 installed proofs pass. Read fourteen changed RU/ES translations plus EN/RU/ES Meetings prose. Roadmap removes selected communications from future-only work; broader series/project discovery and unselected source research remain planned. Preserve separate conflicting statements, unknown archive completeness, grant restart/revocation and owner-reviewed writes. Other tool pins unchanged."
+    "conclusion": "Reviewed published Zoom 0.25.0 source 55956cc with Core 0.334.0/Base 0.44.1. Project scan compares one bounded stored meeting page with existing project names/keys/aliases, retains ambiguity and separate evidence/output coverage, and saves no association. MCP access is explicit. SDK inventory is one bounded candidate series page; CLI/MCP inventory remains planned. Read changed EN guides and ten RU/ES translations, including command and changelog additions. Existing Memo vocabulary preflight/audit is reused; no label merge is claimed. Roadmap unchanged: broader preparation and unselected source research remain future work. All six installed platform proofs and 522 source cases pass; npm/validated/publish artifacts match. Other tool pins unchanged."
   }
 }

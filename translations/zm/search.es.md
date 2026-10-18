@@ -270,15 +270,66 @@ clave puede ser incidental y las referencias repetidas entre nombres son la mism
 asociaciones tras revisar el pasaje. Si aún no existe el proyecto, sigue disponible la búsqueda normal
 sin `--project`: repite manualmente los nombres conocidos con la misma selección.
 
+<a id="suggest-projects-for-one-meeting" />
+
+## Sugerir proyectos para una reunión
+
+Si encontraste una reunión pero no sabes a qué proyecto guardado corresponde, pide al agente
+que la compare con los nombres, claves y alias de tus proyectos existentes:
+
+```text prompt
+Revisa esta reunión y sugiere con cuáles de mis proyectos guardados puede estar relacionada.
+Muestra los pasajes que respaldan cada sugerencia, distingue una pista del título de la evidencia
+en la transcripción y deja los vínculos con proyectos pendientes de revisión.
+```
+
+La revisión lee la reunión local del perfil elegido y el catálogo compartido de nombres de
+proyectos. No contacta con Zoom ni necesita un componente de búsqueda por significado. Toma
+la referencia `ref` de la reunión principal de un resultado de búsqueda. Ejemplo ficticio:
+
+```sh
+zm meetings projects scan meeting:1/2 --cues 20 --json
+```
+
+La respuesta conserva la referencia canónica del proyecto, el nombre/clave/alias coincidente y
+su fuente. Las coincidencias del título llevan `metadata-title`; las de transcripción incluyen
+la referencia del pasaje retenido, su huella y revisión. Abre el pasaje antes de proponer un
+vínculo. Un alias compartido sigue siendo ambiguo aunque el límite oculte otro proyecto. La
+revisión no guarda asociaciones ni considera una coincidencia existente o repetida como prueba
+adicional de pertenencia al proyecto.
+
+Cada llamada lee una página acotada de transcripción y hasta 128 proyectos con 64 KiB de nombres
+de catálogo. Los valores predeterminados son veinte pasajes y diez candidatos. `--cues` admite
+1–100; `--limit`, 1–10; `--max-read-bytes` limita cada lectura del almacén hasta 64 KiB; y `--bytes`
+limita el objeto de respuesta a 2–64 KiB. El paquete de pasajes tiene un límite fijo de 32 KiB.
+Si el catálogo excede su límite, elige un proyecto conocido mediante
+[la búsqueda de evidencia](#find-a-project-before-linking-it): la revisión rechaza el exceso en
+lugar de omitir proyectos silenciosamente.
+
+Comprueba `coverage` y `evidence.coverage`. Para leer más transcripción, pasa
+`evidence.coverage.next_cursor` con la misma referencia de reunión mediante `--cursor`. Un título
+o proyecto puede repetirse. Las huellas describen lecturas actuales, no una instantánea fija.
+Los límites de candidatos son independientes: aumenta `--limit` o `--bytes` si faltaron candidatos.
+Una página sin pasajes ni cursor, truncada por bytes, indica que un pasaje no cabía; no demuestra
+que no hubiera discusión relevante. No se sabe si el archivo local contiene todas las reuniones.
+
+Tras comprobar las fuentes, `memo projects meetings link` puede guardar la asociación local
+confirmada con el ID exacto de la reunión guardada y su cuenta, por ejemplo
+`--account zoom:zm-profile:AliceExample`. Es una escritura separada de la revisión. Para confirmar
+una propuesta ya guardada, utiliza su propia huella de Memo: la revisión de proyectos no crea
+esa propuesta, y la huella del vocabulario no sustituye el recibo de pertenencia. Consulta los
+argumentos en [la referencia de proyectos de Memo](https://wirecat.dev/en/docs/memo/commands#memo-projects-meetings-link).
+El proyecto sugerido sigue sin confirmar hasta aplicar esa escritura revisada.
+
 ## Notas, etiquetas y recuerdos con memo
 
 [Memo](https://github.com/WireCatLabs/cli-memo) guarda notas, etiquetas y recuerdos comunes. Si cambias
 la ruta, usa el mismo `MESSAGING_STORE`. Para el perfil de Zoom `AliceExample`, la cuenta es `zm-profile:AliceExample`:
 
 ```sh
-memo tags add planning --meeting 1 --provider zoom --account zm-profile:AliceExample --json
-memo tags remove planning --meeting 1 --provider zoom --account zm-profile:AliceExample --json
-memo notes add --text "Alice Example follow-up" --meeting 1 --provider zoom --account zm-profile:AliceExample --json
+memo tags add planning --meeting 1 --account zoom:zm-profile:AliceExample --json
+memo tags remove planning --meeting 1 --account zoom:zm-profile:AliceExample --json
+memo notes add --text "Alice Example follow-up" --meeting 1 --account zoom:zm-profile:AliceExample --json
 memo notes list --about meeting:1/1 --json
 memo facts add "Alice Example will review" --type promise --scope work --subject meeting:1/1 --evidence meeting:1/1/1/0 --json
 memo facts list --subject meeting:1/1 --json
@@ -288,6 +339,46 @@ Añadir y quitar en Memo escribe directamente. Los hechos del dueño se aceptan;
 MCP del agente quedan propuestos para revisión. Los recuerdos guardan resúmenes, recopilaciones y
 preferencias aparte. Las referencias a revisiones y pasajes siguen disponibles tras correcciones.
 Los ejemplos son ficticios: usa los identificadores de tus reuniones y cuenta.
+
+<a id="suggest-labels-without-creating-synonyms" />
+
+### Sugerir etiquetas sin crear sinónimos
+
+El agente puede leer los metadatos y pasajes citados de la reunión y comparar las etiquetas
+propuestas con el vocabulario compartido de Memo. Pide primero una propuesta:
+
+```text prompt
+Sugiere un conjunto pequeño de etiquetas para esta reunión. Reutiliza nuestros nombres y alias,
+muestra los pasajes que respaldan cada sugerencia y señala posibles sinónimos para revisar.
+No crees ni fusiones etiquetas al preparar la propuesta.
+```
+
+Memo ya ofrece las comprobaciones; Zoom no mantiene un segundo catálogo de etiquetas:
+
+```sh
+memo vocabulary list 'kind:tag' --max-entries 128 --max-read-bytes 65536 --json
+memo vocabulary check planning --kind tag --max-entries 128 --max-read-bytes 65536 --json
+memo vocabulary check --kind tag --max-entries 128 --max-read-bytes 65536 --max-comparisons 1000 --limit 20 --json
+```
+
+La primera orden lista nombres canónicos y alias. La segunda comprueba un nombre propuesto frente
+a etiquetas existentes o nombres parecidos antes de crearlo, entre tipos de etiquetas para no
+ocultar un conflicto con un tema. La última audita posibles sinónimos entre las etiquetas. Estas
+lecturas no crean ni fusionan nada. Los límites de catálogo y comparaciones acotan el trabajo;
+un rechazo o una auditoría incompleta no demuestran que el nombre sea único.
+
+Si el resultado dice `reuse`, utiliza el nombre canónico existente. Con `review`, comprueba las
+alternativas y la evidencia de la reunión antes de elegir una etiqueta o un alias revisado por el
+propietario. `create` significa que no se encontró un candidato léxico, no que el concepto sea
+nuevo. La similitud conserva los acentos y no descubre todas las traducciones o sinónimos. Deja
+las propuestas dudosas pendientes de revisión. Memo protege la creación frente a nombres parecidos
+a duplicados y huellas caducadas; una huella es una condición de la vista previa, no permiso para
+aceptar automáticamente una propuesta.
+
+Tras la revisión, aplica la etiqueta existente con los argumentos de reunión y cuenta de Memo
+mostrados arriba, y busca reuniones por esa etiqueta. Consulta
+[la guía de etiquetas de Memo](https://wirecat.dev/en/docs/memo/tags) para el proceso compartido.
+La preparación y la revisión de proyectos de Zoom no guardan etiquetas ni fusiones.
 
 ## Propuestas de tareas
 

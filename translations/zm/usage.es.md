@@ -224,6 +224,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `meetings export <meeting> --format markdown\|vtt` | exportar contenido guardado |
 | `search meetings <query>`, `meetings people <query>` | buscar texto o participantes |
 | `meetings prepare <series-id>` | reunir la próxima cita y el contexto guardado con fuentes de una serie elegida |
+| `meetings projects scan <ref>` | sugerir proyectos existentes a partir de una página acotada de evidencia local; no guarda vínculos |
 | `meetings projects evidence <project> [query...]` | leer evidencia acotada del nombre, clave y alias de un proyecto existente |
 | `meetings update <reference>`, `meetings link <reference>` | revisar o aplicar vínculos elegidos |
 | `meetings transcribe <meeting> <file> --model <model>` | revisar o reconocer un WAV como transcripción independiente |
