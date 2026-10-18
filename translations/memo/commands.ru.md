@@ -667,7 +667,7 @@ memo tasks add [source] [options]
 
 ### `memo tasks list`
 
-tasks of the accounts --source names, or of one project, open by default
+tasks of the --source accounts (default all) or of a project, open by default
 
 ```sh
 memo tasks list [query] [options]
@@ -768,7 +768,7 @@ memo tasks agenda [query] [options]
 | `--waiting <duration>` | list chats where you wrote last this long ago (default 7d). |
 | `--within <duration>` | leave out chats silent longer than this: they ended (default 30d). |
 | `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
-| `--source <accounts>` | the messenger account: telegram:<account>, max:<account>, or group:<name> of one. |
+| `--source <accounts>` | the account: telegram:<account>, email:<account>, notes:<id>, or group:<name> of one. |
 | `--provider <provider>` | deprecated: --source <provider>. |
 | `--account <account>` | deprecated: --source <provider>:<account>. |
 | `--json` | print JSON. |
@@ -795,7 +795,7 @@ memo tasks plan <task> [options]
 | `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
 | `--remind-time <time>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
 | `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
-| `--account <account>` | the messenger account it acts as: telegram:<account> or max:<account>. |
+| `--account <account>` | the account it acts as: telegram:<account>, email:<account> or a notes folder, notes:<id>. |
 | `--provider <provider>` | deprecated: --account <provider>:<account>. |
 | `--json` | print JSON. |
 
@@ -813,7 +813,7 @@ memo tasks show <task> [options]
 
 | Option | What it does |
 |---|---|
-| `--source <accounts>` | the messenger account: telegram:<account>, max:<account>, or group:<name> of one. |
+| `--source <accounts>` | the account: telegram:<account>, email:<account>, notes:<id>, or group:<name> of one. |
 | `--provider <provider>` | deprecated: --source <provider>. |
 | `--account <account>` | deprecated: --source <provider>:<account>. |
 | `--json` | print JSON. |
@@ -837,7 +837,7 @@ memo tasks link <task> [targets] [options]
 |---|---|
 | `--chat <chat>` | a chat it concerns, repeatable; a stored chat, by its id or title. |
 | `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by, follow-up-of, duplicate-of or discovered-from. |
-| `--account <account>` | the messenger account it acts as: telegram:<account> or max:<account>. |
+| `--account <account>` | the account it acts as: telegram:<account>, email:<account> or a notes folder, notes:<id>. |
 | `--provider <provider>` | deprecated: --account <provider>:<account>. |
 | `--json` | print JSON. |
 
@@ -861,7 +861,7 @@ memo stats tasks show [options]
 |---|---|
 | `--chat <chat>` | only this chat; a stored chat, by its id or title. |
 | `--type <type>` | only this type: question, request, mention or promise. |
-| `--source <accounts>` | the messenger account: telegram:<account>, max:<account>, or group:<name> of one. |
+| `--source <accounts>` | the account: telegram:<account>, email:<account>, notes:<id>, or group:<name> of one. |
 | `--provider <provider>` | deprecated: --source <provider>. |
 | `--account <account>` | deprecated: --source <provider>:<account>. |
 | `--json` | print JSON. |
@@ -1204,7 +1204,7 @@ memo reminders add <task> [options]
 
 ### `memo reminders list`
 
-pending reminders of the accounts --source names, soonest first
+pending reminders of the accounts --source names (default all), soonest first
 
 ```sh
 memo reminders list [options]
@@ -1833,6 +1833,31 @@ memo meetings actions reject <id> [options]
 | `--json` | print JSON; --json=id,status keeps only those fields. |
 | `--fingerprint <hash>` | the exact fingerprint shown in the preview. |
 
+### `memo meetings passage`
+
+read a cited cue with bounded context before and after it
+
+```sh
+memo meetings passage <reference> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `reference` | required | retained transcript cue reference from a search hit. |
+
+| Option | What it does |
+|---|---|
+| `--before-n <n>` | preceding cues (default 3). |
+| `--after-n <n>` | following cues (default 3); at most 999 surrounding cues in total. |
+| `--bytes <bytes>` | cue JSON byte budget (default 65536); the anchor must fit. |
+| `--max-read-bytes <bytes>` | stored text byte budget (default 4194304); boundary probes read metadata only. |
+| `--expected-fingerprint <hash>` | reject a changed anchor using its previously read cue fingerprint. |
+| `--format <format>` | compact text, Markdown or structured JSON. One of: `text`, `markdown`, `json`. Default: `text`. |
+| `--source <accounts>` | the meeting account: provider:account (zoom:me@example.com), or a provider that has one. |
+| `--provider <provider>` | deprecated: --source <provider>. |
+| `--account <account>` | deprecated: --source <provider>:<account>. |
+| `--json` | print the standard JSON answer. |
+
 ## `memo actions`
 
 what an agent proposes to do; confirming one makes it your task, nothing is sent
@@ -2075,6 +2100,31 @@ memo search memories <query> [options]
 |---|---|
 | `--limit <n>` | most memories, up to 500. Default: `20`. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+
+### `memo search meetings`
+
+find words in stored meetings, indexing new ones first
+
+```sh
+memo search meetings <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | words to find; each also matches its other word forms. |
+
+| Option | What it does |
+|---|---|
+| `--project <project>` | meetings confirmed in this project, by name, key or alias. |
+| `--since-time <time>` | meetings starting at or after this ISO 8601 date or time. |
+| `--until-time <time>` | meetings starting at or before this ISO 8601 date or time. |
+| `--limit <n>` | how many hits, 1 through 1000 (default 100). |
+| `--cursor <cursor>` | continue from the previous page's page.next_cursor, with the same query and filters. |
+| `--max-read-bytes <bytes>` | most stored bytes to read, 1 through 67108864 (default 4194304). |
+| `--source <accounts>` | the meeting account: provider:account (zoom:me@example.com), or a provider that has one. |
+| `--provider <provider>` | deprecated: --source <provider>. |
+| `--account <account>` | deprecated: --source <provider>:<account>. |
+| `--json` | print the standard JSON answer. |
 
 ## `memo ask`
 

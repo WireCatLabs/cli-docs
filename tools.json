@@ -29,7 +29,7 @@
     "repo": "WireCatLabs/drive-cli",
     "package": "@wirecat/drive-cli",
     "lang": "en",
-    "docsRef": "v0.17.2",
+    "docsRef": "v0.17.3",
     "summary": {
       "en": "Import selected Google folders, search documents locally and keep tags, notes and source-backed memories.",
       "ru": "Импортируйте выбранные папки Google, ищите документы локально и сохраняйте теги, заметки и записи памяти с источниками.",
@@ -60,6 +60,6 @@
       "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
       "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.66.0"
+    "docsRef": "v0.68.0"
   }
 ]

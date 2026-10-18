@@ -4,6 +4,20 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.17.3 — 18.10.2026
+
+### Fixed
+
+- A mistyped command, a missing argument or a missing required option now says which one it is, with Commander's
+  suggestion where it has one, instead of "invalid command arguments".
+- `drive --version` no longer prints a blank line after the version.
+- A command for a profile that is not signed in fails before the shared database is created.
+
+### Documentation
+
+- The README names a working command for listing profiles (`drive personal session list`), and the contributor
+  sections moved to `docs/dev/`.
+
 ## 0.17.2 — 18.10.2026
 
 ### Changed
