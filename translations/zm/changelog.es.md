@@ -4,6 +4,14 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.27.1 — 18.10.2026
+
+### Corregido
+
+- `meetings import` y `watch files` informan de una carpeta inexistente como `folder not found: <path>` (código de salida 6), de un archivo dado como carpeta como `not a folder` y de una carpeta ilegible como un error de permisos, en lugar de «esto es un bug».
+- Un comando mal escrito, un argumento que falta o una opción desconocida ahora muestran qué falló (`unknown command 'lst'` con la sugerencia) en lugar de «command failed; use --help for usage». El código de salida sigue siendo 2.
+- README: `search recordings <directory> <query>` sustituye a la eliminada `search meetings --archive`; el campo de paginación es `page.next_cursor`; el enlace a la hoja de ruta apunta a este repositorio.
+
 ## 0.27.0 — 18.10.2026
 
 ### Cambiado — puede romper la compatibilidad

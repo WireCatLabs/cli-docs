@@ -86,7 +86,7 @@ Al informar, conserva orden, código y permiso; excluye retornos OAuth, tokens y
 
 | Síntoma | Diagnóstico y reparación | Resultado |
 |---|---|---|
-| No hay perfil o la lista está vacía | Elige perfil e importa/descarga; leer no registra cuentas | `zm meetings list --json` muestra sus reuniones |
+| No hay perfil o la lista está vacía (código de salida 3, «no stored meetings for the selected profile») | Elige perfil e importa/descarga; leer no registra cuentas | `zm meetings list --json` muestra sus reuniones |
 | No hay reuniones recientes del anfitrión | Revisa usuario, API y fechas; usa un `--since-time` anterior | Compara fechas con ocurrencias esperadas |
 | Reunión sin texto | Revisa generación/retención y permisos; texto nunca guardado o expirado no se recrea | Abre texto tras estar disponible y descargar otra vez |
 | Falta una reunión a la que asististe | Pide VTT al anfitrión o descarga con permiso e importa | Comprueba fecha, título y texto |

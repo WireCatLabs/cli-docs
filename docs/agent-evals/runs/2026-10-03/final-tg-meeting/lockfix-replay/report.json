@@ -1,6 +1,6 @@
 {
   "kind": "real-cli-recorded-choice-replay",
-  "baseline": "/home/leemour/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-tg-meeting",
+  "baseline": "~/Projects/AI/cli-docs/docs/agent-evals/runs/2026-10-03/final-tg-meeting",
   "launcher": "/tmp/wirecat-tg-lockfix-replay/meeting/tg",
   "versions": {
     "tg-cli": "0.23.0",
