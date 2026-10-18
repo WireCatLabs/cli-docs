@@ -35,9 +35,9 @@ Do not merge people based only on names or create a task without asking me what 
 ```
 
 For MAX history, replace “Use tg CLI” with “Use max CLI”. Your agent can read from separate tools
-and produce an answer, but **a database link needs both records in the same store**. Drive uses a
-separate database by default. [Drive settings](./drive/configuration.md) explain explicit sharing;
-sharing does not combine account logins or grant remote access.
+and produce an answer, but **a database link needs both records in the same store**. Drive uses the same
+shared database by default (`~/.local/share/WireCat/wirecat.db` on Linux). [Drive settings](./drive/configuration.md) explain
+how to change it; sharing does not combine account logins or grant remote access.
 
 Check the source IDs and people in the result. A link describes a relationship; it does not copy
 the target's full content into the document. When you need a reusable fact, keep its source and

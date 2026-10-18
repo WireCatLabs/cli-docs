@@ -57,10 +57,10 @@ Abre Terminal en macOS o Linux, o PowerShell en Windows.
 2. **Instala tg:**
 
    ```sh
-   npm install -g --allow-scripts=@wirecat/tg-cli --foreground-scripts @wirecat/tg-cli
+   npm install -g @wirecat/tg-cli && tg skill install --for all
    ```
 
-   La parte `--allow-scripts` permite que npm instale las instrucciones de tg para tus agentes; las versiones nuevas de npm omiten ese paso sin ella.
+   npm 12 puede mostrar «install scripts blocked». No pasa nada: el segundo comando instala las instrucciones para tus agentes, lo mismo que haría el script de instalación. En Windows, abre una terminal nueva si no se encuentra `tg`.
 
    En Windows puedes usar un solo comando. Instala tg, lo añade a `PATH` (las carpetas donde el terminal busca comandos) y conecta todos los agentes compatibles:
 
@@ -115,7 +115,7 @@ Telegram pide dos confirmaciones. Primero, tg registra para tu cuenta su propia 
 
 ## 3. Conecta tu agente
 
-El agente necesita instrucciones para usar tg. Esas instrucciones se llaman skill. La configuración pregunta qué agente usas e instala la skill para él. Una instalación global con npm y `--allow-scripts` ya instala la skill para todos los agentes compatibles.
+El agente necesita instrucciones para usar tg. Esas instrucciones se llaman skill. La configuración pregunta qué agente usas e instala la skill para él. El comando de instalación de arriba ya ejecuta `tg skill install --for all`.
 
 Para instalarla de nuevo:
 
@@ -286,6 +286,7 @@ tg personal server uninstall          # solo si instalaste el servicio en segund
 tg personal session end               # cerrar sesión en Telegram y borrar el archivo de sesión
 npm uninstall -g @wirecat/tg-cli
 rm -rf ~/.config/tg-cli ~/.local/share/tg-cli ~/.cache/tg-cli
+rm -rf ~/.claude/skills/tg-cli ~/.agents/skills/tg-cli
 ```
 
 Si conectaste bots, ejecuta también `tg <profile> bot auth remove` para cada perfil de bot. Cerrar sesión deja App api_id y App api_hash en el llavero, bajo el servicio `tg-cli`; borra esa entrada con la herramienta del sistema si ya no los necesitas. Borra `~/.local/share/WireCat/` solo si ninguna otra herramienta, como max, necesita los mensajes guardados.

@@ -6,3 +6,6 @@
 
 /api/search/*
   Content-Type: application/gzip
+
+/install.ps1
+  Content-Type: text/plain; charset=utf-8

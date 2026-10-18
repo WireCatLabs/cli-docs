@@ -75,7 +75,7 @@ export function InstallTool({
               </Link>
               <CopyText
                 lang={lang}
-                text={`npm install -g ${tool.package}`}
+                text={`npm install -g ${tool.package} && ${tool.name} skill install --for all`}
                 tracking={{ tool: tool.name as "tg" | "max", locale: lang, surface: "installation" }}
               />
               <p className="text-sm font-medium">{ui.login}</p>
