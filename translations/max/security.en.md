@@ -69,13 +69,20 @@ Only full-disk encryption protects against someone who obtains the disk — see 
 
 Why protection against wrong sends is needed and how it works is described on the [shared page](https://wirecat.dev/ru/docs/security). Before each write — a message, reaction, edit, forward or deletion — `max` checks four safeguards, then logs the attempt:
 
+In the examples below, `agent` is the name of a profile you created just for the agent; use your own.
+
 | Check | How to enable | Denial |
 |---|---|---|
 | forbid message writes, except more specific grants | `max agent config set permissions.messages readonly`; restrict other resources separately | code `5`, no connection |
 | permit sends while forbidding other message writes | first `max agent config set permissions.messages readonly`, then `max agent config set permissions.messages.send allow`; other resources and more specific rules remain | code `5` for forbidden actions, no connection |
 | Recipient allowlist | `max <профиль> recipients add <чат>`; disable with `recipients clear` | Code `7` |
 | Hourly limit for messages, forwards, edits, notified pins, deleted messages and added members; reactions excluded | `sends_per_hour`, default `30` | Code `8`, with next available time |
+| forbid every write for the whole process, whatever levels and flags allow | `MAX_READ_ONLY=1` in the environment | code `5`, no connection |
 | Log every attempt without content | Always; inspect with `max personal sends list` | — |
+
+**A ban by level or by `MAX_READ_ONLY` takes effect before connecting to MAX.** The chat is not looked up, so the refusal line
+in the log is shorter: the command key (`messages.send`) and the kind of write, and the chat only if the command gives its numeric id.
+`--dry-run` under `MAX_READ_ONLY` gives the same refusal and writes nothing to the log.
 
 **Bots have their own `bot.*` keys, such as `bot.messages.send`.** They use the same levels. Common settings and `bot.defaults`/`bot.profiles` layers resolve in the same order; `config show --bot` reports effective permissions. The legacy `allow` is still read.
 

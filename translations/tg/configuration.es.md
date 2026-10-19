@@ -27,7 +27,7 @@ Algunas palabras que utiliza esta página:
 |---|---|---|
 | `limit` | cuántas filas muestra una lista cuando no agrega `--limit` | `20` |
 | `sends_per_hour` | la mayor cantidad de mensajes que este perfil puede enviar en una hora; detiene un bucle de envío | `30`; un bot no tiene límite hasta que se establezca uno en la sección `bot` |
-| `requests_per_minute` | qué tan rápido `tg` le pide cosas a Telegram después de una breve ráfaga; `0` apaga el ritmo ([límites y esperas](./limits.md)) | `60` |
+| `requests_per_minute` | qué tan rápido `tg` le pide cosas a Telegram después de una breve ráfaga; `0` apaga el ritmo ([límites y esperas](./limits.md)) | sin definir, lo que equivale a `60` |
 | `permissions` | qué puede hacer este perfil: solo lectura, preguntar primero o seguir adelante ([permisos](./permissions.md)) | todo está permitido, excepto: eliminar y algunos otros cambios que no se pueden deshacer, pregunte primero; las reglas de respuesta pueden no enviarse |
 | `record` | mantenga un registro de cada ejecución para verlo más tarde ([diagnóstico](./diagnostics.md)) | `false` |
 | `keep_runs_for_days` | Días de conservación de los registros | `30` |

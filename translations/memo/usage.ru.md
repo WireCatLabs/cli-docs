@@ -88,11 +88,11 @@ Do not confirm or approve anything; I will decide.
 
 | Команда | Ссылка на результат |
 |---|---|
-| `memo search messages`, `memo search mail` | `items[].ref`, как у `tg search messages` |
+| `memo search messages`, `memo search mail` | `items[].ref`, как у `tg personal search messages` |
 | `memo search all` | `items[].ref` и `kind`; `next` перечисляет открытые задачи, ссылающиеся на результат (`tasks list source:"<ref>"`) |
 | `memo search notes` | `items[].ref` |
 
-`content:` сужает поиск до текста файлов, `transcript:` — до расшифровок голоса, `filename:` — до имён файлов. Сравнивайте одинаковые условия: `memo search messages 'content:invoice'` с `tg search messages 'content:invoice'`, обычное слово — с обычным словом.
+`content:` сужает поиск до текста файлов, `transcript:` — до расшифровок голоса, `filename:` — до имён файлов. Сравнивайте одинаковые условия: `memo search messages 'content:invoice'` с `tg personal search messages 'content:invoice'`, обычное слово — с обычным словом.
 
 ## Выбор аккаунта
 
@@ -100,11 +100,12 @@ Do not confirm or approve anything; I will decide.
 указывают через `--source`: один аккаунт — `telegram:1` или `email:work`, все аккаунты мессенджера —
 `telegram`, все аккаунты одного вида — `mail`, сохранённую группу — `group:work`. Несколько значений
 разделяйте запятыми. Список читает все указанные аккаунты и сообщает, какие именно. Поиск без указания
-аккаунта ищет во всех и сообщает об этом; так же работают `memo tasks list` и `memo reminders list`. Папка
+аккаунта ищет во всех и сообщает об этом; так же работают `memo tasks list` и `memo reminders list` (задачам проекта нужен `project:<key>`). Папка
 заметок — тоже аккаунт: `notes:<number>`, номер даёт `folder_id` в результатах поиска.
 
 Команда, которая что-то меняет, например добавляет задачу или напоминание, действует от одного аккаунта.
 Укажите его через `--account` — сервис и аккаунт вместе: `--account telegram:1`, `--account email:work`.
 Без него Memo сообщает, какие аккаунты есть.
 
-Старая запись `--provider` с одним номером `--account 1` ещё работает один выпуск и показывает новую запись.
+Старая запись `--provider` с одним номером `--account 1` ещё работает и показывает новую запись в stderr: используйте `--source`
+и `--account provider:account`.

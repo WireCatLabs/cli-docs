@@ -44,9 +44,9 @@ Términos en esta página:
    ```
 
 La skill va a las carpetas de Claude Code (`~/.claude/skills/tg-cli/`) y de Codex y Gemini CLI (`~/.agents/skills/tg-cli/`). `tg skill show` imprime el mismo texto, si su agente mantiene sus skills en otro lugar.
-3. Guarde las solicitudes siguientes en archivos, por ejemplo en `~/tg-recipes/`. Los comandos de programación leen la solicitud de un archivo.
+3. Guarde las solicitudes siguientes en archivos, por ejemplo en `~/tg-recipes/`. Los comandos programados de más abajo leen la solicitud de un archivo.
 
-Un cliente MCP no necesita un skill. Conecta el servidor MCP (`tg personal mcp config` muestra la entrada para sus ajustes) y usa sus peticiones preparadas: `catch-up`, `review`, `reply`, `find`. Consulta [las peticiones del servidor MCP](./mcp.md#prompts-and-chats-by-).
+Un cliente MCP no necesita un skill. Conecta el servidor MCP (`tg personal mcp config` muestra la entrada para sus ajustes) y usa sus peticiones preparadas: `catch-up`, `review`, `reply`, `find`, `open-tasks`, `link-conversations`. Consulta [las peticiones del servidor MCP](./mcp.md#prompts-and-chats-by-).
 
 ## Qué puede hacer el agente
 
@@ -78,6 +78,16 @@ tg personal recipients add "Book club"  # and only to the chats on this list
 **La lectura no revela nada.** Ningún comando en las recetas siguientes marca nada leído: nadie ve que el agente abrió un chat.
 
 ## Programar las ejecuciones
+
+- **`tg personal schedule`.** Integrado: `tg` crea el temporizador por sí mismo (systemd, launchd o el Programador de tareas). `schedule
+  agent` inicia `claude` o `codex` con una petición y `TG_READ_ONLY=1`, de modo que el agente lee y redacta, pero no puede
+  enviar; `schedule command` ejecuta un comando de `tg`, por ejemplo para mantener guardado el historial de un chat. Indique `--every 2h`,
+  `--at 08:30` o `--at-time 30m` (una sola ejecución). Gestiónelos con `schedule list`, `schedule run <name>` y
+  `schedule remove <name>`:
+
+  ```sh
+  tg personal schedule agent morning claude "read tg personal inbox and sum up what needs an answer" --at 08:30 --max-cost 1
+  ```
 
 - **Tareas programadas de Claude Desktop.** La tarea se ejecuta en su computadora, por lo que tiene `tg` y su inicio de sesión. Una ejecución perdida mientras la computadora estaba en reposo se ejecuta una vez cuando se reactiva. Consulte [Tareas programadas de Claude](https://code.claude.com/docs/en/desktop-scheduled-tasks).
 - **cron y `claude -p`.** No se necesita aplicación, en cualquier computadora que esté encendida en ese momento:
@@ -160,7 +170,7 @@ La forma más corta es `tg personal review 'date>7d' --unanswered --json`: pregu
 
 Escribe en Telegram: **no**. Permitir: `Bash(tg personal chats list:*)`, `Bash(tg personal messages list:*)`.
 
-> Ejecute `tg personal chats list kind:dialog --limit 30 --json`. Para cada chat cuyo último mensaje sea de los últimos 7 días, lea `tg personal messages list <chat id> --limit 5 --json`. Muestra los chats donde el último mensaje no es mío y hace una pregunta o hace una petición: quién, sobre qué y hace cuántos días.
+> Ejecute `tg personal chats list kind:dialog --limit 30 --offline --json`. Para cada chat cuyo último mensaje sea de los últimos 7 días, lea `tg personal messages list <chat id> --limit 5 --json`. Muestra los chats donde el último mensaje no es mío y hace una pregunta o hace una petición: quién, sobre qué y hace cuántos días.
 
 ## Encuentra algo que se dijo
 

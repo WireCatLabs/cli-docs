@@ -71,6 +71,22 @@ max personal recipients add "Иван Петров"       # и писать то
 ## Scheduling
 
 - **Claude Desktop - scheduled tasks.** The task runs on your computer, so `max` and your login are available to it. The skipped run (the computer was sleeping) is executed once after waking up. See [Claude scheduled tasks](https://code.claude.com/docs/en/desktop-scheduled-tasks).
+- **`max schedule`.** A built-in schedule: it makes the entry in the system scheduler itself (systemd on Linux,
+  launchd on macOS, Task Scheduler on Windows) and needs no crontab editing. The profile is named as the first
+  word, as with any command:
+
+  ```sh
+  max personal schedule command inbox-daily --at 08:30 -- inbox      # команда `max personal inbox` каждый день
+  max personal schedule agent morning claude "прочитай max skill show follow-ups и выполни ежедневную проверку" --at 08:30
+  max personal schedule list                                         # что назначено и как прошёл последний запуск
+  max personal schedule run morning                                  # запустить сейчас, как это сделал бы таймер
+  max personal schedule remove morning
+  ```
+
+  `schedule agent` runs `claude` or `codex` with the `MAX_READ_ONLY=1` variable: the agent reads and writes
+  drafts but cannot send anything. The agent's answer is saved, and you get a notification.
+  `--max-cost` stops a `claude` run that costs more than the given amount in dollars.
+  The schedule is set with `--every 30m`, `--at 08:30` (every day) or `--at-time 2h` (a single run).
 - **cron and `claude -p`.** Without an application, on any computer that is turned on at this time:
 
   ```cron
@@ -80,7 +96,7 @@ max personal recipients add "Иван Петров"       # и писать то
 Cron jobs run in an almost empty environment. On Linux this breaks `max` in two ways:
 
 - **`node: not found`, code 127.** The Node supplied via nvm, fnm or Volta is not in the system `PATH`, and cron knows only the system one.
-  - **`no token found for profile "default", although it has logged in on this machine`, code 4.** `max` cannot reach the system password storage and does not see the token. **Don't login again**: login is fine, it's a matter of the environment.
+  - **`no token found for profile "personal", although it has logged in on this machine`, code 4.** `max` cannot reach the system password storage and does not see the token. **Don't login again**: login is fine, it's a matter of the environment.
 
 Both lines go to the beginning of `crontab -e`, with their own values. The folder is from `dirname "$(which node)"`, the number is from `id -u`:
 
@@ -101,6 +117,16 @@ See [Codex noninteractive mode](https://learn.chatgpt.com/docs/non-interactive-m
 - **Inside an open session Claude Code** - `/loop` or “remind me at 15:00”. Works while the session is open. See [Claude Code Scheduled Tasks](https://code.claude.com/docs/en/scheduled-tasks).
 
 Claude's cloud tasks (routines) are not suitable: they are executed on another computer where `max` and your login do not exist.
+
+## Daily follow-up check
+
+The ready-made `follow-ups` skill keeps track of your commitments: once a day it reads `max tasks agenda`, looks only
+at the chats the agenda names, sets and links tasks, and returns a short list with draft replies.
+It sends nothing. To read it: `max skill show follow-ups`. To run it on a schedule:
+
+```sh
+max personal schedule agent follow-ups claude "выполни ежедневную проверку: max skill show follow-ups" --at 08:30
+```
 
 ## Morning summary
 

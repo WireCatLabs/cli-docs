@@ -81,7 +81,7 @@ tg personal review 'chat:Hiking' --unanswered 4h --json
 **Команда:**
 
 ```sh
-tg personal chats events "Hiking" 'type:(join OR add) time>=7d' --json
+tg personal chats events "Hiking" 'time>=7d' --json
 ```
 
 **Пример ответа агента:**

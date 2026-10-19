@@ -59,6 +59,9 @@ Para otro perfil, primero ponga su nombre: `max work mcp setup codex`. El comand
 claude mcp add max -- max personal mcp
 ```
 
+Cuidado: por defecto, a través de este servidor el agente puede enviar mensajes en tu nombre. Limita antes los permisos: los niveles `readonly` y `deny` ([permisos](./permissions.md)) o la opción `--permission`, por ejemplo
+`claude mcp add max -- max personal mcp --permission messages.send=deny`.
+
 Con un perfil, su nombre va primero:
 
 ```sh

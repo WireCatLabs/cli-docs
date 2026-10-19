@@ -173,7 +173,7 @@ tg personal search messages 'chat:"Book club" library'
 tg personal search messages 'passport kind:private'  # one-to-one chats only
 ```
 
-`kind:` принимает `private`, `group`, `channel`, `saved` (сохраненные сообщения) и `bot`. `topic:` придерживается одной темы форума группы; ему нужна эта группа в `chat:` или `--chat`. Для поиска по каждому аккаунту в архиве добавьте `--source all`.
+`kind:` принимает `private`, `group`, `channel`, `saved` (сохраненные сообщения) и `bot`. `topic:` придерживается одной темы форума группы; ему нужна эта группа в `chat:`. Для поиска по каждому аккаунту в архиве добавьте `--source all`.
 
 ## Даты
 

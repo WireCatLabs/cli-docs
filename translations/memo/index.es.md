@@ -67,7 +67,7 @@ memo sync --only notes --no-embed
 memo search notes budget
 ```
 
-Memo necesita Node.js 22.16 o posterior ([qué instalar primero](./installation.md)). Tus archivos se
+Memo necesita Node.js 22.16+ o 24+ ([qué instalar primero](./installation.md)). Tus archivos se
 quedan donde están; Memo solo los lee.
 
 ## Adónde ir después

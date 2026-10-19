@@ -54,7 +54,7 @@ Telegram no proporciona a los bots una lista de chats; sus identificadores se ob
   tg sales bot watch --events --jsonl --timeout 1m
   ```
 
-  Cada línea incluye el identificador en `chatId`. Un bot no administrador solo recibe comandos y respuestas a él, salvo que desactives su [modo de privacidad](https://core.telegram.org/bots/features#privacy-mode) en @BotFather.
+  Cada línea incluye el identificador en `chat_id`. Un bot no administrador solo recibe comandos y respuestas a él, salvo que desactives su [modo de privacidad](https://core.telegram.org/bots/features#privacy-mode) en @BotFather.
 
 Después de `tg sales bot chats show <id>`, conoce el título del chat y los comandos siguientes también lo aceptan. `chats list` muestra todos los chats vistos.
 
@@ -103,7 +103,7 @@ tg sales bot messages pin "Team" 512 --notify
 tg sales bot messages unpin "Team" 512
 ```
 
-`--silent` envía sin notificación. El límite es 4096 caracteres ([`sendMessage`](https://core.telegram.org/bots/api#sendmessage)). `--md` y `--html` son incompatibles. Eliminar pregunta primero; `--allow-dangerous` aprueba. Fijar no avisa salvo con `--notify`. El envío devuelve el mensaje y su `operationId`, correspondiente al registro del bot. Telegram solo elimina mensajes con menos de 48 horas.
+`--silent` envía sin notificación. El límite es 4096 caracteres ([`sendMessage`](https://core.telegram.org/bots/api#sendmessage)). `--md` y `--html` son incompatibles. Eliminar pregunta primero; `--allow-dangerous` aprueba. Fijar no avisa salvo con `--notify`. El envío devuelve el mensaje y su `operation_id`, correspondiente al registro del bot. Telegram solo elimina mensajes con menos de 48 horas.
 
 Si se interrumpe la conexión durante un envío, `tg` no reintenta: indica resultado desconocido (código 14). Comprueba el chat antes de repetir.
 

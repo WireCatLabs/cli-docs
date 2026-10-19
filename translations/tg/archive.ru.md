@@ -24,7 +24,7 @@ tg сохраняет каждое прочитанное сообщение н�
 | Загрузите историю чата или историю каждого чата | `tg personal messages sync <chat>`, `tg personal messages sync --all` |
 | Запустить длительную загрузку в фоновом режиме | `tg personal messages sync <chat> --background`, `tg personal store jobs list` |
 | Постоянно держите архив в актуальном состоянии | `tg personal server start`, `tg personal server install` |
-| Чтение чатов без подключения | `tg --offline messages list <chat>` |
+| Чтение чатов без подключения | `tg personal --offline messages list <chat>` |
 | Экспортируйте чат в строки JSON или Markdown | `tg personal store export <chat> --output <file>` |
 | Подготовить сообщения для агентского брифа | `tg personal messages evidence <chat>` |
 | Проверка, резервное копирование и восстановление архива | `tg personal store check`, `tg personal store backup`, `tg personal store restore` |
@@ -218,7 +218,7 @@ tg personal store export --include group --output-dir ~/tg-groups  # every store
 tg personal store export --all --output-dir ~/tg-all   # every stored chat of this account
 ```
 
-Повторный запуск в тот же каталог добавляет только изменения с прошлого раза: новые сообщения, правки (в том числе старых сообщений) и удаления. Удалённое сообщение записывается без текста, как `{ "id", "chatId", "deleted": true }`. Каталог с другими файлами или экспортированный из другого аккаунта отклоняется. Изменение одних только реакций изменением не считается.
+Повторный запуск в тот же каталог добавляет только изменения с прошлого раза: новые сообщения, правки (в том числе старых сообщений) и удаления. Удалённое сообщение записывается без текста, как `{ "id", "chat_id", "deleted": true }`. Каталог с другими файлами или экспортированный из другого аккаунта отклоняется. Изменение одних только реакций изменением не считается.
 
 ### С паролем
 
@@ -251,23 +251,23 @@ tg personal messages evidence "Project Alpha" --cursor <cursor> --json
 ## Без подключения: `--offline`
 
 ```sh
-tg --offline chats list
+tg personal --offline chats list
 ```
 
 ```sh
-tg --offline messages list "Book club" --limit 50
+tg personal --offline messages list "Book club" --limit 50
 ```
 
 ```sh
-tg --offline messages show "Book club" 4242
+tg personal --offline messages show "Book club" 4242
 ```
 
 ```sh
-tg --offline messages context "Book club" 4242
+tg personal --offline messages context "Book club" 4242
 ```
 
 ```sh
-tg --offline contacts list
+tg personal --offline contacts list
 ```
 
 `--offline` читает базу без подключения: вход не нужен, запросов нет. JSON соответствует онлайн-режиму, но чаты идут от новых к старым, тогда как Telegram сначала показывает закреплённые.
@@ -316,7 +316,7 @@ tg personal server start  # starts it — through the unit, now that there is on
 
 ```sh
 tg personal server status
-systemctl --user enable tg-serve-default    # only if it should start at every login
+systemctl --user enable tg-serve-personal    # only if it should start at every login
 ```
 
 В macOS агент находится в `~/Library/LaunchAgents/`.

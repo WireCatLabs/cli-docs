@@ -247,7 +247,7 @@ Local extraction also reads UTF-16 with BOM, confidently detected legacy encodin
 
 For PDF you need the optional package `unpdf`, for DOCX - `mammoth`, installed in the same place as `max`. For a global npm install: `npm install -g unpdf mammoth`. If the package is not present, command reports this; the text can be recorded by an agent.
 
-**Photos and scans** lack a text layer. Your agent normally uses its own OCR or vision tools, then saves text with `attachments text set`. `attachments list --needs-text` returns local paths, message links and attachment numbers, but no text. Verify by searching `content:`. A remote agent needs the actual file: a server path does not transfer it. [Attachments show](./attachments.md) can transfer saved bytes in chunks with hash verification; transfer does not recognise or index text. Save the result with `attachments text set`.
+**Photos and scans** lack a text layer. Your agent normally uses its own OCR or vision tools, then saves text with `attachments text set`. `attachments list is:needs_text` returns local paths, message links and attachment numbers, but no text. Verify by searching `content:`. A remote agent needs the actual file: a server path does not transfer it. [Attachments show](./attachments.md) can transfer saved bytes in chunks with hash verification; transfer does not recognise or index text. Save the result with `attachments text set`.
 
 **Bulk scan recognition** can use an AI provider you explicitly select. Configure a vision-capable provider/model in `models.ocr` and save the key through `models text key set`. Replace `your-vision-model` with the desired model id.
 

@@ -331,9 +331,9 @@ la ruta, usa el mismo `MESSAGING_STORE`. Para el perfil de Zoom `AliceExample`, 
 memo tags add planning --meeting 1 --account zoom:zm-profile:AliceExample --json
 memo tags remove planning --meeting 1 --account zoom:zm-profile:AliceExample --json
 memo notes add --text "Alice Example follow-up" --meeting 1 --account zoom:zm-profile:AliceExample --json
-memo notes list --about meeting:1/1 --json
-memo facts add "Alice Example will review" --type promise --scope work --subject meeting:1/1 --evidence meeting:1/1/1/0 --json
-memo facts list --subject meeting:1/1 --json
+memo notes list 'about:"meeting:1/1"' --json
+memo facts add "Alice Example will review" --kind promise --scope work --subject meeting:1/1 --evidence meeting:1/1/1/0 --json
+memo facts list 'subject:"meeting:1/1"' --json
 ```
 
 Añadir y quitar en Memo escribe directamente. Los hechos del dueño se aceptan; los enviados mediante

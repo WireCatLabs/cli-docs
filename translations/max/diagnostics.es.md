@@ -101,7 +101,7 @@ El directorio tiene permisos `0700` y ambos archivos, `0600`. `run.json` se escr
 El resultado se escribe **en cualquier salida**, incluso si falla antes de conectar:
 
 ```json
-{ "run_id": "…", "command": "chats list", "profile": "default", "status": "failed",
+{ "run_id": "…", "command": "chats list", "profile": "personal", "status": "failed",
   "requests": 0, "error_code": "authentication_error", "duration_ms": 12 }
 ```
 
@@ -123,7 +123,7 @@ max personal chats list --no-record          # но не этот запуск
 Lo mismo en el archivo de configuración:
 
 ```json
-{ "profiles": { "default": { "record": true } } }
+{ "profiles": { "personal": { "record": true } } }
 ```
 
 Luego se escribe cada ejecución. Por defecto, una ejecución completamente satisfactoria no se registra a menos que se lo soliciten: un directorio de quién lee y cuándo sería un diario de su vida que nadie solicitó. `--no-record` o `"record": false` desactivan tanto la grabación de ejecución como el historial de búsqueda.
@@ -154,7 +154,7 @@ No se registra el texto de error de MAX: el servidor podría citar lo enviado, i
 
 Lo mismo ocurre con un informe recopilado de una ejecución.
 
-## Verificar instalación: `max doctor`
+## Verificar instalación: `max personal doctor`
 
 ```sh
 max personal doctor              # никуда не подключается

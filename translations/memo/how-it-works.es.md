@@ -68,8 +68,8 @@ las palabras que contiene.
 ## Una persona, varias cuentas
 
 La misma persona puede tener una cuenta de Telegram, una cuenta de MAX y una dirección de correo.
-Memo las trata como una sola persona solo después de que tú las enlaces, con `tg contacts link` o
-`max contacts link`. Un nombre o un dominio de correo que coinciden nunca bastan. Así los mensajes de
+Memo las trata como una sola persona solo después de que tú las enlaces, con `tg personal contacts link` o
+`max personal contacts link`. Un nombre o un dominio de correo que coinciden nunca bastan. Así los mensajes de
 una persona no se mezclan con los de otra.
 
 ## Referencias

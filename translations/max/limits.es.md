@@ -43,7 +43,7 @@ MAX_REQUESTS_PER_MINUTE=10 max personal messages sync Друзья
 
 - **"Demasiadas solicitudes".** El comando se detiene con el código `8` (`rate_limited`). Según la respuesta de MAX, `max` no sabe cuánto tiempo esperar, por lo que no espera ni repite la solicitud. `messages sync` guarda lo que ya se ha descargado y el siguiente ejecución continúa desde el mismo lugar. Espere unos minutos.
 - **Inicios de sesión demasiado frecuentes.** MAX rechaza el inicio de sesión y el propio `max` no inicia sesión hasta el final de la pausa: ni el comando, ni `max personal session start`, ni el servidor en segundo plano. La pausa aumenta con cada rechazo consecutivo: 1 minuto, 5 minutos, 30 minutos, una hora, 6 horas, luego un día; una entrada exitosa lo restablece. Más detalles en [resolución de problemas](./troubleshooting.md).
-- **Si MAX todavía llama al tiempo de espera**, esta espera retiene todo el perfil: la siguiente solicitud de cualquier proceso espera su finalización, y el que tiene que esperar más de 5 minutos recibe inmediatamente el código `8` sin enviar nada. `max personal doctor` muestra lo que se lleva a cabo en la sección `flood`; `max personal flood clear` se elimina antes de lo previsto si sabe que se ha levantado la restricción.
+- **Si MAX todavía llama al tiempo de espera**, esta espera retiene todo el perfil: la siguiente solicitud de cualquier proceso espera su finalización, y el que tiene que esperar más de 5 minutos recibe inmediatamente el código `8` sin enviar nada. `max personal server status` muestra lo que se retiene en el campo `flood`; `max personal flood clear` se elimina antes de lo previsto si sabe que se ha levantado la restricción.
 
 ## Enviar
 

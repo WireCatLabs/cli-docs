@@ -194,6 +194,13 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       writeFileSync(join(destination, file), page)
     }
     const meta = JSON.parse(readFileSync(join(docs, "meta.json"), "utf8")) as Record<string, unknown>
+    // The release-note gate reads every npm release's changelog, so a sidebar that drops it must not hide it.
+    if (
+      tool.distribution !== "source" &&
+      existsSync(join(checkout, "CHANGELOG.md")) &&
+      !(meta.pages as string[]).includes("changelog")
+    )
+      (meta.pages as string[]).push("---Project---", "changelog")
     if (
       changelogGuide ||
       ((meta.pages as string[]).includes("changelog") && existsSync(join(checkout, "CHANGELOG.md")))

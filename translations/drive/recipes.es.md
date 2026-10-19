@@ -340,8 +340,12 @@ drive personal --read-only mcp --tools --json
 drive personal --read-only mcp
 ```
 
-Revisa los tools del primer comando antes de iniciar el servidor stdio. Usa el mismo árbol de
-comandos, perfil y controles. No es un conector HTTP alojado para navegador. Consulta
+El servidor ofrece tres tools: `drive_tools_search` encuentra un comando y muestra sus argumentos, y
+`drive_read` o `drive_write` lo ejecuta con `{ command, arguments }`. El primer comando de arriba lista
+esos comandos, así que revísalo antes de iniciar el servidor stdio. Usa el mismo árbol de comandos,
+perfil y controles; `drive_write` no se ofrece cuando el perfil no permite escrituras. Los comandos que
+cambian archivos de Google, leen Drive Activity o listan apps de Drive solo se ofrecen si el perfil
+inició sesión con `--grant write`, `activity` o `apps`; reinicia el servidor tras volver a iniciar sesión. No es un conector HTTP alojado para navegador. Consulta
 [la referencia completa](./commands.md) para otras operaciones.
 
 ## Encontrar un documento y la conversación donde se compartió

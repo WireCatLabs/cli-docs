@@ -22,7 +22,7 @@ existentes siguen siendo compatibles; cada proveedor conserva su propio formato 
 
 ## Guarda resultados revisados con Memo
 
-Memo 0.58.0 permite preparar decisiones, afirmaciones y tareas de proyecto de una reunión guardada
+Memo permite preparar decisiones, afirmaciones y tareas de proyecto de una reunión guardada
 para que el dueño las revise. Usa un vínculo confirmado entre la reunión y un proyecto existente,
 lee los pasajes que las respaldan y confirma los candidatos que quieras conservar. Preparar las
 propuestas no crea hechos ni tareas; repetir exactamente la operación reutiliza los registros

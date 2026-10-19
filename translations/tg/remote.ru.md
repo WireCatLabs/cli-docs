@@ -62,7 +62,7 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ tg personal 
 
 ### Windows (PowerShell)
 
-Установите приложение Tailscale для Windows и войдите в систему из его меню на панели задач. Откройте новое окно PowerShell после установки Node.js, CLI и Tailscale, чтобы оно увидело обновленный PATH. Используйте `.cmd` для команд npm, чтобы избежать ошибок политики выполнения PowerShell. Если настройка еще не завершена, запустите `tg.cmd setup --agent none` в обычном окне PowerShell.
+Установите приложение Tailscale для Windows и войдите в систему из его меню на панели задач. Откройте новое окно PowerShell после установки Node.js, CLI и Tailscale, чтобы оно увидело обновленный PATH. Используйте `.cmd` для команд npm, чтобы избежать ошибок политики выполнения PowerShell. Если настройка еще не завершена, запустите `tg.cmd personal setup --agent none` в обычном окне PowerShell.
 
 Первое окно: запустите Funnel в PowerShell от имени администратора. Оператор вызова `&` обрабатывает пространство в пути установки по умолчанию; измените путь, если вы установили Tailscale в другом месте.
 
@@ -74,7 +74,7 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ tg personal 
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Paste the HTTPS origin printed by Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
+tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Запустите оба процесса в самой Windows. WSL — это отдельная среда: туннель Windows, указывающий на адрес обратной связи Windows, может не достигать сервера внутри WSL.

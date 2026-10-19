@@ -317,20 +317,25 @@ ayuda sin una instalación global, usa `npx @wirecat/drive-cli --help`; los paso
 La [guía oficial de instalación del repositorio](https://github.com/WireCatLabs/drive-cli/blob/main/docs/installation.md)
 es la fuente de estas instrucciones.
 
-## Actualizar o quitar
+## Actualizar
 
-Estos comandos son para una instalación existente. Para actualizar:
+Para actualizar una instalación existente:
 
 ```sh
 npm install -g @wirecat/drive-cli
 drive --version
 ```
 
-Para cerrar la sesión de un perfil, ejecuta `drive personal session end`. Para quitar el comando:
+## Desinstalar
+
+Cierra primero la sesión de cada perfil para que su token salga del almacén de credenciales:
 
 ```sh
-npm uninstall -g @wirecat/drive-cli
+drive personal session end
+npm uninstall -g @wirecat/drive-cli   # or pnpm remove -g, or bun remove -g
+rm -rf ~/.config/drive-cli ~/.local/share/drive-cli   # settings, snapshots and checkpoints (Linux paths)
 ```
 
-Cerrar sesión o desinstalar conserva la configuración local y los datos importados. Consulta
-[dónde están los archivos](./configuration.md#where-the-files-live) antes de moverlos o borrarlos.
+La base compartida se conserva. Memo, Telegram y MAX también la usan, y guarda los documentos importados con tus
+etiquetas y notas. Borra `~/.local/share/WireCat/` solo si ninguna otra herramienta la usa. En macOS y Windows las
+carpetas se indican en [dónde están los archivos](./configuration.md#where-the-files-live).

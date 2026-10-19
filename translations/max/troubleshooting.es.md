@@ -25,10 +25,10 @@ En la salida de `--json`, un error que termina el comando es una línea en stder
 
 |Código|Nombre|¿Qué suele significar?|Dónde|
 |---|---|---|---|
-| `1` | `internal_error` |un error tipográfico en el nombre del comando o un fallo en el propio `max`|[perfil incorrecto](#команда-отвечает-но-профиль-не-тот), [informe](#как-сообщить-о-проблеме)|
-| `2` | `validation_error` |un valor o combinación de opciones que `max` no acepta; el nombre se adapta a varios chats|[valores](#--limit-takes-a-whole-number-from-1-upwards-not-abc), [varios chats](#matches-n-chats)|
+| `1` | `internal_error` |un fallo en el propio `max`|[informe](#как-сообщить-о-проблеме)|
+| `2` | `validation_error` |un valor o combinación de opciones que `max` no acepta; una errata en un comando o una opción; el nombre se adapta a varios chats|[errata](#команда-отвечает-но-профиль-не-тот), [valores](#--limit-takes-a-whole-number-from-1-upwards-not-abc), [varios chats](#matches-n-chats)|
 | `3` | `configuration_error` |error en `config.json`, o una versión más reciente registró el archivo local|[configuración](#is-an-unknown-setting), [archivo local](#the-message-store-was-written-by-a-newer-version-)|
-| `4` | `authentication_error` |no hay inicio de sesión, la sesión finalizó o el llavero no está disponible|[sin sesión](#no-session-for-profile-default), [token ilegible](#no-token-found-for-profile-default-although-it-has-logged-in-on-this-machine)|
+| `4` | `authentication_error` |no hay inicio de sesión, la sesión finalizó o el llavero no está disponible|[sin sesión](#no-session-for-profile-personal), [token ilegible](#no-token-found-for-profile-personal-although-it-has-logged-in-on-this-machine)|
 | `5` | `permission_error` |Acción prohibida del perfil `permissions`|[no permitido](#profile--does-not-let--write-или-profile--denies-)|
 | `6` | `not_found` |no existe tal chat, mensaje o persona; el archivo local todavía está vacía|[sin chat](#no-chat-matches), [nada guardado](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline)|
 | `7` | `confirmation_required` |el chat no está en la lista de destinatarios, o la acción está esperando confirmación y no hay nadie para responder|[lista de destinatarios](#chat--is-not-on-the-recipient-list-of-profile-), [pregunta](#-asks-before-it-acts)|
@@ -41,7 +41,7 @@ En la salida de `--json`, un error que termina el comando es una línea en stder
 | `14` | `outcome_unknown` |la conexión se perdió después del envío, o la puerta de enlace `max sales bot` respondió con 502, 503 o 504 al cambio: el mensaje pudo haber sido enviado|[resultado desconocido](#outcome_unknown-после-отправки)|
 | `130` | `cancelled` |presionó Ctrl-C o respondió “no” a una pregunta| [Ctrl-C](#ctrl-c) |
 
-## Primero, `max doctor`
+## Primero, `max personal doctor`
 
 ```sh
 max personal doctor
@@ -53,7 +53,7 @@ No se conecta a ningún lado y muestra de qué depende cada comando: versión y 
 max personal doctor --online
 ```
 
-`--online` también inicia sesión en MAX una vez, lee un chat e inicia el servidor MCP. No envía nada y no marca nada como leído. La entrada cuenta para el límite MAX de las entradas, por lo que si hay un error, no se repite ([como se muestra en `max personal doctor`](./diagnostics.md#проверить-установку-max-doctor)).
+`--online` también inicia sesión en MAX una vez, lee un chat e inicia el servidor MCP. No envía nada y no marca nada como leído. La entrada cuenta para el límite MAX de las entradas, por lo que si hay un error, no se repite ([como se muestra en `max personal doctor`](./diagnostics.md#проверить-установку-max-personal-doctor)).
 
 ## Instalación
 
@@ -62,10 +62,10 @@ max personal doctor --online
 La instalación terminó, pero el terminal dice que no existe el comando `max`. Puedes averiguar el motivo sin utilizarlo:
 
 ```sh
-npx @wirecat/max-cli doctor
+npx @wirecat/max-cli personal doctor
 ```
 
-`max on PATH` indica si la encuentra; debajo aparece la solución.
+Aquí `personal` es el nombre del perfil que elegiste al iniciar sesión; el tuyo puede ser otro. `max on PATH` indica si la encuentra; debajo aparece la solución.
 
 **Windows.** npm instala en `%APPDATA%\npm`. Si falta en `PATH`, `max personal doctor` muestra dos órdenes PowerShell para la ventana actual y futuras. Comprueba:
 
@@ -76,7 +76,7 @@ $env:Path -split ';'
 
 El primer comando muestra la carpeta y el segundo lo que hay actualmente en `PATH`. Si la carpeta está en la lista pero `max` sigue sin encontrarse, cierra y vuelve a abrir el terminal: una ventana abierta antes de instalar Node no ve el nuevo `PATH`.
 
-**PowerShell: «running scripts is disabled on this system».** npm crea `max.ps1` y `npx.ps1`, bloqueados por defecto. Usa `max.cmd`, `npx.cmd` (`npx.cmd @wirecat/max-cli doctor`) o permite scripts para tu usuario:
+**PowerShell: «running scripts is disabled on this system».** npm crea `max.ps1` y `npx.ps1`, bloqueados por defecto. Usa `max.cmd`, `npx.cmd` (`npx.cmd @wirecat/max-cli personal doctor`) o permite scripts para tu usuario:
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
@@ -98,10 +98,10 @@ npx @wirecat/max-cli@latest --version
 
 ## Inicio de sesión y perfiles
 
-### «no session for profile "default"»
+### «no session for profile "personal"»
 
 ```json
-{"error":{"code":"authentication_error","message":"no session for profile \"default\" — run `max personal setup` in a local terminal; agents: read `max skill show`"}}
+{"error":{"code":"authentication_error","message":"no session for profile \"personal\" — run `max personal setup` in a local terminal; agents: read `max skill show`"}}
 ```
 
 Código `4`: no hay token. No has entrado, usaste **otro perfil** o variables de directorios distintas.
@@ -130,7 +130,7 @@ max shop bot messages list -100
 
 No hace falta `max shop session start`, salvo que también quieras una cuenta personal con ese nombre. `max shop doctor` indica qué existe.
 
-### «no token found for profile "default", although it has logged in on this machine»
+### «no token found for profile "personal", although it has logged in on this machine»
 
 Código de retorno `4`. Ya se ha iniciado sesión en el perfil de esta computadora, pero el token no se puede leer. Casi siempre se trata de un almacenamiento de contraseña al que `max` no ha llegado: el comando se lanzó desde cron, vía ssh o desde otro entorno sin `XDG_RUNTIME_DIR`. **No vuelvas a iniciar sesión**: esto agregará otro dispositivo a tu cuenta y la próxima vez desde el mismo entorno, el token no se volverá a leer. `max personal doctor` mostrará si ve el token; cómo configurar cron - en la sección [ejecutar según lo programado](./recipes.md#как-запускать-по-расписанию).
 
@@ -152,14 +152,14 @@ Una primera palabra desconocida se interpreta como perfil; una errata puede camb
 "chat" is not a command, so it was read as a profile name — and no command followed it.
 ```
 
-Es `chats`, plural. Consulta `max --help`.
+Es `chats`, plural. `max commands` los enumera todos.
 
 ## Configuraciones y valores de opciones
 
 ### «is an unknown setting»
 
 ```json
-{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json: profiles.default.limitt is an unknown setting","retry":{"safe":false}}}
+{"error":{"code":"configuration_error","reason":"config.invalid","message":"…/config.json: profiles.personal.limitt is an unknown setting","retry":{"safe":false}}}
 ```
 
 Código `3`. En un archivo de configuración, un campo que no está en el esquema casi siempre es un error tipográfico y el mensaje indica su ruta. Rechazado a propósito: un campo silenciosamente ignorado vale medio día de desconcierto. Todos los campos están en [referencia de configuración](./configuration-reference.md).

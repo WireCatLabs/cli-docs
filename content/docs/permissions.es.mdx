@@ -61,6 +61,18 @@ ese proceso. No cambia los ajustes guardados. La opción solo endurece: una anul
 del perfil se rechaza al iniciar, así que para permitir más cambia los permisos del perfil. Por MCP, `ask` no exige un formulario de confirmación en el servidor: la app
 controla sus aprobaciones y puede permitir otra llamada sin preguntar. Usa `deny` o `readonly` para impedir cambios. Consulta [la conexión web](./browser-apps.mdx).
 
+## Bloquear toda una ejecución en solo lectura
+
+Cada herramienta lee además una variable de entorno que rechaza los cambios durante toda la ejecución,
+permitan lo que permitan los permisos guardados. Un cambio rechazado sale con el código 5. Úsala con un agente que solo deba leer.
+
+| Herramienta | Variable | Qué rechaza |
+|---|---|---|
+| tg, max | `TG_READ_ONLY=1`, `MAX_READ_ONLY=1` | Enviar y otros cambios; el agente puede leer y preparar el texto de la respuesta. |
+| Zoom | `ZM_READ_ONLY=1` | Cambios en Zoom, el acceso, la configuración y lo que añadiste; leer y sincronizar desde Zoom siguen funcionando. |
+| Google Drive | `DRIVE_READ_ONLY` (cualquier valor salvo `0` o vacío) | Cualquier cambio, en este ordenador o en Google, como `--read-only`. |
+| Memo | `MEMO_READ_ONLY` (cualquier valor salvo `0`) | Cualquier cambio; leer, `memo sync` y los `tasks plan` y `tasks link` de un agente programado siguen funcionando, y `memo mcp` deja fuera sus herramientas de escritura. |
+
 ## Límites y reglas detalladas
 
 Un agente con acceso a archivos de configuración o a un terminal sin restricciones puede

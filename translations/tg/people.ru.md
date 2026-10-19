@@ -49,12 +49,12 @@ tg personal contacts profile @example_user --json
   "mutualContact": true,
   "commonChatsCount": 2,
   "registered": { "at": "2019-04-01T00:00:00.000Z", "source": "estimate", "precision": "month" },
-  "hasPhoto": true,
+  "has_photo": true,
   "chats": [
-    { "id": "1000001", "title": "Example User", "kind": "dialog", "theirMessages": 412,
-      "firstAt": "2023-02-11T09:14:00.000Z", "lastAt": "2026-10-05T18:02:00.000Z", "complete": true },
-    { "id": "-1002000002", "title": "Book club", "kind": "group", "theirMessages": 37,
-      "firstAt": "2025-06-01T10:00:00.000Z", "lastAt": "2026-09-30T20:41:00.000Z", "complete": false }
+    { "id": "1000001", "title": "Example User", "kind": "dialog", "their_messages": 412,
+      "first_at": "2023-02-11T09:14:00.000Z", "last_at": "2026-10-05T18:02:00.000Z", "complete": true },
+    { "id": "-1002000002", "title": "Book club", "kind": "group", "their_messages": 37,
+      "first_at": "2025-06-01T10:00:00.000Z", "last_at": "2026-09-30T20:41:00.000Z", "complete": false }
   ],
   "aliases": [
     { "name": "Example U.", "username": "example_old", "link": "https://t.me/example_old",
@@ -69,13 +69,13 @@ tg personal contacts profile @example_user --json
 - **`registered`** всегда указывает источник даты:
   - `telegram` — месяц, который Telegram сообщает, когда человек впервые пишет вам;
   - `estimate` — оценка по ID аккаунта на основе таблицы, заканчивающейся августом 2026 года. Для новых ID оценка не выдаётся, чтобы не показывать дату, ошибочную на несколько лет.
-- **`hasPhoto`** учитывает собственное и публичное фото человека, но не назначенное вами.
+- **`has_photo`** учитывает собственное и публичное фото человека, но не назначенное вами.
 - **`chats`** перечисляет все общие чаты и другие чаты, в которых хранилище содержит сообщения человека.
 - **`aliases`** — прежние имена и имена пользователя, которые видело хранилище, от старых к новым; для старого имени пользователя есть ссылка `t.me`. `source: profile` — профиль изменился во время наблюдения; `source: messages` — имя в сохранённых сообщениях, приблизительное, поскольку повторно загруженное сообщение содержит последнее имя. Список пуст, пока хранилище не увидело изменение.
 
 ### Числа отражают содержимое вашего хранилища
 
-`theirMessages`, `firstAt` и `lastAt` берутся из локального хранилища, а не из Telegram. Когда `complete` равен `false`, чат сохранён не с начала, поэтому число сообщений — нижняя граница, а `firstAt` может быть позже настоящего первого сообщения человека. Загрузите чат, чтобы заполнить историю:
+`their_messages`, `first_at` и `last_at` берутся из локального хранилища, а не из Telegram. Когда `complete` равен `false`, чат сохранён не с начала, поэтому число сообщений — нижняя граница, а `first_at` может быть позже настоящего первого сообщения человека. Загрузите чат, чтобы заполнить историю:
 
 ```sh
 tg personal messages sync "Book club"
@@ -137,11 +137,11 @@ tg personal contacts check @example_user --no-registries
     { "reason": "link_first", "weight": 2, "source": "store" }
   ],
   "registries": [
-    { "name": "cas", "answer": "clean", "checkedAt": "2026-10-07T08:00:00.000Z" },
-    { "name": "lols", "answer": "clean", "checkedAt": "2026-10-07T08:00:00.000Z" }
+    { "name": "cas", "answer": "clean", "checked_at": "2026-10-07T08:00:00.000Z" },
+    { "name": "lols", "answer": "clean", "checked_at": "2026-10-07T08:00:00.000Z" }
   ],
   "unknown": ["new_account"],
-  "checkedAt": "2026-10-07T08:00:00.000Z"
+  "checked_at": "2026-10-07T08:00:00.000Z"
 }
 ```
 
@@ -154,6 +154,8 @@ tg personal contacts check @example_user --no-registries
 | `new_account` | 2 | зарегистрирован менее 30 дней назад по месяцу Telegram или оценке ID |
 | `link_first` | 2 | первое сохранённое сообщение — ссылка |
 | `same_text` | 2 | одинаковый текст в нескольких чатах |
+| `burst_join` | 1 | вступил в серии из 5 или более человек, каждый не позже чем через 10 минут после предыдущего |
+| `mass_invited` | 1 | добавлен не администратором, который добавил 5 или более участников |
 | `photo_recent` | 1 | самому старому видимому фото меньше 30 дней |
 | `no_photo`, `no_username`, `no_bio` | 1 | соответствующее поле профиля пусто |
 | `odd_name` | 1 | нет имени, длинная последовательность цифр или ссылка в имени |

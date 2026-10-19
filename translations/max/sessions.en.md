@@ -83,7 +83,7 @@ max personal session end              # выйти из MAX и забыть то
 `session end` first ends the session on the MAX server, then erases the token on this computer. If `max serve` is running for the profile, started manually or by a service, `session end` refuses (exit code 2): run `max personal server stop` first. The response reports the outcome:
 
 ```json
-{ "item": { "profile": "default", "forgotten": true, "revoked_on_server": true }, "meta": { … } }
+{ "item": { "profile": "personal", "forgotten": true, "revoked_on_server": true }, "meta": { … } }
 ```
 
 **If you signed in with a token from a web.max.ru tab, they share one session:** `session end` also signs that tab out of MAX.

@@ -124,6 +124,6 @@ propietario siguen siendo aparte.
 
 ## Etiquetas en tg y max
 
-tg y max leen las mismas etiquetas: `tg search messages 'tag:follow-up'` encuentra mensajes de Telegram etiquetados y `memo search mail 'tag:follow-up'` encuentra correo etiquetado. Las etiquetas de contactos también están disponibles con `tg tags` y `max tags`.
+tg y max leen las mismas etiquetas: `tg personal search messages 'tag:follow-up'` encuentra mensajes de Telegram etiquetados y `memo search mail 'tag:follow-up'` encuentra correo etiquetado. Las etiquetas de contactos también están disponibles con `tg personal tags` y `max personal tags`.
 
 Siguiente: [busca por etiqueta y por palabras](./search.md).

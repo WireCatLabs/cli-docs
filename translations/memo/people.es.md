@@ -49,7 +49,7 @@ Una persona puede tener una cuenta de Telegram, una cuenta de MAX y una direcci�
 en tg o max para que Memo las trate como una sola persona:
 
 ```sh
-tg contacts link 'Kai Sample' email:kai@example.com
+tg personal contacts link 'Kai Sample' email:kai@example.com
 ```
 
 Después, `memo context` para cualquiera de las cuentas muestra todo lo de todas ellas. Un nombre que
@@ -73,9 +73,15 @@ memo projects list
 memo projects context HRB
 ```
 
-`--scope` es `personal` o `work`. `projects context` recibe la clave del proyecto o su
-número. `projects context` y `organizations context` muestran las personas enlazadas al proyecto o a
-la organización, las notas que tratan sobre él o que enlazan a él, y sus etiquetas. La clave
+`--scope` es `personal` o `work`. `projects context` recibe una clave, un número, `project:<id>`, el nombre exacto o un alias.
+`projects context` y `organizations context` muestran las personas enlazadas al proyecto o a
+la organización, las notas que tratan sobre él o que enlazan a él, y sus etiquetas. Para un proyecto, la vista también agrupa los documentos clave, las relaciones, los hechos y los seguimientos de reuniones pendientes
+bajo `review`, separados de las tareas numeradas abiertas que ya existen. No confirma nada. La vista de texto muestra
+las referencias de las propuestas; `--json` incluye la evidencia, el alcance de las fuentes y los comandos de continuación. Las vistas previas
+de hechos y tareas contienen 20 registros cada una. Las vistas previas de reuniones leen como máximo cinco lotes propuestos por cada cuenta
+de reuniones enlazada, en ocho cuentas. Lee un lote completo antes de revisarlo, porque puede abarcar varios proyectos.
+
+La clave
 de un proyecto también se usa para sus tareas, como `HRB-1` ([tareas](./tasks.md#tasks-in-a-project)).
 
 ## Documentos clave de un proyecto

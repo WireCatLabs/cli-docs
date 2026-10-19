@@ -77,7 +77,7 @@ Revisa los eventos de entrada. Una cuenta nueva merece revisión; su edad no dem
 **Comando:**
 
 ```sh
-tg personal chats events "Hiking" 'type:(join OR add) time>=7d' --json
+tg personal chats events "Hiking" 'time>=7d' --json
 ```
 
 **Ejemplo de respuesta del agente:**

@@ -88,22 +88,22 @@ Dónde están las referencias de búsqueda:
 
 | Comando | Referencia de cada resultado |
 |---|---|
-| `memo search messages`, `memo search mail` | `items[].ref`, como en `tg search messages` |
+| `memo search messages`, `memo search mail` | `items[].ref`, como en `tg personal search messages` |
 | `memo search all` | `items[].ref`, con `kind`; `next` enumera tareas abiertas que apuntan al resultado (`tasks list source:"<ref>"`) |
 | `memo search notes` | `items[].ref` |
 
-`content:` limita al texto de archivos, `transcript:` a transcripciones de voz y `filename:` a nombres de archivo. Compara condiciones iguales: `memo search messages 'content:invoice'` con `tg search messages 'content:invoice'`, y una palabra simple con otra palabra simple.
+`content:` limita al texto de archivos, `transcript:` a transcripciones de voz y `filename:` a nombres de archivo. Compara condiciones iguales: `memo search messages 'content:invoice'` con `tg personal search messages 'content:invoice'`, y una palabra simple con otra palabra simple.
 
 ## Elegir una cuenta
 
 Cuando tienes varias cuentas de Telegram, MAX o correo, Memo no elige una por ti. Indica las cuentas
 con `--source`: una cuenta como `telegram:1` o `email:work`, todas las cuentas de un servicio de
 mensajería como `telegram`, todas las cuentas de un tipo como `mail`, o un grupo guardado como
-`group:work`; separa varias con comas. Una lista lee todas las cuentas que indicas y dice cuáles. Una búsqueda sin cuenta busca en todas y lo indica, igual que `memo tasks list` y `memo reminders list`. Una carpeta de notas también es una cuenta: `notes:<number>`, con el número que dan los resultados de búsqueda como `folder_id`.
+`group:work`; separa varias con comas. Una lista lee todas las cuentas que indicas y dice cuáles. Una búsqueda sin cuenta busca en todas y lo indica, igual que `memo tasks list` y `memo reminders list` (las tareas de un proyecto necesitan `project:<key>`). Una carpeta de notas también es una cuenta: `notes:<number>`, con el número que dan los resultados de búsqueda como `folder_id`.
 
 Un comando que cambia algo, como añadir una tarea o un recordatorio, actúa como una sola cuenta. Indícala con
 `--account`, con el proveedor y la cuenta juntos: `--account telegram:1`, `--account email:work`. Si falta,
 Memo te dice qué cuentas existen.
 
-El antiguo `--provider` con un `--account 1` simple sigue funcionando durante una versión más y muestra la
-nueva forma de escribirlo.
+El antiguo `--provider` con un `--account 1` simple sigue funcionando y muestra la nueva forma de escribirlo en stderr:
+usa `--source` y `--account provider:account` en su lugar.

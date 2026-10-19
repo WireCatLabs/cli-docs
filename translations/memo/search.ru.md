@@ -48,7 +48,7 @@ Quote the matching text, show the source of each result and tell me what you cou
 | Тема или папка письма | `subject:invoice`, `mailbox:important` |
 | Внутри вложения (сообщения и почта) | `content:invoice`, `filename:*.pdf` |
 
-`content:` сужает поиск до текста файлов, `filename:` — до имён: `memo search messages 'content:invoice'`. Текст доступен после обработки файла tg или max (`tg attachments extract`) либо записи агентом.
+`content:` сужает поиск до текста файлов, `filename:` — до имён: `memo search messages 'content:invoice'`. Текст доступен после обработки файла tg или max (`tg personal attachments extract`) либо записи агентом.
 
 Заключайте запрос поиска в одинарные кавычки, чтобы терминал передал его в Memo без изменений:
 `memo search notes '"budget review" NOT cancelled'`. `--exact` находит слова только в том виде, в котором
@@ -117,7 +117,7 @@ memo meetings passage 'meeting:1/42/3/0' --source zoom:work --before-n 2 --after
 найтись заметка об отпуске. tg или max скачивает модель один раз:
 
 ```sh
-tg models text download e5-small    # or: max models text download e5-small
+npx -y @wirecat/tg-cli local models text download e5-small
 ```
 
 Модель работает на вашем компьютере. После скачивания выполните `memo sync`, чтобы подготовить заметки

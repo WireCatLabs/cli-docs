@@ -13,7 +13,20 @@ primero. La importación lee el buzón sin cambiarlo ni marcar correo como leíd
 
 Configura tu cuenta de correo en Himalaya. Para Gmail, usa una cuenta IMAP con una
 [contraseña de aplicación](https://myaccount.google.com/apppasswords) de Gmail (una contraseña aparte
-para un solo programa, que puedes revocar en cualquier momento). Comprueba que Himalaya muestra tu
+para un solo programa, que puedes revocar en cualquier momento). Memo funciona con Himalaya 2.x (`himalaya --version`).
+
+Himalaya lee sus cuentas de `~/.config/himalaya/config.toml` (`HIMALAYA_CONFIG` o `-c` le indican otro
+archivo). Una cuenta de Gmail llamada `work` se ve así; la contraseña sale de un comando, aquí el llavero
+de Linux, de modo que nunca queda escrita en el archivo:
+
+```toml
+[accounts.work]
+imap.server = "imaps://imap.gmail.com:993"
+imap.sasl.plain.username = "you@example.com"
+imap.sasl.plain.password.command = "secret-tool lookup service himalaya account work"
+```
+
+`himalaya account list` muestra las cuentas que ha leído. Comprueba que Himalaya muestra tu
 correo antes de continuar.
 
 ```text prompt
@@ -271,9 +284,8 @@ en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
 
 - El remitente, los destinatarios (Para, CC y CCO), el asunto, la fecha y el texto de cada correo.
 - Si un correo está leído o destacado, tal como lo muestra tu buzón.
-- El texto de los adjuntos legibles, que se busca junto con el correo. Los adjuntos PDF y Word
-  necesitan los [lectores opcionales](./notes.md#files-memo-can-read). Después de instalarlos,
-  ejecuta `memo sync --source email:work --retry-attachments` para leer los adjuntos que se omitieron. Solo vuelve a leer, por id Gmail, los correos cuyo adjunto quedó sin leer por falta de lector, hasta `--limit`. No lista el buzón; al repetir continúa con el resto.
+- El texto de los adjuntos legibles, que se busca junto con el correo ([archivos compatibles](./notes.md#files-memo-can-read)).
+  `memo sync --source email:work --retry-attachments` solo vuelve a leer, por id Gmail, los correos cuyo adjunto quedó sin leer por falta de lector, hasta `--limit`. No lista el buzón, así que es rápido; al repetir continúa con el resto.
 - Hasta 1.000.000 de caracteres de cada correo y 200.000 de cada adjunto
   ([cambiar los límites](./configuration.md#mail)).
 
@@ -292,7 +304,7 @@ correo movido a Spam cuenta como borrado. Para protegerte de errores:
 ## El correo y las personas
 
 Para incluir el correo de una persona en [su contexto](./people.md#everything-about-a-person), vincula
-la dirección a esa persona en tg o max: `tg contacts link 'Kai Sample' email:kai@example.com`.
+la dirección a esa persona en tg o max: `tg personal contacts link 'Kai Sample' email:kai@example.com`.
 
 ## Teléfonos y enlaces en el correo
 

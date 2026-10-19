@@ -44,7 +44,7 @@ pertenece al intento activo. La conexión termina cuando el terminal la confirma
 zm session status --json
 ```
 
-Se comprueba el estado guardado sin contactar con Zoom ni renovar tokens. `logged_in: true` indica
+Se comprueba el estado guardado sin contactar con Zoom ni renovar tokens. `state: saved` indica
 credenciales guardadas, no validez remota. Los permisos devueltos muestran lo concedido. Para una
 comprobación remota, añade `user:read:user`, autoriza otra vez y ejecuta:
 
@@ -65,7 +65,8 @@ normal, no en una tarea de fondo o un cliente MCP.
 zm config set account.profile personal
 ```
 
-Un perfil es una etiqueta de datos, no otras credenciales de Zoom. Acepta 1–64 letras, dígitos,
+Un perfil es una etiqueta de datos, no otras credenciales de Zoom. A diferencia de `tg` y `max`,
+`zm` no admite un argumento de perfil: el perfil es el ajuste `account.profile`. Acepta 1–64 letras, dígitos,
 puntos, guiones bajos o guiones, y empieza por letra o dígito. Importación y API comparten la etiqueta.
 La escritura registra el perfil; la lectura solo lo busca. Descarga o importa primero para que
 `meetings list` pueda encontrarlo.
@@ -81,8 +82,14 @@ hacer falta un `--since-time` anterior explícito.
 ## Retirar el acceso
 
 No hay orden de cierre de sesión. Retira la autorización desde la gestión de apps de Zoom App Marketplace.
-Para borrar también el token local, usa la interfaz del almacén de contraseñas del sistema.
+Para borrar el token local, abre el almacén de contraseñas del sistema y elimina la entrada cuyo servicio es
+`zoom-cli:<configuration directory>` (por ejemplo `zoom-cli:/home/you/.config/zm`; `zm doctor --json` muestra
+el directorio) y cuya cuenta es tu Public Client ID.
 Desinstalar `zm` no revoca permisos ni borra reuniones. Consulta [seguridad](./security.md) antes de
 compartir datos con un agente.
+
+Varios usuarios de Zoom en un mismo equipo necesitan cada uno su propio `ZM_CONFIG_DIR`: la entrada del llavero
+depende del directorio de configuración y del ID de cliente, así que los usuarios que comparten ambos comparten
+un mismo acceso.
 
 Cuando la sesión y el perfil estén listos, [descarga o importa la primera reunión](./archive.md#pull-hosted-meetings).

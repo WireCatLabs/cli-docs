@@ -61,6 +61,9 @@ memo tasks list project:HRB
 memo tasks update HRB-1 --priority 0 --description 'Call before Friday'
 ```
 
+Un `memo tasks list` sin más muestra solo las tareas de tus cuentas; las tareas de un proyecto se listan con
+`project:` y la clave del proyecto.
+
 | Opción | Significado |
 |---|---|
 | `--type` | `chore` (el predeterminado), `bug` o `feature` |
@@ -89,7 +92,7 @@ memo tasks close HRB-1 --reason booked
 memo tasks close 7 --account telegram:1 --as dismissed
 ```
 
-Cierra una tarea con `--as done` (predeterminado) o `--as dismissed`. `memo tasks list state:done` muestra las cerradas; con `--project`, `kind:bug` filtra la clase. `source:"note:12"` conserva tareas de una cuenta procedentes de un mensaje, nota o documento: es el paso que propone `memo search all` para un resultado con tareas vinculadas. Cada cambio de estado, prioridad o responsable queda registrado.
+Cierra una tarea con `--as done` (predeterminado) o `--as dismissed`. `memo tasks list state:done` muestra las cerradas; con `project:`, `kind:bug` filtra la clase. `source:"note:12"` conserva tareas de una cuenta procedentes de un mensaje, nota o documento: es el paso que propone `memo search all` para un resultado con tareas vinculadas. Cada cambio de estado, prioridad o responsable queda registrado.
 
 ## Qué hacer primero
 

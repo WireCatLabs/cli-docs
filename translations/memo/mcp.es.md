@@ -13,14 +13,14 @@ que guarda espera tu revisión.
 | La aplicación puede | La aplicación no puede |
 |---|---|
 | Buscar y leer tus mensajes, correo y notas guardados | Enviar un mensaje o un correo |
-| Leer el contexto de una persona en los mensajeros y el correo | Cambiar tus notas, tu correo o tus mensajes |
+| Leer el contexto de una persona o revisar los hallazgos pendientes de un proyecto | Cambiar tus notas, tu correo o tus mensajes |
 | Añadir, listar, mostrar y buscar recuerdos | Confirmar un recuerdo |
 | Añadir, listar y mostrar hechos | Aceptar un hecho |
 | Proponer acciones y listarlas | Aprobar o rechazar una acción |
 | Leer el registro de agentes | Borrar nada |
 | Buscar proyectos, etiquetas y temas por su nombre, y ver qué tareas están listas | Crear o vincular tareas |
 
-Solo tres herramientas escriben: `memories_add`, `facts_add` y `actions_add`. Lo que añaden queda
+Cuatro herramientas escriben: `memories_add`, `facts_add`, `actions_add` y `meeting_actions_add`. Lo que añaden queda
 como propuesta hasta que lo confirmas, y una acción nunca se envía. Las demás herramientas no modifican los registros de origen; la búsqueda de reuniones puede actualizar su índice de texto local. Conecta Memo solo a una aplicación en la que confíes para leer tus mensajes, tu correo y tus notas.
 
 ## Conectar una aplicación
@@ -57,6 +57,10 @@ Use the memo tools to list the memories waiting for my review.
 | `search_all` | Buscar mensajes de todos los servicios, correo y notas; solo lectura |
 | `search_messages`, `search_mail`, `search_notes` | Buscar un tipo con todos sus campos; solo lectura |
 | `search_meetings`, `meeting_passage` | Buscar en reuniones guardadas de una cuenta de origen elegida explícitamente y leer pasajes citados de la transcripción |
+| `meeting_prepare` | Reunir el historial guardado de la serie y el contexto enlazado, opcionalmente con cuentas de mensajes o correo elegidas explícitamente; no verifica la hora de la próxima reunión |
+| `project_context` | Documentos clave, relaciones, hechos y hallazgos de reuniones pendientes, junto con las tareas numeradas abiertas |
+| `project_evidence` | Referencias citadas sobre un proyecto en mensajes, correo y carpetas de notas guardados, buscadas por sus nombres, palabras adicionales y personas; solo lectura |
+| `meeting_actions_add`, `meeting_actions_show`, `meeting_actions_list` | Proponer y examinar hechos y seguimientos citados de reuniones; nunca los confirma |
 | `person_context` | Una persona entre servicios y correo, con notas y tareas enlazadas; solo lectura |
 | `memories_add`, `memories_list`, `memories_show`, `search_memories` | Guardar y leer recuerdos |
 | `facts_add`, `facts_list`, `facts_show` | Registrar y leer hechos |
@@ -79,7 +83,26 @@ memo agents log agent:memo-mcp --limit 20
 
 El registro muestra la herramienta, el resultado y la hora, nunca lo que envió la aplicación.
 
-Para la evidencia de reuniones, consulta la [búsqueda de reuniones](./search.md#search-stored-meetings). Los lotes de
-hallazgos de reuniones se crean por ahora desde la línea de comandos (`memo meetings actions add`), no con una herramienta MCP por lotes.
+Para la evidencia de reuniones, consulta la [búsqueda de reuniones](./search.md#search-stored-meetings). Pide a tu agente que lea
+pasajes con `meeting_passage` y que después prepare un lote con `meeting_actions_add`. Indica una `account` como
+`example:work` y un objeto `input` con `schema_version: 1`, `key`, `extractor` y `findings`, con los mismos campos
+que `memo meetings actions add --help`. Cada hallazgo necesita referencias exactas a fragmentos de la transcripción
+y sus huellas, y un vínculo confirmado con el proyecto. Las fechas y responsables desconocidos se dejan vacíos; los
+seguimientos deducidos se marcan como tales. Un reintento idéntico reutiliza la clave; una entrada distinta necesita una clave nueva.
+
+`meeting_actions_show` y `meeting_actions_list` reciben un `source` explícito. Solo el propietario revisa los
+lotes con `memo meetings actions confirm` o `reject`. Preparar un lote no crea hechos ni tareas numeradas.
+
+`project_evidence` acepta las opciones de `memo projects evidence` en snake_case y necesita `source`: entradas de
+cuenta, un tipo, `group:<name>` o `all`. Busca por separado el nombre del proyecto, cada alias, cada `context_query`
+y cada `contact`, y une los resultados; `since_time` vale `60d` por defecto. Un elemento encontrado solo por el nombre
+de un contacto lleva `context: "person-only"`. Las fuentes que fallaron o no se leyeron se listan, y `completeness`
+sigue en `unknown`. Si devuelve un `checkpoint`, vuelve a llamar con los mismos argumentos y `cursor` igual a ese valor.
+No escribe nada.
+
+Usa `project_context` con la clave, el nombre exacto o un alias de un proyecto para revisar juntos los hallazgos pendientes.
+Las vistas previas de reuniones leen como máximo cinco lotes de cada una de ocho cuentas de reuniones enlazadas; los
+comandos de cobertura y continuación identifican registros adicionales o ausentes. Una vista previa incluye solo los
+hallazgos sin decidir de este proyecto. Lee el lote completo antes de revisarlo: también puede contener hallazgos de otro proyecto.
 
 Siguiente: [revisar lo que guardó la aplicación](./memories.md).

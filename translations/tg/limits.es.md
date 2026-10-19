@@ -51,7 +51,7 @@ TG_REQUESTS_PER_MINUTE=30 tg personal messages sync "Book club"
 |---|---|
 | hasta 10 s, en un comando que se ejecuta una vez | espera como máximo dos veces y lo indica en stderr |
 | hasta 2 min, en `serve` y `watch` | espera como máximo tres veces |
-| más tiempo | se detiene con el código de salida `8` (`rate_limited`) y `retryAfterMs` en el JSON |
+| más tiempo | se detiene con el código de salida `8` (`rate_limited`) y `retry_after_ms` en el JSON |
 
 `messages sync` y `messages download --all` esperan hasta 5 minutos entre páginas y continúan;
 una espera más larga detiene la ejecución, y la siguiente continúa desde lo que ya se ha guardado. `messages sync --all`

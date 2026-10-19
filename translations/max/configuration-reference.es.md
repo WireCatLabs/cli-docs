@@ -119,6 +119,7 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_ru
 | `analysis_base_url` |dirección API de análisis| `build --base-url` |por servicio|
 | `models` |modelos externos por propósito ([abajo](#модели-по-назначению))|variables `MAX_MODELS_*`|No|
 | `search_stemmers.cyrillic`, `search_stemmers.latin` |Lenguajes de raíces de palabras para buscar en todo el archivo general ([abajo](#языки-поиска))| — | `russian`, `english,spanish` |
+| `task_first_pass_per_chat` | Cuántas tareas pueden abrir las reglas en cada chat a partir del historial en la primera sincronización de la cuenta; un número entero de 0 a 1000. Después solo se leen los mensajes nuevos, y `tasks scan <чат>` crea tareas a partir del historial cuando lo pides. Compartido por todo el archivo | — | `0` |
 | `task_agent_close`, `task_agent_close_min` | Si un agente cierra tareas y con qué confianza de `--certainty`; por debajo del umbral queda abierta con una sugerencia de cierre ([tareas](./groups.md#что-ждёт-вашего-ответа)). Compartidos por todo el archivo | — | `on`, `0.8` |
 
 ⚠ **`timeout_ms` y `--timeout` son distintos.** `timeout_ms` limita la espera de **una respuesta** de MAX. `--timeout` limita **todo el comando**. Una lectura incluye conexión, INIT, LOGIN, resolución del nombre del chat y la propia petición, por lo que su duración puede ser varias veces `timeout_ms`.
@@ -144,7 +145,7 @@ No hay campo para `--timeout`: el presupuesto corresponde a una ejecución, no a
 | `ask` | Pide confirmación en el terminal, con «no» por defecto ([más abajo](#вопрос-перед-изменением)) |
 | `allow` | Ejecuta la acción sin preguntar |
 
-**La clave es la ruta del comando**: `messages`, `messages.delete`, `messages.send`, `reactions`, `chats.members`, `contacts`, `account.sessions.end`. Comienza con el recurso: `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` o `metadata`. Las claves del bot comienzan con `bot`, por ejemplo `bot.messages.send`. `config set` rechaza una clave de comando desconocida, incluso dentro de un objeto `permissions` completo, con el código 2. `config unset` le permite eliminar una clave desconocida antigua. La lectura de un archivo existente con dicha clave advierte en stderr y continúa funcionando.
+**La clave es la ruta del comando**: `messages`, `messages.delete`, `messages.send`, `reactions`, `chats.members`, `contacts`, `account.sessions.end`. Comienza con el recurso: `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `mentions`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` o `metadata`. `calls` y `stickers` solo tienen lectura y no tienen clave de permiso: `config set` responde con el código 2. Las claves del bot comienzan con `bot`, por ejemplo `bot.messages.send`. `config set` rechaza una clave de comando desconocida, incluso dentro de un objeto `permissions` completo, con el código 2. `config unset` le permite eliminar una clave desconocida antigua. La lectura de un archivo existente con dicha clave advierte en stderr y continúa funcionando.
 
 **Una clave más específica anula el recurso.** El ejemplo anterior permite leer y eliminar mensajes sin confirmación y desactiva otras escrituras en mensajes. Los contactos, chats, reacciones y otros recursos no se limitan a este ejemplo. `config show` muestra los derechos actuales y su fuente.
 
@@ -276,6 +277,7 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 | `search_stemmers.latin` |`english`, `spanish`, ambos separados por comas, `none`|archivo general, vía `config set`|
 | `task_agent_close` | `on`, `off` | archivo compartido, mediante `config set` |
 | `task_agent_close_min` | un número de 0 a 1 | archivo compartido, mediante `config set` |
+| `task_first_pass_per_chat` | un número entero de 0 a 1000 | archivo compartido, mediante `config set` |
 
 ### Modelos por tarea
 

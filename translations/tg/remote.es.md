@@ -62,7 +62,7 @@ El servidor escucha en `127.0.0.1:8765` e imprime un código de inicio de sesió
 
 ### Windows (PowerShell)
 
-Instale la aplicación Tailscale para Windows e inicie sesión desde el menú de su bandeja. Abra una nueva ventana de PowerShell después de instalar Node.js, la CLI y Tailscale, para que vea el PATH actualizada. Utilice `.cmd` para los comandos npm para evitar errores de política de ejecución de PowerShell. Si la configuración aún no ha finalizado, ejecute `tg.cmd setup --agent none` en una ventana normal de PowerShell.
+Instale la aplicación Tailscale para Windows e inicie sesión desde el menú de su bandeja. Abra una nueva ventana de PowerShell después de instalar Node.js, la CLI y Tailscale, para que vea el PATH actualizada. Utilice `.cmd` para los comandos npm para evitar errores de política de ejecución de PowerShell. Si la configuración aún no ha finalizado, ejecute `tg.cmd personal setup --agent none` en una ventana normal de PowerShell.
 
 Primera ventana: ejecute PowerShell como administrador de Funnel. El operador de llamada `&` maneja el espacio en la ruta de instalación predeterminada; cambie la ruta si instaló Tailscale en otro lugar.
 
@@ -74,7 +74,7 @@ Segunda ventana: PowerShell normal, como el usuario que inició sesión en Teleg
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Paste the HTTPS origin printed by Funnel (no /mcp)'
-tg.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
+tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Ejecute ambos procesos en el propio Windows. WSL es un entorno separado: un túnel de Windows que apunta a la dirección de bucle invertido de Windows puede no llegar a un servidor dentro de WSL.

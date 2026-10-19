@@ -143,7 +143,7 @@ Search covers all prepared chats. It can find “I'll bring sandwiches” and �
 **Discussed in another language.**
 
 ```sh
-max personal search conversations "аренда квартиры" --chat "Valencia expats"
+max personal search conversations "аренда квартиры" --chat "Клуб Пример"
 ```
 
 With the default model, this is also the case in Spanish - about “piso”.
@@ -161,8 +161,8 @@ max personal search conversations "условия договора" --filter 'ha
 **Start with one message.** You found a message using a word search and want everything else on this topic:
 
 ```sh
-max personal search messages '"вернули залог" chat:"Valencia expats"'
-max personal conversations related "Valencia expats" 5120
+max personal search messages '"вернули залог" chat:"Клуб Пример"'
+max personal conversations related "Клуб Пример" 5120
 ```
 
 **Search in bot chats too.** By default, the search for topics is carried out in the current account. `--source personal`, `bots`, `all` or the name of the messenger expands coverage; then each result says which account it is from.

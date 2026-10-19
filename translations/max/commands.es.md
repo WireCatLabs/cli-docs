@@ -45,8 +45,8 @@ Se aplican a todos los comandos.
 | `--no-input` | no pedir entrada ni abrir un inicio de sesión interactivo; la entrada mediante una tubería sigue disponible. |
 | `--max-input-bytes <bytes>` | máximo de bytes de entrada almacenados en búfer (predeterminado: 16777216). |
 | `--max-output-bytes <bytes>` | máximo de bytes de salida para máquinas (predeterminado: 4194304; 0 desactiva el límite). |
-| `--brief` | los mensajes y correos encontrados solo con referencia, título, hora, remitente y fragmento. |
-| `--full` | los mensajes y correos encontrados con todo su texto y todos los campos del proveedor. |
+| `--brief` | los mensajes encontrados solo con referencia, título, hora, remitente y fragmento. |
+| `--full` | los mensajes encontrados con todo su texto y todos los campos del proveedor. |
 | `--dry-run` | previsualizar los argumentos analizados y los permisos antes de ejecutar la acción. |
 | `--yes` |Continúe sin la pregunta que un nivel de pregunta pone antes de escribir.|
 | `--record` |mantenga esto ejecutándose en `max runs`: identificadores y horarios, nunca contenido de mensajes.|
@@ -72,6 +72,10 @@ max session start [method]
 |---|---|---|
 | `method` | opcional |token (pegado o por stdin), qr, qr-chrome o sms. Uno de: `token`, `qr`, `qr-chrome`, `sms`. Por defecto: `token`.|
 
+**Returns:** log this profile in to MAX
+
+**Example:** `max session start`
+
 ### `max session end`
 
 cerrar la sesión de este perfil en MAX y eliminar la sesión guardada aquí
@@ -81,6 +85,10 @@ cerrar la sesión de este perfil en MAX y eliminar la sesión guardada aquí
 ```sh
 max session end
 ```
+
+**Returns:** log this profile out on MAX's side and forget the session here
+
+**Example:** `max session end`
 
 ## `max setup`
 
@@ -97,6 +105,10 @@ max setup [options]
 | `--agent <agent>` |instalar la habilidad para este agente; pregunta en una terminal, de lo contrario ninguno. Uno de: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`.|
 | `--method <method>` |cómo iniciar sesión cuando no hay sesión. Uno de: `token`, `qr`, `qr-chrome`, `sms`. Por defecto: `qr`.|
 
+**Returns:** set up your personal MAX account and connect your agent
+
+**Example:** `max setup`
+
 ## `max account`
 
 la cuenta iniciada
@@ -109,6 +121,10 @@ todos los perfiles de este ordenador y sus cuentas; no consulta el servicio de m
 max account list
 ```
 
+**Returns:** every profile on this computer, and the account each is logged in as; asks the messenger…
+
+**Example:** `max account list`
+
 ### `max account show`
 
 con quién se ha iniciado sesión en este perfil; el número de teléfono muestra sus últimos cuatro dígitos
@@ -120,6 +136,10 @@ max account show [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--show-phone` | mostrar el número de teléfono completo. |
+
+**Returns:** account — provider, id, name, username, phone, scope; every field: max commands schema account show
+
+**Example:** `max account show`
 
 ### `max account update`
 
@@ -138,6 +158,10 @@ max account update [options]
 | `--description <text>` | about you. |
 | `--photo <file>` |una nueva foto de perfil: un archivo de imagen.|
 
+**Returns:** change the name, the description or the photo everyone sees on your profile
+
+**Example:** `max account update`
+
 ### `max account sessions`
 
 ¿En qué otro lugar se inició sesión con esta cuenta? No en `max session`, que es el inicio de sesión propio de esta herramienta.
@@ -154,6 +178,10 @@ max account sessions list [query]
 |---|---|---|
 | `query` | opcional | condiciones campo:valor; esta lista aún no filtra por ninguno. |
 
+**Returns:** account session — current, client, device, location, last_active_at, created_at; every field: max commands schema account sessions list
+
+**Example:** `max account sessions list`
+
 #### `max account sessions end`
 
 cierre sesión en todos los demás dispositivos, incluido su teléfono; este se queda
@@ -168,6 +196,10 @@ max account sessions end [options]
 |---|---|
 | `--others` |todas las sesiones excepto ésta.|
 
+**Returns:** log out every other device, your phone included; this one stays
+
+**Example:** `max account sessions end`
+
 ### `max account privacy`
 
 quién puede encontrar la cuenta, llamar o añadirla
@@ -179,6 +211,10 @@ ajustes de privacidad de la cuenta; leerlos no cambia nada
 ```sh
 max account privacy show
 ```
+
+**Returns:** the account's privacy settings; reading changes nothing
+
+**Example:** `max account privacy show`, `max account privacy show --json`
 
 #### `max account privacy set`
 
@@ -198,6 +234,10 @@ max account privacy set [options]
 | `--chat-invites <who>` |quién puede añadir la cuenta a grupos y canales: everyone, contacts o nobody.|
 | `--hide-online <on\|off>` | ocultar el estado en línea y la última conexión. |
 
+**Returns:** change who may find, call or add the account; the settings not named stay
+
+**Example:** `max account privacy set --find-by-phone contacts`, `max account privacy set --hide-online on`
+
 ## `max calls`
 
 llamadas de la cuenta
@@ -214,6 +254,10 @@ max calls list [options]
 |---|---|
 | `--limit <n>` | cuántos mostrar. |
 
+**Returns:** calls made and received, newest first; reading changes nothing
+
+**Example:** `max calls list`
+
 ## `max stickers`
 
 stickers añadidos a la cuenta
@@ -229,6 +273,10 @@ max stickers list [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--set <id>` | los stickers de este paquete. |
+
+**Returns:** sticker sets, or with --set the stickers in one; reading changes nothing
+
+**Example:** `max stickers list`
 
 ## `max chats`
 
@@ -252,6 +300,12 @@ max chats list [query] [options]
 | `--page <n>` | qué página, empezando por 1. |
 | `--all` | todas las filas, sin paginar. |
 
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 12 more; every field: max commands schema chats list
+
+**Next usually:** `max chats show <chat>`, `max chats events <chat> [query]`, `max chats media <chat>`
+
+**Example:** `max chats list`
+
 ### `max chats show`
 
 un chat: su tipo, recuento de no leídos, hora del último mensaje y quién está en él
@@ -263,6 +317,12 @@ max chats show <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 12 more; every field: max commands schema chats show
+
+**Next usually:** `max chats events <chat> [query]`, `max chats media <chat>`, `max chats documents list <chat>`
+
+**Example:** `max chats show Team`
 
 ### `max chats documents`
 
@@ -285,6 +345,10 @@ max chats documents list <chat> [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | qué página, empezando por 1. |
 
+**Returns:** every document link in the chat, newest first, and whether the store has it
+
+**Example:** `max personal chats documents list CHAT_ID --limit 20`
+
 ### `max chats events`
 
 quién entró, salió, fue añadido o eliminado, y por quién — a partir de los mensajes de servicio del chat; los últimos 7 días, salvo que la consulta indique una fecha
@@ -298,6 +362,10 @@ max chats events <chat> [query]
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `query` | opcional | condiciones campo:valor que acotan la lista; los campos están abajo. |
 
+**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: max commands schema chats events
+
+**Example:** `max chats events Team`
+
 ### `max chats inspect`
 
 a qué conduce una invitación o un enlace público, sin unirse a él
@@ -309,6 +377,10 @@ max chats inspect <link>
 | Argumento | | Qué es |
 |---|---|---|
 | `link` | obligatorio |un enlace de invitación o uno público.|
+
+**Returns:** what an invite or public link leads to, without joining it
+
+**Example:** `max chats inspect https://example.com/join/abc`
 
 ### `max chats join`
 
@@ -323,6 +395,10 @@ max chats join <link>
 | Argumento | | Qué es |
 |---|---|---|
 | `link` | obligatorio |un enlace de invitación o uno público.|
+
+**Returns:** join a group or channel by its link; the others in it see that you joined
+
+**Example:** `max chats join https://example.com/join/abc`
 
 ### `max chats mark-read`
 
@@ -342,6 +418,10 @@ max chats mark-read <chat> [options]
 |---|---|
 | `--until-id <id>` |sólo hasta esta identificación de mensaje; el más nuevo por defecto.|
 
+**Returns:** mark a chat read; the other side sees that you read it
+
+**Example:** `max chats mark-read Team`
+
 ### `max chats leave`
 
 abandonar un grupo o canal; los demás en él ven que te fuiste
@@ -355,6 +435,10 @@ max chats leave <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+**Returns:** leave a group or channel; the others in it see that you left
+
+**Example:** `max chats leave Team`
 
 ### `max chats create`
 
@@ -374,6 +458,10 @@ max chats create <title> [person] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--channel` |un canal privado en lugar de un grupo; la gente se une a través de su enlace.|
+
+**Returns:** create a group or a channel; the people added are told
+
+**Example:** `max chats create "Weekly sync" Anna`
 
 ### `max chats members`
 
@@ -398,6 +486,12 @@ max chats members list <chat> [query] [options]
 | `--page <n>` | qué página, empezando por 1. |
 | `--all` | todas las filas, sin paginar. |
 
+**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: max commands schema chats members list
+
+**Next usually:** `max contacts show <person>`, `max contacts profile <person>`, `max contacts notes list <person> [query]`
+
+**Example:** `max chats members list Team`
+
 #### `max chats members audit`
 
 miembros que parecen robots, cada uno con sus motivos: leídos en la lista de miembros y en el archivo local; nunca una solicitud por persona, y no elimina a nadie
@@ -416,6 +510,12 @@ max chats members audit <chat> [query] [options]
 | `--max-pages <pages>` |como máximo esta cantidad de páginas de 200 miembros, una pausa entre ellas (predeterminado: 10).|
 | `--deep <n>` | comprueba también a las primeras n personas en detalle — perfil, fotos y todo lo que escribieron — a una persona por segundo; las listas públicas de bloqueos solo cubren Telegram, por lo que no se envía nada. |
 
+**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: max commands schema chats members audit
+
+**Next usually:** `max contacts show <person>`, `max contacts profile <person>`, `max contacts notes list <person> [query]`
+
+**Example:** `max chats members audit Team`
+
 #### `max chats members history`
 
 quién se unió, quién se fue y cuyo perfil cambió, el más antiguo primero: qué chats obtienen los miembros registrados en el archivo local; nunca le pregunta al servicio de mensajería
@@ -428,6 +528,10 @@ max chats members history <chat> [query]
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `query` | opcional | condiciones campo:valor que acotan la lista; los campos están abajo. |
+
+**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: max commands schema chats members history
+
+**Example:** `max chats members history Team`
 
 #### `max chats members fetch`
 
@@ -448,6 +552,10 @@ max chats members fetch <chat> [options]
 | `--track` |descargarla también a diario mientras se ejecuta serve; chats tracking enumera y modifica esos chats.|
 | `--max-pages <pages>` |como máximo esta cantidad de páginas de 200 miembros, una pausa entre ellas (predeterminado: 10).|
 
+**Returns:** read a group's whole member list into the local store's member history: who joined, who…
+
+**Example:** `max chats members fetch Team`
+
 #### `max chats members add`
 
 agregar personas; se les dice
@@ -467,6 +575,10 @@ max chats members add <chat> <person> [options]
 |---|---|
 | `--history` |las personas agregadas también ven los mensajes anteriores a su llegada.|
 
+**Returns:** add people; they are told
+
+**Example:** `max chats members add Team Anna`
+
 #### `max chats members remove`
 
 eliminar personas; sus mensajes permanecen
@@ -482,6 +594,10 @@ max chats members remove <chat> <person>
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `person` | obligatorio | un ID o parte de un nombre. |
 
+**Returns:** remove people; their messages stay
+
+**Example:** `max chats members remove Team Anna`
+
 ### `max chats tracking`
 
 los chats cuyas listas de miembros descarga serve a diario al almacenamiento local — chats members fetch --track añade uno
@@ -494,6 +610,10 @@ cada chat rastreado: desde cuándo y su último recuento de miembros
 max chats tracking list
 ```
 
+**Returns:** every tracked chat: since when, and its last member count
+
+**Example:** `max chats tracking list`
+
 #### `max chats tracking show`
 
 un chat: si se realiza un seguimiento y el recuento de miembros por día durante los últimos 30 días
@@ -505,6 +625,10 @@ max chats tracking show <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+**Returns:** one chat: whether it is tracked, and its member count per day for the last 30 days
+
+**Example:** `max chats tracking show Team`
 
 #### `max chats tracking add`
 
@@ -520,6 +644,10 @@ max chats tracking add <chat>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 
+**Returns:** fetch this chat's member list daily while serve runs, from its next run
+
+**Example:** `max chats tracking add Team`
+
 #### `max chats tracking remove`
 
 dejar de descargarla a diario; se conserva el historial ya guardado
@@ -533,6 +661,10 @@ max chats tracking remove <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+**Returns:** stop fetching it daily; the history already kept stays
+
+**Example:** `max chats tracking remove Team`
 
 ### `max chats admins`
 
@@ -557,6 +689,10 @@ max chats admins add <chat> <person> [options]
 |---|---|
 | `--can <rights>` |qué pueden hacer, separados por comas: leer, miembros, administradores, información, fijar, vincular, publicar, editar, eliminar.|
 
+**Returns:** make a member an admin with these rights
+
+**Example:** `max chats admins add Team Anna --can <rights>`
+
 #### `max chats admins remove`
 
 retirar los permisos de un administrador; ellos siguen siendo miembros
@@ -571,6 +707,10 @@ max chats admins remove <chat> <person>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `person` | obligatorio | un ID o parte de un nombre. |
+
+**Returns:** take an admin's rights back; they stay a member
+
+**Example:** `max chats admins remove Team Anna`
 
 ### `max chats update`
 
@@ -597,6 +737,10 @@ max chats update <chat> [options]
 |`--only-owner-edits-info <on\|off>` |Sólo el propietario podrá cambiar el nombre y la foto.|
 | `--members-see-link <on\|off>` |los miembros pueden ver el enlace de invitación.|
 
+**Returns:** rename a group or channel, change its description, or turn one of its settings on or off
+
+**Example:** `max chats update Team`
+
 ### `max chats link`
 
 enlace de invitación de un grupo
@@ -613,6 +757,10 @@ max chats link show <chat>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 
+**Returns:** the invite link, if you may see it
+
+**Example:** `max chats link show Team`
+
 #### `max chats link reset`
 
 reemplace el enlace de invitación; el viejo deja de funcionar
@@ -626,6 +774,10 @@ max chats link reset <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+**Returns:** replace the invite link; the old one stops working
+
+**Example:** `max chats link reset Team`
 
 ### `max chats requests`
 
@@ -649,6 +801,10 @@ max chats requests list <chat> [query] [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | qué página, empezando por 1. |
 
+**Returns:** join request — person_id, name, username, requested_at, about; every field: max commands schema chats requests list
+
+**Example:** `max chats requests list Team`
+
 #### `max chats requests accept`
 
 aceptar; el grupo ve la entrada
@@ -664,6 +820,10 @@ max chats requests accept <chat> <person>
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `person` | obligatorio | quién lo solicitó: un ID de `chats requests list`. |
 
+**Returns:** let them in; the group sees them join
+
+**Example:** `max chats requests accept Team Anna`
+
 #### `max chats requests decline`
 
 rechazar la solicitud
@@ -678,6 +838,10 @@ max chats requests decline <chat> <person>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `person` | obligatorio | quién lo solicitó: un ID de `chats requests list`. |
+
+**Returns:** turn the request away
+
+**Example:** `max chats requests decline Team Anna`
 
 ### `max chats folders`
 
@@ -695,6 +859,12 @@ max chats folders list [query]
 |---|---|---|
 | `query` | opcional | condiciones campo:valor; esta lista aún no filtra por ninguno. |
 
+**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: max commands schema chats folders list
+
+**Next usually:** `max chats folders show <folder>`, `max chats folders update <folder>`, `max chats folders delete <folder>`
+
+**Example:** `max chats folders list`
+
 #### `max chats folders show`
 
 una carpeta con los nombres de sus chats
@@ -706,6 +876,12 @@ max chats folders show <folder>
 | Argumento | | Qué es |
 |---|---|---|
 | `folder` | obligatorio | ID de la carpeta o título exacto. |
+
+**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: max commands schema chats folders show
+
+**Next usually:** `max chats folders update <folder>`, `max chats folders delete <folder>`, `max chats folders order <folders>`
+
+**Example:** `max chats folders show Work`
 
 #### `max chats folders create`
 
@@ -724,6 +900,10 @@ max chats folders create <title> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat <chat>` |un chat para poner en él, por id o nombre; repítelo para más.|
+
+**Returns:** create a chat folder
+
+**Example:** `max chats folders create "Weekly sync"`
 
 #### `max chats folders update`
 
@@ -745,6 +925,10 @@ max chats folders update <folder> [options]
 | `--add <chat>` |ponle un chat; repítelo para más.|
 | `--remove <chat>` | quitar el chat de la carpeta y de las listas de excluidos y fijados; repetir para varios. |
 
+**Returns:** rename a folder, or change which chats are in it
+
+**Example:** `max chats folders update Work`
+
 #### `max chats folders delete`
 
 eliminar una carpeta; los chats en el se quedan
@@ -759,6 +943,10 @@ max chats folders delete <folder>
 |---|---|---|
 | `folder` | obligatorio | ID de la carpeta o su título exacto. |
 
+**Returns:** delete a folder; the chats in it stay
+
+**Example:** `max chats folders delete Work`
+
 #### `max chats folders order`
 
 colocar las carpetas en este orden; las que no se nombran conservan su orden después de ellas
@@ -772,6 +960,10 @@ max chats folders order <folders>
 | Argumento | | Qué es |
 |---|---|---|
 | `folders` | obligatorio | ID de las carpetas o sus títulos exactos, en el orden deseado. |
+
+**Returns:** put folders in this order; the ones not named keep theirs after them
+
+**Example:** `max chats folders order <folders>`
 
 ### `max chats rules`
 
@@ -789,6 +981,10 @@ max chats rules show <chat>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 
+**Returns:** the group's rules; the defaults, marked not saved, if it has none yet
+
+**Example:** `max chats rules show Team`
+
 #### `max chats rules set`
 
 cambiar una regla; El primer cambio del grupo escribe cada regla con su valor predeterminado.
@@ -805,6 +1001,10 @@ max chats rules set <chat> <key> <value>
 | `key` | obligatorio |uno de: confiable, bloqueado, nombres bloqueados, enlaces, invitaciones, reenvíos, personas bloqueadas, mensajes de inundación, minutos de inundación, acción de inundación, días de cuenta nueva, acción de cuenta nueva, consentimiento.eliminar, consentimiento.eliminar.|
 | `value` | obligatorio |el nuevo valor; una lista está separada por comas.|
 
+**Returns:** change one rule; the group's first change writes every rule with its default
+
+**Example:** `max chats rules set Team <key> <value>`
+
 #### `max chats rules unset`
 
 devolver una regla a su valor predeterminado
@@ -819,6 +1019,10 @@ max chats rules unset <chat> <key>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `key` | obligatorio |uno de: confiable, bloqueado, nombres bloqueados, enlaces, invitaciones, reenvíos, personas bloqueadas, mensajes de inundación, minutos de inundación, acción de inundación, días de cuenta nueva, acción de cuenta nueva, consentimiento.eliminar, consentimiento.eliminar.|
+
+**Returns:** put one rule back to its default
+
+**Example:** `max chats rules unset Team <key>`
 
 ### `max chats moderate`
 
@@ -841,6 +1045,10 @@ max chats moderate <chat> [options]
 | `--allow-dangerous` |sí a toda acción cuyo nivel en las reglas del grupo sea preguntar.|
 | `--max-actions <n>` | como máximo este número de acciones por ejecución; 10 si no se indica. |
 
+**Returns:** judge a group's new messages and members by its rules, and act as they allow
+
+**Example:** `max chats moderate Team`
+
 ### `max chats media`
 
 fotos, vídeos, archivos, audio y enlaces del chat desde el servidor; leerlos no marca nada
@@ -858,6 +1066,10 @@ max chats media <chat> [options]
 | `--type <names>` | solo estos tipos, separados por comas: photo, video, file, audio, link. |
 | `--limit <n>` | cuántos mostrar. |
 | `--cursor <cursor>` | continuar desde donde, según page.next, se detuvo la última página. |
+
+**Returns:** a chat's photos, videos, files, audio and links, from the messenger's server; reading…
+
+**Example:** `max chats media Team`
 
 ### `max chats mute`
 
@@ -877,6 +1089,10 @@ max chats mute <chat> [options]
 |---|---|
 | `--until <time>` | solo hasta entonces: 2026-09-25T09:00 (hora local), o dentro de 30m, 2h, 7d. |
 
+**Returns:** stop notifications from a chat, for good or until a time; nobody in it is told
+
+**Example:** `max chats mute "Book club"`, `max chats mute "Book club" --until 2h`
+
 ### `max chats unmute`
 
 volver a activar las notificaciones del chat
@@ -890,6 +1106,10 @@ max chats unmute <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+**Returns:** hear a muted chat again
+
+**Example:** `max chats unmute "Book club"`
 
 ### `max chats delete`
 
@@ -909,6 +1129,10 @@ max chats delete <chat> [options]
 |---|---|
 | `--allow-dangerous` | borrar sin la pregunta que el nivel ask hace antes de eliminar. |
 
+**Returns:** delete a chat from this account; the others in it keep it and its messages
+
+**Example:** `max chats delete Team`
+
 ### `max chats clear`
 
 eliminar todos los mensajes del chat para esta cuenta; los demás conservan los suyos
@@ -926,6 +1150,10 @@ max chats clear <chat> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--allow-dangerous` | borrar sin la pregunta que el nivel ask hace antes de eliminar. |
+
+**Returns:** delete every message in a chat for this account; the others in it keep theirs
+
+**Example:** `max chats clear Team`
 
 ### `max chats start`
 
@@ -945,6 +1173,10 @@ max chats start <bot> [options]
 |---|---|
 | `--start <param>` |parámetro de inicio que lee el bot; usa ?start= del enlace si se omite.|
 
+**Returns:** start a bot, as its Start button does; the bot sees that you started it
+
+**Example:** `max chats start <bot>`
+
 ### `max chats app`
 
 dirección de la miniaplicación del bot con tu sesión; mantenla privada
@@ -962,6 +1194,10 @@ max chats app <bot> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--start <param>` | parámetro de inicio que lee la aplicación. |
+
+**Returns:** the address that opens a bot's mini app, signed in as you — keep it to yourself
+
+**Example:** `max chats app <bot>`
 
 ## `max contacts`
 
@@ -986,6 +1222,12 @@ max contacts list [query] [options]
 | `--all` | todas las filas, sin paginar. |
 | `--order <recent\|name>` |la conversación más reciente primero o alfabéticamente. Por defecto: `recent`.|
 
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 2 more; every field: max commands schema contacts list
+
+**Next usually:** `max contacts show <person>`, `max contacts profile <person>`, `max contacts context <person>`
+
+**Example:** `max contacts list`
+
 ### `max contacts show`
 
 una persona y los chats que compartes con ella
@@ -1001,6 +1243,12 @@ max contacts show <person> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--with-notes` |incluir tus notas privadas, sujeto al permiso contacts.notes.list.|
+
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 2 more; every field: max commands schema contacts show
+
+**Next usually:** `max contacts profile <person>`, `max contacts context <person>`, `max contacts timeline <person>`
+
+**Example:** `max contacts show Anna`
 
 ### `max contacts profile`
 
@@ -1018,13 +1266,17 @@ max contacts profile <person> [options]
 |---|---|
 | `--show-phone` | mostrar el número de teléfono completo. |
 
+**Returns:** everything the messenger says about one person — handles, flags, last seen, when they…
+
+**Example:** `max contacts profile Anna`
+
 ### `max contacts alias`
 
 un nombre visible local y privado en la cuenta seleccionada
 
 #### `max contacts alias set`
 
-
+your own name for a person in this account; kept on this machine, never sent
 
 **Cambia algo solo en este ordenador.**
 
@@ -1037,9 +1289,13 @@ max contacts alias set <person> <alias>
 | `person` | obligatorio |  |
 | `alias` | obligatorio |  |
 
+**Returns:** your own name for a person in this account; kept on this machine, never sent
+
+**Example:** `max contacts alias set Anna <alias>`
+
 #### `max contacts alias rm`
 
-
+drop your local name for a person; their own name shows again
 
 **Cambia algo solo en este ordenador.**
 
@@ -1051,13 +1307,17 @@ max contacts alias rm <person>
 |---|---|---|
 | `person` | obligatorio |  |
 
+**Returns:** drop your local name for a person; their own name shows again
+
+**Example:** `max contacts alias rm Anna`
+
 ### `max contacts notes`
 
 notas privadas del contacto, compartidas por las cuentas que lo ven
 
 #### `max contacts notes list`
 
-
+every private note you keep on a person, oldest first
 
 ```sh
 max contacts notes list <person> [query]
@@ -1068,9 +1328,13 @@ max contacts notes list <person> [query]
 | `person` | obligatorio |  |
 | `query` | opcional | condiciones campo:valor; esta lista aún no filtra por ninguno. |
 
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: max commands schema contacts notes list
+
+**Example:** `max contacts notes list Anna`
+
 #### `max contacts notes show`
 
-
+one private note on a person, with its revision for edit
 
 ```sh
 max contacts notes show <person> <id>
@@ -1081,9 +1345,13 @@ max contacts notes show <person> <id>
 | `person` | obligatorio |  |
 | `id` | obligatorio |  |
 
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: max commands schema contacts notes show
+
+**Example:** `max contacts notes show Anna 1`
+
 #### `max contacts notes add`
 
-
+add a private note on a person from stdin or --file; never sent
 
 **Cambia algo solo en este ordenador.**
 
@@ -1099,9 +1367,13 @@ max contacts notes add <person> [options]
 |---|---|
 | `--file <path>` | leer el texto de la nota desde un archivo; si se omite o se indica -, leer stdin. |
 
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: max commands schema contacts notes add
+
+**Example:** `max contacts notes add Anna`
+
 #### `max contacts notes edit`
 
-
+replace a note's text; --revision must match the one you read
 
 **Cambia algo solo en este ordenador.**
 
@@ -1119,9 +1391,13 @@ max contacts notes edit <person> <id> [options]
 | `--file <path>` | leer el texto de la nota desde un archivo; si se omite o se indica -, leer stdin. |
 | `--revision <n>` | la revisión que leíste antes de editar. |
 
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: max commands schema contacts notes edit
+
+**Example:** `max contacts notes edit Anna 1 --revision <n>`
+
 #### `max contacts notes remove`
 
-
+delete one private note on a person
 
 **Cambia algo solo en este ordenador.**
 
@@ -1134,6 +1410,10 @@ max contacts notes remove <person> <id>
 | `person` | obligatorio |  |
 | `id` | obligatorio |  |
 
+**Returns:** delete one private note on a person
+
+**Example:** `max contacts notes remove Anna 1`
+
 ### `max contacts sync`
 
 Olvida dónde quedó la última sincronización y vuelve a tomar la lista completa.
@@ -1144,6 +1424,10 @@ Olvida dónde quedó la última sincronización y vuelve a tomar la lista comple
 max contacts sync
 ```
 
+**Returns:** forget where the last sync left off and take the whole list again
+
+**Example:** `max contacts sync`
+
 ### `max contacts lookup`
 
 quién tiene MAX bajo un número de teléfono: lo solicita o lo lee desde stdin
@@ -1151,6 +1435,10 @@ quién tiene MAX bajo un número de teléfono: lo solicita o lo lee desde stdin
 ```sh
 max contacts lookup
 ```
+
+**Returns:** who MAX has under a phone number — asks for it, or reads it from stdin
+
+**Example:** `max contacts lookup`
 
 ### `max contacts add`
 
@@ -1166,6 +1454,10 @@ max contacts add <person>
 |---|---|---|
 | `person` | obligatorio | ID de la persona (lo encuentra `contacts lookup`) o parte de un nombre conocido. |
 
+**Returns:** add a person to your contacts — `contacts list` still shows only people you have a dialog…
+
+**Example:** `max contacts add Anna`
+
 ### `max contacts remove`
 
 eliminar a una persona de tus contactos; el chat permanece, un nombre que les diste puede no
@@ -1179,6 +1471,10 @@ max contacts remove <person>
 | Argumento | | Qué es |
 |---|---|---|
 | `person` | obligatorio | ID de la persona (lo encuentra `contacts lookup`) o parte de un nombre conocido. |
+
+**Returns:** remove a person from your contacts; the chat stays, a name you gave them may not
+
+**Example:** `max contacts remove Anna`
 
 ### `max contacts block`
 
@@ -1194,6 +1490,10 @@ max contacts block <person>
 |---|---|---|
 | `person` | obligatorio | ID de la persona (lo encuentra `contacts lookup`) o parte de un nombre conocido. |
 
+**Returns:** stop a person from writing to you — they need not be a contact
+
+**Example:** `max contacts block Anna`
+
 ### `max contacts unblock`
 
 deja que una persona bloqueada te vuelva a escribir
@@ -1207,6 +1507,10 @@ max contacts unblock <person>
 | Argumento | | Qué es |
 |---|---|---|
 | `person` | obligatorio | ID de la persona (lo encuentra `contacts lookup`) o parte de un nombre conocido. |
+
+**Returns:** let a blocked person write to you again
+
+**Example:** `max contacts unblock Anna`
 
 ### `max contacts rename`
 
@@ -1224,6 +1528,10 @@ max contacts rename <person> <first-name> [last-name]
 | `first-name` | obligatorio |el nombre que quieres ver para ellos.|
 | `last-name` | opcional |  |
 
+**Returns:** rename the contact in the messenger address book; use contacts alias for a private local…
+
+**Example:** `max contacts rename Anna <first-name>`
+
 ### `max contacts import`
 
 cargue números de teléfono y agregue las personas que el servicio de mensajería tiene debajo de ellos
@@ -1237,6 +1545,10 @@ max contacts import <file>
 | Argumento | | Qué es |
 |---|---|---|
 | `file` | obligatorio |una persona por línea: número, luego una coma, una tabulación o un punto y coma, luego el nombre.|
+
+**Returns:** upload phone numbers and add the people the messenger has under them
+
+**Example:** `max contacts import ./report.pdf`
 
 ### `max contacts context`
 
@@ -1256,6 +1568,10 @@ max contacts context <person> [options]
 | `--since-time <time>` |nada más antiguo que este tiempo ISO 8601, o hace 2 h / 1 d.|
 | `--chat <chat>` |un chat, por id o nombre; repítalo para más, luego sus mensajes más nuevos en cada uno, 20 a menos que --limit, breve a menos que -v.|
 | `--sync-first` |Con --chat, lee primero los mensajes más recientes del Messenger en cada uno.|
+
+**Returns:** what the store holds about one person, in every messenger linked to them: shared chats,…
+
+**Example:** `max contacts context Anna`
 
 ### `max contacts timeline`
 
@@ -1277,6 +1593,10 @@ max contacts timeline <person> [options]
 | `--limit <n>` | at most this many; 50 if not given. |
 | `--cursor <cursor>` | continuar desde donde se detuvo la última página; lo da page.next, con los mismos filtros. |
 
+**Returns:** everything one person took part in, in every messenger linked to them — messages they…
+
+**Example:** `max contacts timeline Anna`
+
 ### `max contacts check`
 
 comprueba si una persona parece un bot, una cuenta falsa o un spammer a partir de su perfil y sus mensajes en el almacén: es una pista, nunca un veredicto; las listas públicas de bloqueos solo cubren Telegram, por lo que no se envía nada
@@ -1293,6 +1613,10 @@ max contacts check <person> [options]
 |---|---|
 | `--no-registries` |no preguntes a las listas de prohibiciones públicas; nada de ellos sale de esta máquina.|
 
+**Returns:** whether one person looks like a bot, a fake or a spammer: their profile and what they…
+
+**Example:** `max contacts check Anna`
+
 ### `max contacts link`
 
 registre que dos personas en el archivo son una sola persona; el mismo nombre nunca es suficiente
@@ -1308,6 +1632,10 @@ max contacts link <person> <other>
 | `person` | obligatorio | su ID, @username o parte de su nombre. |
 | `other` | obligatorio |lo mismo en otro messenger de el archivo, como <messenger>:<person> — max:Ana; me: eres tú, como zoom:<id> me.|
 
+**Returns:** record that two people in the store are one person — the same name is never enough
+
+**Example:** `max contacts link Anna <other>`
+
 ### `max contacts unlink`
 
 Deshacer enlace de contactos para una identidad: vuelve a ser una persona propia
@@ -1321,6 +1649,10 @@ max contacts unlink <person>
 | Argumento | | Qué es |
 |---|---|---|
 | `person` | obligatorio |su id, @nombredeusuario o parte de su nombre; <messenger>:<person> para otro servicio de mensajería.|
+
+**Returns:** undo contacts link for one identity: it is a person of its own again
+
+**Example:** `max contacts unlink Anna`
 
 ## `max messages`
 
@@ -1347,6 +1679,12 @@ max messages list <chat> [query] [options]
 | `--model <id>` |qué modelo de voz descargado los escucha, con --transcribe; `models audio list` se los muestra.|
 | `--mark-read` |también marque el chat leído hasta el mensaje más reciente mostrado; la otra persona lo ve.|
 
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 26 more; every field: max commands schema messages list
+
+**Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
+
+**Example:** `max messages list Team`
+
 ### `max messages show`
 
 un mensaje, por su chat e id o por su mensaje: localizador
@@ -1359,6 +1697,10 @@ max messages show <chat> [message]
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título; o un localizador msg: sin ID de mensaje al final. |
 | `message` | opcional | el ID del mensaje. |
+
+**Returns:** one message, by its chat and id or by its msg: locator
+
+**Example:** `max messages show Team 1234`
 
 ### `max messages context`
 
@@ -1383,6 +1725,10 @@ max messages context <chat> [message] [options]
 | `--before-n <n>` |cuantos antes. Por defecto: `5`.|
 | `--after-n <n>` |how many after it. Por defecto: `5`.|
 
+**Returns:** a message and what came either side of it, oldest first
+
+**Example:** `max messages context Team 1234`
+
 ### `max messages links`
 
 Por qué un mensaje está en su conversación: cada eslabón que tiene y la cadena de respuestas hasta el inicio.
@@ -1396,6 +1742,10 @@ max messages links <chat> <message>
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `message` | obligatorio | el ID del mensaje. |
 
+**Returns:** why a message is in its conversation: each link it has, and the chain of answers back to…
+
+**Example:** `max messages links Team 1234`
+
 ### `max messages link`
 
 un enlace permanente de mensaje cuando sea compatible y su localizador de ámbito de cuenta
@@ -1408,6 +1758,12 @@ max messages link <chat> [message]
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título; o un localizador msg: sin ID de mensaje al final. |
 | `message` | opcional | el ID del mensaje. |
+
+**Returns:** message link — ref, url, access, reason; every field: max commands schema messages link
+
+**Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
+
+**Example:** `max messages link Team 1234`
 
 ### `max messages download`
 
@@ -1431,6 +1787,10 @@ max messages download <chat> [message] [options]
 | `--pause <duration>` |con --all, una pausa entre páginas, para permanecer por debajo de los límites del proveedor. Por defecto: `5s`.|
 | `--extract` | leer las capas de texto de los archivos que esta descarga vincula al índice de contenido local. |
 
+**Returns:** save a message's photos, files, videos and voice notes to a folder — or a whole chat's…
+
+**Example:** `max messages download Team 1234`
+
 ### `max messages evidence`
 
 un paquete de evidencia limitado de los mensajes almacenados, el más nuevo primero
@@ -1447,6 +1807,10 @@ max messages evidence <chat> [options]
 |---|---|
 | `--limit <n>` | how many, 1–100. |
 | `--cursor <cursor>` | continuar desde donde, según page.next, se detuvo el último paquete. |
+
+**Returns:** a bounded evidence packet from stored messages, newest first
+
+**Example:** `max messages evidence Team`
 
 ### `max messages sync`
 
@@ -1478,6 +1842,10 @@ max messages sync [chat] [options]
 | `--background` |ejecutar como un trabajo que sobrevive a este comando; `store jobs show` lo sigue.|
 | `--dry-run` |Solo calcule cuántos mensajes, solicitudes y minutos aún tomaría una recuperación completa: desde el archivo, sin solicitud.|
 
+**Returns:** bring a chat's history in the local store up to date, newest first; run it again to…
+
+**Example:** `max messages sync Team`
+
 ### `max messages transcribe`
 
 convierta un mensaje de voz en texto en esta máquina: la grabación no va a ninguna parte
@@ -1494,6 +1862,10 @@ max messages transcribe <chat> <message> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--model <id>` |qué modelo de voz descargado usar; `max models audio list` se los muestra.|
+
+**Returns:** turn a voice message into text, on this machine — the recording goes nowhere
+
+**Example:** `max messages transcribe Team 1234`
 
 ### `max messages send`
 
@@ -1526,6 +1898,10 @@ max messages send <chat> [text] [options]
 | `--at-time <time>` |deja que el servicio de mensajería lo envíe más tarde, incluso con esta máquina apagada: 2026-09-25T09:00 (hora local), o dentro de 30m, 2h, 1d.|
 | `--sticker <id>` | enviar solo este sticker; `stickers list` muestra su id. |
 
+**Returns:** send a text message; without [text], the text is read from stdin
+
+**Example:** `max messages send Team "on my way"`
+
 ### `max messages scheduled`
 
 mensajes que esperan ser enviados más tarde en un chat, los más prontos primero; cancelar uno en la aplicación
@@ -1537,6 +1913,12 @@ max messages scheduled <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 26 more; every field: max commands schema messages scheduled
+
+**Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
+
+**Example:** `max messages scheduled Team`
 
 ### `max messages edit`
 
@@ -1558,6 +1940,10 @@ max messages edit <chat> <message> [text] [options]
 |---|---|
 | `--md` | interpretar el Markdown de este servicio de mensajería; la sintaxis admitida está en su guía de formato. |
 
+**Returns:** change the text of your own message; the other side may have read it already
+
+**Example:** `max messages edit Team 1234 "on my way"`
+
 ### `max messages delete`
 
 eliminar mensajes solo para usted; con --for-everyone, para todos en el chat
@@ -1577,6 +1963,10 @@ max messages delete <chat> <messages> [options]
 |---|---|
 | `--for-everyone` |eliminar para todos en el chat, no solo para ti: no pueden recuperarlo.|
 | `--allow-dangerous` | borrar sin la pregunta que el nivel ask hace antes de eliminar. |
+
+**Returns:** delete messages for you only; with --for-everyone, for everyone in the chat
+
+**Example:** `max messages delete Team <messages>`
 
 ### `max messages forward`
 
@@ -1600,6 +1990,10 @@ max messages forward <chat> <message> [options]
 | `--send-as <id>` |publicar como una de las identidades que enumera `chats send-as` para el chat --to; obligatorio cuando el chat publica como otra identidad de forma predeterminada.|
 | `--operation-id <id>` |repetir un reenvío cuyo resultado se desconocía, sin arriesgarse a una segunda copia.|
 
+**Returns:** forward one message to another chat
+
+**Example:** `max messages forward Team 1234 --to Team`
+
 ### `max messages pin`
 
 fijar un mensaje en un chat, en silencio a menos que --notify
@@ -1619,6 +2013,10 @@ max messages pin <chat> <message> [options]
 |---|---|
 | `--notify` |informar a los miembros del chat sobre el PIN.|
 
+**Returns:** pin a message in a chat, quietly unless --notify
+
+**Example:** `max messages pin <chat> <message>`, `max messages pin <chat> <message> --notify`
+
 ### `max messages unpin`
 
 desanclar un mensaje en un chat
@@ -1633,6 +2031,10 @@ max messages unpin <chat> <message>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `message` | obligatorio | el ID del mensaje. |
+
+**Returns:** unpin a message in a chat
+
+**Example:** `max messages unpin <chat> <message>`
 
 ### `max messages press`
 
@@ -1650,6 +2052,10 @@ max messages press <chat> <message> <button>
 | `message` | obligatorio | ID del mensaje con botones. |
 | `button` | obligatorio | número mostrado por `messages show` o texto exacto. |
 
+**Returns:** press a bot's button under a message; the bot sees that you pressed it
+
+**Example:** `max messages press Team 1234 <button>`
+
 ## `max store`
 
 el almacén local de mensajes
@@ -1666,6 +2072,10 @@ max store status [chat]
 |---|---|---|
 | `chat` | opcional | un chat: su ID o parte de su título. |
 
+**Returns:** per chat: messages stored, the oldest and newest, and the stretches held completely
+
+**Example:** `max store status Team`
+
 ### `max store gaps`
 
 inspeccionar las lagunas internas de cobertura registradas y descargar explícitamente los datos que faltan
@@ -1681,6 +2091,10 @@ max store gaps plan <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
+
+**Returns:** local coverage plan; missing message ids alone do not imply missing history
+
+**Example:** `max store gaps plan Team`
 
 #### `max store gaps repair`
 
@@ -1711,6 +2125,10 @@ max store gaps repair <chat> [options]
 | `--catch-up-time <duration>` | tiempo de preparación dentro del tiempo restante de la reparación. |
 | `--background` |reparar mediante el mecanismo existente de trabajos del almacenamiento; consultar store jobs show.|
 
+**Returns:** fetch bounded interior gaps and recheck coverage; never delete unseen messages
+
+**Example:** `max store gaps repair Team`
+
 ### `max store jobs`
 
 tareas de sincronización en segundo plano
@@ -1733,6 +2151,10 @@ max store jobs list [query] [options]
 | `--page <n>` | qué página, empezando por 1. |
 | `--all` | todas las filas, sin paginar. |
 
+**Returns:** job — id, chat, state, pid, started_at, fetched, finished_at, message_limit, and 5 more; every field: max commands schema store jobs list
+
+**Example:** `max store jobs list`
+
 #### `max store jobs show`
 
 un trabajo en segundo plano (el más nuevo cuando no se nombra ninguno) y lo que el archivo tiene ahora de su chat
@@ -1744,6 +2166,10 @@ max store jobs show [job]
 | Argumento | | Qué es |
 |---|---|---|
 | `job` | opcional | el ID de la tarea que imprimió `messages sync --background`. |
+
+**Returns:** one background job — the newest when none is named — and what the store now holds of its…
+
+**Example:** `max store jobs show`
 
 #### `max store jobs cancel`
 
@@ -1758,6 +2184,10 @@ max store jobs cancel <job>
 | Argumento | | Qué es |
 |---|---|---|
 | `job` | obligatorio |la identificación del trabajo.|
+
+**Returns:** stop a running background job after its current page; a later sync resumes where it…
+
+**Example:** `max store jobs cancel <job>`
 
 #### `max store jobs retry`
 
@@ -1777,6 +2207,10 @@ max store jobs retry [job] [options]
 |---|---|
 | `--failed` |todos los chats cuyo último trabajo falló o se interrumpió.|
 
+**Returns:** start a partial, failed or died job again, as a new job; the sync resumes where the store…
+
+**Example:** `max store jobs retry`
+
 #### `max store jobs clear`
 
 olvidar trabajos terminados y borrar sus registros; se conservan los trabajos en curso
@@ -1786,6 +2220,10 @@ olvidar trabajos terminados y borrar sus registros; se conservan los trabajos en
 ```sh
 max store jobs clear
 ```
+
+**Returns:** forget finished jobs and remove their logs; a running job is kept
+
+**Example:** `max store jobs clear`
 
 ### `max store export`
 
@@ -1811,6 +2249,10 @@ max store export [chats] [options]
 | `--all` |con --output-dir: cada chat almacenado de esta cuenta.|
 | `--encrypt` |comprimir y cifrar con una contraseña, escrita en un mensaje oculto o canalizada en stdin; nunca se conserva; si se pierde, el archivo no se podrá abrir.|
 
+**Returns:** a chat's stored messages, oldest first: --jsonl one message per line, --json the list…
+
+**Example:** `max store export`
+
 ### `max store clear`
 
 eliminar de el archivo los chats que ha dejado esta cuenta, con sus mensajes
@@ -1826,6 +2268,10 @@ max store clear [options]
 | `--left` |los chats que ha dejado esta cuenta: lo único que esto borra.|
 | `--allow-dangerous` |sí, eliminar: no se puede deshacer y un chat que abandonaste no se puede recuperar de nuevo.|
 
+**Returns:** delete from the store the chats this account has left, with their messages
+
+**Example:** `max store clear`
+
 ### `max store info`
 
 el archivo de almacenamiento: dónde está, su tamaño, su esquema y cuántas filas contiene; no cambia nada
@@ -1834,6 +2280,10 @@ el archivo de almacenamiento: dónde está, su tamaño, su esquema y cuántas fi
 max store info
 ```
 
+**Returns:** the store file: where it is, its size, its schema and how many rows it holds; changes…
+
+**Example:** `max store info`
+
 ### `max store check`
 
 si el archivo está en buen estado: integridad, índices de búsqueda, disco y qué chats están detrás
@@ -1841,6 +2291,10 @@ si el archivo está en buen estado: integridad, índices de búsqueda, disco y q
 ```sh
 max store check
 ```
+
+**Returns:** whether the store is healthy — integrity, search indexes, disk, and which chats are behind
+
+**Example:** `max store check`
 
 ### `max store migrate`
 
@@ -1852,6 +2306,10 @@ actualizar el esquema y normalizar e indexar mensajes y notas, incluidas sus ra�
 max store migrate
 ```
 
+**Returns:** bring the store up to this build's schema, then normalize, index and stem the messages…
+
+**Example:** `max store migrate`
+
 ### `max store reindex`
 
 reconstruir índices de palabras, erratas, raíces, archivos y notas sin perder datos
@@ -1861,6 +2319,10 @@ reconstruir índices de palabras, erratas, raíces, archivos y notas sin perder 
 ```sh
 max store reindex
 ```
+
+**Returns:** rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes'…
+
+**Example:** `max store reindex`
 
 ### `max store backup`
 
@@ -1880,6 +2342,10 @@ max store backup <file> [options]
 |---|---|
 | `--encrypt` |comprimir y cifrar con una contraseña, escrita en un mensaje oculto o canalizada en stdin; nunca se conserva; si se pierde, el archivo no se podrá abrir.|
 
+**Returns:** copy the store into a new file, while it is in use; never overwrites a file
+
+**Example:** `max store backup ./report.pdf`
+
 ### `max store restore`
 
 poner una copia de seguridad en lugar de el archivo; el archivo a la que reemplaza se mantiene a su lado, nunca se elimina
@@ -1893,6 +2359,10 @@ max store restore <file>
 | Argumento | | Qué es |
 |---|---|---|
 | `file` | obligatorio |un archivo que escribió `store backup`; uno escrito con --encrypt solicita su contraseña.|
+
+**Returns:** put a backup in place of the store; the store it replaces is kept beside it, never deleted
+
+**Example:** `max store restore ./report.pdf`
 
 ### `max store decrypt`
 
@@ -1912,6 +2382,10 @@ max store decrypt <file> [options]
 |---|---|
 | `--output <file>` |el nuevo archivo, legible sólo por usted.|
 
+**Returns:** open a file written with --encrypt into a new file; asks for its password
+
+**Example:** `max store decrypt ./report.pdf --output ./report.pdf`
+
 ### `max store repair`
 
 traer cada tabla a la forma de esta construcción, sin eliminar nada: una tabla con la forma incorrecta se guarda como una copia junto a una nueva
@@ -1926,6 +2400,10 @@ max store repair [options]
 |---|---|
 | `--dry-run` |diga lo que haría y no cambiará nada.|
 
+**Returns:** bring every table to this build's shape, deleting nothing: a table of the wrong shape is…
+
+**Example:** `max store repair`
+
 ### `max store reset`
 
 back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
@@ -1939,6 +2417,10 @@ max store reset [options]
 | Opción | Qué hace |
 |---|---|
 | `--no-backup` | delete the store without backing it up first. |
+
+**Returns:** back the store up beside itself, then delete it and start an empty one at this build's…
+
+**Example:** `max store reset`
 
 ### `max store copies`
 
@@ -1957,6 +2439,10 @@ max store copies delete <name>
 | Argumento | | Qué es |
 |---|---|---|
 | `name` | obligatorio |el nombre de la copia, tal como lo imprimió `store repair`.|
+
+**Returns:** delete one copy `store repair` kept, named exactly; refuses any other table
+
+**Example:** `max store copies delete daily`
 
 ## `max stats`
 
@@ -1992,6 +2478,10 @@ max stats messages show [query] [options]
 | `--exact` |las palabras sin campo y las frases entre comillas coinciden solo en su forma exacta, como exact:word; text: sigue admitiendo todas las formas.|
 | `--saved <name\|id>` |contar lo que coincide con una búsqueda guardada o una ejecución anterior; Las opciones escritas aquí reemplazan las suyas.|
 
+**Returns:** message counts — by, total, rows; every field: max commands schema stats messages show
+
+**Example:** `max stats messages show "invoice"`
+
 #### `max stats messages counters`
 
 observaciones por contador y actualización remota limitada
@@ -2018,6 +2508,10 @@ max stats messages counters show [query] [options]
 | `--counters <names>` | campos distintos views,reactions,comments; los tres por defecto. |
 | `--limit <n>` | mensajes, 1–100; 20 por defecto. |
 | `--max-age <duration>` | edad máxima de una observación reciente; 24h por defecto. |
+
+**Returns:** counters — cutoff, max_age_ms, selection, rows; every field: max commands schema stats messages counters show
+
+**Example:** `max stats messages counters show "invoice"`
 
 #### `max stats messages counters refresh`
 
@@ -2046,6 +2540,10 @@ max stats messages counters refresh [query] [options]
 | `--sync-time <duration>` | tiempo de actualización remota; 30s por defecto, máximo 5m. |
 | `--dry-run` | mostrar objetivos guardados exactos y contadores admitidos sin conectar. |
 
+**Returns:** counter refresh — dry_run, targets, counters, supported, unsupported, max_messages, time_ms, results, and 2 more; every field: max commands schema stats messages counters refresh
+
+**Example:** `max stats messages counters refresh "invoice"`
+
 #### `max stats messages unanswered`
 
 preguntas detectadas más antiguas sin una respuesta directa válida observada
@@ -2069,6 +2567,10 @@ max stats messages unanswered [query] [options]
 | `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
 | `--older-than <duration>` | edad mínima de una pregunta sin respuesta válida observada. |
 
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: max commands schema stats messages unanswered
+
+**Example:** `max stats messages unanswered "invoice"`
+
 #### `max stats messages discussion`
 
 publicaciones vistas con poca conversación guardada
@@ -2091,6 +2593,10 @@ max stats messages discussion [query] [options]
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
 | `--min-views <n>` | mínimo de vistas acumuladas conocidas. |
 | `--max-replies <n>` | máximo de respuestas observadas en la conversación. |
+
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: max commands schema stats messages discussion
+
+**Example:** `max stats messages discussion "invoice"`
 
 #### `max stats messages top`
 
@@ -2121,6 +2627,10 @@ max stats messages top [query] [options]
 | `--limit <n>` | filas clasificadas, 1–100. |
 | `--saved <name\|id>` | ejecutar una consulta guardada o una ejecución de clasificación; las opciones introducidas sustituyen las almacenadas. |
 
+**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: max commands schema stats messages top
+
+**Example:** `max stats messages top "invoice"`
+
 #### `max stats messages evidence`
 
 página limitada de mensajes, pares de respuestas o miembros de una cohorte desde una selección drilldown exacta
@@ -2139,6 +2649,10 @@ max stats messages evidence <message> [options]
 | `--component <name>` | el componente de clasificación expuesto. |
 | `--limit <n>` | filas de evidencia, 1–100; 20 si no se indica. |
 | `--cursor <cursor>` | continuar con el mismo componente y la misma huella de las evidencias almacenadas. |
+
+**Returns:** evidence — ; every field: max commands schema stats messages evidence
+
+**Example:** `max stats messages evidence 1234 --selection <json> --component daily`
 
 ### `max stats contacts`
 
@@ -2165,6 +2679,10 @@ max stats contacts responses [query] [options]
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
 | `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
+
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: max commands schema stats contacts responses
+
+**Example:** `max stats contacts responses "invoice"`
 
 #### `max stats contacts top`
 
@@ -2196,6 +2714,10 @@ max stats contacts top [query] [options]
 | `--saved <name\|id>` | ejecutar una consulta guardada o una ejecución de clasificación; las opciones introducidas sustituyen las almacenadas. |
 | `--min-messages <n>` | mínimo de mensajes seleccionados por autor; 1 o 5 para engaging. |
 
+**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: max commands schema stats contacts top
+
+**Example:** `max stats contacts top "invoice"`
+
 #### `max stats contacts evidence`
 
 página limitada de mensajes, pares de respuestas o miembros de una cohorte desde una selección drilldown exacta
@@ -2214,6 +2736,10 @@ max stats contacts evidence <person> [options]
 | `--component <name>` | el componente de clasificación expuesto. |
 | `--limit <n>` | filas de evidencia, 1–100; 20 si no se indica. |
 | `--cursor <cursor>` | continuar con el mismo componente y la misma huella de las evidencias almacenadas. |
+
+**Returns:** evidence — ; every field: max commands schema stats contacts evidence
+
+**Example:** `max stats contacts evidence Anna --selection <json> --component daily`
 
 ### `max stats chats`
 
@@ -2237,6 +2763,10 @@ max stats chats show <chat> [options]
 | `--by <day\|week>` |también una fila por día calendario o semana (las semanas comienzan el lunes).|
 | `--timezone <zone>` | la zona horaria IANA para los días del calendario. |
 
+**Returns:** chat stats — chat, since, until, complete, completeness, messages, senders, replies, and 10 more; every field: max commands schema stats chats show
+
+**Example:** `max stats chats show Team`
+
 #### `max stats chats newcomers`
 
 miembros con fecha de entrada conocida y ayuda durante el plazo posterior
@@ -2258,6 +2788,10 @@ max stats chats newcomers <chat> [options]
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
 | `--limit <n>` | filas del informe, 1–100; 20 por defecto. |
 | `--answerer <person>` | nombre guardado, alias, @username, ID o person:provider/account/id; los nombres ambiguos requieren elegir; repetir para varias. |
+
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: max commands schema stats chats newcomers
+
+**Example:** `max stats chats newcomers Team`
 
 #### `max stats chats retention`
 
@@ -2281,6 +2815,10 @@ max stats chats retention <chat> [options]
 | `--timezone <zone>` | zona horaria IANA para cohortes de incorporación. |
 | `--limit <n>` | cohortes y pruebas de miembros, 1–100. |
 
+**Returns:** retention — chat_ref, cutoff, since, until, checkpoints_ms, within_ms, by, timezone, and 5 more; every field: max commands schema stats chats retention
+
+**Example:** `max stats chats retention Team`
+
 ### `max stats tasks`
 
 estadísticas de las tareas
@@ -2297,6 +2835,10 @@ max stats tasks show [options]
 |---|---|
 | `--chat <chat>` | solo este chat; indica su ID o parte de su título. |
 | `--type <type>` |sólo este tipo: pregunta, petición, mención o promesa.|
+
+**Returns:** task stats — open, rows; every field: max commands schema stats tasks show
+
+**Example:** `max stats tasks show`
 
 ### `max stats charts`
 
@@ -2320,6 +2862,10 @@ max stats charts <chat> [options]
 | `--timezone <zone>` | la zona horaria IANA para los días del calendario. |
 | `--output <file>` | guardar una imagen de tema oscuro en un nuevo archivo .svg o .png. |
 
+**Returns:** chart — version, kind, title, x, series, unit, timezone, partial, and 2 more; every field: max commands schema stats charts
+
+**Example:** `max stats charts Team`
+
 ## `max tasks`
 
 lo que requiere tu atención —preguntas sin respuesta, menciones, peticiones y promesas— guardado en el almacenamiento local; lo añaden review, inbox y messages sync, y serve solo las peticiones de las reglas de respuesta automática
@@ -2339,6 +2885,12 @@ max tasks list [query] [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--limit <n>` | cuántos resultados. |
+
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 15 more; every field: max commands schema tasks list
+
+**Next usually:** `max tasks show <task>`, `max tasks related <task>`, `max tasks plan <task>`
+
+**Example:** `max tasks list`
 
 ### `max tasks add`
 
@@ -2366,6 +2918,10 @@ max tasks add <message> [options]
 | `--remind-time <time>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
 | `--assignee <person...>` | quién la hace: sender (quien envió el mensaje de la tarea) o person:<id>; none lo borra. Si no estás seguro, omítelo: más vale una tarea sin responsable que ninguna. |
 
+**Returns:** add a task for a stored message or note — a promise, a request
+
+**Example:** `max tasks add 1234 --type <type> --category daily`
+
 ### `max tasks plan`
 
 establecer el título, la descripción, la fecha límite, la próxima revisión, la categoría y el responsable de una tarea; nada llega al servicio de mensajería
@@ -2389,6 +2945,10 @@ max tasks plan <task> [options]
 | `--remind-time <time>` | cuándo volver a revisarla: una hora ISO 8601 o 2h, 3d desde ahora; none la borra. |
 | `--assignee <person...>` | quién la hace: sender (quien envió el mensaje de la tarea) o person:<id>; none lo borra. Si no estás seguro, omítelo: más vale una tarea sin responsable que ninguna. |
 
+**Returns:** set a task's title, description, due date, next check, category and assignee
+
+**Example:** `max tasks plan 12`
+
 ### `max tasks link`
 
 vincular una tarea con mensajes, chats, personas o URL, o con otra tarea: task:<id>
@@ -2409,6 +2969,10 @@ max tasks link <task> [targets] [options]
 | `--chat <chat>` | un chat al que se refiere, se puede repetir; un chat: su ID o parte de su título. |
 | `--kind <kind>` | related-to (por defecto), evidence —muestra que la tarea es real— o created-from; para task:<id>, related-to, blocked-by, follow-up-of, duplicate-of o discovered-from. |
 
+**Returns:** link a task to messages, chats, people or URLs — or to another task: task:<id>
+
+**Example:** `max tasks link 12`
+
 ### `max tasks show`
 
 una tarea: su plan y todo lo vinculado a ella
@@ -2420,6 +2984,10 @@ max tasks show <task>
 | Argumento | | Qué es |
 |---|---|---|
 | `task` | obligatorio | el ID o la clave de la tarea, tal como lo muestra tasks list. |
+
+**Returns:** one task: its plan and everything linked to it
+
+**Example:** `max tasks show 12`
 
 ### `max tasks related`
 
@@ -2436,6 +3004,10 @@ max tasks related <task> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--limit <n>` | cuántos, como máximo 40 (por defecto 10). |
+
+**Returns:** tasks that may be the same job as this one, best first; merges nothing
+
+**Example:** `max tasks related PR-12`
 
 ### `max tasks duplicates`
 
@@ -2468,6 +3040,10 @@ max tasks duplicates reject <dup> <task>
 | `dup` | obligatorio | la tarea listada como duplicado, por su id o clave. |
 | `task` | obligatorio | la tarea con la que se emparejó. |
 
+**Returns:** two tasks are not the same job: the pair is never offered again
+
+**Example:** `max tasks duplicates reject PR-14 PR-12`
+
 #### `max tasks duplicates defer`
 
 ni los campos ni el texto lo aclaran: dejar el par al propietario, que lo lista con decision:unsure
@@ -2482,6 +3058,10 @@ max tasks duplicates defer <dup> <task>
 |---|---|---|
 | `dup` | obligatorio | la tarea listada como duplicado, por su id o clave. |
 | `task` | obligatorio | la tarea con la que se emparejó. |
+
+**Returns:** the fields and the text cannot tell: leave the pair to the owner
+
+**Example:** `max tasks duplicates defer PR-14 PR-12`
 
 ### `max tasks merge`
 
@@ -2501,6 +3081,10 @@ max tasks merge <dup> [options]
 |---|---|
 | `--into <id>` | la tarea que se queda, por su id o clave. |
 
+**Returns:** one job seen twice: fold the duplicate into the task that stays
+
+**Example:** `max tasks merge PR-14 --into PR-12`
+
 ### `max tasks unmerge`
 
 deshacer una fusión: reabrir la tarea y quitar su vínculo duplicate-of; los mensajes que vinculó la fusión siguen vinculados
@@ -2514,6 +3098,10 @@ max tasks unmerge <dup>
 | Argumento | | Qué es |
 |---|---|---|
 | `dup` | obligatorio | la tarea fusionada, por su id o clave. |
+
+**Returns:** undo a merge: reopen the task and remove its duplicate-of relation
+
+**Example:** `max tasks unmerge PR-14`
 
 ### `max tasks agenda`
 
@@ -2535,6 +3123,10 @@ max tasks agenda [query] [options]
 | `--within <duration>` | omitir los chats sin actividad durante más tiempo: ya terminaron (por defecto 30d). |
 | `--holder <name>` | quién eres para las reservas: un id de sesión o un id de chat; por defecto WIRECAT_HOLDER, si no la sesión de Claude Code, si no el nombre del agente. |
 
+**Returns:** agenda — at, account, stored_at, stale, tasks, owed, waiting, unsynced, and 2 more; every field: max commands schema tasks agenda
+
+**Example:** `max tasks agenda`
+
 ### `max tasks categories`
 
 las categorías que puede tener una tarea, con lo que significa cada una y las palabras por las que una regla la elige
@@ -2542,6 +3134,10 @@ las categorías que puede tener una tarea, con lo que significa cada una y las p
 ```sh
 max tasks categories
 ```
+
+**Returns:** the categories a task takes, with what each means
+
+**Example:** `max tasks categories`
 
 ### `max tasks scan`
 
@@ -2560,6 +3156,10 @@ max tasks scan <chat> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--last <n>` | lee los n mensajes guardados más recientes de cada chat (50 por defecto, como máximo 1000). |
+
+**Returns:** build tasks from a chat's stored history: unanswered questions and mentions
+
+**Example:** `max tasks scan <chat>`, `max tasks scan <chat> --last 300 --yes`
 
 ### `max tasks claim`
 
@@ -2580,6 +3180,10 @@ max tasks claim <task> [options]
 | `--lease <duration>` | cuánto dura la reserva: 30m, 2h (por defecto 30m); si la tomas otra vez, se alarga. |
 | `--holder <name>` | quién eres para las reservas: un id de sesión o un id de chat; por defecto WIRECAT_HOLDER, si no la sesión de Claude Code, si no el nombre del agente. |
 
+**Returns:** take an open task so no other agent works it at once; the claim lapses by itself
+
+**Example:** `max tasks claim PR-12 --lease 2h`
+
 ### `max tasks release`
 
 devolver una tarea que reservaste, antes de que caduque la reserva; el propietario puede liberar cualquiera
@@ -2597,6 +3201,10 @@ max tasks release <task> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--holder <name>` | quién eres para las reservas: un id de sesión o un id de chat; por defecto WIRECAT_HOLDER, si no la sesión de Claude Code, si no el nombre del agente. |
+
+**Returns:** give back a task you claimed, before the claim lapses; the owner may release any
+
+**Example:** `max tasks release PR-12`
 
 ### `max tasks close`
 
@@ -2619,6 +3227,10 @@ max tasks close <task> [options]
 | `--certainty <n>` | confianza del agente, de 0 a 1, en que la tarea no necesita nada más. |
 | `--as-owner` | cerrar como propietario aunque se ejecute desde la terminal del agente (AI_AGENT o CLAUDECODE definidos). |
 
+**Returns:** close a task: done, or dismissed when it needs no answer; an agent's unsure close waits…
+
+**Example:** `max tasks close Q-15 --as done --certainty 0.9 --reason answered-in-chat`, `max tasks close Q-15`
+
 ### `max tasks reject`
 
 rechazar el cierre sugerido por un agente: la tarea queda abierta y sale de close:suggested; el agente puede volver a proponer su cierre
@@ -2636,6 +3248,10 @@ max tasks reject <task> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--as-owner` | rechazar como propietario aunque se ejecute desde la terminal del agente (AI_AGENT o CLAUDECODE definidos). |
+
+**Returns:** refuse an agent's close of a task: it stays open and the suggestion goes
+
+**Example:** `max tasks reject Q-15`
 
 ## `max conversations`
 
@@ -2662,6 +3278,10 @@ max conversations build [options]
 | `--max-tokens <n>` |límite de reserva de entrada/salida de análisis por ejecución; predeterminado 100000.|
 | `--max-chats <n>` |como máximo este número de chats por ejecución; 20 si no se indica.|
 
+**Returns:** find a chat's conversations in what the store holds, replacing the last build; without…
+
+**Example:** `max conversations build`
+
 ### `max conversations list`
 
 Las conversaciones de un chat, las más nuevas primero: cuándo, cuántos mensajes, cuántas personas.
@@ -2679,6 +3299,10 @@ max conversations list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | cuántos resultados. |
 
+**Returns:** conversation — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 1 more; every field: max commands schema conversations list
+
+**Example:** `max conversations list Team`
+
 ### `max conversations show`
 
 los mensajes de una conversación, los más antiguos primero, por su ID o en el que se encuentra el mensaje
@@ -2691,6 +3315,10 @@ max conversations show <conversation> [message]
 |---|---|---|
 | `conversation` | obligatorio |una identificación de conversación de `conversations list`; o un chat: su id, o parte de su título, con un mensaje.|
 | `message` | opcional |un id de mensaje en ese chat: muestra la conversación en la que se encuentra.|
+
+**Returns:** one conversation's messages, oldest first — by its id, or the one a message is in
+
+**Example:** `max conversations show <conversation> 1234`
 
 ### `max conversations related`
 
@@ -2713,6 +3341,10 @@ max conversations related <chat> <message> [options]
 | `--base-url <url>` | un servidor con /v1/embeddings de OpenAI: Gemini, Jina, u Ollama y LM Studio en este comando. |
 | `--dims <n>` | remoto: el tamaño del vector — necesario con --base-url; acorta el de un modelo de OpenAI. |
 
+**Returns:** the conversations nearest in meaning to the one a message is in, in every built chat,…
+
+**Example:** `max conversations related Team 1234`
+
 ### `max conversations status`
 
 qué tan actualizadas son las conversaciones y los vectores de cada chat creado: mensajes que la compilación no ha visto, fragmentos con un vector actual, obsoleto o faltante
@@ -2728,6 +3360,10 @@ max conversations status [options]
 | `--provider <provider>` | proveedor de vectores: local u openai; las opciones prevalecen sobre los ajustes del perfil. |
 | `--base-url <url>` | un servidor con /v1/embeddings de OpenAI: Gemini, Jina, u Ollama y LM Studio en este comando. |
 | `--dims <n>` | remoto: el tamaño del vector — necesario con --base-url; acorta el de un modelo de OpenAI. |
+
+**Returns:** how fresh each built chat's conversations and vectors are: messages the build has not…
+
+**Example:** `max conversations status`
 
 ### `max conversations batches`
 
@@ -2746,6 +3382,10 @@ max conversations batches status [options]
 | `--chat <chat>` | un chat: su ID o parte de su título. |
 | `--size <n>` |mensajes para responder por lote, 10 a 200; 50 por defecto.|
 
+**Returns:** how many messages still wait for an answer, in how many batches, and how much text
+
+**Example:** `max conversations batches status --chat Team`
+
 #### `max conversations batches next`
 
 la siguiente ventana para responder, con los mensajes anteriores; El texto del mensaje va solo a la salida estándar.
@@ -2758,6 +3398,10 @@ max conversations batches next [options]
 |---|---|
 | `--chat <chat>` | un chat: su ID o parte de su título. |
 | `--size <n>` |mensajes para responder por lote, 10 a 200; 50 por defecto.|
+
+**Returns:** the next window to answer, with the messages before it; message text goes to stdout only
+
+**Example:** `max conversations batches next --chat Team`
 
 ### `max conversations links`
 
@@ -2777,6 +3421,10 @@ max conversations links add [options]
 |---|---|
 | `--batch <id>` |se imprime el ID de lote `conversations batches next`.|
 
+**Returns:** store your agent's answer to a batch, read as JSON from stdin: { "model", "answers": [{…
+
+**Example:** `max conversations links add --batch 1`
+
 #### `max conversations links clear`
 
 deja las respuestas de tu agente para un chat, o solo las de un modelo; los mensajes nunca se tocan
@@ -2791,6 +3439,10 @@ max conversations links clear [options]
 |---|---|
 | `--chat <chat>` | un chat: su ID o parte de su título. |
 | `--model <model>` |sólo las respuestas que dio este modelo.|
+
+**Returns:** drop your agent's answers for a chat, or only one model's; messages are never touched
+
+**Example:** `max conversations links clear --chat Team`
 
 ### `max conversations rebuild`
 
@@ -2808,21 +3460,29 @@ max conversations rebuild [options]
 | `--max-chats <n>` | como máximo este número de chats por ejecución; 20 por defecto. |
 | `--max-chunks <n>` | como máximo este número de fragmentos vectorizados por ejecución; 2000 por defecto. |
 
+**Returns:** build and embed the chats that changed, on this machine only
+
+**Example:** `max conversations rebuild --max-chats 5`
+
 ### `max conversations consents`
 
 Permisos de análisis recordados para los chats de esta cuenta y los puntos finales del proveedor.
 
 #### `max conversations consents list`
 
-
+which chats and provider endpoints you allowed to analyse, and when
 
 ```sh
 max conversations consents list
 ```
 
+**Returns:** which chats and provider endpoints you allowed to analyse, and when
+
+**Example:** `max conversations consents list`
+
 #### `max conversations consents revoke`
 
-
+forget analysis permissions so the next analysis asks again
 
 **Cambia algo solo en este ordenador.**
 
@@ -2834,6 +3494,10 @@ max conversations consents revoke [options]
 |---|---|
 | `--chat <chat>` |revocar únicamente los consentimientos de este chat; predeterminado para cada chat.|
 | `--provider <identity>` |identidad exacta del proveedor de la lista de consentimientos; por defecto para cada proveedor.|
+
+**Returns:** forget analysis permissions so the next analysis asks again
+
+**Example:** `max conversations consents revoke`
 
 ### `max conversations embed`
 
@@ -2874,6 +3538,10 @@ max conversations embed status [options]
 | `--base-url <url>` | un servidor con /v1/embeddings de OpenAI: Gemini, Jina, u Ollama y LM Studio en este comando. |
 | `--dims <n>` | remoto: el tamaño del vector — necesario con --base-url; acorta el de un modelo de OpenAI. |
 
+**Returns:** how many chunks of a chat have a vector of the model, how many are left, and what is left…
+
+**Example:** `max conversations embed status`
+
 #### `max conversations embed clear`
 
 soltar los vectores de un chat, o solo los de un modelo; Los mensajes y conversaciones nunca se tocan.
@@ -2891,6 +3559,10 @@ max conversations embed clear [options]
 | `--provider <provider>` | proveedor de vectores: local u openai; las opciones prevalecen sobre los ajustes del perfil. |
 | `--base-url <url>` | un servidor con /v1/embeddings de OpenAI: Gemini, Jina, u Ollama y LM Studio en este comando. |
 | `--dims <n>` | remoto: el tamaño del vector — necesario con --base-url; acorta el de un modelo de OpenAI. |
+
+**Returns:** drop a chat's vectors, or only one model's; messages and conversations are never touched
+
+**Example:** `max conversations embed clear`
 
 ## `max attachments`
 
@@ -2917,6 +3589,10 @@ max attachments extract [options]
 | `--ocr` | llamar explícitamente a models.ocr para extraer texto en lotes de imágenes y PDF escaneados. |
 | `--concurrency <n>` | remoto: solicitudes a la vez (predeterminado: 4). |
 
+**Returns:** read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/PPTX/EPUB —…
+
+**Example:** `max attachments extract`
+
 ### `max attachments list`
 
 archivos de los mensajes guardados, los más recientes primero: dónde se guardó cada uno y si se tiene su texto — nunca el texto
@@ -2934,6 +3610,10 @@ max attachments list [query] [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | qué página, empezando por 1. |
 | `--all` | todas las filas, sin paginar. |
+
+**Returns:** attachment — kind, message, position, url, name, title, mime, size, and 7 more; every field: max commands schema attachments list
+
+**Example:** `max attachments list`
 
 ### `max attachments show`
 
@@ -2955,6 +3635,10 @@ max attachments show <chat> [message] [options]
 | `--offset-bytes <n>` | desplazamiento en bytes desde 0. |
 | `--chunk-bytes <n>` | bytes que devolver, 1–1048576 (por defecto524288). |
 | `--expected-fingerprint <hash>` | exigir el SHA-256 del archivo completo de la porción anterior. |
+
+**Returns:** read a bounded chunk of one retained attachment; JSON includes base64 bytes
+
+**Example:** `max attachments show Team 1234`
 
 ### `max attachments text`
 
@@ -2980,6 +3664,10 @@ max attachments text set <chat> [message] [options]
 | `--attachment <n>` |qué archivo del mensaje, de 1; necesario cuando tiene más de uno.|
 | `--text-file <path>` |leer el texto de este archivo; - o ninguno lee la entrada estándar.|
 
+**Returns:** keep the text an agent read from a file — a scan, a photo — so search finds it; nothing…
+
+**Example:** `max attachments text set Team 1234`
+
 ## `max tags`
 
 tus propias etiquetas en chats, personas, mensajes y tareas, guardadas en el almacén local y nunca enviadas; tag: en una búsqueda las encuentra
@@ -3001,6 +3689,10 @@ max tags auto [options]
 | `--sync-first` | Leer descripciones actuales del servicio antes de clasificar. |
 | `--dry-run` | Previsualizar la clasificación guardada sin modificar el archivo. |
 
+**Returns:** derive local group/channel tags from cached metadata using keyword rules
+
+**Example:** `max tags auto`
+
 ### `max tags add`
 
 poner etiquetas en un chat, persona, mensaje o tarea
@@ -3021,6 +3713,10 @@ max tags add <tag> [options]
 | `--contact <person>` |la persona a etiquetar: su id, @nombredeusuario o nombre, como lo conoce el archivo local.|
 | `--message <message>` |el mensaje a etiquetar: su id en --chat, o un localizador msg: solo.|
 | `--task <id>` | la tarea que se etiqueta: su id o clave, como la muestra tasks list. |
+
+**Returns:** put tags on one chat, person, message or task
+
+**Example:** `max tags add <tag>`
 
 ### `max tags remove`
 
@@ -3044,6 +3740,10 @@ max tags remove <tag> [options]
 | `--task <id>` | la tarea a la que se quitan etiquetas: su id o clave, como la muestra tasks list. |
 | `--source <manual\|auto>` | eliminar solo la atribución a este origen. |
 
+**Returns:** take tags off one chat, person, message or task
+
+**Example:** `max tags remove <tag>`
+
 ### `max tags list`
 
 qué está etiquetado: los chats, mensajes y tareas de esta cuenta, y las personas de su servicio de mensajería
@@ -3055,6 +3755,10 @@ max tags list [query]
 | Argumento | | Qué es |
 |---|---|---|
 | `query` | opcional | condiciones campo:valor que acotan la lista; los campos están abajo. |
+
+**Returns:** tagging — tag, type, target, name, sources, created_at; every field: max commands schema tags list
+
+**Example:** `max tags list`
 
 ## `max mentions`
 
@@ -3078,6 +3782,10 @@ max mentions list [query] [options]
 | `--page <n>` | qué página, empezando por 1. |
 | `--new` | menciones sin decidir halladas desde la última ejecución de --new que las mostró todas; la primera ejecución muestra todas. |
 
+**Returns:** this account's mentions matching the query, newest first
+
+**Example:** `max mentions list kind:phone`, `max mentions list domain:google.com`, `max mentions list --new`
+
 ### `max mentions domains`
 
 los sitios a los que apuntan los enlaces de esta cuenta, los más enlazados primero, con los chats y la primera y la última vez
@@ -3095,6 +3803,10 @@ max mentions domains [query] [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | qué página, empezando por 1. |
 
+**Returns:** the sites this account's links point to, most linked first
+
+**Example:** `max mentions domains`, `max mentions domains status:found`
+
 ### `max mentions places`
 
 direcciones confirmadas en todas las cuentas, primero las más mencionadas; `mentions confirm <id>` añade una
@@ -3108,6 +3820,10 @@ max mentions places [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | qué página, empezando por 1. |
 
+**Returns:** confirmed street addresses, most mentioned first
+
+**Example:** `max mentions places`
+
 ### `max mentions show`
 
 una mención, el texto que la rodea y en cuántos otros sitios aparece su valor
@@ -3119,6 +3835,10 @@ max mentions show <id>
 | Argumento | | Qué es |
 |---|---|---|
 | `id` | obligatorio | el ID de la mención, de mentions list. |
+
+**Returns:** one mention, the text around it, and how many other places hold its value
+
+**Example:** `max mentions show 12`
 
 ### `max mentions confirm`
 
@@ -3140,6 +3860,10 @@ max mentions confirm <id> [person] [options]
 | `--all-in-chat` | un nombre: también cada lugar sin decidir con el mismo nombre en su chat. |
 | `--as-owner` | registrarlo como tuyo aunque la herramienta se ejecute en el terminal de un agente (AI_AGENT o CLAUDECODE definidas). |
 
+**Returns:** say what a mention is, everywhere its value is written
+
+**Example:** `max mentions confirm 12 person:7`, `max mentions confirm 15`, `max mentions confirm 31 person:7 --all-in-chat`
+
 ### `max mentions reject`
 
 no es una mención real: descartar su valor en todas partes y en las sincronizaciones siguientes; un nombre, solo donde aparece
@@ -3159,6 +3883,10 @@ max mentions reject <id> [options]
 | `--all-in-chat` | un nombre: también cada lugar sin decidir con el mismo nombre en su chat. |
 | `--as-owner` | registrarlo como tuyo aunque la herramienta se ejecute en el terminal de un agente (AI_AGENT o CLAUDECODE definidas). |
 
+**Returns:** dismiss a mention's value everywhere, and on later syncs
+
+**Example:** `max mentions reject 12`
+
 ### `max mentions rebuild`
 
 volver a buscar las menciones en todos los mensajes guardados; las decisiones se conservan
@@ -3172,6 +3900,10 @@ max mentions rebuild [kind]
 | Argumento | | Qué es |
 |---|---|---|
 | `kind` | opcional | solo este tipo: person-name después de añadir o renombrar personas. Uno de: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
+
+**Returns:** find the mentions of every stored message again; decisions are kept
+
+**Example:** `max mentions rebuild`, `max mentions rebuild person-name`
 
 ## `max images`
 
@@ -3192,6 +3924,10 @@ max images embed [options]
 | `--chat <chat>` | solo este chat; un chat: su ID o parte de su título. |
 | `--limit <n>` | como máximo esta cantidad de imágenes por ejecución; 100 si no se indica. |
 
+**Returns:** compute a vector for each stored picture that has none; resumes where it stopped
+
+**Example:** `max images embed`, `max images embed --limit 500`
+
 ### `max images models`
 
 modelos que leen imágenes, para `images embed` y la búsqueda de imágenes
@@ -3208,6 +3944,12 @@ max images models list [query]
 |---|---|---|
 | `query` | opcional | términos campo:valor; esta lista todavía no filtra por ninguno. |
 
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands schema images models list
+
+**Next usually:** `max models audio download <model>`, `max models text download <model>`, `max images models download <model>`
+
+**Example:** `max images models list`
+
 #### `max images models download`
 
 descargar un modelo de imágenes una vez, comprobado contra el sha256 que espera esta versión
@@ -3221,6 +3963,12 @@ max images models download <model>
 | Argumento | | Qué es |
 |---|---|---|
 | `model` | obligatorio | un ID de modelo de `images models list`. |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands schema images models download
+
+**Next usually:** `max models audio download <model>`, `max models text download <model>`
+
+**Example:** `max images models download clip-b32`
 
 ## `max metadata`
 
@@ -3238,6 +3986,10 @@ max metadata get [options]
 |---|---|
 | `--chat <chat>` | un chat almacenado. |
 
+**Returns:** a stored chat's cached description, as automatic tags read it
+
+**Example:** `max metadata get --chat 7`
+
 ### `max metadata refresh`
 
 vuelve a obtener las descripciones de grupos y canales y las guarda en caché
@@ -3254,13 +4006,17 @@ max metadata refresh [options]
 | `--only-missing` |Solo chats sin metadatos; sin --chat, todos los grupos/canales guardados.|
 | `--limit <number>` |Procesar 1–500 chats como máximo. Por defecto: `50`.|
 
+**Returns:** fetch group and channel descriptions again and cache them
+
+**Example:** `max metadata refresh --chat 7 --chat 8`, `max metadata refresh --only-missing --limit 20`
+
 ## `max search`
 
-buscar por texto: un recurso si lo conoces (messages, notes), o search all en mensajes y notas; el correo se busca con memo search mail
+buscar por texto: un recurso si lo conoces (messages, notes), o search all en mensajes y notas; para el correo, la CLI aparte memo: memo search mail
 
 ### `max search all`
 
-buscar mensajes del servicio de mensajería y notas en el almacén local, y mensajes en el servidor del servicio (--backend; las notas solo son locales), y transcripciones de una cuenta de reuniones cuando --source la nombra; primero la mejor coincidencia; no correo (memo search mail), tareas, personas, recuerdos ni proyectos. Úsalo cuando no sepas dónde se escribió algo; search messages o notes lee un solo tipo con todos sus campos
+buscar mensajes del servicio de mensajería y notas en el almacén local, y mensajes en el servidor del servicio (--backend; las notas solo son locales), y transcripciones de una cuenta de reuniones cuando --source la nombra; primero la mejor coincidencia; no correo (lo busca la CLI aparte memo: memo search mail), tareas, personas, recuerdos ni proyectos. Úsalo cuando no sepas dónde se escribió algo; search messages o notes lee un solo tipo con todos sus campos
 
 ```sh
 max search all <query> [options]
@@ -3281,6 +4037,10 @@ max search all <query> [options]
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
 | `--backend <archive\|server\|both>` | dónde buscar: el archivo local, el servidor del servicio de mensajería o ambos (predeterminado: both). Discovery usa solo el archivo. |
 | `--server-time <duration>` | dejar de esperar al servidor tras este tiempo (predeterminado: 5s). |
+
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 4 more; every field: max commands schema search all
+
+**Example:** `max search all "invoice"`
 
 ### `max search messages`
 
@@ -3317,6 +4077,12 @@ max search messages [query] [options]
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
 | `--saved <name\|id>` |ejecutar una búsqueda guardada o una ejecución anterior; Las opciones escritas aquí reemplazan las suyas.|
 
+**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, found_in, and 3 more; every field: max commands schema search messages
+
+**Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
+
+**Example:** `max search messages "invoice"`
+
 ### `max search notes`
 
 buscar en las notas —escritas en memo o importadas de una carpeta de notas— por palabras y, con el modelo de texto local, por significado; cada resultado indica cómo se encontró y a qué enlaza
@@ -3337,6 +4103,10 @@ max search notes <query> [options]
 | `--page <n>` | qué página, empezando por 1. |
 | `--exact` | solo las palabras tal como se escriben; no se busca por significado. |
 | `--timezone <zone>` | la zona horaria IANA para los límites de las fechas del calendario. |
+
+**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 5 more; every field: max commands schema search notes
+
+**Example:** `max search notes "invoice"`
 
 ### `max search conversations`
 
@@ -3371,6 +4141,10 @@ max search conversations <query> [options]
 | `--limit <n>` | cuántos resultados. |
 | `--catch-up` |Primero construya e incruste, en esta máquina, los chats en el alcance que cambiaron o que nunca se crearon, dentro de --max-chats y --max-chunks.|
 
+**Returns:** the conversations nearest to a query in meaning and in words, best first, in one chat or…
+
+**Example:** `max search conversations "invoice"`
+
 ## `max searches`
 
 búsquedas guardadas e historial de search messages y stats messages show en el almacenamiento local; --saved ejecuta una
@@ -3403,6 +4177,10 @@ max searches create <name> [query] [options]
 | `--selection <json>` | guardar la consulta de clasificación principal resuelta y sus opciones a partir de una vista detallada. |
 | `--replace` |sobrescribir una búsqueda guardada con el mismo nombre.|
 
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: max commands schema searches create
+
+**Example:** `max searches create daily "invoice"`
+
 ### `max searches show`
 
 una búsqueda guardada o ejecución anterior: su consulta, opciones y con qué frecuencia se ejecutó
@@ -3415,6 +4193,10 @@ max searches show <name|id>
 |---|---|---|
 | `name\|id` | obligatorio | el nombre de una búsqueda guardada o el ID de cualquier fila del historial de searches. |
 
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: max commands schema searches show
+
+**Example:** `max searches show <name|id>`
+
 ### `max searches list`
 
 las búsquedas guardadas, por nombre
@@ -3426,6 +4208,10 @@ max searches list [query]
 | Argumento | | Qué es |
 |---|---|---|
 | `query` | opcional | condiciones campo:valor; esta lista aún no filtra por ninguno. |
+
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: max commands schema searches list
+
+**Example:** `max searches list`
 
 ### `max searches history`
 
@@ -3441,6 +4227,10 @@ max searches history [options]
 | `--page <n>` | qué página, empezando por 1. |
 | `--all` | todas las filas, sin paginar. |
 
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: max commands schema searches history
+
+**Example:** `max searches history`
+
 ### `max searches delete`
 
 eliminar una búsqueda guardada o una ejecución del historial
@@ -3455,6 +4245,10 @@ max searches delete <name|id>
 |---|---|---|
 | `name\|id` | obligatorio | el nombre de una búsqueda guardada o el ID de cualquier fila del historial de searches. |
 
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: max commands schema searches delete
+
+**Example:** `max searches delete <name|id>`
+
 ### `max searches clear`
 
 vaciar la historia; las búsquedas guardadas permanecen
@@ -3464,6 +4258,10 @@ vaciar la historia; las búsquedas guardadas permanecen
 ```sh
 max searches clear
 ```
+
+**Returns:** empty the history; saved searches stay
+
+**Example:** `max searches clear`
 
 ## `max flood`
 
@@ -3478,6 +4276,10 @@ olvidarlos y levantar la pausa y el límite de ritmo del perfil cuando MAX ya no
 ```sh
 max flood clear
 ```
+
+**Returns:** forget them, lift the hold and the profile's pace, once MAX no longer limits the account;…
+
+**Example:** `max flood clear`
 
 ## `max models`
 
@@ -3499,6 +4301,12 @@ max models audio list [query]
 |---|---|---|
 | `query` | opcional | condiciones campo:valor; esta lista aún no filtra por ninguno. |
 
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands schema models audio list
+
+**Next usually:** `max models audio download <model>`, `max models text download <model>`, `max images models download <model>`
+
+**Example:** `max models audio list`
+
 #### `max models audio download`
 
 descargue un modelo de voz una vez, comparado con el sha256 que espera esta versión
@@ -3512,6 +4320,12 @@ max models audio download <model>
 | Argumento | | Qué es |
 |---|---|---|
 | `model` | obligatorio |una identificación de modelo de `models audio list`.|
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands schema models audio download
+
+**Next usually:** `max models text download <model>`, `max images models download <model>`
+
+**Example:** `max models audio download default`
 
 ### `max models text`
 
@@ -3528,6 +4342,12 @@ max models text list [query]
 | Argumento | | Qué es |
 |---|---|---|
 | `query` | opcional | condiciones campo:valor; esta lista aún no filtra por ninguno. |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands schema models text list
+
+**Next usually:** `max models text download <model>`, `max models audio download <model>`, `max images models download <model>`
+
+**Example:** `max models text list`
 
 #### `max models text download`
 
@@ -3547,6 +4367,12 @@ max models text download <model> [options]
 |---|---|
 | `--accept-terms` |aceptar los términos de licencia del modelo, para un modelo que tiene los suyos propios.|
 
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands schema models text download
+
+**Next usually:** `max models audio download <model>`, `max images models download <model>`
+
+**Example:** `max models text download default`
+
 #### `max models text key`
 
 Claves API para proveedores de incrustación y análisis
@@ -3565,6 +4391,10 @@ max models text key set <provider>
 |---|---|---|
 | `provider` | obligatorio |openai, anthropic o el host de un servidor --base-url que quiere una clave.|
 
+**Returns:** store a key, typed at a hidden prompt or piped on stdin — never as an argument
+
+**Example:** `max models text key set <provider>`
+
 #### `max models text key remove`
 
 olvidar una clave almacenada
@@ -3578,6 +4408,10 @@ max models text key remove <provider>
 | Argumento | | Qué es |
 |---|---|---|
 | `provider` | obligatorio |openai, anthropic o el host de un servidor.|
+
+**Returns:** forget a stored key
+
+**Example:** `max models text key remove <provider>`
 
 ## `max polls`
 
@@ -3595,6 +4429,10 @@ max polls show <chat> <message>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `message` | obligatorio | el ID del mensaje que contiene la encuesta. |
+
+**Returns:** a poll and its answer ids, as the message carries it now
+
+**Example:** `max polls show Team 1234`
 
 ### `max polls vote`
 
@@ -3616,6 +4454,10 @@ max polls vote <chat> <message> [answers] [options]
 |---|---|
 | `--retract` |retira tu voto.|
 
+**Returns:** vote in a poll, or take your vote back; the others see it unless the poll is anonymous
+
+**Example:** `max polls vote Team 1234`
+
 ### `max polls close`
 
 cierra tu propia encuesta; nadie puede votar después de eso y no se puede reabrir
@@ -3630,6 +4472,10 @@ max polls close <chat> <message>
 |---|---|---|
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `message` | obligatorio |la identificación de su propio mensaje que lleva la encuesta.|
+
+**Returns:** close your own poll; nobody can vote after that, and it cannot be reopened
+
+**Example:** `max polls close Team 1234`
 
 ### `max polls create`
 
@@ -3656,6 +4502,10 @@ max polls create <chat> <question> <answers> [options]
 | `--send-as <id>` | publicar como una de las identidades que enumera `chats send-as`; obligatorio cuando el chat publica como otra identidad de forma predeterminada. |
 | `--operation-id <id>` |repetir una creación cuyo resultado se desconocía, sin arriesgarse a una segunda encuesta.|
 
+**Returns:** send a poll to a chat, as a message of its own; public unless --anonymous
+
+**Example:** `max polls create Team <question> <answers>`
+
 ## `max reactions`
 
 reaccionar a los mensajes
@@ -3676,6 +4526,10 @@ max reactions add <chat> <message> <emoji>
 | `message` | obligatorio | el ID del mensaje. |
 | `emoji` | obligatorio |un emoji, por ejemplo 👍.|
 
+**Returns:** put your reaction on a message; it replaces the one you had
+
+**Example:** `max reactions add Team 1234 <emoji>`
+
 ### `max reactions remove`
 
 quita tu reacción de un mensaje
@@ -3691,6 +4545,10 @@ max reactions remove <chat> <message>
 | `chat` | obligatorio | un chat: su ID o parte de su título. |
 | `message` | obligatorio | el ID del mensaje. |
 
+**Returns:** take your reaction off a message
+
+**Example:** `max reactions remove Team 1234`
+
 ## `max recipients`
 
 los chats a los que este perfil puede enviar, cuando la lista está activada
@@ -3702,6 +4560,10 @@ los chats de la lista; vacío y apagado hasta el primer agregado
 ```sh
 max recipients list
 ```
+
+**Returns:** the chats on the list; empty and off until the first add
+
+**Example:** `max recipients list`
 
 ### `max recipients add`
 
@@ -3717,6 +4579,10 @@ max recipients add <chat>
 |---|---|---|
 | `chat` | obligatorio | ID del chat o parte de su nombre. |
 
+**Returns:** allow sending to this chat; the first add turns the list on
+
+**Example:** `max recipients add Team`
+
 ### `max recipients remove`
 
 deja de permitir este chat; la lista sigue encendida
@@ -3731,6 +4597,10 @@ max recipients remove <chat>
 |---|---|---|
 | `chat` | obligatorio |ID de chat o el título como lo muestra la lista.|
 
+**Returns:** stop allowing this chat; the list stays on
+
+**Example:** `max recipients remove Team`
+
 ### `max recipients clear`
 
 vacíe la lista y apáguela: este perfil puede enviar a cualquier chat nuevamente
@@ -3740,6 +4610,10 @@ vacíe la lista y apáguela: este perfil puede enviar a cualquier chat nuevament
 ```sh
 max recipients clear
 ```
+
+**Returns:** empty the list and turn it off: this profile may send to any chat again
+
+**Example:** `max recipients clear`
 
 ## `max sends`
 
@@ -3758,6 +4632,10 @@ max sends list [options]
 | `--limit <n>` | cuántos mostrar. |
 | `--page <n>` | qué página, empezando por 1. |
 | `--all` | todas las filas, sin paginar. |
+
+**Returns:** attempts to send, newest first: sent, refused, failed, or not known
+
+**Example:** `max sends list`
 
 ## `max inbox`
 
@@ -3782,6 +4660,12 @@ max inbox [query] [options]
 | `--mark-read` |también marque cada chat mostrado como leído, hasta el mensaje más reciente mostrado; el otro lado lo ve.|
 | `--no-mark-read` | no lo hagas, independientemente de lo que diga la configuración catch_up_marks_read. |
 
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: max commands schema inbox
+
+**Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
+
+**Example:** `max inbox`
+
 ## `max review`
 
 cada mensaje, el tuyo también, en chats que cambiaron desde un momento, para revisar quién debe qué
@@ -3805,6 +4689,12 @@ max review [query] [options]
 | `--mark-read` |también marque cada chat mostrado como leído, hasta el mensaje más reciente mostrado; el otro lado lo ve.|
 | `--no-mark-read` | no lo hagas, independientemente de lo que diga la configuración catch_up_marks_read. |
 
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: max commands schema review
+
+**Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
+
+**Example:** `max review`
+
 ## `max replies`
 
 reglas que responden mensajes por usted, guardadas en un archivo de este perfil
@@ -3823,6 +4713,10 @@ max replies add <id>
 |---|---|---|
 | `id` | obligatorio | letras minúsculas, dígitos y -; debe ser único en este perfil. |
 
+**Returns:** add a rule with every default written out, off until you edit and enable it
+
+**Example:** `max replies add 1`
+
 ### `max replies on`
 
 activar una regla de respuesta; su plantilla debe estar lista
@@ -3837,6 +4731,10 @@ max replies on <id>
 |---|---|---|
 | `id` | obligatorio | ID de la regla. |
 
+**Returns:** enable one reply rule; its template must be ready
+
+**Example:** `max replies on 1`
+
 ### `max replies off`
 
 desactivar una regla de respuesta
@@ -3850,6 +4748,10 @@ max replies off <id>
 | Argumento | | Qué es |
 |---|---|---|
 | `id` | obligatorio | ID de la regla. |
+
+**Returns:** disable one reply rule
+
+**Example:** `max replies off 1`
 
 ### `max replies edit`
 
@@ -3891,6 +4793,10 @@ max replies edit <id> [options]
 | `--timezone <zone>` | zona horaria IANA del intervalo de trabajo. |
 | `--no-hours` | borrar el intervalo de trabajo. |
 
+**Returns:** change only the named fields of a reply rule; lists replace the whole list
+
+**Example:** `max replies edit 1`
+
 ### `max replies audience`
 
 mostrar la audiencia de las respuestas, a quién pueden responder las reglas, o sustituir los campos indicados; un archivo nuevo responde a todos los destinatarios que coinciden con una regla
@@ -3909,6 +4815,10 @@ max replies audience [options]
 | `--deny-people <ids>` | sustituir los identificadores de remitentes prohibidos, separados por comas; vacío borra la lista; la prohibición tiene prioridad. |
 | `--deny-chats <ids>` |sustituir los identificadores de chats prohibidos, separados por comas; vacío borra la lista; la prohibición tiene prioridad.|
 
+**Returns:** show the reply audience, who the rules may answer, or replace its named fields; a new…
+
+**Example:** `max replies audience`
+
 ### `max replies consents`
 
 consentimiento para los modelos de respuesta una vez por perfil y endpoint, con exclusiones por chat
@@ -3921,6 +4831,10 @@ mostrar el consentimiento para el modelo de respuesta y las exclusiones de chats
 max replies consents show
 ```
 
+**Returns:** show the reply model consent and chat opt-outs; never calls a model
+
+**Example:** `max replies consents show`
+
 #### `max replies consents grant`
 
 permitir que los datos de mensajes entrantes se envíen al modelo de respuesta configurado para este perfil; se conservan las exclusiones de chats
@@ -3931,6 +4845,10 @@ permitir que los datos de mensajes entrantes se envíen al modelo de respuesta c
 max replies consents grant
 ```
 
+**Returns:** allow incoming message data to go to the configured reply model for this profile; chat…
+
+**Example:** `max replies consents grant`
+
 #### `max replies consents revoke`
 
 revocar de inmediato el consentimiento del perfil para el modelo de respuesta; se conservan las exclusiones de chats
@@ -3940,6 +4858,10 @@ revocar de inmediato el consentimiento del perfil para el modelo de respuesta; s
 ```sh
 max replies consents revoke
 ```
+
+**Returns:** revoke the profile's reply model consent immediately; chat opt-outs remain
+
+**Example:** `max replies consents revoke`
 
 #### `max replies consents deny`
 
@@ -3955,6 +4877,10 @@ max replies consents deny <chat>
 |---|---|---|
 | `chat` | obligatorio | ID del chat en el servicio, utilizado tal como se indica; nunca se resuelve a través de la red. |
 
+**Returns:** keep this chat's incoming data away from the reply model
+
+**Example:** `max replies consents deny Team`
+
 #### `max replies consents allow`
 
 eliminar la exclusión de este chat del modelo; no concede consentimiento al perfil
@@ -3968,6 +4894,10 @@ max replies consents allow <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | ID del chat en el servicio, utilizado tal como se indica; nunca se resuelve a través de la red. |
+
+**Returns:** remove this chat's model opt-out; does not grant profile consent
+
+**Example:** `max replies consents allow Team`
 
 ### `max replies test`
 
@@ -3986,6 +4916,10 @@ max replies test [rule] [options]
 | `--since-time <time>` |desde esta hora ISO 8601, o hace 2h/1d; Hace 7 días si no se da.|
 | `--ai` | llamar al modelo de respuesta configurado con datos de mensajes almacenados; requiere consentimiento para el modelo de respuesta, de lo contrario usa la alternativa. |
 
+**Returns:** what the rules would have answered in the stored messages, to whom and why — sends…
+
+**Example:** `max replies test`
+
 ### `max replies pause`
 
 detener todas las reglas de respuesta de este perfil a la vez, también un servicio en ejecución; reanudar lo deshace
@@ -3995,6 +4929,10 @@ detener todas las reglas de respuesta de este perfil a la vez, también un servi
 ```sh
 max replies pause
 ```
+
+**Returns:** stop every reply rule of this profile at once, a running serve too; resume undoes it
+
+**Example:** `max replies pause`
 
 ### `max replies resume`
 
@@ -4006,6 +4944,10 @@ dejar que las reglas de respuesta respondan nuevamente después de una pausa
 max replies resume
 ```
 
+**Returns:** let the reply rules answer again after pause
+
+**Example:** `max replies resume`
+
 ### `max replies status`
 
 si las reglas pueden enviar, cuáles están vigentes y a quién pueden responder
@@ -4013,6 +4955,10 @@ si las reglas pueden enviar, cuáles están vigentes y a quién pueden responder
 ```sh
 max replies status
 ```
+
+**Returns:** whether the rules may send, which are on, and who they may answer
+
+**Example:** `max replies status`
 
 ## `max serve`
 
@@ -4029,6 +4975,10 @@ max serve [options]
 | `--idle <duration>` |deténgase después de tanto tiempo sin que nadie lo use: 15 m, 1 h son 60 m.|
 | `--max-subscriber-buffer-bytes <bytes>` | búfer por observador antes de desconectarlo; 0 es sin límite. |
 | `--max-subscriber-total-buffer-bytes <bytes>` | presupuesto conjunto de búfer de todos los observadores; 0 es sin límite. |
+
+**Returns:** stay connected to MAX and stream new messages to `max watch`, until Ctrl-C
+
+**Example:** `max serve`
 
 ## `max server`
 
@@ -4048,6 +4998,10 @@ max server start [options]
 |---|---|
 | `--idle <duration>` | detenerse tras este tiempo sin uso — 15m, 1h. |
 
+**Returns:** start serve in the background — through the unit if one is installed — and answer once it…
+
+**Example:** `max server start`
+
 ### `max server stop`
 
 detener el servicio de este perfil: a través de la unidad si se ejecuta bajo uno
@@ -4057,6 +5011,10 @@ detener el servicio de este perfil: a través de la unidad si se ejecuta bajo un
 ```sh
 max server stop
 ```
+
+**Returns:** stop this profile's serve — through the unit if it runs under one
+
+**Example:** `max server stop`
 
 ### `max server restart`
 
@@ -4072,6 +5030,10 @@ max server restart [options]
 |---|---|
 | `--idle <duration>` | detenerse tras este tiempo sin uso — 15m, 1h. |
 
+**Returns:** stop it and start it again
+
+**Example:** `max server restart`
+
 ### `max server status`
 
 si el servicio se ejecuta para este perfil, desde cuándo, quién lo inició y la unidad, si la hay
@@ -4079,6 +5041,10 @@ si el servicio se ejecuta para este perfil, desde cuándo, quién lo inició y l
 ```sh
 max server status
 ```
+
+**Returns:** whether serve runs for this profile, since when, who started it, and the unit if there is…
+
+**Example:** `max server status`
 
 ### `max server logs`
 
@@ -4092,6 +5058,10 @@ max server logs [options]
 |---|---|
 | `-n, --limit <n>` | how many lines. Por defecto: `50`. |
 
+**Returns:** serve's latest log lines — from the journal under systemd, else its log file
+
+**Example:** `max server logs`
+
 ### `max server install`
 
 escriba una unidad de usuario systemd o un agente de lanzamiento para este perfil; no empieza nada
@@ -4102,6 +5072,10 @@ escriba una unidad de usuario systemd o un agente de lanzamiento para este perfi
 max server install
 ```
 
+**Returns:** write a systemd user unit or a launchd agent for this profile; starts nothing
+
+**Example:** `max server install`
+
 ### `max server uninstall`
 
 eliminar la unidad de este perfil; detenlo primero
@@ -4111,6 +5085,10 @@ eliminar la unidad de este perfil; detenlo primero
 ```sh
 max server uninstall
 ```
+
+**Returns:** remove this profile's unit; stop it first
+
+**Example:** `max server uninstall`
 
 ## `max schedule`
 
@@ -4137,6 +5115,10 @@ max schedule command <name> <args> [options]
 | `--at <HH:MM>` | cada día a esta hora local. |
 | `--at-time <time>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; después la programación se elimina sola. |
 
+**Returns:** run max <args…> on a timer — reads save what they read, so this is how a chat's history…
+
+**Example:** `max schedule command daily <args>`
+
 ### `max schedule agent`
 
 iniciar un agente (claude o codex) con una petición de forma programada; se ejecuta con MAX_READ_ONLY=1, así que lee y redacta borradores pero no puede enviar; su respuesta se guarda y recibes un aviso
@@ -4160,6 +5142,10 @@ max schedule agent <name> <harness> <prompt> [options]
 | `--at <HH:MM>` | cada día a esta hora local. |
 | `--at-time <time>` | una sola ejecución: dentro de 30m, 2d o a una hora ISO; después la programación se elimina sola. |
 
+**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with MAX_READ_ONLY=1,…
+
+**Example:** `max schedule agent daily claude <prompt>`
+
 ### `max schedule list`
 
 las programaciones, cuándo se ejecutan y cómo fue su última ejecución
@@ -4167,6 +5153,10 @@ las programaciones, cuándo se ejecutan y cómo fue su última ejecución
 ```sh
 max schedule list
 ```
+
+**Returns:** the schedules, when they run and how their last run went
+
+**Example:** `max schedule list`
 
 ### `max schedule run`
 
@@ -4182,6 +5172,10 @@ max schedule run <name>
 |---|---|---|
 | `name` | obligatorio |  |
 
+**Returns:** run a schedule now, as its timer would, and wait for it
+
+**Example:** `max schedule run daily`
+
 ### `max schedule remove`
 
 detener una programación y eliminar su temporizador; sus resultados anteriores se conservan
@@ -4195,6 +5189,10 @@ max schedule remove <name>
 | Argumento | | Qué es |
 |---|---|---|
 | `name` | obligatorio |  |
+
+**Returns:** stop a schedule and remove its timer; its past output stays
+
+**Example:** `max schedule remove daily`
 
 ### `max schedule exec`
 
@@ -4210,6 +5208,10 @@ max schedule exec <file>
 |---|---|---|
 | `file` | obligatorio |  |
 
+**Returns:** what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Example:** `max schedule exec ./report.pdf`
+
 ## `max watch`
 
 imprimir nuevos mensajes a medida que llegan, desde un `max serve` en ejecución
@@ -4221,6 +5223,10 @@ max watch [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--events` |mostrar también ediciones, eliminaciones, reacciones, lecturas y cambios de chats; cada línea indica su evento.|
+
+**Returns:** print new messages as they arrive, from a running `max serve`
+
+**Example:** `max watch`
 
 ## `max config`
 
@@ -4237,6 +5243,10 @@ max config show [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--bot` |la configuración que obtiene un comando `max bot` en este perfil, en lugar de la de la cuenta personal.|
+
+**Returns:** the profile, the profiles that exist, and each setting with where it came from
+
+**Example:** `max config show`
 
 ### `max config set`
 
@@ -4259,6 +5269,10 @@ max config set <setting> <value> [options]
 | `--personal` | solo para cuentas personales — la sección personal del archivo. |
 | `--bot` | solo para bots — la sección bot del archivo. |
 
+**Returns:** save a setting to the configuration file
+
+**Example:** `max config set <setting> <value>`
+
 ### `max config unset`
 
 eliminar una configuración del archivo de configuración
@@ -4278,6 +5292,10 @@ max config unset <setting> [options]
 | `--defaults` | cambiar lo que reciben todos los perfiles, no solo este. |
 | `--personal` | solo para cuentas personales — la sección personal del archivo. |
 | `--bot` | solo para bots — la sección bot del archivo. |
+
+**Returns:** remove a setting from the configuration file
+
+**Example:** `max config unset <setting>`
 
 ## `max doctor`
 
@@ -4310,6 +5328,10 @@ max doctor report create [options]
 | `--run <id>` |la ejecución sobre la que trata el informe; el más nuevo falló si no se proporciona.|
 | `--output <file>` |dónde escribirlo; un nuevo archivo en este directorio si no se proporciona.|
 
+**Returns:** write a problem report to a file, and print how to send it
+
+**Example:** `max doctor report create`
+
 ## `max runs`
 
 ejecuciones registradas: qué hizo esta herramienta y cuándo
@@ -4327,6 +5349,10 @@ max runs list [options]
 | `--limit <n>` |how many to show. Por defecto: `20`.|
 | `--page <n>` | qué página, empezando por 1. Por defecto: `1`. |
 
+**Returns:** recorded runs, newest first
+
+**Example:** `max runs list`
+
 ### `max runs show`
 
 una ejecución: qué fue, cómo terminó y todos los eventos que registró
@@ -4342,6 +5368,10 @@ max runs show <run-id> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--problems` | solo respuestas fallidas, avisos y caídas. |
+
+**Returns:** one run: what it was, how it ended, and every event it logged
+
+**Example:** `max runs show <run-id>`
 
 ### `max runs search`
 
@@ -4365,6 +5395,10 @@ max runs search [query] [options]
 | `--limit <n>` | matches per page, at most 100. Por defecto: `20`. |
 | `--page <n>` | result page. Por defecto: `1`. |
 
+**Returns:** search recorded diagnostic metadata and events; no message contents
+
+**Example:** `max runs search "invoice"`
+
 ### `max runs path`
 
 el directorio que contiene una ejecución
@@ -4376,6 +5410,10 @@ max runs path <run-id>
 | Argumento | | Qué es |
 |---|---|---|
 | `run-id` | obligatorio | un ID de `max runs list`. |
+
+**Returns:** the directory holding one run
+
+**Example:** `max runs path <run-id>`
 
 ## `max skill`
 
@@ -4393,6 +5431,10 @@ max skill show [name]
 |---|---|---|
 | `name` | opcional | una de las habilidades incluidas para una tarea: follow-ups, link-conversations. |
 
+**Returns:** print SKILL.md — `max skill install` puts it where Claude Code, Codex and Gemini CLI look…
+
+**Example:** `max skill show daily`
+
 ### `max skill install`
 
 escriba SKILL.md en \~/.claude/skills/max-cli/ (Claude Code) y \~/.agents/skills/max-cli/ (Codex, Gemini CLI)
@@ -4407,9 +5449,13 @@ max skill install [options]
 |---|---|
 | `--for <agents>` |which agents to install for. Uno de: `claude`, `agents`, `all`. Por defecto: `all`.|
 
+**Returns:** write SKILL.md to ~/.claude/skills/max-cli/ (Claude Code) and ~/.agents/skills/max-cli/…
+
+**Example:** `max skill install`
+
 ## `max commands`
 
-Comandos, opciones y códigos de salida como JSON: inspecciona una ruta de comando por llamada.
+todos los comandos por secciones, una línea cada uno; --json: el contrato, una ruta por llamada
 
 ### `max commands schema`
 
@@ -4422,6 +5468,10 @@ max commands schema <path>
 | Argumento | | Qué es |
 |---|---|---|
 | `path` | obligatorio |una ruta de comando, por ejemplo: stats messages show.|
+
+**Returns:** one command's argv and result schemas, effects, permissions and retry guidance
+
+**Example:** `max commands schema <path>`
 
 ## `max upgrade`
 
@@ -4437,6 +5487,10 @@ max upgrade [options]
 |---|---|
 | `--check` |diga si existe una versión más nueva y no instale nada.|
 
+**Returns:** upgrade max with the package manager that installed it; --check only looks
+
+**Example:** `max upgrade --check`, `max upgrade`
+
 ## `max complete`
 
 finalización del shell: `max complete zsh` imprime el script en el código fuente
@@ -4448,6 +5502,10 @@ max complete [words]
 | Argumento | | Qué es |
 |---|---|---|
 | `words` | opcional |  |
+
+**Returns:** shell completion: `max complete zsh` prints the script to source
+
+**Example:** `max complete`
 
 ## `max mcp`
 
@@ -4479,6 +5537,10 @@ max mcp config [options]
 |---|---|
 | `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
+**Returns:** print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes…
+
+**Example:** `max mcp config`
+
 ### `max mcp setup`
 
 agregue el servidor MCP local de este perfil a Codex o Claude Code
@@ -4498,6 +5560,10 @@ max mcp setup <client> [options]
 | `--allow-writes` |Reconocer que este perfil ofrece herramientas de escritura.|
 | `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
+**Returns:** add this profile's local MCP server to Codex or Claude Code
+
+**Example:** `max mcp setup <client>`
+
 ### `max mcp doctor`
 
 consulte la lista de herramientas y protocolo de enlace MCP local de este perfil
@@ -4509,6 +5575,10 @@ max mcp doctor [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
+
+**Returns:** check this profile's local MCP handshake and tool list
+
+**Example:** `max mcp doctor`
 
 ## `max bot`
 
@@ -4528,6 +5598,10 @@ verifique un token de bot con MAX y luego guárdelo, escrito en un mensaje ocult
 max bot auth set
 ```
 
+**Returns:** check a bot token with MAX, then keep it — typed at a hidden prompt or piped on stdin
+
+**Example:** `max bot auth set`
+
 #### `max bot auth show`
 
 de dónde proviene el token de bot de este perfil y qué bot es
@@ -4535,6 +5609,10 @@ de dónde proviene el token de bot de este perfil y qué bot es
 ```sh
 max bot auth show
 ```
+
+**Returns:** where this profile's bot token comes from, and which bot it is
+
+**Example:** `max bot auth show`
 
 #### `max bot auth remove`
 
@@ -4545,6 +5623,10 @@ olvidar el token de bot de este perfil
 ```sh
 max bot auth remove
 ```
+
+**Returns:** forget this profile's bot token
+
+**Example:** `max bot auth remove`
 
 ### `max bot list`
 
@@ -4558,6 +5640,10 @@ max bot list [options]
 |---|---|
 | `--check` |Pregúntale al servicio de mensajería quién es cada bot, con su token.|
 
+**Returns:** every name on this machine that has a bot token; --check asks MAX which bot each is
+
+**Example:** `max bot list`
+
 ### `max bot chats`
 
 los chats en los que se encuentra este bot: MAX no le da al bot una lista de ellos, por lo que `list` muestra los que ha visto
@@ -4570,6 +5656,10 @@ chats que este robot ha visto en esta máquina; no es una lista completa de MAX
 max bot chats list
 ```
 
+**Returns:** chats this bot has seen on this machine — not a complete list from MAX
+
+**Example:** `max bot chats list`
+
 #### `max bot chats show`
 
 un chat de MAX, y recuérdalo
@@ -4581,6 +5671,10 @@ max bot chats show <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | ID de chat, user:<id> para una persona o el título de un chat que este bot ha visto. |
+
+**Returns:** one chat from MAX, and remember it
+
+**Example:** `max bot chats show Team`
 
 #### `max bot chats leave`
 
@@ -4595,6 +5689,10 @@ max bot chats leave <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | ID de chat o el título de un chat que este bot ha visto. |
+
+**Returns:** take the bot out of a chat; only an admin of the chat can bring it back
+
+**Example:** `max bot chats leave Team`
 
 #### `max bot chats action`
 
@@ -4611,6 +5709,10 @@ max bot chats action <chat> <action>
 | `chat` | obligatorio | ID de chat, user:<id> para una persona o el título de un chat que este bot ha visto. |
 | `action` | obligatorio |lo que ve el chat. Uno de: `typing`, `photo`, `video`, `voice`, `file`.|
 
+**Returns:** show what the bot is doing in a chat — typing, sending a photo — for a few seconds
+
+**Example:** `max bot chats action Team typing`
+
 #### `max bot chats admins`
 
 los administradores de un chat en el que el bot es administrador
@@ -4626,6 +5728,10 @@ max bot chats admins list <chat>
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | ID de chat o el título de un chat que este bot ha visto. |
+
+**Returns:** the chat's admins and what each may do
+
+**Example:** `max bot chats admins list Team`
 
 #### `max bot chats admins add`
 
@@ -4647,6 +5753,10 @@ max bot chats admins add <chat> <person> [options]
 | `--can <rights>` |qué pueden hacer, separados por comas: leer, miembros, administradores, información, fijar, vincular, editar, eliminar.|
 | `--title <title>` |el título que se muestra al lado de su nombre.|
 
+**Returns:** make a member an admin with these rights
+
+**Example:** `max bot chats admins add Team Anna --can <rights>`
+
 #### `max bot chats admins remove`
 
 retirar los permisos de un administrador; ellos siguen siendo miembros
@@ -4661,6 +5771,10 @@ max bot chats admins remove <chat> <person>
 |---|---|---|
 | `chat` | obligatorio | ID de chat o el título de un chat que este bot ha visto. |
 | `person` | obligatorio | el ID de usuario de la persona. |
+
+**Returns:** take an admin's rights back; they stay a member
+
+**Example:** `max bot chats admins remove Team Anna`
 
 #### `max bot chats members`
 
@@ -4685,6 +5799,10 @@ max bot chats members remove <chat> <person> [options]
 |---|---|
 | `--block` |También evitar que regresen por el enlace del chat.|
 
+**Returns:** take a person out of a chat; their messages stay
+
+**Example:** `max bot chats members remove Team Anna`
+
 #### `max bot chats members list`
 
 miembros de un chat, una página a la vez — --cursor toma el `page.next_cursor` que proporcionó la última página
@@ -4702,6 +5820,10 @@ max bot chats members list <chat> [options]
 | `--limit <n>` | cuántos, hasta 100. |
 | `--cursor <cursor>` |continúa desde aquí.|
 
+**Returns:** members of a chat, a page at a time — --cursor takes the `page.next_cursor` the last page…
+
+**Example:** `max bot chats members list Team`
+
 #### `max bot chats members add`
 
 añadir personas a un chat por ID de usuario, 100 como máximo; el bot debe ser un administrador con permiso para añadir miembros
@@ -4716,6 +5838,10 @@ max bot chats members add <chat> <users>
 |---|---|---|
 | `chat` | obligatorio |  |
 | `users` | obligatorio |  |
+
+**Returns:** add people to a chat by user id, at most 100; the bot must be an admin that may add…
+
+**Example:** `max bot chats members add Team <users>`
 
 #### `max bot chats rules`
 
@@ -4733,6 +5859,10 @@ max bot chats rules show <chat>
 |---|---|---|
 | `chat` | obligatorio | ID del grupo o el título de un grupo que este bot ha visto. |
 
+**Returns:** the chat's rules; the defaults, marked not saved, if it has none yet
+
+**Example:** `max bot chats rules show Team`
+
 #### `max bot chats rules set`
 
 cambie una regla: confiable, bloqueado, nombres bloqueados, enlaces, invitaciones, reenvíos, personas bloqueadas, mensajes de inundación, minutos de inundación, acción de inundación, días de cuenta nueva, acción de cuenta nueva, consentimiento.eliminar, consentimiento.eliminar
@@ -4749,6 +5879,10 @@ max bot chats rules set <chat> <key> <value>
 | `key` | obligatorio | la regla. |
 | `value` | obligatorio | its new value. |
 
+**Returns:** change one rule — trusted, blocked, blockedNames, links, invites, forwards,…
+
+**Example:** `max bot chats rules set Team <key> <value>`
+
 #### `max bot chats rules unset`
 
 devolver una regla a su valor predeterminado
@@ -4763,6 +5897,10 @@ max bot chats rules unset <chat> <key>
 |---|---|---|
 | `chat` | obligatorio | ID del grupo o el título de un grupo que este bot ha visto. |
 | `key` | obligatorio | la regla. |
+
+**Returns:** put one rule back to its default
+
+**Example:** `max bot chats rules unset Team <key>`
 
 #### `max bot chats moderate`
 
@@ -4785,6 +5923,10 @@ max bot chats moderate <chat> [options]
 | `--allow-dangerous` |sí a toda acción cuyo nivel en las reglas del grupo sea preguntar.|
 | `--no-block` |eliminar sin prohibir; De forma predeterminada, una persona eliminada no puede regresar mediante el enlace.|
 | `--max-actions <n>` | como máximo este número de acciones por ejecución; 10 si no se indica. |
+
+**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot
+
+**Example:** `max bot chats moderate Team`
 
 ### `max bot messages`
 
@@ -4817,6 +5959,10 @@ max bot messages send <chat> [text] [options]
 | `--voice <file>` |envía un archivo Ogg Opus como mensaje de voz, solo, sin texto.|
 | `--allow-any-file` | enviar un archivo incluso desde carpetas de credenciales o de la propia CLI. |
 
+**Returns:** send a message as the bot; without [text], the text is read from stdin
+
+**Example:** `max bot messages send Team "on my way"`
+
 #### `max bot messages list`
 
 los últimos mensajes en un chat; donde MAX no le da historial al bot y con --offline, los que este bot ha visto en esta máquina
@@ -4833,6 +5979,10 @@ max bot messages list <chat> [options]
 |---|---|
 | `--limit <n>` |Cuantos, los más nuevos.|
 
+**Returns:** the latest messages in a chat; where MAX gives a bot no history, and with --offline, the…
+
+**Example:** `max bot messages list Team`
+
 #### `max bot messages show`
 
 un mensaje por su id en un chat
@@ -4845,6 +5995,10 @@ max bot messages show <chat> <message>
 |---|---|---|
 | `chat` | obligatorio | ID de chat, user:<id> para una persona o el título de un chat que este bot ha visto. |
 | `message` | obligatorio | ID del mensaje. |
+
+**Returns:** one message by its id in a chat
+
+**Example:** `max bot messages show Team 1234`
 
 #### `max bot messages edit`
 
@@ -4867,6 +6021,10 @@ max bot messages edit <chat> <message> <text> [options]
 | `--md` | interpretar el Markdown de este servicio de mensajería; la sintaxis admitida está en su guía de formato. |
 | `--html` |el texto es HTML: <b>, <i>, <a href>, <code>.|
 
+**Returns:** replace the text of a message the bot sent
+
+**Example:** `max bot messages edit Team 1234 "on my way"`
+
 #### `max bot messages delete`
 
 eliminar mensajes en un chat en el que el bot puede eliminar; no se puede deshacer
@@ -4885,6 +6043,10 @@ max bot messages delete <chat> <messages> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--allow-dangerous` |eliminar sin preguntar.|
+
+**Returns:** delete messages in a chat the bot can delete in; it cannot be undone
+
+**Example:** `max bot messages delete Team <messages>`
 
 #### `max bot messages pin`
 
@@ -4905,6 +6067,10 @@ max bot messages pin <chat> <message> [options]
 |---|---|
 | `--notify` |decirle a los miembros del chat.|
 
+**Returns:** pin a message in a chat; quietly unless --notify
+
+**Example:** `max bot messages pin Team 1234`
+
 #### `max bot messages unpin`
 
 desanclar un mensaje en un chat
@@ -4919,6 +6085,10 @@ max bot messages unpin <chat> <message>
 |---|---|---|
 | `chat` | obligatorio | ID de chat, user:<id> para una persona o el título de un chat que este bot ha visto. |
 | `message` | obligatorio | ID del mensaje. |
+
+**Returns:** unpin a message in a chat
+
+**Example:** `max bot messages unpin Team 1234`
 
 #### `max bot messages between`
 
@@ -4937,6 +6107,10 @@ max bot messages between <people> [options]
 | `--all-bots` | leer también la copia de cualquier otro bot en este ordenador que permita read_other_bots. |
 | `--bots <profiles>` | leer también las copias de estos bots, separados por comas — cada uno permitido por read_other_bots. |
 | `--limit <n>` |cuántos de los últimos mensajes de cada chat.|
+
+**Returns:** what two or more people wrote in the chats they have all written in — from the local…
+
+**Example:** `max bot messages between Anna`
 
 ### `max bot search`
 
@@ -4963,6 +6137,10 @@ max bot search messages [query] [options]
 | `--newest` | primero los más recientes en lugar de los mejores. |
 | `--from <who>` |sólo lo que escribió esta persona: una identificación, @nombre de usuario o parte de un nombre; repítalo para cualquiera de varios.|
 
+**Returns:** search the messages this bot has read, sent or received on this machine — the local copy…
+
+**Example:** `max bot search messages "invoice"`
+
 ### `max bot recipients`
 
 los chats en los que este bot puede escribir; sin lista, todos los chats: `clear` elimina la lista
@@ -4974,6 +6152,10 @@ los chats en la lista, o nada cuando no hay lista
 ```sh
 max bot recipients list
 ```
+
+**Returns:** the chats on the list, or nothing when there is no list
+
+**Example:** `max bot recipients list`
 
 #### `max bot recipients add`
 
@@ -4989,6 +6171,10 @@ max bot recipients add <chat>
 |---|---|---|
 | `chat` | obligatorio |  |
 
+**Returns:** allow a chat: its id, `user:<id>`, or the title of a chat this bot has seen
+
+**Example:** `max bot recipients add Team`
+
 #### `max bot recipients remove`
 
 eliminar un chat de la lista
@@ -5003,6 +6189,10 @@ max bot recipients remove <chat>
 |---|---|---|
 | `chat` | obligatorio |  |
 
+**Returns:** take a chat off the list
+
+**Example:** `max bot recipients remove Team`
+
 #### `max bot recipients clear`
 
 eliminar la lista: el bot puede volver a escribir en cualquier chat
@@ -5013,17 +6203,25 @@ eliminar la lista: el bot puede volver a escribir en cualquier chat
 max bot recipients clear
 ```
 
+**Returns:** remove the list: the bot may write to any chat again
+
+**Example:** `max bot recipients clear`
+
 ### `max bot sends`
 
 Lo que este robot envió, editó y eliminó de esta máquina: identificadores y resultados, nunca mensajes de texto.
 
 #### `max bot sends list`
 
-
+every send, edit and delete this bot made from this machine, with its outcome
 
 ```sh
 max bot sends list
 ```
+
+**Returns:** every send, edit and delete this bot made from this machine, with its outcome
+
+**Example:** `max bot sends list`
 
 ### `max bot watch`
 
@@ -5039,6 +6237,10 @@ max bot watch [options]
 |---|---|
 | `--events` |también ediciones, eliminaciones, botones presionados y personas yendo y viniendo; cada línea nombra su evento.|
 | `--types <types>` |sólo estos tipos de actualización, separados por comas, en palabras del servicio de mensajería.|
+
+**Returns:** print new messages as they arrive and keep them, until Ctrl-C or --timeout (either ends…
+
+**Example:** `max bot watch`
 
 ### `max bot callbacks`
 
@@ -5063,6 +6265,10 @@ max bot callbacks answer <callback> [options]
 | `--text <text>` |el nuevo texto del mensaje.|
 | `--notification <text>` |una nota que sólo ve la persona que presionó.|
 
+**Returns:** answer a pressed button by its callback id: --notification shows the person a one-time…
+
+**Example:** `max bot callbacks answer <callback>`
+
 ### `max bot commands`
 
 el menú de comandos del bot: lo que la gente ve después /
@@ -5074,6 +6280,10 @@ los comandos en el menú ahora
 ```sh
 max bot commands list
 ```
+
+**Returns:** the commands in the menu now
+
+**Example:** `max bot commands list`
 
 #### `max bot commands set`
 
@@ -5089,6 +6299,10 @@ max bot commands set <commands>
 |---|---|---|
 | `commands` | obligatorio |nombre=descripción, uno por comando.|
 
+**Returns:** replace the whole menu: each command as name=description, e.g. start=Begin
+
+**Example:** `max bot commands set <commands>`
+
 #### `max bot commands clear`
 
 vaciar el menú
@@ -5098,6 +6312,10 @@ vaciar el menú
 ```sh
 max bot commands clear
 ```
+
+**Returns:** empty the menu
+
+**Example:** `max bot commands clear`
 
 ### `max bot webhooks`
 
@@ -5110,6 +6328,10 @@ los webhooks que tiene este bot
 ```sh
 max bot webhooks list
 ```
+
+**Returns:** the webhooks this bot has
+
+**Example:** `max bot webhooks list`
 
 #### `max bot webhooks set`
 
@@ -5131,6 +6353,10 @@ max bot webhooks set <url> [options]
 | `--secret-stdin` |un secreto que el servicio de mensajería envía con cada actualización, solicitado o leído desde una tubería.|
 | `--add` |mantenga los webhooks ya configurados y agregue este junto a ellos.|
 
+**Returns:** send this bot's updates to an HTTPS address; refused while another is set
+
+**Example:** `max bot webhooks set https://example.com`
+
 #### `max bot webhooks delete`
 
 dejar de enviar actualizaciones a esta dirección; sin nada restante, `bot watch` vuelve a funcionar
@@ -5144,6 +6370,10 @@ max bot webhooks delete <url>
 | Argumento | | Qué es |
 |---|---|---|
 | `url` | obligatorio |la dirección.|
+
+**Returns:** stop sending updates to this address; with none left, `bot watch` works again
+
+**Example:** `max bot webhooks delete https://example.com`
 
 ### `max bot contacts`
 
@@ -5167,6 +6397,10 @@ max bot contacts show <who> [options]
 | `--bots <profiles>` | leer también las copias de estos bots, separados por comas — cada uno permitido por read_other_bots. |
 | `--limit <n>` |cuantos mensajes del chat privado.|
 | `--sync-first` |Primero lea el chat privado con ellos nuevamente desde el Messenger: una solicitud.|
+
+**Returns:** one person: the chats they wrote in (with their last message there) and the latest…
+
+**Example:** `max bot contacts show <who>`
 
 ### `max bot store`
 
@@ -5194,6 +6428,10 @@ max bot store fetch <chat> [options]
 | `--since-time <time>` |deténgase una vez que llegue a mensajes anteriores a este: ISO 8601, o hace 2 h/1 d.|
 | `--last <n>` |se detiene una vez que se retienen los n mensajes más nuevos.|
 
+**Returns:** fetch a chat's history into the bot's local copy, newest first; run it again to continue
+
+**Example:** `max bot store fetch Team`
+
 ### `max bot mcp`
 
 ofrecer este bot a un agente mediante MCP por entrada y salida estándar — `claude mcp add sales-bot -- max sales bot mcp`
@@ -5206,6 +6444,10 @@ mostrar la entrada mcpServers para Claude Desktop, Cursor y otros, con rutas com
 max bot mcp config
 ```
 
+**Returns:** print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes…
+
+**Example:** `max bot mcp config`
+
 ### `max bot me`
 
 El bot al que pertenece el token de este perfil: nombre, identificación, descripción, comandos.
@@ -5213,6 +6455,10 @@ El bot al que pertenece el token de este perfil: nombre, identificación, descri
 ```sh
 max bot me
 ```
+
+**Returns:** the bot this profile's token belongs to: name, id, description, commands
+
+**Example:** `max bot me`
 
 ### `max bot comments`
 
@@ -5234,6 +6480,10 @@ max bot comments list <message> [options]
 |---|---|
 | `--limit <n>` | cuántos, hasta 100. |
 
+**Returns:** the comments under a post, newest last
+
+**Example:** `max bot comments list 1234`
+
 #### `max bot comments get`
 
 un comentario debajo de una publicación
@@ -5246,6 +6496,10 @@ max bot comments get <message> <comment>
 |---|---|---|
 | `message` | obligatorio |  |
 | `comment` | obligatorio |  |
+
+**Returns:** one comment under a post
+
+**Example:** `max bot comments get 1234 <comment>`
 
 #### `max bot comments send`
 
@@ -5265,6 +6519,10 @@ max bot comments send <message> <text> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--format <format>` |cómo se marca el texto. Uno de: `markdown`, `html`.|
+
+**Returns:** comment under a post as the bot; - reads stdin
+
+**Example:** `max bot comments send 1234 "on my way"`
 
 #### `max bot comments edit`
 
@@ -5286,6 +6544,10 @@ max bot comments edit <message> <comment> <text> [options]
 |---|---|
 | `--format <format>` |cómo se marca el texto. Uno de: `markdown`, `html`.|
 
+**Returns:** replace the text of a comment the bot wrote; - reads stdin
+
+**Example:** `max bot comments edit 1234 <comment> "on my way"`
+
 #### `max bot comments delete`
 
 eliminar un comentario debajo de una publicación
@@ -5304,6 +6566,10 @@ max bot comments delete <message> <comment> [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--allow-dangerous` |omitir la confirmación de bot.messages.delete en el nivel ask.|
+
+**Returns:** delete a comment under a post
+
+**Example:** `max bot comments delete 1234 <comment>`
 
 ### `max bot uploads`
 
@@ -5328,6 +6594,10 @@ max bot uploads put <file> [options]
 | `--type <type>` |subirlo como este tipo en lugar de adivinar por extensión. Uno de: `image`, `video`, `audio`, `file`.|
 | `--allow-any-file` | subir un archivo incluso desde carpetas de credenciales o de aplicaciones WireCat. |
 
+**Returns:** upload a file from disk and print the attachment to put in a message's `attachments` —…
+
+**Example:** `max bot uploads put ./report.pdf`
+
 ### `max bot api`
 
 cada operación de la API de Bot oficial, generada a partir de su esquema: docs/dev/bot-api-coverage.md
@@ -5348,6 +6618,10 @@ Obtenga información actual del bot: lea (GET /me)
 max bot api get-my-info
 ```
 
+**Returns:** Get current bot info — read (GET /me)
+
+**Example:** `max bot api get-my-info`
+
 #### `max bot api edit-my-commands`
 
 Editar comandos de bot actuales: escribir (PATCH /me/commands)
@@ -5363,6 +6637,10 @@ max bot api edit-my-commands [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Edit current bot commands — write (PATCH /me/commands)
+
+**Example:** `max bot api edit-my-commands`
+
 #### `max bot api get-chat`
 
 Obtener chat - leer (GET /chats/{chatId})
@@ -5374,6 +6652,10 @@ max bot api get-chat [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat-id <value>` |Chat solicitado o identificador de canal.|
+
+**Returns:** Get chat — read (GET /chats/{chatId})
+
+**Example:** `max bot api get-chat --chat-id <value>`
 
 #### `max bot api edit-chat`
 
@@ -5391,6 +6673,10 @@ max bot api edit-chat [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Edit chat or channel info — write (PATCH /chats/{chatId})
+
+**Example:** `max bot api edit-chat --chat-id <value>`
+
 #### `max bot api send-action`
 
 Enviar acción – escribir (POST /chats/{chatId}/actions)
@@ -5407,6 +6693,10 @@ max bot api send-action [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Send action — write (POST /chats/{chatId}/actions)
+
+**Example:** `max bot api send-action --chat-id <value>`
+
 #### `max bot api get-pinned-message`
 
 Obtener mensaje fijado: leer (GET /chats/{chatId}/pin)
@@ -5418,6 +6708,10 @@ max bot api get-pinned-message [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat-id <value>` |Identificador de chat para obtener su mensaje fijado.|
+
+**Returns:** Get pinned message — read (GET /chats/{chatId}/pin)
+
+**Example:** `max bot api get-pinned-message --chat-id <value>`
 
 #### `max bot api pin-message`
 
@@ -5435,6 +6729,10 @@ max bot api pin-message [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Pin message — write (PUT /chats/{chatId}/pin)
+
+**Example:** `max bot api pin-message --chat-id <value>`
+
 #### `max bot api unpin-message`
 
 Desanclar mensaje: escribir (BORRAR /chats/{chatId}/pin)
@@ -5449,6 +6747,10 @@ max bot api unpin-message [options]
 |---|---|
 | `--chat-id <value>` |Identificador de chat para eliminar mensajes fijados.|
 
+**Returns:** Unpin message — write (DELETE /chats/{chatId}/pin)
+
+**Example:** `max bot api unpin-message --chat-id <value>`
+
 #### `max bot api get-membership`
 
 Obtenga membresía de chat o canal: lea (GET /chats/{chatId}/members/me)
@@ -5460,6 +6762,10 @@ max bot api get-membership [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat-id <value>` | ID del chat o canal. |
+
+**Returns:** Get chat or channel membership — read (GET /chats/{chatId}/members/me)
+
+**Example:** `max bot api get-membership --chat-id <value>`
 
 #### `max bot api leave-chat`
 
@@ -5475,6 +6781,10 @@ max bot api leave-chat [options]
 |---|---|
 | `--chat-id <value>` | ID del chat o canal. |
 
+**Returns:** Leave chat — destructive (DELETE /chats/{chatId}/members/me)
+
+**Example:** `max bot api leave-chat --chat-id <value>`
+
 #### `max bot api get-admins`
 
 Obtenga administradores de chat o canal: lea (GET /chats/{chatId}/members/admins)
@@ -5486,6 +6796,10 @@ max bot api get-admins [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--chat-id <value>` | ID del chat o canal. |
+
+**Returns:** Get chat or channel admins — read (GET /chats/{chatId}/members/admins)
+
+**Example:** `max bot api get-admins --chat-id <value>`
 
 #### `max bot api post-admins`
 
@@ -5503,6 +6817,10 @@ max bot api post-admins [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Set chat or channel admins — write (POST /chats/{chatId}/members/admins)
+
+**Example:** `max bot api post-admins --chat-id <value>`
+
 #### `max bot api delete-admins`
 
 Revocar derechos de administrador: escriba (BORRAR /chats/{chatId}/members/admins/{userId})
@@ -5518,6 +6836,10 @@ max bot api delete-admins [options]
 | `--chat-id <value>` | ID del chat o canal. |
 | `--user-id <value>` | User identifier. |
 
+**Returns:** Revoke admin rights — write (DELETE /chats/{chatId}/members/admins/{userId})
+
+**Example:** `max bot api delete-admins --chat-id <value> --user-id <value>`
+
 #### `max bot api get-members`
 
 Obtener miembros: lea (GET /chats/{chatId}/members)
@@ -5532,6 +6854,10 @@ max bot api get-members [options]
 | `--user-ids <value>` |Lista separada por comas de identificadores de usuarios para obtener su membresía. Cuando se pasa este parámetro, se ignoran tanto `count` como `marker`.|
 | `--marker <value>` | Marker. |
 | `--count <value>` | Count. |
+
+**Returns:** Get members — read (GET /chats/{chatId}/members)
+
+**Example:** `max bot api get-members --chat-id <value>`
 
 #### `max bot api add-members`
 
@@ -5549,6 +6875,10 @@ max bot api add-members [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Add members — write (POST /chats/{chatId}/members)
+
+**Example:** `max bot api add-members --chat-id <value>`
+
 #### `max bot api remove-member`
 
 Eliminar miembro: escriba (BORRAR /chats/{chatId}/members)
@@ -5565,6 +6895,10 @@ max bot api remove-member [options]
 | `--user-id <value>` |ID de usuario para eliminar del chat o canal.|
 | `--block <value>` |Establezca en `true` si el usuario debe ser bloqueado en el chat.|
 
+**Returns:** Remove member — write (DELETE /chats/{chatId}/members)
+
+**Example:** `max bot api remove-member --chat-id <value> --user-id <value>`
+
 #### `max bot api get-subscriptions`
 
 Obtener suscripciones: leer (OBTENER /suscripciones)
@@ -5572,6 +6906,10 @@ Obtener suscripciones: leer (OBTENER /suscripciones)
 ```sh
 max bot api get-subscriptions
 ```
+
+**Returns:** Get subscriptions — read (GET /subscriptions)
+
+**Example:** `max bot api get-subscriptions`
 
 #### `max bot api subscribe`
 
@@ -5588,6 +6926,10 @@ max bot api subscribe [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Subscribe — write (POST /subscriptions)
+
+**Example:** `max bot api subscribe`
+
 #### `max bot api unsubscribe`
 
 Cancelar suscripción — escritura (DELETE /subscriptions)
@@ -5602,6 +6944,10 @@ max bot api unsubscribe [options]
 |---|---|
 | `--url <value>` |URL para eliminar de las suscripciones a WebHook.|
 
+**Returns:** Unsubscribe — write (DELETE /subscriptions)
+
+**Example:** `max bot api unsubscribe --url <value>`
+
 #### `max bot api get-upload-url`
 
 Obtener URL de carga: escribir (POST /uploads)
@@ -5615,6 +6961,10 @@ max bot api get-upload-url [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--type <value>` |Tipo de archivo subido: image, audio, video, file.|
+
+**Returns:** Get upload URL — write (POST /uploads)
+
+**Example:** `max bot api get-upload-url --type <value>`
 
 #### `max bot api get-messages`
 
@@ -5634,6 +6984,10 @@ max bot api get-messages [options]
 | `--after <value>` |Mensajes después de la marca de tiempo.|
 | `--count <value>` |Cantidad máxima de mensajes en respuesta.|
 
+**Returns:** Get messages — read (GET /messages)
+
+**Example:** `max bot api get-messages`
+
 #### `max bot api send-message`
 
 Enviar mensaje - escribir (POST /mensajes)
@@ -5652,6 +7006,10 @@ max bot api send-message [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Send message — write (POST /messages)
+
+**Example:** `max bot api send-message`
+
 #### `max bot api edit-message`
 
 Editar mensaje - escribir (PUT /mensajes)
@@ -5668,6 +7026,10 @@ max bot api edit-message [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Edit message — write (PUT /messages)
+
+**Example:** `max bot api edit-message --message-id <value>`
+
 #### `max bot api delete-message`
 
 Eliminar mensaje: destructivo (BORRAR /mensajes)
@@ -5683,6 +7045,10 @@ max bot api delete-message [options]
 | `--message-id <value>` |Eliminando identificador de mensaje.|
 | `--allow-dangerous` |omitir la confirmación de bot.messages.delete en el nivel ask.|
 
+**Returns:** Delete message — destructive (DELETE /messages)
+
+**Example:** `max bot api delete-message --message-id <value>`
+
 #### `max bot api get-message-by-id`
 
 Obtener mensaje: leer (GET /messages/{messageId})
@@ -5694,6 +7060,10 @@ max bot api get-message-by-id [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--message-id <value>` |Identificador de mensaje (`mid`) para recibir un solo mensaje en el chat o canal.|
+
+**Returns:** Get message — read (GET /messages/{messageId})
+
+**Example:** `max bot api get-message-by-id --message-id <value>`
 
 #### `max bot api get-comments`
 
@@ -5710,6 +7080,10 @@ max bot api get-comments [options]
 | `--before <value>` |Comentarios antes de la marca de tiempo.|
 | `--after <value>` |Comentarios después de la marca de tiempo.|
 | `--count <value>` |Cantidad máxima de comentarios en respuesta.|
+
+**Returns:** Get comments — read (GET /messages/{messageId}/comments)
+
+**Example:** `max bot api get-comments --message-id <value>`
 
 #### `max bot api send-comment`
 
@@ -5728,6 +7102,10 @@ max bot api send-comment [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Send comment — write (POST /messages/{messageId}/comments)
+
+**Example:** `max bot api send-comment --message-id <value>`
+
 #### `max bot api edit-comment`
 
 Editar comentario: escribir (PUT /messages/{messageId}/comments)
@@ -5745,6 +7123,10 @@ max bot api edit-comment [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Edit comment — write (PUT /messages/{messageId}/comments)
+
+**Example:** `max bot api edit-comment --message-id <value> --comment-id <value>`
+
 #### `max bot api delete-comment`
 
 Eliminar comentario: destructivo (BORRAR /messages/{messageId}/comments)
@@ -5761,6 +7143,10 @@ max bot api delete-comment [options]
 | `--comment-id <value>` | Deleting comment identifier. |
 | `--allow-dangerous` |omitir la confirmación de bot.messages.delete en el nivel ask.|
 
+**Returns:** Delete comment — destructive (DELETE /messages/{messageId}/comments)
+
+**Example:** `max bot api delete-comment --message-id <value> --comment-id <value>`
+
 #### `max bot api get-comment-by-id`
 
 Obtener comentario: leer (GET /messages/{messageId}/comments/{commentId})
@@ -5774,6 +7160,10 @@ max bot api get-comment-by-id [options]
 | `--message-id <value>` | ID (`mid`) del mensaje comentado. |
 | `--comment-id <value>` |Identificador de comentario (`mid`) para obtener un comentario único en el canal.|
 
+**Returns:** Get comment — read (GET /messages/{messageId}/comments/{commentId})
+
+**Example:** `max bot api get-comment-by-id --message-id <value> --comment-id <value>`
+
 #### `max bot api get-video-attachment-details`
 
 Obtenga detalles del video: lea (GET /videos/{videoToken})
@@ -5785,6 +7175,10 @@ max bot api get-video-attachment-details [options]
 | Opción | Para qué sirve |
 |---|---|
 | `--video-token <value>` | Video attachment token. |
+
+**Returns:** Get video details — read (GET /videos/{videoToken})
+
+**Example:** `max bot api get-video-attachment-details --video-token <value>`
 
 #### `max bot api answer-on-callback`
 
@@ -5803,6 +7197,10 @@ max bot api answer-on-callback [options]
 | `--body <json>` | el cuerpo de la solicitud en JSON; - lo lee de stdin. |
 | `--body-file <path>` | el cuerpo de la solicitud desde un archivo JSON; - es stdin. |
 
+**Returns:** Answer on callback — write (POST /answers)
+
+**Example:** `max bot api answer-on-callback --callback-id <value>`
+
 #### `max bot api get-updates`
 
 Obtener actualizaciones — escritura (GET /updates)
@@ -5819,6 +7217,26 @@ max bot api get-updates [options]
 | `--poll-timeout <value>` |Tiempo de espera en segundos para long polling.|
 | `--marker <value>` |Pase `null` para obtener actualizaciones que aún no recibió.|
 | `--types <value>` |Lista separada por comas de los tipos de actualizaciones que su bot desea recibir.|
+
+**Returns:** Get updates — write (GET /updates)
+
+**Example:** `max bot api get-updates`
+
+## `max guide`
+
+scenarios: the commands for a common task, in order, and why each
+
+```sh
+max guide [name]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | opcional | one scenario; without it, the list. |
+
+**Returns:** scenarios: the commands for a common task, in order, and why each
+
+**Example:** `max guide`, `max guide <name> --json`
 
 ## Códigos de salida
 

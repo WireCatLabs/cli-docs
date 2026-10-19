@@ -58,6 +58,9 @@ For another profile, put its name first: `max work mcp setup codex`. Setup uses 
 claude mcp add max -- max personal mcp
 ```
 
+Caution: by default an agent can send messages in your name through this server. Restrict permissions first: the `readonly` and `deny` levels ([permissions](./permissions.md)) or the `--permission` flag, for example
+`claude mcp add max -- max personal mcp --permission messages.send=deny`.
+
 With a profile, put its name first as in any command:
 
 ```sh

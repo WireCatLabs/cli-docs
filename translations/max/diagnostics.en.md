@@ -97,7 +97,7 @@ The directory has permissions `0700`; both files use `0600`. `run.json` is writt
 The outcome is saved **on every exit path**, including a command that fails before connecting:
 
 ```json
-{ "run_id": "…", "command": "chats list", "profile": "default", "status": "failed",
+{ "run_id": "…", "command": "chats list", "profile": "personal", "status": "failed",
   "requests": 0, "error_code": "authentication_error", "duration_ms": 12 }
 ```
 
@@ -119,7 +119,7 @@ max personal chats list --no-record          # но не этот запуск
 The same in the settings file:
 
 ```json
-{ "profiles": { "default": { "record": true } } }
+{ "profiles": { "personal": { "record": true } } }
 ```
 
 This records every run. Fully successful runs are otherwise not recorded unless requested: a directory tracking whom you read and when would create an unwanted personal diary. `--no-record` or `"record": false` disables run records and search history.
@@ -150,7 +150,7 @@ MAX error text is excluded because a server error can quote submitted data, incl
 
 The same applies to reports assembled from runs.
 
-## Check installation: `max doctor`
+## Check installation: `max personal doctor`
 
 ```sh
 max personal doctor              # никуда не подключается

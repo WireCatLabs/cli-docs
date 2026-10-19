@@ -71,13 +71,20 @@ Frente a quien extrae el disco solo protege el cifrado completo del disco: consu
 
 Por qué hace falta la protección de envíos y cómo funciona se explica en la [página común](https://wirecat.dev/ru/docs/security). Antes de cada escritura (mensajes, reacciones, ediciones, reenvíos, eliminaciones), `max` comprueba cuatro cosas y después escribe una línea en el registro:
 
+En los ejemplos de abajo, `agent` es el nombre de un perfil que creaste aparte para el agente; pon el tuyo.
+
 | Comprobación | Cómo activar | Denegación |
 |---|---|---|
 | prohibir escrituras en mensajes salvo autorizaciones más específicas | `max agent config set permissions.messages readonly`; limita otros recursos por separado | código `5`, sin conexión |
 | permitir envíos y prohibir otras escrituras en mensajes | primero `max agent config set permissions.messages readonly` y después `max agent config set permissions.messages.send allow`; conserva otros recursos y reglas más específicas | código `5` para acciones prohibidas, sin conexión |
 | destinatarios permitidos | `max <профиль> recipients add <чат>`; desactivar con `recipients clear` | código `7` |
 | máximo por hora: mensajes, reenvíos, ediciones, fijados con aviso, eliminados y personas añadidas; no reacciones | `sends_per_hour`, predeterminado `30` | código `8`, indica cuándo reintentar |
+| prohibir cualquier escritura en todo el proceso, permitan lo que permitan los niveles y las opciones | `MAX_READ_ONLY=1` en el entorno | código `5`, sin conexión |
 | registro de cada intento, sin texto | siempre; `max personal sends list` | — |
+
+**La prohibición por nivel o por `MAX_READ_ONLY` actúa antes de conectarse a MAX.** El chat no se busca, así que la línea de la negativa
+en el registro es más corta: la clave del comando (`messages.send`) y el tipo de escritura, y el chat solo si el comando indica su id numérico.
+`--dry-run` con `MAX_READ_ONLY` da la misma negativa y no escribe en el registro.
 
 **Los bots tienen claves propias `bot.*`, como `bot.messages.send`.** Usan los mismos niveles. Los ajustes comunes y las capas `bot.defaults`/`bot.profiles` se resuelven en el mismo orden; `config show --bot` muestra los permisos efectivos. El antiguo `allow` todavía se lee.
 

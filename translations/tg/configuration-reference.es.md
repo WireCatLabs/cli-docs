@@ -40,18 +40,18 @@ No todos los entornos tienen las cinco formas. La [tabla de configuraciones](#th
 ## Consultar la configuración efectiva
 
 ```sh
-tg config show
+tg personal config show
 tg work config show
 tg shop config show --bot
 ```
 
 Enumera el perfil, de dónde vino el nombre del perfil, los perfiles, los nombres de los archivos, la ruta del archivo y si existe, y cada configuración con su valor y **de dónde vino ese valor**: `flag`, una variable de entorno, `config file`, `config defaults` o `default`. `--bot` muestra la configuración a medida que la obtiene un comando de bot de ese perfil. `--json` da lo mismo que un objeto, para un script.
 
-La lista termina con `commandTimeoutMs`: el límite de un comando completo, desde `--timeout` o `TG_TIMEOUT`. No es una configuración del archivo; `timeout_ms` limita una solicitud.
+La lista termina con `command_timeout_ms`: el límite de un comando completo, desde `--timeout` o `TG_TIMEOUT`. No es una configuración del archivo; `timeout_ms` limita una solicitud.
 
 Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en stderr, ya que eso también cambia qué inicio de sesión se encuentra ([donde se guardan las partes del inicio de sesión](./sessions.md#where-the-parts-are-kept)).
 
-⚠ **No es una verificación de estado.** Crea la configuración inicial si está ausente y luego lee los archivos. No abre ningún archivo local, no pide llavero y no se conecta. Si la sesión aún funciona es una pregunta para `tg personal doctor --online` ([solución de problemas con tg doctor](./troubleshooting.md#first-tg-doctor)).
+⚠ **No es una verificación de estado.** Crea la configuración inicial si está ausente y luego lee los archivos. No abre ningún archivo local, no pide llavero y no se conecta. Si la sesión aún funciona es una pregunta para `tg personal doctor --online` ([solución de problemas con tg doctor](./troubleshooting.md#first-tg-personal-doctor)).
 
 ## El archivo
 
@@ -92,7 +92,7 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `keep_runs_for_days` | `30` | las ejecuciones registradas anteriores a esta se eliminan cuando se conserva la siguiente | ninguno |
 | `permissions` | todo está permitido, excepto: eliminar, finalizar sesiones y algunos otros cambios solicitados; las reglas de respuesta pueden no enviarse | qué puede hacer el perfil, por comando ([abajo](#what-a-profile-may-do)) | ninguno; `--yes` y `--allow-dangerous` solo responden `ask`, nunca levantan `deny` |
 | `sends_per_hour` | `30`; un bot no tiene ninguno hasta que se configura en la sección `bot` | la mayor cantidad de envíos en cualquier hora ([el control de envío](./security.md#the-send-guard)) | ninguno |
-| `requests_per_minute` | `60` | solicitudes un minuto después de una ráfaga de 20, compartida por todos los procesos del perfil; `0` lo apaga ([límites y esperas](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
+| `requests_per_minute` | sin definir, lo que equivale a `60` | solicitudes un minuto después de una ráfaga de 20, compartida por todos los procesos del perfil; `0` lo apaga ([límites y esperas](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
 | `transcribe_with` | `auto` | quién convierte la voz en texto: `auto` (Telegram, si no, un modelo local), `messenger` o `local` | `--local`, o `--model`, lo que lo implica |
 | `speech_model` | ninguno | qué modelo descargado utiliza `--local` (`tg personal models audio list`) | `--model` |
 | `proxy` | ninguno | el servidor SOCKS5, HTTP `CONNECT` o MTProxy para llegar a Telegram a través de ([abajo](#through-a-proxy)) | `TG_PROXY` |
@@ -108,6 +108,12 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `analysis_base_url` | predeterminado del proveedor | punto final API de análisis | `build --base-url` |
 | `models` | ninguno | modelos externos por finalidad ([abajo](#models-by-purpose)) | Variables `TG_MODELS_*` |
 | `search_stemmers.cyrillic`, `search_stemmers.latin` | `russian`, `english,spanish` | los idiomas de raíz de palabras para buscar en todal archivo local ([abajo](#search-languages)) | ninguno |
+| `phone_countries` | `ru` | códigos de país, separados por comas, con los que se lee un número de teléfono escrito sin `+` (`es,ru`); gana el primero que encaja ([búsqueda](./query-language.md)) | ninguno |
+| `task_categories.<name>` | la lista incorporada | una categoría que puede tomar una tarea: un significado y luego palabras clave ([tareas](./groups.md#what-waits-on-you)) | ninguno |
+| `task_agent_close` | `on` | `off` convierte en sugerencia cada cierre hecho por un agente | ninguno |
+| `task_agent_close_min` | `0.8` | el `--certainty` mínimo con el que se acepta el cierre de un agente | ninguno |
+| `task_first_pass_per_chat` | `0` | cuántas tareas puede abrir la primera sincronización por chat | ninguno |
+| `account_groups.<name>` | ninguno | una lista con nombre de cuentas para `--source group:<name>`, por ejemplo `tg:work,max:Alice,email:me@x` | ninguno |
 
 El archivo se escribe `0600` cuando se creó por primera vez y `0644` por `config set`. No guarda ningún secreto.
 
@@ -282,6 +288,11 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 | `embedding_dims` | entero 1–65,536 | perfil |
 | `analysis_provider` | `agent`, `openai`, `anthropic` | perfil |
 | `models` | objetos de propósito descritos a continuación | perfil |
+| `phone_countries` | códigos de país, separados por comas | archivo compartido, a través de `config set` |
+| `task_categories.<name>`, `account_groups.<name>` | una cadena, como arriba | archivo compartido, a través de `config set` |
+| `task_agent_close` | `on`, `off` | archivo compartido, a través de `config set` |
+| `task_agent_close_min` | número de 0 a 1 | archivo compartido, a través de `config set` |
+| `task_first_pass_per_chat` | número entero de 0 a 1000 | archivo compartido, a través de `config set` |
 | `search_stemmers.cyrillic` | `russian`, `none` | archivo compartido, a través de `config set` |
 | `search_stemmers.latin` | `english`, `spanish`, ambos separados por comas, `none` | archivo compartido, a través de `config set` |
 

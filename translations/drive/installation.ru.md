@@ -319,20 +319,25 @@ bun add -g @wirecat/drive-cli
 [Официальное руководство репозитория](https://github.com/WireCatLabs/drive-cli/blob/main/docs/installation.md)
 служит источником этих инструкций.
 
-## Обновить или удалить
+## Обновление
 
-Эти команды нужны для уже установленного инструмента. Для обновления:
+Чтобы обновить установленный инструмент:
 
 ```sh
 npm install -g @wirecat/drive-cli
 drive --version
 ```
 
-Для выхода из профиля выполните `drive personal session end`. Чтобы удалить команду:
+## Удаление
+
+Сначала выйдите из каждого профиля, чтобы его токен удалился из хранилища ключей:
 
 ```sh
-npm uninstall -g @wirecat/drive-cli
+drive personal session end
+npm uninstall -g @wirecat/drive-cli   # or pnpm remove -g, or bun remove -g
+rm -rf ~/.config/drive-cli ~/.local/share/drive-cli   # settings, snapshots and checkpoints (Linux paths)
 ```
 
-Выход и удаление оставляют локальную конфигурацию и импортированные данные на месте. Прежде
-чем перемещать или удалять их, см. [где хранятся файлы](./configuration.md#where-the-files-live).
+Общая база остаётся. Ею пользуются также Memo, Telegram и MAX, и в ней лежат импортированные документы с вашими
+тегами и заметками. Удаляйте `~/.local/share/WireCat/`, только если она не нужна ни одному другому инструменту. Папки для macOS и
+Windows перечислены в разделе [где хранятся файлы](./configuration.md#where-the-files-live).

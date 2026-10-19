@@ -49,7 +49,7 @@ formas de cada palabra (`meeting` también encuentra `meetings`).
 | En el asunto o carpeta de correo | `subject:invoice`, `mailbox:important` |
 | Dentro de un adjunto (mensajes y correo) | `content:invoice`, `filename:*.pdf` |
 
-`content:` limita la búsqueda al texto de archivos y `filename:` a sus nombres: `memo search messages 'content:invoice'`. El texto está disponible cuando tg o max lo ha leído (`tg attachments extract`) o un agente lo ha escrito.
+`content:` limita la búsqueda al texto de archivos y `filename:` a sus nombres: `memo search messages 'content:invoice'`. El texto está disponible cuando tg o max lo ha leído (`tg personal attachments extract`) o un agente lo ha escrito.
 
 Pon la búsqueda entre comillas simples para que el terminal se la pase a Memo tal cual:
 `memo search notes '"budget review" NOT cancelled'`. `--exact` solo encuentra las palabras tal como
@@ -120,7 +120,7 @@ Con el modelo de búsqueda en tu ordenador, Memo también busca por significado,
 puede encontrar una nota sobre unas vacaciones. tg o max descarga el modelo una vez:
 
 ```sh
-tg models text download e5-small    # or: max models text download e5-small
+npx -y @wirecat/tg-cli local models text download e5-small
 ```
 
 El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo sync` para que tus notas

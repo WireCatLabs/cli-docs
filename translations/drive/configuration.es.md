@@ -16,7 +16,7 @@ una **opción** afecta a una ejecución. Son formas distintas de controlar la he
 | Sistema | Archivo de configuración | Datos y copias locales |
 | --- | --- | --- |
 | Linux | `~/.config/drive-cli/config.json` | `~/.local/share/drive-cli/` |
-| macOS | `~/Library/Preferences/drive-cli/config.json` | `~/Library/Application Support/drive-cli/` |
+| macOS | `~/.config/drive-cli/config.json` | `~/Library/Application Support/drive-cli/` |
 | Windows | `%APPDATA%\drive-cli\Config\config.json` | `%LOCALAPPDATA%\drive-cli\Data\` |
 
 Son los valores del sistema; las variables de abajo pueden moverlos. La configuración contiene
@@ -81,18 +81,12 @@ La primera línea cambia el valor compartido; la segunda lo sustituye para `work
 imprime ambas secciones, no una lista combinada de valores efectivos.
 
 `drive personal config set picture_search true` activa imágenes solo para `personal`.
-Prepara primero el modelo local compartido `clip-b32` (unos 160 MB) y escribe consultas en inglés.
-Un agente con terminal puede usar el instalador de modelos verificado del SDK instalado:
+Descarga primero el modelo local compartido `clip-b32` (unos 160 MB) y escribe consultas en inglés. La descarga no
+necesita perfil ni inicio de sesión:
 
-```text prompt
-Prepare WireCat's local CLIP image model for Drive profile personal using the installed shared SDK.
-Use its verified model installer and the same WIRECAT_STATE_DIR as Drive. Download only model files;
-do not connect to Google or change my source files. Then enable picture_search for personal.
+```sh
+drive images models download clip-b32
 ```
-
-El SDK público exporta `modelsCommand` mediante `@wirecat/cli-core/cli`; el agente puede consultar
-esa API. Drive ofrece configuración y búsqueda; la preparación del modelo usa el SDK compartido
-o una herramienta WireCat con soporte de modelos de imagen.
 
 `drive personal config set max_text_chars 500000` omite textos más largos con su razón; se leen
 en el siguiente sync después de aumentar el límite.
@@ -105,6 +99,9 @@ Afectan al proceso que ejecuta Drive; `config set` no las guarda.
 
 | Variable | Para qué sirve |
 | --- | --- |
+| `DRIVE_TIMEOUT` | Plazo para todo el comando, como `--timeout` (`500ms`, `30s`, `2m`); por defecto 30 segundos |
+| `DRIVE_READ_ONLY` | Cualquier valor salvo `0` o vacío: todos los comandos rechazan cambios, locales o en Google, con salida 5, igual que `--read-only` |
+| `DRIVE_PROFILE_LOCK` | Fija el proceso a un perfil: nombrar cualquier otro perfil se rechaza con salida 5 |
 | `DRIVE_CONFIG_DIR` | Mover `config.json` y el espacio asociado de credenciales |
 | `DRIVE_STATE_DIR` | Mover copias y puntos de control |
 | `DRIVE_CACHE_DIR` | Mover la caché de la herramienta; no mueve las copias de documentos |
@@ -127,7 +124,7 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 | `--read-only` | Rechazar cambios locales y remotos |
 | `--permission KEY=LEVEL` | Sustituir temporalmente el permiso de un comando |
 | `--dry-run` | Validar y mostrar una operación compatible sin ejecutarla |
-| `--json`, `--jsonl` | Salida estructurada; `--json=id,title` conserva solo esos campos; MCP muestra los caracteres de control de forma visible |
+| `--json`, `--jsonl` | Salida estructurada; `--json=id,name` conserva solo esos campos; MCP muestra los caracteres de control de forma visible |
 | `--timeout DURATION`, `--max-output-bytes N` | Limitar el tiempo del comando y la salida almacenada en búfer |
 
 Estas opciones no son ajustes del archivo. Las de cada comando, como `search --limit` y
@@ -168,8 +165,7 @@ y conserva el archivo original. Puedes repetir una reconstrucción interrumpida.
 ejecuta `drive personal sync --rescan` para volver a descargar las fuentes seleccionadas.
 
 Drive se detiene si la base anterior contiene anotaciones que quedarían fuera de la nueva base.
-Para seguir usándolas, apunta `MESSAGING_STORE` al archivo anterior; no lo borres. `DRIVE_STORE`
-ya no se admite y genera un error en lugar de seleccionar otro archivo silenciosamente. No hay
+Para seguir usándolas, apunta `MESSAGING_STORE` al archivo anterior; no lo borres. No hay
 transferencia automática de anotaciones del usuario entre bases.
 
 Continúa con [vincular documentos con personas y proyectos](./recipes.md#link-a-document-to-a-person-or-project).

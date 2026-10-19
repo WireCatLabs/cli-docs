@@ -24,8 +24,8 @@ En la salida `--json`, un error que termina el comando es una línea en stderr, 
 
 | Código | Nombre | Qué suele significar | Dónde |
 |---|---|---|---|
-| `1` | `internal_error` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |
-| `2` | `validation_error` | un valor o una combinación de opciones que `tg` no acepta; un nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |
+| `1` | `internal_error` | un fallo del propio `tg` | [informar del problema](#report-a-problem) |
+| `2` | `validation_error` | una errata en un comando o una opción, un valor o una combinación de opciones que `tg` no acepta; un nombre que coincide con varios chats | [comando desconocido](#unknown-command-), [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |
 | `3` | `configuration_error` | `config.json` incorrecto, el proxy rechazó la conexión o no responde, o archivo local más reciente que este `tg` | [configuración](#-is-not-a-valid-config), [proxy](#the-proxy--cannot-be-reached-or--refused), [archivo local](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | sin sesión, sesión finalizada o llavero inaccesible | [sin sesión](#no-session-for-profile-personal--run-tg-personal-setup-in-a-local-terminal) |
 | `5` | `permission_error` | rechazado por `permissions` o por Telegram | [no permitido](#profile--does-not-let--write-or-profile--denies-), [rechazo de Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
@@ -40,7 +40,7 @@ En la salida `--json`, un error que termina el comando es una línea en stderr, 
 | `14` | `outcome_unknown` | conexión interrumpida después de una escritura; puede haberse realizado | [resultado desconocido](#outcome_unknown-after-a-send) |
 | `130` | `cancelled` | Ctrl-C o respuesta negativa a una pregunta | [Ctrl-C](#ctrl-c) |
 
-## Primero: `tg doctor`
+## Primero: `tg personal doctor`
 
 ```sh
 tg personal doctor
@@ -52,7 +52,7 @@ No se conecta y muestra las dependencias de los comandos: versión, entorno, con
 tg personal doctor --online
 ```
 
-`--online` también se conecta una vez y lee la cuenta. No envía nada y no marca nada leído. Sin él, el inicio de sesión se muestra como `not checked`: solo `--online` te dice que Telegram aún acepta la sesión. `--online` también informa un reloj incorrecto en esta computadora y si Telegram congeló o cerró la cuenta ([lo que muestra `tg personal doctor`](./diagnostics.md#check-the-installation-tg-doctor)).
+`--online` también se conecta una vez y lee la cuenta. No envía nada y no marca nada leído. Sin él, el inicio de sesión se muestra como `not checked`: solo `--online` te dice que Telegram aún acepta la sesión. `--online` también informa un reloj incorrecto en esta computadora y si Telegram congeló o cerró la cuenta ([lo que muestra `tg personal doctor`](./diagnostics.md#check-the-installation-tg-personal-doctor)).
 
 ## Instalación
 
@@ -67,9 +67,7 @@ La carpeta donde npm instala los comandos no está en `PATH`.
   `Get-Command tg -All` en PowerShell) los enumera todos; ejecuta el nuestro por su ruta completa o coloca su carpeta
   primero.
 
-También funciona sin instalar: `npx @wirecat/tg-cli doctor`.
-
-<a id="npx-leemourtg-cli-ejecuta-una-versión-antigua" />
+También funciona sin instalar: `npx @wirecat/tg-cli personal doctor`.
 
 ### `npx @wirecat/tg-cli` ejecuta una versión antigua
 
@@ -86,7 +84,7 @@ tg personal chats list         # the profile named in the message
 export TG_PROFILE=personal     # or for the whole shell session
 ```
 
-En un equipo que todavía no tiene ningún perfil, el mensaje indica que ejecutes `tg personal setup`; cualquier nombre sirve en lugar de `personal`. Si el mensaje dice `default_profile is no longer read`, el archivo de configuración aún tiene ese ajuste de un `tg` anterior: nombra el perfil, y `tg config unset default_profile` lo elimina.
+En un equipo que todavía no tiene ningún perfil, el mensaje indica que ejecutes `tg personal setup`; cualquier nombre sirve en lugar de `personal`. Si el mensaje dice `default_profile is no longer read` (código de salida `2`), el archivo de configuración aún tiene ese ajuste de un `tg` anterior: nombra el perfil, y `tg config unset default_profile` lo elimina.
 
 ### "no session for profile "personal" — run `tg personal setup` in a local terminal"
 
@@ -117,9 +115,13 @@ Para cron, consulte [ejecución programada](./recipes.md#running-on-a-schedule).
 
 Código `4`. Telegram ya no acepta la sesión: se cerró desde otro dispositivo (Ajustes → Dispositivos) o mediante `tg personal session end`. Inicia sesión con `tg personal session start`.
 
-### "`tg session start` asks questions — run it in a terminal"
+### "`tg session start` shows a QR code to scan — run it in a terminal, or pass --qr-file <png>"
 
-Código de salida `2`. El inicio de sesión necesita que una persona escanee un código o escriba uno. Ejecútelo en una terminal. Para un agente, `--qr-file login.png` escribe el código QR en un archivo ([cuando un agente ejecuta el inicio de sesión](./sessions.md#when-an-agent-runs-the-login)).
+Código de salida `2`. El inicio de sesión necesita que una persona escanee un código o escriba uno. Ejecútelo en una terminal. Para un agente, `--qr-file login.png` escribe el código QR en un archivo ([cuando un agente ejecuta el inicio de sesión](./sessions.md#when-an-agent-runs-the-login)). Un inicio de sesión por teléfono sin terminal dice en su lugar "asks questions — run it in a terminal".
+
+### "the terminal is 40 columns wide and the QR code needs 49"
+
+El código no se dibuja, porque un código partido en varias líneas no se puede escanear. Ensancha la terminal: el siguiente código que envíe Telegram se dibujará. O vuelve a ejecutar el inicio de sesión con `--qr-file login.png` y abre la imagen.
 
 ### "my.telegram.org says the app was created, but its page shows none"
 
@@ -127,18 +129,18 @@ Código de salida `13`, durante `tg personal session start --app auto`. El sitio
 
 ### La respuesta proviene del perfil equivocado
 
-`tg config show` indica el perfil y su origen. `TG_PROFILE` selecciona uno y `TG_PROFILE_LOCK` rechaza los demás. Una errata en el comando se interpreta como perfil ([arriba](#error-unknown-command-)).
+`tg config show` indica el perfil y su origen. `TG_PROFILE` selecciona uno y `TG_PROFILE_LOCK` rechaza los demás. Una errata en el comando se interpreta como perfil ([abajo](#unknown-command-)).
 
-### "error: unknown command '…'"
+### "unknown command '…'"
 
-Código de salida `1`; muestra ayuda por stderr, no JSON. La primera palabra es el perfil si no es un comando, por lo que una errata en el comando se interpreta como perfil:
+Código de salida `2`. En una terminal es una sola línea con `✗`; con la salida redirigida, es un `validation_error` en JSON por stderr. La primera palabra es el perfil si no es un comando, por lo que una errata en el comando puede convertirse en un nombre de perfil:
 
 ```text
 tg chat list
-error: unknown command 'list'
+✗ unknown command 'list' "chat" is not a command, so it was read as a profile name — which left "list" to be one.
 ```
 
-Aquí `chat` se interpretó como perfil y `list` no es un comando. El correcto es `chats`, en plural. `tg --help` muestra todos.
+Aquí `chat` se interpretó como perfil y `list` no es un comando. El correcto es `chats`, en plural. `tg commands` los muestra todos. Una errata en un comando después del perfil sugiere el correcto: `✗ unknown command 'lst' (Did you mean list?)`. Una opción desconocida da el mismo error, con código de salida `2`.
 
 ## Configuraciones y valores de opciones
 
@@ -152,7 +154,7 @@ Código `2`. Lo mismo se aplica a `--page`. Sin esa comprobación, un valor no n
 
 ### "`id<` takes a message id"
 
-Código `2`. `id<` e `id>` en una consulta de `messages list` aceptan un identificador de mensaje (`'id<4242'`); `messages comments` dice lo mismo sobre un identificador de comentario. Para una fecha, usa `date>` o `date<`: una fecha ISO 8601 (`2026-09-20T09:00`) o un intervalo anterior (`30m`, `2h`, `1d`).
+Código `2`. `id<` e `id>` en una consulta de `messages list` aceptan un identificador de mensaje (`'id<4242'`); `messages comments` dice lo mismo sobre un identificador de comentario. Para una fecha, usa `date>` o `date<`: una fecha ISO 8601 entre comillas (`'date>"2026-09-20T09:00:00+02:00"'`) o un intervalo anterior (`30m`, `2h`, `1d`).
 
 ### "--at-time takes a time like 2026-09-25T09:00 or a delay like 30m, 2h, 1d"
 
@@ -174,7 +176,7 @@ Código `2`. El título coincide con varios chats. El error los enumera con iden
 
 ### "no chat matches …"
 
-Código `6`. Ningún título contiene lo introducido. Prueba `tg personal chats list 'title:*<part of it>*'`, el identificador, `@username` o `me` para Mensajes guardados. El título de un chat individual es el nombre de la otra persona tal como Telegram te lo muestra.
+Código `6`. Ningún título contiene lo introducido. Prueba `tg personal chats list 'title:*<part of it>*' --offline`, el identificador, `@username` o `me` para Mensajes guardados. El título de un chat individual es el nombre de la otra persona tal como Telegram te lo muestra.
 
 ### "Telegram does not know that (…)"
 
@@ -185,7 +187,7 @@ Telegram lets you find has this number" si la persona oculta su teléfono o no t
 
 ### "Telegram asks to wait N s before the next request"
 
-Código `8`. Es el límite propio de Telegram (FLOOD_WAIT). Espera ese tiempo; el JSON incluye `retryAfterMs`. Suele aparecer tras muchas peticiones seguidas, como `chats list --all` después de otros comandos o una descarga larga con `messages sync`. Para `messages sync` y `messages download --all`, aumentar `--pause` ayuda.
+Código `8`. Es el límite propio de Telegram (FLOOD_WAIT). Espera ese tiempo; el JSON incluye `retry_after_ms`. Suele aparecer tras muchas peticiones seguidas, como `chats list --all` después de otros comandos o una descarga larga con `messages sync`. Para `messages sync` y `messages download --all`, aumentar `--pause` ayuda.
 
 Un comando espera una petición de hasta 10 segundos, dos veces como máximo, y lo indica en stderr: "Telegram asks to wait 3 s before … — waiting, then going on". `serve` y `watch` esperan hasta 2 minutos. Una espera más larga termina una solicitud independiente con este error; la lectura de historial por lotes devuelve un resultado parcial con `issue` y acciones de recuperación. `tg` también recuerda la espera: hasta que acaba, el mismo comando falla al instante sin volver a preguntar a Telegram, y `tg personal doctor` y `tg personal server status` la muestran en `flood`.
 
@@ -193,7 +195,7 @@ Cómo encajan el ritmo, las esperas y los comandos paralelos: [límites y espera
 
 ### "Telegram limited this account's messages as spam (PEER_FLOOD)"
 
-Código `5`. Telegram limita una cuenta que ha escrito a demasiadas personas que no son sus contactos. Puede seguir leyendo. Escribe a @SpamBot desde una aplicación de Telegram: te dice hasta cuándo dura. Volver a enviar lo empeora, así que `tg` retiene todos los envíos durante una hora y lo indica; cada nuevo rechazo reinicia la hora. `tg personal doctor` muestra la retención en `flood.sendBlock`. Cuando @SpamBot diga que el límite ha terminado, `tg personal flood clear` la levanta, junto con cualquier espera que `tg` recuerde. El rechazo a una cuenta congelada retiene los envíos del mismo modo, hasta la fecha que indica Telegram; `tg personal doctor --online` activa y levanta esa retención.
+Código `5`. Telegram limita una cuenta que ha escrito a demasiadas personas que no son sus contactos. Puede seguir leyendo. Escribe a @SpamBot desde una aplicación de Telegram: te dice hasta cuándo dura. Volver a enviar lo empeora, así que `tg` retiene todos los envíos durante una hora y lo indica; cada nuevo rechazo reinicia la hora. `tg personal doctor` muestra la retención en `flood.send_block`. Cuando @SpamBot diga que el límite ha terminado, `tg personal flood clear` la levanta, junto con cualquier espera que `tg` recuerde. El rechazo a una cuenta congelada retiene los envíos del mismo modo, hasta la fecha que indica Telegram; `tg personal doctor --online` activa y levanta esa retención.
 
 ### "profile … has sent N messages in the hour …"
 
@@ -233,7 +235,7 @@ Código `12`. Fallo de Telegram. `tg` no cambió nada; reintenta pasado un minut
 
 ### "cannot reach Telegram (…)"
 
-Código de salida `10`. No pudo establecerse la conexión o se interrumpió: no hay red, firewall, proxy o DNS. El código entre paréntesis dice cuál (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`). Los comandos que responden desde el archivo local funcionan sin red: `tg --offline chats list`. Cuando Telegram esté bloqueado, configure un proxy ([configurar un proxy](./configuration-reference.md#through-a-proxy)).
+Código de salida `10`. No pudo establecerse la conexión o se interrumpió: no hay red, firewall, proxy o DNS. El código entre paréntesis dice cuál (`ECONNREFUSED`, `ENOTFOUND`, `ETIMEDOUT`). Los comandos que responden desde el archivo local funcionan sin red: `tg personal --offline chats list`. Cuando Telegram esté bloqueado, configure un proxy ([configurar un proxy](./configuration-reference.md#through-a-proxy)).
 
 ### "the proxy … cannot be reached" or "… refused"
 
@@ -250,7 +252,7 @@ Código `3`. El fallo está en el proxy, no en Telegram: nada llegó a Telegram,
 Todos los comandos puntuales cierran la conexión y terminan. Si Telegram no responde, terminan con código `9` y `timeout`. Para establecer tu propio límite y ver dónde se detiene:
 
 ```sh
-tg --timeout 30s --trace chats list
+tg personal --timeout 30s --trace chats list
 ```
 
 `--timeout` cubre todo el comando, incluido el inicio de sesión, y lo finaliza con el código de salida `9` después de cerrar la conexión. En `--trace`, una línea `→` sin `←` después es una solicitud que salió y nunca regresó: la red o Telegram, no `tg` ([leyendo un rastro](./diagnostics.md#show-it---trace)).
@@ -335,6 +337,6 @@ Los límites de API no aumentan con ajustes locales; reduce o divide los datos d
 
 El fallo de un archivo independiente o una página de historial devuelve un resultado parcial con código de salida `0`,
 `complete: false` y `batch` o `issue`. Los archivos y las páginas anteriores permanecen guardados.
-Si la pausa del proveedor impide terminar, `messages sync` de un solo chat incluye `issue.retryAfterMs` y un límite `resume`;
+Si la pausa del proveedor impide terminar, `messages sync` de un solo chat incluye `issue.retry_after_ms` y un límite `resume`;
 la consulta de todos los chats incluye sus respectivos `issue`, y las descargas usan checkpoints. No repitas las solicitudes antes de que termine la pausa.
 Un trabajo parcial en segundo plano tiene estado `partial` y se reintenta con `tg personal store jobs retry`. Comprueba la integridad del resultado además del código de salida.

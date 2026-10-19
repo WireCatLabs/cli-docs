@@ -70,6 +70,22 @@ max personal recipients add "Иван Петров"       # и писать то
 ## Programar ejecuciones
 
 - **Claude Desktop: tareas programadas.** La tarea se ejecuta en su computadora, por lo que puede acceder a `max` y a sus entradas. Un inicio fallido (la computadora estaba inactiva) se realiza una vez después de despertarse. Ver [tareas programadas Claude](https://code.claude.com/docs/en/desktop-scheduled-tasks).
+- **`max schedule`.** Una programación integrada: crea por sí misma la entrada en el programador del sistema (systemd en Linux,
+  launchd en macOS, el Programador de tareas en Windows) y no requiere editar crontab. El perfil se nombra con la primera
+  palabra, como en cualquier comando:
+
+  ```sh
+  max personal schedule command inbox-daily --at 08:30 -- inbox      # команда `max personal inbox` каждый день
+  max personal schedule agent morning claude "прочитай max skill show follow-ups и выполни ежедневную проверку" --at 08:30
+  max personal schedule list                                         # что назначено и как прошёл последний запуск
+  max personal schedule run morning                                  # запустить сейчас, как это сделал бы таймер
+  max personal schedule remove morning
+  ```
+
+  `schedule agent` ejecuta `claude` o `codex` con la variable `MAX_READ_ONLY=1`: el agente lee y escribe
+  borradores, pero no puede enviar nada. La respuesta del agente se guarda y recibes una notificación.
+  `--max-cost` detiene una ejecución de `claude` que cueste más de la cantidad indicada en dólares.
+  La programación se define con `--every 30m`, `--at 08:30` (cada día) o `--at-time 2h` (una sola ejecución).
 - **cron y `claude -p`.** Sin una aplicación, en cualquier computadora que esté encendida en este momento:
 
   ```cron
@@ -79,7 +95,7 @@ max personal recipients add "Иван Петров"       # и писать то
 Los trabajos cron se ejecutan en un entorno casi vacío. En Linux esto rompe `max` de dos maneras:
 
 - **`node: not found`, código 127.** Node instalado mediante nvm, fnm o Volta no está en el `PATH` del sistema; cron solo conoce ese PATH.
-- **`no token found for profile "default", although it has logged in on this machine`, código 4.** `max` no alcanza el llavero y no ve el token. **No vuelvas a iniciar sesión**: la sesión funciona; el problema es el entorno.
+- **`no token found for profile "personal", although it has logged in on this machine`, código 4.** `max` no alcanza el llavero y no ve el token. **No vuelvas a iniciar sesión**: la sesión funciona; el problema es el entorno.
 
 Ambas líneas van al principio de `crontab -e`, con sus propios valores. La carpeta es de `dirname "$(which node)"`, el número es de `id -u`:
 
@@ -100,6 +116,16 @@ Consulte [sin modo de diálogo en Codex](https://learn.chatgpt.com/docs/non-inte
 - **Dentro de una sesión abierta Claude Code** - `/loop` o “recuérdamelo a las 15:00”. Funciona mientras la sesión está abierta. Ver [tareas programadas Claude Code](https://code.claude.com/docs/en/scheduled-tasks).
 
 Las tareas (rutinas) en la nube de Claude no son adecuadas: se ejecutan en otra computadora donde no están presentes `max` ni su inicio de sesión.
+
+## Revisión diaria de compromisos
+
+La habilidad lista para usar `follow-ups` lleva tus compromisos: una vez al día lee `max tasks agenda`, mira solo
+los chats que esa agenda nombra, crea y vincula tareas y devuelve una lista corta con borradores de respuesta.
+No envía nada. Para leerla: `max skill show follow-ups`. Para ejecutarla de forma programada:
+
+```sh
+max personal schedule agent follow-ups claude "выполни ежедневную проверку: max skill show follow-ups" --at 08:30
+```
 
 ## Resumen de la mañana
 

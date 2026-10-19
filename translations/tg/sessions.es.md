@@ -46,8 +46,8 @@ tg personal session start phone --sms  # the same, asking Telegram for the code 
 Después de cualquiera de los dos, Telegram incluye un nuevo dispositivo en la lista de sesiones de la aplicación.
 
 ```text
-Logged in as <your name> (@<username>, id <id>) — profile default.
-Session:  ~/.local/share/tg-cli/sessions/default.session
+Logged in as <your name> (@<username>, id <id>) — profile personal.
+Session:  ~/.local/share/tg-cli/sessions/personal.session
 App keys: in the keyring
 Next:     tg personal chats list · tg personal server install to keep the archive current
 ```

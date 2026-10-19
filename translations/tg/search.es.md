@@ -172,7 +172,7 @@ tg personal search messages 'chat:"Book club" library'
 tg personal search messages 'passport kind:private'  # one-to-one chats only
 ```
 
-`kind:` toma `private`, `group`, `channel`, `saved` (mensajes guardados) y `bot`. `topic:` se centra en un tema del foro de un grupo; necesita ese grupo en `chat:` o `--chat`. Para buscar en todas las cuentas del archivo local, agregue `--source all`.
+`kind:` toma `private`, `group`, `channel`, `saved` (mensajes guardados) y `bot`. `topic:` se centra en un tema del foro de un grupo; necesita ese grupo en `chat:`. Para buscar en todas las cuentas del archivo local, agregue `--source all`.
 
 ## Fechas
 
