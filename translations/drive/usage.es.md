@@ -93,6 +93,11 @@ Si Google tiene más resultados, `page.next_cursor` contiene el token; pásalo a
 agrupa documentos por cuenta; moverlos en Google conserva su referencia local. Los nombres
 repetidos son seguros: selecciona la fuente por ID.
 
+Los mismos documentos importados sirven para [reunir evidencia del proyecto con Memo](./recipes.md#gather-project-context-with-memo).
+Sincroniza primero las carpetas elegidas: consultar un archivo mediante una aplicación conectada
+no lo guarda en Memo. Usa la misma base compartida en ambas herramientas y selecciona
+explícitamente el perfil Drive importado.
+
 ## Leer contenido y metadatos sin conexión
 
 Tras importar, estos comandos usan la copia local y no consultan Google:
