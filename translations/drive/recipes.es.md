@@ -15,6 +15,7 @@ archivo de Google. [Importación y almacenamiento](./usage.md) explica la copia 
 | --- | --- | --- | --- |
 | Importar o actualizar un proyecto | Sí | Índice y copias | No |
 | Preparar un informe con la copia guardada | No | No | No |
+| Reunir contexto de un proyecto con Memo | La sincronización usa Google; la recopilación lee la copia guardada | Índice y copias durante la sincronización | No |
 | Explorar y organizar el árbol guardado | No | Etiquetas/notas cuando se solicitan | No |
 | Añadir etiquetas, notas o vínculos | No | Sí | No |
 | Proponer recuerdos con IA | Envía texto local al proveedor configurado | Solo con `--yes` o confirmación | No |
@@ -64,6 +65,71 @@ Lee los fragmentos guardados y sus metadatos para comprobar las decisiones. Abre
 de Google cuando necesites la versión actual. El resumen no cubre fuentes
 incompatibles o sin importar. `documents get` lee un Doc accesible directamente de Google sin
 importarlo; imprime JSON Docs y no lo añade a la búsqueda.
+
+## Reunir contexto de un proyecto con Memo
+
+Usa este flujo cuando la información del proyecto está repartida entre documentos de Drive y otras
+fuentes que tu agente puede leer con Memo. Drive conserva los documentos elegidos localmente;
+Memo busca evidencia del proyecto con referencias en ese material guardado. Ambas herramientas
+deben usar la misma base WireCat. Conecta primero el perfil Drive con
+[la guía de instalación](./installation.md) e instala
+[Memo](https://wirecat.dev/en/docs/memo/installation) si todavía no está disponible.
+
+```text prompt
+Usa el perfil Drive personal y Memo para reunir contexto de Cobalt Orchard. Primero muestra las
+carpetas Drive seleccionadas y déjame elegir una carpeta concreta del proyecto. Sincronízala,
+informa de archivos omitidos o trabajo pendiente y reúne evidencia de ese perfil Drive de los
+últimos 60 días. Muestra enlaces originales, fechas de las fuentes y lagunas de cobertura.
+No cambies archivos Google ni crees relaciones con el proyecto.
+```
+
+Para uso manual, sustituye `FOLDER_ID` por el ID o URL de la carpeta Google del proyecto. Se incluyen
+sus descendientes, así que elige una carpeta del proyecto en lugar de toda la cuenta:
+
+```sh
+drive personal folders list --json
+drive personal folders add FOLDER_ID
+drive personal sync --limit 50 --json
+drive personal status --json
+drive personal documents list --json
+memo projects list --json
+memo projects evidence COB --source drive:personal --json
+```
+
+Sustituye `COB` por la clave, nombre o alias de un proyecto existente de `memo projects list`.
+También puedes buscar un nombre nuevo sin crear el proyecto. Si tu perfil Drive tiene otro nombre,
+sustituye `personal` en los comandos de ambas herramientas. Una sincronización correcta registra
+el perfil para seleccionar fuentes locales; `drive:personal` indica a Memo qué cuenta importada leer.
+
+`--limit 50` limita las lecturas de contenido de esa ejecución; no limita el descubrimiento recursivo
+a 50 entradas. Las raíces ya seleccionadas siguen incluidas. Revisa primero `folders list` y después
+el resultado de sincronización y `status` para ver trabajo pendiente o archivos omitidos. Repite la
+sincronización para continuar el trabajo guardado. Un lote terminado no demuestra que se hayan
+leído todos los tipos de archivo.
+
+Memo busca los últimos 60 días por defecto. Para ampliar el periodo:
+
+```sh
+memo projects evidence COB --source drive:personal --since-time 365d --json
+```
+
+En documentos Google importados se usa la fecha de modificación de la fuente cuando está disponible;
+si falta, se usa la actualización del registro local. Importar hoy un documento antiguo no convierte
+su fecha conocida en reciente. Una fecha de modificación tampoco establece cuándo se tomó una decisión
+descrita en el documento. Revisa `time_kind`, URL y texto de cada resultado antes de usarlo como evidencia.
+Si Memo devuelve un punto de continuación, sigue con las mismas opciones y su valor `--cursor`;
+los errores y fuentes no leídas siguen siendo lagunas de cobertura. La recopilación usa contenido
+guardado y no actualiza Google por ti.
+
+Leer un archivo mediante una aplicación Google Drive conectada o el `documents get` en línea no
+realiza esta sincronización local. Tras la sincronización normal no hace falta exportar Markdown
+ni volver a importar. Ambas herramientas usan la base compartida por defecto; si cambias
+`MESSAGING_STORE`, usa la misma ruta en ambas. Bases separadas no comparten referencias de documentos.
+
+El resultado esperado es un conjunto de coincidencias con referencias de la cuenta elegida, enlaces
+Google originales y límites explícitos. Importar y buscar no crea pertenencia al proyecto, hechos
+ni tareas. Revísalos por separado con [las relaciones de documentos](#link-a-document-to-a-person-or-project)
+o [los flujos de proyectos de Memo](https://wirecat.dev/en/docs/memo/recipes).
 
 ## Preparar un informe sin conexión
 

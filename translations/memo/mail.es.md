@@ -285,7 +285,10 @@ en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
 - El remitente, los destinatarios (Para, CC y CCO), el asunto, la fecha y el texto de cada correo.
 - Si un correo está leído o destacado, tal como lo muestra tu buzón.
 - El texto de los adjuntos legibles, que se busca junto con el correo ([archivos compatibles](./notes.md#files-memo-can-read)).
-  `memo sync --source email:work --retry-attachments` solo vuelve a leer, por id Gmail, los correos cuyo adjunto quedó sin leer por falta de lector, hasta `--limit`. No lista el buzón, así que es rápido; al repetir continúa con el resto.
+  Los lectores de PDF y Word se incluyen con Memo. Si un adjunto quedó sin leer porque faltaba su lector
+  (`engine-missing`, por un Memo antiguo o una instalación dañada), `memo sync --source email:work --retry-attachments`
+  solo vuelve a leer esos correos por su id Gmail, hasta `--limit`. No lista el buzón, así que es rápido;
+  al repetir continúa con el resto.
 - Hasta 1.000.000 de caracteres de cada correo y 200.000 de cada adjunto
   ([cambiar los límites](./configuration.md#mail)).
 

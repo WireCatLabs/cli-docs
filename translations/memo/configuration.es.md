@@ -89,7 +89,7 @@ sigue en su siguiente ejecución. Consulta [importar con un temporizador](./arch
 | `MEMO_MODELS_ANALYSIS_PROVIDER`, `MEMO_MODELS_ANALYSIS_MODEL` | El proveedor de IA y el identificador del modelo (el nombre que usa el proveedor para él) a los que llama `memo ask --analyze`. |
 | `MEMO_MODELS_ANALYSIS_BASE_URL` | Opcional: la dirección del proveedor. |
 | `MEMO_MODEL_API_KEY` | La clave del proveedor. |
-| `MEMO_READ_ONLY` | Cualquier valor salvo `0` rechaza todo cambio con `permission_error` (código de salida 5): escrituras en el almacén, en tus archivos, en el correo del proveedor, en el temporizador y en los archivos de la skill, además de `upgrade` y `ask --allow-remote`. Las lecturas y `memo sync` siguen funcionando; `memo mcp` deja fuera sus herramientas de escritura. |
+| `MEMO_READ_ONLY` | Cualquier valor salvo `0` rechaza todo cambio con `permission_error` (código de salida 5): escrituras en el almacén, en tus archivos, en el correo del proveedor, en el temporizador y en los archivos de la skill, además de `upgrade` y `ask --allow-remote`. Las lecturas, `memo sync`, `tasks plan` y `tasks link` siguen funcionando (el vínculo solo se propone y se rechaza vincular dos tareas); `reminders poll` se rechaza; `memo mcp` deja fuera sus herramientas de escritura. |
 
 Memo llama a un proveedor fuera de tu ordenador solo cuando `memo ask` tiene a la vez `--analyze` y
 `--allow-remote`. Consulta [dar las fuentes a tu agente](./search.md#give-your-agent-the-sources).

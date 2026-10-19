@@ -1223,7 +1223,7 @@ memo projects context <project> [options]
 
 ### `memo projects evidence`
 
-cited references about a project in stored messages, mail and imported notes folders. The project's name, each of its aliases, each --context-query and each --contact name is its own literal search, and their hits are joined. Reads only what the store holds; proposes and confirms nothing
+cited references about a project in stored messages, mail, meeting transcripts and imported notes folders. The project's name, its key, each of its aliases and each --alias, each --context-query and each --contact name is its own literal search, and their hits are joined. New mail and documents are indexed for search first, unless --no-catch-up. Reads only what the store holds; proposes and confirms nothing
 
 ```sh
 memo projects evidence <project> [options]
@@ -1236,12 +1236,16 @@ memo projects evidence <project> [options]
 | Option | What it does |
 |---|---|
 | `--source <accounts>` | where to look, or all: which accounts, separated by commas: provider:account (email:personal), a provider (email), a kind (mail, notes, documents) or group:<name>. |
+| `--alias <name>` | another name of the project, searched on its own; repeat for more. |
 | `--context-query <words>` | more words that all appear in one text; repeat for another search. |
 | `--contact <person>` | a person's name; what only names them is context, not the project. |
-| `--since-time <time>` | how many days back, at most 730d. Default: `60d`. |
+| `--since-time <time>` | how far back: days (90d, at most 730d) or a start date (2026-09-01). Default: `60d`. |
 | `--limit <n>` | new references at most, up to 500. Default: `100`. |
 | `--max-pages <pages>` | store pages read at most this run, up to 512. |
 | `--cursor <cursor>` | continue a stopped search from its checkpoint, with the same options. |
+| `--before-n <n>` | messages before each message hit, shown as its context, at most 5. Default: `2`. |
+| `--after-n <n>` | messages after each message hit, shown as its context, at most 5. Default: `2`. |
+| `--no-catch-up` | read the search index as it is, without indexing new mail and documents first. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Returns:** find what the store holds about a project, by its names, more words and people

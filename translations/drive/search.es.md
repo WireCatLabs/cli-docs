@@ -91,6 +91,15 @@ no tienen texto; se encuentran por nombre y `not_read` indica la razón (es `nul
 Abre `source_url`, sin citar texto ausente. Consulta [formatos](./usage.md#which-document-types-are-searchable)
 y [recetas](./recipes.md#refresh-a-project-and-prepare-a-meeting-brief).
 
+## Reunir contexto de distintas fuentes
+
+Para encontrar evidencia del proyecto en los documentos importados junto con otras fuentes elegidas,
+usa Memo con la misma base compartida. La [receta de Drive y Memo](./recipes.md#gather-project-context-with-memo)
+explica cómo elegir carpetas, limitar la sincronización y seleccionar la fuente `drive:personal`.
+Leer un archivo Google mediante una aplicación conectada no basta para añadirlo a esa búsqueda local.
+Las coincidencias conservan las fechas y enlaces de sus fuentes; revisar las relaciones con el proyecto
+sigue siendo un paso separado.
+
 ## Buscar imágenes por lo que muestran
 
 Con `picture_search` activado en el perfil, `drive personal search "cat on a sofa"` también

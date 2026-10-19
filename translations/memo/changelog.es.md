@@ -8,6 +8,47 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
+## Unreleased
+
+## 0.76.0 — 19.10.2026
+
+### Added
+
+- **Project evidence includes stored meeting transcripts** when `--source` selects a meeting account,
+  its recorded profile or `all`. CLI and MCP return cited transcript cue references dated by the meeting
+  start. Superseded/deleted transcripts stay out; missing or pending indexes remain visible. This reads
+  existing indexed text and does not fetch recordings or confirm project membership.
+- **Shared SDK update:** pins Core 0.358.0 for transcript context reads, retaining Base 0.47.1.
+  The store schema and compatibility boundary are unchanged. Intervening messenger chat-membership
+  contract changes require no Memo adapter changes; shared consumer compatibility remains checked.
+
+### Fixed
+
+- **A failed timer run no longer keeps its error text in `last.json`** (privacy). That text can name a folder, a
+  sender or a subject, and it reached the file, the "scheduled sync failing" line and `memo auto status`. They now
+  keep the error code, its reason id and the kind of source (`notes: configuration_error (folder.unbound)`); the
+  full message stays on stderr and in the timer's journal, which `memo auto status` names (`log`).
+- **A failing source in `memo sync --json` names its reason id** (`failed[].reason_id`, additive), the fixed id
+  that `last.json` and `memo auto status` now show beside the error code, as a run that stopped already did.
+
+## 0.75.0 — 19.10.2026
+
+### Added
+
+- **`memo projects evidence` names the other projects, tags and topics its texts mention** (`mentions`, and an
+  "also names" line in the text): words found in the excerpts and their context, each cited, never membership. A
+  mail hit now shows the emails before and after it in its thread as context.
+
+## 0.74.0 — 19.10.2026
+
+### Added
+
+- **`memo projects evidence` indexes new mail and imported documents for search before it reads**, so a store
+  just synced no longer misses them; `--no-catch-up` (MCP `catch_up: false`) reads the index as it is. The
+  project's key is searched too, and `--alias` (MCP `alias`) adds more names. The text output says when the index
+  could not be brought up to date. `--since-time` also takes a start date (`2026-09-01`); a continued run keeps its end. Each message hit shows the messages next to it in its
+  chat as context (`--before-n`, `--after-n`, default 2, MCP `before_n`/`after_n`), never as more hits.
+
 ## 0.73.0 — 19.10.2026
 
 ### Changed — may break callers

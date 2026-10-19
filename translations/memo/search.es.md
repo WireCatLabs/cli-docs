@@ -114,6 +114,40 @@ siguiente paso. Una transcripción sin archivar o ausente debe obtenerse antes c
 
 Siguiente: [convierte pasajes citados de reuniones en hallazgos para revisar](./recipes.md#review-a-meetings-decisions-and-follow-ups).
 
+## Reunir contexto de reuniones de un proyecto
+
+Al preparar una conversación sobre un proyecto, busca sus distintos nombres en las cuentas elegidas.
+Así encuentras fragmentos de transcripciones incluso antes de vincular la reunión al proyecto.
+Pide a tu agente:
+
+```text prompt
+Usa memo CLI para reunir evidencia de Harbour desde mi cuenta de reuniones del trabajo y Telegram.
+Busca los últimos 60 días con los alias guardados del proyecto. Muestra fragmentos con referencias,
+separa los hechos comunicados de los seguimientos propuestos e indica qué fuentes o transcripciones
+faltan. No confirmes hallazgos ni crees tareas.
+```
+
+Para usar el comando directamente, sustituye la clave del proyecto y las cuentas por las tuyas:
+
+```sh
+memo projects evidence HRB --source zoom:work,telegram:1 --since-time 60d --json
+```
+
+Cada nombre o alias es una búsqueda separada de palabras literales; los resultados se unen.
+Un resultado de reunión conserva la referencia exacta del fragmento y usa la fecha de inicio:
+una reunión antigua importada hoy sigue siendo antigua. Lee el fragmento y sus vecinos con
+`memo meetings passage` antes de sacar conclusiones. La recopilación no crea vínculos al proyecto,
+no establece asistentes ni guarda hechos o tareas extraídos.
+
+Si `units` indica un índice de reuniones pendiente, ejecuta `memo search meetings` para esa misma
+cuenta siguiendo [la búsqueda de reuniones](#search-stored-meetings) y vuelve a recopilar. La
+actualización de correo y documentos no indexa fragmentos de transcripciones. Las transcripciones
+ausentes deben archivarse primero con su herramienta de reuniones; incluso al terminar las páginas
+la cobertura del archivo sigue siendo desconocida.
+
+Continúa una ejecución limitada con el punto devuelto, las mismas opciones y `--cursor`, y después
+[revisa las decisiones y seguimientos propuestos](./recipes.md#review-a-meetings-decisions-and-follow-ups).
+
 ## Búsqueda por significado
 
 Con el modelo de búsqueda en tu ordenador, Memo también busca por significado, así que `holiday`
