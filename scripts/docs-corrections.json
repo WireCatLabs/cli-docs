@@ -2022,5 +2022,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "memo",
+    "slug": "mcp",
+    "reason": "The released project-evidence footer says no writes despite documented index catch-up; clarify derived-record and index effects as in https://github.com/WireCatLabs/cli-memo/pull/337 without changing the pinned runtime/source.",
+    "replacements": {
+      "en": [
+        {
+          "before": "It writes\nnothing.",
+          "after": "It creates no facts, tasks or project links; the index catch-up above can update local search indexes."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Он ничего не записывает.",
+          "after": "Он не создаёт факты, задачи или связи с проектами; описанное выше обновление индекса может менять локальные поисковые индексы."
+        }
+      ],
+      "es": [
+        {
+          "before": "No escribe nada.",
+          "after": "No crea hechos, tareas ni vínculos con proyectos; la actualización del índice descrita arriba puede modificar los índices de búsqueda locales."
+        }
+      ]
+    }
   }
 ]

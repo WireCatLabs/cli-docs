@@ -3,13 +3,14 @@
 ## Source and scope
 
 Prepared from site main `3efbcb4897402e70f4f75e5b91d8be1960c91083` in an isolated worktree.
-The Drive runtime remains v0.18.0 and Memo remains v0.73.0. The three Drive guide overrides select
+The Drive runtime remains v0.18.0; the companion Memo review advances its runtime from v0.73.0 to v0.76.0.
+The three Drive guide overrides select
 immutable native source `c86e077a5ffac187ce079572a844318bc8b6a663`
 ([native PR #139](https://github.com/WireCatLabs/drive-cli/pull/139)). Against Drive v0.18.0,
 the guide delta is exactly the new project-context recipe and its two incoming links: 74 added lines.
-No command reference, runtime pin, sidebar or OAuth setting changes.
+Drive's command reference, runtime pin, sidebar and OAuth settings are unchanged.
 
-## Behavioral comparison and publication hold
+## Behavioral comparison
 
 The existing [synthetic acceptance proof](https://github.com/WireCatLabs/cli-testing/tree/dc041b98/performance/projects/drive-context)
 passed ten checks with registry Drive 0.17.1 / Core 0.331.0 and Memo 0.75.0 / Core 0.351.0.
@@ -34,11 +35,18 @@ and npm lock are in `/var/tmp/dm-reviewed-install-xM2OSh/packages`. Reproduce fr
 runner using those exact registry versions and updating only its two version assertions. No live
 Google conversion, OAuth, owner account, memory invalidation or proposal creation was tested.
 
-**Hold publication:** the documented immediate sync-to-gather workflow is not validated on the
-currently reviewed Memo release. Keep this change a draft until Memo's separately owned runtime
-review advances to a release with index catch-up and the same synthetic scenario passes against
-the resulting exact reviewed pair. Passing syntax or localization checks cannot clear that hold.
-The guide text is not weakened or rewritten to pretend automatic catch-up works on Memo 0.73.0.
+The initial draft was held because the immediate sync-to-gather workflow failed on Memo 0.73.0.
+That historical failure is retained above. After the release owner confirmed Memo v0.76.0's registry
+artifact and tag, the normal filtered release workflow advanced only Memo's reviewed runtime.
+The same synthetic scenario then passed all ten checks on the exact reviewed Drive 0.18.0 / Memo
+0.76.0 pair, with their original Core 0.348.0 / 0.358.0 dependency graphs. The successful result is
+`/var/tmp/dm-release-context-result.json`, with its original install lock in
+`/var/tmp/dm-release-install-gBs4Oa/packages`. No manual index warming or scenario changes bypassed
+the old failure. First sync fetched two bodies; the unchanged repeat fetched none.
+
+The compatibility hold is resolved. Site PR/CI and deployment gates still apply; this preparation
+does not itself merge or deploy. Runtime/artifact details are in the
+[Memo release review](2026-10-19-memo-project-evidence.md).
 
 ## Editorial review
 
@@ -50,7 +58,7 @@ their capabilities are not newly certified by this scoped review.
 | --- | --- | --- |
 | usage / en, ru, es | Imports become shared local sources; connected-app reads alone do not import | Reviewed |
 | search / en, ru, es | Follow the recipe with explicit Drive scope; retain dates/links and separate relationships | Reviewed |
-| recipes / en, ru, es | Choose narrow roots, bound content reads, inspect pending/skipped work, gather within a date window | Reviewed; runtime hold above |
+| recipes / en, ru, es | Choose narrow roots, bound content reads, inspect pending/skipped work, gather within a date window | Reviewed; exact reviewed-pair proof passes |
 
 Russian uses «вы» in instructions and «основания» for source evidence; Spanish addresses the reader
 as «tú». New agent requests are localized. Command fences, inline literals, URLs and heading depth
