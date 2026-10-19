@@ -19,6 +19,38 @@ Tu agente ejecuta `memo context` para la persona y lee las fuentes. Comprueba lo
 fuentes que muestra. Si una parte está vacía, puede que los chats no estén descargados o que las
 cuentas no estén vinculadas ([personas](./people.md)).
 
+Si tienes reuniones archivadas de la misma serie periódica, pide a tu agente que las incluya:
+
+```text prompt
+Prepare for my next Harbour meeting. Find the exact meeting series in my selected Zoom account,
+then gather its archived discussions, linked people and projects, notes and open tasks.
+Also search the stored messages in my personal Telegram profile for Harbour over the last month.
+Suggest an agenda with sources. Separate proposals from agreed actions and say what history is missing.
+Do not claim that a future time is verified from the local archive.
+```
+
+El agente usa `memo meetings prepare <series-id> --source <provider>:<account>` con el ID exacto de la serie
+en el proveedor, que puede mostrar la lista de reuniones de Zoom. El ID no es un número de reunión local. Esto
+solo lee el historial guardado: no necesita ningún permiso nuevo de Zoom y no consulta el calendario. Usa el
+calendario del proveedor para verificar una sesión futura. Una serie no archivada puede tener igualmente contexto
+de mensajes seleccionados, pero Memo no puede inventar las transcripciones que faltan.
+
+Los mensajes y el correo se incluyen solo si se seleccionan. `--context-source tg.personal` significa el perfil
+`personal` guardado de `tg`; `max.personal` funciona igual. `email.work` significa un buzón llamado `work` en los
+ajustes de correo de Memo. El perfil o el buzón ya deben estar guardados. Repite la opción para hasta ocho cuentas
+e indica `--context-query Harbour`. Cada palabra literal debe coincidir; `OR` no es un operador de alias. Usa
+consultas separadas para los nombres alternativos. Esta selección no incluye notas de archivos ni documentos;
+léelos por separado con el [contexto del proyecto](./people.md#organizations-and-projects) y la [búsqueda](./search.md).
+
+Para un periodo fijo, indica marcas de tiempo con zona horaria en `--context-since-time` y en
+`--context-before-time`, que es exclusivo. Por defecto se cubren los catorce días anteriores al inicio de la
+preparación; una ventana de comunicaciones no puede superar los noventa días. `--history-since-time` controla por
+separado las reuniones anteriores. Añade `--json` para obtener la evidencia citada, el contexto enlazado y la
+cobertura. Cada fuente de comunicaciones informa del estado de su índice y, cuando es posible, de `next_cursor`;
+continúa con `--context-source tg.personal=<cursor>` con la misma consulta y la misma ventana explícita. Si
+`restart_required` es true, aumenta `--bytes` y empieza de nuevo; no supongas que los extractos mostrados cubren
+todas las coincidencias. La preparación no acepta ni asigna nada.
+
 ## Revisar las decisiones y los seguimientos de una reunión
 
 Úsalo cuando tus transcripciones de reuniones ya estén archivadas. Tu agente puede leer la evidencia en Memo,
@@ -49,9 +81,8 @@ duplicar la propuesta; cambiar el contenido requiere una clave nueva.
 
 Para preparar, pide al agente que combine los pasajes de reuniones anteriores con los hechos aceptados y las
 tareas abiertas del proyecto (`memo projects context`) y con los mensajes, el correo y las notas de los
-participantes (`memo context`). El lector de preparación de reuniones de Zoom también puede reunir el historial
-guardado de la serie. El nuevo lector de pasajes de Memo no localiza por sí mismo un evento de calendario próximo
-ni deduce la pertenencia a un proyecto. La respuesta debe mostrar sus fuentes y el historial que falta antes de
+participantes (`memo context`). `memo meetings prepare` reúne un historial guardado y acotado de la serie y el
+contexto enlazado; no localiza un evento de calendario próximo ni deduce la pertenencia a un proyecto. La respuesta debe mostrar sus fuentes y el historial que falta antes de
 sugerir una agenda.
 
 Si no aparece ningún pasaje, comprueba la cuenta seleccionada y la cobertura del archivo, y prueba los alias del

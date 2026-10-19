@@ -27,7 +27,7 @@ tg personal replies edit away --outside 09:00-19:00 --days mon-fri --timezone Eu
 tg personal replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` создает отключенное правило, в котором записаны все настройки. Правила находятся в `<profile>.replies.json`, в той же папке, что и `configFile`, который показывает `tg config show --json`. По умолчанию правила отвечают всем, кому они соответствуют. Чтобы ответить только избранным людям, укажите их идентификаторы Telegram через запятую; `tg personal contacts show <name> --json` печатает идентификатор человека как `id`:
+`add` создает отключенное правило, в котором записаны все настройки. Правила находятся в `<profile>.replies.json`, в той же папке, что и `config_file`, который показывает `tg config show --json`. По умолчанию правила отвечают всем, кому они соответствуют. Чтобы ответить только избранным людям, укажите их идентификаторы Telegram через запятую; `tg personal contacts show <name> --json` печатает идентификатор человека как `id`:
 
 ```sh
 tg personal replies audience --reply listed --allow-people 1000001

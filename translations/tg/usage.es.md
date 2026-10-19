@@ -75,6 +75,10 @@ npm install -g @wirecat/tg-cli
 ```
 
 ```sh
+tg skill install --for all  # the agent skill
+```
+
+```sh
 tg personal setup         # guided app registration, login and agent skill
 ```
 
@@ -184,18 +188,18 @@ tg personal chats list                     # newest first, archived chats includ
 ```
 
 ```sh
-tg personal chats list 'unread_count>0 kind:group'  # only groups with unread messages
+tg personal chats list 'unread_count>0 kind:group' --offline  # only groups with unread messages
 ```
 
 ```sh
-tg personal chats list 'title:*book*'   # titles containing "book"; at least 3 characters
+tg personal chats list 'title:*book*' --offline  # titles containing "book"; at least 3 characters
 ```
 
 ```sh
 tg personal chats show "Book club"         # kind, unread count, last message, who is in it
 ```
 
-`--kind` acepta `dialog` (individual), `group`, `channel` o `saved`. Los filtros se aplican a todos los chats devueltos. Los grupos y canales tienen [su propia sección](#groups-and-channels).
+Una consulta de chats se responde desde el archivo local, así que necesita `--offline`: Telegram no filtra nada en línea. `kind:` acepta `dialog` (individual), `group`, `channel` o `saved`. Los grupos y canales tienen [su propia sección](#groups-and-channels).
 
 ### Mensajes
 
@@ -262,7 +266,7 @@ tg personal review                         # the last 3 days
 ```
 
 ```sh
-tg personal review 'date>2026-09-23T09:00'  # from where the last review ended
+tg personal review 'date>"2026-09-23T09:00:00+02:00"'  # from where the last review ended
 ```
 
 ```sh
@@ -451,7 +455,7 @@ tg personal messages list "Book club" "date>2h"  # what came in during the last 
 ```
 
 ```sh
-tg personal messages list "Book club" "date>2026-09-20T09:00"
+tg personal messages list "Book club" 'date>"2026-09-20T09:00:00+02:00"'
 ```
 
 ```sh
@@ -463,7 +467,7 @@ En la terminal, las indicaciones para la página siguiente van por stderr; en JS
 ### Encontrar un chat antes de escribir
 
 ```sh
-tg personal chats list 'title:*book* kind:group'  # groups with "book" in the title
+tg personal chats list 'title:*book* kind:group' --offline  # groups with "book" in the title
 ```
 
 ```sh
@@ -790,7 +794,7 @@ tg personal chats events "Hiking"                  # who joined, left, was added
 ```
 
 ```sh
-tg personal chats events "Hiking" 'type:(join OR leave) time>=2026-09-01T00:00'
+tg personal chats events "Hiking" 'time>="2026-09-01T00:00:00+02:00"'
 ```
 
 ```sh
@@ -903,7 +907,7 @@ tg personal chats admins add "Hiking 2027" @kate --can pin,delete
 tg personal chats admins remove "Hiking 2027" @kate
 ```
 
-Un grupo nuevo es siempre un supergrupo. Alguien cuya configuración de privacidad impide que se agreguen se menciona en la respuesta en `providerMetadata.notAdded`; el grupo está hecho de todos modos. `chats join` a un grupo cuyos administradores aprueban quién se une, responde `requested: true` y sale de `0`: la solicitud se envía y usted ingresa una vez que un administrador la acepta. Cada uno pasa por la guardia como un cambio `chat` y cada persona agregada cuenta para el límite por hora.
+Un grupo nuevo es siempre un supergrupo. Alguien cuya configuración de privacidad impide que se agreguen se menciona en la respuesta en `provider_metadata.not_added`; el grupo está hecho de todos modos. `chats join` a un grupo cuyos administradores aprueban quién se une, responde `requested: true` y sale de `0`: la solicitud se envía y usted ingresa una vez que un administrador la acepta. Cada uno pasa por la guardia como un cambio `chat` y cada persona agregada cuenta para el límite por hora.
 
 `chats link create` crea otro enlace de invitación y no se lo dice a nadie: `--approval` hace que quien se una pregunte primero, `--expire-time` lo detiene a la vez (`2026-12-01T09:00`, o `30m`, `2h`, `7d` a partir de ahora), y `--max-uses` deja entrar como máximo esa cantidad de personas. `chats link update` cambia los mismos tres en uno de sus enlaces, el del grupo también (`--no-approval` desactiva la aprobación, `--expire-time never` elimina la caducidad); lo que dejas afuera se queda. Un enlace que pregunta primero no tiene límite de uso, por lo que `--approval` con `--max-uses` es rechazado. `chats update --join-approval on` hace que todos pregunten primero, sea cual sea el enlace que utilicen.
 
@@ -1016,11 +1020,11 @@ tg personal server install  # a systemd user unit or a launchd agent; starts not
 ## Qué hizo un comando
 
 ```sh
-tg --trace chats list          # show each request on stderr, keep nothing
+tg personal --trace chats list          # show each request on stderr, keep nothing
 ```
 
 ```sh
-tg --record chats list         # keep it, show nothing
+tg personal --record chats list         # keep it, show nothing
 ```
 
 ```sh

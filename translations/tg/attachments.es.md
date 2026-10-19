@@ -187,10 +187,10 @@ Comprueba una frase del archivo y abre el mensaje devuelto. Después utiliza
 ## Recuperar un lote de archivos incompleto
 
 Un fallo aislado conserva los archivos terminados y permite continuar con los siguientes archivos independientes.
-El JSON parcial contiene `complete: false` y `batch`: los recuentos de intentos, éxitos y fallos, `errorRate`
+El JSON parcial contiene `complete: false` y `batch`: los recuentos de intentos, éxitos y fallos, `error_rate`
 (una fracción de 0 a 1) y `failures`. Cada fallo incluye su ID o localizador, la etapa y `error`; la posición del adjunto aparece cuando se conoce.
 El error incluye código, mensaje y `actions`: esperar, reintentar, comprobar, configurar u omitir.
-La acción de espera indica `afterMs` cuando el proveedor comunica una pausa; la de configuración nombra el ajuste.
+La acción de espera indica `after_ms` cuando el proveedor comunica una pausa; la de configuración nombra el ajuste.
 
 El código de salida `0` no confirma que todos los archivos se descargaron: comprueba `complete` y `batch.failed`.
 El JSONL de una descarga parcial añade una fila `type: "batch_summary"`. Los archivos guardados permanecen en el disco.

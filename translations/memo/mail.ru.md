@@ -13,8 +13,21 @@ title: "Почта"
 
 Настройте свой почтовый аккаунт в Himalaya. Для Gmail используйте аккаунт IMAP с
 [паролем приложения](https://myaccount.google.com/apppasswords) Gmail (это отдельный пароль для одной
-программы; его можно отозвать в любой момент). Прежде чем продолжить, проверьте, что Himalaya показывает
-список ваших писем.
+программы; его можно отозвать в любой момент). Memo работает с Himalaya 2.x (`himalaya --version`).
+
+Himalaya читает свои аккаунты из `~/.config/himalaya/config.toml` (`HIMALAYA_CONFIG` или `-c` указывают
+другое место). Аккаунт Gmail с именем `work` выглядит так; пароль берётся из команды, здесь из связки ключей
+Linux, поэтому в файле он никогда не записан:
+
+```toml
+[accounts.work]
+imap.server = "imaps://imap.gmail.com:993"
+imap.sasl.plain.username = "you@example.com"
+imap.sasl.plain.password.command = "secret-tool lookup service himalaya account work"
+```
+
+`himalaya account list` показывает аккаунты, которые он прочитал. Прежде чем продолжить, проверьте, что
+Himalaya показывает список ваших писем.
 
 ```text prompt
 Help me set up Himalaya for my Gmail account with an app password, and check that it lists my inbox.
@@ -269,9 +282,10 @@ memo search mail 'invoice' --plain-order
 
 - Отправитель, получатели (To, CC и BCC), тема, дата и текст каждого письма.
 - Прочитано ли письмо и помечено ли оно звёздочкой — так, как это показывает ваш почтовый ящик.
-- Текст вложений, которые можно прочитать. Он ищется вместе с письмом. Для вложений PDF и Word нужны
-  [дополнительные модули чтения](./notes.md#files-memo-can-read). После их установки запустите
-  `memo sync --source email:work --retry-attachments`, чтобы прочитать пропущенные вложения. По id Gmail повторно читаются только письма с вложением, которое не удалось прочитать из-за отсутствующего модуля, до `--limit` писем. Список ящика не запрашивается; повторный запуск продолжает оставшиеся.
+- Текст вложений, которые можно прочитать. Он ищется вместе с письмом ([файлы, которые читает Memo](./notes.md#files-memo-can-read)).
+  `memo sync --source email:work --retry-attachments` повторно читает по id Gmail только письма с вложением, которое
+  не удалось прочитать из-за отсутствующего модуля, до `--limit` писем. Список ящика не запрашивается, поэтому это
+  быстро; повторный запуск продолжает оставшиеся.
 - До 1 000 000 символов каждого письма и до 200 000 символов каждого вложения
   ([как изменить ограничения](./configuration.md#mail)).
 
@@ -290,7 +304,7 @@ memo search mail 'invoice' --plain-order
 ## Почта и люди
 
 Чтобы письма человека попадали в [его контекст](./people.md#everything-about-a-person), свяжите адрес
-с этим человеком в tg или max: `tg contacts link 'Kai Sample' email:kai@example.com`.
+с этим человеком в tg или max: `tg personal contacts link 'Kai Sample' email:kai@example.com`.
 
 ## Телефоны и ссылки в почте
 

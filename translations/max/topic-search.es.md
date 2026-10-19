@@ -146,7 +146,7 @@ La búsqueda se realiza en todos los chats preparados. Puede encontrar una conve
 **Discutido en otro idioma.**
 
 ```sh
-max personal search conversations "аренда квартиры" --chat "Valencia expats"
+max personal search conversations "аренда квартиры" --chat "Клуб Пример"
 ```
 
 Con el modelo predeterminado, esto también ocurre en español, sobre “piso”.
@@ -164,8 +164,8 @@ max personal search conversations "условия договора" --filter 'ha
 **Comienza con un mensaje.** Encontraste un mensaje usando una búsqueda de palabras y quieres todo lo demás sobre este tema:
 
 ```sh
-max personal search messages '"вернули залог" chat:"Valencia expats"'
-max personal conversations related "Valencia expats" 5120
+max personal search messages '"вернули залог" chat:"Клуб Пример"'
+max personal conversations related "Клуб Пример" 5120
 ```
 
 **Busca también en chats de bots.** Por defecto, la búsqueda de temas se realiza en la cuenta actual. `--source personal`, `bots`, `all` o el nombre del servicio de mensajería amplía el alcance; luego cada resultado dice de qué cuenta proviene.

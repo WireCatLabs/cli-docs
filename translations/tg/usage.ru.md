@@ -75,6 +75,10 @@ npm install -g @wirecat/tg-cli
 ```
 
 ```sh
+tg skill install --for all  # the agent skill
+```
+
+```sh
 tg personal setup         # guided app registration, login and agent skill
 ```
 
@@ -184,18 +188,18 @@ tg personal chats list                     # newest first, archived chats includ
 ```
 
 ```sh
-tg personal chats list 'unread_count>0 kind:group'  # only groups with unread messages
+tg personal chats list 'unread_count>0 kind:group' --offline  # only groups with unread messages
 ```
 
 ```sh
-tg personal chats list 'title:*book*'   # titles containing "book"; at least 3 characters
+tg personal chats list 'title:*book*' --offline  # titles containing "book"; at least 3 characters
 ```
 
 ```sh
 tg personal chats show "Book club"         # kind, unread count, last message, who is in it
 ```
 
-`--kind` принимает `dialog` (личный чат), `group`, `channel`, `saved`. Фильтры проверяют все полученные чаты. Для групп и каналов есть [отдельный раздел](#groups-and-channels).
+Запрос по чатам выполняется по локальному архиву, поэтому ему нужен `--offline`: онлайн Telegram ничего не фильтрует. `kind:` принимает `dialog` (личный чат), `group`, `channel`, `saved`. Для групп и каналов есть [отдельный раздел](#groups-and-channels).
 
 ### Сообщения
 
@@ -262,7 +266,7 @@ tg personal review                         # the last 3 days
 ```
 
 ```sh
-tg personal review 'date>2026-09-23T09:00'  # from where the last review ended
+tg personal review 'date>"2026-09-23T09:00:00+02:00"'  # from where the last review ended
 ```
 
 ```sh
@@ -453,7 +457,7 @@ tg personal messages list "Book club" "date>2h"  # what came in during the last 
 ```
 
 ```sh
-tg personal messages list "Book club" "date>2026-09-20T09:00"
+tg personal messages list "Book club" 'date>"2026-09-20T09:00:00+02:00"'
 ```
 
 ```sh
@@ -465,7 +469,7 @@ tg personal messages list "Book club" "date<1d"  # what came before this time ye
 ### Найти чат и написать в него
 
 ```sh
-tg personal chats list 'title:*book* kind:group'  # groups with "book" in the title
+tg personal chats list 'title:*book* kind:group' --offline  # groups with "book" in the title
 ```
 
 ```sh
@@ -792,7 +796,7 @@ tg personal chats events "Hiking"                  # who joined, left, was added
 ```
 
 ```sh
-tg personal chats events "Hiking" 'type:(join OR leave) time>=2026-09-01T00:00'
+tg personal chats events "Hiking" 'time>="2026-09-01T00:00:00+02:00"'
 ```
 
 ```sh
@@ -905,7 +909,7 @@ tg personal chats admins add "Hiking 2027" @kate --can pin,delete
 tg personal chats admins remove "Hiking 2027" @kate
 ```
 
-Новая группа — это всегда супергруппа. Имя человека, чьи настройки конфиденциальности запрещают его добавление, указано в ответе под `providerMetadata.notAdded`; группа все равно создается. `chats join` в группу, администраторы которой одобряют присоединение, отвечает `requested: true` и завершается с кодом `0`: запрос отправлен, и вы попадаете в него, как только администратор его примет. Каждый из них проходит через охрану как изменение `chat`, и каждый добавленный человек засчитывается в почасовой лимит.
+Новая группа — это всегда супергруппа. Имя человека, чьи настройки конфиденциальности запрещают его добавление, указано в ответе под `provider_metadata.not_added`; группа все равно создается. `chats join` в группу, администраторы которой одобряют присоединение, отвечает `requested: true` и завершается с кодом `0`: запрос отправлен, и вы попадаете в него, как только администратор его примет. Каждый из них проходит через охрану как изменение `chat`, и каждый добавленный человек засчитывается в почасовой лимит.
 
 `chats link create` создает еще одну ссылку-приглашение и никому не сообщает: `--approval` заставляет того, кто присоединится по ней, спросить подтвердить вступление, `--expire-time` задаёт срок действия (`2026-12-01T09:00` или `30m`, `2h`, `7d` с этого момента), а `--max-uses` ограничивает число вступлений. `chats link update` меняет одни и те же три на одной из ваших ссылок, а также на собственной ссылке группы (`--no-approval` отключает одобрение, `--expire-time never` отменяет срок действия); неуказанные настройки сохраняются. Ссылка с одобрением вступления, не имеет ограничения на использование, поэтому `--approval` с `--max-uses` отклоняется. `chats update --join-approval on` заставляет всех спрашивать первыми, какую бы ссылку они ни использовали.
 
@@ -1020,11 +1024,11 @@ tg personal server install  # a systemd user unit or a launchd agent; starts not
 ## Что сделала команда
 
 ```sh
-tg --trace chats list          # show each request on stderr, keep nothing
+tg personal --trace chats list          # show each request on stderr, keep nothing
 ```
 
 ```sh
-tg --record chats list         # keep it, show nothing
+tg personal --record chats list         # keep it, show nothing
 ```
 
 ```sh

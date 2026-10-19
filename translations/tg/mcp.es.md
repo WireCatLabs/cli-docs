@@ -50,7 +50,7 @@ tg personal mcp setup claude-code  # or add it to Claude Code
 
 Ponga un perfil primero, por ejemplo `tg work mcp setup codex`. La instalación utiliza el comando propio de la aplicación y deja en paz a los demás servidores. Si ya existe una entrada con el mismo nombre, elimínela de la aplicación antes de ejecutar la configuración nuevamente. El perfil predeterminado ofrece herramientas que escriben. Entonces la configuración le pide que revise los permisos del perfil y lo ejecute nuevamente con `--allow-writes`. Esa bandera sólo confirma la instalación; no cambia los permisos. Para limitar lo que el agente puede hacer, configure primero el `permissions` del perfil ([abajo](#what-an-agent-may-do)).
 
-`mcp doctor` no lee mensajes y no inicia sesión en Telegram. Un buen resultado significa que el protocolo de enlace MCP y la lista de herramientas funcionan. No significa que la sesión de la cuenta sea válida. `potentialWrites` cuenta las herramientas que no están marcadas como de solo lectura. Cuando el servidor no se inicia, el error muestra las últimas líneas que escribió en stderr, con su carpeta de inicio, números largos y tokens ocultos. Las aplicaciones del navegador y del teléfono necesitan una conexión remota separada ([conectar una aplicación del navegador o del teléfono](./remote.md)).
+`mcp doctor` no lee mensajes y no inicia sesión en Telegram. Un buen resultado significa que el protocolo de enlace MCP y la lista de herramientas funcionan. No significa que la sesión de la cuenta sea válida. `potential_writes` cuenta las herramientas que no están marcadas como de solo lectura. Cuando el servidor no se inicia, el error muestra las últimas líneas que escribió en stderr, con su carpeta de inicio, números largos y tokens ocultos. Las aplicaciones del navegador y del teléfono necesitan una conexión remota separada ([conectar una aplicación del navegador o del teléfono](./remote.md)).
 
 **Claude Code, manualmente:**
 
@@ -74,10 +74,10 @@ tg work mcp config                  # another profile
 ```json
 {
   "mcpServers": {
-    "tg": {
+    "tg-personal": {
       "type": "stdio",
       "command": "/usr/bin/node",
-      "args": ["/usr/lib/node_modules/@wirecat/tg-cli/dist/bin/tg.js", "mcp"],
+      "args": ["/usr/lib/node_modules/@wirecat/tg-cli/dist/bin/tg.js", "personal", "mcp"],
       "env": { "XDG_RUNTIME_DIR": "/run/user/1000" }
     }
   }

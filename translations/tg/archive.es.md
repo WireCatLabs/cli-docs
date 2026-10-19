@@ -24,7 +24,7 @@ Términos utilizados en esta página:
 | Descargue el historial de un chat o el de cada chat | `tg personal messages sync <chat>`, `tg personal messages sync --all` |
 | Ejecute una descarga larga en segundo plano | `tg personal messages sync <chat> --background`, `tg personal store jobs list` |
 | Mantengal archivo local actualizado todo el tiempo | `tg personal server start`, `tg personal server install` |
-| Leer chats sin conectarse | `tg --offline messages list <chat>` |
+| Leer chats sin conectarse | `tg personal --offline messages list <chat>` |
 | Exportar un chat a líneas JSON o Markdown | `tg personal store export <chat> --output <file>` |
 | Preparar mensajes para el informe de un agente | `tg personal messages evidence <chat>` |
 | Verificar, realizar copias de seguridad y restaurar el archivo local | `tg personal store check`, `tg personal store backup`, `tg personal store restore` |
@@ -218,7 +218,7 @@ tg personal store export --include group --output-dir ~/tg-groups  # every store
 tg personal store export --all --output-dir ~/tg-all   # every stored chat of this account
 ```
 
-Si vuelves a ejecutarlo en la misma carpeta, solo añade lo que ha cambiado desde la última vez: mensajes nuevos, ediciones (también de mensajes antiguos) y eliminaciones. Un mensaje eliminado se escribe sin su texto, como `{ "id", "chatId", "deleted": true }`. Se rechaza una carpeta que contenga otros archivos o que se haya exportado desde otra cuenta. Un cambio solo en las reacciones no cuenta como cambio.
+Si vuelves a ejecutarlo en la misma carpeta, solo añade lo que ha cambiado desde la última vez: mensajes nuevos, ediciones (también de mensajes antiguos) y eliminaciones. Un mensaje eliminado se escribe sin su texto, como `{ "id", "chat_id", "deleted": true }`. Se rechaza una carpeta que contenga otros archivos o que se haya exportado desde otra cuenta. Un cambio solo en las reacciones no cuenta como cambio.
 
 ### Con contraseña
 
@@ -251,23 +251,23 @@ El agente podrá citar los localizadores en su escrito; tg no escribe un resumen
 ## Consultar sin conexión: `--offline`
 
 ```sh
-tg --offline chats list
+tg personal --offline chats list
 ```
 
 ```sh
-tg --offline messages list "Book club" --limit 50
+tg personal --offline messages list "Book club" --limit 50
 ```
 
 ```sh
-tg --offline messages show "Book club" 4242
+tg personal --offline messages show "Book club" 4242
 ```
 
 ```sh
-tg --offline messages context "Book club" 4242
+tg personal --offline messages context "Book club" 4242
 ```
 
 ```sh
-tg --offline contacts list
+tg personal --offline contacts list
 ```
 
 `--offline` responde desde el archivo local sin conectarse: no requiere sesión ni hace peticiones. El JSON es igual al de la consulta en línea, salvo que los chats se ordenan por actividad reciente mientras Telegram coloca primero los fijados.
@@ -316,7 +316,7 @@ tg personal server start  # starts it — through the unit, now that there is on
 
 ```sh
 tg personal server status
-systemctl --user enable tg-serve-default    # only if it should start at every login
+systemctl --user enable tg-serve-personal    # only if it should start at every login
 ```
 
 En macOS, el agente se guarda en `~/Library/LaunchAgents/`.

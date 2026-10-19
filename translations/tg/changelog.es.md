@@ -4,6 +4,76 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.75.0 — 19.10.2026
+
+### Correcciones
+
+- **El paso de inicio de sesión de `setup` se titula «Link this device»** y ya no pide escanear un código QR antes
+  de dibujarlo. La línea bajo el código dice dónde escanearlo; una terminal estrecha muestra solo la sugerencia de
+  ensancharla.
+- **Una terminal demasiado estrecha para el código QR ya no pide escanearlo** (cli-core 0.350.0). `session start` y
+  `setup` decían dónde escanear en Telegram antes del código; si el código no cabía, solo seguía la sugerencia de
+  ensanchar la terminal o pasar `--qr-file`. Ahora la línea de escaneo va después del código dibujado o de la nota
+  de `--qr-file`, y una terminal estrecha muestra solo la sugerencia.
+- **`tg <profile> setup --help` vuelve a mostrar el bloque Global Options.** 0.74.0 lo perdió cuando la línea de
+  uso ganó `<profile>`.
+- **Las sugerencias de errores y notas nombran el perfil**: «the store is behind this build — `tg personal store migrate`»
+  en lugar de `tg store migrate`, que al copiarlo fallaba con «name a profile».
+
+### Novedades
+
+- **Un siguiente paso en la salida `--json` y en un error lleva `line`, el comando completo con el perfil**
+  (cli-core 0.348.0): `"line": "tg personal mcp config"` junto a `"command": "mcp config"`. Copiar solo `command`
+  fallaba con «name a profile». `command` no cambia, y las respuestas MCP omiten `line`.
+
+## 0.74.0 — 19.10.2026
+
+### Novedades
+
+- **`tg guide` enumera escenarios: los comandos para una tarea habitual, en orden, y el porqué de cada uno.** tg trae
+  cuatro —`catch-up`, `find-what-was-said`, `searchable-files` y `agent-without-send`— y la lista remite a
+  `person-brief` de memo para ver a una persona en todas las herramientas. `tg guide <name> --json` devuelve uno como
+  datos. La CI comprueba que cada paso sea un comando de tg cuyas opciones y argumentos se analicen sin error.
+- **El `--help` de cada comando termina con Returns, Next usually y Example** (cli-core 0.345.0), y
+  `docs/commands.md` lleva las mismas líneas. La línea de uso muestra `tg <profile> …`.
+
+### Cambios — pueden romper scripts
+
+- **`npm install -g` instala la skill del agente solo cuando se pide.** Antes la escribía por defecto en
+  `~/.claude/skills` y `~/.agents/skills`, y npm oculta la salida de los scripts del ciclo de vida, así que nadie se
+  enteraba. Ahora `TG_INSTALL_AGENT=all` (o el nombre de un agente) la instala durante la instalación; si no,
+  `tg <profile> setup` la ofrece, o `tg skill install --for all`. El instalador de Windows pasa `all` por sí mismo y no
+  cambia.
+- **`tg --help` y `tg` sin nada muestran una primera pantalla breve** (cli-core 0.344.0): para qué sirve tg, ocho cosas
+  que hace y un cliente normal no, las demás herramientas de WireCat y adónde ir después. La ayuda completa de
+  commander, con cada comando y opción, está en `tg --help-all`; solo las opciones, en `tg help options`. Un script que
+  buscaba un comando o una opción global en `tg --help` debe leer `--help-all`.
+- **`tg commands` sin `--json` imprime una lista de texto, por secciones, incluso con la salida redirigida**: una línea
+  por comando, con el uso, qué hace y `(writes)` cuando cambia algo. Antes imprimía el documento JSON completo.
+  `--json` y `--jsonl` imprimen el mismo documento que antes; un script que analizaba un `tg commands` sin opciones
+  debe pasar `--json`.
+- **El `provider_metadata` de un chat indica `null` para un indicador desactivado o un nombre de usuario que ya no
+  existe**: antes `isBot`, `isForum`, `pinned` y `username` se omitían. El almacén de cli-core pronto conservará una
+  clave omitida, así que un chat desfijado o un nombre de usuario abandonado seguirían en el almacén, y `@old` seguiría
+  encontrando el chat. Todos los lectores de tg y cli-core tratan `null` como ausente, pero la salida JSON ahora
+  muestra estas claves como `null`: un script que comprueba si la clave está presente la verá.
+
+### Seguridad
+
+- **El inicio de sesión por QR es `loginQr` de cli-core, como en max y wa.** `--qr-file` se escribe como un archivo
+  temporal creado con modo `0600` y renombrado sobre la ruta, en lugar de escribirse y luego cambiarle los permisos, y
+  se borra cuando el inicio de sesión se interrumpe con Ctrl+C, una cancelación o `--timeout`, no solo cuando termina
+  por sí mismo. Una terminal demasiado estrecha para el código no dibuja nada y pide ensancharla o pasar
+  `--qr-file`. Sin terminal, `session start` dice "shows a QR code to scan — run it in a terminal, or pass
+  --qr-file <png>".
+- **Con el bloqueo de solo lectura y en un perfil readonly, una escritura se rechaza antes de conectarse; los rechazos
+  aparecen en `sends list`** (cli-core 0.343.0).
+
+### Correcciones
+
+- **`inbox` y `review` declaran su salida**, así que `tg commands schema inbox` da los campos del resumen de mensajes
+  y `--json=<fields>` rechaza un nombre que no tienen en lugar de imprimir elementos vacíos (cli-core 0.345.0).
+
 ## 0.73.1 — 18.10.2026
 
 ### Correcciones

@@ -46,9 +46,9 @@ title: "Сценарии: агент и ваш Telegram"
    ```
 
 Навык находится в папках Claude Code (`~/.claude/skills/tg-cli/`) и Codex и Gemini CLI (`~/.agents/skills/tg-cli/`). `tg skill show` печатает тот же текст, если ваш агент хранит skillи где-то еще.
-3. Сохраните приведенные ниже запросы в файлы, например в `~/tg-recipes/`. Команды расписания читают запрос из файла.
+3. Сохраните приведенные ниже запросы в файлы, например в `~/tg-recipes/`. Команды для запуска по расписанию ниже читают запрос из файла.
 
-Клиенту MCP не нужен skill. Подключите MCP-сервер (`tg personal mcp config` выводит запись для его настроек) и используйте готовые запросы: `catch-up`, `review`, `reply`, `find`. См. [запросы MCP-сервера](./mcp.md#prompts-and-chats-by-).
+Клиенту MCP не нужен skill. Подключите MCP-сервер (`tg personal mcp config` выводит запись для его настроек) и используйте готовые запросы: `catch-up`, `review`, `reply`, `find`, `open-tasks`, `link-conversations`. См. [запросы MCP-сервера](./mcp.md#prompts-and-chats-by-).
 
 ## Что может делать агент
 
@@ -80,6 +80,16 @@ tg personal recipients add "Book club"  # and only to the chats on this list
 **Чтение незаметно для собеседников.** Ни одна команда в сценариях ниже не отмечает прочитанное: никто не увидит, что агент открыл чат.
 
 ## Работа по расписанию
+
+- **`tg personal schedule`.** Встроено в `tg`: таймер создаёт сам `tg` (systemd, launchd или Планировщик заданий Windows). `schedule
+  agent` запускает `claude` или `codex` с запросом и `TG_READ_ONLY=1`, поэтому агент читает и готовит черновики, но не может
+  отправлять; `schedule command` запускает команду `tg`, например чтобы история чата оставалась сохранённой. Укажите `--every 2h`,
+  `--at 08:30` или `--at-time 30m` (один запуск). Управление — `schedule list`, `schedule run <name>` и
+  `schedule remove <name>`:
+
+  ```sh
+  tg personal schedule agent morning claude "read tg personal inbox and sum up what needs an answer" --at 08:30 --max-cost 1
+  ```
 
 - **Запланированные задачи Claude Desktop.** Задача запускается на вашем компьютере, поэтому она имеет `tg` и ваш логин. Запуск, пропущенный во время сна компьютера, выполняется один раз при его пробуждении. См. [Запланированные задачи Claude](https://code.claude.com/docs/en/desktop-scheduled-tasks).
 - **cron и `claude -p`.** Приложение не требуется, на любом компьютере, который в данный момент включен:
@@ -162,7 +172,7 @@ channel --json` и просьба выбрать самое важное. Без
 
 Изменения в Telegram: **нет**. Разрешите: `Bash(tg personal chats list:*)`, `Bash(tg personal messages list:*)`.
 
-> Запустите `tg personal chats list kind:dialog --limit 30 --json`. Для каждого чата, последнее сообщение которого было получено за последние 7 дней, прочитайте `tg personal messages list <chat id> --limit 5 --json`. Показать чаты, где последнее сообщение не мое и задает вопрос или делает запрос: кто, о чем и сколько дней назад.
+> Запустите `tg personal chats list kind:dialog --limit 30 --offline --json`. Для каждого чата, последнее сообщение которого было получено за последние 7 дней, прочитайте `tg personal messages list <chat id> --limit 5 --json`. Показать чаты, где последнее сообщение не мое и задает вопрос или делает запрос: кто, о чем и сколько дней назад.
 
 ## Найдите то, что было сказано
 

@@ -27,7 +27,7 @@ tg personal replies edit away --outside 09:00-19:00 --days mon-fri --timezone Eu
 tg personal replies edit away --per-chat 1/12h --per-person 1/1d
 ```
 
-`add` crea una regla que está desactivada, con cada configuración escrita. Las reglas se encuentran en `<profile>.replies.json`, en la misma carpeta que el `configFile` que nombra `tg config show --json`. Por defecto, las reglas responden a todas las personas con las que coinciden. Para responder solo a personas seleccionadas, indique sus ID de Telegram, separados por comas; `tg personal contacts show <name> --json` imprime la identificación de una persona como `id`:
+`add` crea una regla que está desactivada, con cada configuración escrita. Las reglas se encuentran en `<profile>.replies.json`, en la misma carpeta que el `config_file` que nombra `tg config show --json`. Por defecto, las reglas responden a todas las personas con las que coinciden. Para responder solo a personas seleccionadas, indique sus ID de Telegram, separados por comas; `tg personal contacts show <name> --json` imprime la identificación de una persona como `id`:
 
 ```sh
 tg personal replies audience --reply listed --allow-people 1000001

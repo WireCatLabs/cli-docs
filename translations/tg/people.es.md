@@ -49,12 +49,12 @@ Muestra todo lo que Telegram dice de la persona y cuántos mensajes suyos contie
   "mutualContact": true,
   "commonChatsCount": 2,
   "registered": { "at": "2019-04-01T00:00:00.000Z", "source": "estimate", "precision": "month" },
-  "hasPhoto": true,
+  "has_photo": true,
   "chats": [
-    { "id": "1000001", "title": "Example User", "kind": "dialog", "theirMessages": 412,
-      "firstAt": "2023-02-11T09:14:00.000Z", "lastAt": "2026-10-05T18:02:00.000Z", "complete": true },
-    { "id": "-1002000002", "title": "Book club", "kind": "group", "theirMessages": 37,
-      "firstAt": "2025-06-01T10:00:00.000Z", "lastAt": "2026-09-30T20:41:00.000Z", "complete": false }
+    { "id": "1000001", "title": "Example User", "kind": "dialog", "their_messages": 412,
+      "first_at": "2023-02-11T09:14:00.000Z", "last_at": "2026-10-05T18:02:00.000Z", "complete": true },
+    { "id": "-1002000002", "title": "Book club", "kind": "group", "their_messages": 37,
+      "first_at": "2025-06-01T10:00:00.000Z", "last_at": "2026-09-30T20:41:00.000Z", "complete": false }
   ],
   "aliases": [
     { "name": "Example U.", "username": "example_old", "link": "https://t.me/example_old",
@@ -69,13 +69,13 @@ Muestra todo lo que Telegram dice de la persona y cuántos mensajes suyos contie
 - **`registered`** siempre indica de dónde procede la fecha:
   - `telegram`: el mes que Telegram envía cuando alguien te escribe por primera vez;
   - `estimate`: una estimación a partir del ID de cuenta, con una tabla que termina en agosto de 2026. Los ID posteriores no reciben estimación, en lugar de una fecha que podría desviarse años.
-- **`hasPhoto`** cuenta su foto propia y la pública, nunca una foto que tú le hayas asignado.
+- **`has_photo`** cuenta su foto propia y la pública, nunca una foto que tú le hayas asignado.
 - **`chats`** enumera todos los chats compartidos y cualquier otro donde el almacén contenga mensajes suyos.
 - **`aliases`** son nombres y nombres de usuario anteriores que vio el almacén, de más antiguo a más nuevo, cada uno con un enlace `t.me` para un nombre de usuario anterior. `source: profile`: el perfil cambió mientras el almacén lo observaba; `source: messages`: el nombre de los mensajes guardados, aproximado, ya que un mensaje descargado de nuevo lleva el nombre más reciente. Queda vacío hasta que el almacén haya visto un cambio.
 
 ### Los recuentos reflejan lo que contiene tu almacén
 
-`theirMessages`, `firstAt` y `lastAt` proceden de tu almacén local, nunca de Telegram. Cuando `complete` es `false`, el almacén no contiene el chat desde el principio, así que el recuento es un mínimo y `firstAt` puede ser posterior al primer mensaje real de la persona. Descarga el chat para completar el historial:
+`their_messages`, `first_at` y `last_at` proceden de tu almacén local, nunca de Telegram. Cuando `complete` es `false`, el almacén no contiene el chat desde el principio, así que el recuento es un mínimo y `first_at` puede ser posterior al primer mensaje real de la persona. Descarga el chat para completar el historial:
 
 ```sh
 tg personal messages sync "Book club"
@@ -137,11 +137,11 @@ tg personal contacts check @example_user --no-registries
     { "reason": "link_first", "weight": 2, "source": "store" }
   ],
   "registries": [
-    { "name": "cas", "answer": "clean", "checkedAt": "2026-10-07T08:00:00.000Z" },
-    { "name": "lols", "answer": "clean", "checkedAt": "2026-10-07T08:00:00.000Z" }
+    { "name": "cas", "answer": "clean", "checked_at": "2026-10-07T08:00:00.000Z" },
+    { "name": "lols", "answer": "clean", "checked_at": "2026-10-07T08:00:00.000Z" }
   ],
   "unknown": ["new_account"],
-  "checkedAt": "2026-10-07T08:00:00.000Z"
+  "checked_at": "2026-10-07T08:00:00.000Z"
 }
 ```
 
@@ -154,6 +154,8 @@ La puntuación suma los pesos de todos los motivos encontrados. Es una pista, nu
 | `new_account` | 2 | registro de hace menos de 30 días, según el mes de Telegram o la estimación por ID |
 | `link_first` | 2 | su primer mensaje guardado es un enlace |
 | `same_text` | 2 | el mismo texto en varios chats |
+| `burst_join` | 1 | entró en una tanda de 5 o más personas, cada una a menos de 10 minutos de la anterior |
+| `mass_invited` | 1 | lo añadió alguien que no es administrador y que añadió a 5 o más de los miembros |
 | `photo_recent` | 1 | su foto visible más antigua tiene menos de 30 días |
 | `no_photo`, `no_username`, `no_bio` | 1 | esa parte del perfil está vacía |
 | `odd_name` | 1 | sin nombre, una secuencia larga de dígitos o un enlace en el nombre |

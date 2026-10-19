@@ -62,7 +62,8 @@ not read in order.
 
 ### Project
 
-- `changelog` — from `CHANGELOG.md` at the repository root; not a file in `docs/`.
+- `changelog` — from `CHANGELOG.md` at the repository root; not a file in `docs/`. The portal publishes an
+  npm tool's changelog under Project even when `meta.json` leaves it out, because the release-note gate reads it.
 - `roadmap.md` — what is planned, what is not.
 
 ## `docs/meta.json` — the sidebar

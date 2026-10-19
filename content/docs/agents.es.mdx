@@ -47,7 +47,7 @@ Cambia `codex` por `cursor`, `claude` o `gemini`. Sin `--agent`, la configuraci�
 
 ### La cuenta ya está conectada
 
-El comando de instalación de la [página de instalación](./installation.mdx) ya ejecutó `tg skill install --for all` (`tg`, `max` y `memo` también tienen un script de instalación, que npm 12 bloquea; el comando explícito hace el mismo trabajo). Si tu agente ya ve `tg-cli`, puedes saltarte este paso. `zm` no instala el skill por sí solo: tras `npm install -g`, ejecuta `zm skill install`. `drive` no tiene skill; da al agente la [documentación en Markdown](./mcp.mdx#documentación-para-tu-agente). Para añadir o actualizar las instrucciones sin repetir el inicio de sesión:
+`tg personal setup` con un agente elegido ya instaló el skill. Si tu agente ya ve `tg-cli`, puedes saltarte este paso. Una instalación global de `tg`, `max` o `memo` con npm añade el skill solo cuando `TG_INSTALL_AGENT`, `MAX_INSTALL_AGENT` o `MEMO_INSTALL_AGENT` nombra un agente (`all`, `claude`, `codex`, `cursor` o `gemini`). El instalador de Windows de un solo comando para `tg` y `max` lo añade salvo que pases `-Agent none`. `zm` y `drive` instalan un skill solo cuando se pide: tras `npm install -g`, ejecuta `zm skill install` o `drive skill install`. Para añadir o actualizar las instrucciones sin repetir el inicio de sesión:
 
 ```sh
 tg skill install
@@ -94,7 +94,7 @@ La cuenta y los chats deben ser tuyos. Después sigue con [Primeras tareas](./fi
   ordenador, el mismo nombre de perfil y las mismas variables de carpetas, como `TG_CONFIG_DIR`,
   si las definiste. Detalles:
   [Telegram](./tg/troubleshooting.md#no-session-for-profile-personal--run-tg-personal-setup-in-a-local-terminal) ·
-  [MAX](./max/troubleshooting.md#no-session-for-profile-default).
+  [MAX](./max/troubleshooting.md#no-session-for-profile-personal).
 
 ## Notas para tu agente
 
@@ -150,7 +150,7 @@ esté disponible para tu agente y abre una nueva sesión. La herramienta debe es
 
 ### Otro agente
 
-Los ejemplos anteriores no son una lista cerrada. Cualquier agente con acceso a la línea de comandos puede usar la herramienta. Dale la salida de `tg skill show`, o la [documentación en Markdown](./mcp.mdx#documentación-para-tu-agente). Puede consultar los comandos con `--help`.
+Los ejemplos anteriores no son una lista cerrada. Cualquier agente con acceso a la línea de comandos puede usar la herramienta. Dale la salida de `tg skill show`, o la [documentación en Markdown](./mcp.mdx#documentación-para-tu-agente). Encuentra qué hacer con `tg guide`, que enumera escenarios paso a paso para tareas habituales, y `tg commands`, que enumera todos los comandos por secciones y marca los que cambian algo. `--help` tras un comando, como `tg chats list --help`, muestra sus opciones.
 
 Un agente en la nube trabaja en otro ordenador. Instala allí la herramienta e inicia sesión; tu acceso local no está disponible para él.
 

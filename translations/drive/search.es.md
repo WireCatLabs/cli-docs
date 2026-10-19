@@ -57,11 +57,11 @@ coincidencias del texto.
 
 ## Buscar por significado
 
-Drive utiliza la caché compartida del componente de búsqueda local. Si usas Telegram o MAX,
-prepara el componente con esa herramienta y genera los vectores del texto importado:
+Drive utiliza la caché compartida del componente de búsqueda local. Descarga el componente una vez
+(no necesita perfil ni inicio de sesión) y genera los vectores del texto importado:
 
 ```sh
-tg personal models text download e5-small
+drive models text download e5-small
 drive personal sync --embed
 drive personal search 'what did we agree to spend?' --json
 ```
@@ -70,8 +70,8 @@ La descarga utiliza internet; la generación de vectores es local. Drive no desc
 un componente ausente. La generación procesa notas y documentos pendientes de toda la base
 compartida, incluidos otros perfiles; la búsqueda Drive sigue leyendo solo la cuenta Google
 seleccionada. La búsqueda por palabras funciona sin él. Cero resultados significa que
-no hubo coincidencias en lo importado, no que el documento no exista en Google Drive.
-Consulta [problemas de sincronización](./troubleshooting.md).
+no hubo coincidencias en lo importado, no que el documento no exista en Google Drive; antes de la primera
+importación, `not_imported` lo indica. Consulta [problemas de sincronización](./troubleshooting.md).
 
 ## Comprobar qué se buscó
 

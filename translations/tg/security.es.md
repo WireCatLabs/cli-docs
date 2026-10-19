@@ -97,7 +97,7 @@ Cada inicio añade un dispositivo en Telegram → Ajustes → Dispositivos.
 
 ## Cambios de la instalación global
 
-El postinstall global de npm instala la skill incluida en los directorios de agentes del usuario; en Windows añade la carpeta de comandos npm al PATH del usuario y elimina solo el lanzador `tg.ps1` generado por npm para este paquete. Conserva el lanzador `.cmd`. Las instalaciones de proyectos y npx no hacen estos cambios. `TG_INSTALL_AGENT=none` omite la skill. El instalador independiente de Windows hace la misma preparación aunque los scripts npm estén desactivados. No cambia la política de ejecución, el PATH del equipo, las credenciales ni el estado de la cuenta. La instalación nunca inicia sesión ni lee chats.
+El postinstall global de npm instala la skill incluida en los directorios de agentes del usuario solo cuando `TG_INSTALL_AGENT` nombra un agente; en Windows añade la carpeta de comandos npm al PATH del usuario y elimina solo el lanzador `tg.ps1` generado por npm para este paquete. Conserva el lanzador `.cmd`. Las instalaciones de proyectos y npx no hacen estos cambios. Si no está definida o vale `TG_INSTALL_AGENT=none`, no se instala ninguna skill. El instalador independiente de Windows hace la misma preparación aunque los scripts npm estén desactivados. No cambia la política de ejecución, el PATH del equipo, las credenciales ni el estado de la cuenta. La instalación nunca inicia sesión ni lee chats.
 
 ## Si se filtra la sesión
 

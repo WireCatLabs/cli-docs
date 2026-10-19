@@ -56,7 +56,7 @@ Las herramientas:
 |---|---|---|---|---|
 | Instalar | npm, pnpm, Bun | npm, Homebrew | git y uv, Docker, extensión de escritorio Claude | un binario, Homebrew, Scoop, AUR, Nix, Docker |
 | Escrito en | TypeScript | JavaScript | Python | Go |
-| Licencia | MIT | MIT | Apache-2.0 | AGPL-3.0 |
+| Licencia | Apache-2.0 | MIT | Apache-2.0 | AGPL-3.0 |
 
 ## Cuando otra herramienta encaja mejor
 

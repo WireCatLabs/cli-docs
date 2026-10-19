@@ -4,6 +4,60 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.63.0 — 19.10.2026
+
+### New
+
+- **`max --help` and `max` with no command show a short first screen** (cli-core 0.345.0): what max can do, the other
+  WireCat tools and where to go next — `max commands`, `max guide`, `max help options`, `max skill show`. It no
+  longer prints the full command list and all the global options.
+- **`max guide` — scenarios: which commands to run, in order, for a common task.** Four scenarios: `catch-up`
+  (go through what has piled up), `find-what-was-said` (find what someone wrote), `agent-on-a-timer` (a scheduled
+  agent that cannot send) and `post-as-a-bot` (write as a bot). `max guide <имя>` prints the steps, `--json` the
+  same as data. The `memo guide person-brief` scenario is shown under "Works with".
+- **`max help options`** prints the options of every command, **`max --help-all`** the former full help.
+- **`max commands` without `--json` prints the commands by section** (Read, Write, Organise, Automate, Set up), one
+  line per command; `max commands <путь>` narrows it.
+- **Each command's help ends with Returns, Next usually and Example lines**, and the same lines are in the
+  [command reference](./commands.md).
+
+### Changed — may break scripts
+
+- **`npm install -g` no longer installs the agent skill by itself.** It silently wrote to `~/.claude/skills` and
+  `~/.agents/skills`, and npm hides the install script's output. Now the skill is installed by `max <профиль> setup`
+  or `max skill install --for all`; `MAX_INSTALL_AGENT=all` (or an agent name) at install time installs it right
+  away, as before. The Windows installer passes `all` itself and behaves as before.
+- **`max --help` no longer lists the commands and global options.** A script that looked for them there needs
+  `max --help-all` or `max help options`.
+- **`max commands` without `--json` prints text, even into a pipe.** It used to print the whole JSON document
+  (hundreds of kilobytes); a script that parsed it needs to add `--json`.
+- **A typo in an option of a list that takes a query is an unknown-option error** (`unknown option '--limt' (Did you mean
+  --limit?)`), not a query word. A negation such as `-kind:channel` is still part of the query.
+
+### Fixed
+
+- **`inbox` and `review` declare their output** (cli-core 0.345.0): `max commands schema inbox` gives the fields of
+  the message summary, and `--json=<поля>` with a name it does not have refuses with the list of fields instead of
+  returning empty records.
+- **`--brief` and `--full` no longer mention mail** in max's help.
+- **A typo in a profile name no longer creates a profile.** `max typoprofile chats list` refused but left a
+  `profiles/typoprofile.json` file, and then the "name a profile" error and `max complete` offered `typoprofile` as
+  a profile on this computer. Now the file appears only at login; `session end` for such a name does not create it
+  either. Files left by earlier typos can be deleted from `~/.local/share/max-cli/profiles/`.
+- **`max <профиль> doctor` without a token suggests `max <профиль> setup`**, like the README and the "no session"
+  error, not `session start`.
+
+### Security
+
+- **The write ban takes effect before connecting to MAX** (cli-core). Under `MAX_READ_ONLY=1` or with the `readonly`
+  or `deny` level, `messages send`, `messages edit`, `messages delete --for-everyone`, `reactions add` and other
+  writes first connected to MAX and only then were refused; with a broken login they exited with code `10`. Now it
+  is code `5` with no connection, as the [security page](./security.md) promises. The refusal stays in `sends list`
+  as a short line: the command key and the kind, and the chat only if its id was given.
+- **`--dry-run` under `MAX_READ_ONLY` no longer answers "allowed"** for a write that a real run would refuse.
+- **`max mcp` under `MAX_READ_ONLY` does not offer writes to MAX**, and calling such a command through `max_write`
+  gets the ban's refusal, not "no such command".
+
 ## 0.62.0 — 18.10.2026
 
 ### New
@@ -1575,7 +1629,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.62.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.63.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

@@ -56,20 +56,32 @@
     "replacements": {
       "en": [
         {
-          "before": "judge a group's new messages and joins by its rules, and act as they allow — as the bot",
-          "after": "judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
+          "before": "\njudge a group's new messages and joins by its rules, and act as they allow — as the bot\n",
+          "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
+        },
+        {
+          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
+          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
         }
       ],
       "ru": [
         {
           "before": "проверить новые сообщения и вступления по правилам группы и выполнить разрешённое от бота",
           "after": "проверить новые сообщения по правилам группы и выполнить разрешённое от бота; вступления не проверяются"
+        },
+        {
+          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
+          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
         }
       ],
       "es": [
         {
           "before": "revisa como bot mensajes y entradas nuevos según las reglas y ejecuta lo permitido",
           "after": "revisa como bot los mensajes nuevos según las reglas y ejecuta lo permitido; no evalúa incorporaciones al grupo"
+        },
+        {
+          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
+          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
         }
       ]
     }
@@ -963,67 +975,6 @@
         {
           "before": "Los pasos para cada sistema operativo no se han probado en todos los sistemas. Si el paso no funciona, [abra el problema](https://github.com/WireCatLabs/max-cli/issues).",
           "after": "Si falla un paso de configuración, [abre una incidencia](https://github.com/WireCatLabs/max-cli/issues)."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "troubleshooting",
-    "reason": "Measured released tg0.42.0 parser in isolated state with network/keyring blocked: unknown command, unknown option and missing argument all exit2 and emit validation_error JSON stderr.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Exit code `1`, and the help on stderr, not JSON. The first word is the profile whenever it is not a\ncommand, so a typo in a command name becomes a profile name:",
-          "after": "Unknown commands, unknown options and missing required arguments return exit code `2` (`validation_error`). With `--json`, the error is a JSON object on stderr. An unrecognised first word is interpreted as a profile name, so a command typo may be read as a profile:"
-        },
-        {
-          "before": "| `1` | `internal_error` | a typo in a command name, or a fault in `tg` itself | [unknown command](#error-unknown-command-), [report it](#report-a-problem) |",
-          "after": "| `1` | `internal_error` | an unexpected failure in `tg` | [report it](#report-a-problem) |"
-        },
-        {
-          "before": "| `2` | `validation_error` | a value or a combination of options `tg` does not accept; a name that fits several chats | [values](#--limit-takes-a-whole-number-from-1-upwards), [several chats](#-matches-3-chats--name-one-by-its-id) |",
-          "after": "| `2` | `validation_error` | an unknown command or option, a missing argument, invalid values or an ambiguous chat name | [unknown command](#error-unknown-command-), [values](#--limit-takes-a-whole-number-from-1-upwards), [several chats](#-matches-3-chats--name-one-by-its-id) |"
-        },
-        {
-          "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
-          "after": "```text\ntg chat list --json\n{\"error\":{\"code\":\"validation_error\",\"reason\":\"input.invalid\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Код `1`, справка в stderr вместо JSON. Первое слово, не являющееся командой, считается профилем, поэтому опечатка может стать именем профиля:",
-          "after": "Неизвестная команда, неизвестная опция и пропущенный обязательный аргумент возвращают код `2` (`validation_error`). С `--json` ошибка выводится объектом JSON в stderr. Первое слово, не являющееся командой, считается именем профиля, поэтому опечатка может стать именем профиля:"
-        },
-        {
-          "before": "| `1` | `internal_error` | опечатка в команде или сбой `tg` | [неизвестная команда](#error-unknown-command-), [сообщить](#report-a-problem) |",
-          "after": "| `1` | `internal_error` | непредвиденный сбой `tg` | [сообщить](#report-a-problem) |"
-        },
-        {
-          "before": "| `2` | `validation_error` | значение или сочетание параметров, которое `tg` не принимает; имя, совпадающее с несколькими чатами | [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |",
-          "after": "| `2` | `validation_error` | неизвестная команда или опция, пропущенный аргумент, неверное значение или неоднозначное имя чата | [неизвестная команда](#error-unknown-command-), [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |"
-        },
-        {
-          "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
-          "after": "```text\ntg chat list --json\n{\"error\":{\"code\":\"validation_error\",\"reason\":\"input.invalid\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
-        }
-      ],
-      "es": [
-        {
-          "before": "Código de salida `1`; muestra ayuda por stderr, no JSON. La primera palabra es el perfil si no es un comando, por lo que una errata en el comando se interpreta como perfil:",
-          "after": "Los comandos u opciones desconocidos y los argumentos obligatorios ausentes devuelven el código `2` (`validation_error`). Con `--json`, el error es un objeto JSON en stderr. Una primera palabra que no sea un comando se interpreta como nombre de perfil, así que una errata puede convertirse en un perfil:"
-        },
-        {
-          "before": "| `1` | `internal_error` | error en el nombre del comando o fallo de `tg` | [comando desconocido](#error-unknown-command-), [informar del problema](#report-a-problem) |",
-          "after": "| `1` | `internal_error` | un fallo inesperado de `tg` | [informar del problema](#report-a-problem) |"
-        },
-        {
-          "before": "| `2` | `validation_error` | un valor o una combinación de opciones que `tg` no acepta; un nombre que coincide con varios chats | [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |",
-          "after": "| `2` | `validation_error` | comando u opción desconocidos, argumento ausente, valor inválido o nombre de chat ambiguo | [comando desconocido](#error-unknown-command-), [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |"
-        },
-        {
-          "before": "```text\ntg chat list\nerror: unknown command 'list'\n```",
-          "after": "```text\ntg chat list --json\n{\"error\":{\"code\":\"validation_error\",\"reason\":\"input.invalid\",\"message\":\"unknown command 'list' \\\"chat\\\" is not a command, so it was read as a profile name — which left \\\"list\\\" to be one.\"}}\n```"
         }
       ]
     }
@@ -1971,55 +1922,6 @@
     }
   },
   {
-    "tool": "zm",
-    "slug": "search",
-    "reason": "Memo 0.41.0 list filters use query terms and facts add uses kind; update the meeting-knowledge examples from the separately pinned Zoom guide.",
-    "replacements": {
-      "en": [
-        {
-          "before": "memo notes list --about meeting:1/1 --json",
-          "after": "memo notes list 'about:\"meeting:1/1\"' --json"
-        },
-        {
-          "before": "memo facts add \"Alice Example will review\" --type promise --scope work",
-          "after": "memo facts add \"Alice Example will review\" --kind promise --scope work"
-        },
-        {
-          "before": "memo facts list --subject meeting:1/1 --json",
-          "after": "memo facts list 'subject:\"meeting:1/1\"' --json"
-        }
-      ],
-      "ru": [
-        {
-          "before": "memo notes list --about meeting:1/1 --json",
-          "after": "memo notes list 'about:\"meeting:1/1\"' --json"
-        },
-        {
-          "before": "memo facts add \"Alice Example will review\" --type promise --scope work",
-          "after": "memo facts add \"Alice Example will review\" --kind promise --scope work"
-        },
-        {
-          "before": "memo facts list --subject meeting:1/1 --json",
-          "after": "memo facts list 'subject:\"meeting:1/1\"' --json"
-        }
-      ],
-      "es": [
-        {
-          "before": "memo notes list --about meeting:1/1 --json",
-          "after": "memo notes list 'about:\"meeting:1/1\"' --json"
-        },
-        {
-          "before": "memo facts add \"Alice Example will review\" --type promise --scope work",
-          "after": "memo facts add \"Alice Example will review\" --kind promise --scope work"
-        },
-        {
-          "before": "memo facts list --subject meeting:1/1 --json",
-          "after": "memo facts list 'subject:\"meeting:1/1\"' --json"
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "groups",
     "reason": "Public guides carry no release numbers (AUTHORING: current capabilities). tg v0.66.0 docs/groups.md names cli-core 0.298.0 and tg 0.63.0 for the shared category file; which released tools read it is not settled at the current pins (MAX v0.56.0 is on Core 0.296.0; memo v0.58.0 is on Core 0.311.0 without tasks categories), so the sentence names no tools or versions.",
@@ -2092,6 +1994,31 @@
         {
           "before": "via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken",
           "after": "via the link `https://api.telegram.org/file/bot<token>/<file_path>`, where `<file_path>` is taken"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "troubleshooting",
+    "reason": "tg 0.74.0 puts a bare --qr-file <png> in a heading; MDX reads <png> as raw HTML and the table of contents cannot render it. Quote it as code until tg-cli does.",
+    "replacements": {
+      "en": [
+        {
+          "before": "### \"`tg session start` shows a QR code to scan — run it in a terminal, or pass --qr-file <png>\"",
+          "after": "### \"`tg session start` shows a QR code to scan — run it in a terminal, or pass `--qr-file <png>`\""
+        }
+      ],
+      "ru": [
+        {
+          "before": "### \"`tg session start` показывает QR-код для сканирования — запустите его в терминале или передайте --qr-file <png>\"",
+          "after": "### \"`tg session start` показывает QR-код для сканирования — запустите его в терминале или передайте `--qr-file <png>`\""
+        }
+      ],
+      "es": [
+        {
+          "before": "### \"`tg session start` shows a QR code to scan — run it in a terminal, or pass --qr-file <png>\"",
+          "after": "### \"`tg session start` shows a QR code to scan — run it in a terminal, or pass `--qr-file <png>`\""
         }
       ]
     }

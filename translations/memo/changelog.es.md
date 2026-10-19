@@ -8,7 +8,127 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
-## Unreleased
+## 0.73.0 — 19.10.2026
+
+### Changed — may break callers
+
+- **`npm install -g` installs the agent skill only when asked.** It wrote the skill into `~/.claude/skills` and
+  `~/.agents/skills` by default, and npm hides a lifecycle script's output, so nobody was told. Now
+  `MEMO_INSTALL_AGENT=all` (or an agent's name) installs it at install time; otherwise run
+  `memo skill install --for all`.
+- **`memo commands` without `--json` prints the commands as text, by section** (Read, Write, Organise, Automate,
+  Set up), one line each with `(writes)` on a command that changes something, instead of the JSON document. A
+  path lists one group: `memo commands mail rules`. `memo commands --json` is unchanged, contract 4.
+- **A bare `memo`, or a group without its command (`memo tags`), exits 2 instead of 1**, as the other WireCat tools
+  do: it prints the first screen or the group's help, and a missing command is a usage mistake.
+- **Adopt Core 0.348.0 and Base 0.47.0**, which move together: a next step in `--json` output may carry `line`, the
+  whole command to type. Core 0.348.0 changes no store schema from the 0.347.0 tg and max pin. An SDK consumer that
+  pins Core or Base beside memo moves with them.
+
+### Added
+
+- **`memo projects evidence <project> --source <accounts|all>` and MCP `project_evidence`: cited references about a
+  project** from stored messages, mail and imported notes folders. An existing project brings its name and aliases;
+  each name, `--context-query` and `--contact` is its own literal search, and the hits are joined, each with the
+  searches that found it. `--since-time` takes days back (default `60d`). An item found only through a person's
+  name is marked `person-only`. A source that failed or has no reader yet (your own notes, meetings) is listed,
+  never read as empty, and so is one whose new text still waits for the search index. `--limit` and `--max-pages`
+  bound a run, and `--cursor` continues a stopped one with the same window. Nothing is written.
+
+### Fixed
+
+- **`--help` works on the 13 commands that take a query**: `notes list`, `folders list`, `tags list`, `tasks list`,
+  `tasks agenda`, `projects meetings list`, `relationships list`, `vocabulary list`, `memories list`, `facts list`,
+  `meetings actions list`, `actions list` and `agents log` exited 2 on `--help` as an unknown option (Core 0.347.0). A test now runs `--help`
+  on every command.
+- **A search that skips meaning for a missing model names the tools that download it** (tg, max or wa), from Core
+  itself; memo no longer rewrites a `tg models text download` hint it was handed.
+- **`memo commands | head` no longer crashes** with an unhandled `EPIPE` when the reader stops early; memo ignores
+  the closed pipe, as the tools built on Core do.
+
+## 0.72.0 — 18.10.2026
+
+### Changed — may break callers
+
+- **`memo --help` and a bare `memo` show a short first screen instead of every command**: what memo is for, eight
+  things it does, the other WireCat tools, and where to go next (`memo commands`, `memo guide`, `memo help options`,
+  `memo skill show`). A script that read a command or an option from the root help reads `memo --help-all`, which
+  prints the old help, or `memo help options`.
+- **A command's `--help` ends with Returns, Next usually and Example** in place of its Examples block, worked out
+  from the command's definition. `docs/commands.md` shows the same lines.
+- **A list command refuses an unknown `--option` before it reads anything**, with commander's message
+  (`unknown option '--project'`). `memo tasks list --project HRB` used to answer with a pointer to `project:HRB`.
+
+### Added
+
+- **`memo guide [name]`: scenarios, the commands for a common task in order and why each**, with `--json` for agents.
+  `person-brief` gathers one person across tg, MAX, mail, notes, meetings and Drive before a call;
+  `decision-trail` finds what was decided about a topic across every source; `start-the-day`, `prepare-meeting` and
+  `set-up` stay within memo. Every memo step is checked against the command tree in CI.
+
+### Security
+
+- **`MEMO_READ_ONLY=1` refuses every change with `permission_error` (exit 5)** before the command runs: writes to
+  the store and your files, mail trash and restore, the timer, the skill files, `upgrade` and `ask --allow-remote`.
+  Reads and `memo sync` still run, and so do `tasks plan` and `tasks link`, which cli-core marks as safe for a
+  scheduled agent. `memo mcp` leaves its writing tools out under the lock.
+
+## 0.71.0 — 18.10.2026
+
+### Added
+
+- MCP tools `meeting_actions_add`, `meeting_actions_show` and `meeting_actions_list` stage and inspect
+  cited meeting follow-ups for owner review. Exact retries reuse their batch; no confirmation tool is exposed.
+- `memo projects context` and MCP `project_context` bring pending key documents, relationships, facts and
+  meeting findings together, alongside open numbered tasks. Bounded previews report continuation and source scope.
+
+## 0.70.0 — 18.10.2026
+
+### Changed — may break callers
+
+- **`memo sync --ignore` leaves a file or folder alone for that run.** Notes already imported from it stay in Memo;
+  before, the run removed them and the next run imported them again. `notes.ignore` in the config still removes them.
+
+### Fixed
+
+- Project context, key-document commands and search key-document ordering accept an exact project name or alias,
+  as meeting searches do. Ambiguous names list candidates; numeric IDs, `project:<id>` and keys still work.
+- **`memo sync` reports the files it could not read on every run, also in the text report.** Each folder line counts
+  them (`1 not read`) and a line names each file and why, such as a file over 50 MiB or an `.xls`. Before, only the
+  first run's `--json` listed them, and the count of notes included them.
+- **A notes folder that is gone is a normal error**, `not_found` with the way to fix it, not "this is a bug (ENOENT)".
+  `memo doctor` names the same fix in place of a bare `memo folders`.
+- `memo notes show` names a link that leads nowhere by its text, in place of an empty entry after a comma.
+- The hint for search by meaning gives a command that works without installing tg:
+  `npx -y @wirecat/tg-cli local models text download e5-small`.
+- The docs: `.doc` files are read and need nothing extra (PDF and Word readers come with Memo); install leads with
+  `memo skill install --for all` and explains npm 12's "install scripts blocked"; Himalaya 2.x and its config file;
+  the cache folder and `MEMO_AUTO`; plain `memo tasks list` leaves out project tasks; tg and max commands show a
+  profile; the README example is real output.
+
+## 0.69.0 — 18.10.2026
+
+### Added
+
+- Prepare a cited packet of stored series history with `memo meetings prepare` or the MCP tool `meeting_prepare`.
+  It includes linked people and projects, accepted facts, owner notes and source tasks. You can explicitly add
+  a stored messenger profile or mailbox and a literal word query. Memo reports missing history, bounded output
+  and continuation cursors; it does not contact a provider or verify the next meeting time.
+
+### Changed — may break callers
+
+- **Commands with no text view of their own print plain lines in place of JSON when `--json` is not given:** one line
+  per record for a list (`organizations list`, `projects list`, `reminders list`, `tasks list`…) and `field: value`
+  lines for one record (`projects add`, `tasks add`…). A script that read that JSON gets the same data, in the shared
+  envelope, with `--json`.
+
+### Fixed
+
+- **A failed mail login no longer holds `memo sync` for a minute.** A read that fails is tried again after 15 s, and
+  a refused login or keyring was too, twice per account; with two accounts that took 60 s. It now fails at once.
+  A missing himalaya says it is not installed or not on PATH, not `failed (ENOENT): no error text`.
+- The README and the installation page give the sizes: the search model is about 135 MB and the install about
+  250 MB. The Windows steps say Windows is not tested yet.
 
 ## 0.68.0 — 18.10.2026
 
@@ -207,8 +327,7 @@ The same code as 0.60.0, published again under a new number. Nothing changed for
 
 - **Mail stored before memo kept Reply-To and Gmail's SPF, DKIM and DMARC verdicts gets them.** Each sync reads
   the header lines of up to 2,000 such emails from Gmail, newest first, until none is left; the text is not read
-  again. The sender score then sees these signals on all mail: on the owner's mailbox 57,000 of 92,000 emails
-  stored in full had none.
+  again. The sender score then sees these signals on all mail, not only on mail stored since memo began keeping them.
 
 ## 0.58.0 — 17.10.2026
 
@@ -217,8 +336,7 @@ The same code as 0.60.0, published again under a new number. Nothing changed for
 - `memo meetings actions` stages cited meeting facts and project tasks for owner review. Confirmation creates selected records atomically, keeps review receipts and prevents exact retries from duplicating accepted work. Missing dates and assignees stay unknown; stale evidence is refused.
 - **Every sender gets its spam score in the store, and search shows it.** Each sync scores the account's senders
   from the stored mail, at most once a day, as `memo mail inspect` scores a group; a hit from a scored sender
-  carries `sender_score` (score and signals) in `--json`. Results are not reordered by it. On the owner's mailbox:
-  5,789 senders in 15 seconds. cli-core 0.311.0 (store version 19).
+  carries `sender_score` (score and signals) in `--json`. Results are not reordered by it. cli-core 0.311.0 (store version 19).
 - **`memo mentions list|show|confirm|reject`: phones, e-mail addresses, links, documents, names and street addresses in
   documents, notes and mail.** `memo mentions list note kind:phone`; mail is read only from the accounts named by
   `--account` (repeatable), never every mailbox by default. `show` names the senders of received mail that may own a
@@ -229,8 +347,7 @@ The same code as 0.60.0, published again under a new number. Nothing changed for
 ### Fixed
 
 - **The sender score counts a failed DMARC check only on mail from 2022 on.** Before that, senders often published a
-  policy their own mail did not meet yet; on the owner's mailbox every failure was from 2018 to March 2021, all from
-  real senders. Senders at 3 or more on the strong signals: 20 → 2, both look-alike domains.
+  policy their own mail did not meet yet, so an early failure is no sign of fraud.
 - **A broken config file is reported in one line** (cli-core 0.304.0, 0.307.0): the first bad key, a fixed reason
   and a count of the rest, never a value — `config.json: updateCheck is an unknown setting; rename it to
   update_check (and 1 more problem)`. An old camelCase key is named with its new name first.
@@ -254,8 +371,7 @@ The same code as 0.60.0, published again under a new number. Nothing changed for
   spoofs, nor senders whose DMARC failed only because they signed for another domain.** "Google via LinkedIn" from
   LinkedIn's own domain is LinkedIn passing a page on; Coursera and Quora name courses and spaces after companies;
   hellosign, dropboxmail, onedrive and microsoftadvertising are the brands' own domains. A DMARC failure counts only
-  without a valid DKIM signature, and not for a sender that passes DMARC on other mail. On the owner's mailbox the
-  senders at 3 or more on these signals went from 71 to 20.
+  without a valid DKIM signature, and not for a sender that passes DMARC on other mail.
 
 ### Documentation
 
@@ -459,8 +575,7 @@ The same code as 0.60.0, published again under a new number. Nothing changed for
 - **`--filter` takes `from:<address|domain|word>` and `to:<address>`**: `from:sample` matches a sender whose
   address or display name contains the word.
 - **Two more spam signals in the sender score:** `never_opened` (+2, you opened none of a sender's mail) and
-  `dkim_not_passed` (+2, Gmail's DKIM check did not pass on most of it). On the owner's mailbox they raised the
-  share of Gmail Spam reaching score 3 from 22.9% to 84.2%, with the same 1 of 63 replied-to senders flagged
+  `dkim_not_passed` (+2, Gmail's DKIM check did not pass on most of it)
   ([cli-testing](https://github.com/WireCatLabs/cli-testing/tree/main/performance/mail/spam-scoring)).
 
 ### Cambios que pueden afectar a scripts
@@ -736,8 +851,7 @@ The same code as 0.60.0, published again under a new number. Nothing changed for
 
 - **A mail sync goes on where the last one stopped, without listing the mailbox again.** Each run keeps, in the
   store, the mailbox's UIDVALIDITY and the UIDs whose outcome is final (stored, recorded or skipped by a rule), so a
-  rerun reads metadata only for mail not done: a 305,000-email mailbox no longer costs 15–25 minutes of listing
-  per run. A whole listing — the only kind that marks deleted mail and refreshes labels and read state — still runs
+  rerun reads metadata only for mail not done: a large mailbox is no longer listed whole on every run. A whole listing — the only kind that marks deleted mail and refreshes labels and read state — still runs
   at least daily, whenever the rules change, when UIDVALIDITY changes, and with the new `memo sync --rescan`. A
   window under 5,000 emails, like the timer's 30 days, is listed whole every run. An mbox file read to the end is
   not read again until its size or time changes. `memo sync --json` adds `pass` (`full` or `resumed`) to each
@@ -1000,8 +1114,7 @@ The same code as 0.60.0, published again under a new number. Nothing changed for
 ### Corregido
 
 - **`memo ask` gives coverage as counts per account, and its 64 KiB limit covers the whole answer.** Each
-  messenger account had one row per chat, up to 500, which made 95% of an answer (64 KB of 68 KB on one real
-  store); now `chats` counts `checked`, `complete`, `partial`, `neverFetched`, `behind` and `withGaps`, and `more`
+  messenger account had one row per chat, up to 500, which could fill most of an answer; now `chats` counts `checked`, `complete`, `partial`, `neverFetched`, `behind` and `withGaps`, and `more`
   says the 500-chat check was cut short. The size check measured the evidence only; it now measures what is printed.
 
 ## 0.21.0 — 11.10.2026

@@ -43,7 +43,7 @@ MAX_REQUESTS_PER_MINUTE=10 max personal messages sync Друзья
 
 - **“Too many requests.”** The command stops with exit code `8` (`rate_limited`). MAX's response does not tell `max` how long to wait, so it neither waits nor retries. `messages sync` preserves downloaded data and resumes from the same point on the next run. Wait a few minutes.
 - **Too many logins.** MAX rejects login and `max` does not log in again until the pause ends: this applies to every command, `max personal session start` and the background server. Consecutive refusals increase the pause: 1 minute, 5 minutes, 30 minutes, one hour, 6 hours, then one day. A successful login resets it. See [troubleshooting](./troubleshooting.md).
-- **If MAX does specify a waiting time**, it applies to the whole profile. The next request from any process waits until it ends; a request that would wait more than 5 minutes returns code `8` immediately without sending anything. `max personal doctor` shows this in `flood`; `max personal flood clear` clears it early if you know the restriction has ended.
+- **If MAX does specify a waiting time**, it applies to the whole profile. The next request from any process waits until it ends; a request that would wait more than 5 minutes returns code `8` immediately without sending anything. `max personal server status` shows this in the `flood` field; `max personal flood clear` clears it early if you know the restriction has ended.
 
 ## Sending
 

@@ -18,8 +18,8 @@ Algunas palabras que utiliza esta página:
 
 | Tarea | Comando | ¿Guarda algo? |
 |---|---|---|
-| Vea cada solicitud a medida que sucede | `tg --trace …` | no, imprime solo en stderr |
-| Mantenga un registro de una ejecución | `tg --record …` | sí, un registro de ejecución |
+| Vea cada solicitud a medida que sucede | `tg personal --trace …` | no, imprime solo en stderr |
+| Mantenga un registro de una ejecución | `tg personal --record …` | sí, un registro de ejecución |
 | Encuentra una ejecución fallida más tarde | `tg personal runs list` | una ejecución fallida se mantiene sola |
 | Mantenga un registro de cada ejecución | `tg personal config set record true` | sí, cada ejecución |
 | Verifique la instalación | `tg personal doctor`, `tg personal doctor --online` | no |
@@ -28,7 +28,7 @@ Algunas palabras que utiliza esta página:
 ## Ver las operaciones: `--trace`
 
 ```sh
-tg --trace messages list "Book club" --limit 5
+tg personal --trace messages list "Book club" --limit 5
 ```
 
 `--trace` imprime cada operación por stderr mientras ocurre: `→` indica lo solicitado y `←` la respuesta, con identificadores, cantidades, duración y código de error si lo hay.
@@ -43,7 +43,7 @@ También pasa por las líneas de registro de la biblioteca de Telegram que se en
 ## Guardar una ejecución: `--record`
 
 ```sh
-tg --record chats list
+tg personal --record chats list
 tg personal runs list        # recorded runs, newest first
 tg personal runs show <run-id>  # one run: its outcome, and one line per operation
 tg personal runs path <run-id>  # the folder that holds it
@@ -56,7 +56,7 @@ Un registro de ejecución es una carpeta en `runs/<day>/` en la carpeta de estad
 
 ## Las ejecuciones fallidas siempre se guardan
 
-Cuando un comando termina con un error, su ejecución se mantiene incluso sin `--record`. `run.json` entonces tiene `"keptBecauseFailed": true`. Esto es cierto para cada comando y cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo y comandos que nunca se conectan (`models`, `server`, `upgrade`). Un error antes de que se iniciara el comando, como un archivo de configuración que no se carga, se mantiene como una ejecución denominada `tg`. El registro contiene sólo las palabras del comando, como `messages list`, nunca lo que siguió.
+Cuando un comando termina con un error, su ejecución se mantiene incluso sin `--record`. `run.json` entonces tiene `"kept_because_failed": true`. Esto es cierto para cada comando y cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo y comandos que nunca se conectan (`models`, `server`, `upgrade`). Un error antes de que se iniciara el comando, como un archivo de configuración que no se carga, se mantiene como una ejecución denominada `tg`. El registro contiene sólo las palabras del comando, como `messages list`, nunca lo que siguió.
 
 Una ejecución completamente exitosa no deja registro a menos que usted lo solicite. Por lo tanto, un informe de problema siempre tiene un error al adjuntarlo. `--no-record`, o `"record": false` en la configuración, también desactiva esto.
 
@@ -86,7 +86,7 @@ Un registro de ejecución y `--trace` contienen el nombre, los identificadores, 
 
 Lo mismo ocurre con un informe elaborado a partir de una ejecución.
 
-## Comprobar la instalación: `tg doctor`
+## Comprobar la instalación: `tg personal doctor`
 
 ```sh
 tg personal doctor     # connects to nothing
@@ -97,9 +97,9 @@ Muestra versión, entorno de ejecución, perfil, configuración, existencia de s
 
 - **`login`** es `not checked` sin `--online`. Un archivo de sesión en el disco no significa que Telegram todavía lo acepte. Con `--online` es `ok` o `failed`, con una pista.
 - **`files`** y **`telegram.session.files`** nombran cada archivo o carpeta privada que otros usuarios de esta máquina pueden leer: la sesión, el almacén, sus archivos SQLite `-wal` y `-shm`, el diario de envío y la carpeta de ejecuciones. Cada uno tiene el comando `chmod` que lo soluciona. `doctor` nunca cambia el modo de un archivo. Windows no está marcado.
-- **`online.clock`** (con `--online`) compara el reloj de esta computadora con el de Telegram.   `skewMs` es positivo cuando esta computadora está por delante. Avisa (`ok: false`) a los 10 segundos. Telegram rechaza una solicitud enviada más de 30 segundos antes de su propio reloj.
+- **`online.clock`** (con `--online`) compara el reloj de esta computadora con el de Telegram.   `skew_ms` es positivo cuando esta computadora está por delante. Avisa (`ok: false`) a los 10 segundos. Telegram rechaza una solicitud enviada más de 30 segundos antes de su propio reloj.
 - **`online.standing`** (con `--online`) es `active`, `frozen`, `banned`, `deactivated` o `revoked`, o `unknown` cuando la respuesta de Telegram no pudo decirlo. Una cuenta congelada puede leer pero no escribir. Cuando Telegram los proporciona, incluye la fecha en que se congeló la cuenta, la fecha en que Telegram la eliminará y el enlace de apelación. Iniciar sesión nuevamente no vuelve a abrir una cuenta cerrada de Telegram.
-- **`flood`** enumera las esperas que Telegram le pidió a este perfil que mantuviera (`deadlines`) y una retención en sus envíos (`sendBlock`). `doctor` solo lee, con una excepción: **`doctor --online` escribe la retención congelada.** Cuando lee la cuenta como congelada, retiene los envíos hasta la fecha de Telegram. Cuando lo lee como activo, levanta esa retención. Nunca elimina la retención de un límite de spam: `tg personal flood clear` lo hace.
+- **`flood`** enumera las esperas que Telegram le pidió a este perfil que mantuviera (`deadlines`) y una retención en sus envíos (`send_block`). `doctor` solo lee, con una excepción: **`doctor --online` escribe la retención congelada.** Cuando lee la cuenta como congelada, retiene los envíos hasta la fecha de Telegram. Cuando lo lee como activo, levanta esa retención. Nunca elimina la retención de un límite de spam: `tg personal flood clear` lo hace.
 
 ## Crear un informe de problema
 
@@ -138,7 +138,7 @@ tg personal runs search --status partial --since-time 2026-10-01 --json
 
 `runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.
 `--operation`, `--profile`, `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
-cada ejecución devuelve hasta 100 eventos coincidentes, con `eventsTruncated` si hay más.
+cada ejecución devuelve hasta 100 eventos coincidentes, con `events_truncated` si hay más.
 El fallo de un archivo o una página de historial genera `status: "partial"` con ID fallidos, etapas y códigos.
 El registro no copia el contenido de mensajes ni las respuestas de error del proveedor.
 Las ejecuciones parciales se conservan por defecto salvo que se desactive explícitamente el registro. La búsqueda no se registra a sí misma.

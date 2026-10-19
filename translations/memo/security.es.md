@@ -36,6 +36,7 @@ carpeta o de un buzón, no borra nada y te avisa.
 - Un hecho, recuerdo, vínculo o acción propuesta añadido con `memo` registra al autor. En un terminal de agente (`AI_AGENT` o `CLAUDECODE` definido), el agente es el autor y el hecho, recuerdo o vínculo espera tu revisión, como mediante MCP. Lo tuyo se confirma al instante; en el terminal de un agente se indica con `--as-owner`. Es una etiqueta, no un bloqueo: el agente también puede pasarla, así que indícale que nunca lo haga.
 - Aprobar una acción la convierte en una tarea para ti. Memo no envía mensajes ni correos.
 - El registro del agente conserva agente, herramienta, resultado y hora, sin el contenido enviado.
+- Un agente que solo debe leer se ejecuta con `MEMO_READ_ONLY=1`. Entonces todo comando que cambia algo se detiene con `permission_error` (código de salida 5), y `memo mcp` ofrece solo sus herramientas de lectura. Las lecturas y `memo sync` siguen funcionando, igual que las escrituras de tareas que hace un agente programado con `tasks plan` y `tasks link`, como en tg y max.
 - Dos cuentas solo representan a una persona después de que las enlaces. Coincidir en nombre o dominio nunca basta.
 
 ## Qué puede salir de tu ordenador

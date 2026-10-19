@@ -117,6 +117,7 @@ Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`,
 | `analysis_base_url` | Analysis API URL | `build --base-url` | Provider-dependent |
 | `models` | External AI configuration by purpose ([below](#модели-по-назначению)) | `MAX_MODELS_*` variables | Unset |
 | `search_stemmers.cyrillic`, `search_stemmers.latin` | Word-stem languages for the shared archive ([below](#языки-поиска)) | None | `russian`, `english,spanish` |
+| `task_first_pass_per_chat` | How many tasks the rules may open in each chat from history on an account's first sync; a whole number from 0 to 1000. Later only new messages are read, and `tasks scan <чат>` builds tasks from history when you ask. Shared across the archive | — | `0` |
 | `task_agent_close`, `task_agent_close_min` | Whether an agent closes a task and the confidence from `--certainty`; below the threshold it stays open with a suggested close ([tasks](./groups.md#что-ждёт-вашего-ответа)). Shared across the archive | — | `on`, `0.8` |
 
 ⚠ **`timeout_ms` and `--timeout` are different things, and it’s expensive to confuse them.** `timeout_ms` is how long to wait **one answer** from MAX. `--timeout` - how much is allocated to **command entirely**. One read is a connection, INIT, LOGIN, parsing the chat name and the request itself, so the operating time is a multiple of `timeout_ms` and is never equal to it.
@@ -142,7 +143,7 @@ There is no file setting for `--timeout`: a command budget belongs to a specific
 | `ask` | question in the terminal, the default answer is “no” ([below](#вопрос-перед-изменением)) |
 | `allow` | action is performed without question |
 
-**The key is the command path**: `messages`, `messages.delete`, `messages.send`, `reactions`, `chats.members`, `contacts`, `account.sessions.end`. It starts with a resource - `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` or `metadata`. The bot's keys start with `bot`, for example `bot.messages.send`. `config set` rejects the unknown command key, including inside the entire `permissions` object, with code 2. `config unset` allows you to delete the old unknown key. Reading an existing file with such a key warns in stderr and continues to work.
+**The key is the command path**: `messages`, `messages.delete`, `messages.send`, `reactions`, `chats.members`, `contacts`, `account.sessions.end`. It starts with a resource - `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `mentions`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` or `metadata`. `calls` and `stickers` are read-only and have no permission key: `config set` answers with code 2. The bot's keys start with `bot`, for example `bot.messages.send`. `config set` rejects the unknown command key, including inside the entire `permissions` object, with code 2. `config unset` allows you to delete the old unknown key. Reading an existing file with such a key warns in stderr and continues to work.
 
 **A more specific key overrides its resource.** The example allows reading and deleting messages without confirmation, while denying other message writes. It does not restrict contacts, chats, reactions or other resources. `config show` displays effective permissions and their sources.
 
@@ -274,6 +275,7 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 | `search_stemmers.latin` | `english`, `spanish`, both separated by commas, `none` | general archive, via `config set` |
 | `task_agent_close` | `on`, `off` | shared archive, through `config set` |
 | `task_agent_close_min` | a number from 0 to 1 | shared archive, through `config set` |
+| `task_first_pass_per_chat` | a whole number from 0 to 1000 | shared archive, through `config set` |
 
 ### Models by task
 

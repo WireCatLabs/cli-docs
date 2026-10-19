@@ -4,6 +4,82 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.29.0 — 19.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **`ZM_READ_ONLY` ahora funciona como `TG_READ_ONLY` en tg, max y wa: lee y copia, nunca cambia.** Las sincronizaciones
+  que copian Zoom al almacén o a un archivo se ejecutan bajo él: `meetings sync`, `watch`, `recordings sync`,
+  `recordings download` y `recordings schedule run`; antes el bloqueo las rechazaba. Los cambios en Zoom, el acceso,
+  la configuración y lo que añadió el propietario (importaciones, vínculos, transcripciones, exportaciones, trabajos de archivo)
+  siguen rechazándose con código 5, y el rechazo ahora indica de qué tipo era. La primera pantalla dice qué bloquea el candado.
+- **`zm commands` sin `--json` imprime los comandos como texto, por sección** (Read, Write, Organise, Automate, Set
+  up), una línea por comando con `(writes)` en los que cambian algo, en lugar de un array JSON.
+  `zm commands --json` no cambia.
+- **Adopta Core 0.348.0 y Base 0.47.0**, que se mueven juntos: un siguiente paso en la salida `--json` puede llevar `line`, el
+  comando completo para escribir. Un consumidor del SDK que fije Core o Base junto a zoom se mueve con ellos.
+
+### Seguridad
+
+- **`ZM_READ_ONLY` rechaza `zm serve --mcp --semantic --base-url`**, cuyas consultas semánticas van a un servicio remoto
+  de vectores; en 0.28.0 se ejecutaba bajo el bloqueo. El bloqueo de cli-core rechaza del mismo modo una consulta enviada a otro servicio.
+  `meetings embeddings` se rechaza como creación de vectores, con ese motivo.
+
+### Corregido
+
+- **`zm meetings list --help` y `zm meetings projects evidence --help` imprimen su ayuda** en lugar de salir con código 2
+  (cli-core 0.347.0). Ahora una prueba ejecuta `--help` en cada comando.
+- **`zm guide --help` vuelve a través del manejo de salida propio de zm** en lugar de terminar el proceso por sí mismo.
+
+## 0.28.0 — 18.10.2026
+
+### Añadido
+
+- **`zm guide [name]`: escenarios, los comandos de una tarea común en orden.** El paquete incluye cinco:
+  `catch-up`, `find-quote`, `prepare-meeting`, `person-in-meetings` y `archive-recordings`; cada uno imprime su objetivo,
+  cada paso como un comando con su porqué y qué mirar. `--json` da lo mismo como datos. En «Works with» la lista
+  nombra `person-brief` de memo para una persona en todas las herramientas. La CI comprueba que el comando y las opciones de
+  cada paso se analizan correctamente.
+- **El `--help` de cada comando final termina con Returns, Next usually y Example**, y el documento de comandos lleva
+  las mismas tres líneas bajo cada comando.
+- `zm help options` imprime las opciones de todos los comandos; `zm help <command>` imprime la ayuda de ese comando.
+
+### Cambiado — puede romper la compatibilidad
+
+- **Adopta Core 0.345.0 y Base 0.46.0.** Un consumidor del SDK que fije Core o Base junto a zoom se mueve con ellos.
+- **`zm --help` y `zm` sin argumentos muestran una primera pantalla corta** en lugar de la ayuda completa de commander: para qué
+  sirve zm, qué puede hacer que un cliente de la API no haría, las otras herramientas de WireCat y adónde ir después (`commands`,
+  `guide`, `help options`, `skill show`). Ya no enumera todos los comandos ni las opciones globales; `zm --help-all` imprime la
+  ayuda anterior. Los códigos de salida no cambian.
+- `meetings list` y `meetings projects evidence` rechazan una palabra que empieza por `--` como opción desconocida, con
+  la sugerencia de commander, en lugar de leerla como texto de consulta; después de `--` cada palabra es consulta. Problema
+  conocido: esto también rechaza su `--help` (código 2); `-h` y `zm help meetings list` muestran la ayuda.
+
+### Seguridad
+
+- **`ZM_READ_ONLY=1` hace que una ejecución no cambie nada.** Todo comando que escribe en Zoom, en el almacén de reuniones o en un
+  archivo local —`meetings sync`, `import`, `export`, `link`, `update`, `transcribe`, `embeddings`, descargas de grabaciones y
+  trabajos de archivo, `watch`, `config set`, `skill install`, `session start` y los cambios remotos de reuniones— se rechaza con
+  código 5 antes de conectar con nada, vistas previas incluidas; también `search meetings --model`, que crea los vectores
+  que faltan. Las lecturas, la búsqueda de palabras, `batch` y `serve --mcp` siguen funcionando.
+  El bloqueo se decide por los efectos declarados de cada comando, así que un comando nuevo que escriba también se rechaza. Antes,
+  la variable solo funcionaba en tg, max y wa.
+
+### Corregido
+
+- `skill install` y `skill show` informan de un error de uso, como `zm skill install --yes`, con el mismo error JSON
+  y código 2 que cualquier otro comando, en lugar del texto plano de commander con código 1.
+- `session start` con salida canalizada o JSON ya no dice «remove --no-input» cuando no se pasó esa opción. Ahora
+  dice que añadas `--interactive`; sin terminal interactiva o en CI dice que ejecutes el acceso en una.
+- Las guías de instalación y de sesiones comprueban `state: saved` en `session status`. Decían `logged_in: true`, que
+  solo imprime `session start`.
+- `meetings sync` sin `zoom.client_id` ahora dice que configures el ID de cliente, no que ejecutes antes `session start`.
+- Un `--pause` incorrecto (como `0s`) ya no dice «timeout must be»; dice qué duración se espera.
+- El origen del skill ya no lleva una `version` obsoleta; `skill install` estampa la versión del paquete.
+- Las guías ahora dicen que `zm` no admite un argumento de perfil, cómo quitar el acceso del llavero, por qué varios usuarios
+  de Zoom en un mismo equipo necesitan `ZM_CONFIG_DIR` separados y adónde van los archivos; los ejemplos de Memo en la guía de
+  búsqueda coinciden con las opciones actuales de Memo; el número de herramientas MCP y las opciones opcionales están completos.
+
 ## 0.27.1 — 18.10.2026
 
 ### Corregido

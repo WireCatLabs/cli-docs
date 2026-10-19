@@ -27,8 +27,8 @@ copiada de una sonda de desarrollo.
 El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone`, `account_profile` y `source`.
 Los archivos JSON deben usar esas claves snake_case. Los antiguos archivos camelCase se rechazan sin
 reescribirlos. Antes de actualizar, renombra `clientId` a `client_id`, `filesFolder` a `files_folder`,
-`filesTimezone` a `files_timezone` y `accountProfile` a `account_profile`. Conserva sus valores y los
-permisos privados del archivo. El selector de comando `zoom.clientId` sigue como alias de
+`filesTimezone` a `files_timezone` y `accountProfile` a `account_profile`. Conserva sus valores.
+El selector de comando `zoom.clientId` sigue como alias de
 `zoom.client_id`, pero no se admite como clave JSON.
 
 Una configuración incorrecta permite `--help` y `--version`; los comandos de configuración indican el error.
@@ -53,10 +53,15 @@ Ajustes públicos, tokens del almacén y base de reuniones son datos separados.
 | Variable | Efecto |
 |---|---|
 | `ZM_CONFIG_DIR` | cambia el directorio de configuración y el servicio del llavero para el acceso |
+| `ZM_STATE_DIR` | cambia el directorio de las ejecuciones registradas (`runs/`) |
+| `ZM_CACHE_DIR` | cambia el directorio de caché |
+| `ZM_READ_ONLY` | `1` rechaza los cambios en Zoom, el acceso, los ajustes y lo que hayas añadido, con código 5; la lectura y la sincronización desde Zoom siguen funcionando ([seguridad](./security.md#what-agents-can-do)) |
+| `WIRECAT_STATE_DIR` | mueve la carpeta WireCat que comparten todas las CLI de WireCat: la base y los modelos de voz |
 | `MESSAGING_STORE` | ruta explícita de la base compartida para importar, descargar, observar y leer mediante CLI o MCP |
 | `OPENAI_API_KEY` | para un endpoint OpenAI elegido explícitamente ([búsqueda por significado](./topic-search.md)) |
 
 Los directorios siguen la convención de plataforma. La base predeterminada es `wirecat.db`
+(`~/.local/share/WireCat/wirecat.db`, en Windows `%LOCALAPPDATA%\WireCat\Data\wirecat.db`)
 ([almacenamiento](./archive.md#where-meetings-are-stored)). Usa el mismo entorno en terminal y MCP,
 o verán perfiles/bases distintos. En [sesiones](./sessions.md) comprueba autorización aparte de estos ajustes.
 

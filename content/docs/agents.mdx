@@ -45,7 +45,7 @@ Replace `codex` with `cursor`, `claude` or `gemini` for your agent. Without `--a
 
 ### Account already connected
 
-The install command on the [installation page](./installation.mdx) already ran `tg skill install --for all` (`tg`, `max` and `memo` also have an install script, which npm 12 blocks; the explicit command does the same work). If your agent already sees `tg-cli`, you can skip this step. `zm` does not install a skill by itself: run `zm skill install` after `npm install -g`. `drive` has no skill; give the agent the [Markdown documentation](./mcp.mdx#documentation-for-your-agent). To add or update the instructions without repeating login:
+`tg personal setup` with an agent chosen has already installed the skill. If your agent already sees `tg-cli`, you can skip this step. A global npm install of `tg`, `max` or `memo` adds the skill only when `TG_INSTALL_AGENT`, `MAX_INSTALL_AGENT` or `MEMO_INSTALL_AGENT` names an agent (`all`, `claude`, `codex`, `cursor` or `gemini`). The one-command Windows installer for `tg` and `max` adds it unless you pass `-Agent none`. `zm` and `drive` install a skill only when asked: run `zm skill install` or `drive skill install` after `npm install -g`. To add or update the instructions without repeating login:
 
 ```sh
 tg skill install
@@ -89,7 +89,7 @@ The account and chats should match yours. You can then continue to [First tasks]
 - **The agent reports "no session".** The tool runs, but it finds no login. Log in with
   `tg personal setup` in the same environment and profile the agent uses: the same computer user, the same
   profile name and the same folder variables such as `TG_CONFIG_DIR`, if you set them. Details: [Telegram](./tg/troubleshooting.md#no-session-for-profile-personal--run-tg-personal-setup-in-a-local-terminal) ·
-  [MAX](./max/troubleshooting.md#no-session-for-profile-default).
+  [MAX](./max/troubleshooting.md#no-session-for-profile-personal).
 
 ## Notes for your agent
 
@@ -146,7 +146,7 @@ agent and start a new session. The tool must be installed on the computer or ser
 
 ### Another agent
 
-The examples above are not a closed list. Any agent with command-line access can use the tool. Give it the output of `tg skill show`, or give it [the Markdown documentation](./mcp.mdx#documentation-for-your-agent). It can check available commands with `--help`.
+The examples above are not a closed list. Any agent with command-line access can use the tool. Give it the output of `tg skill show`, or give it [the Markdown documentation](./mcp.mdx#documentation-for-your-agent). It finds what to do with `tg guide`, which lists step-by-step scenarios for common tasks, and `tg commands`, which lists every command by section and marks the ones that change something. `--help` after a command, as in `tg chats list --help`, shows its options.
 
 A cloud agent runs on another computer. Install the tool and log in there; your local login is not available to it.
 

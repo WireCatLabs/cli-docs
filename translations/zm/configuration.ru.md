@@ -27,8 +27,8 @@ title: "Настройки"
 Файл хранит эти настройки как `client_id`, `files_folder`, `files_timezone`, `account_profile` и `source`.
 Настройки в JSON используют snake_case. Старый файл camelCase отклоняется и не переписывается.
 Перед обновлением переименуйте `clientId` в `client_id`, `filesFolder` в `files_folder`,
-`filesTimezone` в `files_timezone`, `accountProfile` в `account_profile`. Сохраните значения и закрытые
-права доступа к файлу. Селектор команды `zoom.clientId` остаётся псевдонимом `zoom.client_id`,
+`filesTimezone` в `files_timezone`, `accountProfile` в `account_profile`. Сохраните их значения.
+Селектор команды `zoom.clientId` остаётся псевдонимом `zoom.client_id`,
 но не поддерживается как ключ JSON.
 
 Повреждённая конфигурация не мешает `--help` и `--version`; команды настроек сообщают об ошибке.
@@ -53,10 +53,15 @@ title: "Настройки"
 | Переменная | Действие |
 |---|---|
 | `ZM_CONFIG_DIR` | меняет каталог настроек и службу хранилища секретов для входа |
+| `ZM_STATE_DIR` | меняет каталог записанных запусков (`runs/`) |
+| `ZM_CACHE_DIR` | меняет каталог кеша |
+| `ZM_READ_ONLY` | `1` запрещает менять Zoom, вход, настройки и то, что вы добавили (отказ с кодом 5); чтение и синхронизация из Zoom продолжают работать ([безопасность](./security.md#what-agents-can-do)) |
+| `WIRECAT_STATE_DIR` | переносит папку WireCat, общую для всех CLI WireCat: базу и модели распознавания речи |
 | `MESSAGING_STORE` | явный путь к общей базе для импорта, загрузки, наблюдения, чтения встреч и MCP |
 | `OPENAI_API_KEY` | для явно выбранного OpenAI endpoint поиска по смыслу ([руководство](./topic-search.md)) |
 
 Иначе каталоги следуют правилам платформы. Стандартная база — `wirecat.db`
+(`~/.local/share/WireCat/wirecat.db`, в Windows `%LOCALAPPDATA%\WireCat\Data\wirecat.db`)
 ([хранение встреч](./archive.md#where-meetings-are-stored)). Передавайте одинаковое окружение
 в терминале и MCP; иначе они могут видеть разные профили или базы. В [сеансах](./sessions.md)
 проверьте авторизацию отдельно от открытых настроек.

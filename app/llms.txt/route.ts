@@ -57,6 +57,8 @@ export function GET() {
     `${siteUrl}/llms-full.txt is every English page in one file, without changelogs and the per-group command pages. The same pages exist in Russian and Spanish: insert the language after /llms.mdx/docs/, for example ${localized.join(" or ")}.`,
     "",
     ...setup.flatMap((block) => [block, ""]),
+    "To find what to do with an installed tool, run `<tool> guide`: it lists step-by-step scenarios for common tasks, and `<tool> guide <name>` prints one. `<tool> commands` lists every command by section and marks the ones that change something; `<tool> commands --json` adds the options.",
+    "",
     section("Getting started", general),
     "## Policies",
     "",

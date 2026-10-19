@@ -58,7 +58,7 @@ The server listens on `127.0.0.1:8765` and prints a one-time login code. It does
 
 ### Windows (PowerShell)
 
-Install the Tailscale app and sign in from its tray menu. After installing Node.js, the CLI and Tailscale, open a new PowerShell window to refresh PATH. The `.cmd` suffix avoids PowerShell execution-policy errors for npm commands. If MAX is not configured yet, run `max.cmd setup --agent none` in ordinary PowerShell.
+Install the Tailscale app and sign in from its tray menu. After installing Node.js, the CLI and Tailscale, open a new PowerShell window to refresh PATH. The `.cmd` suffix avoids PowerShell execution-policy errors for npm commands. If MAX is not configured yet, run `max.cmd personal setup --agent none` in ordinary PowerShell (`personal` is the profile name; yours may differ).
 
 First window: PowerShell as administrator, for Funnel. The `&` operator is needed because the standard installation path contains a space; replace the path if you installed elsewhere.
 
@@ -70,7 +70,7 @@ Second window: ordinary PowerShell as the user who signed in to MAX:
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Вставьте HTTPS origin из Funnel (без /mcp)'
-max.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
+max.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Run both processes in Windows itself. WSL is a separate environment: a Windows tunnel targeting a local Windows address may not reach a server inside WSL.
@@ -178,7 +178,7 @@ Retained-file transfer refuses known credential files and folders, the CLI’s o
 
 MCP makes hidden Unicode controls visible in text results. Subdivision flag emoji stay intact; MCP write arguments and ordinary CLI machine JSON preserve original strings.
 
-First download the message's files normally ([what you can download](./attachments.md#что-можно-скачать)). Use `attachments list --needs-text` to find the message locator and attachment number, then request the file:
+First download the message's files normally ([what you can download](./attachments.md#что-можно-скачать)). Use `attachments list is:needs_text` to find the message locator and attachment number, then request the file:
 
 ```sh
 max personal attachments show msg:max/511/7/204 --attachment 1 --json

@@ -58,7 +58,7 @@ El servidor escucha `127.0.0.1:8765` e imprime un código de inicio de sesión �
 
 ### Windows (PowerShell)
 
-Instale la aplicación Tailscale e inicie sesión a través del menú de la bandeja. Una vez que Node.js, CLI y Tailscale estén instalados, abra una nueva ventana de PowerShell para actualizar su PATH. El sufijo `.cmd` soluciona un error de política de ejecución de PowerShell para comandos npm. Si aún no ha configurado MAX, ejecute `max.cmd setup --agent none` en PowerShell normal.
+Instale la aplicación Tailscale e inicie sesión a través del menú de la bandeja. Una vez que Node.js, CLI y Tailscale estén instalados, abra una nueva ventana de PowerShell para actualizar su PATH. El sufijo `.cmd` soluciona un error de política de ejecución de PowerShell para comandos npm. Si aún no ha configurado MAX, ejecute `max.cmd personal setup --agent none` en PowerShell normal (`personal` es el nombre del perfil; el suyo puede ser otro).
 
 Primera ventana: PowerShell del administrador de Funnel. El operador `&` es necesario debido a un espacio en la ruta de instalación estándar; si elige un directorio diferente, reemplace la ruta.
 
@@ -70,7 +70,7 @@ Segunda ventana: PowerShell normal con el usuario que inició sesión en MAX:
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Вставьте HTTPS origin из Funnel (без /mcp)'
-max.cmd mcp --http --port 8765 --public-url $mcpPublicUrl
+max.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Ejecute ambos procesos en el propio Windows. WSL es un entorno independiente: es posible que un túnel de Windows dirigido a una dirección local de Windows no llegue al servidor dentro de WSL.
@@ -178,7 +178,7 @@ La transferencia de archivos guardados rechaza archivos y carpetas conocidos de 
 
 MCP hace visibles los controles Unicode ocultos en los resultados de texto. Los emojis de banderas regionales se conservan; los argumentos de escritura de MCP y el JSON normal de la CLI mantienen las cadenas originales.
 
-Primero, descargue los archivos de mensajes de la forma habitual ([que puede descargar](./attachments.md#что-можно-скачать)). El localizador del mensaje y el número de archivo adjunto encontrará `attachments list --needs-text`. Luego solicital archivo:
+Primero, descargue los archivos de mensajes de la forma habitual ([que puede descargar](./attachments.md#что-можно-скачать)). El localizador del mensaje y el número de archivo adjunto encontrará `attachments list is:needs_text`. Luego solicital archivo:
 
 ```sh
 max personal attachments show msg:max/511/7/204 --attachment 1 --json

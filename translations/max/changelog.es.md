@@ -4,6 +4,65 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.63.0 — 19.10.2026
+
+### Novedades
+
+- **`max --help` y `max` sin comando muestran una primera pantalla corta** (cli-core 0.345.0): qué sabe hacer max,
+  las otras herramientas de WireCat y adónde ir después — `max commands`, `max guide`, `max help options`,
+  `max skill show`. Ya no imprime la lista completa de comandos ni todas las opciones generales.
+- **`max guide` — escenarios: qué comandos ejecutar, en orden, para una tarea frecuente.** Cuatro escenarios:
+  `catch-up` (ponerse al día con lo acumulado), `find-what-was-said` (encontrar lo que alguien escribió),
+  `agent-on-a-timer` (un agente programado que no puede enviar) y `post-as-a-bot` (escribir en nombre de un bot).
+  `max guide <имя>` imprime los pasos, `--json` lo mismo como datos. El escenario `memo guide person-brief`
+  aparece en la sección «Works with».
+- **`max help options`** imprime las opciones de todos los comandos, **`max --help-all`** la ayuda completa de antes.
+- **`max commands` sin `--json` imprime la lista de comandos por secciones** (Read, Write, Organise, Automate,
+  Set up), una línea por comando; `max commands <путь>` la acota.
+- **La ayuda de cada comando termina con las líneas Returns, Next usually y Example**, y las mismas líneas están en
+  la [referencia de comandos](./commands.md).
+
+### Cambios — pueden romper scripts
+
+- **`npm install -g` ya no instala por sí solo la habilidad del agente.** Escribía sin avisar en `~/.claude/skills` y
+  `~/.agents/skills`, y npm oculta la salida del script de instalación. Ahora la habilidad la instala
+  `max <профиль> setup` o `max skill install --for all`; `MAX_INSTALL_AGENT=all` (o el nombre de un agente) durante
+  la instalación la instala en el acto, como antes. El instalador de Windows pasa `all` él mismo y se comporta como
+  antes.
+- **`max --help` ya no enumera los comandos ni las opciones generales.** Un script que los buscaba ahí necesita
+  `max --help-all` o `max help options`.
+- **`max commands` sin `--json` imprime texto, incluso hacia una tubería.** Antes imprimía el documento JSON completo
+  (cientos de kilobytes); un script que lo analizaba tiene que añadir `--json`.
+- **Una errata en una opción de una lista con consulta es un error de opción desconocida** (`unknown option '--limt' (Did you mean
+  --limit?)`), no una palabra de la consulta. Una negación como `-kind:channel` sigue siendo parte de
+  la consulta.
+
+### Correcciones
+
+- **`inbox` y `review` declaran su salida** (cli-core 0.345.0): `max commands schema inbox` da los campos del
+  resumen del mensaje, y `--json=<поля>` con un nombre que no tiene se rechaza con la lista de campos en lugar de
+  devolver registros vacíos.
+- **`--brief` y `--full` ya no mencionan el correo** en la ayuda de max.
+- **Una errata en el nombre del perfil ya no crea un perfil.** `max typoprofile chats list` se negaba, pero dejaba
+  el archivo `profiles/typoprofile.json`, y después el error «name a profile» y `max complete` ofrecían
+  `typoprofile` como perfil de este equipo. Ahora el archivo solo aparece al iniciar sesión; `session end` con un
+  nombre así tampoco lo crea. Los archivos que quedaron de erratas anteriores se pueden borrar de
+  `~/.local/share/max-cli/profiles/`.
+- **`max <профиль> doctor` sin token aconseja `max <профиль> setup`**, como el README y el error «no session», y no
+  `session start`.
+
+### Seguridad
+
+- **La prohibición de escribir actúa antes de conectarse a MAX** (cli-core). Con `MAX_READ_ONLY=1` o con el nivel
+  `readonly` o `deny`, `messages send`, `messages edit`, `messages delete --for-everyone`, `reactions add` y otras
+  escrituras primero se conectaban a MAX y solo después recibían la negativa; con el inicio de sesión roto salían con
+  el código `10`. Ahora es el código `5`, sin conexión, como promete la [página de seguridad](./security.md). La
+  negativa queda en `sends list` como una línea corta: la clave del comando y el tipo, y el chat solo si se indicó
+  su id.
+- **`--dry-run` con `MAX_READ_ONLY` ya no responde «se puede»** a una escritura que la ejecución real prohibiría.
+- **`max mcp` con `MAX_READ_ONLY` no ofrece escrituras en MAX**, y la llamada a un comando así mediante `max_write`
+  recibe la negativa de la prohibición, no «no existe ese comando».
+
 ## 0.62.0 — 18.10.2026
 
 ### Novedades
@@ -1579,7 +1638,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.62.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.63.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

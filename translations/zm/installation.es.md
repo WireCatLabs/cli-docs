@@ -128,7 +128,7 @@ zm meetings sync --lookback-days 7
 zm meetings list --json
 ```
 
-El estado debe mostrar credenciales guardadas con `logged_in: true`; no contacta con Zoom para
+El estado debe mostrar credenciales guardadas con `state: saved`; no contacta con Zoom para
 comprobar si el acceso sigue siendo válido. Sync hace las peticiones remotas y guarda los datos
 disponibles de reuniones del anfitrión. List lee la copia local. Cambiar la etiqueta del perfil
 no cambia la cuenta aprobada. Consulta [sesiones y perfiles](./sessions.md#select-a-local-profile).
@@ -191,9 +191,15 @@ Cuando funcione, [busca un tema y lee el contexto de sus fuentes](./search.md).
 
 ## Dónde se guardan los archivos
 
-La herramienta crea ajustes públicos en `config.json` al configurarla; no es un archivo de
-credenciales descargado. `zm doctor --json` muestra su ubicación. Los tokens quedan en el almacén
-de contraseñas del sistema. Las reuniones usan el `wirecat.db` local compartido; las grabaciones
+| Qué | Linux y macOS | Windows |
+|---|---|---|
+| ajustes (`config.json`) | `~/.config/zm/` | `%APPDATA%\zm\Config\` |
+| estado (ejecuciones registradas en `runs/`) | `~/.local/share/zm/` | `%LOCALAPPDATA%\zm\Data\` |
+| caché | `~/.cache/zm/` | `%LOCALAPPDATA%\zm\Cache\` |
+| el almacén local | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
+
+`config.json` guarda ajustes públicos; no es un archivo de credenciales descargado. `zm doctor --json`
+muestra su ubicación. Los tokens de acceso quedan en el almacén de contraseñas del sistema. Las grabaciones
 se descargan en el destino elegido. `ZM_CONFIG_DIR` cambia la configuración y su servicio de claves;
 `MESSAGING_STORE` elige otra base de datos. Consulta [configuración](./configuration.md).
 
@@ -212,13 +218,22 @@ Para quitar el comando:
 npm uninstall -g @wirecat/zoom-cli
 ```
 
-La desinstalación deja la base de reuniones y las carpetas de grabaciones. Revoca el acceso de la
-aplicación en Zoom Marketplace si también quieres retirar su autorización. No hay comando de
-cierre de sesión; consulta [sesiones](./sessions.md#remove-access). Usa los lanzadores `.cmd` en Windows si hace falta.
+La desinstalación quita solo el paquete. Para quitar todo lo demás, borra:
+
+- el directorio de ajustes (`~/.config/zm`) y el directorio de estado (`~/.local/share/zm`);
+- las carpetas del skill del agente, si lo instalaste: `~/.claude/skills/zoom-cli` y
+  `~/.agents/skills/zoom-cli`;
+- la entrada de acceso en tu almacén de contraseñas, descrita en [sesiones](./sessions.md#remove-access);
+- la base de reuniones compartida y tus carpetas de grabaciones, solo si quieres borrar las reuniones guardadas.
+  Otras herramientas de WireCat usan la misma base.
+
+Revoca el acceso de la aplicación en Zoom Marketplace si también quieres retirar su autorización.
+Usa los lanzadores `.cmd` en Windows si hace falta.
 
 ## Completar comandos en la terminal
 
 `zm complete -- <words...>` responde a peticiones de autocompletado; no lo instala en tu terminal.
-`zm commands --json` enumera comandos y opciones para agentes y scripts.
+`zm commands` enumera todos los comandos por sección; `zm commands --json` añade las opciones para agentes
+y scripts.
 
 Tras instalar, [busca un pasaje de reunión](./search.md) y comprueba la fuente antes de guardar conclusiones.

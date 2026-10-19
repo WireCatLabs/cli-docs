@@ -18,9 +18,9 @@ Términos utilizados en esta página:
 - **Operador**: palabra o signo que une condiciones, como `AND`, `OR` y `NOT`.
 - **Formas de palabras**: la misma palabra con diferentes terminaciones. `piso` y `pisos` son formas de una palabra.
 
-El lenguaje es un perfil estricto de la sintaxis de consulta de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, comodines acotados y expresiones regulares. "Estricto" significa que cualquier cosa que no admita es un error y nunca se ignora silenciosamente. La [referencia completa](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language.md) (en ruso) tiene las tablas generadas de campos, operadores, ajustes preestablecidos y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/WireCatLabs/cli-core/blob/v0.212.0/docs/search/query-language-spec.md) describe la gramática y el compilador.
+El lenguaje es un perfil estricto de la sintaxis de consulta de Apache Lucene: palabras, frases, Y/O/NO, grupos, campos, rangos, comodines acotados y expresiones regulares. "Estricto" significa que cualquier cosa que no admita es un error y nunca se ignora silenciosamente. La [referencia completa](https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language.md) (por ahora solo en ruso) tiene las tablas generadas de campos, operadores, ajustes preestablecidos y límites, y ejemplos ejecutables; la [especificación técnica](https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language-spec.md) describe la gramática y el compilador.
 
-En el correo, `chat:` y `--chat` seleccionan una cadena de correos por id o asunto; `from:` selecciona el remitente. El correo no tiene `kind:` ni `topic:`.
+En el correo, `chat:` selecciona una cadena de correos por id o asunto; `from:` selecciona el remitente. El correo no tiene `kind:` ni `topic:`.
 
 ## Qué puede hacer
 
@@ -87,7 +87,7 @@ Las palabras y frases sin campo coinciden con las formas de las palabras. `--exa
 
 Los nombres de los campos distinguen entre mayúsculas y minúsculas. Un campo, valor o combinación desconocidos es un error, nunca una respuesta vacía y nunca texto sin formato. Un nombre que el archivo local no conoce no se busca en Telegram.
 
-`kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de las cuentas de `tg personal bot`. `topic:` necesita exactamente un chat en `chat:` o `--chat`, porque los números de tema se repiten entre grupos. `filename`, `mime` y `size` coinciden con un mensaje cuando al menos uno de sus archivos coincide. `/` inicia una expresión regular, así que pon un tipo completo entre comillas: `mime:"application/pdf"`.
+`kind:bot` selecciona un chat con un bot; `in:bots` selecciona los archivos de las cuentas de `tg personal bot`. `topic:` necesita exactamente un chat en `chat:`, porque los números de tema se repiten entre grupos. `filename`, `mime` y `size` coinciden con un mensaje cuando al menos uno de sus archivos coincide. `/` inicia una expresión regular, así que pon un tipo completo entre comillas: `mime:"application/pdf"`.
 
 ## Menciones
 

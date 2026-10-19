@@ -31,7 +31,7 @@ JSON клиента, токены или приватный текст. Когд
 
 ## «Choose a profile explicitly»
 
-Выполните команду как `drive personal …` либо `drive --profile personal …`, заменив `personal`
+Выполните команду как `drive personal status` либо `drive --profile personal status`, заменив `personal`
 выбранным именем аккаунта. Ошибка перечисляет настроенные профили. Ни `DRIVE_PROFILE`, ни прежний
 сохранённый профиль не заменяют явный выбор. Для первого входа см.
 [подключение](./installation.md#connect-your-account). `drive personal session list` показывает все имена.

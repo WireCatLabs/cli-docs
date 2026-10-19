@@ -44,6 +44,17 @@ IA. Esta guía los explica antes de conectar o archivar.
 - La búsqueda de palabras actualiza su índice automáticamente. Con `--model` genera los vectores que
   faltan antes de ordenar; un `--base-url` remoto recibe pasajes de transcripción además de la consulta.
 - Proponer una tarea no la crea.
+- `ZM_READ_ONLY=1` deja que una ejecución lea y copie, sin cambiar nada, como `TG_READ_ONLY` en tg, max y wa.
+  Se rechaza con código 5 antes de conectar con nada, vistas previas incluidas: cambios remotos de reuniones,
+  acceso, configuración, instalación del skill, importación, exportación, vínculos, transcripción, trabajos de
+  archivo y recuperación de bloqueos, creación de vectores (`meetings embeddings`, búsqueda por significado con
+  `--model`) y un servidor MCP cuyas consultas semánticas van a un `--base-url` remoto. Siguen funcionando: lecturas,
+  búsqueda de palabras (que mantiene su índice al día), `batch`, `serve --mcp` y las sincronizaciones que copian
+  Zoom al almacén o a un archivo: `meetings sync`, `watch`, `recordings sync`, `recordings download` y
+  `recordings schedule run`; una sincronización o `watch` desde una fuente de archivos lee la carpeta configurada,
+  mientras que `meetings import <folder>` nombra una carpeta puntual y se rechaza. Un comando añadido más adelante
+  que escriba se rechaza hasta que se nombre aquí. Actívalo para un agente que solo deba leer; `0` o un valor vacío
+  lo desactivan.
 
 Una app IA puede enviar los resultados a su propio proveedor. Elige app y política por separado
 de la autorización Zoom. Un servicio remoto de vectores recibe texto y consultas solo cuando se

@@ -243,8 +243,10 @@ y locales; `api_operation` identifica un método generado de Google. Las listas 
 usan `page.mode: "cursor"` y devuelven `next_cursor`. La búsqueda y las listas de notas
 usan `--page`, no `--offset`. JSONL emite registros `{"type":"item","data":…}` seguidos de un único
 registro `{"type":"end",…}` con `complete` y metadatos de página. Los errores incluyen
-`error.retry.safe`; comprueba una escritura remota de resultado incierto antes de repetirla.
-MCP muestra los caracteres de control de forma visible; `--agent-json` ya no es una opción.
+`error.retry.safe`, y el código de salida del proceso indica el tipo (`2` entrada incorrecta, `4` sin sesión iniciada,
+`5` no permitido, `6` no encontrado, `9` tiempo agotado; la tabla completa está en [códigos de salida](./commands.md#exit-codes));
+comprueba una escritura remota de resultado incierto antes de repetirla.
+MCP muestra los caracteres de control de forma visible.
 
 Para unos pocos campos del catálogo, usa `--json=id,name` en vez de `--json`. Las rutas con puntos seleccionan objetos y arrays anidados: `--json=hits.ref,hits.excerpt`
 selecciona los pasajes de `item.hits`. Las rutas parten de los datos de la respuesta. Se conservan

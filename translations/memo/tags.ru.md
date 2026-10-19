@@ -120,6 +120,6 @@ memo vocabulary inspect tag:1 tag:2 --fingerprint FINGERPRINT --limit 5 --json
 
 ## Теги в tg и max
 
-tg и max читают те же теги: `tg search messages 'tag:follow-up'` находит помеченные сообщения Telegram, а `memo search mail 'tag:follow-up'` — письма. Теги контактов доступны через `tg tags` и `max tags`.
+tg и max читают те же теги: `tg personal search messages 'tag:follow-up'` находит помеченные сообщения Telegram, а `memo search mail 'tag:follow-up'` — письма. Теги контактов доступны через `tg personal tags` и `max personal tags`.
 
 Дальше: [ищите по тегу и по словам](./search.md).

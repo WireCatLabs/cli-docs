@@ -19,8 +19,8 @@ y ejecuta `memo --help`. Si sigue fallando, instala Memo de nuevo:
 3. Busca una palabra que sepas que está en el archivo. Una búsqueda encuentra resultados que contienen
    **todas** las palabras, así que una frase larga a menudo no encuentra nada; usa dos o tres palabras
    clave.
-4. Los archivos PDF y Word necesitan los lectores opcionales: `npm install -g unpdf mammoth` y luego
-   importa de nuevo. Los PDF escaneados no tienen texto que leer.
+4. Los PDF escaneados no tienen texto que leer, y los archivos antiguos `.xls` no se pueden leer: el informe
+   los muestra en "not read".
 
 ## Aparece "Searched by words only"
 
@@ -29,7 +29,7 @@ todas las notas que contienen tus palabras. Para buscar también por significado
 con tg o max y luego importa:
 
 ```sh
-tg models text download e5-small    # or: max models text download e5-small
+npx -y @wirecat/tg-cli local models text download e5-small
 memo sync
 ```
 
@@ -66,7 +66,7 @@ La revisión que indicaste no es la actual: la nota cambió después de que la l
 ## El contexto de una persona está vacío o le falta algo
 
 - Los chats de la persona todavía no están descargados. Descárgalos con tg o max.
-- Las cuentas no están vinculadas. Vincúlalas con `tg contacts link` ([detalles](./people.md#link-a-persons-accounts)).
+- Las cuentas no están vinculadas. Vincúlalas con `tg personal contacts link` ([detalles](./people.md#link-a-persons-accounts)).
 - Si tienes varias cuentas en un servicio de mensajería, añade `--source`, como `--source telegram:1`.
 - Una nota que solo menciona el nombre en su texto no se incluye; enlázala en su lugar.
 

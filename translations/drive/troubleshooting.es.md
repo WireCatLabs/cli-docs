@@ -31,7 +31,7 @@ del cliente, tokens ni texto privado. Cuando aparezca la fuente, vuelve a [búsq
 
 ## «Choose a profile explicitly»
 
-Ejecuta `drive personal …` o `drive --profile personal …`, sustituyendo `personal` por tu cuenta.
+Ejecuta `drive personal status` o `drive --profile personal status`, sustituyendo `personal` por tu cuenta.
 El error lista perfiles configurados. Ni `DRIVE_PROFILE` ni un antiguo perfil guardado sustituyen
 la selección. Para la primera conexión, consulta [acceso](./installation.md#connect-your-account).
 `drive personal session list` muestra todos los nombres configurados.

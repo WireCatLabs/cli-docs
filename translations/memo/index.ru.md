@@ -66,7 +66,7 @@ memo sync --only notes --no-embed
 memo search notes budget
 ```
 
-Memo нужен Node.js 22.16 или новее ([что установить сначала](./installation.md)). Ваши файлы остаются
+Memo нужен Node.js 22.16+ или 24+ ([что установить сначала](./installation.md)). Ваши файлы остаются
 на месте; Memo их только читает.
 
 ## Что дальше

@@ -4,6 +4,64 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.18.0 — 19.10.2026
+
+### Added
+
+- **`drive guide [name]`: scenarios**, the commands for a common task in order — `set-up`, `find-decision`,
+  `brief-document`, `agent-access` — and memo's `person-brief` under "Works with". `--json` gives the same as data.
+- **`drive skill show` and `drive skill install`**: the agent skill, which says when to pick drive and points at
+  `guide` and `commands`. Neither needs a profile.
+- **`drive models text download <model>` and `drive images models download <model>`** download the search and
+  picture models into the folder every WireCat CLI shares, checked against their sha256. No profile or sign-in is
+  needed; `--offline` refuses them.
+- **`drive help options`** prints the options for every command and `drive help <command>` one command's help;
+  neither needs a profile.
+
+### Changed — may break callers
+
+- **`drive commands` without `--json` prints a text list by section, even when piped**: every command on one line,
+  its usage and description, `(writes)` when it changes something, under Read, Write, Organise, Automate or Set up.
+  It printed the whole JSON tree. A script that parsed a bare `drive commands` must pass `--json`, which prints the
+  same document as before.
+- **`drive mcp` serves three tools in place of one per command (161 before)**: `drive_tools_search` finds a command
+  and shows its arguments, `drive_read` and `drive_write` run it as `{ command, arguments }` — the model tg and max
+  use. Commands, arguments, permissions and the audit record are unchanged; `drive_write` is not offered when the
+  profile allows no writes. `mcp --tools` lists commands by `command` instead of tool `name`.
+- **`drive --help` and a bare `drive` show a short first screen** instead of every command and option: what drive
+  is for, eight things it does, the other WireCat tools, and where to go next. The full help moved to `--help-all`,
+  the options for every command to `drive help options`. A leaf command's `--help` ends with Returns, Next usually
+  and Example, and its old "Examples:" block is gone.
+- **A list query refuses a word that starts with `--`** as an unknown option, with a suggestion
+  (`documents list --tag budget` → "unknown option '--tag' (Did you mean --page?)"), instead of reading it as query
+  text. It comes with cli-core 0.345.0.
+
+### Fixed
+
+- `--help` on a list that takes a query (`documents list`, `memories list`, `facts list`, `api list`) prints the
+  help again; since cli-core 0.343.0 it was refused as an unknown option (exit 2). Every leaf command's `--help` is
+  now checked in the tests.
+- The profile may follow a global option that takes a value: `drive --timeout 30s personal status` reads `personal`
+  as the profile, not `30s`.
+- A search that finds nothing before anything is imported says so in `not_imported`: no folder is selected, or no
+  sync has run yet. An empty answer read as "no such document".
+- `session start` checks that the keyring can be used before it shows the Google sign-in, so a computer without one
+  fails at once instead of after consent.
+- `drive complete --help` prints the help instead of "choose a supported shell".
+- The advice for a missing search or picture model names drive's own download (`drive models text download
+  e5-small`, `drive images models download clip-b32`) instead of tg's, which needed a profile and a second tool.
+- `drive mcp` no longer offers tools the Google sign-in cannot run: changing Google files needs `--grant write`,
+  Drive Activity needs `activity`, Drive apps need `apps`. They used to be listed and fail when called. `memories
+  extract`, which sends a document to the model and changes no Google file, stays offered without `--grant write`.
+- README, search and configuration pages download the text and picture models with drive itself; the
+  `npx @wirecat/tg-cli` workaround is gone. The configuration page lists `DRIVE_READ_ONLY`.
+
+### Security
+
+- **`DRIVE_READ_ONLY=1` locks the process as `--read-only` does**: every command that changes local
+  or Google data is refused with exit 5 before anything is touched, and the MCP server offers no write.
+  Any value but empty or `0` turns it on.
+
 ## 0.17.3 — 18.10.2026
 
 ### Fixed

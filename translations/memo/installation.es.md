@@ -16,17 +16,18 @@ La instalación no inicia sesión, no arranca un servicio en segundo plano ni le
 
 ## Qué necesita
 
-- **Node.js 22.16+ (rama 22.x) o 24+**, con npm. Si no lo tienes, pide ayuda a tu agente o descárgalo de [nodejs.org](https://nodejs.org).
+- **Node.js 22.16+ (rama 22.x) o 24+**, con npm. Node.js 23 no es compatible. Si no lo tienes, pide ayuda a tu agente o descárgalo de [nodejs.org](https://nodejs.org). El comando también funciona con **Bun**; la integración continua (CI) también ejecuta el comando compilado con Bun.
 - Linux. macOS y Windows aún no se han probado: las pruebas de Memo solo se ejecutan en Linux.
+- Unos 250 MB de disco para la instalación. La mayor parte es código compartido de WireCat que Memo aún no usa: gráficos, reconocimiento de voz y decodificadores de audio.
 
 Cada fuente necesita algo más, solo cuando vayas a utilizarla:
 
 | Fuente | Requisito |
 |---|---|
-| Notas y documentos | Ninguno. Los PDF y Word (`.docx`) requieren dos lectores opcionales: [archivos compatibles](./notes.md#files-memo-can-read) |
+| Notas y documentos | Ninguno: [archivos compatibles](./notes.md#files-memo-can-read) |
 | Mensajes de Telegram o MAX | [tg](https://github.com/WireCatLabs/tg-cli) o [max](https://github.com/WireCatLabs/max-cli). Guardan los chats en el almacén local; Memo no inicia sesión en un servicio de mensajería |
-| Búsqueda por significado | Un modelo pequeño en el equipo. tg o max lo descarga una vez: `tg models text download e5-small`. Sin él, Memo busca por palabras |
-| Correo | [Himalaya](https://github.com/pimalaya/himalaya), el programa con el que Memo lee el buzón ([correo](./mail.md)) |
+| Búsqueda por significado | Un modelo de búsqueda en el equipo, de unos 135 MB. tg o max lo descarga una vez: `npx -y @wirecat/tg-cli local models text download e5-small`. Sin él, Memo busca por palabras |
+| Correo | [Himalaya](https://github.com/pimalaya/himalaya) 2.x, el programa con el que Memo lee el buzón. Lee sus cuentas de `~/.config/himalaya/config.toml` ([correo](./mail.md#before-you-start)) |
 | Sincronización periódica (`memo auto`) | Linux con systemd. En macOS y Windows, ejecuta `memo sync` personalmente o con tu planificador ([mantener Memo al día](./archive.md)) |
 
 ## Instalar
@@ -34,18 +35,19 @@ Cada fuente necesita algo más, solo cuando vayas a utilizarla:
 **Lo más fácil: pídeselo a tu agente.**
 
 ```text prompt
-Install Memo with npm install -g @wirecat/cli-memo.
+Install Memo with npm install -g @wirecat/cli-memo, then run memo skill install --for all.
 Check Node.js and npm first and help me set them up if needed.
 Then run memo --version and memo --help and tell me if it works.
 ```
 
-**O instálalo personalmente** con una de estas opciones:
+**O instálalo personalmente:**
 
 ```sh
 npm install -g @wirecat/cli-memo
-pnpm add -g @wirecat/cli-memo
-bun add -g @wirecat/cli-memo
+memo skill install --for all     # puts Memo's skill where your agents read it
 ```
+
+npm 12 muestra "install scripts blocked": es inofensivo, `memo skill install` hace lo que haría el script. En Windows, abre un terminal nuevo si no se encuentra `memo`. Con pnpm o Bun, usa `pnpm add -g @wirecat/cli-memo` o `bun add -g @wirecat/cli-memo` y después el mismo `memo skill install --for all`.
 
 Para probarlo sin instalarlo (sigue necesitando Node.js):
 
@@ -80,11 +82,11 @@ memo search notes "budget"
 
 Después, [añade más carpetas](./notes.md#add-a-folder) o [conecta una cuenta de correo](./mail.md).
 
-**El skill del agente.** La instalación global con npm también coloca el skill de Memo en las carpetas de Claude Code (`~/.claude/skills/cli-memo/`) y de Codex o Gemini CLI (`~/.agents/skills/cli-memo/`). `MEMO_INSTALL_AGENT` elige el destino: `all` (predeterminado), `claude`, `codex`, `cursor`, `gemini` o `none` para omitirlo. `npx` y una instalación local no colocan el skill; pnpm y Bun pueden omitir los scripts de instalación. En esos casos ejecuta `memo skill install --for all` (`--for claude` o `--for agents` para un destino). `memo skill show` lo muestra.
+**El skill del agente.** `memo skill install --for all` coloca el skill de Memo en las carpetas de Claude Code (`~/.claude/skills/cli-memo/`) y de Codex o Gemini CLI (`~/.agents/skills/cli-memo/`); `--for claude` o `--for agents` lo instala para un solo destino. `memo skill show` lo muestra. Una instalación global con npm hace lo mismo solo cuando `MEMO_INSTALL_AGENT` indica dónde: `all`, `claude`, `codex`, `cursor` o `gemini`; si no está definida o vale `none`, no instala ningún skill.
 
 ## Windows
 
-Abre PowerShell y usa `npm.cmd`, porque PowerShell puede bloquear el script `npm`:
+Windows aún no se ha probado; estos pasos son los que deberían funcionar. Abre PowerShell y usa `npm.cmd`, porque PowerShell puede bloquear el script `npm`:
 
 ```powershell
 npm.cmd install -g @wirecat/cli-memo
@@ -122,6 +124,7 @@ node dist/bin/memo.js --help
 |---|---|---|
 | Ajustes | `~/.config/cli-memo/` | `%APPDATA%\cli-memo\Config\` |
 | Estado | `~/.local/share/cli-memo/` | `%LOCALAPPDATA%\cli-memo\Data\` |
+| Caché, que `memo doctor` indica; Memo aún no guarda nada en ella | `~/.cache/cli-memo/` | `%LOCALAPPDATA%\cli-memo\Cache\` |
 | Almacén compartido con tg y max | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 | Modelos descargados por tg o max | `~/.local/share/WireCat/models/` | `%LOCALAPPDATA%\WireCat\Data\models\` |
 | Temporizador tras `memo auto start` | `~/.config/systemd/user/memo-import.timer` y `.service` | — |
@@ -130,7 +133,9 @@ node dist/bin/memo.js --help
 - **Estado**: lo último importado de cada carpeta (`folders/`), el bloqueo de sincronizaciones simultáneas (`import.lock`) y el resultado de la última ejecución periódica (`auto/`).
 - **El almacén local** contiene notas, correo, mensajes, etiquetas, tareas y recuerdos. Los archivos y el buzón permanecen en su sitio; el almacén conserva una copia de su texto.
 
-`~` representa tu carpeta personal. Las variables de entorno cambian las ubicaciones: `MEMO_CONFIG_DIR` (ajustes), `MEMO_STATE_DIR` (estado), `MESSAGING_STORE` (archivo del almacén) y `WIRECAT_STATE_DIR` (carpeta WireCat con el almacén y los modelos).
+`~` representa tu carpeta personal. Las variables de entorno cambian las ubicaciones: `MEMO_CONFIG_DIR` (ajustes), `MEMO_STATE_DIR` (estado), `MEMO_CACHE_DIR` (caché), `MESSAGING_STORE` (archivo del almacén) y `WIRECAT_STATE_DIR` (carpeta WireCat con el almacén y los modelos).
+
+Los comandos de tareas también leen `~/.config/cli-memo-tasks/config.json` (`MEMO_TASKS_CONFIG_DIR` lo cambia de sitio) cuando existe. Memo nunca lo escribe y no lo necesitas. El temporizador ejecuta `memo sync` con `MEMO_AUTO=1`, que marca una ejecución periódica: omite la comprobación de actualizaciones y, si el temporizador está desactivado en los ajustes, no hace nada.
 
 > ⚠ **Establece estas variables en todas partes o en ninguna.** Sin ellas, un comando lee otros ajustes y otro almacén e indica que faltan carpetas o correo. El temporizador conserva las variables de `memo auto start`; repite el comando tras cambiarlas. tg y max leen el mismo almacén solo con los mismos `MESSAGING_STORE` o `WIRECAT_STATE_DIR`. Estas variables están pensadas para pruebas y perfiles temporales.
 
@@ -139,7 +144,7 @@ node dist/bin/memo.js --help
 ```sh
 memo upgrade --check           # only say whether a newer version exists; installs nothing
 memo upgrade                   # update with the package manager that installed Memo: npm, pnpm or Bun
-memo skill install --for all   # a global npm install does this for you; pnpm and Bun may not
+memo skill install --for all   # the skill of the new version
 ```
 
 Una vez al día Memo pregunta a npm si existe una versión nueva y, si la hay, escribe una línea en stderr tras el comando. Solo aparece ante una persona en el terminal: no con `--json`, en una tubería ni en ejecuciones periódicas. Desactívala con `"update_check": false` en los ajustes o `MEMO_NO_UPDATE_CHECK=1`. Memo nunca se actualiza por sí solo.
@@ -157,7 +162,7 @@ La desinstalación elimina el comando Memo y conserva tus datos. Sigue este orde
 memo auto stop                       # if you turned on the timer: removes it while memo still exists
 npm uninstall -g @wirecat/cli-memo   # or pnpm remove -g, or bun remove -g
 rm -rf ~/.claude/skills/cli-memo ~/.agents/skills/cli-memo   # the agent skill
-rm -rf ~/.config/cli-memo ~/.local/share/cli-memo            # Memo's settings and state
+rm -rf ~/.config/cli-memo ~/.local/share/cli-memo ~/.cache/cli-memo   # Memo's settings, state and cache
 ```
 
 El almacén local permanece. tg y max también lo utilizan; contiene notas, correo, etiquetas y recuerdos. Elimina `~/.local/share/WireCat/` solo si ninguna otra herramienta lo utiliza: guarda todo lo que cada una conservó.

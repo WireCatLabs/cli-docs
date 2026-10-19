@@ -63,6 +63,18 @@ process. Saved settings stay the same. The flag only tightens: an override that 
 level is refused at startup, so to allow more, change the profile's permissions. Over MCP, `ask` does not require a confirmation form on the server: the app controls
 its own approvals and may allow a call without asking again. Use `deny` or `readonly` to refuse changes. [Browser setup](./browser-apps.mdx) explains the full connection.
 
+## Lock a whole run to reading
+
+Each tool also reads a variable in its environment that refuses changes for the whole run, whatever
+the saved permissions allow. A refused change exits with code 5. Set it for an agent that should only read.
+
+| Tool | Variable | What it refuses |
+|---|---|---|
+| tg, max | `TG_READ_ONLY=1`, `MAX_READ_ONLY=1` | Sending and other changes; the agent can still read and prepare reply text. |
+| Zoom | `ZM_READ_ONLY=1` | Changes to Zoom, the login, settings and what you added; reading and syncing from Zoom still run. |
+| Google Drive | `DRIVE_READ_ONLY` (any value except `0` or empty) | Every change, on this computer or in Google, as `--read-only` does. |
+| Memo | `MEMO_READ_ONLY` (any value except `0`) | Every change; reading, `memo sync` and a scheduled agent's `tasks plan` and `tasks link` still run, and `memo mcp` leaves out its writing tools. |
+
 ## Limits and detailed rules
 
 An agent that can edit configuration files or run unrestricted terminal commands may be able

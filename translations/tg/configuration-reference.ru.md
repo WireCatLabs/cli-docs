@@ -40,18 +40,18 @@ tg personal chats list --limit 5  # 5: the option
 ## Текущие значения
 
 ```sh
-tg config show
+tg personal config show
 tg work config show
 tg shop config show --bot
 ```
 
 В нем перечислены профиль, откуда взялось имя профиля, профили, имена файлов, путь к файлу и его существование, а также каждый параметр с его значением и **откуда это значение**: `flag`, переменная среды, `config file`, `config defaults` или `default`. `--bot` показывает настройки, которые получает команда бота этого профиля. `--json` дает то же самое, что и один объект для скрипта.
 
-Список заканчивается `commandTimeoutMs`: ограничение на всю команду, от `--timeout` или `TG_TIMEOUT`. Это не настройка файла; `timeout_ms` ограничивает один запрос.
+Список заканчивается `command_timeout_ms`: ограничение на всю команду, от `--timeout` или `TG_TIMEOUT`. Это не настройка файла; `timeout_ms` ограничивает один запрос.
 
 Когда установлены `TG_CONFIG_DIR`, `TG_STATE_DIR` или `TG_CACHE_DIR`, об этом говорится в stderr, поскольку это также меняет, какой логин находится ([где хранятся части логина](./sessions.md#where-the-parts-are-kept)).
 
-⚠ **Это не проверка работоспособности.** Если она отсутствует, создается стартовая конфигурация, а затем считывается файлы. Он не открывает архив, не спрашивает системное хранилище ключей и не подключается. Работает ли сессия по-прежнему - это вопрос для `tg personal doctor --online` ([устранение неполадок с помощью tg Doctor](./troubleshooting.md#first-tg-doctor)).
+⚠ **Это не проверка работоспособности.** Если она отсутствует, создается стартовая конфигурация, а затем считывается файлы. Он не открывает архив, не спрашивает системное хранилище ключей и не подключается. Работает ли сессия по-прежнему - это вопрос для `tg personal doctor --online` ([устранение неполадок с помощью tg Doctor](./troubleshooting.md#first-tg-personal-doctor)).
 
 ## Файл настроек
 
@@ -92,7 +92,7 @@ tg shop config show --bot
 | `keep_runs_for_days` | `30` | записи запусков старше этого удаляются при сохранении следующего | нет |
 | `permissions` | разрешено все, кроме: спрашивают удаление, завершение сессий и некоторые другие изменения; автоответы не могут отправляться | что профиль может делать по команде ([ниже](#what-a-profile-may-do)) | нет; `--yes` и `--allow-dangerous` отвечают только на `ask`, они никогда не отменяют `deny` |
 | `sends_per_hour` | `30`; у бота его нет, пока он не установлен в разделе `bot` | наибольшее количество отправок за час ([защита отправки](./security.md#the-send-guard)) | нет |
-| `requests_per_minute` | `60` | запросов в минуту после краткого всплеска до 20, общие для всех процессов профиля; `0` отключает ([ограничивает и ждет](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
+| `requests_per_minute` | не задано, что означает `60` | запросов в минуту после краткого всплеска до 20, общие для всех процессов профиля; `0` отключает ([ограничения и ожидания](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
 | `transcribe_with` | `auto` | кто превращает голос в текст: `auto` (Telegram, иначе локальная модель), `messenger` или `local` | `--local` или `--model`, что подразумевает |
 | `speech_model` | нет | какую скачанную модель использует `--local` (`tg personal models audio list`) | `--model` |
 | `proxy` | нет | сервер SOCKS5, HTTP `CONNECT` или MTProxy для доступа к Telegram через ([ниже](#through-a-proxy)) | `TG_PROXY` |
@@ -108,6 +108,12 @@ tg shop config show --bot
 | `analysis_base_url` | провайдер по умолчанию | конечная точка API анализа | `build --base-url` |
 | `models` | нет | внешние модели по назначению ([ниже](#models-by-purpose)) | `TG_MODELS_*` переменные |
 | `search_stemmers.cyrillic`, `search_stemmers.latin` | `russian`, `english,spanish` | языки-основы слов для поиска по всему архиву ([ниже](#search-languages)) | нет |
+| `phone_countries` | `ru` | коды стран через запятую, по которым читается номер телефона, записанный без `+` (`es,ru`); побеждает первый подходящий ([поиск](./query-language.md)) | нет |
+| `task_categories.<name>` | встроенный список | одна категория, которую может получить задача: смысл, затем слова-триггеры ([задачи](./groups.md#what-waits-on-you)) | нет |
+| `task_agent_close` | `on` | `off` превращает каждое закрытие задачи агентом в предложение | нет |
+| `task_agent_close_min` | `0.8` | наименьшая `--certainty`, при которой закрытие задачи агентом принимается | нет |
+| `task_first_pass_per_chat` | `0` | сколько задач первая синхронизация может открыть в одном чате | нет |
+| `account_groups.<name>` | нет | именованный список аккаунтов для `--source group:<name>`, например `tg:work,max:Alice,email:me@x` | нет |
 
 При первом создании файл создаётся с правами `0600`, а `config set` пишет его с правами `0644`. Секретов в нём нет.
 
@@ -283,6 +289,11 @@ tg personal setup
 | `embedding_dims` | целое число 1–65 536 | профиль |
 | `analysis_provider` | `agent`, `openai`, `anthropic` | профиль |
 | `models` | объекты назначения, описанные ниже | профиль |
+| `phone_countries` | коды стран через запятую | общий архив через `config set` |
+| `task_categories.<name>`, `account_groups.<name>` | строка, как выше | общий архив через `config set` |
+| `task_agent_close` | `on`, `off` | общий архив через `config set` |
+| `task_agent_close_min` | число от 0 до 1 | общий архив через `config set` |
+| `task_first_pass_per_chat` | целое число от 0 до 1000 | общий архив через `config set` |
 | `search_stemmers.cyrillic` | `russian`, `none` | общий архив через `config set` |
 | `search_stemmers.latin` | `english`, `spanish`, оба через запятую, `none` | общий архив через `config set` |
 

@@ -85,18 +85,21 @@ trabajo. Memo omite las carpetas ocultas, como `.obsidian`.
 | Texto y Markdown | `.txt`, `.md`, `.markdown` | El texto, los enlaces y las etiquetas |
 | Tablas | `.csv`, `.tsv`, `.xlsx`, `.ods` | Los valores de las celdas, con la hoja, la fila y la columna |
 | Documentos, presentaciones y libros electrónicos | `.odt`, `.pptx`, `.epub` | El texto, sin el diseño |
-| PDF y Word | `.pdf`, `.docx` | El texto, con los números de página del PDF. Necesita los lectores opcionales de abajo |
-
-Para leer archivos PDF y Word, instala los dos lectores opcionales junto a Memo:
-
-```sh
-npm install -g unpdf mammoth
-```
+| PDF y Word | `.pdf`, `.docx`, `.doc` | El texto, con los números de página del PDF |
 
 Algunos archivos no se pueden leer: los PDF escaneados (imágenes de páginas, sin texto dentro), los
-archivos antiguos `.doc` y `.xls`, y los archivos de más de 50 MB. Memo guarda hasta 200 000
-caracteres de cada archivo. El informe de la importación muestra cada archivo que no pudo leer y el
-motivo, así que un archivo que falta nunca queda fuera de la búsqueda sin aviso.
+archivos antiguos `.xls` y los archivos de más de 50 MiB. Memo guarda hasta 200 000 caracteres de cada
+archivo. El informe de la importación muestra cada archivo que no pudo leer y el motivo, en cada
+ejecución, hasta que el archivo cambie:
+
+```text
+notes /home/you/Notes: 41 notes, 2 changed, 0 moved, 0 gone, 1 not read
+  not read: Archive/2009 budget.xls — this file type cannot be read
+```
+
+El informe de texto nombra los 10 primeros; con `--json`, la lista completa está en `not_read` dentro del informe de cada carpeta, con el motivo en `status`:
+`too-large`, `unsupported`, `needs-agent` (sin texto, como un escaneo), `unreadable` (dañado o bloqueado) o
+`engine-missing`. El recuento de notas excluye los archivos que no se leyeron.
 
 ### Omitir algunos archivos
 
@@ -108,7 +111,9 @@ carpeta (se omite todo lo que contiene) o un patrón:
 { "notes": { "ignore": ["Journal/Private.md", "Archive", "**/Private*"] } }
 ```
 
-`memo sync --only notes --ignore Drafts` omite una carpeta solo en esa ejecución.
+`memo sync --only notes --ignore Drafts` deja una carpeta de lado durante una ejecución: sus notas no se vuelven
+a leer y las que ya se importaron siguen en Memo. `notes.ignore` es distinto: elimina las notas ya importadas
+de ese lugar.
 
 ## Encontrar tus notas
 
