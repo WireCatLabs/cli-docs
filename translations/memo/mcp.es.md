@@ -59,7 +59,7 @@ Use the memo tools to list the memories waiting for my review.
 | `search_meetings`, `meeting_passage` | Buscar en reuniones guardadas de una cuenta de origen elegida explícitamente y leer pasajes citados de la transcripción |
 | `meeting_prepare` | Reunir el historial guardado de la serie y el contexto enlazado, opcionalmente con cuentas de mensajes o correo elegidas explícitamente; no verifica la hora de la próxima reunión |
 | `project_context` | Documentos clave, relaciones, hechos y hallazgos de reuniones pendientes, junto con las tareas numeradas abiertas |
-| `project_evidence` | Referencias citadas sobre un proyecto en mensajes, correo y carpetas de notas guardados, buscadas por sus nombres, palabras adicionales y personas; solo lectura |
+| `project_evidence` | Referencias citadas sobre un proyecto en mensajes, correo, transcripciones de reuniones y carpetas de notas guardados, buscadas por sus nombres, palabras adicionales y personas; solo lectura |
 | `meeting_actions_add`, `meeting_actions_show`, `meeting_actions_list` | Proponer y examinar hechos y seguimientos citados de reuniones; nunca los confirma |
 | `person_context` | Una persona entre servicios y correo, con notas y tareas enlazadas; solo lectura |
 | `memories_add`, `memories_list`, `memories_show`, `search_memories` | Guardar y leer recuerdos |
@@ -94,8 +94,18 @@ seguimientos deducidos se marcan como tales. Un reintento idéntico reutiliza la
 lotes con `memo meetings actions confirm` o `reject`. Preparar un lote no crea hechos ni tareas numeradas.
 
 `project_evidence` acepta las opciones de `memo projects evidence` en snake_case y necesita `source`: entradas de
-cuenta, un tipo, `group:<name>` o `all`. Busca por separado el nombre del proyecto, cada alias, cada `context_query`
-y cada `contact`, y une los resultados; `since_time` vale `60d` por defecto. Un elemento encontrado solo por el nombre
+cuenta, un tipo, `group:<name>` o `all`. Busca por separado el nombre del proyecto, su clave, cada alias guardado y
+cada `alias`, cada `context_query` y cada `contact`, y une los resultados; `since_time` vale `60d` por defecto.
+Admite cuentas de reuniones: un perfil registrado como `zm:work` selecciona los fragmentos guardados e
+indexados de sus transcripciones. Los resultados conservan referencias exactas a fragmentos `meeting:`
+y usan la fecha de inicio de la reunión (`time_kind: "meeting-start"`). Se excluyen transcripciones
+sustituidas o eliminadas. Las transcripciones ausentes y los archivos incompletos siguen siendo
+desconocidos; Memo no descarga grabaciones. La indexación de transcripciones usa el flujo existente
+de la herramienta de reuniones; la actualización de correo y documentos descrita abajo no las indexa.
+El correo y los documentos nuevos se indexan antes de buscar; `catch_up: false` lee el índice como está.
+Cada resultado de mensaje contiene `around`: `before_n` y `after_n` mensajes vecinos del chat (2 por defecto),
+como contexto, nunca como resultados adicionales. `mentions` enumera otros proyectos, etiquetas y temas
+que los textos mencionan, con referencias; un nombre no establece pertenencia. Un elemento encontrado solo por el nombre
 de un contacto lleva `context: "person-only"`. Las fuentes que fallaron o no se leyeron se listan, y `completeness`
 sigue en `unknown`. Si devuelve un `checkpoint`, vuelve a llamar con los mismos argumentos y `cursor` igual a ese valor.
 No escribe nada.
