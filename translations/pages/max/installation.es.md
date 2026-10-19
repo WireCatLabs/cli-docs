@@ -66,7 +66,7 @@ Abre Terminal en macOS o Linux, o PowerShell en Windows.
    npm install -g @wirecat/max-cli && max skill install --for all
    ```
 
-   npm 12 puede mostrar «install scripts blocked». No pasa nada: el segundo comando instala las instrucciones para tus agentes, lo mismo que haría el script de instalación. En Windows, abre una terminal nueva si no se encuentra `max`.
+   npm 12 puede mostrar «install scripts blocked». No pasa nada: el script de instalación solo añade las instrucciones para tus agentes si la variable `MAX_INSTALL_AGENT` está definida, así que las instala el segundo comando. En Windows, abre una terminal nueva si no se encuentra `max`.
 
    En Windows puedes usar un solo comando. Instala max, lo añade a `PATH` (las carpetas donde el terminal busca comandos) y conecta todos los agentes compatibles:
 

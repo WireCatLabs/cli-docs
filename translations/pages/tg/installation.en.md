@@ -60,7 +60,7 @@ Open Terminal on macOS or Linux, or PowerShell on Windows.
    npm install -g @wirecat/tg-cli && tg skill install --for all
    ```
 
-   npm 12 may print "install scripts blocked". This is harmless: the second command installs the instructions for your agents, which is what the install script would do. On Windows, open a new terminal if `tg` is not found.
+   npm 12 may print "install scripts blocked". This is harmless: the install script adds the instructions for your agents only when `TG_INSTALL_AGENT` is set, so the second command installs them. On Windows, open a new terminal if `tg` is not found.
 
    On Windows, you can use one command instead. It installs tg, adds it to `PATH` (the folders where the terminal looks for commands) and connects all supported agents:
 
