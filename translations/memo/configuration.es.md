@@ -2,8 +2,8 @@
 title: "Configuración"
 ---
 
-Esta página muestra cada ajuste del archivo de configuración de Memo y cada variable de entorno que
-lee Memo. Úsala para consultar un ajuste; rara vez necesitas editar el archivo a mano.
+Usa esta referencia para consultar los ajustes y variables de entorno propios de Memo.
+Rara vez necesitas editar el archivo a mano.
 `memo folders add` añade una carpeta y `memo auto start` activa el temporizador por ti. Edita tú el
 archivo para indicar los archivos que se omiten, las cuentas de correo y dónde van las notas
 exportadas.
@@ -79,6 +79,26 @@ sigue en su siguiente ejecución. Consulta [importar con un temporizador](./arch
 ## `update_check`
 
 `false` desactiva la comprobación diaria de nuevas versiones de memo. `MEMO_NO_UPDATE_CHECK=1` hace lo mismo para una sesión de terminal.
+
+## `agent_decisions`
+
+De forma predeterminada, un agente puede confirmar o rechazar [propuestas de proyecto](./recipes.md#review-project-facts-and-follow-ups)
+por ti, con un motivo registrado en la decisión. Establece la clave `agent_decisions` en `false`
+en el nivel superior para exigir decisiones del propietario en este recorrido:
+
+```json
+{
+  "agent_decisions": false
+}
+```
+
+Añade la clave a tu configuración existente en vez de sustituir tus ajustes de notas, correo y temporizador
+por este breve ejemplo. Tanto CLI como MCP rechazan entonces `projects actions confirm` y `reject` del agente;
+leer y preparar propuestas sigue disponible. Las decisiones del propietario siguen disponibles en el terminal.
+El ajuste controla el modo de agente de Memo; el acceso al terminal conserva los permisos de su usuario.
+`--as-owner` etiqueta un comando como del propietario y el agente no debe usarlo para eludir este ajuste.
+El ajuste se aplica a propuestas de proyecto; no cambia la confirmación de hallazgos de reuniones reservada
+al propietario ni sustituye las demás comprobaciones de permisos de la herramienta.
 
 ## Variables de entorno
 

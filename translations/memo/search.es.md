@@ -4,15 +4,15 @@ title: "Búsqueda"
 
 Esta página te ayuda a encontrar algo que escribiste o recibiste, en tus notas, tu correo o tus
 mensajes de Telegram y MAX, y a dar a tu agente las fuentes de una respuesta. Cada resultado nombra
-su fuente, para que puedas abrir el original y comprobarlo. Un resultado vacío solo significa que el
-almacén local no tiene nada que coincida; puede que el chat no esté descargado o que la carpeta aún
-no esté importada.
+su fuente, para que puedas abrir el original y comprobarlo. Un resultado vacío significa que esa
+búsqueda no devolvió coincidencias. Las fuentes elegidas, el historial importado o el índice de búsqueda
+pueden estar incompletos.
 
 ## Pregunta a tu agente
 
 ```text prompt
-Use memo CLI to find what was agreed about the Harbour budget, in my notes, mail and messages.
-Quote the matching text, show the source of each result and tell me what you could not search.
+Usa memo CLI para encontrar lo acordado sobre el presupuesto de Harbour en mis notas, correo y mensajes.
+Cita el texto coincidente, muestra la fuente de cada resultado e indica dónde no pudiste buscar.
 ```
 
 Tu agente elige la búsqueda, lee el texto que coincide y te muestra las fuentes. Puedes comprobar
@@ -107,8 +107,8 @@ lo que dijo esa persona.
 La búsqueda de reuniones usa su propia consulta de palabras y sus propias opciones; los campos de consulta de
 correo y mensajes de arriba no se aplican. Usa `memo search meetings --help` para las opciones de fecha y proyecto;
 MCP también tiene selectores de evento y serie. Las respuestas JSON tienen los estándar `items`, `page`, `next` y
-`meta.accounts`; usa el cursor devuelto con la misma cuenta y los mismos filtros. El campo `missing` indica que la
-integridad del archivo es desconocida. Aunque la indexación esté lista, una búsqueda vacía no puede demostrar que
+`meta.accounts`; usa el cursor devuelto con la misma cuenta y los mismos filtros. El campo `missing` indica que no
+se sabe si el archivo está completo. Aunque la indexación esté lista, una búsqueda vacía no puede demostrar que
 ninguna reunión trató el tema. Si los pasajes cambiaron durante la indexación, repite la búsqueda como indica el
 siguiente paso. Una transcripción sin archivar o ausente debe obtenerse antes con Zoom.
 
@@ -157,8 +157,16 @@ actualización de correo y documentos no indexa fragmentos de transcripciones. L
 ausentes deben archivarse primero con su herramienta de reuniones; incluso al terminar las páginas
 la cobertura del archivo sigue siendo desconocida.
 
-Continúa una ejecución limitada con el punto devuelto, las mismas opciones y `--cursor`, y después
-[revisa las decisiones y seguimientos propuestos](./recipes.md#review-a-meetings-decisions-and-follow-ups).
+Continúa una ejecución limitada con el punto devuelto, las mismas opciones y `--cursor`. Comprueba
+si las fuentes realmente avanzan: repetir páginas vacías con el mismo estado de error no demuestra
+cobertura completa. Indica las fuentes pendientes en la respuesta en vez de reintentar indefinidamente.
+
+Para hechos y seguimientos respaldados por mensajes guardados, correo importado o archivos,
+[revisa las propuestas del proyecto con su evidencia](./recipes.md#review-project-facts-and-follow-ups).
+Las referencias a fragmentos de transcripciones usan la
+[revisión separada de hallazgos de reuniones](./recipes.md#review-a-meetings-decisions-and-follow-ups),
+que exige vínculos confirmados entre reunión y proyecto. La recopilación por sí misma no crea ninguno
+de los dos tipos de propuesta.
 
 ## Búsqueda por significado
 
@@ -171,8 +179,7 @@ npx -y @wirecat/tg-cli local models text download e5-small
 
 El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo sync` para que tus notas
 queden preparadas para él. Cada resultado indica si se encontró por palabras, por significado o de
-las dos formas. Sin el modelo, Memo dice "Searched by words only" y aun así encuentra todas las notas
-que contienen las palabras.
+las dos formas. Sin el modelo, Memo dice "Searched by words only" y busca por palabras en las notas guardadas.
 
 ## Qué muestra un resultado
 
