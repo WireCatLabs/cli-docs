@@ -4,6 +4,26 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.19.0 — 20.10.2026
+
+### Added
+
+- **The shared store moves to version 25 when first opened** (cli-core 0.366.0): it adds a history of chat
+  changes for the messengers that share it. Nothing is sent.
+
+### Fixed
+
+- **`drive guide` lists memo's `decision-trail` under "Works with"**, the memo scenario whose steps run
+  `drive search`, next to `person-brief`, whose title is now capitalised as in memo and the other tools. Both titles
+  come from cli-core (0.348.0 → 0.370.0), whose scenario check also catches shell characters left outside
+  quotes in a step.
+
+- **Project context with Memo**: the guides now explain selected-folder sync, the shared-store source,
+  source dates and coverage limits, and why a connected-app read alone does not import a document.
+
+- **`--json` help names a real field**: it said `--json=id,title`, which is refused; Drive results use `name`, so it
+  now says `--json=id,name`.
+
 ## 0.18.0 — 19.10.2026
 
 ### Added

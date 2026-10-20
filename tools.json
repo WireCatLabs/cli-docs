@@ -9,7 +9,7 @@
       "ru": "MAX в терминале: боты через официальный Bot API и ваш личный аккаунт.",
       "es": "MAX Messenger desde la terminal: bots con la Bot API oficial y tu cuenta personal."
     },
-    "docsRef": "v0.65.0"
+    "docsRef": "v0.66.0"
   },
   {
     "name": "tg",
@@ -21,7 +21,7 @@
       "ru": "Клиент Telegram для терминала и ИИ-агентов, с вашим собственным аккаунтом.",
       "es": "Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta."
     },
-    "docsRef": "v0.76.0"
+    "docsRef": "v0.77.0"
   },
   {
     "name": "drive",
@@ -29,12 +29,7 @@
     "repo": "WireCatLabs/drive-cli",
     "package": "@wirecat/drive-cli",
     "lang": "en",
-    "docsRef": "v0.18.0",
-    "guideRefs": {
-      "usage": "c86e077a5ffac187ce079572a844318bc8b6a663",
-      "search": "c86e077a5ffac187ce079572a844318bc8b6a663",
-      "recipes": "c86e077a5ffac187ce079572a844318bc8b6a663"
-    },
+    "docsRef": "v0.19.0",
     "summary": {
       "en": "Import selected Google folders, search documents locally and keep tags, notes and source-backed memories.",
       "ru": "Импортируйте выбранные папки Google, ищите документы локально и сохраняйте теги, заметки и записи памяти с источниками.",
@@ -47,7 +42,7 @@
     "repo": "WireCatLabs/zoom-cli",
     "package": "@wirecat/zoom-cli",
     "lang": "en",
-    "docsRef": "v0.30.0",
+    "docsRef": "v0.31.0",
     "profile": false,
     "summary": {
       "en": "Keep Zoom transcripts and recordings, search meeting evidence and give your agent context for the next call.",
@@ -66,12 +61,7 @@
       "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
       "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.78.0",
-    "guideRefs": {
-      "recipes": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b",
-      "search": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b",
-      "configuration": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b"
-    },
+    "docsRef": "v0.81.0",
     "profile": false
   }
 ]

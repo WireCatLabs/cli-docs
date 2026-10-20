@@ -47,7 +47,7 @@ En la terminal: `max guide agent-on-a-timer`
 Sabe quién espera tu respuesta y qué prometiste, sin abrir cada chat.
 
 1. ```sh
-   max review date>1d --unanswered 4h
+   max review 'date>1d' --unanswered 4h
    ```
 
    preguntas para ti que nadie respondió en cuatro horas, en todos los chats
