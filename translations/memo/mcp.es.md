@@ -5,8 +5,8 @@ title: "El servidor MCP"
 Esta página te ayuda a conectar Memo a una aplicación de IA que no tiene terminal, como Claude Desktop
 o Cursor. MCP (Model Context Protocol) es la forma en que estas aplicaciones usan un programa de tu
 ordenador. Una vez conectada, la aplicación puede leer tus mensajes, tu correo, tus notas y tus reuniones archivadas, y lo que
-Memo sabe de una persona. También puede guardar recuerdos, registrar hechos y proponer acciones. Lo
-que guarda espera tu revisión.
+Memo sabe de una persona. También puede guardar recuerdos, registrar hechos y proponer acciones. Las nuevas sugerencias esperan revisión; las propuestas de proyecto tienen permisos de decisión
+propios, descritos más abajo.
 
 ## Qué puede hacer la aplicación a través de MCP
 
@@ -15,13 +15,22 @@ que guarda espera tu revisión.
 | Buscar y leer tus mensajes, correo y notas guardados | Enviar un mensaje o un correo |
 | Leer el contexto de una persona o revisar los hallazgos pendientes de un proyecto | Cambiar tus notas, tu correo o tus mensajes |
 | Añadir, listar, mostrar y buscar recuerdos | Confirmar un recuerdo |
-| Añadir, listar y mostrar hechos | Aceptar un hecho |
+| Añadir, listar y mostrar hechos | Aceptar directamente un hecho ya propuesto |
 | Proponer acciones y listarlas | Aprobar o rechazar una acción |
-| Leer el registro de agentes | Borrar nada |
-| Buscar proyectos, etiquetas y temas por su nombre, y ver qué tareas están listas | Crear o vincular tareas |
+| Revisar propuestas de proyecto y, si está permitido, decidir hechos y seguimientos citados con un motivo | Confirmar un lote de hallazgos de reuniones |
+| Leer el registro de agentes | Borrar mensajes, correo o notas de origen |
+| Buscar proyectos, etiquetas y temas por su nombre, y ver qué tareas están listas | Crear o modificar tareas arbitrarias |
 
-Cuatro herramientas escriben: `memories_add`, `facts_add`, `actions_add` y `meeting_actions_add`. Lo que añaden queda
-como propuesta hasta que lo confirmas, y una acción nunca se envía. Las demás herramientas no modifican los registros de origen; la búsqueda de reuniones puede actualizar su índice de texto local. Conecta Memo solo a una aplicación en la que confíes para leer tus mensajes, tu correo y tus notas.
+`memories_add`, `facts_add`, `actions_add`, `meeting_actions_add` y `project_actions_add` guardan propuestas.
+Por defecto, `project_actions_confirm` y `project_actions_reject` pueden decidir propuestas de proyecto
+por ti con un motivo guardado. Confirmar puede crear hechos aceptados y tareas numeradas, o confirmar
+un documento clave. Fija [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo
+el propietario decida las propuestas de proyecto; leer y proponer siguen disponibles. Los hallazgos
+de reuniones siguen necesitando al propietario. Memo nunca envía una acción propuesta con `actions_add`.
+
+Las demás herramientas no modifican los registros de origen; la búsqueda de reuniones y la recopilación
+de contexto de proyecto pueden actualizar índices de texto locales. Conecta Memo solo a una aplicación
+en la que confíes para leer tus mensajes, tu correo y tus notas.
 
 ## Conectar una aplicación
 
@@ -71,7 +80,7 @@ Use the memo tools to list the memories waiting for my review.
 | `vocabulary_inspect` | Examinar dos etiquetas elegidas antes de unirlas: recuentos, coincidencias y muestras limitadas; no fusiona nada |
 | `tasks_relations`, `tasks_status`, `tasks_list` | Consultar dependencias entre tareas; solo lectura |
 
-Todo lo que añade la aplicación se guarda con el nombre de agente `memo-mcp` y espera como propuesto. Lo revisas
+Las sugerencias se guardan con el nombre de agente `memo-mcp`. Revisa los recuerdos y hechos propuestos
 con `memo memories list status:proposed` y los comandos de [Recuerdos y hechos](./memories.md).
 
 ## El registro de agentes
@@ -98,11 +107,13 @@ lotes con `memo meetings actions confirm` o `reject`. Preparar un lote no crea h
 `msg:` o `document:` con el `fingerprint` que dio `project_evidence`, y un texto que cambió desde entonces se rechaza
 por obsoleto. `project_actions_list` recorre por páginas las propuestas de un proyecto —documentos clave sugeridos
 (`key:<n>`) y lotes de hallazgos—, cada una con su evidencia: si el texto cambió (`state`), el texto y los mensajes
-de alrededor salvo con `brief`. Un texto que cambió después de prepararlos rechaza solo los hallazgos que lo citan.
-Decide los que tengas claros con `project_actions_confirm` (los ID de hallazgos que
+de alrededor salvo con `brief`; los documentos citados incluyen párrafos cercanos. Si un texto cambió desde que se preparó el lote, solo impide confirmar los hallazgos que lo citan. Decide los que tengas claros con `project_actions_confirm` (los ID de hallazgos que
 crear) o `project_actions_reject`, siempre con un `reason`, que se guarda con la decisión; pregunta al propietario por
 el resto. Un lote necesita su `fingerprint`. Si el propietario fija `agent_decisions: false`, las decisiones se
 rechazan y solo decide el propietario, con `memo projects actions confirm` o `reject`.
+
+Las sugerencias de documentos clave no tienen una huella de texto guardada y devuelven `state: "untracked"`;
+vuelve a leerlas antes de decidir. Los hallazgos conservan sus propias huellas para detectar cambios en las fuentes.
 
 `project_evidence` acepta las opciones de `memo projects evidence` en snake_case y necesita `source`: entradas de
 cuenta, un tipo, `group:<name>` o `all`. Busca por separado el nombre del proyecto, su clave, cada alias guardado y

@@ -30,10 +30,14 @@ Cuando borras un archivo de nota o un correo, su texto sale del almacén local e
 importación. Si una importación detecta que falta de golpe una parte inusualmente grande de una
 carpeta o de un buzón, no borra nada y te avisa.
 
-## Los agentes sugieren, tú decides
+<a id="agents-suggest-you-decide"></a>
+<a id="los-agentes-sugieren-tú-decides"></a>
 
-- Las acciones propuestas y los recuerdos y hechos añadidos por MCP esperan tu revisión. Por MCP un agente no puede confirmar, aceptar, aprobar ni rechazar.
-- Un hecho, recuerdo, vínculo o acción propuesta añadido con `memo` registra al autor. En un terminal de agente (`AI_AGENT` o `CLAUDECODE` definido), el agente es el autor y el hecho, recuerdo o vínculo espera tu revisión, como mediante MCP. Lo tuyo se confirma al instante; en el terminal de un agente se indica con `--as-owner`. Es una etiqueta, no un bloqueo: el agente también puede pasarla, así que indícale que nunca lo haga.
+## Controlar las decisiones del agente
+
+- Los recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas empiezan como propuestos. MCP no confirma recuerdos, no acepta directamente hechos propuestos existentes ni aprueba acciones en cuentas externas.
+- Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las conclusiones de reuniones siguen requiriendo al propietario.
+- Un hecho, recuerdo o vínculo añadido con `memo` registra al autor. En un terminal de agente (`AI_AGENT` o `CLAUDECODE` definido), el agente es el autor y el hecho registrado directamente, recuerdo o vínculo nuevo espera revisión. Los recuerdos y vínculos del propietario se confirman y los hechos se aceptan al instante; en el terminal de un agente, añade `--as-owner`. Es una etiqueta, no un bloqueo: el agente también puede pasarla, así que indícale que nunca lo haga.
 - Aprobar una acción la convierte en una tarea para ti. Memo no envía mensajes ni correos.
 - El registro del agente conserva agente, herramienta, resultado y hora, sin el contenido enviado.
 - Un agente que solo debe leer se ejecuta con `MEMO_READ_ONLY=1`. Entonces todo comando que cambia algo se detiene con `permission_error` (código de salida 5), y `memo mcp` ofrece solo sus herramientas de lectura. Las lecturas y `memo sync` siguen funcionando, igual que las escrituras de tareas que hace un agente programado con `tasks plan` y `tasks link`, como en tg y max: el vínculo solo se propone y se rechaza vincular dos tareas. `reminders poll` se rechaza.

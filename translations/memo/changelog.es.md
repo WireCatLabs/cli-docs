@@ -8,6 +8,21 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
+## Unreleased
+
+## 0.82.0 — 20.10.2026
+
+### Fixed
+
+- The MCP guide describes project-decision permissions and the accepted facts and numbered tasks that
+  confirming a proposal can create, alongside the owner-only review of meeting findings.
+- Key-document suggestions report `state: "untracked"` because no source fingerprint was saved with
+  the suggestion. They no longer incorrectly report unchanged text; reread the document before deciding.
+- **Project proposal review includes document paragraphs**, using the shared Core passage helper around
+  the finding's words. `projects actions list`, its MCP counterpart and key-document review now show this
+  context; `--brief` or zero before/after counts still omit it. The guides also explain oversized evidence
+  and accepting unchanged findings from a partly stale batch.
+
 ## 0.81.0 — 20.10.2026
 
 ### Fixed

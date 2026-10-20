@@ -30,7 +30,10 @@ explica cómo.
 
 Para un lote de hechos y tareas con citas de reuniones, usa la [revisión de conclusiones de reuniones](#meeting-findings) de abajo.
 
-**Qué espera tu decisión.** Una acción propuesta siempre espera aprobación o rechazo. Un recuerdo o hecho espera cuando lo añade un agente: mediante [MCP](./mcp.md) o `memo` en su terminal (con `AI_AGENT` o `CLAUDECODE`), que registra al agente como autor. Lo que añades personalmente se confirma al instante; en un terminal de agente, `--as-owner` lo atribuye a ti. El agente también puede pasar `--as-owner`; indícale que no lo haga.
+Para fuentes reunidas en un proyecto, usa la [revisión de propuestas de proyecto](./recipes.md#review-project-facts-and-follow-ups).
+Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las conclusiones de reuniones siguen requiriendo al propietario.
+
+**Qué espera tu decisión.** Una acción propuesta siempre espera aprobación o rechazo. Un recuerdo o hecho registrado directamente espera cuando lo añade un agente: mediante [MCP](./mcp.md) o `memo` en su terminal (con `AI_AGENT` o `CLAUDECODE`), que registra al agente como autor. Tu recuerdo se confirma y tu hecho se acepta al instante; en un terminal de agente, `--as-owner` lo atribuye a ti. El agente también puede pasar `--as-owner`; indícale que no lo haga.
 
 ## Recuerdos
 
@@ -62,7 +65,7 @@ memo facts show fact:4
 memo facts confirm fact:4
 ```
 
-Un hecho que añades con `memo` se acepta al instante. El de un agente queda `proposed` hasta `accept`; `author` y `origin` identifican al autor. `facts list` filtra por `kind`, `status`, `project` y `subject` en la consulta. `--project project:1` lo incorpora a un proyecto y `--occurred-time` indica cuándo ocurrió.
+Un hecho que añades con `memo` se acepta al instante. El de un agente queda `proposed` hasta `memo facts confirm`; `author` y `source` identifican al autor. `facts list` filtra por `kind`, `status`, `project` y `subject` en la consulta. `--project project:1` lo incorpora a un proyecto y `--occurred-time` indica cuándo ocurrió.
 
 Una decisión puede sustituir a otra anterior: añade `--supersedes fact:2`. Cuando aceptas la nueva
 decisión, la antigua deja de ser válida. Cuando una decisión ya no es válida y nada la sustituyó,
@@ -128,8 +131,6 @@ Nunca guarda lo que envió el agente.
 
 ## A través del servidor MCP
 
-Una aplicación sin terminal, como Claude Desktop, puede añadir recuerdos, hechos y acciones propuestas
-a través de [el servidor MCP](./mcp.md). Lo que añade siempre espera tu decisión: a través de MCP un
-agente no puede confirmar, aceptar, aprobar ni rechazar.
+Una aplicación sin terminal, como Claude Desktop, puede añadir recuerdos, hechos y acciones propuestas mediante [el servidor MCP](./mcp.md). Los registros directos quedan propuestos. Las propuestas de proyecto usan el flujo de revisión separado descrito arriba.
 
 Siguiente: [conectar una aplicación a través de MCP](./mcp.md).

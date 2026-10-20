@@ -42,10 +42,9 @@ Tres palabras aparecen en todas las páginas:
    mueven el correo elegido a la Papelera o lo restauran solo con `--yes`.
 3. **Tú o tu agente preguntáis.** Memo responde con el texto que coincide y una referencia a cada
    fuente, para que puedas abrir el original y comprobarlo.
-4. **Tu agente puede sugerir, pero tú decides.** Lo que una aplicación añade a través de MCP, y cada
-   acción propuesta, espera tu revisión. Memo nunca envía un mensaje ni un correo.
+4. **Tú controlas las decisiones del proyecto.** Los nuevos recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas esperan revisión. Por defecto, el agente puede decidir propuestas de proyecto con un motivo registrado; [exige decisiones del propietario](./configuration.md#agent_decisions) si quieres revisar cada una. Las conclusiones de reuniones siguen requiriendo al propietario. Memo nunca envía mensajes ni correos.
 
-Todo se queda en tu ordenador. Memo envía tu texto a un proveedor de IA solo cuando configuras uno y
+Memo conserva el almacén en tu ordenador. Memo envía tu texto a un proveedor de IA solo cuando configuras uno y
 lo permites para esa petición. [Cómo funciona Memo](./how-it-works.md) lo explica con más detalle.
 
 ## Empezar

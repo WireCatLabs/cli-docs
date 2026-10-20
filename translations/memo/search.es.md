@@ -151,6 +151,11 @@ una reunión antigua importada hoy sigue siendo antigua. Lee el fragmento y sus 
 `memo meetings passage` antes de sacar conclusiones. La recopilación no crea vínculos al proyecto,
 no establece asistentes ni guarda hechos o tareas extraídos.
 
+Un resultado de documento incluye párrafos breves alrededor del primer párrafo con una palabra buscada.
+Ayudan a localizar el pasaje, pero no prueban una conclusión. Si `oversized` enumera un documento,
+la recopilación no leyó su texto: abre su referencia con `memo notes show` cuando lo necesites.
+Mantén la fuente sin leer en el resultado en vez de afirmar que no hay evidencia.
+
 Si `units` indica un índice de reuniones pendiente, ejecuta `memo search meetings` para esa misma
 cuenta siguiendo [la búsqueda de reuniones](#search-stored-meetings) y vuelve a recopilar. La
 actualización de correo y documentos no indexa fragmentos de transcripciones. Las transcripciones

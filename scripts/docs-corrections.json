@@ -1786,31 +1786,6 @@
   },
   {
     "tool": "memo",
-    "slug": "memories",
-    "reason": "Memo 0.41.0 exposes facts confirm, replacing facts accept; keep native surrounding prose consistent with the generated command example.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`accept`",
-          "after": "`confirm`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`accept`",
-          "after": "`confirm`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`accept`",
-          "after": "`confirm`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
     "slug": "installation",
     "reason": "Preserve incoming section anchors from the previously reviewed Memo release after task and command vocabulary updates.",
     "replacements": {
