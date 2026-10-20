@@ -128,7 +128,7 @@
   },
   {
     "id": "memo-people",
-    "pages": ["memo/people.md", "memo/mail.md"],
+    "pages": ["memo/people.md", "memo/mail.md", "memo/recipes.md"],
     "families": {
       "memo": ["context", "organizations", "projects", "relationships", "vocabulary", "mail"]
     }

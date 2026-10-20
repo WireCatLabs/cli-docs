@@ -8,7 +8,30 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
-## Unreleased
+## 0.83.0 — 20.10.2026
+
+### Added
+
+- `memo projects evidence --contact person:<id>` (MCP `project_evidence` `contact`) searches the person's stored name and
+  keeps the `person:<id>` reference on the lane; an unknown id is refused with `not_found` instead of searched as text,
+  and a person with no stored name is refused with `validation_error` rather than searched under an identity's name.
+- **`projects annotations export|check|restore`** retains selected project aliases, facts and generic
+  links, with explicit external bindings and historical state. Export writes a new private file from
+  read-only source access; preview checks an existing explicit target; owner-only restore requires its
+  exact fingerprint and refuses populated/conflicting targets. Notes, meeting memberships, tasks,
+  memories, labels and findings remain omitted, so this selected format is not a full project backup.
+- **`project_annotations_snapshot` and `project_annotations_preview` MCP tools** read the same bounded
+  selected graph and destination conflicts. Restore is not exposed through MCP. Calls keep the normal
+  audit record, and schema, file reading, reference policy and transactions come from shared Core.
+
+### Fixed
+
+- MCP connection instructions distinguish direct proposed records, configurable project decisions and
+  owner-only meeting findings and annotation restoration.
+- Guides consistently distinguish proposed memories and direct facts from project proposals that an
+  agent can decide with a recorded reason, and explain the owner decision setting and meeting boundary.
+- **`sync --retry-attachments` help no longer says to install an extraction engine.** The PDF and Word
+  readers ship with memo; the option is for attachments an older memo or a broken install left unread.
 
 ## 0.82.0 — 20.10.2026
 
