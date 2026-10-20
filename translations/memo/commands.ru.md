@@ -1281,7 +1281,7 @@ memo projects actions add <file> [options]
 
 #### `memo projects actions list`
 
-a project's proposed key documents and findings, newest first, each with its cited evidence: whether the text changed since it was cited, the text itself and the messages around it
+a project's proposed key documents and findings, newest first, with source state, cited text and nearby messages or document paragraphs; key-document text is untracked because no fingerprint was saved
 
 ```sh
 memo projects actions list <project> [query] [options]
@@ -1297,9 +1297,9 @@ memo projects actions list <project> [query] [options]
 | `--json` | print JSON; --json=id,status keeps only those fields. |
 | `--limit <n>` | findings batches per page, at most 50. Default: `10`. |
 | `--page <n>` | which page, from 1; key documents come on the first. Default: `1`. |
-| `--brief` | only the references and whether their text changed, without the text around them. |
-| `--before-n <n>` | messages before each cited message, at most 5. Default: `2`. |
-| `--after-n <n>` | messages after each cited message, at most 5. Default: `2`. |
+| `--brief` | only references and source state, without excerpts or nearby text. |
+| `--before-n <n>` | messages or document paragraphs before the citation, at most 5. Default: `2`. |
+| `--after-n <n>` | messages or document paragraphs after the citation, at most 5. Default: `2`. |
 
 **Returns:** a project's proposals with the evidence to decide them
 

@@ -70,7 +70,9 @@ Use memo CLI to show the memories, facts and actions waiting for my review, with
 Do not confirm or approve anything; I will decide.
 ```
 
-[Recuerdos y hechos](./memories.md) explica cómo confirmarlos o rechazarlos. Aprobar una acción la convierte en una tarea para ti; Memo no envía nada. Un recuerdo o hecho añadido por el agente con `memo` también espera: con `AI_AGENT` o `CLAUDECODE`, Memo registra al agente como autor. Lo que añades personalmente se confirma al instante.
+[Recuerdos y hechos](./memories.md) explica cómo confirmarlos o rechazarlos. Aprobar una acción la convierte en una tarea para ti; Memo no envía nada. Un recuerdo o hecho añadido por el agente con `memo` también espera: con `AI_AGENT` o `CLAUDECODE`, Memo registra al agente como autor. Tus recuerdos se confirman y tus hechos se aceptan al instante.
+
+Las propuestas de proyecto tienen un [flujo de revisión](./recipes.md#review-project-facts-and-follow-ups) separado. Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las conclusiones de reuniones siguen requiriendo al propietario.
 
 ## Respuestas para scripts y agentes
 

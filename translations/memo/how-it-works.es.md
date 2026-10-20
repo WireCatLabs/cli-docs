@@ -42,7 +42,7 @@ Una importación lee tus carpetas y tus cuentas de correo y pone al día el alma
   importación también prepara el texto nuevo para la búsqueda por significado. `--no-embed` se salta
   este paso.
 
-Dos importaciones nunca se ejecutan a la vez, y una fuente que falla no detiene las demás.
+Dos importaciones de Memo nunca se ejecutan a la vez, y una fuente que falla no detiene las demás.
 
 ## Carpetas en más de un ordenador
 
@@ -102,7 +102,10 @@ indica cómo se encontró.
 Un resultado vacío solo significa que el almacén local no tiene nada que coincida. No demuestra que
 algo nunca ocurrió: puede que el chat no esté descargado o que la carpeta no esté importada.
 
-## Los agentes sugieren, tú decides
+<a id="agents-suggest-you-decide"></a>
+<a id="los-agentes-sugieren-tú-decides"></a>
+
+## Autoría del agente y revisión
 
 Tu agente puede añadir tres tipos de registros:
 
@@ -111,16 +114,12 @@ Tu agente puede añadir tres tipos de registros:
 - una **acción propuesta**: algo que hacer, como una respuesta. Siempre espera hasta que la apruebes o
   la rechaces. Aprobarla la convierte en una tarea para ti. Memo nunca envía un mensaje ni un correo.
 
-Lo que una aplicación añade a través del [servidor MCP](./mcp.md) queda como **propuesto** hasta que
-confirmes el recuerdo o aceptes el hecho. A través de MCP, un agente no puede confirmar, aceptar,
-aprobar ni rechazar, y cada llamada que hace queda escrita en el registro de agentes
-(`memo agents log`), sin los detalles que envió.
+Los recuerdos y los hechos registrados directamente mediante el [servidor MCP](./mcp.md) empiezan como **propuestos**. MCP no confirma recuerdos, no acepta directamente hechos propuestos existentes ni aprueba acciones en cuentas externas. Cada llamada se escribe en el registro de agentes (`memo agents log`), sin los detalles enviados.
 
-El comando `memo` reconoce el terminal de un agente por `AI_AGENT` o `CLAUDECODE`, variables que establecen agentes como Claude Code. Un hecho, recuerdo, vínculo o acción propuesta se atribuye al agente y espera tu revisión, como mediante MCP. Sin ellas, o con `--as-owner`, se atribuye a ti y se confirma al instante. Las variables y `--as-owner` son etiquetas, no un bloqueo: un agente puede establecerlas y escribir como tú.
+Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las conclusiones de reuniones siguen requiriendo al propietario.
+
+El comando `memo` reconoce el terminal de un agente por `AI_AGENT` o `CLAUDECODE`, variables que establecen agentes como Claude Code. Allí, un hecho registrado directamente, recuerdo o vínculo se atribuye al agente y empieza como propuesto. Sin ellas, o con `--as-owner`, se atribuye a ti: los recuerdos y vínculos se confirman y los hechos se aceptan al instante. Las acciones propuestas siguen esperando aprobación. Las variables y `--as-owner` son etiquetas, no un bloqueo: un agente puede establecerlas y escribir como tú.
 
 ## Qué puede salir de tu ordenador
 
-Nada, a menos que lo pidas. Por defecto, `memo ask` prepara fuentes para tu propio agente. Envía
-texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a un proveedor remoto
-solo si además añades `--allow-remote`. Lo que tu agente hace con el texto que lee depende de ese
-agente. Consulta [Seguridad](./security.md).
+El envío de fuentes a un proveedor de IA requiere tu autorización. Por defecto, `memo ask` prepara fuentes para tu agente. Envía texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a uno remoto solo con `--allow-remote` además. Lo que tu agente hace con el texto depende de él. Las comprobaciones automáticas de actualizaciones y dominios de remitentes también pueden hacer peticiones de red; [Seguridad](./security.md) explica qué envían y qué ajustes se aplican.

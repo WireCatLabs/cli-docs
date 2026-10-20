@@ -127,15 +127,20 @@ memo projects actions list HRB --limit 5 --page 1 --json
 memo projects actions list HRB --brief
 ```
 
-La vista normal incluye fragmentos citados y mensajes cercanos. Lee la fuente completa cuando un
+La vista normal incluye fragmentos citados y mensajes o párrafos de documentos cercanos. Lee la fuente completa cuando un
 fragmento no baste para juzgar el hallazgo. `--brief` conserva referencias y estado de las fuentes sin
-ese contexto. `--limit` cuenta lotes de hallazgos; los documentos clave propuestos se añaden en la
+ese contexto. Las sugerencias de documentos clave no tienen una huella de texto guardada: su estado
+es `untracked`, así que vuelve a leerlas antes de decidir. Un hallazgo sí conserva su propia huella
+para comprobar el texto citado. `--limit` cuenta lotes de hallazgos; los documentos clave propuestos se añaden en la
 primera página. Usa `--page 2` y las siguientes mientras el resultado indique que hay más.
 La recopilación usa puntos de continuación; esta lista de revisión usa números de página.
 
 Comprueba el significado, proyecto, fecha y responsable de cada hallazgo con su evidencia. Una cita
 exacta o una huella sin cambios no demuestra que la conclusión se desprenda del texto. Si una fuente
-cambió o desapareció, vuelve a leerla y prepara una propuesta nueva; puedes rechazar un lote obsoleto.
+cambió o desapareció, vuelve a leerla y prepara una propuesta nueva para los hallazgos afectados.
+Puedes aceptar los hallazgos cuyo proyecto, responsable y texto citado no hayan cambiado. Algunos
+lotes antiguos exigen que todas las citas sigan iguales; si uno no permite confirmar, prepara los
+hallazgos que aún quieras en un lote nuevo. Puedes rechazar un lote obsoleto.
 
 El propietario puede confirmar un documento clave como `key:12` o aceptar hallazgos elegidos de un lote.
 En este ejemplo, sustituye `7`, ambos ID y `BATCH_FINGERPRINT` por los valores de la lista de revisión:
