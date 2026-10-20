@@ -4,6 +4,25 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.66.0 — 20.10.2026
+
+### New
+
+- **The store keeps a chat's history (store version 25, cli-core 0.366.0).** A change to a chat's id, title,
+  membership or visibility is written to `chat_revisions` with the old and new value; a read by the old id of a chat
+  that got a new one finds it. The store moves to version 25 when first opened; nothing is sent.
+
+### Fixed
+
+- **A chat you left is found by any of its ids** (cli-core 0.368.0): `store export`, `store status`, `messages
+  thread`, `--chat` and `chat:` in search, tags, tasks and the other reads of its saved history. `chats track` and
+  `store gaps plan` refuse a left chat: "you left chat <id>".
+- **`max guide catch-up` and the first screen of `max --help` quote the filter: `max review 'date>1d' --unanswered 4h`.**
+  Without quotes the shell read `>` as a redirect: it created a file named `1d`, and `review` ran without the filter.
+  On cli-core 0.370.0 the scenario check in the tests catches such characters outside quotes.
+- **"Works with" spells memo's scenario title the same way as memo and the other tools:** "One person across every
+  tool", capitalised.
+
 ## 0.65.0 — 19.10.2026
 
 ### New
@@ -1685,7 +1704,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.65.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

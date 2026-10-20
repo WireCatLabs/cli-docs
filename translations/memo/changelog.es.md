@@ -8,6 +8,39 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
+## 0.81.0 — 20.10.2026
+
+### Fixed
+
+- **The `person-brief` and `decision-trail` scenario titles start with a capital**, like every other scenario:
+  "One person across every tool", "What did we decide about X, across every source". tg, max, zm and drive list
+  them under "Works with" from the same text in cli-core 0.370.0, and memo's tests hold its files to it.
+
+## 0.80.0 — 20.10.2026
+
+### Fixed
+
+- **`memo projects evidence` reads a large document once**, not once per search that matches it: a 95 KB document
+  matched by five searches charged about 476 KB of the read budget. Needs `@wirecat/cli-core` 0.369.0.
+
+## 0.79.0 — 20.10.2026
+
+### Added
+
+- **`memo projects evidence` gives a document hit the paragraphs around it** and lists a document too large to
+  read under `oversized` (text: "too large to read here"), with its reference to open by `memo notes show`.
+
+### Fixed
+
+- **`memo projects evidence` no longer stalls on large documents.** A large document no longer leaves its search
+  read-limited, with every `--cursor` continuation retrying the same page and charging the read budget again. Needs `@wirecat/cli-core` 0.367.0.
+- **`memo projects actions confirm` accepts the findings whose own cited text is unchanged**, even when another
+  finding in the batch cites a changed text; before, the whole batch had to be staged again.
+- Guides describe incomplete search results and local record/file export effects without promising
+  complete retrieval or unchanged files.
+- Guides explain gathering project evidence, reviewing proposed facts and follow-ups, and the
+  `agent_decisions` setting, with the separate review path for meeting transcript findings.
+
 ## 0.78.0 — 19.10.2026
 
 ### Fixed

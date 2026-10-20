@@ -4,6 +4,24 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.77.0 — 20.10.2026
+
+### Novedades
+
+- **El almacén guarda el historial de un chat (versión 25 del almacén, cli-core 0.366.0).** Un cambio de id, título,
+  pertenencia o visibilidad en la búsqueda de un chat se guarda en `chat_revisions` con el valor anterior y el nuevo;
+  una lectura por el id que tenía un chat antes del cambio encuentra el chat en que se convirtió. El almacén pasa a la
+  versión 25 al abrirse por primera vez; no se envía nada.
+
+### Correcciones
+
+- **Un chat que abandonaste se encuentra por cualquiera de sus ids** (cli-core 0.368.0) en `store export`, `store status`, `messages
+  thread`, en `--chat` y `chat:` de una búsqueda, en etiquetas, tareas y las demás lecturas de su historial guardado.
+  `chats track` y `store gaps plan` lo rechazan: "you left chat <id>".
+- **`tg guide` muestra el escenario de memo con el mismo título que memo y las demás herramientas:** "One person
+  across every tool", con mayúscula. Con cli-core 0.370.0, la comprobación de escenarios en las pruebas también
+  detecta caracteres de la shell fuera de comillas en un paso.
+
 ## 0.76.0 — 19.10.2026
 
 ### Cambios — pueden romper scripts

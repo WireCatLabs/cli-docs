@@ -98,7 +98,8 @@ lotes con `memo meetings actions confirm` o `reject`. Preparar un lote no crea h
 `msg:` o `document:` con el `fingerprint` que dio `project_evidence`, y un texto que cambió desde entonces se rechaza
 por obsoleto. `project_actions_list` recorre por páginas las propuestas de un proyecto —documentos clave sugeridos
 (`key:<n>`) y lotes de hallazgos—, cada una con su evidencia: si el texto cambió (`state`), el texto y los mensajes
-de alrededor salvo con `brief`. Decide los que tengas claros con `project_actions_confirm` (los ID de hallazgos que
+de alrededor salvo con `brief`. Un texto que cambió después de prepararlos rechaza solo los hallazgos que lo citan.
+Decide los que tengas claros con `project_actions_confirm` (los ID de hallazgos que
 crear) o `project_actions_reject`, siempre con un `reason`, que se guarda con la decisión; pregunta al propietario por
 el resto. Un lote necesita su `fingerprint`. Si el propietario fija `agent_decisions: false`, las decisiones se
 rechazan y solo decide el propietario, con `memo projects actions confirm` o `reject`.

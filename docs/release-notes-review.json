@@ -1,20 +1,20 @@
 {
   "tg": {
-    "version": "v0.76.0",
+    "version": "v0.77.0",
     "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
-    "reviewedAt": "2026-10-19",
-    "conclusion": "Reviewed Telegram 0.76.0 (Core 0.362.0): without a terminal, session start qr and setup print the login QR code as text for an agent to paste into the chat as a code block, and a renewed code is pasted again; --json adds one {\"event\":\"qr\"} stderr line per code; --qr-file is removed; login stays off MCP. store clear --left names the chats it deletes and takes --dry-run. Core 0.351.0-0.362.0 fixes chats leave/join store updates, sent-message chat, re-keyed chat privacy, hidden-chat search, schedule last.json and the first serve after an upgrade; messages forward answers with the copy in the target chat. Changed native pages: changelog, cli-contract, commands, people (snake_case sample), query-language, rankings and cli-contract (cli-core links pinned to v0.350.0), security, sessions, troubleshooting (renamed heading), usage; RU/ES updated. The troubleshooting correction that quoted --qr-file <png> is retired: the heading is gone. Roadmap unchanged: richer sending, chat notes and max parity are not shipped."
+    "reviewedAt": "2026-10-20",
+    "conclusion": "Reviewed Telegram 0.77.0 (Core 0.370.0): tg guide lists memo's person-brief as 'One person across every tool' from cli-core MEMO_SCENARIOS; the scenario check now also refuses shell characters left unquoted in a step (tg's steps were already quoted). Core 0.363.0-0.370.0: store version 25 keeps a chat's history (chat_revisions) and a read by a re-keyed chat's old id finds it; a left chat is found by any of its ids in reads of its kept history, while chats track and store gaps plan refuse it. Changed native pages: changelog, and the v0.77.0 release links in cli-contract; RU/ES updated. Roadmap unchanged: richer sending, chat notes and max parity are not shipped."
   },
   "max": {
-    "version": "v0.65.0",
+    "version": "v0.66.0",
     "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
-    "reviewedAt": "2026-10-19",
-    "conclusion": "Reviewed MAX 0.64.0-0.65.0 (Core 0.362.0): 0.64.0 briefly added --qr-file and stopped opening the QR code in a browser in a narrow terminal; 0.65.0 removes --qr-file, and without a terminal session start qr and setup print the QR code as text for an agent to paste as a code block; one code per run, about 2 minutes, rerun when it expires; the cloud password needs a terminal; login is not on MCP. store clear --left names its chats and takes --dry-run; a chat the owner returned to is no longer marked left. Changed native pages: changelog, commands, security (checks everything in the table), sessions (new Login through an agent section), and release links in bot/cli-contract/usage; EN/ES (and RU commands) updated. Roadmap unchanged: optional local copy, event actions, video notes, cloud password and native installers are not shipped."
+    "reviewedAt": "2026-10-20",
+    "conclusion": "Reviewed MAX 0.66.0 (Core 0.370.0): max guide catch-up and the first screen of max --help quote the filter, max review 'date>1d' --unanswered 4h (unquoted, a shell wrote a file named 1d and dropped the filter; the site's correction for it is retired); Works with shows memo's title from cli-core MEMO_SCENARIOS. Core 0.363.0-0.370.0: store version 25 keeps a chat's history; a left chat is found by any id, chats track and store gaps plan refuse it. Changed native pages: changelog, scenarios (quoted step), and the v0.66.0 release links in bot/cli-contract/usage; EN/ES (RU scenarios) updated. Roadmap unchanged: optional local copy, event actions, video notes, cloud password and native installers are not shipped."
   },
   "zm": {
-    "version": "v0.30.0",
+    "version": "v0.31.0",
     "roadmapSha256": "d6932e6c14696349630b8a975a2d32fb36bf79728ec8bd808457a72d79d9ae2d",
-    "reviewedAt": "2026-10-19",
-    "conclusion": "Reviewed Zoom 0.30.0 (Core 0.348.0): zm session start works without a terminal, printing 'Open this URL to approve Zoom login:' and the URL on stderr (kept with --quiet) and waiting for the browser callback on this computer; only the paste fallback needs a terminal; --no-input and CI still refuse; --interactive is removed. Changed native pages: changelog, commands, installation (Windows and cache folders in the uninstall list), security (any other write is refused), sessions (agent paragraph), troubleshooting; RU/ES updated. Roadmap unchanged: broader meeting preparation remains planned and is not shipped."
+    "reviewedAt": "2026-10-20",
+    "conclusion": "Reviewed Zoom 0.31.0 (Core 0.348.0 -> 0.370.0): Works with takes memo's person-brief title from cli-core MEMO_SCENARIOS; the scenario check refuses shell characters left unquoted in a step (zm's steps were already quoted); the shared store moves to version 25 (chat history) when first opened. Changed native pages: changelog; RU/ES updated. Roadmap unchanged: broader meeting preparation remains planned and is not shipped."
   }
 }

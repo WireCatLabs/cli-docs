@@ -4,6 +4,26 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.66.0 — 20.10.2026
+
+### Novedades
+
+- **El almacén guarda el historial de un chat (versión 25 del almacén, cli-core 0.366.0).** Un cambio de id, título,
+  pertenencia o visibilidad de un chat se escribe en `chat_revisions` con el valor anterior y el nuevo; una lectura por
+  el id antiguo de un chat que recibió uno nuevo lo encuentra. El almacén pasa a la versión 25 al abrirse por primera
+  vez; no se envía nada.
+
+### Correcciones
+
+- **Un chat que abandonaste se encuentra por cualquiera de sus ids** (cli-core 0.368.0): `store export`,
+  `store status`, `messages
+  thread`, `--chat` y `chat:` en la búsqueda, etiquetas, tareas y las demás lecturas de su historial guardado. `chats track` y `store gaps plan` rechazan un chat abandonado: «you left chat <id>».
+- **`max guide catch-up` y la primera pantalla de `max --help` ponen el filtro entre comillas: `max review 'date>1d' --unanswered 4h`.**
+  Sin comillas, la shell leía `>` como una redirección: creaba un archivo llamado `1d` y `review` se ejecutaba sin el
+  filtro. Con cli-core 0.370.0, la comprobación de escenarios en las pruebas detecta esos caracteres fuera de comillas.
+- **«Works with» escribe el título del escenario de memo igual que memo y las demás herramientas:** «One person across
+  every tool», con mayúscula.
+
 ## 0.65.0 — 19.10.2026
 
 ### Novedades
@@ -1696,7 +1716,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.65.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

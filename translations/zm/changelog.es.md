@@ -4,6 +4,19 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.31.0 — 20.10.2026
+
+### Añadido
+
+- **El almacén compartido pasa a la versión 25 al abrirse por primera vez** (cli-core 0.366.0): añade un historial de
+  cambios de los chats para los mensajeros que lo comparten. No se envía nada.
+
+### Correcciones
+
+- **La comprobación de escenarios detecta un paso que la shell cambiaría** (cli-core 0.348.0 → 0.370.0): `>`, `|`,
+  `;`, `$(` o un comodín fuera de comillas ahora hacen fallar las pruebas. Los pasos de zm ya estaban entre comillas.
+  "Works with" toma el título del escenario de memo de cli-core, el mismo texto que muestran todas las herramientas.
+
 ## 0.30.0 — 19.10.2026
 
 ### Cambiado — puede romper la compatibilidad
