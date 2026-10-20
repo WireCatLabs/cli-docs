@@ -7,6 +7,8 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
     sessions: "Connect your Zoom account, keep tokens in the keyring and choose a local data profile.",
     archive: "Pull or import transcripts, save cloud recordings and verify the local archive.",
     search: "Find transcript passages and connect their evidence to people, notes and facts.",
+    scenarios:
+      "Common Zoom tasks step by step: catch up on meetings, find a quote, prepare for the next call and archive recordings.",
     "topic-search": "Configure search by meaning and check which meeting passages have been indexed.",
     mcp: "Give your agent a skill or connect an AI app to Zoom's read-only meeting tools.",
     "remote-meetings": "Read upcoming meetings and invitations, then preview simple scheduling changes.",
@@ -25,6 +27,8 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
     sessions: "Подключите аккаунт Zoom, храните токены в системном хранилище секретов и выберите профиль данных.",
     archive: "Загрузите или импортируйте расшифровки, сохраните облачные записи и проверьте архив.",
     search: "Находите фрагменты расшифровок и связывайте источники с людьми, заметками и фактами.",
+    scenarios:
+      "Частые задачи Zoom по шагам: наверстать встречи, найти цитату, подготовиться к созвону и архивировать записи.",
     "topic-search": "Настройте поиск по смыслу и проверьте, какие фрагменты встреч проиндексированы.",
     mcp: "Дайте агенту инструкции или подключите приложение ИИ к инструментам Zoom только для чтения.",
     "remote-meetings": "Читайте будущие встречи и приглашения, затем просматривайте простые изменения расписания.",
@@ -43,6 +47,8 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
     sessions: "Conecta la cuenta de Zoom, guarda tokens en el llavero y elige un perfil local de datos.",
     archive: "Descarga o importa transcripciones, guarda grabaciones y verifica el archivo local.",
     search: "Encuentra pasajes y relaciona sus fuentes con personas, notas y hechos.",
+    scenarios:
+      "Tareas habituales de Zoom paso a paso: ponerse al día con reuniones, encontrar una cita, preparar la llamada y archivar grabaciones.",
     "topic-search": "Configura la búsqueda por significado y comprueba qué pasajes están indexados.",
     mcp: "Da instrucciones al agente o conecta una app de IA a las herramientas de Zoom de solo lectura.",
     "remote-meetings": "Lee próximas reuniones e invitaciones y revisa cambios simples de programación.",

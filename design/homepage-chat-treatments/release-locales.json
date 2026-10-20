@@ -660,7 +660,8 @@
     "MCP & CLI for your Agent": "MCP & CLI для вашего агента",
     "drive · your Google folders, searched locally": "drive · ваши папки Google, поиск на компьютере",
     "Source on GitHub": "Исходный код на GitHub",
-    "Packages on npm": "Пакеты на npm"
+    "Packages on npm": "Пакеты на npm",
+    "To run the commands yourself, follow a tool’s step-by-step scenarios:": "Чтобы выполнять команды самостоятельно, откройте пошаговые сценарии нужного инструмента:"
   },
   "es": {
     "Put the context from your chats to work — for you, your bots and the groups you run.": "Aprovecha el contexto de tus chats: para ti, tus bots y los grupos que administras.",
@@ -1322,6 +1323,7 @@
     "MCP & CLI for your Agent": "MCP & CLI para tu agente",
     "drive · your Google folders, searched locally": "drive · tus carpetas de Google, búsqueda local",
     "Source on GitHub": "Código fuente en GitHub",
-    "Packages on npm": "Paquetes en npm"
+    "Packages on npm": "Paquetes en npm",
+    "To run the commands yourself, follow a tool’s step-by-step scenarios:": "Para ejecutar los comandos tú mismo, sigue los escenarios paso a paso de cada herramienta:"
   }
 }

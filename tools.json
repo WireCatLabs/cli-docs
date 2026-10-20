@@ -48,6 +48,7 @@
     "package": "@wirecat/zoom-cli",
     "lang": "en",
     "docsRef": "v0.30.0",
+    "profile": false,
     "summary": {
       "en": "Keep Zoom transcripts and recordings, search meeting evidence and give your agent context for the next call.",
       "ru": "Сохраняйте расшифровки и записи Zoom, ищите обсуждения и давайте агенту контекст для следующего созвона.",
@@ -70,6 +71,7 @@
       "recipes": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b",
       "search": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b",
       "configuration": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b"
-    }
+    },
+    "profile": false
   }
 ]

@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 import { structureProblems } from "@wirecat/cli-base/release"
 import { captureUpstream, localizeTool } from "./localize.ts"
+import { crossToolScenarios, readScenarios, type Scenario, scenarioPage } from "./scenarios.ts"
 import { checkoutCommit, checkoutSource, sourceInstallation } from "./source-install.ts"
 
 export type Tool = {
@@ -26,6 +27,8 @@ export type Tool = {
   summary: Record<string, string>
   displayName?: string
   distribution?: "source"
+  /** `false` when the tool's commands take no leading profile, as its `guide` command is told. */
+  profile?: boolean
 }
 
 /** A preview uses its requested ref; published prose overrides must be immutable. */
@@ -138,6 +141,50 @@ const run = (command: string, args: string[], cwd?: string) =>
     stdio: ["ignore", "pipe", "inherit"],
   })
 
+const sparseClone = (repo: string, tag: string, checkout: string) =>
+  run("git", [
+    "-c",
+    "advice.detachedHead=false",
+    "clone",
+    "-q",
+    "--depth",
+    "1",
+    "--branch",
+    tag,
+    "--filter=blob:none",
+    "--sparse",
+    `https://github.com/${repo}.git`,
+    checkout,
+  ])
+
+let memoScenarios: Scenario[] | undefined
+/** Cross-tool scenarios come from memo at its own pinned release, whichever tool is being synced. */
+const pinnedMemoScenarios = (root: string): Scenario[] => {
+  if (memoScenarios) return memoScenarios
+  const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as Tool[]
+  const memo = tools.find((tool) => tool.name === "memo")
+  if (!memo?.docsRef) return []
+  const checkout = mkdtempSync(join(tmpdir(), "cli-docs-memo-scenarios-"))
+  try {
+    sparseClone(memo.repo, memo.docsRef, checkout)
+    run("git", ["sparse-checkout", "set", "scenarios"], checkout)
+    memoScenarios = readScenarios(join(checkout, "scenarios"))
+  } finally {
+    rmSync(checkout, { recursive: true, force: true })
+  }
+  return memoScenarios
+}
+
+/** Scenarios join the Guides group after recipes, or close it when the tool has none. */
+export const withScenarios = (pages: string[]): string[] => {
+  if (pages.includes("scenarios")) return pages
+  const after = pages.includes("recipes")
+    ? pages.indexOf("recipes") + 1
+    : pages.findIndex((page, index) => index > 0 && page.startsWith("---") && pages.indexOf("usage") < index)
+  const at = after < 0 ? pages.length : after
+  return [...pages.slice(0, at), "scenarios", ...pages.slice(at)]
+}
+
 export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = false) => {
   const tag =
     ref ?? tool.docsRef ?? latestTag(run("git", ["ls-remote", "--tags", `https://github.com/${tool.repo}.git`]))
@@ -146,22 +193,8 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
   try {
     if (ref && /^[a-f0-9]{40}$/.test(ref)) checkoutCommit(tool.repo, ref, checkout)
     else if (!ref && sourceInstallation(tool)) checkoutSource(tool, checkout)
-    else
-      run("git", [
-        "-c",
-        "advice.detachedHead=false",
-        "clone",
-        "-q",
-        "--depth",
-        "1",
-        "--branch",
-        tag,
-        "--filter=blob:none",
-        "--sparse",
-        `https://github.com/${tool.repo}.git`,
-        checkout,
-      ])
-    run("git", ["sparse-checkout", "set", "docs"], checkout)
+    else sparseClone(tool.repo, tag, checkout)
+    run("git", ["sparse-checkout", "set", "docs", "scenarios"], checkout)
     const problems = structureProblems(checkout)
     if (problems.length > 0) throw new Error(`${tool.repo} ${tag}:\n${problems.join("\n")}`)
 
@@ -213,6 +246,18 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       })
       writeFileSync(join(destination, "changelog.md"), changelog)
     }
+    const scenarios = readScenarios(join(checkout, "scenarios"))
+    if (scenarios.length > 0) {
+      const crossTool = tool.name === "memo" ? [] : crossToolScenarios(tool.name, pinnedMemoScenarios(root))
+      const page = toPage(scenarioPage(tool, scenarios, crossTool), {
+        repo: tool.repo,
+        tag,
+        pages,
+        from: "scenarios/README.md",
+      })
+      writeFileSync(join(destination, "scenarios.md"), page)
+      meta.pages = withScenarios(meta.pages as string[])
+    }
     // root: each tool is a tab of its own in the sidebar, not a folder under the others.
     const sidebar = meta.pages as string[]
     for (const file of guides.keys()) {
@@ -225,7 +270,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       cpSync(join(docs, "design"), join(root, "public", tool.name), {
         recursive: true,
       })
-    console.log(`${tool.name}: ${files.length} pages from ${tool.repo} ${tag}`)
+    console.log(`${tool.name}: ${files.length} pages and ${scenarios.length} scenarios from ${tool.repo} ${tag}`)
     if (captureOnly) return
     captureUpstream(root, tool)
     const untranslated = localizeTool(root, tool)

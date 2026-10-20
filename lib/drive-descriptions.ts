@@ -5,6 +5,8 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
       "Google Drive CLI setup: agent or npm installation, WireCat browser sign-in and a first folder search.",
     usage: "Import Google Drive folders, refresh cached documents and attach local context without editing originals.",
     search: "Find words, tags and meaning in cached Google Drive documents, with links to the original sources.",
+    scenarios:
+      "Common Google Drive tasks step by step: set up, find a decision, brief yourself on a document, give an agent read-only access.",
     recipes: "Prepare briefs, link Google Drive documents to existing work records and review proposed memories.",
     commands: "Look up Google Drive CLI commands, API methods, flags and exit codes in the generated reference.",
     configuration: "Choose Google Drive profiles, explicit store sharing, local controls and optional AI settings.",
@@ -19,6 +21,8 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
     usage:
       "Импортируйте папки Google Drive, обновляйте локальные документы и добавляйте контекст без изменения оригиналов.",
     search: "Ищите слова, теги и смысл в локальных документах Google Drive со ссылками на источники.",
+    scenarios:
+      "Частые задачи Google Drive по шагам: настройка, поиск решения, справка по документу и доступ агента только на чтение.",
     recipes: "Готовьте обзоры, связывайте документы Google Drive с работой и проверяйте предложенную память.",
     commands: "Находите команды Google Drive CLI, методы API, параметры и коды завершения в справочнике.",
     configuration: "Выбирайте профили Google Drive, явную общую базу, локальные запреты и необязательные настройки ИИ.",
@@ -34,6 +38,8 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
       "Configura Google Drive CLI: instalación con un agente o npm, acceso con WireCat y búsqueda en una carpeta.",
     usage: "Importa carpetas Google Drive, actualiza documentos locales y añade contexto sin editar originales.",
     search: "Busca palabras, etiquetas y significado en documentos Google Drive locales, con enlaces a las fuentes.",
+    scenarios:
+      "Tareas habituales de Google Drive paso a paso: configurar, encontrar una decisión, repasar un documento y dar acceso de solo lectura.",
     recipes: "Prepara resúmenes, vincula documentos Google Drive con trabajo existente y revisa recuerdos propuestos.",
     commands: "Consulta comandos de Google Drive CLI, métodos API, opciones y códigos de salida en la referencia.",
     configuration:
