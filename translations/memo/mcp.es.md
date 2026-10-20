@@ -56,7 +56,7 @@ muestra `which memo` (macOS y Linux) o `where.exe memo` (Windows).
 Después, pruébalo:
 
 ```text prompt
-Use the memo tools to list the memories waiting for my review.
+Usa las herramientas de memo para mostrar los recuerdos que esperan mi revisión.
 ```
 
 ## Las herramientas
@@ -70,6 +70,7 @@ Use the memo tools to list the memories waiting for my review.
 | `project_context` | Documentos clave, relaciones, hechos y hallazgos de reuniones pendientes, junto con las tareas numeradas abiertas |
 | `project_evidence` | Referencias citadas sobre un proyecto en mensajes, correo, transcripciones de reuniones y carpetas de notas guardados, buscadas por sus nombres, palabras adicionales y personas; solo lectura |
 | `project_actions_add`, `project_actions_list`, `project_actions_confirm`, `project_actions_reject` | Preparar hechos y seguimientos citados sobre un proyecto, revisarlos con la evidencia y su contexto, y decidir los que tengas claros con un motivo |
+| `project_annotations_snapshot`, `project_annotations_preview` | Leer alias, hechos y vínculos genéricos seleccionados o comprobar correspondencias explícitas en un destino preparado; restaurar corresponde al propietario por CLI |
 | `meeting_actions_add`, `meeting_actions_show`, `meeting_actions_list` | Proponer y examinar hechos y seguimientos citados de reuniones; nunca los confirma |
 | `person_context` | Una persona entre servicios y correo, con notas y tareas enlazadas; solo lectura |
 | `memories_add`, `memories_list`, `memories_show`, `search_memories` | Guardar y leer recuerdos |
@@ -139,5 +140,18 @@ Usa `project_context` con la clave, el nombre exacto o un alias de un proyecto p
 Las vistas previas de reuniones leen como máximo cinco lotes de cada una de ocho cuentas de reuniones enlazadas; los
 comandos de cobertura y continuación identifican registros adicionales o ausentes. Una vista previa incluye solo los
 hallazgos sin decidir de este proyecto. Lee el lote completo antes de revisarlo: también puede contener hallazgos de otro proyecto.
+
+`project_annotations_snapshot` devuelve un `snapshot` de versión 2, su `fingerprint`, cobertura y
+contadores acotados para un proyecto existente. Omite el cuerpo de las fuentes y conserva el estado
+propuesto. Pasa la instantánea a `project_annotations_preview` con `target_store` explícito, el proyecto
+de destino `project:<id>` y `bindings` que asocien cada referencia externa y el proyecto. `max_read_bytes`
+puede reducir el presupuesto de lectura de 4 MiB. El destino debe existir con fuentes, clave y nombre
+del proyecto coincidentes. La herramienta informa de conflictos y devuelve una huella sin restaurar.
+Ambas rechazan argumentos desconocidos; tras validar el esquema se comprueban el grafo y su contenido.
+
+Se omiten notas, vínculos específicos entre reuniones y proyectos, tareas, recuerdos, etiquetas y hallazgos: es
+un formato de anotaciones seleccionadas, no una copia completa. No hay herramienta MCP de restauración;
+el propietario usa el [recorrido de anotaciones seleccionadas](./recipes.md#keep-selected-project-annotations).
+Las lecturas siguen disponibles con `MEMO_READ_ONLY=1`; las llamadas conservan su entrada normal de auditoría.
 
 Siguiente: [revisar lo que guardó la aplicación](./memories.md).

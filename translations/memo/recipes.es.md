@@ -163,6 +163,64 @@ El recorrido separado de reuniones sigue dejando la confirmación al propietario
 
 Después, [prepara una agenda con el contexto aceptado del proyecto](#prepare-for-a-meeting-with-someone).
 
+## Conservar anotaciones seleccionadas de un proyecto
+
+Usa una instantánea de anotaciones seleccionadas para inspeccionar o reconstruir los alias, hechos
+y vínculos genéricos de un proyecto en otro almacén preparado. Obtendrás un archivo JSON privado y
+una vista previa de los conflictos de destino. Se omiten notas, vínculos específicos entre reuniones y proyectos,
+tareas, recuerdos, etiquetas y hallazgos; conserva tu copia habitual del archivo para esos datos.
+Los documentos, mensajes y personas externos se referencian, sin copiarlos ni recrearlos.
+
+```text prompt
+Usa memo CLI para exportar las anotaciones seleccionadas del proyecto Harbour a un archivo nuevo que yo elija.
+Muestra la cobertura y los recuentos. Ayúdame a preparar correspondencias explícitas con otro almacén de prueba existente,
+comprueba después el traslado y explica las fuentes ausentes o los conflictos. Déjame la restauración a mí.
+```
+
+```sh
+memo projects annotations export HRB --output harbour-annotations.json --json
+memo projects annotations check harbour-annotations.json --target-store ./trial/wirecat.db --project project:2 --bindings bindings.json --json
+```
+
+La carpeta superior del archivo debe existir. La exportación rechaza archivos existentes y crea uno
+nuevo con permisos privados. Conserva el estado propuesto y guarda hashes del texto de fuentes
+externas. `coverage` enumera todos los aspectos omitidos. Nunca elimina ni reinicia el proyecto.
+
+Prepara el destino por separado, con la clave y el nombre del proyecto iguales a los de la instantánea.
+Las fuentes y autores que vincules deben existir allí, y los hashes de las fuentes de texto deben
+coincidir. `project:2` es una referencia de destino inventada: usa la real de `MESSAGING_STORE=./trial/wirecat.db memo projects list --json`.
+`bindings.json` asocia la referencia del proyecto y cada `external[].ref` de la instantánea con una
+referencia de destino explícita. Por ejemplo:
+
+```json
+{"project:1":"project:2","bot:3":"bot:7","document:4":"document:9"}
+```
+
+Estos ID son ilustrativos. Leer una referencia no establece identidad: elige correspondencias entre
+los registros que comprobaste. Los nombres nunca unen personas automáticamente. La comprobación debe
+mostrar `ready: true`, sin correspondencias ausentes, texto cambiado ni conflictos de descripción,
+nombre o alias de proyecto. Las anotaciones seleccionadas existentes son un conflicto aunque parezcan
+iguales. Si se supera el presupuesto de lectura, se rechaza la operación en vez de revisar solo una
+parte. Los contadores cubren la lectura seleccionada del SDK, no la E/S física del disco. Resolver
+una clave, nombre o alias lee otro catálogo acotado; pasa `project:<id>` para leer el grafo directamente.
+
+Después de comprobar la vista previa, el propietario puede ejecutar:
+
+```sh
+memo projects annotations restore harbour-annotations.json --target-store ./trial/wirecat.db --project project:2 --bindings bindings.json --fingerprint PREVIEW_FINGERPRINT --json
+```
+
+Sustituye `PREVIEW_FINGERPRINT` por la huella exacta de la comprobación correcta. La restauración
+comprueba de nuevo, aplica los cambios juntos y los revierte por completo si falla. Una fuente o un
+destino cambiado requiere otra comprobación. Repetir una restauración completada en un destino ocupado
+se rechaza sin añadir duplicados. Los hechos históricos aceptados siguen aceptados y los propuestos
+siguen propuestos. Memo rechaza la restauración cuando el entorno identifica al llamante como agente:
+es una política del CLI, no una barrera de acceso del sistema operativo. MCP solo ofrece lecturas de
+instantánea y vista previa; las llamadas siguen creando su entrada normal de auditoría.
+
+Cuando la comprobación sea correcta y los recuentos coincidan con lo esperado, vuelve a la [revisión del proyecto](#review-project-facts-and-follow-ups)
+para las propuestas actuales; la instantánea no decide sobre ellas.
+
 ## Encontrar dónde se decidió algo
 
 ```text prompt
