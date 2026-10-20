@@ -67,7 +67,7 @@ Only full-disk encryption protects against someone who obtains the disk — see 
 
 ## Preventing sends to the wrong place
 
-Why protection against wrong sends is needed and how it works is described on the [shared page](https://wirecat.dev/ru/docs/security). Before each write — a message, reaction, edit, forward or deletion — `max` checks four safeguards, then logs the attempt:
+Why protection against wrong sends is needed and how it works is described on the [shared page](https://wirecat.dev/ru/docs/security). Before each write — a message, reaction, edit, forward or deletion — `max` checks everything in the table below, then logs the attempt.
 
 In the examples below, `agent` is the name of a profile you created just for the agent; use your own.
 

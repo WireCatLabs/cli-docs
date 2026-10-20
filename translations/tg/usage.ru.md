@@ -114,7 +114,7 @@ tg personal session start phone --sms   # the same, asking for the code by SMS i
 ```
 
 ```sh
-tg personal session start --qr-file login.png  # the QR code as a picture, for an agent to show you
+tg personal session start qr  # without a terminal (an agent): the QR code as text to paste into the chat
 ```
 
 При первом входе также запрашивается ваше собственное приложение Telegram с сайта my.telegram.org; `--app auto` заполняет сайт за вас. Оба шага, и что где хранится: [логин, сессии и профили](./sessions.md).

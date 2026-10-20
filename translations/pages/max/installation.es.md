@@ -45,7 +45,7 @@ El agente te guía por estos pasos:
 
 1. **Revisa tu ordenador.** max necesita Node.js 22.16 o posterior. Si falta, el agente te explica cómo instalarlo.
 2. **Instala max.** En este paso tu cuenta no se toca.
-3. **Inicia el acceso.** El agente ejecuta `max personal setup` en una ventana de terminal, y ahí aparece un código QR. Lo escaneas con el teléfono, como se explica en [Inicia sesión en MAX](#log-in). Si el agente no puede mostrarte esa ventana, te pedirá que ejecutes `max personal setup` tú mismo.
+3. **Inicia el acceso.** El agente ejecuta `max personal setup` en una ventana de terminal, y ahí aparece un código QR. Lo escaneas con el teléfono, como se explica en [Inicia sesión en MAX](#log-in). Si el agente no puede mostrarte esa ventana, pega el código QR en el chat como texto: consulta [el agente no puede mostrarme el terminal](#q-agent-qr).
 4. **Se conecta a max.** El agente instala para sí las instrucciones de max.
 5. **Muestra el resultado.** Ves el nombre de tu cuenta y algunos chats. El agente no envía nada.
 
@@ -106,7 +106,7 @@ El acceso añade tu ordenador como un dispositivo nuevo de tu cuenta de MAX, igu
 
 `personal` es el nombre de este acceso en tu ordenador, llamado perfil. Sirve cualquier nombre. Los comandos siguientes empiezan con el mismo nombre, por ejemplo `max personal doctor`.
 
-1. Espera a que aparezca el código QR de acceso en el ordenador. Aparece en el terminal. Si la ventana es demasiado estrecha, setup abre el código en el navegador.
+1. Espera a que aparezca el código QR de acceso en el ordenador. Aparece en el terminal. Si la ventana es demasiado estrecha, el código no se dibuja: ensancha la ventana y vuelve a ejecutar setup. Cuando tu agente inicia la sesión sin terminal, pega el código en el chat.
 2. En el teléfono, abre MAX, entra en Ajustes → Dispositivos y elige escanear el QR. Permite el acceso a la cámara si se solicita.
 3. Apunta el escáner al código del ordenador. Usa el código de acceso de setup, no el QR de tu perfil para compartir contactos. Confirma en MAX si te lo pide.
 4. Si setup pide la contraseña adicional de tu cuenta, escribe la contraseña que configuraste en MAX. El terminal no muestra lo que escribes. Escríbela y pulsa Enter.
@@ -167,9 +167,17 @@ max personal setup --method sms         # la misma ventana, con acceso por núme
 
 El acceso por navegador necesita Chrome, Chromium, Edge o Brave. Los navegadores instalados como paquete snap no funcionan. La ventana usa un perfil temporal, no el tuyo, y se cierra tras el acceso.
 
+<a id="q-agent-qr" />
+
+### El agente no puede mostrarme el terminal con el código QR
+
+El agente ejecuta `max personal session start qr` en segundo plano. Sin terminal, max imprime el código QR como texto. El agente lo pega en el chat como bloque de código, tal como se imprimió, y tú lo escaneas enseguida desde la pantalla: un código de MAX dura unos 2 minutos. Cuando caduca, el agente vuelve a ejecutar el comando para obtener uno nuevo. La contraseña adicional de la cuenta solo se puede escribir en una terminal; si MAX la pide, ejecuta `max personal setup` tú mismo. Más en [cuando el agente inicia la sesión](/es/docs/agents#agent-login).
+
 ### El código QR caducó o setup se detuvo
 
-**Con tu agente:** pídele que ejecute setup otra vez y escanea el código nuevo.
+Un código de acceso de MAX dura unos 2 minutos.
+
+**Con tu agente:** pídele que vuelva a iniciar el acceso y escanea enseguida el código nuevo.
 
 **A mano:** vuelve a ejecutar `max personal setup`. Si ya iniciaste sesión, setup usa ese acceso y no vuelve a preguntar.
 

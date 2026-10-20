@@ -45,7 +45,7 @@ The agent goes through these steps with you:
 
 1. **It checks your computer.** max needs Node.js 22.16 or newer. If it is missing, the agent explains how to install it.
 2. **It installs max.** This does not touch your account yet.
-3. **It starts the login.** The agent runs `max personal setup` in a terminal window, and a QR code appears there. You scan it with your phone, as described in [Log in to MAX](#log-in). If the agent cannot show you that window, it asks you to run `max personal setup` yourself.
+3. **It starts the login.** The agent runs `max personal setup` in a terminal window, and a QR code appears there. You scan it with your phone, as described in [Log in to MAX](#log-in). If the agent cannot show you that window, it pastes the QR code into the chat as text instead: see [the agent cannot show me the terminal](#q-agent-qr).
 4. **It connects itself to max.** The agent installs the max instructions for itself.
 5. **It shows the result.** You see your account name and a few chats. The agent sends nothing.
 
@@ -106,7 +106,7 @@ Login adds your computer as a new device on your MAX account, like the MAX deskt
 
 `personal` is the name of this login on your computer, called a profile. Any name works. Later commands start with the same name, for example `max personal doctor`.
 
-1. Wait for the login QR code to appear on your computer. It appears in the terminal. If the window is too narrow, setup opens the code in your browser.
+1. Wait for the login QR code to appear on your computer. It appears in the terminal. If the window is too narrow, the code is not drawn: widen the window and run setup again. When your agent runs the login without a terminal, it pastes the code into the chat instead.
 
 2. On your phone, open MAX, then **Settings → Devices**, and choose QR scanning. Allow camera access if MAX asks.
 
@@ -169,9 +169,17 @@ max personal setup --method sms         # the same window, with phone-number log
 
 Browser login needs Chrome, Chromium, Edge or Brave. Browsers installed as a snap package do not work. The window uses a temporary profile, not your own, and closes after login.
 
+<a id="q-agent-qr" />
+
+### The agent cannot show me the terminal with the QR code
+
+The agent runs `max personal session start qr` in the background. Without a terminal, max prints the QR code as text. The agent pastes it into the chat as a code block, exactly as printed, and you scan it from the screen at once: a MAX code lasts about 2 minutes. When it expires, the agent runs the command again for a new code. Your additional account password can only be typed in a terminal; if MAX asks for it, run `max personal setup` yourself. More in [when the agent runs the login](/en/docs/agents#agent-login).
+
 ### The QR code expired, or setup stopped
 
-**With your agent:** ask it to run setup again, then scan the new code.
+A MAX login code lasts about 2 minutes.
+
+**With your agent:** ask it to run the login again, then scan the new code at once.
 
 **By hand:** run `max personal setup` again. If you already logged in, setup uses that login and does not ask again.
 

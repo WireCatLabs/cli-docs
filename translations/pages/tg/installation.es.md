@@ -41,7 +41,7 @@ El agente te guía por estos pasos:
 
 1. **Revisa tu ordenador.** tg necesita Node.js 22.16 o posterior. Si falta, el agente te explica cómo instalarlo.
 2. **Instala tg.** En este paso tu cuenta no se toca.
-3. **Inicia el acceso.** El agente ejecuta `tg personal setup` en una ventana de terminal. Confirmas en el teléfono, como se explica en [Inicia sesión en Telegram](#log-in). Si el agente no puede mostrarte esa ventana, te pedirá que ejecutes `tg personal setup` tú mismo.
+3. **Inicia el acceso.** El agente ejecuta `tg personal setup` en una ventana de terminal. Confirmas en el teléfono, como se explica en [Inicia sesión en Telegram](#log-in). Si el agente no puede mostrarte esa ventana, pega el código QR en el chat como texto: consulta [el agente no puede mostrarme el terminal](#q-agent-qr).
 4. **Se conecta a tg.** El agente instala para sí las instrucciones de tg.
 5. **Muestra el resultado.** Ves el nombre de tu cuenta y algunos chats. El agente no envía nada.
 
@@ -161,9 +161,11 @@ A mano, `tg personal doctor` muestra si has iniciado sesión y dónde guarda tg 
 tg personal setup --method phone
 ```
 
+<a id="q-agent-qr" />
+
 ### El agente no puede mostrarme el terminal con el código QR
 
-Pide al agente que guarde el código QR como imagen y te la muestre: `tg personal setup --qr-file login.png`. La imagen se sustituye cuando Telegram renueva el código y se borra cuando termina el acceso. Solo funciona si tg ya tiene su aplicación de Telegram y tu cuenta no tiene contraseña adicional; si no, ejecuta `tg personal setup` tú mismo.
+El agente ejecuta `tg personal session start qr` en segundo plano. Sin terminal, tg imprime el código QR como texto. El agente lo pega en el chat como bloque de código, tal como se imprimió, y tú lo escaneas desde la pantalla. Cuando Telegram renueva el código, el agente pega el nuevo y dice que el anterior caducó. Solo funciona si tg ya tiene su aplicación de Telegram y tu cuenta no tiene contraseña adicional; si no, ejecuta `tg personal setup` tú mismo. Más en [cuando el agente inicia la sesión](/es/docs/agents#agent-login).
 
 <a id="q-app" />
 

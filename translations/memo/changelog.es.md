@@ -8,7 +8,37 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
-## Unreleased
+## 0.78.0 — 19.10.2026
+
+### Fixed
+
+- **A proposed findings batch whose cited text changed can be rejected** with `memo projects actions reject`; before,
+  it could be neither confirmed nor rejected and stayed in the list. Needs `@wirecat/cli-core` 0.365.0.
+
+### Added
+
+- **`memo projects actions` — an agent's proposals for a project, with the evidence to decide them.** `add` stages
+  cited facts and follow-ups (references and fingerprints from `projects evidence`; a changed text refuses as
+  stale). `list` pages through suggested key documents and findings batches, each cited text shown with whether it
+  changed, the text and the messages around it (`--brief` drops them, `--before-n`/`--after-n`). `confirm` creates
+  the named findings or confirms a key document, `reject` turns them down. An agent in your terminal, or over MCP
+  (`project_actions_*`), decides for you only with `--reason`, kept with the decision; set `agent_decisions: false`
+  in the config to keep every decision yours. `projects key-documents list` items carry their `id`. Needs
+  `@wirecat/cli-core` 0.363.0.
+
+## 0.77.0 — 19.10.2026
+
+### Added
+
+- **Repeat a project-evidence time window** with `--before-time` (MCP `before_time`), an ISO timestamp with a UTC
+  offset used as the exclusive end. Days back are counted from that instant; explicit start dates also
+  keep that end. Text output prints the exact cutoff. Reusing a cutoff does not freeze archive contents,
+  registered aliases or account scope.
+
+### Fixed
+
+- **Project evidence documentation** distinguishes local search-index catch-up from creating facts,
+  tasks or project links; it no longer claims that every evidence call writes nothing.
 
 ## 0.76.0 — 19.10.2026
 

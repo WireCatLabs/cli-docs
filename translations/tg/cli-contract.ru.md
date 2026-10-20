@@ -71,7 +71,7 @@ tg personal stats charts <chat> --json
 
 ## Запуск без вопросов и ограничения
 
-`--no-input` запрещает интерактивный ввод. JSON, JSONL и запуск без терминала также никогда не задают вопрос и никогда не запускают интерактивный вход. Специально вводимые данные по-прежнему работают: учетные данные передаются через канал, а не в качестве аргумента команды или значения конфигурации. `setup` может проверить существующую сессию. Поскольку учетные данные приложения уже сохранены, явный `--qr-file` записывает временное QR-изображение без запроса; любой шаг, требующий вашего участия, будет отклонен.
+`--no-input` запрещает интерактивный ввод. JSON, JSONL и запуск без терминала также никогда не задают вопрос и никогда не запускают интерактивный вход. Специально вводимые данные по-прежнему работают: учетные данные передаются через канал, а не в качестве аргумента команды или значения конфигурации. `setup` может проверить существующую сессию. Если учётные данные приложения уже сохранены, вход по QR без терминала печатает код текстом, чтобы агент передал его дальше, и ничего не спрашивает; любой шаг, требующий вашего участия, будет отклонен.
 
 Для записи на уровне разрешений `ask` требуется явный `--yes`; для удаления требуется `--allow-dangerous`. Эти флаги только отвечают на вопрос. Все остальные проверки разрешений по-прежнему применяются.
 
@@ -112,6 +112,6 @@ tg commands schema messages list --json
 
 ## Стандарты, которым мы следуем
 
-`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.75.0/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
+`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.76.0/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
 
 Для настройки см. [руководство по настройке](./configuration.md); для каждого ключа и переменной среды — [справочник настроек](./configuration-reference.md).

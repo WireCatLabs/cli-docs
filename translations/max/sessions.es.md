@@ -27,7 +27,7 @@ No confunda `max personal session` y `max personal account sessions`. `max perso
 
 `max personal setup --agent codex` comprueba los directorios locales, guía el acceso con QR, comprueba la cuenta y hasta cinco chats e instala el skill del agente. Opciones: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Sin opción pregunta en el terminal; en modo máquina omite el skill. `max skill show` se puede leer antes de iniciar sesión.
 
-Tarda unos cinco minutos. La historia se descarga por separado luego de seleccionar el chat y el volumen; La instalación no inicia el servicio en segundo plano. Al reiniciar se comprueba la sesión existente. `--method token|qr|qr-chrome|sms` selecciona el nuevo método de entrada; de forma predeterminada, la configuración toma `qr`. QR y navegador requieren una persona en la terminal local. No pase el token como argumento. Si se interrumpe la configuración, repita la configuración. Si el token ha caducado, ejecute explícitamente `max personal session start qr`; Si el llavero es inaccesible, primero corrija el entorno de acuerdo con las indicaciones.
+Tarda unos cinco minutos. La historia se descarga por separado luego de seleccionar el chat y el volumen; La instalación no inicia el servicio en segundo plano. Al reiniciar se comprueba la sesión existente. `--method token|qr|qr-chrome|sms` selecciona el nuevo método de entrada; de forma predeterminada, la configuración toma `qr`. `qr-chrome` y `sms` requieren una persona en la terminal local. Sin terminal, `qr` imprime el código QR como texto: el agente lo pega en el chat y el propietario lo escanea desde la pantalla (consulte [Acceso a través de un agente](#вход-через-агента)). No pase el token como argumento. Si se interrumpe la configuración, repita la configuración. Si el token ha caducado, ejecute explícitamente `max personal session start qr`; Si el llavero es inaccesible, primero corrija el entorno de acuerdo con las indicaciones.
 
 ## Entrada
 
@@ -36,9 +36,26 @@ Tarda unos cinco minutos. La historia se descarga por separado luego de seleccio
 | Método | Qué ocurre | Requisitos |
 |---|---|---|
 | `token` (predeterminado) | Pegar un token emitido por el cliente oficial o pasarlo mediante una tubería | Ninguno |
-| `qr` | Muestra el QR en la terminal para escanearlo con MAX. Si la terminal es estrecha, abre el código en el navegador predeterminado | Unas 70 columnas de ancho o cualquier navegador |
+| `qr` | Muestra el QR en la terminal para escanearlo con MAX. Si la terminal es estrecha, el código no se dibuja: ensancha la ventana y vuelve a ejecutarlo. Sin terminal, el código se imprime como texto para un agente | Unas 70 columnas de ancho o un agente |
 | `qr-chrome` | Abre web.max.ru en una ventana separada; escaneas su QR | Chrome, Chromium, Edge o Brave |
 | `sms` | Abre la misma ventana de web.max.ru; elige acceso por teléfono en la página | Chrome, Chromium, Edge o Brave |
+
+### Acceso a través de un agente
+
+Sin terminal (el agente ejecuta el comando con su herramienta de shell), `max <профиль> session start qr`
+imprime el código QR en stderr como texto plano: caracteres `█▀▄`, sin color y con los módulos claros dibujados, de
+modo que en un tema oscuro el código se lee como negro sobre blanco. El agente:
+
+1. ejecuta el comando en segundo plano: espera el escaneo hasta 2 minutos, y una herramienta de shell no muestra
+   nada hasta que el comando termina;
+2. lee su salida y pega el bloque QR en el chat como bloque de código, tal como se imprimió;
+3. espera a que termine: el resultado del acceso llega por stdout.
+
+Con `--json`, cada código también es una línea JSON en stderr: `{"event":"qr","qr":{"text":…,"expires_at":…,"scan":…}}`.
+MAX emite un código por ejecución; si caduca, vuelve a ejecutar el comando. La contraseña en la nube de MAX no se
+puede introducir así: solo se pide en una terminal. El acceso no está disponible por MCP (`session` no se publica en
+MCP y el acceso no pasa por `serve`): un agente que solo tiene MCP debe pedir al propietario que ejecute el comando,
+o usar una shell.
 
 ```sh
 max personal session start qr

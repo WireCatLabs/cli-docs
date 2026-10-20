@@ -23,7 +23,7 @@ Do not confuse `max personal session` and `max personal account sessions`. `max 
 
 `max personal setup --agent codex` checks local directories, guides you through QR login, checks your account and up to five chats, and installs the agent skill. Agent choices: `codex`, `cursor`, `claude`, `gemini`, `all`, `none`. Without a parameter, an interactive terminal asks you; machine mode skips skill installation. `max skill show` is available before login.
 
-Allow about five minutes. History downloads separately after you choose a chat and volume; setup does not start a background service. Repeating setup checks the existing session. `--method token|qr|qr-chrome|sms` selects a new login method; default `qr`. QR and browser methods require a person at the local terminal. Do not pass a token as an argument. Repeat interrupted setup. For an expired token, explicitly run `max personal session start qr`; if the keyring is unavailable, follow the environment repair guidance first.
+Allow about five minutes. History downloads separately after you choose a chat and volume; setup does not start a background service. Repeating setup checks the existing session. `--method token|qr|qr-chrome|sms` selects a new login method; default `qr`. `qr-chrome` and `sms` require a person at the local terminal. Without a terminal, `qr` prints the QR code as text: the agent pastes it into the chat and the owner scans it from the screen (see [Login through an agent](#вход-через-агента)). Do not pass a token as an argument. Repeat interrupted setup. For an expired token, explicitly run `max personal session start qr`; if the keyring is unavailable, follow the environment repair guidance first.
 
 ## Log in
 
@@ -32,9 +32,25 @@ Allow about five minutes. History downloads separately after you choose a chat a
 | Method | What happens | Requirements |
 |---|---|---|
 | `token` (default) | Paste a token issued by an official client, or pipe it in | None |
-| `qr` | A QR code appears directly in the terminal; scan it with the MAX app. In a narrow terminal, the code opens in your default browser | A terminal about 70 columns wide, or any browser |
+| `qr` | A QR code appears directly in the terminal; scan it with the MAX app. In a narrow terminal the code is not drawn: widen the window and run it again. Without a terminal the code is printed as text for an agent | A terminal about 70 columns wide, or an agent |
 | `qr-chrome` | web.max.ru opens in a separate browser window; scan its QR code | Chrome, Chromium, Edge or Brave |
 | `sms` | The same web.max.ru window; choose phone-number login on the page | Chrome, Chromium, Edge or Brave |
+
+### Login through an agent
+
+Without a terminal (an agent runs the command through its shell tool), `max <профиль> session start qr`
+prints the QR code on stderr as plain text: `█▀▄` characters, no colour, with the light modules drawn, so on a
+dark theme the code reads as black on white. The agent:
+
+1. runs the command in the background — it waits up to 2 minutes for the scan, and a shell tool shows nothing
+   until the command ends;
+2. reads its output and pastes the QR block into the chat as a code block, exactly as printed;
+3. waits for the command to finish: the login result arrives on stdout.
+
+With `--json` each code is also one JSON line on stderr: `{"event":"qr","qr":{"text":…,"expires_at":…,"scan":…}}`.
+MAX issues one code per run; when it expires, run the command again. The MAX cloud password cannot be entered this
+way: it is asked for only in a terminal. Login is not available through MCP (`session` is not published to MCP, and
+login does not go through `serve`): an agent with only MCP has to ask the owner to run the command, or use a shell.
 
 ```sh
 max personal session start qr

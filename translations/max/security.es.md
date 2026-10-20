@@ -69,7 +69,7 @@ Frente a quien extrae el disco solo protege el cifrado completo del disco: consu
 
 ## Protección de envíos
 
-Por qué hace falta la protección de envíos y cómo funciona se explica en la [página común](https://wirecat.dev/ru/docs/security). Antes de cada escritura (mensajes, reacciones, ediciones, reenvíos, eliminaciones), `max` comprueba cuatro cosas y después escribe una línea en el registro:
+Por qué hace falta la protección de envíos y cómo funciona se explica en la [página común](https://wirecat.dev/ru/docs/security). Antes de cada escritura (mensajes, reacciones, ediciones, reenvíos, eliminaciones), `max` comprueba todo lo que figura en la tabla de abajo y después escribe una línea en el registro.
 
 En los ejemplos de abajo, `agent` es el nombre de un perfil que creaste aparte para el agente; pon el tuyo.
 

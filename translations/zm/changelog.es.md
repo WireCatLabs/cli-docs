@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.30.0 — 19.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **`zm session start` funciona sin terminal, así que un agente puede pasar la URL de acceso.** Antes se negaba si stdin
+  no era un terminal, y el acceso canalizado o con `--json` necesitaba `--interactive`. Ahora imprime
+  `Open this URL to approve Zoom
+  login:` y la URL en stderr, incluso con `--quiet`, y espera el retorno del navegador;
+  solo la alternativa de pegar el retorno necesita un terminal. `--no-input` y CI siguen rechazándolo. `--interactive`
+  se elimina: no hacía nada más.
+
 ## 0.29.0 — 19.10.2026
 
 ### Cambiado — puede romper la compatibilidad

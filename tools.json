@@ -9,7 +9,7 @@
       "ru": "MAX в терминале: боты через официальный Bot API и ваш личный аккаунт.",
       "es": "MAX Messenger desde la terminal: bots con la Bot API oficial y tu cuenta personal."
     },
-    "docsRef": "v0.63.0"
+    "docsRef": "v0.65.0"
   },
   {
     "name": "tg",
@@ -21,7 +21,7 @@
       "ru": "Клиент Telegram для терминала и ИИ-агентов, с вашим собственным аккаунтом.",
       "es": "Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta."
     },
-    "docsRef": "v0.75.0"
+    "docsRef": "v0.76.0"
   },
   {
     "name": "drive",
@@ -47,7 +47,7 @@
     "repo": "WireCatLabs/zoom-cli",
     "package": "@wirecat/zoom-cli",
     "lang": "en",
-    "docsRef": "v0.29.0",
+    "docsRef": "v0.30.0",
     "summary": {
       "en": "Keep Zoom transcripts and recordings, search meeting evidence and give your agent context for the next call.",
       "ru": "Сохраняйте расшифровки и записи Zoom, ищите обсуждения и давайте агенту контекст для следующего созвона.",
@@ -65,6 +65,6 @@
       "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
       "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.76.0"
+    "docsRef": "v0.78.0"
   }
 ]

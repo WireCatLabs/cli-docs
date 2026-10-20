@@ -36,7 +36,7 @@ zm session start --browser firefox
 
 En un terminal interactivo, abre tú la URL de autorización impresa por ese login y pega el retorno
 si hace falta. No reutilices una URL antigua. Sin entrada, el fallo del navegador termina pronto.
-Para login canalizado/JSON hace falta `--interactive`; `--no-input` lo impide.
+Sin terminal la URL se imprime igualmente; `--no-input` y CI rechazan el login.
 
 ### La app no está disponible o necesita aprobación
 

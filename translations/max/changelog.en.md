@@ -4,6 +4,62 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.65.0 — 19.10.2026
+
+### New
+
+- **`store clear --left` names the chats it deletes** (cli-core 0.353.0–0.362.0). The refusal without
+  `--allow-dangerous` lists the first 20 by id, title and message count; the new `--dry-run` shows them all in
+  `left` and deletes nothing; the answer after deletion carries `left` too.
+
+### Changed — may break scripts
+
+- **Without a terminal, `session start qr` and `setup` print the QR code as text, and `--qr-file` is gone.** The owner
+  logged in through a PNG that the agent opened in an image viewer — a separate window that is easy to lose. Now the
+  code goes to stderr as plain text (`█▀▄` characters, no colour, readable on a dark theme), and the agent pastes it
+  into the chat as a code block. With `--json` the code is also a `{"event":"qr","qr":{"text","expires_at","scan"}}`
+  line on stderr. In a terminal the code is drawn as before. A script with `--qr-file` now gets an unknown-option
+  error. How an agent logs in: [sessions.md](./sessions.md#вход-через-агента).
+
+### Fixed
+
+- **A chat the owner returned to no longer stays marked "left"** (cli-core 0.352.0). An incomplete chat list and a
+  login remove that mark from the chats they name; "archived" and other states stay. Before, such a chat could
+  disappear from `max chats list`, and `store clear --left` deleted it with its messages. A full list still marks as
+  "left" the chats missing from it.
+
+## 0.64.0 — 19.10.2026
+
+### New
+
+- **`session start qr --qr-file <png>` and `setup --qr-file <png>`**, as in tg and wa: the QR code is written to a PNG
+  for the agent, without a terminal. The file is created with mode `0600` from the start and removed after login. QR
+  login now goes through `loginQr` from cli-core 0.347.0, one for all three CLIs.
+- **The next step in `--json` output and in an error carries `line` — the whole command with the profile**
+  (cli-core 0.348.0): `"line": "max personal mcp config"` beside `"command": "mcp config"`. A copied bare `command`
+  failed with "name a profile". `command` is unchanged; MCP answers have no `line`.
+
+### Changed — may break scripts
+
+- **A narrow terminal no longer opens the QR code in a browser.** The code is not drawn, and `max` says to widen the
+  window or pass `--qr-file`. Why: QR login is now shared by tg, max and wa, and a browser that opens by itself could
+  not be moved into cli-core for all three. MAX issues one code per run, so there is nothing to wait for in a narrow
+  window: stop the command and run it again wider or with `--qr-file`.
+- Without a terminal, `session start qr` and `setup` answer the same as tg and wa: "shows a QR code to scan — run it in a
+  terminal, or pass --qr-file <png>".
+
+### Fixed
+
+- **The login step in `setup` is called "Link this device"** and no longer asks to scan a QR code before it is
+  drawn. The line under the code itself says where to scan; in a narrow terminal, only the hint to widen it.
+- **A narrow terminal no longer asks to scan a QR code that is not there** (cli-core 0.350.0). `session start qr` and
+  `setup` wrote "scan this code with the MAX app on your phone" before the code; if the code did not fit, only the
+  hint to widen the window or pass `--qr-file` followed. Now the line "scan in the MAX app on your phone" comes after
+  the drawn code or the `--qr-file` note, and a narrow terminal shows only the hint.
+- **Hints in errors and notes name the profile**: "the store is behind this build — `max personal store
+  migrate`" instead of `max store migrate`, which failed with "name a profile" when copied. The same for the hint
+  to download the speech model: `max personal models audio download gigaam-v3`.
+
 ## 0.63.0 — 19.10.2026
 
 ### New
@@ -1629,7 +1685,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.63.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.65.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

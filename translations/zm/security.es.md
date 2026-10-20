@@ -52,8 +52,8 @@ IA. Esta guía los explica antes de conectar o archivar.
   búsqueda de palabras (que mantiene su índice al día), `batch`, `serve --mcp` y las sincronizaciones que copian
   Zoom al almacén o a un archivo: `meetings sync`, `watch`, `recordings sync`, `recordings download` y
   `recordings schedule run`; una sincronización o `watch` desde una fuente de archivos lee la carpeta configurada,
-  mientras que `meetings import <folder>` nombra una carpeta puntual y se rechaza. Un comando añadido más adelante
-  que escriba se rechaza hasta que se nombre aquí. Actívalo para un agente que solo deba leer; `0` o un valor vacío
+  mientras que `meetings import <folder>` nombra una carpeta puntual y se rechaza. Cualquier otro comando que
+  escriba, incluido uno añadido en una versión posterior, se rechaza. Actívalo para un agente que solo deba leer; `0` o un valor vacío
   lo desactivan.
 
 Una app IA puede enviar los resultados a su propio proveedor. Elige app y política por separado

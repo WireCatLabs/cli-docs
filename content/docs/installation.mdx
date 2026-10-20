@@ -51,8 +51,10 @@ Explain where data stays and how to stop any background work you start.
 ```
 
 The agent prepares the programs and explains the next step. You approve account access in the
-service's own login flow. Use the tool guide for QR codes, browser consent or a bot token; do not
-paste passwords, tokens or authorization callbacks into an ordinary agent chat.
+service's own login flow. When the agent runs the login, it pastes the QR code or the sign-in link
+into the chat for you: see [when the agent runs the login](./agents.mdx#agent-login). Use the tool
+guide for browser consent or a bot token; do not paste passwords, tokens or authorization callbacks
+into an ordinary agent chat.
 
 For an agent without terminal access, use [MCP](./mcp.mdx) or [web and mobile access](./browser-apps.mdx).
 It still needs a tool running on a computer you control.

@@ -4,6 +4,40 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.76.0 — 19.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Sin terminal, el código QR de acceso se imprime como texto para que un agente lo pegue en el chat; `--qr-file`
+  desaparece.** Un agente escribía un PNG y lo abría en un visor de imágenes, una ventana que se puede perder. Ahora
+  `tg <profile> session
+  start qr` y `setup` imprimen el código en stderr como texto plano (medios bloques, sin colores,
+  dibujado para un tema de terminal oscuro) y luego indican al agente que lo pegue como bloque de código, tal como se
+  imprimió, y que pegue el código renovado diciendo que el anterior caducó. Con `--json` cada código también es una
+  línea en stderr, `{"event":"qr","qr":{"text","expires_at","scan"}}`. En una terminal el código se dibuja como antes.
+  `--qr-file` se elimina de `session start` y `setup`. Sin terminal, el acceso sigue necesitando las claves de la
+  aplicación guardadas y ninguna 2FA, y se rechaza antes de abrir un navegador; el acceso por teléfono necesita una
+  terminal. El acceso sigue fuera de MCP: ejecuta el comando
+  ([cuando un agente inicia la sesión](./sessions.md#when-an-agent-runs-the-login)).
+
+### Novedades
+
+- **`store clear --left` nombra los chats que elimina** (cli-core 0.353.0): el rechazo sin `--allow-dangerous`
+  enumera los primeros 20, `--dry-run` los enumera todos y la respuesta incluye una lista `left` (`id`, `title`,
+  `messages`).
+
+### Correcciones
+
+- **De cli-core 0.351.0–0.362.0:** `chats leave` y `chats join` actualizan el almacén, y `chats show` encuentra un
+  chat que abandonaste; un mensaje enviado se guarda en el chat en el que respondió Telegram; un chat con clave nueva
+  conserva la privacidad más estricta de sus dos mitades; un chat oculto de la búsqueda queda fuera de toda búsqueda
+  que no lo nombre; el `last.json` de una ejecución programada fallida guarda un código de error, nunca el título de
+  un chat; el primer `serve` tras una actualización cambia las claves de los chats en pasadas cortas en lugar de
+  bloquear el almacén.
+- **`messages forward` devuelve y guarda la copia reenviada en el chat al que fue.** Tomaba el primer mensaje nuevo
+  de la respuesta de Telegram, que puede pertenecer a otro chat; ahora toma el que nombra su id de envío, en el chat
+  de destino. Crear un tema de foro lee su primer mensaje de la misma forma.
+
 ## 0.75.0 — 19.10.2026
 
 ### Correcciones
