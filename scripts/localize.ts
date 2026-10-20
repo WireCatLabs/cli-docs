@@ -192,6 +192,8 @@ export function localizeTool(root: string, tool: Tool) {
   for (const file of pages) {
     const slug = file.slice(0, -3)
     const original = readFileSync(join(source, file), "utf8")
+    // Scenario files are English in every tool, whatever language its other pages use.
+    const sourceLang = slug === "scenarios" ? "en" : tool.lang
     for (const lang of languages) {
       const owned =
         slug === "index"
@@ -203,25 +205,25 @@ export function localizeTool(root: string, tool: Tool) {
         writeFileSync(destination, siteLinks(contentLanguage(readFileSync(owned, "utf8"), lang), lang))
         continue
       }
-      if (lang === tool.lang && !existsSync(path)) {
+      if (lang === sourceLang && !existsSync(path)) {
         writeFileSync(destination, siteLinks(contentLanguage(corrected(original, slug, lang), lang), lang))
         continue
       }
       if (!existsSync(path)) {
         problems.push(`${tool.name}/${slug}.${lang}: missing translation`)
-        writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(original, sourceLang), lang))
         continue
       }
       if (hashes[`${tool.name}/${slug}.${lang}`] !== fingerprint(original)) {
         problems.push(`${tool.name}/${slug}.${lang}: source changed; translation needs review`)
-        writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(original, sourceLang), lang))
         continue
       }
       const translated = readFileSync(path, "utf8")
       const errors = translationProblems(original, translated)
       if (errors.length) {
         problems.push(`${tool.name}/${slug}.${lang}: ${errors.join(", ")}`)
-        writeFileSync(destination, siteLinks(contentLanguage(original, tool.lang), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(original, sourceLang), lang))
         continue
       }
       writeFileSync(

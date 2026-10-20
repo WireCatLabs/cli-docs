@@ -7,6 +7,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     notes: "Import Markdown folders and Obsidian vaults, read documents and write notes about people.",
     tags: "Label notes, emails, messages, people and projects, then find everything with a label.",
     search: "Find words, phrases, tags and dates across notes, mail and messages, with each source.",
+    scenarios:
+      "Common Memo tasks step by step: set up, start the day, prepare for a meeting, trace a person or a decision across tools.",
     people: "See a person's messages, mail and notes in one answer, and record organizations and projects.",
     mail: "Import Gmail or IMAP mail read-only through Himalaya, beside your notes and messages.",
     tasks: "Track requests, promises and project work, decide what can start and schedule local reminders.",
@@ -28,6 +30,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     notes: "Импортируйте папки Markdown и хранилища Obsidian, читайте документы и пишите заметки о людях.",
     tags: "Отмечайте тегами заметки, письма, сообщения, людей и проекты и находите всё по тегу.",
     search: "Ищите слова, фразы, теги и даты в заметках, почте и сообщениях с указанием источника.",
+    scenarios:
+      "Частые задачи Memo по шагам: настройка, начало дня, подготовка к встрече, человек или решение во всех инструментах.",
     people: "Смотрите сообщения, письма и заметки о человеке в одном ответе, ведите организации и проекты.",
     mail: "Импортируйте почту Gmail или IMAP только для чтения через Himalaya рядом с заметками.",
     tasks: "Следите за просьбами, обещаниями и задачами проектов и ставьте локальные напоминания.",
@@ -49,6 +53,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     notes: "Importa carpetas Markdown y bóvedas de Obsidian, lee documentos y escribe notas sobre personas.",
     tags: "Etiqueta notas, correos, mensajes, personas y proyectos, y encuentra todo por su etiqueta.",
     search: "Busca palabras, frases, etiquetas y fechas en notas, correo y mensajes, con cada fuente.",
+    scenarios:
+      "Tareas habituales de Memo paso a paso: configurar, empezar el día, preparar una reunión, seguir a una persona o una decisión.",
     people: "Ve los mensajes, correos y notas de una persona en una respuesta, y registra organizaciones y proyectos.",
     mail: "Importa correo de Gmail o IMAP en modo solo lectura con Himalaya, junto a tus notas.",
     tasks: "Sigue peticiones, promesas y trabajo de proyectos, y programa recordatorios locales.",
