@@ -46,8 +46,8 @@ Muestra todo lo que Telegram dice de la persona y cuántos mensajes suyos contie
              "restricted": false, "deleted": false, "support": false },
   "seen": "recently",
   "contact": true,
-  "mutualContact": true,
-  "commonChatsCount": 2,
+  "mutual_contact": true,
+  "common_chats_count": 2,
   "registered": { "at": "2019-04-01T00:00:00.000Z", "source": "estimate", "precision": "month" },
   "has_photo": true,
   "chats": [
@@ -58,7 +58,7 @@ Muestra todo lo que Telegram dice de la persona y cuántos mensajes suyos contie
   ],
   "aliases": [
     { "name": "Example U.", "username": "example_old", "link": "https://t.me/example_old",
-      "firstSeenAt": "2024-03-02T08:00:00.000Z", "lastSeenAt": "2024-03-02T08:00:00.000Z", "source": "profile" }
+      "first_seen_at": "2024-03-02T08:00:00.000Z", "last_seen_at": "2024-03-02T08:00:00.000Z", "source": "profile" }
   ]
 }
 ```

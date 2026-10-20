@@ -1240,6 +1240,7 @@ memo projects evidence <project> [options]
 | `--context-query <words>` | more words that all appear in one text; repeat for another search. |
 | `--contact <person>` | a person's name; what only names them is context, not the project. |
 | `--since-time <time>` | how far back: days (90d, at most 730d) or a start date (2026-09-01). Default: `60d`. |
+| `--before-time <time>` | fixed exclusive end: ISO 8601 timestamp with UTC offset; days back count from it. |
 | `--limit <n>` | new references at most, up to 500. Default: `100`. |
 | `--max-pages <pages>` | store pages read at most this run, up to 512. |
 | `--cursor <cursor>` | continue a stopped search from its checkpoint, with the same options. |
@@ -1251,6 +1252,111 @@ memo projects evidence <project> [options]
 **Returns:** find what the store holds about a project, by its names, more words and people
 
 **Example:** `memo projects evidence SYH --source telegram:1,email:personal --contact 'Alice Example'`, `memo projects evidence SYH --source all --context-query 'crane tender' --since-time 180d --json`
+
+### `memo projects actions`
+
+cited key documents and findings an agent proposed for a project, with the evidence to decide them
+
+#### `memo projects actions add`
+
+stage an agent's cited facts and follow-ups about one project for review
+
+This command changes the local store or your files.
+
+```sh
+memo projects actions add <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | JSON findings file, or - for stdin; at most 65536 UTF-8 bytes. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+
+**Returns:** stage an agent's cited facts and follow-ups about one project for review
+
+**Example:** `memo projects actions add findings.json`
+
+#### `memo projects actions list`
+
+a project's proposed key documents and findings, newest first, each with its cited evidence: whether the text changed since it was cited, the text itself and the messages around it
+
+```sh
+memo projects actions list <project> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `project` | required | the project's id, project:<id>, key, exact name or alias. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+| `--limit <n>` | findings batches per page, at most 50. Default: `10`. |
+| `--page <n>` | which page, from 1; key documents come on the first. Default: `1`. |
+| `--brief` | only the references and whether their text changed, without the text around them. |
+| `--before-n <n>` | messages before each cited message, at most 5. Default: `2`. |
+| `--after-n <n>` | messages after each cited message, at most 5. Default: `2`. |
+
+**Returns:** a project's proposals with the evidence to decide them
+
+**Example:** `memo projects actions list SYH`, `memo projects actions list SYH status:reviewed --brief --json`
+
+#### `memo projects actions confirm`
+
+confirm a suggested key document, or create the named findings of a batch and reject its other new ones; an agent decides for you only with --reason, unless agent_decisions is false
+
+This command changes the local store or your files.
+
+```sh
+memo projects actions confirm <project> <id> [findings] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `project` | required | the project's id, project:<id>, key, exact name or alias. |
+| `id` | required | key:<id> for a key document, or a findings batch number, as projects actions list gives them. |
+| `findings` | optional | the finding IDs of a batch to create. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--fingerprint <hash>` | a findings batch's fingerprint, as projects actions list gives it. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
+
+**Returns:** confirm a proposal, yours or an agent's with --reason
+
+**Example:** `memo projects actions confirm SYH 12 budget accountant --fingerprint 3f9a0c --reason 'both are stated plainly'`, `memo projects actions confirm SYH key:4`
+
+#### `memo projects actions reject`
+
+reject a suggested key document, or every new finding of a batch
+
+This command changes the local store or your files.
+
+```sh
+memo projects actions reject <project> <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `project` | required | the project's id, project:<id>, key, exact name or alias. |
+| `id` | required | key:<id> for a key document, or a findings batch number, as projects actions list gives them. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--fingerprint <hash>` | a findings batch's fingerprint, as projects actions list gives it. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
+
+**Returns:** reject a proposal
+
+**Example:** `memo projects actions reject SYH 12 --fingerprint 3f9a0c --reason 'not about this project'`
 
 ### `memo projects key-documents`
 

@@ -61,7 +61,6 @@ tg session start [method] [options]
 | Параметр | Назначение |
 |---|---|
 | `--app <how>` | только первый раз: способ получения приложения профиля с my.telegram.org: `browser`, `auto`. По умолчанию: `browser`. |
-| `--qr-file <png>` | сохранить QR-код в PNG для передачи агентом вместо отображения. |
 | `--sms` | вход по телефону: попросить код по SMS; Telegram всё равно может отказать. |
 
 **Returns:** log in by QR code (default) or by phone number, code and 2FA password
@@ -97,7 +96,6 @@ tg setup [options]
 | `--agent <agent>` | установить skill для агента; в терминале спрашивает выбор, иначе не устанавливает. Варианты: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`. |
 | `--app <how>` | как получить ключи приложения Telegram при первом входе. Варианты: `auto`, `browser`. По умолчанию: `auto`. |
 | `--method <method>` | как войти, если сессии нет. Варианты: `qr`, `phone`. По умолчанию: `qr`. |
-| `--qr-file <png>` | записать временное QR-изображение для передачи агентом; работает без терминала. |
 
 **Returns:** set up Telegram and connect your agent
 
@@ -2949,6 +2947,7 @@ tg store clear [options]
 |---|---|
 | `--left` | только покинутые этим аккаунтом чаты. |
 | `--allow-dangerous` | подтвердить необратимое удаление; историю покинутого чата нельзя загрузить снова. |
+| `--dry-run` | перечислить чаты, которые были бы удалены, и ничего не удалять. |
 
 **Returns:** delete from the store the chats this account has left, with their messages
 

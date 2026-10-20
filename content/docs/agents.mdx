@@ -43,6 +43,19 @@ tg personal setup --agent codex
 
 Replace `codex` with `cursor`, `claude` or `gemini` for your agent. Without `--agent`, setup asks you to choose. For Hermes, OpenClaw or another agent, use `none` and follow the relevant note below.
 
+<a id="agent-login" />
+
+### When the agent runs the login
+
+An agent has no terminal to draw a QR code in or to open a browser from, so each tool prints what you need as text, and the agent passes it to you in the chat. Replace `personal` with your profile name.
+
+- **Telegram and MAX:** the agent runs `tg personal session start qr` or `max personal session start qr` in the background, because the command waits for your scan and a shell tool shows nothing until it ends. Without a terminal, the tool prints the QR code as text. The agent pastes it into the chat as a code block, exactly as printed, and you scan it with the Telegram or MAX app on your phone. When Telegram renews the code, the agent pastes the new one and says that the old one expired.
+- **MAX codes expire fast:** a MAX QR code lasts about 2 minutes, so the agent pastes it at once. When it expires, the agent runs the command again for a new code.
+- **Zoom:** without a terminal, `zm session start` prints `Open this URL to approve Zoom login:` and the URL. The agent gives you the URL as a link. Open it in a browser on the same computer, because Zoom returns to a listener there.
+- **Google Drive:** `drive personal session start` always prints its Google sign-in URL, and also tries to open a browser. If no browser opens, the agent gives you the printed URL as a link to open on the same computer.
+
+A phone-number login, a two-step verification password and the first registration of your Telegram app still need you at a terminal. Login is not an MCP tool: an agent that has only MCP asks you to run the command yourself.
+
 ### Account already connected
 
 `tg personal setup` with an agent chosen has already installed the skill. If your agent already sees `tg-cli`, you can skip this step. A global npm install of `tg`, `max` or `memo` adds the skill only when `TG_INSTALL_AGENT`, `MAX_INSTALL_AGENT` or `MEMO_INSTALL_AGENT` names an agent (`all`, `claude`, `codex`, `cursor` or `gemini`). The one-command Windows installer for `tg` and `max` adds it unless you pass `-Agent none`. `zm` and `drive` install a skill only when asked: run `zm skill install` or `drive skill install` after `npm install -g`. To add or update the instructions without repeating login:

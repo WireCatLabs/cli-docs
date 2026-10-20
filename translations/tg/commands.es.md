@@ -65,7 +65,6 @@ tg session start [method] [options]
 | Opción | Qué hace |
 |---|---|
 | `--app <how>` | solo la primera vez: cómo obtener la aplicación de my.telegram.org para el perfil. Valores: `browser`, `auto`. Predeterminado: `browser`. |
-| `--qr-file <png>` | guarda el QR en este PNG en lugar de dibujarlo, para que un agente pueda mostrártelo. |
 | `--sms` | acceso por teléfono: pedir el código por SMS; Telegram puede rechazarlo. |
 
 **Returns:** log in by QR code (default) or by phone number, code and 2FA password
@@ -101,7 +100,6 @@ tg setup [options]
 | `--agent <agent>` | instala la skill para este agente; pregunta en una terminal, de lo contrario no instala ninguna. Valores: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`. |
 | `--app <how>` | cómo obtener las credenciales de aplicación Telegram la primera vez. Valores: `auto`, `browser`. Por defecto: `auto`. |
 | `--method <method>` | cómo iniciar sesión si no existe una. Valores: `qr`, `phone`. Por defecto: `qr`. |
-| `--qr-file <png>` | guarda una imagen QR temporal para que un agente la transmita; funciona sin terminal. |
 
 **Returns:** set up Telegram and connect your agent
 
@@ -2953,6 +2951,7 @@ tg store clear [options]
 |---|---|
 | `--left` | chats que esta cuenta abandonó; es lo único que elimina. |
 | `--allow-dangerous` | confirma la eliminación irreversible; no se pueden descargar de nuevo chats abandonados. |
+| `--dry-run` | enumera los chats que eliminaría, sin eliminar nada. |
 
 **Returns:** delete from the store the chats this account has left, with their messages
 

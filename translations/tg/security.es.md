@@ -89,7 +89,7 @@ No hay telemetría.
 
 ## Inicio de sesión
 
-`tg personal setup` y `tg personal session start` dibujan el QR en la terminal. Queda en el historial visual, pero Telegram lo renueva mientras esperas, por lo que los antiguos no sirven. `--qr-file` lo guarda como PNG legible solo por ti y elimina el archivo al finalizar, funcione o no.
+`tg personal setup` y `tg personal session start` dibujan el QR en la terminal. Queda en el historial visual, pero Telegram lo renueva mientras esperas, por lo que los antiguos no sirven. Sin terminal se imprime como texto, para que un agente lo pegue en el chat. Un código de acceso mostrado así solo inicia sesión con la cuenta que lo escanea, aquí y solo mientras es válido.
 
 `--app auto` rellena my.telegram.org sin navegador: solicita el teléfono y el código que el sitio envía por Telegram, nada más.
 

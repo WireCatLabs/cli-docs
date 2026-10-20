@@ -2267,6 +2267,7 @@ max store clear [options]
 |---|---|
 | `--left` |los chats que ha dejado esta cuenta: lo único que esto borra.|
 | `--allow-dangerous` |sí, eliminar: no se puede deshacer y un chat que abandonaste no se puede recuperar de nuevo.|
+| `--dry-run` |enumera los chats que eliminaría, sin eliminar nada.|
 
 **Returns:** delete from the store the chats this account has left, with their messages
 

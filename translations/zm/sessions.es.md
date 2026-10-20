@@ -16,6 +16,11 @@ zm config set zoom.client_id <public-client-id>
 zm session start --browser firefox
 ```
 
+Si eres un agente: ejecuta `zm session start` en segundo plano (espera la aprobación hasta cinco minutos, y una
+herramienta de shell no muestra nada hasta que el comando termina), lee la línea `Open this URL to approve Zoom login:`
+y la URL debajo, y da la URL a la persona como enlace. El navegador que la abra debe estar en este ordenador, porque el
+retorno llega a un receptor de aquí. `--quiet` conserva la URL.
+
 Omite `--browser firefox` para usar el navegador predeterminado. Zoom muestra los permisos solicitados;
 entra en la cuenta correcta y aprueba. Los tokens se guardan en el almacén de contraseñas del sistema,
 no en la configuración pública. Si ese almacén no está disponible, la conexión falla.
@@ -55,9 +60,9 @@ zm session status --check --json
 El error de permiso ausente indica su nombre. El dueño lo añade y guarda la app; el usuario repite
 `zm session start`. Cambiar la configuración no amplía un token ya emitido.
 
-El inicio de sesión necesita entrada interactiva. La salida canalizada o con `--json` requiere
-además `--interactive`; `--no-input` impide abrir el navegador. Haz la primera conexión en un terminal
-normal, no en una tarea de fondo o un cliente MCP.
+Sin terminal, el inicio de sesión imprime igualmente la URL y espera el retorno del navegador; solo la
+alternativa de pegar el retorno necesita un terminal. `--no-input` y CI rechazan el acceso con navegador.
+El inicio de sesión no es una herramienta MCP.
 
 ## Elegir un perfil local
 

@@ -4,6 +4,64 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.65.0 — 19.10.2026
+
+### Novedades
+
+- **`store clear --left` nombra los chats que elimina** (cli-core 0.353.0–0.362.0). El rechazo sin
+  `--allow-dangerous` enumera los primeros 20 por id, título y número de mensajes; el nuevo `--dry-run` los muestra
+  todos en `left` y no elimina nada; la respuesta tras eliminar también incluye `left`.
+
+### Cambios — pueden romper scripts
+
+- **Sin terminal, `session start qr` y `setup` imprimen el código QR como texto, y `--qr-file` desaparece.** El
+  propietario iniciaba sesión con un PNG que el agente abría en un visor de imágenes, una ventana aparte fácil de
+  perder. Ahora el código va a stderr como texto plano (caracteres `█▀▄`, sin color, legible en un tema oscuro) y el
+  agente lo pega en el chat como bloque de código. Con `--json` el código también es una línea
+  `{"event":"qr","qr":{"text","expires_at","scan"}}` en stderr. En una terminal el código se dibuja como antes. Un
+  script con `--qr-file` recibe ahora un error de opción desconocida. Cómo inicia sesión un agente:
+  [sessions.md](./sessions.md#вход-через-агента).
+
+### Correcciones
+
+- **Un chat al que el propietario volvió ya no queda marcado como «abandonado»** (cli-core 0.352.0). Una lista de
+  chats incompleta y el inicio de sesión quitan esa marca de los chats que nombran; «archivado» y otros estados se
+  mantienen. Antes, ese chat podía desaparecer de `max chats list`, y `store clear --left` lo eliminaba con sus
+  mensajes. Una lista completa sigue marcando como «abandonados» los chats que no contiene.
+
+## 0.64.0 — 19.10.2026
+
+### Novedades
+
+- **`session start qr --qr-file <png>` y `setup --qr-file <png>`**, como en tg y wa: el código QR se escribe en un PNG
+  para el agente, sin terminal. El archivo se crea desde el principio con modo `0600` y se elimina tras el acceso. El
+  acceso por QR pasa ahora por `loginQr` de cli-core 0.347.0, uno para los tres CLI.
+- **El siguiente paso en la salida `--json` y en un error incluye `line`, el comando completo con el perfil**
+  (cli-core 0.348.0): `"line": "max personal mcp config"` junto a `"command": "mcp config"`. Un `command` copiado
+  solo fallaba con «name a profile». `command` no cambia; las respuestas MCP no tienen `line`.
+
+### Cambios — pueden romper scripts
+
+- **Una terminal estrecha ya no abre el código QR en un navegador.** El código no se dibuja y `max` indica ensanchar
+  la ventana o pasar `--qr-file`. Por qué: el acceso por QR es ahora común a tg, max y wa, y un navegador que se abre
+  solo no se podía llevar a cli-core para los tres. MAX emite un código por ejecución, así que en una ventana
+  estrecha no hay nada que esperar: interrumpe el comando y ejecútalo de nuevo más ancho o con `--qr-file`.
+- Sin terminal, `session start qr` y `setup` responden igual que tg y wa: «shows a QR code to scan — run it in a
+  terminal, or pass --qr-file <png>».
+
+### Correcciones
+
+- **El paso de acceso en `setup` se llama «Link this device»** y ya no pide escanear un código QR antes de
+  dibujarlo. La línea bajo el propio código dice dónde escanear; en una terminal estrecha, solo la sugerencia de
+  ensancharla.
+- **Una terminal estrecha ya no pide escanear un código QR que no está** (cli-core 0.350.0). `session start qr` y
+  `setup` escribían «scan this code with the MAX app on your phone» antes del código; si el código no cabía, solo
+  seguía la sugerencia de ensanchar la ventana o pasar `--qr-file`. Ahora la línea «scan in the MAX app on your phone»
+  va tras el código dibujado o la nota sobre `--qr-file`, y una terminal estrecha muestra solo la sugerencia.
+- **Las sugerencias en errores y notas nombran el perfil**: «the store is behind this build — `max personal store
+  migrate`» en lugar de `max store migrate`, que al copiarse fallaba con «name a profile». Lo mismo con la
+  sugerencia para descargar el modelo de voz: `max personal models audio download gigaam-v3`.
+
 ## 0.63.0 — 19.10.2026
 
 ### Novedades
@@ -1638,7 +1696,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.63.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.65.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

@@ -133,6 +133,18 @@ Para usar el comando directamente, sustituye la clave del proyecto y las cuentas
 memo projects evidence HRB --source zoom:work,telegram:1 --since-time 60d --json
 ```
 
+Para comparar ejecuciones sobre la misma ventana de tiempo, fija un final exclusivo exacto con `--before-time`:
+
+```sh
+memo projects evidence HRB --source zoom:work,telegram:1 --since-time 60d --before-time 2026-10-01T12:00:00Z --json
+```
+
+Los días hacia atrás se cuentan desde esa marca de tiempo. Una fecha de inicio explícita en `--since-time` también
+conserva ese final; el inicio se incluye y el final se excluye. Usa una marca de tiempo real con `Z` o un desfase UTC,
+no solo una fecha. La salida de texto imprime el límite exacto. Mantén `--before-time` y las demás opciones sin
+cambios al usar `--cursor`. Una ventana fija no congela el contenido de las fuentes, los alias registrados ni la
+selección de cuentas: importaciones, ediciones o eliminaciones posteriores aún pueden cambiar la evidencia.
+
 Cada nombre o alias es una búsqueda separada de palabras literales; los resultados se unen.
 Un resultado de reunión conserva la referencia exacta del fragmento y usa la fecha de inicio:
 una reunión antigua importada hoy sigue siendo antigua. Lee el fragmento y sus vecinos con

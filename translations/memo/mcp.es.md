@@ -60,6 +60,7 @@ Use the memo tools to list the memories waiting for my review.
 | `meeting_prepare` | Reunir el historial guardado de la serie y el contexto enlazado, opcionalmente con cuentas de mensajes o correo elegidas explícitamente; no verifica la hora de la próxima reunión |
 | `project_context` | Documentos clave, relaciones, hechos y hallazgos de reuniones pendientes, junto con las tareas numeradas abiertas |
 | `project_evidence` | Referencias citadas sobre un proyecto en mensajes, correo, transcripciones de reuniones y carpetas de notas guardados, buscadas por sus nombres, palabras adicionales y personas; solo lectura |
+| `project_actions_add`, `project_actions_list`, `project_actions_confirm`, `project_actions_reject` | Preparar hechos y seguimientos citados sobre un proyecto, revisarlos con la evidencia y su contexto, y decidir los que tengas claros con un motivo |
 | `meeting_actions_add`, `meeting_actions_show`, `meeting_actions_list` | Proponer y examinar hechos y seguimientos citados de reuniones; nunca los confirma |
 | `person_context` | Una persona entre servicios y correo, con notas y tareas enlazadas; solo lectura |
 | `memories_add`, `memories_list`, `memories_show`, `search_memories` | Guardar y leer recuerdos |
@@ -93,9 +94,21 @@ seguimientos deducidos se marcan como tales. Un reintento idéntico reutiliza la
 `meeting_actions_show` y `meeting_actions_list` reciben un `source` explícito. Solo el propietario revisa los
 lotes con `memo meetings actions confirm` o `reject`. Preparar un lote no crea hechos ni tareas numeradas.
 
+`project_actions_add` prepara hechos y seguimientos citados sobre un proyecto: cada referencia es una referencia
+`msg:` o `document:` con el `fingerprint` que dio `project_evidence`, y un texto que cambió desde entonces se rechaza
+por obsoleto. `project_actions_list` recorre por páginas las propuestas de un proyecto —documentos clave sugeridos
+(`key:<n>`) y lotes de hallazgos—, cada una con su evidencia: si el texto cambió (`state`), el texto y los mensajes
+de alrededor salvo con `brief`. Decide los que tengas claros con `project_actions_confirm` (los ID de hallazgos que
+crear) o `project_actions_reject`, siempre con un `reason`, que se guarda con la decisión; pregunta al propietario por
+el resto. Un lote necesita su `fingerprint`. Si el propietario fija `agent_decisions: false`, las decisiones se
+rechazan y solo decide el propietario, con `memo projects actions confirm` o `reject`.
+
 `project_evidence` acepta las opciones de `memo projects evidence` en snake_case y necesita `source`: entradas de
 cuenta, un tipo, `group:<name>` o `all`. Busca por separado el nombre del proyecto, su clave, cada alias guardado y
 cada `alias`, cada `context_query` y cada `contact`, y une los resultados; `since_time` vale `60d` por defecto.
+El `before_time` opcional fija el final exclusivo en una marca de tiempo ISO 8601 con `Z` o un desfase UTC. Los días
+hacia atrás se cuentan desde ese instante; una fecha de inicio explícita también lo usa como final. Mantén el mismo
+valor al continuar. Fija la ventana, no los datos de origen ni los alias o cuentas registrados.
 Admite cuentas de reuniones: un perfil registrado como `zm:work` selecciona los fragmentos guardados e
 indexados de sus transcripciones. Los resultados conservan referencias exactas a fragmentos `meeting:`
 y usan la fecha de inicio de la reunión (`time_kind: "meeting-start"`). Se excluyen transcripciones
@@ -108,7 +121,7 @@ como contexto, nunca como resultados adicionales. `mentions` enumera otros proye
 que los textos mencionan, con referencias; un nombre no establece pertenencia. Un elemento encontrado solo por el nombre
 de un contacto lleva `context: "person-only"`. Las fuentes que fallaron o no se leyeron se listan, y `completeness`
 sigue en `unknown`. Si devuelve un `checkpoint`, vuelve a llamar con los mismos argumentos y `cursor` igual a ese valor.
-No escribe nada.
+No crea hechos, tareas ni vínculos con proyectos; la actualización del índice descrita arriba puede modificar los índices de búsqueda locales.
 
 Usa `project_context` con la clave, el nombre exacto o un alias de un proyecto para revisar juntos los hallazgos pendientes.
 Las vistas previas de reuniones leen como máximo cinco lotes de cada una de ocho cuentas de reuniones enlazadas; los

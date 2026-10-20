@@ -115,13 +115,13 @@ Para cron, consulte [ejecución programada](./recipes.md#running-on-a-schedule).
 
 Código `4`. Telegram ya no acepta la sesión: se cerró desde otro dispositivo (Ajustes → Dispositivos) o mediante `tg personal session end`. Inicia sesión con `tg personal session start`.
 
-### "`tg session start` shows a QR code to scan — run it in a terminal, or pass --qr-file <png>"
+### "`tg session start` asks questions — run it in a terminal"
 
-Código de salida `2`. El inicio de sesión necesita que una persona escanee un código o escriba uno. Ejecútelo en una terminal. Para un agente, `--qr-file login.png` escribe el código QR en un archivo ([cuando un agente ejecuta el inicio de sesión](./sessions.md#when-an-agent-runs-the-login)). Un inicio de sesión por teléfono sin terminal dice en su lugar "asks questions — run it in a terminal".
+Código de salida `2`. Un inicio de sesión por teléfono, o un primer inicio de sesión que tiene que registrar la aplicación, necesita que una persona escriba las respuestas. Ejecútelo en una terminal. Un inicio de sesión por QR sin terminal imprime en su lugar el código como texto ([cuando un agente ejecuta el inicio de sesión](./sessions.md#when-an-agent-runs-the-login)).
 
 ### "the terminal is 40 columns wide and the QR code needs 49"
 
-El código no se dibuja, porque un código partido en varias líneas no se puede escanear. Ensancha la terminal: el siguiente código que envíe Telegram se dibujará. O vuelve a ejecutar el inicio de sesión con `--qr-file login.png` y abre la imagen.
+El código no se dibuja, porque un código partido en varias líneas no se puede escanear. Ensancha la terminal: el siguiente código que envíe Telegram se dibujará.
 
 ### "my.telegram.org says the app was created, but its page shows none"
 

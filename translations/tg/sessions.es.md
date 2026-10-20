@@ -54,13 +54,15 @@ Next:     tg personal chats list · tg personal server install to keep the archi
 
 ### Cuando un agente inicia la sesión
 
-Su agente de IA puede iniciar el inicio de sesión por usted, pero no tiene una terminal para dibujar el código QR. `--qr-file` escribe el código como una imagen (PNG) y el agente se lo muestra para que lo escanee:
+Su agente de IA puede iniciar el inicio de sesión por usted. Sin terminal, `tg` imprime el código QR como texto plano y el agente lo pega en el chat para que lo escanee:
 
 ```sh
-tg personal session start --qr-file login.png
+tg personal session start qr
 ```
 
-El archivo se reemplaza cuando Telegram renueva el código y se elimina cuando finaliza el inicio de sesión, haya funcionado o no. Sin terminal, esto funciona sólo cuando el perfil ya tiene su aplicación y la cuenta no tiene contraseña 2FA: cualquier otra cosa tienes que escribirla tú mismo. `tg personal setup` toma la misma opción `--qr-file`.
+El agente lo ejecuta en segundo plano, porque el comando espera el escaneo y una herramienta de shell no muestra nada hasta que el comando termina. Lee la salida y pega el bloque QR en el chat como bloque de código, tal como se imprimió. Cuando Telegram renueva el código, se imprime un bloque nuevo: el agente lo pega y dice que el anterior caducó. Con `--json`, cada código también es una línea en stderr, `{"event":"qr","qr":{"text":…,"expires_at":…,"scan":…}}`.
+
+El código está dibujado para un tema de terminal oscuro. Sin terminal, esto funciona sólo cuando el perfil ya tiene su aplicación y la cuenta no tiene contraseña 2FA: cualquier otra cosa tienes que escribirla tú mismo. `tg personal setup` funciona igual. El inicio de sesión no se ofrece como herramienta MCP: un agente que solo tiene MCP le pide que ejecute el comando, o lo ejecuta desde su shell.
 
 ## Comprobar la cuenta y cerrar sesión
 

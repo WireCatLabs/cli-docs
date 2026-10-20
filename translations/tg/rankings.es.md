@@ -250,6 +250,6 @@ Un informe vacío con historial incompleto no demuestra que no hubiera preguntas
 
 ## Más opciones
 
-Puede seleccionar un período, elegir una medida o puntuación combinada y guardar una selección para otro informe. Las fórmulas de puntuación, los argumentos de evidencia exacta y los límites de páginas se encuentran en la [especificación de estadísticas compartidas](https://github.com/WireCatLabs/cli-core/blob/main/docs/rankings.md) y la [referencia de comando para estadísticas](./commands.md#tg-stats).
+Puede seleccionar un período, elegir una medida o puntuación combinada y guardar una selección para otro informe. Las fórmulas de puntuación, los argumentos de evidencia exacta y los límites de páginas se encuentran en la [especificación de estadísticas compartidas](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/rankings.md) y la [referencia de comando para estadísticas](./commands.md#tg-stats).
 
 Para verificar un resultado, pide al agente que abra la pregunta, respuesta o miembros que sustentan esa fila. Antes del siguiente informe, [comprueba la cobertura del archivo](./archive.md).
