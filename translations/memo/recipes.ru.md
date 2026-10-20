@@ -5,14 +5,15 @@ title: "Рецепты"
 На этой странице собраны готовые задачи для ИИ-агента. Используйте их, когда в Memo уже есть ваши
 заметки, почта или сообщения. Скопируйте запрос агенту и замените имена и темы своими. Каждая задача
 заканчивается результатом, который можно проверить: источниками, которые можно открыть, или списком,
-который ждёт вашего решения. Ни одна из них не отправляет сообщения и не меняет ваши файлы.
+который ждёт вашего решения. Сохранение записи меняет локальное хранилище Memo; экспорт заметки
+создаёт файл. Эти запросы не просят агента отправлять сообщения.
 
 ## Подготовка к встрече с человеком
 
 ```text prompt
-Use memo CLI to prepare me for a meeting with Kai Sample tomorrow.
-Show our recent messages and mail, my notes about Kai and the open tasks between us.
-Give me three points to raise, each with its source.
+Используй memo CLI, чтобы подготовить меня к завтрашней встрече с Kai Sample.
+Покажи наши недавние сообщения и почту, мои заметки о Kai и открытые задачи между нами.
+Предложи три вопроса для обсуждения, каждый со ссылкой на источник.
 ```
 
 Агент запускает `memo context` для этого человека и читает источники. Сверьте пункты с источниками,
@@ -22,11 +23,11 @@ Give me three points to raise, each with its source.
 Если у вас есть архивные встречи той же регулярной серии, попросите агента включить их:
 
 ```text prompt
-Prepare for my next Harbour meeting. Find the exact meeting series in my selected Zoom account,
-then gather its archived discussions, linked people and projects, notes and open tasks.
-Also search the stored messages in my personal Telegram profile for Harbour over the last month.
-Suggest an agenda with sources. Separate proposals from agreed actions and say what history is missing.
-Do not claim that a future time is verified from the local archive.
+Подготовь меня к следующей встрече Harbour. Найди точную серию встреч в выбранном аккаунте Zoom,
+затем собери архивные обсуждения, связанных людей и проекты, заметки и открытые задачи.
+Также найди сохранённые сообщения о Harbour в моём личном профиле Telegram за последний месяц.
+Предложи повестку со ссылками на источники. Отдели предложения от договорённостей и укажи пробелы в истории.
+Не утверждай, что будущее время встречи проверено по локальному архиву.
 ```
 
 Агент использует `memo meetings prepare <series-id> --source <provider>:<account>` с точным ID серии у провайдера,
@@ -57,11 +58,11 @@ Do not claim that a future time is verified from the local archive.
 что важно, и оставить результат на ваше решение:
 
 ```text prompt
-Review the recent Harbour meetings in my selected Zoom account. Look up the project's existing
-aliases and tags first. Search the stored transcripts and read the surrounding passages.
-Show observed attendees separately from people merely mentioned. Propose decisions, key statements
-and follow-up tasks, citing each exact passage. Leave unknown dates and assignees blank, distinguish
-explicit commitments from inferred tasks, and leave everything proposed for my review.
+Разбери недавние встречи Harbour в выбранном аккаунте Zoom. Сначала найди существующие
+псевдонимы и теги проекта. Ищи в сохранённых расшифровках и читай соседние фрагменты.
+Покажи наблюдавшихся участников отдельно от людей, которых лишь упоминали. Предложи решения,
+ключевые высказывания и следующие задачи с точными ссылками. Не заполняй неизвестные сроки
+и исполнителей, отличай явные обязательства от предполагаемых задач и оставь всё на мою проверку.
 ```
 
 Список участников агент берёт из архивных метаданных встречи через `zm meetings show`; одних меток говорящих в
@@ -87,22 +88,93 @@ explicit commitments from inferred tasks, and leave everything proposed for my r
 Если фрагментов нет, проверьте выбранный аккаунт и полноту архива, затем попробуйте псевдонимы проекта без
 фильтра по проекту. Границы объясняет [поиск по встречам](./search.md#search-stored-meetings).
 
+## Проверить факты и следующие действия по проекту
+
+Используйте этот сценарий, когда данные проекта разбросаны по сохранённым сообщениям,
+импортированной почте и файлам. Memo сохраняет предложения агента вместе с источниками, чтобы
+ключевые документы, факты и следующие действия можно было проверить в одном месте. Проект уже
+должен существовать; [названия и псевдонимы проекта](./people.md#organizations-and-projects) помогают
+агенту использовать имеющуюся запись. Данные выбранных аккаунтов уже должны быть импортированы
+или синхронизированы.
+
+```text prompt
+Используй memo CLI, чтобы собрать данные проекта Harbour из моего личного профиля Telegram
+и рабочей почты. Сначала прочитай ключевые документы проекта и используй его записанные псевдонимы.
+Ищи за последние 60 дней, покажи выбранные аккаунты и даты, укажи пробелы и неполную историю.
+Прочитай источники, прежде чем предлагать факты и следующие действия. Не заполняй неизвестные
+сроки и исполнителей; отличай явные обязательства от предположений о следующих задачах.
+Предложи ключевые документы и выводы на мою проверку. Покажи предложения с контекстом источников.
+Ничего не подтверждай и не отклоняй.
+```
+
+Агент начинает с `memo projects context`, затем собирает источники со ссылками через
+[`memo projects evidence`](./search.md#gather-a-projects-meeting-context). Каждое название проекта,
+псевдоним или дополнительный запрос ищется отдельно. Совпадение имени не устанавливает участие
+в проекте, личность или договорённость. Агент готовит выбранные выводы по сообщениям и документам
+через `memo projects actions add`, используя точные ссылки и отпечатки источников из результатов
+сбора. Отпечатки — контрольные значения, по которым замечают последующие изменения источника.
+Это создаёт предложение, а не принятые факты или задачи. Точный повтор использует прежний
+ключ пакета и те же данные; изменённым выводам нужен новый ключ.
+
+Для выводов из расшифровок используйте [проверку встречи](#review-a-meetings-decisions-and-follow-ups):
+она принимает ссылки на реплики и проверяет подтверждённые связи встречи с проектом.
+Выводы проекта принимают ссылки `msg:` и `document:`; `meeting:` и `note:` их не заменяют.
+
+Посмотрите предложения в терминале, заменив `HRB` ключом, названием или псевдонимом своего проекта:
+
+```sh
+memo projects actions list HRB --limit 5 --page 1 --json
+memo projects actions list HRB --brief
+```
+
+Обычный вид показывает отрывки источников и соседние сообщения. Прочитайте полный источник, если
+отрывка недостаточно для оценки вывода. `--brief` оставляет ссылки и состояние источника без контекста.
+`--limit` считает пакеты выводов; предложенные ключевые документы добавляются на первой странице.
+Используйте `--page 2` и следующие страницы, пока результат сообщает о продолжении. Сбор использует
+контрольные точки, а этот список проверки — номера страниц.
+
+Сверьте смысл каждого вывода, проект, дату и исполнителя с доказательствами. Точная цитата или
+неизменившийся отпечаток ещё не означают, что вывод следует из текста. Если источник изменился или
+исчез, перечитайте его и подготовьте новое предложение; устаревший пакет можно отклонить.
+
+Владелец может подтвердить ключевой документ вроде `key:12` или выбрать выводы из пакета.
+В примере замените `7`, оба ID выводов и `BATCH_FINGERPRINT` значениями из списка проверки:
+
+```sh
+memo projects actions confirm HRB 7 launch-status draft-check --fingerprint BATCH_FINGERPRINT
+```
+
+Подтверждение создаёт выбранные выводы и отклоняет остальные новые выводы этого пакета. Сначала
+выберите весь набор, который хотите принять; пакет с нерешёнными вопросами оставьте открытым.
+`projects actions reject` отклоняет все новые выводы пакета. После решения `memo projects context HRB`
+показывает принятые факты, ключевые документы и открытые нумерованные задачи;
+`projects actions list HRB status:reviewed` показывает прошлые решения по пакетам.
+
+По умолчанию агент может принимать решения по предложениям проекта с записанной причиной.
+Запрос выше явно оставляет решение вам. Чтобы требовать решения владельца в этом сценарии,
+установите [`agent_decisions` в `false`](./configuration.md#agent_decisions): это запрещает агенту
+подтверждать и отклонять предложения через CLI и MCP. Чтение и подготовка предложений остаются
+доступны. В отдельном сценарии проверки встречи подтверждение по-прежнему остаётся за владельцем.
+
+Дальше [подготовьте повестку по принятому контексту проекта](#prepare-for-a-meeting-with-someone).
+
 ## Где было принято решение
 
 ```text prompt
-Use memo CLI to find where we decided the launch date for the Harbour project.
-Search my notes, mail and messages. Quote the text and show the source of each result.
-If you find nothing, tell me what you searched.
+Используй memo CLI, чтобы найти, где мы договорились о дате запуска проекта Harbour.
+Проверь мои заметки, почту и сообщения. Приведи текст и ссылку на источник каждого результата.
+Если ничего не найдёшь, скажи, где и как искал.
 ```
 
 Агент использует `memo search all`, а при необходимости — поиск по одному виду источников. Пустой
-ответ означает только то, что в локальном хранилище нет совпадений ([поиск](./search.md)).
+ответ означает, что этот поиск не вернул совпадений; проверьте покрытие источников, прежде чем
+делать вывод, что решения не было ([поиск](./search.md)).
 
 ## Превратить просьбы в задачи
 
 ```text prompt
-Use memo CLI to find messages and emails from the last week where someone asked me to do something.
-List them with their sources. Create a task only for the ones I choose.
+Используй memo CLI, чтобы найти сообщения и письма за последнюю неделю с просьбами ко мне.
+Покажи их с источниками. Создай задачи только для тех, которые я выберу.
 ```
 
 Агент ищет, показывает вам просьбы и запускает `memo tasks add` для тех, которые вы выберете. Ваши
@@ -111,8 +183,8 @@ List them with their sources. Create a task only for the ones I choose.
 ## Собрать заметки проекта вместе
 
 ```text prompt
-Use memo CLI to find my notes, emails and messages about the Harbour project.
-Tag the ones I confirm with harbour, then show everything tagged harbour.
+Используй memo CLI, чтобы найти мои заметки, письма и сообщения о проекте Harbour.
+Пометь выбранные мной записи тегом harbour, затем покажи всё с этим тегом.
 ```
 
 После этого `memo search all 'tag:harbour'` находит их, а тег на папке действует и на новые заметки
@@ -121,32 +193,33 @@ Tag the ones I confirm with harbour, then show everything tagged harbour.
 ## Запомнить предпочтение вместе с источником
 
 ```text prompt
-Use memo CLI to find what Kai Sample said about meeting times.
-Show me the memory you would save and the message it is based on.
-Save it with the message as evidence only after I agree.
+Используй memo CLI, чтобы найти, что Kai Sample говорил о времени встреч.
+Покажи запись памяти, которую предлагаешь сохранить, и сообщение, на котором она основана.
+Сохрани её с сообщением в доказательствах только после моего согласия.
 ```
 
-Запись памяти, добавленная командой `memo`, подтверждается сразу. Поэтому в запросе агента просят
-сначала показать её. Позже, когда запись перестанет быть верной, отметьте её командой
-`memo memories stale` ([память](./memories.md)).
+Запись памяти, которую вы добавляете сами, подтверждена; добавленная агентом остаётся предложенной
+на вашу проверку. Сверьте вывод с источником перед подтверждением. Позже `memo memories stale`
+отмечает записи, которые больше не верны ([память](./memories.md)).
 
 ## Записать решение из чата
 
 ```text prompt
-Use memo CLI to find the decision about the venue in the Harbour chat.
-Show me the decision and the message first. After I agree, record it as a decision fact
-with the message as evidence, in the Harbour project.
+Используй memo CLI, чтобы найти решение о месте встречи в чате Harbour.
+Сначала покажи решение и сообщение. После моего согласия запиши его как факт-решение
+с сообщением в доказательствах, в проекте Harbour.
 ```
 
-Факт, добавленный командой `memo`, принимается сразу. Поэтому в запросе агента просят сначала
-показать его. Если решение заменяет более раннее, попросите агента отметить это с помощью
-`--supersedes`.
+Факт, который вы записываете сами, принимается; добавленный агентом остаётся предложенным.
+[Проверка проекта](#review-project-facts-and-follow-ups) держит выводы с источниками вместе до
+решения. Если факт заменяет более раннее решение, попросите агента отметить это через `--supersedes`.
 
 ## Обзор за неделю
 
 ```text prompt
-Use memo CLI to give me a weekly review: open tasks by project, tasks that are ready to start,
-and the memories, facts and actions waiting for my review. Do not approve or confirm anything.
+Используй memo CLI для недельного обзора: открытые задачи по проектам, задачи, к которым можно
+приступить, а также записи памяти, факты и действия, ожидающие моей проверки. Ничего не принимай
+и не подтверждай.
 ```
 
 Агент объединяет `memo tasks list`, `memo tasks list project:HRB ready:true` и списки на проверку со страницы
@@ -155,8 +228,8 @@ and the memories, facts and actions waiting for my review. Do not approve or con
 ## Записать сводку в папку с заметками
 
 ```text prompt
-Use memo CLI to write a short note about the Harbour project that summarises what I know,
-with the sources it is based on. Show me the note, then export it to my vault.
+Используй memo CLI, чтобы написать короткую заметку о проекте Harbour: что мне известно
+и на каких источниках это основано. Покажи заметку, затем экспортируй её в мою папку с заметками.
 ```
 
 Агент пишет заметку командой `memo notes add --subject project:…` и экспортирует её командой
@@ -166,8 +239,8 @@ with the sources it is based on. Show me the note, then export it to my vault.
 ## Спросить только по источникам
 
 ```text prompt
-Use memo CLI to collect the sources about the Harbour budget with memo ask, using the key words
-"Harbour budget". Answer only from those sources and cite each one.
+Используй memo CLI, чтобы собрать источники о бюджете Harbour через memo ask по ключевым словам
+"Harbour budget". Ответь только по этим источникам и приведи ссылки на каждый из них.
 ```
 
 `memo ask` собирает источники, а отвечает агент. Memo ничего не отправляет провайдеру ИИ, если вы его

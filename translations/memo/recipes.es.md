@@ -5,14 +5,15 @@ title: "Recetas"
 Esta página te da tareas completas para encargar a tu agente de IA cuando Memo ya tiene tus notas, tu
 correo o tus mensajes. Copia una petición en tu agente y cambia los nombres y temas por los tuyos.
 Cada una termina con algo que puedes comprobar: fuentes que puedes abrir o una lista que espera tu
-decisión. Ninguna envía un mensaje ni cambia tus archivos.
+decisión. Guardar un registro cambia el almacén local de Memo; exportar una nota crea un archivo.
+Estas peticiones no piden al agente que envíe mensajes.
 
 ## Prepararte para una reunión con alguien
 
 ```text prompt
-Use memo CLI to prepare me for a meeting with Kai Sample tomorrow.
-Show our recent messages and mail, my notes about Kai and the open tasks between us.
-Give me three points to raise, each with its source.
+Usa memo CLI para prepararme para una reunión con Kai Sample mañana.
+Muestra nuestros mensajes y correos recientes, mis notas sobre Kai y las tareas abiertas entre nosotros.
+Dame tres puntos que tratar, cada uno con su fuente.
 ```
 
 Tu agente ejecuta `memo context` para la persona y lee las fuentes. Comprueba los puntos con las
@@ -22,11 +23,11 @@ cuentas no estén vinculadas ([personas](./people.md)).
 Si tienes reuniones archivadas de la misma serie periódica, pide a tu agente que las incluya:
 
 ```text prompt
-Prepare for my next Harbour meeting. Find the exact meeting series in my selected Zoom account,
-then gather its archived discussions, linked people and projects, notes and open tasks.
-Also search the stored messages in my personal Telegram profile for Harbour over the last month.
-Suggest an agenda with sources. Separate proposals from agreed actions and say what history is missing.
-Do not claim that a future time is verified from the local archive.
+Prepárame para mi próxima reunión de Harbour. Encuentra la serie exacta en mi cuenta de Zoom elegida
+y reúne sus conversaciones archivadas, las personas y proyectos vinculados, las notas y tareas abiertas.
+Busca también mensajes guardados sobre Harbour en mi perfil personal de Telegram durante el último mes.
+Sugiere una agenda con fuentes. Separa propuestas de acciones acordadas e indica qué historial falta.
+No afirmes que el archivo local verifica la hora de una reunión futura.
 ```
 
 El agente usa `memo meetings prepare <series-id> --source <provider>:<account>` con el ID exacto de la serie
@@ -57,11 +58,11 @@ todas las coincidencias. La preparación no acepta ni asigna nada.
 sugerir qué importa y dejar el resultado para tu decisión:
 
 ```text prompt
-Review the recent Harbour meetings in my selected Zoom account. Look up the project's existing
-aliases and tags first. Search the stored transcripts and read the surrounding passages.
-Show observed attendees separately from people merely mentioned. Propose decisions, key statements
-and follow-up tasks, citing each exact passage. Leave unknown dates and assignees blank, distinguish
-explicit commitments from inferred tasks, and leave everything proposed for my review.
+Revisa las reuniones recientes de Harbour en mi cuenta de Zoom elegida. Busca primero los alias
+y etiquetas existentes del proyecto. Busca en las transcripciones guardadas y lee los pasajes cercanos.
+Muestra los asistentes observados separados de las personas solo mencionadas. Propón decisiones,
+declaraciones clave y tareas de seguimiento citando cada pasaje exacto. Deja sin rellenar fechas
+y responsables desconocidos, distingue compromisos explícitos de tareas inferidas y deja todo propuesto para mi revisión.
 ```
 
 Para las listas de asistentes, el agente lee los metadatos archivados de la reunión con `zm meetings show`; las
@@ -88,23 +89,92 @@ sugerir una agenda.
 Si no aparece ningún pasaje, comprueba la cuenta seleccionada y la cobertura del archivo, y prueba los alias del
 proyecto sin filtro de proyecto. La [búsqueda de reuniones](./search.md#search-stored-meetings) explica estos límites.
 
+## Revisar hechos y seguimientos de un proyecto
+
+Usa este recorrido cuando la información del proyecto esté repartida entre mensajes guardados,
+correo importado y archivos. Memo conserva las sugerencias del agente con sus fuentes para revisar
+documentos clave, hechos y seguimientos juntos. El proyecto debe existir;
+[sus nombres y alias](./people.md#organizations-and-projects) ayudan al agente a reutilizarlo.
+Los datos de las cuentas elegidas ya deben estar importados o sincronizados.
+
+```text prompt
+Usa memo CLI para recopilar información del proyecto Harbour de mi perfil personal de Telegram
+y mi correo de trabajo. Lee primero los documentos clave y reutiliza los alias registrados del proyecto.
+Busca los últimos 60 días, muestra las cuentas y fechas elegidas e indica qué historial falta o está incompleto.
+Lee las fuentes citadas antes de sugerir hechos o seguimientos. Deja sin rellenar las fechas y responsables
+desconocidos y distingue los compromisos explícitos de las posibles tareas inferidas.
+Propón los documentos clave y los hallazgos para mi revisión. Muestra las propuestas con el contexto de sus fuentes.
+No confirmes ni rechaces nada.
+```
+
+El agente empieza con `memo projects context` y recopila fuentes citadas con
+[`memo projects evidence`](./search.md#gather-a-projects-meeting-context). Cada nombre, alias o consulta
+adicional se busca por separado. Una coincidencia de nombre no establece pertenencia, identidad ni
+un acuerdo. El agente prepara los hallazgos elegidos de mensajes y documentos con
+`memo projects actions add`, usando las referencias exactas y huellas de las fuentes devueltas por
+la recopilación. Las huellas son valores de comprobación para detectar cambios posteriores de la fuente.
+Esto crea una propuesta, no hechos o tareas aceptados. Un reintento exacto reutiliza
+la clave y los datos del lote; si los hallazgos cambian, hace falta una clave nueva.
+
+Para hallazgos de transcripciones, usa la [revisión de reuniones](#review-a-meetings-decisions-and-follow-ups),
+que acepta referencias a fragmentos y comprueba los vínculos confirmados entre reunión y proyecto.
+Los hallazgos de proyecto aceptan referencias `msg:` y `document:`; `meeting:` y `note:` no son intercambiables.
+
+Inspecciona las propuestas en tu terminal, sustituyendo `HRB` por la clave, nombre o alias del proyecto:
+
+```sh
+memo projects actions list HRB --limit 5 --page 1 --json
+memo projects actions list HRB --brief
+```
+
+La vista normal incluye fragmentos citados y mensajes cercanos. Lee la fuente completa cuando un
+fragmento no baste para juzgar el hallazgo. `--brief` conserva referencias y estado de las fuentes sin
+ese contexto. `--limit` cuenta lotes de hallazgos; los documentos clave propuestos se añaden en la
+primera página. Usa `--page 2` y las siguientes mientras el resultado indique que hay más.
+La recopilación usa puntos de continuación; esta lista de revisión usa números de página.
+
+Comprueba el significado, proyecto, fecha y responsable de cada hallazgo con su evidencia. Una cita
+exacta o una huella sin cambios no demuestra que la conclusión se desprenda del texto. Si una fuente
+cambió o desapareció, vuelve a leerla y prepara una propuesta nueva; puedes rechazar un lote obsoleto.
+
+El propietario puede confirmar un documento clave como `key:12` o aceptar hallazgos elegidos de un lote.
+En este ejemplo, sustituye `7`, ambos ID y `BATCH_FINGERPRINT` por los valores de la lista de revisión:
+
+```sh
+memo projects actions confirm HRB 7 launch-status draft-check --fingerprint BATCH_FINGERPRINT
+```
+
+Confirmar crea los hallazgos elegidos y rechaza los demás hallazgos nuevos del lote. Elige el conjunto
+completo que quieres aceptar antes de confirmar; deja abierto un lote si quedan dudas.
+`projects actions reject` rechaza todos los hallazgos nuevos del lote. Después de decidir,
+`memo projects context HRB` muestra hechos aceptados, documentos clave y tareas numeradas abiertas;
+`projects actions list HRB status:reviewed` muestra decisiones anteriores sobre lotes.
+
+De forma predeterminada, un agente puede decidir propuestas del proyecto con un motivo registrado.
+La petición anterior deja explícitamente esa decisión en tus manos. Para exigir decisiones del propietario
+en este recorrido, establece [`agent_decisions` en `false`](./configuration.md#agent_decisions): rechaza
+las confirmaciones y rechazos del agente por CLI y MCP. Leer y preparar propuestas sigue disponible.
+El recorrido separado de reuniones sigue dejando la confirmación al propietario.
+
+Después, [prepara una agenda con el contexto aceptado del proyecto](#prepare-for-a-meeting-with-someone).
+
 ## Encontrar dónde se decidió algo
 
 ```text prompt
-Use memo CLI to find where we decided the launch date for the Harbour project.
-Search my notes, mail and messages. Quote the text and show the source of each result.
-If you find nothing, tell me what you searched.
+Usa memo CLI para encontrar dónde decidimos la fecha de lanzamiento del proyecto Harbour.
+Busca en mis notas, correo y mensajes. Cita el texto y muestra la fuente de cada resultado.
+Si no encuentras nada, dime dónde y cómo buscaste.
 ```
 
 Tu agente usa `memo search all` y, si hace falta, la búsqueda para un solo tipo de fuente. Una
-respuesta vacía solo significa que el almacén local no tiene ninguna coincidencia
-([búsqueda](./search.md)).
+respuesta vacía significa que esa búsqueda no devolvió coincidencias; comprueba su cobertura de
+fuentes antes de concluir que no se decidió nada ([búsqueda](./search.md)).
 
 ## Convertir peticiones en tareas
 
 ```text prompt
-Use memo CLI to find messages and emails from the last week where someone asked me to do something.
-List them with their sources. Create a task only for the ones I choose.
+Usa memo CLI para encontrar mensajes y correos de la última semana en los que me pidieron hacer algo.
+Enuméralos con sus fuentes. Crea tareas solo para los que yo elija.
 ```
 
 Tu agente busca, te muestra las peticiones y ejecuta `memo tasks add` para las que eliges. Consulta
@@ -113,8 +183,8 @@ tus tareas con `memo tasks list` ([tareas](./tasks.md)).
 ## Reunir las notas de un proyecto
 
 ```text prompt
-Use memo CLI to find my notes, emails and messages about the Harbour project.
-Tag the ones I confirm with harbour, then show everything tagged harbour.
+Usa memo CLI para encontrar mis notas, correos y mensajes sobre el proyecto Harbour.
+Etiqueta con harbour los que yo confirme y luego muestra todo lo que tenga esa etiqueta.
 ```
 
 Después, `memo search all 'tag:harbour'` los encuentra, y una etiqueta en una carpeta también cubre
@@ -123,32 +193,32 @@ las notas nuevas ([etiquetas](./tags.md)).
 ## Recordar una preferencia, con su fuente
 
 ```text prompt
-Use memo CLI to find what Kai Sample said about meeting times.
-Show me the memory you would save and the message it is based on.
-Save it with the message as evidence only after I agree.
+Usa memo CLI para encontrar lo que Kai Sample dijo sobre los horarios de reunión.
+Muéstrame el recuerdo que guardarías y el mensaje en que se basa.
+Guárdalo con el mensaje como evidencia solo después de que yo dé mi aprobación.
 ```
 
-Un recuerdo añadido con el comando `memo` se confirma al momento, así que la petición pide a tu agente
-que primero te lo muestre. Más adelante, `memo memories stale` lo marca cuando ya no es válido
-([recuerdos](./memories.md)).
+Un recuerdo que registras directamente queda confirmado; uno añadido por un agente sigue propuesto
+para tu revisión. Comprueba la afirmación y su fuente antes de confirmarlo. Después,
+`memo memories stale` marca recuerdos que ya no son válidos ([recuerdos](./memories.md)).
 
 ## Registrar una decisión de un chat
 
 ```text prompt
-Use memo CLI to find the decision about the venue in the Harbour chat.
-Show me the decision and the message first. After I agree, record it as a decision fact
-with the message as evidence, in the Harbour project.
+Usa memo CLI para encontrar la decisión sobre el lugar de la reunión en el chat de Harbour.
+Muéstrame primero la decisión y el mensaje. Tras mi aprobación, regístrala como un hecho de decisión
+con el mensaje como evidencia en el proyecto Harbour.
 ```
 
-Un hecho añadido con el comando `memo` se acepta al momento, así que la petición pide a tu agente que
-primero te lo muestre. Si sustituye a una decisión anterior, pide a tu agente que lo indique con
-`--supersedes`.
+Un hecho que registras directamente queda aceptado; uno añadido por un agente sigue propuesto.
+La [revisión del proyecto](#review-project-facts-and-follow-ups) reúne los hallazgos citados antes de
+decidir. Si un hecho sustituye a una decisión anterior, pide al agente que lo indique con `--supersedes`.
 
 ## Revisión semanal
 
 ```text prompt
-Use memo CLI to give me a weekly review: open tasks by project, tasks that are ready to start,
-and the memories, facts and actions waiting for my review. Do not approve or confirm anything.
+Usa memo CLI para darme una revisión semanal: tareas abiertas por proyecto, tareas listas para empezar
+y los recuerdos, hechos y acciones que esperan mi revisión. No apruebes ni confirmes nada.
 ```
 
 Tu agente combina `memo tasks list`, `memo tasks list project:HRB ready:true` y las listas de revisión de
@@ -157,8 +227,8 @@ Tu agente combina `memo tasks list`, `memo tasks list project:HRB ready:true` y 
 ## Escribir un resumen en tu bóveda
 
 ```text prompt
-Use memo CLI to write a short note about the Harbour project that summarises what I know,
-with the sources it is based on. Show me the note, then export it to my vault.
+Usa memo CLI para escribir una nota breve del proyecto Harbour que resuma lo que sé
+y cite las fuentes. Muéstrame la nota y luego expórtala a mi carpeta de notas.
 ```
 
 Tu agente escribe la nota con `memo notes add --subject project:…` y la exporta con
@@ -168,8 +238,8 @@ que editaste.
 ## Preguntar solo con fuentes
 
 ```text prompt
-Use memo CLI to collect the sources about the Harbour budget with memo ask, using the key words
-"Harbour budget". Answer only from those sources and cite each one.
+Usa memo CLI para recopilar las fuentes del presupuesto de Harbour con memo ask, usando las palabras clave
+"Harbour budget". Responde solo con esas fuentes y cita cada una.
 ```
 
 `memo ask` reúne las fuentes; tu agente responde. Memo no envía nada a un proveedor de IA a menos que

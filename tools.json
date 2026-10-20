@@ -65,6 +65,11 @@
       "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
       "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.78.0"
+    "docsRef": "v0.78.0",
+    "guideRefs": {
+      "recipes": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b",
+      "search": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b",
+      "configuration": "fb5b7da5482a2be561e4ec49ec2dc765f7a2993b"
+    }
   }
 ]
