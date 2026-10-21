@@ -16,15 +16,19 @@ can change. There are no promised dates. What already works is in [features](./f
 in the [WireCat chat on Telegram](https://t.me/wirecatdev). We read every request there and use them to decide
 what comes next.
 
+## Recently added
+
+[Zoom](./zoom.mdx) meetings and [Google Drive](./drive/index.md) documents now work. See
+[features](./features.mdx).
+
 ## In progress
 
-- **Zoom** — meeting recordings and transcripts. See the [Zoom page](./zoom.mdx).
-- **Google Drive** — documents and files beside your [notes and files](./memo/index.md).
+- **WhatsApp** — messages, groups and files.
 
 ## Next
 
-- **More messengers and meetings** — WhatsApp, Google Meet, Microsoft Teams and Slack, for both
-  messages and meetings.
+- **More messengers and meetings** — Google Meet, Microsoft Teams and Slack, for both messages
+  and meetings.
 - **Knowledge bases** — Notion.
 - **Agent platforms** — native integrations for OpenClaw and Hermes, beyond the skill both can
   [already use](./agents.mdx).
