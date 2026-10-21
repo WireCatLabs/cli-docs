@@ -1,70 +1,60 @@
-export function renderReport(root, Chart, DATA) {
+export function renderReport(root, Chart, DATA, T) {
   const $ = (id) => root.querySelector(`#${id}`)
   const css = (n) => getComputedStyle(root).getPropertyValue(n).trim()
-  const fmt = (n) =>
-    n == null
-      ? "—"
-      : n >= 1e6
-        ? `${(n / 1e6).toFixed(1)}M`
-        : n >= 1e4
-          ? `${Math.round(n / 1e3)}k`
-          : n.toLocaleString("en-US")
+  const compact = new Intl.NumberFormat(T.locale, { notation: "compact", maximumFractionDigits: 1 })
+  const num = (n) => (n == null ? "—" : n.toLocaleString(T.locale))
+  const fmt = (n) => (n == null ? "—" : n >= 1e4 ? compact.format(n) : num(n))
+  const label = (s) => T.labels[s] ?? s
   const esc = (s) =>
     String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c])
   // Single-quoted href: the cli-docs link checker reads double-quoted hrefs in the page source as local links.
   const anchor = (url, text) => `<a href='${esc(url)}' target="_blank" rel="noopener">${text}</a>`
-  const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  const DAYS = T.days
   const o = DATA.overview
   const tiles = (list) => list.map(([b, s]) => `<div class="kpi"><b>${b}</b><span>${s}</span></div>`).join("")
   const table = (head, rows) =>
     `<tr>${head.map(([h, n]) => `<th${n ? ' class="n"' : ""}>${h}</th>`).join("")}</tr>` +
     rows.map((r) => `<tr>${r.map((c, i) => `<td${head[i][1] ? ' class="n"' : ""}>${c}</td>`).join("")}</tr>`).join("")
-  const pct = (v) => (v == null ? "—" : `${v}%`)
+  const pct = (v) => (v == null ? "—" : `${num(v)}%`)
+  const head = (labels, text = [0]) => labels.map((h, i) => [h, !text.includes(i)])
 
-  $("about").textContent = `${DATA.about.split("\n")[0]} This report reads every post from ${o.first} to ${o.last}.`
+  $("about").textContent = DATA.about.split("\n")[0] + T.about(o.first, o.last)
   const pf = DATA.profile
   const link = (s) =>
     s.startsWith("@")
       ? `<a href="https://t.me/${s.slice(1)}" target="_blank" rel="noopener">${esc(s)}</a>`
       : anchor(s, esc(s.replace(/^https?:\/\//, "")))
+  const P = T.profile
   $("profile").innerHTML = [
-    ["Created", pf.created ? `${pf.created}, ${pf.years} years ago` : null],
+    [P.created, pf.created ? P.createdValue(pf.created, num(pf.years)) : null],
     [
-      "Earliest post",
+      P.earliest,
       pf.created && pf.firstPost.date.slice(0, 4) !== pf.created.slice(0, 4)
-        ? `${anchor(pf.firstPost.link, pf.firstPost.date)}; nothing older survives`
+        ? `${anchor(pf.firstPost.link, pf.firstPost.date)}${P.nothingOlder}`
         : anchor(pf.firstPost.link, pf.firstPost.date),
     ],
-    ["Longest silence", `${pf.pauseDays} days, until ${pf.pauseEnded}`],
-    ["Live voice chats", pf.calls ? `${pf.calls}, the last on ${pf.lastCall}` : null],
-    ["Links", pf.links.length ? pf.links.map(link).join(" · ") : null],
+    [P.silence, P.silenceValue(num(pf.pauseDays), pf.pauseEnded)],
+    [P.calls, pf.calls ? P.callsValue(num(pf.calls), pf.lastCall) : null],
+    [P.links, pf.links.length ? pf.links.map(link).join(" · ") : null],
   ]
     .filter(([, v]) => v)
     .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
     .join("")
-  $("kpis").innerHTML = tiles([
-    [fmt(o.subs), "subscribers today"],
-    [fmt(o.posts), "posts analysed"],
-    [o.perWeek, "posts a week, last 90 days"],
-    [fmt(o.recentMedViews), "median views, last 90 days"],
-    [pct(o.recentReach), "of subscribers see a typical post"],
-    [pct(o.recentER), "median engagement, last 90 days"],
-    [fmt(o.totalFwd), "forwards, all time"],
-    [fmt(o.totalCom), "comments, all time"],
-  ])
+  $("kpis").innerHTML = tiles(
+    [
+      fmt(o.subs),
+      fmt(o.posts),
+      num(o.perWeek),
+      fmt(o.recentMedViews),
+      pct(o.recentReach),
+      pct(o.recentER),
+      fmt(o.totalFwd),
+      fmt(o.totalCom),
+    ].map((v, i) => [v, T.kpis[i]]),
+  )
 
   $("tYearly").innerHTML = table(
-    [
-      ["Year"],
-      ["Posts", 1],
-      ["Median views", 1],
-      ["Median ER", 1],
-      ["Forwards", 1],
-      ["Comments", 1],
-      ["Polls", 1],
-      ["Avg length", 1],
-      ["Negative", 1],
-    ],
+    head(T.yearly),
     DATA.yearly.map((y) => [
       y.y,
       y.n,
@@ -89,58 +79,46 @@ export function renderReport(root, Chart, DATA) {
           row
             .map(
               (n, h) =>
-                `<div class="c" style="opacity:${n ? 0.08 + (0.92 * n) / heatMax : 0.03}" title="${DAYS[d]} ${h}:00 UTC: ${n} posts"></div>`,
+                `<div class="c" style="opacity:${n ? 0.08 + (0.92 * n) / heatMax : 0.03}" title="${T.heatTitle(DAYS[d], h, n)}"></div>`,
             )
             .join(""),
       )
       .join("")
 
   $("tThemes").innerHTML = table(
-    [
-      ["Theme"],
-      ["Posts", 1],
-      ["Avg lift", 1],
-      ["Hit rate", 1],
-      ["Median ER", 1],
-      ["Forwards / 1k views", 1],
-      ["Comments / 1k views", 1],
-      ["Forwards per reaction", 1],
-    ],
+    head(T.themeHead),
     DATA.themes
       .filter((t) => t.n >= 3)
       .sort((a, b) => b.hit - a.hit)
-      .map((t) => [t.name, t.n, t.lift, pct(t.hit), pct(t.er), t.fwdPer1k, t.comPer1k, t.fwdPerReact]),
+      .map((t) => [
+        label(t.name),
+        num(t.n),
+        num(t.lift),
+        pct(t.hit),
+        pct(t.er),
+        num(t.fwdPer1k),
+        num(t.comPer1k),
+        num(t.fwdPerReact),
+      ]),
   )
   $("tOpeners").innerHTML = table(
-    [["Opening"], ["Posts", 1], ["Avg lift", 1], ["Hit rate", 1], ["Forwards / 1k", 1], ["Comments / 1k", 1]],
+    head(T.openerHead),
     DATA.openers
       .filter((t) => t.n)
-      .map((t) => [t.name, t.n, t.lift ?? "—", pct(t.hit), t.fwdPer1k ?? "—", t.comPer1k ?? "—"]),
+      .map((t) => [label(t.name), num(t.n), num(t.lift), pct(t.hit), num(t.fwdPer1k), num(t.comPer1k)]),
   )
 
   const pr = DATA.promo
-  $("promo").textContent = pr.n
-    ? `${pr.n} posts carry an ad mark, a promo code or a referral link. Their average lift is ${pr.lift} against 1.0 for a normal post. Telegram's own sponsored messages are not part of a channel's history, so they cannot be counted.`
-    : "No post carries an ad mark, a promo code or a referral link. Telegram's own sponsored messages are not part of a channel's history, so they cannot be counted."
-  const linkRow = (r) => `<span class="pill">${r.kind}</span> ${anchor(r.link, esc(r.text))}`
+  $("promo").textContent = pr.n ? T.promo(num(pr.n), num(pr.lift)) : T.promoNone
+  const linkRow = (r) => `<span class="pill">${label(r.kind)}</span> ${anchor(r.link, esc(r.text))}`
   $("tPromo").innerHTML = pr.n
     ? table(
-        [["Date", 1], ["Post"], ["Views", 1], ["Lift", 1], ["Forwards", 1]],
-        pr.rows.map((r) => [r.date, linkRow(r), fmt(r.views), `${r.lift}×`, fmt(r.fwd)]),
+        head(T.promoHead, [1]),
+        pr.rows.map((r) => [r.date, linkRow(r), fmt(r.views), `${num(r.lift)}×`, fmt(r.fwd)]),
       )
     : ""
 
-  const TABS = {
-    topLift: [
-      "Beat their period",
-      "Views ÷ the median of the 40 nearest posts: posts that reached beyond the usual audience. The last 14 days are left out.",
-    ],
-    topViews: ["Most viewed", "Raw views."],
-    topFwd: ["Most forwarded", "Forwards: readers found the post useful enough to pass on."],
-    topCom: ["Most discussed", "Comments in the linked discussion group."],
-    controversial: ["Most divisive", "Share of 💩 👎 🤬 🤡 🤮 😡 among reactions, posts with 30+ reactions."],
-    flops: ["Underperformed", "Lowest lift in the last two years, the last 14 days left out."],
-  }
+  const TABS = T.tabs
   const tabs = $("tabs")
   const showTab = (key) => {
     tabs.querySelectorAll("button").forEach((b) => {
@@ -148,25 +126,16 @@ export function renderReport(root, Chart, DATA) {
     })
     const neg = key === "controversial"
     $("tTop").innerHTML = table(
-      [
-        ["Date", 1],
-        ["Post"],
-        ["Views", 1],
-        ["Lift", 1],
-        ["Reactions", 1],
-        ["Forwards", 1],
-        ["Comments", 1],
-        ...(neg ? [["Negative", 1]] : []),
-      ],
+      head([...T.topHead, ...(neg ? [T.negative] : [])], [1]),
       DATA[key].map((r) => [
         r.date,
         linkRow(r),
         fmt(r.views),
-        `<span class="${r.lift >= 1.5 ? "up" : r.lift < 0.8 ? "down" : ""}">${r.lift}×</span>`,
+        `<span class="${r.lift >= 1.5 ? "up" : r.lift < 0.8 ? "down" : ""}">${num(r.lift)}×</span>`,
         fmt(r.react),
         fmt(r.fwd),
         fmt(r.com),
-        ...(neg ? [`<span class="down">${r.neg}%</span>`] : []),
+        ...(neg ? [`<span class="down">${pct(r.neg)}</span>`] : []),
       ]),
     )
     $("tabCap").textContent = TABS[key][1]
@@ -180,18 +149,20 @@ export function renderReport(root, Chart, DATA) {
 
   const c = DATA.community
   if (c) {
-    $("communityKpis").innerHTML = tiles([
-      [fmt(c.comments), `comments under ${c.posts} posts`],
-      [fmt(c.people), "different people commented"],
-      [pct(c.onceShare), "of them commented only once"],
-      [pct(c.top10Share), "of comments come from the top 10% of commenters"],
-      [fmt(c.returning), "came back under 3+ posts"],
-      [`${c.authorComments}`, `author replies, under ${c.authorPosts} posts`],
-      [c.firstMinutes == null ? "—" : `${c.firstMinutes} min`, "median wait for the first comment"],
-      [pct(c.replyShare), "of comments answer another comment"],
-    ])
-    $("communityCap").textContent =
-      "Bars: commenters by how many comments each wrote in the period. Readers are counted, never named."
+    const postsOf = { 0: c.posts, 5: c.authorPosts }
+    $("communityKpis").innerHTML = tiles(
+      [
+        fmt(c.comments),
+        fmt(c.people),
+        pct(c.onceShare),
+        pct(c.top10Share),
+        fmt(c.returning),
+        num(c.authorComments),
+        c.firstMinutes == null ? "—" : T.minutes(num(c.firstMinutes)),
+        pct(c.replyShare),
+      ].map((v, i) => [v, T.community[i].replace("{posts}", num(postsOf[i]))]),
+    )
+    $("communityCap").textContent = T.communityCap
   } else {
     $("communityFig").hidden = true
   }
@@ -207,8 +178,8 @@ export function renderReport(root, Chart, DATA) {
                 `<div class="bar"><div>${esc(t)}<i style="width:${(n / max) * 100}%"></i></div><span class="n">${fmt(n)}</span></div>`,
             )
             .join("")
-        : `<div class="muted">Answer counts hidden until this account votes.</div>`
-      return `<div class="poll"><div>${anchor(q.link, esc(q.text))} <span class="muted">· ${q.date} · ${fmt(q.voters)} votes · ${q.rate}% of viewers voted</span></div>${answers}</div>`
+        : `<div class="muted">${T.pollHidden}</div>`
+      return `<div class="poll"><div>${anchor(q.link, esc(q.text))} <span class="muted">· ${T.pollMeta(q.date, fmt(q.voters), pct(q.rate))}</span></div>${answers}</div>`
     })
     .join("")
 
@@ -229,21 +200,23 @@ export function renderReport(root, Chart, DATA) {
     Chart.defaults.borderColor = line
     Chart.defaults.font.family = css("--body")
     Chart.defaults.font.size = 12
+    const C = T.chart
     const base = {
+      locale: T.locale,
       responsive: true,
       maintainAspectRatio: false,
       plugins: { legend: { labels: { color: ink, boxWidth: 12 } } },
     }
     const mk = (id, cfg) => charts.push(new Chart($(id), { ...cfg, options: { ...base, ...cfg.options } }))
-    const liftHit = (id, rows, label) =>
+    const liftHit = (id, rows, key) =>
       mk(id, {
         data: {
-          labels: rows.map((r) => `${r[label]} (${r.n})`),
+          labels: rows.map((r) => `${r[key]} (${num(r.n)})`),
           datasets: [
-            { type: "bar", label: "Avg lift", data: rows.map((r) => r.lift), backgroundColor: acc, yAxisID: "y" },
+            { type: "bar", label: C.avgLift, data: rows.map((r) => r.lift), backgroundColor: acc, yAxisID: "y" },
             {
               type: "line",
-              label: "Hit rate %",
+              label: C.hitRate,
               data: rows.map((r) => r.hit),
               borderColor: warm,
               backgroundColor: warm,
@@ -262,14 +235,14 @@ export function renderReport(root, Chart, DATA) {
         datasets: [
           {
             type: "bar",
-            label: "Posts",
+            label: C.posts,
             data: DATA.monthly.map((m) => m.n),
             backgroundColor: `${acc}55`,
             yAxisID: "y",
           },
           {
             type: "line",
-            label: "Median views",
+            label: C.medianViews,
             data: DATA.monthly.map((m) => m.views),
             borderColor: warm,
             backgroundColor: warm,
@@ -283,19 +256,19 @@ export function renderReport(root, Chart, DATA) {
       options: {
         scales: {
           x: { ticks: { maxTicksLimit: 12 } },
-          y: { title: { display: true, text: "posts" } },
-          y1: { position: "right", grid: { display: false }, title: { display: true, text: "views" } },
+          y: { title: { display: true, text: C.axisPosts } },
+          y1: { position: "right", grid: { display: false }, title: { display: true, text: C.axisViews } },
         },
       },
     })
     liftHit(
       "cGap",
-      DATA.byGap.filter((r) => r.n),
+      DATA.byGap.filter((r) => r.n).map((r) => ({ ...r, b: label(r.b) })),
       "b",
     )
     liftHit(
       "cLoad",
-      DATA.byDayLoad.filter((r) => r.n),
+      DATA.byDayLoad.filter((r) => r.n).map((r) => ({ ...r, b: label(r.b) })),
       "b",
     )
     const days = DATA.byWeekday.map((d) => ({ ...d, b: DAYS[d.d] }))
@@ -308,29 +281,29 @@ export function renderReport(root, Chart, DATA) {
     mk("cKind", {
       type: "bar",
       data: {
-        labels: DATA.byKind.map((k) => `${k.k} (${k.n})`),
+        labels: DATA.byKind.map((k) => `${label(k.k)} (${num(k.n)})`),
         datasets: [
-          { label: "Reactions", data: DATA.byKind.map((k) => k.reactPer1k), backgroundColor: acc },
-          { label: "Forwards", data: DATA.byKind.map((k) => k.fwdPer1k), backgroundColor: warm },
-          { label: "Comments", data: DATA.byKind.map((k) => k.comPer1k), backgroundColor: good },
+          { label: C.reactions, data: DATA.byKind.map((k) => k.reactPer1k), backgroundColor: acc },
+          { label: C.forwards, data: DATA.byKind.map((k) => k.fwdPer1k), backgroundColor: warm },
+          { label: C.comments, data: DATA.byKind.map((k) => k.comPer1k), backgroundColor: good },
         ],
       },
     })
     const len = DATA.byLength.filter((b) => b.n >= 20)
     mk("cLen", {
       data: {
-        labels: len.map((b) => `${b.b} (${b.n})`),
+        labels: len.map((b) => `${label(b.b)} (${num(b.n)})`),
         datasets: [
           {
             type: "bar",
-            label: "Forwards / 1k views",
+            label: C.fwdPer1k,
             data: len.map((b) => b.fwdPer1k),
             backgroundColor: warm,
             yAxisID: "y",
           },
           {
             type: "line",
-            label: "Hit rate %",
+            label: C.hitRate,
             data: len.map((b) => b.hit),
             borderColor: acc,
             backgroundColor: acc,
@@ -349,11 +322,11 @@ export function renderReport(root, Chart, DATA) {
     mk("cThemeYears", {
       type: "line",
       data: {
-        labels: yrs.map((y) => (y === open ? `${y} (to ${o.last.slice(5)})` : y)),
+        labels: yrs.map((y) => (y === open ? C.openYear(y, o.last.slice(5)) : y)),
         datasets: DATA.themes
           .filter((t) => t.n >= 3)
           .map((t, i) => ({
-            label: t.name,
+            label: label(t.name),
             data: yrs.map((y) => (perYear[y] ? Math.round((t.byYear[y] / perYear[y]) * 100) : null)),
             borderColor: palette[i % palette.length],
             backgroundColor: palette[i % palette.length],
@@ -362,14 +335,13 @@ export function renderReport(root, Chart, DATA) {
       },
       options: { scales: { y: { beginAtZero: true, ticks: { callback: (v) => `${v}%` } } } },
     })
-    $("themeCap").textContent =
-      "Share of the year's posts that touch each theme. A post can touch several, so a year adds up to more than 100%."
+    $("themeCap").textContent = C.themeCap
     if (c)
       mk("cCommenters", {
         type: "bar",
         data: {
-          labels: ["1 comment", "2–3", "4–9", "10–29", "30+"],
-          datasets: [{ label: "Commenters", data: c.distribution, backgroundColor: acc }],
+          labels: C.commenterBuckets,
+          datasets: [{ label: C.commenters, data: c.distribution, backgroundColor: acc }],
         },
         options: { plugins: { legend: { display: false } } },
       })
@@ -378,10 +350,10 @@ export function renderReport(root, Chart, DATA) {
       data: {
         labels: py.map((y) => y.y),
         datasets: [
-          { type: "bar", label: "Polls", data: py.map((y) => y.n), backgroundColor: `${acc}55`, yAxisID: "y" },
+          { type: "bar", label: C.polls, data: py.map((y) => y.n), backgroundColor: `${acc}55`, yAxisID: "y" },
           {
             type: "line",
-            label: "Median % of viewers voting",
+            label: C.pollRate,
             data: py.map((y) => y.rate),
             borderColor: warm,
             backgroundColor: warm,
@@ -397,7 +369,7 @@ export function renderReport(root, Chart, DATA) {
       type: "bar",
       data: {
         labels: DATA.reactions.map((r) => r.e),
-        datasets: [{ label: "Reactions", data: DATA.reactions.map((r) => r.n), backgroundColor: acc }],
+        datasets: [{ label: C.reactions, data: DATA.reactions.map((r) => r.n), backgroundColor: acc }],
       },
       options: { indexAxis: "y", plugins: { legend: { display: false } } },
     })
