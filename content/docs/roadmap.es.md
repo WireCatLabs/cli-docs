@@ -17,15 +17,19 @@ disponible, y el orden puede cambiar. No hay fechas prometidas. Lo que ya funcio
 comenta un punto en el [chat de WireCat en Telegram](https://t.me/wirecatdev). Leemos cada petición y con ellas
 decidimos qué viene después.
 
+## Novedades
+
+Ya funcionan las reuniones de [Zoom](./zoom.mdx) y los documentos de [Google Drive](./drive/index.md).
+Consulta las [funciones](./features.mdx).
+
 ## En curso
 
-- **Zoom**: grabaciones y transcripciones de reuniones. Consulta la [página de Zoom](./zoom.mdx).
-- **Google Drive**: documentos y archivos junto a tus [notas y archivos](./memo/index.md).
+- **WhatsApp**: mensajes, grupos y archivos.
 
 ## A continuación
 
-- **Más mensajería y reuniones**: WhatsApp, Google Meet, Microsoft Teams y Slack, tanto mensajes
-  como reuniones.
+- **Más mensajería y reuniones**: Google Meet, Microsoft Teams y Slack, tanto mensajes como
+  reuniones.
 - **Bases de conocimiento**: Notion.
 - **Plataformas de agentes**: integraciones nativas con OpenClaw y Hermes, más allá de la skill
   que [ambos ya pueden usar](./agents.mdx).
