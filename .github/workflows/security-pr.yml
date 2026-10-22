@@ -10,4 +10,4 @@ permissions:
 
 jobs:
   secrets:
-    uses: WireCatLabs/cli-base/.github/workflows/security-pr.yml@03341651a008f77abb8172f86d6df652321b4ce5 # v0.31.0
+    uses: WireCatLabs/cli-base/.github/workflows/security-pr.yml@b8c56ea3471b09102dde9d5d2b851ae3a573e401 # v0.47.2
