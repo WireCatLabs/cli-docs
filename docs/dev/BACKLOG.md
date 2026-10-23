@@ -26,9 +26,7 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
   structure check at v0.4.0, and the other tools' `--help` already names it. Needs a `tools.json` entry,
   RU/ES translations, an install prompt in `lib/words.ts`, the landing and the global roadmap (which still
   says "In progress"). Waits on the owner: advertise WhatsApp at launch or not.
-- **DOCS-5 · P1 · The landing's tool list is out of date.** "What you can use today" names Telegram, MAX,
-  Drive, Himalaya and Markdown, but not Zoom or Memo; "Both messaging tools are free" counts two tools.
-  Start: `design/homepage-chat-treatments/release-source.json`, then `pnpm landing:export`.
+
 
 ## Next (P2)
 
