@@ -8,6 +8,95 @@ title: "История изменений"
 
 Точные технические записи новых выпусков сохранены на английском; инструкции по использованию переведены в соответствующих руководствах.
 
+## 0.89.0 — 22.10.2026
+
+### Added
+
+- **`sync`, `mail inspect`, `mail trash`, `mail rules apply` and `projects evidence` name the zone they read a
+  date in and give the window in UTC.** In `--json` (and over MCP for `project_evidence`), `meta.timezone` appears
+  when `--since-time` was a date without a zone, and `meta.window.since` is the start it used.
+  `projects evidence` also gives `meta.window.until`, its exclusive end.
+
+### Fixed
+
+- **An mbox email whose only date is a `Date:` header without a zone is refused**, instead of being read in this
+  computer's zone without a word. A `From ` line date without a zone is still UTC, as the mbox format defines it.
+
+## 0.88.0 — 22.10.2026
+
+### Added
+
+- **`search meetings --json` names the zone it read a date in and gives the window in UTC.** `meta.timezone` appears
+  when `--since-time` or `--until-time` had no zone, and `meta.window` holds the `since`/`until` bounds it used. The
+  MCP tool `search_meetings` gives only `meta.window`, since its times always carry a zone. cli-core 0.384.0 and
+  cli-base 0.49.0.
+
+### Fixed
+
+- **A store the pre-rename `cli-messaging` wrote is refused again, and left untouched** (cli-core 0.385.0). Since
+  cli-core 0.382.0 such a file was opened and failed with `internal_error`; it now fails with `configuration_error`.
+
+## 0.87.0 — 21.10.2026
+
+### Changed — may break callers
+
+- **A date you type covers your whole local day, and a time without a zone is read in your computer's zone.**
+  `mail inspect`, `mail trash`, `mail rules apply` and `sync` `--since-time`, and `projects gather --since-time`, read
+  `2026-09-01` as midnight UTC and `2026-09-01T10:00` in whatever zone the process ran in. They now start at local
+  midnight of the computer's zone (cli-core 0.379.0, cli-base `WC-TIME-3`/`WC-TIME-5`). What to watch for: a window
+  given as a date alone now starts a few hours earlier or later than before, by your offset from UTC.
+- **`reminders add --timezone` defaults to the computer's zone, not UTC.** The reminder's time is unchanged; only the
+  zone kept with it is.
+- **A mail rule's `decided_at` without a zone is read in the computer's zone** when rules are imported; a date alone
+  was UTC midnight.
+- **cli-core 0.379.0 and cli-base 0.48.0**; the shared CI runs the tests in `Asia/Vladivostok`.
+
+## 0.86.0 — 21.10.2026
+
+### Fixed
+
+- **`memo projects evidence --contact person:<id>` found nothing for a person with a messenger display name.** It
+  searched the stored name as words, and a name such as «Степа Stefan Grachev AVITO M A» is spelled out in no
+  message. It now reads every message and mail the person's stored identities wrote in `--source`, labelled
+  `sender` (`[sent by contact]` in text), and searches only the aliases you gave them; a person with neither is
+  refused. A literal `--contact "<name>"` is searched as before.
+
+## 0.85.0 — 21.10.2026
+
+### Fixed
+
+- **`memo projects evidence` no longer fails on a project with a confirmed meeting link.** Reading linked chats
+  parsed every confirmed member-of link as a reference and stopped at `meeting:…` with `input.invalid`; it now skips
+  links that are not chats. Broken in 0.84.0.
+
+## 0.84.0 — 20.10.2026
+
+### Added
+
+- **`memo projects evidence` reads the project's linked chats** (MCP `project_evidence` too, on by default). Every
+  message of a chat confirmed as the project's is read, at most 16 chats, oldest link first, when `--source` holds
+  the chat's account. Those items have `context: "linked-chat"` (text output `[linked chat]`): they name nothing.
+  A suggested link is not read. A linked chat outside `--source`, or past the 16th, is listed in `unread_sources`
+  with `kind: "linked-chat"` and `reason` `out-of-scope` or `linked-chat-limit`. The result also carries
+  `linked_chats` with each chat's state.
+- **`memo relationships add chat:<provider>/<account>/<chat> project:<id>`** makes a chat a project's
+  (`member-of` only). The reference names the chat's account, so no account is chosen for you. An agent's link
+  waits for the owner's `memo relationships confirm`.
+
+### Changed — may break callers
+
+- Needs `@wirecat/cli-core` 0.377.0. A project evidence lane's `query` is `null` for a linked chat; its `chat`
+  holds the chat reference.
+
+### Fixed
+
+- **A document hit's `around` is centred on the first paragraph that names a searched word**, in document order,
+  not on the paragraph the first lane found. A document item also carries `moreMatches`: how many later paragraphs
+  name a searched word too (`@wirecat/cli-core` 0.377.0).
+- **`projects evidence` help no longer says "literal search".** Each name, alias, `--context-query` and
+  `--contact` is a search where every word must appear in one text, in any order, as whole words; it is not a
+  phrase search.
+
 ## 0.83.0 — 20.10.2026
 
 ### Added

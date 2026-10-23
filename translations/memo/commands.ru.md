@@ -1223,7 +1223,7 @@ memo projects context <project> [options]
 
 ### `memo projects evidence`
 
-cited references about a project in stored messages, mail, meeting transcripts and imported notes folders. The project's name, its key, each of its aliases and each --alias, each --context-query and each --contact name is its own literal search, and their hits are joined. New mail and documents are indexed for search first, unless --no-catch-up. Reads only what the store holds; proposes and confirms nothing
+cited references about a project in stored messages, mail, meeting transcripts and imported notes folders. The project's name, its key, each of its aliases and each --alias, each --context-query and each --contact name is its own search: every word of it must appear in one text, in any order, as whole words; their hits are joined. Every message of a chat confirmed as the project's (memo relationships add chat:<provider>/<account>/<chat> project:<id>) is read too, when --source holds its account. New mail and documents are indexed for search first, unless --no-catch-up. Reads only what the store holds; proposes and confirms nothing
 
 ```sh
 memo projects evidence <project> [options]
@@ -1238,7 +1238,7 @@ memo projects evidence <project> [options]
 | `--source <accounts>` | where to look, or all: which accounts, separated by commas: provider:account (email:personal), a provider (email), a kind (mail, notes, documents) or group:<name>. |
 | `--alias <name>` | another name of the project, searched on its own; repeat for more. |
 | `--context-query <words>` | more words that all appear in one text; repeat for another search. |
-| `--contact <person>` | label a contact identity, with --account. |
+| `--contact <person>` | a name to search, or person:<id> to read what that person's stored identities wrote and search the aliases you gave them; what only names them or comes from them is context, not the project. |
 | `--since-time <time>` | how far back: days (90d, at most 730d) or a start date (2026-09-01). Default: `60d`. |
 | `--before-time <time>` | fixed exclusive end: ISO 8601 timestamp with UTC offset; days back count from it. |
 | `--limit <n>` | new references at most, up to 500. Default: `100`. |
@@ -1249,7 +1249,7 @@ memo projects evidence <project> [options]
 | `--no-catch-up` | read the search index as it is, without indexing new mail and documents first. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
-**Returns:** find what the store holds about a project, by its names, more words and people
+**Returns:** find what the store holds about a project: names, words, people, linked chats
 
 **Example:** `memo projects evidence SYH --source telegram:1,email:personal --contact 'Alice Example'`, `memo projects evidence SYH --source all --context-query 'crane tender' --since-time 180d --json`
 
@@ -1515,7 +1515,7 @@ relations between people, organizations and projects; never between identities
 
 ### `memo relationships add`
 
-state that a person, organization or project belongs to or relates to another; an agent's waits for you to confirm it
+state that a person, organization or project belongs to or relates to another, or that a chat is a project's (member-of only); an agent's waits for you to confirm it
 
 This command changes the local store or your files.
 
@@ -1525,7 +1525,7 @@ memo relationships add <from> <to> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `from` | required | the person:, organization: or project: that belongs or relates. |
+| `from` | required | the person:, organization: or project: that belongs or relates, or chat:<provider>/<account>/<chat> of a project. |
 | `to` | required | the person:, organization: or project: it belongs or relates to. |
 
 | Option | What it does |
@@ -1536,7 +1536,7 @@ memo relationships add <from> <to> [options]
 | `--role <role>` | the role it has there, in a few words, such as cto. |
 | `--reason <text>` | why you think so, in a sentence. |
 
-**Returns:** state that a person, organization or project belongs or relates to another
+**Returns:** state that a person, organization, project or chat belongs or relates to another
 
 **Example:** `memo relationships add person:3 organization:1 --role cto`, `memo relationships add project:2 organization:1 --kind related-to --reason 'same client'`
 
@@ -1648,7 +1648,7 @@ memo reminders add <task> [options]
 | `--provider <provider>` | deprecated: --account <provider>:<account>. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--at-time <time>` | when to remind: an ISO 8601 time with its UTC offset. |
-| `--timezone <zone>` | IANA timezone. Default: `UTC`. |
+| `--timezone <zone>` | IANA timezone; the computer's when not given. |
 
 **Returns:** add a reminder for an open task
 
@@ -2787,7 +2787,7 @@ memo search meetings <query> [options]
 |---|---|
 | `--project <project>` | meetings confirmed in this project, by name, key or alias. |
 | `--since-time <time>` | meetings starting at or after this ISO 8601 date or time. |
-| `--until-time <time>` | meetings starting at or before this ISO 8601 date or time. |
+| `--until-time <time>` | meetings starting at or before this ISO 8601 date or time; a date alone covers that whole local day. |
 | `--limit <n>` | how many hits, 1 through 1000 (default 100). |
 | `--cursor <cursor>` | continue from the previous page's page.next_cursor, with the same query and filters. |
 | `--max-read-bytes <bytes>` | most stored bytes to read, 1 through 67108864 (default 4194304). |
@@ -2796,7 +2796,7 @@ memo search meetings <query> [options]
 | `--account <account>` | deprecated: --source <provider>:<account>. |
 | `--json` | print the standard JSON answer. |
 
-**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, source
+**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, match, corrections, and 1 more
 
 **Example:** `memo search meetings budget --source example:synthetic --project Harbour --since-time 2026-10-01 --limit 10 --json`
 
@@ -2847,7 +2847,7 @@ memo sync [options]
 | `--account <account>` | deprecated: --source email:<account>. |
 | `--since-time <time>` | mail: read from this time, ISO 8601 or 30d ago (default: 30d). |
 | `--limit <n>` | mail: most new emails to read per account this run (default: 200). |
-| `--retry-attachments` | mail: reread stored emails' attachments after installing an extraction engine. |
+| `--retry-attachments` | mail: reread stored emails' attachments that an older memo or a broken install left unread. |
 | `--rescan` | mail: list every message again, not only mail an earlier run left; also checks deletions. |
 | `--no-embed` | skip embedding notes and mail for search by meaning this run. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
