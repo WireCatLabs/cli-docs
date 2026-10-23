@@ -27,7 +27,7 @@ beforeAll(async () => {
     const key = { provider, account: "demo" }
     for (const chatId of [...new Set(selected.map((message) => message.chatId))]) {
       const rows = selected.filter((message) => message.chatId === chatId)
-      await store.saveChats(key, [
+      await store.chats.saveChats(key, [
         {
           id: chatId,
           title: rows[0].chat,
@@ -37,7 +37,7 @@ beforeAll(async () => {
           participantsCount: null,
         },
       ])
-      await store.saveMessages(
+      await store.messages.saveMessages(
         key,
         chatId,
         rows.map((message) => ({
@@ -111,7 +111,6 @@ describe("browser demo against the actual indexed SQLite search service", () => 
   ])("returns the same message ids for %s", async (query) => {
     const expected = await searchStore(store, account, {
       text: query,
-      language: "lucene",
       timezone: "UTC",
       source: "all",
       newest: true,
@@ -123,7 +122,6 @@ describe("browser demo against the actual indexed SQLite search service", () => 
   it("keeps surrounding context inside the original account and chat", async () => {
     const expected = await searchStore(store, account, {
       text: initialQuery,
-      language: "lucene",
       timezone: "UTC",
       source: "all",
       newest: true,
@@ -203,7 +201,6 @@ describe("reversible query filters and value suggestions", () => {
   it("an empty query really includes every sample chat and message", async () => {
     const expected = await searchStore(store, account, {
       text: "in:all",
-      language: "lucene",
       source: "all",
       newest: true,
       context: 2,

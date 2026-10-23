@@ -107,11 +107,11 @@ importers:
         specifier: 1.7.5
         version: 1.7.5
       '@wirecat/cli-base':
-        specifier: 0.26.0
-        version: 0.26.0(commander@15.0.0)(typescript@7.0.2)
+        specifier: 0.50.2
+        version: 0.50.2(commander@15.0.0)(typescript@7.0.2)(vitest@5.0.5(@types/node@26.6.3)(vite@8.3.5(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))
       '@wirecat/cli-core':
-        specifier: 0.262.0
-        version: 0.262.0(@wirecat/cli-base@0.26.0(commander@15.0.0)(typescript@7.0.2))(commander@15.0.0)(typescript@7.0.2)(zod@4.6.5)
+        specifier: 0.397.0
+        version: 0.397.0(@wirecat/cli-base@0.50.2(commander@15.0.0)(typescript@7.0.2)(vitest@5.0.5(@types/node@26.6.3)(vite@8.3.5(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))))(commander@15.0.0)(supports-color@7.2.0)(typescript@7.0.2)(zod@4.6.5)
       cspell:
         specifier: 10.3.6
         version: 10.3.6
@@ -1685,33 +1685,36 @@ packages:
   '@wasm-audio-decoders/opus-ml@0.0.3':
     resolution: {integrity: sha512-SEeTmk0eb3q5etJA/NHCRWW6BivTx9tqvNTmG0kg2ynuATEQRUZnwQE6Ibvl1BBvqIGHqI57+qyJMWmJBwb5XQ==}
 
-  '@wirecat/cli-base@0.26.0':
-    resolution: {integrity: sha512-KN9U4u8hfluNbCltBXubJhCt4bWd37wyaeWNR5UWilutJqZ4Ii0NDFBaBXKgOAHWO7Py5L6Rpzvusjqnynfbow==}
+  '@wirecat/cli-base@0.50.2':
+    resolution: {integrity: sha512-qGWjz+4ldXv9FlJ4l7YqvP7GqF5C2uz3/x5S90PFMN/x8sclcmnK/z0z5/hAeVpYWGrx8uZkYc8l49IHiOAIxg==}
     engines: {node: '>=22'}
     hasBin: true
     peerDependencies:
       commander: '>=15'
+      vitest: '>=5'
     peerDependenciesMeta:
       commander:
         optional: true
+      vitest:
+        optional: true
 
-  '@wirecat/cli-core@0.262.0':
-    resolution: {integrity: sha512-jyGJJuzzHyE33YhCOzI3LY3Z2C0Hxu/1MEY2jg0zW9I9Hi9Ti8STTJwdDlC1dNbVB+j/FDRcP5X6Bqphmkgihw==}
+  '@wirecat/cli-core-onnx@1.0.1':
+    resolution: {integrity: sha512-4oLtnyhm8W69oCWYqCWYtUQEhaJYitivQmgLkKHAsPOCEJlZG8+IUzchEgGyq3X1rWFs66wRw6uVnKHjYRMyyQ==}
+
+  '@wirecat/cli-core-sqlite@1.0.1':
+    resolution: {integrity: sha512-dFkTE3+XdvZwrt7bZZEd2fzdqR2vFgnnGPOhmBKGNa7uKQHjOdqJL8Q9O5cajIjy5o8Gl0LVn0OZbYajhLvQ1A==}
+
+  '@wirecat/cli-core@0.397.0':
+    resolution: {integrity: sha512-ZRWy524L4iki9/2j9HUgV2CUF9zZ5TNl29yHji32HYPdhcMi5mOpUZmtKopCyKGpkAuoZfD/wYAHivlxtGFw6w==}
     engines: {node: ^22.16.0 || >=24}
     hasBin: true
     peerDependencies:
       '@napi-rs/canvas': '>=0.1.69 <2'
-      '@wirecat/cli-base': '>=0.26.0 <0.27.0'
+      '@wirecat/cli-base': '>=0.50.1 <0.51.0'
       commander: '>=15'
     peerDependenciesMeta:
       '@napi-rs/canvas':
         optional: true
-
-  '@wirecat/cli-messaging-onnx@1.0.1':
-    resolution: {integrity: sha512-e0ewPI3k417jvzoXy4I/4KW3PBnGWhRXy/YDshya0+d1D8QlajmswGpsh6UJlVr3DbAPuQLLc0qkqgGmh1+eNw==}
-
-  '@wirecat/cli-messaging-sqlite@1.0.1':
-    resolution: {integrity: sha512-hnB4eL6ER/++nTPrlSCAUzDJH7MN3V+Obx9B2xXMwBN1KrLkJHIrybQCikfNOnwnyrkultSkLulM7vd+qSG5Hg==}
 
   '@xmldom/xmldom@0.8.15':
     resolution: {integrity: sha512-/5NV/vDALVFDXgLmfsy9TRCBlKwO2LNBFzpzvb9iIj+jR+eSc6DLYYvVOdivT/jm7MtU6TebYuRmzEOI7w40UA==}
@@ -2233,6 +2236,9 @@ packages:
 
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
+
+  dictionary-ru@3.0.0:
+    resolution: {integrity: sha512-tigem0CDnNpxEciW6ktwVH3wWB4FYpuvpwA6IR6UlF7bVu2kez6vOejVNyZgBX1TJIjuYTCTuLxzg/YOls2mRQ==}
 
   dingbat-to-unicode@1.0.2:
     resolution: {integrity: sha512-R0bRerYzy/EZP6QzD3Hkl6JjUDA1Mnn+pd928w0nWjPzihnbAR6dcjGJGiRyznj5E4S1duEKzWrTqw02DPcdzg==}
@@ -3175,6 +3181,9 @@ packages:
   mdast-util-from-markdown@2.0.3:
     resolution: {integrity: sha512-W4mAWTvSlKvf8L6J+VN9yLSqQ9AOAAvHuoDAmPkz4dHf553m5gVj2ejadHJhoJmcmxEnOv6Pa8XJhpxE93kb8Q==}
 
+  mdast-util-from-markdown@2.1.0:
+    resolution: {integrity: sha512-KRLgmPaP2H1ul2bpoJkOS+9pAcDAAj9Nu1mqLnh8NLeJG5tlvj42TH80PIGBpROWlRXLk0lDrWNuZCFy/tsB4A==}
+
   mdast-util-gfm-autolink-literal@2.0.1:
     resolution: {integrity: sha512-5HVP2MKaP6L+G6YaxPNjuL0BPrq9orG3TsrZ9YXbA3vDw/ACI4MEsnoDpn6ZNm7GnZgtAcONJyPhOP8tNJQavQ==}
 
@@ -3644,8 +3653,15 @@ packages:
     resolution: {integrity: sha512-5nnx0yGyVUcY6t9RnWcARWtwT9F1D8O9rt08htPvnd49W1IgZtmLkhu9WfMzQj1cFxjHIO6connUNVW5k7AVyQ==}
     engines: {node: '>= 0.10'}
 
+  psl@1.15.0:
+    resolution: {integrity: sha512-JZd3gMVBAVQkSs6HdNZo9Sdo0LNcQeMNP3CozBJb3JYC/QUYZTnKxP+f8oWRX4rHP5EurWxqAHTSwUCjlNKa1w==}
+
   punycode.js@2.3.1:
     resolution: {integrity: sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==}
+    engines: {node: '>=6'}
+
+  punycode@2.3.1:
+    resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
   qrcode-generator@2.0.4:
@@ -5541,7 +5557,7 @@ snapshots:
     dependencies:
       '@wasm-audio-decoders/common': 9.0.7
 
-  '@wirecat/cli-base@0.26.0(commander@15.0.0)(typescript@7.0.2)':
+  '@wirecat/cli-base@0.50.2(commander@15.0.0)(typescript@7.0.2)(vitest@5.0.5(@types/node@26.6.3)(vite@8.3.5(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))':
     dependencies:
       '@valibot/to-json-schema': 1.8.0(valibot@1.5.0(typescript@7.0.2))
       cli-table3: 0.6.5
@@ -5551,10 +5567,17 @@ snapshots:
     optionalDependencies:
       '@napi-rs/keyring': 2.1.0
       commander: 15.0.0
+      vitest: 5.0.5(@types/node@26.6.3)(vite@8.3.5(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
     transitivePeerDependencies:
       - typescript
 
-  '@wirecat/cli-core@0.262.0(@wirecat/cli-base@0.26.0(commander@15.0.0)(typescript@7.0.2))(commander@15.0.0)(typescript@7.0.2)(zod@4.6.5)':
+  '@wirecat/cli-core-onnx@1.0.1':
+    dependencies:
+      onnxruntime-common: 1.30.0
+
+  '@wirecat/cli-core-sqlite@1.0.1': {}
+
+  '@wirecat/cli-core@0.397.0(@wirecat/cli-base@0.50.2(commander@15.0.0)(typescript@7.0.2)(vitest@5.0.5(@types/node@26.6.3)(vite@8.3.5(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))))(commander@15.0.0)(supports-color@7.2.0)(typescript@7.0.2)(zod@4.6.5)':
     dependencies:
       '@anthropic-ai/sdk': 0.131.0(zod@4.6.5)
       '@bomb.sh/tab': 0.0.22(commander@15.0.0)
@@ -5562,13 +5585,14 @@ snapshots:
       '@modelcontextprotocol/server': 2.3.1
       '@resvg/resvg-js': 2.6.2
       '@valibot/to-json-schema': 1.8.0(valibot@1.5.0(typescript@7.0.2))
-      '@wirecat/cli-base': 0.26.0(commander@15.0.0)(typescript@7.0.2)
-      '@wirecat/cli-messaging-onnx': 1.0.1
-      '@wirecat/cli-messaging-sqlite': 1.0.1
+      '@wirecat/cli-base': 0.50.2(commander@15.0.0)(typescript@7.0.2)(vitest@5.0.5(@types/node@26.6.3)(vite@8.3.5(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))
+      '@wirecat/cli-core-onnx': 1.0.1
+      '@wirecat/cli-core-sqlite': 1.0.1
       '@xmldom/xmldom': 0.9.12
       chardet: 2.2.0
       commander: 15.0.0
       defuddle: 0.19.5
+      dictionary-ru: 3.0.0
       echarts: 6.1.0
       fflate: 0.8.3
       iconv-lite: 0.7.3
@@ -5577,7 +5601,11 @@ snapshots:
       liquidjs: 10.30.0
       lossless-json: 4.3.0
       mammoth: 1.13.0
+      mdast-util-from-markdown: 2.1.0(supports-color@7.2.0)
+      mdast-util-gfm: 3.1.0(supports-color@7.2.0)
+      micromark-extension-gfm: 3.0.0
       ogg-opus-decoder: 1.7.5
+      psl: 1.15.0
       qrcode-generator: 2.0.4
       sherpa-onnx: 1.13.8
       string-width: 8.3.0
@@ -5590,14 +5618,9 @@ snapshots:
       - cac
       - canvas
       - citty
+      - supports-color
       - typescript
       - zod
-
-  '@wirecat/cli-messaging-onnx@1.0.1':
-    dependencies:
-      onnxruntime-common: 1.30.0
-
-  '@wirecat/cli-messaging-sqlite@1.0.1': {}
 
   '@xmldom/xmldom@0.8.15': {}
 
@@ -6063,6 +6086,8 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
+
+  dictionary-ru@3.0.0: {}
 
   dingbat-to-unicode@1.0.2: {}
 
@@ -7068,6 +7093,23 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  mdast-util-from-markdown@2.1.0(supports-color@7.2.0):
+    dependencies:
+      '@types/mdast': 4.0.4
+      '@types/unist': 3.0.3
+      decode-named-character-reference: 1.3.0
+      devlop: 1.1.0
+      mdast-util-to-string: 4.0.0
+      micromark: 4.0.3(supports-color@7.2.0)
+      micromark-util-decode-numeric-character-reference: 2.0.2
+      micromark-util-decode-string: 2.0.1
+      micromark-util-normalize-identifier: 2.0.1
+      micromark-util-symbol: 2.0.1
+      micromark-util-types: 2.0.3
+      unist-util-stringify-position: 4.0.0
+    transitivePeerDependencies:
+      - supports-color
+
   mdast-util-gfm-autolink-literal@2.0.1:
     dependencies:
       '@types/mdast': 4.0.4
@@ -7080,7 +7122,7 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
-      mdast-util-from-markdown: 2.0.3(supports-color@7.2.0)
+      mdast-util-from-markdown: 2.0.2(supports-color@7.2.0)
       mdast-util-to-markdown: 2.1.3
       micromark-util-normalize-identifier: 2.0.1
     transitivePeerDependencies:
@@ -7089,7 +7131,7 @@ snapshots:
   mdast-util-gfm-strikethrough@2.0.1(supports-color@7.2.0):
     dependencies:
       '@types/mdast': 4.0.4
-      mdast-util-from-markdown: 2.0.3(supports-color@7.2.0)
+      mdast-util-from-markdown: 2.0.2(supports-color@7.2.0)
       mdast-util-to-markdown: 2.1.3
     transitivePeerDependencies:
       - supports-color
@@ -7099,7 +7141,7 @@ snapshots:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
       markdown-table: 3.0.4
-      mdast-util-from-markdown: 2.0.3(supports-color@7.2.0)
+      mdast-util-from-markdown: 2.0.2(supports-color@7.2.0)
       mdast-util-to-markdown: 2.1.3
     transitivePeerDependencies:
       - supports-color
@@ -7108,14 +7150,14 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
-      mdast-util-from-markdown: 2.0.3(supports-color@7.2.0)
+      mdast-util-from-markdown: 2.0.2(supports-color@7.2.0)
       mdast-util-to-markdown: 2.1.3
     transitivePeerDependencies:
       - supports-color
 
   mdast-util-gfm@3.1.0(supports-color@7.2.0):
     dependencies:
-      mdast-util-from-markdown: 2.0.3(supports-color@7.2.0)
+      mdast-util-from-markdown: 2.0.2(supports-color@7.2.0)
       mdast-util-gfm-autolink-literal: 2.0.1
       mdast-util-gfm-footnote: 2.1.0(supports-color@7.2.0)
       mdast-util-gfm-strikethrough: 2.0.1(supports-color@7.2.0)
@@ -7813,7 +7855,13 @@ snapshots:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
 
+  psl@1.15.0:
+    dependencies:
+      punycode: 2.3.1
+
   punycode.js@2.3.1: {}
+
+  punycode@2.3.1: {}
 
   qrcode-generator@2.0.4: {}
 
