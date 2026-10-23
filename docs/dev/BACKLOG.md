@@ -19,9 +19,10 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 ## Launch blockers (P1)
 
 
-- **DOCS-3 · P1 · The other tools' pages lag npm.** Pinned max v0.66.0 / tg v0.77.0; npm has
-  0.69.0 / 0.81.0 (drive v0.23.0 and memo v0.89.0 are current). Work through issue #335 per tool:
-  translations, `docs:contracts`, release notes.
+- **DOCS-3 · P1 🟡 · tg and max pages lag npm.** Pinned max v0.66.0 / tg v0.77.0; npm has 0.70.0 /
+  0.82.0 (drive and memo are current). Waits for the tg and max releases of the launch fix round, then
+  issue #335 per tool. The newest releases dropped `messages list --mark-read`, still used in
+  `tg/usage*.md` and `max/usage*.md` (the daily report lists the lines).
 - **DOCS-4 · P1 🚩 · WhatsApp is missing from the site.** `wa` 0.4.0 is on npm, its docs pass the
   structure check at v0.4.0, and the other tools' `--help` already names it. Needs a `tools.json` entry,
   RU/ES translations, an install prompt in `lib/words.ts`, the landing and the global roadmap (which still
@@ -33,3 +34,6 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 - **DOCS-6 · P2 · A roadmap page for every tool, and the global page linking them all.** drive and memo
   have none (no `docs/roadmap.md` in their repositories); a new page also needs RU/ES translations or
   `pnpm sync` fails. The global page links Telegram, MAX and Zoom; drive and memo wait on their repositories. Details: [BACKLOG-NOTES.md](BACKLOG-NOTES.md#docs-6).
+- **DOCS-14 · P2 · `pnpm docs:report-fixture` fails with `store.saveChats is not a function`.** The fixture
+  calls the store API cli-core moved to `store.chats` / `store.messages`; it fails on main too. Start:
+  `scripts/docs-report-fixture.mjs`.
