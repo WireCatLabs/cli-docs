@@ -19,6 +19,7 @@ Algunas palabras en esta página:
 | --- | --- |
 | Ver quién es una persona y dónde hablas con ella | `tg personal contacts profile` |
 | Lee lo que dijeron, en cada chat o en los chats que nombras | `tg personal contacts context` |
+| Prepárese para hablar con la persona: chats, tareas abiertas, hechos, notas y reuniones | `tg personal contacts prepare` |
 | Compruebe si la cuenta parece un bot, una falsificación o un spammer | `tg personal contacts check` |
 | Consulta los miembros más sospechosos de un grupo | `tg personal chats members audit --deep` |
 | Registra que una cuenta de Telegram y una cuenta MAX son la misma persona | `tg personal contacts link` |
@@ -120,6 +121,25 @@ tg personal contacts context @example_user --chat "Book club" --sync-first
 - `--sync-first` consulta primero Telegram: una búsqueda por chat de los mensajes de esa persona. Sin él, la respuesta procede del almacén y nunca se conecta.
 - `more: true` indica que hay mensajes más antiguos que los del límite; `complete: false`, que el almacén no contiene el chat desde el principio.
 - Un mensaje de voz incluye `transcript` una vez convertido en texto.
+
+## Antes de hablar con la persona: `contacts prepare`
+
+Úselo antes de una llamada, una reunión o una respuesta, cuando quiera todo lo relevante sobre una persona en una sola
+respuesta. Da lo que da `contacts context`, más los chats individuales donde su mensaje es el más reciente guardado,
+las tareas abiertas asignadas a ella, los hechos aceptados sobre ella y sus proyectos, sus notas sobre ella y sus
+reuniones recientes. Cada elemento lleva su referencia, para que pueda abrirlo. Lee solo el almacén y nunca se conecta.
+
+```sh
+tg personal contacts prepare @example_user
+tg personal contacts prepare @example_user --limit 5 --since-time 30d
+```
+
+- `--limit` limita los mensajes y los elementos de cada sección (10 por defecto); `--since-time` omite los mensajes y
+  las reuniones más antiguos.
+- Todo cabe en un único presupuesto de tamaño. `prepare.coverage` indica qué dejó fuera cada sección y por qué.
+- Las tareas de otra cuenta de Telegram y los hechos de un proyecto vinculado a una quedan fuera.
+- Con `contacts.notes.list: deny` las notas se omiten, y la respuesta lo indica. Con `messages: deny` el comando se
+  rechaza, igual que `contacts context`.
 
 ## Bot, cuenta falsa o spammer: `contacts check`
 

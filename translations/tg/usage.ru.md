@@ -179,7 +179,7 @@ export TG_PROFILE=work    # or for a whole shell session
 
 ## Чтение
 
-**Чтение не отмечает сообщения прочитанными.** Команды ниже не показывают собеседнику ваш просмотр. Это делают только `tg personal chats mark-read` и `tg personal messages list --mark-read` ([ниже](#marking-a-chat-read)).
+**Чтение не отмечает сообщения прочитанными.** Команды ниже не показывают собеседнику ваш просмотр. Это делает только `tg personal chats mark-read` ([ниже](#marking-a-chat-read)).
 
 ### Чаты
 
@@ -477,7 +477,11 @@ tg personal contacts list 'name:*ann*'  # people by name or @username
 ```
 
 ```sh
-tg personal search all "contract"            # messages and notes this machine has kept
+tg personal search all "contract"            # messages and notes kept here, and Telegram's own search
+```
+
+```sh
+tg personal search all "contract" --offline  # only this computer; the query never leaves it
 ```
 
 ```sh
@@ -629,6 +633,27 @@ tg personal polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution 
 
 При чтении чата реакции отображаются под сообщением — `👍 3  🔥 1  (you: 🔥)`. Голос в публичном опросе показывает ваше имя всем участникам чата. Голосуйте по ID из `polls show`, а не по порядковому номеру ответа. `--multiple` позволяет выбирать несколько ответов. Изменить голос можно только в опросе, созданном с `--revote`. Голосование в закрытом опросе, два ответа в опросе с одним вариантом, изменение или отзыв окончательного голоса и `--retract` без голоса отклоняются до отправки; закрытие чужого опроса тоже отклоняется.
 
+### Боты и их кнопки
+
+Используйте, когда бот отвечает кнопками под сообщением или нужно запустить бота либо открыть его мини-приложение.
+
+```sh
+tg personal messages show "Shop bot" 4300   # the buttons are numbered under the message
+```
+
+```sh
+tg personal messages press "Shop bot" 4300 2        # button 2, counted from 1 across the rows
+tg personal messages press "Shop bot" 4300 "Order"  # or by its exact text
+```
+
+```sh
+tg personal chats start "Shop bot" --start ref7     # the same as its Start button; the bot sees it
+tg personal chats start "https://t.me/shop_bot?start=ref7"  # a bot's link, even one you never opened
+tg personal chats app "Shop bot" --start go         # the address of its mini app, signed in as you
+```
+
+Бот видит, что вы нажали кнопку или запустили его. `press` работает только с callback-кнопками. Кнопка, запрашивающая ваш пароль 2FA, ссылка, кнопка, отправляющая ваш номер телефона или местоположение, и кнопка, открывающая мини-приложение, отклоняются до отправки. Адрес, который печатает `chats app`, входит в приложение бота от вашего имени: никому его не показывайте.
+
 ### Правка, пересылка, закрепление, удаление
 
 ```sh
@@ -677,6 +702,26 @@ tg personal messages forward "Book club" 4242 --to me --operation-id <id from th
 
 Пересылка и опрос тоже получают идентификатор. Повтор без него создаст второе сообщение. Файл загружается до отправки сообщения: оборванную загрузку tg повторяет три раза, и если она так и не удалась, в ошибке сказано, что ничего не отправлено, — такую команду можно просто запустить снова. Другие записи — закрепление, реакция, отметка о прочтении, удаление, голос, папки, контакты — так же завершаются кодом `14`, когда Telegram не отвечает; сообщение говорит, безопасно ли повторять. Создание папки повторять небезопасно: сначала посмотрите `tg personal chats folders list`, иначе папок может стать две. Отправка с `--at-time` не повторяется: проверьте `tg personal messages scheduled <chat>`.
 
+### Ваш список чатов: архив, закрепление, непрочитанное, звук
+
+```sh
+tg personal chats archive "Book club"        # into the archive; `unarchive` brings it back
+```
+
+```sh
+tg personal chats pin "Book club"            # to the top of your list; `unpin` lets it move down
+```
+
+```sh
+tg personal chats mark-unread "Book club"    # the dot on your own devices; nobody sees it
+```
+
+```sh
+tg personal chats mute "Book club" --until 2h  # without --until, for good; `unmute` hears it again
+```
+
+Это меняет только ваш список и уведомления; никому в чате об этом не сообщается. Telegram отклоняет закрепление сверх лимита закреплённых чатов, закрепление в архиве тоже отклоняется.
+
 ### Отметка прочитанным
 
 ```sh
@@ -692,7 +737,7 @@ tg personal chats mark-read "Hiking" --topic 12  # only this forum topic
 ```
 
 ```sh
-tg personal messages list "Book club" --mark-read  # read it, and mark it read up to the newest shown
+tg personal messages list "Book club"  # read without sending a receipt
 ```
 
 Собеседник видит прочтение. Действие `read` проходит защиту, но не входит в часовой лимит.

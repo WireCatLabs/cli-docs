@@ -203,3 +203,7 @@ Después de diez intentos, una tasa de errores superior al 50% detiene los eleme
 pueden detener el lote antes; las solicitudes paralelas ya iniciadas pueden terminar. Respeta la pausa del proveedor y continúa el trabajo pendiente.
 Busca registros parciales con `tg personal runs search --status partial --json` o MCP `tg_read` con `command: "runs search"`
 ([diagnóstico](./diagnostics.md)).
+
+## Conservar copias tras borrar el origen
+
+Para copias de archivos verificadas y copias diarias opcionales, usa el [archivo de medios independiente](./archive.md#keep-independent-media-copies).

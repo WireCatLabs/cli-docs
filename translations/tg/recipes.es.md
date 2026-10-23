@@ -135,7 +135,7 @@ Escribe en Telegram: **no**. Permitir: `Bash(tg personal inbox:*)`.
 - `tg personal inbox --new`: desde la última ejecución de `--new`. Sólo `tg` conoce ese punto; nadie más lo ve.
 - `tg personal inbox 'date>2d'` — los dos últimos días; el punto guardado permanece donde estaba.
 
-Ninguno de ellos marca nada de lo leído. Para hacer eso, agregue `--mark-read` o active `catch_up_marks_read` en la [configuración](./configuration.md). El otro lado ve entonces que lo lees.
+Ninguno de ellos marca nada de lo leído. Usa `tg personal chats mark-read <chat>` de forma explícita para enviar un acuse de lectura. El otro lado ve entonces que lo lees.
 
 ### Chats directos, grupos y canales aparte
 

@@ -67,7 +67,7 @@ tg shop config show --bot
     "default": { "limit": 50 },
     "work": { "permissions": { "messages": "readonly", "messages.send": "allow" }, "record": true }
   },
-  "personal": { "defaults": { "catch_up_marks_read": true } },
+  "personal": { "defaults": { "search_catch_up": true } },
   "bot": { "profiles": { "shop": { "sends_per_hour": 200 } } }
 }
 ```
@@ -85,7 +85,6 @@ tg shop config show --bot
 | `timeout_ms` | нет | как долго может ждать **один** запрос к Telegram, в миллисекундах. Команда делает несколько запросов, поэтому для ограничения всей команды используйте `--timeout` | нет (`--timeout` — это другое) |
 | `color` | из терминала | цвет в виде таблицы | нет; без настроек `NO_COLOR` отключает его |
 | `sender_colors` | `false` | цвет для каждого отправителя в таблице сообщений | нет |
-| `catch_up_marks_read` | `false` | `inbox` и `review` отмечают каждый чат, который они показывают, прочитанным, вплоть до самого нового отображаемого сообщения. Другая сторона это видит | `--mark-read`, `--no-mark-read` |
 | `search_catch_up` | `false` | `messages sync` и `store gaps repair` также подготавливают полученный чат для локального поиска: его граф обсуждений и, если он установлен, его векторы. Никогда не загружает модели и не вызывает внешних провайдеров | `--catch-up`, `--no-catch-up` |
 | `picture_search` | `false` | поиск сохранённых картинок по тому, что на них изображено. `images embed` читает сохранённые картинки, когда модель загружена, и тогда `search messages` также возвращает список `pictures` ([картинки](./search.md#pictures-by-what-they-show)) | нет |
 | `record` | `false` | сохранять каждый запуск ([диагностика](./diagnostics.md)) | `--record`, `--no-record` |
@@ -276,7 +275,7 @@ tg personal setup
 |---|---|---|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | целое число ≥ 1 | профиль |
 | `requests_per_minute` | целое число ≥ 0 | профиль |
-| `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record` | логическое | профиль |
+| `color`, `sender_colors`, `search_catch_up`, `record` | логическое | профиль |
 | `permissions` | объект путей команд и уровней `deny`, `readonly`, `ask`, `allow` | профиль |
 | `read_other_bots` | логическое значение или массив имен профилей | только бот |
 | `update_check`, `skill_hint` | логическое | только корневые `defaults` |

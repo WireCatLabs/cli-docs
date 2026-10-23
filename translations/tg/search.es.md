@@ -36,7 +36,7 @@ Cada búsqueda se realiza bajo un grupo de comandos, `tg personal search`. Cuand
 
 | Tarea | Comando |
 |---|---|
-| Busque mensajes y notas en una sola respuesta | `tg personal search all '<query>'` |
+| Busque mensajes y notas en una sola respuesta; sin `--offline`, también en el servidor de Telegram | `tg personal search all '<query>'` |
 | Buscar solo mensajes de Telegram; sin `--discover`, también en su servidor | `tg personal search messages '<query>'` |
 | Buscar correo | En Memo: instala @wirecat/cli-memo y ejecuta `memo search mail '<query>'` |
 | Buscar notas escritas en memo o importadas desde una carpeta | `tg personal search notes '<query>'` |
@@ -68,6 +68,14 @@ tg personal search conversations 'moving to the country'  # conversations close 
 
 ```sh
 tg personal search topics "Hiking" "gear"         # topic titles in one forum group
+```
+
+Como `search messages`, `search all` también envía por defecto las palabras de la consulta a la búsqueda propia de
+Telegram (`--backend both`, [más abajo](#asking-telegram-too---backend)); las notas se buscan solo aquí. Para que la
+consulta se quede en este equipo, añade `--offline` (tg entonces no se conecta en absoluto) o `--backend archive`.
+
+```sh
+tg personal search all 'lease agreement' --offline  # the store only; nothing is sent to Telegram
 ```
 
 `search all` indica el tipo de resultado: mensaje (`msg:…`) o nota (`note:…`). tg no busca correo: `tg personal search mail` responde "mail is memo's: install @wirecat/cli-memo, then `memo search mail …`", y `search all --only mail` se rechaza igual. En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; en `search notes`, `source:internal` y `source:file` dejan las notas escritas en memo o importadas de una carpeta. Si un campo no corresponde —`chat:`/`from:` para notas—, `search all` omite esa fuente y explica por qué.
@@ -148,7 +156,12 @@ tg personal search messages '(cafe OR library) NOT loud'
 tg personal search messages 'invoic*'            # every word that starts with "invoic"
 ```
 
-Todas las palabras una al lado de la otra deben estar en el mensaje. La búsqueda incluye formas de palabras, según la configuración de idioma del archivo local: `piso` puede encontrar `pisos`. Las citas mantienen unidas las palabras y también permiten formas de palabras. Utilice `exact:piso` o agregue `--exact` para palabras sin un campo explícito. Un `text:` explícito sigue buscando formas de palabra. Se ignoran las mayúsculas y las tildes. Los errores tipográficos no se corrigen automáticamente.
+Todas las palabras una al lado de la otra deben estar en el mensaje. La búsqueda incluye formas de palabras, según la configuración de idioma del archivo local: `piso` puede encontrar `pisos`. Las citas mantienen unidas las palabras y también permiten formas de palabras. Utilice `exact:piso` o agregue `--exact` para palabras sin un campo explícito. Un `text:` explícito sigue buscando formas de palabra. Se ignoran las mayúsculas y las tildes. El texto escrito de los mensajes no se corrige por errores tipográficos.
+
+Las palabras sueltas y `transcript:` también buscan en las transcripciones guardadas de notas de voz, incluidas las
+formas de palabra y las grafías de una sola palabra que el reconocimiento de voz pueda haber distorsionado. `text:`
+busca solo en el texto escrito; `exact:` o `--exact` para palabras sueltas mantiene esas palabras exactas sin ampliar
+las grafías de las transcripciones.
 
 ## Personas y chats
 

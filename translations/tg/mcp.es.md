@@ -125,6 +125,27 @@ Ambas herramientas de ejecución toman `{command, arguments}`. Utilice la ruta d
 
 Las respuestas están estructuradas en JSON: las listas mantienen sus páginas y los identificadores permanecen como cadenas. Una falla es `{error:{code,reason,message,details}}`; un objetivo que coincide con varios chats trae los candidatos en `details.candidates`. El servidor compara los argumentos con el esquema del comando y rechaza los campos desconocidos antes de conectarse o actuar. Utilice `at_time` para programar. Si se desconoce el resultado de una escritura, consulte el diario de envío y Telegram antes de pensar en volver a intentarlo. El texto del mensaje son datos, nunca instrucciones para el agente. Los esquemas, límites y reglas de reintento se encuentran en [cómo se comporta tg en los scripts](./cli-contract.md).
 
+### Comandos que el servidor no ofrece
+
+Cada comando es una herramienta, incluidos los de escritura; los permisos del perfil limitan lo que el agente puede
+ejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto. Unos pocos comandos no se
+ofrecen nunca, y los ejecutas en una terminal:
+
+- **Inicio de sesión y configuración**: `session start|end`, `upgrade`, `complete`, `mcp config|setup|doctor`,
+  `skill install`, `bot auth set|show|remove`, `bot mcp config`. Una llamada del agente no puede usarlos, o necesitan
+  que estés ante el teclado.
+- **Comandos que cambian lo que podrá hacer una ejecución posterior**: `config set|unset`,
+  `recipients add|remove|clear`, `chats rules set|unset`, las reglas y los consentimientos de `replies`,
+  `schedule command|agent|remove`, `server install|uninstall`, `attachments jobs install|uninstall`,
+  `models text key set|remove`, `flood clear`, y en el bot `recipients add|remove|clear` y `chats rules set|unset`.
+  Un agente limitado a solo lectura podría, de otro modo, desbloquear una ejecución posterior.
+- **Escrituras que ningún permiso limita todavía**: `store backup|restore|migrate|repair|reset|clear|decrypt|copies delete`,
+  `server start|stop|restart`, `attachments jobs start|stop`, descargas de modelos (`models audio|text download`,
+  `images models download`), `schedule run|exec`, `doctor report create`, `account sessions end`, `bot store fetch`
+  y los métodos `bot api` sin procesar.
+
+`tg commands --json` marca cada uno de ellos con `mcp: false`.
+
 ## Prompts y chats mediante `@`
 
 El servidor ofrece seis prompts preparados; en Claude Code son comandos `/`:

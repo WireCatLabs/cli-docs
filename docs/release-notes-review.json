@@ -1,9 +1,9 @@
 {
   "tg": {
-    "version": "v0.77.0",
-    "roadmapSha256": "978bfe805c38732b567388b00cbe701d12721599bc2d3e8dae060fee8f83baab",
-    "reviewedAt": "2026-10-20",
-    "conclusion": "Reviewed Telegram 0.77.0 (Core 0.370.0): tg guide lists memo's person-brief as 'One person across every tool' from cli-core MEMO_SCENARIOS; the scenario check now also refuses shell characters left unquoted in a step (tg's steps were already quoted). Core 0.363.0-0.370.0: store version 25 keeps a chat's history (chat_revisions) and a read by a re-keyed chat's old id finds it; a left chat is found by any of its ids in reads of its kept history, while chats track and store gaps plan refuse it. Changed native pages: changelog, and the v0.77.0 release links in cli-contract; RU/ES updated. Roadmap unchanged: richer sending, chat notes and max parity are not shipped."
+    "version": "v0.83.0",
+    "roadmapSha256": "15a3b38314418ef5903fc921daa30ee330f23ac75ea056be32f5cda7139c786c",
+    "reviewedAt": "2026-10-24",
+    "conclusion": "Reviewed Telegram 0.83.0: 0.78.0-0.83.0 dropped messages list --mark-read and the catch_up_marks_read setting (mark a chat read only with chats mark-read), added chats mute, unmute, archive, unarchive, pin, unpin, mark-unread, start and app, messages press (bot buttons), contacts prepare, the attachments group (download, check, move, daily jobs), search --offline and transcript search, tg compare against five tools, and profile-first command examples. Changed native pages: changelog, commands, archive, attachments, compare, configuration, configuration-reference, mcp, people, query-language, recipes, roadmap, search, usage and the v0.83.0 release link in cli-contract; RU/ES updated. Roadmap reviewed: muting a chat, bot buttons and starting a bot left the max parity list; the archive-pin-mute item and the file copy check are new; several photos in one message, a reply saved as draft and chat notes are not shipped."
   },
   "max": {
     "version": "v0.66.0",

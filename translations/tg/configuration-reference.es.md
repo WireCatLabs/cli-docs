@@ -67,7 +67,7 @@ Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en
     "default": { "limit": 50 },
     "work": { "permissions": { "messages": "readonly", "messages.send": "allow" }, "record": true }
   },
-  "personal": { "defaults": { "catch_up_marks_read": true } },
+  "personal": { "defaults": { "search_catch_up": true } },
   "bot": { "profiles": { "shop": { "sends_per_hour": 200 } } }
 }
 ```
@@ -85,7 +85,6 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `timeout_ms` | ninguno | cuánto tiempo puede esperar **una** solicitud a Telegram, en milisegundos. Un comando genera varios, por lo que para limitar el comando completo use `--timeout` | ninguno (`--timeout` es otra cosa) |
 | `color` | desde la terminal | color en la vista de tabla | ninguno; sin configuración, `NO_COLOR` lo apaga |
 | `sender_colors` | `false` | un color por remitente en la vista de tabla de mensajes | ninguno |
-| `catch_up_marks_read` | `false` | `inbox` y `review` marcan cada chat que muestran como leído, hasta el mensaje más reciente mostrado. El otro lado lo ve | `--mark-read`, `--no-mark-read` |
 | `search_catch_up` | `false` | `messages sync` y `store gaps repair` también preparan el chat recuperado para búsqueda local: su gráfico y, si está instalado, sus vectores. Nunca descarga modelos ni llama a proveedores remotos | `--catch-up`, `--no-catch-up` |
 | `picture_search` | `false` | busca las imágenes guardadas por lo que muestran. `images embed` lee las imágenes guardadas una vez descargado el modelo, y entonces `search messages` también devuelve una lista `pictures` ([imágenes](./search.md#pictures-by-what-they-show)) | ninguno |
 | `record` | `false` | mantener cada ejecución ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` |
@@ -275,7 +274,7 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 |---|---|---|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | entero ≥ 1 | perfil |
 | `requests_per_minute` | entero ≥ 0 | perfil |
-| `color`, `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `record` | booleano | perfil |
+| `color`, `sender_colors`, `search_catch_up`, `record` | booleano | perfil |
 | `permissions` | objeto de rutas de comando y niveles `deny`, `readonly`, `ask`, `allow` | perfil |
 | `read_other_bots` | booleano o conjunto de nombres de perfil | solo bot |
 | `update_check`, `skill_hint` | booleano | raíz `defaults` solamente |

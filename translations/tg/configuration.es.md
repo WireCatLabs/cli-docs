@@ -34,7 +34,6 @@ Algunas palabras que utiliza esta página:
 | `color` | color en tablas | lo decide tu terminal |
 | `sender_colors` | un color diferente para cada remitente en una lista de mensajes | `false` |
 | `timeout_ms` | cuánto tiempo puede esperar **una** solicitud a Telegram, en milisegundos. Para limitar un comando completo, use `--timeout` en su lugar | la propia espera de la conexión |
-| `catch_up_marks_read` | `inbox` y `review` marcan los chats que muestran como leídos. La otra persona lo ve | `false` |
 | `proxy` | un servidor proxy para acceder a Telegram, donde está bloqueado ([configuración de proxy](./configuration-reference.md#through-a-proxy)) | ninguno |
 | `transcribe_with` | quién convierte mensajes de voz en texto: `auto`, `messenger` o `local` | `auto` |
 | `update_check` | una vez al día, avise cuando exista un `tg` más nuevo | `true` |
@@ -86,7 +85,7 @@ Entonces, `tg work chats list` muestra 50 filas y `tg personal chats list` muest
     }
   },
   "personal": {
-    "defaults": { "catch_up_marks_read": false, "search_catch_up": true }
+    "defaults": { "search_catch_up": true }
   },
   "bot": {
     "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },
