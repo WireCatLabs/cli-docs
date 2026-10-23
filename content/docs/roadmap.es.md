@@ -44,8 +44,9 @@ Consulta las [funciones](./features.mdx).
   propósito de cada cambio.
 - **Gestores de tareas**: Jira, Linear, Todoist y TickTick.
 
-## Planes de cada mensajería
+## Planes de cada herramienta
 
-Lo que aún falta en Telegram y MAX está en la hoja de ruta de cada herramienta:
-[hoja de ruta de Telegram](./tg/roadmap.md) · [hoja de ruta de MAX](./max/roadmap.md). Para
+Lo que aún falta en cada herramienta está en su propia hoja de ruta:
+[hoja de ruta de Telegram](./tg/roadmap.md) · [hoja de ruta de MAX](./max/roadmap.md) ·
+[hoja de ruta de Zoom](./zm/roadmap.md). Para
 proponer una fuente o una función, abre un issue en el repositorio de GitHub de la herramienta.

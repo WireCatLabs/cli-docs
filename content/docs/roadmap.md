@@ -42,8 +42,9 @@ what comes next.
   change was for.
 - **Task trackers** — Jira, Linear, Todoist and TickTick.
 
-## Messenger plans
+## Each tool's plans
 
-Missing Telegram and MAX features are listed in each tool's roadmap:
-[Telegram roadmap](./tg/roadmap.md) · [MAX roadmap](./max/roadmap.md). To suggest a source or a
+What each tool still lacks is listed in its own roadmap:
+[Telegram roadmap](./tg/roadmap.md) · [MAX roadmap](./max/roadmap.md) · [Zoom roadmap](./zm/roadmap.md).
+To suggest a source or a
 feature, open an issue in the tool's GitHub repository.
