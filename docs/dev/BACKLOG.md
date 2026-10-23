@@ -41,6 +41,3 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
   profile-aware command check to the daily `docs-updates` report. Start: `scripts/docs-updates.ts`.
 - **DOCS-9 · P2 · `llms.txt` opens with "Telegram and MAX accounts, notes and files".** Name Drive, Zoom
   (and WhatsApp, after DOCS-4). Start: `app/llms.txt/route.ts:55`, `lib/words.ts:100`.
-- **DOCS-13 · P2 · The search playground parses queries with cli-core 0.262.0 and cli-base 0.26.0.** npm has
-  0.394.0 and 0.50.1, so the playground may accept or reject queries differently from today's tools. Bump,
-  then `pnpm search:generate`. Start: `package.json`, `scripts/build-search-language.mjs`.
