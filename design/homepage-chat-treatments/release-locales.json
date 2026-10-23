@@ -453,7 +453,6 @@
     "“Help me answer their latest question.”": "«Помоги ответить на их последний вопрос».",
     "A draft that takes earlier answers, changed plans and your promises into account.": "Черновик, который учитывает прежние ответы, изменения планов и ваши обещания.",
     "What you can use today": "Что доступно уже сейчас",
-    "Start with the tools you use. Telegram and MAX are WireCat’s messaging tools. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Начните с привычных инструментов. Telegram и MAX — инструменты WireCat для переписки. Почта через Himalaya и Markdown-заметки, в том числе Obsidian, могут работать вместе с ними через вашего агента.",
     "More messenger connections are planned. You can use today’s tools on their own.": "Планируется поддержка других мессенджеров. Нынешние инструменты можно использовать отдельно.",
     "tg · your account, bots and groups": "tg · личный аккаунт, боты и группы",
     "max · your account, bots and groups": "max · личный аккаунт, боты и группы",
@@ -486,7 +485,6 @@
     "See the full feature list": "Все возможности",
     "Open source, your data and your agent": "Открытый код, ваши данные и ваш агент",
     "Open source": "Открытый код",
-    "Both messaging tools are free under the Apache 2.0 licence. Read the code, report an issue or contribute.": "Оба инструмента бесплатны и доступны по лицензии Apache 2.0. Изучайте код, сообщайте о проблемах и участвуйте в разработке.",
     "Security guide": "Руководство по безопасности",
     "Use Claude Code, Codex, Cursor, Gemini CLI, Hermes or another agent that works with CLI tools or MCP.": "Используйте Claude Code, Codex, Cursor, Gemini CLI, Hermes или другого агента, работающего с CLI или MCP.",
     "Agent setup guide": "Подключение агента",
@@ -661,7 +659,11 @@
     "drive · your Google folders, searched locally": "drive · ваши папки Google, поиск на компьютере",
     "Source on GitHub": "Исходный код на GitHub",
     "Packages on npm": "Пакеты на npm",
-    "To run the commands yourself, follow a tool’s step-by-step scenarios:": "Чтобы выполнять команды самостоятельно, откройте пошаговые сценарии нужного инструмента:"
+    "To run the commands yourself, follow a tool’s step-by-step scenarios:": "Чтобы выполнять команды самостоятельно, откройте пошаговые сценарии нужного инструмента:",
+    "Start with the tools you use. Telegram and MAX are WireCat’s messaging tools; Zoom, Google Drive and Memo add your meetings, documents and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Начните с привычных инструментов. Telegram и MAX — инструменты WireCat для переписки; Zoom, Google Drive и Memo добавляют ваши встречи, документы и заметки. Почта через Himalaya и Markdown-заметки, в том числе Obsidian, могут работать вместе с ними через вашего агента.",
+    "Every WireCat tool is free under the Apache 2.0 licence. Read the code, report an issue or contribute.": "Все инструменты WireCat бесплатны и доступны по лицензии Apache 2.0. Изучайте код, сообщайте о проблемах и участвуйте в разработке.",
+    "zm · your meeting transcripts and recordings": "zm · расшифровки и записи ваших встреч",
+    "memo · notes, mail and messages in one place": "memo · заметки, почта и сообщения в одном месте"
   },
   "es": {
     "Put the context from your chats to work — for you, your bots and the groups you run.": "Aprovecha el contexto de tus chats: para ti, tus bots y los grupos que administras.",
@@ -1105,7 +1107,6 @@
     "“Help me answer their latest question.”": "«Ayúdame a responder a su última pregunta».",
     "A draft that takes earlier answers, changed plans and your promises into account.": "Un borrador que tiene en cuenta respuestas anteriores, cambios de planes y tus promesas.",
     "What you can use today": "Qué puedes usar hoy",
-    "Start with the tools you use. Telegram and MAX are WireCat’s messaging tools. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Empieza con las herramientas que usas. Telegram y MAX son las herramientas de mensajería de WireCat. El correo con Himalaya y las notas Markdown, incluidas las de Obsidian, pueden formar parte del mismo flujo con tu agente.",
     "More messenger connections are planned. You can use today’s tools on their own.": "Está prevista la conexión con más servicios de mensajería. Puedes usar las herramientas actuales por separado.",
     "tg · your account, bots and groups": "tg · tu cuenta, bots y grupos",
     "max · your account, bots and groups": "max · tu cuenta, bots y grupos",
@@ -1138,7 +1139,6 @@
     "See the full feature list": "Todas las funciones",
     "Open source, your data and your agent": "Código abierto, tus datos y tu agente",
     "Open source": "Código abierto",
-    "Both messaging tools are free under the Apache 2.0 licence. Read the code, report an issue or contribute.": "Ambas herramientas son gratuitas bajo la licencia Apache 2.0. Lee el código, informa de problemas o contribuye.",
     "Security guide": "Guía de seguridad",
     "Use Claude Code, Codex, Cursor, Gemini CLI, Hermes or another agent that works with CLI tools or MCP.": "Usa Claude Code, Codex, Cursor, Gemini CLI, Hermes u otro agente compatible con CLI o MCP.",
     "Agent setup guide": "Guía para conectar el agente",
@@ -1324,6 +1324,10 @@
     "drive · your Google folders, searched locally": "drive · tus carpetas de Google, búsqueda local",
     "Source on GitHub": "Código fuente en GitHub",
     "Packages on npm": "Paquetes en npm",
-    "To run the commands yourself, follow a tool’s step-by-step scenarios:": "Para ejecutar los comandos tú mismo, sigue los escenarios paso a paso de cada herramienta:"
+    "To run the commands yourself, follow a tool’s step-by-step scenarios:": "Para ejecutar los comandos tú mismo, sigue los escenarios paso a paso de cada herramienta:",
+    "Start with the tools you use. Telegram and MAX are WireCat’s messaging tools; Zoom, Google Drive and Memo add your meetings, documents and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Empieza con las herramientas que usas. Telegram y MAX son las herramientas de mensajería de WireCat; Zoom, Google Drive y Memo añaden tus reuniones, documentos y notas. El correo con Himalaya y las notas Markdown, incluidas las de Obsidian, pueden formar parte del mismo flujo con tu agente.",
+    "Every WireCat tool is free under the Apache 2.0 licence. Read the code, report an issue or contribute.": "Todas las herramientas de WireCat son gratuitas bajo la licencia Apache 2.0. Lee el código, informa de problemas o contribuye.",
+    "zm · your meeting transcripts and recordings": "zm · transcripciones y grabaciones de tus reuniones",
+    "memo · notes, mail and messages in one place": "memo · notas, correo y mensajes en un solo lugar"
   }
 }
