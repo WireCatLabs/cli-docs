@@ -30,6 +30,14 @@ Topic filters are filename-based and omit dependencies outside the selected file
 reads for exact behavior. Optional `--compress` reduces context but can omit implementation detail.
 The wrapper never uploads the pack; a subsequent AI workflow uses its selected provider.
 
+## Run a pinned CLI by hand
+
+Never run a CLI from `.docs-tooling/` with your real `HOME`: a released tool can write to it, and one
+pointed the owner's systemd timer at a worktree that was later deleted (issue #259). Use
+`pnpm docs:cli <tool> <args…>`, or `createSandbox()` from `scripts/cli-sandbox.ts` in scripts. Both run with a
+temporary `HOME`, `XDG_*`, `MESSAGING_STORE` and `WIRECAT_STATE_DIR`, and with the network disabled.
+The tool must already be installed by `pnpm docs:contracts`.
+
 ## Check released commands and coverage
 
 ```sh

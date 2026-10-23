@@ -1,9 +1,14 @@
 import assert from "node:assert/strict"
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs"
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { createRequire } from "node:module"
-import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
 import { pathToFileURL } from "node:url"
+import { createSandbox } from "./cli-sandbox.ts"
+
+// Released code runs in this process, so the sandbox has to replace process.env before it loads.
+const sandbox = createSandbox("report")
+for (const key of Object.keys(process.env)) delete process.env[key]
+Object.assign(process.env, sandbox.env)
 
 const root = resolve(".docs-tooling/releases")
 const results = []
@@ -18,7 +23,7 @@ for (const { name: tool, docsRef, package: packageName } of reviewed) {
   const { openStore } = await import(pathToFileURL(join(base, "store/index.js")))
   const { storedDeps, adminStatisticsService } = await import(pathToFileURL(join(base, "services/index.js")))
   const account = { provider: "fixture", account: "synthetic-owner" }
-  const store = await openStore({ path: join(mkdtempSync(join(tmpdir(), "wirecat-doc-report-")), "fixture.db") })
+  const store = await openStore({ path: join(sandbox.dir, "fixture.db") })
   const make = (id, text, day, sender, reply) => ({
     id,
     chatId: "room",
