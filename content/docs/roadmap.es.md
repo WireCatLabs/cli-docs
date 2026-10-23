@@ -28,13 +28,13 @@ Consulta las [funciones](./features.mdx).
 
 ## A continuación
 
+- **Calendarios**: primero Google Calendar, con tus eventos enlazados a las personas, reuniones y
+  chats relacionados.
 - **Más mensajería y reuniones**: Google Meet, Microsoft Teams y Slack, tanto mensajes como
   reuniones.
 - **Bases de conocimiento**: Notion.
 - **Plataformas de agentes**: integraciones nativas con OpenClaw y Hermes, más allá de la skill
   que [ambos ya pueden usar](./agents.mdx).
-- **Un SDK para nuevas integraciones**: para que tú u otras personas conectéis una fuente nueva
-  de la misma forma.
 - **GitHub**: descripciones de pull requests, issues y proyectos.
 
 ## Más adelante

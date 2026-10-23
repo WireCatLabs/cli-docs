@@ -27,12 +27,13 @@ what comes next.
 
 ## Next
 
+- **Calendars** — Google Calendar first: your events, linked to the people, meetings and chats
+  around them.
 - **More messengers and meetings** — Google Meet, Microsoft Teams and Slack, for both messages
   and meetings.
 - **Knowledge bases** — Notion.
 - **Agent platforms** — native integrations for OpenClaw and Hermes, beyond the skill both can
   [already use](./agents.mdx).
-- **An SDK for new integrations** — so you or others can connect a new source the same way.
 - **GitHub** — pull request descriptions, issues and projects.
 
 ## Later
