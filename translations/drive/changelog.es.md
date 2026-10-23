@@ -4,6 +4,69 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.23.0 — 22.10.2026
+
+### Added
+
+- **`mirrors sync` works both ways.** Edits and ticks made in Google come back into the local files: a Markdown
+  file changes only on the lines of changed paragraphs, so its own markers, spacing and code languages stay; a CSV
+  or TSV file takes Google's cells and keeps how it spelled unchanged values (`1.50` stays `1.50`). The same
+  paragraph or cells changed on both sides is a conflict: that file is left alone, the rest sync, and the report
+  shows each side's text, when the file changed and Google's last revision time and editor. `--keep local`,
+  `--keep google` or `--keep both` settles it. Every mirrored file is now read from Google on each sync. XLSX files
+  do not take changes back; a Google edit to one stays a conflict until `--keep local`.
+
+### Changed
+
+- **`--replace` keeps Google's edits that do not collide.** It now means `--keep local` plus creating deleted
+  files again, so only conflicting parts are overwritten, and Google's other edits come back into the file. A Doc
+  with pending suggestions is refused whatever side is kept: suggested text would read as accepted.
+
+## 0.22.0 — 22.10.2026
+
+### Changed
+
+- **cli-core 0.383.0 → 0.384.0, with no change to drive's commands**: the new `meta.timezone` and `meta.window`
+  in JSON answers cover messenger commands with date filters (`search conversations`, `inbox` and others), and
+  drive has none of them. `files list` already names its zone in `meta.timezone` since 0.20.0.
+
+### Fixed
+
+- **A store the pre-rename `cli-messaging` wrote is refused again, and left untouched** (cli-core 0.385.0). Since
+  cli-core 0.382.0 such a file was opened and failed with `internal_error`; it now fails with `configuration_error`.
+
+## 0.21.0 — 22.10.2026
+
+### Added
+
+- **`mirrors`: keep local folders mirrored into native Google Docs and Sheets.** `mirrors add <path> --parent
+  <folder>` saves a mirror; `mirrors sync` writes changed files: Markdown becomes a Google Doc with native headings,
+  bulleted, numbered and checklist items, tables, code, quotes, links and images; CSV, TSV and XLSX become a
+  Google Sheet with typed cells, one tab per worksheet. An update edits in place: a Doc changes only the
+  paragraphs that changed, so comments on the rest stay, and a Sheet rewrites only the mirrored range, so other
+  tabs, columns and formatting stay. A change made in Google since the last sync stops that file unless
+  `--replace`; a checklist tick may change on either side. `- [x]` items are written struck through, since Google
+  lets no app tick a box. Nothing is ever deleted in Google. `mirrors status` shows what the next sync would do
+  without asking Google; `mirrors list` and `mirrors remove` change local settings only. Needs the write grant
+  (`session start --grant write`). DOCX files are not mirrored yet (cli-core 0.379.0 → 0.383.0, cli-base
+  0.48.0 → 0.49.0).
+
+## 0.20.0 — 21.10.2026
+
+### Changed — may break callers
+
+- **`files list` reads a query time without a zone in this computer's zone**: Google reads
+  `modifiedTime > '2026-09-01T09:00:00'` as UTC, so drive now converts such a time (and a date alone, as the whole
+  local day) to UTC before it sends the query, and names the zone in `meta.timezone`. `api call drive.files.list`
+  and `api drive-files-list` do the same for `q`. A time that names its zone is sent as typed. What to watch for: a
+  script that typed UTC times without a zone gets other files on a computer outside UTC; add `Z` to keep UTC.
+
+### Fixed
+- **Text output shows times in this computer's zone and says which**: a stored UTC time such as `modified_time`
+  prints as local wall-clock time, followed by a `times in <zone>` line. JSON, JSONL and MCP output stay UTC.
+- **`facts add --occurred-time` help says how a time without a zone is read**: in this computer's zone, and a date
+  alone as its local midnight (cli-core 0.370.0 → 0.379.0, cli-base 0.47.0 → 0.48.0).
+
 ## 0.19.0 — 20.10.2026
 
 ### Added
