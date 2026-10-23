@@ -4,6 +4,62 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.25.0 — 24.10.2026
+
+### Added
+
+- **`drive doctor`**: the state of this installation (version, Node, whether the settings file reads, the profiles
+  here, the OAuth client, the store path, read-only and profile locks) without a profile, a login, the keyring or the
+  database. A settings file that does not read is a field in the answer, not a failure.
+- **`drive upgrade`** installs a newer drive with the package manager that installed it; `--check` only looks. It is
+  refused under `DRIVE_READ_ONLY` unless it only checks, and is not offered as an MCP tool.
+
+### Changed — may break callers
+
+- **`doctor` and `upgrade` are commands, so they can no longer be profile names.** `drive doctor` used to be read as
+  a profile called "doctor". A profile already named `doctor` or `upgrade` is reached only through `DRIVE_PROFILE`.
+
+### Security
+
+- **`pnpm audit --prod` is clean.** The MCP server library is 2.3.0 (advisories on 2.0–2.2) and its `zod` 4.6.7
+  (memory exhaustion on oversized input before 4.6.6).
+
+## 0.24.0 — 23.10.2026
+
+### Added
+
+- **[Compared with other tools](./compare.md)**: drive next to gog, Workspace MCP and rclone, with where each
+  fits better, and when Google Docs' own Markdown editing is enough.
+- **[Roadmap](./roadmap.md)**: what is planned for drive and is not in it yet.
+
+### Changed — may break callers
+
+- **The profile is only the first word, or `DRIVE_PROFILE`; `--profile` is gone.** `drive --profile work …` now fails
+  with a pointer to `drive work …`. `DRIVE_PROFILE` names the profile when the command line does not.
+- **A profile that does not exist is `validation_error` (exit 2) with the profiles here** (`profile.unknown`,
+  `details.profiles`), not `authentication_error` (exit 4) with a hint to sign in under the misspelled name.
+
+### Fixed
+
+- **A partial `sync` or `mirrors sync` says so in its answer.** `meta.complete` is `false` with one `issues` entry per
+  failed source, where it used to say `true` before the command failed.
+- **`DRIVE_READ_ONLY` refuses `config set`.** A setting changes what later runs may do; it was the one local write the
+  lock let through.
+- **Output piped into a reader that stops early ends quietly.** `drive commands --json | head` exits 0 instead of
+  printing a stack trace.
+- **`DRIVE_PROFILE_LOCK` pins the process.** A first word or `DRIVE_PROFILE` naming another profile is refused with
+  `permission_error`; with no profile named, the locked one is used. Before, the variable was ignored.
+- **`session list` and `config show` run without a profile**, as they read every profile. A missing profile's error
+  names a leftover `default_profile` instead of ignoring it silently.
+
+### Security
+
+- **`--permission` can no longer loosen a profile's settings.** A level looser than the profile's, its defaults or a
+  built-in default (such as `ask` before a deletion) is refused with `validation_error`; before, `--permission
+  api=allow` lifted a `deny`, also for the MCP server it started. A flag still tightens. A permission in the config
+  or on the command line that names no drive command is refused, not ignored, so a misspelling cannot silently
+  allow more.
+
 ## 0.23.0 — 22.10.2026
 
 ### Added

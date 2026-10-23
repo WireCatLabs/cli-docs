@@ -10,6 +10,9 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
     recipes: "Prepare briefs, link Google Drive documents to existing work records and review proposed memories.",
     commands: "Look up Google Drive CLI commands, API methods, flags and exit codes in the generated reference.",
     configuration: "Choose Google Drive profiles, explicit store sharing, local controls and optional AI settings.",
+    compare:
+      "Compare Google Drive CLI with other open tools that connect Google Drive, Docs and Sheets to a terminal or an agent.",
+    roadmap: "See what the Google Drive CLI does today, what is in progress and what is planned next.",
     troubleshooting: "Recover Google Drive sign-in, inspect skipped sources and resolve missing search results.",
     security: "Understand Google Drive grants, local data retention, optional provider processing and write controls.",
     changelog:
@@ -26,6 +29,9 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
     recipes: "Готовьте обзоры, связывайте документы Google Drive с работой и проверяйте предложенную память.",
     commands: "Находите команды Google Drive CLI, методы API, параметры и коды завершения в справочнике.",
     configuration: "Выбирайте профили Google Drive, явную общую базу, локальные запреты и необязательные настройки ИИ.",
+    compare:
+      "Сравните Google Drive CLI с другими открытыми инструментами, которые подключают Google Drive, Документы и Таблицы к терминалу или агенту.",
+    roadmap: "Что Google Drive CLI умеет сегодня, что в работе и что запланировано дальше.",
     troubleshooting: "Восстановите вход Google Drive, проверьте пропущенные источники и исправьте пустой поиск.",
     security: "Узнайте о разрешениях Google Drive, хранении данных, внешней обработке и управлении изменениями.",
     changelog:
@@ -44,6 +50,9 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
     commands: "Consulta comandos de Google Drive CLI, métodos API, opciones y códigos de salida en la referencia.",
     configuration:
       "Elige perfiles Google Drive, almacenamiento compartido explícito, controles locales y ajustes de IA.",
+    compare:
+      "Compara Google Drive CLI con otras herramientas abiertas que conectan Google Drive, Documentos y Hojas de cálculo con una terminal o un agente.",
+    roadmap: "Qué hace hoy Google Drive CLI, qué está en curso y qué se planea a continuación.",
     troubleshooting: "Recupera el acceso Google Drive, revisa fuentes omitidas y resuelve resultados vacíos.",
     security: "Comprende permisos Google Drive, retención local, procesamiento opcional y controles de escritura.",
     changelog:

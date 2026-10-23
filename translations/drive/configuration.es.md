@@ -91,7 +91,7 @@ drive images models download clip-b32
 `drive personal config set max_text_chars 500000` omite textos más largos con su razón; se leen
 en el siguiente sync después de aumentar el límite.
 
-Omitir el perfil es un error: `DRIVE_PROFILE` y un antiguo perfil predeterminado guardado no lo seleccionan.
+El perfil es la primera palabra del comando o `DRIVE_PROFILE`; nada más lo elige. Omitirlo es un error que lista los perfiles existentes, y un antiguo perfil predeterminado guardado se nombra en ese error, pero no se usa.
 
 ## Variables de entorno
 
@@ -101,7 +101,8 @@ Afectan al proceso que ejecuta Drive; `config set` no las guarda.
 | --- | --- |
 | `DRIVE_TIMEOUT` | Plazo para todo el comando, como `--timeout` (`500ms`, `30s`, `2m`); por defecto 30 segundos |
 | `DRIVE_READ_ONLY` | Cualquier valor salvo `0` o vacío: todos los comandos rechazan cambios, locales o en Google, con salida 5, igual que `--read-only` |
-| `DRIVE_PROFILE_LOCK` | Fija el proceso a un perfil: nombrar cualquier otro perfil se rechaza con salida 5 |
+| `DRIVE_PROFILE` | Nombra el perfil cuando la línea de comandos no empieza por uno |
+| `DRIVE_PROFILE_LOCK` | Fija el proceso a un perfil: una primera palabra o `DRIVE_PROFILE` que nombre cualquier otro perfil se rechaza con salida 5; si no se nombra ninguno, se usa el fijado |
 | `DRIVE_CONFIG_DIR` | Mover `config.json` y el espacio asociado de credenciales |
 | `DRIVE_STATE_DIR` | Mover copias y puntos de control |
 | `DRIVE_CACHE_DIR` | Mover la caché de la herramienta; no mueve las copias de documentos |
@@ -119,10 +120,10 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 
 | Opción | Efecto en esta ejecución |
 | --- | --- |
-| `--profile NAME` o la primera palabra `NAME` | Elegir explícitamente el perfil de Google |
+| la primera palabra `NAME` | Elegir el perfil de Google; no existe la opción `--profile` |
 | `--offline` | Rechazar Google, sincronización y extracción con IA; responder con la copia local |
 | `--read-only` | Rechazar cambios locales y remotos |
-| `--permission KEY=LEVEL` | Sustituir temporalmente el permiso de un comando |
+| `--permission KEY=LEVEL` | Endurecer el permiso de un comando en esta ejecución; un nivel más laxo que el del perfil o el predeterminado integrado se rechaza |
 | `--dry-run` | Validar y mostrar una operación compatible sin ejecutarla |
 | `--json`, `--jsonl` | Salida estructurada; `--json=id,name` conserva solo esos campos; MCP muestra los caracteres de control de forma visible |
 | `--timeout DURATION`, `--max-output-bytes N` | Limitar el tiempo del comando y la salida almacenada en búfer |

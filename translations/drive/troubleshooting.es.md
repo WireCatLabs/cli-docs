@@ -8,6 +8,7 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 
 | Síntoma | Qué hacer |
 | --- | --- |
+| No sabes qué está configurado | Ejecuta `drive doctor`: versión, si se lee el archivo de ajustes, los perfiles existentes y las rutas. No necesita perfil y no lee el llavero ni el almacén. |
 | No se encuentra `drive` | Reabre la terminal/agente, comprueba que el directorio de comandos globales de npm está en PATH y repite [instalación](./installation.md). |
 | Google bloquea el acceso | Revisa el error mostrado por Google y las políticas Workspace. Con tu propio cliente, comprueba también APIs, consentimiento y usuarios de prueba. |
 | `google-api.disabled` | El propietario del proyecto OAuth debe habilitar la API solicitada; consulta [configuración de API](#google-api-is-disabled). Reconectar o conceder escritura no la habilita. |
@@ -20,6 +21,7 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 | No se encuentra el destino del vínculo | Usa una referencia de la base seleccionada. Comprueba que todas las herramientas usan el mismo MESSAGING_STORE antes de vincular personas/proyectos del servicio de mensajería. |
 
 ```sh
+drive doctor --json
 drive personal status --json
 drive personal folders list --json
 drive personal sync --json
@@ -29,12 +31,12 @@ drive personal search 'known word' --exact --json
 Al pedir ayuda, comparte el código de error sin datos privados y el comando. No incluyas JSON
 del cliente, tokens ni texto privado. Cuando aparezca la fuente, vuelve a [búsqueda](./search.md).
 
-## «Choose a profile explicitly»
+## «Name a profile»
 
-Ejecuta `drive personal status` o `drive --profile personal status`, sustituyendo `personal` por tu cuenta.
-El error lista perfiles configurados. Ni `DRIVE_PROFILE` ni un antiguo perfil guardado sustituyen
-la selección. Para la primera conexión, consulta [acceso](./installation.md#connect-your-account).
-`drive personal session list` muestra todos los nombres configurados.
+Ejecuta `drive personal status`, sustituyendo `personal` por tu cuenta, o define `DRIVE_PROFILE=personal`.
+El error lista los perfiles existentes. Un antiguo perfil guardado no se elige; el error lo nombra.
+Para la primera conexión, consulta [acceso](./installation.md#connect-your-account).
+`drive session list` muestra todos los nombres configurados.
 
 ## La configuración Google Cloud resulta confusa
 
