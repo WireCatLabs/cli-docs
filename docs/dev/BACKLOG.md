@@ -1,0 +1,56 @@
+# Backlog
+
+Open work for the wirecat.dev site, P1 and P2 only, most important first. P3 and ideas are in
+[BACKLOG_LATER.md](BACKLOG_LATER.md). How the site is laid out: [DESIGN.md](../DESIGN.md); which pages
+this repository owns: [STRUCTURE.md](../STRUCTURE.md).
+
+## Rules
+
+- **An id is permanent** and never reused: `DOCS-n`, the next free number in this file and in
+  BACKLOG_LATER.md. Older ids (`IDEA-107` and so on) keep their names.
+- **One item:** id · priority · title, then where the work starts and a link to the details. 1–3 lines.
+- **Priority:** **P1** broken, wrong for a reader, or blocks publishing — done before the site is
+  advertised · **P2** this cycle · **P3** someday, in BACKLOG_LATER.md.
+- **Mark:** none — not started · 🚧 `<branch>` — taken · 🟡 — half done, the rest named · ⏸️ — deferred
+  by the owner · 🚩 — waits on an owner decision.
+- **Claim before code:** `🚧 <branch>` on the line in the first push of the branch.
+- **Close in the PR that ships the work:** delete the line here in that PR.
+
+## Launch blockers (P1)
+
+- **DOCS-1 · P1 · Deploys fail at the dependency audit, so no fix reaches the site.** The daily deploy of
+  2026-10-23 stopped with 15 advisories (3 critical: `next` through `fumadocs-core`, `dompurify` through
+  `posthog-js`). Start: `package.json`, Dependabot PRs #327, #338, #339, #231, #233.
+- **DOCS-2 · P1 · The Zoom pages give commands that zm 0.35+ rejects.** The site shows zm v0.31.0; npm has
+  0.36.0, where the profile is the first word (`zm personal session start`) and `serve --mcp` became
+  `zm <profile> mcp`. Bump `tools.json` (docsRef, `profile`), then fix the portal's own copies:
+  `lib/words.ts` (zm prompts, all three languages), `content/docs/agents.mdx`, `mcp.mdx`, `zoom.mdx`.
+- **DOCS-3 · P1 · The other tools' pages lag npm.** Pinned max v0.66.0 / tg v0.77.0 / drive v0.19.0 /
+  memo v0.83.0; npm has 0.69.0 / 0.81.0 / 0.23.0 / 0.89.0. Work through issue #335 per tool:
+  translations, `docs:contracts`, release notes.
+- **DOCS-4 · P1 🚩 · WhatsApp is missing from the site.** `wa` 0.4.0 is on npm, its docs pass the
+  structure check at v0.4.0, and the other tools' `--help` already names it. Needs a `tools.json` entry,
+  RU/ES translations, an install prompt in `lib/words.ts`, the landing and the global roadmap (which still
+  says "In progress"). Waits on the owner: advertise WhatsApp at launch or not.
+- **DOCS-5 · P1 · The landing's tool list is out of date.** "What you can use today" names Telegram, MAX,
+  Drive, Himalaya and Markdown, but not Zoom or Memo; "Both messaging tools are free" counts two tools.
+  Start: `design/homepage-chat-treatments/release-source.json`, then `pnpm landing:export`.
+
+## Next (P2)
+
+- **DOCS-6 · P2 · A roadmap page for every tool, and the global page linking them all.** drive and memo
+  have none (no `docs/roadmap.md` in their repositories); a new page also needs RU/ES translations or
+  `pnpm sync` fails. The global page links only Telegram and MAX. Details: [BACKLOG-NOTES.md](BACKLOG-NOTES.md#docs-6).
+- **DOCS-7 · P2 · Explain npm's "install scripts not covered by allowScripts" warning on the shared
+  installation page.** npm 11.17 prints it on a fresh install of max, tg, memo and wa; the tool still works.
+  Only the tg page mentions it, as "npm 12 … install scripts blocked". Start: `content/docs/installation.mdx`.
+- **DOCS-8 · P2 · Check every command on the site against the newest npm release, not only the pinned
+  one.** The zm drift (DOCS-2) passed every check, because the pages match their own pin. Add a
+  profile-aware command check to the daily `docs-updates` report. Start: `scripts/docs-updates.ts`.
+- **DOCS-9 · P2 · `llms.txt` opens with "Telegram and MAX accounts, notes and files".** Name Drive, Zoom
+  (and WhatsApp, after DOCS-4). Start: `app/llms.txt/route.ts:55`, `lib/words.ts:100`.
+- **DOCS-10 · P2 · Run release CLIs only with an isolated HOME.** Issue #259; the sandbox already exists
+  in `scripts/docs-contracts.ts`.
+- **DOCS-13 · P2 · The search playground parses queries with cli-core 0.262.0 and cli-base 0.26.0.** npm has
+  0.394.0 and 0.50.1, so the playground may accept or reject queries differently from today's tools. Bump,
+  then `pnpm search:generate`. Start: `package.json`, `scripts/build-search-language.mjs`.
