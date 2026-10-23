@@ -70,6 +70,12 @@ describe("released documentation contracts", () => {
     expect(validateInvocation('tg messages send <чат> "<текст сообщения>"', program, true)).toBeNull()
     expect(validateInvocation("tg [profile] [options] …", program, true)?.kind).toBe("syntax")
     expect(validateInvocation('tg "$COMMAND"', program, true)?.kind).toBe("unsupported")
+    expect(validateInvocation("tg work PLACEHOLDER_command --json", program, false)?.kind).toBe("syntax")
+  })
+  it("lets an upgrade note name a retired command, but not a runnable example", () => {
+    const zm: Program = { ...program, cli: "zm" }
+    expect(validateInvocation("zm serve --mcp", zm, false)?.kind).toBe("syntax")
+    expect(validateInvocation("zm serve --mcp", zm, true)?.kind).toBe("invalid")
   })
   it("reports reference gaps independently from examples", () => {
     const coverage = referenceCoverage("## `tg messages`\n\n### `tg messages list`\n\n--json\n", program)

@@ -11,8 +11,8 @@ consultable automáticamente en la base.
 
 | Fuente disponible | Uso | Comprobación |
 |---|---|---|
-| Reuniones del anfitrión accesibles para la app | `zm meetings sync --lookback-days 7` | Lista, una transcripción y partes ausentes |
-| Archivos VTT descargados | `zm meetings import ./downloaded-transcripts` | Fecha/título frente al original |
+| Reuniones del anfitrión accesibles para la app | `zm personal meetings sync --lookback-days 7` | Lista, una transcripción y partes ausentes |
+| Archivos VTT descargados | `zm personal meetings import ./downloaded-transcripts` | Fecha/título frente al original |
 | Grabaciones en la nube | Lista, descarga o sincronización | Manifiesto del destino y sumas |
 | VTT archivados para búsqueda | Importación del archivo | Recibo y búsqueda del texto guardado |
 
@@ -38,12 +38,12 @@ Selecciona la API, descarga un periodo reciente y comprueba el resultado:
 
 ```sh
 zm config set source api
-zm meetings sync --lookback-days 7
-zm meetings list --json
-zm meetings transcript <meeting-id> --json
+zm personal meetings sync --lookback-days 7
+zm personal meetings list --json
+zm personal meetings transcript <meeting-id> --json
 ```
 
-Usa un ID de la lista. `zm meetings sync` obtiene reuniones del anfitrión y participantes, transcripciones
+Usa un ID de la lista. `zm personal meetings sync` obtiene reuniones del anfitrión y participantes, transcripciones
  y resúmenes disponibles. No crea texto ausente. Comprueba [generación y retención](./zoom-app.md#before-your-first-zm-meetings-sync)
 si falta la transcripción.
 
@@ -58,25 +58,32 @@ Pon el archivo directamente en la carpeta elegida y usa su fecha/hora/título, p
 `2026-10-01_1000_example-planning.vtt`. Renombrarlo no cambia su contenido.
 
 ```sh
-zm config set account.profile personal
 zm config set files.timezone Europe/Madrid
-zm meetings import ./downloaded-transcripts
-zm meetings list --json
+zm personal meetings import ./downloaded-transcripts
+zm personal meetings list --json
 ```
 
-La fuente lee archivos `.vtt` normales directamente en la carpeta, sin recursión. Los nombres usan
-`YYYY-MM-DD_HHMM_topic-slug.vtt`. El ID deriva del momento y tema normalizado; no hay UUID de Zoom.
-Los participantes quedan desconocidos: los nombres de hablantes se conservan sin adivinar identidades.
-Comprueba fecha, título y texto antes de vincular proyectos o personas.
+La fuente lee archivos `.vtt` y `.txt` directamente en la carpeta, sin recursión. Los nombres usan
+`YYYY-MM-DD_HHMM_topic-slug.vtt` o `.txt`. Un `.txt` es la forma que escribía zoom-searcher: una cabecera
+(`Встреча:` título, `Дата:` inicio, `Zoom ID:`, `Говорят:` oradores) y después líneas `[hh:mm:ss] Speaker: text`. Su
+título sustituye al del nombre del archivo; su hora (como la del nombre) es cuando terminó la grabación, así que el
+inicio es esa hora menos el desplazamiento de la última línea, su ID de reunión de Zoom pasa a ser la clave de la
+serie y sus oradores pasan a ser participantes solo de esa reunión, con el nombre como clave, nunca una misma persona
+entre reuniones. Un `.txt` y un `.vtt` con el mismo nombre son una reunión, y se lee el `.txt`. El ID deriva del
+momento y tema normalizado; no hay UUID de Zoom. Los participantes de un `.vtt` quedan desconocidos: los nombres de
+hablantes se conservan sin adivinar identidades. `zm personal meetings import` nombra la zona en que leyó las horas
+de los archivos (`timezone`), y `zm personal meetings import --help` la muestra antes de ejecutar. Comprueba fecha,
+título y texto antes de vincular proyectos o personas.
 
-Las horas usan UTC. `files.timezone` elige la zona IANA usada en los nombres, como `Europe/Madrid`.
-Horas ambiguas o inexistentes se rechazan. Contenidos distintos de una clave normalizada dan error:
+La hora del nombre de un archivo se lee en la zona de este ordenador. `files.timezone` elige la zona IANA usada en
+los nombres cuando es distinta, como `Europe/Madrid`; el almacenamiento sigue en UTC. Horas ambiguas o inexistentes
+se rechazan. Contenidos distintos de una clave normalizada dan error:
 resuelve el conflicto antes de repetir. Un nombre inválido falla explícitamente, sin importar
 parte de la carpeta en silencio.
 
 ## Observar nuevas reuniones
 
-`zm watch api --lookback-days 7 --jsonl` repite descargas. `zm watch files [folder]` observa una
+`zm personal watch api --lookback-days 7 --jsonl` repite descargas. `zm personal watch files [folder]` observa una
 carpeta de transcripciones; si falta, usa `files.folder`. Sin ambos argumentos se aplica el origen
 configurado. La API necesita red y admite `--since-time` y solapamiento de 0–31 días. Tras guardar el cursor se usa este con el solapamiento; fallos retienen
 la primera frontera. El solapamiento se resta también del primer `--since-time`.
@@ -87,7 +94,7 @@ Detén con Ctrl-C.
 Para una carpeta:
 
 ```sh
-zm watch files ./downloaded-transcripts --pause 10s --jsonl
+zm personal watch files ./downloaded-transcripts --pause 10s --jsonl
 ```
 
 Cada ciclo revisa de nuevo los archivos, incluidas correcciones antiguas, importa en serie, cierra
@@ -102,21 +109,22 @@ bloqueada detiene esa entrega y no empieza otro ciclo.
 `zm` guarda vídeo, audio, transcripciones y chat disponibles. Elige reunión y destino:
 
 ```sh
-zm recordings list --since-time 2026-10-01 --until-time 2026-10-10 --json
-zm recordings show <zoom-occurrence-uuid> --json
-zm recordings download <zoom-occurrence-uuid> --output-dir ./zoom-archive --json
-zm recordings archive check ./zoom-archive --offline --json
+zm personal recordings list --since-time 2026-10-01 --until-time 2026-10-10 --json
+zm personal recordings show <zoom-occurrence-uuid> --json
+zm personal recordings download <zoom-occurrence-uuid> --output-dir ./zoom-archive --json
+zm personal recordings archive check ./zoom-archive --offline --json
 ```
 
 Sustituye `<zoom-occurrence-uuid>` por el UUID devuelto en la lista, no un ID local o número de reunión
 Zoom. El recibo identifica archivos guardados y no disponibles. La verificación compara archivos con
 su manifiesto; no demuestra que Zoom tuviera todas las grabaciones. Si la lista está vacía, comprueba
-datos, cuenta anfitriona, disponibilidad y permisos antes de ampliar el periodo.
+datos, cuenta anfitriona, disponibilidad y permisos antes de ampliar el periodo. Sin `--until-time` la lista termina
+hoy en la zona del ordenador, o en `--timezone`, y `meta.timezone` nombra esa zona.
 
 Para historial por meses:
 
 ```sh
-zm recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --output-dir ./zoom-archive --jsonl
+zm personal recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --output-dir ./zoom-archive --jsonl
 ```
 
 Las fechas deben estar ordenadas y abarcar como máximo diez años. Se hacen peticiones mensuales,
@@ -139,7 +147,7 @@ Los manifiestos contienen metadatos, tamaños y SHA-256, sin URLs firmadas ni to
 y omite archivos coincidentes. Si tamaño y fecha de modificación no cambian desde la última
 verificación (`.zoom-verified.json`), no vuelve a calcular su hash. `recordings archive check` siempre
 calcula el hash de todos. No sobrescribe: usa otro destino si no coinciden. Descargas y sincronización
-necesitan un perfil elegido (`zm config set account.profile <label>`); el archivo pertenece a esa cuenta.
+actúan para el perfil nombrado primero (`zm personal recordings …`); el archivo pertenece a esa cuenta.
 Se conservan partes verificadas y se reanuda solo con validador fuerte y rango coincidentes. Una
 representación cambiada reinicia con seguridad. `--no-resume` usa partes temporales. Entradas completas permanecen tras errores posteriores.
 
@@ -162,10 +170,10 @@ confirmación de descarga correcta.
 Elige destino absoluto y zona del temporizador:
 
 ```sh
-zm recordings schedule create --name daily --output-dir /home/AliceExample/zoom-archive --since-time 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
-zm recordings schedule list --offline --json
-zm recordings schedule run <schedule-id> --jsonl
-zm recordings schedule disable <schedule-id> --yes --json
+zm personal recordings schedule create --name daily --output-dir /home/AliceExample/zoom-archive --since-time 2026-01-01 --at 03:15 --timezone Europe/Madrid --json
+zm personal recordings schedule list --offline --json
+zm personal recordings schedule run <schedule-id> --jsonl
+zm personal recordings schedule disable <schedule-id> --yes --json
 ```
 
 Primero se muestra un plan. `--yes` instala un temporizador de usuario systemd en Linux; `--dry-run`
@@ -180,8 +188,8 @@ operación confirmada; lista y detalles no consultan el temporizador. Desactivar
 Los nombres usan hashes y las identidades quedan en manifiestos:
 
 ```sh
-zm recordings archive transcript ./zoom-archive --offline --json
-zm search recordings ./zoom-archive "example plan" --limit 100 --offline --json
+zm personal recordings archive transcript ./zoom-archive --offline --json
+zm personal search recordings ./zoom-archive "example plan" --limit 100 --offline --json
 ```
 
 Se verifica tamaño y SHA-256 de cada WebVTT antes de devolver pasajes. La búsqueda se detiene al
@@ -195,7 +203,7 @@ cursor. `--max-output-bytes` limita la salida; un fallo de verificación no da �
 Para importar al perfil:
 
 ```sh
-zm recordings archive import ./zoom-archive --offline --jsonl
+zm personal recordings archive import ./zoom-archive --offline --jsonl
 ```
 
 Verifica todos los VTT antes de abrir la base. Límites: 8 MiB por archivo, 64 MiB totales;
@@ -211,18 +219,24 @@ los adaptadores antiguos no inventan cifras. Adiciones anteriores pueden quedar 
 Crea una transcripción independiente para una reunión guardada:
 
 ```sh
-zm meetings transcribe 1 ./AliceExample.wav --model parakeet-v3 --json
-zm meetings transcribe 1 ./AliceExample.wav --model parakeet-v3 --yes --json
+zm models audio download parakeet-v3
+zm personal meetings transcribe 1 ./AliceExample.m4a --model parakeet-v3 --json
+zm personal meetings transcribe 1 ./AliceExample.m4a --model parakeet-v3 --yes --json
 ```
 
 El plan verifica el archivo y describe el componente sin abrirlo. `--yes` reconoce con uno local
-instalado y añade atómicamente el resultado; `--dry-run` prevalece. No instala componentes.
-Admite PCM16 WAV mono o estéreo a 16 o 48 kHz, sin decodificar vídeo. `--models-dir` elige un directorio
+instalado y añade atómicamente el resultado; `--dry-run` prevalece. La transcripción nunca descarga un
+componente: `zm models audio list` muestra los modelos que conoce esta versión y `zm models audio download <model>`
+descarga uno a la carpeta que comparten todas las CLI de WireCat, comprobando el sha256 de cada archivo; ejecútalo
+de nuevo para reparar un modelo cuyos archivos son de otra versión. Un PCM16 WAV mono o estéreo a 16 o 48 kHz se
+lee tal cual; cualquier otra cosa (las grabaciones MP4 y M4A de Zoom, otro audio y vídeo) la decodifica antes el
+`ffmpeg` instalado en este ordenador, en una carpeta temporal privada que se borra después. El mismo archivo
+siempre da el mismo audio, así que transcribirlo de nuevo es una repetición. `--models-dir` elige un directorio
 absoluto. Limita bytes, duración, segmentos y texto con `--max-bytes`, `--max-duration`, `--max-segments`
 y `--max-text-bytes`. Las marcas de tiempo indican ventanas de hasta 30 segundos; hablantes desconocidos.
 Se conservan fuentes del proveedor e historial; el recibo muestra cifras y procedencia.
 
 El reconocimiento necesita un componente de voz compatible instalado; no se presupone que exista.
-Convierte audio/vídeo no compatible al WAV indicado con una herramienta que ya uses. Tras aplicar,
+Una grabación que no es un WAV listo necesita `ffmpeg` en `PATH`; zm no lo instala. Tras aplicar,
 abre `meetings transcript` y revisa palabras y ventanas de tiempo antes de usarlo como evidencia.
 Continúa con [búsqueda y citas](./search.md).

@@ -75,6 +75,9 @@ export function examples(markdown: string): Example[] {
   return result
 }
 
+// Upgrade notes name a command a release removed; the same command in a fenced example still fails.
+const retiredCommands: Record<string, string[]> = { zm: ["serve"] }
+
 export function validateInvocation(
   text: string,
   program: Program,
@@ -149,7 +152,11 @@ export function validateInvocation(
   if (!withoutGlobals.length) return null
   if (withoutGlobals[0] === "--help" || withoutGlobals[0] === "-h") return null
   if (!executable && withoutGlobals.slice(0, 2).join(" ") === "on PATH") return null
+  if (!roots.has(withoutGlobals[0]) && withoutGlobals[1] === "PLACEHOLDER_command")
+    return { kind: "syntax", reason: "Command syntax illustration" }
   if (!roots.has(withoutGlobals[0]) && roots.has(withoutGlobals[1])) withoutGlobals.shift()
+  if (!executable && retiredCommands[program.cli]?.includes(withoutGlobals[0]))
+    return { kind: "syntax", reason: "Retired command named in an upgrade note" }
   const command = all
     .filter((item) => item.path.every((word, index) => withoutGlobals[index] === word))
     .sort((a, b) => b.path.length - a.path.length)[0]

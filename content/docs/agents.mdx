@@ -51,7 +51,7 @@ An agent has no terminal to draw a QR code in or to open a browser from, so each
 
 - **Telegram and MAX:** the agent runs `tg personal session start qr` or `max personal session start qr` in the background, because the command waits for your scan and a shell tool shows nothing until it ends. Without a terminal, the tool prints the QR code as text. The agent pastes it into the chat as a code block, exactly as printed, and you scan it with the Telegram or MAX app on your phone. When Telegram renews the code, the agent pastes the new one and says that the old one expired.
 - **MAX codes expire fast:** a MAX QR code lasts about 2 minutes, so the agent pastes it at once. When it expires, the agent runs the command again for a new code.
-- **Zoom:** without a terminal, `zm session start` prints `Open this URL to approve Zoom login:` and the URL. The agent gives you the URL as a link. Open it in a browser on the same computer, because Zoom returns to a listener there.
+- **Zoom:** without a terminal, `zm personal session start` prints `Open this URL to approve Zoom login:` and the URL. The agent gives you the URL as a link. Open it in a browser on the same computer, because Zoom returns to a listener there.
 - **Google Drive:** `drive personal session start` always prints its Google sign-in URL, and also tries to open a browser. If no browser opens, the agent gives you the printed URL as a link to open on the same computer.
 
 A phone-number login, a two-step verification password and the first registration of your Telegram app still need you at a terminal. Login is not an MCP tool: an agent that has only MCP asks you to run the command yourself.

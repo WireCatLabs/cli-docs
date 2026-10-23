@@ -51,7 +51,7 @@ Run memo doctor: it lists what needs attention and the command that fixes each. 
 Read memo --help and suggest next steps for my notes and mail.
 At the end, offer to install the memo skill for my agent: memo skill install --for all.`,
     zm: (pkg) => `Install zm with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
-Run zm doctor. Read https://wirecat.dev/en/docs/zm/installation and zm session start --help, then help me log in with zm session start.
+Run zm doctor. Read https://wirecat.dev/en/docs/zm/installation and zm personal session start --help, then help me log in with zm personal session start (personal is the profile name; ask me if I want another).
 At the end, offer to install the zm skill for my agent: zm skill install --for all.`,
   },
   ru: {
@@ -69,7 +69,7 @@ At the end, offer to install the zm skill for my agent: zm skill install --for a
 Прочитай memo --help и предложи следующие шаги для моих заметок и почты.
 В конце предложи установить memo skill для моего агента: memo skill install --for all.`,
     zm: (pkg) => `Установи zm через npm install -g ${pkg}. Перед этим проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
-Выполни zm doctor. Прочитай https://wirecat.dev/ru/docs/zm/installation и zm session start --help, затем помоги войти командой zm session start.
+Выполни zm doctor. Прочитай https://wirecat.dev/ru/docs/zm/installation и zm personal session start --help, затем помоги войти командой zm personal session start (personal — имя профиля; спроси, нужно ли другое).
 В конце предложи установить zm skill для моего агента: zm skill install --for all.`,
   },
   es: {
@@ -83,7 +83,7 @@ Ejecuta memo doctor: indica lo que necesita atención y el comando que lo arregl
 Lee memo --help y propone los siguientes pasos para mis notas y mi correo.
 Al terminar, ofrece instalar el skill de memo para mi agente: memo skill install --for all.`,
     zm: (pkg) => `Instala zm con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
-Ejecuta zm doctor. Lee https://wirecat.dev/es/docs/zm/installation y zm session start --help, y ayúdame a iniciar sesión con zm session start.
+Ejecuta zm doctor. Lee https://wirecat.dev/es/docs/zm/installation y zm personal session start --help, y ayúdame a iniciar sesión con zm personal session start (personal es el nombre del perfil; pregúntame si quiero otro).
 Al terminar, ofrece instalar el skill de zm para mi agente: zm skill install --for all.`,
   },
 }

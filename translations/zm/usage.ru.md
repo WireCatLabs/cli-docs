@@ -9,10 +9,10 @@ title: "Использование"
 ## Прочитайте первую встречу
 
 ```sh
-zm meetings list --json
-zm meetings show <meeting-id> --json
-zm meetings transcript <meeting-id> --json
-zm meetings summary <meeting-id> --json
+zm personal meetings list --json
+zm personal meetings show <meeting-id> --json
+zm personal meetings transcript <meeting-id> --json
+zm personal meetings summary <meeting-id> --json
 ```
 
 Замените `<meeting-id>` на ID из списка. Проверьте дату и название перед использованием текста.
@@ -23,7 +23,7 @@ zm meetings summary <meeting-id> --json
 Чтобы получить переносимую копию доступного содержимого:
 
 ```sh
-zm meetings export <meeting-id> --format markdown --json
+zm personal meetings export <meeting-id> --format markdown --json
 ```
 
 Прочитайте полученный экспорт перед сохранением в файл. MCP возвращает экспорт как текст, но
@@ -43,7 +43,7 @@ zm meetings export <meeting-id> --format markdown --json
 ```
 
 ```sh
-zm meetings scheduled --limit 20 --json
+zm personal meetings scheduled --limit 20 --json
 ```
 
 Ответ сохраняет аккаунт, названия, ID `meeting_id`, абсолютное окно и покрытие. Стандартное окно —
@@ -75,7 +75,7 @@ zm meetings scheduled --limit 20 --json
 а не внутренний ID из `meetings list`. В терминале:
 
 ```sh
-zm meetings prepare 123456789 --json
+zm personal meetings prepare 123456789 --json
 ```
 
 Команда читает выбранную серию в Zoom и сопоставляет её с историей выбранного локального профиля.
@@ -132,7 +132,7 @@ zm meetings prepare 123456789 --json
 В терминале добавьте `--project`:
 
 ```sh
-zm meetings prepare 123456789 --project RES --json
+zm personal meetings prepare 123456789 --project RES --json
 ```
 
 `project_evidence.pages` сохраняет совпавшее название или псевдоним рядом с цитируемыми фрагментами,
@@ -189,7 +189,7 @@ zm meetings prepare 123456789 --project RES --json
 Для терминала явно укажите каждый источник и буквальные слова поиска:
 
 ```sh
-zm meetings prepare 123456789 --context-source project-notes --context-query "launch" --json
+zm personal meetings prepare 123456789 --context-source project-notes --context-query "launch" --json
 ```
 
 Повторяйте `--context-source` для других настроенных ID. Запрос принимает до шестнадцати буквальных
@@ -220,6 +220,23 @@ zm meetings prepare 123456789 --context-source project-notes --context-query "la
 или индексирование исходного инструмента. Если схема слишком старая, сначала выполните обычное
 обновление, затем повторите подготовку.
 
+## Посчитать, кто и сколько говорит
+
+```sh
+zm personal stats meetings show --since-time 30d --json
+zm personal stats meetings top --project RES --limit 5 --json
+```
+
+`show` выдаёт встречи, строки, слова и время речи в выборке по неделям (неделя начинается с понедельника в
+`--timezone`, по умолчанию в поясе компьютера) и десять говоривших больше всех. `top` перечисляет говорящих по
+времени речи, с их строками, словами, встречами и долей речи. Обе команды принимают `--since-time`, `--until-time`,
+`--event-id`, `--project` и `--topic`, которые читаются так же, как в `search meetings`.
+
+Говорящий — это человек, с которым связан участник, иначе участник, иначе имя из расшифровки; строка без говорящего
+считается как `unknown`. Время речи — длина каждой строки, поэтому двое, говорящие одновременно, считаются оба.
+Встреча и с расшифровкой Zoom, и с локальной считается только по расшифровке Zoom (самой ранней); встречи без
+расшифровки не считаются. Читаются только числа: текст расшифровки не показывается.
+
 ## Выберите локальные или удалённые данные
 
 | Что нужно | Группа команд | Где работает |
@@ -245,7 +262,7 @@ zm meetings prepare 123456789 --context-source project-notes --context-query "la
 | `complete -- <words...>` | ответить на дополнение команд |
 | `doctor` | проверить среду и публичные настройки без входа или базы |
 | `session status` | проверить OAuth отдельно от профилей данных |
-| `meetings import <folder>` | импортировать скачанные расшифровки в выбранный профиль |
+| `meetings import <folder>` | импортировать расшифровки `.vtt` или `.txt` из zoom-searcher в выбранный профиль; называет пояс, в котором прочитано время файлов |
 | `meetings sync [--since-time <time>]` | загрузить встречи из настроенного источника |
 | `meetings list`, `meetings show <meeting>` | прочитать сохранённые встречи |
 | `meetings transcript <meeting>` | прочитать текущие расшифровки |
@@ -257,7 +274,8 @@ zm meetings prepare 123456789 --context-source project-notes --context-query "la
 | `meetings projects scan <ref>` | предложить существующие проекты по ограниченной странице доказательств встречи; связи не сохраняются |
 | `meetings projects evidence <project> [query...]` | прочитать ограниченные источники по названию, ключу и псевдонимам существующего проекта |
 | `meetings update <reference>`, `meetings link <reference>` | просмотреть или применить выбранные связи |
-| `meetings transcribe <meeting> <file> --model <model>` | просмотреть или локально распознать WAV в отдельную расшифровку |
+| `meetings transcribe <meeting> <file> --model <model>` | просмотреть или локально распознать запись (MP4, M4A, WAV) в отдельную расшифровку |
+| `models audio list\|download` | речевые компоненты для расшифровки; скачать или починить один |
 | `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | прочитать ограниченные источники или контекст связанного человека |
 | `meetings task-proposal <reference> --type <type>` | просмотреть задачу со ссылкой на встречу |
 | `search meetings <query> --model <model>` | искать по смыслу, сначала создавая недостающие векторы |
@@ -275,8 +293,9 @@ zm meetings prepare 123456789 --context-source project-notes --context-query "la
 | `search recordings <directory> <query>` | искать проверенный текст без базы |
 | `recordings archive import <directory>` | проверить VTT и добавить к сохранённым встречам |
 | `remote-meetings list\|show\|invitation` | прочитать будущие встречи и приглашения |
-| `remote-meetings create\|update\|cancel` | просмотреть или применить простое изменение Zoom |
-| `serve --mcp` | предоставить чтение встреч через MCP stdio |
+| `remote-meetings create\|update\|cancel` | простое изменение встречи Zoom с предварительным вопросом; `--dry-run` показывает план |
+| `mcp` | предоставить команды zm агенту MCP через stdio в рамках разрешений профиля |
+| `stats meetings show\|top` | время речи, строки и слова по говорящим и по неделям |
 | `skill show`, `skill install --for agents` | показать или явно установить инструкции агенту |
 
 `meetings` использует локальные ID, `remote-meetings` — числовые ID Zoom.

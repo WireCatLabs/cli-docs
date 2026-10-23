@@ -4,6 +4,8 @@ title: "Escenarios paso a paso"
 
 Cada escenario es una tarea habitual en orden: los comandos que hay que ejecutar, para qué sirve cada uno y qué mirar en la respuesta. Los mismos escenarios están en la terminal: `zm guide` los enumera y `zm guide <name>` muestra uno.
 
+Los comandos que usan una cuenta empiezan por tu perfil, el nombre que diste a la cuenta al iniciar sesión: `zm <profile> …`.
+
 <a id="archive-recordings" />
 
 ## Un archivo diario y verificado de grabaciones en la nube

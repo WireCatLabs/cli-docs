@@ -20,9 +20,9 @@ detalles e invitaciones requieren [permisos adicionales](./zoom-app.md#add-archi
 ## Leer próximas reuniones
 
 ```sh
-zm remote-meetings list --json
-zm remote-meetings show 123456789 --json
-zm remote-meetings invitation 123456789 --json
+zm personal remote-meetings list --json
+zm personal remote-meetings show 123456789 --json
+zm personal remote-meetings invitation 123456789 --json
 ```
 
 Los identificadores remotos son IDs numéricos de Zoom; `meetings` usa IDs de la base local.
@@ -38,13 +38,16 @@ incompleta o no verificada: una fecha listada no prueba una futura llamada.
 
 ## Crear, modificar o cancelar
 
-Primero se muestra la petición. `--yes` la aplica una vez; `--dry-run` mantiene siempre la vista
-previa, incluso junto a `--yes`.
+Crear, modificar y cancelar preguntan antes: en una terminal zm pregunta y/N (por defecto no); sin terminal,
+el comando se detiene con `confirmation_required` (código 7), salvo que `--yes` lo aplique una vez. `--dry-run`
+muestra siempre la petición propuesta sin aplicarla, incluso junto a `--yes`. Un perfil cuyos
+[permisos](./configuration.md#permissions) permiten `remote-meetings` aplica sin preguntar; `readonly` o `deny`
+rechazan incluso con `--yes`.
 
 ```sh
-zm remote-meetings create --title "Example planning" --start-time 2026-10-20T10:00:00Z --duration-minutes 30 --json
-zm remote-meetings update 123456789 --title "Example review" --yes --json
-zm remote-meetings cancel 123456789 --dry-run --json
+zm personal remote-meetings create --title "Example planning" --start-time 2026-10-20T10:00:00Z --duration-minutes 30 --json
+zm personal remote-meetings update 123456789 --title "Example review" --yes --json
+zm personal remote-meetings cancel 123456789 --dry-run --json
 ```
 
 Se admite crear reuniones instantáneas o programadas y cambios básicos. Las escrituras remotas no

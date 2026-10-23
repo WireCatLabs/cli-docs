@@ -9,10 +9,10 @@ empieza por [instalar y conectar](./installation.md).
 ## Lee tu primera reunión
 
 ```sh
-zm meetings list --json
-zm meetings show <meeting-id> --json
-zm meetings transcript <meeting-id> --json
-zm meetings summary <meeting-id> --json
+zm personal meetings list --json
+zm personal meetings show <meeting-id> --json
+zm personal meetings transcript <meeting-id> --json
+zm personal meetings summary <meeting-id> --json
 ```
 
 Sustituye `<meeting-id>` por un ID de la lista. Comprueba la fecha y el título antes de usar el texto.
@@ -23,7 +23,7 @@ explica cómo recuperar periodos o importar archivos.
 Para obtener una copia portable del contenido disponible:
 
 ```sh
-zm meetings export <meeting-id> --format markdown --json
+zm personal meetings export <meeting-id> --format markdown --json
 ```
 
 Lee el resultado antes de guardarlo en un archivo. MCP devuelve exportaciones como texto, pero no
@@ -43,7 +43,7 @@ antiguas o inciertas y verifica la próxima ocurrencia de la serie que elija ant
 ```
 
 ```sh
-zm meetings scheduled --limit 20 --json
+zm personal meetings scheduled --limit 20 --json
 ```
 
 La respuesta conserva cuenta, títulos, ID `meeting_id`, ventana absoluta y cobertura. Por defecto,
@@ -75,7 +75,7 @@ Usa el ID de serie del propio Zoom que aparece en [la agenda](./remote-meetings.
 sin espacios, en lugar del ID interno de `meetings list`. En el terminal:
 
 ```sh
-zm meetings prepare 123456789 --json
+zm personal meetings prepare 123456789 --json
 ```
 
 La orden lee la serie elegida en Zoom y la une al historial del perfil local seleccionado.
@@ -133,7 +133,7 @@ este perfil. Separa las coincidencias de palabras de los vínculos confirmados e
 En el terminal, añade `--project`:
 
 ```sh
-zm meetings prepare 123456789 --project RES --json
+zm personal meetings prepare 123456789 --project RES --json
 ```
 
 `project_evidence.pages` conserva cada nombre o alias coincidente junto a los pasajes citados,
@@ -191,7 +191,7 @@ y fuente de cada afirmación, muestra los desacuerdos e indica qué fuentes o í
 En el terminal, indica cada fuente y una consulta de palabras literales:
 
 ```sh
-zm meetings prepare 123456789 --context-source project-notes --context-query "launch" --json
+zm personal meetings prepare 123456789 --context-source project-notes --context-query "launch" --json
 ```
 
 Repite `--context-source` para otros ID configurados. La consulta admite hasta dieciséis palabras
@@ -222,6 +222,24 @@ no migra una versión antigua del esquema, no importa registros ausentes ni guar
 Si faltan índices, ejecuta por separado la importación o indexación del programa de origen.
 Si el esquema es demasiado antiguo, actualízalo normalmente antes de repetir la preparación.
 
+## Cuenta quién habla y cuánto
+
+```sh
+zm personal stats meetings show --since-time 30d --json
+zm personal stats meetings top --project RES --limit 5 --json
+```
+
+`show` da las reuniones, líneas, palabras y tiempo de palabra de la selección, por semana (las semanas empiezan el
+lunes en `--timezone`, por defecto la zona del ordenador), con los diez oradores que más hablaron. `top` enumera los
+oradores por tiempo de palabra, con sus líneas, palabras, reuniones y parte de la conversación. Ambos admiten
+`--since-time`, `--until-time`, `--event-id`, `--project` y `--topic`, interpretados como los lee `search meetings`.
+
+Un orador es la persona a la que está vinculado un participante; si no, el participante; si no, el nombre que da la
+transcripción. Una línea sin orador cuenta como `unknown`. El tiempo de palabra es la duración de cada línea, así que
+dos personas que hablan a la vez cuentan las dos. Una reunión con la transcripción de Zoom y una local cuenta solo la
+de Zoom (la más antigua); las reuniones sin transcripción no se cuentan. Solo se leen números: no se muestra texto de
+la transcripción.
+
 ## Elige datos locales o remotos
 
 | Necesidad | Familia de órdenes | Dónde trabaja |
@@ -247,7 +265,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `complete -- <words...>` | responder a autocompletado |
 | `doctor` | inspeccionar entorno y configuración sin acceso ni base |
 | `session status` | comprobar OAuth aparte de perfiles locales |
-| `meetings import <folder>` | importar transcripciones al perfil elegido |
+| `meetings import <folder>` | importar transcripciones `.vtt` o `.txt` de zoom-searcher al perfil elegido; indica la zona en que se leyeron las horas de los archivos |
 | `meetings sync [--since-time <time>]` | descargar reuniones del origen configurado |
 | `meetings list`, `meetings show <meeting>` | leer reuniones guardadas |
 | `meetings transcript <meeting>` | leer transcripciones actuales |
@@ -259,7 +277,8 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `meetings projects scan <ref>` | sugerir proyectos existentes a partir de una página acotada de evidencia local; no guarda vínculos |
 | `meetings projects evidence <project> [query...]` | leer evidencia acotada del nombre, clave y alias de un proyecto existente |
 | `meetings update <reference>`, `meetings link <reference>` | revisar o aplicar vínculos elegidos |
-| `meetings transcribe <meeting> <file> --model <model>` | revisar o reconocer un WAV como transcripción independiente |
+| `meetings transcribe <meeting> <file> --model <model>` | revisar o reconocer una grabación (MP4, M4A, WAV) como transcripción independiente |
+| `models audio list\|download` | los modelos de voz para transcribir; descargar o reparar uno |
 | `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | leer fuentes limitadas o contexto personal vinculado |
 | `meetings task-proposal <reference> --type <type>` | revisar una tarea con su fuente |
 | `search meetings <query> --model <model>` | buscar por significado, generando primero los vectores que faltan |
@@ -277,8 +296,9 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `search recordings <directory> <query>` | buscar texto verificado sin base |
 | `recordings archive import <directory>` | verificar VTT y añadirlo a reuniones guardadas |
 | `remote-meetings list\|show\|invitation` | leer próximas reuniones e invitaciones |
-| `remote-meetings create\|update\|cancel` | revisar o aplicar un cambio simple en Zoom |
-| `serve --mcp` | servir lecturas de reuniones por MCP stdio |
+| `remote-meetings create\|update\|cancel` | un cambio simple en Zoom, con confirmación previa; `--dry-run` lo revisa |
+| `mcp` | servir los comandos de zm a un agente MCP por stdio, según los permisos del perfil |
+| `stats meetings show\|top` | tiempo de palabra, líneas y palabras por orador y por semana |
 | `skill show`, `skill install --for agents` | mostrar o instalar instrucciones del agente |
 
 `meetings` usa IDs locales; `remote-meetings`, IDs numéricos de Zoom.

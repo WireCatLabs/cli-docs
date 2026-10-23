@@ -12,9 +12,9 @@
     "conclusion": "Reviewed MAX 0.66.0 (Core 0.370.0): max guide catch-up and the first screen of max --help quote the filter, max review 'date>1d' --unanswered 4h (unquoted, a shell wrote a file named 1d and dropped the filter; the site's correction for it is retired); Works with shows memo's title from cli-core MEMO_SCENARIOS. Core 0.363.0-0.370.0: store version 25 keeps a chat's history; a left chat is found by any id, chats track and store gaps plan refuse it. Changed native pages: changelog, scenarios (quoted step), and the v0.66.0 release links in bot/cli-contract/usage; EN/ES (RU scenarios) updated. Roadmap unchanged: optional local copy, event actions, video notes, cloud password and native installers are not shipped."
   },
   "zm": {
-    "version": "v0.31.0",
+    "version": "v0.36.0",
     "roadmapSha256": "d6932e6c14696349630b8a975a2d32fb36bf79728ec8bd808457a72d79d9ae2d",
-    "reviewedAt": "2026-10-20",
-    "conclusion": "Reviewed Zoom 0.31.0 (Core 0.348.0 -> 0.370.0): Works with takes memo's person-brief title from cli-core MEMO_SCENARIOS; the scenario check refuses shell characters left unquoted in a step (zm's steps were already quoted); the shared store moves to version 25 (chat history) when first opened. Changed native pages: changelog; RU/ES updated. Roadmap unchanged: broader meeting preparation remains planned and is not shipped."
+    "reviewedAt": "2026-10-23",
+    "conclusion": "Reviewed Zoom 0.32.0-0.36.0 (Core 0.370.0 -> 0.389.0): the profile is the first word (zm personal meetings list; ZM_PROFILE for a shell; each profile has its own Zoom login); zm <profile> mcp replaces zm serve --mcp and offers zm's commands as the profile's permissions allow; permissions per profile; stats meetings; models audio; meetings transcribe takes Zoom's recordings; .txt transcript import; search reads the query language and ranks words and meaning together; meeting writes ask first. Changed native pages: every guide (profile prefix), changelog, commands, configuration (Permissions), mcp (rewritten), search, sessions; RU/ES updated. Portal copies (install prompts, agents, MCP, Zoom overview, command rules) moved to zm personal. Roadmap unchanged: broader meeting preparation remains planned and is not shipped."
   }
 }

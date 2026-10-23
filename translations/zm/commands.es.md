@@ -52,12 +52,12 @@ zm config set <key> <value>
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required | setting name, such as account.profile. |
+| `key` | required | setting name, such as zoom.client_id. |
 | `value` | required | new value. |
 
 **Returns:** set a configuration value
 
-**Example:** `zm config set account.profile personal --json`
+**Example:** `zm config set files.timezone Europe/Madrid --json`
 
 ## `zm meetings`
 
@@ -82,11 +82,11 @@ zm meetings list [query] [options]
 | `--limit <n>` | meetings per page. Default: `100`. |
 | `--page <n>` | page number. Default: `1`. |
 
-**Returns:** meeting — ref, id, provider, account, title, url, started_at, ended_at, and 7 more
+**Returns:** meeting — ref, id, provider, account, title, url, started_at, ended_at, and 8 more
 
 **Next usually:** `zm meetings show <meeting>`, `zm meetings transcript <meeting>`, `zm meetings summary <meeting>`
 
-**Example:** `zm meetings list --json`
+**Example:** `zm personal meetings list --json`
 
 ### `zm meetings show`
 
@@ -105,11 +105,11 @@ zm meetings show <meeting> [options]
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 
-**Returns:** meeting details — ref, id, provider, account, title, url, started_at, ended_at, and 15 more
+**Returns:** meeting details — ref, id, provider, account, title, url, started_at, ended_at, and 16 more
 
 **Next usually:** `zm meetings transcript <meeting>`, `zm meetings summary <meeting>`, `zm recordings show <meeting>`
 
-**Example:** `zm meetings show 1 --json`
+**Example:** `zm personal meetings show 1 --json`
 
 ### `zm meetings transcript`
 
@@ -131,7 +131,7 @@ zm meetings transcript <meeting> [options]
 
 **Returns:** meeting transcript — ref, meeting, source, language, superseded_at, created_at, lines
 
-**Example:** `zm meetings transcript 1 --json`
+**Example:** `zm personal meetings transcript 1 --json`
 
 ### `zm meetings summary`
 
@@ -154,7 +154,7 @@ zm meetings summary <meeting> [options]
 
 **Next usually:** `zm meetings show <meeting>`, `zm meetings transcript <meeting>`, `zm recordings show <meeting>`
 
-**Example:** `zm meetings summary 1 --json`
+**Example:** `zm personal meetings summary 1 --json`
 
 ### `zm meetings export`
 
@@ -180,7 +180,7 @@ zm meetings export <meeting> [options]
 
 **Returns:** export a meeting as Markdown or one transcript as WebVTT
 
-**Example:** `zm meetings export 1 --format markdown --json`
+**Example:** `zm personal meetings export 1 --format markdown --json`
 
 ### `zm meetings people`
 
@@ -205,7 +205,7 @@ zm meetings people <query> [options]
 
 **Returns:** find meeting participants by name or email
 
-**Example:** `zm meetings people "Alice Example" --json`
+**Example:** `zm personal meetings people "Alice Example" --json`
 
 ### `zm meetings sync`
 
@@ -226,7 +226,7 @@ zm meetings sync [options]
 
 **Returns:** bring the stored meetings up to date from the connected account
 
-**Example:** `zm meetings sync --json`
+**Example:** `zm personal meetings sync --json`
 
 ### `zm meetings import`
 
@@ -249,7 +249,7 @@ zm meetings import <folder> [options]
 
 **Returns:** import downloaded meeting transcripts
 
-**Example:** `zm meetings import ./downloaded-transcripts --json`
+**Example:** `zm personal meetings import ./downloaded-transcripts --json`
 
 ### `zm meetings scheduled`
 
@@ -297,7 +297,7 @@ zm meetings projects evidence <project> [query] [options]
 
 **Returns:** meeting project evidence — schema_version, kind, account_id, query, project, term, hits, association, and 5 more
 
-**Example:** `zm meetings projects evidence RES "identity_id:12" --json`
+**Example:** `zm personal meetings projects evidence RES "identity_id:12" --json`
 
 #### `zm meetings projects scan`
 
@@ -420,7 +420,7 @@ zm meetings transcribe <meeting> <file> [options]
 | Argument | | What it is |
 |---|---|---|
 | `meeting` | required | stored meeting id or meeting reference. |
-| `file` | required | local PCM16 WAV file (16 or 48 kHz, mono/stereo). |
+| `file` | required | a recording: WAV as it is, MP4, M4A or other audio and video through an installed ffmpeg. |
 
 | Option | What it does |
 |---|---|
@@ -435,7 +435,7 @@ zm meetings transcribe <meeting> <file> [options]
 
 **Returns:** preview transcribing a recording on this machine; --yes adds the transcript
 
-**Example:** `zm meetings transcribe meeting:3/12 ./AliceExample.wav --model parakeet-v3 --json`
+**Example:** `zm personal meetings transcribe meeting:3/12 ./AliceExample.m4a --model parakeet-v3 --json`
 
 ### `zm meetings evidence`
 
@@ -576,7 +576,7 @@ zm events list [options]
 
 **Returns:** list stored events
 
-**Example:** `zm events list --json`
+**Example:** `zm personal events list --json`
 
 ## `zm commands`
 
@@ -658,7 +658,63 @@ zm session start [options]
 
 **Returns:** log in to Zoom through your browser
 
-**Example:** `zm session start`
+**Example:** `zm personal session start`
+
+## `zm upgrade`
+
+upgrade zm with the package manager that installed it; --check only looks
+
+**Changes local data.**
+
+```sh
+zm upgrade [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--check` | say whether a newer version exists, and install nothing. |
+
+**Returns:** upgrade zm with the package manager that installed it; --check only looks
+
+**Example:** `zm upgrade --check`, `zm upgrade`
+
+## `zm models`
+
+models that run on this machine
+
+### `zm models audio`
+
+speech models for `meetings transcribe`
+
+#### `zm models audio list`
+
+the speech models this version knows, and which are downloaded
+
+```sh
+zm models audio list
+```
+
+**Returns:** the speech models this version knows, and which are downloaded
+
+**Example:** `zm models audio list --json`
+
+#### `zm models audio download`
+
+download a speech model, or repair one, checking every file's sha256
+
+**Changes local data.**
+
+```sh
+zm models audio download <model>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `model` | required | a model id from `models audio list`. |
+
+**Returns:** download a speech model, or repair one, checking every file's sha256
+
+**Example:** `zm models audio download parakeet-v3 --json`
 
 ## `zm watch`
 
@@ -700,7 +756,8 @@ zm recordings list [options]
 | Option | What it does |
 |---|---|
 | `--since-time <time>` | first day, YYYY-MM-DD. |
-| `--until-time <time>` | last day, YYYY-MM-DD. |
+| `--until-time <time>` | last day, YYYY-MM-DD (default today in --timezone). |
+| `--timezone <zone>` | IANA timezone of today (default the computer's). |
 
 **Returns:** list cloud recording occurrences (last 30 days by default)
 
@@ -1046,7 +1103,7 @@ zm remote-meetings invitation <meeting>
 
 ### `zm remote-meetings create`
 
-preview a meeting creation; --yes performs it once
+create a Zoom meeting; asks first, --dry-run previews
 
 **Changes remote Zoom data.**
 
@@ -1062,16 +1119,16 @@ zm remote-meetings create [options]
 | `--timezone <zone>` | IANA timezone. |
 | `--agenda <text>` | meeting agenda. |
 | `--type <type>` | instant (1) or scheduled (2). |
-| `--yes` | apply the remote mutation once instead of previewing. |
+| `--yes` | apply the change without asking first. |
 | `--dry-run` | preview only, including when --yes is present. |
 
-**Returns:** preview a meeting creation; --yes performs it once
+**Returns:** create a Zoom meeting; asks first, --dry-run previews
 
 **Example:** `zm remote-meetings create --title "Example planning" --start-time 2026-10-10T15:30:00Z --dry-run --json`
 
 ### `zm remote-meetings update`
 
-preview a meeting update; --yes performs it once
+change a Zoom meeting; asks first, --dry-run previews
 
 **Changes remote Zoom data.**
 
@@ -1091,16 +1148,16 @@ zm remote-meetings update <meeting> [options]
 | `--timezone <zone>` | IANA timezone. |
 | `--agenda <text>` | meeting agenda. |
 | `--type <type>` | instant (1) or scheduled (2). |
-| `--yes` | apply the remote mutation once instead of previewing. |
+| `--yes` | apply the change without asking first. |
 | `--dry-run` | preview only, including when --yes is present. |
 
-**Returns:** preview a meeting update; --yes performs it once
+**Returns:** change a Zoom meeting; asks first, --dry-run previews
 
 **Example:** `zm remote-meetings update 123456789 --title "Example planning" --dry-run --json`
 
 ### `zm remote-meetings cancel`
 
-preview a cancellation; --yes performs it once
+cancel a Zoom meeting; asks first, --dry-run previews
 
 **Changes remote Zoom data.**
 
@@ -1115,10 +1172,10 @@ zm remote-meetings cancel <meeting> [options]
 | Option | What it does |
 |---|---|
 | `--occurrence-id <id>` | cancel one recurring occurrence. |
-| `--yes` | apply cancellation once instead of previewing. |
+| `--yes` | cancel without asking first. |
 | `--dry-run` | preview only, including when --yes is present. |
 
-**Returns:** preview a cancellation; --yes performs it once
+**Returns:** cancel a Zoom meeting; asks first, --dry-run previews
 
 **Example:** `zm remote-meetings cancel 123456789 --dry-run --json`
 
@@ -1156,32 +1213,19 @@ zm skill install [options]
 
 **Example:** `zm skill install --for agents --json`
 
-## `zm serve`
+## `zm mcp`
 
-serve read-only meeting tools over MCP stdio
+serve zm's commands to an MCP agent over stdio, as the named profile allows them
 
 **Changes local data.**
 
 ```sh
-zm serve [options]
+zm mcp
 ```
 
-| Option | What it does |
-|---|---|
-| `--mcp` | use the MCP JSON-RPC protocol. |
-| `--unified-search` | include selected-profile meetings-only unified search. |
-| `--meeting-context` | include account-fixed evidence, person context and task proposals. |
-| `--meeting-project-candidates` | include stored meeting project suggestions using the global project vocabulary. |
-| `--meeting-inventory` | include bounded remote meeting-series discovery with unverified date hints. |
-| `--meeting-preparation` | include cited meeting preparation with remote Zoom schedule reads. |
-| `--semantic` | include read-only meeting vector search with an explicit query model. |
-| `--model <model>` | query embedding model: an installed one, or one served at --base-url. |
-| `--base-url <url>` | explicit remote embedding endpoint for semantic queries. |
-| `--dims <n>` | vector size the remote service returns, in dimensions. |
+**Returns:** serve zm's commands to an MCP agent over stdio, as the named profile allows them
 
-**Returns:** serve read-only meeting tools over MCP stdio
-
-**Example:** `zm serve --mcp`
+**Example:** `zm personal mcp`
 
 ## `zm search`
 
@@ -1223,7 +1267,7 @@ zm search meetings <query> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | required | words to find; each also matches its other word forms. |
+| `query` | required | words, OR, (groups), -word, "a phrase", "a b"\~N (within N lines), exact:word, from:"Name" (who said the line); a word also matches its other forms and spellings speech recognition garbled. |
 
 | Option | What it does |
 |---|---|
@@ -1236,18 +1280,18 @@ zm search meetings <query> [options]
 | `--tag <name>` | meetings with this tag, by name or alias. |
 | `--topic <name>` | meetings with this topic, by name or alias. |
 | `--since-time <time>` | meetings starting at or after this ISO 8601 date or time. |
-| `--until-time <time>` | meetings starting at or before this ISO 8601 date or time. |
+| `--until-time <time>` | meetings starting at or before this ISO 8601 date or time; a date alone covers that whole local day. |
 | `--limit <n>` | how many hits, 1 through 1000 (default 100). |
 | `--cursor <cursor>` | continue from the previous page's page.next_cursor, with the same query and filters. |
 | `--max-read-bytes <bytes>` | most stored bytes to read, 1 through 67108864 (default 4194304). |
-| `--model <model>` | search by meaning with this embedding model, building missing vectors first. |
+| `--model <model>` | rank words and meaning together with this embedding model, building missing vectors first. |
 | `--base-url <url>` | remote embedding service for --model; OpenAI reads OPENAI_API_KEY. |
 | `--dims <n>` | vector size the remote service returns, in dimensions. |
-| `--max-chunks <n>` | by meaning: most stored passages to compare. |
+| `--max-chunks <n>` | by meaning: most stored passages to compare (default 10000). |
 | `--max-rows <n>` | by meaning: most transcript lines to read, 1 through 100000. |
 | `--max-text-bytes <bytes>` | by meaning: most transcript text to read (default 4 MiB). |
 
-**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, source
+**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, match, corrections, and 1 more
 
 **Next usually:** `zm meetings show <meeting>`, `zm meetings transcript <meeting>`, `zm meetings summary <meeting>`
 
@@ -1273,6 +1317,59 @@ zm search recordings <directory> <query> [options]
 **Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 4 more
 
 **Example:** `zm search recordings ./zoom-archive "example plan" --limit 100 --offline --json`
+
+## `zm stats`
+
+numbers about the stored meetings
+
+### `zm stats meetings`
+
+talk time, lines and words, by speaker and by week
+
+#### `zm stats meetings show`
+
+meetings, lines, words and talk time by week, with the top speakers
+
+```sh
+zm stats meetings show [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | meetings starting at or after this date or time (ISO 8601, or 30d ago). |
+| `--until-time <time>` | meetings starting at or before this date or time; a date alone is that whole day. |
+| `--timezone <zone>` | the IANA zone dates and weeks are read in (default: this computer's). |
+| `--event-id <id>` | only meetings linked to this stored event. |
+| `--project <name>` | meetings confirmed in this project, by name, key or alias. |
+| `--topic <name>` | meetings with this topic, by name or alias. |
+| `--max-rows <n>` | most transcript lines to read (default and at most 500000). |
+
+**Returns:** meetings, lines, words and talk time by week, with the top speakers
+
+**Example:** `zm personal stats meetings show --since-time 30d --json`
+
+#### `zm stats meetings top`
+
+speakers by talk time: lines, words, meetings and their share of the talk
+
+```sh
+zm stats meetings top [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | meetings starting at or after this date or time (ISO 8601, or 30d ago). |
+| `--until-time <time>` | meetings starting at or before this date or time; a date alone is that whole day. |
+| `--timezone <zone>` | the IANA zone dates and weeks are read in (default: this computer's). |
+| `--event-id <id>` | only meetings linked to this stored event. |
+| `--project <name>` | meetings confirmed in this project, by name, key or alias. |
+| `--topic <name>` | meetings with this topic, by name or alias. |
+| `--max-rows <n>` | most transcript lines to read (default and at most 500000). |
+| `--limit <n>` | how many speakers (default 20). |
+
+**Returns:** speakers by talk time: lines, words, meetings and their share of the talk
+
+**Example:** `zm personal stats meetings top --project RES --limit 5 --json`
 
 ## `zm batch`
 

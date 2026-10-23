@@ -86,9 +86,9 @@ const memo: Record<Lang, Rules> = {
 
 const zm: Record<Lang, Rules> = {
   en: {
-    shape: "zm [options] <resource> <action> [arguments]",
+    shape: "zm <profile> [options] <resource> <action> [arguments]",
     items: [
-      "Resource first, then the action: `zm meetings list`, `zm meetings show`, `zm recordings list`.",
+      "Name the profile as the first word, then the resource and action: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. No profile is ever assumed; `ZM_PROFILE` names one for a whole shell. Help, `doctor`, `guide` and `skill` need none.",
       "Global options work with every command: `--json` or `--jsonl` for scripts and agents, `--offline` to refuse network requests, `--no-input` to never start an interactive login.",
       "A command that changes something is marked in the reference: “Changes remote Zoom data” changes data in Zoom, “Changes local data” changes only files on this computer.",
       "Some writes take `--dry-run` to preview the change and `--yes` to confirm it in advance.",
@@ -97,9 +97,9 @@ const zm: Record<Lang, Rules> = {
     links: { sessions: "Login", usage: "Usage", configuration: "Configuration" },
   },
   ru: {
-    shape: "zm [опции] <ресурс> <действие> [аргументы]",
+    shape: "zm <профиль> [опции] <ресурс> <действие> [аргументы]",
     items: [
-      "Сначала ресурс, потом действие: `zm meetings list`, `zm meetings show`, `zm recordings list`.",
+      "Первым словом укажите профиль, затем ресурс и действие: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. Профиль никогда не подставляется сам; `ZM_PROFILE` задаёт его для всей оболочки. Справке, `doctor`, `guide` и `skill` профиль не нужен.",
       "Общие параметры работают с любой командой: `--json` или `--jsonl` для скриптов и агентов, `--offline`, чтобы не обращаться к сети, `--no-input`, чтобы никогда не начинать интерактивный вход.",
       "Команда, которая что-то меняет, отмечена в справочнике: «Changes remote Zoom data» меняет данные в Zoom, «Changes local data» меняет только файлы на этом компьютере.",
       "Некоторые команды записи принимают `--dry-run` для предпросмотра изменения и `--yes` для подтверждения заранее.",
@@ -108,9 +108,9 @@ const zm: Record<Lang, Rules> = {
     links: { sessions: "Вход", usage: "Работа", configuration: "Настройки" },
   },
   es: {
-    shape: "zm [opciones] <recurso> <acción> [argumentos]",
+    shape: "zm <perfil> [opciones] <recurso> <acción> [argumentos]",
     items: [
-      "Primero el recurso, después la acción: `zm meetings list`, `zm meetings show`, `zm recordings list`.",
+      "Indica el perfil como primera palabra y después el recurso y la acción: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. Nunca se asume un perfil; `ZM_PROFILE` lo fija para toda la shell. La ayuda, `doctor`, `guide` y `skill` no lo necesitan.",
       "Las opciones globales funcionan con cualquier comando: `--json` o `--jsonl` para scripts y agentes, `--offline` para rechazar peticiones de red, `--no-input` para no iniciar nunca un acceso interactivo.",
       "Un comando que cambia algo está marcado en la referencia: «Changes remote Zoom data» cambia datos en Zoom, «Changes local data» cambia solo archivos en este ordenador.",
       "Algunas escrituras aceptan `--dry-run` para previsualizar el cambio y `--yes` para confirmarlo por adelantado.",

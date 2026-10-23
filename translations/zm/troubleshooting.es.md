@@ -12,7 +12,7 @@ un cambio remoto incierto antes de repetirlo.
 
 El navegador aprobó la app, pero el retorno no llegó al proceso. Deja abierto el terminal.
 Copia `code=…&state=…` o la URL completa en la página WireCat y pégalo en **el mismo terminal
-con `zm session start` activo**, pulsando Enter. Debe informar `logged_in: true` y devolver el indicador.
+con `zm personal session start` activo**, pulsando Enter. Debe informar `logged_in: true` y devolver el indicador.
 Si caducó, inicia otro intento y usa su retorno; el antiguo no completa uno nuevo.
 
 Un navegador en otro dispositivo o un terminal remoto puede impedir el retorno automático.
@@ -31,7 +31,7 @@ comprueba que el terminal termine.
 Selecciona un navegador instalado explícitamente:
 
 ```sh
-zm session start --browser firefox
+zm personal session start --browser firefox
 ```
 
 En un terminal interactivo, abre tú la URL de autorización impresa por ese login y pega el retorno
@@ -50,7 +50,7 @@ Puedes importar VTT autorizados sin la API.
 El almacén debe estar instalado, activo y accesible para este usuario. Conecta desde el mismo
 usuario/sesión del sistema donde esté disponible; un entorno sin escritorio puede carecer de él.
 No se guarda el token en un archivo de texto. Tras repararlo, repite login y comprueba
-`zm session status --json`.
+`zm personal session status --json`.
 
 ### Las órdenes terminan con "Zoom token request failed"
 
@@ -59,13 +59,13 @@ Cada solicitud de token registra su resultado en `~/.local/share/zm/runs/<date>/
 si llegó un nuevo token de actualización, si se guardó en el llavero, un tiempo de espera agotado o
 cancelación y el identificador del proceso. Nunca contiene el token. Dos registros cercanos con
 identificadores de proceso distintos sugieren dos órdenes actualizando a la vez. Léelos con
-`cat ~/.local/share/zm/runs/*/*/events.jsonl` y vuelve a ejecutar `zm session start`.
+`cat ~/.local/share/zm/runs/*/*/events.jsonl` y vuelve a ejecutar `zm personal session start`.
 Los registros de ejecuciones de más de 30 días se eliminan.
 
 ### Falta un permiso necesario
 
 El error indica el nombre exacto. El dueño lo añade en **Scopes** y guarda; el usuario repite
-`zm session start`. Comprueba lo concedido con `zm session status --json` y repite la lectura. Los tokens
+`zm personal session start`. Comprueba lo concedido con `zm personal session status --json` y repite la lectura. Los tokens
 emitidos no adquieren permisos automáticamente. Archivo, detalles, comprobación remota y cambios
 necesitan [permisos distintos](./zoom-app.md#add-archive-or-management-access).
 
@@ -86,11 +86,11 @@ Al informar, conserva orden, código y permiso; excluye retornos OAuth, tokens y
 
 | Síntoma | Diagnóstico y reparación | Resultado |
 |---|---|---|
-| No hay perfil o la lista está vacía (código de salida 3, «no stored meetings for the selected profile») | Elige perfil e importa/descarga; leer no registra cuentas | `zm meetings list --json` muestra sus reuniones |
+| No hay perfil o la lista está vacía (código de salida 3, «no stored meetings for the selected profile») | Elige perfil e importa/descarga; leer no registra cuentas | `zm personal meetings list --json` muestra sus reuniones |
 | No hay reuniones recientes del anfitrión | Revisa usuario, API y fechas; usa un `--since-time` anterior | Compara fechas con ocurrencias esperadas |
 | Reunión sin texto | Revisa generación/retención y permisos; texto nunca guardado o expirado no se recrea | Abre texto tras estar disponible y descargar otra vez |
 | Falta una reunión a la que asististe | Pide VTT al anfitrión o descarga con permiso e importa | Comprueba fecha, título y texto |
-| El texto llegó después | Repite `zm meetings sync --lookback-days 7` o un `--since-time` anterior | Abre el nuevo texto |
+| El texto llegó después | Repite `zm personal meetings sync --lookback-days 7` o un `--since-time` anterior | Abre el nuevo texto |
 | Fallo parcial de descarga | Corrige y repite; la ocurrencia fallida no avanza el cursor | Revisa recibo y lista |
 | Nombre/hora de archivo inválido | Usa `YYYY-MM-DD_HHMM_topic.vtt` y su zona; resuelve conflictos | Importación con fecha/título correctos |
 | Búsqueda vacía | Comprueba texto, perfil y cobertura del índice | Abre un pasaje conocido y comprueba su disponibilidad |

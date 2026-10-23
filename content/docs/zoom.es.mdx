@@ -67,7 +67,7 @@ En una serie recurrente, confirma la siguiente ocurrencia concreta: la fecha ini
 no verifica la próxima llamada. Si faltan permisos para comprobarla, marca la fecha como no verificada.
 
 Para una serie elegida, [reúne contexto con fuentes](./zm/usage.md#prepare-for-an-upcoming-meeting)
-con `zm meetings prepare <series-id> --json`. Lee la próxima fecha en Zoom y une historial guardado
+con `zm personal meetings prepare <series-id> --json`. Lee la próxima fecha en Zoom y une historial guardado
 acotado, participantes observados, proyectos confirmados, hechos aceptados y tareas con fuentes
 directas. Incluye también llamadas guardadas relacionadas mediante vínculos existentes a personas
 o proyectos confirmados, dentro de la cuenta y el periodo elegidos. Usa el ID numérico de la serie
@@ -112,24 +112,24 @@ Una repetición exacta reutiliza el resultado de la revisión y los registros ac
 
 ## Más control
 
-Lee reuniones guardadas y la agenda de Zoom. Sustituye `1` por un ID de tu propia lista,
+Lee reuniones guardadas y la agenda de Zoom. Sustituye `personal` por el nombre de tu perfil y `1` por un ID de tu propia lista,
 y la referencia ficticia del pasaje por el `ref` de una coincidencia de transcripción.
 La clave de proyecto `RES` y el ID de identidad `12` también son ficticios; elige registros existentes de Memo y los resultados de participantes.
 
 ```sh
-zm meetings list --json
-zm meetings show 1 --json
-zm meetings transcript 1 --json
-zm search meetings "launch decision" --json
-zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
-zm meetings projects scan meeting:1/2 --cues 20 --json
-zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
-zm meetings scheduled --limit 20 --json
+zm personal meetings list --json
+zm personal meetings show 1 --json
+zm personal meetings transcript 1 --json
+zm personal search meetings "launch decision" --json
+zm personal meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
+zm personal meetings projects scan meeting:1/2 --cues 20 --json
+zm personal meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
+zm personal meetings scheduled --limit 20 --json
 ```
 
 La búsqueda usa los datos disponibles en el perfil elegido. Si faltan, [descarga o importa las
 transcripciones necesarias](./zm/archive.md) antes de confiar en la respuesta.
-`zm meetings passage` muestra las líneas guardadas cercanas con referencias; no descarga datos
+`zm personal meetings passage` muestra las líneas guardadas cercanas con referencias; no descarga datos
 ausentes de Zoom.
 
 ## Guías relacionadas

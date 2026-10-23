@@ -107,7 +107,7 @@ Ejecuta los comandos de uno en uno en una terminal normal. Déjala abierta mient
 ```sh
 zm config set zoom.client_id <public-client-id>
 zm config set source api
-zm session start
+zm personal session start
 ```
 
 1. Inicia sesión en la cuenta de Zoom cuyas reuniones organizadas quieres recuperar y revisa los permisos.
@@ -119,19 +119,17 @@ zm session start
    **esa misma terminal que espera**. Pulsa Enter. No la pegues en el chat del agente ni la
    ejecutes como comando. Tras el plazo de cinco minutos, inicia un nuevo intento.
 
-Elige un **perfil**, una etiqueta local para estas reuniones guardadas, y recupera un periodo pequeño:
+La primera palabra, `personal`, es el **perfil**: este acceso y sus reuniones guardadas. Recupera un periodo pequeño:
 
 ```sh
-zm session status --json
-zm config set account.profile personal
-zm meetings sync --lookback-days 7
-zm meetings list --json
+zm personal session status --json
+zm personal meetings sync --lookback-days 7
+zm personal meetings list --json
 ```
 
 El estado debe mostrar credenciales guardadas con `state: saved`; no contacta con Zoom para
 comprobar si el acceso sigue siendo válido. Sync hace las peticiones remotas y guarda los datos
-disponibles de reuniones del anfitrión. List lee la copia local. Cambiar la etiqueta del perfil
-no cambia la cuenta aprobada. Consulta [sesiones y perfiles](./sessions.md#select-a-local-profile).
+disponibles de reuniones del anfitrión. List lee la copia local. Otro usuario de Zoom es otro perfil, con su propio acceso. Consulta [sesiones y perfiles](./sessions.md#select-a-local-profile).
 
 Si la lista está vacía, comprueba la cuenta, las fechas y [la disponibilidad de grabaciones y transcripciones](./zoom-app.md#before-your-first-zm-meetings-sync).
 Una reunión a la que asististe sin organizarla puede requerir un archivo del anfitrión. Un error
@@ -144,10 +142,9 @@ Usa un `.vtt` descargado con permiso o proporcionado por el anfitrión. Nombra e
 hora y el título; el ajuste de zona horaria determina cómo se interpreta la hora:
 
 ```sh
-zm config set account.profile personal
 zm config set files.timezone Europe/Madrid
-zm meetings import ./downloaded-transcripts
-zm meetings list --json
+zm personal meetings import ./downloaded-transcripts
+zm personal meetings list --json
 ```
 
 Usa tu carpeta y zona horaria. La importación no recorre subcarpetas ni deduce asistentes a partir
@@ -172,8 +169,8 @@ use MCP, sigue [MCP y skills](./mcp.md); sus herramientas de reuniones son de so
 Usa un ID devuelto por la lista, sustituyendo `<meeting-id>` sin los signos angulares:
 
 ```sh
-zm meetings show <meeting-id> --json
-zm meetings transcript <meeting-id> --json
+zm personal meetings show <meeting-id> --json
+zm personal meetings transcript <meeting-id> --json
 ```
 
 Debes ver la reunión guardada y las transcripciones que Zoom proporcionó o importaste. Una reunión

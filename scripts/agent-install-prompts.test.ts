@@ -20,7 +20,7 @@ describe("agent installation requests", () => {
     it.each([
       ["drive", "drive personal session start"],
       ["memo", "memo doctor"],
-      ["zm", "zm session start"],
+      ["zm", "zm personal session start"],
     ])(`${lang}: asks %s only for commands it has`, (tool, first) => {
       const prompt = wordsFor(lang).onboarding.prompt(tool, `@wirecat/${tool}-cli`)
       expect(prompt).toContain(first)

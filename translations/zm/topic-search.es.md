@@ -23,20 +23,20 @@ lo instala. Para comparar resultados, deben usar el mismo modelo/dimensiones que
 Elige un componente local ya instalado o un endpoint remoto y su dimensión:
 
 ```sh
-zm search meetings "example plan" --model e5-small --max-chunks 1000 --json
-zm search meetings "example plan" --model example-model --base-url http://127.0.0.1:8080/v1 --dims 384 --json
+zm personal search meetings "what did we decide about pricing?" --model e5-small --since-time 2026-09-01 --json
+zm personal search meetings "example plan" --model example-model --base-url http://127.0.0.1:8080/v1 --dims 384 --json
 ```
 
 Antes de leer, la búsqueda vuelve a dividir las transcripciones actuales en pasajes y genera
 vectores para los que aún no tienen uno del componente elegido. La primera búsqueda tarda más
 en un almacén grande y, con un servicio remoto, le envía esos pasajes. Continúa mediante
-`--cursor <next_cursor>`; los resultados se ordenan por página.
+`--cursor <next_cursor>`: las páginas continúan una misma clasificación.
 
 Para preparar vectores de antemano, revisa el plan y procésalos por lotes:
 
 ```sh
-zm meetings embeddings --model e5-small --json
-zm meetings embeddings --model e5-small --yes --limit 100 --json
+zm personal meetings embeddings --model e5-small --json
+zm personal meetings embeddings --model e5-small --yes --limit 100 --json
 ```
 
 El primer comando muestra el estado sin abrir el componente, descargar archivos ni crear vectores.
@@ -54,13 +54,25 @@ completa puede emitir su confirmación durante un período limitado tras la canc
 
 ## Buscar
 
-El comando genera primero los vectores guardados que faltan, calcula el vector de la consulta
-y ordena los candidatos examinados para la cuenta y el componente elegidos. Continúa mediante
-`--cursor <next_cursor>`: cada página ordena sus candidatos, sin ampliar una clasificación global.
-El informe indica la cobertura del examen; la integridad del índice y del archivo sigue siendo
-desconocida. `--max-rows` y `--max-text-bytes` limitan las lecturas durante generación y búsqueda.
-Con la opción `by_meaning` fijada por el servidor MCP, la búsqueda solo lee vectores existentes
-y no puede generarlos.
+El comando genera primero los vectores guardados que faltan y luego hace dos búsquedas sobre las mismas
+reuniones (los filtros de fecha, reunión, serie, evento, persona, proyecto y etiqueta valen para ambas) y las
+ordena juntas:
+
+- **Por palabras**, como `search meetings` sin `--model`. Una pregunta (con una palabra interrogativa al principio
+  o un `?` final) se busca por sus palabras de contenido: "what did we decide about pricing?" por «decide pricing».
+  Otro texto es el lenguaje de consulta; el texto que este rechaza se busca igualmente por significado, y
+  `missing` lo indica.
+- **Por significado**: todos los vectores de pasajes guardados del componente en esas reuniones, hasta
+  `--max-chunks` (10000 por defecto).
+
+Una línea hallada de ambas formas queda primera y se cita con su propio `ref`; `by` indica cómo se halló cada
+resultado, `score` es la similitud y `passage` da la primera y la última línea que coincidió por significado. En un
+empate, una línea que tiene las palabras queda por encima de un pasaje que solo se parece a la pregunta. `missing`
+indica cuándo `--max-chunks` detuvo el examen. La integridad del índice y del archivo sigue siendo desconocida.
+`--max-rows` y `--max-text-bytes` limitan las lecturas durante generación y búsqueda. Por MCP el mismo comando solo
+funciona con un componente instalado: `--base-url` y `meetings embeddings` no se ofrecen a un agente.
+[La medición](https://github.com/WireCatLabs/cli-testing/tree/main/performance/search/meeting-hybrid)
+compara palabras, significado y ambos con reuniones inventadas.
 
 Abre el pasaje mediante [el contexto de reunión](./search.md#read-around-a-search-hit) y lee
 las líneas cercanas: la similitud indica una candidata, no demuestra una decisión. Si no hay
