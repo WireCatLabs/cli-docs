@@ -18,9 +18,6 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 
 ## Launch blockers (P1)
 
-- **DOCS-1 · P1 · Deploys fail at the dependency audit, so no fix reaches the site.** The daily deploy of
-  2026-10-23 stopped with 15 advisories (3 critical: `next` through `fumadocs-core`, `dompurify` through
-  `posthog-js`). Start: `package.json`, Dependabot PRs #327, #338, #339, #231, #233.
 - **DOCS-2 · P1 · The Zoom pages give commands that zm 0.35+ rejects.** The site shows zm v0.31.0; npm has
   0.36.0, where the profile is the first word (`zm personal session start`) and `serve --mcp` became
   `zm <profile> mcp`. Bump `tools.json` (docsRef, `profile`), then fix the portal's own copies:

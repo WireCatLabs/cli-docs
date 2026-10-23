@@ -17,3 +17,5 @@ overrides:
   serve>compression: 1.8.2
   markdownlint-cli2>smol-toml: 1.9.0
   micromark-extension-math>katex: 0.18.2
+  # cli-core pins 2.1.0, which has advisories fixed in 2.3.0.
+  '@modelcontextprotocol/server': 2.3.1
