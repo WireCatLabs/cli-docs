@@ -158,7 +158,7 @@
     "id": "meeting-agent-access",
     "pages": ["zm/mcp.md", "zoom.mdx"],
     "families": {
-      "zm": ["serve", "skill", "search", "commands", "complete"]
+      "zm": ["mcp", "skill", "search", "commands", "complete"]
     }
   }
 ]

@@ -49,7 +49,7 @@ IA. Esta guía los explica antes de conectar o archivar.
   acceso, configuración, instalación del skill, importación, exportación, vínculos, transcripción, trabajos de
   archivo y recuperación de bloqueos, creación de vectores (`meetings embeddings`, búsqueda por significado con
   `--model`) y un servidor MCP cuyas consultas semánticas van a un `--base-url` remoto. Siguen funcionando: lecturas,
-  búsqueda de palabras (que mantiene su índice al día), `batch`, `serve --mcp` y las sincronizaciones que copian
+  búsqueda de palabras (que mantiene su índice al día), `batch`, `mcp` y las sincronizaciones que copian
   Zoom al almacén o a un archivo: `meetings sync`, `watch`, `recordings sync`, `recordings download` y
   `recordings schedule run`; una sincronización o `watch` desde una fuente de archivos lee la carpeta configurada,
   mientras que `meetings import <folder>` nombra una carpeta puntual y se rechaza. Cualquier otro comando que

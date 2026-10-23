@@ -25,7 +25,7 @@ Elige cómo conectar:
 ```sh
 zm config set zoom.client_id <public-client-id>
 zm config set source api
-zm session start
+zm personal session start
 ```
 
 Sustituye el valor sin los signos angulares. Entra como el usuario cuyas reuniones quieres, revisa
@@ -40,7 +40,7 @@ mantiene retorno y permisos; tú autorizas tu propia cuenta.
 
 Una app en desarrollo no está disponible automáticamente para usuarios de otra cuenta. Confirma
 el acceso con su dueño; puede hacer falta el administrador. Un enlace de autorización solo no
-configura `zm` ni completa su sesión: inicia `zm session start` para crear el retorno y la clave de ese
+configura `zm` ni completa su sesión: inicia `zm personal session start` para crear el retorno y la clave de ese
 intento. Si no puedes autorizar la app compartida, crea la tuya siguiendo los pasos siguientes.
 
 ## Crea tu propia app
@@ -66,7 +66,7 @@ pero esta herramienta envía la URL indicada.
 5. Abre **Scopes → Add Scopes**, busca cada nombre de la tabla, selecciona los permisos de usuario
    y guarda. Explica su uso si Zoom pide una descripción. Añade grabación o escritura solo para esas tareas.
 6. Revisa **Local Test**, instalación y aprobación requerida. **Add App Now** puede autorizar la
-   app en desarrollo, pero vuelve al terminal y ejecuta `zm session start` para establecer la sesión.
+   app en desarrollo, pero vuelve al terminal y ejecuta `zm personal session start` para establecer la sesión.
    Distribuirla a otras cuentas tiene otro proceso de revisión de Zoom.
 7. Vuelve al [primer uso](./installation.md#first-run) con el Public Client ID.
 
@@ -82,7 +82,7 @@ es una plantilla para crear la app, no un archivo de credenciales. Contiene URLs
 manifiesto, guarda el JSON e impórtalo al crear la General app.
 
 **El manifiesto no incluye permisos ni activa Public Client OAuth.** Completa los pasos 3–6 a mano
-tras importarlo. Importar correctamente no significa estar listo para `zm session start`. La creación manual
+tras importarlo. Importar correctamente no significa estar listo para `zm personal session start`. La creación manual
 es la ruta completa cuando no hay opción de importar.
 
 <a id="what-the-manifest-asks-for" />
@@ -100,22 +100,22 @@ nombrado: autoriza una llamada API, pero no garantiza que existan los datos soli
 | `meeting:read:list_past_participants` | Participantes y sesiones de entrada/salida |
 | `meeting:read:summary` | Resumen disponible de Zoom AI |
 
-Configura los cinco para `zm meetings sync`: la obtención lee esas partes aunque falte texto o resumen.
+Configura los cinco para `zm personal meetings sync`: la obtención lee esas partes aunque falte texto o resumen.
 El plan, ajustes del anfitrión y retención determinan qué existe. Para listar series con
 `meetings scheduled` basta su permiso de lista. Verificar una serie elegida mediante preparación
 también requiere `meeting:read:meeting`, indicado abajo.
 
 ## Añadir archivo o gestión
 
-El dueño añade el permiso en **Scopes** y guarda; el usuario repite `zm session start`. Los tokens ya
+El dueño añade el permiso en **Scopes** y guarda; el usuario repite `zm personal session start`. Los tokens ya
 emitidos no ganan permisos automáticamente. Comprueba lo realmente concedido con
-`zm session status --json`.
+`zm personal session status --json`.
 
 | Permiso | Función |
 |---|---|
 | `cloud_recording:read:list_user_recordings` | Descubrir grabaciones |
 | `cloud_recording:read:list_recording_files` | Inspeccionar y descargar archivos |
-| `user:read:user` | Verificar sesión remota con `zm session status --check` |
+| `user:read:user` | Verificar sesión remota con `zm personal session status --check` |
 | `meeting:read:meeting` | Ver detalles remotos y preparar una serie elegida con contexto guardado |
 | `meeting:read:invitation` | Leer invitación |
 | `meeting:write:meeting` | Crear reunión |

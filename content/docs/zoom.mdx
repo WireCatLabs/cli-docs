@@ -67,7 +67,7 @@ For a recurring series, confirm the actual next occurrence; its original start d
 verify the next call. If permissions prevent that check, mark the date as unverified.
 
 For one selected series, [prepare cited context](./zm/usage.md#prepare-for-an-upcoming-meeting)
-with `zm meetings prepare <series-id> --json`. It reads the upcoming time from Zoom and joins
+with `zm personal meetings prepare <series-id> --json`. It reads the upcoming time from Zoom and joins
 bounded stored prior calls, observed people, confirmed projects, accepted facts and directly sourced
 tasks. It also includes related stored calls through existing person links or confirmed projects,
 within the selected account and history window. Use the provider's numeric series ID, not the
@@ -111,24 +111,24 @@ An exact retry reuses its receipt and accepted records. If the transcript or pro
 
 ## More control
 
-Read saved meetings and list the upcoming Zoom schedule. Replace `1` with an ID from your list,
+Read saved meetings and list the upcoming Zoom schedule. Replace `personal` with your profile name and `1` with an ID from your list,
 and replace the fictional passage reference with a transcript search hit's `ref`.
 The project key `RES` and identity ID `12` are also fictional; select existing records from Memo and participant results.
 
 ```sh
-zm meetings list --json
-zm meetings show 1 --json
-zm meetings transcript 1 --json
-zm search meetings "launch decision" --json
-zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
-zm meetings projects scan meeting:1/2 --cues 20 --json
-zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
-zm meetings scheduled --limit 20 --json
+zm personal meetings list --json
+zm personal meetings show 1 --json
+zm personal meetings transcript 1 --json
+zm personal search meetings "launch decision" --json
+zm personal meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
+zm personal meetings projects scan meeting:1/2 --cues 20 --json
+zm personal meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
+zm personal meetings scheduled --limit 20 --json
 ```
 
 Search uses the data available in the selected profile. If it is missing, [pull or import the
 required transcripts](./zm/archive.md) before relying on the answer.
-`zm meetings passage` shows the surrounding stored lines with source references; it does not fetch
+`zm personal meetings passage` shows the surrounding stored lines with source references; it does not fetch
 missing Zoom data.
 
 ## Related guides

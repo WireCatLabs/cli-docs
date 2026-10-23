@@ -107,7 +107,7 @@ zm.cmd doctor
 ```sh
 zm config set zoom.client_id <public-client-id>
 zm config set source api
-zm session start
+zm personal session start
 ```
 
 1. Войдите в аккаунт Zoom, чьи встречи организатора хотите получить, и проверьте разрешения.
@@ -119,19 +119,17 @@ zm session start
    вставьте в **тот же ожидающий терминал** и нажмите Enter. Не отправляйте в чат агента
    и не выполняйте как команду оболочки. После пяти минут запустите новый вход.
 
-Выберите **профиль** — локальную метку для сохранённых встреч, затем получите небольшой период:
+Первое слово, `personal`, — это **профиль**: этот вход и его сохранённые встречи. Получите небольшой период:
 
 ```sh
-zm session status --json
-zm config set account.profile personal
-zm meetings sync --lookback-days 7
-zm meetings list --json
+zm personal session status --json
+zm personal meetings sync --lookback-days 7
+zm personal meetings list --json
 ```
 
 Статус должен показать сохранённый вход `state: saved`; он не обращается в Zoom для проверки
 действительности доступа. Sync делает удалённые запросы и сохраняет доступные данные встреч
-организатора. List читает локальную копию. Смена метки профиля не меняет подтверждённый аккаунт
-Zoom. См. [сеансы и профили](./sessions.md#select-a-local-profile).
+организатора. List читает локальную копию. Другой пользователь Zoom — это другой профиль со своим входом. См. [сеансы и профили](./sessions.md#select-a-local-profile).
 
 Если список пуст, проверьте аккаунт, даты и [наличие записей и расшифровок](./zoom-app.md#before-your-first-zm-meetings-sync).
 Для встречи, где вы были участником, а не организатором, может понадобиться файл от организатора.
@@ -144,10 +142,9 @@ Zoom. См. [сеансы и профили](./sessions.md#select-a-local-profil
 настройка часового пояса определяет, как интерпретировать время:
 
 ```sh
-zm config set account.profile personal
 zm config set files.timezone Europe/Madrid
-zm meetings import ./downloaded-transcripts
-zm meetings list --json
+zm personal meetings import ./downloaded-transcripts
+zm personal meetings list --json
 ```
 
 Укажите свою папку и часовой пояс. Импорт не обходит вложенные папки и не считает имена
@@ -171,8 +168,8 @@ zm skill install --for agents
 Возьмите ID из списка встреч и замените `<meeting-id>` без угловых скобок:
 
 ```sh
-zm meetings show <meeting-id> --json
-zm meetings transcript <meeting-id> --json
+zm personal meetings show <meeting-id> --json
+zm personal meetings transcript <meeting-id> --json
 ```
 
 Вы увидите сохранённую встречу и расшифровку, если Zoom её предоставил или вы импортировали файл.

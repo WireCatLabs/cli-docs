@@ -21,9 +21,9 @@ title: "Управление встречами Zoom"
 ## Прочитать будущие встречи
 
 ```sh
-zm remote-meetings list --json
-zm remote-meetings show 123456789 --json
-zm remote-meetings invitation 123456789 --json
+zm personal remote-meetings list --json
+zm personal remote-meetings show 123456789 --json
+zm personal remote-meetings invitation 123456789 --json
 ```
 
 Удалённые идентификаторы — числовые ID Zoom; команды `meetings` используют ID локальной базы.
@@ -39,13 +39,16 @@ zm remote-meetings invitation 123456789 --json
 
 ## Создать, изменить или отменить
 
-Команды сначала показывают запрос. `--yes` применяет его один раз; `--dry-run` всегда оставляет
-предпросмотр, даже вместе с `--yes`.
+Создание, изменение и отмена сначала спрашивают подтверждение: в терминале zm задаёт вопрос y/N (по умолчанию нет);
+без терминала команда останавливается с `confirmation_required` (код выхода 7), если нет `--yes`, который применяет запрос один раз.
+`--dry-run` всегда показывает предложенный запрос, не применяя его, даже вместе с `--yes`. Профиль, чьи
+[разрешения](./configuration.md#permissions) позволяют `remote-meetings`, применяет запрос без вопроса;
+`readonly` или `deny` отказывают даже с `--yes`.
 
 ```sh
-zm remote-meetings create --title "Example planning" --start-time 2026-10-20T10:00:00Z --duration-minutes 30 --json
-zm remote-meetings update 123456789 --title "Example review" --yes --json
-zm remote-meetings cancel 123456789 --dry-run --json
+zm personal remote-meetings create --title "Example planning" --start-time 2026-10-20T10:00:00Z --duration-minutes 30 --json
+zm personal remote-meetings update 123456789 --title "Example review" --yes --json
+zm personal remote-meetings cancel 123456789 --dry-run --json
 ```
 
 Поддерживаются создание мгновенных и запланированных встреч и основные изменения. Удалённые

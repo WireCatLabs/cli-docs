@@ -20,15 +20,27 @@ Una búsqueda vacía no demuestra que no hubo discusión.
 Busca en las reuniones guardadas:
 
 ```sh
-zm search meetings "example plan" --json
-zm search meetings "example plan" --limit 20 --cursor <next_cursor> --json
+zm personal search meetings "example plan" --json
+zm personal search meetings "example plan" --limit 20 --cursor <next_cursor> --json
 ```
 
 La búsqueda lee el perfil guardado, no el historial actual de Zoom. Primero [descarga o importa las reuniones que faltan](./archive.md).
 `search meetings` indexa las nuevas entradas antes de leer; no hay un paso separado de indexación.
 Todas las palabras deben coincidir por prefijos literales o formas guardadas. Por defecto se usan raíces
-inglesas, rusas y españolas; pueden cambiarse o desactivarse. La consulta usa palabras normales, sin operadores.
-`--meeting-id`, `--event-id`, `--series-id`, `--since-time` y `--until-time` limitan la cuenta elegida.
+inglesas, rusas y españolas; pueden cambiarse o desactivarse. Una palabra de cuatro letras o más también coincide con grafías que el reconocimiento de voz deformó («риелтор»
+halla «реелтора», «рилторов»); los resultados exactos van primero, y uno ampliado tiene `match: "corrected"` y la
+palabra guardada en `corrections`. La consulta es el
+[lenguaje de consulta de mensajes](https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language.md#встречи):
+
+```sh
+zm personal search meetings 'риелтор OR агент' --json             # either word
+zm personal search meetings '(ипотека OR кредит) -квартира' --json # groups and exclusions
+zm personal search meetings '"циан риелтор"~3' --json              # the words at most 3 lines apart
+zm personal search meetings 'exact:риелтор' --json                 # the typed form only, no widening
+zm personal search meetings 'from:"Alice Example" бюджет' --json   # lines Alice said
+```
+
+`from:` es quien dijo la línea; quien asistió es `--identity-id` o `--person-id`. `--meeting-id`, `--event-id`, `--series-id`, `--since-time` y `--until-time` limitan la cuenta elegida.
 El cursor opaco pertenece a la cuenta, consulta y filtros, y continúa dentro de una transcripción larga.
 JSON incluye `page.next_cursor`, `next` e información `missing` del índice. JSONL emite registros de resultados seguidos de un registro end con la página y si el resultado está completo.
 Cada coincidencia contiene `ref`, referencia de reunión `meeting`, `excerpt` y `offset_ms`.
@@ -38,19 +50,29 @@ no lo sustituye. Abre una línea con `meetings passage`.
 
 ## Buscar por significado o en un archivo
 
-`--model <model>` busca por significado en vez de palabras y genera primero los vectores que faltan;
-consulta la [búsqueda por temas](./topic-search.md). `search recordings <directory> <query>` busca transcripciones en una
+`--model <model>` ordena palabras y significado juntos, con los mismos filtros, y genera primero los vectores que
+faltan; una pregunta («что решили по цене?») se hace por sus palabras de contenido y por significado. Consulta la
+[búsqueda por temas](./topic-search.md). `search recordings <directory> <query>` busca transcripciones en una
 carpeta descargada antes de importarlas, sin base de datos, configuración ni inicio de sesión:
 
 ```sh
-zm search recordings ./zoom-archive "example plan" --limit 100 --offline --json
+zm personal search recordings ./zoom-archive "example plan" --limit 100 --offline --json
 ```
 
 Las coincidencias tienen el formato de `search all`: `ref` (`recording:<file id>/<cue position>`),
 `title`, `timestamp`, `excerpt`, `sender_name` y `offset_ms`; `account` es la carpeta del archivo.
 
+## Por qué zm personal no busca en el lado de Zoom
 
-Los filtros del almacén no se aplican al archivo ni a la búsqueda por significado.
+La API de Zoom no tiene forma de buscar texto de transcripciones. La [referencia de la API de Meetings](https://developers.zoom.us/docs/api/meetings/)
+solo entrega las transcripciones como archivos: `GET /meetings/{meetingId}/transcript`, y archivos de grabación con
+`file_type` `TRANSCRIPT` (VTT) desde `GET /meetings/{meetingId}/recordings` y `GET /archive_files`. Ninguno de sus
+endpoints admite una consulta de texto (comprobado el 2026-10-21). Buscar texto dentro de las transcripciones es una
+función solo del portal web de Zoom: "You can search for text within audio transcripts", y un administrador puede
+buscar en todas las transcripciones de la cuenta ([Using audio transcription for cloud recordings](https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0064927)).
+
+Así que zm personal descarga cada transcripción una vez y busca en su propia copia: funciona sin conexión, conserva
+las reuniones que Zoom ha borrado y permite que una palabra coincida con sus otras formas y grafías deformadas.
 
 ## Buscar por personas y proyectos
 
@@ -58,10 +80,10 @@ Combina la identidad de un participante o una persona vinculada explícitamente 
 y un intervalo de fechas:
 
 ```sh
-zm meetings people "Alice Example" --json
-zm search meetings "launch" --identity-id 12 --project RES --since-time 2026-09-12 --until-time 2026-10-12 --json
-zm search meetings "budget" --person-id 7 --topic costs --since-time 2026-09-12 --json
-zm search meetings "launch" --tag planning --limit 20 --json
+zm personal meetings people "Alice Example" --json
+zm personal search meetings "launch" --identity-id 12 --project RES --since-time 2026-09-12 --until-time 2026-10-12 --json
+zm personal search meetings "budget" --person-id 7 --topic costs --since-time 2026-09-12 --json
+zm personal search meetings "launch" --tag planning --limit 20 --json
 ```
 
 Los IDs y las etiquetas del ejemplo son ficticios: sustitúyelos por registros de tu almacén local.
@@ -74,8 +96,8 @@ reuniones y no atribuyen una intervención sin autor a una persona.
 Solo cuenta una pertenencia confirmada; una propuesta del agente o una palabra coincidente
 en la transcripción no establece esa pertenencia. `--tag` y `--topic` aceptan nombres canónicos
 o alias explícitos de etiquetas ya asociadas a la reunión; elige un solo filtro de etiqueta.
-Un nombre inexistente o ambiguo produce un error en vez de ampliar la búsqueda. Una fecha sin hora significa
-medianoche UTC; usa una hora con desplazamiento explícito para delimitar un día local.
+Un nombre inexistente o ambiguo produce un error en vez de ampliar la búsqueda. Una fecha sola cubre todo el día local
+de la zona del ordenador, y una hora sin desplazamiento se lee en esa zona; da un desplazamiento o `Z` para otra zona.
 Se mantienen las reglas de continuación y cobertura.
 
 Si una reunión aún no está vinculada a un proyecto ni etiquetada, busca palabras y revisa
@@ -93,7 +115,7 @@ Sigue el paso `item.next` o repite la misma consulta con `--cursor`. Una página
 Los IDs distintos son candidatos para revisar, nunca vínculos automáticos con personas. No se sabe si el archivo está completo.
 
 `meetings list` filtra metadatos con una consulta, por ejemplo
-`zm meetings list 'started_at:[2026-09-12 TO 2026-10-12]' --json`.
+`zm personal meetings list 'started_at:[2026-09-12 TO 2026-10-12]' --json`.
 JSON devuelve `items`, `page` y pasos `next` opcionales. JSONL emite cada reunión en un registro item,
 seguido de un registro end con la página y si el resultado está completo. Continúa con `--page`.
 La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;
@@ -101,10 +123,10 @@ esos parámetros siguen disponibles en la búsqueda de transcripciones y la impo
 `search all` usa el servicio común y busca solo reuniones por defecto:
 
 ```sh
-zm search all "example plan" --limit 100 --max-meetings 100 --json
-zm meetings evidence meeting:3/15/20/0 --cues 100 --bytes 65536 --json
-zm meetings context person:7 --meetings 10 --scan-limit 1000 --json
-zm meetings task-proposal meeting:3/15/20/0 --type promise --json
+zm personal search all "example plan" --limit 100 --max-meetings 100 --json
+zm personal meetings evidence meeting:3/15/20/0 --cues 100 --bytes 65536 --json
+zm personal meetings context person:7 --meetings 10 --scan-limit 1000 --json
+zm personal meetings task-proposal meeting:3/15/20/0 --type promise --json
 ```
 
 Para otras fuentes indica `--only messages,mail,notes,meetings`. Los mensajes pertenecen a la cuenta
@@ -127,8 +149,8 @@ el examen de revisiones, incluso vacías. Consulta los campos de continuación e
 Usa el `ref` de una coincidencia de transcripción para comprobar lo dicho justo antes y después:
 
 ```sh
-zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
-zm meetings passage meeting:3/15/20/4 --before-n 0 --after-n 0 --json
+zm personal meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
+zm personal meetings passage meeting:3/15/20/4 --before-n 0 --after-n 0 --json
 ```
 
 Sustituye la referencia ficticia por una de tus resultados. El pasaje muestra tiempos, nombres de
@@ -152,9 +174,8 @@ silenciosamente a la nueva versión. Para rechazar una línea modificada, pasa e
 anterior con `--expected-fingerprint`. JSON conserva las líneas estructuradas y sus huellas; Markdown
 cita el texto de la transcripción. `--json=items.ref,items.start_ms,items.speaker_name,items.text` conserva solo esos campos.
 
-Con `zm serve --mcp --meeting-context`, `meeting_passage` ofrece la misma lectura con `reference`,
-`before`, `after`, `bytes`, `max_read_bytes`, `expected_fingerprint` y `format` (`json`, `text`
-o `markdown`). El servidor fija la cuenta. Pide al agente que cite el contexto antes de sugerir
+Por MCP (`zm personal mcp`) un agente ejecuta el mismo `meetings passage` mediante `zm_read`, con los mismos
+argumentos; el servidor fija el perfil. Pide al agente que cite el contexto antes de sugerir
 un hecho o una tarea de seguimiento.
 
 ## Leer varias consultas o pasajes juntos
@@ -176,9 +197,9 @@ Guarda un JSON como `requests.json`, sustituyendo la referencia ficticia por una
 ```
 
 ```sh
-zm batch requests.json --json
-zm batch requests.json --format markdown
-cat requests.json | zm batch - --jsonl
+zm personal batch requests.json --json
+zm personal batch requests.json --format markdown
+cat requests.json | zm personal batch - --jsonl
 ```
 
 Cada resultado conserva `id`, `command`, `status` y `complete`. Si tiene éxito, la respuesta habitual está
@@ -219,9 +240,9 @@ La referencia principal es `meeting:<accountId>/<meetingId>`; se añaden revisi�
 pasaje para más detalle. Los vínculos de evento y persona usan la principal:
 
 ```sh
-zm meetings update meeting:1/1 --event-id 1 --expected-event-id none --json
-zm meetings update meeting:1/1 --event-id 1 --expected-event-id none --yes --json
-zm meetings link meeting:1/1 --participant-id 1 --person 1 --expected-person none --yes --json
+zm personal meetings update meeting:1/1 --event-id 1 --expected-event-id none --json
+zm personal meetings update meeting:1/1 --event-id 1 --expected-event-id none --yes --json
+zm personal meetings link meeting:1/1 --participant-id 1 --person 1 --expected-person none --yes --json
 ```
 
 Primero aparece un plan; `--yes` aplica una vez y `--dry-run` prevalece. Los valores esperados rechazan
@@ -235,8 +256,8 @@ El filtro de pertenencia confirmada puede omitir una reunión pertinente que tod
 Usa un proyecto existente del catálogo compartido para buscar su nombre canónico, clave y alias explícitos:
 
 ```sh
-zm meetings people "Alice Example" --limit 50 --json
-zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
+zm personal meetings people "Alice Example" --limit 50 --json
+zm personal meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
 ```
 
 La clave del proyecto y el ID de identidad son ficticios. Revisa las páginas de participantes antes de
@@ -264,7 +285,7 @@ fijan límites exactos. Se rechazan OR, negación y filtros de pertenencia confi
 La herramienta MCP `meeting_project_evidence` recibe `project` y, opcionalmente, `query`, `limit`,
 `cursor` y `max_read_bytes`; la cuenta queda fijada por el servidor.
 
-Para cada pasaje conservado pertinente, abre `zm meetings passage <ref> --format markdown` y revisa
+Para cada pasaje conservado pertinente, abre `zm personal meetings passage <ref> --format markdown` y revisa
 las palabras cercanas. `association: "unconfirmed-word-evidence"` significa evidencia candidata: una
 clave puede ser incidental y las referencias repetidas entre nombres son la misma evidencia. Propón
 asociaciones tras revisar el pasaje. Si aún no existe el proyecto, sigue disponible la búsqueda normal
@@ -289,7 +310,7 @@ campo `meeting` del resultado como referencia principal de la reunión. La `ref`
 de transcripción apunta a un pasaje y no se acepta aquí. Ejemplo de referencia principal ficticia:
 
 ```sh
-zm meetings projects scan meeting:1/2 --cues 20 --json
+zm personal meetings projects scan meeting:1/2 --cues 20 --json
 ```
 
 La respuesta conserva la referencia canónica del proyecto, el nombre/clave/alias coincidente y

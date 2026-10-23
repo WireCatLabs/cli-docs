@@ -53,7 +53,7 @@ Un agente no tiene terminal en la que dibujar un código QR ni desde la que abri
 
 - **Telegram y MAX:** el agente ejecuta `tg personal session start qr` o `max personal session start qr` en segundo plano, porque el comando espera tu escaneo y una herramienta de shell no muestra nada hasta que termina. Sin terminal, la herramienta imprime el código QR como texto. El agente lo pega en el chat como bloque de código, tal como se imprimió, y tú lo escaneas con la app de Telegram o MAX en el teléfono. Cuando Telegram renueva el código, el agente pega el nuevo y dice que el anterior caducó.
 - **Los códigos de MAX caducan rápido:** un código QR de MAX dura unos 2 minutos, así que el agente lo pega enseguida. Cuando caduca, el agente vuelve a ejecutar el comando para obtener uno nuevo.
-- **Zoom:** sin terminal, `zm session start` imprime `Open this URL to approve Zoom login:` y la URL. El agente te da la URL como enlace. Ábrela en un navegador de este mismo ordenador, porque Zoom responde a un receptor que está aquí.
+- **Zoom:** sin terminal, `zm personal session start` imprime `Open this URL to approve Zoom login:` y la URL. El agente te da la URL como enlace. Ábrela en un navegador de este mismo ordenador, porque Zoom responde a un receptor que está aquí.
 - **Google Drive:** `drive personal session start` siempre imprime su URL de acceso a Google y además intenta abrir un navegador. Si no se abre ninguno, el agente te da la URL impresa como enlace para abrirla en este mismo ordenador.
 
 El acceso con número de teléfono, la contraseña de verificación en dos pasos y el primer registro de tu app de Telegram siguen necesitándote en una terminal. El acceso no es una herramienta MCP: un agente que solo tiene MCP te pide que ejecutes el comando tú.

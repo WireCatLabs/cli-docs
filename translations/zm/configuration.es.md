@@ -13,21 +13,21 @@ Configura con `zm config set <key> <value>` y consulta los valores con `zm confi
 | Clave | Significado |
 |---|---|
 | `zoom.client_id` | Public Client ID de [app existente o nueva](./zoom-app.md); sin valor inicial, necesario para API |
-| `account.profile` | [Etiqueta local](./sessions.md#select-a-local-profile) de reuniones; sin valor inicial, necesaria para la base |
 | `source` | Fuente de `meetings sync` y `watch`: `api` predeterminada o `files` |
 | `files.folder` | Carpeta para obtención/observación de archivos; sin valor inicial |
 | `context.sources` | Array JSON de cuentas de mensajes/correo o carpetas de documentos elegidas para este perfil; vacío por defecto ([configuración abajo](#select-communications-for-preparation)) |
-| `files.timezone` | Zona IANA de nombres, por ejemplo `Europe/Madrid`; UTC predeterminado |
+| `files.timezone` | Zona IANA de nombres, por ejemplo `Europe/Madrid`; sin valor: la zona de este ordenador |
 
-Comprueba `zm config show` tras editar. Cambiar `account.profile` no cambia el usuario de Zoom.
-Otro ID selecciona otra entrada del almacén; autoriza esa app antes de usar API. `ZOOM_CLIENT_ID`
+Comprueba `zm config show` tras editar. El perfil no es un ajuste: es la primera palabra de cada comando
+([perfiles](./sessions.md#select-a-local-profile)). Otro ID selecciona otra entrada del almacén; autoriza esa app antes de usar API. `ZOOM_CLIENT_ID`
 no es un ajuste de la orden instalada `zm`; usa `zm config set zoom.client_id` en vez de la variable
 copiada de una sonda de desarrollo.
 
-El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone`, `account_profile` y `source`.
+El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone` y `source`, y los perfiles de este ordenador en `profiles`. Un `account_profile` dejado por
+la versión 0.34 o anterior solo indica qué perfil asume el acceso guardado entonces.
 Los archivos JSON deben usar esas claves snake_case. Los antiguos archivos camelCase se rechazan sin
-reescribirlos. Antes de actualizar, renombra `clientId` a `client_id`, `filesFolder` a `files_folder`,
-`filesTimezone` a `files_timezone` y `accountProfile` a `account_profile`. Conserva sus valores.
+reescribirlos. Antes de actualizar, renombra `clientId` a `client_id`, `filesFolder` a `files_folder`
+y `filesTimezone` a `files_timezone`. Conserva sus valores.
 El selector de comando `zoom.clientId` sigue como alias de
 `zoom.client_id`, pero no se admite como clave JSON.
 
@@ -47,6 +47,26 @@ comprobar la sesión OAuth guardada.
 
 Los directorios antiguos de macOS ya no se trasladan automáticamente; doctor muestra la ruta utilizada.
 Ajustes públicos, tokens del almacén y base de reuniones son datos separados.
+
+## Permisos
+
+Cada perfil indica qué puede hacer en `permissions`: una ruta de comando, con puntos, y un nivel.
+
+```sh
+zm personal config set permissions '{"remote-meetings": "allow", "recordings": "readonly"}'
+```
+
+| Nivel | Efecto |
+|---|---|
+| `deny` | el comando se rechaza |
+| `readonly` | solo se ejecuta si no cambia nada, como con `ZM_READ_ONLY` |
+| `ask` | un cambio en Zoom pregunta y/N en una terminal; sin terminal necesita `--yes` (si no, código 7) |
+| `allow` | se ejecuta; un cambio en Zoom se aplica sin `--yes` |
+
+Gana la clave más específica (`remote-meetings.cancel` sobre `remote-meetings`). De fábrica, `remote-meetings` es `ask`;
+una clave más amplia que fija el propietario nunca lo relaja, una clave igual de profunda sí. `--yes` solo responde a `ask`: nunca
+levanta `deny` ni `readonly`. Los ajustes, el acceso, la ayuda y el servidor MCP nunca se limitan. Una clave que no nombra ningún
+comando, o un nivel que no es uno de los cuatro, se rechaza al fijarlo. `ZM_READ_ONLY` se aplica además de cualquier nivel.
 
 ## Variables de entorno
 
@@ -74,8 +94,7 @@ cópialas de los ajustes del programa de origen o de sus referencias. El nombre 
 la identidad de la cuenta.
 
 ```sh
-zm config set account.profile research
-zm config set context.sources '[{"id":"project-notes","kind":"document","provider":"folder","account":"notes:5"}]'
+zm research config set context.sources '[{"id":"project-notes","kind":"document","provider":"folder","account":"notes:5"}]'
 zm config show
 ```
 

@@ -4,7 +4,7 @@ title: "Acceso, sesiones y perfiles"
 
 Conecta la cuenta de Zoom correcta y comprueba que la aprobación del navegador llegó a la herramienta.
 Después elige un perfil local para sus reuniones. Los permisos de la app, la sesión OAuth y el perfil
-son distintos: cambiar la etiqueta no inicia sesión como otro usuario.
+son distintos: cada perfil tiene su propio acceso, así que el perfil se elige antes de cada comando.
 
 ## Conectar la cuenta
 
@@ -13,10 +13,10 @@ terminal interactivo del ordenador que guardará la sesión:
 
 ```sh
 zm config set zoom.client_id <public-client-id>
-zm session start --browser firefox
+zm personal session start --browser firefox
 ```
 
-Si eres un agente: ejecuta `zm session start` en segundo plano (espera la aprobación hasta cinco minutos, y una
+Si eres un agente: ejecuta `zm personal session start` en segundo plano (espera la aprobación hasta cinco minutos, y una
 herramienta de shell no muestra nada hasta que el comando termina), lee la línea `Open this URL to approve Zoom login:`
 y la URL debajo, y da la URL a la persona como enlace. El navegador que la abra debe estar en este ordenador, porque el
 retorno llega a un receptor de aquí. `--quiet` conserva la URL.
@@ -34,7 +34,7 @@ receptor temporal del ordenador. Al recibirla correctamente, se cierra; la orden
 Si no aparece nada en el terminal después de aprobar:
 
 1. Mira la página de retorno del navegador. Copia los parámetros `code=…&state=…` o la URL completa.
-2. Pégalos en **el mismo terminal que sigue esperando en `zm session start`** y pulsa Enter. No inicies
+2. Pégalos en **el mismo terminal que sigue esperando en `zm personal session start`** y pulsa Enter. No inicies
    otro proceso ni pegues el valor como una orden nueva del intérprete.
 3. Si pasaron cinco minutos, repite la conexión y usa el nuevo retorno. Cada intento tiene su
    estado y clave de verificación; una respuesta antigua se rechaza.
@@ -46,7 +46,7 @@ pertenece al intento activo. La conexión termina cuando el terminal la confirma
 ## Comprobar la sesión
 
 ```sh
-zm session status --json
+zm personal session status --json
 ```
 
 Se comprueba el estado guardado sin contactar con Zoom ni renovar tokens. `state: saved` indica
@@ -54,11 +54,11 @@ credenciales guardadas, no validez remota. Los permisos devueltos muestran lo co
 comprobación remota, añade `user:read:user`, autoriza otra vez y ejecuta:
 
 ```sh
-zm session status --check --json
+zm personal session status --check --json
 ```
 
 El error de permiso ausente indica su nombre. El dueño lo añade y guarda la app; el usuario repite
-`zm session start`. Cambiar la configuración no amplía un token ya emitido.
+`zm personal session start`. Cambiar la configuración no amplía un token ya emitido.
 
 Sin terminal, el inicio de sesión imprime igualmente la URL y espera el retorno del navegador; solo la
 alternativa de pegar el retorno necesita un terminal. `--no-input` y CI rechazan el acceso con navegador.
@@ -67,18 +67,34 @@ El inicio de sesión no es una herramienta MCP.
 ## Elegir un perfil local
 
 ```sh
-zm config set account.profile personal
+zm personal meetings list
+ZM_PROFILE=personal zm meetings list
 ```
 
-Un perfil es una etiqueta de datos, no otras credenciales de Zoom. A diferencia de `tg` y `max`,
-`zm` no admite un argumento de perfil: el perfil es el ajuste `account.profile`. Acepta 1–64 letras, dígitos,
-puntos, guiones bajos o guiones, y empieza por letra o dígito. Importación y API comparten la etiqueta.
-La escritura registra el perfil; la lectura solo lo busca. Descarga o importa primero para que
-`meetings list` pueda encontrarlo.
+La primera palabra es el perfil, como en `tg` y `max`; `ZM_PROFILE` dice lo mismo para toda una sesión de
+shell. Un perfil es un acceso de Zoom y sus propias reuniones en la base. Nada elige uno por ti: sin perfil, un
+comando que usa una cuenta falla con `validation_error` y enumera los perfiles de este ordenador en
+`details.profiles`. Los nombres tienen 1–64 letras, dígitos, puntos, guiones bajos o guiones y empiezan por
+letra o dígito; una palabra de comando como `meetings` no puede ser un perfil.
 
-Para otro usuario de Zoom, elige otro perfil de datos **y** vuelve a iniciar sesión con ese usuario
-en el navegador. No mezcles usuarios en una etiqueta. La entrada del almacén se selecciona por
-directorio de configuración y Public Client ID; cambiar solo `account.profile` conserva la sesión OAuth.
+`zm <name> session start` inicia sesión en ese perfil y lo crea. En un ordenador sin ningún perfil, la primera
+importación o descarga también crea uno, así que una configuración solo con archivos no necesita acceso a Zoom.
+Junto a otros perfiles, una importación o descarga que nombra uno desconocido se rechaza antes de guardar nada
+(`zm persnal meetings import …` falla y enumera los perfiles), así que una cuenta nueva empieza con su inicio de
+sesión; `zm <name> config set permissions '{}'` también crea un perfil, para uno que solo importa archivos. Los
+comandos de lectura solo buscan el perfil: descarga o importa primero para que `meetings list` pueda encontrarlo.
+
+Para otro usuario de Zoom, crea un segundo perfil con `zm work session start` y elige a ese usuario en el
+navegador. El acceso de cada perfil es su propia entrada del llavero, `<client id>:<profile>`.
+
+`ZM_PROFILE_LOCK=personal` fija un proceso a un solo perfil: una primera palabra o un `ZM_PROFILE` que nombre
+otro se rechaza con `permission_error`. Fíjalo donde se ejecuta un agente.
+
+### Actualizar desde la versión 0.34 o anterior
+
+El ajuste antiguo `account.profile` ya no se lee para elegir perfil, y `zm config set
+account.profile` se rechaza. Su valor sigue apareciendo entre los perfiles, y el acceso guardado antes de
+actualizar pasa a ese perfil la primera vez que lo usas: `zm personal meetings sync`.
 
 `MESSAGING_STORE` selecciona la base compartida. Usa la misma ruta en Zoom, Memo y MCP para conectar
 reuniones con notas y proyectos. Importar archivos no avanza el cursor; al cambiar de fuente puede
@@ -89,12 +105,11 @@ hacer falta un `--since-time` anterior explícito.
 No hay orden de cierre de sesión. Retira la autorización desde la gestión de apps de Zoom App Marketplace.
 Para borrar el token local, abre el almacén de contraseñas del sistema y elimina la entrada cuyo servicio es
 `zoom-cli:<configuration directory>` (por ejemplo `zoom-cli:/home/you/.config/zm`; `zm doctor --json` muestra
-el directorio) y cuya cuenta es tu Public Client ID.
+el directorio) y cuya cuenta es `<Public Client ID>:<profile>`. Un acceso guardado por la versión 0.34 o anterior tiene solo el
+Public Client ID como cuenta; cuando el perfil lo ha asumido, esa entrada antigua queda sin uso y se puede borrar.
 Desinstalar `zm` no revoca permisos ni borra reuniones. Consulta [seguridad](./security.md) antes de
 compartir datos con un agente.
 
-Varios usuarios de Zoom en un mismo equipo necesitan cada uno su propio `ZM_CONFIG_DIR`: la entrada del llavero
-depende del directorio de configuración y del ID de cliente, así que los usuarios que comparten ambos comparten
-un mismo acceso.
+Varios usuarios de Zoom en un mismo equipo son varios perfiles: cada uno tiene su propia entrada del llavero y sus propias reuniones.
 
 Cuando la sesión y el perfil estén listos, [descarga o importa la primera reunión](./archive.md#pull-hosted-meetings).

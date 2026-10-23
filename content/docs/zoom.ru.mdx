@@ -67,7 +67,7 @@ description: "Находите обсуждения, связывайте их �
 по себе её не подтверждает. Если разрешений для проверки нет, отметьте дату как неподтверждённую.
 
 Для выбранной серии [соберите контекст с источниками](./zm/usage.md#prepare-for-an-upcoming-meeting)
-через `zm meetings prepare <series-id> --json`. Команда читает предстоящее время в Zoom и объединяет
+через `zm personal meetings prepare <series-id> --json`. Команда читает предстоящее время в Zoom и объединяет
 ограниченную сохранённую историю, наблюдаемых участников, подтверждённые проекты, принятые факты
 и задачи с прямыми источниками. Также включаются связанные сохранённые созвоны по существующим
 связям с людьми или подтверждённым проектам в выбранном аккаунте и временном окне. Нужен числовой
@@ -112,24 +112,24 @@ ID серии провайдера, а не внутренний ID встреч
 
 ## Больше контроля
 
-Прочитайте сохранённые встречи и расписание Zoom. Замените `1` идентификатором из своего списка,
+Прочитайте сохранённые встречи и расписание Zoom. Замените `personal` именем своего профиля, а `1` — идентификатором из своего списка,
 а вымышленную ссылку фрагмента — полем `ref` совпадения в расшифровке.
 Ключ проекта `RES` и ID идентичности `12` также вымышлены: выберите существующие записи в Memo и результатах поиска участников.
 
 ```sh
-zm meetings list --json
-zm meetings show 1 --json
-zm meetings transcript 1 --json
-zm search meetings "launch decision" --json
-zm meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
-zm meetings projects scan meeting:1/2 --cues 20 --json
-zm meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
-zm meetings scheduled --limit 20 --json
+zm personal meetings list --json
+zm personal meetings show 1 --json
+zm personal meetings transcript 1 --json
+zm personal search meetings "launch decision" --json
+zm personal meetings projects evidence RES 'identity_id:12 started_at:[2026-09-14 TO 2026-10-14]' --limit 20 --json
+zm personal meetings projects scan meeting:1/2 --cues 20 --json
+zm personal meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown
+zm personal meetings scheduled --limit 20 --json
 ```
 
 Поиск использует данные выбранного профиля. Если их нет, [загрузите или импортируйте нужные
 расшифровки](./zm/archive.md), прежде чем полагаться на ответ.
-`zm meetings passage` показывает соседние сохранённые строки со ссылками; недостающие данные
+`zm personal meetings passage` показывает соседние сохранённые строки со ссылками; недостающие данные
 Zoom эта команда не загружает.
 
 ## Другие руководства

@@ -13,21 +13,22 @@ title: "Настройки"
 | Ключ | Значение |
 |---|---|
 | `zoom.client_id` | Public Client ID [существующего или нового приложения](./zoom-app.md); изначально не задан, нужен для API |
-| `account.profile` | [Локальная метка](./sessions.md#select-a-local-profile) данных; изначально не задана, нужна для базы |
 | `source` | Источник `meetings sync` и `watch`: `api` по умолчанию или `files` |
 | `files.folder` | Папка для загрузки/наблюдения файлов; изначально не задана |
 | `context.sources` | JSON-массив явно выбранных аккаунтов сообщений, почты или папок документов для этого профиля; по умолчанию пуст ([настройка ниже](#select-communications-for-preparation)) |
-| `files.timezone` | Часовой пояс IANA имён файлов, например `Europe/Madrid`; по умолчанию UTC |
+| `files.timezone` | Часовой пояс IANA имён файлов, например `Europe/Madrid`; не задан: часовой пояс этого компьютера |
 
-После изменения проверьте `zm config show`. Смена `account.profile` не меняет пользователя Zoom.
-Другой ID клиента выбирает другую запись ключей: подтвердите приложение перед API. `ZOOM_CLIENT_ID`
+После изменения проверьте `zm config show`. Профиль не настройка: это первое слово каждой команды
+([профили](./sessions.md#select-a-local-profile)). Другой ID клиента выбирает другую запись ключей: подтвердите приложение перед API. `ZOOM_CLIENT_ID`
 не является настройкой установленной команды `zm`; используйте `zm config set zoom.client_id`,
 а не переменную из инструмента разработчика.
 
-Файл хранит эти настройки как `client_id`, `files_folder`, `files_timezone`, `account_profile` и `source`.
+Файл хранит эти настройки как `client_id`, `files_folder`, `files_timezone` и `source`, а профили этого
+компьютера — в `profiles`. Ключ `account_profile`, оставшийся от версии 0.34 или старше, лишь указывает,
+какой профиль принимает сохранённый тогда вход.
 Настройки в JSON используют snake_case. Старый файл camelCase отклоняется и не переписывается.
 Перед обновлением переименуйте `clientId` в `client_id`, `filesFolder` в `files_folder`,
-`filesTimezone` в `files_timezone`, `accountProfile` в `account_profile`. Сохраните их значения.
+и `filesTimezone` в `files_timezone`. Сохраните их значения.
 Селектор команды `zoom.clientId` остаётся псевдонимом `zoom.client_id`,
 но не поддерживается как ключ JSON.
 
@@ -47,6 +48,27 @@ title: "Настройки"
 
 Старое расположение macOS больше не переносится автоматически; doctor показывает используемый путь.
 Открытые настройки приложения, токены хранилища секретов и база встреч — разные данные.
+
+## Разрешения
+
+Каждый профиль задаёт в `permissions`, что ему можно: путь команды через точки и уровень.
+
+```sh
+zm personal config set permissions '{"remote-meetings": "allow", "recordings": "readonly"}'
+```
+
+| Уровень | Действие |
+|---|---|
+| `deny` | команда отклоняется |
+| `readonly` | запускается, только если ничего не меняет, как при `ZM_READ_ONLY` |
+| `ask` | изменение в Zoom спрашивает y/N в терминале; без терминала нужен `--yes` (иначе код выхода 7) |
+| `allow` | запускается; изменение в Zoom применяется без `--yes` |
+
+Побеждает самый точный ключ (`remote-meetings.cancel` важнее `remote-meetings`). Встроенный уровень
+`remote-meetings` — `ask`; более широкий ключ владельца его не ослабляет, ключ той же глубины ослабляет.
+`--yes` лишь отвечает на `ask`: он никогда не снимает `deny` и `readonly`. Настройки, вход, справка и
+MCP-сервер никогда не ограничиваются. Ключ, не называющий команду, или уровень не из этих четырёх
+отклоняется при установке. `ZM_READ_ONLY` действует поверх любого уровня.
 
 ## Переменные среды
 
@@ -75,8 +97,7 @@ title: "Настройки"
 на источники. Отображаемое имя не заменяет идентификатор аккаунта.
 
 ```sh
-zm config set account.profile research
-zm config set context.sources '[{"id":"project-notes","kind":"document","provider":"folder","account":"notes:5"}]'
+zm research config set context.sources '[{"id":"project-notes","kind":"document","provider":"folder","account":"notes:5"}]'
 zm config show
 ```
 

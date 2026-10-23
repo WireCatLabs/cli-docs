@@ -4,6 +4,146 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.36.0 — 22.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **Una importación o sincronización que nombra un perfil desconocido se rechaza cuando ya existen otros perfiles.**
+  Antes creaba el perfil y, en una terminal, lo avisaba; un error de escritura (`zm persnal meetings import …`)
+  guardaba las reuniones bajo un nombre nuevo. Ahora falla con `validation_error` y `details.profiles`, antes de
+  guardar nada. Un perfil nuevo empieza con `zm <name> session start`; en un ordenador sin ningún perfil, la primera
+  importación todavía crea uno.
+
+### Correcciones
+
+- **`models audio download` dice cuánto va a descargar de verdad.** Mostraba el tamaño de todo el modelo cuando solo
+  faltaba el archivo de detección de voz.
+
+## 0.35.0 — 22.10.2026
+
+### Añadido
+
+- **`zm <profile> stats meetings show|top`: quién habla y cuánto** (cli-core 0.389.0). Tiempo de palabra, líneas y
+  palabras por orador (la persona vinculada; si no, el participante; si no, el nombre de la transcripción) y reuniones
+  y tiempo de palabra por semana, en una ventana de fechas, un proyecto, un tema o un evento. Solo números; no se
+  lee texto de transcripciones.
+- **Permisos por perfil** (WC-PERM-1..3, 9, 10): `zm <profile> config set permissions '{"recordings": "readonly"}'`.
+  Una clave es una ruta de comando, con puntos; un nivel es `deny`, `readonly`, `ask` o `allow`, y gana la clave más
+  específica. `--yes` responde a `ask` y nunca levanta `deny` ni `readonly`. Los ajustes, el acceso, la ayuda y el
+  servidor MCP nunca se limitan.
+- **`meetings transcribe` acepta las grabaciones de Zoom.** Un archivo que no es ya un WAV PCM16 de 16 o 48 kHz (MP4,
+  M4A, otro audio y vídeo) lo decodifica antes el `ffmpeg` instalado en una carpeta temporal privada, bit a bit, así
+  que transcribirlo de nuevo es una repetición. zm no instala ffmpeg.
+- **`zm models audio list|download`.** Los modelos de voz que usa la transcripción, en la carpeta que comparten todas
+  las CLI de WireCat. `download` comprueba el sha256 de cada archivo, también el del modelo de detección de voz, y
+  vuelve a descargar lo que no coincide, así que repara un modelo dejado por otra versión.
+
+### Correcciones
+
+- **Un modelo de voz de otra versión ya no hace fallar la transcripción con "this is a bug".** El motor lanza un
+  número suelto cuando no puede leer un archivo; zm ahora indica que ejecutes `zm models audio download <model>`,
+  que lo repara.
+
+### Cambiado — puede romper la compatibilidad
+
+- **El perfil es la primera palabra: `zm personal meetings list`.** `ZM_PROFILE` lo nombra para una sesión de shell y
+  `ZM_PROFILE_LOCK` fija un proceso a uno solo (otro perfil nombrado → `permission_error`). El ajuste
+  `account.profile` ya no elige el perfil, y `zm config set account.profile` se rechaza. Un comando que usa una
+  cuenta y no nombra perfil falla con `validation_error` y enumera los perfiles en `details.profiles` (antes era
+  `configuration_error`, código 3). El inicio de sesión, la importación y la sincronización registran un perfil;
+  `doctor` los enumera (`profiles`, antes `data_profile`).
+- **Cada perfil tiene su propio acceso a Zoom**, en el llavero como `<client id>:<profile>`. El acceso guardado antes
+  de esta versión pasa al perfil que nombraba `account.profile`, la primera vez que se usa ese perfil.
+  `session status` nombra el `profile`; el usuario de Zoom verificado es ahora `zoom_user`.
+- **`context.sources` pertenece al perfil nombrado en el comando**: `zm research config set context.sources …`.
+- **El temporizador de una programación de grabaciones ejecuta `zm <profile> recordings schedule run`.** Un
+  temporizador instalado por una versión anterior no nombra ningún perfil; crea la programación de nuevo.
+- **Crear, modificar o cancelar una reunión de Zoom pregunta antes.** En una terminal zm pregunta y/N; sin terminal y
+  sin `--yes` el comando falla con `confirmation_required` (código 7). Antes mostraba una vista previa y salía con 0;
+  `--dry-run` sigue mostrando la vista previa. Un perfil con `"remote-meetings": "allow"` aplica sin `--yes`.
+- **`zm <profile> mcp` sustituye a `zm serve --mcp`** (WC-MCP-1..10, WC-CMD-5). Un solo servidor ofrece los comandos
+  de zm como las tres herramientas compartidas `zm_tools_search`, `zm_read`, `zm_write`, y ejecuta cada llamada como
+  la línea de comandos. Las ocho herramientas fijas y las opciones de serve (`--meeting-context`,
+  `--meeting-preparation`, `--semantic` y las demás) desaparecen; cada herramienta que añadían es un comando que el
+  servidor ofrece. Los permisos del perfil deciden qué ofrece; por MCP un cambio de nivel `ask` se ejecuta sin
+  preguntar, así que da al perfil de un agente `{"remote-meetings": "readonly"}` para que no cambie reuniones de
+  Zoom. Las entradas MCP cambian `args` a `["<profile>", "mcp"]`; `zm serve` ahora lo indica. Se eliminan las
+  exportaciones de la biblioteca `createMeetingMcpServer` y `serveMeetingMcp`.
+- **`search meetings --model` ordena palabras y significado juntos** (cli-core 0.385.0 → 0.388.0). Buscaba solo por
+  significado, ordenaba cada página por separado e ignoraba los filtros de reuniones. Ahora valen los filtros de
+  fecha, reunión, serie, evento, persona, proyecto y etiqueta, una sola clasificación recorre las páginas, una línea
+  hallada de ambas formas queda primera y se cita por su línea, y una pregunta ("what did we decide about
+  pricing?") se busca por sus palabras de contenido, mientras que la búsqueda de palabras sola rechazaba el «?» y no
+  hallaba nada sin él. La respuesta es una lista de resultados con `by`, `score` y `passage`; antes era un elemento
+  con `items`. Un cursor de una versión anterior se rechaza.
+
+## 0.34.0 — 22.10.2026
+
+### Correcciones
+
+- **Un almacén escrito por `cli-messaging` antes del cambio de nombre se rechaza de nuevo y no se toca** (cli-core
+  0.385.0). Desde cli-core 0.382.0 un archivo así se abría y fallaba con `internal_error`; ahora falla con
+  `configuration_error`.
+- **`zm search meetings` nombra la zona en que leyó una fecha y da la ventana en UTC** (cli-core 0.384.0). Con
+  `--since-time`/`--until-time`, la respuesta JSON incluye `meta.timezone` (la zona en que se leyó una fecha sin zona
+  propia) y `meta.window` (`since`/`until` en UTC).
+
+## 0.33.0 — 22.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **cli-core 0.380.0 → 0.382.0.** La copia de un archivo y la copia de la API de una misma reunión pasan a ser un
+  solo registro al importar (el mismo ID de reunión de Zoom, con inicio a menos de 15 minutos); gana el registro de la
+  API y el archivo solo completa una transcripción ausente. `from:"Name"` halla en todas las reuniones a un orador
+  conocido solo por su nombre. La búsqueda también halla palabras que el reconocimiento de voz cortó («може» por
+  «может») cuando no son palabras del diccionario. El almacén compartido pasa a la versión 28 al abrirse por primera
+  vez (estado de los chats); las herramientas más antiguas siguen abriéndolo.
+
+## 0.32.0 — 22.10.2026
+
+### Añadido
+
+- **`zm meetings import` lee las transcripciones `.txt` de zoom-searcher.** Se importan los archivos
+  `YYYY-MM-DD_HHMM_topic.txt` con cabecera: el título y el inicio de la cabecera sustituyen a los del nombre del
+  archivo, su ID de reunión de Zoom pasa a ser la clave de la serie (así la copia de la API de la misma reunión puede
+  unirse cuando cli-core las fusione) y sus oradores pasan a ser participantes solo de esa reunión. Un `.txt` y un
+  `.vtt` con el mismo nombre son una reunión; se lee el `.txt`. Un `.txt` que no se llama como una transcripción se
+  omite. El resultado de la importación nombra la zona en que se leyeron las horas de los archivos (`timezone`), y
+  `zm meetings import --help` muestra los nombres de archivo y esa zona.
+- **La búsqueda de reuniones amplía palabras deformadas y lee el lenguaje de consulta** (cli-core 0.380.0): «риелтор»
+  también halla «реелтора»; `OR`, `(groups)`, `-word`, `"phrases"`, `"a b"~N`, `exact:` y `from:"Name"`. Consulta
+  [búsqueda](./search.md).
+
+### Cambiado — puede romper la compatibilidad
+
+- **Una consulta de búsqueda es ahora sintaxis, y una fecha sola es un día local** (cli-core 0.370.0 → 0.380.0,
+  cli-base 0.49.0). `:`, `(`, `"`, `-` y `AND`/`OR`/`NOT` en `zm search meetings` significan sintaxis de consulta; una
+  consulta solo de signos de puntuación es un error. `--since-time 2026-10-01` empieza a medianoche local, no a
+  medianoche UTC; escribe una hora con `Z` para UTC. Los cursores de búsqueda de versiones anteriores se rechazan;
+  busca de nuevo.
+- **La hora del nombre de un archivo de transcripción se lee en la zona de este ordenador, salvo que se fije
+  `files.timezone`.** Se leía en UTC, así que un archivo `2026-10-21_1000_…` de Madrid se guardaba dos horas tarde. Una
+  configuración que nombra una zona la conserva; guardar otro ajuste ya no escribe `UTC` en `files_timezone`. El
+  almacenamiento sigue en UTC.
+- **Una hora de Zoom sin zona se lee en la zona de este ordenador, se marca y se nombra en un aviso.** Zoom documenta
+  esa hora como local. Se leía en la zona que tuviera el proceso, sin avisar. Ahora se lee en la zona IANA del
+  ordenador (UTC cuando el cambio de hora omite o repite esa hora), la reunión, el participante o el resumen recibe
+  `metadata.issues: ["time_without_zone"]`, y el comando avisa una vez por stderr: "N Zoom times had no zone; read in
+  <zone> and marked time_without_zone". Una hora mal formada se sigue rechazando. Las horas de las grabaciones no
+  tienen metadatos, así que solo se cuentan en el aviso.
+- **`zm recordings list` termina "hoy" en el día local, no en el día UTC.** Sin `--until-time` la lista terminaba en
+  la fecha UTC, así que en Madrid entre medianoche y las 02:00 se detenía en ayer. Ahora toma el día de hoy en la zona
+  del ordenador, o en la nueva `--timezone`, y `meta.timezone` la nombra.
+- **La salida de texto que muestra una hora termina con `times in UTC`.** JSON, JSONL y MCP no cambian: UTC, con `Z`
+  al final.
+
+### Correcciones
+
+- **La hora de una transcripción `.txt` se lee como el final de su grabación.** zoom-searcher nombraba los archivos y
+  escribía `Дата:` con la hora de «creación» del portal de Zoom, que es cuando terminó la grabación. Ahora una reunión
+  `.txt` empieza a esa hora menos el desplazamiento de su última línea y termina en ella, así que coincide con la copia
+  de la API de la misma reunión.
+
 ## 0.31.0 — 20.10.2026
 
 ### Añadido

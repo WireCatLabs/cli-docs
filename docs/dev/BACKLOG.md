@@ -18,10 +18,7 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 
 ## Launch blockers (P1)
 
-- **DOCS-2 · P1 · The Zoom pages give commands that zm 0.35+ rejects.** The site shows zm v0.31.0; npm has
-  0.36.0, where the profile is the first word (`zm personal session start`) and `serve --mcp` became
-  `zm <profile> mcp`. Bump `tools.json` (docsRef, `profile`), then fix the portal's own copies:
-  `lib/words.ts` (zm prompts, all three languages), `content/docs/agents.mdx`, `mcp.mdx`, `zoom.mdx`.
+
 - **DOCS-3 · P1 · The other tools' pages lag npm.** Pinned max v0.66.0 / tg v0.77.0; npm has
   0.69.0 / 0.81.0 (drive v0.23.0 and memo v0.89.0 are current). Work through issue #335 per tool:
   translations, `docs:contracts`, release notes.
