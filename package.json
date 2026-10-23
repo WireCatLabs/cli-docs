@@ -81,7 +81,7 @@
     "cspell": "10.3.6",
     "esbuild": "^0.28.2",
     "lefthook": "2.1.16",
-    "markdownlint-cli2": "0.24.0",
+    "markdownlint-cli2": "0.23.3",
     "postcss": "^8.5.28",
     "repomix": "1.18.1",
     "serve": "^14.2.6",
