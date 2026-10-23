@@ -32,12 +32,7 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 
 - **DOCS-6 · P2 · A roadmap page for every tool, and the global page linking them all.** drive and memo
   have none (no `docs/roadmap.md` in their repositories); a new page also needs RU/ES translations or
-  `pnpm sync` fails. The global page links only Telegram and MAX. Details: [BACKLOG-NOTES.md](BACKLOG-NOTES.md#docs-6).
-- **DOCS-7 · P2 · Explain npm's "install scripts not covered by allowScripts" warning on the shared
-  installation page.** npm 11.17 prints it on a fresh install of max, tg, memo and wa; the tool still works.
-  Only the tg page mentions it, as "npm 12 … install scripts blocked". Start: `content/docs/installation.mdx`.
+  `pnpm sync` fails. The global page links Telegram, MAX and Zoom; drive and memo wait on their repositories. Details: [BACKLOG-NOTES.md](BACKLOG-NOTES.md#docs-6).
 - **DOCS-8 · P2 · Check every command on the site against the newest npm release, not only the pinned
   one.** The zm drift (DOCS-2) passed every check, because the pages match their own pin. Add a
   profile-aware command check to the daily `docs-updates` report. Start: `scripts/docs-updates.ts`.
-- **DOCS-9 · P2 · `llms.txt` opens with "Telegram and MAX accounts, notes and files".** Name Drive, Zoom
-  (and WhatsApp, after DOCS-4). Start: `app/llms.txt/route.ts:55`, `lib/words.ts:100`.

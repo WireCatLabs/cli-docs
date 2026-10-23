@@ -96,6 +96,16 @@ After installing, check the tool's version in the **same environment your agent 
 installation puts commands on PATH, the folders the terminal searches. Reopen the terminal or
 restart an already-running agent if it cannot find the new command.
 
+<a id="npm-install-scripts" />
+
+### npm's warning about install scripts
+
+npm 11.17 and later warn after a fresh global install of `tg`, `max` or `memo`:
+`install scripts not yet covered by allowScripts`. It names the tool's own setup script and its
+database driver. With npm 11 both scripts still run and the tool works, so you can ignore the
+warning. npm 12 blocks them instead. Run the `npm install -g --allow-scripts=…` command that npm
+prints under the warning: it allows only the packages it names, once.
+
 <a id="what-the-windows-installer-changes" />
 
 ### Windows and command visibility

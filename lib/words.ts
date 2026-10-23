@@ -97,7 +97,8 @@ const languageName: Record<string, Record<string, string>> = {
 export const words: Record<string, Words> = {
   en: {
     tagline: "AI Messaging with CLI tools for agents",
-    intro: "Your Telegram and MAX accounts, from the terminal — for you, your scripts and your AI agents.",
+    intro:
+      "Your Telegram and MAX accounts, Zoom meetings, Google Drive documents and notes, from the terminal — for you, your scripts and your AI agents.",
     docs: "Documentation",
     source: "Source",
     install: "Install",
@@ -145,7 +146,8 @@ At the end, offer to install the ${tool} skill for my agent.`,
   },
   ru: {
     tagline: "AI Messaging with CLI tools for agents",
-    intro: "Ваши аккаунты Telegram и MAX в терминале — для вас, ваших скриптов и ИИ-агентов.",
+    intro:
+      "Ваши аккаунты Telegram и MAX, встречи Zoom, документы Google Drive и заметки в терминале — для вас, ваших скриптов и ИИ-агентов.",
     docs: "Документация",
     source: "Исходный код",
     install: "Установка",
@@ -194,7 +196,8 @@ At the end, offer to install the ${tool} skill for my agent.`,
   },
   es: {
     tagline: "AI Messaging with CLI tools for agents",
-    intro: "Tus cuentas de Telegram y MAX desde la terminal — para ti, tus scripts y tus agentes de IA.",
+    intro:
+      "Tus cuentas de Telegram y MAX, reuniones de Zoom, documentos de Google Drive y notas desde la terminal — para ti, tus scripts y tus agentes de IA.",
     docs: "Documentación",
     source: "Código fuente",
     install: "Instalar",
