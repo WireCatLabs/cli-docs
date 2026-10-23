@@ -18,7 +18,7 @@ export function sandboxEnv(dir: string): NodeJS.ProcessEnv {
     NO_COLOR: "1",
     PATH: process.env.PATH ?? "",
   }
-  for (const prefix of ["TG", "MAX", "DRIVE", "MEMO", "CLI_MESSAGING"])
+  for (const prefix of ["TG", "MAX", "ZM", "WA", "DRIVE", "MEMO", "CLI_MESSAGING"])
     for (const suffix of ["CONFIG_DIR", "STATE_DIR", "CACHE_DIR"])
       env[`${prefix}_${suffix}`] = join(dir, prefix, suffix)
   return env
