@@ -541,7 +541,7 @@ export function createDemoMessages(dates: ReturnType<typeof createDemoDates> = d
 export const messages = createDemoMessages()
 export const initialQuery = "Atlas AND (invoice OR budget)"
 export const demoFields = QUERY_FIELDS.filter(
-  (field) => field.support === "A1" && !["preset", "topic", "kind", "body"].includes(field.name),
+  (field) => field.support === "A1" && !["preset", "topic", "kind", "body", "source"].includes(field.name),
 )
 export const locator = (message: DemoMessage) => `msg:${message.provider}/demo/${message.chatId}/${message.id}`
 const tokens = (text: string) => normalize(text).match(/[\p{L}\p{N}]+/gu) ?? []
