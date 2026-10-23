@@ -1,9 +1,9 @@
 import { execFileSync } from "node:child_process"
 import { createHash } from "node:crypto"
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs"
-import { tmpdir } from "node:os"
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { createSandbox } from "./cli-sandbox.ts"
 import { discoveryContract } from "./discovery-contract.ts"
 import { checkoutSource, sourceInstallation } from "./source-install.ts"
 import type { Tool } from "./sync.ts"
@@ -28,21 +28,14 @@ for (const tool of tools) {
     if (!existsSync(join(packageRoot, ".git"))) checkoutSource(tool, packageRoot)
     const head = execFileSync("git", ["rev-parse", "HEAD"], { cwd: packageRoot, encoding: "utf8" }).trim()
     if (head !== tool.docsRef) throw new Error("Source discovery checkout differs from reviewed commit")
-    const buildHome = mkdtempSync(join(tmpdir(), "wirecat-doc-build-"))
+    const { dir: buildHome, env: sandboxed } = createSandbox("build")
     const userConfig = join(buildHome, "npm-user-config")
     const globalConfig = join(buildHome, "npm-global-config")
     writeFileSync(userConfig, "")
     writeFileSync(globalConfig, "")
     const buildEnv: NodeJS.ProcessEnv = {
-      HOME: buildHome,
-      XDG_CONFIG_HOME: join(buildHome, "config"),
-      XDG_STATE_HOME: join(buildHome, "state"),
-      XDG_CACHE_HOME: join(buildHome, "cache"),
-      MESSAGING_STORE: join(buildHome, "wirecat.db"),
-      WIRECAT_STATE_DIR: join(buildHome, "wirecat-state"),
+      ...sandboxed,
       NPM_CONFIG_GLOBALCONFIG: globalConfig,
-      PATH: process.env.PATH ?? "",
-      NODE_ENV: "test",
       NPM_CONFIG_USERCONFIG: userConfig,
     }
     execFileSync("pnpm", ["install", "--frozen-lockfile", "--ignore-scripts"], {
@@ -71,23 +64,7 @@ for (const tool of tools) {
   const installed = JSON.parse(readFileSync(join(packageRoot, "package.json"), "utf8"))
   if (!source && installed.version !== tool.docsRef.slice(1))
     throw new Error("Installed discovery version differs from docsRef")
-  const sandbox = mkdtempSync(join(tmpdir(), "wirecat-doc-discovery-"))
-  const env: NodeJS.ProcessEnv = {
-    HOME: sandbox,
-    MESSAGING_STORE: join(sandbox, "wirecat.db"),
-    WIRECAT_STATE_DIR: join(sandbox, "wirecat-state"),
-    XDG_STATE_HOME: join(sandbox, "state"),
-    NODE_ENV: "test",
-    PATH: process.env.PATH ?? "",
-    TMPDIR: sandbox,
-    XDG_CONFIG_HOME: join(sandbox, "config"),
-    XDG_DATA_HOME: join(sandbox, "data"),
-    XDG_CACHE_HOME: join(sandbox, "cache"),
-    NO_COLOR: "1",
-  }
-  for (const prefix of ["TG", "MAX", "DRIVE", "MEMO", "CLI_MESSAGING"])
-    for (const suffix of ["CONFIG_DIR", "STATE_DIR", "CACHE_DIR"])
-      env[`${prefix}_${suffix}`] = join(sandbox, prefix, suffix)
+  const { env } = createSandbox("discovery")
   const binary = join(packageRoot, typeof installed.bin === "string" ? installed.bin : installed.bin[tool.name])
   const raw = execFileSync(
     process.execPath,
