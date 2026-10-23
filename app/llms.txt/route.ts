@@ -52,7 +52,7 @@ export function GET() {
   const text = [
     `# ${appName}`,
     "",
-    "> Command line tools that connect an AI agent (Claude Code, Codex, Cursor, Gemini CLI) to the user's Telegram and MAX accounts, notes and files. Every link below is the page as Markdown.",
+    "> Command line tools that connect an AI agent (Claude Code, Codex, Cursor, Gemini CLI) to the user's Telegram and MAX accounts, Zoom meetings, Google Drive documents and Memo notes. Every link below is the page as Markdown.",
     "",
     `${siteUrl}/llms-full.txt is every English page in one file, without changelogs and the per-group command pages. The same pages exist in Russian and Spanish: insert the language after /llms.mdx/docs/, for example ${localized.join(" or ")}.`,
     "",

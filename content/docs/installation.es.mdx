@@ -103,6 +103,17 @@ Tras instalar, comprueba la versión de la herramienta **en el mismo entorno que
 La instalación global pone los comandos en PATH, las carpetas donde la terminal busca programas.
 Abre de nuevo la terminal o reinicia un agente que ya estuviera ejecutándose si no encuentra el comando.
 
+<a id="npm-install-scripts" />
+
+### El aviso de npm sobre scripts de instalación
+
+npm 11.17 y posteriores avisan tras la primera instalación global de `tg`, `max` o `memo`:
+`install scripts not yet covered by allowScripts`. El aviso nombra el script de configuración de la
+herramienta y su controlador de base de datos. Con npm 11 ambos scripts se ejecutan igualmente y la
+herramienta funciona, así que puedes ignorar el aviso. npm 12, en cambio, los bloquea. Ejecuta el
+comando `npm install -g --allow-scripts=…` que npm muestra bajo el aviso: permite solo los paquetes
+que nombra, una vez.
+
 <a id="what-the-windows-installer-changes" />
 
 <a id="windows-y-acceso-al-comando" />
