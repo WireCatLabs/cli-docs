@@ -16,4 +16,8 @@ patchedDependencies:
 overrides:
   serve>compression: 1.8.2
   markdownlint-cli2>smol-toml: 1.9.0
+  # The shared standard pins markdownlint-cli2 0.23.3, which pins markdown-it 15.0.1 (advisories fixed in 15.0.3).
+  markdownlint-cli2>markdown-it: 15.0.3
   micromark-extension-math>katex: 0.18.2
+  # cli-core pins 2.1.0, which has advisories fixed in 2.3.0.
+  '@modelcontextprotocol/server': 2.3.1
