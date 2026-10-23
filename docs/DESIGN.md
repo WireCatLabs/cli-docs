@@ -202,14 +202,8 @@ security), Project (changelog, roadmap).
 
 ## Later
 
-- ⚪ **IDEA-107** — `/{lang}/compare`: max and tg side by side, generated from cli-core's
-  `parity.json`, so it cannot drift from the programs.
-- ⚪ **IDEA-108** — a searchable commands reference built from `<tool> commands --json`, beside the
-  generated `commands` page.
-- ⚪ **IDEA-109** — sitemap and `robots.txt`; link preview images; Cloudflare Web Analytics (no
-  cookies); "Edit on GitHub" at the release tag instead of `main`.
-- ⚪ Outside links checked weekly with lychee.
-- ⚪ Each tool's release workflow signals this site to rebuild (the daily build covers it now).
+Open ideas for the site are in [the later backlog](dev/BACKLOG_LATER.md); this cycle's work is in
+[the backlog](dev/BACKLOG.md).
 
 The benefits section is followed by an interactive, localized time estimate. `components/time-savings.tsx` uses `lib/time-savings.ts`: messages, active chats and replies per day plus six editable timing assumptions. Monthly estimates use 22 days; negative savings are shown honestly. It makes no measured speed or accuracy claim.
 

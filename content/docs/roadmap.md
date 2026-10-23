@@ -27,12 +27,13 @@ what comes next.
 
 ## Next
 
+- **Calendars** — Google Calendar first: your events, linked to the people, meetings and chats
+  around them.
 - **More messengers and meetings** — Google Meet, Microsoft Teams and Slack, for both messages
   and meetings.
 - **Knowledge bases** — Notion.
 - **Agent platforms** — native integrations for OpenClaw and Hermes, beyond the skill both can
   [already use](./agents.mdx).
-- **An SDK for new integrations** — so you or others can connect a new source the same way.
 - **GitHub** — pull request descriptions, issues and projects.
 
 ## Later
@@ -42,8 +43,9 @@ what comes next.
   change was for.
 - **Task trackers** — Jira, Linear, Todoist and TickTick.
 
-## Messenger plans
+## Each tool's plans
 
-Missing Telegram and MAX features are listed in each tool's roadmap:
-[Telegram roadmap](./tg/roadmap.md) · [MAX roadmap](./max/roadmap.md). To suggest a source or a
+What each tool still lacks is listed in its own roadmap:
+[Telegram roadmap](./tg/roadmap.md) · [MAX roadmap](./max/roadmap.md) · [Zoom roadmap](./zm/roadmap.md).
+To suggest a source or a
 feature, open an issue in the tool's GitHub repository.

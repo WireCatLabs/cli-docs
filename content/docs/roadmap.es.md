@@ -28,13 +28,13 @@ Consulta las [funciones](./features.mdx).
 
 ## A continuación
 
+- **Calendarios**: primero Google Calendar, con tus eventos enlazados a las personas, reuniones y
+  chats relacionados.
 - **Más mensajería y reuniones**: Google Meet, Microsoft Teams y Slack, tanto mensajes como
   reuniones.
 - **Bases de conocimiento**: Notion.
 - **Plataformas de agentes**: integraciones nativas con OpenClaw y Hermes, más allá de la skill
   que [ambos ya pueden usar](./agents.mdx).
-- **Un SDK para nuevas integraciones**: para que tú u otras personas conectéis una fuente nueva
-  de la misma forma.
 - **GitHub**: descripciones de pull requests, issues y proyectos.
 
 ## Más adelante
@@ -44,8 +44,9 @@ Consulta las [funciones](./features.mdx).
   propósito de cada cambio.
 - **Gestores de tareas**: Jira, Linear, Todoist y TickTick.
 
-## Planes de cada mensajería
+## Planes de cada herramienta
 
-Lo que aún falta en Telegram y MAX está en la hoja de ruta de cada herramienta:
-[hoja de ruta de Telegram](./tg/roadmap.md) · [hoja de ruta de MAX](./max/roadmap.md). Para
+Lo que aún falta en cada herramienta está en su propia hoja de ruta:
+[hoja de ruta de Telegram](./tg/roadmap.md) · [hoja de ruta de MAX](./max/roadmap.md) ·
+[hoja de ruta de Zoom](./zm/roadmap.md). Para
 proponer una fuente o una función, abre un issue en el repositorio de GitHub de la herramienta.

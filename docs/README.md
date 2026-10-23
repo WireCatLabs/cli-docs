@@ -10,6 +10,7 @@ and sidebar rules; [DESIGN.md](DESIGN.md) covers presentation.
 
 [TOOLING.md](TOOLING.md) explains source packs, strict command/reference coverage, spelling,
 Mermaid diagrams and the isolated CodeWiki comparison. Task mappings live in `tasks.json`.
+Open work is in [the backlog](dev/BACKLOG.md).
 
 This is the maintainer index, not another public user guide. It identifies existing homes for
 reader questions so authors can improve them instead of creating overlapping pages.
