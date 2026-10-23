@@ -3,6 +3,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
+import { captureContract } from "./docs-contracts.ts"
+import { exampleFindings, type Finding, type Program, validateInvocation } from "./docs-quality.ts"
 import { syncTool, type Tool } from "./sync.ts"
 
 export type ReleaseUpdate = {
@@ -17,6 +19,7 @@ export type ReleaseUpdate = {
   pages: string[]
   changesComplete: boolean
   review: string[]
+  rejected?: Finding[]
 }
 export const stableVersion = (tag: string): number[] => {
   const match = /^v?(\d+)\.(\d+)\.(\d+)$/.exec(tag)
@@ -117,13 +120,25 @@ export async function checkToolRelease(tool: Tool, getJson: JsonRequest = reques
     ],
   }
 }
+const rejectedLimit = 50
+const rejectedReport = (update: ReleaseUpdate): string => {
+  if (!update.rejected) return ""
+  if (!update.rejected.length) return `\n\nEvery site command for ${update.tool} is valid in npm ${update.npm}.`
+  const rows = update.rejected
+    .slice(0, rejectedLimit)
+    .map(
+      (finding) => `- ${finding.file}:${finding.line} \`${finding.command.replaceAll("`", "'")}\` — ${finding.reason}`,
+    )
+  const more = update.rejected.length - rows.length
+  return `\n\nSite commands that npm ${update.npm} rejects (${update.rejected.length}):\n\n${rows.join("\n")}${more > 0 ? `\n- …and ${more} more in .docs-updates/updates.json` : ""}`
+}
 export function updateReport(updates: ReleaseUpdate[]): string {
   if (!updates.length)
     return "# Documentation release check\n\nBoth documentation versions match the latest published stable releases.\n"
   return `# Documentation releases needing review\n\nThis report does not approve translations or publish the site.\n\n${updates
     .map(
       (update) =>
-        `## ${update.tool}: ${update.current} → ${update.latest}\n\n[Release](${update.releaseUrl}) · [Source comparison](${update.compareUrl})\n\nnpm: ${update.npm}. ${update.published ? "GitHub and npm agree; source preparation is available." : "GitHub and npm differ; wait for publication before changing docsRef."}\n\nChanged documentation files:\n\n${update.pages.length ? update.pages.map((path) => `- ${path}`).join("\n") : "- No public guide content changed; check release links and fingerprints."}\n\nReview checklist:\n\n${update.review.map((item) => `- [ ] ${item}`).join("\n")}`,
+        `## ${update.tool}: ${update.current} → ${update.latest}\n\n[Release](${update.releaseUrl}) · [Source comparison](${update.compareUrl})\n\nnpm: ${update.npm}. ${update.published ? "GitHub and npm agree; source preparation is available." : "GitHub and npm differ; wait for publication before changing docsRef."}\n\nChanged documentation files:\n\n${update.pages.length ? update.pages.map((path) => `- ${path}`).join("\n") : "- No public guide content changed; check release links and fingerprints."}${rejectedReport(update)}\n\nReview checklist:\n\n${update.review.map((item) => `- [ ] ${item}`).join("\n")}`,
     )
     .join(
       "\n\n",
@@ -161,6 +176,23 @@ export async function notifyUpdates(
   })
 }
 
+type Capture = (tool: Tool & { docsRef: string }, root: string, target?: string) => Promise<Program>
+/** Validate the site's commands against the newest npm release, since the pinned contract cannot see its changes. */
+export async function newestRejections(
+  root: string,
+  tool: Tool & { docsRef: string },
+  npm: string,
+  capture: Capture = captureContract,
+): Promise<Finding[]> {
+  const newest = await capture({ ...tool, docsRef: `v${npm}` }, root, join(root, ".docs-updates/contracts"))
+  const pinnedProfile =
+    newest.profile && (await capture(tool, root, join(root, ".docs-updates/contracts-pinned"))).profile
+  const requireProfile = Boolean(newest.profile && !pinnedProfile)
+  return exampleFindings(root, tool.name, newest, (text, program, executable) =>
+    validateInvocation(text, program, executable, requireProfile),
+  ).findings.filter((finding) => finding.kind === "invalid")
+}
+
 export function prepareUpdates(root: string, tools: Tool[], updates: ReleaseUpdate[], capture = syncTool): void {
   if (updates.some((update) => !update.published))
     throw new Error("Release publication is incomplete; no version pins changed")
@@ -184,6 +216,15 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const updates = (await Promise.all(tools.map((tool) => checkToolRelease(tool)))).filter(
     (row): row is ReleaseUpdate => row !== null,
   )
+  for (const update of updates) {
+    const tool = tools.find((tool) => tool.name === update.tool)
+    if (!tool?.docsRef || !newerVersion(update.npm, tool.docsRef)) continue
+    try {
+      update.rejected = await newestRejections(root, { ...tool, docsRef: tool.docsRef }, update.npm)
+    } catch (error) {
+      update.review.unshift(`Could not check site commands against npm ${update.npm}: ${(error as Error).message}`)
+    }
+  }
   const output = join(root, ".docs-updates")
   mkdirSync(output, { recursive: true })
   writeFileSync(join(output, "updates.json"), `${JSON.stringify(updates, null, 2)}\n`)

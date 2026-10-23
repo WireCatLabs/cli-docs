@@ -5,12 +5,15 @@ import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { createSandbox } from "./cli-sandbox.ts"
 import { discoveryContract } from "./discovery-contract.ts"
+import type { Program } from "./docs-quality.ts"
 import { checkoutSource, sourceInstallation } from "./source-install.ts"
 import type { Tool } from "./sync.ts"
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..")
-const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as (Tool & { docsRef: string })[]
-for (const tool of tools) {
+export async function captureContract(
+  tool: Tool & { docsRef: string },
+  root: string,
+  target = join(root, ".docs-tooling/contracts"),
+): Promise<Program> {
   const source = sourceInstallation(tool)
   if (!source && !/^v\d+\.\d+\.\d+$/.test(tool.docsRef)) throw new Error("Discovery requires an exact reviewed release")
   const directory = join(root, ".docs-tooling/releases", `${tool.name}-${tool.docsRef}`)
@@ -72,7 +75,6 @@ for (const tool of tools) {
     { env, encoding: "utf8", timeout: 30000, maxBuffer: 15_000_000 },
   )
   const program = discoveryContract(JSON.parse(raw), tool.name)
-  const target = join(root, ".docs-tooling/contracts")
   mkdirSync(target, { recursive: true })
   writeFileSync(
     join(target, `${tool.name}.json`),
@@ -95,4 +97,11 @@ for (const tool of tools) {
   console.log(
     `Captured ${tool.name} ${source ? tool.docsRef : installed.version} command contract with network disabled`,
   )
+  return program
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const root = join(dirname(fileURLToPath(import.meta.url)), "..")
+  const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as (Tool & { docsRef: string })[]
+  for (const tool of tools) await captureContract(tool, root)
 }

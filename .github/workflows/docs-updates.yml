@@ -11,6 +11,7 @@ on:
       - authored-docs.json
       - scripts/docs-freshness.ts
       - scripts/docs-updates.ts
+      - scripts/docs-contracts.ts
       - .github/workflows/docs-updates.yml
 
 permissions:
@@ -34,6 +35,9 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # The site's commands are checked against each newer npm release, so the pages must exist.
+      - run: pnpm sync
+        continue-on-error: true
       - name: Compare published releases and maintain a review issue
         run: pnpm docs:updates --notify
         env:
