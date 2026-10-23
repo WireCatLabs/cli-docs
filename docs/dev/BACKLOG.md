@@ -33,6 +33,3 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 - **DOCS-6 · P2 · A roadmap page for every tool, and the global page linking them all.** drive and memo
   have none (no `docs/roadmap.md` in their repositories); a new page also needs RU/ES translations or
   `pnpm sync` fails. The global page links Telegram, MAX and Zoom; drive and memo wait on their repositories. Details: [BACKLOG-NOTES.md](BACKLOG-NOTES.md#docs-6).
-- **DOCS-8 · P2 · Check every command on the site against the newest npm release, not only the pinned
-  one.** The zm drift (DOCS-2) passed every check, because the pages match their own pin. Add a
-  profile-aware command check to the daily `docs-updates` report. Start: `scripts/docs-updates.ts`.

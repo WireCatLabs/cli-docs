@@ -7,7 +7,7 @@ import { parse, quote } from "shell-quote"
 import { demoScenarioIds } from "../lib/demo-scenarios.ts"
 import { readerGuideMarkdown } from "../lib/reader-guides.ts"
 
-export type Program = { cli: string; commands: CommandInfo[]; globalOptions: OptionInfo[] }
+export type Program = { cli: string; commands: CommandInfo[]; globalOptions: OptionInfo[]; profile?: boolean }
 export type Example = { text: string; line: number; executable: boolean }
 export type Finding = {
   file: string
@@ -82,6 +82,7 @@ export function validateInvocation(
   text: string,
   program: Program,
   executable: boolean,
+  requireProfile = false,
 ): { reason: string; kind: Finding["kind"] } | null {
   const syntaxText = text.replace(/\\([[\]])/g, "$1")
   if (/\[(?:options|profile|профиль|perfil)\]|<command>|<resource>|<verb>|\.\.\.|…/.test(syntaxText))
@@ -154,6 +155,11 @@ export function validateInvocation(
   if (!executable && withoutGlobals.slice(0, 2).join(" ") === "on PATH") return null
   if (!roots.has(withoutGlobals[0]) && withoutGlobals[1] === "PLACEHOLDER_command")
     return { kind: "syntax", reason: "Command syntax illustration" }
+  if (requireProfile && executable && roots.has(withoutGlobals[0]))
+    return {
+      kind: "invalid",
+      reason: `Needs a profile first (${program.cli} <profile> ${withoutGlobals[0]} …) unless it touches no account`,
+    }
   if (!roots.has(withoutGlobals[0]) && roots.has(withoutGlobals[1])) withoutGlobals.shift()
   if (!executable && retiredCommands[program.cli]?.includes(withoutGlobals[0]))
     return { kind: "syntax", reason: "Retired command named in an upgrade note" }
@@ -241,6 +247,76 @@ const filesIn = (folder: string): string[] =>
         ? [join(folder, entry.name)]
         : [],
   )
+export function exampleFindings(
+  root: string,
+  cli: string,
+  program: Program,
+  check: (
+    text: string,
+    program: Program,
+    executable: boolean,
+  ) => ReturnType<typeof validateInvocation> = validateInvocation,
+): { checked: number; findings: Finding[] } {
+  const findings: Finding[] = []
+  let checked = 0
+  for (const file of filesIn(join(root, "content/docs"))) {
+    if (
+      file.includes(`/content/docs/${cli === "tg" ? "max" : "tg"}/`) ||
+      /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap)(?:\.[a-z]{2})?\.md$/.test(file)
+    )
+      continue
+    const readerPage = /\/(tg|max)\/(usage|rankings|bot|groups)(?:\.(ru|es))?\.md$/.exec(file)
+    const presentation = readerPage ? readerGuideMarkdown([readerPage[1], readerPage[2]], readerPage[3] ?? "en") : ""
+    for (const example of examples(`${readFileSync(file, "utf8")}\n${presentation}`)) {
+      for (const segment of commandSegments(example.text)) {
+        if (!new RegExp(`\\b${cli}\\b`).test(segment)) continue
+        checked++
+        const finding = check(segment, program, example.executable)
+        if (finding && new RegExp(`\\b${cli}\\b`).test(example.text))
+          findings.push({
+            file: file.slice(root.length + 1),
+            line: example.line,
+            command: example.text.trim(),
+            ...finding,
+          })
+      }
+    }
+  }
+  for (const lang of ["en", "ru", "es"]) {
+    const file = `lib/landing/${lang}.json`
+    const source = readFileSync(join(root, file), "utf8")
+    const data = JSON.parse(source) as {
+      sessions: { id: string; steps: { tool: boolean; html: string }[] }[]
+      maxSessions: { id: string; steps: { tool: boolean; html: string }[] }[]
+    }
+    for (const session of [...data.sessions, ...data.maxSessions].filter((s) =>
+      demoScenarioIds.some((id) => id === s.id),
+    )) {
+      for (const step of session.steps.filter((step) => step.tool)) {
+        const encoded = /<code>([\s\S]*?)<\/code>/.exec(step.html)?.[1]
+        if (!encoded) throw new Error(`Missing command markup in ${file}: ${session.id}`)
+        const command = encoded
+          .replace(/<[^>]*>/g, "")
+          .replaceAll("&quot;", '"')
+          .replaceAll("&amp;", "&")
+          .replaceAll("&lt;", "<")
+          .replaceAll("&gt;", ">")
+        if (!command.startsWith(`${cli} `)) continue
+        checked++
+        const finding = check(command, program, true)
+        if (finding)
+          findings.push({
+            file,
+            line: source.slice(0, source.indexOf(JSON.stringify(step.html))).split("\n").length,
+            command,
+            ...finding,
+          })
+      }
+    }
+  }
+  return { checked, findings }
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = join(dirname(fileURLToPath(import.meta.url)), "..")
   const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as { name: string; docsRef: string }[]
@@ -260,61 +336,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         contract.program,
       ),
     })
-    for (const file of filesIn(join(root, "content/docs"))) {
-      if (
-        file.includes(`/content/docs/${tool.name === "tg" ? "max" : "tg"}/`) ||
-        /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap)(?:\.[a-z]{2})?\.md$/.test(file)
-      )
-        continue
-      const readerPage = /\/(tg|max)\/(usage|rankings|bot|groups)(?:\.(ru|es))?\.md$/.exec(file)
-      const presentation = readerPage ? readerGuideMarkdown([readerPage[1], readerPage[2]], readerPage[3] ?? "en") : ""
-      for (const example of examples(`${readFileSync(file, "utf8")}\n${presentation}`)) {
-        for (const segment of commandSegments(example.text)) {
-          if (!new RegExp(`\\b${tool.name}\\b`).test(segment)) continue
-          checkedExamples++
-          const finding = validateInvocation(segment, contract.program, example.executable)
-          if (finding && new RegExp(`\\b${tool.name}\\b`).test(example.text))
-            findings.push({
-              file: file.slice(root.length + 1),
-              line: example.line,
-              command: example.text.trim(),
-              ...finding,
-            })
-        }
-      }
-    }
-    for (const lang of ["en", "ru", "es"]) {
-      const file = `lib/landing/${lang}.json`
-      const source = readFileSync(join(root, file), "utf8")
-      const data = JSON.parse(source) as {
-        sessions: { id: string; steps: { tool: boolean; html: string }[] }[]
-        maxSessions: { id: string; steps: { tool: boolean; html: string }[] }[]
-      }
-      for (const session of [...data.sessions, ...data.maxSessions].filter((s) =>
-        demoScenarioIds.some((id) => id === s.id),
-      )) {
-        for (const step of session.steps.filter((step) => step.tool)) {
-          const encoded = /<code>([\s\S]*?)<\/code>/.exec(step.html)?.[1]
-          if (!encoded) throw new Error(`Missing command markup in ${file}: ${session.id}`)
-          const command = encoded
-            .replace(/<[^>]*>/g, "")
-            .replaceAll("&quot;", '"')
-            .replaceAll("&amp;", "&")
-            .replaceAll("&lt;", "<")
-            .replaceAll("&gt;", ">")
-          if (!command.startsWith(`${tool.name} `)) continue
-          checkedExamples++
-          const finding = validateInvocation(command, contract.program, true)
-          if (finding)
-            findings.push({
-              file,
-              line: source.slice(0, source.indexOf(JSON.stringify(step.html))).split("\n").length,
-              command,
-              ...finding,
-            })
-        }
-      }
-    }
+    const result = exampleFindings(root, tool.name, contract.program)
+    checkedExamples += result.checked
+    findings.push(...result.findings)
   }
   const tasks = JSON.parse(readFileSync(join(root, "docs/tasks.json"), "utf8")) as {
     id: string

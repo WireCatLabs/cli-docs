@@ -1,10 +1,13 @@
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
+import type { CommandInfo } from "@wirecat/cli-base/commands"
 import { describe, expect, it, vi } from "vitest"
+import type { Program } from "./docs-quality.ts"
 import {
   checkToolRelease,
   newerVersion,
+  newestRejections,
   notifyUpdates,
   prepareUpdates,
   publishedTogether,
@@ -158,5 +161,74 @@ describe("source preparation keeps review gates intact", () => {
     expect(() => prepareUpdates("/unused", [tool], [{ ...fixture, published: false }], capture)).toThrow("publication")
     expect(() => prepareUpdates("/unused", [tool], [{ ...fixture, current: "v0.23.0" }], capture)).toThrow("stale")
     expect(capture).not.toHaveBeenCalled()
+  })
+})
+
+describe("site commands against the newest npm release", () => {
+  const command = (path: string[], commands: CommandInfo[] = []): CommandInfo => ({
+    path,
+    name: path.at(-1) ?? "",
+    description: "",
+    usage: "",
+    origin: "handwritten",
+    arguments: [],
+    options: [],
+    commands,
+  })
+  const pinned: Program = {
+    cli: "zm",
+    globalOptions: [],
+    commands: [command(["meetings"], [command(["meetings", "list"])]), command(["serve"])],
+  }
+  const newest: Program = { ...pinned, commands: [pinned.commands[0]], profile: true }
+  const zm = { ...tool, name: "zm", docsRef: "v0.31.0" }
+  const site = (pages: string) => {
+    const root = mkdtempSync(join(tmpdir(), "wirecat-newest-"))
+    mkdirSync(join(root, "content/docs/zm"), { recursive: true })
+    mkdirSync(join(root, "lib/landing"), { recursive: true })
+    writeFileSync(join(root, "content/docs/zm/guide.md"), pages)
+    for (const lang of ["en", "ru", "es"])
+      writeFileSync(join(root, `lib/landing/${lang}.json`), JSON.stringify({ sessions: [], maxSessions: [] }))
+    return root
+  }
+
+  it("lists removed commands and a newly required profile with their page and line", async () => {
+    const root = site("# Zoom\n\n```sh\nzm meetings list\nzm personal meetings list\nzm serve\n```\n")
+    try {
+      const capture = vi.fn(async (target: { docsRef: string }) => (target.docsRef === "v0.35.0" ? newest : pinned))
+      const rejected = await newestRejections(root, zm, "0.35.0", capture)
+      expect(rejected.map(({ file, line, command }) => [file, line, command])).toEqual([
+        ["content/docs/zm/guide.md", 4, "zm meetings list"],
+        ["content/docs/zm/guide.md", 6, "zm serve"],
+      ])
+      expect(rejected[0].reason).toContain("profile")
+      expect(capture).toHaveBeenCalledTimes(2)
+    } finally {
+      rmSync(root, { recursive: true, force: true })
+    }
+  })
+  it("does not ask for a profile the pinned release already required", async () => {
+    const root = site("```sh\nzm meetings list\n```\n")
+    try {
+      const capture = vi.fn(async () => newest)
+      expect(await newestRejections(root, zm, "0.35.0", capture)).toEqual([])
+    } finally {
+      rmSync(root, { recursive: true, force: true })
+    }
+  })
+  it("reports rejections in the review issue", () => {
+    const rejected = [
+      {
+        file: "content/docs/zm/guide.md",
+        line: 4,
+        command: "zm serve",
+        reason: "Unknown command: serve",
+        kind: "invalid" as const,
+      },
+    ]
+    expect(updateReport([{ ...fixture, rejected }])).toContain(
+      "- content/docs/zm/guide.md:4 `zm serve` — Unknown command: serve",
+    )
+    expect(updateReport([{ ...fixture, rejected: [] }])).toContain("Every site command for tg is valid in npm 0.25.0")
   })
 })

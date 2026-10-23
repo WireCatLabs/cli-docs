@@ -17,9 +17,15 @@ export function discoveryContract(value: unknown, executable: string): Program {
   const options = raw.global_options ?? raw.globalOptions ?? raw.options
   if ((raw.cli !== undefined && raw.cli !== executable) || !Array.isArray(raw.commands) || !Array.isArray(options))
     throw new Error("Invalid discovery contract")
+  const commands = (raw.commands as CommandInfo[]).map(snakeCommand)
+  // The contract has no profile field; cli-core states the rule in the root help, drive in each usage line.
+  const profile =
+    /first word is the profile/i.test(String(raw.description ?? "")) ||
+    commands.some((command) => command.usage.includes("<profile>"))
   return {
     cli: executable,
-    commands: (raw.commands as CommandInfo[]).map(snakeCommand),
+    commands,
     globalOptions: (options as OptionInfo[]).map(snakeOption),
+    ...(profile ? { profile } : {}),
   }
 }

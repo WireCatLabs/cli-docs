@@ -28,3 +28,14 @@ it("refuses a different executable or missing command/options data", () => {
   for (const raw of [null, {}, { cli: "max", commands: [], options: [] }, { commands: [] }])
     expect(() => discoveryContract(raw, "zm")).toThrow("Invalid discovery contract")
 })
+it("marks a release whose first word is the profile", () => {
+  const usage = (text: string) => ({ path: ["chats"], usage: text, options: [], commands: [] })
+  const described = {
+    description: "The first word is the profile whenever it is not a command",
+    commands: [],
+    options: [],
+  }
+  expect(discoveryContract(described, "zm").profile).toBe(true)
+  expect(discoveryContract({ commands: [usage("drive <profile> folders")], options: [] }, "drive").profile).toBe(true)
+  expect(discoveryContract({ commands: [usage("tg chats")], options: [] }, "tg")).not.toHaveProperty("profile")
+})
