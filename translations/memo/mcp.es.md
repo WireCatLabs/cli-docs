@@ -131,8 +131,15 @@ de la herramienta de reuniones; la actualización de correo y documentos descrit
 El correo y los documentos nuevos se indexan antes de buscar; `catch_up: false` lee el índice como está.
 Cada resultado de mensaje contiene `around`: `before_n` y `after_n` mensajes vecinos del chat (2 por defecto),
 como contexto, nunca como resultados adicionales. `mentions` enumera otros proyectos, etiquetas y temas
-que los textos mencionan, con referencias; un nombre no establece pertenencia. Un elemento encontrado solo por el nombre
-de un contacto lleva `context: "person-only"`. Las fuentes que fallaron o no se leyeron se listan, y `completeness`
+que los textos mencionan, con referencias; un nombre no establece pertenencia. También se lee cada mensaje de un chat
+confirmado como del proyecto (`memo relationships add
+chat:<provider>/<account>/<chat> project:<id>`) cuando `source`
+incluye su cuenta: esos elementos tienen `context: "linked-chat"` y no nombran nada, su línea tiene `query: null` y
+`chat`, y un chat vinculado fuera de `source` aparece en `unread_sources` y nunca se lee. Un elemento encontrado solo
+por el nombre de un contacto lleva `context: "person-only"`. Un contacto `person:<id>` lee lo que escribieron las
+identidades guardadas de esa persona en `source` (línea `kinds: ["sender"]`, `query: null`, `senders`; elementos con
+`context: "sender"`, que pueden no nombrar nada) y busca solo los alias que el propietario les dio, no su nombre
+visible en el mensajero. Las fuentes que fallaron o no se leyeron se listan, y `completeness`
 sigue en `unknown`. Si devuelve un `checkpoint`, vuelve a llamar con los mismos argumentos y `cursor` igual a ese valor.
 No crea hechos, tareas ni vínculos con proyectos; la actualización del índice descrita arriba puede modificar los índices de búsqueda locales.
 

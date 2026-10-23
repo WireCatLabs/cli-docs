@@ -145,7 +145,13 @@ no solo una fecha. La salida de texto imprime el límite exacto. Mantén `--befo
 cambios al usar `--cursor`. Una ventana fija no congela el contenido de las fuentes, los alias registrados ni la
 selección de cuentas: importaciones, ediciones o eliminaciones posteriores aún pueden cambiar la evidencia.
 
-Cada nombre o alias es una búsqueda separada de palabras literales; los resultados se unen.
+Cada nombre o alias es una búsqueda separada: todas sus palabras deben aparecer en un mismo texto, en cualquier orden,
+como palabras completas; los resultados se unen. También se lee cada mensaje de un chat confirmado como del proyecto
+cuando `--source` incluye su cuenta. Esos elementos llevan la etiqueta `linked-chat`: no nombran nada, pertenecen al
+chat. Un chat vinculado fuera de `--source` aparece como no leído. `--contact person:<id>` lee cada mensaje y correo
+que escribieron las identidades guardadas de esa persona en `--source`, con la etiqueta `sender` (se encuentra por
+quién lo escribió, no por palabras), y busca los alias que les diste; su nombre visible en el mensajero no se busca,
+porque los textos rara vez lo escriben. Un `--contact "<name>"` literal se busca como palabras.
 Un resultado de reunión conserva la referencia exacta del fragmento y usa la fecha de inicio:
 una reunión antigua importada hoy sigue siendo antigua. Lee el fragmento y sus vecinos con
 `memo meetings passage` antes de sacar conclusiones. La recopilación no crea vínculos al proyecto,

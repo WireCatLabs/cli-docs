@@ -112,6 +112,15 @@ memo relationships list 'about:"project:1"'
 memo relationships remove 4
 ```
 
+Un chat también puede ser de un proyecto, así `memo projects evidence` lo lee entero, no solo los mensajes que nombran
+el proyecto. La referencia nombra la cuenta del chat, así que no se adivina ninguna cuenta:
+
+```sh
+memo relationships add chat:telegram/1/123 project:1
+```
+
+Para un chat solo se permite `member-of` un proyecto.
+
 Los vínculos son afirmaciones tuyas. No unen dos cuentas en una persona. Uno añadido desde el terminal de un agente queda sin confirmar, con el agente en `provenance` (`agent:claude-code`), hasta `memo relationships confirm`; `--as-owner` lo atribuye a ti al instante.
 
 Memo puede sugerir relaciones a partir del correo: personas que te escriben desde el mismo dominio de
