@@ -321,12 +321,14 @@ bun add -g @wirecat/drive-cli
 
 ## Обновление
 
-Чтобы обновить установленный инструмент:
+Чтобы обновить установленный инструмент тем менеджером пакетов, которым он установлен:
 
 ```sh
-npm install -g @wirecat/drive-cli
-drive --version
+drive upgrade --check   # only says whether a newer version exists
+drive upgrade
 ```
+
+`drive upgrade` сам запускает `npm`, `pnpm` или `bun`; из исходного каталога или через `npx` он подскажет, что выполнить.
 
 ## Удаление
 

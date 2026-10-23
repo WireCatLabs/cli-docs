@@ -319,12 +319,14 @@ es la fuente de estas instrucciones.
 
 ## Actualizar
 
-Para actualizar una instalación existente:
+Para actualizar una instalación existente con el gestor de paquetes que la instaló:
 
 ```sh
-npm install -g @wirecat/drive-cli
-drive --version
+drive upgrade --check   # only says whether a newer version exists
+drive upgrade
 ```
+
+`drive upgrade` ejecuta `npm`, `pnpm` o `bun` por ti; desde una copia del código fuente o con `npx` indica qué ejecutar.
 
 ## Desinstalar
 

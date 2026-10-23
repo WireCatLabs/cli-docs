@@ -5,7 +5,7 @@ title: "Команды Drive"
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
 
 
-Здесь доступны все команды и параметры. Команды для аккаунта требуют явный профиль: `drive personal documents show DOC_ID` или `drive --profile personal documents show DOC_ID`. Справка, сценарии, навык для агента, загрузка моделей, дерево команд, методы API, схемы и дополнение оболочки не выбирают аккаунт. См. [сценарии](./recipes.md) и [импорт и хранение](./usage.md). Описания операций сохраняют язык справки инструмента.
+Здесь доступны все команды и параметры. Команды для аккаунта требуют явный профиль: первое слово, как в `drive personal documents show DOC_ID`, или `DRIVE_PROFILE`; параметра `--profile` нет. Справка, сценарии, навык для агента, загрузка моделей, дерево команд, методы API, схемы, дополнение оболочки, `doctor` и `upgrade` не выбирают аккаунт. См. [сценарии](./recipes.md) и [импорт и хранение](./usage.md). Описания операций сохраняют язык справки инструмента.
 
 ## Глобальные параметры
 
@@ -14,7 +14,6 @@ title: "Команды Drive"
 | Option | What it does |
 |---|---|
 | `-V, --version` | output the version number. |
-| `--profile <name>` | explicit Google account profile (alternative to the first word). |
 | `--json` | print machine-readable JSON; --json=id,name keeps only those fields. |
 | `--jsonl` | print machine-readable JSON lines. |
 | `--quiet` | suppress optional diagnostics. |
@@ -1087,7 +1086,7 @@ drive api list [query]
 
 **Returns:** list the Google API methods drive can call
 
-**Example:** `drive api list`, `drive api list service:docs`
+**Example:** `drive personal api list`, `drive personal api list service:docs`
 
 ### `drive api show`
 
@@ -1103,7 +1102,7 @@ drive api show <method>
 
 **Returns:** show one method's request schema and contract, without calling Google
 
-**Example:** `drive api show docs.documents.batchUpdate --json`
+**Example:** `drive personal api show docs.documents.batchUpdate --json`
 
 ### `drive api call`
 
@@ -1154,7 +1153,7 @@ drive <profile> api docs-documents-batch-update [options]
 
 **Returns:** Applies one or more updates to the document. Each request is validated before being…
 
-**Example:** `drive api docs-documents-batch-update --document-id <value>`
+**Example:** `drive personal api docs-documents-batch-update --document-id <value>`
 
 ### `drive api docs-documents-create`
 
@@ -1179,7 +1178,7 @@ drive <profile> api docs-documents-create [options]
 
 **Returns:** Creates a blank document using the title given in the request. Other fields in the…
 
-**Example:** `drive api docs-documents-create`
+**Example:** `drive personal api docs-documents-create`
 
 ### `drive api docs-documents-get`
 
@@ -1204,7 +1203,7 @@ drive <profile> api docs-documents-get [options]
 
 **Returns:** Gets the latest version of the specified document. — read (GET v1/documents/{documentId})
 
-**Example:** `drive api docs-documents-get --document-id <value>`
+**Example:** `drive personal api docs-documents-get --document-id <value>`
 
 ### `drive api drive-about-get`
 
@@ -1225,7 +1224,7 @@ drive <profile> api drive-about-get [options]
 
 **Returns:** Gets information about the user, the user's Drive, and system capabilities. For more…
 
-**Example:** `drive api drive-about-get`
+**Example:** `drive personal api drive-about-get`
 
 ### `drive api drive-accessproposals-get`
 
@@ -1248,7 +1247,7 @@ drive <profile> api drive-accessproposals-get [options]
 
 **Returns:** Retrieves an access proposal by ID. For more information, see [Manage pending access…
 
-**Example:** `drive api drive-accessproposals-get --proposal-id <value> --file-id <value>`
+**Example:** `drive personal api drive-accessproposals-get --proposal-id <value> --file-id <value>`
 
 ### `drive api drive-accessproposals-list`
 
@@ -1272,7 +1271,7 @@ drive <profile> api drive-accessproposals-list [options]
 
 **Returns:** List the access proposals on a file. For more information, see [Manage pending access…
 
-**Example:** `drive api drive-accessproposals-list --file-id <value>`
+**Example:** `drive personal api drive-accessproposals-list --file-id <value>`
 
 ### `drive api drive-accessproposals-resolve`
 
@@ -1299,7 +1298,7 @@ drive <profile> api drive-accessproposals-resolve [options]
 
 **Returns:** Approves or denies an access proposal. For more information, see [Manage pending access…
 
-**Example:** `drive api drive-accessproposals-resolve --file-id <value> --proposal-id <value>`
+**Example:** `drive personal api drive-accessproposals-resolve --file-id <value> --proposal-id <value>`
 
 ### `drive api drive-approvals-approve`
 
@@ -1326,7 +1325,7 @@ drive <profile> api drive-approvals-approve [options]
 
 **Returns:** Approves an approval. For more information, see [Manage…
 
-**Example:** `drive api drive-approvals-approve --file-id <value> --approval-id <value>`
+**Example:** `drive personal api drive-approvals-approve --file-id <value> --approval-id <value>`
 
 ### `drive api drive-approvals-cancel`
 
@@ -1353,7 +1352,7 @@ drive <profile> api drive-approvals-cancel [options]
 
 **Returns:** Cancels an approval. For more information, see [Manage…
 
-**Example:** `drive api drive-approvals-cancel --file-id <value> --approval-id <value>`
+**Example:** `drive personal api drive-approvals-cancel --file-id <value> --approval-id <value>`
 
 ### `drive api drive-approvals-comment`
 
@@ -1380,7 +1379,7 @@ drive <profile> api drive-approvals-comment [options]
 
 **Returns:** Comments on an approval. For more information, see [Manage…
 
-**Example:** `drive api drive-approvals-comment --file-id <value> --approval-id <value>`
+**Example:** `drive personal api drive-approvals-comment --file-id <value> --approval-id <value>`
 
 ### `drive api drive-approvals-decline`
 
@@ -1407,7 +1406,7 @@ drive <profile> api drive-approvals-decline [options]
 
 **Returns:** Declines an approval. For more information, see [Manage…
 
-**Example:** `drive api drive-approvals-decline --file-id <value> --approval-id <value>`
+**Example:** `drive personal api drive-approvals-decline --file-id <value> --approval-id <value>`
 
 ### `drive api drive-approvals-get`
 
@@ -1430,7 +1429,7 @@ drive <profile> api drive-approvals-get [options]
 
 **Returns:** Gets an approval by ID. For more information, see [Manage…
 
-**Example:** `drive api drive-approvals-get --file-id <value> --approval-id <value>`
+**Example:** `drive personal api drive-approvals-get --file-id <value> --approval-id <value>`
 
 ### `drive api drive-approvals-list`
 
@@ -1454,7 +1453,7 @@ drive <profile> api drive-approvals-list [options]
 
 **Returns:** Lists the approvals on a file. For more information, see [Manage…
 
-**Example:** `drive api drive-approvals-list --file-id <value>`
+**Example:** `drive personal api drive-approvals-list --file-id <value>`
 
 ### `drive api drive-approvals-reassign`
 
@@ -1481,7 +1480,7 @@ drive <profile> api drive-approvals-reassign [options]
 
 **Returns:** Reassigns the reviewers on an approval. For more information, see [Manage…
 
-**Example:** `drive api drive-approvals-reassign --approval-id <value> --file-id <value>`
+**Example:** `drive personal api drive-approvals-reassign --approval-id <value> --file-id <value>`
 
 ### `drive api drive-approvals-start`
 
@@ -1507,7 +1506,7 @@ drive <profile> api drive-approvals-start [options]
 
 **Returns:** Starts an approval on a file. For more information, see [Manage…
 
-**Example:** `drive api drive-approvals-start --file-id <value>`
+**Example:** `drive personal api drive-approvals-start --file-id <value>`
 
 ### `drive api drive-apps-get`
 
@@ -1529,7 +1528,7 @@ drive <profile> api drive-apps-get [options]
 
 **Returns:** Gets a specific app. For more information, see [Return user…
 
-**Example:** `drive api drive-apps-get --app-id <value>`
+**Example:** `drive personal api drive-apps-get --app-id <value>`
 
 ### `drive api drive-apps-list`
 
@@ -1553,7 +1552,7 @@ drive <profile> api drive-apps-list [options]
 
 **Returns:** Lists a user's installed apps. For more information, see [Return user…
 
-**Example:** `drive api drive-apps-list`
+**Example:** `drive personal api drive-apps-list`
 
 ### `drive api drive-changes-get-start-page-token`
 
@@ -1578,7 +1577,7 @@ drive <profile> api drive-changes-get-start-page-token [options]
 
 **Returns:** Gets the starting pageToken for listing future changes. For more information, see…
 
-**Example:** `drive api drive-changes-get-start-page-token`
+**Example:** `drive personal api drive-changes-get-start-page-token`
 
 ### `drive api drive-changes-list`
 
@@ -1613,7 +1612,7 @@ drive <profile> api drive-changes-list [options]
 
 **Returns:** Lists the changes for a user or shared drive. For more information, see [Retrieve…
 
-**Example:** `drive api drive-changes-list --page-token <value>`
+**Example:** `drive personal api drive-changes-list --page-token <value>`
 
 ### `drive api drive-changes-watch`
 
@@ -1652,7 +1651,7 @@ drive <profile> api drive-changes-watch [options]
 
 **Returns:** Subscribes to changes for a user. For more information, see [Notifications for resource…
 
-**Example:** `drive api drive-changes-watch --page-token <value>`
+**Example:** `drive personal api drive-changes-watch --page-token <value>`
 
 ### `drive api drive-channels-stop`
 
@@ -1677,7 +1676,7 @@ drive <profile> api drive-channels-stop [options]
 
 **Returns:** Stops watching resources through this channel. For more information, see [Notifications…
 
-**Example:** `drive api drive-channels-stop`
+**Example:** `drive personal api drive-channels-stop`
 
 ### `drive api drive-comments-create`
 
@@ -1703,7 +1702,7 @@ drive <profile> api drive-comments-create [options]
 
 **Returns:** Creates a comment on a file. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-comments-create --file-id <value>`
+**Example:** `drive personal api drive-comments-create --file-id <value>`
 
 ### `drive api drive-comments-delete`
 
@@ -1728,7 +1727,7 @@ drive <profile> api drive-comments-delete [options]
 
 **Returns:** Deletes a comment. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-comments-delete --comment-id <value> --file-id <value>`
+**Example:** `drive personal api drive-comments-delete --comment-id <value> --file-id <value>`
 
 ### `drive api drive-comments-get`
 
@@ -1752,7 +1751,7 @@ drive <profile> api drive-comments-get [options]
 
 **Returns:** Gets a comment by ID. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-comments-get --file-id <value> --comment-id <value>`
+**Example:** `drive personal api drive-comments-get --file-id <value> --comment-id <value>`
 
 ### `drive api drive-comments-list`
 
@@ -1778,7 +1777,7 @@ drive <profile> api drive-comments-list [options]
 
 **Returns:** Lists a file's comments. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-comments-list --file-id <value>`
+**Example:** `drive personal api drive-comments-list --file-id <value>`
 
 ### `drive api drive-comments-update`
 
@@ -1805,7 +1804,7 @@ drive <profile> api drive-comments-update [options]
 
 **Returns:** Updates a comment with patch semantics. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-comments-update --comment-id <value> --file-id <value>`
+**Example:** `drive personal api drive-comments-update --comment-id <value> --file-id <value>`
 
 ### `drive api drive-drives-create`
 
@@ -1831,7 +1830,7 @@ drive <profile> api drive-drives-create [options]
 
 **Returns:** Creates a shared drive. For more information, see [Manage shared…
 
-**Example:** `drive api drive-drives-create --request-id <value>`
+**Example:** `drive personal api drive-drives-create --request-id <value>`
 
 ### `drive api drive-drives-delete`
 
@@ -1857,7 +1856,7 @@ drive <profile> api drive-drives-delete [options]
 
 **Returns:** Permanently deletes a shared drive for which the user is an `organizer`. The shared drive…
 
-**Example:** `drive api drive-drives-delete --drive-id <value>`
+**Example:** `drive personal api drive-drives-delete --drive-id <value>`
 
 ### `drive api drive-drives-get`
 
@@ -1880,7 +1879,7 @@ drive <profile> api drive-drives-get [options]
 
 **Returns:** Gets a shared drive's metadata by ID. For more information, see [Manage shared…
 
-**Example:** `drive api drive-drives-get --drive-id <value>`
+**Example:** `drive personal api drive-drives-get --drive-id <value>`
 
 ### `drive api drive-drives-hide`
 
@@ -1904,7 +1903,7 @@ drive <profile> api drive-drives-hide [options]
 
 **Returns:** Hides a shared drive from the default view. For more information, see [Manage shared…
 
-**Example:** `drive api drive-drives-hide --drive-id <value>`
+**Example:** `drive personal api drive-drives-hide --drive-id <value>`
 
 ### `drive api drive-drives-list`
 
@@ -1929,7 +1928,7 @@ drive <profile> api drive-drives-list [options]
 
 **Returns:** Lists the user's shared drives. This method accepts the `q` parameter, which is a search…
 
-**Example:** `drive api drive-drives-list`
+**Example:** `drive personal api drive-drives-list`
 
 ### `drive api drive-drives-unhide`
 
@@ -1953,7 +1952,7 @@ drive <profile> api drive-drives-unhide [options]
 
 **Returns:** Restores a shared drive to the default view. For more information, see [Manage shared…
 
-**Example:** `drive api drive-drives-unhide --drive-id <value>`
+**Example:** `drive personal api drive-drives-unhide --drive-id <value>`
 
 ### `drive api drive-drives-update`
 
@@ -1980,7 +1979,7 @@ drive <profile> api drive-drives-update [options]
 
 **Returns:** Updates the metadata for a shared drive. For more information, see [Manage shared…
 
-**Example:** `drive api drive-drives-update --drive-id <value>`
+**Example:** `drive personal api drive-drives-update --drive-id <value>`
 
 ### `drive api drive-files-copy`
 
@@ -2015,7 +2014,7 @@ drive <profile> api drive-files-copy [options]
 
 **Returns:** Creates a copy of a file and applies any requested updates with patch semantics. For more…
 
-**Example:** `drive api drive-files-copy --file-id <value>`
+**Example:** `drive personal api drive-files-copy --file-id <value>`
 
 ### `drive api drive-files-create`
 
@@ -2049,7 +2048,7 @@ drive <profile> api drive-files-create [options]
 
 **Returns:** Creates a file. For more information, see [Create and manage…
 
-**Example:** `drive api drive-files-create`
+**Example:** `drive personal api drive-files-create`
 
 ### `drive api drive-files-delete`
 
@@ -2076,7 +2075,7 @@ drive <profile> api drive-files-delete [options]
 
 **Returns:** Permanently deletes a file owned by the user without moving it to the trash. For more…
 
-**Example:** `drive api drive-files-delete --file-id <value>`
+**Example:** `drive personal api drive-files-delete --file-id <value>`
 
 ### `drive api drive-files-download`
 
@@ -2100,7 +2099,7 @@ drive <profile> api drive-files-download [options]
 
 **Returns:** Downloads the content of a file. For more information, see [Download and export…
 
-**Example:** `drive api drive-files-download --file-id <value>`
+**Example:** `drive personal api drive-files-download --file-id <value>`
 
 ### `drive api drive-files-empty-trash`
 
@@ -2125,7 +2124,7 @@ drive <profile> api drive-files-empty-trash [options]
 
 **Returns:** Permanently deletes all of the user's trashed files. For more information, see [Trash or…
 
-**Example:** `drive api drive-files-empty-trash`
+**Example:** `drive personal api drive-files-empty-trash`
 
 ### `drive api drive-files-export`
 
@@ -2148,7 +2147,7 @@ drive <profile> api drive-files-export [options]
 
 **Returns:** Exports a Google Workspace document to the requested MIME type and returns exported byte…
 
-**Example:** `drive api drive-files-export --mime-type <value> --file-id <value>`
+**Example:** `drive personal api drive-files-export --mime-type <value> --file-id <value>`
 
 ### `drive api drive-files-generate-cse-token`
 
@@ -2171,7 +2170,7 @@ drive <profile> api drive-files-generate-cse-token [options]
 
 **Returns:** Generates a CSE token which can be used to create or update CSE files. — read (GET…
 
-**Example:** `drive api drive-files-generate-cse-token`
+**Example:** `drive personal api drive-files-generate-cse-token`
 
 ### `drive api drive-files-generate-ids`
 
@@ -2195,7 +2194,7 @@ drive <profile> api drive-files-generate-ids [options]
 
 **Returns:** Generates a set of file IDs which can be provided in create or copy requests. For more…
 
-**Example:** `drive api drive-files-generate-ids`
+**Example:** `drive personal api drive-files-generate-ids`
 
 ### `drive api drive-files-get`
 
@@ -2222,7 +2221,7 @@ drive <profile> api drive-files-get [options]
 
 **Returns:** Gets a file's metadata or content by ID. For more information, see [Search for files and…
 
-**Example:** `drive api drive-files-get --file-id <value>`
+**Example:** `drive personal api drive-files-get --file-id <value>`
 
 ### `drive api drive-files-list`
 
@@ -2258,7 +2257,7 @@ drive <profile> api drive-files-list [options]
 
 **Returns:** Lists the user's files. For more information, see [Search for files and…
 
-**Example:** `drive api drive-files-list`
+**Example:** `drive personal api drive-files-list`
 
 ### `drive api drive-files-list-labels`
 
@@ -2282,7 +2281,7 @@ drive <profile> api drive-files-list-labels [options]
 
 **Returns:** Lists the labels on a file. For more information, see [List labels on a…
 
-**Example:** `drive api drive-files-list-labels --file-id <value>`
+**Example:** `drive personal api drive-files-list-labels --file-id <value>`
 
 ### `drive api drive-files-modify-labels`
 
@@ -2308,7 +2307,7 @@ drive <profile> api drive-files-modify-labels [options]
 
 **Returns:** Modifies the set of labels applied to a file. For more information, see [Set a label…
 
-**Example:** `drive api drive-files-modify-labels --file-id <value>`
+**Example:** `drive personal api drive-files-modify-labels --file-id <value>`
 
 ### `drive api drive-files-update`
 
@@ -2344,7 +2343,7 @@ drive <profile> api drive-files-update [options]
 
 **Returns:** Updates a file's metadata, content, or both. When calling this method, only populate…
 
-**Example:** `drive api drive-files-update --file-id <value>`
+**Example:** `drive personal api drive-files-update --file-id <value>`
 
 ### `drive api drive-files-watch`
 
@@ -2375,7 +2374,7 @@ drive <profile> api drive-files-watch [options]
 
 **Returns:** Subscribes to changes to a file. For more information, see [Notifications for resource…
 
-**Example:** `drive api drive-files-watch --file-id <value>`
+**Example:** `drive personal api drive-files-watch --file-id <value>`
 
 ### `drive api drive-operations-get`
 
@@ -2397,7 +2396,7 @@ drive <profile> api drive-operations-get [options]
 
 **Returns:** Gets the latest state of a long-running operation. Clients can use this method to poll…
 
-**Example:** `drive api drive-operations-get --name <value>`
+**Example:** `drive personal api drive-operations-get --name <value>`
 
 ### `drive api drive-permissions-create`
 
@@ -2432,7 +2431,7 @@ drive <profile> api drive-permissions-create [options]
 
 **Returns:** Creates a permission for a file or shared drive. For more information, see [Share files,…
 
-**Example:** `drive api drive-permissions-create --file-id <value>`
+**Example:** `drive personal api drive-permissions-create --file-id <value>`
 
 ### `drive api drive-permissions-delete`
 
@@ -2461,7 +2460,7 @@ drive <profile> api drive-permissions-delete [options]
 
 **Returns:** Deletes a permission. For more information, see [Share files, folders, and…
 
-**Example:** `drive api drive-permissions-delete --permission-id <value> --file-id <value>`
+**Example:** `drive personal api drive-permissions-delete --permission-id <value> --file-id <value>`
 
 ### `drive api drive-permissions-get`
 
@@ -2487,7 +2486,7 @@ drive <profile> api drive-permissions-get [options]
 
 **Returns:** Gets a permission by ID. For more information, see [Share files, folders, and…
 
-**Example:** `drive api drive-permissions-get --permission-id <value> --file-id <value>`
+**Example:** `drive personal api drive-permissions-get --permission-id <value> --file-id <value>`
 
 ### `drive api drive-permissions-list`
 
@@ -2515,7 +2514,7 @@ drive <profile> api drive-permissions-list [options]
 
 **Returns:** Lists a file's or shared drive's permissions. For more information, see [Share files,…
 
-**Example:** `drive api drive-permissions-list --file-id <value>`
+**Example:** `drive personal api drive-permissions-list --file-id <value>`
 
 ### `drive api drive-permissions-update`
 
@@ -2548,7 +2547,7 @@ drive <profile> api drive-permissions-update [options]
 
 **Returns:** Updates a permission with patch semantics. For more information, see [Share files,…
 
-**Example:** `drive api drive-permissions-update --file-id <value> --permission-id <value>`
+**Example:** `drive personal api drive-permissions-update --file-id <value> --permission-id <value>`
 
 ### `drive api drive-replies-create`
 
@@ -2575,7 +2574,7 @@ drive <profile> api drive-replies-create [options]
 
 **Returns:** Creates a reply to a comment. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-replies-create --comment-id <value> --file-id <value>`
+**Example:** `drive personal api drive-replies-create --comment-id <value> --file-id <value>`
 
 ### `drive api drive-replies-delete`
 
@@ -2601,7 +2600,7 @@ drive <profile> api drive-replies-delete [options]
 
 **Returns:** Deletes a reply. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-replies-delete --comment-id <value> --reply-id <value> --file-id <value>`
+**Example:** `drive personal api drive-replies-delete --comment-id <value> --reply-id <value> --file-id <value>`
 
 ### `drive api drive-replies-get`
 
@@ -2626,7 +2625,7 @@ drive <profile> api drive-replies-get [options]
 
 **Returns:** Gets a reply by ID. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-replies-get --file-id <value> --comment-id <value> --reply-id <value>`
+**Example:** `drive personal api drive-replies-get --file-id <value> --comment-id <value> --reply-id <value>`
 
 ### `drive api drive-replies-list`
 
@@ -2652,7 +2651,7 @@ drive <profile> api drive-replies-list [options]
 
 **Returns:** Lists a comment's replies. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-replies-list --file-id <value> --comment-id <value>`
+**Example:** `drive personal api drive-replies-list --file-id <value> --comment-id <value>`
 
 ### `drive api drive-replies-update`
 
@@ -2680,7 +2679,7 @@ drive <profile> api drive-replies-update [options]
 
 **Returns:** Updates a reply with patch semantics. For more information, see [Manage comments and…
 
-**Example:** `drive api drive-replies-update --comment-id <value> --file-id <value> --reply-id <value>`
+**Example:** `drive personal api drive-replies-update --comment-id <value> --file-id <value> --reply-id <value>`
 
 ### `drive api drive-revisions-delete`
 
@@ -2705,7 +2704,7 @@ drive <profile> api drive-revisions-delete [options]
 
 **Returns:** Permanently deletes a file version. You can only delete revisions for files with binary…
 
-**Example:** `drive api drive-revisions-delete --file-id <value> --revision-id <value>`
+**Example:** `drive personal api drive-revisions-delete --file-id <value> --revision-id <value>`
 
 ### `drive api drive-revisions-get`
 
@@ -2729,7 +2728,7 @@ drive <profile> api drive-revisions-get [options]
 
 **Returns:** Gets a revision's metadata or content by ID. For more information, see [Manage file…
 
-**Example:** `drive api drive-revisions-get --revision-id <value> --file-id <value>`
+**Example:** `drive personal api drive-revisions-get --revision-id <value> --file-id <value>`
 
 ### `drive api drive-revisions-list`
 
@@ -2753,7 +2752,7 @@ drive <profile> api drive-revisions-list [options]
 
 **Returns:** Lists a file's revisions. For more information, see [Manage file…
 
-**Example:** `drive api drive-revisions-list --file-id <value>`
+**Example:** `drive personal api drive-revisions-list --file-id <value>`
 
 ### `drive api drive-revisions-update`
 
@@ -2780,7 +2779,7 @@ drive <profile> api drive-revisions-update [options]
 
 **Returns:** Updates a revision with patch semantics. For more information, see [Manage file…
 
-**Example:** `drive api drive-revisions-update --file-id <value> --revision-id <value>`
+**Example:** `drive personal api drive-revisions-update --file-id <value> --revision-id <value>`
 
 ### `drive api drive-teamdrives-create`
 
@@ -2806,7 +2805,7 @@ drive <profile> api drive-teamdrives-create [options]
 
 **Returns:** Deprecated: Use `drives.create` instead. — write (POST teamdrives)
 
-**Example:** `drive api drive-teamdrives-create --request-id <value>`
+**Example:** `drive personal api drive-teamdrives-create --request-id <value>`
 
 ### `drive api drive-teamdrives-delete`
 
@@ -2830,7 +2829,7 @@ drive <profile> api drive-teamdrives-delete [options]
 
 **Returns:** Deprecated: Use `drives.delete` instead. — destructive (DELETE teamdrives/{teamDriveId})
 
-**Example:** `drive api drive-teamdrives-delete --team-drive-id <value>`
+**Example:** `drive personal api drive-teamdrives-delete --team-drive-id <value>`
 
 ### `drive api drive-teamdrives-get`
 
@@ -2853,7 +2852,7 @@ drive <profile> api drive-teamdrives-get [options]
 
 **Returns:** Deprecated: Use `drives.get` instead. — read (GET teamdrives/{teamDriveId})
 
-**Example:** `drive api drive-teamdrives-get --team-drive-id <value>`
+**Example:** `drive personal api drive-teamdrives-get --team-drive-id <value>`
 
 ### `drive api drive-teamdrives-list`
 
@@ -2878,7 +2877,7 @@ drive <profile> api drive-teamdrives-list [options]
 
 **Returns:** Deprecated: Use `drives.list` instead. — read (GET teamdrives)
 
-**Example:** `drive api drive-teamdrives-list`
+**Example:** `drive personal api drive-teamdrives-list`
 
 ### `drive api drive-teamdrives-update`
 
@@ -2905,7 +2904,7 @@ drive <profile> api drive-teamdrives-update [options]
 
 **Returns:** Deprecated: Use `drives.update` instead. — write (PATCH teamdrives/{teamDriveId})
 
-**Example:** `drive api drive-teamdrives-update --team-drive-id <value>`
+**Example:** `drive personal api drive-teamdrives-update --team-drive-id <value>`
 
 ### `drive api driveactivity-activity-query`
 
@@ -2928,7 +2927,7 @@ drive <profile> api driveactivity-activity-query [options]
 
 **Returns:** Query past activity in Google Drive. — read (POST v2/activity:query)
 
-**Example:** `drive api driveactivity-activity-query`
+**Example:** `drive personal api driveactivity-activity-query`
 
 ### `drive api sheets-spreadsheets-batch-update`
 
@@ -2954,7 +2953,7 @@ drive <profile> api sheets-spreadsheets-batch-update [options]
 
 **Returns:** Applies one or more updates to the spreadsheet. Each request is validated before being…
 
-**Example:** `drive api sheets-spreadsheets-batch-update --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-batch-update --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-create`
 
@@ -2979,7 +2978,7 @@ drive <profile> api sheets-spreadsheets-create [options]
 
 **Returns:** Creates a spreadsheet, returning the newly created spreadsheet. — write (POST…
 
-**Example:** `drive api sheets-spreadsheets-create`
+**Example:** `drive personal api sheets-spreadsheets-create`
 
 ### `drive api sheets-spreadsheets-developer-metadata-get`
 
@@ -3002,7 +3001,7 @@ drive <profile> api sheets-spreadsheets-developer-metadata-get [options]
 
 **Returns:** Returns the developer metadata with the specified ID. The caller must specify the…
 
-**Example:** `drive api sheets-spreadsheets-developer-metadata-get --metadata-id <value> --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-developer-metadata-get --metadata-id <value> --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-developer-metadata-search`
 
@@ -3026,7 +3025,7 @@ drive <profile> api sheets-spreadsheets-developer-metadata-search [options]
 
 **Returns:** Returns all developer metadata matching the specified DataFilter. For more information,…
 
-**Example:** `drive api sheets-spreadsheets-developer-metadata-search --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-developer-metadata-search --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-get`
 
@@ -3052,7 +3051,7 @@ drive <profile> api sheets-spreadsheets-get [options]
 
 **Returns:** Returns the spreadsheet at the given ID. The caller must specify the spreadsheet ID. By…
 
-**Example:** `drive api sheets-spreadsheets-get --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-get --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-get-by-data-filter`
 
@@ -3076,7 +3075,7 @@ drive <profile> api sheets-spreadsheets-get-by-data-filter [options]
 
 **Returns:** Returns the spreadsheet at the given ID. The caller must specify the spreadsheet ID. For…
 
-**Example:** `drive api sheets-spreadsheets-get-by-data-filter --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-get-by-data-filter --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-sheets-copy-to`
 
@@ -3103,7 +3102,7 @@ drive <profile> api sheets-spreadsheets-sheets-copy-to [options]
 
 **Returns:** Copies a single sheet from a spreadsheet to another spreadsheet. Returns the properties…
 
-**Example:** `drive api sheets-spreadsheets-sheets-copy-to --sheet-id <value> --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-sheets-copy-to --sheet-id <value> --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-append`
 
@@ -3135,7 +3134,7 @@ drive <profile> api sheets-spreadsheets-values-append [options]
 
 **Returns:** Appends values to a spreadsheet. The input range is used to search for existing data and…
 
-**Example:** `drive api sheets-spreadsheets-values-append --spreadsheet-id <value> --range <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-append --spreadsheet-id <value> --range <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-clear`
 
@@ -3161,7 +3160,7 @@ drive <profile> api sheets-spreadsheets-values-batch-clear [options]
 
 **Returns:** Clears one or more ranges of values from a spreadsheet. The caller must specify the…
 
-**Example:** `drive api sheets-spreadsheets-values-batch-clear --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-batch-clear --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-clear-by-data-filter`
 
@@ -3187,7 +3186,7 @@ drive <profile> api sheets-spreadsheets-values-batch-clear-by-data-filter [optio
 
 **Returns:** Clears one or more ranges of values from a spreadsheet. For more information, see [Read,…
 
-**Example:** `drive api sheets-spreadsheets-values-batch-clear-by-data-filter --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-batch-clear-by-data-filter --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-get`
 
@@ -3213,7 +3212,7 @@ drive <profile> api sheets-spreadsheets-values-batch-get [options]
 
 **Returns:** Returns one or more ranges of values from a spreadsheet. The caller must specify the…
 
-**Example:** `drive api sheets-spreadsheets-values-batch-get --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-batch-get --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-get-by-data-filter`
 
@@ -3237,7 +3236,7 @@ drive <profile> api sheets-spreadsheets-values-batch-get-by-data-filter [options
 
 **Returns:** Returns one or more ranges of values that match the specified data filters. For more…
 
-**Example:** `drive api sheets-spreadsheets-values-batch-get-by-data-filter --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-batch-get-by-data-filter --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-update`
 
@@ -3263,7 +3262,7 @@ drive <profile> api sheets-spreadsheets-values-batch-update [options]
 
 **Returns:** Sets values in one or more ranges of a spreadsheet. The caller must specify the…
 
-**Example:** `drive api sheets-spreadsheets-values-batch-update --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-batch-update --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-update-by-data-filter`
 
@@ -3289,7 +3288,7 @@ drive <profile> api sheets-spreadsheets-values-batch-update-by-data-filter [opti
 
 **Returns:** Sets values in one or more ranges of a spreadsheet. For more information, see [Read,…
 
-**Example:** `drive api sheets-spreadsheets-values-batch-update-by-data-filter --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-batch-update-by-data-filter --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-clear`
 
@@ -3316,7 +3315,7 @@ drive <profile> api sheets-spreadsheets-values-clear [options]
 
 **Returns:** Clears values from a spreadsheet. The caller must specify the spreadsheet ID and range.…
 
-**Example:** `drive api sheets-spreadsheets-values-clear --spreadsheet-id <value> --range <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-clear --spreadsheet-id <value> --range <value>`
 
 ### `drive api sheets-spreadsheets-values-get`
 
@@ -3342,7 +3341,7 @@ drive <profile> api sheets-spreadsheets-values-get [options]
 
 **Returns:** Returns a range of values from a spreadsheet. The caller must specify the spreadsheet ID…
 
-**Example:** `drive api sheets-spreadsheets-values-get --range <value> --spreadsheet-id <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-get --range <value> --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-update`
 
@@ -3373,7 +3372,7 @@ drive <profile> api sheets-spreadsheets-values-update [options]
 
 **Returns:** Sets values in a range of a spreadsheet. The caller must specify the spreadsheet ID,…
 
-**Example:** `drive api sheets-spreadsheets-values-update --spreadsheet-id <value> --range <value>`
+**Example:** `drive personal api sheets-spreadsheets-values-update --spreadsheet-id <value> --range <value>`
 
 ## `drive sheets`
 
@@ -4103,7 +4102,7 @@ drive models text download <model> [options]
 
 **Next usually:** `drive images models download <model>`
 
-**Example:** `drive models text download e5-small`
+**Example:** `drive personal models text download e5-small`
 
 ## `drive images`
 
@@ -4131,7 +4130,7 @@ drive images models download <model>
 
 **Next usually:** `drive models text download <model>`
 
-**Example:** `drive images models download clip-b32`
+**Example:** `drive personal images models download clip-b32`
 
 ## `drive mcp`
 
@@ -4200,6 +4199,36 @@ drive skill install [options]
 **Returns:** put SKILL.md where Claude Code, Codex and Gemini CLI look
 
 **Example:** `drive skill install --for all`
+
+## `drive doctor`
+
+check this installation: config, profiles, paths; no keyring, store or network
+
+```sh
+drive doctor
+```
+
+**Returns:** check this installation: config, profiles, paths; no keyring, store or network
+
+**Example:** `drive personal doctor`, `drive personal doctor --json`
+
+## `drive upgrade`
+
+upgrade drive with the package manager that installed it; --check only looks
+
+This command changes local state.
+
+```sh
+drive upgrade [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--check` | say whether a newer version exists, and install nothing. |
+
+**Returns:** upgrade drive with the package manager that installed it; --check only looks
+
+**Example:** `drive upgrade --check`, `drive upgrade`
 
 ## `drive guide`
 

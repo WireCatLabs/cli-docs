@@ -14,7 +14,7 @@ for every tool with no site code:
 | tg | yes | `/docs/tg/roadmap` |
 | max | yes (Russian source) | `/docs/max/roadmap` |
 | zm | yes | `/docs/zm/roadmap` |
-| drive | no | none |
+| drive | yes (v0.25.0) | `/docs/drive/roadmap` |
 | memo | no | none |
 | wa | yes | none (the tool is not on the site, DOCS-4) |
 

@@ -16,5 +16,11 @@
     "roadmapSha256": "d6932e6c14696349630b8a975a2d32fb36bf79728ec8bd808457a72d79d9ae2d",
     "reviewedAt": "2026-10-23",
     "conclusion": "Reviewed Zoom 0.32.0-0.36.0 (Core 0.370.0 -> 0.389.0): the profile is the first word (zm personal meetings list; ZM_PROFILE for a shell; each profile has its own Zoom login); zm <profile> mcp replaces zm serve --mcp and offers zm's commands as the profile's permissions allow; permissions per profile; stats meetings; models audio; meetings transcribe takes Zoom's recordings; .txt transcript import; search reads the query language and ranks words and meaning together; meeting writes ask first. Changed native pages: every guide (profile prefix), changelog, commands, configuration (Permissions), mcp (rewritten), search, sessions; RU/ES updated. Portal copies (install prompts, agents, MCP, Zoom overview, command rules) moved to zm personal. Roadmap unchanged: broader meeting preparation remains planned and is not shipped."
+  },
+  "drive": {
+    "version": "v0.25.0",
+    "roadmapSha256": "03a41557ca52edafb9eaed4e3026b091da147e5db74c9757a5da8edf6514d38e",
+    "reviewedAt": "2026-10-24",
+    "conclusion": "Reviewed Drive 0.25.0: the first roadmap page and a compare page ship with this tag; drive doctor and drive upgrade are new commands; the profile is the first word or DRIVE_PROFILE and there is no --profile option. Changed native pages: changelog, commands, compare, configuration, installation, roadmap, troubleshooting; RU/ES written. The roadmap is new, so every item on it is unshipped."
   }
 }
