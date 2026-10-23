@@ -22,8 +22,8 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
   0.36.0, where the profile is the first word (`zm personal session start`) and `serve --mcp` became
   `zm <profile> mcp`. Bump `tools.json` (docsRef, `profile`), then fix the portal's own copies:
   `lib/words.ts` (zm prompts, all three languages), `content/docs/agents.mdx`, `mcp.mdx`, `zoom.mdx`.
-- **DOCS-3 · P1 · The other tools' pages lag npm.** Pinned max v0.66.0 / tg v0.77.0 / drive v0.19.0 /
-  memo v0.83.0; npm has 0.69.0 / 0.81.0 / 0.23.0 / 0.89.0. Work through issue #335 per tool:
+- **DOCS-3 · P1 · The other tools' pages lag npm.** Pinned max v0.66.0 / tg v0.77.0 /
+  memo v0.83.0; npm has 0.69.0 / 0.81.0 / 0.89.0 (drive is current at v0.23.0). Work through issue #335 per tool:
   translations, `docs:contracts`, release notes.
 - **DOCS-4 · P1 🚩 · WhatsApp is missing from the site.** `wa` 0.4.0 is on npm, its docs pass the
   structure check at v0.4.0, and the other tools' `--help` already names it. Needs a `tools.json` entry,

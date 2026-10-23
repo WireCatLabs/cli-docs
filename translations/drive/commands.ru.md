@@ -947,7 +947,7 @@ drive <profile> facts add <document> <statement> [options]
 | `--type <type>` | what kind of fact it is. One of: `fact`, `statement`, `question`, `decision`, `promise`. Default: `fact`. |
 | `--scope <scope>` | whose fact it is: personal or work. One of: `personal`, `work`. |
 | `--supersedes <ref>` | a decision only: the decision this one replaces. |
-| `--occurred-time <time>` | when it happened, as the evidence shows, ISO 8601. |
+| `--occurred-time <time>` | when it happened, as the evidence shows, ISO 8601; a time without a zone is read in this computer's zone, a date alone as its midnight. |
 
 **Returns:** record a fact a document shows
 
@@ -3582,7 +3582,7 @@ drive <profile> files list [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | optional | Google Drive query the files match; trashed = false when omitted. |
+| `query` | optional | Google Drive query the files match; trashed = false when omitted. A time without a zone is read in this computer's zone and sent as UTC. |
 
 | Option | What it does |
 |---|---|
@@ -3901,6 +3901,101 @@ drive <profile> shared-drives [options]
 **Returns:** list the shared drives this account can open
 
 **Example:** `drive personal shared-drives`
+
+## `drive mirrors`
+
+keep local folders mirrored into Google Docs and Sheets
+
+### `drive mirrors add`
+
+mirror a local folder: Markdown to Google Docs, CSV/TSV/XLSX to Sheets
+
+This command changes local state.
+
+```sh
+drive <profile> mirrors add <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | local folder to mirror. |
+
+| Option | What it does |
+|---|---|
+| `--parent <id>` | the Google Drive folder to write into, by id or URL. |
+
+**Returns:** mirror a local folder: Markdown to Google Docs, CSV/TSV/XLSX to Sheets
+
+**Example:** `drive personal mirrors add ./notes --parent FOLDER_ID`
+
+### `drive mirrors list`
+
+list this profile's mirrors
+
+```sh
+drive <profile> mirrors list
+```
+
+**Returns:** list this profile's mirrors
+
+**Example:** `drive personal mirrors list`
+
+### `drive mirrors remove`
+
+stop mirroring a folder; nothing in Google Drive is changed or deleted
+
+This command changes local state.
+
+```sh
+drive <profile> mirrors remove <id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+
+**Returns:** stop mirroring a folder; nothing in Google Drive is changed or deleted
+
+**Example:** `drive personal mirrors remove 1a2b3c4d`
+
+### `drive mirrors status`
+
+show which local files the next sync would create or send; Google is not asked
+
+```sh
+drive <profile> mirrors status [id]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id; every mirror of the profile when omitted. |
+
+**Returns:** show which local files the next sync would create or send; Google is not asked
+
+**Example:** `drive personal mirrors status`
+
+### `drive mirrors sync`
+
+sync both ways with Docs and Sheets; a part changed on both sides is reported
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> mirrors sync [id] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id; every mirror of the profile when omitted. |
+
+| Option | What it does |
+|---|---|
+| `--keep <side>` | where a part changed on both sides, keep this side. One of: `local`, `google`, `both`. |
+| `--replace` | same as --keep local, and create again files deleted in Google. |
+
+**Returns:** sync both ways with Docs and Sheets; a part changed on both sides is reported
+
+**Example:** `drive personal mirrors sync`, `drive personal mirrors sync 1a2b3c4d --keep google`, `drive personal mirrors sync 1a2b3c4d --replace`
 
 ## `drive config`
 
