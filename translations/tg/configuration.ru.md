@@ -34,7 +34,6 @@ title: "Настройки"
 | `color` | цвет в таблицах | определяется вашим терминалом |
 | `sender_colors` | свой цвет для каждого отправителя в списке сообщений | `false` |
 | `timeout_ms` | как долго может ждать **один** запрос к Telegram, в миллисекундах. Чтобы ограничить всю команду, вместо этого используйте `--timeout` | собственное ожидание соединения |
-| `catch_up_marks_read` | `inbox` и `review` помечают отображаемые чаты как прочитанные. Другой человек это видит | `false` |
 | `proxy` | прокси-сервер для доступа к Telegram, где он заблокирован ([настройка прокси](./configuration-reference.md#through-a-proxy)) | нет |
 | `transcribe_with` | кто превращает голосовые сообщения в текст: `auto`, `messenger` или `local` | `auto` |
 | `update_check` | раз в день сообщать, когда появится более новая версия `tg` | `true` |
@@ -87,7 +86,7 @@ title: "Настройки"
     }
   },
   "personal": {
-    "defaults": { "catch_up_marks_read": false, "search_catch_up": true }
+    "defaults": { "search_catch_up": true }
   },
   "bot": {
     "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },

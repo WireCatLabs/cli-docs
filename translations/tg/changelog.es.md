@@ -4,6 +4,160 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.83.0 — 23.10.2026
+
+### Added
+
+- **`tg <profile> messages press <chat> <message> <button>`, `chats start <bot>` and `chats app <bot>` work with bots.**
+  `messages show` now numbers the inline buttons under a bot's message; `press` presses a callback button by its number
+  or text. A button that asks for your 2FA password is refused, never pressed. `chats start` starts a bot as its Start
+  button does (`--start <param>`, or a `t.me/<bot>?start=` link), and `chats app` prints the address of its mini app,
+  which signs you in.
+- **The skill tells an agent to search again in other words before saying something is not there.** A search
+  finds the words it is given, and a paraphrase shares none with its answer.
+- **`tg <profile> chats archive|unarchive|pin|unpin|mark-unread|mute|unmute <chat>`: your own chat list from the
+  command line.** Telegram's archive, pinned chats, the unread dot and notifications, with `mute --until 2h` for a
+  time and plain `mute` for good. They change only your list; nobody in the chat is told, and repeating one is safe.
+
+- **Verified media backups.** `attachments download <dir>` archives available files across chats with size and
+  SHA-256 manifests; `attachments check <dir>` verifies them offline. `attachments jobs` manages opt-in Linux
+  daily timers. Completed copies survive interrupted runs and message-store deletion; interrupted files restart.
+  `attachments move <dir> <archive-dir> --before-time <time>` moves older images into another verified archive,
+  retaining relocation records so checks follow the copies and later downloads do not duplicate them.
+
+- **`tg <profile> review --offline` reads the local store** (cli-core 0.398.0) instead of refusing. It shows only
+  what was already synced and says so (`missing` in JSON, a warning on the terminal).
+- **The MCP server offers more commands, each limited by the profile's permissions** (cli-core 0.398.0): `runs`,
+  `store status|info|check|export|reindex`, `store jobs`, `attachments move`, `attachments jobs status`, `config show`,
+  `commands schema`, `guide`, `skill show`, `doctor report`, the `models` lists, `replies status|test|consents show`,
+  `schedule list`, `server status|logs`, and on the bot server `webhooks`, `commands set|clear`, `chats leave` and
+  `chats admins`. [The MCP guide](./mcp.md#commands-the-server-leaves-out) lists the few it leaves out, and why.
+
+- Saved voice-note transcripts match word forms and spellings that speech recognition may have garbled.
+  `text:` searches written text only; `exact:` disables expansion for that word.
+
+### Changed — may break callers
+
+- **`tg <profile> setup --json`: the command map is `item.commands`, not `item.next`.** The envelope's `next` is
+  reserved for structured continuation steps, so the map of follow-up commands (`instructions`, `inbox`, `chats`,
+  `history`, `history_status`, and `skill`, `mcp` when no agent skill was installed) moved to `item.commands`; the
+  values are unchanged. Login details stay under `item.session`. What to do: read `item.commands.<name>` where you
+  read `item.next.<name>`.
+
+- MCP message deletion takes `message`, chat export takes `chat`, and duplicate-task operations take `task`
+  and, for a pair, `other_task`. Update saved MCP requests using `messages`, `chats` or `dup`.
+  CLI positional arguments keep their order.
+- Command discovery (`commands` and `commands schema`) rejects `--jsonl`; use `--json` for its single document.
+
+### Fixed
+
+- **The docs and the skill say `search all` also asks Telegram.** By default it sends the query's words to
+  Telegram's own search too (`--backend both`); `--offline` or `--backend archive` keeps the query on your computer.
+  README, usage, search and the skill said it read only this computer.
+- **Installation explains npm's install-script warnings.** npm 11.17 also prints `not yet covered by allowScripts`
+  for `@wirecat/tg-cli` and `better-sqlite3`; both are harmless, and the guide says why.
+- **`contacts prepare` is in the people guide and the skill**, and the comparison page covers tlgr and
+  mcp-telegram, links the maintained tgcli and marks tgcli's several accounts.
+
+- **A pasted `--help` example runs** (cli-core 0.398.0): an account command's example names the profile
+  (`tg personal messages list Team`) instead of failing with "name a profile".
+- **`search all --help` says it asks Telegram's server by default** and names `--offline` and `--backend archive`
+  to keep the query local (cli-core 0.398.0).
+- Message-search commands no longer list or delete saved meeting searches.
+- Command corrections preserve the chosen profile; help shows concise descriptions and concrete examples.
+
+## 0.82.0 — 23.10.2026
+
+### Added
+
+- **`tg <profile> contacts prepare <person>`: what to know before talking to someone** (cli-core 0.394.0). What
+  `contacts context` gives, plus the one-to-one chats where their message is the newest the store holds, open tasks
+  assigned to them, accepted facts about them and their projects, your notes about them, and their recent meetings —
+  each with its reference, under one size budget, with `prepare.coverage` saying what each section left out and why.
+  Tasks of another Telegram account, and facts on a project bound to one, stay out. `contacts.notes.list: deny`
+  leaves the notes out and says so; `messages: deny` refuses the command, as it does `contacts context`.
+- **Message search reads `"a b"~N`: the words at most N words apart in one message** (cli-core 0.391.0).
+- **`bot watch --public-url <url> [--port <n>]` receives a bot's updates by webhook** (cli-core 0.391.0).
+
+### Changed — may break callers
+
+- **Reads never mark chats read** (cli-core 0.391.0). `messages list`, `inbox` and `review` no longer take
+  `--mark-read` or `--no-mark-read`, and the `catch_up_marks_read` setting is refused. Why: a command that only read
+  sent the other person a read receipt. What to do: remove `catch_up_marks_read`; run `tg <profile> chats mark-read
+  <chat>` when you mean to mark a chat read.
+- **An unknown key under `permissions` refuses messenger commands with `configuration_error`** (cli-core 0.391.0),
+  typos such as `messages.sedn` included. It was a warning, and the restriction did not hold. What to do: correct the
+  key or remove it with `config unset`.
+
+### Fixed
+
+- **A local read with an unknown profile lists the profiles on this computer** (cli-core 0.391.0), instead of
+  suggesting to link a new account.
+
+## 0.81.0 — 22.10.2026
+
+### Added
+
+- **JSON answers of commands with a date filter say how they read the date** (cli-core 0.385.0): `meta.window` gives
+  the bounds used, in UTC, and `meta.timezone` names the zone a date typed without one was read in. This covers
+  `store export`, `messages sync`, `stats chats show`, `stats chats retention`, `contacts context`,
+  `search conversations`, `replies test`, `runs search`, `stats messages unanswered`, `stats contacts responses`,
+  `stats chats newcomers`, `stats messages discussion`, and a `time:` or `date:` term in `chats events`,
+  `chats members history`, `inbox` and `review`.
+
+## 0.80.0 — 22.10.2026
+
+### Changed — may break callers
+
+- **A time typed without a zone is read in your zone, and a date alone means local midnight** (cli-core 0.379.0).
+  This covers `messages send --at-time`, `chats link create` and `chats link update --expire-time`,
+  `chats mute --until` and date-only `time>=` queries, such as `chats events Valencia time>=2026-09-20`. Before,
+  some of them read a date alone as midnight UTC. A time with `Z` or an offset is read as before, and JSON and MCP
+  output still give every time in UTC with `Z`.
+
+### Fixed
+
+- **`stats chats retention` and `chats stats show` read `--since-time`/`--until-time` in their `--timezone`**, and a
+  date alone in retention's `--until-time` covers that whole local day (cli-core 0.380.0). `stats charts`, `contacts
+  timeline` and the MCP `stats` tool name the zone in `meta.timezone` and give the UTC window in `meta.window`.
+
+- **The QR login line names the zone of its time:** "valid until 22:00:00 Asia/Vladivostok". Before, it gave the
+  computer's local time without saying so.
+- **A frozen account's deletion date says it is a UTC date:** "deletes it on 2026-10-03 (UTC)". The `until` field
+  is unchanged.
+
+## 0.79.0 — 21.10.2026
+
+### Fixed
+
+- **An action Telegram keeps for Premium accounts now says so** ("that needs Telegram Premium on this account").
+  Before, every such refusal, for example a reaction from a free account, said that Telegram transcribes only for
+  Premium. `messages transcribe` keeps its own message about Premium and the free trial.
+- **A locked or unreachable Linux keyring now warns and falls back to the credentials file** (cli-base 0.47.5). The
+  keyring is read through the Secret Service only; before, a failure could end in silent storage in kernel memory,
+  which is gone after a logout or reboot.
+
+## 0.78.0 — 21.10.2026
+
+### Changed — may break callers
+
+- **Markdown headings are refused when sending (cli-core parser).** Send text now goes through cli-core's shared
+  Markdown parser, as `max` does. A line that starts with `#` used to go out as typed; it now fails with a
+  validation error, because Telegram has no headings. Write the line in bold instead. Nothing else changes.
+- **A message that sends you to another command names it with your profile:** after a send or an edit with no answer
+  from Telegram, "check `tg personal chats list`" replaces "check `tg chats list`", so it can be pasted as it
+  stands. The words now come from cli-core.
+- **Telegram's account and login refusals, a stopped watch and an unanswered write carry their own error
+  `reason`** instead of the generic one for their code: `login.revoked`, `login.duplicated`, `account.deactivated`,
+  `account.banned`, `account.frozen`, `account.limited` (were `auth.failed` or `access.denied`), `updates.stopped`
+  (was `provider.unavailable`) and `write.unanswered` (was `outcome.unknown`). Codes, exit codes and messages are
+  unchanged. Under `--debug`, the record's `cause` now gives the failure behind it, not only its code.
+
+### Fixed
+
+- **Search queries keep an `@` that is followed by a letter inside a term.** E-mail addresses without a dot after the
+  `@` and chat ids no longer need quotes: `email:ana@example.com` works as typed.
+
 ## 0.77.0 — 20.10.2026
 
 ### Novedades

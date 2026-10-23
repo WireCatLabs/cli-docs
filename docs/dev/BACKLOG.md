@@ -19,10 +19,10 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 ## Launch blockers (P1)
 
 
-- **DOCS-3 · P1 🟡 · tg and max pages lag npm.** Pinned max v0.66.0 / tg v0.77.0; npm has 0.70.0 /
-  0.82.0 (drive and memo are current). Waits for the tg and max releases of the launch fix round, then
-  issue #335 per tool. The newest releases dropped `messages list --mark-read`, still used in
-  `tg/usage*.md` and `max/usage*.md` (the daily report lists the lines).
+- **DOCS-3 · P1 🟡 · max page lags npm.** Pinned max v0.66.0; npm has 0.70.0 (drive, memo and tg v0.83.0 are
+  current). Waits for the max release of the launch fix round, then issue #335 for max. The newest releases
+  dropped `messages list --mark-read`, still used in `max/usage*.md`. tg's `scenarios` page still says
+  `review --mark-read` because tg-cli's `scenarios/catch-up.md` at v0.83.0 does (fix upstream).
 - **DOCS-4 · P1 🚩 · WhatsApp is missing from the site.** `wa` 0.4.0 is on npm, its docs pass the
   structure check at v0.4.0, and the other tools' `--help` already names it. Needs a `tools.json` entry,
   RU/ES translations, an install prompt in `lib/words.ts`, the landing and the global roadmap (which still

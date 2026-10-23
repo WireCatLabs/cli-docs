@@ -431,3 +431,83 @@ el historial de respuestas; no se puede combinar con `--offline`.
 - [Búsqueda de mensajes](./search.md): encuentra lo que tiene el archivo local.
 - [Recetas](./recipes.md): busca y exporta en el trabajo diario de tu agente.
 - [Seguridad](./security.md): qué significa el archivo local para la privacidad de tus mensajes.
+
+<a id="keep-independent-media-copies" />
+
+## Copias independientes de archivos
+
+Usa un archivo de medios independiente cuando los archivos deban sobrevivir a mensajes borrados o enlaces de descarga caducados.
+Guarda los bytes en una carpeta que eliges, con un manifiesto que registra la identidad, el tamaño y la suma de verificación SHA-256 de cada archivo.
+Pídele a tu agente: «Haz una copia de los archivos del grupo Example group en mi archivo de medios y luego verifica las copias».
+
+Telegram solo puede devolver los mensajes y archivos que siguen disponibles para tu cuenta. Esta orden no puede recuperar mensajes borrados ni archivos que ya no están disponibles.
+
+Guarda todos los chats disponibles o repite `--chat` para elegir varios. `--since-time` incluye los mensajes desde una
+marca de tiempo ISO con zona horaria, inclusive:
+
+```sh
+tg personal attachments download ~/media-archive --chat "Example group" --since-time 2026-10-01T00:00:00Z --timeout 6h
+tg personal attachments check ~/media-archive --offline --json
+```
+
+El resultado informa de los archivos guardados, las copias existentes verificadas y los chats visitados. Una nueva ejecución verifica
+cada copia existente y descarga las identidades que faltan. Los archivos tienen nombres `.bin` basados en su identidad; sus manifiestos
+identifican el chat, el mensaje y la posición del adjunto. En un manifiesto no se guarda ninguna URL de descarga, clave de medios ni nombre de archivo original.
+Estas copias independientes no se registran como rutas conservadas en el almacén de mensajes; usa el
+`messages download` habitual para los archivos que quieras que encuentren `attachments show` o la extracción de texto.
+
+Una ejecución interrumpida conserva los archivos completados. Ejecuta de nuevo la misma orden: un archivo interrumpido empieza desde el byte cero,
+porque los flujos del mensajero no ofrecen los validadores necesarios para añadir datos con seguridad. Una descarga fallida se detiene
+con un error; un archivo no disponible no cuenta como guardado. Si falta un archivo archivado o ha cambiado, la verificación
+falla con un código de salida distinto de cero y se detiene el archivado. Elige un destino nuevo; los archivos existentes
+nunca se sobrescriben. `complete: true` abarca el historial disponible para el lector seleccionado, no demuestra
+que todos los archivos de origen antiguos sigan existiendo.
+
+### Copia diaria en Linux
+
+Las copias diarias están desactivadas hasta que instales y arranques un temporizador de usuario de systemd. La instalación no inicia nada:
+
+```sh
+tg personal attachments jobs install ~/media-archive --chat "Example group" --at 03:00 --timezone UTC
+tg personal attachments jobs start ~/media-archive
+tg personal attachments jobs status ~/media-archive
+```
+
+El temporizador se ejecuta con el ejecutable, el perfil y las ubicaciones de archivos capturados, un límite de seis horas
+y permisos de archivo solo para el propietario. Por defecto son las 03:00 UTC; `--timezone Europe/Madrid` elige esa hora local.
+La configuración de servicios de usuario de tu sistema determina si se ejecuta con la sesión cerrada; las ejecuciones perdidas
+se recuperan cuando el temporizador vuelve a arrancar. macOS y Windows pueden ejecutar la orden de descarga manualmente.
+
+```sh
+tg personal attachments jobs stop ~/media-archive
+tg personal attachments jobs uninstall ~/media-archive
+```
+
+Detener evita las ejecuciones futuras; una descarga en curso termina. Desinstalar exige un temporizador desactivado e inactivo
+y un servicio inactivo, y conserva el archivo. Usa el mismo perfil y destino en estas órdenes.
+Para cambiar el horario o el ejecutable, detén, desinstala e instala de nuevo; los archivos de unidad editados se conservan.
+
+Tras una copia, `attachments check` debería informar de que todos los archivos son válidos. Para obtener texto buscable de las
+descargas habituales, continúa con los [archivos adjuntos](./attachments.md).
+
+### Mover imágenes antiguas a otro archivo
+
+Para mantener pequeña la carpeta activa, mueve las imágenes anteriores a una fecha de mensaje elegida a otro archivo verificado.
+Usa otro disco para liberar espacio en el disco original. Primero haz una vista previa:
+
+```sh
+tg personal attachments move ~/media-archive /mnt/archive/older-images --before-time 2026-10-01T00:00:00Z --dry-run
+tg personal attachments move ~/media-archive /mnt/archive/older-images --before-time 2026-10-01T00:00:00Z --timeout 6h
+tg personal attachments check ~/media-archive --offline
+```
+
+El corte usa la fecha del mensaje, no la de la descarga, y excluye las imágenes exactamente en el corte.
+Se mueven las fotos y los archivos con tipo MIME de imagen; los demás se quedan. El destino se copia y verifica
+antes de eliminar los bytes locales de las imágenes. En la carpeta original quedan pequeños registros de traslado para que las comprobaciones
+sigan las copias y las descargas posteriores no las vuelvan a obtener. No se contacta con el mensajero.
+
+Mantén el otro archivo disponible en su ruta registrada. Si está sin conexión o una copia cambia, las comprobaciones fallan
+y las descargas se detienen en lugar de duplicar archivos en silencio. Repite un traslado interrumpido para terminarlo.
+Las imágenes de borradores de archivo anteriores sin fecha de mensaje se quedan donde están y se cuentan como `undated`;
+`complete: false` significa que esas imágenes no se pudieron seleccionar por antigüedad. Nunca se usan las fechas de modificación
+de los archivos como sustituto. La vista previa informa de recuentos y bytes sin crear la carpeta de destino.

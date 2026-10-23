@@ -36,7 +36,7 @@ tg personal search messages 'What time does Helix export run? chat:990' --discov
 
 | Задача | Команда |
 |---|---|
-| Поиск сообщений и заметок в одном ответе | `tg personal search all '<query>'` |
+| Поиск сообщений и заметок в одном ответе; без `--offline` также на сервере Telegram | `tg personal search all '<query>'` |
 | Искать только сообщения Telegram; без `--discover` — также на сервере Telegram | `tg personal search messages '<query>'` |
 | Поиск почты | В Memo: установите @wirecat/cli-memo и выполните `memo search mail '<query>'` |
 | Поиск заметок, созданных в memo или импортированных из папки | `tg personal search notes '<query>'` |
@@ -68,6 +68,14 @@ tg personal search conversations 'moving to the country'  # conversations close 
 
 ```sh
 tg personal search topics "Hiking" "gear"         # topic titles in one forum group
+```
+
+Как и `search messages`, `search all` по умолчанию тоже отправляет слова запроса во встроенный поиск Telegram
+(`--backend both`, [ниже](#asking-telegram-too---backend)); заметки ищутся только здесь. Чтобы запрос остался на этом
+компьютере, добавьте `--offline` (тогда tg вообще не подключается) или `--backend archive`.
+
+```sh
+tg personal search all 'lease agreement' --offline  # the store only; nothing is sent to Telegram
 ```
 
 `search all` сообщает тип результата — сообщение (`msg:…`) или заметку (`note:…`). tg не ищет почту: `tg personal search mail` отвечает "mail is memo's: install @wirecat/cli-memo, then `memo search mail …`", а `search all --only mail` отклоняется так же. В `search messages` условия `NOT has:attachment`, `has:voice` и `has:file` в запросе оставляют только текст, голос или файлы; в `search notes` условия `source:internal` и `source:file` оставляют заметки, написанные в memo или импортированные из папки. Неподходящие поля — `chat:`/`from:` для заметок — заставляют `search all` пропустить источник и объяснить причину.
@@ -149,7 +157,11 @@ tg personal search messages '(cafe OR library) NOT loud'
 tg personal search messages 'invoic*'            # every word that starts with "invoic"
 ```
 
-Все слова, записанные в запросе рядом, должны присутствовать в сообщении. Поиск включает формы слов в соответствии с языковыми настройками архива: `piso` может найти `pisos`. Кавычки объединяют слова в фразу, но тоже допускают словоформы. Используйте `exact:piso` или добавьте `--exact` для слов без явного поля. Явный `text:` по-прежнему соответствует формам. Регистр и акценты игнорируются. Опечатки не исправляются автоматически.
+Все слова, записанные в запросе рядом, должны присутствовать в сообщении. Поиск включает формы слов в соответствии с языковыми настройками архива: `piso` может найти `pisos`. Кавычки объединяют слова в фразу, но тоже допускают словоформы. Используйте `exact:piso` или добавьте `--exact` для слов без явного поля. Явный `text:` по-прежнему соответствует формам. Регистр и акценты игнорируются. Опечатки в написанном тексте сообщений не исправляются.
+
+Простые слова и `transcript:` также ищут по сохранённым расшифровкам голосовых сообщений, включая формы слов и
+написания отдельных слов, которые распознавание речи могло исказить. `text:` ищет только по написанному тексту;
+`exact:` или `--exact` для простых слов оставляет эти слова точными, не расширяя написания в расшифровках.
 
 ## Люди и чаты
 

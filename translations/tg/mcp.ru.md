@@ -125,6 +125,26 @@ tg agent config set permissions.messages.send allow
 
 Ответы структурированы в формате JSON: списки сохраняют свои страницы, а идентификаторы остаются строками. Ошибка — `{error:{code,reason,message,details}}`; для цели, соответствующей нескольким чатам, кандидаты приходят в `details.candidates`. Сервер проверяет аргументы на соответствие схеме команды и отклоняет неизвестные поля перед подключением или действием. Используйте `at_time` для планирования. Если результат записи неизвестен, проверьте журнал отправки и Telegram, прежде чем думать о повторной попытке. Текст сообщения — это данные, а не инструкции для агента. Схемы, ограничения и правила повтора находятся в [как tg ведет себя в скриптах](./cli-contract.md).
 
+### Команды, которые сервер не предлагает
+
+Каждая команда — это инструмент, включая команды записи; что агенту можно запускать, ограничивают разрешения
+профиля. Только чтение — это ваш выбор в этих разрешениях, а не значение по умолчанию. Несколько команд не
+предлагаются никогда, и вы запускаете их в терминале:
+
+- **Вход и настройка**: `session start|end`, `upgrade`, `complete`, `mcp config|setup|doctor`, `skill install`,
+  `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.
+- **Команды, которые меняют то, что можно будет сделать при следующем запуске**: `config set|unset`,
+  `recipients add|remove|clear`, `chats rules set|unset`, правила и согласия `replies`,
+  `schedule command|agent|remove`, `server install|uninstall`, `attachments jobs install|uninstall`,
+  `models text key set|remove`, `flood clear`, а у бота `recipients add|remove|clear` и `chats rules set|unset`.
+  Агент, ограниченный только чтением, мог бы иначе разблокировать следующий запуск.
+- **Записи, которые разрешения пока не ограничивают**: `store backup|restore|migrate|repair|reset|clear|decrypt|copies delete`,
+  `server start|stop|restart`, `attachments jobs start|stop`, загрузки моделей (`models audio|text download`,
+  `images models download`), `schedule run|exec`, `doctor report create`, `account sessions end`, `bot store fetch`
+  и прямые методы `bot api`.
+
+`tg commands --json` помечает каждую из них как `mcp: false`.
+
 ## Готовые запросы и чаты через `@`
 
 Сервер предлагает шесть готовых запросов; в Claude Code это команды `/`:

@@ -203,3 +203,7 @@ tg personal attachments extract --chat "Study group" --ocr --concurrency 4 --lim
 После паузы сервера повторите только незавершённое. Ошибки и частичные запуски ищутся через
 `tg personal runs search --status partial --json` или `tg_read` с `command: "runs search"` в MCP
 ([диагностика](./diagnostics.md)).
+
+## Сохранение копий после удаления источника
+
+Для проверенных копий файлов и ежедневных резервных копий по желанию используйте [независимый архив файлов](./archive.md#keep-independent-media-copies).

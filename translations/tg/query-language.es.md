@@ -80,7 +80,7 @@ Las palabras y frases sin campo coinciden con las formas de las palabras. `--exa
 | `size` | el tamaño de un archivo adjunto, en bytes o en KB/MB/GB de 1024 | `size>10MB` |
 | `tag` | tu propia etiqueta local en el mensaje, su chat o su remitente | `tag:work` |
 | `phone` | un número de teléfono en el texto, escrito de cualquier forma | `phone:"+34 600 000 000"` |
-| `email` | una dirección de correo en el texto | `email:"ana@example.com"` |
+| `email` | una dirección de correo en el texto | `email:ana@example.com` |
 | `url` | un enlace en el texto, sin parámetros de seguimiento | `url:"https://example.com/a"` |
 | `domain` | el sitio de un enlace o de una dirección en el texto | `domain:example.com` |
 | `mentions` | una persona, organización o documento al que vinculaste una mención encontrada | `mentions:"person:12"` |
@@ -97,7 +97,7 @@ guardados. Usa estos campos para encontrar los mensajes que los contienen. Los h
 
 ```sh
 tg personal search messages 'phone:"+34 600 000 000"'
-tg personal search messages 'email:"ana@example.com" OR domain:example.com'
+tg personal search messages 'email:ana@example.com OR domain:example.com'
 tg personal search messages 'mentions:"person:12"'
 ```
 

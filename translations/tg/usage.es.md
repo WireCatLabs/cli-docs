@@ -179,7 +179,7 @@ Una persona (`<person>` en `contacts show`) puede indicarse por identificador, `
 
 ## Leer
 
-**Leer no marca como leído.** Ningún comando siguiente muestra a otros que has mirado. Solo lo hacen `tg personal chats mark-read` y `tg personal messages list --mark-read` ([más abajo](#marking-a-chat-read)).
+**Leer no marca como leído.** Ningún comando siguiente muestra a otros que has mirado. Solo lo hace `tg personal chats mark-read` ([más abajo](#marking-a-chat-read)).
 
 ### Chats
 
@@ -475,7 +475,11 @@ tg personal contacts list 'name:*ann*'  # people by name or @username
 ```
 
 ```sh
-tg personal search all "contract"            # messages and notes this machine has kept
+tg personal search all "contract"            # messages and notes kept here, and Telegram's own search
+```
+
+```sh
+tg personal search all "contract" --offline  # only this computer; the query never leaves it
 ```
 
 ```sh
@@ -627,6 +631,27 @@ tg personal polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution 
 
 Al leer un chat, las reacciones aparecen bajo el mensaje: `👍 3  🔥 1  (you: 🔥)`. Votar en una encuesta pública muestra tu nombre a todos en el chat. Vota con los ID que imprime `polls show`, nunca por la posición de una respuesta. `--multiple` permite elegir varias respuestas. Solo se puede cambiar el voto en una encuesta creada con `--revote`. Se rechazan antes de enviar nada: votar en una encuesta cerrada, elegir dos respuestas en una de respuesta única, cambiar o retirar un voto definitivo y usar `--retract` sin haber votado; también se rechaza cerrar una encuesta ajena.
 
+### Bots y sus botones
+
+Úsalo cuando un bot responde con botones bajo un mensaje, o cuando quieres iniciar un bot o abrir su mini app.
+
+```sh
+tg personal messages show "Shop bot" 4300   # the buttons are numbered under the message
+```
+
+```sh
+tg personal messages press "Shop bot" 4300 2        # button 2, counted from 1 across the rows
+tg personal messages press "Shop bot" 4300 "Order"  # or by its exact text
+```
+
+```sh
+tg personal chats start "Shop bot" --start ref7     # the same as its Start button; the bot sees it
+tg personal chats start "https://t.me/shop_bot?start=ref7"  # a bot's link, even one you never opened
+tg personal chats app "Shop bot" --start go         # the address of its mini app, signed in as you
+```
+
+El bot ve que has pulsado un botón o lo has iniciado. `press` solo admite botones de callback. Un botón que pide tu contraseña 2FA, un enlace, un botón que envía tu número de teléfono o tu ubicación y uno que abre una mini app se rechazan antes de enviar nada. La dirección que imprime `chats app` te inicia sesión en la app del bot: no la compartas.
+
 ### Editar, reenviar, fijar y eliminar
 
 ```sh
@@ -675,6 +700,26 @@ tg personal messages forward "Book club" 4242 --to me --operation-id <id from th
 
 Los reenvíos y encuestas también incluyen ese identificador. Repetir sin él envía otro mensaje. Un archivo se sube antes de enviar el mensaje: tg reintenta tres veces una subida interrumpida y, si aun así falla, el error dice que no se envió nada; ese comando puedes simplemente repetirlo. Las demás escrituras (fijar, reaccionar, marcar como leído, borrar, votar, carpetas, contactos) terminan igual con el código de salida `14` cuando Telegram no responde; el mensaje indica si es seguro repetir. Crear una carpeta no lo es: mira primero en `tg personal chats folders list` o puedes acabar con dos. Un envío con `--at-time` nunca se repite: consulta `tg personal messages scheduled <chat>`.
 
+### Tu lista de chats: archivar, fijar, marcar como no leído, silenciar
+
+```sh
+tg personal chats archive "Book club"        # into the archive; `unarchive` brings it back
+```
+
+```sh
+tg personal chats pin "Book club"            # to the top of your list; `unpin` lets it move down
+```
+
+```sh
+tg personal chats mark-unread "Book club"    # the dot on your own devices; nobody sees it
+```
+
+```sh
+tg personal chats mute "Book club" --until 2h  # without --until, for good; `unmute` hears it again
+```
+
+Esto cambia solo tu propia lista y tus notificaciones; nadie en el chat lo sabe. Telegram rechaza un chat fijado más allá de su límite de chats fijados, y también se rechaza fijar uno en el archivo.
+
 ### Marcar un chat como leído
 
 ```sh
@@ -690,7 +735,7 @@ tg personal chats mark-read "Hiking" --topic 12  # only this forum topic
 ```
 
 ```sh
-tg personal messages list "Book club" --mark-read  # read it, and mark it read up to the newest shown
+tg personal messages list "Book club"  # read without sending a receipt
 ```
 
 La otra persona lo ve. Pasa por los controles como acción `read` y no cuenta para el límite por hora.

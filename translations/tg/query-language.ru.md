@@ -80,7 +80,7 @@ title: "Язык поисковых запросов"
 | `size` | размер прикреплённого файла в байтах или в KB/MB/GB по 1024 | `size>10MB` |
 | `tag` | ваша локальная метка на сообщении, его чате или отправителе | `tag:work` |
 | `phone` | номер телефона в тексте, как бы он ни был записан | `phone:"+34 600 000 000"` |
-| `email` | адрес почты в тексте | `email:"ana@example.com"` |
+| `email` | адрес почты в тексте | `email:ana@example.com` |
 | `url` | ссылку в тексте, без параметров отслеживания | `url:"https://example.com/a"` |
 | `domain` | сайт ссылки или адреса в тексте | `domain:example.com` |
 | `mentions` | человека, организацию или документ, с которым вы связали найденное упоминание | `mentions:"person:12"` |
@@ -99,7 +99,7 @@ title: "Язык поисковых запросов"
 
 ```sh
 tg personal search messages 'phone:"+34 600 000 000"'
-tg personal search messages 'email:"ana@example.com" OR domain:example.com'
+tg personal search messages 'email:ana@example.com OR domain:example.com'
 tg personal search messages 'mentions:"person:12"'
 ```
 

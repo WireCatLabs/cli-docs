@@ -69,7 +69,7 @@ tg session start [method] [options]
 
 **Returns:** log in by QR code (default) or by phone number, code and 2FA password
 
-**Example:** `tg session start`
+**Example:** `tg personal session start`
 
 ### `tg session end`
 
@@ -83,7 +83,7 @@ tg session end
 
 **Returns:** log this profile out on Telegram's side and forget the session here
 
-**Example:** `tg session end`
+**Example:** `tg personal session end`
 
 ## `tg setup`
 
@@ -103,7 +103,7 @@ tg setup [options]
 
 **Returns:** set up Telegram and connect your agent
 
-**Example:** `tg setup`
+**Example:** `tg personal setup`
 
 ## `tg account`
 
@@ -117,9 +117,9 @@ todos los perfiles de este ordenador y sus cuentas; no consulta el servicio de m
 tg account list
 ```
 
-**Returns:** every profile on this computer, and the account each is logged in as; asks the messenger…
+**Returns:** profiles on this computer and their signed-in accounts
 
-**Example:** `tg account list`
+**Example:** `tg personal account list`
 
 ### `tg account show`
 
@@ -135,7 +135,7 @@ tg account show [options]
 
 **Returns:** account — provider, id, name, username, phone, scope; every field: tg commands schema account show
 
-**Example:** `tg account show`
+**Example:** `tg personal account show`
 
 ### `tg account update`
 
@@ -156,7 +156,7 @@ tg account update [options]
 
 **Returns:** change the name, the description or the photo everyone sees on your profile
 
-**Example:** `tg account update`
+**Example:** `tg personal account update --first-name Alex`
 
 ### `tg account sessions`
 
@@ -176,7 +176,7 @@ tg account sessions list [query]
 
 **Returns:** account session — current, client, device, location, last_active_at, created_at; every field: tg commands schema account sessions list
 
-**Example:** `tg account sessions list`
+**Example:** `tg personal account sessions list`
 
 #### `tg account sessions end`
 
@@ -194,7 +194,7 @@ tg account sessions end [options]
 
 **Returns:** log out every other device, your phone included; this one stays
 
-**Example:** `tg account sessions end`
+**Example:** `tg personal account sessions end --others`
 
 ## `tg chats`
 
@@ -218,11 +218,11 @@ tg chats list [query] [options]
 | `--page <n>` | número de página, desde 1. |
 | `--all` | todas las filas, sin paginar. |
 
-**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 12 more; every field: tg commands schema chats list
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: tg commands schema chats list
 
 **Next usually:** `tg chats events <chat> [query]`, `tg chats show <chat>`, `tg chats send-as <chat>`
 
-**Example:** `tg chats list`
+**Example:** `tg personal chats list --limit 10`
 
 ### `tg chats events`
 
@@ -239,7 +239,7 @@ tg chats events <chat> [query]
 
 **Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: tg commands schema chats events
 
-**Example:** `tg chats events Team`
+**Example:** `tg personal chats events "Book club"`
 
 ### `tg chats inspect`
 
@@ -255,7 +255,7 @@ tg chats inspect <link>
 
 **Returns:** what an invite or public link leads to, without joining it
 
-**Example:** `tg chats inspect https://example.com/join/abc`
+**Example:** `tg personal chats inspect https://example.com/invite/book-club`
 
 ### `tg chats show`
 
@@ -269,11 +269,11 @@ tg chats show <chat>
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 
-**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 12 more; every field: tg commands schema chats show
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: tg commands schema chats show
 
 **Next usually:** `tg chats events <chat> [query]`, `tg chats send-as <chat>`, `tg chats documents list <chat>`
 
-**Example:** `tg chats show Team`
+**Example:** `tg personal chats show "Book club"`
 
 ### `tg chats send-as`
 
@@ -289,7 +289,7 @@ tg chats send-as <chat>
 
 **Returns:** who this account may post as in a chat; changes no saved choice
 
-**Example:** `tg chats send-as Team`
+**Example:** `tg personal chats send-as "Project room"`
 
 ### `tg chats documents`
 
@@ -314,7 +314,7 @@ tg chats documents list <chat> [options]
 
 **Returns:** every document link in the chat, newest first, and whether the store has it
 
-**Example:** `tg chats documents list Team`
+**Example:** `tg personal chats documents list "Project room" --limit 10`
 
 ### `tg chats members`
 
@@ -343,7 +343,7 @@ tg chats members list <chat> [query] [options]
 
 **Next usually:** `tg contacts show <person>`, `tg contacts profile <person>`, `tg contacts context <person>`
 
-**Example:** `tg chats members list Team`
+**Example:** `tg personal chats members list "Book club"`
 
 #### `tg chats members audit`
 
@@ -367,7 +367,7 @@ tg chats members audit <chat> [query] [options]
 
 **Next usually:** `tg contacts show <person>`, `tg contacts profile <person>`, `tg contacts context <person>`
 
-**Example:** `tg chats members audit Team`
+**Example:** `tg personal chats members audit "Book club"`
 
 #### `tg chats members history`
 
@@ -384,7 +384,7 @@ tg chats members history <chat> [query]
 
 **Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: tg commands schema chats members history
 
-**Example:** `tg chats members history Team`
+**Example:** `tg personal chats members history "Book club"`
 
 #### `tg chats members fetch`
 
@@ -405,9 +405,9 @@ tg chats members fetch <chat> [options]
 | `--track` | descargarla también a diario mientras se ejecuta serve; chats tracking enumera y modifica esos chats. |
 | `--max-pages <pages>` | como máximo este número de páginas de 200 miembros, con una pausa entre ellas (predeterminado: 10). |
 
-**Returns:** read a group's whole member list into the local store's member history: who joined, who…
+**Returns:** save the group's current membership
 
-**Example:** `tg chats members fetch Team`
+**Example:** `tg personal chats members fetch "Book club"`
 
 #### `tg chats members add`
 
@@ -426,7 +426,7 @@ tg chats members add <chat> <person>
 
 **Returns:** add people; they are told
 
-**Example:** `tg chats members add Team Anna`
+**Example:** `tg personal chats members add "Book club" "Alex Example"`
 
 #### `tg chats members remove`
 
@@ -445,7 +445,7 @@ tg chats members remove <chat> <person>
 
 **Returns:** remove people; their messages stay
 
-**Example:** `tg chats members remove Team Anna`
+**Example:** `tg personal chats members remove "Book club" "Alex Example"`
 
 ### `tg chats mark-read`
 
@@ -468,7 +468,7 @@ tg chats mark-read <chat> [options]
 
 **Returns:** mark a chat read; the other side sees that you read it
 
-**Example:** `tg chats mark-read Team`
+**Example:** `tg personal chats mark-read "Book club" --until-id 101`
 
 ### `tg chats tracking`
 
@@ -484,7 +484,7 @@ tg chats tracking list
 
 **Returns:** every tracked chat: since when, and its last member count
 
-**Example:** `tg chats tracking list`
+**Example:** `tg personal chats tracking list`
 
 #### `tg chats tracking show`
 
@@ -498,9 +498,9 @@ tg chats tracking show <chat>
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 
-**Returns:** one chat: whether it is tracked, and its member count per day for the last 30 days
+**Returns:** one chat's member tracking and daily counts
 
-**Example:** `tg chats tracking show Team`
+**Example:** `tg personal chats tracking show "Book club"`
 
 #### `tg chats tracking add`
 
@@ -518,7 +518,7 @@ tg chats tracking add <chat>
 
 **Returns:** fetch this chat's member list daily while serve runs, from its next run
 
-**Example:** `tg chats tracking add Team`
+**Example:** `tg personal chats tracking add "Book club"`
 
 #### `tg chats tracking remove`
 
@@ -536,7 +536,7 @@ tg chats tracking remove <chat>
 
 **Returns:** stop fetching it daily; the history already kept stays
 
-**Example:** `tg chats tracking remove Team`
+**Example:** `tg personal chats tracking remove "Book club"`
 
 ### `tg chats create`
 
@@ -559,7 +559,7 @@ tg chats create <title> [person] [options]
 
 **Returns:** create a group or a channel; the people added are told
 
-**Example:** `tg chats create "Weekly sync" Anna`
+**Example:** `tg personal chats create "Book club" "Alex Example"`
 
 ### `tg chats join`
 
@@ -577,7 +577,7 @@ tg chats join <link>
 
 **Returns:** join a group or channel by its link; the others in it see that you joined
 
-**Example:** `tg chats join https://example.com/join/abc`
+**Example:** `tg personal chats join https://example.com/invite/book-club`
 
 ### `tg chats leave`
 
@@ -595,7 +595,7 @@ tg chats leave <chat>
 
 **Returns:** leave a group or channel; the others in it see that you left
 
-**Example:** `tg chats leave Team`
+**Example:** `tg personal chats leave "Book club"`
 
 ### `tg chats update`
 
@@ -619,9 +619,9 @@ tg chats update <chat> [options]
 | `--only-admins-add <on\|off>` | solo administradores pueden añadir miembros. |
 | `--join-approval <on\|off>` | la gente pide unirse, y un administrador los deja entrar. |
 
-**Returns:** rename a group or channel, change its description, or turn one of its settings on or off
+**Returns:** change a group or channel's profile and settings
 
-**Example:** `tg chats update Team`
+**Example:** `tg personal chats update "Book club" --title "Reading group"`
 
 ### `tg chats link`
 
@@ -641,7 +641,7 @@ tg chats link show <chat>
 
 **Returns:** the invite link, if you may see it
 
-**Example:** `tg chats link show Team`
+**Example:** `tg personal chats link show "Book club"`
 
 #### `tg chats link create`
 
@@ -665,7 +665,7 @@ tg chats link create <chat> [options]
 
 **Returns:** make another invite link; nobody is told until you share it
 
-**Example:** `tg chats link create Team`
+**Example:** `tg personal chats link create "Book club"`
 
 #### `tg chats link list`
 
@@ -687,7 +687,7 @@ tg chats link list <chat> [query] [options]
 
 **Returns:** invite link — link, approval, expires_at, max_uses, primary, revoked, pending_count, joined_count; every field: tg commands schema chats link list
 
-**Example:** `tg chats link list Team`
+**Example:** `tg personal chats link list "Book club"`
 
 #### `tg chats link revoke`
 
@@ -706,7 +706,7 @@ tg chats link revoke <chat> <link>
 
 **Returns:** stop one link; for the group's own link, the answer is the new one
 
-**Example:** `tg chats link revoke Team https://example.com/join/abc`
+**Example:** `tg personal chats link revoke "Book club" https://example.com/invite/book-club`
 
 #### `tg chats link update`
 
@@ -732,7 +732,7 @@ tg chats link update <chat> <link> [options]
 
 **Returns:** change one of your invite links, the group's own one too
 
-**Example:** `tg chats link update Team https://example.com/join/abc`
+**Example:** `tg personal chats link update Team https://example.com/join/abc`
 
 #### `tg chats link reset`
 
@@ -750,7 +750,7 @@ tg chats link reset <chat>
 
 **Returns:** replace the invite link; the old one stops working
 
-**Example:** `tg chats link reset Team`
+**Example:** `tg personal chats link reset "Book club"`
 
 ### `tg chats requests`
 
@@ -776,7 +776,7 @@ tg chats requests list <chat> [query] [options]
 
 **Returns:** join request — person_id, name, username, requested_at, about; every field: tg commands schema chats requests list
 
-**Example:** `tg chats requests list Team`
+**Example:** `tg personal chats requests list "Book club"`
 
 #### `tg chats requests accept`
 
@@ -800,7 +800,7 @@ tg chats requests accept <chat> [person] [options]
 
 **Returns:** let them in; the group sees them join
 
-**Example:** `tg chats requests accept Team Anna`
+**Example:** `tg personal chats requests accept "Book club" "Alex Example"`
 
 #### `tg chats requests decline`
 
@@ -824,7 +824,7 @@ tg chats requests decline <chat> [person] [options]
 
 **Returns:** turn the request away
 
-**Example:** `tg chats requests decline Team Anna`
+**Example:** `tg personal chats requests decline "Book club" "Alex Example"`
 
 ### `tg chats admins`
 
@@ -851,7 +851,7 @@ tg chats admins add <chat> <person> [options]
 
 **Returns:** make a member an admin with these rights
 
-**Example:** `tg chats admins add Team Anna --can <rights>`
+**Example:** `tg personal chats admins add "Book club" "Alex Example" --can members`
 
 #### `tg chats admins remove`
 
@@ -870,7 +870,7 @@ tg chats admins remove <chat> <person>
 
 **Returns:** take an admin's rights back; they stay a member
 
-**Example:** `tg chats admins remove Team Anna`
+**Example:** `tg personal chats admins remove "Book club" "Alex Example"`
 
 ### `tg chats folders`
 
@@ -892,7 +892,7 @@ tg chats folders list [query]
 
 **Next usually:** `tg chats folders show <folder>`, `tg chats folders update <folder>`, `tg chats folders delete <folder>`
 
-**Example:** `tg chats folders list`
+**Example:** `tg personal chats folders list`
 
 #### `tg chats folders show`
 
@@ -910,7 +910,7 @@ tg chats folders show <folder>
 
 **Next usually:** `tg chats folders update <folder>`, `tg chats folders delete <folder>`, `tg chats folders order <folders>`
 
-**Example:** `tg chats folders show Work`
+**Example:** `tg personal chats folders show "Reading"`
 
 #### `tg chats folders create`
 
@@ -937,7 +937,7 @@ tg chats folders create <title> [options]
 
 **Returns:** create a chat folder
 
-**Example:** `tg chats folders create "Weekly sync"`
+**Example:** `tg personal chats folders create "Reading" --chat "Book club"`
 
 #### `tg chats folders update`
 
@@ -966,7 +966,7 @@ tg chats folders update <folder> [options]
 
 **Returns:** rename a folder, or change which chats are in it
 
-**Example:** `tg chats folders update Work`
+**Example:** `tg personal chats folders update "Reading" --title "Books"`
 
 #### `tg chats folders delete`
 
@@ -984,7 +984,7 @@ tg chats folders delete <folder>
 
 **Returns:** delete a folder; the chats in it stay
 
-**Example:** `tg chats folders delete Work`
+**Example:** `tg personal chats folders delete "Reading"`
 
 #### `tg chats folders order`
 
@@ -1002,7 +1002,7 @@ tg chats folders order <folders>
 
 **Returns:** put folders in this order; the ones not named keep theirs after them
 
-**Example:** `tg chats folders order <folders>`
+**Example:** `tg personal chats folders order "Reading" "Work"`
 
 #### `tg chats folders join`
 
@@ -1020,7 +1020,7 @@ tg chats folders join <link>
 
 **Returns:** add a folder someone shared by a link; joins every chat in it, and the others there see…
 
-**Example:** `tg chats folders join https://example.com/join/abc`
+**Example:** `tg personal chats folders join https://t.me/addlist/example`
 
 ### `tg chats rules`
 
@@ -1040,7 +1040,7 @@ tg chats rules show <chat>
 
 **Returns:** the group's rules; the defaults, marked not saved, if it has none yet
 
-**Example:** `tg chats rules show Team`
+**Example:** `tg personal chats rules show "Book club"`
 
 #### `tg chats rules set`
 
@@ -1060,7 +1060,7 @@ tg chats rules set <chat> <key> <value>
 
 **Returns:** change one rule; the group's first change writes every rule with its default
 
-**Example:** `tg chats rules set Team <key> <value>`
+**Example:** `tg personal chats rules set "Book club" links report`
 
 #### `tg chats rules unset`
 
@@ -1079,7 +1079,7 @@ tg chats rules unset <chat> <key>
 
 **Returns:** put one rule back to its default
 
-**Example:** `tg chats rules unset Team <key>`
+**Example:** `tg personal chats rules unset "Book club" links`
 
 ### `tg chats moderate`
 
@@ -1104,7 +1104,181 @@ tg chats moderate <chat> [options]
 
 **Returns:** judge a group's new messages and members by its rules, and act as they allow
 
-**Example:** `tg chats moderate Team`
+**Example:** `tg personal chats moderate "Book club" --dry-run`
+
+### `tg chats mute`
+
+silencia las notificaciones de un chat, para siempre o hasta una hora; nadie en él recibe un aviso
+
+**Changes something in Telegram.**
+
+```sh
+tg chats mute <chat> [options]
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+| Opción | Qué hace |
+| --- | --- |
+| `--until <time>` | solo hasta entonces: 2026-09-25T09:00 (hora local) o dentro de 30m, 2h, 7d. |
+
+**Returns:** stop notifications from a chat, for good or until a time; nobody in it is told
+
+**Example:** `tg personal chats mute "Book club"`, `tg personal chats mute "Book club" --until 2h`
+
+### `tg chats unmute`
+
+vuelve a recibir las notificaciones de un chat silenciado
+
+**Changes something in Telegram.**
+
+```sh
+tg chats unmute <chat>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+**Returns:** hear a muted chat again
+
+**Example:** `tg personal chats unmute "Book club"`
+
+### `tg chats archive`
+
+mueve un chat al archivo; nadie en él recibe un aviso
+
+**Changes something in Telegram.**
+
+```sh
+tg chats archive <chat>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+**Returns:** move a chat into the archive; nobody in it is told
+
+**Example:** `tg personal chats archive 123456789`
+
+### `tg chats unarchive`
+
+devuelve un chat archivado a la lista de chats
+
+**Changes something in Telegram.**
+
+```sh
+tg chats unarchive <chat>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+**Returns:** bring an archived chat back to the chat list
+
+**Example:** `tg personal chats unarchive 123456789`
+
+### `tg chats pin`
+
+mantiene un chat al principio de tu lista de chats; nadie en él recibe un aviso
+
+**Changes something in Telegram.**
+
+```sh
+tg chats pin <chat>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+**Returns:** keep a chat at the top of your chat list; nobody in it is told
+
+**Example:** `tg personal chats pin 123456789`
+
+### `tg chats unpin`
+
+permite que un chat fijado vuelva a bajar en la lista de chats
+
+**Changes something in Telegram.**
+
+```sh
+tg chats unpin <chat>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+**Returns:** let a pinned chat move down the chat list again
+
+**Example:** `tg personal chats unpin 123456789`
+
+### `tg chats mark-unread`
+
+marca un chat como no leído en tus propios dispositivos; nadie en él recibe un aviso
+
+**Changes something in Telegram.**
+
+```sh
+tg chats mark-unread <chat>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+
+**Returns:** mark a chat unread on your own devices; nobody in it is told
+
+**Example:** `tg personal chats mark-unread 123456789`
+
+### `tg chats start`
+
+inicia un bot, como lo hace su botón Iniciar; el bot ve que lo has iniciado
+
+**Changes something in Telegram.**
+
+```sh
+tg chats start <bot> [options]
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `bot` | obligatorio | el chat con el bot (su identificador o su nombre) o el enlace del bot, aunque nunca lo hayas abierto. |
+
+| Opción | Qué hace |
+| --- | --- |
+| `--start <param>` | parámetro de inicio que lee el bot; si no se indica, el ?start= del propio enlace. |
+
+**Returns:** start a bot, as its Start button does; the bot sees that you started it
+
+**Example:** `tg personal chats start <bot>`
+
+### `tg chats app`
+
+la dirección que abre la mini aplicación de un bot, con tu sesión iniciada; no la compartas
+
+**Changes something in Telegram.**
+
+```sh
+tg chats app <bot> [options]
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `bot` | obligatorio | el chat con el bot: su identificador o su nombre. |
+
+| Opción | Qué hace |
+| --- | --- |
+| `--start <param>` | parámetro de inicio que lee la aplicación. |
+
+**Returns:** the address that opens a bot's mini app, signed in as you — keep it to yourself
+
+**Example:** `tg personal chats app <bot>`
 
 ## `tg contacts`
 
@@ -1133,7 +1307,7 @@ tg contacts list [query] [options]
 
 **Next usually:** `tg contacts show <person>`, `tg contacts profile <person>`, `tg contacts context <person>`
 
-**Example:** `tg contacts list`
+**Example:** `tg personal contacts list --limit 10`
 
 ### `tg contacts show`
 
@@ -1153,9 +1327,9 @@ tg contacts show <person> [options]
 
 **Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 2 more; every field: tg commands schema contacts show
 
-**Next usually:** `tg contacts profile <person>`, `tg contacts context <person>`, `tg contacts timeline <person>`
+**Next usually:** `tg contacts profile <person>`, `tg contacts context <person>`, `tg contacts prepare <person>`
 
-**Example:** `tg contacts show Anna`
+**Example:** `tg personal contacts show "Alex Example"`
 
 ### `tg contacts profile`
 
@@ -1173,9 +1347,9 @@ tg contacts profile <person> [options]
 |---|---|
 | `--show-phone` | muestra el número completo. |
 
-**Returns:** everything the messenger says about one person — handles, flags, last seen, when they…
+**Returns:** contact profile — id, name, usernames, bio, flags, chats, aliases, birthday, and 7 more; every field: tg commands schema contacts profile
 
-**Example:** `tg contacts profile Anna`
+**Example:** `tg personal contacts profile "Alex Example"`
 
 ### `tg contacts context`
 
@@ -1196,9 +1370,30 @@ tg contacts context <person> [options]
 | `--chat <chat>` | un chat por identificador o nombre; repítelo para más — después, sus mensajes más recientes en cada uno, 20 salvo que se indique --limit, abreviados salvo que se indique -v. |
 | `--sync-first` | con --chat, leer primero sus mensajes más recientes en cada chat desde el servicio de mensajería. |
 
-**Returns:** what the local store holds about a person; --chat --sync-first explicitly asks Telegram…
+**Returns:** what the local archive knows about a person
 
-**Example:** `tg contacts context Anna`
+**Example:** `tg personal contacts context "Alex Example" --limit 10`
+
+### `tg contacts prepare`
+
+antes de hablar con alguien: lo que da contacts context, más los chats individuales donde escribió por última vez, las tareas abiertas, los hechos aceptados, tus notas y sus reuniones recientes, cada uno con su referencia; nunca se conecta
+
+```sh
+tg contacts prepare <person> [options]
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `person` | obligatorio | identificador, @username o parte del nombre. |
+
+| Opción | Qué hace |
+| --- | --- |
+| `--limit <n>` | como máximo este número de mensajes y de elementos en cada sección; 10 por defecto. |
+| `--since-time <time>` | ningún mensaje ni reunión anterior a esta fecha ISO 8601 o a hace 2h / 1d. |
+
+**Returns:** what to know before you talk to someone, each item with its reference
+
+**Example:** `tg personal contacts prepare Ana`
 
 ### `tg contacts timeline`
 
@@ -1220,9 +1415,9 @@ tg contacts timeline <person> [options]
 | `--limit <n>` | at most this many; 50 if not given. |
 | `--cursor <cursor>` | sigue desde donde se detuvo la última página; lo da page.next, con los mismos filtros. |
 
-**Returns:** everything one person took part in, in every messenger linked to them — messages they…
+**Returns:** one person's activity across their linked identities
 
-**Example:** `tg contacts timeline Anna`
+**Example:** `tg personal contacts timeline "Alex Example" --limit 10`
 
 ### `tg contacts check`
 
@@ -1240,9 +1435,9 @@ tg contacts check <person> [options]
 |---|---|
 | `--no-registries` | omitir las listas públicas de bloqueos; seguir consultando Telegram para obtener el perfil y las fotos salvo que se indique --offline. |
 
-**Returns:** whether one person looks like a bot, a fake or a spammer: their profile, what they wrote…
+**Returns:** check a person's profile and messages for signs of abuse
 
-**Example:** `tg contacts check Anna`
+**Example:** `tg personal contacts check "Alex Example"`
 
 ### `tg contacts link`
 
@@ -1259,9 +1454,9 @@ tg contacts link <person> <other>
 | `person` | obligatorio | identificador, @username o parte del nombre. |
 | `other` | obligatorio | la misma persona en otro servicio de mensajería del archivo local, como <messenger>:<person>: max:Ana; me: eres tú, como zoom:<id> me. |
 
-**Returns:** record that two people in the store are one person — the same name is never enough
+**Returns:** link identities that belong to one person
 
-**Example:** `tg contacts link Anna <other>`
+**Example:** `tg personal contacts link "Alex Example" zoom:101`
 
 ### `tg contacts unlink`
 
@@ -1279,7 +1474,7 @@ tg contacts unlink <person>
 
 **Returns:** undo contacts link for one identity: it is a person of its own again
 
-**Example:** `tg contacts unlink Anna`
+**Example:** `tg personal contacts unlink "Alex Example"`
 
 ### `tg contacts lookup`
 
@@ -1289,9 +1484,9 @@ quién tiene este teléfono; lo solicita o lee por stdin, nunca como argumento
 tg contacts lookup
 ```
 
-**Returns:** who has this phone number — asks for it, or reads it from stdin; never an argument
+**Returns:** contact lookup — id, name, username; every field: tg commands schema contacts lookup
 
-**Example:** `tg contacts lookup`
+**Example:** `tg personal contacts lookup`
 
 ### `tg contacts sync`
 
@@ -1303,9 +1498,9 @@ guarda toda la lista de contactos del servicio en el archivo local
 tg contacts sync
 ```
 
-**Returns:** take the whole contact list from the messenger into the local store
+**Returns:** contact sync — added, changed, known; every field: tg commands schema contacts sync
 
-**Example:** `tg contacts sync`
+**Example:** `tg personal contacts sync`
 
 ### `tg contacts alias`
 
@@ -1323,12 +1518,12 @@ tg contacts alias set <person> <alias>
 
 | Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio |  |
-| `alias` | obligatorio |  |
+| `person` | obligatorio | identificador, referencia o nombre conocido de la persona. |
+| `alias` | obligatorio | nombre privado que se usará para esta persona. |
 
 **Returns:** your own name for a person in this account; kept on this machine, never sent
 
-**Example:** `tg contacts alias set Anna <alias>`
+**Example:** `tg personal contacts alias set "Alex Example" "Reading partner"`
 
 #### `tg contacts alias rm`
 
@@ -1342,11 +1537,11 @@ tg contacts alias rm <person>
 
 | Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio |  |
+| `person` | obligatorio | identificador, referencia o nombre conocido de la persona. |
 
 **Returns:** drop your local name for a person; their own name shows again
 
-**Example:** `tg contacts alias rm Anna`
+**Example:** `tg personal contacts alias rm "Alex Example"`
 
 ### `tg contacts notes`
 
@@ -1362,12 +1557,12 @@ tg contacts notes list <person> [query]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio |  |
+| `person` | obligatorio | identificador, referencia o nombre conocido de la persona. |
 | `query` | opcional | términos campo:valor; esta lista aún no filtra por ninguno. |
 
 **Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands schema contacts notes list
 
-**Example:** `tg contacts notes list Anna`
+**Example:** `tg personal contacts notes list "Alex Example"`
 
 #### `tg contacts notes show`
 
@@ -1379,12 +1574,12 @@ tg contacts notes show <person> <id>
 
 | Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio |  |
-| `id` | obligatorio |  |
+| `person` | obligatorio | identificador, referencia o nombre conocido de la persona. |
+| `id` | obligatorio | identificador de la nota, de contacts notes list. |
 
 **Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands schema contacts notes show
 
-**Example:** `tg contacts notes show Anna 1`
+**Example:** `tg personal contacts notes show "Alex Example" 1`
 
 #### `tg contacts notes add`
 
@@ -1398,7 +1593,7 @@ tg contacts notes add <person> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio |  |
+| `person` | obligatorio | identificador, referencia o nombre conocido de la persona. |
 
 | Opción | Qué hace |
 |---|---|
@@ -1406,7 +1601,7 @@ tg contacts notes add <person> [options]
 
 **Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands schema contacts notes add
 
-**Example:** `tg contacts notes add Anna`
+**Example:** `tg personal contacts notes add "Alex Example" --file ./note.txt`
 
 #### `tg contacts notes edit`
 
@@ -1420,8 +1615,8 @@ tg contacts notes edit <person> <id> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio |  |
-| `id` | obligatorio |  |
+| `person` | obligatorio | identificador, referencia o nombre conocido de la persona. |
+| `id` | obligatorio | identificador de la nota, de contacts notes list. |
 
 | Opción | Qué hace |
 |---|---|
@@ -1430,7 +1625,7 @@ tg contacts notes edit <person> <id> [options]
 
 **Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands schema contacts notes edit
 
-**Example:** `tg contacts notes edit Anna 1 --revision <n>`
+**Example:** `tg personal contacts notes edit "Alex Example" 1 --revision 1 --file ./note.txt`
 
 #### `tg contacts notes remove`
 
@@ -1444,12 +1639,12 @@ tg contacts notes remove <person> <id>
 
 | Argumento | | Qué es |
 |---|---|---|
-| `person` | obligatorio |  |
-| `id` | obligatorio |  |
+| `person` | obligatorio | identificador, referencia o nombre conocido de la persona. |
+| `id` | obligatorio | identificador de la nota, de contacts notes list. |
 
 **Returns:** delete one private note on a person
 
-**Example:** `tg contacts notes remove Anna 1`
+**Example:** `tg personal contacts notes remove "Alex Example" 1`
 
 ### `tg contacts add`
 
@@ -1465,9 +1660,9 @@ tg contacts add <person>
 |---|---|---|
 | `person` | obligatorio | identificador de persona, obtenido con `contacts lookup`, o parte de un nombre conocido. |
 
-**Returns:** add a person to your contacts — `contacts list` still shows only people you have a dialog…
+**Returns:** add a person to your contacts
 
-**Example:** `tg contacts add Anna`
+**Example:** `tg personal contacts add "Alex Example"`
 
 ### `tg contacts remove`
 
@@ -1485,7 +1680,7 @@ tg contacts remove <person>
 
 **Returns:** remove a person from your contacts; the chat stays, a name you gave them may not
 
-**Example:** `tg contacts remove Anna`
+**Example:** `tg personal contacts remove "Alex Example"`
 
 ### `tg contacts block`
 
@@ -1503,7 +1698,7 @@ tg contacts block <person>
 
 **Returns:** stop a person from writing to you — they need not be a contact
 
-**Example:** `tg contacts block Anna`
+**Example:** `tg personal contacts block "Alex Example"`
 
 ### `tg contacts unblock`
 
@@ -1521,7 +1716,7 @@ tg contacts unblock <person>
 
 **Returns:** let a blocked person write to you again
 
-**Example:** `tg contacts unblock Anna`
+**Example:** `tg personal contacts unblock "Alex Example"`
 
 ### `tg contacts rename`
 
@@ -1537,11 +1732,11 @@ tg contacts rename <person> <first-name> [last-name]
 |---|---|---|
 | `person` | obligatorio | identificador de persona, obtenido con `contacts lookup`, o parte de un nombre conocido. |
 | `first-name` | obligatorio | el nombre con el que quieres verla. |
-| `last-name` | opcional |  |
+| `last-name` | opcional | los apellidos con los que quieres verla. |
 
-**Returns:** rename the contact in the messenger address book; use contacts alias for a private local…
+**Returns:** change a contact's name in the messenger address book
 
-**Example:** `tg contacts rename Anna <first-name>`
+**Example:** `tg personal contacts rename "Alex Example" Alex Example`
 
 ### `tg contacts import`
 
@@ -1559,7 +1754,7 @@ tg contacts import <file>
 
 **Returns:** upload phone numbers and add the people the messenger has under them
 
-**Example:** `tg contacts import ./report.pdf`
+**Example:** `tg personal contacts import ./contacts.csv`
 
 ## `tg messages`
 
@@ -1584,7 +1779,7 @@ tg messages evidence <chat> [options]
 
 **Returns:** a bounded evidence packet from stored messages, newest first
 
-**Example:** `tg messages evidence Team`
+**Example:** `tg personal messages evidence "Book club" --limit 10`
 
 ### `tg messages list`
 
@@ -1605,13 +1800,12 @@ tg messages list <chat> [query] [options]
 | `--cursor <cursor>` | sigue desde donde se detuvo la última página; lo da page.next. |
 | `--transcribe` | transcribe notas de voz pendientes mediante el servicio de mensajería cuando puede, si no con un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
-| `--mark-read` | también marca como leído hasta el mensaje más reciente mostrado; la otra persona lo ve. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 26 more; every field: tg commands schema messages list
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands schema messages list
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
-**Example:** `tg messages list Team`
+**Example:** `tg personal messages list "Book club" --limit 20`
 
 ### `tg messages send`
 
@@ -1651,7 +1845,7 @@ tg messages send <chat> [text] [options]
 
 **Returns:** send a text message; without [text], the text is read from stdin
 
-**Example:** `tg messages send Team "on my way"`
+**Example:** `tg personal messages send "Book club" "The meeting starts at 10."`
 
 ### `tg messages show`
 
@@ -1668,7 +1862,7 @@ tg messages show <chat> [message]
 
 **Returns:** one message, by its chat and id or by its msg: locator
 
-**Example:** `tg messages show Team 1234`
+**Example:** `tg personal messages show "Book club" 101`
 
 ### `tg messages context`
 
@@ -1695,7 +1889,7 @@ tg messages context <chat> [message] [options]
 
 **Returns:** a message and what came either side of it, oldest first
 
-**Example:** `tg messages context Team 1234`
+**Example:** `tg personal messages context "Book club" 101 --before-n 3 --after-n 3`
 
 ### `tg messages download`
 
@@ -1719,9 +1913,9 @@ tg messages download <chat> [message] [options]
 | `--pause <duration>` | con --all, pausa entre páginas para respetar límites del servicio. Predeterminada: `1s`. |
 | `--extract` | leer las capas de texto de los archivos que esta descarga vincula al índice de contenido local. |
 
-**Returns:** save a message's photos, files, videos and voice notes to a folder — or a whole chat's…
+**Returns:** download files attached to stored messages
 
-**Example:** `tg messages download Team 1234`
+**Example:** `tg personal messages download "Book club" 101 --output-dir ./downloads`
 
 ### `tg messages transcribe`
 
@@ -1741,9 +1935,9 @@ tg messages transcribe <chat> <message> [options]
 | `--local` | usa el modelo local, nunca el servicio. |
 | `--model <id>` | modelo descargado que utilizar; implica --local (`models audio list`). |
 
-**Returns:** a voice message as text — by Telegram where it can, else by a model on this machine
+**Returns:** transcribe one voice message
 
-**Example:** `tg messages transcribe Team 1234`
+**Example:** `tg personal messages transcribe "Book club" 101`
 
 ### `tg messages edit`
 
@@ -1768,7 +1962,7 @@ tg messages edit <chat> <message> [text] [options]
 
 **Returns:** change the text of your own message; the other side may have read it already
 
-**Example:** `tg messages edit Team 1234 "on my way"`
+**Example:** `tg personal messages edit "Book club" 101 "The meeting starts at 11."`
 
 ### `tg messages delete`
 
@@ -1777,13 +1971,13 @@ elimina mensajes solo para ti; con --for-everyone, para todos
 **Changes something in Telegram.**
 
 ```sh
-tg messages delete <chat> <messages> [options]
+tg messages delete <chat> <message> [options]
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
-| `messages` | obligatorio | identificadores de mensajes, separados por espacios o comas, máximo 10. |
+| `message` | obligatorio | identificadores de mensajes, separados por espacios o comas, máximo 10. |
 
 | Opción | Qué hace |
 |---|---|
@@ -1792,7 +1986,7 @@ tg messages delete <chat> <messages> [options]
 
 **Returns:** delete messages for you only; with --for-everyone, for everyone in the chat
 
-**Example:** `tg messages delete Team <messages>`
+**Example:** `tg personal messages delete "Book club" 101`
 
 ### `tg messages forward`
 
@@ -1819,7 +2013,7 @@ tg messages forward <chat> <message> [options]
 
 **Returns:** forward one message to another chat
 
-**Example:** `tg messages forward Team 1234 --to Team`
+**Example:** `tg personal messages forward "Book club" 101 --to "Project room"`
 
 ### `tg messages pin`
 
@@ -1842,7 +2036,7 @@ tg messages pin <chat> <message> [options]
 
 **Returns:** pin a message in a chat, quietly unless --notify
 
-**Example:** `tg messages pin <chat> <message>`, `tg messages pin <chat> <message> --notify`
+**Example:** `tg personal messages pin <chat> <message>`, `tg personal messages pin <chat> <message> --notify`
 
 ### `tg messages unpin`
 
@@ -1861,7 +2055,27 @@ tg messages unpin <chat> <message>
 
 **Returns:** unpin a message in a chat
 
-**Example:** `tg messages unpin <chat> <message>`
+**Example:** `tg personal messages unpin <chat> <message>`
+
+### `tg messages press`
+
+pulsa un botón de un bot bajo un mensaje; el bot ve que lo has pulsado
+
+**Changes something in Telegram.**
+
+```sh
+tg messages press <chat> <message> <button>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
+| `message` | obligatorio | identificador del mensaje con los botones. |
+| `button` | obligatorio | su número tal como lo muestra `messages show`, o su texto exacto. |
+
+**Returns:** press a bot's button under a message; the bot sees that you pressed it
+
+**Example:** `tg personal messages press Team 1234 <button>`
 
 ### `tg messages scheduled`
 
@@ -1875,11 +2089,11 @@ tg messages scheduled <chat>
 |---|---|---|
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 26 more; every field: tg commands schema messages scheduled
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands schema messages scheduled
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
-**Example:** `tg messages scheduled Team`
+**Example:** `tg personal messages scheduled "Book club"`
 
 ### `tg messages link`
 
@@ -1898,7 +2112,7 @@ tg messages link <chat> [message]
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
-**Example:** `tg messages link Team 1234`
+**Example:** `tg personal messages link "Book club" 101`
 
 ### `tg messages comments`
 
@@ -1919,11 +2133,11 @@ tg messages comments <chat> <post> [query] [options]
 | `--limit <n>` | cuántos. |
 | `--cursor <cursor>` | sigue desde donde se detuvo la última página; lo da page.next. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 26 more; every field: tg commands schema messages comments
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands schema messages comments
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages links <chat> <message>`, `tg polls show <chat> <message>`
 
-**Example:** `tg messages comments Team 1234`
+**Example:** `tg personal messages comments "News channel" 101 --limit 20`
 
 ### `tg messages links`
 
@@ -1938,9 +2152,9 @@ tg messages links <chat> <message>
 | `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `message` | obligatorio | identificador del mensaje. |
 
-**Returns:** why a message is in its conversation: each link it has, and the chain of answers back to…
+**Returns:** why a message belongs to its conversation
 
-**Example:** `tg messages links Team 1234`
+**Example:** `tg personal messages links "Book club" 101`
 
 ### `tg messages sync`
 
@@ -1972,9 +2186,9 @@ tg messages sync [chat] [options]
 | `--background` | ejecuta como tarea que continúa al finalizar el comando; consúltala con `store jobs show`. |
 | `--dry-run` | solo estima mensajes, peticiones y minutos pendientes usando el archivo local, sin peticiones. |
 
-**Returns:** bring a chat's history in the local store up to date, newest first; run it again to…
+**Returns:** fetch and save a chat's message history
 
-**Example:** `tg messages sync Team`
+**Example:** `tg personal messages sync "Book club" --last 100`
 
 ## `tg reactions`
 
@@ -1998,7 +2212,7 @@ tg reactions add <chat> <message> <emoji>
 
 **Returns:** put your reaction on a message; it replaces the one you had
 
-**Example:** `tg reactions add Team 1234 <emoji>`
+**Example:** `tg personal reactions add "Book club" 101 👍`
 
 ### `tg reactions remove`
 
@@ -2017,7 +2231,7 @@ tg reactions remove <chat> <message>
 
 **Returns:** take your reaction off a message
 
-**Example:** `tg reactions remove Team 1234`
+**Example:** `tg personal reactions remove "Book club" 101`
 
 ## `tg polls`
 
@@ -2038,7 +2252,7 @@ tg polls show <chat> <message>
 
 **Returns:** a poll and its answer ids, as the message carries it now
 
-**Example:** `tg polls show Team 1234`
+**Example:** `tg personal polls show "Book club" 101`
 
 ### `tg polls voters`
 
@@ -2061,7 +2275,7 @@ tg polls voters <chat> <message> [query] [options]
 
 **Returns:** poll vote — person_id, name, username, answers, voted_at; every field: tg commands schema polls voters
 
-**Example:** `tg polls voters Team 1234`
+**Example:** `tg personal polls voters "Book club" 101 answers:0 --limit 10`
 
 ### `tg polls vote`
 
@@ -2085,7 +2299,7 @@ tg polls vote <chat> <message> [answers] [options]
 
 **Returns:** vote in a poll, or take your vote back; the others see it unless the poll is anonymous
 
-**Example:** `tg polls vote Team 1234`
+**Example:** `tg personal polls vote "Book club" 101 0`
 
 ### `tg polls close`
 
@@ -2104,7 +2318,7 @@ tg polls close <chat> <message>
 
 **Returns:** close your own poll; nobody can vote after that, and it cannot be reopened
 
-**Example:** `tg polls close Team 1234`
+**Example:** `tg personal polls close "Book club" 101`
 
 ### `tg polls create`
 
@@ -2138,7 +2352,7 @@ tg polls create <chat> <question> <answers> [options]
 
 **Returns:** send a poll to a chat, as a message of its own; public unless --anonymous
 
-**Example:** `tg polls create Team <question> <answers>`
+**Example:** `tg personal polls create "Book club" "Which day?" Monday Tuesday`
 
 ## `tg models`
 
@@ -2164,7 +2378,7 @@ tg models audio list [query]
 
 **Next usually:** `tg models audio download <model>`, `tg models text download <model>`, `tg images models download <model>`
 
-**Example:** `tg models audio list`
+**Example:** `tg personal models audio list`
 
 #### `tg models audio download`
 
@@ -2184,7 +2398,7 @@ tg models audio download <model>
 
 **Next usually:** `tg models text download <model>`, `tg images models download <model>`
 
-**Example:** `tg models audio download default`
+**Example:** `tg personal models audio download parakeet-v3`
 
 ### `tg models text`
 
@@ -2206,7 +2420,7 @@ tg models text list [query]
 
 **Next usually:** `tg models text download <model>`, `tg models audio download <model>`, `tg images models download <model>`
 
-**Example:** `tg models text list`
+**Example:** `tg personal models text list`
 
 #### `tg models text download`
 
@@ -2230,7 +2444,7 @@ tg models text download <model> [options]
 
 **Next usually:** `tg models audio download <model>`, `tg images models download <model>`
 
-**Example:** `tg models text download default`
+**Example:** `tg personal models text download e5-small`
 
 #### `tg models text key`
 
@@ -2252,7 +2466,7 @@ tg models text key set <provider>
 
 **Returns:** store a key, typed at a hidden prompt or piped on stdin — never as an argument
 
-**Example:** `tg models text key set <provider>`
+**Example:** `tg personal models text key set openai`
 
 #### `tg models text key remove`
 
@@ -2270,7 +2484,7 @@ tg models text key remove <provider>
 
 **Returns:** forget a stored key
 
-**Example:** `tg models text key remove <provider>`
+**Example:** `tg personal models text key remove openai`
 
 ## `tg inbox`
 
@@ -2292,14 +2506,12 @@ tg inbox [query] [options]
 | `--kind <kinds>` | solo chats de estos tipos, separados por comas: dialog, group, channel, saved. |
 | `--transcribe` | transcribe notas de voz pendientes mediante el servicio de mensajería cuando puede, si no con un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
-| `--mark-read` | además marca como leído cada chat mostrado, hasta el mensaje más reciente mostrado; la otra persona lo ve. |
-| `--no-mark-read` | no lo hace, diga lo que diga el ajuste catch_up_marks_read. |
 
 **Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: tg commands schema inbox
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
-**Example:** `tg inbox`
+**Example:** `tg personal inbox --limit 10`
 
 ## `tg review`
 
@@ -2321,14 +2533,12 @@ tg review [query] [options]
 | `--transcribe` | transcribe notas de voz pendientes mediante el servicio de mensajería cuando puede, si no con un modelo local; puede tardar minutos. |
 | `--model <id>` | modelo de voz descargado para --transcribe; `models audio list` muestra los disponibles. |
 | `--new` | lo que cambió desde el último `review --new`, con un punto por chat; para tareas programadas. |
-| `--mark-read` | además marca como leído cada chat mostrado, hasta el mensaje más reciente mostrado; la otra persona lo ve. |
-| `--no-mark-read` | no lo hace, diga lo que diga el ajuste catch_up_marks_read. |
 
 **Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: tg commands schema review
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
-**Example:** `tg review`
+**Example:** `tg personal review "date>2h"`
 
 ## `tg topics`
 
@@ -2354,7 +2564,7 @@ tg topics list <chat> [options]
 
 **Returns:** a forum group's topics, newest activity first
 
-**Example:** `tg topics list Team`
+**Example:** `tg personal topics list Team`
 
 ### `tg topics show`
 
@@ -2371,7 +2581,7 @@ tg topics show <chat> <topic>
 
 **Returns:** one forum topic: its title, state and last activity
 
-**Example:** `tg topics show Team General`
+**Example:** `tg personal topics show Team General`
 
 ### `tg topics enable`
 
@@ -2393,7 +2603,7 @@ tg topics enable <chat> [options]
 
 **Returns:** enable forum topics; only the owner, with an explicit upgrade for a basic group
 
-**Example:** `tg topics enable Team`
+**Example:** `tg personal topics enable Team`
 
 ### `tg topics create`
 
@@ -2416,7 +2626,7 @@ tg topics create <chat> <title> [options]
 
 **Returns:** create a named topic in an existing forum; never enable or upgrade a group implicitly
 
-**Example:** `tg topics create Team "Weekly sync"`
+**Example:** `tg personal topics create Team "Weekly sync"`
 
 ### `tg topics edit`
 
@@ -2442,7 +2652,7 @@ tg topics edit <chat> <topic> [options]
 
 **Returns:** rename, close or reopen a forum topic
 
-**Example:** `tg topics edit Team General`
+**Example:** `tg personal topics edit Team General`
 
 ### `tg topics delete`
 
@@ -2465,7 +2675,7 @@ tg topics delete <chat> <topic> [options]
 
 **Returns:** delete a forum topic and every message in it, for everyone; it cannot be undone
 
-**Example:** `tg topics delete Team General`
+**Example:** `tg personal topics delete Team General`
 
 ### `tg topics order`
 
@@ -2484,7 +2694,7 @@ tg topics order <chat> <topic>
 
 **Returns:** put the pinned topics in this order; it pins and unpins nothing
 
-**Example:** `tg topics order Team General`
+**Example:** `tg personal topics order Team General`
 
 ## `tg watch`
 
@@ -2498,9 +2708,9 @@ tg watch [options]
 |---|---|
 | `--events` | incluye ediciones, eliminaciones, reacciones, votos en encuestas y eventos del chat; cada línea indica su evento. |
 
-**Returns:** print new messages as they arrive, until Ctrl-C or --timeout (either ends it normally)
+**Returns:** stream new messages until interrupted or timed out
 
-**Example:** `tg watch`
+**Example:** `tg personal watch --jsonl --timeout 30s`
 
 ## `tg serve`
 
@@ -2514,7 +2724,7 @@ tg serve
 
 **Returns:** keep the local store current until stopped — what a systemd or launchd unit runs
 
-**Example:** `tg serve`
+**Example:** `tg personal serve`
 
 ## `tg server`
 
@@ -2530,9 +2740,9 @@ inicia serve en segundo plano mediante la unidad si existe y responde cuando se 
 tg server start
 ```
 
-**Returns:** start serve in the background — through the unit if one is installed — and answer once it…
+**Returns:** start this profile's background server
 
-**Example:** `tg server start`
+**Example:** `tg personal server start`
 
 ### `tg server stop`
 
@@ -2546,7 +2756,7 @@ tg server stop
 
 **Returns:** stop this profile's serve — through the unit if it runs under one
 
-**Example:** `tg server stop`
+**Example:** `tg personal server stop`
 
 ### `tg server restart`
 
@@ -2560,7 +2770,7 @@ tg server restart
 
 **Returns:** stop it and start it again
 
-**Example:** `tg server restart`
+**Example:** `tg personal server restart`
 
 ### `tg server status`
 
@@ -2570,9 +2780,9 @@ si serve está activo para el perfil, desde cuándo, quién lo inició y unidad 
 tg server status
 ```
 
-**Returns:** whether serve runs for this profile, since when, who started it, and the unit if there is…
+**Returns:** this profile's background-server status
 
-**Example:** `tg server status`
+**Example:** `tg personal server status`
 
 ### `tg server logs`
 
@@ -2588,7 +2798,7 @@ tg server logs [options]
 
 **Returns:** serve's latest log lines — from the journal under systemd, else its log file
 
-**Example:** `tg server logs`
+**Example:** `tg personal server logs --limit 20`
 
 ### `tg server install`
 
@@ -2602,7 +2812,7 @@ tg server install
 
 **Returns:** write a systemd user unit or a launchd agent for this profile; starts nothing
 
-**Example:** `tg server install`
+**Example:** `tg personal server install`
 
 ### `tg server uninstall`
 
@@ -2616,7 +2826,7 @@ tg server uninstall
 
 **Returns:** remove this profile's unit; stop it first
 
-**Example:** `tg server uninstall`
+**Example:** `tg personal server uninstall`
 
 ## `tg schedule`
 
@@ -2645,7 +2855,7 @@ tg schedule command <name> <args> [options]
 
 **Returns:** run tg <args…> on a timer — reads save what they read, so this is how a chat's history…
 
-**Example:** `tg schedule command daily <args>`
+**Example:** `tg personal schedule command daily <args>`
 
 ### `tg schedule agent`
 
@@ -2672,7 +2882,7 @@ tg schedule agent <name> <harness> <prompt> [options]
 
 **Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with TG_READ_ONLY=1,…
 
-**Example:** `tg schedule agent daily claude <prompt>`
+**Example:** `tg personal schedule agent daily claude <prompt>`
 
 ### `tg schedule list`
 
@@ -2684,7 +2894,7 @@ tg schedule list
 
 **Returns:** the schedules, when they run and how their last run went
 
-**Example:** `tg schedule list`
+**Example:** `tg personal schedule list`
 
 ### `tg schedule run`
 
@@ -2702,7 +2912,7 @@ tg schedule run <name>
 
 **Returns:** run a schedule now, as its timer would, and wait for it
 
-**Example:** `tg schedule run daily`
+**Example:** `tg personal schedule run daily`
 
 ### `tg schedule remove`
 
@@ -2720,7 +2930,7 @@ tg schedule remove <name>
 
 **Returns:** stop a schedule and remove its timer; its past output stays
 
-**Example:** `tg schedule remove daily`
+**Example:** `tg personal schedule remove daily`
 
 ### `tg schedule exec`
 
@@ -2738,7 +2948,7 @@ tg schedule exec <file>
 
 **Returns:** what a timer runs, given the schedule's file; to run one by hand, use run
 
-**Example:** `tg schedule exec ./report.pdf`
+**Example:** `tg personal schedule exec ./report.pdf`
 
 ## `tg store`
 
@@ -2756,9 +2966,9 @@ tg store status [chat]
 |---|---|---|
 | `chat` | opcional | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 
-**Returns:** per chat: messages stored, the oldest and newest, and the stretches held completely
+**Returns:** what the local archive holds and what is missing
 
-**Example:** `tg store status Team`
+**Example:** `tg personal store status "Book club"`
 
 ### `tg store gaps`
 
@@ -2778,7 +2988,7 @@ tg store gaps plan <chat>
 
 **Returns:** local coverage plan; missing message ids alone do not imply missing history
 
-**Example:** `tg store gaps plan Team`
+**Example:** `tg personal store gaps plan "Book club"`
 
 #### `tg store gaps repair`
 
@@ -2811,7 +3021,7 @@ tg store gaps repair <chat> [options]
 
 **Returns:** fetch bounded interior gaps and recheck coverage; never delete unseen messages
 
-**Example:** `tg store gaps repair Team`
+**Example:** `tg personal store gaps repair "Book club" --limit 100`
 
 ### `tg store jobs`
 
@@ -2837,7 +3047,7 @@ tg store jobs list [query] [options]
 
 **Returns:** job — id, chat, state, pid, started_at, fetched, finished_at, message_limit, and 5 more; every field: tg commands schema store jobs list
 
-**Example:** `tg store jobs list`
+**Example:** `tg personal store jobs list`
 
 #### `tg store jobs show`
 
@@ -2851,9 +3061,9 @@ tg store jobs show [job]
 |---|---|---|
 | `job` | opcional | identificador que imprimió `messages sync --background`. |
 
-**Returns:** one background job — the newest when none is named — and what the store now holds of its…
+**Returns:** one archive job's status and log
 
-**Example:** `tg store jobs show`
+**Example:** `tg personal store jobs show`
 
 #### `tg store jobs cancel`
 
@@ -2869,9 +3079,9 @@ tg store jobs cancel <job>
 |---|---|---|
 | `job` | obligatorio | identificador de tarea. |
 
-**Returns:** stop a running background job after its current page; a later sync resumes where it…
+**Returns:** cancel a queued or running archive job
 
-**Example:** `tg store jobs cancel <job>`
+**Example:** `tg personal store jobs cancel job-101`
 
 #### `tg store jobs retry`
 
@@ -2891,9 +3101,9 @@ tg store jobs retry [job] [options]
 |---|---|
 | `--failed` | cada chat cuya última tarea falló o se interrumpió. |
 
-**Returns:** start a partial, failed or died job again, as a new job; the sync resumes where the store…
+**Returns:** retry an archive job
 
-**Example:** `tg store jobs retry`
+**Example:** `tg personal store jobs retry --failed`
 
 #### `tg store jobs clear`
 
@@ -2907,7 +3117,7 @@ tg store jobs clear
 
 **Returns:** forget finished jobs and remove their logs; a running job is kept
 
-**Example:** `tg store jobs clear`
+**Example:** `tg personal store jobs clear`
 
 ### `tg store export`
 
@@ -2916,12 +3126,12 @@ mensajes guardados de un chat, antiguos primero: --jsonl un mensaje por línea, 
 **Solo hace cambios en este equipo.**
 
 ```sh
-tg store export [chats] [options]
+tg store export [chat] [options]
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
-| `chats` | opcional | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados; varios con --output-dir. |
+| `chat` | opcional | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados; varios con --output-dir. |
 
 | Opción | Qué hace |
 |---|---|
@@ -2933,9 +3143,9 @@ tg store export [chats] [options]
 | `--all` | con --output-dir: todos los chats guardados de esta cuenta. |
 | `--encrypt` | comprime y cifra con una contraseña, escrita en una solicitud oculta o pasada por stdin; nunca se guarda: si la pierdes, no se puede abrir el archivo. |
 
-**Returns:** a chat's stored messages, oldest first: --jsonl one message per line, --json the list…
+**Returns:** export stored messages to files
 
-**Example:** `tg store export`
+**Example:** `tg personal store export "Book club" --output ./messages.jsonl`
 
 ### `tg store clear`
 
@@ -2955,7 +3165,7 @@ tg store clear [options]
 
 **Returns:** delete from the store the chats this account has left, with their messages
 
-**Example:** `tg store clear`
+**Example:** `tg personal store clear --left --dry-run`
 
 ### `tg store info`
 
@@ -2965,9 +3175,9 @@ ruta, tamaño, esquema y filas del archivo local; no cambia nada
 tg store info
 ```
 
-**Returns:** the store file: where it is, its size, its schema and how many rows it holds; changes…
+**Returns:** the local archive's format, size and contents
 
-**Example:** `tg store info`
+**Example:** `tg personal store info`
 
 ### `tg store check`
 
@@ -2977,9 +3187,9 @@ comprueba integridad, índices de búsqueda, disco y chats desactualizados
 tg store check
 ```
 
-**Returns:** whether the store is healthy — integrity, search indexes, disk, and which chats are behind
+**Returns:** check the local archive for problems
 
-**Example:** `tg store check`
+**Example:** `tg personal store check`
 
 ### `tg store migrate`
 
@@ -2991,9 +3201,9 @@ actualiza el esquema a esta versión y normaliza, indexa y extrae las raíces de
 tg store migrate
 ```
 
-**Returns:** bring the store up to this build's schema, then normalize, index and stem the messages…
+**Returns:** migrate an older local archive
 
-**Example:** `tg store migrate`
+**Example:** `tg personal store migrate`
 
 ### `tg store reindex`
 
@@ -3005,9 +3215,9 @@ reconstruye el índice de palabras, su vocabulario de erratas, las raíces, el �
 tg store reindex
 ```
 
-**Returns:** rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes'…
+**Returns:** rebuild the local archive's search indexes
 
-**Example:** `tg store reindex`
+**Example:** `tg personal store reindex`
 
 ### `tg store backup`
 
@@ -3029,7 +3239,7 @@ tg store backup <file> [options]
 
 **Returns:** copy the store into a new file, while it is in use; never overwrites a file
 
-**Example:** `tg store backup ./report.pdf`
+**Example:** `tg personal store backup ./backup.db`
 
 ### `tg store restore`
 
@@ -3045,9 +3255,9 @@ tg store restore <file>
 |---|---|---|
 | `file` | obligatorio | archivo creado por `store backup`; si se escribió con --encrypt, pide su contraseña. |
 
-**Returns:** put a backup in place of the store; the store it replaces is kept beside it, never deleted
+**Returns:** restore a backup while keeping the current store
 
-**Example:** `tg store restore ./report.pdf`
+**Example:** `tg personal store restore ./backup.db`
 
 ### `tg store decrypt`
 
@@ -3069,7 +3279,7 @@ tg store decrypt <file> [options]
 
 **Returns:** open a file written with --encrypt into a new file; asks for its password
 
-**Example:** `tg store decrypt ./report.pdf --output ./report.pdf`
+**Example:** `tg personal store decrypt ./backup.enc --output ./restored.db`
 
 ### `tg store repair`
 
@@ -3085,9 +3295,9 @@ tg store repair [options]
 |---|---|
 | `--dry-run` | indica qué haría, sin cambiar nada. |
 
-**Returns:** bring every table to this build's shape, deleting nothing: a table of the wrong shape is…
+**Returns:** repair table shapes while keeping the old tables
 
-**Example:** `tg store repair`
+**Example:** `tg personal store repair --dry-run`
 
 ### `tg store reset`
 
@@ -3103,9 +3313,9 @@ tg store reset [options]
 |---|---|
 | `--no-backup` | delete the store without backing it up first. |
 
-**Returns:** back the store up beside itself, then delete it and start an empty one at this build's…
+**Returns:** back up the local archive and replace it with an empty one
 
-**Example:** `tg store reset`
+**Example:** `tg personal store reset`
 
 ### `tg store copies`
 
@@ -3127,7 +3337,7 @@ tg store copies delete <name>
 
 **Returns:** delete one copy `store repair` kept, named exactly; refuses any other table
 
-**Example:** `tg store copies delete daily`
+**Example:** `tg personal store copies delete messages_copy_1`
 
 ## `tg conversations`
 
@@ -3154,9 +3364,9 @@ tg conversations build [options]
 | `--max-tokens <n>` | límite de tokens de entrada y salida reservados por ejecución; 100000 por defecto. |
 | `--max-chats <n>` | como máximo este número de chats en una ejecución; 20 por defecto. |
 
-**Returns:** find a chat's conversations in what the store holds, replacing the last build; without…
+**Returns:** build conversation links from stored messages
 
-**Example:** `tg conversations build`
+**Example:** `tg personal conversations build --chat "Book club"`
 
 ### `tg conversations list`
 
@@ -3177,7 +3387,7 @@ tg conversations list <chat> [query] [options]
 
 **Returns:** conversation — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 1 more; every field: tg commands schema conversations list
 
-**Example:** `tg conversations list Team`
+**Example:** `tg personal conversations list "Book club"`
 
 ### `tg conversations show`
 
@@ -3192,9 +3402,9 @@ tg conversations show <conversation> [message]
 | `conversation` | obligatorio | identificador de `conversations list` o chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados, seguido de un mensaje. |
 | `message` | opcional | identificador de mensaje del chat; muestra la conversación que lo contiene. |
 
-**Returns:** one conversation's messages, oldest first — by its id, or the one a message is in
+**Returns:** one conversation and its messages
 
-**Example:** `tg conversations show <conversation> 1234`
+**Example:** `tg personal conversations show "Book club" 101`
 
 ### `tg conversations related`
 
@@ -3217,9 +3427,9 @@ tg conversations related <chat> <message> [options]
 | `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
 | `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
 
-**Returns:** the conversations nearest in meaning to the one a message is in, in every built chat,…
+**Returns:** conversations nearest in meaning to a message's conversation
 
-**Example:** `tg conversations related Team 1234`
+**Example:** `tg personal conversations related "Book club" 101`
 
 ### `tg conversations status`
 
@@ -3237,9 +3447,9 @@ tg conversations status [options]
 | `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
 | `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
 
-**Returns:** how fresh each built chat's conversations and vectors are: messages the build has not…
+**Returns:** which chats are ready for conversation search
 
-**Example:** `tg conversations status`
+**Example:** `tg personal conversations status`
 
 ### `tg conversations batches`
 
@@ -3258,9 +3468,9 @@ tg conversations batches status [options]
 | `--chat <chat>` | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `--size <n>` | mensajes que vincular por lote, 10–200; 50 por defecto. |
 
-**Returns:** how many messages still wait for an answer, in how many batches, and how much text
+**Returns:** progress of conversation-link batches
 
-**Example:** `tg conversations batches status --chat Team`
+**Example:** `tg personal conversations batches status --chat "Book club"`
 
 #### `tg conversations batches next`
 
@@ -3275,9 +3485,9 @@ tg conversations batches next [options]
 | `--chat <chat>` | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `--size <n>` | mensajes que vincular por lote, 10–200; 50 por defecto. |
 
-**Returns:** the next window to answer, with the messages before it; message text goes to stdout only
+**Returns:** get the next batch of messages to link
 
-**Example:** `tg conversations batches next --chat Team`
+**Example:** `tg personal conversations batches next --chat "Book club"`
 
 ### `tg conversations links`
 
@@ -3297,9 +3507,9 @@ tg conversations links add [options]
 |---|---|
 | `--batch <id>` | identificador de lote que imprimió `conversations batches next`. |
 
-**Returns:** store your agent's answer to a batch, read as JSON from stdin: { "model", "answers": [{…
+**Returns:** save an agent's conversation-link answers
 
-**Example:** `tg conversations links add --batch 1`
+**Example:** `tg personal conversations links add --batch "$batch"`
 
 #### `tg conversations links clear`
 
@@ -3316,9 +3526,9 @@ tg conversations links clear [options]
 | `--chat <chat>` | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |
 | `--model <model>` | solo respuestas de este modelo. |
 
-**Returns:** drop your agent's answers for a chat, or only one model's; messages are never touched
+**Returns:** remove an agent's saved conversation-link answers
 
-**Example:** `tg conversations links clear --chat Team`
+**Example:** `tg personal conversations links clear --chat "Book club"`
 
 ### `tg conversations rebuild`
 
@@ -3338,7 +3548,7 @@ tg conversations rebuild [options]
 
 **Returns:** build and embed the chats that changed, on this machine only
 
-**Example:** `tg conversations rebuild --max-chats 5`
+**Example:** `tg personal conversations rebuild --max-chats 5`
 
 ### `tg conversations consents`
 
@@ -3354,7 +3564,7 @@ tg conversations consents list
 
 **Returns:** which chats and provider endpoints you allowed to analyse, and when
 
-**Example:** `tg conversations consents list`
+**Example:** `tg personal conversations consents list`
 
 #### `tg conversations consents revoke`
 
@@ -3373,7 +3583,7 @@ tg conversations consents revoke [options]
 
 **Returns:** forget analysis permissions so the next analysis asks again
 
-**Example:** `tg conversations consents revoke`
+**Example:** `tg personal conversations consents revoke --chat "Book club"`
 
 ### `tg conversations embed`
 
@@ -3414,9 +3624,9 @@ tg conversations embed status [options]
 | `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
 | `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
 
-**Returns:** how many chunks of a chat have a vector of the model, how many are left, and what is left…
+**Returns:** which conversation vectors are ready or stale
 
-**Example:** `tg conversations embed status`
+**Example:** `tg personal conversations embed status --chat "Book club"`
 
 #### `tg conversations embed clear`
 
@@ -3436,9 +3646,9 @@ tg conversations embed clear [options]
 | `--base-url <url>` | servidor compatible con /v1/embeddings de OpenAI: Gemini, Jina, Ollama o LM Studio local. |
 | `--dims <n>` | remoto: tamaño vectorial; necesario con --base-url y reduce el de modelos OpenAI. |
 
-**Returns:** drop a chat's vectors, or only one model's; messages and conversations are never touched
+**Returns:** remove stored conversation vectors
 
-**Example:** `tg conversations embed clear`
+**Example:** `tg personal conversations embed clear --chat "Book club"`
 
 ## `tg attachments`
 
@@ -3465,9 +3675,9 @@ tg attachments extract [options]
 | `--ocr` | llamar explícitamente a models.ocr para extraer texto en lotes de imágenes y PDF escaneados. |
 | `--concurrency <n>` | remoto: peticiones simultáneas (predeterminado: 4). |
 
-**Returns:** read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/PPTX/EPUB —…
+**Returns:** extract text from retained message files
 
-**Example:** `tg attachments extract`
+**Example:** `tg personal attachments extract --chat "Book club" --limit 10`
 
 ### `tg attachments list`
 
@@ -3489,7 +3699,7 @@ tg attachments list [query] [options]
 
 **Returns:** attachment — kind, message, position, url, name, title, mime, size, and 7 more; every field: tg commands schema attachments list
 
-**Example:** `tg attachments list`
+**Example:** `tg personal attachments list --limit 10`
 
 ### `tg attachments show`
 
@@ -3514,7 +3724,7 @@ tg attachments show <chat> [message] [options]
 
 **Returns:** read a bounded chunk of one retained attachment; JSON includes base64 bytes
 
-**Example:** `tg attachments show Team 1234`
+**Example:** `tg personal attachments show "Book club" 101 --attachment 1`
 
 ### `tg attachments text`
 
@@ -3540,9 +3750,172 @@ tg attachments text set <chat> [message] [options]
 | `--attachment <n>` | qué archivo del mensaje, desde 1; necesario si tiene más de uno. |
 | `--text-file <path>` | lee el texto de este archivo; - o nada lee stdin. |
 
-**Returns:** keep the text an agent read from a file — a scan, a photo — so search finds it; nothing…
+**Returns:** save the text read from one message file
 
-**Example:** `tg attachments text set Team 1234`
+**Example:** `tg personal attachments text set "Book club" 101 --text-file ./transcript.txt`
+
+### `tg attachments download`
+
+archiva los archivos multimedia de los chats elegidos; verifica y conserva las copias existentes
+
+**Changes something on this computer only.**
+
+```sh
+tg attachments download <dir> [options]
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `dir` | obligatorio | directorio del archivo; se crea si no existe. |
+
+| Opción | Qué hace |
+| --- | --- |
+| `--chat <chat>` | solo este chat; repetir para más; chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. Predeterminado: ``. |
+| `--since-time <time>` | incluye los mensajes desde esta fecha ISO con zona horaria. |
+| `--pause <duration>` | pausa entre páginas del historial. Predeterminado: `1s`. |
+
+**Returns:** archive media from selected chats; verify and keep existing copies
+
+**Example:** `tg personal attachments download ./media-archive`
+
+### `tg attachments check`
+
+recalcula el hash de todos los archivos archivados sin conectarse al servicio de mensajería
+
+```sh
+tg attachments check <dir>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `dir` | obligatorio | directorio del archivo. |
+
+**Returns:** rehash all archived files without connecting to the messenger
+
+**Example:** `tg personal attachments check ./media-archive`
+
+### `tg attachments jobs`
+
+temporizadores diarios del archivo multimedia de este perfil
+
+#### `tg attachments jobs install`
+
+instala un temporizador diario de archivo en Linux para este directorio; no inicia nada
+
+**Changes something on this computer only.**
+
+```sh
+tg attachments jobs install <dir> [options]
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `dir` | obligatorio | directorio del archivo, usado con el mismo perfil que en install. |
+
+| Opción | Qué hace |
+| --- | --- |
+| `--at <HH:mm>` | hora de inicio diaria. Predeterminado: `03:00`. |
+| `--timezone <zone>` | zona horaria IANA de la hora de inicio diaria. Predeterminado: `UTC`. |
+| `--chat <chat>` | solo este chat; repetir para más; chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. Predeterminado: ``. |
+| `--since-time <time>` | incluye los mensajes desde esta fecha ISO con zona horaria. |
+
+**Returns:** install a Linux daily archive timer for this directory; starts nothing
+
+**Example:** `tg personal attachments jobs install ./media-archive`
+
+#### `tg attachments jobs start`
+
+activa el temporizador de archivo instalado al iniciar sesión y empieza su horario diario
+
+**Changes something on this computer only.**
+
+```sh
+tg attachments jobs start <dir>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `dir` | obligatorio | directorio del archivo, usado con el mismo perfil que en install. |
+
+**Returns:** enable the installed archive timer at login and start its daily schedule
+
+**Example:** `tg personal attachments jobs start ./media-archive`
+
+#### `tg attachments jobs stop`
+
+desactiva el temporizador de archivo; una descarga ya en curso termina
+
+**Changes something on this computer only.**
+
+```sh
+tg attachments jobs stop <dir>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `dir` | obligatorio | directorio del archivo, usado con el mismo perfil que en install. |
+
+**Returns:** disable the archive timer; a download already running finishes
+
+**Example:** `tg personal attachments jobs stop ./media-archive`
+
+#### `tg attachments jobs status`
+
+muestra si el temporizador de archivo de este directorio está instalado y activo
+
+```sh
+tg attachments jobs status <dir>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `dir` | obligatorio | directorio del archivo, usado con el mismo perfil que en install. |
+
+**Returns:** show whether this directory's archive timer is installed and active
+
+**Example:** `tg personal attachments jobs status ./media-archive`
+
+#### `tg attachments jobs uninstall`
+
+elimina el temporizador de archivo detenido de este directorio; conserva los archivos archivados
+
+**Changes something on this computer only.**
+
+```sh
+tg attachments jobs uninstall <dir>
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `dir` | obligatorio | directorio del archivo, usado con el mismo perfil que en install. |
+
+**Returns:** remove this directory's stopped archive timer; keep archived files
+
+**Example:** `tg personal attachments jobs uninstall ./media-archive`
+
+### `tg attachments move`
+
+mueve las imágenes antiguas a otro archivo verificado; recuerda sus nuevas ubicaciones
+
+**Changes something on this computer only.**
+
+```sh
+tg attachments move <dir> <archive-dir> [options]
+```
+
+| Argumento | | Qué es |
+| --- | --- | --- |
+| `dir` | obligatorio | directorio del archivo multimedia de origen. |
+| `archive-dir` | obligatorio | directorio del archivo de destino; se crea si hace falta. |
+
+| Opción | Qué hace |
+| --- | --- |
+| `--before-time <time>` | mueve las imágenes cuyo mensaje es anterior a esta fecha ISO con zona horaria. |
+| `--dry-run` | muestra recuentos y bytes sin mover archivos ni crear el destino. |
+
+**Returns:** move older images into another verified archive; remember their new locations
+
+**Example:** `tg personal attachments move ./media-archive ./older-images --before-time 2026-10-01T00:00:00Z --dry-run`
 
 ## `tg tags`
 
@@ -3567,7 +3940,7 @@ tg tags auto [options]
 
 **Returns:** derive local group/channel tags from cached metadata using keyword rules
 
-**Example:** `tg tags auto`
+**Example:** `tg personal tags auto --chat "Book club" --dry-run`
 
 ### `tg tags add`
 
@@ -3592,7 +3965,7 @@ tg tags add <tag> [options]
 
 **Returns:** put tags on one chat, person, message or task
 
-**Example:** `tg tags add <tag>`
+**Example:** `tg personal tags add reading --chat "Book club"`
 
 ### `tg tags remove`
 
@@ -3618,7 +3991,7 @@ tg tags remove <tag> [options]
 
 **Returns:** take tags off one chat, person, message or task
 
-**Example:** `tg tags remove <tag>`
+**Example:** `tg personal tags remove reading --chat "Book club"`
 
 ### `tg tags list`
 
@@ -3634,7 +4007,7 @@ tg tags list [query]
 
 **Returns:** tagging — tag, type, target, name, sources, created_at; every field: tg commands schema tags list
 
-**Example:** `tg tags list`
+**Example:** `tg personal tags list`, `tg personal tags list tag:reading`
 
 ## `tg mentions`
 
@@ -3660,7 +4033,7 @@ tg mentions list [query] [options]
 
 **Returns:** this account's mentions matching the query, newest first
 
-**Example:** `tg mentions list kind:phone`, `tg mentions list domain:google.com`, `tg mentions list --new`
+**Example:** `tg personal mentions list kind:phone`, `tg personal mentions list domain:google.com`, `tg personal mentions list --new`
 
 ### `tg mentions domains`
 
@@ -3681,7 +4054,7 @@ tg mentions domains [query] [options]
 
 **Returns:** the sites this account's links point to, most linked first
 
-**Example:** `tg mentions domains`, `tg mentions domains status:found`
+**Example:** `tg personal mentions domains`, `tg personal mentions domains status:found`
 
 ### `tg mentions places`
 
@@ -3698,7 +4071,7 @@ tg mentions places [options]
 
 **Returns:** confirmed street addresses, most mentioned first
 
-**Example:** `tg mentions places`
+**Example:** `tg personal mentions places`
 
 ### `tg mentions show`
 
@@ -3714,7 +4087,7 @@ tg mentions show <id>
 
 **Returns:** one mention, the text around it, and how many other places hold its value
 
-**Example:** `tg mentions show 12`
+**Example:** `tg personal mentions show 12`
 
 ### `tg mentions confirm`
 
@@ -3738,7 +4111,7 @@ tg mentions confirm <id> [person] [options]
 
 **Returns:** say what a mention is, everywhere its value is written
 
-**Example:** `tg mentions confirm 12 person:7`, `tg mentions confirm 15`, `tg mentions confirm 31 person:7 --all-in-chat`
+**Example:** `tg personal mentions confirm 12 person:7`, `tg personal mentions confirm 15`, `tg personal mentions confirm 31 person:7 --all-in-chat`
 
 ### `tg mentions reject`
 
@@ -3761,7 +4134,7 @@ tg mentions reject <id> [options]
 
 **Returns:** dismiss a mention's value everywhere, and on later syncs
 
-**Example:** `tg mentions reject 12`
+**Example:** `tg personal mentions reject 12`
 
 ### `tg mentions rebuild`
 
@@ -3779,7 +4152,7 @@ tg mentions rebuild [kind]
 
 **Returns:** find the mentions of every stored message again; decisions are kept
 
-**Example:** `tg mentions rebuild`, `tg mentions rebuild person-name`
+**Example:** `tg personal mentions rebuild`, `tg personal mentions rebuild person-name`
 
 ## `tg images`
 
@@ -3802,7 +4175,7 @@ tg images embed [options]
 
 **Returns:** compute a vector for each stored picture that has none; resumes where it stopped
 
-**Example:** `tg images embed`, `tg images embed --limit 500`
+**Example:** `tg personal images embed`, `tg personal images embed --limit 500`
 
 ### `tg images models`
 
@@ -3824,7 +4197,7 @@ tg images models list [query]
 
 **Next usually:** `tg models audio download <model>`, `tg models text download <model>`, `tg images models download <model>`
 
-**Example:** `tg images models list`
+**Example:** `tg personal images models list`
 
 #### `tg images models download`
 
@@ -3844,7 +4217,7 @@ tg images models download <model>
 
 **Next usually:** `tg models audio download <model>`, `tg models text download <model>`
 
-**Example:** `tg images models download clip-b32`
+**Example:** `tg personal images models download clip-b32`
 
 ## `tg metadata`
 
@@ -3864,7 +4237,7 @@ tg metadata get [options]
 
 **Returns:** a stored chat's cached description, as automatic tags read it
 
-**Example:** `tg metadata get --chat 7`
+**Example:** `tg personal metadata get --chat 7`
 
 ### `tg metadata refresh`
 
@@ -3884,7 +4257,7 @@ tg metadata refresh [options]
 
 **Returns:** fetch group and channel descriptions again and cache them
 
-**Example:** `tg metadata refresh --chat 7 --chat 8`, `tg metadata refresh --only-missing --limit 20`
+**Example:** `tg personal metadata refresh --chat 7 --chat 8`, `tg personal metadata refresh --only-missing --limit 20`
 
 ## `tg stats`
 
@@ -3922,7 +4295,7 @@ tg stats messages show [query] [options]
 
 **Returns:** message counts — by, total, rows; every field: tg commands schema stats messages show
 
-**Example:** `tg stats messages show "invoice"`
+**Example:** `tg personal stats messages show --chat "Book club" --by day`
 
 #### `tg stats messages counters`
 
@@ -3953,7 +4326,7 @@ tg stats messages counters show [query] [options]
 
 **Returns:** counters — cutoff, max_age_ms, selection, rows; every field: tg commands schema stats messages counters show
 
-**Example:** `tg stats messages counters show "invoice"`
+**Example:** `tg personal stats messages counters show --chat "Book club" --limit 10`
 
 #### `tg stats messages counters refresh`
 
@@ -3984,7 +4357,7 @@ tg stats messages counters refresh [query] [options]
 
 **Returns:** counter refresh — dry_run, targets, counters, supported, unsupported, max_messages, time_ms, results, and 2 more; every field: tg commands schema stats messages counters refresh
 
-**Example:** `tg stats messages counters refresh "invoice"`
+**Example:** `tg personal stats messages counters refresh --chat "Book club" --dry-run`
 
 #### `tg stats messages unanswered`
 
@@ -4011,7 +4384,7 @@ tg stats messages unanswered [query] [options]
 
 **Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands schema stats messages unanswered
 
-**Example:** `tg stats messages unanswered "invoice"`
+**Example:** `tg personal stats messages unanswered --chat "Project room"`
 
 #### `tg stats messages discussion`
 
@@ -4038,7 +4411,7 @@ tg stats messages discussion [query] [options]
 
 **Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands schema stats messages discussion
 
-**Example:** `tg stats messages discussion "invoice"`
+**Example:** `tg personal stats messages discussion --chat "Book club"`
 
 #### `tg stats messages top`
 
@@ -4071,7 +4444,7 @@ tg stats messages top [query] [options]
 
 **Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: tg commands schema stats messages top
 
-**Example:** `tg stats messages top "invoice"`
+**Example:** `tg personal stats messages top --chat "Book club" --limit 10`
 
 #### `tg stats messages evidence`
 
@@ -4094,7 +4467,7 @@ tg stats messages evidence <message> [options]
 
 **Returns:** evidence — ; every field: tg commands schema stats messages evidence
 
-**Example:** `tg stats messages evidence 1234 --selection <json> --component daily`
+**Example:** `tg personal stats messages evidence "$message" --selection "$selection" --component reactions`
 
 ### `tg stats contacts`
 
@@ -4124,7 +4497,7 @@ tg stats contacts responses [query] [options]
 
 **Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands schema stats contacts responses
 
-**Example:** `tg stats contacts responses "invoice"`
+**Example:** `tg personal stats contacts responses --chat "Project room"`
 
 #### `tg stats contacts top`
 
@@ -4158,7 +4531,7 @@ tg stats contacts top [query] [options]
 
 **Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: tg commands schema stats contacts top
 
-**Example:** `tg stats contacts top "invoice"`
+**Example:** `tg personal stats contacts top --chat "Book club" --limit 10`
 
 #### `tg stats contacts evidence`
 
@@ -4181,7 +4554,7 @@ tg stats contacts evidence <person> [options]
 
 **Returns:** evidence — ; every field: tg commands schema stats contacts evidence
 
-**Example:** `tg stats contacts evidence Anna --selection <json> --component daily`
+**Example:** `tg personal stats contacts evidence 101 --selection "$selection" --component messages`
 
 ### `tg stats chats`
 
@@ -4207,7 +4580,7 @@ tg stats chats show <chat> [options]
 
 **Returns:** chat stats — chat, since, until, complete, completeness, messages, senders, replies, and 10 more; every field: tg commands schema stats chats show
 
-**Example:** `tg stats chats show Team`
+**Example:** `tg personal stats chats show "Book club"`
 
 #### `tg stats chats newcomers`
 
@@ -4233,7 +4606,7 @@ tg stats chats newcomers <chat> [options]
 
 **Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands schema stats chats newcomers
 
-**Example:** `tg stats chats newcomers Team`
+**Example:** `tg personal stats chats newcomers "Book club"`
 
 #### `tg stats chats retention`
 
@@ -4259,7 +4632,7 @@ tg stats chats retention <chat> [options]
 
 **Returns:** retention — chat_ref, cutoff, since, until, checkpoints_ms, within_ms, by, timezone, and 5 more; every field: tg commands schema stats chats retention
 
-**Example:** `tg stats chats retention Team`
+**Example:** `tg personal stats chats retention "Book club"`
 
 #### `tg stats chats official`
 
@@ -4275,7 +4648,7 @@ tg stats chats official <chat>
 
 **Returns:** official stats — chat_id, title, kind, since, until, totals, graphs, top, and 2 more; every field: tg commands schema stats chats official
 
-**Example:** `tg stats chats official Team`
+**Example:** `tg personal stats chats official Team`
 
 ### `tg stats tasks`
 
@@ -4296,7 +4669,7 @@ tg stats tasks show [options]
 
 **Returns:** task stats — open, rows; every field: tg commands schema stats tasks show
 
-**Example:** `tg stats tasks show`
+**Example:** `tg personal stats tasks show --chat "Project room"`
 
 ### `tg stats charts`
 
@@ -4322,7 +4695,7 @@ tg stats charts <chat> [options]
 
 **Returns:** chart — version, kind, title, x, series, unit, timezone, partial, and 2 more; every field: tg commands schema stats charts
 
-**Example:** `tg stats charts Team`
+**Example:** `tg personal stats charts "Book club" --output ./activity.svg`
 
 ## `tg tasks`
 
@@ -4348,7 +4721,7 @@ tg tasks list [query] [options]
 
 **Next usually:** `tg tasks show <task>`, `tg tasks related <task>`, `tg tasks plan <task>`
 
-**Example:** `tg tasks list`
+**Example:** `tg personal tasks list --limit 10`
 
 ### `tg tasks add`
 
@@ -4378,7 +4751,7 @@ tg tasks add <message> [options]
 
 **Returns:** add a task for a stored message or note — a promise, a request
 
-**Example:** `tg tasks add 1234 --type <type> --category daily`
+**Example:** `tg personal tasks add note:101 --type promise --category documents --title "Review draft"`
 
 ### `tg tasks plan`
 
@@ -4405,7 +4778,7 @@ tg tasks plan <task> [options]
 
 **Returns:** set a task's title, description, due date, next check, category and assignee
 
-**Example:** `tg tasks plan 12`
+**Example:** `tg personal tasks plan DOC-12 --title "Review draft"`
 
 ### `tg tasks link`
 
@@ -4429,7 +4802,7 @@ tg tasks link <task> [targets] [options]
 
 **Returns:** link a task to messages, chats, people or URLs — or to another task: task:<id>
 
-**Example:** `tg tasks link 12`
+**Example:** `tg personal tasks link DOC-12 https://example.com/draft`
 
 ### `tg tasks show`
 
@@ -4445,7 +4818,7 @@ tg tasks show <task>
 
 **Returns:** one task: its plan and everything linked to it
 
-**Example:** `tg tasks show 12`
+**Example:** `tg personal tasks show DOC-12`
 
 ### `tg tasks related`
 
@@ -4465,7 +4838,7 @@ tg tasks related <task> [options]
 
 **Returns:** tasks that may be the same job as this one, best first; merges nothing
 
-**Example:** `tg tasks related PR-12`
+**Example:** `tg personal tasks related PR-12`
 
 ### `tg tasks duplicates`
 
@@ -4490,17 +4863,17 @@ son tareas distintas: el par sale de la lista y no vuelve a proponerse
 **Solo hace cambios en este equipo.**
 
 ```sh
-tg tasks duplicates reject <dup> <task>
+tg tasks duplicates reject <task> <other-task>
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
-| `dup` | obligatorio | la tarea marcada como duplicada, por id o clave. |
-| `task` | obligatorio | la tarea con la que forma el par. |
+| `task` | obligatorio | la tarea marcada como duplicada, por id o clave. |
+| `other-task` | obligatorio | la tarea con la que forma el par. |
 
 **Returns:** two tasks are not the same job: the pair is never offered again
 
-**Example:** `tg tasks duplicates reject PR-14 PR-12`
+**Example:** `tg personal tasks duplicates reject PR-14 PR-12`
 
 #### `tg tasks duplicates defer`
 
@@ -4509,17 +4882,17 @@ los campos y el texto no bastan: dejar el par al propietario, que lo encuentra c
 **Solo hace cambios en este equipo.**
 
 ```sh
-tg tasks duplicates defer <dup> <task>
+tg tasks duplicates defer <task> <other-task>
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
-| `dup` | obligatorio | la tarea marcada como duplicada, por id o clave. |
-| `task` | obligatorio | la tarea con la que forma el par. |
+| `task` | obligatorio | la tarea marcada como duplicada, por id o clave. |
+| `other-task` | obligatorio | la tarea con la que forma el par. |
 
 **Returns:** the fields and the text cannot tell: leave the pair to the owner
 
-**Example:** `tg tasks duplicates defer PR-14 PR-12`
+**Example:** `tg personal tasks duplicates defer PR-14 PR-12`
 
 ### `tg tasks merge`
 
@@ -4528,12 +4901,12 @@ un trabajo visto dos veces: vincular los mensajes del duplicado a la tarea y cer
 **Solo hace cambios en este equipo.**
 
 ```sh
-tg tasks merge <dup> [options]
+tg tasks merge <task> [options]
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
-| `dup` | obligatorio | el duplicado por id o clave; debe estar abierto. |
+| `task` | obligatorio | el duplicado por id o clave; debe estar abierto. |
 
 | Opción | Qué hace |
 |---|---|
@@ -4541,7 +4914,7 @@ tg tasks merge <dup> [options]
 
 **Returns:** one job seen twice: fold the duplicate into the task that stays
 
-**Example:** `tg tasks merge PR-14 --into PR-12`
+**Example:** `tg personal tasks merge PR-14 --into PR-12`
 
 ### `tg tasks unmerge`
 
@@ -4550,16 +4923,16 @@ deshacer una unión: reabrir la tarea y quitar duplicate-of; los mensajes vincul
 **Solo hace cambios en este equipo.**
 
 ```sh
-tg tasks unmerge <dup>
+tg tasks unmerge <task>
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
-| `dup` | obligatorio | la tarea unida por id o clave. |
+| `task` | obligatorio | la tarea unida por id o clave. |
 
 **Returns:** undo a merge: reopen the task and remove its duplicate-of relation
 
-**Example:** `tg tasks unmerge PR-14`
+**Example:** `tg personal tasks unmerge PR-14`
 
 ### `tg tasks agenda`
 
@@ -4583,7 +4956,7 @@ tg tasks agenda [query] [options]
 
 **Returns:** agenda — at, account, stored_at, stale, tasks, owed, waiting, unsynced, and 2 more; every field: tg commands schema tasks agenda
 
-**Example:** `tg tasks agenda`
+**Example:** `tg personal tasks agenda`
 
 ### `tg tasks categories`
 
@@ -4595,7 +4968,7 @@ tg tasks categories
 
 **Returns:** the categories a task takes, with what each means
 
-**Example:** `tg tasks categories`
+**Example:** `tg personal tasks categories`
 
 ### `tg tasks scan`
 
@@ -4617,7 +4990,7 @@ tg tasks scan <chat> [options]
 
 **Returns:** build tasks from a chat's stored history: unanswered questions and mentions
 
-**Example:** `tg tasks scan <chat>`, `tg tasks scan <chat> --last 300 --yes`
+**Example:** `tg personal tasks scan <chat>`, `tg personal tasks scan <chat> --last 300 --yes`
 
 ### `tg tasks claim`
 
@@ -4640,7 +5013,7 @@ tg tasks claim <task> [options]
 
 **Returns:** take an open task so no other agent works it at once; the claim lapses by itself
 
-**Example:** `tg tasks claim PR-12 --lease 2h`
+**Example:** `tg personal tasks claim PR-12 --lease 2h`
 
 ### `tg tasks release`
 
@@ -4662,7 +5035,7 @@ tg tasks release <task> [options]
 
 **Returns:** give back a task you claimed, before the claim lapses; the owner may release any
 
-**Example:** `tg tasks release PR-12`
+**Example:** `tg personal tasks release PR-12`
 
 ### `tg tasks close`
 
@@ -4685,9 +5058,9 @@ tg tasks close <task> [options]
 | `--certainty <n>` | de un agente: su certeza, de 0 a 1, de que la tarea no necesita nada más. |
 | `--as-owner` | cerrarla en tu nombre aunque la herramienta se ejecute en la terminal de un agente (con AI_AGENT o CLAUDECODE definida). |
 
-**Returns:** close a task: done, or dismissed when it needs no answer; an agent's unsure close waits…
+**Returns:** close a task as done or dismissed
 
-**Example:** `tg tasks close Q-15 --as done --certainty 0.9 --reason answered-in-chat`, `tg tasks close Q-15`
+**Example:** `tg personal tasks close Q-15 --as done --certainty 0.9 --reason answered-in-chat`, `tg personal tasks close Q-15`
 
 ### `tg tasks reject`
 
@@ -4709,7 +5082,7 @@ tg tasks reject <task> [options]
 
 **Returns:** refuse an agent's close of a task: it stays open and the suggestion goes
 
-**Example:** `tg tasks reject Q-15`
+**Example:** `tg personal tasks reject Q-15`
 
 ## `tg search`
 
@@ -4717,7 +5090,7 @@ buscar por texto: messages o notes si sabes el recurso, o search all en ambos; p
 
 ### `tg search all`
 
-buscar mensajes y notas del almacén local y mensajes del servidor (--backend; notas solo locales), además de transcripciones si --source indica una cuenta de reuniones; mejores coincidencias primero; no correo (lo busca la CLI memo, aparte: memo search mail), tareas, personas, recuerdos ni proyectos. Úsalo si no sabes dónde se escribió; search messages o notes lee un tipo con todos sus campos
+buscar mensajes y notas del almacén local y, por defecto, también mensajes del servidor del servicio de mensajería (las notas son solo locales; --backend archive o --offline lo limita al almacén local), además de transcripciones si --source indica una cuenta de reuniones; mejores coincidencias primero; no correo (lo busca la CLI memo, aparte: memo search mail), tareas, personas, recuerdos ni proyectos. Úsalo cuando no sepas dónde se escribió algo; search messages o notes lee un solo tipo con todos sus campos
 
 ```sh
 tg search all <query> [options]
@@ -4741,7 +5114,7 @@ tg search all <query> [options]
 
 **Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 4 more; every field: tg commands schema search all
 
-**Example:** `tg search all "invoice"`
+**Example:** `tg personal search all draft`
 
 ### `tg search messages`
 
@@ -4778,11 +5151,11 @@ tg search messages [query] [options]
 | `--timezone <zone>` | zona horaria IANA para los límites de fechas del calendario. |
 | `--saved <name\|id>` | ejecuta una búsqueda guardada o una ejecución anterior; las opciones escritas aquí sustituyen a las suyas. |
 
-**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, found_in, and 3 more; every field: tg commands schema search messages
+**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 5 more; every field: tg commands schema search messages
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
-**Example:** `tg search messages "invoice"`
+**Example:** `tg personal search messages draft --limit 10`
 
 ### `tg search notes`
 
@@ -4807,7 +5180,7 @@ tg search notes <query> [options]
 
 **Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 5 more; every field: tg commands schema search notes
 
-**Example:** `tg search notes "invoice"`
+**Example:** `tg personal search notes draft --limit 10`
 
 ### `tg search conversations`
 
@@ -4842,9 +5215,9 @@ tg search conversations <query> [options]
 | `--limit <n>` | cuántos. |
 | `--catch-up` | primero analiza y calcula vectores, en este equipo, de los chats del alcance que cambiaron o nunca se analizaron, dentro de --max-chats y --max-chunks. |
 
-**Returns:** the conversations nearest to a query in meaning and in words, best first, in one chat or…
+**Returns:** find conversations by words and meaning
 
-**Example:** `tg search conversations "invoice"`
+**Example:** `tg personal search conversations "Reviewing the project draft"`
 
 ### `tg search topics`
 
@@ -4867,7 +5240,7 @@ tg search topics <chat> <text> [options]
 
 **Returns:** a forum group's topics whose title matches
 
-**Example:** `tg search topics Team "on my way"`
+**Example:** `tg personal search topics "Book club" draft`
 
 ## `tg searches`
 
@@ -4903,7 +5276,7 @@ tg searches create <name> [query] [options]
 
 **Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches create
 
-**Example:** `tg searches create daily "invoice"`
+**Example:** `tg personal searches create project-drafts draft --chat "Project room"`
 
 ### `tg searches show`
 
@@ -4919,7 +5292,7 @@ tg searches show <name|id>
 
 **Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches show
 
-**Example:** `tg searches show <name|id>`
+**Example:** `tg personal searches show project-drafts`
 
 ### `tg searches list`
 
@@ -4935,7 +5308,7 @@ tg searches list [query]
 
 **Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches list
 
-**Example:** `tg searches list`
+**Example:** `tg personal searches list`
 
 ### `tg searches history`
 
@@ -4953,7 +5326,7 @@ tg searches history [options]
 
 **Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches history
 
-**Example:** `tg searches history`
+**Example:** `tg personal searches history --limit 10`
 
 ### `tg searches delete`
 
@@ -4971,7 +5344,7 @@ tg searches delete <name|id>
 
 **Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches delete
 
-**Example:** `tg searches delete <name|id>`
+**Example:** `tg personal searches delete project-drafts`
 
 ### `tg searches clear`
 
@@ -4985,7 +5358,7 @@ tg searches clear
 
 **Returns:** empty the history; saved searches stay
 
-**Example:** `tg searches clear`
+**Example:** `tg personal searches clear`
 
 ## `tg flood`
 
@@ -5001,9 +5374,9 @@ olvidarlos, levantar el bloqueo y la regulación del ritmo del perfil una vez qu
 tg flood clear
 ```
 
-**Returns:** forget them, lift the hold and the profile's pace, once Telegram no longer limits the…
+**Returns:** clear a profile's stored rate-limit hold
 
-**Example:** `tg flood clear`
+**Example:** `tg personal flood clear`
 
 ## `tg replies`
 
@@ -5025,7 +5398,7 @@ tg replies add <id>
 
 **Returns:** add a rule with every default written out, off until you edit and enable it
 
-**Example:** `tg replies add 1`
+**Example:** `tg personal replies add 1`
 
 ### `tg replies on`
 
@@ -5043,7 +5416,7 @@ tg replies on <id>
 
 **Returns:** enable one reply rule; its template must be ready
 
-**Example:** `tg replies on 1`
+**Example:** `tg personal replies on 1`
 
 ### `tg replies off`
 
@@ -5061,7 +5434,7 @@ tg replies off <id>
 
 **Returns:** disable one reply rule
 
-**Example:** `tg replies off 1`
+**Example:** `tg personal replies off 1`
 
 ### `tg replies edit`
 
@@ -5105,7 +5478,7 @@ tg replies edit <id> [options]
 
 **Returns:** change only the named fields of a reply rule; lists replace the whole list
 
-**Example:** `tg replies edit 1`
+**Example:** `tg personal replies edit 1`
 
 ### `tg replies audience`
 
@@ -5127,7 +5500,7 @@ tg replies audience [options]
 
 **Returns:** show the reply audience, who the rules may answer, or replace its named fields; a new…
 
-**Example:** `tg replies audience`
+**Example:** `tg personal replies audience`
 
 ### `tg replies consents`
 
@@ -5143,7 +5516,7 @@ tg replies consents show
 
 **Returns:** show the reply model consent and chat opt-outs; never calls a model
 
-**Example:** `tg replies consents show`
+**Example:** `tg personal replies consents show`
 
 #### `tg replies consents grant`
 
@@ -5157,7 +5530,7 @@ tg replies consents grant
 
 **Returns:** allow incoming message data to go to the configured reply model for this profile; chat…
 
-**Example:** `tg replies consents grant`
+**Example:** `tg personal replies consents grant`
 
 #### `tg replies consents revoke`
 
@@ -5171,7 +5544,7 @@ tg replies consents revoke
 
 **Returns:** revoke the profile's reply model consent immediately; chat opt-outs remain
 
-**Example:** `tg replies consents revoke`
+**Example:** `tg personal replies consents revoke`
 
 #### `tg replies consents deny`
 
@@ -5189,7 +5562,7 @@ tg replies consents deny <chat>
 
 **Returns:** keep this chat's incoming data away from the reply model
 
-**Example:** `tg replies consents deny Team`
+**Example:** `tg personal replies consents deny Team`
 
 #### `tg replies consents allow`
 
@@ -5207,7 +5580,7 @@ tg replies consents allow <chat>
 
 **Returns:** remove this chat's model opt-out; does not grant profile consent
 
-**Example:** `tg replies consents allow Team`
+**Example:** `tg personal replies consents allow Team`
 
 ### `tg replies test`
 
@@ -5228,7 +5601,7 @@ tg replies test [rule] [options]
 
 **Returns:** what the rules would have answered in the stored messages, to whom and why — sends…
 
-**Example:** `tg replies test`
+**Example:** `tg personal replies test`
 
 ### `tg replies pause`
 
@@ -5242,7 +5615,7 @@ tg replies pause
 
 **Returns:** stop every reply rule of this profile at once, a running serve too; resume undoes it
 
-**Example:** `tg replies pause`
+**Example:** `tg personal replies pause`
 
 ### `tg replies resume`
 
@@ -5256,7 +5629,7 @@ tg replies resume
 
 **Returns:** let the reply rules answer again after pause
 
-**Example:** `tg replies resume`
+**Example:** `tg personal replies resume`
 
 ### `tg replies status`
 
@@ -5268,7 +5641,7 @@ tg replies status
 
 **Returns:** whether the rules may send, which are on, and who they may answer
 
-**Example:** `tg replies status`
+**Example:** `tg personal replies status`
 
 ## `tg recipients`
 
@@ -5284,7 +5657,7 @@ tg recipients list
 
 **Returns:** the chats on the list; empty and off until the first add
 
-**Example:** `tg recipients list`
+**Example:** `tg personal recipients list`
 
 ### `tg recipients add`
 
@@ -5302,7 +5675,7 @@ tg recipients add <chat>
 
 **Returns:** allow sending to this chat; the first add turns the list on
 
-**Example:** `tg recipients add Team`
+**Example:** `tg personal recipients add "Book club"`
 
 ### `tg recipients remove`
 
@@ -5320,7 +5693,7 @@ tg recipients remove <chat>
 
 **Returns:** stop allowing this chat; the list stays on
 
-**Example:** `tg recipients remove Team`
+**Example:** `tg personal recipients remove "Book club"`
 
 ### `tg recipients clear`
 
@@ -5334,7 +5707,7 @@ tg recipients clear
 
 **Returns:** delete the list, which turns it off: this profile may send to any chat again
 
-**Example:** `tg recipients clear`
+**Example:** `tg personal recipients clear`
 
 ## `tg sends`
 
@@ -5356,7 +5729,7 @@ tg sends list [options]
 
 **Returns:** attempts to send, newest first: sent, refused, failed, or not known
 
-**Example:** `tg sends list`
+**Example:** `tg personal sends list`
 
 ## `tg runs`
 
@@ -5377,7 +5750,7 @@ tg runs list [options]
 
 **Returns:** recorded runs, newest first
 
-**Example:** `tg runs list`
+**Example:** `tg personal runs list --limit 10`
 
 ### `tg runs show`
 
@@ -5397,7 +5770,7 @@ tg runs show <run-id> [options]
 
 **Returns:** one run: what it was, how it ended, and every event it logged
 
-**Example:** `tg runs show <run-id>`
+**Example:** `tg personal runs show run-101`
 
 ### `tg runs search`
 
@@ -5423,7 +5796,7 @@ tg runs search [query] [options]
 
 **Returns:** search recorded diagnostic metadata and events; no message contents
 
-**Example:** `tg runs search "invoice"`
+**Example:** `tg personal runs search timeout --limit 10`
 
 ### `tg runs path`
 
@@ -5439,7 +5812,7 @@ tg runs path <run-id>
 
 **Returns:** the directory holding one run
 
-**Example:** `tg runs path <run-id>`
+**Example:** `tg personal runs path run-101`
 
 ## `tg config`
 
@@ -5459,7 +5832,7 @@ tg config show [options]
 
 **Returns:** the profile, the profiles that exist, and each setting with where it came from
 
-**Example:** `tg config show`
+**Example:** `tg personal config show`
 
 ### `tg config set`
 
@@ -5473,7 +5846,7 @@ tg config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | obligatorio | número, true o false; para allow, lista como send,reaction; para un grupo, tg:work,max:Alice,email:me@x. |
 
 | Opción | Qué hace |
@@ -5484,7 +5857,7 @@ tg config set <setting> <value> [options]
 
 **Returns:** save a setting to the configuration file
 
-**Example:** `tg config set <setting> <value>`
+**Example:** `tg personal config set limit 20`
 
 ### `tg config unset`
 
@@ -5498,7 +5871,7 @@ tg config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, catch_up_marks_read, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | obligatorio | uno de: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
 | Opción | Qué hace |
 |---|---|
@@ -5508,7 +5881,7 @@ tg config unset <setting> [options]
 
 **Returns:** remove a setting from the configuration file
 
-**Example:** `tg config unset <setting>`
+**Example:** `tg personal config unset limit`
 
 ## `tg doctor`
 
@@ -5543,7 +5916,7 @@ tg doctor report create [options]
 
 **Returns:** write a problem report to a file, and say where to send it
 
-**Example:** `tg doctor report create`
+**Example:** `tg personal doctor report create`
 
 ## `tg commands`
 
@@ -5575,11 +5948,11 @@ tg complete [words]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `words` | opcional |  |
+| `words` | opcional | zsh para el script de shell, o palabras del comando que completar. |
 
 **Returns:** shell completion: `tg complete zsh` prints the script to source
 
-**Example:** `tg complete`
+**Example:** `tg complete zsh`
 
 ## `tg upgrade`
 
@@ -5629,9 +6002,9 @@ tg mcp config [options]
 |---|---|
 | `--permission <key=level>` | hacer un permiso más estricto solo para este servidor, como messages.send=deny; nunca afloja el perfil; repetir para más claves. |
 
-**Returns:** print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes…
+**Returns:** print this profile's local MCP configuration
 
-**Example:** `tg mcp config`
+**Example:** `tg personal mcp config`
 
 ### `tg mcp setup`
 
@@ -5654,7 +6027,7 @@ tg mcp setup <client> [options]
 
 **Returns:** add this profile's local MCP server to Codex or Claude Code
 
-**Example:** `tg mcp setup <client>`
+**Example:** `tg personal mcp setup codex --allow-writes`
 
 ### `tg mcp doctor`
 
@@ -5670,7 +6043,7 @@ tg mcp doctor [options]
 
 **Returns:** check this profile's local MCP handshake and tool list
 
-**Example:** `tg mcp doctor`
+**Example:** `tg personal mcp doctor`
 
 ## `tg bot`
 
@@ -5692,7 +6065,7 @@ tg bot auth set
 
 **Returns:** check a bot token with Telegram, then keep it — typed at a hidden prompt or piped on stdin
 
-**Example:** `tg bot auth set`
+**Example:** `tg personal bot auth set`
 
 #### `tg bot auth show`
 
@@ -5704,7 +6077,7 @@ tg bot auth show
 
 **Returns:** where this profile's bot token comes from, and which bot it is
 
-**Example:** `tg bot auth show`
+**Example:** `tg personal bot auth show`
 
 #### `tg bot auth remove`
 
@@ -5718,7 +6091,7 @@ tg bot auth remove
 
 **Returns:** forget this profile's bot token
 
-**Example:** `tg bot auth remove`
+**Example:** `tg personal bot auth remove`
 
 ### `tg bot list`
 
@@ -5734,7 +6107,7 @@ tg bot list [options]
 
 **Returns:** every name on this machine that has a bot token; --check asks Telegram which bot each is
 
-**Example:** `tg bot list`
+**Example:** `tg personal bot list`
 
 ### `tg bot chats`
 
@@ -5750,7 +6123,7 @@ tg bot chats list
 
 **Returns:** chats this bot has seen on this machine — not a complete list from Telegram
 
-**Example:** `tg bot chats list`
+**Example:** `tg personal bot chats list`
 
 #### `tg bot chats show`
 
@@ -5766,7 +6139,7 @@ tg bot chats show <chat>
 
 **Returns:** one chat from Telegram, and remember it
 
-**Example:** `tg bot chats show Team`
+**Example:** `tg personal bot chats show Team`
 
 #### `tg bot chats leave`
 
@@ -5784,7 +6157,7 @@ tg bot chats leave <chat>
 
 **Returns:** take the bot out of a chat; only an admin of the chat can bring it back
 
-**Example:** `tg bot chats leave Team`
+**Example:** `tg personal bot chats leave Team`
 
 #### `tg bot chats action`
 
@@ -5803,7 +6176,7 @@ tg bot chats action <chat> <action>
 
 **Returns:** show what the bot is doing in a chat — typing, sending a photo — for a few seconds
 
-**Example:** `tg bot chats action Team typing`
+**Example:** `tg personal bot chats action Team typing`
 
 #### `tg bot chats admins`
 
@@ -5823,7 +6196,7 @@ tg bot chats admins list <chat>
 
 **Returns:** the chat's admins and what each may do
 
-**Example:** `tg bot chats admins list Team`
+**Example:** `tg personal bot chats admins list Team`
 
 #### `tg bot chats admins add`
 
@@ -5847,7 +6220,7 @@ tg bot chats admins add <chat> <person> [options]
 
 **Returns:** make a member an admin with these rights
 
-**Example:** `tg bot chats admins add Team Anna --can <rights>`
+**Example:** `tg personal bot chats admins add Team Anna --can <rights>`
 
 #### `tg bot chats admins remove`
 
@@ -5866,7 +6239,7 @@ tg bot chats admins remove <chat> <person>
 
 **Returns:** take an admin's rights back; they stay a member
 
-**Example:** `tg bot chats admins remove Team Anna`
+**Example:** `tg personal bot chats admins remove Team Anna`
 
 #### `tg bot chats members`
 
@@ -5893,7 +6266,7 @@ tg bot chats members remove <chat> <person> [options]
 
 **Returns:** take a person out of a chat; their messages stay
 
-**Example:** `tg bot chats members remove Team Anna`
+**Example:** `tg personal bot chats members remove Team Anna`
 
 #### `tg bot chats rules`
 
@@ -5913,7 +6286,7 @@ tg bot chats rules show <chat>
 
 **Returns:** the chat's rules; the defaults, marked not saved, if it has none yet
 
-**Example:** `tg bot chats rules show Team`
+**Example:** `tg personal bot chats rules show Team`
 
 #### `tg bot chats rules set`
 
@@ -5933,7 +6306,7 @@ tg bot chats rules set <chat> <key> <value>
 
 **Returns:** change one rule — trusted, blocked, blockedNames, links, invites, forwards,…
 
-**Example:** `tg bot chats rules set Team <key> <value>`
+**Example:** `tg personal bot chats rules set Team <key> <value>`
 
 #### `tg bot chats rules unset`
 
@@ -5952,7 +6325,7 @@ tg bot chats rules unset <chat> <key>
 
 **Returns:** put one rule back to its default
 
-**Example:** `tg bot chats rules unset Team <key>`
+**Example:** `tg personal bot chats rules unset Team <key>`
 
 #### `tg bot chats moderate`
 
@@ -5978,7 +6351,7 @@ tg bot chats moderate <chat> [options]
 
 **Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot
 
-**Example:** `tg bot chats moderate Team`
+**Example:** `tg personal bot chats moderate Team`
 
 ### `tg bot messages`
 
@@ -6013,7 +6386,7 @@ tg bot messages send <chat> [text] [options]
 
 **Returns:** send a message as the bot; without [text], the text is read from stdin
 
-**Example:** `tg bot messages send Team "on my way"`
+**Example:** `tg personal bot messages send Team "on my way"`
 
 #### `tg bot messages list`
 
@@ -6033,7 +6406,7 @@ tg bot messages list <chat> [options]
 
 **Returns:** the latest messages in a chat; where Telegram gives a bot no history, and with --offline,…
 
-**Example:** `tg bot messages list Team`
+**Example:** `tg personal bot messages list Team`
 
 #### `tg bot messages show`
 
@@ -6050,7 +6423,7 @@ tg bot messages show <chat> <message>
 
 **Returns:** one message by its id in a chat
 
-**Example:** `tg bot messages show Team 1234`
+**Example:** `tg personal bot messages show Team 1234`
 
 #### `tg bot messages edit`
 
@@ -6075,7 +6448,7 @@ tg bot messages edit <chat> <message> <text> [options]
 
 **Returns:** replace the text of a message the bot sent
 
-**Example:** `tg bot messages edit Team 1234 "on my way"`
+**Example:** `tg personal bot messages edit Team 1234 "on my way"`
 
 #### `tg bot messages delete`
 
@@ -6098,7 +6471,7 @@ tg bot messages delete <chat> <messages> [options]
 
 **Returns:** delete messages in a chat the bot can delete in; it cannot be undone
 
-**Example:** `tg bot messages delete Team <messages>`
+**Example:** `tg personal bot messages delete Team <messages>`
 
 #### `tg bot messages pin`
 
@@ -6121,7 +6494,7 @@ tg bot messages pin <chat> <message> [options]
 
 **Returns:** pin a message in a chat; quietly unless --notify
 
-**Example:** `tg bot messages pin Team 1234`
+**Example:** `tg personal bot messages pin Team 1234`
 
 #### `tg bot messages unpin`
 
@@ -6140,7 +6513,7 @@ tg bot messages unpin <chat> <message>
 
 **Returns:** unpin a message in a chat
 
-**Example:** `tg bot messages unpin Team 1234`
+**Example:** `tg personal bot messages unpin Team 1234`
 
 #### `tg bot messages between`
 
@@ -6162,7 +6535,7 @@ tg bot messages between <people> [options]
 
 **Returns:** what two or more people wrote in the chats they have all written in — from the local…
 
-**Example:** `tg bot messages between Anna`
+**Example:** `tg personal bot messages between Anna`
 
 ### `tg bot search`
 
@@ -6191,7 +6564,7 @@ tg bot search messages [query] [options]
 
 **Returns:** search the messages this bot has read, sent or received on this machine — the local copy…
 
-**Example:** `tg bot search messages "invoice"`
+**Example:** `tg personal bot search messages "invoice"`
 
 ### `tg bot recipients`
 
@@ -6207,7 +6580,7 @@ tg bot recipients list
 
 **Returns:** the chats on the list, or nothing when there is no list
 
-**Example:** `tg bot recipients list`
+**Example:** `tg personal bot recipients list`
 
 #### `tg bot recipients add`
 
@@ -6225,7 +6598,7 @@ tg bot recipients add <chat>
 
 **Returns:** allow a chat: its id, `user:<id>`, or the title of a chat this bot has seen
 
-**Example:** `tg bot recipients add Team`
+**Example:** `tg personal bot recipients add Team`
 
 #### `tg bot recipients remove`
 
@@ -6243,7 +6616,7 @@ tg bot recipients remove <chat>
 
 **Returns:** take a chat off the list
 
-**Example:** `tg bot recipients remove Team`
+**Example:** `tg personal bot recipients remove Team`
 
 #### `tg bot recipients clear`
 
@@ -6257,7 +6630,7 @@ tg bot recipients clear
 
 **Returns:** remove the list: the bot may write to any chat again
 
-**Example:** `tg bot recipients clear`
+**Example:** `tg personal bot recipients clear`
 
 ### `tg bot sends`
 
@@ -6273,7 +6646,7 @@ tg bot sends list
 
 **Returns:** every send, edit and delete this bot made from this machine, with its outcome
 
-**Example:** `tg bot sends list`
+**Example:** `tg personal bot sends list`
 
 ### `tg bot watch`
 
@@ -6289,10 +6662,12 @@ tg bot watch [options]
 |---|---|
 | `--events` | incluye ediciones, eliminaciones, botones y entradas y salidas; cada línea indica el evento. |
 | `--types <types>` | tipos de actualización separados por comas, con los nombres del servicio. |
+| `--public-url <url>` | recibe por webhook en la dirección https de tu túnel en lugar de consultar periódicamente, p. ej. https://<name>.ts.net. |
+| `--port <port>` | puerto local detrás del túnel para --public-url (predeterminado: 8766). |
 
 **Returns:** print new messages as they arrive and keep them, until Ctrl-C or --timeout (either ends…
 
-**Example:** `tg bot watch`
+**Example:** `tg personal bot watch`
 
 ### `tg bot callbacks`
 
@@ -6319,7 +6694,7 @@ tg bot callbacks answer <callback> [options]
 
 **Returns:** answer a pressed button by its callback id: --notification shows the person a one-time…
 
-**Example:** `tg bot callbacks answer <callback>`
+**Example:** `tg personal bot callbacks answer <callback>`
 
 ### `tg bot commands`
 
@@ -6335,7 +6710,7 @@ tg bot commands list
 
 **Returns:** the commands in the menu now
 
-**Example:** `tg bot commands list`
+**Example:** `tg personal bot commands list`
 
 #### `tg bot commands set`
 
@@ -6353,7 +6728,7 @@ tg bot commands set <commands>
 
 **Returns:** replace the whole menu: each command as name=description, e.g. start=Begin
 
-**Example:** `tg bot commands set <commands>`
+**Example:** `tg personal bot commands set <commands>`
 
 #### `tg bot commands clear`
 
@@ -6367,7 +6742,7 @@ tg bot commands clear
 
 **Returns:** empty the menu
 
-**Example:** `tg bot commands clear`
+**Example:** `tg personal bot commands clear`
 
 ### `tg bot webhooks`
 
@@ -6383,7 +6758,7 @@ tg bot webhooks list
 
 **Returns:** the webhooks this bot has
 
-**Example:** `tg bot webhooks list`
+**Example:** `tg personal bot webhooks list`
 
 #### `tg bot webhooks set`
 
@@ -6406,7 +6781,7 @@ tg bot webhooks set <url> [options]
 
 **Returns:** send this bot's updates to an HTTPS address; refused while another is set
 
-**Example:** `tg bot webhooks set https://example.com`
+**Example:** `tg personal bot webhooks set https://example.com`
 
 #### `tg bot webhooks delete`
 
@@ -6424,7 +6799,7 @@ tg bot webhooks delete <url>
 
 **Returns:** stop sending updates to this address; with none left, `bot watch` works again
 
-**Example:** `tg bot webhooks delete https://example.com`
+**Example:** `tg personal bot webhooks delete https://example.com`
 
 ### `tg bot contacts`
 
@@ -6451,7 +6826,7 @@ tg bot contacts show <who> [options]
 
 **Returns:** one person: the chats they wrote in (with their last message there) and the latest…
 
-**Example:** `tg bot contacts show <who>`
+**Example:** `tg personal bot contacts show <who>`
 
 ### `tg bot me`
 
@@ -6463,7 +6838,7 @@ tg bot me
 
 **Returns:** the bot this profile's token belongs to: id, name and username
 
-**Example:** `tg bot me`
+**Example:** `tg personal bot me`
 
 ### `tg bot store`
 
@@ -6494,7 +6869,7 @@ tg bot store fetch <chat> [options]
 
 **Returns:** fetch a chat's history into the bot's local copy, newest first; run it again to continue
 
-**Example:** `tg bot store fetch Team`
+**Example:** `tg personal bot store fetch Team`
 
 ### `tg bot mcp`
 
@@ -6510,7 +6885,7 @@ tg bot mcp config
 
 **Returns:** print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes…
 
-**Example:** `tg bot mcp config`
+**Example:** `tg personal bot mcp config`
 
 ### `tg bot api`
 
@@ -6546,7 +6921,7 @@ tg bot api get-updates [options]
 
 **Returns:** Use this method to receive incoming updates using long polling (wiki). Returns an Array…
 
-**Example:** `tg bot api get-updates`
+**Example:** `tg personal bot api get-updates`
 
 #### `tg bot api set-webhook`
 
@@ -6571,7 +6946,7 @@ tg bot api set-webhook [options]
 
 **Returns:** Use this method to specify a URL and receive incoming updates via an outgoing webhook.…
 
-**Example:** `tg bot api set-webhook`
+**Example:** `tg personal bot api set-webhook`
 
 #### `tg bot api delete-webhook`
 
@@ -6591,7 +6966,7 @@ tg bot api delete-webhook [options]
 
 **Returns:** Use this method to remove webhook integration if you decide to switch back to getUpdates.…
 
-**Example:** `tg bot api delete-webhook`
+**Example:** `tg personal bot api delete-webhook`
 
 #### `tg bot api get-webhook-info`
 
@@ -6603,7 +6978,7 @@ tg bot api get-webhook-info
 
 **Returns:** Use this method to get current webhook status. Requires no parameters. On success,…
 
-**Example:** `tg bot api get-webhook-info`
+**Example:** `tg personal bot api get-webhook-info`
 
 #### `tg bot api get-me`
 
@@ -6615,7 +6990,7 @@ tg bot api get-me
 
 **Returns:** A simple method for testing your bot's authentication token. Requires no parameters.…
 
-**Example:** `tg bot api get-me`
+**Example:** `tg personal bot api get-me`
 
 #### `tg bot api log-out`
 
@@ -6629,7 +7004,7 @@ tg bot api log-out
 
 **Returns:** Use this method to log out from the cloud Bot API server before launching the bot…
 
-**Example:** `tg bot api log-out`
+**Example:** `tg personal bot api log-out`
 
 #### `tg bot api close`
 
@@ -6643,7 +7018,7 @@ tg bot api close
 
 **Returns:** Use this method to close the bot instance before moving it from one local server to…
 
-**Example:** `tg bot api close`
+**Example:** `tg personal bot api close`
 
 #### `tg bot api send-message`
 
@@ -6678,7 +7053,7 @@ tg bot api send-message [options]
 
 **Returns:** Use this method to send text messages. On success, the sent Message is returned. — write…
 
-**Example:** `tg bot api send-message`
+**Example:** `tg personal bot api send-message`
 
 #### `tg bot api forward-message`
 
@@ -6707,7 +7082,7 @@ tg bot api forward-message [options]
 
 **Returns:** Use this method to forward messages of any kind. Service messages and messages with…
 
-**Example:** `tg bot api forward-message`
+**Example:** `tg personal bot api forward-message`
 
 #### `tg bot api forward-messages`
 
@@ -6733,7 +7108,7 @@ tg bot api forward-messages [options]
 
 **Returns:** Use this method to forward multiple messages of any kind. If some of the specified…
 
-**Example:** `tg bot api forward-messages`
+**Example:** `tg personal bot api forward-messages`
 
 #### `tg bot api copy-message`
 
@@ -6769,7 +7144,7 @@ tg bot api copy-message [options]
 
 **Returns:** Use this method to copy messages of any kind. Service messages, paid media messages,…
 
-**Example:** `tg bot api copy-message`
+**Example:** `tg personal bot api copy-message`
 
 #### `tg bot api copy-messages`
 
@@ -6796,7 +7171,7 @@ tg bot api copy-messages [options]
 
 **Returns:** Use this method to copy messages of any kind. If some of the specified messages can't be…
 
-**Example:** `tg bot api copy-messages`
+**Example:** `tg personal bot api copy-messages`
 
 #### `tg bot api send-photo`
 
@@ -6833,7 +7208,7 @@ tg bot api send-photo [options]
 
 **Returns:** Use this method to send photos. On success, the sent Message is returned. — write…
 
-**Example:** `tg bot api send-photo`
+**Example:** `tg personal bot api send-photo`
 
 #### `tg bot api send-live-photo`
 
@@ -6871,7 +7246,7 @@ tg bot api send-live-photo [options]
 
 **Returns:** Use this method to send live photos. On success, the sent Message is returned. — write…
 
-**Example:** `tg bot api send-live-photo`
+**Example:** `tg personal bot api send-live-photo`
 
 #### `tg bot api send-audio`
 
@@ -6910,7 +7285,7 @@ tg bot api send-audio [options]
 
 **Returns:** Use this method to send audio files, if you want Telegram clients to display them in the…
 
-**Example:** `tg bot api send-audio`
+**Example:** `tg personal bot api send-audio`
 
 #### `tg bot api send-document`
 
@@ -6947,7 +7322,7 @@ tg bot api send-document [options]
 
 **Returns:** Use this method to send general files. On success, the sent Message is returned. Bots can…
 
-**Example:** `tg bot api send-document`
+**Example:** `tg personal bot api send-document`
 
 #### `tg bot api send-video`
 
@@ -6991,7 +7366,7 @@ tg bot api send-video [options]
 
 **Returns:** Use this method to send video files, Telegram clients support MPEG4 videos (other formats…
 
-**Example:** `tg bot api send-video`
+**Example:** `tg personal bot api send-video`
 
 #### `tg bot api send-animation`
 
@@ -7032,7 +7407,7 @@ tg bot api send-animation [options]
 
 **Returns:** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On…
 
-**Example:** `tg bot api send-animation`
+**Example:** `tg personal bot api send-animation`
 
 #### `tg bot api send-voice`
 
@@ -7068,7 +7443,7 @@ tg bot api send-voice [options]
 
 **Returns:** Use this method to send audio files, if you want Telegram clients to display the file as…
 
-**Example:** `tg bot api send-voice`
+**Example:** `tg personal bot api send-voice`
 
 #### `tg bot api send-video-note`
 
@@ -7103,7 +7478,7 @@ tg bot api send-video-note [options]
 
 **Returns:** Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success,…
 
-**Example:** `tg bot api send-video-note`
+**Example:** `tg personal bot api send-video-note`
 
 #### `tg bot api send-paid-media`
 
@@ -7139,7 +7514,7 @@ tg bot api send-paid-media [options]
 
 **Returns:** Use this method to send paid media. On success, the sent Message is returned. — write…
 
-**Example:** `tg bot api send-paid-media`
+**Example:** `tg personal bot api send-paid-media`
 
 #### `tg bot api send-media-group`
 
@@ -7168,7 +7543,7 @@ tg bot api send-media-group [options]
 
 **Returns:** Use this method to send a group of photos, live photos, videos, documents or audios as an…
 
-**Example:** `tg bot api send-media-group`
+**Example:** `tg personal bot api send-media-group`
 
 #### `tg bot api send-location`
 
@@ -7205,7 +7580,7 @@ tg bot api send-location [options]
 
 **Returns:** Use this method to send point on the map. On success, the sent Message is returned. —…
 
-**Example:** `tg bot api send-location`
+**Example:** `tg personal bot api send-location`
 
 #### `tg bot api send-venue`
 
@@ -7244,7 +7619,7 @@ tg bot api send-venue [options]
 
 **Returns:** Use this method to send information about a venue. On success, the sent Message is…
 
-**Example:** `tg bot api send-venue`
+**Example:** `tg personal bot api send-venue`
 
 #### `tg bot api send-contact`
 
@@ -7279,7 +7654,7 @@ tg bot api send-contact [options]
 
 **Returns:** Use this method to send phone contacts. On success, the sent Message is returned. — write…
 
-**Example:** `tg bot api send-contact`
+**Example:** `tg personal bot api send-contact`
 
 #### `tg bot api send-poll`
 
@@ -7332,7 +7707,7 @@ tg bot api send-poll [options]
 
 **Returns:** Use this method to send a native poll. On success, the sent Message is returned. — write…
 
-**Example:** `tg bot api send-poll`
+**Example:** `tg personal bot api send-poll`
 
 #### `tg bot api send-checklist`
 
@@ -7359,7 +7734,7 @@ tg bot api send-checklist [options]
 
 **Returns:** Use this method to send a checklist on behalf of a connected business account. On…
 
-**Example:** `tg bot api send-checklist`
+**Example:** `tg personal bot api send-checklist`
 
 #### `tg bot api send-dice`
 
@@ -7390,7 +7765,7 @@ tg bot api send-dice [options]
 
 **Returns:** Use this method to send an animated emoji that will display a random value. On success,…
 
-**Example:** `tg bot api send-dice`
+**Example:** `tg personal bot api send-dice`
 
 #### `tg bot api send-message-draft`
 
@@ -7417,7 +7792,7 @@ tg bot api send-message-draft [options]
 
 **Returns:** Use this method to stream a partial message to a user while the message is being…
 
-**Example:** `tg bot api send-message-draft`
+**Example:** `tg personal bot api send-message-draft`
 
 #### `tg bot api send-chat-action`
 
@@ -7440,7 +7815,7 @@ tg bot api send-chat-action [options]
 
 **Returns:** Use this method when you need to tell the user that something is happening on the bot's…
 
-**Example:** `tg bot api send-chat-action`
+**Example:** `tg personal bot api send-chat-action`
 
 #### `tg bot api set-message-reaction`
 
@@ -7463,7 +7838,7 @@ tg bot api set-message-reaction [options]
 
 **Returns:** Use this method to change the chosen reactions on a message. Service messages of some…
 
-**Example:** `tg bot api set-message-reaction`
+**Example:** `tg personal bot api set-message-reaction`
 
 #### `tg bot api get-user-profile-photos`
 
@@ -7483,7 +7858,7 @@ tg bot api get-user-profile-photos [options]
 
 **Returns:** Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos…
 
-**Example:** `tg bot api get-user-profile-photos`
+**Example:** `tg personal bot api get-user-profile-photos`
 
 #### `tg bot api get-user-profile-audios`
 
@@ -7503,7 +7878,7 @@ tg bot api get-user-profile-audios [options]
 
 **Returns:** Use this method to get a list of profile audios for a user. Returns a UserProfileAudios…
 
-**Example:** `tg bot api get-user-profile-audios`
+**Example:** `tg personal bot api get-user-profile-audios`
 
 #### `tg bot api set-user-emoji-status`
 
@@ -7525,7 +7900,7 @@ tg bot api set-user-emoji-status [options]
 
 **Returns:** Changes the emoji status for a given user that previously allowed the bot to manage their…
 
-**Example:** `tg bot api set-user-emoji-status`
+**Example:** `tg personal bot api set-user-emoji-status`
 
 #### `tg bot api get-file`
 
@@ -7543,7 +7918,7 @@ tg bot api get-file [options]
 
 **Returns:** Use this method to get basic information about a file and prepare it for downloading. For…
 
-**Example:** `tg bot api get-file`
+**Example:** `tg personal bot api get-file`
 
 #### `tg bot api ban-chat-member`
 
@@ -7566,7 +7941,7 @@ tg bot api ban-chat-member [options]
 
 **Returns:** Use this method to ban a user in a group, a supergroup or a channel. In the case of…
 
-**Example:** `tg bot api ban-chat-member`
+**Example:** `tg personal bot api ban-chat-member`
 
 #### `tg bot api unban-chat-member`
 
@@ -7588,7 +7963,7 @@ tg bot api unban-chat-member [options]
 
 **Returns:** Use this method to unban a previously banned user in a supergroup or channel. The user…
 
-**Example:** `tg bot api unban-chat-member`
+**Example:** `tg personal bot api unban-chat-member`
 
 #### `tg bot api restrict-chat-member`
 
@@ -7612,7 +7987,7 @@ tg bot api restrict-chat-member [options]
 
 **Returns:** Use this method to restrict a user in a supergroup. The bot must be an administrator in…
 
-**Example:** `tg bot api restrict-chat-member`
+**Example:** `tg personal bot api restrict-chat-member`
 
 #### `tg bot api promote-chat-member`
 
@@ -7651,7 +8026,7 @@ tg bot api promote-chat-member [options]
 
 **Returns:** Use this method to promote or demote a user in a supergroup or a channel. The bot must be…
 
-**Example:** `tg bot api promote-chat-member`
+**Example:** `tg personal bot api promote-chat-member`
 
 #### `tg bot api set-chat-administrator-custom-title`
 
@@ -7673,7 +8048,7 @@ tg bot api set-chat-administrator-custom-title [options]
 
 **Returns:** Use this method to set a custom title for an administrator in a supergroup promoted by…
 
-**Example:** `tg bot api set-chat-administrator-custom-title`
+**Example:** `tg personal bot api set-chat-administrator-custom-title`
 
 #### `tg bot api set-chat-member-tag`
 
@@ -7695,7 +8070,7 @@ tg bot api set-chat-member-tag [options]
 
 **Returns:** Use this method to set a tag for a regular member in a group or a supergroup. The bot…
 
-**Example:** `tg bot api set-chat-member-tag`
+**Example:** `tg personal bot api set-chat-member-tag`
 
 #### `tg bot api ban-chat-sender-chat`
 
@@ -7716,7 +8091,7 @@ tg bot api ban-chat-sender-chat [options]
 
 **Returns:** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is…
 
-**Example:** `tg bot api ban-chat-sender-chat`
+**Example:** `tg personal bot api ban-chat-sender-chat`
 
 #### `tg bot api unban-chat-sender-chat`
 
@@ -7737,7 +8112,7 @@ tg bot api unban-chat-sender-chat [options]
 
 **Returns:** Use this method to unban a previously banned channel chat in a supergroup or channel. The…
 
-**Example:** `tg bot api unban-chat-sender-chat`
+**Example:** `tg personal bot api unban-chat-sender-chat`
 
 #### `tg bot api set-chat-permissions`
 
@@ -7759,7 +8134,7 @@ tg bot api set-chat-permissions [options]
 
 **Returns:** Use this method to set default chat permissions for all members. The bot must be an…
 
-**Example:** `tg bot api set-chat-permissions`
+**Example:** `tg personal bot api set-chat-permissions`
 
 #### `tg bot api export-chat-invite-link`
 
@@ -7779,7 +8154,7 @@ tg bot api export-chat-invite-link [options]
 
 **Returns:** Use this method to generate a new primary invite link for a chat; any previously…
 
-**Example:** `tg bot api export-chat-invite-link`
+**Example:** `tg personal bot api export-chat-invite-link`
 
 #### `tg bot api create-chat-invite-link`
 
@@ -7803,7 +8178,7 @@ tg bot api create-chat-invite-link [options]
 
 **Returns:** Use this method to create an additional invite link for a chat. The bot must be an…
 
-**Example:** `tg bot api create-chat-invite-link`
+**Example:** `tg personal bot api create-chat-invite-link`
 
 #### `tg bot api edit-chat-invite-link`
 
@@ -7828,7 +8203,7 @@ tg bot api edit-chat-invite-link [options]
 
 **Returns:** Use this method to edit a non-primary invite link created by the bot. The bot must be an…
 
-**Example:** `tg bot api edit-chat-invite-link`
+**Example:** `tg personal bot api edit-chat-invite-link`
 
 #### `tg bot api create-chat-subscription-invite-link`
 
@@ -7851,7 +8226,7 @@ tg bot api create-chat-subscription-invite-link [options]
 
 **Returns:** Use this method to create a subscription invite link for a channel chat. The bot must…
 
-**Example:** `tg bot api create-chat-subscription-invite-link`
+**Example:** `tg personal bot api create-chat-subscription-invite-link`
 
 #### `tg bot api edit-chat-subscription-invite-link`
 
@@ -7873,7 +8248,7 @@ tg bot api edit-chat-subscription-invite-link [options]
 
 **Returns:** Use this method to edit a subscription invite link created by the bot. The bot must have…
 
-**Example:** `tg bot api edit-chat-subscription-invite-link`
+**Example:** `tg personal bot api edit-chat-subscription-invite-link`
 
 #### `tg bot api revoke-chat-invite-link`
 
@@ -7894,7 +8269,7 @@ tg bot api revoke-chat-invite-link [options]
 
 **Returns:** Use this method to revoke an invite link created by the bot. If the primary link is…
 
-**Example:** `tg bot api revoke-chat-invite-link`
+**Example:** `tg personal bot api revoke-chat-invite-link`
 
 #### `tg bot api approve-chat-join-request`
 
@@ -7915,7 +8290,7 @@ tg bot api approve-chat-join-request [options]
 
 **Returns:** Use this method to approve a chat join request. The bot must be an administrator in the…
 
-**Example:** `tg bot api approve-chat-join-request`
+**Example:** `tg personal bot api approve-chat-join-request`
 
 #### `tg bot api decline-chat-join-request`
 
@@ -7936,7 +8311,7 @@ tg bot api decline-chat-join-request [options]
 
 **Returns:** Use this method to decline a chat join request. The bot must be an administrator in the…
 
-**Example:** `tg bot api decline-chat-join-request`
+**Example:** `tg personal bot api decline-chat-join-request`
 
 #### `tg bot api answer-chat-join-request-query`
 
@@ -7957,7 +8332,7 @@ tg bot api answer-chat-join-request-query [options]
 
 **Returns:** Use this method to process a received chat join request query. Returns True on success. —…
 
-**Example:** `tg bot api answer-chat-join-request-query`
+**Example:** `tg personal bot api answer-chat-join-request-query`
 
 #### `tg bot api send-chat-join-request-web-app`
 
@@ -7978,7 +8353,7 @@ tg bot api send-chat-join-request-web-app [options]
 
 **Returns:** Use this method to process a received chat join request query by showing a Mini App to…
 
-**Example:** `tg bot api send-chat-join-request-web-app`
+**Example:** `tg personal bot api send-chat-join-request-web-app`
 
 #### `tg bot api set-chat-photo`
 
@@ -7999,7 +8374,7 @@ tg bot api set-chat-photo [options]
 
 **Returns:** Use this method to set a new profile photo for the chat. Photos can't be changed for…
 
-**Example:** `tg bot api set-chat-photo`
+**Example:** `tg personal bot api set-chat-photo`
 
 #### `tg bot api delete-chat-photo`
 
@@ -8019,7 +8394,7 @@ tg bot api delete-chat-photo [options]
 
 **Returns:** Use this method to delete a chat photo. Photos can't be changed for private chats. The…
 
-**Example:** `tg bot api delete-chat-photo`
+**Example:** `tg personal bot api delete-chat-photo`
 
 #### `tg bot api set-chat-title`
 
@@ -8040,7 +8415,7 @@ tg bot api set-chat-title [options]
 
 **Returns:** Use this method to change the title of a chat. Titles can't be changed for private chats.…
 
-**Example:** `tg bot api set-chat-title`
+**Example:** `tg personal bot api set-chat-title`
 
 #### `tg bot api set-chat-description`
 
@@ -8061,7 +8436,7 @@ tg bot api set-chat-description [options]
 
 **Returns:** Use this method to change the description of a group, a supergroup or a channel. The bot…
 
-**Example:** `tg bot api set-chat-description`
+**Example:** `tg personal bot api set-chat-description`
 
 #### `tg bot api pin-chat-message`
 
@@ -8084,7 +8459,7 @@ tg bot api pin-chat-message [options]
 
 **Returns:** Use this method to add a message to the list of pinned messages in a chat. In private…
 
-**Example:** `tg bot api pin-chat-message`
+**Example:** `tg personal bot api pin-chat-message`
 
 #### `tg bot api unpin-chat-message`
 
@@ -8106,7 +8481,7 @@ tg bot api unpin-chat-message [options]
 
 **Returns:** Use this method to remove a message from the list of pinned messages in a chat. In…
 
-**Example:** `tg bot api unpin-chat-message`
+**Example:** `tg personal bot api unpin-chat-message`
 
 #### `tg bot api unpin-all-chat-messages`
 
@@ -8126,7 +8501,7 @@ tg bot api unpin-all-chat-messages [options]
 
 **Returns:** Use this method to clear the list of pinned messages in a chat. In private chats and…
 
-**Example:** `tg bot api unpin-all-chat-messages`
+**Example:** `tg personal bot api unpin-all-chat-messages`
 
 #### `tg bot api leave-chat`
 
@@ -8146,7 +8521,7 @@ tg bot api leave-chat [options]
 
 **Returns:** Use this method for your bot to leave a group, supergroup or channel. Returns True on…
 
-**Example:** `tg bot api leave-chat`
+**Example:** `tg personal bot api leave-chat`
 
 #### `tg bot api get-chat`
 
@@ -8164,7 +8539,7 @@ tg bot api get-chat [options]
 
 **Returns:** Use this method to get up-to-date information about the chat. Returns a ChatFullInfo…
 
-**Example:** `tg bot api get-chat`
+**Example:** `tg personal bot api get-chat`
 
 #### `tg bot api get-chat-administrators`
 
@@ -8183,7 +8558,7 @@ tg bot api get-chat-administrators [options]
 
 **Returns:** Use this method to get a list of administrators in a chat. Returns an Array of ChatMember…
 
-**Example:** `tg bot api get-chat-administrators`
+**Example:** `tg personal bot api get-chat-administrators`
 
 #### `tg bot api get-chat-member-count`
 
@@ -8201,7 +8576,7 @@ tg bot api get-chat-member-count [options]
 
 **Returns:** Use this method to get the number of members in a chat. Returns Integer on success. —…
 
-**Example:** `tg bot api get-chat-member-count`
+**Example:** `tg personal bot api get-chat-member-count`
 
 #### `tg bot api get-chat-member`
 
@@ -8220,7 +8595,7 @@ tg bot api get-chat-member [options]
 
 **Returns:** Use this method to get information about a member of a chat. The method is only…
 
-**Example:** `tg bot api get-chat-member`
+**Example:** `tg personal bot api get-chat-member`
 
 #### `tg bot api get-user-personal-chat-messages`
 
@@ -8239,7 +8614,7 @@ tg bot api get-user-personal-chat-messages [options]
 
 **Returns:** Use this method to get the last messages from the personal chat (i.e., the chat currently…
 
-**Example:** `tg bot api get-user-personal-chat-messages`
+**Example:** `tg personal bot api get-user-personal-chat-messages`
 
 #### `tg bot api set-chat-sticker-set`
 
@@ -8260,7 +8635,7 @@ tg bot api set-chat-sticker-set [options]
 
 **Returns:** Use this method to set a new group sticker set for a supergroup. The bot must be an…
 
-**Example:** `tg bot api set-chat-sticker-set`
+**Example:** `tg personal bot api set-chat-sticker-set`
 
 #### `tg bot api delete-chat-sticker-set`
 
@@ -8280,7 +8655,7 @@ tg bot api delete-chat-sticker-set [options]
 
 **Returns:** Use this method to delete a group sticker set from a supergroup. The bot must be an…
 
-**Example:** `tg bot api delete-chat-sticker-set`
+**Example:** `tg personal bot api delete-chat-sticker-set`
 
 #### `tg bot api get-forum-topic-icon-stickers`
 
@@ -8292,7 +8667,7 @@ tg bot api get-forum-topic-icon-stickers
 
 **Returns:** Use this method to get custom emoji stickers, which can be used as a forum topic icon by…
 
-**Example:** `tg bot api get-forum-topic-icon-stickers`
+**Example:** `tg personal bot api get-forum-topic-icon-stickers`
 
 #### `tg bot api create-forum-topic`
 
@@ -8315,7 +8690,7 @@ tg bot api create-forum-topic [options]
 
 **Returns:** Use this method to create a topic in a forum supergroup chat or a private chat with a…
 
-**Example:** `tg bot api create-forum-topic`
+**Example:** `tg personal bot api create-forum-topic`
 
 #### `tg bot api edit-forum-topic`
 
@@ -8338,7 +8713,7 @@ tg bot api edit-forum-topic [options]
 
 **Returns:** Use this method to edit name and icon of a topic in a forum supergroup chat or a private…
 
-**Example:** `tg bot api edit-forum-topic`
+**Example:** `tg personal bot api edit-forum-topic`
 
 #### `tg bot api close-forum-topic`
 
@@ -8359,7 +8734,7 @@ tg bot api close-forum-topic [options]
 
 **Returns:** Use this method to close an open topic in a forum supergroup chat. The bot must be an…
 
-**Example:** `tg bot api close-forum-topic`
+**Example:** `tg personal bot api close-forum-topic`
 
 #### `tg bot api reopen-forum-topic`
 
@@ -8380,7 +8755,7 @@ tg bot api reopen-forum-topic [options]
 
 **Returns:** Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an…
 
-**Example:** `tg bot api reopen-forum-topic`
+**Example:** `tg personal bot api reopen-forum-topic`
 
 #### `tg bot api delete-forum-topic`
 
@@ -8401,7 +8776,7 @@ tg bot api delete-forum-topic [options]
 
 **Returns:** Use this method to delete a forum topic along with all its messages in a forum supergroup…
 
-**Example:** `tg bot api delete-forum-topic`
+**Example:** `tg personal bot api delete-forum-topic`
 
 #### `tg bot api unpin-all-forum-topic-messages`
 
@@ -8422,7 +8797,7 @@ tg bot api unpin-all-forum-topic-messages [options]
 
 **Returns:** Use this method to clear the list of pinned messages in a forum topic in a forum…
 
-**Example:** `tg bot api unpin-all-forum-topic-messages`
+**Example:** `tg personal bot api unpin-all-forum-topic-messages`
 
 #### `tg bot api edit-general-forum-topic`
 
@@ -8443,7 +8818,7 @@ tg bot api edit-general-forum-topic [options]
 
 **Returns:** Use this method to edit the name of the 'General' topic in a forum supergroup chat. The…
 
-**Example:** `tg bot api edit-general-forum-topic`
+**Example:** `tg personal bot api edit-general-forum-topic`
 
 #### `tg bot api close-general-forum-topic`
 
@@ -8463,7 +8838,7 @@ tg bot api close-general-forum-topic [options]
 
 **Returns:** Use this method to close an open 'General' topic in a forum supergroup chat. The bot must…
 
-**Example:** `tg bot api close-general-forum-topic`
+**Example:** `tg personal bot api close-general-forum-topic`
 
 #### `tg bot api reopen-general-forum-topic`
 
@@ -8483,7 +8858,7 @@ tg bot api reopen-general-forum-topic [options]
 
 **Returns:** Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot…
 
-**Example:** `tg bot api reopen-general-forum-topic`
+**Example:** `tg personal bot api reopen-general-forum-topic`
 
 #### `tg bot api hide-general-forum-topic`
 
@@ -8503,7 +8878,7 @@ tg bot api hide-general-forum-topic [options]
 
 **Returns:** Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be…
 
-**Example:** `tg bot api hide-general-forum-topic`
+**Example:** `tg personal bot api hide-general-forum-topic`
 
 #### `tg bot api unhide-general-forum-topic`
 
@@ -8523,7 +8898,7 @@ tg bot api unhide-general-forum-topic [options]
 
 **Returns:** Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be…
 
-**Example:** `tg bot api unhide-general-forum-topic`
+**Example:** `tg personal bot api unhide-general-forum-topic`
 
 #### `tg bot api unpin-all-general-forum-topic-messages`
 
@@ -8543,7 +8918,7 @@ tg bot api unpin-all-general-forum-topic-messages [options]
 
 **Returns:** Use this method to clear the list of pinned messages in a General forum topic. The bot…
 
-**Example:** `tg bot api unpin-all-general-forum-topic-messages`
+**Example:** `tg personal bot api unpin-all-general-forum-topic-messages`
 
 #### `tg bot api answer-callback-query`
 
@@ -8567,7 +8942,7 @@ tg bot api answer-callback-query [options]
 
 **Returns:** Use this method to send answers to callback queries sent from inline keyboards. The…
 
-**Example:** `tg bot api answer-callback-query`
+**Example:** `tg personal bot api answer-callback-query`
 
 #### `tg bot api answer-guest-query`
 
@@ -8587,7 +8962,7 @@ tg bot api answer-guest-query [options]
 
 **Returns:** Use this method to reply to a received guest message. On success, a SentGuestMessage…
 
-**Example:** `tg bot api answer-guest-query`
+**Example:** `tg personal bot api answer-guest-query`
 
 #### `tg bot api get-user-chat-boosts`
 
@@ -8606,7 +8981,7 @@ tg bot api get-user-chat-boosts [options]
 
 **Returns:** Use this method to get the list of boosts added to a chat by a user. Requires…
 
-**Example:** `tg bot api get-user-chat-boosts`
+**Example:** `tg personal bot api get-user-chat-boosts`
 
 #### `tg bot api get-business-connection`
 
@@ -8624,7 +8999,7 @@ tg bot api get-business-connection [options]
 
 **Returns:** Use this method to get information about the connection of the bot with a business…
 
-**Example:** `tg bot api get-business-connection`
+**Example:** `tg personal bot api get-business-connection`
 
 #### `tg bot api get-managed-bot-token`
 
@@ -8642,7 +9017,7 @@ tg bot api get-managed-bot-token [options]
 
 **Returns:** Use this method to get the token of a managed bot. Returns the token as String on…
 
-**Example:** `tg bot api get-managed-bot-token`
+**Example:** `tg personal bot api get-managed-bot-token`
 
 #### `tg bot api replace-managed-bot-token`
 
@@ -8662,7 +9037,7 @@ tg bot api replace-managed-bot-token [options]
 
 **Returns:** Use this method to revoke the current token of a managed bot and generate a new one.…
 
-**Example:** `tg bot api replace-managed-bot-token`
+**Example:** `tg personal bot api replace-managed-bot-token`
 
 #### `tg bot api get-managed-bot-access-settings`
 
@@ -8680,7 +9055,7 @@ tg bot api get-managed-bot-access-settings [options]
 
 **Returns:** Use this method to get the access settings of a managed bot. Returns a BotAccessSettings…
 
-**Example:** `tg bot api get-managed-bot-access-settings`
+**Example:** `tg personal bot api get-managed-bot-access-settings`
 
 #### `tg bot api set-managed-bot-access-settings`
 
@@ -8702,7 +9077,7 @@ tg bot api set-managed-bot-access-settings [options]
 
 **Returns:** Use this method to change the access settings of a managed bot. Returns True on success.…
 
-**Example:** `tg bot api set-managed-bot-access-settings`
+**Example:** `tg personal bot api set-managed-bot-access-settings`
 
 #### `tg bot api set-my-commands`
 
@@ -8724,7 +9099,7 @@ tg bot api set-my-commands [options]
 
 **Returns:** Use this method to change the list of the bot's commands. See this manual for more…
 
-**Example:** `tg bot api set-my-commands`
+**Example:** `tg personal bot api set-my-commands`
 
 #### `tg bot api delete-my-commands`
 
@@ -8745,7 +9120,7 @@ tg bot api delete-my-commands [options]
 
 **Returns:** Use this method to delete the list of the bot's commands for the given scope and user…
 
-**Example:** `tg bot api delete-my-commands`
+**Example:** `tg personal bot api delete-my-commands`
 
 #### `tg bot api get-my-commands`
 
@@ -8764,7 +9139,7 @@ tg bot api get-my-commands [options]
 
 **Returns:** Use this method to get the current list of the bot's commands for the given scope and…
 
-**Example:** `tg bot api get-my-commands`
+**Example:** `tg personal bot api get-my-commands`
 
 #### `tg bot api set-my-name`
 
@@ -8785,7 +9160,7 @@ tg bot api set-my-name [options]
 
 **Returns:** Use this method to change the bot's name. Returns True on success. — write (setMyName)
 
-**Example:** `tg bot api set-my-name`
+**Example:** `tg personal bot api set-my-name`
 
 #### `tg bot api get-my-name`
 
@@ -8803,7 +9178,7 @@ tg bot api get-my-name [options]
 
 **Returns:** Use this method to get the current bot name for the given user language. Returns BotName…
 
-**Example:** `tg bot api get-my-name`
+**Example:** `tg personal bot api get-my-name`
 
 #### `tg bot api set-my-description`
 
@@ -8824,7 +9199,7 @@ tg bot api set-my-description [options]
 
 **Returns:** Use this method to change the bot's description, which is shown in the chat with the bot…
 
-**Example:** `tg bot api set-my-description`
+**Example:** `tg personal bot api set-my-description`
 
 #### `tg bot api get-my-description`
 
@@ -8842,7 +9217,7 @@ tg bot api get-my-description [options]
 
 **Returns:** Use this method to get the current bot description for the given user language. Returns…
 
-**Example:** `tg bot api get-my-description`
+**Example:** `tg personal bot api get-my-description`
 
 #### `tg bot api set-my-short-description`
 
@@ -8863,7 +9238,7 @@ tg bot api set-my-short-description [options]
 
 **Returns:** Use this method to change the bot's short description, which is shown on the bot's…
 
-**Example:** `tg bot api set-my-short-description`
+**Example:** `tg personal bot api set-my-short-description`
 
 #### `tg bot api get-my-short-description`
 
@@ -8881,7 +9256,7 @@ tg bot api get-my-short-description [options]
 
 **Returns:** Use this method to get the current bot short description for the given user language.…
 
-**Example:** `tg bot api get-my-short-description`
+**Example:** `tg personal bot api get-my-short-description`
 
 #### `tg bot api set-my-profile-photo`
 
@@ -8901,7 +9276,7 @@ tg bot api set-my-profile-photo [options]
 
 **Returns:** Changes the profile photo of the bot. Returns True on success. — write (setMyProfilePhoto)
 
-**Example:** `tg bot api set-my-profile-photo`
+**Example:** `tg personal bot api set-my-profile-photo`
 
 #### `tg bot api remove-my-profile-photo`
 
@@ -8915,7 +9290,7 @@ tg bot api remove-my-profile-photo
 
 **Returns:** Removes the profile photo of the bot. Requires no parameters. Returns True on success. —…
 
-**Example:** `tg bot api remove-my-profile-photo`
+**Example:** `tg personal bot api remove-my-profile-photo`
 
 #### `tg bot api set-chat-menu-button`
 
@@ -8936,7 +9311,7 @@ tg bot api set-chat-menu-button [options]
 
 **Returns:** Use this method to change the bot's menu button in a private chat, or the default menu…
 
-**Example:** `tg bot api set-chat-menu-button`
+**Example:** `tg personal bot api set-chat-menu-button`
 
 #### `tg bot api get-chat-menu-button`
 
@@ -8954,7 +9329,7 @@ tg bot api get-chat-menu-button [options]
 
 **Returns:** Use this method to get the current value of the bot's menu button in a private chat, or…
 
-**Example:** `tg bot api get-chat-menu-button`
+**Example:** `tg personal bot api get-chat-menu-button`
 
 #### `tg bot api set-my-default-administrator-rights`
 
@@ -8975,7 +9350,7 @@ tg bot api set-my-default-administrator-rights [options]
 
 **Returns:** Use this method to change the default administrator rights requested by the bot when it's…
 
-**Example:** `tg bot api set-my-default-administrator-rights`
+**Example:** `tg personal bot api set-my-default-administrator-rights`
 
 #### `tg bot api get-my-default-administrator-rights`
 
@@ -8993,7 +9368,7 @@ tg bot api get-my-default-administrator-rights [options]
 
 **Returns:** Use this method to get the current default administrator rights of the bot. Returns…
 
-**Example:** `tg bot api get-my-default-administrator-rights`
+**Example:** `tg personal bot api get-my-default-administrator-rights`
 
 #### `tg bot api get-available-gifts`
 
@@ -9005,7 +9380,7 @@ tg bot api get-available-gifts
 
 **Returns:** Returns the list of gifts that can be sent by the bot to users and channel chats.…
 
-**Example:** `tg bot api get-available-gifts`
+**Example:** `tg personal bot api get-available-gifts`
 
 #### `tg bot api send-gift`
 
@@ -9031,7 +9406,7 @@ tg bot api send-gift [options]
 
 **Returns:** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram…
 
-**Example:** `tg bot api send-gift`
+**Example:** `tg personal bot api send-gift`
 
 #### `tg bot api gift-premium-subscription`
 
@@ -9056,7 +9431,7 @@ tg bot api gift-premium-subscription [options]
 
 **Returns:** Gifts a Telegram Premium subscription to the given user. Returns True on success. —…
 
-**Example:** `tg bot api gift-premium-subscription`
+**Example:** `tg personal bot api gift-premium-subscription`
 
 #### `tg bot api verify-user`
 
@@ -9077,7 +9452,7 @@ tg bot api verify-user [options]
 
 **Returns:** Verifies a user on behalf of the organization which is represented by the bot. Returns…
 
-**Example:** `tg bot api verify-user`
+**Example:** `tg personal bot api verify-user`
 
 #### `tg bot api verify-chat`
 
@@ -9098,7 +9473,7 @@ tg bot api verify-chat [options]
 
 **Returns:** Verifies a chat on behalf of the organization which is represented by the bot. Returns…
 
-**Example:** `tg bot api verify-chat`
+**Example:** `tg personal bot api verify-chat`
 
 #### `tg bot api remove-user-verification`
 
@@ -9118,7 +9493,7 @@ tg bot api remove-user-verification [options]
 
 **Returns:** Removes verification from a user who is currently verified on behalf of the organization…
 
-**Example:** `tg bot api remove-user-verification`
+**Example:** `tg personal bot api remove-user-verification`
 
 #### `tg bot api remove-chat-verification`
 
@@ -9138,7 +9513,7 @@ tg bot api remove-chat-verification [options]
 
 **Returns:** Removes verification from a chat that is currently verified on behalf of the organization…
 
-**Example:** `tg bot api remove-chat-verification`
+**Example:** `tg personal bot api remove-chat-verification`
 
 #### `tg bot api read-business-message`
 
@@ -9160,7 +9535,7 @@ tg bot api read-business-message [options]
 
 **Returns:** Marks incoming message as read on behalf of a business account. Requires the…
 
-**Example:** `tg bot api read-business-message`
+**Example:** `tg personal bot api read-business-message`
 
 #### `tg bot api delete-business-messages`
 
@@ -9181,7 +9556,7 @@ tg bot api delete-business-messages [options]
 
 **Returns:** Delete messages on behalf of a business account. Requires the can_delete_sent_messages…
 
-**Example:** `tg bot api delete-business-messages`
+**Example:** `tg personal bot api delete-business-messages`
 
 #### `tg bot api set-business-account-name`
 
@@ -9203,7 +9578,7 @@ tg bot api set-business-account-name [options]
 
 **Returns:** Changes the first and last name of a managed business account. Requires the…
 
-**Example:** `tg bot api set-business-account-name`
+**Example:** `tg personal bot api set-business-account-name`
 
 #### `tg bot api set-business-account-username`
 
@@ -9224,7 +9599,7 @@ tg bot api set-business-account-username [options]
 
 **Returns:** Changes the username of a managed business account. Requires the can_change_username…
 
-**Example:** `tg bot api set-business-account-username`
+**Example:** `tg personal bot api set-business-account-username`
 
 #### `tg bot api set-business-account-bio`
 
@@ -9245,7 +9620,7 @@ tg bot api set-business-account-bio [options]
 
 **Returns:** Changes the bio of a managed business account. Requires the can_change_bio business bot…
 
-**Example:** `tg bot api set-business-account-bio`
+**Example:** `tg personal bot api set-business-account-bio`
 
 #### `tg bot api set-business-account-profile-photo`
 
@@ -9267,7 +9642,7 @@ tg bot api set-business-account-profile-photo [options]
 
 **Returns:** Changes the profile photo of a managed business account. Requires the…
 
-**Example:** `tg bot api set-business-account-profile-photo`
+**Example:** `tg personal bot api set-business-account-profile-photo`
 
 #### `tg bot api remove-business-account-profile-photo`
 
@@ -9288,7 +9663,7 @@ tg bot api remove-business-account-profile-photo [options]
 
 **Returns:** Removes the current profile photo of a managed business account. Requires the…
 
-**Example:** `tg bot api remove-business-account-profile-photo`
+**Example:** `tg personal bot api remove-business-account-profile-photo`
 
 #### `tg bot api set-business-account-gift-settings`
 
@@ -9310,7 +9685,7 @@ tg bot api set-business-account-gift-settings [options]
 
 **Returns:** Changes the privacy settings pertaining to incoming gifts in a managed business account.…
 
-**Example:** `tg bot api set-business-account-gift-settings`
+**Example:** `tg personal bot api set-business-account-gift-settings`
 
 #### `tg bot api get-business-account-star-balance`
 
@@ -9328,7 +9703,7 @@ tg bot api get-business-account-star-balance [options]
 
 **Returns:** Returns the amount of Telegram Stars owned by a managed business account. Requires the…
 
-**Example:** `tg bot api get-business-account-star-balance`
+**Example:** `tg personal bot api get-business-account-star-balance`
 
 #### `tg bot api transfer-business-account-stars`
 
@@ -9349,7 +9724,7 @@ tg bot api transfer-business-account-stars [options]
 
 **Returns:** Transfers Telegram Stars from the business account balance to the bot's balance. Requires…
 
-**Example:** `tg bot api transfer-business-account-stars`
+**Example:** `tg personal bot api transfer-business-account-stars`
 
 #### `tg bot api get-business-account-gifts`
 
@@ -9377,7 +9752,7 @@ tg bot api get-business-account-gifts [options]
 
 **Returns:** Returns the gifts received and owned by a managed business account. Requires the…
 
-**Example:** `tg bot api get-business-account-gifts`
+**Example:** `tg personal bot api get-business-account-gifts`
 
 #### `tg bot api get-user-gifts`
 
@@ -9403,7 +9778,7 @@ tg bot api get-user-gifts [options]
 
 **Returns:** Returns the gifts owned and hosted by a user. Returns OwnedGifts on success. — read…
 
-**Example:** `tg bot api get-user-gifts`
+**Example:** `tg personal bot api get-user-gifts`
 
 #### `tg bot api get-chat-gifts`
 
@@ -9431,7 +9806,7 @@ tg bot api get-chat-gifts [options]
 
 **Returns:** Returns the gifts owned by a chat. Returns OwnedGifts on success. — read (getChatGifts)
 
-**Example:** `tg bot api get-chat-gifts`
+**Example:** `tg personal bot api get-chat-gifts`
 
 #### `tg bot api convert-gift-to-stars`
 
@@ -9452,7 +9827,7 @@ tg bot api convert-gift-to-stars [options]
 
 **Returns:** Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars…
 
-**Example:** `tg bot api convert-gift-to-stars`
+**Example:** `tg personal bot api convert-gift-to-stars`
 
 #### `tg bot api upgrade-gift`
 
@@ -9475,7 +9850,7 @@ tg bot api upgrade-gift [options]
 
 **Returns:** Upgrades a given regular gift to a unique gift. Requires the…
 
-**Example:** `tg bot api upgrade-gift`
+**Example:** `tg personal bot api upgrade-gift`
 
 #### `tg bot api transfer-gift`
 
@@ -9498,7 +9873,7 @@ tg bot api transfer-gift [options]
 
 **Returns:** Transfers an owned unique gift to another user. Requires the…
 
-**Example:** `tg bot api transfer-gift`
+**Example:** `tg personal bot api transfer-gift`
 
 #### `tg bot api post-story`
 
@@ -9526,7 +9901,7 @@ tg bot api post-story [options]
 
 **Returns:** Posts a story on behalf of a managed business account. Requires the can_manage_stories…
 
-**Example:** `tg bot api post-story`
+**Example:** `tg personal bot api post-story`
 
 #### `tg bot api repost-story`
 
@@ -9551,7 +9926,7 @@ tg bot api repost-story [options]
 
 **Returns:** Reposts a story on behalf of a business account from another business account. Both…
 
-**Example:** `tg bot api repost-story`
+**Example:** `tg personal bot api repost-story`
 
 #### `tg bot api edit-story`
 
@@ -9577,7 +9952,7 @@ tg bot api edit-story [options]
 
 **Returns:** Edits a story previously posted by the bot on behalf of a managed business account.…
 
-**Example:** `tg bot api edit-story`
+**Example:** `tg personal bot api edit-story`
 
 #### `tg bot api delete-story`
 
@@ -9598,7 +9973,7 @@ tg bot api delete-story [options]
 
 **Returns:** Deletes a story previously posted by the bot on behalf of a managed business account.…
 
-**Example:** `tg bot api delete-story`
+**Example:** `tg personal bot api delete-story`
 
 #### `tg bot api answer-web-app-query`
 
@@ -9618,7 +9993,7 @@ tg bot api answer-web-app-query [options]
 
 **Returns:** Use this method to set the result of an interaction with a Web App and send a…
 
-**Example:** `tg bot api answer-web-app-query`
+**Example:** `tg personal bot api answer-web-app-query`
 
 #### `tg bot api save-prepared-inline-message`
 
@@ -9642,7 +10017,7 @@ tg bot api save-prepared-inline-message [options]
 
 **Returns:** Stores a message that can be sent by a user of a Mini App. Returns a…
 
-**Example:** `tg bot api save-prepared-inline-message`
+**Example:** `tg personal bot api save-prepared-inline-message`
 
 #### `tg bot api save-prepared-keyboard-button`
 
@@ -9663,7 +10038,7 @@ tg bot api save-prepared-keyboard-button [options]
 
 **Returns:** Stores a keyboard button that can be used by a user within a Mini App. Returns a…
 
-**Example:** `tg bot api save-prepared-keyboard-button`
+**Example:** `tg personal bot api save-prepared-keyboard-button`
 
 #### `tg bot api edit-message-text`
 
@@ -9692,7 +10067,7 @@ tg bot api edit-message-text [options]
 
 **Returns:** Use this method to edit text, rich and game messages. On success, if the edited message…
 
-**Example:** `tg bot api edit-message-text`
+**Example:** `tg personal bot api edit-message-text`
 
 #### `tg bot api edit-message-caption`
 
@@ -9720,7 +10095,7 @@ tg bot api edit-message-caption [options]
 
 **Returns:** Use this method to edit captions of messages. On success, if the edited message is not an…
 
-**Example:** `tg bot api edit-message-caption`
+**Example:** `tg personal bot api edit-message-caption`
 
 #### `tg bot api edit-message-media`
 
@@ -9745,7 +10120,7 @@ tg bot api edit-message-media [options]
 
 **Returns:** Use this method to edit animation, audio, document, live photo, photo, or video messages,…
 
-**Example:** `tg bot api edit-message-media`
+**Example:** `tg personal bot api edit-message-media`
 
 #### `tg bot api edit-message-live-location`
 
@@ -9775,7 +10150,7 @@ tg bot api edit-message-live-location [options]
 
 **Returns:** Use this method to edit live location messages. A location can be edited until its…
 
-**Example:** `tg bot api edit-message-live-location`
+**Example:** `tg personal bot api edit-message-live-location`
 
 #### `tg bot api stop-message-live-location`
 
@@ -9799,7 +10174,7 @@ tg bot api stop-message-live-location [options]
 
 **Returns:** Use this method to stop updating a live location message before live_period expires. On…
 
-**Example:** `tg bot api stop-message-live-location`
+**Example:** `tg personal bot api stop-message-live-location`
 
 #### `tg bot api edit-message-checklist`
 
@@ -9823,7 +10198,7 @@ tg bot api edit-message-checklist [options]
 
 **Returns:** Use this method to edit a checklist on behalf of a connected business account. On…
 
-**Example:** `tg bot api edit-message-checklist`
+**Example:** `tg personal bot api edit-message-checklist`
 
 #### `tg bot api edit-message-reply-markup`
 
@@ -9847,7 +10222,7 @@ tg bot api edit-message-reply-markup [options]
 
 **Returns:** Use this method to edit only the reply markup of messages. On success, if the edited…
 
-**Example:** `tg bot api edit-message-reply-markup`
+**Example:** `tg personal bot api edit-message-reply-markup`
 
 #### `tg bot api stop-poll`
 
@@ -9870,7 +10245,7 @@ tg bot api stop-poll [options]
 
 **Returns:** Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is…
 
-**Example:** `tg bot api stop-poll`
+**Example:** `tg personal bot api stop-poll`
 
 #### `tg bot api edit-ephemeral-message-text`
 
@@ -9898,7 +10273,7 @@ tg bot api edit-ephemeral-message-text [options]
 
 **Returns:** Use this method to edit an ephemeral text or rich message. Note that it is not guaranteed…
 
-**Example:** `tg bot api edit-ephemeral-message-text`
+**Example:** `tg personal bot api edit-ephemeral-message-text`
 
 #### `tg bot api edit-ephemeral-message-media`
 
@@ -9922,7 +10297,7 @@ tg bot api edit-ephemeral-message-media [options]
 
 **Returns:** Use this method to edit the media of an ephemeral message. Note that it is not guaranteed…
 
-**Example:** `tg bot api edit-ephemeral-message-media`
+**Example:** `tg personal bot api edit-ephemeral-message-media`
 
 #### `tg bot api edit-ephemeral-message-caption`
 
@@ -9949,7 +10324,7 @@ tg bot api edit-ephemeral-message-caption [options]
 
 **Returns:** Use this method to edit the caption of an ephemeral message. Note that it is not…
 
-**Example:** `tg bot api edit-ephemeral-message-caption`
+**Example:** `tg personal bot api edit-ephemeral-message-caption`
 
 #### `tg bot api edit-ephemeral-message-reply-markup`
 
@@ -9972,7 +10347,7 @@ tg bot api edit-ephemeral-message-reply-markup [options]
 
 **Returns:** Use this method to edit only the reply markup of an ephemeral message. Note that it is…
 
-**Example:** `tg bot api edit-ephemeral-message-reply-markup`
+**Example:** `tg personal bot api edit-ephemeral-message-reply-markup`
 
 #### `tg bot api approve-suggested-post`
 
@@ -9994,7 +10369,7 @@ tg bot api approve-suggested-post [options]
 
 **Returns:** Use this method to approve a suggested post in a direct messages chat. The bot must have…
 
-**Example:** `tg bot api approve-suggested-post`
+**Example:** `tg personal bot api approve-suggested-post`
 
 #### `tg bot api decline-suggested-post`
 
@@ -10016,7 +10391,7 @@ tg bot api decline-suggested-post [options]
 
 **Returns:** Use this method to decline a suggested post in a direct messages chat. The bot must have…
 
-**Example:** `tg bot api decline-suggested-post`
+**Example:** `tg personal bot api decline-suggested-post`
 
 #### `tg bot api delete-message`
 
@@ -10037,7 +10412,7 @@ tg bot api delete-message [options]
 
 **Returns:** Use this method to delete a message, including service messages, with the following…
 
-**Example:** `tg bot api delete-message`
+**Example:** `tg personal bot api delete-message`
 
 #### `tg bot api delete-messages`
 
@@ -10058,7 +10433,7 @@ tg bot api delete-messages [options]
 
 **Returns:** Use this method to delete multiple messages simultaneously. If some of the specified…
 
-**Example:** `tg bot api delete-messages`
+**Example:** `tg personal bot api delete-messages`
 
 #### `tg bot api delete-ephemeral-message`
 
@@ -10080,7 +10455,7 @@ tg bot api delete-ephemeral-message [options]
 
 **Returns:** Use this method to delete an ephemeral message. Note that it is not guaranteed that the…
 
-**Example:** `tg bot api delete-ephemeral-message`
+**Example:** `tg personal bot api delete-ephemeral-message`
 
 #### `tg bot api delete-message-reaction`
 
@@ -10103,7 +10478,7 @@ tg bot api delete-message-reaction [options]
 
 **Returns:** Use this method to remove a reaction from a message in a group or a supergroup chat. The…
 
-**Example:** `tg bot api delete-message-reaction`
+**Example:** `tg personal bot api delete-message-reaction`
 
 #### `tg bot api delete-all-message-reactions`
 
@@ -10125,7 +10500,7 @@ tg bot api delete-all-message-reactions [options]
 
 **Returns:** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat…
 
-**Example:** `tg bot api delete-all-message-reactions`
+**Example:** `tg personal bot api delete-all-message-reactions`
 
 #### `tg bot api send-sticker`
 
@@ -10158,7 +10533,7 @@ tg bot api send-sticker [options]
 
 **Returns:** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success,…
 
-**Example:** `tg bot api send-sticker`
+**Example:** `tg personal bot api send-sticker`
 
 #### `tg bot api get-sticker-set`
 
@@ -10176,7 +10551,7 @@ tg bot api get-sticker-set [options]
 
 **Returns:** Use this method to get a sticker set. On success, a StickerSet object is returned. — read…
 
-**Example:** `tg bot api get-sticker-set`
+**Example:** `tg personal bot api get-sticker-set`
 
 #### `tg bot api get-custom-emoji-stickers`
 
@@ -10194,7 +10569,7 @@ tg bot api get-custom-emoji-stickers [options]
 
 **Returns:** Use this method to get information about custom emoji stickers by their identifiers.…
 
-**Example:** `tg bot api get-custom-emoji-stickers`
+**Example:** `tg personal bot api get-custom-emoji-stickers`
 
 #### `tg bot api upload-sticker-file`
 
@@ -10216,7 +10591,7 @@ tg bot api upload-sticker-file [options]
 
 **Returns:** Use this method to upload a file with a sticker for later use in the createNewStickerSet,…
 
-**Example:** `tg bot api upload-sticker-file`
+**Example:** `tg personal bot api upload-sticker-file`
 
 #### `tg bot api create-new-sticker-set`
 
@@ -10241,7 +10616,7 @@ tg bot api create-new-sticker-set [options]
 
 **Returns:** Use this method to create a new sticker set owned by a user. The bot will be able to edit…
 
-**Example:** `tg bot api create-new-sticker-set`
+**Example:** `tg personal bot api create-new-sticker-set`
 
 #### `tg bot api add-sticker-to-set`
 
@@ -10263,7 +10638,7 @@ tg bot api add-sticker-to-set [options]
 
 **Returns:** Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can…
 
-**Example:** `tg bot api add-sticker-to-set`
+**Example:** `tg personal bot api add-sticker-to-set`
 
 #### `tg bot api set-sticker-position-in-set`
 
@@ -10284,7 +10659,7 @@ tg bot api set-sticker-position-in-set [options]
 
 **Returns:** Use this method to move a sticker in a set created by the bot to a specific position.…
 
-**Example:** `tg bot api set-sticker-position-in-set`
+**Example:** `tg personal bot api set-sticker-position-in-set`
 
 #### `tg bot api delete-sticker-from-set`
 
@@ -10304,7 +10679,7 @@ tg bot api delete-sticker-from-set [options]
 
 **Returns:** Use this method to delete a sticker from a set created by the bot. Returns True on…
 
-**Example:** `tg bot api delete-sticker-from-set`
+**Example:** `tg personal bot api delete-sticker-from-set`
 
 #### `tg bot api replace-sticker-in-set`
 
@@ -10327,7 +10702,7 @@ tg bot api replace-sticker-in-set [options]
 
 **Returns:** Use this method to replace an existing sticker in a sticker set with a new one. The…
 
-**Example:** `tg bot api replace-sticker-in-set`
+**Example:** `tg personal bot api replace-sticker-in-set`
 
 #### `tg bot api set-sticker-emoji-list`
 
@@ -10348,7 +10723,7 @@ tg bot api set-sticker-emoji-list [options]
 
 **Returns:** Use this method to change the list of emoji assigned to a regular or custom emoji…
 
-**Example:** `tg bot api set-sticker-emoji-list`
+**Example:** `tg personal bot api set-sticker-emoji-list`
 
 #### `tg bot api set-sticker-keywords`
 
@@ -10369,7 +10744,7 @@ tg bot api set-sticker-keywords [options]
 
 **Returns:** Use this method to change search keywords assigned to a regular or custom emoji sticker.…
 
-**Example:** `tg bot api set-sticker-keywords`
+**Example:** `tg personal bot api set-sticker-keywords`
 
 #### `tg bot api set-sticker-mask-position`
 
@@ -10390,7 +10765,7 @@ tg bot api set-sticker-mask-position [options]
 
 **Returns:** Use this method to change the mask position of a mask sticker. The sticker must belong to…
 
-**Example:** `tg bot api set-sticker-mask-position`
+**Example:** `tg personal bot api set-sticker-mask-position`
 
 #### `tg bot api set-sticker-set-title`
 
@@ -10411,7 +10786,7 @@ tg bot api set-sticker-set-title [options]
 
 **Returns:** Use this method to set the title of a created sticker set. Returns True on success. —…
 
-**Example:** `tg bot api set-sticker-set-title`
+**Example:** `tg personal bot api set-sticker-set-title`
 
 #### `tg bot api set-sticker-set-thumbnail`
 
@@ -10434,7 +10809,7 @@ tg bot api set-sticker-set-thumbnail [options]
 
 **Returns:** Use this method to set the thumbnail of a regular or mask sticker set. The format of the…
 
-**Example:** `tg bot api set-sticker-set-thumbnail`
+**Example:** `tg personal bot api set-sticker-set-thumbnail`
 
 #### `tg bot api set-custom-emoji-sticker-set-thumbnail`
 
@@ -10455,7 +10830,7 @@ tg bot api set-custom-emoji-sticker-set-thumbnail [options]
 
 **Returns:** Use this method to set the thumbnail of a custom emoji sticker set. Returns True on…
 
-**Example:** `tg bot api set-custom-emoji-sticker-set-thumbnail`
+**Example:** `tg personal bot api set-custom-emoji-sticker-set-thumbnail`
 
 #### `tg bot api delete-sticker-set`
 
@@ -10475,7 +10850,7 @@ tg bot api delete-sticker-set [options]
 
 **Returns:** Use this method to delete a sticker set that was created by the bot. Returns True on…
 
-**Example:** `tg bot api delete-sticker-set`
+**Example:** `tg personal bot api delete-sticker-set`
 
 #### `tg bot api send-rich-message`
 
@@ -10507,7 +10882,7 @@ tg bot api send-rich-message [options]
 
 **Returns:** Use this method to send rich messages. If the message contains a block with a media…
 
-**Example:** `tg bot api send-rich-message`
+**Example:** `tg personal bot api send-rich-message`
 
 #### `tg bot api send-rich-message-draft`
 
@@ -10532,7 +10907,7 @@ tg bot api send-rich-message-draft [options]
 
 **Returns:** Use this method to stream a partial rich message to a user while the message is being…
 
-**Example:** `tg bot api send-rich-message-draft`
+**Example:** `tg personal bot api send-rich-message-draft`
 
 #### `tg bot api answer-inline-query`
 
@@ -10556,7 +10931,7 @@ tg bot api answer-inline-query [options]
 
 **Returns:** Use this method to send answers to an inline query. On success, True is returned. — write…
 
-**Example:** `tg bot api answer-inline-query`
+**Example:** `tg personal bot api answer-inline-query`
 
 #### `tg bot api send-invoice`
 
@@ -10605,7 +10980,7 @@ tg bot api send-invoice [options]
 
 **Returns:** Use this method to send invoices. On success, the sent Message is returned. — write…
 
-**Example:** `tg bot api send-invoice`
+**Example:** `tg personal bot api send-invoice`
 
 #### `tg bot api create-invoice-link`
 
@@ -10645,7 +11020,7 @@ tg bot api create-invoice-link [options]
 
 **Returns:** Use this method to create a link for an invoice. Returns the created invoice link as…
 
-**Example:** `tg bot api create-invoice-link`
+**Example:** `tg personal bot api create-invoice-link`
 
 #### `tg bot api answer-shipping-query`
 
@@ -10668,7 +11043,7 @@ tg bot api answer-shipping-query [options]
 
 **Returns:** If you sent an invoice requesting a shipping address and the parameter is_flexible was…
 
-**Example:** `tg bot api answer-shipping-query`
+**Example:** `tg personal bot api answer-shipping-query`
 
 #### `tg bot api answer-pre-checkout-query`
 
@@ -10690,7 +11065,7 @@ tg bot api answer-pre-checkout-query [options]
 
 **Returns:** Once the user has confirmed their payment and shipping details, the Bot API sends the…
 
-**Example:** `tg bot api answer-pre-checkout-query`
+**Example:** `tg personal bot api answer-pre-checkout-query`
 
 #### `tg bot api get-my-star-balance`
 
@@ -10702,7 +11077,7 @@ tg bot api get-my-star-balance
 
 **Returns:** A method to get the current Telegram Stars balance of the bot. Requires no parameters. On…
 
-**Example:** `tg bot api get-my-star-balance`
+**Example:** `tg personal bot api get-my-star-balance`
 
 #### `tg bot api get-star-transactions`
 
@@ -10721,7 +11096,7 @@ tg bot api get-star-transactions [options]
 
 **Returns:** Returns the bot's Telegram Star transactions in chronological order. On success, returns…
 
-**Example:** `tg bot api get-star-transactions`
+**Example:** `tg personal bot api get-star-transactions`
 
 #### `tg bot api refund-star-payment`
 
@@ -10742,7 +11117,7 @@ tg bot api refund-star-payment [options]
 
 **Returns:** Refunds a successful payment in Telegram Stars. Returns True on success. — destructive…
 
-**Example:** `tg bot api refund-star-payment`
+**Example:** `tg personal bot api refund-star-payment`
 
 #### `tg bot api edit-user-star-subscription`
 
@@ -10764,7 +11139,7 @@ tg bot api edit-user-star-subscription [options]
 
 **Returns:** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.…
 
-**Example:** `tg bot api edit-user-star-subscription`
+**Example:** `tg personal bot api edit-user-star-subscription`
 
 #### `tg bot api set-passport-data-errors`
 
@@ -10785,7 +11160,7 @@ tg bot api set-passport-data-errors [options]
 
 **Returns:** Informs a user that some of the Telegram Passport elements they provided contains errors.…
 
-**Example:** `tg bot api set-passport-data-errors`
+**Example:** `tg personal bot api set-passport-data-errors`
 
 #### `tg bot api send-game`
 
@@ -10814,7 +11189,7 @@ tg bot api send-game [options]
 
 **Returns:** Use this method to send a game. On success, the sent Message is returned. — write…
 
-**Example:** `tg bot api send-game`
+**Example:** `tg personal bot api send-game`
 
 #### `tg bot api set-game-score`
 
@@ -10840,7 +11215,7 @@ tg bot api set-game-score [options]
 
 **Returns:** Use this method to set the score of the specified user in a game message. On success, if…
 
-**Example:** `tg bot api set-game-score`
+**Example:** `tg personal bot api set-game-score`
 
 #### `tg bot api get-game-high-scores`
 
@@ -10861,7 +11236,7 @@ tg bot api get-game-high-scores [options]
 
 **Returns:** Use this method to get data for high score tables. Will return the score of the specified…
 
-**Example:** `tg bot api get-game-high-scores`
+**Example:** `tg personal bot api get-game-high-scores`
 
 ## `tg skill`
 
@@ -10879,9 +11254,9 @@ tg skill show [name]
 |---|---|---|
 | `name` | opcional | skill de tarea incluida: follow-ups, link-conversations. |
 
-**Returns:** print SKILL.md — `tg skill install` puts it where Claude Code, Codex and Gemini CLI look…
+**Returns:** print the tool's instructions for AI agents
 
-**Example:** `tg skill show daily`
+**Example:** `tg skill show`, `tg skill show follow-ups`
 
 ### `tg skill install`
 
@@ -10897,9 +11272,9 @@ tg skill install [options]
 |---|---|
 | `--for <agents>` | agentes para los que instalar. Valores: `claude`, `agents`, `all`. Predeterminado: `all`. |
 
-**Returns:** write SKILL.md to ~/.claude/skills/tg-cli/ (Claude Code) and ~/.agents/skills/tg-cli/…
+**Returns:** install the tool's instructions for AI agents
 
-**Example:** `tg skill install`
+**Example:** `tg skill install --for agents`
 
 ## `tg guide`
 
