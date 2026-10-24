@@ -1,16 +1,15 @@
-# Drive 0.27.0 release documentation review
+# Drive 0.28.0 release documentation review
 
 Readers can download a file, export a Google document, connect a local mirror, resolve a conflict and
 configure an MCP agent using the published command contract in English, Russian and Spanish.
-Reviewer: Codex. The runtime pin is `v0.27.0`, with exact cli-core 0.405.0.
+Reviewer: Codex. The runtime pin is `v0.28.0`, with exact cli-core 0.406.0.
 
 ## Sources and behavior
 
-- [Published release](https://github.com/WireCatLabs/drive-cli/releases/tag/v0.27.0) and
+- [Published release](https://github.com/WireCatLabs/drive-cli/releases/tag/v0.28.0) and
   [successful release validation](https://github.com/WireCatLabs/drive-cli/actions/runs/40102720586).
-- [Immutable guide corrections](https://github.com/WireCatLabs/drive-cli/commit/95e35b4af8e6a280f9769feeff95899c6c0fb4b1)
-  correct roadmap, usage contract number and the watcher comparison. Only these three pages use
-  `guideRefs`; their runtime claims are available in 0.27.0.
+- [Guide corrections](https://github.com/WireCatLabs/drive-cli/commit/95e35b4af8e6a280f9769feeff95899c6c0fb4b1)
+  are included in the native 0.28.0 tag. No guide overrides are needed.
 - [Runtime and live evidence](https://github.com/WireCatLabs/cli-testing/tree/main/performance/documents/drive-command-contracts):
   synthetic policy, overwrite and binary transport tests; isolated package acceptance; approved live
   download/PDF/DOCX checks. Live observations certify byte output, not layout fidelity.
@@ -34,21 +33,20 @@ context, source capability boundaries and translated terminology were reviewed.
 | security | Find shared and Drive-specific protections | Added shared security link with locale-aware rendering; retained Google OAuth versus local command permission distinction. |
 | roadmap | Distinguish shipped work from plans | Mirroring guide, download/export and comments moved to current capabilities. Watch while running is shipped; automatic startup service remains planned. |
 | commands | Find exact flags and effects | Refreshed generated additions, including watch and comment actions; original CLI flags and examples retained. |
-| changelog | See released compatibility changes | Added native 0.26/0.27 release sections under existing localized technical framing. |
+| changelog | See released compatibility changes | Added native 0.26/0.27/0.28 release sections under existing localized technical framing. |
 
-Unchanged index, installation, search and scenarios retain their previously reviewed translations.
+Search and scenarios use the canonical `models download` spelling from 0.28.0; the old spelling has no alias.
+Unchanged index and installation retain their previously reviewed translations.
 No release claims were inferred from translated headings or fingerprint agreement alone.
 
 ## Checks and publication boundary
 
-Passed locally: lint (three existing warnings), search bundle freshness, all five exact released CLI
-contract captures, strict documentation checks (zero reference gaps and invalid examples), release-note
-and roadmap validation, targeted release/editorial tests and typecheck. Translation validation passes
-for all eighteen changed RU/ES pages. Browser smoke and the Drive reader suite were attempted locally. The default Turbopack readiness
-check timed out before any case ran; a diagnostic Webpack server also timed out on the Markdown
-readiness request. No browser assertions have passed locally. Full CI export/browser validation
-is requested on the draft branch; the PR records this limit rather than claiming rendered verification.
+The initial 0.27 update passed full [CI export, browser and Windows validation](https://github.com/WireCatLabs/cli-docs/actions/runs/40107661263).
+Local browser startup timed out before assertions; the successful CI run supplies rendered verification.
+The 0.28 update recaptures exact released contracts and reruns strict documentation, translation,
+release-note, lint, type and editorial checks, followed by full CI before merge.
 
-`docs/release-hold.json` is an existing production-deployment hold for a broader MAX/TG release review.
-This change does not lift it. The CLI package is already published; the documentation update remains
-reviewable without claiming that the public portal has deployed it.
+The historical MAX 0.38.1 namespace hold in `docs/release-hold.json` is resolved. It was not enforced by
+publication code; [current main already deployed successfully](https://github.com/WireCatLabs/cli-docs/actions/runs/40109267730).
+Current reviewed MAX/TG releases have the required namespace. Normal contract, translation and CI
+gates apply to this release. Drive 0.28.0 is already published; merging this review deploys the portal.

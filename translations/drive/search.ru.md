@@ -60,7 +60,7 @@ Drive использует общий кеш локальной поисково
 не нужны ни профиль, ни вход в аккаунт, — затем создайте векторы импортированного текста:
 
 ```sh
-drive models text download e5-small
+drive models download e5-small
 drive personal sync --embed
 drive personal search 'what did we agree to spend?' --json
 ```

@@ -4,6 +4,15 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.28.0 — 24.10.2026
+
+### Changed — may break callers
+
+- **`models download <model>` replaces `models text download`** (cli-core 0.405.0 → 0.406.0). The old spelling is
+  refused, with no alias; the hint cli-core prints for a missing search model already names `models download`.
+  `images models download` keeps its name. Shared command paths and flags now accept only their canonical
+  spelling, and a saved permission key with a renamed path stops with `configuration_error` naming its replacement.
+
 ## 0.27.0 — 24.10.2026
 
 ### Added

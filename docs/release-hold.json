@@ -1,8 +1,11 @@
 {
   "reason": "Guide and shared search documentation uses the new search namespace; published MAX 0.38.1 still lacks it. Reviewed runtime refs and translations must be aligned before production publication.",
-  "scope": "Production deployment only; local review and CI builds remain available.",
+  "scope": "Historical production hold, resolved; normal reviewed-release and CI gates apply.",
   "required": [
     "Publish the matching MAX namespace release or backport documentation to released commands",
     "Review MAX/TG runtime refs, retire candidate guide refs, validate exact released command contracts"
-  ]
+  ],
+  "status": "resolved",
+  "resolvedAt": "2026-10-24",
+  "resolution": "Historical MAX 0.38.1 namespace hold is obsolete: reviewed MAX/TG released refs and translations are present, exact released command contracts validate, strict examples have no invalid commands, and current main has successful production deployments (40109267730). Normal release, translation and CI gates continue to apply."
 }

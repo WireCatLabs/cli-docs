@@ -143,7 +143,7 @@ title: "Пошаговые сценарии"
    импортируются только добавленные папки и всё, что в них
 
 3. ```sh
-   drive models text download e5-small
+   drive models download e5-small
    ```
 
    локальная модель для поиска по смыслу, один раз на компьютер; её используют все WireCat CLI

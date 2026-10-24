@@ -4179,7 +4179,7 @@ drive complete [words]
 
 ## `drive models`
 
-choose the model that proposes memories; keys stay out of config
+choose the memory model and download the search model
 
 ### `drive models set`
 
@@ -4202,18 +4202,14 @@ drive <profile> models set [options]
 
 **Example:** `drive personal models set --provider openai --model MODEL_ID`, `drive personal models set --provider off`
 
-### `drive models text`
-
-the local model that search by meaning uses
-
-#### `drive models text download`
+### `drive models download`
 
 download a search model once into the folder every WireCat CLI shares
 
 This command changes local state.
 
 ```sh
-drive models text download <model> [options]
+drive models download <model> [options]
 ```
 
 | Argument | | What it is |
@@ -4228,7 +4224,7 @@ drive models text download <model> [options]
 
 **Next usually:** `drive images models download <model>`
 
-**Example:** `drive personal models text download e5-small`
+**Example:** `drive personal models download e5-small`
 
 ## `drive images`
 
@@ -4254,7 +4250,7 @@ drive images models download <model>
 
 **Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more
 
-**Next usually:** `drive models text download <model>`
+**Next usually:** `drive models download <model>`
 
 **Example:** `drive personal images models download clip-b32`
 
