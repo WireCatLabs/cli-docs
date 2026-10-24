@@ -6,7 +6,7 @@ Several open tools connect a personal WhatsApp account to a terminal or an AI ag
 business numbers. This page puts `wa` next to five of them, by the jobs people do: catch up, reply, send files, find
 things, look after groups, and hand the account to an agent. Use it to pick the tool that fits your job.
 
-Every mark was checked on 24 October 2026. Our marks come from the `main` branch of `wa` (version 0.7.0) and from
+Every mark was checked on 24 October 2026. Our marks come from the `main` branch of `wa` and from
 running a build of it; some commands were not tried on a real account, and [using wa](./usage.md#not-in-wa-yet) lists
 what `wa` does not do. A mark for another tool comes from its own documentation or source, linked
 [below the table](#where-the-marks-come-from). A tool may do more than its documentation says.
@@ -139,7 +139,7 @@ about either.
 
 Checked on 24 October 2026.
 
-- **wa**: the `main` branch of [whatsapp-cli](https://github.com/WireCatLabs/whatsapp-cli) at version 0.7.0, its
+- **wa**: the `main` branch of [whatsapp-cli](https://github.com/WireCatLabs/whatsapp-cli), its
   command list (`wa commands --json`), the default `sends_per_hour` of 30 shown by `wa config show`, and the
   [MCP](./mcp.md), [permissions](./permissions.md), [limits](./limits.md) and [search](./search.md) pages.
 - **wacli**: [README](https://github.com/openclaw/wacli/blob/main/README.md),

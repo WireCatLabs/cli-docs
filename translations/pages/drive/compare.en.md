@@ -3,7 +3,7 @@ title: "Compared with other tools"
 ---
 
 Pick a tool by the job you want done. This page lists the jobs people give a Google Drive tool and shows which
-tool does each one. Checked on 24 October 2026, against `drive` 0.27.0 and each project's own documentation. A
+tool does each one. Checked on 24 October 2026, against `drive` and each project's own documentation. A
 tool may do more than its documentation says; those cells are ➖.
 
 ✅ yes · 🟡 partly · ❌ no · ➖ not in its documentation · n/a does not apply
@@ -107,7 +107,7 @@ If `drive` fits, start with [installation](./installation.md). To connect an age
 
 ## How each mark was checked
 
-`drive` marks were checked on `main` at 0.27.0: by running a build with an empty home folder (`drive commands --json`
+`drive` marks were checked on the [reviewed source](https://github.com/WireCatLabs/drive-cli/tree/v0.27.0): by running a build with an empty home folder (`drive commands --json`
 and `drive <profile> mcp --tools --json`, which list the commands and the 105 that MCP offers to a signed out
 profile) and by the [usage guide](./usage.md), [search guide](./search.md), [mirroring guide](https://github.com/WireCatLabs/drive-cli/blob/main/docs/mirrors.md),
 [configuration](./configuration.md) and [security](./security.md) pages. Where a mark is a limit (🟡 or ❌), the section
@@ -119,20 +119,20 @@ where a command list is complete.
 - **gog**
   ([README](https://github.com/openclaw/gogcli/blob/main/README.md),
   [MCP guide](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md)).
-  Rows 1, 10: [`drive search`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-search.md)
+  Rows 1, 10: [`gog drive search`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-search.md)
   ("Full-text search across Drive") and
-  [`drive download`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-download.md).
-  Row 4: [`docs cat`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-docs-cat.md) and the MCP tools
+  [`gog drive download`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-download.md).
+  Row 4: [`gog docs cat`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-docs-cat.md) and the MCP tools
   `docs_get` and `sheets_read_range`. Row 6:
-  [`drive activity query`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-activity-query.md).
-  Row 7: the only `drive sync` subcommand is
+  [`gog drive activity query`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-activity-query.md).
+  Row 7: the only `gog drive sync` subcommand is
   [`push`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-sync-push.md), so rows 7 and 8 are no
   pull and one way. Row 9:
-  [`drive changes watch`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-changes-watch.md)
+  [`gog drive changes watch`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-changes-watch.md)
   sets up a webhook and does not sync files. Row 11:
-  [`docs export`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-docs-export.md). Row 12: MCP
+  [`gog docs export`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-docs-export.md). Row 12: MCP
   `docs_write` "optionally as Markdown". Row 13:
-  [`drive labels`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-labels.md) are Google Drive
+  [`gog drive labels`](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-drive-labels.md) are Google Drive
   labels, not tags kept on your computer. Rows 16 to 19: README ("`gog mcp` ... is read-only by default", `--readonly`,
   exact command allowlists, dry-run plans, untrusted-content wrapping). Row 22: README, "download its JSON file",
   which means your own OAuth client. Row 23: the MCP guide describes a "typed stdio MCP server".
