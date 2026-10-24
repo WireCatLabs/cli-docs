@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs"
+import { readdirSync, readFileSync } from "node:fs"
 import { expect, it } from "vitest"
 import { commandGroup, commandGroupForAnchor, commandGroups, splitCommandReference } from "../lib/command-groups"
 import { commandReferences } from "../lib/remark-doc-usability"
@@ -45,9 +45,12 @@ it("routes existing bot/admin/personal anchors, including multiword commands and
   expect(commandGroupForAnchor("#%invalid")).toBe("personal")
 })
 
-it("gives every released WhatsApp page a distinct localized description", () => {
+it("gives every released and site-authored WhatsApp page a distinct localized description", () => {
   const sidebar = JSON.parse(readFileSync("content/upstream/wa/meta.json", "utf8")) as { pages: string[] }
-  const pages = sidebar.pages.filter((page) => !page.startsWith("---"))
+  const authored = readdirSync("translations/pages/wa")
+    .filter((file) => file.endsWith(".en.md"))
+    .map((file) => file.replace(/\.en\.md$/, ""))
+  const pages = [...new Set([...sidebar.pages.filter((page) => !page.startsWith("---")), ...authored])]
   for (const lang of seoLocales) {
     const descriptions = pages.map((page) => documentationDescription(lang, page === "index" ? ["wa"] : ["wa", page]))
     expect(new Set(descriptions).size).toBe(pages.length)
