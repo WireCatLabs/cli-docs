@@ -951,7 +951,7 @@ memo tasks plan <task> [options]
 | `--provider <provider>` | deprecated: --account <provider>:<account>. |
 | `--json` | print JSON. |
 
-**Returns:** set a task's title, description, due date, next check, category and assignee
+**Returns:** task card — id, ref, key, project, title, description, type, status, and 18 more
 
 **Example:** `memo tasks plan 1a2b3c4d --due 2d --title 'Send the revised budget' --account telegram:1`
 
@@ -974,7 +974,7 @@ memo tasks show <task> [options]
 | `--account <account>` | deprecated: --source <provider>:<account>. |
 | `--json` | print JSON. |
 
-**Returns:** one task: its plan and everything linked to it
+**Returns:** task card — id, ref, key, project, title, description, type, status, and 18 more
 
 **Example:** `memo tasks show 1a2b3c4d --source telegram:1 --json`
 
@@ -1001,7 +1001,7 @@ memo tasks link <task> [targets] [options]
 | `--provider <provider>` | deprecated: --account <provider>:<account>. |
 | `--json` | print JSON. |
 
-**Returns:** link a task to messages, chats, people or URLs — or to another task: task:<id>
+**Returns:** task links —
 
 **Example:** `memo tasks link HRB-2 HRB-1 --kind blocked-by`
 
@@ -2658,7 +2658,7 @@ memo search all <query> [options]
 | `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 | `--project <project>` | rank the key documents of this project (id, project:<id>, key, exact name or alias) first; nothing is left out. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 4 more
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 6 more
 
 **Example:** `memo search all 'budget harbour'`, `memo search all 'content:invoice' --only mail,notes --json`
 
@@ -2683,7 +2683,7 @@ memo search messages <query> [options]
 | `--brief` | each message or email as reference, time, sender and excerpt only. |
 | `--full` | each message or email with its whole text; --json keeps the excerpt, messages show the text. |
 
-**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, found_in, and 3 more
+**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 5 more
 
 **Next usually:** `memo messages show <message>`
 
@@ -2713,7 +2713,7 @@ memo search mail <query> [options]
 | `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 | `--account <account>` | deprecated: --source email:<account>. |
 
-**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, found_in, and 3 more
+**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 5 more
 
 **Next usually:** `memo messages show <message>`
 

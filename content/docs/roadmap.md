@@ -45,7 +45,10 @@ what comes next.
 
 ## Each tool's plans
 
-What each tool still lacks is listed in its own roadmap:
-[Telegram roadmap](./tg/roadmap.md) · [MAX roadmap](./max/roadmap.md) · [Zoom roadmap](./zm/roadmap.md) · [Google Drive roadmap](./drive/roadmap.md).
-To suggest a source or a
-feature, open an issue in the tool's GitHub repository.
+- [Telegram roadmap](./tg/roadmap.md)
+- [MAX roadmap](./max/roadmap.md)
+- [Zoom roadmap](./zm/roadmap.md)
+- [Google Drive roadmap](./drive/roadmap.md)
+- [Memo roadmap](./memo/roadmap.md)
+
+To suggest a source or feature, open an issue in the tool’s GitHub repository.

@@ -46,7 +46,10 @@ Consulta las [funciones](./features.mdx).
 
 ## Planes de cada herramienta
 
-Lo que aún falta en cada herramienta está en su propia hoja de ruta:
-[hoja de ruta de Telegram](./tg/roadmap.md) · [hoja de ruta de MAX](./max/roadmap.md) ·
-[hoja de ruta de Zoom](./zm/roadmap.md) · [hoja de ruta de Google Drive](./drive/roadmap.md). Para
-proponer una fuente o una función, abre un issue en el repositorio de GitHub de la herramienta.
+- [Hoja de ruta de Telegram](./tg/roadmap.md)
+- [Hoja de ruta de MAX](./max/roadmap.md)
+- [Hoja de ruta de Zoom](./zm/roadmap.md)
+- [Hoja de ruta de Google Drive](./drive/roadmap.md)
+- [Hoja de ruta de Memo](./memo/roadmap.md)
+
+Para proponer una fuente o función, abre un issue en el repositorio de GitHub de la herramienta.
