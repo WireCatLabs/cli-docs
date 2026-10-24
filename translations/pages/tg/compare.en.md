@@ -34,21 +34,9 @@ The tools:
 
 <a id="features" />
 
-<a id="install-and-licence" />
-
-<a id="when-another-tool-fits-better" />
-
 <a id="функции" />
 
-<a id="установка-и-лицензия" />
-
-<a id="когда-другой-инструмент-подходит-лучше" />
-
 <a id="características" />
-
-<a id="instalar-y-licenciar" />
-
-<a id="cuando-otra-herramienta-encaja-mejor" />
 
 ## What each tool does
 
@@ -105,6 +93,12 @@ Notes on these rows:
 - **Loosen its own limits.** Over MCP, tg hides the commands that change what a later run may do (settings,
   recipient lists, schedules) until you open them from a terminal.
 
+<a id="install-and-licence" />
+
+<a id="установка-и-лицензия" />
+
+<a id="instalar-y-licenciar" />
+
 ## Setup
 
 | | tg | tgcli | tlgr | telegram-mcp | mcp-telegram | tdl |
@@ -117,6 +111,12 @@ Notes on these rows:
 `tg` and the other tools here call Telegram's own interface, so the agent gets the same answer a script would, in a
 fixed shape, and a command either succeeds or says why not. This page does not claim that either way is faster: there
 is no published measurement.
+
+<a id="when-another-tool-fits-better" />
+
+<a id="когда-другой-инструмент-подходит-лучше" />
+
+<a id="cuando-otra-herramienta-encaja-mejor" />
 
 ## Where another tool fits better
 
