@@ -159,7 +159,7 @@ De forma predeterminada, un agente puede decidir propuestas del proyecto con un 
 La petición anterior deja explícitamente esa decisión en tus manos. Para exigir decisiones del propietario
 en este recorrido, establece [`agent_decisions` en `false`](./configuration.md#agent_decisions): rechaza
 las confirmaciones y rechazos del agente por CLI y MCP. Leer y preparar propuestas sigue disponible.
-El recorrido separado de reuniones sigue dejando la confirmación al propietario.
+Las decisiones de reuniones mediante MCP necesitan permisos explícitos del propietario.
 
 Después, [prepara una agenda con el contexto aceptado del proyecto](#prepare-for-a-meeting-with-someone).
 
@@ -263,7 +263,7 @@ Guárdalo con el mensaje como evidencia solo después de que yo dé mi aprobaci�
 
 Un recuerdo que registras directamente queda confirmado; uno añadido por un agente sigue propuesto
 para tu revisión. Comprueba la afirmación y su fuente antes de confirmarlo. Después,
-`memo memories stale` marca recuerdos que ya no son válidos ([recuerdos](./memories.md)).
+`memo memories invalidate` marca recuerdos que ya no son válidos ([recuerdos](./memories.md)).
 
 ## Registrar una decisión de un chat
 
@@ -301,15 +301,15 @@ que editaste.
 ## Preguntar solo con fuentes
 
 ```text prompt
-Usa memo CLI para recopilar las fuentes del presupuesto de Harbour con memo ask, usando las palabras clave
+Usa memo CLI para recopilar las fuentes del presupuesto de Harbour con memo answers create, usando las palabras clave
 "Harbour budget". Responde solo con esas fuentes y cita cada una.
 ```
 
-`memo ask` reúne las fuentes; tu agente responde. Memo no envía nada a un proveedor de IA a menos que
+`memo answers create` reúne las fuentes; tu agente responde. Memo no envía nada a un proveedor de IA a menos que
 configures uno y lo permitas ([búsqueda](./search.md#give-your-agent-the-sources)).
 
 ## Ejecutarlo de forma programada
 
-En Linux, `memo auto start` mantiene al día tus notas y tu correo. Para ejecutar una receta cada mañana,
+En Linux, `memo jobs start` mantiene al día tus notas y tu correo. Para ejecutar una receta cada mañana,
 usa la programación propia de tu agente o un programador de tareas de tu ordenador que inicie tu
 agente con la petición.

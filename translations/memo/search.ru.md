@@ -179,7 +179,7 @@ memo projects evidence HRB --source zoom:work,telegram:1 --since-time 60d --befo
 найтись заметка об отпуске. tg или max скачивает модель один раз:
 
 ```sh
-memo models text download e5-small
+memo models download e5-small
 ```
 
 Модель работает на вашем компьютере. После скачивания выполните `memo sync`, чтобы подготовить заметки
@@ -205,10 +205,10 @@ Linked from these notes
 
 ## Передайте агенту источники
 
-`memo ask` собирает источники для вопроса, чтобы агент мог ответить и сослаться на них:
+`memo answers create` собирает источники для вопроса, чтобы агент мог ответить и сослаться на них:
 
 ```sh
-memo ask 'What is the Harbour budget?' 'Harbour budget' --all
+memo answers create 'What is the Harbour budget?' 'Harbour budget' --all
 ```
 
 Слова после вопроса задают поиск. Без них Memo ищет весь вопрос, и каждое слово должно совпасть. `--all` ищет во всех аккаунтах; `--source telegram:1` выбирает один. Ответ перечисляет источники с ссылками и текстом, область поиска и пропуски. Memo сам не отвечает на вопрос и не сохраняет ответ.
@@ -225,8 +225,10 @@ Memo может также отправить источники настрое�
 Memo и zm используют общие селекторы и парсеры cli-core: ID встречи, личности, человека, события и серии;
 проект, тег и тему; границы времени, курсор и бюджет чтения. Например:
 
+Для тегов и тем встреч Memo использует поля нативного запроса `tag:` и `topic:`, без отдельных флагов выбора.
+
 ```sh
-memo search meetings "draft" --source zoom:work --topic finance --meeting-id 12
+memo search meetings "draft topic:finance" --source zoom:work --meeting-id 12
 ```
 
 Выбор аккаунта отличается: Memo требует один сохранённый `--source provider:account`, а zm выбирает аккаунт

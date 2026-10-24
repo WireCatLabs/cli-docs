@@ -31,19 +31,19 @@ notes /path/to/notes: 24 notes, 2 changed, 0 moved, 0 gone
 ## Импорт по таймеру (Linux)
 
 ```sh
-memo auto start --every 5m   # sync every 5 minutes, starting a minute from now
-memo auto status             # whether the timer is on, when it runs next and how the last run ended
-memo auto stop               # stop and remove the timer
+memo jobs start --every 5m   # sync every 5 minutes, starting a minute from now
+memo jobs status             # whether the timer is on, when it runs next and how the last run ended
+memo jobs stop               # stop and remove the timer
 ```
 
-Пока запуски таймера завершаются ошибкой, каждая команда memo выводит в stderr одну строку: с какого времени, сколько запусков и почему не удались. `memo auto status` показывает это в `failing`. После успешного запуска строка исчезает. Причина содержит код ошибки, её идентификатор причины и вид источника (`notes: configuration_error (folder.unbound)`), но не текст ошибки: он может раскрывать папку или тему письма. Полное сообщение остаётся в журнале таймера — `journalctl --user -u memo-import.service`, который указывает `memo auto status`.
+Пока запуски таймера завершаются ошибкой, каждая команда memo выводит в stderr одну строку: с какого времени, сколько запусков и почему не удались. `memo jobs status` показывает это в `failing`. После успешного запуска строка исчезает. Причина содержит код ошибки, её идентификатор причины и вид источника (`notes: configuration_error (folder.unbound)`), но не текст ошибки: он может раскрывать папку или тему письма. Полное сообщение остаётся в журнале таймера — `journalctl --user -u memo-import.service`, который указывает `memo jobs status`.
 
 `--every` принимает `90s`, `5m`, `1h` и так далее; самый короткий интервал — одна минута. Таймер
 использует systemd — диспетчер служб в большинстве систем Linux. В macOS и Windows запускайте
 `memo sync` сами или через собственный планировщик.
 
 Таймер запускает `memo sync` с настройками терминала, из которого вы его включили. Поэтому он
-находит Himalaya и ваши пароли так же, как этот терминал. `memo auto start` и `stop` записывают `auto` в
+находит Himalaya и ваши пароли так же, как этот терминал. `memo jobs start` и `stop` записывают `auto` в
 файл настроек; если вы измените значение там, таймер учтёт это при следующем запуске.
 
 ## Что читает импорт

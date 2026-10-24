@@ -12,7 +12,9 @@ title: "Установка"
 - **Локальное хранилище**: файл базы данных на компьютере с текстами заметок, почты и сообщений. Memo использует его вместе с [tg](https://github.com/WireCatLabs/tg-cli) и [max](https://github.com/WireCatLabs/max-cli).
 - **Навык**: краткие инструкции для ИИ-агента по работе с Memo.
 
-Установка не выполняет вход, не запускает фоновую службу и не читает заметки или почту. Memo читает папку или ящик, только когда вы добавляете источник и запускаете `memo sync`. Синхронизация по таймеру включается отдельно: `memo auto start`.
+Установка не выполняет вход, не запускает фоновую службу и не читает заметки или почту. Memo читает папку или ящик, только когда вы добавляете источник и запускаете `memo sync`. Синхронизация по таймеру включается отдельно: `memo jobs start`.
+
+<a id="обновление-и-удаление" />
 
 ## Что нужно для работы
 
@@ -26,9 +28,9 @@ title: "Установка"
 |---|---|
 | Заметки и документы | Ничего: [форматы файлов](./notes.md#files-memo-can-read) |
 | Сообщения Telegram или MAX | [tg](https://github.com/WireCatLabs/tg-cli) или [max](https://github.com/WireCatLabs/max-cli). Они сохраняют чаты в локальном хранилище; Memo не входит в мессенджер |
-| Поиск по смыслу | Модель поиска на компьютере, около 135 МБ. Скачайте её один раз: `memo models text download e5-small`. Без неё Memo ищет по словам |
+| Поиск по смыслу | Модель поиска на компьютере, около 135 МБ. Скачайте её один раз: `memo models download e5-small`. Без неё Memo ищет по словам |
 | Почта | [Himalaya](https://github.com/pimalaya/himalaya) 2.x, программа для чтения почтового ящика. Свои аккаунты она читает из `~/.config/himalaya/config.toml` ([почта](./mail.md#before-you-start)) |
-| Синхронизация по таймеру (`memo auto`) | Linux с systemd. На macOS и Windows запускайте `memo sync` сами или своим планировщиком ([обновление архива](./archive.md)) |
+| Синхронизация по таймеру (`memo jobs`) | Linux с systemd. На macOS и Windows запускайте `memo sync` сами или своим планировщиком ([обновление архива](./archive.md)) |
 
 ## Установка
 
@@ -131,7 +133,7 @@ node dist/bin/memo.js --help
 | Кэш, который называет `memo doctor`; Memo пока ничего там не хранит | `~/.cache/cli-memo/` | `%LOCALAPPDATA%\cli-memo\Cache\` |
 | Общее хранилище с tg и max | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 | Модели поиска, скачанные tg или max | `~/.local/share/WireCat/models/` | `%LOCALAPPDATA%\WireCat\Data\models\` |
-| Таймер после `memo auto start` | `~/.config/systemd/user/memo-import.timer` и `.service` | — |
+| Таймер после `memo jobs start` | `~/.config/systemd/user/memo-import.timer` и `.service` | — |
 
 - **Настройки**: `config.json` ([справочник](./configuration.md)): папки, почтовые аккаунты, правила почты и таймер.
 - **Состояние**: что импортировано из каждой папки (`folders/`), блокировка одновременных синхронизаций (`import.lock`) и результат последнего запуска таймера (`auto/`).
@@ -141,7 +143,7 @@ node dist/bin/memo.js --help
 
 Команды задач также читают `~/.config/cli-memo-tasks/config.json` (`MEMO_TASKS_CONFIG_DIR` меняет его расположение), если он существует. Memo никогда в него не пишет, и он вам не нужен. Таймер запускает `memo sync` с `MEMO_AUTO=1`, что отмечает запуск таймером: такой запуск пропускает проверку обновлений и ничего не делает, если таймер выключен в настройках.
 
-> ⚠ **Задавайте эти переменные везде или нигде.** Без них команда читает другие настройки и другое хранилище и сообщает об отсутствии папок или почты. Таймер сохраняет переменные при `memo auto start`; повторите команду после их изменения. tg и max читают то же хранилище только с одинаковыми `MESSAGING_STORE` или `WIRECAT_STATE_DIR`. Эти переменные предназначены для тестов и временных профилей.
+> ⚠ **Задавайте эти переменные везде или нигде.** Без них команда читает другие настройки и другое хранилище и сообщает об отсутствии папок или почты. Таймер сохраняет переменные при `memo jobs start`; повторите команду после их изменения. tg и max читают то же хранилище только с одинаковыми `MESSAGING_STORE` или `WIRECAT_STATE_DIR`. Эти переменные предназначены для тестов и временных профилей.
 
 ## Обновление
 
@@ -163,7 +165,7 @@ memo skill install --for all   # the skill of the new version
 Удаление убирает команду Memo, сохраняя данные. Действуйте в таком порядке:
 
 ```sh
-memo auto stop                       # if you turned on the timer: removes it while memo still exists
+memo jobs stop                       # if you turned on the timer: removes it while memo still exists
 npm uninstall -g @wirecat/cli-memo   # or pnpm remove -g, or bun remove -g
 rm -rf ~/.claude/skills/cli-memo ~/.agents/skills/cli-memo   # the agent skill
 rm -rf ~/.config/cli-memo ~/.local/share/cli-memo ~/.cache/cli-memo   # Memo's settings, state and cache

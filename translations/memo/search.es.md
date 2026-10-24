@@ -185,7 +185,7 @@ Con el modelo de búsqueda en tu ordenador, Memo también busca por significado,
 puede encontrar una nota sobre unas vacaciones. tg o max descarga el modelo una vez:
 
 ```sh
-memo models text download e5-small
+memo models download e5-small
 ```
 
 El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo sync` para que tus notas
@@ -211,10 +211,10 @@ enlaces y cómo se encontró.
 
 ## Dar las fuentes a tu agente
 
-`memo ask` reúne las fuentes para una pregunta, para que tu agente pueda responder y citarlas:
+`memo answers create` reúne las fuentes para una pregunta, para que tu agente pueda responder y citarlas:
 
 ```sh
-memo ask 'What is the Harbour budget?' 'Harbour budget' --all
+memo answers create 'What is the Harbour budget?' 'Harbour budget' --all
 ```
 
 Las palabras después de la pregunta indican qué buscar; sin ellas, Memo busca toda la pregunta y cada palabra debe coincidir. `--all` busca en todas las cuentas; `--source telegram:1` elige una. La respuesta enumera fuentes con referencia y texto, el ámbito buscado y lo omitido. Memo no responde a la pregunta ni guarda la respuesta por sí solo.
@@ -231,8 +231,10 @@ Siguiente: [ver todo sobre una persona](./people.md) o [convertir lo que encontr
 Memo y zm comparten los selectores y analizadores de cli-core: identificadores de reunión, identidad, persona,
 evento y serie; proyecto, etiqueta y tema; límites de tiempo, cursor y presupuesto de lectura. Por ejemplo:
 
+Para las etiquetas y temas de reuniones, Memo usa los términos nativos `tag:` y `topic:` en la consulta, sin opciones de selección separadas.
+
 ```sh
-memo search meetings "draft" --source zoom:work --topic finance --meeting-id 12
+memo search meetings "draft topic:finance" --source zoom:work --meeting-id 12
 ```
 
 La selección de cuenta difiere: Memo necesita un `--source provider:account` guardado, mientras zm selecciona

@@ -190,9 +190,9 @@ Puedes decirle a Memo qué archivo es la nota principal sobre una persona, por e
 en tu bóveda:
 
 ```sh
-memo note telegram:'Kai Sample' /path/to/vault/People/Kai.md
-memo note telegram:'Kai Sample'           # shows which note it is
-memo note telegram:'Kai Sample' --clear   # forgets it
+memo notes links add telegram:'Kai Sample' /path/to/vault/People/Kai.md
+memo notes links show telegram:'Kai Sample'           # shows which note it is
+memo notes links clear telegram:'Kai Sample'   # forgets it
 ```
 
 Antes tienes que importar el archivo. Después, la nota y las notas que enlazan a ella aparecen en
@@ -206,11 +206,11 @@ una carpeta nueva:
 
 ```sh
 memo folders list                                  # shows the folder IDs the local store has
-memo folders attach 1 /other/path/to/notes
+memo folders update 1 /other/path/to/notes
 ```
 
 Con el mismo ID, las notas conservan sus enlaces y sus etiquetas en los dos ordenadores.
 
-Una carpeta `google-drive:…` contiene documentos que guardó drive-cli. `memo folders list` la marca «kept by drive» y `memo folders attach` la rechaza: la búsqueda de memo ya la lee.
+Una carpeta `google-drive:…` contiene documentos que guardó drive-cli. `memo folders list` la marca «kept by drive» y `memo folders update` la rechaza: la búsqueda de memo ya la lee.
 
 Siguiente: [etiqueta tus notas](./tags.md) o [busca en ellas](./search.md).

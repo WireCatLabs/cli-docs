@@ -127,7 +127,7 @@ Memo puede sugerir relaciones a partir del correo: personas que te escriben desd
 empresa.
 
 ```sh
-memo relationships suggest --source email:you@example.com
+memo relationships scan --source email:you@example.com
 memo relationships confirm 4
 ```
 

@@ -48,7 +48,7 @@ Dos importaciones de Memo nunca se ejecutan a la vez, y una fuente que falla no 
 
 Cuando añades una carpeta, Memo le da un ID (un número corto) en el almacén local. Las notas y los
 enlaces usan ese ID, no la ruta de la carpeta. Si usas las mismas notas en otro ordenador,
-`memo folders attach` conecta el ID con la ruta de la carpeta en ese ordenador. Como el ID no cambia,
+`memo folders update` conecta el ID con la ruta de la carpeta en ese ordenador. Como el ID no cambia,
 las notas conservan sus enlaces y sus etiquetas.
 
 ## Enlaces entre notas y personas
@@ -114,7 +114,7 @@ Tu agente puede añadir tres tipos de registros:
 - una **acción propuesta**: algo que hacer, como una respuesta. Siempre espera hasta que la apruebes o
   la rechaces. Aprobarla la convierte en una tarea para ti. Memo nunca envía un mensaje ni un correo.
 
-Los recuerdos y los hechos registrados directamente mediante el [servidor MCP](./mcp.md) empiezan como **propuestos**. Las herramientas de comandos MCP pueden confirmar recuerdos, aceptar hechos y aprobar acciones si lo permiten los permisos guardados. Cada llamada se escribe en el registro de agentes (`memo agents log`), sin los detalles enviados.
+Los recuerdos y los hechos registrados directamente mediante el [servidor MCP](./mcp.md) empiezan como **propuestos**. Las herramientas de comandos MCP pueden confirmar recuerdos, aceptar hechos y aprobar acciones si lo permiten los permisos guardados. Cada comando que llega al ejecutor de Memo se escribe en el registro de agentes (`memo agents list`), sin los detalles enviados.
 
 Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
 
@@ -122,4 +122,4 @@ El comando `memo` reconoce el terminal de un agente por `AI_AGENT` o `CLAUDECODE
 
 ## Qué puede salir de tu ordenador
 
-El envío de fuentes a un proveedor de IA requiere tu autorización. Por defecto, `memo ask` prepara fuentes para tu agente. Envía texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a uno remoto solo con `--allow-remote` además. Lo que tu agente hace con el texto depende de él. Las comprobaciones automáticas de actualizaciones y dominios de remitentes también pueden hacer peticiones de red; [Seguridad](./security.md) explica qué envían y qué ajustes se aplican.
+El envío de fuentes a un proveedor de IA requiere tu autorización. Por defecto, `memo answers create` prepara fuentes para tu agente. Envía texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a uno remoto solo con `--allow-remote` además. Lo que tu agente hace con el texto depende de él. Las comprobaciones automáticas de actualizaciones y dominios de remitentes también pueden hacer peticiones de red; [Seguridad](./security.md) explica qué envían y qué ajustes se aplican.

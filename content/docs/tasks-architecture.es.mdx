@@ -11,7 +11,7 @@ duplicados con un ejemplo resuelto. Para el uso diario, empieza por [Tareas](./t
 El diseño viene del plan de tareas aprobado en cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). Todo está ya hecho
 en cli-core salvo las partes marcadas como **aún no está hecho**. `tg` y `max` lo tienen todo, salvo que `serve` en `max` abre solo las tareas de las reglas de respuesta
-automática. `memo` no tiene los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías fuera de la lista ni la lectura de mensajes vinculados en la detección de duplicados; tiene categorías (`tasks plan --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
+automática. `memo` no tiene los cierres de agente por certeza, los seguimientos, la lista de 59 categorías con sus categorías fuera de la lista ni la lectura de mensajes vinculados en la detección de duplicados; tiene categorías (`tasks update --category`, `category:`), etiquetas y la detección de duplicados en `tasks add`, pero
 aún no `tasks categories`, la reserva, `tasks related`, `tasks duplicates` ni `tasks merge`.
 
 ## Los datos
@@ -178,7 +178,7 @@ pase una lista guardada al archivo, `memo` usa su propia lista por defecto. `tas
 `tasks categories` la lista en `unlisted` con el número de tareas abiertas y el total (también MCP
 `tasks_categories`), un `config set` o `unset` de `task_categories` termina su nota con las mismas
 líneas, y `tasks agenda` nombra las que llevan las tareas abiertas (`unlisted_categories`).
-`tasks list category:<name>` encuentra sus tareas, y `tasks plan <task> --category <name>` mueve una.
+`tasks list category:<name>` encuentra sus tareas, y `tasks update <task> --category <name>` mueve una.
 
 La lista por defecto en `tg` y `max`:
 
@@ -282,7 +282,7 @@ persona le debe al propietario.
 | --- | --- |
 | `tasks add <message> … --assignee sender` | la persona que envió el mensaje de la tarea |
 | `tasks add <message> … --assignee person:<id>` | una persona nombrada; varios valores nombran a varias personas |
-| `tasks plan <task> --assignee none` | quita los responsables |
+| `tasks update <task> --assignee none` | quita los responsables |
 | `tasks list "assignee:any state:open"` | tareas abiertas con cualquier responsable: lo que otros deben al propietario |
 | `tasks list assignee:none`, `tasks list assignee:person:<id>` | tareas sin responsable, o las de una persona |
 

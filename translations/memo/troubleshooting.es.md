@@ -29,7 +29,7 @@ todas las notas que contienen tus palabras. Para buscar también por significado
 con tg o max y luego importa:
 
 ```sh
-memo models text download e5-small
+memo models download e5-small
 memo sync
 ```
 
@@ -43,7 +43,7 @@ Si dos personas tienen el mismo nombre, enlaza a la correcta con una referencia 
 
 Cada carpeta necesita un ID del almacén local. Añádela con `memo folders add /path/to/folder`. Si la
 carpeta se añadió en otro ordenador, conéctala en su lugar: `memo folders list` muestra su ID y
-`memo folders attach ID /path/to/folder` la conecta ([detalles](./notes.md#use-the-same-notes-on-another-computer)).
+`memo folders update ID /path/to/folder` la conecta ([detalles](./notes.md#use-the-same-notes-on-another-computer)).
 
 ## Una importación no borró nada y mostró un aviso
 
@@ -84,7 +84,7 @@ carpeta con `memo folders add` y luego ejecuta `memo sync --only notes` y `memo 
 
 ## La ayuda muestra todos los comandos
 
-Una ruta en un solo argumento, como `memo "projects add" --help`, se rechaza indicando las palabras correctas. Un bucle puede pasarla así: en zsh, `for c in "projects add"; do memo $c --help; done` conserva `$c` entero. Usa `memo ${=c} --help` en zsh o recorre las palabras.
+Una ruta en un solo argumento, como `"projects add"`, se rechaza indicando las palabras correctas. Un bucle puede pasarla así: en zsh, `for c in "projects add"; do memo $c --help; done` conserva `$c` entero. Usa `memo ${=c} --help` en zsh o recorre las palabras.
 
 ## Si sigues sin solución
 

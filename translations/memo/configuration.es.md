@@ -4,7 +4,7 @@ title: "Configuración"
 
 Usa esta referencia para consultar los ajustes y variables de entorno propios de Memo.
 Rara vez necesitas editar el archivo a mano.
-`memo folders add` añade una carpeta y `memo auto start` activa el temporizador por ti. `memo mail add` añade una cuenta explícita de Himalaya. Edita el
+`memo folders add` añade una carpeta y `memo jobs start` activa el temporizador por ti. `memo mail add` añade una cuenta explícita de Himalaya. Edita el
 archivo para indicar qué archivos se omiten y dónde van las notas exportadas.
 
 El archivo es `~/.config/cli-memo/config.json`. Es un archivo JSON: mantén las comillas, las comas y
@@ -70,9 +70,9 @@ Consulta [Correo](./mail.md).
 |---|---|
 | `enabled` | `true` si el temporizador de importación está activo. |
 | `every` | Frecuencia: `90s`, `5m`, `1h`; un minuto como mínimo. |
-| `places` | Variables de ubicación de memo y del almacén (`MEMO_CONFIG_DIR`, `MESSAGING_STORE`…) guardadas al ejecutar `memo auto start`; se pasan a cada ejecución del temporizador. |
+| `places` | Variables de ubicación de memo y del almacén (`MEMO_CONFIG_DIR`, `MESSAGING_STORE`…) guardadas al ejecutar `memo jobs start`; se pasan a cada ejecución del temporizador. |
 
-`memo auto start` y `memo auto stop` escriben estos valores. Si los editas a mano, el temporizador los
+`memo jobs start` y `memo jobs stop` escriben estos valores. Si los editas a mano, el temporizador los
 sigue en su siguiente ejecución. Consulta [importar con un temporizador](./archive.md#import-on-a-timer-linux).
 
 ## `update_check`
@@ -104,26 +104,26 @@ El ajuste se aplica a propuestas de proyecto; no cambia el permiso separado para
 |---|---|
 | `MEMO_CONFIG_DIR` | La carpeta que contiene `config.json`. |
 | `MEMO_STATE_DIR` | La carpeta de estado de Memo: cómo era cada carpeta en la última importación. |
-| `MEMO_MODELS_ANALYSIS_PROVIDER`, `MEMO_MODELS_ANALYSIS_MODEL` | El proveedor de IA y el identificador del modelo (el nombre que usa el proveedor para él) a los que llama `memo ask --analyze`. |
+| `MEMO_MODELS_ANALYSIS_PROVIDER`, `MEMO_MODELS_ANALYSIS_MODEL` | El proveedor de IA y el identificador del modelo (el nombre que usa el proveedor para él) a los que llama `memo answers create --analyze`. |
 | `MEMO_MODELS_ANALYSIS_BASE_URL` | Opcional: la dirección del proveedor. |
 | `MEMO_MODEL_API_KEY` | La clave del proveedor. |
-| `MEMO_READ_ONLY` | Cualquier valor salvo `0` rechaza todo cambio con `permission_error` (código de salida 5): escrituras en el almacén, en tus archivos, en el correo del proveedor, en el temporizador y en los archivos de la skill, además de `upgrade` y `ask --allow-remote`. Las lecturas, `memo sync`, `tasks plan` y `tasks link` siguen funcionando (el vínculo solo se propone y se rechaza vincular dos tareas); `reminders poll` se rechaza; `memo mcp` deja fuera sus herramientas de escritura. |
+| `MEMO_READ_ONLY` | Cualquier valor salvo `0` rechaza todo cambio con `permission_error` (código de salida 5): escrituras en el almacén, en tus archivos, en el correo del proveedor, en el temporizador y en los archivos de la skill, además de `upgrade` y `answers create --allow-remote`. Las lecturas, `memo sync`, `tasks link` siguen funcionando (el vínculo solo se propone y se rechaza vincular dos tareas); `reminders claim` se rechaza; `memo mcp` mantiene visibles los comandos de escritura, pero rechaza ejecutarlos. |
 
-Memo llama a un proveedor fuera de tu ordenador solo cuando `memo ask` tiene a la vez `--analyze` y
+Memo llama a un proveedor fuera de tu ordenador solo cuando `memo answers create` tiene a la vez `--analyze` y
 `--allow-remote`. Consulta [dar las fuentes a tu agente](./search.md#give-your-agent-the-sources).
 
 ## `permissions`
 
 Las rutas de comandos con puntos limitan las herramientas MCP. Una clave cubre el comando y sus subcomandos;
-gana la clave guardada más específica. `deny` oculta herramientas, `readonly` permite leer y `ask` o `allow`
-permiten escribir. En MCP, `ask` se ejecuta sin pregunta en el terminal; la aplicación cliente obtiene la aprobación.
+gana la clave guardada más específica. `deny` marca los comandos como no disponibles, `readonly` permite leer y `ask` o `allow`
+permiten escribir. En MCP, `ask` se ejecuta sin pregunta en el terminal; la aplicación cliente determina las solicitudes de aprobación.
 Las escrituras sin un nivel guardado usan `ask`.
 
 ```json
 {
   "permissions": {
     "notes": "readonly",
-    "mail.trash": "deny",
+    "mail.delete": "deny",
     "mcp.authority": "deny"
   }
 }
@@ -135,6 +135,6 @@ configura explícitamente la clave correspondiente como `ask` o `allow` para del
 `agent_decisions: false` sigue rechazando decisiones sobre propuestas de proyecto. El límite compartido de lectura
 de WireCat y `MEMO_READ_ONLY` restringen todos los permisos.
 
-Reinicia la conexión MCP tras permitir una herramienta antes oculta. Los permisos más estrictos también afectan
-las conexiones abiertas. `memo mcp --permission notes.edit=deny` restringe una clave para ese servidor sin cambiar
+Los permisos cambiados se aplican en la siguiente búsqueda de comandos y llamada, también en las
+conexiones abiertas. `memo mcp --permission notes.edit=deny` restringe una clave para ese servidor sin cambiar
 el archivo; se rechaza cualquier modificación que relaje una clave guardada.

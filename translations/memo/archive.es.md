@@ -31,19 +31,19 @@ Los mensajes de Telegram y MAX los mantienen al día tg y max, no `memo sync`.
 ## Importar con un temporizador (Linux)
 
 ```sh
-memo auto start --every 5m   # sync every 5 minutes, starting a minute from now
-memo auto status             # whether the timer is on, when it runs next and how the last run ended
-memo auto stop               # stop and remove the timer
+memo jobs start --every 5m   # sync every 5 minutes, starting a minute from now
+memo jobs status             # whether the timer is on, when it runs next and how the last run ended
+memo jobs stop               # stop and remove the timer
 ```
 
-Mientras fallen las ejecuciones del temporizador, cada comando memo escribe una línea en stderr con el inicio del fallo, el número de ejecuciones y la causa. `memo auto status` muestra lo mismo en `failing`. La línea desaparece tras una ejecución correcta. La causa contiene el código de error, su identificador de motivo y el tipo de fuente (`notes: configuration_error (folder.unbound)`), nunca el texto del error, que puede revelar una carpeta o un asunto. El mensaje completo queda en el registro del temporizador, `journalctl --user -u memo-import.service`, indicado por `memo auto status`.
+Mientras fallen las ejecuciones del temporizador, cada comando memo escribe una línea en stderr con el inicio del fallo, el número de ejecuciones y la causa. `memo jobs status` muestra lo mismo en `failing`. La línea desaparece tras una ejecución correcta. La causa contiene el código de error, su identificador de motivo y el tipo de fuente (`notes: configuration_error (folder.unbound)`), nunca el texto del error, que puede revelar una carpeta o un asunto. El mensaje completo queda en el registro del temporizador, `journalctl --user -u memo-import.service`, indicado por `memo jobs status`.
 
 `--every` acepta `90s`, `5m`, `1h`, etc.; el intervalo más corto es un minuto. El temporizador usa
 systemd, el gestor de servicios de la mayoría de los sistemas Linux. En macOS y Windows, ejecuta
 `memo sync` tú mismo o desde tu propio programador de tareas.
 
 El temporizador ejecuta `memo sync` con los ajustes de la terminal desde la que lo activaste, así que
-encuentra Himalaya y tus contraseñas de la misma forma. `memo auto start` y `stop` escriben `auto` en el
+encuentra Himalaya y tus contraseñas de la misma forma. `memo jobs start` y `stop` escriben `auto` en el
 archivo de configuración; si lo editas allí, el temporizador lo sigue en su siguiente ejecución.
 
 ## Qué lee una importación
