@@ -51,7 +51,7 @@ The tools:
 | Edit, delete, forward and pin messages | ✅ | ❌ | ✅ | ✅ | ✅ | 🟡 |
 | Send photos, files and voice messages | ✅ | 🟡 | ✅ | ✅ | ✅ | 🟡 |
 | Send several photos as one album | ✅ | ❌ | ✅ | ✅ | ✅ | ➖ |
-| Save a draft that shows in your Telegram app | ❌ | ❌ | ✅ | ✅ | ✅ | ➖ |
+| Save a draft that shows in your Telegram app | ✅ | ❌ | ✅ | ✅ | ✅ | ➖ |
 | **Find** | | | | | | |
 | Search messages on Telegram's server | ✅ | 🟡 | 🟡 | ✅ | ✅ | ❌ |
 | Search your saved messages with no internet | ✅ | ✅ | ➖ | ❌ | ➖ | ➖ |
@@ -122,8 +122,8 @@ is no published measurement.
 
 - **tdl** — you mostly move files: bulk downloads, uploads and forwarding at full speed, from one binary that most
   package managers can install.
-- **tlgr** — you want Telegram drafts and parallel downloads that resume, from a command line, and you do not need a
-  local copy to search.
+- **tlgr** — you want parallel downloads that resume, from a command line, and you do not need a local copy to
+  search.
 - **telegram-mcp** — you want the widest set of agent actions in Claude Desktop, installed in one step, with a large
   community behind it.
 - **mcp-telegram** — you want a large MCP tool set started with one `npx` command, without Python.

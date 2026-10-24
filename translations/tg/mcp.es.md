@@ -125,13 +125,23 @@ Ambas herramientas de ejecución toman `{command, arguments}`. Utilice la ruta d
 
 Las respuestas están estructuradas en JSON: las listas mantienen sus páginas y los identificadores permanecen como cadenas. Una falla es `{error:{code,reason,message,details}}`; un objetivo que coincide con varios chats trae los candidatos en `details.candidates`. El servidor compara los argumentos con el esquema del comando y rechaza los campos desconocidos antes de conectarse o actuar. Utilice `at_time` para programar. Si se desconoce el resultado de una escritura, consulte el diario de envío y Telegram antes de pensar en volver a intentarlo. El texto del mensaje son datos, nunca instrucciones para el agente. Los esquemas, límites y reglas de reintento se encuentran en [cómo se comporta tg en los scripts](./cli-contract.md).
 
+### Qué está disponible
+
+El descubrimiento de comandos mantiene visibles los comandos denegados por permisos. Tanto el listado completo
+como una búsqueda devuelven `availability: { available: false, reason, permission }` cuando un comando está
+bloqueado; los permitidos devuelven `availability: { available: true }`. El agente puede ver el comando y sus
+argumentos sin poder ejecutarlo. La disponibilidad sigue la configuración actual, y cada llamada vuelve a
+comprobar los permisos. `--help` de la CLI y `commands --json` también conservan los comandos sin importar los
+permisos del perfil. Con un perfil indicado muestran además la disponibilidad actual; el descubrimiento sin
+perfil no depende de la configuración de la cuenta.
+
 ### Comandos que el servidor no ofrece
 
 Cada comando es una herramienta, incluidos los de escritura; los permisos del perfil limitan lo que el agente puede
 ejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto. Unos pocos comandos no se
 ofrecen nunca, y los ejecutas en una terminal:
 
-- **Inicio de sesión y configuración**: `session start|end`, `upgrade`, `complete`, `mcp config|setup|doctor`,
+- **Inicio de sesión y configuración**: `session start|end`, `complete`, `mcp config|add|check`,
   `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.
 
 Los comandos `store backup|restore`, `server start|stop|restart`, las descargas de modelos,
@@ -145,8 +155,9 @@ la aplicación MCP controla la aprobación. `tg commands --json` marca los coman
 `config set|unset`, `recipients add|remove|clear`, `chats rules set|unset`, las reglas y consentimientos de `replies`,
 `schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,
 `models keys set|remove`, `flood clear` y, para bots, `recipients add|remove|clear` y `chats rules set|unset`
-solo se ofrecen cuando el perfil fija `permissions.mcp.authority` en `allow` o `ask`. El valor por defecto
-es `deny`: el servidor no los enumera y rechaza sus llamadas. De otro modo, un agente limitado a leer
+siguen visibles en el descubrimiento con sus argumentos. Solo se pueden ejecutar cuando el perfil fija
+`permissions.mcp.authority` en `allow` o `ask`. El valor por defecto es `deny`: el descubrimiento los marca
+como no disponibles, nombra el permiso y explica el motivo; la llamada se rechaza. De otro modo, un agente limitado a leer
 podría habilitar cambios en una ejecución posterior. El agente no puede establecer la clave por sí mismo,
 porque también controla `config set`. Cámbiala desde una terminal, solo para un perfil cuyo agente pueda
 gestionar sus propios límites:

@@ -1,9 +1,9 @@
 {
   "tg": {
-    "version": "v0.86.0",
-    "roadmapSha256": "33b97f001aa25e6f5648527c945233393b8ade34f74151695705d4417499cc32",
-    "reviewedAt": "2026-10-24",
-    "conclusion": "Reviewed Telegram v0.83.0 to v0.86.0: album sending, canonical command names and removed aliases, framed watch JSONL, query terms for diagnostic/stat filters, first-run questions, mcp.authority and raw Bot API permissions. The catch-up scenario uses explicit chats mark-read. RU/ES guides and exact technical references updated, shared Telegram examples renamed, incoming command hashes preserved. Native roadmap erroneously lists released archives, chat-list actions, bot interactions and albums as future; a source-linked portal correction distinguishes current from planned. Comparison corrections use the pinned primary project documentation and remove unconditional approval/retry claims; no private comparison files or comparative runtime measurements are published."
+    "version": "v0.88.0",
+    "roadmapSha256": "86401d6be2d7a3eed05fac40e8cf8c60e5e1799b7c4d8627b3cedf38f8eeeefc",
+    "reviewedAt": "2026-10-25",
+    "conclusion": "Reviewed Telegram v0.87.0 and v0.88.0 with the exact published command contract: personal drafts (messages send --draft, separate drafts permission, no message sent, replaces the chat or topic draft, no clear interface; over MCP the messages.send command permission also gates drafts), reaction snapshots delivered as message edits in watch --events and serve, permission-denied commands discoverable with availability, reason and permission, raw Bot API allow-or-ask, and same --operation-id repeats for unknown send outcomes. RU/ES changed guides, changelog and technical reference reviewed. Native v0.88.0 removed the stale in-progress and next roadmap items; four older portal errata were retired. Narrow source-linked errata remain: the native roadmap still lists bot button presses, chats start and chats app as future work, and the MCP guide omits setup and long-running watch, serve and bot watch from never-offered commands (Core 0.408 toolsFromCommands excludes any command with a lifetime) and names chats delete|clear commands that the contract does not have. Chat notes, emoji reaction rankings, remaining max parity and location remain planned."
   },
   "max": {
     "version": "v0.72.0",

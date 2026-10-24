@@ -4,6 +4,25 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.88.0 — 24.10.2026
+
+### Added
+
+- `messages send --draft` guarda texto en el chat para que lo revises y envíes desde Telegram. Admite formato, respuestas y temas de foro, usa el permiso independiente `drafts` y nunca envía un mensaje. Se rechazan borradores vacíos y opciones exclusivas del envío.
+
+### Fixed
+
+- `watch --events` y `serve` reciben instantáneas de reacciones entregadas como ediciones del mensaje, incluida la eliminación de reacciones. Los contadores se mantienen actualizados aunque Telegram no envíe una actualización de reacción independiente.
+
+## 0.87.0 — 24.10.2026
+
+### Fixed
+
+- Las guías MCP describen las escrituras con claves de permiso y la autorización independiente para llamadas directas a Bot API.
+- El escenario catch-up usa `chats mark-read` como comando separado. La guía de instalación explica cómo recuperarse si falta en PATH el directorio global de ejecutables de pnpm.
+- Los comandos denegados siguen visibles en la ayuda de CLI y en MCP con disponibilidad actual, motivos y claves de permiso. La configuración del bot permanece limitada al bot y las llamadas siguen comprobando los permisos actuales.
+- **`chats members check --help` vuelve a mostrar la descripción de tg**: qué lee `--deep` y que envía identificadores a listas públicas de bloqueos. Desde 0.86.0 aparecía el texto compartido, que omitía ambos detalles.
+
 ## 0.86.0 — 24.10.2026
 
 ### Added

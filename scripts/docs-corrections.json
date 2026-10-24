@@ -2335,32 +2335,6 @@
   },
   {
     "tool": "tg",
-    "slug": "mcp",
-    "reason": "The released command contract renames mcp setup/doctor to add/check; update the native exclusion list to the canonical names.",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
-    "replacements": {
-      "en": [
-        {
-          "before": "`mcp config|setup|doctor`",
-          "after": "`mcp config|add|check`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`mcp config|setup|doctor`",
-          "after": "`mcp config|add|check`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`mcp config|setup|doctor`",
-          "after": "`mcp config|add|check`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "groups",
     "reason": "The released request actions are confirm/reject; the group task table retained the retired accept/decline spellings.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/groups.md",
@@ -2984,37 +2958,60 @@
   {
     "tool": "tg",
     "slug": "mcp",
-    "source": "https://github.com/WireCatLabs/cli-core/blob/v0.406.0/src/mcp/agent.ts",
-    "reason": "Released Core 0.406 excludes persistent/interactive commands from MCP, while upgrade is authority-gated rather than permanently excluded. Verified installed mcp/agent.js and cli/upgrade-command.js.",
+    "reason": "tg 0.88.0/Core 0.408.0: toolsFromCommands drops every command with a lifetime (setup, watch, serve, bot watch) though the contract marks only mcp:false ones; the 0.88 contract has no chats delete or clear command; upgradeCommand is wrapped in grantsAuthority (upgrade --check exempt), so it belongs with the authority-gated commands.",
     "replacements": {
       "en": [
         {
-          "before": "`session start|end`, `upgrade`, `complete`",
-          "after": "`session start|end`, `complete`, `setup`, `watch`, `serve`, `bot watch`"
+          "before": "`session start|end`, `complete`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. An agent call cannot use them, or they need you at the keyboard.",
+          "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. An agent call cannot use them, or they need you at the keyboard.\n- **Long-running**: `watch`, `serve` and `bot watch` run until stopped, and an agent call must return."
         },
         {
-          "before": "`server install|uninstall`, `skill install`",
-          "after": "`server install|uninstall`, `upgrade`, `skill install`"
+          "before": "`account sessions end`, `chats delete|clear` and\n`bot store fetch`",
+          "after": "`account sessions end` and\n`bot store fetch`"
+        },
+        {
+          "before": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`.",
+          "after": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`, and long-running ones with a `lifetime`."
+        },
+        {
+          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
+          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
         }
       ],
       "ru": [
         {
-          "before": "`session start|end`, `upgrade`, `complete`",
-          "after": "`session start|end`, `complete`, `setup`, `watch`, `serve`, `bot watch`"
+          "before": "`session start|end`, `complete`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.",
+          "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.\n- **Долгие процессы**: `watch`, `serve` и `bot watch` работают до остановки, а вызов агента должен завершиться."
         },
         {
-          "before": "`server install|uninstall`, `skill install`",
-          "after": "`server install|uninstall`, `upgrade`, `skill install`"
+          "before": "`account sessions end`, `chats delete|clear` и\n",
+          "after": "`account sessions end` и\n"
+        },
+        {
+          "before": "исключённые команды отмечены\nкак `mcp: false`.",
+          "after": "исключённые команды отмечены\nкак `mcp: false`, а долгие процессы — полем `lifetime`."
+        },
+        {
+          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
+          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
         }
       ],
       "es": [
         {
-          "before": "`session start|end`, `upgrade`, `complete`",
-          "after": "`session start|end`, `complete`, `setup`, `watch`, `serve`, `bot watch`"
+          "before": "`session start|end`, `complete`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.",
+          "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.\n- **Procesos largos**: `watch`, `serve` y `bot watch` siguen hasta que los detienes, y una llamada del agente debe terminar."
         },
         {
-          "before": "`server install|uninstall`, `skill install`",
-          "after": "`server install|uninstall`, `upgrade`, `skill install`"
+          "before": "`account sessions end`, `chats delete|clear` y\n",
+          "after": "`account sessions end` y\n"
+        },
+        {
+          "before": "marca los comandos excluidos con\n`mcp: false`.",
+          "after": "marca los comandos excluidos con\n`mcp: false`, y los procesos largos con `lifetime`."
+        },
+        {
+          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
+          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
         }
       ]
     }
@@ -3126,25 +3123,24 @@
   {
     "tool": "tg",
     "slug": "roadmap",
-    "reason": "The native roadmap still calls released attachment archives, chat-list actions, bot interactions and albums future work. Move verified released capabilities to current and retain unshipped drafts, chat notes and remaining parity items.",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/CHANGELOG.md",
+    "reason": "tg 0.88.0 changelog and command contract ship messages press, chats start and chats app; the native roadmap still lists them as max parity work.",
     "replacements": {
       "en": [
         {
-          "before": "This page lists what is planned for `tg` and is not in it yet. Read it before you build a workaround\nfor a missing feature: it may already be on the way. The order is approximate and can change. To\nsuggest something, open an [issue on GitHub](https://github.com/WireCatLabs/tg-cli/issues).\n\n## What works today\n\nReading, sending, search, the local store, groups, people, bots, MCP and permissions: see\n[using tg](./usage.md) and [every command](./commands.md). What each released version changed is in the\n[changelog](./changelog.md).\n\n## In progress\n\n- **A checked copy of a chat's files.** Download a chat's files into a folder you choose, check later that\n  every copy is still whole, and repeat it on a daily timer.\n\n## Next\n\n- **Several photos in one message.** Until then, see [what tg cannot send yet](./usage.md#not-in-tg-yet).\n- **Archive, pin and mute a chat, or mark it unread.** The WhatsApp and MAX tools already can.\n- **A reply saved as the chat's draft.** Your agent writes it, you read it in Telegram and press send.\n\n## Later\n\n- **Your own notes on chats.** Private notes on a chat, like the ones\n  [tgcli](https://github.com/kfastov/tgcli) keeps beside its tags. Private names and notes for people already work:\n  [your own names and notes for people](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Reactions by emoji in message rankings.** Beside the total, how many of each reaction a message got.\n- **What `max` can do and `tg` cannot yet.** Privacy settings, call history, a chat's media, stickers,\n  deleting or clearing a chat for yourself, a group photo, pressing a bot's buttons, starting a bot and\n  opening its mini app.\n- **Your location in a message.**",
-          "after": "This roadmap helps you check planned Telegram work before building a workaround. Priorities can change; suggest a task in [GitHub issues](https://github.com/WireCatLabs/tg-cli/issues).\n\n## What works today\n\nReading, sending, search, the local store, groups, people, bots, MCP and permissions are available: see [using tg](./usage.md) and [every command](./commands.md). Released changes are in the [changelog](./changelog.md).\n\nAlbums of up to ten supported attachments, archive/pin/mute/unread chat actions, bot buttons, bot startup and mini-app links are released. The attachment archive saves available files, verifies size and SHA-256 and supports opt-in daily timers on Linux. [Current limitations](./usage.md#not-in-tg-yet) explain the remaining boundaries.\n\n## In progress\n\nNo additional work is listed in this section. The planned tasks follow.\n\n## Next\n\n- **A reply saved as the chat’s draft.** Let an agent prepare it, review it in Telegram and send it there.\n\n## Later\n\n- **Your own notes on chats**, like [tgcli](https://github.com/kfastov/tgcli) keeps beside its tags. Private names and notes for people already work: [names and notes for people](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Reactions by emoji in message rankings**, alongside the total.\n- **Remaining parity with `max`**: privacy settings, call history, chat media, stickers, deleting or clearing a chat for yourself and a group photo.\n- **Your location in a message.**"
+          "before": "deleting or clearing a chat for yourself, a group photo, pressing a bot's buttons, starting a bot and\n  opening its mini app.",
+          "after": "deleting or clearing a chat for yourself and a group photo."
         }
       ],
       "ru": [
         {
-          "before": "На этой странице перечислено то, что запланировано для `tg` и чего еще нет. Прочтите эту страницу, прежде чем придумывать обходной путь для отсутствующей функции: возможно, он уже в разработке. Порядок приблизительный и может меняться. Чтобы что-то предложить, создайте [задачу на GitHub](https://github.com/WireCatLabs/tg-cli/issues).\n\n## Что работает сегодня\n\nЧтение, отправка, поиск, локальное хранилище, группы, люди, боты, MCP и разрешения: см. [использование tg](./usage.md) и [все команды](./commands.md). Что изменила каждая выпущенная версия, описано в [списке изменений](./changelog.md).\n\n## В работе\n\n- **Проверенная копия файлов чата.** Скачайте файлы чата в выбранную папку, позже проверьте, что каждая копия по-прежнему целая, и повторяйте это по ежедневному таймеру.\n\n## Ближайшие планы\n\n- **Несколько фотографий в одном сообщении.** А пока посмотрите [что tg пока не может отправить](./usage.md#not-in-tg-yet).\n- **Архивировать, закреплять и отключать звук чата или отмечать его непрочитанным.** Инструменты для WhatsApp и MAX это уже умеют.\n- **Ответ, сохранённый как черновик чата.** Ваш агент пишет его, вы читаете его в Telegram и нажимаете «Отправить».\n\n## Позже\n\n- **Ваши собственные заметки в чатах.** Личные заметки в чате, например те, которые [tgcli](https://github.com/kfastov/tgcli) хранит рядом с тегами. Свои имена и заметки для людей уже работают: [ваши собственные имена и заметки для людей](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Реакции по эмодзи в рейтингах сообщений.** Рядом с общим числом: сколько раз получена каждая реакция.\n- **Что `max` может делать, а `tg` пока не может.** Настройки конфиденциальности, история звонков, медиафайлы чата, стикеры, удаление или очистка чата для себя, групповое фото, нажатие кнопок бота, запуск бота и открытие его мини-приложения.\n- **Ваше местоположение в сообщении.**",
-          "after": "Проверьте планы для Telegram, прежде чем искать обходной путь. Приоритеты могут меняться; предложите задачу в [GitHub issues](https://github.com/WireCatLabs/tg-cli/issues).\n\n## Что работает сегодня\n\nЧтение, отправка, поиск, локальное хранилище, группы, люди, боты, MCP и разрешения уже доступны: см. [использование tg](./usage.md) и [все команды](./commands.md). Выпущенные изменения — в [истории версий](./changelog.md).\n\nАльбомы до десяти поддерживаемых вложений, архивирование/закрепление/отключение уведомлений/отметка чата непрочитанным, кнопки ботов, запуск бота и ссылки мини-приложений уже работают. Архив вложений сохраняет доступные файлы, проверяет размер и SHA-256 и поддерживает ежедневные таймеры по вашему выбору в Linux. Остальные границы описаны в [текущих ограничениях](./usage.md#not-in-tg-yet).\n\n## В работе\n\nДополнительная работа в этом разделе не указана. Запланированные задачи перечислены дальше.\n\n## Ближайшие планы\n\n- **Ответ, сохранённый как черновик чата.** Агент готовит его, вы проверяете в Telegram и отправляете оттуда.\n\n## Позже\n\n- **Свои заметки к чатам**, как у [tgcli](https://github.com/kfastov/tgcli) рядом с тегами. Свои имена и заметки для людей уже работают: [имена и заметки для людей](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Реакции по эмодзи в рейтингах сообщений**, рядом с общим числом.\n- **Оставшиеся возможности `max`**: настройки конфиденциальности, история звонков, медиа чата, стикеры, удаление или очистка чата для себя и фотография группы.\n- **Ваше местоположение в сообщении.**"
+          "before": "удаление или очистка чата для себя, групповое фото, нажатие кнопок бота, запуск бота и открытие его мини-приложения.",
+          "after": "удаление или очистка чата для себя и групповое фото."
         }
       ],
       "es": [
         {
-          "before": "Esta página enumera lo que está planeado para `tg` y aún no está incluido. Léelo antes de crear una solución alternativa para una característica faltante: es posible que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abra un [problema en GitHub](https://github.com/WireCatLabs/tg-cli/issues).\n\n## Lo que funciona hoy\n\nLectura, envío, búsqueda, el almacén local, grupos, personas, bots, MCP y permisos: consulte [usar tg](./usage.md) y [todos los comandos](./commands.md). Lo que cambió cada versión lanzada se encuentra en el [registro de cambios](./changelog.md).\n\n## En curso\n\n- **Una copia verificada de los archivos de un chat.** Descargue los archivos de un chat en una carpeta que elija, compruebe más tarde que cada copia sigue completa y repítalo con un temporizador diario.\n\n## Próximo\n\n- **Varias fotos en un solo mensaje.** Hasta entonces, consulte [lo que tg no puede enviar todavía](./usage.md#not-in-tg-yet).\n- **Archivar, fijar y silenciar un chat, o marcarlo como no leído.** Las herramientas de WhatsApp y MAX ya pueden hacerlo.\n- **Una respuesta guardada como borrador del chat.** Su agente la escribe, usted la lee en Telegram y pulsa enviar.\n\n## Más tarde\n\n- **Tus propias notas en los chats.** Notas privadas en un chat, como las que [tgcli](https://github.com/kfastov/tgcli) guarda junto a sus etiquetas. Los nombres privados y notas para personas ya funcionan: [tus propios nombres y notas para personas](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Reacciones por emoji en los rankings de mensajes.** Junto al total, cuántas veces recibió cada reacción un mensaje.\n- **Lo que `max` puede hacer y `tg` todavía no.** Configuración de privacidad, historial de llamadas, medios de un chat, stickers, eliminar o borrar un chat para usted mismo, una foto de grupo, presionar los botones de un bot, iniciar un bot y abrir su mini aplicación.\n- **Su ubicación en un mensaje.**",
-          "after": "Consulta lo previsto para Telegram antes de buscar una solución alternativa. Las prioridades pueden cambiar; propón una tarea en [GitHub issues](https://github.com/WireCatLabs/tg-cli/issues).\n\n## Lo que funciona hoy\n\nYa están disponibles la lectura, el envío, la búsqueda, el almacén local, grupos, personas, bots, MCP y permisos: consulta [usar tg](./usage.md) y [todos los comandos](./commands.md). Los cambios publicados figuran en el [historial de versiones](./changelog.md).\n\nYa funcionan los álbumes de hasta diez adjuntos compatibles, archivar/fijar/silenciar/marcar chats como no leídos, los botones de bots, iniciar bots y los enlaces de miniaplicaciones. El archivo de adjuntos guarda los archivos disponibles, verifica tamaño y SHA-256 y admite temporizadores diarios opcionales en Linux. Los [límites actuales](./usage.md#not-in-tg-yet) explican las restricciones restantes.\n\n## En curso\n\nNo se enumera trabajo adicional en esta sección. Las tareas previstas aparecen a continuación.\n\n## Próximo\n\n- **Una respuesta guardada como borrador del chat.** El agente la prepara y tú la revisas y envías desde Telegram.\n\n## Más tarde\n\n- **Notas propias en los chats**, como las que [tgcli](https://github.com/kfastov/tgcli) guarda junto a sus etiquetas. Los nombres privados y notas para personas ya funcionan: [nombres y notas para personas](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Reacciones por emoji en los rankings de mensajes**, junto al total.\n- **Paridad pendiente con `max`**: privacidad, historial de llamadas, medios del chat, stickers, eliminar o vaciar un chat para ti y la foto del grupo.\n- **Tu ubicación en un mensaje.**"
+          "before": "eliminar o borrar un chat para usted mismo, una foto de grupo, presionar los botones de un bot, iniciar un bot y abrir su mini aplicación.",
+          "after": "eliminar o borrar un chat para usted mismo y una foto de grupo."
         }
       ]
     }
@@ -3191,32 +3187,6 @@
         {
           "before": "## Tus propios nombres y notas: `contacts aliases`, `contacts notes`",
           "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"tus-propios-nombres-y-notas-contacts-alias-contacts-notes\" />\n\n## Tus propios nombres y notas: `contacts aliases`, `contacts notes`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "The album feature ships in this release; the unchanged limitations paragraph still called it future work. Keep the unshipped in-app draft boundary explicit.",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/CHANGELOG.md",
-    "replacements": {
-      "en": [
-        {
-          "before": "Several photos in one message remain on the [roadmap](./roadmap.md).",
-          "after": "Albums are supported within the attachment limits above. Saving a reply as a draft in the Telegram app remains planned; see the [roadmap](./roadmap.md)."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Несколько фотографий в одном сообщении остаются в [планах](./roadmap.md).",
-          "after": "Альбомы поддерживаются с ограничениями на вложения, указанными выше. Сохранение ответа как черновика в приложении Telegram пока остаётся в [планах](./roadmap.md)."
-        }
-      ],
-      "es": [
-        {
-          "before": "Varias fotos en un solo mensaje siguen en [próximas mejoras](./roadmap.md).",
-          "after": "Los álbumes están disponibles con los límites de adjuntos indicados arriba. Guardar una respuesta como borrador en la aplicación de Telegram sigue en [próximas mejoras](./roadmap.md)."
         }
       ]
     }
@@ -3281,58 +3251,6 @@
         {
           "before": "Utilice esta página cuando desee una aplicación de IA que se ejecute en el navegador o en su teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de Telegram. Una aplicación de este tipo no puede iniciar `tg` en su computadora, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `tg` a través de una dirección HTTPS privada, solo puede hacer lo que su perfil permite y usted sabe cómo detenerla o recuperar su acceso.",
           "after": "Conecta una aplicación MCP del navegador o teléfono, como ChatGPT o Claude, con tg en un equipo que controles. Iniciarás un endpoint HTTPS público con acceso autenticado, conectarás la aplicación con los permisos del perfil elegido y aprenderás a detener el servidor o revocar el acceso."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "bot",
-    "reason": "Core 0.406 botApiAllowed accepts allow or ask, with deny as default; describe both explicit enabling levels. MCP client approval remains separate.",
-    "source": "https://github.com/WireCatLabs/cli-core/blob/v0.406.0/src/sends/permissions.ts",
-    "replacements": {
-      "en": [
-        {
-          "before": "tools need `permissions.bot.api: allow`; the default is `deny`",
-          "after": "tools need an explicit `permissions.bot.api` level of `allow` or `ask`; the default is `deny`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "требуется `permissions.bot.api: allow`; по умолчанию\nдействует `deny`",
-          "after": "нужен явный уровень `allow` или `ask` для `permissions.bot.api`; по умолчанию\nдействует `deny`"
-        }
-      ],
-      "es": [
-        {
-          "before": "necesitan `permissions.bot.api: allow`; el valor\npor defecto es `deny`",
-          "after": "necesitan un nivel explícito `allow` o `ask` para `permissions.bot.api`; el valor\npor defecto es `deny`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "permissions",
-    "reason": "Core 0.406 botApiAllowed accepts allow or ask, with deny as default; describe both explicit enabling levels. MCP client approval remains separate.",
-    "source": "https://github.com/WireCatLabs/cli-core/blob/v0.406.0/src/sends/permissions.ts",
-    "replacements": {
-      "en": [
-        {
-          "before": "unless `permissions.bot.api` is `allow`; its default is `deny`",
-          "after": "unless `permissions.bot.api` is `allow` or `ask`; its default is `deny`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "пока `permissions.bot.api` не равен `allow`. По умолчанию это `deny`",
-          "after": "пока `permissions.bot.api` не равен `allow` или `ask`. По умолчанию это `deny`"
-        }
-      ],
-      "es": [
-        {
-          "before": "MCP las oculta salvo que `permissions.bot.api` sea `allow`; el valor por defecto es `deny`",
-          "after": "MCP las oculta salvo que `permissions.bot.api` sea `allow` o `ask`; el valor por defecto es `deny`"
         }
       ]
     }

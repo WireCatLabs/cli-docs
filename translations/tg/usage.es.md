@@ -826,7 +826,18 @@ Un grupo puede tener un canal guardado como remitente por defecto; Telegram lo h
 
 ### Funciones aún no disponibles
 
-Varias fotos en un solo mensaje siguen en [próximas mejoras](./roadmap.md).
+Enviar stickers y ubicaciones sigue en la [hoja de ruta](./roadmap.md). Ya puedes enviar varias fotos o vídeos en un álbum repitiendo `--photo` o `--file`.
+
+### Guarda una respuesta para revisarla
+
+Un borrador de Telegram te permite revisar el texto en la aplicación y pulsar Enviar personalmente:
+
+```sh
+tg personal messages send me "Review this text" --draft
+tg personal messages send CHAT "A **formatted** reply" --draft --md --reply-to MESSAGE_ID
+```
+
+El comando reemplaza el borrador existente en ese chat o tema del foro y no envía ningún mensaje. Los borradores admiten `--topic`, `--reply-to`, `--md`, `--html` y `--no-preview`. El permiso independiente `drafts` controla el guardado. Se rechazan texto vacío, adjuntos, programación y otras opciones exclusivas del envío; este comando no borra borradores. El recibo devuelve `saved: true`, en lugar de un mensaje enviado.
 
 ## Grupos y canales
 

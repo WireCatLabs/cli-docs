@@ -63,7 +63,7 @@ sus propias aprobaciones y puede permitir una llamada sin volver a preguntar. Us
 
 ## Permitir que un agente cambie sus propios límites
 
-MCP oculta por defecto los comandos que cambian lo que podrá hacer una ejecución posterior: `config set|unset`,
+MCP conserva visibles los comandos que cambian lo que podrá hacer una ejecución posterior, pero los marca como no disponibles por defecto: `config set|unset`,
 listas de destinatarios, reglas de chat y respuesta, consentimientos, horarios, `server install`, `skill install`,
 claves de modelos, temporizadores del archivo de adjuntos y `flood clear`. Una clave los habilita:
 
@@ -72,22 +72,29 @@ tg work config set permissions.mcp.authority allow
 ```
 
 Para el servidor de un bot, añade `--bot`: `tg support config set permissions.mcp.authority allow --bot`.
-El valor por defecto es `deny`; tanto `allow` como `ask` ofrecen esos comandos. Mantén `deny` en el perfil
+El valor por defecto es `deny`; tanto `allow` como `ask` permiten ejecutar esos comandos. Mantén `deny` en el perfil
 que entregues a un agente: al habilitarlo, el agente podrá aflojar sus propios permisos. No puede cambiar
 la clave mediante `config set`, porque esa misma clave controla el comando. Consulta el [servidor MCP](./mcp.md#commands-that-change-what-a-later-run-may-do).
 
 ## Llamadas directas a Bot API
 
 Las llamadas `bot api <operation>` eluden la protección de envío y la lista de destinatarios del bot.
-MCP las oculta salvo que `permissions.bot.api` sea `allow`; el valor por defecto es `deny`, y un permiso
+MCP las muestra como no disponibles salvo que `permissions.bot.api` sea `allow` o `ask`; el valor por defecto es `deny`, y un permiso
 más general `permissions.bot: allow` no las habilita. Establece este permiso aparte desde una terminal:
 
 ```sh
 tg support config set --bot permissions.bot.api allow
 ```
 
-Vuelve a `deny` para ocultar esas herramientas. El agente no puede cambiar esta clave mediante MCP.
+Vuelve a `deny` para impedir su ejecución; las herramientas seguirán visibles. El agente no puede cambiar esta clave mediante MCP.
 
 ## Límites y reglas detalladas
 
 Un agente que pueda editar archivos de configuración o ejecutar comandos de terminal sin restricciones puede cambiar estas configuraciones. Lea [seguridad](./security.md) antes de otorgar ese acceso. Para permisos anidados y claves de comando exactas, consulte [qué puede hacer un perfil](./configuration-reference.md#what-a-profile-may-do).
+
+## Guardar un borrador
+
+`messages send --draft` usa el permiso independiente `drafts`. Guardar cambia el borrador de Telegram de ese chat o tema, no envía ningún mensaje y no registra el texto del borrador en el diario. `deny` o `readonly` impide guardar; `ask` solicita confirmación en la CLI y sigue el flujo de aprobación del cliente MCP.
+
+En MCP, el permiso del comando también debe permitir `messages send`. Configurar `drafts: allow` no anula `messages.send: deny` ni `readonly`.
+
