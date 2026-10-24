@@ -90,8 +90,8 @@ Notes on these rows:
 - **Limits.** tg has a list of chats it may send to and 30 sends an hour by default. telegram-mcp limits the chats,
   mcp-telegram limits its request rate, tdl has a delay between requests, tlgr limits the commands.
 - **Retry identity.** Reuse the same operation ID for an unscheduled send retry. Inspect the send journal and Telegram when an outcome is unknown; scheduled sends must be checked rather than blindly repeated. tlgr documents a distinct exit code for unknown outcomes.
-- **Loosen its own limits.** Over MCP, tg hides the commands that change what a later run may do (settings,
-  recipient lists, schedules) until you open them from a terminal.
+- **Loosen its own limits.** Over MCP, tg lists commands that change what a later run may do (settings,
+  recipient lists, schedules), marks them unavailable and names the permission to set from a terminal.
 
 <a id="install-and-licence" />
 
