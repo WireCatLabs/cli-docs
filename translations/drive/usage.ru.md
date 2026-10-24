@@ -219,11 +219,11 @@ drive personal documents context DOC_ID --json
 Эти команды читают Google напрямую: импортировать файл заранее не нужно.
 
 ```sh
-drive personal files download FILE_ID --out ./download.bin
-drive personal files export DOC_ID --format pdf --out ./document.pdf
-drive personal files export DOC_ID --format docx --out ./document.docx
-drive personal files export SHEET_ID --format xlsx --out ./workbook.xlsx
-drive personal files export SHEET_ID --format csv --out ./sheet.csv
+drive personal files download FILE_ID --output ./download.bin
+drive personal files export DOC_ID --format pdf --output ./document.pdf
+drive personal files export DOC_ID --format docx --output ./document.docx
+drive personal files export SHEET_ID --format xlsx --output ./workbook.xlsx
+drive personal files export SHEET_ID --format csv --output ./sheet.csv
 ```
 
 `download` сохраняет байты загруженного файла. `export` просит Google преобразовать собственный

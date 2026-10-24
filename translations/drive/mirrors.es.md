@@ -40,6 +40,28 @@ vecinas y otras pestañas. La primera fila se convierte en una cabecera en negri
 Revisa el resultado si importan las fórmulas, el formato o la estructura del libro: el espejo no es
 una copia de seguridad completa de documentos de Google.
 
+## Imágenes locales
+
+Documentos de Google solo copia una imagen desde una dirección web pública, así que una imagen local como
+`![chart](pics/chart.png)` queda como ese texto en el Documento salvo que des a la sincronización la dirección de tu túnel:
+
+```sh
+drive personal mirrors sync --public-url https://<name>.ts.net
+```
+
+Entonces Drive sirve cada imagen local nueva a través del túnel, en una dirección aleatoria que solo funciona
+mientras Google copia la imagen, y la cierra justo después. No se comparte nada de tu Google Drive, y Google
+guarda su propia copia dentro del Documento. Es el mismo túnel que usas para el [MCP remoto](./remote.md);
+debe reenviar al `--port` de este ordenador (8765 por defecto). Si `drive mcp --http` ocupa ese puerto,
+detenlo durante la sincronización o pasa otro `--port` y apunta el túnel allí; la sincronización no empieza
+mientras el puerto esté ocupado.
+
+Solo se insertan archivos PNG, JPEG y GIF de menos de 50 MB dentro de la carpeta espejada. Cualquier otra
+imagen queda como texto, con un aviso. Si Google no puede obtener una imagen, el resto del Documento se
+escribe igualmente, la imagen queda como texto con un aviso y la siguiente sincronización con `--public-url`
+lo intenta de nuevo. Una imagen que ya está en el Documento se mantiene en las siguientes sincronizaciones sin
+`--public-url`. `mirrors watch` acepta las mismas dos opciones.
+
 ## Elegir un lado tras un conflicto
 
 Si ambos lados cambian la misma parte, la sincronización informa del conflicto y termina con un

@@ -103,8 +103,8 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await mirror.text()).toContain("drive personal mirrors remove MIRROR_ID")
     const usage = await request.get(`/llms.mdx/docs/${prefix}drive/usage/content.md`)
     expect(usage.ok()).toBe(true)
-    expect(await usage.text()).toContain("drive personal files download FILE_ID --out ./download.bin")
-    expect(await usage.text()).toContain("drive personal files export DOC_ID --format pdf --out ./document.pdf")
+    expect(await usage.text()).toContain("drive personal files download FILE_ID --output ./download.bin")
+    expect(await usage.text()).toContain("drive personal files export DOC_ID --format pdf --output ./document.pdf")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google/)
   })
 
