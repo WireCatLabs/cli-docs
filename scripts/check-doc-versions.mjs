@@ -1,14 +1,14 @@
 import { readdirSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 
-// Immutable evidence URLs and release history retain revisions. User guides install latest.
+// Immutable evidence URLs, release history and the comparison pages (which name the version each mark was checked against) retain revisions. User guides install latest.
 const walk = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory() ? walk(join(dir, entry.name)) : [join(dir, entry.name)],
   )
 const findings = []
 for (const file of walk("content/docs")) {
-  if (!/\.mdx?$/.test(file) || /\/(changelog|roadmap)(\.|\/)/.test(file)) continue
+  if (!/\.mdx?$/.test(file) || /\/(changelog|roadmap|compare)(\.|\/)/.test(file)) continue
   const lines = readFileSync(file, "utf8").split("\n")
   lines.forEach((line, index) => {
     const editorialArtifact =
