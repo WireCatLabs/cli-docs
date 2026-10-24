@@ -58,6 +58,8 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Second task for the same thing | duplicate; merge | дубликат; объединить | duplicado; fusionar | A merge moves messages to the kept task and closes the duplicate; it can be undone and deletes nothing. |
 | Source collection | folder | папка | carpeta | Explain whether it is a local file folder, Google folder or messenger chat folder. |
 | Shared local file of the CLIs | local store | локальное хранилище | almacén local | The one file on the computer (`wirecat.db`) where tg, max and memo keep messages, mail, notes and records. A messenger's own pages may call its chat copy the local archive. |
+| The real thing a record is about | entity | сущность | entidad | A person, an event or a document as the owner means it, with no provider id. Used on technical and developer pages; task guides say person, event or document. |
+| One source's copy of an entity | source record | запись источника | registro de origen | What one source says about an entity: a Telegram user, a Zoom meeting, a calendar entry, a Drive file. It keeps the provider's id in `external_id`. Not a synonym for source (the evidence item). |
 | Pointer to one stored item | reference | ссылка на источник | referencia | The typed identifier a result returns, such as `note:12` or `msg:telegram/1/77/42`. Distinct from a link written inside a note. |
 | Link inside a note | link | ссылка | enlace | A note's link to another note, a person or a message. A name in plain text is not a link. |
 | Sources behind a record | evidence | доказательство | evidencia | The references that show a memory or fact. |

@@ -55,6 +55,42 @@ belongs to an event. A project holds tasks and decisions. A memory and a tag can
 to Account stands for all of them. Colours group the cards: people, chats and mail, the account
 they came through, documents and meetings, work, and the two that attach to anything.
 
+### Entities and source records
+
+The store keeps two kinds of record. An **entity** is the real thing you mean: a person, an event,
+a document. A **source record** is what one source says about it: a Telegram user, an email
+address, a Zoom meeting. The source record keeps the provider's own id in `external_id` and points
+at its entity. One entity can gather source records from several sources and accounts, so the same
+meeting in Zoom and in your calendar is one event, and the same person in Telegram and in mail is
+one person.
+
+```mermaid One entity, several source records
+graph LR
+  TgUser("Telegram user<br>source record") --> Person("Person<br>entity")
+  MailAddr("Email address<br>source record") --> Person
+  ZoomMeeting("Zoom meeting<br>source record") --> Event("Event<br>entity")
+  WorkEntry("Work calendar entry<br>coming") -.-> Event
+  HomeEntry("Personal calendar entry<br>coming") -.-> Event
+  DriveFile("Drive file<br>coming") -.-> Document("Document<br>entity")
+  LocalFile("File in a folder<br>coming") -.-> Document
+  classDef entity fill:var(--diagram-blue-bg),stroke:var(--diagram-blue-line),color:var(--diagram-blue-fg)
+  classDef source fill:var(--diagram-green-bg),stroke:var(--diagram-green-line),color:var(--diagram-green-fg)
+  classDef coming fill:var(--diagram-grey-bg),stroke:var(--diagram-grey-line),color:var(--diagram-grey-fg)
+  class Person,Event,Document entity
+  class TgUser,MailAddr,ZoomMeeting source
+  class WorkEntry,HomeEntry,DriveFile,LocalFile coming
+```
+
+In words: a Telegram user and an email address both point at one person. A Zoom meeting points at
+its event. Solid lines exist today; dashed lines are coming. Each link keeps how it was made, and a
+link you made yourself is never replaced by an automatic one ([how links are made](./how-things-are-linked.md#who-makes-a-link)).
+
+Today, people (identities) and events (Zoom meetings) work this way. **Coming in the next cli-core
+release:** calendar entries as source records of events, files as source records of documents, an
+email address on every identity so one address joins one person, and a review list for pairs the
+tools cannot tell apart. The rules every tool follows are in the
+[data-model standard](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md).
+
 ### People and identities
 
 A **person** is one human. An **identity** is how one source knows a person: a Telegram

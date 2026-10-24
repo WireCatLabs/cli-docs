@@ -126,6 +126,13 @@ tg personal tags add work --chat "Book club"
 
 Each stored link records its source: `file` (written in a note file), `owner` (added by you), `suggested` (proposed, not yet confirmed) or `message` (written in a stored message).
 
+A link between an identity and its person also keeps how it was made, how sure it is and who made it, and every move
+of an identity from one person to another is logged, so a wrong link can be undone. The rule for every tool is that
+a link you made is never replaced by an automatic one, and two equally good candidates make no link at all
+([the data-model standard](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+**Coming in the next cli-core release:** the same record for events and documents, and a review list where you
+decide the pairs the tools could not tell apart.
+
 ## Use links in a question
 
 Four requests an agent can answer because of links. Replace the names with yours.

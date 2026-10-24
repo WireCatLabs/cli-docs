@@ -203,6 +203,14 @@ account: () => Promise<AccountKey>
 `index.ts`, а сами они ничего не импортируют из cli-core. Поставщик встреч вроде Zoom подключается так,
 что ядро о нём не знает.
 
+### Хранилище со стороны инструмента
+
+Инструмент обращается к общему хранилищу только через области хранилища cli-core. Он не пишет SQL к общему файлу,
+поэтому следующая миграция его не сломает ([WC-STORE-5](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md#wc-store-5--a-cli-writes-no-sql-against-the-shared-store)).
+Таблицы, нужные только одному инструменту, — контрольные точки, кэши — живут в его собственном файле SQLite рядом с
+общим хранилищем и открываются через `openCache` из `@wirecat/cli-core/store`; они ссылаются на общие строки только по
+id, и другие инструменты их не читают ([WC-DATA-1](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+
 ### Реестры
 
 Чтение документов и описание картинок регистрируются через `registerReader` и `registerImageProvider`,
