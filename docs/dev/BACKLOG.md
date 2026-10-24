@@ -34,6 +34,3 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 - **DOCS-6 · P2 · memo has no roadmap page.** tg, max, zm and drive (v0.25.0) have one, and the global page
   links all four. memo has no `docs/roadmap.md` in its repository; a new page also needs RU/ES translations or
   `pnpm sync` fails. Details: [BACKLOG-NOTES.md](BACKLOG-NOTES.md#docs-6).
-- **DOCS-14 · P2 · `pnpm docs:report-fixture` fails with `store.saveChats is not a function`.** The fixture
-  calls the store API cli-core moved to `store.chats` / `store.messages`; it fails on main too. Start:
-  `scripts/docs-report-fixture.mjs`.

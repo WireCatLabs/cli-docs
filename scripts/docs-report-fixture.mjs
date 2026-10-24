@@ -23,7 +23,9 @@ for (const { name: tool, docsRef, package: packageName } of reviewed) {
   const { openStore } = await import(pathToFileURL(join(base, "store/index.js")))
   const { storedDeps, adminStatisticsService } = await import(pathToFileURL(join(base, "services/index.js")))
   const account = { provider: "fixture", account: "synthetic-owner" }
-  const store = await openStore({ path: join(sandbox.dir, "fixture.db") })
+  const store = await openStore({ path: join(sandbox.dir, `${tool}-fixture.db`) })
+  const chats = store.chats ?? store
+  const messages = store.messages ?? store
   const make = (id, text, day, sender, reply) => ({
     id,
     chatId: "room",
@@ -43,7 +45,7 @@ for (const { name: tool, docsRef, package: packageName } of reviewed) {
   const originalNow = Date.now
   Date.now = () => Date.parse("2026-10-08T12:00:00Z")
   try {
-    await store.saveChats(account, [
+    await chats.saveChats(account, [
       {
         id: "room",
         title: "Synthetic project group",
@@ -53,7 +55,7 @@ for (const { name: tool, docsRef, package: packageName } of reviewed) {
         participantsCount: null,
       },
     ])
-    await store.saveMessages(
+    await messages.saveMessages(
       account,
       "room",
       [
@@ -107,5 +109,5 @@ for (const { name: tool, docsRef, package: packageName } of reviewed) {
 mkdirSync(".docs-tooling/reports/approved-proposals", { recursive: true })
 writeFileSync(".docs-tooling/reports/approved-proposals/report-fixture.json", `${JSON.stringify(results, null, 2)}\n`)
 console.log(
-  "Both reviewed releases: two synthetic questions, one observed answer, one question without an observed answer.",
+  "All reviewed releases: two synthetic questions, one observed answer, one question without an observed answer.",
 )
