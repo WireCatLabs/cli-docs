@@ -73,11 +73,11 @@ Notes on `memo`:
 - **Search.** All six tools search by words and by meaning. This page does not rank them. In `memo`, search by
   meaning uses a local model that `memo models text download` fetches; without it, word search still works.
 - **No LLM key.** Sync and search never call a model. `ask --analyze` calls a model you configure, and only if you ask.
-- **MCP.** `memo mcp` runs on stdio only. There is no HTTP mode yet. It offers 124 tools made from the commands,
+- **MCP.** `memo mcp` runs on stdio only. There is no HTTP mode yet. It offers tools made from the commands,
   writes included, except `mcp`, `upgrade`, `skill install`, `auto start` and `auto stop`. `memo` never sends a
   message or mail.
 - **Safety.** Permissions in the configuration set each command to `deny`, `readonly`, `ask` or `allow`.
-  `MEMO_READ_ONLY=1` removes the writing tools. Memories, facts and actions an agent adds are saved as proposed
+  `MEMO_READ_ONLY=1` marks writing tools unavailable and refuses their calls. Memories, facts and actions an agent adds are saved as proposed
   until you confirm them. Decisions on project proposals are the exception: an agent may make them, with a
   recorded reason, until you set `agent_decisions` to `false`.
 - **Knowledge.** `memo` stores messages and the facts and links you or your agent record, each with the message,
