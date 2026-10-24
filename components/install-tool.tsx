@@ -50,7 +50,7 @@ export function InstallTool({
       className="group min-w-0 scroll-mt-20 rounded-xl border bg-fd-card"
     >
       <summary className="cursor-pointer rounded-xl px-5 py-4 text-center font-semibold hover:bg-fd-muted focus-visible:outline-2 focus-visible:outline-offset-2">
-        {words.install} {tool.name === "tg" ? "Telegram" : "MAX"}
+        {words.install} {tool.displayName ?? (tool.name === "tg" ? "Telegram" : "MAX")}
       </summary>
       <div className="space-y-4 border-t p-5">
         <p className="text-sm text-fd-muted-foreground">{ui.paste}</p>
@@ -58,7 +58,7 @@ export function InstallTool({
           kind="prompt"
           lang={lang}
           text={request ?? ui.prompt(tool.name, tool.package)}
-          tracking={{ tool: tool.name as "tg" | "max", locale: lang, surface: "installation" }}
+          tracking={{ tool: tool.name as "tg" | "max" | "wa", locale: lang, surface: "installation" }}
         />
         <Link href={`/${lang}/docs/agents`} className="inline-block text-sm">
           {words.navigation.agents} →
@@ -76,10 +76,10 @@ export function InstallTool({
               <CopyText
                 lang={lang}
                 text={`npm install -g ${tool.package} && ${tool.name} skill install --for all`}
-                tracking={{ tool: tool.name as "tg" | "max", locale: lang, surface: "installation" }}
+                tracking={{ tool: tool.name as "tg" | "max" | "wa", locale: lang, surface: "installation" }}
               />
               <p className="text-sm font-medium">{ui.login}</p>
-              <CopyText lang={lang} text={`${tool.name} setup`} />
+              <CopyText lang={lang} text={`${tool.name} personal setup`} />
               <Link href={`/${lang}/docs/${tool.name}/sessions`} className="inline-block text-sm">
                 {words.docs} →
               </Link>

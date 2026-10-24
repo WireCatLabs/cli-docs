@@ -6,6 +6,7 @@ import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
 import { homePath } from "./site-routes"
+import { whatsappDescriptions } from "./whatsapp-descriptions"
 import { zoomDescriptions } from "./zoom-descriptions"
 
 export type SiteLocale = keyof typeof seoCopy
@@ -78,7 +79,9 @@ export function documentationDescription(lang: string, slugs: string[], authored
   if (taskDescription) return taskDescription
   if (authored?.trim()) return authored
   const selectedTool = tools.find((candidate) => candidate.name === slugs[0])
-  const reviewed = { drive: driveDescriptions, memo: memoDescriptions }[selectedTool?.name ?? ""]
+  const reviewed = { drive: driveDescriptions, memo: memoDescriptions, wa: whatsappDescriptions }[
+    selectedTool?.name ?? ""
+  ]
   if (reviewed) {
     const description = reviewed[localeOf(lang)][slugs[1] ?? "index"]
     if (!description) throw new Error(`Missing reviewed ${selectedTool?.displayName} description: ${slugs.join("/")}`)

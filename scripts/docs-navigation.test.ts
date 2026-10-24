@@ -147,3 +147,8 @@ it("links every current tool's roadmap from each global roadmap", () => {
     for (const tool of tools) expect(roadmap).toContain(`](./${tool.name}/roadmap.md)`)
   }
 })
+
+it("keeps the current section when switching to or from WhatsApp", () => {
+  expect(messengerHref("/ru/docs/wa/installation", "ru", "tg", ["tg/installation"])).toBe("/ru/docs/tg/installation")
+  expect(messengerHref("/es/docs/tg/usage", "es", "wa", ["wa/usage"])).toBe("/es/docs/wa/usage")
+})

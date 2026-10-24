@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 for (const lang of ["en", "ru", "es"])
-  for (const tool of ["tg", "max"]) {
+  for (const tool of ["tg", "max", "wa"]) {
     test(`${lang}/${tool}: reference entry is small and legacy anchors reach the right partition`, async ({
       page,
       request,

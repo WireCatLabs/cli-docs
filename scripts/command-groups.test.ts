@@ -20,7 +20,7 @@ it("covers every released Drive sidebar page with distinct localized metadata", 
 })
 
 it("partitions every generated command exactly once while retaining shared options and exit codes", () => {
-  for (const tool of ["tg", "max"]) {
+  for (const tool of ["tg", "max", "wa"]) {
     const source = readFileSync(`content/docs/${tool}/commands.md`, "utf8")
     const parts = splitCommandReference(source, "en")
     const commands = commandGroups.flatMap((group) => [...commandReferences(parts[group]).keys()])
@@ -43,4 +43,13 @@ it("routes existing bot/admin/personal anchors, including multiword commands and
   expect(commandGroupForAnchor("#max-session-start")).toBe("setup")
   expect(commandGroupForAnchor("#tg-messages-search")).toBe("personal")
   expect(commandGroupForAnchor("#%invalid")).toBe("personal")
+})
+
+it("gives every released WhatsApp page a distinct localized description", () => {
+  const sidebar = JSON.parse(readFileSync("content/upstream/wa/meta.json", "utf8")) as { pages: string[] }
+  const pages = sidebar.pages.filter((page) => !page.startsWith("---"))
+  for (const lang of seoLocales) {
+    const descriptions = pages.map((page) => documentationDescription(lang, page === "index" ? ["wa"] : ["wa", page]))
+    expect(new Set(descriptions).size).toBe(pages.length)
+  }
 })

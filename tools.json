@@ -24,6 +24,19 @@
     "docsRef": "v0.83.0"
   },
   {
+    "name": "wa",
+    "displayName": "WhatsApp",
+    "repo": "WireCatLabs/whatsapp-cli",
+    "package": "@wirecat/whatsapp-cli",
+    "lang": "en",
+    "docsRef": "v0.6.0",
+    "summary": {
+      "en": "Your WhatsApp chats, files and group context from the terminal and through your AI agent.",
+      "ru": "Ваши чаты WhatsApp, файлы и контекст групп — в терминале и через ИИ-агента.",
+      "es": "Tus chats, archivos y contexto de grupos de WhatsApp desde el terminal y con tu agente de IA."
+    }
+  },
+  {
     "name": "drive",
     "displayName": "Google Drive",
     "repo": "WireCatLabs/drive-cli",

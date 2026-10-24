@@ -1,7 +1,7 @@
 import siteConfig from "@/site.config.json"
 
 export type InstallationEventContext = {
-  tool: "tg" | "max"
+  tool: "tg" | "max" | "wa"
   locale: string
   surface: "hero" | "footer" | "closing" | "installation"
 }
@@ -38,14 +38,15 @@ export function flushSiteEvents(): void {
 
 export function trackSiteEvent(name: SiteEvent["name"], context: InstallationEventContext): void {
   if (typeof window === "undefined" || window.location.hostname !== productionHostname) return
-  if (!["en", "ru", "es"].includes(context.locale) || !["tg", "max"].includes(context.tool)) return
+  if (!["en", "ru", "es"].includes(context.locale) || !["tg", "max", "wa"].includes(context.tool)) return
   const queue = eventQueue(window as TrackingWindow)
   if (queue.length < 50)
     queue.push({ name, context: { tool: context.tool, locale: context.locale, surface: context.surface } })
   flushSiteEvents()
 }
 
-export function copiedInstallationTool(command: string): "tg" | "max" | undefined {
+export function copiedInstallationTool(command: string): "tg" | "max" | "wa" | undefined {
+  if (/@wirecat\/whatsapp-cli\b/.test(command)) return "wa"
   return (/@wirecat\/(tg|max)-cli\b/.exec(command)?.[1] ?? /-Tool (tg|max)\b/.exec(command)?.[1]) as
     | "tg"
     | "max"
