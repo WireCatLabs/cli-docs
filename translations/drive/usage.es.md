@@ -220,11 +220,11 @@ y editores observados. Para hechos revisados o vínculos con personas/proyectos,
 Estos comandos leen Google directamente; no necesitas importar el archivo primero.
 
 ```sh
-drive personal files download FILE_ID --out ./download.bin
-drive personal files export DOC_ID --format pdf --out ./document.pdf
-drive personal files export DOC_ID --format docx --out ./document.docx
-drive personal files export SHEET_ID --format xlsx --out ./workbook.xlsx
-drive personal files export SHEET_ID --format csv --out ./sheet.csv
+drive personal files download FILE_ID --output ./download.bin
+drive personal files export DOC_ID --format pdf --output ./document.pdf
+drive personal files export DOC_ID --format docx --output ./document.docx
+drive personal files export SHEET_ID --format xlsx --output ./workbook.xlsx
+drive personal files export SHEET_ID --format csv --output ./sheet.csv
 ```
 
 `download` guarda los bytes de un archivo subido. `export` pide a Google convertir un documento

@@ -22,18 +22,18 @@ Un agente busca y lee los documentos importados sin que nada de lo que ejecute p
    drive mcp --tools --read-only
    ```
 
-   enumera los comandos que ofrecería el servidor MCP con el bloqueo; ninguno escribe
+   enumera comandos con su disponibilidad actual; las escrituras siguen visibles pero se rechazan
 
 3. ```sh
    drive mcp --read-only
    ```
 
-   sirve tres herramientas por stdio — drive_tools_search y luego drive_read; drive_write no se ofrece
+   sirve tres herramientas por stdio — drive_tools_search, drive_read y drive_write; las escrituras siguen bloqueadas
 
 Qué mirar:
 
 - DRIVE_READ_ONLY=1 en el entorno del agente equivale a --read-only en cada comando que ejecute
-- no se ofrecen los comandos que necesitan un permiso de Google que el inicio de sesión no tiene
+- los comandos sin la autorización Google necesaria siguen visibles con un motivo de indisponibilidad
 
 El texto que el agente lee en los documentos son datos, nunca instrucciones.
 

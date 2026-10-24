@@ -3986,7 +3986,7 @@
   {
     "tool": "drive",
     "slug": "scenarios",
-    "reason": "Drive 0.28.1 requires explicit profiles and retains denied commands with availability metadata (Drive PR189/Core 0.408). The bundled agent-access scenario still describes older discovery; correct only this scenario while retaining the actual read-only refusal. Source correction is submitted separately.",
+    "reason": "Shared scenario templates omit profile words by design; copyable website examples need an explicit profile. Drive 0.29.0 ships the corrected availability prose, so only the profile replacements remain.",
     "replacements": {
       "en": [
         {
@@ -3996,18 +3996,6 @@
         {
           "before": "drive mcp --read-only",
           "after": "drive personal mcp --read-only"
-        },
-        {
-          "before": "lists the commands the MCP server would offer under the lock; none of them writes",
-          "after": "lists commands with their current availability; writes stay visible but are refused"
-        },
-        {
-          "before": "serves three tools on stdio — drive_tools_search, then drive_read; drive_write is not offered",
-          "after": "serves three tools on stdio — drive_tools_search, drive_read and drive_write; writes remain refused"
-        },
-        {
-          "before": "commands that need a Google grant the sign-in lacks are not offered",
-          "after": "commands that need a Google grant the sign-in lacks stay visible with an unavailable reason"
         }
       ],
       "ru": [
@@ -4018,18 +4006,6 @@
         {
           "before": "drive mcp --read-only",
           "after": "drive personal mcp --read-only"
-        },
-        {
-          "before": "показывает команды, которые MCP-сервер предложит под запретом изменений; ни одна из них ничего не записывает",
-          "after": "показывает команды с текущей доступностью; запись остаётся видимой, но запрещена"
-        },
-        {
-          "before": "запускает три инструмента на stdio — drive_tools_search, затем drive_read; drive_write не предлагается",
-          "after": "запускает три инструмента на stdio — drive_tools_search, drive_read и drive_write; запись по-прежнему запрещена"
-        },
-        {
-          "before": "команды, которым нужно разрешение Google, не выданное при входе, не предлагаются",
-          "after": "команды без нужного разрешения Google остаются видимыми с причиной недоступности"
         }
       ],
       "es": [
@@ -4040,18 +4016,6 @@
         {
           "before": "drive mcp --read-only",
           "after": "drive personal mcp --read-only"
-        },
-        {
-          "before": "enumera los comandos que ofrecería el servidor MCP con el bloqueo; ninguno escribe",
-          "after": "enumera comandos con su disponibilidad actual; las escrituras siguen visibles pero se rechazan"
-        },
-        {
-          "before": "sirve tres herramientas por stdio — drive_tools_search y luego drive_read; drive_write no se ofrece",
-          "after": "sirve tres herramientas por stdio — drive_tools_search, drive_read y drive_write; las escrituras siguen bloqueadas"
-        },
-        {
-          "before": "no se ofrecen los comandos que necesitan un permiso de Google que el inicio de sesión no tiene",
-          "after": "los comandos sin la autorización Google necesaria siguen visibles con un motivo de indisponibilidad"
         }
       ]
     }
