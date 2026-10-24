@@ -45,7 +45,7 @@ Encuentra los mensajes con más reacciones guardadas.
 **Comando:**
 
 ```sh
-max personal stats messages top --chat "Поход" --measure reactions --limit 3 --json
+max personal stats messages top 'chat:"Поход"' --measure reactions --limit 3 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -69,7 +69,7 @@ Compara a las personas por sus respuestas observadas a preguntas.
 **Comando:**
 
 ```sh
-max personal stats contacts top --chat "Поход" --measure answers --limit 3 --json
+max personal stats contacts top 'chat:"Поход"' --measure answers --limit 3 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -99,7 +99,7 @@ Encuentra preguntas antiguas sin respuesta directa observada.
 **Comando:**
 
 ```sh
-max personal stats messages unanswered --chat "Поход" --older-than 24h --json
+max personal stats messages unanswered 'chat:"Поход"' older_than:24h --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -125,7 +125,7 @@ Consulta cuántas respuestas se observaron y cuánto tardaron para la persona el
 **Comando:**
 
 ```sh
-max personal stats contacts responses --chat "Поход" --answerer "Алекс" --json
+max personal stats contacts responses 'chat:"Поход"' --answerer "Алекс" --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -204,7 +204,7 @@ Encuentra publicaciones vistas con poca conversación guardada.
 **Comando:**
 
 ```sh
-max personal stats messages discussion --chat "Новости" --min-views 100 --max-replies 0 --json
+max personal stats messages discussion 'chat:"Новости"' min_views:100 max_replies:0 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -245,7 +245,7 @@ max personal stats messages counters show --chat "Поход" --counters views,r
 Antes de consultar recuentos nuevos, pide los mensajes exactos y los límites.
 
 ```sh
-max personal stats messages counters refresh --chat "Поход" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+max personal stats messages counters sync --chat "Поход" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
 ```
 
 > **Plan:** Como máximo 20 mensajes y 30 segundos. Se admiten visitas y reacciones.

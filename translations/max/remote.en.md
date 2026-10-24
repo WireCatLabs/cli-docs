@@ -166,7 +166,7 @@ Those apps must log in again with a new code. Your MAX session stays logged in.
 
 - **The app says it cannot connect:** open `https://<устройство>.<сеть>.ts.net/.well-known/oauth-protected-resource/mcp` in a browser. It should return a short JSON document. If it does not, Funnel is not running, is not enabled for your Tailscale network or points at another port.
 - **The login page says “Too many wrong codes”:** five wrong codes disable it until `max personal mcp --http` restarts. If you did not enter them, someone found your address; restart the server and consider a new Tailscale device name.
-- **It connects but no tools appear:** `max personal mcp doctor` checks that the MCP server starts and provides a tool list. It does not check the MAX login or tunnel. A command that contacts MAX, such as `max personal account show`, checks account access.
+- **It connects but no tools appear:** `max personal mcp check` checks that the MCP server starts and provides a tool list. It does not check the MAX login or tunnel. A command that contacts MAX, such as `max personal account show`, checks account access.
 - **Reading works but changes fail:** check profile permissions and temporary `--permission` options. `deny` and `readonly` refuse changes regardless of the app's approval.
 - **You need a record of calls:** use `max personal runs list`. Successful calls appear only when recording is enabled; failures are saved by default unless recording was disabled with `"record": false` or `--no-record` ([diagnostics guide](./diagnostics.md)).
 
@@ -206,7 +206,7 @@ The app must pass these bytes to the agent's file tools. Whether the agent can o
 
 Ordinary extraction reads text layers and simple document formats on your computer. By default, the agent uses its own vision or OCR tools for scans, photos, handwriting and complex layouts. It reads every page, saves the text verbatim and marks unclear passages. Quality depends on resolution, language, handwriting, layout and the agent's tools. The agent does not follow instructions inside the attachment.
 
-Save the result with `attachments text set` (MCP: `max_write`, command `attachments text set`), then check a `content:` search. Receiving bytes alone does not add text to the index.
+Save the result with `attachments update` (MCP: `max_write`, command `attachments update`), then check a `content:` search. Receiving bytes alone does not add text to the index.
 
 Use `attachments extract --ocr` for batch extraction through `models.ocr`. It calls the configured external AI service and sends supported images and scanned PDF pages to it. It runs only when explicitly called, never during file transfer or when the agent reads a file itself. Formats and text search are covered in the [attachments guide](./attachments.md).
 
@@ -222,7 +222,7 @@ In MCP, call `max_read`, command `attachments show`, with `page: 1` and the mess
 
 `pdf.source_sha256` and `pdf.source_bytes` describe the source PDF; the top-level `sha256` and `total_bytes` describe the page image. `--expected-fingerprint` checks the source PDF. `--page` cannot be combined with `--offset-bytes` or `--chunk-bytes`. By default, the PDF can be up to 50 MiB without a separate page-count limit; a PNG allows 4000 pixels per side and 8 MiB per page. All three values are configurable.
 
-Rendering a page image does not call an external OCR service or add text to the index. After viewing every page, the agent calls `attachments text set` and checks a `content:` search. Verify numbers and complex layouts against the images; quality depends on the source document and the agent's tools.
+Rendering a page image does not call an external OCR service or add text to the index. After viewing every page, the agent calls `attachments update` and checks a `content:` search. Verify numbers and complex layouts against the images; quality depends on the source document and the agent's tools.
 
 ## Increase file or PDF preview size
 

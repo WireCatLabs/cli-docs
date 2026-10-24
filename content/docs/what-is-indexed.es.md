@@ -75,12 +75,12 @@ Para muchos escaneos puedes elegir un servicio de modelos. Es el único sitio do
 Una nota de voz se puede buscar cuando tiene transcripción. La herramienta la guarda y la encuentra con una palabra normal o con `transcript:`.
 
 ```sh
-max personal models audio download gigaam-v3
+max personal models download gigaam-v3
 max personal messages transcribe "Book club" 204
 max personal search messages 'transcript:invoice'
 ```
 
-- Un modelo de voz funciona en tu ordenador. La grabación no sale de él. Descarga un modelo una vez con `models audio download`; no se descarga solo.
+- Un modelo de voz funciona en tu ordenador. La grabación no sale de él. Descarga un modelo una vez con `models download`; no se descarga solo.
 - Modelos: `parakeet-v3` cubre 25 idiomas, `gigaam-v3` es el mejor para ruso.
 - `tg` también puede usar la transcripción del propio Telegram si tu cuenta la tiene (`transcribe_with`: `auto`, `messenger` o `local`). `max` siempre usa el modelo de tu ordenador.
 - La transcripción local lee una grabación Ogg Opus completa. Las grabaciones largas necesitan más memoria y tiempo.

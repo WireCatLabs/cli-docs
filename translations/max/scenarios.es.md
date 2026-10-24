@@ -87,7 +87,7 @@ Recupera un mensaje, un archivo o una nota de voz cuando solo recuerdas una pala
    mensajes, notas, el texto de archivos y transcripciones de voz en una sola búsqueda, la mejor coincidencia primero
 
 2. ```sh
-   max contacts timeline Anna
+   max contacts events Anna
    ```
 
    todo lo que una persona escribió o donde se la mencionó, lo más reciente primero, desde el almacén

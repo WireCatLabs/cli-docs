@@ -57,11 +57,11 @@ The table covers **max**, [PyMax](https://github.com/MaxApiTeam/PyMax), [tsmax](
 | **Agents and safety** | | | | | | |
 | An agent reads and writes in MAX through MCP | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ |
 | An agent with a terminal works without MCP: a skill explains the commands | ✅ | ❌ | ❌ | 🟡 | ❌ | ❌ |
-| An agent only reads until you allow writing | ✅ | ➖ | ➖ | ❌ | ❌ | ➖ |
-| Ask you before every send | ✅ | ➖ | ➖ | ❌ | ❌ | ➖ |
+| Restrict an agent to reading | ✅ | ➖ | ➖ | ❌ | ❌ | ➖ |
+| Configurable approval before sending | ✅ | ➖ | ➖ | ❌ | ❌ | ➖ |
 | Allow sending only to a list of chats | ✅ | ➖ | ➖ | ❌ | ❌ | ➖ |
 | Limit the number of sends per hour | ✅ | ➖ | ➖ | ❌ | ❌ | ➖ |
-| Retrying a send does not create a second message | ✅ | ➖ | ➖ | ❌ | ❌ | ➖ |
+| Retry a supported send with the same operation ID | ✅ | ➖ | ➖ | ❌ | ❌ | ➖ |
 | The token is kept in the system keyring, not in a file (without a keyring, `max` writes a file with mode 0600) | ✅ | ❌ | ❌ | 🟡 | 🟡 | ➖ |
 
 **Reply and send.** In `max`, repeat `--photo` for an album. Several `--file` options go out as separate messages, and
@@ -81,14 +81,11 @@ personal account has no such comments.
 
 **Agents and safety.** PyMax, tsmax and Bot API get ➖ where the program's author would have to write the protection:
 they are libraries and have no ready settings.
-The `max` MCP server gives an agent three tools: find a command, read and write. Through them 227 of the 268 personal
-account commands are available (counted from `max commands --json` and the server's tool list), writes
-included. Profile permissions apply to MCP too. The bot has a separate server. Login and logout, updates, commands that
+The `max` MCP server gives an agent three tools: find a command, read and write. They expose released commands as profile permissions allow, including writes. Profile permissions apply to MCP too. The bot has a separate server. Login and logout and commands that
 run without stopping (`watch`, `serve`), and commands with which an agent could lift its own limits (the allowed chat
 list, permissions, auto-replies, schedules) are not offered in MCP; `permissions.mcp.authority` opens some of them, and
 it is `deny` by default. Raw bot operations separately need `permissions.bot.api: allow` or `ask`. See the
-[MCP guide](./mcp.md) for more. To reply, the agent writes a draft and sends it only after your "yes"
-to that text. The default limit is 30 sends per hour per profile, and the error says when you can send again. max-mcp
+[MCP guide](./mcp.md) for more. Profile permissions and the agent application's approval settings determine when sending is allowed; MCP itself has no confirmation form. Configure these before connecting an agent. The default limit is 30 sends per hour per profile, and the error says when you can send again. max-mcp
 has one limit: a list of allowed folders for files. max-mcp keeps its token in a file with mode 0600, and
 mcp-max-messenger reads it from the `MAX_TOKEN` environment variable. PyMax and tsmax keep the token in the
 `session.db` session file.

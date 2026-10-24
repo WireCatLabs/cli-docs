@@ -38,19 +38,19 @@ ChatGPT and Claude **in a browser** connect through `max personal mcp --http`; s
 
 ## Connecting
 
-First run `max personal setup --agent none` in your local terminal to log in to MAX; MCP does not perform login. Then `max personal mcp setup` connects the application separately. Your agent can read `max skill show` before login; it explains both steps.
+First run `max personal setup --agent none` in your local terminal to log in to MAX; MCP does not perform login. Then `max personal mcp add` connects the application separately. Your agent can read `max skill show` before login; it explains both steps.
 
 **Codex or Claude Code on this computer:**
 
 ```sh
-max personal mcp doctor                 # проверяет запуск MCP и список инструментов
-max personal mcp setup codex           # добавляет сервер в Codex
-max personal mcp setup claude-code     # или в Claude Code
+max personal mcp check                 # проверяет запуск MCP и список инструментов
+max personal mcp add codex           # добавляет сервер в Codex
+max personal mcp add claude-code     # или в Claude Code
 ```
 
-For another profile, put its name first: `max work mcp setup codex`. Setup uses the application's own commands and leaves other servers intact. If an entry with the same name exists, remove it in the application before repeating setup. If the profile exposes write tools, check permissions, then repeat with `--allow-writes`. This flag confirms installation only: it does not change profile permissions.
+For another profile, put its name first: `max work mcp add codex`. Setup uses the application's own commands and leaves other servers intact. If an entry with the same name exists, remove it in the application before repeating setup. If the profile exposes write tools, check permissions, then repeat with `--allow-writes`. This flag confirms installation only: it does not change profile permissions.
 
-`mcp doctor` reads no messages and does not log in to MAX. Success means MCP starts and lists tools; it does not prove the session is valid. `potential_writes` counts tools without the read-only annotation. Web and mobile need a separate [remote connection](./remote.md).
+`mcp check` reads no messages and does not log in to MAX. Success means MCP starts and lists tools; it does not prove the session is valid. `potential_writes` counts tools without the read-only annotation. Web and mobile need a separate [remote connection](./remote.md).
 
 **Claude Code manually:**
 
@@ -100,6 +100,30 @@ Bots have their own server, `max <имя> bot mcp`; see [a bot for your agent](.
 
 Profile `permissions` controls access ([permissions reference](./configuration-reference.md#права-доступа)). `deny` blocks a command; `readonly` allows reading; `ask` and `allow` permit the requested write. The server has no confirmation form: configure approval in the agent application. Terminal commands at `ask` still require an answer or explicit flag. An agent deletes messages only for itself, never for everyone. `--permission ключ=уровень` tightens permissions only for this server process and never loosens them. `MAX_PROFILE_LOCK` can fix the profile.
 
+### What MCP does not offer
+
+Profile permissions limit the agent's commands. Commands that change what future runs may do (`config set`, `recipients add`, `replies add`, `schedule command`, `skill install` and similar operations) are offered with `permissions.mcp.authority: allow` or `ask`; the default is `deny`. The agent cannot change `permissions.mcp` or `permissions.bot.api`, including by replacing the whole `permissions` object: the owner sets them in the terminal.
+
+Archive writes, server control, model downloads and report creation are also available through MCP, with their own keys such as `store.backup`, `server.start`, `models.download`, `doctor.reports.create`. Their default is `ask`: the terminal requests confirmation, while MCP permits the requested action without a confirmation form. Raw `bot api` separately requires explicit `permissions.bot.api: allow` or `ask`; a broader `bot: allow` does not enable it.
+
+The following commands are hidden with default permissions. Changes to future authority and raw bot operations become available through the keys above. Login, persistent processes and local-file uploads through `bot uploads put` remain unavailable even when those keys permit access.
+
+| Commands | Why |
+| --- | --- |
+| `setup`, `session` | login and logout are performed by a person |
+| `upgrade`, `complete` | update the program and terminal completion |
+| `serve`, `watch`, `mcp`, `bot watch`, `bot mcp` | run until stopped; an agent call must finish |
+| `config set`, `config unset`, `skill install`, `flood clear`, `models keys set`, `models keys remove` | change what future runs can do; otherwise an agent could remove read-only restrictions |
+| `recipients add`, `recipients remove`, `recipients clear`, `chats rules set`, `chats rules unset` | same reason |
+| `replies add`, `replies on`, `replies off`, `replies edit`, `replies audience`, `replies pause`, `replies resume` | same reason |
+| `replies consents grant`, `replies consents revoke`, `replies consents deny`, `replies consents allow` | same reason |
+| `schedule command`, `schedule agent`, `schedule remove`, `server install`, `server uninstall` | same reason |
+| `attachments jobs install`, `attachments jobs start`, `attachments jobs stop`, `attachments jobs uninstall` | same reason |
+| `bot chats rules set`, `bot chats rules unset`, `bot recipients add`, `bot recipients remove`, `bot recipients clear` | same reason, for bots |
+| `bot auth` | a person enters the token |
+| `bot api` | requires explicit `permissions.bot.api: allow` or `ask` |
+| `bot uploads put` | reads a file from your computer |
+
 ## Tools
 
 | Tool | Purpose |
@@ -143,11 +167,11 @@ Chats are resources at `max://chat/<id>`; Claude Code can mention them through `
 
 ## Discussion links
 
-The `link-conversations` request lets an agent link replies into discussions. It first estimates volume through `max_read` (`command: "conversations batches status"`) and waits for your consent for this chat. It then reads packets through `max_read` (`command: "conversations batches next"`), saves links through `max_write` (`command: "conversations links add"`) and rebuilds through `max_write` (`command: "conversations build"`). `max_write` (`command: "conversations links clear"`) deletes agent links and also requires rebuilding. Writes require `conversations.links`. If search vectors use an external service, MCP search sends it the question text too.
+The `link-conversations` request lets an agent link replies into discussions. It first estimates volume through `max_read` (`command: "conversations batches status"`) and waits for your consent for this chat. It then reads packets through `max_read` (`command: "conversations batches show"`), saves links through `max_write` (`command: "conversations links add"`) and rebuilds through `max_write` (`command: "conversations links rebuild"`). `max_write` (`command: "conversations links clear"`) deletes agent links and also requires rebuilding. Writes require `conversations.links`. If search vectors use an external service, MCP search sends it the question text too.
 
 ## Files and saved messages
 
-`max_read` (`command: "attachments list"`) shows saved-file paths and text status; `max_write` (`command: "attachments text set"`) saves text the agent read from a file for `content:` search. `max_write` (`command: "attachments extract"`) extracts text from saved files in batches through `cursor`, without returning that text in its answer. `max_read` with `command: "messages context"` and `arguments: { offline: true }` reads only the local archive.
+`max_read` (`command: "attachments list"`) shows saved-file paths and text status; `max_write` (`command: "attachments update"`) saves text the agent read from a file for `content:` search. `max_write` (`command: "attachments extract"`) extracts text from saved files in batches through `cursor`, without returning that text in its answer. `max_read` with `command: "messages context"` and `arguments: { offline: true }` reads only the local archive.
 
 MAX has no Telegram-style topics, so there are no `topics …` commands. Voice is transcribed by a model on this computer. A photo is selected through `index` and returned only if it is no larger than 512 KB. Models never download automatically. The server releases its connection before local recognition; the search model closes on server shutdown.
 

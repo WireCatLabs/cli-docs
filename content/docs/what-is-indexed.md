@@ -75,12 +75,12 @@ For many scans, you can choose a model service. This is the one place where file
 A voice note becomes searchable once it has a transcript. The tool saves the transcript and finds it with a plain word or with `transcript:`.
 
 ```sh
-max personal models audio download gigaam-v3
+max personal models download gigaam-v3
 max personal messages transcribe "Book club" 204
 max personal search messages 'transcript:invoice'
 ```
 
-- A speech model runs on your computer. The recording does not leave it. Download a model once, with `models audio download`; no model is downloaded on its own.
+- A speech model runs on your computer. The recording does not leave it. Download a model once, with `models download`; no model is downloaded on its own.
 - Models: `parakeet-v3` covers 25 languages, `gigaam-v3` is best for Russian.
 - `tg` can also use Telegram's own transcription where your account has it (`transcribe_with`: `auto`, `messenger` or `local`). `max` always uses the model on your computer.
 - Local transcription reads a complete Ogg Opus recording. Longer recordings need more memory and time.

@@ -250,10 +250,12 @@ max personal server logs             # последние строки его ж
 max personal server install          # служба systemd (Linux) или launchd (macOS) для профиля; ничего не запускает
 max personal server uninstall        # убрать службу; сначала max personal server stop
 max personal watch                   # в другом: новые сообщения по мере прихода
-max personal watch --jsonl           # то же для скрипта: одно сообщение на строку, как у `messages list`
+max personal watch --jsonl           # для скрипта: записи item/data и завершающая end
 max personal watch --jsonl | ./on-message.sh
-max personal watch --events --jsonl  # ещё правки, удаления, реакции, прочтения и изменения чатов; у строки поле "event"
+max personal watch --events --jsonl  # ещё правки, удаления, реакции, прочтения и изменения чатов; поле "event" внутри data
 ```
+
+En `watch --json` y `watch --jsonl`, cada registro de datos tiene la forma `{"type":"item","data":…}`. El mensaje o evento está en `data`, con nombres de campos snake_case. Un registro independiente `{"type":"end",…}` indica si el flujo está completo. Un fallo del origen lo termina como incompleto y devuelve un código de error. Comprueba `type` antes de leer los datos.
 
 - **Tras actualizar `max`**, el servidor automático se sustituye solo. Uno manual mantiene la versión hasta reiniciar; `max personal server status` lo muestra y `max personal server restart` lo resuelve.
 - **Usar un servicio.** Después de `max personal server install`, `max personal server start` inicia el servidor mediante systemd o launchd y `max personal server stop` lo detiene allí. El servicio ejecuta `max personal serve`, un servidor iniciado manualmente sin cierre por inactividad. Si MAX rechaza el inicio de sesión, el servicio **no** reinicia el servidor: cada reintento supondría otro inicio de sesión. `max personal server status` muestra el servicio y la ubicación de su registro.
@@ -302,9 +304,9 @@ max personal store clear --left --allow-dangerous  # удалить их из о
 
 ## Mantenimiento del archivo
 
-`max personal store migrate` completa los índices; `max personal store reindex` los reconstruye: búsqueda, diccionario de erratas y raíces de palabras. Los mensajes se conservan. `store info` y `store check` muestran si los índices de palabras y raíces están listos. Una raíz es la parte que permanece entre distintas formas de una palabra; la búsqueda estricta usa raíces para encontrarlas, mientras que `exact:` y `--exact` seleccionan la forma exacta.
+`max personal store migrate` completa los índices; `max personal store rebuild` los reconstruye: búsqueda, diccionario de erratas y raíces de palabras. Los mensajes se conservan. `store info` y `store check` muestran si los índices de palabras y raíces están listos. Una raíz es la parte que permanece entre distintas formas de una palabra; la búsqueda estricta usa raíces para encontrarlas, mientras que `exact:` y `--exact` seleccionan la forma exacta.
 
-`config set search_stemmers.cyrillic` acepta `russian` o `none`; `config set search_stemmers.latin` acepta `english`, `spanish` o ambos separados por comas (por defecto `english,spanish`: las palabras latinas se buscan usando las raíces de ambos idiomas), o `none`. `none` desactiva las raíces de ese alfabeto. Tras cambiarlo, ejecuta `store reindex`. Mientras se reconstruyen las raíces tras una actualización que cambió el valor predeterminado, la búsqueda usa formas exactas y lo indica; `max personal serve` completa las raíces en segundo plano y `store migrate` lo hace de inmediato. El ajuste es común a todos los perfiles y ambos servicios de mensajería: `--defaults`, `--personal` y `--bot` no se aplican, y no se puede modificar bajo `MAX_PROFILE_LOCK`.
+`config set search_stemmers.cyrillic` acepta `russian` o `none`; `config set search_stemmers.latin` acepta `english`, `spanish` o ambos separados por comas (por defecto `english,spanish`: las palabras latinas se buscan usando las raíces de ambos idiomas), o `none`. `none` desactiva las raíces de ese alfabeto. Tras cambiarlo, ejecuta `store rebuild`. Mientras se reconstruyen las raíces tras una actualización que cambió el valor predeterminado, la búsqueda usa formas exactas y lo indica; `max personal serve` completa las raíces en segundo plano y `store migrate` lo hace de inmediato. El ajuste es común a todos los perfiles y ambos servicios de mensajería: `--defaults`, `--personal` y `--bot` no se aplican, y no se puede modificar bajo `MAX_PROFILE_LOCK`.
 
 `max personal store repair --dry-run --json` muestra las reparaciones de estructura y revierte los cambios; `store repair` las aplica sin borrar datos. Una tabla incompatible se conserva como copia; la respuesta enumera las filas y columnas que no pudieron trasladarse. Conserva la copia hasta comprobar el resultado. `store repair` indica los nombres de las copias (`copies` en `--json`); `store copies delete <точное имя>` borra solo la indicada. Detén los procesos que usen el archivo antes de reparar su estructura.
 
@@ -330,3 +332,53 @@ Para actualizar el esquema de `wirecat.db`, ejecuta `max upgrade` después de co
 - [Uso](./usage.md): leer y enviar.
 - [Qué hizo el comando](./diagnostics.md): diagnosticar ejecuciones.
 - [Referencia de comandos](./commands.md): todas las opciones de `store`, `serve` y `watch`.
+
+## Copias independientes de archivos
+
+Para conservar los archivos después de borrar sus mensajes, descárgalos a una carpeta de archivo separada. Cada archivo conserva los identificadores del chat, mensaje y adjunto, el tamaño y la suma SHA-256. Pide al agente: «Guarda los archivos del grupo de prueba en mi archivo de documentos y verifica las copias». MAX solo puede devolver los mensajes y archivos aún disponibles para tu cuenta. Esto no recupera un archivo borrado.
+
+```sh
+max personal attachments download ~/media-archive --chat "Тестовая группа" --since-time 2026-10-01T00:00:00Z --timeout 6h
+max personal attachments check ~/media-archive --offline --json
+```
+
+Sin `--chat`, el comando recorre todos los chats disponibles. Repite `--chat` para elegir varios. `--since-time` incluye mensajes desde ese instante y exige una zona horaria. El resultado cuenta los archivos guardados, las copias existentes verificadas y los chats recorridos.
+
+Los nombres se calculan a partir de los identificadores y terminan en `.bin`. Un manifiesto junto a cada archivo identifica su chat, mensaje y posición del adjunto. No contiene enlaces de descarga, claves de medios ni nombres originales. Las rutas no se escriben en el almacén de mensajes: borrar el historial conserva estas copias. Para `attachments show` y la extracción de texto, sigue usando `messages download`.
+
+Repetir el comando verifica las copias existentes y descarga lo que falta. Un archivo interrumpido se descarga de nuevo: los flujos del mensajero no dan la confirmación necesaria para continuar con seguridad desde un byte concreto. Los archivos completos sobreviven a errores e interrupciones. Un archivo no disponible provoca un error y no cuenta como guardado. Si una copia desaparece o cambia, la comprobación devuelve un código distinto de cero y la descarga se detiene. Elige otra carpeta: los archivos existentes no se sobrescriben. `complete: true` describe el historial disponible para el origen elegido; no demuestra que se conserven todos los mensajes antiguos del servidor.
+
+### Copia diaria en Linux
+
+La copia automática permanece desactivada hasta instalar e iniciar explícitamente un temporizador systemd de usuario. La instalación no inicia nada:
+
+```sh
+max personal attachments jobs install ~/media-archive --chat "Тестовая группа" --at 03:00 --timezone UTC
+max personal attachments jobs start ~/media-archive
+max personal attachments jobs status ~/media-archive
+```
+
+El horario predeterminado es a las 03:00 UTC. Para la hora local usa, por ejemplo, `--timezone Europe/Madrid`. El temporizador recuerda el ejecutable, el perfil y las ubicaciones de los almacenes, usa un límite de seis horas y guarda archivos accesibles solo para su propietario. Funcionar sin una sesión de usuario activa depende de systemd; una ejecución perdida se realiza al volver a iniciar el temporizador. En macOS y Windows puedes descargar manualmente.
+
+```sh
+max personal attachments jobs stop ~/media-archive
+max personal attachments jobs uninstall ~/media-archive
+```
+
+Detenerlo impide futuras ejecuciones; una descarga activa termina. Desinstala el temporizador tras desactivarlo y esperar a que termine el servicio; los archivos se conservan. Usa el mismo perfil y carpeta en cada comando. Para cambiar el horario o ejecutable, detén y desinstala el temporizador y vuelve a instalarlo. Se conservan los archivos de servicio editados manualmente.
+
+Después de copiar, `attachments check` debe confirmar la integridad de cada archivo. Para buscar texto en archivos descargados de forma ordinaria, continúa con [adjuntos](./attachments.md).
+
+### Mover imágenes antiguas a otro archivo
+
+Para reducir la carpeta de trabajo, mueve las imágenes anteriores a una fecha de mensaje elegida a otro archivo verificable. Usa otro disco para liberar espacio en el disco de origen. Primero consulta el número de archivos y su tamaño sin moverlos:
+
+```sh
+max personal attachments move ~/media-archive /mnt/archive/older-images --before-time 2026-10-01T00:00:00Z --dry-run
+max personal attachments move ~/media-archive /mnt/archive/older-images --before-time 2026-10-01T00:00:00Z --timeout 6h
+max personal attachments check ~/media-archive --offline
+```
+
+La antigüedad procede de la fecha del mensaje, no de la descarga; las imágenes justo en el límite se quedan. Se mueven fotos y archivos con tipo MIME de imagen; los demás permanecen. La copia de destino se verifica antes de borrar los bytes locales. En el origen queda un pequeño registro de la nueva ubicación: la comprobación lo sigue y otra descarga no duplica el archivo. No se consulta al mensajero.
+
+Mantén el otro archivo disponible en la ruta registrada. Si se desconecta o cambia una copia, la comprobación falla y la descarga se detiene sin crear duplicados silenciosos. Repite el comando para continuar un traslado interrumpido. Las imágenes de archivos preliminares sin fecha de mensaje permanecen y cuentan como `undated`; `complete: false` indica que no se pudieron seleccionar por antigüedad. No se sustituye la fecha del mensaje por la de modificación del archivo. La vista `--dry-run` no crea la carpeta de destino y muestra el número de archivos y el tamaño.

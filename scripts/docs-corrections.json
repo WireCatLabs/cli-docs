@@ -3512,5 +3512,733 @@
         }
       ]
     }
+  },
+  {
+    "tool": "max",
+    "slug": "configuration-reference",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "Canonical permission paths in Core 0.406.0 are models.download and doctor.reports.create; native prose still uses retired paths.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`models.audio.download`",
+          "after": "`models.download`"
+        },
+        {
+          "before": "`doctor.report.create`",
+          "after": "`doctor.reports.create`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`models.audio.download`",
+          "after": "`models.download`"
+        },
+        {
+          "before": "`doctor.report.create`",
+          "after": "`doctor.reports.create`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`models.audio.download`",
+          "after": "`models.download`"
+        },
+        {
+          "before": "`doctor.report.create`",
+          "after": "`doctor.reports.create`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "diagnostics",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "Released search runs filters belong inside query, not separate MCP arguments; discovery contract exposes query/since_time/limit/page.",
+    "replacements": {
+      "en": [
+        {
+          "before": "MCP `max_read` with `command: \"search runs\"` accepts these `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit` and `page`.\nIt reads only the active profile's diagnostic runs, does not connect to MAX and does not open\nraw background-job logs. The original partial result names the failed items and their error codes; diagnostic records\nkeep only safe identifiers and codes.\n",
+          "after": "MCP `max_read` with `command: \"search runs\"` accepts these `arguments`: `query`, `since_time`, `limit` and `page`.\nIt reads only the active profile's diagnostic runs, does not connect to MAX and does not open\nraw background-job logs. The original partial result names the failed items and their error codes; diagnostic records\nkeep only safe identifiers and codes.\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "В MCP вызовите `max_read` с `command: \"search runs\"`; поля `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit`,\n`page`. Он читает только записи активного профиля, не подключается к MAX и не открывает сырые\nжурналы фоновых заданий. Полный результат частичной команды называет неудачные элементы и коды их ошибок;\nдиагностическая запись сохраняет только безопасные идентификаторы и коды.\n",
+          "after": "В MCP вызовите `max_read` с `command: \"search runs\"`; поля `arguments`: `query`, `since_time`, `limit`,\n`page`. Он читает только записи активного профиля, не подключается к MAX и не открывает сырые\nжурналы фоновых заданий. Полный результат частичной команды называет неудачные элементы и коды их ошибок;\nдиагностическая запись сохраняет только безопасные идентификаторы и коды.\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "En MCP llama a `max_read` con `command: \"search runs\"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.\nSolo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.\nEl resultado completo del comando parcial nombra los elementos fallidos y sus códigos de error; el registro conserva solo identificadores y códigos seguros.\n",
+          "after": "En MCP llama a `max_read` con `command: \"search runs\"`; `arguments` acepta `query`, `since_time`, `limit` y `page`.\nSolo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.\nEl resultado completo del comando parcial nombra los elementos fallidos y sus códigos de error; el registro conserva solo identificadores y códigos seguros.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "groups",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
+    "replacements": {
+      "en": [
+        {
+          "before": "chats requests list\\|accept\\|decline",
+          "after": "chats requests list\\|confirm\\|reject"
+        },
+        {
+          "before": "chats requests confirm\\|decline",
+          "after": "chats requests confirm\\|reject"
+        }
+      ],
+      "ru": [
+        {
+          "before": "chats requests list\\|accept\\|decline",
+          "after": "chats requests list\\|confirm\\|reject"
+        },
+        {
+          "before": "chats requests confirm\\|decline",
+          "after": "chats requests confirm\\|reject"
+        }
+      ],
+      "es": [
+        {
+          "before": "chats requests list\\|accept\\|decline",
+          "after": "chats requests list\\|confirm\\|reject"
+        },
+        {
+          "before": "chats requests confirm\\|decline",
+          "after": "chats requests confirm\\|reject"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "security",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
+    "replacements": {
+      "en": [
+        {
+          "before": "chats requests confirm|decline",
+          "after": "chats requests confirm|reject"
+        }
+      ],
+      "ru": [
+        {
+          "before": "chats requests confirm|decline",
+          "after": "chats requests confirm|reject"
+        }
+      ],
+      "es": [
+        {
+          "before": "chats requests confirm|decline",
+          "after": "chats requests confirm|reject"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
+    "replacements": {
+      "en": [
+        {
+          "before": "впустить; decline — отказать",
+          "after": "впустить; reject — отказать"
+        }
+      ],
+      "ru": [
+        {
+          "before": "впустить; decline — отказать",
+          "after": "впустить; reject — отказать"
+        }
+      ],
+      "es": [
+        {
+          "before": "впустить; decline — отказать",
+          "after": "впустить; reject — отказать"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "commands",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "Repair native generated empty-default backticks spanning two table rows; flags and behavior remain unchanged.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. По умолчанию: ``. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. По умолчанию: ``. |",
+          "after": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. No files by default. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. No files by default. |"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. По умолчанию: ``. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. По умолчанию: ``. |",
+          "after": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. No files by default. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. No files by default. |"
+        }
+      ],
+      "es": [
+        {
+          "before": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. По умолчанию: ``. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. По умолчанию: ``. |",
+          "after": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. No files by default. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. No files by default. |"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "roadmap",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "Verified attachment archives shipped in v0.71.0 and service-event skipping in v0.72.0; keep actual future features separate.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## In progress\n\n- **Attachment archives.** Download attachments to a folder, verify each file and check the archive offline.",
+          "after": "## Attachment archives are available\n\nVerified attachment archives, offline integrity checks, explicitly enabled daily Linux copying and moving older images are available now; see [independent file copies](./archive.md#независимые-копии-файлов)."
+        }
+      ],
+      "es": [
+        {
+          "before": "## En desarrollo\n\n- **Archivos de adjuntos.** Descargar adjuntos a una carpeta, verificar cada archivo y comprobar el archivo sin conexión.",
+          "after": "## Archivos de adjuntos disponibles\n\nYa están disponibles los archivos de adjuntos verificados, las comprobaciones sin red, las copias diarias de Linux habilitadas explícitamente y el traslado de imágenes antiguas; consulta [copias independientes](./archive.md#независимые-копии-файлов)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Сейчас в работе\n\n- **Архив вложений.** Скачать вложения в папку с проверкой каждого файла и проверять архив без сети.",
+          "after": "## Архив вложений доступен\n\nПроверяемый архив вложений, проверка без сети, ежедневное копирование в Linux с явным включением и перенос старых изображений уже доступны: [независимые копии файлов](./archive.md#независимые-копии-файлов)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "commands",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "Keep incoming hashes from v0.66.0 at the corresponding canonical command; this does not restore removed CLI aliases.",
+    "replacements": {
+      "en": [
+        {
+          "before": "#### `max chats members check`",
+          "after": "#### `max chats members check`\n\n<a id=\"max-chats-members-audit\" />"
+        },
+        {
+          "before": "### `max chats links`",
+          "after": "### `max chats links`\n\n<a id=\"max-chats-link\" />"
+        },
+        {
+          "before": "#### `max chats links show`",
+          "after": "#### `max chats links show`\n\n<a id=\"max-chats-link-show\" />"
+        },
+        {
+          "before": "#### `max chats links reset`",
+          "after": "#### `max chats links reset`\n\n<a id=\"max-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `max chats requests confirm`",
+          "after": "#### `max chats requests confirm`\n\n<a id=\"max-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `max chats requests reject`",
+          "after": "#### `max chats requests reject`\n\n<a id=\"max-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `max contacts info`",
+          "after": "### `max contacts info`\n\n<a id=\"max-contacts-profile\" />"
+        },
+        {
+          "before": "### `max contacts aliases`",
+          "after": "### `max contacts aliases`\n\n<a id=\"max-contacts-alias\" />"
+        },
+        {
+          "before": "#### `max contacts aliases set`",
+          "after": "#### `max contacts aliases set`\n\n<a id=\"max-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `max contacts aliases remove`",
+          "after": "#### `max contacts aliases remove`\n\n<a id=\"max-contacts-alias-rm\" />"
+        },
+        {
+          "before": "### `max contacts events`",
+          "after": "### `max contacts events`\n\n<a id=\"max-contacts-timeline\" />"
+        },
+        {
+          "before": "#### `max store gaps show`",
+          "after": "#### `max store gaps show`\n\n<a id=\"max-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `max store rebuild`",
+          "after": "### `max store rebuild`\n\n<a id=\"max-store-reindex\" />"
+        },
+        {
+          "before": "#### `max stats messages counters sync`",
+          "after": "#### `max stats messages counters sync`\n\n<a id=\"max-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `max tasks update`",
+          "after": "### `max tasks update`\n\n<a id=\"max-tasks-plan\" />"
+        },
+        {
+          "before": "#### `max conversations links rebuild`",
+          "after": "#### `max conversations links rebuild`\n\n<a id=\"max-conversations-build\" />"
+        },
+        {
+          "before": "#### `max conversations batches show`",
+          "after": "#### `max conversations batches show`\n\n<a id=\"max-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `max conversations consents remove`",
+          "after": "#### `max conversations consents remove`\n\n<a id=\"max-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `max conversations embeddings status`",
+          "after": "#### `max conversations embeddings status`\n\n<a id=\"max-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `max conversations embeddings clear`",
+          "after": "#### `max conversations embeddings clear`\n\n<a id=\"max-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `max attachments update`",
+          "after": "### `max attachments update`\n\n<a id=\"max-attachments-text\" />\n\n<a id=\"max-attachments-text-set\" />"
+        },
+        {
+          "before": "### `max tags rebuild`",
+          "after": "### `max tags rebuild`\n\n<a id=\"max-tags-auto\" />"
+        },
+        {
+          "before": "### `max metadata show`",
+          "after": "### `max metadata show`\n\n<a id=\"max-metadata-get\" />"
+        },
+        {
+          "before": "### `max metadata sync`",
+          "after": "### `max metadata sync`\n\n<a id=\"max-metadata-refresh\" />"
+        },
+        {
+          "before": "## `max models`",
+          "after": "## `max models`\n\n<a id=\"max-models-audio\" />\n\n<a id=\"max-models-text\" />"
+        },
+        {
+          "before": "### `max models list`",
+          "after": "### `max models list`\n\n<a id=\"max-models-audio-list\" />\n\n<a id=\"max-models-text-list\" />"
+        },
+        {
+          "before": "### `max models download`",
+          "after": "### `max models download`\n\n<a id=\"max-models-audio-download\" />\n\n<a id=\"max-models-text-download\" />"
+        },
+        {
+          "before": "### `max models keys`",
+          "after": "### `max models keys`\n\n<a id=\"max-models-text-key\" />"
+        },
+        {
+          "before": "#### `max models keys set`",
+          "after": "#### `max models keys set`\n\n<a id=\"max-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `max models keys remove`",
+          "after": "#### `max models keys remove`\n\n<a id=\"max-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `max doctor reports show`",
+          "after": "#### `max doctor reports show`\n\n<a id=\"max-doctor-report\" />"
+        },
+        {
+          "before": "#### `max doctor reports create`",
+          "after": "#### `max doctor reports create`\n\n<a id=\"max-doctor-report-create\" />"
+        },
+        {
+          "before": "### `max search runs`",
+          "after": "### `max search runs`\n\n<a id=\"max-runs-search\" />"
+        },
+        {
+          "before": "### `max commands info`",
+          "after": "### `max commands info`\n\n<a id=\"max-commands-schema\" />"
+        },
+        {
+          "before": "### `max mcp add`",
+          "after": "### `max mcp add`\n\n<a id=\"max-mcp-setup\" />"
+        },
+        {
+          "before": "### `max mcp check`",
+          "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
+        }
+      ],
+      "ru": [
+        {
+          "before": "#### `max chats members check`",
+          "after": "#### `max chats members check`\n\n<a id=\"max-chats-members-audit\" />"
+        },
+        {
+          "before": "### `max chats links`",
+          "after": "### `max chats links`\n\n<a id=\"max-chats-link\" />"
+        },
+        {
+          "before": "#### `max chats links show`",
+          "after": "#### `max chats links show`\n\n<a id=\"max-chats-link-show\" />"
+        },
+        {
+          "before": "#### `max chats links reset`",
+          "after": "#### `max chats links reset`\n\n<a id=\"max-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `max chats requests confirm`",
+          "after": "#### `max chats requests confirm`\n\n<a id=\"max-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `max chats requests reject`",
+          "after": "#### `max chats requests reject`\n\n<a id=\"max-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `max contacts info`",
+          "after": "### `max contacts info`\n\n<a id=\"max-contacts-profile\" />"
+        },
+        {
+          "before": "### `max contacts aliases`",
+          "after": "### `max contacts aliases`\n\n<a id=\"max-contacts-alias\" />"
+        },
+        {
+          "before": "#### `max contacts aliases set`",
+          "after": "#### `max contacts aliases set`\n\n<a id=\"max-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `max contacts aliases remove`",
+          "after": "#### `max contacts aliases remove`\n\n<a id=\"max-contacts-alias-rm\" />"
+        },
+        {
+          "before": "### `max contacts events`",
+          "after": "### `max contacts events`\n\n<a id=\"max-contacts-timeline\" />"
+        },
+        {
+          "before": "#### `max store gaps show`",
+          "after": "#### `max store gaps show`\n\n<a id=\"max-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `max store rebuild`",
+          "after": "### `max store rebuild`\n\n<a id=\"max-store-reindex\" />"
+        },
+        {
+          "before": "#### `max stats messages counters sync`",
+          "after": "#### `max stats messages counters sync`\n\n<a id=\"max-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `max tasks update`",
+          "after": "### `max tasks update`\n\n<a id=\"max-tasks-plan\" />"
+        },
+        {
+          "before": "#### `max conversations links rebuild`",
+          "after": "#### `max conversations links rebuild`\n\n<a id=\"max-conversations-build\" />"
+        },
+        {
+          "before": "#### `max conversations batches show`",
+          "after": "#### `max conversations batches show`\n\n<a id=\"max-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `max conversations consents remove`",
+          "after": "#### `max conversations consents remove`\n\n<a id=\"max-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `max conversations embeddings status`",
+          "after": "#### `max conversations embeddings status`\n\n<a id=\"max-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `max conversations embeddings clear`",
+          "after": "#### `max conversations embeddings clear`\n\n<a id=\"max-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `max attachments update`",
+          "after": "### `max attachments update`\n\n<a id=\"max-attachments-text\" />\n\n<a id=\"max-attachments-text-set\" />"
+        },
+        {
+          "before": "### `max tags rebuild`",
+          "after": "### `max tags rebuild`\n\n<a id=\"max-tags-auto\" />"
+        },
+        {
+          "before": "### `max metadata show`",
+          "after": "### `max metadata show`\n\n<a id=\"max-metadata-get\" />"
+        },
+        {
+          "before": "### `max metadata sync`",
+          "after": "### `max metadata sync`\n\n<a id=\"max-metadata-refresh\" />"
+        },
+        {
+          "before": "## `max models`",
+          "after": "## `max models`\n\n<a id=\"max-models-audio\" />\n\n<a id=\"max-models-text\" />"
+        },
+        {
+          "before": "### `max models list`",
+          "after": "### `max models list`\n\n<a id=\"max-models-audio-list\" />\n\n<a id=\"max-models-text-list\" />"
+        },
+        {
+          "before": "### `max models download`",
+          "after": "### `max models download`\n\n<a id=\"max-models-audio-download\" />\n\n<a id=\"max-models-text-download\" />"
+        },
+        {
+          "before": "### `max models keys`",
+          "after": "### `max models keys`\n\n<a id=\"max-models-text-key\" />"
+        },
+        {
+          "before": "#### `max models keys set`",
+          "after": "#### `max models keys set`\n\n<a id=\"max-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `max models keys remove`",
+          "after": "#### `max models keys remove`\n\n<a id=\"max-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `max doctor reports show`",
+          "after": "#### `max doctor reports show`\n\n<a id=\"max-doctor-report\" />"
+        },
+        {
+          "before": "#### `max doctor reports create`",
+          "after": "#### `max doctor reports create`\n\n<a id=\"max-doctor-report-create\" />"
+        },
+        {
+          "before": "### `max search runs`",
+          "after": "### `max search runs`\n\n<a id=\"max-runs-search\" />"
+        },
+        {
+          "before": "### `max commands info`",
+          "after": "### `max commands info`\n\n<a id=\"max-commands-schema\" />"
+        },
+        {
+          "before": "### `max mcp add`",
+          "after": "### `max mcp add`\n\n<a id=\"max-mcp-setup\" />"
+        },
+        {
+          "before": "### `max mcp check`",
+          "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
+        }
+      ],
+      "es": [
+        {
+          "before": "#### `max chats members check`",
+          "after": "#### `max chats members check`\n\n<a id=\"max-chats-members-audit\" />"
+        },
+        {
+          "before": "### `max chats links`",
+          "after": "### `max chats links`\n\n<a id=\"max-chats-link\" />"
+        },
+        {
+          "before": "#### `max chats links show`",
+          "after": "#### `max chats links show`\n\n<a id=\"max-chats-link-show\" />"
+        },
+        {
+          "before": "#### `max chats links reset`",
+          "after": "#### `max chats links reset`\n\n<a id=\"max-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `max chats requests confirm`",
+          "after": "#### `max chats requests confirm`\n\n<a id=\"max-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `max chats requests reject`",
+          "after": "#### `max chats requests reject`\n\n<a id=\"max-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `max contacts info`",
+          "after": "### `max contacts info`\n\n<a id=\"max-contacts-profile\" />"
+        },
+        {
+          "before": "### `max contacts aliases`",
+          "after": "### `max contacts aliases`\n\n<a id=\"max-contacts-alias\" />"
+        },
+        {
+          "before": "#### `max contacts aliases set`",
+          "after": "#### `max contacts aliases set`\n\n<a id=\"max-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `max contacts aliases remove`",
+          "after": "#### `max contacts aliases remove`\n\n<a id=\"max-contacts-alias-rm\" />"
+        },
+        {
+          "before": "### `max contacts events`",
+          "after": "### `max contacts events`\n\n<a id=\"max-contacts-timeline\" />"
+        },
+        {
+          "before": "#### `max store gaps show`",
+          "after": "#### `max store gaps show`\n\n<a id=\"max-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `max store rebuild`",
+          "after": "### `max store rebuild`\n\n<a id=\"max-store-reindex\" />"
+        },
+        {
+          "before": "#### `max stats messages counters sync`",
+          "after": "#### `max stats messages counters sync`\n\n<a id=\"max-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `max tasks update`",
+          "after": "### `max tasks update`\n\n<a id=\"max-tasks-plan\" />"
+        },
+        {
+          "before": "#### `max conversations links rebuild`",
+          "after": "#### `max conversations links rebuild`\n\n<a id=\"max-conversations-build\" />"
+        },
+        {
+          "before": "#### `max conversations batches show`",
+          "after": "#### `max conversations batches show`\n\n<a id=\"max-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `max conversations consents remove`",
+          "after": "#### `max conversations consents remove`\n\n<a id=\"max-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `max conversations embeddings status`",
+          "after": "#### `max conversations embeddings status`\n\n<a id=\"max-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `max conversations embeddings clear`",
+          "after": "#### `max conversations embeddings clear`\n\n<a id=\"max-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `max attachments update`",
+          "after": "### `max attachments update`\n\n<a id=\"max-attachments-text\" />\n\n<a id=\"max-attachments-text-set\" />"
+        },
+        {
+          "before": "### `max tags rebuild`",
+          "after": "### `max tags rebuild`\n\n<a id=\"max-tags-auto\" />"
+        },
+        {
+          "before": "### `max metadata show`",
+          "after": "### `max metadata show`\n\n<a id=\"max-metadata-get\" />"
+        },
+        {
+          "before": "### `max metadata sync`",
+          "after": "### `max metadata sync`\n\n<a id=\"max-metadata-refresh\" />"
+        },
+        {
+          "before": "## `max models`",
+          "after": "## `max models`\n\n<a id=\"max-models-audio\" />\n\n<a id=\"max-models-text\" />"
+        },
+        {
+          "before": "### `max models list`",
+          "after": "### `max models list`\n\n<a id=\"max-models-audio-list\" />\n\n<a id=\"max-models-text-list\" />"
+        },
+        {
+          "before": "### `max models download`",
+          "after": "### `max models download`\n\n<a id=\"max-models-audio-download\" />\n\n<a id=\"max-models-text-download\" />"
+        },
+        {
+          "before": "### `max models keys`",
+          "after": "### `max models keys`\n\n<a id=\"max-models-text-key\" />"
+        },
+        {
+          "before": "#### `max models keys set`",
+          "after": "#### `max models keys set`\n\n<a id=\"max-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `max models keys remove`",
+          "after": "#### `max models keys remove`\n\n<a id=\"max-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `max doctor reports show`",
+          "after": "#### `max doctor reports show`\n\n<a id=\"max-doctor-report\" />"
+        },
+        {
+          "before": "#### `max doctor reports create`",
+          "after": "#### `max doctor reports create`\n\n<a id=\"max-doctor-report-create\" />"
+        },
+        {
+          "before": "### `max search runs`",
+          "after": "### `max search runs`\n\n<a id=\"max-runs-search\" />"
+        },
+        {
+          "before": "### `max commands info`",
+          "after": "### `max commands info`\n\n<a id=\"max-commands-schema\" />"
+        },
+        {
+          "before": "### `max mcp add`",
+          "after": "### `max mcp add`\n\n<a id=\"max-mcp-setup\" />"
+        },
+        {
+          "before": "### `max mcp check`",
+          "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/cli-core/blob/v0.406.0/src/sends/permissions.ts",
+    "reason": "upgrade is gated by authority; complete is explicitly mcp:false. Distinguish the native combined table row.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| `upgrade`, `complete` | update the program and terminal completion |",
+          "after": "| `upgrade` | changes the installed program; requires authority permission |\n| `complete` | terminal completion; never offered through MCP |"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `upgrade`, `complete` | обновляют саму программу и автодополнение в терминале |",
+          "after": "| `upgrade` | меняет установленную программу; требует разрешения на изменение условий запусков |\n| `complete` | автодополнение терминала; не предлагается через MCP |"
+        }
+      ],
+      "es": [
+        {
+          "before": "| `upgrade`, `complete` | actualizan el programa y el autocompletado del terminal |",
+          "after": "| `upgrade` | cambia el programa instalado; requiere permiso de autoridad |\n| `complete` | autocompletado del terminal; nunca se ofrece mediante MCP |"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "people",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/people.md",
+    "reason": "Keep incoming people-guide hashes after canonical contact/member command renames; the new preparation heading is independent.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## Who they are: `contacts info`",
+          "after": "<a id=\"who-they-are-contacts-profile\" />\n\n## Who they are: `contacts info`"
+        },
+        {
+          "before": "## Group members: `chats members check --deep`",
+          "after": "<a id=\"group-members-chats-members-audit---deep\" />\n\n## Group members: `chats members check --deep`"
+        },
+        {
+          "before": "## Your names and notes: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-names-and-notes-contacts-alias-contacts-notes\" />\n\n## Your names and notes: `contacts aliases`, `contacts notes`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Кто это: `contacts info`",
+          "after": "<a id=\"кто-это-contacts-profile\" />\n\n## Кто это: `contacts info`"
+        },
+        {
+          "before": "## Участники группы: `chats members check --deep`",
+          "after": "<a id=\"участники-группы-chats-members-audit---deep\" />\n\n## Участники группы: `chats members check --deep`"
+        },
+        {
+          "before": "## Свои имена и заметки: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"свои-имена-и-заметки-contacts-alias-contacts-notes\" />\n\n## Свои имена и заметки: `contacts aliases`, `contacts notes`"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Quién es: `contacts info`",
+          "after": "<a id=\"quién-es-contacts-profile\" />\n\n## Quién es: `contacts info`"
+        },
+        {
+          "before": "## Miembros del grupo: `chats members check --deep`",
+          "after": "<a id=\"miembros-del-grupo-chats-members-audit---deep\" />\n\n## Miembros del grupo: `chats members check --deep`"
+        },
+        {
+          "before": "## Sus nombres y notas: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"sus-nombres-y-notas-contacts-alias-contacts-notes\" />\n\n## Sus nombres y notas: `contacts aliases`, `contacts notes`"
+        }
+      ]
+    }
   }
 ]

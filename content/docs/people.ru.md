@@ -58,7 +58,7 @@ tg personal mentions confirm 1 person:7
 
 ```sh
 tg personal contacts info @example_user
-max personal contacts profile 20000002
+max personal contacts info 20000002
 ```
 
 Для краткой информации используйте `contacts show`. Человека называют по ID или части имени;
@@ -128,14 +128,14 @@ max personal contacts check 20000002
 и [lols.bot](https://lols.bot). **Им уходит ID человека в Telegram.** Параметр `--no-registries`
 отключает эти запросы. Списки ведут только аккаунты Telegram, поэтому `max` им ничего не отправляет.
 
-Чтобы проверить всю группу, `chats members audit` оценивает каждого участника по списку участников
+Чтобы проверить всю группу, `chats members check` оценивает каждого участника по списку участников
 и сохранённой истории и перечисляет тех, у кого нашлась причина. `--deep 10` затем делает полную
 проверку для десяти с самой высокой оценкой, по человеку в секунду. Владелец и администраторы в
 список не попадают, никто не удаляется:
 
 ```sh
 tg personal chats members check "Книжный клуб" --deep 10
-max personal chats members audit "Книжный клуб" --deep 10
+max personal chats members check "Книжный клуб" --deep 10
 ```
 
 <a id="link-your-accounts" />
@@ -150,7 +150,7 @@ tg personal contacts link @example_user max:"Example User"
 
 Оба аккаунта уже должны быть в истории на этом компьютере, поэтому `tg` и `max` нужны на одном
 компьютере. После этого `contacts context` без `--chat` собирает связанные учётные записи.
-`contacts context --chat` и `contacts profile` показывают только выбранную учётную запись
+`contacts context --chat` и `contacts info` показывают только выбранную учётную запись
 мессенджера. Одинакового имени недостаточно: считается только то, что записали вы.
 `contacts unlink` убирает эту локальную связь.
 

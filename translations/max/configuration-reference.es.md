@@ -97,7 +97,6 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_ru
 | `timeout_ms` |cuánto tiempo esperar para recibir una respuesta a **una solicitud**|— (`--timeout` — otro, ver más abajo)|tomado del transporte|
 | `color` |color en terminal; sin un campo se decide en función de si es una terminal|—; sin color de campo se apaga `NO_COLOR`|por terminal|
 | `sender_colors` |en `max personal messages` cada autor tiene su propio color; `вы` - siempre azul. Sin `color` no funciona. Solo para cuenta personal| — | `false` |
-| `catch_up_marks_read` |`max personal inbox` y `max personal review` marcan cada chat mostrado como leído, hasta el último mensaje mostrado. El interlocutor ve la marca. Solo para cuenta personal| `--mark-read`, `--no-mark-read` | `false` |
 | `search_catch_up` |después de `messages sync` o reparación de roturas, prepara el gráfico y establece los vectores locales de este chat dentro de límites especificados. Los modelos no se descargan, no se llama a proveedores remotos. Solo para cuenta personal| `--catch-up`, `--no-catch-up` | `false` |
 | `record` |si se debe registrar cada inicio como si se transfiriera `--record` ([diagnóstico](./diagnostics.md))| `--record`, `--no-record` | `false` |
 | `keep_runs_for_days` |¿Cuántos días se almacenan los registros de ejecución?| — | `30` |
@@ -176,6 +175,12 @@ Con `ask`, el terminal pide confirmación con «no» por defecto. `--allow-dange
 
 MCP no muestra formularios de confirmación: `ask` permite la escritura invocada; `deny` y `readonly` siguen bloqueándola. `--permission ключ=уровень` endurece temporalmente los permisos del proceso, pero no los relaja. En la CLI, `ask` sigue requiriendo una respuesta o una opción explícita. Consulta la conexión en la [guía MCP](./mcp.md).
 
+`mcp.authority` controla los cambios de ajustes, reglas, destinatarios y otras condiciones de futuras ejecuciones; su valor predeterminado es `deny`. El propietario debe elegir `allow` o `ask` para ofrecer estos comandos al agente. Las operaciones directas del bot requieren aparte un `bot.api: allow` o `ask` explícito; un `bot: allow` general no las habilita. El agente no puede cambiar estas claves ni sustituir todo el objeto `permissions`; puede cambiar otras claves individuales si lo permite `mcp.authority`.
+
+El mantenimiento del archivo, el control del servidor, las descargas de modelos y la creación de informes tienen claves propias, por ejemplo `store.backup`, `server.start`, `models.audio.download`, `doctor.report.create`. Su nivel predeterminado es `ask`.
+
+Elegir solo lectura en el primer inicio limita todos los perfiles de todas las herramientas WireCat, incluido MCP. Un `allow` más específico del perfil no elimina ese límite. Cambia la respuesta mediante `max setup` en el terminal.
+
 ### Ajuste antiguo `allow`
 
 La lista en `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) se lee como `allow` para estas acciones y `readonly` para el resto; eliminar sigue pidiendo confirmación. La clave en `permissions` de la misma sección es más importante. Cuando el archivo tiene `permissions`, `config set allow` se rechaza e indica el nuevo ajuste.
@@ -193,11 +198,11 @@ max config set --personal --defaults limit 30 # всем личным аккау
 max config unset default_profile         # убрать старую настройку: профиль больше не подразумевается
 ```
 
-Los valores se comprueban con el mismo esquema usado para leer, **antes de escribir**: `max personal config set limit 0` se rechaza y el archivo queda igual. `serve`, `sender_colors`, `catch_up_marks_read` y `search_catch_up` no se admiten con `--bot`: los bots no tienen servidor, colores de autores ni estado de no leído.
+Los valores se comprueban con el mismo esquema usado para leer, **antes de escribir**: `max personal config set limit 0` se rechaza y el archivo queda igual. `serve`, `sender_colors` y `search_catch_up` no se admiten con `--bot`: los bots no tienen servidor, colores de autores ni estado de no leído.
 
 ### Idiomas de búsqueda
 
-`search_stemmers.cyrillic` (`russian` o `none`) y `search_stemmers.latin` (`english`, `spanish`, ambos separados por comas (este es el valor predeterminado) o `none`) no se almacenan en el archivo de configuración, sino en el archivo general de mensajes: son los mismos para todos los perfiles y para ambos servicios de mensajería. Por lo tanto, `--defaults`, `--personal` y `--bot` no se aceptan con ellos y no se pueden cambiar en `MAX_PROFILE_LOCK`. `config unset` devuelve el valor incorporado. Después del cambio, realice `max personal store reindex`; consulte [mantenimiento de archivos](./archive.md#обслуживание-архива).
+`search_stemmers.cyrillic` (`russian` o `none`) y `search_stemmers.latin` (`english`, `spanish`, ambos separados por comas (este es el valor predeterminado) o `none`) no se almacenan en el archivo de configuración, sino en el archivo general de mensajes: son los mismos para todos los perfiles y para ambos servicios de mensajería. Por lo tanto, `--defaults`, `--personal` y `--bot` no se aceptan con ellos y no se pueden cambiar en `MAX_PROFILE_LOCK`. `config unset` devuelve el valor incorporado. Después del cambio, realice `max personal store rebuild`; consulte [mantenimiento de archivos](./archive.md#обслуживание-архива).
 
 ## Las erratas son errores
 
@@ -261,12 +266,12 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` |entero ≥ 1|perfil|
 | `requests_per_minute` |entero ≥ 0|perfil|
 | `color`, `record` | boolean |perfil|
-| `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `serve` | boolean |cuenta personal|
+| `sender_colors`, `search_catch_up`, `serve` | boolean |cuenta personal|
 | `permissions` |objeto de rutas y niveles de comando `deny`, `readonly`, `ask`, `allow`|perfil|
 | `allow` |variedad de acciones permitidas; formato antiguo|perfil|
 | `read_other_bots` |booleano o conjunto de nombres de perfil|sólo `bot`|
 | `update_check`, `skill_hint` | boolean |solo `defaults`|
-| `transcribe_model` |ID de cadena de `max personal models audio list`|solo `defaults`|
+| `transcribe_model` |ID de cadena de `max personal models list kind:audio`|solo `defaults`|
 | `embedding_provider` |`local` o `openai`|perfil|
 | `embedding_model`, `analysis_model` |cadena no vacía, no más de 200 caracteres|perfil|
 | `embedding_base_url`, `analysis_base_url` |URL HTTP(S) sin credenciales, consulta y fragmento|perfil|
@@ -291,7 +296,7 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 
 Para cada campo, el orden es `MAX_MODELS_<НАЗНАЧЕНИЕ>_PROVIDER`, `_MODEL` o `_BASE_URL`, después la entrada más específica del archivo para la tarea, luego los campos antiguos `analysis*` explícitos para `analysis` y después las variables y entradas de `models.default`. Los guiones del nombre de tarea se convierten en `_` en la variable de entorno. Los tokens del proveedor no forman parte de este objeto.
 
-Las configuraciones de vectores y análisis son independientes y pueden variar según los perfiles. La dirección es HTTP/S sin contraseña, consulta ni fragmento integrados. El servicio de vectores externo también recibe la pregunta de la búsqueda MCP. Las claves se especifican a través de `models text key set openai|anthropic` y no se escriben en `config.json`. El `build` habitual no desencadena un análisis externo: se necesita un `--analyze` explícito. Los proveedores y ejemplos se encuentran en [manual de modelos externos](./external-models.md).
+Las configuraciones de vectores y análisis son independientes y pueden variar según los perfiles. La dirección es HTTP/S sin contraseña, consulta ni fragmento integrados. El servicio de vectores externo también recibe la pregunta de la búsqueda MCP. Las claves se especifican a través de `models keys set openai|anthropic` y no se escriben en `config.json`. El `build` habitual no desencadena un análisis externo: se necesita un `--analyze` explícito. Los proveedores y ejemplos se encuentran en [manual de modelos externos](./external-models.md).
 
 ### Variables para configurar modelos
 

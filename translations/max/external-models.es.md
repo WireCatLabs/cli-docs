@@ -21,7 +21,7 @@ Estos ajustes no controlan a tu agente de IA. Cuando el agente lee un archivo po
 | Tarea | Ajuste | Cómo se ejecuta |
 | --- | --- | --- |
 | OCR de imágenes y PDF escaneados | `models.ocr` | `attachments extract --ocr`; necesita un modelo que admita imágenes |
-| Analizar vínculos entre conversaciones en mensajes guardados | `models.analysis` | `conversations build --analyze`; el consentimiento se aplica a un chat y proveedor concretos |
+| Analizar vínculos entre conversaciones en mensajes guardados | `models.analysis` | `conversations links rebuild --analyze`; el consentimiento se aplica a un chat y proveedor concretos |
 | Bloque de IA en una plantilla de respuesta | `models.replies` | Regla con un bloque `{% ai %}` y consentimiento aparte para respuestas; consulta [reglas de respuesta](./replies.md) |
 | Valores comunes de estas tareas | `models.default` | Se usan para los campos no configurados en una tarea concreta |
 
@@ -32,7 +32,7 @@ La búsqueda por significado se puede configurar por separado: `embedding_provid
 Elige el identificador exacto de un modelo que admita imágenes. El ejemplo siguiente usa `gpt-4o-mini`; cambia el valor para otro modelo. Primero guarda la clave mediante entrada interactiva oculta y después configura la tarea:
 
 ```sh
-max personal models text key set openai
+max personal models keys set openai
 max personal config set models.ocr.provider openai
 max personal config set models.ocr.model gpt-4o-mini
 max config show
@@ -53,7 +53,7 @@ max personal attachments extract --chat "Учебная группа" --ocr --co
 Elige el identificador exacto de un modelo de visión al que tengas acceso; `your-vision-model` es un marcador para tu valor, no un nombre de modelo real.
 
 ```sh
-max personal models text key set anthropic
+max personal models keys set anthropic
 max personal config set models.ocr.provider anthropic
 max personal config set models.ocr.model your-vision-model
 max personal config unset models.ocr.base_url
@@ -69,7 +69,7 @@ Un endpoint compatible con OpenAI usa el adaptador `openai`, aunque el servidor 
 max personal config set models.ocr.provider openai
 max personal config set models.ocr.model your-vision-model
 max personal config set models.ocr.base_url https://gateway.example.org/v1
-max personal models text key set gateway.example.org
+max personal models keys set gateway.example.org
 ```
 
 Para un punto final no estándar, el nombre de la clave es su host, incluido el puerto si se especifica en la URL. El campo `base_url` en sí no es una clave. Si el servidor acepta texto, esto no significa que lea imágenes; verifique esto en la documentación de su servidor.

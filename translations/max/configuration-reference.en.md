@@ -95,7 +95,6 @@ Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`,
 | `timeout_ms` | Milliseconds to wait for **one request** | None (`--timeout` is different; see below) | Transport-dependent |
 | `color` | Terminal colours; otherwise based on terminal detection | None; without the field, `NO_COLOR` disables colour | Terminal-dependent |
 | `sender_colors` | Separate author colours in `max personal messages`; `вы` is always blue. Requires `color`. Personal accounts only | None | `false` |
-| `catch_up_marks_read` | `max personal inbox`/`max personal review` mark displayed chats read through the last shown message. Other people see the receipt. Personal accounts only | `--mark-read`, `--no-mark-read` | `false` |
 | `search_catch_up` | After `messages sync` or gap repair, prepare this chat's graph and installed local vectors within limits; no automatic downloads or remote calls. Personal accounts only | `--catch-up`, `--no-catch-up` | `false` |
 | `record` | Save every run as with `--record` ([diagnostics](./diagnostics.md)) | `--record`, `--no-record` | `false` |
 | `keep_runs_for_days` | Run-record retention in days | None | `30` |
@@ -174,6 +173,12 @@ At level `ask` a question appears in the terminal with the default answer being 
 
 MCP has no confirmation forms: `ask` permits the requested write; `deny` and `readonly` still block it. `--permission ключ=уровень` temporarily tightens permissions for this process but never loosens them. In the CLI, `ask` still needs an answer or explicit confirmation flag. See [MCP](./mcp.md).
 
+`mcp.authority` controls changes to settings, rules, recipients and other conditions for future runs; its default is `deny`. The owner must choose `allow` or `ask` to offer these commands to an agent. Raw bot operations separately require explicit `bot.api: allow` or `ask`; a broader `bot: allow` does not enable them. The agent cannot change these keys or replace the entire `permissions` object; other individual keys can be changed when `mcp.authority` permits it.
+
+Archive maintenance, server control, model downloads and report creation have their own keys, for example `store.backup`, `server.start`, `models.audio.download`, `doctor.report.create`. Their default level is `ask`.
+
+Choosing read-only access at first run limits every profile of every WireCat tool, including MCP. A more specific profile `allow` cannot relax that limit. Change the answer through `max setup` in the terminal.
+
 ### Old `allow` setting
 
 The list in `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) is read as `allow` for these actions and `readonly` for the rest; deletion still asks. The key in `permissions` of the same section is more important. When the file has `permissions`, `config set allow` is refused and names the new setting.
@@ -191,11 +196,11 @@ max config set --personal --defaults limit 30 # всем личным аккау
 max config unset default_profile         # убрать старую настройку: профиль больше не подразумевается
 ```
 
-Values are checked with the same schema used for reading, **before writing**: `max personal config set limit 0` is refused and the file stays unchanged. `serve`, `sender_colors`, `catch_up_marks_read` and `search_catch_up` are not accepted with `--bot`: bots have no server, sender colors or unread state.
+Values are checked with the same schema used for reading, **before writing**: `max personal config set limit 0` is refused and the file stays unchanged. `serve`, `sender_colors` and `search_catch_up` are not accepted with `--bot`: bots have no server, sender colors or unread state.
 
 ### Search languages
 
-`search_stemmers.cyrillic` (`russian` or `none`) and `search_stemmers.latin` (`english`, `spanish`, both separated by commas - this is the default - or `none`) are stored not in the settings file, but in the general message archive: they are the same for all profiles and for both messengers. Therefore, `--defaults`, `--personal` and `--bot` are not accepted with them, and they cannot be changed under `MAX_PROFILE_LOCK`. `config unset` returns the built-in value. After the change, perform `max personal store reindex` - see [archive maintenance](./archive.md#обслуживание-архива).
+`search_stemmers.cyrillic` (`russian` or `none`) and `search_stemmers.latin` (`english`, `spanish`, both separated by commas - this is the default - or `none`) are stored not in the settings file, but in the general message archive: they are the same for all profiles and for both messengers. Therefore, `--defaults`, `--personal` and `--bot` are not accepted with them, and they cannot be changed under `MAX_PROFILE_LOCK`. `config unset` returns the built-in value. After the change, perform `max personal store rebuild` - see [archive maintenance](./archive.md#обслуживание-архива).
 
 ## Typos are errors, not ignored settings
 
@@ -259,12 +264,12 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | integer ≥ 1 | profile |
 | `requests_per_minute` | integer ≥ 0 | profile |
 | `color`, `record` | boolean | profile |
-| `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `serve` | boolean | personal account |
+| `sender_colors`, `search_catch_up`, `serve` | boolean | personal account |
 | `permissions` | object of command paths and levels `deny`, `readonly`, `ask`, `allow` | profile |
 | `allow` | array of allowed actions; old format | profile |
 | `read_other_bots` | boolean or array of profile names | only `bot` |
 | `update_check`, `skill_hint` | boolean | only `defaults` |
-| `transcribe_model` | string id from `max personal models audio list` | only `defaults` |
+| `transcribe_model` | string id from `max personal models list kind:audio` | only `defaults` |
 | `embedding_provider` | `local` or `openai` | profile |
 | `embedding_model`, `analysis_model` | non-empty string, no more than 200 characters | profile |
 | `embedding_base_url`, `analysis_base_url` | HTTP(S) URL without credentials, query and fragment | profile |
@@ -289,7 +294,7 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 
 For each field, precedence is `MAX_MODELS_<НАЗНАЧЕНИЕ>_PROVIDER`, `_MODEL` or `_BASE_URL`, then the most specific file entry for the task, then explicit legacy `analysis*` fields for `analysis`, then `models.default` variables and entries. Hyphens in a task name become `_` in its environment variable. Provider tokens are not part of this object.
 
-Vector and analysis settings are independent and may vary across profiles. The address is HTTP/S without a built-in password, query and fragment. The external vector service also receives the question from the MCP search. Keys are specified via `models text key set openai|anthropic` and are not written to `config.json`. The usual `build` does not run external analysis: an explicit `--analyze` is needed. Providers and examples are in [external models manual](./external-models.md).
+Vector and analysis settings are independent and may vary across profiles. The address is HTTP/S without a built-in password, query and fragment. The external vector service also receives the question from the MCP search. Keys are specified via `models keys set openai|anthropic` and are not written to `config.json`. The usual `build` does not run external analysis: an explicit `--analyze` is needed. Providers and examples are in [external models manual](./external-models.md).
 
 ### Model configuration variables
 

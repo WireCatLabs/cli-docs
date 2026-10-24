@@ -54,8 +54,8 @@ El token de `max sales bot` está separado en el servicio `max-cli`, entrada `bo
 | copia anterior del perfil; ya no se abre | `~/.cache/max-cli/<профиль>.db` y sus `-wal`, `-shm` | carpeta `0700`, archivos `0600` |
 | exportación, **solo `max personal store export --output`** | destino indicado | `0600` |
 | archivos descargados, `max personal messages download` o `max personal attachments extract --download --output-dir` | carpeta actual o `--output` | `0600` |
-| informe, **solo `max personal doctor report create`** | carpeta actual o `--output` | `0600` |
-| modelos de voz, **solo tras `max personal models audio download`** | `~/.local/share/WireCat/models/audio/…` | carpeta `0700`, archivos `0600` |
+| informe, **solo `max personal doctor reports create`** | carpeta actual o `--output` | `0600` |
+| modelos de voz, **solo tras `max personal models download`** | `~/.local/share/WireCat/models/audio/…` | carpeta `0700`, archivos `0600` |
 
 ⚠ **La copia compartida contiene texto de mensajes y transcripciones de voz:** sirve para responder sin red. `max personal session end` no la elimina. `max personal store clear --left --allow-dangerous` solo borra datos de chats abandonados; no hay una orden que elimine toda la copia compartida.
 
@@ -100,8 +100,8 @@ La lista es opcional: sin destinatarios añadidos, cualquier chat; activa pero v
 
 ## Qué no hace la herramienta
 
-- **No marca como leído sin preguntar.** “Obtener historial” y “marcar como leído” son operaciones de protocolo diferentes. El segundo lo envían únicamente `max personal chats mark-read` y `messages list --mark-read`; leerlo no lo envía.
-- **No envía nada que no haya sido solicitado.** Sólo `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats requests accept|decline`, `chats link reset`, cambia algo `chats folders create|update|delete|order`, `chats moderate` (solo lo que gobierna el grupo). permitir), `chats mark-read` y `messages list --mark-read`, y cada uno hace sólo lo que está escrito en la línea escrita. `max commands --json` los marca con `effects.remote: "write"`.
+- **No marca como leído sin preguntar.** “Obtener historial” y “marcar como leído” son operaciones de protocolo diferentes. El segundo lo envían únicamente `max personal chats mark-read`; leerlo no lo envía.
+- **No envía cambios sin que se soliciten.** Las operaciones que cambian el estado remoto son `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats requests confirm|decline`, `chats links reset`, `chats folders create|update|delete|order`, `chats moderate` (dentro de las reglas del grupo) y `chats mark-read`. Cada una realiza la acción indicada. `max commands --json` las identifica mediante `effects.remote: "write"`.
 - **La eliminación por defecto requiere confirmación.** El nivel `ask` para `messages.delete` requiere una respuesta en el terminal o `--allow-dangerous`; explícito `allow` realiza la eliminación sin lugar a dudas. Para eliminar a todos también necesitas `--for-everyone`; La herramienta MCP general no lo permite.
 - **No toma el número de teléfono de la línea de comando.** `contacts lookup` lo solicita o lo lee desde la tubería, `contacts import` - desde el archivo: la línea de comando es vista por `ps` y el historial del shell. No hay ningún número en los errores, el registro de envío y los registros de inicio, y `max personal session start` y `max personal account show` lo muestran oculto.
 - **No escribe mensajes en el registro.** Ni en forma recortada ni en hash - consulte [diagnóstico](./diagnostics.md).
@@ -123,10 +123,10 @@ El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en 
 | `wss://api.oneme.ru/websocket`, cabecera `Origin`: `https://web.max.ru` | comandos que necesitan MAX |
 | servidores de archivos de MAX, dirección indicada por MAX | `messages send --file`, `messages download` |
 | `https://web.max.ru` en perfil Chromium temporal | `session start qr-chrome`, `session start sms`, `setup --method qr-chrome|sms` |
-| Hugging Face y GitHub para modelos de voz | solo `max personal models audio download`; la voz se procesa localmente |
-| Hugging Face, archivos del modelo de texto | Solo `max personal models text download`; el modelo local no envía mensajes |
+| Hugging Face y GitHub para modelos de voz | solo `max personal models download`; la voz se procesa localmente |
+| Hugging Face, archivos del modelo de texto | Solo `max personal models download`; el modelo local no envía mensajes |
 | Servicio externo de vectores configurado | `conversations embed` envía texto de conversaciones tras el consentimiento; `search conversations`, incluido MCP, envía la pregunta al seleccionar un servicio externo |
-| Servicio compatible con OpenAI o Anthropic configurado | `conversations build --analyze --chat` envía lotes limitados tras el consentimiento para la cuenta, el chat y el servicio |
+| Servicio compatible con OpenAI o Anthropic configurado | `conversations links rebuild --analyze --chat` envía lotes limitados tras el consentimiento para la cuenta, el chat y el servicio |
 | `https://platform-api2.max.ru`, Bot API oficial, token en `Authorization` | solo `max sales bot` |
 | registro npm para comprobar versiones | `max upgrade` y una vez al día desde terminal; se desactiva con `update_check: false` |
 
@@ -134,7 +134,7 @@ El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en 
 
 Las solicitudes de `max sales bot` se identifican como `max-cli/<версия>`: MAX ya conoce al bot por su token. El certificado de `platform-api2.max.ru` está firmado por una raíz del Ministerio de Desarrollo Digital ausente en Node. En Node, `max` la añade a los certificados de confianza de todo el proceso: desde la primera solicitud del bot, todas las conexiones TLS de esa ejecución de `max` confían en ella, no solo las de Bot API. En Bun se añade únicamente para las solicitudes de Bot API. El sistema no cambia.
 
-Para las cuentas personales, las solicitudes de red no contienen el nombre de esta herramienta ni un user-agent propio: el user-agent y la descripción del dispositivo proceden del cliente web de MAX. Las tramas también usan la dirección, el formato binario y la compresión del cliente web. `max personal serve` reproduce la telemetría del cliente web tal como la envía una pestaña oculta: un evento «lista de chats mostrada» 20 segundos después de iniciar sesión, y nada más. Solo contiene el número de tu cuenta y la hora, sin mensajes ni nombres de chats. Los comandos de una sola ejecución no envían telemetría. Después de iniciar sesión, `max personal serve` solicita los mismos datos que una pestaña: carpetas, banners, historial de llamadas, conjuntos de stickers y reacciones. Son solicitudes de solo lectura; las respuestas no se muestran ni se guardan. Los comandos de una sola ejecución no hacen estas solicitudes. Siguen existiendo diferencias: la pestaña también solicita contactos, historias y suscripciones a notificaciones push, mientras que `max` no lo hace. Por tanto, MAX puede distinguir `max` de su cliente web.
+Para las cuentas personales, las solicitudes de red no contienen el nombre de esta herramienta ni un user-agent propio: el user-agent y la descripción del dispositivo proceden del cliente web de MAX. Las tramas también usan la dirección, el formato binario y la compresión del cliente web. `max personal serve` reproduce la telemetría del cliente web tal como la envía una pestaña oculta: un evento «lista de chats mostrada» 20 segundos después de iniciar sesión, y nada más. Solo contiene el número de tu cuenta y la hora, sin mensajes ni nombres de chats. Los comandos de una sola ejecución no envían telemetría. Tras iniciar sesión, `max personal serve` solicita los mismos tipos de datos que la pestaña web: carpetas, banners, historial de llamadas, conjuntos de stickers y reacciones, y las fichas y el estado en línea de los contactos de chats personales. Tras el primer inicio también solicita historias, chats que faltan en las carpetas y la siguiente página de chats. Son peticiones de lectura; las respuestas no se muestran ni se guardan. Los comandos puntuales no las realizan. Hay diferencias: `max` no se suscribe a notificaciones push ni solicita emojis animados. La pestaña decide qué pedir según su caché del navegador, que `max` no tiene, por lo que el número de peticiones difiere. MAX puede distinguir `max` de su cliente web.
 
 ## Condiciones de MAX y tu cuenta
 
@@ -165,7 +165,7 @@ MAX no publica una API para cuentas de usuario. Todo lo que se sabe sobre el pro
 
 La herramienta guarda en tu comando conversaciones y contactos de otras personas, incluidos los textos de los mensajes. El acceso a la base local permite acceder a esos datos. Entregar una exportación (`max personal store export`) a otra persona también entrega el contenido de la conversación; sus enlaces a fotos pueden abrirse sin iniciar sesión. Antes de compartir, revisa el contenido y los destinatarios. Esta página describe el funcionamiento de la herramienta y no certifica el cumplimiento legal de tu caso de uso.
 
-Los informes (`max personal doctor report create`) se adjuntan a incidencias **públicas** de GitHub. No contienen texto, nombres ni teléfonos; los identificadores se sustituyen por etiquetas. Revísalos antes de enviarlos.
+Los informes (`max personal doctor reports create`) se adjuntan a incidencias **públicas** de GitHub. No contienen texto, nombres ni teléfonos; los identificadores se sustituyen por etiquetas. Revísalos antes de enviarlos.
 
 ## Si se filtra el token
 

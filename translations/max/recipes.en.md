@@ -142,18 +142,18 @@ Writes to MAX: **no**. Permit: `Bash(max personal inbox:*)`.
 - `max personal inbox --new` — since the previous `--new` run. Only `max` knows this point; your contacts do not see it.
 - `max personal inbox 'date>2d'` — the past two days; the saved point does not move.
 
-None of them mark messages as read. If needed, add `--mark-read` or enable `catch_up_marks_read` in [settings](./configuration.md). Then the interlocutor will see what you have read.
+Neither command marks messages as read. To do that, run `max personal chats mark-read <чат>`. The other person will see the read receipt.
 
 ### Direct chats, groups and channels separately
 
-`--kind` leaves only chats of the required type: `dialog` - personal, `group` - groups, `channel` - channels. The channel summary and conversation summary can be run separately, at different times. Each chat has its own point, and one run does not hide what the other has not yet shown:
+`kind:` leaves only chats of the required type: `dialog` - personal, `group` - groups, `channel` - channels. The channel summary and conversation summary can be run separately, at different times. Each chat has its own point, and one run does not hide what the other has not yet shown:
 
 ```cron
 30 8 * * * claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max personal inbox:*)"
 0 19 * * * claude -p "$(cat ~/max-recipes/news.md)" --allowedTools "Bash(max personal inbox:*)"
 ```
 
-`morning.md` contains `max personal inbox --new --kind dialog,group --json`; `news.md` contains `max personal inbox --new --kind channel --json` and a request to pick out the main points. Without `--kind`, everything comes together.
+`morning.md` contains `max personal inbox --new 'kind:dialog OR kind:group' --json`; `news.md` contains `max personal inbox --new kind:channel --json` and a request to pick out the main points. Without `kind:`, everything comes together.
 
 ## Weekly work-chat report
 

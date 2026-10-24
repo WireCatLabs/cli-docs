@@ -21,11 +21,11 @@ These actions use your personal account in groups you administer. Terms used bel
 | Sum up the week: decisions, promises, open questions | `max personal review 'date>7d'` |
 | Keep a list of what's waiting for you | `max personal tasks list` |
 | Remove spam according to your own rules | `max personal chats rules set`, `max personal chats moderate` |
-| Replace leaked invitation link | `max personal chats link reset` |
+| Replace leaked invitation link | `max personal chats links reset` |
 | Let people in or turn them away | `max personal chats requests list\|accept\|decline` |
 | View activity for the week | `max personal stats chats show` |
 | Save list of participants every day | `max personal chats members fetch --track` |
-| Find members who look like bots or spammers | `max personal chats members audit` |
+| Find members who look like bots or spammers | `max personal chats members check` |
 
 The full list of commands for groups is [below](#что-можно). Details about each - [groups and channels in the user manual](./usage.md#группы-и-каналы); each option is in the [command reference](./commands.md).
 
@@ -101,7 +101,7 @@ Change the invitation link only if you ask for it.
 **Replace link:**
 
 ```sh
-max personal chats link reset "Поход" --json
+max personal chats links reset "Поход" --json
 ```
 
 **Limit adding participants:**
@@ -195,8 +195,8 @@ Without `--allow-dangerous` in cron, actions at level `ask` are just planned and
 | `max personal chats moderate <чат>` | checking according to the rules; does what the rules allow |
 | `max personal chats members add\|remove`, `admins add\|remove` | members and admins |
 | `max personal chats requests list <чат>` | applications to the channel with approval; admins see, application time is unknown |
-| `max personal chats requests accept\|decline <чат> <человек>` | accept or reject one application; `--all` and `--link` are not supported |
-| `max personal chats link show\|reset <чат>` | invitation link; `reset` - new, old stops working |
+| `max personal chats requests confirm\|decline <чат> <человек>` | accept or reject one application; `--all` and `--link` are not supported |
+| `max personal chats links show\|reset <чат>` | invitation link; `reset` - new, old stops working |
 | `max personal chats inspect <ссылка>` | where the invitation or public link leads; does not enter anywhere |
 | `max personal chats create`, `max personal chats join <ссылка>`, `max personal chats leave <чат>` | create a group, join via link, exit |
 | `max personal chats update` | settings, title, description, photo, who can pin (`--all-can-pin`) and add people (`--only-admins-add`); read settings - `max personal chats show` |
@@ -226,7 +226,7 @@ Add something that the rules don't see, like your promise, or close a task that 
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other
 ```
 
-If a task may be the same work as an open task, `tasks add` refuses with exit code 2 and names the candidates. Repeat with `--into <задача>` to attach the message to it, or with `--new` to open a new task anyway. If it only resembles a task closed in the last 14 days, `tasks add` opens a new task linked to the closed one by `follow-up-of`; the closed task stays closed, and `tasks show` displays the link. `tasks duplicates` shows the pairs found by the rules, and `tasks merge <задача> --into <другая>` merges them:
+If a task may be the same work as an open task, `tasks add` refuses with exit code 2 and names the candidates. Repeat with `--into <задача>` to attach the message to it, or with `--new` to open a new task anyway. If it only resembles a task closed in the last 14 days, `tasks add` opens a new task linked to the closed one by `follow-up-of`; the closed task stays closed, and `tasks show` displays the link. `tasks duplicates list` shows the pairs found by the rules, and `tasks merge <задача> --into <другая>` merges them:
 
 ```sh
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --into <задача>
@@ -245,16 +245,16 @@ max personal tasks reject <задача>
 max config set task_agent_close_min 0.9
 ```
 
-A pair that is not one task is removed for good by `tasks duplicates reject`; `tasks duplicates defer` leaves it to you, and `tasks duplicates decision:unsure` lists it. `tasks related <задача>` scores similar tasks and changes nothing, and `tasks unmerge` undoes a merge:
+A pair that is not one task is removed for good by `tasks duplicates reject`; `tasks duplicates defer` leaves it to you, and `tasks duplicates list decision:unsure` lists it. `tasks related <задача>` scores similar tasks and changes nothing, and `tasks unmerge` undoes a merge:
 
 ```sh
 max personal tasks related <задача>
-max personal tasks duplicates decision:unsure
+max personal tasks duplicates list decision:unsure
 max personal tasks duplicates reject <дубль> <задача>
 max personal tasks unmerge <дубль>
 ```
 
-`tasks agenda` and `tasks duplicates` use query fields:
+`tasks agenda` and `tasks duplicates list` use query fields:
 
 - `tag:` and `category:` keep tasks with that tag or category: `tag:urgent`, `category:money`.
 - `claimed:` selects whose claim is on a task: `none`, `mine`, `others` or `any`. Without this field, the agenda shows unclaimed tasks and yours; `claimed:any` shows all.
@@ -274,7 +274,7 @@ max personal tasks release <задача>
 max config set task_categories.travel "поездки и билеты | рейс, отель, es:vuelo"
 ```
 
-A task keeps its category even after it is removed from the list. `tasks categories` names these categories and counts their tasks, `tasks list category:<имя>` finds them, and `tasks plan <задача> --category <имя>` moves a task to a different category.
+A task keeps its category even after it is removed from the list. `tasks categories` names these categories and counts their tasks, `tasks list category:<имя>` finds them, and `tasks update <задача> --category <имя>` moves a task to a different category.
 
 More on the [Tasks](https://wirecat.dev/ru/docs/tasks) page.
 
@@ -365,7 +365,7 @@ moderate`. Unlike a personal account, it can ban removed users from returning th
 
 ## Limitations
 
-- **Personal accounts cannot ban.** A removed member can return through an invite link. Reset the link (`max personal chats link reset`) or use a bot check, which can ban.
+- **Personal accounts cannot ban.** A removed member can return through an invite link. Reset the link (`max personal chats links reset`) or use a bot check, which can ban.
 - **Join requests exist only for a channel with approval.** A closed group has no approval: people join through the link immediately. In a channel with approval, `chats join` only sends a request (`requested: true`). `chats requests list` does not show when a person asked to join: MAX does not report it. You cannot answer all requests at once or select requests by link.
 - **At most 10 actions per check** (`--max-actions`). Deletions count toward the hourly send limit; once it is reached, remaining actions wait for the next check.
 - **Up to 1,000 messages per CLI check.** If there are more, the next check continues from that position.
@@ -410,7 +410,7 @@ Tracking does not start the server or prolong its idle timeout: for daily histor
 
 `max personal chats members history` lists saved joins, departures and profile changes chronologically; the query `time>=7d` limits the period. It never contacts MAX. A join uses MAX's timestamp when available, otherwise first observation. Departure time is the first complete snapshot missing the person, rather than their exact departure. The initial list does not mean everyone joined that day. `chats members list --offline` shows the latest complete saved membership; partial reads do not replace it. Without a complete snapshot, the list can be empty even when individual profiles and events exist. Profiles and history remain beside messages in the local archive.
 
-`max personal chats members audit` reads members and shows signals of suspicious accounts. `--max-pages` limits pages, and a query such as `score>=3` keeps members scored three or higher. This is a hint for human review: nobody is removed, administrators and the owner are excluded, `more` means an incomplete list, and `unknown` means unknown signals. MAX does not provide every Telegram signal. This check is unavailable with `--offline`. “Never wrote” means no messages from the person were found in local history; it does not prove they never posted in the group.
+`max personal chats members check` reads members and shows signals of suspicious accounts. `--max-pages` limits pages, and a query such as `score>=3` keeps members scored three or higher. This is a hint for human review: nobody is removed, administrators and the owner are excluded, `more` means an incomplete list, and `unknown` means unknown signals. MAX does not provide every Telegram signal. This check is unavailable with `--offline`. “Never wrote” means no messages from the person were found in local history; it does not prove they never posted in the group.
 
 `--deep <n>` additionally checks the first n members in full, one per second: their profile and up to 1000 saved messages each. Public spammer lists cover only Telegram accounts, so they are not queried for MAX, as the response explains.
 
@@ -439,7 +439,7 @@ max personal chats tracking show "Поход" --offline --json
 ```
 
 ```sh
-max personal chats members audit "Поход" --json
+max personal chats members check "Поход" --json
 ```
 
 Ask the agent to report message and active-sender counts, unanswered questions, membership changes and days with member snapshots. Keep incompleteness indicators in the report: `complete`, `more`, `unknown` and missing daily snapshots. Repeat membership collection for the next report; the first report cannot show departures before the first saved membership list.
