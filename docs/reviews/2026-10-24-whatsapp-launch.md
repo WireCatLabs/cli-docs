@@ -150,3 +150,5 @@ Desktop/mobile screenshots were inspected. CI results and deployment/public veri
 linked from the PR; successful checks do not certify unexecuted live account operations.
 
 Integration rebased onto cli-docs #358 (Memo 0.91.0); its source, translations and release review are preserved. After rebase, sync, all six released command captures, strict docs, release notes, lint, typecheck and 337 unit tests pass. The 22 local browser cases above used the pre-rebase export; deployment validates the combined export with the complete browser suite before publication.
+
+Final agent-export follow-up: the shared installation Markdown used the old Telegram/MAX label fallback, incorrectly naming its WhatsApp section MAX. Use the reviewed tool displayName for every messenger and assert WhatsApp [#wa] in all three exports. The fallback site description now also names WhatsApp. The queued initial deployment was cancelled so this correction publishes together with the launch.

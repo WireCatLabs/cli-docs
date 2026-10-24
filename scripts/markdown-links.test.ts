@@ -62,12 +62,15 @@ describe("exported Markdown destinations", () => {
     )
   })
 
-  it.each(["en", "ru", "es"])("exports actionable install prompts for both providers in %s", (lang) => {
+  it.each(["en", "ru", "es"])("exports actionable install prompts for all messenger providers in %s", (lang) => {
     const text = installationMarkdown(lang)
     expect(text).toContain("@wirecat/tg-cli")
     expect(text).toContain("@wirecat/max-cli")
     expect(text).toContain("[#tg]")
     expect(text).toContain("[#max]")
+    expect(text).toContain("WhatsApp [#wa]")
+    expect(text).toContain("@wirecat/whatsapp-cli")
+    expect(text).not.toContain("MAX [#wa]")
     expect(text).toContain("tg setup --help")
     expect(text).toContain("max personal doctor")
     expect(text).not.toContain("https://wirecat.dev/llms.mdx/docs/")
