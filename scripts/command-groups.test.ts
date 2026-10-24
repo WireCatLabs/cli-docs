@@ -61,3 +61,15 @@ it("keeps canonical Telegram invite links and diagnostic search in their reader 
   expect(commandGroup("tg chats links create")).toBe("admin")
   expect(commandGroup("tg search runs")).toBe("setup")
 })
+
+it("covers every site-authored page with reviewed metadata in every locale", () => {
+  for (const tool of readdirSync("translations/pages", { withFileTypes: true }).filter((entry) =>
+    entry.isDirectory(),
+  )) {
+    const pages = readdirSync(`translations/pages/${tool.name}`)
+      .filter((file) => file.endsWith(".en.md"))
+      .map((file) => file.replace(/\.en\.md$/, ""))
+    for (const page of pages)
+      for (const lang of seoLocales) expect(documentationDescription(lang, [tool.name, page])).not.toBe("")
+  }
+})
