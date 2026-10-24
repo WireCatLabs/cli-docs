@@ -21,6 +21,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     troubleshooting: "Recover from missing notes, empty searches, refused imports and edits, and mail errors.",
     security: "What Memo reads, writes and keeps locally, and what can reach an AI provider.",
     changelog: "Read Memo release notes: new capabilities, changes and fixes.",
+    roadmap: "See Memo’s current capabilities and planned work on notes, mail, messages and project context.",
   },
   ru: {
     index: "Храните заметки, почту и сообщения Telegram или MAX в одном месте для поиска ИИ-агентом.",
@@ -44,6 +45,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     troubleshooting: "Что делать, если нет заметок, поиск пуст, импорт или правка отклонены, почта не идёт.",
     security: "Что Memo читает, записывает и хранит локально и что может попасть к провайдеру ИИ.",
     changelog: "История выпусков Memo: новые возможности, изменения и исправления.",
+    roadmap: "Посмотрите, что Memo уже умеет и что планируется для заметок, почты, сообщений и проектов.",
   },
   es: {
     index: "Reúne notas, correo y mensajes de Telegram o MAX en un lugar que tu agente de IA puede buscar.",
@@ -67,5 +69,6 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     troubleshooting: "Qué hacer si faltan notas, la búsqueda sale vacía, se rechaza una importación o falla el correo.",
     security: "Qué lee, escribe y guarda Memo en tu ordenador, y qué puede llegar a un proveedor de IA.",
     changelog: "Notas de versión de Memo: nuevas capacidades, cambios y correcciones.",
+    roadmap: "Consulta las funciones actuales de Memo y los planes para notas, correo, mensajes y proyectos.",
   },
 }
