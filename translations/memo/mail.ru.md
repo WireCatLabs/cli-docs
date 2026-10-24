@@ -21,6 +21,7 @@ Linux, поэтому в файле он никогда не записан:
 
 ```toml
 [accounts.work]
+email = "you@example.com"
 imap.server = "imaps://imap.gmail.com:993"
 imap.sasl.plain.username = "you@example.com"
 imap.sasl.plain.password.command = "secret-tool lookup service himalaya account work"
@@ -36,19 +37,28 @@ Then add the account to Memo's config and import the last 30 days of mail.
 
 ## Добавьте аккаунт в Memo
 
-Укажите аккаунт в [файле настроек](./configuration.md#mail) Memo, `~/.config/cli-memo/config.json`.
-`name` — это имя аккаунта в Himalaya; `address` — ваш адрес электронной почты:
+Укажите имя аккаунта Himalaya и его настроенный адрес явно:
 
-```json
-{ "mail": { "accounts": [{ "name": "work", "address": "you@example.com" }] } }
+```sh
+memo mail add work you@example.com
+memo mail check work
 ```
 
-По умолчанию используется Gmail. Для другого почтового сервиса добавьте `"mode": "imap"` и папки, которые
-нужно читать:
+`add` запрашивает список аккаунтов Himalaya, сверяет `email` (или `from`) выбранного аккаунта в TOML-файле,
+затем добавляет его в [настройки](./configuration.md#mail) Memo. Аккаунт Himalaya по умолчанию не выбирается.
+Без имени команда перечисляет доступные имена и ничего не меняет. Несовпадающий адрес или уже существующее
+имя/адрес отклоняются. Если `email` не задан, сначала укажите его у выбранного аккаунта в Himalaya.
+`check` повторяет локальные проверки настроек без изменений Memo и без подключения к ящику; это не проверка входа.
 
-```json
-{ "mail": { "accounts": [{ "name": "home", "address": "me@example.org", "mode": "imap", "folders": ["INBOX", "Archive"] }] } }
+Для другого провайдера IMAP выберите вид и папки:
+
+```sh
+memo mail add home me@example.org --kind imap --folder INBOX --folder Archive
 ```
+
+По умолчанию используется Gmail. Эти команды работают с одним файлом настроек Himalaya, выбранным через
+`HIMALAYA_CONFIG` или обычное расположение. Сохраняйте то же окружение при импорте. Объединённый список файлов
+требует ручной настройки. Google Takeout `mbox` по-прежнему использует настройку `mode: "mbox"`, описанную ниже.
 
 ## Синхронизация почты
 

@@ -8,29 +8,42 @@ ordenador. Una vez conectada, la aplicación puede leer tus mensajes, tu correo,
 Memo sabe de una persona. También puede guardar recuerdos, registrar hechos y proponer acciones. Las nuevas sugerencias esperan revisión; las propuestas de proyecto tienen permisos de decisión
 propios, descritos más abajo.
 
-## Qué puede hacer la aplicación a través de MCP
+## Comandos y permisos
 
-| La aplicación puede | La aplicación no puede |
-|---|---|
-| Buscar y leer tus mensajes, correo y notas guardados | Enviar un mensaje o un correo |
-| Leer el contexto de una persona o revisar los hallazgos pendientes de un proyecto | Cambiar tus notas, tu correo o tus mensajes |
-| Añadir, listar, mostrar y buscar recuerdos | Confirmar un recuerdo |
-| Añadir, listar y mostrar hechos | Aceptar directamente un hecho ya propuesto |
-| Proponer acciones y listarlas | Aprobar o rechazar una acción |
-| Revisar propuestas de proyecto y, si está permitido, decidir hechos y seguimientos citados con un motivo | Confirmar un lote de hallazgos de reuniones |
-| Leer el registro de agentes | Borrar mensajes, correo o notas de origen |
-| Buscar proyectos, etiquetas y temas por su nombre, y ver qué tareas están listas | Crear o modificar tareas arbitrarias |
+MCP ofrece los comandos de Memo, incluidas las escrituras. Sus nombres separan palabras con guiones bajos:
+`notes_show`, `notes_edit`, `memories_confirm`, `tasks_add`, `mail_trash` y `mail_restore`. Los nombres existentes
+`person_context`, `project_evidence` y `meeting_passage` conservan sus argumentos y la forma de respuesta.
+
+Configura `permissions` en la [configuración](./configuration.md#permissions) para limitar las acciones.
+La clave es una ruta con puntos, como `notes.edit`; una clave superior como `notes` cubre sus comandos.
+`deny` oculta herramientas, `readonly` permite leer y `ask` o `allow` permiten escribir. En MCP `ask` se ejecuta
+sin pregunta en el terminal; la aplicación obtiene la aprobación del propietario. Las escrituras sin nivel
+guardado usan `ask`. `mail_trash` y `mail_restore` también necesitan `yes: true`, como `--yes` en CLI.
+
+Cambiar carpetas de origen o reglas de correo requiere `mcp.authority`, cuyo valor predeterminado es `deny`.
+Las decisiones de hallazgos (`meetings.actions.confirm` y `meetings.actions.reject`) y
+`projects.annotations.restore` también tienen `deny`: el propietario debe permitir cada operación explícitamente.
+Configura el permiso y reconecta para descubrir herramientas recién permitidas. Cada llamada vuelve a comprobar
+los permisos y el límite compartido de lectura de WireCat.
+
+`memo mcp --permission notes.edit=deny` restringe un permiso para ese servidor; repite la opción para otras claves.
+No puede relajar los permisos guardados, incluidas claves más específicas. `MEMO_READ_ONLY=1` oculta todas las
+herramientas de escritura y rechaza escrituras en conexiones existentes.
+
+Las exclusiones reservadas a CLI son `mcp`, `upgrade`, `skill install`, `auto start` y `auto stop`: inician otro
+servidor, sustituyen el programa, instalan instrucciones en otras aplicaciones o gestionan un temporizador.
 
 `memories_add`, `facts_add`, `actions_add`, `meeting_actions_add` y `project_actions_add` guardan propuestas.
-Por defecto, `project_actions_confirm` y `project_actions_reject` pueden decidir propuestas de proyecto
-por ti con un motivo guardado. Confirmar puede crear hechos aceptados y tareas numeradas, o confirmar
-un documento clave. Fija [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo
-el propietario decida las propuestas de proyecto; leer y proponer siguen disponibles. Los hallazgos
-de reuniones siguen necesitando al propietario. Memo nunca envía una acción propuesta con `actions_add`.
+Por defecto, `project_actions_confirm` y `project_actions_reject` pueden decidir propuestas de proyecto con un
+motivo registrado. [`agent_decisions: false`](./configuration.md#agent_decisions) exige decisiones del propietario
+tanto en los nombres existentes como en los comandos generados. Memo nunca envía mensajes ni correo.
 
-Las demás herramientas no modifican los registros de origen; la búsqueda de reuniones y la recopilación
-de contexto de proyecto pueden actualizar índices de texto locales. Conecta Memo solo a una aplicación
-en la que confíes para leer tus mensajes, tu correo y tus notas.
+## Abrir una fuente citada
+
+Pasa el `ref` del resultado a `notes_show` como `note`, o una referencia de mensaje o correo a `messages_show`
+como `message`. `notes_show` devuelve la nota completa; `messages_show`, el mensaje o correo guardado, y con
+`full: true` todo el texto de los adjuntos. `mail_inspect` lee cabeceras de una cuenta explícita y `tags_list`
+lista etiquetas. Los mensajes usan la cuenta y el chat de la referencia; no se consulta al proveedor.
 
 ## Conectar una aplicación
 
@@ -59,7 +72,9 @@ Después, pruébalo:
 Usa las herramientas de memo para mostrar los recuerdos que esperan mi revisión.
 ```
 
-## Las herramientas
+## Nombres de herramientas existentes
+
+Estos nombres siguen disponibles junto a las herramientas de [todos los comandos](./commands.md), según los permisos.
 
 | Herramienta | Función |
 |---|---|
@@ -70,8 +85,8 @@ Usa las herramientas de memo para mostrar los recuerdos que esperan mi revisión
 | `project_context` | Documentos clave, relaciones, hechos y hallazgos de reuniones pendientes, junto con las tareas numeradas abiertas |
 | `project_evidence` | Referencias citadas sobre un proyecto en mensajes, correo, transcripciones de reuniones y carpetas de notas guardados, buscadas por sus nombres, palabras adicionales y personas; solo lectura |
 | `project_actions_add`, `project_actions_list`, `project_actions_confirm`, `project_actions_reject` | Preparar hechos y seguimientos citados sobre un proyecto, revisarlos con la evidencia y su contexto, y decidir los que tengas claros con un motivo |
-| `project_annotations_snapshot`, `project_annotations_preview` | Leer alias, hechos y vínculos genéricos seleccionados o comprobar correspondencias explícitas en un destino preparado; restaurar corresponde al propietario por CLI |
-| `meeting_actions_add`, `meeting_actions_show`, `meeting_actions_list` | Proponer y examinar hechos y seguimientos citados de reuniones; nunca los confirma |
+| `project_annotations_snapshot`, `project_annotations_preview` | Leer anotaciones o comprobar correspondencias; `projects_annotations_restore` necesita su permiso explícito |
+| `meeting_actions_add`, `meeting_actions_show`, `meeting_actions_list` | Proponer e inspeccionar hallazgos de reuniones; las decisiones necesitan permisos explícitos |
 | `person_context` | Una persona entre servicios y correo, con notas y tareas enlazadas; solo lectura |
 | `memories_add`, `memories_list`, `memories_show`, `search_memories` | Guardar y leer recuerdos |
 | `facts_add`, `facts_list`, `facts_show` | Registrar y leer hechos |
@@ -101,8 +116,8 @@ que `memo meetings actions add --help`. Cada hallazgo necesita referencias exact
 y sus huellas, y un vínculo confirmado con el proyecto. Las fechas y responsables desconocidos se dejan vacíos; los
 seguimientos deducidos se marcan como tales. Un reintento idéntico reutiliza la clave; una entrada distinta necesita una clave nueva.
 
-`meeting_actions_show` y `meeting_actions_list` reciben un `source` explícito. Solo el propietario revisa los
-lotes con `memo meetings actions confirm` o `reject`. Preparar un lote no crea hechos ni tareas numeradas.
+`meeting_actions_show` y `meeting_actions_list` reciben un `source` explícito. El propietario revisa los
+lotes con `memo meetings actions confirm` o `reject`, o permite explícitamente las herramientas MCP correspondientes. Preparar un lote no crea hechos ni tareas numeradas.
 
 `project_actions_add` prepara hechos y seguimientos citados sobre un proyecto: cada referencia es una referencia
 `msg:` o `document:` con el `fingerprint` que dio `project_evidence`, y un texto que cambió desde entonces se rechaza
@@ -157,8 +172,8 @@ del proyecto coincidentes. La herramienta informa de conflictos y devuelve una h
 Ambas rechazan argumentos desconocidos; tras validar el esquema se comprueban el grafo y su contenido.
 
 Se omiten notas, vínculos específicos entre reuniones y proyectos, tareas, recuerdos, etiquetas y hallazgos: es
-un formato de anotaciones seleccionadas, no una copia completa. No hay herramienta MCP de restauración;
-el propietario usa el [recorrido de anotaciones seleccionadas](./recipes.md#keep-selected-project-annotations).
+un formato de anotaciones seleccionadas, no una copia completa. El propietario usa el [recorrido de anotaciones seleccionadas](./recipes.md#keep-selected-project-annotations)
+o permite explícitamente `projects.annotations.restore` para la herramienta generada.
 Las lecturas siguen disponibles con `MEMO_READ_ONLY=1`; las llamadas conservan su entrada normal de auditoría.
 
 Siguiente: [revisar lo que guardó la aplicación](./memories.md).

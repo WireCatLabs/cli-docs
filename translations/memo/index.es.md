@@ -42,7 +42,7 @@ Tres palabras aparecen en todas las páginas:
    mueven el correo elegido a la Papelera o lo restauran solo con `--yes`.
 3. **Tú o tu agente preguntáis.** Memo responde con el texto que coincide y una referencia a cada
    fuente, para que puedas abrir el original y comprobarlo.
-4. **Tú controlas las decisiones del proyecto.** Los nuevos recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas esperan revisión. Por defecto, el agente puede decidir propuestas de proyecto con un motivo registrado; [exige decisiones del propietario](./configuration.md#agent_decisions) si quieres revisar cada una. Las conclusiones de reuniones siguen requiriendo al propietario. Memo nunca envía mensajes ni correos.
+4. **Tú controlas las decisiones del proyecto.** Los nuevos recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas esperan revisión. Por defecto, el agente puede decidir propuestas de proyecto con un motivo registrado; [exige decisiones del propietario](./configuration.md#agent_decisions) si quieres revisar cada una. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos. Memo nunca envía mensajes ni correos.
 
 Memo conserva el almacén en tu ordenador. Memo envía tu texto a un proveedor de IA solo cuando configuras uno y
 lo permites para esa petición. [Cómo funciona Memo](./how-it-works.md) lo explica con más detalle.
@@ -67,7 +67,9 @@ memo search notes budget
 ```
 
 Memo necesita Node.js 22.16+ o 24+ ([qué instalar primero](./installation.md)). Tus archivos se
-quedan donde están; Memo solo los lee.
+quedan donde están. Memo lee los archivos e importa el correo sin modificarlo. `notes edit` puede cambiar
+el archivo original de una nota; `notes export` escribe notas en archivos. Los comandos explícitos `mail trash`
+y `mail restore` mueven correo de Gmail solo con `--yes`.
 
 ## Adónde ir después
 
@@ -90,3 +92,4 @@ quedan donde están; Memo solo los lee.
 | [Configuración](./configuration.md) | Cada ajuste del archivo de configuración |
 | [Solución de problemas](./troubleshooting.md) | Algo no funciona: qué dice la pantalla y qué hacer |
 | [Seguridad](./security.md) | ¿Qué lee, escribe y envía Memo? |
+| [Comparación con otras herramientas](./compare.md) | ¿En qué se diferencia Memo y cuándo conviene otra herramienta de memoria? |

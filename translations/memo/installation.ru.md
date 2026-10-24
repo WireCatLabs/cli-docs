@@ -26,7 +26,7 @@ title: "Установка"
 |---|---|
 | Заметки и документы | Ничего: [форматы файлов](./notes.md#files-memo-can-read) |
 | Сообщения Telegram или MAX | [tg](https://github.com/WireCatLabs/tg-cli) или [max](https://github.com/WireCatLabs/max-cli). Они сохраняют чаты в локальном хранилище; Memo не входит в мессенджер |
-| Поиск по смыслу | Модель поиска на компьютере, около 135 МБ. tg или max скачивает её один раз: `npx -y @wirecat/tg-cli local models text download e5-small`. Без неё Memo ищет по словам |
+| Поиск по смыслу | Модель поиска на компьютере, около 135 МБ. Скачайте её один раз: `memo models text download e5-small`. Без неё Memo ищет по словам |
 | Почта | [Himalaya](https://github.com/pimalaya/himalaya) 2.x, программа для чтения почтового ящика. Свои аккаунты она читает из `~/.config/himalaya/config.toml` ([почта](./mail.md#before-you-start)) |
 | Синхронизация по таймеру (`memo auto`) | Linux с systemd. На macOS и Windows запускайте `memo sync` сами или своим планировщиком ([обновление архива](./archive.md)) |
 
@@ -47,9 +47,11 @@ npm install -g @wirecat/cli-memo
 memo skill install --for all     # puts Memo's skill where your agents read it
 ```
 
-npm 12 выводит "install scripts blocked": это безвредно, `memo skill install` делает то же, что сделал бы скрипт. В
-Windows откройте новый терминал, если `memo` не находится. С pnpm или Bun: `pnpm add -g @wirecat/cli-memo` или
-`bun add -g @wirecat/cli-memo`, затем та же `memo skill install --for all`.
+npm 11.17 и новее предупреждают о скриптах установки, не указанных в `allowScripts`; в npm 11 скрипты ещё выполняются.
+npm 12 блокирует их. Выполните команду `npm install -g --allow-scripts=…`, которую npm печатает под предупреждением;
+она однократно разрешает только названные пакеты. Затем выполните `memo skill install --for all` для установки навыка.
+В Windows откройте новый терминал, если `memo` не найден. С pnpm или Bun используйте `pnpm add -g @wirecat/cli-memo`
+или `bun add -g @wirecat/cli-memo`, затем ту же `memo skill install --for all`.
 
 Чтобы попробовать без установки (всё равно нужен Node.js):
 

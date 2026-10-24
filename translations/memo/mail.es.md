@@ -21,6 +21,7 @@ de Linux, de modo que nunca queda escrita en el archivo:
 
 ```toml
 [accounts.work]
+email = "you@example.com"
 imap.server = "imaps://imap.gmail.com:993"
 imap.sasl.plain.username = "you@example.com"
 imap.sasl.plain.password.command = "secret-tool lookup service himalaya account work"
@@ -36,20 +37,28 @@ Then add the account to Memo's config and import the last 30 days of mail.
 
 ## Añadir la cuenta a Memo
 
-Pon el nombre de la cuenta en el [archivo de configuración](./configuration.md#mail) de Memo,
-`~/.config/cli-memo/config.json`. `name` es el nombre de la cuenta en Himalaya; `address` es tu
-dirección de correo:
+Indica explícitamente el nombre de la cuenta de Himalaya y su correo configurado:
 
-```json
-{ "mail": { "accounts": [{ "name": "work", "address": "you@example.com" }] } }
+```sh
+memo mail add work you@example.com
+memo mail check work
 ```
 
-Gmail es la opción predeterminada. Para otro proveedor de correo, añade `"mode": "imap"` y las
-carpetas que quieres leer:
+`add` pide a Himalaya la lista de cuentas, comprueba el `email` (o `from`) de la cuenta elegida en su archivo TOML
+y la añade a la [configuración](./configuration.md#mail) de Memo. Nunca elige la cuenta predeterminada de Himalaya.
+Si falta el nombre, enumera los nombres disponibles sin cambiar nada. Rechaza una dirección distinta o un nombre/correo
+ya existente. Si falta `email`, configúralo primero en la cuenta de Himalaya. `check` repite las comprobaciones
+locales sin cambiar Memo ni conectar al buzón; no comprueba el inicio de sesión.
 
-```json
-{ "mail": { "accounts": [{ "name": "home", "address": "me@example.org", "mode": "imap", "folders": ["INBOX", "Archive"] }] } }
+Para otro proveedor IMAP, selecciona el tipo y las carpetas:
+
+```sh
+memo mail add home me@example.org --kind imap --folder INBOX --folder Archive
 ```
+
+Gmail es el tipo predeterminado. Estos comandos admiten un archivo de configuración de Himalaya, elegido por
+`HIMALAYA_CONFIG` o su ubicación normal. Mantén el mismo entorno para importar. Una lista combinada de archivos
+requiere configuración manual. Google Takeout `mbox` sigue usando `mode: "mbox"`, descrito más abajo.
 
 ## Sincronizar correo
 

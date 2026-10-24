@@ -1972,5 +1972,81 @@
         }
       ]
     }
+  },
+  {
+    "tool": "memo",
+    "slug": "index",
+    "reason": "Memo 0.91.0 permits delegated MCP meeting decisions through explicit deny-default operation permissions; source src/findings/command.ts and src/mcp/permissions.ts. Preserve the owner approval boundary without claiming the tools are absent.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Meeting findings still need the owner.",
+          "after": "Meeting findings decisions need explicit owner permissions."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "memories",
+    "reason": "Memo 0.91.0 delegates MCP meeting review only through explicit operation permissions; src/findings/command.ts and src/mcp/permissions.ts.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Meeting findings still require the owner.",
+          "after": "Meeting findings decisions require explicit permissions."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "compare",
+    "reason": "Memo uses local embedding models during sync/search; the no-key claim concerns remote language-model APIs. Source src/notes/embed.ts and src/search/search.ts.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Sync and search never call a model.",
+          "after": "Sync and search need no remote language-model API key."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Синхронизация и поиск не вызывают модель.",
+          "after": "Для синхронизации и поиска не нужен ключ API удалённой языковой модели."
+        }
+      ],
+      "es": [
+        {
+          "before": "La sincronización y búsqueda no llaman a un modelo.",
+          "after": "La sincronización y búsqueda no necesitan clave de API de un modelo de lenguaje remoto."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "recipes",
+    "reason": "Memo 0.91.0 allows explicitly delegated MCP meeting review via deny-default operation permissions; source src/findings/command.ts and src/mcp/permissions.ts.",
+    "replacements": {
+      "en": [
+        {
+          "before": "meeting review flow still leaves confirmation to the owner.",
+          "after": "meeting review flow needs explicit owner permissions for MCP decisions."
+        }
+      ],
+      "ru": [
+        {
+          "before": "В отдельном сценарии проверки встречи подтверждение по-прежнему остаётся за владельцем.",
+          "after": "Решения по встречам через MCP требуют явных разрешений владельца."
+        }
+      ],
+      "es": [
+        {
+          "before": "El recorrido separado de reuniones sigue dejando la confirmación al propietario.",
+          "after": "Las decisiones de reuniones mediante MCP necesitan permisos explícitos del propietario."
+        }
+      ]
+    }
   }
 ]

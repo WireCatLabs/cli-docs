@@ -185,7 +185,7 @@ Con el modelo de búsqueda en tu ordenador, Memo también busca por significado,
 puede encontrar una nota sobre unas vacaciones. tg o max descarga el modelo una vez:
 
 ```sh
-npx -y @wirecat/tg-cli local models text download e5-small
+memo models text download e5-small
 ```
 
 El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo sync` para que tus notas
@@ -225,3 +225,24 @@ respuesta: añade `--analyze`, y `--allow-remote` para un proveedor fuera de tu 
 generado: compárala con las fuentes.
 
 Siguiente: [ver todo sobre una persona](./people.md) o [convertir lo que encontraste en una tarea](./tasks.md).
+
+## Ámbito de lectura de reuniones
+
+Memo y zm comparten los selectores y analizadores de cli-core: identificadores de reunión, identidad, persona,
+evento y serie; proyecto, etiqueta y tema; límites de tiempo, cursor y presupuesto de lectura. Por ejemplo:
+
+```sh
+memo search meetings "draft" --source zoom:work --topic finance --meeting-id 12
+```
+
+La selección de cuenta difiere: Memo necesita un `--source provider:account` guardado, mientras zm selecciona
+la cuenta con su argumento de perfil. `meetings passage` reutiliza la gramática compartida de pasajes y
+`meetings prepare`, el generador de contexto y esquema de respuesta. La evidencia y cobertura JSON mantienen
+la forma común; los resúmenes de texto describen lo que realmente lee cada herramienta.
+
+Memo lee archivos guardados. Su preparación deja sin verificar la próxima reunión porque no consulta un
+calendario del proveedor. zm puede comprobarlo mediante la conexión del proveedor seleccionado. zm también
+añade búsqueda opcional por significado y ajustes de embeddings remotos a la gramática compartida;
+Memo busca reuniones guardadas por palabras. Esas opciones necesitan otro proceso de embeddings y no forman
+parte de su lector actual de reuniones. `search notes` y `search all` siguen usando el modelo local compartido
+para buscar notas y correo por significado.

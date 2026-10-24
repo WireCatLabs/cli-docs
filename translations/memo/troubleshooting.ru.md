@@ -29,7 +29,7 @@ Memo не установлен, или терминал был открыт до
 импорт:
 
 ```sh
-npx -y @wirecat/tg-cli local models text download e5-small
+memo models text download e5-small
 memo sync
 ```
 
@@ -53,8 +53,8 @@ memo sync
 
 ## "no mail account" или импорт почты просит указать аккаунт
 
-`no mail account` означает, что в файле настроек ещё нет почтовых аккаунтов. Добавьте аккаунт в
-`mail.accounts` ([почта](./mail.md#add-the-account-to-memo)).
+`no mail account` означает, что в файле настроек ещё нет почтовых аккаунтов. Выполните `memo mail add <account> <address>` после настройки Himalaya
+или добавьте аккаунт в `mail.accounts` ([почта](./mail.md#add-the-account-to-memo)).
 
 `memo sync --source email:work` принимает имя аккаунта — `name` из `mail.accounts` файла настроек. При неверном имени Memo перечисляет известные аккаунты. Без `--source` читает все аккаунты.
 

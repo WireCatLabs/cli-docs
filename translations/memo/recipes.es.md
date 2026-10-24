@@ -214,9 +214,9 @@ Sustituye `PREVIEW_FINGERPRINT` por la huella exacta de la comprobación correct
 comprueba de nuevo, aplica los cambios juntos y los revierte por completo si falla. Una fuente o un
 destino cambiado requiere otra comprobación. Repetir una restauración completada en un destino ocupado
 se rechaza sin añadir duplicados. Los hechos históricos aceptados siguen aceptados y los propuestos
-siguen propuestos. Memo rechaza la restauración cuando el entorno identifica al llamante como agente:
-es una política del CLI, no una barrera de acceso del sistema operativo. MCP solo ofrece lecturas de
-instantánea y vista previa; las llamadas siguen creando su entrada normal de auditoría.
+siguen propuestos. Memo rechaza la restauración desde el terminal de un agente. La herramienta MCP generada requiere el permiso
+explícito `projects.annotations.restore`; la instantánea y la vista previa siguen siendo lecturas. Las llamadas MCP
+conservan su entrada normal de auditoría.
 
 Cuando la comprobación sea correcta y los recuentos coincidan con lo esperado, vuelve a la [revisión del proyecto](#review-project-facts-and-follow-ups)
 para las propuestas actuales; la instantánea no decide sobre ellas.

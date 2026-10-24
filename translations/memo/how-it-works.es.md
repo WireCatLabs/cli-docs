@@ -114,9 +114,9 @@ Tu agente puede añadir tres tipos de registros:
 - una **acción propuesta**: algo que hacer, como una respuesta. Siempre espera hasta que la apruebes o
   la rechaces. Aprobarla la convierte en una tarea para ti. Memo nunca envía un mensaje ni un correo.
 
-Los recuerdos y los hechos registrados directamente mediante el [servidor MCP](./mcp.md) empiezan como **propuestos**. MCP no confirma recuerdos, no acepta directamente hechos propuestos existentes ni aprueba acciones en cuentas externas. Cada llamada se escribe en el registro de agentes (`memo agents log`), sin los detalles enviados.
+Los recuerdos y los hechos registrados directamente mediante el [servidor MCP](./mcp.md) empiezan como **propuestos**. Las herramientas de comandos MCP pueden confirmar recuerdos, aceptar hechos y aprobar acciones si lo permiten los permisos guardados. Cada llamada se escribe en el registro de agentes (`memo agents log`), sin los detalles enviados.
 
-Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las conclusiones de reuniones siguen requiriendo al propietario.
+Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
 
 El comando `memo` reconoce el terminal de un agente por `AI_AGENT` o `CLAUDECODE`, variables que establecen agentes como Claude Code. Allí, un hecho registrado directamente, recuerdo o vínculo se atribuye al agente y empieza como propuesto. Sin ellas, o con `--as-owner`, se atribuye a ti: los recuerdos y vínculos se confirman y los hechos se aceptan al instante. Las acciones propuestas siguen esperando aprobación. Las variables y `--as-owner` son etiquetas, no un bloqueo: un agente puede establecerlas y escribir como tú.
 

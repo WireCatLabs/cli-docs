@@ -8,7 +8,39 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
-## Unreleased
+## 0.91.0 — 24.10.2026
+
+### Added
+
+- **The agent skill asks for two or three searches in other words before reporting no answer**, covering
+  paraphrases and language changes without a separate query-expansion model.
+
+- **Meeting search exposes every shared selector**, including meeting/person/identity/event/series ids,
+  tags and topics. The guide explains Memo's explicit stored-account scope and why calendar verification
+  and zm's extra semantic-search flags differ.
+
+- **`memo mail add <account> <address>` checks the explicit Himalaya account and matching configured email**
+  before saving it. `mail check <account>` repeats the local checks; neither command chooses a default account
+  or opens the mailbox. Use `--kind imap` and repeated `--folder` for other IMAP providers.
+
+- **`memo models text download <model>` downloads and checks the shared search model**, through cli-core's
+  downloader. Sync, search and setup instructions now point to `memo models text download e5-small`.
+
+- **MCP exposes the command tree, including writes**, with generated command names alongside all 37 existing
+  tools. Open cited notes with `notes_show`, stored messages and emails with `messages_show`, and tags with `tags_list`.
+  Source-folder and mail-rule changes need `mcp.authority` (denied by default). Meeting findings decisions
+  and selected annotation restore each need their own explicit permission. `agent_decisions` still applies.
+- **Saved dotted `permissions` and `mcp --permission key=level` limit tools.** Server overrides can only tighten
+  saved levels; locks and permissions are checked before every call. `MEMO_READ_ONLY` removes writing tools.
+
+### Fixed
+
+- **The shared mail-import hint names `--only mail`**, included with cli-core 0.404.0.
+- **cli-base is pinned at 0.50.3**, matching cli-core's required vocabulary. MCP server/client are pinned at 2.3.0.
+- **Install instructions name npm 11.17's `allowScripts` warning and npm 12's blocked scripts**, explain the
+  package-specific approval command, and keep `memo skill install --for all` explicit.
+- **The introduction describes file writes accurately:** `notes edit` can change a source note, `notes export`
+  writes files, and explicit Gmail Trash and restore commands need `--yes`.
 
 ## 0.90.0 — 24.10.2026
 

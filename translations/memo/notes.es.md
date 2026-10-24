@@ -4,8 +4,7 @@ title: "Notas y carpetas"
 
 Esta página te ayuda a traer tus notas a Memo y a guardar ahí tus propias notas. Puedes añadir una
 carpeta de archivos Markdown o una bóveda de Obsidian, buscar en sus documentos y escribir notas sobre
-personas, mensajes y proyectos. Memo solo lee tus carpetas: escribe un archivo solo cuando exportas
-tus notas.
+personas, mensajes y proyectos. Memo importa las carpetas sin modificarlas. `notes edit` puede cambiar una nota original; `notes export` escribe archivos.
 
 Hay dos tipos de notas:
 

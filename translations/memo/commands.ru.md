@@ -264,11 +264,11 @@ memo folders list [query] [options]
 
 ## `memo messages`
 
-stored emails; tg and max read messenger messages
+stored messenger messages and emails
 
 ### `memo messages show`
 
-one stored email whole, with its attachments' text and nearby thread emails
+one stored message or email whole, with optional stored neighbours
 
 ```sh
 memo messages show <message> [options]
@@ -276,7 +276,7 @@ memo messages show <message> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `message` | required | the email's msg:email/… reference, as search answers give it. |
+| `message` | required | the msg:provider/account/chat/message reference a search gives. |
 
 | Option | What it does |
 |---|---|
@@ -285,13 +285,58 @@ memo messages show <message> [options]
 | `--full` | whole attachment text, not the first 4000 characters of each. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
-**Returns:** one stored email whole, with its attachments' text and nearby thread emails
+**Returns:** one stored message or email whole, with optional stored neighbours
 
 **Example:** `memo messages show 'msg:email/me%40example.com/thread/42' --before-n 2 --after-n 2`
 
 ## `memo mail`
 
 look at a mail account before importing it, and the owner's rules
+
+### `memo mail add`
+
+add an explicit account after matching its Himalaya email
+
+This command changes the local store or your files.
+
+```sh
+memo mail add [account] [address] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | optional | one Himalaya account name; omission lists choices and changes nothing. |
+| `address` | optional | must match the email configured for this Himalaya account. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | gmail or imap. Default: `gmail`. |
+| `--folder <folder>` | mail folder to import; repeat for several. |
+| `--json` | print the added account as JSON. |
+
+**Returns:** add an explicit account after matching its Himalaya email
+
+**Example:** `memo mail add work you@example.test --kind imap`
+
+### `memo mail check`
+
+check one Memo account against Himalaya's configured identity
+
+```sh
+memo mail check [account] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `account` | optional | one Memo account name; omission lists choices and changes nothing. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print the checked account as JSON. |
+
+**Returns:** check one Memo account against Himalaya's configured identity
+
+**Example:** `memo mail check work`
 
 ### `memo mail inspect`
 
@@ -2618,17 +2663,52 @@ memo agents log [query] [options]
 
 ## `memo mcp`
 
-serve search, person context, memories, facts and actions over MCP on stdio
+serve memo commands over MCP on stdio, limited by saved permissions
 
 This command changes the local store or your files.
 
 ```sh
-memo mcp
+memo mcp [options]
 ```
 
-**Returns:** serve search, person context, memories, facts and actions over MCP on stdio
+| Option | What it does |
+|---|---|
+| `--permission <key=level>` | tighten one saved permission for this server; repeat for more keys. |
+
+**Returns:** serve memo commands over MCP on stdio, limited by saved permissions
 
 **Example:** `memo mcp`
+
+## `memo models`
+
+models that run on this machine
+
+### `memo models text`
+
+embedding models for searching by meaning
+
+#### `memo models text download`
+
+download a shared search model, check its hash and load it once
+
+This command changes the local store or your files.
+
+```sh
+memo models text download <model> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `model` | required | a shared text model id, such as e5-small. |
+
+| Option | What it does |
+|---|---|
+| `--accept-terms` | acknowledge the model's licence terms after reading them. |
+| `--json` | print the model's download receipt as JSON. |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more
+
+**Example:** `memo models text download e5-small`
 
 ## `memo search`
 
@@ -2785,7 +2865,14 @@ memo search meetings <query> [options]
 
 | Option | What it does |
 |---|---|
+| `--meeting-id <id>` | only this stored meeting. |
+| `--identity-id <id>` | meetings with this participant identity; does not say who spoke a hit. |
+| `--person-id <id>` | meetings with a participant linked to this person. |
+| `--event-id <id>` | only meetings linked to this stored event. |
+| `--series-id <id>` | only meetings in this stored series. |
 | `--project <project>` | meetings confirmed in this project, by name, key or alias. |
+| `--tag <name>` | meetings with this tag, by name or alias. |
+| `--topic <name>` | meetings with this topic, by name or alias. |
 | `--since-time <time>` | meetings starting at or after this ISO 8601 date or time. |
 | `--until-time <time>` | meetings starting at or before this ISO 8601 date or time; a date alone covers that whole local day. |
 | `--limit <n>` | how many hits, 1 through 1000 (default 100). |
@@ -2975,7 +3062,7 @@ print SKILL.md — `memo skill install` puts it where Claude Code, Codex and Gem
 memo skill show
 ```
 
-**Returns:** print SKILL.md — `memo skill install` puts it where Claude Code, Codex and Gemini CLI…
+**Returns:** print the tool's instructions for AI agents
 
 **Example:** `memo skill show`
 
@@ -2993,7 +3080,7 @@ memo skill install [options]
 |---|---|
 | `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
 
-**Returns:** write SKILL.md to ~/.claude/skills/cli-memo/ (Claude Code) and ~/.agents/skills/cli-memo/…
+**Returns:** install the tool's instructions for AI agents
 
 **Example:** `memo skill install --for all`
 
