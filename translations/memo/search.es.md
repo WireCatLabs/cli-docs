@@ -231,7 +231,7 @@ Siguiente: [ver todo sobre una persona](./people.md) o [convertir lo que encontr
 Memo y zm comparten los selectores y analizadores de cli-core: identificadores de reunión, identidad, persona,
 evento y serie; proyecto, etiqueta y tema; límites de tiempo, cursor y presupuesto de lectura. Por ejemplo:
 
-Para las etiquetas y temas de reuniones, Memo usa los términos nativos `tag:` y `topic:` en la consulta, sin opciones de selección separadas.
+Para las etiquetas y temas de reuniones, Memo usa los términos nativos `tag:` y `topic:` en la consulta; los temas guardados también se pueden seleccionar con la opción compartida `--topic-name`.
 
 ```sh
 memo search meetings "draft topic:finance" --source zoom:work --meeting-id 12
