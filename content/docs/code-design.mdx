@@ -202,6 +202,14 @@ and the store implements `MeetingStore` and `TaskStore`. The rest of cli-core im
 their `index.ts`, and they import nothing else from cli-core. A meeting provider such as Zoom plugs in
 without the core knowing it exists.
 
+### The store from a tool
+
+A tool reaches the shared store only through cli-core's store areas. It writes no SQL against the shared file, so
+the next migration cannot break it ([WC-STORE-5](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md#wc-store-5--a-cli-writes-no-sql-against-the-shared-store)).
+Tables only one tool needs, such as checkpoints and caches, live in that tool's own SQLite file next to the shared
+store, opened with `openCache` from `@wirecat/cli-core/store`; they refer to shared rows by id only, and no other tool
+reads them ([WC-DATA-1](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+
 ### Registries
 
 Document readers and image describers register themselves with `registerReader` and

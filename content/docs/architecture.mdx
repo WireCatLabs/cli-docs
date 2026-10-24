@@ -191,6 +191,13 @@ The store keeps message text so it can answer without the network. It is not enc
 What the store holds — the entities, how they connect and how a search narrows to context — is
 explained in [the data model](./data-model.mdx).
 
+The store keeps two kinds of record: **entities**, the real people, events and documents, and **source records**,
+what one source says about them, with the provider's id in `external_id`. A tool writes its source records through
+cli-core and never runs SQL against the file itself ([store rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md), [data-model rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+**Coming in the next cli-core release:** each tool records its provider in the store when it runs, so other tools
+learn about a new source without a cli-core release; rows of a provider no tool has recorded are skipped and
+reported, never searched as messages ([architecture rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/architecture.md)).
+
 ## Patterns that hold it together
 
 - **stdout carries data and nothing else** in machine mode: no spinner, no colour, no warning. Agents

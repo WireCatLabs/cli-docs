@@ -126,6 +126,13 @@ tg personal tags add work --chat "Book club"
 
 Cada vínculo guardado anota su origen: `file` (escrito en un archivo de notas), `owner` (añadido por ti), `suggested` (propuesto, aún sin confirmar) o `message` (escrito en un mensaje guardado).
 
+El vínculo entre una identidad y su persona también guarda cómo se hizo, qué seguridad tiene y quién lo hizo, y cada
+paso de una identidad de una persona a otra queda registrado, así que un vínculo equivocado se puede deshacer. La regla
+para todas las herramientas es que un vínculo que hiciste tú nunca se sustituye por uno automático, y dos candidatos
+igual de buenos no producen ningún vínculo ([el estándar del modelo de datos](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+**Llega en la próxima versión de cli-core:** el mismo registro para eventos y documentos, y una lista de revisión
+donde decides los pares que las herramientas no pudieron distinguir.
+
 ## Usar los vínculos en una pregunta
 
 Cuatro peticiones que un agente puede responder gracias a los vínculos. Sustituye los nombres por los tuyos.

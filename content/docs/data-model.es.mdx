@@ -57,6 +57,44 @@ Una reunión pertenece a un evento. Un proyecto contiene tareas y decisiones. Un
 personas, chats y correo, la cuenta por la que llegaron, documentos y reuniones, trabajo, y lo que
 se une a cualquier cosa.
 
+### Entidades y registros de origen
+
+El almacén guarda dos tipos de registro. Una **entidad** es la cosa real a la que te refieres: una
+persona, un evento, un documento. Un **registro de origen** es lo que una fuente dice de ella: un
+usuario de Telegram, una dirección de correo, una reunión de Zoom. El registro de origen guarda el id
+propio del proveedor en `external_id` y apunta a su entidad. Una entidad reúne registros de varias
+fuentes y cuentas, así que la misma reunión en Zoom y en tu calendario es un solo evento, y la misma
+persona en Telegram y en el correo es una sola persona.
+
+```mermaid Una entidad, varios registros de origen
+graph LR
+  TgUser("Usuario de Telegram<br>registro de origen") --> Person("Persona<br>entidad")
+  MailAddr("Dirección de correo<br>registro de origen") --> Person
+  ZoomMeeting("Reunión de Zoom<br>registro de origen") --> Event("Evento<br>entidad")
+  WorkEntry("Entrada del calendario de trabajo<br>próximamente") -.-> Event
+  HomeEntry("Entrada del calendario personal<br>próximamente") -.-> Event
+  DriveFile("Archivo de Drive<br>próximamente") -.-> Document("Documento<br>entidad")
+  LocalFile("Archivo en una carpeta<br>próximamente") -.-> Document
+  classDef entity fill:var(--diagram-blue-bg),stroke:var(--diagram-blue-line),color:var(--diagram-blue-fg)
+  classDef source fill:var(--diagram-green-bg),stroke:var(--diagram-green-line),color:var(--diagram-green-fg)
+  classDef coming fill:var(--diagram-grey-bg),stroke:var(--diagram-grey-line),color:var(--diagram-grey-fg)
+  class Person,Event,Document entity
+  class TgUser,MailAddr,ZoomMeeting source
+  class WorkEntry,HomeEntry,DriveFile,LocalFile coming
+```
+
+En palabras: un usuario de Telegram y una dirección de correo apuntan a la misma persona. Una reunión
+de Zoom apunta a su evento. Las líneas continuas existen hoy; las discontinuas llegarán después. Cada
+vínculo guarda cómo se hizo, y un vínculo que hiciste tú nunca se sustituye por uno automático
+([cómo se hacen los vínculos](./how-things-are-linked.md#quién-crea-un-vínculo)).
+
+Hoy funcionan así las personas (identidades) y los eventos (reuniones de Zoom). **Llega en la próxima
+versión de cli-core:** las entradas de calendario como registros de origen de eventos, los archivos
+como registros de origen de documentos, una dirección de correo en cada identidad para que una
+dirección una a una persona, y una lista de revisión para los pares que las herramientas no pueden
+distinguir. Las reglas que sigue cada herramienta están en el
+[estándar del modelo de datos](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md).
+
 ### Personas e identidades
 
 Una **persona** es un ser humano. Una **identidad** es cómo una fuente conoce a una persona: un

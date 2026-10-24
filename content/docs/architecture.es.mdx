@@ -199,6 +199,14 @@ El almacén guarda el texto de los mensajes para responder sin red. No está cif
 Qué guarda el almacén — las entidades, cómo se conectan y cómo una búsqueda acota el contexto — se
 explica en [el modelo de datos](./data-model.mdx).
 
+El almacén guarda dos tipos de registro: **entidades**, las personas, eventos y documentos reales, y **registros de
+origen**, lo que una fuente dice de ellos, con el id del proveedor en `external_id`. Una herramienta escribe sus
+registros de origen a través de cli-core y nunca ejecuta SQL sobre el archivo ([reglas del almacén](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md),
+[reglas del modelo de datos](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+**Llega en la próxima versión de cli-core:** cada herramienta registra su proveedor en el almacén al ejecutarse, así
+las demás conocen una fuente nueva sin una versión de cli-core; las filas de un proveedor que ninguna herramienta ha
+registrado se omiten y se informan, nunca se buscan como mensajes ([reglas de arquitectura](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/architecture.md)).
+
 ## Patrones que lo sostienen
 
 - **stdout lleva datos y nada más** en modo máquina: sin spinner, sin color, sin avisos. Los agentes y

@@ -209,6 +209,14 @@ paquete, y el almacén implementa `MeetingStore` y `TaskStore`. El resto de cli-
 través de su `index.ts`, y ellos no importan nada más de cli-core. Un proveedor de reuniones como Zoom se
 conecta sin que el núcleo sepa que existe.
 
+### El almacén desde una herramienta
+
+Una herramienta llega al almacén compartido solo a través de las áreas del almacén de cli-core. No escribe SQL sobre
+el archivo compartido, así que la siguiente migración no la rompe ([WC-STORE-5](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md#wc-store-5--a-cli-writes-no-sql-against-the-shared-store)).
+Las tablas que solo necesita una herramienta, como puntos de control y memorias caché, viven en su propio archivo SQLite junto
+al almacén compartido, abierto con `openCache` de `@wirecat/cli-core/store`; se refieren a las filas compartidas solo
+por id, y ninguna otra herramienta las lee ([WC-DATA-1](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+
 ### Registros
 
 Los lectores de documentos y los descriptores de imágenes se registran con `registerReader` y
