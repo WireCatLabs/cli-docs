@@ -32,7 +32,6 @@ Estas son las configuraciones que se cambian con más frecuencia. Una descripci�
 | `color` |color en tablas|por terminal|
 | `sender_colors` |Cada autor tiene un color diferente en la lista de mensajes.| `false` |
 | `timeout_ms` |cuánto tiempo esperar una respuesta a **una** solicitud a MAX, en milisegundos. Para restringir todo el comando, use `--timeout`|en transporte|
-| `catch_up_marks_read` |`inbox` y `review` marcan los chats mostrados como leídos. El interlocutor ve esto.| `false` |
 | `serve` |ejecute el servidor en segundo plano `max personal serve` cuando el comando necesite MAX ([una entrada para todos los](./limits.md#один-вход-на-всё))| `true` |
 | `transcribe_model` |qué modelo reconocer mensajes de voz| `gigaam-v3` |
 | `update_check` |una vez al día para informar que se ha lanzado una nueva versión de `max`| `true` |
@@ -84,7 +83,7 @@ Por lo tanto, `max work chats list` mostrará 50 líneas y `max personal chats l
     }
   },
   "personal": {
-    "defaults": { "catch_up_marks_read": false, "search_catch_up": true }
+    "defaults": { "search_catch_up": true }
   },
   "bot": {
     "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },
@@ -102,7 +101,7 @@ Qué hace cada parte:
 - `profiles.work`: se pueden leer mensajes, se pueden enviar mensajes, se prohíben otros cambios en los mensajes. No más de 10 envíos por hora. El servidor en segundo plano no se inicia: cada comando ingresa MAX.
 - `personal.defaults`: sólo para comandos de cuentas personales, nunca para `max … bot`. Aquí `messages sync` también prepara chats descargados para búsqueda.
 - `bot.defaults`: sólo para comandos de bot (`max shop bot …`). Los bots pueden leer y enviar, y nada más.
-- `bot.profiles.shop`: El bot `shop` puede enviar 200 mensajes por hora y no lee lo que otros bots en esta computadora han guardado. `read_other_bots` sólo es válido en la sección `bot`; Allí, por el contrario, no se aceptan `serve`, `sender_colors` y `catch_up_marks_read`.
+- `bot.profiles.shop`: El bot `shop` puede enviar 200 mensajes por hora y no lee lo que otros bots en esta computadora han guardado. `read_other_bots` sólo es válido en la sección `bot`; Allí, por el contrario, no se aceptan `serve`, `sender_colors`.
 
 </details>
 

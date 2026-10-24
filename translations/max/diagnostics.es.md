@@ -29,7 +29,7 @@ Palabras que aparecen aquí:
 | Encontrar una ejecución fallida | `max personal runs list` | Los fallos se guardan automáticamente |
 | Guardar todas las ejecuciones | `max personal config set record true` | Cada registro |
 | Comprobar la instalación | `max personal doctor`, `max personal doctor --online` | Nada |
-| Crear un informe de problemas | `max personal doctor report create` | Un archivo que tú envías |
+| Crear un informe de problemas | `max personal doctor reports create` | Un archivo que tú envías |
 
 ## Mostrar: `--trace`
 
@@ -178,9 +178,11 @@ Para un bot, `max <имя> doctor` indica de dónde viene el token, cuántos cha
 ## Informe de problemas
 
 ```sh
-max personal doctor report create              # о последнем неудачном запуске
-max personal doctor report create --run <id>   # об этом запуске
+max personal doctor reports create              # о последнем неудачном запуске
+max personal doctor reports create --run <id>   # об этом запуске
 ```
+
+Si no se puede leer la configuración, ejecuta primero `max doctor --json` para ver el error del ajuste. Crear un archivo de informe requiere comprobar los permisos de escritura, así que corrige antes el ajuste inválido.
 
 El comando escribe un archivo JSON (lo que muestra y ejecuta `max personal doctor`) e imprime un enlace al nuevo problema en [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues). Leal archivo antes de enviarlo. No contiene textos de mensajes y los números de chats y mensajes se reemplazan por etiquetas. ¿Qué más contiene? En la sección [cómo informar un problema](./troubleshooting.md#как-сообщить-о-проблеме).
 
@@ -211,17 +213,17 @@ done
 ## Buscar errores y ejecuciones parciales
 
 ```sh
-max personal runs search --error-code rate_limited --json
-max personal runs search --status partial --since-time 2026-10-01 --json
+max personal search runs error_code:rate_limited --json
+max personal search runs status:partial --since-time 2026-10-01 --json
 ```
 
-`runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.
-`--operation`, `--profile`, `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
+`search runs` busca texto literal en metadatos y eventos de diagnóstico seguros.
+`status:`, `error_code:`, `operation:`, `profile:`; `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
 cada ejecución devuelve hasta 100 eventos coincidentes, con `events_truncated` si hay más.
 El fallo de un archivo o una página de historial genera `status: "partial"` con ID fallidos, etapas y códigos.
 El registro no copia el contenido de mensajes ni las respuestas de error del proveedor.
 Las ejecuciones parciales se conservan por defecto salvo que se desactive explícitamente el registro. La búsqueda no se registra a sí misma.
 
-En MCP llama a `max_read` con `command: "runs search"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.
+En MCP llama a `max_read` con `command: "search runs"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.
 Solo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.
 El resultado completo del comando parcial nombra los elementos fallidos y sus códigos de error; el registro conserva solo identificadores y códigos seguros.

@@ -35,7 +35,7 @@ max [профиль] [опции] <ресурс> <действие> [аргум�
 | Replies and commitments | Unread messages, promises and open matters | `max personal inbox`, `max personal review` |
 | Voice | Transcribe locally | `max personal messages transcribe` |
 | Files | Download attachments or chat files; browse media | `max personal messages download`, `max personal chats media` |
-| People | Contacts, aliases, notes, profiles and bot signals | `max personal contacts list`, `max personal contacts profile` |
+| People | Contacts, aliases, notes, profiles and bot signals | `max personal contacts list`, `max personal contacts info` |
 | Search | Messages, files, dates, people and discussions by meaning | `max personal search messages`, `max personal search conversations` |
 | Sending | Text, files, voice, replies and scheduled messages | `max personal messages send` |
 | Changes | Edit, forward, pin, delete, react, vote and mark read | `max personal messages edit`, `max personal reactions add` |
@@ -281,18 +281,18 @@ See the [voice recognition guide](./audio-recognition.md) for model selection, c
 Voice messages are transcribed **on your computer**: recordings are not sent anywhere. Download the recognition model once with a separate command:
 
 ```sh
-max personal models audio list                # какие модели есть, какие скачаны, какая по умолчанию (*)
+max personal models list kind:audio                # какие модели есть, какие скачаны, какая по умолчанию (*)
 ```
 
 ```sh
-max personal models audio download gigaam-v3  # 233 МБ, один раз
+max personal models download gigaam-v3  # 233 МБ, один раз
 ```
 
 ```sh
 max personal messages transcribe "Иван Петров" 100000000000000001
 ```
 
-Models live in a directory shared by MAX and Telegram; `WIRECAT_STATE_DIR` relocates it. `models audio list --json` returns an `items` list with `page`; each model has its `path`. Downloaded files are reused. `gigaam-v3` remains first, and `config set --defaults transcribe_model <модель>` selects the model.
+Models live in a directory shared by MAX and Telegram; `WIRECAT_STATE_DIR` relocates it. `models list kind:audio --json` returns an `items` list with `page`; each model has its `path`. Downloaded files are reused. `gigaam-v3` remains first, and `config set --defaults transcribe_model <модель>` selects the model.
 
 | Model | Languages | Size | 5 minutes of speech |
 |---|---|---|---|
@@ -379,15 +379,15 @@ This is a repair action for inconsistent local data or a schema update that clea
 #### Your names and notes about people
 
 ```sh
-max personal contacts alias set "Борис Тестов" Боря          # своё имя для человека, только на этом компьютере
+max personal contacts aliases set "Борис Тестов" Боря          # своё имя для человека, только на этом компьютере
 ```
 
 ```sh
-max personal contacts alias rm "Борис Тестов"
+max personal contacts aliases remove "Борис Тестов"
 ```
 
 ```sh
-max personal contacts notes add "Борис Тестов" --file note.txt   # или текст из stdin
+max personal contacts notes add "Борис Тестов" --text-file note.txt   # или текст из stdin
 ```
 
 ```sh
@@ -395,7 +395,7 @@ max personal contacts notes list "Борис Тестов"
 ```
 
 ```sh
-max personal contacts notes edit "Борис Тестов" <id> --revision 1 --file note.txt
+max personal contacts notes edit "Борис Тестов" <id> --revision 1 --text-file note.txt
 ```
 
 ```sh
@@ -543,7 +543,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.66.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.72.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -765,10 +765,6 @@ max personal chats mark-read "Иван Петров"                  # до п�
 max personal chats mark-read "Иван Петров" --until-id 100000000000000001   # до этого сообщения включительно
 ```
 
-```sh
-max personal messages list "Иван Петров" --mark-read        # прочитать и отметить показанное
-```
-
 The other person sees the read receipt. It passes permission and recipient-list checks but does not consume the hourly message limit. `--offline` rejects it.
 
 ### Contacts, profile and folders
@@ -798,7 +794,7 @@ max personal contacts unblock 20000002
 ```
 
 ```sh
-max personal contacts profile 20000002               # профиль, дата создания, его сообщения по общим чатам
+max personal contacts info 20000002               # профиль, дата создания, его сообщения по общим чатам
 ```
 
 ```sh
@@ -982,11 +978,11 @@ max personal chats update "Поход" --all-can-pin off       # поменят�
 ```
 
 ```sh
-max personal chats link show "Поход"                      # ссылка-приглашение, если вам её видно
+max personal chats links show "Поход"                      # ссылка-приглашение, если вам её видно
 ```
 
 ```sh
-max personal chats link reset "Поход"                     # новая ссылка; старая перестаёт работать
+max personal chats links reset "Поход"                     # новая ссылка; старая перестаёт работать
 ```
 
 ```sh
@@ -994,7 +990,7 @@ max personal chats requests list "Канал"                  # кто прос
 ```
 
 ```sh
-max personal chats requests accept "Канал" 20000002        # впустить; decline — отказать
+max personal chats requests confirm "Канал" 20000002        # впустить; decline — отказать
 ```
 
 ```sh
@@ -1232,7 +1228,7 @@ Levels `deny`, `readonly`, `ask`, `allow` are used in both CLI and MCP. The more
 
 ## One person
 
-`max personal contacts profile <человек>` shows what MAX and the local copy know about the person. `max personal contacts check <человек>` evaluates whether it looks like a bot. `max personal contacts context <человек>` reads his latest chat messages from a copy, and `max personal contacts link` links his MAX account to his Telegram account. Details - [people](./people.md).
+`max personal contacts info <человек>` shows what MAX and the local copy know about the person. `max personal contacts check <человек>` evaluates whether it looks like a bot. `max personal contacts context <человек>` reads his latest chat messages from a copy, and `max personal contacts link` links his MAX account to his Telegram account. Details - [people](./people.md).
 
 ## Next steps
 

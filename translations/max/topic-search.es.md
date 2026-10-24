@@ -61,8 +61,8 @@ Prepara el chat una vez y luego haz tantas preguntas como quieras.
 
 ```sh
 max personal messages sync "Книжный клуб"                  # 1. скачать историю, если её ещё нет
-max personal conversations build --chat "Книжный клуб"   # 2. разделить чат на разговоры
-max personal models text download e5-small               # 3. один раз: скачать модель, 135 МБ, общая с tg
+max personal conversations links rebuild --chat "Книжный клуб"   # 2. разделить чат на разговоры
+max personal models download e5-small               # 3. один раз: скачать модель, 135 МБ, общая с tg
 max personal conversations embed --chat "Книжный клуб"   # 4. посчитать вектор каждого куска
 max personal search conversations "где встречаемся" --chat "Книжный клуб"   # 5. спросить
 max personal conversations show 91                       # 6. прочитать найденный разговор
@@ -85,7 +85,7 @@ Hay tres etapas para buscar por tema. Los dos primeros preparan el chat una vez;
 
 ### 1. Compilación: dividir el chat en conversaciones
 
-`max personal conversations build` lee los mensajes de chat guardados del antiguo al nuevo y para cada uno decide qué mensaje anterior continúa. No se utiliza AI, el comando no accede a MAX. Las conexiones se toman en este orden:
+`max personal conversations links rebuild` lee los mensajes de chat guardados del antiguo al nuevo y para cada uno decide qué mensaje anterior continúa. No se utiliza AI, el comando no accede a MAX. Las conexiones se toman en este orden:
 
 1. **Respuestas de MAX.** Un mensaje enviado como respuesta enlaza con el mensaje respondido.
 2. **Relaciones del agente**, si le pediste que conectara los mensajes ([más abajo](#связать-сообщения-поможет-ваш-агент)).
@@ -186,7 +186,7 @@ Los mensajes nuevos se incorporan a una conversación solo tras el siguiente `bu
 
 ```sh
 max personal conversations status                         # что отстало, по чатам
-max personal conversations build                          # все изменившиеся чаты и группы, ни разу не построенные
+max personal conversations links rebuild                          # все изменившиеся чаты и группы, ни разу не построенные
 max personal conversations embed                          # все построенные чаты, где остались куски
 max personal search conversations "аренда квартиры" --catch-up  # сначала догнать, потом искать
 ```
@@ -208,17 +208,17 @@ max skill show link-conversations                     # инструкция д�
 max personal conversations batches status --chat "Книжный клуб"   # сколько сообщений и пачек, сколько текста
 ```
 
-El agente lee instrucciones, estima cuánto texto procesará y espera tu aprobación. Lee lotes (`max personal conversations batches next`), decide a qué mensaje anterior responde cada uno y guarda los enlaces (`max personal conversations links add`). El siguiente `build` los incorpora después de las respuestas de MAX y antes de las reglas. `max personal conversations links clear --chat "Книжный клуб"` los elimina; reconstruye después el chat. En este flujo, `max` no llama a un modelo directamente. El permiso `conversations.links` permite guardar enlaces.
+El agente lee instrucciones, estima cuánto texto procesará y espera tu aprobación. Lee lotes (`max personal conversations batches show`), decide a qué mensaje anterior responde cada uno y guarda los enlaces (`max personal conversations links add`). El siguiente `build` los incorpora después de las respuestas de MAX y antes de las reglas. `max personal conversations links clear --chat "Книжный клуб"` los elimina; reconstruye después el chat. En este flujo, `max` no llama a un modelo directamente. El permiso `conversations.links` permite guardar enlaces.
 
-`max` puede enviar él mismo los paquetes al servicio de modelos. Normal `build` utiliza reglas y conexiones guardadas; `max personal conversations build --chat <чат> --analyze` transfiere paquetes limitados a un servicio personalizado compatible con OpenAI o Anthropic. Se necesita un `--chat` explícito. Antes de la primera transferencia, el comando muestra el volumen, la dirección y el límite de tokens y solicita consentimiento; se guarda para la cuenta, el chat y el servicio seleccionado hasta su revocación. De forma predeterminada, el paquete es de 50 mensajes (`--size`), el límite de reserva es de 100.000 tokens por ejecución (`--max-tokens`); `--yes` da consentimiento en los guiones. `max personal conversations consents list` muestra su consentimiento, `consents revoke --chat <чат>` los retira. El análisis integrado sólo está disponible desde la línea de comandos, no a través de MCP; las claves no se escriben en el archivo de configuración.
+`max` puede enviar él mismo los paquetes al servicio de modelos. Normal `build` utiliza reglas y conexiones guardadas; `max personal conversations links rebuild --chat <чат> --analyze` transfiere paquetes limitados a un servicio personalizado compatible con OpenAI o Anthropic. Se necesita un `--chat` explícito. Antes de la primera transferencia, el comando muestra el volumen, la dirección y el límite de tokens y solicita consentimiento; se guarda para la cuenta, el chat y el servicio seleccionado hasta su revocación. De forma predeterminada, el paquete es de 50 mensajes (`--size`), el límite de reserva es de 100.000 tokens por ejecución (`--max-tokens`); `--yes` da consentimiento en los guiones. `max personal conversations consents list` muestra su consentimiento, `consents remove --chat <чат>` los retira. El análisis integrado sólo está disponible desde la línea de comandos, no a través de MCP; las claves no se escriben en el archivo de configuración.
 
 ## Privacidad y coste
 
 De forma predeterminada, nada sale de la computadora. El modelo funciona aquí y se descarga solo con su comando:
 
 ```sh
-max personal models text list                             # модели и какие скачаны
-max personal models text download embeddinggemma --accept-terms
+max personal models list kind:text                             # модели и какие скачаны
+max personal models download embeddinggemma --accept-terms
 ```
 
 `e5-small` es el predeterminado: pequeño, rápido y con unos 100 idiomas. `embeddinggemma` encuentra más, pero es unas siete veces más lento y requiere `--accept-terms` para aceptar las condiciones de Google Gemma. No se mezclan sus vectores: busca con el modelo usado para calcularlos. stderr indica los chats calculados solo con otro modelo.
@@ -228,12 +228,12 @@ En un portátil reciente, `e5-small` vectoriza unos 30 fragmentos por segundo; u
 Un servicio puede calcular los vectores en su lugar, con tu propia clave:
 
 ```sh
-max personal models text key set openai
-max personal conversations embed --chat "Книжный клуб" --provider openai
-max personal search conversations "аренда квартиры" --provider openai
+max personal models keys set openai
+max personal conversations embed --chat "Книжный клуб" --embedding-provider openai
+max personal search conversations "аренда квартиры" --embedding-provider openai
 ```
 
-Luego, el texto de las conversaciones de chat va a este servicio, y cada búsqueda le envía su pregunta. Antes de enviar algo, `embed` indica el número de piezas, el mayor número de tokens y el precio más alto y espera "sí" (`--yes` en los scripts; `--max-tokens` establece el límite). `--base-url` acepta cualquier servidor con OpenAI Vectors API (`/v1/embeddings`), como Ollama o LM Studio en su computadora, junto con `--model` y `--dims`. `max personal models text key remove openai` olvida la clave. La configuración de vectores externos también afecta la búsqueda que realiza su agente a través de MCP: sus preguntas también van a este servicio.
+Luego, el texto de las conversaciones de chat va a este servicio, y cada búsqueda le envía su pregunta. Antes de enviar algo, `embed` indica el número de piezas, el mayor número de tokens y el precio más alto y espera "sí" (`--yes` en los scripts; `--max-tokens` establece el límite). `--base-url` acepta cualquier servidor con OpenAI Vectors API (`/v1/embeddings`), como Ollama o LM Studio en su computadora, junto con `--model` y `--dims`. `max personal models keys remove openai` olvida la clave. La configuración de vectores externos también afecta la búsqueda que realiza su agente a través de MCP: sus preguntas también van a este servicio.
 
 ## Más
 

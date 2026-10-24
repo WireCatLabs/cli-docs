@@ -34,7 +34,7 @@ Términos que aparecen a continuación:
 | Ejecutar sin preguntas | `--no-input`; confirmaciones `--yes` y `--allow-dangerous` |
 | Evitar bloqueos y salidas excesivas | Límites de tiempo y tamaño de entrada y salida |
 | Solo los campos necesarios | `--json=<поля>` |
-| Consultar parámetros sin leer la documentación | `max commands` y `max commands schema` |
+| Consultar parámetros sin leer la documentación | `max commands` y `max commands info` |
 | Ver lo que haría el comando | `--dry-run` |
 | Saber si un cambio se realizó después de un fallo | `outcome_unknown` y `details.operation_id` |
 
@@ -76,12 +76,12 @@ La entrada desde stdin está limitada a 16 MiB; `--max-input-bytes 33554432` aum
 ```sh
 max personal messages list <чат> --json=ref,text,reply_to.text
 max commands messages list --json
-max commands schema messages list --json
+max commands info messages list --json
 ```
 
 `--json=<поля>` conserva los campos de cada elemento separados por comas. Un punto selecciona un campo anidado: `reply_to.text` conserva el texto del mensaje al que se respondió. Mantiene la información de paginación del formato elegido. Para `page` y `page.has_more`, usa `--json`: JSONL enumera elementos sin un contenedor común. Un campo ausente sigue ausente, sin convertirse en cero.
 
-`max commands` enumera los comandos por secciones, y `max commands --json` muestra indicadores, valores válidos, valores predeterminados y códigos de salida. `max commands schema` proporciona [JSON Schema](https://json-schema.org/specification) (versiones 2020-12) argumentos y resultados. `schemaVersion` es una versión de esta descripción, cambia por separado de la versión del programa; `contract` es la versión de la forma de las respuestas (ahora 3). `outputSchemaCoverage` indica de dónde sale el esquema del resultado: `declared-entity`, el comando describió su entidad; `envelope-with-open-items`, solo se describe el contenedor y los elementos quedan abiertos. El esquema abierto permite campos adicionales del servicio de mensajería y no promete la verificación de cada campo.
+`max commands` enumera los comandos por secciones, y `max commands --json` muestra indicadores, valores válidos, valores predeterminados y códigos de salida. `max commands info` proporciona [JSON Schema](https://json-schema.org/specification) (versiones 2020-12) argumentos y resultados. `schemaVersion` es una versión de esta descripción, cambia por separado de la versión del programa; `contract` es la versión de la forma de las respuestas (ahora 3). `outputSchemaCoverage` indica de dónde sale el esquema del resultado: `declared-entity`, el comando describió su entidad; `envelope-with-open-items`, solo se describe el contenedor y los elementos quedan abiertos. El esquema abierto permite campos adicionales del servicio de mensajería y no promete la verificación de cada campo.
 
 ## Vista previa y repetición segura
 
@@ -101,6 +101,6 @@ Pide al agente los mensajes que ha contado y cuánto historial tiene guardado. U
 
 ## Reglas que seguimos
 
-`max` sigue las partes aplicables de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html), [Command Line Interface Guidelines](https://clig.dev/), [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) explican su aplicación y las excepciones deliberadas. No afirmamos disponer de certificación externa completa.
+`max` sigue las partes aplicables de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html), [Command Line Interface Guidelines](https://clig.dev/), [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/max-cli/blob/v0.72.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) explican su aplicación y las excepciones deliberadas. No afirmamos disponer de certificación externa completa.
 
 Configuración paso a paso: consulte [guía de configuración](./configuration.md); Todas las claves y variables de entorno se encuentran en el [referencia de configuración](./configuration-reference.md).

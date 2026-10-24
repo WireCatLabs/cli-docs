@@ -662,7 +662,7 @@
           "delay": 500
         },
         {
-          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>max models audio list</code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"parakeet-v3\"</span>,\n      <span class=\"k\">\"downloaded\"</span>: <span class=\"n\">true</span>\n    }\n  ]\n}</pre></details>",
+          "html": "<details class=\"tool step\"><summary><span class=\"state\"><svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 8.5l3 3 7-7\"/></svg></span><code>max models list kind:audio</code><svg class=\"chev\" width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M6 3l5 5-5 5\"/></svg></summary><pre>{\n  <span class=\"k\">\"items\"</span>: [\n    {\n      <span class=\"k\">\"id\"</span>: <span class=\"s\">\"parakeet-v3\"</span>,\n      <span class=\"k\">\"downloaded\"</span>: <span class=\"n\">true</span>\n    }\n  ]\n}</pre></details>",
           "tool": true,
           "delay": 600
         },

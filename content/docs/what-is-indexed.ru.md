@@ -75,12 +75,12 @@ tg personal attachments update "Book club" 204 --text-file ./scan.txt
 Голосовое становится доступным для поиска, когда у него есть расшифровка. Инструмент сохраняет её и находит по обычному слову или по `transcript:`.
 
 ```sh
-max personal models audio download gigaam-v3
+max personal models download gigaam-v3
 max personal messages transcribe "Book club" 204
 max personal search messages 'transcript:invoice'
 ```
 
-- Модель речи работает на вашем компьютере. Запись его не покидает. Модель скачивается один раз командой `models audio download`; сама она не скачивается.
+- Модель речи работает на вашем компьютере. Запись его не покидает. Модель скачивается один раз командой `models download`; сама она не скачивается.
 - Модели: `parakeet-v3` знает 25 языков, `gigaam-v3` лучше всех для русского.
 - `tg` может использовать и расшифровку самого Telegram, если она есть у вашего аккаунта (`transcribe_with`: `auto`, `messenger` или `local`). `max` всегда использует модель на вашем компьютере.
 - Локальная расшифровка читает полную запись Ogg Opus. Длинным записям нужно больше памяти и времени.

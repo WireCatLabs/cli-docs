@@ -14,8 +14,8 @@ Terms used below:
 
 | Task | Command |
 | --- | --- |
-| See available models, sizes and downloads | `max personal models audio list` |
-| Download a model | `max personal models audio download <модель>` |
+| See available models, sizes and downloads | `max personal models list kind:audio` |
+| Download a model | `max personal models download <модель>` |
 | Transcribe one voice message | `max personal messages transcribe <чат> <сообщение>` |
 | Transcribe voice messages in the displayed list | `--transcribe` with `messages list` and `inbox` |
 | Choose a model for future runs | `max config set --defaults transcribe_model <модель>` |
@@ -23,12 +23,12 @@ Terms used below:
 ## Quick start
 
 ```sh
-max personal models audio list --json
-max personal models audio download gigaam-v3
+max personal models list kind:audio --json
+max personal models download gigaam-v3
 max personal messages transcribe "Учебная группа" 204 --json
 ```
 
-`max` downloads the recording from MAX, closes the connection and then starts recognition. Reading a chat does not automatically download the model: run `models audio download` first. Downloaded files are reused and their checksums are verified during installation.
+`max` downloads the recording from MAX, closes the connection and then starts recognition. Reading a chat does not automatically download the model: run `models download` first. Downloaded files are reused and their checksums are verified during installation.
 
 ## Choose a model
 
@@ -38,10 +38,10 @@ max personal messages transcribe "Учебная группа" 204 --json
 | `gigaam-v3-ctc` | Another Russian model; wording and formatting can differ |
 | `parakeet-v3` | Several languages, including Spanish, English and Russian; uses more disk space and memory |
 
-`models audio list` shows exact sizes and existing downloads. Choose a model that supports the recording's language. For one run:
+`models list kind:audio` shows exact sizes and existing downloads. Choose a model that supports the recording's language. For one run:
 
 ```sh
-max personal models audio download parakeet-v3
+max personal models download parakeet-v3
 max personal messages transcribe "Учебная группа" 204 --model parakeet-v3 --json
 ```
 

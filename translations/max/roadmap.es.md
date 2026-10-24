@@ -2,16 +2,27 @@
 title: "Hoja de ruta"
 ---
 
-Esta página contiene lo que está planeado para `max` y lo que aún no está disponible. Léelo antes de buscar una solución para la característica que falta: es posible que ya esté en los planes. El orden es aproximado y puede cambiar. Puedes enviar el tuyo en [problemas en GitHub](https://github.com/WireCatLabs/max-cli/issues).
+Estas funciones están previstas y aún no están disponibles en `max`. Consulta la lista antes de buscar una alternativa: quizá la función que falta ya esté prevista. Las prioridades son aproximadas y pueden cambiar. Propón funciones en [GitHub issues](https://github.com/WireCatLabs/max-cli/issues).
 
-## Próximamente
+## Disponible ahora
 
-- **Archivo local opcional.** Un ajuste para que `max` no guarde nada en disco y consulte siempre MAX.
+Cuentas personales y bots: lectura, búsqueda en el archivo local, envío, grupos y canales, contactos, tareas, transcripción de voz y un servidor MCP para agentes. Consulta [todos los comandos](./commands.md) y los flujos de trabajo de [recetas](./recipes.md).
+
+## En desarrollo
+
+- **Archivos de adjuntos.** Descargar adjuntos a una carpeta, verificar cada archivo y comprobar el archivo sin conexión.
+
+## A continuación
+
+- **Solicitudes de entrada en bloque.** Aceptar o rechazar todas las solicitudes o solo las de un enlace de invitación.
 
 ## Más adelante
 
-- **Acciones por evento.** Ejecutar tu propio comando cuando llegue un mensaje nuevo.
-- **Videomensajes circulares** y **establecer o eliminar la contraseña en la nube**.
-- **Instaladores** para cada plataforma, sin Node ni Bun.
+- **Archivo local opcional.** Un ajuste para no guardar nada en disco y obtenerlo todo de MAX.
+- **Acciones por evento.** Ejecutar un comando propio cuando llegue un mensaje.
+- **Videomensajes**, **establecer y eliminar una contraseña en la nube**.
+- **Fijar y archivar chats**, marcar un chat como no leído.
+- **Comentarios de canales** para cuentas personales.
+- **Instaladores por plataforma** sin Node ni Bun.
 
-Lo que ha cambiado en cada versión lanzada se encuentra en [historial de cambios](./changelog.md).
+Consulta los cambios de cada versión publicada en el [historial](./changelog.md).

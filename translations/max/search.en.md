@@ -142,7 +142,9 @@ max personal search messages '(кафе OR библиотека) NOT шумно'
 max personal search messages 'квартир*'                   # все слова, которые начинаются на «квартир»
 ```
 
-All adjacent query words must appear in the message. Search matches word forms: `квартира` finds «квартиру». Quotes preserve word order but also allow other forms. For an exact form, use `exact:квартира` or add `--exact` for words without an explicit field. An explicit `text:` still matches word forms. Case, stress marks, `ё` and `е` are treated alike. Typos are not corrected automatically. Word forms depend on the archive language settings.
+All adjacent query words must appear in the message. Search matches word forms: `квартира` finds «квартиру». Quotes preserve word order but also allow other forms. For an exact form, use `exact:квартира` or add `--exact` for words without an explicit field. An explicit `text:` still matches word forms. Case, stress marks, `ё` and `е` are treated alike. Typos in written message text are not corrected automatically. Word forms depend on the archive language settings.
+
+Words without a field and `transcript:` also search saved voice transcripts, matching word forms and individual words that speech recognition may have distorted. `text:` searches written messages only; `exact:` or `--exact` for unfielded words disables matching other forms and distorted spellings.
 
 ## People and chats
 
@@ -238,7 +240,7 @@ max personal attachments list 'chat:"Книжный клуб" is:needs_text'
 ```
 
 ```sh
-max personal attachments text set "Книжный клуб" 204 --text-file ./scan.txt
+max personal attachments update "Книжный клуб" 204 --text-file ./scan.txt
 ```
 
 The `attachments extract` reads plain text files, DOCX and PDF with a text layer on this computer. `--download` requires `--output-dir`; without them, extraction reads already downloaded files. If there are several attachments in the message, indicate one through `--attachment`, starting with 1.
@@ -247,9 +249,9 @@ Local extraction also reads UTF-16 with BOM, confidently detected legacy encodin
 
 For PDF you need the optional package `unpdf`, for DOCX - `mammoth`, installed in the same place as `max`. For a global npm install: `npm install -g unpdf mammoth`. If the package is not present, command reports this; the text can be recorded by an agent.
 
-**Photos and scans** lack a text layer. Your agent normally uses its own OCR or vision tools, then saves text with `attachments text set`. `attachments list is:needs_text` returns local paths, message links and attachment numbers, but no text. Verify by searching `content:`. A remote agent needs the actual file: a server path does not transfer it. [Attachments show](./attachments.md) can transfer saved bytes in chunks with hash verification; transfer does not recognise or index text. Save the result with `attachments text set`.
+**Photos and scans** lack a text layer. Your agent normally uses its own OCR or vision tools, then saves text with `attachments update`. `attachments list is:needs_text` returns local paths, message links and attachment numbers, but no text. Verify by searching `content:`. A remote agent needs the actual file: a server path does not transfer it. [Attachments show](./attachments.md) can transfer saved bytes in chunks with hash verification; transfer does not recognise or index text. Save the result with `attachments update`.
 
-**Bulk scan recognition** can use an AI provider you explicitly select. Configure a vision-capable provider/model in `models.ocr` and save the key through `models text key set`. Replace `your-vision-model` with the desired model id.
+**Bulk scan recognition** can use an AI provider you explicitly select. Configure a vision-capable provider/model in `models.ocr` and save the key through `models keys set`. Replace `your-vision-model` with the desired model id.
 
 ```sh
 max personal config set models.ocr.provider openai
@@ -260,7 +262,7 @@ max personal config set models.ocr.model your-vision-model
 ```
 
 ```sh
-max personal models text key set openai
+max personal models keys set openai
 ```
 
 ```sh
@@ -318,19 +320,19 @@ A tag is your own label on a chat, a person or one message (`--message <id> --ch
 Group and channel tags can be generated automatically from their title, username and description, without reading messages or using a model:
 
 ```sh
-max personal metadata refresh --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
+max personal metadata sync --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
 ```
 
 ```sh
-max personal metadata refresh --only-missing          # все сохранённые группы и каналы, у которых описание ещё не читалось
+max personal metadata sync --only-missing          # все сохранённые группы и каналы, у которых описание ещё не читалось
 ```
 
 ```sh
-max personal tags auto --dry-run                      # что получилось бы, без записи
+max personal tags rebuild --dry-run                      # что получилось бы, без записи
 ```
 
 ```sh
-max personal tags auto                                # записать автоматические метки
+max personal tags rebuild                                # записать автоматические метки
 ```
 
 ```sh
@@ -339,7 +341,7 @@ max personal tags list sources:auto                  # только автома
 
 Automatic tagging leaves your tags intact: rerunning it removes only outdated automatic tags. If you manually add a tag that was already added automatically, it becomes your own tag.
 
-`max personal tags auto` processes up to 50 chats per run; `--limit` raises the cap to 500, and `--chat` selects chats (repeatable). `--dry-run` uses the saved descriptions. To read fresh ones before tagging, add `--sync-first` without `--dry-run`. `max personal metadata get --chat <чат>` shows the saved description.
+`max personal tags rebuild` processes up to 50 chats per run; `--limit` raises the cap to 500, and `--chat` selects chats (repeatable). `--dry-run` uses the saved descriptions. To read fresh ones before tagging, add `--sync-first` without `--dry-run`. `max personal metadata show --chat <чат>` shows the saved description.
 
 ## Saved searches and history
 
@@ -447,7 +449,7 @@ A terminal shows a message feed. `--json` returns one object with messages and s
 
 An empty answer means “not in the archive you searched”, not “never sent”. `max personal store status` shows what is stored; `max personal messages sync` adds history. With `--json`, the answer reports which chats were searched and how complete they are, even without matches. If `max` asks for `max personal store migrate`, the word index is still being built; searches without words (`has:file`, `date:today`) already work.
 
-**Gaps in history.** `max personal store gaps plan <чат>` locally identifies gaps between saved ranges. Missing message ids and quiet periods alone do not prove missing history; archive edges remain `unknown`. Review the plan, then `max personal store gaps repair <чат> --fingerprint <хеш>` downloads gaps. Defaults: 5 gaps, 500 messages, 30 seconds; adjust through `--max-gaps`, `--limit`, `--repair-time`, `--page-size` and `--pause`. A repeated run checks remaining gaps and never deletes a message just because MAX omitted it. Ambiguous same-time pages remain incomplete. `--background` starts a job managed through `store jobs show`, `store jobs list` and `store jobs cancel`. Repair requires `store.gaps.repair` and read permission; planning never connects. MCP discovers commands through `max_tools_search`, reads plans/jobs through `max_read`, and repairs through `max_write`.
+**Gaps in history.** `max personal store gaps show <чат>` locally identifies gaps between saved ranges. Missing message ids and quiet periods alone do not prove missing history; archive edges remain `unknown`. Review the plan, then `max personal store gaps repair <чат> --fingerprint <хеш>` downloads gaps. Defaults: 5 gaps, 500 messages, 30 seconds; adjust through `--max-gaps`, `--limit`, `--repair-time`, `--page-size` and `--pause`. A repeated run checks remaining gaps and never deletes a message just because MAX omitted it. Ambiguous same-time pages remain incomplete. `--background` starts a job managed through `store jobs show`, `store jobs list` and `store jobs cancel`. Repair requires `store.gaps.repair` and read permission; planning never connects. MCP discovers commands through `max_tools_search`, reads plans/jobs through `max_read`, and repairs through `max_write`.
 
 **Prepare topic search while downloading.** `max personal messages sync <чат> --catch-up` builds discussions and local vectors for only that chat after download ([topic search](./topic-search.md)). It is off by default; `search_catch_up: true` enables it and `--no-catch-up` disables it for one run. Limits: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. It neither downloads recognition files automatically nor calls a remote service. `prepared` reports preparation separately; downloaded history survives regardless.
 

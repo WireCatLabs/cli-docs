@@ -52,7 +52,7 @@ max [профиль] [опции] <ресурс> <действие> [аргум�
 |¿Qué espera una respuesta?|no leído por otros; lo que prometiste y lo que se revela| `max personal inbox`, `max personal review` |
 |Voz|convertir voz en texto en esta computadora| `max personal messages transcribe` |
 |Archivos|descargar archivos adjuntos de mensajes o el chat completo; chat de medios| `max personal messages download`, `max personal chats media` |
-|Gente|contactos, sus nombres y notas, perfil de persona, verificación de bots| `max personal contacts list`, `max personal contacts profile` |
+|Gente|contactos, sus nombres y notas, perfil de persona, verificación de bots| `max personal contacts list`, `max personal contacts info` |
 |Buscar|mensajes, archivos, fechas, personas; discusiones sobre el significado| `max personal search messages`, `max personal search conversations` |
 |Despacho|texto, archivos, voz, respuestas, mensajes retrasados| `max personal messages send` |
 |Cambiar|editar, reenviar, fijar, eliminar, reacciones, encuestas, marcar como leído| `max personal messages edit`, `max personal reactions add` |
@@ -298,18 +298,18 @@ Consulta la selección de modelos, los comandos y los límites en la [guía de r
 Los mensajes de voz se transcriben **en tu ordenador**: las grabaciones no se envían a ningún sitio. Descarga el modelo de reconocimiento una vez con un comando independiente:
 
 ```sh
-max personal models audio list                # какие модели есть, какие скачаны, какая по умолчанию (*)
+max personal models list kind:audio                # какие модели есть, какие скачаны, какая по умолчанию (*)
 ```
 
 ```sh
-max personal models audio download gigaam-v3  # 233 МБ, один раз
+max personal models download gigaam-v3  # 233 МБ, один раз
 ```
 
 ```sh
 max personal messages transcribe "Иван Петров" 100000000000000001
 ```
 
-Los modelos se guardan en un directorio compartido por MAX y Telegram; `WIRECAT_STATE_DIR` cambia su ubicación. `models audio list --json` devuelve una lista `items` con `page`; cada modelo tiene su ruta `path`. Los archivos descargados se reutilizan. `gigaam-v3` sigue primero, y `config set --defaults transcribe_model <модель>` selecciona el modelo.
+Los modelos se guardan en un directorio compartido por MAX y Telegram; `WIRECAT_STATE_DIR` cambia su ubicación. `models list kind:audio --json` devuelve una lista `items` con `page`; cada modelo tiene su ruta `path`. Los archivos descargados se reutilizan. `gigaam-v3` sigue primero, y `config set --defaults transcribe_model <модель>` selecciona el modelo.
 
 | Modelo | Idiomas | Tamaño | 5 minutos de voz |
 |---|---|---|---|
@@ -396,15 +396,15 @@ Es una reparación para una copia desincronizada o reiniciada tras cambio de esq
 #### Tus nombres y notas sobre personas.
 
 ```sh
-max personal contacts alias set "Борис Тестов" Боря          # своё имя для человека, только на этом компьютере
+max personal contacts aliases set "Борис Тестов" Боря          # своё имя для человека, только на этом компьютере
 ```
 
 ```sh
-max personal contacts alias rm "Борис Тестов"
+max personal contacts aliases remove "Борис Тестов"
 ```
 
 ```sh
-max personal contacts notes add "Борис Тестов" --file note.txt   # или текст из stdin
+max personal contacts notes add "Борис Тестов" --text-file note.txt   # или текст из stdin
 ```
 
 ```sh
@@ -412,7 +412,7 @@ max personal contacts notes list "Борис Тестов"
 ```
 
 ```sh
-max personal contacts notes edit "Борис Тестов" <id> --revision 1 --file note.txt
+max personal contacts notes edit "Борис Тестов" <id> --revision 1 --text-file note.txt
 ```
 
 ```sh
@@ -559,7 +559,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 El JSON es `{item}` con la descripción del gráfico y, al guardar la imagen, también `file` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.66.0/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.72.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 
@@ -779,10 +779,6 @@ max personal chats mark-read "Иван Петров"                  # до п�
 max personal chats mark-read "Иван Петров" --until-id 100000000000000001   # до этого сообщения включительно
 ```
 
-```sh
-max personal messages list "Иван Петров" --mark-read        # прочитать и отметить показанное
-```
-
 El destinatario verá la marca de lectura. Pasa las comprobaciones de envío: un perfil de solo lectura o la lista de destinatarios pueden bloquearla. No cuenta en el límite horario. Se rechaza con `--offline`.
 
 ### Contactos, perfil, carpetas
@@ -812,7 +808,7 @@ max personal contacts unblock 20000002
 ```
 
 ```sh
-max personal contacts profile 20000002               # профиль, дата создания, его сообщения по общим чатам
+max personal contacts info 20000002               # профиль, дата создания, его сообщения по общим чатам
 ```
 
 ```sh
@@ -1002,11 +998,11 @@ max personal chats update "Поход" --all-can-pin off       # поменят�
 ```
 
 ```sh
-max personal chats link show "Поход"                      # ссылка-приглашение, если вам её видно
+max personal chats links show "Поход"                      # ссылка-приглашение, если вам её видно
 ```
 
 ```sh
-max personal chats link reset "Поход"                     # новая ссылка; старая перестаёт работать
+max personal chats links reset "Поход"                     # новая ссылка; старая перестаёт работать
 ```
 
 ```sh
@@ -1014,7 +1010,7 @@ max personal chats requests list "Канал"                  # кто прос
 ```
 
 ```sh
-max personal chats requests accept "Канал" 20000002        # впустить; decline — отказать
+max personal chats requests confirm "Канал" 20000002        # впустить; decline — отказать
 ```
 
 ```sh
@@ -1251,7 +1247,7 @@ Los niveles `deny`, `readonly`, `ask`, `allow` se utilizan tanto en CLI como en 
 
 ## Una persona
 
-`max personal contacts profile <человек>` muestra lo que MAX y el archivo local saben sobre la persona. `max personal contacts check <человек>` evalúa si parece un bot. `max personal contacts context <человек>` lee sus últimos mensajes de chat a partir de una copia y `max personal contacts link` vincula su cuenta MAX con su cuenta de Telegram. Detalles - [personas](./people.md).
+`max personal contacts info <человек>` muestra lo que MAX y el archivo local saben sobre la persona. `max personal contacts check <человек>` evalúa si parece un bot. `max personal contacts context <человек>` lee sus últimos mensajes de chat a partir de una copia y `max personal contacts link` vincula su cuenta MAX con su cuenta de Telegram. Detalles - [personas](./people.md).
 
 ## Siguiente paso
 

@@ -318,8 +318,8 @@ The reason will be shown by `max personal server logs`. The usual reason for the
 ## Reporting a problem
 
 ```sh
-max personal doctor report          # что попадёт в отчёт и чего в нём не будет
-max personal doctor report create   # записать отчёт в файл и показать, как его отправить
+max personal doctor reports show          # что попадёт в отчёт и чего в нём не будет
+max personal doctor reports create   # записать отчёт в файл и показать, как его отправить
 ```
 
 `create` writes `max-report-<время>.json` in the current directory with permissions `0600`. It contains version, runtime/system, doctor results, the latest failed run and the latest 20 write actions. It excludes message text, chat/person names, phone numbers and tokens. Chat/message ids become consistent labels within the report but different labels in another report. Failed runs save automatically without `--record` ([failed runs](./diagnostics.md#неудачный-запуск-сохраняется-всегда)). Select another run with `--run <id>`; `max personal runs list` shows ids.

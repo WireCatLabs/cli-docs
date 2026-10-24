@@ -319,7 +319,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/dev/bot-api-coverage.md).
+Los parámetros de ruta y consulta son opciones; el cuerpo es JSON en `--body`, `--body -` (tubería) o `--body-file`. `--body-file -` también lee stdin. El parámetro nativo `timeout` se llama `--poll-timeout`; el global `--timeout` limita todo el comando. `--store-token <profile>` no está disponible en los métodos MAX actuales: todos lo rechazan antes de ejecutar. Se valida el cuerpo contra el esquema y los errores muestran el campo y lo esperado, sin revelar su valor. Lista de operaciones y clasificación lectura/escritura: [cobertura Bot API](https://github.com/WireCatLabs/max-cli/blob/v0.72.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
@@ -358,6 +358,8 @@ El agente puede acceder a lo que permita el perfil del bot: el bot, los chats qu
 - La eliminación de mensajes o comentarios tiene el nivel `ask` de forma predeterminada: se permite la operación solicitada sin un formulario de confirmación del servidor; `deny` y `readonly` la prohíben.
 - Las acciones que las reglas del chat exigen confirmar permanecen como planes para el propietario.
 
-Cada escritura ejecuta el mismo comando que escribirías tú y comprueba la lista de destinatarios del bot, `permissions` y el registro. El agente no puede acceder al token ni a los webhooks. Puede leer la lista de destinatarios, el menú de comandos y los administradores, pero no cambiarlos; tampoco puede salir del chat, enviar archivos ni usar `bot api`.
+Cada escritura usa el mismo comando que escribirías en el terminal, con las restricciones de destinatarios del bot, `permissions` y el registro. Salir de chats, los menús de comandos, los administradores y los webhooks están disponibles dentro de los permisos del perfil. Cambiar reglas o destinatarios requiere `permissions.mcp.authority: allow` o `ask`; el valor predeterminado es `deny`.
+
+Las operaciones directas `bot api` solo se ofrecen con un `permissions.bot.api: allow` o `ask` explícito. Siguen deshabilitadas por defecto incluso con `permissions.bot: allow`. En max mantienen las comprobaciones de permisos y destinatarios, y las escrituras se registran. El agente no puede cambiar `mcp` ni `bot.api` mediante `config set`, ni sustituir todo el objeto `permissions`. El propietario introduce el token; no se ofrece la carga de archivos locales mediante `bot uploads put`.
 
 Con `--md`, el bot usa las reglas MAX: `__жирный__`, `++подчёркнутый++`, `^^выделенный^^`, enlaces, código, encabezados y citas. El conversor genera HTML seguro con texto y direcciones escapados; es una representación interna, y el argumento --md sigue siendo Markdown.

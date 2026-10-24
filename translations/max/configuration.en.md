@@ -30,7 +30,6 @@ These settings are changed most often. The [configuration reference](./configura
 | `color` | Table colours | Based on terminal |
 | `sender_colors` | Different colour for each message author | `false` |
 | `timeout_ms` | Milliseconds to wait for **one** MAX response; use `--timeout` for the whole command | Transport-dependent |
-| `catch_up_marks_read` | `inbox` and `review` mark displayed chats read; the other person can see this | `false` |
 | `serve` | Start background `max personal serve` when a command needs MAX ([one shared login](./limits.md#один-вход-на-всё)) | `true` |
 | `transcribe_model` | Speech-recognition model for voice messages | `gigaam-v3` |
 | `update_check` | Report new `max` versions once a day | `true` |
@@ -82,7 +81,7 @@ Thus `max work chats list` shows 50 rows, while `max personal chats list` shows 
     }
   },
   "personal": {
-    "defaults": { "catch_up_marks_read": false, "search_catch_up": true }
+    "defaults": { "search_catch_up": true }
   },
   "bot": {
     "defaults": { "permissions": { "bot": "readonly", "bot.messages.send": "allow" } },
@@ -100,7 +99,7 @@ What each part does:
 - `profiles.work`: reading and sending messages are allowed; other message changes are denied. At most 10 sends per hour. No background server starts: each command connects to MAX itself.
 - `personal.defaults`: applies only to personal-account commands, never `max … bot`. Here `messages sync` also prepares downloaded chats for search.
 - `bot.defaults`: applies only to bot commands (`max shop bot …`). Bots can read and send, and do nothing else.
-- `bot.profiles.shop`: `shop` can send 200 messages per hour and cannot read other bots' saved data on this computer. `read_other_bots` is allowed only in `bot`; `serve`, `sender_colors` and `catch_up_marks_read` are not accepted there.
+- `bot.profiles.shop`: `shop` can send 200 messages per hour and cannot read other bots' saved data on this computer. `read_other_bots` is allowed only in `bot`; `serve`, `sender_colors` are not accepted there.
 
 </details>
 

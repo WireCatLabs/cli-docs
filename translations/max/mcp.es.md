@@ -39,19 +39,19 @@ ChatGPT y Claude **en el navegador** se conectan a través de `max personal mcp 
 
 ## Conexión
 
-Primero ejecute `max personal setup --agent none` en su terminal local. Este es el inicio de sesión de su cuenta MAX; No es posible iniciar sesión a través de MCP. Luego, `max personal mcp setup` conecta la aplicación por separado. El agente puede leer `max skill show` antes de ingresar: allí se explican ambos pasos.
+Primero ejecute `max personal setup --agent none` en su terminal local. Este es el inicio de sesión de su cuenta MAX; No es posible iniciar sesión a través de MCP. Luego, `max personal mcp add` conecta la aplicación por separado. El agente puede leer `max skill show` antes de ingresar: allí se explican ambos pasos.
 
 **Codex o Claude Code en este comando:**
 
 ```sh
-max personal mcp doctor                 # проверяет запуск MCP и список инструментов
-max personal mcp setup codex           # добавляет сервер в Codex
-max personal mcp setup claude-code     # или в Claude Code
+max personal mcp check                 # проверяет запуск MCP и список инструментов
+max personal mcp add codex           # добавляет сервер в Codex
+max personal mcp add claude-code     # или в Claude Code
 ```
 
-Para otro perfil, primero ponga su nombre: `max work mcp setup codex`. El comando de instalación utiliza la aplicación en sí y no toca sus otros servidores. Si ya existe una entrada con el mismo nombre, elimínela en la aplicación antes de instalarla nuevamente. Si el perfil ofrece herramientas de grabación, primero verifique sus permisos y luego vuelva a emitir el comando con `--allow-writes`. Esta bandera solo confirma la instalación: no cambia los derechos del perfil.
+Para otro perfil, primero ponga su nombre: `max work mcp add codex`. El comando de instalación utiliza la aplicación en sí y no toca sus otros servidores. Si ya existe una entrada con el mismo nombre, elimínela en la aplicación antes de instalarla nuevamente. Si el perfil ofrece herramientas de grabación, primero verifique sus permisos y luego vuelva a emitir el comando con `--allow-writes`. Esta bandera solo confirma la instalación: no cambia los derechos del perfil.
 
-`mcp doctor` no lee mensajes ni se conecta a MAX. Una comprobación correcta demuestra que MCP inicia y enumera herramientas, no que la sesión sea válida. `potential_writes` cuenta herramientas que no son de solo lectura. El navegador y el móvil requieren [conexión remota](./remote.md).
+`mcp check` no lee mensajes ni se conecta a MAX. Una comprobación correcta demuestra que MCP inicia y enumera herramientas, no que la sesión sea válida. `potential_writes` cuenta herramientas que no son de solo lectura. El navegador y el móvil requieren [conexión remota](./remote.md).
 
 **Claude Code manualmente:**
 
@@ -101,6 +101,30 @@ El bot tiene su propio servidor, `max <имя> bot mcp`; consulta [bot para agen
 
 El acceso está determinado por el perfil `permissions` ([derechos de acceso en el directorio de configuración](./configuration-reference.md#права-доступа)). `deny` niega el comando, `readonly` permite solo lectura y `ask` y `allow` permiten la escritura que solicitó el agente. No hay formularios de confirmación en el servidor: la aprobación se configura en la aplicación del agente. En la terminal, el comando en el nivel `ask` aún requiere una respuesta o un indicador explícito. El agente elimina mensajes solo para sí mismo, nunca para todos. `--permission ключ=уровень` endurece el nivel solo para el proceso del servidor y nunca lo relaja. El perfil se puede proteger mediante `MAX_PROFILE_LOCK`.
 
+### Qué no ofrece MCP
+
+Los permisos del perfil limitan los comandos del agente. Los comandos que cambian lo que podrán hacer futuras ejecuciones (`config set`, `recipients add`, `replies add`, `schedule command`, `skill install` y similares) se ofrecen con `permissions.mcp.authority: allow` o `ask`; el valor predeterminado es `deny`. El agente no puede cambiar `permissions.mcp` ni `permissions.bot.api`, tampoco sustituyendo todo el objeto `permissions`: el propietario los define en el terminal.
+
+Las escrituras en el archivo, el control del servidor, las descargas de modelos y la creación de informes también están disponibles por MCP, con claves propias como `store.backup`, `server.start`, `models.download`, `doctor.reports.create`. Su valor predeterminado es `ask`: el terminal pide confirmación y MCP permite la acción solicitada sin formulario. `bot api` requiere aparte un `permissions.bot.api: allow` o `ask` explícito; un `bot: allow` general no lo habilita.
+
+Los siguientes comandos están ocultos con los permisos predeterminados. Los cambios de autoridad futura y las operaciones directas del bot se habilitan con las claves anteriores. El inicio de sesión, los procesos persistentes y la carga de archivos locales mediante `bot uploads put` siguen sin ofrecerse aunque esas claves lo permitan.
+
+| Comandos | Motivo |
+| --- | --- |
+| `setup`, `session` | el inicio y cierre de sesión los realiza una persona |
+| `upgrade`, `complete` | actualizan el programa y el autocompletado del terminal |
+| `serve`, `watch`, `mcp`, `bot watch`, `bot mcp` | funcionan hasta detenerlos; una llamada del agente debe terminar |
+| `config set`, `config unset`, `skill install`, `flood clear`, `models keys set`, `models keys remove` | cambian lo que podrán hacer futuras ejecuciones; el agente podría quitar la restricción de solo lectura |
+| `recipients add`, `recipients remove`, `recipients clear`, `chats rules set`, `chats rules unset` | el mismo motivo |
+| `replies add`, `replies on`, `replies off`, `replies edit`, `replies audience`, `replies pause`, `replies resume` | el mismo motivo |
+| `replies consents grant`, `replies consents revoke`, `replies consents deny`, `replies consents allow` | el mismo motivo |
+| `schedule command`, `schedule agent`, `schedule remove`, `server install`, `server uninstall` | el mismo motivo |
+| `attachments jobs install`, `attachments jobs start`, `attachments jobs stop`, `attachments jobs uninstall` | el mismo motivo |
+| `bot chats rules set`, `bot chats rules unset`, `bot recipients add`, `bot recipients remove`, `bot recipients clear` | el mismo motivo, para bots |
+| `bot auth` | una persona introduce el token |
+| `bot api` | requiere un `permissions.bot.api: allow` o `ask` explícito |
+| `bot uploads put` | lee un archivo de tu equipo |
+
 ## Herramientas
 
 | Herramienta | Para qué |
@@ -144,11 +168,11 @@ Los chats están disponibles como recursos `max://chat/<id>`; en Claude Code se 
 
 ## Conexiones de conversación
 
-La solicitud preparada `link-conversations` permite al agente vincular respuestas en conversaciones. Primero, el agente estima el volumen a través de `max_read` (`command: "conversations batches status"`) y espera su consentimiento para este chat. Luego lee los paquetes mediante `max_read` (`command: "conversations batches next"`), guarda las respuestas mediante `max_write` (`command: "conversations links add"`) y reconstruye el gráfico mediante `max_write` (`command: "conversations build"`). `max_write` (`command: "conversations links clear"`) elimina las respuestas del agente; después, el gráfico también debe reconstruirse. La entrada requiere el permiso `conversations.links`. Si ha configurado un servicio externo para vectores de búsqueda, la búsqueda MCP también le envía el texto de la pregunta.
+La solicitud preparada `link-conversations` permite al agente vincular respuestas en conversaciones. Primero, el agente estima el volumen a través de `max_read` (`command: "conversations batches status"`) y espera su consentimiento para este chat. Luego lee los paquetes mediante `max_read` (`command: "conversations batches show"`), guarda las respuestas mediante `max_write` (`command: "conversations links add"`) y reconstruye el gráfico mediante `max_write` (`command: "conversations links rebuild"`). `max_write` (`command: "conversations links clear"`) elimina las respuestas del agente; después, el gráfico también debe reconstruirse. La entrada requiere el permiso `conversations.links`. Si ha configurado un servicio externo para vectores de búsqueda, la búsqueda MCP también le envía el texto de la pregunta.
 
 ## Archivos y mensajes guardados
 
-`max_read` (`command: "attachments list"`) muestra las rutas de los archivos guardados y el estado de su texto; `max_write` (`command: "attachments text set"`) guarda el texto que el agente leyó de un archivo para buscarlo mediante `content:`. `max_write` (`command: "attachments extract"`) extrae el texto de los archivos guardados por lotes mediante `cursor`, sin devolver ese texto en la respuesta. `max_read` con `command: "messages context"` y `arguments: { offline: true }` solo lee el archivo local.
+`max_read` (`command: "attachments list"`) muestra las rutas de los archivos guardados y el estado de su texto; `max_write` (`command: "attachments update"`) guarda el texto que el agente leyó de un archivo para buscarlo mediante `content:`. `max_write` (`command: "attachments extract"`) extrae el texto de los archivos guardados por lotes mediante `cursor`, sin devolver ese texto en la respuesta. `max_read` con `command: "messages context"` y `arguments: { offline: true }` solo lee el archivo local.
 
 MAX no tiene los temas de Telegram, por lo que no hay comandos `topics …`. El audio se transcribe con un modelo en este ordenador. La foto se elige mediante `index` y solo se devuelve si no supera 512 KB. Los modelos nunca se descargan solos. Antes del reconocimiento local, el servidor libera la conexión; el modelo de búsqueda se cierra al finalizar el servidor.
 

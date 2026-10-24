@@ -16,20 +16,21 @@ Terms used below:
 
 | Task | Command |
 | --- | --- |
-| Learn who someone is and where you chat with them | `max personal contacts profile` |
+| Learn who someone is and where you chat with them | `max personal contacts info` |
 | Read their messages across all chats or selected chats | `max personal contacts context` |
+| Prepare for a conversation: messages, tasks, notes and meetings | `max personal contacts prepare` |
 | Check an account for bot, fake or spammer signals | `max personal contacts check` |
-| Check the most suspicious group members | `max personal chats members audit --deep` |
+| Check the most suspicious group members | `max personal chats members check --deep` |
 | Record that a MAX account and a Telegram account belong to one person | `max personal contacts link` |
-| Keep your own name and notes for a person | `max personal contacts alias`, `max personal contacts notes` |
+| Keep your own name and notes for a person | `max personal contacts aliases`, `max personal contacts notes` |
 
 See the [contacts command reference](./commands.md#max-contacts) for all options.
 
-## Who they are: `contacts profile`
+## Who they are: `contacts info`
 
 ```sh
-max personal contacts profile 20000002
-max personal contacts profile 20000002 --json
+max personal contacts info 20000002
+max personal contacts info 20000002 --json
 ```
 
 The command shows what MAX reports about the person and how many of their messages are saved locally in each shared chat. In JSON this is the `item` field of the response, as with `contacts context` and `contacts check` below:
@@ -75,6 +76,16 @@ The command makes one additional MAX request beyond those made by `contacts show
 ```sh
 max personal messages sync "Книжный клуб"
 ```
+
+## Prepare for a conversation
+
+`contacts prepare` assembles a briefing from saved data: conversation context, direct chats where the person spoke last, open tasks, accepted facts, your notes and recent meetings. Every item links to its source. It does not connect to MAX or send read receipts.
+
+```sh
+max personal contacts prepare 20000002 --since-time 2026-10-01T00:00:00Z --limit 10
+```
+
+For a general conversation overview, use `contacts context` below.
 
 ## What they wrote: `contacts context`
 
@@ -157,14 +168,14 @@ The score adds the weights of detected reasons. It is a hint, not a conclusion: 
 
 Nothing. Public spammer lists (Combot CAS and lols.bot) cover only Telegram accounts, so `max` does not query them and marks them `unknown`. The person’s ID is not sent anywhere. `--offline` reads only saved data.
 
-## Group members: `chats members audit --deep`
+## Group members: `chats members check --deep`
 
 ```sh
-max personal chats members audit "Книжный клуб"
-max personal chats members audit "Книжный клуб" --deep 10
+max personal chats members check "Книжный клуб"
+max personal chats members check "Книжный клуб" --deep 10
 ```
 
-`chats members audit` scores all members using the member list and local copy, without a separate request for each person, and shows those with a detected reason, highest scores first. `--deep 10` then runs a full `contacts check` for the ten highest-scoring people, one person per second. It removes nobody; owners and administrators are excluded.
+`chats members check` scores all members using the member list and local copy, without a separate request for each person, and shows those with a detected reason, highest scores first. `--deep 10` then runs a full `contacts check` for the ten highest-scoring people, one person per second. It removes nobody; owners and administrators are excluded.
 
 ## One person in two messengers: `contacts link`
 
@@ -175,16 +186,16 @@ max personal contacts link 20000002 telegram:1000001
 max personal contacts unlink 20000002
 ```
 
-After linking, `contacts context` without `--chat` combines both accounts: shared chats and messages from MAX and Telegram. `contacts profile` and `contacts context --chat` still show only the account you named. A link is your explicit record: matching names in two messengers never establish that they are one person. This record does not change the MAX address book.
+After linking, `contacts context` without `--chat` combines both accounts: shared chats and messages from MAX and Telegram. `contacts info` and `contacts context --chat` still show only the account you named. A link is your explicit record: matching names in two messengers never establish that they are one person. This record does not change the MAX address book.
 
-## Your names and notes: `contacts alias`, `contacts notes`
+## Your names and notes: `contacts aliases`, `contacts notes`
 
 ```sh
-max personal contacts alias set "Борис Пример" Боря            # ваше имя для человека, только на этом компьютере
-max personal contacts alias rm "Борис Пример"
-max personal contacts notes add "Борис Пример" --file note.txt  # или текст из stdin
+max personal contacts aliases set "Борис Пример" Боря            # ваше имя для человека, только на этом компьютере
+max personal contacts aliases remove "Борис Пример"
+max personal contacts notes add "Борис Пример" --text-file note.txt  # или текст из stdin
 max personal contacts notes list "Борис Пример"
-max personal contacts notes edit "Борис Пример" <id> --revision 1 --file note.txt
+max personal contacts notes edit "Борис Пример" <id> --revision 1 --text-file note.txt
 max personal contacts notes remove "Борис Пример" <id>
 max personal contacts show "Борис Пример" --with-notes
 max personal contacts list notes:квартира                     # люди, в чьих заметках есть этот текст

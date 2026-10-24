@@ -6,10 +6,10 @@
     "conclusion": "Reviewed Telegram v0.83.0 to v0.86.0: album sending, canonical command names and removed aliases, framed watch JSONL, query terms for diagnostic/stat filters, first-run questions, mcp.authority and raw Bot API permissions. The catch-up scenario uses explicit chats mark-read. RU/ES guides and exact technical references updated, shared Telegram examples renamed, incoming command hashes preserved. Native roadmap erroneously lists released archives, chat-list actions, bot interactions and albums as future; a source-linked portal correction distinguishes current from planned. Comparison corrections use the pinned primary project documentation and remove unconditional approval/retry claims; no private comparison files or comparative runtime measurements are published."
   },
   "max": {
-    "version": "v0.66.0",
-    "roadmapSha256": "f1628c3c19b2ea49f41fb57147b92bb0f9d29081ed577d1be3755a8a35b2a961",
-    "reviewedAt": "2026-10-20",
-    "conclusion": "Reviewed MAX 0.66.0 (Core 0.370.0): max guide catch-up and the first screen of max --help quote the filter, max review 'date>1d' --unanswered 4h (unquoted, a shell wrote a file named 1d and dropped the filter; the site's correction for it is retired); Works with shows memo's title from cli-core MEMO_SCENARIOS. Core 0.363.0-0.370.0: store version 25 keeps a chat's history; a left chat is found by any id, chats track and store gaps plan refuse it. Changed native pages: changelog, scenarios (quoted step), and the v0.66.0 release links in bot/cli-contract/usage; EN/ES (RU scenarios) updated. Roadmap unchanged: optional local copy, event actions, video notes, cloud password and native installers are not shipped."
+    "version": "v0.72.0",
+    "roadmapSha256": "49ff16de0413267d238c2a98ea854985e0b1cacb1e166798bb5ab5ca5767ba6e",
+    "reviewedAt": "2026-10-24",
+    "conclusion": "Reviewed MAX v0.66.0 to v0.72.0, release commit 538197e9e51dc307fd8579c00d45e9965213cd76, Core 0.406.0/Base 0.50.3. Native Russian source and EN/ES translations cover canonical command names, removed read-receipt flags/config, transcript matching, dates/timezones, contacts prepare, framed watch JSONL, query-based run/stat filters, explicit first-run choices and MCP authority/raw bot API levels allow and ask. Verified file archives shipped in v0.71.0; v0.72.0 fixes service-event/keyboard skips. Source-attributed portal corrections move archives out of future plans, repair retired permission keys, diagnostic MCP argument names, request confirm/reject shorthands and malformed empty reference defaults. Forty retired command hashes are retained. Optional store, event actions, bulk join requests, video notes/cloud password, chat pin/archive/unread, personal channel comments and standalone installers remain future. No live account checks or extra release performed."
   },
   "zm": {
     "version": "v0.36.0",

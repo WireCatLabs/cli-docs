@@ -25,13 +25,13 @@ for (const lang of ["en", "ru", "es"])
       await page.goto(`/${lang}/docs/${tool}/commands#${tool}-bot-api`)
       await expect(page).toHaveURL(new RegExp(`commands-bot#${tool}-bot-api$`))
       await expect(page.locator(`#${tool}-bot-api`)).toBeInViewport()
-      if (tool === "tg") {
+      if (tool === "tg" || tool === "max") {
         for (const [hash, group, current] of [
-          ["tg-contacts-profile", "personal", "tg-contacts-info"],
-          ["tg-mcp-setup", "setup", "tg-mcp-add"],
+          [`${tool}-contacts-profile`, "personal", `${tool}-contacts-info`],
+          [`${tool}-mcp-setup`, "setup", `${tool}-mcp-add`],
         ]) {
           await page.goto("about:blank")
-          await page.goto(`/${lang}/docs/tg/commands#${hash}`)
+          await page.goto(`/${lang}/docs/${tool}/commands#${hash}`)
           await expect(page).toHaveURL(new RegExp(`commands-${group}#${hash}$`))
           await expect(page.locator(`#${hash}`)).toHaveCount(1)
           await expect(page.locator(`#${current}`)).toBeInViewport()

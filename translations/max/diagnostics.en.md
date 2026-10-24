@@ -25,7 +25,7 @@ Terms used below:
 | Find a failed run later | `max personal runs list` | Failed runs are saved automatically |
 | Save every run | `max personal config set record true` | Every run's record |
 | Check installation | `max personal doctor`, `max personal doctor --online` | Nothing |
-| Prepare a problem report | `max personal doctor report create` | One file you choose to submit |
+| Prepare a problem report | `max personal doctor reports create` | One file you choose to submit |
 
 ## Show: `--trace`
 
@@ -174,9 +174,11 @@ For a bot profile, `max <имя> doctor` reports the bot token's source, observe
 ## Problem Report
 
 ```sh
-max personal doctor report create              # о последнем неудачном запуске
-max personal doctor report create --run <id>   # об этом запуске
+max personal doctor reports create              # о последнем неудачном запуске
+max personal doctor reports create --run <id>   # об этом запуске
 ```
+
+If configuration cannot be read, first run `max doctor --json` to see the settings error. Creating a report file requires a write-permission check, so fix the invalid setting first.
 
 The command writes a JSON file containing `max personal doctor` results and the run, then prints a link to a new [GitHub issue](https://github.com/WireCatLabs/max-cli/issues). Read the file before submitting. It has no message text; chat and message ids are replaced with labels. See [reporting a problem](./troubleshooting.md#как-сообщить-о-проблеме) for its remaining contents.
 
@@ -207,18 +209,17 @@ done
 ## Search errors and partial runs
 
 ```sh
-max personal runs search --error-code rate_limited --json
-max personal runs search --status partial --since-time 2026-10-01 --json
+max personal search runs error_code:rate_limited --json
+max personal search runs status:partial --since-time 2026-10-01 --json
 ```
 
-`runs search` matches literal diagnostic text in metadata and safe events. Use `--operation`,
-`--profile`, `--since-time`, `--limit` and `--page` to narrow it. Each page allows up to 100 runs and
+`search runs` matches literal diagnostic text in metadata and safe events. Put `status:`, `error_code:`, `operation:` and `profile:` in the query; use `--since-time`, `--limit` and `--page` to narrow it. Each page allows up to 100 runs and
 each run returns at most 100 matched events, with `events_truncated` for additional events.
 A failed batch item or history page creates `status: "partial"` with failed IDs, stages and
 codes; message contents and provider error payloads are not copied into that record. Partial
 records are kept by default unless recording was explicitly disabled. Search does not record itself.
 
-MCP `max_read` with `command: "runs search"` accepts these `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit` and `page`.
+MCP `max_read` with `command: "search runs"` accepts these `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit` and `page`.
 It reads only the active profile's diagnostic runs, does not connect to MAX and does not open
 raw background-job logs. The original partial result names the failed items and their error codes; diagnostic records
 keep only safe identifiers and codes.

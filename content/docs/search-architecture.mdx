@@ -92,7 +92,7 @@ Word forms are not typo correction. Strict search, the default, does not correct
 
 Snowball stems recover more word forms than exact matching, but can also join unrelated words. See the [word-form benchmark](https://github.com/WireCatLabs/cli-core/blob/ca0ae248b4f743e395c5b022f742250876bbb818/bench/stemming/results.md) for the comparison with spelling-based trigram neighbors. Use `exact:` when that distinction matters.
 
-The stemmers are a store-wide setting, shared by every profile, tg and MAX: `search_stemmers.cyrillic` (`russian` or `none`) and `search_stemmers.latin` (`english`, `spanish`, both — the default — or `none`). `store reindex` applies your own change. While the stem index is being built, a search matches exact word forms and says so; `serve` finishes the stems in the background and `store migrate` at once. Some different words share a stem — `часть`/`часто`, `caso`/`casa` — and `exact:` or `--exact` separates them. The JSON answer says whether stems were used: `query.stemming` names the stemmer and each word's stem, `stemsReady` sits beside `wordsReady`, and each hit carries `exact: false` when only another form matched.
+The stemmers are a store-wide setting, shared by every profile, tg and MAX: `search_stemmers.cyrillic` (`russian` or `none`) and `search_stemmers.latin` (`english`, `spanish`, both — the default — or `none`). `store rebuild` applies your own change. While the stem index is being built, a search matches exact word forms and says so; `serve` finishes the stems in the background and `store migrate` at once. Some different words share a stem — `часть`/`часто`, `caso`/`casa` — and `exact:` or `--exact` separates them. The JSON answer says whether stems were used: `query.stemming` names the stemmer and each word's stem, `stemsReady` sits beside `wordsReady`, and each hit carries `exact: false` when only another form matched.
 
 ### Server search beside the archive
 
@@ -106,7 +106,7 @@ Only what narrows the candidates is sent: the required words and phrases, one ch
 
 <ArchitectureDiagram name="conversationSearch" lang="en" />
 
-`conversations build` walks one chat's stored messages in time order. Each message can have candidate links to earlier messages. A chosen parent joins it to that discussion; no parent starts a new one.
+`conversations links rebuild` walks one chat's stored messages in time order. Each message can have candidate links to earlier messages. A chosen parent joins it to that discussion; no parent starts a new one.
 
 Precedence:
 
@@ -122,7 +122,7 @@ Building is explicit. A new build publishes new memberships and conversation ide
 
 Agent-assisted linking: `skill show link-conversations` gives the owner's agent its instructions; `conversations batches status` estimates the messages, batches and text; `batches next` hands out a window of 10–200 messages (50 by default) with the messages before it; `conversations links add` stores the agent's JSON answer, all or nothing, and `conversations links clear` drops the agent's answers for a chat. Storing answers needs the profile permission `conversations.links`. In this workflow the CLI never calls a model itself. An answer that refers to a changed or deleted message becomes stale and is left out of later builds.
 
-`conversations build --chat <chat> --analyze` is the explicit alternative: the CLI sends bounded batches to a configured OpenAI-compatible or Anthropic endpoint. It needs one named chat, reports the volume, endpoint and token limit, and asks for consent, which is remembered for that account, chat and provider until revoked (`conversations consents list`, `conversations consents revoke`). Defaults are 50 messages per batch and at most 100,000 reserved tokens per run; `--yes` grants consent in scripts.
+`conversations links rebuild --chat <chat> --analyze` is the explicit alternative: the CLI sends bounded batches to a configured OpenAI-compatible or Anthropic endpoint. It needs one named chat, reports the volume, endpoint and token limit, and asks for consent, which is remembered for that account, chat and provider until revoked (`conversations consents list`, `conversations consents remove`). Defaults are 50 messages per batch and at most 100,000 reserved tokens per run; `--yes` grants consent in scripts.
 
 ```sh
 tg personal conversations links rebuild --chat "Project team"
@@ -182,7 +182,7 @@ max personal conversations related "Project team" 4521 --json
 
 - **Edits.** A result whose piece changed after it was embedded is marked `stale: true`; its score is for the old text until the next build and embedding.
 - **Deletions.** A deleted message keeps its row, so a later sync cannot bring it back, but loses its text: in the row, the search copy, the edit history, transcripts and every vector of a piece that held it, unless a current piece without a deleted message still uses the same text.
-- **Catch-up.** `conversations build` and `embed` without `--chat`, and `search conversations --catch-up`, build and embed on this machine the chats that changed or were never built: at most 20 chats and 2,000 pieces a run by default (`--max-chats`, `--max-chunks`). They never download a model; a remote model is only ever used per chat, with the owner's yes. MCP offers the same catch-up as the `conversations refresh` write command.
+- **Catch-up.** `conversations links rebuild` and `embed` without `--chat`, and `search conversations --catch-up`, build and embed on this machine the chats that changed or were never built: at most 20 chats and 2,000 pieces a run by default (`--max-chats`, `--max-chunks`). They never download a model; a remote model is only ever used per chat, with the owner's yes. MCP offers the same catch-up as the `conversations refresh` write command.
 
 ## 7. Evidence and context for an agent
 
