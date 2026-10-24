@@ -23,10 +23,6 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
   v0.72.0, which must include BUG-378's attachment-download fix, then issue #335 for max. The newest releases
   dropped `messages list --mark-read`, still used in `max/usage*.md`. tg's scenario correction is merged in
   tg-cli #680; wait for a release containing it before bumping the tg pin from v0.83.0.
-- **DOCS-4 · P1 🚧 `docs/whatsapp-launch-20261024` · Add WhatsApp for launch.** Owner approved launch inclusion
-  on 2026-10-24, with the same reader structure as tg and a standards review before publication. Uses v0.6.0;
-  native guides, RU/ES, installation, landing, metadata and roadmap are under review in the worktree.
-
 
 ## Next (P2)
 

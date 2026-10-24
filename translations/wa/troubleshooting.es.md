@@ -6,7 +6,7 @@ Usa esta página cuando falle un comando y su mensaje no diga lo suficiente. Bus
 
 Algunas palabras que utiliza esta página:
 
-- El **código de salida** es el número que devuelve un comando cuando finaliza: `0` significa que se completó y cualquier otro número indica el tipo de falla. Los guiones y los agentes de IA lo leen; la siguiente tabla asigna cada uno a su sección.
+- El **código de salida** es el número que devuelve un comando cuando finaliza: `0` significa que se completó y cualquier otro número indica el tipo de falla. Los scripts y los agentes de IA lo leen; la siguiente tabla asigna cada uno a su sección.
 - **`wa <profile> doctor`** comprueba la instalación sin conectarse a WhatsApp. Ejecútelo primero.
 
 En la salida `--json`, un error que finaliza el comando es una línea en stderr, `{"error":{"code":"…","reason":"…",
@@ -22,7 +22,7 @@ En la salida `--json`, un error que finaliza el comando es una línea en stderr,
 | `4` | `authentication_error` | el perfil no está vinculado o WhatsApp cerró sesión en el dispositivo | [desconectado](#whatsapp-logged-this-device-out) |
 | `5` | `permission_error` | el perfil `permissions` lo rechazó, o WhatsApp baneó o restringió la cuenta | [permisos](./permissions.md), [escribe](./limits.md#writes) |
 | `6` | `not_found` | no existe tal chat, mensaje o persona en el almacén local; nada almacenado todavía | [nada registrado](#nothing-recorded-for-profile--yet) |
-| `7` | `confirmation_required` | el chat no está en la lista de destinatarios, o el cambio pregunta primero y nadie pudo responder | [preguntas en guiones](./permissions.md#questions-in-scripts) |
+| `7` | `confirmation_required` | el chat no está en la lista de destinatarios, o el cambio pregunta primero y nadie pudo responder | [preguntas en scripts](./permissions.md#questions-in-scripts) |
 | `8` | `rate_limited` | el límite de envío por horas, o WhatsApp pidió que la cuenta fuera más lenta | [escribe](./limits.md#writes) |
 | `9` | `timeout` | el teléfono no respondió a tiempo o `--timeout` finalizó el comando | [historia anterior](./archive.md#older-history-from-your-phone) |
 | `10` | `network_error` | `wa` no pudo conectarse a WhatsApp a tiempo | [algo más](#something-else) |

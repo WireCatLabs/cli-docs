@@ -39,8 +39,8 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal 
 | Aplicación | Planes | Documentación |
 |---|---|---|
 | ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |
-| Claudio | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
-| Géminis | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |
+| Claude | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
+| Gemini | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |
 
 No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/WireCatLabs/whatsapp-cli/issues).
 
@@ -109,14 +109,14 @@ Cada servidor necesita su propio puerto local y su propia dirección HTTPS públ
 
 ## Receptor de webhook para un bot
 
-Un número de WhatsApp Business en la API de la nube recibe sus mensajes solo mediante webhook, por lo que su receptor se publica de la misma manera ([un número de WhatsApp Business como bot](./bot.md)). `wa <profile> bot watch --public-url` escucha en `8766` local. Con Funnel, publíquelo en un puerto público que el servidor MCP no utiliza, como `10000`:
+Un número de WhatsApp Business en la Cloud API recibe sus mensajes solo mediante webhook, por lo que su receptor se publica de la misma manera ([un número de WhatsApp Business como bot](./bot.md)). `wa <profile> bot watch --public-url` escucha en `8766` local. Con Funnel, publíquelo en un puerto público que el servidor MCP no utiliza, como `10000`:
 
 ```sh
 tailscale funnel --bg --https=10000 8766
 wa cloudtest bot watch --public-url https://<name>.ts.net:10000
 ```
 
-Ejecuta primero `tailscale funnel status` para ver qué puertos públicos están ocupados. Con un túnel de Cloudflare con nombre, agregue un segundo nombre de host público cuyo servicio local sea `http://127.0.0.1:8766`. Ingrese el mismo origen que la URL de devolución de llamada en el Panel de aplicaciones de Meta. El destinatario solo mantiene en secreto las entregas firmadas con su aplicación.
+Ejecuta primero `tailscale funnel status` para ver qué puertos públicos están ocupados. Con un túnel de Cloudflare con nombre, agregue un segundo nombre de host público cuyo servicio local sea `http://127.0.0.1:8766`. Ingrese el mismo origen que la URL de devolución de llamada en el Panel de aplicaciones de Meta. El receptor solo guarda las entregas con una firma válida de tu aplicación.
 
 ## Alternativa: Túnel Cloudflare
 
@@ -158,7 +158,7 @@ Pulsa Ctrl-C en ambas ventanas de terminal para detener el servidor y este túne
 
 Si inició Funnel con `--bg`, Ctrl-C no detiene esa ruta en segundo plano. Verifique `tailscale funnel status` y apague solo su puerto público, por ejemplo `tailscale funnel --https=443 off`. No utilice `funnel reset` cuando otro servidor utilice Funnel: borra todas las rutas.
 
-Recuperar el acceso desde las aplicaciones es independiente de detener un proceso. Para cerrar sesión en todas las aplicaciones de un perfil:
+Revocar el acceso de las aplicaciones es independiente de detener un proceso. Para cerrar sesión en todas las aplicaciones de un perfil:
 
 ```sh
 wa personal mcp --revoke --json
@@ -171,5 +171,5 @@ Esas aplicaciones deben iniciar sesión nuevamente con un nuevo código. Esto no
 - **La aplicación dice que no se puede conectar:** abra `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` en un navegador. Debe mostrar un JSON corto. Si no es así, Funnel no se está ejecutando, no está habilitado en su red Tailscale o apunta a otro puerto.
 - **La página de inicio de sesión dice "Demasiados códigos incorrectos":** después de cinco códigos incorrectos, espera 30 segundos y luego el terminal muestra un nuevo código. Si no los escribiste, alguien encontró tu dirección: detén el servidor y piensa en un nuevo nombre de dispositivo en Tailscale.
 - **La aplicación se conecta, pero no hay herramientas:** `wa personal mcp doctor` verifica que el servidor MCP se inicie y enumere sus herramientas. No comprueba el enlace a WhatsApp ni al túnel; `wa personal doctor` lee el estado del dispositivo.
-- **La lectura funciona, la escritura falla:** el servidor HTTP no pasa por `serve`, por lo que se rechaza una escritura mientras se ejecuta `serve`; el error lo nombra. De lo contrario, verifique los permisos del perfil y cualquier anulación de `--permission`: el bloque `deny` y `readonly` escribe lo que apruebe la aplicación.
-- **Necesita un registro de las llamadas:** `wa personal runs list` las muestra. Las llamadas exitosas aparecen sólo cuando la grabación está activada; las llamadas fallidas se mantienen de forma predeterminada, a menos que la grabación se haya desactivado con `"record": false` o `--no-record` ([diagnóstico](./diagnostics.md)).
+- **La lectura funciona, la escritura falla:** el servidor HTTP no pasa por `serve`, por lo que se rechaza una escritura mientras se ejecuta `serve`; el error lo nombra. De lo contrario, verifique los permisos del perfil y cualquier anulación de `--permission`: `deny` y `readonly` bloquean las escrituras aunque la aplicación las apruebe.
+- **Necesitas un registro de llamadas a herramientas:** `wa personal runs list` las muestra. Las llamadas exitosas aparecen sólo cuando la grabación está activada; las llamadas fallidas se mantienen de forma predeterminada, a menos que la grabación se haya desactivado con `"record": false` o `--no-record` ([diagnóstico](./diagnostics.md)).

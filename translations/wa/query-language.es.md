@@ -86,7 +86,7 @@ wa personal search messages 'email:"ana@example.com" OR domain:example.com'
 wa personal search messages 'mentions:"person:12"'
 ```
 
-En la tabla, `<phone>` representa el número: estas páginas no muestran ninguno real. Cite un valor que tenga `+` o `@`, ya que ambos son operadores. Se encuentra un teléfono como esté escrito: con o sin espacios, guiones y el código de país, es un teléfono, y se lee un número sin `+` con los países de la configuración `phone_countries`. `domain:` trata a `docs.example.com` como `example.com`. `mentions:` toma la referencia de una persona, una organización o un documento, y encuentra los mensajes cuyas menciones vinculaste con `wa personal mentions confirm`.
+En la tabla, `<phone>` representa el número: estas páginas no muestran ninguno real. Cite un valor que tenga `+` o `@`, ya que ambos son operadores. Se encuentra un teléfono como esté escrito: con o sin espacios, scripts y el código de país, es un teléfono, y se lee un número sin `+` con los países de la configuración `phone_countries`. `domain:` trata a `docs.example.com` como `example.com`. `mentions:` toma la referencia de una persona, una organización o un documento, y encuentra los mensajes cuyas menciones vinculaste con `wa personal mentions confirm`.
 
 ## Preajustes
 
@@ -98,7 +98,7 @@ Un ajuste preestablecido busca texto por su forma. Úselo para encontrar una con
 | `code` | una etiqueta con el código de verificación y entre 4 y 8 dígitos |
 | `api-key` | una etiqueta de clave API y un valor |
 | `secret` | una contraseña, secreto, token o etiqueta de clave API y un valor |
-| `card` | 13 a 19 dígitos con espacios o guiones opcionales |
+| `card` | 13 a 19 dígitos con espacios o scripts opcionales |
 | `bank` | un valor en forma de IBAN |
 | `passport` | un valor de pasaporte etiquetado o una forma rusa de 4+6 dígitos |
 | `phone` | una forma de teléfono internacional con prefijo más |

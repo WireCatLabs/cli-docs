@@ -233,7 +233,7 @@ wa personal search messages 'invoice NOT tag:work'
 wa personal tags remove work --chat "Book club"
 ```
 
-Una etiqueta es tu propia etiqueta en un chat, una persona, un mensaje (`--message <id> --chat <chat>`) o una tarea (`--task <id-or-key>`). Se guarda únicamente en el almacén local y nunca se envía a WhatsApp. `tag:work` encuentra mensajes etiquetados como `work`, mensajes en un chat etiquetados como `work` y mensajes de una persona etiquetada como `work`. Una etiqueta tiene entre 1 y 32 letras de la a a la z, dígitos y guiones.
+Una etiqueta es tu propia etiqueta en un chat, una persona, un mensaje (`--message <id> --chat <chat>`) o una tarea (`--task <id-or-key>`). Se guarda únicamente en el almacén local y nunca se envía a WhatsApp. `tag:work` encuentra mensajes etiquetados como `work`, mensajes en un chat etiquetados como `work` y mensajes de una persona etiquetada como `work`. Una etiqueta tiene entre 1 y 32 letras de la a a la z, dígitos y scripts.
 
 Los grupos se pueden etiquetar automáticamente, a partir de su título y descripción, sin mensajes ni modelo:
 

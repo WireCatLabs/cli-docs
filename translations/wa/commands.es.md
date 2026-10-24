@@ -4,28 +4,21 @@ title: "Todos los comandos"
 
 <!-- Generated from the command tree by scripts/commands.ts. Do not edit; run `pnpm generate`. -->
 
+Consulta la sintaxis de cada comando, sus opciones y sus códigos de salida. Las descripciones técnicas de API y campos se conservan en inglés.
 
-Every command, option and exit code. This page is **generated from the program itself**, so it
-cannot describe a version that does not exist.
+El mismo catálogo en JSON: `wa commands --json`.
 
-For the same list as JSON, run `wa commands --json`.
-
-How a command line is built:
+Estructura del comando:
 
 ```sh
 wa [profile] [options] <resource> <verb> [arguments]
 ```
 
-**The first word is the profile** when it is not a command: `wa work chats list` lists the chats of
-profile `work`. `WA_PROFILE` does the same for a whole shell session; no setting in the config file
-picks one. **No profile is assumed**, not even the only one: without either, a command
-that uses an account stops with exit 2 and lists the profiles on this computer. Commands that use no
-account (`--help`, `--version`, `commands`, `skill show`, `account list`, `config show`) run
-without one.
+**La primera palabra es el perfil** cuando no es un comando: `wa work chats list` muestra los chats del perfil `work`. `WA_PROFILE` lo fija para toda la sesión del terminal; ningún ajuste del archivo de configuración lo elige. **No se presupone un perfil**, aunque solo exista uno: sin nombre, un comando que necesita cuenta termina con código 2 y enumera los perfiles del ordenador. Los comandos sin cuenta (`--help`, `--version`, `commands`, `skill show`, `account list`, `config show`) funcionan sin perfil.
 
-## Options for every command
+## Opciones globales
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `-V, --version` | output the version number. |
 | `-v, --verbose` | more detail in what is shown: -v ids, -vv everything we know. Default: `0`. |
@@ -60,7 +53,7 @@ link by QR code (default) or a pairing code, then keep the pushed history
 wa session start [method]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `method` | optional | how to link. One of: `qr`, `phone`. Default: `qr`. |
 
@@ -84,7 +77,7 @@ set up WhatsApp and connect your agent
 wa setup [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--agent <agent>` | install the skill for this agent; asks at a terminal, otherwise none. One of: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`. |
 | `--method <method>` | how to log in when there is no session. One of: `qr`, `phone`. Default: `qr`. |
@@ -109,7 +102,7 @@ who this profile is logged in as; the phone number shows its last four digits
 wa account show [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--show-phone` | print the whole phone number. |
 
@@ -123,7 +116,7 @@ change the name, the description or the photo everyone sees on your profile
 wa account update [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--first-name <name>` | your first name. |
 | `--last-name <name>` | your last name. |
@@ -142,7 +135,7 @@ every device and app logged in to this account; nothing is ended
 wa account sessions list [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
@@ -156,7 +149,7 @@ log out every other device, your phone included; this one stays
 wa account sessions end [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--others` | every session but this one. |
 
@@ -182,7 +175,7 @@ change who may find, call or add the account; the settings not named stay
 wa account privacy set [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--last-seen <who>` | who sees when the account was last online: everyone, contacts or nobody. |
 | `--hide-online <on\|off>` | hide online status and last seen. |
@@ -204,11 +197,11 @@ chats, newest first, archived ones included; the query is answered from the loca
 wa chats list [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -222,7 +215,7 @@ who joined, left, was added or removed, and by whom — from the chat's service 
 wa chats events <chat> [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
@@ -235,7 +228,7 @@ what an invite or public link leads to, without joining it
 wa chats inspect <link>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `link` | required | an invite link or a public one. |
 
@@ -247,7 +240,7 @@ one chat: its kind, unread count, last message time and who is in it
 wa chats show <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -263,11 +256,11 @@ every document link in the chat, newest first, and whether the store has it
 wa chats documents list <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -284,12 +277,12 @@ everyone in a group, a page at a time, with their role and when they were last s
 wa chats members list <chat> [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `query` | optional | field:value terms; this list filters by none yet. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -303,12 +296,12 @@ members that look like bots, each with its reasons — read from the member list
 wa chats members audit <chat> [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
 | `--deep <n>` | also check the top n in full — profile, photos and everything they wrote — one person a second; the public ban lists cover Telegram only, so nothing is sent. |
@@ -321,7 +314,7 @@ who joined, who left and whose profile changed, oldest first — what chats memb
 wa chats members history <chat> [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
@@ -336,11 +329,11 @@ read a group's whole member list into the local store's member history: who join
 wa chats members fetch <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--track` | also fetch it daily while serve runs; chats tracking lists and edits those chats. |
 | `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
@@ -355,7 +348,7 @@ add people; they are told
 wa chats members add <chat> <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `person` | required | an id, or part of a name. |
@@ -370,7 +363,7 @@ remove people; their messages stay
 wa chats members remove <chat> <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `person` | required | an id, or part of a name. |
@@ -385,11 +378,11 @@ mark a chat read; the other side sees that you read it
 wa chats mark-read <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--until-id <id>` | only up to this message id; the newest by default. |
 
@@ -413,7 +406,7 @@ one chat: whether it is tracked, and its member count per day for the last 30 da
 wa chats tracking show <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -427,7 +420,7 @@ fetch this chat's member list daily while serve runs, from its next run
 wa chats tracking add <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -441,7 +434,7 @@ stop fetching it daily; the history already kept stays
 wa chats tracking remove <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -455,12 +448,12 @@ create a group or a channel; the people added are told
 wa chats create <title> [person] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `title` | required | the group's name. |
 | `person` | optional | people to add: an id, or part of a name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--channel` | a private channel instead of a group; people join it by its link. |
 
@@ -474,7 +467,7 @@ join a group or channel by its link; the others in it see that you joined
 wa chats join <link>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `link` | required | an invite link, or a public one. |
 
@@ -488,7 +481,7 @@ leave a group or channel; the others in it see that you left
 wa chats leave <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -502,11 +495,11 @@ rename a group or channel, change its description, or turn one of its settings o
 wa chats update <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--title <title>` | the new name. |
 | `--description <text>` | the new description. |
@@ -530,7 +523,7 @@ the invite link, if you may see it
 wa chats link show <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -544,7 +537,7 @@ replace the invite link; the old one stops working
 wa chats link reset <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -560,12 +553,12 @@ who asked to join, newest first; only admins see them, and reading tells nobody
 wa chats requests list <chat> [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -580,7 +573,7 @@ let them in; the group sees them join
 wa chats requests accept <chat> <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `person` | required | who asked: an id from `chats requests list`. |
@@ -595,7 +588,7 @@ turn the request away
 wa chats requests decline <chat> <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `person` | required | who asked: an id from `chats requests list`. |
@@ -614,7 +607,7 @@ make a member an admin, with every right: members, admins, info, pin, link, post
 wa chats admins add <chat> <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `person` | required | an id, or part of a name. |
@@ -629,7 +622,7 @@ take an admin's rights back; they stay a member
 wa chats admins remove <chat> <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `person` | required | an id, or part of a name. |
@@ -646,7 +639,7 @@ your chat folders, in the order the app shows them
 wa chats folders list [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
@@ -658,7 +651,7 @@ one chat folder, with the names of the chats in it
 wa chats folders show <folder>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `folder` | required | the folder's id, or its title exactly. |
 
@@ -672,11 +665,11 @@ create a chat folder
 wa chats folders create <title> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `title` | required | the folder's name; the app may refuse a long one. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat to put in it, by id or name; repeat it for more. |
 
@@ -690,11 +683,11 @@ rename a folder, or change which chats are in it
 wa chats folders update <folder> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `folder` | required | folder id, or its title exactly. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--title <title>` | a new name. |
 | `--add <chat>` | put a chat in it; repeat it for more. |
@@ -710,7 +703,7 @@ delete a folder; the chats in it stay
 wa chats folders delete <folder>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `folder` | required | folder id, or its title exactly. |
 
@@ -726,7 +719,7 @@ the group's rules; the defaults, marked not saved, if it has none yet
 wa chats rules show <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -740,7 +733,7 @@ change one rule; the group's first change writes every rule with its default
 wa chats rules set <chat> <key> <value>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
@@ -756,7 +749,7 @@ put one rule back to its default
 wa chats rules unset <chat> <key>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
@@ -771,11 +764,11 @@ judge a group's new messages and members by its rules, and act as they allow
 wa chats moderate <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
 | `--dry-run` | judge and plan; do nothing. |
@@ -792,11 +785,11 @@ stop notifications from a chat, for good or until a time; nobody in it is told
 wa chats mute <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--until <time>` | only until then: 2026-09-25T09:00 (local time), or 30m, 2h, 7d from now. |
 
@@ -810,7 +803,7 @@ hear a muted chat again
 wa chats unmute <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -824,7 +817,7 @@ move a chat into the archive; nobody in it is told
 wa chats archive <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -838,7 +831,7 @@ bring an archived chat back to the chat list
 wa chats unarchive <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -852,7 +845,7 @@ keep a chat at the top of your chat list; nobody in it is told
 wa chats pin <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -866,7 +859,7 @@ let a pinned chat move down the chat list again
 wa chats unpin <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -880,7 +873,7 @@ mark a chat unread on your own devices; nobody in it is told
 wa chats mark-unread <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -894,11 +887,11 @@ delete a chat from this account; the others in it keep it and its messages
 wa chats delete <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
@@ -912,11 +905,11 @@ delete every message in a chat for this account; the others in it keep theirs
 wa chats clear <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
@@ -932,11 +925,11 @@ people you have a one-to-one chat with; name: matches the name, your local alias
 wa contacts list [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -951,11 +944,11 @@ one person and the chats you share with them
 wa contacts show <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--with-notes` | include your private notes, subject to contacts.notes.list permission. |
 
@@ -967,11 +960,11 @@ everything the messenger says about one person — handles, flags, last seen, wh
 wa contacts profile <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--show-phone` | print the whole phone number. |
 
@@ -983,11 +976,11 @@ what the store holds about one person, in every messenger linked to them: shared
 wa contacts context <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | at most this many messages in each list; 10 if not given. |
 | `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
@@ -1001,11 +994,11 @@ before you talk to someone: what contacts context gives, plus the one-to-one cha
 wa contacts prepare <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | at most this many messages, and items in each section; 10 if not given. |
 | `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 2h / 1d ago. |
@@ -1018,11 +1011,11 @@ everything one person took part in, in every messenger linked to them — messag
 wa contacts timeline <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--scope <scope>` | only what belongs to personal or to work accounts: personal or work. |
 | `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
@@ -1038,11 +1031,11 @@ whether one person looks like a bot, a fake or a spammer: their profile and what
 wa contacts check <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--no-registries` | do not ask the public ban lists; nothing about them leaves this machine. |
 
@@ -1056,7 +1049,7 @@ record that two people in the store are one person — the same name is never en
 wa contacts link <person> <other>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
 | `other` | required | the same in another messenger of the store, as <messenger>:<person> — max:Ana; me: it is you, as zoom:<id> me. |
@@ -1071,7 +1064,7 @@ undo contacts link for one identity: it is a person of its own again
 wa contacts unlink <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name; <messenger>:<person> for another messenger. |
 
@@ -1107,7 +1100,7 @@ your own name for a person in this account; kept on this machine, never sent
 wa contacts alias set <person> <alias>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | the person's id, reference or known name. |
 | `alias` | required | the private name to use for this person. |
@@ -1122,7 +1115,7 @@ drop your local name for a person; their own name shows again
 wa contacts alias rm <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | the person's id, reference or known name. |
 
@@ -1138,7 +1131,7 @@ every private note you keep on a person, oldest first
 wa contacts notes list <person> [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | the person's id, reference or known name. |
 | `query` | optional | field:value terms; this list filters by none yet. |
@@ -1151,7 +1144,7 @@ one private note on a person, with its revision for edit
 wa contacts notes show <person> <id>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | the person's id, reference or known name. |
 | `id` | required | the note id from contacts notes list. |
@@ -1166,11 +1159,11 @@ add a private note on a person from stdin or --text-file; never sent
 wa contacts notes add <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | the person's id, reference or known name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--text-file <path>` | read note text from a file; omitted or - reads stdin. |
 
@@ -1184,12 +1177,12 @@ replace a note's text; --revision must match the one you read
 wa contacts notes edit <person> <id> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | the person's id, reference or known name. |
 | `id` | required | the note id from contacts notes list. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--text-file <path>` | read note text from a file; omitted or - reads stdin. |
 | `--revision <n>` | the revision you read before editing. |
@@ -1204,7 +1197,7 @@ delete one private note on a person
 wa contacts notes remove <person> <id>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | the person's id, reference or known name. |
 | `id` | required | the note id from contacts notes list. |
@@ -1219,7 +1212,7 @@ add a person to your contacts — `contacts list` still shows only people you ha
 wa contacts add <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
@@ -1233,7 +1226,7 @@ remove a person from your contacts; the chat stays, a name you gave them may not
 wa contacts remove <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
@@ -1247,7 +1240,7 @@ stop a person from writing to you — they need not be a contact
 wa contacts block <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
@@ -1261,7 +1254,7 @@ let a blocked person write to you again
 wa contacts unblock <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
@@ -1275,7 +1268,7 @@ rename the contact in the messenger address book; use contacts alias for a priva
 wa contacts rename <person> <first-name> [last-name]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 | `first-name` | required | the name you want to see for them. |
@@ -1291,7 +1284,7 @@ upload phone numbers and add the people the messenger has under them
 wa contacts import <file>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `file` | required | one person per line: number, then a comma, a tab or a semicolon, then the name. |
 
@@ -1307,11 +1300,11 @@ a bounded evidence packet from stored messages, newest first
 wa messages evidence <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many, 1–100. |
 | `--cursor <cursor>` | go on from where page.next says the last packet stopped. |
@@ -1324,12 +1317,12 @@ a chat's messages, oldest to newest
 wa messages list <chat> [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `query` | optional | where to start: id<42, date>2026-10-01; starred:true keeps the ones you starred. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many. |
 | `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
@@ -1346,12 +1339,12 @@ send a text message; without [text], the text is read from stdin
 wa messages send <chat> [text] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `text` | optional | the message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--operation-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
@@ -1373,7 +1366,7 @@ one message, by its chat and id or by its msg: locator
 wa messages show <chat> [message]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter); or a msg: locator, with no message id after it. |
 | `message` | optional | the message id. |
@@ -1386,12 +1379,12 @@ a message and what came either side of it, oldest first
 wa messages context <chat> [message] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter); or a msg: locator, with no message id after it. |
 | `message` | optional | the message id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
 | `--thread-hops <n>` | at most this many links from the hit (default: 8). |
@@ -1411,12 +1404,12 @@ save a message's photos, files, videos and voice notes to a folder — or a whol
 wa messages download <chat> [message] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | optional | the message id; left out with --all. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--output-dir <dir>` | where to save them; created if missing. Default: `.`. |
 | `--all` | every file of the chat, newest first; run it again to continue where it stopped. |
@@ -1431,12 +1424,12 @@ a voice message as text — by WhatsApp where it can, else by a model on this ma
 wa messages transcribe <chat> <message> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the id of a voice message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--local` | use the model on this machine, never the messenger. |
 | `--model <model>` | which downloaded model; implies --local (`models audio list`). |
@@ -1451,13 +1444,13 @@ change the text of your own message; the other side may have read it already
 wa messages edit <chat> <message> [text] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the id of your own message. |
 | `text` | optional | the new text; without it, read from stdin. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 
@@ -1471,12 +1464,12 @@ delete messages for you only; with --for-everyone, for everyone in the chat
 wa messages delete <chat> <message> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message ids, by spaces or commas, at most 10. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--for-everyone` | delete for everyone in the chat, not only for you — they cannot get it back. |
 | `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
@@ -1491,12 +1484,12 @@ forward one message to another chat
 wa messages forward <chat> <message> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | the chat the message is in: a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--to <chat>` | where it goes: a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--operation-id <id>` | repeat a forward whose outcome was unknown, without risking a second copy. |
@@ -1511,12 +1504,12 @@ pin a message in a chat; its members are told
 wa messages pin <chat> <message> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--expire-time <time>` | how long the pin lasts: 24h, 7d or 30d; 7d by default. |
 
@@ -1530,7 +1523,7 @@ unpin a message in a chat
 wa messages unpin <chat> <message>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message id. |
@@ -1545,7 +1538,7 @@ star a message, so it is easy to find again; only you see the star
 wa messages star <chat> <message>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message id. |
@@ -1560,7 +1553,7 @@ take the star off a message
 wa messages unstar <chat> <message>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message id. |
@@ -1573,7 +1566,7 @@ a message permalink when supported, and its account-scoped locator
 wa messages link <chat> [message]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter); or a msg: locator, with no message id after it. |
 | `message` | optional | the message id. |
@@ -1586,13 +1579,13 @@ the comments under a channel post, oldest to newest; they live in its discussion
 wa messages comments <chat> <post> [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | the channel: a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `post` | required | the post's message id in the channel. |
 | `query` | optional | where to start: id<42. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many. |
 | `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
@@ -1605,7 +1598,7 @@ why a message is in its conversation: each link it has, and the chain of answers
 wa messages links <chat> <message>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message id. |
@@ -1620,11 +1613,11 @@ bring a chat's history in the local store up to date, newest first; run it again
 wa messages sync [chat] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | optional | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last. |
 | `--limit <n>` | at most this many messages in this run, per chat with --all; 1000 if not given. |
@@ -1654,7 +1647,7 @@ put your reaction on a message; it replaces the one you had
 wa reactions add <chat> <message> <emoji>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message id. |
@@ -1670,7 +1663,7 @@ take your reaction off a message
 wa reactions remove <chat> <message>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the message id. |
@@ -1687,7 +1680,7 @@ a poll and its answer ids, as the message carries it now
 wa polls show <chat> <message>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the id of the message that carries the poll. |
@@ -1700,13 +1693,13 @@ who voted for what, newest first
 wa polls voters <chat> <message> [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the id of the message that carries the poll. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -1721,13 +1714,13 @@ vote in a poll, or take your vote back; the others see it
 wa polls vote <chat> <message> [answers] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | the id of the message that carries the poll. |
 | `answers` | optional | answer ids, as `polls show` prints them. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--retract` | take your vote back. |
 
@@ -1741,13 +1734,13 @@ send a poll to a chat, as a message of its own; everyone sees who voted for what
 wa polls create <chat> <question> <answers> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `question` | required | the question. |
 | `answers` | required | two answers or more. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--multiple` | people may pick several answers. |
 | `--operation-id <id>` | repeat a create whose outcome was unknown, without risking a second poll. |
@@ -1768,7 +1761,7 @@ the speech models, most suitable first, which are downloaded, and which one is t
 wa models audio list [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
@@ -1782,7 +1775,7 @@ download a speech model once, checked against the sha256 this version expects
 wa models audio download <model>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `model` | required | a model id from `models audio list`. |
 
@@ -1798,7 +1791,7 @@ the embedding models, most suitable first, which are downloaded, and which one i
 wa models text list [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
@@ -1812,11 +1805,11 @@ download an embedding model once, checked against the sha256 this version expect
 wa models text download <model> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `model` | required | a model id from `models text list`. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--accept-terms` | accept the model's licence terms, for a model that has its own. |
 
@@ -1834,7 +1827,7 @@ store a key, typed at a hidden prompt or piped on stdin — never as an argument
 wa models text key set <provider>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `provider` | required | openai, anthropic, or the host of a --base-url server that wants a key. |
 
@@ -1848,7 +1841,7 @@ forget a stored key
 wa models text key remove <provider>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `provider` | required | openai, anthropic, or a server's host. |
 
@@ -1860,11 +1853,11 @@ other people's unread messages in every chat; --new for what arrived since the l
 wa inbox [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | from when: date>2h, date>2026-10-01; the saved point stays put. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--new` | what arrived since the last check, each message once — for scheduled runs. |
 | `--limit <n>` | at most this many per chat, the newest. |
@@ -1880,11 +1873,11 @@ every message, yours too, in chats that changed since a point — for reviewing 
 wa review [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | where the last review ended and which chat: date>2h, chat:"Book club"; 3 days ago if no date. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--unanswered [duration]` | only questions to you or a group's admins that nobody answered, asked at least this long ago — 4h, 1d; 24h if not given. |
 | `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
@@ -1900,7 +1893,7 @@ print new messages as they arrive, until Ctrl-C or --timeout (either ends it nor
 wa watch [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--events` | also edits, deletions, reactions, poll votes and chat events; every line then names its event. |
 
@@ -1964,7 +1957,7 @@ serve's latest log lines — from the journal under systemd, else its log file
 wa server logs [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `-n, --limit <n>` | how many lines. Default: `50`. |
 
@@ -2000,7 +1993,7 @@ per chat: messages stored, the oldest and newest, and the stretches held complet
 wa store status [chat]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | optional | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -2016,7 +2009,7 @@ local coverage plan; missing message ids alone do not imply missing history
 wa store gaps plan <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -2030,11 +2023,11 @@ fetch bounded interior gaps and recheck coverage; never delete unseen messages
 wa store gaps repair <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | total messages in this repair, 500 by default. |
 | `--max-gaps <n>` | at most this many gaps, 5 by default. |
@@ -2061,11 +2054,11 @@ background sync jobs, newest first
 wa store jobs list [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -2079,7 +2072,7 @@ one background job — the newest when none is named — and what the store now 
 wa store jobs show [job]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `job` | optional | the job id `messages sync --background` printed. |
 
@@ -2093,7 +2086,7 @@ stop a running background job after its current page; a later sync resumes where
 wa store jobs cancel <job>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `job` | required | the job id. |
 
@@ -2107,11 +2100,11 @@ start a partial, failed or died job again, as a new job; the sync resumes where 
 wa store jobs retry [job] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `job` | optional | the job id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--failed` | every chat whose newest job partial, failed or died. |
 
@@ -2135,11 +2128,11 @@ a chat's stored messages, oldest first: --jsonl one message per line, --json the
 wa store export [chat] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | optional | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter); several with --output-dir. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--format <format>` | jsonl: one message per line, the default with --output; markdown: a transcript with a heading per day, replies and forwards quoted. |
 | `--since-time <time>` | only from this ISO 8601 time, or 30m / 2h / 1d ago, on. |
@@ -2159,7 +2152,7 @@ delete from the store the chats this account has left, with their messages
 wa store clear [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--left` | the chats this account has left — the only thing this clears. |
 | `--allow-dangerous` | yes, delete — it cannot be undone, and a chat you left cannot be fetched again. |
@@ -2211,11 +2204,11 @@ copy the store into a new file, while it is in use; never overwrites a file
 wa store backup <file> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `file` | required | the new file. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
@@ -2229,7 +2222,7 @@ put a backup in place of the store; the store it replaces is kept beside it, nev
 wa store restore <file>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `file` | required | a file `store backup` wrote; one written with --encrypt asks for its password. |
 
@@ -2243,11 +2236,11 @@ open a file written with --encrypt into a new file; asks for its password
 wa store decrypt <file> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `file` | required | a file `store backup --encrypt` or `store export --encrypt` wrote. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--output <file>` | the new file, readable only by you. |
 
@@ -2261,7 +2254,7 @@ bring every table to this build's shape, deleting nothing: a table of the wrong 
 wa store repair [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--dry-run` | say what it would do, and change nothing. |
 
@@ -2275,7 +2268,7 @@ back the store up beside itself, then delete it and start an empty one at this b
 wa store reset [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--no-backup` | delete the store without backing it up first. |
 
@@ -2293,7 +2286,7 @@ delete one copy `store repair` kept, named exactly; refuses any other table
 wa store copies delete <name>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `name` | required | the copy's name, as `store repair` printed it. |
 
@@ -2311,7 +2304,7 @@ find a chat's conversations in what the store holds, replacing the last build; w
 wa conversations build [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--analyze` | link batches using the configured analysis provider; requires --chat and remembers consent for this chat/provider. |
@@ -2330,12 +2323,12 @@ a chat's conversations, the newest first: when, how many messages, how many peop
 wa conversations list <chat> [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many. |
 
@@ -2347,7 +2340,7 @@ one conversation's messages, oldest first — by its id, or the one a message is
 wa conversations show <conversation> [message]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `conversation` | required | a conversation id from `conversations list`; or a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter), with a message. |
 | `message` | optional | a message id in that chat: show the conversation it is in. |
@@ -2360,12 +2353,12 @@ the conversations nearest in meaning to the one a message is in, in every built 
 wa conversations related <chat> <message> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `message` | required | a message id in that chat. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many. |
 | `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
@@ -2381,7 +2374,7 @@ how fresh each built chat's conversations and vectors are: messages the build ha
 wa conversations status [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat: a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
@@ -2401,7 +2394,7 @@ how many messages still wait for an answer, in how many batches, and how much te
 wa conversations batches status [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
@@ -2414,7 +2407,7 @@ the next window to answer, with the messages before it; message text goes to std
 wa conversations batches next [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
@@ -2433,7 +2426,7 @@ store your agent's answer to a batch, read as JSON from stdin: { "model", "answe
 wa conversations links add [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--batch <id>` | the batch id `conversations batches next` printed. |
 
@@ -2447,7 +2440,7 @@ drop your agent's answers for a chat, or only one model's; messages are never to
 wa conversations links clear [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--answer-model <model>` | only the stored answers this model gave. |
@@ -2462,7 +2455,7 @@ build, then embed with the model on this machine, the chats that changed since t
 wa conversations rebuild [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
@@ -2490,7 +2483,7 @@ forget analysis permissions so the next analysis asks again
 wa conversations consents revoke [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | revoke only this chat's consents; defaults to every chat. |
 | `--consent-provider <identity>` | exact provider identity from consents list; defaults to every provider. |
@@ -2505,7 +2498,7 @@ compute a vector for each chunk of a chat's conversations for search by meaning 
 wa conversations embed [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
@@ -2526,7 +2519,7 @@ how many chunks of a chat have a vector of the model, how many are left, and wha
 wa conversations embed status [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
@@ -2544,7 +2537,7 @@ drop a chat's vectors, or only one model's; messages and conversations are never
 wa conversations embed clear [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
@@ -2566,7 +2559,7 @@ read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/P
 wa attachments extract [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat's files; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--from-dir <dir>` | match files in this nonrecursive directory; needs --chat. |
@@ -2585,11 +2578,11 @@ files of stored messages, newest first: where each was saved and whether its tex
 wa attachments list [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -2603,12 +2596,12 @@ read a bounded chunk of one retained attachment; JSON includes base64 bytes
 wa attachments show <chat> [message] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter); or a msg: locator alone. |
 | `message` | optional | the message id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--attachment <n>` | file position from 1; required for several files. |
 | `--page <n>` | render one PDF page as PNG, from 1; optional unpdf/canvas, no OCR. |
@@ -2630,12 +2623,12 @@ keep the text an agent read from a file — a scan, a photo — so search finds 
 wa attachments text set <chat> [message] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter); or a msg: locator, with no message id after it. |
 | `message` | optional | the message id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--attachment <n>` | which file of the message, from 1; needed when it has more than one. |
 | `--text-file <path>` | read the text from this file; - or none reads stdin. |
@@ -2650,11 +2643,11 @@ archive media from selected chats; verify and keep existing copies
 wa attachments download <dir> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `dir` | required | archive directory; created if missing. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat; repeat for more; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). Default: ``. |
 | `--since-time <time>` | include messages from this ISO timestamp with a time zone. |
@@ -2668,7 +2661,7 @@ rehash all archived files without connecting to the messenger
 wa attachments check <dir>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `dir` | required | archive directory. |
 
@@ -2686,11 +2679,11 @@ install a Linux daily archive timer for this directory; starts nothing
 wa attachments jobs install <dir> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--at <HH:mm>` | daily start time. Default: `03:00`. |
 | `--timezone <zone>` | IANA time zone of the daily start time. Default: `UTC`. |
@@ -2707,7 +2700,7 @@ enable the installed archive timer at login and start its daily schedule
 wa attachments jobs start <dir>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
@@ -2721,7 +2714,7 @@ disable the archive timer; a download already running finishes
 wa attachments jobs stop <dir>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
@@ -2733,7 +2726,7 @@ show whether this directory's archive timer is installed and active
 wa attachments jobs status <dir>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
@@ -2747,7 +2740,7 @@ remove this directory's stopped archive timer; keep archived files
 wa attachments jobs uninstall <dir>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
@@ -2761,12 +2754,12 @@ move older images into another verified archive; remember their new locations
 wa attachments move <dir> <archive-dir> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `dir` | required | source media archive directory. |
 | `archive-dir` | required | destination archive directory; created if needed. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--before-time <time>` | move images whose message date is before this ISO timestamp with zone. |
 | `--dry-run` | show counts and bytes without moving files or creating the destination. |
@@ -2785,7 +2778,7 @@ derive local group/channel tags from cached metadata using keyword rules
 wa tags auto [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a stored group/channel; repeat to select several. Default: ``. |
 | `--limit <n>` | process at most 1–500 chats. Default: `50`. |
@@ -2802,11 +2795,11 @@ put tags on one chat, person, message or task
 wa tags add <tag> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `tag` | required | one or more tags: 1–32 letters a–z, digits and hyphens; upper case is lowered. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | the chat to tag, or the chat of --message; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--contact <person>` | the person to tag: their id, @username or name, as the local store knows them. |
@@ -2823,11 +2816,11 @@ take tags off one chat, person, message or task
 wa tags remove <tag> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `tag` | required | one or more tags: 1–32 letters a–z, digits and hyphens; upper case is lowered. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | the chat to untag, or the chat of --message; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--contact <person>` | the person to untag: their id, @username or name, as the local store knows them. |
@@ -2843,7 +2836,7 @@ what is tagged: this account's chats, messages and tasks, and the people of its 
 wa tags list [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
@@ -2859,11 +2852,11 @@ this account's mentions matching the query, newest first; --new for those found 
 wa mentions list [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | fields below; a bare word is a value, so a phone typed with 8 finds it written with +7. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -2877,11 +2870,11 @@ the sites this account's links point to, most linked first, with chats and first
 wa mentions domains [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | narrows the links counted: the fields below; dismissed links are never counted. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -2894,7 +2887,7 @@ confirmed addresses, in every account, most mentioned first; `mentions confirm <
 wa mentions places [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -2907,7 +2900,7 @@ one mention, the text around it, and how many other places hold its value
 wa mentions show <id>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `id` | required | the mention's id, from mentions list. |
 
@@ -2921,12 +2914,12 @@ say what a mention is: a phone's owner everywhere it is written, the stored docu
 wa mentions confirm <id> [person] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `id` | required | the mention's id, from mentions list. |
 | `person` | optional | person:<uid> or organization:<id> that owns the phone or the e-mail address; person:<uid> a name means; a document or a street address needs none. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
@@ -2941,11 +2934,11 @@ not a real mention: dismiss its value everywhere and on later syncs; a name only
 wa mentions reject <id> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `id` | required | the mention's id, from mentions list. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
@@ -2960,7 +2953,7 @@ find the mentions of every stored message again; decisions are kept
 wa mentions rebuild [kind]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `kind` | optional | only this kind: person-name after people were added or renamed. One of: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
 
@@ -2978,7 +2971,7 @@ compute a vector for each picture the store knows and has none for — downloadi
 wa images embed [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--limit <n>` | at most this many pictures in one run; 100 if not given. |
@@ -2995,7 +2988,7 @@ the picture models, which are downloaded, and which one is the default
 wa images models list [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
@@ -3009,7 +3002,7 @@ download a picture model once, checked against the sha256 this version expects
 wa images models download <model>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `model` | required | a model id from `images models list`. |
 
@@ -3025,7 +3018,7 @@ a stored chat's cached description, as automatic tags read it
 wa metadata get [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a stored chat. |
 
@@ -3039,7 +3032,7 @@ fetch group and channel descriptions again and cache them
 wa metadata refresh [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | stored group/channel; repeat for several. Default: ``. |
 | `--only-missing` | only chats with no metadata yet; without --chat, every stored group/channel. |
@@ -3061,11 +3054,11 @@ how many stored messages match, by chat, sender, day or hour — the local store
 wa stats messages show [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | a strict Lucene query, as for search messages; none counts every stored message; with --saved, more words AND-ed to it. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--by <group>` | count by chat, sender, day or hour (default: chat). |
 | `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
@@ -3087,11 +3080,11 @@ show saved counter values and their observation freshness
 wa stats messages counters show [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | strict Lucene query over stored messages. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--source <accounts>` | held accounts of this messenger; refresh uses the active account. |
@@ -3112,11 +3105,11 @@ read authoritative counters for bounded messages and update their local observat
 wa stats messages counters refresh [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | strict Lucene query over stored messages. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--source <accounts>` | held accounts of this messenger; refresh uses the active account. |
@@ -3137,11 +3130,11 @@ oldest detected questions without an observed qualifying explicit reply
 wa stats messages unanswered [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--source <accounts>` | every held account of this messenger; personal, bots or all. |
@@ -3160,11 +3153,11 @@ viewed posts with little recorded discussion
 wa stats messages discussion [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--source <accounts>` | every held account of this messenger; personal, bots or all. |
@@ -3183,11 +3176,11 @@ rank stored messages by a measure or explainable score; counters are snapshots w
 wa stats messages top [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--measure <name>` | the ranking metric; not with score or weights. One of: `views`, `reactions`, `forwards`, `comments`, `replies`, `thread-size`. |
 | `--score <preset>` | helpful/active for authors; engaging for either target. One of: `helpful`, `active`, `engaging`. |
@@ -3208,11 +3201,11 @@ bounded messages, answer pairs or retention members from an exact drilldown sele
 wa stats messages evidence <message> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `message` | required | the canonical message locator, or retention cohort reference, from drilldown. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--selection <json>` | the resolved ranking selection returned in drilldown. |
 | `--component <name>` | the exposed ranking component. |
@@ -3231,11 +3224,11 @@ counts and median/p90 latency for selected human answering identities
 wa stats contacts responses [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--source <accounts>` | every held account of this messenger; personal, bots or all. |
@@ -3253,11 +3246,11 @@ rank the human authors of stored messages by a measure or explainable score; cou
 wa stats contacts top [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--measure <name>` | the ranking metric; not with score or weights. One of: `messages`, `words`, `reactions`, `replies`, `answers`, `answer-time`, `threads`, `active-days`. |
 | `--score <preset>` | helpful/active for authors; engaging for either target. One of: `helpful`, `active`, `engaging`. |
@@ -3279,11 +3272,11 @@ bounded messages, answer pairs or retention members from an exact drilldown sele
 wa stats contacts evidence <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `person` | required | the exact native person id from the ranking row. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--selection <json>` | the resolved ranking selection returned in drilldown. |
 | `--component <name>` | the exposed ranking component. |
@@ -3302,11 +3295,11 @@ a group's or channel's numbers for a period: messages, active members, replies, 
 wa stats chats show <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
 | `--by <group>` | also one row per calendar day or week (weeks start on Monday). |
@@ -3320,11 +3313,11 @@ known-join members and their help within a join window
 wa stats chats newcomers <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--since-time <time>` | from this ISO 8601 time, or 2h / 1d ago; 30d ago if not given. |
 | `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
@@ -3342,11 +3335,11 @@ joining cohorts and observed checkpoint membership from saved roster observation
 wa stats chats retention <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--since-time <time>` | joining period starts at ISO 8601 or a relative time; last 90 days by default. |
 | `--until-time <time>` | joining period ends at this time; now by default. |
@@ -3368,7 +3361,7 @@ per chat: how many tasks are open, the oldest open one, the median time to close
 wa stats tasks show [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--type <type>` | only this type: question, request, mention or promise. |
@@ -3383,11 +3376,11 @@ a chart's data from a chat's statistics, and optionally a dark SVG or PNG image
 wa stats charts <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chart-kind <messages\|active\|membership>` | what to draw: messages, active authors, or joins and leaves. Default: `messages`. |
 | `--by <group>` | one point per calendar day or week (weeks start on Monday). Default: `day`. |
@@ -3407,11 +3400,11 @@ tasks, oldest first, with their message or note source
 wa tasks list [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many. |
 
@@ -3425,11 +3418,11 @@ add a task for a stored message or note — a promise, a request
 wa tasks add <message> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `message` | required | a message locator, msg:<provider>/<account>/<chat>/<message>, or note:<id>. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--type <type>` | the task's type: question, request, mention or promise. |
 | `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …. |
@@ -3451,11 +3444,11 @@ set a task's title, description, due date, next check, category and assignee; no
 wa tasks plan <task> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …; a change is kept in the task's history. |
 | `--title <title>` | one line: the action and its object — send Alex the API token. |
@@ -3474,12 +3467,12 @@ link a task to messages, chats, people or URLs — or to another task: task:<id>
 wa tasks link <task> [targets] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 | `targets` | optional | msg: locators, person:<id>, document:<id>, note:<id>, a URL; or task:<id>, which links two project tasks. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat it concerns, repeatable; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by, follow-up-of, duplicate-of or discovered-from. |
@@ -3492,7 +3485,7 @@ one task: its plan and everything linked to it
 wa tasks show <task>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 
@@ -3504,11 +3497,11 @@ tasks that may be the same job as this one, best first, each with a band — lik
 wa tasks related <task> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many, at most 40 (default 10). |
 
@@ -3520,11 +3513,11 @@ pairs of tasks a rule opened that may be one job, newest first, with score and r
 wa tasks duplicates [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many. |
 
@@ -3538,7 +3531,7 @@ two tasks are not the same job: the pair leaves the list and is never offered ag
 wa tasks duplicates reject <task> <other-task>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task listed as the duplicate, by its id or key. |
 | `other-task` | required | the task it was paired with. |
@@ -3553,7 +3546,7 @@ the fields and the text cannot tell: leave the pair to the owner, who lists it w
 wa tasks duplicates defer <task> <other-task>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task listed as the duplicate, by its id or key. |
 | `other-task` | required | the task it was paired with. |
@@ -3568,11 +3561,11 @@ one job seen twice: link every message of the duplicate to the task and close th
 wa tasks merge <task> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the duplicate, by its id or key; it must be open. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--into <id>` | the task that stays, by its id or key. |
 
@@ -3586,7 +3579,7 @@ undo a merge: reopen the task and remove its duplicate-of relation; messages the
 wa tasks unmerge <task>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the merged task, by its id or key. |
 
@@ -3598,11 +3591,11 @@ what needs a look today, from the local store and without message text: tasks ov
 wa tasks agenda [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--due-within <duration>` | list tasks due within this: 30m, 2h, 1d (default 1d). |
 | `--unanswered <duration>` | list chats where someone else wrote last this long ago (default 1d). |
@@ -3628,11 +3621,11 @@ the task rules over a chat's newest stored messages: in a one-to-one chat a ques
 wa tasks scan <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--last <n>` | read the newest n stored messages of each chat (default 50, at most 1000). |
 
@@ -3646,11 +3639,11 @@ take an open task so no other agent works it at once; the claim lapses by itself
 wa tasks claim <task> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--lease <duration>` | how long the claim lasts: 30m, 2h (default 30m); claiming again extends it. |
 | `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
@@ -3665,11 +3658,11 @@ give back a task you claimed, before the claim lapses; the owner may release any
 wa tasks release <task> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
 
@@ -3683,11 +3676,11 @@ close a task: done, or dismissed when it needs no answer. An agent (AI_AGENT or 
 wa tasks close <task> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--as <state>` | how it is closed: done, or dismissed — it needs no answer; the owner may leave it out to confirm an agent's close. |
 | `--reason <text>` | why, kept with the task — no-reply-needed, for example. |
@@ -3704,11 +3697,11 @@ refuse the close an agent suggested: the task stays open and leaves close:sugges
 wa tasks reject <task> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--as-owner` | refuse it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
@@ -3724,11 +3717,11 @@ search messenger messages and notes in the local store, and a meeting account's 
 wa search all <query> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--only <resources>` | only these resources, separated by commas: messages, notes; meetings when --source names a meeting account. |
 | `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
@@ -3746,11 +3739,11 @@ search messenger messages in the local store — what was read, fetched or kept 
 wa search messages [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; with --saved, more words AND-ed to it. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
 | `--thread-hops <n>` | at most this many links from the hit (default: 8). |
@@ -3775,11 +3768,11 @@ search the notes — written in memo, or imported from a notes folder — by wor
 wa search notes <query> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, tag:, source:internal (written in memo) or source:file (from a notes folder) and date ranges. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--source <accounts>` | only these notes accounts, separated by commas: notes:internal for notes written in memo, notes:<folder id> as a hit shows it, notes, documents or group:<name>. |
 | `--filter <query>` | a query every hit must also match; it does not change the search by meaning. |
@@ -3798,11 +3791,11 @@ the conversations nearest to a query in meaning and in words, best first, in one
 wa search conversations <query> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | required | what to look for, in your own words, in any language the model reads. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--model <model>` | local: a model id from `models text list` (default: e5-small); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
@@ -3832,12 +3825,12 @@ save a search under a name without running it; search messages --saved <name> ru
 wa searches create <name> [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `name` | required | up to 64 letters a–z, digits and hyphens, not only digits. |
 | `query` | optional | the query, as for search messages; none matches every stored message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice,email:me@example.com. |
@@ -3858,7 +3851,7 @@ one saved search or earlier run: its query, options and how often it ran
 wa searches show <name|id>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `name\|id` | required | a saved search's name, or the id of any row of searches history. |
 
@@ -3870,7 +3863,7 @@ the saved searches, by name
 wa searches list [query]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
@@ -3882,7 +3875,7 @@ the searches and counts that ran, newest first — saved ones included; never th
 wa searches history [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -3898,7 +3891,7 @@ delete a saved search, or one run from the history
 wa searches delete <name|id>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `name\|id` | required | a saved search's name, or the id of any row of searches history. |
 
@@ -3948,7 +3941,7 @@ allow sending to this chat; the first add turns the list on
 wa recipients add <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 
@@ -3962,7 +3955,7 @@ stop allowing this chat; the list stays on
 wa recipients remove <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | chat id, or the title as the list shows it. |
 
@@ -3988,7 +3981,7 @@ attempts to send, newest first: sent, refused, failed, or not known
 wa sends list [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
@@ -4006,7 +3999,7 @@ recorded runs, newest first
 wa runs list [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many to show. Default: `20`. |
 | `--page <n>` | which page, starting at 1. Default: `1`. |
@@ -4019,11 +4012,11 @@ one run: what it was, how it ended, and every event it logged
 wa runs show <run-id> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `run-id` | required | an id from `wa runs list`. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--problems` | only failed responses, warnings and crashes. |
 
@@ -4035,11 +4028,11 @@ search recorded diagnostic metadata and events; no message contents
 wa runs search [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | case-insensitive literal diagnostic text. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--status <status>` | run outcome. One of: `success`, `failed`, `partial`, `running`. |
 | `--error-code <code>` | one stable error code. |
@@ -4057,7 +4050,7 @@ the directory holding one run
 wa runs path <run-id>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `run-id` | required | an id from `wa runs list`. |
 
@@ -4073,7 +4066,7 @@ the profile, the profiles that exist, and each setting with where it came from
 wa config show [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
@@ -4087,12 +4080,12 @@ save a setting to the configuration file
 wa config set <setting> <value> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | required | a number, true or false, or for allow a list like send,reaction; for a group tg:work,max:Alice,email:me@x. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
 | `--personal` | only for personal accounts — the personal section of the file. |
@@ -4108,11 +4101,11 @@ remove a setting from the configuration file
 wa config unset <setting> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
 | `--personal` | only for personal accounts — the personal section of the file. |
@@ -4126,7 +4119,7 @@ the state this installation is in, without connecting unless --online
 wa doctor [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--online` | also connect once and read the account; sends nothing. |
 
@@ -4144,7 +4137,7 @@ write a problem report to a file, and say where to send it
 wa doctor report create [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--run <id>` | the run the report is about; the newest failed one if not given. |
 | `--output <file>` | where to write it; a new file in this directory if not given. |
@@ -4161,7 +4154,7 @@ one command's argv and result schemas, effects, permissions and retry guidance
 wa commands schema <path>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `path` | required | one command path, for example: stats messages show. |
 
@@ -4173,7 +4166,7 @@ shell completion: `wa complete zsh` prints the script to source
 wa complete [words]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `words` | optional | zsh for the shell script, or command words to complete. |
 
@@ -4187,7 +4180,7 @@ upgrade wa with the package manager that installed it; --check only looks
 wa upgrade [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--check` | say whether a newer version exists, and install nothing. |
 
@@ -4201,7 +4194,7 @@ serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add
 wa mcp [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
@@ -4217,7 +4210,7 @@ print the mcpServers entry for Claude Desktop, Cursor and others, with full path
 wa mcp config [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
@@ -4231,11 +4224,11 @@ add this profile's local MCP server to Codex or Claude Code
 wa mcp setup <client> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `client` | required | codex or claude-code. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
@@ -4248,7 +4241,7 @@ check this profile's local MCP handshake and tool list
 wa mcp doctor [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
@@ -4270,7 +4263,7 @@ check a bot token with WhatsApp, then keep it — typed at a hidden prompt or pi
 wa bot auth set [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--secret <name>` | keep this secret instead of the token, the same way: app-secret (the Meta app's secret, from App settings → Basic; checks each webhook delivery); verify-token (a string you choose and type in the App Dashboard's webhook setup too; answers Meta's handshake). |
 
@@ -4300,7 +4293,7 @@ every name on this machine that has a bot token; --check asks WhatsApp which bot
 wa bot list [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--check` | ask the messenger who each bot is, with its token. |
 
@@ -4324,7 +4317,7 @@ one chat from WhatsApp, and remember it
 wa bot chats show <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 
@@ -4338,7 +4331,7 @@ take the bot out of a chat; only an admin of the chat can bring it back
 wa bot chats leave <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, or the title of a chat this bot has seen. |
 
@@ -4352,7 +4345,7 @@ show what the bot is doing in a chat — typing, sending a photo — for a few s
 wa bot chats action <chat> <action>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 | `action` | required | what the chat sees. One of: `typing`, `photo`, `video`, `voice`, `file`. |
@@ -4369,7 +4362,7 @@ the chat's admins and what each may do
 wa bot chats admins list <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, or the title of a chat this bot has seen. |
 
@@ -4383,12 +4376,12 @@ make a member an admin with these rights
 wa bot chats admins add <chat> <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, or the title of a chat this bot has seen. |
 | `person` | required | the person's user id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--can <rights>` | what they may do, comma-separated: read, members, admins, info, pin, link, post, edit, delete. |
 | `--title <title>` | the title shown beside their name. |
@@ -4403,7 +4396,7 @@ take an admin's rights back; they stay a member
 wa bot chats admins remove <chat> <person>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, or the title of a chat this bot has seen. |
 | `person` | required | the person's user id. |
@@ -4422,12 +4415,12 @@ take a person out of a chat; their messages stay
 wa bot chats members remove <chat> <person> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, or the title of a chat this bot has seen. |
 | `person` | required | the person's user id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--block` | also keep them from coming back by the chat's link. |
 
@@ -4443,7 +4436,7 @@ the chat's rules; the defaults, marked not saved, if it has none yet
 wa bot chats rules show <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a group's id, or the title of a group this bot has seen. |
 
@@ -4457,7 +4450,7 @@ change one rule — trusted, blocked, blockedNames, links, invites, forwards, bl
 wa bot chats rules set <chat> <key> <value>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a group's id, or the title of a group this bot has seen. |
 | `key` | required | the rule. |
@@ -4473,7 +4466,7 @@ put one rule back to its default
 wa bot chats rules unset <chat> <key>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a group's id, or the title of a group this bot has seen. |
 | `key` | required | the rule. |
@@ -4488,11 +4481,11 @@ judge a group's new messages and joins by its rules, and act as they allow — a
 wa bot chats moderate <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a group's id, or the title of a group this bot has seen. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
 | `--dry-run` | judge and plan; do nothing. |
@@ -4514,12 +4507,12 @@ send a message as the bot; without [text], the text is read from stdin
 wa bot messages send <chat> [text] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 | `text` | optional | the message. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--silent` | deliver without a notification. |
@@ -4539,11 +4532,11 @@ the latest messages in a chat; where WhatsApp gives a bot no history, and with -
 wa bot messages list <chat> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many, the newest. |
 
@@ -4555,7 +4548,7 @@ one message by its id in a chat
 wa bot messages show <chat> <message>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 | `message` | required | message id. |
@@ -4570,13 +4563,13 @@ replace the text of a message the bot sent
 wa bot messages edit <chat> <message> <text> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 | `message` | required | message id. |
 | `text` | required | the new text. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
@@ -4591,12 +4584,12 @@ delete messages in a chat the bot can delete in; it cannot be undone
 wa bot messages delete <chat> <messages> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 | `messages` | required | message ids. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--allow-dangerous` | delete without asking. |
 
@@ -4610,12 +4603,12 @@ pin a message in a chat; quietly unless --notify
 wa bot messages pin <chat> <message> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 | `message` | required | message id. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--notify` | tell the chat's members. |
 
@@ -4629,7 +4622,7 @@ unpin a message in a chat
 wa bot messages unpin <chat> <message>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 | `message` | required | message id. |
@@ -4642,11 +4635,11 @@ what two or more people wrote in the chats they have all written in — from the
 wa bot messages between <people> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `people` | required | two or more people — an id, @username or part of a name each. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
 | `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
@@ -4664,11 +4657,11 @@ search the messages this bot has read, sent or received on this machine — the 
 wa bot search messages [query] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | the words to find. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
 | `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
@@ -4699,7 +4692,7 @@ allow a chat: its id, `user:<id>`, or the title of a chat this bot has seen
 wa bot recipients add <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat id, `user:<id>`, or the title of a chat this bot has seen. |
 
@@ -4713,7 +4706,7 @@ take a chat off the list
 wa bot recipients remove <chat>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | the chat id, or the title as the list shows it. |
 
@@ -4749,7 +4742,7 @@ print new messages as they arrive and keep them, until Ctrl-C or --timeout (eith
 wa bot watch [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--events` | also edits, deletions, buttons pressed and people coming and going; every line names its event. |
 | `--types <types>` | only these update types, comma-separated, in the messenger's words. |
@@ -4770,11 +4763,11 @@ answer a pressed button by its callback id: --notification shows the person a on
 wa bot callbacks answer <callback> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `callback` | required | the callback id `bot watch` printed. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--text <text>` | the message's new text. |
 | `--notification <text>` | a note only the person who pressed sees. |
@@ -4801,7 +4794,7 @@ replace the whole menu: each command as name=description, e.g. start=Begin
 wa bot commands set <commands>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `commands` | required | name=description, one per command. |
 
@@ -4837,11 +4830,11 @@ send this bot's updates to an HTTPS address; refused while another is set
 wa bot webhooks set <url> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `url` | required | the HTTPS address. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--types <types>` | only these update types, comma-separated, in the messenger's words. |
 | `--secret-stdin` | a secret the messenger sends back with each update — asked for, or read from a pipe. |
@@ -4856,7 +4849,7 @@ stop sending updates to this address; with none left, `bot watch` works again
 wa bot webhooks delete <url>
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `url` | required | the address. |
 
@@ -4872,11 +4865,11 @@ one person: the chats they wrote in (with their last message there) and the late
 wa bot contacts show <who> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `who` | required | an id, @username or part of a name. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
 | `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
@@ -4911,7 +4904,7 @@ every Cloud API operation wa keeps, generated from Meta's OpenAPI file
 wa bot api [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--store-token <profile>` | keep a returned authentication token only in this bot profile's OS keyring; never print it. |
 | `--allow-any-file` | read @path files even from credential folders or this CLI's own folders. |
@@ -4926,7 +4919,7 @@ Add Phone Number to Business Account — write (POST /{Version}/{Business-ID}/ad
 wa bot api add-phone-numbers [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--business-id <value>` | Your WhatsApp Business Account ID. This ID can be found in your Business Manager. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -4940,7 +4933,7 @@ Get Business Portfolio (Specific Fields) — read (GET /{Version}/{Business-ID})
 wa bot api get-business-portfolio [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--business-id <value>` | Business-ID. |
 | `--fields <value>` | fields. |
@@ -4953,7 +4946,7 @@ Get Owned WhatsApp Business Accounts — read (GET /{Version}/{Business-ID}/owne
 wa bot api get-owned-whats-app-business-accounts [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--business-id <value>` | Your Business ID. This ID represents the business portfolio that owns the. |
 | `--business-type <value>` | Filter accounts by business type. Can specify multiple types as comma-separated values. |
@@ -4971,7 +4964,7 @@ Get blocked users — read (GET /{Version}/{Phone-Number-ID}/block_users)
 wa bot api get-blocked-users [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 
@@ -4985,7 +4978,7 @@ Block user(s) — write (POST /{Version}/{Phone-Number-ID}/block_users)
 wa bot api block-users [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5001,7 +4994,7 @@ Unblock user(s) — write (DELETE /{Version}/{Phone-Number-ID}/block_users)
 wa bot api unblock-users [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5015,7 +5008,7 @@ Check Call Permissions — read (GET /{Version}/{Phone-Number-ID}/call_permissio
 wa bot api check-call-permissions [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The ID of the phone number registered with your WhatsApp Business Account. |
 | `--user-wa-id <value>` | The WhatsApp ID of the user you want to check call permissions for. |
@@ -5030,7 +5023,7 @@ Manage Calls — write (POST /{Version}/{Phone-Number-ID}/calls)
 wa bot api manage-calls [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The ID of the phone number registered with your WhatsApp Business Account. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5046,7 +5039,7 @@ Send Marketing Template Message — write (POST /{Version}/{Phone-Number-ID}/mar
 wa bot api send-marketing-message [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | WhatsApp Business Phone Number ID. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5062,7 +5055,7 @@ Upload Image — write (POST /{Version}/{Phone-Number-ID}/media)
 wa bot api upload-media [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5078,7 +5071,7 @@ Send Message. — write (POST /{Version}/{Phone-Number-ID}/messages)
 wa bot api send-message [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5092,7 +5085,7 @@ List All Message QR Codes — read (GET /{Version}/{Phone-Number-ID}/message_qrd
 wa bot api list-qr-codes [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The WhatsApp Business Account phone number ID for which to list QR codes. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. Available fields:. |
@@ -5111,7 +5104,7 @@ Create or Update Message QR Code — write (POST /{Version}/{Phone-Number-ID}/me
 wa bot api create-or-update-qr-code [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The WhatsApp Business Account phone number ID for which to create or update the QR code. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5125,7 +5118,7 @@ Get Individual Message QR Code — read (GET /{Version}/{Phone-Number-ID}/messag
 wa bot api get-qr-code [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The WhatsApp Business Account phone number ID that owns the QR code. |
 | `--qr-code-id <value>` | The unique 14-character identifier of the QR code to retrieve. |
@@ -5141,7 +5134,7 @@ Delete Individual Message QR Code — destructive (DELETE /{Version}/{Phone-Numb
 wa bot api delete-qr-code [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The WhatsApp Business Account phone number ID that owns the QR code to be deleted. |
 | `--qr-code-id <value>` | The unique 14-character identifier of the QR code to delete. |
@@ -5156,7 +5149,7 @@ Send Encrypted Message — write (POST /{Version}/{Phone-Number-ID}/messages_enc
 wa bot api send-encrypted-message [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The ID of the phone number used to send the message. Retrieved from the WhatsApp Business Account. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5170,7 +5163,7 @@ Get Official Business Account Status — read (GET /{Version}/{Phone-Number-ID}/
 wa bot api get-official-business-account-status [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business phone number ID. This ID represents the phone number. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5185,7 +5178,7 @@ Update Official Business Account Status — write (POST /{Version}/{Phone-Number
 wa bot api request-official-business-account [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business phone number ID. This ID represents the phone number. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5199,7 +5192,7 @@ Retrieve WhatsApp Business Phone Number Information — read (GET /{Version}/{Ph
 wa bot api get-phone-number [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business Account phone number ID (CSID). This unique identifier is assigned when you. |
 | `--fields <value>` | Comma-separated list of additional fields to include in the response. If not specified,. |
@@ -5214,7 +5207,7 @@ Update WhatsApp Business Account Phone Number Status and Configuration — write
 wa bot api update-phone-number [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business Account phone number ID (CSID). This ID is provided when you. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5230,7 +5223,7 @@ Deregister WhatsApp Business Phone Number — destructive (POST /{Version}/{Phon
 wa bot api deregister-phone-number [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The ID of the phone number to deregister. This ID is provided when you register. |
 
@@ -5242,7 +5235,7 @@ Get WhatsApp Business Account Message History — read (GET /{Version}/{Phone-Nu
 wa bot api get-message-history [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business Account phone number ID. This ID is provided when you register. |
 | `--message-id <value>` | Filter results by specific WhatsApp message ID (WAMID). When provided,. |
@@ -5261,7 +5254,7 @@ Register WhatsApp Business Phone Number — destructive (POST /{Version}/{Phone-
 wa bot api register-phone-number [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The ID of the phone number to register. This ID is provided when the phone number. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5277,7 +5270,7 @@ Request Phone Number Verification Code — write (POST /{Version}/{Phone-Number-
 wa bot api request-verification-code [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business phone number ID. This ID represents the phone number. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5291,7 +5284,7 @@ Get phone number settings — read (GET /{Version}/{Phone-Number-ID}/settings)
 wa bot api get-phone-number-settings [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 | `--include-sip-credentials <value>` | Include SIP credentials in the response (requires additional permissions). |
@@ -5306,7 +5299,7 @@ Update phone number settings — write (POST /{Version}/{Phone-Number-ID}/settin
 wa bot api update-phone-number-settings [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5322,7 +5315,7 @@ Verify Phone Number Verification Code — write (POST /{Version}/{Phone-Number-I
 wa bot api verify-phone-number-code [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | The WhatsApp Business Account phone number ID that needs verification. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5336,7 +5329,7 @@ Get Business Encryption Public Key — read (GET /{Version}/{Phone-Number-ID}/wh
 wa bot api get-encryption-public-key [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business phone number ID. This ID represents the phone number. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5351,7 +5344,7 @@ Set Business Encryption Public Key — write (POST /{Version}/{Phone-Number-ID}/
 wa bot api set-encryption-public-key [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business phone number ID. This ID represents the phone number. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5365,7 +5358,7 @@ Get WhatsApp Business Profile — read (GET /{Version}/{Phone-Number-ID}/whatsap
 wa bot api get-business-profile [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business phone number ID. This ID represents the phone number. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5380,7 +5373,7 @@ Update WhatsApp Business Profile — write (POST /{Version}/{Phone-Number-ID}/wh
 wa bot api update-business-profile [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business phone number ID. This ID represents the phone number. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5394,7 +5387,7 @@ Get commerce settings — read (GET /{Version}/{Phone-Number-ID}/whatsapp_commer
 wa bot api get-commerce-settings [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 
@@ -5408,7 +5401,7 @@ Set or update commerce settings — write (POST /{Version}/{Phone-Number-ID}/wha
 wa bot api set-commerce-settings [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Phone-Number-ID. |
 | `--is-cart-enabled <value>` | is_cart_enabled. |
@@ -5422,7 +5415,7 @@ Get Business Compliance Information — read (GET /{Version}/{Phone-Number-ID}/b
 wa bot api get-business-compliance-info [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business Account phone number ID. This ID can be found in your. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5437,7 +5430,7 @@ Update Business Compliance Information — write (POST /{Version}/{Phone-Number-
 wa bot api update-business-compliance-info [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business Account phone number ID. This ID can be found in your. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5451,7 +5444,7 @@ Retrieve Media URL — read (GET /{Version}/{Media-ID})
 wa bot api get-media [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--media-id <value>` | Media-ID. |
 | `--phone-number-id <value>` | Specifies that this action only be performed if the media belongs to the provided phone number. |
@@ -5466,7 +5459,7 @@ Delete Media — destructive (DELETE /{Version}/{Media-ID})
 wa bot api delete-media [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--media-id <value>` | Media-ID. |
 | `--phone-number-id <value>` | Specifies that deletion of the media  only be performed if the media belongs to the provided phone number. |
@@ -5479,7 +5472,7 @@ Get WhatsApp Message History Events — read (GET /{Version}/{Message-History-ID
 wa bot api get-message-history-events [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--message-history-id <value>` | Your WhatsApp Business Message History ID. This ID is provided when you retrieve. |
 | `--status-filter <value>` | Filter results by specific delivery status. When provided,. |
@@ -5496,7 +5489,7 @@ Get Assigned WhatsApp Business Accounts — read (GET /{Version}/{User-ID}/assig
 wa bot api get-assigned-whats-app-business-accounts [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--user-id <value>` | The user ID for whom to retrieve assigned WhatsApp Business Accounts. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5512,7 +5505,7 @@ Get WhatsApp Account Number Details — read (GET /{Version}/{WhatsApp-Account-N
 wa bot api get-whats-app-account-number-details [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--whats-app-account-number-id <value>` | Your WhatsApp Account Number ID. This ID represents the account number entity. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5525,7 +5518,7 @@ List Assigned Users — read (GET /{Version}/{WhatsApp-Business-Account-ID}/assi
 wa bot api get-assigned-users [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--whats-app-business-account-id <value>` | Your WhatsApp Business Account ID. This ID is provided when you create the account. |
 | `--business <value>` | Business ID that owns or has access to the WhatsApp Business Account. |
@@ -5544,7 +5537,7 @@ Add User to WhatsApp Business Account — write (POST /{Version}/{WhatsApp-Busin
 wa bot api add-assigned-user [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--whats-app-business-account-id <value>` | Your WhatsApp Business Account ID. This ID is provided when you create the account. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5560,7 +5553,7 @@ Remove User from WhatsApp Business Account — write (DELETE /{Version}/{WhatsAp
 wa bot api remove-assigned-user [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--whats-app-business-account-id <value>` | Your WhatsApp Business Account ID. This ID is provided when you create the account. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5576,7 +5569,7 @@ Configure Conversational Automation — write (POST /{Version}/{Phone-Number-ID}
 wa bot api configure-conversational-automation [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--phone-number-id <value>` | Your WhatsApp Business phone number ID. This ID represents the phone number. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5590,7 +5583,7 @@ Get credit lines — read (GET /{Version}/{Business-ID}/extendedcredits)
 wa bot api get-credit-lines [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--business-id <value>` | Business-ID. |
 
@@ -5602,7 +5595,7 @@ Get WhatsApp Business Account Phone Numbers — read (GET /{Version}/{WABA-ID}/p
 wa bot api list-phone-numbers [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WhatsApp Business Account ID. This ID can be found in your WhatsApp Manager. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5622,7 +5615,7 @@ Create WhatsApp Business Account Phone Number — write (POST /{Version}/{WABA-I
 wa bot api create-phone-number [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WhatsApp Business Account ID where the phone number will be added. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5636,7 +5629,7 @@ Get WhatsApp Business Account Schedules — read (GET /{Version}/{WABA-ID}/sched
 wa bot api list-schedules [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WhatsApp Business Account ID. This ID can be found in your WhatsApp Manager. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5656,7 +5649,7 @@ Create WhatsApp Business Account Schedule — write (POST /{Version}/{WABA-ID}/s
 wa bot api create-schedule [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WhatsApp Business Account ID where the schedule will be created. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5670,7 +5663,7 @@ Get All Subscriptions for a WABA — read (GET /{Version}/{WABA-ID}/subscribed_a
 wa bot api list-subscribed-apps [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WhatsApp Business Account ID. This ID can be found in your WhatsApp Manager. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5685,7 +5678,7 @@ Subscribe to WABA Webhooks — write (POST /{Version}/{WABA-ID}/subscribed_apps)
 wa bot api subscribe-app [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WhatsApp Business Account ID. This ID can be found in your WhatsApp Manager. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5701,7 +5694,7 @@ Unsubscribe from WABA Webhooks — write (DELETE /{Version}/{WABA-ID}/subscribed
 wa bot api unsubscribe-app [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WhatsApp Business Account ID. This ID can be found in your WhatsApp Manager. |
 
@@ -5713,7 +5706,7 @@ Get template by ID (default fields) — read (GET /{Version}/{TEMPLATE_ID})
 wa bot api get-template [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--template-id <value>` | TEMPLATE_ID. |
 
@@ -5727,7 +5720,7 @@ Edit template — write (POST /{Version}/{TEMPLATE_ID})
 wa bot api edit-template [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--template-id <value>` | TEMPLATE_ID. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5741,7 +5734,7 @@ Get template by name (default fields) — read (GET /{Version}/{WABA-ID}/message
 wa bot api list-templates [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WABA-ID. |
 | `--name <value>` | name. |
@@ -5756,7 +5749,7 @@ Create authentication template w/ OTP copy code button — write (POST /{Version
 wa bot api create-template [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WABA-ID. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5772,7 +5765,7 @@ Delete template by name — destructive (DELETE /{Version}/{WABA-ID}/message_tem
 wa bot api delete-template [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | WABA-ID. |
 | `--name <value>` | name. |
@@ -5786,7 +5779,7 @@ Get WhatsApp Business Account Activities — read (GET /{Version}/{WABA-ID}/acti
 wa bot api list-activities [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | Your WhatsApp Business Account ID. This ID can be found in your WhatsApp Manager. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5805,7 +5798,7 @@ Get WhatsApp Business Account Details — read (GET /{Version}/{WABA-ID})
 wa bot api get-business-account [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | Your WhatsApp Business Account ID. This ID is provided when you create the account. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5820,7 +5813,7 @@ Update WhatsApp Business Account — write (POST /{Version}/{WABA-ID})
 wa bot api update-business-account [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-id <value>` | Your WhatsApp Business Account ID. This ID is provided when you create the account. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5834,7 +5827,7 @@ Get WhatsApp Business Bot Details — read (GET /{Version}/{WABA-Bot-ID})
 wa bot api get-business-bot [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--waba-bot-id <value>` | Your WhatsApp Business Bot ID. This ID is provided when you create the bot. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5847,7 +5840,7 @@ Get WhatsApp Business Profile Details — read (GET /{Version}/{WhatsApp-Busines
 wa bot api get-business-profile-by-id [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--whats-app-business-profile-id <value>` | Your WhatsApp Business Profile ID. This ID is provided when the profile is created. |
 | `--fields <value>` | Comma-separated list of fields to include in the response. If not specified,. |
@@ -5862,7 +5855,7 @@ Update WhatsApp Business Profile — write (POST /{Version}/{WhatsApp-Business-P
 wa bot api update-business-profile-by-id [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--whats-app-business-profile-id <value>` | Your WhatsApp Business Profile ID. This ID is provided when the profile is created. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
@@ -5880,7 +5873,7 @@ the business account's templates, with status, language and category
 wa bot templates list [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--name <name>` | only templates with this name. |
 
@@ -5894,13 +5887,13 @@ send an approved template; hello_world is pre-approved on the test number
 wa bot templates send <chat> <name> [language] [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a phone number in digits, or user:<id> as `bot watch` shows it. |
 | `name` | required | the template's name, as `bot templates list` shows it. |
 | `language` | optional | the template's language code. Default: `en_US`. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--payload <json>` | the values for the template's placeholders, as Meta's components array. |
 
@@ -5918,11 +5911,11 @@ save a file someone sent, by its media id; Meta's link for it lasts 5 minutes
 wa bot media download <media-id> [options]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `media-id` | required | the media id, from the attachment `bot watch --jsonl` printed. |
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--output <file>` | where to write the file. |
 
@@ -5938,7 +5931,7 @@ print SKILL.md — `wa skill install` puts it where Claude Code, Codex and Gemin
 wa skill show [name]
 ```
 
-| Argument | | What it is |
+| Argumento | | Qué es |
 |---|---|---|
 | `name` | optional | one of the skills shipped for a task: follow-ups, link-conversations. |
 
@@ -5952,11 +5945,11 @@ write SKILL.md to \~/.claude/skills/whatsapp-cli/ (Claude Code) and \~/.agents/s
 wa skill install [options]
 ```
 
-| Option | What it does |
+| Opción | Qué hace |
 |---|---|
 | `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
 
-## Exit codes
+## Códigos de salida
 
 Branch on the code, not on the text: the text can change, the code does not.
 

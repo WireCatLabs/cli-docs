@@ -16,7 +16,7 @@ for every tool with no site code:
 | zm | yes | `/docs/zm/roadmap` |
 | drive | yes (v0.25.0) | `/docs/drive/roadmap` |
 | memo | yes (v0.90.0) | `/docs/memo/roadmap` |
-| wa | yes | none (the tool is not on the site, DOCS-4) |
+| wa | yes (v0.6.0) | `/docs/wa/roadmap` |
 
 What each new page needs:
 

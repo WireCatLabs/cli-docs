@@ -56,7 +56,9 @@ WhatsApp mantiene un archivo en sus servidores sólo por un tiempo limitado. Cua
 
 **Limitación conocida: un archivo antiguo aún no se descarga.** En los teléfonos probados, el teléfono carga el archivo nuevamente pero cifra la nueva copia con una nueva clave que no envía a los dispositivos vinculados, por lo que `wa` no puede leerlo. La descarga finaliza con `media.retry-failed` ("el teléfono cargó este archivo nuevamente, pero la nueva copia no se descargó") y no guarda nada, en lugar de un archivo roto. Abra el archivo en el teléfono o pídale al remitente que lo envíe nuevamente.
 
-## DescargarEl ID del mensaje `3EB0A1B2C3D4E5F6A7B8` en esta página está compuesto; tome uno real de `messages list -v`.
+## Descargar
+
+El ID del mensaje `3EB0A1B2C3D4E5F6A7B8` en esta página es ficticio; toma uno real de `messages list -v`.
 
 ```sh
 wa personal messages download "Book club" 3EB0A1B2C3D4E5F6A7B8 --output-dir ~/Downloads --json
@@ -98,21 +100,21 @@ wa personal search messages 'content:"reading list"'
 
 `--extract` lee los archivos guardados en esta descarga. `attachments extract` lee los archivos ya guardados, o con `--download` guarda primero los que aún no se han descargado. `attachments list` muestra cada archivo, dónde se guardó y si se conserva su texto, nunca el texto en sí.
 
-Su agente lee un escaneo o una fotografía, con sus propias herramientas de visión. Luego, el agente guarda el texto para que la búsqueda lo encuentre:
+Tu agente lee un escaneo o una fotografía, con sus propias herramientas de visión. Luego, el agente guarda el texto para que la búsqueda lo encuentre:
 
 ```sh
 wa personal attachments text set "Book club" 3EB0A1B2C3D4E5F6A7B8 --text-file scan.txt
 ```
 
-Para leer escaneos de forma masiva con una API modelo, configure `models.ocr.provider` y `models.ocr.model`, luego ejecute `attachments extract --ocr`. Las imágenes van a ese proveedor solo con un `--ocr` explícito.
+Para leer escaneos de forma masiva con la API de un modelo, configura `models.ocr.provider` y `models.ocr.model`, y ejecuta `attachments extract --ocr`. Las imágenes van a ese proveedor solo con un `--ocr` explícito.
 
 ## Archivos para un agente remoto
 
-Un agente en esta computadora abre la ruta guardada. Un agente en otra computadora obtiene los bytes de un archivo con `attachments show`, una pieza delimitada a la vez, como base64 en JSON; `--page` convierte una página PDF en una imagen, con el paquete opcional `@napi-rs/canvas` instalado donde `wa` puede cargarlo. Consulta [desde el navegador](./remote.md) para conectar dicho agente.
+Un agente en esta computadora abre la ruta guardada. Un agente en otra computadora obtiene los bytes de un archivo con `attachments show`, un fragmento de tamaño limitado cada vez, como base64 en JSON; `--page` convierte una página PDF en una imagen, con el paquete opcional `@napi-rs/canvas` instalado donde `wa` puede cargarlo. Consulta [desde el navegador](./remote.md) para conectar dicho agente.
 
 ## Siguiente paso
 
-Busque un mensaje por su archivo con `has:file`, `filename:` o `content:` ([búsqueda](./search.md#files)) y vea todas las opciones en la [página de comandos](./commands.md).
+Busca un mensaje por su archivo con `has:file`, `filename:` o `content:` ([búsqueda](./search.md#files)) y consulta todas las opciones en la [página de comandos](./commands.md).
 
 ## Conservar copias después de eliminar la fuente
 

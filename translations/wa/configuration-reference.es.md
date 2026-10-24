@@ -47,13 +47,15 @@ Cinco, el valor predeterminado incorporado
 | `analysis_provider` | `agent` | `agent`, `openai` o `anthropic` | `build --analysis-provider` |
 | `analysis_model` | ninguno | modelo de análisis | `build --model` |
 | `analysis_base_url` | predeterminado del proveedor | punto final API de análisis | `build --base-url` |
-| `models` | ninguno | modelos externos por finalidad | Variables `WA_MODELS_*` |Las configuraciones para la raíz de búsqueda, los países telefónicos, las tareas y los grupos de cuentas (`search_stemmers.*`, `phone_countries`, `task_*`, `account_groups.*`) se enumeran en [`wa config set`](./commands.md#wa-config-set).
+| `models` | ninguno | modelos externos por finalidad | Variables `WA_MODELS_*` |
+
+Las configuraciones para la raíz de búsqueda, los países telefónicos, las tareas y los grupos de cuentas (`search_stemmers.*`, `phone_countries`, `task_*`, `account_groups.*`) se enumeran en [`wa config set`](./commands.md#wa-config-set).
 
 El archivo se escribe `0600` cuando se creó por primera vez. No guarda ningún secreto.
 
 ## Un perfil de bot
 
-Un número de WhatsApp Business en la API de la nube de Meta (`wa <profile> bot …`) mantiene tu configuración en `bot` en el archivo: `wa <profile> config set --bot <setting> <value>`. Son identificadores de la página de configuración de API del Panel de aplicaciones, no secretos; el token de acceso se encuentra en el llavero del sistema ([un número de WhatsApp Business como bot](./bot.md)).
+Un número de WhatsApp Business en la Cloud API de Meta (`wa <profile> bot …`) mantiene tu configuración en `bot` en el archivo: `wa <profile> config set --bot <setting> <value>`. Son identificadores de la página de configuración de API del Panel de aplicaciones, no secretos; el token de acceso se encuentra en el llavero del sistema ([un número de WhatsApp Business como bot](./bot.md)).
 
 | Configuración | Predeterminado | Qué hace | Anulado por uno ejecutado por |
 |---|---|---|---|

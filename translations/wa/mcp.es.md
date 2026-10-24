@@ -129,7 +129,7 @@ El `permissions` del perfil decide el acceso ([permisos](./permissions.md)). `de
 wa agent config set permissions.messages readonly
 wa agent config set permissions.messages.send allow
 ```
-Aquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que tome los mensajes de los dispositivos del propietario; aún no se ha verificado en un teléfono) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio.
+Aquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos; aún no se ha verificado en un teléfono) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio.
 
 ## Herramientas
 

@@ -104,7 +104,9 @@ wa personal recipients add 100000000000001@lid   # and only to the chats on this
 
 Las rutinas en la nube de Claude no encajan: se ejecutan en otra computadora, donde no hay ningún `wa` ni ninguna tienda suya.
 
-## Resumen de la mañanaEscribe a WhatsApp: **no**. Permitir: `Bash(wa personal inbox:*)`.
+## Resumen de la mañana
+
+Escribe a WhatsApp: **no**. Permitir: `Bash(wa personal inbox:*)`.
 
 > Ejecuta `wa personal inbox --new --json`. Agrupa los mensajes por chat. Para cada chat, una línea: quién escribe y qué
 > quiero. Ponga primero lo que necesita una respuesta hoy.

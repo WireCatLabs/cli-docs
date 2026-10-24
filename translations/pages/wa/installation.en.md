@@ -37,7 +37,7 @@ wa --version
 wa doctor
 ```
 
-Keep optional packages enabled: npm installs the WhatsApp engine for your operating system and processor. A manager may report blocked install scripts; check the installation with the commands below. If the engine is missing, see [troubleshooting](./troubleshooting.md#whatsapp-engine-is-not-installed). On Windows, open a new terminal if the command is not found.
+Keep optional packages enabled: npm installs the WhatsApp engine for your operating system and processor. A manager may report blocked install scripts; check the installation with the commands below. If the engine is missing, see [troubleshooting](./troubleshooting.md#the-whatsapp-engine-is-not-installed). On Windows, open a new terminal if the command is not found.
 
 <a id="log-in" />
 <a id="first-run" />

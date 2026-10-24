@@ -37,7 +37,7 @@ wa --version
 wa doctor
 ```
 
-Mantén habilitados los paquetes opcionales: npm instala el motor de WhatsApp para tu sistema y procesador. El gestor puede avisar de scripts de instalación bloqueados; comprueba el resultado con los comandos siguientes. Si falta el motor, consulta [solución de problemas](./troubleshooting.md#whatsapp-engine-is-not-installed). En Windows, abre un terminal nuevo si no se encuentra el comando.
+Mantén habilitados los paquetes opcionales: npm instala el motor de WhatsApp para tu sistema y procesador. El gestor puede avisar de scripts de instalación bloqueados; comprueba el resultado con los comandos siguientes. Si falta el motor, consulta [solución de problemas](./troubleshooting.md#the-whatsapp-engine-is-not-installed). En Windows, abre un terminal nuevo si no se encuentra el comando.
 
 <a id="log-in" />
 <a id="first-run" />

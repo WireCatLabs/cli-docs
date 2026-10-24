@@ -59,6 +59,11 @@ These pages and shared interface/Markdown behavior belong to this repository.
 
 ## Messenger pages
 
+WhatsApp uses the same release-owned page structure as Telegram and MAX. The portal owns its reader overview and
+installation path, with EN/RU/ES guides and the same partitioned command reference. Personal device linking and
+Cloud API business-number bots have separate setup paths; the shared command catalog also includes unsupported
+WhatsApp paths, which are explained in its guides.
+
 Google Drive uses the same source-owned structure under `drive/`, pinned to its reviewed npm
 release. Its compact reader path is overview → installation → usage/search/recipes;
 configuration, security, troubleshooting and generated commands remain discoverable references.

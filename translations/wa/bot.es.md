@@ -2,9 +2,9 @@
 title: "Un número de WhatsApp Business como bot"
 ---
 
-`wa <profile> bot …` habla por un número de WhatsApp Business en la [API de la nube](https://developers.facebook.com/documentation/business-messaging/whatsapp/get-started) de Meta, no por su propio WhatsApp. Nunca vincula un dispositivo y nunca arranca el motor que utiliza `wa <profile> chats …`. Se comunica con `graph.facebook.com` a través de HTTPS con un token que guarda en el llavero del sistema.
+`wa <profile> bot …` habla por un número de WhatsApp Business en la [Cloud API](https://developers.facebook.com/documentation/business-messaging/whatsapp/get-started) de Meta, no por tu WhatsApp personal. Nunca vincula un dispositivo y nunca arranca el motor que utiliza `wa <profile> chats …`. Se comunica con `graph.facebook.com` a través de HTTPS con un token que guarda en el llavero del sistema.
 
-**Nunca registres tu propio número de teléfono ni ningún número cuyo WhatsApp todavía uses en un teléfono.** Registrar un número en la API de la nube elimina la cuenta de WhatsApp de ese número. Usa el número de prueba gratuito de Meta o un número que no tenga cuenta de WhatsApp.
+**Nunca registres tu propio número de teléfono ni ningún número cuyo WhatsApp todavía uses en un teléfono.** Registrar un número en la Cloud API elimina la cuenta de WhatsApp de ese número. Usa el número de prueba gratuito de Meta o un número que no tenga cuenta de WhatsApp.
 
 ## Qué puedes hacer
 

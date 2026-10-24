@@ -61,7 +61,9 @@ Un error que finaliza el comando en modo máquina es un objeto en stderr: `{"err
 | `12` | `provider_unavailable` | otro comando `wa` mantiene la única conexión del dispositivo (`device.in-use`) o se hace cargo de ella (`device.replaced`), el motor se detiene (`engine.stopped`), WhatsApp ya no acepta esta versión de `wa` (`client.outdated`), o aún no ha enviado a este dispositivo las claves que necesita un cambio de configuración (`settings.keys-missing`: mantenga funcionando `serve` unos minutos) |
 | `13` | `invalid_response` | WhatsApp respondió algo que `wa` no entiende |
 | `14` | `outcome_unknown` | una escritura puede haber ocurrido o no, también cuando el motor se detuvo durante la misma (`engine.stopped-mid-write`) ([abajo](#previews-and-safe-retries)) |
-| `130` | `cancelled` | Ctrl-C |`wa commands --json` proporciona la misma tabla en `exit_codes`. Bifurcación en el código y el `reason` entre paréntesis, nunca en el texto del mensaje.
+| `130` | `cancelled` | Ctrl-C |
+
+`wa commands --json` proporciona la misma tabla en `exit_codes`. En scripts, comprueba el código y `reason` entre paréntesis; no dependas del texto del mensaje.
 
 ## Corriendo sin preguntas y sin límites
 

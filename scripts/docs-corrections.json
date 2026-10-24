@@ -2250,14 +2250,14 @@
       ],
       "ru": [
         {
-          "before": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nЗдесь `agent` — имя профиля. При записи сохраняется список получателей, часовой лимит и журнал отправки (`wa agent sends list`). Маркировка чтения — это отдельная запись, под `chats.mark-read`: другая сторона это видит. Агент никогда не удаляет сообщения для всех, независимо от уровня: `messages delete` через MCP предназначен только для владельца (`wa` просит WhatsApp принимать сообщения с устройств владельца; еще не проверено на телефоне) и не имеет `--for-everyone`. Удаление для всех остается `wa <profile> messages delete --for-everyone` владельца. `--permission key=level` сужает уровень только для этого серверного процесса; тот, который ослабит профиль, останавливает сервер при запуске.",
-          "after": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nЗдесь `agent` — имя профиля. При записи сохраняется список получателей, часовой лимит и журнал отправки (`wa agent sends list`). Маркировка чтения — это отдельная запись, под `chats.mark-read`: другая сторона это видит. Агент никогда не удаляет сообщения для всех, независимо от уровня: `messages delete` через MCP предназначен только для владельца (`wa` просит WhatsApp принимать сообщения с устройств владельца) и не имеет `--for-everyone`. Удаление для всех остается `wa <profile> messages delete --for-everyone` владельца. `--permission key=level` сужает уровень только для этого серверного процесса; тот, который ослабит профиль, останавливает сервер при запуске."
+          "before": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nЗдесь `agent` — имя профиля. При изменениях сохраняются ограничения получателей, часовой лимит и журнал отправки (`wa agent sends list`). Маркировка чтения — это отдельная запись, под `chats.mark-read`: другая сторона это видит. Агент никогда не удаляет сообщения для всех, независимо от уровня: `messages delete` через MCP предназначен только для владельца (`wa` просит WhatsApp убрать сообщения с устройств владельца; еще не проверено на телефоне) и не имеет `--for-everyone`. Удаление для всех остается `wa <profile> messages delete --for-everyone` владельца. `--permission key=level` сужает уровень только для этого серверного процесса; тот, который ослабит профиль, останавливает сервер при запуске.",
+          "after": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nЗдесь `agent` — имя профиля. При изменениях сохраняются ограничения получателей, часовой лимит и журнал отправки (`wa agent sends list`). Маркировка чтения — это отдельная запись, под `chats.mark-read`: другая сторона это видит. Агент никогда не удаляет сообщения для всех, независимо от уровня: `messages delete` через MCP предназначен только для владельца (`wa` просит WhatsApp убрать сообщения с устройств владельца) и не имеет `--for-everyone`. Удаление для всех остается `wa <profile> messages delete --for-everyone` владельца. `--permission key=level` сужает уровень только для этого серверного процесса; тот, который ослабит профиль, останавливает сервер при запуске."
         }
       ],
       "es": [
         {
-          "before": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nAquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que tome los mensajes de los dispositivos del propietario; aún no se ha verificado en un teléfono) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio.",
-          "after": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nAquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que tome los mensajes de los dispositivos del propietario) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio."
+          "before": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nAquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos; aún no se ha verificado en un teléfono) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio.",
+          "after": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nAquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio."
         }
       ]
     },
@@ -2328,5 +2328,185 @@
       ]
     },
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/diagnostics.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "usage",
+    "source": "https://faq.whatsapp.com/6614640168569481/",
+    "reason": "WhatsApp documents a 15-minute edit window for sent text. The native v0.6.0 guide says 20 minutes; do not promise a broader provider window. This changes portal guidance, not CLI runtime behavior.",
+    "replacements": {
+      "en": [
+        {
+          "before": "An edit works on your own message within 20 minutes of sending.",
+          "after": "Edit your own text messages within 15 minutes of sending; see [WhatsApp’s editing help](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Своё сообщение можно исправить в течение 20 минут после отправки.",
+          "after": "Своё текстовое сообщение можно исправить в течение 15 минут после отправки; см. [справку WhatsApp](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ],
+      "es": [
+        {
+          "before": "Puedes editar un mensaje propio durante los 20 minutos posteriores al envío.",
+          "after": "Puedes editar tus mensajes de texto hasta 15 minutos después de enviarlos; consulta [la ayuda de WhatsApp](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "remote",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/remote.md",
+    "reason": "Use an authenticated public HTTPS endpoint, preserve revocation semantics, and link current client prerequisites instead of an unchecked plan/region matrix. Keep setup-test provenance internal.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| App | Plans | Documentation |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | any; one custom connector on the free plan | [custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | only adults in the US with a personal Google account | [connected apps](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Your account must be able to add a remote MCP connector. Check the app’s current account and region requirements before starting the tunnel.\n\n| App | Connector prerequisites |\n|---|---|\n| ChatGPT | [Connection guide](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Connection guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Connection guide](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Use this page when you want an AI app that runs in the browser or on your phone, for example ChatGPT, Codex web or\nClaude, to read and answer your WhatsApp messages. Such an app cannot start `wa` on your computer, so you give it an\ninternet address instead. At the end, the app is connected to `wa` through a private HTTPS address, it can do only\nwhat your profile permits, and you know how to stop it or take its access back.",
+          "after": "Connect a browser or phone MCP app, such as ChatGPT or Claude, to `wa` running on a computer you control. This guide connects the app through an HTTPS tunnel with sign-in, explains which actions the `wa` profile allows, and shows how to stop the connection or revoke access."
+        },
+        {
+          "before": "The setup steps for each operating system have not all been tried on that system. ",
+          "after": ""
+        }
+      ],
+      "ru": [
+        {
+          "before": "| Приложение | Планы | Документация |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [режим разработчика](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | любой; один специальный соединитель в бесплатном плане | [нестандартные разъемы](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | только взрослые в США имеют личный аккаунт Google | [связанные приложения](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Ваш аккаунт должен поддерживать добавление удалённого MCP-подключения. Перед запуском туннеля проверьте текущие требования приложения к аккаунту и региону.\n\n| Приложение | Условия подключения |\n|---|---|\n| ChatGPT | [Руководство подключения](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Руководство подключения](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Руководство подключения](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Используйте эту страницу, если вы хотите, чтобы приложение искусственного интеллекта, работающее в браузере или на вашем телефоне, например ChatGPT, Codex Web или Claude, читало ваши сообщения WhatsApp и отвечало на них. Такое приложение не может запустить `wa` на вашем компьютере, поэтому вместо этого вы указываете ему интернет-адрес. После настройки приложение подключается к `wa` через частный адрес HTTPS, оно может делать только то, что разрешено вашим профилем, и вы знаете, как остановить его или вернуть ему доступ.",
+          "after": "Подключите MCP-приложение в браузере или на телефоне, например ChatGPT или Claude, к `wa` на своём компьютере. Вы настроите HTTPS-туннель с входом, узнаете, какие действия разрешает профиль `wa`, и сможете остановить подключение или отозвать доступ приложения."
+        },
+        {
+          "before": "Не все шаги установки для каждой операционной системы были опробованы в этой системе. ",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "| Aplicación | Planes | Documentación |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Tu cuenta debe permitir añadir un conector MCP remoto. Comprueba los requisitos actuales de cuenta y región antes de iniciar el túnel.\n\n| Aplicación | Requisitos de conexión |\n|---|---|\n| ChatGPT | [Guía de conexión](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Guía de conexión](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Guía de conexión](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Usa esta página cuando desee una aplicación de IA que se ejecute en el navegador o en tu teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de WhatsApp. Una aplicación de este tipo no puede iniciar `wa` en tu ordenador, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `wa` a través de una dirección HTTPS privada, solo puede hacer lo que tu perfil permite y ti sabe cómo detenerla o recuperar su acceso.",
+          "after": "Conecta una aplicación MCP del navegador o del teléfono, como ChatGPT o Claude, a `wa` en un ordenador que controlas. Configurarás un túnel HTTPS con inicio de sesión, comprobarás qué acciones permite el perfil de `wa` y aprenderás a detener la conexión o revocar el acceso."
+        },
+        {
+          "before": "No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. ",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "attachments",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/attachments.md",
+    "reason": "Distinguish an expired-media retry request from success: the same released guide documents media.retry-failed.",
+    "replacements": {
+      "en": [
+        {
+          "before": "and fetches the new copy.",
+          "after": "and attempts to fetch the new copy."
+        }
+      ],
+      "ru": [
+        {
+          "before": "и получает новую копию.",
+          "after": "и пытается скачать новую копию."
+        }
+      ],
+      "es": [
+        {
+          "before": "y recupera la nueva copia.",
+          "after": "e intenta descargar la nueva copia."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "sessions",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md",
+    "reason": "The portal resolves explicit relative Markdown links; preserve the native configuration reference destination.",
+    "replacements": {
+      "en": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ],
+      "ru": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ],
+      "es": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "sessions",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md",
+    "reason": "State the released CLI photo-format validation and keep unverified provider-side timing/dimension research out of the reader guide.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`wa` takes the photo as a square JPEG of 190 to 720 pixels a side, the sides it takes for a group; whether WhatsApp\ntakes other sides for your own photo is not checked. `wa` does not convert or crop one, and a PNG or WebP is refused by\nits content, before anything changes. Given together, the name goes first, then the about, then the\nphoto; if a later one fails, the error says which changed. Removing the photo is done on the phone.",
+          "after": "For a profile photo, `wa` requires a square JPEG from 190 to 720 pixels per side, using the same validation as for a group photo. `wa` does not convert or crop images and rejects PNG or WebP content before changing anything. When name, about and photo are supplied together, they are changed in that order; a later error names the changes already made. Remove the photo from the phone."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Имя одновременно передается на телефон и другие ваши устройства. Другие люди, вероятно, увидят его только после того, как телефон в следующий раз подключится к сети: устройство сообщает WhatsApp свое имя, когда сообщает, что оно онлайн, а `wa` никогда этого не делает. Устройство, подключенное несколько минут назад, может еще не иметь ключей настроек WhatsApp; оставьте `serve` работать некоторое время и повторите попытку.`wa` воспринимает фотографию как квадратный JPEG со стороной от 190 до 720 пикселей, стороны, которые он принимает за группу; принимает ли WhatsApp другую сторону за ваше собственное фото, не проверяется. `wa` не преобразует и не обрезает его, а содержимое PNG или WebP отклоняется до того, как что-либо изменится. В совокупности сначала идет имя, затем описание, затем фотография; если более поздний произойдет сбой, в ошибке будет указано, что изменилось. Удаление фото производится на телефоне.",
+          "after": "Изменение имени отправляется как настройка аккаунта через `wa`. У недавно привязанного устройства может ещё не быть ключей настроек WhatsApp: оставьте `serve` работающим и повторите попытку позже.\n\nДля фотографии профиля `wa` требует квадратный JPEG со стороной от 190 до 720 пикселей, как для фотографии группы. `wa` не преобразует и не обрезает изображение и отклоняет PNG или WebP до изменения данных. Если имя, описание и фотография заданы вместе, они меняются в этом порядке; при последующей ошибке указано, что уже изменилось. Удаляйте фотографию на телефоне."
+        }
+      ],
+      "es": [
+        {
+          "before": "El nombre va al teléfono y a sus otros dispositivos a la vez. Otras personas probablemente lo vean solo la próxima vez que el teléfono se conecte: un dispositivo le dice a WhatsApp su nombre cuando dice que está en línea, y `wa` nunca lo hace (aún no verificado). Es posible que un dispositivo vinculado hace unos minutos aún no tenga las claves de configuración de WhatsApp; Mantén `serve` ejecutándose por un tiempo e inténtelo nuevamente.`wa` toma la foto como un JPEG cuadrado de 190 a 720 píxeles por lado, los lados que toma para un grupo; No se comprueba si WhatsApp toma otros lados de su propia foto. `wa` no convierte ni recorta uno, y su contenido rechaza un PNG o WebP, antes de que algo cambie. En conjunto, primero va el nombre, luego acerca de y luego la foto; si falla uno posterior, el error dice cuál cambió. La eliminación de la foto se realiza en el teléfono.",
+          "after": "`wa` envía el cambio de nombre como un ajuste de la cuenta. Un dispositivo recién vinculado puede carecer de las claves de ajustes de WhatsApp: mantén `serve` en marcha y vuelve a intentarlo más tarde.\n\nPara la foto de perfil, `wa` exige un JPEG cuadrado de 190 a 720 píxeles por lado, con la misma validación que para una foto de grupo. `wa` no convierte ni recorta imágenes y rechaza contenido PNG o WebP antes de cambiar nada. Si indicas nombre, descripción y foto juntos, se cambian en ese orden; un error posterior identifica los cambios ya realizados. Quita la foto desde el teléfono."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md",
+    "reason": "Name the terminal-only paths from the released command contract. The catalogue explicitly excludes 121 nodes, covered by 48 top paths; this documents the current MCP interface without promising unsupported WhatsApp actions.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The tools use the same catalogue as `tg` and `max`. A command that WhatsApp cannot do yet is refused when it runs,\nwith exit code `2` and a message that says so.",
+          "after": "The tools use the same catalogue as `tg` and `max`. A command that WhatsApp cannot do yet is refused when it runs,\nwith exit code `2` and a message that says so.\n\n<details>\n<summary>Commands kept in the terminal</summary>\n\nThe released personal-account MCP interface excludes the following paths and their subcommands. Use the terminal for setup and maintenance; the WhatsApp limitations in the CLI reference still apply.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Инструменты используют тот же каталог, что и `tg` и `max`. Команда, которую WhatsApp пока не может выполнить, при запуске отклоняется с кодом завершения `2` и сообщением об этом.",
+          "after": "Инструменты используют тот же каталог, что и `tg` и `max`. Команда, которую WhatsApp пока не может выполнить, при запуске отклоняется с кодом завершения `2` и сообщением об этом.\n\n<details>\n<summary>Команды для терминала</summary>\n\nMCP-интерфейс личного аккаунта в этом выпуске не предоставляет следующие пути и их подкоманды. Настройку и обслуживание выполняйте в терминале; ограничения WhatsApp из справочника команд по-прежнему действуют.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+        }
+      ],
+      "es": [
+        {
+          "before": "Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.",
+          "after": "Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.\n\n<details>\n<summary>Comandos que quedan en el terminal</summary>\n\nLa interfaz MCP de la cuenta personal no ofrece estas rutas ni sus subcomandos. Usa el terminal para configuración y mantenimiento; siguen aplicándose las limitaciones de WhatsApp indicadas en la referencia.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+        }
+      ]
+    }
   }
 ]
