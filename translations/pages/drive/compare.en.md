@@ -58,7 +58,7 @@ functionality is implemented".
 | 21 | Your documents stay on your computer | ✅ | ✅ | 🟡 | ✅ | ❌ |
 | | **Setup** | | | | | |
 | 22 | Sign in without creating your own Google Cloud project | 🟡⁵ | ❌ | ❌ | 🟡 | ✅ |
-| 23 | Use it from Claude or ChatGPT on the web and phone | ❌ | ❌ | ✅ | ❌ | ✅ |
+| 23 | Use it from Claude or ChatGPT on the web and phone | ✅ | ❌ | ✅ | ❌ | ✅ |
 
 ¹ Needs the optional activity grant at sign in. It shows what Google's activity log returns, not a complete edit
 history.
@@ -87,7 +87,7 @@ Steps and the links to Google's pages are in [installation](./installation.md#go
 - **Backing up or moving big folders and files that are not Docs**: rclone. It copies the files themselves, keeps
   them in sync both ways and works with many storage services. `drive` keeps text and does not copy originals.
 - **Claude or ChatGPT on the web or phone, with nothing to install**: Claude's connector, or Workspace MCP run as a
-  hosted server. `drive` runs on your computer.
+  hosted server. `drive` runs on your computer or server and connects through your [HTTPS tunnel](./remote.md).
 - **Gmail and Calendar in the same tool**: gog or Workspace MCP. `drive` works with Drive, Docs and Sheets only.
 
 ## Compared with an agent driving the Drive web page
@@ -111,7 +111,8 @@ If `drive` fits, start with [installation](./installation.md). To connect an age
 and `drive <profile> mcp --tools --json`, which list the commands and the 105 that MCP offers to a signed out
 profile) and by the [usage guide](./usage.md), [search guide](./search.md), [mirroring guide](https://github.com/WireCatLabs/drive-cli/blob/main/docs/mirrors.md),
 [configuration](./configuration.md) and [security](./security.md) pages. Where a mark is a limit (🟡 or ❌), the section
-above says what the limit is.
+above says what the limit is. Remote MCP uses the guarded HTTP server and access-code login in the
+[remote connection guide](./remote.md); it requires your own running server and tunnel.
 
 Other tools' marks come from their own pages. A search that finds nothing in those pages gives ➖, never ❌, except
 where a command list is complete.

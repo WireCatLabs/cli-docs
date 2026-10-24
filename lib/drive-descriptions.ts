@@ -1,5 +1,7 @@
 export const driveDescriptions: Record<string, Record<string, string>> = {
   en: {
+    remote:
+      "Connect browser agents to Google Drive through an HTTPS tunnel, with an access-code login and profile permissions.",
     index: "Manage Google Drive, import documents and search your local copy with tags, notes and linked memories.",
     installation:
       "Google Drive CLI setup: agent or npm installation, WireCat browser sign-in and a first folder search.",
@@ -20,6 +22,7 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
       "See released Google Drive CLI features and changes to document imports, local search and account connection.",
   },
   ru: {
+    remote: "Подключите агента в браузере к Google Drive через HTTPS-туннель с кодом входа и правами профиля.",
     index: "Управляйте Google Drive, импортируйте документы и ищите в локальной копии с тегами, заметками и памятью.",
     installation: "Настройка Google Drive CLI: установка с агентом или через npm, вход через WireCat и поиск в папке.",
     usage:
@@ -40,6 +43,8 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
       "Узнайте о выпущенных возможностях Google Drive CLI и изменениях импорта, локального поиска и подключения.",
   },
   es: {
+    remote:
+      "Conecta agentes del navegador a Google Drive por un túnel HTTPS, con código de acceso y permisos del perfil.",
     index:
       "Gestiona Google Drive, importa documentos y busca en tu copia local con etiquetas, notas y recuerdos vinculados.",
     installation:

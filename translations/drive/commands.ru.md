@@ -4267,10 +4267,14 @@ drive <profile> mcp [options]
 | Option | What it does |
 |---|---|
 | `--tools` | list the commands the server offers instead of starting it. |
+| `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
+| `--port <port>` | the local port for --http (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
+| `--revoke` | forget every login given to a browser app; each must log in again. |
 
 **Returns:** serve drive's commands to an agent over MCP: search, then read or write
 
-**Example:** `drive personal mcp`, `drive personal mcp --tools`
+**Example:** `drive personal mcp`, `drive personal mcp --http --public-url https://<name>.ts.net`, `drive personal mcp --revoke`
 
 ## `drive commands`
 
@@ -4368,7 +4372,7 @@ drive guide [name]
 
 **Example:** `drive guide`, `drive guide <name> --json`
 
-## Коды завершения
+## Exit codes
 
 Failures use the shared WireCat error contract.
 
