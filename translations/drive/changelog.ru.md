@@ -4,6 +4,61 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.27.0 — 24.10.2026
+
+### Added
+
+- **`mirrors watch` keeps mirrored folders in sync while it runs**, until Ctrl-C or `--timeout`, both a normal end. A
+  saved file is synced a couple of seconds after the last save, and only if it differs from the last sync; Google's
+  change feed is read every minute (`--every`) and only the mirrors whose files it names are synced. Every mirror is
+  also compared every 5 minutes and synced every 30, for changes no event reported. A part changed on both sides is
+  reported and left for `mirrors sync --keep`. With `--jsonl`, one line per sync and an end line; it is not an MCP
+  tool, and `DRIVE_READ_ONLY` refuses it.
+
+- **A mirroring guide** covers setup, both directions, conflicts, choosing a side and deletion limits.
+  The documentation check now enforces standard changelog headings for new releases.
+
+- **`files download FILE_ID --out PATH` and `files export DOC_ID --format pdf|docx|xlsx|csv --out PATH`** save
+  Google content locally. Existing outputs require `--overwrite`; results report byte counts. The existing
+  `documents export --output PATH` still writes imported Markdown offline.
+
+- **`comments reply`, `comments resolve` and `comments reopen`** change Google comment threads through the
+  same method permissions and Google write grant as generated commands.
+
+- **MCP offers profile listings, settings reads, agent instructions, guides and imported Markdown export.**
+  Exports use a filename within the profile cache export folder. `config set` and `models set` require the
+  owner to allow `mcp.authority`; agents cannot alter their own authority settings.
+
+### Changed — may break callers
+
+- **Status output omits document names.** `status` reports skipped IDs and reasons without file metadata;
+  `mirrors status` reports counts for `create`, `update` and `orphans`, without filenames or the local root.
+  `documents show` and `mirrors list` still provide explicitly requested details. The discovery contract is 4.
+
+- **The retired `read_only` setting is refused**, including its old camelCase spelling. Remove it from config;
+  use command permissions, `--read-only` or `DRIVE_READ_ONLY`. A terminal now asks before a write at level `ask`.
+
+- **Google write results include `operation_id`**, matching the write journal for both friendly and generated commands.
+  Read-only file commands appear under Read in command discovery, and mirrors under Automate.
+
+- **MCP argument names use snake_case**, such as `file_id` instead of `file-id`; CLI flags keep their spelling.
+  Command declarations control the MCP surface. Model downloads and skill installation are discoverable,
+  with skill installation requiring the owner’s authority permission.
+
+### Security
+
+- **Development tooling uses patched fast-uri and markdown-it.** Overrides resolve fast-uri 3.1.9 and
+  markdown-it 15.0.3, body-parser 2.4.0 and ip-address 10.7.4; production dependencies and the historical upgrade fixture stay unchanged.
+
+## 0.26.0 — 24.10.2026
+
+### Added
+
+- **The first command at a terminal asks three questions once for every WireCat tool** (cli-core 0.404.0): which
+  languages you write and speak, which other WireCat tools to install, and whether commands and agents may only read.
+  Answered in any tool, they hold in all of them; "read only" makes every `drive` profile read-only. `tg setup`,
+  `max setup` or `wa setup` asks again. Agents, `--json`, `--no-input`, `CI` and `DRIVE_READ_ONLY` are never asked.
+
 ## 0.25.0 — 24.10.2026
 
 ### Added

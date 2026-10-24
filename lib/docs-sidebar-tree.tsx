@@ -90,6 +90,7 @@ export const sidebarIcons = {
   "cli-contract": FileCode2,
   limits: Gauge,
   compare: ArrowRightLeft,
+  mirrors: ArrowRightLeft,
   replies: Reply,
   index: BookOpen,
   installation: Download,

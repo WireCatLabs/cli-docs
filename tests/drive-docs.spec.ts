@@ -91,6 +91,23 @@ for (const lang of ["en", "ru", "es"] as const) {
     )
   })
 
+  test(`${lang}: Drive mirror guidance and file exports survive Markdown`, async ({ page, request }) => {
+    await page.goto(`/${lang}/docs/drive/mirrors`)
+    const body = page.locator("main")
+    await expect(body).toContainText("drive personal mirrors add ./notes --parent FOLDER_ID")
+    await expect(body).toContainText("--keep both")
+    await expect(body).toContainText("XLSX")
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const mirror = await request.get(`/llms.mdx/docs/${prefix}drive/mirrors/content.md`)
+    expect(mirror.ok()).toBe(true)
+    expect(await mirror.text()).toContain("drive personal mirrors remove MIRROR_ID")
+    const usage = await request.get(`/llms.mdx/docs/${prefix}drive/usage/content.md`)
+    expect(usage.ok()).toBe(true)
+    expect(await usage.text()).toContain("drive personal files download FILE_ID --out ./download.bin")
+    expect(await usage.text()).toContain("drive personal files export DOC_ID --format pdf --out ./document.pdf")
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google/)
+  })
+
   test(`${lang}: Drive search preserves executable tagged-search examples`, async ({ page, request }) => {
     await page.goto(`/${lang}/docs/drive/search`)
     await expect(page.locator("main")).toContainText("budget AND tag:follow-up")
@@ -119,7 +136,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await markdown.text()).toContain("provider_metadata")
     expect(await markdown.text()).toContain("`effects`")
     expect(await markdown.text()).toContain("`api_operation`")
-    expect(await markdown.text()).toContain("`3`")
+    expect(await markdown.text()).toContain("`4`")
     expect(await markdown.text()).toContain("`error.retry.safe`")
     const text = await markdown.text()
     expect(text).toContain("--json=id,name")

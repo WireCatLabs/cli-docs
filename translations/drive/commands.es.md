@@ -4,12 +4,11 @@ title: "Comandos Drive"
 
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
 
-
 Consulta todos los comandos y opciones. Las operaciones de cuenta requieren perfil explícito: la primera palabra, como en `drive personal documents show DOC_ID`, o `DRIVE_PROFILE`; no existe `--profile`. Ayuda, escenarios, la skill del agente, descargas de modelos, descubrimiento, métodos API, esquemas, completado, `doctor` y `upgrade` no seleccionan cuenta. Consulta [recetas](./recipes.md) e [importación y almacenamiento](./usage.md). Las descripciones conservan el idioma de la ayuda.
 
 ## Opciones globales
 
-Las opciones se aplican al perfil seleccionado y a esta ejecución.
+These options apply to the selected profile and current invocation.
 
 | Option | What it does |
 |---|---|
@@ -3571,6 +3570,53 @@ drive <profile> sheets clear <spreadsheet> <range>
 
 read and change files in Google Drive; nothing is imported
 
+### `drive files download`
+
+download a stored file to a local file
+
+This command changes local state.
+
+```sh
+drive <profile> files download <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | file id or Google Drive URL. |
+
+| Option | What it does |
+|---|---|
+| `--out <path>` | local file to write. |
+| `--overwrite` | replace an existing output file. |
+
+**Returns:** download a stored file to a local file
+
+**Example:** `drive personal files download FILE_ID --out download.bin`
+
+### `drive files export`
+
+export a Google document to a local file
+
+This command changes local state.
+
+```sh
+drive <profile> files export <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | file id or Google Drive URL. |
+
+| Option | What it does |
+|---|---|
+| `--out <path>` | local file to write. |
+| `--overwrite` | replace an existing output file. |
+| `--format <format>` | format Google should export. One of: `pdf`, `docx`, `xlsx`, `csv`. |
+
+**Returns:** export a Google document to a local file
+
+**Example:** `drive personal files export DOC_ID --format pdf --out document.pdf`
+
 ### `drive files list`
 
 list files in Google Drive, one page at a time
@@ -3761,6 +3807,64 @@ drive <profile> files upload <path> [options]
 ## `drive comments`
 
 read the comments of a file in Google Drive
+
+### `drive comments reply`
+
+reply to a Google Drive comment
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> comments reply <file> <comment-id> <text>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | file id or Google Drive URL. |
+| `comment-id` | required | comment id from comments list. |
+| `text` | required | reply text. |
+
+**Returns:** reply to a Google Drive comment
+
+**Example:** `drive personal comments reply FILE_ID COMMENT_ID "Reply text"`
+
+### `drive comments resolve`
+
+resolve a Google Drive comment
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> comments resolve <file> <comment-id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | file id or Google Drive URL. |
+| `comment-id` | required | comment id from comments list. |
+
+**Returns:** resolve a Google Drive comment
+
+**Example:** `drive personal comments resolve FILE_ID COMMENT_ID`
+
+### `drive comments reopen`
+
+reopen a Google Drive comment
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> comments reopen <file> <comment-id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | file id or Google Drive URL. |
+| `comment-id` | required | comment id from comments list. |
+
+**Returns:** reopen a Google Drive comment
+
+**Example:** `drive personal comments reopen FILE_ID COMMENT_ID`
 
 ### `drive comments list`
 
@@ -3996,6 +4100,28 @@ drive <profile> mirrors sync [id] [options]
 
 **Example:** `drive personal mirrors sync`, `drive personal mirrors sync 1a2b3c4d --keep google`, `drive personal mirrors sync 1a2b3c4d --replace`
 
+### `drive mirrors watch`
+
+keep syncing both ways until Ctrl-C or --timeout: on each local save and each Google change; a part changed on both sides is reported and left for mirrors sync --keep
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> mirrors watch [id] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id; every mirror of the profile when omitted. |
+
+| Option | What it does |
+|---|---|
+| `--every <duration>` | how often to ask Google for changes. Default: `60s`. |
+
+**Returns:** keep syncing both ways until Ctrl-C or --timeout
+
+**Example:** `drive personal mirrors watch`, `drive personal mirrors watch 1a2b3c4d --every 2m --jsonl`
+
 ## `drive config`
 
 read and change settings; credentials are kept apart
@@ -4024,7 +4150,7 @@ drive <profile> config set <key> <json-value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required | read_only, max_text_chars, picture_search, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
+| `key` | required | max_text_chars, picture_search, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
 | `json-value` | required | the new value, as JSON. |
 
 | Option | What it does |
@@ -4033,7 +4159,7 @@ drive <profile> config set <key> <json-value> [options]
 
 **Returns:** set one setting of this profile, or of the defaults
 
-**Example:** `drive personal config set read_only true`, `drive personal config set permissions.files '"readonly"' --defaults`
+**Example:** `drive personal config set max_text_chars 100000`, `drive personal config set permissions.files '"readonly"' --defaults`
 
 ## `drive complete`
 
@@ -4246,15 +4372,13 @@ drive guide [name]
 
 **Example:** `drive guide`, `drive guide <name> --json`
 
-<a id="exit-codes"></a>
-
 ## Códigos de salida
 
-Los errores siguen el contrato de errores común de WireCat.
+Failures use the shared WireCat error contract.
 
-| Código | Cuándo |
+| Code | When |
 |---|---|
-| `0` | funcionó |
+| `0` | it worked |
 | `2` | `validation_error` |
 | `3` | `configuration_error` |
 | `4` | `authentication_error` |
@@ -4269,4 +4393,4 @@ Los errores siguen el contrato de errores común de WireCat.
 | `13` | `invalid_response` |
 | `14` | `outcome_unknown` |
 | `130` | `cancelled` |
-| `1` | cualquier otro error |
+| `1` | anything else |

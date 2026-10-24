@@ -31,11 +31,13 @@ correcta. Conservan sus permisos y no se reescriben si no hay cambios. Se mantie
 de perfiles, las rutas de permisos y los nombres de usos de modelos. Los valores antiguos y
 nuevos que entren en conflicto se rechazan.
 
+Los ajustes antiguos `read_only` y `readOnly` se rechazan. Elimínalos del archivo de configuración;
+usa `permissions` por comando para guardar límites, o `--read-only` / `DRIVE_READ_ONLY=1` para una ejecución.
+
 ## Ajustes guardados
 
 | Clave | Qué controla | Alcance |
 | --- | --- | --- |
-| `read_only` | Rechaza cambios locales y remotos, incluida la sincronización y añadir notas | Perfil o `defaults` |
 | `permissions` | Acceso por comando: `deny`, `readonly`, `ask` o `allow` | Perfil o `defaults` |
 | `max_text_chars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
 | `picture_search` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
@@ -65,15 +67,15 @@ drive personal config show --json
 ```
 
 Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización
-local y las notas tienen claves separadas. `read_only true` es más amplio: también bloquea cambios
-locales, así que no lo actives si quieres importar o etiquetar. Revisa la [referencia de comandos](./commands.md)
+local y las notas tienen claves separadas. `--read-only` es más amplio: también bloquea cambios
+locales, así que no lo uses si quieres importar o etiquetar. Revisa la [referencia de comandos](./commands.md)
 y los [permisos de datos](./security.md) antes de elegir reglas más amplias.
 
 `config set` cambia el perfil elegido salvo que añadas `--defaults`. Por ejemplo:
 
 ```sh
-drive personal config set read_only true --defaults
-drive work config set read_only false
+drive personal config set permissions.files '"readonly"' --defaults
+drive work config set permissions.files '"deny"'
 drive personal config show --json
 ```
 
@@ -130,7 +132,7 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 
 Estas opciones no son ajustes del archivo. Las de cada comando, como `search --limit` y
 `sync --limit`, se explican en su referencia. Los permisos temporales tienen prioridad sobre los
-del perfil y después los compartidos. Un `read_only true` guardado sigue limitando incluso con
+del perfil y después los compartidos. La variable del proceso `DRIVE_READ_ONLY=1` sigue limitando incluso con
 permiso `allow`. Las variables de IA tienen prioridad sobre el modelo y proveedor del perfil
 o de los valores compartidos.
 
