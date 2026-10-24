@@ -7,6 +7,7 @@ import {
   correctDocumentation,
   fingerprint,
   localizeTool,
+  missingComparisons,
   siteLinks,
   translationProblems,
   withOriginalAnchors,
@@ -152,5 +153,13 @@ describe("released documentation translations", () => {
     } finally {
       rmSync(root, { recursive: true, force: true })
     }
+  })
+})
+
+describe("site-written comparison pages", () => {
+  it("exist in English for every tool in tools.json", () => {
+    const root = join(import.meta.dirname, "..")
+    const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as { name: string }[]
+    expect(missingComparisons(root, tools)).toEqual([])
   })
 })
