@@ -29,7 +29,7 @@ todas las notas que contienen tus palabras. Para buscar también por significado
 con tg o max y luego importa:
 
 ```sh
-npx -y @wirecat/tg-cli local models text download e5-small
+memo models text download e5-small
 memo sync
 ```
 
@@ -53,8 +53,8 @@ funciona, y luego importa de nuevo.
 
 ## Aparece "no mail account" o la importación de correo pide una cuenta
 
-`no mail account` significa que el archivo de configuración todavía no tiene cuentas de correo. Añade
-una en `mail.accounts` ([correo](./mail.md#add-the-account-to-memo)).
+`no mail account` significa que el archivo de configuración todavía no tiene cuentas de correo. Ejecuta `memo mail add <account> <address>` tras configurar Himalaya
+o añade una en `mail.accounts` ([correo](./mail.md#add-the-account-to-memo)).
 
 `memo sync --source email:work` acepta el nombre de cuenta: el `name` de `mail.accounts` en los ajustes. Si es incorrecto, Memo enumera las cuentas conocidas. Sin `--source`, lee todas.
 

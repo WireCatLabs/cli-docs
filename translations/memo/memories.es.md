@@ -31,7 +31,7 @@ explica cómo.
 Para un lote de hechos y tareas con citas de reuniones, usa la [revisión de conclusiones de reuniones](#meeting-findings) de abajo.
 
 Para fuentes reunidas en un proyecto, usa la [revisión de propuestas de proyecto](./recipes.md#review-project-facts-and-follow-ups).
-Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las conclusiones de reuniones siguen requiriendo al propietario.
+Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
 
 **Qué espera tu decisión.** Una acción propuesta siempre espera aprobación o rechazo. Un recuerdo o hecho registrado directamente espera cuando lo añade un agente: mediante [MCP](./mcp.md) o `memo` en su terminal (con `AI_AGENT` o `CLAUDECODE`), que registra al agente como autor. Tu recuerdo se confirma y tu hecho se acepta al instante; en un terminal de agente, `--as-owner` lo atribuye a ti. El agente también puede pasar `--as-owner`; indícale que no lo haga.
 
@@ -131,6 +131,9 @@ Nunca guarda lo que envió el agente.
 
 ## A través del servidor MCP
 
-Una aplicación sin terminal, como Claude Desktop, puede añadir recuerdos, hechos y acciones propuestas mediante [el servidor MCP](./mcp.md). Los registros directos quedan propuestos. Las propuestas de proyecto usan el flujo de revisión separado descrito arriba.
+Una aplicación sin terminal, como Claude Desktop, puede añadir recuerdos, hechos y acciones propuestas mediante
+[el servidor MCP](./mcp.md). Los registros nuevos empiezan como propuestos. Las herramientas de comandos pueden
+confirmar recuerdos, aceptar hechos y decidir acciones cuando lo permiten los permisos guardados. Las decisiones
+sobre propuestas de proyecto también respetan `agent_decisions`, como se explica arriba.
 
 Siguiente: [conectar una aplicación a través de MCP](./mcp.md).

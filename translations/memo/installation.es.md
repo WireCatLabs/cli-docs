@@ -26,7 +26,7 @@ Cada fuente necesita algo más, solo cuando vayas a utilizarla:
 |---|---|
 | Notas y documentos | Ninguno: [archivos compatibles](./notes.md#files-memo-can-read) |
 | Mensajes de Telegram o MAX | [tg](https://github.com/WireCatLabs/tg-cli) o [max](https://github.com/WireCatLabs/max-cli). Guardan los chats en el almacén local; Memo no inicia sesión en un servicio de mensajería |
-| Búsqueda por significado | Un modelo de búsqueda en el equipo, de unos 135 MB. tg o max lo descarga una vez: `npx -y @wirecat/tg-cli local models text download e5-small`. Sin él, Memo busca por palabras |
+| Búsqueda por significado | Un modelo de búsqueda en el equipo, de unos 135 MB. Descárgalo una vez: `memo models text download e5-small`. Sin él, Memo busca por palabras |
 | Correo | [Himalaya](https://github.com/pimalaya/himalaya) 2.x, el programa con el que Memo lee el buzón. Lee sus cuentas de `~/.config/himalaya/config.toml` ([correo](./mail.md#before-you-start)) |
 | Sincronización periódica (`memo auto`) | Linux con systemd. En macOS y Windows, ejecuta `memo sync` personalmente o con tu planificador ([mantener Memo al día](./archive.md)) |
 
@@ -47,7 +47,11 @@ npm install -g @wirecat/cli-memo
 memo skill install --for all     # puts Memo's skill where your agents read it
 ```
 
-npm 12 muestra "install scripts blocked": es inofensivo, `memo skill install` hace lo que haría el script. En Windows, abre un terminal nuevo si no se encuentra `memo`. Con pnpm o Bun, usa `pnpm add -g @wirecat/cli-memo` o `bun add -g @wirecat/cli-memo` y después el mismo `memo skill install --for all`.
+npm 11.17 y posteriores avisan de scripts de instalación no incluidos en `allowScripts`; con npm 11 todavía se ejecutan.
+npm 12 los bloquea. Ejecuta el comando `npm install -g --allow-scripts=…` que npm muestra bajo el aviso;
+permite solo los paquetes nombrados, una vez. Después ejecuta `memo skill install --for all` para instalar el skill.
+En Windows, abre un terminal nuevo si no se encuentra `memo`. Con pnpm o Bun, usa `pnpm add -g @wirecat/cli-memo`
+o `bun add -g @wirecat/cli-memo`, seguido del mismo `memo skill install --for all`.
 
 Para probarlo sin instalarlo (sigue necesitando Node.js):
 

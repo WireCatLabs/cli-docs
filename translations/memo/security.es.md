@@ -35,14 +35,14 @@ carpeta o de un buzón, no borra nada y te avisa.
 
 ## Controlar las decisiones del agente
 
-- Los recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas empiezan como propuestos. MCP no confirma recuerdos, no acepta directamente hechos propuestos existentes ni aprueba acciones en cuentas externas.
-- Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las conclusiones de reuniones siguen requiriendo al propietario.
+- Los recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas empiezan como propuestos. MCP también ofrece comandos para decidir, limitados por los [permisos](./configuration.md#permissions) guardados.
+- Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
 - Un hecho, recuerdo o vínculo añadido con `memo` registra al autor. En un terminal de agente (`AI_AGENT` o `CLAUDECODE` definido), el agente es el autor y el hecho registrado directamente, recuerdo o vínculo nuevo espera revisión. Los recuerdos y vínculos del propietario se confirman y los hechos se aceptan al instante; en el terminal de un agente, añade `--as-owner`. Es una etiqueta, no un bloqueo: el agente también puede pasarla, así que indícale que nunca lo haga.
 - Aprobar una acción la convierte en una tarea para ti. Memo no envía mensajes ni correos.
 - La [exportación y comprobación de anotaciones seleccionadas](./recipes.md#keep-selected-project-annotations)
   leen las fuentes y el destino sin restaurarlos. La exportación crea un archivo privado nuevo y
-  rechaza rutas existentes. La restauración corresponde al propietario, requiere la huella de una
-  comprobación correcta y no es una herramienta MCP. Conserva el estado histórico aceptado o propuesto;
+  rechaza rutas existentes. La restauración requiere la huella de una
+  comprobación correcta; un agente MCP necesita además el permiso explícito `projects.annotations.restore`. Conserva el estado histórico aceptado o propuesto;
   no confirma una propuesta de nuevo. Las lecturas MCP siguen creando su entrada normal de auditoría.
   El formato omite varios aspectos del proyecto y no sustituye una copia completa del archivo.
 - El registro del agente conserva agente, herramienta, resultado y hora, sin el contenido enviado.

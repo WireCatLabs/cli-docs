@@ -24,9 +24,9 @@
     "conclusion": "Reviewed Drive 0.25.0: the first roadmap page and a compare page ship with this tag; drive doctor and drive upgrade are new commands; the profile is the first word or DRIVE_PROFILE and there is no --profile option. Changed native pages: changelog, commands, compare, configuration, installation, roadmap, troubleshooting; RU/ES written. The roadmap is new, so every item on it is unshipped."
   },
   "memo": {
-    "version": "v0.90.0",
-    "roadmapSha256": "4734ba07333b179273a3d4c31301ff04c311e5d8f820eee028102e43a5661cd9",
+    "version": "v0.91.0",
+    "roadmapSha256": "9a3152425ccf546ce7d917cc747229e4662d592c057a38f6aa57f670541bcf16",
     "reviewedAt": "2026-10-24",
-    "conclusion": "Reviewed Memo v0.89.0 to v0.90.0: the first roadmap and Project sidebar entry are new; command return summaries changed for task cards, task links and search hits. The release adds shared first-run questions and refreshes the introduction example; no roadmap item is claimed shipped by this release. Native installation, usage, MCP and other guides are unchanged. RU/ES roadmap, command return summaries and new changelog entry reviewed; exact technical changelog text remains English as in the existing translations."
+    "conclusion": "Reviewed Memo 0.91.0: command-derived MCP coverage with 37 preserved legacy tool names, saved permissions and stricter-only server overrides, opening cited notes/messages, explicit delegated meeting/annotation decisions, local model download, explicit Himalaya account add/check and all shared meeting selectors. Source versions match tg: core 0.404.0, base 0.50.3. Reviewed EN sources and RU/ES updates for commands, configuration, how-it-works, index, installation, mail, MCP, memories, notes, recipes, roadmap, search, security, troubleshooting and changelog; added the comparison page in RU/ES. Portal corrections clarify explicit meeting delegation and remote versus local model use. Roadmap removes shipped model download, account setup and cited-item reads; HTTP, visual UI, full graph export and engine benchmark results remain unshipped. Individual MCP tools remain a known standards gap (MEMO-31); this review does not certify full standards compliance."
   }
 }

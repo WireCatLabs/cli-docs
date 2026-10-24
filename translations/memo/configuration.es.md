@@ -4,9 +4,8 @@ title: "Configuración"
 
 Usa esta referencia para consultar los ajustes y variables de entorno propios de Memo.
 Rara vez necesitas editar el archivo a mano.
-`memo folders add` añade una carpeta y `memo auto start` activa el temporizador por ti. Edita tú el
-archivo para indicar los archivos que se omiten, las cuentas de correo y dónde van las notas
-exportadas.
+`memo folders add` añade una carpeta y `memo auto start` activa el temporizador por ti. `memo mail add` añade una cuenta explícita de Himalaya. Edita el
+archivo para indicar qué archivos se omiten y dónde van las notas exportadas.
 
 El archivo es `~/.config/cli-memo/config.json`. Es un archivo JSON: mantén las comillas, las comas y
 las llaves como en el ejemplo.
@@ -97,8 +96,7 @@ por este breve ejemplo. Tanto CLI como MCP rechazan entonces `projects actions c
 leer y preparar propuestas sigue disponible. Las decisiones del propietario siguen disponibles en el terminal.
 El ajuste controla el modo de agente de Memo; el acceso al terminal conserva los permisos de su usuario.
 `--as-owner` etiqueta un comando como del propietario y el agente no debe usarlo para eludir este ajuste.
-El ajuste se aplica a propuestas de proyecto; no cambia la confirmación de hallazgos de reuniones reservada
-al propietario ni sustituye las demás comprobaciones de permisos de la herramienta.
+El ajuste se aplica a propuestas de proyecto; no cambia el permiso separado para confirmar hallazgos de reuniones ni sustituye las demás comprobaciones de permisos de la herramienta.
 
 ## Variables de entorno
 
@@ -113,3 +111,30 @@ al propietario ni sustituye las demás comprobaciones de permisos de la herramie
 
 Memo llama a un proveedor fuera de tu ordenador solo cuando `memo ask` tiene a la vez `--analyze` y
 `--allow-remote`. Consulta [dar las fuentes a tu agente](./search.md#give-your-agent-the-sources).
+
+## `permissions`
+
+Las rutas de comandos con puntos limitan las herramientas MCP. Una clave cubre el comando y sus subcomandos;
+gana la clave guardada más específica. `deny` oculta herramientas, `readonly` permite leer y `ask` o `allow`
+permiten escribir. En MCP, `ask` se ejecuta sin pregunta en el terminal; la aplicación cliente obtiene la aprobación.
+Las escrituras sin un nivel guardado usan `ask`.
+
+```json
+{
+  "permissions": {
+    "notes": "readonly",
+    "mail.trash": "deny",
+    "mcp.authority": "deny"
+  }
+}
+```
+
+`mcp.authority` tiene `deny` por defecto para cambiar carpetas de origen y reglas de correo.
+`meetings.actions.confirm`, `meetings.actions.reject` y `projects.annotations.restore` también tienen `deny`;
+configura explícitamente la clave correspondiente como `ask` o `allow` para delegar una de esas operaciones.
+`agent_decisions: false` sigue rechazando decisiones sobre propuestas de proyecto. El límite compartido de lectura
+de WireCat y `MEMO_READ_ONLY` restringen todos los permisos.
+
+Reinicia la conexión MCP tras permitir una herramienta antes oculta. Los permisos más estrictos también afectan
+las conexiones abiertas. `memo mcp --permission notes.edit=deny` restringe una clave para ese servidor sin cambiar
+el archivo; se rechaza cualquier modificación que relaje una clave guardada.
