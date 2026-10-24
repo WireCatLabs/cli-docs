@@ -120,7 +120,8 @@ restores both the sidebar and Telegram → WhatsApp installation navigation.
 | roadmap | Future/current distinctions must match released behavior | Move shipped Cloud API bot and attachment capabilities to current; retain future work |
 | search | Cross-tool examples must use actual pinned commands | Memo examples use `memo sync --only mail` and `memo sync --only notes` |
 | attachments | A retry attempt is not guaranteed recovery | Explain expired/unavailable media and supported retry action |
-| usage, MCP, groups, diagnostics, sessions | Reader guides must describe tasks rather than internal validation history | Remove test-provenance prose; keep prerequisites and runtime boundaries in the guide, validation limits here |
+| usage, MCP, groups, sessions | Reader guides must describe tasks rather than internal validation history | Remove test-provenance prose; keep prerequisites and runtime boundaries in the guide, validation limits here |
+| diagnostics | Platform limitations must survive editorial cleanup | Preserve Windows skipped Unix file-mode checks, verified against released src/diagnose.ts deviceModes |
 | RU/ES guides and references | Matching fingerprints alone do not prove a translation | Repair fences, links, table paragraph boundaries, free-form text, device keys, tool calls, product names, denied writes and revoked access |
 | installation troubleshooting link | A next step must resolve to an actual anchor | Preserve source headings and legacy anchors; use #the-whatsapp-engine-is-not-installed |
 
@@ -132,7 +133,7 @@ created. The existing production hold and private comparison material are untouc
 
 All six reviewed release contracts captured. Sync, localization/fingerprints, lint, typecheck,
 strict documentation checks, release-note validation, search bundle check, production export,
-asset limits, links and SEO pass. Strict quality: 1884 reference entries, zero reference gaps,
+asset limits, links and SEO pass. Strict quality after integration: 1889 reference entries, zero reference gaps,
 zero invalid examples; 174 examples require manual classification/review and are not runtime proofs.
 The synthetic report fixture passes for all six pinned releases. The Linux packed install matrix
 in cli-testing PR204 passes all 18 rows (six tools × npm/pnpm/Bun); an additional WhatsApp doctor
@@ -147,3 +148,5 @@ covers EN/RU/ES, desktop/mobile, actual provider selection and cross-tool naviga
 accessibility, Markdown, legacy anchors and the unchanged 3000-element command-reference limit.
 Desktop/mobile screenshots were inspected. CI results and deployment/public verification are
 linked from the PR; successful checks do not certify unexecuted live account operations.
+
+Integration rebased onto cli-docs #358 (Memo 0.91.0); its source, translations and release review are preserved. After rebase, sync, all six released command captures, strict docs, release notes, lint, typecheck and 337 unit tests pass. The 22 local browser cases above used the pre-rebase export; deployment validates the combined export with the complete browser suite before publication.
