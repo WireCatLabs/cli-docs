@@ -143,7 +143,7 @@ Inicia sesión una vez, elige las carpetas de Drive que quieres conservar y llev
    solo se importan las carpetas que añades, con todo lo que contienen
 
 3. ```sh
-   drive models text download e5-small
+   drive models download e5-small
    ```
 
    el modelo local para buscar por significado, una vez por ordenador; lo comparten todas las CLI de WireCat

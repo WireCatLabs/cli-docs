@@ -71,7 +71,7 @@ Notes on `memo`:
   goes through [Himalaya](https://github.com/pimalaya/himalaya), and [mail](./mail.md) is covered below. `search all` covers messages, mail and notes;
   meetings have their own `search meetings`.
 - **Search.** All six tools search by words and by meaning. This page does not rank them. In `memo`, search by
-  meaning uses a local model that `memo models download` fetches; without it, word search still works.
+  meaning uses a local model that `memo models text download` fetches; without it, word search still works.
 - **No LLM key.** Sync and search never call a model. `ask --analyze` calls a model you configure, and only if you ask.
 - **MCP.** `memo mcp` runs on stdio only. There is no HTTP mode yet. It offers 124 tools made from the commands,
   writes included, except `mcp`, `upgrade`, `skill install`, `auto start` and `auto stop`. `memo` never sends a

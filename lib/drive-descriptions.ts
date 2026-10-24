@@ -4,6 +4,7 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
     installation:
       "Google Drive CLI setup: agent or npm installation, WireCat browser sign-in and a first folder search.",
     usage: "Import Google Drive folders, refresh cached documents and attach local context without editing originals.",
+    mirrors: "Sync local Markdown and tables with Google Drive, review conflicts and choose which side to keep.",
     search: "Find words, tags and meaning in cached Google Drive documents, with links to the original sources.",
     scenarios:
       "Common Google Drive tasks step by step: set up, find a decision, brief yourself on a document, give an agent read-only access.",
@@ -23,6 +24,7 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
     installation: "Настройка Google Drive CLI: установка с агентом или через npm, вход через WireCat и поиск в папке.",
     usage:
       "Импортируйте папки Google Drive, обновляйте локальные документы и добавляйте контекст без изменения оригиналов.",
+    mirrors: "Синхронизируйте локальные файлы с Google Drive, проверяйте конфликты и выбирайте нужную версию.",
     search: "Ищите слова, теги и смысл в локальных документах Google Drive со ссылками на источники.",
     scenarios:
       "Частые задачи Google Drive по шагам: настройка, поиск решения, справка по документу и доступ агента только на чтение.",
@@ -43,6 +45,7 @@ export const driveDescriptions: Record<string, Record<string, string>> = {
     installation:
       "Configura Google Drive CLI: instalación con un agente o npm, acceso con WireCat y búsqueda en una carpeta.",
     usage: "Importa carpetas Google Drive, actualiza documentos locales y añade contexto sin editar originales.",
+    mirrors: "Sincroniza archivos locales con Google Drive, revisa conflictos y elige qué versión conservar.",
     search: "Busca palabras, etiquetas y significado en documentos Google Drive locales, con enlaces a las fuentes.",
     scenarios:
       "Tareas habituales de Google Drive paso a paso: configurar, encontrar una decisión, repasar un documento y dar acceso de solo lectura.",

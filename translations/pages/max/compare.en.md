@@ -3,7 +3,7 @@ title: "Compared with other tools"
 ---
 
 There are other open tools for MAX. This page puts `max` next to five of them and compares them by task: what you can
-do. The table shows which tool fits your work. The marks for `max` were checked against its code (version 0.72.0).
+do. The table shows which tool fits your work. The marks for `max` were checked against its code.
 The marks for the other tools come from the documentation and source code of their projects, on 24 October 2026. A
 tool may do more than its documentation says.
 
@@ -82,7 +82,7 @@ personal account has no such comments.
 **Agents and safety.** PyMax, tsmax and Bot API get ➖ where the program's author would have to write the protection:
 they are libraries and have no ready settings.
 The `max` MCP server gives an agent three tools: find a command, read and write. Through them 227 of the 268 personal
-account commands are available (0.72.0, counted from `max commands --json` and the server's tool list), writes
+account commands are available (counted from `max commands --json` and the server's tool list), writes
 included. Profile permissions apply to MCP too. The bot has a separate server. Login and logout, updates, commands that
 run without stopping (`watch`, `serve`), and commands with which an agent could lift its own limits (the allowed chat
 list, permissions, auto-replies, schedules) are not offered in MCP; `permissions.mcp.authority` opens some of them, and

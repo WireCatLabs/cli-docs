@@ -215,6 +215,30 @@ Etiquetas, notas y enlaces son contexto local, sin editar el original Google. Re
 sincronizar de nuevo los conserva. `documents context` reúne notas, etiquetas, enlaces, recuerdos
 y editores observados. Para hechos revisados o vínculos con personas/proyectos, usa [recetas](./recipes.md).
 
+## Descargar o convertir un archivo de Google
+
+Estos comandos leen Google directamente; no necesitas importar el archivo primero.
+
+```sh
+drive personal files download FILE_ID --out ./download.bin
+drive personal files export DOC_ID --format pdf --out ./document.pdf
+drive personal files export DOC_ID --format docx --out ./document.docx
+drive personal files export SHEET_ID --format xlsx --out ./workbook.xlsx
+drive personal files export SHEET_ID --format csv --out ./sheet.csv
+```
+
+`download` guarda los bytes de un archivo subido. `export` pide a Google convertir un documento
+nativo: elige un formato compatible con su tipo — PDF o DOCX para Documentos, XLSX o CSV para Hojas
+de cálculo. CSV exporta solo la primera hoja. Google limita las exportaciones nativas a 10 MB;
+Drive limita cada descarga a 50 MB. Ninguno importa el archivo al buscador ni lo cambia en Google.
+Google Vids necesita el flujo API de larga duración y no admite estos comandos simplificados.
+
+Un archivo existente, incluido un enlace simbólico, se rechaza antes de descargar. Usa `--overwrite`
+para sustituirlo. El resultado contiene el ID y el número de bytes, sin nombre del documento ni ruta
+local. Ambos escriben un archivo local, así que `--read-only` los rechaza; `--dry-run` muestra el plan
+sin descargar. El comando existente `documents export --output PATH` escribe una copia Markdown
+importada sin conectarse a Google.
+
 ## Exportar o dejar de importar
 
 ```sh
@@ -241,7 +265,7 @@ o `items` con `page` para una lista; `meta` identifica la ejecución, su duraci�
 `complete`. Las claves de Drive usan snake_case. Los metadatos del proveedor y los diccionarios del
 usuario conservan sus claves. Los pasajes de búsqueda están en `item.hits` y los contadores de
 sync/status en `item`. La ayuda y el autocompletado siguen siendo texto; `commands --json` usa el
-documento compartido de comandos con contrato `3`. `effects` describe lecturas y escrituras remotas
+documento compartido de comandos con contrato `4`. `effects` describe lecturas y escrituras remotas
 y locales; `api_operation` identifica un método generado de Google. Las listas locales usan
 `page.mode: "page"` y devuelven `next_page` si quedan resultados; las listas de Google
 (`files list`, `comments list`, `permissions list`, `revisions list`, `shared-drives`, `documents history`)

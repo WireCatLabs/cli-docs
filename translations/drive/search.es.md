@@ -61,7 +61,7 @@ Drive utiliza la caché compartida del componente de búsqueda local. Descarga e
 (no necesita perfil ni inicio de sesión) y genera los vectores del texto importado:
 
 ```sh
-drive models text download e5-small
+drive models download e5-small
 drive personal sync --embed
 drive personal search 'what did we agree to spend?' --json
 ```

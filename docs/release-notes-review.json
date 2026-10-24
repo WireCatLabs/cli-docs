@@ -18,10 +18,10 @@
     "conclusion": "Reviewed Zoom 0.32.0-0.36.0 (Core 0.370.0 -> 0.389.0): the profile is the first word (zm personal meetings list; ZM_PROFILE for a shell; each profile has its own Zoom login); zm <profile> mcp replaces zm serve --mcp and offers zm's commands as the profile's permissions allow; permissions per profile; stats meetings; models audio; meetings transcribe takes Zoom's recordings; .txt transcript import; search reads the query language and ranks words and meaning together; meeting writes ask first. Changed native pages: every guide (profile prefix), changelog, commands, configuration (Permissions), mcp (rewritten), search, sessions; RU/ES updated. Portal copies (install prompts, agents, MCP, Zoom overview, command rules) moved to zm personal. Roadmap unchanged: broader meeting preparation remains planned and is not shipped."
   },
   "drive": {
-    "version": "v0.25.0",
-    "roadmapSha256": "03a41557ca52edafb9eaed4e3026b091da147e5db74c9757a5da8edf6514d38e",
+    "version": "v0.28.0",
+    "roadmapSha256": "b9ce431f6138a93c3915540ab8c2b6fc7798f2ab4ba0a025efb59fea67481493",
     "reviewedAt": "2026-10-24",
-    "conclusion": "Reviewed Drive 0.25.0: the first roadmap page and a compare page ship with this tag; drive doctor and drive upgrade are new commands; the profile is the first word or DRIVE_PROFILE and there is no --profile option. Changed native pages: changelog, commands, compare, configuration, installation, roadmap, troubleshooting; RU/ES written. The roadmap is new, so every item on it is unshipped."
+    "conclusion": "Reviewed Drive 0.26.0–0.28.0 (cli-core 0.404.0–0.406.0): shared first-run choices; bounded file download/export; skipped-name privacy and mirror status counts; MCP declaration parity, snake_case and guarded authority/export folders; comment reply/resolve/reopen and operation IDs; retired read_only refusal; mirrors watch while its process runs. EN/RU/ES changed guides and generated reference additions reviewed. Native source correction 95e35b4 (Drive #182), included in v0.28.0, moves the shipped mirror guide, download/export and comment writes out of future plans, states contract 4 and marks process-based watch partial; no guide overrides remain. Models download is the canonical command in v0.28.0; search/scenario examples and the reference were updated in RU/ES. Automatic-start mirror service, local images, front matter, larger annotation copying, mirror deletions and hosted MCP remain planned."
   },
   "memo": {
     "version": "v0.91.0",

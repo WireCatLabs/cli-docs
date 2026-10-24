@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 `zm` is a command line and an MCP server for the Zoom meetings of your own account. This page puts it next to the
 other command lines, MCP servers and scripts that use a Zoom account through Zoom's API, so you can see which one
-fits your job. The marks for `zm` come from its source code on `main` (version 0.40.0), checked on 24 October 2026. The
+fits your job. The marks for `zm` come from its source code on `main`, checked on 24 October 2026. The
 marks for the other tools come from their own READMEs and documentation, checked on 24 October 2026. Nothing was
 logged in to or tested live, and a tool may do more than its pages say.
 
@@ -16,7 +16,7 @@ The tools:
   server that Zoom hosts, with 9 tools, from the official [zoom/skills](https://github.com/zoom/skills) repository
   (updated 20 October 2026).
 - **[zoom-cli by rvben](https://github.com/rvben/zoom-cli)**: a Rust command line for the Zoom API: meetings,
-  recordings, users, webinars and reports (v0.2.9, updated 19 October 2026).
+  recordings, users, webinars and reports (updated 19 October 2026).
 - **[zoom-agent-cli](https://github.com/bcharleson/zoom-agent-cli)**: a command line and MCP server for the Zoom API,
   61 commands (updated 8 September 2026).
 - **[zoom-recording-downloader](https://github.com/ricardorodrigues-ca/zoom-recording-downloader)**: a Python script

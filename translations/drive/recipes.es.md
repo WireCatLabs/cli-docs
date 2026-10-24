@@ -398,21 +398,27 @@ conserva el formato original; no convierte Markdown local en un Google Doc con f
 
 ## Usar un cliente MCP local
 
-Para agentes sin terminal, configura ejecutable `drive` y argumentos `personal --read-only mcp`.
+Añade `--read-only` si este servidor debe rechazar escrituras.
+
+Para agentes sin terminal, configura el ejecutable `drive` y los argumentos `personal mcp`.
 La cuenta conectada debe estar en el ordenador que ejecuta el servidor.
 
 ```sh
-drive personal --read-only mcp --tools --json
-drive personal --read-only mcp
+drive personal mcp --tools --json
+drive personal mcp
 ```
 
-El servidor ofrece tres tools: `drive_tools_search` encuentra un comando y muestra sus argumentos, y
-`drive_read` o `drive_write` lo ejecuta con `{ command, arguments }`. El primer comando de arriba lista
-esos comandos, así que revísalo antes de iniciar el servidor stdio. Usa el mismo árbol de comandos,
-perfil y controles; `drive_write` no se ofrece cuando el perfil no permite escrituras. Los comandos que
-cambian archivos de Google, leen Drive Activity o listan apps de Drive solo se ofrecen si el perfil
-inició sesión con `--grant write`, `activity` o `apps`; reinicia el servidor tras volver a iniciar sesión. No es un conector HTTP alojado para navegador. Consulta
-[la referencia completa](./commands.md) para otras operaciones.
+El servidor ofrece tres herramientas: `drive_tools_search` encuentra un comando y muestra sus argumentos,
+y `drive_read` o `drive_write` lo ejecuta con `{ command, arguments }`. El primer comando de arriba
+lista los comandos disponibles: revísalos antes de iniciar el servidor stdio. Los argumentos MCP
+usan snake_case, por ejemplo `file_id`; la opción CLI correspondiente es `--file-id`.
+El servidor usa el mismo árbol, perfil y controles; `drive_write` no se ofrece si el perfil no permite
+escrituras. Los comandos que cambian archivos Google, leen Drive Activity o listan apps de Drive
+solo se ofrecen con las autorizaciones `--grant write`, `activity` o `apps`; reinicia el servidor
+tras volver a iniciar sesión. Cambiar ajustes e instalar la habilidad requiere que el propietario
+permita `permissions.mcp.authority`; el agente no puede modificar ese control por sí mismo.
+Las exportaciones y descargas aceptan un nombre de archivo dentro de la carpeta de exportación
+de la caché del perfil. No es un conector HTTP alojado para navegador. Consulta [la referencia completa](./commands.md).
 
 ## Encontrar un documento y la conversación donde se compartió
 

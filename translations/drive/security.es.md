@@ -6,6 +6,9 @@ Decide qué pueden leer o cambiar Drive y tu agente antes de conectar fuentes se
 Esta guía explica las autorizaciones de Google, el almacenamiento y los permisos de comandos
 para elegir el alcance, saber dónde van los datos y distinguir desconectar de borrar copias.
 
+La [guía de seguridad compartida de WireCat](https://wirecat.dev/en/docs/security) explica las protecciones
+y cómo informar de problemas en todas las herramientas. Esta página trata los permisos y datos de Drive.
+
 ## Acceso a Google y permisos de comandos
 
 La autorización predeterminada es `drive.readonly` sobre el Drive de la cuenta. Las carpetas

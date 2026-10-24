@@ -214,6 +214,30 @@ drive personal documents context DOC_ID --json
 переименование и повторную синхронизацию. `documents context` объединяет заметки, метки, связи,
 память и наблюдаемых редакторов. Проверенные факты и связи с людьми/проектами описаны в [сценариях](./recipes.md).
 
+## Скачать или преобразовать файл Google
+
+Эти команды читают Google напрямую: импортировать файл заранее не нужно.
+
+```sh
+drive personal files download FILE_ID --out ./download.bin
+drive personal files export DOC_ID --format pdf --out ./document.pdf
+drive personal files export DOC_ID --format docx --out ./document.docx
+drive personal files export SHEET_ID --format xlsx --out ./workbook.xlsx
+drive personal files export SHEET_ID --format csv --out ./sheet.csv
+```
+
+`download` сохраняет байты загруженного файла. `export` просит Google преобразовать собственный
+документ: выберите поддерживаемый формат для его типа — PDF или DOCX для Документов, XLSX или CSV
+для Таблиц. CSV содержит только первый лист. Google ограничивает собственный экспорт 10 МБ,
+а Drive — любое скачивание 50 МБ. Эти команды не добавляют файл в поиск и не меняют его в Google.
+Google Vids требует длительной операции API и не поддерживается этими удобными командами.
+
+Существующий файл, включая символическую ссылку, отклоняется до скачивания. Для замены передайте
+`--overwrite`. Результат содержит ID и число байт без названия документа и локального пути.
+Обе команды пишут локальный файл, поэтому `--read-only` запрещает их; `--dry-run` показывает план
+без скачивания. Прежняя команда `documents export --output PATH` записывает импортированный
+снимок Markdown без обращения к Google.
+
 ## Экспортировать или прекратить импорт
 
 ```sh
@@ -240,7 +264,7 @@ JSON и JSONL позволяют другому инструменту чита�
 и статус `complete`. Ключи Drive записаны в snake_case. Метаданные провайдера и пользовательские
 словари сохраняют свои ключи. Фрагменты поиска находятся в `item.hits`, счётчики sync/status — в `item`.
 Справка и дополнение оболочки остаются текстовыми; `commands --json` использует общее дерево
-команд с контрактом `3`. Поле `effects` описывает чтение и запись удалённых и локальных данных,
+команд с контрактом `4`. Поле `effects` описывает чтение и запись удалённых и локальных данных,
 а `api_operation` указывает сгенерированный метод Google. Локальные списки используют `page.mode: "page"`
 и возвращают `next_page`, если остались результаты. Списки Google
 (`files list`, `comments list`, `permissions list`, `revisions list`, `shared-drives`, `documents history`)
