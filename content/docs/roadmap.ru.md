@@ -20,9 +20,7 @@ WireCat собирает ваш контекст в одном месте. Со�
 Уже работают встречи [Zoom](./zoom.mdx) и документы [Google Drive](./drive/index.md). См.
 [возможности](./features.mdx).
 
-## В работе
-
-- **WhatsApp** — сообщения, группы и файлы.
+Также доступны чаты [WhatsApp](./wa/index.md) и боты бизнес-номеров.
 
 ## Дальше
 
@@ -49,5 +47,6 @@ WireCat собирает ваш контекст в одном месте. Со�
 - [Планы Zoom](./zm/roadmap.md)
 - [Планы Google Drive](./drive/roadmap.md)
 - [Планы Memo](./memo/roadmap.md)
+- [Планы WhatsApp](./wa/roadmap.md)
 
 Предложить источник или функцию можно в issue в GitHub-репозитории инструмента.

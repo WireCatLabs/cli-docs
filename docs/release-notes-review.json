@@ -28,5 +28,11 @@
     "roadmapSha256": "9a3152425ccf546ce7d917cc747229e4662d592c057a38f6aa57f670541bcf16",
     "reviewedAt": "2026-10-24",
     "conclusion": "Reviewed Memo 0.91.0: command-derived MCP coverage with 37 preserved legacy tool names, saved permissions and stricter-only server overrides, opening cited notes/messages, explicit delegated meeting/annotation decisions, local model download, explicit Himalaya account add/check and all shared meeting selectors. Source versions match tg: core 0.404.0, base 0.50.3. Reviewed EN sources and RU/ES updates for commands, configuration, how-it-works, index, installation, mail, MCP, memories, notes, recipes, roadmap, search, security, troubleshooting and changelog; added the comparison page in RU/ES. Portal corrections clarify explicit meeting delegation and remote versus local model use. Roadmap removes shipped model download, account setup and cited-item reads; HTTP, visual UI, full graph export and engine benchmark results remain unshipped. Individual MCP tools remain a known standards gap (MEMO-31); this review does not certify full standards compliance."
+  },
+  "wa": {
+    "version": "v0.6.0",
+    "roadmapSha256": "48d534979d6841392f23b73c07978d17fd4eae3d651c432ebe419381a139c26b",
+    "reviewedAt": "2026-10-24",
+    "conclusion": "Reviewed v0.6.0 changelog, command capture and public guides. Cloud API business bots and verified attachment archives ship in this release; the native roadmap incorrectly retains them as in progress. A source-linked portal correction in scripts/docs-corrections.json moves them to current capabilities in EN/RU/ES and keeps channel files, old media, business labels, guide scenarios, broader albums, communities and sent-reaction storage as future work. Personal device linking and Cloud API business profiles remain separate."
   }
 }

@@ -123,10 +123,10 @@ describe("sidebar icon coverage", () => {
     }
     const slugs = new Set(
       shared.pages
-        .filter((slug) => !slug.startsWith("---") && !["tg", "max"].includes(slug))
+        .filter((slug) => !slug.startsWith("---") && !["tg", "max", "wa"].includes(slug))
         .map((slug) => /^\[[^\]]+\]\(\/[a-z]{2}\/docs\/([^)]+)\)$/.exec(slug)?.[1].split("/").at(-1) ?? slug),
     )
-    for (const tool of ["tg", "max", "memo", "zm"])
+    for (const tool of ["tg", "max", "wa", "memo", "zm"])
       for (const file of readdirSync(new URL(`../translations/${tool}/`, import.meta.url)))
         if (/\.(en|ru|es)\.md$/.test(file)) slugs.add(file.replace(/\.(en|ru|es)\.md$/, ""))
     for (const slug of slugs) {
@@ -145,5 +145,17 @@ it("links every current tool's roadmap from each global roadmap", () => {
   for (const suffix of ["", ".ru", ".es"]) {
     const roadmap = readFileSync(`content/docs/roadmap${suffix}.md`, "utf8")
     for (const tool of tools) expect(roadmap).toContain(`](./${tool.name}/roadmap.md)`)
+  }
+})
+
+it("keeps the current section when switching to or from WhatsApp", () => {
+  expect(messengerHref("/ru/docs/wa/installation", "ru", "tg", ["tg/installation"])).toBe("/ru/docs/tg/installation")
+  expect(messengerHref("/es/docs/tg/usage", "es", "wa", ["wa/usage"])).toBe("/es/docs/wa/usage")
+})
+
+it("includes every released messenger in the full navigation used by the switcher", () => {
+  for (const suffix of ["", ".ru", ".es"]) {
+    const meta = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }
+    for (const tool of ["tg", "max", "wa"]) expect(meta.pages).toContain(tool)
   }
 })

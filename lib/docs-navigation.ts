@@ -2,7 +2,7 @@
 export function messengerHref(pathname: string, lang: string, tool: string, pages: readonly string[]): string {
   const prefix = `/${lang}/docs/`
   const slugs = pathname.startsWith(prefix) ? pathname.slice(prefix.length).split("/").filter(Boolean) : []
-  const section = slugs[0] === "tg" || slugs[0] === "max" ? slugs.slice(1) : []
+  const section = ["tg", "max", "wa"].includes(slugs[0]) ? slugs.slice(1) : []
   const target = [tool, ...section].join("/")
   return `/${lang}/docs/${pages.includes(target) ? target : tool}`
 }

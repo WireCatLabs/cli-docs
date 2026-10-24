@@ -2048,5 +2048,465 @@
         }
       ]
     }
+  },
+  {
+    "tool": "wa",
+    "slug": "roadmap",
+    "reason": "WhatsApp v0.6.0 changelog and released bot/attachments guides ship both items still listed as in progress. Keep the release source traceable; remove test provenance and retain only future work.",
+    "replacements": {
+      "en": [
+        {
+          "before": "---\ntitle: \"Roadmap\"\n---\n\nThis page lists what is planned for `wa` and is not in it yet. Read it before you build a workaround for a missing\nfeature: it may already be on the way. The order is approximate and can change. To suggest something, open an\n[issue on GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## What works today\n\n`wa` links to your account as a device and keeps your chats in a local store: reading, search, sending text and\nfiles, replies, edits, deletes, reactions, polls, groups, channels, people and your own profile. The guide is\n[using wa](./usage.md), and every command is in the [command reference](./commands.md). What `wa` cannot do, and why,\nis in [not in wa yet](./usage.md#not-in-wa-yet). `wa` is early: some of it has not been checked on real phones yet.\n\n## In progress\n\n- **Bots through WhatsApp's official Cloud API**: a business number answering from `wa`, apart from your personal\n  account.\n- **A checked archive of your files**: saving every received file into a folder of your choice, with a check that\n  each copy is complete.\n\n## Next\n\n- **Files in channels**: saving one from a post, and an album to a channel you run.\n- **Old files**: downloading a file that WhatsApp no longer keeps on its servers, from your phone.\n- **Business accounts**: WhatsApp Business labels, and another business's profile.\n- **A guide command** that walks you through common tasks step by step.\n\n## Later\n\n- **More files in one message** than a photo and a video, and previews on sent videos and WEBP photos.\n- **Communities**: listing a community's groups, and adding a group to one or taking it out. A group already\n  names its community ([communities](./groups.md#communities)).\n- **Your reactions in the local store**: a reaction you send is kept on this computer too, as one from your phone is.\n\nWhat each released version changed is in the [changelog](./changelog.md).\n",
+          "after": "---\ntitle: \"Roadmap\"\n---\n\nUse this roadmap to check whether a missing WhatsApp feature is planned before building a workaround. The order can change; suggest a task in [GitHub issues](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## What works today\n\nThe personal-account tool links as a device and keeps chats in the local store: reading, search, text and files, replies, edits, deletes, reactions, polls, groups, channels and contacts. See [using wa](./usage.md) and the [command reference](./commands.md). [Current limitations](./usage.md#not-in-wa-yet) explain unsupported commands.\n\nBusiness-number bots use Meta’s Cloud API independently of personal device linking; see [business bots](./bot.md). The [attachment archive](./attachments.md) saves available files with size and SHA-256 manifests, checks copies offline and supports opt-in daily jobs on Linux.\n\n## In progress\n\nNo additional work is listed here. The next planned tasks follow.\n\n## Next\n\n- Save files from channel posts and send albums to a channel you administer.\n- Download files that WhatsApp no longer keeps by requesting a new copy from the phone.\n- WhatsApp Business labels and another business’s profile.\n- A guide command for common tasks.\n\n## Later\n\n- More files in one message than a photo and video, and previews on sent videos and WEBP photos.\n- List a community’s groups and add or remove a group. A group already names its [community](./groups.md#communities).\n- Keep reactions you send in the local store, as reactions arriving from the phone are kept.\n\nReleased changes are in the [changelog](./changelog.md).\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "---\ntitle: \"Планы\"\n---\n\nНа этой странице перечислено то, что запланировано для `wa` и чего еще нет. Прочтите его, прежде чем придумывать обходной путь для отсутствующей функции: возможно, он уже в разработке. Порядок примерный и может меняться. Чтобы что-то предложить, откройте [issue на GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## Что работает сегодня\n\n`wa` привязывается к вашему аккаунту как к устройству и сохраняет ваши чаты в локальном хранилище: чтение, поиск, отправка текста и файлов, ответы, редактирование, удаление, реакции, опросы, группы, каналы, люди и ваш собственный профиль. Руководство по [использованию wa](./usage.md), а каждая команда находится в [справке по командам](./commands.md). То, что `wa` не может сделать и почему, находится в [пока не в wa](./usage.md#not-in-wa-yet). `wa` ранний: часть его еще не проверена на реальных телефонах.\n\n## В процессе\n\n- **Боты через официальный облачный API WhatsApp**: рабочий номер, отвечающий с `wa`, помимо вашего личного аккаунта.\n- **Проверенный архив ваших файлов**: сохранение каждого полученного файла в выбранную вами папку с проверкой целостности каждой копии.\n\n## Далее\n\n- **Файлы в каналах**: сохранение одного из сообщений и альбома на канале, который вы ведете.\n- **Старые файлы**: загрузка с телефона файла, который WhatsApp больше не хранит на своих серверах.\n- **Бизнес-аккаунты**: ярлыки WhatsApp Business и профиль другой компании.\n- **Помощь**, которая шаг за шагом поможет вам выполнить типичные задачи.\n\n## Позже\n\n- **Больше файлов в одном сообщении**, чем фото и видео, а также превью отправленных видео и фотографий WEBP.\n- **Сообщества**: список групп сообщества, добавление группы в одну или удаление ее. Группа уже называет свое сообщество ([communities](./groups.md#communities)).\n- **Ваши реакции в локальном хранилище**: отправленные вами реакции сохраняются на этом компьютере так же, как и реакции с вашего телефона.\n\nИзменения в каждой выпущенной версии можно найти в [списке изменений](./changelog.md).\n",
+          "after": "---\ntitle: \"Планы\"\n---\n\nПеред поиском обходного решения проверьте, запланирована ли нужная функция WhatsApp. Порядок может меняться; предложить задачу можно в [issues на GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## Что уже работает\n\nИнструмент личного аккаунта привязывается как устройство и сохраняет чаты локально: чтение, поиск, текст и файлы, ответы, редактирование, удаление, реакции, опросы, группы, каналы и контакты. Начните с [использования wa](./usage.md) и [справочника команд](./commands.md). [Текущие ограничения](./usage.md#not-in-wa-yet) объясняют, какие команды не поддерживаются.\n\nБоты бизнес-номеров используют Cloud API Meta отдельно от привязки личного устройства; см. [бизнес-ботов](./bot.md). [Архив вложений](./attachments.md) сохраняет доступные файлы с размером и SHA-256, проверяет копии без сети и поддерживает ежедневные задания по выбору пользователя в Linux.\n\n## В работе\n\nДругих задач здесь пока нет. Следующие запланированные задачи перечислены ниже.\n\n## Дальше\n\n- Сохранение файлов из публикаций каналов и отправка альбомов в свой канал.\n- Загрузка файлов, которые WhatsApp больше не хранит, через запрос новой копии с телефона.\n- Метки WhatsApp Business и профиль другой компании.\n- Команда с пошаговыми сценариями частых задач.\n\n## Позже\n\n- Больше файлов в сообщении, чем фотография и видео, и предпросмотр отправленных видео и фотографий WEBP.\n- Список групп сообщества, добавление группы и удаление из него. Группа уже указывает своё [сообщество](./groups.md#communities).\n- Сохранение отправленных вами реакций в локальном хранилище, как реакций с телефона.\n\nИзменения выпусков — в [истории изменений](./changelog.md).\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "---\ntitle: \"Hoja de ruta\"\n---\n\nEsta página enumera lo que está planeado para `wa` y aún no está incluido. Léelo antes de crear una solución alternativa para una característica faltante: es posible que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abra un [problema en GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## Lo que funciona hoy\n\n`wa` se vincula a tu cuenta como un dispositivo y mantiene tus chats en un almacén local: lectura, búsqueda, envío de textos y archivos, respuestas, ediciones, eliminaciones, reacciones, encuestas, grupos, canales, personas y su propio perfil. La guía está [usando wa](./usage.md), y cada comando está en la [referencia de comando](./commands.md). Lo que `wa` no puede hacer y por qué está en [aún no está en wa](./usage.md#not-in-wa-yet). `wa` es temprano: parte de esto aún no se ha verificado en teléfonos reales.\n\n## En progreso\n\n- **Bots a través de la API Cloud oficial de WhatsApp**: un número comercial que atiende desde `wa`, aparte de tu cuenta personal.\n- **Un archivo verificado de tus archivos**: guarda cada archivo recibido en una carpeta de tu elección, con una verificación de que cada copia esté completa.\n\n## Siguiente\n\n- **Archivos en canales**: guarda uno de una publicación y un álbum en un canal que ejecutas.\n- **Archivos antiguos**: descargar desde tu teléfono un archivo que WhatsApp ya no guarda en sus servidores.\n- **Cuentas comerciales**: etiquetas de WhatsApp Business y el perfil de otro negocio.\n- **Un comando guía** que te guía paso a paso a través de tareas comunes.\n\n## Más tarde\n\n- **Más archivos en un mensaje** que una foto y un video, y vistas previas de videos enviados y fotos WEBP.\n- **Comunidades**: enumerar los grupos de una comunidad y agregar un grupo a uno o eliminarlo. Un grupo ya nombra su comunidad ([comunidades](./groups.md#communities)).\n- **Tus reacciones en el almacén local**: una reacción que envías también se guarda en esta computadora, al igual que una reacción de tu teléfono.\n\nLo que cambió cada versión lanzada se encuentra en el [registro de cambios](./changelog.md).\n",
+          "after": "---\ntitle: \"Hoja de ruta\"\n---\n\nAntes de buscar una solución alternativa, comprueba si la función de WhatsApp que necesitas está prevista. El orden puede cambiar; propón una tarea en [GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## Qué funciona hoy\n\nLa herramienta de la cuenta personal se vincula como dispositivo y guarda chats localmente: lectura, búsqueda, texto y archivos, respuestas, ediciones, eliminaciones, reacciones, encuestas, grupos, canales y contactos. Consulta [usar wa](./usage.md) y la [referencia de comandos](./commands.md). Las [limitaciones actuales](./usage.md#not-in-wa-yet) explican qué comandos no se admiten.\n\nLos bots de números empresariales usan la Cloud API de Meta por separado de la vinculación personal; consulta [bots de empresa](./bot.md). El [archivo de adjuntos](./attachments.md) guarda los archivos disponibles con tamaños y SHA-256, comprueba copias sin conexión y ofrece tareas diarias opcionales en Linux.\n\n## En curso\n\nNo se enumeran otras tareas aquí. Los próximos trabajos previstos aparecen a continuación.\n\n## A continuación\n\n- Guardar archivos de publicaciones de canales y enviar álbumes a un canal que administras.\n- Descargar archivos que WhatsApp ya no conserva pidiendo una nueva copia al teléfono.\n- Etiquetas de WhatsApp Business y el perfil de otra empresa.\n- Un comando de guía para tareas habituales.\n\n## Más adelante\n\n- Más archivos por mensaje que una foto y un vídeo, y vistas previas de vídeos y fotos WEBP enviados.\n- Listar grupos de una comunidad y añadir o quitar un grupo. Un grupo ya indica su [comunidad](./groups.md#communities).\n- Guardar en el almacén local las reacciones que envías, como las que llegan del teléfono.\n\nLos cambios publicados están en el [historial](./changelog.md).\n"
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/roadmap.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "mcp",
+    "reason": "Remove an unmeasured token-cost comparison; command availability is established by the release contract, token equivalence is not.",
+    "replacements": {
+      "en": [
+        {
+          "before": "which costs the same tokens and can do the same things",
+          "after": "which exposes the same commands"
+        }
+      ],
+      "ru": [
+        {
+          "before": "который стоит тех же токенов и может делать те же самые действия",
+          "after": "который предоставляет те же команды"
+        }
+      ],
+      "es": [
+        {
+          "before": "que cuesta los mismos tokens y puede hacer las mismas cosas",
+          "after": "que ofrece los mismos comandos"
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "search",
+    "reason": "The pinned Memo command contract uses sync --only mail and sync --only notes; sync --mail and import are obsolete. Preserve the native WhatsApp release while correcting its cross-tool examples.",
+    "replacements": {
+      "en": [
+        {
+          "before": "memo sync --mail",
+          "after": "memo sync --only mail"
+        },
+        {
+          "before": "memo import",
+          "after": "memo sync --only notes"
+        }
+      ],
+      "ru": [
+        {
+          "before": "memo sync --mail",
+          "after": "memo sync --only mail"
+        },
+        {
+          "before": "memo import",
+          "after": "memo sync --only notes"
+        }
+      ],
+      "es": [
+        {
+          "before": "memo sync --mail",
+          "after": "memo sync --only mail"
+        },
+        {
+          "before": "memo import",
+          "after": "memo sync --only notes"
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/search.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "usage",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "replacements": {
+      "en": [
+        {
+          "before": "WhatsApp names a message by who sent it as well as by its id, so these work on messages the local store holds; keep\n`serve` running. An edit works on your own message within 20 minutes of sending. A deletion is for you only: `wa`\nasks WhatsApp to take it from your phone and your other devices, to leave it with the others in the chat, and to\nkeep the photos and files the phone saved from it. That is not yet checked on a phone. `--for-everyone` removes it\nfor everyone. Every pin tells the chat's members: WhatsApp has no quiet pin, so no flag is needed. A pin lasts 24\nhours, 7 days or 30 days (`--expire-time 24h`, `7d`, `30d`); without `--expire-time`, `wa` pins for 7 days. Nothing\nis marked read by reading commands. Use `chats mark-read` to send a read receipt explicitly.",
+          "after": "WhatsApp names a message by who sent it as well as by its id, so these work on messages the local store holds; keep\n`serve` running. An edit works on your own message within 20 minutes of sending. A deletion is for you only: `wa`\nasks WhatsApp to take it from your phone and your other devices, to leave it with the others in the chat, and to\nkeep the photos and files the phone saved from it. `--for-everyone` removes it\nfor everyone. Every pin tells the chat's members: WhatsApp has no quiet pin, so no flag is needed. A pin lasts 24\nhours, 7 days or 30 days (`--expire-time 24h`, `7d`, `30d`); without `--expire-time`, `wa` pins for 7 days. Nothing\nis marked read by reading commands. Use `chats mark-read` to send a read receipt explicitly."
+        },
+        {
+          "before": "A star is your own mark, which WhatsApp syncs to your other devices; nobody in the chat is told. Like an edit, it\nneeds the message in the local store. The local store keeps a star you set with `wa`:\n`wa personal messages list \"Book club\" starred:true` and `wa personal search messages is:starred` find those\nmessages. While `serve` or `watch` runs, a star you set or take off on the phone reaches the store too, and\n`watch --events` prints it; so do the stars of the messages the phone pushes right after linking. Whether the phone\nshows a star set with `wa` has not been checked yet.\nStar a channel's post on the phone.",
+          "after": "A star is your own mark, which WhatsApp syncs to your other devices; nobody in the chat is told. Like an edit, it\nneeds the message in the local store. The local store keeps a star you set with `wa`:\n`wa personal messages list \"Book club\" starred:true` and `wa personal search messages is:starred` find those\nmessages. While `serve` or `watch` runs, a star you set or take off on the phone reaches the store too, and\n`watch --events` prints it; so do the stars of the messages the phone pushes right after linking.\nStar a channel's post on the phone."
+        },
+        {
+          "before": "Muting is your own setting, which WhatsApp syncs to your other devices; nobody in the chat is told. Whether the phone\napplies it to a one-to-one chat has not been checked yet. A device linked a few minutes ago may not have WhatsApp's\nsettings keys yet; keep `serve` running a while and try again. Mute a channel on the phone.",
+          "after": "Muting is your own setting, which WhatsApp syncs to your other devices; nobody in the chat is told. A device linked a few minutes ago may not have WhatsApp's\nsettings keys yet; keep `serve` running a while and try again. Mute a channel on the phone."
+        },
+        {
+          "before": "These are your own settings too, synced to your other devices; nobody in the chat is told. `chats pin` pins the\nchat, not a message. Archiving a chat also unpins it (whatsmeow's archive patch does both). WhatsApp's apps keep\nthree pinned chats; `wa` does not count them, and what the phone does with a fourth has not been checked. Archive,\nunarchive and mark-unread name the chat's newest message in the local store, as `chats delete` does, so a chat the\nstore holds nothing of is refused. Channels are refused. A chat marked unread sends no read receipt. In your own chat\nthe phone shows pin, unpin, archive, unarchive and mark-unread (checked 2026-10-18); other chats are not checked yet.",
+          "after": "These are your own settings too, synced to your other devices; nobody in the chat is told. `chats pin` pins the\nchat, not a message. Archiving a chat also unpins it (whatsmeow's archive patch does both). WhatsApp's apps keep\nthree pinned chats; `wa` does not count them. Archive,\nunarchive and mark-unread name the chat's newest message in the local store, as `chats delete` does, so a chat the\nstore holds nothing of is refused. Channels are refused. A chat marked unread sends no read receipt."
+        },
+        {
+          "before": "`chats mark-read` first sends the same settings change with \"read\", up to the newest stored message (or\n`--until-id`), then the read receipt; a receipt alone leaves a mark-unread on the phone. Until WhatsApp has sent the\nsettings keys it is refused and sends neither. A channel gets the receipt only. That the phone takes the mark off\nthis way is not checked yet.",
+          "after": "`chats mark-read` first sends the same settings change with \"read\", up to the newest stored message (or\n`--until-id`), then the read receipt; a receipt alone leaves a mark-unread on the phone. Until WhatsApp has sent the\nsettings keys it is refused and sends neither. A channel gets the receipt only."
+        },
+        {
+          "before": "Both are for your devices alone: the others in the chat keep it and its messages. Without `--allow-dangerous` they ask\nfirst in a terminal and refuse in a script. WhatsApp deletes up to a message `wa` names: the chat's newest one in the\nlocal store, so keep `serve` running for it to be current, and a chat the store holds nothing of is refused. `wa`\nasks WhatsApp to leave the photos and files the phone saved from the chat. `wa`'s local store still holds the\nmessages afterwards. None of this has been checked on a phone yet.",
+          "after": "Both are for your devices alone: the others in the chat keep it and its messages. Without `--allow-dangerous` they ask\nfirst in a terminal and refuse in a script. WhatsApp deletes up to a message `wa` names: the chat's newest one in the\nlocal store, so keep `serve` running for it to be current, and a chat the store holds nothing of is refused. `wa`\nasks WhatsApp to leave the photos and files the phone saved from the chat. `wa`'s local store still holds the\nmessages afterwards."
+        },
+        {
+          "before": "- **`--last-seen`, `--profile-photo` and `--about-text`** take everyone, contacts or nobody. A setting kept on the\n  phone as \"my contacts except…\" shows as `contacts_except`; `set` cannot choose it, since the list of exceptions\n  stays on the phone, and setting another value replaces it.\n- **`--hide-online on`** sets last seen to nobody and online to \"same as last seen\", so nobody sees either.\n  `--hide-online off` shows last seen to your contacts, since `wa` does not know the setting from before it was\n  hidden; `--last-seen everyone` instead chooses who. Give one of the two, not both.\n- **`--read-receipts off`** works both ways, as on the phone: others no longer see when you read their messages,\n  and you no longer see when they read yours. `chats mark-read` then marks a chat read on your own devices only\n  (whatsmeow sends a read receipt only to your devices while receipts are off; read in its code, not checked on a\n  real account).\n- **`--chat-invites`** takes everyone or contacts: WhatsApp is reported to refuse nobody, so `wa` refuses it. A\n  setting kept with exceptions on the phone is left out of `show`.\n- **`--calls contacts`** is meant as the phone's \"silence unknown callers\" (calls from people you do not know arrive\n  without ringing); this is not yet checked on a real account. WhatsApp has no `--calls nobody`, so `wa` refuses it.",
+          "after": "- **`--last-seen`, `--profile-photo` and `--about-text`** take everyone, contacts or nobody. A setting kept on the\n  phone as \"my contacts except…\" shows as `contacts_except`; `set` cannot choose it, since the list of exceptions\n  stays on the phone, and setting another value replaces it.\n- **`--hide-online on`** sets last seen to nobody and online to \"same as last seen\", so nobody sees either.\n  `--hide-online off` shows last seen to your contacts, since `wa` does not know the setting from before it was\n  hidden; `--last-seen everyone` instead chooses who. Give one of the two, not both.\n- **`--read-receipts off`** works both ways, as on the phone: others no longer see when you read their messages,\n  and you no longer see when they read yours. `chats mark-read` then marks a chat read on your own devices only\n  (whatsmeow sends a read receipt only to your devices while receipts are off).\n- **`--chat-invites`** takes everyone or contacts: WhatsApp is reported to refuse nobody, so `wa` refuses it. A\n  setting kept with exceptions on the phone is left out of `show`.\n- **`--calls contacts`** is meant as the phone's \"silence unknown callers\" (calls from people you do not know arrive\n  without ringing). WhatsApp has no `--calls nobody`, so `wa` refuses it."
+        }
+      ],
+      "ru": [
+        {
+          "before": "WhatsApp определяет сообщение по отправителю и идентификатору, поэтому эти команды работают с сообщениями из локального хранилища; оставьте `serve` работающим. Своё сообщение можно исправить в течение 20 минут после отправки. По умолчанию удаление затрагивает только вас: `wa` просит WhatsApp убрать сообщение с вашего телефона и других устройств, оставить его у собеседников и сохранить фотографии и файлы, уже сохранённые телефоном. Это ещё не проверено на телефоне. `--for-everyone` удаляет сообщение у всех. О каждом закреплении узнают участники чата: тихого закрепления в WhatsApp нет, поэтому отдельный флаг не нужен. Срок закрепления — 24 часа, 7 или 30 дней (`--expire-time 24h`, `7d`, `30d`); без `--expire-time` команда `wa` закрепляет на 7 дней. Чтение не помечает сообщения прочитанными. Чтобы явно отправить уведомление о прочтении, используйте `chats mark-read`.",
+          "after": "WhatsApp определяет сообщение по отправителю и идентификатору, поэтому эти команды работают с сообщениями из локального хранилища; оставьте `serve` работающим. Своё сообщение можно исправить в течение 20 минут после отправки. По умолчанию удаление затрагивает только вас: `wa` просит WhatsApp убрать сообщение с вашего телефона и других устройств, оставить его у собеседников и сохранить фотографии и файлы, уже сохранённые телефоном. `--for-everyone` удаляет сообщение у всех. О каждом закреплении узнают участники чата: тихого закрепления в WhatsApp нет, поэтому отдельный флаг не нужен. Срок закрепления — 24 часа, 7 или 30 дней (`--expire-time 24h`, `7d`, `30d`); без `--expire-time` команда `wa` закрепляет на 7 дней. Чтение не помечает сообщения прочитанными. Чтобы явно отправить уведомление о прочтении, используйте `chats mark-read`."
+        },
+        {
+          "before": "Звёздочка — ваша личная отметка, которую WhatsApp синхронизирует с другими вашими устройствами; участники чата не получают уведомлений. Как и для редактирования, сообщение должно быть в локальном хранилище. Хранилище сохраняет отметку, поставленную через `wa`: такие сообщения находят `wa personal messages list \"Book club\" starred:true` и `wa personal search messages is:starred`. Пока работает `serve` или `watch`, поставленная или снятая на телефоне отметка тоже попадает в хранилище, а `watch --events` выводит событие. Сохраняются и отметки сообщений из истории, которую телефон передаёт сразу после привязки. Отображение на телефоне звёздочки, поставленной через `wa`, ещё не проверено. Публикацию канала отмечайте на телефоне.",
+          "after": "Звёздочка — ваша личная отметка, которую WhatsApp синхронизирует с другими вашими устройствами; участники чата не получают уведомлений. Как и для редактирования, сообщение должно быть в локальном хранилище. Хранилище сохраняет отметку, поставленную через `wa`: такие сообщения находят `wa personal messages list \"Book club\" starred:true` и `wa personal search messages is:starred`. Пока работает `serve` или `watch`, поставленная или снятая на телефоне отметка тоже попадает в хранилище, а `watch --events` выводит событие. Сохраняются и отметки сообщений из истории, которую телефон передаёт сразу после привязки. Публикацию канала отмечайте на телефоне."
+        },
+        {
+          "before": "Отключение звука — ваша настройка, синхронизируемая между устройствами; участники чата не получают уведомлений. Применение этой настройки на телефоне к личной переписке ещё не проверено. У недавно привязанного устройства может пока не быть ключей настроек WhatsApp: оставьте `serve` работающим и повторите попытку позже. Звук канала отключайте на телефоне.",
+          "after": "Отключение звука — ваша настройка, синхронизируемая между устройствами; участники чата не получают уведомлений. У недавно привязанного устройства может пока не быть ключей настроек WhatsApp: оставьте `serve` работающим и повторите попытку позже. Звук канала отключайте на телефоне."
+        },
+        {
+          "before": "Это тоже ваши настройки, синхронизируемые между устройствами; участники чата не получают уведомлений. `chats pin` закрепляет чат, а не сообщение. Архивирование также открепляет чат: операция архивирования whatsmeow делает и то и другое. Приложения WhatsApp поддерживают три закреплённых чата; `wa` их не считает, а поведение телефона при четвёртом закреплении не проверено. Архивирование, возврат из архива и отметка непрочитанного используют последнее сообщение чата в локальном хранилище, как и `chats delete`; пустой для хранилища чат отклоняется. Каналы не поддерживаются. Отметка непрочитанного не отправляет уведомления о прочтении. В чате с собой телефон отображает закрепление, открепление, архивирование, возврат из архива и отметку непрочитанного (проверено 2026-10-18); другие чаты ещё не проверены.",
+          "after": "Это тоже ваши настройки, синхронизируемые между устройствами; участники чата не получают уведомлений. `chats pin` закрепляет чат, а не сообщение. Архивирование также открепляет чат: операция архивирования whatsmeow делает и то и другое. Приложения WhatsApp поддерживают три закреплённых чата; `wa` их не считает. Архивирование, возврат из архива и отметка непрочитанного используют последнее сообщение чата в локальном хранилище, как и `chats delete`; пустой для хранилища чат отклоняется. Каналы не поддерживаются. Отметка непрочитанного не отправляет уведомления о прочтении."
+        },
+        {
+          "before": "`chats mark-read` сначала отправляет изменение настройки «прочитано» до последнего сохранённого сообщения (либо `--until-id`), затем уведомление о прочтении: одно уведомление не снимает отметку непрочитанного на телефоне. Пока WhatsApp не прислал ключи настроек, команда отклоняется и не отправляет ни того, ни другого. Для канала отправляется только уведомление. Снятие отметки этим способом на телефоне ещё не проверено.",
+          "after": "`chats mark-read` сначала отправляет изменение настройки «прочитано» до последнего сохранённого сообщения (либо `--until-id`), затем уведомление о прочтении: одно уведомление не снимает отметку непрочитанного на телефоне. Пока WhatsApp не прислал ключи настроек, команда отклоняется и не отправляет ни того, ни другого. Для канала отправляется только уведомление."
+        },
+        {
+          "before": "Обе команды действуют только на ваших устройствах: у собеседников чат и сообщения остаются. Без `--allow-dangerous` в терминале запрашивается подтверждение, а в скрипте команда отклоняется. WhatsApp удаляет сообщения до указанного `wa` сообщения — последнего в локальном хранилище. Для актуальности оставьте `serve` работающим; чат без сохранённых сообщений отклоняется. `wa` просит WhatsApp оставить сохранённые телефоном фотографии и файлы. Локальное хранилище `wa` по-прежнему содержит сообщения. Это поведение ещё не проверено на телефоне.",
+          "after": "Обе команды действуют только на ваших устройствах: у собеседников чат и сообщения остаются. Без `--allow-dangerous` в терминале запрашивается подтверждение, а в скрипте команда отклоняется. WhatsApp удаляет сообщения до указанного `wa` сообщения — последнего в локальном хранилище. Для актуальности оставьте `serve` работающим; чат без сохранённых сообщений отклоняется. `wa` просит WhatsApp оставить сохранённые телефоном фотографии и файлы. Локальное хранилище `wa` по-прежнему содержит сообщения."
+        },
+        {
+          "before": "- **`--last-seen`, `--profile-photo` и `--about-text`** принимают everyone, contacts или nobody. Настройка телефона «мои контакты, кроме…» отображается как `contacts_except`; `set` не может выбрать её, поскольку список исключений остаётся на телефоне. Другое значение заменяет её.\n- **`--hide-online on`** скрывает время последнего посещения от всех, а присутствие в сети — от тех же людей. `--hide-online off` показывает последнее посещение контактам: `wa` не знает значение до скрытия. `--last-seen everyone` задаёт аудиторию явно. Выберите один из двух параметров.\n- **`--read-receipts off`** действует в обе стороны, как на телефоне: собеседники не видят, когда вы прочитали сообщение, и вы не видите их прочтения. Тогда `chats mark-read` помечает чат прочитанным только на ваших устройствах (при выключенных уведомлениях whatsmeow отправляет их только вашим устройствам; это следует из кода и не проверено на реальном аккаунте).\n- **`--chat-invites`** принимает everyone или contacts. По имеющимся данным WhatsApp отклоняет nobody, поэтому `wa` тоже отклоняет его. Настройка с исключениями на телефоне не выводится в `show`.\n- **`--calls contacts`** соответствует настройке телефона «заглушать неизвестных абонентов»: звонки незнакомых людей приходят без звука. Это ещё не проверено на реальном аккаунте. В WhatsApp нет `--calls nobody`, поэтому `wa` его отклоняет.",
+          "after": "- **`--last-seen`, `--profile-photo` и `--about-text`** принимают everyone, contacts или nobody. Настройка телефона «мои контакты, кроме…» отображается как `contacts_except`; `set` не может выбрать её, поскольку список исключений остаётся на телефоне. Другое значение заменяет её.\n- **`--hide-online on`** скрывает время последнего посещения от всех, а присутствие в сети — от тех же людей. `--hide-online off` показывает последнее посещение контактам: `wa` не знает значение до скрытия. `--last-seen everyone` задаёт аудиторию явно. Выберите один из двух параметров.\n- **`--read-receipts off`** действует в обе стороны, как на телефоне: собеседники не видят, когда вы прочитали сообщение, и вы не видите их прочтения. Тогда `chats mark-read` помечает чат прочитанным только на ваших устройствах (при выключенных уведомлениях whatsmeow отправляет их только вашим устройствам).\n- **`--chat-invites`** принимает everyone или contacts. По имеющимся данным WhatsApp отклоняет nobody, поэтому `wa` тоже отклоняет его. Настройка с исключениями на телефоне не выводится в `show`.\n- **`--calls contacts`** соответствует настройке телефона «заглушать неизвестных абонентов»: звонки незнакомых людей приходят без звука. В WhatsApp нет `--calls nobody`, поэтому `wa` его отклоняет."
+        }
+      ],
+      "es": [
+        {
+          "before": "WhatsApp identifica un mensaje por su remitente y su ID, así que estos comandos necesitan mensajes guardados localmente; mantén `serve` en marcha. Puedes editar un mensaje propio durante los 20 minutos posteriores al envío. La eliminación afecta solo a ti por defecto: `wa` pide a WhatsApp que quite el mensaje de tu teléfono y tus otros dispositivos, lo deje a los demás y conserve las fotos y archivos que el teléfono haya guardado. Esto aún no se ha comprobado en un teléfono. `--for-everyone` lo elimina para todos. Cada mensaje fijado avisa a los miembros: WhatsApp no tiene fijación silenciosa y no hace falta un indicador. Puede durar 24 horas, 7 días o 30 días (`--expire-time 24h`, `7d`, `30d`); sin `--expire-time`, `wa` fija durante 7 días. Leer no marca mensajes como leídos. Usa `chats mark-read` para enviar explícitamente una confirmación de lectura.",
+          "after": "WhatsApp identifica un mensaje por su remitente y su ID, así que estos comandos necesitan mensajes guardados localmente; mantén `serve` en marcha. Puedes editar un mensaje propio durante los 20 minutos posteriores al envío. La eliminación afecta solo a ti por defecto: `wa` pide a WhatsApp que quite el mensaje de tu teléfono y tus otros dispositivos, lo deje a los demás y conserve las fotos y archivos que el teléfono haya guardado. `--for-everyone` lo elimina para todos. Cada mensaje fijado avisa a los miembros: WhatsApp no tiene fijación silenciosa y no hace falta un indicador. Puede durar 24 horas, 7 días o 30 días (`--expire-time 24h`, `7d`, `30d`); sin `--expire-time`, `wa` fija durante 7 días. Leer no marca mensajes como leídos. Usa `chats mark-read` para enviar explícitamente una confirmación de lectura."
+        },
+        {
+          "before": "La estrella es una marca propia que WhatsApp sincroniza entre tus dispositivos; no avisa al chat. Como una edición, necesita el mensaje en el almacén local. El almacén conserva las estrellas puestas con `wa`: `wa personal messages list \"Book club\" starred:true` y `wa personal search messages is:starred` encuentran esos mensajes. Mientras funciona `serve` o `watch`, las estrellas que pongas o quites en el teléfono también llegan al almacén y `watch --events` muestra el evento. También se guardan las estrellas del historial que el teléfono envía tras vincular. Aún no se ha comprobado si el teléfono muestra una estrella puesta desde `wa`. Destaca las publicaciones de canales desde el teléfono.",
+          "after": "La estrella es una marca propia que WhatsApp sincroniza entre tus dispositivos; no avisa al chat. Como una edición, necesita el mensaje en el almacén local. El almacén conserva las estrellas puestas con `wa`: `wa personal messages list \"Book club\" starred:true` y `wa personal search messages is:starred` encuentran esos mensajes. Mientras funciona `serve` o `watch`, las estrellas que pongas o quites en el teléfono también llegan al almacén y `watch --events` muestra el evento. También se guardan las estrellas del historial que el teléfono envía tras vincular. Destaca las publicaciones de canales desde el teléfono."
+        },
+        {
+          "before": "Silenciar es un ajuste propio que WhatsApp sincroniza con tus dispositivos; no avisa al chat. Aún no se ha comprobado su aplicación en el teléfono para chats individuales. Un dispositivo recién vinculado puede carecer de las claves de ajustes: deja `serve` en marcha y vuelve a intentarlo más tarde. Silencia los canales desde el teléfono.",
+          "after": "Silenciar es un ajuste propio que WhatsApp sincroniza con tus dispositivos; no avisa al chat. Un dispositivo recién vinculado puede carecer de las claves de ajustes: deja `serve` en marcha y vuelve a intentarlo más tarde. Silencia los canales desde el teléfono."
+        },
+        {
+          "before": "También son ajustes propios sincronizados entre tus dispositivos, sin avisar al chat. `chats pin` fija el chat, no un mensaje. Archivar también quita la fijación: la operación de archivado de whatsmeow hace ambas cosas. Las aplicaciones de WhatsApp permiten tres chats fijados; `wa` no los cuenta y no se ha comprobado qué hace el teléfono con un cuarto. Archivar, desarchivar y marcar como no leído utilizan el mensaje más reciente del almacén, como `chats delete`; se rechaza un chat sin mensajes guardados. Los canales se rechazan. Marcar como no leído no envía confirmación de lectura. El teléfono muestra fijación, desfijación, archivo, desarchivo y marca de no leído en el chat contigo mismo (comprobado el 2026-10-18); faltan pruebas en otros chats.",
+          "after": "También son ajustes propios sincronizados entre tus dispositivos, sin avisar al chat. `chats pin` fija el chat, no un mensaje. Archivar también quita la fijación: la operación de archivado de whatsmeow hace ambas cosas. Las aplicaciones de WhatsApp permiten tres chats fijados; `wa` no los cuenta. Archivar, desarchivar y marcar como no leído utilizan el mensaje más reciente del almacén, como `chats delete`; se rechaza un chat sin mensajes guardados. Los canales se rechazan. Marcar como no leído no envía confirmación de lectura."
+        },
+        {
+          "before": "`chats mark-read` envía primero el cambio de ajuste a «leído», hasta el mensaje guardado más reciente (o `--until-id`), y después la confirmación: una confirmación por sí sola deja la marca de no leído en el teléfono. Hasta recibir las claves de ajustes de WhatsApp, se rechaza sin enviar ninguno de los dos cambios. Un canal solo recibe la confirmación. Aún no se ha comprobado que el teléfono quite la marca de esta forma.",
+          "after": "`chats mark-read` envía primero el cambio de ajuste a «leído», hasta el mensaje guardado más reciente (o `--until-id`), y después la confirmación: una confirmación por sí sola deja la marca de no leído en el teléfono. Hasta recibir las claves de ajustes de WhatsApp, se rechaza sin enviar ninguno de los dos cambios. Un canal solo recibe la confirmación."
+        },
+        {
+          "before": "Ambas acciones afectan solo a tus dispositivos: los demás conservan el chat y sus mensajes. Sin `--allow-dangerous`, preguntan en el terminal y se rechazan en scripts. WhatsApp borra hasta el mensaje que indique `wa`: el más reciente del almacén local. Mantén `serve` en marcha para actualizarlo; se rechazan chats sin mensajes guardados. `wa` pide conservar fotos y archivos guardados en el teléfono. El almacén local de `wa` sigue conservando los mensajes. Esto aún no se ha comprobado en un teléfono.",
+          "after": "Ambas acciones afectan solo a tus dispositivos: los demás conservan el chat y sus mensajes. Sin `--allow-dangerous`, preguntan en el terminal y se rechazan en scripts. WhatsApp borra hasta el mensaje que indique `wa`: el más reciente del almacén local. Mantén `serve` en marcha para actualizarlo; se rechazan chats sin mensajes guardados. `wa` pide conservar fotos y archivos guardados en el teléfono. El almacén local de `wa` sigue conservando los mensajes."
+        },
+        {
+          "before": "- **`--last-seen`, `--profile-photo` y `--about-text`** aceptan everyone, contacts o nobody. «Mis contactos, excepto…» aparece como `contacts_except`; `set` no puede elegirlo porque la lista de excepciones permanece en el teléfono. Otro valor lo reemplaza.\n- **`--hide-online on`** oculta la última conexión a todos y muestra el estado en línea solo a quienes pueden verla: nadie. `--hide-online off` muestra la última conexión a tus contactos, ya que `wa` desconoce el valor anterior. `--last-seen everyone` permite elegir la audiencia explícitamente. Usa una de las dos opciones.\n- **`--read-receipts off`** funciona en ambos sentidos, como en el teléfono: nadie ve cuándo lees y tú tampoco ves sus lecturas. Entonces `chats mark-read` marca el chat como leído solo en tus dispositivos (whatsmeow envía la confirmación solo a tus dispositivos cuando están desactivadas; se ha leído en su código y no se ha probado con una cuenta real).\n- **`--chat-invites`** acepta everyone o contacts. Según los informes, WhatsApp rechaza nobody y `wa` también. Un ajuste con excepciones guardado en el teléfono se omite en `show`.\n- **`--calls contacts`** corresponde a «silenciar llamadas de números desconocidos»: las llamadas llegan sin sonar. Aún no se ha comprobado con una cuenta real. WhatsApp no tiene `--calls nobody` y `wa` lo rechaza.",
+          "after": "- **`--last-seen`, `--profile-photo` y `--about-text`** aceptan everyone, contacts o nobody. «Mis contactos, excepto…» aparece como `contacts_except`; `set` no puede elegirlo porque la lista de excepciones permanece en el teléfono. Otro valor lo reemplaza.\n- **`--hide-online on`** oculta la última conexión a todos y muestra el estado en línea solo a quienes pueden verla: nadie. `--hide-online off` muestra la última conexión a tus contactos, ya que `wa` desconoce el valor anterior. `--last-seen everyone` permite elegir la audiencia explícitamente. Usa una de las dos opciones.\n- **`--read-receipts off`** funciona en ambos sentidos, como en el teléfono: nadie ve cuándo lees y tú tampoco ves sus lecturas. Entonces `chats mark-read` marca el chat como leído solo en tus dispositivos (whatsmeow envía la confirmación solo a tus dispositivos cuando están desactivadas).\n- **`--chat-invites`** acepta everyone o contacts. Según los informes, WhatsApp rechaza nobody y `wa` también. Un ajuste con excepciones guardado en el teléfono se omite en `show`.\n- **`--calls contacts`** corresponde a «silenciar llamadas de números desconocidos»: las llamadas llegan sin sonar. WhatsApp no tiene `--calls nobody` y `wa` lo rechaza."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/usage.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "mcp",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Here `agent` is the name of a profile. Writes keep the recipient list, the hourly limit and the send journal\n(`wa agent sends list`). Marking read is a separate write, under `chats.mark-read`: the other side sees it. An agent\nnever deletes for everyone, whatever the level: `messages delete` through MCP is for the owner only (`wa` asks\nWhatsApp to take the messages from the owner's devices; not yet checked on a phone) and has no `--for-everyone`.\nDeleting for everyone stays the owner's `wa <profile> messages delete --for-everyone`. `--permission key=level`\nnarrows a level for this server process only; one that would loosen the profile stops the server at startup.",
+          "after": "Here `agent` is the name of a profile. Writes keep the recipient list, the hourly limit and the send journal\n(`wa agent sends list`). Marking read is a separate write, under `chats.mark-read`: the other side sees it. An agent\nnever deletes for everyone, whatever the level: `messages delete` through MCP is for the owner only (`wa` asks\nWhatsApp to take the messages from the owner's devices) and has no `--for-everyone`.\nDeleting for everyone stays the owner's `wa <profile> messages delete --for-everyone`. `--permission key=level`\nnarrows a level for this server process only; one that would loosen the profile stops the server at startup."
+        }
+      ],
+      "ru": [
+        {
+          "before": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nЗдесь `agent` — имя профиля. При изменениях сохраняются ограничения получателей, часовой лимит и журнал отправки (`wa agent sends list`). Маркировка чтения — это отдельная запись, под `chats.mark-read`: другая сторона это видит. Агент никогда не удаляет сообщения для всех, независимо от уровня: `messages delete` через MCP предназначен только для владельца (`wa` просит WhatsApp убрать сообщения с устройств владельца; еще не проверено на телефоне) и не имеет `--for-everyone`. Удаление для всех остается `wa <profile> messages delete --for-everyone` владельца. `--permission key=level` сужает уровень только для этого серверного процесса; тот, который ослабит профиль, останавливает сервер при запуске.",
+          "after": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nЗдесь `agent` — имя профиля. При изменениях сохраняются ограничения получателей, часовой лимит и журнал отправки (`wa agent sends list`). Маркировка чтения — это отдельная запись, под `chats.mark-read`: другая сторона это видит. Агент никогда не удаляет сообщения для всех, независимо от уровня: `messages delete` через MCP предназначен только для владельца (`wa` просит WhatsApp убрать сообщения с устройств владельца) и не имеет `--for-everyone`. Удаление для всех остается `wa <profile> messages delete --for-everyone` владельца. `--permission key=level` сужает уровень только для этого серверного процесса; тот, который ослабит профиль, останавливает сервер при запуске."
+        }
+      ],
+      "es": [
+        {
+          "before": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nAquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos; aún no se ha verificado en un teléfono) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio.",
+          "after": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nAquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "groups",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "replacements": {
+      "en": [
+        {
+          "before": "In a group you administer, this removes another member's message for everyone; anywhere, it removes your own. It\nneeds the message in the local store, since WhatsApp addresses a message by its sender too. It asks first by\ndefault, and it cannot be undone. Without `--for-everyone` it is for you only: `wa` asks WhatsApp to take the\nmessage from all your devices and leave it with the others (not yet checked on a phone).",
+          "after": "In a group you administer, this removes another member's message for everyone; anywhere, it removes your own. It\nneeds the message in the local store, since WhatsApp addresses a message by its sender too. It asks first by\ndefault, and it cannot be undone. Without `--for-everyone` it is for you only: `wa` asks WhatsApp to take the\nmessage from all your devices and leave it with the others."
+        }
+      ],
+      "ru": [
+        {
+          "before": "В группе, которую вы администрируете, это удаляет сообщение другого участника для всех; где угодно, он удаляет ваши собственные. Ему нужно сообщение в локальном хранилище, поскольку WhatsApp также адресует сообщение отправителю. По умолчанию он запрашивает первым, и его нельзя отменить. Без `--for-everyone` это только для вас: `wa` просит WhatsApp забрать сообщение со всех ваших устройств и оставить его на других (пока не проверено на телефоне).",
+          "after": "В группе, которую вы администрируете, это удаляет сообщение другого участника для всех; где угодно, он удаляет ваши собственные. Ему нужно сообщение в локальном хранилище, поскольку WhatsApp также адресует сообщение отправителю. По умолчанию он запрашивает первым, и его нельзя отменить. Без `--for-everyone` это только для вас: `wa` просит WhatsApp забрать сообщение со всех ваших устройств и оставить его на других."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/groups.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "sessions",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The name goes to the phone and your other devices at once. Other people probably see it only once the phone next\ncomes online: a device tells WhatsApp its name when it says it is online, and `wa` never does (not checked yet). A\ndevice linked a few minutes ago may not have WhatsApp's settings keys yet; keep `serve` running a while and try again.",
+          "after": "The name goes to the phone and your other devices at once. Other people probably see it only once the phone next\ncomes online: a device tells WhatsApp its name when it says it is online, and `wa` never does. A\ndevice linked a few minutes ago may not have WhatsApp's settings keys yet; keep `serve` running a while and try again."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Имя одновременно передается на телефон и другие ваши устройства. Другие люди, вероятно, увидят его только после того, как телефон в следующий раз подключится к сети: устройство сообщает WhatsApp свое имя, когда сообщает, что оно онлайн, а `wa` никогда этого не делает (еще не проверено). Устройство, подключенное несколько минут назад, может еще не иметь ключей настроек WhatsApp; оставьте `serve` работать некоторое время и повторите попытку.`wa` воспринимает фотографию как квадратный JPEG со стороной от 190 до 720 пикселей, стороны, которые он принимает за группу; принимает ли WhatsApp другую сторону за ваше собственное фото, не проверяется. `wa` не преобразует и не обрезает его, а содержимое PNG или WebP отклоняется до того, как что-либо изменится. В совокупности сначала идет имя, затем описание, затем фотография; если более поздний произойдет сбой, в ошибке будет указано, что изменилось. Удаление фото производится на телефоне.",
+          "after": "Имя одновременно передается на телефон и другие ваши устройства. Другие люди, вероятно, увидят его только после того, как телефон в следующий раз подключится к сети: устройство сообщает WhatsApp свое имя, когда сообщает, что оно онлайн, а `wa` никогда этого не делает. Устройство, подключенное несколько минут назад, может еще не иметь ключей настроек WhatsApp; оставьте `serve` работать некоторое время и повторите попытку.`wa` воспринимает фотографию как квадратный JPEG со стороной от 190 до 720 пикселей, стороны, которые он принимает за группу; принимает ли WhatsApp другую сторону за ваше собственное фото, не проверяется. `wa` не преобразует и не обрезает его, а содержимое PNG или WebP отклоняется до того, как что-либо изменится. В совокупности сначала идет имя, затем описание, затем фотография; если более поздний произойдет сбой, в ошибке будет указано, что изменилось. Удаление фото производится на телефоне."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "diagnostics",
+    "reason": "Explain the actual Windows file-mode limitation, not test provenance. Source: whatsapp-cli v0.6.0 src/diagnose.ts deviceModes returns checked:false on win32; native docs/diagnostics.md.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- **`engine`** — whether the engine program is there to start, and its path. When it is missing, the hint says what\n  to do: reinstall `wa` with optional packages on, set `WA_ENGINE`, or in a source checkout run `pnpm engine:build`.\n- **`device`** — whether the device keys exist, and whether `private.db`, its `-wal` and `-shm` files or their folder\n  can be read by other users of this machine. Each such file comes with the `chmod` command that fixes it. `doctor`\n  never opens the keys and never changes a file mode itself. Windows is not checked.\n- **`lock`** — who last held the device's one connection (`serve (pid 4242)`), and whether that process still runs.\n  The engine never clears the name, so a holder counts as running only while its process does.",
+          "after": "- **`engine`** — whether the engine program is there to start, and its path. When it is missing, the hint says what\n  to do: reinstall `wa` with optional packages on, set `WA_ENGINE`, or in a source checkout run `pnpm engine:build`.\n- **`device`** — whether the device keys exist, and whether `private.db`, its `-wal` and `-shm` files or their folder\n  can be read by other users of this machine. Each such file comes with the `chmod` command that fixes it. `doctor`\n  never opens the keys and never changes a file mode itself. Unix file-mode checks are skipped on Windows.\n- **`lock`** — who last held the device's one connection (`serve (pid 4242)`), and whether that process still runs.\n  The engine never clears the name, so a holder counts as running only while its process does."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Помимо версии, среды выполнения, профиля, файла конфигурации и локального хранилища, `doctor` считывает с диска три вещи WhatsApp, ничего не запуская:- **`engine`** — есть ли программа движка для запуска и путь к ней. Когда он отсутствует, подсказка говорит, что делать: переустановить `wa` с включенными дополнительными пакетами, установить `WA_ENGINE` или при проверке исходного кода запустить `pnpm engine:build`.\n- **`device`** — существуют ли ключи устройства, и могут ли `private.db`, его файлы `-wal` и `-shm` или их папка быть прочитаны другими пользователями этой машины. К каждому такому файлу прилагается команда `chmod`, которая его исправляет. `doctor` никогда не открывает ключи и никогда не меняет режим файла сам. Windows не проверяется.\n- **`lock`** — кто последним удерживал одно соединение устройства (`serve (pid 4242)`), и выполняется ли этот процесс. Движок никогда не очищает имя, поэтому держатель считается запущенным только до тех пор, пока работает его процесс.",
+          "after": "Помимо версии, среды выполнения, профиля, файла конфигурации и локального хранилища, `doctor` считывает с диска три вещи WhatsApp, ничего не запуская:- **`engine`** — есть ли программа движка для запуска и путь к ней. Когда он отсутствует, подсказка говорит, что делать: переустановить `wa` с включенными дополнительными пакетами, установить `WA_ENGINE` или при проверке исходного кода запустить `pnpm engine:build`.\n- **`device`** — существуют ли ключи устройства, и могут ли `private.db`, его файлы `-wal` и `-shm` или их папка быть прочитаны другими пользователями этой машины. К каждому такому файлу прилагается команда `chmod`, которая его исправляет. `doctor` никогда не открывает ключи и никогда не меняет режим файла сам. В Windows проверка Unix-прав доступа к файлам не выполняется.\n- **`lock`** — кто последним удерживал одно соединение устройства (`serve (pid 4242)`), и выполняется ли этот процесс. Движок никогда не очищает имя, поэтому держатель считается запущенным только до тех пор, пока работает его процесс."
+        }
+      ],
+      "es": [
+        {
+          "before": "Además de la versión, el tiempo de ejecución, el perfil, el archivo de configuración y el almacén local, `doctor` lee tres cosas de WhatsApp desde el disco, sin iniciar nada:- **`engine`**: si el programa del motor está ahí para iniciarse y su ruta. Cuando falta, la sugerencia dice qué hacer: reinstalar `wa` con los paquetes opcionales activados, configurar `WA_ENGINE` o, en una verificación de código fuente, ejecutar `pnpm engine:build`.\n- **`device`**: si las claves del dispositivo existen y si otros usuarios de esta máquina pueden leer `private.db`, sus archivos `-wal` y `-shm` o su carpeta. Cada uno de estos archivos viene con el comando `chmod` que lo soluciona. `doctor` nunca abre las claves y nunca cambia el modo de un archivo. Windows no está marcado.\n- **`lock`**: quién mantuvo la última conexión del dispositivo (`serve (pid 4242)`) y si ese proceso aún se ejecuta. El motor nunca borra el nombre, por lo que un titular cuenta como en funcionamiento sólo mientras su proceso lo hace.",
+          "after": "Además de la versión, el tiempo de ejecución, el perfil, el archivo de configuración y el almacén local, `doctor` lee tres cosas de WhatsApp desde el disco, sin iniciar nada:- **`engine`**: si el programa del motor está ahí para iniciarse y su ruta. Cuando falta, la sugerencia dice qué hacer: reinstalar `wa` con los paquetes opcionales activados, configurar `WA_ENGINE` o, en una verificación de código fuente, ejecutar `pnpm engine:build`.\n- **`device`**: si las claves del dispositivo existen y si otros usuarios de esta máquina pueden leer `private.db`, sus archivos `-wal` y `-shm` o su carpeta. Cada uno de estos archivos viene con el comando `chmod` que lo soluciona. `doctor` nunca abre las claves y nunca cambia el modo de un archivo. En Windows se omite la comprobación de permisos Unix de los archivos.\n- **`lock`**: quién mantuvo la última conexión del dispositivo (`serve (pid 4242)`) y si ese proceso aún se ejecuta. El motor nunca borra el nombre, por lo que un titular cuenta como en funcionamiento sólo mientras su proceso lo hace."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/src/diagnose.ts"
+  },
+  {
+    "tool": "wa",
+    "slug": "usage",
+    "source": "https://faq.whatsapp.com/6614640168569481/",
+    "reason": "WhatsApp documents a 15-minute edit window for sent text. The native v0.6.0 guide says 20 minutes; do not promise a broader provider window. This changes portal guidance, not CLI runtime behavior.",
+    "replacements": {
+      "en": [
+        {
+          "before": "An edit works on your own message within 20 minutes of sending.",
+          "after": "Edit your own text messages within 15 minutes of sending; see [WhatsApp’s editing help](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Своё сообщение можно исправить в течение 20 минут после отправки.",
+          "after": "Своё текстовое сообщение можно исправить в течение 15 минут после отправки; см. [справку WhatsApp](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ],
+      "es": [
+        {
+          "before": "Puedes editar un mensaje propio durante los 20 minutos posteriores al envío.",
+          "after": "Puedes editar tus mensajes de texto hasta 15 minutos después de enviarlos; consulta [la ayuda de WhatsApp](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "remote",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/remote.md",
+    "reason": "Use an authenticated public HTTPS endpoint, preserve revocation semantics, and link current client prerequisites instead of an unchecked plan/region matrix. Keep setup-test provenance internal.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| App | Plans | Documentation |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | any; one custom connector on the free plan | [custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | only adults in the US with a personal Google account | [connected apps](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Your account must be able to add a remote MCP connector. Check the app’s current account and region requirements before starting the tunnel.\n\n| App | Connector prerequisites |\n|---|---|\n| ChatGPT | [Connection guide](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Connection guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Connection guide](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Use this page when you want an AI app that runs in the browser or on your phone, for example ChatGPT, Codex web or\nClaude, to read and answer your WhatsApp messages. Such an app cannot start `wa` on your computer, so you give it an\ninternet address instead. At the end, the app is connected to `wa` through a private HTTPS address, it can do only\nwhat your profile permits, and you know how to stop it or take its access back.",
+          "after": "Connect a browser or phone MCP app, such as ChatGPT or Claude, to `wa` running on a computer you control. This guide connects the app through an HTTPS tunnel with sign-in, explains which actions the `wa` profile allows, and shows how to stop the connection or revoke access."
+        },
+        {
+          "before": "The setup steps for each operating system have not all been tried on that system. ",
+          "after": ""
+        }
+      ],
+      "ru": [
+        {
+          "before": "| Приложение | Планы | Документация |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [режим разработчика](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | любой; один специальный соединитель в бесплатном плане | [нестандартные разъемы](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | только взрослые в США имеют личный аккаунт Google | [связанные приложения](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Ваш аккаунт должен поддерживать добавление удалённого MCP-подключения. Перед запуском туннеля проверьте текущие требования приложения к аккаунту и региону.\n\n| Приложение | Условия подключения |\n|---|---|\n| ChatGPT | [Руководство подключения](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Руководство подключения](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Руководство подключения](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Используйте эту страницу, если вы хотите, чтобы приложение искусственного интеллекта, работающее в браузере или на вашем телефоне, например ChatGPT, Codex Web или Claude, читало ваши сообщения WhatsApp и отвечало на них. Такое приложение не может запустить `wa` на вашем компьютере, поэтому вместо этого вы указываете ему интернет-адрес. После настройки приложение подключается к `wa` через частный адрес HTTPS, оно может делать только то, что разрешено вашим профилем, и вы знаете, как остановить его или вернуть ему доступ.",
+          "after": "Подключите MCP-приложение в браузере или на телефоне, например ChatGPT или Claude, к `wa` на своём компьютере. Вы настроите HTTPS-туннель с входом, узнаете, какие действия разрешает профиль `wa`, и сможете остановить подключение или отозвать доступ приложения."
+        },
+        {
+          "before": "Не все шаги установки для каждой операционной системы были опробованы в этой системе. ",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "| Aplicación | Planes | Documentación |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Tu cuenta debe permitir añadir un conector MCP remoto. Comprueba los requisitos actuales de cuenta y región antes de iniciar el túnel.\n\n| Aplicación | Requisitos de conexión |\n|---|---|\n| ChatGPT | [Guía de conexión](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Guía de conexión](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Guía de conexión](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Usa esta página cuando desee una aplicación de IA que se ejecute en el navegador o en tu teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de WhatsApp. Una aplicación de este tipo no puede iniciar `wa` en tu ordenador, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `wa` a través de una dirección HTTPS privada, solo puede hacer lo que tu perfil permite y ti sabe cómo detenerla o recuperar su acceso.",
+          "after": "Conecta una aplicación MCP del navegador o del teléfono, como ChatGPT o Claude, a `wa` en un ordenador que controlas. Configurarás un túnel HTTPS con inicio de sesión, comprobarás qué acciones permite el perfil de `wa` y aprenderás a detener la conexión o revocar el acceso."
+        },
+        {
+          "before": "No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. ",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "attachments",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/attachments.md",
+    "reason": "Distinguish an expired-media retry request from success: the same released guide documents media.retry-failed.",
+    "replacements": {
+      "en": [
+        {
+          "before": "and fetches the new copy.",
+          "after": "and attempts to fetch the new copy."
+        }
+      ],
+      "ru": [
+        {
+          "before": "и получает новую копию.",
+          "after": "и пытается скачать новую копию."
+        }
+      ],
+      "es": [
+        {
+          "before": "y recupera la nueva copia.",
+          "after": "e intenta descargar la nueva copia."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "sessions",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md",
+    "reason": "The portal resolves explicit relative Markdown links; preserve the native configuration reference destination.",
+    "replacements": {
+      "en": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ],
+      "ru": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ],
+      "es": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "sessions",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md",
+    "reason": "State the released CLI photo-format validation and keep unverified provider-side timing/dimension research out of the reader guide.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`wa` takes the photo as a square JPEG of 190 to 720 pixels a side, the sides it takes for a group; whether WhatsApp\ntakes other sides for your own photo is not checked. `wa` does not convert or crop one, and a PNG or WebP is refused by\nits content, before anything changes. Given together, the name goes first, then the about, then the\nphoto; if a later one fails, the error says which changed. Removing the photo is done on the phone.",
+          "after": "For a profile photo, `wa` requires a square JPEG from 190 to 720 pixels per side, using the same validation as for a group photo. `wa` does not convert or crop images and rejects PNG or WebP content before changing anything. When name, about and photo are supplied together, they are changed in that order; a later error names the changes already made. Remove the photo from the phone."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Имя одновременно передается на телефон и другие ваши устройства. Другие люди, вероятно, увидят его только после того, как телефон в следующий раз подключится к сети: устройство сообщает WhatsApp свое имя, когда сообщает, что оно онлайн, а `wa` никогда этого не делает. Устройство, подключенное несколько минут назад, может еще не иметь ключей настроек WhatsApp; оставьте `serve` работать некоторое время и повторите попытку.`wa` воспринимает фотографию как квадратный JPEG со стороной от 190 до 720 пикселей, стороны, которые он принимает за группу; принимает ли WhatsApp другую сторону за ваше собственное фото, не проверяется. `wa` не преобразует и не обрезает его, а содержимое PNG или WebP отклоняется до того, как что-либо изменится. В совокупности сначала идет имя, затем описание, затем фотография; если более поздний произойдет сбой, в ошибке будет указано, что изменилось. Удаление фото производится на телефоне.",
+          "after": "Изменение имени отправляется как настройка аккаунта через `wa`. У недавно привязанного устройства может ещё не быть ключей настроек WhatsApp: оставьте `serve` работающим и повторите попытку позже.\n\nДля фотографии профиля `wa` требует квадратный JPEG со стороной от 190 до 720 пикселей, как для фотографии группы. `wa` не преобразует и не обрезает изображение и отклоняет PNG или WebP до изменения данных. Если имя, описание и фотография заданы вместе, они меняются в этом порядке; при последующей ошибке указано, что уже изменилось. Удаляйте фотографию на телефоне."
+        }
+      ],
+      "es": [
+        {
+          "before": "El nombre va al teléfono y a sus otros dispositivos a la vez. Otras personas probablemente lo vean solo la próxima vez que el teléfono se conecte: un dispositivo le dice a WhatsApp su nombre cuando dice que está en línea, y `wa` nunca lo hace (aún no verificado). Es posible que un dispositivo vinculado hace unos minutos aún no tenga las claves de configuración de WhatsApp; Mantén `serve` ejecutándose por un tiempo e inténtelo nuevamente.`wa` toma la foto como un JPEG cuadrado de 190 a 720 píxeles por lado, los lados que toma para un grupo; No se comprueba si WhatsApp toma otros lados de su propia foto. `wa` no convierte ni recorta uno, y su contenido rechaza un PNG o WebP, antes de que algo cambie. En conjunto, primero va el nombre, luego acerca de y luego la foto; si falla uno posterior, el error dice cuál cambió. La eliminación de la foto se realiza en el teléfono.",
+          "after": "`wa` envía el cambio de nombre como un ajuste de la cuenta. Un dispositivo recién vinculado puede carecer de las claves de ajustes de WhatsApp: mantén `serve` en marcha y vuelve a intentarlo más tarde.\n\nPara la foto de perfil, `wa` exige un JPEG cuadrado de 190 a 720 píxeles por lado, con la misma validación que para una foto de grupo. `wa` no convierte ni recorta imágenes y rechaza contenido PNG o WebP antes de cambiar nada. Si indicas nombre, descripción y foto juntos, se cambian en ese orden; un error posterior identifica los cambios ya realizados. Quita la foto desde el teléfono."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md",
+    "reason": "Name the terminal-only paths from the released command contract. The catalogue explicitly excludes 121 nodes, covered by 48 top paths; this documents the current MCP interface without promising unsupported WhatsApp actions.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The tools use the same catalogue as `tg` and `max`. A command that WhatsApp cannot do yet is refused when it runs,\nwith exit code `2` and a message that says so.",
+          "after": "The tools use the same catalogue as `tg` and `max`. A command that WhatsApp cannot do yet is refused when it runs,\nwith exit code `2` and a message that says so.\n\n<details>\n<summary>Commands kept in the terminal</summary>\n\nThe released personal-account MCP interface excludes the following paths and their subcommands. Use the terminal for setup and maintenance; the WhatsApp limitations in the CLI reference still apply.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Инструменты используют тот же каталог, что и `tg` и `max`. Команда, которую WhatsApp пока не может выполнить, при запуске отклоняется с кодом завершения `2` и сообщением об этом.",
+          "after": "Инструменты используют тот же каталог, что и `tg` и `max`. Команда, которую WhatsApp пока не может выполнить, при запуске отклоняется с кодом завершения `2` и сообщением об этом.\n\n<details>\n<summary>Команды для терминала</summary>\n\nMCP-интерфейс личного аккаунта в этом выпуске не предоставляет следующие пути и их подкоманды. Настройку и обслуживание выполняйте в терминале; ограничения WhatsApp из справочника команд по-прежнему действуют.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+        }
+      ],
+      "es": [
+        {
+          "before": "Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.",
+          "after": "Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.\n\n<details>\n<summary>Comandos que quedan en el terminal</summary>\n\nLa interfaz MCP de la cuenta personal no ofrece estas rutas ni sus subcomandos. Usa el terminal para configuración y mantenimiento; siguen aplicándose las limitaciones de WhatsApp indicadas en la referencia.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+        }
+      ]
+    }
   }
 ]

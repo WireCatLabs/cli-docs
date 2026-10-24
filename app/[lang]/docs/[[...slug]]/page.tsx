@@ -73,7 +73,7 @@ export default async function Page(props: Props) {
         ? "docs/commands.md"
         : `docs/${page.slugs.slice(1).join("/") || "index"}.md`
 
-  const commandIndex = tool && ["tg", "max"].includes(tool.name) && page.slugs.at(-1) === "commands"
+  const commandIndex = tool && ["tg", "max", "wa"].includes(tool.name) && page.slugs.at(-1) === "commands"
   const commandRaw = commandIndex ? await page.data.getText("raw") : ""
   const commandNames = [...commandReferences(commandRaw)]
   const commandAliases = [
