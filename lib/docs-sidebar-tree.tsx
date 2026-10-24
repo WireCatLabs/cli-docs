@@ -132,6 +132,11 @@ export const sidebarIcons = {
   security: ShieldCheck,
   changelog: History,
   roadmap: Route,
+  "build-concepts": Lightbulb,
+  "build-add-source": Cable,
+  "build-own-data": Database,
+  "build-sign-in": KeyRound,
+  "build-stay-compliant": ShieldCheck,
 }
 
 const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
