@@ -1,7 +1,14 @@
 import type { CommandInfo } from "@wirecat/cli-base/commands"
 import { describe, expect, it } from "vitest"
 import { diagramStructure, diagramSvg } from "../lib/mermaid"
-import { commandSegments, examples, type Program, referenceCoverage, validateInvocation } from "./docs-quality"
+import {
+  commandSegments,
+  editorialExamples,
+  examples,
+  type Program,
+  referenceCoverage,
+  validateInvocation,
+} from "./docs-quality"
 import { affectedDocumentationTasks } from "./docs-updates"
 import { translationProblems } from "./localize"
 import { allowedSource } from "./source-pack"
@@ -136,4 +143,27 @@ it("checks every non-executable shorthand alternative instead of hiding unknown 
   expect(validateInvocation("tg config show/unknown", program, false)?.kind).toBe("invalid")
   expect(validateInvocation("tg config show/set --unknown", program, false)?.kind).toBe("invalid")
   expect(validateInvocation(commandSegments("tg [profile] resource action")[0], program, true)?.kind).toBe("syntax")
+})
+
+it("validates released commands from the actual published HTML, including encoded arguments", () => {
+  const source = JSON.stringify(
+    {
+      home: '<code class="command">tg messages list &quot;Book &amp; club&quot; --limit 5</code>',
+      features: "<code>tg messages <strong>invented</strong></code>",
+      examples: "<code>tg messages list &quot;chat&quot; --unknown</code>",
+    },
+    null,
+    2,
+  )
+  const extracted = editorialExamples(source)
+  expect(extracted.map((example) => example.text)).toEqual([
+    'tg messages list "Book & club" --limit 5',
+    "tg messages invented",
+    'tg messages list "chat" --unknown',
+  ])
+  expect(
+    extracted.map((example) => validateInvocation(example.text, program, example.executable)?.kind ?? "valid"),
+  ).toEqual(["valid", "invalid", "invalid"])
+  expect(extracted.map((example) => example.line)).toEqual([2, 3, 4])
+  expect(() => editorialExamples(JSON.stringify({ home: "" }))).toThrow("Missing published editorial page")
 })

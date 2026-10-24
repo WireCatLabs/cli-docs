@@ -239,6 +239,27 @@ export function referenceCoverage(text: string, program: Program) {
   })
 }
 
+/** Commands in the HTML snapshots actually rendered by the public pages. */
+export function editorialExamples(source: string): Example[] {
+  const pages = JSON.parse(source) as Record<string, string>
+  return ["home", "features", "examples"].flatMap((page) => {
+    const html = pages[page]
+    if (typeof html !== "string") throw new Error(`Missing published editorial page: ${page}`)
+    const line = source.slice(0, source.indexOf(JSON.stringify(html))).split("\n").length
+    return [...html.matchAll(/<code\b[^>]*>([\s\S]*?)<\/code>/g)].map((match) => ({
+      text: match[1]
+        .replace(/<[^>]*>/g, "")
+        .replaceAll("&quot;", '"')
+        .replaceAll("&#39;", "'")
+        .replaceAll("&lt;", "<")
+        .replaceAll("&gt;", ">")
+        .replaceAll("&amp;", "&"),
+      line,
+      executable: true,
+    }))
+  })
+}
+
 const filesIn = (folder: string): string[] =>
   readdirSync(folder, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory()
@@ -311,6 +332,17 @@ export function exampleFindings(
             command,
             ...finding,
           })
+      }
+    }
+  }
+  for (const lang of ["en", "ru", "es"]) {
+    const file = `lib/editorial/${lang}.json`
+    for (const example of editorialExamples(readFileSync(join(root, file), "utf8"))) {
+      if (!example.text.startsWith(`${cli} `)) continue
+      for (const segment of commandSegments(example.text)) {
+        checked++
+        const finding = check(segment, program, true)
+        if (finding) findings.push({ file, line: example.line, command: example.text, ...finding })
       }
     }
   }
