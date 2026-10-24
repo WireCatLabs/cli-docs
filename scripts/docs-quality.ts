@@ -262,7 +262,7 @@ export function exampleFindings(
   for (const file of filesIn(join(root, "content/docs"))) {
     if (
       file.includes(`/content/docs/${cli === "tg" ? "max" : "tg"}/`) ||
-      /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap)(?:\.[a-z]{2})?\.md$/.test(file)
+      /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap|compare)(?:\.[a-z]{2})?\.md$/.test(file)
     )
       continue
     const readerPage = /\/(tg|max)\/(usage|rankings|bot|groups)(?:\.(ru|es))?\.md$/.exec(file)
