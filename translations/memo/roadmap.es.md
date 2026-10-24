@@ -13,7 +13,7 @@ mensajes que tg, max y wa guardan en el almacén local. Puedes buscar en todas e
 sabes de una persona o proyecto, etiquetar contenido, mantener tareas y recordatorios locales y dejar que
 un agente registre recuerdos, hechos y propuestas para que los revises, desde el terminal o mediante MCP.
 MCP ofrece comandos, incluidas escrituras, limitados por permisos guardados, y abre las fuentes completas.
-Descarga el modelo con `models text download` y añade una cuenta explícita de Himalaya con `mail add`.
+Descarga el modelo con `models download` y añade una cuenta explícita de Himalaya con `mail add`.
 Todos los comandos y opciones están en [la referencia de comandos](./commands.md); las guías empiezan en
 [la introducción](./index.md).
 

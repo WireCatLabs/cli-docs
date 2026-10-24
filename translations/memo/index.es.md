@@ -68,7 +68,7 @@ memo search notes budget
 
 Memo necesita Node.js 22.16+ o 24+ ([qué instalar primero](./installation.md)). Tus archivos se
 quedan donde están. Memo lee los archivos e importa el correo sin modificarlo. `notes edit` puede cambiar
-el archivo original de una nota; `notes export` escribe notas en archivos. Los comandos explícitos `mail trash`
+el archivo original de una nota; `notes export` escribe notas en archivos. Los comandos explícitos `mail delete`
 y `mail restore` mueven correo de Gmail solo con `--yes`.
 
 ## Adónde ir después

@@ -13,7 +13,7 @@ Aquí verás qué lee y escribe Memo y qué puede salir del ordenador, para eleg
   de notas escribe en la carpeta elegida y nunca sobrescribe un archivo que editaste. La exportación
   de anotaciones seleccionadas crea un archivo privado nuevo en la ruta elegida, como se explica abajo.
 - **La importación de correo** abre el buzón solo para lectura y no marca correo como leído. Memo nunca envía correo.
-- **La limpieza de Gmail** es independiente: `memo mail trash` y `memo mail restore` muestran una vista previa sin `--yes`. La limpieza mueve el correo elegido a la Papelera de Gmail; Gmail lo elimina definitivamente a los 30 días. La restauración devuelve el correo de una ejecución registrada mientras siga en la Papelera. La limpieza requiere una copia reciente del almacén y nunca se ejecuta desde el temporizador. Consulta [la limpieza de Gmail](./mail.md#clean-up-gmail).
+- **La limpieza de Gmail** es independiente: `memo mail delete` y `memo mail restore` muestran una vista previa sin `--yes`. La limpieza mueve el correo elegido a la Papelera de Gmail; Gmail lo elimina definitivamente a los 30 días. La restauración devuelve el correo de una ejecución registrada mientras siga en la Papelera. La limpieza requiere una copia reciente del almacén y nunca se ejecuta desde el temporizador. Consulta [la limpieza de Gmail](./mail.md#clean-up-gmail).
 - Las **etiquetas** dejan tus archivos, las etiquetas de Gmail y los indicadores del buzón tal como
   están.
 
@@ -46,12 +46,12 @@ carpeta o de un buzón, no borra nada y te avisa.
   no confirma una propuesta de nuevo. Las lecturas MCP siguen creando su entrada normal de auditoría.
   El formato omite varios aspectos del proyecto y no sustituye una copia completa del archivo.
 - El registro del agente conserva agente, herramienta, resultado y hora, sin el contenido enviado.
-- Un agente que solo debe leer se ejecuta con `MEMO_READ_ONLY=1`. Entonces todo comando que cambia algo se detiene con `permission_error` (código de salida 5), y `memo mcp` ofrece solo sus herramientas de lectura. Las lecturas y `memo sync` siguen funcionando, igual que las escrituras de tareas que hace un agente programado con `tasks plan` y `tasks link`, como en tg y max: el vínculo solo se propone y se rechaza vincular dos tareas. `reminders poll` se rechaza.
+- Un agente que solo debe leer se ejecuta con `MEMO_READ_ONLY=1`. Entonces todo comando que cambia algo se detiene con `permission_error` (código de salida 5), y `memo mcp` mantiene visibles los comandos de escritura, pero rechaza ejecutarlos. Las lecturas y `memo sync` siguen funcionando, igual que las escrituras de tareas que hace un agente programado con `tasks link`, como en tg y max: el vínculo solo se propone y se rechaza vincular dos tareas. `reminders claim` se rechaza.
 - Dos cuentas solo representan a una persona después de que las enlaces. Coincidir en nombre o dominio nunca basta.
 
 ## Qué puede salir de tu ordenador
 
-- `memo ask` prepara fuentes para tu agente. Solo las envía a un proveedor con `--analyze` y, si es externo al equipo, también `--allow-remote`. La respuesta generada debe comprobarse con las fuentes.
+- `memo answers create` prepara fuentes para tu agente. Solo las envía a un proveedor con `--analyze` y, si es externo al equipo, también `--allow-remote`. La respuesta generada debe comprobarse con las fuentes.
 - Lo que tu agente haga con el texto depende de él y su proveedor; Memo no puede controlarlo. Dale acceso solo a fuentes que quieras compartir.
 - La sincronización del correo pregunta por sí sola a los registros de dominios cuándo se registró el dominio de un remitente: como mucho una vez al día, para remitentes a los que nunca escribiste y de los que recibiste correo en los últimos dos años. `memo mail inspect --domain-age` pregunta por los grupos que muestra. Cada consulta comunica un nombre de dominio a un registro; se hace una sola vez y la respuesta se guarda en tu ordenador. Nunca se pregunta por grandes proveedores de correo como gmail.com. No hay ajuste para desactivarlo; consulta [cómo se comprueban los dominios de remitentes](./mail.md#choose-what-to-import).
 - Una vez al día Memo pregunta a npm si hay una versión nueva. Desactívalo con `"update_check": false` en los ajustes o con `MEMO_NO_UPDATE_CHECK=1`. Memo nunca se actualiza solo.

@@ -188,9 +188,9 @@ memo notes export --output-dir /path/to/vault/memo --format obsidian
 папке Obsidian:
 
 ```sh
-memo note telegram:'Kai Sample' /path/to/vault/People/Kai.md
-memo note telegram:'Kai Sample'           # shows which note it is
-memo note telegram:'Kai Sample' --clear   # forgets it
+memo notes links add telegram:'Kai Sample' /path/to/vault/People/Kai.md
+memo notes links show telegram:'Kai Sample'           # shows which note it is
+memo notes links clear telegram:'Kai Sample'   # forgets it
 ```
 
 Сначала файл нужно импортировать. После этого эта заметка и заметки, которые ссылаются на неё, появятся в
@@ -204,11 +204,11 @@ memo note telegram:'Kai Sample' --clear   # forgets it
 
 ```sh
 memo folders list                                  # shows the folder IDs the local store has
-memo folders attach 1 /other/path/to/notes
+memo folders update 1 /other/path/to/notes
 ```
 
 С тем же ID заметки сохраняют свои ссылки и теги на обоих компьютерах.
 
-Папка `google-drive:…` содержит документы Google Drive, сохранённые drive-cli. `memo folders list` помечает её «kept by drive», а `memo folders attach` отклоняет: поиск memo уже читает её.
+Папка `google-drive:…` содержит документы Google Drive, сохранённые drive-cli. `memo folders list` помечает её «kept by drive», а `memo folders update` отклоняет: поиск memo уже читает её.
 
 Дальше: [пометьте заметки тегами](./tags.md) или [найдите их](./search.md).

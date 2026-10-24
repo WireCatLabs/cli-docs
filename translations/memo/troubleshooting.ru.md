@@ -29,7 +29,7 @@ Memo не установлен, или терминал был открыт до
 импорт:
 
 ```sh
-memo models text download e5-small
+memo models download e5-small
 memo sync
 ```
 
@@ -43,7 +43,7 @@ memo sync
 
 Каждой папке нужен ID из локального хранилища. Добавьте папку командой `memo folders add /path/to/folder`.
 Если папку добавили на другом компьютере, подключите её: `memo folders list` покажет её ID, а
-`memo folders attach ID /path/to/folder` подключит её ([подробнее](./notes.md#use-the-same-notes-on-another-computer)).
+`memo folders update ID /path/to/folder` подключит её ([подробнее](./notes.md#use-the-same-notes-on-another-computer)).
 
 ## Импорт ничего не удалил и вывел предупреждение
 
@@ -84,7 +84,7 @@ memo sync
 
 ## Справка показывает все команды вместо одной
 
-Путь команды в одном аргументе, например `memo "projects add" --help`, отклоняется с подсказкой правильных слов. Цикл оболочки передаёт его именно так: в zsh `for c in "projects add"; do memo $c --help; done` сохраняет `$c` целиком. В zsh используйте `memo ${=c} --help` или перебирайте слова.
+Путь команды в одном аргументе, например `"projects add"`, отклоняется с подсказкой правильных слов. Цикл оболочки передаёт его именно так: в zsh `for c in "projects add"; do memo $c --help; done` сохраняет `$c` целиком. В zsh используйте `memo ${=c} --help` или перебирайте слова.
 
 ## Ничего не помогло
 

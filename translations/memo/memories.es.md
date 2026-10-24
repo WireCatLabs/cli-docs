@@ -49,7 +49,7 @@ memo memories list kind:preference scope:work
 memo memories show memory:3
 memo search memories friday meetings scope:work
 memo memories confirm memory:3
-memo memories stale memory:3
+memo memories invalidate memory:3
 ```
 
 Un recuerdo que añades con `memo` se confirma al instante. El de un agente queda `proposed` hasta que revises las fuentes y lo marques con `confirm`. Si la evidencia deja de ser válida, por ejemplo Kai prefiere ahora los lunes, márcalo `stale`. `--subject person:…` indica de quién o de qué trata. `memories list` filtra por `kind`, `status`, `scope` y `subject` en la consulta: `subject:"person:42"`.
@@ -121,11 +121,11 @@ memo actions add reply --reason 'Kai asked twice' --account telegram:1 --target 
 ## Qué hicieron los agentes
 
 ```sh
-memo agents log --limit 20
-memo agents log agent:memo-mcp
+memo agents list --limit 20
+memo agents list agent:memo-mcp
 ```
 
-El registro de agentes muestra cada llamada que hizo un agente a través de los servidores MCP de Memo,
+El registro compartido muestra los comandos que llegan al ejecutor de Memo y las llamadas registradas por
 tg y max, de la más reciente a la más antigua: qué agente, qué herramienta, el resultado y la hora.
 Nunca guarda lo que envió el agente.
 

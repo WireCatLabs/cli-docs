@@ -1760,81 +1760,6 @@
     }
   },
   {
-    "tool": "memo",
-    "slug": "mail",
-    "reason": "Describe the supported legacy rule migration without release-number prose in a current task guide.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Before 0.32.0 rules were kept in `config.json`.",
-          "after": "Older settings kept rules in `config.json`."
-        }
-      ],
-      "ru": [
-        {
-          "before": "До 0.32.0 правила находились в `config.json`.",
-          "after": "Прежние настройки содержали правила в `config.json`."
-        }
-      ],
-      "es": [
-        {
-          "before": "Antes de 0.32.0 las reglas estaban en `config.json`.",
-          "after": "Los ajustes antiguos guardaban las reglas en `config.json`."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "installation",
-    "reason": "Preserve incoming section anchors from the previously reviewed Memo release after task and command vocabulary updates.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## What it needs",
-          "after": "<a id=\"update-and-remove\" />\n\n## What it needs"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Что нужно для работы",
-          "after": "<a id=\"обновление-и-удаление\" />\n\n## Что нужно для работы"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Qué necesita",
-          "after": "<a id=\"actualizar-y-quitar\" />\n\n## Qué necesita"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "mail",
-    "reason": "Preserve incoming section anchors from the previously reviewed Memo release after task and command vocabulary updates.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## Before you start",
-          "after": "<a id=\"import-mail\" />\n\n## Before you start"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Перед началом",
-          "after": "<a id=\"импортируйте-почту\" />\n\n## Перед началом"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Antes de empezar",
-          "after": "<a id=\"importar-correo\" />\n\n## Antes de empezar"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "search",
     "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. MAX 0.54.0 still names memo import. MAX 0.54.0 has no search mail subcommand (it answers with a Memo hint), so the prose names it without a runnable invocation.",
@@ -1867,31 +1792,6 @@
         {
           "before": "`max personal search mail` responde con una indicación",
           "after": "el comando `search mail` de `max` responde con una indicación"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "troubleshooting",
-    "reason": "This is an intentionally refused single-argument path, not an executable command. Keep the quoted path illustration and the valid corrected invocation without presenting the refused form as runnable.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`memo \"projects add\" --help`",
-          "after": "`\"projects add\"`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`memo \"projects add\" --help`",
-          "after": "`\"projects add\"`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`memo \"projects add\" --help`",
-          "after": "`\"projects add\"`"
         }
       ]
     }
@@ -1969,82 +1869,6 @@
         {
           "before": "via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken",
           "after": "via the link `https://api.telegram.org/file/bot<token>/<file_path>`, where `<file_path>` is taken"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "index",
-    "reason": "Memo 0.91.0 permits delegated MCP meeting decisions through explicit deny-default operation permissions; source src/findings/command.ts and src/mcp/permissions.ts. Preserve the owner approval boundary without claiming the tools are absent.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Meeting findings still need the owner.",
-          "after": "Meeting findings decisions need explicit owner permissions."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "memories",
-    "reason": "Memo 0.91.0 delegates MCP meeting review only through explicit operation permissions; src/findings/command.ts and src/mcp/permissions.ts.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Meeting findings still require the owner.",
-          "after": "Meeting findings decisions require explicit permissions."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "compare",
-    "reason": "Memo uses local embedding models during sync/search; the no-key claim concerns remote language-model APIs. Source src/notes/embed.ts and src/search/search.ts.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Sync and search never call a model.",
-          "after": "Sync and search need no remote language-model API key."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Синхронизация и поиск не вызывают модель.",
-          "after": "Для синхронизации и поиска не нужен ключ API удалённой языковой модели."
-        }
-      ],
-      "es": [
-        {
-          "before": "La sincronización y búsqueda no llaman a un modelo.",
-          "after": "La sincronización y búsqueda no necesitan clave de API de un modelo de lenguaje remoto."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "recipes",
-    "reason": "Memo 0.91.0 allows explicitly delegated MCP meeting review via deny-default operation permissions; source src/findings/command.ts and src/mcp/permissions.ts.",
-    "replacements": {
-      "en": [
-        {
-          "before": "meeting review flow still leaves confirmation to the owner.",
-          "after": "meeting review flow needs explicit owner permissions for MCP decisions."
-        }
-      ],
-      "ru": [
-        {
-          "before": "В отдельном сценарии проверки встречи подтверждение по-прежнему остаётся за владельцем.",
-          "after": "Решения по встречам через MCP требуют явных разрешений владельца."
-        }
-      ],
-      "es": [
-        {
-          "before": "El recorrido separado de reuniones sigue dejando la confirmación al propietario.",
-          "after": "Las decisiones de reuniones mediante MCP necesitan permisos explícitos del propietario."
         }
       ]
     }

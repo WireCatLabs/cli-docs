@@ -71,13 +71,14 @@ Notes on `memo`:
   goes through [Himalaya](https://github.com/pimalaya/himalaya), and [mail](./mail.md) is covered below. `search all` covers messages, mail and notes;
   meetings have their own `search meetings`.
 - **Search.** All six tools search by words and by meaning. This page does not rank them. In `memo`, search by
-  meaning uses a local model that `memo models text download` fetches; without it, word search still works.
-- **No LLM key.** Sync and search never call a model. `ask --analyze` calls a model you configure, and only if you ask.
-- **MCP.** `memo mcp` runs on stdio only. There is no HTTP mode yet. It offers tools made from the commands,
-  writes included, except `mcp`, `upgrade`, `skill install`, `auto start` and `auto stop`. `memo` never sends a
-  message or mail.
+  meaning uses a local model that `memo models download` fetches; without it, word search still works.
+- **No LLM key.** Sync and search need no remote language-model API key; meaning search uses a local model. `answers create --analyze` calls a model you configure, and only if you ask.
+- **MCP.** `memo mcp` runs on stdio; HTTP remains planned. It offers `memo_tools_search`, `memo_read` and `memo_write`. Discovery retains blocked
+  commands with their current availability and reason. CLI-only exclusions are `mcp`, `upgrade`, `skill install`,
+  `jobs start` and `jobs stop`. Saved permissions use `deny`, `readonly`, `ask` or `allow`.
+  `MEMO_READ_ONLY=1` refuses writes. Agent memories, facts and proposed actions wait for review.
 - **Safety.** Permissions in the configuration set each command to `deny`, `readonly`, `ask` or `allow`.
-  `MEMO_READ_ONLY=1` marks writing tools unavailable and refuses their calls. Memories, facts and actions an agent adds are saved as proposed
+  `MEMO_READ_ONLY=1` keeps writing commands discoverable but refuses their calls. Memories, facts and actions an agent adds are saved as proposed
   until you confirm them. Decisions on project proposals are the exception: an agent may make them, with a
   recorded reason, until you set `agent_decisions` to `false`.
 - **Knowledge.** `memo` stores messages and the facts and links you or your agent record, each with the message,
@@ -117,7 +118,7 @@ The marks come from each project's documentation, checked on 24 October 2026.
 Notes on `memo`:
 
 - **Himalaya.** `memo` needs it installed and set up first. It reads mailboxes through it and changes nothing there,
-  except `memo mail trash` and `memo mail restore`, which move mail to and from Gmail's Trash only with `--yes`.
+  except `memo mail delete` and `memo mail restore`, which move mail to and from Gmail's Trash only with `--yes`.
 - **Filters.** `memo` does not create filters in Gmail. It reads a Gmail filter export and turns each filter into
   a rule for what to import.
 - **Sending.** `memo` never sends mail. It has no code for it.

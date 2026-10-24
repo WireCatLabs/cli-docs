@@ -12,7 +12,9 @@ Términos de esta página:
 - **Almacén local**: un archivo de base de datos del equipo con el texto de tus notas, correo y mensajes. Memo lo comparte con [tg](https://github.com/WireCatLabs/tg-cli) y [max](https://github.com/WireCatLabs/max-cli).
 - **Skill**: instrucciones breves para que un agente de IA utilice Memo.
 
-La instalación no inicia sesión, no arranca un servicio en segundo plano ni lee tus notas o correo. Memo lee una carpeta o un buzón solo cuando lo añades y ejecutas `memo sync`. La sincronización periódica se activa por separado con `memo auto start`.
+La instalación no inicia sesión, no arranca un servicio en segundo plano ni lee tus notas o correo. Memo lee una carpeta o un buzón solo cuando lo añades y ejecutas `memo sync`. La sincronización periódica se activa por separado con `memo jobs start`.
+
+<a id="actualizar-y-quitar" />
 
 ## Qué necesita
 
@@ -26,9 +28,9 @@ Cada fuente necesita algo más, solo cuando vayas a utilizarla:
 |---|---|
 | Notas y documentos | Ninguno: [archivos compatibles](./notes.md#files-memo-can-read) |
 | Mensajes de Telegram o MAX | [tg](https://github.com/WireCatLabs/tg-cli) o [max](https://github.com/WireCatLabs/max-cli). Guardan los chats en el almacén local; Memo no inicia sesión en un servicio de mensajería |
-| Búsqueda por significado | Un modelo de búsqueda en el equipo, de unos 135 MB. Descárgalo una vez: `memo models text download e5-small`. Sin él, Memo busca por palabras |
+| Búsqueda por significado | Un modelo de búsqueda en el equipo, de unos 135 MB. Descárgalo una vez: `memo models download e5-small`. Sin él, Memo busca por palabras |
 | Correo | [Himalaya](https://github.com/pimalaya/himalaya) 2.x, el programa con el que Memo lee el buzón. Lee sus cuentas de `~/.config/himalaya/config.toml` ([correo](./mail.md#before-you-start)) |
-| Sincronización periódica (`memo auto`) | Linux con systemd. En macOS y Windows, ejecuta `memo sync` personalmente o con tu planificador ([mantener Memo al día](./archive.md)) |
+| Sincronización periódica (`memo jobs`) | Linux con systemd. En macOS y Windows, ejecuta `memo sync` personalmente o con tu planificador ([mantener Memo al día](./archive.md)) |
 
 ## Instalar
 
@@ -131,7 +133,7 @@ node dist/bin/memo.js --help
 | Caché, que `memo doctor` indica; Memo aún no guarda nada en ella | `~/.cache/cli-memo/` | `%LOCALAPPDATA%\cli-memo\Cache\` |
 | Almacén compartido con tg y max | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 | Modelos descargados por tg o max | `~/.local/share/WireCat/models/` | `%LOCALAPPDATA%\WireCat\Data\models\` |
-| Temporizador tras `memo auto start` | `~/.config/systemd/user/memo-import.timer` y `.service` | — |
+| Temporizador tras `memo jobs start` | `~/.config/systemd/user/memo-import.timer` y `.service` | — |
 
 - **Ajustes**: `config.json` ([configuración](./configuration.md)): carpetas, cuentas y reglas de correo y temporizador.
 - **Estado**: lo último importado de cada carpeta (`folders/`), el bloqueo de sincronizaciones simultáneas (`import.lock`) y el resultado de la última ejecución periódica (`auto/`).
@@ -141,7 +143,7 @@ node dist/bin/memo.js --help
 
 Los comandos de tareas también leen `~/.config/cli-memo-tasks/config.json` (`MEMO_TASKS_CONFIG_DIR` lo cambia de sitio) cuando existe. Memo nunca lo escribe y no lo necesitas. El temporizador ejecuta `memo sync` con `MEMO_AUTO=1`, que marca una ejecución periódica: omite la comprobación de actualizaciones y, si el temporizador está desactivado en los ajustes, no hace nada.
 
-> ⚠ **Establece estas variables en todas partes o en ninguna.** Sin ellas, un comando lee otros ajustes y otro almacén e indica que faltan carpetas o correo. El temporizador conserva las variables de `memo auto start`; repite el comando tras cambiarlas. tg y max leen el mismo almacén solo con los mismos `MESSAGING_STORE` o `WIRECAT_STATE_DIR`. Estas variables están pensadas para pruebas y perfiles temporales.
+> ⚠ **Establece estas variables en todas partes o en ninguna.** Sin ellas, un comando lee otros ajustes y otro almacén e indica que faltan carpetas o correo. El temporizador conserva las variables de `memo jobs start`; repite el comando tras cambiarlas. tg y max leen el mismo almacén solo con los mismos `MESSAGING_STORE` o `WIRECAT_STATE_DIR`. Estas variables están pensadas para pruebas y perfiles temporales.
 
 ## Actualizar
 
@@ -163,7 +165,7 @@ Desde el código fuente: `git pull && pnpm install && pnpm build`.
 La desinstalación elimina el comando Memo y conserva tus datos. Sigue este orden:
 
 ```sh
-memo auto stop                       # if you turned on the timer: removes it while memo still exists
+memo jobs stop                       # if you turned on the timer: removes it while memo still exists
 npm uninstall -g @wirecat/cli-memo   # or pnpm remove -g, or bun remove -g
 rm -rf ~/.claude/skills/cli-memo ~/.agents/skills/cli-memo   # the agent skill
 rm -rf ~/.config/cli-memo ~/.local/share/cli-memo ~/.cache/cli-memo   # Memo's settings, state and cache

@@ -49,7 +49,7 @@ memo memories list kind:preference scope:work
 memo memories show memory:3
 memo search memories friday meetings scope:work
 memo memories confirm memory:3
-memo memories stale memory:3
+memo memories invalidate memory:3
 ```
 
 Память, которую вы добавляете командой `memo`, подтверждается сразу. Запись агента остаётся `proposed`, пока вы не проверите основания и не выполните `confirm`. Если основания устарели, например Kai теперь предпочитает понедельники, пометьте запись `stale`. `--subject person:…` задаёт предмет записи. `memories list` фильтруется полями `kind`, `status`, `scope` и `subject` запроса: `subject:"person:42"`.
@@ -121,11 +121,11 @@ memo actions add reply --reason 'Kai asked twice' --account telegram:1 --target 
 ## Что делали агенты
 
 ```sh
-memo agents log --limit 20
-memo agents log agent:memo-mcp
+memo agents list --limit 20
+memo agents list agent:memo-mcp
 ```
 
-Журнал агентов показывает каждый вызов, который агент сделал через MCP-серверы Memo, tg и max, начиная
+Общий журнал агентов показывает команды, дошедшие до исполнителя Memo, и вызовы, записанные tg и max, начиная
 с самых новых: какой агент, какой инструмент, результат и время. Журнал никогда не хранит то, что
 отправил агент.
 

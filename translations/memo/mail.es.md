@@ -9,6 +9,8 @@ primero. La importación lee el buzón sin cambiarlo ni marcar correo como leíd
 [limpieza de Gmail](#clean-up-gmail) mueven el correo elegido a la Papelera o lo restauran solo con
 `--yes`. Memo nunca envía correo.
 
+<a id="importar-correo" />
+
 ## Antes de empezar
 
 Configura tu cuenta de correo en Himalaya. Para Gmail, usa una cuenta IMAP con una
@@ -196,8 +198,8 @@ La exportación Mail de Google Takeout incluye los filtros de Gmail en `Mail/Use
 Memo propone una regla por cada filtro que puede expresar:
 
 ```sh
-memo mail rules import-filters work Filters.json        # shows the proposed rules and the skipped filters
-memo mail rules import-filters work Filters.json --yes  # adds them
+memo mail rules import work Filters.json --format gmail        # shows the proposed rules and the skipped filters
+memo mail rules import work Filters.json --format gmail --yes  # adds them
 ```
 
 Primero compara las etiquetas Gmail que añade el filtro con las de Memo: reutiliza el mismo nombre con otras
@@ -228,18 +230,18 @@ memo mail rules export work > rules.json
 memo mail rules import work rules.json   # a rule with the same sender, domain or list is replaced
 ```
 
-Antes de 0.32.0 las reglas estaban en `config.json`. El primer comando memo que las lee las mueve al almacén, comprueba la copia y solo entonces las quita de los ajustes. Conserva al lado `config.json.<time>.before-rules-in-store`, legible solo por ti, y lo comunica una vez por stderr. Una regla de conservación con «never remove» en el motivo queda protegida: ninguna limpieza puede recortar ni eliminar lo que coincida.
+Los ajustes antiguos guardaban las reglas en `config.json`. El primer comando memo que las lee las mueve al almacén, comprueba la copia y solo entonces las quita de los ajustes. Conserva al lado `config.json.<time>.before-rules-in-store`, legible solo por ti, y lo comunica una vez por stderr. Una regla de conservación con «never remove» en el motivo queda protegida: ninguna limpieza puede recortar ni eliminar lo que coincida.
 
 ## Limpia Gmail
 
-`memo mail trash` mueve a la Papelera de Gmail los correos de los que decidiste conservar solo el sobre. Gmail los conserva allí 30 días y después los elimina definitivamente.
+`memo mail delete` mueve a la Papelera de Gmail los correos de los que decidiste conservar solo el sobre. Gmail los conserva allí 30 días y después los elimina definitivamente.
 
 ```sh
-memo mail trash work                  # says what would move, per rule, and what stays and why
-memo mail trash work --yes            # a first run moves at most 100, to check by hand in Gmail's Trash
-memo mail trash work --yes            # later runs move up to 5,000, oldest first (--limit changes it)
-memo mail trash work --yes --since-time 2012-01-01   # only mail from 2012 on; older mail stays for now
-memo mail runs work                   # each run: how much moved, and until when it can be restored
+memo mail delete work                  # says what would move, per rule, and what stays and why
+memo mail delete work --yes            # a first run moves at most 100, to check by hand in Gmail's Trash
+memo mail delete work --yes            # later runs move up to 5,000, oldest first (--limit changes it)
+memo mail delete work --yes --since-time 2012-01-01   # only mail from 2012 on; older mail stays for now
+memo mail runs list work                   # each run: how much moved, and until when it can be restored
 memo mail restore work --run <id> --yes   # moves a run back, to the inbox if it was there, with its labels
 ```
 
@@ -247,7 +249,7 @@ Cada correo se evalúa otra vez con las reglas actuales y los datos de la últim
 
 Sin `--yes`, el comando muestra el plan. La primera ejecución con `--yes` mueve como máximo 100 correos para revisarlos en la Papelera; las siguientes, hasta 5 000, del más antiguo al más reciente, salvo otro `--limit`. Se necesita una copia verificada del almacén de menos de 8 días: el script de copia registra `backups/last.json` junto al almacén. Se aconseja un archivo Google Takeout `mbox` para conservar el texto completo, pero no es obligatorio; la vista previa y `memo doctor` indican si se ha importado.
 
-Antes de cada lote, los identificadores Gmail, etiquetas y marcas se escriben en el registro de restauración `mail-trash/<account>/<run>.jsonl` en la carpeta de estado de Memo. La Papelera quita el correo de Todos y la etiqueta Recibidos; conserva las demás etiquetas. memo mail runs muestra las ejecuciones y hasta cuándo se pueden restaurar. memo mail restore muestra el plan sin `--yes`; con él devuelve de la Papelera los correos de la ejecución indicada con sus etiquetas anteriores, incluida Recibidos si la tenían. También restaura un lote que Gmail movió sin confirmar la operación.
+Antes de cada lote, los identificadores Gmail, etiquetas y marcas se escriben en el registro de restauración `mail-trash/<account>/<run>.jsonl` en la carpeta de estado de Memo. La Papelera quita el correo de Todos y la etiqueta Recibidos; conserva las demás etiquetas. memo mail runs list muestra las ejecuciones y hasta cuándo se pueden restaurar. memo mail restore muestra el plan sin `--yes`; con él devuelve de la Papelera los correos de la ejecución indicada con sus etiquetas anteriores, incluida Recibidos si la tenían. También restaura un lote que Gmail movió sin confirmar la operación.
 
 El correo movido queda marcado como eliminado en el almacén; la siguiente sincronización tras restaurarlo lo importa según las reglas actuales. El temporizador nunca ejecuta la limpieza.
 

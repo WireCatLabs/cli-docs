@@ -124,7 +124,7 @@ memo relationships add chat:telegram/1/123 project:1
 Memo может предложить связи на основе почты: люди, которые пишут вам с одного и того же домена компании.
 
 ```sh
-memo relationships suggest --source email:you@example.com
+memo relationships scan --source email:you@example.com
 memo relationships confirm 4
 ```
 
