@@ -1,5 +1,6 @@
 export const whatsappDescriptions: Record<string, Record<string, string>> = {
   en: {
+    compare: "Compare WhatsApp tools for chats, search, files, automation and agent permissions.",
     index: "Connect your own WhatsApp account to your AI agent for chats, search, files and conversation context.",
     installation: "Install the WhatsApp CLI, check runtime requirements, update it and find its local files.",
     usage: "Read and answer WhatsApp chats, choose a profile and control which changes your agent may make.",
@@ -29,6 +30,7 @@ export const whatsappDescriptions: Record<string, Record<string, string>> = {
     roadmap: "See which WhatsApp CLI capabilities are available and which work remains planned.",
   },
   ru: {
+    compare: "Сравните инструменты WhatsApp для чатов, поиска, файлов, автоматизации и прав ИИ-агента.",
     index: "Подключите свой WhatsApp к ИИ-агенту: чаты, поиск, файлы и контекст переписки.",
     installation: "Установите WhatsApp CLI, проверьте требования, обновите инструмент и найдите его файлы.",
     usage: "Читайте чаты WhatsApp, готовьте ответы, выбирайте профиль и разрешённые агенту изменения.",
@@ -58,6 +60,7 @@ export const whatsappDescriptions: Record<string, Record<string, string>> = {
     roadmap: "Что WhatsApp CLI уже умеет и какие функции ещё запланированы.",
   },
   es: {
+    compare: "Compara herramientas de WhatsApp para chats, búsqueda, archivos, automatización y permisos del agente.",
     index: "Conecta tu WhatsApp a tu agente de IA para leer chats, buscar, guardar archivos y reunir contexto.",
     installation: "Instala la CLI de WhatsApp, comprueba requisitos, actualízala y localiza sus archivos.",
     usage: "Lee y responde chats de WhatsApp, elige un perfil y controla qué puede cambiar tu agente.",
