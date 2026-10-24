@@ -71,7 +71,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(markdown.ok()).toBe(true)
     const text = await markdown.text()
     expect(text).toContain('zm personal search meetings "launch" --identity-id 12 --project RES')
-    expect(text).toContain("search_meetings")
+    expect(text).toContain("zm_write")
     expect(text).toContain("zm personal meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown")
     expect(text).toContain("--scan-limit")
     expect(text).toContain("page.has_more")
