@@ -139,7 +139,10 @@ in cli-testing PR204 passes all 18 rows (six tools × npm/pnpm/Bun); an addition
 check passes for each of the three managers without an account. macOS, Windows and Node 22 legs
 are configured in the reusable suite but were not run locally.
 
-Final browser and unit counts are recorded below after the final navigation export. Browser review
+Final results: 336 unit tests, 13 browser smoke cases (including six WhatsApp locale/viewport paths),
+and nine command-reference cases pass against the final export. The initial unrestricted export
+worker was killed; retry with four CPU cores succeeded. Final asset, link, SEO and release-note
+checks pass. Browser review
 covers EN/RU/ES, desktop/mobile, actual provider selection and cross-tool navigation, whole-page
 accessibility, Markdown, legacy anchors and the unchanged 3000-element command-reference limit.
 Desktop/mobile screenshots were inspected. CI results and deployment/public verification are
