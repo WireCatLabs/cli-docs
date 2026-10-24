@@ -32,16 +32,20 @@ Sustituye el valor sin los signos angulares. Entra como el usuario cuyas reunion
 los permisos y aprueba. Espera `logged_in: true` en el terminal. Si sigue esperando después de aprobar,
 [completa el retorno](./sessions.md#finish-the-browser-callback).
 
-### Usa una app de WireCat o de tu equipo
+zm no incluye un client ID. Hasta que la app del propietario supere la revisión de Zoom Marketplace,
+no hay ninguna app de WireCat disponible para otras cuentas de Zoom. Esa app está en Development y
+solo funciona para la cuenta de su creador.
 
-Si el dueño habilitó una app de WireCat o del equipo para tu usuario, usa el **Public Client ID
-facilitado por ese dueño** con las mismas órdenes. No necesitas otra app ni su secreto. El dueño
-mantiene retorno y permisos; tú autorizas tu propia cuenta.
+<a id="use-a-wirecat-or-team-app" />
 
-Una app en desarrollo no está disponible automáticamente para usuarios de otra cuenta. Confirma
-el acceso con su dueño; puede hacer falta el administrador. Un enlace de autorización solo no
-configura `zm` ni completa su sesión: inicia `zm personal session start` para crear el retorno y la clave de ese
-intento. Si no puedes autorizar la app compartida, crea la tuya siguiendo los pasos siguientes.
+### Usa una app de equipo
+
+Si un compañero creó una app y la compartió con tu cuenta de Zoom, usa su **Public Client ID** con
+los comandos anteriores. El compañero mantiene las direcciones de retorno y los permisos solicitados;
+tú autorizas tu propia cuenta. Confirma el acceso con él; puede hacer falta la aprobación de un administrador.
+Un enlace de autorización de Marketplace por sí solo no configura zm: inicia `zm personal session start`
+para crear el retorno y la clave de verificación del intento. Si no puedes autorizar la app de equipo,
+crea la tuya siguiendo los pasos siguientes.
 
 ## Crea tu propia app
 
@@ -114,7 +118,7 @@ emitidos no ganan permisos automáticamente. Comprueba lo realmente concedido co
 | Permiso | Función |
 |---|---|
 | `cloud_recording:read:list_user_recordings` | Descubrir grabaciones |
-| `cloud_recording:read:list_recording_files` | Inspeccionar y descargar archivos |
+| `cloud_recording:read:list_recording_files` | Inspeccionar y descargar archivos; guardar el chat de la reunión al sincronizar |
 | `user:read:user` | Verificar sesión remota con `zm personal session status --check` |
 | `meeting:read:meeting` | Ver detalles remotos y preparar una serie elegida con contexto guardado |
 | `meeting:read:invitation` | Leer invitación |

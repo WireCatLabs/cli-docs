@@ -6,7 +6,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { fingerprint, translationProblems } from "./localize.ts"
+import { type Correction, fingerprint, reviewedSource, translationProblems } from "./localize.ts"
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const [mode, ...ids] = process.argv.slice(2)
@@ -16,8 +16,8 @@ if (!["check", "accept", "corrections"].includes(mode) || ids.length === 0) {
 }
 const hashesPath = join(root, "translations/sources.json")
 const hashes = JSON.parse(readFileSync(hashesPath, "utf8")) as Record<string, string>
-type Correction = { tool: string; slug: string; replacements: Record<string, { before: string; after: string }[]> }
 const corrections = JSON.parse(readFileSync(join(root, "scripts/docs-corrections.json"), "utf8")) as Correction[]
+const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as { name: string; lang: string }[]
 let failed = false
 for (const id of ids) {
   const [tool, rest] = id.split("/")
@@ -42,7 +42,12 @@ for (const id of ids) {
     if (broken) failed = true
     continue
   }
-  const problems = translationProblems(original, readFileSync(path, "utf8"))
+  const sourceLang = slug === "scenarios" ? "en" : tools.find((entry) => entry.name === tool)?.lang
+  if (!sourceLang) throw new Error(`Unknown tool ${tool}`)
+  const problems = translationProblems(
+    reviewedSource(original, corrections, tool, slug, sourceLang),
+    reviewedSource(readFileSync(path, "utf8"), corrections, tool, slug, lang),
+  )
   const current = hashes[id] === fingerprint(original)
   console.log(
     `${id}: ${problems.length ? `PROBLEMS ${problems.join(", ")}` : "structure ok"}; fingerprint ${current ? "current" : "STALE"}`,

@@ -4,6 +4,94 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.42.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- `recordings download` acepta una reunión o un intervalo de fechas. `recordings sync` desaparece sin alias: usa `recordings download --since-time … --until-time …`. Los archivos, puntos de control y tareas programadas existentes siguen siendo compatibles.
+- Revisa los permisos guardados `recordings.sync` y cámbialos por `recordings.download`. Las entradas antiguas detienen los comandos que comprueban permisos, en lugar de perder sus restricciones.
+
+### Añadido
+
+- Las descargas por intervalo admiten listas JSON acotadas de confirmaciones, también por MCP. `--jsonl` sigue emitiendo cada confirmación al completarse, para conservar resultados anteriores si falla una descarga posterior.
+
+### Correcciones
+
+- Los comandos denegados siguen apareciendo en las búsquedas MCP con su disponibilidad actual y un motivo. La ayuda CLI con perfil explícito muestra esa disponibilidad; las llamadas siguen rechazándose antes de ejecutarse.
+
+## 0.41.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- Las duraciones usan la sintaxis CLI común: un entero seguido de `ms`, `s`, `m`, `h` o `d`. Se rechazan los números sin unidad y las duraciones fraccionarias.
+- Las respuestas tipadas usan ID como cadenas y fechas ISO de forma coherente, incluidos los recibos de archivo y cambios en reuniones.
+- Los comandos usan el ciclo de vida, plazos, cancelación, descubrimiento y metadatos de solo lectura de Core. El SDK requiere `parseAsync`; se rechaza el análisis síncrono antes de ejecutar el comando.
+
+### Añadido
+
+- `meetings status` y `recordings status <directory>` muestran progreso persistente sin acceder a la red ni abrir la base.
+- MCP expone inventario de reuniones programadas, examen de proyectos y actualización según los permisos del perfil; actualizar y cambiar temporizadores necesita autoridad.
+- `bin/release --local` valida y publica un único paquete comprobado con un token npm exportado explícitamente.
+
+### Correcciones
+
+- Las descargas de modelos usan la verificación de checksum y reparación de Core.
+- MCP comprueba la autoridad mediante anotaciones y permisos del catálogo compartido, también después de revocar un permiso.
+
+## 0.40.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- Los modelos de voz usan los nombres compartidos de cli-core 0.406.0: `models list` sustituye a `models audio list` y acepta `kind:audio`, `id:` y `downloaded:`; `models download <model>` sustituye a `models audio
+  download`. No hay alias. La respuesta `model` usa `size_bytes` en lugar de `sizeBytes` y `default`, siempre `false`, porque `meetings transcribe` recibe `--model`.
+
+### Correcciones
+
+- Los ejemplos de ayuda y escenarios del paquete incluyen el perfil.
+- La guía MCP describe escrituras y permisos; la instalación explica que cada usuario necesita su propia app de Zoom o una app de equipo autorizada.
+
+### Añadido
+
+- El catálogo MCP incluye lectura de ajustes, estado de sesión, lectura de la skill y vectores de reuniones. Los ajustes e instalación de skills necesitan `mcp.authority` explícito; el agente no puede cambiar permisos del perfil.
+- `doctor` muestra `authentication.keyring` tras probar y eliminar una entrada temporal, sin leer accesos guardados.
+
+## 0.39.0 — 24.10.2026
+
+### Añadido
+
+- El primer comando en una terminal pregunta una sola vez para todas las herramientas WireCat por tus idiomas, otras herramientas que instalar y si comandos y agentes solo pueden leer. Las respuestas se comparten; «solo lectura» impide los cambios de zm aunque el perfil permita más. `tg setup`, `max setup` o `wa setup` vuelve a preguntar. No pregunta a agentes, con `--json`, `--no-input`, `CI` ni `ZM_READ_ONLY`.
+
+## 0.38.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- `search all` devuelve una lista de coincidencias como tg, en vez de un único item con detalles internos. Cada coincidencia conserva `ref`, `title`, `timestamp`, `excerpt` (antes `text`), `offset_ms` (antes `start_ms`) y, para reuniones, `scope` e `id`. Las fuentes omitidas van a `meta.issues`, con el motivo por stderr; `missing` informa de un examen truncado. Continúa con `--page` o `--max-meetings all`; desaparece `--meeting-cursor`.
+- `meetings evidence` y `meetings context` identifican cada línea con `ref` (antes `reference`), su inicio con `offset_ms` (antes `start_ms`) y los ID como cadenas, igual que `meetings prepare`.
+- `events list` devuelve fechas ISO 8601 e ID como cadenas, antes milisegundos y números.
+
+### Añadido
+
+- Once comandos más declaran el tipo de respuesta: `review`, `mentions list`, `stats meetings show` y `top`, `meetings people`, `meetings passage`, `meetings task-proposal`, `meetings evidence`, `meetings
+  context`, `events list` y `search all`. `commands --json` y MCP describen sus campos, y `--json=a,b` valida sus nombres.
+
+### Correcciones
+
+- `search all` pagina las coincidencias de reuniones: `--page 2` ya no repite la primera página y `has_more` se conserva mientras quedan resultados.
+- `searches run` declara el tipo `meeting_hit`, como `search meetings`, en lugar de `hit`; `--json=scope` ya no se rechaza por ese esquema incorrecto.
+
+## 0.37.0 — 23.10.2026
+
+### Añadido
+
+- `zm <profile> review` muestra las reuniones desde una fecha, con decisiones y tiempo de palabra: los últimos siete días por defecto, con resumen, próximos pasos, proyectos, tamaño de la transcripción y las tres personas que más hablaron. Informa de resúmenes ausentes y transcripciones casi vacías.
+- La sincronización conserva el chat guardado por Zoom con una grabación en la nube, con `cloud_recording:read:list_recording_files`. `zm <profile> mentions list` enumera los enlaces más compartidos, quién los compartió y en qué reuniones.
+- `zm <profile> searches create|run|list|show|delete` guarda una consulta y sus opciones bajo un nombre. Se interpretan en cada ejecución: `date>=7d` sigue siendo la última semana. `searches run` responde como `search meetings`.
+- `search meetings` admite `date:`, `project:`, `tag:` y `topic:` en la consulta, igual que las opciones correspondientes: `zm personal search meetings "launch project:RES date>=30d"`.
+
+### Correcciones
+
+- Una transcripción que Zoom aún no ha terminado ya no se informa como una respuesta rota. Sync avisa de que todavía no está lista y puede obtenerla más tarde. Si no existe, fue borrada o Zoom no puede exportarla, la reunión se guarda sin transcripción y sin advertencia.
+
 ## 0.36.0 — 22.10.2026
 
 ### Cambiado — puede romper la compatibilidad

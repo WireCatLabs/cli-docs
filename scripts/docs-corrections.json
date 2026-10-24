@@ -4137,5 +4137,73 @@
         }
       ]
     }
+  },
+  {
+    "tool": "zm",
+    "slug": "security",
+    "phase": "before-translation",
+    "reason": "Reviewed v0.42.0 runtime errata; native fix WireCatLabs/zoom-cli#245. Permission denial limits execution, unified search is a paged hit list, and released capabilities are current.",
+    "replacements": {
+      "en": [
+        {
+          "before": "  limit both discovery and execution; `deny` hides a command and `readonly` withholds writes.\n",
+          "after": "  limit execution. Denied commands remain discoverable with current availability and a reason;\n  `readonly` marks writes unavailable.\n"
+        },
+        {
+          "before": "  `mcp.authority: allow`; profile permissions can only be changed in a terminal. See [MCP and skills](./mcp.md).\n",
+          "after": "  `mcp.authority: allow` or `ask`; profile permissions can only be changed in a terminal. See [MCP and skills](./mcp.md).\n"
+        },
+        {
+          "before": "  remote `--base-url`. Still running: reads, word search (which keeps its index current), `batch`, `mcp`,\n  and the syncs that copy Zoom into the store or an archive — `meetings sync`, `watch`, `recordings sync`,\n  `recordings download` and `recordings schedule run`; a sync or `watch` from a files source reads the configured\n",
+          "after": "  remote `--base-url`. Still running: reads, word search (which keeps its index current), `mcp`,\n  and the syncs that copy Zoom into the store or an archive — `meetings sync`, `watch`, `recordings download` and `recordings schedule run`; a sync or `watch` from a files source reads the configured\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "search",
+    "phase": "before-translation",
+    "reason": "Reviewed v0.42.0 runtime errata; native fix WireCatLabs/zoom-cli#245. Permission denial limits execution, unified search is a paged hit list, and released capabilities are current.",
+    "replacements": {
+      "en": [
+        {
+          "before": "as skipped. A meetings-only continuation uses the returned `item.meetings.next_cursor` as\n`--meeting-cursor '<json>'`, bound to its account and query. JSONL emits the report in one item record, retaining skips, coverage and cursors, followed by an end\nrecord. Skipped sources set `complete` to false and appear in `issues`; search still exits zero.\n",
+          "after": "as skipped. Continue the hit list with `--page`. JSONL emits one item per hit and an end record.\nSkipped sources set `meta.complete` to false and appear in `issues`; search still exits zero.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "usage",
+    "phase": "before-translation",
+    "reason": "Reviewed v0.42.0 runtime errata; native fix WireCatLabs/zoom-cli#245. Permission denial limits execution, unified search is a paged hit list, and released capabilities are current.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Detailed reports, including participant discovery, evidence, semantic search and unified search,\nkeep their coverage and report-specific continuation inside `item`. Stored meeting word search\n",
+          "after": "Detailed reports, including participant discovery, evidence and semantic search, keep their coverage\nand report-specific continuation inside `item`. Unified `search all` returns hit lists and uses `--page`. Stored meeting word search\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "roadmap",
+    "phase": "before-translation",
+    "reason": "Reviewed v0.42.0 runtime errata; native fix WireCatLabs/zoom-cli#245. Permission denial limits execution, unified search is a paged hit list, and released capabilities are current.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## In progress\n",
+          "after": "<a id=\"in-progress\" />\n<a id=\"next\" />\n\n## Also available\n"
+        },
+        {
+          "before": "- A digest of recent meetings (`review`) and the links shared in meeting chat (`mentions list`). They are built\n  and come with the next release.\n- Saved meeting searches you can run again by name.\n\n## Next\n\n- Help examples you can copy as they are, with the profile word in them.\n- Every command available to an agent through MCP, with the profile's permissions deciding what it may change.\n- More search fields for meetings: date, project, tag and topic inside the query.\n- `doctor` tells you whether this computer can save a Zoom login.\n",
+          "after": "- `review` makes a digest of recent meetings, and `mentions list` finds links shared in meeting chat.\n- Saved searches can be run again by name; meeting query fields include date, project, tag and topic.\n- Profile-aware examples can be copied as shown. `doctor` checks whether this computer can save a Zoom login.\n- MCP keeps supported commands discoverable; profile permissions decide which reads and writes may run.\n"
+        }
+      ]
+    }
   }
 ]

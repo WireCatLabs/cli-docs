@@ -240,6 +240,37 @@ dos personas que hablan a la vez cuentan las dos. Una reunión con la transcripc
 de Zoom (la más antigua); las reuniones sin transcripción no se cuentan. Solo se leen números: no se muestra texto de
 la transcripción.
 
+<a id="review-the-last-week" />
+
+## Revisa la última semana
+
+```sh
+zm personal review --json
+zm personal review --since-time 30d --project RES --json
+```
+
+`review` enumera las reuniones desde una fecha, de la más reciente a la más antigua: los últimos siete días
+si no indicas `--since-time`, hasta `--limit` resultados (50 por defecto, máximo 200). Cada reunión incluye
+su último resumen y próximos pasos, proyectos confirmados, líneas y palabras de la transcripción y las
+tres personas con más tiempo de palabra. `missing` cuenta las reuniones sin resumen —Zoom solo lo crea
+cuando AI Companion resumió la reunión; las transcripciones importadas no lo tienen— y las transcripciones
+con menos de 50 palabras. En estas últimas, una búsqueda vacía puede significar que no se grabó el texto.
+Admite los mismos filtros que `stats meetings`.
+
+<a id="find-links-shared-in-meeting-chat" />
+
+## Encuentra enlaces compartidos en el chat
+
+```sh
+zm personal mentions list --since-time 30d --json
+```
+
+`meetings sync` conserva el chat que Zoom guarda con una grabación en la nube si el acceso incluye
+`cloud_recording:read:list_recording_files`. `mentions list` muestra sus enlaces, de más a menos compartidos,
+con quién los compartió, en qué reuniones, cuándo y el archivo de Google que identifica un enlace de Docs,
+Sheets o Drive. Elimina parámetros de seguimiento como `utm_source`, para contar una misma página una sola
+vez. Sin grabación en la nube no hay un chat de reunión que recuperar.
+
 ## Elige datos locales o remotos
 
 | Necesidad | Familia de órdenes | Dónde trabaja |
@@ -278,7 +309,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `meetings projects evidence <project> [query...]` | leer evidencia acotada del nombre, clave y alias de un proyecto existente |
 | `meetings update <reference>`, `meetings link <reference>` | revisar o aplicar vínculos elegidos |
 | `meetings transcribe <meeting> <file> --model <model>` | revisar o reconocer una grabación (MP4, M4A, WAV) como transcripción independiente |
-| `models audio list\|download` | los modelos de voz para transcribir; descargar o reparar uno |
+| `models list\|download` | los modelos de voz para transcribir; descargar o reparar uno |
 | `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | leer fuentes limitadas o contexto personal vinculado |
 | `meetings task-proposal <reference> --type <type>` | revisar una tarea con su fuente |
 | `search meetings <query> --model <model>` | buscar por significado, generando primero los vectores que faltan |
@@ -288,7 +319,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `watch [api\|files] [folder] --jsonl` | importar repetidamente en primer plano |
 | `recordings list`, `recordings show <meeting>` | descubrir grabaciones y metadatos |
 | `recordings download <meeting> --output-dir <dir>` | archivar archivos disponibles |
-| `recordings sync --since-time <date> --until-time <date> --output-dir <dir> --jsonl` | archivar historial por meses |
+| `recordings download --since-time <date> --until-time <date> --output-dir <dir> --jsonl` | descargar historial por meses; `--json` también devuelve una lista acotada |
 | `recordings schedule create\|list\|show\|run\|disable` | gestionar trabajos diarios de archivo |
 | `recordings archive show\|check\|locks <directory>` | inspeccionar manifiestos, sumas o bloqueos |
 | `recordings archive recover <directory>` | revisar recuperación de bloqueos obsoletos |
@@ -310,8 +341,8 @@ Usa `--json` para una respuesta completa. Un resultado lleva `item`; una lista, 
 `page` (`mode`, `limit`, `has_more` y `next_cursor` opcional). Ambos incluyen `meta.run_id`,
 `meta.duration_ms` y `meta.complete`, con pasos `next` e información `missing` opcionales. Las claves usan snake_case.
 
-Los informes detallados de participantes, fuentes, búsqueda semántica y búsqueda unificada
-conservan cobertura y continuación dentro de `item`. La búsqueda de palabras en reuniones
+Los informes detallados de participantes, fuentes y búsqueda semántica conservan cobertura y continuación
+dentro de `item`. `search all` devuelve una lista en `items`, con su página y metadatos de ejecución; continúa con `--page`. La búsqueda de palabras en reuniones
 guardadas devuelve elementos con `ref`, `meeting`, `excerpt` y `offset_ms`. Si están guardados,
 `source` añade título, `started_at`, referencia de evidencia `ref` y documento `url`. Un URL null
 indica que no hay enlace al documento; el enlace para entrar a la llamada no es un enlace a evidencia.
@@ -327,8 +358,8 @@ Lee `complete` e `issues` opcional en el registro end. Usa `--json` cuando neces
 contrato compartido 3 con declaraciones separadas `effects.remote` y `effects.local`; ayuda,
 versión y autocompletado mantienen sus protocolos.
 
-Una fuente omitida deja `meta.complete` en false y añade un problema de esa fuente.
-`search all` acepta resultados parciales y termina con código cero; revisa sus omisiones antes de
+Una fuente omitida deja `meta.complete` en false y añade un problema de esa fuente; `search all` explica
+el motivo por stderr. Acepta resultados parciales y termina con código cero: revisa `meta.issues` antes de
 considerar completo el resultado. Otras respuestas parciales imprimen lo disponible y después
 terminan con el código del primer problema. Una página limitada con más resultados es paginación
 normal, en vez de un fallo de fuente.
@@ -346,7 +377,20 @@ hasta liberar recursos; el límite predeterminado es 4 MiB. `--max-output-bytes 
 
 ## Plazos y cancelación
 
-`--timeout <milliseconds>` establece un plazo positivo para todo el comando. También acepta `30s`,
-`5m` y `1h`. Lecturas: 30 segundos; acceso: cinco minutos; descargas, sincronización y verificación:
-una hora. El seguimiento y MCP no tienen plazo predeterminado. La cancelación espera operaciones
-y limpieza; una operación inyectada que ignore la señal puede retrasar la salida.
+`--timeout <duration>` establece un plazo positivo para todo el comando: un número entero seguido de
+`ms`, `s`, `m`, `h` o `d`, como `30s`, `5m` o `1h`. Se rechazan los números sin unidad y las duraciones
+fraccionarias. Los valores predeterminados son 30 segundos para lecturas, cinco minutos para un acceso
+sin terminal y una hora para descargas, sincronización y verificación de archivos. El acceso desde una
+terminal interactiva no tiene plazo predeterminado. Tampoco lo tienen los observadores en primer plano
+ni el servidor MCP. La cancelación espera las operaciones activas y la limpieza; una operación inyectada
+que ignore su señal puede retrasar la salida.
+
+<a id="inspect-sync-progress" />
+
+## Consulta el progreso
+
+`zm personal meetings status --json` lee el último progreso de importación sin abrir la base ni contactar
+con Zoom. `zm personal recordings status <directory> --json` consulta el punto de control de un archivo
+sin modificarlo; `--checkpoint <file>` elige otro archivo. Ambos usan los campos de progreso compartidos.
+Un total `null` significa que se desconoce. El progreso parcial y las descargas confirmadas no prueban
+que el archivo esté completo: la sincronización termina cuando finalizan la enumeración y todos los archivos pendientes.
