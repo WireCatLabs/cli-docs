@@ -48,7 +48,7 @@ La búsqueda de tema no es el campo `topic:` de [búsqueda de mensajes](./search
 | Otras palabras para lo mismo | no: "piso" no encuentra "apartamento" | si |
 | Otros idiomas | no | sí, unos 100 idiomas con el modelo predeterminado |
 | Filtros exactos (remitente, fecha, archivo, enlace) | sí, el [lenguaje de consulta completo](./query-language.md) | sí, a través de `--filter` |
-| Preparación | descargar la historia | descargar el historial, luego `build` y `embed` |
+| Preparación | descargar la historia | descargar el historial, luego `conversations links rebuild` y `conversations embed` |
 | Pregunta Telegram | sí, por defecto | no, solo lee esta computadora |
 
 Utilice la búsqueda de palabras cuando recuerde una palabra, un número, un nombre o un archivo. Utilice la búsqueda de temas cuando recuerde el tema pero no la redacción, cuando una discusión se extienda en muchos mensajes cortos o cuando las personas escribieron en otro idioma. Si no está seguro, intente primero la búsqueda de temas: también coincide con sus palabras, por lo que una conversación que las utilice aún se ubicará en la parte superior.
@@ -65,8 +65,8 @@ Prepare un chat una vez y luego haga tantas preguntas como desee.
 
 ```sh
 tg personal messages sync "Book club"              # 1. download the history, if it is not saved yet
-tg personal conversations build --chat "Book club"  # 2. separate the chat into conversations
-tg personal models text download e5-small        # 3. once: download the model, 135 MB, shared with max
+tg personal conversations links rebuild --chat "Book club"  # 2. separate the chat into conversations
+tg personal models download e5-small        # 3. once: download the model, 135 MB, shared with max
 tg personal conversations embed --chat "Book club"  # 4. compute a vector for each piece
 tg personal search conversations "where do we meet" --chat "Book club"  # 5. ask
 tg personal conversations show 91                # 6. read the conversation that was found
@@ -89,7 +89,7 @@ La búsqueda de temas tiene tres etapas. Los dos primeros preparan una charla un
 
 ### 1. Construir: separar el chat en conversaciones
 
-`tg personal conversations build` lee los mensajes guardados de un chat, los más antiguos primero, y decide para cada mensaje cuál mensaje anterior continúa. No utiliza IA y no solicita Telegram. Los enlaces provienen, en este orden:
+`tg personal conversations links rebuild` lee los mensajes guardados de un chat, los más antiguos primero, y decide para cada mensaje cuál mensaje anterior continúa. No utiliza IA y no solicita Telegram. Los enlaces provienen, en este orden:
 
 1. **Respuestas propias de Telegram.** Un mensaje enviado como respuesta pertenece al mensaje que responde.
 2. **Las respuestas de su agente**, si le pidió a su agente que vincule el chat ([abajo](#let-your-ai-agent-link-messages)).
@@ -190,12 +190,12 @@ Los mensajes nuevos llegan a una conversación solo tras la siguiente construcci
 
 ```sh
 tg personal conversations status                 # what is behind, chat by chat
-tg personal conversations build                  # every chat that changed, and groups never built
+tg personal conversations links rebuild                  # every chat that changed, and groups never built
 tg personal conversations embed                  # every built chat with pieces left
 tg personal search conversations "renting a flat" --catch-up  # catch up first, then search
 ```
 
-`status` cuenta, para cada chat creado, los mensajes que la compilación no ha visto (nuevos, editados, eliminados), las piezas cuyo vector está actual, obsoleto o faltante, y cuántos grupos nunca se crearon. Sin `--chat`, `build`, `embed` y `search conversations --catch-up` aceptan como máximo 20 chats por ejecución (`--max-chats`) e incrustan como máximo 2000 piezas por ejecución (`--max-chunks`); ejecútelos nuevamente para continuar. Nunca descargan un modelo. `--catch-up` no se puede combinar con `--filter` o `--source`: primero cree e incruste los chats que desee.
+`status` cuenta, para cada chat creado, los mensajes que la compilación no ha visto (nuevos, editados, eliminados), las piezas cuyo vector está actual, obsoleto o faltante, y cuántos grupos nunca se crearon. Sin `--chat`, `conversations links rebuild`, `embed` y `search conversations --catch-up` aceptan como máximo 20 chats por ejecución (`--max-chats`) e incrustan como máximo 2000 piezas por ejecución (`--max-chunks`); ejecútelos nuevamente para continuar. Nunca descargan un modelo. `--catch-up` no se puede combinar con `--filter` o `--source`: primero cree e incruste los chats que desee.
 
 Cuando las reglas cambian en una nueva versión, `status` y `tg personal store check` nombran los chats creados con las reglas anteriores; construirlos de nuevo.
 
@@ -212,17 +212,17 @@ tg skill show link-conversations                 # the agent's instructions
 tg personal conversations batches status --chat "Book club"  # how many messages and batches, how much text
 ```
 
-El agente lee las instrucciones, te dice cuánto texto leerá y espera tu sí. Luego toma el chat por lotes a la vez (`tg personal conversations batches next`), decide qué mensaje anterior responde cada uno y guarda su respuesta (`tg personal conversations links add`). La siguiente versión los utiliza: las respuestas de Telegram vienen primero, luego los enlaces del agente y luego las reglas. `tg personal conversations links clear --chat "Book club"` descarta las respuestas del agente; construir de nuevo después. En este flujo de trabajo, tg en sí no llama a un modelo. El permiso de perfil `conversations.links` decide si se pueden guardar las respuestas.
+El agente lee las instrucciones, te dice cuánto texto leerá y espera tu sí. Luego toma el chat por lotes a la vez (`tg personal conversations batches show`), decide qué mensaje anterior responde cada uno y guarda su respuesta (`tg personal conversations links add`). La siguiente versión los utiliza: las respuestas de Telegram vienen primero, luego los enlaces del agente y luego las reglas. `tg personal conversations links clear --chat "Book club"` descarta las respuestas del agente; construir de nuevo después. En este flujo de trabajo, tg en sí no llama a un modelo. El permiso de perfil `conversations.links` decide si se pueden guardar las respuestas.
 
-tg también puede enviar los lotes a un servicio modelo. El habitual `build` utiliza reglas y enlaces guardados; `tg personal conversations build --chat <chat> --analyze` envía lotes limitados a un punto final Anthropic o compatible con OpenAI configurado. Se requiere un `--chat` explícito. Antes del primer lote, muestra el volumen, el punto final y el límite del token, y solicita consentimiento. El consentimiento se recuerda para esa cuenta, chat y proveedor hasta que lo revoques. Los valores predeterminados son 50 mensajes por lote (`--size`) y como máximo 100.000 tokens reservados por ejecución (`--max-tokens`); `--yes` otorga consentimiento en scripts. `tg personal conversations consents list` enumera los consentimientos; `consents revoke --chat <chat>` los revoca. El análisis integrado funciona sólo desde la línea de comandos, no a través de MCP, y las claves nunca van al archivo de configuración.
+tg también puede enviar los lotes a un servicio modelo. El habitual `conversations links rebuild` utiliza reglas y enlaces guardados; `tg personal conversations links rebuild --chat <chat> --analyze` envía lotes limitados a un punto final Anthropic o compatible con OpenAI configurado. Se requiere un `--chat` explícito. Antes del primer lote, muestra el volumen, el punto final y el límite del token, y solicita consentimiento. El consentimiento se recuerda para esa cuenta, chat y proveedor hasta que lo revoques. Los valores predeterminados son 50 mensajes por lote (`--size`) y como máximo 100.000 tokens reservados por ejecución (`--max-tokens`); `--yes` otorga consentimiento en scripts. `tg personal conversations consents list` enumera los consentimientos; `consents revoke --chat <chat>` los revoca. El análisis integrado funciona sólo desde la línea de comandos, no a través de MCP, y las claves nunca van al archivo de configuración.
 
 ## Privacidad y coste
 
 Por defecto nada sale de tu equipo. El modelo se ejecuta aquí, y un modelo solo se descarga cuando lo pides:
 
 ```sh
-tg personal models text list                     # the models, and which are downloaded
-tg personal models text download embeddinggemma --accept-terms
+tg personal models list kind:text                     # the models, and which are downloaded
+tg personal models download embeddinggemma --accept-terms
 ```
 
 `e5-small` es el predeterminado: pequeño y rápido, alrededor de 100 idiomas. `embeddinggemma` encuentra más, pero se ejecuta aproximadamente siete veces más lento y se descarga solo con `--accept-terms`, ya que está bajo los términos Gemma de Google. Los vectores de dos modelos nunca se mezclan: busque con el modelo con el que incrustó. Un chat integrado solo con otro modelo se nombra en stderr.
@@ -232,12 +232,12 @@ En un portátil reciente, `e5-small` vectoriza unos 30 fragmentos por segundo; u
 Un servicio puede calcular los vectores en su lugar, con tu propia clave:
 
 ```sh
-tg personal models text key set openai
-tg personal conversations embed --chat "Book club" --provider openai
-tg personal search conversations "renting a flat" --provider openai
+tg personal models keys set openai
+tg personal conversations embed --chat "Book club" --embedding-provider openai
+tg personal search conversations "renting a flat" --embedding-provider openai
 ```
 
-Luego el texto de las conversaciones del chat pasa a ese servicio, y cada búsqueda envía tu pregunta. Antes de enviar cualquier cosa, `embed` dice cuántas piezas, como máximo cuántos tokens y como máximo qué precio, y espera su sí (`--yes` en scripts; `--max-tokens` establece un límite). `--base-url` toma cualquier servidor con la API integrada de OpenAI, como Ollama o LM Studio en su propia computadora, con `--model` y `--dims`. `tg personal models text key remove openai` olvida la clave. La configuración de incrustación remota también se aplica a las búsquedas que su agente realiza en MCP, por lo que sus preguntas también se dirigen a ese servicio.
+Luego el texto de las conversaciones del chat pasa a ese servicio, y cada búsqueda envía tu pregunta. Antes de enviar cualquier cosa, `embed` dice cuántas piezas, como máximo cuántos tokens y como máximo qué precio, y espera su sí (`--yes` en scripts; `--max-tokens` establece un límite). `--base-url` toma cualquier servidor con la API integrada de OpenAI, como Ollama o LM Studio en su propia computadora, con `--model` y `--dims`. `tg personal models keys remove openai` olvida la clave. La configuración de incrustación remota también se aplica a las búsquedas que su agente realiza en MCP, por lo que sus preguntas también se dirigen a ese servicio.
 
 ## Próximo
 

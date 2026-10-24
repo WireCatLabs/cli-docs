@@ -244,7 +244,7 @@ for its connector. Funnel's permitted public ports are `443`, `8443` and `10000`
   effective permission. Use `deny` or `readonly` to refuse server-side changes; check the app's own approval settings.
 - **PowerShell refuses scripts:** use `tg.cmd` or `max.cmd`. If the command is missing, reopen
   PowerShell and check the CLI installation; do not change machine-wide execution policy.
-- **No tools:** `tg personal mcp doctor` or `max personal mcp doctor` checks the local handshake, not the tunnel or
+- **No tools:** `tg personal mcp check` or `max personal mcp doctor` checks the local handshake, not the tunnel or
   messenger login. An explicit `account show` command checks that account connection.
 - **Port occupied:** use another local port and point Funnel at the same number. For simultaneous
   servers, also give each route a distinct public HTTPS port as above.

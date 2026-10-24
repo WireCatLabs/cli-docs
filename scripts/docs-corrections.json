@@ -60,28 +60,28 @@
           "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
         },
         {
-          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
-          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
+          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
+          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ],
       "ru": [
         {
-          "before": "проверить новые сообщения и вступления по правилам группы и выполнить разрешённое от бота",
-          "after": "проверить новые сообщения по правилам группы и выполнить разрешённое от бота; вступления не проверяются"
+          "before": "\njudge a group's new messages and joins by its rules, and act as they allow — as the bot\n",
+          "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
         },
         {
-          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
-          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
+          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
+          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ],
       "es": [
         {
-          "before": "revisa como bot mensajes y entradas nuevos según las reglas y ejecuta lo permitido",
-          "after": "revisa como bot los mensajes nuevos según las reglas y ejecuta lo permitido; no evalúa incorporaciones al grupo"
+          "before": "\njudge a group's new messages and joins by its rules, and act as they allow — as the bot\n",
+          "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
         },
         {
-          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
-          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
+          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
+          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ]
     }
@@ -395,20 +395,20 @@
     "replacements": {
       "en": [
         {
-          "before": "#### `tg chats requests decline`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
-          "after": "#### `tg chats requests decline`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
+          "before": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
+          "after": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
         }
       ],
       "ru": [
         {
-          "before": "#### `tg chats requests decline`\n\nотклонить запрос\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Аргумент | | Описание |\n|---|---|---|\n| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |\n| `person` | необязательный | кто запросил вступление: идентификатор из `chats requests list`. |\n\n| Параметр | Назначение |\n|---|---|\n| `--all` | все ожидающие запросы; сначала проверяются с учётом почасового лимита. |\n",
-          "after": "#### `tg chats requests decline`\n\nотклонить запрос\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Аргумент | | Описание |\n|---|---|---|\n| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |\n| `person` | необязательный | кто запросил вступление: идентификатор из `chats requests list`. |\n\n| Параметр | Назначение |\n|---|---|\n| `--all` | отклонить все ожидающие заявки; отклонения не учитываются в часовом лимите отправок. |\n"
+          "before": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
+          "after": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
         }
       ],
       "es": [
         {
-          "before": "#### `tg chats requests decline`\n\nrechazar la solicitud\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argumento | | Qué es |\n|---|---|---|\n| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |\n| `person` | opcional | quien solicitó entrar: un identificador de `chats requests list`. |\n\n| Opción | Qué hace |\n|---|---|\n| `--all` | todas las solicitudes pendientes, contabilizadas primero frente al límite por hora. |\n",
-          "after": "#### `tg chats requests decline`\n\nrechazar la solicitud\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argumento | | Qué es |\n|---|---|---|\n| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |\n| `person` | opcional | quien solicitó entrar: un identificador de `chats requests list`. |\n\n| Opción | Qué hace |\n|---|---|\n| `--all` | rechazar todas las solicitudes pendientes; los rechazos no cuentan para el límite horario de envíos. |\n"
+          "before": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
+          "after": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
         }
       ]
     }
@@ -445,20 +445,20 @@
     "replacements": {
       "en": [
         {
-          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
         }
       ],
       "ru": [
         {
-          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
         }
       ],
       "es": [
         {
-          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
         }
       ]
     }
@@ -558,7 +558,7 @@
       "es": [
         {
           "before": "## Herramientas\n",
-          "after": "## Herramientas\n\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el mensajero y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal."
+          "after": "## Herramientas\n\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el servicio de mensajería y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal."
         }
       ]
     }
@@ -2505,6 +2505,958 @@
         {
           "before": "Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.",
           "after": "Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.\n\n<details>\n<summary>Comandos que quedan en el terminal</summary>\n\nLa interfaz MCP de la cuenta personal no ofrece estas rutas ni sus subcomandos. Usa el terminal para configuración y mantenimiento; siguen aplicándose las limitaciones de WhatsApp indicadas en la referencia.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "reason": "The released command contract renames mcp setup/doctor to add/check; update the native exclusion list to the canonical names.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "`mcp config|setup|doctor`",
+          "after": "`mcp config|add|check`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`mcp config|setup|doctor`",
+          "after": "`mcp config|add|check`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`mcp config|setup|doctor`",
+          "after": "`mcp config|add|check`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "groups",
+    "reason": "The released request actions are confirm/reject; the group task table retained the retired accept/decline spellings.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/groups.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "reason": "Remove an unmeasured token-cost comparison. CLI and MCP availability are explained separately by the released exclusions and permissions.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "which costs the same tokens and can do the\nsame things",
+          "after": "which uses the command-line interface directly"
+        }
+      ],
+      "ru": [
+        {
+          "before": "с теми же затратами токенов и может делать те же самые действия",
+          "after": "через интерфейс командной строки"
+        }
+      ],
+      "es": [
+        {
+          "before": "que cuesta los mismos tokens y puede hacer las mismas cosas",
+          "after": "mediante la interfaz de línea de comandos"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "configuration-reference",
+    "reason": "Use the complete canonical conversations command in the analysis option column.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/configuration-reference.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "`build --analysis-provider`",
+          "after": "`conversations links rebuild --analysis-provider`"
+        },
+        {
+          "before": "`build --model`",
+          "after": "`conversations links rebuild --model`"
+        },
+        {
+          "before": "`build --base-url`",
+          "after": "`conversations links rebuild --base-url`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`build --analysis-provider`",
+          "after": "`conversations links rebuild --analysis-provider`"
+        },
+        {
+          "before": "`build --model`",
+          "after": "`conversations links rebuild --model`"
+        },
+        {
+          "before": "`build --base-url`",
+          "after": "`conversations links rebuild --base-url`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`build --analysis-provider`",
+          "after": "`conversations links rebuild --analysis-provider`"
+        },
+        {
+          "before": "`build --model`",
+          "after": "`conversations links rebuild --model`"
+        },
+        {
+          "before": "`build --base-url`",
+          "after": "`conversations links rebuild --base-url`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "commands",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/CHANGELOG.md",
+    "reason": "Keep incoming command-reference hashes from the previously reviewed release at the corresponding canonical command. These anchors do not restore retired CLI aliases.",
+    "replacements": {
+      "en": [
+        {
+          "before": "#### `tg chats members check`",
+          "after": "#### `tg chats members check`\n\n<a id=\"tg-chats-members-audit\" />"
+        },
+        {
+          "before": "### `tg chats links`",
+          "after": "### `tg chats links`\n\n<a id=\"tg-chats-link\" />"
+        },
+        {
+          "before": "#### `tg chats links show`",
+          "after": "#### `tg chats links show`\n\n<a id=\"tg-chats-link-show\" />"
+        },
+        {
+          "before": "#### `tg chats links create`",
+          "after": "#### `tg chats links create`\n\n<a id=\"tg-chats-link-create\" />"
+        },
+        {
+          "before": "#### `tg chats links list`",
+          "after": "#### `tg chats links list`\n\n<a id=\"tg-chats-link-list\" />"
+        },
+        {
+          "before": "#### `tg chats links remove`",
+          "after": "#### `tg chats links remove`\n\n<a id=\"tg-chats-link-revoke\" />"
+        },
+        {
+          "before": "#### `tg chats links update`",
+          "after": "#### `tg chats links update`\n\n<a id=\"tg-chats-link-update\" />"
+        },
+        {
+          "before": "#### `tg chats links reset`",
+          "after": "#### `tg chats links reset`\n\n<a id=\"tg-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `tg chats requests confirm`",
+          "after": "#### `tg chats requests confirm`\n\n<a id=\"tg-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `tg chats requests reject`",
+          "after": "#### `tg chats requests reject`\n\n<a id=\"tg-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `tg contacts info`",
+          "after": "### `tg contacts info`\n\n<a id=\"tg-contacts-profile\" />"
+        },
+        {
+          "before": "### `tg contacts events`",
+          "after": "### `tg contacts events`\n\n<a id=\"tg-contacts-timeline\" />"
+        },
+        {
+          "before": "### `tg contacts aliases`",
+          "after": "### `tg contacts aliases`\n\n<a id=\"tg-contacts-alias\" />"
+        },
+        {
+          "before": "#### `tg contacts aliases set`",
+          "after": "#### `tg contacts aliases set`\n\n<a id=\"tg-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `tg contacts aliases remove`",
+          "after": "#### `tg contacts aliases remove`\n\n<a id=\"tg-contacts-alias-rm\" />"
+        },
+        {
+          "before": "## `tg models`",
+          "after": "## `tg models`\n\n<a id=\"tg-models-audio\" />\n\n<a id=\"tg-models-text\" />"
+        },
+        {
+          "before": "### `tg models list`",
+          "after": "### `tg models list`\n\n<a id=\"tg-models-audio-list\" />\n\n<a id=\"tg-models-text-list\" />"
+        },
+        {
+          "before": "### `tg models download`",
+          "after": "### `tg models download`\n\n<a id=\"tg-models-audio-download\" />\n\n<a id=\"tg-models-text-download\" />"
+        },
+        {
+          "before": "### `tg models keys`",
+          "after": "### `tg models keys`\n\n<a id=\"tg-models-text-key\" />"
+        },
+        {
+          "before": "#### `tg models keys set`",
+          "after": "#### `tg models keys set`\n\n<a id=\"tg-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `tg models keys remove`",
+          "after": "#### `tg models keys remove`\n\n<a id=\"tg-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `tg store gaps show`",
+          "after": "#### `tg store gaps show`\n\n<a id=\"tg-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `tg store rebuild`",
+          "after": "### `tg store rebuild`\n\n<a id=\"tg-store-reindex\" />"
+        },
+        {
+          "before": "#### `tg conversations links rebuild`",
+          "after": "#### `tg conversations links rebuild`\n\n<a id=\"tg-conversations-build\" />"
+        },
+        {
+          "before": "#### `tg conversations batches show`",
+          "after": "#### `tg conversations batches show`\n\n<a id=\"tg-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `tg conversations consents remove`",
+          "after": "#### `tg conversations consents remove`\n\n<a id=\"tg-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `tg conversations embeddings status`",
+          "after": "#### `tg conversations embeddings status`\n\n<a id=\"tg-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `tg conversations embeddings clear`",
+          "after": "#### `tg conversations embeddings clear`\n\n<a id=\"tg-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `tg attachments update`",
+          "after": "### `tg attachments update`\n\n<a id=\"tg-attachments-text\" />\n\n<a id=\"tg-attachments-text-set\" />"
+        },
+        {
+          "before": "### `tg tags rebuild`",
+          "after": "### `tg tags rebuild`\n\n<a id=\"tg-tags-auto\" />"
+        },
+        {
+          "before": "### `tg metadata show`",
+          "after": "### `tg metadata show`\n\n<a id=\"tg-metadata-get\" />"
+        },
+        {
+          "before": "### `tg metadata sync`",
+          "after": "### `tg metadata sync`\n\n<a id=\"tg-metadata-refresh\" />"
+        },
+        {
+          "before": "#### `tg stats messages counters sync`",
+          "after": "#### `tg stats messages counters sync`\n\n<a id=\"tg-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `tg tasks update`",
+          "after": "### `tg tasks update`\n\n<a id=\"tg-tasks-plan\" />"
+        },
+        {
+          "before": "### `tg search runs`",
+          "after": "### `tg search runs`\n\n<a id=\"tg-runs-search\" />"
+        },
+        {
+          "before": "#### `tg doctor reports show`",
+          "after": "#### `tg doctor reports show`\n\n<a id=\"tg-doctor-report\" />"
+        },
+        {
+          "before": "#### `tg doctor reports create`",
+          "after": "#### `tg doctor reports create`\n\n<a id=\"tg-doctor-report-create\" />"
+        },
+        {
+          "before": "### `tg commands info`",
+          "after": "### `tg commands info`\n\n<a id=\"tg-commands-schema\" />"
+        },
+        {
+          "before": "### `tg mcp add`",
+          "after": "### `tg mcp add`\n\n<a id=\"tg-mcp-setup\" />"
+        },
+        {
+          "before": "### `tg mcp check`",
+          "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
+        }
+      ],
+      "ru": [
+        {
+          "before": "#### `tg chats members check`",
+          "after": "#### `tg chats members check`\n\n<a id=\"tg-chats-members-audit\" />"
+        },
+        {
+          "before": "### `tg chats links`",
+          "after": "### `tg chats links`\n\n<a id=\"tg-chats-link\" />"
+        },
+        {
+          "before": "#### `tg chats links show`",
+          "after": "#### `tg chats links show`\n\n<a id=\"tg-chats-link-show\" />"
+        },
+        {
+          "before": "#### `tg chats links create`",
+          "after": "#### `tg chats links create`\n\n<a id=\"tg-chats-link-create\" />"
+        },
+        {
+          "before": "#### `tg chats links list`",
+          "after": "#### `tg chats links list`\n\n<a id=\"tg-chats-link-list\" />"
+        },
+        {
+          "before": "#### `tg chats links remove`",
+          "after": "#### `tg chats links remove`\n\n<a id=\"tg-chats-link-revoke\" />"
+        },
+        {
+          "before": "#### `tg chats links update`",
+          "after": "#### `tg chats links update`\n\n<a id=\"tg-chats-link-update\" />"
+        },
+        {
+          "before": "#### `tg chats links reset`",
+          "after": "#### `tg chats links reset`\n\n<a id=\"tg-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `tg chats requests confirm`",
+          "after": "#### `tg chats requests confirm`\n\n<a id=\"tg-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `tg chats requests reject`",
+          "after": "#### `tg chats requests reject`\n\n<a id=\"tg-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `tg contacts info`",
+          "after": "### `tg contacts info`\n\n<a id=\"tg-contacts-profile\" />"
+        },
+        {
+          "before": "### `tg contacts events`",
+          "after": "### `tg contacts events`\n\n<a id=\"tg-contacts-timeline\" />"
+        },
+        {
+          "before": "### `tg contacts aliases`",
+          "after": "### `tg contacts aliases`\n\n<a id=\"tg-contacts-alias\" />"
+        },
+        {
+          "before": "#### `tg contacts aliases set`",
+          "after": "#### `tg contacts aliases set`\n\n<a id=\"tg-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `tg contacts aliases remove`",
+          "after": "#### `tg contacts aliases remove`\n\n<a id=\"tg-contacts-alias-rm\" />"
+        },
+        {
+          "before": "## `tg models`",
+          "after": "## `tg models`\n\n<a id=\"tg-models-audio\" />\n\n<a id=\"tg-models-text\" />"
+        },
+        {
+          "before": "### `tg models list`",
+          "after": "### `tg models list`\n\n<a id=\"tg-models-audio-list\" />\n\n<a id=\"tg-models-text-list\" />"
+        },
+        {
+          "before": "### `tg models download`",
+          "after": "### `tg models download`\n\n<a id=\"tg-models-audio-download\" />\n\n<a id=\"tg-models-text-download\" />"
+        },
+        {
+          "before": "### `tg models keys`",
+          "after": "### `tg models keys`\n\n<a id=\"tg-models-text-key\" />"
+        },
+        {
+          "before": "#### `tg models keys set`",
+          "after": "#### `tg models keys set`\n\n<a id=\"tg-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `tg models keys remove`",
+          "after": "#### `tg models keys remove`\n\n<a id=\"tg-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `tg store gaps show`",
+          "after": "#### `tg store gaps show`\n\n<a id=\"tg-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `tg store rebuild`",
+          "after": "### `tg store rebuild`\n\n<a id=\"tg-store-reindex\" />"
+        },
+        {
+          "before": "#### `tg conversations links rebuild`",
+          "after": "#### `tg conversations links rebuild`\n\n<a id=\"tg-conversations-build\" />"
+        },
+        {
+          "before": "#### `tg conversations batches show`",
+          "after": "#### `tg conversations batches show`\n\n<a id=\"tg-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `tg conversations consents remove`",
+          "after": "#### `tg conversations consents remove`\n\n<a id=\"tg-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `tg conversations embeddings status`",
+          "after": "#### `tg conversations embeddings status`\n\n<a id=\"tg-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `tg conversations embeddings clear`",
+          "after": "#### `tg conversations embeddings clear`\n\n<a id=\"tg-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `tg attachments update`",
+          "after": "### `tg attachments update`\n\n<a id=\"tg-attachments-text\" />\n\n<a id=\"tg-attachments-text-set\" />"
+        },
+        {
+          "before": "### `tg tags rebuild`",
+          "after": "### `tg tags rebuild`\n\n<a id=\"tg-tags-auto\" />"
+        },
+        {
+          "before": "### `tg metadata show`",
+          "after": "### `tg metadata show`\n\n<a id=\"tg-metadata-get\" />"
+        },
+        {
+          "before": "### `tg metadata sync`",
+          "after": "### `tg metadata sync`\n\n<a id=\"tg-metadata-refresh\" />"
+        },
+        {
+          "before": "#### `tg stats messages counters sync`",
+          "after": "#### `tg stats messages counters sync`\n\n<a id=\"tg-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `tg tasks update`",
+          "after": "### `tg tasks update`\n\n<a id=\"tg-tasks-plan\" />"
+        },
+        {
+          "before": "### `tg search runs`",
+          "after": "### `tg search runs`\n\n<a id=\"tg-runs-search\" />"
+        },
+        {
+          "before": "#### `tg doctor reports show`",
+          "after": "#### `tg doctor reports show`\n\n<a id=\"tg-doctor-report\" />"
+        },
+        {
+          "before": "#### `tg doctor reports create`",
+          "after": "#### `tg doctor reports create`\n\n<a id=\"tg-doctor-report-create\" />"
+        },
+        {
+          "before": "### `tg commands info`",
+          "after": "### `tg commands info`\n\n<a id=\"tg-commands-schema\" />"
+        },
+        {
+          "before": "### `tg mcp add`",
+          "after": "### `tg mcp add`\n\n<a id=\"tg-mcp-setup\" />"
+        },
+        {
+          "before": "### `tg mcp check`",
+          "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
+        }
+      ],
+      "es": [
+        {
+          "before": "#### `tg chats members check`",
+          "after": "#### `tg chats members check`\n\n<a id=\"tg-chats-members-audit\" />"
+        },
+        {
+          "before": "### `tg chats links`",
+          "after": "### `tg chats links`\n\n<a id=\"tg-chats-link\" />"
+        },
+        {
+          "before": "#### `tg chats links show`",
+          "after": "#### `tg chats links show`\n\n<a id=\"tg-chats-link-show\" />"
+        },
+        {
+          "before": "#### `tg chats links create`",
+          "after": "#### `tg chats links create`\n\n<a id=\"tg-chats-link-create\" />"
+        },
+        {
+          "before": "#### `tg chats links list`",
+          "after": "#### `tg chats links list`\n\n<a id=\"tg-chats-link-list\" />"
+        },
+        {
+          "before": "#### `tg chats links remove`",
+          "after": "#### `tg chats links remove`\n\n<a id=\"tg-chats-link-revoke\" />"
+        },
+        {
+          "before": "#### `tg chats links update`",
+          "after": "#### `tg chats links update`\n\n<a id=\"tg-chats-link-update\" />"
+        },
+        {
+          "before": "#### `tg chats links reset`",
+          "after": "#### `tg chats links reset`\n\n<a id=\"tg-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `tg chats requests confirm`",
+          "after": "#### `tg chats requests confirm`\n\n<a id=\"tg-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `tg chats requests reject`",
+          "after": "#### `tg chats requests reject`\n\n<a id=\"tg-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `tg contacts info`",
+          "after": "### `tg contacts info`\n\n<a id=\"tg-contacts-profile\" />"
+        },
+        {
+          "before": "### `tg contacts events`",
+          "after": "### `tg contacts events`\n\n<a id=\"tg-contacts-timeline\" />"
+        },
+        {
+          "before": "### `tg contacts aliases`",
+          "after": "### `tg contacts aliases`\n\n<a id=\"tg-contacts-alias\" />"
+        },
+        {
+          "before": "#### `tg contacts aliases set`",
+          "after": "#### `tg contacts aliases set`\n\n<a id=\"tg-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `tg contacts aliases remove`",
+          "after": "#### `tg contacts aliases remove`\n\n<a id=\"tg-contacts-alias-rm\" />"
+        },
+        {
+          "before": "## `tg models`",
+          "after": "## `tg models`\n\n<a id=\"tg-models-audio\" />\n\n<a id=\"tg-models-text\" />"
+        },
+        {
+          "before": "### `tg models list`",
+          "after": "### `tg models list`\n\n<a id=\"tg-models-audio-list\" />\n\n<a id=\"tg-models-text-list\" />"
+        },
+        {
+          "before": "### `tg models download`",
+          "after": "### `tg models download`\n\n<a id=\"tg-models-audio-download\" />\n\n<a id=\"tg-models-text-download\" />"
+        },
+        {
+          "before": "### `tg models keys`",
+          "after": "### `tg models keys`\n\n<a id=\"tg-models-text-key\" />"
+        },
+        {
+          "before": "#### `tg models keys set`",
+          "after": "#### `tg models keys set`\n\n<a id=\"tg-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `tg models keys remove`",
+          "after": "#### `tg models keys remove`\n\n<a id=\"tg-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `tg store gaps show`",
+          "after": "#### `tg store gaps show`\n\n<a id=\"tg-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `tg store rebuild`",
+          "after": "### `tg store rebuild`\n\n<a id=\"tg-store-reindex\" />"
+        },
+        {
+          "before": "#### `tg conversations links rebuild`",
+          "after": "#### `tg conversations links rebuild`\n\n<a id=\"tg-conversations-build\" />"
+        },
+        {
+          "before": "#### `tg conversations batches show`",
+          "after": "#### `tg conversations batches show`\n\n<a id=\"tg-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `tg conversations consents remove`",
+          "after": "#### `tg conversations consents remove`\n\n<a id=\"tg-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `tg conversations embeddings status`",
+          "after": "#### `tg conversations embeddings status`\n\n<a id=\"tg-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `tg conversations embeddings clear`",
+          "after": "#### `tg conversations embeddings clear`\n\n<a id=\"tg-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `tg attachments update`",
+          "after": "### `tg attachments update`\n\n<a id=\"tg-attachments-text\" />\n\n<a id=\"tg-attachments-text-set\" />"
+        },
+        {
+          "before": "### `tg tags rebuild`",
+          "after": "### `tg tags rebuild`\n\n<a id=\"tg-tags-auto\" />"
+        },
+        {
+          "before": "### `tg metadata show`",
+          "after": "### `tg metadata show`\n\n<a id=\"tg-metadata-get\" />"
+        },
+        {
+          "before": "### `tg metadata sync`",
+          "after": "### `tg metadata sync`\n\n<a id=\"tg-metadata-refresh\" />"
+        },
+        {
+          "before": "#### `tg stats messages counters sync`",
+          "after": "#### `tg stats messages counters sync`\n\n<a id=\"tg-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `tg tasks update`",
+          "after": "### `tg tasks update`\n\n<a id=\"tg-tasks-plan\" />"
+        },
+        {
+          "before": "### `tg search runs`",
+          "after": "### `tg search runs`\n\n<a id=\"tg-runs-search\" />"
+        },
+        {
+          "before": "#### `tg doctor reports show`",
+          "after": "#### `tg doctor reports show`\n\n<a id=\"tg-doctor-report\" />"
+        },
+        {
+          "before": "#### `tg doctor reports create`",
+          "after": "#### `tg doctor reports create`\n\n<a id=\"tg-doctor-report-create\" />"
+        },
+        {
+          "before": "### `tg commands info`",
+          "after": "### `tg commands info`\n\n<a id=\"tg-commands-schema\" />"
+        },
+        {
+          "before": "### `tg mcp add`",
+          "after": "### `tg mcp add`\n\n<a id=\"tg-mcp-setup\" />"
+        },
+        {
+          "before": "### `tg mcp check`",
+          "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
+    "reason": "The server has three dispatcher tools and excludes some commands; describe catalogue coverage without claiming one MCP tool per command.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Every command is a tool, writes included; the profile's permissions limit what the agent may run. Read-only is\na choice you make in those permissions, not a default.",
+          "after": "The catalogue includes read and write commands, subject to the profile permissions and exclusions below. Read-only access is a choice you configure in those permissions."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Каждая команда — это инструмент, включая команды записи; что агенту можно запускать, ограничивают разрешения\nпрофиля. Только чтение — это ваш выбор в этих разрешениях, а не значение по умолчанию.",
+          "after": "Каталог включает команды чтения и записи с учётом разрешений профиля и исключений ниже. Доступ только для чтения настраивается в разрешениях."
+        }
+      ],
+      "es": [
+        {
+          "before": "Cada comando es una herramienta, incluidos los de escritura; los permisos del perfil limitan lo que el agente puede\nejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto.",
+          "after": "El catálogo incluye comandos de lectura y escritura, sujetos a los permisos del perfil y a las exclusiones siguientes. El acceso de solo lectura se configura mediante esos permisos."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/cli-core/blob/v0.406.0/src/mcp/agent.ts",
+    "reason": "Released Core 0.406 excludes persistent/interactive commands from MCP, while upgrade is authority-gated rather than permanently excluded. Verified installed mcp/agent.js and cli/upgrade-command.js.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`session start|end`, `upgrade`, `complete`",
+          "after": "`session start|end`, `complete`, `setup`, `watch`, `serve`, `bot watch`"
+        },
+        {
+          "before": "`server install|uninstall`, `skill install`",
+          "after": "`server install|uninstall`, `upgrade`, `skill install`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`session start|end`, `upgrade`, `complete`",
+          "after": "`session start|end`, `complete`, `setup`, `watch`, `serve`, `bot watch`"
+        },
+        {
+          "before": "`server install|uninstall`, `skill install`",
+          "after": "`server install|uninstall`, `upgrade`, `skill install`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`session start|end`, `upgrade`, `complete`",
+          "after": "`session start|end`, `complete`, `setup`, `watch`, `serve`, `bot watch`"
+        },
+        {
+          "before": "`server install|uninstall`, `skill install`",
+          "after": "`server install|uninstall`, `upgrade`, `skill install`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/commands.md",
+    "reason": "The released attachments extract command has no MCP exclusion or lifetime; remove the stale terminal-only restriction without claiming that installed parsers or provider consent are unnecessary.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Extracting text is done in the terminal only.",
+          "after": "Text extraction is governed by the profile’s attachment permissions."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Извлечение текста выполняется только в терминале.",
+          "after": "Извлечением текста управляют разрешения профиля на вложения."
+        }
+      ],
+      "es": [
+        {
+          "before": "La extracción de texto se realiza únicamente en la terminal.",
+          "after": "La extracción de texto está sujeta a los permisos de adjuntos del perfil."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "source": "https://github.com/WireCatLabs/cli-base/blob/v0.50.3/src/standards/output.ts",
+    "reason": "The released stream serializer emits item/end records, as the updated watch section states. Keep the general JSONL description and jq example consistent with that contract.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- `--jsonl`: one object per line, no wrapper; whether there is more is said on stderr only.\n  A report (`stats …`) is one object, so `--jsonl` on it is refused; `stats * evidence` lists still stream.",
+          "after": "- `--jsonl`: item records carry the result in `data`; a final end record carries completeness and page metadata. Check that record rather than treating the stream as bare messages. A report (`stats …`) is one object, so `--jsonl` on it is refused; `stats * evidence` lists still stream."
+        },
+        {
+          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
+          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
+        }
+      ],
+      "ru": [
+        {
+          "before": "- `--jsonl`: по одному объекту в строке, без оболочки; есть ли что-то еще, говорится только в stderr.\n  Отчет (`stats …`) — это один объект, поэтому `--jsonl` для него отклоняется; списки `stats * evidence` по-прежнему выдаются потоком.",
+          "after": "- `--jsonl`: записи элементов содержат результат в `data`; последняя запись завершения содержит полноту и данные страницы. Проверяйте её, а не считайте поток набором сообщений без оболочки. Отчёт (`stats …`) — один объект, поэтому `--jsonl` для него отклоняется; списки `stats * evidence` по-прежнему выдаются потоком."
+        },
+        {
+          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
+          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
+        }
+      ],
+      "es": [
+        {
+          "before": "- `--jsonl`: un objeto por línea, sin contenedor; si hay más se dice solo en stderr. Un informe (`stats …`) es un solo objeto, así que `--jsonl` se rechaza en él; las listas `stats * evidence` siguen emitiéndose por líneas.",
+          "after": "- `--jsonl`: los registros de elementos llevan el resultado en `data`; el registro final indica completitud y paginación. Compruébalo en vez de tratar el flujo como mensajes sin contenedor. Un informe (`stats …`) es un objeto, por lo que rechaza `--jsonl`; las listas `stats * evidence` siguen emitiéndose como flujo."
+        },
+        {
+          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
+          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Scope empty stdout to refusal before output; framed streams can retain earlier records after a later failure.",
+    "source": "https://github.com/WireCatLabs/cli-base/blob/v0.50.3/src/standards/output.ts",
+    "replacements": {
+      "en": [
+        {
+          "before": "- An error that ends the command is `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` on stderr, and stdout is empty, so a\n  refusal can never be taken for an empty result.",
+          "after": "- An error uses `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` on stderr. A refusal before output writes no result, so it cannot be mistaken for an empty result. If a stream already printed records, keep them and inspect its final completeness record; a missing end record also means the stream did not finish."
+        }
+      ],
+      "ru": [
+        {
+          "before": "- Ошибка, завершающая команду, — `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` на stderr, а stdout пуст, поэтому отказ никогда не может быть воспринят как пустой результат.",
+          "after": "- Ошибка выдаёт `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` в stderr. Отказ до начала вывода не пишет результат, поэтому его нельзя принять за пустой ответ. Если поток уже выдал записи, сохраните их и проверьте запись завершения; отсутствие такой записи тоже означает незавершённый поток."
+        }
+      ],
+      "es": [
+        {
+          "before": "- Un error que termina el comando aparece como `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` en stderr y la salida estándar está vacía, por lo que nunca se puede considerar un rechazo como un resultado vacío.",
+          "after": "- Un error usa `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` en stderr. Un rechazo anterior a la salida no escribe resultados y no se confunde con un resultado vacío. Si el flujo ya emitió registros, consérvalos y comprueba su registro final de completitud; si falta el final, el flujo tampoco terminó."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "permissions",
+    "reason": "Use the shared AI agent term for the actor; an agent with unrestricted file/terminal access can still edit the settings.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/permissions.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "An assistant that can edit configuration files",
+          "after": "An AI agent that can edit configuration files"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "roadmap",
+    "reason": "The native roadmap still calls released attachment archives, chat-list actions, bot interactions and albums future work. Move verified released capabilities to current and retain unshipped drafts, chat notes and remaining parity items.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/CHANGELOG.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "This page lists what is planned for `tg` and is not in it yet. Read it before you build a workaround\nfor a missing feature: it may already be on the way. The order is approximate and can change. To\nsuggest something, open an [issue on GitHub](https://github.com/WireCatLabs/tg-cli/issues).\n\n## What works today\n\nReading, sending, search, the local store, groups, people, bots, MCP and permissions: see\n[using tg](./usage.md) and [every command](./commands.md). What each released version changed is in the\n[changelog](./changelog.md).\n\n## In progress\n\n- **A checked copy of a chat's files.** Download a chat's files into a folder you choose, check later that\n  every copy is still whole, and repeat it on a daily timer.\n\n## Next\n\n- **Several photos in one message.** Until then, see [what tg cannot send yet](./usage.md#not-in-tg-yet).\n- **Archive, pin and mute a chat, or mark it unread.** The WhatsApp and MAX tools already can.\n- **A reply saved as the chat's draft.** Your agent writes it, you read it in Telegram and press send.\n\n## Later\n\n- **Your own notes on chats.** Private notes on a chat, like the ones\n  [tgcli](https://github.com/kfastov/tgcli) keeps beside its tags. Private names and notes for people already work:\n  [your own names and notes for people](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Reactions by emoji in message rankings.** Beside the total, how many of each reaction a message got.\n- **What `max` can do and `tg` cannot yet.** Privacy settings, call history, a chat's media, stickers,\n  deleting or clearing a chat for yourself, a group photo, pressing a bot's buttons, starting a bot and\n  opening its mini app.\n- **Your location in a message.**",
+          "after": "This roadmap helps you check planned Telegram work before building a workaround. Priorities can change; suggest a task in [GitHub issues](https://github.com/WireCatLabs/tg-cli/issues).\n\n## What works today\n\nReading, sending, search, the local store, groups, people, bots, MCP and permissions are available: see [using tg](./usage.md) and [every command](./commands.md). Released changes are in the [changelog](./changelog.md).\n\nAlbums of up to ten supported attachments, archive/pin/mute/unread chat actions, bot buttons, bot startup and mini-app links are released. The attachment archive saves available files, verifies size and SHA-256 and supports opt-in daily timers on Linux. [Current limitations](./usage.md#not-in-tg-yet) explain the remaining boundaries.\n\n## In progress\n\nNo additional work is listed in this section. The planned tasks follow.\n\n## Next\n\n- **A reply saved as the chat’s draft.** Let an agent prepare it, review it in Telegram and send it there.\n\n## Later\n\n- **Your own notes on chats**, like [tgcli](https://github.com/kfastov/tgcli) keeps beside its tags. Private names and notes for people already work: [names and notes for people](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Reactions by emoji in message rankings**, alongside the total.\n- **Remaining parity with `max`**: privacy settings, call history, chat media, stickers, deleting or clearing a chat for yourself and a group photo.\n- **Your location in a message.**"
+        }
+      ],
+      "ru": [
+        {
+          "before": "На этой странице перечислено то, что запланировано для `tg` и чего еще нет. Прочтите эту страницу, прежде чем придумывать обходной путь для отсутствующей функции: возможно, он уже в разработке. Порядок приблизительный и может меняться. Чтобы что-то предложить, создайте [задачу на GitHub](https://github.com/WireCatLabs/tg-cli/issues).\n\n## Что работает сегодня\n\nЧтение, отправка, поиск, локальное хранилище, группы, люди, боты, MCP и разрешения: см. [использование tg](./usage.md) и [все команды](./commands.md). Что изменила каждая выпущенная версия, описано в [списке изменений](./changelog.md).\n\n## В работе\n\n- **Проверенная копия файлов чата.** Скачайте файлы чата в выбранную папку, позже проверьте, что каждая копия по-прежнему целая, и повторяйте это по ежедневному таймеру.\n\n## Ближайшие планы\n\n- **Несколько фотографий в одном сообщении.** А пока посмотрите [что tg пока не может отправить](./usage.md#not-in-tg-yet).\n- **Архивировать, закреплять и отключать звук чата или отмечать его непрочитанным.** Инструменты для WhatsApp и MAX это уже умеют.\n- **Ответ, сохранённый как черновик чата.** Ваш агент пишет его, вы читаете его в Telegram и нажимаете «Отправить».\n\n## Позже\n\n- **Ваши собственные заметки в чатах.** Личные заметки в чате, например те, которые [tgcli](https://github.com/kfastov/tgcli) хранит рядом с тегами. Свои имена и заметки для людей уже работают: [ваши собственные имена и заметки для людей](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Реакции по эмодзи в рейтингах сообщений.** Рядом с общим числом: сколько раз получена каждая реакция.\n- **Что `max` может делать, а `tg` пока не может.** Настройки конфиденциальности, история звонков, медиафайлы чата, стикеры, удаление или очистка чата для себя, групповое фото, нажатие кнопок бота, запуск бота и открытие его мини-приложения.\n- **Ваше местоположение в сообщении.**",
+          "after": "Проверьте планы для Telegram, прежде чем искать обходной путь. Приоритеты могут меняться; предложите задачу в [GitHub issues](https://github.com/WireCatLabs/tg-cli/issues).\n\n## Что работает сегодня\n\nЧтение, отправка, поиск, локальное хранилище, группы, люди, боты, MCP и разрешения уже доступны: см. [использование tg](./usage.md) и [все команды](./commands.md). Выпущенные изменения — в [истории версий](./changelog.md).\n\nАльбомы до десяти поддерживаемых вложений, архивирование/закрепление/отключение уведомлений/отметка чата непрочитанным, кнопки ботов, запуск бота и ссылки мини-приложений уже работают. Архив вложений сохраняет доступные файлы, проверяет размер и SHA-256 и поддерживает ежедневные таймеры по вашему выбору в Linux. Остальные границы описаны в [текущих ограничениях](./usage.md#not-in-tg-yet).\n\n## В работе\n\nДополнительная работа в этом разделе не указана. Запланированные задачи перечислены дальше.\n\n## Ближайшие планы\n\n- **Ответ, сохранённый как черновик чата.** Агент готовит его, вы проверяете в Telegram и отправляете оттуда.\n\n## Позже\n\n- **Свои заметки к чатам**, как у [tgcli](https://github.com/kfastov/tgcli) рядом с тегами. Свои имена и заметки для людей уже работают: [имена и заметки для людей](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Реакции по эмодзи в рейтингах сообщений**, рядом с общим числом.\n- **Оставшиеся возможности `max`**: настройки конфиденциальности, история звонков, медиа чата, стикеры, удаление или очистка чата для себя и фотография группы.\n- **Ваше местоположение в сообщении.**"
+        }
+      ],
+      "es": [
+        {
+          "before": "Esta página enumera lo que está planeado para `tg` y aún no está incluido. Léelo antes de crear una solución alternativa para una característica faltante: es posible que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abra un [problema en GitHub](https://github.com/WireCatLabs/tg-cli/issues).\n\n## Lo que funciona hoy\n\nLectura, envío, búsqueda, el almacén local, grupos, personas, bots, MCP y permisos: consulte [usar tg](./usage.md) y [todos los comandos](./commands.md). Lo que cambió cada versión lanzada se encuentra en el [registro de cambios](./changelog.md).\n\n## En curso\n\n- **Una copia verificada de los archivos de un chat.** Descargue los archivos de un chat en una carpeta que elija, compruebe más tarde que cada copia sigue completa y repítalo con un temporizador diario.\n\n## Próximo\n\n- **Varias fotos en un solo mensaje.** Hasta entonces, consulte [lo que tg no puede enviar todavía](./usage.md#not-in-tg-yet).\n- **Archivar, fijar y silenciar un chat, o marcarlo como no leído.** Las herramientas de WhatsApp y MAX ya pueden hacerlo.\n- **Una respuesta guardada como borrador del chat.** Su agente la escribe, usted la lee en Telegram y pulsa enviar.\n\n## Más tarde\n\n- **Tus propias notas en los chats.** Notas privadas en un chat, como las que [tgcli](https://github.com/kfastov/tgcli) guarda junto a sus etiquetas. Los nombres privados y notas para personas ya funcionan: [tus propios nombres y notas para personas](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Reacciones por emoji en los rankings de mensajes.** Junto al total, cuántas veces recibió cada reacción un mensaje.\n- **Lo que `max` puede hacer y `tg` todavía no.** Configuración de privacidad, historial de llamadas, medios de un chat, stickers, eliminar o borrar un chat para usted mismo, una foto de grupo, presionar los botones de un bot, iniciar un bot y abrir su mini aplicación.\n- **Su ubicación en un mensaje.**",
+          "after": "Consulta lo previsto para Telegram antes de buscar una solución alternativa. Las prioridades pueden cambiar; propón una tarea en [GitHub issues](https://github.com/WireCatLabs/tg-cli/issues).\n\n## Lo que funciona hoy\n\nYa están disponibles la lectura, el envío, la búsqueda, el almacén local, grupos, personas, bots, MCP y permisos: consulta [usar tg](./usage.md) y [todos los comandos](./commands.md). Los cambios publicados figuran en el [historial de versiones](./changelog.md).\n\nYa funcionan los álbumes de hasta diez adjuntos compatibles, archivar/fijar/silenciar/marcar chats como no leídos, los botones de bots, iniciar bots y los enlaces de miniaplicaciones. El archivo de adjuntos guarda los archivos disponibles, verifica tamaño y SHA-256 y admite temporizadores diarios opcionales en Linux. Los [límites actuales](./usage.md#not-in-tg-yet) explican las restricciones restantes.\n\n## En curso\n\nNo se enumera trabajo adicional en esta sección. Las tareas previstas aparecen a continuación.\n\n## Próximo\n\n- **Una respuesta guardada como borrador del chat.** El agente la prepara y tú la revisas y envías desde Telegram.\n\n## Más tarde\n\n- **Notas propias en los chats**, como las que [tgcli](https://github.com/kfastov/tgcli) guarda junto a sus etiquetas. Los nombres privados y notas para personas ya funcionan: [nombres y notas para personas](./people.md#your-own-names-and-notes-contacts-aliases-contacts-notes).\n- **Reacciones por emoji en los rankings de mensajes**, junto al total.\n- **Paridad pendiente con `max`**: privacidad, historial de llamadas, medios del chat, stickers, eliminar o vaciar un chat para ti y la foto del grupo.\n- **Tu ubicación en un mensaje.**"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "people",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.83.0/docs/people.md",
+    "reason": "Keep incoming people-guide hashes after profile/info, audit/check and alias/aliases command renames.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## Who they are: `contacts info`",
+          "after": "<a id=\"who-they-are-contacts-profile\" />\n\n## Who they are: `contacts info`"
+        },
+        {
+          "before": "## The members of a group: `chats members check --deep`",
+          "after": "<a id=\"the-members-of-a-group-chats-members-audit---deep\" />\n\n## The members of a group: `chats members check --deep`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Кто этот человек: `contacts info`",
+          "after": "<a id=\"who-they-are-contacts-profile\" />\n\n<a id=\"кто-этот-человек-contacts-profile\" />\n\n## Кто этот человек: `contacts info`"
+        },
+        {
+          "before": "## Участники группы: `chats members check --deep`",
+          "after": "<a id=\"the-members-of-a-group-chats-members-audit---deep\" />\n\n<a id=\"участники-группы-chats-members-audit---deep\" />\n\n## Участники группы: `chats members check --deep`"
+        },
+        {
+          "before": "## Свои имена и заметки: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"свои-имена-и-заметки-contacts-alias-contacts-notes\" />\n\n## Свои имена и заметки: `contacts aliases`, `contacts notes`"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Quién es: `contacts info`",
+          "after": "<a id=\"who-they-are-contacts-profile\" />\n\n<a id=\"quién-es-contacts-profile\" />\n\n## Quién es: `contacts info`"
+        },
+        {
+          "before": "## Miembros de un grupo: `chats members check --deep`",
+          "after": "<a id=\"the-members-of-a-group-chats-members-audit---deep\" />\n\n<a id=\"miembros-de-un-grupo-chats-members-audit---deep\" />\n\n## Miembros de un grupo: `chats members check --deep`"
+        },
+        {
+          "before": "## Tus propios nombres y notas: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"tus-propios-nombres-y-notas-contacts-alias-contacts-notes\" />\n\n## Tus propios nombres y notas: `contacts aliases`, `contacts notes`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "The album feature ships in this release; the unchanged limitations paragraph still called it future work. Keep the unshipped in-app draft boundary explicit.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/CHANGELOG.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "Several photos in one message remain on the [roadmap](./roadmap.md).",
+          "after": "Albums are supported within the attachment limits above. Saving a reply as a draft in the Telegram app remains planned; see the [roadmap](./roadmap.md)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Несколько фотографий в одном сообщении остаются в [планах](./roadmap.md).",
+          "after": "Альбомы поддерживаются с ограничениями на вложения, указанными выше. Сохранение ответа как черновика в приложении Telegram пока остаётся в [планах](./roadmap.md)."
+        }
+      ],
+      "es": [
+        {
+          "before": "Varias fotos en un solo mensaje siguen en [próximas mejoras](./roadmap.md).",
+          "after": "Los álbumes están disponibles con los límites de adjuntos indicados arriba. Guardar una respuesta como borrador en la aplicación de Telegram sigue en [próximas mejoras](./roadmap.md)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Do not promise provider plan/region eligibility from a stale matrix; retain direct primary prerequisites for each app, as in the reviewed WhatsApp guide.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "| App | Plans | Documentation |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | any; one custom connector on the free plan | [custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | only adults in the US with a personal Google account | [connected apps](https://support.google.com/gemini/answer/17209137?hl=en) |",
+          "after": "Check the app’s current account and region requirements before starting the tunnel.\n\n| App | Connector prerequisites |\n|---|---|\n| ChatGPT | [Connection guide](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Connection guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Connection guide](https://support.google.com/gemini/answer/17209137?hl=en) |"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| Приложение | Планы | Документация |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [режим разработчика](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | любой; один своё подключение в бесплатном плане | [свои подключения](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | взрослые пользователи в США с личным аккаунтом Google | [связанные приложения](https://support.google.com/gemini/answer/17209137?hl=en) |",
+          "after": "Перед запуском туннеля проверьте текущие требования приложения к аккаунту и региону.\n\n| Приложение | Условия подключения |\n|---|---|\n| ChatGPT | [Руководство по подключению](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Руководство по подключению](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Руководство по подключению](https://support.google.com/gemini/answer/17209137?hl=en) |"
+        }
+      ],
+      "es": [
+        {
+          "before": "| Aplicación | Planes | Documentación |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claudio | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Géminis | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |",
+          "after": "Comprueba los requisitos actuales de cuenta y región de la aplicación antes de iniciar el túnel.\n\n| Aplicación | Requisitos de conexión |\n|---|---|\n| ChatGPT | [Guía de conexión](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Guía de conexión](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Guía de conexión](https://support.google.com/gemini/answer/17209137?hl=en) |"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Lead with the remote-connection task and accurately describe a public HTTPS endpoint protected by sign-in. Use verified client examples and link current provider prerequisites.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "title: \"ChatGPT, Codex or Claude in the browser\"",
+          "after": "title: \"Connect a browser or phone app\""
+        },
+        {
+          "before": "Use this page when you want an AI app that runs in the browser or on your phone, for example\nChatGPT, Codex web or Claude, to read and answer your Telegram messages. Such an app cannot start\n`tg` on your computer, so you give it an internet address instead. At the end, the app is connected\nto `tg` through a private HTTPS address, it can do only what your profile permits, and you know how\nto stop it or take its access back.",
+          "after": "Connect a browser or phone MCP app, such as ChatGPT or Claude, to tg running on a computer you control. You will start a public HTTPS endpoint with sign-in, connect the app under the chosen profile’s permissions and learn how to stop the server or revoke app access."
+        }
+      ],
+      "ru": [
+        {
+          "before": "title: \"ChatGPT, Codex или Claude в браузере\"",
+          "after": "title: \"Подключить приложение в браузере или на телефоне\""
+        },
+        {
+          "before": "Используйте эту страницу, если вы хотите, чтобы приложение агента, работающее в браузере или на вашем телефоне, например ChatGPT, Codex Web или Claude, читало ваши сообщения Telegram и отвечало на них. Такое приложение не может запустить `tg` на вашем компьютере, поэтому вместо этого вы указываете ему интернет-адрес. В результате приложение подключится к `tg` через частный адрес HTTPS, оно может делать только то, что разрешено вашим профилем, и вы знаете, как остановить его или отозвать доступ.",
+          "after": "Подключите приложение MCP в браузере или на телефоне, например ChatGPT или Claude, к tg на вашем компьютере. Вы запустите публичную точку HTTPS со входом, подключите приложение с разрешениями выбранного профиля и узнаете, как остановить сервер или отозвать доступ приложения."
+        }
+      ],
+      "es": [
+        {
+          "before": "title: \"ChatGPT, Codex o Claude en el navegador\"",
+          "after": "title: \"Conectar una aplicación del navegador o teléfono\""
+        },
+        {
+          "before": "Utilice esta página cuando desee una aplicación de IA que se ejecute en el navegador o en su teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de Telegram. Una aplicación de este tipo no puede iniciar `tg` en su computadora, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `tg` a través de una dirección HTTPS privada, solo puede hacer lo que su perfil permite y usted sabe cómo detenerla o recuperar su acceso.",
+          "after": "Conecta una aplicación MCP del navegador o teléfono, como ChatGPT o Claude, con tg en un equipo que controles. Iniciarás un endpoint HTTPS público con acceso autenticado, conectarás la aplicación con los permisos del perfil elegido y aprenderás a detener el servidor o revocar el acceso."
         }
       ]
     }

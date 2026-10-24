@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs"
 import { expect, it } from "vitest"
-import { commandGroupForAnchor, commandGroups, splitCommandReference } from "../lib/command-groups"
+import { commandGroup, commandGroupForAnchor, commandGroups, splitCommandReference } from "../lib/command-groups"
 import { commandReferences } from "../lib/remark-doc-usability"
 import { documentationDescription, seoLocales } from "../lib/seo"
 
@@ -52,4 +52,9 @@ it("gives every released WhatsApp page a distinct localized description", () => 
     const descriptions = pages.map((page) => documentationDescription(lang, page === "index" ? ["wa"] : ["wa", page]))
     expect(new Set(descriptions).size).toBe(pages.length)
   }
+})
+
+it("keeps canonical Telegram invite links and diagnostic search in their reader groups", () => {
+  expect(commandGroup("tg chats links create")).toBe("admin")
+  expect(commandGroup("tg search runs")).toBe("setup")
 })

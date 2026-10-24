@@ -98,7 +98,7 @@ Thanks, {{ sender.firstName | default: "there" }}!
 
 Содержимое блока — инструкция агенту. Входящий текст передаётся агенту отдельно, как данные. Если ИИ не настроен, нет согласия или вызов не удался, отправляется текст `else`; без `else` сообщение остаётся без ответа, а причина записывается.
 
-Выберите модель через `models.replies.provider` (`openai` или `anthropic`), `models.replies.model` и, для своего сервера, `models.replies.base_url`; `models.default` заполняет незаданные значения. Храните ключ через `tg personal models text key set`.
+Выберите модель через `models.replies.provider` (`openai` или `anthropic`), `models.replies.model` и, для своего сервера, `models.replies.base_url`; `models.default` заполняет незаданные значения. Храните ключ через `tg personal models keys set`.
 
 Для передачи данных провайдеру ИИ нужно отдельное согласие, независимо от права на отправку:
 

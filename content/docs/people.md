@@ -57,7 +57,7 @@ and questions still open. The answer should say which history was available.
 Both messengers provide a profile with the person's identity and shared conversations:
 
 ```sh
-tg personal contacts profile @example_user
+tg personal contacts info @example_user
 max personal contacts profile 20000002
 ```
 
@@ -133,7 +133,7 @@ saved history, and lists those with a reason. `--deep 10` then runs the full che
 highest, one person per second. The owner and admins are left out, and nobody is removed:
 
 ```sh
-tg personal chats members audit "Book club" --deep 10
+tg personal chats members check "Book club" --deep 10
 max personal chats members audit "Book club" --deep 10
 ```
 

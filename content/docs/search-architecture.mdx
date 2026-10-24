@@ -125,7 +125,7 @@ Agent-assisted linking: `skill show link-conversations` gives the owner's agent 
 `conversations build --chat <chat> --analyze` is the explicit alternative: the CLI sends bounded batches to a configured OpenAI-compatible or Anthropic endpoint. It needs one named chat, reports the volume, endpoint and token limit, and asks for consent, which is remembered for that account, chat and provider until revoked (`conversations consents list`, `conversations consents revoke`). Defaults are 50 messages per batch and at most 100,000 reserved tokens per run; `--yes` grants consent in scripts.
 
 ```sh
-tg personal conversations build --chat "Project team"
+tg personal conversations links rebuild --chat "Project team"
 tg personal conversations list "Project team" --json
 max personal conversations batches status --chat "Project team" --json
 ```
@@ -141,9 +141,9 @@ Local models run through ONNX Runtime (WebAssembly) in Node or Bun. The default 
 One local session uses `min(8, cores)` threads. `--workers` starts several sessions with the threads split between them, each with its own copy of the model, and `--threads` sets the total.
 
 ```sh
-tg personal models text download e5-small
+tg personal models download e5-small
 tg personal conversations embed --chat "Project team"
-tg personal conversations embed status --chat "Project team" --json
+tg personal conversations embeddings status --chat "Project team" --json
 ```
 
 A remote provider computes vectors with the owner's key: OpenAI, or any server with OpenAI's `/v1/embeddings` shape through `--base-url` with `--model` and `--dims`, such as Gemini, Jina, Ollama or LM Studio. That sends the pieces' text, and each search sends the question. Before sending anything, `embed` states the pieces, the maximum tokens and the maximum price and waits for a yes (`--yes` in scripts, `--max-tokens` as a cap).

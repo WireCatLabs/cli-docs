@@ -93,16 +93,16 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `sends_per_hour` | `30`; un bot no tiene ninguno hasta que se configura en la sección `bot` | la mayor cantidad de envíos en cualquier hora ([el control de envío](./security.md#the-send-guard)) | ninguno |
 | `requests_per_minute` | sin definir, lo que equivale a `60` | solicitudes un minuto después de una ráfaga de 20, compartida por todos los procesos del perfil; `0` lo apaga ([límites y esperas](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
 | `transcribe_with` | `auto` | quién convierte la voz en texto: `auto` (Telegram, si no, un modelo local), `messenger` o `local` | `--local`, o `--model`, lo que lo implica |
-| `speech_model` | ninguno | qué modelo descargado utiliza `--local` (`tg personal models audio list`) | `--model` |
+| `speech_model` | ninguno | qué modelo descargado utiliza `--local` (`tg personal models list kind:audio`) | `--model` |
 | `proxy` | ninguno | el servidor SOCKS5, HTTP `CONNECT` o MTProxy para llegar a Telegram a través de ([abajo](#through-a-proxy)) | `TG_PROXY` |
 | `read_other_bots` | `false` | solo un bot: si `tg personal bot` puede leer lo que otros bots en esta máquina guardan: `true`, o una lista de nombres de perfiles ([bots](./bot.md)) | ninguno; `--all-bots` y `--bots` preguntan, la configuración permite |
 | `update_check` | `true` | la línea diaria "existe una versión más nueva"; sólo bajo `defaults` | ninguno; `TG_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` o `CI` apágalo |
 | `skill_hint` | `true` | una línea, como máximo una vez al día, para un agente cuya copia de la skill de tg falta o es anterior a tg; sólo bajo `defaults` | ninguno |
-| `embedding_provider` | `local` | modelo local o `openai` | `--provider` |
+| `embedding_provider` | `local` | modelo local o `openai` | `--embedding-provider` |
 | `embedding_model` | predeterminado del proveedor | modelo de incrustación | `--model` |
 | `embedding_base_url` | predeterminado del proveedor | incorporación de punto final API | `--base-url` |
 | `embedding_dims` | modelo predeterminado | entero 1–65,536 | `--dims` |
-| `analysis_provider` | `agent` | `agent`, `openai` o `anthropic` | `build --provider` |
+| `analysis_provider` | `agent` | `agent`, `openai` o `anthropic` | `build --analysis-provider` |
 | `analysis_model` | ninguno; requerido para `--analyze` | modelo de análisis | `build --model` |
 | `analysis_base_url` | predeterminado del proveedor | punto final API de análisis | `build --base-url` |
 | `models` | ninguno | modelos externos por finalidad ([abajo](#models-by-purpose)) | Variables `TG_MODELS_*` |
@@ -146,7 +146,7 @@ Las claves de distintas secciones del archivo se suman, pero **decide primero la
 
 Funciona en ambos sentidos: `messages: allow` en un perfil también oculta `messages.delete: deny` de `defaults`, y eliminar vuelve a pedir confirmación, como por defecto.
 
-`inbox`, `review`, `watch`, `serve` y `messages sync`, `export` y `search` muestran mensajes, por lo que cuentan como `messages`: `messages: deny` también los bloquea. `config`, `session`, `doctor`, `recipients`, `mcp` y el mantenimiento del archivo local nunca se restringen.
+`inbox`, `review`, `watch`, `serve` y `messages sync`, `export` y `search` muestran mensajes, por lo que cuentan como `messages`: `messages: deny` también los bloquea. `config`, `session`, `doctor`, `recipients`, `mcp` y el mantenimiento del archivo local nunca se restringen. Una clave queda fuera de las rutas de comandos: `mcp.authority` (`deny` por defecto) decide si el servidor MCP ofrece comandos que cambian lo que podrá hacer una ejecución posterior ([permisos](./permissions.md#let-an-agent-change-its-own-limits)).
 
 **Los valores predeterminados permiten todo excepto algunos cambios que son difíciles de revertir.** Estos preguntan: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` y `account.sessions.end`. Es posible que las reglas de respuesta no se envíen hasta que usted lo permita: `replies.send` es `deny`. Un valor predeterminado incorporado solo endurece: `messages: readonly` aún rechaza una eliminación, y `messages: allow` mantiene la pregunta antes de una eliminación hasta que usted configure `messages.delete`.
 
@@ -314,7 +314,7 @@ después el campo de propósito configurado más cercano, los campos antiguos `a
 y, por último, los campos de entorno y configuración de `models.default`. Los guiones del propósito
 se convierten en guiones bajos en el nombre de su variable de entorno. Las credenciales no forman parte de este objeto.
 
-Las configuraciones de incrustación y análisis son independientes y pueden diferir según el perfil. Los puntos finales deben ser HTTP/S sin credenciales, consultas o fragmentos integrados. Los embeddings remotos también reciben el texto de consulta de las búsquedas de MCP. Las claves se configuran con `models text key set openai|anthropic` y permanecen fuera de `config.json`. El `build` ordinario no inicia el análisis remoto: se requiere `--analyze` explícito.
+Las configuraciones de incrustación y análisis son independientes y pueden diferir según el perfil. Los puntos finales deben ser HTTP/S sin credenciales, consultas o fragmentos integrados. Los embeddings remotos también reciben el texto de consulta de las búsquedas de MCP. Las claves se configuran con `models keys set openai|anthropic` y permanecen fuera de `config.json`. El `conversations links rebuild` ordinario no inicia el análisis remoto: se requiere `--analyze` explícito.
 
 ### Variables de entorno de modelos
 

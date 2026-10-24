@@ -58,7 +58,7 @@ El agente debe indicar qué historial estaba disponible.
 Ambos mensajeros ofrecen un perfil con la identidad y conversaciones compartidas:
 
 ```sh
-tg personal contacts profile @example_user
+tg personal contacts info @example_user
 max personal contacts profile 20000002
 ```
 
@@ -139,7 +139,7 @@ comprobación completa de los diez con más puntos, una persona por segundo. El 
 administradores quedan fuera, y no se elimina a nadie:
 
 ```sh
-tg personal chats members audit "Club de lectura" --deep 10
+tg personal chats members check "Club de lectura" --deep 10
 max personal chats members audit "Club de lectura" --deep 10
 ```
 

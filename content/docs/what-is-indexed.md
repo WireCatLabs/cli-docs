@@ -65,7 +65,7 @@ Your agent reads the image with its own vision tools and saves the words:
 
 ```sh
 tg personal attachments list 'chat:"Book club" is:needs_text'
-tg personal attachments text set "Book club" 204 --text-file ./scan.txt
+tg personal attachments update "Book club" 204 --text-file ./scan.txt
 ```
 
 For many scans, you can choose a model service. This is the one place where files leave your computer: `attachments extract --ocr` sends images and scanned PDF pages to the service you configured. Without `--ocr`, no model is called.
@@ -109,8 +109,8 @@ Pictures are searchable in two ways. Choose by what you remember.
 You remember what people were talking about when the photo came. `conversations embed` gives each photo a piece of text made of its caption, up to 3 messages before and after it within 10 minutes, the chat title and the sender. Search by meaning then finds the photo's message in any language.
 
 ```sh
-tg personal models text download e5-small
-tg personal conversations build --chat "Book club"
+tg personal models download e5-small
+tg personal conversations links rebuild --chat "Book club"
 tg personal conversations embed --chat "Book club"
 tg personal search conversations "photos from the trip" --chat "Book club"
 ```

@@ -36,7 +36,7 @@ Algunos términos que utiliza la página:
 | Sin preguntas en mitad de una ejecución | `--no-input`; banderas de confirmación `--yes` y `--allow-dangerous` |
 | Evitar ejecuciones bloqueadas o salidas excesivas | Un límite de tiempo y límites de tamaño para la entrada y la salida |
 | Sólo los campos que necesitas | `--json=<fields>` |
-| Opciones de un comando sin leer los documentos | `tg commands` y `tg commands schema` |
+| Opciones de un comando sin leer los documentos | `tg commands` y `tg commands info` |
 | Para ver qué haría un comando | `--dry-run` |
 | Para saber si ocurrió una escritura fallida | `outcome_unknown` y `details.operation_id` |
 
@@ -83,12 +83,12 @@ La entrada leída desde stdin está limitada a 16 MiB; `--max-input-bytes 335544
 ```sh
 tg personal messages list <chat> --json=id,text
 tg commands messages list --json
-tg commands schema messages list --json
+tg commands info messages list --json
 ```
 
 `--json=id,text` mantiene sólo los campos enumerados, separados por comas; un punto selecciona un campo anidado. `--json id,text` también funciona cuando cada nombre es un campo de la respuesta del comando. La información de la página del formato elegido permanece. Para `page`, utilice `--json`: las listas JSONL imprimen los elementos sin el envoltorio de página. Un campo que falta sigue faltando; no llega a ser cero.
 
-`tg commands` describe opciones, valores permitidos, valores predeterminados y códigos de salida. `tg commands schema` proporciona un [esquema JSON](https://json-schema.org/specification) (versión 2020-12) de los argumentos y el resultado. `schemaVersion` es la versión de esta descripción y cambia por separado de la versión del programa. `outputSchemaCoverage` muestra qué parte del resultado describe el esquema: `declared-entity` cuando el comando declara qué son sus elementos, `envelope-with-open-items` cuando el esquema verifica el envoltorio y deja abiertos los elementos. Un esquema abierto permite campos adicionales del servicio de mensajería; no promete que se verifiquen todos los campos.
+`tg commands` describe opciones, valores permitidos, valores predeterminados y códigos de salida. `tg commands info` proporciona un [esquema JSON](https://json-schema.org/specification) (versión 2020-12) de los argumentos y el resultado. `schemaVersion` es la versión de esta descripción y cambia por separado de la versión del programa. `outputSchemaCoverage` muestra qué parte del resultado describe el esquema: `declared-entity` cuando el comando declara qué son sus elementos, `envelope-with-open-items` cuando el esquema verifica el envoltorio y deja abiertos los elementos. Un esquema abierto permite campos adicionales del servicio de mensajería; no promete que se verifiquen todos los campos.
 
 ## Vistas previas y reintentos seguros
 
@@ -108,6 +108,6 @@ Pídale al agente que le muestre los mensajes que contó y cuánto del historial
 
 ## Estándares que seguimos
 
-`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.83.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
+`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
 
 Para la configuración, consulte la [guía de configuración](./configuration.md); para cada clave y variable de entorno, la [referencia de configuración](./configuration-reference.md).

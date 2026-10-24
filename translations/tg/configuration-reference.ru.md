@@ -93,16 +93,16 @@ tg shop config show --bot
 | `sends_per_hour` | `30`; у бота его нет, пока он не установлен в разделе `bot` | наибольшее количество отправок за час ([защита отправки](./security.md#the-send-guard)) | нет |
 | `requests_per_minute` | не задано, что означает `60` | запросов в минуту после краткого всплеска до 20, общие для всех процессов профиля; `0` отключает ([ограничения и ожидания](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
 | `transcribe_with` | `auto` | кто превращает голос в текст: `auto` (Telegram, иначе локальная модель), `messenger` или `local` | `--local` или `--model`, что подразумевает |
-| `speech_model` | нет | какую скачанную модель использует `--local` (`tg personal models audio list`) | `--model` |
+| `speech_model` | нет | какую скачанную модель использует `--local` (`tg personal models list kind:audio`) | `--model` |
 | `proxy` | нет | сервер SOCKS5, HTTP `CONNECT` или MTProxy для доступа к Telegram через ([ниже](#through-a-proxy)) | `TG_PROXY` |
 | `read_other_bots` | `false` | только бот: может ли `tg personal bot` читать то, что хранят другие боты на этой машине — `true` или список имен профилей ([bots](./bot.md)) | нет; `--all-bots` и `--bots` спрашивают, настройка позволяет |
 | `update_check` | `true` | ежедневная строка «Существует более новая версия»; только под `defaults` | нет; `TG_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` или `CI` выключить |
 | `skill_hint` | `true` | линия не чаще одного раза в день для агента, у которого копия навыка tg отсутствует или старше tg; только под `defaults` | нет |
-| `embedding_provider` | `local` | локальная модель или `openai` | `--provider` |
+| `embedding_provider` | `local` | локальная модель или `openai` | `--embedding-provider` |
 | `embedding_model` | провайдер по умолчанию | модель векторизации | `--model` |
 | `embedding_base_url` | провайдер по умолчанию | адрес API для векторизации | `--base-url` |
 | `embedding_dims` | модель по умолчанию | целое число 1–65 536 | `--dims` |
-| `analysis_provider` | `agent` | `agent`, `openai` или `anthropic` | `build --provider` |
+| `analysis_provider` | `agent` | `agent`, `openai` или `anthropic` | `build --analysis-provider` |
 | `analysis_model` | нет; требуется для `--analyze` | модель анализа | `build --model` |
 | `analysis_base_url` | провайдер по умолчанию | конечная точка API анализа | `build --base-url` |
 | `models` | нет | внешние модели по назначению ([ниже](#models-by-purpose)) | `TG_MODELS_*` переменные |
@@ -146,7 +146,7 @@ tg shop config show --bot
 
 Это работает и в обратную сторону: `messages: allow` профиля тоже скрывает `messages.delete: deny` из `defaults`, и удаление снова требует подтверждения, как по умолчанию.
 
-`inbox`, `review`, `watch`, `serve` и `messages sync`, `export`, `search` показывают сообщения и относятся к `messages`: `messages: deny` блокирует и их. `config`, `session`, `doctor`, `recipients`, `mcp` и обслуживание самой базы не ограничиваются.
+`inbox`, `review`, `watch`, `serve` и `messages sync`, `export`, `search` показывают сообщения и относятся к `messages`: `messages: deny` блокирует и их. `config`, `session`, `doctor`, `recipients`, `mcp` и обслуживание самой базы не ограничиваются. Один ключ не совпадает с путями команд: `mcp.authority` (по умолчанию `deny`) определяет, предлагает ли MCP-сервер команды, меняющие возможности следующего запуска ([разрешения](./permissions.md#let-an-agent-change-its-own-limits)).
 
 **Значения по умолчанию позволяют все, кроме нескольких изменений, которые трудно отменить.** Они задают вопросы: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` и `account.sessions.end`. Правила ответа не могут отправлять сообщения, пока вы не разрешите это: `replies.send` — `deny`. Встроенное значение по умолчанию только усиливает ограничения: `messages: readonly` по-прежнему отказывается от удаления, а `messages: allow` сохраняет вопрос перед удалением, пока вы не установите сам `messages.delete`.
 
@@ -315,7 +315,7 @@ tg personal setup
 затем переменные окружения и поля конфигурации в `models.default`. Дефисы в названии назначения
 становятся подчёркиваниями в имени переменной окружения. Учётные данные не входят в этот объект.
 
-Настройки векторизации и анализа независимы и могут различаться в зависимости от профиля. Конечные точки должны быть HTTP/S без встроенных учетных данных, запросов или фрагментов. Удалённые вызовы векторизации также получают текст запроса поиска MCP. Ключи устанавливаются с помощью `models text key set openai|anthropic` и остаются за пределами `config.json`. Обычный `build` не запускает удаленный анализ: требуется явный `--analyze`.
+Настройки векторизации и анализа независимы и могут различаться в зависимости от профиля. Конечные точки должны быть HTTP/S без встроенных учетных данных, запросов или фрагментов. Удалённые вызовы векторизации также получают текст запроса поиска MCP. Ключи устанавливаются с помощью `models keys set openai|anthropic` и остаются за пределами `config.json`. Обычный `conversations links rebuild` не запускает удаленный анализ: требуется явный `--analyze`.
 
 ### Переменные окружения для моделей
 

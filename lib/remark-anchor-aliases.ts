@@ -37,7 +37,13 @@ export function remarkAnchorAliases() {
           return aliases.flatMap((alias) => {
             if (ids.has(alias[1])) return []
             ids.add(alias[1])
-            return [{ type: "paragraph", children: [], data: { hName: "span", hProperties: { id: alias[1] } } }]
+            return [
+              {
+                type: "paragraph",
+                children: [],
+                data: { hName: "span", hProperties: { id: alias[1], className: "block scroll-mt-28" } },
+              },
+            ]
           })
         }
         visit(child)

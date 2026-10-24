@@ -65,7 +65,7 @@ tg personal search messages 'content:invoice'
 
 ```sh
 tg personal attachments list 'chat:"Book club" is:needs_text'
-tg personal attachments text set "Book club" 204 --text-file ./scan.txt
+tg personal attachments update "Book club" 204 --text-file ./scan.txt
 ```
 
 Для многих сканов можно выбрать сервис моделей. Это единственное место, где файлы покидают компьютер: `attachments extract --ocr` отправляет изображения и страницы отсканированных PDF в настроенный вами сервис. Без `--ocr` никакая модель не вызывается.
@@ -109,8 +109,8 @@ tg personal search messages 'domain:example.com'
 Вы помните, о чём говорили, когда пришло фото. `conversations embed` делает для каждого фото кусок текста: подпись, до 3 сообщений до и после него в пределах 10 минут, название чата и отправитель. Поиск по смыслу затем находит сообщение с фото на любом языке.
 
 ```sh
-tg personal models text download e5-small
-tg personal conversations build --chat "Book club"
+tg personal models download e5-small
+tg personal conversations links rebuild --chat "Book club"
 tg personal conversations embed --chat "Book club"
 tg personal search conversations "photos from the trip" --chat "Book club"
 ```

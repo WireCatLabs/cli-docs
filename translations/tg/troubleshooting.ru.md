@@ -254,7 +254,7 @@ tg chat list
 
 Код `5`, если аккаунту запрещено действие, `11` — остальные отказы. Имя причины приходит от Telegram и содержится в JSON как `provider_error`; введённые аргументы не повторяются. Некоторые причины объясняются отдельно:
 
-- **Telegram распознаёт речь только для Premium** — код `5`. Используйте локальную модель: `tg personal models audio download parakeet-v3`, затем `tg personal messages transcribe <chat> <id> --local`.
+- **Telegram распознаёт речь только для Premium** — код `5`. Используйте локальную модель: `tg personal models download parakeet-v3`, затем `tg personal messages transcribe <chat> <id> --local`.
 - **Сообщение не является голосовым или видеозаметкой** — код `2`: указан другой тип сообщения.
 - **Telegram не смог распознать речь** — код `11`; попробуйте `--local`.
 
@@ -347,9 +347,9 @@ tg personal messages send <chat> "<the same text>" --operation-id <id from the e
 ## Сообщить о проблеме
 
 ```sh
-tg personal doctor report  # what a report holds, and what it never holds; writes nothing
-tg personal doctor report create  # write it to a file, and say where to send it
-tg personal doctor report create --run <id>  # about another run; ids from tg personal runs list
+tg personal doctor reports show  # what a report holds, and what it never holds; writes nothing
+tg personal doctor reports create  # write it to a file, and say where to send it
+tg personal doctor reports create --run <id>  # about another run; ids from tg personal runs list
 ```
 
 `create` записывает `tg-report-<time>.json` в текущую папку (или `--output`), доступную для чтения только вам. Он содержит версию, среду выполнения и операционную систему, ответ `tg personal doctor`, последний неудачный запуск — операцию каждого запроса, продолжительность и код ошибки — и только последние 20 попыток отправки, результат и длину. Каждый идентификатор чата, сообщения и аккаунта заменяется меткой, которая ничего не значит за пределами файла. Он не содержит текста сообщения, заголовков чатов, имен, номеров телефонов, учетных данных сессии или приложения. Неудачный запуск сохраняется отдельно, даже без `--record` ([неудачные запуски](./diagnostics.md#a-failed-run-is-always-kept)).

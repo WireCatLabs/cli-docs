@@ -25,6 +25,18 @@ for (const lang of ["en", "ru", "es"])
       await page.goto(`/${lang}/docs/${tool}/commands#${tool}-bot-api`)
       await expect(page).toHaveURL(new RegExp(`commands-bot#${tool}-bot-api$`))
       await expect(page.locator(`#${tool}-bot-api`)).toBeInViewport()
+      if (tool === "tg") {
+        for (const [hash, group, current] of [
+          ["tg-contacts-profile", "personal", "tg-contacts-info"],
+          ["tg-mcp-setup", "setup", "tg-mcp-add"],
+        ]) {
+          await page.goto("about:blank")
+          await page.goto(`/${lang}/docs/tg/commands#${hash}`)
+          await expect(page).toHaveURL(new RegExp(`commands-${group}#${hash}$`))
+          await expect(page.locator(`#${hash}`)).toHaveCount(1)
+          await expect(page.locator(`#${current}`)).toBeInViewport()
+        }
+      }
       const locale = lang === "en" ? "" : `${lang}/`
       const md = await request.get(`/llms.mdx/docs/${locale}${tool}/commands/content.md`)
       expect(md.ok()).toBe(true)
