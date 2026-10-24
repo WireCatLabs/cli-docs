@@ -22,5 +22,11 @@
     "roadmapSha256": "03a41557ca52edafb9eaed4e3026b091da147e5db74c9757a5da8edf6514d38e",
     "reviewedAt": "2026-10-24",
     "conclusion": "Reviewed Drive 0.25.0: the first roadmap page and a compare page ship with this tag; drive doctor and drive upgrade are new commands; the profile is the first word or DRIVE_PROFILE and there is no --profile option. Changed native pages: changelog, commands, compare, configuration, installation, roadmap, troubleshooting; RU/ES written. The roadmap is new, so every item on it is unshipped."
+  },
+  "memo": {
+    "version": "v0.90.0",
+    "roadmapSha256": "4734ba07333b179273a3d4c31301ff04c311e5d8f820eee028102e43a5661cd9",
+    "reviewedAt": "2026-10-24",
+    "conclusion": "Reviewed Memo v0.89.0 to v0.90.0: the first roadmap and Project sidebar entry are new; command return summaries changed for task cards, task links and search hits. The release adds shared first-run questions and refreshes the introduction example; no roadmap item is claimed shipped by this release. Native installation, usage, MCP and other guides are unchanged. RU/ES roadmap, command return summaries and new changelog entry reviewed; exact technical changelog text remains English as in the existing translations."
   }
 }

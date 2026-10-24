@@ -44,7 +44,10 @@ WireCat собирает ваш контекст в одном месте. Со�
 
 ## Планы каждого инструмента
 
-Чего пока нет в каждом инструменте, перечислено в его собственных планах:
-[планы Telegram](./tg/roadmap.md) · [планы MAX](./max/roadmap.md) · [планы Zoom](./zm/roadmap.md) · [планы Google Drive](./drive/roadmap.md).
-Предложить источник или
-функцию можно в issue в GitHub-репозитории инструмента.
+- [Планы Telegram](./tg/roadmap.md)
+- [Планы MAX](./max/roadmap.md)
+- [Планы Zoom](./zm/roadmap.md)
+- [Планы Google Drive](./drive/roadmap.md)
+- [Планы Memo](./memo/roadmap.md)
+
+Предложить источник или функцию можно в issue в GitHub-репозитории инструмента.

@@ -139,3 +139,11 @@ describe("sidebar icon coverage", () => {
     }
   })
 })
+
+it("links every current tool's roadmap from each global roadmap", () => {
+  const tools = JSON.parse(readFileSync("tools.json", "utf8")) as { name: string }[]
+  for (const suffix of ["", ".ru", ".es"]) {
+    const roadmap = readFileSync(`content/docs/roadmap${suffix}.md`, "utf8")
+    for (const tool of tools) expect(roadmap).toContain(`](./${tool.name}/roadmap.md)`)
+  }
+})

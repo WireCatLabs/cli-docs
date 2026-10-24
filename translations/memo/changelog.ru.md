@@ -8,6 +8,23 @@ title: "История изменений"
 
 Точные технические записи новых выпусков сохранены на английском; инструкции по использованию переведены в соответствующих руководствах.
 
+## Unreleased
+
+## 0.90.0 — 24.10.2026
+
+### Added
+
+- **The first command at a terminal asks three questions once for every WireCat tool** (cli-core 0.404.0): which
+  languages you write and speak, which other WireCat tools to install, and whether commands and agents may only read.
+  Answered in any tool, they hold in all of them; "read only" stops every `memo` change, as `MEMO_READ_ONLY` does.
+  `tg setup`, `max setup` or `wa setup` asks again. Agents, `--json`, `--no-input`, `CI` and `MEMO_READ_ONLY` are
+  never asked.
+
+### Fixed
+
+- **The introduction shows the current notes-search output and names all six WireCat tools.** The example
+  uses fictional notes and explains the diagnostic when the local meaning model is missing.
+
 ## 0.89.0 — 22.10.2026
 
 ### Added

@@ -134,8 +134,8 @@
   "drive/security.es": "a49bb872d74c6abaa9586f5e8995633d5faae489e93abfcff54999118061f3d3",
   "memo/archive.es": "4ec5c10e7af64d164cb92e7a5aae788540c0f3ccdcd9df0c6999170afe65217a",
   "memo/archive.ru": "4ec5c10e7af64d164cb92e7a5aae788540c0f3ccdcd9df0c6999170afe65217a",
-  "memo/commands.es": "fe67800eb8d73e11f3dd532436c5187f409225b7eaca5411a44a55e773a9020d",
-  "memo/commands.ru": "fe67800eb8d73e11f3dd532436c5187f409225b7eaca5411a44a55e773a9020d",
+  "memo/commands.es": "eddb595a52b98be6c7fa35844df441395cfd9a4a1969557437e259e505655dd1",
+  "memo/commands.ru": "eddb595a52b98be6c7fa35844df441395cfd9a4a1969557437e259e505655dd1",
   "memo/configuration.es": "f056563d9c4df3df4269082ce3381873687462c3361afcea884e435f3d1dddaf",
   "memo/configuration.ru": "f056563d9c4df3df4269082ce3381873687462c3361afcea884e435f3d1dddaf",
   "memo/how-it-works.es": "10253b14d275396d2fbf9df37eb8c0b478c46c66dc0495247cdb76d2a93dadd7",
@@ -168,8 +168,8 @@
   "memo/troubleshooting.ru": "2eef97e2e3dc72d73e75806de73a42748bf709f2fcaf9fe78c8ebfacb7af94d8",
   "memo/usage.es": "acde45092b89737a9a8580e4063f0bcf29c380544269b042589f22afea34bfcf",
   "memo/usage.ru": "acde45092b89737a9a8580e4063f0bcf29c380544269b042589f22afea34bfcf",
-  "memo/changelog.ru": "c9c72f48eec02895d91304465ddf7f503be8387720211eff5229fb359a134c63",
-  "memo/changelog.es": "c9c72f48eec02895d91304465ddf7f503be8387720211eff5229fb359a134c63",
+  "memo/changelog.ru": "eb3db5c559dafd2a22f8fe695d8f7cb567295b12b2cb9845aa7ad70d51ec1e65",
+  "memo/changelog.es": "eb3db5c559dafd2a22f8fe695d8f7cb567295b12b2cb9845aa7ad70d51ec1e65",
   "zm/troubleshooting.ru": "1dd5b910faafd04419af3c397b5e4a3718a34403bb2754995ead594aa6b64ed9",
   "zm/roadmap.es": "204a8bd153c69b1186e09dd8df1cd8d6426f8148df2a7c2eb4e7337705ad9853",
   "zm/mcp.ru": "1673502322624bf6b6befd26de2c193588f101013f03c73782d45cdbd8c89eaa",
@@ -215,5 +215,7 @@
   "drive/compare.es": "d2bfea804e9653bc85c52fcabcadd415fe3ac099cc3da47ec293718c6ba4aab7",
   "drive/compare.ru": "d2bfea804e9653bc85c52fcabcadd415fe3ac099cc3da47ec293718c6ba4aab7",
   "drive/roadmap.es": "c326252e0c28182df35fcfe853c7c5116422eb3f166b22059aa0b2bfb7584af1",
-  "drive/roadmap.ru": "c326252e0c28182df35fcfe853c7c5116422eb3f166b22059aa0b2bfb7584af1"
+  "drive/roadmap.ru": "c326252e0c28182df35fcfe853c7c5116422eb3f166b22059aa0b2bfb7584af1",
+  "memo/roadmap.ru": "09556a6c2a16e8bed284ccf98b1e1d2ff2660b053bd34eadb3a31702d0c53cbb",
+  "memo/roadmap.es": "09556a6c2a16e8bed284ccf98b1e1d2ff2660b053bd34eadb3a31702d0c53cbb"
 }
