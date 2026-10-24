@@ -12,10 +12,10 @@
     "conclusion": "Reviewed MAX v0.66.0 to v0.72.0, release commit 538197e9e51dc307fd8579c00d45e9965213cd76, Core 0.406.0/Base 0.50.3. Native Russian source and EN/ES translations cover canonical command names, removed read-receipt flags/config, transcript matching, dates/timezones, contacts prepare, framed watch JSONL, query-based run/stat filters, explicit first-run choices and MCP authority/raw bot API levels allow and ask. Verified file archives shipped in v0.71.0; v0.72.0 fixes service-event/keyboard skips. Source-attributed portal corrections move archives out of future plans, repair retired permission keys, diagnostic MCP argument names, request confirm/reject shorthands and malformed empty reference defaults. Forty retired command hashes are retained. Optional store, event actions, bulk join requests, video notes/cloud password, chat pin/archive/unread, personal channel comments and standalone installers remain future. No live account checks or extra release performed."
   },
   "zm": {
-    "version": "v0.36.0",
-    "roadmapSha256": "d6932e6c14696349630b8a975a2d32fb36bf79728ec8bd808457a72d79d9ae2d",
-    "reviewedAt": "2026-10-23",
-    "conclusion": "Reviewed Zoom 0.32.0-0.36.0 (Core 0.370.0 -> 0.389.0): the profile is the first word (zm personal meetings list; ZM_PROFILE for a shell; each profile has its own Zoom login); zm <profile> mcp replaces zm serve --mcp and offers zm's commands as the profile's permissions allow; permissions per profile; stats meetings; models audio; meetings transcribe takes Zoom's recordings; .txt transcript import; search reads the query language and ranks words and meaning together; meeting writes ask first. Changed native pages: every guide (profile prefix), changelog, commands, configuration (Permissions), mcp (rewritten), search, sessions; RU/ES updated. Portal copies (install prompts, agents, MCP, Zoom overview, command rules) moved to zm personal. Roadmap unchanged: broader meeting preparation remains planned and is not shipped."
+    "version": "v0.42.0",
+    "roadmapSha256": "0ba21295559e9024680168e2bb53115f68bd64bf044b91228927bd2ee3c23039",
+    "reviewedAt": "2026-10-24",
+    "conclusion": "Reviewed Zoom0.36.0–0.42.0 with the exact published command contract, including permission discovery, unified search hit paging, review/mentions/saved searches, model and archive vocabulary, profile examples and keyring diagnostics. EN/RU/ES full guide and technical-reference review completed. Source Zoom#245 corrects older released security/search/usage/roadmap claims; explicit portal runtime errata preserve the reviewed0.42 grammar and discovery contract3 rather than importing newer Core411 behavior. Custom/team-authorized Zoomapp required; no public shared app promised. Audio recording of attended calls, notes/speaker naming, broader preparation and additional platforms remain planned."
   },
   "drive": {
     "version": "v0.28.1",

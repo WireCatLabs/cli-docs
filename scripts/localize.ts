@@ -8,11 +8,22 @@ import { diagramStructure } from "../lib/mermaid.ts"
 import { writeCommandSections } from "./command-sections.ts"
 
 type Tool = { name: string; lang: string; displayName?: string }
-type Correction = {
+export type Correction = {
   tool: string
   slug: string
   reason: string
+  phase?: "before-translation"
   replacements: Record<string, { before: string; after: string }[]>
+}
+
+/** Runtime errata must be checked before translation preserves their corrected syntax. */
+export function reviewedSource(text: string, corrections: Correction[], tool: string, slug: string, lang: string) {
+  return correctDocumentation(
+    text,
+    corrections
+      .filter((item) => item.tool === tool && item.slug === slug && item.phase === "before-translation")
+      .flatMap((item) => item.replacements[lang] ?? []),
+  )
 }
 const languages = ["en", "ru", "es"]
 
@@ -203,7 +214,7 @@ export function localizeTool(root: string, tool: Tool) {
     correctDocumentation(
       text,
       corrections
-        .filter((item) => item.tool === tool.name && item.slug === slug)
+        .filter((item) => item.tool === tool.name && item.slug === slug && !item.phase)
         .flatMap((item) => item.replacements[lang] ?? []),
     )
   const pages = readdirSync(source).filter((name) => /^[^.]+\.md$/.test(name))
@@ -222,6 +233,7 @@ export function localizeTool(root: string, tool: Tool) {
     const original = readFileSync(join(source, file), "utf8")
     // Scenario files are English in every tool, whatever language its other pages use.
     const sourceLang = slug === "scenarios" ? "en" : tool.lang
+    const reviewedOriginal = reviewedSource(original, corrections, tool.name, slug, sourceLang)
     for (const lang of languages) {
       const owned =
         slug === "index"
@@ -234,7 +246,7 @@ export function localizeTool(root: string, tool: Tool) {
         continue
       }
       if (lang === sourceLang && !existsSync(path)) {
-        writeFileSync(destination, siteLinks(contentLanguage(corrected(original, slug, lang), lang), lang))
+        writeFileSync(destination, siteLinks(contentLanguage(corrected(reviewedOriginal, slug, lang), lang), lang))
         continue
       }
       if (!existsSync(path)) {
@@ -247,8 +259,8 @@ export function localizeTool(root: string, tool: Tool) {
         writeFileSync(destination, siteLinks(contentLanguage(original, sourceLang), lang))
         continue
       }
-      const translated = readFileSync(path, "utf8")
-      const errors = translationProblems(original, translated)
+      const translated = reviewedSource(readFileSync(path, "utf8"), corrections, tool.name, slug, lang)
+      const errors = translationProblems(reviewedOriginal, translated)
       if (errors.length) {
         problems.push(`${tool.name}/${slug}.${lang}: ${errors.join(", ")}`)
         writeFileSync(destination, siteLinks(contentLanguage(original, sourceLang), lang))
@@ -256,7 +268,10 @@ export function localizeTool(root: string, tool: Tool) {
       }
       writeFileSync(
         destination,
-        siteLinks(contentLanguage(withOriginalAnchors(original, corrected(translated, slug, lang)), lang), lang),
+        siteLinks(
+          contentLanguage(withOriginalAnchors(reviewedOriginal, corrected(translated, slug, lang)), lang),
+          lang,
+        ),
       )
     }
   }

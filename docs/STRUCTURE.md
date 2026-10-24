@@ -10,6 +10,12 @@ Read [AUTHORING.md](AUTHORING.md) before drafting: every guide begins with its u
 A reviewed documentation-only `guideRefs` override imports one page from a full immutable commit;
 its runtime facts must remain compatible with the pinned release. Its GitHub source link uses that commit.
 
+When a released guide contains incorrect command syntax, a reviewed correction in
+`scripts/docs-corrections.json` can use `phase: "before-translation"`. Translation checks then preserve
+the corrected source and locale syntax. Source fingerprints still identify the untouched released
+page. Every correction must match exactly once; stale or ambiguous corrections fail. Corrections
+without this phase retain their existing presentation-after-validation behavior.
+
 A tool explicitly marked `distribution: "source"` is installed from its repository, not npm.
 It pins a full reviewed commit in `docsRef`; source sync and offline command capture use that same
 commit. The overview and installation disclose the source/client prerequisites. This mode does not

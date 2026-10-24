@@ -2,41 +2,57 @@
 title: "Planes"
 ---
 
-Consulta qué flujos puedes usar hoy y cuáles faltan. La herramienta ya obtiene datos del anfitrión,
-importa texto, copia grabaciones y busca pasajes citados. `meetings prepare` combina la prueba de
-la próxima cita de una serie elegida con contexto guardado acotado, incluidas llamadas relacionadas,
-hechos aceptados de personas/proyectos y notas del dueño sobre llamadas anteriores incluidas,
-personas vinculadas explícitamente y proyectos confirmados. Elegir opcionalmente un proyecto existente
-añade coincidencias citadas de nombre, clave y alias, separadas de la pertenencia confirmada.
-Las fuentes configuradas explícitamente añaden coincidencias literales acotadas de mensajes,
-correo y carpetas guardadas, con citas, cobertura y continuación.
-`meetings scheduled` descubre una página acotada de posibles series; `meetings projects scan`
-compara fuentes de una reunión guardada con nombres, claves y alias de proyectos existentes.
-Ambos conservan la incertidumbre y no guardan asociaciones.
-Un agente puede combinar esas fuentes con proyectos, notas y personas de Memo. Empieza con
-[preparación](./usage.md#prepare-for-an-upcoming-meeting) o [búsqueda y fuentes](./search.md).
+Consulta qué flujos de reuniones puedes usar hoy y cuáles necesitan más desarrollo.
 
-Las copias de grabaciones usan almacenamiento compartido para los bloqueos de escritura, las
-descargas reanudables y la recuperación tras interrumpirse el guardado final. Los archivos de Zoom
-existentes siguen siendo compatibles; cada proveedor conserva su propio formato de metadatos.
+<a id="what-works-today" />
 
-## Guarda resultados revisados con Memo
+## Qué funciona hoy
 
-Memo permite preparar decisiones, afirmaciones y tareas de proyecto de una reunión guardada
-para que el dueño las revise. Usa un vínculo confirmado entre la reunión y un proyecto existente,
-lee los pasajes que las respaldan y confirma los candidatos que quieras conservar. Preparar las
-propuestas no crea hechos ni tareas; repetir exactamente la operación reutiliza los registros
-aceptados. [Revisa los resultados de una reunión](https://wirecat.dev/en/docs/memo/memories#meeting-findings)
-explica los comandos, las comprobaciones de la vista previa y los límites. La preparación de reuniones
-lee contexto guardado; no acepta estos resultados ni genera un resumen.
+La herramienta obtiene las reuniones, participantes, transcripciones y resúmenes de Zoom AI que tu cuenta
+ha alojado, importa transcripciones que hayas descargado, copia grabaciones en la nube con sumas de
+comprobación y busca reuniones guardadas por palabras o significado, con una referencia a cada pasaje.
+`meetings prepare` reúne contexto citado para una próxima serie elegida. `stats meetings` muestra quién
+habló y cuánto. Un agente puede usar todo esto mediante la skill o MCP, junto con proyectos, notas y
+personas de Memo.
 
-## Trabajo previsto
+Todos los comandos aparecen en [la referencia de comandos](./commands.md). Empieza con
+[preparación de reuniones](./usage.md#prepare-for-an-upcoming-meeting) o [búsqueda y fuentes](./search.md).
 
-- Preparación más amplia: combinar descubrimiento de series, sugerencias de proyectos y contexto
-  de la serie elegida en un informe revisado con fuentes y lagunas explícitas. Una investigación
-  más amplia debe respetar los permisos explícitos del dueño. Los lectores actuales devuelven
-  contexto guardado y candidatas sin generar resúmenes ni consultar fuentes no elegidas.
+Memo puede preparar decisiones, afirmaciones y tareas de proyecto citadas de una reunión guardada para
+que el dueño las revise; consulta [revisar resultados de una reunión](https://wirecat.dev/en/docs/memo/memories#meeting-findings).
+La preparación de reuniones lee contexto guardado; no acepta estos resultados ni genera un resumen.
 
-Los nombres alternativos de proyectos, etiquetas y notas ya pertenecen a Memo y al almacén común.
-Otros proveedores usan las capacidades compartidas; esta herramienta no incluye conectores de
-producción de Google Meet o Teams. Consulta los [escenarios disponibles](./index.md).
+Para usar tu cuenta de Zoom, primero conectas tu propia app de Zoom;
+[la guía de la app](./zoom-app.md) explica cómo.
+
+<a id="also-available" />
+
+<a id="in-progress" />
+<a id="next" />
+
+## También disponible
+
+- `review` prepara un resumen de reuniones recientes y `mentions list` encuentra enlaces compartidos en el chat.
+- Las búsquedas guardadas se pueden ejecutar de nuevo por nombre; los campos de consulta de reuniones incluyen
+  fecha, proyecto, etiqueta y tema.
+- Los ejemplos incluyen el perfil y se pueden copiar tal como aparecen. `doctor` comprueba si este equipo
+  puede guardar el acceso a Zoom.
+- MCP mantiene los comandos compatibles visibles; los permisos del perfil deciden qué lecturas y escrituras
+  se pueden ejecutar.
+
+<a id="later" />
+
+<a id="planned-work" />
+<a id="later" />
+
+## Más adelante
+
+- Llamadas a las que solo asistes: grabar audio en este equipo, sin un bot, y transcribirlo localmente (ZM-25).
+- Notas por reunión: decisiones, preguntas pendientes y acciones que citen líneas de transcripción (ZM-26).
+- Nombres de hablantes en transcripciones hechas en este equipo.
+- Reuniones alojadas por otra persona, sin pedirle al anfitrión un archivo.
+- Un informe de preparación revisado que combine próximas series, sugerencias de proyectos y contexto guardado,
+  con sus fuentes y lagunas.
+- Copias diarias de grabaciones en macOS y Windows.
+- Google Meet y Microsoft Teams, como herramientas separadas que usan el mismo almacén de reuniones.
+  No forman parte de esta herramienta.

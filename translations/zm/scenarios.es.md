@@ -13,25 +13,25 @@ Los comandos que usan una cuenta empiezan por tu perfil, el nombre que diste a l
 Descarga cada día las grabaciones en la nube de Zoom a una carpeta y confirma que cada archivo llegó completo.
 
 1. ```sh
-   zm recordings list --since-time 2026-10-01
+   zm personal recordings list --since-time 2026-10-01
    ```
 
    las grabaciones en la nube que Zoom tiene para ese intervalo, antes de descargar nada
 
 2. ```sh
-   zm recordings schedule create --name daily --output-dir /srv/zoom-archive --at 03:00 --timezone Europe/Madrid --since-time 2026-10-01
+   zm personal recordings schedule create --name daily --output-dir /srv/zoom-archive --at 03:00 --timezone Europe/Madrid --since-time 2026-10-01
    ```
 
    muestra una vista previa de la tarea diaria y su temporizador; ejecútalo de nuevo con --yes para instalarla
 
 3. ```sh
-   zm recordings schedule run daily
+   zm personal recordings schedule run daily
    ```
 
    una ejecución ahora, para ver la tarea funcionar antes que el temporizador
 
 4. ```sh
-   zm recordings archive check /srv/zoom-archive
+   zm personal recordings archive check /srv/zoom-archive
    ```
 
    comprueba el tamaño y la suma de verificación de cada archivo archivado, sin Zoom ni el almacén
@@ -40,7 +40,7 @@ Qué mirar:
 
 - archivos cuya suma de verificación o tamaño no coincide; descárgalos de nuevo
 - el último resultado de la tarea en schedule show y si el temporizador está activado
-- zm recordings archive import añade las transcripciones archivadas al almacén
+- zm personal recordings archive import añade las transcripciones archivadas al almacén
 
 El archivo guarda sumas de verificación y tamaños, nunca URL firmadas ni tokens.
 
@@ -53,25 +53,25 @@ En la terminal: `zm guide archive-recordings`
 Lleva al almacén las reuniones de los últimos días y lee qué se decidió en cada una.
 
 1. ```sh
-   zm meetings sync --since-time 2026-10-01 --lookback-days 3
+   zm personal meetings sync --since-time 2026-10-01 --lookback-days 3
    ```
 
    trae reuniones, transcripciones y resúmenes nuevos, y revisa las recientes cuya transcripción llegó tarde
 
 2. ```sh
-   zm meetings list "started_at:[2026-10-01 TO 2026-10-08]"
+   zm personal meetings list "started_at:[2026-10-01 TO 2026-10-08]"
    ```
 
    las reuniones guardadas en ese intervalo, las más recientes primero, con sus id locales
 
 3. ```sh
-   zm meetings summary 12
+   zm personal meetings summary 12
    ```
 
    el resumen propio de Zoom de una reunión; vista general, secciones y próximos pasos
 
 4. ```sh
-   zm meetings transcript 12
+   zm personal meetings transcript 12
    ```
 
    la transcripción detrás del resumen, cuando una afirmación necesita las palabras exactas
@@ -93,19 +93,19 @@ En la terminal: `zm guide catch-up`
 Encuentra dónde surgió un tema en todas las reuniones y lee las líneas exactas a su alrededor.
 
 1. ```sh
-   zm search meetings "budget review" --limit 20 --json=ref,excerpt,source.title,source.started_at
+   zm personal search meetings "budget review" --limit 20 --json=ref,excerpt,source.title,source.started_at
    ```
 
    palabras en todas las transcripciones y resúmenes guardados; cada resultado conserva la referencia de su línea
 
 2. ```sh
-   zm meetings passage meeting:1/12/3/140 --before-n 3 --after-n 3
+   zm personal meetings passage meeting:1/12/3/140 --before-n 3 --after-n 3
    ```
 
    la línea citada con tres líneas antes y después, con hablantes y horas
 
 3. ```sh
-   zm meetings evidence meeting:1/12
+   zm personal meetings evidence meeting:1/12
    ```
 
    las líneas, el chat o el resumen guardados detrás de una referencia de reunión, para un resultado que no es una línea de transcripción
@@ -128,19 +128,19 @@ En la terminal: `zm guide find-quote`
 Encuentra a una persona entre los participantes de reuniones y lee lo que dicen de ella las reuniones pasadas.
 
 1. ```sh
-   zm meetings people "Alice Example"
+   zm personal meetings people "Alice Example"
    ```
 
    participantes que coinciden con un nombre o email, con los id de identidad y la persona vinculada, si la hay
 
 2. ```sh
-   zm meetings context person:7 --meetings 5 --cues 40
+   zm personal meetings context person:7 --meetings 5 --cues 40
    ```
 
    las reuniones a las que asistió esa persona mediante identidades vinculadas, con las líneas que la mencionan
 
 3. ```sh
-   zm search meetings "Alice" --person-id 7 --limit 20
+   zm personal search meetings "Alice" --person-id 7 --limit 20
    ```
 
    palabras en las reuniones a las que asistió esa persona, cuando quieres un tema y no todo
@@ -151,7 +151,7 @@ Qué mirar:
 - un participante no es quien habla en cada línea de esa reunión
 - para la misma persona en mensajes, correo y notas, usa memo guide person-brief
 
-Vincula un participante con una persona con `zm meetings link` (muestra una vista previa; `--yes` la aplica). El contexto solo sigue esos
+Vincula un participante con una persona con `zm personal meetings link` (muestra una vista previa; `--yes` la aplica). El contexto solo sigue esos
 vínculos.
 
 En la terminal: `zm guide person-in-meetings`
@@ -163,19 +163,19 @@ En la terminal: `zm guide person-in-meetings`
 Obtén un resumen con fuentes para la próxima reunión de una serie, a partir de sus reuniones pasadas.
 
 1. ```sh
-   zm meetings scheduled --json
+   zm personal meetings scheduled --json
    ```
 
    las series de los próximos siete días, con sus id de serie
 
 2. ```sh
-   zm meetings prepare 8123456789 --meetings 3 --cues 10
+   zm personal meetings prepare 8123456789 --meetings 3 --cues 10
    ```
 
    las tres últimas reuniones de esa serie y las líneas que importan, cada una con su referencia
 
 3. ```sh
-   zm meetings passage meeting:1/12/3/140 --before-n 5 --after-n 5
+   zm personal meetings passage meeting:1/12/3/140 --before-n 5 --after-n 5
    ```
 
    más contexto alrededor de una línea citada antes de confiar en ella

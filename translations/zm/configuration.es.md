@@ -65,8 +65,13 @@ zm personal config set permissions '{"remote-meetings": "allow", "recordings": "
 
 Gana la clave más específica (`remote-meetings.cancel` sobre `remote-meetings`). De fábrica, `remote-meetings` es `ask`;
 una clave más amplia que fija el propietario nunca lo relaja, una clave igual de profunda sí. `--yes` solo responde a `ask`: nunca
-levanta `deny` ni `readonly`. Los ajustes, el acceso, la ayuda y el servidor MCP nunca se limitan. Una clave que no nombra ningún
+levanta `deny` ni `readonly`. En una terminal, los ajustes, el acceso, la ayuda y el servidor MCP nunca se limitan. Una clave que no nombra ningún
 comando, o un nivel que no es uno de los cuatro, se rechaza al fijarlo. `ZM_READ_ONLY` se aplica además de cualquier nivel.
+
+Por MCP, los cambios de ajustes, instalación de skills, actualización y temporizadores del archivo
+necesitan `mcp.authority` en `allow` o `ask`. Se deniega por defecto. Configúralo desde una terminal en
+el mapa `permissions` del perfil, conservando las restricciones existentes, y reinicia el servidor MCP.
+Un agente MCP no puede cambiar los permisos del perfil. Consulta [MCP y skills](./mcp.md#the-mcp-server).
 
 ## Variables de entorno
 

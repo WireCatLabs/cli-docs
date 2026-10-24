@@ -89,7 +89,7 @@ Al informar, conserva orden, código y permiso; excluye retornos OAuth, tokens y
 | No hay perfil o la lista está vacía (código de salida 3, «no stored meetings for the selected profile») | Elige perfil e importa/descarga; leer no registra cuentas | `zm personal meetings list --json` muestra sus reuniones |
 | No hay reuniones recientes del anfitrión | Revisa usuario, API y fechas; usa un `--since-time` anterior | Compara fechas con ocurrencias esperadas |
 | Reunión sin texto | Revisa generación/retención y permisos; texto nunca guardado o expirado no se recrea | Abre texto tras estar disponible y descargar otra vez |
-| Falta una reunión a la que asististe | Pide VTT al anfitrión o descarga con permiso e importa | Comprueba fecha, título y texto |
+| Falta una reunión organizada por otra persona | Sync no la obtiene: la API de Zoom solo enumera reuniones que programaste. Pide el VTT al anfitrión e impórtalo con `meetings import` | Comprueba fecha, título y texto |
 | El texto llegó después | Repite `zm personal meetings sync --lookback-days 7` o un `--since-time` anterior | Abre el nuevo texto |
 | Fallo parcial de descarga | Corrige y repite; la ocurrencia fallida no avanza el cursor | Revisa recibo y lista |
 | Nombre/hora de archivo inválido | Usa `YYYY-MM-DD_HHMM_topic.vtt` y su zona; resuelve conflictos | Importación con fecha/título correctos |

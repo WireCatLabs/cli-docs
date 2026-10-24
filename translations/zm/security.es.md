@@ -31,8 +31,12 @@ IA. Esta guía los explica antes de conectar o archivar.
 
 ## Qué pueden los agentes
 
-- MCP solo lee: no escribe exportaciones ni cambios remotos, ni genera vectores o crea tareas.
-  Las lecturas de reuniones usan el perfil de Zoom elegido.
+- MCP ofrece comandos de lectura y escritura para el perfil de Zoom elegido. Los permisos limitan su
+  ejecución: los comandos denegados siguen visibles con su disponibilidad actual y un motivo;
+  `readonly` marca las escrituras como no disponibles. En MCP, `ask` permite la escritura solicitada sin
+  preguntar en una terminal. Ajustes, instalación de skills, actualización y temporizadores necesitan
+  `mcp.authority: allow` o `ask`; los permisos del perfil solo cambian desde la terminal.
+  Consulta [MCP y skills](./mcp.md).
 - La preparación opcional también puede leer cuentas de mensajes/correo y carpetas de documentos
   que [selecciones explícitamente para ese perfil](./configuration.md#select-communications-for-preparation).
   El permiso cubre toda la cuenta o carpeta; solo se resuelven y consultan los ID solicitados.
@@ -49,8 +53,8 @@ IA. Esta guía los explica antes de conectar o archivar.
   acceso, configuración, instalación del skill, importación, exportación, vínculos, transcripción, trabajos de
   archivo y recuperación de bloqueos, creación de vectores (`meetings embeddings`, búsqueda por significado con
   `--model`) y un servidor MCP cuyas consultas semánticas van a un `--base-url` remoto. Siguen funcionando: lecturas,
-  búsqueda de palabras (que mantiene su índice al día), `batch`, `mcp` y las sincronizaciones que copian
-  Zoom al almacén o a un archivo: `meetings sync`, `watch`, `recordings sync`, `recordings download` y
+  búsqueda de palabras (que mantiene su índice al día), `mcp` y las sincronizaciones que copian
+  Zoom al almacén o a un archivo: `meetings sync`, `watch`, `recordings download` y
   `recordings schedule run`; una sincronización o `watch` desde una fuente de archivos lee la carpeta configurada,
   mientras que `meetings import <folder>` nombra una carpeta puntual y se rechaza. Cualquier otro comando que
   escriba, incluido uno añadido en una versión posterior, se rechaza. Actívalo para un agente que solo deba leer; `0` o un valor vacío
@@ -62,4 +66,4 @@ selecciona explícitamente; la ejecución local queda en el equipo. Archivos y b
 datos sensibles aunque los manifiestos omitan tokens.
 
 Para retirar acceso Zoom, [revoca la autorización](./sessions.md#remove-access). Para controlar lo
-que solicita una app, elige [instrucciones CLI o MCP de lectura](./mcp.md).
+que solicita una app, elige [instrucciones CLI o conexión MCP](./mcp.md).
