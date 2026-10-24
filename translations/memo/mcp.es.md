@@ -8,6 +8,8 @@ ordenador. Una vez conectada, la aplicación puede leer tus mensajes, tu correo,
 Memo sabe de una persona. También puede guardar recuerdos, registrar hechos y proponer acciones. Las nuevas sugerencias esperan revisión; las propuestas de proyecto tienen permisos de decisión
 propios, descritos más abajo.
 
+Para apps del navegador o del teléfono, usa la [guía de conexión remota](./remote.md). Sirve las mismas tres herramientas por HTTP con inicio de sesión y tu túnel HTTPS.
+
 ## Comandos y permisos
 
 Memo usa la interfaz MCP compartida de cli-core. Presenta tres herramientas:

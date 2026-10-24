@@ -17,6 +17,8 @@ Descarga el modelo con `models download` y añade una cuenta explícita de Himal
 Todos los comandos y opciones están en [la referencia de comandos](./commands.md); las guías empiezan en
 [la introducción](./index.md).
 
+Los clientes locales usan stdio; las apps del navegador y teléfono se conectan por HTTP con inicio de sesión y tu túnel HTTPS ([conexión remota](./remote.md)).
+
 ## En curso
 
 Ahora mismo no hay nada en desarrollo. Los primeros elementos del apartado siguiente tienen prioridad.
@@ -35,7 +37,6 @@ Ahora mismo no hay nada en desarrollo. Los primeros elementos del apartado sigui
 - Fusión de etiquetas duplicadas. Hoy Memo muestra qué afectaría una fusión sin cambiar nada.
 - Recordatorios de las propias tareas de un proyecto.
 - Compatibilidad con macOS y Windows. Hoy Memo solo está probado en Linux.
-- MCP mediante HTTP para aplicaciones que no inician Memo por sí mismas.
 - Búsqueda de imágenes por la conversación que las rodea y por los datos de la foto.
 
 Los cambios de cada versión están en el [historial de cambios](./changelog.md).

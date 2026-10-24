@@ -32,6 +32,7 @@ Tres palabras aparecen en todas las páginas:
 | Llevar la cuenta de lo que debes a otras personas y recibir recordatorios | [Tareas y recordatorios](./tasks.md) |
 | Dejar que tu agente recuerde lo que aprendió, y decidir tú qué se queda | [Recuerdos y hechos](./memories.md) |
 | Usar Memo desde una aplicación sin terminal, como Claude Desktop | [El servidor MCP](./mcp.md) |
+| Conectar una app del navegador o teléfono | [Conexión remota](./remote.md) |
 
 ## Cómo funciona
 

@@ -58,7 +58,7 @@ The tools:
 | Installs without Docker or a database server | ✅ | 🟡 [↗][hs] | ✅ [↗][m0] | ❌ [↗][gr-db] | ✅ [↗][cg] | ✅ [↗][bm] |
 | Works with no LLM key | ✅ | ❌ [↗][hs-core] | ➖ | ❌ [↗][gr-env] | ✅ [↗][cg-news] | ✅ [↗][bm] |
 | MCP over stdio, started by your agent app | ✅ | ❌ [↗][hs-mcp] | 🟡 [↗][m0-mcp] | ➖ | ➖ | ✅ [↗][bm] |
-| MCP over HTTP, for a server or a remote agent | ❌ | ✅ [↗][hs-mcp] | ✅ [↗][m0-mcp] | ➖ | ➖ | ✅ [↗][bm] |
+| MCP over HTTP, for a server or a remote agent | ✅ | ✅ [↗][hs-mcp] | ✅ [↗][m0-mcp] | ➖ | ➖ | ✅ [↗][bm] |
 | Hosted cloud, so the same memory is there from any device | ❌ | ✅ [↗][hs-price] | ✅ [↗][m0] | 🟡 [↗][gr] | ✅ [↗][cg] | ✅ [↗][bm] |
 | A visual interface | ❌ | ✅ [↗][hs] | ✅ [↗][m0] | ❌ [↗][gr] | ✅ [↗][cg] | 🟡 [↗][bm] |
 | Libraries for building your own app | ❌ | ✅ [↗][hs] | ✅ [↗][m0] | ✅ [↗][gr] | ✅ [↗][cg] | ➖ |
@@ -73,7 +73,7 @@ Notes on `memo`:
 - **Search.** All six tools search by words and by meaning. This page does not rank them. In `memo`, search by
   meaning uses a local model that `memo models download` fetches; without it, word search still works.
 - **No LLM key.** Sync and search need no remote language-model API key; meaning search uses a local model. `answers create --analyze` calls a model you configure, and only if you ask.
-- **MCP.** `memo mcp` runs on stdio; HTTP remains planned. It offers `memo_tools_search`, `memo_read` and `memo_write`. Discovery retains blocked
+- **MCP.** `memo mcp` uses stdio for local apps; `memo mcp --http` serves the same commands through the owner’s HTTPS tunnel and access-code OAuth login ([remote setup](./remote.md)). It offers `memo_tools_search`, `memo_read` and `memo_write`. Discovery retains blocked
   commands with their current availability and reason. CLI-only exclusions are `mcp`, `upgrade`, `skill install`,
   `jobs start` and `jobs stop`. Saved permissions use `deny`, `readonly`, `ask` or `allow`.
   `MEMO_READ_ONLY=1` refuses writes. Agent memories, facts and proposed actions wait for review.
@@ -153,7 +153,7 @@ Notes on `memo`:
   information arrives, and keeps both. `memo` records dates and replaced decisions, but you or your agent mark them.
 - **You are building a product for other people, or need a hosted service.** Hindsight, mem0 and Cognee have
   libraries, a cloud, a dashboard and MCP over HTTP; mem0, Hindsight and Cognee publish benchmark scores. `memo` is a
-  tool for one person's computer, with a terminal and stdio MCP.
+  tool for one person's computer, with a terminal, local stdio MCP and authenticated HTTP MCP through your tunnel.
 - **You live in Markdown notes and want sync and a mobile app.** basic-memory's cloud syncs notes between devices.
   `memo` has one store per computer and no interface of its own.
 

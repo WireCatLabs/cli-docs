@@ -1,5 +1,6 @@
 export const memoDescriptions: Record<string, Record<string, string>> = {
   en: {
+    remote: "Connect a browser or phone app through your HTTPS tunnel, log in with a terminal code and revoke access.",
     compare: "Compare Memo with other memory tools by sources, search, agent access and local data limits.",
     index: "Keep notes, mail and Telegram or MAX messages in one place your AI agent can search and cite.",
     installation: "Install Memo with npm, check what each source needs and find where its files are kept.",
@@ -25,6 +26,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     roadmap: "See Memo’s current capabilities and planned work on notes, mail, messages and project context.",
   },
   ru: {
+    remote: "Подключите приложение в браузере или на телефоне через HTTPS-туннель, войдите по коду и отзовите доступ.",
     compare: "Сравните Memo с другими инструментами памяти по источникам, поиску, доступу агента и хранению данных.",
     index: "Храните заметки, почту и сообщения Telegram или MAX в одном месте для поиска ИИ-агентом.",
     installation: "Установите Memo через npm, проверьте требования источников и узнайте, где лежат файлы.",
@@ -50,6 +52,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     roadmap: "Посмотрите, что Memo уже умеет и что планируется для заметок, почты, сообщений и проектов.",
   },
   es: {
+    remote:
+      "Conecta una app del navegador o teléfono por tu túnel HTTPS, inicia sesión con un código y revoca el acceso.",
     compare: "Compara Memo con otras herramientas de memoria por fuentes, búsqueda, acceso del agente y datos locales.",
     index: "Reúne notas, correo y mensajes de Telegram o MAX en un lugar que tu agente de IA puede buscar.",
     installation: "Instala Memo con npm, revisa qué necesita cada fuente y dónde guarda sus archivos.",
