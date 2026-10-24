@@ -19,6 +19,8 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
     security: "Understand what is stored locally, which data leaves the computer and how writes are controlled.",
     changelog: "Read the changes delivered in each Zoom CLI release.",
     roadmap: "See which meeting intake, preparation and shared archive workflows are planned.",
+    compare:
+      "Compare the Zoom CLI with other command lines and MCP servers for a Zoom account, by the jobs you want done.",
   },
   ru: {
     compare: "Сравните инструменты Zoom для встреч, записей, расшифровок, поиска и доступа ИИ-агента.",
@@ -40,6 +42,7 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
     security: "Узнайте, что хранится локально, какие данные уходят с компьютера и как контролируются изменения.",
     changelog: "Изменения в каждом опубликованном релизе Zoom CLI.",
     roadmap: "Планы разбора встреч, подготовки и общего архивирования.",
+    compare: "Сравните Zoom CLI с другими командными строками и MCP-серверами для аккаунта Zoom по задачам.",
   },
   es: {
     compare: "Compara herramientas de Zoom para reuniones, grabaciones, transcripciones, búsqueda y acceso del agente.",
@@ -61,5 +64,6 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
     security: "Entiende qué se guarda localmente, qué datos salen del equipo y cómo se controlan los cambios.",
     changelog: "Consulta los cambios de cada versión publicada del CLI de Zoom.",
     roadmap: "Planes para análisis, preparación y archivos compartidos de reuniones.",
+    compare: "Compara Zoom CLI con otras líneas de comandos y servidores MCP para una cuenta de Zoom, por tareas.",
   },
 }

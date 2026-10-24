@@ -28,6 +28,8 @@ export const whatsappDescriptions: Record<string, Record<string, string>> = {
     security: "Understand WhatsApp linked-device credentials, local data and the risks of an unofficial client.",
     changelog: "Read WhatsApp CLI release notes, including new capabilities, changes and fixes.",
     roadmap: "See which WhatsApp CLI capabilities are available and which work remains planned.",
+    compare:
+      "Compare WhatsApp CLI with other WhatsApp tools by what you can do: catch up, reply, send files, find messages, run groups and use an agent.",
   },
   ru: {
     compare: "Сравните инструменты WhatsApp для чатов, поиска, файлов, автоматизации и прав ИИ-агента.",
@@ -58,6 +60,8 @@ export const whatsappDescriptions: Record<string, Record<string, string>> = {
     security: "Ключи связанного устройства WhatsApp, локальные данные и риски неофициального клиента.",
     changelog: "История выпусков WhatsApp CLI: новые возможности, изменения и исправления.",
     roadmap: "Что WhatsApp CLI уже умеет и какие функции ещё запланированы.",
+    compare:
+      "Сравните WhatsApp CLI с другими инструментами WhatsApp по задачам: разбор чатов, ответы, файлы, поиск, группы и работа с агентом.",
   },
   es: {
     compare: "Compara herramientas de WhatsApp para chats, búsqueda, archivos, automatización y permisos del agente.",
@@ -88,5 +92,7 @@ export const whatsappDescriptions: Record<string, Record<string, string>> = {
     security: "Credenciales del dispositivo WhatsApp, datos locales y riesgos de un cliente no oficial.",
     changelog: "Notas de versión de WhatsApp CLI: nuevas funciones, cambios y correcciones.",
     roadmap: "Consulta qué ofrece WhatsApp CLI y qué funciones siguen previstas.",
+    compare:
+      "Compara WhatsApp CLI con otras herramientas de WhatsApp por tareas: ponerse al día, responder, enviar archivos, buscar, grupos y agentes.",
   },
 }

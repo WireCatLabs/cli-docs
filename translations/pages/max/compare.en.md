@@ -1,5 +1,6 @@
 ---
 title: "Compared with other tools"
+description: "Compare max with other MAX tools by what you can do: catch up, reply, find messages, run groups and use an agent."
 ---
 
 There are other open tools for MAX. This page puts `max` next to five of them and compares them by task: what you can
