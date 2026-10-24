@@ -13,7 +13,7 @@ import { dirname, join, normalize } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 import { structureProblems } from "@wirecat/cli-base/release"
-import { captureUpstream, localizeTool } from "./localize.ts"
+import { captureUpstream, localizeTool, siteOwnedPage } from "./localize.ts"
 import { crossToolScenarios, readScenarios, type Scenario, scenarioPage } from "./scenarios.ts"
 import { checkoutCommit, checkoutSource, sourceInstallation } from "./source-install.ts"
 
@@ -199,7 +199,9 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
     if (problems.length > 0) throw new Error(`${tool.repo} ${tag}:\n${problems.join("\n")}`)
 
     const docs = join(checkout, "docs")
-    const files = readdirSync(docs).filter((name) => name.endsWith(".md") && name !== "README.md")
+    const allFiles = readdirSync(docs).filter((name) => name.endsWith(".md") && name !== "README.md")
+    // Comparisons are written and checked on this site, not taken from the tool's release.
+    const files = allFiles.filter((name) => name !== `${siteOwnedPage}.md`)
     const guides = new Map<string, { text: string; ref: string }>()
     let changelogGuide: { text: string; ref: string } | undefined
     for (const [slug, guideRef] of reviewedGuideRefs(tool, ref)) {
@@ -211,7 +213,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       guides.set(`${slug}.md`, { text: run("git", ["show", `${guideRef}:docs/${slug}.md`], checkout), ref: guideRef })
       if (!files.includes(`${slug}.md`)) files.push(`${slug}.md`)
     }
-    const pages = new Set(files.map((name) => name.slice(0, -3)))
+    const pages = new Set([...files, `${siteOwnedPage}.md`].map((name) => name.slice(0, -3)))
     const destination = join(root, captureOnly ? "content/upstream" : "content/docs", tool.name)
     rmSync(destination, { recursive: true, force: true })
     mkdirSync(destination, { recursive: true })

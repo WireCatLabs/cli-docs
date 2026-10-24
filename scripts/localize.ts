@@ -16,6 +16,9 @@ type Correction = {
 }
 const languages = ["en", "ru", "es"]
 
+/** The comparison page is written here, because it changes with other tools, not with a release of ours. */
+export const siteOwnedPage = "compare"
+
 /** Reviewed release errata are separate from translation and apply to every locale. */
 export function correctDocumentation(text: string, replacements: { before: string; after: string }[]): string {
   let result = text
@@ -172,6 +175,22 @@ export function captureUpstream(root: string, tool: Tool) {
   cpSync(join(root, "content/docs", tool.name), destination, { recursive: true })
 }
 
+/** The comparison joins the sidebar at the end of Guides when the release's own sidebar lacks it. */
+export const withComparison = (pages: string[]): string[] => {
+  if (pages.includes(siteOwnedPage)) return pages
+  const reference = pages.findIndex(
+    (page, index) => index > 0 && page.startsWith("---") && pages.includes("usage") && index > pages.indexOf("usage"),
+  )
+  const at = reference < 0 ? pages.length : reference
+  return [...pages.slice(0, at), siteOwnedPage, ...pages.slice(at)]
+}
+
+/** Tools whose site-written comparison has no English master. */
+export const missingComparisons = (root: string, tools: { name: string }[]): string[] =>
+  tools
+    .filter((tool) => !existsSync(join(root, "translations/pages", tool.name, `${siteOwnedPage}.en.md`)))
+    .map((tool) => tool.name)
+
 export function localizeTool(root: string, tool: Tool) {
   const source = join(root, "content/upstream", tool.name)
   const target = join(root, "content/docs", tool.name)
@@ -189,8 +208,17 @@ export function localizeTool(root: string, tool: Tool) {
     )
   const pages = readdirSync(source).filter((name) => /^[^.]+\.md$/.test(name))
   const problems: string[] = []
+  const comparison = (lang: string) => join(root, "translations/pages", tool.name, `${siteOwnedPage}.${lang}.md`)
+  // Only the languages written for the page exist; the site shows English for the others.
+  for (const lang of languages)
+    if (existsSync(comparison(lang)))
+      writeFileSync(
+        join(target, lang === "en" ? `${siteOwnedPage}.md` : `${siteOwnedPage}.${lang}.md`),
+        siteLinks(contentLanguage(readFileSync(comparison(lang), "utf8"), lang), lang),
+      )
   for (const file of pages) {
     const slug = file.slice(0, -3)
+    if (slug === siteOwnedPage) continue
     const original = readFileSync(join(source, file), "utf8")
     // Scenario files are English in every tool, whatever language its other pages use.
     const sourceLang = slug === "scenarios" ? "en" : tool.lang
@@ -239,7 +267,7 @@ export function localizeTool(root: string, tool: Tool) {
       ...meta,
       title: tool.displayName ?? (tool.name === "tg" ? "Telegram" : "MAX"),
       root: true,
-      pages: meta.pages.map((page) => (page.startsWith("---") ? groups[lang][group++] : page)),
+      pages: withComparison(meta.pages).map((page) => (page.startsWith("---") ? groups[lang][group++] : page)),
     }
     writeFileSync(
       join(target, lang === "en" ? "meta.json" : `meta.${lang}.json`),
@@ -254,7 +282,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = join(dirname(fileURLToPath(import.meta.url)), "..")
   const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as Tool[]
   if (process.argv.includes("--capture")) for (const tool of tools) captureUpstream(root, tool)
-  const problems = tools.flatMap((tool) => localizeTool(root, tool))
+  const problems = [
+    ...missingComparisons(root, tools).map((name) => `${name}/${siteOwnedPage}.en: comparison page missing`),
+    ...tools.flatMap((tool) => localizeTool(root, tool)),
+  ]
   if (!problems.length) writeCommandSections(root)
   for (const problem of problems) console.error(problem)
   if (problems.length) process.exitCode = 1
