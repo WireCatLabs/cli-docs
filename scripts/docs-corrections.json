@@ -2958,7 +2958,7 @@
   {
     "tool": "tg",
     "slug": "mcp",
-    "reason": "tg 0.88.0/Core 0.408.0: toolsFromCommands drops every command with a lifetime (setup, watch, serve, bot watch) though the contract marks only mcp:false ones; the 0.88 contract has no chats delete or clear command. upgrade is housekeeping, not authority-gated.",
+    "reason": "tg 0.88.0/Core 0.408.0: toolsFromCommands drops every command with a lifetime (setup, watch, serve, bot watch) though the contract marks only mcp:false ones; the 0.88 contract has no chats delete or clear command; upgradeCommand is wrapped in grantsAuthority (upgrade --check exempt), so it belongs with the authority-gated commands.",
     "replacements": {
       "en": [
         {
@@ -2972,6 +2972,10 @@
         {
           "before": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`.",
           "after": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`, and long-running ones with a `lifetime`."
+        },
+        {
+          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
+          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
         }
       ],
       "ru": [
@@ -2986,6 +2990,10 @@
         {
           "before": "исключённые команды отмечены\nкак `mcp: false`.",
           "after": "исключённые команды отмечены\nкак `mcp: false`, а долгие процессы — полем `lifetime`."
+        },
+        {
+          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
+          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
         }
       ],
       "es": [
@@ -3000,6 +3008,10 @@
         {
           "before": "marca los comandos excluidos con\n`mcp: false`.",
           "after": "marca los comandos excluidos con\n`mcp: false`, y los procesos largos con `lifetime`."
+        },
+        {
+          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
+          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
         }
       ]
     }
