@@ -3460,5 +3460,57 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "bot",
+    "reason": "Core 0.406 botApiAllowed accepts allow or ask, with deny as default; describe both explicit enabling levels. MCP client approval remains separate.",
+    "source": "https://github.com/WireCatLabs/cli-core/blob/v0.406.0/src/sends/permissions.ts",
+    "replacements": {
+      "en": [
+        {
+          "before": "tools need `permissions.bot.api: allow`; the default is `deny`",
+          "after": "tools need an explicit `permissions.bot.api` level of `allow` or `ask`; the default is `deny`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "требуется `permissions.bot.api: allow`; по умолчанию\nдействует `deny`",
+          "after": "нужен явный уровень `allow` или `ask` для `permissions.bot.api`; по умолчанию\nдействует `deny`"
+        }
+      ],
+      "es": [
+        {
+          "before": "necesitan `permissions.bot.api: allow`; el valor\npor defecto es `deny`",
+          "after": "necesitan un nivel explícito `allow` o `ask` para `permissions.bot.api`; el valor\npor defecto es `deny`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "permissions",
+    "reason": "Core 0.406 botApiAllowed accepts allow or ask, with deny as default; describe both explicit enabling levels. MCP client approval remains separate.",
+    "source": "https://github.com/WireCatLabs/cli-core/blob/v0.406.0/src/sends/permissions.ts",
+    "replacements": {
+      "en": [
+        {
+          "before": "unless `permissions.bot.api` is `allow`; its default is `deny`",
+          "after": "unless `permissions.bot.api` is `allow` or `ask`; its default is `deny`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "пока `permissions.bot.api` не равен `allow`. По умолчанию это `deny`",
+          "after": "пока `permissions.bot.api` не равен `allow` или `ask`. По умолчанию это `deny`"
+        }
+      ],
+      "es": [
+        {
+          "before": "MCP las oculta salvo que `permissions.bot.api` sea `allow`; el valor por defecto es `deny`",
+          "after": "MCP las oculta salvo que `permissions.bot.api` sea `allow` o `ask`; el valor por defecto es `deny`"
+        }
+      ]
+    }
   }
 ]
