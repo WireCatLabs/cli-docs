@@ -318,8 +318,9 @@ tg sales bot mcp config          # the entry for Claude Desktop, Cursor and othe
 
 El agente obtiene lo que permiten los permisos del perfil del bot, según `bot.`: los chats que el bot ha visto, los mensajes, los administradores, el menú de comandos, el diario y la lista de destinatarios y, a menos que el perfil sea de solo lectura, escribir como el bot: enviar, editar, anclar, "escribir", botones de respuesta, eliminar, eliminar miembros. `permissions.bot: readonly` bloquea las escrituras a menos que una regla más específica lo permita. `ask` y `allow` permiten una escritura MCP solicitada sin un formulario de servidor; `deny` y `readonly` lo bloquean. Los indicadores de confirmación antiguos no tienen ningún efecto. Aún se aplica el consentimiento de la regla de moderación separada: las acciones que requieren que devuelva un plan para que usted lo apruebe a través de la CLI. `tg_bot_read` (`command: "status"`) indica de qué perfil habla el servidor y en qué herramientas de escritura se encuentran.
 
-Las herramientas directas `bot api <operation>` necesitan `permissions.bot.api: allow`; el valor
-por defecto es `deny`, y `permissions.bot: allow` no las habilita. Estas llamadas eluden la protección
+Las herramientas directas `bot api <operation>` necesitan `permissions.bot.api: allow` (o `ask`); el valor
+por defecto es `deny`, y `permissions.bot: allow` no las habilita. El descubrimiento las mantiene visibles y
+nombra el permiso que falta cuando no están disponibles. Estas llamadas eluden la protección
 de envío y la lista de destinatarios. Habilítalas desde una terminal solo cuando el agente necesite
 llamadas sin restricciones a Bot API:
 
@@ -328,6 +329,6 @@ tg sales config set --bot permissions.bot.api allow
 ```
 
 Cada herramienta es el comando que escribirías tú, ejecutado en el proceso del servidor, así que los comandos protegidos usan la lista de destinatarios y el diario del bot. Sus argumentos son los argumentos y opciones del propio comando en snake_case: `messages send` recibe `chat`, `text`, `md` o `html`, `reply_to` y `silent`.
-Cambiar el token, los webhooks, el menú de comandos y la lista de destinatarios sigue correspondiéndote a ti, igual que enviar archivos, `--allow-dangerous` y `--max-actions` de la moderación: las herramientas del agente los dejan fuera.
+Los cambios de webhooks, el menú de comandos y la lista de destinatarios siguen visibles en el descubrimiento; ejecutarlos requiere los permisos del perfil del bot, incluida la autoridad para cambios en ejecuciones posteriores. La gestión del token queda en la terminal. Las herramientas del agente omiten los archivos de entrada, `--allow-dangerous` y `--max-actions` de la moderación.
 
 El `--md` del bot usa las mismas [reglas de formato de Telegram](./usage.md#sending) que los envíos personales. Las ediciones de texto y los pies de fotos y archivos usan el mismo formato.

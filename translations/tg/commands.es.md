@@ -352,7 +352,7 @@ tg chats members list <chat> [query] [options]
 
 #### `tg chats members check`
 
-members that look like bots, each with its reasons — read from the member list and the local store; never one request per person, and it removes nobody
+members that look like bots, each with its reasons, from the member list and local store; --deep checks selected people individually; removes nobody
 
 ```sh
 tg chats members check <chat> [query] [options]
@@ -366,7 +366,7 @@ tg chats members check <chat> [query] [options]
 | Option | What it does |
 |---|---|
 | `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
-| `--deep <n>` | also check the top n in full — profile, photos, everything they wrote, and the public ban lists, which are sent their ids — one person a second. |
+| `--deep <n>` | also check the top n profiles, oldest photos, up to 1,000 stored messages each and public ban lists, which are sent their ids — one person a second. |
 
 **Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: tg commands info chats members check
 
@@ -1312,7 +1312,7 @@ tg contacts list [query] [options]
 | `--all` | every row, no paging. |
 | `--order <recent\|name>` | newest conversation first, or alphabetical. Default: `recent`. |
 
-**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 2 more; every field: tg commands info contacts list
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 4 more; every field: tg commands info contacts list
 
 **Next usually:** `tg contacts show <person>`, `tg contacts info <person>`, `tg contacts context <person>`
 
@@ -1334,7 +1334,7 @@ tg contacts show <person> [options]
 |---|---|
 | `--with-notes` | include your private notes, subject to contacts.notes.list permission. |
 
-**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 2 more; every field: tg commands info contacts show
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 4 more; every field: tg commands info contacts show
 
 **Next usually:** `tg contacts info <person>`, `tg contacts context <person>`, `tg contacts prepare <person>`
 
@@ -1834,6 +1834,7 @@ tg messages send <chat> [text] [options]
 | Option | What it does |
 |---|---|
 | `--topic <id>` | send to this forum topic. |
+| `--draft` | save the text as a draft for the owner to review and send. |
 | `--reply-to <message>` | answer this message, by its id in the same chat. |
 | `--comment-to <post>` | comment on this post of the channel; it goes to the post's discussion group. |
 | `--send-as <id>` | post as one of the identities `chats send-as` lists; required where the chat posts as someone else by default. |
@@ -1852,7 +1853,7 @@ tg messages send <chat> [text] [options]
 | `--filename <name>` | the name others see for the --file, instead of its name on disk. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 
-**Returns:** message write — operation_id, message, messages, scheduled_for; every field: tg commands info messages send
+**Returns:** message send — ; every field: tg commands info messages send
 
 **Example:** `tg personal messages send "Book club" "The meeting starts at 10."`
 

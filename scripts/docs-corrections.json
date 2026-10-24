@@ -2973,6 +2973,34 @@
           "before": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`.",
           "after": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`, and long-running ones with a `lifetime`."
         }
+      ],
+      "ru": [
+        {
+          "before": "`session start|end`, `complete`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.",
+          "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.\n- **Долгие процессы**: `watch`, `serve` и `bot watch` работают до остановки, а вызов агента должен завершиться."
+        },
+        {
+          "before": "`account sessions end`, `chats delete|clear` и\n",
+          "after": "`account sessions end` и\n"
+        },
+        {
+          "before": "исключённые команды отмечены\nкак `mcp: false`.",
+          "after": "исключённые команды отмечены\nкак `mcp: false`, а долгие процессы — полем `lifetime`."
+        }
+      ],
+      "es": [
+        {
+          "before": "`session start|end`, `complete`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.",
+          "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.\n- **Procesos largos**: `watch`, `serve` y `bot watch` siguen hasta que los detienes, y una llamada del agente debe terminar."
+        },
+        {
+          "before": "`account sessions end`, `chats delete|clear` y\n",
+          "after": "`account sessions end` y\n"
+        },
+        {
+          "before": "marca los comandos excluidos con\n`mcp: false`.",
+          "after": "marca los comandos excluidos con\n`mcp: false`, y los procesos largos con `lifetime`."
+        }
       ]
     }
   },
@@ -3089,6 +3117,18 @@
         {
           "before": "deleting or clearing a chat for yourself, a group photo, pressing a bot's buttons, starting a bot and\n  opening its mini app.",
           "after": "deleting or clearing a chat for yourself and a group photo."
+        }
+      ],
+      "ru": [
+        {
+          "before": "удаление или очистка чата для себя, групповое фото, нажатие кнопок бота, запуск бота и открытие его мини-приложения.",
+          "after": "удаление или очистка чата для себя и групповое фото."
+        }
+      ],
+      "es": [
+        {
+          "before": "eliminar o borrar un chat para usted mismo, una foto de grupo, presionar los botones de un bot, iniciar un bot y abrir su mini aplicación.",
+          "after": "eliminar o borrar un chat para usted mismo y una foto de grupo."
         }
       ]
     }
