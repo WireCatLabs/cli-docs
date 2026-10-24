@@ -50,7 +50,7 @@ title: "Статистика"
 **Команда:**
 
 ```sh
-tg personal stats messages top --chat "Hiking" --measure reactions --limit 3 --json
+tg personal stats messages top chat:Hiking --measure reactions --limit 3 --json
 ```
 
 **Пример ответа агента:**
@@ -74,7 +74,7 @@ tg personal stats messages top --chat "Hiking" --measure reactions --limit 3 --j
 **Команда:**
 
 ```sh
-tg personal stats contacts top --chat "Hiking" --measure answers --limit 3 --json
+tg personal stats contacts top chat:Hiking --measure answers --limit 3 --json
 ```
 
 **Пример ответа агента:**
@@ -98,7 +98,7 @@ tg personal stats contacts top --chat "Hiking" --measure answers --limit 3 --jso
 **Команда:**
 
 ```sh
-tg personal stats messages unanswered --chat "Hiking" --older-than 24h --json
+tg personal stats messages unanswered chat:Hiking older_than:24h --json
 ```
 
 **Пример ответа агента:**
@@ -124,7 +124,7 @@ tg personal stats messages unanswered --chat "Hiking" --older-than 24h --json
 **Команда:**
 
 ```sh
-tg personal stats contacts responses --chat "Hiking" --answerer "Alex Rivera" --json
+tg personal stats contacts responses chat:Hiking --answerer "Alex Rivera" --json
 ```
 
 **Пример ответа агента:**
@@ -201,7 +201,7 @@ tg personal stats chats retention "Hiking" --checkpoints 1d,7d,30d --within 7d -
 **Команда:**
 
 ```sh
-tg personal stats messages discussion --chat "News" --min-views 100 --max-replies 0 --json
+tg personal stats messages discussion chat:News min_views:100 max_replies:0 --json
 ```
 
 **Пример ответа агента:**
@@ -240,7 +240,7 @@ tg personal stats messages counters show --chat "Hiking" --counters views,reacti
 Перед чтением новых счётчиков попросите показать точные сообщения и пределы.
 
 ```sh
-tg personal stats messages counters refresh --chat "Hiking" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+tg personal stats messages counters sync --chat "Hiking" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
 ```
 
 > **План:** не больше 20 сообщений, до 30 секунд. Просмотры и реакции поддерживаются.

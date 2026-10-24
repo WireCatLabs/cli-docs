@@ -77,9 +77,9 @@ Los caracteres de control, los saltos de línea en nombres y los títulos de cha
 - **Telegram**, a través de MTProto para comandos de cuentas personales, incluidos archivos y fotos. Los comandos de bot utilizan la API de bot HTTPS; `bot store fetch` utiliza una sesión de bot MTProto separada para el historial.
 - **npm**, una vez al día en una terminal, para ver si existe un `tg` más nuevo y en `tg upgrade`.   `update_check` o `TG_NO_UPDATE_CHECK=1` lo apaga ([configuración](./configuration.md)).
 - **my.telegram.org**, solo durante `tg personal setup` o `tg personal session start`: abierto en su navegador, o, con `--app auto`, controlado por `tg`. Una aplicación que `tg` crea allí se titula `tg-cli` y tiene la página GitHub de este proyecto como dirección.
-- **Hugging Face y GitHub**, solo cuando ejecutas `tg personal models audio download` o `tg personal models text download`. Un mensaje de voz nunca llega allí: en esta máquina se ejecuta un modelo local.
+- **Hugging Face y GitHub**, solo cuando ejecutas `tg personal models download` o `tg personal models download`. Un mensaje de voz nunca llega allí: en esta máquina se ejecuta un modelo local.
 - **Los endpoints de embeddings configurados** reciben texto de conversación de `conversations embed` después del consentimiento y consulta de texto de `search conversations` remoto, incluidas las búsquedas de MCP. Las incrustaciones locales no envían ningún texto.
-- **Los puntos finales de análisis configurados** reciben lotes de mensajes limitados solo con `conversations build --analyze --chat`, después del consentimiento limitado a la cuenta, el chat y el proveedor; La construcción ordinaria no envía nada.
+- **Los puntos finales de análisis configurados** reciben lotes de mensajes limitados solo con `conversations links rebuild --analyze --chat`, después del consentimiento limitado a la cuenta, el chat y el proveedor; La construcción ordinaria no envía nada.
 
 No hay telemetría.
 

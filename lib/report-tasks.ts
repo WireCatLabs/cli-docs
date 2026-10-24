@@ -267,7 +267,29 @@ export function reportTasks(tool: string, lang: string): ReportTask[] {
       `${tool} contacts check 42 --offline --json`,
     ],
   }
-  if (tool === "tg") commands.group.push("tg personal stats chats official Project --json")
+  if (tool === "tg") {
+    commands.authors = [
+      "tg stats contacts top 'date:[2026-10-01 TO 2026-10-07] chat:Project' --measure messages --limit 10 --json",
+      "tg stats contacts top 'date:[2026-10-01 TO 2026-10-07] chat:Project min_messages:3' --score helpful --limit 10 --json",
+    ]
+    commands.posts = [
+      "tg stats messages top 'date:[2026-10-01 TO 2026-10-07] chat:News' --measure reactions --limit 10 --json",
+      "tg stats messages top 'date:[2026-10-01 TO 2026-10-07] chat:News' --measure views --limit 10 --json",
+    ]
+    commands.responses = [
+      "tg stats messages unanswered 'chat:Project older_than:24h' --json",
+      "tg stats contacts responses chat:Project --answerer 42 --answerer 73 --json",
+    ]
+    commands.person = [
+      "tg contacts info Anna --json",
+      "tg contacts context Anna --json",
+      "tg stats contacts top 'date:[2026-10-01 TO 2026-10-07] from:Anna chat:Project' --measure messages --json",
+    ]
+    commands.antibot[0] = "tg chats members check Project 'score>=2' --max-pages 2 --json"
+    commands.group.push("tg stats chats official Project --json")
+    for (const [id, values] of Object.entries(commands))
+      commands[id] = values.map((command) => command.replace(/^tg /, "tg personal "))
+  }
   const examples: Record<string, ReportTask["example"]> = {
     group: {
       headers: labels.slice(0, 2),

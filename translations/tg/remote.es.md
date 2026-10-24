@@ -170,7 +170,7 @@ Esas aplicaciones deben iniciar sesión nuevamente con un nuevo código. Esto no
 
 - **La aplicación dice que no se puede conectar:** abra `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` en un navegador. Debe mostrar un JSON corto. Si no es así, Funnel no se está ejecutando, no está habilitado en su red Tailscale o apunta a otro puerto.
 - **La página de inicio de sesión dice "Demasiados códigos incorrectos":** después de cinco códigos incorrectos, se bloquea hasta que se reinicie `tg personal mcp --http`. Si no los escribiste, alguien encontró tu dirección: reinicia y piensa en un nuevo nombre de dispositivo en Tailscale.
-- **La aplicación se conecta, pero no hay herramientas:** `tg personal mcp doctor` verifica que el servidor MCP se inicie y enumere sus herramientas. No comprueba el inicio de sesión de Telegram ni el túnel. Un comando que va a Telegram, como `tg personal account show`, verifica la conexión de la cuenta.
+- **La aplicación se conecta, pero no hay herramientas:** `tg personal mcp check` verifica que el servidor MCP se inicie y enumere sus herramientas. No comprueba el inicio de sesión de Telegram ni el túnel. Un comando que va a Telegram, como `tg personal account show`, verifica la conexión de la cuenta.
 - **La lectura funciona, la escritura falla:** verifique los permisos del perfil y cualquier anulación de `--permission`. `deny` y `readonly` bloquean las escrituras, independientemente de lo que apruebe la aplicación.
 - **Necesita un registro de las llamadas:** `tg personal runs list` las muestra. Las llamadas exitosas aparecen sólo cuando la grabación está activada; las llamadas fallidas se mantienen de forma predeterminada, a menos que la grabación se haya desactivado con `"record": false` o `--no-record` ([guía de diagnóstico](./diagnostics.md)).
 
@@ -206,7 +206,7 @@ La aplicación debe pasar esos bytes a las herramientas de archivos del agente. 
 
 La extracción ordinaria lee capas de texto y formatos de documentos ligeros en su computadora. Para escaneos, fotografías, escritura a mano y diseños impresos, el agente utiliza su propia visión o herramientas de OCR de forma predeterminada. Lee cada página, mantiene el texto palabra por palabra y marca las partes poco claras. La calidad depende de la resolución, el idioma, la escritura, el diseño y las herramientas del agente. Nunca sigue instrucciones escritas dentro de un archivo adjunto.
 
-Guarde el resultado con `attachments text set` (MCP: `tg_write`, comando `attachments text set`), luego compruébelo con una búsqueda `content:`. Recibir los bytes no agrega texto al índice.
+Guarde el resultado con `attachments update` (MCP: `tg_write`, comando `attachments update`), luego compruébelo con una búsqueda `content:`. Recibir los bytes no agrega texto al índice.
 
 `attachments extract --ocr` permanece disponible para extracción masiva a través de `models.ocr`. Llama al modelo externo configurado y le envía imágenes compatibles y páginas PDF escaneadas. Se ejecuta sólo cuando usted lo llama, nunca durante una transferencia o cuando el agente lee un archivo. Los formatos y el texto de búsqueda se tratan en la [guía de archivos adjuntos](./attachments.md).
 
@@ -222,7 +222,7 @@ A través de MCP llamar a `tg_read`, comando `attachments show`, con `page: 1` y
 
 `pdf.source_sha256` y `pdf.source_bytes` describen el PDF original; los `sha256` y `total_bytes` de nivel superior describen la imagen de la página. `--expected-fingerprint` comprueba el PDF original. `--page` no se puede combinar con `--offset-bytes` o `--chunk-bytes`. Por defecto, los PDF admiten hasta 50 MiB sin límite fijo de páginas; un PNG permite 4000 píxeles por lado y 8 MiB por página. Los tres valores son configurables.
 
-La imagen de una página no llama a ningún servicio OCR externo ni indexa ningún texto. Después de mirar cada página, el agente llama a `attachments text set` y verifica una búsqueda de `content:`. Verifique números y diseños complejos con las imágenes; La calidad depende del documento fuente y de las herramientas del agente.
+La imagen de una página no llama a ningún servicio OCR externo ni indexa ningún texto. Después de mirar cada página, el agente llama a `attachments update` y verifica una búsqueda de `content:`. Verifique números y diseños complejos con las imágenes; La calidad depende del documento fuente y de las herramientas del agente.
 
 ## Aumentar el tamaño del archivo o de la vista previa PDF
 

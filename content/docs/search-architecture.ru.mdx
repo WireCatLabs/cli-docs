@@ -125,7 +125,7 @@ tg personal search messages 'filename:*.pdf size>1MB date:7d' --json
 `conversations build --chat <chat> --analyze` — явная альтернатива: CLI сам отправляет ограниченные пачки на настроенный OpenAI-совместимый или Anthropic-адрес. Нужен один названный чат; команда сообщает объём, адрес и предел токенов и просит согласия, которое запоминается для этого аккаунта, чата и провайдера до отзыва (`conversations consents list`, `conversations consents revoke`). По умолчанию — 50 сообщений в пачке и не больше 100 000 зарезервированных токенов за запуск; `--yes` даёт согласие в скриптах.
 
 ```sh
-tg personal conversations build --chat "Project team"
+tg personal conversations links rebuild --chat "Project team"
 tg personal conversations list "Project team" --json
 max personal conversations batches status --chat "Project team" --json
 ```
@@ -141,9 +141,9 @@ max personal conversations batches status --chat "Project team" --json
 Одна локальная сессия занимает `min(8, ядра)` потоков. `--workers` запускает несколько сессий, каждую со своей копией модели, и делит потоки между ними, `--threads` задаёт общее число.
 
 ```sh
-tg personal models text download e5-small
+tg personal models download e5-small
 tg personal conversations embed --chat "Project team"
-tg personal conversations embed status --chat "Project team" --json
+tg personal conversations embeddings status --chat "Project team" --json
 ```
 
 Внешний провайдер считает векторы с ключом владельца: OpenAI или любой сервер с API `/v1/embeddings` в формате OpenAI — через `--base-url` вместе с `--model` и `--dims`, например Gemini, Jina, Ollama или LM Studio. Тогда ему уходит текст кусков, а каждый поиск отправляет вопрос. Прежде чем что-то отправить, `embed` называет число кусков, наибольшее число токенов и наибольшую цену и ждёт «да» (`--yes` в скриптах, `--max-tokens` — предел).

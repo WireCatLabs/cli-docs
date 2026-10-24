@@ -4,6 +4,96 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.86.0 — 24.10.2026
+
+### Added
+
+- **Send up to ten attachments as one album** by repeating `messages send --photo` or `--file`.
+  Photos and videos can share an album; documents form a separate group. The caption belongs to the first
+  item, and JSON includes every sent message. Each item counts toward the hourly send limit. Retrying an
+  unscheduled send with the same operation id repeats the same per-item Telegram ids.
+
+### Changed — may break callers
+
+- **Shared commands have one name each, and the old names are gone** (cli-core 0.406.0). `contacts profile` is
+  `contacts info`, `contacts timeline` is `contacts events`, `contacts alias set|rm` is `contacts aliases set|remove`.
+  `chats link …` is `chats links …` and `chats link revoke` is `chats links remove`; `chats members audit` is
+  `chats members check`; `chats requests accept|decline` is `chats requests confirm|reject`. `metadata get|refresh` is
+  `metadata show|sync`, `tasks plan` is `tasks update`, `tags auto` is `tags rebuild`, `attachments text set` is
+  `attachments update`, `store reindex` is `store rebuild`, `store gaps plan` is `store gaps show` and
+  `stats messages counters refresh` is `stats messages counters sync`. `conversations build` is
+  `conversations links rebuild`, `conversations embed status|clear` is `conversations embeddings status|clear`,
+  `conversations batches next` is `conversations batches show` and `conversations consents revoke` is
+  `conversations consents remove`. `models audio list` and `models text list` are `models list kind:audio|kind:text`,
+  `models audio|text download` is `models download`, `models text key` is `models keys`. `doctor report create` is
+  `doctor reports create` and `doctor report` is `doctor reports show`. `mcp setup` is `mcp add`, `mcp doctor` is
+  `mcp check` and `commands schema` is `commands info`. An old name stops with the new one in the message; CLI and MCP
+  use the same paths.
+- **The hidden old option spellings are removed.** Use `--analysis-provider`, `--embedding-provider` or
+  `--consent-provider` for `--provider`, `--answer-model` on `conversations links clear`, `--template-mode` on reply
+  rules, `--claim` on `tags remove`, `--text-file` on `contacts notes`, and `kind:` in the `inbox` and `review` query.
+- **A saved permission key with an old path stops every command with `configuration_error`** and names the key to
+  rename it to, for example `permissions.conversations.embed` to `permissions.conversations.embeddings`. `config set`
+  and `config unset` stop too, so rename the key by hand in `config.json`
+  ([where it is](./configuration-reference.md)).
+
+## 0.85.0 — 24.10.2026
+
+### Added
+
+- **The first command at a terminal asks three questions once for every WireCat tool** (cli-core 0.404.0): which
+  languages you write and speak, which other WireCat tools to install, and whether commands and agents may only read.
+  Answered in any tool, they hold in all of them; "read only" caps every profile, over MCP too. `tg setup` asks them
+  again. Agents, `--json`, `--no-input`, `CI` and `TG_READ_ONLY` are never asked.
+
+## 0.84.0 — 24.10.2026
+
+### Added
+
+- **`permissions.mcp.authority` decides whether an MCP server offers the commands that change what a later run may
+  do** (cli-core 0.400.0): `config set|unset`, `schedule command|agent|remove`, reply rules and consents, recipient lists,
+  chat rules, `server install`, `skill install`, model keys, media archive timers and `flood clear`. It is `deny` by
+  default, so an agent still cannot loosen its own limits until you run
+  `tg <profile> config set permissions.mcp.authority allow` in a terminal (add `--bot` for a bot's server).
+  [Permissions](./permissions.md#let-an-agent-change-its-own-limits) and
+  [the MCP guide](./mcp.md#commands-that-change-what-a-later-run-may-do) explain it.
+
+### Changed — may break callers
+
+- **`tg mcp` offers the writes that had no permission key before, each `ask` by default** (cli-core 0.401.0): store
+  backup, restore, migrate, repair, reset, clear, decrypt and copy deletion, server start/stop/restart, model downloads,
+  `schedule run|exec`, `doctor report create` and `account sessions end`; the bot server offers `store fetch`. Over MCP
+  `ask` goes ahead, so set a key to `readonly` or `deny` to hide a tool. `tasks duplicates` is `tasks duplicates list`.
+
+- **`tg <profile> events list --json` writes times as ISO 8601 and ids as strings** (cli-core 0.401.0): `starts_at`,
+  `ends_at`, `deleted_at`, `created_at` and `updated_at`, as every other answer does.
+- **A bot's MCP server can offer `bot api`, behind `permissions.bot.api`** (cli-core 0.402.0). It is `deny` by default;
+  `tg <profile> config set --bot permissions.bot.api allow` in a terminal turns it on.
+
+- **`tg <profile> watch --jsonl` prints `{"type":"item","data":…}` lines and a final `{"type":"end","complete":true}`.**
+  Read each message or event from `data`, and stop at the `end` line. Fields are snake_case. A timeout or a normal stop
+  ends with `complete: true`; a failure ends with `complete: false` and its exit code.
+- **`runs search` is now `search runs`.** Filters are terms in the query: `status:failed`, `error_code:timeout`,
+  `operation:messages.download`, `profile:work`, next to plain words. Saved MCP requests use the new command path.
+- **`stats` reports take their filters as query terms.** `--message-kind` is `message_kind:posts|comments|all`,
+  `--min-messages 5` is `min_messages:5`, `--min-views` and `--max-replies` are `min_views:` and `max_replies:`,
+  `--older-than 24h` is `older_than:24h`, and `--chat` is `chat:<chat>` on the rankings and reports; exact words use `exact:` in place of `--exact`. Update saved
+  commands and MCP requests.
+
+- **Options have one meaning each** (cli-core 0.399.0). Use `--analysis-provider` for analysis and `--embedding-provider`
+  for vector search (`conversations build|embed|related|status`, `search conversations`), `--consent-provider` for
+  `conversations consents revoke`, `--claim` for `tags remove`, `--answer-model` for `conversations links clear`,
+  `--template-mode` for reply templates and `--text-file` for `contacts notes add|edit`. `inbox` and `review` take
+  `kind:group,channel` in their query. The old spellings still work, hidden, for one release.
+
+### Fixed
+
+- **Voice-note search no longer finds a different real English or Spanish word for the one you typed** (cli-core
+  0.402.0). A misheard spelling still turns up: "budget" finds "budjet", but "cost" no longer finds "cast".
+
+- **Downloading media skips service events and keyboards** (cli-core 0.400.0). A chat with a group event or an inline
+  keyboard no longer makes `attachments download` fail with `provider.invalid-response`.
+
 ## 0.83.0 — 23.10.2026
 
 ### Added

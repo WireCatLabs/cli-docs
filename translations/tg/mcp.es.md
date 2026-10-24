@@ -28,7 +28,7 @@ Para ChatGPT o Claude **en el navegador**, use `tg personal mcp --http`; consult
 | Qué | Qué hace |
 |---|---|
 | [Tres herramientas](#tools) | Busque un comando y luego ejecútelo como lectura o escritura |
-| [Seis indicaciones](#prompts-and-chats-by-) | Ponte al día, responde, busca, revisa, abre tareas, vincula conversaciones |
+| [Seis peticiones preparadas](#prompts-and-chats-by-) | Ponte al día, responde, busca, revisa, abre tareas, vincula conversaciones |
 | [Chats de `@`](#prompts-and-chats-by-) | Adjuntar un chat y sus mensajes recientes a la conversación |
 | La skill, `tg://skill` | El mismo texto que `tg skill show` |
 | [Gráficos](#statistics-charts) | Estadísticas de un chat como imagen JSON o PNG |
@@ -38,19 +38,19 @@ Las herramientas personales utilizan el mismo catálogo que `max`. Telegram tamb
 
 ## Conexión
 
-Primero ejecute `tg personal setup --agent none` en una terminal local. Inicia sesión en su cuenta de Telegram. El servidor MCP nunca inicia sesión por usted. Luego, `tg personal mcp setup` conecta la aplicación, como un paso separado. Un agente puede leer `tg skill show` antes de iniciar sesión; explica ambos pasos.
+Primero ejecute `tg personal setup --agent none` en una terminal local. Inicia sesión en su cuenta de Telegram. El servidor MCP nunca inicia sesión por usted. Luego, `tg personal mcp add` conecta la aplicación, como un paso separado. Un agente puede leer `tg skill show` antes de iniciar sesión; explica ambos pasos.
 
 **Codex o Claude Code en este equipo:**
 
 ```sh
-tg personal mcp doctor       # check that MCP starts and lists tools
-tg personal mcp setup codex  # add it to Codex
-tg personal mcp setup claude-code  # or add it to Claude Code
+tg personal mcp check       # check that MCP starts and lists tools
+tg personal mcp add codex  # add it to Codex
+tg personal mcp add claude-code  # or add it to Claude Code
 ```
 
-Ponga un perfil primero, por ejemplo `tg work mcp setup codex`. La instalación utiliza el comando propio de la aplicación y deja en paz a los demás servidores. Si ya existe una entrada con el mismo nombre, elimínela de la aplicación antes de ejecutar la configuración nuevamente. El perfil predeterminado ofrece herramientas que escriben. Entonces la configuración le pide que revise los permisos del perfil y lo ejecute nuevamente con `--allow-writes`. Esa bandera sólo confirma la instalación; no cambia los permisos. Para limitar lo que el agente puede hacer, configure primero el `permissions` del perfil ([abajo](#what-an-agent-may-do)).
+Ponga un perfil primero, por ejemplo `tg work mcp add codex`. La instalación utiliza el comando propio de la aplicación y deja en paz a los demás servidores. Si ya existe una entrada con el mismo nombre, elimínela de la aplicación antes de ejecutar la configuración nuevamente. El perfil predeterminado ofrece herramientas que escriben. Entonces la configuración le pide que revise los permisos del perfil y lo ejecute nuevamente con `--allow-writes`. Esa bandera sólo confirma la instalación; no cambia los permisos. Para limitar lo que el agente puede hacer, configure primero el `permissions` del perfil ([abajo](#what-an-agent-may-do)).
 
-`mcp doctor` no lee mensajes y no inicia sesión en Telegram. Un buen resultado significa que el protocolo de enlace MCP y la lista de herramientas funcionan. No significa que la sesión de la cuenta sea válida. `potential_writes` cuenta las herramientas que no están marcadas como de solo lectura. Cuando el servidor no se inicia, el error muestra las últimas líneas que escribió en stderr, con su carpeta de inicio, números largos y tokens ocultos. Las aplicaciones del navegador y del teléfono necesitan una conexión remota separada ([conectar una aplicación del navegador o del teléfono](./remote.md)).
+`mcp check` no lee mensajes y no inicia sesión en Telegram. Un buen resultado significa que el protocolo de enlace MCP y la lista de herramientas funcionan. No significa que la sesión de la cuenta sea válida. `potential_writes` cuenta las herramientas que no están marcadas como de solo lectura. Cuando el servidor no se inicia, el error muestra las últimas líneas que escribió en stderr, con su carpeta de inicio, números largos y tokens ocultos. Las aplicaciones del navegador y del teléfono necesitan una conexión remota separada ([conectar una aplicación del navegador o del teléfono](./remote.md)).
 
 **Claude Code, manualmente:**
 
@@ -132,23 +132,34 @@ ejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor 
 ofrecen nunca, y los ejecutas en una terminal:
 
 - **Inicio de sesión y configuración**: `session start|end`, `upgrade`, `complete`, `mcp config|setup|doctor`,
-  `skill install`, `bot auth set|show|remove`, `bot mcp config`. Una llamada del agente no puede usarlos, o necesitan
-  que estés ante el teclado.
-- **Comandos que cambian lo que podrá hacer una ejecución posterior**: `config set|unset`,
-  `recipients add|remove|clear`, `chats rules set|unset`, las reglas y los consentimientos de `replies`,
-  `schedule command|agent|remove`, `server install|uninstall`, `attachments jobs install|uninstall`,
-  `models text key set|remove`, `flood clear`, y en el bot `recipients add|remove|clear` y `chats rules set|unset`.
-  Un agente limitado a solo lectura podría, de otro modo, desbloquear una ejecución posterior.
-- **Escrituras que ningún permiso limita todavía**: `store backup|restore|migrate|repair|reset|clear|decrypt|copies delete`,
-  `server start|stop|restart`, `attachments jobs start|stop`, descargas de modelos (`models audio|text download`,
-  `images models download`), `schedule run|exec`, `doctor report create`, `account sessions end`, `bot store fetch`
-  y los métodos `bot api` sin procesar.
+  `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.
 
-`tg commands --json` marca cada uno de ellos con `mcp: false`.
+Los comandos `store backup|restore`, `server start|stop|restart`, las descargas de modelos,
+`schedule run|exec`, `doctor reports create`, `account sessions end`, `chats delete|clear` y
+`bot store fetch` tienen claves de permisos propias, con `ask` por defecto. Se ofrecen al agente;
+la aplicación MCP controla la aprobación. `tg commands --json` marca los comandos excluidos con
+`mcp: false`. Las operaciones directas de `bot api` necesitan un [permiso](./permissions.md#raw-bot-api-calls) explícito.
 
-## Prompts y chats mediante `@`
+### Comandos que cambian lo que podrá hacer la siguiente ejecución
 
-El servidor ofrece seis prompts preparados; en Claude Code son comandos `/`:
+`config set|unset`, `recipients add|remove|clear`, `chats rules set|unset`, las reglas y consentimientos de `replies`,
+`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,
+`models keys set|remove`, `flood clear` y, para bots, `recipients add|remove|clear` y `chats rules set|unset`
+solo se ofrecen cuando el perfil fija `permissions.mcp.authority` en `allow` o `ask`. El valor por defecto
+es `deny`: el servidor no los enumera y rechaza sus llamadas. De otro modo, un agente limitado a leer
+podría habilitar cambios en una ejecución posterior. El agente no puede establecer la clave por sí mismo,
+porque también controla `config set`. Cámbiala desde una terminal, solo para un perfil cuyo agente pueda
+gestionar sus propios límites:
+
+```sh
+tg agent config set permissions.mcp.authority allow
+```
+
+Consulta los [permisos](./permissions.md#let-an-agent-change-its-own-limits).
+
+## Peticiones preparadas y chats mediante `@`
+
+El servidor ofrece seis peticiones preparadas; en Claude Code son comandos `/`:
 
 | Aviso | Argumento | Qué hace el agente |
 |---|---|---|
@@ -171,11 +182,11 @@ Los chats son recursos `tg://chat/<id>` — en Claude Code puedes mencionarlos c
 
 ## Vincular conversaciones
 
-La petición preparada `link-conversations` permite al agente vincular las respuestas a las conversaciones. El agente primero informa el tamaño del trabajo con `tg_read` (`command: "conversations batches status"`) y espera su consentimiento. Luego lee lotes con `tg_read` (`command: "conversations batches next"`), guarda sus respuestas con `tg_write` (`command: "conversations links add"`) y reconstruye con `tg_write` (`command: "conversations build"`). `tg_write` (`command: "conversations links clear"`) elimina las respuestas del agente; reconstruir después de eso también. Para guardar se necesita el permiso `conversations.links`. Si configura un servicio externo para vectores de búsqueda, la búsqueda MCP también envía el texto de la consulta a ese servicio.
+La petición preparada `link-conversations` permite al agente vincular las respuestas a las conversaciones. El agente primero informa el tamaño del trabajo con `tg_read` (`command: "conversations batches status"`) y espera su consentimiento. Luego lee lotes con `tg_read` (`command: "conversations batches show"`), guarda sus respuestas con `tg_write` (`command: "conversations links add"`) y reconstruye con `tg_write` (`command: "conversations links rebuild"`). `tg_write` (`command: "conversations links clear"`) elimina las respuestas del agente; reconstruir después de eso también. Para guardar se necesita el permiso `conversations.links`. Si configura un servicio externo para vectores de búsqueda, la búsqueda MCP también envía el texto de la consulta a ese servicio.
 
 ## Archivos y mensajes guardados
 
-`tg_read` (`command: "attachments list"`) muestra las rutas de los archivos guardados y si se extrajo su texto. `tg_write` (`command: "attachments text set"`) guarda el texto que el agente leyó de un archivo. La extracción de texto se realiza únicamente en la terminal. `tg_read` con `command: "messages context"` y `arguments: { offline: true }` lee solo la copia local.
+`tg_read` (`command: "attachments list"`) muestra las rutas de los archivos guardados y si se extrajo su texto. `tg_write` (`command: "attachments update"`) guarda el texto que el agente leyó de un archivo. La extracción de texto se realiza únicamente en la terminal. `tg_read` con `command: "messages context"` y `arguments: { offline: true }` lee solo la copia local.
 
 ## Cómo se mantiene la conexión
 

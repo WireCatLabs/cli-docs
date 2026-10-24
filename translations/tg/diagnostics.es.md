@@ -23,7 +23,7 @@ Algunas palabras que utiliza esta página:
 | Encuentra una ejecución fallida más tarde | `tg personal runs list` | una ejecución fallida se mantiene sola |
 | Mantenga un registro de cada ejecución | `tg personal config set record true` | sí, cada ejecución |
 | Verifique la instalación | `tg personal doctor`, `tg personal doctor --online` | no |
-| Hacer un informe de problema | `tg personal doctor report create` | sí, un archivo que envías |
+| Hacer un informe de problema | `tg personal doctor reports create` | sí, un archivo que envías |
 
 ## Ver las operaciones: `--trace`
 
@@ -96,7 +96,7 @@ tg personal doctor --online  # also connects once and reads the account; sends n
 Muestra versión, entorno de ejecución, perfil, configuración, existencia de sesión y credenciales (nunca sus valores), si `TG_*_DIR` ha cambiado la entrada del llavero, el archivo local (ruta, versión, número de chats y mensajes), los envíos de la última hora y las ejecuciones guardadas.
 
 - **`login`** es `not checked` sin `--online`. Un archivo de sesión en el disco no significa que Telegram todavía lo acepte. Con `--online` es `ok` o `failed`, con una pista.
-- **`files`** y **`telegram.session.files`** nombran cada archivo o carpeta privada que otros usuarios de esta máquina pueden leer: la sesión, el almacén, sus archivos SQLite `-wal` y `-shm`, el diario de envío y la carpeta de ejecuciones. Cada uno tiene el comando `chmod` que lo soluciona. `doctor` nunca cambia el modo de un archivo. Windows no está marcado.
+- **`files`** y **`telegram.session.files`** nombran cada archivo o carpeta privada que otros usuarios de esta máquina pueden leer: la sesión, el almacén, sus archivos SQLite `-wal` y `-shm`, el diario de envío y la carpeta de ejecuciones. Cada uno tiene el comando `chmod` que lo soluciona. `doctor` nunca cambia el modo de un archivo. En Windows no se comprueban los permisos Unix.
 - **`online.clock`** (con `--online`) compara el reloj de esta computadora con el de Telegram.   `skew_ms` es positivo cuando esta computadora está por delante. Avisa (`ok: false`) a los 10 segundos. Telegram rechaza una solicitud enviada más de 30 segundos antes de su propio reloj.
 - **`online.standing`** (con `--online`) es `active`, `frozen`, `banned`, `deactivated` o `revoked`, o `unknown` cuando la respuesta de Telegram no pudo decirlo. Una cuenta congelada puede leer pero no escribir. Cuando Telegram los proporciona, incluye la fecha en que se congeló la cuenta, la fecha en que Telegram la eliminará y el enlace de apelación. Iniciar sesión nuevamente no vuelve a abrir una cuenta cerrada de Telegram.
 - **`flood`** enumera las esperas que Telegram le pidió a este perfil que mantuviera (`deadlines`) y una retención en sus envíos (`send_block`). `doctor` solo lee, con una excepción: **`doctor --online` escribe la retención congelada.** Cuando lee la cuenta como congelada, retiene los envíos hasta la fecha de Telegram. Cuando lo lee como activo, levanta esa retención. Nunca elimina la retención de un límite de spam: `tg personal flood clear` lo hace.
@@ -104,11 +104,11 @@ Muestra versión, entorno de ejecución, perfil, configuración, existencia de s
 ## Crear un informe de problema
 
 ```sh
-tg personal doctor report create          # about the newest failed run
-tg personal doctor report create --run <run-id>  # about this one
+tg personal doctor reports create          # about the newest failed run
+tg personal doctor reports create --run <run-id>  # about this one
 ```
 
-Escribe un archivo JSON (lo que muestra `tg personal doctor` más la ejecución) y dice dónde enviarlo: un nuevo número en [github.com/WireCatLabs/tg-cli/issues](https://github.com/WireCatLabs/tg-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje y cada identificación aparece como una etiqueta, no como un número de Telegram. [Cómo informar un problema](./troubleshooting.md#report-a-problem) enumera todo lo que contiene el archivo.
+Escribe un archivo JSON (lo que muestra `tg personal doctor` más la ejecución) y dice dónde enviarlo: una nueva incidencia en [github.com/WireCatLabs/tg-cli/issues](https://github.com/WireCatLabs/tg-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje y cada identificación aparece como una etiqueta, no como un número de Telegram. [Cómo informar un problema](./troubleshooting.md#report-a-problem) enumera todo lo que contiene el archivo.
 
 Si no hay ejecuciones fallidas guardadas, vuelve a ejecutar el comando que falla; el fallo se guardará automáticamente.
 
@@ -132,17 +132,17 @@ tg personal runs list --limit 100 --json | jq '[.items[] | select(.requests > 10
 ## Buscar errores y ejecuciones parciales
 
 ```sh
-tg personal runs search --error-code rate_limited --json
-tg personal runs search --status partial --since-time 2026-10-01 --json
+tg personal search runs error_code:rate_limited --json
+tg personal search runs status:partial --since-time 2026-10-01 --json
 ```
 
-`runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.
-`--operation`, `--profile`, `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
+`search runs` busca texto literal en metadatos y eventos de diagnóstico seguros.
+Los términos `status:`, `error_code:`, `operation:` y `profile:`, junto con `--since-time`, `--limit` y `--page`, acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
 cada ejecución devuelve hasta 100 eventos coincidentes, con `events_truncated` si hay más.
 El fallo de un archivo o una página de historial genera `status: "partial"` con ID fallidos, etapas y códigos.
 El registro no copia el contenido de mensajes ni las respuestas de error del proveedor.
 Las ejecuciones parciales se conservan por defecto salvo que se desactive explícitamente el registro. La búsqueda no se registra a sí misma.
 
-En MCP llama a `tg_read` con `command: "runs search"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.
+En MCP llama a `tg_read` con `command: "search runs"`; `arguments` acepta `query` (los términos anteriores), `since_time`, `limit` y `page`.
 Solo lee registros del perfil activo, no conecta con Telegram ni abre los logs sin filtrar de trabajos en segundo plano.
 El resultado parcial original contiene acciones de recuperación; el registro conserva solo identificadores y códigos seguros.

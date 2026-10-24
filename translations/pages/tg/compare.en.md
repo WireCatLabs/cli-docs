@@ -2,6 +2,16 @@
 title: "Compared with other tools"
 ---
 
+<a id="login-profiles-and-the-background-service" />
+
+The marks reflect the reviewed released command catalogue and the linked project documentation read on 24 October 2026. Album sending is released. Sources for other tools are pinned [below the tables](#where-the-marks-come-from); a tool may do more than its documentation says. These are documentation/source comparisons, not comparative runtime measurements.
+
+<a id="sending" />
+
+<a id="groups-and-folders" />
+
+<a id="your-own-notes-on-chats-and-people" />
+
 Several open tools connect a personal Telegram account to a terminal or an AI agent. This page puts `tg` next to
 five of them, row by row, by the jobs people do: catch up, reply, find, organise, look after a group, and hand the
 account to an agent. Use it to pick the tool that fits your job.
@@ -17,13 +27,28 @@ The tools:
 - **tg** — this tool: a command line and an MCP server for your account, with a searchable local copy of your chats.
 - **[tgcli](https://github.com/dapi/tgcli)** — a command line with background sync, a local archive and an MCP
   server (the actively developed fork of [kfastov/tgcli](https://github.com/kfastov/tgcli)).
-- **[tlgr](https://github.com/tlgrcli/tlgr)** — a command line and a background service that do almost everything
-  on Telegram's server, with a skill for agents.
-- **[telegram-mcp](https://github.com/chigwell/telegram-mcp)** — the most used Telegram MCP server, with a large set
-  of actions.
-- **[mcp-telegram](https://github.com/mcp-telegram/mcp-telegram)** — an MCP server with about 180 tools, started with
-  `npx`.
+- **[tlgr](https://github.com/tlgrcli/tlgr)** — a command line and a background service, with an agent skill.
+- **[telegram-mcp](https://github.com/chigwell/telegram-mcp)** — a Python MCP server for Claude Desktop, Cursor and other MCP clients.
+- **[mcp-telegram](https://github.com/mcp-telegram/mcp-telegram)** — an MCP server started with `npx`.
 - **[tdl](https://github.com/iyear/tdl)** — a fast downloader and uploader for files and media.
+
+<a id="features" />
+
+<a id="install-and-licence" />
+
+<a id="when-another-tool-fits-better" />
+
+<a id="функции" />
+
+<a id="установка-и-лицензия" />
+
+<a id="когда-другой-инструмент-подходит-лучше" />
+
+<a id="características" />
+
+<a id="instalar-y-licenciar" />
+
+<a id="cuando-otra-herramienta-encaja-mejor" />
 
 ## What each tool does
 
@@ -48,7 +73,7 @@ The tools:
 | Download all the files of a chat, and carry on after a stop | 🟡 | 🟡 | ✅ | 🟡 | 🟡 | ✅ |
 | **Organise** | | | | | | |
 | Archive, pin, mute or mark a chat unread | ✅ | ➖ | ✅ | 🟡 | ✅ | ➖ |
-| Keep chats in folders | ✅ | ➖ | ✅ | ✅ | ✅ | ❌ |
+| Keep chats in folders | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
 | **Group overview** | | | | | | |
 | Create a group, manage admins, members, topics and join requests | ✅ | 🟡 | ✅ | ✅ | ✅ | 🟡 |
 | See who joined, who left and who added them | ✅ | ➖ | ➖ | ➖ | 🟡 | 🟡 |
@@ -58,14 +83,14 @@ The tools:
 | Press a bot's buttons | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
 | **Agents and safety** | | | | | | |
 | Works with an agent that has a terminal, with a skill that teaches it | ✅ | ✅ | ✅ | 🟡 | ➖ | ➖ |
-| An MCP server that offers every command | ✅ | 🟡 | ❌ | ✅ | ✅ | ❌ |
-| An agent can read but not send, until you allow it | ✅ | ➖ | 🟡 | ✅ | ➖ | ➖ |
-| Ask you before each send | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
+| MCP tools for reading and writing | ✅ | ✅ | ❌ | ✅ | ✅ | ❌ |
+| Configure an agent for read-only access | ✅ | ➖ | 🟡 | ✅ | ➖ | ➖ |
+| Configure a CLI send-confirmation permission | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Limit sends to a list of chats, and to a number an hour | ✅ | ➖ | 🟡 | 🟡 | 🟡 | 🟡 |
-| A send that is repeated after a failure is never made twice | ✅ | 🟡 | ✅ | ➖ | ➖ | ➖ |
-| An agent cannot loosen its own limits | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
+| Reuse an operation ID for unscheduled send retries | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
+| Hide permission changes from MCP by default | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | The login is kept in the system keyring | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| Several accounts, and none picked for you | ✅ | ❌ | ➖ | ➖ | ➖ | ❌ |
+| Require an explicit account for each action | ✅ | ❌ | 🟡 | ➖ | ➖ | ❌ |
 
 What an agent may do without asking, how a wrong send is stopped, and what you can see afterwards.
 
@@ -73,12 +98,10 @@ Notes on these rows:
 
 - **Read but not send.** tg lets a profile be read-only for the terminal and for MCP. telegram-mcp can expose only its
   reading tools. tlgr can allow only the commands you list.
-- **Ask before each send.** In the terminal, tg asks. Over MCP it does not show its own form: your agent app asks, and
-  `reply` and `review` show a draft and send only after your yes.
+- **Send approval.** Set `messages.send: ask` to request terminal confirmation. Over MCP, the client controls approval and can allow a call without asking again; use deny or read-only permissions to block writes. `reply` and `review` present drafts for review. Explicit account selection is required by tg; tgcli supports profiles with a default, while tlgr can require a selected account through its strict-account setting.
 - **Limits.** tg has a list of chats it may send to and 30 sends an hour by default. telegram-mcp limits the chats,
   mcp-telegram limits its request rate, tdl has a delay between requests, tlgr limits the commands.
-- **Never twice.** tg repeats a send with the same operation id, so Telegram makes one message; a scheduled send is
-  checked, not repeated. tlgr ends with a special exit code when the outcome is unknown.
+- **Retry identity.** Reuse the same operation ID for an unscheduled send retry. Inspect the send journal and Telegram when an outcome is unknown; scheduled sends must be checked rather than blindly repeated. tlgr documents a distinct exit code for unknown outcomes.
 - **Loosen its own limits.** Over MCP, tg hides the commands that change what a later run may do (settings,
   recipient lists, schedules) until you open them from a terminal.
 
@@ -88,7 +111,7 @@ Notes on these rows:
 |---|---|---|---|---|---|---|
 | Install | npm, pnpm, Bun | npm | pipx | git and uv, Docker, Claude Desktop extension | npx, binaries | one binary, Homebrew, Scoop, AUR, Nix, Docker |
 | Licence and price | Apache-2.0, free | MIT, free | MIT, free | Apache-2.0, free | MIT, free | AGPL-3.0, free |
-| MCP | stdio, and HTTP with its own login for browser and phone apps | stdio | none | stdio | stdio | none |
+| MCP | stdio, and HTTP with its own login for browser and phone apps | HTTP | none | stdio | stdio | none |
 
 **Compared with a browser agent.** An agent that drives the Telegram web app clicks through a page meant for people.
 `tg` and the other tools here call Telegram's own interface, so the agent gets the same answer a script would, in a

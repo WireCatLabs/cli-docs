@@ -57,7 +57,7 @@ tg personal mentions confirm 1 person:7
 Оба мессенджера показывают профиль человека и общую переписку:
 
 ```sh
-tg personal contacts profile @example_user
+tg personal contacts info @example_user
 max personal contacts profile 20000002
 ```
 
@@ -134,7 +134,7 @@ max personal contacts check 20000002
 список не попадают, никто не удаляется:
 
 ```sh
-tg personal chats members audit "Книжный клуб" --deep 10
+tg personal chats members check "Книжный клуб" --deep 10
 max personal chats members audit "Книжный клуб" --deep 10
 ```
 

@@ -225,7 +225,7 @@ Cuando Telegram dice cuánto tiempo esperar, `tg` recuerda ese tiempo para la op
 
 Telegram rechazó la petición e indicó por qué. Código `5` si la cuenta no tiene permiso; `11` en los demás casos. El nombre después de "refused" es el de Telegram y el JSON lo incluye como `provider_error`; nunca se repite lo introducido. Algunos tienen mensajes específicos:
 
-- **"Telegram transcribes only for Premium accounts…"**: código `5`. Usa un modelo local: `tg personal models audio download parakeet-v3` y después `tg personal messages transcribe <chat> <id> --local`.
+- **"Telegram transcribes only for Premium accounts…"**: código `5`. Usa un modelo local: `tg personal models download parakeet-v3` y después `tg personal messages transcribe <chat> <id> --local`.
 - **"that message is not a voice or video note"**: código `2`; el identificador corresponde a otro tipo de mensaje.
 - **"Telegram could not transcribe this voice message"**: código `11`; prueba `--local`.
 
@@ -318,9 +318,9 @@ Código `2`. Solo se admite un `serve` por perfil. `tg personal server status` i
 ## Informar de un problema
 
 ```sh
-tg personal doctor report  # what a report holds, and what it never holds; writes nothing
-tg personal doctor report create  # write it to a file, and say where to send it
-tg personal doctor report create --run <id>  # about another run; ids from tg personal runs list
+tg personal doctor reports show  # what a report holds, and what it never holds; writes nothing
+tg personal doctor reports create  # write it to a file, and say where to send it
+tg personal doctor reports create --run <id>  # about another run; ids from tg personal runs list
 ```
 
 `create` escribe `tg-report-<time>.json` en la carpeta actual (o `--output`), que solo usted puede leer. Contiene la versión, el tiempo de ejecución y el sistema, lo que responde `tg personal doctor`, la ejecución fallida más reciente (la operación, duración y código de error de cada solicitud) y los últimos 20 intentos de envío, solo el resultado y la duración. Cada ID de chat, mensaje y cuenta se reemplaza por una etiqueta que no significa nada fuera del archivo. No contiene texto de mensaje, títulos de chat, nombres, números de teléfono, credenciales de sesión o aplicación. Una ejecución fallida se mantiene sola, incluso sin `--record` ([ejecuciones fallidas](./diagnostics.md#a-failed-run-is-always-kept)).

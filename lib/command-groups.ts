@@ -30,6 +30,7 @@ const adminChat = new Set([
   "invite",
   "invites",
   "link",
+  "links",
   "requests",
   "join-requests",
   "permissions",
@@ -41,7 +42,7 @@ const adminTopics = new Set(["enable", "create", "edit", "delete", "order"])
 export function commandGroup(command: string): CommandGroup {
   const words = command.trim().split(/\s+/).slice(1)
   if (words[0] === "bot") return "bot"
-  if (setup.has(words[0])) return "setup"
+  if (setup.has(words[0]) || (words[0] === "search" && words[1] === "runs")) return "setup"
   if (
     words[0] === "groups" ||
     words[0] === "stats" ||
@@ -58,6 +59,7 @@ export function commandGroupForAnchor(anchor: string): CommandGroup {
   } catch {
     return "personal"
   }
+  if (/^(tg|max|wa)-search-runs(?:-|$)/.test(value)) return "setup"
   if (/^(tg|max|wa)-bot(?:-|$)/.test(value)) return "bot"
   if ([...setup].some((name) => new RegExp(`^(tg|max|wa)-${name}(?:-|$)`).test(value))) return "setup"
   if (

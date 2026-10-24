@@ -60,7 +60,7 @@ Abre Terminal en macOS o Linux, o PowerShell en Windows.
    npm install -g @wirecat/tg-cli && tg skill install --for all
    ```
 
-   npm 12 puede mostrar «install scripts blocked». No pasa nada: el script de instalación solo añade las instrucciones para tus agentes si la variable `TG_INSTALL_AGENT` está definida, así que las instala el segundo comando. En Windows, abre una terminal nueva si no se encuentra `tg`.
+   npm puede informar de scripts de instalación bloqueados. El segundo comando instala las instrucciones del agente de forma explícita. Lee los avisos del gestor de paquetes y comprueba la versión en el paso siguiente. En Windows, abre otra terminal si no se encuentra `tg`.
 
    En Windows puedes usar un solo comando. Instala tg, lo añade a `PATH` (las carpetas donde el terminal busca comandos) y conecta todos los agentes compatibles:
 
@@ -205,6 +205,10 @@ tg rellena por ti el formulario de my.telegram.org. Si Telegram cambia ese sitio
 **Con tu agente:** reinicia el agente o pídele que abra un terminal nuevo. Un terminal que estaba abierto durante la instalación no ve el comando nuevo.
 
 **A mano:** abre un terminal nuevo y vuelve a ejecutar `tg --version`. npm no puede cambiar el `PATH` del terminal donde se ejecutó. En Windows, el comando de PowerShell de [Instala tg](#install) también corrige `PATH` cuando npm omitió su script de instalación, y actualiza el terminal actual.
+
+### pnpm no encuentra su directorio global de comandos
+
+Si pnpm muestra `ERR_PNPM_GLOBAL_BIN_DIR_NOT_IN_PATH`, ejecuta `pnpm setup`, abre otra terminal y repite la instalación. Consulta [pnpm setup](https://pnpm.io/cli/setup).
 
 ### ¿Dónde escribo los códigos y las contraseñas?
 

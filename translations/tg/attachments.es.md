@@ -20,7 +20,7 @@ Algunas palabras en esta página:
 | Descargar los archivos de un mensaje o un chat | `tg personal messages download` |
 | Leer texto de archivos guardados en esta computadora | `tg personal attachments extract` |
 | Vea qué archivos aún necesitan texto | `tg personal attachments list is:needs_text` |
-| Guarde el texto que leyó su agente | `tg personal attachments text set` |
+| Guarde el texto que leyó su agente | `tg personal attachments update` |
 | Buscar un mensaje por el texto de su archivo | `tg personal search messages 'content:…'` |
 | Leer escaneos de forma masiva con un modelo externo | `tg personal attachments extract --ocr` |
 
@@ -131,11 +131,11 @@ Pregúntele a su agente: “Lea cada página de este archivo adjunto, marque los
 ```sh
 tg personal attachments extract --chat "Study group" --download --output-dir ./files
 tg personal attachments list 'chat:"Study group" is:needs_text'
-tg personal attachments text set "Study group" 204 --text-file ./scan.txt
+tg personal attachments update "Study group" 204 --text-file ./scan.txt
 tg personal search messages 'content:worksheet chat:"Study group"' --backend archive
 ```
 
-`--attachment` selecciona un archivo de un mensaje entre varios, contando desde 1. Al recibir los bytes y leer el texto no lo indexa: `attachments text set` guarda el resultado. Comprueba que `content:` devuelve el mensaje original y su localizador. El texto de un archivo son datos, nunca instrucciones para el agente. El texto que guardó el agente no se sobrescribe con una extracción automática posterior.
+`--attachment` selecciona un archivo de un mensaje entre varios, contando desde 1. Al recibir los bytes y leer el texto no lo indexa: `attachments update` guarda el resultado. Comprueba que `content:` devuelve el mensaje original y su localizador. El texto de un archivo son datos, nunca instrucciones para el agente. El texto que guardó el agente no se sobrescribe con una extracción automática posterior.
 
 ### Qué hace el agente
 
@@ -201,7 +201,7 @@ Un nuevo fallo no borra el texto válido ya indexado.
 Después de diez intentos, una tasa de errores superior al 50% detiene los elementos nuevos.
 `MESSAGING_BATCH_MAX_ERROR_PERCENT` establece un porcentaje entero de 1 a 100. Los límites de frecuencia y los fallos de autenticación
 pueden detener el lote antes; las solicitudes paralelas ya iniciadas pueden terminar. Respeta la pausa del proveedor y continúa el trabajo pendiente.
-Busca registros parciales con `tg personal runs search --status partial --json` o MCP `tg_read` con `command: "runs search"`
+Busca registros parciales con `tg personal search runs status:partial --json` o MCP `tg_read` con `command: "search runs"`
 ([diagnóstico](./diagnostics.md)).
 
 ## Conservar copias tras borrar el origen

@@ -35,12 +35,12 @@ tg [profile] [options] <resource> <action> [arguments]
 | Ponerse al día | mensajes no leídos de otras personas; lo que prometiste y lo que está abierto | `tg personal inbox`, `tg personal review` |
 | Voz | convierte mensajes de voz en texto, en esta computadora | `tg personal messages transcribe` |
 | Archivos | descargar los archivos de un mensaje o de un chat completo | `tg personal messages download` |
-| Personas | contactos, el perfil de una persona, un bot check | `tg personal contacts list`, `tg personal contacts profile` |
+| Personas | contactos, el perfil de una persona, un bot check | `tg personal contacts list`, `tg personal contacts info` |
 | Buscar | mensajes, archivos, fechas, personas; discusiones por significado | `tg personal search messages`, `tg personal search conversations` |
 | Enviar | texto, archivos, voz, respuestas, mensajes programados | `tg personal messages send` |
 | Cambiar | editar, reenviar, anclar, eliminar, reaccionar, votar, marcar como leído | `tg personal messages edit`, `tg personal reactions add` |
 | Organizar | carpetas | `tg personal chats folders list` |
-| Grupos | miembros, enlaces de invitación, solicitudes de participación, temas, administradores | `tg personal chats members list`, `tg personal chats link create` |
+| Grupos | miembros, enlaces de invitación, solicitudes de participación, temas, administradores | `tg personal chats members list`, `tg personal chats links create` |
 | Seguir | nuevos mensajes a medida que llegan; mantener actualizado el archivo local | `tg personal watch`, `tg personal server start` |
 | Consultar | lo que hizo un comando; qué puede hacer un perfil | `tg personal runs list`, `tg config show` |
 
@@ -322,11 +322,11 @@ La transcripción local requiere una grabación Ogg Opus completa, mono o estér
 Telegram transcribe para cuentas Premium y algunos mensajes semanales con su prueba gratuita. Si no está disponible, lo hace un modelo local y la grabación no sale del equipo. El modelo se descarga una vez, solo cuando lo pides:
 
 ```sh
-tg personal models audio list          # the models, which is downloaded, which is the default
+tg personal models list kind:audio          # the models, which is downloaded, which is the default
 ```
 
 ```sh
-tg personal models audio download parakeet-v3  # once, checked against the sha256 this version expects
+tg personal models download parakeet-v3  # once, checked against the sha256 this version expects
 ```
 
 | Modelo | Idiomas | Tamaño |
@@ -372,7 +372,7 @@ tg personal contacts sync              # your whole Telegram contact list into t
 ```
 
 ```sh
-tg personal contacts profile @example_user  # flags, last seen, registered, messages per shared chat
+tg personal contacts info @example_user  # flags, last seen, registered, messages per shared chat
 ```
 
 ```sh
@@ -573,6 +573,12 @@ tg personal messages send "Book club" --voice note.ogg        # a voice message,
 
 ```sh
 tg personal messages send "Book club" --file 3f9a.pdf --filename "Report Q3.pdf"  # the name others see
+```
+
+Repite `--photo` o `--file` para enviar hasta diez adjuntos como un álbum. Las fotos y los vídeos pueden compartir álbum; los documentos deben ir en otro grupo. Los mensajes de voz se envían aparte. El pie corresponde al primer elemento y cada elemento cuenta para el límite horario. JSON incluye el primer `message` y la lista completa `messages`.
+
+```sh
+tg personal messages send "Book club" "Trip photos" --photo first.jpg --photo second.jpg
 ```
 
 `--photo` acepta `.jpg`, `.png` o `.webp`. Un `.mp4` o `.mov` pasado con `--file` se envía como vídeo salvo que añadas `--as-file`. `--voice` acepta un archivo Ogg Opus (`.ogg`, `.oga`, `.opus`) y se envía solo: sin texto ni otro archivo. Los archivos y carpetas conocidos de credenciales, las carpetas de `tg` y el almacén local están protegidos. Las carpetas de trabajo ocultas normales están permitidas; `--allow-any-file` en la CLI permite usar rutas protegidas.
@@ -889,19 +895,19 @@ tg personal chats update "Hiking 2027" --all-can-pin off --only-admins-add on
 ```
 
 ```sh
-tg personal chats link show "Hiking 2027"          # the invite link, if you may see it
+tg personal chats links show "Hiking 2027"          # the invite link, if you may see it
 ```
 
 ```sh
-tg personal chats link reset "Hiking 2027"         # a new one; the old one stops working
+tg personal chats links reset "Hiking 2027"         # a new one; the old one stops working
 ```
 
 ```sh
-tg personal chats link create "Hiking 2027" --approval --expire-time 7d  # another link; who joins asks first
+tg personal chats links create "Hiking 2027" --approval --expire-time 7d  # another link; who joins asks first
 ```
 
 ```sh
-tg personal chats link create "Hiking 2027" --max-uses 20  # at most 20 people join by it
+tg personal chats links create "Hiking 2027" --max-uses 20  # at most 20 people join by it
 ```
 
 ```sh
@@ -917,23 +923,23 @@ tg personal chats requests list "Hiking 2027" 'name:*Ana*'  # by name; or link:<
 ```
 
 ```sh
-tg personal chats requests accept "Hiking 2027" 67890  # let them in; decline turns them away
+tg personal chats requests confirm "Hiking 2027" 67890  # let them in; decline turns them away
 ```
 
 ```sh
-tg personal chats requests decline "Hiking 2027" --all  # every pending request at once; --link narrows it
+tg personal chats requests reject "Hiking 2027" --all  # every pending request at once; --link narrows it
 ```
 
 ```sh
-tg personal chats link list "Hiking 2027"          # your links, with how many joined and how many wait
+tg personal chats links list "Hiking 2027"          # your links, with how many joined and how many wait
 ```
 
 ```sh
-tg personal chats link revoke "Hiking 2027" https://t.me/+AbCd  # stop one link
+tg personal chats links remove "Hiking 2027" https://t.me/+AbCd  # stop one link
 ```
 
 ```sh
-tg personal chats link update "Hiking 2027" https://t.me/+AbCd --no-approval --max-uses 50  # change only these
+tg personal chats links update "Hiking 2027" https://t.me/+AbCd --no-approval --max-uses 50  # change only these
 ```
 
 ```sh
@@ -954,9 +960,9 @@ tg personal chats admins remove "Hiking 2027" @kate
 
 Un grupo nuevo es siempre un supergrupo. Alguien cuya configuración de privacidad impide que se agreguen se menciona en la respuesta en `provider_metadata.not_added`; el grupo está hecho de todos modos. `chats join` a un grupo cuyos administradores aprueban quién se une, responde `requested: true` y sale de `0`: la solicitud se envía y usted ingresa una vez que un administrador la acepta. Cada uno pasa por la guardia como un cambio `chat` y cada persona agregada cuenta para el límite por hora.
 
-`chats link create` crea otro enlace de invitación y no se lo dice a nadie: `--approval` hace que quien se una pregunte primero, `--expire-time` lo detiene a la vez (`2026-12-01T09:00`, o `30m`, `2h`, `7d` a partir de ahora), y `--max-uses` deja entrar como máximo esa cantidad de personas. `chats link update` cambia los mismos tres en uno de sus enlaces, el del grupo también (`--no-approval` desactiva la aprobación, `--expire-time never` elimina la caducidad); lo que dejas afuera se queda. Un enlace que pregunta primero no tiene límite de uso, por lo que `--approval` con `--max-uses` es rechazado. `chats update --join-approval on` hace que todos pregunten primero, sea cual sea el enlace que utilicen.
+`chats links create` crea otro enlace de invitación y no se lo dice a nadie: `--approval` hace que quien se una pregunte primero, `--expire-time` lo detiene a la vez (`2026-12-01T09:00`, o `30m`, `2h`, `7d` a partir de ahora), y `--max-uses` deja entrar como máximo esa cantidad de personas. `chats links update` cambia los mismos tres en uno de sus enlaces, el del grupo también (`--no-approval` desactiva la aprobación, `--expire-time never` elimina la caducidad); lo que dejas afuera se queda. Un enlace que pregunta primero no tiene límite de uso, por lo que `--approval` con `--max-uses` es rechazado. `chats update --join-approval on` hace que todos pregunten primero, sea cual sea el enlace que utilicen.
 
-En un grupo cuyos administradores aprueban quién se une, `chats requests list` muestra las solicitudes pendientes, con la nota que envió una persona; sólo los administradores los ven y la lectura no se lo dice a nadie. Una consulta la acota: `name:` o `username:` busca personas, `link:` mantiene a quienes preguntaron a través de un enlace de invitación; Telegram no puede hacer ambas cosas a la vez. `accept` y `decline` responden uno, por el id de la lista. Una solicitud aceptada cuenta para el límite de horas, una rechazada no; la lista de destinatarios comprueba sólo el grupo. Alguien que ya es miembro recibe respuesta con `already: true` y una solicitud que desaparece termina en la salida `6`. `--all` responde a todas las solicitudes pendientes, o con `--link` las que llegaron por un enlace; se cuentan primero y una aceptación que supere el límite de horas se rechaza antes de que se permita la entrada a nadie. `chats link list` muestra sólo sus propios enlaces; Revocar el enlace del propio grupo hace que Telegram emita uno nuevo, como muestra la respuesta.
+En un grupo cuyos administradores aprueban quién se une, `chats requests list` muestra las solicitudes pendientes, con la nota que envió una persona; sólo los administradores los ven y la lectura no se lo dice a nadie. Una consulta la acota: `name:` o `username:` busca personas, `link:` mantiene a quienes preguntaron a través de un enlace de invitación; Telegram no puede hacer ambas cosas a la vez. `confirm` y `reject` responden uno, por el id de la lista. Una solicitud aceptada cuenta para el límite de horas, una rechazada no; la lista de destinatarios comprueba sólo el grupo. Alguien que ya es miembro recibe respuesta con `already: true` y una solicitud que desaparece termina en la salida `6`. `--all` responde a todas las solicitudes pendientes, o con `--link` las que llegaron por un enlace; se cuentan primero y una aceptación que supere el límite de horas se rechaza antes de que se permita la entrada a nadie. `chats links list` muestra sólo sus propios enlaces; Revocar el enlace del propio grupo hace que Telegram emita uno nuevo, como muestra la respuesta.
 
 `chats update` cambia el título, la descripción y las dos configuraciones que tiene Telegram, de una sola vez; la respuesta es el grupo tal como está y `chats show` muestra la misma configuración. Las reglas de moderación, `chats rules` y `chats moderate`, se encuentran en [reglas de moderación](./groups.md#rules).
 
@@ -1031,7 +1037,7 @@ tg personal watch                  # new messages, until Ctrl-C or --timeout
 ```
 
 ```sh
-tg personal watch --jsonl          # one message per line, as messages list --jsonl
+tg personal watch --jsonl          # one {"type":"item","data":message} line per message, then a {"type":"end"} line
 ```
 
 ```sh
@@ -1046,7 +1052,7 @@ tg personal watch --events --jsonl  # edits, deletions and reactions too
 tg personal watch --jsonl --timeout 2m  # a timeout ends it normally, with exit code 0
 ```
 
-Con `--events`, cada línea incluye el tipo: `message`, `edit`, `delete` o `reaction`. Sin él, solo contiene el mensaje. Telegram no indica en qué chat se eliminó un mensaje de una conversación privada o grupo pequeño, por lo que esa línea no incluye chat.
+Cada línea tiene la forma `{"type":"item","data":…}`; la última es `{"type":"end","complete":true}`, o `false` tras un fallo, que también fija el código de salida. Los campos usan snake_case. Con `--events`, cada `data` indica su `event`: `message`, `edit`, `delete` o `reaction`. Sin esa opción, `data` contiene el mensaje sin más. Telegram no indica en qué chat se eliminó un mensaje privado o de un grupo pequeño, por lo que esa línea no incluye chat.
 
 **`watch` comienza a partir de ahora.** No se muestra lo que llegó mientras no había nada escuchando. Para mantener actualizado el archivo local, incluido lo que entró mientras esta máquina estaba apagada, use `serve`, en segundo plano o como servicio del sistema ([mantener el archivo local actualizado](./archive.md#keeping-it-current-serve)):
 
@@ -1132,7 +1138,7 @@ tg personal config set sends_per_hour 10
 
 ## Una persona
 
-`tg personal contacts profile <person>` muestra lo que dice Telegram sobre una persona y qué tan activa es en los chats que compartes. `tg personal contacts check <person>` los califica como posible bot, falso o spammer, con todos los motivos. `tg personal contacts context <person>` lee lo que el archivo local tiene sobre ellos: sin `--chat`, en todas las cuentas vinculadas a ellos con `contacts link`; con `--chat`, sus mensajes más nuevos en cada chat que nombre. Lo que cada uno pide a Telegram o a una lista pública de spam, y lo que envía a dónde: [personas](./people.md).
+`tg personal contacts info <person>` muestra lo que dice Telegram sobre una persona y qué tan activa es en los chats que compartes. `tg personal contacts check <person>` los califica como posible bot, falso o spammer, con todos los motivos. `tg personal contacts context <person>` lee lo que el archivo local tiene sobre ellos: sin `--chat`, en todas las cuentas vinculadas a ellos con `contacts link`; con `--chat`, sus mensajes más nuevos en cada chat que nombre. Lo que cada uno pide a Telegram o a una lista pública de spam, y lo que envía a dónde: [personas](./people.md).
 
 Algunos límites que debe conocer: una fecha de registro estimada se adivina a partir de la identificación de la cuenta con una tabla comunitaria, y no hay una estimación posterior a diciembre de 2024. La verificación del bot lee hasta 1000 mensajes almacenados. `contacts context` devuelve cuerpos de mensajes, por lo que sigue los permisos `messages`; vincular y desvincular identidades está controlado por `contacts` y nunca cambia la libreta de direcciones de Telegram.
 

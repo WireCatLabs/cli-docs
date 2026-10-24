@@ -36,7 +36,7 @@ title: "Как tg ведет себя в скриптах"
 | Никаких вопросов во время запуска | `--no-input`; флаги подтверждения `--yes` и `--allow-dangerous` |
 | Запуски с ограничением времени и объёма данных | Ограничение по времени и размеру для ввода и вывода |
 | Только те поля, которые вам нужны | `--json=<fields>` |
-| Параметры команды без чтения документации | `tg commands` и `tg commands schema` |
+| Параметры команды без чтения документации | `tg commands` и `tg commands info` |
 | Чтобы увидеть, что будет делать команда | `--dry-run` |
 | Чтобы узнать, произошла ли неудачная запись | `outcome_unknown` и `details.operation_id` |
 
@@ -84,13 +84,13 @@ tg personal stats charts <chat> --json
 ```sh
 tg personal messages list <chat> --json=id,text
 tg commands messages list --json
-tg commands schema messages list --json
+tg commands info messages list --json
 ```
 
 `--json=id,text` сохраняет только перечисленные поля, разделенные запятыми; точка выбирает вложенное поле. `--json id,text`
 тоже работает, если каждое имя — поле ответа команды. Информация о странице выбранного формата останется. Для `page` используйте `--json`: списки JSONL печатают элементы без оболочки страницы. Отсутствующее поле остается отсутствующим; оно не становится нулевым.
 
-`tg commands` описывает параметры, допустимые значения, значения по умолчанию и коды выхода. `tg commands schema` предоставляет [JSON Schema](https://json-schema.org/specification) (версия 2020-12) аргументов и результата. `schemaVersion` является версией данного описания и меняется отдельно от версии программы. `outputSchemaCoverage` показывает, какую часть результата описывает схема: `declared-entity`, когда команда
+`tg commands` описывает параметры, допустимые значения, значения по умолчанию и коды выхода. `tg commands info` предоставляет [JSON Schema](https://json-schema.org/specification) (версия 2020-12) аргументов и результата. `schemaVersion` является версией данного описания и меняется отдельно от версии программы. `outputSchemaCoverage` показывает, какую часть результата описывает схема: `declared-entity`, когда команда
 объявляет, что представляют собой ее элементы, `envelope-with-open-items`, когда схема проверяет оболочку и оставляет элементы
 открытыми. Открытая схема позволяет использовать дополнительные поля из мессенджера; он не обещает, что будет проверено каждое поле.
 
@@ -112,6 +112,6 @@ tg commands schema messages list --json
 
 ## Стандарты, которым мы следуем
 
-`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.83.0/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
+`tg` соответствует частям, применимым к [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) и [Рекомендациям по интерфейсу командной строки](https://clig.dev/), а также [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) и [Agent Навыки](https://agentskills.io/specification). [Архитектура](https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/dev/ARCHITECTURE.md) и [стандарт общего интерфейса командной строки](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) описывают, как они применяются, а также исключения, сделанные специально. Мы не претендуем на полную сертификацию третьей стороной.
 
 Для настройки см. [руководство по настройке](./configuration.md); для каждого ключа и переменной среды — [справочник настроек](./configuration-reference.md).

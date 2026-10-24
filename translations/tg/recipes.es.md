@@ -139,15 +139,15 @@ Ninguno de ellos marca nada de lo leído. Usa `tg personal chats mark-read <chat
 
 ### Chats directos, grupos y canales aparte
 
-`--kind` mantiene sólo chats de ese tipo: `dialog` (uno a uno), `group`, `channel`. Un resumen de noticias de canales y un resumen de sus conversaciones pueden aparecer separados, en diferentes momentos. Cada chat tiene su propio punto, por lo que una ejecución nunca oculta lo que la otra aún no ha mostrado.
+`kind:` mantiene sólo chats de ese tipo: `dialog` (uno a uno), `group`, `channel`. Un resumen de noticias de canales y un resumen de sus conversaciones pueden aparecer separados, en diferentes momentos. Cada chat tiene su propio punto, por lo que una ejecución nunca oculta lo que la otra aún no ha mostrado.
 
 ```cron
 30 8 * * * claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg personal inbox:*)"
 0 19 * * * claude -p "$(cat ~/tg-recipes/news.md)" --allowedTools "Bash(tg personal inbox:*)"
 ```
 
-En `morning.md`, `tg personal inbox --new --kind dialog,group --json`; en `news.md`, `tg personal inbox --new --kind
-channel --json` y una solicitud para elegir lo que importa. Sin `--kind`, todo junto.
+En `morning.md`, `tg personal inbox --new kind:dialog,group --json`; en `news.md`, `tg personal inbox --new kind:channel
+--json` y una solicitud para elegir lo que importa. Sin `kind:`, todo junto.
 
 ## Informe semanal sobre un chat
 

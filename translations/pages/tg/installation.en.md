@@ -60,7 +60,7 @@ Open Terminal on macOS or Linux, or PowerShell on Windows.
    npm install -g @wirecat/tg-cli && tg skill install --for all
    ```
 
-   npm 12 may print "install scripts blocked". This is harmless: the install script adds the instructions for your agents only when `TG_INSTALL_AGENT` is set, so the second command installs them. On Windows, open a new terminal if `tg` is not found.
+   npm may report blocked installation scripts. The second command installs the agent instructions explicitly. Read the package-manager warnings and check the version in the next step. On Windows, open a new terminal if `tg` is not found.
 
    On Windows, you can use one command instead. It installs tg, adds it to `PATH` (the folders where the terminal looks for commands) and connects all supported agents:
 
@@ -205,6 +205,10 @@ tg fills in the my.telegram.org form for you. If Telegram changes that site, reg
 **With your agent:** restart the agent, or ask it to open a new terminal. A terminal that was open during the install does not see the new command.
 
 **By hand:** open a new terminal and run `tg --version` again. npm cannot change the `PATH` of the terminal it ran in. On Windows, the PowerShell command in [Install tg](#install) also fixes `PATH` when npm skipped its installation script, and updates the current terminal as well.
+
+### pnpm cannot find its global binary directory
+
+If pnpm reports `ERR_PNPM_GLOBAL_BIN_DIR_NOT_IN_PATH`, run `pnpm setup`, open a new terminal and repeat the install command. See [pnpm setup](https://pnpm.io/cli/setup).
 
 ### Where do I enter codes and passwords?
 
