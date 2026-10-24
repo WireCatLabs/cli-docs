@@ -16,7 +16,7 @@ Esta página enumera lo que está planeado para `drive` y aún no incluye. Léel
 
 ## Lo que funciona hoy
 
-`drive` importa las carpetas de Google Drive que elijas y guarda su texto en tu ordenador: Documentos y Hojas de cálculo de Google, PDF, docx, xlsx, CSV y Markdown. Puedes buscar por palabras y significado, leer sin conexión y añadir etiquetas, notas y recuerdos. También lee y edita rangos de Hojas de cálculo, gestiona archivos y sincroniza carpetas locales Markdown y CSV con Documentos y Hojas de cálculo en ambos sentidos, al ejecutar `mirrors sync` o mientras funciona `mirrors watch`. Descarga archivos subidos, exporta documentos Google como PDF, DOCX, XLSX o CSV, y responde, resuelve y reabre comentarios. La [guía de espejos](./mirrors.md) explica la configuración y la resolución de conflictos. Todos los comandos están en la [referencia](./commands.md).
+`drive` importa las carpetas de Google Drive que elijas y guarda su texto en tu ordenador: Documentos y Hojas de cálculo de Google, PDF, docx, xlsx, CSV y Markdown. Puedes buscar por palabras y significado, leer sin conexión y añadir etiquetas, notas y recuerdos. También lee y edita rangos de Hojas de cálculo, gestiona archivos y sincroniza carpetas locales Markdown y CSV con Documentos y Hojas de cálculo en ambos sentidos, al ejecutar `mirrors sync` o mientras funciona `mirrors watch`. Descarga archivos subidos, exporta documentos Google como PDF, DOCX, XLSX o CSV, y responde, resuelve y reabre comentarios. Su [servidor MCP remoto](./remote.md) conecta agentes del navegador y teléfono mediante tu túnel HTTPS, un código de acceso y los permisos del perfil. La [guía de espejos](./mirrors.md) explica la configuración y la resolución de conflictos. Todos los comandos están en la [referencia](./commands.md).
 
 ## En curso
 
@@ -32,6 +32,5 @@ Esta página enumera lo que está planeado para `drive` y aún no incluye. Léel
 
 - **Copiar conjuntos mayores de etiquetas, notas y recuerdos** entre almacenes.
 - **Borrado a través de los espejos**, si lo activas, con un archivo local.
-- **Un servidor MCP para agentes web y móviles**, además del local.
 
 Lo que cambió cada versión publicada está en el [registro de cambios](./changelog.md).
