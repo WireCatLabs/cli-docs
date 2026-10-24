@@ -1972,5 +1972,55 @@
         }
       ]
     }
+  },
+  {
+    "tool": "memo",
+    "slug": "configuration",
+    "reason": "Keep migration instructions in the current guide without obsolete release-number prose; the conditional config-to-store migration and backup behavior are unchanged.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Read only to move them into the store: since 0.32.0 rules live there, managed by",
+          "after": "Read to migrate rules into the store, where they are managed by"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Читается только для переноса правил в хранилище: с 0.32.0 они хранятся там, управление —",
+          "after": "Читается для переноса правил в хранилище; управление правилами —"
+        }
+      ],
+      "es": [
+        {
+          "before": "Solo se lee para mover las reglas al almacén: desde 0.32.0 se guardan allí y se gestionan con",
+          "after": "Se lee para mover las reglas al almacén, donde se gestionan con"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "mail",
+    "reason": "Keep migration instructions in the current guide without obsolete release-number prose; the conditional config-to-store migration and backup behavior are unchanged.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Before 0.32.0 rules were kept in `config.json`. The first",
+          "after": "If rules remain in `config.json`, the first"
+        }
+      ],
+      "ru": [
+        {
+          "before": "До 0.32.0 правила находились в `config.json`. Первая",
+          "after": "Если правила ещё хранятся в `config.json`, первая"
+        }
+      ],
+      "es": [
+        {
+          "before": "Antes de 0.32.0 las reglas estaban en `config.json`. El primer",
+          "after": "Si las reglas siguen en `config.json`, el primer"
+        }
+      ]
+    }
   }
 ]
