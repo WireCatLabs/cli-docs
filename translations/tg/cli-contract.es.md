@@ -47,7 +47,7 @@ tg personal stats tasks show --json
 tg personal stats charts <chat> --json
 ```
 
-Las rutas más antiguas `messages stats`, `chats stats` y `tasks stats` ya no existen y no hay alias para ellas. Si sus permisos nombran estas rutas, cámbielas a las rutas de `stats` mediante `tg config set`. El permiso para las estadísticas no anula un permiso denegado para los mensajes, chats o tareas que se encuentran debajo.
+El permiso para las estadísticas no anula un permiso denegado para los mensajes, chats o tareas que se encuentran debajo.
 
 ## Salida y errores
 
@@ -102,6 +102,6 @@ Pídale al agente que le muestre los mensajes que contó y cuánto del historial
 
 ## Estándares que seguimos
 
-`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.90.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
+`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.92.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
 
 Para la configuración, consulte la [guía de configuración](./configuration.md); para cada clave y variable de entorno, la [referencia de configuración](./configuration-reference.md).

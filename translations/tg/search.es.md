@@ -77,7 +77,7 @@ consulta se quede en este equipo, añade `--offline` (tg entonces no se conecta 
 tg personal search all 'lease agreement' --offline  # the store only; nothing is sent to Telegram
 ```
 
-`search all` indica el tipo de resultado: mensaje (`msg:…`) o nota (`note:…`). tg no busca correo: `tg personal search mail` responde "mail is memo's: install @wirecat/cli-memo, then `memo search mail …`", y `search all --only mail` se rechaza igual. En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; en `search notes`, `source:internal` y `source:file` dejan las notas escritas en memo o importadas de una carpeta. Si un campo no corresponde —`chat:`/`from:` para notas—, `search all` omite esa fuente y explica por qué.
+`search all` indica el tipo de resultado: mensaje (`msg:…`) o nota (`note:…`). tg no busca correo: `search all --only mail` se rechaza con una indicación hacia `memo search mail`. En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; en `search notes`, `source:internal` y `source:file` dejan las notas escritas en memo o importadas de una carpeta. Si un campo no corresponde —`chat:`/`from:` para notas—, `search all` omite esa fuente y explica por qué.
 
 El correo y las notas llegan al archivo local mediante memo: `memo sync --mail` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.
 

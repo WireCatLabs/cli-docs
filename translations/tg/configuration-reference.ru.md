@@ -77,7 +77,7 @@ tg shop config show --bot
 - `personal.defaults`, `personal.profiles.<name>`: только команды личного аккаунта.
 - `bot.defaults`, `bot.profiles.<name>`: только команды `tg <name> bot …`.
 
-Ни одна настройка не выбирает профиль: его называет первое слово (`tg work …`) или `TG_PROFILE`. Если нет ни того, ни другого, команда, которая использует аккаунт, останавливается с кодом выхода `2` и перечисляет профили на этом компьютере. Файл, в котором ещё остался `default_profile` от старой версии `tg`, тоже останавливает такую команду; `tg config unset default_profile` убирает эту настройку.
+Ни одна настройка не выбирает профиль: его называет первое слово (`tg work …`) или `TG_PROFILE`. Если нет ни того, ни другого, команда, которая использует аккаунт, останавливается с кодом выхода `2` и перечисляет профили на этом компьютере.
 
 | Настройка | По умолчанию | Что делает | Переопределение на один запуск |
 |---|---|---|---|
@@ -102,9 +102,6 @@ tg shop config show --bot
 | `embedding_model` | провайдер по умолчанию | модель векторизации | `--model` |
 | `embedding_base_url` | провайдер по умолчанию | адрес API для векторизации | `--base-url` |
 | `embedding_dims` | модель по умолчанию | целое число 1–65 536 | `--dims` |
-| `analysis_provider` | `agent` | `agent`, `openai` или `anthropic` | `build --analysis-provider` |
-| `analysis_model` | нет; требуется для `--analyze` | модель анализа | `build --model` |
-| `analysis_base_url` | провайдер по умолчанию | конечная точка API анализа | `build --base-url` |
 | `models` | нет | внешние модели по назначению ([ниже](#models-by-purpose)) | `TG_MODELS_*` переменные |
 | `search_stemmers.cyrillic`, `search_stemmers.latin` | `russian`, `english,spanish` | языки-основы слов для поиска по всему архиву ([ниже](#search-languages)) | нет |
 | `phone_countries` | `ru` | коды стран через запятую, по которым читается номер телефона, записанный без `+` (`es,ru`); побеждает первый подходящий ([поиск](./query-language.md)) | нет |
@@ -114,7 +111,8 @@ tg shop config show --bot
 | `task_first_pass_per_chat` | `0` | сколько задач первая синхронизация может открыть в одном чате | нет |
 | `account_groups.<name>` | нет | именованный список аккаунтов для `--source group:<name>`, например `tg:work,max:Alice,email:me@x` | нет |
 
-При первом создании файл создаётся с правами `0600`, а `config set` пишет его с правами `0644`. Секретов в нём нет.
+Файл записывается с правами `0600`, только для вас, в папке с правами `0700`, и `config set` их сохраняет. Секретов в нём
+нет. `tg doctor` называет файл или его папку, если их могут читать другие пользователи ([диагностика](./diagnostics.md#check-the-installation-tg-personal-doctor)).
 
 ## Разрешения профиля
 
@@ -131,7 +129,10 @@ tg shop config show --bot
 | `ask` | подтверждение y/N в терминале; по умолчанию нет ([ниже](#a-question-before-a-change)) |
 | `allow` | действие выполняется без подтверждения |
 
-**Ключ — это путь к команде**: `messages`, `messages.delete`, `messages.send`, `reactions`, `polls.vote`, `chats.mark-read`, `chats.members.remove`, `contacts`, `account.sessions.end`. Начинается с ресурса — `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` или `metadata` — и должны называть известную команду, иначе запись отклоняется. Неизвестные командные ключи отклоняются `config set` с кодом завершения 2, включая ключи внутри всего объекта `permissions`. `config unset` может удалить старый неизвестный ключ. При чтении существующего файла с неизвестным ключом выводится предупреждение в stderr, и работа продолжается.
+**Ключ — это путь к команде**: `messages`, `messages.delete`, `messages.send`, `reactions`, `messages.sync`, `polls.vote`, `chats.mark-read`, `chats.members.remove`, `contacts`, `account.sessions.end`. Начинается с ресурса — `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` или `metadata` — и должны называть известную команду, иначе запись отклоняется. Неизвестные командные ключи отклоняются `config set` с кодом завершения 2, включая ключи внутри всего объекта `permissions`.
+Сохранённый ключ под известным ресурсом, который не называет ни одной команды, останавливает любую другую команду с ошибкой настроек,
+в которой есть `config unset` для его удаления; `config show`, `set` и `unset` при этом работают. Сохранённый ключ, который не начинается
+с известного ресурса, делает недействительным весь файл, включая `config`, пока его не удалят из файла.
 
 **Выигрывает наиболее конкретный ключ, который вы установили**: в приведенном выше примере разрешен `messages.send`, а все остальные изменения в сообщениях запрещены. Подстановочный знак отсутствует: `messages: readonly` не касается `reactions`, `polls` или `chats`.
 
@@ -146,7 +147,8 @@ tg shop config show --bot
 
 Это работает и в обратную сторону: `messages: allow` профиля тоже скрывает `messages.delete: deny` из `defaults`, и удаление снова требует подтверждения, как по умолчанию.
 
-`inbox`, `review`, `watch`, `serve` и `messages sync`, `export`, `search` показывают сообщения и относятся к `messages`: `messages: deny` блокирует и их. `config`, `session`, `doctor`, `recipients`, `mcp` и обслуживание самой базы не ограничиваются. Один ключ не совпадает с путями команд: `mcp.authority` (по умолчанию `deny`) определяет, может ли MCP-сервер выполнять команды, меняющие возможности следующего запуска; эти команды остаются в списке с текущей доступностью ([разрешения](./permissions.md#let-an-agent-change-its-own-limits)).
+`inbox`, `review`, `watch`, `serve`, `export` и `search` показывают сообщения и относятся к `messages`:
+`messages: deny` блокирует и их, как блокирует и `messages.sync`. `config`, `session`, `doctor`, `recipients`, `mcp` и обслуживание самой базы не ограничиваются. Один ключ не совпадает с путями команд: `mcp.authority` (по умолчанию `deny`) определяет, может ли MCP-сервер выполнять команды, меняющие возможности следующего запуска; эти команды остаются в списке с текущей доступностью ([разрешения](./permissions.md#let-an-agent-change-its-own-limits)).
 
 **Значения по умолчанию позволяют все, кроме нескольких изменений, которые трудно отменить.** Они задают вопросы: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` и `account.sessions.end`. Правила ответа не могут отправлять сообщения, пока вы не разрешите это: `replies.send` — `deny`. Встроенное значение по умолчанию только усиливает ограничения: `messages: readonly` по-прежнему отказывается от удаления, а `messages: allow` сохраняет вопрос перед удалением, пока вы не установите сам `messages.delete`.
 
@@ -202,14 +204,16 @@ tg personal config unset sends_per_hour         # back to the default
 
 ## Опечатки вызывают ошибку
 
-Неизвестная настройка останавливает любую команду с кодом завершения `3`:
+Неизвестная настройка останавливает любую команду, кроме `config` и `doctor`, с кодом завершения `3`.
+Сообщение называет первую проблему и команду, которая её убирает:
 
 ```text
-config.json is not a valid config:
-  profiles.default.limt: unknown setting — the known ones are limit, timeout_ms, …
+/home/alice/.config/tg-cli/config.json: setting limt is not a setting of tg — remove it with `tg work config unset limt`
 ```
 
-Если бы ошибочные настройки игнорировались, команда незаметно использовала бы значение по умолчанию. Поэтому ошибкой также считается ключ `permissions`, не начинающийся с ресурса.
+Если бы ошибочные настройки игнорировались, команда незаметно использовала бы значение по умолчанию. То же относится к ключу в `permissions`, который не называет ни одной команды, в любом разделе файла.
+`tg personal doctor` перечисляет все проблемы файла, каждую с её `config unset`
+([диагностика](./diagnostics.md#check-the-installation-tg-personal-doctor)).
 
 ## Через прокси
 
@@ -252,7 +256,7 @@ Bot API (`tg personal bot …`) и регистрация приложения �
 | `TG_NO_UPDATE_CHECK` | `1` отключает ежедневную строку «Существует более новая версия» |
 | `NO_COLOR` | нет цвета в виде таблицы |
 | `XDG_RUNTIME_DIR` | в Linux, как достигается связка ключей; cron и ssh часто оставляют это без внимания |
-| `TG_EMBEDDING_*`, `TG_ANALYSIS_*`, `TG_MODELS_*` | настройки модели ([ниже](#model-environment-variables)) |
+| `TG_EMBEDDING_*`, `TG_MODELS_*` | настройки модели ([ниже](#model-environment-variables)) |
 
 ## Временные отдельные настройки
 
@@ -283,10 +287,9 @@ tg personal setup
 | `speech_model` | загруженный идентификатор модели в виде строки | профиль |
 | `proxy` | поддерживается URL-адрес прокси-сервера в виде строки | профиль |
 | `embedding_provider` | `local`, `openai` | профиль |
-| `embedding_model`, `analysis_model` | непустая строка, не более 200 символов | профиль |
-| `embedding_base_url`, `analysis_base_url` | URL-адрес HTTP(S) без учетных данных, запроса или фрагмента | профиль |
+| `embedding_model` | непустая строка, не более 200 символов | профиль |
+| `embedding_base_url` | URL-адрес HTTP(S) без учетных данных, запроса или фрагмента | профиль |
 | `embedding_dims` | целое число 1–65 536 | профиль |
-| `analysis_provider` | `agent`, `openai`, `anthropic` | профиль |
 | `models` | объекты назначения, описанные ниже | профиль |
 | `phone_countries` | коды стран через запятую | общий архив через `config set` |
 | `task_categories.<name>`, `account_groups.<name>` | строка, как выше | общий архив через `config set` |
@@ -311,15 +314,14 @@ tg personal setup
 | `models.<purpose>.base_url` | URL HTTP(S) без учётных данных, строки запроса или фрагмента | адрес API провайдера |
 
 Для каждого поля порядок приоритета: `TG_MODELS_<PURPOSE>_PROVIDER`, `_MODEL` или `_BASE_URL`,
-затем ближайшее настроенное поле назначения, явно заданные прежние поля `analysis*` для `analysis`,
-затем переменные окружения и поля конфигурации в `models.default`. Дефисы в названии назначения
+затем ближайшее настроенное поле назначения, затем переменные окружения и поля конфигурации в `models.default`. Дефисы в названии назначения
 становятся подчёркиваниями в имени переменной окружения. Учётные данные не входят в этот объект.
 
 Настройки векторизации и анализа независимы и могут различаться в зависимости от профиля. Конечные точки должны быть HTTP/S без встроенных учетных данных, запросов или фрагментов. Удалённые вызовы векторизации также получают текст запроса поиска MCP. Ключи устанавливаются с помощью `models keys set openai|anthropic` и остаются за пределами `config.json`. Обычный `conversations links rebuild` не запускает удаленный анализ: требуется явный `--analyze`.
 
 ### Переменные окружения для моделей
 
-Устаревшие поля принимают `TG_EMBEDDING_PROVIDER`, `TG_EMBEDDING_MODEL`, `TG_EMBEDDING_BASE_URL`, `TG_EMBEDDING_DIMS`, `TG_ANALYSIS_PROVIDER`, `TG_ANALYSIS_MODEL` и `TG_ANALYSIS_BASE_URL` перед значениями файла; параметры команды имеют преимущество перед ними. `TG_MODELS_DEFAULT_PROVIDER`, `TG_MODELS_DEFAULT_MODEL` и `TG_MODELS_DEFAULT_BASE_URL` предоставляют общие поля в новом формате; замените `DEFAULT` на цель, например `ANALYSIS`. Пустая переменная не отменяет настройку. Неверные значения возвращают `configuration_error`.
+`TG_EMBEDDING_PROVIDER`, `TG_EMBEDDING_MODEL`, `TG_EMBEDDING_BASE_URL` и `TG_EMBEDDING_DIMS` имеют преимущество перед настройками векторизации в файле; параметры команды имеют преимущество перед ними. `TG_MODELS_DEFAULT_PROVIDER`, `TG_MODELS_DEFAULT_MODEL` и `TG_MODELS_DEFAULT_BASE_URL` задают общие поля `models`; замените `DEFAULT` на цель, например `ANALYSIS`. Пустая переменная не отменяет настройку. Неверные значения возвращают `configuration_error`.
 
 ## Дальше
 
