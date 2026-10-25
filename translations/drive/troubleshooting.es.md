@@ -9,6 +9,7 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 | Síntoma | Qué hacer |
 | --- | --- |
 | No sabes qué está configurado | Ejecuta `drive doctor`: versión, si se lee el archivo de ajustes, los perfiles existentes y las rutas. No necesita perfil y no lee el llavero ni el almacén. |
+| Un comando falló antes y necesitas saber qué hizo | Ejecuta `drive runs list status:failed` y luego `drive runs show <run-id>`: las llamadas a Google que hizo, su estado y duración, y su código de error. No necesita perfil; nunca se guardan nombres, ids ni texto de documentos. |
 | No se encuentra `drive` | Reabre la terminal/agente, comprueba que el directorio de comandos globales de npm está en PATH y repite [instalación](./installation.md). |
 | Google bloquea el acceso | Revisa el error mostrado por Google y las políticas Workspace. Con tu propio cliente, comprueba también APIs, consentimiento y usuarios de prueba. |
 | `google-api.disabled` | El propietario del proyecto OAuth debe habilitar la API solicitada; consulta [configuración de API](#google-api-is-disabled). Reconectar o conceder escritura no la habilita. |

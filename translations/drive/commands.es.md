@@ -25,6 +25,8 @@ These options apply to the selected profile and current invocation.
 | `--yes` | answer a policy confirmation; cannot override deny or readonly. |
 | `--allow-dangerous` | answer a permanent-deletion confirmation. |
 | `--permission <key=level>` | temporary policy override; repeat to add keys. |
+| `--record` | keep this run — ids and timings, never document content. |
+| `--no-record` | do not keep this run, even if it fails. |
 
 ## `drive session`
 
@@ -4178,7 +4180,7 @@ drive <profile> config set <key> <json-value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required | max_text_chars, picture_search, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
+| `key` | required | max_text_chars, picture_search, record, keep_runs_for_days, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
 | `json-value` | required | the new value, as JSON. |
 
 | Option | What it does |
@@ -4187,7 +4189,7 @@ drive <profile> config set <key> <json-value> [options]
 
 **Returns:** set one setting of this profile, or of the defaults
 
-**Example:** `drive personal config set max_text_chars 100000`, `drive personal config set permissions.files '"readonly"' --defaults`
+**Example:** `drive personal config set max_text_chars 100000`, `drive personal config set permissions.files '"readonly"' --defaults`, `drive personal config set record true --defaults`
 
 ## `drive complete`
 
@@ -4321,7 +4323,7 @@ drive <profile> mcp [options]
 
 **Returns:** serve drive's commands to an agent over MCP: search, then read or write
 
-**Example:** `drive personal mcp`, `drive personal mcp --http --public-url https://<name>.ts.net`, `drive personal mcp --revoke`
+**Example:** `drive personal mcp --tools`, `drive personal mcp`, `drive personal mcp --http --public-url https://laptop.example.ts.net`
 
 ## `drive commands`
 
@@ -4406,6 +4408,67 @@ drive upgrade [options]
 **Returns:** upgrade drive with the package manager that installed it; --check only looks
 
 **Example:** `drive upgrade --check`, `drive upgrade`
+
+## `drive runs`
+
+recorded runs — what this tool did, and when
+
+### `drive runs list`
+
+recorded runs, newest first
+
+```sh
+drive runs list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. Default: `20`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+
+**Returns:** run — run_id, command, profile, started_at, status, cli_version, completed_at, requests, and 15 more; every field: drive commands info runs list
+
+**Example:** `drive personal runs list --limit 10`
+
+### `drive runs show`
+
+one run: what it was, how it ended, and every event it logged
+
+```sh
+drive runs show <run-id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `run-id` | required | an id from `drive runs list`. |
+
+| Option | What it does |
+|---|---|
+| `--problems` | only failed responses, warnings and crashes. |
+
+**Returns:** run details — run_id, command, profile, started_at, status, cli_version, directory, event_count, and 14 more; every field: drive commands info runs show
+
+**Example:** `drive personal runs show run-101`
+
+### `drive runs path`
+
+the directory holding one run
+
+```sh
+drive runs path <run-id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `run-id` | required | an id from `drive runs list`. |
+
+**Returns:** run location — path; every field: drive commands info runs path
+
+**Example:** `drive personal runs path run-101`
 
 ## `drive guide`
 
