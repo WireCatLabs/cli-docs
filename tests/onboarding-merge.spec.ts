@@ -57,7 +57,7 @@ for (const lang of ["en", "ru", "es"] as const) {
 
   for (const tool of ["tg", "max"]) {
     test(`${lang}/${tool}: installation deep links lead from landing to tool guides`, async ({ page }) => {
-      await page.goto(`/${lang}`)
+      await page.goto(lang === "en" ? "/" : `/${lang}`)
       const menu = page.locator(".site-header [data-connect]")
       await menu.locator(":scope > summary").click()
       await menu.locator(`[data-connect-provider="${tool}"]`).click()

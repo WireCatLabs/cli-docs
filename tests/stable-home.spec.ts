@@ -16,10 +16,8 @@ test("English root is complete and stable with JavaScript disabled and non-Engli
   await context.close()
 })
 
-test("legacy English home redirects permanently without catching English subpages", async ({ request }) => {
-  const redirect = await request.get("/en", { maxRedirects: 0 })
-  expect(redirect.status()).toBe(301)
-  expect(redirect.headers().location).toBe("/")
+test("English home is published only at /, and English subpages stay under /en", async ({ request }) => {
+  expect((await request.get("/en", { maxRedirects: 0 })).status()).toBe(404)
   expect((await request.get("/en/docs/installation")).status()).toBe(200)
   expect((await request.get("/en/about")).status()).toBe(200)
 })
