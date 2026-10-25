@@ -140,8 +140,11 @@ documentos de un perfil de Drive:
 memo search notes "budget decision" --source drive:personal --json
 ```
 
-Indica varios perfiles separados por comas, como `--source drive:personal,drive:work`. Un perfil que aún no
-se ha sincronizado se rechaza con la lista de perfiles que tiene la base. `memo search all` ordena mensajes,
+Los documentos de cada cuenta de Google se guardan en su propia cuenta dentro de la base compartida, aparte de
+tus notas. `drive:personal` nombra esa cuenta por su perfil de drive; `google-drive:<id>` nombra la misma cuenta
+por su ID de Google, el `principal` guardado para el perfil en `config.json`. Indica varios perfiles separados
+por comas, como `--source drive:personal,drive:work`. Un perfil que aún no se ha sincronizado se rechaza con la
+lista de perfiles que tiene la base. `memo search all` ordena mensajes,
 correo y notas juntos y no tiene filtro de origen; `drive personal search` devuelve los mismos documentos con
 los campos propios de Drive.
 
