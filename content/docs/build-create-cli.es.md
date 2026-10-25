@@ -3,13 +3,27 @@ title: "Crea tu CLI"
 description: "Conecta un servicio que WireCat aún no admite: crea tu propia herramienta con nuestra plantilla y tu agente de IA, con guías para cada paso."
 ---
 
-Puedes crear tu propia herramienta WireCat para cualquier servicio o API, y rápido, con nuestra plantilla y tu agente
-de IA. ¿Usas un CRM, un gestor de tareas o una app de notas que WireCat aún no admite? Añádelo tú. Tu herramienta
-funciona como las demás: tú y tus agentes podéis buscar en ella, preguntar por ella y actuar en ella junto a tus
-chats, tu correo y tus reuniones.
+Puedes crear tu propia herramienta de línea de comandos para cualquier servicio o API, y rápido, con nuestra
+plantilla y tu agente de IA. ¿Usas un CRM, un gestor de tareas o una app de notas que WireCat aún no admite? Añádelo
+tú.
 
 Esta página muestra lo que hace falta, lo que obtienes y por dónde empezar. Las guías siguientes te acompañan en cada
 parte.
+
+## Dos formas de usarla
+
+Las dos empiezan desde la misma plantilla y tienen la misma base. La única diferencia es hasta dónde conectas tu
+herramienta.
+
+- **Una herramienta independiente.** Quieres una herramienta de línea de comandos rápida para un servicio, y nada más.
+  La plantilla te da la base desde el primer día: los datos del servicio guardados en tu ordenador, búsqueda rápida en
+  ellos, memoria para lo que aprende tu agente, un servidor para agentes de IA e inicio de sesión seguro. No necesitas
+  ninguna otra herramienta WireCat.
+- **Parte de WireCat.** También usas WireCat para chats, correo o reuniones y quieres una sola búsqueda sobre todo.
+  Entonces conecta tu herramienta con las demás: lo que guarda queda junto a todo lo demás y una sola pregunta lo
+  encuentra. Hacen falta unos pasos más, descritos en [Añadir una fuente](./build-add-source.md).
+
+Puedes empezar con la primera y conectar tu herramienta más tarde.
 
 ## Cómo construirla, en breve
 
@@ -26,8 +40,12 @@ necesites.
 
 ## Qué le da WireCat a tu herramienta
 
-- **Búsqueda en todo a la vez.** Lo que guarda tu herramienta está junto a los mensajes, el correo, las reuniones y
-  los documentos de las demás herramientas, y una sola pregunta busca en todo.
+- **Tus datos en tu ordenador, con búsqueda rápida.** Lo que guarda tu herramienta queda en un archivo local. La
+  búsqueda encuentra palabras en cualquier forma en inglés, ruso y español, y por significado si la activas.
+- **Memoria para tu agente.** Tu agente puede guardar lo que aprendió —un resumen, una preferencia— y encontrarlo
+  después.
+- **Una sola búsqueda en todas tus herramientas,** si la conectas: lo que guarda queda junto a los mensajes, el
+  correo, las reuniones y los documentos de las demás herramientas.
 - **Trabajo con agentes de IA.** Cada comando de tu herramienta está listo para un agente, y tú decides qué puede
   cambiar.
 - **Tus cuentas no se mezclan.** Siempre indicas qué cuenta usa un comando, así nada va a la cuenta equivocada.
