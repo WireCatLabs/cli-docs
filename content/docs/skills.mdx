@@ -1,0 +1,103 @@
+---
+title: "Where to get WireCat skills"
+description: "Install a tool's skill through ClawHub, Hermes, skills.sh or the Claude Code plugin marketplace, with one command each."
+---
+
+A **skill** is an instruction file, `SKILL.md`, that teaches your AI agent the commands of one WireCat
+tool. Each tool installs its own skill with `skill install` (see [Connect your AI agent](./agents.mdx#connect-instructions)).
+This page lists the skill directories that offer the same skills, for when you prefer to install and
+update skills the way your agent does. By the end, your agent has the skill it needs, from the
+source you chose.
+
+A skill only teaches. The tool itself must still be installed and logged in on the computer where
+your agent runs: see [Installation](./installation.mdx).
+
+## Skill names
+
+The examples use `tg` for Telegram. For another tool, replace the repository and the skill name:
+
+- **Telegram** (`tg`): repository `WireCatLabs/tg-cli`, skill `tg-cli`
+- **MAX** (`max`): repository `WireCatLabs/max-cli`, skill `max-cli`
+- **WhatsApp** (`wa`): repository `WireCatLabs/whatsapp-cli`, skill `whatsapp-cli`
+- **Google Drive** (`drive`): repository `WireCatLabs/drive-cli`, skill `drive-cli`
+- **Zoom** (`zm`): repository `WireCatLabs/zoom-cli`, skill `zoom-cli`
+- **Memo** (`memo`): repository `WireCatLabs/cli-memo`, skill `cli-memo`
+
+## From the tool itself
+
+This is the copy that matches the tool version you installed. It works for Codex, Claude Code,
+Cursor, Gemini CLI and OpenClaw:
+
+```sh
+tg skill install
+```
+
+Run it again after you update the tool.
+
+<a id="hermes" />
+
+## Hermes Agent
+
+This site publishes every tool's skill, at the release these pages describe, in a skill index
+that Hermes reads. Install one skill:
+
+```sh
+hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
+```
+
+`hermes skills search https://wirecat.dev --source well-known` lists them all. Hermes keeps the
+source, so `hermes skills update` refreshes the skill later.
+
+You can also add a tool's repository as a source. `hermes skills search tg-cli` then shows its
+skill and the name to install it with:
+
+```sh
+hermes skills tap add WireCatLabs/tg-cli
+```
+
+A repository source reads the repository's main branch, which can be ahead of the released tool.
+[Hermes skills guide](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/#skills-hub).
+
+<a id="openclaw" />
+
+## OpenClaw and ClawHub
+
+**Coming soon.** ClawHub is OpenClaw's skill directory. When the WireCat skills are listed there,
+one command installs a skill for every workspace:
+
+```sh
+openclaw skills install @wirecat/tg --global
+```
+
+Until then, `tg skill install --for agents` gives OpenClaw the skill, because OpenClaw reads
+`~/.agents/skills`. [OpenClaw skills guide](https://docs.openclaw.ai/tools/skills).
+
+## skills.sh
+
+The `skills` command from skills.sh installs a skill from a repository into the folders of the
+agents it finds on your computer:
+
+```sh
+npx skills add WireCatLabs/tg-cli --skill tg-cli
+```
+
+Keep `--skill`: some repositories also hold skills for people who work on the tool itself. Like a
+Hermes repository source, it reads the main branch. [skills.sh](https://skills.sh/).
+
+## Claude Code plugin marketplace
+
+**Coming soon.** A WireCat marketplace for Claude Code, with one plugin per tool that holds only its
+skill. When it is published, add it in Claude Code with:
+
+```text
+/plugin marketplace add WireCatLabs/claude-plugins
+```
+
+Until then, `tg skill install --for claude` installs the skill for Claude Code.
+[Claude Code plugins guide](https://code.claude.com/docs/en/plugins).
+
+## Check the result
+
+Start a new agent session and run the check in [Connect your AI agent](./agents.mdx#check-connection).
+If the agent has the skill but cannot run the tool, see the notes for
+[Hermes](./agents.mdx#hermes) and [OpenClaw](./agents.mdx#openclaw).

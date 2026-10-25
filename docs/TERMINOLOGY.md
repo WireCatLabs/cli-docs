@@ -21,6 +21,8 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Address-book entry | contact | контакт | contacto | A contact saved in a messenger's address book. Do not use contact as a synonym for every person. |
 | Separate automated messenger account | bot | бот | bot | A messenger bot and its account/API. Do not call an AI agent a bot merely because it automates a task. |
 | Program the agent runs | command-line tool; CLI where already introduced | инструмент командной строки; CLI | herramienta de línea de comandos; CLI | The messenger tool used through commands. Introduce CLI during setup; task guides can assume the reader knows it. Keep actual command names. |
+| Instructions for one tool | skill | навык | skill | The `SKILL.md` file that teaches an agent a tool's commands. It holds no login. Keep the file and command names. |
+| Place that lists skills from many authors | skill directory | каталог навыков | directorio de skills | ClawHub, skills.sh, a Hermes source or a plugin marketplace. Name the directory; do not call it a store. |
 | Reader's instruction | request | запрос | petición | What the reader asks their agent to do. Prompt may remain in API names or technical references; use request in ordinary task instructions. |
 
 ## Search, replies and access

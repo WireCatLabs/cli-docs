@@ -9,7 +9,7 @@ Conecta tu agente al mensajero para encontrar mensajes, reunir contexto y prepar
 
 Un **agente de IA** es un programa que utiliza herramientas para realizar una petición. Puede encontrar mensajes y resumirlos. Tú describes la tarea; el agente elige las acciones.
 
-Una **CLI** es una herramienta de línea de comandos: se controla con instrucciones de texto. Un agente con terminal puede ejecutarla en tu ordenador o servidor. Un chat sin terminal se conecta mediante **MCP**, que permite al agente utilizar la herramienta a través de una conexión. No necesitas memorizar comandos.
+Una **CLI** es una herramienta de línea de comandos: se controla con instrucciones de texto. Un agente con terminal la ejecuta en tu ordenador o servidor, igual que lo harías tú en una terminal. Un **skill** enseña los comandos al agente, así que no necesitas memorizarlos. Las aplicaciones que no pueden ejecutar programas tienen su propia vía [al final de esta página](#chat-apps-and-remote-agents).
 
 <a id="dónde-quieres-usar-el-asistente" />
 
@@ -17,7 +17,7 @@ Una **CLI** es una herramienta de línea de comandos: se controla con instruccio
 
 - **[En ChatGPT, Claude u otro chat de IA en el navegador o móvil](./browser-apps.mdx)** — Sigue la guía de navegador y móvil.
 - **[En Codex, Claude Code, Cursor, Gemini CLI, Hermes u OpenClaw con terminal](#connect-instructions)** — Conecta la herramienta abajo.
-- **[En una aplicación con ajustes MCP, como Claude Desktop](./mcp.mdx)** — Sigue la guía MCP.
+- **[Mi aplicación no puede ejecutar comandos, o mi agente trabaja en otro ordenador](#chat-apps-and-remote-agents)** — Mira las otras vías, incluida una conexión MCP opcional.
 - **[Quiero comprobar una conexión existente](#check-connection)** — Pide la cuenta y los chats.
 - **[La herramienta o cuenta no están configuradas](./installation.mdx)** — Empieza por instalación e inicio de sesión.
 
@@ -56,7 +56,7 @@ Un agente no tiene terminal en la que dibujar un código QR ni desde la que abri
 - **Zoom:** sin terminal, `zm personal session start` imprime `Open this URL to approve Zoom login:` y la URL. El agente te da la URL como enlace. Ábrela en un navegador de este mismo ordenador, porque Zoom responde a un receptor que está aquí.
 - **Google Drive:** `drive personal session start` siempre imprime su URL de acceso a Google y además intenta abrir un navegador. Si no se abre ninguno, el agente te da la URL impresa como enlace para abrirla en este mismo ordenador.
 
-El acceso con número de teléfono, la contraseña de verificación en dos pasos y el primer registro de tu app de Telegram siguen necesitándote en una terminal. El acceso no es una herramienta MCP: un agente que solo tiene MCP te pide que ejecutes el comando tú.
+El acceso con número de teléfono, la contraseña de verificación en dos pasos y el primer registro de tu app de Telegram siguen necesitándote en una terminal.
 
 ### La cuenta ya está conectada
 
@@ -76,7 +76,8 @@ Dónde busca cada agente el archivo del skill:
 - **OpenClaw**: `~/.agents/skills/tg-cli/SKILL.md`; `tg skill install --for agents`, ver [OpenClaw](#openclaw).
 
 `~` es tu carpeta personal, también en Windows. Sin `--for`, `skill install` escribe las dos
-copias: en `.agents` y en `.claude`.
+copias: en `.agents` y en `.claude`. También puedes conseguir los skills en un directorio de skills,
+como ClawHub o skills.sh: [Dónde conseguir los skills de WireCat](./skills.mdx).
 
 **Después de actualizar la herramienta, vuelve a ejecutar `tg skill install`**, para que las
 instrucciones correspondan a la nueva versión. Para Hermes, o cualquier archivo guardado a mano, vuelve a
@@ -122,11 +123,11 @@ Si no aparece, abre una nueva conversación o reinicia Codex. [Guía de Codex](h
 
 Usa **Agent** con acceso a la terminal y pídele que use la herramienta. Puedes elegir `tg-cli` con
 `/` en el chat de Agent. Si no aparece, reinicia Cursor o pide al agente que lea `tg skill show`.
-También puedes [conectarlo por MCP](./mcp.mdx#cursor-y-claude-desktop). [Guía de Cursor](https://cursor.com/help/customization/skills).
+[Guía de Cursor](https://cursor.com/help/customization/skills).
 
 ### Claude Code
 
-Usa `/tg-cli` en una nueva sesión local. Si el terminal ya funciona, MCP es opcional.
+Usa `/tg-cli` en una nueva sesión local.
 [Guía de Claude Code](https://code.claude.com/docs/en/skills).
 
 ### Gemini CLI
@@ -136,25 +137,68 @@ Comprueba los skills disponibles con `gemini skills list`. En una sesión abiert
 
 ### Hermes
 
-Pide a Hermes que guarde la salida exacta de `tg skill show` en
-`~/.hermes/skills/tg-cli/SKILL.md`, conservando el frontmatter y el texto en UTF-8. En macOS o
-Linux puedes hacerlo tú:
+**Instala el skill.** Hermes Agent lee los skills de `~/.hermes/skills`. Pide a Hermes que guarde la
+salida exacta de `tg skill show` en `~/.hermes/skills/tg-cli/SKILL.md`, conservando el frontmatter y
+el texto en UTF-8. En macOS o Linux puedes hacerlo tú:
 
 ```sh
 mkdir -p ~/.hermes/skills/tg-cli
 tg skill show > ~/.hermes/skills/tg-cli/SKILL.md
 ```
 
+Hermes también puede instalar el skill desde este sitio; las demás fuentes están en
+[Dónde conseguir los skills de WireCat](./skills.mdx#hermes):
+
+```sh
+hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
+```
+
 Después abre una nueva sesión y repite la comprobación de arriba. El terminal de Hermes debe tener
 la herramienta y el mismo acceso a la cuenta.
+
+**Próximamente:** `skill install --for hermes` lo hará en un solo paso. Pondrá el skill en
+`~/.agents/skills` y añadirá esa carpeta a `skills.external_dirs` en los ajustes de Hermes. Cuando tu
+herramienta lo tenga, borra la copia de `~/.hermes/skills/tg-cli`: Hermes prefiere esa carpeta, así
+que una copia antigua ocultaría la nueva.
+
+**Si Hermes no encuentra `tg`.** Hermes ejecuta los comandos con el entorno de un `bash` de inicio de
+sesión (`bash -l`), que guarda al empezar la sesión. Ese shell lee `~/.bash_profile` si existe, y si
+no, `~/.profile`. No lee `~/.zshrc`. Si añadiste la carpeta de npm al `PATH` solo en `~/.zshrc`, copia
+esa línea `export PATH=…` al archivo que lee bash, abre una nueva sesión de Hermes y pídele que
+ejecute `tg --version`.
+
+**Si hablas con Hermes desde un chat.** Su gateway te permite escribir a Hermes desde Telegram,
+Discord y otros chats. Cualquiera que el gateway acepte puede pedir a Hermes que ejecute `tg` con tu
+cuenta: leer tus chats o enviar mensajes en tu nombre. Deja solo a ti en su lista de usuarios
+permitidos y considera un perfil que solo lea: consulta [Permisos](./permissions.mdx).
 [Guía de Hermes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/).
 
 ### OpenClaw
 
-Con su carpeta de estado predeterminada, OpenClaw también lee `~/.agents/skills`, así que basta con
-`tg skill install`. Si moviste esa carpeta con `OPENCLAW_STATE_DIR`, pide a OpenClaw que guarde la
-salida exacta de `tg skill show` en `skills/tg-cli/SKILL.md` dentro de ella. Comprueba que el skill
-esté disponible para tu agente y abre una nueva sesión. La herramienta debe estar instalada en el ordenador o servidor donde se ejecuta OpenClaw.
+**Instala el skill.** Con su carpeta de estado predeterminada, OpenClaw también lee
+`~/.agents/skills`, así que basta con `tg skill install --for agents`. Si moviste esa carpeta con
+`OPENCLAW_STATE_DIR`, pide a OpenClaw que guarde la salida exacta de `tg skill show` en
+`skills/tg-cli/SKILL.md` dentro de ella. Comprueba que el skill esté disponible para tu agente y abre
+una nueva sesión. La herramienta debe estar instalada en el ordenador o servidor donde se ejecuta
+OpenClaw.
+
+**Si OpenClaw no encuentra `tg`.** El servicio en segundo plano de OpenClaw arranca con un `PATH`
+corto, como `/usr/local/bin:/usr/bin:/bin` en Linux, y la carpeta global de npm puede no estar en él.
+Encuentra esa carpeta con `npm prefix -g`; en macOS y Linux los programas están en su subcarpeta
+`bin`. Detén el gateway de OpenClaw, añade la carpeta y vuelve a iniciar el gateway:
+
+```sh
+openclaw config set tools.exec.pathPrepend '["/home/you/.npm-global/bin"]' --strict-json
+```
+
+Cambia la ruta por la tuya. El valor sustituye toda la lista, así que incluye las carpetas que ya
+tuvieras ahí.
+
+**Si hablas con OpenClaw desde un chat.** Sus canales (channels) conectan OpenClaw con Telegram,
+WhatsApp, Discord y otros chats. Cualquiera que un canal acepte puede pedir a OpenClaw que ejecute
+`tg` con tu cuenta: leer tus chats o enviar mensajes en tu nombre. Acepta solo a ti en sus ajustes de
+emparejamiento (pairing) o lista de permitidos, y considera un perfil que solo lea: consulta
+[Permisos](./permissions.mdx).
 [Guía de OpenClaw](https://docs.openclaw.ai/tools/skills).
 
 <a id="otros-clientes" />
@@ -167,7 +211,23 @@ Los ejemplos anteriores no son una lista cerrada. Cualquier agente con acceso a 
 
 Un agente en la nube trabaja en otro ordenador. Instala allí la herramienta e inicia sesión; tu acceso local no está disponible para él.
 
-Si usa MCP, sigue la [configuración MCP](./mcp.mdx); para un chat del navegador, usa la [conexión desde el navegador](./browser-apps.mdx). Las opciones de instalación preparadas cubren clientes concretos; los demás usan sus propios ajustes de instrucciones o herramientas.
+Las opciones de instalación preparadas cubren clientes concretos; los demás usan sus propios ajustes de instrucciones o herramientas.
+
+<a id="chat-apps-and-remote-agents" />
+
+## Para aplicaciones de chat y agentes remotos
+
+Todo lo anterior ejecuta directamente la herramienta de línea de comandos. Para un agente en el mismo
+ordenador es la vía más rápida, y puedes ejecutar tú el mismo comando cuando algo no cuadre. **MCP**
+es una conexión opcional para aplicaciones que no pueden ejecutar programas:
+
+- **ChatGPT, Claude u otro chat en el navegador o en una app del móvil:** sigue la
+  [guía de navegador y móvil](./browser-apps.mdx).
+- **Una aplicación de escritorio con ajustes MCP, como Claude Desktop:** sigue la [configuración MCP](./mcp.mdx#cursor-y-claude-desktop).
+- **Un agente en otro ordenador:** instala allí la herramienta e inicia sesión, como se explica en
+  [Otro agente](#other-agents). Si solo puede llegar a tu ordenador a través de una conexión, usa la [configuración MCP](./mcp.mdx).
+
+El acceso no es una herramienta MCP: un agente que solo tiene MCP te pide que ejecutes tú el comando de inicio de sesión.
 
 ## Empieza tu primera tarea
 
