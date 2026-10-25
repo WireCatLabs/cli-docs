@@ -85,7 +85,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     )
     await expect(page.locator("main")).toContainText("zm personal meetings projects evidence RES")
     expect(text).toContain("`item.page.next_cursor`")
-    expect(text).toContain("meeting_project_evidence")
+    expect(text).toContain('`{ "command": "meetings projects evidence", "arguments": { … } }`')
     expect(text).toContain('association: "unconfirmed-word-evidence"')
     expect(text).toContain('archive_completeness: "unknown"')
     expect(text).toContain("UTC")
