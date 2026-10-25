@@ -7,6 +7,27 @@ tablas en tu ordenador y tus compañeros trabajan en Documentos u Hojas de cálc
 La sincronización envía cambios locales y recupera las ediciones compatibles de Google.
 Si hay un conflicto, lo muestra antes de elegir entre los cambios.
 
+## Cuándo basta un archivo Markdown en Drive
+
+Documentos de Google ya abre archivos `.md` directamente: las personas los leen y editan en Documentos, y el
+archivo sigue siendo Markdown. Pon el archivo en Drive con `drive personal files upload` o con la aplicación de
+escritorio de Google, y `drive personal sync` lo lee como cualquier otro documento. No hace falta un espejo
+cuando editan las personas y el archivo puede cambiar como lo escribe Documentos.
+
+Usa un espejo cuando:
+
+- un programa, o tú desde un editor local, sigue cambiando un documento mientras otras personas lo editan
+  también en Google. Google solo permite a los programas cambiar un archivo Markdown sustituyéndolo entero,
+  mientras que el Documento de Google de un espejo acepta ediciones pequeñas junto a las suyas;
+- los comentarios deben quedar fuera del archivo. Documentos escribe cada comentario dentro del propio
+  archivo `.md`, con el nombre y el texto de quien comenta, así que viaja adonde vaya el archivo, también a
+  un repositorio git;
+- un archivo CSV debe convertirse en una Hoja de cálculo.
+
+Las pruebas en que se basa esto están en cli-testing:
+[qué pueden hacer los programas con el archivo](https://github.com/WireCatLabs/cli-testing/tree/main/performance/documents/native-markdown)
+y [qué escribe en él una edición en Documentos](https://github.com/WireCatLabs/cli-testing/blob/main/performance/documents/drive-push/README.md#google-docs-own-markdown-editing-2026-10-23).
+
 ## Conectar una carpeta
 
 Inicia sesión en el perfil con permiso de escritura de Google y elige la carpeta local y su destino:
@@ -42,25 +63,10 @@ una copia de seguridad completa de documentos de Google.
 
 ## Imágenes locales
 
-Documentos de Google solo copia una imagen desde una dirección web pública, así que una imagen local como
-`![chart](pics/chart.png)` queda como ese texto en el Documento salvo que des a la sincronización la dirección de tu túnel:
-
-```sh
-drive personal mirrors sync --public-url https://<name>.ts.net
-```
-
-Entonces Drive sirve cada imagen local nueva a través del túnel, en una dirección aleatoria que solo funciona
-mientras Google copia la imagen, y la cierra justo después. No se comparte nada de tu Google Drive, y Google
-guarda su propia copia dentro del Documento. Es el mismo túnel que usas para el [MCP remoto](./remote.md);
-debe reenviar al `--port` de este ordenador (8765 por defecto). Si `drive mcp --http` ocupa ese puerto,
-detenlo durante la sincronización o pasa otro `--port` y apunta el túnel allí; la sincronización no empieza
-mientras el puerto esté ocupado.
-
-Solo se insertan archivos PNG, JPEG y GIF de menos de 50 MB dentro de la carpeta espejada. Cualquier otra
-imagen queda como texto, con un aviso. Si Google no puede obtener una imagen, el resto del Documento se
-escribe igualmente, la imagen queda como texto con un aviso y la siguiente sincronización con `--public-url`
-lo intenta de nuevo. Una imagen que ya está en el Documento se mantiene en las siguientes sincronizaciones sin
-`--public-url`. `mirrors watch` acepta las mismas dos opciones.
+Una imagen local como `![chart](pics/chart.png)` queda como ese texto en el Documento; una imagen con un enlace
+`https://` aparece como imagen. Documentos de Google solo inserta una imagen descargándola desde una dirección web
+pública como visitante anónimo, así que un archivo privado, en tu ordenador o en tu Drive, no puede colocarse en
+un Documento.
 
 ## Elegir un lado tras un conflicto
 

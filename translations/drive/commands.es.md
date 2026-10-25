@@ -56,10 +56,14 @@ drive <profile> session start [options]
 list the configured profiles; credentials are never printed
 
 ```sh
-drive <profile> session list
+drive <profile> session list [query]
 ```
 
-**Returns:** list the configured profiles; credentials are never printed
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** drive session — profile, selected_folders, storage; every field: drive commands info session list
 
 **Example:** `drive personal session list`
 
@@ -104,10 +108,14 @@ drive <profile> folders add <folder>
 list the folder ids sync imports
 
 ```sh
-drive <profile> folders list
+drive <profile> folders list [query]
 ```
 
-**Returns:** list the folder ids sync imports
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** drive selected folder — id; every field: drive commands info folders list
 
 **Example:** `drive personal folders list`
 
@@ -495,14 +503,15 @@ add owner tags to cached files or folders
 list local tags on a cached file or folder
 
 ```sh
-drive <profile> catalog tags list <file>
+drive <profile> catalog tags list <file> [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `file` | required | Google file or folder id, or its Drive URL. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** list local tags on a cached file or folder
+**Returns:** drive document tag — tag; every field: drive commands info catalog tags list
 
 **Example:** `drive personal catalog tags list FOLDER_ID --offline`
 
@@ -553,14 +562,15 @@ label imported documents; labels survive a sync
 list a document's tags
 
 ```sh
-drive <profile> tags list <document>
+drive <profile> tags list <document> [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** list a document's tags
+**Returns:** drive document tag — tag; every field: drive commands info tags list
 
 **Example:** `drive personal tags list DOC_ID`
 
@@ -611,14 +621,15 @@ connect a document to people, projects, notes and other references
 list a document's relationships
 
 ```sh
-drive <profile> relationships list <document>
+drive <profile> relationships list <document> [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** list a document's relationships
+**Returns:** drive document relationship — id, from, to, kind, role, confirmed, origin; every field: drive commands info relationships list
 
 **Example:** `drive personal relationships list DOC_ID`
 
@@ -706,7 +717,7 @@ drive <profile> notes list <document> [query] [options]
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog. |
-| `query` | optional | text:word or text:"a phrase" a note must contain. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
@@ -1044,14 +1055,15 @@ the Google accounts seen on a document, and the people they belong to
 list the owners and last editor Google shows for a document
 
 ```sh
-drive <profile> identities list <document>
+drive <profile> identities list <document> [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** list the owners and last editor Google shows for a document
+**Returns:** drive document identity — google_id, role, person; every field: drive commands info identities list
 
 **Example:** `drive personal identities list DOC_ID`
 
@@ -3635,17 +3647,18 @@ drive <profile> files list [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | optional | Google Drive query the files match; trashed = false when omitted. A time without a zone is read in this computer's zone and sent as UTC. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many items one page holds. Default: `100`. |
 | `--cursor <cursor>` | continue from page.next_cursor of the previous answer. |
 | `--parent <id>` | only the files directly inside this folder id. |
+| `--timezone <zone>` | zone for query dates without an offset. |
 
-**Returns:** list files in Google Drive, one page at a time
+**Returns:** drive remote file — id, name, trashed, modified_time, created_time, viewed_by_me_time; every field: drive commands info files list
 
-**Example:** `drive personal files list --parent FOLDER_ID`, `drive personal files list "name contains 'plan'" --limit 20`
+**Example:** `drive personal files list --parent FOLDER_ID`, `drive personal files list 'name:"Example plan"' --limit 20`
 
 ### `drive files get`
 
@@ -3879,19 +3892,20 @@ drive <profile> comments reopen <file> <comment-id>
 list a file's comments
 
 ```sh
-drive <profile> comments list <file> [options]
+drive <profile> comments list <file> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `file` | required | file id or Google Drive URL. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many items one page holds. Default: `100`. |
 | `--cursor <cursor>` | continue from page.next_cursor of the previous answer. |
 
-**Returns:** list a file's comments
+**Returns:** drive remote comment — id; every field: drive commands info comments list
 
 **Example:** `drive personal comments list FILE_ID`
 
@@ -3921,19 +3935,20 @@ read the permissions of a file in Google Drive
 list a file's permissions
 
 ```sh
-drive <profile> permissions list <file> [options]
+drive <profile> permissions list <file> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `file` | required | file id or Google Drive URL. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many items one page holds. Default: `100`. |
 | `--cursor <cursor>` | continue from page.next_cursor of the previous answer. |
 
-**Returns:** list a file's permissions
+**Returns:** drive remote permission — id; every field: drive commands info permissions list
 
 **Example:** `drive personal permissions list FILE_ID`
 
@@ -3963,19 +3978,20 @@ read the revisions of a file in Google Drive
 list a file's revisions
 
 ```sh
-drive <profile> revisions list <file> [options]
+drive <profile> revisions list <file> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `file` | required | file id or Google Drive URL. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many items one page holds. Default: `100`. |
 | `--cursor <cursor>` | continue from page.next_cursor of the previous answer. |
 
-**Returns:** list a file's revisions
+**Returns:** drive remote revision — id; every field: drive commands info revisions list
 
 **Example:** `drive personal revisions list FILE_ID`
 
@@ -4044,10 +4060,14 @@ drive <profile> mirrors add <path> [options]
 list this profile's mirrors
 
 ```sh
-drive <profile> mirrors list
+drive <profile> mirrors list [query]
 ```
 
-**Returns:** list this profile's mirrors
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** drive mirror — id, path, folder; every field: drive commands info mirrors list
 
 **Example:** `drive personal mirrors list`
 
@@ -4103,12 +4123,10 @@ drive <profile> mirrors sync [id] [options]
 |---|---|
 | `--keep <side>` | where a part changed on both sides, keep this side. One of: `local`, `google`, `both`. |
 | `--replace` | same as --keep local, and create again files deleted in Google. |
-| `--public-url <url>` | the tunnel's https address, e.g. https://<name>.ts.net: local images go into Docs from a one-off address on it. |
-| `--port <port>` | the local port the tunnel forwards to (default 8765). |
 
 **Returns:** sync both ways with Docs and Sheets; a part changed on both sides is reported
 
-**Example:** `drive personal mirrors sync`, `drive personal mirrors sync 1a2b3c4d --keep google`, `drive personal mirrors sync --public-url https://<name>.ts.net`
+**Example:** `drive personal mirrors sync`, `drive personal mirrors sync 1a2b3c4d --keep google`, `drive personal mirrors sync 1a2b3c4d --replace`
 
 ### `drive mirrors watch`
 
@@ -4127,8 +4145,6 @@ drive <profile> mirrors watch [id] [options]
 | Option | What it does |
 |---|---|
 | `--every <duration>` | how often to ask Google for changes. Default: `60s`. |
-| `--public-url <url>` | the tunnel's https address, e.g. https://<name>.ts.net: local images go into Docs from a one-off address on it. |
-| `--port <port>` | the local port the tunnel forwards to (default 8765). |
 
 **Returns:** keep syncing both ways until Ctrl-C or --timeout
 
