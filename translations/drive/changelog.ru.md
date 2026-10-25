@@ -4,6 +4,26 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.38.0 — 25.10.2026
+
+### Changed — may break callers
+
+- cli-core 0.432.0 and cli-base 0.57.1.
+
+### Fixed
+
+- **A bare `drive --version` answers before the program loads**: about 50 module files in place of 1,150 (cli-core's `cli/start`). `--version` with anything else on the line goes through the program as before.
+
+## 0.37.0 — 25.10.2026
+
+### Added
+
+- `drive store info --json` describes the shared store: where it is, its schema against the one drive reads (`schema.reason`, and `schema.upgrade` — what drive's next run moves it to), and which tools used it. It opens the store read-only and needs no profile, so WireCat Desktop can tell whether drive can read the store. The `store` group's help now says it covers the shared store too.
+
+### Changed — may break callers
+
+- **Run recording comes from cli-core 0.430.0** (`recordRuns`) in place of drive's own copy. Runs are kept as before — every failed command, a usage error before any command included, a successful one under `--record` or `defaults.record: true`, nothing under `--no-record` — and Google requests are logged as before. A run with no profile now leaves `profile` out of `runs list` and `runs show` instead of `""`.
+
 ## 0.36.0 — 25.10.2026
 
 ### Security

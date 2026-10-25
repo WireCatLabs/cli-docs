@@ -2159,56 +2159,6 @@
     }
   },
   {
-    "tool": "drive",
-    "slug": "configuration",
-    "reason": "User guides carry no package release numbers (AUTHORING.md); the native 0.36.0 page names the release that saved config.json as 0644. Native fix belongs in drive-cli docs/configuration.md.",
-    "replacements": {
-      "en": [
-        {
-          "before": "A file\nsaved by drive 0.35 or older, or",
-          "after": "A file\nsaved by an older drive, or"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Файл, сохранённый drive 0.35 или более старой версией, или",
-          "after": "Файл, сохранённый более старой версией drive, или"
-        }
-      ],
-      "es": [
-        {
-          "before": "Un archivo guardado por drive 0.35 o anterior, o",
-          "after": "Un archivo guardado por una versión anterior de drive, o"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "drive",
-    "slug": "roadmap",
-    "reason": "Drive 0.36.0's roadmap still lists front matter in mirrored Markdown as next, but it shipped: drive-cli#228 closed DRV-8 (cli-core#1952, in cli-core 0.420.0 and later), and the released cli-core 0.428.0 markdownBlocks used by mirrors drops YAML front matter from the Doc's blocks. Native fix belongs in drive-cli docs/roadmap.md.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n- **Front matter in mirrored Markdown** kept out of the Doc's text.",
-          "after": ""
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n- **Front matter в зеркалируемом Markdown** не попадает в текст Документа.",
-          "after": ""
-        }
-      ],
-      "es": [
-        {
-          "before": "\n- **Front matter en Markdown espejado** que no entre en el texto del Documento.",
-          "after": ""
-        }
-      ]
-    }
-  },
-  {
     "tool": "memo",
     "slug": "configuration",
     "reason": "The released configuration page says Memo has no config command, but the same release adds memo config unset (its only subcommand, checked with memo config --help on 0.107.0). Keys are still added by hand.",
