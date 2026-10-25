@@ -11,7 +11,7 @@ Put the profile before the command:
 
 ```sh
 tg work config show
-drive personal config show
+drive personal sync
 ```
 
 Name the profile in every command and agent request: `tg work …`, or `TG_PROFILE=work` for a whole

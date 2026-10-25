@@ -60,7 +60,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(manualInstall).toHaveCount(1)
     // Users can finish shared-app sign-in and their first import before optional Cloud setup.
     const sharedSignIn = text.indexOf("drive personal session start\n")
-    const sessionCheck = text.indexOf("drive personal session list --json")
+    const sessionCheck = text.indexOf("session list --json", sharedSignIn)
     const firstImport = text.indexOf("drive personal folders add")
     const cloudSetup = text.indexOf("https://console.cloud.google.com/")
     const customSignIn = text.indexOf("drive personal session start --client-file")
