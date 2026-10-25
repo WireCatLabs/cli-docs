@@ -2830,25 +2830,37 @@
   {
     "tool": "tg",
     "slug": "groups",
-    "reason": "The released request actions are confirm/reject; the group task table retained the retired accept/decline spellings.",
+    "reason": "The released request actions are confirm/reject (tg 0.90.0 contract: chats requests list|confirm|reject); the group task table and command table retained the retired accept/decline spellings.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/groups.md",
     "replacements": {
       "en": [
         {
           "before": "`tg personal chats requests list\\|accept\\|decline`",
           "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
         }
       ],
       "ru": [
         {
           "before": "`tg personal chats requests list\\|accept\\|decline`",
           "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
         }
       ],
       "es": [
         {
           "before": "`tg personal chats requests list\\|accept\\|decline`",
           "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
         }
       ]
     }
