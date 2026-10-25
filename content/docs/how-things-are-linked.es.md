@@ -63,7 +63,7 @@ Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dic
 - **Una regla de la herramienta.** Un mensaje que menciona a alguien, o que continúa al mismo remitente.
 - **Tu agente.** Una respuesta que guardó tras leer el chat. Guardarla requiere el permiso de perfil `conversations.links`.
 
-`conversations build` une esos punteros en conversaciones de un chat. `messages context` con `--thread` sigue la cadena desde un mensaje en lugar de mostrar sus vecinos en el tiempo. Un vínculo que quedó desactualizado tras una edición o un borrado se muestra, pero no se sigue. Al reconstruir, las conversaciones reciben ids nuevos, así que conserva la referencia `msg:` del mensaje, no el id de la conversación. Cómo se construye el grafo: [Cómo funciona la búsqueda](./search-architecture.mdx#3-reconstruir-conversaciones-con-un-grafo-de-mensajes).
+`conversations rebuild` une esos punteros en conversaciones de un chat. `messages context` con `--thread` sigue la cadena desde un mensaje en lugar de mostrar sus vecinos en el tiempo. Un vínculo que quedó desactualizado tras una edición o un borrado se muestra, pero no se sigue. Al reconstruir, las conversaciones reciben ids nuevos, así que conserva la referencia `msg:` del mensaje, no el id de la conversación. Cómo se construye el grafo: [Cómo funciona la búsqueda](./search-architecture.mdx#3-reconstruir-conversaciones-con-un-grafo-de-mensajes).
 
 ## Archivos, notas de voz e imágenes
 
@@ -158,7 +158,7 @@ Usa memo. ¿Qué tarea nació del mensaje sobre la factura y qué mensaje la res
 | Síntoma | Causa probable | Qué hacer |
 | --- | --- | --- |
 | La cronología de una persona muestra una sola mensajería | Las identidades no están vinculadas | `contacts link`, y vuelve a preguntar |
-| `--thread` solo muestra vecinos en el tiempo | No hay conversaciones construidas para el chat | `conversations build --chat "Book club"` |
+| `--thread` solo muestra vecinos en el tiempo | No hay conversaciones construidas para el chat | `conversations rebuild --chat "Book club"` |
 | No se encuentra un teléfono o correo de un mensaje antiguo | El mensaje se guardó antes de que existieran las menciones | `mentions rebuild` |
 | No se encuentra el nombre de un contacto nuevo | Las menciones se construyeron antes de que existiera la persona | `mentions rebuild person-name` |
 | No se encuentran palabras dentro de un archivo | No se extrajo el texto del archivo | `attachments extract` |

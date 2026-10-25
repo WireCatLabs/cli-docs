@@ -2,9 +2,6 @@
 title: "Search"
 ---
 
-<a id="для-скриптов-и-агентов" />
-<a id="подготовка-файлов-и-архива" />
-
 Search helps you recover a message, agreement, file or old code without scrolling through chats. This page explains searching data saved on this computer—messenger messages and notes—and searching the MAX server. Mail is searched by [memo](https://github.com/WireCatLabs/cli-memo): `memo search mail`.
 
 After reading it, you will be able to find messages by words, people, chats, dates, files and links, save the search and run it again, count matches and distinguish between a real “not found” and a gap in the saved history. The search does not mark anything as read.

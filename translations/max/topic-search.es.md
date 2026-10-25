@@ -5,9 +5,6 @@ title: "Búsqueda por tema"
 <a id="qué-es-una-conversación" />
 <a id="construir-vectorizar-buscar" />
 <a id="para-agentes" />
-<a id="что-такое-разговор" />
-<a id="построить-посчитать-векторы-искать" />
-<a id="для-агентов" />
 
 Recuerdas que discutiste algo en el chat, pero no recuerdas con qué palabras. Una búsqueda por tema encuentra dicha discusión por tema. Pregunte "¿dónde hablamos sobre alquilar un apartamento?" - y encontrará una conversación en la que estaban "alquiler", "depósito" y "arrendadora", aunque nadie escribió las palabras "alquilar un apartamento". También funciona entre idiomas: una pregunta en ruso se discute en inglés o español.
 

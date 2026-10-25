@@ -3,7 +3,6 @@ title: "Diagnóstico: qué hizo un comando"
 ---
 
 <a id="descubrir-comandos-desde-scripts" />
-<a id="command-discovery-for-scripts" />
 
 Utilice esta página cuando un comando falle, se cuelgue o tarde demasiado y quiera ver por qué. Al final, puede observar las solicitudes de un comando a medida que ocurren, mantener un registro de una ejecución, verificar su instalación y enviar un informe de problema que no contenga ningún mensaje de texto.
 

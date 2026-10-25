@@ -2,8 +2,6 @@
 title: "People: profiles, messages and bot checks"
 ---
 
-<a id="для-агентов" />
-
 Use this page to learn about a person: who they are, what they wrote to you or in your groups, and whether their account shows signs of a bot or spammer. You will learn to view their profile, collect messages for a summary, check an account before trusting it, and keep your own names and notes.
 
 Terms used below:

@@ -63,7 +63,7 @@ Every message can point at the earlier message it answers. Each pointer says whe
 - **A rule of the tool.** A message that mentions someone, or that continues the same sender.
 - **Your agent.** An answer it stored after reading the chat. Storing it needs the profile permission `conversations.links`.
 
-`conversations build` joins these pointers into conversations for one chat. `messages context` with `--thread` follows the chain from a message instead of showing its neighbours in time. A link that went out of date after an edit or a deletion is shown but never followed. A rebuild gives conversations new ids, so keep the `msg:` reference of the message, not the conversation id. How the graph is built: [How search works](./search-architecture.mdx#3-reconstruct-discussions-with-a-message-graph).
+`conversations rebuild` joins these pointers into conversations for one chat. `messages context` with `--thread` follows the chain from a message instead of showing its neighbours in time. A link that went out of date after an edit or a deletion is shown but never followed. A rebuild gives conversations new ids, so keep the `msg:` reference of the message, not the conversation id. How the graph is built: [How search works](./search-architecture.mdx#3-reconstruct-discussions-with-a-message-graph).
 
 ## Files, voice notes and pictures
 
@@ -158,7 +158,7 @@ Use memo. Which task came from the message about the invoice, and which message 
 | Symptom | Likely cause | What to do |
 | --- | --- | --- |
 | A person's timeline shows one messenger only | The identities are not linked | `contacts link`, then ask again |
-| `--thread` shows only neighbours in time | No conversations built for the chat | `conversations build --chat "Book club"` |
+| `--thread` shows only neighbours in time | No conversations built for the chat | `conversations rebuild --chat "Book club"` |
 | A phone or email in an old message is not found | The message was stored before mentions existed | `mentions rebuild` |
 | A name of a new contact is not found | Mentions were built before the person existed | `mentions rebuild person-name` |
 | Words inside a file are not found | The file text was not extracted | `attachments extract` |

@@ -5,8 +5,6 @@ title: "Configuración"
 <a id="archivo" />
 <a id="ejemplo-breve" />
 <a id="qué-puedes-configurar" />
-<a id="файл" />
-<a id="короткий-пример" />
 
 Esta página es necesaria cuando escribe el mismo parámetro una y otra vez o desea que `max` se comporte de manera diferente para una cuenta. Después de leerlo, sabrá dónde está el archivo de configuración, qué hacen las configuraciones principales, cómo cambiar una de ellas y cómo verificar qué valor está vigente. No necesita un archivo para comenzar: sin uno, cada configuración tiene un valor incorporado.
 

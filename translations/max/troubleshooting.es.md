@@ -7,9 +7,7 @@ title: "Solución de problemas"
 <a id="responde-pero-con-otro-perfil" />
 <a id="un-comando-se-queda-esperando" />
 <a id="lista-vacía-de-chats" />
-<a id="npx-leemourmax-cli-instala-otra-versión" />
 <a id="límite-recordado" />
-<a id="проверка-со-входом-в-max" />
 
 Esta página es necesaria cuando `max` mostró un error o no hizo lo que esperaba. Busque el mensaje que ve, o su código de retorno, y la página le dirá qué significa y qué hacer a continuación. La mayoría de las veces, un comando es suficiente.
 
@@ -85,8 +83,6 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 **Linux y macOS.** La carpeta de comandos de npm es `$(npm prefix -g)/bin`. `max personal doctor` muestra una línea `export PATH=…`; añádela a `~/.zshrc` o `~/.bashrc`.
 
 **Hay otro `max` en `PATH`.** Si otro programa con el mismo nombre aparece antes en `PATH`, `max personal doctor` muestra su ruta. Ejecuta nuestra herramienta con la ruta completa o coloca su carpeta antes.
-
-<a id="npx-leemourmax-cli-instala-la-versión-incorrecta" />
 
 ### `npx @wirecat/max-cli` instala la versión incorrecta
 

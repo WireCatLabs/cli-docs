@@ -22,18 +22,11 @@ const setup = new Set([
 const adminChat = new Set([
   "create",
   "update",
-  "photo",
   "delete",
   "moderate",
-  "check",
   "members",
-  "invite",
-  "invites",
-  "link",
   "links",
   "requests",
-  "join-requests",
-  "permissions",
   "pin",
   "unpin",
   "admins",
@@ -44,7 +37,6 @@ export function commandGroup(command: string): CommandGroup {
   if (words[0] === "bot") return "bot"
   if (setup.has(words[0]) || (words[0] === "search" && words[1] === "runs")) return "setup"
   if (
-    words[0] === "groups" ||
     words[0] === "stats" ||
     (words[0] === "chats" && adminChat.has(words[1])) ||
     (words[0] === "topics" && adminTopics.has(words[1]))
@@ -63,7 +55,7 @@ export function commandGroupForAnchor(anchor: string): CommandGroup {
   if (/^(tg|max|wa)-bot(?:-|$)/.test(value)) return "bot"
   if ([...setup].some((name) => new RegExp(`^(tg|max|wa)-${name}(?:-|$)`).test(value))) return "setup"
   if (
-    /^(tg|max|wa)-(?:groups|stats)(?:-|$)/.test(value) ||
+    /^(tg|max|wa)-stats(?:-|$)/.test(value) ||
     [...adminChat].some((name) => new RegExp(`^(tg|max|wa)-chats-${name}(?:-|$)`).test(value)) ||
     [...adminTopics].some((name) => new RegExp(`^(tg|max|wa)-topics-${name}(?:-|$)`).test(value))
   )

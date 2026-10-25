@@ -3,7 +3,6 @@ title: "Servidor MCP"
 ---
 
 <a id="los-permisos-del-perfil-controlan-las-herramientas" />
-<a id="права-профиля-управляют-инструментами" />
 
 Esta página te ayuda a conectar una aplicación de IA sin terminal, como Claude Desktop o Cursor Chat, a tu cuenta MAX. Aprenderás a conectarla, elegir los permisos del agente y usar peticiones preparadas y referencias a chats.
 

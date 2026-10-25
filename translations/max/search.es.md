@@ -5,8 +5,6 @@ title: "Búsqueda"
 <a id="prueba-una-búsqueda-concreta" />
 <a id="scripts-y-agentes" />
 <a id="preparar-los-archivos-y-el-historial-local" />
-<a id="для-скриптов-и-агентов" />
-<a id="подготовка-файлов-и-архива" />
 
 Esta página te ayuda a encontrar mensajes, acuerdos, archivos o códigos antiguos. Explica cómo buscar en lo que `max` conserva en este ordenador: mensajes MAX y notas, y cómo consultar el servidor MAX. El correo lo busca [memo](https://github.com/WireCatLabs/cli-memo): `memo search mail`.
 

@@ -83,10 +83,12 @@ describe("released documentation contracts", () => {
     expect(validateInvocation("tg messages list\\|send <chat> --limit 5", program, false)?.kind).toBe("syntax")
     expect(validateInvocation("tg messages list\\|send <chat> --bogus", program, false)?.kind).toBe("invalid")
   })
-  it("lets an upgrade note name a retired command, but not a runnable example", () => {
-    const zm: Program = { ...program, cli: "zm" }
-    expect(validateInvocation("zm serve --mcp", zm, false)?.kind).toBe("syntax")
-    expect(validateInvocation("zm serve --mcp", zm, true)?.kind).toBe("invalid")
+  it("fails an alternative subcommand the release does not have", () => {
+    expect(validateInvocation("tg messages list\\|invented <chat>", program, false)?.kind).toBe("invalid")
+    expect(validateInvocation("tg messages invented|send <chat>", program, false)?.kind).toBe("invalid")
+    expect(validateInvocation("messages list|invented", program, false)?.kind).toBe("invalid")
+    expect(validateInvocation("tg messages list|send <chat>", program, false)?.kind).toBe("syntax")
+    expect(validateInvocation("messages list\\|send", program, false)?.kind).toBe("syntax")
   })
   it("reports reference gaps independently from examples", () => {
     const coverage = referenceCoverage("## `tg messages`\n\n### `tg messages list`\n\n--json\n", program)

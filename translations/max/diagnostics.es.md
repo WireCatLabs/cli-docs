@@ -6,10 +6,6 @@ title: "Diagnóstico: qué hizo un comando"
 <a id="guardar-eventos" />
 <a id="usar-los-registros" />
 <a id="referencia-para-scripts" />
-<a id="показать" />
-<a id="сохранить" />
-<a id="что-можно-с-этим-делать" />
-<a id="справочник-для-скриптов" />
 
 Esta página es necesaria cuando un comando falla, se congela o tarda demasiado y desea comprender por qué. Una vez que lo haya leído, podrá ver las solicitudes del comando mientras funcionan, guardar un registro de ejecución, probar la instalación y enviar un informe de problemas que no incluya ningún texto de mensaje.
 

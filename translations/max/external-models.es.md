@@ -3,7 +3,6 @@ title: "Modelos externos: configuración de API"
 ---
 
 <a id="tareas-que-usan-una-api" />
-<a id="какие-задачи-используют-api" />
 
 Esta página explica cómo configurar servicios de IA que `max` llama directamente para leer escaneos e imágenes, analizar relaciones entre temas o completar una plantilla de respuesta. Aprenderás a elegir un proveedor, guardar una clave, seleccionar el modelo para cada tarea y probarlo con pocos datos.
 

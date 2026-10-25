@@ -2,13 +2,6 @@
 title: "Personal account guide"
 ---
 
-<a id="ответ-и-реакция" />
-<a id="правка-пересылка-закрепление" />
-<a id="опросы" />
-<a id="локальная-копия-и-новые-сообщения" />
-<a id="настройки" />
-<a id="человек" />
-
 `max` allows you or your AI agent to read and write to your personal MAX account from a terminal. This page is an overview: from login to reading, sending and groups, in the order you need it. Open it when you start working with `max`, or when you want to know what's possible before asking an agent. The bot, which works through the official Bot API, is described on the [bot](./bot.md) page.
 
 You will learn to identify a chat, read and search without marking messages read, send safely, and return results a script can parse. The [command reference](./commands.md) is generated from the program; this guide explains how commands fit together.

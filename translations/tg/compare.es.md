@@ -7,11 +7,6 @@ title: "Comparado con otras herramientas"
 <a id="enviar" />
 <a id="grupos-y-carpetas" />
 <a id="tus-propias-notas-sobre-chats-y-personas" />
-<a id="login-profiles-and-the-background-service" />
-<a id="reading-and-searching" />
-<a id="sending" />
-<a id="groups-and-folders" />
-<a id="your-own-notes-on-chats-and-people" />
 
 Varias herramientas abiertas ya conectan una cuenta personal de Telegram a una terminal o a un agente de IA. Esta página coloca `tg` junto a cinco de ellos, para que pueda ver de un vistazo qué herramienta hace qué y elegir la que se adapta a su trabajo. Las notas provienen de la documentación y el código fuente de cada proyecto, comprobados el 23 de octubre de 2026; una herramienta puede hacer más de lo que dice su documentación.
 

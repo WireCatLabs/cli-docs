@@ -2,8 +2,6 @@
 title: "MCP server"
 ---
 
-<a id="права-профиля-управляют-инструментами" />
-
 Use this page to connect your MAX account to an agent application without terminal access, such as Claude Desktop or Cursor chat, or to let the application request approval before actions. You will learn to connect the account, choose what your agent may do, and use ready-made requests and chat mentions.
 
 Terms used below:

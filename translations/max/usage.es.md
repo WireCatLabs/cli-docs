@@ -19,12 +19,6 @@ title: "Cómo usar tu cuenta personal"
 <a id="permisos-del-perfil" />
 <a id="personas" />
 <a id="gráficos-de-estadísticas" />
-<a id="ответ-и-реакция" />
-<a id="правка-пересылка-закрепление" />
-<a id="опросы" />
-<a id="локальная-копия-и-новые-сообщения" />
-<a id="настройки" />
-<a id="человек" />
 
 `max` le permite a usted o a su agente de IA leer y escribir en su cuenta MAX personal desde la terminal. Esta página es una descripción general, desde el inicio de sesión hasta la lectura, el envío y los grupos, en el orden en que lo necesita. Ábrelo cuando empieces a trabajar con `max`, o cuando quieras saber qué es posible antes de solicitar un agente. El bot, que funciona a través de la API oficial de Bot, se describe en la página [bot](./bot.md).
 

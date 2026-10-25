@@ -4,7 +4,6 @@ title: "Búsqueda"
 
 <a id="para-scripts-y-agentes" />
 <a id="archivos-preparación-y-lagunas-del-archivo" />
-<a id="for-scripts-and-agents" />
 
 Necesitas encontrar algo que esté escrito: un mensaje, un acuerdo, un archivo que alguien envió, un código de hace meses. Esta página muestra cómo buscar todo lo que tg ha guardado en esta computadora (mensajes de Telegram y el correo y las notas que [memo](https://github.com/WireCatLabs/cli-memo) importó) y cómo realizar la búsqueda propia de Telegram al mismo tiempo.
 

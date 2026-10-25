@@ -22,8 +22,8 @@ mensajero:
   cuenta seleccionada y no cambia su nombre en tus contactos.
 - **Notas.** Texto libre sobre la persona en el que tú o tu agente podréis buscar después.
 
-Los comandos están en la [guía de personas de Telegram](./tg/people.md#your-own-names-and-notes-contacts-alias-contacts-notes)
-y en la [referencia de MAX](./max/commands.md#max-contacts-alias).
+Los comandos están en la [guía de personas de Telegram](./tg/people.md#tus-propios-nombres-y-notas-contacts-aliases-contacts-notes)
+y en la [referencia de MAX](./max/commands.md#max-contacts-aliases).
 
 La misma persona suele tener una cuenta en Telegram y otra en MAX. Las herramientas las tratan como
 dos personas hasta que las **vinculas**: registras en tu ordenador que ambas cuentas son de la misma

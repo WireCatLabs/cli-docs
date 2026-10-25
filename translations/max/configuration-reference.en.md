@@ -2,9 +2,6 @@
 title: "Configuration reference"
 ---
 
-<a id="порядок-в-котором-решается-настройка" />
-<a id="посмотреть-что-получилось" />
-
 Use this reference to look up setting names, types, defaults, scopes, environment variables and precedence. For ordinary changes and file examples, start with [configuration](./configuration.md). The [CLI contract](./cli-contract.md) covers command behaviour, output and exit codes.
 
 Terms used below:

@@ -2,9 +2,6 @@
 title: "Configuration"
 ---
 
-<a id="файл" />
-<a id="короткий-пример" />
-
 Use this page when you repeatedly type the same option or want `max` to behave differently for one account. You will learn where the settings file lives, which basic settings to change, how to change one value and how to check the effective value. No file is needed to start: every setting has a built-in default.
 
 Terms used below:

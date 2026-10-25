@@ -75,9 +75,6 @@ export function examples(markdown: string): Example[] {
   return result
 }
 
-// Upgrade notes name a command a release removed; the same command in a fenced example still fails.
-const retiredCommands: Record<string, string[]> = { zm: ["serve"] }
-
 export function validateInvocation(
   text: string,
   program: Program,
@@ -98,13 +95,15 @@ export function validateInvocation(
       }
       return { kind: "syntax", reason: "Reviewed shorthand alternatives, not a runnable command" }
     }
-    const piped = /(?<![\w:|\\])[a-z][a-z-]*(?:\\\|[a-z][a-z-]*)+(?![\w|\\])/.exec(text)
+    const piped = /(?<![\w:|\\])[a-z][a-z-]*(?:\\?\|[a-z][a-z-]*)+(?![\w|\\])/.exec(text)
     if (piped) {
-      for (const alternative of piped[0].split("\\|")) {
+      // Guides often write `chats requests confirm|reject` without the tool name; check those as well.
+      const bare =
+        !text.split(/\s+/).includes(program.cli) && program.commands.some((c) => c.path[0] === text.split(/\s+/)[0])
+      for (const alternative of piped[0].split(/\\?\|/)) {
         const expanded = text.slice(0, piped.index) + alternative + text.slice(piped.index + piped[0].length)
-        const finding = validateInvocation(expanded, program, false)
-        // Unknown alternative subcommands were never checked here; options and values are.
-        if (finding && finding.kind !== "syntax" && !finding.reason.startsWith("Unknown subcommand")) return finding
+        const finding = validateInvocation(bare ? `${program.cli} ${expanded}` : expanded, program, false)
+        if (finding && finding.kind !== "syntax") return finding
       }
       return { kind: "syntax", reason: "Alternative subcommand syntax" }
     }
@@ -171,8 +170,6 @@ export function validateInvocation(
       reason: `Needs a profile first (${program.cli} <profile> ${withoutGlobals[0]} …) unless it touches no account`,
     }
   if (!roots.has(withoutGlobals[0]) && roots.has(withoutGlobals[1])) withoutGlobals.shift()
-  if (!executable && retiredCommands[program.cli]?.includes(withoutGlobals[0]))
-    return { kind: "syntax", reason: "Retired command named in an upgrade note" }
   const command = all
     .filter((item) => item.path.every((word, index) => withoutGlobals[index] === word))
     .sort((a, b) => b.path.length - a.path.length)[0]

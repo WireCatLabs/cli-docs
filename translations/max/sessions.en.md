@@ -2,11 +2,6 @@
 title: "Login, sessions and profiles"
 ---
 
-<a id="откуда-берётся-токен" />
-<a id="проверить-и-забыть" />
-<a id="если-ключницы-нет" />
-<a id="сколько-живёт-токен" />
-
 Use this page when connecting `max` to a MAX account for the first time, adding a second account or recovering from “no session”. You will learn to log in, check which account is connected, log out, and locate the saved data that keeps the login available.
 
 Terms used below:
