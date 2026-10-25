@@ -12,10 +12,6 @@ Personal accounts and bots: reading, local archive search, sending, groups and c
 
 - **Attachment archives.** Download attachments to a folder, verify each file and check the archive offline.
 
-## Next
-
-- **Bulk join requests.** Accept or reject every request, or only requests from one invite link.
-
 ## Later
 
 - **Optional local archive.** A setting to save nothing on disk and get everything from MAX.

@@ -77,14 +77,15 @@ pictures by what they show, with a model on your computer. You turn that on sepa
 **Groups and channels.** mcp-max-messenger and Bot API see only the groups where the bot is a member. tsmax cannot make
 admins. The digest in `max` is computed from the local copy, and `max` asks MAX who joined and who left. max-mcp has
 reactions and channel post statistics, but no group digest. `max` handles comments under posts only as a bot; a
-personal account has no such comments.
+personal account has no such comments. `max` can answer every pending join request of a channel at once; it cannot
+pick requests by invite link, because MAX does not report which link a request came through.
 
 **Agents and safety.** PyMax, tsmax and Bot API get ➖ where the program's author would have to write the protection:
 they are libraries and have no ready settings.
 The `max` MCP server gives an agent three tools: find a command, read and write. They expose released commands as profile permissions allow, including writes. Profile permissions apply to MCP too. The bot has a separate server. Login and logout and commands that
-run without stopping (`watch`, `serve`), and commands with which an agent could lift its own limits (the allowed chat
-list, permissions, auto-replies, schedules) are not offered in MCP; `permissions.mcp.authority` opens some of them, and
-it is `deny` by default. Raw bot operations separately need `permissions.bot.api: allow` or `ask`. See the
+run without stopping (`watch`, `serve`) are not offered in MCP. Commands with which an agent could lift its own limits
+(the allowed chat list, permissions, auto-replies, schedules) stay in its command list marked unavailable;
+`permissions.mcp.authority` lets them run, and it is `deny` by default. Raw bot operations separately need `permissions.bot.api: allow` or `ask`. See the
 [MCP guide](./mcp.md) for more. Profile permissions and the agent application's approval settings determine when sending is allowed; MCP itself has no confirmation form. Configure these before connecting an agent. The default limit is 30 sends per hour per profile, and the error says when you can send again. max-mcp
 has one limit: a list of allowed folders for files. max-mcp keeps its token in a file with mode 0600, and
 mcp-max-messenger reads it from the `MAX_TOKEN` environment variable. PyMax and tsmax keep the token in the

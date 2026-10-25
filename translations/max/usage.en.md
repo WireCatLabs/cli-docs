@@ -182,7 +182,7 @@ max personal chats list 'unread_count>0' --offline # только чаты с н
 max personal chats show "Иван Петров"        # один чат: вид, непрочитанное, последнее сообщение, участники
 ```
 
-`chats show` returns one object containing fields from `chats list` plus `members`, excluding you. For a channel, `members` is `null`: MAX can return only a few subscribers from thousands, which cannot represent its full membership. See [groups and channels](#группы-и-каналы).
+`chats show` returns one object containing fields from `chats list` plus `members`, excluding you. If the membership is unknown, `members` is omitted; `[]` means a known empty membership. For a channel, MAX can return only a few subscribers from thousands, which cannot represent its full membership. See [groups and channels](#группы-и-каналы).
 
 ### Messages
 
@@ -543,7 +543,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.72.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.74.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -1099,13 +1099,15 @@ Beside it there can be `next`: commands worth running next (the `page.next` step
 
 In the terminal, the line about the next page goes **to stderr**: stdout carries data in any mode, but continuation hints do not belong there.
 
-**`--jsonl` outputs one object per line** without a wrapper, suitable for streaming and `jq`. Only stderr reports whether more pages exist.
+**`--jsonl` outputs one record per line**: the data is inside `{"type":"item","data":…}`.
+The last record, `{"type":"end",…}`, holds `complete` and `page`, including whether another page exists.
 
 ```sh
-max personal messages list -1000 --jsonl | jq 'select(.sender_id == "111")'
+max personal messages list -1000 --jsonl | jq 'select(.type == "item") | .data | select(.sender_id == "111")'
 ```
 
-Errors that end the command go **to stderr** with stdout empty, so they cannot be mistaken for data:
+A refusal before any output goes **to stderr** with stdout empty, so it cannot be mistaken for data.
+If the stream has already produced data, that data stays; on a failure it adds an incomplete `end` record and returns an error code:
 
 ```json
 {"error":{"code":"authentication_error","message":"no session for profile \"personal\" — run `max personal setup` in a local terminal; agents: read `max skill show`"}}

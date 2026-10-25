@@ -210,16 +210,15 @@ done
 
 ```sh
 max personal search runs error_code:rate_limited --json
-max personal search runs status:partial --since-time 2026-10-01 --json
+max personal search runs status:partial 'started_at>=2026-10-01' --json
 ```
 
-`search runs` matches literal diagnostic text in metadata and safe events. Put `status:`, `error_code:`, `operation:` and `profile:` in the query; use `--since-time`, `--limit` and `--page` to narrow it. Each page allows up to 100 runs and
+`search runs` matches literal diagnostic text in metadata and safe events. Put `status:`, `error_code:`, `operation:`, `profile:` and `started_at:` comparisons or ranges in the query. `--limit` and `--page` choose the page. Each page allows up to 100 runs and
 each run returns at most 100 matched events, with `events_truncated` for additional events.
 A failed batch item or history page creates `status: "partial"` with failed IDs, stages and
 codes; message contents and provider error payloads are not copied into that record. Partial
 records are kept by default unless recording was explicitly disabled. Search does not record itself.
 
-MCP `max_read` with `command: "search runs"` accepts these `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit` and `page`.
-It reads only the active profile's diagnostic runs, does not connect to MAX and does not open
+MCP `max_read` with `command: "search runs"` accepts these `arguments`: `query` (including conditions and time bounds), `limit` and `page`. It reads only the active profile's diagnostic runs, does not connect to MAX and does not open
 raw background-job logs. The original partial result names the failed items and their error codes; diagnostic records
 keep only safe identifiers and codes.

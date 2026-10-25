@@ -184,6 +184,8 @@ export function validateInvocation(
       ...command.options,
     ].flatMap((option) => optionNames(option).map((name) => [name, option] as const)),
   )
+  if (command.commands.length && remaining.find((token) => !token.startsWith("-"))?.includes("|"))
+    return { kind: "syntax", reason: "Alternative subcommand syntax" }
   const positional: string[] = []
   let literal = false
   for (let i = 0; i < remaining.length; i++) {
@@ -210,8 +212,6 @@ export function validateInvocation(
   }
   if (command.commands.length && positional[0]?.startsWith("PLACEHOLDER_"))
     return { kind: "unsupported", reason: "Subcommand placeholder requires a concrete operation" }
-  if (command.commands.length && positional[0]?.includes("|"))
-    return { kind: "syntax", reason: "Alternative subcommand syntax" }
   if (command.commands.length && positional.length && !command.arguments.length)
     return { kind: "invalid", reason: `Unknown subcommand ${positional[0]} for ${command.path.join(" ")}` }
   if (!executable) return null

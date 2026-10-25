@@ -102,26 +102,20 @@ Profile `permissions` controls access ([permissions reference](./configuration-r
 
 ### What MCP does not offer
 
-Profile permissions limit the agent's commands. Commands that change what future runs may do (`config set`, `recipients add`, `replies add`, `schedule command`, `skill install` and similar operations) are offered with `permissions.mcp.authority: allow` or `ask`; the default is `deny`. The agent cannot change `permissions.mcp` or `permissions.bot.api`, including by replacing the whole `permissions` object: the owner sets them in the terminal.
+Profile permissions limit the agent's commands. Commands that change what future runs may do (`config set`, `recipients add`, `replies add`, `schedule command`, `skill install` and similar operations) can run with `permissions.mcp.authority: allow` or `ask`; the default is `deny`, but the commands stay visible in the catalogue. The agent cannot change `permissions.mcp` or `permissions.bot.api`, including by replacing the whole `permissions` object: the owner sets them in the terminal.
 
 Archive writes, server control, model downloads and report creation are also available through MCP, with their own keys such as `store.backup`, `server.start`, `models.download`, `doctor.reports.create`. Their default is `ask`: the terminal requests confirmation, while MCP permits the requested action without a confirmation form. Raw `bot api` separately requires explicit `permissions.bot.api: allow` or `ask`; a broader `bot: allow` does not enable it.
 
-The following commands are hidden with default permissions. Changes to future authority and raw bot operations become available through the keys above. Login, persistent processes and local-file uploads through `bot uploads put` remain unavailable even when those keys permit access.
+A denial does not hide a command: the full `tools_search` list returns its name and availability, and a search by task also shows its arguments and answer schema. A blocked command has `availability: { available: false, reason, permission }`. An allowed command has `availability: { available: true }`. Availability follows the current settings, and every call checks permissions again. With a profile named, CLI help and the command catalogue show availability too.
+
+Only commands that need a terminal or a long-running process stay outside MCP:
 
 | Commands | Why |
 | --- | --- |
 | `setup`, `session` | login and logout are performed by a person |
-| `upgrade`, `complete` | update the program and terminal completion |
+| `complete` | terminal completion |
 | `serve`, `watch`, `mcp`, `bot watch`, `bot mcp` | run until stopped; an agent call must finish |
-| `config set`, `config unset`, `skill install`, `flood clear`, `models keys set`, `models keys remove` | change what future runs can do; otherwise an agent could remove read-only restrictions |
-| `recipients add`, `recipients remove`, `recipients clear`, `chats rules set`, `chats rules unset` | same reason |
-| `replies add`, `replies on`, `replies off`, `replies edit`, `replies audience`, `replies pause`, `replies resume` | same reason |
-| `replies consents grant`, `replies consents revoke`, `replies consents deny`, `replies consents allow` | same reason |
-| `schedule command`, `schedule agent`, `schedule remove`, `server install`, `server uninstall` | same reason |
-| `attachments jobs install`, `attachments jobs start`, `attachments jobs stop`, `attachments jobs uninstall` | same reason |
-| `bot chats rules set`, `bot chats rules unset`, `bot recipients add`, `bot recipients remove`, `bot recipients clear` | same reason, for bots |
 | `bot auth` | a person enters the token |
-| `bot api` | requires explicit `permissions.bot.api: allow` or `ask` |
 | `bot uploads put` | reads a file from your computer |
 
 ## Tools

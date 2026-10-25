@@ -214,16 +214,16 @@ done
 
 ```sh
 max personal search runs error_code:rate_limited --json
-max personal search runs status:partial --since-time 2026-10-01 --json
+max personal search runs status:partial 'started_at>=2026-10-01' --json
 ```
 
 `search runs` busca texto literal en metadatos y eventos de diagnóstico seguros.
-`status:`, `error_code:`, `operation:`, `profile:`; `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
+Las condiciones `status:`, `error_code:`, `operation:`, `profile:` y las comparaciones o rangos de `started_at:` van en la consulta. `--limit` y `--page` eligen la página. Cada página admite hasta 100 ejecuciones;
 cada ejecución devuelve hasta 100 eventos coincidentes, con `events_truncated` si hay más.
 El fallo de un archivo o una página de historial genera `status: "partial"` con ID fallidos, etapas y códigos.
 El registro no copia el contenido de mensajes ni las respuestas de error del proveedor.
 Las ejecuciones parciales se conservan por defecto salvo que se desactive explícitamente el registro. La búsqueda no se registra a sí misma.
 
-En MCP llama a `max_read` con `command: "search runs"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.
+En MCP llama a `max_read` con `command: "search runs"`; `arguments` acepta `query` (con las condiciones y los límites de tiempo), `limit` y `page`.
 Solo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.
 El resultado completo del comando parcial nombra los elementos fallidos y sus códigos de error; el registro conserva solo identificadores y códigos seguros.

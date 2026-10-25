@@ -25,7 +25,7 @@ Aquí todo funciona desde tu cuenta personal, en grupos donde tú eres el admini
 |Mantén una lista de lo que te espera| `max personal tasks list` |
 |Elimina el spam según tus propias reglas| `max personal chats rules set`, `max personal chats moderate` |
 |Reemplace el enlace de invitación filtrado| `max personal chats links reset` |
-|Dejar entrar a la gente o negarles| `max personal chats requests list\|accept\|decline` |
+|Dejar entrar a la gente o negarles| `max personal chats requests list\|confirm\|reject` |
 |Ver actividad de la semana| `max personal stats chats show` |
 |Guarda la lista de participantes todos los días.| `max personal chats members fetch --track` |
 |Encuentra miembros que parezcan bots o spammers| `max personal chats members check` |
@@ -194,7 +194,8 @@ Sin `--allow-dangerous` en cron, las acciones en el nivel `ask` simplemente est�
 | `max personal chats moderate <чат>` | Comprueba las reglas y realiza lo permitido |
 | `max personal chats members add\|remove`, `admins add\|remove` | Miembros y administradores |
 | `max personal chats requests list <чат>` | Solicitudes de un canal con aprobación; visibles para administradores, sin hora conocida |
-| `max personal chats requests confirm\|decline <чат> <человек>` | Aceptar o rechazar; no admite `--all` ni `--link` |
+| `max personal chats requests confirm\|reject <чат> <человек>` | Aceptar o rechazar una solicitud |
+| `max personal chats requests confirm\|reject <чат> --all` | Responder a todas las solicitudes del canal; los permisos y el límite de acciones se comprueban antes de cambiar nada |
 | `max personal chats links show\|reset <чат>` | Ver o sustituir la invitación; `reset` invalida la antigua |
 | `max personal chats inspect <ссылка>` | Ver el destino de un enlace sin unirse |
 | `max personal chats create`, `max personal chats join <ссылка>`, `max personal chats leave <чат>` | Crear, unirse o salir |
@@ -365,7 +366,7 @@ moderate`. También puede vetar a usuarios expulsados para que no vuelvan con el
 ## Límites
 
 - **La cuenta personal no puede vetar el regreso.** Una persona expulsada puede volver por invitación. Renueva el enlace (`max personal chats links reset`) o utiliza un bot.
-- **Solo los canales con aprobación tienen solicitudes de entrada.** Un grupo cerrado no tiene aprobación: con el enlace se entra directamente. En un canal con aprobación, `chats join` solo envía la solicitud (`requested: true`). `chats requests list` no muestra cuándo pidió entrar la persona: MAX no lo informa. No se puede responder a todas a la vez ni filtrar solicitudes por enlace.
+- **Solo los canales con aprobación tienen solicitudes de entrada.** Un grupo cerrado no tiene aprobación: con el enlace se entra directamente. En un canal con aprobación, `chats join` solo envía la solicitud (`requested: true`). `chats requests list` no muestra cuándo pidió entrar la persona: MAX no lo informa. Se puede responder a todas a la vez con `--all`; no se pueden filtrar por enlace, porque MAX no indica el enlace de cada solicitud.
 - **Máximo 10 acciones por comprobación** (`--max-actions`). Los borrados cuentan en el límite horario; el resto espera.
 - **Hasta 1000 mensajes por comprobación en CLI.** La siguiente continúa desde el punto anterior.
 - **Una incorporación requiere toda la lista de miembros** para conocer la antigüedad de la cuenta; en grupos grandes puede necesitar decenas de solicitudes.

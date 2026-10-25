@@ -12,10 +12,6 @@ Cuentas personales y bots: lectura, búsqueda en el archivo local, envío, grupo
 
 - **Archivos de adjuntos.** Descargar adjuntos a una carpeta, verificar cada archivo y comprobar el archivo sin conexión.
 
-## A continuación
-
-- **Solicitudes de entrada en bloque.** Aceptar o rechazar todas las solicitudes o solo las de un enlace de invitación.
-
 ## Más adelante
 
 - **Archivo local opcional.** Un ajuste para no guardar nada en disco y obtenerlo todo de MAX.

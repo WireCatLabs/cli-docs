@@ -103,26 +103,20 @@ El acceso está determinado por el perfil `permissions` ([derechos de acceso en 
 
 ### Qué no ofrece MCP
 
-Los permisos del perfil limitan los comandos del agente. Los comandos que cambian lo que podrán hacer futuras ejecuciones (`config set`, `recipients add`, `replies add`, `schedule command`, `skill install` y similares) se ofrecen con `permissions.mcp.authority: allow` o `ask`; el valor predeterminado es `deny`. El agente no puede cambiar `permissions.mcp` ni `permissions.bot.api`, tampoco sustituyendo todo el objeto `permissions`: el propietario los define en el terminal.
+Los permisos del perfil limitan los comandos del agente. Los comandos que cambian lo que podrán hacer futuras ejecuciones (`config set`, `recipients add`, `replies add`, `schedule command`, `skill install` y similares) se pueden ejecutar con `permissions.mcp.authority: allow` o `ask`; el valor predeterminado es `deny`, pero los comandos siguen visibles en el catálogo. El agente no puede cambiar `permissions.mcp` ni `permissions.bot.api`, tampoco sustituyendo todo el objeto `permissions`: el propietario los define en el terminal.
 
 Las escrituras en el archivo, el control del servidor, las descargas de modelos y la creación de informes también están disponibles por MCP, con claves propias como `store.backup`, `server.start`, `models.download`, `doctor.reports.create`. Su valor predeterminado es `ask`: el terminal pide confirmación y MCP permite la acción solicitada sin formulario. `bot api` requiere aparte un `permissions.bot.api: allow` o `ask` explícito; un `bot: allow` general no lo habilita.
 
-Los siguientes comandos están ocultos con los permisos predeterminados. Los cambios de autoridad futura y las operaciones directas del bot se habilitan con las claves anteriores. El inicio de sesión, los procesos persistentes y la carga de archivos locales mediante `bot uploads put` siguen sin ofrecerse aunque esas claves lo permitan.
+Una denegación no oculta el comando: la lista completa de `tools_search` devuelve su nombre y su disponibilidad, y una búsqueda por tarea también muestra los argumentos y el esquema de respuesta. Un comando bloqueado tiene `availability: { available: false, reason, permission }`. Un comando permitido tiene `availability: { available: true }`. La disponibilidad sigue los ajustes actuales y cada llamada vuelve a comprobar los permisos. Con un perfil indicado, la ayuda de la CLI y el catálogo de comandos también muestran la disponibilidad.
+
+Fuera de MCP solo quedan los comandos que necesitan un terminal o un proceso persistente:
 
 | Comandos | Motivo |
 | --- | --- |
 | `setup`, `session` | el inicio y cierre de sesión los realiza una persona |
-| `upgrade`, `complete` | actualizan el programa y el autocompletado del terminal |
+| `complete` | autocompletado del terminal |
 | `serve`, `watch`, `mcp`, `bot watch`, `bot mcp` | funcionan hasta detenerlos; una llamada del agente debe terminar |
-| `config set`, `config unset`, `skill install`, `flood clear`, `models keys set`, `models keys remove` | cambian lo que podrán hacer futuras ejecuciones; el agente podría quitar la restricción de solo lectura |
-| `recipients add`, `recipients remove`, `recipients clear`, `chats rules set`, `chats rules unset` | el mismo motivo |
-| `replies add`, `replies on`, `replies off`, `replies edit`, `replies audience`, `replies pause`, `replies resume` | el mismo motivo |
-| `replies consents grant`, `replies consents revoke`, `replies consents deny`, `replies consents allow` | el mismo motivo |
-| `schedule command`, `schedule agent`, `schedule remove`, `server install`, `server uninstall` | el mismo motivo |
-| `attachments jobs install`, `attachments jobs start`, `attachments jobs stop`, `attachments jobs uninstall` | el mismo motivo |
-| `bot chats rules set`, `bot chats rules unset`, `bot recipients add`, `bot recipients remove`, `bot recipients clear` | el mismo motivo, para bots |
 | `bot auth` | una persona introduce el token |
-| `bot api` | requiere un `permissions.bot.api: allow` o `ask` explícito |
 | `bot uploads put` | lee un archivo de tu equipo |
 
 ## Herramientas

@@ -175,9 +175,9 @@ Con `ask`, el terminal pide confirmación con «no» por defecto. `--allow-dange
 
 MCP no muestra formularios de confirmación: `ask` permite la escritura invocada; `deny` y `readonly` siguen bloqueándola. `--permission ключ=уровень` endurece temporalmente los permisos del proceso, pero no los relaja. En la CLI, `ask` sigue requiriendo una respuesta o una opción explícita. Consulta la conexión en la [guía MCP](./mcp.md).
 
-`mcp.authority` controla los cambios de ajustes, reglas, destinatarios y otras condiciones de futuras ejecuciones; su valor predeterminado es `deny`. El propietario debe elegir `allow` o `ask` para ofrecer estos comandos al agente. Las operaciones directas del bot requieren aparte un `bot.api: allow` o `ask` explícito; un `bot: allow` general no las habilita. El agente no puede cambiar estas claves ni sustituir todo el objeto `permissions`; puede cambiar otras claves individuales si lo permite `mcp.authority`.
+`mcp.authority` controla los cambios de ajustes, reglas, destinatarios y otras condiciones de futuras ejecuciones; su valor predeterminado es `deny`. Los comandos siguen en el catálogo; para ejecutarlos, el propietario elige `allow` o `ask`. Las operaciones directas del bot requieren aparte un `bot.api: allow` o `ask` explícito; un `bot: allow` general no las habilita. El agente no puede cambiar estas claves ni sustituir todo el objeto `permissions`; puede cambiar otras claves individuales si lo permite `mcp.authority`.
 
-El mantenimiento del archivo, el control del servidor, las descargas de modelos y la creación de informes tienen claves propias, por ejemplo `store.backup`, `server.start`, `models.audio.download`, `doctor.report.create`. Su nivel predeterminado es `ask`.
+El mantenimiento del archivo, el control del servidor, las descargas de modelos y la creación de informes tienen claves propias, por ejemplo `store.backup`, `server.start`, `models.download`, `doctor.reports.create`. Su nivel predeterminado es `ask`.
 
 Elegir solo lectura en el primer inicio limita todos los perfiles de todas las herramientas WireCat, incluido MCP. Un `allow` más específico del perfil no elimina ese límite. Cambia la respuesta mediante `max setup` en el terminal.
 
