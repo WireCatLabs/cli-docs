@@ -26,14 +26,6 @@ En Linux, la base predeterminada es `~/.local/share/WireCat/wirecat.db`; las cop
 están en `profiles/PROFILE_NAME/`. Lee sobre [almacenamiento local](./usage.md#disk-use-index-without-an-export-directory)
 antes de moverlos o borrarlos.
 
-Los archivos con nombres antiguos en camelCase se migran a snake_case en la primera lectura
-correcta. Conservan sus permisos y no se reescriben si no hay cambios. Se mantienen los nombres
-de perfiles, las rutas de permisos y los nombres de usos de modelos. Los valores antiguos y
-nuevos que entren en conflicto se rechazan.
-
-Los ajustes antiguos `read_only` y `readOnly` se rechazan. Elimínalos del archivo de configuración;
-usa `permissions` por comando para guardar límites, o `--read-only` / `DRIVE_READ_ONLY=1` para una ejecución.
-
 ## Ajustes guardados
 
 | Clave | Qué controla | Alcance |
@@ -95,7 +87,41 @@ drive images models download clip-b32
 `drive personal config set max_text_chars 500000` omite textos más largos con su razón; se leen
 en el siguiente sync después de aumentar el límite.
 
-El perfil es la primera palabra del comando o `DRIVE_PROFILE`; nada más lo elige. Omitirlo es un error que lista los perfiles existentes, y un antiguo perfil predeterminado guardado se nombra en ese error, pero no se usa.
+El perfil es la primera palabra del comando o `DRIVE_PROFILE`; nada más lo elige. Omitirlo es un error que lista los perfiles existentes.
+
+`config unset` elimina un ajuste: `drive personal config unset max_text_chars`, o
+`drive config unset --defaults permissions.files` para `defaults`.
+
+## Corregir un problema del archivo
+
+Todos los comandos salvo `config` y `doctor` rechazan un archivo de configuración con un problema: una clave que
+drive no conoce, un valor de tipo incorrecto, un permiso que no nombra ningún comando o un texto que no es JSON. El
+rechazo nombra el primer problema y el comando que lo elimina. `drive doctor --json` lista todos los problemas en
+`config.issues`; cada uno tiene un `kind`, el archivo `file`, el perfil `profile` y la clave `key` donde está, un
+`what` que dice cómo tiene que ser el valor (nunca cuál era) y un `fix` que puedes ejecutar tal como está escrito:
+
+```sh
+drive doctor --json
+drive personal config unset colour
+```
+
+Un problema sin `fix` (un texto que no es JSON, o que falte `principal` o `storage`) se corrige editando el
+archivo. `config show`, `config set` y `config unset` siguen funcionando con un archivo que es JSON válido pero
+tiene problemas: `show` nombra cada uno con su corrección, y `set` solo rechaza un cambio que añada un problema.
+
+## Mantener el archivo privado
+
+drive guarda `config.json` de modo que solo tú puedas leerlo (`0600`), en una carpeta en la que solo tú puedes
+entrar (`0700`). Un archivo guardado por drive 0.35 o anterior, o una carpeta creada a mano, puede estar abierto a
+otros usuarios del ordenador. `drive doctor` lista ese archivo o carpeta en `files.problems` (`path`, `mode`,
+`want`) e imprime el `chmod` que lo corrige:
+
+```sh
+drive doctor
+chmod 600 '/home/me/.config/drive-cli/config.json'
+```
+
+Windows no se comprueba: no tiene esos modos.
 
 ## Variables de entorno
 

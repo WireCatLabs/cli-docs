@@ -19,13 +19,13 @@ title: "Пошаговые сценарии"
    кладёт инструкции drive туда, где их ищут Claude Code, Codex и Gemini CLI
 
 2. ```sh
-   drive mcp --tools --read-only
+   drive personal mcp --tools --read-only
    ```
 
    показывает команды с текущей доступностью; запись остаётся видимой, но запрещена
 
 3. ```sh
-   drive mcp --read-only
+   drive personal mcp --read-only
    ```
 
    запускает три инструмента на stdio — drive_tools_search, drive_read и drive_write; запись по-прежнему запрещена
@@ -46,31 +46,31 @@ title: "Пошаговые сценарии"
 Узнайте, о чём документ, что о нём уже записано и какие факты в нём есть, с цитатой для каждого.
 
 1. ```sh
-   drive sync
+   drive personal sync
    ```
 
    загружает последнюю версию перед чтением
 
 2. ```sh
-   drive documents context DOC_ID
+   drive personal documents context DOC_ID
    ```
 
    документ с тегами, заметками, записями памяти и редакторами в одном ответе
 
 3. ```sh
-   drive memories extract DOC_ID --scope work
+   drive personal memories extract DOC_ID --scope work
    ```
 
    отправляет текст выбранной модели и показывает предложенные записи памяти, каждую с точной цитатой; --yes сохраняет их
 
 4. ```sh
-   drive notes add DOC_ID "ask about the Q3 numbers"
+   drive personal notes add DOC_ID "ask about the Q3 numbers"
    ```
 
    ваша заметка, которая остаётся с документом при синхронизациях
 
 5. ```sh
-   drive documents export DOC_ID --output brief.md
+   drive personal documents export DOC_ID --output brief.md
    ```
 
    документ в Markdown в новом файле; существующий файл никогда не перезаписывается
@@ -91,25 +91,25 @@ title: "Пошаговые сценарии"
 Найдите документ с решением, прочитайте нужный фрагмент и посмотрите, кто его менял.
 
 1. ```sh
-   drive search "budget decision"
+   drive personal search "budget decision"
    ```
 
    все импортированные документы, по словам и по смыслу, каждый результат со ссылкой Google
 
 2. ```sh
-   drive documents show DOC_ID
+   drive personal documents show DOC_ID
    ```
 
    текст документа со вкладками, чтобы прочитать фрагмент целиком
 
 3. ```sh
-   drive documents context DOC_ID
+   drive personal documents context DOC_ID
    ```
 
    его теги, заметки, записи памяти и редакторы из локального хранилища
 
 4. ```sh
-   drive documents history DOC_ID --activity
+   drive personal documents history DOC_ID --activity
    ```
 
    кто что с ним делал, по данным Drive Activity; нужен вход с --grant activity
@@ -131,13 +131,13 @@ title: "Пошаговые сценарии"
 Войдите один раз, выберите папки Drive и загрузите их документы в локальное хранилище как текст для поиска.
 
 1. ```sh
-   drive session start
+   drive personal session start
    ```
 
-   выполняет вход в Google в браузере, только на чтение; команды drive начинаются с профиля, например drive personal session start
+   выполняет вход в Google в браузере, только на чтение; personal — это профиль, любое имя на ваш выбор, и с него начинается каждая команда для аккаунта
 
 2. ```sh
-   drive folders add https://drive.google.com/drive/folders/FOLDER_ID
+   drive personal folders add https://drive.google.com/drive/folders/FOLDER_ID
    ```
 
    импортируются только добавленные папки и всё, что в них
@@ -149,13 +149,13 @@ title: "Пошаговые сценарии"
    локальная модель для поиска по смыслу, один раз на компьютер; её используют все WireCat CLI
 
 4. ```sh
-   drive sync --embed
+   drive personal sync --embed
    ```
 
    импортирует изменения в этих папках и индексирует текст для поиска по смыслу
 
 5. ```sh
-   drive status
+   drive personal status
    ```
 
    сколько документов импортировано, что ещё ждёт и что пропущено
