@@ -32,6 +32,7 @@
     "browser-apps",
     "permissions",
     "security",
+    "desktop",
     "---Build on WireCat---",
     "build-create-cli",
     "build-concepts",

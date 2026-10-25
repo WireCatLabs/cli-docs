@@ -70,6 +70,16 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Stated tie between records | relationship | связь | relación | A person belongs to or relates to an organization or project. It never joins two accounts into one person. |
 | Version number of a note | revision | ревизия | revisión | Increases with each edit; an edit names the current revision so a newer change is not lost. |
 
+## Diagnostics and the desktop app
+
+| Concept | English | Russian | Spanish | Meaning |
+| --- | --- | --- | --- | --- |
+| The WireCat app on the computer | WireCat Desktop | WireCat Desktop | WireCat Desktop | The desktop app that installs the tools and shows their settings and logs. The name is not translated; its on-screen labels stay in English. |
+| One start of a tool | run | запуск | ejecución | One command of a tool, from start to exit. |
+| What a tool kept about a run | run record | запись запуска | registro de ejecución | The run's command, profile, outcome, timing and codes. Never message text, names or tokens. |
+| One step inside a run | event | событие | evento | A request the tool made to the service, or a notable step, with its time and outcome. |
+| Value counts beside the logs | facet | фасет | faceta | A list of one field's values with the number of runs for each; clicking a value filters the list. |
+
 ## Technical words and protected text
 
 Use **AI agent** or **agent** for the AI actor in ordinary prose. Do not introduce model as a
