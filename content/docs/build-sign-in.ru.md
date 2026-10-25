@@ -4,8 +4,8 @@ description: "Как инструмент входит к провайдеру, 
 ---
 
 Ваш инструмент работает с сервисом, которому нужен вход, например с Google или Zoom. Эта страница показывает, где живут
-ключи и токены, как владелец выбирает аккаунт и чего вход никогда не должен делать. Ещё она говорит, что добавит общий
-модуль входа в cli-core.
+ключи и токены, как владелец выбирает аккаунт и чего вход никогда не должен делать. Ещё она показывает общий модуль входа
+в cli-core.
 
 ## Правила
 
@@ -38,18 +38,49 @@ const saved = credentials.read(profile)
 `profile` — имя, которое ввёл владелец. `saved.secret` уходит клиенту сервиса и больше никуда; `saved.source` говорит,
 откуда он взят: из окружения, связки ключей или файла.
 
-## Появится в следующем выпуске cli-core
+## Вход через браузер с общим модулем
 
-Общий модуль входа `@wirecat/cli-core/oauth` с одним порядком входа для всех инструментов:
+Для сервиса, где вход идёт через его веб-страницу (OAuth), используйте общий модуль входа `@wirecat/cli-core/oauth`.
+Он даёт всем инструментам один порядок входа:
 
 - вход через браузер с локальным адресом возврата или вставленным кодом, защищённый `state` и PKCE;
 - обмен токена, обновление и выход;
 - блокировка на профиль, чтобы две команды не обновляли один токен одновременно;
-- провайдеры объявляются в каждом инструменте (`drive` и инструмент календаря объявляют Google, `zm` — Zoom), любой шаг
-  можно заменить;
-- одна схема имён для записей связки ключей, при этом нынешние записи продолжают работать, и никому не нужно входить
+- провайдера объявляет ваш инструмент; в cli-core нет адресов и идентификаторов провайдеров, любой шаг можно заменить;
+- одна схема имён для записей связки ключей; старую запись по-прежнему можно прочитать, и никому не нужно входить
   заново.
 
+```ts
+import { credentialStorage, type OAuthProvider, oauthAccount, standardCodec, tokenKeeper } from "@wirecat/cli-core/oauth"
+
+const acme: OAuthProvider = {
+  id: "acme",
+  name: "Acme",
+  authorizeUrl: "https://acme.example/oauth/authorize",
+  tokenUrl: "https://acme.example/oauth/token",
+  client: { clientId: "your-app-id" },
+  redirect: { kind: "loopback" },
+}
+
+const keeper = tokenKeeper({
+  provider: acme,
+  storage: credentialStorage({
+    credentials: { service: "acme-cli", configDir, envVar: "ACME_TOKEN" },
+    account: oauthAccount(acme.id, profile),
+    codec: standardCodec(acme.id),
+  }),
+  lockDir: configDir,
+  fetch,
+  signInCommand: `acme ${profile} sign-in`,
+})
+
+await keeper.signIn({ scopes: ["meetings:read"], openBrowser })
+const accessToken = await keeper.accessToken()
+```
+
+`configDir` и `profile` — те же, что выше; `openBrowser` открывает адрес в браузере владельца. `accessToken()`
+обновляет токен, когда срок его действия подходит к концу. Токен сохраняется через `Credentials`, так что правила выше
+по-прежнему действуют.
 ## Что сломается, если это пропустить
 
 Профиль по умолчанию читает или пишет не тот аккаунт. Токен в командной строке остаётся в истории оболочки. Токен в

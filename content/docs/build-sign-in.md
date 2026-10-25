@@ -4,8 +4,8 @@ description: "How a tool signs in to a provider, keeps its keys and tokens out o
 ---
 
 Your tool talks to a service that needs a sign-in, such as Google or Zoom. This page shows where the keys and tokens
-live, how the owner chooses the account, and what a sign-in must never do. It also says what the shared sign-in module
-in cli-core will add.
+live, how the owner chooses the account, and what a sign-in must never do. It also shows the shared sign-in module in
+cli-core.
 
 ## The rules
 
@@ -38,17 +38,47 @@ const saved = credentials.read(profile)
 `profile` is the name the owner typed. `saved.secret` goes to the service client and nowhere else; `saved.source`
 says whether it came from the environment, the keyring or the file.
 
-## Coming in the next cli-core release
+## Browser sign-in with the shared module
 
-A shared sign-in module, `@wirecat/cli-core/oauth`, with one flow for every tool:
+For a service that signs in through its web page (OAuth), use the shared sign-in module `@wirecat/cli-core/oauth`.
+It gives every tool one flow:
 
 - the browser sign-in with a local return address or a pasted code, protected by `state` and PKCE;
 - token exchange, refresh and sign-out;
 - a lock per profile, so two commands never refresh the same token at once;
-- providers declared in each tool (`drive` and a calendar tool declare Google, `zm` declares Zoom), with any step
-  replaceable;
-- one naming scheme for keyring entries, while today's entries keep working, so no one signs in again.
+- your tool declares its provider; cli-core holds no provider's addresses or ids, and any step can be replaced;
+- one naming scheme for keyring entries; an older entry can still be read, so no one has to sign in again.
 
+```ts
+import { credentialStorage, type OAuthProvider, oauthAccount, standardCodec, tokenKeeper } from "@wirecat/cli-core/oauth"
+
+const acme: OAuthProvider = {
+  id: "acme",
+  name: "Acme",
+  authorizeUrl: "https://acme.example/oauth/authorize",
+  tokenUrl: "https://acme.example/oauth/token",
+  client: { clientId: "your-app-id" },
+  redirect: { kind: "loopback" },
+}
+
+const keeper = tokenKeeper({
+  provider: acme,
+  storage: credentialStorage({
+    credentials: { service: "acme-cli", configDir, envVar: "ACME_TOKEN" },
+    account: oauthAccount(acme.id, profile),
+    codec: standardCodec(acme.id),
+  }),
+  lockDir: configDir,
+  fetch,
+  signInCommand: `acme ${profile} sign-in`,
+})
+
+await keeper.signIn({ scopes: ["meetings:read"], openBrowser })
+const accessToken = await keeper.accessToken()
+```
+
+`configDir` and `profile` are as above; `openBrowser` opens a URL in the owner's browser. `accessToken()` refreshes
+the token when it is about to expire. The token is saved with `Credentials`, so the rules above still hold.
 ## What breaks if you skip this
 
 A default profile reads or writes the wrong account. A token on the command line stays in the shell history. A token

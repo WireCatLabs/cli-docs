@@ -44,12 +44,20 @@ A recording that arrives later finds the same row by its key and updates it.
 - meeting passcodes, PINs and the query string of a join link;
 - a provider's raw response; keep only allow-listed fields.
 
-## Coming in the next cli-core release
+## Register your provider
 
-Your tool will record its provider in the store when it runs: its name, kind, aliases and command. Until then, a
-provider that cli-core does not list is treated as a messenger. After that release, rows of a provider no tool has
-recorded are skipped and reported, never searched as messages.
+Each time your tool runs, it records its provider in the store: its name, kind, aliases and command. Every other tool
+then knows the new source without a cli-core release. Rows of a provider no tool has recorded are skipped and
+reported, never searched as messages.
 
+```ts
+import { openStore } from "@wirecat/cli-core/store"
+
+const store = await openStore()
+await store.accounts.registerProvider({ name: "acme", kind: "meetings", aliases: ["acme"], command: "acme" })
+```
+
+`kind` is what search reads your records as: `messages`, `mail`, `notes`, `documents`, `meetings` or `events`.
 ## What breaks if you skip this
 
 Without `external_id`, each sync adds the same record again. Without soft delete, a failed sync erases what the owner
