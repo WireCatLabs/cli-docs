@@ -8,7 +8,8 @@
       "!**/out",
       "!**/.source",
       "!content/docs/*/",
-      "!pnpm-lock.yaml",
+      "!**/pnpm-lock.yaml",
+      "!pnpm-workspace.yaml",
       "!next-env.d.ts",
       "!design",
       "!lib/search-language.generated.js",
@@ -44,6 +45,10 @@
       }
     }
   ],
+  "markdown": {
+    "formatter": { "enabled": false },
+    "linter": { "enabled": false }
+  },
   "css": {
     "parser": {
       "tailwindDirectives": true
