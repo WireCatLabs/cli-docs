@@ -65,8 +65,8 @@ Los directorios antiguos de macOS ya no se trasladan automáticamente; doctor mu
 Ajustes públicos, tokens del almacén y base de reuniones son datos separados.
 
 `zm config set` guarda el archivo para que solo tú puedas leerlo (`0600`). `zm doctor --json` enumera el archivo y
-su carpeta en `files.problems` cuando otros usuarios pueden leerlos, con el modo encontrado y el deseado, y escribe
-en stderr el `chmod` que corrige cada uno. No cambia nada por sí mismo. Windows no se comprueba.
+su carpeta en `files.problems` cuando otros usuarios pueden leerlos, cada uno con `path`, `mode` (el encontrado) y
+`want`, y escribe en stderr el `chmod` que corrige cada uno. No cambia nada por sí mismo. Windows no se comprueba.
 
 ## Permisos
 

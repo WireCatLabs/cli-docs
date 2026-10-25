@@ -54,12 +54,12 @@ zm personal session start --browser firefox
 
 ### Команды завершаются ошибкой "Zoom token request failed"
 
-Каждый запрос токена записывает результат в `~/.local/share/zm/runs/<date>/<run>/events.jsonl`
+Каждый запрос токена записывает результат в `~/.local/share/zoom-cli/runs/<date>/<run>/events.jsonl`
 (папка `runs` внутри `ZM_STATE_DIR`, если переменная задана). Запись содержит статус HTTP,
 получен ли новый токен обновления, удалось ли сохранить его в хранилище паролей, тайм-аут или отмену
 и идентификатор процесса. Самих токенов в ней нет. Две близкие по времени записи с разными
 идентификаторами процессов могут означать одновременное обновление из двух команд. Прочитайте их
-через `cat ~/.local/share/zm/runs/*/*/events.jsonl`, затем повторите `zm personal session start`.
+через `cat ~/.local/share/zoom-cli/runs/*/*/events.jsonl`, затем повторите `zm personal session start`.
 Запуски старше 30 дней удаляются.
 
 ### Не хватает разрешения

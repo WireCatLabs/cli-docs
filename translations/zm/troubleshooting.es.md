@@ -54,12 +54,12 @@ No se guarda el token en un archivo de texto. Tras repararlo, repite login y com
 
 ### Las órdenes terminan con "Zoom token request failed"
 
-Cada solicitud de token registra su resultado en `~/.local/share/zm/runs/<date>/<run>/events.jsonl`
+Cada solicitud de token registra su resultado en `~/.local/share/zoom-cli/runs/<date>/<run>/events.jsonl`
 (la carpeta `runs` dentro de `ZM_STATE_DIR` cuando está definida). El registro contiene el estado HTTP,
 si llegó un nuevo token de actualización, si se guardó en el llavero, un tiempo de espera agotado o
 cancelación y el identificador del proceso. Nunca contiene el token. Dos registros cercanos con
 identificadores de proceso distintos sugieren dos órdenes actualizando a la vez. Léelos con
-`cat ~/.local/share/zm/runs/*/*/events.jsonl` y vuelve a ejecutar `zm personal session start`.
+`cat ~/.local/share/zoom-cli/runs/*/*/events.jsonl` y vuelve a ejecutar `zm personal session start`.
 Los registros de ejecuciones de más de 30 días se eliminan.
 
 ### Falta un permiso necesario

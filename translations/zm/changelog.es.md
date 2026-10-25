@@ -4,6 +4,13 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.48.0 — 25.10.2026
+
+### Correcciones
+
+- **`zm --version` sin nada más en la línea responde antes de cargar el programa**: unos 50 archivos de módulos en lugar de 1150
+  (`cli/start` de cli-core). `--version` con cualquier otra cosa en la línea pasa por el programa como antes.
+
 ## 0.47.0 — 25.10.2026
 
 ### Añadido
