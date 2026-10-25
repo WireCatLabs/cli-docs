@@ -5,19 +5,13 @@ allowBuilds:
   lefthook: true
   sharp: true
 minimumReleaseAgeExclude:
-  - '@wirecat/cli-base@0.50.2'
-  - '@wirecat/cli-core-onnx@1.0.0'
-  - '@wirecat/cli-core-sqlite@1.0.0'
-  - '@wirecat/cli-core@0.397.0'
-  - '@wirecat/cli-tasks@0.2.0'
-patchedDependencies:
-  '@fumadocs/base-ui@16.15.17': patches/@fumadocs__base-ui@16.15.17.patch
+  - '@wirecat/*'
 
 overrides:
+  # serve 14.2.6 is its latest release and still allows compression 1.8.1 (GHSA-vc2v-76pw-4v95).
   serve>compression: 1.8.2
-  markdownlint-cli2>smol-toml: 1.9.0
-  # The shared standard pins markdownlint-cli2 0.23.3, which pins markdown-it 15.0.1 (advisories fixed in 15.0.3).
-  markdownlint-cli2>markdown-it: 15.0.3
-  micromark-extension-math>katex: 0.18.2
-  # cli-core pins 2.1.0, which has advisories fixed in 2.3.0.
-  '@modelcontextprotocol/server': 2.3.1
+  # micromark-extension-math 3.1 (via markdownlint) allows only katex ^0.16 (GHSA-238p-pmpm-9mq7).
+  micromark-extension-math>katex: 0.19.1
+
+patchedDependencies:
+  '@fumadocs/base-ui@16.17.8': patches/@fumadocs__base-ui@16.17.8.patch
