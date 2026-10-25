@@ -3,11 +3,23 @@ title: "Create your CLI"
 description: "Connect a service WireCat does not support yet: build your own tool with our template and your AI agent, with guides for every step."
 ---
 
-You can build your own WireCat tool for any service or API — quickly, with our template and your AI agent. Use a CRM,
-a task tracker or a notes app that WireCat does not support yet? Add it yourself. Your tool then works like the
-others: you and your agents can search it, ask about it and act on it next to your chats, mail and meetings.
+You can build your own command-line tool for any service or API — quickly, with our template and your AI agent. Use a
+CRM, a task tracker or a notes app that WireCat does not support yet? Add it yourself.
 
 This page shows what it takes, what you get, and where to start. The guides after it walk you through each part.
+
+## Two ways to use it
+
+Both start from the same template and get the same foundation. The only difference is how far you connect your tool.
+
+- **A tool of its own.** You want a fast command-line tool for one service, and nothing more. The template gives you
+  the foundation from the first day: the service's data kept on your computer, quick search in it, memory for what
+  your agent learns, a server for AI agents and safe sign-in. You do not need any other WireCat tool.
+- **Part of WireCat.** You already have WireCat tools for chats, mail or meetings, and want one search over all of
+  it. Then connect your tool to the others: what it saves sits next to everything else, and one question finds it.
+  This takes a few more steps, described in [Add a source](./build-add-source.md).
+
+You can start with the first and connect your tool later.
 
 ## How to build it, in short
 
@@ -22,8 +34,11 @@ You do not need to know how WireCat works inside to get started. The guides belo
 
 ## What WireCat gives your tool
 
-- **Search across everything.** What your tool saves sits next to messages, mail, meetings and documents from the
-  other tools, and one question searches them all.
+- **Your data on your computer, with fast search.** What your tool saves stays in a local file. Search finds words in
+  any form in English, Russian and Spanish, and by meaning if you turn it on.
+- **Memory for your agent.** Your agent can keep what it learned — a summary, a preference — and find it later.
+- **One search across all your tools,** if you connect it: what your tool saves sits next to messages, mail, meetings
+  and documents from the other tools.
 - **Work with AI agents.** Every command of your tool is ready for an agent, and you decide what the agent may change.
 - **Your accounts stay apart.** You always say which account a command uses, so nothing goes to the wrong one.
 - **Sign-in and passwords handled safely.** Keys stay in your computer's keychain and never show up in output.
