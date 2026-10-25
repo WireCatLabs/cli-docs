@@ -153,9 +153,10 @@ anyway. Then start a new session and try the check above. Hermes's terminal must
 same account login.
 
 **Coming soon:** `skill install --for hermes` does this in one step. It puts the skill in
-`~/.agents/skills` and adds that folder to `skills.external_dirs` in Hermes's settings. When your
-tool has it, remove the copy in `~/.hermes/skills/tg-cli`: Hermes prefers that folder, so an old
-copy would hide the new one.
+`~/.agents/skills` and adds that folder to `skills.external_dirs` in Hermes's settings; if that
+fails, it saves a copy in `~/.hermes/skills` instead, and says which it did. Before you run it,
+delete the copy you saved in `~/.hermes/skills/tg-cli`, or run `hermes skills uninstall tg-cli` if
+you installed it from this site: Hermes prefers that folder, so an old copy would hide the new one.
 
 **If Hermes cannot find `tg`.** Hermes runs commands with the environment of a login `bash`
 (`bash -l`), saved when the session starts. That shell reads `~/.bash_profile` if you have one,

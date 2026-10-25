@@ -158,9 +158,10 @@ hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
 и тот же вход в аккаунт.
 
 **Скоро:** `skill install --for hermes` сделает это одной командой. Он положит навык в
-`~/.agents/skills` и добавит эту папку в `skills.external_dirs` в настройках Hermes. Когда в вашем
-инструменте появится эта команда, удалите копию в `~/.hermes/skills/tg-cli`: Hermes предпочитает эту
-папку, и старая копия заслонит новую.
+`~/.agents/skills` и добавит эту папку в `skills.external_dirs` в настройках Hermes; если это не
+получится, сохранит копию в `~/.hermes/skills` и скажет, что сделал. Перед запуском удалите копию,
+которую вы сохранили в `~/.hermes/skills/tg-cli`, или выполните `hermes skills uninstall tg-cli`, если
+ставили навык с этого сайта: Hermes предпочитает эту папку, и старая копия заслонит новую.
 
 **Если Hermes не находит `tg`.** Hermes выполняет команды в окружении login-оболочки `bash`
 (`bash -l`), которое он сохраняет в начале сессии. Такая оболочка читает `~/.bash_profile`, если он

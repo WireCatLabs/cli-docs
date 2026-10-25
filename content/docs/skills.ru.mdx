@@ -50,8 +50,7 @@ hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
 `hermes skills search https://wirecat.dev --source well-known` покажет все навыки. Hermes запоминает
 источник, поэтому позже `hermes skills update` обновит навык.
 
-Можно также добавить репозиторий инструмента как источник. После этого `hermes skills search tg-cli`
-покажет его навык и имя для установки:
+Можно также добавить репозиторий инструмента как постоянный источник навыков (tap):
 
 ```sh
 hermes skills tap add WireCatLabs/tg-cli

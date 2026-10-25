@@ -49,8 +49,7 @@ Hermes scans every skill before it installs one. If it stops at a caution, read 
 shows; add `--force` to install anyway. `hermes skills search https://wirecat.dev --source well-known` lists them all. Hermes keeps the
 source, so `hermes skills update` refreshes the skill later.
 
-You can also add a tool's repository as a source. `hermes skills search tg-cli` then shows its
-skill and the name to install it with:
+You can also add a tool's repository as a standing skill source (a tap):
 
 ```sh
 hermes skills tap add WireCatLabs/tg-cli
