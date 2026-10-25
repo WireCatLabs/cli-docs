@@ -43,7 +43,7 @@ El token de `max sales bot` está separado en el servicio `max-cli`, entrada `bo
 | Contenido | Ubicación | Permisos |
 |---|---|---|
 | estado del perfil: dispositivo, accesos y `viewerId` | `~/.local/share/max-cli/profiles/<профиль>.json` | `0600` |
-| configuración | `~/.config/max-cli/config.json` | `0644` |
+| configuración | `~/.config/max-cli/config.json` | carpeta `0700`, archivo `0600`; `doctor` nombra los abiertos |
 | ejecuciones con `--record` y todos los fallos: comando, identificadores, tiempos y errores, sin texto | `~/.local/share/max-cli/runs/…` | carpeta `0700`, archivos `0600` |
 | registro de envíos, **siempre**: chat, hora, identificador, longitud y resultado, sin texto | `~/.local/share/max-cli/sends/<профиль>.jsonl` | carpeta `0700`, archivos `0600` |
 | destinatarios permitidos, si está activo | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
@@ -86,7 +86,7 @@ En los ejemplos de abajo, `agent` es el nombre de un perfil que creaste aparte p
 en el registro es más corta: la clave del comando (`messages.send`) y el tipo de escritura, y el chat solo si el comando indica su id numérico.
 `--dry-run` con `MAX_READ_ONLY` da la misma negativa y no escribe en el registro.
 
-**Los bots tienen claves propias `bot.*`, como `bot.messages.send`.** Usan los mismos niveles. Los ajustes comunes y las capas `bot.defaults`/`bot.profiles` se resuelven en el mismo orden; `config show --bot` muestra los permisos efectivos. El antiguo `allow` todavía se lee.
+**Los bots tienen claves propias `bot.*`, como `bot.messages.send`.** Usan los mismos niveles. Los ajustes comunes y las capas `bot.defaults`/`bot.profiles` se resuelven en el mismo orden; `config show --bot` muestra los permisos efectivos.
 
 Cada bot tiene destinatarios (`max <имя> bot recipients add <чат>`) y registro (`max <имя> bot sends list`) propios. **Toda** escritura pasa por ellos, incluidos `messages send`, `messages pin` y `bot api`, para evitar eludir controles con API genérica. Edición y eliminación reciben primero el chat; `max` consulta el mensaje y rechaza si pertenece a otro. No hace esa comprobación para `user:<id>`. Registra chat, tipo, resultado y longitud, nunca texto. No hay límite por hora de bots hasta definirlo en `bot`: `max <имя> config set --bot sends_per_hour 200`.
 
@@ -114,7 +114,7 @@ Los nombres, títulos y textos de otras personas no controlan la terminal: los c
 
 ## Qué ven otros procesos
 
-El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en `ps` y en el historial de la shell ([página común](https://wirecat.dev/ru/docs/security)). Los archivos de estado y el socket del servidor en segundo plano están protegidos con permisos `0600` y carpetas `0700`. Otros archivos pueden tener permisos distintos, como `0644` en la configuración. Al mover archivos o redirigir la salida, comprueba los permisos por separado.
+El token no se pasa como argumento, pero el texto de un mensaje sí, y se ve en `ps` y en el historial de la shell ([página común](https://wirecat.dev/ru/docs/security)). Los archivos de estado y el socket del servidor en segundo plano están protegidos con permisos `0600` y carpetas `0700`. `config set` escribe `config.json` con permisos `0600`; un archivo de una versión anterior puede seguir con `0644` hasta que se reescriba, y `max doctor` nombra ese archivo y el comando `chmod` que lo corrige. Al mover archivos o redirigir la salida, comprueba los permisos por separado.
 
 ## Qué sale por la red
 

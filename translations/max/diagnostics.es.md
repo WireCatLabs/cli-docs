@@ -178,7 +178,7 @@ max personal doctor reports create              # о последнем неуд
 max personal doctor reports create --run <id>   # об этом запуске
 ```
 
-Si no se puede leer la configuración, ejecuta primero `max doctor --json` para ver el error del ajuste. Crear un archivo de informe requiere comprobar los permisos de escritura, así que corrige antes el ajuste inválido.
+Si no se puede leer la configuración, ejecuta primero `max doctor --json`. En `config.issues` enumera cada error del archivo: el tipo, la clave, la línea y la columna si el JSON no es válido, y el comando `config unset` que quita la clave. Los valores de los ajustes no aparecen en la respuesta. Aunque el archivo tenga errores, `doctor` responde y termina con el código `0`. En `files.problems` nombra el archivo de ajustes y su carpeta si otros usuarios pueden leerlos, y en stderr imprime el `chmod` que lo corrige. Crear un archivo de informe requiere comprobar los permisos de escritura, así que corrige antes el ajuste inválido.
 
 El comando escribe un archivo JSON (lo que muestra y ejecuta `max personal doctor`) e imprime un enlace al nuevo problema en [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues). Leal archivo antes de enviarlo. No contiene textos de mensajes y los números de chats y mensajes se reemplazan por etiquetas. ¿Qué más contiene? En la sección [cómo informar un problema](./troubleshooting.md#как-сообщить-о-проблеме).
 

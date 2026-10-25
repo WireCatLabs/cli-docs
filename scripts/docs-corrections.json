@@ -591,7 +591,7 @@
   {
     "tool": "max",
     "slug": "changelog",
-    "reason": "The source placeholders <слова>, <состояние>, <операция>, <профиль> and <чат> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
+    "reason": "The source placeholders <слова>, <состояние>, <операция>, <профиль>, <чат>, <ключ> and <путь> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
     "replacements": {
       "en": [
         {
@@ -617,6 +617,14 @@
         {
           "before": "`chats requests confirm|reject <чат> --all` answers",
           "after": "`chats requests confirm|reject <chat> --all` answers"
+        },
+        {
+          "before": "(`max config unset <ключ>`)",
+          "after": "(`max config unset <key>`)"
+        },
+        {
+          "before": "`to make it private: chmod 600 '<путь>'`",
+          "after": "`to make it private: chmod 600 '<path>'`"
         }
       ],
       "es": [
@@ -643,6 +651,14 @@
         {
           "before": "`chats requests confirm|reject <чат> --all` responde",
           "after": "`chats requests confirm|reject <chat> --all` responde"
+        },
+        {
+          "before": "(`max config unset <ключ>`)",
+          "after": "(`max config unset <clave>`)"
+        },
+        {
+          "before": "`to make it private: chmod 600 '<путь>'`",
+          "after": "`to make it private: chmod 600 '<ruta>'`"
         }
       ]
     }
@@ -1136,48 +1152,24 @@
   {
     "tool": "max",
     "slug": "search",
-    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. MAX removed its mail search; send readers to memo without naming the removed command.",
+    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes.",
     "replacements": {
       "ru": [
         {
           "before": "`memo import`",
           "after": "`memo sync --only notes`"
-        },
-        {
-          "before": "; `max personal search mail` отвечает\nподсказкой «mail is memo's: install @wirecat/cli-memo, then `memo search mail …`».",
-          "after": ". Почту ищет memo: `memo search mail …`."
-        },
-        {
-          "before": "# почта — это memo; max search mail подскажет его",
-          "after": "# почта — это memo"
         }
       ],
       "en": [
         {
           "before": "`memo import`",
           "after": "`memo sync --only notes`"
-        },
-        {
-          "before": "; `max personal search mail` answers with a hint, “mail is memo's: install @wirecat/cli-memo, then `memo search mail …`”.",
-          "after": ". Mail is searched by memo: `memo search mail …`."
-        },
-        {
-          "before": "# почта — это memo; max search mail подскажет его",
-          "after": "# почта — это memo"
         }
       ],
       "es": [
         {
           "before": "`memo import`",
           "after": "`memo sync --only notes`"
-        },
-        {
-          "before": "; `max personal search mail` responde con una indicación, «mail is memo's: install @wirecat/cli-memo, then `memo search mail …`».",
-          "after": ". El correo lo busca memo: `memo search mail …`."
-        },
-        {
-          "before": "# почта — это memo; max search mail подскажет его",
-          "after": "# почта — это memo"
         }
       ]
     }

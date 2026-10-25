@@ -4,6 +4,49 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.76.0 — 25.10.2026
+
+### Fixed
+
+- **A failure in the middle of a command is now reported like any other error.** Instead of a Node stack trace, it prints an `internal_error` (`command.crashed`): one line in a terminal, a JSON error object otherwise; the exit code is still 1.
+  Why: a stack trace tells a script nothing and can put text on the screen that does not belong there.
+  What to check: if a script parsed the stack trace on stderr, have it read the error object.
+
+### What's new
+
+- **`max doctor --json` lists every problem in the settings file in `config.issues` (cli-core 0.423.0).** Each problem is `{ kind, file, profile?, key?, line?, column?, what, fix? }`; `kind` is `invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` or `invalid_value`. For invalid JSON, `line` and `column` show where parsing stopped; for the rest, `fix` is a `config unset` command that removes the key and runs as written. The setting's value is not included in the answer. With problems in the file, `doctor` still answers and exits with code `0`; without a profile name it answers with `profile: null`.
+- **`config show` works with a file that has problems and names each one with the command that removes it.** `config unset` also removes a key that no schema knows, including one at the root of the file (`max config unset <ключ>`).
+- **`max skill status` and `max skill show --for claude|agents` (cli-core 0.427.0).** `status` says whether the installed SKILL.md matches this version; `show --for` prints the installed copy.
+- **`max store tables list` lists the tables of the shared archive, and `store info` shows more about the file (cli-core 0.427.0).**
+- **A run record says who started it and what went wrong (cli-core 0.425.0).** `run.json`, `runs list`, `runs show` and `search runs` gain `cli_command`, `argv` (content and secrets are `[redacted]`), `agent` and, for a failed run, `error`.
+
+### Changed — may break scripts
+
+- **`npm install -g` chooses the agent for the skill only from `MAX_INSTALL_AGENT`.** `TG_INSTALL_AGENT` is no longer read.
+- **The `doctor` answer has a `config.issues` list instead of the `config.error` string.** If settings could not be resolved because of a profile lock, a flag or an environment variable, the message is in `settings.error`.
+- **Old setting names are no longer recognized.** `default_profile`, `analysis_provider`, `analysis_model`, `analysis_base_url` with the `MAX_ANALYSIS_*` variables, and camelCase names (`sendsPerHour` and others) are unknown settings like any other: the command refuses and names the `config unset` that removes the key. The analysis model is set in `models.analysis.provider`, `models.analysis.model` and `models.analysis.base_url`.
+- **`messages sync` and `bot messages sync` are checked under their own keys `messages.sync` and `bot.messages.sync` (cli-core 0.421.0).** A level on `messages` or `bot.messages` still applies to them, and a denial written directly on `messages.sync` or `bot.messages.sync` now stops the command. Bot commands check a read denial before connecting.
+- **A saved permission key that no command checks stops both bot commands and `--dry-run`.** The error names the key and the `config unset` that removes it; `config show`, `set` and `unset` work so the file can be repaired.
+- **Former command names get the ordinary "unknown command" answer, without a hint.** `max personal search mail` no longer names memo: mail is searched by `memo search mail`.
+- **A run without a named profile is recorded without `profile`, not with `"profile": "default"` (cli-core 0.424.0).**
+- **In a run record, a failed command's stack starts with the package name and has no Node lines (cli-core 0.425.0).** A stack line is `MaxClient.connect @wirecat/max-cli/client.js:1497`, not `client.js:1497`; there are no more `node:internal` lines.
+- **`config set` writes `config.json` with mode `0600`, not `0644` (cli-base 0.57.0).** The file holds the owner's profiles, accounts and paths. A program that reads the settings as another user will not read them after the next `config set`.
+
+### Security
+
+- **`max doctor` names `config.json` and its folder if other users can read them, and the `chmod` command that fixes it.** In `--json` this is `files`: `{ checked, ok, problems: [{ path, mode, want }] }`; the file should be `0600`, the folder `0700`. For each problem stderr gets a line `to make it private: chmod 600 '<путь>'`; `doctor` itself does not change permissions. The folder is checked also when `MAX_CONFIG_DIR` sets it. The block is present without a profile name and when settings did not resolve; it is also included in the `doctor reports create` report. On Windows permissions are not checked: `files` is `{ checked: false, reason }`.
+
+## 0.75.0 — 25.10.2026
+
+### What's new
+
+- `max --help` names `max account list`: the list of profiles and their logged-in accounts.
+
+### Changed — may break scripts
+
+- **Old names of statistics and search permissions are no longer recognized.** Previously the keys `messages.stats`, `chats.stats`, `tasks.stats`, `messages.search`, `conversations.search` and `topics.search` stopped the command with a hint on how to rename them; now such a key simply has no effect, and a denial saved under the old name no longer applies. Rename them to `stats.messages.show`, `stats.chats.show`, `stats.tasks.show`, `search.messages`, `search.conversations` and `search.topics`.
+- **The shared database moves to version 33 (cli-core 0.420.0).** Once this version opens the database, a CLI on an older cli-core refuses to work with it and asks to be updated, so update all WireCat CLIs that share the database together.
+
 ## 0.74.0 — 25.10.2026
 
 ### Changed — may break scripts
@@ -1834,7 +1877,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.74.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.76.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

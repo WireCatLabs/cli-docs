@@ -53,7 +53,7 @@ max personal search messages 'договор chat:Друзья'     # тольк
 ```
 
 ```sh
-memo search mail 'счёт'                                  # почта — это memo; max search mail подскажет его
+memo search mail 'счёт'                                  # почта — это memo
 ```
 
 ```sh
@@ -64,7 +64,7 @@ max personal search notes 'бюджет source:internal'       # только з
 max personal search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
 ```
 
-`search all` escribe para cada hallazgo que se trata de un mensaje (`msg:…`) o una nota (`note:…`). `max` no busca en el correo: ni `search messages` ni `search all`; `max personal search mail` responde con una indicación, «mail is memo's: install @wirecat/cli-memo, then `memo search mail …`». En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; `source:internal` y `source:file` en la consulta de `search notes` seleccionan notas de memo o de una carpeta. Si un campo no corresponde, por ejemplo `chat:`/`from:` para las notas, `search all` omite esa fuente y explica por qué.
+`search all` escribe para cada hallazgo que se trata de un mensaje (`msg:…`) o una nota (`note:…`). `max` no busca en el correo: ni `search messages` ni `search all`. En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; `source:internal` y `source:file` en la consulta de `search notes` seleccionan notas de memo o de una carpeta. Si un campo no corresponde, por ejemplo `chat:`/`from:` para las notas, `search all` omite esa fuente y explica por qué.
 
 Las notas llegan al archivo mediante memo: `memo import`. Sin ellas, `search all` solo busca mensajes.
 

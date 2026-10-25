@@ -4,6 +4,49 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.76.0 — 25.10.2026
+
+### Corregido
+
+- **Un fallo a mitad de un comando ahora se informa como cualquier otro error.** En lugar de una traza de pila de Node, se imprime un error `internal_error` (`command.crashed`): una línea en el terminal y un objeto JSON de error en los demás casos; el código de salida sigue siendo 1.
+  Por qué: la traza no le dice nada a un script y puede mostrar en pantalla texto que no debe estar ahí.
+  Qué tener en cuenta: si un script analizaba la traza en stderr, que lea el objeto de error.
+
+### Novedades
+
+- **`max doctor --json` enumera todos los errores del archivo de ajustes en `config.issues` (cli-core 0.423.0).** Cada error es `{ kind, file, profile?, key?, line?, column?, what, fix? }`; `kind` es `invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` o `invalid_value`. Si el JSON no es válido, `line` y `column` indican dónde se detuvo el análisis; en los demás casos, `fix` es un comando `config unset` que quita la clave y se ejecuta tal como está escrito. El valor del ajuste no aparece en la respuesta. Con errores en el archivo, `doctor` responde y termina con el código `0`, y sin nombre de perfil responde con `profile: null`.
+- **`config show` funciona con un archivo que tiene errores y nombra cada uno con el comando que lo quita.** `config unset` también elimina una clave que ningún esquema conoce, incluso en la raíz del archivo (`max config unset <ключ>`).
+- **`max skill status` y `max skill show --for claude|agents` (cli-core 0.427.0).** `status` dice si el SKILL.md instalado coincide con esta versión; `show --for` imprime la copia instalada.
+- **`max store tables list` enumera las tablas del archivo común, y `store info` muestra más datos del archivo (cli-core 0.427.0).**
+- **El registro de una ejecución dice quién la inició y qué salió mal (cli-core 0.425.0).** En `run.json`, `runs list`, `runs show` y `search runs` aparecen `cli_command`, `argv` (el contenido y los secretos son `[redacted]`), `agent` y, para una ejecución fallida, `error`.
+
+### Cambios que pueden romper scripts
+
+- **`npm install -g` elige el agente para el skill solo según `MAX_INSTALL_AGENT`.** `TG_INSTALL_AGENT` ya no se lee.
+- **La respuesta de `doctor` tiene la lista `config.issues` en lugar de la cadena `config.error`.** Si los ajustes no se pudieron resolver por un bloqueo del perfil, una opción o una variable de entorno, el mensaje está en `settings.error`.
+- **Los nombres antiguos de ajustes ya no se reconocen.** `default_profile`, `analysis_provider`, `analysis_model`, `analysis_base_url` con las variables `MAX_ANALYSIS_*` y los nombres en camelCase (`sendsPerHour` y otros) son ajustes desconocidos como cualquier otro: el comando se niega y nombra el `config unset` que quita la clave. El modelo de análisis se configura en `models.analysis.provider`, `models.analysis.model` y `models.analysis.base_url`.
+- **`messages sync` y `bot messages sync` se comprueban con sus propias claves `messages.sync` y `bot.messages.sync` (cli-core 0.421.0).** Un nivel en `messages` o `bot.messages` sigue aplicándose a ellos, y una denegación escrita directamente en `messages.sync` o `bot.messages.sync` ahora detiene el comando. Los comandos del bot comprueban la denegación de lectura antes de conectarse.
+- **Una clave de permiso guardada que ningún comando comprueba detiene tanto los comandos del bot como `--dry-run`.** El error nombra la clave y el `config unset` que la quita; `config show`, `set` y `unset` funcionan para que se pueda reparar el archivo.
+- **Los nombres antiguos de comandos reciben la respuesta habitual «unknown command», sin pista.** `max personal search mail` ya no nombra memo: el correo lo busca `memo search mail`.
+- **Una ejecución sin perfil nombrado se registra sin `profile`, no con `"profile": "default"` (cli-core 0.424.0).**
+- **En el registro de una ejecución, la pila de un comando fallido empieza por el nombre del paquete y no tiene líneas de Node (cli-core 0.425.0).** Una línea de la pila es `MaxClient.connect @wirecat/max-cli/client.js:1497`, no `client.js:1497`; ya no hay líneas `node:internal`.
+- **`config set` escribe `config.json` con permisos `0600`, no `0644` (cli-base 0.57.0).** El archivo contiene los perfiles, cuentas y rutas del propietario. Un programa que lee los ajustes como otro usuario no podrá leerlos después del siguiente `config set`.
+
+### Seguridad
+
+- **`max doctor` nombra `config.json` y su carpeta si otros usuarios pueden leerlos, y el comando `chmod` que lo corrige.** En `--json` es `files`: `{ checked, ok, problems: [{ path, mode, want }] }`; el archivo debe ser `0600` y la carpeta `0700`. Por cada problema, stderr recibe una línea `to make it private: chmod 600 '<путь>'`; `doctor` no cambia los permisos. La carpeta se comprueba también cuando la fija `MAX_CONFIG_DIR`. El bloque está presente sin nombre de perfil y cuando los ajustes no se resolvieron; también entra en el informe de `doctor reports create`. En Windows los permisos no se comprueban: `files` es `{ checked: false, reason }`.
+
+## 0.75.0 — 25.10.2026
+
+### Novedades
+
+- `max --help` nombra `max account list`: la lista de perfiles y sus cuentas con sesión iniciada.
+
+### Cambios que pueden romper scripts
+
+- **Los nombres antiguos de los permisos de estadísticas y búsqueda ya no se reconocen.** Antes, las claves `messages.stats`, `chats.stats`, `tasks.stats`, `messages.search`, `conversations.search` y `topics.search` detenían el comando con una pista para renombrarlas; ahora esa clave simplemente no tiene efecto, y una denegación guardada con el nombre antiguo ya no se aplica. Renómbralas a `stats.messages.show`, `stats.chats.show`, `stats.tasks.show`, `search.messages`, `search.conversations` y `search.topics`.
+- **La base de datos común pasa a la versión 33 (cli-core 0.420.0).** Cuando esta versión abra la base, un CLI con un cli-core más antiguo se negará a trabajar con ella y pedirá actualizarse, así que actualiza juntos todos los CLI de WireCat que comparten la base.
+
 ## 0.74.0 — 25.10.2026
 
 ### Cambios que pueden romper scripts
@@ -1846,7 +1889,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.74.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.76.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).
