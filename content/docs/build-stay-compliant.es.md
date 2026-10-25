@@ -51,11 +51,12 @@ niega a abrirlo y pide actualizar, en lugar de leerlo mal
 Por eso una herramienta que se queda en un cli-core antiguo puede dejar de funcionar cuando el propietario actualiza
 otra herramienta.
 
+Una herramienta creada con cli-template recibe también los cambios posteriores de la plantilla con
+`npx @wirecat/cli-template upgrade`: consulta
+[Recibe las mejoras de la plantilla](./build-create-cli.md#recibe-las-mejoras-de-la-plantilla).
+
 ## Próximamente
 
-- **`cli-template`**: empezar una herramienta nueva con un solo comando `npx`, con documentación, análisis, pruebas,
-  hooks de git e instrucciones para IA ya configurados, y actualizaciones que siguen cada versión de cli-base y
-  cli-core.
 - **Una comprobación del código para el acceso al almacén**, para que una herramienta que importa directamente un
   controlador de SQLite no pase el análisis.
 

@@ -47,10 +47,11 @@ The shared store only moves forward. A newer cli-core may migrate the file; an o
 upgrade, instead of reading it wrong ([WC-STORE-10](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md#wc-store-10--an-older-build-refuses-a-store-it-cannot-read-and-says-to-upgrade)).
 That is why a tool that stays on an old cli-core can stop working once the owner updates another tool.
 
+A tool made from cli-template also takes the template's later changes with `npx @wirecat/cli-template upgrade`:
+see [Keep it current](./build-create-cli.md#keep-it-current).
+
 ## Coming
 
-- **`cli-template`**: start a new tool with one `npx` command, with docs, linters, tests, git hooks and AI
-  instructions already set up, and upgrades that follow each cli-base and cli-core release.
 - **A source-code check for store access**, so a tool that imports a SQLite driver directly fails lint.
 
 ## What breaks if you skip this

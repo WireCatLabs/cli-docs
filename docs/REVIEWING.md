@@ -83,6 +83,24 @@ remaining issues separately with their owning repository, proposed correction an
 successful CI run is evidence for its checks, not a declaration that the entire corpus follows
 editorial rules.
 
+## Community tools
+
+A tool from outside WireCatLabs joins the site's "Community tools" group through a pull request that adds it to
+`tools.json` with `"community": true`. Its pages then sync from its repository at the reviewed tag in `docsRef`, as
+ours do; it never joins cli-core's list of WireCat tools. Review the entry against this list, and hold it until every
+point has evidence linked in the pull request:
+
+1. Every "Done when" check of the
+   [New CLI checklist](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/new-cli.md#done-when) is
+   green in the tool's own CI, on the tagged commit.
+2. The fresh-agent audit passed: an agent given only the handbook's index and the repository found no gap left open.
+3. Every command, example, help text and page names its profile explicitly; nothing picks an account by itself.
+4. Nothing is published under the `@wirecat` npm scope, and the tool is not called "WireCat".
+
+The tests reject a community entry with a `@wirecat/` package or a `WireCatLabs/` repository, and add the group to the
+sidebar only while at least one such entry exists. The entry is also listed in `content/docs/meta.json`,
+`meta.ru.json` and `meta.es.json`, like any tool.
+
 ## Required evidence before merge or release
 
 The PR description should state what the reader can do after the change, the pages/locales

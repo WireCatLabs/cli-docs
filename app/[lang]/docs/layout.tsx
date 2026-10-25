@@ -39,7 +39,7 @@ export default async function Layout({
     <DocsProvider lang={lang}>
       <DocsLayout
         {...options}
-        tree={unifiedDocsTree(source.getPageTree(lang))}
+        tree={unifiedDocsTree(source.getPageTree(lang), lang)}
         tabs={false}
         // Fumadocs' trigger expects a mounted dialog; ours opens the deferred one, in the header and drawer.
         searchToggle={{ enabled: false }}
