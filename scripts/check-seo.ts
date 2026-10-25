@@ -26,10 +26,8 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     const pathname = `/${relative(out, file)
       .replace(/\/index\.html$|\.html$/, "")
       .replace(/^index$/, "")}`
-    if (pathname === "/en" && stableHome) {
-      const redirects = join(out, "_redirects")
-      if (!existsSync(redirects) || !/^\/en\s+\/\s+301$/m.test(readFileSync(redirects, "utf8")))
-        problems.push("/en: legacy homepage must permanently redirect to /")
+    if (pathname === "/en") {
+      problems.push("/en: the English home is published only at /")
       continue
     }
     const lang = pathname === "/" ? "en" : pathname.split("/")[1]
