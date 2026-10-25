@@ -31,7 +31,8 @@ que escribiste con `memo notes add`, añade `--account`, como `--account telegra
 `--account notes:1`. Si añades la misma tarea dos veces, obtienes la que ya existe.
 
 Una carpeta de notas también es una cuenta: la búsqueda da su número como `folder_id`, y Memo lo acepta como
-`notes:<number>` o como el `folder:<id>` que muestran sus mensajes. `--source notes` indica tu carpeta cuando
+`notes:<number>` o como el `obsidian:<id>` o `local:<id>` que muestran sus mensajes; `folder:<id>` también la nombra.
+`--source notes` indica tu carpeta cuando
 tienes una. `memo tasks list` y `memo reminders list` sin `--source` leen todas las cuentas y las nombran en
 `meta.accounts`.
 

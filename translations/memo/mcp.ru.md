@@ -84,32 +84,6 @@ Memo использует общий интерфейс MCP из cli-core. В н
 Используй инструменты memo, чтобы показать записи памяти, которые ждут моей проверки.
 ```
 
-<a id="existing-tool-names"></a>
-
-## Обновите сохранённое подключение
-
-После обновления подключитесь заново, чтобы приложение перечитало список инструментов. Замените отдельные инструменты команд
-на `memo_read` или `memo_write`, передавая путь CLI в `command`. Например, вместо `notes_show` используйте
-`memo_read {"command":"notes show","arguments":{"note":"note:12"}}`.
-Прежние имена инструментов больше не зарегистрированы. Найдите команду, чтобы получить текущую схему аргументов.
-
-| Прежний вызов | Текущая команда и аргументы |
-|---|---|
-| `person_context` | `context`; сохраните `person` и явный `source` |
-| `project_context`, `project_evidence` | `projects context`, `projects evidence`; для доказательств `no_catch_up: true` заменяет `catch_up: false` |
-| `search_notes`, `search_messages`, `search_mail`, `search_all` | `search notes`, `search messages`, `search mail`, `search all`; используйте `query` вместо `text` |
-| `facts_add` | `facts add`; используйте `statement` вместо `text` |
-| `search_memories` | `search memories`; используйте `query` вместо `text` |
-| `meeting_passage`, `meeting_prepare` | `meetings passage`, `meetings prepare`; найдите текущие аргументы CLI |
-| `meeting_actions_add`, `project_actions_add` | `meetings actions add`, `projects actions add`; `input` передаёт JSON предложения, не читая stdin MCP |
-| `meeting_actions_list` | `meetings actions list`; используйте `query: "status:proposed"` вместо поля `status` |
-| `project_annotations_snapshot` | `projects annotations show`; читает без создания файла |
-| `project_annotations_preview` | `projects annotations check`; `file` и `bindings` указывают существующие локальные JSON-файлы |
-| Другие имена с подчёркиванием | Их пути в CLI, например `memories add`, `actions list`, `vocabulary check` и `tasks status` |
-
-Ключи разрешений остаются путями CLI через точку, например `projects.evidence`, а не прежними именами инструментов.
-Параметры бюджета словаря используют snake_case, например `max_comparisons`.
-
 Предложения сохраняются под именем агента `memo-mcp`. Проверяйте предложенные записи памяти и факты командой `memo memories list status:proposed` и командами со страницы
 [Память и факты](./memories.md).
 
@@ -167,11 +141,20 @@ chat:<provider>/<account>/<chat> project:<id>`), если
 `source` включает его аккаунт: у таких элементов `context: "linked-chat"`, они ничего не называют, у их линии
 `query: null` и задан `chat`. У каждой записи `linked_chats` есть `items` (новые элементы за этот запуск) и `capped`:
 за один запуск из каждого чата берётся не больше доли лимита элементов, а `cursor` читает остальное из ограниченного
-чата. Связанный чат вне `source` указан в `unread_sources` и не читается. У элемента,
+чата. Связанный чат вне `source` указан в `unread_sources` и не читается. Каждый человек, подтверждённый как участник проекта
+(`person:<id>` `member-of` `project:<id>`), читается как контакт `person:<id>` ниже, без его псевдонимов и
+без явной передачи: линия отправителя и элементы с `context: "sender"`. Человек, переданный ещё и как контакт, читается один раз.
+Core берёт не больше 16 линий, поэтому участники, которые не поместились, в фиксированном порядке перечислены в `unread_sources` с
+`kind: "member"` и `reason: "member-limit"`; у участника без сохранённой идентичности `reason: "no-identity"`. У элемента,
 найденного только по имени контакта, стоит `context: "person-only"`. Для контакта `person:<id>` читается всё, что
 написали сохранённые идентичности этого человека в `source` (линия `kinds: ["sender"]`, `query: null`, задан
 `senders`; у элементов `context: "sender"`, они могут ничего не называть), а искать будут только по псевдонимам,
-которые дал владелец, а не по отображаемому имени в мессенджере. Источники, которые не удалось прочитать, перечисляются, а
+которые дал владелец, а не по отображаемому имени в мессенджере. `people` перечисляет, кто написал сообщения и письма
+этого запуска, по сохранённым контактам, никогда по именам в тексте: одна запись на сохранённого человека
+(`person: "person:<id>"`, `name`, каждая встреченная запись `identities` `{provider, account, id}`, так что Telegram и
+WhatsApp одного человека считаются вместе) или на идентичность, не связанную ни с кем (`person: null`), с `items` и
+`contexts` (элементы по `context`). Собственные сообщения владельца не учитываются. Сначала те, у кого больше элементов, не больше 20;
+`people_omitted` считает остальных. Счёт относится только к этому вызову: складывайте его по вызовам с `cursor`. Источники, которые не удалось прочитать, перечисляются, а
 `completeness` остаётся `unknown`. Если он возвращает `checkpoint`, вызовите его снова с теми же аргументами и
 `cursor`, равным этому значению.
 Он не создаёт факты, задачи или связи с проектами; описанное выше обновление индекса может менять локальные поисковые индексы.

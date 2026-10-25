@@ -209,6 +209,6 @@ memo folders update 1 /other/path/to/notes
 
 С тем же ID заметки сохраняют свои ссылки и теги на обоих компьютерах.
 
-Папка `google-drive:…` содержит документы Google Drive, сохранённые drive-cli. `memo folders list` помечает её «kept by drive», а `memo folders update` отклоняет: поиск memo уже читает её.
+Документы Google Drive, сохранённые drive-cli, принадлежат его аккаунту `google-drive:…`. `memo folders list` помечает этот аккаунт «kept by drive», а `memo folders update` отклоняет его: поиск memo уже читает его.
 
 Дальше: [пометьте заметки тегами](./tags.md) или [найдите их](./search.md).
