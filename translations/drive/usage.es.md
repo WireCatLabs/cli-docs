@@ -56,7 +56,7 @@ la exportación si importan formato o pestañas. Revisa cada fuente omitida.
 
 Un archivo ilegible se guarda con nombre, tipo, tamaño, propietarios y enlace, sin texto.
 `drive personal sync` los cuenta en `names_only` y muestra la razón en `skipped`. `search` los encuentra
-por nombre; `not_read` indica la razón, así que abre `source_url` en vez de citar texto ausente.
+por nombre; `not_read` indica la razón, así que abre `url` en vez de citar texto ausente.
 La búsqueda por significado los ignora. Salen del índice al borrarse, moverse fuera del alcance
 o enviarse a la papelera. Si el formato o límite permite leerlos después, sync sustituye la entrada por texto.
 
