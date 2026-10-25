@@ -33,6 +33,7 @@
     "permissions",
     "security",
     "---Build on WireCat---",
+    "build-create-cli",
     "build-concepts",
     "build-add-source",
     "build-own-data",
