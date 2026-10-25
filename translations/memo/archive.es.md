@@ -26,7 +26,7 @@ notes /path/to/notes: 24 notes, 2 changed, 0 moved, 0 gone
 | `--only mail` | Solo cuentas de correo |
 | `--no-embed` | Omite la preparación para la búsqueda por significado |
 
-Los mensajes de Telegram y MAX los mantienen al día tg y max, no `memo sync`.
+Los mensajes de Telegram, MAX y WhatsApp los mantienen al día tg, max y wa, no `memo sync`.
 
 ## Importar con un temporizador (Linux)
 

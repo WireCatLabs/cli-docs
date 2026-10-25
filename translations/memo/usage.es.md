@@ -18,7 +18,7 @@ memo sync
 
 Solo se leen los archivos cambiados y el correo nuevo, así que una segunda ejecución es rápida. En
 Linux, `memo jobs start` lo ejecuta por ti cada pocos minutos ([mantener Memo al día](./archive.md)).
-Los mensajes de Telegram y MAX llegan a través de tg y max, no a través de Memo.
+Los mensajes de Telegram, MAX y WhatsApp llegan a través de tg, max y wa, no a través de Memo.
 
 ## Encontrar algo
 

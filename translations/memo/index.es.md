@@ -3,7 +3,7 @@ title: "Memo"
 ---
 
 Memo guarda en un solo lugar de tu ordenador lo que sabes sobre personas y proyectos: tus notas, tu
-correo y tus mensajes de Telegram y MAX. Tu agente de IA (por ejemplo Claude Code, Codex, Cursor o
+correo y tus mensajes de Telegram, MAX y WhatsApp. Tu agente de IA (por ejemplo Claude Code, Codex, Cursor o
 Gemini CLI) lo usa para encontrar lo que se dijo, reunir el contexto para una respuesta y recordar lo
 importante.
 
@@ -32,11 +32,12 @@ Tres palabras aparecen en todas las páginas:
 | Llevar la cuenta de lo que debes a otras personas y recibir recordatorios | [Tareas y recordatorios](./tasks.md) |
 | Dejar que tu agente recuerde lo que aprendió, y decidir tú qué se queda | [Recuerdos y hechos](./memories.md) |
 | Usar Memo desde una aplicación sin terminal, como Claude Desktop | [El servidor MCP](./mcp.md) |
+| Conectar una app del navegador o teléfono | [Conexión remota](./remote.md) |
 
 ## Cómo funciona
 
-1. **Tú eliges tus fuentes.** Añades una carpeta de notas, conectas una cuenta de correo o usas tg y
-   max para guardar tus chats. No se lee nada hasta que tú lo eliges.
+1. **Tú eliges tus fuentes.** Añades una carpeta de notas, conectas una cuenta de correo o usas tg, max
+   y wa para guardar tus chats. No se lee nada hasta que tú lo eliges.
 2. **Memo copia el texto en el almacén local.** La importación deja archivos y correo intactos.
    En Linux, un temporizador puede repetir la importación. Los [comandos de limpieza de Gmail](./mail.md#clean-up-gmail)
    mueven el correo elegido a la Papelera o lo restauran solo con `--yes`.

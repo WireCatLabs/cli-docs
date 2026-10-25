@@ -1735,31 +1735,6 @@
     }
   },
   {
-    "tool": "memo",
-    "slug": "configuration",
-    "reason": "Current guides describe supported behavior; migration version numbers belong in changelogs.",
-    "replacements": {
-      "en": [
-        {
-          "before": "since 0.32.0 rules live there",
-          "after": "rules live there"
-        }
-      ],
-      "ru": [
-        {
-          "before": "с 0.32.0 они хранятся там",
-          "after": "они хранятся там"
-        }
-      ],
-      "es": [
-        {
-          "before": "desde 0.32.0 se guardan allí",
-          "after": "se guardan allí"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "search",
     "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. MAX 0.54.0 still names memo import. MAX 0.54.0 has no search mail subcommand (it answers with a Memo hint), so the prose names it without a runnable invocation.",

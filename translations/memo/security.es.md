@@ -51,6 +51,8 @@ carpeta o de un buzón, no borra nada y te avisa.
 
 ## Qué puede salir de tu ordenador
 
+- Las apps del navegador y teléfono se conectan por tu túnel HTTPS y el acceso compartido por código. Usan los mismos permisos de comandos que los clientes MCP locales. `memo mcp --revoke` invalida sus sesiones guardadas, también en un servidor en ejecución; consulta [el acceso remoto](./remote.md).
+
 - `memo answers create` prepara fuentes para tu agente. Solo las envía a un proveedor con `--analyze` y, si es externo al equipo, también `--allow-remote`. La respuesta generada debe comprobarse con las fuentes.
 - Lo que tu agente haga con el texto depende de él y su proveedor; Memo no puede controlarlo. Dale acceso solo a fuentes que quieras compartir.
 - La sincronización del correo pregunta por sí sola a los registros de dominios cuándo se registró el dominio de un remitente: como mucho una vez al día, para remitentes a los que nunca escribiste y de los que recibiste correo en los últimos dos años. `memo mail inspect --domain-age` pregunta por los grupos que muestra. Cada consulta comunica un nombre de dominio a un registro; se hace una sola vez y la respuesta se guarda en tu ordenador. Nunca se pregunta por grandes proveedores de correo como gmail.com. No hay ajuste para desactivarlo; consulta [cómo se comprueban los dominios de remitentes](./mail.md#choose-what-to-import).

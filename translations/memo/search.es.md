@@ -27,9 +27,10 @@ cada una con `memo notes show` o en la aplicación original.
 | Tu correo | `memo search mail 'budget'` |
 | Mensajes de Telegram o MAX | `memo search messages 'budget'` |
 | Transcripciones y resúmenes de reuniones guardados | `memo search meetings 'budget' --source zoom:work` |
+| Una persona, por nombre, usuario o alias | `memo search people kai` |
 
 `search all` busca en mensajes, correo y notas a la vez. No busca reuniones, personas, recuerdos, proyectos ni
-tareas; para eso usa `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
+tareas; para eso usa `memo search people`, `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
 está algo, su propia búsqueda es mejor, porque entiende más palabras de búsqueda.
 
 ## Palabras de búsqueda
@@ -148,7 +149,9 @@ selección de cuentas: importaciones, ediciones o eliminaciones posteriores aún
 Cada nombre o alias es una búsqueda separada: todas sus palabras deben aparecer en un mismo texto, en cualquier orden,
 como palabras completas; los resultados se unen. También se lee cada mensaje de un chat confirmado como del proyecto
 cuando `--source` incluye su cuenta. Esos elementos llevan la etiqueta `linked-chat`: no nombran nada, pertenecen al
-chat. Un chat vinculado fuera de `--source` aparece como no leído. `--contact person:<id>` lee cada mensaje y correo
+chat. Una ejecución toma como máximo una parte del límite de elementos de cada chat vinculado (50 para un solo chat
+con el límite por defecto de 100, 20 de cada uno a partir de cuatro chats); un chat con más aparece como recortado
+y `--cursor` lee el resto. Un chat vinculado fuera de `--source` aparece como no leído. `--contact person:<id>` lee cada mensaje y correo
 que escribieron las identidades guardadas de esa persona en `--source`, con la etiqueta `sender` (se encuentra por
 quién lo escribió, no por palabras), y busca los alias que les diste; su nombre visible en el mensajero no se busca,
 porque los textos rara vez lo escriben. Un `--contact "<name>"` literal se busca como palabras.
@@ -231,7 +234,7 @@ Siguiente: [ver todo sobre una persona](./people.md) o [convertir lo que encontr
 Memo y zm comparten los selectores y analizadores de cli-core: identificadores de reunión, identidad, persona,
 evento y serie; proyecto, etiqueta y tema; límites de tiempo, cursor y presupuesto de lectura. Por ejemplo:
 
-Para las etiquetas y temas de reuniones, Memo usa los términos nativos `tag:` y `topic:` en la consulta, sin opciones de selección separadas.
+Para las etiquetas y temas de reuniones, Memo usa los términos nativos `tag:` y `topic:` en la consulta; los temas guardados también se pueden seleccionar con la opción compartida `--topic-name`.
 
 ```sh
 memo search meetings "draft topic:finance" --source zoom:work --meeting-id 12
