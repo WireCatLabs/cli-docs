@@ -51,7 +51,7 @@ Consulta [usar las mismas notas en otro ordenador](./notes.md#use-the-same-notes
 | `path` | Para `mbox`: archivo Takeout, como `~/Takeout/Mail/All mail Including Spam and Trash.mbox`. |
 | `folders` | Para `imap`: carpetas que se leerán, como `["INBOX", "Archive"]`. |
 | `embed` | `false` excluye el correo de esta cuenta de la búsqueda por significado. |
-| `rules` | Solo se lee para mover las reglas al almacén: desde 0.32.0 se guardan allí y se gestionan con `memo mail rules`. Véase [Correo](./mail.md#choose-what-to-import). |
+| `rules` | Solo se lee para mover las reglas al almacén: se guardan allí y se gestionan con `memo mail rules`. Véase [Correo](./mail.md#choose-what-to-import). |
 
 Junto a `accounts`:
 

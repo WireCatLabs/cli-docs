@@ -8,6 +8,49 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
+## 0.97.0 — 25.10.2026
+
+### Added
+
+- `memo mcp --http --public-url <https-origin>` ofrece las mismas tres herramientas MCP a través del transporte HTTP autenticado de cli-core, en el puerto local 8767 por defecto. El inicio de sesión OAuth compartido con código de acceso, el hash de los tokens y `--revoke` funcionan con los mismos permisos por llamada y las restricciones más estrictas del servidor que stdio. `--port` elige otro puerto local; las opciones solo para HTTP sin `--http` se rechazan. La guía de conexión remota explica los túneles, el inicio de sesión de la app y la revocación.
+
+### Fixed
+
+- Crear una nota por MCP pasa el texto una sola vez a través del ejecutor generado de Core, en vez de pasarlo como argumento posicional y como `--text`. La corrección compartida se aplica a stdio y a HTTP.
+
+## 0.96.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `mail rules list <account> protected:true` sustituye a `--filter is:protected`. La opción eliminada no tiene alias.
+
+### Added
+
+- Las listas de organizaciones, proyectos, recordatorios, documentos clave, reglas de correo y ejecuciones de limpieza declaran consultas derivadas del esquema y seleccionan los registros en sus lectores nativos antes de los límites de la lista.
+- **`memo search people <name>` encuentra a una persona en todas las cuentas.** Busca por el nombre, el usuario o tu
+  alias, sin importar mayúsculas ni acentos, también en cirílico, y da el `person:<id>` que acepta
+  `memo projects evidence --contact`, con cada identidad. `--source` limita las cuentas; la respuesta nombra
+  las que leyó.
+- **`memo projects evidence` lee solo una parte de cada chat vinculado por ejecución.** Un chat con mucha actividad ya no
+  llena la ejecución: cada chat vinculado da como máximo su parte del límite de elementos (50 para un solo chat con el
+  límite por defecto de 100, 20 de cada uno a partir de cuatro chats), la salida nombra los chats recortados y `--cursor`
+  lee el resto. Las entradas JSON de `linked_chats` ganan `items` y `capped`. Requiere cli-core 0.413.0.
+
+## 0.94.0 — 24.10.2026
+
+### Changed — may break callers
+
+- **Los contratos de comandos compartidos exigen sustituciones explícitas en el código fuente.** El descubrimiento incluye esquemas, motivos declarados y las diferencias exactas de antes y después. Las etiquetas de tema guardadas de las reuniones usan `--topic-name` en la CLI y `topic_name` en las continuaciones de MCP.
+
+### Added
+
+- **`memo context` muestra los archivos de Google Drive de la persona.** Los archivos que posee o que editó por última vez aparecen en «Files, as Google reports», con el enlace de Google y la hora de edición que indica Google. Los vínculos que adivinó un programa siguen esperando tu revisión.
+- **`models list` y las descargas verificadas usan el catálogo de Core.** La selección de modelos es una consulta nativa, y `models download --offline` se niega antes de cualquier trabajo de red. Las actualizaciones de tareas de proyecto conservan los campos de prioridad y tarea padre; las tareas de fuentes conservan su tratamiento explícito de cuenta y responsables.
+
+### Security
+
+- **La resolución de dependencias excluye las versiones vulnerables de Zod, Vite y postal-mime.** Las comprobaciones de publicación rechazan los fallos graves de producción en las resoluciones bloqueadas y en las nuevas.
+
 ## 0.93.0 — 24.10.2026
 
 ### Changed — may break callers

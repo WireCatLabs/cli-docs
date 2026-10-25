@@ -9,13 +9,13 @@ antes de dirigirlo a algo privado.
 
 ## El almacén local
 
-Memo guarda todo en un archivo de tu ordenador, el **almacén local** (`wirecat.db`). tg y max
-guardan tus mensajes de Telegram y MAX en el mismo archivo, así que Memo puede responder sobre
+Memo guarda todo en un archivo de tu ordenador, el **almacén local** (`wirecat.db`). tg, max y wa
+guardan tus mensajes de Telegram, MAX y WhatsApp en el mismo archivo, así que Memo puede responder sobre
 mensajes, correo y notas a la vez.
 
 | De dónde viene | Quién lo pone en el almacén local |
 |---|---|
-| Mensajes de Telegram y MAX | tg y max, cuando descargan tus chats |
+| Mensajes de Telegram, MAX y WhatsApp | tg, max y wa, cuando descargan tus chats |
 | Correo | `memo sync --only mail` o `memo sync` |
 | Archivos de tus carpetas de notas | `memo sync --only notes` o `memo sync` |
 | Tus propias notas, etiquetas, tareas, recuerdos y hechos | Memo, cuando tú o tu agente los añadís |

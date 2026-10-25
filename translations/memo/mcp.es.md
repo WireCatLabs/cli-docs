@@ -165,7 +165,9 @@ que los textos mencionan, con referencias; un nombre no establece pertenencia. T
 confirmado como del proyecto (`memo relationships add
 chat:<provider>/<account>/<chat> project:<id>`) cuando `source`
 incluye su cuenta: esos elementos tienen `context: "linked-chat"` y no nombran nada, su línea tiene `query: null` y
-`chat`, y un chat vinculado fuera de `source` aparece en `unread_sources` y nunca se lee. Un elemento encontrado solo
+`chat`. Cada entrada de `linked_chats` tiene `items` (elementos nuevos en esta ejecución) y `capped`: una ejecución
+toma como máximo una parte del límite de elementos de cada chat, y `cursor` lee el resto de uno recortado. Un chat
+vinculado fuera de `source` aparece en `unread_sources` y nunca se lee. Un elemento encontrado solo
 por el nombre de un contacto lleva `context: "person-only"`. Un contacto `person:<id>` lee lo que escribieron las
 identidades guardadas de esa persona en `source` (línea `kinds: ["sender"]`, `query: null`, `senders`; elementos con
 `context: "sender"`, que pueden no nombrar nada) y busca solo los alias que el propietario les dio, no su nombre

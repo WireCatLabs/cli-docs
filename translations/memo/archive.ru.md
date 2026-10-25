@@ -26,7 +26,7 @@ notes /path/to/notes: 24 notes, 2 changed, 0 moved, 0 gone
 | `--only mail` | Только почтовые аккаунты |
 | `--no-embed` | Пропустить подготовку к поиску по смыслу |
 
-Сообщения Telegram и MAX обновляют tg и max, а не `memo sync`.
+Сообщения Telegram, MAX и WhatsApp обновляют tg, max и wa, а не `memo sync`.
 
 ## Импорт по таймеру (Linux)
 

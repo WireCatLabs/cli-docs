@@ -51,7 +51,7 @@ title: "Настройки"
 | `path` | Для `mbox`: файл Takeout, например `~/Takeout/Mail/All mail Including Spam and Trash.mbox`. |
 | `folders` | Для `imap`: папки почты, например `["INBOX", "Archive"]`. |
 | `embed` | `false` исключает почту аккаунта из поиска по смыслу. |
-| `rules` | Читается только для переноса правил в хранилище: с 0.32.0 они хранятся там, управление — `memo mail rules`. См. [Почта](./mail.md#choose-what-to-import). |
+| `rules` | Читается только для переноса правил в хранилище: они хранятся там, управление — `memo mail rules`. См. [Почта](./mail.md#choose-what-to-import). |
 
 Рядом с `accounts`:
 

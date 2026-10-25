@@ -38,5 +38,7 @@ Ahora mismo no hay nada en desarrollo. Los primeros elementos del apartado sigui
 - Recordatorios de las propias tareas de un proyecto.
 - Compatibilidad con macOS y Windows. Hoy Memo solo está probado en Linux.
 - Búsqueda de imágenes por la conversación que las rodea y por los datos de la foto.
+- Leer el correo sin Himalaya: Memo se conecta él mismo a tu buzón, así que no hay un programa de correo aparte
+  que instalar y configurar.
 
 Los cambios de cada versión están en el [historial de cambios](./changelog.md).
