@@ -19,13 +19,13 @@ Un agente busca y lee los documentos importados sin que nada de lo que ejecute p
    coloca las instrucciones de drive donde las buscan Claude Code, Codex y Gemini CLI
 
 2. ```sh
-   drive mcp --tools --read-only
+   drive personal mcp --tools --read-only
    ```
 
    enumera comandos con su disponibilidad actual; las escrituras siguen visibles pero se rechazan
 
 3. ```sh
-   drive mcp --read-only
+   drive personal mcp --read-only
    ```
 
    sirve tres herramientas por stdio — drive_tools_search, drive_read y drive_write; las escrituras siguen bloqueadas
@@ -46,31 +46,31 @@ En la terminal: `drive guide agent-access`
 Sabe qué dice un documento, qué se anotó ya sobre él y qué hechos contiene, con una cita para cada uno.
 
 1. ```sh
-   drive sync
+   drive personal sync
    ```
 
    trae la última versión antes de leerlo
 
 2. ```sh
-   drive documents context DOC_ID
+   drive personal documents context DOC_ID
    ```
 
    el documento con sus etiquetas, notas, recuerdos y editores en una sola respuesta
 
 3. ```sh
-   drive memories extract DOC_ID --scope work
+   drive personal memories extract DOC_ID --scope work
    ```
 
    envía el texto al modelo configurado y muestra los recuerdos que propone, cada uno con una cita exacta; --yes los guarda
 
 4. ```sh
-   drive notes add DOC_ID "ask about the Q3 numbers"
+   drive personal notes add DOC_ID "ask about the Q3 numbers"
    ```
 
    una nota tuya, que se conserva con el documento entre sincronizaciones
 
 5. ```sh
-   drive documents export DOC_ID --output brief.md
+   drive personal documents export DOC_ID --output brief.md
    ```
 
    el documento como Markdown en un archivo nuevo; nunca se sobrescribe un archivo existente
@@ -91,25 +91,25 @@ En la terminal: `drive guide brief-document`
 Encuentra el documento que recoge una decisión, lee el pasaje y mira quién lo cambió.
 
 1. ```sh
-   drive search "budget decision"
+   drive personal search "budget decision"
    ```
 
    todos los documentos importados, por palabras y por significado, cada resultado con su URL de Google
 
 2. ```sh
-   drive documents show DOC_ID
+   drive personal documents show DOC_ID
    ```
 
    el texto del documento con sus pestañas, para leer el pasaje completo
 
 3. ```sh
-   drive documents context DOC_ID
+   drive personal documents context DOC_ID
    ```
 
    sus etiquetas, notas, recuerdos y editores, guardados en el almacén local
 
 4. ```sh
-   drive documents history DOC_ID --activity
+   drive personal documents history DOC_ID --activity
    ```
 
    quién hizo qué con él, según Drive Activity; necesita un inicio de sesión con --grant activity
@@ -131,13 +131,13 @@ En la terminal: `drive guide find-decision`
 Inicia sesión una vez, elige las carpetas de Drive que quieres conservar y lleva sus documentos al almacén local como texto que se puede buscar.
 
 1. ```sh
-   drive session start
+   drive personal session start
    ```
 
-   inicia sesión en Google en el navegador, solo lectura; los comandos de drive empiezan por tu perfil, como en drive personal session start
+   inicia sesión en Google en el navegador, solo lectura; personal es el perfil, cualquier nombre que elijas, y va al principio de cada comando de la cuenta
 
 2. ```sh
-   drive folders add https://drive.google.com/drive/folders/FOLDER_ID
+   drive personal folders add https://drive.google.com/drive/folders/FOLDER_ID
    ```
 
    solo se importan las carpetas que añades, con todo lo que contienen
@@ -149,13 +149,13 @@ Inicia sesión una vez, elige las carpetas de Drive que quieres conservar y llev
    el modelo local para buscar por significado, una vez por ordenador; lo comparten todas las CLI de WireCat
 
 4. ```sh
-   drive sync --embed
+   drive personal sync --embed
    ```
 
    importa lo que cambió en esas carpetas e indexa el texto por significado
 
 5. ```sh
-   drive status
+   drive personal status
    ```
 
    cuántos documentos se importaron, qué queda pendiente y qué se omitió

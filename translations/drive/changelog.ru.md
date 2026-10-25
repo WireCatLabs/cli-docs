@@ -4,6 +4,45 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.36.0 — 25.10.2026
+
+### Security
+
+- `doctor` reports a `config.json` or config folder that other users of the computer can read. `doctor --json` gains `files: { checked, ok, problems: [{ path, mode, want }] }` (the file wants `0600`, the folder `0700`), the shape the other WireCat tools use, and stderr prints `to make it private: chmod 600 '<path>'` for each; nothing is changed on disk. drive 0.35 and older saved the file as `0644` on every `config set`; it is now saved `0600` (cli-base 0.57.0). Windows is not checked.
+
+### Changed — may break callers
+
+- A command that refuses the config file counts every problem `doctor` lists in its "(and N more problems)", saved permissions that name no command included. `session list` and a command run with no profile now refuse a file whose only problem is such a permission, as every other command already did.
+- `skill show`'s effects say it reads local files (`local: read`): `skill show --for claude|agents` prints the copy installed for that agent. `skill status` and `skill show --for` come from cli-base 0.56.0.
+- cli-core 0.428.0 and cli-base 0.57.0.
+
+### Fixed
+
+- Every command starts faster: Google's client libraries load only when a command reaches Google. `drive --version`, `--help`, `config show` and `runs list` loaded about 1,380 module files; now about 1,180. `src/startup.test.ts` keeps them out of what the program imports at start.
+
+## 0.35.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `doctor --json` reports the config file as `config: { path, found, issues }`, the shape the other WireCat tools use. Each issue is `{ kind, file, profile?, key?, line?, column?, what, fix? }`: `kind` is `invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` or `invalid_value`, `what` says what the value has to be and never quotes it, and `fix` is a `drive … config unset …` command that runs as written. `config.readable` and `config.error` are removed, and `profiles` is always a list: the profiles that load. Doctor lists every problem in every profile and still exits 0.
+- drive reads setting names only as written. A camelCase key, `default_profile` or `read_only` is an unknown setting like any other: the file is refused with the first problem and its `config unset`, and drive no longer rewrites the file. `config set` takes the key as written too.
+- A permission key that names no command is refused wherever it is saved, in any profile or the defaults, not only in the profile a command runs as. The refusal names the `config unset` that removes it.
+- A profile's `roots` may be left out (no folders), and so may `profiles` (no profiles yet). `principal` and `storage` are still required; doctor reports either one missing.
+- `commands --json` gives `config show` and `session list` a usage line without `<profile>` (`drive config show`), like `doctor` and `api list`; they read every profile or none.
+- Every drive `--dry-run` preview says `action_invoked: false`, beside `dry_run: true`, so a caller can check that nothing ran.
+- `runs list`, `runs show` and `run.json` gain `cli_command`, `argv` (values that may be content written `[redacted]`), `unknown_command`, `agent` and, for a failed run, `error`; `profile` is left out when the command named none. From cli-core 0.426.0.
+- cli-core 0.426.0.
+
+### Added
+
+- `config unset <key>` removes one setting from a profile, from the defaults (`--defaults`), or a key the file should not have at its top (`drive config unset <key>`, with no profile, as doctor's `fix` says).
+- `config show`, `config set` and `config unset` work on a file that is valid JSON but has problems (`show` also on one that is not). `show` prints what loads and names each problem with its fix; `set` is refused only when the change adds a problem or leaves the setting it writes invalid. Every other command still refuses the file.
+
+### Fixed
+
+- A global `--dry-run` no longer lets a command write. `drive personal --dry-run config set …`, `config unset`, `drive --dry-run skill install`, `upgrade`, `models download` and `images models download` saved the setting, wrote both SKILL.md files, upgraded or downloaded; they now print the preview (`dry_run: true`, `action_invoked: false`) and change nothing. `config set` and `config unset` still refuse under `DRIVE_READ_ONLY` first.
+- Help shows drive's housekeeping commands without a profile: `drive doctor`, `drive api list`, `drive models list`, `drive config show`, `drive session list`, `drive runs list`, not `drive personal doctor`. The guide's steps name the profile where the command takes one (`drive personal sync`). MCP tool text says "what people wrote", not "messages". Needs cli-core 0.426.0.
+
 ## 0.34.0 — 25.10.2026
 
 ### Added
