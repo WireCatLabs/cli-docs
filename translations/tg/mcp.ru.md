@@ -121,7 +121,7 @@ tg agent config set permissions.messages.send allow
 {"command":"stats chats show","arguments":{"chat":"123"}}
 ```
 
-`status` считывает состояние профиля через `tg_read`. Поиск показывает только то, что позволяют разрешения профиля и Telegram. Прежние названия «один инструмент на команду», такие как `tg_messages_list` и `tg_status`, больше не существуют. Бот-серверы используют `tg_bot_tools_search`, `tg_bot_read` и `tg_bot_write`; их пути команд не включают `bot`.
+`status` считывает состояние профиля через `tg_read`. Поиск показывает только то, что позволяют разрешения профиля и Telegram. Бот-серверы используют `tg_bot_tools_search`, `tg_bot_read` и `tg_bot_write`; их пути команд не включают `bot`.
 
 Ответы структурированы в формате JSON: списки сохраняют свои страницы, а идентификаторы остаются строками. Ошибка — `{error:{code,reason,message,details}}`; для цели, соответствующей нескольким чатам, кандидаты приходят в `details.candidates`. Сервер проверяет аргументы на соответствие схеме команды и отклоняет неизвестные поля перед подключением или действием. Используйте `at_time` для планирования. Если результат записи неизвестен, проверьте журнал отправки и Telegram, прежде чем думать о повторной попытке. Текст сообщения — это данные, а не инструкции для агента. Схемы, ограничения и правила повтора находятся в [как tg ведет себя в скриптах](./cli-contract.md).
 
@@ -141,20 +141,22 @@ tg agent config set permissions.messages.send allow
 профиля. Только чтение — это ваш выбор в этих разрешениях, а не значение по умолчанию. Несколько команд не
 предлагаются никогда, и вы запускаете их в терминале:
 
-- **Вход и настройка**: `session start|end`, `complete`, `mcp config|add|check`,
+- **Вход и настройка**: `setup`, `session start|end`, `complete`, `mcp config|add|check`,
   `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.
+- **Долгие команды**: `watch`, `serve` и `bot watch` работают, пока вы их не остановите, а вызов агента должен
+  завершиться. Сам сервер MCP (`mcp`, `bot mcp`) не предлагается по той же причине.
 
 У команд `store backup|restore`, `server start|stop|restart`, загрузки моделей,
-`schedule run|exec`, `doctor reports create`, `account sessions end`, `chats delete|clear` и
-`bot messages sync` есть собственные ключи разрешений со значением `ask` по умолчанию. Сервер предлагает их
-агенту; подтверждениями управляет приложение MCP. В `tg commands --json` исключённые команды отмечены
-как `mcp: false`. Прямым операциям `bot api` требуется отдельное [разрешение](./permissions.md#raw-bot-api-calls).
+`schedule run|exec`, `doctor reports create` и `account sessions end` есть собственные ключи разрешений со значением `ask` по умолчанию. Сервер предлагает их
+агенту; подтверждениями управляет приложение MCP. В `tg commands --json` команда, не предлагаемая через MCP, отмечена
+`mcp: false`, а у долгой команды вместо этого есть поле `lifetime`. Прямым операциям `bot api` требуется отдельное [разрешение](./permissions.md#raw-bot-api-calls).
 
 ### Команды, которые меняют возможности следующего запуска
 
 `config set|unset`, `recipients add|remove|clear`, `chats rules set|unset`, правила и согласия `replies`,
-`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,
-`models keys set|remove`, `flood clear`, а у бота `recipients add|remove|clear` и `chats rules set|unset`
+`schedule command|agent|remove`, `server install|uninstall`, `skill install`,
+`attachments jobs install|start|stop|uninstall`, `models keys set|remove`, `flood clear`, `upgrade` (`upgrade --check`
+только проверяет и не ограничивается), а у бота `recipients add|remove|clear` и `chats rules set|unset`
 остаются в списке команд вместе с аргументами. Выполнить их можно, только если профиль устанавливает
 `permissions.mcp.authority` в `allow` или `ask`. По умолчанию это `deny`: список помечает их недоступными,
 называет разрешение и объясняет причину; вызов отклоняется. Иначе агент, ограниченный чтением, мог бы разрешить
