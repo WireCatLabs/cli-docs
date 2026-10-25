@@ -88,8 +88,8 @@ The template has no sample code. Your agent learns from the WireCat tool closest
 | notes | [`cli-memo`](https://github.com/WireCatLabs/cli-memo) |
 | mail, calendar, other | none yet: choose the nearest one with your agent |
 
-For now, search shows your tool's records as messages. Once cli-core can register a new kind of source, they get their
-own kind, and your tool needs no other change.
+For now, search shows your tool's records as messages. Once cli-core can register a new kind of source, your tool can
+register its own.
 
 ## Four steps that need a person
 

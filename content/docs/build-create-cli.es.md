@@ -96,7 +96,7 @@ la primera respuesta:
 | correo, calendario, otra | todavía ninguna: elige la más cercana con tu agente |
 
 Por ahora, la búsqueda muestra los registros de tu herramienta como mensajes. Cuando cli-core pueda registrar un tipo
-de fuente nuevo, tendrán su propio tipo, y tu herramienta no necesitará ningún otro cambio.
+de fuente nuevo, tu herramienta podrá registrar el suyo.
 
 ## Cuatro pasos que hace una persona
 
