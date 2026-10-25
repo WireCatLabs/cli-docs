@@ -8,7 +8,8 @@ Esta referencia enumera claves aceptadas y valores predeterminados.
 
 ## Ajustes
 
-Configura con `zm config set <key> <value>` y consulta los valores con `zm config show`.
+Configura con `zm config set <key> <value>`, quita un ajuste con `zm config unset <key>` y consulta los valores con
+`zm config show`.
 
 | Clave | Significado |
 |---|---|
@@ -17,21 +18,36 @@ Configura con `zm config set <key> <value>` y consulta los valores con `zm confi
 | `files.folder` | Carpeta para obtención/observación de archivos; sin valor inicial |
 | `context.sources` | Array JSON de cuentas de mensajes/correo o carpetas de documentos elegidas para este perfil; vacío por defecto ([configuración abajo](#select-communications-for-preparation)) |
 | `files.timezone` | Zona IANA de nombres, por ejemplo `Europe/Madrid`; sin valor: la zona de este ordenador |
+| `record` | `true` guarda cada ejecución en el [registro de ejecuciones](#run-log), `false` ninguna, ni siquiera un fallo; sin valor: solo las fallidas |
+| `keep_runs_for_days` | cuántos días se conserva una ejecución guardada antes de borrarla; 30 por defecto |
 
 Comprueba `zm config show` tras editar. El perfil no es un ajuste: es la primera palabra de cada comando
 ([perfiles](./sessions.md#select-a-local-profile)). Otro ID selecciona otra entrada del almacén; autoriza esa app antes de usar API. `ZOOM_CLIENT_ID`
 no es un ajuste de la orden instalada `zm`; usa `zm config set zoom.client_id` en vez de la variable
 copiada de una sonda de desarrollo.
 
-El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone` y `source`, y los perfiles de este ordenador en `profiles`. Un `account_profile` dejado por
-la versión 0.34 o anterior solo indica qué perfil asume el acceso guardado entonces.
-Los archivos JSON deben usar esas claves snake_case. Los antiguos archivos camelCase se rechazan sin
-reescribirlos. Antes de actualizar, renombra `clientId` a `client_id`, `filesFolder` a `files_folder`
-y `filesTimezone` a `files_timezone`. Conserva sus valores.
-El selector de comando `zoom.clientId` sigue como alias de
-`zoom.client_id`, pero no se admite como clave JSON.
+El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone`, `source`, `context_sources`,
+`record` y `keep_runs_for_days`, y los perfiles de este ordenador en `profiles`. Cualquier otra clave es un problema
+del archivo.
 
-Una configuración incorrecta permite `--help` y `--version`; los comandos de configuración indican el error.
+## Problemas en el archivo
+
+Un archivo con problemas sigue permitiendo `--help`, `--version`, `zm config` y `zm doctor`. Los demás comandos se
+detienen en el primer problema, indican cómo quitarlo y cuántos más hay. `zm doctor --json` los enumera todos en
+`config.issues`:
+
+```json
+{ "kind": "unknown_setting", "file": "/home/you/.config/zm/config.json", "key": "example_setting",
+  "what": "setting example_setting is not a setting of zm", "fix": "zm config unset example_setting" }
+```
+
+`kind` es `invalid_json`, `unknown_setting`, `unknown_permission` o `invalid_value`. `what` dice qué tiene que ser el
+valor y nunca muestra el valor guardado. `fix` funciona tal como está escrito; falta en el JSON no válido, donde `line`
+y `column` dicen dónde se detuvo la lectura. Un problema en los permisos de un perfil indica además ese `profile`. Una
+parte rota de un ajuste, como una entrada de `context_sources`, se informa como el ajuste entero, y su `fix` lo quita.
+Una ruta de configuración que es una carpeta o no se puede leer es un único problema de todo el archivo, sin `fix`.
+`zm config show` muestra cada problema tras los ajustes que sí se cargan, y `zm config set` y `zm config unset` cambian
+el archivo sin tocar el resto.
 
 ## Encontrar el archivo de configuración
 
@@ -47,6 +63,10 @@ comprobar la sesión OAuth guardada.
 
 Los directorios antiguos de macOS ya no se trasladan automáticamente; doctor muestra la ruta utilizada.
 Ajustes públicos, tokens del almacén y base de reuniones son datos separados.
+
+`zm config set` guarda el archivo para que solo tú puedas leerlo (`0600`). `zm doctor --json` enumera el archivo y
+su carpeta en `files.problems` cuando otros usuarios pueden leerlos, con el modo encontrado y el deseado, y escribe
+en stderr el `chmod` que corrige cada uno. No cambia nada por sí mismo. Windows no se comprueba.
 
 ## Permisos
 
@@ -66,12 +86,22 @@ zm personal config set permissions '{"remote-meetings": "allow", "recordings": "
 Gana la clave más específica (`remote-meetings.cancel` sobre `remote-meetings`). De fábrica, `remote-meetings` es `ask`;
 una clave más amplia que fija el propietario nunca lo relaja, una clave igual de profunda sí. `--yes` solo responde a `ask`: nunca
 levanta `deny` ni `readonly`. En una terminal, los ajustes, el acceso, la ayuda y el servidor MCP nunca se limitan. Una clave que no nombra ningún
-comando, o un nivel que no es uno de los cuatro, se rechaza al fijarlo. `ZM_READ_ONLY` se aplica además de cualquier nivel.
+comando, o un nivel que no es uno de los cuatro, se rechaza al fijarlo; una ya guardada detiene todos los comandos hasta que
+`zm <profile> config unset permissions.<key>` la quita. `ZM_READ_ONLY` se aplica además de cualquier nivel.
 
 Por MCP, los cambios de ajustes, instalación de skills, actualización y temporizadores del archivo
 necesitan `mcp.authority` en `allow` o `ask`. Se deniega por defecto. Configúralo desde una terminal en
 el mapa `permissions` del perfil, conservando las restricciones existentes, y reinicia el servidor MCP.
 Un agente MCP no puede cambiar los permisos del perfil. Consulta [MCP y skills](./mcp.md#the-mcp-server).
+
+## Registro de ejecuciones
+
+`zm` guarda un comando fallido como ejecución: las palabras del comando, el perfil, cómo terminó y un evento por cada
+petición a Zoom con su método, ruta (cada id oculto como `:id`), estado y duración. Nunca guarda argumentos, contenido
+de reuniones, nombres, correos ni tokens. `--record` guarda también una ejecución correcta, `--no-record` no guarda
+nada de ese comando, y el ajuste `record` cambia el comportamiento predeterminado. `zm runs list`,
+`zm runs show <run-id>` y `zm runs path <run-id>` leen el registro sin perfil; el `meta.run_id` de una respuesta es
+el id que acepta `runs show`.
 
 ## Variables de entorno
 
@@ -99,12 +129,13 @@ cópialas de los ajustes del programa de origen o de sus referencias. El nombre 
 la identidad de la cuenta.
 
 ```sh
-zm research config set context.sources '[{"id":"project-notes","kind":"document","provider":"folder","account":"notes:5"}]'
+zm research config set context.sources '[{"id":"project-notes","kind":"document","provider":"local","account":"notes:5"}]'
 zm config show
 ```
 
 El ejemplo usa un ID de carpeta inventado. Ejecuta `memo folders list` y sustituye el ID de la
-carpeta que elijas. `notes:5` resuelve su identidad guardada; no crea ni importa una carpeta.
+carpeta que elijas y su proveedor: `local` para una carpeta normal, `obsidian` para una bóveda de Obsidian.
+`notes:5` resuelve su identidad guardada; no crea ni importa una carpeta.
 Una fuente de documentos selecciona una carpeta; una de mensajes, una cuenta de mensajería; una
 de correo, una cuenta de correo. El permiso cubre toda la cuenta o carpeta: todavía no permite
 restringir chats, remitentes o rutas dentro de ella. Elige un alcance adecuado para tu tarea.

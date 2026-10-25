@@ -232,7 +232,7 @@ zm personal stats meetings top --project RES --limit 5 --json
 `show` da las reuniones, líneas, palabras y tiempo de palabra de la selección, por semana (las semanas empiezan el
 lunes en `--timezone`, por defecto la zona del ordenador), con los diez oradores que más hablaron. `top` enumera los
 oradores por tiempo de palabra, con sus líneas, palabras, reuniones y parte de la conversación. Ambos admiten
-`--since-time`, `--until-time`, `--event-id`, `--project` y `--topic`, interpretados como los lee `search meetings`.
+`--since-time`, `--until-time`, `--event-id`, `--project` y `--topic-name`, interpretados como los lee `search meetings`.
 
 Un orador es la persona a la que está vinculado un participante; si no, el participante; si no, el nombre que da la
 transcripción. Una línea sin orador cuenta como `unknown`. El tiempo de palabra es la duración de cada línea, así que
@@ -262,7 +262,7 @@ Admite los mismos filtros que `stats meetings`.
 ## Encuentra enlaces compartidos en el chat
 
 ```sh
-zm personal mentions list --since-time 30d --json
+zm personal mentions list started_at>=30d --json
 ```
 
 `meetings sync` conserva el chat que Zoom guarda con una grabación en la nube si el acceso incluye

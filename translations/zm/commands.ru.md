@@ -19,19 +19,80 @@ These options apply to every command.
 | `--json` | machine-readable output: one JSON value on stdout; --json=id,text keeps only those fields. |
 | `--jsonl` | machine-readable output: one JSON object per line, for streaming and jq. |
 | `--quiet` | diagnostics off; a failure is still said. |
-| `--trace` | the connection's own log lines on stderr — never message content. |
+| `--trace` | the connection's own log lines on stderr — never content. |
 | `--debug` | on a failure, its whole record — cause and stack — in place of the short line. |
 | `--timeout <duration>` | give up on the whole command after this — 30s, 2m, 500ms. |
 | `--offline` | answer from what was recorded and never connect; fails if nothing was. |
 | `--no-input` | never prompt or open interactive login; piped input remains available. |
 | `--max-input-bytes <bytes>` | maximum buffered input bytes (default: 16777216). |
 | `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
-| `--brief` | found messages as reference, title, time, sender and excerpt only. |
-| `--full` | found messages with their whole text and every provider field. |
+| `--brief` | found items as reference, title, time, author and excerpt only. |
+| `--full` | found items with their whole text and every provider field. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
-| `--record` | keep this run — ids and timings, never message content. |
+| `--record` | keep this run — ids and timings, never content. |
 | `--no-record` | do not keep it, whatever the configuration says. |
+
+## `zm runs`
+
+recorded runs — what this tool did, and when
+
+### `zm runs list`
+
+recorded runs, newest first
+
+```sh
+zm runs list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. Default: `20`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+
+**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 20 more; every field: zm commands info runs list
+
+**Example:** `zm runs list --limit 10`
+
+### `zm runs show`
+
+one run: what it was, how it ended, and every event it logged
+
+```sh
+zm runs show <run-id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `run-id` | required | an id from `zm runs list`. |
+
+| Option | What it does |
+|---|---|
+| `--problems` | only failed responses, warnings and crashes. |
+
+**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 19 more; every field: zm commands info runs show
+
+**Example:** `zm runs show run-101`
+
+### `zm runs path`
+
+the directory holding one run
+
+```sh
+zm runs path <run-id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `run-id` | required | an id from `zm runs list`. |
+
+**Returns:** run location — path; every field: zm commands info runs path
+
+**Example:** `zm runs path run-101`
 
 ## `zm config`
 
@@ -47,7 +108,7 @@ zm config show
 
 **Returns:** show local configuration
 
-**Example:** `zm personal config show --json`
+**Example:** `zm config show --json`
 
 ### `zm config set`
 
@@ -66,7 +127,25 @@ zm config set <key> <value>
 
 **Returns:** set a configuration value
 
-**Example:** `zm personal config set files.timezone Europe/Madrid --json`
+**Example:** `zm config set files.timezone Europe/Madrid --json`
+
+### `zm config unset`
+
+remove a setting, or a part of the file doctor reports a problem in
+
+**Changes local data.**
+
+```sh
+zm config unset <key>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `key` | required | setting name, such as files.folder, or the key a doctor fix names. |
+
+**Returns:** remove a setting, or a part of the file doctor reports a problem in
+
+**Example:** `zm config unset files.folder`
 
 ## `zm meetings`
 
@@ -187,7 +266,7 @@ zm meetings export <meeting> [options]
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 
-**Returns:** meeting export — ; every field: zm commands info meetings export
+**Returns:** meeting export — meeting_id, format, filename, content, output; every field: zm commands info meetings export
 
 **Example:** `zm personal meetings export 1 --format markdown --json`
 
@@ -235,7 +314,7 @@ zm meetings sync [options]
 
 **Returns:** meeting ingestion — meetings, participants, transcript_rows, summaries, warnings, timezone; every field: zm commands info meetings sync
 
-**Example:** `zm personal meetings sync --json`
+**Example:** `zm personal meetings sync --dry-run --json`
 
 ### `zm meetings import`
 
@@ -279,7 +358,7 @@ zm meetings scheduled [options]
 
 **Returns:** meeting series inventory — schema_version, kind, scope, after, until, items, page, fingerprint, and 2 more; every field: zm commands info meetings scheduled
 
-**Example:** `zm personal meetings scheduled --json`
+**Example:** `zm personal meetings scheduled --dry-run --json`
 
 ### `zm meetings projects`
 
@@ -362,7 +441,7 @@ zm meetings prepare <series-id> [options]
 
 **Returns:** meeting preparation — schema_version, kind, account_id, upcoming, series, history_window, meetings, related, and 6 more; every field: zm commands info meetings prepare
 
-**Example:** `zm personal meetings prepare 123 --json`
+**Example:** `zm personal meetings prepare 123 --dry-run --json`
 
 ### `zm meetings update`
 
@@ -387,7 +466,7 @@ zm meetings update <reference> [options]
 
 **Returns:** meeting association — scope, account_id, meeting_id, change, applied, result; every field: zm commands info meetings update
 
-**Example:** `zm personal meetings update meeting:1/1 --event-id 1 --yes --json`
+**Example:** `zm personal meetings update meeting:1/1 --event-id 1 --json`
 
 ### `zm meetings link`
 
@@ -414,7 +493,7 @@ zm meetings link <reference> [options]
 
 **Returns:** meeting association — scope, account_id, meeting_id, change, applied, result; every field: zm commands info meetings link
 
-**Example:** `zm personal meetings link meeting:1/1 --participant-id 1 --person 1 --yes --json`
+**Example:** `zm personal meetings link meeting:1/1 --participant-id 1 --person 1 --json`
 
 ### `zm meetings transcribe`
 
@@ -442,7 +521,7 @@ zm meetings transcribe <meeting> <file> [options]
 | `--yes` | recognize locally and append to the existing meeting. |
 | `--dry-run` | preview even when --yes is present. |
 
-**Returns:** meeting transcription — ; every field: zm commands info meetings transcribe
+**Returns:** meeting transcription — applied, account_id, external_id, segments, media, meeting_id, created, inserted_transcripts, and 7 more; every field: zm commands info meetings transcribe
 
 **Example:** `zm personal meetings transcribe meeting:3/12 ./AliceExample.m4a --model parakeet-v3 --json`
 
@@ -562,7 +641,7 @@ zm meetings embeddings [options]
 | `--after-hash <hash>` | continue embedding after this passage. |
 | `--yes` | split transcripts and build their vectors; otherwise only preview. |
 
-**Returns:** meeting embedding — ; every field: zm commands info meetings embeddings
+**Returns:** meeting embedding — account_id, model, status, applied, scope, rebuild_required, saved, skipped, and 3 more; every field: zm commands info meetings embeddings
 
 **Example:** `zm personal meetings embeddings --model e5-small --json`
 
@@ -587,37 +666,57 @@ the owner's stored events
 list stored events
 
 ```sh
-zm events list [options]
+zm events list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | event id, origin or time fields that narrow the list. |
 
 | Option | What it does |
 |---|---|
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 
-**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 4 more; every field: zm commands info events list
+**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 7 more; every field: zm commands info events list
 
 **Example:** `zm personal events list --json`
 
 ## `zm commands`
 
-every command by section, one line each; --json: the contract, one path per call
+every command by section; --json prints its contract, one path per call
 
 ### `zm commands info`
 
-one command's argv and result schemas, effects, permissions and retry guidance
+one command contract, or all schemas, error reasons and explicit overrides
 
 ```sh
-zm commands info <path>
+zm commands info [path]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `path` | required | one command path, for example: stats messages show. |
+| `path` | optional | one command path; without one, export schemas, error reasons and explicit overrides. |
 
-**Returns:** one command's argv and result schemas, effects, permissions and retry guidance
+**Returns:** one command contract, or all schemas, error reasons and explicit overrides
 
-**Example:** `zm commands info messages list`
+**Example:** `zm commands info commands`
+
+## `zm store`
+
+the shared local store every WireCat tool reads
+
+### `zm store info`
+
+the store file: where it is, its size, its schema against the one this tool speaks, which tools used it and how many rows it holds, by provider, chat kind, account, year (UTC) and attachment kind, over every account; changes nothing
+
+```sh
+zm store info
+```
+
+**Returns:** store info — path, exists, schema, opens, error, bytes, journal_mode, pages, and 12 more; every field: zm commands info store info
+
+**Example:** `zm personal store info --json`
 
 ## `zm complete`
 
@@ -645,7 +744,7 @@ zm doctor
 
 **Returns:** check local runtime and public config without a login or database
 
-**Example:** `zm personal doctor --json`
+**Example:** `zm doctor --json`
 
 ## `zm session`
 
@@ -665,7 +764,7 @@ zm session status [options]
 
 **Returns:** show cached login state; remote verification is explicit
 
-**Example:** `zm personal session status --json`, `zm personal session status --check --json`
+**Example:** `zm personal session status --json`, `zm personal session status --check --dry-run --json`
 
 ### `zm session start`
 
@@ -705,11 +804,11 @@ zm upgrade [options]
 
 ## `zm models`
 
-speech models that run on this machine, for `meetings transcribe`
+models that run on this machine
 
 ### `zm models list`
 
-the speech models this version knows, and which are downloaded
+speech and embedding models, their download status and the default of each kind
 
 ```sh
 zm models list [query]
@@ -723,25 +822,30 @@ zm models list [query]
 
 **Next usually:** `zm models download <model>`
 
-**Example:** `zm personal models list --json`, `zm personal models list kind:audio downloaded:false`
+**Example:** `zm models list`, `zm models list kind:audio`
 
 ### `zm models download`
 
-download a speech model, or repair one, checking every file's sha256
+download and verify one speech or embedding model
 
 **Changes local data.**
 
 ```sh
-zm models download <model>
+zm models download <model> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `model` | required | a model id from `models list`. |
+| `model` | required | a model id from models list. |
+
+| Option | What it does |
+|---|---|
+| `--offline` | refuse a download that needs the network. |
+| `--accept-terms` | accept the model's licence terms, for a model that has its own. |
 
 **Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: zm commands info models download
 
-**Example:** `zm personal models download parakeet-v3 --json`
+**Example:** `zm models download parakeet-v3`
 
 ## `zm watch`
 
@@ -766,7 +870,7 @@ zm watch [target] [folder] [options]
 
 **Returns:** meeting ingestion — meetings, participants, transcript_rows, summaries, warnings, timezone; every field: zm commands info watch
 
-**Example:** `zm personal watch files ./downloads --pause 10s --jsonl`, `zm personal watch api --lookback-days 2 --jsonl`
+**Example:** `zm personal watch files ./downloads --pause 10s --jsonl`, `zm personal watch api --lookback-days 2 --dry-run --jsonl`
 
 ## `zm recordings`
 
@@ -792,7 +896,7 @@ zm recordings list [query] [options]
 
 **Returns:** zoom recording — id, uuid, title, started_at, assets; every field: zm commands info recordings list
 
-**Example:** `zm personal recordings list --since-time 2026-10-01 --until-time 2026-10-10 --json`
+**Example:** `zm personal recordings list --since-time 2026-10-01 --until-time 2026-10-10 --dry-run --json`
 
 ### `zm recordings show`
 
@@ -808,7 +912,7 @@ zm recordings show <meeting>
 
 **Returns:** zoom recording — id, uuid, title, started_at, assets; every field: zm commands info recordings show
 
-**Example:** `zm personal recordings show example-occurrence --json`
+**Example:** `zm personal recordings show example-occurrence --dry-run --json`
 
 ### `zm recordings download`
 
@@ -838,9 +942,9 @@ zm recordings download [meeting] [options]
 | `--max-pages <pages>` | date-range catalog page limit from 1 through 10000 (default 1000). |
 | `--max-entries <n>` | date-range occurrence limit from 1 through 10000 (default 10000). |
 
-**Returns:** zoom archive — ; every field: zm commands info recordings download
+**Returns:** zoom archive — uuid, manifest_path, downloaded, skipped, unavailable, window, meeting, archive, and 2 more; every field: zm commands info recordings download
 
-**Example:** `zm personal recordings download example-occurrence --output-dir ./zoom-archive --json`, `zm personal recordings download --since-time 2026-01-01 --until-time 2026-10-10 --output-dir ./zoom-archive --jsonl`
+**Example:** `zm personal recordings download example-occurrence --output-dir ./zoom-archive --dry-run --json`, `zm personal recordings download --since-time 2026-01-01 --until-time 2026-10-10 --output-dir ./zoom-archive --dry-run --jsonl`
 
 ### `zm recordings archive`
 
@@ -1042,7 +1146,7 @@ zm recordings schedule run <job>
 
 **Returns:** zoom archive receipt — window, meeting, archive, availability, checkpoint_revision; every field: zm commands info recordings schedule run
 
-**Example:** `zm personal recordings schedule run example-job --jsonl`
+**Example:** `zm personal recordings schedule run example-job --dry-run --jsonl`
 
 #### `zm recordings schedule disable`
 
@@ -1065,7 +1169,7 @@ zm recordings schedule disable <job> [options]
 
 **Returns:** zoom archive schedule change — applied, backend, job, timer_state, units; every field: zm commands info recordings schedule disable
 
-**Example:** `zm personal recordings schedule disable example-job --yes --json`
+**Example:** `zm personal recordings schedule disable example-job --json`
 
 ### `zm recordings status`
 
@@ -1105,7 +1209,7 @@ zm remote-meetings list [query]
 
 **Returns:** zoom remote meeting — id, uuid, title, type, started_at, duration_minutes, timezone, agenda, and 1 more; every field: zm commands info remote-meetings list
 
-**Example:** `zm personal remote-meetings list --json`
+**Example:** `zm personal remote-meetings list --dry-run --json`
 
 ### `zm remote-meetings show`
 
@@ -1121,7 +1225,7 @@ zm remote-meetings show <meeting>
 
 **Returns:** zoom remote meeting — id, uuid, title, type, started_at, duration_minutes, timezone, agenda, and 1 more; every field: zm commands info remote-meetings show
 
-**Example:** `zm personal remote-meetings show 123456789 --json`
+**Example:** `zm personal remote-meetings show 123456789 --dry-run --json`
 
 ### `zm remote-meetings invitation`
 
@@ -1137,7 +1241,7 @@ zm remote-meetings invitation <meeting>
 
 **Returns:** zoom remote invitation — id, invitation; every field: zm commands info remote-meetings invitation
 
-**Example:** `zm personal remote-meetings invitation 123456789 --json`
+**Example:** `zm personal remote-meetings invitation 123456789 --dry-run --json`
 
 ### `zm remote-meetings create`
 
@@ -1223,11 +1327,15 @@ the instructions an agent is given for this tool
 
 ### `zm skill show`
 
-print SKILL.md — `zm skill install` puts it where Claude Code, Codex and Gemini CLI look for it
+print SKILL.md — `zm skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
 
 ```sh
-zm skill show
+zm skill show [options]
 ```
+
+| Option | What it does |
+|---|---|
+| `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
 
 **Returns:** print the tool's instructions for AI agents
 
@@ -1250,6 +1358,18 @@ zm skill install [options]
 **Returns:** install the tool's instructions for AI agents
 
 **Example:** `zm skill install --for agents --json`
+
+### `zm skill status`
+
+for each place `zm skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+
+```sh
+zm skill status
+```
+
+**Returns:** whether the installed instructions for AI agents match this version
+
+**Example:** `zm skill status`, `zm skill status --json`
 
 ## `zm mcp`
 
@@ -1314,9 +1434,9 @@ zm search meetings <query> [options]
 | `--person-id <id>` | meetings with a participant linked to this person. |
 | `--event-id <id>` | only meetings linked to this stored event. |
 | `--series-id <id>` | only meetings in this stored series. |
-| `--project <name>` | meetings confirmed in this project, by name, key or alias. |
+| `--project <project>` | meetings confirmed in this project, by name, key or alias. |
 | `--tag <name>` | meetings with this tag, by name or alias. |
-| `--topic <name>` | meetings with this topic, by name or alias. |
+| `--topic-name <name>` | meetings with this topic, by name or alias. |
 | `--since-time <time>` | meetings starting at or after this ISO 8601 date or time. |
 | `--until-time <time>` | meetings starting at or before this ISO 8601 date or time; a date alone covers that whole local day. |
 | `--limit <n>` | how many hits, 1 through 1000 (default 100). |
@@ -1378,8 +1498,8 @@ zm stats meetings show [options]
 | `--until-time <time>` | meetings starting at or before this date or time; a date alone is that whole day. |
 | `--timezone <zone>` | the IANA zone dates and weeks are read in (default: this computer's). |
 | `--event-id <id>` | only meetings linked to this stored event. |
-| `--project <name>` | meetings confirmed in this project, by name, key or alias. |
-| `--topic <name>` | meetings with this topic, by name or alias. |
+| `--project <project>` | meetings confirmed in this project, by name, key or alias. |
+| `--topic-name <name>` | meetings with this topic label, by name or alias. |
 | `--max-rows <n>` | most transcript lines to read (default and at most 500000). |
 
 **Returns:** meeting stats — time_zone, meetings, lines, words, talk_ms, weeks, top_speakers; every field: zm commands info stats meetings show
@@ -1400,8 +1520,8 @@ zm stats meetings top [options]
 | `--until-time <time>` | meetings starting at or before this date or time; a date alone is that whole day. |
 | `--timezone <zone>` | the IANA zone dates and weeks are read in (default: this computer's). |
 | `--event-id <id>` | only meetings linked to this stored event. |
-| `--project <name>` | meetings confirmed in this project, by name, key or alias. |
-| `--topic <name>` | meetings with this topic, by name or alias. |
+| `--project <project>` | meetings confirmed in this project, by name, key or alias. |
+| `--topic-name <name>` | meetings with this topic label, by name or alias. |
 | `--max-rows <n>` | most transcript lines to read (default and at most 500000). |
 | `--limit <n>` | how many speakers (default 20). |
 
@@ -1423,8 +1543,8 @@ zm review [options]
 | `--until-time <time>` | meetings starting at or before this date or time; a date alone is that whole day. |
 | `--timezone <zone>` | the IANA zone dates and weeks are read in (default: this computer's). |
 | `--event-id <id>` | only meetings linked to this stored event. |
-| `--project <name>` | meetings confirmed in this project, by name, key or alias. |
-| `--topic <name>` | meetings with this topic, by name or alias. |
+| `--project <project>` | meetings confirmed in this project, by name, key or alias. |
+| `--topic-name <name>` | meetings with this topic label, by name or alias. |
 | `--limit <n>` | most meetings, newest first (default 50, at most 200). |
 
 **Returns:** meeting review — ref, id, title, started_at, duration_ms, participants_count, projects, transcript, and 2 more; every field: zm commands info review
@@ -1440,23 +1560,22 @@ what the stored meetings point to: links shared in their chat
 links shared in meeting chat, most shared first, by whom and where
 
 ```sh
-zm mentions list [options]
+zm mentions list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--since-time <time>` | meetings starting at or after this date or time (ISO 8601, or 30d ago). |
-| `--until-time <time>` | meetings starting at or before this date or time; a date alone is that whole day. |
 | `--timezone <zone>` | the IANA zone dates and weeks are read in (default: this computer's). |
-| `--event-id <id>` | only meetings linked to this stored event. |
-| `--project <name>` | meetings confirmed in this project, by name, key or alias. |
-| `--topic <name>` | meetings with this topic, by name or alias. |
 | `--limit <n>` | how many links (default 100). |
 | `--max-messages <n>` | most chat messages to read (default and at most 100000). |
 
 **Returns:** meeting link — url, domain, document_id, count, first_at, last_at, senders, meetings; every field: zm commands info mentions list
 
-**Example:** `zm personal mentions list --since-time 30d --json`
+**Example:** `zm personal mentions list started_at>=30d --json`, `zm personal mentions list project:RES --json`
 
 ## `zm searches`
 
@@ -1481,8 +1600,8 @@ zm searches create <name> <query> [options]
 |---|---|
 | `--replace` | overwrite a saved search of the same name. |
 | `--event-id <id>` | only meetings linked to this stored event. |
-| `--project <name>` | meetings confirmed in this project, by name, key or alias. |
-| `--topic <name>` | meetings with this topic, by name or alias. |
+| `--project <project>` | meetings confirmed in this project, by name, key or alias. |
+| `--topic-name <name>` | meetings with this topic, by name or alias. |
 | `--since-time <time>` | meetings starting at or after this ISO 8601 date or time. |
 | `--until-time <time>` | meetings starting at or before this ISO 8601 date or time; a date alone covers that whole local day. |
 | `--limit <n>` | how many hits, 1 through 1000 (default 100). |
@@ -1566,7 +1685,7 @@ zm searches delete <name>
 
 **Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: zm commands info searches delete
 
-**Example:** `zm personal searches delete weekly-plan`
+**Example:** `zm personal searches delete weekly-plan --dry-run`
 
 ## `zm batch`
 
@@ -1587,7 +1706,7 @@ zm batch <file> [options]
 | `--max-read-bytes <bytes>` | aggregate stored-text read ceilings, including one 4 MiB index pass; at most 67108864. |
 | `--format <format>` | text, markdown or json. One of: `text`, `markdown`, `json`. Default: `text`. |
 
-**Returns:** meeting batch result — ; every field: zm commands info batch
+**Returns:** meeting batch result — id, command, status, answer, complete, error; every field: zm commands info batch
 
 **Example:** `zm personal batch requests.json --json`
 
@@ -1605,7 +1724,7 @@ zm guide [name]
 
 **Returns:** scenarios: the commands for a common task, in order, and why each
 
-**Example:** `zm guide`, `zm guide <name> --json`
+**Example:** `zm guide`, `zm guide archive-recordings --json`
 
 ## Коды завершения
 

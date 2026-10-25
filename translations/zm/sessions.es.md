@@ -25,6 +25,8 @@ Omite `--browser firefox` para usar el navegador predeterminado. Zoom muestra lo
 entra en la cuenta correcta y aprueba. Los tokens se guardan en el almacén de contraseñas del sistema,
 no en la configuración pública. Si ese almacén no está disponible, la conexión falla.
 
+Si iniciaste sesión por última vez con zm 0.34 o anterior, vuelve a ejecutar `zm <profile> session start`: ese acceso antiguo ya no se usa.
+
 ## Completa el retorno del navegador
 
 Deja el terminal abierto. Tras **Allow**, `https://wirecat.dev/zoom-callback` envía la respuesta al
@@ -90,12 +92,6 @@ navegador. El acceso de cada perfil es su propia entrada del llavero, `<client i
 `ZM_PROFILE_LOCK=personal` fija un proceso a un solo perfil: una primera palabra o un `ZM_PROFILE` que nombre
 otro se rechaza con `permission_error`. Fíjalo donde se ejecuta un agente.
 
-### Actualizar desde la versión 0.34 o anterior
-
-El ajuste antiguo `account.profile` ya no se lee para elegir perfil, y `zm config set
-account.profile` se rechaza. Su valor sigue apareciendo entre los perfiles, y el acceso guardado antes de
-actualizar pasa a ese perfil la primera vez que lo usas: `zm personal meetings sync`.
-
 `MESSAGING_STORE` selecciona la base compartida. Usa la misma ruta en Zoom, Memo y MCP para conectar
 reuniones con notas y proyectos. Importar archivos no avanza el cursor; al cambiar de fuente puede
 hacer falta un `--since-time` anterior explícito.
@@ -105,8 +101,7 @@ hacer falta un `--since-time` anterior explícito.
 No hay orden de cierre de sesión. Retira la autorización desde la gestión de apps de Zoom App Marketplace.
 Para borrar el token local, abre el almacén de contraseñas del sistema y elimina la entrada cuyo servicio es
 `zoom-cli:<configuration directory>` (por ejemplo `zoom-cli:/home/you/.config/zm`; `zm doctor --json` muestra
-el directorio) y cuya cuenta es `<Public Client ID>:<profile>`. Un acceso guardado por la versión 0.34 o anterior tiene solo el
-Public Client ID como cuenta; cuando el perfil lo ha asumido, esa entrada antigua queda sin uso y se puede borrar.
+el directorio) y cuya cuenta es `<Public Client ID>:<profile>`.
 Desinstalar `zm` no revoca permisos ni borra reuniones. Consulta [seguridad](./security.md) antes de
 compartir datos con un agente.
 

@@ -83,7 +83,7 @@ zm personal search recordings ./zoom-archive "example plan" --limit 100 --offlin
 ```sh
 zm personal meetings people "Alice Example" --json
 zm personal search meetings "launch" --identity-id 12 --project RES --since-time 2026-09-12 --until-time 2026-10-12 --json
-zm personal search meetings "budget" --person-id 7 --topic costs --since-time 2026-09-12 --json
+zm personal search meetings "budget" --person-id 7 --topic-name costs --since-time 2026-09-12 --json
 zm personal search meetings "launch" --tag planning --limit 20 --json
 ```
 
@@ -95,7 +95,7 @@ zm personal search meetings "launch" --tag planning --limit 20 --json
 
 `--project` принимает существующее основное имя проекта, его ключ или явно заданный псевдоним.
 Учитывается только подтверждённая принадлежность встречи проекту; предложение агента или
-совпадение слова в расшифровке её не устанавливает. `--tag` и `--topic` принимают основные
+совпадение слова в расшифровке её не устанавливает. `--tag` и `--topic-name` принимают основные
 имена или явные псевдонимы уже прикреплённых к встрече меток; выберите один фильтр метки.
 Отсутствующее или неоднозначное имя вызывает ошибку, а не расширяет поиск. Дата без времени покрывает весь местный день
 в поясе компьютера, а время без смещения читается в этом поясе; для другого пояса задайте смещение или `Z`. Правила продолжения
@@ -147,7 +147,7 @@ zm personal meetings task-proposal meeting:3/15/20/0 --type promise --json
 ## Задать фильтры в запросе и сохранить поиск
 
 Фильтры проекта, меток и даты можно писать рядом со словами: `date:`, `project:`, `tag:` и `topic:`
-соответствуют `--since-time`/`--until-time`, `--project`, `--tag` и `--topic`.
+соответствуют `--since-time`/`--until-time`, `--project`, `--tag` и `--topic-name`.
 
 ```sh
 zm personal search meetings "launch project:RES date>=30d" --json
@@ -312,9 +312,9 @@ zm personal meetings projects evidence RES 'identity_id:12 started_at:[2026-09-1
 Необязательный запрос отбора принимает точные значения `meeting_id`, `identity_id`, `person_id`,
 `tag_id`, `event_id` и `series_id`, каждое один раз и только с AND, а также даты/диапазоны `started_at`.
 Диапазоны дат включают полные календарные дни UTC; ISO-время в кавычках задаёт точные границы.
-OR, отрицание и фильтры подтверждённой принадлежности к проекту отклоняются. MCP-инструмент
-`meeting_project_evidence` принимает `project`, необязательные `query`, `limit`, `cursor` и
-`max_read_bytes`; аккаунт фиксируется сервером.
+OR, отрицание и фильтры подтверждённой принадлежности к проекту отклоняются. Через MCP её выполняет
+`zm_read` как `{ "command": "meetings projects evidence", "arguments": { … } }` с теми же аргументами;
+профиль фиксирует сервер.
 
 Для каждого подходящего сохранённого фрагмента откройте `zm personal meetings passage <ref> --format markdown`
 и проверьте соседние слова. `association: "unconfirmed-word-evidence"` означает кандидата: ключ может
