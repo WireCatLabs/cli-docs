@@ -7,19 +7,25 @@ La página **Logs** de WireCat Desktop muestra lo que cada herramienta de línea
 
 ## Qué muestra la página
 
-Telegram (`tg`), MAX (`max`) y WhatsApp (`wa`) guardan logs de ejecución. La aplicación los lee con los comandos `runs list` y `runs show` de cada herramienta. Zoom (`zm`), Google Drive (`drive`) y Memo (`memo`) todavía no guardan logs que la aplicación pueda leer. La fila sobre la búsqueda muestra cada herramienta y cuántas ejecuciones leyó la aplicación. La aplicación lee las 500 ejecuciones más recientes de cada herramienta; **Load older** lee las 500 siguientes.
+Las seis herramientas guardan logs de ejecución: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`) y Memo (`memo`). La aplicación los lee con los comandos `runs list` y `runs show` de cada herramienta. Un Zoom, Google Drive o Memo más antiguo no tiene logs de ejecución; actualízalo para verlos. La fila sobre la búsqueda muestra cada herramienta y cuántas ejecuciones leyó la aplicación. La aplicación lee las 500 ejecuciones más recientes de cada herramienta; **Load older** lee las 500 siguientes.
 
 ## Por qué casi todo son fallos
 
 Una herramienta guarda una ejecución solo cuando falla o termina a medias. Una ejecución correcta no deja registro. Por eso la lista muestra sobre todo fallos. Esto no significa que todo esté roto.
 
-Para guardar todas las ejecuciones, elige **Keep every run** para la herramienta en la parte superior de la página Logs, o cambia el ajuste tú mismo:
+Para guardar todas las ejecuciones de Telegram, MAX o WhatsApp, elige **Keep every run** para la herramienta en la parte superior de la página Logs, o cambia el ajuste tú mismo:
 
 ```sh
 tg config set record true --defaults
 ```
 
-Esto se aplica a todos los perfiles de esa herramienta. Para MAX o WhatsApp, escribe `max` o `wa` en lugar de `tg`. Una herramienta borra las ejecuciones con más de `keep_runs_for_days` días. El valor por defecto es 30 días. [Configuración](../configuration.mdx) explica dónde se guardan estos ajustes y cómo cambiarlos.
+Esto se aplica a todos los perfiles de esa herramienta. Para MAX o WhatsApp, escribe `max` o `wa` en lugar de `tg`. La página no ofrece el interruptor para las otras tres herramientas; cambia el ajuste tú mismo:
+
+- Zoom: `zm config set record true`.
+- Google Drive: `drive personal config set record true --defaults`. Escribe cualquiera de tus perfiles en lugar de `personal`; con `--defaults` el ajuste se aplica a todos.
+- Memo: añade `"record": true` al archivo de configuración de memo. `memo doctor` muestra dónde está.
+
+Una herramienta borra las ejecuciones con más de `keep_runs_for_days` días. El valor por defecto es 30 días. [Configuración](../configuration.mdx) explica dónde se guardan estos ajustes y cómo cambiarlos.
 
 ## Buscar ejecuciones
 
