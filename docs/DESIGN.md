@@ -55,8 +55,9 @@ wirecat.dev/
 ```
 
 `{lang}` is `en`, `ru` or `es`. `{tool}` is `max` or `tg`; a new tool is one line in `tools.json`.
-A line with `"community": true` is an outside tool: the sidebar shows it under "Community tools", a group that
-appears only while one is listed ([review list](REVIEWING.md#community-tools)).
+A line with `"community": true` is an outside tool: the sidebar and `/llms.txt` show it under "Community tools", a
+group that appears only while one is listed ([review list](REVIEWING.md#community-tools)). `/llms.txt` gives install
+requests for our tools only.
 `www.wirecat.dev` answers 301 to `wirecat.dev`.
 
 ## The landing page — `/{lang}`
