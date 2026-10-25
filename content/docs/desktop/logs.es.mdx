@@ -1,0 +1,111 @@
+---
+title: Buscar en los logs de WireCat Desktop
+description: Descubre por qué falló una herramienta, con qué frecuencia pasa y qué comando, perfil o error intervienen, con filtros, grupos y el registro de cada ejecución.
+---
+
+La página **Logs** de WireCat Desktop muestra lo que cada herramienta de línea de comandos registró sobre sus propias ejecuciones. Una **ejecución** es un arranque de una herramienta, como `tg personal messages send`, desde el inicio hasta la salida. Usa esta página cuando una herramienta falló y quieres saber por qué, con qué frecuencia pasa o qué comando, perfil o error intervienen. Aprenderás a filtrar ejecuciones, agruparlas, abrir una y copiar su registro para un informe de error.
+
+## Qué muestra la página
+
+Telegram (`tg`), MAX (`max`) y WhatsApp (`wa`) guardan logs de ejecución. La aplicación los lee con los comandos `runs list` y `runs show` de cada herramienta. Zoom (`zm`), Google Drive (`drive`) y Memo (`memo`) todavía no guardan logs que la aplicación pueda leer. La fila sobre la búsqueda muestra cada herramienta y cuántas ejecuciones leyó la aplicación. La aplicación lee las 500 ejecuciones más recientes de cada herramienta; **Load older** lee las 500 siguientes.
+
+## Por qué casi todo son fallos
+
+Una herramienta guarda una ejecución solo cuando falla o termina a medias. Una ejecución correcta no deja registro. Por eso la lista muestra sobre todo fallos. Esto no significa que todo esté roto.
+
+Para guardar todas las ejecuciones, elige **Keep every run** para la herramienta en la parte superior de la página Logs, o cambia el ajuste tú mismo:
+
+```sh
+tg config set record true --defaults
+```
+
+Esto se aplica a todos los perfiles de esa herramienta. Para MAX o WhatsApp, escribe `max` o `wa` en lugar de `tg`. Una herramienta borra las ejecuciones con más de `keep_runs_for_days` días. El valor por defecto es 30 días. [Configuración](../configuration.mdx) explica dónde se guardan estos ajustes y cómo cambiarlos.
+
+## Buscar ejecuciones
+
+Escribe en el cuadro de búsqueda sobre la lista. Una búsqueda tiene condiciones separadas por espacios. Una ejecución debe cumplir todas las condiciones.
+
+| Escribe | Significado | Ejemplo |
+| --- | --- | --- |
+| `field:value` | El campo tiene este valor. El valor completo debe coincidir; mayúsculas y minúsculas dan igual. | `status:failed` |
+| `field:"two words"` | Pon entre comillas un valor con espacios. | `cli_command:"tg messages send"` |
+| `*` | Cualquier carácter, también ninguno. Úsalo para buscar parte de un valor. | `cli_command:"tg messages*"` |
+| `-` delante de una condición | Excluye las ejecuciones que la cumplen. | `-profile:work` |
+| `field:>N`, `<`, `>=`, `<=` | Compara un número. | `duration_ms:>1000` |
+| `a.b.c:value` | Un campo dentro de otro campo. Una lista coincide si coincide uno de sus elementos. | `partial.failures.stage:upload` |
+| una palabra sin `field:` | Texto que forma parte de los campos principales de la ejecución: comando, perfil, estado o códigos de error. | `timeout` |
+
+Dos valores del mismo campo coinciden con **cualquiera** de ellos: `tool:tg tool:max` muestra las ejecuciones de ambas herramientas. Campos distintos deben cumplirse **todos**: `tool:tg status:failed` muestra solo las ejecuciones fallidas de `tg`. Una exclusión o una comparación de números siempre se aplica por separado. Por ejemplo, `duration_ms:>1000 duration_ms:<5000` encuentra ejecuciones de uno a cinco segundos.
+
+El cuadro de búsqueda sugiere nombres de campos y los valores que tienen las ejecuciones cargadas. Si la aplicación no puede leer una condición, la subraya y explica por qué: una comilla sin cerrar, un campo sin valor, una comparación con algo que no es un número o un campo que ninguna ejecución cargada tiene.
+
+### Campos
+
+| Campo | Qué contiene | Valor de ejemplo |
+| --- | --- | --- |
+| `tool` | La herramienta que registró la ejecución | `tg` |
+| `status` | Cómo terminó la ejecución | `failed`, `partial`, `success`, `running` |
+| `cli_command` | El nombre de la herramienta y su comando | `tg messages send` |
+| `command` | El comando sin el nombre de la herramienta | `messages send` |
+| `profile` | El perfil que usó la ejecución | `work` |
+| `error_code` | Por qué falló la ejecución | `rate_limited` |
+| `codes` (o `code`) | Códigos de error de las solicitudes de la ejecución | `timeout` |
+| `operations` (o `operation`) | Las solicitudes que la herramienta hizo al servicio | `messages.getHistory` |
+| `duration_ms` (o `duration`) | Cuánto duró la ejecución, en milisegundos | `31000` |
+| `requests` | Cuántas solicitudes hizo la herramienta | `3` |
+| `cli_version` | La versión de la herramienta | un número de versión |
+| `run_id` | El identificador de la ejecución | `20261025T100000Z-sync-a1b2c3` |
+
+Una ejecución puede tener más campos. Abre una ejecución para verlos todos: cualquier campo de su registro se puede buscar por su nombre o su ruta. Un `cli_command` que es solo el nombre de la herramienta, como `max`, significa que la herramienta arrancó sin un comando que conozca. Normalmente es una errata o falta el perfil.
+
+### Búsquedas de ejemplo
+
+| Para encontrar | Busca |
+| --- | --- |
+| Ejecuciones fallidas de un comando | `status:failed cli_command:"tg messages send"` |
+| Límites de frecuencia en el último día | `code:rate_limited` y elige **Last 24h** |
+| Ejecuciones lentas | `duration_ms:>10000` |
+| Las ejecuciones de un perfil | `profile:work` |
+| Fallos, salvo tiempos de espera agotados | `status:failed -error_code:timeout` |
+| Ejecuciones parciales en las que falló una subida | `status:partial partial.failures.stage:upload` |
+
+### En qué se diferencia de la búsqueda de mensajes
+
+La [búsqueda de mensajes](../search-playground.mdx) usa la sintaxis de Lucene. La búsqueda en Logs es más sencilla:
+
+- No hay palabras `AND`, `OR`, `NOT` ni paréntesis. Un espacio significa «y», el mismo campo dos veces significa «cualquiera de los dos» y `-` excluye.
+- `field:value` debe coincidir con el valor completo. Añade `*` para buscar una parte. Las palabras sin campo coinciden con parte de un valor.
+- `*` es el único comodín. No hay `?`, ni búsqueda aproximada, ni rangos entre corchetes.
+- No hay campo de fecha para comparar. Usa los botones de periodo.
+
+## Filtrar con facetas
+
+La columna de la izquierda muestra las **facetas**: los valores de Tool, Status, Command, Profile y Error code, con el número de ejecuciones de cada uno. Haz clic en un valor para ver solo esas ejecuciones y vuelve a hacer clic para quitar el filtro. Alt + clic en un valor, o su botón de menos, oculta esas ejecuciones. Cada clic añade una condición al cuadro de búsqueda, así puedes ver y editar la búsqueda. Los números tienen en cuenta todas las demás condiciones. Por eso puedes elegir también un segundo valor de la misma faceta.
+
+En una ventana estrecha, abre las facetas con el botón **Facets**.
+
+## Agrupar ejecuciones
+
+Elige un campo en **Group by** para ver una fila por cada valor: cuántas ejecuciones lo tienen, cuántas fallaron y cuándo empezó la última. También puedes agrupar desde una faceta con su botón **Group by this field**, o desde un valor del registro de una ejecución con su botón **Group by**. Haz clic en la fila de un grupo para ver solo sus ejecuciones.
+
+## Elegir un periodo
+
+Elige **Last 1h**, **Last 24h**, **Last 7d**, **Last 30d** o **All**. El periodo se aplica a las ejecuciones que cargó la aplicación. Si no ves una ejecución antigua, usa **Load older** en esa herramienta.
+
+## Abrir una ejecución
+
+Haz clic en una ejecución para abrirla. Verás:
+
+- **Events**: los eventos, es decir, las solicitudes que la herramienta hizo al servicio y los pasos importantes de la ejecución, con la hora, el resultado y la duración de cada uno. Haz clic en un evento para ver todos sus campos.
+- **Run record**: el registro de ejecución, todo lo que la herramienta guardó sobre ella, como un árbol que puedes desplegar. La mayoría de los valores tienen botones para filtrar por él, excluirlo, agrupar por su campo y copiarlo.
+- **Copy JSON** copia el registro completo. Puedes adjuntarlo a un informe de error o darlo a tu agente.
+
+**Copy run id** copia el identificador de la ejecución. Puedes usarlo con el comando `runs show` de la herramienta.
+
+## Privacidad
+
+Los registros de ejecución nunca contienen el texto de los mensajes, nombres de personas, títulos de chats ni secretos de acceso, como contraseñas y claves de sesión. La [guía de diagnóstico de Telegram](../tg/diagnostics.md) enumera lo que una herramienta registra y lo que nunca registra.
+
+Antes de mostrar una ejecución, la aplicación también oculta los datos personales: los valores de campos como tokens, contraseñas, números de teléfono, direcciones de correo, nombres de cuenta e ID de usuario pasan a ser `•••`. En el texto, la aplicación sustituye las direcciones de correo por `[email]`, los números de teléfono por `[number]` y los tokens de bot por `[bot token]`. Lo que copias también queda oculto.
+
+Un informe de error que envías desde la aplicación siempre adjunta los logs de errores recientes: las últimas 20 ejecuciones fallidas de cada herramienta instalada, ocultas de la misma forma. El servidor de WireCat las oculta de nuevo. Se guardan de forma privada en el servidor de WireCat durante 90 días, después se eliminan y nunca se publican. En cualquier otro caso, los logs nunca salen de tu ordenador. La [política de privacidad](/es/privacy#bug-reports) explica qué envía un informe de error.

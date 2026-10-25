@@ -38,8 +38,9 @@ export default async function HomePage({ params }: Props) {
   )
 }
 
+// English home is app/(root); building it here too would publish a second copy at /en.
 export function generateStaticParams() {
-  return i18n.languages.map((lang) => ({ lang }))
+  return i18n.languages.filter((lang) => lang !== "en").map((lang) => ({ lang }))
 }
 
 export async function generateMetadata({ params }: Props) {

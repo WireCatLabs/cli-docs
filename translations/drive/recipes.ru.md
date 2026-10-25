@@ -132,6 +132,23 @@ memo projects evidence COB --source drive:personal --since-time 365d --json
 Проверяйте их отдельно через [связи документов](#link-a-document-to-a-person-or-project) или
 [сценарии проектов Memo](https://wirecat.dev/en/docs/memo/recipes).
 
+### Искать в Memo только документы Drive
+
+`memo search notes` ищет в ваших заметках и импортированных документах вместе. `--source` оставляет только
+документы одного профиля Drive:
+
+```sh
+memo search notes "budget decision" --source drive:personal --json
+```
+
+Документы каждого аккаунта Google лежат в общей базе в своём аккаунте, не вместе с вашими заметками.
+`drive:personal` называет этот аккаунт по профилю drive; `google-drive:<id>` называет тот же аккаунт по его
+Google ID — значению `principal`, сохранённому для профиля в `config.json`. Несколько профилей перечисляются
+через запятую, например `--source drive:personal,drive:work`. Профиль, который ещё не синхронизировался,
+отклоняется со списком профилей, которые есть в базе. `memo search all`
+ранжирует сообщения, почту и заметки вместе и не фильтрует по источнику; `drive personal search` находит
+те же документы с собственными полями Drive.
+
 ## Подготовить справку полностью без сети
 
 ```text prompt

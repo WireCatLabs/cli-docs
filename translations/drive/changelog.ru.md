@@ -4,6 +4,54 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.34.0 — 25.10.2026
+
+### Added
+
+- drive keeps a log of its runs, as tg, max and wa do: a failed command always, every command with `--record` or `record: true` in the defaults (`drive personal config set record true --defaults`), each for `keep_runs_for_days` (30 by default). `drive runs list`, `drive runs show <run-id>` and `drive runs path <run-id>` read them without a profile. A run holds the command's words, its profile, its outcome and every Google request as method, path shape with ids masked, status and duration, never a document id, name or text. `--no-record` keeps nothing.
+
+### Fixed
+
+- Help and MCP text describe drive, not a messenger: the `command` argument of `drive_read` and `drive_write` gives `"session list"` as its example instead of `"messages list"`. The examples of `session list` and `config show` name a profile, and `mcp`'s examples start with `drive personal mcp --tools`, which lists the tools without starting a server, and use `https://laptop.example.ts.net` instead of a `<name>` placeholder. Needs cli-core 0.422.0.
+
+## 0.33.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `search --json` hits carry the Google link as `url` and say `kind: "document"`, the same fields and values as `memo search notes` and `search all` for the same document. `source_url` is removed, with no alias, from hits and from `pictures`; a folder hit is told apart by `not_read: "folder metadata only"` instead of `kind: "folder"`. `tabs`, `content` and `not_read` stay.
+
+### Added
+
+- When the Google sign-in has expired, the error's `next` says it is the owner's step: run `drive <profile> session start` on the computer running drive. An agent over MCP can't sign in, so it now knows to stop and ask instead of retrying.
+
+## 0.32.0 — 25.10.2026
+
+### Changed — may break callers
+
+- Drive documents live in the store's Google Drive account (`google-drive` / your Google principal) instead of a notes folder named `google-drive:<principal>`, and the `drive` profile names that account. This needs cli-core 0.420.0, which carries store versions 30 to 33: it moves existing documents on first open, keeping every `document:<id>` reference, and an older CLI then refuses the store until upgraded. Opening the store records drive's version, so an upgrade can name the CLIs it locks out.
+
+### Fixed
+
+- Two drive processes using the same profile, such as `mirrors watch` and `drive mcp`, refresh its Google sign-in one at a time and share the result, instead of each refreshing on its own. Your saved sign-in stays as it is: nobody signs in again, and older drive versions still read it. `DRV-29`
+
+## 0.31.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `files list` uses the shared field query language, such as `name:"Example plan"` and `modified_time>=2026-01-01`, instead of Google query syntax. Timestamp values require an offset; `--timezone` controls date bounds. File-list fields use snake_case. Raw Google queries remain available through `api`.
+- Tag lists return `items` containing `{ "tag": "budget" }` rows. Removed spellings have no aliases.
+
+### Added
+
+- Lists declare schema-derived native queries for configured folders, mirrors, profiles, document tags, notes, relationships, contributors and remote files. Provider lists without predicates advertise their fields and reject filters before requests.
+- A file's owner or editor is the same person as your mail contact with that exact email address, so `memo context` joins their files and mail. A name alone never joins anyone, and a person you unlink stays unlinked.
+
+## 0.30.0 — 25.10.2026
+
+### Removed
+
+- `mirrors sync --public-url` and `mirrors watch --public-url`, added in 0.29.0: Google Docs did not download images through a Tailscale Funnel or an ngrok tunnel, so local images stayed as text anyway. Local images stay as Markdown text in the Doc, as `docs/mirrors.md` explains. `DRV-11`
+
 ## 0.29.0 — 24.10.2026
 
 ### Added

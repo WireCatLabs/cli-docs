@@ -6,7 +6,7 @@
     "@cspell/dict-ru_ru/cspell-ext.json"
   ],
   "language": "en,en-GB,ru,es",
-  "files": ["content/docs/*.{md,mdx}"],
+  "files": ["content/docs/*.{md,mdx}", "content/docs/desktop/*.{md,mdx}"],
   "ignoreRegExpList": ["/<[^>]+>/g", "/^---[\\s\\S]*?^---/gm"],
   "words": [
     "Fellegi",

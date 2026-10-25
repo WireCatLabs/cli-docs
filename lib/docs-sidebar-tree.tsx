@@ -38,6 +38,7 @@ import {
   Mail,
   MessageSquare,
   Mic,
+  Monitor,
   Network,
   NotebookPen,
   Paperclip,
@@ -45,6 +46,7 @@ import {
   Reply,
   Rocket,
   Route,
+  ScrollText,
   Search,
   Send,
   Settings2,
@@ -141,6 +143,8 @@ export const sidebarIcons = {
   "build-own-data": Database,
   "build-sign-in": KeyRound,
   "build-stay-compliant": ShieldCheck,
+  desktop: Monitor,
+  logs: ScrollText,
 }
 
 const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
@@ -201,7 +205,9 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
               ? NotebookPen
               : tool === "zm"
                 ? Video
-                : FolderOpen
+                : firstPage?.type === "page" && /\/docs\/desktop\//.test(firstPage.url)
+                  ? Monitor
+                  : FolderOpen
       return {
         ...node,
         root: false,

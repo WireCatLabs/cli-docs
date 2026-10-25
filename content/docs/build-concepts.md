@@ -48,16 +48,15 @@ such as a sync checkpoint or a cache, lives in your tool's own SQLite file, and 
 ([WC-DATA-1](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md#wc-data-1--a-record-more-than-one-tool-needs-is-a-core-entity-in-cli-core-a-clis-own-tables-stay-private)).
 See [Keep your own data](./build-own-data.md).
 
-## Coming in the next cli-core release
+## More in the store
 
 - **The provider registry.** Your tool records its provider (name, kind, aliases, command) in the store each time it
   runs, so every other tool knows the new source without a cli-core release. Rows of a provider no tool has recorded
-  are skipped and reported, never searched as messages.
+  are skipped and reported, never searched as messages. See [Add a source](./build-add-source.md).
 - **The review list.** Pairs the tools cannot tell apart, such as two events for one meeting, wait there for the
   owner to decide.
-- **Calendar entries and files** as source records of events and documents, and an email address on every identity,
-  so one address joins one person.
-
+- **Calendar entries and files** are source records of events and documents, and every identity can hold an email
+  address, so one address joins one person.
 ## What breaks if you skip this
 
 A provider id kept only in `metadata` cannot be updated by key, so every sync makes a duplicate. A link made by title

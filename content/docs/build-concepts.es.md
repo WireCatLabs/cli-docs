@@ -53,16 +53,16 @@ archivo SQLite propio de tu herramienta, y ninguna otra la lee
 ([WC-DATA-1](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md#wc-data-1--a-record-more-than-one-tool-needs-is-a-core-entity-in-cli-core-a-clis-own-tables-stay-private)).
 Consulta [Guardar tus propios datos](./build-own-data.md).
 
-## Llega en la próxima versión de cli-core
+## Más en el almacén
 
 - **El registro de proveedores.** Tu herramienta anota su proveedor (nombre, tipo, alias, comando) en el almacén cada
   vez que se ejecuta, así todas las demás conocen la nueva fuente sin una versión de cli-core. Las filas de un
-  proveedor que ninguna herramienta ha registrado se omiten y se informan, nunca se buscan como mensajes.
+  proveedor que ninguna herramienta ha registrado se omiten y se informan, nunca se buscan como mensajes. Consulta
+  [Añadir una fuente](./build-add-source.md).
 - **La lista de revisión.** Los pares que las herramientas no pueden distinguir, como dos eventos para una reunión,
   esperan ahí a que el propietario decida.
-- **Las entradas de calendario y los archivos** como registros de origen de eventos y documentos, y una dirección de
-  correo en cada identidad, para que una dirección una a una persona.
-
+- **Las entradas de calendario y los archivos** son registros de origen de eventos y documentos, y cada identidad puede
+  tener una dirección de correo, para que una dirección una a una persona.
 ## Qué se rompe si lo omites
 
 Un id de proveedor guardado solo en `metadata` no se puede actualizar por clave, así que cada sincronización crea un
