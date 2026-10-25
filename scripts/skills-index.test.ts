@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
-import { publishSkills, SKILLS_DIR, skillEntry, writeSkillsIndex } from "./skills-index.ts"
+import { publishSkills, SKILLS_DIR, skillEntry, skillIndexProblems, writeSkillsIndex } from "./skills-index.ts"
 
 const skill = (name: string) =>
   [
@@ -67,5 +67,11 @@ describe("publishSkills and writeSkillsIndex", () => {
       description: "Read the owner's chats. Use when asked.",
       files: ["SKILL.md"],
     })
+
+    const out = join(root, "public")
+    expect(skillIndexProblems(out)).toEqual([])
+    rmSync(join(root, SKILLS_DIR, "tg-cli", "SKILL.md"))
+    expect(skillIndexProblems(out)).toEqual([".well-known/skills/tg-cli/SKILL.md: missing"])
+    expect(skillIndexProblems(folder())).toEqual([".well-known/skills/index.json: missing from the export"])
   })
 })

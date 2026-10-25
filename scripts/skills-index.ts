@@ -6,7 +6,7 @@
  * what Hermes's `WellKnownSkillSource` reads. v0.2 moved to `/.well-known/agent-skills/` with digests; Hermes
  * does not read that yet.
  */
-import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { withVersion } from "@wirecat/cli-base/skill"
 import { parse } from "yaml"
@@ -56,4 +56,18 @@ export const writeSkillsIndex = (root: string): SkillEntry[] => {
     .map((name) => skillEntry(name, readFileSync(join(dir, name, "SKILL.md"), "utf8")))
   writeFileSync(join(dir, "index.json"), `${JSON.stringify({ skills }, null, 2)}\n`)
   return skills
+}
+
+/** What a Hermes `well-known` install would miss in the exported site; empty when every listed skill is served. */
+export const skillIndexProblems = (out: string): string[] => {
+  const dir = join(out, ".well-known/skills")
+  const index = join(dir, "index.json")
+  if (!existsSync(index)) return [".well-known/skills/index.json: missing from the export"]
+  const { skills } = JSON.parse(readFileSync(index, "utf8")) as { skills: SkillEntry[] }
+  if (skills.length === 0) return [".well-known/skills/index.json: lists no skills"]
+  return skills.flatMap(({ name, files }) =>
+    files
+      .filter((file) => !existsSync(join(dir, name, file)))
+      .map((file) => `.well-known/skills/${name}/${file}: missing`),
+  )
 }
