@@ -4,6 +4,34 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.32.0 — 25.10.2026
+
+### Changed — may break callers
+
+- Drive documents live in the store's Google Drive account (`google-drive` / your Google principal) instead of a notes folder named `google-drive:<principal>`, and the `drive` profile names that account. This needs cli-core 0.420.0, which carries store versions 30 to 33: it moves existing documents on first open, keeping every `document:<id>` reference, and an older CLI then refuses the store until upgraded. Opening the store records drive's version, so an upgrade can name the CLIs it locks out.
+
+### Fixed
+
+- Two drive processes using the same profile, such as `mirrors watch` and `drive mcp`, refresh its Google sign-in one at a time and share the result, instead of each refreshing on its own. Your saved sign-in stays as it is: nobody signs in again, and older drive versions still read it. `DRV-29`
+
+## 0.31.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `files list` uses the shared field query language, such as `name:"Example plan"` and `modified_time>=2026-01-01`, instead of Google query syntax. Timestamp values require an offset; `--timezone` controls date bounds. File-list fields use snake_case. Raw Google queries remain available through `api`.
+- Tag lists return `items` containing `{ "tag": "budget" }` rows. Removed spellings have no aliases.
+
+### Added
+
+- Lists declare schema-derived native queries for configured folders, mirrors, profiles, document tags, notes, relationships, contributors and remote files. Provider lists without predicates advertise their fields and reject filters before requests.
+- A file's owner or editor is the same person as your mail contact with that exact email address, so `memo context` joins their files and mail. A name alone never joins anyone, and a person you unlink stays unlinked.
+
+## 0.30.0 — 25.10.2026
+
+### Removed
+
+- `mirrors sync --public-url` and `mirrors watch --public-url`, added in 0.29.0: Google Docs did not download images through a Tailscale Funnel or an ngrok tunnel, so local images stayed as text anyway. Local images stay as Markdown text in the Doc, as `docs/mirrors.md` explains. `DRV-11`
+
 ## 0.29.0 — 24.10.2026
 
 ### Added

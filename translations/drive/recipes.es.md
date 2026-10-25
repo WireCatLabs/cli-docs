@@ -131,6 +131,20 @@ Google originales y límites explícitos. Importar y buscar no crea pertenencia 
 ni tareas. Revísalos por separado con [las relaciones de documentos](#link-a-document-to-a-person-or-project)
 o [los flujos de proyectos de Memo](https://wirecat.dev/en/docs/memo/recipes).
 
+### Buscar solo documentos de Drive desde Memo
+
+`memo search notes` busca a la vez en tus notas y en los documentos importados. `--source` deja solo los
+documentos de un perfil de Drive:
+
+```sh
+memo search notes "budget decision" --source drive:personal --json
+```
+
+Indica varios perfiles separados por comas, como `--source drive:personal,drive:work`. Un perfil que aún no
+se ha sincronizado se rechaza con la lista de perfiles que tiene la base. `memo search all` ordena mensajes,
+correo y notas juntos y no tiene filtro de origen; `drive personal search` devuelve los mismos documentos con
+los campos propios de Drive.
+
 ## Preparar un informe sin conexión
 
 ```text prompt
