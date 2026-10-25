@@ -2,28 +2,24 @@
 title: "Hoja de ruta"
 ---
 
-Esta página enumera lo que está planeado para `wa` y aún no está incluido. Léelo antes de crear una solución alternativa para una característica faltante: es posible que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abra un [problema en GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).
+Esta página enumera lo que está planeado para `wa` y aún no incluye. Léela antes de crear una solución alternativa para una función que falta: puede que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abre un [issue en GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).
 
 ## Lo que funciona hoy
 
-`wa` se vincula a tu cuenta como un dispositivo y mantiene tus chats en un almacén local: lectura, búsqueda, envío de textos y archivos, respuestas, ediciones, eliminaciones, reacciones, encuestas, grupos, canales, personas y su propio perfil. La guía está [usando wa](./usage.md), y cada comando está en la [referencia de comando](./commands.md). Lo que `wa` no puede hacer y por qué está en [aún no está en wa](./usage.md#not-in-wa-yet). `wa` es temprano: parte de esto aún no se ha verificado en teléfonos reales.
+`wa` se vincula a tu cuenta como un dispositivo y guarda tus chats en un almacén local: lectura, búsqueda, envío de textos y archivos, respuestas, ediciones, eliminaciones, reacciones, encuestas, grupos, canales, personas y tu propio perfil. La guía es [usar wa](./usage.md), y cada comando está en la [referencia de comandos](./commands.md). Lo que `wa` no puede hacer, y por qué, está en [lo que falta en wa](./usage.md#not-in-wa-yet).
 
-## En progreso
-
-- **Bots a través de la API Cloud oficial de WhatsApp**: un número comercial que atiende desde `wa`, aparte de tu cuenta personal.
-- **Un archivo verificado de tus archivos**: guarda cada archivo recibido en una carpeta de tu elección, con una verificación de que cada copia esté completa.
+La Cloud API oficial está disponible para [bots](./bot.md), y los [archivos de adjuntos](./attachments.md) guardan los archivos recibidos con comprobaciones de integridad. Las vistas previas de invitaciones, los identificadores de dispositivos, las listas personalizadas y los comentarios guardados de comunidades se describen en [usar wa](./usage.md#preview-links-devices-and-lists).
 
 ## Siguiente
 
-- **Archivos en canales**: guarda uno de una publicación y un álbum en un canal que ejecutas.
-- **Archivos antiguos**: descargar desde tu teléfono un archivo que WhatsApp ya no guarda en sus servidores.
+- **Archivos en canales**: guardar uno de una publicación y enviar un álbum a un canal que administras.
 - **Cuentas comerciales**: etiquetas de WhatsApp Business y el perfil de otro negocio.
-- **Un comando guía** que te guía paso a paso a través de tareas comunes.
+- **Un comando guía** que te lleva paso a paso por las tareas comunes.
 
 ## Más tarde
 
-- **Más archivos en un mensaje** que una foto y un video, y vistas previas de videos enviados y fotos WEBP.
-- **Comunidades**: enumerar los grupos de una comunidad y agregar un grupo a uno o eliminarlo. Un grupo ya nombra su comunidad ([comunidades](./groups.md#communities)).
-- **Tus reacciones en el almacén local**: una reacción que envías también se guarda en esta computadora, al igual que una reacción de tu teléfono.
+- **Más archivos en un mensaje** que una foto y un vídeo, y vistas previas en vídeos enviados y fotos WEBP.
+- **Comunidades**: listar los grupos de una comunidad y añadir o quitar un grupo. Un grupo ya indica su comunidad ([comunidades](./groups.md#communities)).
+- **Tus reacciones en el almacén local**: una reacción que envías también se guarda en este ordenador, como una que llega desde tu teléfono.
 
-Lo que cambió cada versión lanzada se encuentra en el [registro de cambios](./changelog.md).
+Lo que cambió cada versión publicada está en el [historial de cambios](./changelog.md).

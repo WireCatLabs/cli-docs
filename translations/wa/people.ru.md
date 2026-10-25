@@ -18,7 +18,7 @@ title: "Контекст общения с человеком"
 | Просмотр человека и чатов, которыми вы делитесь | `wa personal contacts show` |
 | Прочитайте, что они сказали, в каждом чате или в названных вами чатах | `wa personal contacts context` |
 | Зафиксируйте, что аккаунт WhatsApp и аккаунт Telegram или MAX — это одно лицо | `wa personal contacts link` |
-| Сохраняйте свое имя и заметки для человека | `wa personal contacts alias`, `wa personal contacts notes` |
+| Сохраняйте свое имя и заметки для человека | `wa personal contacts aliases`, `wa personal contacts notes` |
 
 Все параметры этих команд приведены в [справке по командам](./commands.md).
 
@@ -59,11 +59,11 @@ wa personal contacts unlink 100000000000001@lid
 
 После этого `contacts context` без `--chat` собирает обе учетные записи. `contacts context --chat` по-прежнему показывает только указанную вами аккаунт. Ссылка — это только то, что вы записываете: одно и то же имя в двух мессенджерах никогда не воспринимается как один и тот же человек.
 
-## Ваши собственные имена и примечания: `contacts alias`, `contacts notes`
+## Ваши собственные имена и примечания: `contacts aliases`, `contacts notes`
 
 ```sh
-wa personal contacts alias set 100000000000001@lid Ana    # your own name for a person, on this computer only
-wa personal contacts alias rm 100000000000001@lid
+wa personal contacts aliases set 100000000000001@lid Ana    # your own name for a person, on this computer only
+wa personal contacts aliases remove 100000000000001@lid
 wa personal contacts notes add 100000000000001@lid --text-file note.txt  # or the text from stdin
 wa personal contacts notes list 100000000000001@lid
 ```
@@ -77,7 +77,7 @@ wa personal contacts notes list 100000000000001@lid
 Они соединяются; пока работает `serve`, они проходят через соединение `serve`.
 
 ```sh
-wa personal contacts profile 100000000000001@lid        # their name, about line and whether they show a photo
+wa personal contacts info 100000000000001@lid        # their name, about line and whether they show a photo
 wa personal contacts block 100000000000001@lid
 wa personal contacts unblock 100000000000001@lid
 wa personal contacts lookup < number.txt                # whether this number has WhatsApp, and its id
@@ -86,7 +86,7 @@ wa personal contacts sync                                # the phone's address b
 
 Для `contacts lookup` сначала напишите номер `number.txt` в одной строке в международном формате.
 
-- `contacts profile` ничего не говорит человеку. Не показывает номер телефона.
+- `contacts info` ничего не говорит человеку. Не показывает номер телефона.
 - `contacts lookup` считывает число из стандартного ввода, а не из командной строки, и ничего на него не отправляет. Для профиля требуется одно число, максимум одно каждые 10 секунд: множество поисков подряд — вот за что WhatsApp запрещает парсеры.
 - WhatsApp хранит вашу адресную книгу на телефоне, поэтому `contacts add`, `remove`, `rename` и `import` отклоняются.
 

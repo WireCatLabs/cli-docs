@@ -245,9 +245,9 @@ wa personal store migrate              # bring the store up to this version's sc
 
 ## Reparación y mantenimiento de índices
 
-`wa personal store migrate` crea índices sin terminar; `wa personal store reindex` los reconstruye. `store info` y `store check` muestran si el índice de palabras y el índice de raíz de palabras están listos. La búsqueda utiliza raíces (la parte de una palabra que permanece igual en sus formas) para encontrar formas de palabras; `exact:` y `--exact` seleccionan formas exactas.
+`wa personal store migrate` crea índices sin terminar; `wa personal store rebuild` los reconstruye. `store info` y `store check` muestran si el índice de palabras y el índice de raíz de palabras están listos. La búsqueda utiliza raíces (la parte de una palabra que permanece igual en sus formas) para encontrar formas de palabras; `exact:` y `--exact` seleccionan formas exactas.
 
-Los lematizadores de la tienda son una configuración compartida: `wa config set searchStemmers.latin english,spanish` (el valor predeterminado) y `searchStemmers.cyrillic russian`; `none` desactiva uno. Ejecuta `store reindex` según su propia elección. La configuración afecta a cada CLI de WireCat y a cada perfil; un proceso con perfil bloqueado no puede cambiarlo.
+Los lematizadores de la tienda son una configuración compartida: `wa config set searchStemmers.latin english,spanish` (el valor predeterminado) y `searchStemmers.cyrillic russian`; `none` desactiva uno. Ejecuta `store rebuild` según su propia elección. La configuración afecta a cada CLI de WireCat y a cada perfil; un proceso con perfil bloqueado no puede cambiarlo.
 
 `wa personal store repair --dry-run --json` obtiene una vista previa de una reparación estructural y la revierte. `store repair` lo aplica sin eliminar datos: las tablas que no coinciden se mantienen como copias y las filas o columnas que quedan allí se nombran en la respuesta. Inspeccione las copias antes de eliminar una con `store copies delete <exact name>`. Detenga los procesos que utilizan el almacén local antes de una reparación.
 

@@ -21,7 +21,7 @@ title: "Диагностика"
 | Найти неудачный запуск позже | `wa personal runs list` | неудачный запуск сохраняется сам по себе |
 | Ведите учет каждого запуска | `wa personal config set record true` | да, каждый запуск |
 | Проверьте установку | `wa personal doctor`, `wa personal doctor --online` | нет |
-| Сообщить о проблеме | `wa personal doctor report create` | да, один файл вы отправите |
+| Сообщить о проблеме | `wa personal doctor reports create` | да, один файл вы отправите |
 
 ## Покажите это: `--trace` и `--debug`
 
@@ -98,11 +98,11 @@ wa personal doctor --online   # also connects once and reads the account; sends 
 ## Отчет о проблеме
 
 ```sh
-wa personal doctor report create              # about the newest failed run
-wa personal doctor report create --run 20261001T080000Z-process-000001   # a made-up run id
+wa personal doctor reports create              # about the newest failed run
+wa personal doctor reports create --run 20261001T080000Z-process-000001   # a made-up run id
 ```
 
-Он записывает файл JSON — то, что показывает `wa personal doctor` плюс запуск — и говорит, куда его отправить: новая проблема на [github.com/WireCatLabs/whatsapp-cli/issues](https://github.com/WireCatLabs/whatsapp-cli/issues/new). Прочтите его, прежде чем отправить. Он не содержит текста сообщения. Только `wa doctor report` показывает, что будет содержать отчет, и ничего не пишет.
+Он записывает файл JSON — то, что показывает `wa personal doctor` плюс запуск — и говорит, куда его отправить: новая проблема на [github.com/WireCatLabs/whatsapp-cli/issues](https://github.com/WireCatLabs/whatsapp-cli/issues/new). Прочтите его, прежде чем отправить. Он не содержит текста сообщения. Только `wa doctor reports show` показывает, что будет содержать отчет, и ничего не пишет.
 
 Если неудачных запусков не сохранилось, запустите неудачную команду еще раз; его неудача сохраняется сама собой.
 
@@ -118,11 +118,11 @@ wa personal runs list --limit 100 --json | jq '[.items[] | .duration_ms] | add /
 ## Ошибки поиска и частичные запуски
 
 ```sh
-wa personal runs search --error-code authentication_error --json
-wa personal runs search --status partial --since-time 2026-10-01 --json
+wa personal search runs error_code:authentication_error --json
+wa personal search runs status:partial 'started_at>=2026-10-01' --json
 ```
 
-`runs search` соответствует буквальному диагностическому тексту в записях. `--operation`, `--profile`, `--since-time`, `--limit` и `--page` сужают его; каждая страница вмещает до 100 запусков. Он читает только записи и никогда не подключается.
+`search runs` ищет буквальный диагностический текст в записях. Условия запроса, например `operation:messages.download`, `profile:work`, `error_code:timeout`, `status:failed`, а также сравнения и диапазоны `started_at:`, сужают поиск вместе с `--limit` и `--page`; каждая страница вмещает до 100 запусков. Команда читает только записи и никогда не подключается.
 
 ## Далее
 

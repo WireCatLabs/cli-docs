@@ -25,8 +25,8 @@ Algunas palabras en esta página:
 | Crea un grupo, únete a uno mediante su enlace o abandona | `wa personal chats create`, `chats join`, `chats leave` |
 | Agregar o eliminar personas, convertir a alguien en administrador | `wa personal chats members add`, `chats admins add` |
 | Cambiar el nombre de un grupo, configurar o eliminar su foto, o cambiar quién puede agregar personas | `wa personal chats update` |
-| Mostrar o reemplazar el enlace de invitación | `wa personal chats link show`, `chats link reset` |
-| Dejar entrar o rechazar a las personas que solicitaron unirse | `wa personal chats requests list`, `chats requests accept` |
+| Mostrar o reemplazar el enlace de invitación | `wa personal chats links show`, `chats links reset` |
+| Dejar entrar o rechazar a las personas que solicitaron unirse | `wa personal chats requests list`, `chats requests confirm` |
 | Sigue un canal, lee sus publicaciones o deja de seguirlo | `wa personal chats join`, `messages sync`, `chats leave` ([canales](./usage.md#channels)) |
 | Publicar en un canal que ti ejecute | `wa personal messages send` ([canales](./usage.md#channels)) |
 
@@ -126,7 +126,7 @@ wa personal tasks add msg:whatsapp/100000000000009%40lid/120363000000000001%40g.
 wa personal tasks list "assignee:any state:open"
 ```
 
-`--assignee sender` es quien envió el mensaje; `--assignee person:<id>` nombra a otra persona y `tasks plan <task> --assignee none` lo borra. Una tarea sin responsable está bien: mejor que perderla.Vea lo que le espera, primero el mayor, luego solo preguntas y menciones en un grupo:
+`--assignee sender` es quien envió el mensaje; `--assignee person:<id>` nombra a otra persona y `tasks update <task> --assignee none` lo borra. Una tarea sin responsable está bien: mejor que perderla.Vea lo que le espera, primero el mayor, luego solo preguntas y menciones en un grupo:
 
 ```sh
 wa personal tasks list state:open
@@ -187,10 +187,10 @@ wa personal chats update 120363000000000001@g.us --title "Hiking club" --only-ad
 wa personal chats update 120363000000000001@g.us --only-admins-send on --disappear-after 7d
 wa personal chats update 120363000000000001@g.us --photo club.jpg
 wa personal chats update 120363000000000001@g.us --remove-photo
-wa personal chats link show 120363000000000001@g.us
-wa personal chats link reset 120363000000000001@g.us
+wa personal chats links show 120363000000000001@g.us
+wa personal chats links reset 120363000000000001@g.us
 wa personal chats requests list 120363000000000001@g.us
-wa personal chats requests accept 120363000000000001@g.us 100000000000004@lid
+wa personal chats requests confirm 120363000000000001@g.us 100000000000004@lid
 wa personal chats join https://chat.whatsapp.com/AAAAAAAAAAAAAAAAAAAAAA
 wa personal chats leave 120363000000000001@g.us
 ```

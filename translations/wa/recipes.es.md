@@ -119,7 +119,7 @@ Escribe a WhatsApp: **no**. Permitir: `Bash(wa personal inbox:*)`.
 - `wa personal inbox --new`: desde la última ejecución de `--new`. Sólo `wa` conoce ese punto; nadie más lo ve.
 - `wa personal inbox 'date>2d'` — los dos últimos días; el punto guardado permanece donde estaba.
 
-Ninguno de ellos marca nada de lo leído. `--kind dialog` mantiene chats uno a uno, grupos `--kind group`.
+Ninguno de ellos marca nada de lo leído. `kind:dialog` mantiene chats uno a uno, grupos `kind:group`.
 
 ## Informe semanal sobre un chat
 

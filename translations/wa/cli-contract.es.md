@@ -23,7 +23,7 @@ Algunos términos que utiliza la página:
 | Sin preguntas en mitad de una carrera | `--no-input`; banderas de confirmación `--yes` y `--allow-dangerous` |
 | Pistas que no pueden colgarse ni inundarse | Un límite de tiempo y límites de tamaño para la entrada y la salida |
 | Sólo los campos que necesitas | `--json=<fields>` |
-| Opciones de un comando sin leer los documentos | `wa commands` y `wa commands schema` |
+| Opciones de un comando sin leer los documentos | `wa commands` y `wa commands info` |
 | Para ver qué haría un comando | `--dry-run` |
 | Para saber si ocurrió una escritura fallida | `outcome_unknown` y `details.operation_id` |
 
@@ -80,10 +80,10 @@ La entrada leída desde stdin está limitada a 16 MiB; `--max-input-bytes 335544
 ```sh
 wa personal messages list 120363000000000001@g.us --json=id,text
 wa commands messages list --json
-wa commands schema messages list --json
+wa commands info messages list --json
 ```
 
-`--json=id,text` mantiene sólo los campos enumerados, separados por comas; un punto selecciona un campo anidado. La información de la página del formato elegido permanece. Para `page`, utilice `--json`: las listas JSONL imprimen los elementos sin el envoltorio de página. Un campo que falta sigue faltando; no llega a ser cero.`wa commands` describe opciones, valores permitidos, valores predeterminados y códigos de salida. `wa commands schema` proporciona un [esquema JSON](https://json-schema.org/specification) (versión 2020-12) de los argumentos y el resultado. `schemaVersion` es la versión de esta descripción y cambia por separado de la versión del programa. `outputSchemaCoverage` muestra qué parte del resultado describe el esquema.
+`--json=id,text` mantiene sólo los campos enumerados, separados por comas; un punto selecciona un campo anidado. La información de la página del formato elegido permanece. Para `page`, utilice `--json`: las listas JSONL imprimen los elementos sin el envoltorio de página. Un campo que falta sigue faltando; no llega a ser cero.`wa commands` describe opciones, valores permitidos, valores predeterminados y códigos de salida. `wa commands info` proporciona un [esquema JSON](https://json-schema.org/specification) (versión 2020-12) de los argumentos y el resultado. `schemaVersion` es la versión de esta descripción y cambia por separado de la versión del programa. `outputSchemaCoverage` muestra qué parte del resultado describe el esquema.
 
 ## Vistas previas y reintentos seguros
 

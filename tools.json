@@ -29,7 +29,7 @@
     "repo": "WireCatLabs/whatsapp-cli",
     "package": "@wirecat/whatsapp-cli",
     "lang": "en",
-    "docsRef": "v0.6.0",
+    "docsRef": "v0.8.0",
     "summary": {
       "en": "Your WhatsApp chats, files and group context from the terminal and through your AI agent.",
       "ru": "Ваши чаты WhatsApp, файлы и контекст групп — в терминале и через ИИ-агента.",

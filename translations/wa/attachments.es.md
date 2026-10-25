@@ -20,7 +20,7 @@ Algunas palabras en esta página:
 | Escuche una nota de voz como texto | `wa personal messages transcribe` |
 | Vea los archivos que conoce el almacén local y que aún necesitan texto | `wa personal attachments list` |
 | Leer texto de archivos guardados en el índice de búsqueda | `wa personal attachments extract` |
-| Mantén el texto que tu agente leyó de un escaneo o una foto | `wa personal attachments text set` |
+| Mantén el texto que tu agente leyó de un escaneo o una foto | `wa personal attachments update` |
 | Buscar un mensaje por su archivo | `wa personal search messages 'has:file'`, `'content:…'` |
 
 ## Lo que puedes enviar
@@ -80,8 +80,8 @@ Un reenvío reutiliza las claves del archivo y no comprueba que WhatsApp aún co
 ## Notas de voz como texto
 
 ```sh
-wa personal models audio list                    # the speech models, and which are downloaded
-wa personal models audio download parakeet-v3    # once, about 670 MB
+wa personal models list kind:audio                    # the speech models, and which are downloaded
+wa personal models download parakeet-v3    # once, about 670 MB
 wa personal messages transcribe "Book club" 3EB0A1B2C3D4E5F6A7B8 --local
 ```
 
@@ -103,7 +103,7 @@ wa personal search messages 'content:"reading list"'
 Tu agente lee un escaneo o una fotografía, con sus propias herramientas de visión. Luego, el agente guarda el texto para que la búsqueda lo encuentre:
 
 ```sh
-wa personal attachments text set "Book club" 3EB0A1B2C3D4E5F6A7B8 --text-file scan.txt
+wa personal attachments update "Book club" 3EB0A1B2C3D4E5F6A7B8 --text-file scan.txt
 ```
 
 Para leer escaneos de forma masiva con la API de un modelo, configura `models.ocr.provider` y `models.ocr.model`, y ejecuta `attachments extract --ocr`. Las imágenes van a ese proveedor solo con un `--ocr` explícito.
