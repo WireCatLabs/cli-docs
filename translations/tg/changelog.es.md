@@ -4,6 +4,24 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.90.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **`tg <bot> bot store fetch` ahora es `tg <bot> bot messages sync`, y el grupo `bot store` desaparece.** Lee los mensajes antiguos de un canal o supergrupo en la copia local del bot, lo mismo que hace `messages sync` en la cuenta personal, así que lleva el mismo nombre; `store` es para la base de datos local. Las opciones no cambian. La ruta antigua responde con una indicación de la nueva. Un `permissions.bot.store.fetch` guardado se rechaza hasta que lo renombres a `permissions.bot.messages.sync`.
+
+## 0.89.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **Una cuenta de Telegram bloqueada devuelve `permission_error` (código de salida 5).** Un nuevo inicio de sesión no puede levantar el bloqueo; usa el mismo contrato de motivos y códigos que las demás CLI.
+
+- **Los contratos compartidos de las CLI ahora exigen declarar explícitamente las diferencias del proveedor.** El descubrimiento de comandos exporta las definiciones heredadas, los esquemas, los motivos de error y las diferencias aceptadas exactas. La actividad de un contacto usa consultas `scope:` y `at:`; las búsquedas de ejecuciones de diagnóstico usan límites `started_at:` en lugar de opciones de tiempo. Las listas de miembros de chat desconocidas y las listas de tipos de webhook sin restricción se omiten en lugar de devolver `null`.
+
+### Security
+
+- **La resolución de dependencias excluye las versiones vulnerables de Zod y Vite.** Las auditorías locales y las de producción nuevas usan las versiones corregidas.
+
 ## 0.88.0 — 24.10.2026
 
 ### Added

@@ -45,10 +45,10 @@ Only you join identities into one person. The same name or the same email domain
 tg personal contacts link "Kai Sample" max:Kai
 ```
 
-After that, `contacts timeline` follows the person across messengers. It lists what they wrote, where they were mentioned, and their chats, mail, meetings and tasks, newest first, from the store only.
+After that, `contacts events` follows the person across messengers. It lists what they wrote, where they were mentioned, and their chats, mail, meetings and tasks, newest first, from the store only.
 
 ```sh
-tg personal contacts events "Kai Sample" --since-time 2026-10-01 --limit 20
+tg personal contacts events "Kai Sample" 'at>=2026-10-01' --limit 20
 ```
 
 The tool also records who took part in what (sender, recipient, participant, assignee, author, mentioned, linked). That record is why "everything about Kai" is one lookup and not a scan of every message.

@@ -74,7 +74,7 @@ Los caracteres de control, los saltos de línea en nombres y los títulos de cha
 
 ## Qué pasa por la red
 
-- **Telegram**, a través de MTProto para comandos de cuentas personales, incluidos archivos y fotos. Los comandos de bot utilizan la API de bot HTTPS; `bot store fetch` utiliza una sesión de bot MTProto separada para el historial.
+- **Telegram**, a través de MTProto para comandos de cuentas personales, incluidos archivos y fotos. Los comandos de bot utilizan la API de bot HTTPS; `bot messages sync` utiliza una sesión de bot MTProto separada para el historial.
 - **npm**, una vez al día en una terminal, para ver si existe un `tg` más nuevo y en `tg upgrade`.   `update_check` o `TG_NO_UPDATE_CHECK=1` lo apaga ([configuración](./configuration.md)).
 - **my.telegram.org**, solo durante `tg personal setup` o `tg personal session start`: abierto en su navegador, o, con `--app auto`, controlado por `tg`. Una aplicación que `tg` crea allí se titula `tg-cli` y tiene la página GitHub de este proyecto como dirección.
 - **Hugging Face y GitHub**, solo cuando ejecutas `tg personal models download` o `tg personal models download`. Un mensaje de voz nunca llega allí: en esta máquina se ejecuta un modelo local.

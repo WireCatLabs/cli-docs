@@ -114,7 +114,7 @@ tg personal messages context "msg:telegram/1/77/42" --thread
 | Задача | Команда |
 | --- | --- |
 | Договорённость и её источник | `tg personal search messages 'chat:"Book club" agreed date>=2026-10-01' --limit 5` |
-| Всё об одном человеке за этот месяц | `tg personal contacts events "Kai Sample" --since-time 2026-10-01` |
+| Всё об одном человеке за этот месяц | `tg personal contacts events "Kai Sample" 'at>=2026-10-01'` |
 | Где встречается номер телефона | `tg personal search messages 'phone:"+1 555 010 0100"'` |
 | Файлы, присланные в чат на прошлой неделе | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07'` |
 | Что документ Drive говорит о теме | `drive personal search 'budget' --exact --limit 5` |

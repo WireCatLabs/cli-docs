@@ -74,7 +74,7 @@ tg personal sends list                       # every attempt: sent, refused, fai
 
 ## Сетевые подключения
 
-- **Telegram** через MTProto для команд личного аккаунта, включая файлы и фотографии. Команды бота используют HTTPS Bot API; `bot store fetch` использует отдельную сессию бота MTProto для истории.
+- **Telegram** через MTProto для команд личного аккаунта, включая файлы и фотографии. Команды бота используют HTTPS Bot API; `bot messages sync` использует отдельную сессию бота MTProto для истории.
 - **npm**, один раз в день на терминале, чтобы проверить, существует ли более новая версия `tg`, а также на `tg upgrade`.   `update_check` или `TG_NO_UPDATE_CHECK=1` отключает его ([конфигурация](./configuration.md)).
 - **my.telegram.org**, только во время `tg personal setup` или `tg personal session start`: открывается в браузере или, в случае `--app auto`, под управлением `tg`. Приложение `tg` создает его под названием `tg-cli`, адресом которого является страница этого проекта на GitHub.
 - **Hugging Face и GitHub**, только при запуске `tg personal models download` или `tg personal models download`. Голосовое сообщение туда никогда не поступает: на этой машине работает локальная модель.

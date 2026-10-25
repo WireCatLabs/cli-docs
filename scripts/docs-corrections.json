@@ -2830,25 +2830,37 @@
   {
     "tool": "tg",
     "slug": "groups",
-    "reason": "The released request actions are confirm/reject; the group task table retained the retired accept/decline spellings.",
+    "reason": "The released request actions are confirm/reject (tg 0.90.0 contract: chats requests list|confirm|reject); the group task table and command table retained the retired accept/decline spellings.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/groups.md",
     "replacements": {
       "en": [
         {
           "before": "`tg personal chats requests list\\|accept\\|decline`",
           "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
         }
       ],
       "ru": [
         {
           "before": "`tg personal chats requests list\\|accept\\|decline`",
           "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
         }
       ],
       "es": [
         {
           "before": "`tg personal chats requests list\\|accept\\|decline`",
           "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
         }
       ]
     }
@@ -3095,6 +3107,10 @@
         {
           "before": "### `tg mcp check`",
           "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
+        },
+        {
+          "before": "#### `tg bot messages sync`",
+          "after": "#### `tg bot messages sync`\n\n<a id=\"tg-bot-store\" />\n<a id=\"tg-bot-store-fetch\" />"
         }
       ],
       "ru": [
@@ -3257,6 +3273,10 @@
         {
           "before": "### `tg mcp check`",
           "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
+        },
+        {
+          "before": "#### `tg bot messages sync`",
+          "after": "#### `tg bot messages sync`\n\n<a id=\"tg-bot-store\" />\n<a id=\"tg-bot-store-fetch\" />"
         }
       ],
       "es": [
@@ -3419,6 +3439,10 @@
         {
           "before": "### `tg mcp check`",
           "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
+        },
+        {
+          "before": "#### `tg bot messages sync`",
+          "after": "#### `tg bot messages sync`\n\n<a id=\"tg-bot-store\" />\n<a id=\"tg-bot-store-fetch\" />"
         }
       ]
     }
@@ -3452,7 +3476,7 @@
   {
     "tool": "tg",
     "slug": "mcp",
-    "reason": "tg 0.88.0/Core 0.408.0: toolsFromCommands drops every command with a lifetime (setup, watch, serve, bot watch) though the contract marks only mcp:false ones; the 0.88 contract has no chats delete or clear command; upgradeCommand is wrapped in grantsAuthority (upgrade --check exempt), so it belongs with the authority-gated commands.",
+    "reason": "tg 0.90.0/Core 0.412.0 (unchanged since 0.88.0/Core 0.408.0): toolsFromCommands drops every command with a lifetime (setup, watch, serve, bot watch) though the contract marks only mcp:false ones; the contract has no chats delete or clear command; bot messages sync has no ask-by-default key of its own (commands info reports permission bot.messages, absent from DEFAULT_PERMISSIONS); upgradeCommand is wrapped in grantsAuthority (upgrade --check exempt), so it belongs with the authority-gated commands.",
     "replacements": {
       "en": [
         {
@@ -3460,8 +3484,8 @@
           "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. An agent call cannot use them, or they need you at the keyboard.\n- **Long-running**: `watch`, `serve` and `bot watch` run until stopped, and an agent call must return."
         },
         {
-          "before": "`account sessions end`, `chats delete|clear` and\n`bot store fetch`",
-          "after": "`account sessions end` and\n`bot store fetch`"
+          "before": "`doctor reports create`, `account sessions end`, `chats delete|clear` and\n`bot messages sync`",
+          "after": "`doctor reports create` and `account sessions end`"
         },
         {
           "before": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`.",
@@ -3478,8 +3502,8 @@
           "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.\n- **Долгие процессы**: `watch`, `serve` и `bot watch` работают до остановки, а вызов агента должен завершиться."
         },
         {
-          "before": "`account sessions end`, `chats delete|clear` и\n",
-          "after": "`account sessions end` и\n"
+          "before": "`doctor reports create`, `account sessions end`, `chats delete|clear` и\n`bot messages sync`",
+          "after": "`doctor reports create` и `account sessions end`"
         },
         {
           "before": "исключённые команды отмечены\nкак `mcp: false`.",
@@ -3496,8 +3520,8 @@
           "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.\n- **Procesos largos**: `watch`, `serve` y `bot watch` siguen hasta que los detienes, y una llamada del agente debe terminar."
         },
         {
-          "before": "`account sessions end`, `chats delete|clear` y\n",
-          "after": "`account sessions end` y\n"
+          "before": "`doctor reports create`, `account sessions end`, `chats delete|clear` y\n`bot messages sync`",
+          "after": "`doctor reports create` y `account sessions end`"
         },
         {
           "before": "marca los comandos excluidos con\n`mcp: false`.",
@@ -3506,6 +3530,43 @@
         {
           "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
           "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "bot",
+    "reason": "tg 0.90.0 contract: bot messages sync has --until-id <id> (start at this message, by its t.me link, inclusive) and no --from option; Core 0.412 botMessagesSyncCommand passes --until-id as the internal from value, and the missing-start error says 'give --until-id <message link>'.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`--from` starts at that message, inclusive, and must name the same chat.",
+          "after": "`--until-id` starts at that message, given as its t.me link, inclusive, and must name the same chat."
+        },
+        {
+          "before": "it exits with code `2` and asks for `--from`.",
+          "after": "it exits with code `2` and asks for `--until-id`."
+        }
+      ],
+      "ru": [
+        {
+          "before": "`--from` начинает с указанного сообщения включительно;",
+          "after": "`--until-id` начинает с указанного сообщения (ссылка t.me) включительно;"
+        },
+        {
+          "before": "и просит указать `--from`.",
+          "after": "и просит указать `--until-id`."
+        }
+      ],
+      "es": [
+        {
+          "before": "`--from` empieza en ese mensaje, incluido,",
+          "after": "`--until-id` empieza en ese mensaje (su enlace t.me), incluido,"
+        },
+        {
+          "before": "y solicita `--from`.",
+          "after": "y solicita `--until-id`."
         }
       ]
     }

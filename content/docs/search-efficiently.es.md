@@ -114,7 +114,7 @@ Sustituye los nombres por los tuyos.
 | Objetivo | Comando |
 | --- | --- |
 | Un acuerdo y su fuente | `tg personal search messages 'chat:"Book club" agreed date>=2026-10-01' --limit 5` |
-| Todo sobre una persona este mes | `tg personal contacts events "Kai Sample" --since-time 2026-10-01` |
+| Todo sobre una persona este mes | `tg personal contacts events "Kai Sample" 'at>=2026-10-01'` |
 | Dónde aparece un número de teléfono | `tg personal search messages 'phone:"+1 555 010 0100"'` |
 | Archivos enviados a un chat la semana pasada | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07'` |
 | Qué dice un documento de Drive sobre un tema | `drive personal search 'budget' --exact --limit 5` |

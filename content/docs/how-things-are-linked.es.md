@@ -45,10 +45,10 @@ Solo tú unes identidades en una misma persona. El mismo nombre o el mismo domin
 tg personal contacts link "Kai Sample" max:Kai
 ```
 
-Después, `contacts timeline` sigue a la persona entre mensajerías. Muestra lo que escribió, dónde la mencionaron, y sus chats, correos, reuniones y tareas, de lo más reciente a lo más antiguo, solo desde el almacén.
+Después, `contacts events` sigue a la persona entre mensajerías. Muestra lo que escribió, dónde la mencionaron, y sus chats, correos, reuniones y tareas, de lo más reciente a lo más antiguo, solo desde el almacén.
 
 ```sh
-tg personal contacts events "Kai Sample" --since-time 2026-10-01 --limit 20
+tg personal contacts events "Kai Sample" 'at>=2026-10-01' --limit 20
 ```
 
 La herramienta también anota quién participó en qué (remitente, destinatario, participante, responsable, autor, mencionado, vinculado). Por eso «todo sobre Kai» es una sola consulta y no un recorrido por todos los mensajes.
