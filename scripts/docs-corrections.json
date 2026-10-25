@@ -2209,74 +2209,6 @@
     }
   },
   {
-    "tool": "zm",
-    "slug": "security",
-    "phase": "before-translation",
-    "reason": "Reviewed v0.42.0 runtime errata; native fix WireCatLabs/zoom-cli#245. Permission denial limits execution, unified search is a paged hit list, and released capabilities are current.",
-    "replacements": {
-      "en": [
-        {
-          "before": "  limit both discovery and execution; `deny` hides a command and `readonly` withholds writes.\n",
-          "after": "  limit execution. Denied commands remain discoverable with current availability and a reason;\n  `readonly` marks writes unavailable.\n"
-        },
-        {
-          "before": "  `mcp.authority: allow`; profile permissions can only be changed in a terminal. See [MCP and skills](./mcp.md).\n",
-          "after": "  `mcp.authority: allow` or `ask`; profile permissions can only be changed in a terminal. See [MCP and skills](./mcp.md).\n"
-        },
-        {
-          "before": "  remote `--base-url`. Still running: reads, word search (which keeps its index current), `batch`, `mcp`,\n  and the syncs that copy Zoom into the store or an archive — `meetings sync`, `watch`, `recordings sync`,\n  `recordings download` and `recordings schedule run`; a sync or `watch` from a files source reads the configured\n",
-          "after": "  remote `--base-url`. Still running: reads, word search (which keeps its index current), `mcp`,\n  and the syncs that copy Zoom into the store or an archive — `meetings sync`, `watch`, `recordings download` and `recordings schedule run`; a sync or `watch` from a files source reads the configured\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "zm",
-    "slug": "search",
-    "phase": "before-translation",
-    "reason": "Reviewed v0.42.0 runtime errata; native fix WireCatLabs/zoom-cli#245. Permission denial limits execution, unified search is a paged hit list, and released capabilities are current.",
-    "replacements": {
-      "en": [
-        {
-          "before": "as skipped. A meetings-only continuation uses the returned `item.meetings.next_cursor` as\n`--meeting-cursor '<json>'`, bound to its account and query. JSONL emits the report in one item record, retaining skips, coverage and cursors, followed by an end\nrecord. Skipped sources set `complete` to false and appear in `issues`; search still exits zero.\n",
-          "after": "as skipped. Continue the hit list with `--page`. JSONL emits one item per hit and an end record.\nSkipped sources set `meta.complete` to false and appear in `issues`; search still exits zero.\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "zm",
-    "slug": "usage",
-    "phase": "before-translation",
-    "reason": "Reviewed v0.42.0 runtime errata; native fix WireCatLabs/zoom-cli#245. Permission denial limits execution, unified search is a paged hit list, and released capabilities are current.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Detailed reports, including participant discovery, evidence, semantic search and unified search,\nkeep their coverage and report-specific continuation inside `item`. Stored meeting word search\n",
-          "after": "Detailed reports, including participant discovery, evidence and semantic search, keep their coverage\nand report-specific continuation inside `item`. Unified `search all` returns hit lists and uses `--page`. Stored meeting word search\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "zm",
-    "slug": "roadmap",
-    "phase": "before-translation",
-    "reason": "Reviewed v0.42.0 runtime errata; native fix WireCatLabs/zoom-cli#245. Permission denial limits execution, unified search is a paged hit list, and released capabilities are current.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## In progress\n",
-          "after": "## Also available\n"
-        },
-        {
-          "before": "- A digest of recent meetings (`review`) and the links shared in meeting chat (`mentions list`). They are built\n  and come with the next release.\n- Saved meeting searches you can run again by name.\n\n## Next\n\n- Help examples you can copy as they are, with the profile word in them.\n- Every command available to an agent through MCP, with the profile's permissions deciding what it may change.\n- More search fields for meetings: date, project, tag and topic inside the query.\n- `doctor` tells you whether this computer can save a Zoom login.\n",
-          "after": "- `review` makes a digest of recent meetings, and `mentions list` finds links shared in meeting chat.\n- Saved searches can be run again by name; meeting query fields include date, project, tag and topic.\n- Profile-aware examples can be copied as shown. `doctor` checks whether this computer can save a Zoom login.\n- MCP keeps supported commands discoverable; profile permissions decide which reads and writes may run.\n"
-        }
-      ]
-    }
-  },
-  {
     "tool": "memo",
     "slug": "configuration",
     "reason": "The released configuration page says Memo has no config command, but the same release adds memo config unset (its only subcommand, checked with memo config --help on 0.107.0). Keys are still added by hand.",
@@ -2290,32 +2222,6 @@
       ]
     },
     "source": "https://github.com/WireCatLabs/cli-memo/blob/v0.107.0/docs/configuration.md"
-  },
-  {
-    "tool": "zm",
-    "slug": "mcp",
-    "reason": "Commands have one name and no aliases: drop the upgrade note that names the removed serve --mcp entry point and its flags. The section above gives the current configuration.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "### Upgrading from 0.34 and earlier\n\n`zm serve --mcp` and its flags (`--meeting-context`, `--meeting-preparation`, `--semantic` and the others) are gone;\n`zm serve` now says so. Use `meetings context`, `meetings prepare`, `search all` and `search meetings --model` through the\nshared server. Change\nthe entry's `args` to `[\"personal\", \"mcp\"]`.\n\n",
-          "after": ""
-        }
-      ],
-      "ru": [
-        {
-          "before": "### Обновление с версии 0.34 и ранее\n\n`zm serve --mcp` и его флаги (`--meeting-context`, `--meeting-preparation`, `--semantic` и остальные) удалены;\n`zm serve` сообщает об этом. Через общий сервер используйте `meetings context`, `meetings prepare`,\n`search all` и `search meetings --model`. Замените `args` записи на `[\"personal\", \"mcp\"]`.\n\n",
-          "after": ""
-        }
-      ],
-      "es": [
-        {
-          "before": "### Actualizar desde la versión 0.34 o anterior\n\n`zm serve --mcp` y sus opciones (`--meeting-context`, `--meeting-preparation`, `--semantic` y las demás)\nya no existen; `zm serve` lo indica. Usa `meetings context`, `meetings prepare`, `search all` y\n`search meetings --model` a través del servidor compartido. Cambia los `args` de la entrada a\n`[\"personal\", \"mcp\"]`.\n\n",
-          "after": ""
-        }
-      ]
-    }
   },
   {
     "tool": "zm",
@@ -2338,6 +2244,48 @@
         {
           "before": "La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;\nesos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.\n",
           "after": "La búsqueda de transcripciones y la importación de reuniones aceptan `--since-time` y `--until-time`.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "configuration",
+    "phase": "before-translation",
+    "reason": "One name per setting: the document-source provider is local or obsidian; drop the sentence that keeps the old provider value folder in a guide.",
+    "replacements": {
+      "en": [
+        {
+          "before": "for a vault. A source\nsaved earlier with provider `folder` still resolves. `notes:5` resolves",
+          "after": "for a vault.\n`notes:5` resolves"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "installation",
+    "phase": "before-translation",
+    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the update step must.",
+    "replacements": {
+      "en": [
+        {
+          "before": "zm --version\n```\n\nRemove the command with:",
+          "after": "zm --version\n```\n\nIf you last signed in with zm 0.34 or earlier, run `zm <profile> session start` again: that older login is no longer used.\n\nRemove the command with:"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "sessions",
+    "phase": "before-translation",
+    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the login step must.",
+    "replacements": {
+      "en": [
+        {
+          "before": "If that password store is unavailable, login fails.\n",
+          "after": "If that password store is unavailable, login fails.\n\nIf you last signed in with zm 0.34 or earlier, run `zm <profile> session start` again: that older login is no longer used.\n"
         }
       ]
     }

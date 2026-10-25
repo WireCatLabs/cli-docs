@@ -71,9 +71,11 @@ necesitan [permisos distintos](./zoom-app.md#add-archive-or-management-access).
 
 ## Configuración
 
-Comprueba cliente, fuente y perfil con `zm config show`. Una configuración dañada no impide
-`--help` o `--version`; `zm config show` indica el archivo y la primera clave incorrecta, y
-`zm doctor` informa en `config.error`. Cambiar la etiqueta no cambia el usuario.
+Comprueba cliente, fuente y perfil con `zm config show`. Una configuración con problemas no impide
+`--help`, `--version`, `zm config` ni `zm doctor`; los demás comandos se detienen en el primer problema y
+explican cómo quitarlo. `zm doctor --json` enumera todos los problemas en `config.issues`, cada uno con su
+`fix` cuando un comando puede quitarlo, y `zm config show` los muestra tras los ajustes que sí se cargan.
+Cambiar la etiqueta no cambia el usuario.
 Si terminal y MCP ven datos distintos, compara `ZM_CONFIG_DIR` y `MESSAGING_STORE`.
 
 ## Respuestas de Zoom

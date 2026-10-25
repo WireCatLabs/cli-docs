@@ -82,7 +82,7 @@ y un intervalo de fechas:
 ```sh
 zm personal meetings people "Alice Example" --json
 zm personal search meetings "launch" --identity-id 12 --project RES --since-time 2026-09-12 --until-time 2026-10-12 --json
-zm personal search meetings "budget" --person-id 7 --topic costs --since-time 2026-09-12 --json
+zm personal search meetings "budget" --person-id 7 --topic-name costs --since-time 2026-09-12 --json
 zm personal search meetings "launch" --tag planning --limit 20 --json
 ```
 
@@ -94,7 +94,7 @@ reuniones y no atribuyen una intervención sin autor a una persona.
 
 `--project` acepta el nombre canónico de un proyecto existente, su clave o un alias explícito.
 Solo cuenta una pertenencia confirmada; una propuesta del agente o una palabra coincidente
-en la transcripción no establece esa pertenencia. `--tag` y `--topic` aceptan nombres canónicos
+en la transcripción no establece esa pertenencia. `--tag` y `--topic-name` aceptan nombres canónicos
 o alias explícitos de etiquetas ya asociadas a la reunión; elige un solo filtro de etiqueta.
 Un nombre inexistente o ambiguo produce un error en vez de ampliar la búsqueda. Una fecha sola cubre todo el día local
 de la zona del ordenador, y una hora sin desplazamiento se lee en esa zona; da un desplazamiento o `Z` para otra zona.
@@ -145,7 +145,7 @@ con el motivo por stderr; la búsqueda termina con código cero.
 
 Los filtros de proyecto, etiquetas y fecha también pueden formar parte de la consulta, junto a las
 palabras: `date:`, `project:`, `tag:` y `topic:` corresponden a `--since-time`/`--until-time`, `--project`,
-`--tag` y `--topic`.
+`--tag` y `--topic-name`.
 
 ```sh
 zm personal search meetings "launch project:RES date>=30d" --json
@@ -310,8 +310,8 @@ La consulta opcional de selección acepta valores exactos de `meeting_id`, `iden
 `tag_id`, `event_id` y `series_id`, una vez cada uno y unidos por AND, además de fechas/rangos de
 `started_at`. Los rangos incluyen días naturales completos en UTC; las marcas ISO entre comillas
 fijan límites exactos. Se rechazan OR, negación y filtros de pertenencia confirmada a un proyecto.
-La herramienta MCP `meeting_project_evidence` recibe `project` y, opcionalmente, `query`, `limit`,
-`cursor` y `max_read_bytes`; la cuenta queda fijada por el servidor.
+Por MCP, `zm_read` la ejecuta como
+`{ "command": "meetings projects evidence", "arguments": { … } }` con los mismos argumentos; el servidor fija el perfil.
 
 Para cada pasaje conservado pertinente, abre `zm personal meetings passage <ref> --format markdown` y revisa
 las palabras cercanas. `association: "unconfirmed-word-evidence"` significa evidencia candidata: una

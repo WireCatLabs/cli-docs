@@ -71,13 +71,6 @@ completa de `command -v zm` en Linux/macOS o `where.exe zm` en Windows como coma
 `ZM_CONFIG_DIR` o `MESSAGING_STORE`, pasa los mismos valores en `env` de la entrada; de lo contrario el servidor
 leerá otro perfil o base. Reserva stdout para el protocolo: omite `--json` y `--jsonl`.
 
-### Actualizar desde la versión 0.34 o anterior
-
-`zm serve --mcp` y sus opciones (`--meeting-context`, `--meeting-preparation`, `--semantic` y las demás)
-ya no existen; `zm serve` lo indica. Usa `meetings context`, `meetings prepare`, `search all` y
-`search meetings --model` a través del servidor compartido. Cambia los `args` de la entrada a
-`["personal", "mcp"]`.
-
 ## Prueba la conexión
 
 Tras instalar instrucciones, inicia otra sesión si el agente no las detectó. Después de configurar

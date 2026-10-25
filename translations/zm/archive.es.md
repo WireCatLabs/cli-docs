@@ -138,11 +138,6 @@ ejecución agregada, no imprime JSON parcial; los archivos completos y los punto
 conservan para el siguiente intento. No se puede combinar un ID de reunión con las opciones de intervalo;
 `--file-ids` solo sirve para una reunión.
 
-`recordings sync` ya no existe: usa `recordings download` con las mismas fechas. Si un permiso guardado
-nombra `recordings.sync`, los comandos se detienen con instrucciones de migración. Revisa esa entrada y
-sustitúyela por `recordings.download`, conservando las demás restricciones. La nueva clave cubre tanto la
-descarga de una reunión como la de un intervalo. Consulta [permisos del perfil](./configuration.md#permissions).
-
 Los puntos de control confirman operaciones anteriores, no integridad actual ni acceso a todas
 las grabaciones. Comprueba archivos con `recordings archive check`. `--no-resume` examina de
 nuevo todo el período sin progreso persistente.
