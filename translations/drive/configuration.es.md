@@ -112,7 +112,7 @@ tiene problemas: `show` nombra cada uno con su corrección, y `set` solo rechaza
 ## Mantener el archivo privado
 
 drive guarda `config.json` de modo que solo tú puedas leerlo (`0600`), en una carpeta en la que solo tú puedes
-entrar (`0700`). Un archivo guardado por drive 0.35 o anterior, o una carpeta creada a mano, puede estar abierto a
+entrar (`0700`). Un archivo guardado por una versión anterior de drive, o una carpeta creada a mano, puede estar abierto a
 otros usuarios del ordenador. `drive doctor` lista ese archivo o carpeta en `files.problems` (`path`, `mode`,
 `want`) e imprime el `chmod` que lo corrige:
 

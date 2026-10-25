@@ -173,7 +173,19 @@ drive <profile> status
 
 ## `drive store`
 
-check and import this profile's previous document database
+the shared store, and importing this profile's previous document database
+
+### `drive store info`
+
+the shared store file: where it is, its size, its schema against the one drive speaks, which tools used it and how many rows it holds; changes nothing
+
+```sh
+drive store info
+```
+
+**Returns:** store info — path, exists, schema, opens, error, bytes, journal_mode, pages, and 12 more; every field: drive commands info store info
+
+**Example:** `drive store info --json`
 
 ### `drive store check`
 
