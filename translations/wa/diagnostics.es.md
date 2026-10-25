@@ -89,9 +89,16 @@ wa personal doctor            # connects to nothing
 wa personal doctor --online   # also connects once and reads the account; sends nothing
 ```
 
-Además de la versión, el tiempo de ejecución, el perfil, el archivo de configuración y el almacén local, `doctor` lee tres cosas de WhatsApp desde el disco, sin iniciar nada:- **`engine`**: si el programa del motor está ahí para iniciarse y su ruta. Cuando falta, la sugerencia dice qué hacer: reinstalar `wa` con los paquetes opcionales activados, configurar `WA_ENGINE` o, en una verificación de código fuente, ejecutar `pnpm engine:build`.
+Además de la versión, el tiempo de ejecución, el perfil, el archivo de configuración y el almacén local, `doctor` lee tres cosas de WhatsApp desde el disco, sin iniciar nada:
+
+- **`engine`**: si el programa del motor está ahí para iniciarse y su ruta. Cuando falta, la sugerencia dice qué hacer: reinstalar `wa` con los paquetes opcionales activados, configurar `WA_ENGINE` o, en una verificación de código fuente, ejecutar `pnpm engine:build`.
 - **`device`**: si las claves del dispositivo existen y si otros usuarios de esta máquina pueden leer `private.db`, sus archivos `-wal` y `-shm` o su carpeta. Cada uno de estos archivos viene con el comando `chmod` que lo soluciona. `doctor` nunca abre las claves y nunca cambia el modo de un archivo. Windows no está marcado.
 - **`lock`**: quién mantuvo la última conexión del dispositivo (`serve (pid 4242)`) y si ese proceso aún se ejecuta. El motor nunca borra el nombre, por lo que un titular cuenta como en funcionamiento sólo mientras su proceso lo hace.
+
+**`config.issues`** enumera todos los problemas del archivo de configuración: JSON no válido (con la línea y la columna donde se detuvo la lectura), una configuración o una clave de permiso que `wa` no conoce, un valor de tipo incorrecto. Cada uno dice qué debe ser el valor, nunca el valor en sí. Todos menos el JSON no válido vienen con el comando `config unset` que los elimina (`fix`). `doctor` sigue respondiendo, con el código de salida `0`.
+
+**`files`** nombra cada archivo o carpeta privados que otros usuarios de esta máquina pueden leer: el archivo de configuración (quiere `0600`) y su carpeta (`0700`), el almacén con sus archivos `-wal` y `-shm`, el diario de envíos y la carpeta de ejecuciones. Cada problema es `{ path, mode, want }`, y stderr imprime el `chmod` que lo corrige: `to make it private: chmod 600
+'<path>'`. Sin un perfil nombrado, o cuando la configuración se rechaza, `files` comprueba solo el archivo de configuración y su carpeta. `doctor` nunca cambia el modo de un archivo por sí mismo. Windows no se comprueba.
 
 `--online` se conecta una vez. Mientras se ejecuta `serve`, utiliza la conexión de `serve` ([una conexión por dispositivo](./sessions.md#one-connection-per-device)).
 

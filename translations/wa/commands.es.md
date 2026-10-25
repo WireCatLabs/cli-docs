@@ -1774,7 +1774,7 @@ wa models list [query]
 
 ### `wa models download`
 
-download and verify one speech or embedding model
+download and verify one speech or embedding model: tens to hundreds of MB, each size in models list
 
 **Reads from an outside service.**
 
@@ -2105,7 +2105,7 @@ wa store clear [options]
 
 ### `wa store info`
 
-the store file: where it is, its size, its schema and how many rows it holds; changes nothing
+the store file: where it is, its size, its schema against the one this tool speaks, which tools used it and how many rows it holds, by provider, chat kind, account, year (UTC) and attachment kind, over every account; changes nothing
 
 ```sh
 wa store info
@@ -2235,6 +2235,22 @@ wa store copies delete <name>
 |---|---|---|
 | `name` | required | the copy's name, as `store repair` printed it. |
 
+### `wa store tables`
+
+the tables of the local archive
+
+#### `wa store tables list`
+
+every table of the local archive: its kind (data, search index, part of a search index, internal) and its rows, a search index's rows not counted; --full adds each table's size on disk, which reads the whole file (about ten seconds for 3 GB); changes nothing
+
+```sh
+wa store tables list [query]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
 ## `wa conversations`
 
 the conversations inside a chat, found in the stored messages by replies, mentions and who wrote next
@@ -2355,8 +2371,8 @@ wa conversations links rebuild [options]
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--analyze` | link batches using the configured analysis provider; requires --chat and remembers consent for this chat/provider. |
 | `--analysis-provider <provider>` | analysis: agent, openai or anthropic. |
-| `--model <model>` | analysis model; overrides analysis_model. |
-| `--base-url <url>` | analysis API endpoint; overrides analysis_base_url. |
+| `--model <model>` | analysis model; overrides models.analysis.model. |
+| `--base-url <url>` | analysis API endpoint; overrides models.analysis.base_url. |
 | `--size <n>` | analysis answer messages per batch, 10–200; default 50. |
 | `--max-tokens <n>` | analysis input/output reservation cap per run; default 100000. |
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
@@ -4028,8 +4044,8 @@ wa config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
-| `value` | required | a number, true or false, or for allow a list like send,reaction; for a group tg:work,max:Alice,email:me@x. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Opción | Qué hace |
 |---|---|
@@ -4049,7 +4065,7 @@ wa config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
 | Opción | Qué hace |
 |---|---|
@@ -5905,15 +5921,19 @@ the instructions an agent is given for this tool
 
 ### `wa skill show`
 
-print SKILL.md — `wa skill install` puts it where Claude Code, Codex and Gemini CLI look for it
+print SKILL.md — `wa skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
 
 ```sh
-wa skill show [name]
+wa skill show [name] [options]
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `name` | optional | one of the skills shipped for a task: follow-ups, link-conversations. |
+
+| Opción | Qué hace |
+|---|---|
+| `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
 
 ### `wa skill install`
 
@@ -5928,6 +5948,14 @@ wa skill install [options]
 | Opción | Qué hace |
 |---|---|
 | `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
+
+### `wa skill status`
+
+for each place `wa skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+
+```sh
+wa skill status
+```
 
 ## Códigos de salida
 

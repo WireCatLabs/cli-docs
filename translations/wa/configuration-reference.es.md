@@ -20,7 +20,7 @@ Cinco, el valor predeterminado incorporado
 
 ## El archivo
 
-`~/.config/whatsapp-cli/config.json`. Ninguna configuración elige un perfil: la primera palabra (`wa work …`) o `WA_PROFILE` lo nombra. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles en esta computadora. Un archivo que todavía tiene `default_profile` de un `wa` anterior también detiene ese comando; `wa config unset default_profile` lo elimina.
+`~/.config/whatsapp-cli/config.json`. Ninguna configuración elige un perfil: la primera palabra (`wa work …`) o `WA_PROFILE` lo nombra. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles en esta computadora.
 
 | Configuración | Predeterminado | Qué hace | Anulado por uno ejecutado por |
 |---|---|---|---|
@@ -44,14 +44,14 @@ Cinco, el valor predeterminado incorporado
 | `embedding_model` | predeterminado del proveedor | modelo de incrustación | `--model` |
 | `embedding_base_url` | predeterminado del proveedor | incorporación de punto final API | `--base-url` |
 | `embedding_dims` | modelo predeterminado | entero 1–65,536 | `--dims` |
-| `analysis_provider` | `agent` | `agent`, `openai` o `anthropic` | `build --analysis-provider` |
-| `analysis_model` | ninguno | modelo de análisis | `build --model` |
-| `analysis_base_url` | predeterminado del proveedor | punto final API de análisis | `build --base-url` |
 | `models` | ninguno | modelos externos por finalidad | Variables `WA_MODELS_*` |
 
 Las configuraciones para la raíz de búsqueda, los países telefónicos, las tareas y los grupos de cuentas (`search_stemmers.*`, `phone_countries`, `task_*`, `account_groups.*`) se enumeran en [`wa config set`](./commands.md#wa-config-set).
 
-El archivo se escribe `0600` cuando se creó por primera vez. No guarda ningún secreto.
+El archivo se escribe con permisos `0600`, legible solo por ti, en una carpeta `0700`, y `config set` lo mantiene así. No guarda ningún secreto. `wa doctor` señala el archivo o su carpeta cuando otros usuarios pueden leerlos ([diagnóstico](./diagnostics.md#check-the-installation-wa-doctor)).
+
+Una configuración que el archivo no conoce, una clave de permiso que no nombra ningún comando, un valor de tipo incorrecto o un archivo que no es JSON válido detienen todos los comandos excepto `config` y `doctor`, con el código de salida `3`. El mensaje nombra el primer problema y el `config unset` que lo elimina. `wa personal doctor` enumera todos los problemas del archivo
+([diagnóstico](./diagnostics.md#check-the-installation-wa-doctor)).
 
 ## Un perfil de bot
 
@@ -79,4 +79,4 @@ Un número de WhatsApp Business en la Cloud API de Meta (`wa <profile> bot …`)
 | `WA_ENGINE_LOG` | un archivo al que el motor añade sus advertencias, números de teléfono enmascarados; desarmado, no registra nada |
 | `WA_NO_UPDATE_CHECK` | `1` desactiva la línea diaria "Existe una versión más nueva" |
 | `NO_COLOR` | sin color en la vista de tabla |
-| `WA_EMBEDDING_*`, `WA_ANALYSIS_*`, `WA_MODELS_*` | configuración del modelo |
+| `WA_EMBEDDING_*`, `WA_MODELS_*` | configuración del modelo |
