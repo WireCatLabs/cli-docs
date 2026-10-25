@@ -151,7 +151,10 @@ como palabras completas; los resultados se unen. También se lee cada mensaje de
 cuando `--source` incluye su cuenta. Esos elementos llevan la etiqueta `linked-chat`: no nombran nada, pertenecen al
 chat. Una ejecución toma como máximo una parte del límite de elementos de cada chat vinculado (50 para un solo chat
 con el límite por defecto de 100, 20 de cada uno a partir de cuatro chats); un chat con más aparece como recortado
-y `--cursor` lee el resto. Un chat vinculado fuera de `--source` aparece como no leído. `--contact person:<id>` lee cada mensaje y correo
+y `--cursor` lee el resto. Un chat vinculado fuera de `--source` aparece como no leído. Las personas confirmadas como miembros del proyecto (`memo relationships add
+person:<id> project:<id>`) se leen igual que `--contact person:<id>` (ver abajo), sin nombrarlas, pero sin
+sus alias; una persona que también pasas con `--contact` se lee una vez. Como máximo corren 16 líneas en total, así que si los
+miembros no caben, el resto aparece como no leído (`member-limit`), en un orden fijo. `--contact person:<id>` lee cada mensaje y correo
 que escribieron las identidades guardadas de esa persona en `--source`, con la etiqueta `sender` (se encuentra por
 quién lo escribió, no por palabras), y busca los alias que les diste; su nombre visible en el mensajero no se busca,
 porque los textos rara vez lo escriben. Un `--contact "<name>"` literal se busca como palabras.
@@ -159,6 +162,12 @@ Un resultado de reunión conserva la referencia exacta del fragmento y usa la fe
 una reunión antigua importada hoy sigue siendo antigua. Lee el fragmento y sus vecinos con
 `memo meetings passage` antes de sacar conclusiones. La recopilación no crea vínculos al proyecto,
 no establece asistentes ni guarda hechos o tareas extraídos.
+
+Para ver quién participa, lee `people` en el resultado `--json` (la salida de texto imprime una línea «people who wrote these»):
+quién escribió los mensajes y correos de esta ejecución, contado a partir de los contactos guardados, nunca comparando nombres
+del texto. Las identidades de una persona en varios servicios de mensajería y en el correo cuentan como una entrada cuando están vinculadas ([enlaza las cuentas de una persona](./people.md#link-a-persons-accounts));
+una identidad no vinculada a nadie es su propia entrada. Tus propios mensajes quedan fuera. Cada ejecución cuenta solo sus elementos nuevos,
+así que suma los recuentos entre ejecuciones con `--cursor`.
 
 Un resultado de documento incluye párrafos breves alrededor del primer párrafo con una palabra buscada.
 Ayudan a localizar el pasaje, pero no prueban una conclusión. Si `oversized` enumera un documento,

@@ -29,10 +29,10 @@ title: "Пошаговые сценарии"
    что говорили об этом на встречах, с фрагментом для цитаты
 
 4. ```sh
-   drive search venue
+   drive personal search venue
    ```
 
-   документы Drive на эту тему; команды drive начинаются с профиля, например drive personal search venue
+   документы Drive на эту тему
 
 5. ```sh
    memo answers create "what did we decide about the venue?" --all
@@ -85,25 +85,25 @@ title: "Пошаговые сценарии"
    встречи, где его упоминают, с фрагментом для цитаты
 
 5. ```sh
-   tg contacts context Kai
+   tg personal contacts context Kai
    ```
 
-   общие чаты Telegram, последние сообщения в обе стороны и где его упоминали другие; команды tg, max и drive начинаются с профиля, например tg personal contacts context Kai
+   общие чаты Telegram, последние сообщения в обе стороны и где его упоминали другие
 
 6. ```sh
-   max contacts context Kai
+   max personal contacts context Kai
    ```
 
    то же для MAX
 
 7. ```sh
-   zm meetings context person:42
+   zm personal meetings context person:42
    ```
 
    что о нём говорят сохранённые встречи Zoom, через связанные с ним идентичности
 
 8. ```sh
-   drive search Kai
+   drive personal search Kai
    ```
 
    документы Drive, где он назван

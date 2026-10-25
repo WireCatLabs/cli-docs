@@ -84,32 +84,6 @@ Después, pruébalo:
 Usa las herramientas de memo para mostrar los recuerdos que esperan mi revisión.
 ```
 
-<a id="existing-tool-names"></a>
-
-## Actualizar una conexión guardada
-
-Vuelve a conectar después de actualizar para que la aplicación recargue su lista de herramientas. Sustituye las herramientas individuales
-por `memo_read` o `memo_write`, pasando la ruta CLI en `command`. Por ejemplo, `notes_show` pasa a ser
-`memo_read {"command":"notes show","arguments":{"note":"note:12"}}`.
-Los nombres anteriores ya no están registrados. Busca el comando para obtener su esquema de argumentos actual.
-
-| Llamada anterior | Comando y argumentos actuales |
-|---|---|
-| `person_context` | `context`; conserva `person` y un `source` explícito |
-| `project_context`, `project_evidence` | `projects context`, `projects evidence`; la evidencia usa `no_catch_up: true` en vez de `catch_up: false` |
-| `search_notes`, `search_messages`, `search_mail`, `search_all` | `search notes`, `search messages`, `search mail`, `search all`; usa `query` en vez de `text` |
-| `facts_add` | `facts add`; usa `statement` en vez de `text` |
-| `search_memories` | `search memories`; usa `query` en vez de `text` |
-| `meeting_passage`, `meeting_prepare` | `meetings passage`, `meetings prepare`; busca los argumentos actuales del CLI |
-| `meeting_actions_add`, `project_actions_add` | `meetings actions add`, `projects actions add`; `input` lleva la propuesta JSON sin leer stdin de MCP |
-| `meeting_actions_list` | `meetings actions list`; usa `query: "status:proposed"` en vez de un campo `status` |
-| `project_annotations_snapshot` | `projects annotations show`; lee sin crear un archivo |
-| `project_annotations_preview` | `projects annotations check`; `file` y `bindings` indican archivos JSON locales existentes |
-| Otros nombres con guiones bajos | Sus rutas CLI, como `memories add`, `actions list`, `vocabulary check` y `tasks status` |
-
-Las claves de permisos siguen siendo rutas CLI con puntos, como `projects.evidence`, no los nombres de herramientas anteriores.
-Los argumentos de presupuesto del vocabulario usan snake_case, como `max_comparisons`.
-
 Las sugerencias se guardan con el nombre de agente `memo-mcp`. Revisa los recuerdos y hechos propuestos
 con `memo memories list status:proposed` y los comandos de [Recuerdos y hechos](./memories.md).
 
@@ -167,11 +141,20 @@ chat:<provider>/<account>/<chat> project:<id>`) cuando `source`
 incluye su cuenta: esos elementos tienen `context: "linked-chat"` y no nombran nada, su línea tiene `query: null` y
 `chat`. Cada entrada de `linked_chats` tiene `items` (elementos nuevos en esta ejecución) y `capped`: una ejecución
 toma como máximo una parte del límite de elementos de cada chat, y `cursor` lee el resto de uno recortado. Un chat
-vinculado fuera de `source` aparece en `unread_sources` y nunca se lee. Un elemento encontrado solo
+vinculado fuera de `source` aparece en `unread_sources` y nunca se lee. Cada persona confirmada como miembro del proyecto
+(`person:<id>` `member-of` `project:<id>`) se lee como un contacto `person:<id>` (ver abajo), sin sus alias y
+sin pasarla: una línea de remitente y elementos con `context: "sender"`. Una persona pasada también como contacto se lee una vez.
+Core toma como máximo 16 líneas, así que los miembros que no caben, en un orden fijo, aparecen en `unread_sources` con
+`kind: "member"` y `reason: "member-limit"`; un miembro sin identidad guardada tiene `reason: "no-identity"`. Un elemento encontrado solo
 por el nombre de un contacto lleva `context: "person-only"`. Un contacto `person:<id>` lee lo que escribieron las
 identidades guardadas de esa persona en `source` (línea `kinds: ["sender"]`, `query: null`, `senders`; elementos con
 `context: "sender"`, que pueden no nombrar nada) y busca solo los alias que el propietario les dio, no su nombre
-visible en el mensajero. Las fuentes que fallaron o no se leyeron se listan, y `completeness`
+visible en el mensajero. `people` enumera quién escribió los mensajes y correos de esta ejecución, a partir de los
+contactos guardados, nunca de los nombres en el texto: una entrada por persona guardada (`person: "person:<id>"`,
+`name`, cada entrada de `identities` `{provider, account, id}` vista, de modo que Telegram y WhatsApp de una misma persona
+cuentan juntos) o por identidad no vinculada a nadie (`person: null`), con `items` y `contexts` (elementos por `context`).
+Los mensajes propios del propietario quedan fuera. Primero quien tiene más elementos, como máximo 20; `people_omitted`
+cuenta el resto. Los recuentos cubren solo esta llamada: súmalos entre llamadas con `cursor`. Las fuentes que fallaron o no se leyeron se listan, y `completeness`
 sigue en `unknown`. Si devuelve un `checkpoint`, vuelve a llamar con los mismos argumentos y `cursor` igual a ese valor.
 No crea hechos, tareas ni vínculos con proyectos; la actualización del índice descrita arriba puede modificar los índices de búsqueda locales.
 

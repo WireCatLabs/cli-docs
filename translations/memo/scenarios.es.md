@@ -29,10 +29,10 @@ Encuentra la decisión sobre un tema y su evidencia en notas, correo, mensajes, 
    lo que se dijo sobre ello en reuniones, con el pasaje para citar
 
 4. ```sh
-   drive search venue
+   drive personal search venue
    ```
 
-   documentos de Drive sobre ello; los comandos de drive empiezan por tu perfil, como en drive personal search venue
+   documentos de Drive sobre ello
 
 5. ```sh
    memo answers create "what did we decide about the venue?" --all
@@ -85,25 +85,25 @@ Sabe todo sobre una persona antes de una llamada — mensajes en tg y MAX, corre
    reuniones que la mencionan, con el pasaje para citar
 
 5. ```sh
-   tg contacts context Kai
+   tg personal contacts context Kai
    ```
 
-   chats de Telegram compartidos, los últimos mensajes en cada sentido y dónde la mencionaron otros; los comandos de tg, max y drive empiezan por tu perfil, como en tg personal contacts context Kai
+   chats de Telegram compartidos, los últimos mensajes en cada sentido y dónde la mencionaron otros
 
 6. ```sh
-   max contacts context Kai
+   max personal contacts context Kai
    ```
 
    lo mismo para MAX
 
 7. ```sh
-   zm meetings context person:42
+   zm personal meetings context person:42
    ```
 
    lo que dicen de ella las reuniones de Zoom guardadas, mediante las identidades vinculadas a esa persona
 
 8. ```sh
-   drive search Kai
+   drive personal search Kai
    ```
 
    documentos de Drive que la nombran

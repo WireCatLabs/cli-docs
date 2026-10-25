@@ -117,9 +117,9 @@ la huella caducada.
 
 `coverage.inspected_tables` nombra las cuatro tablas cubiertas: asignaciones, alias, asignaciones
 automáticas y enlaces. El texto de búsquedas guardadas, el historial de propuestas y las referencias
-serializadas arbitrarias quedan fuera de esta vista previa. `coverage.apply_supported` es false: es una
-ayuda para revisar, no un plan de fusión ejecutable. Se rechazan temas y proyectos. No hay comando para
-aplicar, y una huella de vista previa no da permiso para fusionar. Los comandos de alias que revisa el
+serializadas arbitrarias quedan fuera de esta vista previa. `coverage.apply_supported` es true: cli-core
+puede aplicar esa vista previa, pero memo no tiene ningún comando que lo haga. Se rechazan temas y proyectos.
+Una huella de vista previa no da permiso para fusionar. Los comandos de alias que revisa el
 propietario siguen siendo aparte.
 
 ## Etiquetas en tg y max

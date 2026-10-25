@@ -10,6 +10,12 @@ archivo para indicar qué archivos se omiten y dónde van las notas exportadas.
 El archivo es `~/.config/cli-memo/config.json`. Es un archivo JSON: mantén las comillas, las comas y
 las llaves como en el ejemplo.
 
+Un archivo con un problema detiene todos los comandos excepto `memo doctor` y `memo config unset`. El rechazo nombra el
+primer problema y el comando que lo elimina; `memo doctor` los enumera todos, cada uno con su línea o su `memo config unset
+<key>`. `config unset` elimina un ajuste por su ruta con puntos, también uno que Memo no conoce, como
+`memo config unset mail.accounts.0.colour` o `memo config unset permissions.notes.edit`. Un archivo que no es JSON
+válido se corrige a mano en la línea y la columna que indica `memo doctor`.
+
 ```json
 {
   "notes": {
@@ -78,6 +84,19 @@ sigue en su siguiente ejecución. Consulta [importar con un temporizador](./arch
 ## `update_check`
 
 `false` desactiva la comprobación diaria de nuevas versiones de memo. `MEMO_NO_UPDATE_CHECK=1` hace lo mismo para una sesión de terminal.
+
+## `record` y `keep_runs_for_days`
+
+Memo guarda un registro de ejecución de cada comando que falla: las palabras del comando, cómo terminó y las peticiones
+de correo y RDAP que hizo, con sus tiempos y códigos de estado. Nunca una nota, una dirección, un asunto ni el nombre de una carpeta.
+`memo runs list` los muestra, `memo runs show <run-id>` muestra uno.
+
+| Clave | Significado |
+|---|---|
+| `record` | `true` guarda todas las ejecuciones, no solo las fallidas; `false` no guarda ninguna, ni siquiera las fallidas. Sin definir: solo las fallidas. `--record` y `--no-record` deciden para un comando. |
+| `keep_runs_for_days` | Cuántos días se guardan las ejecuciones. Por defecto, 30. |
+
+Añade estas claves a `config.json` a mano: `memo config` solo elimina ajustes.
 
 ## `agent_decisions`
 

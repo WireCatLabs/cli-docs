@@ -211,6 +211,6 @@ memo folders update 1 /other/path/to/notes
 
 Con el mismo ID, las notas conservan sus enlaces y sus etiquetas en los dos ordenadores.
 
-Una carpeta `google-drive:…` contiene documentos que guardó drive-cli. `memo folders list` la marca «kept by drive» y `memo folders update` la rechaza: la búsqueda de memo ya la lee.
+Los documentos de Google Drive que guardó drive-cli pertenecen a su cuenta `google-drive:…`. `memo folders list` marca esa cuenta «kept by drive» y `memo folders update` la rechaza: la búsqueda de memo ya la lee.
 
 Siguiente: [etiqueta tus notas](./tags.md) o [busca en ellas](./search.md).

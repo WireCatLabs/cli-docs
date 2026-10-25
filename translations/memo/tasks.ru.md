@@ -31,7 +31,8 @@ memo tasks list --source telegram:1
 дважды, вы получите уже существующую.
 
 Папка заметок — тоже аккаунт: номер папки search выдаёт как `folder_id`, а Memo принимает его как
-`notes:<number>` или как `folder:<id>`, который показывают её сообщения. `--source notes` указывает вашу папку,
+`notes:<number>` или как `obsidian:<id>` либо `local:<id>`, которые показывают её сообщения; `folder:<id>` тоже её называет.
+`--source notes` указывает вашу папку,
 если она одна. `memo tasks list` и `memo reminders list` без `--source` читают все аккаунты и называют их в
 `meta.accounts`.
 
