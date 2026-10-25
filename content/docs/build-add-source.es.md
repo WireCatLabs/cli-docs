@@ -48,12 +48,20 @@ Una grabación que llega después encuentra la misma fila por su clave y la actu
 - códigos de acceso de reuniones, PIN ni la parte de consulta de un enlace para unirse;
 - la respuesta en bruto del proveedor; guarda solo los campos permitidos.
 
-## Llega en la próxima versión de cli-core
+## Registra tu proveedor
 
-Tu herramienta anotará su proveedor en el almacén al ejecutarse: su nombre, tipo, alias y comando. Hasta entonces, un
-proveedor que cli-core no conoce se trata como una mensajería. Después de esa versión, las filas de un proveedor que
-ninguna herramienta ha registrado se omiten y se informan, nunca se buscan como mensajes.
+Cada vez que se ejecuta, tu herramienta anota su proveedor en el almacén: su nombre, tipo, alias y comando. Así todas
+las demás herramientas conocen la nueva fuente sin una versión de cli-core. Las filas de un proveedor que ninguna
+herramienta ha registrado se omiten y se informan, nunca se buscan como mensajes.
 
+```ts
+import { openStore } from "@wirecat/cli-core/store"
+
+const store = await openStore()
+await store.accounts.registerProvider({ name: "acme", kind: "meetings", aliases: ["acme"], command: "acme" })
+```
+
+`kind` es cómo la búsqueda lee tus registros: `messages`, `mail`, `notes`, `documents`, `meetings` o `events`.
 ## Qué se rompe si lo omites
 
 Sin `external_id`, cada sincronización añade el mismo registro otra vez. Sin borrado suave, una sincronización fallida

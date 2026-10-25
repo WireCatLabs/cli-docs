@@ -4,8 +4,8 @@ description: "Cómo inicia sesión una herramienta en un proveedor, mantiene cla
 ---
 
 Tu herramienta habla con un servicio que necesita iniciar sesión, como Google o Zoom. Esta página muestra dónde viven
-las claves y los tokens, cómo elige el propietario la cuenta y qué no debe hacer nunca un inicio de sesión. También dice
-qué añadirá el módulo de inicio de sesión compartido de cli-core.
+las claves y los tokens, cómo elige el propietario la cuenta y qué no debe hacer nunca un inicio de sesión. También muestra
+el módulo de inicio de sesión compartido de cli-core.
 
 ## Las reglas
 
@@ -39,19 +39,51 @@ const saved = credentials.read(profile)
 `profile` es el nombre que escribió el propietario. `saved.secret` va al cliente del servicio y a ningún otro sitio;
 `saved.source` dice si vino del entorno, del llavero o del archivo.
 
-## Llega en la próxima versión de cli-core
+## Inicio de sesión en el navegador con el módulo compartido
 
-Un módulo de inicio de sesión compartido, `@wirecat/cli-core/oauth`, con un solo flujo para todas las herramientas:
+Para un servicio en el que se inicia sesión desde su página web (OAuth), usa el módulo de inicio de sesión compartido
+`@wirecat/cli-core/oauth`. Da a todas las herramientas un solo flujo:
 
 - el inicio de sesión en el navegador con una dirección de retorno local o un código pegado, protegido con `state` y
   PKCE;
 - intercambio, renovación y cierre de sesión del token;
 - un bloqueo por perfil, para que dos comandos nunca renueven el mismo token a la vez;
-- proveedores declarados en cada herramienta (`drive` y una herramienta de calendario declaran Google, `zm` declara
-  Zoom), con cualquier paso reemplazable;
-- un esquema de nombres para las entradas del llavero, mientras las entradas actuales siguen funcionando, así nadie
-  vuelve a iniciar sesión.
+- tu herramienta declara su proveedor; cli-core no guarda direcciones ni identificadores de ningún proveedor, y
+  cualquier paso se puede reemplazar;
+- un esquema de nombres para las entradas del llavero; una entrada antigua aún se puede leer, así nadie tiene que
+  volver a iniciar sesión.
 
+```ts
+import { credentialStorage, type OAuthProvider, oauthAccount, standardCodec, tokenKeeper } from "@wirecat/cli-core/oauth"
+
+const acme: OAuthProvider = {
+  id: "acme",
+  name: "Acme",
+  authorizeUrl: "https://acme.example/oauth/authorize",
+  tokenUrl: "https://acme.example/oauth/token",
+  client: { clientId: "your-app-id" },
+  redirect: { kind: "loopback" },
+}
+
+const keeper = tokenKeeper({
+  provider: acme,
+  storage: credentialStorage({
+    credentials: { service: "acme-cli", configDir, envVar: "ACME_TOKEN" },
+    account: oauthAccount(acme.id, profile),
+    codec: standardCodec(acme.id),
+  }),
+  lockDir: configDir,
+  fetch,
+  signInCommand: `acme ${profile} sign-in`,
+})
+
+await keeper.signIn({ scopes: ["meetings:read"], openBrowser })
+const accessToken = await keeper.accessToken()
+```
+
+`configDir` y `profile` son los de arriba; `openBrowser` abre una dirección en el navegador del propietario.
+`accessToken()` renueva el token cuando está a punto de caducar. El token se guarda con `Credentials`, así que las
+reglas de arriba siguen valiendo.
 ## Qué se rompe si lo omites
 
 Un perfil por defecto lee o escribe la cuenta equivocada. Un token en la línea de comandos queda en el historial del
