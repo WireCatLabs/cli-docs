@@ -49,7 +49,7 @@ After linking, run wa personal doctor with the profile I chose and offer to inst
     drive: (pkg) => `Install drive with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
 Read drive personal session start --help (personal is a profile name; any name works), then help me run it.
 Warn me first: Google may show an "unverified app" screen. Read https://wirecat.dev/en/docs/drive/installation for what to do.
-Check the sign-in with drive personal session list --json.
+Check that the profile was saved with drive session list --json.
 Then help me choose a first folder (drive personal folders --help) and import it with drive personal sync.`,
     memo: (pkg) => `Install memo with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
 Run memo doctor: it lists what needs attention and the command that fixes each. Help me work through it.
@@ -69,7 +69,7 @@ At the end, offer to install the zm skill for my agent: zm skill install --for a
     ) => `Установи drive через npm install -g ${pkg}. Перед этим проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
 Прочитай drive personal session start --help (personal — имя профиля, подойдёт любое), затем помоги выполнить эту команду.
 Сначала предупреди: Google может показать экран «непроверенное приложение». Что делать — на https://wirecat.dev/ru/docs/drive/installation.
-Проверь вход командой drive personal session list --json.
+Проверь, что профиль сохранён: drive session list --json.
 Затем помоги выбрать первую папку (drive personal folders --help) и импортировать её командой drive personal sync.`,
     memo: (
       pkg,
@@ -89,7 +89,7 @@ Después ejecuta wa personal doctor con el perfil que elegí y ofrece instalar e
     drive: (pkg) => `Instala drive con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
 Lee drive personal session start --help (personal es un nombre de perfil; sirve cualquiera) y ayúdame a ejecutarlo.
 Avísame antes: Google puede mostrar una pantalla de «aplicación no verificada». Qué hacer: https://wirecat.dev/es/docs/drive/installation.
-Comprueba el acceso con drive personal session list --json.
+Comprueba que el perfil se guardó con drive session list --json.
 Después ayúdame a elegir una primera carpeta (drive personal folders --help) e importarla con drive personal sync.`,
     memo: (pkg) => `Instala memo con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
 Ejecuta memo doctor: indica lo que necesita atención y el comando que lo arregla. Ayúdame a recorrer la lista.

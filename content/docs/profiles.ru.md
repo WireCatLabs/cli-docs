@@ -11,7 +11,7 @@ description: "Разделите аккаунты, входы ботов и их
 
 ```sh
 tg work config show
-drive personal config show
+drive personal sync
 ```
 
 Называйте профиль в каждой команде и запросе агенту: `tg work …` или `TG_PROFILE=work` на всю

@@ -220,7 +220,8 @@ registrado se omiten y se informan, nunca se buscan como mensajes ([reglas de ar
 - **Un modelo de permisos, una protección**, usados por cada comando, cada herramienta MCP y, en max,
   por el proceso en segundo plano `max serve` para todo lo que pasa por él.
 - **Las ejecuciones se registran sin contenido.** Un registro guarda las palabras del comando, ids,
-  recuentos y tiempos. El texto privado de mensajes, tokens y teléfonos se excluyen de los registros de diagnóstico; la documentación y los tests usan ejemplos ficticios.
+  recuentos y tiempos, el agente que ejecutó el comando y, en una ejecución fallida, el error con su mensaje
+  enmascarado. Cada valor de argumento que pueda ser contenido o un secreto se escribe como `[redacted]`. El texto privado de mensajes, tokens y teléfonos se excluyen de los registros de diagnóstico; la documentación y los tests usan ejemplos ficticios.
 - **Generado y comprobado.** La referencia de comandos (`commands.md`), los envoltorios de operaciones
   de max y los tipos de la Bot API se generan; CI falla si la copia confirmada se aparta del
   generador.

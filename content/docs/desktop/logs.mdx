@@ -7,19 +7,25 @@ The **Logs** page in WireCat Desktop shows what each command-line tool recorded 
 
 ## What the page shows
 
-Telegram (`tg`), MAX (`max`) and WhatsApp (`wa`) keep run logs. The app reads them with each tool's own `runs list` and `runs show` commands. Zoom (`zm`), Google Drive (`drive`) and Memo (`memo`) keep no run logs that the app can read yet. The row above the search shows each tool and how many runs the app read from it. The app reads the newest 500 runs of each tool; **Load older** reads the next 500.
+All six tools keep run logs: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`) and Memo (`memo`). The app reads them with each tool's own `runs list` and `runs show` commands. An older Zoom, Google Drive or Memo has no run logs; update it to see them. The row above the search shows each tool and how many runs the app read from it. The app reads the newest 500 runs of each tool; **Load older** reads the next 500.
 
 ## Why most runs are failures
 
 A tool keeps a run only when the run fails or is partly done. A successful run leaves no record. Thus the list shows mostly failures. This does not mean that everything is broken.
 
-To keep every run, choose **Keep every run** for the tool at the top of the Logs page, or set it yourself:
+To keep every run of Telegram, MAX or WhatsApp, choose **Keep every run** for the tool at the top of the Logs page, or set it yourself:
 
 ```sh
 tg config set record true --defaults
 ```
 
-This applies to every profile of that tool. For MAX or WhatsApp, write `max` or `wa` instead of `tg`. A tool deletes runs that are older than `keep_runs_for_days` days. The default is 30 days. [Configuration](../configuration.mdx) explains where these settings are stored and how to change them.
+This applies to every profile of that tool. For MAX or WhatsApp, write `max` or `wa` instead of `tg`. The page does not offer the switch for the other three tools; set it yourself:
+
+- Zoom: `zm config set record true`.
+- Google Drive: `drive personal config set record true --defaults`. Write any of your profiles in place of `personal`; with `--defaults` the setting applies to all of them.
+- Memo: add `"record": true` to memo's config file. `memo doctor` shows where the file is.
+
+A tool deletes runs that are older than `keep_runs_for_days` days. The default is 30 days. [Configuration](../configuration.mdx) explains where these settings are stored and how to change them.
 
 ## Search runs
 
