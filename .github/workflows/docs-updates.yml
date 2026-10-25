@@ -2,7 +2,7 @@ name: Documentation release check
 
 on:
   schedule:
-    - cron: '17 7 * * *'
+    - cron: "17 7 * * *"
   workflow_dispatch:
   push:
     branches: [main]
