@@ -199,7 +199,7 @@ max personal chats list 'unread_count>0' --offline # только чаты с н
 max personal chats show "Иван Петров"        # один чат: вид, непрочитанное, последнее сообщение, участники
 ```
 
-`chats show` responde con un objeto: campos de cadena de `chats list` y `members`: quién está en el chat excepto usted. El canal `members` - `null`: MAX envía cuatro suscriptores entre miles, y hacerlos pasar como parte del canal sería mentir. Grupos y canales - en [su sección](#группы-и-каналы).
+`chats show` responde con un objeto: campos de cadena de `chats list` y `members`: quién está en el chat excepto usted. Si no se conoce la composición, `members` se omite; `[]` significa una composición conocida y vacía. En un canal, MAX envía cuatro suscriptores entre miles, y hacerlos pasar por la composición del canal sería mentir. Grupos y canales - en [su sección](#группы-и-каналы).
 
 ### Mensajes
 
@@ -559,7 +559,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 El JSON es `{item}` con la descripción del gráfico y, al guardar la imagen, también `file` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.72.0/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.74.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 
@@ -1118,13 +1118,15 @@ Junto a ellas pueden aparecer `next`, los comandos que conviene ejecutar despué
 
 En la terminal, la línea sobre la página siguiente va **a stderr**: stdout transporta datos en cualquier modo, pero la punta de la hoja no transporta datos.
 
-**`--jsonl` imprime un objeto por línea**, sin envoltorio, útil para flujos y `jq`. Solo stderr avisa si hay más páginas.
+**`--jsonl` imprime un registro por línea**: los datos van dentro de `{"type":"item","data":…}`.
+El último registro, `{"type":"end",…}`, contiene `complete` y `page`, incluido si hay otra página.
 
 ```sh
-max personal messages list -1000 --jsonl | jq 'select(.sender_id == "111")'
+max personal messages list -1000 --jsonl | jq 'select(.type == "item") | .data | select(.sender_id == "111")'
 ```
 
-Los errores que terminan el comando van por **stderr**, dejando stdout vacío para no confundirlos con resultados:
+Un rechazo antes de empezar la salida va por **stderr**, dejando stdout vacío para no confundirlo con resultados.
+Si el flujo ya produjo datos, se conservan; ante un fallo añade un registro `end` incompleto y devuelve un código de error:
 
 ```json
 {"error":{"code":"authentication_error","message":"no session for profile \"personal\" — run `max personal setup` in a local terminal; agents: read `max skill show`"}}

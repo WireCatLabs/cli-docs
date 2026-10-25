@@ -591,7 +591,7 @@
   {
     "tool": "max",
     "slug": "changelog",
-    "reason": "The source placeholders <слова>, <состояние>, <операция> and <профиль> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
+    "reason": "The source placeholders <слова>, <состояние>, <операция>, <профиль> and <чат> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
     "replacements": {
       "en": [
         {
@@ -613,6 +613,10 @@
         {
           "before": "`max <профиль> messages delete --for-everyone`",
           "after": "`max <profile> messages delete --for-everyone`"
+        },
+        {
+          "before": "`chats requests confirm|reject <чат> --all` answers",
+          "after": "`chats requests confirm|reject <chat> --all` answers"
         }
       ],
       "es": [
@@ -635,6 +639,10 @@
         {
           "before": "`max <профиль> messages delete --for-everyone`",
           "after": "`max <perfil> messages delete --for-everyone`"
+        },
+        {
+          "before": "`chats requests confirm|reject <чат> --all` responde",
+          "after": "`chats requests confirm|reject <chat> --all` responde"
         }
       ]
     }
@@ -1234,6 +1242,31 @@
         {
           "before": "---\ntitle: \"MCP-сервер\"\n---\n\n",
           "after": "---\ntitle: \"MCP-сервер\"\n---\n\n<a id=\"права-профиля-управляют-инструментами\" />\n\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "mcp",
+    "reason": "Since MAX 0.73.0 the MCP catalogue includes unavailable commands (cli-core 0.412.0 mcp/server.js passes includeUnavailable: true), and mcp/surface.js registers max_write whenever the catalogue holds a writing command. The tool is therefore always present; a blocked write reports its availability and is refused on call. The native table still says max_write is absent when no write is permitted.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "| `max_write` | Выполнить найденную команду записи; его нет, если профиль не разрешает ни одной |",
+          "after": "| `max_write` | Выполнить найденную команду записи; запрещённая правами команда видна в поиске как недоступная и при вызове получает отказ |"
+        }
+      ],
+      "en": [
+        {
+          "before": "| `max_write` | Run a discovered write command; absent if no writes are permitted |",
+          "after": "| `max_write` | Run a discovered write command; a write the profile blocks is listed as unavailable and refused when called |"
+        }
+      ],
+      "es": [
+        {
+          "before": "| `max_write` | Ejecutar el comando de escritura encontrado; no aparece si el perfil no permite ninguno |",
+          "after": "| `max_write` | Ejecutar el comando de escritura encontrado; un comando que el perfil bloquea aparece como no disponible y se rechaza al llamarlo |"
         }
       ]
     }
@@ -3812,108 +3845,6 @@
   },
   {
     "tool": "max",
-    "slug": "configuration-reference",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
-    "reason": "Canonical permission paths in Core 0.406.0 are models.download and doctor.reports.create; native prose still uses retired paths.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`models.audio.download`",
-          "after": "`models.download`"
-        },
-        {
-          "before": "`doctor.report.create`",
-          "after": "`doctor.reports.create`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`models.audio.download`",
-          "after": "`models.download`"
-        },
-        {
-          "before": "`doctor.report.create`",
-          "after": "`doctor.reports.create`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`models.audio.download`",
-          "after": "`models.download`"
-        },
-        {
-          "before": "`doctor.report.create`",
-          "after": "`doctor.reports.create`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "diagnostics",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
-    "reason": "Released search runs filters belong inside query, not separate MCP arguments; discovery contract exposes query/since_time/limit/page.",
-    "replacements": {
-      "en": [
-        {
-          "before": "MCP `max_read` with `command: \"search runs\"` accepts these `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit` and `page`.\nIt reads only the active profile's diagnostic runs, does not connect to MAX and does not open\nraw background-job logs. The original partial result names the failed items and their error codes; diagnostic records\nkeep only safe identifiers and codes.\n",
-          "after": "MCP `max_read` with `command: \"search runs\"` accepts these `arguments`: `query`, `since_time`, `limit` and `page`.\nIt reads only the active profile's diagnostic runs, does not connect to MAX and does not open\nraw background-job logs. The original partial result names the failed items and their error codes; diagnostic records\nkeep only safe identifiers and codes.\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "В MCP вызовите `max_read` с `command: \"search runs\"`; поля `arguments`: `query`, `status`, `error_code`, `operation`, `since_time`, `limit`,\n`page`. Он читает только записи активного профиля, не подключается к MAX и не открывает сырые\nжурналы фоновых заданий. Полный результат частичной команды называет неудачные элементы и коды их ошибок;\nдиагностическая запись сохраняет только безопасные идентификаторы и коды.\n",
-          "after": "В MCP вызовите `max_read` с `command: \"search runs\"`; поля `arguments`: `query`, `since_time`, `limit`,\n`page`. Он читает только записи активного профиля, не подключается к MAX и не открывает сырые\nжурналы фоновых заданий. Полный результат частичной команды называет неудачные элементы и коды их ошибок;\nдиагностическая запись сохраняет только безопасные идентификаторы и коды.\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "En MCP llama a `max_read` con `command: \"search runs\"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.\nSolo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.\nEl resultado completo del comando parcial nombra los elementos fallidos y sus códigos de error; el registro conserva solo identificadores y códigos seguros.\n",
-          "after": "En MCP llama a `max_read` con `command: \"search runs\"`; `arguments` acepta `query`, `since_time`, `limit` y `page`.\nSolo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.\nEl resultado completo del comando parcial nombra los elementos fallidos y sus códigos de error; el registro conserva solo identificadores y códigos seguros.\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "groups",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
-    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
-    "replacements": {
-      "en": [
-        {
-          "before": "chats requests list\\|accept\\|decline",
-          "after": "chats requests list\\|confirm\\|reject"
-        },
-        {
-          "before": "chats requests confirm\\|decline",
-          "after": "chats requests confirm\\|reject"
-        }
-      ],
-      "ru": [
-        {
-          "before": "chats requests list\\|accept\\|decline",
-          "after": "chats requests list\\|confirm\\|reject"
-        },
-        {
-          "before": "chats requests confirm\\|decline",
-          "after": "chats requests confirm\\|reject"
-        }
-      ],
-      "es": [
-        {
-          "before": "chats requests list\\|accept\\|decline",
-          "after": "chats requests list\\|confirm\\|reject"
-        },
-        {
-          "before": "chats requests confirm\\|decline",
-          "after": "chats requests confirm\\|reject"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
     "slug": "security",
     "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
     "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
@@ -3960,6 +3891,43 @@
         {
           "before": "впустить; decline — отказать",
           "after": "впустить; reject — отказать"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "MAX v0.74.0 (since 0.73.0) answers every join request with `chats requests confirm|reject <chat> --all` (cli-core admin-commands.js, services/admin.js answerAllRequests); only --link is refused, because MAX does not report a request's link (max-cli client/chat-writes.js). The command is `requests confirm`, not `requests accept`. The native usage guide still says --all is refused.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Ответить сразу всем (`--all`) и отобрать заявки по ссылке (`--link`) в MAX\nнельзя — команда откажет.",
+          "after": "Ответить сразу всем можно через `--all`; отобрать заявки по ссылке (`--link`)\nнельзя: MAX не сообщает, по какой ссылке пришла заявка."
+        },
+        {
+          "before": "`create`, `members add` и `requests accept` считаются",
+          "after": "`create`, `members add` и `requests confirm` считаются"
+        }
+      ],
+      "en": [
+        {
+          "before": "You cannot reply to everyone at once (`--all`) and select applications using the link (`--link`) in MAX - the command will refuse.",
+          "after": "You can answer every request at once with `--all`; selecting requests by invite link (`--link`) is not available, because MAX does not report which link a request came through."
+        },
+        {
+          "before": "`create`, `members add` and `requests accept` count",
+          "after": "`create`, `members add` and `requests confirm` count"
+        }
+      ],
+      "es": [
+        {
+          "before": "No puede responder a todos a la vez (`--all`) y seleccionar aplicaciones usando el enlace (`--link`) en MAX; el comando se negará.",
+          "after": "Puedes responder a todas las solicitudes a la vez con `--all`; no se pueden seleccionar por enlace de invitación (`--link`), porque MAX no indica por qué enlace llegó cada solicitud."
+        },
+        {
+          "before": "y `requests accept` cuentan",
+          "after": "y `requests confirm` cuentan"
         }
       ]
     }
@@ -4020,7 +3988,7 @@
     "tool": "max",
     "slug": "commands",
     "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
-    "reason": "Keep incoming hashes from v0.66.0 at the corresponding canonical command; this does not restore removed CLI aliases.",
+    "reason": "Keep incoming hashes from v0.66.0 at the corresponding canonical command; this does not restore removed CLI aliases. In 0.74.0 `max bot store fetch` became `max bot messages sync` and the `max bot store` group was removed; both old anchors land on the replacement.",
     "replacements": {
       "en": [
         {
@@ -4166,6 +4134,10 @@
         {
           "before": "### `max mcp check`",
           "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
+        },
+        {
+          "before": "#### `max bot messages sync`",
+          "after": "#### `max bot messages sync`\n\n<a id=\"max-bot-store\" />\n\n<a id=\"max-bot-store-fetch\" />"
         }
       ],
       "ru": [
@@ -4312,6 +4284,10 @@
         {
           "before": "### `max mcp check`",
           "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
+        },
+        {
+          "before": "#### `max bot messages sync`",
+          "after": "#### `max bot messages sync`\n\n<a id=\"max-bot-store\" />\n\n<a id=\"max-bot-store-fetch\" />"
         }
       ],
       "es": [
@@ -4458,32 +4434,10 @@
         {
           "before": "### `max mcp check`",
           "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "mcp",
-    "source": "https://github.com/WireCatLabs/cli-core/blob/v0.406.0/src/sends/permissions.ts",
-    "reason": "upgrade is gated by authority; complete is explicitly mcp:false. Distinguish the native combined table row.",
-    "replacements": {
-      "en": [
+        },
         {
-          "before": "| `upgrade`, `complete` | update the program and terminal completion |",
-          "after": "| `upgrade` | changes the installed program; requires authority permission |\n| `complete` | terminal completion; never offered through MCP |"
-        }
-      ],
-      "ru": [
-        {
-          "before": "| `upgrade`, `complete` | обновляют саму программу и автодополнение в терминале |",
-          "after": "| `upgrade` | меняет установленную программу; требует разрешения на изменение условий запусков |\n| `complete` | автодополнение терминала; не предлагается через MCP |"
-        }
-      ],
-      "es": [
-        {
-          "before": "| `upgrade`, `complete` | actualizan el programa y el autocompletado del terminal |",
-          "after": "| `upgrade` | cambia el programa instalado; requiere permiso de autoridad |\n| `complete` | autocompletado del terminal; nunca se ofrece mediante MCP |"
+          "before": "#### `max bot messages sync`",
+          "after": "#### `max bot messages sync`\n\n<a id=\"max-bot-store\" />\n\n<a id=\"max-bot-store-fetch\" />"
         }
       ]
     }

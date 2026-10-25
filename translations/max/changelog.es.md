@@ -4,6 +4,41 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.74.0 — 25.10.2026
+
+### Cambios que pueden romper scripts
+
+- **`bot store fetch` ahora es `bot messages sync`; el grupo `bot store` ya no existe.** El comando hace lo mismo que el `messages sync` personal, así que ahora se llama igual; `store` es la base de datos local. El nombre antiguo responde con una pista que indica el nuevo. Si tus ajustes guardan `permissions.bot.store.fetch`, los comandos se niegan a ejecutarse hasta que la clave se renombre a `permissions.bot.messages.sync`.
+
+## 0.73.0 — 25.10.2026
+
+### Novedades
+
+- **`chats requests confirm|reject <чат> --all` responde a todas las solicitudes de un canal a la vez.** Primero se comprueba el número de solicitudes con los permisos del perfil y el límite de acciones por hora; después se envía una sola petición a MAX. Úsalo solo en un canal donde todas las solicitudes pendientes deban recibir la misma respuesta. No se puede filtrar con `--link`: la interfaz actual de MAX no indica por qué enlace llegó la solicitud.
+
+- Las listas de miembros, comentarios y destinatarios permitidos del bot aceptan una consulta por campos. Los identificadores de miembros y comentarios se pasan a la Bot API antes de aplicar el límite de página; la lista de destinatarios se filtra al leerla y no cambia los permisos de envío. Un comentario también muestra su `id` de texto cuando la API lo envió en `body.mid`.
+
+
+### Correcciones
+
+- **`watch --jsonl` imprime registros `item` y un `end` final.** Un fallo del origen termina el flujo con un resumen incompleto; `--json` se niega antes de suscribirse. La lista de destinatarios permitidos usa la consulta nativa común.
+- **El archivado ya no se detiene ante un evento de llamada junto a un archivo.** El archivo se guarda y se verifica su suma de comprobación; los mensajes que solo contienen una llamada no requieren descarga.
+- **El informe de diagnóstico usa el módulo común de WireCat.** Se mantienen el formato de MAX y los campos técnicos de los eventos; el contenido de los mensajes se excluye y los identificadores reciben etiquetas dentro del informe.
+
+- **Una denegación de permisos no oculta el comando.** Los catálogos de la CLI y de MCP conservan los comandos y muestran su disponibilidad actual con el motivo de la denegación; la llamada sigue comprobando los permisos. El MCP del bot también muestra los comandos de configuración dentro del perfil del bot.
+- **El cambio de ajustes usa la implementación común de WireCat.** `config set|unset` mantiene el formato de respuesta, los ajustes de MAX y los límites de permisos; el módulo común comprueba y escribe el archivo.
+
+### Cambios que pueden romper scripts
+
+- **Una segunda dirección de webhook se añade con `--append`.** `--add <chat>` sigue siendo la opción para cambiar carpetas. La composición desconocida de un chat y la lista de tipos de webhook ahora se omiten en lugar de ser `null`.
+
+- **Los contratos comunes de los comandos no pueden cambiar en silencio.** `commands info --json` muestra las definiciones de origen, los esquemas, los motivos de error y las diferencias explícitas de MAX. Los eventos de contacto usan `at:` y `scope:` en lugar de opciones de tiempo y ámbito, y los registros de diagnóstico usan `started_at:`.
+
+### Seguridad
+
+- **La resolución de dependencias excluye las versiones vulnerables de Vite.** Las dependencias de producción se comprueban tanto en la resolución guardada como en una nueva.
+
+
 ## 0.72.0 — 24.10.2026
 
 ### Novedades
@@ -1811,7 +1846,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.72.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.74.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

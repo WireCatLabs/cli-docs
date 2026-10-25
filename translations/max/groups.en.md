@@ -22,7 +22,7 @@ These actions use your personal account in groups you administer. Terms used bel
 | Keep a list of what's waiting for you | `max personal tasks list` |
 | Remove spam according to your own rules | `max personal chats rules set`, `max personal chats moderate` |
 | Replace leaked invitation link | `max personal chats links reset` |
-| Let people in or turn them away | `max personal chats requests list\|accept\|decline` |
+| Let people in or turn them away | `max personal chats requests list\|confirm\|reject` |
 | View activity for the week | `max personal stats chats show` |
 | Save list of participants every day | `max personal chats members fetch --track` |
 | Find members who look like bots or spammers | `max personal chats members check` |
@@ -195,7 +195,8 @@ Without `--allow-dangerous` in cron, actions at level `ask` are just planned and
 | `max personal chats moderate <чат>` | checking according to the rules; does what the rules allow |
 | `max personal chats members add\|remove`, `admins add\|remove` | members and admins |
 | `max personal chats requests list <чат>` | applications to the channel with approval; admins see, application time is unknown |
-| `max personal chats requests confirm\|decline <чат> <человек>` | accept or reject one application; `--all` and `--link` are not supported |
+| `max personal chats requests confirm\|reject <чат> <человек>` | accept or reject one application |
+| `max personal chats requests confirm\|reject <чат> --all` | answer every application to the channel; permissions and the action limit are checked before anything changes |
 | `max personal chats links show\|reset <чат>` | invitation link; `reset` - new, old stops working |
 | `max personal chats inspect <ссылка>` | where the invitation or public link leads; does not enter anywhere |
 | `max personal chats create`, `max personal chats join <ссылка>`, `max personal chats leave <чат>` | create a group, join via link, exit |
@@ -366,7 +367,7 @@ moderate`. Unlike a personal account, it can ban removed users from returning th
 ## Limitations
 
 - **Personal accounts cannot ban.** A removed member can return through an invite link. Reset the link (`max personal chats links reset`) or use a bot check, which can ban.
-- **Join requests exist only for a channel with approval.** A closed group has no approval: people join through the link immediately. In a channel with approval, `chats join` only sends a request (`requested: true`). `chats requests list` does not show when a person asked to join: MAX does not report it. You cannot answer all requests at once or select requests by link.
+- **Join requests exist only for a channel with approval.** A closed group has no approval: people join through the link immediately. In a channel with approval, `chats join` only sends a request (`requested: true`). `chats requests list` does not show when a person asked to join: MAX does not report it. You can answer all requests at once with `--all`; selecting requests by link is not available, because MAX does not report a request's link.
 - **At most 10 actions per check** (`--max-actions`). Deletions count toward the hourly send limit; once it is reached, remaining actions wait for the next check.
 - **Up to 1,000 messages per CLI check.** If there are more, the next check continues from that position.
 - **One join means reading the full member list.** To find a new member's account age, the check reads every member; in a large group this can require dozens of MAX requests.

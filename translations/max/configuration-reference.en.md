@@ -173,9 +173,9 @@ At level `ask` a question appears in the terminal with the default answer being 
 
 MCP has no confirmation forms: `ask` permits the requested write; `deny` and `readonly` still block it. `--permission ключ=уровень` temporarily tightens permissions for this process but never loosens them. In the CLI, `ask` still needs an answer or explicit confirmation flag. See [MCP](./mcp.md).
 
-`mcp.authority` controls changes to settings, rules, recipients and other conditions for future runs; its default is `deny`. The owner must choose `allow` or `ask` to offer these commands to an agent. Raw bot operations separately require explicit `bot.api: allow` or `ask`; a broader `bot: allow` does not enable them. The agent cannot change these keys or replace the entire `permissions` object; other individual keys can be changed when `mcp.authority` permits it.
+`mcp.authority` controls changes to settings, rules, recipients and other conditions for future runs; its default is `deny`. The commands stay in the catalogue; to run them, the owner sets `allow` or `ask`. Raw bot operations separately require explicit `bot.api: allow` or `ask`; a broader `bot: allow` does not enable them. The agent cannot change these keys or replace the entire `permissions` object; other individual keys can be changed when `mcp.authority` permits it.
 
-Archive maintenance, server control, model downloads and report creation have their own keys, for example `store.backup`, `server.start`, `models.audio.download`, `doctor.report.create`. Their default level is `ask`.
+Archive maintenance, server control, model downloads and report creation have their own keys, for example `store.backup`, `server.start`, `models.download`, `doctor.reports.create`. Their default level is `ask`.
 
 Choosing read-only access at first run limits every profile of every WireCat tool, including MCP. A more specific profile `allow` cannot relax that limit. Change the answer through `max setup` in the terminal.
 

@@ -34,7 +34,9 @@ const leaf = (path: string[], args = 0): CommandInfo => ({
 const program: Program = {
   cli: "tg",
   globalOptions: [{ flags: "--timeout <duration>", takes_value: true, mandatory: false, description: "" }],
-  commands: [{ ...leaf(["messages"]), commands: [leaf(["messages", "send"], 2), leaf(["messages", "list"], 1)] }],
+  commands: [
+    { ...leaf(["messages"]), options: [], commands: [leaf(["messages", "send"], 2), leaf(["messages", "list"], 1)] },
+  ],
 }
 
 describe("released documentation contracts", () => {
@@ -78,6 +80,8 @@ describe("released documentation contracts", () => {
     expect(validateInvocation("tg [profile] [options] …", program, true)?.kind).toBe("syntax")
     expect(validateInvocation('tg "$COMMAND"', program, true)?.kind).toBe("unsupported")
     expect(validateInvocation("tg work PLACEHOLDER_command --json", program, false)?.kind).toBe("syntax")
+    expect(validateInvocation("tg messages list\\|send <chat> --limit 5", program, false)?.kind).toBe("syntax")
+    expect(validateInvocation("tg messages list\\|send <chat> --bogus", program, false)?.kind).toBe("invalid")
   })
   it("lets an upgrade note name a retired command, but not a runnable example", () => {
     const zm: Program = { ...program, cli: "zm" }

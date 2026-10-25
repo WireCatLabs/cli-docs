@@ -98,6 +98,16 @@ export function validateInvocation(
       }
       return { kind: "syntax", reason: "Reviewed shorthand alternatives, not a runnable command" }
     }
+    const piped = /(?<![\w:|\\])[a-z][a-z-]*(?:\\\|[a-z][a-z-]*)+(?![\w|\\])/.exec(text)
+    if (piped) {
+      for (const alternative of piped[0].split("\\|")) {
+        const expanded = text.slice(0, piped.index) + alternative + text.slice(piped.index + piped[0].length)
+        const finding = validateInvocation(expanded, program, false)
+        // Unknown alternative subcommands were never checked here; options and values are.
+        if (finding && finding.kind !== "syntax" && !finding.reason.startsWith("Unknown subcommand")) return finding
+      }
+      return { kind: "syntax", reason: "Alternative subcommand syntax" }
+    }
   }
   let entries: ReturnType<typeof parse>
   try {
