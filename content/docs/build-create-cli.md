@@ -30,10 +30,17 @@ You do not need to know how WireCat works inside to get started. The guides belo
 - **Checks that keep it working.** The template brings the same checks every WireCat tool runs, so your tool keeps
   working as WireCat grows.
 
+## What you need
+
+- **An account at the service**, and a way for programs to reach it. Most services give you an API key in their
+  settings, or let an app sign in for you. A link to the service's developer documentation helps your agent a lot.
+- **An AI coding agent that can run commands**: Claude Code, Codex, Cursor, Gemini CLI or a similar one.
+- **Node.js, pnpm and git** on your computer.
+
 ## Start from the template
 
-[cli-template](https://github.com/WireCatLabs/cli-template) is where every new tool starts. On a computer with
-Node.js, pnpm and git, these commands make a tool named `acme` and check that it runs:
+[cli-template](https://github.com/WireCatLabs/cli-template) is where every new tool starts. These commands make a
+tool named `acme` and check that it runs:
 
 ```sh
 git clone https://github.com/WireCatLabs/cli-template.git
@@ -43,32 +50,33 @@ cd acme-cli && pnpm install && pnpm build
 node dist/bin/acme.js personal doctor
 ```
 
-`personal` is the profile: a name for one of your accounts. Then open the `acme-cli` folder with your AI agent and
-tell it which service to connect. The template's instructions guide it from there.
+`personal` is the profile: a name for one of your accounts. Now open the `acme-cli` folder with your AI agent.
 
-## Why it works this way
+## What happens next
 
-**One place for all your data, so answers come from every tool at once.** A question like "what did we decide about
-the launch?" needs the chat, the mail and the meeting notes together. That works only when every tool saves into the
-same place, in the same shape.
+1. **Tell your agent what you want.** Name the service, give it the link to the developer documentation, and say what
+   you want to do. For example: "Connect acme to the Acme CRM API. Its docs are at https://example.com/api. I want to
+   list my deals and find a deal by name."
+2. **Answer its questions.** The agent asks how you sign in, what the service holds and what must never be saved.
+   Short answers are fine.
+3. **Try each command on your own account.** The agent builds commands one by one, such as one that lists your deals.
+   Run them, and tell the agent what looks wrong or what is missing.
+4. **Make it searchable.** Ask the agent to save what the service returns into WireCat, so search and your agents find
+   it next to your chats and mail. [Add a source](./build-add-source.md) shows how.
+5. **Share it, if you want.** When the built-in checks pass, publish the tool on npm, and others install it like any
+   other WireCat tool.
 
-**Nothing counted twice.** The same meeting can arrive from two calendars and from Zoom. WireCat keeps each copy and
-knows they are one meeting. When it cannot tell two things apart, it asks you instead of guessing. The details are on
-[Concepts in five minutes](./build-concepts.md).
+## If you get stuck
 
-**Always the account you meant.** A tool that picks "the first account" sends a work message from a personal account
-sooner or later. A WireCat tool stops and lists your accounts when you do not say which one.
-
-**Agents can do real work, safely.** An agent gets the same commands as you. You decide with permissions what it may
-change, and every change is recorded.
-
-**Shared rules, so WireCat can grow without breaking your tool.** The rules are in one
-[handbook](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/README.md), and most of them are checked
-automatically. The template's `upgrade` command brings its later improvements into your tool.
+- Run `node dist/bin/acme.js personal doctor` in the tool's folder. It checks the installation, the settings and the
+  profiles.
+- Ask your agent to read the template's instructions again. They cover the common problems.
+- Open an issue in [cli-template](https://github.com/WireCatLabs/cli-template/issues) for a question or a bug. Leave
+  out keys, passwords and private data.
 
 ## Where to go next
 
-1. [Concepts in five minutes](./build-concepts.md) — how WireCat keeps records from many sources.
+1. [Concepts in five minutes](./build-concepts.md) — how WireCat keeps records from many sources, and why.
 2. [Add a source](./build-add-source.md) — save your service's data so search and agents can use it.
 3. [Keep your own data](./build-own-data.md) — where your tool keeps what only it needs.
 4. [Sign in to a service](./build-sign-in.md) — keys, the keychain and accounts.

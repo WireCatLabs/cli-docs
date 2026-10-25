@@ -36,10 +36,19 @@ necesites.
 - **Comprobaciones que la mantienen funcionando.** La plantilla trae las mismas comprobaciones que ejecuta toda
   herramienta WireCat, para que la tuya siga funcionando mientras WireCat crece.
 
+## Qué necesitas
+
+- **Una cuenta en el servicio** y una forma de que los programas lleguen a él. La mayoría de los servicios te dan una
+  clave de API en sus ajustes o dejan que una app inicie sesión por ti. Un enlace a la documentación para
+  desarrolladores del servicio ayuda mucho a tu agente.
+- **Un agente de IA para programar que pueda ejecutar comandos**: Claude Code, Codex, Cursor, Gemini CLI u otro
+  parecido.
+- **Node.js, pnpm y git** en tu ordenador.
+
 ## Empieza desde la plantilla
 
-[cli-template](https://github.com/WireCatLabs/cli-template) es donde empieza toda herramienta nueva. En un ordenador
-con Node.js, pnpm y git, estos comandos crean una herramienta llamada `acme` y comprueban que se ejecuta:
+[cli-template](https://github.com/WireCatLabs/cli-template) es donde empieza toda herramienta nueva. Estos comandos
+crean una herramienta llamada `acme` y comprueban que se ejecuta:
 
 ```sh
 git clone https://github.com/WireCatLabs/cli-template.git
@@ -49,32 +58,33 @@ cd acme-cli && pnpm install && pnpm build
 node dist/bin/acme.js personal doctor
 ```
 
-`personal` es el perfil: un nombre para una de tus cuentas. Luego abre la carpeta `acme-cli` con tu agente de IA y
-dile qué servicio conectar. Las instrucciones de la plantilla lo guían desde ahí.
+`personal` es el perfil: un nombre para una de tus cuentas. Ahora abre la carpeta `acme-cli` con tu agente de IA.
 
-## Por qué funciona así
+## Qué pasa después
 
-**Un solo lugar para todos tus datos, para que las respuestas lleguen de todas las herramientas a la vez.** Una
-pregunta como «¿qué decidimos sobre el lanzamiento?» necesita el chat, el correo y las notas de la reunión juntos. Eso
-solo funciona cuando todas las herramientas guardan en el mismo lugar y de la misma forma.
+1. **Dile a tu agente lo que quieres.** Nombra el servicio, dale el enlace a la documentación para desarrolladores y
+   di qué quieres hacer. Por ejemplo: «Conecta acme a la API de Acme CRM. La documentación está en
+   https://example.com/api. Quiero ver mis acuerdos y encontrar uno por su nombre».
+2. **Responde a sus preguntas.** El agente pregunta cómo se inicia sesión, qué guarda el servicio y qué no debe
+   guardarse nunca. Bastan respuestas cortas.
+3. **Prueba cada comando con tu propia cuenta.** El agente construye los comandos uno a uno, por ejemplo uno que lista
+   tus acuerdos. Ejecútalos y dile al agente qué está mal o qué falta.
+4. **Haz que se pueda buscar.** Pide al agente que guarde en WireCat lo que devuelve el servicio, para que la búsqueda
+   y tus agentes lo encuentren junto a tus chats y tu correo. [Añadir una fuente](./build-add-source.md) explica cómo.
+5. **Compártela, si quieres.** Cuando pasen las comprobaciones incluidas, publica la herramienta en npm y otras
+   personas la instalarán como cualquier herramienta WireCat.
 
-**Nada se cuenta dos veces.** La misma reunión puede llegar de dos calendarios y de Zoom. WireCat guarda cada copia y
-sabe que son una sola reunión. Cuando no puede distinguir dos cosas, te pregunta en lugar de adivinar. Los detalles
-están en [Conceptos en cinco minutos](./build-concepts.md).
+## Si te atascas
 
-**Siempre la cuenta que querías.** Una herramienta que elige «la primera cuenta» acaba enviando un mensaje de trabajo
-desde una cuenta personal. Una herramienta WireCat se detiene y lista tus cuentas cuando no dices cuál.
-
-**Los agentes hacen trabajo real, con seguridad.** Un agente recibe los mismos comandos que tú. Con los permisos
-decides qué puede cambiar, y cada cambio queda registrado.
-
-**Reglas compartidas, para que WireCat crezca sin romper tu herramienta.** Las reglas están en un solo
-[manual](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/README.md), y la mayoría se comprueban
-automáticamente. El comando `upgrade` de la plantilla trae sus mejoras posteriores a tu herramienta.
+- Ejecuta `node dist/bin/acme.js personal doctor` en la carpeta de la herramienta. Comprueba la instalación, los
+  ajustes y los perfiles.
+- Pide a tu agente que vuelva a leer las instrucciones de la plantilla. Cubren los problemas habituales.
+- Abre una incidencia en [cli-template](https://github.com/WireCatLabs/cli-template/issues) para una pregunta o un
+  error. No incluyas claves, contraseñas ni datos privados.
 
 ## Adónde ir después
 
-1. [Conceptos en cinco minutos](./build-concepts.md): cómo guarda WireCat registros de muchas fuentes.
+1. [Conceptos en cinco minutos](./build-concepts.md): cómo guarda WireCat registros de muchas fuentes, y por qué.
 2. [Añadir una fuente](./build-add-source.md): guarda los datos de tu servicio para que la búsqueda y los agentes los
    usen.
 3. [Guardar tus propios datos](./build-own-data.md): dónde guarda tu herramienta lo que solo ella necesita.
