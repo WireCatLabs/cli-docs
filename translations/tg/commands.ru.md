@@ -425,7 +425,7 @@ tg chats members add <chat> <person>
 | `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 | `person` | required | an id, or part of a name. |
 
-**Returns:** chat members change — ; every field: tg commands info chats members add
+**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: tg commands info chats members add
 
 **Example:** `tg personal chats members add "Book club" "Alex Example"`
 
@@ -444,7 +444,7 @@ tg chats members remove <chat> <person>
 | `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 | `person` | required | an id, or part of a name. |
 
-**Returns:** chat members change — ; every field: tg commands info chats members remove
+**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: tg commands info chats members remove
 
 **Example:** `tg personal chats members remove "Book club" "Alex Example"`
 
@@ -562,7 +562,7 @@ tg chats create <title> [person] [options]
 |---|---|
 | `--channel` | a private channel instead of a group; people join it by its link. |
 
-**Returns:** chat group change — ; every field: tg commands info chats create
+**Returns:** chat group change — operation_id, chat, requested; every field: tg commands info chats create
 
 **Example:** `tg personal chats create "Book club" "Alex Example"`
 
@@ -580,7 +580,7 @@ tg chats join <link>
 |---|---|---|
 | `link` | required | an invite link, or a public one. |
 
-**Returns:** chat group change — ; every field: tg commands info chats join
+**Returns:** chat group change — operation_id, chat, requested; every field: tg commands info chats join
 
 **Example:** `tg personal chats join https://example.com/invite/book-club`
 
@@ -624,7 +624,7 @@ tg chats update <chat> [options]
 | `--only-admins-add <on\|off>` | only admins may add members. |
 | `--join-approval <on\|off>` | people ask to join, and an admin lets them in. |
 
-**Returns:** chat group change — ; every field: tg commands info chats update
+**Returns:** chat group change — operation_id, chat, requested; every field: tg commands info chats update
 
 **Example:** `tg personal chats update "Book club" --title "Reading group"`
 
@@ -753,7 +753,7 @@ tg chats links reset <chat>
 |---|---|---|
 | `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** chat group change — ; every field: tg commands info chats links reset
+**Returns:** chat group change — operation_id, chat, requested; every field: tg commands info chats links reset
 
 **Example:** `tg personal chats links reset "Book club"`
 
@@ -803,7 +803,7 @@ tg chats requests confirm <chat> [person] [options]
 | `--all` | every pending request, counted against the hourly limit first. |
 | `--link <link>` | with --all: only the requests made by this invite link. |
 
-**Returns:** chat request change — ; every field: tg commands info chats requests confirm
+**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: tg commands info chats requests confirm
 
 **Example:** `tg personal chats requests confirm "Book club" "Alex Example"`
 
@@ -827,7 +827,7 @@ tg chats requests reject <chat> [person] [options]
 | `--all` | every pending request, counted against the hourly limit first. |
 | `--link <link>` | with --all: only the requests made by this invite link. |
 
-**Returns:** chat request change — ; every field: tg commands info chats requests reject
+**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: tg commands info chats requests reject
 
 **Example:** `tg personal chats requests reject "Book club" "Alex Example"`
 
@@ -1375,7 +1375,7 @@ tg contacts context <person> [options]
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
 | `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
 
-**Returns:** contact context — ; every field: tg commands info contacts context
+**Returns:** contact context — person, shared, last, recent, mentions, limits, complete, not_read, and 1 more; every field: tg commands info contacts context
 
 **Example:** `tg personal contacts context "Alex Example" --limit 10`
 
@@ -1847,7 +1847,7 @@ tg messages send <chat> [text] [options]
 | `--filename <name>` | the name others see for the --file, instead of its name on disk. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 
-**Returns:** message send — ; every field: tg commands info messages send
+**Returns:** message send — operation_id, message, messages, scheduled_for, chat_id, saved; every field: tg commands info messages send
 
 **Example:** `tg personal messages send "Book club" "The meeting starts at 10."`
 
@@ -1893,7 +1893,7 @@ tg messages context <chat> [message] [options]
 | `--before-n <n>` | how many before it. Default: `5`. |
 | `--after-n <n>` | how many after it. Default: `5`. |
 
-**Returns:** message context — ; every field: tg commands info messages context
+**Returns:** message context — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 40 more; every field: tg commands info messages context
 
 **Example:** `tg personal messages context "Book club" 101 --before-n 3 --after-n 3`
 
@@ -1919,7 +1919,7 @@ tg messages download <chat> [message] [options]
 | `--pause <duration>` | with --all, a pause between pages, to stay under the provider's limits. Default: `1s`. |
 | `--extract` | read text layers from the files this download maps into the local content index. |
 
-**Returns:** message download — ; every field: tg commands info messages download
+**Returns:** message download — files, extraction, complete, batch, chat, saved, existing, stopped; every field: tg commands info messages download
 
 **Example:** `tg personal messages download "Book club" 101 --output-dir ./downloads`
 
@@ -2192,7 +2192,7 @@ tg messages sync [chat] [options]
 | `--background` | run as a job that outlives this command; `store jobs show` follows it. |
 | `--dry-run` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
-**Returns:** message sync — ; every field: tg commands info messages sync
+**Returns:** message sync — chat, held, ranges, missing, requests, runs, seconds, fetched, and 15 more; every field: tg commands info messages sync
 
 **Example:** `tg personal messages sync "Book club" --last 100`
 
@@ -2424,7 +2424,7 @@ tg models list [query]
 
 ### `tg models download`
 
-download and verify one speech or embedding model
+download and verify one speech or embedding model: tens to hundreds of MB, each size in models list
 
 **Reads from an outside service.**
 
@@ -2444,7 +2444,7 @@ tg models download <model> [options]
 
 **Next usually:** `tg images models download <model>`
 
-**Example:** `tg personal models download parakeet-v3`, `tg personal models download e5-small`
+**Example:** `tg personal models download e5-small`
 
 ## `tg inbox`
 
@@ -2669,7 +2669,7 @@ tg watch [options]
 |---|---|
 | `--events` | include changes and receipts; each item names its event. |
 
-**Returns:** watch item — ; every field: tg commands info watch
+**Returns:** watch item — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 30 more; every field: tg commands info watch
 
 **Example:** `tg personal watch --jsonl --timeout 30s`
 
@@ -2984,7 +2984,7 @@ tg store gaps repair <chat> [options]
 | `--catch-up-time <duration>` | preparation time within the repair's remaining budget. |
 | `--background` | repair as an existing store job; inspect store jobs show. |
 
-**Returns:** store gap repair — ; every field: tg commands info store gaps repair
+**Returns:** store gap repair — job, pid, chat, log, version, scope, before, after, and 6 more; every field: tg commands info store gaps repair
 
 **Example:** `tg personal store gaps repair "Book club" --limit 100`
 
@@ -3066,7 +3066,7 @@ tg store jobs retry [job] [options]
 |---|---|
 | `--failed` | every chat whose newest job partial, failed or died. |
 
-**Returns:** store job retry — ; every field: tg commands info store jobs retry
+**Returns:** store job retry — job, pid, chat, log, retried, error; every field: tg commands info store jobs retry
 
 **Example:** `tg personal store jobs retry --failed`
 
@@ -3108,7 +3108,7 @@ tg store export [chat] [options]
 | `--all` | with --output-dir: every stored chat of this account. |
 | `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
-**Returns:** store export — ; every field: tg commands info store export
+**Returns:** store export — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 34 more; every field: tg commands info store export
 
 **Example:** `tg personal store export "Book club" --output ./messages.jsonl`
 
@@ -3134,13 +3134,13 @@ tg store clear [options]
 
 ### `tg store info`
 
-the store file: where it is, its size, its schema and how many rows it holds; changes nothing
+the store file: where it is, its size, its schema against the one this tool speaks, which tools used it and how many rows it holds, by provider, chat kind, account, year (UTC) and attachment kind, over every account; changes nothing
 
 ```sh
 tg store info
 ```
 
-**Returns:** store info — ; every field: tg commands info store info
+**Returns:** store info — path, exists, schema, opens, error, bytes, journal_mode, pages, and 12 more; every field: tg commands info store info
 
 **Example:** `tg personal store info`
 
@@ -3152,7 +3152,7 @@ whether the store is healthy — integrity, search indexes, disk, and which chat
 tg store check
 ```
 
-**Returns:** store check — ; every field: tg commands info store check
+**Returns:** store check — path, exists, ok, opens, error, checks, schema, integrity, and 11 more; every field: tg commands info store check
 
 **Example:** `tg personal store check`
 
@@ -3166,7 +3166,7 @@ bring the store up to this build's schema, then normalize, index and stem the me
 tg store migrate
 ```
 
-**Returns:** store migration — ; every field: tg commands info store migrate
+**Returns:** store migration — path, exists, from, to, normalized, indexed, terms, stemmed, and 1 more; every field: tg commands info store migrate
 
 **Example:** `tg personal store migrate`
 
@@ -3180,7 +3180,7 @@ rebuild the word index, its typo vocabulary, the stems, the files' word index, t
 tg store rebuild
 ```
 
-**Returns:** store reindex — ; every field: tg commands info store rebuild
+**Returns:** store reindex — path, exists, normalized, indexed, terms, stemmed, notes_indexed, file_texts, and 1 more; every field: tg commands info store rebuild
 
 **Example:** `tg personal store rebuild`
 
@@ -3260,7 +3260,7 @@ tg store repair [options]
 |---|---|
 | `--dry-run` | say what it would do, and change nothing. |
 
-**Returns:** store repair — ; every field: tg commands info store repair
+**Returns:** store repair — path, exists, dry_run, repaired, indexes_created, triggers_created, mismatches, foreign_key_violations, and 1 more; every field: tg commands info store repair
 
 **Example:** `tg personal store repair --dry-run`
 
@@ -3278,7 +3278,7 @@ tg store reset [options]
 |---|---|
 | `--no-backup` | delete the store without backing it up first. |
 
-**Returns:** store reset — ; every field: tg commands info store reset
+**Returns:** store reset — path, exists, reset, backup, backed_up, schema; every field: tg commands info store reset
 
 **Example:** `tg personal store reset`
 
@@ -3303,6 +3303,26 @@ tg store copies delete <name>
 **Returns:** store copy removal — path, deleted; every field: tg commands info store copies delete
 
 **Example:** `tg personal store copies delete messages_copy_1`
+
+### `tg store tables`
+
+the tables of the local archive
+
+#### `tg store tables list`
+
+every table of the local archive: its kind (data, search index, part of a search index, internal) and its rows, a search index's rows not counted; --full adds each table's size on disk, which reads the whole file (about ten seconds for 3 GB); changes nothing
+
+```sh
+tg store tables list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** store table — name, kind, rows, bytes; every field: tg commands info store tables list
+
+**Example:** `tg personal store tables list`, `tg personal store tables list kind:data`, `tg personal store tables list --full --json`
 
 ## `tg conversations`
 
@@ -3342,7 +3362,7 @@ tg conversations show <conversation> [message]
 | `conversation` | required | a conversation id from `conversations list`; or a chat: its title or part of it, its id, @username, or `me` for Saved Messages, with a message. |
 | `message` | optional | a message id in that chat: show the conversation it is in. |
 
-**Returns:** conversation details — ; every field: tg commands info conversations show
+**Returns:** conversation details — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 38 more; every field: tg commands info conversations show
 
 **Example:** `tg personal conversations show "Book club" 101`
 
@@ -3425,7 +3445,7 @@ tg conversations batches show [options]
 | `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 | `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
 
-**Returns:** conversation batch — ; every field: tg commands info conversations batches show
+**Returns:** conversation batch — batch, chat, messages, remaining; every field: tg commands info conversations batches show
 
 **Example:** `tg personal conversations batches show --chat "Book club"`
 
@@ -3448,13 +3468,13 @@ tg conversations links rebuild [options]
 | `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 | `--analyze` | link batches using the configured analysis provider; requires --chat and remembers consent for this chat/provider. |
 | `--analysis-provider <provider>` | analysis: agent, openai or anthropic. |
-| `--model <model>` | analysis model; overrides analysis_model. |
-| `--base-url <url>` | analysis API endpoint; overrides analysis_base_url. |
+| `--model <model>` | analysis model; overrides models.analysis.model. |
+| `--base-url <url>` | analysis API endpoint; overrides models.analysis.base_url. |
 | `--size <n>` | analysis answer messages per batch, 10–200; default 50. |
 | `--max-tokens <n>` | analysis input/output reservation cap per run; default 100000. |
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 
-**Returns:** conversation build — ; every field: tg commands info conversations links rebuild
+**Returns:** conversation build — chat, messages, links, conversations, built_at, rules_version, model, model_available, and 10 more; every field: tg commands info conversations links rebuild
 
 **Example:** `tg personal conversations links rebuild --chat "Book club"`
 
@@ -3472,7 +3492,7 @@ tg conversations links add [options]
 |---|---|
 | `--batch <id>` | the batch id `conversations batches show` printed. |
 
-**Returns:** conversation change — ; every field: tg commands info conversations links add
+**Returns:** conversation change — chat, stored, cleared; every field: tg commands info conversations links add
 
 **Example:** `tg personal conversations links add --batch "$batch"`
 
@@ -3491,7 +3511,7 @@ tg conversations links clear [options]
 | `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 | `--answer-model <model>` | only the stored answers this model gave. |
 
-**Returns:** conversation change — ; every field: tg commands info conversations links clear
+**Returns:** conversation change — chat, stored, cleared; every field: tg commands info conversations links clear
 
 **Example:** `tg personal conversations links clear --chat "Book club"`
 
@@ -3537,7 +3557,7 @@ tg conversations embeddings clear [options]
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 
-**Returns:** conversation change — ; every field: tg commands info conversations embeddings clear
+**Returns:** conversation change — chat, stored, cleared; every field: tg commands info conversations embeddings clear
 
 **Example:** `tg personal conversations embeddings clear --chat "Book club"`
 
@@ -3623,7 +3643,7 @@ tg conversations embed [options]
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given, and no limit with --chat. |
 
-**Returns:** conversation embedding — ; every field: tg commands info conversations embed
+**Returns:** conversation embedding — chat, model, embedded, skipped, model_available, built, left; every field: tg commands info conversations embed
 
 **Example:** `tg personal conversations embed --chat "Book club"`
 
@@ -3652,7 +3672,7 @@ tg attachments extract [options]
 | `--ocr` | explicitly call models.ocr for bulk image and scanned-PDF text extraction. |
 | `--concurrency <n>` | remote: requests at once (default: 4). |
 
-**Returns:** attachment extraction — ; every field: tg commands info attachments extract
+**Returns:** attachment extraction — extracted, failed, needs_agent, complete, unchanged, not_downloaded, unsupported, engines_missing, and 15 more; every field: tg commands info attachments extract
 
 **Example:** `tg personal attachments extract --chat "Book club" --limit 10`
 
@@ -3792,7 +3812,7 @@ tg attachments jobs install <dir> [options]
 | `--chat <chat>` | only this chat; repeat for more; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. Default: ``. |
 | `--since-time <time>` | include messages from this ISO timestamp with a time zone. |
 
-**Returns:** media archive timer — ; every field: tg commands info attachments jobs install
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs install
 
 **Example:** `tg personal attachments jobs install ./media-archive`
 
@@ -3810,7 +3830,7 @@ tg attachments jobs start <dir>
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** media archive timer — ; every field: tg commands info attachments jobs start
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs start
 
 **Example:** `tg personal attachments jobs start ./media-archive`
 
@@ -3828,7 +3848,7 @@ tg attachments jobs stop <dir>
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** media archive timer — ; every field: tg commands info attachments jobs stop
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs stop
 
 **Example:** `tg personal attachments jobs stop ./media-archive`
 
@@ -3844,7 +3864,7 @@ tg attachments jobs status <dir>
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** media archive timer — ; every field: tg commands info attachments jobs status
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs status
 
 **Example:** `tg personal attachments jobs status ./media-archive`
 
@@ -3862,7 +3882,7 @@ tg attachments jobs uninstall <dir>
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** media archive timer — ; every field: tg commands info attachments jobs uninstall
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs uninstall
 
 **Example:** `tg personal attachments jobs uninstall ./media-archive`
 
@@ -3936,7 +3956,7 @@ tg tags add <tag> [options]
 | `--message <message>` | the message to tag: its id in --chat, or a msg: locator alone. |
 | `--task <id>` | the task to tag: its id or key, as tasks list shows it. |
 
-**Returns:** tag change — ; every field: tg commands info tags add
+**Returns:** tag change — target, unchanged, added, removed; every field: tg commands info tags add
 
 **Example:** `tg personal tags add reading --chat "Book club"`
 
@@ -3962,7 +3982,7 @@ tg tags remove <tag> [options]
 | `--task <id>` | the task to untag: its id or key, as tasks list shows it. |
 | `--claim <claim>` | remove only this ownership claim: manual or auto. |
 
-**Returns:** tag change — ; every field: tg commands info tags remove
+**Returns:** tag change — target, unchanged, added, removed; every field: tg commands info tags remove
 
 **Example:** `tg personal tags remove reading --chat "Book club"`
 
@@ -4428,7 +4448,7 @@ tg stats messages evidence <message> [options]
 | `--limit <n>` | evidence rows, 1–100; 20 if not given. |
 | `--cursor <cursor>` | continue the same component and stored-evidence fingerprint. |
 
-**Returns:** evidence — ; every field: tg commands info stats messages evidence
+**Returns:** evidence — message, contribution, related, counters, person_ref, joined_at, cohort, checkpoints, and 2 more; every field: tg commands info stats messages evidence
 
 **Example:** `tg personal stats messages evidence "$message" --selection "$selection" --component reactions`
 
@@ -4509,7 +4529,7 @@ tg stats contacts evidence <person> [options]
 | `--limit <n>` | evidence rows, 1–100; 20 if not given. |
 | `--cursor <cursor>` | continue the same component and stored-evidence fingerprint. |
 
-**Returns:** evidence — ; every field: tg commands info stats contacts evidence
+**Returns:** evidence — message, contribution, related, counters, person_ref, joined_at, cohort, checkpoints, and 2 more; every field: tg commands info stats contacts evidence
 
 **Example:** `tg personal stats contacts evidence 101 --selection "$selection" --component messages`
 
@@ -4759,7 +4779,7 @@ tg tasks link <task> [targets] [options]
 | `--chat <chat>` | a chat it concerns, repeatable; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 | `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by, follow-up-of, duplicate-of or discovered-from. |
 
-**Returns:** task links — ; every field: tg commands info tasks link
+**Returns:** task links — id, ref, key, project, title, description, type, status, and 20 more; every field: tg commands info tasks link
 
 **Example:** `tg personal tasks link DOC-12 https://example.com/draft`
 
@@ -5203,7 +5223,7 @@ tg search runs [query] [options]
 | `--limit <n>` | matches per page, at most 100. Default: `20`. |
 | `--page <n>` | result page. Default: `1`. |
 
-**Returns:** run hit — run_id, command, profile, started_at, status, cli_version, events, events_truncated, and 13 more; every field: tg commands info search runs
+**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 18 more; every field: tg commands info search runs
 
 **Example:** `tg personal search runs timeout status:failed --limit 10`
 
@@ -5748,7 +5768,7 @@ tg runs list [query] [options]
 | `--limit <n>` | how many to show. Default: `20`. |
 | `--page <n>` | which page, starting at 1. Default: `1`. |
 
-**Returns:** run — run_id, command, profile, started_at, status, cli_version, completed_at, requests, and 15 more; every field: tg commands info runs list
+**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 20 more; every field: tg commands info runs list
 
 **Example:** `tg personal runs list --limit 10`
 
@@ -5768,7 +5788,7 @@ tg runs show <run-id> [options]
 |---|---|
 | `--problems` | only failed responses, warnings and crashes. |
 
-**Returns:** run details — run_id, command, profile, started_at, status, cli_version, directory, event_count, and 14 more; every field: tg commands info runs show
+**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 19 more; every field: tg commands info runs show
 
 **Example:** `tg personal runs show run-101`
 
@@ -5820,8 +5840,8 @@ tg config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
-| `value` | required | a number, true or false, or for allow a list like send,reaction; for a group tg:work,max:Alice,email:me@x. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
 |---|---|
@@ -5845,7 +5865,7 @@ tg config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
 | Option | What it does |
 |---|---|
@@ -11254,15 +11274,19 @@ the instructions an agent is given for this tool
 
 ### `tg skill show`
 
-print SKILL.md — `tg skill install` puts it where Claude Code, Codex and Gemini CLI look for it
+print SKILL.md — `tg skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
 
 ```sh
-tg skill show [name]
+tg skill show [name] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `name` | optional | one of the skills shipped for a task: follow-ups, link-conversations. |
+
+| Option | What it does |
+|---|---|
+| `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
 
 **Returns:** print the tool's instructions for AI agents
 
@@ -11286,6 +11310,18 @@ tg skill install [options]
 
 **Example:** `tg skill install --for agents`
 
+### `tg skill status`
+
+for each place `tg skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+
+```sh
+tg skill status
+```
+
+**Returns:** whether the installed instructions for AI agents match this version
+
+**Example:** `tg skill status`, `tg skill status --json`
+
 ## `tg guide`
 
 scenarios: the commands for a common task, in order, and why each
@@ -11300,7 +11336,7 @@ tg guide [name]
 
 **Returns:** scenarios: the commands for a common task, in order, and why each
 
-**Example:** `tg guide`, `tg guide <name> --json`
+**Example:** `tg guide`, `tg guide agent-without-send --json`
 
 ## Exit codes
 

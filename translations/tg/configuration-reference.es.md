@@ -77,7 +77,7 @@ Cuando se configura `TG_CONFIG_DIR`, `TG_STATE_DIR` o `TG_CACHE_DIR`, lo dice en
 - `personal.defaults`, `personal.profiles.<name>`: solo comandos de cuenta personal.
 - `bot.defaults`, `bot.profiles.<name>`: sólo comandos `tg <name> bot …`.
 
-Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `TG_PROFILE`. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles de este equipo. Un archivo que aún conserva `default_profile` de un `tg` anterior también detiene ese comando; `tg config unset default_profile` lo elimina.
+Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `TG_PROFILE`. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles de este equipo.
 
 | Configuración | Predeterminado | Qué hace | Anulado por uno ejecutado por |
 |---|---|---|---|
@@ -102,9 +102,6 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `embedding_model` | predeterminado del proveedor | modelo de incrustación | `--model` |
 | `embedding_base_url` | predeterminado del proveedor | incorporación de punto final API | `--base-url` |
 | `embedding_dims` | modelo predeterminado | entero 1–65,536 | `--dims` |
-| `analysis_provider` | `agent` | `agent`, `openai` o `anthropic` | `build --analysis-provider` |
-| `analysis_model` | ninguno; requerido para `--analyze` | modelo de análisis | `build --model` |
-| `analysis_base_url` | predeterminado del proveedor | punto final API de análisis | `build --base-url` |
 | `models` | ninguno | modelos externos por finalidad ([abajo](#models-by-purpose)) | Variables `TG_MODELS_*` |
 | `search_stemmers.cyrillic`, `search_stemmers.latin` | `russian`, `english,spanish` | los idiomas de raíz de palabras para buscar en todal archivo local ([abajo](#search-languages)) | ninguno |
 | `phone_countries` | `ru` | códigos de país, separados por comas, con los que se lee un número de teléfono escrito sin `+` (`es,ru`); gana el primero que encaja ([búsqueda](./query-language.md)) | ninguno |
@@ -114,7 +111,8 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `task_first_pass_per_chat` | `0` | cuántas tareas puede abrir la primera sincronización por chat | ninguno |
 | `account_groups.<name>` | ninguno | una lista con nombre de cuentas para `--source group:<name>`, por ejemplo `tg:work,max:Alice,email:me@x` | ninguno |
 
-El archivo se escribe `0600` cuando se creó por primera vez y `0644` por `config set`. No guarda ningún secreto.
+El archivo se escribe `0600`, legible solo por ti, en una carpeta `0700`, y `config set` lo mantiene así. No guarda
+ningún secreto. `tg doctor` nombra el archivo o su carpeta cuando otros usuarios pueden leerlos ([diagnóstico](./diagnostics.md#check-the-installation-tg-personal-doctor)).
 
 ## Permisos de un perfil
 
@@ -131,7 +129,10 @@ El archivo se escribe `0600` cuando se creó por primera vez y `0644` por `confi
 | `ask` | pregunta y/N en la terminal; la respuesta predeterminada es no ([más abajo](#a-question-before-a-change)) |
 | `allow` | ejecuta la operación sin preguntar |
 
-**Una clave es una ruta de comando**: `messages`, `messages.delete`, `messages.send`, `reactions`, `polls.vote`, `chats.mark-read`, `chats.members.remove`, `contacts`, `account.sessions.end`. Comienza con un recurso: `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `search`. `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` o `metadata`, y debe nombrar un comando conocido o una escritura comprobada. `config set` rechaza las claves de comando desconocidas con el código de salida 2, incluidas las claves dentro de un objeto `permissions` completo. `config unset` puede eliminar una antigua clave desconocida. Al leer un archivo existente con uno, se advierte en stderr y continúa.
+**Una clave es una ruta de comando**: `messages`, `messages.delete`, `messages.send`, `reactions`, `messages.sync`, `polls.vote`, `chats.mark-read`, `chats.members.remove`, `contacts`, `account.sessions.end`. Comienza con un recurso: `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `search`. `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` o `metadata`, y debe nombrar un comando conocido o una escritura comprobada. `config set` rechaza las claves de comando desconocidas con el código de salida 2, incluidas las claves dentro de un objeto `permissions` completo.
+Una clave guardada bajo un recurso conocido que no nombra ningún comando detiene todos los demás comandos con un error de
+configuración que da el `config unset` para eliminarla; `config show`, `set` y `unset` siguen funcionando. Una clave guardada que
+no empieza por un recurso conocido invalida todo el archivo, `config` incluido, hasta que se elimina del archivo.
 
 **La clave más específica que establezcas gana**: con el ejemplo anterior, se permite `messages.send` y se rechaza cualquier otro cambio en los mensajes. No hay comodín: `messages: readonly` no toca a `reactions`, `polls` o `chats`.
 
@@ -146,7 +147,8 @@ Las claves de distintas secciones del archivo se suman, pero **decide primero la
 
 Funciona en ambos sentidos: `messages: allow` en un perfil también oculta `messages.delete: deny` de `defaults`, y eliminar vuelve a pedir confirmación, como por defecto.
 
-`inbox`, `review`, `watch`, `serve` y `messages sync`, `export` y `search` muestran mensajes, por lo que cuentan como `messages`: `messages: deny` también los bloquea. `config`, `session`, `doctor`, `recipients`, `mcp` y el mantenimiento del archivo local nunca se restringen. Una clave queda fuera de las rutas de comandos: `mcp.authority` (`deny` por defecto) decide si el servidor MCP puede ejecutar comandos que cambian lo que podrá hacer una ejecución posterior; esos comandos siguen visibles con su disponibilidad actual ([permisos](./permissions.md#let-an-agent-change-its-own-limits)).
+`inbox`, `review`, `watch`, `serve`, `export` y `search` muestran mensajes, por lo que cuentan como `messages`:
+`messages: deny` también los bloquea, igual que bloquea `messages.sync`. `config`, `session`, `doctor`, `recipients`, `mcp` y el mantenimiento del archivo local nunca se restringen. Una clave queda fuera de las rutas de comandos: `mcp.authority` (`deny` por defecto) decide si el servidor MCP puede ejecutar comandos que cambian lo que podrá hacer una ejecución posterior; esos comandos siguen visibles con su disponibilidad actual ([permisos](./permissions.md#let-an-agent-change-its-own-limits)).
 
 **Los valores predeterminados permiten todo excepto algunos cambios que son difíciles de revertir.** Estos preguntan: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete` y `account.sessions.end`. Es posible que las reglas de respuesta no se envíen hasta que usted lo permita: `replies.send` es `deny`. Un valor predeterminado incorporado solo endurece: `messages: readonly` aún rechaza una eliminación, y `messages: allow` mantiene la pregunta antes de una eliminación hasta que usted configure `messages.delete`.
 
@@ -202,14 +204,16 @@ tg personal config unset sends_per_hour         # back to the default
 
 ## Los errores de escritura no se ignoran
 
-Un ajuste desconocido en el archivo detiene todos los comandos con código de salida `3`:
+Un ajuste desconocido en el archivo detiene todos los comandos salvo `config` y `doctor`, con código de salida `3`.
+El mensaje nombra el primer problema y el comando que lo elimina:
 
 ```text
-config.json is not a valid config:
-  profiles.default.limt: unknown setting — the known ones are limit, timeout_ms, …
+/home/alice/.config/tg-cli/config.json: setting limt is not a setting of tg — remove it with `tg work config unset limt`
 ```
 
-Si se ignorase un ajuste mal escrito, el programa usaría el valor predeterminado sin explicar por qué. Lo mismo se aplica a claves de `permissions` que no empiezan por un recurso.
+Si se ignorase un ajuste mal escrito, el programa usaría el valor predeterminado sin explicar por qué. Lo mismo se aplica a una clave de `permissions` que no nombra ningún comando, en cualquier sección del archivo.
+`tg personal doctor` enumera todos los problemas del archivo, cada uno con su `config unset`
+([diagnóstico](./diagnostics.md#check-the-installation-tg-personal-doctor)).
 
 ## A través de un proxy
 
@@ -252,7 +256,7 @@ La Bot API (`tg personal bot …`) y el registro de la aplicación de `session s
 | `TG_NO_UPDATE_CHECK` | `1` desactiva la línea diaria "Existe una versión más nueva" |
 | `NO_COLOR` | sin color en la vista de tabla |
 | `XDG_RUNTIME_DIR` | en Linux, cómo se llega al llavero; cron y ssh a menudo lo omiten |
-| `TG_EMBEDDING_*`, `TG_ANALYSIS_*`, `TG_MODELS_*` | configuración del modelo ([abajo](#model-environment-variables)) |
+| `TG_EMBEDDING_*`, `TG_MODELS_*` | configuración del modelo ([abajo](#model-environment-variables)) |
 
 ## Configuración temporal independiente
 
@@ -282,10 +286,9 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 | `speech_model` | ID del modelo descargado como una cadena | perfil |
 | `proxy` | URL de proxy compatible como una cadena | perfil |
 | `embedding_provider` | `local`, `openai` | perfil |
-| `embedding_model`, `analysis_model` | cadena no vacía, como máximo 200 caracteres | perfil |
-| `embedding_base_url`, `analysis_base_url` | URL HTTP(S) sin credenciales, consulta o fragmento | perfil |
+| `embedding_model` | cadena no vacía, como máximo 200 caracteres | perfil |
+| `embedding_base_url` | URL HTTP(S) sin credenciales, consulta o fragmento | perfil |
 | `embedding_dims` | entero 1–65,536 | perfil |
-| `analysis_provider` | `agent`, `openai`, `anthropic` | perfil |
 | `models` | objetos de propósito descritos a continuación | perfil |
 | `phone_countries` | códigos de país, separados por comas | archivo compartido, a través de `config set` |
 | `task_categories.<name>`, `account_groups.<name>` | una cadena, como arriba | archivo compartido, a través de `config set` |
@@ -310,15 +313,14 @@ La ausencia de proveedor o `off` desactiva las llamadas a modelos externos.
 | `models.<purpose>.base_url` | URL HTTP(S) sin credenciales, consulta ni fragmento | endpoint del proveedor |
 
 Para cada campo, el orden de prioridad es `TG_MODELS_<PURPOSE>_PROVIDER`, `_MODEL` o `_BASE_URL`,
-después el campo de propósito configurado más cercano, los campos antiguos `analysis*` explícitos para `analysis`
-y, por último, los campos de entorno y configuración de `models.default`. Los guiones del propósito
+después el campo de propósito configurado más cercano y, por último, los campos de entorno y configuración de `models.default`. Los guiones del propósito
 se convierten en guiones bajos en el nombre de su variable de entorno. Las credenciales no forman parte de este objeto.
 
 Las configuraciones de incrustación y análisis son independientes y pueden diferir según el perfil. Los puntos finales deben ser HTTP/S sin credenciales, consultas o fragmentos integrados. Los embeddings remotos también reciben el texto de consulta de las búsquedas de MCP. Las claves se configuran con `models keys set openai|anthropic` y permanecen fuera de `config.json`. El `conversations links rebuild` ordinario no inicia el análisis remoto: se requiere `--analyze` explícito.
 
 ### Variables de entorno de modelos
 
-Los campos heredados aceptan `TG_EMBEDDING_PROVIDER`, `TG_EMBEDDING_MODEL`, `TG_EMBEDDING_BASE_URL`, `TG_EMBEDDING_DIMS`, `TG_ANALYSIS_PROVIDER`, `TG_ANALYSIS_MODEL` y `TG_ANALYSIS_BASE_URL` antes de los valores de archivo; las opciones de comando los ganan. `TG_MODELS_DEFAULT_PROVIDER`, `TG_MODELS_DEFAULT_MODEL` y `TG_MODELS_DEFAULT_BASE_URL` proporcionan campos comunes en el nuevo formato; reemplace `DEFAULT` con un propósito, como `ANALYSIS`. Una variable vacía no anula una configuración. Los valores no válidos devuelven `configuration_error`.
+`TG_EMBEDDING_PROVIDER`, `TG_EMBEDDING_MODEL`, `TG_EMBEDDING_BASE_URL` y `TG_EMBEDDING_DIMS` prevalecen sobre los ajustes de embeddings del archivo; las opciones de comando los ganan. `TG_MODELS_DEFAULT_PROVIDER`, `TG_MODELS_DEFAULT_MODEL` y `TG_MODELS_DEFAULT_BASE_URL` proporcionan campos comunes de `models`; reemplace `DEFAULT` con un propósito, como `ANALYSIS`. Una variable vacía no anula una configuración. Los valores no válidos devuelven `configuration_error`.
 
 ## Siguiente paso
 

@@ -9,7 +9,6 @@ title: "Решение проблем"
 <a id="tg-session-start-требует-терминала" />
 <a id="mytelegramorg-сообщил-о-создании-приложения-но-его-нет" />
 <a id="результат-относится-к-другому-профилю" />
-<a id="ошибка-is-not-a-valid-config" />
 <a id="неверное-значение---limit" />
 <a id="неверное-время---after-time" />
 <a id="неверное-время---at-time" />
@@ -52,7 +51,7 @@ title: "Решение проблем"
 |---|---|---|---|
 | `1` | `internal_error` | сбой самого `tg` | [сообщить](#report-a-problem) |
 | `2` | `validation_error` | опечатка в команде или опции, значение или сочетание параметров, которое `tg` не принимает; имя, совпадающее с несколькими чатами | [неизвестная команда](#unknown-command-), [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |
-| `3` | `configuration_error` | ошибка `config.json`, прокси отказал или недоступен, либо база новее `tg` | [настройки](#-is-not-a-valid-config), [прокси](#the-proxy--cannot-be-reached-or--refused), [база](#the-message-store-was-written-by-a-newer-version-) |
+| `3` | `configuration_error` | ошибка `config.json`, прокси отказал или недоступен, либо база новее `tg` | [настройки](#-is-not-a-setting-of-tg), [прокси](#the-proxy--cannot-be-reached-or--refused), [база](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | нет входа, сессия завершена или хранилище ключей недоступно | [нет сессии](#no-session-for-profile-personal--run-tg-personal-setup-in-a-local-terminal) |
 | `5` | `permission_error` | отказ `permissions` профиля или Telegram | [разрешения](#profile--does-not-let--write-or-profile--denies-), [Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
 | `6` | `not_found` | чат, сообщение или человек не найден; база пустая | [чат](#no-chat-matches-), [база](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
@@ -110,7 +109,7 @@ tg personal chats list         # the profile named in the message
 export TG_PROFILE=personal     # or for the whole shell session
 ```
 
-На компьютере, где ещё нет ни одного профиля, сообщение предлагает выполнить `tg personal setup`; вместо `personal` подойдёт любое имя. Если в сообщении сказано `default_profile is no longer read` (код выхода `2`), в файле настроек осталась эта настройка от старой версии `tg`: назовите профиль, а `tg config unset default_profile` уберёт настройку.
+На компьютере, где ещё нет ни одного профиля, сообщение предлагает выполнить `tg personal setup`; вместо `personal` подойдёт любое имя.
 
 ### "нет сессии для профиля "personal" — запустите `tg personal setup` в локальном терминале"
 
@@ -173,9 +172,12 @@ tg chat list
 
 ## Настройки и значения опций
 
-### «… недопустимая конфигурация»
+### «… не является настройкой tg»
 
-Код выхода `3`. `config.json` имеет настройку, которую `tg` не знает, или значение неправильного типа. В ошибке указывается параметр и профиль, в котором он находится. Это намеренный отказ: молчаливо игнорируемая настройка стоит полдня. Исправьте вручную или удалите с помощью `tg personal config unset <setting>` ([опечатка — ошибка](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
+Код выхода `3`. В `config.json` есть настройка, которую `tg` не знает, значение неправильного типа, или файл не является
+корректным JSON. Ошибка называет первую проблему и, если JSON не сломан, команду `config unset`, которая её
+убирает; выполните эту команду как есть. Это намеренный отказ: молчаливо пропущенная настройка стоит полдня.
+`tg personal doctor` перечисляет все проблемы в файле ([опечатка — ошибка](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
 
 ### "--limit принимает целое число от 1 и выше"
 

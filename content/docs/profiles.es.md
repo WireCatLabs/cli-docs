@@ -17,8 +17,7 @@ drive personal config show
 Indica el perfil en cada comando y petición al agente: `tg work …`, o `TG_PROFILE=work` para toda
 una sesión (`tg` lee `TG_PROFILE` y `max` lee `MAX_PROFILE`; `zm` usa el ajuste `account.profile`; `memo` y `drive` no leen ninguna variable de perfil, así que indica el perfil en el comando). Nunca se elige un perfil por ti. Un
 comando que necesita perfil y no lo indica se detiene con un error que lista los perfiles de este
-ordenador. Un `default_profile` que dejó una versión anterior en el archivo de ajustes también
-detiene el comando; `tg config unset default_profile` lo quita. `profiles.work` se aplica a ese
+ordenador. `profiles.work` se aplica a ese
 perfil y `defaults` aporta valores ausentes. Un perfil no es otro usuario del SO: un agente con acceso
 completo a archivos puede acceder a otros datos del mismo ordenador.
 

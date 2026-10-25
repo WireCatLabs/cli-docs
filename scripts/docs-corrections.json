@@ -1111,31 +1111,6 @@
   {
     "tool": "tg",
     "slug": "search",
-    "reason": "TG removed its mail search; say how mail is refused without naming the removed command.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`tg personal search mail` answers \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\", and\n`search all --only mail` is refused the same way.",
-          "after": "`search all --only mail` is refused with \"mail is memo's: install @wirecat/cli-memo, then\n`memo search mail …`\"."
-        }
-      ],
-      "ru": [
-        {
-          "before": "`tg personal search mail` отвечает \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\", а `search all --only mail` отклоняется так же.",
-          "after": "`search all --only mail` отклоняется с ответом \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\"."
-        }
-      ],
-      "es": [
-        {
-          "before": "`tg personal search mail` responde \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\", y `search all --only mail` se rechaza igual.",
-          "after": "`search all --only mail` se rechaza con \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\"."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "search",
     "reason": "Core 0.285.0 removed mail search from TG; the released guide opening still promises mail alongside notes. Keep the opening consistent with the supported search sources.",
     "replacements": {
       "en": [
@@ -1809,56 +1784,6 @@
   },
   {
     "tool": "tg",
-    "slug": "configuration-reference",
-    "reason": "Use the complete canonical conversations command in the analysis option column.",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/configuration-reference.md",
-    "replacements": {
-      "en": [
-        {
-          "before": "`build --analysis-provider`",
-          "after": "`conversations links rebuild --analysis-provider`"
-        },
-        {
-          "before": "`build --model`",
-          "after": "`conversations links rebuild --model`"
-        },
-        {
-          "before": "`build --base-url`",
-          "after": "`conversations links rebuild --base-url`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`build --analysis-provider`",
-          "after": "`conversations links rebuild --analysis-provider`"
-        },
-        {
-          "before": "`build --model`",
-          "after": "`conversations links rebuild --model`"
-        },
-        {
-          "before": "`build --base-url`",
-          "after": "`conversations links rebuild --base-url`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`build --analysis-provider`",
-          "after": "`conversations links rebuild --analysis-provider`"
-        },
-        {
-          "before": "`build --model`",
-          "after": "`conversations links rebuild --model`"
-        },
-        {
-          "before": "`build --base-url`",
-          "after": "`conversations links rebuild --base-url`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "mcp",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
     "reason": "The server has three dispatcher tools and excludes some commands; describe catalogue coverage without claiming one MCP tool per command.",
@@ -1879,67 +1804,6 @@
         {
           "before": "Cada comando es una herramienta, incluidos los de escritura; los permisos del perfil limitan lo que el agente puede\nejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto.",
           "after": "El catálogo incluye comandos de lectura y escritura, sujetos a los permisos del perfil y a las exclusiones siguientes. El acceso de solo lectura se configura mediante esos permisos."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "mcp",
-    "reason": "tg 0.90.0/Core 0.412.0 (unchanged since 0.88.0/Core 0.408.0): toolsFromCommands drops every command with a lifetime (setup, watch, serve, bot watch) though the contract marks only mcp:false ones; the contract has no chats delete or clear command; bot messages sync has no ask-by-default key of its own (commands info reports permission bot.messages, absent from DEFAULT_PERMISSIONS); upgradeCommand is wrapped in grantsAuthority (upgrade --check exempt), so it belongs with the authority-gated commands.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`session start|end`, `complete`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. An agent call cannot use them, or they need you at the keyboard.",
-          "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. An agent call cannot use them, or they need you at the keyboard.\n- **Long-running**: `watch`, `serve` and `bot watch` run until stopped, and an agent call must return."
-        },
-        {
-          "before": "`doctor reports create`, `account sessions end`, `chats delete|clear` and\n`bot messages sync`",
-          "after": "`doctor reports create` and `account sessions end`"
-        },
-        {
-          "before": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`.",
-          "after": "`tg commands --json` marks commands excluded from MCP as\n`mcp: false`, and long-running ones with a `lifetime`."
-        },
-        {
-          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
-          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`session start|end`, `complete`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.",
-          "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.\n- **Долгие процессы**: `watch`, `serve` и `bot watch` работают до остановки, а вызов агента должен завершиться."
-        },
-        {
-          "before": "`doctor reports create`, `account sessions end`, `chats delete|clear` и\n`bot messages sync`",
-          "after": "`doctor reports create` и `account sessions end`"
-        },
-        {
-          "before": "исключённые команды отмечены\nкак `mcp: false`.",
-          "after": "исключённые команды отмечены\nкак `mcp: false`, а долгие процессы — полем `lifetime`."
-        },
-        {
-          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
-          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
-        }
-      ],
-      "es": [
-        {
-          "before": "`session start|end`, `complete`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.",
-          "after": "`session start|end`, `complete`, `setup`, `mcp config|add|check`,\n  `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.\n- **Procesos largos**: `watch`, `serve` y `bot watch` siguen hasta que los detienes, y una llamada del agente debe terminar."
-        },
-        {
-          "before": "`doctor reports create`, `account sessions end`, `chats delete|clear` y\n`bot messages sync`",
-          "after": "`doctor reports create` y `account sessions end`"
-        },
-        {
-          "before": "marca los comandos excluidos con\n`mcp: false`.",
-          "after": "marca los comandos excluidos con\n`mcp: false`, y los procesos largos con `lifetime`."
-        },
-        {
-          "before": "`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,",
-          "after": "`schedule command|agent|remove`, `server install|uninstall`, `upgrade`, `skill install`, `attachments jobs install|uninstall`,"
         }
       ]
     }
@@ -2081,31 +1945,6 @@
         {
           "before": "An assistant that can edit configuration files",
           "after": "An AI agent that can edit configuration files"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "roadmap",
-    "reason": "tg 0.88.0 changelog and command contract ship messages press, chats start and chats app; the native roadmap still lists them as max parity work.",
-    "replacements": {
-      "en": [
-        {
-          "before": "deleting or clearing a chat for yourself, a group photo, pressing a bot's buttons, starting a bot and\n  opening its mini app.",
-          "after": "deleting or clearing a chat for yourself and a group photo."
-        }
-      ],
-      "ru": [
-        {
-          "before": "удаление или очистка чата для себя, групповое фото, нажатие кнопок бота, запуск бота и открытие его мини-приложения.",
-          "after": "удаление или очистка чата для себя и групповое фото."
-        }
-      ],
-      "es": [
-        {
-          "before": "eliminar o borrar un chat para usted mismo, una foto de grupo, presionar los botones de un bot, iniciar un bot y abrir su mini aplicación.",
-          "after": "eliminar o borrar un chat para usted mismo y una foto de grupo."
         }
       ]
     }

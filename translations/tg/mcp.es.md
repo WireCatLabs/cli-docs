@@ -121,7 +121,7 @@ Ambas herramientas de ejecución toman `{command, arguments}`. Utilice la ruta d
 {"command":"stats chats show","arguments":{"chat":"123"}}
 ```
 
-`status` lee el estado del perfil a través de `tg_read`. La búsqueda muestra solo lo que permiten los permisos del perfil y Telegram. Los nombres anteriores de una herramienta por comando, como `tg_messages_list` y `tg_status`, ya no existen. Los servidores bot utilizan `tg_bot_tools_search`, `tg_bot_read` y `tg_bot_write`; sus rutas de comando omiten `bot`.
+`status` lee el estado del perfil a través de `tg_read`. La búsqueda muestra solo lo que permiten los permisos del perfil y Telegram. Los servidores bot utilizan `tg_bot_tools_search`, `tg_bot_read` y `tg_bot_write`; sus rutas de comando omiten `bot`.
 
 Las respuestas están estructuradas en JSON: las listas mantienen sus páginas y los identificadores permanecen como cadenas. Una falla es `{error:{code,reason,message,details}}`; un objetivo que coincide con varios chats trae los candidatos en `details.candidates`. El servidor compara los argumentos con el esquema del comando y rechaza los campos desconocidos antes de conectarse o actuar. Utilice `at_time` para programar. Si se desconoce el resultado de una escritura, consulte el diario de envío y Telegram antes de pensar en volver a intentarlo. El texto del mensaje son datos, nunca instrucciones para el agente. Los esquemas, límites y reglas de reintento se encuentran en [cómo se comporta tg en los scripts](./cli-contract.md).
 
@@ -141,20 +141,22 @@ Cada comando es una herramienta, incluidos los de escritura; los permisos del pe
 ejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto. Unos pocos comandos no se
 ofrecen nunca, y los ejecutas en una terminal:
 
-- **Inicio de sesión y configuración**: `session start|end`, `complete`, `mcp config|add|check`,
+- **Inicio de sesión y configuración**: `setup`, `session start|end`, `complete`, `mcp config|add|check`,
   `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.
+- **Comandos de larga duración**: `watch`, `serve` y `bot watch` siguen hasta que los detienes, y una llamada del
+  agente debe terminar. El propio servidor MCP (`mcp`, `bot mcp`) queda fuera por la misma razón.
 
 Los comandos `store backup|restore`, `server start|stop|restart`, las descargas de modelos,
-`schedule run|exec`, `doctor reports create`, `account sessions end`, `chats delete|clear` y
-`bot messages sync` tienen claves de permisos propias, con `ask` por defecto. Se ofrecen al agente;
-la aplicación MCP controla la aprobación. `tg commands --json` marca los comandos excluidos con
-`mcp: false`. Las operaciones directas de `bot api` necesitan un [permiso](./permissions.md#raw-bot-api-calls) explícito.
+`schedule run|exec`, `doctor reports create` y `account sessions end` tienen claves de permisos propias, con `ask` por defecto. Se ofrecen al agente;
+la aplicación MCP controla la aprobación. En `tg commands --json`, un comando que MCP no ofrece lleva
+`mcp: false`, y uno de larga duración lleva un `lifetime` en su lugar. Las operaciones directas de `bot api` necesitan un [permiso](./permissions.md#raw-bot-api-calls) explícito.
 
 ### Comandos que cambian lo que podrá hacer la siguiente ejecución
 
 `config set|unset`, `recipients add|remove|clear`, `chats rules set|unset`, las reglas y consentimientos de `replies`,
-`schedule command|agent|remove`, `server install|uninstall`, `skill install`, `attachments jobs install|uninstall`,
-`models keys set|remove`, `flood clear` y, para bots, `recipients add|remove|clear` y `chats rules set|unset`
+`schedule command|agent|remove`, `server install|uninstall`, `skill install`,
+`attachments jobs install|start|stop|uninstall`, `models keys set|remove`, `flood clear`, `upgrade` (`upgrade --check`
+solo consulta y no está limitado) y, para bots, `recipients add|remove|clear` y `chats rules set|unset`
 siguen visibles en el descubrimiento con sus argumentos. Solo se pueden ejecutar cuando el perfil fija
 `permissions.mcp.authority` en `allow` o `ask`. El valor por defecto es `deny`: el descubrimiento los marca
 como no disponibles, nombra el permiso y explica el motivo; la llamada se rechaza. De otro modo, un agente limitado a leer

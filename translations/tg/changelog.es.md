@@ -4,6 +4,41 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.92.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **Los permisos se comprueban con la clave completa de cada comando (cli-core 0.421.0).** `messages sync` se comprueba como `messages.sync` y `bot messages sync` como `bot.messages.sync`; un nivel en `messages` o `bot.messages` sigue aplicándose a ellos. Una clave guardada se lee solo tal como está escrita, así que `chats.mute` ya no cubre `chats unmute`.
+- **Una clave de permiso guardada que no nombra ningún comando se rechaza, también para los comandos del bot.** Con una clave bajo un recurso conocido, todos los comandos salvo `config show`, `set` y `unset` se detienen con un `configuration_error` que nombra la clave y el `config unset` que la elimina.
+- **`tg <profile> search mail` es un comando desconocido.** El correo se busca con `memo search mail`.
+- **`doctor --json` informa de los problemas del archivo de configuración en `config.issues` (cli-core 0.423.0).** `config.error` desaparece. Cada problema tiene un `kind` (`invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` o `invalid_value`), el `file`, el `profile` y la `key` cuando corresponden, `line` y `column` para el JSON no válido, una frase que dice qué tiene que ser el valor (nunca el valor) y `fix`, el comando `config unset` que lo elimina. `doctor` enumera todos los problemas del archivo, sigue saliendo con 0 y sigue respondiendo cuando el JSON está roto. Un bloqueo de perfil, una opción o una variable de entorno que los ajustes rechazan se informa en `settings.error`.
+- **`default_profile`, `analysis_provider`, `analysis_model` y `analysis_base_url` son ajustes desconocidos, y `TG_ANALYSIS_PROVIDER`, `TG_ANALYSIS_MODEL` y `TG_ANALYSIS_BASE_URL` no se leen.** Un archivo que tenga uno se rechaza como cualquier ajuste desconocido, con el `config unset` que lo elimina. El análisis se configura con `models.analysis.provider`, `models.analysis.model` y `models.analysis.base_url` (`TG_MODELS_ANALYSIS_*`); `--model` y `--base-url` de `conversations links rebuild` los sobrescriben.
+- **Un comando rechazado por un problema en el archivo de configuración nombra el primer problema y el comando que lo elimina**, y dice cuántos más enumera `doctor`. `config show`, `set` y `unset` funcionan con ese archivo, y `config unset` elimina un ajuste que ningún esquema conoce. Una clave de permiso desconocida se rechaza en cualquier sección del archivo, no solo en las que lee el comando.
+- **`config set` guarda `config.json` legible solo por ti (`0600`) (cli-core 0.428.0, cli-base 0.57.0).** Antes reescribía el archivo como `0644`. Lo que lea la configuración como otro usuario —un servicio de todo el sistema, un contenedor con otro uid— ya no podrá leerla tras el siguiente guardado; ejecútalo como el propietario o dale su propia configuración.
+- **El registro de una ejecución dice cómo empezó y por qué falló (cli-core 0.425.0).** `run.json`, `runs list`, `runs show` y `search runs` añaden `cli_command` (el comando completo, `tg messages list`), `argv` con cada valor que puede ser contenido escrito como `[redacted]`, `agent` (el agente de programación y su sesión, cuando los da) y, para una ejecución fallida, `error`. Una ejecución sin perfil nombrado omite `profile` en lugar de registrar `default` (cli-core 0.424.0).
+- **La primera pantalla dice que zm y drive se pueden «buscar junto con tus otros datos de WireCat»** (cli-core 0.426.0), y el ejemplo de `guide` nombra un escenario real en lugar de `<name>`.
+
+### Added
+
+- **`tg skill status` y `tg skill show --for claude|agents`** (cli-base 0.56.0, a través de cli-core 0.427.0). `skill status` dice, para Claude Code y para `~/.agents`, si el SKILL.md instalado coincide con esta versión; `skill show --for` imprime la copia instalada allí.
+- **`tg store tables list` enumera todas las tablas del archivo local** con su tipo y sus filas; `--full` añade el tamaño de cada tabla (cli-core 0.427.0). `store info` también dice qué herramientas abrieron el almacén, su modo de diario, páginas, migraciones y última copia de seguridad, y cuenta por proveedor, tipo de chat, cuenta, año y tipo de adjunto.
+
+### Security
+
+- **`doctor` informa de un `config.json` o una carpeta de configuración que otros usuarios pueden leer, con el `chmod` que lo soluciona (cli-core 0.428.0).** `files.problems` enumera el archivo de configuración (necesita `0600`) y su carpeta (necesita `0700`), también cuando `TG_CONFIG_DIR` nombra la carpeta, y stderr imprime `to make it private: chmod 600 '<path>'`. `files` aparece en la respuesta también sin perfil nombrado y cuando se rechazan los ajustes. No se cambia nada en el disco; Windows no se comprueba.
+
+### Fixed
+
+- **Todos los comandos arrancan más rápido: la biblioteca cliente de Telegram se carga solo cuando un comando se conecta.** `tg --version`, `--help`, `config show` y `runs list` cargaban unos 1.900 archivos de módulos, 650 de ellos de mtcute; ahora unos 1.100.
+- **Una denegación guardada en un comando de sincronización ahora lo detiene.** `permissions.messages.sync: deny` se puede guardar y se respeta, y `permissions.bot.messages.sync: deny` ya no se ignora. Un `bot.messages` denegado también detiene `bot messages list` y `bot messages sync` antes de conectarse.
+- **Un fallo a mitad de un comando se informa como cualquier otro error.** Antes imprimía la traza de pila de Node; ahora imprime el error `internal_error` (`command.crashed`) —una línea en una terminal, el objeto de error JSON en otro caso— y sigue saliendo con 1. Una traza de pila no le dice a un script nada que pueda usar, y puede llevar texto que no debería llegar a la pantalla. Un script que leía la traza en stderr lee ahora el objeto de error.
+
+## 0.91.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **El almacén compartido pasa a la versión 33 (cli-core 0.420.0).** Una vez que esta versión abre el almacén, una CLI con un cli-core más antiguo lo rechaza y pide actualizarse, así que actualiza a la vez todas las CLI de WireCat que comparten el almacén.
+
 ## 0.90.0 — 25.10.2026
 
 ### Changed — may break callers
