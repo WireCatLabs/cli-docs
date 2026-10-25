@@ -491,24 +491,24 @@
   {
     "tool": "tg",
     "slug": "people",
-    "reason": "Owner approved replacing verdict-like account labels with signals/limits while retaining original heading anchors.",
+    "reason": "Owner approved replacing verdict-like account labels with signals/limits.",
     "replacements": {
       "en": [
         {
           "before": "## Bot, fake or spammer: `contacts check`",
-          "after": "<a id=\"bot-fake-or-spammer-contacts-check\" />\n\n## Check account signals and their limits: `contacts check`"
+          "after": "## Check account signals and their limits: `contacts check`"
         }
       ],
       "ru": [
         {
           "before": "## Бот, поддельный аккаунт или спамер: `contacts check`",
-          "after": "<a id=\"бот-поддельный-аккаунт-или-спамер-contacts-check\" />\n\n## Проверить признаки аккаунта и их ограничения: `contacts check`"
+          "after": "## Проверить признаки аккаунта и их ограничения: `contacts check`"
         }
       ],
       "es": [
         {
           "before": "## Bot, cuenta falsa o spammer: `contacts check`",
-          "after": "<a id=\"bot-cuenta-falsa-o-spammer-contacts-check\" />\n\n## Comprobar señales de la cuenta y sus límites: `contacts check`"
+          "after": "## Comprobar señales de la cuenta y sus límites: `contacts check`"
         }
       ]
     }
@@ -516,24 +516,24 @@
   {
     "tool": "max",
     "slug": "people",
-    "reason": "Owner approved replacing verdict-like account labels with signals/limits while retaining original heading anchors.",
+    "reason": "Owner approved replacing verdict-like account labels with signals/limits.",
     "replacements": {
       "en": [
         {
           "before": "## Bot, fake account or spammer: `contacts check`",
-          "after": "<a id=\"bot-fake-account-or-spammer-contacts-check\" />\n\n## Check account signals and their limits: `contacts check`"
+          "after": "## Check account signals and their limits: `contacts check`"
         }
       ],
       "ru": [
         {
           "before": "## Бот, фейк или спамер: `contacts check`",
-          "after": "<a id=\"бот-фейк-или-спамер-contacts-check\" />\n\n## Проверить признаки аккаунта и их ограничения: `contacts check`"
+          "after": "## Проверить признаки аккаунта и их ограничения: `contacts check`"
         }
       ],
       "es": [
         {
           "before": "## Bot, cuenta falsa o spam: `contacts check`",
-          "after": "<a id=\"bot-cuenta-falsa-o-spam-contacts-check\" />\n\n## Comprobar señales de la cuenta y sus límites: `contacts check`"
+          "after": "## Comprobar señales de la cuenta y sus límites: `contacts check`"
         }
       ]
     }
@@ -643,177 +643,6 @@
         {
           "before": "`chats requests confirm|reject <чат> --all` responde",
           "after": "`chats requests confirm|reject <chat> --all` responde"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "commands",
-    "reason": "`tg messages search`, `tg conversations search`, `tg topics search` and `tg bot messages search` were replaced by `tg search messages`, `tg search conversations`, `tg search topics` and `tg bot search messages`, and `tg store fetch` was renamed `tg messages sync` (0.52.0). Keep the published anchors of the removed commands pointing at their replacements so existing links still land on the right entry.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n### `tg search messages`\n",
-          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
-        },
-        {
-          "before": "\n### `tg search conversations`\n",
-          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
-        },
-        {
-          "before": "\n### `tg search topics`\n",
-          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
-        },
-        {
-          "before": "\n#### `tg bot search messages`\n",
-          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
-        },
-        {
-          "before": "\n### `tg messages sync`\n",
-          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n### `tg search messages`\n",
-          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
-        },
-        {
-          "before": "\n### `tg search conversations`\n",
-          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
-        },
-        {
-          "before": "\n### `tg search topics`\n",
-          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
-        },
-        {
-          "before": "\n#### `tg bot search messages`\n",
-          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
-        },
-        {
-          "before": "\n### `tg messages sync`\n",
-          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n### `tg search messages`\n",
-          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
-        },
-        {
-          "before": "\n### `tg search conversations`\n",
-          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
-        },
-        {
-          "before": "\n### `tg search topics`\n",
-          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
-        },
-        {
-          "before": "\n#### `tg bot search messages`\n",
-          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
-        },
-        {
-          "before": "\n### `tg messages sync`\n",
-          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "troubleshooting",
-    "reason": "The search command was renamed to search messages, which changed this heading's anchor; keep the old anchor so existing links still land here.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n### `search messages` doesn't find anything\n",
-          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` doesn't find anything\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n### `search messages` ничего не находит\n",
-          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` ничего не находит\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n### `search messages` no encuentra nada\n",
-          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` no encuentra nada\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "commands",
-    "reason": "`max messages search`, `max conversations search` and `max bot messages search` were replaced by `max search messages`, `max search conversations` and `max bot search messages`. Keep the old anchors so existing links land on the replacement. In 0.55.0 `max tasks similar` became `max tasks related` and `max tasks duplicates unsure` became `max tasks duplicates defer`; their old anchors are kept the same way.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n### `max search messages`\n",
-          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
-        },
-        {
-          "before": "\n### `max search conversations`\n",
-          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
-        },
-        {
-          "before": "\n#### `max bot search messages`\n",
-          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
-        },
-        {
-          "before": "\n### `max tasks related`\n",
-          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
-        },
-        {
-          "before": "\n#### `max tasks duplicates defer`\n",
-          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n### `max search messages`\n",
-          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
-        },
-        {
-          "before": "\n### `max search conversations`\n",
-          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
-        },
-        {
-          "before": "\n#### `max bot search messages`\n",
-          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
-        },
-        {
-          "before": "\n### `max tasks related`\n",
-          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
-        },
-        {
-          "before": "\n#### `max tasks duplicates defer`\n",
-          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n### `max search messages`\n",
-          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
-        },
-        {
-          "before": "\n### `max search conversations`\n",
-          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
-        },
-        {
-          "before": "\n#### `max bot search messages`\n",
-          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
-        },
-        {
-          "before": "\n### `max tasks related`\n",
-          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
-        },
-        {
-          "before": "\n#### `max tasks duplicates defer`\n",
-          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
         }
       ]
     }
@@ -988,31 +817,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "troubleshooting",
-    "reason": "Keep incoming pre-rename search troubleshooting hashes after the source moved this entry under a broader help section.",
-    "replacements": {
-      "en": [
-        {
-          "before": "### `search messages` finds nothing",
-          "after": "<a id=\"messages-search-finds-nothing\" />\n\n### `search messages` finds nothing"
-        }
-      ],
-      "ru": [
-        {
-          "before": "### `search messages` ничего не находит",
-          "after": "<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` ничего не находит"
-        }
-      ],
-      "es": [
-        {
-          "before": "### `search messages` no encuentra nada",
-          "after": "<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-no-encuentra-nada\" />\n\n### `search messages` no encuentra nada"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "usage",
     "reason": "Released scheduled tests confirm outcome_unknown with no automatic retry; remove obsolete deduplication research caveat.",
@@ -1021,227 +825,6 @@
         {
           "before": " No se ha probado si MAX colapsa la repetición diferida.",
           "after": ""
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "archive",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"The local store\"\n---\n\n",
-          "after": "---\ntitle: \"The local store\"\n---\n\n<a id=\"tester-only-reply-rules\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "cli-contract",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"How tg behaves in scripts\"\n---\n\n",
-          "after": "---\ntitle: \"How tg behaves in scripts\"\n---\n\n<a id=\"headless-execution-and-limits\" />\n\n<a id=\"compact-results-and-discovery\" />\n\n<a id=\"previews-and-retry-safety\" />\n\n<a id=\"how-agent-behavior-is-checked\" />\n\n<a id=\"references\" />\n\n<a id=\"ambiguous-names\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "compare",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Compared with other tools\"\n---\n\n",
-          "after": "---\ntitle: \"Compared with other tools\"\n---\n\n<a id=\"login-profiles-and-the-background-service\" />\n\n<a id=\"reading-and-searching\" />\n\n<a id=\"sending\" />\n\n<a id=\"groups-and-folders\" />\n\n<a id=\"your-own-notes-on-chats-and-people\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "configuration",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Configuration\"\n---\n\n",
-          "after": "---\ntitle: \"Configuration\"\n---\n\n<a id=\"the-file\" />\n\n<a id=\"a-small-configuration\" />\n\n<a id=\"what-can-i-configure\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "diagnostics",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Diagnostics: what a command did\"\n---\n\n",
-          "after": "---\ntitle: \"Diagnostics: what a command did\"\n---\n\n<a id=\"command-discovery-for-scripts\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "people",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"People\"\n---\n\n",
-          "after": "---\ntitle: \"People\"\n---\n\n<a id=\"for-agents\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "query-language",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Search query language\"\n---\n\n",
-          "after": "---\ntitle: \"Search query language\"\n---\n\n<a id=\"in-mcp\" />\n\n<a id=\"the-older-modes\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "remote",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"ChatGPT, Codex or Claude in the browser\"\n---\n\n",
-          "after": "---\ntitle: \"ChatGPT, Codex or Claude in the browser\"\n---\n\n<a id=\"check-a-connection\" />\n\n<a id=\"mcp-and-host-capabilities\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "search",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Search\"\n---\n\n",
-          "after": "---\ntitle: \"Search\"\n---\n\n<a id=\"for-scripts-and-agents\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "topic-search",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Topic search\"\n---\n\n",
-          "after": "---\ntitle: \"Topic search\"\n---\n\n<a id=\"what-a-conversation-is\" />\n\n<a id=\"build-embed-search\" />\n\n<a id=\"read-what-was-found\" />\n\n<a id=\"keeping-it-current\" />\n\n<a id=\"for-agents\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Using tg\"\n---\n\n",
-          "after": "---\ntitle: \"Using tg\"\n---\n\n<a id=\"a-persons-profile\" />\n\n<a id=\"is-this-account-a-bot\" />\n\n<a id=\"local-person-context\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "cli-contract",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Как max ведёт себя в скриптах\"\n---\n\n",
-          "after": "---\ntitle: \"Как max ведёт себя в скриптах\"\n---\n\n<a id=\"запуск-без-вопросов-и-ограничения\" />\n\n<a id=\"узкий-результат-и-описание-команды\" />\n\n<a id=\"предпросмотр-и-повтор-записи\" />\n\n<a id=\"как-проверяют-работу-агента\" />\n\n<a id=\"неоднозначные-имена\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "configuration-reference",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Справочник настроек\"\n---\n\n",
-          "after": "---\ntitle: \"Справочник настроек\"\n---\n\n<a id=\"порядок-в-котором-решается-настройка\" />\n\n<a id=\"посмотреть-что-получилось\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "configuration",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Настройки\"\n---\n\n",
-          "after": "---\ntitle: \"Настройки\"\n---\n\n<a id=\"файл\" />\n\n<a id=\"короткий-пример\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "diagnostics",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Диагностика: что команда делала\"\n---\n\n",
-          "after": "---\ntitle: \"Диагностика: что команда делала\"\n---\n\n<a id=\"показать\" />\n\n<a id=\"сохранить\" />\n\n<a id=\"что-можно-с-этим-делать\" />\n\n<a id=\"справочник-для-скриптов\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "external-models",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Внешние модели: настройка API\"\n---\n\n",
-          "after": "---\ntitle: \"Внешние модели: настройка API\"\n---\n\n<a id=\"какие-задачи-используют-api\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "mcp",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"MCP-сервер\"\n---\n\n",
-          "after": "---\ntitle: \"MCP-сервер\"\n---\n\n<a id=\"права-профиля-управляют-инструментами\" />\n\n"
         }
       ]
     }
@@ -1267,97 +850,6 @@
         {
           "before": "| `max_write` | Ejecutar el comando de escritura encontrado; no aparece si el perfil no permite ninguno |",
           "after": "| `max_write` | Ejecutar el comando de escritura encontrado; un comando que el perfil bloquea aparece como no disponible y se rechaza al llamarlo |"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "people",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Человек: профиль, сообщения, проверка на бота\"\n---\n\n",
-          "after": "---\ntitle: \"Человек: профиль, сообщения, проверка на бота\"\n---\n\n<a id=\"для-агентов\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "query-language",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Язык поисковых запросов\"\n---\n\n",
-          "after": "---\ntitle: \"Язык поисковых запросов\"\n---\n\n<a id=\"в-mcp\" />\n\n<a id=\"прежние-режимы\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "search",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Поиск\"\n---\n\n",
-          "after": "---\ntitle: \"Поиск\"\n---\n\n<a id=\"для-скриптов-и-агентов\" />\n\n<a id=\"подготовка-файлов-и-архива\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "sessions",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Вход, сессии и профили\"\n---\n\n",
-          "after": "---\ntitle: \"Вход, сессии и профили\"\n---\n\n<a id=\"откуда-берётся-токен\" />\n\n<a id=\"проверить-и-забыть\" />\n\n<a id=\"если-ключницы-нет\" />\n\n<a id=\"сколько-живёт-токен\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "topic-search",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Поиск по темам\"\n---\n\n",
-          "after": "---\ntitle: \"Поиск по темам\"\n---\n\n<a id=\"что-такое-разговор\" />\n\n<a id=\"построить-посчитать-векторы-искать\" />\n\n<a id=\"для-агентов\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "troubleshooting",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Когда не работает\"\n---\n\n",
-          "after": "---\ntitle: \"Когда не работает\"\n---\n\n<a id=\"проверка-со-входом-в-max\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "usage",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Личный аккаунт: как пользоваться\"\n---\n\n",
-          "after": "---\ntitle: \"Личный аккаунт: как пользоваться\"\n---\n\n<a id=\"ответ-и-реакция\" />\n\n<a id=\"правка-пересылка-закрепление\" />\n\n<a id=\"опросы\" />\n\n<a id=\"локальная-копия-и-новые-сообщения\" />\n\n<a id=\"настройки\" />\n\n<a id=\"человек\" />\n\n"
         }
       ]
     }
@@ -1440,20 +932,6 @@
         {
           "before": "\n## La aplicación de my.telegram.org\n",
           "after": "\n## La aplicación de my.telegram.org\n\n> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del CLI por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "troubleshooting",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/troubleshooting.md",
-    "reason": "Preserve the incoming native heading anchor after the npm package rename.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "### `npx @wirecat/max-cli` ставит не ту версию",
-          "after": "<a id=\"npx-leemourmax-cli-ставит-не-ту-версию\" />\n\n### `npx @wirecat/max-cli` ставит не ту версию"
         }
       ]
     }
@@ -1632,112 +1110,25 @@
   },
   {
     "tool": "tg",
-    "slug": "query-language",
-    "reason": "Preserve incoming anchors removed by the single-query-language and permissions-only settings cleanup in TG 0.57.0.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## What it can do",
-          "after": "<a id=\"a-javascript-regular-expression---regex\" />\n\n## What it can do"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Что можно выразить",
-          "after": "<a id=\"регулярное-выражение-javascript---regex\" />\n\n## Что можно выразить"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Qué puede hacer",
-          "after": "<a id=\"una-expresión-regular-de-javascript---regex\" />\n\n## Qué puede hacer"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "configuration-reference",
-    "reason": "Preserve incoming anchors removed by the single-query-language and permissions-only settings cleanup in TG 0.57.0.",
-    "replacements": {
-      "en": [
-        {
-          "before": "### Older settings",
-          "after": "<a id=\"older-settings-that-still-work\" />\n\n<a id=\"migrating-legacy-access-settings\" />\n\n### Older settings"
-        }
-      ],
-      "ru": [
-        {
-          "before": "### Старые настройки",
-          "after": "<a id=\"совместимость-со-старыми-настройками\" />\n\n<a id=\"перенос-устаревших-настроек-доступа\" />\n\n### Старые настройки"
-        }
-      ],
-      "es": [
-        {
-          "before": "### Ajustes anteriores",
-          "after": "<a id=\"ajustes-anteriores-que-siguen-funcionando\" />\n\n<a id=\"migrar-la-configuración-de-acceso-heredada\" />\n\n### Ajustes anteriores"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "commands",
-    "reason": "Retain links to retired migration and mail commands at the corresponding current reference sections.",
-    "replacements": {
-      "en": [
-        {
-          "before": "### `tg config set`",
-          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
-        },
-        {
-          "before": "### `tg search all`",
-          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "### `tg config set`",
-          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
-        },
-        {
-          "before": "### `tg search all`",
-          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
-        }
-      ],
-      "es": [
-        {
-          "before": "### `tg config set`",
-          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
-        },
-        {
-          "before": "### `tg search all`",
-          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "search",
-    "reason": "TG 0.58.0 removed the mail subcommand; explain the rejected legacy path without presenting it as an executable command.",
+    "reason": "TG removed its mail search; say how mail is refused without naming the removed command.",
     "replacements": {
       "en": [
         {
-          "before": "`tg personal search mail`",
-          "after": "the former mail-search command"
+          "before": "`tg personal search mail` answers \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\", and\n`search all --only mail` is refused the same way.",
+          "after": "`search all --only mail` is refused with \"mail is memo's: install @wirecat/cli-memo, then\n`memo search mail …`\"."
         }
       ],
       "ru": [
         {
-          "before": "`tg personal search mail`",
-          "after": "прежняя команда поиска почты"
+          "before": "`tg personal search mail` отвечает \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\", а `search all --only mail` отклоняется так же.",
+          "after": "`search all --only mail` отклоняется с ответом \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\"."
         }
       ],
       "es": [
         {
-          "before": "`tg personal search mail`",
-          "after": "el antiguo comando de búsqueda de correo"
+          "before": "`tg personal search mail` responde \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\", y `search all --only mail` se rechaza igual.",
+          "after": "`search all --only mail` se rechaza con \"mail is memo's: install @wirecat/cli-memo, then `memo search mail …`\"."
         }
       ]
     }
@@ -1770,7 +1161,7 @@
   {
     "tool": "max",
     "slug": "search",
-    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. MAX 0.54.0 still names memo import. MAX 0.54.0 has no search mail subcommand (it answers with a Memo hint), so the prose names it without a runnable invocation.",
+    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. MAX removed its mail search; send readers to memo without naming the removed command.",
     "replacements": {
       "ru": [
         {
@@ -1778,8 +1169,12 @@
           "after": "`memo sync --only notes`"
         },
         {
-          "before": "`max personal search mail` отвечает",
-          "after": "команда `search mail` у `max` отвечает"
+          "before": "; `max personal search mail` отвечает\nподсказкой «mail is memo's: install @wirecat/cli-memo, then `memo search mail …`».",
+          "after": ". Почту ищет memo: `memo search mail …`."
+        },
+        {
+          "before": "# почта — это memo; max search mail подскажет его",
+          "after": "# почта — это memo"
         }
       ],
       "en": [
@@ -1788,8 +1183,12 @@
           "after": "`memo sync --only notes`"
         },
         {
-          "before": "`max personal search mail` answers with a hint",
-          "after": "the `search mail` command of `max` answers with a hint"
+          "before": "; `max personal search mail` answers with a hint, “mail is memo's: install @wirecat/cli-memo, then `memo search mail …`”.",
+          "after": ". Mail is searched by memo: `memo search mail …`."
+        },
+        {
+          "before": "# почта — это memo; max search mail подскажет его",
+          "after": "# почта — это memo"
         }
       ],
       "es": [
@@ -1798,8 +1197,12 @@
           "after": "`memo sync --only notes`"
         },
         {
-          "before": "`max personal search mail` responde con una indicación",
-          "after": "el comando `search mail` de `max` responde con una indicación"
+          "before": "; `max personal search mail` responde con una indicación, «mail is memo's: install @wirecat/cli-memo, then `memo search mail …`».",
+          "after": ". El correo lo busca memo: `memo search mail …`."
+        },
+        {
+          "before": "# почта — это memo; max search mail подскажет его",
+          "after": "# почта — это memo"
         }
       ]
     }
@@ -1825,32 +1228,6 @@
         {
           "before": "Todas las herramientas de WireCat con cli-core 0.298.0 o posterior leen este archivo (tg desde 0.63.0), así que un solo cambio modifica la lista en todas.",
           "after": "Es un archivo de ajustes común a las herramientas de WireCat, no el de un perfil."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "troubleshooting",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/b471dd3a7fc2cdd2750c9e732069dd22dcbbcb77/docs/troubleshooting.md",
-    "reason": "Preserve the previous configuration-error incoming anchor after the released error heading changed.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "### «is an unknown setting»",
-          "after": "<a id=\"is-not-a-valid-config\" />\n\n### «is an unknown setting»"
-        }
-      ],
-      "en": [
-        {
-          "before": "### \"is an unknown setting\"",
-          "after": "<a id=\"is-not-a-valid-config\" />\n\n### \"is an unknown setting\""
-        }
-      ],
-      "es": [
-        {
-          "before": "### «is an unknown setting»",
-          "after": "<a id=\"is-not-a-valid-config\" />\n\n### «is an unknown setting»"
         }
       ]
     }
@@ -2367,500 +1744,6 @@
     }
   },
   {
-    "tool": "wa",
-    "slug": "people",
-    "reason": "Keep incoming people-guide hashes after the alias/aliases command rename in whatsapp-cli 0.7.0.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## Your own names and notes: `contacts aliases`, `contacts notes`",
-          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n## Your own names and notes: `contacts aliases`, `contacts notes`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Ваши собственные имена и примечания: `contacts aliases`, `contacts notes`",
-          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"ваши-собственные-имена-и-примечания-contacts-alias-contacts-notes\" />\n\n## Ваши собственные имена и примечания: `contacts aliases`, `contacts notes`"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Sus propios nombres y notas: `contacts aliases`, `contacts notes`",
-          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"sus-propios-nombres-y-notas-contacts-alias-contacts-notes\" />\n\n## Sus propios nombres y notas: `contacts aliases`, `contacts notes`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "wa",
-    "slug": "commands",
-    "reason": "Keep incoming command-reference hashes from v0.6.0 at the corresponding canonical command after the whatsapp-cli 0.7.0 renames; removed commands resolve to their group. This does not restore removed CLI aliases.",
-    "replacements": {
-      "en": [
-        {
-          "before": "#### `wa chats members check`",
-          "after": "#### `wa chats members check`\n\n<a id=\"wa-chats-members-audit\" />"
-        },
-        {
-          "before": "### `wa chats links`",
-          "after": "### `wa chats links`\n\n<a id=\"wa-chats-link\" />"
-        },
-        {
-          "before": "#### `wa chats links show`",
-          "after": "#### `wa chats links show`\n\n<a id=\"wa-chats-link-show\" />"
-        },
-        {
-          "before": "#### `wa chats links reset`",
-          "after": "#### `wa chats links reset`\n\n<a id=\"wa-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `wa chats requests confirm`",
-          "after": "#### `wa chats requests confirm`\n\n<a id=\"wa-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `wa chats requests reject`",
-          "after": "#### `wa chats requests reject`\n\n<a id=\"wa-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `wa account sessions`",
-          "after": "### `wa account sessions`\n\n<a id=\"wa-account-sessions-end\" />"
-        },
-        {
-          "before": "## `wa contacts`",
-          "after": "## `wa contacts`\n\n<a id=\"wa-contacts-remove\" />"
-        },
-        {
-          "before": "### `wa contacts info`",
-          "after": "### `wa contacts info`\n\n<a id=\"wa-contacts-profile\" />"
-        },
-        {
-          "before": "### `wa contacts aliases`",
-          "after": "### `wa contacts aliases`\n\n<a id=\"wa-contacts-alias\" />"
-        },
-        {
-          "before": "#### `wa contacts aliases set`",
-          "after": "#### `wa contacts aliases set`\n\n<a id=\"wa-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `wa contacts aliases remove`",
-          "after": "#### `wa contacts aliases remove`\n\n<a id=\"wa-contacts-alias-rm\" />"
-        },
-        {
-          "before": "### `wa contacts events`",
-          "after": "### `wa contacts events`\n\n<a id=\"wa-contacts-timeline\" />"
-        },
-        {
-          "before": "#### `wa store gaps show`",
-          "after": "#### `wa store gaps show`\n\n<a id=\"wa-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `wa store rebuild`",
-          "after": "### `wa store rebuild`\n\n<a id=\"wa-store-reindex\" />"
-        },
-        {
-          "before": "#### `wa stats messages counters sync`",
-          "after": "#### `wa stats messages counters sync`\n\n<a id=\"wa-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `wa tasks update`",
-          "after": "### `wa tasks update`\n\n<a id=\"wa-tasks-plan\" />"
-        },
-        {
-          "before": "#### `wa conversations links rebuild`",
-          "after": "#### `wa conversations links rebuild`\n\n<a id=\"wa-conversations-build\" />"
-        },
-        {
-          "before": "#### `wa conversations batches show`",
-          "after": "#### `wa conversations batches show`\n\n<a id=\"wa-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `wa conversations consents remove`",
-          "after": "#### `wa conversations consents remove`\n\n<a id=\"wa-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `wa conversations embeddings status`",
-          "after": "#### `wa conversations embeddings status`\n\n<a id=\"wa-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `wa conversations embeddings clear`",
-          "after": "#### `wa conversations embeddings clear`\n\n<a id=\"wa-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `wa attachments update`",
-          "after": "### `wa attachments update`\n\n<a id=\"wa-attachments-text\" />\n\n<a id=\"wa-attachments-text-set\" />"
-        },
-        {
-          "before": "### `wa tags rebuild`",
-          "after": "### `wa tags rebuild`\n\n<a id=\"wa-tags-auto\" />"
-        },
-        {
-          "before": "### `wa metadata show`",
-          "after": "### `wa metadata show`\n\n<a id=\"wa-metadata-get\" />"
-        },
-        {
-          "before": "### `wa metadata sync`",
-          "after": "### `wa metadata sync`\n\n<a id=\"wa-metadata-refresh\" />"
-        },
-        {
-          "before": "## `wa models`",
-          "after": "## `wa models`\n\n<a id=\"wa-models-audio\" />\n\n<a id=\"wa-models-text\" />"
-        },
-        {
-          "before": "### `wa models list`",
-          "after": "### `wa models list`\n\n<a id=\"wa-models-audio-list\" />\n\n<a id=\"wa-models-text-list\" />"
-        },
-        {
-          "before": "### `wa models download`",
-          "after": "### `wa models download`\n\n<a id=\"wa-models-audio-download\" />\n\n<a id=\"wa-models-text-download\" />"
-        },
-        {
-          "before": "### `wa models keys`",
-          "after": "### `wa models keys`\n\n<a id=\"wa-models-text-key\" />"
-        },
-        {
-          "before": "#### `wa models keys set`",
-          "after": "#### `wa models keys set`\n\n<a id=\"wa-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `wa models keys remove`",
-          "after": "#### `wa models keys remove`\n\n<a id=\"wa-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `wa doctor reports show`",
-          "after": "#### `wa doctor reports show`\n\n<a id=\"wa-doctor-report\" />"
-        },
-        {
-          "before": "#### `wa doctor reports create`",
-          "after": "#### `wa doctor reports create`\n\n<a id=\"wa-doctor-report-create\" />"
-        },
-        {
-          "before": "### `wa search runs`",
-          "after": "### `wa search runs`\n\n<a id=\"wa-runs-search\" />"
-        },
-        {
-          "before": "### `wa commands info`",
-          "after": "### `wa commands info`\n\n<a id=\"wa-commands-schema\" />"
-        },
-        {
-          "before": "### `wa mcp add`",
-          "after": "### `wa mcp add`\n\n<a id=\"wa-mcp-setup\" />"
-        },
-        {
-          "before": "### `wa mcp check`",
-          "after": "### `wa mcp check`\n\n<a id=\"wa-mcp-doctor\" />"
-        }
-      ],
-      "ru": [
-        {
-          "before": "#### `wa chats members check`",
-          "after": "#### `wa chats members check`\n\n<a id=\"wa-chats-members-audit\" />"
-        },
-        {
-          "before": "### `wa chats links`",
-          "after": "### `wa chats links`\n\n<a id=\"wa-chats-link\" />"
-        },
-        {
-          "before": "#### `wa chats links show`",
-          "after": "#### `wa chats links show`\n\n<a id=\"wa-chats-link-show\" />"
-        },
-        {
-          "before": "#### `wa chats links reset`",
-          "after": "#### `wa chats links reset`\n\n<a id=\"wa-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `wa chats requests confirm`",
-          "after": "#### `wa chats requests confirm`\n\n<a id=\"wa-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `wa chats requests reject`",
-          "after": "#### `wa chats requests reject`\n\n<a id=\"wa-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `wa account sessions`",
-          "after": "### `wa account sessions`\n\n<a id=\"wa-account-sessions-end\" />"
-        },
-        {
-          "before": "## `wa contacts`",
-          "after": "## `wa contacts`\n\n<a id=\"wa-contacts-remove\" />"
-        },
-        {
-          "before": "### `wa contacts info`",
-          "after": "### `wa contacts info`\n\n<a id=\"wa-contacts-profile\" />"
-        },
-        {
-          "before": "### `wa contacts aliases`",
-          "after": "### `wa contacts aliases`\n\n<a id=\"wa-contacts-alias\" />"
-        },
-        {
-          "before": "#### `wa contacts aliases set`",
-          "after": "#### `wa contacts aliases set`\n\n<a id=\"wa-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `wa contacts aliases remove`",
-          "after": "#### `wa contacts aliases remove`\n\n<a id=\"wa-contacts-alias-rm\" />"
-        },
-        {
-          "before": "### `wa contacts events`",
-          "after": "### `wa contacts events`\n\n<a id=\"wa-contacts-timeline\" />"
-        },
-        {
-          "before": "#### `wa store gaps show`",
-          "after": "#### `wa store gaps show`\n\n<a id=\"wa-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `wa store rebuild`",
-          "after": "### `wa store rebuild`\n\n<a id=\"wa-store-reindex\" />"
-        },
-        {
-          "before": "#### `wa stats messages counters sync`",
-          "after": "#### `wa stats messages counters sync`\n\n<a id=\"wa-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `wa tasks update`",
-          "after": "### `wa tasks update`\n\n<a id=\"wa-tasks-plan\" />"
-        },
-        {
-          "before": "#### `wa conversations links rebuild`",
-          "after": "#### `wa conversations links rebuild`\n\n<a id=\"wa-conversations-build\" />"
-        },
-        {
-          "before": "#### `wa conversations batches show`",
-          "after": "#### `wa conversations batches show`\n\n<a id=\"wa-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `wa conversations consents remove`",
-          "after": "#### `wa conversations consents remove`\n\n<a id=\"wa-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `wa conversations embeddings status`",
-          "after": "#### `wa conversations embeddings status`\n\n<a id=\"wa-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `wa conversations embeddings clear`",
-          "after": "#### `wa conversations embeddings clear`\n\n<a id=\"wa-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `wa attachments update`",
-          "after": "### `wa attachments update`\n\n<a id=\"wa-attachments-text\" />\n\n<a id=\"wa-attachments-text-set\" />"
-        },
-        {
-          "before": "### `wa tags rebuild`",
-          "after": "### `wa tags rebuild`\n\n<a id=\"wa-tags-auto\" />"
-        },
-        {
-          "before": "### `wa metadata show`",
-          "after": "### `wa metadata show`\n\n<a id=\"wa-metadata-get\" />"
-        },
-        {
-          "before": "### `wa metadata sync`",
-          "after": "### `wa metadata sync`\n\n<a id=\"wa-metadata-refresh\" />"
-        },
-        {
-          "before": "## `wa models`",
-          "after": "## `wa models`\n\n<a id=\"wa-models-audio\" />\n\n<a id=\"wa-models-text\" />"
-        },
-        {
-          "before": "### `wa models list`",
-          "after": "### `wa models list`\n\n<a id=\"wa-models-audio-list\" />\n\n<a id=\"wa-models-text-list\" />"
-        },
-        {
-          "before": "### `wa models download`",
-          "after": "### `wa models download`\n\n<a id=\"wa-models-audio-download\" />\n\n<a id=\"wa-models-text-download\" />"
-        },
-        {
-          "before": "### `wa models keys`",
-          "after": "### `wa models keys`\n\n<a id=\"wa-models-text-key\" />"
-        },
-        {
-          "before": "#### `wa models keys set`",
-          "after": "#### `wa models keys set`\n\n<a id=\"wa-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `wa models keys remove`",
-          "after": "#### `wa models keys remove`\n\n<a id=\"wa-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `wa doctor reports show`",
-          "after": "#### `wa doctor reports show`\n\n<a id=\"wa-doctor-report\" />"
-        },
-        {
-          "before": "#### `wa doctor reports create`",
-          "after": "#### `wa doctor reports create`\n\n<a id=\"wa-doctor-report-create\" />"
-        },
-        {
-          "before": "### `wa search runs`",
-          "after": "### `wa search runs`\n\n<a id=\"wa-runs-search\" />"
-        },
-        {
-          "before": "### `wa commands info`",
-          "after": "### `wa commands info`\n\n<a id=\"wa-commands-schema\" />"
-        },
-        {
-          "before": "### `wa mcp add`",
-          "after": "### `wa mcp add`\n\n<a id=\"wa-mcp-setup\" />"
-        },
-        {
-          "before": "### `wa mcp check`",
-          "after": "### `wa mcp check`\n\n<a id=\"wa-mcp-doctor\" />"
-        }
-      ],
-      "es": [
-        {
-          "before": "#### `wa chats members check`",
-          "after": "#### `wa chats members check`\n\n<a id=\"wa-chats-members-audit\" />"
-        },
-        {
-          "before": "### `wa chats links`",
-          "after": "### `wa chats links`\n\n<a id=\"wa-chats-link\" />"
-        },
-        {
-          "before": "#### `wa chats links show`",
-          "after": "#### `wa chats links show`\n\n<a id=\"wa-chats-link-show\" />"
-        },
-        {
-          "before": "#### `wa chats links reset`",
-          "after": "#### `wa chats links reset`\n\n<a id=\"wa-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `wa chats requests confirm`",
-          "after": "#### `wa chats requests confirm`\n\n<a id=\"wa-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `wa chats requests reject`",
-          "after": "#### `wa chats requests reject`\n\n<a id=\"wa-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `wa account sessions`",
-          "after": "### `wa account sessions`\n\n<a id=\"wa-account-sessions-end\" />"
-        },
-        {
-          "before": "## `wa contacts`",
-          "after": "## `wa contacts`\n\n<a id=\"wa-contacts-remove\" />"
-        },
-        {
-          "before": "### `wa contacts info`",
-          "after": "### `wa contacts info`\n\n<a id=\"wa-contacts-profile\" />"
-        },
-        {
-          "before": "### `wa contacts aliases`",
-          "after": "### `wa contacts aliases`\n\n<a id=\"wa-contacts-alias\" />"
-        },
-        {
-          "before": "#### `wa contacts aliases set`",
-          "after": "#### `wa contacts aliases set`\n\n<a id=\"wa-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `wa contacts aliases remove`",
-          "after": "#### `wa contacts aliases remove`\n\n<a id=\"wa-contacts-alias-rm\" />"
-        },
-        {
-          "before": "### `wa contacts events`",
-          "after": "### `wa contacts events`\n\n<a id=\"wa-contacts-timeline\" />"
-        },
-        {
-          "before": "#### `wa store gaps show`",
-          "after": "#### `wa store gaps show`\n\n<a id=\"wa-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `wa store rebuild`",
-          "after": "### `wa store rebuild`\n\n<a id=\"wa-store-reindex\" />"
-        },
-        {
-          "before": "#### `wa stats messages counters sync`",
-          "after": "#### `wa stats messages counters sync`\n\n<a id=\"wa-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `wa tasks update`",
-          "after": "### `wa tasks update`\n\n<a id=\"wa-tasks-plan\" />"
-        },
-        {
-          "before": "#### `wa conversations links rebuild`",
-          "after": "#### `wa conversations links rebuild`\n\n<a id=\"wa-conversations-build\" />"
-        },
-        {
-          "before": "#### `wa conversations batches show`",
-          "after": "#### `wa conversations batches show`\n\n<a id=\"wa-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `wa conversations consents remove`",
-          "after": "#### `wa conversations consents remove`\n\n<a id=\"wa-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `wa conversations embeddings status`",
-          "after": "#### `wa conversations embeddings status`\n\n<a id=\"wa-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `wa conversations embeddings clear`",
-          "after": "#### `wa conversations embeddings clear`\n\n<a id=\"wa-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `wa attachments update`",
-          "after": "### `wa attachments update`\n\n<a id=\"wa-attachments-text\" />\n\n<a id=\"wa-attachments-text-set\" />"
-        },
-        {
-          "before": "### `wa tags rebuild`",
-          "after": "### `wa tags rebuild`\n\n<a id=\"wa-tags-auto\" />"
-        },
-        {
-          "before": "### `wa metadata show`",
-          "after": "### `wa metadata show`\n\n<a id=\"wa-metadata-get\" />"
-        },
-        {
-          "before": "### `wa metadata sync`",
-          "after": "### `wa metadata sync`\n\n<a id=\"wa-metadata-refresh\" />"
-        },
-        {
-          "before": "## `wa models`",
-          "after": "## `wa models`\n\n<a id=\"wa-models-audio\" />\n\n<a id=\"wa-models-text\" />"
-        },
-        {
-          "before": "### `wa models list`",
-          "after": "### `wa models list`\n\n<a id=\"wa-models-audio-list\" />\n\n<a id=\"wa-models-text-list\" />"
-        },
-        {
-          "before": "### `wa models download`",
-          "after": "### `wa models download`\n\n<a id=\"wa-models-audio-download\" />\n\n<a id=\"wa-models-text-download\" />"
-        },
-        {
-          "before": "### `wa models keys`",
-          "after": "### `wa models keys`\n\n<a id=\"wa-models-text-key\" />"
-        },
-        {
-          "before": "#### `wa models keys set`",
-          "after": "#### `wa models keys set`\n\n<a id=\"wa-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `wa models keys remove`",
-          "after": "#### `wa models keys remove`\n\n<a id=\"wa-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `wa doctor reports show`",
-          "after": "#### `wa doctor reports show`\n\n<a id=\"wa-doctor-report\" />"
-        },
-        {
-          "before": "#### `wa doctor reports create`",
-          "after": "#### `wa doctor reports create`\n\n<a id=\"wa-doctor-report-create\" />"
-        },
-        {
-          "before": "### `wa search runs`",
-          "after": "### `wa search runs`\n\n<a id=\"wa-runs-search\" />"
-        },
-        {
-          "before": "### `wa commands info`",
-          "after": "### `wa commands info`\n\n<a id=\"wa-commands-schema\" />"
-        },
-        {
-          "before": "### `wa mcp add`",
-          "after": "### `wa mcp add`\n\n<a id=\"wa-mcp-setup\" />"
-        },
-        {
-          "before": "### `wa mcp check`",
-          "after": "### `wa mcp check`\n\n<a id=\"wa-mcp-doctor\" />"
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "groups",
     "reason": "The released request actions are confirm/reject (tg 0.90.0 contract: chats requests list|confirm|reject); the group task table and command table retained the retired accept/decline spellings.",
@@ -2970,512 +1853,6 @@
         {
           "before": "`build --base-url`",
           "after": "`conversations links rebuild --base-url`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "commands",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/CHANGELOG.md",
-    "reason": "Keep incoming command-reference hashes from the previously reviewed release at the corresponding canonical command. These anchors do not restore retired CLI aliases.",
-    "replacements": {
-      "en": [
-        {
-          "before": "#### `tg chats members check`",
-          "after": "#### `tg chats members check`\n\n<a id=\"tg-chats-members-audit\" />"
-        },
-        {
-          "before": "### `tg chats links`",
-          "after": "### `tg chats links`\n\n<a id=\"tg-chats-link\" />"
-        },
-        {
-          "before": "#### `tg chats links show`",
-          "after": "#### `tg chats links show`\n\n<a id=\"tg-chats-link-show\" />"
-        },
-        {
-          "before": "#### `tg chats links create`",
-          "after": "#### `tg chats links create`\n\n<a id=\"tg-chats-link-create\" />"
-        },
-        {
-          "before": "#### `tg chats links list`",
-          "after": "#### `tg chats links list`\n\n<a id=\"tg-chats-link-list\" />"
-        },
-        {
-          "before": "#### `tg chats links remove`",
-          "after": "#### `tg chats links remove`\n\n<a id=\"tg-chats-link-revoke\" />"
-        },
-        {
-          "before": "#### `tg chats links update`",
-          "after": "#### `tg chats links update`\n\n<a id=\"tg-chats-link-update\" />"
-        },
-        {
-          "before": "#### `tg chats links reset`",
-          "after": "#### `tg chats links reset`\n\n<a id=\"tg-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `tg chats requests confirm`",
-          "after": "#### `tg chats requests confirm`\n\n<a id=\"tg-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `tg chats requests reject`",
-          "after": "#### `tg chats requests reject`\n\n<a id=\"tg-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `tg contacts info`",
-          "after": "### `tg contacts info`\n\n<a id=\"tg-contacts-profile\" />"
-        },
-        {
-          "before": "### `tg contacts events`",
-          "after": "### `tg contacts events`\n\n<a id=\"tg-contacts-timeline\" />"
-        },
-        {
-          "before": "### `tg contacts aliases`",
-          "after": "### `tg contacts aliases`\n\n<a id=\"tg-contacts-alias\" />"
-        },
-        {
-          "before": "#### `tg contacts aliases set`",
-          "after": "#### `tg contacts aliases set`\n\n<a id=\"tg-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `tg contacts aliases remove`",
-          "after": "#### `tg contacts aliases remove`\n\n<a id=\"tg-contacts-alias-rm\" />"
-        },
-        {
-          "before": "## `tg models`",
-          "after": "## `tg models`\n\n<a id=\"tg-models-audio\" />\n\n<a id=\"tg-models-text\" />"
-        },
-        {
-          "before": "### `tg models list`",
-          "after": "### `tg models list`\n\n<a id=\"tg-models-audio-list\" />\n\n<a id=\"tg-models-text-list\" />"
-        },
-        {
-          "before": "### `tg models download`",
-          "after": "### `tg models download`\n\n<a id=\"tg-models-audio-download\" />\n\n<a id=\"tg-models-text-download\" />"
-        },
-        {
-          "before": "### `tg models keys`",
-          "after": "### `tg models keys`\n\n<a id=\"tg-models-text-key\" />"
-        },
-        {
-          "before": "#### `tg models keys set`",
-          "after": "#### `tg models keys set`\n\n<a id=\"tg-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `tg models keys remove`",
-          "after": "#### `tg models keys remove`\n\n<a id=\"tg-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `tg store gaps show`",
-          "after": "#### `tg store gaps show`\n\n<a id=\"tg-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `tg store rebuild`",
-          "after": "### `tg store rebuild`\n\n<a id=\"tg-store-reindex\" />"
-        },
-        {
-          "before": "#### `tg conversations links rebuild`",
-          "after": "#### `tg conversations links rebuild`\n\n<a id=\"tg-conversations-build\" />"
-        },
-        {
-          "before": "#### `tg conversations batches show`",
-          "after": "#### `tg conversations batches show`\n\n<a id=\"tg-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `tg conversations consents remove`",
-          "after": "#### `tg conversations consents remove`\n\n<a id=\"tg-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `tg conversations embeddings status`",
-          "after": "#### `tg conversations embeddings status`\n\n<a id=\"tg-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `tg conversations embeddings clear`",
-          "after": "#### `tg conversations embeddings clear`\n\n<a id=\"tg-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `tg attachments update`",
-          "after": "### `tg attachments update`\n\n<a id=\"tg-attachments-text\" />\n\n<a id=\"tg-attachments-text-set\" />"
-        },
-        {
-          "before": "### `tg tags rebuild`",
-          "after": "### `tg tags rebuild`\n\n<a id=\"tg-tags-auto\" />"
-        },
-        {
-          "before": "### `tg metadata show`",
-          "after": "### `tg metadata show`\n\n<a id=\"tg-metadata-get\" />"
-        },
-        {
-          "before": "### `tg metadata sync`",
-          "after": "### `tg metadata sync`\n\n<a id=\"tg-metadata-refresh\" />"
-        },
-        {
-          "before": "#### `tg stats messages counters sync`",
-          "after": "#### `tg stats messages counters sync`\n\n<a id=\"tg-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `tg tasks update`",
-          "after": "### `tg tasks update`\n\n<a id=\"tg-tasks-plan\" />"
-        },
-        {
-          "before": "### `tg search runs`",
-          "after": "### `tg search runs`\n\n<a id=\"tg-runs-search\" />"
-        },
-        {
-          "before": "#### `tg doctor reports show`",
-          "after": "#### `tg doctor reports show`\n\n<a id=\"tg-doctor-report\" />"
-        },
-        {
-          "before": "#### `tg doctor reports create`",
-          "after": "#### `tg doctor reports create`\n\n<a id=\"tg-doctor-report-create\" />"
-        },
-        {
-          "before": "### `tg commands info`",
-          "after": "### `tg commands info`\n\n<a id=\"tg-commands-schema\" />"
-        },
-        {
-          "before": "### `tg mcp add`",
-          "after": "### `tg mcp add`\n\n<a id=\"tg-mcp-setup\" />"
-        },
-        {
-          "before": "### `tg mcp check`",
-          "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
-        },
-        {
-          "before": "#### `tg bot messages sync`",
-          "after": "#### `tg bot messages sync`\n\n<a id=\"tg-bot-store\" />\n<a id=\"tg-bot-store-fetch\" />"
-        }
-      ],
-      "ru": [
-        {
-          "before": "#### `tg chats members check`",
-          "after": "#### `tg chats members check`\n\n<a id=\"tg-chats-members-audit\" />"
-        },
-        {
-          "before": "### `tg chats links`",
-          "after": "### `tg chats links`\n\n<a id=\"tg-chats-link\" />"
-        },
-        {
-          "before": "#### `tg chats links show`",
-          "after": "#### `tg chats links show`\n\n<a id=\"tg-chats-link-show\" />"
-        },
-        {
-          "before": "#### `tg chats links create`",
-          "after": "#### `tg chats links create`\n\n<a id=\"tg-chats-link-create\" />"
-        },
-        {
-          "before": "#### `tg chats links list`",
-          "after": "#### `tg chats links list`\n\n<a id=\"tg-chats-link-list\" />"
-        },
-        {
-          "before": "#### `tg chats links remove`",
-          "after": "#### `tg chats links remove`\n\n<a id=\"tg-chats-link-revoke\" />"
-        },
-        {
-          "before": "#### `tg chats links update`",
-          "after": "#### `tg chats links update`\n\n<a id=\"tg-chats-link-update\" />"
-        },
-        {
-          "before": "#### `tg chats links reset`",
-          "after": "#### `tg chats links reset`\n\n<a id=\"tg-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `tg chats requests confirm`",
-          "after": "#### `tg chats requests confirm`\n\n<a id=\"tg-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `tg chats requests reject`",
-          "after": "#### `tg chats requests reject`\n\n<a id=\"tg-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `tg contacts info`",
-          "after": "### `tg contacts info`\n\n<a id=\"tg-contacts-profile\" />"
-        },
-        {
-          "before": "### `tg contacts events`",
-          "after": "### `tg contacts events`\n\n<a id=\"tg-contacts-timeline\" />"
-        },
-        {
-          "before": "### `tg contacts aliases`",
-          "after": "### `tg contacts aliases`\n\n<a id=\"tg-contacts-alias\" />"
-        },
-        {
-          "before": "#### `tg contacts aliases set`",
-          "after": "#### `tg contacts aliases set`\n\n<a id=\"tg-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `tg contacts aliases remove`",
-          "after": "#### `tg contacts aliases remove`\n\n<a id=\"tg-contacts-alias-rm\" />"
-        },
-        {
-          "before": "## `tg models`",
-          "after": "## `tg models`\n\n<a id=\"tg-models-audio\" />\n\n<a id=\"tg-models-text\" />"
-        },
-        {
-          "before": "### `tg models list`",
-          "after": "### `tg models list`\n\n<a id=\"tg-models-audio-list\" />\n\n<a id=\"tg-models-text-list\" />"
-        },
-        {
-          "before": "### `tg models download`",
-          "after": "### `tg models download`\n\n<a id=\"tg-models-audio-download\" />\n\n<a id=\"tg-models-text-download\" />"
-        },
-        {
-          "before": "### `tg models keys`",
-          "after": "### `tg models keys`\n\n<a id=\"tg-models-text-key\" />"
-        },
-        {
-          "before": "#### `tg models keys set`",
-          "after": "#### `tg models keys set`\n\n<a id=\"tg-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `tg models keys remove`",
-          "after": "#### `tg models keys remove`\n\n<a id=\"tg-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `tg store gaps show`",
-          "after": "#### `tg store gaps show`\n\n<a id=\"tg-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `tg store rebuild`",
-          "after": "### `tg store rebuild`\n\n<a id=\"tg-store-reindex\" />"
-        },
-        {
-          "before": "#### `tg conversations links rebuild`",
-          "after": "#### `tg conversations links rebuild`\n\n<a id=\"tg-conversations-build\" />"
-        },
-        {
-          "before": "#### `tg conversations batches show`",
-          "after": "#### `tg conversations batches show`\n\n<a id=\"tg-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `tg conversations consents remove`",
-          "after": "#### `tg conversations consents remove`\n\n<a id=\"tg-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `tg conversations embeddings status`",
-          "after": "#### `tg conversations embeddings status`\n\n<a id=\"tg-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `tg conversations embeddings clear`",
-          "after": "#### `tg conversations embeddings clear`\n\n<a id=\"tg-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `tg attachments update`",
-          "after": "### `tg attachments update`\n\n<a id=\"tg-attachments-text\" />\n\n<a id=\"tg-attachments-text-set\" />"
-        },
-        {
-          "before": "### `tg tags rebuild`",
-          "after": "### `tg tags rebuild`\n\n<a id=\"tg-tags-auto\" />"
-        },
-        {
-          "before": "### `tg metadata show`",
-          "after": "### `tg metadata show`\n\n<a id=\"tg-metadata-get\" />"
-        },
-        {
-          "before": "### `tg metadata sync`",
-          "after": "### `tg metadata sync`\n\n<a id=\"tg-metadata-refresh\" />"
-        },
-        {
-          "before": "#### `tg stats messages counters sync`",
-          "after": "#### `tg stats messages counters sync`\n\n<a id=\"tg-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `tg tasks update`",
-          "after": "### `tg tasks update`\n\n<a id=\"tg-tasks-plan\" />"
-        },
-        {
-          "before": "### `tg search runs`",
-          "after": "### `tg search runs`\n\n<a id=\"tg-runs-search\" />"
-        },
-        {
-          "before": "#### `tg doctor reports show`",
-          "after": "#### `tg doctor reports show`\n\n<a id=\"tg-doctor-report\" />"
-        },
-        {
-          "before": "#### `tg doctor reports create`",
-          "after": "#### `tg doctor reports create`\n\n<a id=\"tg-doctor-report-create\" />"
-        },
-        {
-          "before": "### `tg commands info`",
-          "after": "### `tg commands info`\n\n<a id=\"tg-commands-schema\" />"
-        },
-        {
-          "before": "### `tg mcp add`",
-          "after": "### `tg mcp add`\n\n<a id=\"tg-mcp-setup\" />"
-        },
-        {
-          "before": "### `tg mcp check`",
-          "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
-        },
-        {
-          "before": "#### `tg bot messages sync`",
-          "after": "#### `tg bot messages sync`\n\n<a id=\"tg-bot-store\" />\n<a id=\"tg-bot-store-fetch\" />"
-        }
-      ],
-      "es": [
-        {
-          "before": "#### `tg chats members check`",
-          "after": "#### `tg chats members check`\n\n<a id=\"tg-chats-members-audit\" />"
-        },
-        {
-          "before": "### `tg chats links`",
-          "after": "### `tg chats links`\n\n<a id=\"tg-chats-link\" />"
-        },
-        {
-          "before": "#### `tg chats links show`",
-          "after": "#### `tg chats links show`\n\n<a id=\"tg-chats-link-show\" />"
-        },
-        {
-          "before": "#### `tg chats links create`",
-          "after": "#### `tg chats links create`\n\n<a id=\"tg-chats-link-create\" />"
-        },
-        {
-          "before": "#### `tg chats links list`",
-          "after": "#### `tg chats links list`\n\n<a id=\"tg-chats-link-list\" />"
-        },
-        {
-          "before": "#### `tg chats links remove`",
-          "after": "#### `tg chats links remove`\n\n<a id=\"tg-chats-link-revoke\" />"
-        },
-        {
-          "before": "#### `tg chats links update`",
-          "after": "#### `tg chats links update`\n\n<a id=\"tg-chats-link-update\" />"
-        },
-        {
-          "before": "#### `tg chats links reset`",
-          "after": "#### `tg chats links reset`\n\n<a id=\"tg-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `tg chats requests confirm`",
-          "after": "#### `tg chats requests confirm`\n\n<a id=\"tg-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `tg chats requests reject`",
-          "after": "#### `tg chats requests reject`\n\n<a id=\"tg-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `tg contacts info`",
-          "after": "### `tg contacts info`\n\n<a id=\"tg-contacts-profile\" />"
-        },
-        {
-          "before": "### `tg contacts events`",
-          "after": "### `tg contacts events`\n\n<a id=\"tg-contacts-timeline\" />"
-        },
-        {
-          "before": "### `tg contacts aliases`",
-          "after": "### `tg contacts aliases`\n\n<a id=\"tg-contacts-alias\" />"
-        },
-        {
-          "before": "#### `tg contacts aliases set`",
-          "after": "#### `tg contacts aliases set`\n\n<a id=\"tg-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `tg contacts aliases remove`",
-          "after": "#### `tg contacts aliases remove`\n\n<a id=\"tg-contacts-alias-rm\" />"
-        },
-        {
-          "before": "## `tg models`",
-          "after": "## `tg models`\n\n<a id=\"tg-models-audio\" />\n\n<a id=\"tg-models-text\" />"
-        },
-        {
-          "before": "### `tg models list`",
-          "after": "### `tg models list`\n\n<a id=\"tg-models-audio-list\" />\n\n<a id=\"tg-models-text-list\" />"
-        },
-        {
-          "before": "### `tg models download`",
-          "after": "### `tg models download`\n\n<a id=\"tg-models-audio-download\" />\n\n<a id=\"tg-models-text-download\" />"
-        },
-        {
-          "before": "### `tg models keys`",
-          "after": "### `tg models keys`\n\n<a id=\"tg-models-text-key\" />"
-        },
-        {
-          "before": "#### `tg models keys set`",
-          "after": "#### `tg models keys set`\n\n<a id=\"tg-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `tg models keys remove`",
-          "after": "#### `tg models keys remove`\n\n<a id=\"tg-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `tg store gaps show`",
-          "after": "#### `tg store gaps show`\n\n<a id=\"tg-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `tg store rebuild`",
-          "after": "### `tg store rebuild`\n\n<a id=\"tg-store-reindex\" />"
-        },
-        {
-          "before": "#### `tg conversations links rebuild`",
-          "after": "#### `tg conversations links rebuild`\n\n<a id=\"tg-conversations-build\" />"
-        },
-        {
-          "before": "#### `tg conversations batches show`",
-          "after": "#### `tg conversations batches show`\n\n<a id=\"tg-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `tg conversations consents remove`",
-          "after": "#### `tg conversations consents remove`\n\n<a id=\"tg-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `tg conversations embeddings status`",
-          "after": "#### `tg conversations embeddings status`\n\n<a id=\"tg-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `tg conversations embeddings clear`",
-          "after": "#### `tg conversations embeddings clear`\n\n<a id=\"tg-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `tg attachments update`",
-          "after": "### `tg attachments update`\n\n<a id=\"tg-attachments-text\" />\n\n<a id=\"tg-attachments-text-set\" />"
-        },
-        {
-          "before": "### `tg tags rebuild`",
-          "after": "### `tg tags rebuild`\n\n<a id=\"tg-tags-auto\" />"
-        },
-        {
-          "before": "### `tg metadata show`",
-          "after": "### `tg metadata show`\n\n<a id=\"tg-metadata-get\" />"
-        },
-        {
-          "before": "### `tg metadata sync`",
-          "after": "### `tg metadata sync`\n\n<a id=\"tg-metadata-refresh\" />"
-        },
-        {
-          "before": "#### `tg stats messages counters sync`",
-          "after": "#### `tg stats messages counters sync`\n\n<a id=\"tg-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `tg tasks update`",
-          "after": "### `tg tasks update`\n\n<a id=\"tg-tasks-plan\" />"
-        },
-        {
-          "before": "### `tg search runs`",
-          "after": "### `tg search runs`\n\n<a id=\"tg-runs-search\" />"
-        },
-        {
-          "before": "#### `tg doctor reports show`",
-          "after": "#### `tg doctor reports show`\n\n<a id=\"tg-doctor-report\" />"
-        },
-        {
-          "before": "#### `tg doctor reports create`",
-          "after": "#### `tg doctor reports create`\n\n<a id=\"tg-doctor-report-create\" />"
-        },
-        {
-          "before": "### `tg commands info`",
-          "after": "### `tg commands info`\n\n<a id=\"tg-commands-schema\" />"
-        },
-        {
-          "before": "### `tg mcp add`",
-          "after": "### `tg mcp add`\n\n<a id=\"tg-mcp-setup\" />"
-        },
-        {
-          "before": "### `tg mcp check`",
-          "after": "### `tg mcp check`\n\n<a id=\"tg-mcp-doctor\" />"
-        },
-        {
-          "before": "#### `tg bot messages sync`",
-          "after": "#### `tg bot messages sync`\n\n<a id=\"tg-bot-store\" />\n<a id=\"tg-bot-store-fetch\" />"
         }
       ]
     }
@@ -3735,52 +2112,6 @@
   },
   {
     "tool": "tg",
-    "slug": "people",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.83.0/docs/people.md",
-    "reason": "Keep incoming people-guide hashes after profile/info, audit/check and alias/aliases command renames.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## Who they are: `contacts info`",
-          "after": "<a id=\"who-they-are-contacts-profile\" />\n\n## Who they are: `contacts info`"
-        },
-        {
-          "before": "## The members of a group: `chats members check --deep`",
-          "after": "<a id=\"the-members-of-a-group-chats-members-audit---deep\" />\n\n## The members of a group: `chats members check --deep`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Кто этот человек: `contacts info`",
-          "after": "<a id=\"who-they-are-contacts-profile\" />\n\n<a id=\"кто-этот-человек-contacts-profile\" />\n\n## Кто этот человек: `contacts info`"
-        },
-        {
-          "before": "## Участники группы: `chats members check --deep`",
-          "after": "<a id=\"the-members-of-a-group-chats-members-audit---deep\" />\n\n<a id=\"участники-группы-chats-members-audit---deep\" />\n\n## Участники группы: `chats members check --deep`"
-        },
-        {
-          "before": "## Свои имена и заметки: `contacts aliases`, `contacts notes`",
-          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"свои-имена-и-заметки-contacts-alias-contacts-notes\" />\n\n## Свои имена и заметки: `contacts aliases`, `contacts notes`"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Quién es: `contacts info`",
-          "after": "<a id=\"who-they-are-contacts-profile\" />\n\n<a id=\"quién-es-contacts-profile\" />\n\n## Quién es: `contacts info`"
-        },
-        {
-          "before": "## Miembros de un grupo: `chats members check --deep`",
-          "after": "<a id=\"the-members-of-a-group-chats-members-audit---deep\" />\n\n<a id=\"miembros-de-un-grupo-chats-members-audit---deep\" />\n\n## Miembros de un grupo: `chats members check --deep`"
-        },
-        {
-          "before": "## Tus propios nombres y notas: `contacts aliases`, `contacts notes`",
-          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"tus-propios-nombres-y-notas-contacts-alias-contacts-notes\" />\n\n## Tus propios nombres y notas: `contacts aliases`, `contacts notes`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "remote",
     "reason": "Do not promise provider plan/region eligibility from a stale matrix; retain direct primary prerequisites for each app, as in the reviewed WhatsApp guide.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
@@ -3985,514 +2316,6 @@
     }
   },
   {
-    "tool": "max",
-    "slug": "commands",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
-    "reason": "Keep incoming hashes from v0.66.0 at the corresponding canonical command; this does not restore removed CLI aliases. In 0.74.0 `max bot store fetch` became `max bot messages sync` and the `max bot store` group was removed; both old anchors land on the replacement.",
-    "replacements": {
-      "en": [
-        {
-          "before": "#### `max chats members check`",
-          "after": "#### `max chats members check`\n\n<a id=\"max-chats-members-audit\" />"
-        },
-        {
-          "before": "### `max chats links`",
-          "after": "### `max chats links`\n\n<a id=\"max-chats-link\" />"
-        },
-        {
-          "before": "#### `max chats links show`",
-          "after": "#### `max chats links show`\n\n<a id=\"max-chats-link-show\" />"
-        },
-        {
-          "before": "#### `max chats links reset`",
-          "after": "#### `max chats links reset`\n\n<a id=\"max-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `max chats requests confirm`",
-          "after": "#### `max chats requests confirm`\n\n<a id=\"max-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `max chats requests reject`",
-          "after": "#### `max chats requests reject`\n\n<a id=\"max-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `max contacts info`",
-          "after": "### `max contacts info`\n\n<a id=\"max-contacts-profile\" />"
-        },
-        {
-          "before": "### `max contacts aliases`",
-          "after": "### `max contacts aliases`\n\n<a id=\"max-contacts-alias\" />"
-        },
-        {
-          "before": "#### `max contacts aliases set`",
-          "after": "#### `max contacts aliases set`\n\n<a id=\"max-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `max contacts aliases remove`",
-          "after": "#### `max contacts aliases remove`\n\n<a id=\"max-contacts-alias-rm\" />"
-        },
-        {
-          "before": "### `max contacts events`",
-          "after": "### `max contacts events`\n\n<a id=\"max-contacts-timeline\" />"
-        },
-        {
-          "before": "#### `max store gaps show`",
-          "after": "#### `max store gaps show`\n\n<a id=\"max-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `max store rebuild`",
-          "after": "### `max store rebuild`\n\n<a id=\"max-store-reindex\" />"
-        },
-        {
-          "before": "#### `max stats messages counters sync`",
-          "after": "#### `max stats messages counters sync`\n\n<a id=\"max-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `max tasks update`",
-          "after": "### `max tasks update`\n\n<a id=\"max-tasks-plan\" />"
-        },
-        {
-          "before": "#### `max conversations links rebuild`",
-          "after": "#### `max conversations links rebuild`\n\n<a id=\"max-conversations-build\" />"
-        },
-        {
-          "before": "#### `max conversations batches show`",
-          "after": "#### `max conversations batches show`\n\n<a id=\"max-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `max conversations consents remove`",
-          "after": "#### `max conversations consents remove`\n\n<a id=\"max-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `max conversations embeddings status`",
-          "after": "#### `max conversations embeddings status`\n\n<a id=\"max-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `max conversations embeddings clear`",
-          "after": "#### `max conversations embeddings clear`\n\n<a id=\"max-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `max attachments update`",
-          "after": "### `max attachments update`\n\n<a id=\"max-attachments-text\" />\n\n<a id=\"max-attachments-text-set\" />"
-        },
-        {
-          "before": "### `max tags rebuild`",
-          "after": "### `max tags rebuild`\n\n<a id=\"max-tags-auto\" />"
-        },
-        {
-          "before": "### `max metadata show`",
-          "after": "### `max metadata show`\n\n<a id=\"max-metadata-get\" />"
-        },
-        {
-          "before": "### `max metadata sync`",
-          "after": "### `max metadata sync`\n\n<a id=\"max-metadata-refresh\" />"
-        },
-        {
-          "before": "## `max models`",
-          "after": "## `max models`\n\n<a id=\"max-models-audio\" />\n\n<a id=\"max-models-text\" />"
-        },
-        {
-          "before": "### `max models list`",
-          "after": "### `max models list`\n\n<a id=\"max-models-audio-list\" />\n\n<a id=\"max-models-text-list\" />"
-        },
-        {
-          "before": "### `max models download`",
-          "after": "### `max models download`\n\n<a id=\"max-models-audio-download\" />\n\n<a id=\"max-models-text-download\" />"
-        },
-        {
-          "before": "### `max models keys`",
-          "after": "### `max models keys`\n\n<a id=\"max-models-text-key\" />"
-        },
-        {
-          "before": "#### `max models keys set`",
-          "after": "#### `max models keys set`\n\n<a id=\"max-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `max models keys remove`",
-          "after": "#### `max models keys remove`\n\n<a id=\"max-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `max doctor reports show`",
-          "after": "#### `max doctor reports show`\n\n<a id=\"max-doctor-report\" />"
-        },
-        {
-          "before": "#### `max doctor reports create`",
-          "after": "#### `max doctor reports create`\n\n<a id=\"max-doctor-report-create\" />"
-        },
-        {
-          "before": "### `max search runs`",
-          "after": "### `max search runs`\n\n<a id=\"max-runs-search\" />"
-        },
-        {
-          "before": "### `max commands info`",
-          "after": "### `max commands info`\n\n<a id=\"max-commands-schema\" />"
-        },
-        {
-          "before": "### `max mcp add`",
-          "after": "### `max mcp add`\n\n<a id=\"max-mcp-setup\" />"
-        },
-        {
-          "before": "### `max mcp check`",
-          "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
-        },
-        {
-          "before": "#### `max bot messages sync`",
-          "after": "#### `max bot messages sync`\n\n<a id=\"max-bot-store\" />\n\n<a id=\"max-bot-store-fetch\" />"
-        }
-      ],
-      "ru": [
-        {
-          "before": "#### `max chats members check`",
-          "after": "#### `max chats members check`\n\n<a id=\"max-chats-members-audit\" />"
-        },
-        {
-          "before": "### `max chats links`",
-          "after": "### `max chats links`\n\n<a id=\"max-chats-link\" />"
-        },
-        {
-          "before": "#### `max chats links show`",
-          "after": "#### `max chats links show`\n\n<a id=\"max-chats-link-show\" />"
-        },
-        {
-          "before": "#### `max chats links reset`",
-          "after": "#### `max chats links reset`\n\n<a id=\"max-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `max chats requests confirm`",
-          "after": "#### `max chats requests confirm`\n\n<a id=\"max-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `max chats requests reject`",
-          "after": "#### `max chats requests reject`\n\n<a id=\"max-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `max contacts info`",
-          "after": "### `max contacts info`\n\n<a id=\"max-contacts-profile\" />"
-        },
-        {
-          "before": "### `max contacts aliases`",
-          "after": "### `max contacts aliases`\n\n<a id=\"max-contacts-alias\" />"
-        },
-        {
-          "before": "#### `max contacts aliases set`",
-          "after": "#### `max contacts aliases set`\n\n<a id=\"max-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `max contacts aliases remove`",
-          "after": "#### `max contacts aliases remove`\n\n<a id=\"max-contacts-alias-rm\" />"
-        },
-        {
-          "before": "### `max contacts events`",
-          "after": "### `max contacts events`\n\n<a id=\"max-contacts-timeline\" />"
-        },
-        {
-          "before": "#### `max store gaps show`",
-          "after": "#### `max store gaps show`\n\n<a id=\"max-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `max store rebuild`",
-          "after": "### `max store rebuild`\n\n<a id=\"max-store-reindex\" />"
-        },
-        {
-          "before": "#### `max stats messages counters sync`",
-          "after": "#### `max stats messages counters sync`\n\n<a id=\"max-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `max tasks update`",
-          "after": "### `max tasks update`\n\n<a id=\"max-tasks-plan\" />"
-        },
-        {
-          "before": "#### `max conversations links rebuild`",
-          "after": "#### `max conversations links rebuild`\n\n<a id=\"max-conversations-build\" />"
-        },
-        {
-          "before": "#### `max conversations batches show`",
-          "after": "#### `max conversations batches show`\n\n<a id=\"max-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `max conversations consents remove`",
-          "after": "#### `max conversations consents remove`\n\n<a id=\"max-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `max conversations embeddings status`",
-          "after": "#### `max conversations embeddings status`\n\n<a id=\"max-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `max conversations embeddings clear`",
-          "after": "#### `max conversations embeddings clear`\n\n<a id=\"max-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `max attachments update`",
-          "after": "### `max attachments update`\n\n<a id=\"max-attachments-text\" />\n\n<a id=\"max-attachments-text-set\" />"
-        },
-        {
-          "before": "### `max tags rebuild`",
-          "after": "### `max tags rebuild`\n\n<a id=\"max-tags-auto\" />"
-        },
-        {
-          "before": "### `max metadata show`",
-          "after": "### `max metadata show`\n\n<a id=\"max-metadata-get\" />"
-        },
-        {
-          "before": "### `max metadata sync`",
-          "after": "### `max metadata sync`\n\n<a id=\"max-metadata-refresh\" />"
-        },
-        {
-          "before": "## `max models`",
-          "after": "## `max models`\n\n<a id=\"max-models-audio\" />\n\n<a id=\"max-models-text\" />"
-        },
-        {
-          "before": "### `max models list`",
-          "after": "### `max models list`\n\n<a id=\"max-models-audio-list\" />\n\n<a id=\"max-models-text-list\" />"
-        },
-        {
-          "before": "### `max models download`",
-          "after": "### `max models download`\n\n<a id=\"max-models-audio-download\" />\n\n<a id=\"max-models-text-download\" />"
-        },
-        {
-          "before": "### `max models keys`",
-          "after": "### `max models keys`\n\n<a id=\"max-models-text-key\" />"
-        },
-        {
-          "before": "#### `max models keys set`",
-          "after": "#### `max models keys set`\n\n<a id=\"max-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `max models keys remove`",
-          "after": "#### `max models keys remove`\n\n<a id=\"max-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `max doctor reports show`",
-          "after": "#### `max doctor reports show`\n\n<a id=\"max-doctor-report\" />"
-        },
-        {
-          "before": "#### `max doctor reports create`",
-          "after": "#### `max doctor reports create`\n\n<a id=\"max-doctor-report-create\" />"
-        },
-        {
-          "before": "### `max search runs`",
-          "after": "### `max search runs`\n\n<a id=\"max-runs-search\" />"
-        },
-        {
-          "before": "### `max commands info`",
-          "after": "### `max commands info`\n\n<a id=\"max-commands-schema\" />"
-        },
-        {
-          "before": "### `max mcp add`",
-          "after": "### `max mcp add`\n\n<a id=\"max-mcp-setup\" />"
-        },
-        {
-          "before": "### `max mcp check`",
-          "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
-        },
-        {
-          "before": "#### `max bot messages sync`",
-          "after": "#### `max bot messages sync`\n\n<a id=\"max-bot-store\" />\n\n<a id=\"max-bot-store-fetch\" />"
-        }
-      ],
-      "es": [
-        {
-          "before": "#### `max chats members check`",
-          "after": "#### `max chats members check`\n\n<a id=\"max-chats-members-audit\" />"
-        },
-        {
-          "before": "### `max chats links`",
-          "after": "### `max chats links`\n\n<a id=\"max-chats-link\" />"
-        },
-        {
-          "before": "#### `max chats links show`",
-          "after": "#### `max chats links show`\n\n<a id=\"max-chats-link-show\" />"
-        },
-        {
-          "before": "#### `max chats links reset`",
-          "after": "#### `max chats links reset`\n\n<a id=\"max-chats-link-reset\" />"
-        },
-        {
-          "before": "#### `max chats requests confirm`",
-          "after": "#### `max chats requests confirm`\n\n<a id=\"max-chats-requests-accept\" />"
-        },
-        {
-          "before": "#### `max chats requests reject`",
-          "after": "#### `max chats requests reject`\n\n<a id=\"max-chats-requests-decline\" />"
-        },
-        {
-          "before": "### `max contacts info`",
-          "after": "### `max contacts info`\n\n<a id=\"max-contacts-profile\" />"
-        },
-        {
-          "before": "### `max contacts aliases`",
-          "after": "### `max contacts aliases`\n\n<a id=\"max-contacts-alias\" />"
-        },
-        {
-          "before": "#### `max contacts aliases set`",
-          "after": "#### `max contacts aliases set`\n\n<a id=\"max-contacts-alias-set\" />"
-        },
-        {
-          "before": "#### `max contacts aliases remove`",
-          "after": "#### `max contacts aliases remove`\n\n<a id=\"max-contacts-alias-rm\" />"
-        },
-        {
-          "before": "### `max contacts events`",
-          "after": "### `max contacts events`\n\n<a id=\"max-contacts-timeline\" />"
-        },
-        {
-          "before": "#### `max store gaps show`",
-          "after": "#### `max store gaps show`\n\n<a id=\"max-store-gaps-plan\" />"
-        },
-        {
-          "before": "### `max store rebuild`",
-          "after": "### `max store rebuild`\n\n<a id=\"max-store-reindex\" />"
-        },
-        {
-          "before": "#### `max stats messages counters sync`",
-          "after": "#### `max stats messages counters sync`\n\n<a id=\"max-stats-messages-counters-refresh\" />"
-        },
-        {
-          "before": "### `max tasks update`",
-          "after": "### `max tasks update`\n\n<a id=\"max-tasks-plan\" />"
-        },
-        {
-          "before": "#### `max conversations links rebuild`",
-          "after": "#### `max conversations links rebuild`\n\n<a id=\"max-conversations-build\" />"
-        },
-        {
-          "before": "#### `max conversations batches show`",
-          "after": "#### `max conversations batches show`\n\n<a id=\"max-conversations-batches-next\" />"
-        },
-        {
-          "before": "#### `max conversations consents remove`",
-          "after": "#### `max conversations consents remove`\n\n<a id=\"max-conversations-consents-revoke\" />"
-        },
-        {
-          "before": "#### `max conversations embeddings status`",
-          "after": "#### `max conversations embeddings status`\n\n<a id=\"max-conversations-embed-status\" />"
-        },
-        {
-          "before": "#### `max conversations embeddings clear`",
-          "after": "#### `max conversations embeddings clear`\n\n<a id=\"max-conversations-embed-clear\" />"
-        },
-        {
-          "before": "### `max attachments update`",
-          "after": "### `max attachments update`\n\n<a id=\"max-attachments-text\" />\n\n<a id=\"max-attachments-text-set\" />"
-        },
-        {
-          "before": "### `max tags rebuild`",
-          "after": "### `max tags rebuild`\n\n<a id=\"max-tags-auto\" />"
-        },
-        {
-          "before": "### `max metadata show`",
-          "after": "### `max metadata show`\n\n<a id=\"max-metadata-get\" />"
-        },
-        {
-          "before": "### `max metadata sync`",
-          "after": "### `max metadata sync`\n\n<a id=\"max-metadata-refresh\" />"
-        },
-        {
-          "before": "## `max models`",
-          "after": "## `max models`\n\n<a id=\"max-models-audio\" />\n\n<a id=\"max-models-text\" />"
-        },
-        {
-          "before": "### `max models list`",
-          "after": "### `max models list`\n\n<a id=\"max-models-audio-list\" />\n\n<a id=\"max-models-text-list\" />"
-        },
-        {
-          "before": "### `max models download`",
-          "after": "### `max models download`\n\n<a id=\"max-models-audio-download\" />\n\n<a id=\"max-models-text-download\" />"
-        },
-        {
-          "before": "### `max models keys`",
-          "after": "### `max models keys`\n\n<a id=\"max-models-text-key\" />"
-        },
-        {
-          "before": "#### `max models keys set`",
-          "after": "#### `max models keys set`\n\n<a id=\"max-models-text-key-set\" />"
-        },
-        {
-          "before": "#### `max models keys remove`",
-          "after": "#### `max models keys remove`\n\n<a id=\"max-models-text-key-remove\" />"
-        },
-        {
-          "before": "#### `max doctor reports show`",
-          "after": "#### `max doctor reports show`\n\n<a id=\"max-doctor-report\" />"
-        },
-        {
-          "before": "#### `max doctor reports create`",
-          "after": "#### `max doctor reports create`\n\n<a id=\"max-doctor-report-create\" />"
-        },
-        {
-          "before": "### `max search runs`",
-          "after": "### `max search runs`\n\n<a id=\"max-runs-search\" />"
-        },
-        {
-          "before": "### `max commands info`",
-          "after": "### `max commands info`\n\n<a id=\"max-commands-schema\" />"
-        },
-        {
-          "before": "### `max mcp add`",
-          "after": "### `max mcp add`\n\n<a id=\"max-mcp-setup\" />"
-        },
-        {
-          "before": "### `max mcp check`",
-          "after": "### `max mcp check`\n\n<a id=\"max-mcp-doctor\" />"
-        },
-        {
-          "before": "#### `max bot messages sync`",
-          "after": "#### `max bot messages sync`\n\n<a id=\"max-bot-store\" />\n\n<a id=\"max-bot-store-fetch\" />"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "people",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/people.md",
-    "reason": "Keep incoming people-guide hashes after canonical contact/member command renames; the new preparation heading is independent.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## Who they are: `contacts info`",
-          "after": "<a id=\"who-they-are-contacts-profile\" />\n\n## Who they are: `contacts info`"
-        },
-        {
-          "before": "## Group members: `chats members check --deep`",
-          "after": "<a id=\"group-members-chats-members-audit---deep\" />\n\n## Group members: `chats members check --deep`"
-        },
-        {
-          "before": "## Your names and notes: `contacts aliases`, `contacts notes`",
-          "after": "<a id=\"your-names-and-notes-contacts-alias-contacts-notes\" />\n\n## Your names and notes: `contacts aliases`, `contacts notes`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Кто это: `contacts info`",
-          "after": "<a id=\"кто-это-contacts-profile\" />\n\n## Кто это: `contacts info`"
-        },
-        {
-          "before": "## Участники группы: `chats members check --deep`",
-          "after": "<a id=\"участники-группы-chats-members-audit---deep\" />\n\n## Участники группы: `chats members check --deep`"
-        },
-        {
-          "before": "## Свои имена и заметки: `contacts aliases`, `contacts notes`",
-          "after": "<a id=\"свои-имена-и-заметки-contacts-alias-contacts-notes\" />\n\n## Свои имена и заметки: `contacts aliases`, `contacts notes`"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Quién es: `contacts info`",
-          "after": "<a id=\"quién-es-contacts-profile\" />\n\n## Quién es: `contacts info`"
-        },
-        {
-          "before": "## Miembros del grupo: `chats members check --deep`",
-          "after": "<a id=\"miembros-del-grupo-chats-members-audit---deep\" />\n\n## Miembros del grupo: `chats members check --deep`"
-        },
-        {
-          "before": "## Sus nombres y notas: `contacts aliases`, `contacts notes`",
-          "after": "<a id=\"sus-nombres-y-notas-contacts-alias-contacts-notes\" />\n\n## Sus nombres y notas: `contacts aliases`, `contacts notes`"
-        }
-      ]
-    }
-  },
-  {
     "tool": "drive",
     "slug": "scenarios",
     "reason": "Shared scenario templates omit profile words by design; copyable website examples need an explicit profile. Drive 0.29.0 ships the corrected availability prose, so only the profile replacements remain.",
@@ -4588,11 +2411,183 @@
       "en": [
         {
           "before": "## In progress\n",
-          "after": "<a id=\"in-progress\" />\n<a id=\"next\" />\n\n## Also available\n"
+          "after": "## Also available\n"
         },
         {
           "before": "- A digest of recent meetings (`review`) and the links shared in meeting chat (`mentions list`). They are built\n  and come with the next release.\n- Saved meeting searches you can run again by name.\n\n## Next\n\n- Help examples you can copy as they are, with the profile word in them.\n- Every command available to an agent through MCP, with the profile's permissions deciding what it may change.\n- More search fields for meetings: date, project, tag and topic inside the query.\n- `doctor` tells you whether this computer can save a Zoom login.\n",
           "after": "- `review` makes a digest of recent meetings, and `mentions list` finds links shared in meeting chat.\n- Saved searches can be run again by name; meeting query fields include date, project, tag and topic.\n- Profile-aware examples can be copied as shown. `doctor` checks whether this computer can save a Zoom login.\n- MCP keeps supported commands discoverable; profile permissions decide which reads and writes may run.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "mcp",
+    "reason": "Commands have one name and no aliases: drop the table that maps removed per-command MCP tool names to their CLI paths. The discovery and dispatch tools above already describe the current interface.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "<a id=\"existing-tool-names\"></a>\n\n## Update a saved client\n\nReconnect after upgrading so the app refreshes its tool list. Replace per-command tools with\n`memo_read` or `memo_write`, passing the CLI path in `command`. For instance, `notes_show` becomes\n`memo_read {\"command\":\"notes show\",\"arguments\":{\"note\":\"note:12\"}}`.\nThe old tool names are no longer registered. Use discovery to get the current argument schema.\n\n| Previous call | Current command and arguments |\n|---|---|\n| `person_context` | `context`; keep `person` and explicit `source` |\n| `project_context`, `project_evidence` | `projects context`, `projects evidence`; evidence uses `no_catch_up: true` instead of `catch_up: false` |\n| `search_notes`, `search_messages`, `search_mail`, `search_all` | `search notes`, `search messages`, `search mail`, `search all`; use `query` instead of `text` |\n| `facts_add` | `facts add`; use `statement` instead of `text` |\n| `search_memories` | `search memories`; use `query` instead of `text` |\n| `meeting_passage`, `meeting_prepare` | `meetings passage`, `meetings prepare`; discover the CLI's arguments |\n| `meeting_actions_add`, `project_actions_add` | `meetings actions add`, `projects actions add`; `input` carries the JSON proposal without touching MCP stdin |\n| `meeting_actions_list` | `meetings actions list`; use `query: \"status:proposed\"` instead of a `status` field |\n| `project_annotations_snapshot` | `projects annotations show`; reads without creating a file |\n| `project_annotations_preview` | `projects annotations check`; `file` and `bindings` name existing local JSON files |\n| Other underscore names | Their CLI paths, such as `memories add`, `actions list`, `vocabulary check` and `tasks status` |\n\nPermission keys remain dotted CLI paths, such as `projects.evidence`, rather than old tool names.\nVocabulary budget arguments now use snake_case, such as `max_comparisons`.\n\n",
+          "after": ""
+        }
+      ],
+      "ru": [
+        {
+          "before": "<a id=\"existing-tool-names\"></a>\n\n## Обновите сохранённое подключение\n\nПосле обновления подключитесь заново, чтобы приложение перечитало список инструментов. Замените отдельные инструменты команд\nна `memo_read` или `memo_write`, передавая путь CLI в `command`. Например, вместо `notes_show` используйте\n`memo_read {\"command\":\"notes show\",\"arguments\":{\"note\":\"note:12\"}}`.\nПрежние имена инструментов больше не зарегистрированы. Найдите команду, чтобы получить текущую схему аргументов.\n\n| Прежний вызов | Текущая команда и аргументы |\n|---|---|\n| `person_context` | `context`; сохраните `person` и явный `source` |\n| `project_context`, `project_evidence` | `projects context`, `projects evidence`; для доказательств `no_catch_up: true` заменяет `catch_up: false` |\n| `search_notes`, `search_messages`, `search_mail`, `search_all` | `search notes`, `search messages`, `search mail`, `search all`; используйте `query` вместо `text` |\n| `facts_add` | `facts add`; используйте `statement` вместо `text` |\n| `search_memories` | `search memories`; используйте `query` вместо `text` |\n| `meeting_passage`, `meeting_prepare` | `meetings passage`, `meetings prepare`; найдите текущие аргументы CLI |\n| `meeting_actions_add`, `project_actions_add` | `meetings actions add`, `projects actions add`; `input` передаёт JSON предложения, не читая stdin MCP |\n| `meeting_actions_list` | `meetings actions list`; используйте `query: \"status:proposed\"` вместо поля `status` |\n| `project_annotations_snapshot` | `projects annotations show`; читает без создания файла |\n| `project_annotations_preview` | `projects annotations check`; `file` и `bindings` указывают существующие локальные JSON-файлы |\n| Другие имена с подчёркиванием | Их пути в CLI, например `memories add`, `actions list`, `vocabulary check` и `tasks status` |\n\nКлючи разрешений остаются путями CLI через точку, например `projects.evidence`, а не прежними именами инструментов.\nПараметры бюджета словаря используют snake_case, например `max_comparisons`.\n\n",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "<a id=\"existing-tool-names\"></a>\n\n## Actualizar una conexión guardada\n\nVuelve a conectar después de actualizar para que la aplicación recargue su lista de herramientas. Sustituye las herramientas individuales\npor `memo_read` o `memo_write`, pasando la ruta CLI en `command`. Por ejemplo, `notes_show` pasa a ser\n`memo_read {\"command\":\"notes show\",\"arguments\":{\"note\":\"note:12\"}}`.\nLos nombres anteriores ya no están registrados. Busca el comando para obtener su esquema de argumentos actual.\n\n| Llamada anterior | Comando y argumentos actuales |\n|---|---|\n| `person_context` | `context`; conserva `person` y un `source` explícito |\n| `project_context`, `project_evidence` | `projects context`, `projects evidence`; la evidencia usa `no_catch_up: true` en vez de `catch_up: false` |\n| `search_notes`, `search_messages`, `search_mail`, `search_all` | `search notes`, `search messages`, `search mail`, `search all`; usa `query` en vez de `text` |\n| `facts_add` | `facts add`; usa `statement` en vez de `text` |\n| `search_memories` | `search memories`; usa `query` en vez de `text` |\n| `meeting_passage`, `meeting_prepare` | `meetings passage`, `meetings prepare`; busca los argumentos actuales del CLI |\n| `meeting_actions_add`, `project_actions_add` | `meetings actions add`, `projects actions add`; `input` lleva la propuesta JSON sin leer stdin de MCP |\n| `meeting_actions_list` | `meetings actions list`; usa `query: \"status:proposed\"` en vez de un campo `status` |\n| `project_annotations_snapshot` | `projects annotations show`; lee sin crear un archivo |\n| `project_annotations_preview` | `projects annotations check`; `file` y `bindings` indican archivos JSON locales existentes |\n| Otros nombres con guiones bajos | Sus rutas CLI, como `memories add`, `actions list`, `vocabulary check` y `tasks status` |\n\nLas claves de permisos siguen siendo rutas CLI con puntos, como `projects.evidence`, no los nombres de herramientas anteriores.\nLos argumentos de presupuesto del vocabulario usan snake_case, como `max_comparisons`.\n\n",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "mcp",
+    "reason": "Commands have one name and no aliases: drop the upgrade note that names the removed serve --mcp entry point and its flags. The section above gives the current configuration.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "### Upgrading from 0.34 and earlier\n\n`zm serve --mcp` and its flags (`--meeting-context`, `--meeting-preparation`, `--semantic` and the others) are gone;\n`zm serve` now says so. Use `meetings context`, `meetings prepare`, `search all` and `search meetings --model` through the\nshared server. Change\nthe entry's `args` to `[\"personal\", \"mcp\"]`.\n\n",
+          "after": ""
+        }
+      ],
+      "ru": [
+        {
+          "before": "### Обновление с версии 0.34 и ранее\n\n`zm serve --mcp` и его флаги (`--meeting-context`, `--meeting-preparation`, `--semantic` и остальные) удалены;\n`zm serve` сообщает об этом. Через общий сервер используйте `meetings context`, `meetings prepare`,\n`search all` и `search meetings --model`. Замените `args` записи на `[\"personal\", \"mcp\"]`.\n\n",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "### Actualizar desde la versión 0.34 o anterior\n\n`zm serve --mcp` y sus opciones (`--meeting-context`, `--meeting-preparation`, `--semantic` y las demás)\nya no existen; `zm serve` lo indica. Usa `meetings context`, `meetings prepare`, `search all` y\n`search meetings --model` a través del servidor compartido. Cambia los `args` de la entrada a\n`[\"personal\", \"mcp\"]`.\n\n",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "search",
+    "reason": "Commands have one name and no aliases: state where --since-time and --until-time apply without naming the list options they replaced.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The date query replaces the former list-only `--since-time` and `--until-time` flags;\nthose flags remain available on transcript search and ingestion commands. ",
+          "after": "Transcript search and ingestion commands take `--since-time` and `--until-time`. "
+        }
+      ],
+      "ru": [
+        {
+          "before": "Запрос по дате заменяет прежние параметры списка `--since-time` и `--until-time`;\nэти параметры сохраняются в поиске расшифровок и загрузке встреч. ",
+          "after": "Поиск расшифровок и загрузка встреч принимают `--since-time` и `--until-time`. "
+        }
+      ],
+      "es": [
+        {
+          "before": "La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;\nesos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.\n",
+          "after": "La búsqueda de transcripciones y la importación de reuniones aceptan `--since-time` y `--until-time`.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "cli-contract",
+    "reason": "Commands have one name and no aliases: drop the note that names the removed messages/chats/tasks stats paths. The stats commands above are the only paths.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Старых путей `messages stats`, `chats stats` и `tasks stats` больше нет, псевдонимов для них тоже\nнет. Если в настройках были права для этих путей, перепишите их на новые пути. ",
+          "after": ""
+        }
+      ],
+      "en": [
+        {
+          "before": "The old paths `messages stats`, `chats stats` and `tasks stats` no longer exist, including aliases. If settings grant permissions for them, rewrite those permissions to the new paths. ",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "Las antiguas rutas `messages stats`, `chats stats` y `tasks stats` ya no existen y tampoco existen alias para ellas. Si la configuración tenía permisos para estas rutas, reescríbalos con las rutas nuevas. ",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "The legacy query language was removed (strict Lucene is the only language); do not name it as a mode discovery excludes.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Discovery does not combine with legacy,\nregular-expression search",
+          "after": "Discovery does not combine with\nregular-expression search"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Режим не совмещается с legacy, регулярными",
+          "after": "Режим не совмещается с регулярными"
+        }
+      ],
+      "es": [
+        {
+          "before": "No combina con legacy, expresiones",
+          "after": "No combina con expresiones"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "audio-recognition",
+    "reason": "The models audio and models text groups were removed; max v0.74.0 has one models group (list, download, keys). Drop the sentence that tells readers to keep the removed groups apart.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Не путайте группы команд. `models audio` — модели речи. `models text` — модели для поиска и\nключи API, это другое. ",
+          "after": ""
+        }
+      ],
+      "en": [
+        {
+          "before": "Keep command groups distinct: `models audio` manages speech recognition; `models text` manages search components and API keys. ",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "No confundas los grupos: `models audio` son modelos de voz; `models text` son modelos de búsqueda y claves de API. ",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "people",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.90.0/docs/people.md",
+    "reason": "Mirror the native anchor that the released people guide itself carries above this heading; the released changelog links to it.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "## Свои имена и заметки: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n## Свои имена и заметки: `contacts aliases`, `contacts notes`"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Tus propios nombres y notas: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n## Tus propios nombres y notas: `contacts aliases`, `contacts notes`"
         }
       ]
     }

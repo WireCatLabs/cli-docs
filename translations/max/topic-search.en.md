@@ -2,10 +2,6 @@
 title: "Topic search"
 ---
 
-<a id="что-такое-разговор" />
-<a id="построить-посчитать-векторы-искать" />
-<a id="для-агентов" />
-
 Topic search helps when you remember what a chat discussed but cannot recall the wording. Ask where you talked about renting an apartment, and it can find messages about rent, deposits and a landlady without that exact phrase. It also works across languages: a Russian question can find an English or Spanish discussion.
 
 After reading this page, you can prepare your chat for topic searches, ask questions in your own words, read the results, and understand when a regular word search is best. Searching for topics only uses messages that `max` has already saved on this computer, so first download the history: `max personal messages sync <чат>` ([download chat history](./archive.md#скачать-историю)).

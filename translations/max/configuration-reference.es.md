@@ -4,8 +4,6 @@ title: "Referencia de configuración"
 
 <a id="prioridad-de-los-ajustes" />
 <a id="comprobar-el-resultado" />
-<a id="порядок-в-котором-решается-настройка" />
-<a id="посмотреть-что-получилось" />
 
 Esta página es necesaria cuando necesita el nombre exacto, el tipo, el valor predeterminado o el alcance de una configuración, o el nombre de una variable de entorno. Esto enumera todas las configuraciones que lee `max`, todas las formas de anularlas y qué valor gana. Para cambios regulares y un archivo de ejemplo, comience con [guía de configuración](./configuration.md). El comportamiento de los comandos, códigos de salida y retorno se describe en [contrato CLI](./cli-contract.md).
 

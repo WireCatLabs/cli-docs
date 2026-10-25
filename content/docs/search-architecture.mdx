@@ -70,7 +70,7 @@ The JSON answer includes the language, field and preset versions, the time zone,
 
 `stats messages show` runs the same query and counts each matching message once, grouped by chat, sender, calendar day or hour. It counts the archive only. A successful search or count writes its query and options, never its results, to a local history of the newest 1,000 runs; saved searches are named entries that are parsed again on every run.
 
-Strict Lucene is the only query language. The old `--language legacy` and JavaScript `--regex` modes were removed; write a Lucene regular expression such as `body:/.*invoice.*/` instead.
+Strict Lucene is the only query language. For a regular expression, write a Lucene one such as `body:/.*invoice.*/`.
 
 ### Questions and partial evidence
 

@@ -6,10 +6,6 @@ title: "Inicio de sesión, sesiones y perfiles"
 <a id="comprobar-y-olvidar-la-sesión" />
 <a id="si-no-hay-llavero" />
 <a id="cuánto-dura-el-token" />
-<a id="откуда-берётся-токен" />
-<a id="проверить-и-забыть" />
-<a id="если-ключницы-нет" />
-<a id="сколько-живёт-токен" />
 
 Lea esta página cuando conecte `max` por primera vez a una cuenta MAX, agregue una segunda cuenta o `max` diga que no hay inicio de sesión. Al final, usted sabe cómo iniciar sesión, cómo comprobar quién ha iniciado sesión, cómo cerrar sesión y dónde almacena `max` lo que necesita para mantener su inicio de sesión en su lugar.
 

@@ -7,11 +7,6 @@ title: "Cómo se comporta max en los scripts"
 <a id="previsualizar-y-repetir-operaciones-de-escritura" />
 <a id="cómo-se-comprueba-al-agente" />
 <a id="nombres-ambiguos" />
-<a id="запуск-без-вопросов-и-ограничения" />
-<a id="узкий-результат-и-описание-команды" />
-<a id="предпросмотр-и-повтор-записи" />
-<a id="как-проверяют-работу-агента" />
-<a id="неоднозначные-имена" />
 
 Esta página explica cómo usar `max` desde otro programa: un script, una tarea programada o un agente de IA que ejecuta comandos en el terminal. Presenta las reglas comunes para leer resultados, reconocer errores y decidir cuándo reintentar.
 

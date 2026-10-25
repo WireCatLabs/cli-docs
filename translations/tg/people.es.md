@@ -3,7 +3,6 @@ title: "Personas"
 ---
 
 <a id="para-agentes" />
-<a id="for-agents" />
 
 Utilice esta página cuando quiera saber más sobre una persona: quién es, qué le escribió a usted o a sus grupos, y si su cuenta parece un bot o un spammer. Aprenderá a leer el perfil de una persona, recopilar sus mensajes para obtener un resumen, verificar una cuenta antes de confiar en ella y conservar sus propios nombres y notas sobre las personas.
 

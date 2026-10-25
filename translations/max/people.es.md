@@ -3,7 +3,6 @@ title: "Personas: perfiles, mensajes y comprobación de bots"
 ---
 
 <a id="para-agentes" />
-<a id="для-агентов" />
 
 Esta página es necesaria cuando desea obtener más información sobre una persona: quién es, qué le escribió a usted o en sus grupos, y si su cuenta parece un bot o un spammer. Aprenderá cómo mirar el perfil de una persona, recopilar sus mensajes para volver a contarlos, verificar una cuenta antes de confiar en ella y conservar sus nombres y notas sobre las personas.
 

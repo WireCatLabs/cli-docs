@@ -13,8 +13,8 @@ Pon delante de cada comando el nombre de la herramienta y el de tu perfil, como 
 | --- | --- | --- |
 | Palabras en tus mensajes de Telegram o MAX | `search messages` en `tg` o `max` | Lee el archivo local y, por defecto, también el servidor de la mensajería |
 | Un teléfono, correo, enlace o nombre de persona escritos en mensajes | `search messages` con `phone:`, `email:`, `domain:` o `mentions:`, o `mentions list` | Se encuentra por reglas, como esté escrito |
-| Todo sobre una persona, en todas las mensajerías | `contacts timeline` | Necesita las identidades unidas con `contacts link` |
-| Una conversación, cuando recuerdas el tema y no las palabras | `search conversations` | Necesita `conversations build` y `conversations embed` una vez para el chat |
+| Todo sobre una persona, en todas las mensajerías | `contacts events` | Necesita las identidades unidas con `contacts link` |
+| Una conversación, cuando recuerdas el tema y no las palabras | `search conversations` | Necesita `conversations rebuild` y `conversations embed` una vez para el chat |
 | Una imagen por lo que muestra | `search messages "dog on a beach"` | Solo en inglés, y el ajuste de imágenes debe estar activado: [Qué se indexa](./what-is-indexed.md#imágenes) |
 | Correo, notas, o no sabes dónde se escribió | `memo search all`, `memo search mail`, `memo search notes` | La respuesta lista las fuentes omitidas y el motivo |
 | Mensajes de todas las mensajerías a la vez | `memo search messages` | Solo mensajes |
@@ -82,7 +82,7 @@ La respuesta indica si hay más resultados (`has_more`). Eso describe la página
 | Comando | Página siguiente |
 | --- | --- |
 | `search messages` en `tg` y `max` | `--page <n>`, contando desde 1 |
-| `contacts timeline` | `--cursor <cursor>`, con el cursor de `page.next` de la respuesta |
+| `contacts events` | `--cursor <cursor>`, con el cursor de `page.next` de la respuesta |
 | `mentions list`, `drive catalog list`, `drive catalog search` | `--page <n>` |
 | `memo search notes`, `drive search` | `--offset <n>` |
 | `memo search all`, `memo search mail`, `memo search messages` | Solo `--limit`, hasta 100: acota la consulta |

@@ -8,12 +8,6 @@ title: "Cómo se comporta tg en los scripts"
 <a id="cómo-se-comprueba-al-agente" />
 <a id="referencias" />
 <a id="nombres-ambiguos" />
-<a id="headless-execution-and-limits" />
-<a id="compact-results-and-discovery" />
-<a id="previews-and-retry-safety" />
-<a id="how-agent-behavior-is-checked" />
-<a id="references" />
-<a id="ambiguous-names" />
 
 Esta página es para usted cuando otro programa ejecuta `tg`: un script de shell, un trabajo programado o un agente de IA que llama comandos en una terminal. Describe las reglas que sigue cada comando, para que el programa pueda leer el resultado, reconocer un error y saber cuándo es seguro volver a intentarlo.
 

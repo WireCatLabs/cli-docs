@@ -5,9 +5,6 @@ title: "Configuración"
 <a id="el-archivo" />
 <a id="una-pequeña-configuración" />
 <a id="qué-puedo-configurar" />
-<a id="the-file" />
-<a id="a-small-configuration" />
-<a id="what-can-i-configure" />
 
 Utilice esta página cuando escriba la misma opción una y otra vez, o cuando desee que `tg` se comporte de manera diferente para una cuenta. Al final sabrá dónde está el archivo de configuración, qué hacen las configuraciones comunes, cómo cambiar una y cómo verificar qué valor está vigente. No necesita un archivo de configuración para comenzar: sin uno, cada configuración tiene un valor incorporado.
 

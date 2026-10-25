@@ -2,11 +2,6 @@
 title: "Diagnostics: what a command did"
 ---
 
-<a id="показать" />
-<a id="сохранить" />
-<a id="что-можно-с-этим-делать" />
-<a id="справочник-для-скриптов" />
-
 Use this page when a command fails, hangs or takes too long and you want to know why. You will learn to inspect requests as they happen, save a run record, check installation and submit a problem report without message text.
 
 Terms used below:

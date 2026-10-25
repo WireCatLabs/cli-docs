@@ -35,13 +35,13 @@ it("partitions every generated command exactly once while retaining shared optio
 it("routes existing bot/admin/personal anchors, including multiword commands and malformed hashes", () => {
   expect(commandGroupForAnchor("#tg-bot-api-send-message")).toBe("bot")
   expect(commandGroupForAnchor("#max-chats-members-add")).toBe("admin")
-  expect(commandGroupForAnchor("#tg-chats-requests-accept")).toBe("admin")
+  expect(commandGroupForAnchor("#tg-chats-requests-confirm")).toBe("admin")
   expect(commandGroupForAnchor("#tg-stats-messages-show")).toBe("admin")
   expect(commandGroupForAnchor("#tg-topics-create")).toBe("admin")
   expect(commandGroupForAnchor("#tg-topics-list")).toBe("personal")
   expect(commandGroupForAnchor("#tg-store-export")).toBe("setup")
   expect(commandGroupForAnchor("#max-session-start")).toBe("setup")
-  expect(commandGroupForAnchor("#tg-messages-search")).toBe("personal")
+  expect(commandGroupForAnchor("#tg-search-messages")).toBe("personal")
   expect(commandGroupForAnchor("#%invalid")).toBe("personal")
 })
 

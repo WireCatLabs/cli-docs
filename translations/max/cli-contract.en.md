@@ -2,12 +2,6 @@
 title: "How max behaves in scripts"
 ---
 
-<a id="запуск-без-вопросов-и-ограничения" />
-<a id="узкий-результат-и-описание-команды" />
-<a id="предпросмотр-и-повтор-записи" />
-<a id="как-проверяют-работу-агента" />
-<a id="неоднозначные-имена" />
-
 Use this page when another program runs `max`: a script, scheduled task or AI agent issuing terminal commands. It explains shared command rules so the program can read results, identify failures and decide when to retry.
 
 You will learn to receive precise JSON from any command, select the fields you need, run without interactive questions, and handle writes whose outcomes are unknown.

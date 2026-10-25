@@ -23,8 +23,8 @@ messenger:
   selected account and does not change their name in your contacts.
 - **Notes.** Free text about the person that you or your agent can search later.
 
-The commands are in the [Telegram people guide](./tg/people.md#your-own-names-and-notes-contacts-alias-contacts-notes)
-and the [MAX reference](./max/commands.md#max-contacts-alias).
+The commands are in the [Telegram people guide](./tg/people.md#your-own-names-and-notes-contacts-aliases-contacts-notes)
+and the [MAX reference](./max/commands.md#max-contacts-aliases).
 
 The same human often has a Telegram account and a MAX account. The tools treat them as two people
 until you **link** them: you record on your computer that both accounts belong to one person. Then

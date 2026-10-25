@@ -6,9 +6,6 @@ title: "Cómo usar tg"
 <a id="perfil-de-una-persona" />
 <a id="es-un-bot-esta-cuenta" />
 <a id="contexto-local-de-una-persona" />
-<a id="a-persons-profile" />
-<a id="is-this-account-a-bot" />
-<a id="local-person-context" />
 
 tg le permite a usted, o a su agente de IA, leer y escribir su propia cuenta de Telegram desde la terminal. Esta página es el recorrido: desde el primer inicio de sesión hasta la lectura, envío y ejecución de grupos, en el orden en que lo necesitará. Ábrelo cuando empieces con tg, o cuando quieras saber qué es posible antes de preguntarle a tu agente.
 

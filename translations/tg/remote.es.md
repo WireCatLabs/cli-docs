@@ -5,8 +5,6 @@ title: "ChatGPT, Codex o Claude en el navegador"
 <a id="comprobar-una-conexión" />
 <a id="transferir-un-archivo-grande" />
 <a id="capacidades-de-mcp-y-del-cliente" />
-<a id="check-a-connection" />
-<a id="mcp-and-host-capabilities" />
 
 Utilice esta página cuando desee una aplicación de IA que se ejecute en el navegador o en su teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de Telegram. Una aplicación de este tipo no puede iniciar `tg` en su computadora, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `tg` a través de una dirección HTTPS privada, solo puede hacer lo que su perfil permite y usted sabe cómo detenerla o recuperar su acceso.
 

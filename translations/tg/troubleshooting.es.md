@@ -8,7 +8,6 @@ title: "Solución de problemas"
 <a id="un-comando-se-queda-bloqueado" />
 <a id="un-chat-figura-como-descargado-entero-pero-faltan-mensajes-antiguos" />
 <a id="serve-se-detuvo-por-sí-solo" />
-<a id="npx-leemourtg-cli-ejecuta-una-versión-anterior" />
 
 Utilice esta página cuando `tg` muestre un error o no haga lo que esperaba. Busque el mensaje que ve, o su código de salida, y la página le indicará lo que significa y qué hacer a continuación. La mayoría de las respuestas requieren una orden.
 

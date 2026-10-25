@@ -258,12 +258,12 @@ export function reportTasks(tool: string, lang: string): ReportTask[] {
       `${tool} stats chats retention Project --since-time 30d --checkpoints 1d,7d,30d --within 7d --json`,
     ],
     person: [
-      `${tool} contacts profile Anna --json`,
+      `${tool} contacts info Anna --json`,
       `${tool} contacts context Anna --json`,
       `${tool} stats contacts top 'date:[2026-10-01 TO 2026-10-07] from:Anna' --chat Project --measure messages --json`,
     ],
     antibot: [
-      `${tool} chats members audit Project 'score>=2' --max-pages 2 --json`,
+      `${tool} chats members check Project 'score>=2' --max-pages 2 --json`,
       `${tool} contacts check 42 --offline --json`,
     ],
   }

@@ -104,7 +104,9 @@ artificial “Next steps” section.
 - Shared pages explain common tasks once. Messenger-specific facts belong to their tool's
   source pages. Give both destinations when behavior differs; replacing `tg` with `max` is not
   evidence that a command works.
-- Preserve current URLs and incoming anchors. A route move requires an explicit redirect map.
+- Preserve current URLs and anchors. A route move requires an explicit redirect map. A command has one
+  name: a renamed command or heading keeps no old anchor, and no guide names the old command or says it
+  was renamed. Changelogs keep what each release did.
 - A new page needs a sidebar or hub entry and a contextual inbound link from the task that leads
   to it. A page existing in a sitemap is not enough.
 
@@ -165,7 +167,7 @@ more pages, more headings or more words just to raise a score.
 
 Tool repositories own command behavior and native guides. The portal normally imports a reviewed release, not unreleased `main`. An explicitly reviewed documentation-only page may come from a fixed source commit while the runtime release pin stays unchanged. Such a page must describe capabilities already available in that release; its source and edit link must remain traceable. Release-update preparation retires these overrides so newer guide content is reviewed in full. Review contextual prose corrections again when their native counterpart is included in a release.
 
-Preserve URLs, incoming anchors, command tokens and code examples across edits and translations. Link new guides from a relevant existing task page and the sidebar. Every navigable sidebar page and folder needs an icon that represents its subject; icons are decorative and must not replace the label. Shared navigation belongs in `lib/docs-sidebar-tree.tsx` and `components/getting-started-links.tsx`.
+Preserve URLs, current anchors, command tokens and code examples across edits and translations. Link new guides from a relevant existing task page and the sidebar. Every navigable sidebar page and folder needs an icon that represents its subject; icons are decorative and must not replace the label. Shared navigation belongs in `lib/docs-sidebar-tree.tsx` and `components/getting-started-links.tsx`.
 
 Explain available prerequisites and quality limits where readers need them. For attachments, distinguish automatic parsers, agent tools and explicitly configured external APIs. Put voice transcription in its own row. Never imply that passing a local path transfers a file to a remote agent.
 

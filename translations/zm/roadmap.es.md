@@ -27,9 +27,6 @@ Para usar tu cuenta de Zoom, primero conectas tu propia app de Zoom;
 
 <a id="also-available" />
 
-<a id="in-progress" />
-<a id="next" />
-
 ## También disponible
 
 - `review` prepara un resumen de reuniones recientes y `mentions list` encuentra enlaces compartidos en el chat.

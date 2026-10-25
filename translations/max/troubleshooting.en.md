@@ -2,8 +2,6 @@
 title: "Troubleshooting"
 ---
 
-<a id="проверка-со-входом-в-max" />
-
 Use this page when `max` reports an error or behaves unexpectedly. Find the displayed message or exit code to understand the cause and recovery steps. Most problems need one command.
 
 Terms used below:
@@ -78,8 +76,6 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 **Linux and macOS.** npm's command directory is `$(npm prefix -g)/bin`. `max personal doctor` prints `export PATH=…`; add it to `~/.zshrc` or `~/.bashrc`.
 
 **On `PATH` there is another `max`.** If previously in `PATH` there is someone else’s program with the same name, `max personal doctor` will name its path. Call ours using the full path or put its directory earlier.
-
-<a id="npx-leemourmax-cli-installs-the-wrong-version" />
 
 ### `npx @wirecat/max-cli` installs the wrong version
 

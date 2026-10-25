@@ -2,8 +2,6 @@
 title: "External models: API setup"
 ---
 
-<a id="какие-задачи-используют-api" />
-
 Use this page when `max` needs to call an AI service itself: to read text from scans and images, analyse relationships between discussions or complete a reply template. You will learn to choose a provider, save its key, select a model for one task and test it on a small amount of data.
 
 Terms used below:

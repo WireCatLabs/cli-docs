@@ -3,7 +3,6 @@ title: "Archivo local de mensajes"
 ---
 
 <a id="reglas-de-respuesta-solo-para-probadores" />
-<a id="tester-only-reply-rules" />
 
 tg guarda cada mensaje que lee en su computadora. Esta página es para cuando desea que el historial guardado esté completo y actualizado: para buscar meses atrás, para permitir que su agente responda sin conectarse o para exportar un chat a un archivo.
 

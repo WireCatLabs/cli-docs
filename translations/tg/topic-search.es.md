@@ -7,11 +7,6 @@ title: "Búsqueda por tema"
 <a id="leer-lo-encontrado" />
 <a id="mantenerlo-al-día" />
 <a id="para-agentes" />
-<a id="what-a-conversation-is" />
-<a id="build-embed-search" />
-<a id="read-what-was-found" />
-<a id="keeping-it-current" />
-<a id="for-agents" />
 
 Recuerdas que en un chat se discutió algo, pero no las palabras que usaba la gente. La búsqueda de temas encuentra esa discusión por su significado. Pregunta "¿dónde hablamos de alquilar un piso?" y encuentra una conversación que dice "departamento", "arrendamiento" y "fianza", aunque nadie haya escrito "alquilar piso". También funciona en todos los idiomas: una pregunta en inglés encuentra una discusión en español o ruso.
 

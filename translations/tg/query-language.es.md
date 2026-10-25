@@ -4,8 +4,6 @@ title: "Lenguaje de consulta de la búsqueda"
 
 <a id="en-mcp" />
 <a id="los-modos-anteriores" />
-<a id="in-mcp" />
-<a id="the-older-modes" />
 
 Si utilizas un agente de IA con tg, no necesitas aprender este lenguaje: describe lo que quieres con palabras sencillas y el agente escribe la consulta. Esta página es para personas que escriben búsquedas por sí mismas y para cualquiera que desee todos los filtros: operadores exactos, todos los campos, ajustes preestablecidos, reglas de fecha y límites.
 

@@ -13,8 +13,8 @@ description: "Как выбрать команду поиска, сузить з
 | --- | --- | --- |
 | Слова в ваших сообщениях Telegram или MAX | `search messages` в `tg` или `max` | Читает локальный архив и по умолчанию ещё и сервер мессенджера |
 | Телефон, почта, ссылка или имя человека, написанные в сообщениях | `search messages` с `phone:`, `email:`, `domain:` или `mentions:`, либо `mentions list` | Находится по правилам, как бы ни был написан |
-| Всё об одном человеке во всех мессенджерах | `contacts timeline` | Нужны адреса, объединённые через `contacts link` |
-| Обсуждение, когда помните тему, а не слова | `search conversations` | Для чата один раз нужны `conversations build` и `conversations embed` |
+| Всё об одном человеке во всех мессенджерах | `contacts events` | Нужны адреса, объединённые через `contacts link` |
+| Обсуждение, когда помните тему, а не слова | `search conversations` | Для чата один раз нужны `conversations rebuild` и `conversations embed` |
 | Картинка по тому, что на ней | `search messages "dog on a beach"` | Только по-английски, и должна быть включена настройка картинок: [Что попадает в поиск](./what-is-indexed.md#картинки) |
 | Почта, заметки или неизвестно, где написано | `memo search all`, `memo search mail`, `memo search notes` | Ответ перечисляет пропущенные источники и причину |
 | Сообщения всех мессенджеров сразу | `memo search messages` | Только сообщения |
@@ -82,7 +82,7 @@ tg personal search messages 'chat:"Book club" from:"Kai Sample" date>=2026-10-01
 | Команда | Следующая страница |
 | --- | --- |
 | `search messages` в `tg` и `max` | `--page <n>`, счёт с 1 |
-| `contacts timeline` | `--cursor <cursor>`, курсор из `page.next` в ответе |
+| `contacts events` | `--cursor <cursor>`, курсор из `page.next` в ответе |
 | `mentions list`, `drive catalog list`, `drive catalog search` | `--page <n>` |
 | `memo search notes`, `drive search` | `--offset <n>` |
 | `memo search all`, `memo search mail`, `memo search messages` | Только `--limit`, до 100: сузьте запрос |

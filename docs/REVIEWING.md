@@ -27,8 +27,8 @@ step or a broken translated page while it can still be corrected. Use
    not prove personal-account draft support.
 5. Follow instructions and links in order. If a reader must choose an audience, grant a
    permission or fetch history, provide the next action or a precise guide link there. Remove
-   duplicate Start here blocks from task navigation; preserve the actual getting-started links,
-   incoming URLs and old heading anchors.
+   duplicate Start here blocks from task navigation; preserve the actual getting-started links and
+   incoming URLs. A renamed command or heading keeps no old anchor, and no page names an old command.
 6. Read each locale's changed prose in full. Keep the same terms, capabilities, action boundaries
    and required context; matching code fences or fingerprints does not establish this. Verify
    headings, links, examples and diagrams in the exported Markdown as well as HTML. Never
@@ -76,7 +76,7 @@ Use a review table with one row per page/locale:
 
 | Page and locale | Reader task | Terms and opening | Behavior evidence | Links and exports | Result and owner |
 | --- | --- | --- | --- | --- | --- |
-| Example: drafts-and-templates, en | Review a reply before sending | draft and template remain distinct; setup assumed | personal commands and adapter support checked; app-saving boundary stated | audience settings and old anchors checked | fixed, reviewer name |
+| Example: drafts-and-templates, en | Review a reply before sending | draft and template remain distinct; setup assumed | personal commands and adapter support checked; app-saving boundary stated | audience settings and anchors checked | fixed, reviewer name |
 
 Mark a page reviewed only after reading its prose and checking the material claims. Record
 remaining issues separately with their owning repository, proposed correction and source. A
