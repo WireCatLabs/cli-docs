@@ -29,6 +29,20 @@ export type Tool = {
   distribution?: "source"
   /** `false` when the tool's commands take no leading profile, as its `guide` command is told. */
   profile?: boolean
+  /** An outside tool, reviewed against docs/REVIEWING.md#community-tools; an entry without it is one of ours. */
+  community?: true
+}
+
+/** What makes a tools.json entry unfit to list; empty when it is fine. */
+export const toolProblems = (tool: Tool): string[] => {
+  const problems: string[] = []
+  const flag = (tool as { community?: unknown }).community
+  if (flag !== undefined && flag !== true) problems.push(`${tool.name}: "community" is true or absent`)
+  if (flag === true && tool.package.startsWith("@wirecat/"))
+    problems.push(`${tool.name}: a community tool publishes under its own npm scope, not @wirecat`)
+  if (flag === true && tool.repo.startsWith("WireCatLabs/"))
+    problems.push(`${tool.name}: a WireCatLabs repository is one of ours, not a community tool`)
+  return problems
 }
 
 /** A preview uses its requested ref; published prose overrides must be immutable. */
@@ -303,6 +317,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     options: { ref: { type: "string" }, tool: { type: "string" }, "capture-only": { type: "boolean", default: false } },
   })
   if (values.tool && !tools.some((tool) => tool.name === values.tool)) throw new Error(`Unknown tool: ${values.tool}`)
+  const problems = tools.flatMap(toolProblems)
+  if (problems.length) throw new Error(`tools.json:\n${problems.join("\n")}`)
   for (const tool of tools.filter((tool) => !values.tool || values.tool === tool.name))
     syncTool(tool, root, values.ref, values["capture-only"])
 }

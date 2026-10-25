@@ -44,6 +44,7 @@ wirecat.dev/
 ├── /{lang}/docs/search-architecture  message/graph/embedding architecture, shared guide       🟡
 ├── /{lang}/docs/search-playground  interactive search on a fictional local archive            🟡
 ├── /{lang}/docs/mcp               MCP connections and documentation for agents                ✅
+├── /{lang}/docs/build-create-cli  build a CLI from cli-template: questions, reference tools, upgrade ✅
 ├── /{lang}/docs/{tool}            the tool's start page (its docs/index.md)                   ✅
 ├── /{lang}/docs/{tool}/{page}     one page of STRUCTURE.md                                    ✅
 ├── /{lang}/docs/{tool}/changelog  the tool's CHANGELOG.md                                     ✅
@@ -54,6 +55,8 @@ wirecat.dev/
 ```
 
 `{lang}` is `en`, `ru` or `es`. `{tool}` is `max` or `tg`; a new tool is one line in `tools.json`.
+A line with `"community": true` is an outside tool: the sidebar shows it under "Community tools", a group that
+appears only while one is listed ([review list](REVIEWING.md#community-tools)).
 `www.wirecat.dev` answers 301 to `wirecat.dev`.
 
 ## The landing page — `/{lang}`
