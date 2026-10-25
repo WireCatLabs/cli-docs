@@ -36,29 +36,82 @@ necesites.
 - **Comprobaciones que la mantienen funcionando.** La plantilla trae las mismas comprobaciones que ejecuta toda
   herramienta WireCat, para que la tuya siga funcionando mientras WireCat crece.
 
+## Qué necesitas
+
+- **Una cuenta en el servicio** y una forma de que los programas lleguen a él. La mayoría de los servicios te dan una
+  clave de API en sus ajustes o dejan que una app inicie sesión por ti. Un enlace a la documentación para
+  desarrolladores del servicio ayuda mucho a tu agente.
+- **Un agente de IA para programar que pueda ejecutar comandos**: Claude Code, Codex, Cursor, Gemini CLI u otro
+  parecido.
+- **Node.js, pnpm y git** en tu ordenador.
+
 ## Empieza desde la plantilla
 
-[cli-template](https://github.com/WireCatLabs/cli-template) es donde empieza toda herramienta nueva. En un ordenador
-con Node.js 22.16 o posterior, pnpm y git, este comando crea una herramienta llamada `acme` en la carpeta `acme-cli`:
+[cli-template](https://github.com/WireCatLabs/cli-template) es donde empieza toda herramienta nueva. Este comando
+hace unas preguntas cortas sobre el servicio y crea una herramienta llamada `acme` en la carpeta `acme-cli`:
 
 ```sh
 npx @wirecat/cli-template new acme-cli --command acme --package @example/acme-cli --owner example
 ```
 
-En una terminal, `new` te hace después siete preguntas breves sobre el servicio (abajo). Copia la plantilla, lo
-nombra todo según tu palabra de comando, inicia un repositorio git y escribe tus respuestas en `docs/dev/DESIGN.md`.
-No instala paquetes, no hace commit ni sube nada. Comprueba que la herramienta nueva se ejecuta:
+Comprueba que la nueva herramienta se ejecuta:
 
 ```sh
 cd acme-cli && pnpm install && pnpm build
 node dist/bin/acme.js personal doctor
 ```
 
-`personal` es el perfil: un nombre para una de tus cuentas. Todo comando que usa una cuenta empieza por él, y la
-herramienta nunca elige una por ti. Luego abre la carpeta `acme-cli` con tu agente de IA y dale `docs/dev/DESIGN.md`.
-Las instrucciones de la plantilla lo guían desde ahí.
+`personal` es el perfil: un nombre para una de tus cuentas. Ahora abre la carpeta `acme-cli` con tu agente de IA.
 
-## Las siete preguntas
+## Qué pasa después
+
+1. **Dile a tu agente lo que quieres.** Nombra el servicio, dale el enlace a la documentación para desarrolladores y
+   di qué quieres hacer. Por ejemplo: «Conecta acme a la API de Acme CRM. La documentación está en
+   https://example.com/api. Quiero ver mis acuerdos y encontrar uno por su nombre».
+2. **Responde a sus preguntas.** El agente pregunta cómo se inicia sesión, qué guarda el servicio y qué no debe
+   guardarse nunca. Bastan respuestas cortas.
+3. **Prueba cada comando con tu propia cuenta.** El agente construye los comandos uno a uno, por ejemplo uno que lista
+   tus acuerdos. Ejecútalos y dile al agente qué está mal o qué falta.
+4. **Haz que se pueda buscar.** Pide al agente que guarde en WireCat lo que devuelve el servicio, para que la búsqueda
+   y tus agentes lo encuentren junto a tus chats y tu correo. [Añadir una fuente](./build-add-source.md) explica cómo.
+5. **Compártela, si quieres.** Cuando pasen las comprobaciones incluidas, publica la herramienta en npm y otras
+   personas la instalarán como cualquier herramienta WireCat.
+
+## Si te atascas
+
+- Ejecuta `node dist/bin/acme.js personal doctor` en la carpeta de la herramienta. Comprueba la instalación, los
+  ajustes y los perfiles.
+- Pide a tu agente que vuelva a leer las instrucciones de la plantilla. Cubren los problemas habituales.
+- Abre una incidencia en [cli-template](https://github.com/WireCatLabs/cli-template/issues) para una pregunta o un
+  error. No incluyas claves, contraseñas ni datos privados.
+
+## Aparece en wirecat.dev
+
+Una herramienta fuera de WireCatLabs puede aparecer aquí en el grupo «Herramientas de la comunidad». Abre un pull
+request a [cli-docs](https://github.com/WireCatLabs/cli-docs) que la añada a `tools.json` con `"community": true`.
+Sus páginas se copian entonces desde su repositorio en una etiqueta de versión revisada, como las nuestras. La
+[lista de revisión](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools) dice qué
+comprobamos. Una herramienta de la comunidad publica en su propio ámbito de npm: `@wirecat` y el nombre «WireCat»
+siguen siendo nuestros.
+
+## Recibe las mejoras de la plantilla
+
+La plantilla sigue mejorando. En tu herramienta, con el árbol de trabajo de git limpio, ejecuta:
+
+```sh
+npx @wirecat/cli-template upgrade
+```
+
+Para cada archivo de la plantilla que cambió desde tu versión, pregunta qué hacer: **apply** une el cambio con tu
+archivo, **replace** toma el archivo de la plantilla, **skip** conserva el tuyo y **diff** muestra antes el cambio. Un
+conflicto deja las marcas habituales de git; resuelve el conflicto y vuelve a ejecutar `upgrade`. Los archivos que la plantilla
+solo puso una vez, como tu código y tus páginas, nunca se tocan. `--dry-run` lista lo que cambiaría y no escribe nada.
+
+## Detalles de la plantilla
+
+Para cuando tú o tu agente necesitéis las opciones exactas.
+
+### Las siete preguntas
 
 Cada respuesta, salvo los idiomas, es una opción de una lista corta, y también admite `other:<tu respuesta>`. Sin
 terminal, por ejemplo en un script o en la shell de un agente, pásalas como opciones. Entonces una respuesta que falta
@@ -82,7 +135,7 @@ npx @wirecat/cli-template new acme-cli --command acme --package @example/acme-cl
   --never-store tokens --untrusted messages,links
 ```
 
-## Aprende de una herramienta parecida
+### Aprende de una herramienta parecida
 
 La plantilla no trae código de ejemplo. Tu agente aprende de la herramienta WireCat más cercana a la tuya, elegida por
 la primera respuesta:
@@ -98,7 +151,7 @@ la primera respuesta:
 Por ahora, la búsqueda muestra los registros de tu herramienta como mensajes. Cuando cli-core pueda registrar un tipo
 de fuente nuevo, tu herramienta podrá registrar el suyo.
 
-## Cuatro pasos que hace una persona
+### Cuatro pasos que hace una persona
 
 `new` los muestra al final. El último solo se aplica a las herramientas de la organización WireCatLabs.
 
@@ -112,49 +165,6 @@ de fuente nuevo, tu herramienta podrá registrar el suyo.
 
 Una herramienta fuera de WireCatLabs guarda en su lugar su propio archivo de grupos y ejecuta
 `cli-dev audit --groups <file>`, así se compara con nuestras herramientas sin un pull request a cli-base.
-
-## Recibe las mejoras de la plantilla
-
-La plantilla sigue mejorando. En tu herramienta, con el árbol de trabajo de git limpio, ejecuta:
-
-```sh
-npx @wirecat/cli-template upgrade
-```
-
-Para cada archivo de la plantilla que cambió desde tu versión, pregunta qué hacer: **apply** une el cambio con tu
-archivo, **replace** toma el archivo de la plantilla, **skip** conserva el tuyo y **diff** muestra antes el cambio. Un
-conflicto deja las marcas habituales de git; resuelve el conflicto y vuelve a ejecutar `upgrade`. Los archivos que la plantilla
-solo puso una vez, como tu código y tus páginas, nunca se tocan. `--dry-run` lista lo que cambiaría y no escribe nada.
-
-## Aparece en wirecat.dev
-
-Una herramienta fuera de WireCatLabs puede aparecer aquí en el grupo «Herramientas de la comunidad». Abre un pull
-request a [cli-docs](https://github.com/WireCatLabs/cli-docs) que la añada a `tools.json` con `"community": true`.
-Sus páginas se copian entonces desde su repositorio en una etiqueta de versión revisada, como las nuestras. La
-[lista de revisión](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools) dice qué
-comprobamos. Una herramienta de la comunidad publica en su propio ámbito de npm: `@wirecat` y el nombre «WireCat»
-siguen siendo nuestros.
-
-## Por qué funciona así
-
-**Un solo lugar para todos tus datos, para que las respuestas lleguen de todas las herramientas a la vez.** Una
-pregunta como «¿qué decidimos sobre el lanzamiento?» necesita el chat, el correo y las notas de la reunión juntos. Eso
-solo funciona cuando todas las herramientas guardan en el mismo lugar y de la misma forma.
-
-**Nada se cuenta dos veces.** La misma reunión puede llegar de dos calendarios y de Zoom. WireCat guarda cada copia y
-sabe que son una sola reunión. Cuando no puede distinguir dos cosas, te pregunta en lugar de adivinar. Los detalles
-están en [Conceptos en cinco minutos](./build-concepts.md).
-
-**Siempre la cuenta que querías.** Una herramienta que elige «la primera cuenta» acaba enviando un mensaje de trabajo
-desde una cuenta personal. Una herramienta WireCat se detiene y lista tus cuentas cuando no dices cuál.
-
-**Los agentes hacen trabajo real, con seguridad.** Un agente recibe los mismos comandos que tú: el servidor MCP
-ofrece todos los comandos, también los que escriben. Con los permisos decides qué puede cambiar, y cada cambio queda
-registrado.
-
-**Reglas compartidas, para que WireCat crezca sin romper tu herramienta.** Las reglas están en un solo
-[manual](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/README.md), y la mayoría se comprueban
-automáticamente. El comando `upgrade` de la plantilla trae sus mejoras posteriores a tu herramienta, como se ve arriba.
 
 ## Adónde ir después
 

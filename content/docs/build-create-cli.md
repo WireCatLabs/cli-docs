@@ -30,29 +30,79 @@ You do not need to know how WireCat works inside to get started. The guides belo
 - **Checks that keep it working.** The template brings the same checks every WireCat tool runs, so your tool keeps
   working as WireCat grows.
 
+## What you need
+
+- **An account at the service**, and a way for programs to reach it. Most services give you an API key in their
+  settings, or let an app sign in for you. A link to the service's developer documentation helps your agent a lot.
+- **An AI coding agent that can run commands**: Claude Code, Codex, Cursor, Gemini CLI or a similar one.
+- **Node.js, pnpm and git** on your computer.
+
 ## Start from the template
 
-[cli-template](https://github.com/WireCatLabs/cli-template) is where every new tool starts. On a computer with
-Node.js 22.16 or newer, pnpm and git, this command makes a tool named `acme` in the folder `acme-cli`:
+[cli-template](https://github.com/WireCatLabs/cli-template) is where every new tool starts. This command makes a tool
+named `acme` in the folder `acme-cli`, after a few short questions about the service:
 
 ```sh
 npx @wirecat/cli-template new acme-cli --command acme --package @example/acme-cli --owner example
 ```
 
-In a terminal, `new` then asks seven short questions about the service (below). It copies the template, names
-everything after your command word, starts a git repository and writes your answers to `docs/dev/DESIGN.md`. It does
-not install packages, commit or push. Check that the new tool runs:
+Check that the new tool runs:
 
 ```sh
 cd acme-cli && pnpm install && pnpm build
 node dist/bin/acme.js personal doctor
 ```
 
-`personal` is the profile: a name for one of your accounts. Every command that uses an account starts with it, and the
-tool never picks one for you. Then open the `acme-cli` folder with your AI agent and give it `docs/dev/DESIGN.md`.
-The template's instructions guide it from there.
+`personal` is the profile: a name for one of your accounts. Now open the `acme-cli` folder with your AI agent.
 
-## The seven questions
+## What happens next
+
+1. **Tell your agent what you want.** Name the service, give it the link to the developer documentation, and say what
+   you want to do. For example: "Connect acme to the Acme CRM API. Its docs are at https://example.com/api. I want to
+   list my deals and find a deal by name."
+2. **Answer its questions.** The agent asks how you sign in, what the service holds and what must never be saved.
+   Short answers are fine.
+3. **Try each command on your own account.** The agent builds commands one by one, such as one that lists your deals.
+   Run them, and tell the agent what looks wrong or what is missing.
+4. **Make it searchable.** Ask the agent to save what the service returns into WireCat, so search and your agents find
+   it next to your chats and mail. [Add a source](./build-add-source.md) shows how.
+5. **Share it, if you want.** When the built-in checks pass, publish the tool on npm, and others install it like any
+   other WireCat tool.
+
+## If you get stuck
+
+- Run `node dist/bin/acme.js personal doctor` in the tool's folder. It checks the installation, the settings and the
+  profiles.
+- Ask your agent to read the template's instructions again. They cover the common problems.
+- Open an issue in [cli-template](https://github.com/WireCatLabs/cli-template/issues) for a question or a bug. Leave
+  out keys, passwords and private data.
+
+## Show it on wirecat.dev
+
+A tool outside WireCatLabs can appear here in the "Community tools" group. Open a pull request to
+[cli-docs](https://github.com/WireCatLabs/cli-docs) that adds it to `tools.json` with `"community": true`. Its pages
+are then copied from its repository at a reviewed release tag, like ours. The
+[review list](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools) says what we check.
+A community tool keeps its own npm scope: the `@wirecat` scope and the name "WireCat" stay ours.
+
+## Keep it current
+
+The template keeps improving. In your tool, with a clean git working tree, run:
+
+```sh
+npx @wirecat/cli-template upgrade
+```
+
+For each template file that changed since your version, it asks what to do: **apply** merges the change into your
+file, **replace** takes the template's file, **skip** keeps yours, and **diff** shows the change first. A conflict
+leaves the usual git markers; resolve them and run `upgrade` again. Files the template only seeded, such as your
+source code and your pages, are never touched. `--dry-run` lists what would change and writes nothing.
+
+## Template details
+
+For when you or your agent need the exact options.
+
+### The seven questions
 
 Each answer except the languages is a choice from a short list, and also takes `other:<your answer>`. Without a
 terminal, for example in a script or an agent's shell, pass them as flags. A missing one is then an error that lists
@@ -76,7 +126,7 @@ npx @wirecat/cli-template new acme-cli --command acme --package @example/acme-cl
   --never-store tokens --untrusted messages,links
 ```
 
-## Learn from a tool like yours
+### Learn from a tool like yours
 
 The template has no sample code. Your agent learns from the WireCat tool closest to yours, picked by the first answer:
 
@@ -91,7 +141,7 @@ The template has no sample code. Your agent learns from the WireCat tool closest
 For now, search shows your tool's records as messages. Once cli-core can register a new kind of source, your tool can
 register its own.
 
-## Four steps that need a person
+### Four steps that need a person
 
 `new` prints them at the end. The last one applies only to tools in the WireCatLabs organization.
 
@@ -105,47 +155,6 @@ register its own.
 
 A tool outside WireCatLabs keeps its own parity group file instead and runs `cli-dev audit --groups <file>`, so it is
 compared with our tools without a pull request to cli-base.
-
-## Keep it current
-
-The template keeps improving. In your tool, with a clean git working tree, run:
-
-```sh
-npx @wirecat/cli-template upgrade
-```
-
-For each template file that changed since your version, it asks what to do: **apply** merges the change into your
-file, **replace** takes the template's file, **skip** keeps yours, and **diff** shows the change first. A conflict
-leaves the usual git markers; resolve them and run `upgrade` again. Files the template only seeded, such as your
-source code and your pages, are never touched. `--dry-run` lists what would change and writes nothing.
-
-## Show it on wirecat.dev
-
-A tool outside WireCatLabs can appear here in the "Community tools" group. Open a pull request to
-[cli-docs](https://github.com/WireCatLabs/cli-docs) that adds it to `tools.json` with `"community": true`. Its pages
-are then copied from its repository at a reviewed release tag, like ours. The
-[review list](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools) says what we check.
-A community tool keeps its own npm scope: the `@wirecat` scope and the name "WireCat" stay ours.
-
-## Why it works this way
-
-**One place for all your data, so answers come from every tool at once.** A question like "what did we decide about
-the launch?" needs the chat, the mail and the meeting notes together. That works only when every tool saves into the
-same place, in the same shape.
-
-**Nothing counted twice.** The same meeting can arrive from two calendars and from Zoom. WireCat keeps each copy and
-knows they are one meeting. When it cannot tell two things apart, it asks you instead of guessing. The details are on
-[Concepts in five minutes](./build-concepts.md).
-
-**Always the account you meant.** A tool that picks "the first account" sends a work message from a personal account
-sooner or later. A WireCat tool stops and lists your accounts when you do not say which one.
-
-**Agents can do real work, safely.** An agent gets the same commands as you: the MCP server serves every command,
-writes included. You decide with permissions what it may change, and every change is recorded.
-
-**Shared rules, so WireCat can grow without breaking your tool.** The rules are in one
-[handbook](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/README.md), and most of them are checked
-automatically. The template's `upgrade` command brings its later improvements into your tool, as shown above.
 
 ## Where to go next
 
