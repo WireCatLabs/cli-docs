@@ -156,7 +156,7 @@ wa personal messages transcribe "Book club" 3EB0A1B2C3D4E5F6A7B8 --local
 wa personal messages forward "Book club" 3EB0A1B2C3D4E5F6A7B8 --to "Ann Lee"
 ```
 
-Un mensaje lleva un archivo; el texto es su pie, salvo las notas de voz, que van solas. `.mp4`, `.m4v` y `.mov` se envían como vídeo salvo con `--as-file`. `--photo` junto con un vídeo `--file` forman un álbum y el texto es el pie de la foto. `--sticker-file` envía un `.webp` de hasta 500 KiB como sticker, solo y sin texto. WhatsApp no tiene conjuntos de stickers para elegir por ID, así que no hay `--sticker`. Puedes guardar y reenviar las fotos, vídeos, notas de voz, archivos y stickers que lleguen al almacén, que conserva los datos necesarios para descargarlos. WhatsApp los guarda por tiempo limitado; descargar uno que ya no conserva pide al teléfono que lo suba de nuevo, pero aún no funciona ([lo que falta en wa](#not-in-wa-yet)). También se guardan ubicaciones y tarjetas de contacto para reenviarlas, aunque no son archivos descargables. WhatsApp no reconoce voz por sí mismo: `transcribe` usa un modelo local (`wa models audio list`). Consulta [archivos adjuntos](./attachments.md) para saber qué se guarda, qué se puede volver a descargar y cómo buscar dentro de archivos.
+Un mensaje lleva un archivo; el texto es su pie, salvo las notas de voz, que van solas. `.mp4`, `.m4v` y `.mov` se envían como vídeo salvo con `--as-file`. `--photo` junto con un vídeo `--file` forman un álbum y el texto es el pie de la foto. `--sticker-file` envía un `.webp` de hasta 500 KiB como sticker, solo y sin texto. WhatsApp no tiene conjuntos de stickers para elegir por ID, así que no hay `--sticker`. Puedes guardar y reenviar las fotos, vídeos, notas de voz, archivos y stickers que lleguen al almacén, que conserva los datos necesarios para descargarlos. WhatsApp los guarda por tiempo limitado; descargar uno que ya no conserva pide al teléfono que lo suba de nuevo, pero aún no funciona ([lo que falta en wa](#not-in-wa-yet)). También se guardan ubicaciones y tarjetas de contacto para reenviarlas, aunque no son archivos descargables. WhatsApp no reconoce voz por sí mismo: `transcribe` usa un modelo local (`wa models list kind:audio`). Consulta [archivos adjuntos](./attachments.md) para saber qué se guarda, qué se puede volver a descargar y cómo buscar dentro de archivos.
 
 ## Mensajes antiguos
 
@@ -182,6 +182,31 @@ wa personal chats leave 120363000000000001@newsletter                     # unfo
 - **Solo publican el propietario y los administradores.** `messages send` consulta tu rol y rechaza a los demás (salida `5`) antes de subir nada. Se admite texto o un archivo (`--photo`, `--file`, `--voice`, con el texto como pie), sin respuesta a otra publicación. Los seguidores lo ven inmediatamente. Los archivos de canales no están cifrados, como en las aplicaciones de WhatsApp. Se rechazan álbumes, stickers, encuestas, votos, reenvíos, ediciones y eliminaciones. También se rechaza reenviar un archivo del canal a un chat (`media.channel-file-forward`): sin su clave no se abriría.
 - `chats join` y `chats leave` pasan por los [permisos](./permissions.md), como en grupos: los administradores ven que has seguido el canal. En vez de la lista de miembros, que WhatsApp no muestra, aparece el número de seguidores.
 
+## Previsualizar enlaces, dispositivos y listas
+
+Revisa una invitación a un grupo o canal antes de unirte, lista tus dispositivos vinculados o lee una lista personalizada creada en el teléfono:
+
+```sh
+wa personal chats inspect https://chat.whatsapp.com/INVITECODE
+wa personal account sessions list
+wa personal chats folders list
+wa personal chats folders show "Work"
+```
+
+Revisar un enlace no te une a nada. Las sesiones muestran identificadores numéricos de dispositivo: `0` es el teléfono; el dispositivo actual aparece marcado. WhatsApp no da a un dispositivo vinculado los nombres de los dispositivos ni la última actividad. Cierra otros dispositivos desde el teléfono, en **Ajustes → Dispositivos vinculados**; `wa personal session end` desvincula este dispositivo.
+
+Las carpetas son las listas personalizadas de WhatsApp, con su título y los chats añadidos expresamente. Si este dispositivo aún no tiene una instantánea, la primera lectura descarga las listas sincronizadas; las siguientes usan el último estado sincronizado. Los filtros integrados y las etiquetas de WhatsApp Business son otra cosa. Crea o cambia una lista en el teléfono.
+
+## Leer comentarios de una comunidad
+
+Usa `messages comments` para leer las respuestas bajo una publicación del grupo de avisos de una comunidad:
+
+```sh
+wa personal messages comments "Announcements" POST_ID --limit 20
+```
+
+El resultado muestra los comentarios que este dispositivo vinculado recibió y descifró, guardados bajo su publicación. Mantén `serve` recibiendo mensajes para completar ese historial. No se pueden descifrar los comentarios cuya clave de publicación este dispositivo nunca recibió. Los canales de WhatsApp tienen reacciones, no comentarios. No se admite enviar comentarios a una comunidad.
+
 ## Lo que falta en wa
 
 `wa` comparte el árbol de comandos con tg y max; aparecen comandos que WhatsApp no puede ejecutar. Terminan con código `2` y explican por qué. No llega nada a WhatsApp.
@@ -190,19 +215,16 @@ Aún no está implementado:
 
 - más archivos por mensaje que una foto y un vídeo en un álbum;
 - listar grupos de una comunidad, añadir uno o quitarlo ([comunidades](./groups.md#communities));
-- consultar el destino de una invitación sin unirse (`chats inspect`);
-- listar dispositivos vinculados y cerrar los demás (`account sessions`);
-- crear un canal (`chats create --channel`);
-- descargar un archivo que WhatsApp ya no guarda: el teléfono lo sube con una clave que no comparte y la descarga termina con `media.retry-failed` sin guardar nada ([archivos adjuntos](./attachments.md)).
+- crear un canal (`chats create --channel`).
 
 WhatsApp no ofrece estas funciones o las conserva en el teléfono:
 
-- temas de foro, carpetas de chats (`chats folders`) y comentarios en canales (`messages comments`);
-- varias invitaciones por grupo: `chats link reset` reemplaza la única;
+- temas de foro y comentarios en publicaciones de canales (los canales solo tienen reacciones);
+- varias invitaciones por grupo: `chats links reset` reemplaza la única;
 - administradores con derechos parciales: todos tienen los mismos;
 - encuestas que se cierran, cuestionarios y votos anónimos;
 - mensajes silenciosos, programados o enviados con otra identidad;
-- agenda de contactos: se rechazan `contacts add`, `remove`, `rename` e `import`;
+- cambios e importaciones en la agenda: gestiona los contactos desde el teléfono; `wa` lee la agenda sincronizada;
 - edad de la cuenta: se rechaza una regla `newAccount` en `chats rules set`.
 
 `wa` nunca responde por sí mismo: no tiene respuestas automáticas porque WhatsApp bloquea cuentas que responden como bots. Los planes están en la [hoja de ruta](./roadmap.md).

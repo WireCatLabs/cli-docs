@@ -238,22 +238,22 @@ wa personal tags remove work --chat "Book club"
 Группы могут быть помечены автоматически по их названию и описанию — без сообщений и без модели:
 
 ```sh
-wa personal metadata refresh --chat "Book club"  # read the group's description from WhatsApp; the group is not changed
+wa personal metadata sync --chat "Book club"  # read the group's description from WhatsApp; the group is not changed
 ```
 
 ```sh
-wa personal metadata refresh --only-missing  # every stored group with no description read yet
+wa personal metadata sync --only-missing  # every stored group with no description read yet
 ```
 
 ```sh
-wa personal tags auto --dry-run          # what it would tag, without writing
+wa personal tags rebuild --dry-run          # what it would tag, without writing
 ```
 
 ```sh
-wa personal tags auto                    # write the automatic tags
+wa personal tags rebuild                    # write the automatic tags
 ```
 
-`metadata get --chat "Book club"` показывает, что было прочитано из локального хранилища. Каналы еще не читаются: канал в списке отвечает своей ошибкой, а остальные продолжаются.
+`metadata show --chat "Book club"` показывает, что было прочитано из локального хранилища. Каналы еще не читаются: канал в списке отвечает своей ошибкой, а остальные продолжаются.
 
 ## Сохраненные поисковые запросы и история
 

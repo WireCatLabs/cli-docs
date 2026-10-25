@@ -18,7 +18,7 @@ Los siguientes comandos agregan `--offline` donde el comando podría preguntar a
 | Ver una persona y los chats que comparte | `wa personal contacts show` |
 | Lee lo que dijeron, en cada chat o en los chats que nombras | `wa personal contacts context` |
 | Registra que una cuenta de WhatsApp y una cuenta de Telegram o MAX son una sola persona | `wa personal contacts link` |
-| Mantén su propio nombre y notas para una persona | `wa personal contacts alias`, `wa personal contacts notes` |
+| Mantén su propio nombre y notas para una persona | `wa personal contacts aliases`, `wa personal contacts notes` |
 
 Cada opción de estos comandos se encuentra en la [referencia de comando](./commands.md).
 
@@ -59,11 +59,11 @@ wa personal contacts unlink 100000000000001@lid
 
 Después de eso, `contacts context` sin `--chat` reúne ambas cuentas. `contacts context --chat` todavía muestra solo la cuenta que nombraste. El enlace es sólo lo que registras: el mismo nombre en dos mensajeros nunca se toma como la misma persona.
 
-## Sus propios nombres y notas: `contacts alias`, `contacts notes`
+## Sus propios nombres y notas: `contacts aliases`, `contacts notes`
 
 ```sh
-wa personal contacts alias set 100000000000001@lid Ana    # your own name for a person, on this computer only
-wa personal contacts alias rm 100000000000001@lid
+wa personal contacts aliases set 100000000000001@lid Ana    # your own name for a person, on this computer only
+wa personal contacts aliases remove 100000000000001@lid
 wa personal contacts notes add 100000000000001@lid --text-file note.txt  # or the text from stdin
 wa personal contacts notes list 100000000000001@lid
 ```
@@ -77,7 +77,7 @@ Los alias y notas permanecen en el almacén local y nunca llegan a WhatsApp ni a
 Estos se conectan; Mientras se ejecuta `serve`, pasan por la conexión de `serve`.
 
 ```sh
-wa personal contacts profile 100000000000001@lid        # their name, about line and whether they show a photo
+wa personal contacts info 100000000000001@lid        # their name, about line and whether they show a photo
 wa personal contacts block 100000000000001@lid
 wa personal contacts unblock 100000000000001@lid
 wa personal contacts lookup < number.txt                # whether this number has WhatsApp, and its id
@@ -86,7 +86,7 @@ wa personal contacts sync                                # the phone's address b
 
 Para `contacts lookup`, primero escriba el número a `number.txt`, en una línea, en formato internacional.
 
-- `contacts profile` no le dice nada a la persona. No muestra ningún número de teléfono.
+- `contacts info` no le dice nada a la persona. No muestra ningún número de teléfono.
 - `contacts lookup` lee el número desde la entrada estándar, nunca desde la línea de comando, y no le envía nada. Se necesita un número, como máximo uno cada 10 segundos para el perfil: muchas búsquedas seguidas son el motivo por el que WhatsApp prohíbe los scrapers.
 - WhatsApp mantiene su libreta de direcciones en el teléfono, por lo que se rechazan `contacts add`, `remove`, `rename` y `import`.
 

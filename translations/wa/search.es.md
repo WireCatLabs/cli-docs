@@ -238,22 +238,22 @@ Una etiqueta es tu propia etiqueta en un chat, una persona, un mensaje (`--messa
 Los grupos se pueden etiquetar automáticamente, a partir de su título y descripción, sin mensajes ni modelo:
 
 ```sh
-wa personal metadata refresh --chat "Book club"  # read the group's description from WhatsApp; the group is not changed
+wa personal metadata sync --chat "Book club"  # read the group's description from WhatsApp; the group is not changed
 ```
 
 ```sh
-wa personal metadata refresh --only-missing  # every stored group with no description read yet
+wa personal metadata sync --only-missing  # every stored group with no description read yet
 ```
 
 ```sh
-wa personal tags auto --dry-run          # what it would tag, without writing
+wa personal tags rebuild --dry-run          # what it would tag, without writing
 ```
 
 ```sh
-wa personal tags auto                    # write the automatic tags
+wa personal tags rebuild                    # write the automatic tags
 ```
 
-`metadata get --chat "Book club"` muestra lo leído del almacén local. Los canales aún no se leen: un canal de la lista responde con un error propio y los demás continúan.
+`metadata show --chat "Book club"` muestra lo leído del almacén local. Los canales aún no se leen: un canal de la lista responde con un error propio y los demás continúan.
 
 ## Búsquedas guardadas e historial
 

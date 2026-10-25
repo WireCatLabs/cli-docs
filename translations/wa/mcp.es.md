@@ -16,6 +16,8 @@ Algunos términos primero:
 
 El servidor viene con `wa`; no hay nada más que instalar. De forma predeterminada, se comunica con la aplicación a través de stdin y stdout. En su lugar, `wa personal mcp --http --public-url` lo sirve en un puerto local detrás de su túnel HTTPS.
 
+Los permisos denegados no ocultan comandos. Los listados completos y las búsquedas incluyen la `availability` de cada comando: los comandos bloqueados tienen `available: false`, un motivo y la clave del permiso correspondiente; los permitidos tienen `available: true`. Los argumentos siguen visibles y la ejecución vuelve a comprobar los permisos actuales. Con un perfil indicado, la ayuda de la CLI y el descubrimiento de comandos también muestran la disponibilidad.
+
 ## ¿Lo necesitas?
 
 Un agente de IA que puede ejecutar comandos en una terminal (por ejemplo, Claude Code, Codex, el agente de Cursor o Gemini CLI) no necesita MCP. Llama directamente a `wa`, que cuesta los mismos tokens y puede hacer las mismas cosas; aprende cómo hacerlo gracias a el skill que imprime `wa skill show`. MCP es para:
@@ -33,27 +35,29 @@ Para ChatGPT o Claude **en el navegador**, use `wa personal mcp --http`; consult
 | [Seis indicaciones](#prompts-and-chats-by-) | Ponte al día, responde, busca, revisa, abre tareas, vincula conversaciones |
 | [Chats de `@`](#prompts-and-chats-by-) | Adjuntar un chat y sus mensajes recientes a la conversación |
 | La skill, `wa://skill` | El mismo texto que `wa skill show` |
-| [Permisos](#what-an-agent-may-do) | El perfil decide qué comandos ve el agente |
+| [Permisos](#what-an-agent-may-do) | El perfil decide qué comandos puede ejecutar el agente |
 
-Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.
+Las herramientas utilizan el mismo catálogo que `tg` y `max`. Los comandos que un dispositivo vinculado de WhatsApp no puede realizar, como cerrar otras sesiones o eliminar contactos, están ocultos. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.
+
+Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.
 
 ## Conectar
 
-Primero ejecute `wa personal setup --agent none` en una terminal local. Vincula el perfil a tu cuenta de WhatsApp. El servidor MCP nunca se vincula por ti. Luego, `wa personal mcp setup` conecta la aplicación, como un paso separado. Un agente puede leer `wa skill show` antes de vincular; explica ambos pasos.
+Primero ejecute `wa personal setup --agent none` en una terminal local. Vincula el perfil a tu cuenta de WhatsApp. El servidor MCP nunca se vincula por ti. Luego, `wa personal mcp add` conecta la aplicación, como un paso separado. Un agente puede leer `wa skill show` antes de vincular; explica ambos pasos.
 
 **Codex o Claude Code en esta computadora:**
 
 ```sh
-wa personal mcp doctor             # check that MCP starts and lists tools
-wa personal mcp setup codex        # add it to Codex
-wa personal mcp setup claude-code  # or add it to Claude Code
+wa personal mcp check             # check that MCP starts and lists tools
+wa personal mcp add codex        # add it to Codex
+wa personal mcp add claude-code  # or add it to Claude Code
 ```
 
 
 
-Ponga un perfil primero, por ejemplo `wa work mcp setup codex`. La instalación utiliza el comando propio de la aplicación y deja en paz a los demás servidores. Si ya existe una entrada con el mismo nombre, elimínela de la aplicación antes de ejecutar la configuración nuevamente. El perfil predeterminado ofrece herramientas que escriben. Entonces la configuración le pide que revise los permisos del perfil y lo ejecute nuevamente con `--allow-writes`. Esa bandera sólo confirma la instalación; no cambia los permisos. Para limitar lo que el agente puede hacer, configure primero el `permissions` del perfil ([abajo](#what-an-agent-may-do)).
+Ponga un perfil primero, por ejemplo `wa work mcp add codex`. La instalación utiliza el comando propio de la aplicación y deja en paz a los demás servidores. Si ya existe una entrada con el mismo nombre, elimínela de la aplicación antes de ejecutar la configuración nuevamente. El perfil predeterminado ofrece herramientas que escriben. Entonces la configuración le pide que revise los permisos del perfil y lo ejecute nuevamente con `--allow-writes`. Esa bandera sólo confirma la instalación; no cambia los permisos. Para limitar lo que el agente puede hacer, configure primero el `permissions` del perfil ([abajo](#what-an-agent-may-do)).
 
-`mcp doctor` no lee mensajes y no se conecta a WhatsApp. Un buen resultado significa que el protocolo de enlace MCP y la lista de herramientas funcionan. Esto no significa que el dispositivo todavía esté vinculado; `wa personal doctor` y `wa personal account show` comprueban eso.
+`mcp check` no lee mensajes y no se conecta a WhatsApp. Un buen resultado significa que el protocolo de enlace MCP y la lista de herramientas funcionan. Esto no significa que el dispositivo todavía esté vinculado; `wa personal doctor` y `wa personal account show` comprueban eso.
 
 **Código Claude, a mano:**
 

@@ -21,7 +21,7 @@ Algunas palabras que utiliza esta página:
 | Encuentra una ejecución fallida más tarde | `wa personal runs list` | una ejecución fallida se mantiene sola |
 | Mantén un registro de cada ejecución | `wa personal config set record true` | sí, cada carrera |
 | Verifique la instalación | `wa personal doctor`, `wa personal doctor --online` | no |
-| Hacer un informe de problema | `wa personal doctor report create` | sí, un archivo que envías |
+| Hacer un informe de problema | `wa personal doctor reports create` | sí, un archivo que envías |
 
 ## Muéstralo: `--trace` y `--debug`
 
@@ -98,11 +98,11 @@ Además de la versión, el tiempo de ejecución, el perfil, el archivo de config
 ## Un informe de problema
 
 ```sh
-wa personal doctor report create              # about the newest failed run
-wa personal doctor report create --run 20261001T080000Z-process-000001   # a made-up run id
+wa personal doctor reports create              # about the newest failed run
+wa personal doctor reports create --run 20261001T080000Z-process-000001   # a made-up run id
 ```
 
-Escribe un archivo JSON (lo que muestra `wa personal doctor` más la ejecución) y dice dónde enviarlo: un nuevo problema en [github.com/WireCatLabs/whatsapp-cli/issues](https://github.com/WireCatLabs/whatsapp-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje. `wa doctor report` por sí solo muestra lo que contendría un informe y no escribe nada.
+Escribe un archivo JSON (lo que muestra `wa personal doctor` más la ejecución) y dice dónde enviarlo: un nuevo problema en [github.com/WireCatLabs/whatsapp-cli/issues](https://github.com/WireCatLabs/whatsapp-cli/issues/new). Léelo antes de enviarlo. No contiene ningún texto de mensaje. `wa doctor reports show` por sí solo muestra lo que contendría un informe y no escribe nada.
 
 Si no se mantiene ninguna ejecución fallida, vuelva a ejecutar el comando fallido; su fracaso se mantiene solo.
 
@@ -118,11 +118,11 @@ wa personal runs list --limit 100 --json | jq '[.items[] | .duration_ms] | add /
 ## Errores de búsqueda y ejecuciones parciales
 
 ```sh
-wa personal runs search --error-code authentication_error --json
-wa personal runs search --status partial --since-time 2026-10-01 --json
+wa personal search runs error_code:authentication_error --json
+wa personal search runs status:partial 'started_at>=2026-10-01' --json
 ```
 
-`runs search` coincide con el texto de diagnóstico literal en los registros. `--operation`, `--profile`, `--since-time`, `--limit` y `--page` lo estrechan; cada página tiene capacidad para hasta 100 tiradas. Solo lee los registros y nunca se conecta.
+`search runs` busca texto de diagnóstico literal en los registros. Términos de consulta como `operation:messages.download`, `profile:work`, `error_code:timeout`, `status:failed` y comparaciones o rangos de `started_at:` lo acotan, junto con `--limit` y `--page`; cada página tiene hasta 100 ejecuciones. Solo lee los registros y nunca se conecta.
 
 ## Siguiente
 

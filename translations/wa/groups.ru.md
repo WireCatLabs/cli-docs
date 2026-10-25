@@ -25,8 +25,8 @@ title: "Управление группами"
 | Создайте группу, присоединитесь к ней по ее ссылке или покиньте | `wa personal chats create`, `chats join`, `chats leave` |
 | Добавляйте или удаляйте людей, назначайте кого-нибудь администратором | `wa personal chats members add`, `chats admins add` |
 | Переименуйте группу, установите или удалите ее фотографию или измените тех, кто может добавлять людей | `wa personal chats update` |
-| Показать или заменить ссылку-приглашение | `wa personal chats link show`, `chats link reset` |
-| Впустить или отклонить людей, которые попросили присоединиться | `wa personal chats requests list`, `chats requests accept` |
+| Показать или заменить ссылку-приглашение | `wa personal chats links show`, `chats links reset` |
+| Впустить или отклонить людей, которые попросили присоединиться | `wa personal chats requests list`, `chats requests confirm` |
 | Подпишитесь на канал, прочитайте его публикации или отмените подписку | `wa personal chats join`, `messages sync`, `chats leave` ([каналы](./usage.md#channels)) |
 | Публикация на канале, который вы ведете | `wa personal messages send` ([каналы](./usage.md#channels)) |
 
@@ -126,7 +126,7 @@ wa personal tasks add msg:whatsapp/100000000000009%40lid/120363000000000001%40g.
 wa personal tasks list "assignee:any state:open"
 ```
 
-`--assignee sender` — тот, кто отправил сообщение; `--assignee person:<id>` называет кого-то другого, а `tasks plan <task> --assignee none` очищает его. Задача, у которой нет исполнителя, — это нормально: лучше, чем пропущенная.Посмотрите, что вас ждет, сначала самые старые, потом только вопросы и упоминания в одной группе:
+`--assignee sender` — тот, кто отправил сообщение; `--assignee person:<id>` называет кого-то другого, а `tasks update <task> --assignee none` очищает его. Задача, у которой нет исполнителя, — это нормально: лучше, чем пропущенная.Посмотрите, что вас ждет, сначала самые старые, потом только вопросы и упоминания в одной группе:
 
 ```sh
 wa personal tasks list state:open
@@ -187,10 +187,10 @@ wa personal chats update 120363000000000001@g.us --title "Hiking club" --only-ad
 wa personal chats update 120363000000000001@g.us --only-admins-send on --disappear-after 7d
 wa personal chats update 120363000000000001@g.us --photo club.jpg
 wa personal chats update 120363000000000001@g.us --remove-photo
-wa personal chats link show 120363000000000001@g.us
-wa personal chats link reset 120363000000000001@g.us
+wa personal chats links show 120363000000000001@g.us
+wa personal chats links reset 120363000000000001@g.us
 wa personal chats requests list 120363000000000001@g.us
-wa personal chats requests accept 120363000000000001@g.us 100000000000004@lid
+wa personal chats requests confirm 120363000000000001@g.us 100000000000004@lid
 wa personal chats join https://chat.whatsapp.com/AAAAAAAAAAAAAAAAAAAAAA
 wa personal chats leave 120363000000000001@g.us
 ```

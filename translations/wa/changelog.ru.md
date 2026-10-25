@@ -5,6 +5,78 @@ title: "История изменений"
 Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest first; versions follow
 [semantic versioning](https://semver.org), so before `1.0.0` the command interface may still change.
 
+## 0.8.0 — 24.10.2026
+
+### Added
+
+- The owner-run `bin/live-oneshot-drop` can send its two test messages automatically with
+  `--sender-profile`, using two explicitly confirmed accounts owned by the same person.
+
+- **Session and setup receipts declare their actual provider schemas.** The complete contract audit checks them alongside shared entities.
+
+- Preview a group or channel invite with `chats inspect` without joining it.
+- `account sessions list` shows linked device ids and marks this device. Names and last-active times are unavailable.
+- `chats folders list` and `show` read custom WhatsApp Lists and their chats from synced label state.
+- Incoming community announcement comments are decrypted into their post's stored thread; `messages comments`
+  reads the comments this device has received. Channels have no comments, and comment sending stays unavailable.
+
+### Changed — may break callers
+
+- The one-shot regression checks the receiver's store before restarting `serve`; delivery only after restart
+  is inconclusive. Lost messages and inconclusive checks now return nonzero.
+
+- **Template lists use a query instead of a name flag.** Replace `bot templates list --name hello_world` with
+  `bot templates list name:hello_world`. Meta applies the name predicate before paging; unsupported query fields
+  are refused before a request. The retired flag has no compatibility alias.
+
+- **Shared CLI contracts require explicit provider overrides.** Discovery includes the inherited definitions, schemas, reasons and exact deliberate differences. Contact activity filters with `scope:` and `at:`, and diagnostic run searches with `started_at:`. Unknown roster and webhook type lists are omitted instead of `null`.
+
+### Fixed
+
+- Permission-denied commands stay discoverable in CLI and MCP with current availability and reasons. Calls still enforce permissions; a listed command grants no execution access.
+- The owner-run one-shot regression can pause and restore a persistent systemd user service, including one
+  that selects its profile through its environment instead of a command argument.
+
+- Full settings sync recovers stars and deletions as history updates, instead of presenting them as new live events.
+- The installation guide explains how to allow the optional agent-skill hook with npm's scoped `--allow-scripts` flag.
+
+## 0.7.0 — 24.10.2026
+
+### Added
+
+- The first command at a terminal asks once for your languages, other WireCat tools to install, and whether
+  commands and agents may only read. Pipes, agents and noninteractive runs skip the questions.
+- Preview a group or channel invite with `chats inspect` without joining it.
+- `account sessions list` shows linked device ids and marks this device. Names and last-active times are unavailable.
+- `chats folders list` and `show` read custom WhatsApp Lists and their chats from synced label state.
+- Incoming community announcement comments are decrypted into their post's stored thread; `messages comments`
+  reads the comments this device has received. Channels have no comments, and comment sending stays unavailable.
+
+### Changed — may break callers
+
+- **Live JSON output uses item and end records.** `watch --jsonl` wraps each message or event in
+  `{ "type": "item", "data": … }`, uses snake_case fields and finishes with a `type: "end"` record.
+  Update scripts that consumed bare messages or events.
+- **Diagnostic search is `search runs`.** Replace `runs search` and its filter flags with query terms such as
+  `status:failed`, `error_code:timeout`, `operation:messages.download` and `profile:work`.
+- **Duplicate-task lists require `tasks duplicates list`.** The bare group shows help.
+- **MCP exposes more writes through permission keys.** Commands that change future permissions or automation
+  require `mcp.authority: allow`; raw Cloud API calls require `bot.api: allow`. Both default to `deny` over MCP.
+  Store maintenance and other writes follow their command permissions.
+- **Shared commands use canonical names without compatibility aliases.** Use `contacts info|events|aliases`,
+  `chats links`, `metadata show|sync`, `tasks update`, `commands info`, `mcp add|check` and
+  `doctor reports show|create`. Models use `models list`, `models download` and `models keys`.
+
+### Fixed
+
+- Commands to end other sessions or remove contacts are hidden from help, discovery and MCP because a linked
+  WhatsApp device cannot perform them.
+- **The agent skill describes explicit read receipts correctly.** Reading changes no read state;
+  `chats mark-read` clears the unread mark and sends the receipt. The top help points to linking examples
+  without promising Windows instructions that setup help does not contain.
+- Full settings sync recovers stars and deletions as history updates, instead of presenting them as new live events.
+- The installation guide explains how to allow the optional agent-skill hook with npm's scoped `--allow-scripts` flag.
+
 ## 0.6.0 — 24.10.2026
 
 ### Added

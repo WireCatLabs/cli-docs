@@ -1851,24 +1851,24 @@
   {
     "tool": "wa",
     "slug": "roadmap",
-    "reason": "WhatsApp v0.6.0 changelog and released bot/attachments guides ship both items still listed as in progress. Keep the release source traceable; remove test provenance and retain only future work.",
+    "reason": "whatsapp-cli v0.8.0 dropped the old-files item from Next, but its attachments guide still documents the limitation (media.retry-failed, nothing saved), the 0.7.0/0.8.0 changelogs claim no fix, and the released dist/reasons.js still carries media.retry-failed. Keep it as planned work until a release ships it.",
     "replacements": {
       "en": [
         {
-          "before": "---\ntitle: \"Roadmap\"\n---\n\nThis page lists what is planned for `wa` and is not in it yet. Read it before you build a workaround for a missing\nfeature: it may already be on the way. The order is approximate and can change. To suggest something, open an\n[issue on GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## What works today\n\n`wa` links to your account as a device and keeps your chats in a local store: reading, search, sending text and\nfiles, replies, edits, deletes, reactions, polls, groups, channels, people and your own profile. The guide is\n[using wa](./usage.md), and every command is in the [command reference](./commands.md). What `wa` cannot do, and why,\nis in [not in wa yet](./usage.md#not-in-wa-yet). `wa` is early: some of it has not been checked on real phones yet.\n\n## In progress\n\n- **Bots through WhatsApp's official Cloud API**: a business number answering from `wa`, apart from your personal\n  account.\n- **A checked archive of your files**: saving every received file into a folder of your choice, with a check that\n  each copy is complete.\n\n## Next\n\n- **Files in channels**: saving one from a post, and an album to a channel you run.\n- **Old files**: downloading a file that WhatsApp no longer keeps on its servers, from your phone.\n- **Business accounts**: WhatsApp Business labels, and another business's profile.\n- **A guide command** that walks you through common tasks step by step.\n\n## Later\n\n- **More files in one message** than a photo and a video, and previews on sent videos and WEBP photos.\n- **Communities**: listing a community's groups, and adding a group to one or taking it out. A group already\n  names its community ([communities](./groups.md#communities)).\n- **Your reactions in the local store**: a reaction you send is kept on this computer too, as one from your phone is.\n\nWhat each released version changed is in the [changelog](./changelog.md).\n",
-          "after": "---\ntitle: \"Roadmap\"\n---\n\nUse this roadmap to check whether a missing WhatsApp feature is planned before building a workaround. The order can change; suggest a task in [GitHub issues](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## What works today\n\nThe personal-account tool links as a device and keeps chats in the local store: reading, search, text and files, replies, edits, deletes, reactions, polls, groups, channels and contacts. See [using wa](./usage.md) and the [command reference](./commands.md). [Current limitations](./usage.md#not-in-wa-yet) explain unsupported commands.\n\nBusiness-number bots use Meta’s Cloud API independently of personal device linking; see [business bots](./bot.md). The [attachment archive](./attachments.md) saves available files with size and SHA-256 manifests, checks copies offline and supports opt-in daily jobs on Linux.\n\n## In progress\n\nNo additional work is listed here. The next planned tasks follow.\n\n## Next\n\n- Save files from channel posts and send albums to a channel you administer.\n- Download files that WhatsApp no longer keeps by requesting a new copy from the phone.\n- WhatsApp Business labels and another business’s profile.\n- A guide command for common tasks.\n\n## Later\n\n- More files in one message than a photo and video, and previews on sent videos and WEBP photos.\n- List a community’s groups and add or remove a group. A group already names its [community](./groups.md#communities).\n- Keep reactions you send in the local store, as reactions arriving from the phone are kept.\n\nReleased changes are in the [changelog](./changelog.md).\n"
+          "before": "- **Files in channels**: saving one from a post, and an album to a channel you run.\n",
+          "after": "- **Files in channels**: saving one from a post, and an album to a channel you run.\n- **Old files**: downloading a file that WhatsApp no longer keeps on its servers, from your phone.\n"
         }
       ],
       "ru": [
         {
-          "before": "---\ntitle: \"Планы\"\n---\n\nНа этой странице перечислено то, что запланировано для `wa` и чего еще нет. Прочтите его, прежде чем придумывать обходной путь для отсутствующей функции: возможно, он уже в разработке. Порядок примерный и может меняться. Чтобы что-то предложить, откройте [issue на GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## Что работает сегодня\n\n`wa` привязывается к вашему аккаунту как к устройству и сохраняет ваши чаты в локальном хранилище: чтение, поиск, отправка текста и файлов, ответы, редактирование, удаление, реакции, опросы, группы, каналы, люди и ваш собственный профиль. Руководство по [использованию wa](./usage.md), а каждая команда находится в [справке по командам](./commands.md). То, что `wa` не может сделать и почему, находится в [пока не в wa](./usage.md#not-in-wa-yet). `wa` ранний: часть его еще не проверена на реальных телефонах.\n\n## В процессе\n\n- **Боты через официальный облачный API WhatsApp**: рабочий номер, отвечающий с `wa`, помимо вашего личного аккаунта.\n- **Проверенный архив ваших файлов**: сохранение каждого полученного файла в выбранную вами папку с проверкой целостности каждой копии.\n\n## Далее\n\n- **Файлы в каналах**: сохранение одного из сообщений и альбома на канале, который вы ведете.\n- **Старые файлы**: загрузка с телефона файла, который WhatsApp больше не хранит на своих серверах.\n- **Бизнес-аккаунты**: ярлыки WhatsApp Business и профиль другой компании.\n- **Помощь**, которая шаг за шагом поможет вам выполнить типичные задачи.\n\n## Позже\n\n- **Больше файлов в одном сообщении**, чем фото и видео, а также превью отправленных видео и фотографий WEBP.\n- **Сообщества**: список групп сообщества, добавление группы в одну или удаление ее. Группа уже называет свое сообщество ([communities](./groups.md#communities)).\n- **Ваши реакции в локальном хранилище**: отправленные вами реакции сохраняются на этом компьютере так же, как и реакции с вашего телефона.\n\nИзменения в каждой выпущенной версии можно найти в [списке изменений](./changelog.md).\n",
-          "after": "---\ntitle: \"Планы\"\n---\n\nПеред поиском обходного решения проверьте, запланирована ли нужная функция WhatsApp. Порядок может меняться; предложить задачу можно в [issues на GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## Что уже работает\n\nИнструмент личного аккаунта привязывается как устройство и сохраняет чаты локально: чтение, поиск, текст и файлы, ответы, редактирование, удаление, реакции, опросы, группы, каналы и контакты. Начните с [использования wa](./usage.md) и [справочника команд](./commands.md). [Текущие ограничения](./usage.md#not-in-wa-yet) объясняют, какие команды не поддерживаются.\n\nБоты бизнес-номеров используют Cloud API Meta отдельно от привязки личного устройства; см. [бизнес-ботов](./bot.md). [Архив вложений](./attachments.md) сохраняет доступные файлы с размером и SHA-256, проверяет копии без сети и поддерживает ежедневные задания по выбору пользователя в Linux.\n\n## В работе\n\nДругих задач здесь пока нет. Следующие запланированные задачи перечислены ниже.\n\n## Дальше\n\n- Сохранение файлов из публикаций каналов и отправка альбомов в свой канал.\n- Загрузка файлов, которые WhatsApp больше не хранит, через запрос новой копии с телефона.\n- Метки WhatsApp Business и профиль другой компании.\n- Команда с пошаговыми сценариями частых задач.\n\n## Позже\n\n- Больше файлов в сообщении, чем фотография и видео, и предпросмотр отправленных видео и фотографий WEBP.\n- Список групп сообщества, добавление группы и удаление из него. Группа уже указывает своё [сообщество](./groups.md#communities).\n- Сохранение отправленных вами реакций в локальном хранилище, как реакций с телефона.\n\nИзменения выпусков — в [истории изменений](./changelog.md).\n"
+          "before": "- **Файлы в каналах**: сохранение файла из публикации и отправка альбома в канал, который вы ведёте.\n",
+          "after": "- **Файлы в каналах**: сохранение файла из публикации и отправка альбома в канал, который вы ведёте.\n- **Старые файлы**: скачивание с телефона файла, который WhatsApp больше не хранит на своих серверах.\n"
         }
       ],
       "es": [
         {
-          "before": "---\ntitle: \"Hoja de ruta\"\n---\n\nEsta página enumera lo que está planeado para `wa` y aún no está incluido. Léelo antes de crear una solución alternativa para una característica faltante: es posible que ya esté en camino. El orden es aproximado y puede cambiar. Para sugerir algo, abra un [problema en GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## Lo que funciona hoy\n\n`wa` se vincula a tu cuenta como un dispositivo y mantiene tus chats en un almacén local: lectura, búsqueda, envío de textos y archivos, respuestas, ediciones, eliminaciones, reacciones, encuestas, grupos, canales, personas y su propio perfil. La guía está [usando wa](./usage.md), y cada comando está en la [referencia de comando](./commands.md). Lo que `wa` no puede hacer y por qué está en [aún no está en wa](./usage.md#not-in-wa-yet). `wa` es temprano: parte de esto aún no se ha verificado en teléfonos reales.\n\n## En progreso\n\n- **Bots a través de la API Cloud oficial de WhatsApp**: un número comercial que atiende desde `wa`, aparte de tu cuenta personal.\n- **Un archivo verificado de tus archivos**: guarda cada archivo recibido en una carpeta de tu elección, con una verificación de que cada copia esté completa.\n\n## Siguiente\n\n- **Archivos en canales**: guarda uno de una publicación y un álbum en un canal que ejecutas.\n- **Archivos antiguos**: descargar desde tu teléfono un archivo que WhatsApp ya no guarda en sus servidores.\n- **Cuentas comerciales**: etiquetas de WhatsApp Business y el perfil de otro negocio.\n- **Un comando guía** que te guía paso a paso a través de tareas comunes.\n\n## Más tarde\n\n- **Más archivos en un mensaje** que una foto y un video, y vistas previas de videos enviados y fotos WEBP.\n- **Comunidades**: enumerar los grupos de una comunidad y agregar un grupo a uno o eliminarlo. Un grupo ya nombra su comunidad ([comunidades](./groups.md#communities)).\n- **Tus reacciones en el almacén local**: una reacción que envías también se guarda en esta computadora, al igual que una reacción de tu teléfono.\n\nLo que cambió cada versión lanzada se encuentra en el [registro de cambios](./changelog.md).\n",
-          "after": "---\ntitle: \"Hoja de ruta\"\n---\n\nAntes de buscar una solución alternativa, comprueba si la función de WhatsApp que necesitas está prevista. El orden puede cambiar; propón una tarea en [GitHub](https://github.com/WireCatLabs/whatsapp-cli/issues).\n\n## Qué funciona hoy\n\nLa herramienta de la cuenta personal se vincula como dispositivo y guarda chats localmente: lectura, búsqueda, texto y archivos, respuestas, ediciones, eliminaciones, reacciones, encuestas, grupos, canales y contactos. Consulta [usar wa](./usage.md) y la [referencia de comandos](./commands.md). Las [limitaciones actuales](./usage.md#not-in-wa-yet) explican qué comandos no se admiten.\n\nLos bots de números empresariales usan la Cloud API de Meta por separado de la vinculación personal; consulta [bots de empresa](./bot.md). El [archivo de adjuntos](./attachments.md) guarda los archivos disponibles con tamaños y SHA-256, comprueba copias sin conexión y ofrece tareas diarias opcionales en Linux.\n\n## En curso\n\nNo se enumeran otras tareas aquí. Los próximos trabajos previstos aparecen a continuación.\n\n## A continuación\n\n- Guardar archivos de publicaciones de canales y enviar álbumes a un canal que administras.\n- Descargar archivos que WhatsApp ya no conserva pidiendo una nueva copia al teléfono.\n- Etiquetas de WhatsApp Business y el perfil de otra empresa.\n- Un comando de guía para tareas habituales.\n\n## Más adelante\n\n- Más archivos por mensaje que una foto y un vídeo, y vistas previas de vídeos y fotos WEBP enviados.\n- Listar grupos de una comunidad y añadir o quitar un grupo. Un grupo ya indica su [comunidad](./groups.md#communities).\n- Guardar en el almacén local las reacciones que envías, como las que llegan del teléfono.\n\nLos cambios publicados están en el [historial](./changelog.md).\n"
+          "before": "- **Archivos en canales**: guardar uno de una publicación y enviar un álbum a un canal que administras.\n",
+          "after": "- **Archivos en canales**: guardar uno de una publicación y enviar un álbum a un canal que administras.\n- **Archivos antiguos**: descargar desde tu teléfono un archivo que WhatsApp ya no guarda en sus servidores.\n"
         }
       ]
     },
@@ -2286,24 +2286,543 @@
     "tool": "wa",
     "slug": "mcp",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md",
-    "reason": "Name the terminal-only paths from the released command contract. The catalogue explicitly excludes 121 nodes, covered by 48 top paths; this documents the current MCP interface without promising unsupported WhatsApp actions.",
+    "reason": "Name the commands the released personal MCP server never offers. whatsapp-cli v0.8.0 marks session, setup, complete and mcp as mcp:false, and cli-core 0.411 toolsFromCommands drops any command with a lifetime (watch, serve) and excludes the bot group, which bot mcp serves. Every other command is listed with its availability (includeUnavailable); authority-changing commands need mcp.authority.",
     "replacements": {
       "en": [
         {
-          "before": "The tools use the same catalogue as `tg` and `max`. A command that WhatsApp cannot do yet is refused when it runs,\nwith exit code `2` and a message that says so.",
-          "after": "The tools use the same catalogue as `tg` and `max`. A command that WhatsApp cannot do yet is refused when it runs,\nwith exit code `2` and a message that says so.\n\n<details>\n<summary>Commands kept in the terminal</summary>\n\nThe released personal-account MCP interface excludes the following paths and their subcommands. Use the terminal for setup and maintenance; the WhatsApp limitations in the CLI reference still apply.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+          "before": "Commands that change future permissions or automation require `permissions.mcp.authority` set to `allow`; raw\nCloud API calls require `permissions.bot.api` set to `allow`. Both keys default to `deny` over MCP. Other writes\nremain subject to their command permissions, recipient lists and send limits.",
+          "after": "Commands that change future permissions or automation require `permissions.mcp.authority` set to `allow`; raw\nCloud API calls require `permissions.bot.api` set to `allow`. Both keys default to `deny` over MCP. Other writes\nremain subject to their command permissions, recipient lists and send limits.\n\n<details>\n<summary>Commands kept in the terminal</summary>\n\nThe personal-account MCP server never offers `wa session`, `wa setup`, `wa complete` or `wa mcp` and their subcommands, nor the long-running `wa watch` and `wa serve`, which never return an answer to an agent. Business-bot commands (`wa bot …`) are served by their own server, `wa bot mcp`. Every other command is listed with its availability.\n\n</details>"
         }
       ],
       "ru": [
         {
-          "before": "Инструменты используют тот же каталог, что и `tg` и `max`. Команда, которую WhatsApp пока не может выполнить, при запуске отклоняется с кодом завершения `2` и сообщением об этом.",
-          "after": "Инструменты используют тот же каталог, что и `tg` и `max`. Команда, которую WhatsApp пока не может выполнить, при запуске отклоняется с кодом завершения `2` и сообщением об этом.\n\n<details>\n<summary>Команды для терминала</summary>\n\nMCP-интерфейс личного аккаунта в этом выпуске не предоставляет следующие пути и их подкоманды. Настройку и обслуживание выполняйте в терминале; ограничения WhatsApp из справочника команд по-прежнему действуют.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+          "before": "Командам, которые меняют будущие разрешения или автоматизацию, нужен `permissions.mcp.authority` со значением `allow`; прямым вызовам Cloud API нужен `permissions.bot.api` со значением `allow`. Через MCP оба ключа по умолчанию равны `deny`. Остальные изменения по-прежнему подчиняются разрешениям своих команд, спискам получателей и лимитам отправки.",
+          "after": "Командам, которые меняют будущие разрешения или автоматизацию, нужен `permissions.mcp.authority` со значением `allow`; прямым вызовам Cloud API нужен `permissions.bot.api` со значением `allow`. Через MCP оба ключа по умолчанию равны `deny`. Остальные изменения по-прежнему подчиняются разрешениям своих команд, спискам получателей и лимитам отправки.\n\n<details>\n<summary>Команды для терминала</summary>\n\nMCP-сервер личного аккаунта никогда не предлагает `wa session`, `wa setup`, `wa complete` и `wa mcp` с их подкомандами, а также долгоиграющие `wa watch` и `wa serve`, которые никогда не возвращают агенту ответ. Команды бизнес-бота (`wa bot …`) обслуживает отдельный сервер, `wa bot mcp`. Все остальные команды перечислены вместе с их доступностью.\n\n</details>"
         }
       ],
       "es": [
         {
-          "before": "Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.",
-          "after": "Las herramientas utilizan el mismo catálogo que `tg` y `max`. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.\n\n<details>\n<summary>Comandos que quedan en el terminal</summary>\n\nLa interfaz MCP de la cuenta personal no ofrece estas rutas ni sus subcomandos. Usa el terminal para configuración y mantenimiento; siguen aplicándose las limitaciones de WhatsApp indicadas en la referencia.\n\n`wa session`, `wa setup`, `wa account sessions end`, `wa chats rules set`, `wa chats rules unset`, `wa chats delete`, `wa chats clear`, `wa models audio download`, `wa models text download`, `wa models text key set`, `wa models text key remove`, `wa server start`, `wa server stop`, `wa server restart`, `wa server install`, `wa server uninstall`, `wa store clear`, `wa store migrate`, `wa store backup`, `wa store restore`, `wa store decrypt`, `wa store repair`, `wa store reset`, `wa store copies delete`, `wa attachments jobs install`, `wa attachments jobs start`, `wa attachments jobs stop`, `wa attachments jobs uninstall`, `wa images models download`, `wa flood`, `wa recipients add`, `wa recipients remove`, `wa recipients clear`, `wa config set`, `wa config unset`, `wa doctor report create`, `wa complete`, `wa upgrade`, `wa mcp`, `wa bot auth`, `wa bot chats rules set`, `wa bot chats rules unset`, `wa bot recipients add`, `wa bot recipients remove`, `wa bot recipients clear`, `wa bot mcp`, `wa bot api`, `wa skill install`.\n\n</details>"
+          "before": "Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.",
+          "after": "Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.\n\n<details>\n<summary>Comandos que quedan en el terminal</summary>\n\nEl servidor MCP de la cuenta personal nunca ofrece `wa session`, `wa setup`, `wa complete` ni `wa mcp` con sus subcomandos, ni los comandos de larga duración `wa watch` y `wa serve`, que nunca devuelven una respuesta al agente. Los comandos del bot comercial (`wa bot …`) los sirve su propio servidor, `wa bot mcp`. Todos los demás comandos aparecen con su disponibilidad.\n\n</details>"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "usage",
+    "reason": "whatsapp-cli v0.8.0 removed the old-file download from the not-built list, yet the same guide still links there for it and the released attachments guide and dist/reasons.js still document media.retry-failed. Restore the item.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- making a channel (`chats create --channel`).\n",
+          "after": "- making a channel (`chats create --channel`);\n- downloading a file WhatsApp no longer keeps: the phone uploads it again under a key it does not share, so the\n  download ends with `media.retry-failed` and saves nothing ([file attachments](./attachments.md)).\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "- создание канала (`chats create --channel`).\n",
+          "after": "- создание канала (`chats create --channel`);\n- скачивание файла, который WhatsApp больше не хранит: телефон загружает его с новым ключом, который не передаёт, поэтому загрузка завершается с `media.retry-failed` и ничего не сохраняет ([вложения](./attachments.md)).\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "- crear un canal (`chats create --channel`).\n",
+          "after": "- crear un canal (`chats create --channel`);\n- descargar un archivo que WhatsApp ya no guarda: el teléfono lo sube con una clave que no comparte y la descarga termina con `media.retry-failed` sin guardar nada ([archivos adjuntos](./attachments.md)).\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "people",
+    "reason": "Keep incoming people-guide hashes after the alias/aliases command rename in whatsapp-cli 0.7.0.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## Your own names and notes: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n## Your own names and notes: `contacts aliases`, `contacts notes`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Ваши собственные имена и примечания: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"ваши-собственные-имена-и-примечания-contacts-alias-contacts-notes\" />\n\n## Ваши собственные имена и примечания: `contacts aliases`, `contacts notes`"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Sus propios nombres y notas: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n<a id=\"sus-propios-nombres-y-notas-contacts-alias-contacts-notes\" />\n\n## Sus propios nombres y notas: `contacts aliases`, `contacts notes`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "commands",
+    "reason": "Keep incoming command-reference hashes from v0.6.0 at the corresponding canonical command after the whatsapp-cli 0.7.0 renames; removed commands resolve to their group. This does not restore removed CLI aliases.",
+    "replacements": {
+      "en": [
+        {
+          "before": "#### `wa chats members check`",
+          "after": "#### `wa chats members check`\n\n<a id=\"wa-chats-members-audit\" />"
+        },
+        {
+          "before": "### `wa chats links`",
+          "after": "### `wa chats links`\n\n<a id=\"wa-chats-link\" />"
+        },
+        {
+          "before": "#### `wa chats links show`",
+          "after": "#### `wa chats links show`\n\n<a id=\"wa-chats-link-show\" />"
+        },
+        {
+          "before": "#### `wa chats links reset`",
+          "after": "#### `wa chats links reset`\n\n<a id=\"wa-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `wa chats requests confirm`",
+          "after": "#### `wa chats requests confirm`\n\n<a id=\"wa-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `wa chats requests reject`",
+          "after": "#### `wa chats requests reject`\n\n<a id=\"wa-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `wa account sessions`",
+          "after": "### `wa account sessions`\n\n<a id=\"wa-account-sessions-end\" />"
+        },
+        {
+          "before": "## `wa contacts`",
+          "after": "## `wa contacts`\n\n<a id=\"wa-contacts-remove\" />"
+        },
+        {
+          "before": "### `wa contacts info`",
+          "after": "### `wa contacts info`\n\n<a id=\"wa-contacts-profile\" />"
+        },
+        {
+          "before": "### `wa contacts aliases`",
+          "after": "### `wa contacts aliases`\n\n<a id=\"wa-contacts-alias\" />"
+        },
+        {
+          "before": "#### `wa contacts aliases set`",
+          "after": "#### `wa contacts aliases set`\n\n<a id=\"wa-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `wa contacts aliases remove`",
+          "after": "#### `wa contacts aliases remove`\n\n<a id=\"wa-contacts-alias-rm\" />"
+        },
+        {
+          "before": "### `wa contacts events`",
+          "after": "### `wa contacts events`\n\n<a id=\"wa-contacts-timeline\" />"
+        },
+        {
+          "before": "#### `wa store gaps show`",
+          "after": "#### `wa store gaps show`\n\n<a id=\"wa-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `wa store rebuild`",
+          "after": "### `wa store rebuild`\n\n<a id=\"wa-store-reindex\" />"
+        },
+        {
+          "before": "#### `wa stats messages counters sync`",
+          "after": "#### `wa stats messages counters sync`\n\n<a id=\"wa-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `wa tasks update`",
+          "after": "### `wa tasks update`\n\n<a id=\"wa-tasks-plan\" />"
+        },
+        {
+          "before": "#### `wa conversations links rebuild`",
+          "after": "#### `wa conversations links rebuild`\n\n<a id=\"wa-conversations-build\" />"
+        },
+        {
+          "before": "#### `wa conversations batches show`",
+          "after": "#### `wa conversations batches show`\n\n<a id=\"wa-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `wa conversations consents remove`",
+          "after": "#### `wa conversations consents remove`\n\n<a id=\"wa-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `wa conversations embeddings status`",
+          "after": "#### `wa conversations embeddings status`\n\n<a id=\"wa-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `wa conversations embeddings clear`",
+          "after": "#### `wa conversations embeddings clear`\n\n<a id=\"wa-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `wa attachments update`",
+          "after": "### `wa attachments update`\n\n<a id=\"wa-attachments-text\" />\n\n<a id=\"wa-attachments-text-set\" />"
+        },
+        {
+          "before": "### `wa tags rebuild`",
+          "after": "### `wa tags rebuild`\n\n<a id=\"wa-tags-auto\" />"
+        },
+        {
+          "before": "### `wa metadata show`",
+          "after": "### `wa metadata show`\n\n<a id=\"wa-metadata-get\" />"
+        },
+        {
+          "before": "### `wa metadata sync`",
+          "after": "### `wa metadata sync`\n\n<a id=\"wa-metadata-refresh\" />"
+        },
+        {
+          "before": "## `wa models`",
+          "after": "## `wa models`\n\n<a id=\"wa-models-audio\" />\n\n<a id=\"wa-models-text\" />"
+        },
+        {
+          "before": "### `wa models list`",
+          "after": "### `wa models list`\n\n<a id=\"wa-models-audio-list\" />\n\n<a id=\"wa-models-text-list\" />"
+        },
+        {
+          "before": "### `wa models download`",
+          "after": "### `wa models download`\n\n<a id=\"wa-models-audio-download\" />\n\n<a id=\"wa-models-text-download\" />"
+        },
+        {
+          "before": "### `wa models keys`",
+          "after": "### `wa models keys`\n\n<a id=\"wa-models-text-key\" />"
+        },
+        {
+          "before": "#### `wa models keys set`",
+          "after": "#### `wa models keys set`\n\n<a id=\"wa-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `wa models keys remove`",
+          "after": "#### `wa models keys remove`\n\n<a id=\"wa-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `wa doctor reports show`",
+          "after": "#### `wa doctor reports show`\n\n<a id=\"wa-doctor-report\" />"
+        },
+        {
+          "before": "#### `wa doctor reports create`",
+          "after": "#### `wa doctor reports create`\n\n<a id=\"wa-doctor-report-create\" />"
+        },
+        {
+          "before": "### `wa search runs`",
+          "after": "### `wa search runs`\n\n<a id=\"wa-runs-search\" />"
+        },
+        {
+          "before": "### `wa commands info`",
+          "after": "### `wa commands info`\n\n<a id=\"wa-commands-schema\" />"
+        },
+        {
+          "before": "### `wa mcp add`",
+          "after": "### `wa mcp add`\n\n<a id=\"wa-mcp-setup\" />"
+        },
+        {
+          "before": "### `wa mcp check`",
+          "after": "### `wa mcp check`\n\n<a id=\"wa-mcp-doctor\" />"
+        }
+      ],
+      "ru": [
+        {
+          "before": "#### `wa chats members check`",
+          "after": "#### `wa chats members check`\n\n<a id=\"wa-chats-members-audit\" />"
+        },
+        {
+          "before": "### `wa chats links`",
+          "after": "### `wa chats links`\n\n<a id=\"wa-chats-link\" />"
+        },
+        {
+          "before": "#### `wa chats links show`",
+          "after": "#### `wa chats links show`\n\n<a id=\"wa-chats-link-show\" />"
+        },
+        {
+          "before": "#### `wa chats links reset`",
+          "after": "#### `wa chats links reset`\n\n<a id=\"wa-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `wa chats requests confirm`",
+          "after": "#### `wa chats requests confirm`\n\n<a id=\"wa-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `wa chats requests reject`",
+          "after": "#### `wa chats requests reject`\n\n<a id=\"wa-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `wa account sessions`",
+          "after": "### `wa account sessions`\n\n<a id=\"wa-account-sessions-end\" />"
+        },
+        {
+          "before": "## `wa contacts`",
+          "after": "## `wa contacts`\n\n<a id=\"wa-contacts-remove\" />"
+        },
+        {
+          "before": "### `wa contacts info`",
+          "after": "### `wa contacts info`\n\n<a id=\"wa-contacts-profile\" />"
+        },
+        {
+          "before": "### `wa contacts aliases`",
+          "after": "### `wa contacts aliases`\n\n<a id=\"wa-contacts-alias\" />"
+        },
+        {
+          "before": "#### `wa contacts aliases set`",
+          "after": "#### `wa contacts aliases set`\n\n<a id=\"wa-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `wa contacts aliases remove`",
+          "after": "#### `wa contacts aliases remove`\n\n<a id=\"wa-contacts-alias-rm\" />"
+        },
+        {
+          "before": "### `wa contacts events`",
+          "after": "### `wa contacts events`\n\n<a id=\"wa-contacts-timeline\" />"
+        },
+        {
+          "before": "#### `wa store gaps show`",
+          "after": "#### `wa store gaps show`\n\n<a id=\"wa-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `wa store rebuild`",
+          "after": "### `wa store rebuild`\n\n<a id=\"wa-store-reindex\" />"
+        },
+        {
+          "before": "#### `wa stats messages counters sync`",
+          "after": "#### `wa stats messages counters sync`\n\n<a id=\"wa-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `wa tasks update`",
+          "after": "### `wa tasks update`\n\n<a id=\"wa-tasks-plan\" />"
+        },
+        {
+          "before": "#### `wa conversations links rebuild`",
+          "after": "#### `wa conversations links rebuild`\n\n<a id=\"wa-conversations-build\" />"
+        },
+        {
+          "before": "#### `wa conversations batches show`",
+          "after": "#### `wa conversations batches show`\n\n<a id=\"wa-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `wa conversations consents remove`",
+          "after": "#### `wa conversations consents remove`\n\n<a id=\"wa-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `wa conversations embeddings status`",
+          "after": "#### `wa conversations embeddings status`\n\n<a id=\"wa-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `wa conversations embeddings clear`",
+          "after": "#### `wa conversations embeddings clear`\n\n<a id=\"wa-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `wa attachments update`",
+          "after": "### `wa attachments update`\n\n<a id=\"wa-attachments-text\" />\n\n<a id=\"wa-attachments-text-set\" />"
+        },
+        {
+          "before": "### `wa tags rebuild`",
+          "after": "### `wa tags rebuild`\n\n<a id=\"wa-tags-auto\" />"
+        },
+        {
+          "before": "### `wa metadata show`",
+          "after": "### `wa metadata show`\n\n<a id=\"wa-metadata-get\" />"
+        },
+        {
+          "before": "### `wa metadata sync`",
+          "after": "### `wa metadata sync`\n\n<a id=\"wa-metadata-refresh\" />"
+        },
+        {
+          "before": "## `wa models`",
+          "after": "## `wa models`\n\n<a id=\"wa-models-audio\" />\n\n<a id=\"wa-models-text\" />"
+        },
+        {
+          "before": "### `wa models list`",
+          "after": "### `wa models list`\n\n<a id=\"wa-models-audio-list\" />\n\n<a id=\"wa-models-text-list\" />"
+        },
+        {
+          "before": "### `wa models download`",
+          "after": "### `wa models download`\n\n<a id=\"wa-models-audio-download\" />\n\n<a id=\"wa-models-text-download\" />"
+        },
+        {
+          "before": "### `wa models keys`",
+          "after": "### `wa models keys`\n\n<a id=\"wa-models-text-key\" />"
+        },
+        {
+          "before": "#### `wa models keys set`",
+          "after": "#### `wa models keys set`\n\n<a id=\"wa-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `wa models keys remove`",
+          "after": "#### `wa models keys remove`\n\n<a id=\"wa-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `wa doctor reports show`",
+          "after": "#### `wa doctor reports show`\n\n<a id=\"wa-doctor-report\" />"
+        },
+        {
+          "before": "#### `wa doctor reports create`",
+          "after": "#### `wa doctor reports create`\n\n<a id=\"wa-doctor-report-create\" />"
+        },
+        {
+          "before": "### `wa search runs`",
+          "after": "### `wa search runs`\n\n<a id=\"wa-runs-search\" />"
+        },
+        {
+          "before": "### `wa commands info`",
+          "after": "### `wa commands info`\n\n<a id=\"wa-commands-schema\" />"
+        },
+        {
+          "before": "### `wa mcp add`",
+          "after": "### `wa mcp add`\n\n<a id=\"wa-mcp-setup\" />"
+        },
+        {
+          "before": "### `wa mcp check`",
+          "after": "### `wa mcp check`\n\n<a id=\"wa-mcp-doctor\" />"
+        }
+      ],
+      "es": [
+        {
+          "before": "#### `wa chats members check`",
+          "after": "#### `wa chats members check`\n\n<a id=\"wa-chats-members-audit\" />"
+        },
+        {
+          "before": "### `wa chats links`",
+          "after": "### `wa chats links`\n\n<a id=\"wa-chats-link\" />"
+        },
+        {
+          "before": "#### `wa chats links show`",
+          "after": "#### `wa chats links show`\n\n<a id=\"wa-chats-link-show\" />"
+        },
+        {
+          "before": "#### `wa chats links reset`",
+          "after": "#### `wa chats links reset`\n\n<a id=\"wa-chats-link-reset\" />"
+        },
+        {
+          "before": "#### `wa chats requests confirm`",
+          "after": "#### `wa chats requests confirm`\n\n<a id=\"wa-chats-requests-accept\" />"
+        },
+        {
+          "before": "#### `wa chats requests reject`",
+          "after": "#### `wa chats requests reject`\n\n<a id=\"wa-chats-requests-decline\" />"
+        },
+        {
+          "before": "### `wa account sessions`",
+          "after": "### `wa account sessions`\n\n<a id=\"wa-account-sessions-end\" />"
+        },
+        {
+          "before": "## `wa contacts`",
+          "after": "## `wa contacts`\n\n<a id=\"wa-contacts-remove\" />"
+        },
+        {
+          "before": "### `wa contacts info`",
+          "after": "### `wa contacts info`\n\n<a id=\"wa-contacts-profile\" />"
+        },
+        {
+          "before": "### `wa contacts aliases`",
+          "after": "### `wa contacts aliases`\n\n<a id=\"wa-contacts-alias\" />"
+        },
+        {
+          "before": "#### `wa contacts aliases set`",
+          "after": "#### `wa contacts aliases set`\n\n<a id=\"wa-contacts-alias-set\" />"
+        },
+        {
+          "before": "#### `wa contacts aliases remove`",
+          "after": "#### `wa contacts aliases remove`\n\n<a id=\"wa-contacts-alias-rm\" />"
+        },
+        {
+          "before": "### `wa contacts events`",
+          "after": "### `wa contacts events`\n\n<a id=\"wa-contacts-timeline\" />"
+        },
+        {
+          "before": "#### `wa store gaps show`",
+          "after": "#### `wa store gaps show`\n\n<a id=\"wa-store-gaps-plan\" />"
+        },
+        {
+          "before": "### `wa store rebuild`",
+          "after": "### `wa store rebuild`\n\n<a id=\"wa-store-reindex\" />"
+        },
+        {
+          "before": "#### `wa stats messages counters sync`",
+          "after": "#### `wa stats messages counters sync`\n\n<a id=\"wa-stats-messages-counters-refresh\" />"
+        },
+        {
+          "before": "### `wa tasks update`",
+          "after": "### `wa tasks update`\n\n<a id=\"wa-tasks-plan\" />"
+        },
+        {
+          "before": "#### `wa conversations links rebuild`",
+          "after": "#### `wa conversations links rebuild`\n\n<a id=\"wa-conversations-build\" />"
+        },
+        {
+          "before": "#### `wa conversations batches show`",
+          "after": "#### `wa conversations batches show`\n\n<a id=\"wa-conversations-batches-next\" />"
+        },
+        {
+          "before": "#### `wa conversations consents remove`",
+          "after": "#### `wa conversations consents remove`\n\n<a id=\"wa-conversations-consents-revoke\" />"
+        },
+        {
+          "before": "#### `wa conversations embeddings status`",
+          "after": "#### `wa conversations embeddings status`\n\n<a id=\"wa-conversations-embed-status\" />"
+        },
+        {
+          "before": "#### `wa conversations embeddings clear`",
+          "after": "#### `wa conversations embeddings clear`\n\n<a id=\"wa-conversations-embed-clear\" />"
+        },
+        {
+          "before": "### `wa attachments update`",
+          "after": "### `wa attachments update`\n\n<a id=\"wa-attachments-text\" />\n\n<a id=\"wa-attachments-text-set\" />"
+        },
+        {
+          "before": "### `wa tags rebuild`",
+          "after": "### `wa tags rebuild`\n\n<a id=\"wa-tags-auto\" />"
+        },
+        {
+          "before": "### `wa metadata show`",
+          "after": "### `wa metadata show`\n\n<a id=\"wa-metadata-get\" />"
+        },
+        {
+          "before": "### `wa metadata sync`",
+          "after": "### `wa metadata sync`\n\n<a id=\"wa-metadata-refresh\" />"
+        },
+        {
+          "before": "## `wa models`",
+          "after": "## `wa models`\n\n<a id=\"wa-models-audio\" />\n\n<a id=\"wa-models-text\" />"
+        },
+        {
+          "before": "### `wa models list`",
+          "after": "### `wa models list`\n\n<a id=\"wa-models-audio-list\" />\n\n<a id=\"wa-models-text-list\" />"
+        },
+        {
+          "before": "### `wa models download`",
+          "after": "### `wa models download`\n\n<a id=\"wa-models-audio-download\" />\n\n<a id=\"wa-models-text-download\" />"
+        },
+        {
+          "before": "### `wa models keys`",
+          "after": "### `wa models keys`\n\n<a id=\"wa-models-text-key\" />"
+        },
+        {
+          "before": "#### `wa models keys set`",
+          "after": "#### `wa models keys set`\n\n<a id=\"wa-models-text-key-set\" />"
+        },
+        {
+          "before": "#### `wa models keys remove`",
+          "after": "#### `wa models keys remove`\n\n<a id=\"wa-models-text-key-remove\" />"
+        },
+        {
+          "before": "#### `wa doctor reports show`",
+          "after": "#### `wa doctor reports show`\n\n<a id=\"wa-doctor-report\" />"
+        },
+        {
+          "before": "#### `wa doctor reports create`",
+          "after": "#### `wa doctor reports create`\n\n<a id=\"wa-doctor-report-create\" />"
+        },
+        {
+          "before": "### `wa search runs`",
+          "after": "### `wa search runs`\n\n<a id=\"wa-runs-search\" />"
+        },
+        {
+          "before": "### `wa commands info`",
+          "after": "### `wa commands info`\n\n<a id=\"wa-commands-schema\" />"
+        },
+        {
+          "before": "### `wa mcp add`",
+          "after": "### `wa mcp add`\n\n<a id=\"wa-mcp-setup\" />"
+        },
+        {
+          "before": "### `wa mcp check`",
+          "after": "### `wa mcp check`\n\n<a id=\"wa-mcp-doctor\" />"
         }
       ]
     }

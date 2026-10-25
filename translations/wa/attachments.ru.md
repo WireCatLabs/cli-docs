@@ -20,7 +20,7 @@ title: "Файлы и вложения"
 | Прослушать голосовую заметку в виде текста | `wa personal messages transcribe` |
 | Посмотрите файлы, которые известны локальному хранилищу и которым еще нужен текст | `wa personal attachments list` |
 | Читать текст из сохраненных файлов в индекс поиска | `wa personal attachments extract` |
-| Сохраняйте текст, который ваш агент прочитал на скане или фотографии | `wa personal attachments text set` |
+| Сохраняйте текст, который ваш агент прочитал на скане или фотографии | `wa personal attachments update` |
 | Найти сообщение по файлу | `wa personal search messages 'has:file'`, `'content:…'` |
 
 ## Что вы можете отправить
@@ -80,8 +80,8 @@ wa personal messages forward "Book club" 3EB0A1B2C3D4E5F6A7B8 --to "Ann Lee"
 ## Голосовые заметки в виде текста
 
 ```sh
-wa personal models audio list                    # the speech models, and which are downloaded
-wa personal models audio download parakeet-v3    # once, about 670 MB
+wa personal models list kind:audio                    # the speech models, and which are downloaded
+wa personal models download parakeet-v3    # once, about 670 MB
 wa personal messages transcribe "Book club" 3EB0A1B2C3D4E5F6A7B8 --local
 ```
 
@@ -103,7 +103,7 @@ wa personal search messages 'content:"reading list"'
 Скан или фотография считывается вашим агентом с помощью собственных инструментов машинного зрения. Затем агент сохраняет текст, чтобы поиск нашел его:
 
 ```sh
-wa personal attachments text set "Book club" 3EB0A1B2C3D4E5F6A7B8 --text-file scan.txt
+wa personal attachments update "Book club" 3EB0A1B2C3D4E5F6A7B8 --text-file scan.txt
 ```
 
 Чтобы массово читать сканы с помощью API модели, установите `models.ocr.provider` и `models.ocr.model`, а затем запустите `attachments extract --ocr`. Картинки идут к этому провайдеру только с явным `--ocr`.
