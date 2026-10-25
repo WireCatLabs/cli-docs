@@ -173,7 +173,7 @@ max personal doctor reports create              # о последнем неуд
 max personal doctor reports create --run <id>   # об этом запуске
 ```
 
-If configuration cannot be read, first run `max doctor --json` to see the settings error. Creating a report file requires a write-permission check, so fix the invalid setting first.
+If configuration cannot be read, first run `max doctor --json`. In `config.issues` it lists every problem in the file: its kind, the key, the line and column for invalid JSON, and the `config unset` command that removes the key. Setting values are not included in the answer. Even with problems in the file, `doctor` answers and exits with code `0`. In `files.problems` it names the settings file and its folder if other users can read them, and prints the `chmod` that fixes this to stderr. Creating a report file requires a write-permission check, so fix the invalid setting first.
 
 The command writes a JSON file containing `max personal doctor` results and the run, then prints a link to a new [GitHub issue](https://github.com/WireCatLabs/max-cli/issues). Read the file before submitting. It has no message text; chat and message ids are replaced with labels. See [reporting a problem](./troubleshooting.md#как-сообщить-о-проблеме) for its remaining contents.
 

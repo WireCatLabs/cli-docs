@@ -38,7 +38,7 @@ No hay ningún secreto en un archivo. No hay lugar en él para un token, un núm
 
 ## Archivo de configuración de ejemplo
 
-El primer comando que lee la configuración creal archivo inicial. Aquí está, con un perfil agregado:
+El primer comando que lee la configuración crea el archivo inicial; `max personal doctor` no lo crea. Aquí está, con un perfil agregado:
 
 ```json
 {

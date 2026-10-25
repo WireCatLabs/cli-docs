@@ -35,7 +35,7 @@ There is no place for secrets in this file: no token, phone number or chat id. T
 
 ## Example configuration file
 
-The first command reading settings creates an initial file. Here it is with one profile added:
+The first command that reads the settings creates an initial file; `max personal doctor` does not create it. Here it is with one profile added:
 
 ```json
 {
