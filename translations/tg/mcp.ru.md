@@ -146,7 +146,7 @@ tg agent config set permissions.messages.send allow
 
 У команд `store backup|restore`, `server start|stop|restart`, загрузки моделей,
 `schedule run|exec`, `doctor reports create`, `account sessions end`, `chats delete|clear` и
-`bot store fetch` есть собственные ключи разрешений со значением `ask` по умолчанию. Сервер предлагает их
+`bot messages sync` есть собственные ключи разрешений со значением `ask` по умолчанию. Сервер предлагает их
 агенту; подтверждениями управляет приложение MCP. В `tg commands --json` исключённые команды отмечены
 как `mcp: false`. Прямым операциям `bot api` требуется отдельное [разрешение](./permissions.md#raw-bot-api-calls).
 

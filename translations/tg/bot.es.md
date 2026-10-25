@@ -24,7 +24,7 @@ Algunas palabras en esta página:
 | Enviar, editar, eliminar y anclar mensajes y archivos | `tg <bot> bot messages send\|edit\|delete\|pin` |
 | Ver nuevos mensajes, presionar botones y unirse | `tg <bot> bot watch` |
 | Lea y busque lo que vio el bot | `tg <bot> bot messages list`, `tg <bot> bot search messages` |
-| Importar mensajes antiguos de un canal o supergrupo | `tg <bot> bot store fetch` |
+| Importar mensajes antiguos de un canal o supergrupo | `tg <bot> bot messages sync` |
 | Administrar administradores y eliminar miembros | `tg <bot> bot chats admins`, `tg <bot> bot chats members remove` |
 | Mantenga un grupo en orden según sus reglas | `tg <bot> bot chats moderate` |
 | Botones de respuesta, configurar el menú de comandos y webhooks | `tg <bot> bot callbacks`, `commands`, `webhooks` |
@@ -158,19 +158,19 @@ tg sales bot search messages --from @ann     # what one person wrote
 tg sales bot messages between @ann Bob       # what both wrote, in the chats both wrote in
 ```
 
-**La Bot API de Telegram no ofrece historial de mensajes.** `messages list` y `messages show` responden a partir de lo que envió el bot, lo que recibió `bot watch` y lo que importó `bot store fetch` en esta computadora, y lo dicen. La búsqueda necesita cada palabra; `"a phrase"`, `-word`, `a OR b` y los filtros `from:`, `chat:`, `after:`, `before:` y `has:` funcionan y se corrige un error tipográfico. `contacts show --sync-first` es rechazado: importe primero los mensajes más antiguos con `bot store fetch`.
+**La Bot API de Telegram no ofrece historial de mensajes.** `messages list` y `messages show` responden a partir de lo que envió el bot, lo que recibió `bot watch` y lo que importó `bot messages sync` en esta computadora, y lo dicen. La búsqueda necesita cada palabra; `"a phrase"`, `-word`, `a OR b` y los filtros `from:`, `chat:`, `after:`, `before:` y `has:` funcionan y se corrige un error tipográfico. `contacts show --sync-first` es rechazado: importe primero los mensajes más antiguos con `bot messages sync`.
 
 `--all-bots` y `--bots <names>` también leen las copias de otros bots, cuando el `read_other_bots` del perfil lo permite.
 
 ### Recuperando mensajes antiguos
 
-`bot store fetch` descarga mensajes anteriores de un canal o supergrupo al archivo local del bot. Inicia una sesión separada en la API MTProto de Telegram con el token existente. Consulta los números de mensaje con [channels.getMessages](https://core.telegram.org/method/channels.getMessages). Los envíos y `bot watch` siguen usando la Bot API; la sesión de historial no recibe actualizaciones. El comando no envía nada ni marca mensajes como leídos.
+`bot messages sync` descarga mensajes anteriores de un canal o supergrupo al archivo local del bot. Inicia una sesión separada en la API MTProto de Telegram con el token existente. Consulta los números de mensaje con [channels.getMessages](https://core.telegram.org/method/channels.getMessages). Los envíos y `bot watch` siguen usando la Bot API; la sesión de historial no recibe actualizaciones. El comando no envía nada ni marca mensajes como leídos.
 
 Estos ejemplos usan un identificador de chat y un enlace ficticios:
 
 ```sh
-tg sales bot store fetch -1001234567890 --until-id https://t.me/c/1234567890/512 --limit 20 --json
-tg sales bot store fetch -1001234567890 --last 200 --pause 1s
+tg sales bot messages sync -1001234567890 --until-id https://t.me/c/1234567890/512 --limit 20 --json
+tg sales bot messages sync -1001234567890 --last 200 --pause 1s
 ```
 
 `--from` empieza en ese mensaje, incluido, y debe referirse al mismo chat. Sin él, usa el mensaje más reciente que el bot tenga guardado. Si no tiene ninguno, consulta el más reciente de la sesión personal del mismo perfil, si la tiene. Si ninguna conoce un número, termina con el código `2` y solicita `--from`. Usa las credenciales de aplicación Telegram del propio perfil (`api_id` y `api_hash`), nunca las de otro perfil; también acepta `TG_API_ID` y `TG_API_HASH`. No inicia una sesión personal.
@@ -205,7 +205,7 @@ tg sales bot chats moderate -1001234567890 --dry-run         # what breaks the r
 tg sales bot chats moderate -1001234567890                   # act as the rules allow
 ```
 
-Solo revisa lo guardado por `tg sales bot watch` o importado con `bot store fetch` en este equipo. No evalúa entradas de miembros. Las personas eliminadas no pueden regresar por enlace salvo con `--no-block`. Las reglas se guardan en el mismo archivo que las de tu perfil personal del mismo nombre.
+Solo revisa lo guardado por `tg sales bot watch` o importado con `bot messages sync` en este equipo. No evalúa entradas de miembros. Las personas eliminadas no pueden regresar por enlace salvo con `--no-block`. Las reglas se guardan en el mismo archivo que las de tu perfil personal del mismo nombre.
 
 <a id="buttons-the-menu-webhooks"></a>
 

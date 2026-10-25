@@ -146,7 +146,7 @@ ofrecen nunca, y los ejecutas en una terminal:
 
 Los comandos `store backup|restore`, `server start|stop|restart`, las descargas de modelos,
 `schedule run|exec`, `doctor reports create`, `account sessions end`, `chats delete|clear` y
-`bot store fetch` tienen claves de permisos propias, con `ask` por defecto. Se ofrecen al agente;
+`bot messages sync` tienen claves de permisos propias, con `ask` por defecto. Se ofrecen al agente;
 la aplicación MCP controla la aprobación. `tg commands --json` marca los comandos excluidos con
 `mcp: false`. Las operaciones directas de `bot api` necesitan un [permiso](./permissions.md#raw-bot-api-calls) explícito.
 

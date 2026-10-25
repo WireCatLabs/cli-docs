@@ -737,7 +737,7 @@ tg chats links update <chat> <link> [options]
 
 **Returns:** chat invite change — operation_id, chat_id, link, approval, expires_at, max_uses, primary, revoked, and 2 more; every field: tg commands info chats links update
 
-**Example:** `tg personal chats links update Team https://example.com/join/abc`
+**Example:** `tg personal chats links update "Book club" https://example.com/invite/book-club --max-uses 25`
 
 #### `tg chats links reset`
 
@@ -1261,7 +1261,7 @@ tg chats start <bot> [options]
 
 **Returns:** start a bot, as its Start button does; the bot sees that you started it
 
-**Example:** `tg personal chats start <bot>`
+**Example:** `tg personal chats start "Example Bot"`
 
 ### `tg chats app`
 
@@ -1283,7 +1283,7 @@ tg chats app <bot> [options]
 
 **Returns:** the address that opens a bot's mini app, signed in as you — keep it to yourself
 
-**Example:** `tg personal chats app <bot>`
+**Example:** `tg personal chats app "Example Bot"`
 
 ## `tg contacts`
 
@@ -1405,18 +1405,16 @@ tg contacts prepare <person> [options]
 everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
 
 ```sh
-tg contacts events <person> [options]
+tg contacts events <person> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `person` | required | their id, @username, or part of their name. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--scope <scope>` | only what belongs to personal or to work accounts: personal or work. |
-| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
-| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
 | `--limit <n>` | at most this many; 50 if not given. |
 | `--cursor <cursor>` | go on from where the last page stopped; page.next gives it, with the same filters. |
 
@@ -2083,7 +2081,7 @@ tg messages press <chat> <message> <button>
 
 **Returns:** press a bot's button under a message; the bot sees that you pressed it
 
-**Example:** `tg personal messages press Team 1234 <button>`
+**Example:** `tg personal messages press "Example Bot" 101 1`
 
 ### `tg messages scheduled`
 
@@ -2509,12 +2507,13 @@ the topics of a forum group
 a forum group's topics, newest activity first
 
 ```sh
-tg topics list <chat> [options]
+tg topics list <chat> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
@@ -2522,7 +2521,9 @@ tg topics list <chat> [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** a forum group's topics, newest activity first
+**Returns:** topic — id, title, closed, pinned, unread_count, last_message_at, created_at, hidden; every field: tg commands info topics list
+
+**Next usually:** `tg topics show <chat> <topic>`, `tg topics edit <chat> <topic>`, `tg topics delete <chat> <topic>`
 
 **Example:** `tg personal topics list Team`
 
@@ -2584,7 +2585,7 @@ tg topics create <chat> <title> [options]
 |---|---|
 | `--operation-id <id>` | identify this creation attempt; an already sent or unknown id is refused. |
 
-**Returns:** create a named topic in an existing forum; never enable or upgrade a group implicitly
+**Returns:** create a named topic in an existing forum; never enable or upgrade a group…
 
 **Example:** `tg personal topics create Team "Weekly sync"`
 
@@ -2813,7 +2814,7 @@ tg schedule command <name> <args> [options]
 | `--at <HH:MM>` | every day at this local time. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 
-**Returns:** run tg <args…> on a timer — reads save what they read, so this is how a chat's history…
+**Returns:** run tg <args…> on a timer — reads save what they read, so this is how a…
 
 **Example:** `tg personal schedule command daily <args>`
 
@@ -2840,7 +2841,7 @@ tg schedule agent <name> <harness> <prompt> [options]
 | `--at <HH:MM>` | every day at this local time. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 
-**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with TG_READ_ONLY=1,…
+**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
 
 **Example:** `tg personal schedule agent daily claude <prompt>`
 
@@ -2849,10 +2850,14 @@ tg schedule agent <name> <harness> <prompt> [options]
 the schedules, when they run and how their last run went
 
 ```sh
-tg schedule list
+tg schedule list [query]
 ```
 
-**Returns:** the schedules, when they run and how their last run went
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** scheduled job — name, kind, when, last; every field: tg commands info schedule list
 
 **Example:** `tg personal schedule list`
 
@@ -4707,7 +4712,7 @@ tg tasks add <message> [options]
 
 ### `tg tasks update`
 
-set a task's title, description, due date, next check, category and assignee; nothing reaches the messenger
+update a task's text, schedule, category, assignees, priority or parent; nothing reaches the messenger
 
 **Changes something on this computer only.**
 
@@ -4722,6 +4727,8 @@ tg tasks update <task> [options]
 | Option | What it does |
 |---|---|
 | `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …; a change is kept in the task's history. |
+| `--priority <n>` | priority from 0 (urgent) through 4 (low). |
+| `--parent <id>` | parent task in the same project; none clears it. |
 | `--title <title>` | one line: the action and its object — send Alex the API token. |
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
 | `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
@@ -5193,7 +5200,6 @@ tg search runs [query] [options]
 
 | Option | What it does |
 |---|---|
-| `--since-time <time>` | runs starting on or after an ISO time or 2h / 1d ago. |
 | `--limit <n>` | matches per page, at most 100. Default: `20`. |
 | `--page <n>` | result page. Default: `1`. |
 
@@ -5480,7 +5486,7 @@ tg replies audience [options]
 | `--deny-people <ids>` | replace denied sender ids, comma-separated; empty clears; deny wins. |
 | `--deny-chats <ids>` | replace denied chat ids, comma-separated; empty clears; deny wins. |
 
-**Returns:** show the reply audience, who the rules may answer, or replace its named fields; a new…
+**Returns:** show the reply audience, who the rules may answer, or replace its named…
 
 **Example:** `tg personal replies audience`
 
@@ -5510,7 +5516,7 @@ allow incoming message data to go to the configured reply model for this profile
 tg replies consents grant
 ```
 
-**Returns:** allow incoming message data to go to the configured reply model for this profile; chat…
+**Returns:** allow incoming message data to go to the configured reply model for this…
 
 **Example:** `tg personal replies consents grant`
 
@@ -5581,7 +5587,7 @@ tg replies test [rule] [options]
 | `--since-time <time>` | from this ISO 8601 time, or 2h / 1d ago; 7d ago if not given. |
 | `--ai` | call the configured reply model with stored message data; requires reply consent, otherwise uses fallback. |
 
-**Returns:** what the rules would have answered in the stored messages, to whom and why — sends…
+**Returns:** what the rules would have answered in the stored messages, to whom and why —…
 
 **Example:** `tg personal replies test`
 
@@ -5595,7 +5601,7 @@ stop every reply rule of this profile at once, a running serve too; resume undoe
 tg replies pause
 ```
 
-**Returns:** stop every reply rule of this profile at once, a running serve too; resume undoes it
+**Returns:** stop every reply rule of this profile at once, a running serve too; resume…
 
 **Example:** `tg personal replies pause`
 
@@ -5717,7 +5723,7 @@ tg sends list [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** send attempt — at, profile, chat_id, outcome, kind, action, people, message_id, and 17 more; every field: tg commands info sends list
+**Returns:** send attempt — at, profile, chat_id, outcome, kind, action, people, message_id, and 16 more; every field: tg commands info sends list
 
 **Example:** `tg personal sends list --limit 10`
 
@@ -5900,21 +5906,21 @@ tg doctor reports create [options]
 
 ## `tg commands`
 
-every command by section, one line each; --json: the contract, one path per call
+every command by section; --json prints its contract, one path per call
 
 ### `tg commands info`
 
-one command's argv and result schemas, effects, permissions and retry guidance
+one command contract, or all schemas, error reasons and explicit overrides
 
 ```sh
-tg commands info <path>
+tg commands info [path]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `path` | required | one command path, for example: stats messages show. |
+| `path` | optional | one command path; without one, export schemas, error reasons and explicit overrides. |
 
-**Returns:** one command's argv and result schemas, effects, permissions and retry guidance
+**Returns:** one command contract, or all schemas, error reasons and explicit overrides
 
 **Example:** `tg commands info messages list`
 
@@ -6078,14 +6084,18 @@ tg bot auth remove
 every name on this machine that has a bot token; --check asks Telegram which bot each is
 
 ```sh
-tg bot list [options]
+tg bot list [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
 | `--check` | ask the messenger who each bot is, with its token. |
 
-**Returns:** every bot profile on this machine; --check asks which bot each is
+**Returns:** bot profile — name, token, bot, id, problem; every field: tg commands info bot list
 
 **Example:** `tg sales bot list`, `tg sales bot list --check`
 
@@ -6098,10 +6108,14 @@ the chats this bot is in — Telegram gives a bot no list of them, so `list` sho
 chats this bot has seen on this machine — not a complete list from Telegram
 
 ```sh
-tg bot chats list
+tg bot chats list [query]
 ```
 
-**Returns:** chats this bot has seen on this machine — not a complete list from Telegram
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** bot seen chat — id, title, kind, unread_count, unread_mentions, last_message_at, participants_count, muted, and 9 more; every field: tg commands info bot chats list
 
 **Example:** `tg sales bot chats list`
 
@@ -6167,14 +6181,15 @@ the admins of a chat the bot is an admin in
 the chat's admins and what each may do
 
 ```sh
-tg bot chats admins list <chat>
+tg bot chats admins list <chat> [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat id, or the title of a chat this bot has seen. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** the chat's admins and what each may do
+**Returns:** bot admin — id, name, username, role, rights, title; every field: tg commands info bot chats admins list
 
 **Example:** `tg sales bot chats admins list Team`
 
@@ -6373,18 +6388,21 @@ tg bot messages send <chat> [text] [options]
 the latest messages in a chat; where Telegram gives a bot no history, and with --offline, the ones this bot has seen on this machine
 
 ```sh
-tg bot messages list <chat> [options]
+tg bot messages list <chat> [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many, the newest. |
 
-**Returns:** the latest messages in a chat
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info bot messages list
+
+**Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
 **Example:** `tg sales bot messages list Team --limit 20`
 
@@ -6517,6 +6535,33 @@ tg bot messages between <people> [options]
 
 **Example:** `tg sales bot messages between @ann @bob`
 
+#### `tg bot messages sync`
+
+fetch a chat's history into the bot's local copy, newest first; run it again to continue
+
+**Changes something on this computer only.**
+
+```sh
+tg bot messages sync <chat> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat id, or the title of a chat this bot has seen. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | at most this many messages in this run; 1000 if not given. |
+| `--page-size <n>` | how many messages one request asks for; 100 if not given. |
+| `--pause <duration>` | pause between pages, to stay under the messenger's limits. Default: `1s`. |
+| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
+| `--last <n>` | stop once the newest n messages are held. |
+| `--until-id <id>` | start at this message, by its t.me link, inclusive; otherwise the newest message already known. |
+
+**Returns:** fetch a chat's history into the bot's local copy, newest first; run it again…
+
+**Example:** `tg personal bot messages sync Team`
+
 ### `tg bot search`
 
 find what this bot's local copy holds, by text
@@ -6555,10 +6600,14 @@ the chats this bot may write to; with no list, every chat — `clear` removes th
 the chats on the list, or nothing when there is no list
 
 ```sh
-tg bot recipients list
+tg bot recipients list [query]
 ```
 
-**Returns:** the chats on the list, or nothing when there is no list
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** recipient — id, title, added_at, partner_id; every field: tg commands info bot recipients list
 
 **Example:** `tg sales bot recipients list`
 
@@ -6621,10 +6670,14 @@ what this bot sent, edited and deleted from this machine — ids and outcomes, n
 every send, edit and delete this bot made from this machine, with its outcome
 
 ```sh
-tg bot sends list
+tg bot sends list [query]
 ```
 
-**Returns:** every send, edit and delete this bot made from this machine, with its outcome
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** send attempt — at, profile, chat_id, outcome, kind, action, people, message_id, and 16 more; every field: tg commands info bot sends list
 
 **Example:** `tg sales bot sends list`
 
@@ -6685,10 +6738,14 @@ the bot's command menu — what people see after /
 the commands in the menu now
 
 ```sh
-tg bot commands list
+tg bot commands list [query]
 ```
 
-**Returns:** the commands in the menu now
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+**Returns:** bot menu entry — name, description; every field: tg commands info bot commands list
 
 **Example:** `tg sales bot commands list`
 
@@ -6733,10 +6790,14 @@ where the messenger pushes this bot's updates — while one is set, `bot watch` 
 the webhooks this bot has
 
 ```sh
-tg bot webhooks list
+tg bot webhooks list [query]
 ```
 
-**Returns:** the webhooks this bot has
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+**Returns:** bot webhook — url, types; every field: tg commands info bot webhooks list
 
 **Example:** `tg sales bot webhooks list`
 
@@ -6816,40 +6877,9 @@ the bot this profile's token belongs to: id, name and username
 tg bot me
 ```
 
-**Returns:** the bot this profile's token belongs to: id, name and username
+**Returns:** the bot this profile's token belongs to
 
 **Example:** `tg sales bot me`
-
-### `tg bot store`
-
-the bot's local copy on this machine
-
-#### `tg bot store fetch`
-
-fetch a chat's history into the bot's local copy, newest first; run it again to continue
-
-**Changes something on this computer only.**
-
-```sh
-tg bot store fetch <chat> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `chat` | required | a chat id, or the title of a chat this bot has seen. |
-
-| Option | What it does |
-|---|---|
-| `--limit <n>` | at most this many messages in this run; 1000 if not given. |
-| `--page-size <n>` | how many messages one request asks for; 100 if not given. |
-| `--pause <duration>` | pause between pages, to stay under the messenger's limits. Default: `1s`. |
-| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
-| `--last <n>` | stop once the newest n messages are held. |
-| `--until-id <id>` | start at this message, by its t.me link, inclusive; otherwise the newest message already known. |
-
-**Returns:** fetch a chat's history into the bot's local copy, newest first; run it again to continue
-
-**Example:** `tg personal bot store fetch Team`
 
 ### `tg bot mcp`
 
@@ -6899,7 +6929,7 @@ tg bot api get-updates [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to receive incoming updates using long polling (wiki). Returns an Array…
+**Returns:** Use this method to receive incoming updates using long polling (wiki).…
 
 **Example:** `tg personal bot api get-updates`
 
@@ -6924,7 +6954,7 @@ tg bot api set-webhook [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to specify a URL and receive incoming updates via an outgoing webhook.…
+**Returns:** Use this method to specify a URL and receive incoming updates via an…
 
 **Example:** `tg personal bot api set-webhook`
 
@@ -6944,7 +6974,7 @@ tg bot api delete-webhook [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to remove webhook integration if you decide to switch back to getUpdates.…
+**Returns:** Use this method to remove webhook integration if you decide to switch back…
 
 **Example:** `tg personal bot api delete-webhook`
 
@@ -6956,7 +6986,7 @@ Use this method to get current webhook status. Requires no parameters. On succes
 tg bot api get-webhook-info
 ```
 
-**Returns:** Use this method to get current webhook status. Requires no parameters. On success,…
+**Returns:** Use this method to get current webhook status. Requires no parameters. On…
 
 **Example:** `tg personal bot api get-webhook-info`
 
@@ -6968,7 +6998,7 @@ A simple method for testing your bot's authentication token. Requires no paramet
 tg bot api get-me
 ```
 
-**Returns:** A simple method for testing your bot's authentication token. Requires no parameters.…
+**Returns:** A simple method for testing your bot's authentication token. Requires no…
 
 **Example:** `tg personal bot api get-me`
 
@@ -6982,7 +7012,7 @@ Use this method to log out from the cloud Bot API server before launching the bo
 tg bot api log-out
 ```
 
-**Returns:** Use this method to log out from the cloud Bot API server before launching the bot…
+**Returns:** Use this method to log out from the cloud Bot API server before launching…
 
 **Example:** `tg personal bot api log-out`
 
@@ -6996,7 +7026,7 @@ Use this method to close the bot instance before moving it from one local server
 tg bot api close
 ```
 
-**Returns:** Use this method to close the bot instance before moving it from one local server to…
+**Returns:** Use this method to close the bot instance before moving it from one local…
 
 **Example:** `tg personal bot api close`
 
@@ -7031,7 +7061,7 @@ tg bot api send-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send text messages. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send text messages. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-message`
 
@@ -7060,7 +7090,7 @@ tg bot api forward-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to forward messages of any kind. Service messages and messages with…
+**Returns:** Use this method to forward messages of any kind. Service messages and…
 
 **Example:** `tg personal bot api forward-message`
 
@@ -7086,7 +7116,7 @@ tg bot api forward-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to forward multiple messages of any kind. If some of the specified…
+**Returns:** Use this method to forward multiple messages of any kind. If some of the…
 
 **Example:** `tg personal bot api forward-messages`
 
@@ -7122,7 +7152,7 @@ tg bot api copy-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to copy messages of any kind. Service messages, paid media messages,…
+**Returns:** Use this method to copy messages of any kind. Service messages, paid media…
 
 **Example:** `tg personal bot api copy-message`
 
@@ -7149,7 +7179,7 @@ tg bot api copy-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to copy messages of any kind. If some of the specified messages can't be…
+**Returns:** Use this method to copy messages of any kind. If some of the specified…
 
 **Example:** `tg personal bot api copy-messages`
 
@@ -7186,7 +7216,7 @@ tg bot api send-photo [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send photos. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send photos. On success, the sent Message is returned. —…
 
 **Example:** `tg personal bot api send-photo`
 
@@ -7224,7 +7254,7 @@ tg bot api send-live-photo [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send live photos. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send live photos. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-live-photo`
 
@@ -7263,7 +7293,7 @@ tg bot api send-audio [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send audio files, if you want Telegram clients to display them in the…
+**Returns:** Use this method to send audio files, if you want Telegram clients to display…
 
 **Example:** `tg personal bot api send-audio`
 
@@ -7300,7 +7330,7 @@ tg bot api send-document [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send general files. On success, the sent Message is returned. Bots can…
+**Returns:** Use this method to send general files. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-document`
 
@@ -7344,7 +7374,7 @@ tg bot api send-video [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send video files, Telegram clients support MPEG4 videos (other formats…
+**Returns:** Use this method to send video files, Telegram clients support MPEG4 videos…
 
 **Example:** `tg personal bot api send-video`
 
@@ -7385,7 +7415,7 @@ tg bot api send-animation [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On…
+**Returns:** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video…
 
 **Example:** `tg personal bot api send-animation`
 
@@ -7421,7 +7451,7 @@ tg bot api send-voice [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send audio files, if you want Telegram clients to display the file as…
+**Returns:** Use this method to send audio files, if you want Telegram clients to display…
 
 **Example:** `tg personal bot api send-voice`
 
@@ -7456,7 +7486,7 @@ tg bot api send-video-note [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success,…
+**Returns:** Use this method to send a rounded square MPEG4 video of up to 1 minute long.…
 
 **Example:** `tg personal bot api send-video-note`
 
@@ -7492,7 +7522,7 @@ tg bot api send-paid-media [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send paid media. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send paid media. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-paid-media`
 
@@ -7521,7 +7551,7 @@ tg bot api send-media-group [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a group of photos, live photos, videos, documents or audios as an…
+**Returns:** Use this method to send a group of photos, live photos, videos, documents or…
 
 **Example:** `tg personal bot api send-media-group`
 
@@ -7558,7 +7588,7 @@ tg bot api send-location [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send point on the map. On success, the sent Message is returned. —…
+**Returns:** Use this method to send point on the map. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-location`
 
@@ -7597,7 +7627,7 @@ tg bot api send-venue [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send information about a venue. On success, the sent Message is…
+**Returns:** Use this method to send information about a venue. On success, the sent…
 
 **Example:** `tg personal bot api send-venue`
 
@@ -7632,7 +7662,7 @@ tg bot api send-contact [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send phone contacts. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send phone contacts. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-contact`
 
@@ -7685,7 +7715,7 @@ tg bot api send-poll [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a native poll. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send a native poll. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-poll`
 
@@ -7712,7 +7742,7 @@ tg bot api send-checklist [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a checklist on behalf of a connected business account. On…
+**Returns:** Use this method to send a checklist on behalf of a connected business…
 
 **Example:** `tg personal bot api send-checklist`
 
@@ -7743,7 +7773,7 @@ tg bot api send-dice [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send an animated emoji that will display a random value. On success,…
+**Returns:** Use this method to send an animated emoji that will display a random value.…
 
 **Example:** `tg personal bot api send-dice`
 
@@ -7770,7 +7800,7 @@ tg bot api send-message-draft [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to stream a partial message to a user while the message is being…
+**Returns:** Use this method to stream a partial message to a user while the message is…
 
 **Example:** `tg personal bot api send-message-draft`
 
@@ -7793,7 +7823,7 @@ tg bot api send-chat-action [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method when you need to tell the user that something is happening on the bot's…
+**Returns:** Use this method when you need to tell the user that something is happening…
 
 **Example:** `tg personal bot api send-chat-action`
 
@@ -7816,7 +7846,7 @@ tg bot api set-message-reaction [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the chosen reactions on a message. Service messages of some…
+**Returns:** Use this method to change the chosen reactions on a message. Service…
 
 **Example:** `tg personal bot api set-message-reaction`
 
@@ -7836,7 +7866,7 @@ tg bot api get-user-profile-photos [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos…
+**Returns:** Use this method to get a list of profile pictures for a user. Returns a…
 
 **Example:** `tg personal bot api get-user-profile-photos`
 
@@ -7856,7 +7886,7 @@ tg bot api get-user-profile-audios [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get a list of profile audios for a user. Returns a UserProfileAudios…
+**Returns:** Use this method to get a list of profile audios for a user. Returns a…
 
 **Example:** `tg personal bot api get-user-profile-audios`
 
@@ -7878,7 +7908,7 @@ tg bot api set-user-emoji-status [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the emoji status for a given user that previously allowed the bot to manage their…
+**Returns:** Changes the emoji status for a given user that previously allowed the bot to…
 
 **Example:** `tg personal bot api set-user-emoji-status`
 
@@ -7896,7 +7926,7 @@ tg bot api get-file [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get basic information about a file and prepare it for downloading. For…
+**Returns:** Use this method to get basic information about a file and prepare it for…
 
 **Example:** `tg personal bot api get-file`
 
@@ -7919,7 +7949,7 @@ tg bot api ban-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to ban a user in a group, a supergroup or a channel. In the case of…
+**Returns:** Use this method to ban a user in a group, a supergroup or a channel. In the…
 
 **Example:** `tg personal bot api ban-chat-member`
 
@@ -7941,7 +7971,7 @@ tg bot api unban-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to unban a previously banned user in a supergroup or channel. The user…
+**Returns:** Use this method to unban a previously banned user in a supergroup or…
 
 **Example:** `tg personal bot api unban-chat-member`
 
@@ -7965,7 +7995,7 @@ tg bot api restrict-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to restrict a user in a supergroup. The bot must be an administrator in…
+**Returns:** Use this method to restrict a user in a supergroup. The bot must be an…
 
 **Example:** `tg personal bot api restrict-chat-member`
 
@@ -8004,7 +8034,7 @@ tg bot api promote-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to promote or demote a user in a supergroup or a channel. The bot must be…
+**Returns:** Use this method to promote or demote a user in a supergroup or a channel.…
 
 **Example:** `tg personal bot api promote-chat-member`
 
@@ -8026,7 +8056,7 @@ tg bot api set-chat-administrator-custom-title [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set a custom title for an administrator in a supergroup promoted by…
+**Returns:** Use this method to set a custom title for an administrator in a supergroup…
 
 **Example:** `tg personal bot api set-chat-administrator-custom-title`
 
@@ -8048,7 +8078,7 @@ tg bot api set-chat-member-tag [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set a tag for a regular member in a group or a supergroup. The bot…
+**Returns:** Use this method to set a tag for a regular member in a group or a…
 
 **Example:** `tg personal bot api set-chat-member-tag`
 
@@ -8069,7 +8099,7 @@ tg bot api ban-chat-sender-chat [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is…
+**Returns:** Use this method to ban a channel chat in a supergroup or a channel. Until…
 
 **Example:** `tg personal bot api ban-chat-sender-chat`
 
@@ -8090,7 +8120,7 @@ tg bot api unban-chat-sender-chat [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to unban a previously banned channel chat in a supergroup or channel. The…
+**Returns:** Use this method to unban a previously banned channel chat in a supergroup or…
 
 **Example:** `tg personal bot api unban-chat-sender-chat`
 
@@ -8112,7 +8142,7 @@ tg bot api set-chat-permissions [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set default chat permissions for all members. The bot must be an…
+**Returns:** Use this method to set default chat permissions for all members. The bot…
 
 **Example:** `tg personal bot api set-chat-permissions`
 
@@ -8132,7 +8162,7 @@ tg bot api export-chat-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to generate a new primary invite link for a chat; any previously…
+**Returns:** Use this method to generate a new primary invite link for a chat; any…
 
 **Example:** `tg personal bot api export-chat-invite-link`
 
@@ -8156,7 +8186,7 @@ tg bot api create-chat-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create an additional invite link for a chat. The bot must be an…
+**Returns:** Use this method to create an additional invite link for a chat. The bot must…
 
 **Example:** `tg personal bot api create-chat-invite-link`
 
@@ -8181,7 +8211,7 @@ tg bot api edit-chat-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit a non-primary invite link created by the bot. The bot must be an…
+**Returns:** Use this method to edit a non-primary invite link created by the bot. The…
 
 **Example:** `tg personal bot api edit-chat-invite-link`
 
@@ -8204,7 +8234,7 @@ tg bot api create-chat-subscription-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create a subscription invite link for a channel chat. The bot must…
+**Returns:** Use this method to create a subscription invite link for a channel chat. The…
 
 **Example:** `tg personal bot api create-chat-subscription-invite-link`
 
@@ -8226,7 +8256,7 @@ tg bot api edit-chat-subscription-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit a subscription invite link created by the bot. The bot must have…
+**Returns:** Use this method to edit a subscription invite link created by the bot. The…
 
 **Example:** `tg personal bot api edit-chat-subscription-invite-link`
 
@@ -8247,7 +8277,7 @@ tg bot api revoke-chat-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to revoke an invite link created by the bot. If the primary link is…
+**Returns:** Use this method to revoke an invite link created by the bot. If the primary…
 
 **Example:** `tg personal bot api revoke-chat-invite-link`
 
@@ -8268,7 +8298,7 @@ tg bot api approve-chat-join-request [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to approve a chat join request. The bot must be an administrator in the…
+**Returns:** Use this method to approve a chat join request. The bot must be an…
 
 **Example:** `tg personal bot api approve-chat-join-request`
 
@@ -8289,7 +8319,7 @@ tg bot api decline-chat-join-request [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to decline a chat join request. The bot must be an administrator in the…
+**Returns:** Use this method to decline a chat join request. The bot must be an…
 
 **Example:** `tg personal bot api decline-chat-join-request`
 
@@ -8310,7 +8340,7 @@ tg bot api answer-chat-join-request-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to process a received chat join request query. Returns True on success. —…
+**Returns:** Use this method to process a received chat join request query. Returns True…
 
 **Example:** `tg personal bot api answer-chat-join-request-query`
 
@@ -8331,7 +8361,7 @@ tg bot api send-chat-join-request-web-app [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to process a received chat join request query by showing a Mini App to…
+**Returns:** Use this method to process a received chat join request query by showing a…
 
 **Example:** `tg personal bot api send-chat-join-request-web-app`
 
@@ -8352,7 +8382,7 @@ tg bot api set-chat-photo [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set a new profile photo for the chat. Photos can't be changed for…
+**Returns:** Use this method to set a new profile photo for the chat. Photos can't be…
 
 **Example:** `tg personal bot api set-chat-photo`
 
@@ -8372,7 +8402,7 @@ tg bot api delete-chat-photo [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a chat photo. Photos can't be changed for private chats. The…
+**Returns:** Use this method to delete a chat photo. Photos can't be changed for private…
 
 **Example:** `tg personal bot api delete-chat-photo`
 
@@ -8393,7 +8423,7 @@ tg bot api set-chat-title [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the title of a chat. Titles can't be changed for private chats.…
+**Returns:** Use this method to change the title of a chat. Titles can't be changed for…
 
 **Example:** `tg personal bot api set-chat-title`
 
@@ -8414,7 +8444,7 @@ tg bot api set-chat-description [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the description of a group, a supergroup or a channel. The bot…
+**Returns:** Use this method to change the description of a group, a supergroup or a…
 
 **Example:** `tg personal bot api set-chat-description`
 
@@ -8437,7 +8467,7 @@ tg bot api pin-chat-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to add a message to the list of pinned messages in a chat. In private…
+**Returns:** Use this method to add a message to the list of pinned messages in a chat.…
 
 **Example:** `tg personal bot api pin-chat-message`
 
@@ -8459,7 +8489,7 @@ tg bot api unpin-chat-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to remove a message from the list of pinned messages in a chat. In…
+**Returns:** Use this method to remove a message from the list of pinned messages in a…
 
 **Example:** `tg personal bot api unpin-chat-message`
 
@@ -8479,7 +8509,7 @@ tg bot api unpin-all-chat-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to clear the list of pinned messages in a chat. In private chats and…
+**Returns:** Use this method to clear the list of pinned messages in a chat. In private…
 
 **Example:** `tg personal bot api unpin-all-chat-messages`
 
@@ -8499,7 +8529,7 @@ tg bot api leave-chat [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method for your bot to leave a group, supergroup or channel. Returns True on…
+**Returns:** Use this method for your bot to leave a group, supergroup or channel.…
 
 **Example:** `tg personal bot api leave-chat`
 
@@ -8517,7 +8547,7 @@ tg bot api get-chat [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get up-to-date information about the chat. Returns a ChatFullInfo…
+**Returns:** Use this method to get up-to-date information about the chat. Returns a…
 
 **Example:** `tg personal bot api get-chat`
 
@@ -8536,7 +8566,7 @@ tg bot api get-chat-administrators [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get a list of administrators in a chat. Returns an Array of ChatMember…
+**Returns:** Use this method to get a list of administrators in a chat. Returns an Array…
 
 **Example:** `tg personal bot api get-chat-administrators`
 
@@ -8554,7 +8584,7 @@ tg bot api get-chat-member-count [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the number of members in a chat. Returns Integer on success. —…
+**Returns:** Use this method to get the number of members in a chat. Returns Integer on…
 
 **Example:** `tg personal bot api get-chat-member-count`
 
@@ -8573,7 +8603,7 @@ tg bot api get-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get information about a member of a chat. The method is only…
+**Returns:** Use this method to get information about a member of a chat. The method is…
 
 **Example:** `tg personal bot api get-chat-member`
 
@@ -8592,7 +8622,7 @@ tg bot api get-user-personal-chat-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the last messages from the personal chat (i.e., the chat currently…
+**Returns:** Use this method to get the last messages from the personal chat (i.e., the…
 
 **Example:** `tg personal bot api get-user-personal-chat-messages`
 
@@ -8613,7 +8643,7 @@ tg bot api set-chat-sticker-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set a new group sticker set for a supergroup. The bot must be an…
+**Returns:** Use this method to set a new group sticker set for a supergroup. The bot…
 
 **Example:** `tg personal bot api set-chat-sticker-set`
 
@@ -8633,7 +8663,7 @@ tg bot api delete-chat-sticker-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a group sticker set from a supergroup. The bot must be an…
+**Returns:** Use this method to delete a group sticker set from a supergroup. The bot…
 
 **Example:** `tg personal bot api delete-chat-sticker-set`
 
@@ -8645,7 +8675,7 @@ Use this method to get custom emoji stickers, which can be used as a forum topic
 tg bot api get-forum-topic-icon-stickers
 ```
 
-**Returns:** Use this method to get custom emoji stickers, which can be used as a forum topic icon by…
+**Returns:** Use this method to get custom emoji stickers, which can be used as a forum…
 
 **Example:** `tg personal bot api get-forum-topic-icon-stickers`
 
@@ -8668,7 +8698,7 @@ tg bot api create-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create a topic in a forum supergroup chat or a private chat with a…
+**Returns:** Use this method to create a topic in a forum supergroup chat or a private…
 
 **Example:** `tg personal bot api create-forum-topic`
 
@@ -8691,7 +8721,7 @@ tg bot api edit-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit name and icon of a topic in a forum supergroup chat or a private…
+**Returns:** Use this method to edit name and icon of a topic in a forum supergroup chat…
 
 **Example:** `tg personal bot api edit-forum-topic`
 
@@ -8712,7 +8742,7 @@ tg bot api close-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to close an open topic in a forum supergroup chat. The bot must be an…
+**Returns:** Use this method to close an open topic in a forum supergroup chat. The bot…
 
 **Example:** `tg personal bot api close-forum-topic`
 
@@ -8733,7 +8763,7 @@ tg bot api reopen-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an…
+**Returns:** Use this method to reopen a closed topic in a forum supergroup chat. The bot…
 
 **Example:** `tg personal bot api reopen-forum-topic`
 
@@ -8754,7 +8784,7 @@ tg bot api delete-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a forum topic along with all its messages in a forum supergroup…
+**Returns:** Use this method to delete a forum topic along with all its messages in a…
 
 **Example:** `tg personal bot api delete-forum-topic`
 
@@ -8775,7 +8805,7 @@ tg bot api unpin-all-forum-topic-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to clear the list of pinned messages in a forum topic in a forum…
+**Returns:** Use this method to clear the list of pinned messages in a forum topic in a…
 
 **Example:** `tg personal bot api unpin-all-forum-topic-messages`
 
@@ -8796,7 +8826,7 @@ tg bot api edit-general-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit the name of the 'General' topic in a forum supergroup chat. The…
+**Returns:** Use this method to edit the name of the 'General' topic in a forum…
 
 **Example:** `tg personal bot api edit-general-forum-topic`
 
@@ -8816,7 +8846,7 @@ tg bot api close-general-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to close an open 'General' topic in a forum supergroup chat. The bot must…
+**Returns:** Use this method to close an open 'General' topic in a forum supergroup chat.…
 
 **Example:** `tg personal bot api close-general-forum-topic`
 
@@ -8836,7 +8866,7 @@ tg bot api reopen-general-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot…
+**Returns:** Use this method to reopen a closed 'General' topic in a forum supergroup…
 
 **Example:** `tg personal bot api reopen-general-forum-topic`
 
@@ -8856,7 +8886,7 @@ tg bot api hide-general-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be…
+**Returns:** Use this method to hide the 'General' topic in a forum supergroup chat. The…
 
 **Example:** `tg personal bot api hide-general-forum-topic`
 
@@ -8876,7 +8906,7 @@ tg bot api unhide-general-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be…
+**Returns:** Use this method to unhide the 'General' topic in a forum supergroup chat.…
 
 **Example:** `tg personal bot api unhide-general-forum-topic`
 
@@ -8896,7 +8926,7 @@ tg bot api unpin-all-general-forum-topic-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to clear the list of pinned messages in a General forum topic. The bot…
+**Returns:** Use this method to clear the list of pinned messages in a General forum…
 
 **Example:** `tg personal bot api unpin-all-general-forum-topic-messages`
 
@@ -8920,7 +8950,7 @@ tg bot api answer-callback-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send answers to callback queries sent from inline keyboards. The…
+**Returns:** Use this method to send answers to callback queries sent from inline…
 
 **Example:** `tg personal bot api answer-callback-query`
 
@@ -8940,7 +8970,7 @@ tg bot api answer-guest-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to reply to a received guest message. On success, a SentGuestMessage…
+**Returns:** Use this method to reply to a received guest message. On success, a…
 
 **Example:** `tg personal bot api answer-guest-query`
 
@@ -8959,7 +8989,7 @@ tg bot api get-user-chat-boosts [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the list of boosts added to a chat by a user. Requires…
+**Returns:** Use this method to get the list of boosts added to a chat by a user.…
 
 **Example:** `tg personal bot api get-user-chat-boosts`
 
@@ -8977,7 +9007,7 @@ tg bot api get-business-connection [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get information about the connection of the bot with a business…
+**Returns:** Use this method to get information about the connection of the bot with a…
 
 **Example:** `tg personal bot api get-business-connection`
 
@@ -8995,7 +9025,7 @@ tg bot api get-managed-bot-token [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the token of a managed bot. Returns the token as String on…
+**Returns:** Use this method to get the token of a managed bot. Returns the token as…
 
 **Example:** `tg personal bot api get-managed-bot-token`
 
@@ -9015,7 +9045,7 @@ tg bot api replace-managed-bot-token [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to revoke the current token of a managed bot and generate a new one.…
+**Returns:** Use this method to revoke the current token of a managed bot and generate a…
 
 **Example:** `tg personal bot api replace-managed-bot-token`
 
@@ -9033,7 +9063,7 @@ tg bot api get-managed-bot-access-settings [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the access settings of a managed bot. Returns a BotAccessSettings…
+**Returns:** Use this method to get the access settings of a managed bot. Returns a…
 
 **Example:** `tg personal bot api get-managed-bot-access-settings`
 
@@ -9055,7 +9085,7 @@ tg bot api set-managed-bot-access-settings [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the access settings of a managed bot. Returns True on success.…
+**Returns:** Use this method to change the access settings of a managed bot. Returns True…
 
 **Example:** `tg personal bot api set-managed-bot-access-settings`
 
@@ -9077,7 +9107,7 @@ tg bot api set-my-commands [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the list of the bot's commands. See this manual for more…
+**Returns:** Use this method to change the list of the bot's commands. See this manual…
 
 **Example:** `tg personal bot api set-my-commands`
 
@@ -9098,7 +9128,7 @@ tg bot api delete-my-commands [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete the list of the bot's commands for the given scope and user…
+**Returns:** Use this method to delete the list of the bot's commands for the given scope…
 
 **Example:** `tg personal bot api delete-my-commands`
 
@@ -9117,7 +9147,7 @@ tg bot api get-my-commands [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current list of the bot's commands for the given scope and…
+**Returns:** Use this method to get the current list of the bot's commands for the given…
 
 **Example:** `tg personal bot api get-my-commands`
 
@@ -9138,7 +9168,7 @@ tg bot api set-my-name [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the bot's name. Returns True on success. — write (setMyName)
+**Returns:** Use this method to change the bot's name. Returns True on success. — write…
 
 **Example:** `tg personal bot api set-my-name`
 
@@ -9156,7 +9186,7 @@ tg bot api get-my-name [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current bot name for the given user language. Returns BotName…
+**Returns:** Use this method to get the current bot name for the given user language.…
 
 **Example:** `tg personal bot api get-my-name`
 
@@ -9177,7 +9207,7 @@ tg bot api set-my-description [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the bot's description, which is shown in the chat with the bot…
+**Returns:** Use this method to change the bot's description, which is shown in the chat…
 
 **Example:** `tg personal bot api set-my-description`
 
@@ -9195,7 +9225,7 @@ tg bot api get-my-description [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current bot description for the given user language. Returns…
+**Returns:** Use this method to get the current bot description for the given user…
 
 **Example:** `tg personal bot api get-my-description`
 
@@ -9216,7 +9246,7 @@ tg bot api set-my-short-description [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the bot's short description, which is shown on the bot's…
+**Returns:** Use this method to change the bot's short description, which is shown on the…
 
 **Example:** `tg personal bot api set-my-short-description`
 
@@ -9234,7 +9264,7 @@ tg bot api get-my-short-description [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current bot short description for the given user language.…
+**Returns:** Use this method to get the current bot short description for the given user…
 
 **Example:** `tg personal bot api get-my-short-description`
 
@@ -9254,7 +9284,7 @@ tg bot api set-my-profile-photo [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the profile photo of the bot. Returns True on success. — write (setMyProfilePhoto)
+**Returns:** Changes the profile photo of the bot. Returns True on success. — write…
 
 **Example:** `tg personal bot api set-my-profile-photo`
 
@@ -9268,7 +9298,7 @@ Removes the profile photo of the bot. Requires no parameters. Returns True on su
 tg bot api remove-my-profile-photo
 ```
 
-**Returns:** Removes the profile photo of the bot. Requires no parameters. Returns True on success. —…
+**Returns:** Removes the profile photo of the bot. Requires no parameters. Returns True…
 
 **Example:** `tg personal bot api remove-my-profile-photo`
 
@@ -9289,7 +9319,7 @@ tg bot api set-chat-menu-button [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the bot's menu button in a private chat, or the default menu…
+**Returns:** Use this method to change the bot's menu button in a private chat, or the…
 
 **Example:** `tg personal bot api set-chat-menu-button`
 
@@ -9307,7 +9337,7 @@ tg bot api get-chat-menu-button [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current value of the bot's menu button in a private chat, or…
+**Returns:** Use this method to get the current value of the bot's menu button in a…
 
 **Example:** `tg personal bot api get-chat-menu-button`
 
@@ -9328,7 +9358,7 @@ tg bot api set-my-default-administrator-rights [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the default administrator rights requested by the bot when it's…
+**Returns:** Use this method to change the default administrator rights requested by the…
 
 **Example:** `tg personal bot api set-my-default-administrator-rights`
 
@@ -9346,7 +9376,7 @@ tg bot api get-my-default-administrator-rights [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current default administrator rights of the bot. Returns…
+**Returns:** Use this method to get the current default administrator rights of the bot.…
 
 **Example:** `tg personal bot api get-my-default-administrator-rights`
 
@@ -9358,7 +9388,7 @@ Returns the list of gifts that can be sent by the bot to users and channel chats
 tg bot api get-available-gifts
 ```
 
-**Returns:** Returns the list of gifts that can be sent by the bot to users and channel chats.…
+**Returns:** Returns the list of gifts that can be sent by the bot to users and channel…
 
 **Example:** `tg personal bot api get-available-gifts`
 
@@ -9384,7 +9414,7 @@ tg bot api send-gift [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram…
+**Returns:** Sends a gift to the given user or channel chat. The gift can't be converted…
 
 **Example:** `tg personal bot api send-gift`
 
@@ -9409,7 +9439,7 @@ tg bot api gift-premium-subscription [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Gifts a Telegram Premium subscription to the given user. Returns True on success. —…
+**Returns:** Gifts a Telegram Premium subscription to the given user. Returns True on…
 
 **Example:** `tg personal bot api gift-premium-subscription`
 
@@ -9430,7 +9460,7 @@ tg bot api verify-user [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Verifies a user on behalf of the organization which is represented by the bot. Returns…
+**Returns:** Verifies a user on behalf of the organization which is represented by the…
 
 **Example:** `tg personal bot api verify-user`
 
@@ -9451,7 +9481,7 @@ tg bot api verify-chat [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Verifies a chat on behalf of the organization which is represented by the bot. Returns…
+**Returns:** Verifies a chat on behalf of the organization which is represented by the…
 
 **Example:** `tg personal bot api verify-chat`
 
@@ -9471,7 +9501,7 @@ tg bot api remove-user-verification [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Removes verification from a user who is currently verified on behalf of the organization…
+**Returns:** Removes verification from a user who is currently verified on behalf of the…
 
 **Example:** `tg personal bot api remove-user-verification`
 
@@ -9491,7 +9521,7 @@ tg bot api remove-chat-verification [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Removes verification from a chat that is currently verified on behalf of the organization…
+**Returns:** Removes verification from a chat that is currently verified on behalf of the…
 
 **Example:** `tg personal bot api remove-chat-verification`
 
@@ -9534,7 +9564,7 @@ tg bot api delete-business-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Delete messages on behalf of a business account. Requires the can_delete_sent_messages…
+**Returns:** Delete messages on behalf of a business account. Requires the…
 
 **Example:** `tg personal bot api delete-business-messages`
 
@@ -9577,7 +9607,7 @@ tg bot api set-business-account-username [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the username of a managed business account. Requires the can_change_username…
+**Returns:** Changes the username of a managed business account. Requires the…
 
 **Example:** `tg personal bot api set-business-account-username`
 
@@ -9598,7 +9628,7 @@ tg bot api set-business-account-bio [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the bio of a managed business account. Requires the can_change_bio business bot…
+**Returns:** Changes the bio of a managed business account. Requires the can_change_bio…
 
 **Example:** `tg personal bot api set-business-account-bio`
 
@@ -9641,7 +9671,7 @@ tg bot api remove-business-account-profile-photo [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Removes the current profile photo of a managed business account. Requires the…
+**Returns:** Removes the current profile photo of a managed business account. Requires…
 
 **Example:** `tg personal bot api remove-business-account-profile-photo`
 
@@ -9663,7 +9693,7 @@ tg bot api set-business-account-gift-settings [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the privacy settings pertaining to incoming gifts in a managed business account.…
+**Returns:** Changes the privacy settings pertaining to incoming gifts in a managed…
 
 **Example:** `tg personal bot api set-business-account-gift-settings`
 
@@ -9681,7 +9711,7 @@ tg bot api get-business-account-star-balance [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the amount of Telegram Stars owned by a managed business account. Requires the…
+**Returns:** Returns the amount of Telegram Stars owned by a managed business account.…
 
 **Example:** `tg personal bot api get-business-account-star-balance`
 
@@ -9702,7 +9732,7 @@ tg bot api transfer-business-account-stars [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Transfers Telegram Stars from the business account balance to the bot's balance. Requires…
+**Returns:** Transfers Telegram Stars from the business account balance to the bot's…
 
 **Example:** `tg personal bot api transfer-business-account-stars`
 
@@ -9730,7 +9760,7 @@ tg bot api get-business-account-gifts [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the gifts received and owned by a managed business account. Requires the…
+**Returns:** Returns the gifts received and owned by a managed business account. Requires…
 
 **Example:** `tg personal bot api get-business-account-gifts`
 
@@ -9756,7 +9786,7 @@ tg bot api get-user-gifts [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the gifts owned and hosted by a user. Returns OwnedGifts on success. — read…
+**Returns:** Returns the gifts owned and hosted by a user. Returns OwnedGifts on success.…
 
 **Example:** `tg personal bot api get-user-gifts`
 
@@ -9784,7 +9814,7 @@ tg bot api get-chat-gifts [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the gifts owned by a chat. Returns OwnedGifts on success. — read (getChatGifts)
+**Returns:** Returns the gifts owned by a chat. Returns OwnedGifts on success. — read…
 
 **Example:** `tg personal bot api get-chat-gifts`
 
@@ -9805,7 +9835,7 @@ tg bot api convert-gift-to-stars [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars…
+**Returns:** Converts a given regular gift to Telegram Stars. Requires the…
 
 **Example:** `tg personal bot api convert-gift-to-stars`
 
@@ -9879,7 +9909,7 @@ tg bot api post-story [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Posts a story on behalf of a managed business account. Requires the can_manage_stories…
+**Returns:** Posts a story on behalf of a managed business account. Requires the…
 
 **Example:** `tg personal bot api post-story`
 
@@ -9904,7 +9934,7 @@ tg bot api repost-story [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Reposts a story on behalf of a business account from another business account. Both…
+**Returns:** Reposts a story on behalf of a business account from another business…
 
 **Example:** `tg personal bot api repost-story`
 
@@ -9930,7 +9960,7 @@ tg bot api edit-story [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Edits a story previously posted by the bot on behalf of a managed business account.…
+**Returns:** Edits a story previously posted by the bot on behalf of a managed business…
 
 **Example:** `tg personal bot api edit-story`
 
@@ -9951,7 +9981,7 @@ tg bot api delete-story [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Deletes a story previously posted by the bot on behalf of a managed business account.…
+**Returns:** Deletes a story previously posted by the bot on behalf of a managed business…
 
 **Example:** `tg personal bot api delete-story`
 
@@ -9971,7 +10001,7 @@ tg bot api answer-web-app-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the result of an interaction with a Web App and send a…
+**Returns:** Use this method to set the result of an interaction with a Web App and send…
 
 **Example:** `tg personal bot api answer-web-app-query`
 
@@ -10016,7 +10046,7 @@ tg bot api save-prepared-keyboard-button [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Stores a keyboard button that can be used by a user within a Mini App. Returns a…
+**Returns:** Stores a keyboard button that can be used by a user within a Mini App.…
 
 **Example:** `tg personal bot api save-prepared-keyboard-button`
 
@@ -10045,7 +10075,7 @@ tg bot api edit-message-text [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit text, rich and game messages. On success, if the edited message…
+**Returns:** Use this method to edit text, rich and game messages. On success, if the…
 
 **Example:** `tg personal bot api edit-message-text`
 
@@ -10073,7 +10103,7 @@ tg bot api edit-message-caption [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit captions of messages. On success, if the edited message is not an…
+**Returns:** Use this method to edit captions of messages. On success, if the edited…
 
 **Example:** `tg personal bot api edit-message-caption`
 
@@ -10098,7 +10128,7 @@ tg bot api edit-message-media [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit animation, audio, document, live photo, photo, or video messages,…
+**Returns:** Use this method to edit animation, audio, document, live photo, photo, or…
 
 **Example:** `tg personal bot api edit-message-media`
 
@@ -10128,7 +10158,7 @@ tg bot api edit-message-live-location [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit live location messages. A location can be edited until its…
+**Returns:** Use this method to edit live location messages. A location can be edited…
 
 **Example:** `tg personal bot api edit-message-live-location`
 
@@ -10152,7 +10182,7 @@ tg bot api stop-message-live-location [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to stop updating a live location message before live_period expires. On…
+**Returns:** Use this method to stop updating a live location message before live_period…
 
 **Example:** `tg personal bot api stop-message-live-location`
 
@@ -10176,7 +10206,7 @@ tg bot api edit-message-checklist [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit a checklist on behalf of a connected business account. On…
+**Returns:** Use this method to edit a checklist on behalf of a connected business…
 
 **Example:** `tg personal bot api edit-message-checklist`
 
@@ -10200,7 +10230,7 @@ tg bot api edit-message-reply-markup [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit only the reply markup of messages. On success, if the edited…
+**Returns:** Use this method to edit only the reply markup of messages. On success, if…
 
 **Example:** `tg personal bot api edit-message-reply-markup`
 
@@ -10223,7 +10253,7 @@ tg bot api stop-poll [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is…
+**Returns:** Use this method to stop a poll which was sent by the bot. On success, the…
 
 **Example:** `tg personal bot api stop-poll`
 
@@ -10251,7 +10281,7 @@ tg bot api edit-ephemeral-message-text [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit an ephemeral text or rich message. Note that it is not guaranteed…
+**Returns:** Use this method to edit an ephemeral text or rich message. Note that it is…
 
 **Example:** `tg personal bot api edit-ephemeral-message-text`
 
@@ -10275,7 +10305,7 @@ tg bot api edit-ephemeral-message-media [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit the media of an ephemeral message. Note that it is not guaranteed…
+**Returns:** Use this method to edit the media of an ephemeral message. Note that it is…
 
 **Example:** `tg personal bot api edit-ephemeral-message-media`
 
@@ -10302,7 +10332,7 @@ tg bot api edit-ephemeral-message-caption [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit the caption of an ephemeral message. Note that it is not…
+**Returns:** Use this method to edit the caption of an ephemeral message. Note that it is…
 
 **Example:** `tg personal bot api edit-ephemeral-message-caption`
 
@@ -10325,7 +10355,7 @@ tg bot api edit-ephemeral-message-reply-markup [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit only the reply markup of an ephemeral message. Note that it is…
+**Returns:** Use this method to edit only the reply markup of an ephemeral message. Note…
 
 **Example:** `tg personal bot api edit-ephemeral-message-reply-markup`
 
@@ -10347,7 +10377,7 @@ tg bot api approve-suggested-post [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to approve a suggested post in a direct messages chat. The bot must have…
+**Returns:** Use this method to approve a suggested post in a direct messages chat. The…
 
 **Example:** `tg personal bot api approve-suggested-post`
 
@@ -10369,7 +10399,7 @@ tg bot api decline-suggested-post [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to decline a suggested post in a direct messages chat. The bot must have…
+**Returns:** Use this method to decline a suggested post in a direct messages chat. The…
 
 **Example:** `tg personal bot api decline-suggested-post`
 
@@ -10390,7 +10420,7 @@ tg bot api delete-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a message, including service messages, with the following…
+**Returns:** Use this method to delete a message, including service messages, with the…
 
 **Example:** `tg personal bot api delete-message`
 
@@ -10411,7 +10441,7 @@ tg bot api delete-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete multiple messages simultaneously. If some of the specified…
+**Returns:** Use this method to delete multiple messages simultaneously. If some of the…
 
 **Example:** `tg personal bot api delete-messages`
 
@@ -10433,7 +10463,7 @@ tg bot api delete-ephemeral-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete an ephemeral message. Note that it is not guaranteed that the…
+**Returns:** Use this method to delete an ephemeral message. Note that it is not…
 
 **Example:** `tg personal bot api delete-ephemeral-message`
 
@@ -10456,7 +10486,7 @@ tg bot api delete-message-reaction [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to remove a reaction from a message in a group or a supergroup chat. The…
+**Returns:** Use this method to remove a reaction from a message in a group or a…
 
 **Example:** `tg personal bot api delete-message-reaction`
 
@@ -10478,7 +10508,7 @@ tg bot api delete-all-message-reactions [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat…
+**Returns:** Use this method to remove up to 10000 recent reactions in a group or a…
 
 **Example:** `tg personal bot api delete-all-message-reactions`
 
@@ -10511,7 +10541,7 @@ tg bot api send-sticker [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success,…
+**Returns:** Use this method to send static .WEBP, animated .TGS, or video .WEBM…
 
 **Example:** `tg personal bot api send-sticker`
 
@@ -10529,7 +10559,7 @@ tg bot api get-sticker-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get a sticker set. On success, a StickerSet object is returned. — read…
+**Returns:** Use this method to get a sticker set. On success, a StickerSet object is…
 
 **Example:** `tg personal bot api get-sticker-set`
 
@@ -10547,7 +10577,7 @@ tg bot api get-custom-emoji-stickers [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get information about custom emoji stickers by their identifiers.…
+**Returns:** Use this method to get information about custom emoji stickers by their…
 
 **Example:** `tg personal bot api get-custom-emoji-stickers`
 
@@ -10569,7 +10599,7 @@ tg bot api upload-sticker-file [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to upload a file with a sticker for later use in the createNewStickerSet,…
+**Returns:** Use this method to upload a file with a sticker for later use in the…
 
 **Example:** `tg personal bot api upload-sticker-file`
 
@@ -10594,7 +10624,7 @@ tg bot api create-new-sticker-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create a new sticker set owned by a user. The bot will be able to edit…
+**Returns:** Use this method to create a new sticker set owned by a user. The bot will be…
 
 **Example:** `tg personal bot api create-new-sticker-set`
 
@@ -10616,7 +10646,7 @@ tg bot api add-sticker-to-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can…
+**Returns:** Use this method to add a new sticker to a set created by the bot. Emoji…
 
 **Example:** `tg personal bot api add-sticker-to-set`
 
@@ -10637,7 +10667,7 @@ tg bot api set-sticker-position-in-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to move a sticker in a set created by the bot to a specific position.…
+**Returns:** Use this method to move a sticker in a set created by the bot to a specific…
 
 **Example:** `tg personal bot api set-sticker-position-in-set`
 
@@ -10657,7 +10687,7 @@ tg bot api delete-sticker-from-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a sticker from a set created by the bot. Returns True on…
+**Returns:** Use this method to delete a sticker from a set created by the bot. Returns…
 
 **Example:** `tg personal bot api delete-sticker-from-set`
 
@@ -10680,7 +10710,7 @@ tg bot api replace-sticker-in-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to replace an existing sticker in a sticker set with a new one. The…
+**Returns:** Use this method to replace an existing sticker in a sticker set with a new…
 
 **Example:** `tg personal bot api replace-sticker-in-set`
 
@@ -10701,7 +10731,7 @@ tg bot api set-sticker-emoji-list [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the list of emoji assigned to a regular or custom emoji…
+**Returns:** Use this method to change the list of emoji assigned to a regular or custom…
 
 **Example:** `tg personal bot api set-sticker-emoji-list`
 
@@ -10722,7 +10752,7 @@ tg bot api set-sticker-keywords [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change search keywords assigned to a regular or custom emoji sticker.…
+**Returns:** Use this method to change search keywords assigned to a regular or custom…
 
 **Example:** `tg personal bot api set-sticker-keywords`
 
@@ -10743,7 +10773,7 @@ tg bot api set-sticker-mask-position [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the mask position of a mask sticker. The sticker must belong to…
+**Returns:** Use this method to change the mask position of a mask sticker. The sticker…
 
 **Example:** `tg personal bot api set-sticker-mask-position`
 
@@ -10764,7 +10794,7 @@ tg bot api set-sticker-set-title [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the title of a created sticker set. Returns True on success. —…
+**Returns:** Use this method to set the title of a created sticker set. Returns True on…
 
 **Example:** `tg personal bot api set-sticker-set-title`
 
@@ -10787,7 +10817,7 @@ tg bot api set-sticker-set-thumbnail [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the thumbnail of a regular or mask sticker set. The format of the…
+**Returns:** Use this method to set the thumbnail of a regular or mask sticker set. The…
 
 **Example:** `tg personal bot api set-sticker-set-thumbnail`
 
@@ -10808,7 +10838,7 @@ tg bot api set-custom-emoji-sticker-set-thumbnail [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the thumbnail of a custom emoji sticker set. Returns True on…
+**Returns:** Use this method to set the thumbnail of a custom emoji sticker set. Returns…
 
 **Example:** `tg personal bot api set-custom-emoji-sticker-set-thumbnail`
 
@@ -10828,7 +10858,7 @@ tg bot api delete-sticker-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a sticker set that was created by the bot. Returns True on…
+**Returns:** Use this method to delete a sticker set that was created by the bot. Returns…
 
 **Example:** `tg personal bot api delete-sticker-set`
 
@@ -10860,7 +10890,7 @@ tg bot api send-rich-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send rich messages. If the message contains a block with a media…
+**Returns:** Use this method to send rich messages. If the message contains a block with…
 
 **Example:** `tg personal bot api send-rich-message`
 
@@ -10885,7 +10915,7 @@ tg bot api send-rich-message-draft [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to stream a partial rich message to a user while the message is being…
+**Returns:** Use this method to stream a partial rich message to a user while the message…
 
 **Example:** `tg personal bot api send-rich-message-draft`
 
@@ -10909,7 +10939,7 @@ tg bot api answer-inline-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send answers to an inline query. On success, True is returned. — write…
+**Returns:** Use this method to send answers to an inline query. On success, True is…
 
 **Example:** `tg personal bot api answer-inline-query`
 
@@ -10958,7 +10988,7 @@ tg bot api send-invoice [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send invoices. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send invoices. On success, the sent Message is returned.…
 
 **Example:** `tg personal bot api send-invoice`
 
@@ -10998,7 +11028,7 @@ tg bot api create-invoice-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create a link for an invoice. Returns the created invoice link as…
+**Returns:** Use this method to create a link for an invoice. Returns the created invoice…
 
 **Example:** `tg personal bot api create-invoice-link`
 
@@ -11021,7 +11051,7 @@ tg bot api answer-shipping-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** If you sent an invoice requesting a shipping address and the parameter is_flexible was…
+**Returns:** If you sent an invoice requesting a shipping address and the parameter…
 
 **Example:** `tg personal bot api answer-shipping-query`
 
@@ -11043,7 +11073,7 @@ tg bot api answer-pre-checkout-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Once the user has confirmed their payment and shipping details, the Bot API sends the…
+**Returns:** Once the user has confirmed their payment and shipping details, the Bot API…
 
 **Example:** `tg personal bot api answer-pre-checkout-query`
 
@@ -11055,7 +11085,7 @@ A method to get the current Telegram Stars balance of the bot. Requires no param
 tg bot api get-my-star-balance
 ```
 
-**Returns:** A method to get the current Telegram Stars balance of the bot. Requires no parameters. On…
+**Returns:** A method to get the current Telegram Stars balance of the bot. Requires no…
 
 **Example:** `tg personal bot api get-my-star-balance`
 
@@ -11074,7 +11104,7 @@ tg bot api get-star-transactions [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the bot's Telegram Star transactions in chronological order. On success, returns…
+**Returns:** Returns the bot's Telegram Star transactions in chronological order. On…
 
 **Example:** `tg personal bot api get-star-transactions`
 
@@ -11095,7 +11125,7 @@ tg bot api refund-star-payment [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Refunds a successful payment in Telegram Stars. Returns True on success. — destructive…
+**Returns:** Refunds a successful payment in Telegram Stars. Returns True on success. —…
 
 **Example:** `tg personal bot api refund-star-payment`
 
@@ -11117,7 +11147,7 @@ tg bot api edit-user-star-subscription [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.…
+**Returns:** Allows the bot to cancel or re-enable extension of a subscription paid in…
 
 **Example:** `tg personal bot api edit-user-star-subscription`
 
@@ -11138,7 +11168,7 @@ tg bot api set-passport-data-errors [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Informs a user that some of the Telegram Passport elements they provided contains errors.…
+**Returns:** Informs a user that some of the Telegram Passport elements they provided…
 
 **Example:** `tg personal bot api set-passport-data-errors`
 
@@ -11167,7 +11197,7 @@ tg bot api send-game [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a game. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send a game. On success, the sent Message is returned. —…
 
 **Example:** `tg personal bot api send-game`
 
@@ -11193,7 +11223,7 @@ tg bot api set-game-score [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the score of the specified user in a game message. On success, if…
+**Returns:** Use this method to set the score of the specified user in a game message. On…
 
 **Example:** `tg personal bot api set-game-score`
 
@@ -11214,7 +11244,7 @@ tg bot api get-game-high-scores [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get data for high score tables. Will return the score of the specified…
+**Returns:** Use this method to get data for high score tables. Will return the score of…
 
 **Example:** `tg personal bot api get-game-high-scores`
 
