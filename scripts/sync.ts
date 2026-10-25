@@ -15,6 +15,7 @@ import { parseArgs } from "node:util"
 import { structureProblems } from "@wirecat/cli-base/release"
 import { captureUpstream, localizeTool, siteOwnedPage } from "./localize.ts"
 import { crossToolScenarios, readScenarios, type Scenario, scenarioPage } from "./scenarios.ts"
+import { publishSkills, writeSkillsIndex } from "./skills-index.ts"
 import { checkoutCommit, checkoutSource, sourceInstallation } from "./source-install.ts"
 
 export type Tool = {
@@ -208,7 +209,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
     if (ref && /^[a-f0-9]{40}$/.test(ref)) checkoutCommit(tool.repo, ref, checkout)
     else if (!ref && sourceInstallation(tool)) checkoutSource(tool, checkout)
     else sparseClone(tool.repo, tag, checkout)
-    run("git", ["sparse-checkout", "set", "docs", "scenarios"], checkout)
+    run("git", ["sparse-checkout", "set", "docs", "scenarios", "skills"], checkout)
     const problems = structureProblems(checkout)
     if (problems.length > 0) throw new Error(`${tool.repo} ${tag}:\n${problems.join("\n")}`)
 
@@ -288,6 +289,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       })
     console.log(`${tool.name}: ${files.length} pages and ${scenarios.length} scenarios from ${tool.repo} ${tag}`)
     if (captureOnly) return
+    if (!tool.community) publishSkills(checkout, root, tag.replace(/^v/, ""))
     captureUpstream(root, tool)
     const untranslated = localizeTool(root, tool)
     if (untranslated.length) throw new Error(`Documentation localization failed:\n${untranslated.join("\n")}`)
@@ -321,4 +323,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (problems.length) throw new Error(`tools.json:\n${problems.join("\n")}`)
   for (const tool of tools.filter((tool) => !values.tool || values.tool === tool.name))
     syncTool(tool, root, values.ref, values["capture-only"])
+  if (!values["capture-only"]) writeSkillsIndex(root)
 }
