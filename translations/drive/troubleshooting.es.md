@@ -18,7 +18,7 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 | Se omitió un archivo | Revisa tipo y permiso de descarga. Se importan Docs, Sheets, Markdown/TXT, PDF, `.docx`, `.xlsx` y CSV; PDF escaneados, Slides y accesos directos no se leen. |
 | Sync se detuvo con errores | Repítelo: se reanuda el trabajo pendiente. No trates una importación parcial como completa. |
 | Falta el componente de búsqueda semántica | Prepara la caché compartida según [búsqueda](./search.md#search-by-meaning) o usa `--exact`. |
-| Otra herramienta dice que el almacén lo escribió una versión más nueva | Actualiza esa herramienta, como indica el mensaje; consulta [más abajo](#another-tool-says-the-store-was-written-by-a-newer-version). |
+| Otra herramienta dice que el almacén lo escribió una versión más nueva | Ejecuta `<tool> upgrade` para esa herramienta; consulta [más abajo](#another-tool-says-the-store-was-written-by-a-newer-version). |
 | No se encuentra el destino del vínculo | Usa una referencia de la base seleccionada. Comprueba que todas las herramientas usan el mismo MESSAGING_STORE antes de vincular personas/proyectos del servicio de mensajería. |
 
 ```sh
@@ -93,9 +93,9 @@ comparte el código de error sin datos privados, no respuestas del SDK ni conten
 
 Drive guarda tus documentos de Drive en su propia cuenta dentro del almacén compartido y los traslada allí la
 primera vez que una versión actual de drive lo abre. Después, una herramienta WireCat más antigua que usa el mismo
-almacén, como Memo, se detiene con `the message store was written by a newer version`. Actualiza esa herramienta
-con `<tool> upgrade`, por ejemplo `memo upgrade`; el propio mensaje indica el comando. Los documentos, etiquetas,
-notas y referencias `document:<id>` se conservan; no hay que importar nada de nuevo.
+almacén, como Memo, se detiene con `the message store was written by a newer version` y pide actualizarla.
+Ejecuta `<tool> upgrade`, por ejemplo `memo upgrade`. Los documentos, etiquetas, notas y referencias
+`document:<id>` se conservan; no hay que importar nada de nuevo.
 
 ## La actualización del almacén encuentra anotaciones
 

@@ -44,8 +44,8 @@
     "lang": "en",
     "docsRef": "v0.32.0",
     "guideRefs": {
-      "recipes": "0d212b93b015984f4d1846af087a7d49aa339e3f",
-      "troubleshooting": "0d212b93b015984f4d1846af087a7d49aa339e3f"
+      "recipes": "f3a27fc7d26207c37369da65f5b6e9d4d1ef2abf",
+      "troubleshooting": "f3a27fc7d26207c37369da65f5b6e9d4d1ef2abf"
     },
     "summary": {
       "en": "Import selected Google folders, search documents locally and keep tags, notes and source-backed memories.",
