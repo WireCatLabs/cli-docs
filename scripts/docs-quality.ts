@@ -98,6 +98,16 @@ export function validateInvocation(
       }
       return { kind: "syntax", reason: "Reviewed shorthand alternatives, not a runnable command" }
     }
+    const piped = /(?<![\w:|\\])[a-z][a-z-]*(?:\\\|[a-z][a-z-]*)+(?![\w|\\])/.exec(text)
+    if (piped) {
+      for (const alternative of piped[0].split("\\|")) {
+        const expanded = text.slice(0, piped.index) + alternative + text.slice(piped.index + piped[0].length)
+        const finding = validateInvocation(expanded, program, false)
+        // Unknown alternative subcommands were never checked here; options and values are.
+        if (finding && finding.kind !== "syntax" && !finding.reason.startsWith("Unknown subcommand")) return finding
+      }
+      return { kind: "syntax", reason: "Alternative subcommand syntax" }
+    }
   }
   let entries: ReturnType<typeof parse>
   try {
@@ -184,8 +194,6 @@ export function validateInvocation(
       ...command.options,
     ].flatMap((option) => optionNames(option).map((name) => [name, option] as const)),
   )
-  if (command.commands.length && remaining.find((token) => !token.startsWith("-"))?.includes("|"))
-    return { kind: "syntax", reason: "Alternative subcommand syntax" }
   const positional: string[] = []
   let literal = false
   for (let i = 0; i < remaining.length; i++) {
@@ -212,6 +220,8 @@ export function validateInvocation(
   }
   if (command.commands.length && positional[0]?.startsWith("PLACEHOLDER_"))
     return { kind: "unsupported", reason: "Subcommand placeholder requires a concrete operation" }
+  if (command.commands.length && positional[0]?.includes("|"))
+    return { kind: "syntax", reason: "Alternative subcommand syntax" }
   if (command.commands.length && positional.length && !command.arguments.length)
     return { kind: "invalid", reason: `Unknown subcommand ${positional[0]} for ${command.path.join(" ")}` }
   if (!executable) return null

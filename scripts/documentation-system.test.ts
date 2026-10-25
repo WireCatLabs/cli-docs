@@ -81,6 +81,7 @@ describe("released documentation contracts", () => {
     expect(validateInvocation('tg "$COMMAND"', program, true)?.kind).toBe("unsupported")
     expect(validateInvocation("tg work PLACEHOLDER_command --json", program, false)?.kind).toBe("syntax")
     expect(validateInvocation("tg messages list\\|send <chat> --limit 5", program, false)?.kind).toBe("syntax")
+    expect(validateInvocation("tg messages list\\|send <chat> --bogus", program, false)?.kind).toBe("invalid")
   })
   it("lets an upgrade note name a retired command, but not a runnable example", () => {
     const zm: Program = { ...program, cli: "zm" }
