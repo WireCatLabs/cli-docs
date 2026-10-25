@@ -40,6 +40,8 @@ usa `permissions` por comando para guardar límites, o `--read-only` / `DRIVE_RE
 | --- | --- | --- |
 | `permissions` | Acceso por comando: `deny`, `readonly`, `ask` o `allow` | Perfil o `defaults` |
 | `max_text_chars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
+| `record` | `true` guarda cada ejecución en `drive runs list`; predeterminado `false`, que guarda solo las ejecuciones fallidas. `false` definido aquí no guarda ninguna | Solo `defaults` |
+| `keep_runs_for_days` | Cuántos días se conserva una ejecución guardada; predeterminado `30` | Solo `defaults` |
 | `picture_search` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
 | `models.memories.provider` | Proveedor de IA para la extracción solicitada explícitamente | Perfil o `defaults` |
 | `models.memories.model` | Identificador del modelo del proveedor | Perfil o `defaults` |
@@ -129,6 +131,7 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 | `--dry-run` | Validar y mostrar una operación compatible sin ejecutarla |
 | `--json`, `--jsonl` | Salida estructurada; `--json=id,name` conserva solo esos campos; MCP muestra los caracteres de control de forma visible |
 | `--timeout DURATION`, `--max-output-bytes N` | Limitar el tiempo del comando y la salida almacenada en búfer |
+| `--record`, `--no-record` | Guardar esta ejecución en `drive runs list`, o no guardar nada aunque falle |
 
 Estas opciones no son ajustes del archivo. Las de cada comando, como `search --limit` y
 `sync --limit`, se explican en su referencia. Los permisos temporales tienen prioridad sobre los

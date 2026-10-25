@@ -4,6 +4,16 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.34.0 — 25.10.2026
+
+### Added
+
+- drive keeps a log of its runs, as tg, max and wa do: a failed command always, every command with `--record` or `record: true` in the defaults (`drive personal config set record true --defaults`), each for `keep_runs_for_days` (30 by default). `drive runs list`, `drive runs show <run-id>` and `drive runs path <run-id>` read them without a profile. A run holds the command's words, its profile, its outcome and every Google request as method, path shape with ids masked, status and duration, never a document id, name or text. `--no-record` keeps nothing.
+
+### Fixed
+
+- Help and MCP text describe drive, not a messenger: the `command` argument of `drive_read` and `drive_write` gives `"session list"` as its example instead of `"messages list"`. The examples of `session list` and `config show` name a profile, and `mcp`'s examples start with `drive personal mcp --tools`, which lists the tools without starting a server, and use `https://laptop.example.ts.net` instead of a `<name>` placeholder. Needs cli-core 0.422.0.
+
 ## 0.33.0 — 25.10.2026
 
 ### Changed — may break callers
