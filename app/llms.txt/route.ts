@@ -1,5 +1,5 @@
 import type { Node } from "fumadocs-core/page-tree"
-import { isSecondaryPage } from "@/lib/agent-docs"
+import { isCommunity, isSecondaryPage, toolSections } from "@/lib/agent-docs"
 import { i18n } from "@/lib/i18n"
 import { documentationDescription } from "@/lib/seo"
 import { appName, getPageMarkdownUrl, siteUrl, tools } from "@/lib/shared"
@@ -42,10 +42,12 @@ export function GET() {
     )
   const toolPages = (name: string) => ordered.filter((page) => page.slugs[0] === name)
   const general = ordered.filter((page) => !tools.some((tool) => tool.name === page.slugs[0]))
-  const setup = tools.map(
-    (tool) =>
-      `To install \`${tool.name}\` for the user, carry out the request they would give you:\n\n\`\`\`text\n${wordsFor(i18n.defaultLanguage).onboarding.prompt(tool.name, tool.package)}\n\`\`\``,
-  )
+  const setup = tools
+    .filter((tool) => !isCommunity(tool))
+    .map(
+      (tool) =>
+        `To install \`${tool.name}\` for the user, carry out the request they would give you:\n\n\`\`\`text\n${wordsFor(i18n.defaultLanguage).onboarding.prompt(tool.name, tool.package)}\n\`\`\``,
+    )
   const localized = i18n.languages
     .filter((lang) => lang !== i18n.defaultLanguage)
     .map((lang) => `\`${siteUrl}/llms.mdx/docs/${lang}/content.md\``)
@@ -68,14 +70,13 @@ export function GET() {
     `- [Terms of Service](${siteUrl}/llms.mdx/legal/en/terms/content.md): Account permissions, your content and third-party services.`,
     "",
     "",
-    ...tools.flatMap((tool) => [
+    ...toolSections(tools, (tool) =>
       section(
         tool.name,
         toolPages(tool.name),
         `${tool.summary.en}\n\nPackage: [${tool.package}](https://www.npmjs.com/package/${tool.package}). Source: https://github.com/${tool.repo}`,
       ),
-      "",
-    ]),
+    ).flatMap((block) => [block, ""]),
     "## Optional",
     "",
     ...ordered
