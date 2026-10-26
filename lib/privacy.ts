@@ -7,8 +7,8 @@ export const privacyCopy: Record<
   en: {
     title: "Privacy Policy",
     intro:
-      "How WireCat handles Google account data, local documents, optional AI processing, bug reports from WireCat Desktop and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
-    updated: "Last updated: 25 October 2026",
+      "How WireCat handles Google and Zoom account data, local documents, optional AI processing, bug reports from WireCat Desktop and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
+    updated: "Last updated: 26 October 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
@@ -18,6 +18,18 @@ export const privacyCopy: Record<
           "WireCat Drive connects to Google only after you choose an account and approve access in Google’s browser consent screen. The default permission reads Drive files; it covers the account’s Drive, while your selected folders limit what the CLI imports. Google Docs and uploaded Markdown/plain text are supported for local indexing.",
           "The application accesses file and folder IDs, names, types, parent relationships, links, timestamps and document contents for the operations you request. It can also read owner and last-editor names, email addresses or Google identifiers, permissions, comments and revisions. Activity history and installed-application metadata require their optional sign-in permissions. Remote creation, editing and file management require the separate write permission and an explicit command.",
           "We use this access to import and refresh documents, export Markdown, search your local copy, show source links and history, and attach tags, notes, people and source-backed memories. Connecting an account does not import its whole Drive.",
+        ],
+      },
+      {
+        id: "zoom-access",
+        title: "Zoom account access (zm)",
+        paragraphs: [
+          "zm connects to Zoom only after you start its login and approve the WireCat CLI app on Zoom’s consent screen. It signs in with a one-time key created on your computer for each login (OAuth with PKCE) and holds no app secret.",
+          "With the permissions you approve, zm reads your hosted meetings and their past occurrences, participant names, email addresses and join and leave times, meeting transcripts, Zoom AI summaries, cloud recording file details and meeting chat, your Zoom user profile, and your company and external contacts with their names, email addresses and phone numbers. Downloading recordings, reading invitations and creating, changing or cancelling meetings each need their own permission and an explicit command.",
+          "With the search permission you approve, zm sends the words you search for to Zoom’s own hosted search, which answers from what your Zoom account can already see: meetings, calendar events, Team Chat messages and channels, Canvas docs, notes and, where your account has Zoom Phone, calls, text messages and voicemail. zm shows the results when you ask and does not add them to its local archive. zm does not use Zoom’s AI-written answers.",
+          "We use this access to keep a searchable local archive of your meetings, show who said what and when, help you prepare for upcoming meetings and run the meeting commands you ask for. zm calls Zoom’s API directly from your computer. Zoom tokens, meetings and transcripts are never sent to a WireCat server.",
+          "The login returns through wirecat.dev/zoom-callback. That page is static: a script in your browser passes the one-time code to zm on your computer and removes it from the address bar. The code works only once and only with the key that stays on your computer. wirecat.dev does not store it; Cloudflare, which serves the page, receives the request like any other page view.",
+          "To disconnect, remove the WireCat CLI app in the Zoom App Marketplace under Manage → Added Apps. This stops all further access. WireCat holds no Zoom data on its servers, so there is nothing for us to delete; meetings already copied to your computer stay there until you delete zm’s local store.",
         ],
       },
       {
@@ -67,7 +79,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Who processes the data",
         paragraphs: [
-          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application and bug reports sent from WireCat Desktop. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
+          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application, zm, the WireCat CLI app for Zoom, and bug reports sent from WireCat Desktop. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
           "Cloudflare serves the pages and processes your IP address to deliver them and protect the site.",
         ],
       },
@@ -120,8 +132,8 @@ export const privacyCopy: Record<
   ru: {
     title: "Политика конфиденциальности",
     intro:
-      "Как WireCat обрабатывает данные аккаунта Google, локальные документы, дополнительные ИИ-запросы, отчёты об ошибках из WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
-    updated: "Обновлено: 25 октября 2026 г.",
+      "Как WireCat обрабатывает данные аккаунтов Google и Zoom, локальные документы, дополнительные ИИ-запросы, отчёты об ошибках из WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
+    updated: "Обновлено: 26 октября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
@@ -131,6 +143,18 @@ export const privacyCopy: Record<
           "WireCat Drive подключается к Google только после выбора аккаунта и вашего согласия в браузере Google. По умолчанию запрашивается чтение файлов Drive: разрешение охватывает Drive аккаунта, а выбранные папки ограничивают импорт в CLI. Для локальной индексации поддерживаются Google Docs и загруженные Markdown/обычный текст.",
           "Для запрошенных действий приложение получает идентификаторы файлов и папок, названия, типы, родительские связи, ссылки, даты и содержимое документов. Оно также может читать имена владельцев и последнего редактора, адреса электронной почты или идентификаторы Google, разрешения, комментарии и ревизии. История действий и сведения об установленных приложениях требуют дополнительных разрешений при входе. Создание, редактирование и управление файлами в Google требуют отдельного разрешения на запись и явной команды.",
           "Доступ используется для импорта и обновления документов, экспорта Markdown, поиска в локальной копии, показа ссылок и истории, а также добавления тегов, заметок, людей и записей памяти с источниками. Подключение аккаунта не импортирует весь Drive.",
+        ],
+      },
+      {
+        id: "zoom-access",
+        title: "Доступ к аккаунту Zoom (zm)",
+        paragraphs: [
+          "zm подключается к Zoom только после того, как вы запустите вход и одобрите приложение WireCat CLI на экране согласия Zoom. Для каждого входа он создаёт на вашем компьютере одноразовый ключ (OAuth с PKCE) и не хранит секрет приложения.",
+          "С одобренными разрешениями zm читает встречи, которые вы проводили, и их прошедшие повторы, имена участников, адреса электронной почты и время входа и выхода, расшифровки встреч, сводки Zoom AI, сведения о файлах облачных записей и чат встречи, ваш профиль Zoom, а также ваши контакты из компании и внешние контакты с именами, адресами электронной почты и номерами телефонов. Скачивание записей, чтение приглашений и создание, изменение или отмена встреч требуют отдельного разрешения и явной команды.",
+          "С одобренным разрешением на поиск zm передаёт слова, которые вы ищете, в собственный поиск Zoom, а тот отвечает из того, что уже видит ваш аккаунт Zoom: встречи, события календаря, сообщения и каналы Team Chat, документы Canvas, заметки и, если в аккаунте есть Zoom Phone, звонки, текстовые сообщения и голосовую почту. zm показывает результаты по вашему запросу и не добавляет их в локальный архив. Ответы, написанные ИИ Zoom, zm не использует.",
+          "Доступ используется, чтобы вести локальный архив встреч с поиском, показывать, кто что и когда сказал, помогать готовиться к предстоящим встречам и выполнять команды, которые вы запускаете. zm обращается к API Zoom прямо с вашего компьютера. Токены Zoom, встречи и расшифровки никогда не отправляются на сервер WireCat.",
+          "Вход возвращается через wirecat.dev/zoom-callback. Это статическая страница: скрипт в вашем браузере передаёт одноразовый код zm на вашем компьютере и убирает его из адресной строки. Код срабатывает один раз и только вместе с ключом, который остаётся на вашем компьютере. wirecat.dev его не сохраняет; Cloudflare, который отдаёт страницу, получает запрос как любой другой просмотр страницы.",
+          "Чтобы отключиться, удалите приложение WireCat CLI в Zoom App Marketplace в разделе Manage → Added Apps. Это прекращает любой дальнейший доступ. WireCat не хранит данные Zoom на своих серверах, поэтому удалять с нашей стороны нечего; встречи, уже скопированные на ваш компьютер, остаются там, пока вы не удалите локальное хранилище zm.",
         ],
       },
       {
@@ -180,7 +204,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Кто обрабатывает данные",
         paragraphs: [
-          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive и отчёты об ошибках, отправленные из WireCat Desktop. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
+          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive, zm — приложение WireCat CLI для Zoom — и отчёты об ошибках, отправленные из WireCat Desktop. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
           "Страницы отдаёт Cloudflare; он обрабатывает ваш IP-адрес, чтобы доставить страницы и защитить сайт.",
         ],
       },
@@ -233,8 +257,8 @@ export const privacyCopy: Record<
   es: {
     title: "Política de privacidad",
     intro:
-      "Cómo WireCat trata los datos de Google, los documentos locales, el procesamiento opcional con IA, los informes de errores desde WireCat Desktop y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
-    updated: "Última actualización: 25 de octubre de 2026",
+      "Cómo WireCat trata los datos de Google y Zoom, los documentos locales, el procesamiento opcional con IA, los informes de errores desde WireCat Desktop y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
+    updated: "Última actualización: 26 de octubre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
@@ -244,6 +268,18 @@ export const privacyCopy: Record<
           "WireCat Drive se conecta a Google solo después de elegir una cuenta y aprobar el acceso en la pantalla de consentimiento de Google. El permiso predeterminado lee archivos de Drive: cubre el Drive de la cuenta, mientras que las carpetas seleccionadas limitan la importación del CLI. La indexación local admite Google Docs y archivos Markdown o texto plano subidos.",
           "La aplicación accede a identificadores de archivos y carpetas, nombres, tipos, relaciones de carpetas, enlaces, fechas y contenido para las operaciones que solicitas. También puede leer nombres de propietarios y del último editor, correos o identificadores de Google, permisos, comentarios y revisiones. El historial de actividad y los metadatos de aplicaciones instaladas requieren permisos opcionales al conectar. Crear, editar y gestionar archivos en Google requiere un permiso de escritura separado y un comando explícito.",
           "Usamos este acceso para importar y actualizar documentos, exportar Markdown, buscar en tu copia local, mostrar enlaces e historial y añadir etiquetas, notas, personas y recuerdos con fuentes. Conectar una cuenta no importa todo su Drive.",
+        ],
+      },
+      {
+        id: "zoom-access",
+        title: "Acceso a la cuenta de Zoom (zm)",
+        paragraphs: [
+          "zm se conecta a Zoom solo después de que inicies su inicio de sesión y apruebes la aplicación WireCat CLI en la pantalla de consentimiento de Zoom. En cada inicio de sesión crea en tu ordenador una clave de un solo uso (OAuth con PKCE) y no guarda ningún secreto de la aplicación.",
+          "Con los permisos que apruebes, zm lee las reuniones que organizas y sus sesiones pasadas, los nombres de los participantes, sus direcciones de correo y sus horas de entrada y salida, las transcripciones, los resúmenes de Zoom AI, los datos de los archivos de grabaciones en la nube y el chat de la reunión, tu perfil de usuario de Zoom, y tus contactos de la empresa y externos con sus nombres, direcciones de correo y números de teléfono. Descargar grabaciones, leer invitaciones y crear, cambiar o cancelar reuniones requieren cada uno su propio permiso y un comando explícito.",
+          "Con el permiso de búsqueda que apruebes, zm envía las palabras que buscas a la búsqueda alojada de Zoom, que responde a partir de lo que tu cuenta de Zoom ya puede ver: reuniones, eventos del calendario, mensajes y canales de Team Chat, documentos de Canvas, notas y, si tu cuenta tiene Zoom Phone, llamadas, mensajes de texto y buzón de voz. zm muestra los resultados cuando lo pides y no los añade a su archivo local. zm no usa las respuestas escritas por la IA de Zoom.",
+          "Usamos este acceso para mantener un archivo local de tus reuniones con búsqueda, mostrar quién dijo qué y cuándo, ayudarte a preparar las próximas reuniones y ejecutar los comandos que pidas. zm llama a la API de Zoom directamente desde tu ordenador. Los tokens de Zoom, las reuniones y las transcripciones nunca se envían a un servidor de WireCat.",
+          "El inicio de sesión vuelve a través de wirecat.dev/zoom-callback. Es una página estática: un script en tu navegador pasa el código de un solo uso a zm en tu ordenador y lo quita de la barra de direcciones. El código funciona una sola vez y solo junto con la clave que se queda en tu ordenador. wirecat.dev no lo guarda; Cloudflare, que sirve la página, recibe la petición como cualquier otra visita.",
+          "Para desconectar, elimina la aplicación WireCat CLI en Zoom App Marketplace, en Manage → Added Apps. Esto detiene todo acceso posterior. WireCat no guarda datos de Zoom en sus servidores, así que no tenemos nada que borrar; las reuniones ya copiadas en tu ordenador se quedan allí hasta que borres el almacén local de zm.",
         ],
       },
       {
@@ -293,7 +329,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Quién trata los datos",
         paragraphs: [
-          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive y los informes de errores enviados desde WireCat Desktop. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
+          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive, zm, la aplicación WireCat CLI para Zoom, y los informes de errores enviados desde WireCat Desktop. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
           "Cloudflare sirve las páginas y trata tu dirección IP para entregarlas y proteger el sitio.",
         ],
       },
