@@ -1,0 +1,159 @@
+---
+title: Set up Tailscale Funnel for WireCat MCP
+description: Give a tool's MCP server a fixed public https address, so ChatGPT, Claude and other browser apps can use it. Install Tailscale on macOS, Windows or your Linux, log in, allow Funnel, then press Start.
+---
+
+You want ChatGPT, Claude or another AI app in the browser to read and send your messages through a WireCat tool. Such an app reaches a tool through its **MCP server**: a small server that each command-line tool starts on your computer for AI apps. A browser app runs on its provider's servers, so it cannot reach a server on your computer by itself. **Tailscale Funnel** gives this computer a fixed public https address that leads to that one server and to nothing else.
+
+On this page you set up Funnel once, in the four steps of the **Start** dialog of an MCP server in WireCat Desktop. After that, Start gives the server its public address with one click. You need a Tailscale account, which the login step creates if you have none, and your computer password once, to install Tailscale.
+
+## What WireCat Desktop does for you
+
+The Start dialog shows four steps. Each step has a **Check** button, and the dialog checks again when you come back to the window, so you can do a step in your browser or terminal and return.
+
+- **Install**: on macOS and Windows, WireCat downloads Tailscale's official installer into Downloads, checks it against the checksum that Tailscale publishes, and opens it. On Debian, Ubuntu, Fedora and related systems, it downloads Tailscale's package and shows it in your file manager. On Linux it also shows Tailscale's own commands for your release, with **Open a terminal with them**.
+- **Log in**: WireCat runs `tailscale login` and opens the login page in your browser.
+- **Allow Funnel**: WireCat opens the page of the Tailscale admin console where you switch on what Funnel needs.
+- **Connect**: WireCat turns Funnel on for the server's local port and starts the server with the public address.
+
+WireCat never asks for your computer password and never runs `sudo`. The installer, the Software app or your terminal asks for the password. Stopping the server turns off only the Funnel that WireCat turned on; your own Funnels and Tailscale settings stay as they are.
+
+## Install Tailscale
+
+Use the section for your system. On Linux, WireCat shows the commands for your release already filled in; this page shows one example of each.
+
+### macOS
+
+Select **Download and open the installer**. The macOS Installer opens Tailscale's package from `pkgs.tailscale.com` and asks for your password. Then open Tailscale from Applications and follow its onboarding, which installs Tailscale's VPN configuration. Tailscale requires macOS Monterey 12.0 or later. To get the installer yourself, use [Tailscale's download page for macOS](https://tailscale.com/download/mac).
+
+### Windows
+
+Select **Download and open the installer**. Windows runs Tailscale's setup and asks for permission to install. After the installation, the Tailscale icon appears in the system tray, near the clock. Tailscale requires Windows 10 or later. To get the installer yourself, use [Tailscale's download page for Windows](https://tailscale.com/download/windows).
+
+### Debian and Ubuntu
+
+This section also applies to Linux Mint, Pop!_OS, elementary OS, Zorin OS and Raspberry Pi OS.
+
+The quickest way: select **Download Tailscale (.deb)**. WireCat saves the package in Downloads and shows it in your file manager. Double-click it; your Software app installs it and asks for your password.
+
+A package installed by double-click does not update itself. Tailscale's commands add Tailscale's own update source, so your system's updates keep Tailscale current. Run them instead of the download, or after it. For Ubuntu 24.04:
+
+```sh
+sudo mkdir -p --mode=0755 /usr/share/keyrings
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+sudo apt-get update && sudo apt-get install tailscale
+```
+
+For another release, `noble` is replaced by the release's code name: `jammy` for Ubuntu 22.04, `bookworm` or `trixie` for Debian 12 or 13, with `debian` in place of `ubuntu`. Raspberry Pi OS uses `raspbian`. Linux Mint and other Ubuntu-based systems use the Ubuntu release they are built on. [Tailscale's package page](https://pkgs.tailscale.com/stable/#linux) lists every release.
+
+If Tailscale is installed but its update source is missing, the done Install step says so and offers the commands under **Add the update source**.
+
+### Fedora and Red Hat
+
+This section also applies to Rocky Linux, AlmaLinux, CentOS Stream, Oracle Linux and Amazon Linux.
+
+Select **Download Tailscale (.rpm)**: the file manager shows the package, and a double-click installs it. As on Debian, such a package does not update itself; the commands below add Tailscale's update source.
+
+Fedora 41 and later:
+
+```sh
+sudo dnf install 'dnf-command(config-manager)'
+sudo dnf config-manager addrepo --overwrite --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+sudo dnf install tailscale
+sudo systemctl enable --now tailscaled
+```
+
+Fedora 40 and earlier, Rocky Linux and AlmaLinux:
+
+```sh
+sudo dnf install 'dnf-command(config-manager)'
+sudo dnf config-manager --add-repo https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+sudo dnf install tailscale
+sudo systemctl enable --now tailscaled
+```
+
+Red Hat Enterprise Linux 8 to 10, CentOS Stream and Oracle Linux use the same lines with their own repository, for example `https://pkgs.tailscale.com/stable/rhel/9/tailscale.repo`, `centos/10` or `oracle/9`. Release 7 and Amazon Linux use `yum`; for Amazon Linux 2023:
+
+```sh
+sudo yum install yum-utils
+sudo yum-config-manager --add-repo https://pkgs.tailscale.com/stable/amazon-linux/2023/tailscale.repo
+sudo yum install tailscale
+sudo systemctl enable --now tailscaled
+```
+
+### openSUSE
+
+WireCat shows these commands as the way to install. For Tumbleweed:
+
+```sh
+sudo zypper ar -g -r https://pkgs.tailscale.com/stable/opensuse/tumbleweed/tailscale.repo
+sudo zypper ref && sudo zypper in tailscale
+sudo systemctl enable --now tailscaled
+```
+
+For openSUSE Leap, `tumbleweed` is replaced by `leap/` and the release, for example `leap/15.6`. When zypper asks whether to trust Tailscale's signing key, accept it.
+
+### Arch Linux
+
+Tailscale is in Arch Linux's own repository, so system updates keep it current:
+
+```sh
+sudo pacman -S tailscale
+sudo systemctl enable --now tailscaled
+```
+
+The [Arch Wiki page on Tailscale](https://wiki.archlinux.org/title/Tailscale) has more detail.
+
+### NixOS
+
+On NixOS, Tailscale is part of your system configuration. Add this line to your configuration, then rebuild the system:
+
+```nix
+services.tailscale.enable = true;
+```
+
+The [NixOS Wiki page on Tailscale](https://wiki.nixos.org/wiki/Tailscale) explains the other settings.
+
+### Other Linux
+
+For systems that Tailscale lists no commands for, such as Manjaro, Alpine, Void or Gentoo, WireCat offers Tailscale's install script. It finds the right package manager for most systems and asks for your password:
+
+```sh
+curl -fsSL https://tailscale.com/install.sh | sh
+```
+
+If the script does not support your system, [Tailscale's Linux installation page](https://tailscale.com/docs/install/linux) explains the alternatives, and [Tailscale's static binaries](https://pkgs.tailscale.com/stable/#static) run on any Linux.
+
+### Let your user control Tailscale on Linux
+
+On Linux, Tailscale takes orders only from the administrator unless you name your user as its **operator**. WireCat shows this command with your user name filled in. Run it once in a terminal; it asks for your password:
+
+```sh
+sudo tailscale set --operator=$USER
+```
+
+After that, WireCat can log in and turn Funnel on without asking for your password each time. WireCat does not run this command for you, because it changes who controls Tailscale.
+
+## Log in to Tailscale
+
+Select **Log in**. Your browser opens a Tailscale page that asks you to sign in with Google, Microsoft, GitHub, Apple or a passkey. If you do not have a Tailscale account yet, the same page creates one. The step finishes by itself when you finish in the browser.
+
+If your Tailscale network asks an administrator to approve each new computer, the step says so. If you are the administrator, approve this computer on the [Machines page](https://console.tailscale.com/admin/machines) of the admin console.
+
+## Allow Funnel
+
+Funnel needs two settings in your Tailscale network. You change them once in the admin console, and they apply to every computer in the network.
+
+1. On the [DNS page](https://console.tailscale.com/admin/dns), turn on **MagicDNS** if it is off. Then, under **HTTPS Certificates**, select **Enable HTTPS**. Tailscale says that the names of your computers then appear in a public certificate log; rename a computer first if its name is private.
+2. On the [Access controls page](https://console.tailscale.com/admin/acls), open the **Funnel** section and select **Add Funnel to policy**.
+
+Select **Check** in WireCat. The step is done when Tailscale reports that HTTPS and Funnel are allowed for this computer. To change these settings, you must be an Owner, Admin or Network admin of the Tailscale network. [Tailscale's Funnel documentation](https://tailscale.com/docs/features/tailscale-funnel) describes both settings.
+
+## Connect the server
+
+Select **Start**. WireCat turns Funnel on from a public address, such as `https://laptop.tail4a2c.ts.net`, to the server's local port, then starts the server with that address. Funnel opens only this address, and the server still asks each AI app for its login code.
+
+The address stays the same the next time you start the server, so browser apps stay logged in. Funnel allows three public addresses per computer (ports 443, 8443 and 10000), so up to three servers can use Funnel at once. When you stop the server, WireCat turns its Funnel off. A new address can take up to ten minutes to work everywhere, while public DNS learns it.
+
+Next, add the address to your AI app: [Add the connection to your AI chat](../browser-apps.mdx#3-add-the-connection-to-chatgpt-or-claude) shows where ChatGPT, Claude, Gemini and DeepSeek take it.

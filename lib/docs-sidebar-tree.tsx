@@ -24,6 +24,7 @@ import {
   Gauge,
   GitMerge,
   Globe,
+  GlobeLock,
   History,
   KeyRound,
   Layers,
@@ -147,6 +148,7 @@ export const sidebarIcons = {
   "build-stay-compliant": ShieldCheck,
   desktop: Monitor,
   logs: ScrollText,
+  "tailscale-funnel": GlobeLock,
 }
 
 const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
