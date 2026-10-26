@@ -76,7 +76,7 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | --- | --- | --- | --- | --- |
 | The WireCat app on the computer | WireCat Desktop | WireCat Desktop | WireCat Desktop | The desktop app that installs the tools and shows their settings and logs. The name is not translated; its on-screen labels stay in English. |
 | One start of a tool | run | запуск | ejecución | One command of a tool, from start to exit. |
-| What a tool kept about a run | run record | запись запуска | registro de ejecución | The run's command, profile, outcome, timing and codes. Never message text, names or tokens. |
+| What a tool kept about a run | run record | запись запуска | registro de ejecución | The run's command line, profile, outcome, timing and codes. Secrets such as tokens are always hidden. A tool on cli-core 0.439.0 or later keeps the words typed on the command line unless `record_input` is off; an earlier one hides every typed value that may be text. |
 | One step inside a run | event | событие | evento | A request the tool made to the service, or a notable step, with its time and outcome. |
 | Value counts beside the logs | facet | фасет | faceta | A list of one field's values with the number of runs for each; clicking a value filters the list. |
 

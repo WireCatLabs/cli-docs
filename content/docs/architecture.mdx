@@ -210,9 +210,12 @@ reported, never searched as messages ([architecture rules](https://github.com/Wi
   lists them, not a pick.
 - **One permission model, one guard**, used by every command, every MCP tool and, in max, by the
   background `max serve` process for anything that passes through it.
-- **Runs are recorded without content.** A run record holds the command's words, ids, counts and
-  timings, the coding agent that ran it and, for a failed run, the error with a masked message. Every argument
-  value that may be content or a secret is written as `[redacted]`. Private message text, tokens and phone numbers are excluded from diagnostic records; documentation and tests use synthetic examples.
+- **A run's events hold no content.** A run record holds the command line, ids, counts and
+  timings, the coding agent that ran it and, for a failed run, the error with a masked message. A secret
+  typed on the command line is always written as `[redacted]`. A tool on cli-core 0.439.0 or later keeps the
+  other typed words as they were typed, so the owner can read back what was run; with `record_input: false`, and
+  in earlier versions, every argument value that may be content is `[redacted]` too. Message text, tokens and
+  phone numbers never reach a run's events; documentation and tests use synthetic examples.
 - **Generated, then checked.** The command reference (`commands.md`), max's operation wrappers and
   the Bot API types are generated; CI fails when the committed copy drifts from the generator.
 
