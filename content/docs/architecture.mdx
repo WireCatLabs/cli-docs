@@ -212,9 +212,9 @@ reported, never searched as messages ([architecture rules](https://github.com/Wi
   background `max serve` process for anything that passes through it.
 - **A run's events hold no content.** A run record holds the command line, ids, counts and
   timings, the coding agent that ran it and, for a failed run, the error with a masked message. A secret
-  typed on the command line is always written as `[redacted]`. A tool on cli-core 0.439.0 or later keeps the
-  other typed words as they were typed, so the owner can read back what was run; with `record_input: false`, and
-  in earlier versions, every argument value that may be content is `[redacted]` too. Message text, tokens and
+  typed on the command line is always written as `[redacted]`. A tool whose `config show` lists `record_input` keeps
+  the other typed words as they were typed, so the owner can read back what was run; with `record_input: false`, and
+  in a tool without that setting, every argument value that may be content is `[redacted]` too. Message text, tokens and
   phone numbers never reach a run's events; documentation and tests use synthetic examples.
 - **Generated, then checked.** The command reference (`commands.md`), max's operation wrappers and
   the Bot API types are generated; CI fails when the committed copy drifts from the generator.
