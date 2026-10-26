@@ -53,7 +53,7 @@ Si Tailscale está instalado pero falta su fuente de actualizaciones, el paso de
 
 Esta sección también sirve para Rocky Linux, AlmaLinux, CentOS Stream, Oracle Linux y Amazon Linux.
 
-Selecciona **Download Tailscale (.rpm)**: el gestor de archivos muestra el paquete y un doble clic lo instala. Como en Debian, ese paquete no se actualiza solo; los comandos de abajo añaden la fuente de actualizaciones de Tailscale.
+Selecciona **Download Tailscale (.rpm)**: el gestor de archivos muestra el paquete y un doble clic lo instala. El repositorio propio de Fedora también tiene Tailscale, a menudo una versión más antigua; los comandos de abajo añaden la fuente de actualizaciones de Tailscale, que tiene cada versión.
 
 Fedora 41 y posteriores:
 
@@ -84,7 +84,7 @@ sudo systemctl enable --now tailscaled
 
 ### openSUSE
 
-Aquí WireCat muestra estos comandos como la forma de instalar. Para Tumbleweed:
+Aquí WireCat muestra estos comandos como la forma de instalar. Añaden la fuente de actualizaciones de Tailscale, que recibe cada versión en cuanto Tailscale la publica; Tumbleweed también tiene Tailscale en su propio repositorio. Para Tumbleweed:
 
 ```sh
 sudo zypper ar -g -r https://pkgs.tailscale.com/stable/opensuse/tumbleweed/tailscale.repo
