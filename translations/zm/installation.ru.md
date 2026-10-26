@@ -199,7 +199,8 @@ Use zm CLI: найди встречу, которую я только что и�
 | Что | Linux и macOS | Windows |
 |---|---|---|
 | настройки (`config.json`) | `~/.config/zm/` | `%APPDATA%\zm\Config\` |
-| состояние (записанные запуски в `runs/`) | `~/.local/share/zm/` | `%LOCALAPPDATA%\zm\Data\` |
+| состояние | `~/.local/share/zm/` | `%LOCALAPPDATA%\zm\Data\` |
+| записанные запуски (`runs/`) | `~/.local/share/zoom-cli/` | `%LOCALAPPDATA%\zoom-cli\Data\` |
 | кеш | `~/.cache/zm/` | `%LOCALAPPDATA%\zm\Cache\` |
 | локальное хранилище | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 
@@ -227,8 +228,9 @@ npm uninstall -g @wirecat/zoom-cli
 
 Удаление убирает только пакет. Чтобы убрать всё остальное, удалите:
 
-- каталоги настроек, состояния и кеша: `~/.config/zm`, `~/.local/share/zm` и `~/.cache/zm` в Linux и
-  macOS; `%APPDATA%\zm` и `%LOCALAPPDATA%\zm` в Windows;
+- каталоги настроек, состояния, записанных запусков и кеша: `~/.config/zm`, `~/.local/share/zm`,
+  `~/.local/share/zoom-cli` и `~/.cache/zm` в Linux и macOS; `%APPDATA%\zm`, `%LOCALAPPDATA%\zm` и
+  `%LOCALAPPDATA%\zoom-cli` в Windows;
 - папки skill агента, если вы его устанавливали: `~/.claude/skills/zoom-cli` и
   `~/.agents/skills/zoom-cli` (`%USERPROFILE%\.claude\skills\zoom-cli` и
   `%USERPROFILE%\.agents\skills\zoom-cli` в Windows);
