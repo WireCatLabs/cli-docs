@@ -106,6 +106,9 @@ importers:
       '@wirecat/cli-core':
         specifier: 0.432.0
         version: 0.432.0(@wirecat/cli-base@0.57.1(commander@15.0.0)(typescript@7.0.2)(vitest@5.0.5(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))))(commander@15.0.0)(supports-color@7.2.0)(typescript@7.0.2)(zod@4.6.7)
+      ajv:
+        specifier: 8.20.0
+        version: 8.20.0
       cspell:
         specifier: 10.4.0
         version: 10.4.0
@@ -5037,7 +5040,7 @@ snapshots:
     dependencies:
       '@hono/node-server': 2.1.5(hono@4.13.13)
       ajv: 8.20.0
-      ajv-formats: 3.0.1
+      ajv-formats: 3.0.1(ajv@8.20.0)
       content-type: 1.0.5
       cors: 2.8.6
       cross-spawn: 7.0.6
@@ -5667,8 +5670,8 @@ snapshots:
 
   acorn@8.18.0: {}
 
-  ajv-formats@3.0.1:
-    dependencies:
+  ajv-formats@3.0.1(ajv@8.20.0):
+    optionalDependencies:
       ajv: 8.20.0
 
   ajv@8.18.0:

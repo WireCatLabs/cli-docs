@@ -47,7 +47,8 @@ hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
 
 Hermes scans every skill before it installs one. If it stops at a caution, don't force the install:
 [report it](https://github.com/WireCatLabs/cli-docs/issues) with the finding it shows. `hermes skills search https://wirecat.dev --source well-known` lists them all. Hermes keeps the
-source, so `hermes skills update` refreshes the skill later.
+source, so `hermes skills update` refreshes the skill later. Clients of the newer discovery format read the same
+skills at `https://wirecat.dev/.well-known/agent-skills/index.json`.
 
 You can also add a tool's repository as a standing skill source (a tap):
 
