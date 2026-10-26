@@ -27,8 +27,8 @@ step or a broken translated page while it can still be corrected. Use
    not prove personal-account draft support.
 5. Follow instructions and links in order. If a reader must choose an audience, grant a
    permission or fetch history, provide the next action or a precise guide link there. Remove
-   duplicate Start here blocks from task navigation; preserve the actual getting-started links,
-   incoming URLs and old heading anchors.
+   duplicate Start here blocks from task navigation; preserve the actual getting-started links and
+   incoming URLs. A renamed command or heading keeps no old anchor, and no page names an old command.
 6. Read each locale's changed prose in full. Keep the same terms, capabilities, action boundaries
    and required context; matching code fences or fingerprints does not establish this. Verify
    headings, links, examples and diagrams in the exported Markdown as well as HTML. Never
@@ -76,12 +76,30 @@ Use a review table with one row per page/locale:
 
 | Page and locale | Reader task | Terms and opening | Behavior evidence | Links and exports | Result and owner |
 | --- | --- | --- | --- | --- | --- |
-| Example: drafts-and-templates, en | Review a reply before sending | draft and template remain distinct; setup assumed | personal commands and adapter support checked; app-saving boundary stated | audience settings and old anchors checked | fixed, reviewer name |
+| Example: drafts-and-templates, en | Review a reply before sending | draft and template remain distinct; setup assumed | personal commands and adapter support checked; app-saving boundary stated | audience settings and anchors checked | fixed, reviewer name |
 
 Mark a page reviewed only after reading its prose and checking the material claims. Record
 remaining issues separately with their owning repository, proposed correction and source. A
 successful CI run is evidence for its checks, not a declaration that the entire corpus follows
 editorial rules.
+
+## Community tools
+
+A tool from outside WireCatLabs joins the site's "Community tools" group through a pull request that adds it to
+`tools.json` with `"community": true`. Its pages then sync from its repository at the reviewed tag in `docsRef`, as
+ours do; it never joins cli-core's list of WireCat tools. Review the entry against this list, and hold it until every
+point has evidence linked in the pull request:
+
+1. Every "Done when" check of the
+   [New CLI checklist](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/new-cli.md#done-when) is
+   green in the tool's own CI, on the tagged commit.
+2. The fresh-agent audit passed: an agent given only the handbook's index and the repository found no gap left open.
+3. Every command, example, help text and page names its profile explicitly; nothing picks an account by itself.
+4. Nothing is published under the `@wirecat` npm scope, and the tool is not called "WireCat".
+
+The tests reject a community entry with a `@wirecat/` package or a `WireCatLabs/` repository, and add the group to the
+sidebar only while at least one such entry exists. The entry is also listed in `content/docs/meta.json`,
+`meta.ru.json` and `meta.es.json`, like any tool.
 
 ## Required evidence before merge or release
 

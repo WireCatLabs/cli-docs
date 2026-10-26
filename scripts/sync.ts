@@ -13,8 +13,9 @@ import { dirname, join, normalize } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 import { structureProblems } from "@wirecat/cli-base/release"
-import { captureUpstream, localizeTool } from "./localize.ts"
+import { captureUpstream, localizeTool, siteOwnedPage } from "./localize.ts"
 import { crossToolScenarios, readScenarios, type Scenario, scenarioPage } from "./scenarios.ts"
+import { publishSkills, writeSkillsIndex } from "./skills-index.ts"
 import { checkoutCommit, checkoutSource, sourceInstallation } from "./source-install.ts"
 
 export type Tool = {
@@ -29,6 +30,20 @@ export type Tool = {
   distribution?: "source"
   /** `false` when the tool's commands take no leading profile, as its `guide` command is told. */
   profile?: boolean
+  /** An outside tool, reviewed against docs/REVIEWING.md#community-tools; an entry without it is one of ours. */
+  community?: true
+}
+
+/** What makes a tools.json entry unfit to list; empty when it is fine. */
+export const toolProblems = (tool: Tool): string[] => {
+  const problems: string[] = []
+  const flag = (tool as { community?: unknown }).community
+  if (flag !== undefined && flag !== true) problems.push(`${tool.name}: "community" is true or absent`)
+  if (flag === true && tool.package.startsWith("@wirecat/"))
+    problems.push(`${tool.name}: a community tool publishes under its own npm scope, not @wirecat`)
+  if (flag === true && tool.repo.startsWith("WireCatLabs/"))
+    problems.push(`${tool.name}: a WireCatLabs repository is one of ours, not a community tool`)
+  return problems
 }
 
 /** A preview uses its requested ref; published prose overrides must be immutable. */
@@ -194,12 +209,14 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
     if (ref && /^[a-f0-9]{40}$/.test(ref)) checkoutCommit(tool.repo, ref, checkout)
     else if (!ref && sourceInstallation(tool)) checkoutSource(tool, checkout)
     else sparseClone(tool.repo, tag, checkout)
-    run("git", ["sparse-checkout", "set", "docs", "scenarios"], checkout)
+    run("git", ["sparse-checkout", "set", "docs", "scenarios", "skills"], checkout)
     const problems = structureProblems(checkout)
     if (problems.length > 0) throw new Error(`${tool.repo} ${tag}:\n${problems.join("\n")}`)
 
     const docs = join(checkout, "docs")
-    const files = readdirSync(docs).filter((name) => name.endsWith(".md") && name !== "README.md")
+    const allFiles = readdirSync(docs).filter((name) => name.endsWith(".md") && name !== "README.md")
+    // Comparisons are written and checked on this site, not taken from the tool's release.
+    const files = allFiles.filter((name) => name !== `${siteOwnedPage}.md`)
     const guides = new Map<string, { text: string; ref: string }>()
     let changelogGuide: { text: string; ref: string } | undefined
     for (const [slug, guideRef] of reviewedGuideRefs(tool, ref)) {
@@ -211,7 +228,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       guides.set(`${slug}.md`, { text: run("git", ["show", `${guideRef}:docs/${slug}.md`], checkout), ref: guideRef })
       if (!files.includes(`${slug}.md`)) files.push(`${slug}.md`)
     }
-    const pages = new Set(files.map((name) => name.slice(0, -3)))
+    const pages = new Set([...files, `${siteOwnedPage}.md`].map((name) => name.slice(0, -3)))
     const destination = join(root, captureOnly ? "content/upstream" : "content/docs", tool.name)
     rmSync(destination, { recursive: true, force: true })
     mkdirSync(destination, { recursive: true })
@@ -272,6 +289,7 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
       })
     console.log(`${tool.name}: ${files.length} pages and ${scenarios.length} scenarios from ${tool.repo} ${tag}`)
     if (captureOnly) return
+    if (!tool.community) publishSkills(checkout, root, tag.replace(/^v/, ""))
     captureUpstream(root, tool)
     const untranslated = localizeTool(root, tool)
     if (untranslated.length) throw new Error(`Documentation localization failed:\n${untranslated.join("\n")}`)
@@ -301,6 +319,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     options: { ref: { type: "string" }, tool: { type: "string" }, "capture-only": { type: "boolean", default: false } },
   })
   if (values.tool && !tools.some((tool) => tool.name === values.tool)) throw new Error(`Unknown tool: ${values.tool}`)
+  const problems = tools.flatMap(toolProblems)
+  if (problems.length) throw new Error(`tools.json:\n${problems.join("\n")}`)
   for (const tool of tools.filter((tool) => !values.tool || values.tool === tool.name))
     syncTool(tool, root, values.ref, values["capture-only"])
+  if (!values["capture-only"]) writeSkillsIndex(root)
 }

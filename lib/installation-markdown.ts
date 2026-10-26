@@ -7,8 +7,8 @@ export function installationMarkdown(lang: string): string {
     .toSorted((a) => (a.name === "tg" ? -1 : 1))
     .map((tool) =>
       !isMessenger(tool)
-        ? `### ${tool.displayName ?? tool.name} [#${tool.name}]\n\n[${words.install}](/${lang}/docs/${tool.name}/installation)\n\n${tool.summary[lang as "en" | "ru" | "es"]}`
-        : `### ${words.install} ${tool.name === "tg" ? "Telegram" : "MAX"} [#${tool.name}]\n\n${words.onboarding.paste}\n\n\`\`\`text\n${words.onboarding.prompt(tool.name, tool.package)}\n\`\`\``,
+        ? `### ${tool.displayName ?? (tool.name === "tg" ? "Telegram" : tool.name === "max" ? "MAX" : tool.name)} [#${tool.name}]\n\n[${words.install}](/${lang}/docs/${tool.name}/installation)\n\n${tool.summary[lang as "en" | "ru" | "es"]}`
+        : `### ${words.install} ${tool.displayName ?? (tool.name === "tg" ? "Telegram" : tool.name === "max" ? "MAX" : tool.name)} [#${tool.name}]\n\n${words.onboarding.paste}\n\n\`\`\`text\n${words.onboarding.prompt(tool.name, tool.package)}\n\`\`\``,
     )
     .join("\n\n")
 }

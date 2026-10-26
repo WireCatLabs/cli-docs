@@ -75,9 +75,6 @@ export function examples(markdown: string): Example[] {
   return result
 }
 
-// Upgrade notes name a command a release removed; the same command in a fenced example still fails.
-const retiredCommands: Record<string, string[]> = { zm: ["serve"] }
-
 export function validateInvocation(
   text: string,
   program: Program,
@@ -97,6 +94,18 @@ export function validateInvocation(
         if (finding && finding.kind !== "syntax") return finding
       }
       return { kind: "syntax", reason: "Reviewed shorthand alternatives, not a runnable command" }
+    }
+    const piped = /(?<![\w:|\\])[a-z][a-z-]*(?:\\?\|[a-z][a-z-]*)+(?![\w|\\])/.exec(text)
+    if (piped) {
+      // Guides often write `chats requests confirm|reject` without the tool name; check those as well.
+      const bare =
+        !text.split(/\s+/).includes(program.cli) && program.commands.some((c) => c.path[0] === text.split(/\s+/)[0])
+      for (const alternative of piped[0].split(/\\?\|/)) {
+        const expanded = text.slice(0, piped.index) + alternative + text.slice(piped.index + piped[0].length)
+        const finding = validateInvocation(bare ? `${program.cli} ${expanded}` : expanded, program, false)
+        if (finding && finding.kind !== "syntax") return finding
+      }
+      return { kind: "syntax", reason: "Alternative subcommand syntax" }
     }
   }
   let entries: ReturnType<typeof parse>
@@ -161,8 +170,6 @@ export function validateInvocation(
       reason: `Needs a profile first (${program.cli} <profile> ${withoutGlobals[0]} …) unless it touches no account`,
     }
   if (!roots.has(withoutGlobals[0]) && roots.has(withoutGlobals[1])) withoutGlobals.shift()
-  if (!executable && retiredCommands[program.cli]?.includes(withoutGlobals[0]))
-    return { kind: "syntax", reason: "Retired command named in an upgrade note" }
   const command = all
     .filter((item) => item.path.every((word, index) => withoutGlobals[index] === word))
     .sort((a, b) => b.path.length - a.path.length)[0]
@@ -239,6 +246,27 @@ export function referenceCoverage(text: string, program: Program) {
   })
 }
 
+/** Commands in the HTML snapshots actually rendered by the public pages. */
+export function editorialExamples(source: string): Example[] {
+  const pages = JSON.parse(source) as Record<string, string>
+  return ["home", "features", "examples"].flatMap((page) => {
+    const html = pages[page]
+    if (typeof html !== "string") throw new Error(`Missing published editorial page: ${page}`)
+    const line = source.slice(0, source.indexOf(JSON.stringify(html))).split("\n").length
+    return [...html.matchAll(/<code\b[^>]*>([\s\S]*?)<\/code>/g)].map((match) => ({
+      text: match[1]
+        .replace(/<[^>]*>/g, "")
+        .replaceAll("&quot;", '"')
+        .replaceAll("&#39;", "'")
+        .replaceAll("&lt;", "<")
+        .replaceAll("&gt;", ">")
+        .replaceAll("&amp;", "&"),
+      line,
+      executable: true,
+    }))
+  })
+}
+
 const filesIn = (folder: string): string[] =>
   readdirSync(folder, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory()
@@ -262,7 +290,7 @@ export function exampleFindings(
   for (const file of filesIn(join(root, "content/docs"))) {
     if (
       file.includes(`/content/docs/${cli === "tg" ? "max" : "tg"}/`) ||
-      /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap)(?:\.[a-z]{2})?\.md$/.test(file)
+      /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap|compare)(?:\.[a-z]{2})?\.md$/.test(file)
     )
       continue
     const readerPage = /\/(tg|max)\/(usage|rankings|bot|groups)(?:\.(ru|es))?\.md$/.exec(file)
@@ -311,6 +339,17 @@ export function exampleFindings(
             command,
             ...finding,
           })
+      }
+    }
+  }
+  for (const lang of ["en", "ru", "es"]) {
+    const file = `lib/editorial/${lang}.json`
+    for (const example of editorialExamples(readFileSync(join(root, file), "utf8"))) {
+      if (!example.text.startsWith(`${cli} `)) continue
+      for (const segment of commandSegments(example.text)) {
+        checked++
+        const finding = check(segment, program, true)
+        if (finding) findings.push({ file, line: example.line, command: example.text, ...finding })
       }
     }
   }

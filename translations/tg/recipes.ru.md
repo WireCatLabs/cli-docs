@@ -141,15 +141,15 @@ cron запускает задания с почти пустой средой. 
 
 ### Прямые чаты, группы и каналы отдельно
 
-`--kind` поддерживает только такие чаты: `dialog` (один на один), `group`, `channel`. Сводка новостей каналов и сводка ваших чатов могут запускаться в разное время. В каждом чате есть своя точка, поэтому один запуск никогда не скрывает то, что еще не показал другой.
+`kind:` поддерживает только такие чаты: `dialog` (один на один), `group`, `channel`. Сводка новостей каналов и сводка ваших чатов могут запускаться в разное время. В каждом чате есть своя точка, поэтому один запуск никогда не скрывает то, что еще не показал другой.
 
 ```cron
 30 8 * * * claude -p "$(cat ~/tg-recipes/morning.md)" --allowedTools "Bash(tg personal inbox:*)"
 0 19 * * * claude -p "$(cat ~/tg-recipes/news.md)" --allowedTools "Bash(tg personal inbox:*)"
 ```
 
-В `morning.md`, `tg personal inbox --new --kind dialog,group --json`; в `news.md`, `tg personal inbox --new --kind
-channel --json` и просьба выбрать самое важное. Без `--kind`, все вместе.
+В `morning.md`, `tg personal inbox --new kind:dialog,group --json`; в `news.md`, `tg personal inbox --new kind:channel
+--json` и просьба выбрать самое важное. Без `kind:`, все вместе.
 
 ## Еженедельный отчет по чату
 

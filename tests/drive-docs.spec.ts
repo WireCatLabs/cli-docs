@@ -60,7 +60,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(manualInstall).toHaveCount(1)
     // Users can finish shared-app sign-in and their first import before optional Cloud setup.
     const sharedSignIn = text.indexOf("drive personal session start\n")
-    const sessionCheck = text.indexOf("drive personal session list --json")
+    const sessionCheck = text.indexOf("session list --json", sharedSignIn)
     const firstImport = text.indexOf("drive personal folders add")
     const cloudSetup = text.indexOf("https://console.cloud.google.com/")
     const customSignIn = text.indexOf("drive personal session start --client-file")
@@ -91,6 +91,45 @@ for (const lang of ["en", "ru", "es"] as const) {
     )
   })
 
+  test(`${lang}: Drive mirror guidance and file exports survive Markdown`, async ({ page, request }) => {
+    await page.goto(`/${lang}/docs/drive/mirrors`)
+    const body = page.locator("main")
+    await expect(body).toContainText("drive personal mirrors add ./notes --parent FOLDER_ID")
+    await expect(body).toContainText("--keep both")
+    await expect(body).toContainText("XLSX")
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const mirror = await request.get(`/llms.mdx/docs/${prefix}drive/mirrors/content.md`)
+    expect(mirror.ok()).toBe(true)
+    expect(await mirror.text()).toContain("drive personal mirrors remove MIRROR_ID")
+    const usage = await request.get(`/llms.mdx/docs/${prefix}drive/usage/content.md`)
+    expect(usage.ok()).toBe(true)
+    expect(await usage.text()).toContain("drive personal files download FILE_ID --output ./download.bin")
+    expect(await usage.text()).toContain("drive personal files export DOC_ID --format pdf --output ./document.pdf")
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google/)
+  })
+
+  test(`${lang}: Drive remote guide preserves HTTP login and revocation in HTML and Markdown`, async ({
+    page,
+    request,
+  }) => {
+    await page.goto(`/${lang}/docs/drive/remote`)
+    const body = page.locator("main")
+    await expect(body).toContainText("drive personal mcp --http --port 8765 --public-url")
+    await expect(body).toContainText("drive personal mcp --revoke --json")
+    await expect(body).toContainText("DCR")
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
+    const remoteLink = page.locator("#nd-sidebar").getByRole("link", { name: /ChatGPT.*Claude/ })
+    await expect(remoteLink).toHaveAttribute("href", `/${lang}/docs/drive/remote`)
+    await expect(remoteLink).toBeVisible()
+    const prefix = lang === "en" ? "" : `${lang}/`
+    const markdown = await request.get(`/llms.mdx/docs/${prefix}drive/remote/content.md`)
+    expect(markdown.ok()).toBe(true)
+    expect(await markdown.text()).toContain("drive personal mcp --revoke --json")
+    await page.goto(`/${lang}/docs/drive/recipes`)
+    await expect(page.locator("main")).toContainText("availability.available: false")
+    await expect(page.locator(`main a[href="/${lang}/docs/drive/remote"]`).first()).toBeVisible()
+  })
+
   test(`${lang}: Drive search preserves executable tagged-search examples`, async ({ page, request }) => {
     await page.goto(`/${lang}/docs/drive/search`)
     await expect(page.locator("main")).toContainText("budget AND tag:follow-up")
@@ -119,7 +158,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await markdown.text()).toContain("provider_metadata")
     expect(await markdown.text()).toContain("`effects`")
     expect(await markdown.text()).toContain("`api_operation`")
-    expect(await markdown.text()).toContain("`3`")
+    expect(await markdown.text()).toContain("`4`")
     expect(await markdown.text()).toContain("`error.retry.safe`")
     const text = await markdown.text()
     expect(text).toContain("--json=id,name")

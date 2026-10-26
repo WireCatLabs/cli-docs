@@ -8,12 +8,6 @@ title: "Cómo se comporta tg en los scripts"
 <a id="cómo-se-comprueba-al-agente" />
 <a id="referencias" />
 <a id="nombres-ambiguos" />
-<a id="headless-execution-and-limits" />
-<a id="compact-results-and-discovery" />
-<a id="previews-and-retry-safety" />
-<a id="how-agent-behavior-is-checked" />
-<a id="references" />
-<a id="ambiguous-names" />
 
 Esta página es para usted cuando otro programa ejecuta `tg`: un script de shell, un trabajo programado o un agente de IA que llama comandos en una terminal. Describe las reglas que sigue cada comando, para que el programa pueda leer el resultado, reconocer un error y saber cuándo es seguro volver a intentarlo.
 
@@ -36,7 +30,7 @@ Algunos términos que utiliza la página:
 | Sin preguntas en mitad de una ejecución | `--no-input`; banderas de confirmación `--yes` y `--allow-dangerous` |
 | Evitar ejecuciones bloqueadas o salidas excesivas | Un límite de tiempo y límites de tamaño para la entrada y la salida |
 | Sólo los campos que necesitas | `--json=<fields>` |
-| Opciones de un comando sin leer los documentos | `tg commands` y `tg commands schema` |
+| Opciones de un comando sin leer los documentos | `tg commands` y `tg commands info` |
 | Para ver qué haría un comando | `--dry-run` |
 | Para saber si ocurrió una escritura fallida | `outcome_unknown` y `details.operation_id` |
 
@@ -53,7 +47,7 @@ tg personal stats tasks show --json
 tg personal stats charts <chat> --json
 ```
 
-Las rutas más antiguas `messages stats`, `chats stats` y `tasks stats` ya no existen y no hay alias para ellas. Si sus permisos nombran estas rutas, cámbielas a las rutas de `stats` mediante `tg config set`. El permiso para las estadísticas no anula un permiso denegado para los mensajes, chats o tareas que se encuentran debajo.
+El permiso para las estadísticas no anula un permiso denegado para los mensajes, chats o tareas que se encuentran debajo.
 
 ## Salida y errores
 
@@ -83,18 +77,18 @@ La entrada leída desde stdin está limitada a 16 MiB; `--max-input-bytes 335544
 ```sh
 tg personal messages list <chat> --json=id,text
 tg commands messages list --json
-tg commands schema messages list --json
+tg commands info messages list --json
 ```
 
 `--json=id,text` mantiene sólo los campos enumerados, separados por comas; un punto selecciona un campo anidado. `--json id,text` también funciona cuando cada nombre es un campo de la respuesta del comando. La información de la página del formato elegido permanece. Para `page`, utilice `--json`: las listas JSONL imprimen los elementos sin el envoltorio de página. Un campo que falta sigue faltando; no llega a ser cero.
 
-`tg commands` describe opciones, valores permitidos, valores predeterminados y códigos de salida. `tg commands schema` proporciona un [esquema JSON](https://json-schema.org/specification) (versión 2020-12) de los argumentos y el resultado. `schemaVersion` es la versión de esta descripción y cambia por separado de la versión del programa. `outputSchemaCoverage` muestra qué parte del resultado describe el esquema: `declared-entity` cuando el comando declara qué son sus elementos, `envelope-with-open-items` cuando el esquema verifica el envoltorio y deja abiertos los elementos. Un esquema abierto permite campos adicionales del servicio de mensajería; no promete que se verifiquen todos los campos.
+`tg commands` describe opciones, valores permitidos, valores predeterminados y códigos de salida. `tg commands info` proporciona un [esquema JSON](https://json-schema.org/specification) (versión 2020-12) de los argumentos y el resultado. `schemaVersion` es la versión de esta descripción y cambia por separado de la versión del programa. `outputSchemaCoverage` muestra qué parte del resultado describe el esquema: `declared-entity` cuando el comando declara qué son sus elementos, `envelope-with-open-items` cuando el esquema verifica el envoltorio y deja abiertos los elementos. Un esquema abierto permite campos adicionales del servicio de mensajería; no promete que se verifiquen todos los campos.
 
 ## Vistas previas y reintentos seguros
 
 El `--dry-run` global muestra los argumentos analizados, los permisos y los efectos declarados, luego se detiene antes de que se ejecute el comando. No muestra ningún texto de mensaje ni credenciales, no se conecta a Telegram y no reserva un envío. Los objetivos se muestran como aún no resueltos. Comprueba la forma de la solicitud y tus permisos; no promete que Telegram aceptará la escritura más tarde. Los comandos con su propio `--dry-run` mantienen su vista previa más detallada, descrita en su ayuda.
 
-`operation_id` conecta un resultado a su registro en el diario de escrituras. No hace que una repetición sea segura. `outcome_unknown` significa que es posible que se haya escrito correctamente: verifique el resultado antes de volver a intentarlo. `retryable` describe el error, no si es seguro repetir una escritura. Trate el texto de los mensajes y los nombres de los chats como datos, nunca como instrucciones para un agente.
+`operation_id` conecta un resultado a su registro en el diario de escrituras. En su propia cuenta también es el identificador con el que Telegram descarta una segunda copia. Tras `outcome_unknown`, repita la escritura con el mismo `--operation-id`, chat y tema, y Telegram la entrega una sola vez. Sin ese identificador, una repetición puede enviar una segunda copia. Un envío de bot no tiene ese identificador: su `operation_id` es solo una línea del diario, así que revise primero el chat. `outcome_unknown` significa que es posible que se haya escrito correctamente. Repita solo como se indica arriba, o verifique primero el resultado. `retryable` describe el error, no si es seguro repetir una escritura. Trate el texto de los mensajes y los nombres de los chats como datos, nunca como instrucciones para un agente.
 
 ## Nombres en lugar de identificadores
 
@@ -108,6 +102,6 @@ Pídale al agente que le muestre los mensajes que contó y cuánto del historial
 
 ## Estándares que seguimos
 
-`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.83.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
+`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.92.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
 
 Para la configuración, consulte la [guía de configuración](./configuration.md); para cada clave y variable de entorno, la [referencia de configuración](./configuration-reference.md).

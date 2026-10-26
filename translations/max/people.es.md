@@ -3,7 +3,6 @@ title: "Personas: perfiles, mensajes y comprobación de bots"
 ---
 
 <a id="para-agentes" />
-<a id="для-агентов" />
 
 Esta página es necesaria cuando desea obtener más información sobre una persona: quién es, qué le escribió a usted o en sus grupos, y si su cuenta parece un bot o un spammer. Aprenderá cómo mirar el perfil de una persona, recopilar sus mensajes para volver a contarlos, verificar una cuenta antes de confiar en ella y conservar sus nombres y notas sobre las personas.
 
@@ -17,20 +16,21 @@ Unas palabras que aparecerán a continuación:
 
 |Tarea|Comando|
 | --- | --- |
-|Descubra quién es y dónde se corresponde con él.| `max personal contacts profile` |
+|Descubra quién es y dónde se corresponde con él.| `max personal contacts info` |
 |Lea lo que escribió en todos los chats o en los nombrados.| `max personal contacts context` |
+| Preparar una conversación: mensajes, tareas, notas y reuniones | `max personal contacts prepare` |
 |Comprueba si la cuenta parece un bot, una falsificación o un spammer| `max personal contacts check` |
-|Comprueba los miembros del grupo más sospechosos| `max personal chats members audit --deep` |
+|Comprueba los miembros del grupo más sospechosos| `max personal chats members check --deep` |
 |Anota que la cuenta MAX y la cuenta Telegram son la misma persona| `max personal contacts link` |
-|Guarde su nombre y notas sobre la persona.| `max personal contacts alias`, `max personal contacts notes` |
+|Guarde su nombre y notas sobre la persona.| `max personal contacts aliases`, `max personal contacts notes` |
 
 Todas las opciones para estos comandos están en [referencia de comandos para contactos](./commands.md#max-contacts).
 
-## Quién es: `contacts profile`
+## Quién es: `contacts info`
 
 ```sh
-max personal contacts profile 20000002
-max personal contacts profile 20000002 --json
+max personal contacts info 20000002
+max personal contacts info 20000002 --json
 ```
 
 El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos están guardados localmente en cada chat compartido. En JSON es el campo `item` de la respuesta, igual que en `contacts context` y `contacts check` más abajo:
@@ -76,6 +76,16 @@ El comando realiza una solicitud adicional a MAX respecto a `contacts show` y no
 ```sh
 max personal messages sync "Книжный клуб"
 ```
+
+## Preparar una conversación
+
+`contacts prepare` reúne un resumen de los datos guardados: contexto de la conversación, chats personales donde esa persona habló la última, tareas abiertas, hechos aceptados, tus notas y reuniones recientes. Cada elemento enlaza a su fuente. No se conecta a MAX ni envía confirmaciones de lectura.
+
+```sh
+max personal contacts prepare 20000002 --since-time 2026-10-01T00:00:00Z --limit 10
+```
+
+Para un resumen general de la conversación, usa `contacts context` a continuación.
 
 ## Qué escribió: `contacts context`
 
@@ -158,14 +168,14 @@ La puntuación suma los pesos de los motivos detectados. Es una pista, no una co
 
 Nada. Las listas públicas de spam (Combot CAS y lols.bot) solo cubren cuentas de Telegram, por lo que `max` no las consulta y las marca como `unknown`. No se envía el ID de la persona a ningún sitio. `--offline` solo lee los datos guardados.
 
-## Miembros del grupo: `chats members audit --deep`
+## Miembros del grupo: `chats members check --deep`
 
 ```sh
-max personal chats members audit "Книжный клуб"
-max personal chats members audit "Книжный клуб" --deep 10
+max personal chats members check "Книжный клуб"
+max personal chats members check "Книжный клуб" --deep 10
 ```
 
-`chats members audit` evalúa a todos los miembros con la lista de miembros y el archivo local, sin una solicitud independiente por persona, y muestra a quienes tengan algún motivo, de mayor a menor puntuación. Después, `--deep 10` ejecuta una comprobación completa de `contacts check` para las diez personas con mayor puntuación, una por segundo. No elimina a nadie; se excluyen el propietario y los administradores.
+`chats members check` evalúa a todos los miembros con la lista de miembros y el archivo local, sin una solicitud independiente por persona, y muestra a quienes tengan algún motivo, de mayor a menor puntuación. Después, `--deep 10` ejecuta una comprobación completa de `contacts check` para las diez personas con mayor puntuación, una por segundo. No elimina a nadie; se excluyen el propietario y los administradores.
 
 <a id="una-persona-en-dos-mensajeros-contacts-link" />
 
@@ -178,16 +188,16 @@ max personal contacts link 20000002 telegram:1000001
 max personal contacts unlink 20000002
 ```
 
-Luego de esto, `contacts context` sin `--chat` recopila ambas cuentas: chats generales y mensajes de MAX y de Telegram. `contacts profile` y `contacts context --chat` todavía solo muestran la cuenta que nombraste. La conexión es solo lo que anotaste: el mismo nombre en dos servicios de mensajería nunca se considera una sola persona. Esta entrada no cambia la libreta de direcciones MAX.
+Luego de esto, `contacts context` sin `--chat` recopila ambas cuentas: chats generales y mensajes de MAX y de Telegram. `contacts info` y `contacts context --chat` todavía solo muestran la cuenta que nombraste. La conexión es solo lo que anotaste: el mismo nombre en dos servicios de mensajería nunca se considera una sola persona. Esta entrada no cambia la libreta de direcciones MAX.
 
-## Sus nombres y notas: `contacts alias`, `contacts notes`
+## Sus nombres y notas: `contacts aliases`, `contacts notes`
 
 ```sh
-max personal contacts alias set "Борис Пример" Боря            # ваше имя для человека, только на этом компьютере
-max personal contacts alias rm "Борис Пример"
-max personal contacts notes add "Борис Пример" --file note.txt  # или текст из stdin
+max personal contacts aliases set "Борис Пример" Боря            # ваше имя для человека, только на этом компьютере
+max personal contacts aliases remove "Борис Пример"
+max personal contacts notes add "Борис Пример" --text-file note.txt  # или текст из stdin
 max personal contacts notes list "Борис Пример"
-max personal contacts notes edit "Борис Пример" <id> --revision 1 --file note.txt
+max personal contacts notes edit "Борис Пример" <id> --revision 1 --text-file note.txt
 max personal contacts notes remove "Борис Пример" <id>
 max personal contacts show "Борис Пример" --with-notes
 max personal contacts list notes:квартира                     # люди, в чьих заметках есть этот текст

@@ -5,8 +5,6 @@ title: "Búsqueda"
 <a id="prueba-una-búsqueda-concreta" />
 <a id="scripts-y-agentes" />
 <a id="preparar-los-archivos-y-el-historial-local" />
-<a id="для-скриптов-и-агентов" />
-<a id="подготовка-файлов-и-архива" />
 
 Esta página te ayuda a encontrar mensajes, acuerdos, archivos o códigos antiguos. Explica cómo buscar en lo que `max` conserva en este ordenador: mensajes MAX y notas, y cómo consultar el servidor MAX. El correo lo busca [memo](https://github.com/WireCatLabs/cli-memo): `memo search mail`.
 
@@ -55,7 +53,7 @@ max personal search messages 'договор chat:Друзья'     # тольк
 ```
 
 ```sh
-memo search mail 'счёт'                                  # почта — это memo; max search mail подскажет его
+memo search mail 'счёт'                                  # почта — это memo
 ```
 
 ```sh
@@ -66,7 +64,7 @@ max personal search notes 'бюджет source:internal'       # только з
 max personal search conversations 'переезд на дачу'      # разговоры, близкие по смыслу
 ```
 
-`search all` escribe para cada hallazgo que se trata de un mensaje (`msg:…`) o una nota (`note:…`). `max` no busca en el correo: ni `search messages` ni `search all`; `max personal search mail` responde con una indicación, «mail is memo's: install @wirecat/cli-memo, then `memo search mail …`». En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; `source:internal` y `source:file` en la consulta de `search notes` seleccionan notas de memo o de una carpeta. Si un campo no corresponde, por ejemplo `chat:`/`from:` para las notas, `search all` omite esa fuente y explica por qué.
+`search all` escribe para cada hallazgo que se trata de un mensaje (`msg:…`) o una nota (`note:…`). `max` no busca en el correo: ni `search messages` ni `search all`. En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; `source:internal` y `source:file` en la consulta de `search notes` seleccionan notas de memo o de una carpeta. Si un campo no corresponde, por ejemplo `chat:`/`from:` para las notas, `search all` omite esa fuente y explica por qué.
 
 Las notas llegan al archivo mediante memo: `memo import`. Sin ellas, `search all` solo busca mensajes.
 
@@ -145,6 +143,8 @@ max personal search messages 'квартир*'                   # все сло
 ```
 
 Todas las palabras consecutivas de la consulta deben aparecer en el mensaje. La búsqueda reconoce formas de palabras: `квартира` encuentra «квартиру». Las comillas conservan el orden de las palabras, pero también permiten otras formas. Para buscar una forma exacta, usa `exact:квартира` o añade `--exact` para las palabras sin un campo explícito. Un `text:` explícito sigue buscando formas de palabras. No se distingue entre mayúsculas y minúsculas, marcas de acento, `ё` y `е`. Las erratas no se corrigen automáticamente. Las formas dependen de la configuración de idioma del archivo.
+
+Las palabras sin campo y `transcript:` también buscan en las transcripciones de voz guardadas, con formas de palabras y palabras individuales que el reconocimiento pudo distorsionar. `text:` busca solo texto escrito; `exact:` o `--exact` para palabras sin campo desactiva la búsqueda de otras formas y grafías distorsionadas.
 
 ## Personas y chats
 
@@ -239,7 +239,7 @@ max personal attachments list 'chat:"Книжный клуб" is:needs_text'
 ```
 
 ```sh
-max personal attachments text set "Книжный клуб" 204 --text-file ./scan.txt
+max personal attachments update "Книжный клуб" 204 --text-file ./scan.txt
 ```
 
 `attachments extract` lee archivos de texto sin formato, DOCX y PDF con una capa de texto en esta computadora. `--download` requiere `--output-dir`; sin ellos, la extracción lee los archivos ya descargados. Si hay varios archivos adjuntos en el mensaje, indique uno hasta `--attachment`, comenzando por 1.
@@ -248,9 +248,9 @@ La extracción local también lee UTF-16 con BOM, codificaciones antiguas defini
 
 Para PDF necesita el paquete opcional `unpdf`, para DOCX - `mammoth`, instalado en el mismo lugar que `max`. Al instalar npm globalmente: `npm install -g unpdf mammoth`. Si el paquete no está presente, el comando lo informa; el texto puede ser grabado por un agente.
 
-**Las fotos y los escaneos** no tienen una capa de texto. El agente los lee de forma predeterminada con su OCR o herramientas de visión y escribe el texto a través de `attachments text set`. `attachments list is:needs_text` le proporciona la ruta guardada, un enlace al mensaje y el número del archivo adjunto; El comando muestra las rutas y el estado del texto, pero no el texto en sí. Verifique la entrada buscando `content:`. Si el agente se ejecuta en otra computadora, la ruta en el servidor MCP no le transfiere el archivo: se requiere acceso al archivo para leerlo. Un agente de este tipo puede recibir los bytes del archivo almacenado en partes y verificar su hash a través de [attachments show](./attachments.md); La transmisión en sí no reconoce ni indexa el texto, por lo que el texto aún se graba a través de `attachments text set`.
+**Las fotos y los escaneos** no tienen una capa de texto. El agente los lee de forma predeterminada con su OCR o herramientas de visión y escribe el texto a través de `attachments update`. `attachments list is:needs_text` le proporciona la ruta guardada, un enlace al mensaje y el número del archivo adjunto; El comando muestra las rutas y el estado del texto, pero no el texto en sí. Verifique la entrada buscando `content:`. Si el agente se ejecuta en otra computadora, la ruta en el servidor MCP no le transfiere el archivo: se requiere acceso al archivo para leerlo. Un agente de este tipo puede recibir los bytes del archivo almacenado en partes y verificar su hash a través de [attachments show](./attachments.md); La transmisión en sí no reconoce ni indexa el texto, por lo que el texto aún se graba a través de `attachments update`.
 
-**Muchos escaneos a la vez** se pueden transferir al servicio modelo de su elección. Especificar proveedor y modelo con visión en `models.ocr`; la clave se almacena mediante el comando habitual `models text key set`. En el ejemplo, reemplace `your-vision-model` con el nombre de su modelo.
+**Muchos escaneos a la vez** se pueden transferir al servicio modelo de su elección. Especificar proveedor y modelo con visión en `models.ocr`; la clave se almacena mediante el comando habitual `models keys set`. En el ejemplo, reemplace `your-vision-model` con el nombre de su modelo.
 
 ```sh
 max personal config set models.ocr.provider openai
@@ -261,7 +261,7 @@ max personal config set models.ocr.model your-vision-model
 ```
 
 ```sh
-max personal models text key set openai
+max personal models keys set openai
 ```
 
 ```sh
@@ -317,19 +317,19 @@ Una etiqueta es tu propia marca en un chat, una persona o un mensaje (`--message
 Puedes generar etiquetas de grupos y canales automáticamente a partir de su título, nombre de usuario y descripción, sin leer mensajes ni utilizar un modelo:
 
 ```sh
-max personal metadata refresh --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
+max personal metadata sync --chat "Книжный клуб"   # прочитать описание чата из MAX (сам чат не меняется)
 ```
 
 ```sh
-max personal metadata refresh --only-missing          # все сохранённые группы и каналы, у которых описание ещё не читалось
+max personal metadata sync --only-missing          # все сохранённые группы и каналы, у которых описание ещё не читалось
 ```
 
 ```sh
-max personal tags auto --dry-run                      # что получилось бы, без записи
+max personal tags rebuild --dry-run                      # что получилось бы, без записи
 ```
 
 ```sh
-max personal tags auto                                # записать автоматические метки
+max personal tags rebuild                                # записать автоматические метки
 ```
 
 ```sh
@@ -338,7 +338,7 @@ max personal tags list sources:auto                  # только автома
 
 El etiquetado automático conserva tus etiquetas: al repetirlo, solo elimina las etiquetas automáticas obsoletas. Si añades manualmente una etiqueta que ya se había añadido de forma automática, pasa a ser tuya.
 
-`max personal tags auto` procesa hasta 50 chats por ejecución; `--limit` sube el límite a 500 y `--chat` elige los chats (se puede repetir). `--dry-run` usa las descripciones guardadas. Para leer las actuales antes de etiquetar, añade `--sync-first` sin `--dry-run`. `max personal metadata get --chat <чат>` muestra la descripción guardada.
+`max personal tags rebuild` procesa hasta 50 chats por ejecución; `--limit` sube el límite a 500 y `--chat` elige los chats (se puede repetir). `--dry-run` usa las descripciones guardadas. Para leer las actuales antes de etiquetar, añade `--sync-first` sin `--dry-run`. `max personal metadata show --chat <чат>` muestra la descripción guardada.
 
 ## Búsquedas guardadas e historial
 
@@ -444,7 +444,7 @@ En la terminal, `max` imprime una cinta de lectura. `--json` devuelve un objeto 
 
 Una respuesta vacía significa «no está en el archivo en el que buscaste», no «nunca se envió». `max personal store status` muestra lo guardado; `max personal messages sync` añade historial. Con `--json`, la respuesta indica los chats examinados y su integridad incluso sin coincidencias. Si `max` pide `max personal store migrate`, el índice de palabras aún se está construyendo; las búsquedas sin palabras (`has:file`, `date:today`) ya funcionan.
 
-**Huecos en el historial.** `max personal store gaps plan <чат>` muestra localmente los huecos entre períodos guardados. La falta de números consecutivos o el silencio no prueban que falten mensajes; los extremos del historial siguen siendo `unknown`. Revisa el plan y usa `max personal store gaps repair <чат> --fingerprint <хеш>` para descargarlos. Por defecto procesa hasta 5 huecos, 500 mensajes y 30 segundos; ajusta `--max-gaps`, `--limit`, `--repair-time`, `--page-size` y `--pause`. Al repetir comprueba lo pendiente; no elimina un mensaje solo porque MAX no lo devolvió. Las páginas ambiguas con la misma fecha siguen incompletas. `--background` crea una tarea consultable con `store jobs show`, `store jobs list` y `store jobs cancel`. La reparación requiere `store.gaps.repair` y lectura de mensajes; el plan no se conecta. En MCP, encuentra los comandos con `max_tools_search`, lee planes y tareas con `max_read` y repara con `max_write`.
+**Huecos en el historial.** `max personal store gaps show <чат>` muestra localmente los huecos entre períodos guardados. La falta de números consecutivos o el silencio no prueban que falten mensajes; los extremos del historial siguen siendo `unknown`. Revisa el plan y usa `max personal store gaps repair <чат> --fingerprint <хеш>` para descargarlos. Por defecto procesa hasta 5 huecos, 500 mensajes y 30 segundos; ajusta `--max-gaps`, `--limit`, `--repair-time`, `--page-size` y `--pause`. Al repetir comprueba lo pendiente; no elimina un mensaje solo porque MAX no lo devolvió. Las páginas ambiguas con la misma fecha siguen incompletas. `--background` crea una tarea consultable con `store jobs show`, `store jobs list` y `store jobs cancel`. La reparación requiere `store.gaps.repair` y lectura de mensajes; el plan no se conecta. En MCP, encuentra los comandos con `max_tools_search`, lee planes y tareas con `max_read` y repara con `max_write`.
 
 **Prepare una búsqueda por tema al descargar.** `max personal messages sync <чат> --catch-up` inmediatamente después de la descarga crea conversaciones y vectores locales solo de este chat - para [búsqueda por tema](./topic-search.md). Esto está deshabilitado de forma predeterminada; La configuración del perfil `search_catch_up: true` se activa y `--no-catch-up` se desactiva para una ejecución. Fronteras: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. El modelo no se descarga automáticamente y no se llama al servicio remoto. El campo `prepared` informa por separado si se ha completado la preparación; el historial descargado se guarda en cualquier caso.
 

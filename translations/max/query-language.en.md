@@ -3,8 +3,6 @@ title: "Search query language"
 ---
 
 <a id="упоминания" />
-<a id="в-mcp" />
-<a id="прежние-режимы" />
 
 When using `max` through an AI agent, describe what you want in ordinary words and let the agent form the search query. Use this reference when typing searches yourself or looking up exact operators, every field, presets, date rules and limits.
 

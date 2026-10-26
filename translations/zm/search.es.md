@@ -82,7 +82,7 @@ y un intervalo de fechas:
 ```sh
 zm personal meetings people "Alice Example" --json
 zm personal search meetings "launch" --identity-id 12 --project RES --since-time 2026-09-12 --until-time 2026-10-12 --json
-zm personal search meetings "budget" --person-id 7 --topic costs --since-time 2026-09-12 --json
+zm personal search meetings "budget" --person-id 7 --topic-name costs --since-time 2026-09-12 --json
 zm personal search meetings "launch" --tag planning --limit 20 --json
 ```
 
@@ -94,7 +94,7 @@ reuniones y no atribuyen una intervención sin autor a una persona.
 
 `--project` acepta el nombre canónico de un proyecto existente, su clave o un alias explícito.
 Solo cuenta una pertenencia confirmada; una propuesta del agente o una palabra coincidente
-en la transcripción no establece esa pertenencia. `--tag` y `--topic` aceptan nombres canónicos
+en la transcripción no establece esa pertenencia. `--tag` y `--topic-name` aceptan nombres canónicos
 o alias explícitos de etiquetas ya asociadas a la reunión; elige un solo filtro de etiqueta.
 Un nombre inexistente o ambiguo produce un error en vez de ampliar la búsqueda. Una fecha sola cubre todo el día local
 de la zona del ordenador, y una hora sin desplazamiento se lee en esa zona; da un desplazamiento o `Z` para otra zona.
@@ -102,9 +102,8 @@ Se mantienen las reglas de continuación y cobertura.
 
 Si una reunión aún no está vinculada a un proyecto ni etiquetada, busca palabras y revisa
 las fuentes antes de organizarla con [los registros compartidos de Memo](https://wirecat.dev/en/docs/memo/usage).
-La herramienta MCP de solo lectura `search_meetings` ofrece los mismos filtros en la cuenta
-seleccionada por el servidor: `identity_id`, `person_id`, `event_id`, `series_id`, `project`, `tag`, `topic`, `since_time`, `until_time` y `cursor`.
-Sus fechas se expresan en milisegundos desde la época Unix.
+Por MCP, ejecuta `search meetings` mediante `zm_write`: actualiza el índice de palabras antes de buscar.
+Usa los mismos filtros y la misma sintaxis de tiempo que la CLI, en el perfil elegido por el servidor.
 
 `meetings people <query>` busca observaciones guardadas de participantes por nombre o correo en la cuenta elegida.
 Compara Unicode de forma literal; no traduce nombres ni deduce que dos registros son la misma persona.
@@ -120,7 +119,11 @@ JSON devuelve `items`, `page` y pasos `next` opcionales. JSONL emite cada reuni�
 seguido de un registro end con la página y si el resultado está completo. Continúa con `--page`.
 La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;
 esos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.
-`search all` usa el servicio común y busca solo reuniones por defecto:
+`search all` usa el servicio común y busca solo reuniones por defecto. Devuelve una lista de coincidencias,
+como en tg: una coincidencia de reunión tiene `scope` (transcripción, chat o resumen) y el `id` de la línea
+guardada. Continúa con `--page`; si `missing` indica que el examen se detuvo en `--max-meetings`, repite con
+`--max-meetings all`. `meetings evidence` y `meetings context` identifican cada línea con `ref`, su inicio con
+`offset_ms` y los ID como cadenas, igual que `meetings prepare`:
 
 ```sh
 zm personal search all "example plan" --limit 100 --max-meetings 100 --json
@@ -130,11 +133,36 @@ zm personal meetings task-proposal meeting:3/15/20/0 --type promise --json
 ```
 
 Para otras fuentes indica `--only messages,mail,notes,meetings`. Los mensajes pertenecen a la cuenta
-elegida, el correo incluye cuentas guardadas y las notas son globales. Las reuniones usan prefijos;
-la sintaxis no admitida y consultas exactas se marcan como omitidas. Para continuar solo reuniones,
-pasa `item.meetings.next_cursor` mediante `--meeting-cursor '<json>'`, vinculado a cuenta y consulta.
-JSONL conserva el informe en un registro item, con omisiones, cobertura y cursores, seguido de un registro end.
-Las fuentes omitidas dejan `complete` en false y aparecen en `issues`; la búsqueda termina con código cero.
+local elegida; el correo incluye cuentas guardadas y las notas son globales al almacén compartido.
+Las reuniones usan prefijos de palabras; la sintaxis no admitida y las consultas exactas se marcan como
+omitidas. Continúa la lista mediante `--page`. JSONL emite cada coincidencia en un registro item,
+seguido del registro end. Las fuentes omitidas dejan `meta.complete` en false y aparecen en `issues`,
+con el motivo por stderr; la búsqueda termina con código cero.
+
+<a id="put-filters-in-the-query-and-save-a-search" />
+
+## Pon filtros en la consulta y guarda búsquedas
+
+Los filtros de proyecto, etiquetas y fecha también pueden formar parte de la consulta, junto a las
+palabras: `date:`, `project:`, `tag:` y `topic:` corresponden a `--since-time`/`--until-time`, `--project`,
+`--tag` y `--topic-name`.
+
+```sh
+zm personal search meetings "launch project:RES date>=30d" --json
+zm personal searches create weekly-launch "launch date>=7d" --project RES
+zm personal searches run weekly-launch --json
+```
+
+Eligen reuniones, no líneas: no pueden ir dentro de `OR`, `NOT` ni paréntesis. Tampoco se puede dar un
+mismo filtro en la consulta y como opción. Una consulta con filtros pero sin palabras es un error.
+
+`searches create` comprueba la consulta y sus opciones como `search meetings` y las guarda bajo un nombre,
+tal como se escribieron. Se vuelven a interpretar en cada ejecución: `date>=7d` siempre son los siete días
+anteriores a esa ejecución; `--since-time` solo acepta una fecha fija. `searches run` devuelve lo mismo que
+`search meetings`; `searches list`, `show` y `delete` gestionan las búsquedas guardadas. No se guardan ID del
+almacén (`--meeting-id`, `--person-id` y similares) ni `--tag`: una búsqueda guardada nombra fechas, un proyecto
+o un tema. Comparten almacén con tg y max, pero quedan separadas: un mensajero no lista ni ejecuta búsquedas
+de reuniones, y zm no ejecuta las de mensajes.
 
 ## Leer fuentes
 
@@ -282,8 +310,8 @@ La consulta opcional de selección acepta valores exactos de `meeting_id`, `iden
 `tag_id`, `event_id` y `series_id`, una vez cada uno y unidos por AND, además de fechas/rangos de
 `started_at`. Los rangos incluyen días naturales completos en UTC; las marcas ISO entre comillas
 fijan límites exactos. Se rechazan OR, negación y filtros de pertenencia confirmada a un proyecto.
-La herramienta MCP `meeting_project_evidence` recibe `project` y, opcionalmente, `query`, `limit`,
-`cursor` y `max_read_bytes`; la cuenta queda fijada por el servidor.
+Por MCP, `zm_read` la ejecuta como
+`{ "command": "meetings projects evidence", "arguments": { … } }` con los mismos argumentos; el servidor fija el perfil.
 
 Para cada pasaje conservado pertinente, abre `zm personal meetings passage <ref> --format markdown` y revisa
 las palabras cercanas. `association: "unconfirmed-word-evidence"` significa evidencia candidata: una

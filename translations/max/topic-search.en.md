@@ -2,10 +2,6 @@
 title: "Topic search"
 ---
 
-<a id="что-такое-разговор" />
-<a id="построить-посчитать-векторы-искать" />
-<a id="для-агентов" />
-
 Topic search helps when you remember what a chat discussed but cannot recall the wording. Ask where you talked about renting an apartment, and it can find messages about rent, deposits and a landlady without that exact phrase. It also works across languages: a Russian question can find an English or Spanish discussion.
 
 After reading this page, you can prepare your chat for topic searches, ask questions in your own words, read the results, and understand when a regular word search is best. Searching for topics only uses messages that `max` has already saved on this computer, so first download the history: `max personal messages sync <чат>` ([download chat history](./archive.md#скачать-историю)).
@@ -58,8 +54,8 @@ Prepare the chat once, and then ask as many questions as you like.
 
 ```sh
 max personal messages sync "Книжный клуб"                  # 1. скачать историю, если её ещё нет
-max personal conversations build --chat "Книжный клуб"   # 2. разделить чат на разговоры
-max personal models text download e5-small               # 3. один раз: скачать модель, 135 МБ, общая с tg
+max personal conversations links rebuild --chat "Книжный клуб"   # 2. разделить чат на разговоры
+max personal models download e5-small               # 3. один раз: скачать модель, 135 МБ, общая с tg
 max personal conversations embed --chat "Книжный клуб"   # 4. посчитать вектор каждого куска
 max personal search conversations "где встречаемся" --chat "Книжный клуб"   # 5. спросить
 max personal conversations show 91                       # 6. прочитать найденный разговор
@@ -82,7 +78,7 @@ There are three stages to searching by topic. The first two prepare the chat onc
 
 ### 1. Build: Split chat into conversations
 
-`max personal conversations build` reads saved messages oldest to newest and decides which previous message each continues. It uses no AI and does not contact MAX. Links are chosen in this order:
+`max personal conversations links rebuild` reads saved messages oldest to newest and decides which previous message each continues. It uses no AI and does not contact MAX. Links are chosen in this order:
 
 1. **Explicit MAX replies.** A reply links to its original message.
 2. **Links from your agent**, if you requested them ([below](#связать-сообщения-поможет-ваш-агент)).
@@ -183,7 +179,7 @@ New messages enter a conversation only after the next `build`, and enter vectors
 
 ```sh
 max personal conversations status                         # что отстало, по чатам
-max personal conversations build                          # все изменившиеся чаты и группы, ни разу не построенные
+max personal conversations links rebuild                          # все изменившиеся чаты и группы, ни разу не построенные
 max personal conversations embed                          # все построенные чаты, где остались куски
 max personal search conversations "аренда квартиры" --catch-up  # сначала догнать, потом искать
 ```
@@ -205,17 +201,17 @@ max skill show link-conversations                     # инструкция д�
 max personal conversations batches status --chat "Книжный клуб"   # сколько сообщений и пачек, сколько текста
 ```
 
-The agent reads instructions, estimates how much text it will read and waits for approval. It reads batches through `max personal conversations batches next`, identifies earlier messages they answer, then saves links through `max personal conversations links add`. The next `build` prioritises MAX replies, agent links, then rules. `max personal conversations links clear --chat "Книжный клуб"` removes agent links; rebuild afterwards. `max` calls no AI service in this workflow. Saving links requires `conversations.links`.
+The agent reads instructions, estimates how much text it will read and waits for approval. It reads batches through `max personal conversations batches show`, identifies earlier messages they answer, then saves links through `max personal conversations links add`. The next `build` prioritises MAX replies, agent links, then rules. `max personal conversations links clear --chat "Книжный клуб"` removes agent links; rebuild afterwards. `max` calls no AI service in this workflow. Saving links requires `conversations.links`.
 
-`max` can also send batches to an AI provider. Ordinary `build` uses rules and saved links; `max personal conversations build --chat <чат> --analyze` sends limited batches to a configured OpenAI-compatible service or Anthropic. Explicit `--chat` is required. Before first sharing, it shows volume, destination and token budget and asks for consent, saved for this account, chat and provider until revoked. Default batch size is 50 messages (`--size`), with a reserved budget of 100,000 tokens per run (`--max-tokens`); scripts confirm with `--yes`. `max personal conversations consents list` shows consent and `consents revoke --chat <чат>` revokes it. Built-in analysis runs only through the CLI, not MCP; keys stay out of configuration files.
+`max` can also send batches to an AI provider. Ordinary `build` uses rules and saved links; `max personal conversations links rebuild --chat <чат> --analyze` sends limited batches to a configured OpenAI-compatible service or Anthropic. Explicit `--chat` is required. Before first sharing, it shows volume, destination and token budget and asks for consent, saved for this account, chat and provider until revoked. Default batch size is 50 messages (`--size`), with a reserved budget of 100,000 tokens per run (`--max-tokens`); scripts confirm with `--yes`. `max personal conversations consents list` shows consent and `consents remove --chat <чат>` revokes it. Built-in analysis runs only through the CLI, not MCP; keys stay out of configuration files.
 
 ## Privacy and cost
 
 By default, nothing leaves the computer. The model works here and is downloaded only by your command:
 
 ```sh
-max personal models text list                             # модели и какие скачаны
-max personal models text download embeddinggemma --accept-terms
+max personal models list kind:text                             # модели и какие скачаны
+max personal models download embeddinggemma --accept-terms
 ```
 
 `e5-small` is the small, fast default and supports about 100 languages. `embeddinggemma` can find more but is about seven times slower; downloading requires `--accept-terms` for Google Gemma terms. Their vectors are kept separate: search with the model used to calculate them. Stderr identifies chats prepared only with a different model.
@@ -226,12 +222,12 @@ a little over 20 minutes, once. Later runs embed only what changed.
 A service can compute the vectors instead, with your own key:
 
 ```sh
-max personal models text key set openai
-max personal conversations embed --chat "Книжный клуб" --provider openai
-max personal search conversations "аренда квартиры" --provider openai
+max personal models keys set openai
+max personal conversations embed --chat "Книжный клуб" --embedding-provider openai
+max personal search conversations "аренда квартиры" --embedding-provider openai
 ```
 
-This sends discussion text to that service and sends each search question too. Before sending, `embed` shows chunk count, maximum token use and estimated maximum price, then waits for approval (`--yes` in scripts; `--max-tokens` sets the budget). `--base-url` accepts an OpenAI-compatible vector server (`/v1/embeddings`), including local Ollama or LM Studio, together with `--model` and `--dims`. `max personal models text key remove openai` forgets the key. External vector settings also affect MCP search: your agent's questions go to this service too.
+This sends discussion text to that service and sends each search question too. Before sending, `embed` shows chunk count, maximum token use and estimated maximum price, then waits for approval (`--yes` in scripts; `--max-tokens` sets the budget). `--base-url` accepts an OpenAI-compatible vector server (`/v1/embeddings`), including local Ollama or LM Studio, together with `--model` and `--dims`. `max personal models keys remove openai` forgets the key. External vector settings also affect MCP search: your agent's questions go to this service too.
 
 ## Next steps
 

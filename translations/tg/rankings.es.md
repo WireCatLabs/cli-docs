@@ -44,7 +44,7 @@ Encuentra los mensajes con más reacciones guardadas.
 **Comando:**
 
 ```sh
-tg personal stats messages top --chat "Hiking" --measure reactions --limit 3 --json
+tg personal stats messages top chat:Hiking --measure reactions --limit 3 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -68,7 +68,7 @@ Compara a las personas por sus respuestas observadas a preguntas.
 **Comando:**
 
 ```sh
-tg personal stats contacts top --chat "Hiking" --measure answers --limit 3 --json
+tg personal stats contacts top chat:Hiking --measure answers --limit 3 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -92,7 +92,7 @@ Encuentra preguntas antiguas sin respuesta directa observada.
 **Comando:**
 
 ```sh
-tg personal stats messages unanswered --chat "Hiking" --older-than 24h --json
+tg personal stats messages unanswered chat:Hiking older_than:24h --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -118,7 +118,7 @@ Consulta cuántas respuestas se observaron y cuánto tardaron para la persona el
 **Comando:**
 
 ```sh
-tg personal stats contacts responses --chat "Hiking" --answerer "Alex Rivera" --json
+tg personal stats contacts responses chat:Hiking --answerer "Alex Rivera" --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -195,7 +195,7 @@ Encuentra publicaciones vistas con poca conversación guardada.
 **Comando:**
 
 ```sh
-tg personal stats messages discussion --chat "News" --min-views 100 --max-replies 0 --json
+tg personal stats messages discussion chat:News min_views:100 max_replies:0 --json
 ```
 
 **Ejemplo de respuesta del agente:**
@@ -234,7 +234,7 @@ tg personal stats messages counters show --chat "Hiking" --counters views,reacti
 Antes de consultar recuentos nuevos, pide los mensajes exactos y los límites.
 
 ```sh
-tg personal stats messages counters refresh --chat "Hiking" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
+tg personal stats messages counters sync --chat "Hiking" --counters views,reactions --max-messages 20 --sync-time 30s --dry-run --json
 ```
 
 > **Plan:** Como máximo 20 mensajes y 30 segundos. Se admiten visitas y reacciones.

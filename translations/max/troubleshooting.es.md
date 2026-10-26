@@ -7,9 +7,7 @@ title: "Solución de problemas"
 <a id="responde-pero-con-otro-perfil" />
 <a id="un-comando-se-queda-esperando" />
 <a id="lista-vacía-de-chats" />
-<a id="npx-leemourmax-cli-instala-otra-versión" />
 <a id="límite-recordado" />
-<a id="проверка-со-входом-в-max" />
 
 Esta página es necesaria cuando `max` mostró un error o no hizo lo que esperaba. Busque el mensaje que ve, o su código de retorno, y la página le dirá qué significa y qué hacer a continuación. La mayoría de las veces, un comando es suficiente.
 
@@ -85,8 +83,6 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 **Linux y macOS.** La carpeta de comandos de npm es `$(npm prefix -g)/bin`. `max personal doctor` muestra una línea `export PATH=…`; añádela a `~/.zshrc` o `~/.bashrc`.
 
 **Hay otro `max` en `PATH`.** Si otro programa con el mismo nombre aparece antes en `PATH`, `max personal doctor` muestra su ruta. Ejecuta nuestra herramienta con la ruta completa o coloca su carpeta antes.
-
-<a id="npx-leemourmax-cli-instala-la-versión-incorrecta" />
 
 ### `npx @wirecat/max-cli` instala la versión incorrecta
 
@@ -324,8 +320,8 @@ El motivo lo mostrará `max personal server logs`. El motivo habitual del servic
 ## Informar de un problema
 
 ```sh
-max personal doctor report          # что попадёт в отчёт и чего в нём не будет
-max personal doctor report create   # записать отчёт в файл и показать, как его отправить
+max personal doctor reports show          # что попадёт в отчёт и чего в нём не будет
+max personal doctor reports create   # записать отчёт в файл и показать, как его отправить
 ```
 
 `create` escribe el archivo `max-report-<время>.json` en el directorio actual (derechos `0600`). Contiene la versión, entorno y sistema, lo mismo que muestra `max personal doctor`, la última ejecución que terminó en error y las últimas 20 acciones de registro. No contiene mensajes de texto, nombres de chat, nombres, números de teléfono ni tokens. Los números de chat y mensaje se reemplazan con etiquetas: dentro de un informe, la etiqueta de un chat es la misma, pero en el siguiente informe es diferente. Un inicio que finaliza con un error se guarda solo, incluso sin `--record` ([ejecución fallido](./diagnostics.md#неудачный-запуск-сохраняется-всегда)). Sobre otro ejecución: `--run <id>`, los números mostrados por `max personal runs list`.

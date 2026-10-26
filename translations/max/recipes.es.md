@@ -143,18 +143,18 @@ Escribe en MAX: **no**. Permite `Bash(max personal inbox:*)`.
 - `max personal inbox --new`: desde la ejecución anterior de `--new`. Ese punto solo lo conoce `max`; tus interlocutores no lo ven.
 - `max personal inbox 'date>2d'`: los dos últimos días; el punto guardado no se mueve.
 
-Ninguno de ellos marca los mensajes como leídos. Si es necesario, agregue `--mark-read` o habilite `catch_up_marks_read` en [ajustes](./configuration.md). Entonces el interlocutor verá lo que has leído.
+Ninguno marca mensajes como leídos. Para hacerlo, ejecuta `max personal chats mark-read <чат>`. La otra persona verá la confirmación de lectura.
 
 ### Chats individuales, grupos y canales por separado
 
-`--kind` deja solo chats del tipo requerido: `dialog` - personal, `group` - grupos, `channel` - canales. El resumen del canal y el resumen de la conversación se pueden ejecutar por separado, en momentos diferentes. Cada chat tiene su propio punto y un ejecución no oculta lo que el otro aún no ha mostrado:
+`kind:` deja solo chats del tipo requerido: `dialog` - personal, `group` - grupos, `channel` - canales. El resumen del canal y el resumen de la conversación se pueden ejecutar por separado, en momentos diferentes. Cada chat tiene su propio punto y un ejecución no oculta lo que el otro aún no ha mostrado:
 
 ```cron
 30 8 * * * claude -p "$(cat ~/max-recipes/morning.md)" --allowedTools "Bash(max personal inbox:*)"
 0 19 * * * claude -p "$(cat ~/max-recipes/news.md)" --allowedTools "Bash(max personal inbox:*)"
 ```
 
-`morning.md` contiene `max personal inbox --new --kind dialog,group --json`; `news.md`, `max personal inbox --new --kind channel --json` y la petición de elegir lo importante. Sin `--kind`, todo junto.
+`morning.md` contiene `max personal inbox --new 'kind:dialog OR kind:group' --json`; `news.md`, `max personal inbox --new kind:channel --json` y la petición de elegir lo importante. Sin `kind:`, todo junto.
 
 ## Informe semanal del trabajo
 

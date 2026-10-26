@@ -24,11 +24,11 @@ Aquí todo funciona desde tu cuenta personal, en grupos donde tú eres el admini
 |Resumen de la semana: decisiones, promesas, preguntas abiertas| `max personal review 'date>7d'` |
 |Mantén una lista de lo que te espera| `max personal tasks list` |
 |Elimina el spam según tus propias reglas| `max personal chats rules set`, `max personal chats moderate` |
-|Reemplace el enlace de invitación filtrado| `max personal chats link reset` |
-|Dejar entrar a la gente o negarles| `max personal chats requests list\|accept\|decline` |
+|Reemplace el enlace de invitación filtrado| `max personal chats links reset` |
+|Dejar entrar a la gente o negarles| `max personal chats requests list\|confirm\|reject` |
 |Ver actividad de la semana| `max personal stats chats show` |
 |Guarda la lista de participantes todos los días.| `max personal chats members fetch --track` |
-|Encuentra miembros que parezcan bots o spammers| `max personal chats members audit` |
+|Encuentra miembros que parezcan bots o spammers| `max personal chats members check` |
 
 La lista completa de comandos para grupos se encuentra [a continuación](#что-можно). Detalles sobre cada uno - [grupos y canales en el manual para usar](./usage.md#группы-и-каналы); cada opción está en [referencia de comando](./commands.md).
 
@@ -102,7 +102,7 @@ Cambie el enlace de invitación solo si lo solicita.
 **Reemplazar enlace:**
 
 ```sh
-max personal chats link reset "Поход" --json
+max personal chats links reset "Поход" --json
 ```
 
 **Limitar la adición de participantes:**
@@ -194,8 +194,9 @@ Sin `--allow-dangerous` en cron, las acciones en el nivel `ask` simplemente est�
 | `max personal chats moderate <чат>` | Comprueba las reglas y realiza lo permitido |
 | `max personal chats members add\|remove`, `admins add\|remove` | Miembros y administradores |
 | `max personal chats requests list <чат>` | Solicitudes de un canal con aprobación; visibles para administradores, sin hora conocida |
-| `max personal chats requests accept\|decline <чат> <человек>` | Aceptar o rechazar; no admite `--all` ni `--link` |
-| `max personal chats link show\|reset <чат>` | Ver o sustituir la invitación; `reset` invalida la antigua |
+| `max personal chats requests confirm\|reject <чат> <человек>` | Aceptar o rechazar una solicitud |
+| `max personal chats requests confirm\|reject <чат> --all` | Responder a todas las solicitudes del canal; los permisos y el límite de acciones se comprueban antes de cambiar nada |
+| `max personal chats links show\|reset <чат>` | Ver o sustituir la invitación; `reset` invalida la antigua |
 | `max personal chats inspect <ссылка>` | Ver el destino de un enlace sin unirse |
 | `max personal chats create`, `max personal chats join <ссылка>`, `max personal chats leave <чат>` | Crear, unirse o salir |
 | `max personal chats update` | Ajustes, título, descripción, foto, quién puede fijar (`--all-can-pin`) o añadir personas (`--only-admins-add`); ver ajustes con `max personal chats show` |
@@ -225,7 +226,7 @@ Agrega algo que las reglas no ven, como tu promesa, o cierra una tarea que no ne
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other
 ```
 
-Si una tarea puede ser el mismo trabajo que otra abierta, `tasks add` rechaza la operación con código 2 y muestra las candidatas. Repite con `--into <задача>` para vincular el mensaje a ella, o con `--new` para abrir una nueva. Si solo se parece a una tarea cerrada en los últimos 14 días, `tasks add` abre una nueva y la vincula a la cerrada mediante `follow-up-of`; la cerrada sigue cerrada y `tasks show` muestra el vínculo. `tasks duplicates` muestra los pares que encuentran las reglas y `tasks merge <задача> --into <другая>` los une:
+Si una tarea puede ser el mismo trabajo que otra abierta, `tasks add` rechaza la operación con código 2 y muestra las candidatas. Repite con `--into <задача>` para vincular el mensaje a ella, o con `--new` para abrir una nueva. Si solo se parece a una tarea cerrada en los últimos 14 días, `tasks add` abre una nueva y la vincula a la cerrada mediante `follow-up-of`; la cerrada sigue cerrada y `tasks show` muestra el vínculo. `tasks duplicates list` muestra los pares que encuentran las reglas y `tasks merge <задача> --into <другая>` los une:
 
 ```sh
 max personal tasks add msg:max/<вы>/<чат>/<сообщение> --type promise --category other --into <задача>
@@ -244,16 +245,16 @@ max personal tasks reject <задача>
 max config set task_agent_close_min 0.9
 ```
 
-Un par que no es una sola tarea lo quita para siempre `tasks duplicates reject`; `tasks duplicates defer` te lo deja a ti, y lo muestra `tasks duplicates decision:unsure`. `tasks related <задача>` puntúa las tareas parecidas sin cambiar nada, y `tasks unmerge` deshace una unión:
+Un par que no es una sola tarea lo quita para siempre `tasks duplicates reject`; `tasks duplicates defer` te lo deja a ti, y lo muestra `tasks duplicates list decision:unsure`. `tasks related <задача>` puntúa las tareas parecidas sin cambiar nada, y `tasks unmerge` deshace una unión:
 
 ```sh
 max personal tasks related <задача>
-max personal tasks duplicates decision:unsure
+max personal tasks duplicates list decision:unsure
 max personal tasks duplicates reject <дубль> <задача>
 max personal tasks unmerge <дубль>
 ```
 
-`tasks agenda` y `tasks duplicates` se filtran con campos de consulta:
+`tasks agenda` y `tasks duplicates list` se filtran con campos de consulta:
 
 - `tag:` y `category:` dejan las tareas con esa etiqueta o categoría: `tag:urgent`, `category:money`.
 - `claimed:` elige de quién es la reserva: `none`, `mine`, `others` o `any`. Sin este campo, la agenda muestra las tareas libres y las tuyas; `claimed:any` muestra todas.
@@ -273,7 +274,7 @@ max personal tasks release <задача>
 max config set task_categories.travel "поездки и билеты | рейс, отель, es:vuelo"
 ```
 
-Una tarea conserva su categoría aunque se quite de la lista. `tasks categories` muestra esas categorías y cuenta sus tareas; `tasks list category:<имя>` las encuentra y `tasks plan <задача> --category <имя>` mueve la tarea a otra categoría.
+Una tarea conserva su categoría aunque se quite de la lista. `tasks categories` muestra esas categorías y cuenta sus tareas; `tasks list category:<имя>` las encuentra y `tasks update <задача> --category <имя>` mueve la tarea a otra categoría.
 
 Más en la página [Tareas](https://wirecat.dev/ru/docs/tasks).
 
@@ -364,8 +365,8 @@ moderate`. También puede vetar a usuarios expulsados para que no vuelvan con el
 
 ## Límites
 
-- **La cuenta personal no puede vetar el regreso.** Una persona expulsada puede volver por invitación. Renueva el enlace (`max personal chats link reset`) o utiliza un bot.
-- **Solo los canales con aprobación tienen solicitudes de entrada.** Un grupo cerrado no tiene aprobación: con el enlace se entra directamente. En un canal con aprobación, `chats join` solo envía la solicitud (`requested: true`). `chats requests list` no muestra cuándo pidió entrar la persona: MAX no lo informa. No se puede responder a todas a la vez ni filtrar solicitudes por enlace.
+- **La cuenta personal no puede vetar el regreso.** Una persona expulsada puede volver por invitación. Renueva el enlace (`max personal chats links reset`) o utiliza un bot.
+- **Solo los canales con aprobación tienen solicitudes de entrada.** Un grupo cerrado no tiene aprobación: con el enlace se entra directamente. En un canal con aprobación, `chats join` solo envía la solicitud (`requested: true`). `chats requests list` no muestra cuándo pidió entrar la persona: MAX no lo informa. Se puede responder a todas a la vez con `--all`; no se pueden filtrar por enlace, porque MAX no indica el enlace de cada solicitud.
 - **Máximo 10 acciones por comprobación** (`--max-actions`). Los borrados cuentan en el límite horario; el resto espera.
 - **Hasta 1000 mensajes por comprobación en CLI.** La siguiente continúa desde el punto anterior.
 - **Una incorporación requiere toda la lista de miembros** para conocer la antigüedad de la cuenta; en grupos grandes puede necesitar decenas de solicitudes.
@@ -409,7 +410,7 @@ El seguimiento no inicia el servidor ni extiende su tiempo de inactividad: para 
 
 `max personal chats members history` muestra entradas, salidas y cambios de perfil guardados en orden temporal; la consulta `time>=7d` limita el período. No consulta MAX. Usa la hora de entrada de MAX si se conoce; si no, la primera vez que se observó a la persona. La salida corresponde a la primera instantánea completa sin ella, no a la hora exacta. La primera lectura crea la lista inicial: esas personas no necesariamente entraron ese día. `chats members list --offline` muestra la última lista completa; una lectura parcial no la sustituye. Sin ninguna instantánea completa puede estar vacía aunque existan perfiles y eventos individuales. Los perfiles y el historial se conservan junto a tus mensajes en el archivo local.
 
-`max personal chats members audit` consulta los miembros y muestra señales de cuentas sospechosas. `--max-pages` limita las páginas y una consulta como `score>=3` deja a los miembros con una puntuación de tres o más. Es una pista para que una persona la revise: no se elimina a nadie, se excluyen los administradores y el propietario, `more` indica una lista incompleta y `unknown` indica señales desconocidas. MAX no proporciona todas las señales de Telegram. Esta comprobación no está disponible con `--offline`. «No escribió» significa que no se encontraron mensajes de esa persona en el historial local; no demuestra que nunca escribiera en el grupo.
+`max personal chats members check` consulta los miembros y muestra señales de cuentas sospechosas. `--max-pages` limita las páginas y una consulta como `score>=3` deja a los miembros con una puntuación de tres o más. Es una pista para que una persona la revise: no se elimina a nadie, se excluyen los administradores y el propietario, `more` indica una lista incompleta y `unknown` indica señales desconocidas. MAX no proporciona todas las señales de Telegram. Esta comprobación no está disponible con `--offline`. «No escribió» significa que no se encontraron mensajes de esa persona en el historial local; no demuestra que nunca escribiera en el grupo.
 
 `--deep <n>` comprueba además en profundidad a los primeros n miembros, uno por segundo: su perfil y hasta 1000 mensajes guardados de cada uno. Las listas públicas de spam solo cubren cuentas de Telegram, por lo que no se consultan para MAX, y la respuesta lo explica.
 
@@ -438,7 +439,7 @@ max personal chats tracking show "Поход" --offline --json
 ```
 
 ```sh
-max personal chats members audit "Поход" --json
+max personal chats members check "Поход" --json
 ```
 
 Pide al agente que indique el número de mensajes y remitentes activos, las preguntas sin respuesta, los cambios de miembros y los días con instantáneas. Conserva los indicadores de datos incompletos en el informe: `complete`, `more`, `unknown` y los días sin instantáneas. Repite la recopilación de miembros para el siguiente informe; el primero no puede mostrar salidas anteriores a la primera lista de miembros guardada.

@@ -22,17 +22,11 @@ const setup = new Set([
 const adminChat = new Set([
   "create",
   "update",
-  "photo",
   "delete",
   "moderate",
-  "check",
   "members",
-  "invite",
-  "invites",
-  "link",
+  "links",
   "requests",
-  "join-requests",
-  "permissions",
   "pin",
   "unpin",
   "admins",
@@ -41,9 +35,8 @@ const adminTopics = new Set(["enable", "create", "edit", "delete", "order"])
 export function commandGroup(command: string): CommandGroup {
   const words = command.trim().split(/\s+/).slice(1)
   if (words[0] === "bot") return "bot"
-  if (setup.has(words[0])) return "setup"
+  if (setup.has(words[0]) || (words[0] === "search" && words[1] === "runs")) return "setup"
   if (
-    words[0] === "groups" ||
     words[0] === "stats" ||
     (words[0] === "chats" && adminChat.has(words[1])) ||
     (words[0] === "topics" && adminTopics.has(words[1]))
@@ -58,12 +51,13 @@ export function commandGroupForAnchor(anchor: string): CommandGroup {
   } catch {
     return "personal"
   }
-  if (/^(tg|max)-bot(?:-|$)/.test(value)) return "bot"
-  if ([...setup].some((name) => new RegExp(`^(tg|max)-${name}(?:-|$)`).test(value))) return "setup"
+  if (/^(tg|max|wa)-search-runs(?:-|$)/.test(value)) return "setup"
+  if (/^(tg|max|wa)-bot(?:-|$)/.test(value)) return "bot"
+  if ([...setup].some((name) => new RegExp(`^(tg|max|wa)-${name}(?:-|$)`).test(value))) return "setup"
   if (
-    /^(tg|max)-(?:groups|stats)(?:-|$)/.test(value) ||
-    [...adminChat].some((name) => new RegExp(`^(tg|max)-chats-${name}(?:-|$)`).test(value)) ||
-    [...adminTopics].some((name) => new RegExp(`^(tg|max)-topics-${name}(?:-|$)`).test(value))
+    /^(tg|max|wa)-stats(?:-|$)/.test(value) ||
+    [...adminChat].some((name) => new RegExp(`^(tg|max|wa)-chats-${name}(?:-|$)`).test(value)) ||
+    [...adminTopics].some((name) => new RegExp(`^(tg|max|wa)-topics-${name}(?:-|$)`).test(value))
   )
     return "admin"
   return "personal"
@@ -128,18 +122,43 @@ export const commandGroupCopy = {
     task: "Primeras tareas",
   },
 }
+export function commandCopy(tool: string, lang: string) {
+  const locale = commandLanguage(lang)
+  const base = commandGroupCopy[locale]
+  if (tool !== "wa") return base
+  const descriptions = {
+    en: {
+      personal: "Your WhatsApp chats, messages, contacts, search, files, polls and explicit sends.",
+      bot: "WhatsApp Business numbers through Meta’s Cloud API: tokens, messages, approved templates and webhooks.",
+      admin:
+        "Group members, invitations, settings, moderation and statistics. Changes require the relevant permissions.",
+    },
+    ru: {
+      personal: "Ваши чаты WhatsApp, сообщения, контакты, поиск, файлы, опросы и отправка по явной команде.",
+      bot: "Бизнес-номера WhatsApp через Cloud API Meta: токены, сообщения, одобренные шаблоны и вебхуки.",
+      admin: "Участники групп, приглашения, настройки, модерация и статистика. Изменения требуют соответствующих прав.",
+    },
+    es: {
+      personal: "Tus chats de WhatsApp, mensajes, contactos, búsquedas, archivos, encuestas y envíos explícitos.",
+      bot: "Números de WhatsApp Business con Cloud API de Meta: tokens, mensajes, plantillas aprobadas y webhooks.",
+      admin: "Miembros, invitaciones, ajustes, moderación y estadísticas de grupos. Los cambios requieren permisos.",
+    },
+  }[locale]
+  return { ...base, descriptions: { ...base.descriptions, ...descriptions } }
+}
+
 export const commandLanguage = (lang: string) => (lang === "ru" || lang === "es" ? lang : "en")
 /** Derive smaller presentation pages without changing the release-owned full reference. */
 export function splitCommandReference(markdown: string, lang: string): Record<CommandGroup, string> {
   const body = markdown.replace(/^---\n[\s\S]*?\n---\n/, "")
-  const starts = [...body.matchAll(/^#{2,3} `((?:tg|max)(?: [a-z0-9-]+)+)`[^\n]*$/gm)]
+  const starts = [...body.matchAll(/^#{2,3} `((?:tg|max|wa)(?: [a-z0-9-]+)+)`[^\n]*$/gm)]
   if (!starts.length) throw new Error("Command reference has no command sections")
   const preambleRaw = body.slice(0, starts[0].index)
   const options = /^(?:<a id="[^"\n]+" \/>\n\n)?## [^`].*$/m.exec(preambleRaw)
   const preamble = options ? preambleRaw.slice(options.index) : preambleRaw
   const lastStart = starts.at(-1)?.index ?? body.length
   const tail = body.slice(lastStart)
-  const footerMatch = /^(?:<a id="[^"\n]+" \/>\n\n)?## (?!`(?:tg|max))[^\n]+[\s\S]*$/m.exec(tail)
+  const footerMatch = /^(?:<a id="[^"\n]+" \/>\n\n)?## (?!`(?:tg|max|wa))[^\n]+[\s\S]*$/m.exec(tail)
   const footerIndex = footerMatch ? lastStart + footerMatch.index : body.length
   const footer = footerMatch?.[0] ?? ""
   const sections: Record<CommandGroup, string[]> = { personal: [], bot: [], admin: [], setup: [] }
@@ -147,7 +166,7 @@ export function splitCommandReference(markdown: string, lang: string): Record<Co
     const part = body.slice(match.index, starts[index + 1]?.index ?? footerIndex)
     sections[commandGroup(match[1])].push(part)
   })
-  const text = commandGroupCopy[commandLanguage(lang)]
+  const text = commandCopy(starts[0][1].split(" ")[0], lang)
   return Object.fromEntries(
     commandGroups.map((group) => [
       group,

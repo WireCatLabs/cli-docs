@@ -9,6 +9,8 @@ title: "Почта"
 [очистки Gmail](#clean-up-gmail) перемещают выбранные письма в корзину или восстанавливают их только
 с `--yes`. Memo никогда не отправляет письма.
 
+<a id="импортируйте-почту" />
+
 ## Перед началом
 
 Настройте свой почтовый аккаунт в Himalaya. Для Gmail используйте аккаунт IMAP с
@@ -21,6 +23,7 @@ Linux, поэтому в файле он никогда не записан:
 
 ```toml
 [accounts.work]
+email = "you@example.com"
 imap.server = "imaps://imap.gmail.com:993"
 imap.sasl.plain.username = "you@example.com"
 imap.sasl.plain.password.command = "secret-tool lookup service himalaya account work"
@@ -36,19 +39,28 @@ Then add the account to Memo's config and import the last 30 days of mail.
 
 ## Добавьте аккаунт в Memo
 
-Укажите аккаунт в [файле настроек](./configuration.md#mail) Memo, `~/.config/cli-memo/config.json`.
-`name` — это имя аккаунта в Himalaya; `address` — ваш адрес электронной почты:
+Укажите имя аккаунта Himalaya и его настроенный адрес явно:
 
-```json
-{ "mail": { "accounts": [{ "name": "work", "address": "you@example.com" }] } }
+```sh
+memo mail add work you@example.com
+memo mail check work
 ```
 
-По умолчанию используется Gmail. Для другого почтового сервиса добавьте `"mode": "imap"` и папки, которые
-нужно читать:
+`add` запрашивает список аккаунтов Himalaya, сверяет `email` (или `from`) выбранного аккаунта в TOML-файле,
+затем добавляет его в [настройки](./configuration.md#mail) Memo. Аккаунт Himalaya по умолчанию не выбирается.
+Без имени команда перечисляет доступные имена и ничего не меняет. Несовпадающий адрес или уже существующее
+имя/адрес отклоняются. Если `email` не задан, сначала укажите его у выбранного аккаунта в Himalaya.
+`check` повторяет локальные проверки настроек без изменений Memo и без подключения к ящику; это не проверка входа.
 
-```json
-{ "mail": { "accounts": [{ "name": "home", "address": "me@example.org", "mode": "imap", "folders": ["INBOX", "Archive"] }] } }
+Для другого провайдера IMAP выберите вид и папки:
+
+```sh
+memo mail add home me@example.org --kind imap --folder INBOX --folder Archive
 ```
+
+По умолчанию используется Gmail. Эти команды работают с одним файлом настроек Himalaya, выбранным через
+`HIMALAYA_CONFIG` или обычное расположение. Сохраняйте то же окружение при импорте. Объединённый список файлов
+требует ручной настройки. Google Takeout `mbox` по-прежнему использует настройку `mode: "mbox"`, описанную ниже.
 
 ## Синхронизация почты
 
@@ -145,7 +157,7 @@ memo mail rules list work
 memo mail rules add work --filter 'label:Promotions older:365d' --do envelope
 memo mail rules add work --domain shop.example --do keep,tag:shopping
 memo mail rules add work --domain tax.gov.example --do protect
-memo mail rules list work --filter is:protected
+memo mail rules list work protected:true
 ```
 
 - **`tag:<name>`** ставит тег Memo каждому подходящему письму независимо от правила, определяющего действие.
@@ -186,8 +198,8 @@ memo mail rules add work --kind social --do envelope
 Memo предлагает правило для каждого фильтра, который может выразить:
 
 ```sh
-memo mail rules import-filters work Filters.json        # shows the proposed rules and the skipped filters
-memo mail rules import-filters work Filters.json --yes  # adds them
+memo mail rules import work Filters.json --format gmail        # shows the proposed rules and the skipped filters
+memo mail rules import work Filters.json --format gmail --yes  # adds them
 ```
 
 Сначала добавляемые фильтром ярлыки Gmail сопоставляются с метками Memo: то же имя в другом регистре
@@ -218,18 +230,18 @@ memo mail rules export work > rules.json
 memo mail rules import work rules.json   # a rule with the same sender, domain or list is replaced
 ```
 
-До 0.32.0 правила находились в `config.json`. Первая команда memo, читающая правила, переносит их в хранилище, проверяет перенос и лишь затем убирает из настроек. Рядом остаётся прежний файл `config.json.<time>.before-rules-in-store`, доступный только вам; memo один раз сообщает об этом в stderr. Правило сохранения с причиной «never remove» становится защищённым: очистка не может сокращать или удалять подходящую почту.
+Прежние настройки содержали правила в `config.json`. Первая команда memo, читающая правила, переносит их в хранилище, проверяет перенос и лишь затем убирает из настроек. Рядом остаётся прежний файл `config.json.<time>.before-rules-in-store`, доступный только вам; memo один раз сообщает об этом в stderr. Правило сохранения с причиной «never remove» становится защищённым: очистка не может сокращать или удалять подходящую почту.
 
 ## Очистите Gmail
 
-`memo mail trash` перемещает в корзину Gmail письма, для которых вы решили сохранять только заголовки. Gmail хранит их там 30 дней, затем удаляет окончательно.
+`memo mail delete` перемещает в корзину Gmail письма, для которых вы решили сохранять только заголовки. Gmail хранит их там 30 дней, затем удаляет окончательно.
 
 ```sh
-memo mail trash work                  # says what would move, per rule, and what stays and why
-memo mail trash work --yes            # a first run moves at most 100, to check by hand in Gmail's Trash
-memo mail trash work --yes            # later runs move up to 5,000, oldest first (--limit changes it)
-memo mail trash work --yes --since-time 2012-01-01   # only mail from 2012 on; older mail stays for now
-memo mail runs work                   # each run: how much moved, and until when it can be restored
+memo mail delete work                  # says what would move, per rule, and what stays and why
+memo mail delete work --yes            # a first run moves at most 100, to check by hand in Gmail's Trash
+memo mail delete work --yes            # later runs move up to 5,000, oldest first (--limit changes it)
+memo mail delete work --yes --since-time 2012-01-01   # only mail from 2012 on; older mail stays for now
+memo mail runs list work                   # each run: how much moved, and until when it can be restored
 memo mail restore work --run <id> --yes   # moves a run back, to the inbox if it was there, with its labels
 ```
 
@@ -237,7 +249,7 @@ memo mail restore work --run <id> --yes   # moves a run back, to the inbox if it
 
 Без `--yes` команда показывает план. Первый запуск с `--yes` перемещает не более 100 писем для проверки в корзине Gmail; следующие — до 5 000, начиная со старых, если не задан другой `--limit`. Требуется проверенная резервная копия хранилища моложе 8 дней: скрипт резервного копирования записывает `backups/last.json` рядом с хранилищем. Экспорт Google Takeout `mbox` рекомендуется для сохранения полного текста, но не обязателен; предварительный просмотр и `memo doctor` показывают, импортирован ли он.
 
-Перед каждой порцией идентификаторы Gmail, ярлыки и отметки записываются в журнал восстановления `mail-trash/<account>/<run>.jsonl` в папке состояния Memo. Корзина убирает письмо из «Вся почта» и снимает ярлык входящих; остальные ярлыки сохраняются. memo mail runs показывает запуски и срок восстановления. memo mail restore без `--yes` показывает план, а с ним возвращает письма выбранного запуска из корзины с прежними ярлыками, включая входящие, если они там были. Восстановление охватывает и порцию, которую Gmail переместил без подтверждения.
+Перед каждой порцией идентификаторы Gmail, ярлыки и отметки записываются в журнал восстановления `mail-trash/<account>/<run>.jsonl` в папке состояния Memo. Корзина убирает письмо из «Вся почта» и снимает ярлык входящих; остальные ярлыки сохраняются. memo mail runs list показывает запуски и срок восстановления. memo mail restore без `--yes` показывает план, а с ним возвращает письма выбранного запуска из корзины с прежними ярлыками, включая входящие, если они там были. Восстановление охватывает и порцию, которую Gmail переместил без подтверждения.
 
 Перемещённое письмо отмечается удалённым в хранилище; после восстановления следующая синхронизация загружает его по текущим правилам. Таймер очистку не запускает.
 

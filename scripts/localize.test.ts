@@ -7,6 +7,8 @@ import {
   correctDocumentation,
   fingerprint,
   localizeTool,
+  missingComparisons,
+  reviewedSource,
   siteLinks,
   translationProblems,
   withOriginalAnchors,
@@ -83,6 +85,25 @@ describe("released documentation translations", () => {
     expect(() => correctDocumentation("new claim", correction)).toThrow()
     expect(() => correctDocumentation("old claim; old claim", correction)).toThrow()
   })
+  it("checks translated commands against reviewed runtime errata while retaining the raw source fingerprint", () => {
+    const source = "Use `--old`."
+    const translated = "Используйте `--new`."
+    const corrections = [
+      {
+        tool: "tg",
+        slug: "usage",
+        reason: "Released flag is --new",
+        phase: "before-translation" as const,
+        replacements: { en: [{ before: "`--old`", after: "`--new`" }] },
+      },
+    ]
+    const reviewed = reviewedSource(source, corrections, "tg", "usage", "en")
+    expect(translationProblems(reviewed, translated)).toEqual([])
+    expect(translationProblems(source, translated)).toContain("Inline code changed")
+    expect(translationProblems(reviewed, translated.replace("--new", "--unreviewed"))).toContain("Inline code changed")
+    expect(fingerprint(source)).not.toBe(fingerprint(reviewed))
+    expect(() => reviewedSource("Use `--new`.", corrections, "tg", "usage", "en")).toThrow()
+  })
   it("parses nested backticks and fenced examples inside lists without treating prose as code", () => {
     const before = "Use `` `code` ``.\n\n1. Run:\n\n   ```sh\n   max inbox\n   ```\n\nRead [help](./usage.md)."
     const after =
@@ -152,5 +173,13 @@ describe("released documentation translations", () => {
     } finally {
       rmSync(root, { recursive: true, force: true })
     }
+  })
+})
+
+describe("site-written comparison pages", () => {
+  it("exist in English for every tool in tools.json", () => {
+    const root = join(import.meta.dirname, "..")
+    const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as { name: string }[]
+    expect(missingComparisons(root, tools)).toEqual([])
   })
 })

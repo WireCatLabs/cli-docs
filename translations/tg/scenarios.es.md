@@ -13,7 +13,7 @@ Los comandos que usan una cuenta empiezan por tu perfil, el nombre que diste a l
 Un agente lee tu Telegram y prepara borradores mientras se rechaza cualquier envío.
 
 1. ```sh
-   tg mcp setup claude-code --permission messages.send=deny --allow-writes
+   tg mcp add claude-code --permission messages.send=deny --allow-writes
    ```
 
    añade este perfil a Claude Code; su servidor rechaza messages send aunque el perfil lo permita, y --allow-writes reconoce las otras herramientas que pueden escribir
@@ -66,7 +66,7 @@ Qué mirar:
 - quién preguntó primero y hace cuánto
 - promesas en tus propios mensajes que aún no tienen tarea
 
-`review` lee el almacén local y los chats que cambiaron; por defecto no marca nada como leído; `--mark-read` lo pide.
+`review` lee el almacén local y los chats que cambiaron sin marcar mensajes como leídos. Para marcar un chat como leído, usa `tg personal chats mark-read "Book club"`.
 
 En la terminal: `tg guide catch-up`
 

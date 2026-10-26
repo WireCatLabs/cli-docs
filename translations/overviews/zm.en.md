@@ -27,9 +27,9 @@ for your account; meetings you attended can be imported from downloaded files.
 
 ## Connect your data
 
-Start with [install and connect](./installation.md). Its steps cover using an app you already created, a WireCat/team app available to your Zoom user, or creating your own. You need its Public Client ID and browser consent, not a credentials file. For files only, [import VTT transcripts](./archive.md#downloaded-transcripts) without a Zoom app.
+Start with [install and connect](./installation.md). Its steps cover using an app you already created, a custom app your team authorizes, or creating your own. You need its Public Client ID and browser consent, not a credentials file. For files only, [import VTT transcripts](./archive.md#downloaded-transcripts) without a Zoom app.
 
-After storing a first meeting, [connect your agent](./mcp.md) through a terminal skill or read-only MCP tools. The connection does not retrieve data by itself.
+After storing a first meeting, [connect your agent](./mcp.md) through a terminal skill or MCP tools whose reads and writes are controlled by profile permissions. The connection does not retrieve data by itself.
 
 ## Choose your next task
 

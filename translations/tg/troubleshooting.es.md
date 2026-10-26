@@ -8,7 +8,6 @@ title: "Solución de problemas"
 <a id="un-comando-se-queda-bloqueado" />
 <a id="un-chat-figura-como-descargado-entero-pero-faltan-mensajes-antiguos" />
 <a id="serve-se-detuvo-por-sí-solo" />
-<a id="npx-leemourtg-cli-ejecuta-una-versión-anterior" />
 
 Utilice esta página cuando `tg` muestre un error o no haga lo que esperaba. Busque el mensaje que ve, o su código de salida, y la página le indicará lo que significa y qué hacer a continuación. La mayoría de las respuestas requieren una orden.
 
@@ -26,7 +25,7 @@ En la salida `--json`, un error que termina el comando es una línea en stderr, 
 |---|---|---|---|
 | `1` | `internal_error` | un fallo del propio `tg` | [informar del problema](#report-a-problem) |
 | `2` | `validation_error` | una errata en un comando o una opción, un valor o una combinación de opciones que `tg` no acepta; un nombre que coincide con varios chats | [comando desconocido](#unknown-command-), [valores](#--limit-takes-a-whole-number-from-1-upwards), [varios chats](#-matches-3-chats--name-one-by-its-id) |
-| `3` | `configuration_error` | `config.json` incorrecto, el proxy rechazó la conexión o no responde, o archivo local más reciente que este `tg` | [configuración](#-is-not-a-valid-config), [proxy](#the-proxy--cannot-be-reached-or--refused), [archivo local](#the-message-store-was-written-by-a-newer-version-) |
+| `3` | `configuration_error` | `config.json` incorrecto, el proxy rechazó la conexión o no responde, o archivo local más reciente que este `tg` | [configuración](#-is-not-a-setting-of-tg), [proxy](#the-proxy--cannot-be-reached-or--refused), [archivo local](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | sin sesión, sesión finalizada o llavero inaccesible | [sin sesión](#no-session-for-profile-personal--run-tg-personal-setup-in-a-local-terminal) |
 | `5` | `permission_error` | rechazado por `permissions` o por Telegram | [no permitido](#profile--does-not-let--write-or-profile--denies-), [rechazo de Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
 | `6` | `not_found` | chat, mensaje o persona inexistentes; archivo local vacío | [sin chat](#no-chat-matches-), [sin datos guardados](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
@@ -84,7 +83,7 @@ tg personal chats list         # the profile named in the message
 export TG_PROFILE=personal     # or for the whole shell session
 ```
 
-En un equipo que todavía no tiene ningún perfil, el mensaje indica que ejecutes `tg personal setup`; cualquier nombre sirve en lugar de `personal`. Si el mensaje dice `default_profile is no longer read` (código de salida `2`), el archivo de configuración aún tiene ese ajuste de un `tg` anterior: nombra el perfil, y `tg config unset default_profile` lo elimina.
+En un equipo que todavía no tiene ningún perfil, el mensaje indica que ejecutes `tg personal setup`; cualquier nombre sirve en lugar de `personal`.
 
 ### "no session for profile "personal" — run `tg personal setup` in a local terminal"
 
@@ -144,9 +143,12 @@ Aquí `chat` se interpretó como perfil y `list` no es un comando. El correcto e
 
 ## Configuraciones y valores de opciones
 
-### "… is not a valid config"
+### "… is not a setting of tg"
 
-Código de salida `3`. `config.json` tiene una configuración que `tg` no conoce o un valor del tipo incorrecto. El error nombra la configuración y el perfil en el que se encuentra. Se rechaza a propósito: un escenario ignorado silenciosamente cuesta medio día. Arréglelo a mano o elimínelo con `tg personal config unset <setting>` ([un error tipográfico es un error](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
+Código de salida `3`. `config.json` tiene un ajuste que `tg` no conoce, un valor del tipo incorrecto, o no es
+JSON válido. El error nombra el primer problema y, salvo que el JSON esté roto, el `config unset` que lo elimina;
+ejecuta ese comando tal como aparece. Se rechaza a propósito: un ajuste ignorado en silencio cuesta medio día.
+`tg personal doctor` enumera todos los problemas del archivo ([un error tipográfico es un error](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
 
 ### "--limit takes a whole number from 1 upwards"
 
@@ -225,7 +227,7 @@ Cuando Telegram dice cuánto tiempo esperar, `tg` recuerda ese tiempo para la op
 
 Telegram rechazó la petición e indicó por qué. Código `5` si la cuenta no tiene permiso; `11` en los demás casos. El nombre después de "refused" es el de Telegram y el JSON lo incluye como `provider_error`; nunca se repite lo introducido. Algunos tienen mensajes específicos:
 
-- **"Telegram transcribes only for Premium accounts…"**: código `5`. Usa un modelo local: `tg personal models audio download parakeet-v3` y después `tg personal messages transcribe <chat> <id> --local`.
+- **"Telegram transcribes only for Premium accounts…"**: código `5`. Usa un modelo local: `tg personal models download parakeet-v3` y después `tg personal messages transcribe <chat> <id> --local`.
 - **"that message is not a voice or video note"**: código `2`; el identificador corresponde a otro tipo de mensaje.
 - **"Telegram could not transcribe this voice message"**: código `11`; prueba `--local`.
 
@@ -318,9 +320,9 @@ Código `2`. Solo se admite un `serve` por perfil. `tg personal server status` i
 ## Informar de un problema
 
 ```sh
-tg personal doctor report  # what a report holds, and what it never holds; writes nothing
-tg personal doctor report create  # write it to a file, and say where to send it
-tg personal doctor report create --run <id>  # about another run; ids from tg personal runs list
+tg personal doctor reports show  # what a report holds, and what it never holds; writes nothing
+tg personal doctor reports create  # write it to a file, and say where to send it
+tg personal doctor reports create --run <id>  # about another run; ids from tg personal runs list
 ```
 
 `create` escribe `tg-report-<time>.json` en la carpeta actual (o `--output`), que solo usted puede leer. Contiene la versión, el tiempo de ejecución y el sistema, lo que responde `tg personal doctor`, la ejecución fallida más reciente (la operación, duración y código de error de cada solicitud) y los últimos 20 intentos de envío, solo el resultado y la duración. Cada ID de chat, mensaje y cuenta se reemplaza por una etiqueta que no significa nada fuera del archivo. No contiene texto de mensaje, títulos de chat, nombres, números de teléfono, credenciales de sesión o aplicación. Una ejecución fallida se mantiene sola, incluso sin `--record` ([ejecuciones fallidas](./diagnostics.md#a-failed-run-is-always-kept)).

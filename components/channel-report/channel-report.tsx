@@ -45,7 +45,7 @@ export function ChannelReport({ lang = "en" }: { lang?: Lang }) {
   useEffect(() => {
     let cleanup: (() => void) | undefined
     let cancelled = false
-    Promise.all([import("chart.js/auto"), import("./render.js"), import("./data.json")]).then(
+    Promise.all([import("./chart"), import("./render.js"), import("./data.json")]).then(
       ([{ default: Chart }, { renderReport }, { default: data }]) => {
         if (!cancelled && root.current) cleanup = renderReport(root.current, Chart, data, t.render)
       },

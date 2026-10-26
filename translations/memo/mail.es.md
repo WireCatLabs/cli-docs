@@ -9,6 +9,8 @@ primero. La importación lee el buzón sin cambiarlo ni marcar correo como leíd
 [limpieza de Gmail](#clean-up-gmail) mueven el correo elegido a la Papelera o lo restauran solo con
 `--yes`. Memo nunca envía correo.
 
+<a id="importar-correo" />
+
 ## Antes de empezar
 
 Configura tu cuenta de correo en Himalaya. Para Gmail, usa una cuenta IMAP con una
@@ -21,6 +23,7 @@ de Linux, de modo que nunca queda escrita en el archivo:
 
 ```toml
 [accounts.work]
+email = "you@example.com"
 imap.server = "imaps://imap.gmail.com:993"
 imap.sasl.plain.username = "you@example.com"
 imap.sasl.plain.password.command = "secret-tool lookup service himalaya account work"
@@ -36,20 +39,28 @@ Then add the account to Memo's config and import the last 30 days of mail.
 
 ## Añadir la cuenta a Memo
 
-Pon el nombre de la cuenta en el [archivo de configuración](./configuration.md#mail) de Memo,
-`~/.config/cli-memo/config.json`. `name` es el nombre de la cuenta en Himalaya; `address` es tu
-dirección de correo:
+Indica explícitamente el nombre de la cuenta de Himalaya y su correo configurado:
 
-```json
-{ "mail": { "accounts": [{ "name": "work", "address": "you@example.com" }] } }
+```sh
+memo mail add work you@example.com
+memo mail check work
 ```
 
-Gmail es la opción predeterminada. Para otro proveedor de correo, añade `"mode": "imap"` y las
-carpetas que quieres leer:
+`add` pide a Himalaya la lista de cuentas, comprueba el `email` (o `from`) de la cuenta elegida en su archivo TOML
+y la añade a la [configuración](./configuration.md#mail) de Memo. Nunca elige la cuenta predeterminada de Himalaya.
+Si falta el nombre, enumera los nombres disponibles sin cambiar nada. Rechaza una dirección distinta o un nombre/correo
+ya existente. Si falta `email`, configúralo primero en la cuenta de Himalaya. `check` repite las comprobaciones
+locales sin cambiar Memo ni conectar al buzón; no comprueba el inicio de sesión.
 
-```json
-{ "mail": { "accounts": [{ "name": "home", "address": "me@example.org", "mode": "imap", "folders": ["INBOX", "Archive"] }] } }
+Para otro proveedor IMAP, selecciona el tipo y las carpetas:
+
+```sh
+memo mail add home me@example.org --kind imap --folder INBOX --folder Archive
 ```
+
+Gmail es el tipo predeterminado. Estos comandos admiten un archivo de configuración de Himalaya, elegido por
+`HIMALAYA_CONFIG` o su ubicación normal. Mantén el mismo entorno para importar. Una lista combinada de archivos
+requiere configuración manual. Google Takeout `mbox` sigue usando `mode: "mbox"`, descrito más abajo.
 
 ## Sincronizar correo
 
@@ -146,7 +157,7 @@ Deben cumplirse todas las condiciones indicadas:
 memo mail rules add work --filter 'label:Promotions older:365d' --do envelope
 memo mail rules add work --domain shop.example --do keep,tag:shopping
 memo mail rules add work --domain tax.gov.example --do protect
-memo mail rules list work --filter is:protected
+memo mail rules list work protected:true
 ```
 
 - **`tag:<name>`** etiqueta cada correo coincidente, sea cual sea la regla que decida la acción. La sincronización
@@ -187,8 +198,8 @@ La exportación Mail de Google Takeout incluye los filtros de Gmail en `Mail/Use
 Memo propone una regla por cada filtro que puede expresar:
 
 ```sh
-memo mail rules import-filters work Filters.json        # shows the proposed rules and the skipped filters
-memo mail rules import-filters work Filters.json --yes  # adds them
+memo mail rules import work Filters.json --format gmail        # shows the proposed rules and the skipped filters
+memo mail rules import work Filters.json --format gmail --yes  # adds them
 ```
 
 Primero compara las etiquetas Gmail que añade el filtro con las de Memo: reutiliza el mismo nombre con otras
@@ -219,18 +230,18 @@ memo mail rules export work > rules.json
 memo mail rules import work rules.json   # a rule with the same sender, domain or list is replaced
 ```
 
-Antes de 0.32.0 las reglas estaban en `config.json`. El primer comando memo que las lee las mueve al almacén, comprueba la copia y solo entonces las quita de los ajustes. Conserva al lado `config.json.<time>.before-rules-in-store`, legible solo por ti, y lo comunica una vez por stderr. Una regla de conservación con «never remove» en el motivo queda protegida: ninguna limpieza puede recortar ni eliminar lo que coincida.
+Los ajustes antiguos guardaban las reglas en `config.json`. El primer comando memo que las lee las mueve al almacén, comprueba la copia y solo entonces las quita de los ajustes. Conserva al lado `config.json.<time>.before-rules-in-store`, legible solo por ti, y lo comunica una vez por stderr. Una regla de conservación con «never remove» en el motivo queda protegida: ninguna limpieza puede recortar ni eliminar lo que coincida.
 
 ## Limpia Gmail
 
-`memo mail trash` mueve a la Papelera de Gmail los correos de los que decidiste conservar solo el sobre. Gmail los conserva allí 30 días y después los elimina definitivamente.
+`memo mail delete` mueve a la Papelera de Gmail los correos de los que decidiste conservar solo el sobre. Gmail los conserva allí 30 días y después los elimina definitivamente.
 
 ```sh
-memo mail trash work                  # says what would move, per rule, and what stays and why
-memo mail trash work --yes            # a first run moves at most 100, to check by hand in Gmail's Trash
-memo mail trash work --yes            # later runs move up to 5,000, oldest first (--limit changes it)
-memo mail trash work --yes --since-time 2012-01-01   # only mail from 2012 on; older mail stays for now
-memo mail runs work                   # each run: how much moved, and until when it can be restored
+memo mail delete work                  # says what would move, per rule, and what stays and why
+memo mail delete work --yes            # a first run moves at most 100, to check by hand in Gmail's Trash
+memo mail delete work --yes            # later runs move up to 5,000, oldest first (--limit changes it)
+memo mail delete work --yes --since-time 2012-01-01   # only mail from 2012 on; older mail stays for now
+memo mail runs list work                   # each run: how much moved, and until when it can be restored
 memo mail restore work --run <id> --yes   # moves a run back, to the inbox if it was there, with its labels
 ```
 
@@ -238,7 +249,7 @@ Cada correo se evalúa otra vez con las reglas actuales y los datos de la últim
 
 Sin `--yes`, el comando muestra el plan. La primera ejecución con `--yes` mueve como máximo 100 correos para revisarlos en la Papelera; las siguientes, hasta 5 000, del más antiguo al más reciente, salvo otro `--limit`. Se necesita una copia verificada del almacén de menos de 8 días: el script de copia registra `backups/last.json` junto al almacén. Se aconseja un archivo Google Takeout `mbox` para conservar el texto completo, pero no es obligatorio; la vista previa y `memo doctor` indican si se ha importado.
 
-Antes de cada lote, los identificadores Gmail, etiquetas y marcas se escriben en el registro de restauración `mail-trash/<account>/<run>.jsonl` en la carpeta de estado de Memo. La Papelera quita el correo de Todos y la etiqueta Recibidos; conserva las demás etiquetas. memo mail runs muestra las ejecuciones y hasta cuándo se pueden restaurar. memo mail restore muestra el plan sin `--yes`; con él devuelve de la Papelera los correos de la ejecución indicada con sus etiquetas anteriores, incluida Recibidos si la tenían. También restaura un lote que Gmail movió sin confirmar la operación.
+Antes de cada lote, los identificadores Gmail, etiquetas y marcas se escriben en el registro de restauración `mail-trash/<account>/<run>.jsonl` en la carpeta de estado de Memo. La Papelera quita el correo de Todos y la etiqueta Recibidos; conserva las demás etiquetas. memo mail runs list muestra las ejecuciones y hasta cuándo se pueden restaurar. memo mail restore muestra el plan sin `--yes`; con él devuelve de la Papelera los correos de la ejecución indicada con sus etiquetas anteriores, incluida Recibidos si la tenían. También restaura un lote que Gmail movió sin confirmar la operación.
 
 El correo movido queda marcado como eliminado en el almacén; la siguiente sincronización tras restaurarlo lo importa según las reglas actuales. El temporizador nunca ejecuta la limpieza.
 

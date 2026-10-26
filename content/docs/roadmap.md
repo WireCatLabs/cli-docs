@@ -21,9 +21,7 @@ what comes next.
 [Zoom](./zoom.mdx) meetings and [Google Drive](./drive/index.md) documents now work. See
 [features](./features.mdx).
 
-## In progress
-
-- **WhatsApp** — messages, groups and files.
+[WhatsApp](./wa/index.md) chats and business-number bots are also available.
 
 ## Next
 
@@ -50,5 +48,6 @@ what comes next.
 - [Zoom roadmap](./zm/roadmap.md)
 - [Google Drive roadmap](./drive/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
+- [WhatsApp roadmap](./wa/roadmap.md)
 
 To suggest a source or feature, open an issue in the tool’s GitHub repository.

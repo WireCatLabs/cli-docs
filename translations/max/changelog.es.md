@@ -4,6 +4,179 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.76.0 — 25.10.2026
+
+### Corregido
+
+- **Un fallo a mitad de un comando ahora se informa como cualquier otro error.** En lugar de una traza de pila de Node, se imprime un error `internal_error` (`command.crashed`): una línea en el terminal y un objeto JSON de error en los demás casos; el código de salida sigue siendo 1.
+  Por qué: la traza no le dice nada a un script y puede mostrar en pantalla texto que no debe estar ahí.
+  Qué tener en cuenta: si un script analizaba la traza en stderr, que lea el objeto de error.
+
+### Novedades
+
+- **`max doctor --json` enumera todos los errores del archivo de ajustes en `config.issues` (cli-core 0.423.0).** Cada error es `{ kind, file, profile?, key?, line?, column?, what, fix? }`; `kind` es `invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` o `invalid_value`. Si el JSON no es válido, `line` y `column` indican dónde se detuvo el análisis; en los demás casos, `fix` es un comando `config unset` que quita la clave y se ejecuta tal como está escrito. El valor del ajuste no aparece en la respuesta. Con errores en el archivo, `doctor` responde y termina con el código `0`, y sin nombre de perfil responde con `profile: null`.
+- **`config show` funciona con un archivo que tiene errores y nombra cada uno con el comando que lo quita.** `config unset` también elimina una clave que ningún esquema conoce, incluso en la raíz del archivo (`max config unset <ключ>`).
+- **`max skill status` y `max skill show --for claude|agents` (cli-core 0.427.0).** `status` dice si el SKILL.md instalado coincide con esta versión; `show --for` imprime la copia instalada.
+- **`max store tables list` enumera las tablas del archivo común, y `store info` muestra más datos del archivo (cli-core 0.427.0).**
+- **El registro de una ejecución dice quién la inició y qué salió mal (cli-core 0.425.0).** En `run.json`, `runs list`, `runs show` y `search runs` aparecen `cli_command`, `argv` (el contenido y los secretos son `[redacted]`), `agent` y, para una ejecución fallida, `error`.
+
+### Cambios que pueden romper scripts
+
+- **`npm install -g` elige el agente para el skill solo según `MAX_INSTALL_AGENT`.** `TG_INSTALL_AGENT` ya no se lee.
+- **La respuesta de `doctor` tiene la lista `config.issues` en lugar de la cadena `config.error`.** Si los ajustes no se pudieron resolver por un bloqueo del perfil, una opción o una variable de entorno, el mensaje está en `settings.error`.
+- **Los nombres antiguos de ajustes ya no se reconocen.** `default_profile`, `analysis_provider`, `analysis_model`, `analysis_base_url` con las variables `MAX_ANALYSIS_*` y los nombres en camelCase (`sendsPerHour` y otros) son ajustes desconocidos como cualquier otro: el comando se niega y nombra el `config unset` que quita la clave. El modelo de análisis se configura en `models.analysis.provider`, `models.analysis.model` y `models.analysis.base_url`.
+- **`messages sync` y `bot messages sync` se comprueban con sus propias claves `messages.sync` y `bot.messages.sync` (cli-core 0.421.0).** Un nivel en `messages` o `bot.messages` sigue aplicándose a ellos, y una denegación escrita directamente en `messages.sync` o `bot.messages.sync` ahora detiene el comando. Los comandos del bot comprueban la denegación de lectura antes de conectarse.
+- **Una clave de permiso guardada que ningún comando comprueba detiene tanto los comandos del bot como `--dry-run`.** El error nombra la clave y el `config unset` que la quita; `config show`, `set` y `unset` funcionan para que se pueda reparar el archivo.
+- **Los nombres antiguos de comandos reciben la respuesta habitual «unknown command», sin pista.** `max personal search mail` ya no nombra memo: el correo lo busca `memo search mail`.
+- **Una ejecución sin perfil nombrado se registra sin `profile`, no con `"profile": "default"` (cli-core 0.424.0).**
+- **En el registro de una ejecución, la pila de un comando fallido empieza por el nombre del paquete y no tiene líneas de Node (cli-core 0.425.0).** Una línea de la pila es `MaxClient.connect @wirecat/max-cli/client.js:1497`, no `client.js:1497`; ya no hay líneas `node:internal`.
+- **`config set` escribe `config.json` con permisos `0600`, no `0644` (cli-base 0.57.0).** El archivo contiene los perfiles, cuentas y rutas del propietario. Un programa que lee los ajustes como otro usuario no podrá leerlos después del siguiente `config set`.
+
+### Seguridad
+
+- **`max doctor` nombra `config.json` y su carpeta si otros usuarios pueden leerlos, y el comando `chmod` que lo corrige.** En `--json` es `files`: `{ checked, ok, problems: [{ path, mode, want }] }`; el archivo debe ser `0600` y la carpeta `0700`. Por cada problema, stderr recibe una línea `to make it private: chmod 600 '<путь>'`; `doctor` no cambia los permisos. La carpeta se comprueba también cuando la fija `MAX_CONFIG_DIR`. El bloque está presente sin nombre de perfil y cuando los ajustes no se resolvieron; también entra en el informe de `doctor reports create`. En Windows los permisos no se comprueban: `files` es `{ checked: false, reason }`.
+
+## 0.75.0 — 25.10.2026
+
+### Novedades
+
+- `max --help` nombra `max account list`: la lista de perfiles y sus cuentas con sesión iniciada.
+
+### Cambios que pueden romper scripts
+
+- **Los nombres antiguos de los permisos de estadísticas y búsqueda ya no se reconocen.** Antes, las claves `messages.stats`, `chats.stats`, `tasks.stats`, `messages.search`, `conversations.search` y `topics.search` detenían el comando con una pista para renombrarlas; ahora esa clave simplemente no tiene efecto, y una denegación guardada con el nombre antiguo ya no se aplica. Renómbralas a `stats.messages.show`, `stats.chats.show`, `stats.tasks.show`, `search.messages`, `search.conversations` y `search.topics`.
+- **La base de datos común pasa a la versión 33 (cli-core 0.420.0).** Cuando esta versión abra la base, un CLI con un cli-core más antiguo se negará a trabajar con ella y pedirá actualizarse, así que actualiza juntos todos los CLI de WireCat que comparten la base.
+
+## 0.74.0 — 25.10.2026
+
+### Cambios que pueden romper scripts
+
+- **`bot store fetch` ahora es `bot messages sync`; el grupo `bot store` ya no existe.** El comando hace lo mismo que el `messages sync` personal, así que ahora se llama igual; `store` es la base de datos local. El nombre antiguo responde con una pista que indica el nuevo. Si tus ajustes guardan `permissions.bot.store.fetch`, los comandos se niegan a ejecutarse hasta que la clave se renombre a `permissions.bot.messages.sync`.
+
+## 0.73.0 — 25.10.2026
+
+### Novedades
+
+- **`chats requests confirm|reject <чат> --all` responde a todas las solicitudes de un canal a la vez.** Primero se comprueba el número de solicitudes con los permisos del perfil y el límite de acciones por hora; después se envía una sola petición a MAX. Úsalo solo en un canal donde todas las solicitudes pendientes deban recibir la misma respuesta. No se puede filtrar con `--link`: la interfaz actual de MAX no indica por qué enlace llegó la solicitud.
+
+- Las listas de miembros, comentarios y destinatarios permitidos del bot aceptan una consulta por campos. Los identificadores de miembros y comentarios se pasan a la Bot API antes de aplicar el límite de página; la lista de destinatarios se filtra al leerla y no cambia los permisos de envío. Un comentario también muestra su `id` de texto cuando la API lo envió en `body.mid`.
+
+
+### Correcciones
+
+- **`watch --jsonl` imprime registros `item` y un `end` final.** Un fallo del origen termina el flujo con un resumen incompleto; `--json` se niega antes de suscribirse. La lista de destinatarios permitidos usa la consulta nativa común.
+- **El archivado ya no se detiene ante un evento de llamada junto a un archivo.** El archivo se guarda y se verifica su suma de comprobación; los mensajes que solo contienen una llamada no requieren descarga.
+- **El informe de diagnóstico usa el módulo común de WireCat.** Se mantienen el formato de MAX y los campos técnicos de los eventos; el contenido de los mensajes se excluye y los identificadores reciben etiquetas dentro del informe.
+
+- **Una denegación de permisos no oculta el comando.** Los catálogos de la CLI y de MCP conservan los comandos y muestran su disponibilidad actual con el motivo de la denegación; la llamada sigue comprobando los permisos. El MCP del bot también muestra los comandos de configuración dentro del perfil del bot.
+- **El cambio de ajustes usa la implementación común de WireCat.** `config set|unset` mantiene el formato de respuesta, los ajustes de MAX y los límites de permisos; el módulo común comprueba y escribe el archivo.
+
+### Cambios que pueden romper scripts
+
+- **Una segunda dirección de webhook se añade con `--append`.** `--add <chat>` sigue siendo la opción para cambiar carpetas. La composición desconocida de un chat y la lista de tipos de webhook ahora se omiten en lugar de ser `null`.
+
+- **Los contratos comunes de los comandos no pueden cambiar en silencio.** `commands info --json` muestra las definiciones de origen, los esquemas, los motivos de error y las diferencias explícitas de MAX. Los eventos de contacto usan `at:` y `scope:` en lugar de opciones de tiempo y ámbito, y los registros de diagnóstico usan `started_at:`.
+
+### Seguridad
+
+- **La resolución de dependencias excluye las versiones vulnerables de Vite.** Las dependencias de producción se comprueban tanto en la resolución guardada como en una nueva.
+
+
+## 0.72.0 — 24.10.2026
+
+### Novedades
+
+- **Tras iniciar sesión, `max serve` realiza más peticiones de las que hace web.max.ru:** fichas y estado en línea de contactos de chats personales; tras el primer inicio, también historias para la lista, chats que faltan en carpetas y la siguiente página de chats. Reduce las diferencias respecto al cliente web, aunque MAX aún puede distinguir la herramienta. Son lecturas cuyas respuestas no se muestran. No se suscribe a notificaciones push ([peticiones de red](./security.md#что-уходит-в-сеть)).
+
+- **El primer inicio normal de `max` en el terminal hace tres preguntas comunes:** idiomas de búsqueda, instalación de otras herramientas WireCat y permiso para hacer cambios. Elegir solo lectura limita todos los perfiles, incluido MCP, incluso con un `allow` más específico. No pregunta a agentes, tuberías, modo JSON ni CI. Cambia las respuestas con `max setup`.
+
+### Cambios que pueden afectar a scripts
+
+- **Los comandos comunes adoptan nombres canónicos; se eliminan los anteriores** (cli-core 0.406.0): `contacts profile` → `contacts info`, `contacts timeline` → `contacts events`, `contacts alias` → `contacts aliases`, `chats link` → `chats links`, `metadata refresh` → `metadata sync`, `store reindex` → `store rebuild`, `commands schema` → `commands info`, `stats messages counters refresh` → `stats messages counters sync`, `models text key` → `models keys`, `models audio list` → `models list kind:audio`, `doctor report` → `doctor reports show`. El comando antiguo se niega a ejecutarse e indica el nuevo; también se eliminan los alias ocultos de opciones. Actualiza scripts, horarios y llamadas MCP guardadas. Una ruta de permisos antigua como `permissions.metadata.refresh` detiene la ejecución con `configuration_error` e indica la nueva.
+- **`max <profile> watch --json` emite registros `{ "type": "item", "data": … }` y uno final `{ "type": "end" }`** (cli-core 0.400.0). Los campos de mensajes y eventos usan snake_case y valores canónicos con referencias. La parada normal y el tiempo agotado producen un `end` completo; un fallo del origen, uno incompleto y un código de error. Actualiza los lectores de las antiguas líneas sin envoltura.
+- **La búsqueda de ejecuciones es `max <profile> search runs` (`search runs`), en lugar de `runs search`.** Escribe `status:`, `error_code:`, `operation:` y `profile:` en la consulta: `search runs status:failed error_code:timeout`. No hay alias; migra las peticiones MCP guardadas.
+- **Las estadísticas seleccionan filas mediante términos de consulta.** Sustituye `--chat` y `--exact` por `chat:` y `exact:`; los rankings usan `message_kind:` y `min_messages:`, las discusiones `min_views:` y `max_replies:`, las preguntas sin respuesta `older_than:`. Actualiza CLI y MCP; `--source` y `--timezone` siguen siendo opciones.
+- **Los comandos que cambian lo que podrán hacer futuras ejecuciones requieren `permissions.mcp.authority: allow` o `ask` en MCP**, con `deny` por defecto: `config set|unset`, `recipients add|remove|clear`, `replies …`, `schedule command|agent|remove`, `skill install`, `flood clear`, claves de modelos y operaciones similares. El agente no puede cambiar esta clave mediante `config set`. Consulta [qué no ofrece MCP](./mcp.md#чего-нет-в-mcp).
+
+- **El mantenimiento del archivo, el control del servidor, la descarga de modelos y la creación de informes están disponibles mediante MCP.** Tienen claves propias como `store.backup`, `server.start`, `models.download`, `doctor.reports.create`, con `ask` por defecto. Revisa los permisos si el agente debe limitarse a leer: MCP permite una escritura solicitada con `ask` sin formulario de confirmación.
+- **`bot api` requiere un `permissions.bot.api: allow` o `ask` explícito para el agente.** El valor predeterminado es `deny`; un `bot: allow` general no lo habilita. El agente no puede cambiar `mcp` ni `bot.api` en los ajustes ni sustituir todo `permissions`; puede cambiar otras claves individuales si lo permite `mcp.authority`. En max se mantienen las comprobaciones de permisos, destinatarios y registro de escrituras.
+- **Lee pares de tareas similares mediante `tasks duplicates list [query...]`.** El grupo `tasks duplicates` ya no muestra la lista. Migra las llamadas CLI y MCP guardadas al `list` explícito.
+- **`events list` devuelve fechas ISO 8601 e identificadores de texto.** `starts_at`, `ends_at`, `deleted_at`, `created_at`, `updated_at` dejan de ser números de milisegundos; `id` y `event_series_id` dejan de ser números. Actualiza los lectores JSON que dependían de esos tipos.
+
+- **`doctor reports create` comprueba los permisos antes de crear un archivo.** Una configuración inválida devuelve el código 3 porque no se puede comprobar el permiso de escritura. Lee el motivo con `doctor` y corrige primero el ajuste. Con una configuración válida, la creación segura de informes también está disponible con `MAX_READ_ONLY`.
+
+### Corregido
+
+- **`attachments download` omite eventos de servicio y teclados integrados.** No contienen archivos; antes detenían la copia del chat con el código 13. Comprueba las copias existentes con `attachments check`; repetir la descarga las conserva.
+
+## 0.71.0 — 23.10.2026
+
+### Novedades
+
+- **Las transcripciones de voz coinciden con formas de palabras y distorsiones del reconocimiento** (cli-core 0.396.0). `max <profile> search messages риелтор` encuentra tanto «риелтору» como «реелтора» en transcripciones. Un resultado encontrado solo por distorsión lleva `match: "corrected"` y `corrections`. No se amplían números, frases, `exact:` ni texto escrito. El texto que guarda un agente para un mensaje de voz también es una transcripción. El almacén migra a la versión 29 al iniciarse.
+- **MCP ofrece más comandos dentro de los permisos del perfil** (cli-core 0.398.0): `config show`, `doctor report`, `runs list|show|path`, `store status|info|check|export|reindex`, `store jobs cancel|retry|clear`, `attachments move`, `attachments jobs status`, `commands schema`, `guide`, `skill show`, listas de modelos, `replies status|test|consents show`, `schedule list`, `server status|logs`; para bots, `list`, `chats leave`, `chats admins add|remove`, `commands set|clear`, `webhooks list|set|delete`. Consulta [qué no ofrece MCP](./mcp.md#чего-нет-в-mcp) para las exclusiones y sus motivos. Son los nombres de esta versión histórica.
+- **`max <profile> review --offline` responde desde el archivo local** en vez de negarse (cli-core 0.398.0). Solo muestra lo sincronizado y advierte de los datos ausentes (`missing` en JSON).
+- **Copias de archivos verificadas.** `attachments download <dir>` guarda archivos disponibles de varios chats con tamaño y SHA-256; `attachments check <dir>` comprueba copias sin red. `attachments jobs` controla las copias diarias de Linux habilitadas explícitamente. Las copias completas sobreviven a interrupciones y al borrado del historial. `attachments move <dir> <archive-dir> --before-time <time>` mueve imágenes antiguas a otro archivo verificado y registra la nueva ubicación para comprobarlas y evitar descargas repetidas.
+
+- La búsqueda de transcripciones guardadas encuentra formas de palabras y grafías distorsionadas por el reconocimiento. `text:` busca solo texto escrito; `exact:` desactiva la ampliación para esa palabra.
+
+### Corregido
+
+- **Los ejemplos de `--help` se pueden pegar y ejecutar:** `Example:` incluye el perfil `personal` (`max personal review "date>2h"`) en vez de fallar con «name a profile» (cli-core 0.398.0).
+- Las búsquedas de reuniones guardadas ya no se muestran ni eliminan mediante comandos de búsqueda de mensajes.
+- Las sugerencias de corrección mantienen el perfil elegido; la ayuda muestra descripciones breves y ejemplos.
+
+### Cambios que pueden afectar a scripts
+
+- En argumentos MCP, borrar mensajes acepta `message`, exportar chats acepta `chat` y las operaciones con tareas duplicadas aceptan `task` y, para un par, `other_task`. Actualiza peticiones guardadas con `messages`, `chats` o `dup`. El orden posicional de CLI no cambia.
+- Los comandos de referencia `commands` y `commands schema` rechazan `--jsonl`: usa `--json` para un documento.
+
+## 0.70.0 — 23.10.2026
+
+### Novedades
+
+- **`contacts prepare <person>` prepara un resumen antes de conversar** a partir de mensajes, tareas, hechos y notas guardados, con enlaces a fuentes. Es común con tg y wa y no conecta a MAX (cli-core 0.394.0).
+- **La ayuda incluye ejemplos de invocación** de cli-core 0.394.0.
+
+### Cambios que pueden afectar a scripts
+
+- **Leer ya no marca chats como leídos.** `messages list` ya no acepta `--mark-read`; `inbox` y `review` ya no aceptan `--mark-read` ni `--no-mark-read`; `catch_up_marks_read` deja de ser válido. Envía una confirmación explícita con `chats mark-read`.
+- **Las claves de permisos anidadas desconocidas se rechazan** como errores de configuración antes de conectar. Corrige la clave en vez de depender del antiguo aviso.
+
+## 0.69.0 — 22.10.2026
+
+### Novedades
+
+- **Las respuestas JSON filtradas por fecha identifican la zona usada y el intervalo UTC** (cli-core 0.385.0): `meta.timezone` indica la zona si faltaba en la entrada; `meta.window` da los límites UTC `since` y `until`. Afecta a `stats chats show`, `stats chats retention`, `stats messages unanswered`, `stats messages discussion`, `stats contacts responses`, `stats chats newcomers`, `contacts context`, `search conversations`, `runs search`, `messages sync`, `store export`, `replies test`, y a `inbox`, `review`, `chats events`, `chats members history` con `time:` o `date:` en la consulta. Hace visible el intervalo elegido. Son campos nuevos y opcionales; los anteriores no cambian. `search conversations` interpreta una fecha sin hora en `--timezone` cuando se indica.
+- **El JSON del chat incluye `muted_until`** (fin del silencio en UTC) **y `marked_unread`** (chat marcado sin leer), desde cli-core 0.382.0.
+
+### Cambios que pueden afectar a scripts
+
+- **`inbox` y `review` basados en el archivo omiten chats silenciados y archivados** (cli-core 0.382.0). El archivo guarda esas marcas de MAX y sus resultados coinciden con MAX. Usa `chats list` si un script esperaba esos chats en la bandeja.
+- **Un almacén sin permiso de escritura devuelve `permission_error`, código 5 y motivo `store.not-writable`** (cli-core 0.381.0), en lugar de `internal_error` con «this is a bug». Actualiza los scripts que gestionaban el antiguo código.
+
+### Corregido
+
+- **Los nombres copiados con emojis encuentran el chat o persona** (cli-core 0.381.0). Un emoji copiado puede contener un selector invisible ausente al escribirlo; antes «Семья❤️» no encontraba «Семья❤».
+
+## 0.68.0 — 22.10.2026
+
+### Cambios que pueden afectar a scripts
+
+- **Las fechas y horas sin zona en `--since-time`, `--until-time`, `--at-time` y `chats mute --until` usan la zona del ordenador; una fecha sola significa medianoche local** (cli-core 0.379.0, cli-base 0.48.0). Antes `2026-09-01` significaba medianoche UTC. Una zona explícita (`…Z`, `+02:00`) sigue prevaleciendo; `--timezone` del comando prevalece sobre la del ordenador. Un límite superior sin hora incluye todo el día local. Así se respeta el día del propietario. Los scripts que esperen UTC deben indicarlo, por ejemplo `2026-09-01T00:00:00Z`; las horas JSON siguen en UTC con `Z`.
+- **`stats chats retention` y `chats stats show` interpretan `--since-time` y `--until-time` en `--timezone`**; el límite superior de retención sin hora incluye el día local completo (cli-core 0.380.0). `stats charts`, `contacts timeline` y MCP `stats` identifican la zona en `meta.timezone` y el intervalo UTC en `meta.window`.
+
+### Corregido
+
+- **`max watch` muestra las horas de mensajes en la zona del ordenador**, anunciada como `times in <пояс>` antes del primer mensaje. Antes no se indicaba. Las líneas `--jsonl` no cambian en esta versión.
+- **`max doctor` y los rechazos de inicio tras demasiados intentos muestran horas como `2026-10-21 16:03 Europe/Madrid`**, en lugar de la forma UTC `2026-10-21T14:03:00.000Z`, fácil de confundir con hora local. `max doctor --json` mantiene UTC.
+
+## 0.67.0 — 21.10.2026
+
+### Corregido
+
+- **Un llavero Linux bloqueado o no disponible avisa y recurre al archivo de credenciales** (cli-base 0.47.5). El llavero se lee solo mediante Secret Service. Antes un fallo podía guardar silenciosamente en memoria del núcleo, que se pierde al cerrar sesión o reiniciar.
+
 ## 0.66.0 — 20.10.2026
 
 ### Novedades
@@ -1716,7 +1889,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.76.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

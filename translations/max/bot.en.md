@@ -19,7 +19,7 @@ Terms used below:
 | Send, edit, delete and pin messages and files | `max <бот> bot messages send\|edit\|delete\|pin` |
 | See new messages, button clicks and entries | `max <бот> bot watch` |
 | Read and search what the bot saw | `max <бот> bot messages list`, `max <бот> bot search messages` |
-| Download old chat history | `max <бот> bot store fetch` |
+| Download old chat history | `max <бот> bot messages sync` |
 | Manage members and admins | `max <бот> bot chats members`, `max <бот> bot chats admins` |
 | Bring order to the group according to your own rules | `max <бот> bot chats moderate` |
 | Reply in the comments under channel posts | `max <бот> bot comments` |
@@ -165,9 +165,9 @@ Search - by words, best matches on top; `--newest` - new on top. All the words a
 Download older chat history into the local store:
 
 ```sh
-max sales bot store fetch "Команда продаж"                 # до 1000 сообщений, новые сначала
-max sales bot store fetch "Команда продаж" --last 500      # пока не будет 500 последних
-max sales bot store fetch "Команда продаж" --since-time 7d # за последние семь дней
+max sales bot messages sync "Команда продаж"                 # до 1000 сообщений, новые сначала
+max sales bot messages sync "Команда продаж" --last 500      # пока не будет 500 последних
+max sales bot messages sync "Команда продаж" --since-time 7d # за последние семь дней
 ```
 
 Repeated runs resume where the previous run stopped without refetching downloaded messages. Requests pause one second (`--pause`) and fetch 100 messages each (`--page-size`).
@@ -276,7 +276,7 @@ max sales bot webhooks delete https://bot.example.ru/max
 ```
 
 - The address must use HTTPS on port 443 with a certificate MAX trusts.
-- A new address **does not replace** an old one: MAX sends every update to both. `set` therefore refuses if another address is configured. Remove it first, or use `--add` if you need both.
+- A new address **does not replace** an old one: MAX sends every update to both. `set` therefore refuses if another address is configured. Remove it first, or use `--append` if you need both.
 - `--secret-stdin` prompts without showing input or reads from a pipe. MAX sends this secret in `X-Max-Bot-Api-Secret`, letting your server identify MAX. The secret never appears in command arguments.
 
 ## Who the bot may contact
@@ -316,7 +316,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/dev/bot-api-coverage.md).
+Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.76.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
@@ -355,6 +355,8 @@ The agent can access what the bot profile permits: the bot, chats it has seen, m
 - Deleting a message or comment defaults to level `ask`: the requested write is allowed without a server confirmation form; `deny` and `readonly` forbid it.
 - Actions that chat rules require you to confirm remain plans for the owner.
 
-Every write runs the command you would type yourself and checks the bot's recipient list, `permissions` and journal. The agent cannot access the token or webhooks. It can read the recipient list, command menu and administrators but cannot change them; leaving chats, sending files and `bot api` are also unavailable to it.
+Every write uses the same command you would type, including bot recipient restrictions, `permissions` and the journal. Leaving chats, command menus, administrators and webhooks are available within profile permissions. Changing chat rules or recipients requires `permissions.mcp.authority: allow` or `ask`; the default is `deny`.
+
+Raw `bot api` operations are listed in the catalogue, but run only with explicit `permissions.bot.api: allow` or `ask`. They remain disabled by default even with `permissions.bot: allow`. In max these calls retain permission and recipient checks, and writes are recorded in the journal. The agent cannot change `mcp` or `bot.api` through `config set`, or replace the whole `permissions` object. The owner enters the token; uploading a local file with `bot uploads put` is not offered.
 
 With `--md`, the bot uses MAX rules: `__жирный__`, `++подчёркнутый++`, `^^выделенный^^`, links, code, headings and quotations. The formatter creates safe HTML with escaped text and addresses; this is an internal representation, and the --md argument remains Markdown.

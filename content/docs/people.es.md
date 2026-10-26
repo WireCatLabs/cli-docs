@@ -22,8 +22,8 @@ mensajero:
   cuenta seleccionada y no cambia su nombre en tus contactos.
 - **Notas.** Texto libre sobre la persona en el que tú o tu agente podréis buscar después.
 
-Los comandos están en la [guía de personas de Telegram](./tg/people.md#your-own-names-and-notes-contacts-alias-contacts-notes)
-y en la [referencia de MAX](./max/commands.md#max-contacts-alias).
+Los comandos están en la [guía de personas de Telegram](./tg/people.md#tus-propios-nombres-y-notas-contacts-aliases-contacts-notes)
+y en la [referencia de MAX](./max/commands.md#max-contacts-aliases).
 
 La misma persona suele tener una cuenta en Telegram y otra en MAX. Las herramientas las tratan como
 dos personas hasta que las **vinculas**: registras en tu ordenador que ambas cuentas son de la misma
@@ -58,8 +58,8 @@ El agente debe indicar qué historial estaba disponible.
 Ambos mensajeros ofrecen un perfil con la identidad y conversaciones compartidas:
 
 ```sh
-tg personal contacts profile @example_user
-max personal contacts profile 20000002
+tg personal contacts info @example_user
+max personal contacts info 20000002
 ```
 
 Usa `contacts show` para una consulta breve. Indica a la persona por su ID o parte de su nombre;
@@ -133,14 +133,14 @@ y [lols.bot](https://lols.bot). **Se les envía el ID de Telegram de la persona.
 `--no-registries` para omitir esas consultas. Las listas solo cubren cuentas de Telegram, así que
 `max` nunca les envía nada.
 
-Para revisar un grupo entero, `chats members audit` puntúa a cada miembro a partir de la lista de
+Para revisar un grupo entero, `chats members check` puntúa a cada miembro a partir de la lista de
 miembros y tu historial guardado, y lista a quienes tienen algún motivo. `--deep 10` hace después la
 comprobación completa de los diez con más puntos, una persona por segundo. El propietario y los
 administradores quedan fuera, y no se elimina a nadie:
 
 ```sh
-tg personal chats members audit "Club de lectura" --deep 10
-max personal chats members audit "Club de lectura" --deep 10
+tg personal chats members check "Club de lectura" --deep 10
+max personal chats members check "Club de lectura" --deep 10
 ```
 
 <a id="link-your-accounts" />
@@ -155,7 +155,7 @@ tg personal contacts link @example_user max:"Example User"
 
 Las dos cuentas deben estar ya en el historial de este ordenador, así que usa `tg` y `max` en el
 mismo ordenador. Después, `contacts context` sin `--chat` reúne las identidades vinculadas.
-`contacts context --chat` y `contacts profile` muestran solo la identidad seleccionada del mensajero.
+`contacts context --chat` y `contacts info` muestran solo la identidad seleccionada del mensajero.
 Un nombre igual no basta; solo cuenta lo que registras tú. `contacts unlink` elimina esa asociación
 local.
 

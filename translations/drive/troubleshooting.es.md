@@ -8,7 +8,8 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 
 | Síntoma | Qué hacer |
 | --- | --- |
-| No sabes qué está configurado | Ejecuta `drive doctor`: versión, si se lee el archivo de ajustes, los perfiles existentes y las rutas. No necesita perfil y no lee el llavero ni el almacén. |
+| No sabes qué está configurado | Ejecuta `drive doctor`: versión, cada problema del archivo de ajustes con el comando que lo corrige, un archivo o carpeta de ajustes que otros usuarios pueden leer con el `chmod` que lo corrige, los perfiles existentes y las rutas. No necesita perfil y no lee el llavero ni el almacén. |
+| Un comando falló antes y necesitas saber qué hizo | Ejecuta `drive runs list status:failed` y luego `drive runs show <run-id>`: las llamadas a Google que hizo, su estado y duración, y su código de error. No necesita perfil; nunca se guardan nombres, ids ni texto de documentos. |
 | No se encuentra `drive` | Reabre la terminal/agente, comprueba que el directorio de comandos globales de npm está en PATH y repite [instalación](./installation.md). |
 | Google bloquea el acceso | Revisa el error mostrado por Google y las políticas Workspace. Con tu propio cliente, comprueba también APIs, consentimiento y usuarios de prueba. |
 | `google-api.disabled` | El propietario del proyecto OAuth debe habilitar la API solicitada; consulta [configuración de API](#google-api-is-disabled). Reconectar o conceder escritura no la habilita. |
@@ -18,6 +19,7 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 | Se omitió un archivo | Revisa tipo y permiso de descarga. Se importan Docs, Sheets, Markdown/TXT, PDF, `.docx`, `.xlsx` y CSV; PDF escaneados, Slides y accesos directos no se leen. |
 | Sync se detuvo con errores | Repítelo: se reanuda el trabajo pendiente. No trates una importación parcial como completa. |
 | Falta el componente de búsqueda semántica | Prepara la caché compartida según [búsqueda](./search.md#search-by-meaning) o usa `--exact`. |
+| Otra herramienta dice que el almacén lo escribió una versión más nueva | Ejecuta `<tool> upgrade` para esa herramienta; consulta [más abajo](#another-tool-says-the-store-was-written-by-a-newer-version). |
 | No se encuentra el destino del vínculo | Usa una referencia de la base seleccionada. Comprueba que todas las herramientas usan el mismo MESSAGING_STORE antes de vincular personas/proyectos del servicio de mensajería. |
 
 ```sh
@@ -34,7 +36,7 @@ del cliente, tokens ni texto privado. Cuando aparezca la fuente, vuelve a [búsq
 ## «Name a profile»
 
 Ejecuta `drive personal status`, sustituyendo `personal` por tu cuenta, o define `DRIVE_PROFILE=personal`.
-El error lista los perfiles existentes. Un antiguo perfil guardado no se elige; el error lo nombra.
+El error lista los perfiles existentes.
 Para la primera conexión, consulta [acceso](./installation.md#connect-your-account).
 `drive session list` muestra todos los nombres configurados.
 
@@ -87,6 +89,14 @@ Si un comando informa de un resultado incierto tras un tiempo de espera o respue
 revisa el archivo en Google antes de repetirlo. Crear o copiar de nuevo puede duplicar una
 operación que sí se completó. La [referencia de comandos](./commands.md) explica los errores;
 comparte el código de error sin datos privados, no respuestas del SDK ni contenido sensible.
+
+## Otra herramienta dice que el almacén lo escribió una versión más nueva
+
+Drive guarda tus documentos de Drive en su propia cuenta dentro del almacén compartido y los traslada allí la
+primera vez que una versión actual de drive lo abre. Después, una herramienta WireCat más antigua que usa el mismo
+almacén, como Memo, se detiene con `the message store was written by a newer version` y pide actualizarla.
+Ejecuta `<tool> upgrade`, por ejemplo `memo upgrade`. Los documentos, etiquetas, notas y referencias
+`document:<id>` se conservan; no hay que importar nada de nuevo.
 
 ## La actualización del almacén encuentra anotaciones
 

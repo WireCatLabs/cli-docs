@@ -250,10 +250,12 @@ max personal server logs             # последние строки его ж
 max personal server install          # служба systemd (Linux) или launchd (macOS) для профиля; ничего не запускает
 max personal server uninstall        # убрать службу; сначала max personal server stop
 max personal watch                   # в другом: новые сообщения по мере прихода
-max personal watch --jsonl           # то же для скрипта: одно сообщение на строку, как у `messages list`
+max personal watch --jsonl           # для скрипта: записи item/data и завершающая end
 max personal watch --jsonl | ./on-message.sh
-max personal watch --events --jsonl  # ещё правки, удаления, реакции, прочтения и изменения чатов; у строки поле "event"
+max personal watch --events --jsonl  # ещё правки, удаления, реакции, прочтения и изменения чатов; поле "event" внутри data
 ```
+
+In `watch --jsonl`, each data record has the form `{"type":"item","data":…}`. The message or event is inside `data`, with snake_case field names. `watch --json` refuses before connecting: a stream needs `--jsonl`. A separate `{"type":"end",…}` record states whether the stream is complete. A source failure ends it as incomplete and returns an error code. Check `type` before reading the data.
 
 - **After updating `max`**, an automatically started server replaces itself with the new version. A manually started server keeps its old version until restarted. `max personal server status` shows this; `max personal server restart` fixes it.
 - **Running as a service.** After `max personal server install`, `max personal server start` and `max personal server stop` control the server through systemd or launchd. The service runs `max personal serve` as a manual server, without an idle timeout. If MAX rejects login, the service **does not** restart it: every retry would be another account login. `max personal server status` shows the service and log location.
@@ -262,8 +264,8 @@ max personal watch --events --jsonl  # ещё правки, удаления, р
 - **If MAX disconnects**, the server reconnects after 1, 2, 4… seconds, with the delay capped at one minute. `max personal watch` reports this on stderr. If MAX no longer accepts the token, the server stops with an authentication error.
 - **All clients share one MAX connection per profile.** Commands, `max personal mcp` and `max personal watch` do not log in independently: reads, sends and reactions use the server's connection. Send safeguards still run in the command. If no server exists, the command starts one and waits. With `serve: false` and no server, the command connects itself. A second server refuses before logging in.
 - The server keeps its session state current when messages arrive, a chat is read on your phone or a chat changes. If MAX reports something it cannot apply, such as deleted messages, it logs in again in the background, at most once a minute.
-- **With `--events`, line formats change:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chat_id", "chat_title", "message_id"}`, `{"event": "reaction", "chat_id", "chat_title", "message_id", "reactions"}`, `{"event": "read", "chat_id", "chat_title", "user_id", "up_to_time", "unread_count"}` records who read through that message time, including the owner on another device; `{"event": "chat", "chat"}` records chat-name, membership or departure changes. Marking a chat unread is not a read event. Without the flag, each line is a message as before. `max personal watch` cannot show who is typing: MAX sends typing notifications only to a client with that chat open.
-- **`max personal watch` sees only messages arriving while it and the server are connected.** Messages during an outage are missed. A `status` line with `connected: true` after an outage tells you to fetch them: `max personal inbox 'date>"<время из поля at предыдущей строки status>"'`.
+- **With `--events`, the `data` field holds an event:** `{"event": "message", "message": …}`, `{"event": "edit", "message": …}`, `{"event": "delete", "chat_id", "chat_title", "message_id"}`, `{"event": "reaction", "chat_id", "chat_title", "message_id", "reactions"}`, `{"event": "read", "chat_id", "chat_title", "user_id", "up_to_time", "unread_count"}` records who read through that message time, including the owner on another device; `{"event": "chat", "chat"}` records chat-name, membership or departure changes. Marking a chat unread is not a read event. Without the flag, `data` holds a message. `max personal watch` cannot show who is typing: MAX sends typing notifications only to a client with that chat open.
+- **`max personal watch` sees only messages arriving while it and the server are connected.** Messages during an outage are missed. Connection state goes to stderr; there is no `status` record on stdout. Keep your own time boundary and, once the connection is back, fetch what was missed with `inbox`.
 
 ## Status, backup and recovery
 
@@ -302,9 +304,9 @@ max personal store clear --left --allow-dangerous  # удалить их из о
 
 ## Archive maintenance
 
-`max personal store migrate` adds missing indexes; `max personal store reindex` rebuilds the search index, typo dictionary and word stems without losing messages. `store info` and `store check` show word and stem index readiness. A stem is the part shared by a word's different forms; strict search uses stems to match those forms, while `exact:` and `--exact` choose exact forms.
+`max personal store migrate` adds missing indexes; `max personal store rebuild` rebuilds the search index, typo dictionary and word stems without losing messages. `store info` and `store check` show word and stem index readiness. A stem is the part shared by a word's different forms; strict search uses stems to match those forms, while `exact:` and `--exact` choose exact forms.
 
-`config set search_stemmers.cyrillic` accepts `russian` or `none`; `config set search_stemmers.latin` accepts `english`, `spanish` or both, separated by a comma (default `english,spanish`: Latin words use both languages' stems), or `none`. `none` disables stemming for that alphabet. After choosing your own setting, run `store reindex`. After an update changes the default, searches use exact word forms until stems are ready and report this boundary; `max personal serve` builds them in the background, or `store migrate` immediately. This setting is shared by all profiles and both messengers, so `--defaults`, `--personal` and `--bot` do not apply, and it cannot be changed under `MAX_PROFILE_LOCK`.
+`config set search_stemmers.cyrillic` accepts `russian` or `none`; `config set search_stemmers.latin` accepts `english`, `spanish` or both, separated by a comma (default `english,spanish`: Latin words use both languages' stems), or `none`. `none` disables stemming for that alphabet. After choosing your own setting, run `store rebuild`. After an update changes the default, searches use exact word forms until stems are ready and report this boundary; `max personal serve` builds them in the background, or `store migrate` immediately. This setting is shared by all profiles and both messengers, so `--defaults`, `--personal` and `--bot` do not apply, and it cannot be changed under `MAX_PROFILE_LOCK`.
 
 `max personal store repair --dry-run --json` previews structural repairs and rolls changes back; `store repair` applies them without deleting data. An incompatible table is retained as a copy; the response lists rows and columns that could not be transferred. Keep the copy until you have checked the result. `store repair` lists copy names (`copies` in `--json`); `store copies delete <точное имя>` deletes only the named copy. Stop processes using the archive before repairing its structure.
 
@@ -330,3 +332,53 @@ For a `wirecat.db` schema update, run `max upgrade` after preserving any needed 
 - [Personal account guide](./usage.md) — reading and sending.
 - [Diagnostics](./diagnostics.md) — what a command did.
 - [Command reference](./commands.md) — every `store`, `serve` and `watch` option.
+
+## Independent file copies
+
+To keep files after their messages are deleted, download them to a separate archive folder. Each file has its chat, message and attachment identifiers, size and SHA-256 checksum. Ask your agent: “Save the files from the test group in my file archive and verify the copies.” MAX can return only messages and files still available to your account. This cannot restore a deleted file.
+
+```sh
+max personal attachments download ~/media-archive --chat "Тестовая группа" --since-time 2026-10-01T00:00:00Z --timeout 6h
+max personal attachments check ~/media-archive --offline --json
+```
+
+Without `--chat`, the command visits every available chat. Repeat `--chat` to select several. `--since-time` includes messages from that instant onwards and requires a timezone. The result counts saved files, verified existing copies and visited chats.
+
+Names are derived from identifiers and end in `.bin`. A manifest beside each file identifies its chat, message and attachment position. It contains no download links, media keys or original filenames. Archive paths are not written to the message store, so clearing history leaves these copies intact. For `attachments show` and text extraction, continue to use ordinary `messages download`.
+
+Repeating the command verifies existing copies and downloads missing files. An interrupted file is downloaded again: messenger streams do not provide the confirmation required to resume safely at a byte offset. Completed files survive errors and interruptions. An unavailable file causes an error and is not counted as saved. If an archive copy disappears or changes, checking returns a nonzero code and downloading stops. Choose a new folder: existing files are not overwritten. `complete: true` describes history available to the selected source; it does not prove every old server message survived.
+
+### Daily copies on Linux
+
+Automatic copying remains off until you explicitly install and start a user systemd timer. Installation starts nothing:
+
+```sh
+max personal attachments jobs install ~/media-archive --chat "Тестовая группа" --at 03:00 --timezone UTC
+max personal attachments jobs start ~/media-archive
+max personal attachments jobs status ~/media-archive
+```
+
+The default schedule is 03:00 UTC. For local time, use a value such as `--timezone Europe/Madrid`. The timer remembers the executable, profile and store locations, uses a six-hour timeout and saves files accessible only to their owner. Running while the user is logged out depends on systemd settings; a missed run executes when the timer next starts. On macOS and Windows, run downloads manually.
+
+```sh
+max personal attachments jobs stop ~/media-archive
+max personal attachments jobs uninstall ~/media-archive
+```
+
+Stopping prevents future runs; a running download finishes. Uninstall the timer after disabling it and waiting for the service to finish; archive files remain. Use the same profile and folder in every command. To change the schedule or executable, stop and uninstall the timer, then install it again. Manually edited service files are preserved.
+
+After copying, `attachments check` should confirm each file's integrity. To search text in ordinary downloaded files, continue to [attachments](./attachments.md).
+
+### Move older images to another archive
+
+To reduce the working folder, move images older than a chosen message date to another verified archive. Use another disk to free space on the source disk. First preview file counts and size without moving anything:
+
+```sh
+max personal attachments move ~/media-archive /mnt/archive/older-images --before-time 2026-10-01T00:00:00Z --dry-run
+max personal attachments move ~/media-archive /mnt/archive/older-images --before-time 2026-10-01T00:00:00Z --timeout 6h
+max personal attachments check ~/media-archive --offline
+```
+
+Age comes from the message date, not the download date; images exactly on the boundary remain. Photos and files with image MIME types are moved; other files stay. The destination copy is verified before local bytes are removed. A small record of the new location remains in the source folder: checking follows it, and downloading again does not duplicate the file. The messenger is not contacted.
+
+Keep the other archive available at its recorded path. If disconnected or changed, checking fails and downloading stops without silently making duplicates. Repeat the command to resume an interrupted move. Images from early draft archives without message dates remain and are counted as `undated`; `complete: false` means they could not be selected by age. File modification time is not substituted for message time. A `--dry-run` preview creates no destination folder and reports file counts and size.

@@ -4,13 +4,13 @@ type Rules = { shape: string; items: string[]; links: Record<string, string> }
 const heading = { en: "How commands work", ru: "Как устроены команды", es: "Cómo funcionan los comandos" }
 
 const listing = (tool: string, parts = false): Record<Lang, string> => ({
-  en: `${parts ? "Each reference ends" : "The reference ends"} with the exit codes. \`${tool} commands\` lists every command by section and marks the ones that change something; \`${tool} guide\` lists step-by-step scenarios. Options are in \`${tool} commands --json\` and \`${tool} <command> --help\`.`,
-  ru: `${parts ? "Каждый справочник заканчивается" : "Справочник заканчивается"} кодами выхода. \`${tool} commands\` перечисляет все команды по разделам и отмечает те, что что-то меняют; \`${tool} guide\` перечисляет пошаговые сценарии. Параметры — в \`${tool} commands --json\` и \`${tool} <command> --help\`.`,
-  es: `${parts ? "Cada referencia termina" : "La referencia termina"} con los códigos de salida. \`${tool} commands\` enumera todos los comandos por secciones y marca los que cambian algo; \`${tool} guide\` enumera escenarios paso a paso. Las opciones están en \`${tool} commands --json\` y \`${tool} <command> --help\`.`,
+  en: `${parts ? "Each reference ends" : "The reference ends"} with the exit codes. \`${tool} commands\` lists every command by section and marks the ones that change something${tool === "wa" ? "." : `; \`${tool} guide\` lists step-by-step scenarios.`} Options are in \`${tool} commands --json\` and \`${tool} <command> --help\`.`,
+  ru: `${parts ? "Каждый справочник заканчивается" : "Справочник заканчивается"} кодами выхода. \`${tool} commands\` перечисляет все команды по разделам и отмечает те, что что-то меняют${tool === "wa" ? "." : `; \`${tool} guide\` перечисляет пошаговые сценарии.`} Параметры — в \`${tool} commands --json\` и \`${tool} <command> --help\`.`,
+  es: `${parts ? "Cada referencia termina" : "La referencia termina"} con los códigos de salida. \`${tool} commands\` enumera todos los comandos por secciones y marca los que cambian algo${tool === "wa" ? "." : `; \`${tool} guide\` enumera escenarios paso a paso.`} Las opciones están en \`${tool} commands --json\` y \`${tool} <command> --help\`.`,
 })
 
 const messenger = (tool: string): Record<Lang, Rules> => {
-  const name = tool === "max" ? "MAX" : "Telegram"
+  const name = tool === "wa" ? "WhatsApp" : tool === "max" ? "MAX" : "Telegram"
   return {
     en: {
       shape: `${tool} [profile] [options] <resource> <action> [arguments]`,
@@ -88,7 +88,7 @@ const zm: Record<Lang, Rules> = {
   en: {
     shape: "zm <profile> [options] <resource> <action> [arguments]",
     items: [
-      "Name the profile as the first word, then the resource and action: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. No profile is ever assumed; `ZM_PROFILE` names one for a whole shell. Help, `doctor`, `guide` and `skill` need none.",
+      "Name the profile as the first word, then the resource and action: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. No profile is ever assumed; `ZM_PROFILE` names one for a whole shell. Help, `config`, `doctor`, `models`, `runs`, `guide` and `skill` need none.",
       "Global options work with every command: `--json` or `--jsonl` for scripts and agents, `--offline` to refuse network requests, `--no-input` to never start an interactive login.",
       "A command that changes something is marked in the reference: “Changes remote Zoom data” changes data in Zoom, “Changes local data” changes only files on this computer.",
       "Some writes take `--dry-run` to preview the change and `--yes` to confirm it in advance.",
@@ -99,7 +99,7 @@ const zm: Record<Lang, Rules> = {
   ru: {
     shape: "zm <профиль> [опции] <ресурс> <действие> [аргументы]",
     items: [
-      "Первым словом укажите профиль, затем ресурс и действие: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. Профиль никогда не подставляется сам; `ZM_PROFILE` задаёт его для всей оболочки. Справке, `doctor`, `guide` и `skill` профиль не нужен.",
+      "Первым словом укажите профиль, затем ресурс и действие: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. Профиль никогда не подставляется сам; `ZM_PROFILE` задаёт его для всей оболочки. Справке, `config`, `doctor`, `models`, `runs`, `guide` и `skill` профиль не нужен.",
       "Общие параметры работают с любой командой: `--json` или `--jsonl` для скриптов и агентов, `--offline`, чтобы не обращаться к сети, `--no-input`, чтобы никогда не начинать интерактивный вход.",
       "Команда, которая что-то меняет, отмечена в справочнике: «Changes remote Zoom data» меняет данные в Zoom, «Changes local data» меняет только файлы на этом компьютере.",
       "Некоторые команды записи принимают `--dry-run` для предпросмотра изменения и `--yes` для подтверждения заранее.",
@@ -110,7 +110,7 @@ const zm: Record<Lang, Rules> = {
   es: {
     shape: "zm <perfil> [opciones] <recurso> <acción> [argumentos]",
     items: [
-      "Indica el perfil como primera palabra y después el recurso y la acción: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. Nunca se asume un perfil; `ZM_PROFILE` lo fija para toda la shell. La ayuda, `doctor`, `guide` y `skill` no lo necesitan.",
+      "Indica el perfil como primera palabra y después el recurso y la acción: `zm personal meetings list`, `zm personal meetings show`, `zm personal recordings list`. Nunca se asume un perfil; `ZM_PROFILE` lo fija para toda la shell. La ayuda, `config`, `doctor`, `models`, `runs`, `guide` y `skill` no lo necesitan.",
       "Las opciones globales funcionan con cualquier comando: `--json` o `--jsonl` para scripts y agentes, `--offline` para rechazar peticiones de red, `--no-input` para no iniciar nunca un acceso interactivo.",
       "Un comando que cambia algo está marcado en la referencia: «Changes remote Zoom data» cambia datos en Zoom, «Changes local data» cambia solo archivos en este ordenador.",
       "Algunas escrituras aceptan `--dry-run` para previsualizar el cambio y `--yes` para confirmarlo por adelantado.",
@@ -162,7 +162,7 @@ const drive: Record<Lang, Rules> = {
 export function commandRules(tool: string, lang: string) {
   const language: Lang = lang === "ru" || lang === "es" ? lang : "en"
   const rules =
-    tool === "tg" || tool === "max"
+    tool === "tg" || tool === "max" || tool === "wa"
       ? messenger(tool)
       : tool === "memo"
         ? memo
@@ -171,5 +171,27 @@ export function commandRules(tool: string, lang: string) {
           : tool === "drive"
             ? drive
             : undefined
-  return rules && { heading: heading[language], ...rules[language] }
+  if (!rules) return
+  const selected = rules[language]
+  const unsupported = {
+    en: "The shared reference includes paths WhatsApp cannot run. Those commands stop with exit code 2 before any account action; check the personal-account guide’s current limitations.",
+    ru: "Общий справочник включает команды, которые WhatsApp не поддерживает. Они завершаются с кодом 2 до действия в аккаунте; проверьте текущие ограничения в руководстве личного аккаунта.",
+    es: "La referencia compartida incluye comandos que WhatsApp no admite. Terminan con código 2 antes de actuar en la cuenta; consulta las limitaciones de la guía personal.",
+  }[language]
+  return {
+    heading: heading[language],
+    ...selected,
+    items: tool === "wa" ? [...selected.items, unsupported] : selected.items,
+    links:
+      tool === "wa"
+        ? {
+            ...selected.links,
+            "usage#not-in-wa-yet": {
+              en: "Current limitations",
+              ru: "Текущие ограничения",
+              es: "Limitaciones actuales",
+            }[language],
+          }
+        : selected.links,
+  }
 }

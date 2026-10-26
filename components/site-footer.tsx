@@ -26,11 +26,12 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
   const { email, telegram } = siteConfig.contacts
   const contacts = `<ul class="foot-contacts"><li><!--email_off--><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a><!--/email_off--></li><li><a href="${escapeHtml(telegram)}">Telegram · ${escapeHtml(`@${new URL(telegram).pathname.replace(/^\//, "")}`)}</a></li></ul>`
   const lang = localeFromPath(pathname)
+  const installName = /^\/(?:en|ru|es)\/docs\/wa(?:\/|$)/.test(pathname) ? "WhatsApp" : "Telegram"
   const installLabel =
     {
-      en: "Telegram · CLI + agent skill",
-      ru: "Telegram · CLI + skill",
-      es: "Telegram · CLI + skill del agente",
+      en: `${installName} · CLI + agent skill`,
+      ru: `${installName} · CLI + skill`,
+      es: `${installName} · CLI + skill del agente`,
     }[lang] ?? "Telegram · CLI + agent skill"
   const legal = {
     en: { privacy: "Privacy", terms: "Terms", settings: "Cookie settings" },
@@ -62,6 +63,11 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
       '<div class="footer-controls">',
       `<span class="foot-legal"><a class="animated-text-link" href="/${lang}/privacy"><span class="link-label">${escapeHtml(legal.privacy)}</span></a><a class="animated-text-link" href="/${lang}/terms"><span class="link-label">${escapeHtml(legal.terms)}</span></a><button type="button" class="foot-consent" data-consent-settings hidden>${escapeHtml(legal.settings)}</button></span><div class="footer-controls">`,
     )
+  if (installName === "WhatsApp")
+    footerHtml = footerHtml
+      .replaceAll("@wirecat/tg-cli", "@wirecat/whatsapp-cli")
+      .replaceAll("tg skill install", "wa skill install")
+      .replace(/(<span class="footer-install-label">)[^<]+/, `$1${escapeHtml(installLabel)}`)
   footerHtml = footerHtml.replaceAll('href="/en"', 'href="/"')
   const rootRef = useRef<HTMLDivElement>(null)
   useThemeToggle(rootRef, localeFromPath(pathname))

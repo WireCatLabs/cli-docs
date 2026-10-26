@@ -1,0 +1,117 @@
+---
+title: Search logs in WireCat Desktop
+description: Find why a tool failed, how often it happens and which command, profile or error it involves, with filters, groups and the record of each run.
+---
+
+The **Logs** page in WireCat Desktop shows what each command-line tool recorded about its own runs. A **run** is one start of a tool, such as `tg personal messages send`, from start to exit. Use this page when a tool failed and you want to know why, how often it happens, or which command, profile or error it involves. You will learn to filter runs, group them, open one run and copy its record for a bug report.
+
+## What the page shows
+
+All six tools keep run logs: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`) and Memo (`memo`). The app reads them with each tool's own `runs list` and `runs show` commands. An older Zoom, Google Drive or Memo has no run logs; update it to see them. The row above the search shows each tool and how many runs the app read from it. The app reads the newest 500 runs of each tool; **Load older** reads the next 500.
+
+## Why most runs are failures
+
+A tool keeps a run only when the run fails or is partly done. A successful run leaves no record. Thus the list shows mostly failures. This does not mean that everything is broken.
+
+To keep every run of Telegram, MAX or WhatsApp, choose **Keep every run** for the tool at the top of the Logs page, or set it yourself:
+
+```sh
+tg config set record true --defaults
+```
+
+This applies to every profile of that tool. For MAX or WhatsApp, write `max` or `wa` instead of `tg`. The page does not offer the switch for the other three tools; set it yourself:
+
+- Zoom: `zm config set record true`.
+- Google Drive: `drive personal config set record true --defaults`. Write any of your profiles in place of `personal`; with `--defaults` the setting applies to all of them.
+- Memo: add `"record": true` to memo's config file. `memo doctor` shows where the file is.
+
+A tool deletes runs that are older than `keep_runs_for_days` days. The default is 30 days. [Configuration](../configuration.mdx) explains where these settings are stored and how to change them.
+
+## Search runs
+
+Type in the search box above the list. A search has terms that are separated by spaces. A run must match every term.
+
+| Write | Meaning | Example |
+| --- | --- | --- |
+| `field:value` | The field has this value. The full value must match, upper or lower case does not matter. | `status:failed` |
+| `field:"two words"` | Put quotes around a value that has spaces. | `cli_command:"tg messages send"` |
+| `*` | Any characters, also none. Use it to match part of a value. | `cli_command:"tg messages*"` |
+| `-` before a term | Exclude runs that match the term. | `-profile:work` |
+| `field:>N`, `<`, `>=`, `<=` | Compare a number. | `duration_ms:>1000` |
+| `a.b.c:value` | A field inside another field. A list matches when one of its items matches. | `partial.failures.stage:upload` |
+| a word without `field:` | Text that is part of the run's main fields, such as the command, profile, status or error codes. | `timeout` |
+
+Two values of the same field match **either** value: `tool:tg tool:max` shows the runs of both tools. Different fields must **all** match: `tool:tg status:failed` shows only the failed `tg` runs. An excluded term or a number comparison always applies on its own. For example, `duration_ms:>1000 duration_ms:<5000` finds runs from one to five seconds long.
+
+The search box suggests field names and the values that the loaded runs have. If the app cannot read a term, it underlines the term and tells you why: a quote that is not closed, a field without a value, a comparison with something that is not a number, or a field name that no loaded run has.
+
+### Fields
+
+| Field | What it holds | Example value |
+| --- | --- | --- |
+| `tool` | The tool that recorded the run | `tg` |
+| `status` | How the run ended | `failed`, `partial`, `success`, `running` |
+| `cli_command` | The tool name and its command | `tg messages send` |
+| `command` | The command without the tool name | `messages send` |
+| `profile` | The profile the run used | `work` |
+| `error_code` | Why the run failed | `rate_limited` |
+| `codes` (or `code`) | Error codes of the requests in the run | `timeout` |
+| `operations` (or `operation`) | The requests the tool made to the service | `messages.getHistory` |
+| `duration_ms` (or `duration`) | How long the run took, in milliseconds | `31000` |
+| `requests` | How many requests the tool made | `3` |
+| `cli_version` | The version of the tool | a version number |
+| `run_id` | The run's identifier | `20261025T100000Z-sync-a1b2c3` |
+
+A run can have more fields. Open a run to see them all: every field in its record can be searched by its name or its path. A `cli_command` that is only the tool name, such as `max`, means that the tool started without a command it knows. Usually this is a typo or a missing profile.
+
+### Example searches
+
+| To find | Search |
+| --- | --- |
+| Failed runs of one command | `status:failed cli_command:"tg messages send"` |
+| Rate limits in the last day | `code:rate_limited`, then choose **Last 24h** |
+| Slow runs | `duration_ms:>10000` |
+| The runs of one profile | `profile:work` |
+| Failures, except timeouts | `status:failed -error_code:timeout` |
+| Partial runs where an upload failed | `status:partial partial.failures.stage:upload` |
+
+### How this differs from message search
+
+[Message search](../search-playground.mdx) uses Lucene syntax. The Logs search is simpler:
+
+- There are no `AND`, `OR`, `NOT` words and no parentheses. A space means "and", the same field twice means "either", and `-` excludes.
+- `field:value` must match the full value. Add `*` to match part of it. Words without a field match part of a value.
+- `*` is the only wildcard. There is no `?`, no fuzzy search and no ranges in brackets.
+- There is no date field to compare. Use the time range buttons instead.
+
+## Filter with facets
+
+The column on the left shows **facets**: the values of Tool, Status, Command, Profile and Error code, with the number of runs for each. Click a value to show only those runs, and click it again to remove the filter. Alt-click a value, or use its minus button, to hide those runs. Each click adds a term to the search box, so you can see and edit the search. The counts include all the other terms of the search. Thus you can still choose a second value of the same facet.
+
+On a narrow window, open the facets with the **Facets** button.
+
+## Group runs
+
+Choose a field in **Group by** to see one row for each value: how many runs have it, how many of them failed and when the last one started. You can also group from a facet with its **Group by this field** button, or from a value in a run record with its **Group by** button. Click a group row to show only those runs.
+
+## Choose a time range
+
+Choose **Last 1h**, **Last 24h**, **Last 7d**, **Last 30d** or **All**. The range applies to the runs that the app loaded. If you do not see an older run, use **Load older** for that tool.
+
+## Open a run
+
+Click a run to open it. You see:
+
+- **Events**: the requests that the tool made to the service and the important steps of the run, with the time, the result and how long each one took. Click an event to see all its fields.
+- **Run record**: everything the tool kept about the run, as a tree that you can expand. Most values have buttons to filter by it, exclude it, group by its field and copy it.
+- **Copy JSON**: copies the full run record. Attach it to a bug report or give it to your agent.
+
+**Copy run id** copies the run's identifier. You can use it with the tool's `runs show` command.
+
+## Privacy
+
+Run records never contain message text, names of people, chat titles or login secrets such as passwords and session keys. The [Telegram diagnostics guide](../tg/diagnostics.md) lists what a tool records and what it never records.
+
+Before the app shows a run, it also masks personal data: values of fields such as tokens, passwords, phone numbers, email addresses, account names and user IDs become `•••`. In text, the app replaces email addresses with `[email]`, phone numbers with `[number]` and bot tokens with `[bot token]`. The same masking applies to what you copy.
+
+A bug report that you send from the app always attaches recent error logs: the last 20 failed runs of each installed tool, masked in the same way. WireCat's server masks them again. They are kept privately on WireCat's server for 90 days, then deleted, and they are never published. Otherwise, the logs never leave your computer. The [privacy policy](/en/privacy#bug-reports) explains what a bug report sends.

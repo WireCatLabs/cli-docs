@@ -103,7 +103,7 @@ las fotos», guárdalo también como tarea, con esa persona como su **responsabl
 Así puedes preguntar a tu agente qué te deben otros y reclamar lo que se retrasa. En `tg` y `max`, una
 tarea encontrada en un mensaje puede tener responsables; las tareas de proyecto de `memo` tienen los suyos.
 
-`tasks add` y `tasks plan` aceptan `--assignee`:
+`tasks add` y `tasks update` aceptan `--assignee`:
 
 - `--assignee sender`: quien envió el mensaje de la tarea.
 - `--assignee person:<id>`: una persona que nombras. Varios valores nombran a varias personas.
@@ -119,8 +119,8 @@ el servidor MCP pasan `assignee` a `tasks_add` y `tasks_plan`.
 
 ```text
 tasks add msg:telegram/1/77/42 --type promise --category documents --assignee sender
-tasks plan PR-4 --assignee person:12
-tasks plan PR-4 --assignee none
+tasks update PR-4 --assignee person:12
+tasks update PR-4 --assignee none
 tasks list "assignee:any state:open"
 ```
 
@@ -150,7 +150,7 @@ La etiqueta funciona en `tg` y `max`, y solo en grupos; un canal nunca abre tare
   responde a la pregunta no cierra nada: cierra esa tarea tú o deja que tu agente la cierre indicando su
   certeza; consulta [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea).
 - **Sin responsable.** Una tarea que abre una regla no tiene responsable; tu agente puede añadirlo con
-  `tasks plan`.
+  `tasks update`.
 
 Pon la etiqueta solo en grupos donde las respuestas te tocan a ti. Un grupo muy activo con la etiqueta
 te da muchas tareas.
@@ -203,7 +203,7 @@ Añadir una tarea para un mensaje y planificarla:
 
 ```sh
 tg personal tasks add msg:telegram/1/77/42 --type promise --category documents --title "Send Bob Sample the signed contract" --due 3d
-tg personal tasks plan <task> --description "Done when Bob confirms he has it." --remind-time 2d
+tg personal tasks update <task> --description "Done when Bob confirms he has it." --remind-time 2d
 ```
 
 Vincular más mensajes y verlo todo en un sitio:
@@ -389,7 +389,7 @@ se distinguen por el sentido de una palabra, así que decide un agente o tú.
 
 **Quién decide.** El agente que revisa tus chats después de sincronizar recorre la lista de revisión.
 Fusiona los pares que son el mismo trabajo y rechaza los que no lo son. Cuando no puede decidir, marca
-el par como dudoso. Tú ves solo los pares dudosos, con `tasks duplicates decision:unsure`.
+el par como dudoso. Tú ves solo los pares dudosos, con `tasks duplicates list decision:unsure`.
 
 Cuando se vincula un mensaje a una tarea (`tasks link`, `tasks add --into` o `tasks merge`), la
 comprobación se repite para esa tarea. Los nuevos pares posibles van a la lista de
@@ -401,11 +401,11 @@ par rechazado no vuelve.
 
 ```text
 tasks related REQ-23
-tasks duplicates
+tasks duplicates list
 tasks merge REQ-23 --into REQ-22
 tasks duplicates reject REQ-23 REQ-22
 tasks duplicates defer REQ-23 REQ-22
-tasks duplicates decision:unsure
+tasks duplicates list decision:unsure
 tasks unmerge REQ-23
 ```
 
@@ -420,7 +420,7 @@ primero, cada una con una banda (`likely`, `maybe` o `different`) y los motivos.
   cada una con su significado y sus palabras. `tasks add` necesita una categoría y rechaza un nombre
   que no está en la lista. Una regla elige la categoría por las palabras del mensaje, la más concreta
   si encajan dos (una factura de suministros es `bills`, no `money`), u `other` si ninguna coincide; tu
-  agente la corrige con `tasks plan --category`.
+  agente la corrige con `tasks update --category`.
 - **Una lista en un archivo de ajustes compartido.** `tg` y `max` leen tus cambios a la lista de
   `~/.config/WireCat/config.json`, sección `task_categories`. No es el archivo de ajustes de un perfil,
   así que la lista es la misma en todos los perfiles, y «finanzas» y «pagos» nunca conviven. `memo`
@@ -442,7 +442,7 @@ primero, cada una con una banda (`likely`, `maybe` o `different`) y los motivos.
 - **Una categoría que salió de la lista.** Las tareas conservan su categoría cuando sale de la lista.
   `tasks categories` nombra esas categorías en `unlisted`, con sus tareas abiertas y el total, y
   `tasks agenda` nombra las que aún llevan tareas abiertas (`unlisted_categories`). Encuentra sus
-  tareas con `tasks list category:<name>` y mueve una con `tasks plan <task> --category <name>`.
+  tareas con `tasks list category:<name>` y mueve una con `tasks update <task> --category <name>`.
 - **Las etiquetas**, como `urgent` o `waiting-for-them`, también sirven en las tareas:
   `tags add urgent --task REQ-22`. Las etiquetas solo sirven para filtrar; la detección de duplicados
   no las tiene en cuenta.
@@ -456,7 +456,7 @@ tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
 tasks agenda category:money tag:urgent
 tasks list category:money
-tasks plan REQ-22 --category bills
+tasks update REQ-22 --category bills
 config set task_categories.travel "trips and tickets | flight, hotel, es:vuelo"
 config unset task_categories.travel
 config unset task_categories

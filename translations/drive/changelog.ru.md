@@ -4,6 +4,205 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.38.0 — 25.10.2026
+
+### Changed — may break callers
+
+- cli-core 0.432.0 and cli-base 0.57.1.
+
+### Fixed
+
+- **A bare `drive --version` answers before the program loads**: about 50 module files in place of 1,150 (cli-core's `cli/start`). `--version` with anything else on the line goes through the program as before.
+
+## 0.37.0 — 25.10.2026
+
+### Added
+
+- `drive store info --json` describes the shared store: where it is, its schema against the one drive reads (`schema.reason`, and `schema.upgrade` — what drive's next run moves it to), and which tools used it. It opens the store read-only and needs no profile, so WireCat Desktop can tell whether drive can read the store. The `store` group's help now says it covers the shared store too.
+
+### Changed — may break callers
+
+- **Run recording comes from cli-core 0.430.0** (`recordRuns`) in place of drive's own copy. Runs are kept as before — every failed command, a usage error before any command included, a successful one under `--record` or `defaults.record: true`, nothing under `--no-record` — and Google requests are logged as before. A run with no profile now leaves `profile` out of `runs list` and `runs show` instead of `""`.
+
+## 0.36.0 — 25.10.2026
+
+### Security
+
+- `doctor` reports a `config.json` or config folder that other users of the computer can read. `doctor --json` gains `files: { checked, ok, problems: [{ path, mode, want }] }` (the file wants `0600`, the folder `0700`), the shape the other WireCat tools use, and stderr prints `to make it private: chmod 600 '<path>'` for each; nothing is changed on disk. drive 0.35 and older saved the file as `0644` on every `config set`; it is now saved `0600` (cli-base 0.57.0). Windows is not checked.
+
+### Changed — may break callers
+
+- A command that refuses the config file counts every problem `doctor` lists in its "(and N more problems)", saved permissions that name no command included. `session list` and a command run with no profile now refuse a file whose only problem is such a permission, as every other command already did.
+- `skill show`'s effects say it reads local files (`local: read`): `skill show --for claude|agents` prints the copy installed for that agent. `skill status` and `skill show --for` come from cli-base 0.56.0.
+- cli-core 0.428.0 and cli-base 0.57.0.
+
+### Fixed
+
+- Every command starts faster: Google's client libraries load only when a command reaches Google. `drive --version`, `--help`, `config show` and `runs list` loaded about 1,380 module files; now about 1,180. `src/startup.test.ts` keeps them out of what the program imports at start.
+
+## 0.35.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `doctor --json` reports the config file as `config: { path, found, issues }`, the shape the other WireCat tools use. Each issue is `{ kind, file, profile?, key?, line?, column?, what, fix? }`: `kind` is `invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` or `invalid_value`, `what` says what the value has to be and never quotes it, and `fix` is a `drive … config unset …` command that runs as written. `config.readable` and `config.error` are removed, and `profiles` is always a list: the profiles that load. Doctor lists every problem in every profile and still exits 0.
+- drive reads setting names only as written. A camelCase key, `default_profile` or `read_only` is an unknown setting like any other: the file is refused with the first problem and its `config unset`, and drive no longer rewrites the file. `config set` takes the key as written too.
+- A permission key that names no command is refused wherever it is saved, in any profile or the defaults, not only in the profile a command runs as. The refusal names the `config unset` that removes it.
+- A profile's `roots` may be left out (no folders), and so may `profiles` (no profiles yet). `principal` and `storage` are still required; doctor reports either one missing.
+- `commands --json` gives `config show` and `session list` a usage line without `<profile>` (`drive config show`), like `doctor` and `api list`; they read every profile or none.
+- Every drive `--dry-run` preview says `action_invoked: false`, beside `dry_run: true`, so a caller can check that nothing ran.
+- `runs list`, `runs show` and `run.json` gain `cli_command`, `argv` (values that may be content written `[redacted]`), `unknown_command`, `agent` and, for a failed run, `error`; `profile` is left out when the command named none. From cli-core 0.426.0.
+- cli-core 0.426.0.
+
+### Added
+
+- `config unset <key>` removes one setting from a profile, from the defaults (`--defaults`), or a key the file should not have at its top (`drive config unset <key>`, with no profile, as doctor's `fix` says).
+- `config show`, `config set` and `config unset` work on a file that is valid JSON but has problems (`show` also on one that is not). `show` prints what loads and names each problem with its fix; `set` is refused only when the change adds a problem or leaves the setting it writes invalid. Every other command still refuses the file.
+
+### Fixed
+
+- A global `--dry-run` no longer lets a command write. `drive personal --dry-run config set …`, `config unset`, `drive --dry-run skill install`, `upgrade`, `models download` and `images models download` saved the setting, wrote both SKILL.md files, upgraded or downloaded; they now print the preview (`dry_run: true`, `action_invoked: false`) and change nothing. `config set` and `config unset` still refuse under `DRIVE_READ_ONLY` first.
+- Help shows drive's housekeeping commands without a profile: `drive doctor`, `drive api list`, `drive models list`, `drive config show`, `drive session list`, `drive runs list`, not `drive personal doctor`. The guide's steps name the profile where the command takes one (`drive personal sync`). MCP tool text says "what people wrote", not "messages". Needs cli-core 0.426.0.
+
+## 0.34.0 — 25.10.2026
+
+### Added
+
+- drive keeps a log of its runs, as tg, max and wa do: a failed command always, every command with `--record` or `record: true` in the defaults (`drive personal config set record true --defaults`), each for `keep_runs_for_days` (30 by default). `drive runs list`, `drive runs show <run-id>` and `drive runs path <run-id>` read them without a profile. A run holds the command's words, its profile, its outcome and every Google request as method, path shape with ids masked, status and duration, never a document id, name or text. `--no-record` keeps nothing.
+
+### Fixed
+
+- Help and MCP text describe drive, not a messenger: the `command` argument of `drive_read` and `drive_write` gives `"session list"` as its example instead of `"messages list"`. The examples of `session list` and `config show` name a profile, and `mcp`'s examples start with `drive personal mcp --tools`, which lists the tools without starting a server, and use `https://laptop.example.ts.net` instead of a `<name>` placeholder. Needs cli-core 0.422.0.
+
+## 0.33.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `search --json` hits carry the Google link as `url` and say `kind: "document"`, the same fields and values as `memo search notes` and `search all` for the same document. `source_url` is removed, with no alias, from hits and from `pictures`; a folder hit is told apart by `not_read: "folder metadata only"` instead of `kind: "folder"`. `tabs`, `content` and `not_read` stay.
+
+### Added
+
+- When the Google sign-in has expired, the error's `next` says it is the owner's step: run `drive <profile> session start` on the computer running drive. An agent over MCP can't sign in, so it now knows to stop and ask instead of retrying.
+
+## 0.32.0 — 25.10.2026
+
+### Changed — may break callers
+
+- Drive documents live in the store's Google Drive account (`google-drive` / your Google principal) instead of a notes folder named `google-drive:<principal>`, and the `drive` profile names that account. This needs cli-core 0.420.0, which carries store versions 30 to 33: it moves existing documents on first open, keeping every `document:<id>` reference, and an older CLI then refuses the store until upgraded. Opening the store records drive's version, so an upgrade can name the CLIs it locks out.
+
+### Fixed
+
+- Two drive processes using the same profile, such as `mirrors watch` and `drive mcp`, refresh its Google sign-in one at a time and share the result, instead of each refreshing on its own. Your saved sign-in stays as it is: nobody signs in again, and older drive versions still read it. `DRV-29`
+
+## 0.31.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `files list` uses the shared field query language, such as `name:"Example plan"` and `modified_time>=2026-01-01`, instead of Google query syntax. Timestamp values require an offset; `--timezone` controls date bounds. File-list fields use snake_case. Raw Google queries remain available through `api`.
+- Tag lists return `items` containing `{ "tag": "budget" }` rows. Removed spellings have no aliases.
+
+### Added
+
+- Lists declare schema-derived native queries for configured folders, mirrors, profiles, document tags, notes, relationships, contributors and remote files. Provider lists without predicates advertise their fields and reject filters before requests.
+- A file's owner or editor is the same person as your mail contact with that exact email address, so `memo context` joins their files and mail. A name alone never joins anyone, and a person you unlink stays unlinked.
+
+## 0.30.0 — 25.10.2026
+
+### Removed
+
+- `mirrors sync --public-url` and `mirrors watch --public-url`, added in 0.29.0: Google Docs did not download images through a Tailscale Funnel or an ngrok tunnel, so local images stayed as text anyway. Local images stay as Markdown text in the Doc, as `docs/mirrors.md` explains. `DRV-11`
+
+## 0.29.0 — 24.10.2026
+
+### Added
+
+- `drive <profile> mirrors sync --public-url <https origin>` (and `mirrors watch`) inserts local PNG, JPEG and GIF images into mirrored Docs: drive serves each one through your tunnel at a random address that lives only while Google copies it, so nothing in Drive is shared. Without the option, local images stay as Markdown text, as before. `DRV-11`
+- **Shared contracts, model catalogues and complete contract evidence come from Core.** Source and transport differences are explicit; a later silent edit fails before execution. Model lists accept native `kind:`, `id:` and `downloaded:` terms.
+
+### Fixed
+
+- Correct the read-only agent scenario to keep denied commands discoverable.
+
+- Document remote MCP as available, retire its duplicate backlog entry, and update browser connection guidance.
+
+### Changed — may break callers
+
+- **File download and export destinations use `--output <file>`.** Replace `--out` in scripts. Document-note lists use `text:review` or a quoted `text:` phrase; list rows, reads and writes declare the shared note schema.
+
+## 0.28.1 — 24.10.2026
+
+### Added
+
+- `drive <profile> mcp --http --public-url <https origin>` serves the MCP tools to ChatGPT and Claude on the web and phone, behind your tunnel and a one-time access code; saved permissions and `--permission` apply to every call. `--revoke` logs every browser app out. Guide: `docs/remote.md`.
+
+### Fixed
+
+- Permission-denied commands stay discoverable in CLI help and MCP with current availability, reasons and required permission keys. Execution still refuses denied calls and missing write grants.
+- Correct shared alignment guidance for discovery contract 4, foreground watches and current command-lint debt.
+
+## 0.28.0 — 24.10.2026
+
+### Changed — may break callers
+
+- **`models download <model>` replaces `models text download`** (cli-core 0.405.0 → 0.406.0). The old spelling is
+  refused, with no alias; the hint cli-core prints for a missing search model already names `models download`.
+  `images models download` keeps its name. Shared command paths and flags now accept only their canonical
+  spelling, and a saved permission key with a renamed path stops with `configuration_error` naming its replacement.
+
+## 0.27.0 — 24.10.2026
+
+### Added
+
+- **`mirrors watch` keeps mirrored folders in sync while it runs**, until Ctrl-C or `--timeout`, both a normal end. A
+  saved file is synced a couple of seconds after the last save, and only if it differs from the last sync; Google's
+  change feed is read every minute (`--every`) and only the mirrors whose files it names are synced. Every mirror is
+  also compared every 5 minutes and synced every 30, for changes no event reported. A part changed on both sides is
+  reported and left for `mirrors sync --keep`. With `--jsonl`, one line per sync and an end line; it is not an MCP
+  tool, and `DRIVE_READ_ONLY` refuses it.
+
+- **A mirroring guide** covers setup, both directions, conflicts, choosing a side and deletion limits.
+  The documentation check now enforces standard changelog headings for new releases.
+
+- **`files download FILE_ID --out PATH` and `files export DOC_ID --format pdf|docx|xlsx|csv --out PATH`** save
+  Google content locally. Existing outputs require `--overwrite`; results report byte counts. The existing
+  `documents export --output PATH` still writes imported Markdown offline.
+
+- **`comments reply`, `comments resolve` and `comments reopen`** change Google comment threads through the
+  same method permissions and Google write grant as generated commands.
+
+- **MCP offers profile listings, settings reads, agent instructions, guides and imported Markdown export.**
+  Exports use a filename within the profile cache export folder. `config set` and `models set` require the
+  owner to allow `mcp.authority`; agents cannot alter their own authority settings.
+
+### Changed — may break callers
+
+- **Status output omits document names.** `status` reports skipped IDs and reasons without file metadata;
+  `mirrors status` reports counts for `create`, `update` and `orphans`, without filenames or the local root.
+  `documents show` and `mirrors list` still provide explicitly requested details. The discovery contract is 4.
+
+- **The retired `read_only` setting is refused**, including its old camelCase spelling. Remove it from config;
+  use command permissions, `--read-only` or `DRIVE_READ_ONLY`. A terminal now asks before a write at level `ask`.
+
+- **Google write results include `operation_id`**, matching the write journal for both friendly and generated commands.
+  Read-only file commands appear under Read in command discovery, and mirrors under Automate.
+
+- **MCP argument names use snake_case**, such as `file_id` instead of `file-id`; CLI flags keep their spelling.
+  Command declarations control the MCP surface. Model downloads and skill installation are discoverable,
+  with skill installation requiring the owner’s authority permission.
+
+### Security
+
+- **Development tooling uses patched fast-uri and markdown-it.** Overrides resolve fast-uri 3.1.9 and
+  markdown-it 15.0.3, body-parser 2.4.0 and ip-address 10.7.4; production dependencies and the historical upgrade fixture stay unchanged.
+
+## 0.26.0 — 24.10.2026
+
+### Added
+
+- **The first command at a terminal asks three questions once for every WireCat tool** (cli-core 0.404.0): which
+  languages you write and speak, which other WireCat tools to install, and whether commands and agents may only read.
+  Answered in any tool, they hold in all of them; "read only" makes every `drive` profile read-only. `tg setup`,
+  `max setup` or `wa setup` asks again. Agents, `--json`, `--no-input`, `CI` and `DRIVE_READ_ONLY` are never asked.
+
 ## 0.25.0 — 24.10.2026
 
 ### Added

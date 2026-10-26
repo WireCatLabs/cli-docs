@@ -2,13 +2,6 @@
 title: "Personal account guide"
 ---
 
-<a id="ответ-и-реакция" />
-<a id="правка-пересылка-закрепление" />
-<a id="опросы" />
-<a id="локальная-копия-и-новые-сообщения" />
-<a id="настройки" />
-<a id="человек" />
-
 `max` allows you or your AI agent to read and write to your personal MAX account from a terminal. This page is an overview: from login to reading, sending and groups, in the order you need it. Open it when you start working with `max`, or when you want to know what's possible before asking an agent. The bot, which works through the official Bot API, is described on the [bot](./bot.md) page.
 
 You will learn to identify a chat, read and search without marking messages read, send safely, and return results a script can parse. The [command reference](./commands.md) is generated from the program; this guide explains how commands fit together.
@@ -35,7 +28,7 @@ max [профиль] [опции] <ресурс> <действие> [аргум�
 | Replies and commitments | Unread messages, promises and open matters | `max personal inbox`, `max personal review` |
 | Voice | Transcribe locally | `max personal messages transcribe` |
 | Files | Download attachments or chat files; browse media | `max personal messages download`, `max personal chats media` |
-| People | Contacts, aliases, notes, profiles and bot signals | `max personal contacts list`, `max personal contacts profile` |
+| People | Contacts, aliases, notes, profiles and bot signals | `max personal contacts list`, `max personal contacts info` |
 | Search | Messages, files, dates, people and discussions by meaning | `max personal search messages`, `max personal search conversations` |
 | Sending | Text, files, voice, replies and scheduled messages | `max personal messages send` |
 | Changes | Edit, forward, pin, delete, react, vote and mark read | `max personal messages edit`, `max personal reactions add` |
@@ -182,7 +175,7 @@ max personal chats list 'unread_count>0' --offline # только чаты с н
 max personal chats show "Иван Петров"        # один чат: вид, непрочитанное, последнее сообщение, участники
 ```
 
-`chats show` returns one object containing fields from `chats list` plus `members`, excluding you. For a channel, `members` is `null`: MAX can return only a few subscribers from thousands, which cannot represent its full membership. See [groups and channels](#группы-и-каналы).
+`chats show` returns one object containing fields from `chats list` plus `members`, excluding you. If the membership is unknown, `members` is omitted; `[]` means a known empty membership. For a channel, MAX can return only a few subscribers from thousands, which cannot represent its full membership. See [groups and channels](#группы-и-каналы).
 
 ### Messages
 
@@ -281,18 +274,18 @@ See the [voice recognition guide](./audio-recognition.md) for model selection, c
 Voice messages are transcribed **on your computer**: recordings are not sent anywhere. Download the recognition model once with a separate command:
 
 ```sh
-max personal models audio list                # какие модели есть, какие скачаны, какая по умолчанию (*)
+max personal models list kind:audio                # какие модели есть, какие скачаны, какая по умолчанию (*)
 ```
 
 ```sh
-max personal models audio download gigaam-v3  # 233 МБ, один раз
+max personal models download gigaam-v3  # 233 МБ, один раз
 ```
 
 ```sh
 max personal messages transcribe "Иван Петров" 100000000000000001
 ```
 
-Models live in a directory shared by MAX and Telegram; `WIRECAT_STATE_DIR` relocates it. `models audio list --json` returns an `items` list with `page`; each model has its `path`. Downloaded files are reused. `gigaam-v3` remains first, and `config set --defaults transcribe_model <модель>` selects the model.
+Models live in a directory shared by MAX and Telegram; `WIRECAT_STATE_DIR` relocates it. `models list kind:audio --json` returns an `items` list with `page`; each model has its `path`. Downloaded files are reused. `gigaam-v3` remains first, and `config set --defaults transcribe_model <модель>` selects the model.
 
 | Model | Languages | Size | 5 minutes of speech |
 |---|---|---|---|
@@ -379,15 +372,15 @@ This is a repair action for inconsistent local data or a schema update that clea
 #### Your names and notes about people
 
 ```sh
-max personal contacts alias set "Борис Тестов" Боря          # своё имя для человека, только на этом компьютере
+max personal contacts aliases set "Борис Тестов" Боря          # своё имя для человека, только на этом компьютере
 ```
 
 ```sh
-max personal contacts alias rm "Борис Тестов"
+max personal contacts aliases remove "Борис Тестов"
 ```
 
 ```sh
-max personal contacts notes add "Борис Тестов" --file note.txt   # или текст из stdin
+max personal contacts notes add "Борис Тестов" --text-file note.txt   # или текст из stdin
 ```
 
 ```sh
@@ -395,7 +388,7 @@ max personal contacts notes list "Борис Тестов"
 ```
 
 ```sh
-max personal contacts notes edit "Борис Тестов" <id> --revision 1 --file note.txt
+max personal contacts notes edit "Борис Тестов" <id> --revision 1 --text-file note.txt
 ```
 
 ```sh
@@ -543,7 +536,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.66.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.76.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 
@@ -765,10 +758,6 @@ max personal chats mark-read "Иван Петров"                  # до п�
 max personal chats mark-read "Иван Петров" --until-id 100000000000000001   # до этого сообщения включительно
 ```
 
-```sh
-max personal messages list "Иван Петров" --mark-read        # прочитать и отметить показанное
-```
-
 The other person sees the read receipt. It passes permission and recipient-list checks but does not consume the hourly message limit. `--offline` rejects it.
 
 ### Contacts, profile and folders
@@ -798,7 +787,7 @@ max personal contacts unblock 20000002
 ```
 
 ```sh
-max personal contacts profile 20000002               # профиль, дата создания, его сообщения по общим чатам
+max personal contacts info 20000002               # профиль, дата создания, его сообщения по общим чатам
 ```
 
 ```sh
@@ -982,11 +971,11 @@ max personal chats update "Поход" --all-can-pin off       # поменят�
 ```
 
 ```sh
-max personal chats link show "Поход"                      # ссылка-приглашение, если вам её видно
+max personal chats links show "Поход"                      # ссылка-приглашение, если вам её видно
 ```
 
 ```sh
-max personal chats link reset "Поход"                     # новая ссылка; старая перестаёт работать
+max personal chats links reset "Поход"                     # новая ссылка; старая перестаёт работать
 ```
 
 ```sh
@@ -994,7 +983,7 @@ max personal chats requests list "Канал"                  # кто прос
 ```
 
 ```sh
-max personal chats requests accept "Канал" 20000002        # впустить; decline — отказать
+max personal chats requests confirm "Канал" 20000002        # впустить; decline — отказать
 ```
 
 ```sh
@@ -1103,13 +1092,15 @@ Beside it there can be `next`: commands worth running next (the `page.next` step
 
 In the terminal, the line about the next page goes **to stderr**: stdout carries data in any mode, but continuation hints do not belong there.
 
-**`--jsonl` outputs one object per line** without a wrapper, suitable for streaming and `jq`. Only stderr reports whether more pages exist.
+**`--jsonl` outputs one record per line**: the data is inside `{"type":"item","data":…}`.
+The last record, `{"type":"end",…}`, holds `complete` and `page`, including whether another page exists.
 
 ```sh
-max personal messages list -1000 --jsonl | jq 'select(.sender_id == "111")'
+max personal messages list -1000 --jsonl | jq 'select(.type == "item") | .data | select(.sender_id == "111")'
 ```
 
-Errors that end the command go **to stderr** with stdout empty, so they cannot be mistaken for data:
+A refusal before any output goes **to stderr** with stdout empty, so it cannot be mistaken for data.
+If the stream has already produced data, that data stays; on a failure it adds an incomplete `end` record and returns an error code:
 
 ```json
 {"error":{"code":"authentication_error","message":"no session for profile \"personal\" — run `max personal setup` in a local terminal; agents: read `max skill show`"}}
@@ -1232,7 +1223,7 @@ Levels `deny`, `readonly`, `ask`, `allow` are used in both CLI and MCP. The more
 
 ## One person
 
-`max personal contacts profile <человек>` shows what MAX and the local copy know about the person. `max personal contacts check <человек>` evaluates whether it looks like a bot. `max personal contacts context <человек>` reads his latest chat messages from a copy, and `max personal contacts link` links his MAX account to his Telegram account. Details - [people](./people.md).
+`max personal contacts info <человек>` shows what MAX and the local copy know about the person. `max personal contacts check <человек>` evaluates whether it looks like a bot. `max personal contacts context <человек>` reads his latest chat messages from a copy, and `max personal contacts link` links his MAX account to his Telegram account. Details - [people](./people.md).
 
 ## Next steps
 

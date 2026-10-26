@@ -99,7 +99,7 @@ description: "Вопросы, просьбы и обещания из ваших
 должен её сделать. Тогда можно спросить агента, что вам должны другие, и напомнить о просроченном. В
 `tg` и `max` исполнители бывают у задач из сообщений; у задач проектов в `memo` — свои.
 
-`tasks add` и `tasks plan` принимают `--assignee`:
+`tasks add` и `tasks update` принимают `--assignee`:
 
 - `--assignee sender` — тот, кто отправил сообщение задачи.
 - `--assignee person:<id>` — человек, которого вы называете. Несколько значений — несколько человек.
@@ -115,8 +115,8 @@ description: "Вопросы, просьбы и обещания из ваших
 
 ```text
 tasks add msg:telegram/1/77/42 --type promise --category documents --assignee sender
-tasks plan PR-4 --assignee person:12
-tasks plan PR-4 --assignee none
+tasks update PR-4 --assignee person:12
+tasks update PR-4 --assignee none
 tasks list "assignee:any state:open"
 ```
 
@@ -145,7 +145,7 @@ tg personal tags remove --chat "Renovation" watch-tasks
   вопрос, ничего не закрывает: такую задачу закройте сами или пусть её закроет агент с указанием
   уверенности; см. [Когда задачу закрывает агент](#когда-задачу-закрывает-агент).
 - **Без исполнителя.** У задачи, которую открыло правило, исполнителя нет; агент может назначить его
-  через `tasks plan`.
+  через `tasks update`.
 
 Ставьте тег только группам, за ответы в которых отвечаете вы. Оживлённая группа с тегом даст много
 задач.
@@ -197,7 +197,7 @@ tg personal tasks list 'chat:"Renovation" state:open'
 
 ```sh
 tg personal tasks add msg:telegram/1/77/42 --type promise --category documents --title "Send Bob Sample the signed contract" --due 3d
-tg personal tasks plan <task> --description "Done when Bob confirms he has it." --remind-time 2d
+tg personal tasks update <task> --description "Done when Bob confirms he has it." --remind-time 2d
 ```
 
 Привязать ещё сообщения и посмотреть всё в одном месте:
@@ -378,7 +378,7 @@ config set task_agent_close off
 
 **Кто решает.** Список на проверку разбирает агент, который просматривает ваши чаты после
 синхронизации. Он объединяет пары об одном деле и отклоняет пары о разных. Если он не может решить,
-он отмечает пару как неясную. Вы видите только неясные пары: `tasks duplicates decision:unsure`.
+он отмечает пару как неясную. Вы видите только неясные пары: `tasks duplicates list decision:unsure`.
 
 Когда вы или агент привязываете сообщение к задаче (`tasks link`, `tasks add --into` или
 `tasks merge`), проверка снова запускается для этой задачи. Новые возможные пары попадают в список на
@@ -390,11 +390,11 @@ config set task_agent_close off
 
 ```text
 tasks related REQ-23
-tasks duplicates
+tasks duplicates list
 tasks merge REQ-23 --into REQ-22
 tasks duplicates reject REQ-23 REQ-22
 tasks duplicates defer REQ-23 REQ-22
-tasks duplicates decision:unsure
+tasks duplicates list decision:unsure
 tasks unmerge REQ-23
 ```
 
@@ -409,7 +409,7 @@ tasks unmerge REQ-23
   словами. `tasks add` требует категорию и отказывает, если такого имени нет в списке. Правило
   выбирает категорию по словам сообщения, из двух подходящих — более узкую (счёт за коммунальные
   услуги — `bills`, а не `money`), или `other`, если ни одно слово не подошло; агент исправляет её
-  через `tasks plan --category`.
+  через `tasks update --category`.
 - **Один список в общем файле настроек.** `tg` и `max` читают ваши изменения списка из
   `~/.config/WireCat/config.json`, раздел `task_categories`. Это не файл настроек профиля, поэтому
   список одинаков во всех профилях, а «финансы» и «платежи» не появятся рядом. `memo` пока не читает
@@ -430,7 +430,7 @@ tasks unmerge REQ-23
 - **Категория, которой нет в списке.** Задачи сохраняют свою категорию, когда её убирают из списка.
   `tasks categories` называет такие категории в разделе `unlisted`, с числом открытых задач и всего, а
   `tasks agenda` называет те, что ещё стоят у открытых задач (`unlisted_categories`). Их задачи находит
-  `tasks list category:<name>`, а переносит одну `tasks plan <task> --category <name>`.
+  `tasks list category:<name>`, а переносит одну `tasks update <task> --category <name>`.
 - **Теги** вроде `urgent` или `waiting-for-them` работают и на задачах: `tags add urgent --task REQ-22`.
   Теги нужны только для фильтров; проверка на дубликаты их не учитывает.
 - **Ключи по типам:** задача из сообщения получает короткий ключ, например `Q-15` для вопроса,
@@ -443,7 +443,7 @@ tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
 tasks agenda category:money tag:urgent
 tasks list category:money
-tasks plan REQ-22 --category bills
+tasks update REQ-22 --category bills
 config set task_categories.travel "trips and tickets | flight, hotel, es:vuelo"
 config unset task_categories.travel
 config unset task_categories

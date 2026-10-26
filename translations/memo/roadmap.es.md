@@ -12,8 +12,12 @@ Memo lee carpetas de notas y sus documentos, importa correo de Gmail e IMAP a tr
 mensajes que tg, max y wa guardan en el almacén local. Puedes buscar en todas esas fuentes, consultar lo que
 sabes de una persona o proyecto, etiquetar contenido, mantener tareas y recordatorios locales y dejar que
 un agente registre recuerdos, hechos y propuestas para que los revises, desde el terminal o mediante MCP.
+MCP ofrece comandos, incluidas escrituras, limitados por permisos guardados, y abre las fuentes completas.
+Descarga el modelo con `models download` y añade una cuenta explícita de Himalaya con `mail add`.
 Todos los comandos y opciones están en [la referencia de comandos](./commands.md); las guías empiezan en
 [la introducción](./index.md).
+
+Los clientes locales usan stdio; las apps del navegador y teléfono se conectan por HTTP con inicio de sesión y tu túnel HTTPS ([conexión remota](./remote.md)).
 
 ## En curso
 
@@ -21,13 +25,8 @@ Ahora mismo no hay nada en desarrollo. Los primeros elementos del apartado sigui
 
 ## A continuación
 
-- **Primeros pasos más claros.** Corregir las primeras indicaciones y ejemplos: la indicación para importar
-  correo, el ejemplo de salida del README y las notas de instalación con npm 11 y 12.
 - **Fuentes de un proyecto: próximos pasos.** Antes de recopilar, indicar qué fuentes están lo bastante
   actualizadas para buscar; leer el hilo completo alrededor de una coincidencia; añadir búsqueda por significado si se desea.
-- **Descargar el modelo de búsqueda desde Memo.** Hoy lo descarga otra herramienta WireCat para Memo.
-- **Añadir una cuenta de correo con un comando**, comprobándola con Himalaya en lugar de editar los ajustes.
-- **Abrir una nota, correo o mensaje completo mediante MCP**, no solo el fragmento de un resultado.
 - **Reuniones en `search all` y en el contexto de una persona.** Hoy las reuniones guardadas tienen su propia búsqueda.
 - **Búsqueda más rápida.** Una búsqueda en un almacén pequeño no debería tardar varios segundos.
 
@@ -38,7 +37,8 @@ Ahora mismo no hay nada en desarrollo. Los primeros elementos del apartado sigui
 - Fusión de etiquetas duplicadas. Hoy Memo muestra qué afectaría una fusión sin cambiar nada.
 - Recordatorios de las propias tareas de un proyecto.
 - Compatibilidad con macOS y Windows. Hoy Memo solo está probado en Linux.
-- MCP mediante HTTP para aplicaciones que no inician Memo por sí mismas.
 - Búsqueda de imágenes por la conversación que las rodea y por los datos de la foto.
+- Leer el correo sin Himalaya: Memo se conecta él mismo a tu buzón, así que no hay un programa de correo aparte
+  que instalar y configurar.
 
 Los cambios de cada versión están en el [historial de cambios](./changelog.md).

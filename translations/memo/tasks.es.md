@@ -31,7 +31,8 @@ que escribiste con `memo notes add`, añade `--account`, como `--account telegra
 `--account notes:1`. Si añades la misma tarea dos veces, obtienes la que ya existe.
 
 Una carpeta de notas también es una cuenta: la búsqueda da su número como `folder_id`, y Memo lo acepta como
-`notes:<number>` o como el `folder:<id>` que muestran sus mensajes. `--source notes` indica tu carpeta cuando
+`notes:<number>` o como el `obsidian:<id>` o `local:<id>` que muestran sus mensajes; `folder:<id>` también la nombra.
+`--source notes` indica tu carpeta cuando
 tienes una. `memo tasks list` y `memo reminders list` sin `--source` leen todas las cuentas y las nombran en
 `meta.accounts`.
 
@@ -41,11 +42,13 @@ La agenda, el plan y la ficha son los mismos comandos de tg y max. Cada uno lee 
 
 ```sh
 memo tasks agenda --source telegram:1           # overdue, due, owed and waiting chats
-memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
+memo tasks update 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
 memo tasks show 1a2b3c4d --source telegram:1
 memo stats tasks show --source telegram:1       # open tasks per chat
 memo tasks agenda --source notes                # tasks from your notes folder
 ```
+
+Usa `tasks update` para cambiar los campos de una tarea.
 
 Sin `--source` ni `--account`, el comando enumera las cuentas guardadas. tg y max abren estas tareas al sincronizar; memo lee el mismo almacén.
 
@@ -102,7 +105,7 @@ Una tarea puede esperar a otra. Vincúlalas y luego pregunta a Memo qué tareas 
 memo tasks link HRB-2 HRB-1 --kind blocked-by     # HRB-2 waits for HRB-1
 memo tasks list project:HRB ready:true          # tasks with nothing left to wait for
 memo tasks status HRB-2                           # why HRB-2 can or cannot start
-memo tasks relations HRB-2
+memo tasks links HRB-2
 memo tasks unlink HRB-2 HRB-1 --kind blocked-by
 ```
 
@@ -139,11 +142,11 @@ recordatorio. Tampoco una tarea de una nota que escribiste con `memo notes add` 
 Para el programa que muestra los recordatorios:
 
 ```sh
-memo reminders poll --account telegram:1 --json
-memo reminders ack REMINDER_ID RECEIPT --account telegram:1
+memo reminders claim --account telegram:1 --json
+memo reminders acknowledge REMINDER_ID RECEIPT --account telegram:1
 ```
 
-`poll` entrega los recordatorios pendientes, cada uno con un recibo. `ack` con ese recibo confirma que
+`claim` entrega los recordatorios pendientes, cada uno con un recibo. `acknowledge` con ese recibo confirma que
 el recordatorio se mostró. Un recordatorio que no se confirma a tiempo se entrega de nuevo con un
 recibo nuevo, así que un fallo no lo pierde. Usa el `deliveryId` de la respuesta para no mostrar el
 mismo recordatorio dos veces. El temporizador de importación no entrega recordatorios.

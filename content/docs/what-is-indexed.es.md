@@ -65,7 +65,7 @@ Tu agente lee la imagen con sus propias herramientas de visión y guarda las pal
 
 ```sh
 tg personal attachments list 'chat:"Book club" is:needs_text'
-tg personal attachments text set "Book club" 204 --text-file ./scan.txt
+tg personal attachments update "Book club" 204 --text-file ./scan.txt
 ```
 
 Para muchos escaneos puedes elegir un servicio de modelos. Es el único sitio donde los archivos salen de tu ordenador: `attachments extract --ocr` envía imágenes y páginas de PDF escaneados al servicio que configuraste. Sin `--ocr` no se llama a ningún modelo.
@@ -75,12 +75,12 @@ Para muchos escaneos puedes elegir un servicio de modelos. Es el único sitio do
 Una nota de voz se puede buscar cuando tiene transcripción. La herramienta la guarda y la encuentra con una palabra normal o con `transcript:`.
 
 ```sh
-max personal models audio download gigaam-v3
+max personal models download gigaam-v3
 max personal messages transcribe "Book club" 204
 max personal search messages 'transcript:invoice'
 ```
 
-- Un modelo de voz funciona en tu ordenador. La grabación no sale de él. Descarga un modelo una vez con `models audio download`; no se descarga solo.
+- Un modelo de voz funciona en tu ordenador. La grabación no sale de él. Descarga un modelo una vez con `models download`; no se descarga solo.
 - Modelos: `parakeet-v3` cubre 25 idiomas, `gigaam-v3` es el mejor para ruso.
 - `tg` también puede usar la transcripción del propio Telegram si tu cuenta la tiene (`transcribe_with`: `auto`, `messenger` o `local`). `max` siempre usa el modelo de tu ordenador.
 - La transcripción local lee una grabación Ogg Opus completa. Las grabaciones largas necesitan más memoria y tiempo.
@@ -109,8 +109,8 @@ Las imágenes se buscan de dos maneras. Elige según lo que recuerdes.
 Recuerdas de qué se hablaba cuando llegó la foto. `conversations embed` da a cada foto un fragmento de texto con su pie, hasta 3 mensajes antes y después en un margen de 10 minutos, el título del chat y el remitente. La búsqueda por significado encuentra entonces el mensaje de la foto en cualquier idioma.
 
 ```sh
-tg personal models text download e5-small
-tg personal conversations build --chat "Book club"
+tg personal models download e5-small
+tg personal conversations links rebuild --chat "Book club"
 tg personal conversations embed --chat "Book club"
 tg personal search conversations "photos from the trip" --chat "Book club"
 ```

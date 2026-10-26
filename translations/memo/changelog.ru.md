@@ -8,7 +8,232 @@ title: "История изменений"
 
 Точные технические записи новых выпусков сохранены на английском; инструкции по использованию переведены в соответствующих руководствах.
 
-## Unreleased
+## 0.108.0 — 25.10.2026
+
+### Fixed
+
+- Почта разбирается с postal-mime 4.1.4, где исправлено чтение некоторых повреждённых писем: блок заголовков заканчивается на первой строке, которая не является ни полем, ни его продолжением, вложенное письмо в base64 или quoted-printable остаётся вложением, а учитываются только настоящие метки кодировки UTF-16. При повторном импорте такого письма может сохраниться немного другой текст.
+- **`memo --version` без других аргументов отвечает до загрузки программы**: около 50 файлов модулей вместо 1 050 (`cli/start` из cli-core). `--version` вместе с чем-то ещё в строке проходит через программу, как раньше.
+
+## 0.107.0 — 25.10.2026
+
+### Security
+
+- **`memo doctor` сообщает о файлах и папках, которые могут читать другие пользователи, и о команде `chmod`, которая исправляет каждый случай.** `files` в `memo doctor --json` имеет вид `{ checked, ok, problems }`, каждая проблема — `{ path, mode, want }`, как у doctor каждого инструмента WireCat: файлу настроек и хранилищу с его файлами `-wal` и `-shm` нужен `0600`; папке настроек, папке журнала запусков и папке хранилища (если хранилище не задано через `MESSAGING_STORE`) — `0700`. С `--json` исправление выводится в stderr как `to make it private: chmod 600 '<path>'`; текстовый вывод перечисляет его вместе с остальными проблемами. На диске ничего не меняется, и эти проблемы не влияют на код выхода, как и проблемы настроек. Windows не проверяется: `files` равно `{ checked: false, reason }`.
+- **Каждое изменение, которое memo сохраняет в `config.json`, оставляет файл доступным только владельцу (`0600`)** (cli-base 0.57.0). Файл, который могли читать другие пользователи, как его оставлял `config set` в старых версиях, становится закрытым при следующем сохранении.
+
+## 0.106.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **Записи запусков теперь ведёт cli-core 0.430.0** (`recordRuns`) вместо собственной копии memo. Запуски сохраняются как раньше — каждая неудачная команда, включая ошибку использования до любой команды, удачная — при `--record` или `record: true`, ничего — при `--no-record`, — а вызовы Himalaya и RDAP записываются как раньше. В `runs list` и `runs show` у запуска теперь нет поля `profile` вместо `""`, поскольку у memo нет профилей.
+
+## 0.105.0 — 25.10.2026
+
+### Added
+
+- **Неудачный запуск сообщает, что пошло не так** (cli-core 0.425.0): `memo runs list` и `memo runs show` получают `error` с классом, кодом, причиной, замаскированным сообщением и коротким стеком.
+- `memo store info` описывает общее хранилище: где оно находится, его схему по сравнению с той, которую читает memo (`schema.reason`, и `schema.upgrade` — до какой схемы его переведёт следующий запуск memo), и какие инструменты им пользовались. Он открывает хранилище только для чтения, поэтому WireCat Desktop может понять, может ли memo прочитать хранилище.
+- **`memo skill status` сообщает для каждого агента, совпадает ли установленный у него SKILL.md с этой версией**, а `memo skill show --for claude|agents` печатает установленную там копию (cli-base 0.56). `memo skill show`, `skill install` и `skill status` принимают `--json`, как в tg: у memo нет глобального `--json`, поэтому у каждой команды навыка он свой.
+
+### Fixed
+
+- **Инструменты MCP описывают собственные команды memo, а не команды мессенджера.** `memo_tools_search` предлагает «list», «show», «change a setting» вместо «unread», «send message», «chat members»; `memo_write` говорит «creates, edits, deletes» вместо «sends, edits, deletes, joins»; пример команды у `memo_read` и `memo_write` — `notes list`, а не `messages list`, которой в memo нет; а текст ответа — «names, titles, what people wrote» (cli-core 0.426.0).
+- **Справка больше не пишет «Availability: available for this profile»**, поскольку у memo нет профилей; команда, которую нельзя выполнить, по-прежнему объясняет почему. `memo --help` сообщает, что zm и drive «searchable with your other WireCat data».
+- MCP больше не предлагает группу команд, которая только печатает свою справку, например `models`; её команды по-прежнему предлагаются по одной.
+- Шаги руководств person-brief и decision-trail для tg, max, zm и drive называют профиль, как того требуют эти команды: `tg personal contacts context Kai`.
+
+## 0.104.0 — 25.10.2026
+
+### Added
+
+- **`memo doctor --json` перечисляет каждую проблему в файле настроек как `config.issues`** в форме, общей для doctor каждого инструмента WireCat: `{ kind, file, key?, line?, column?, what, fix? }`, где `kind` — одно из `invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` или `invalid_value`. `what` говорит, каким должно быть значение, и никогда не цитирует сохранённое значение; `fix` — это `memo config unset <key>`, который работает как написано, и его нет для некорректного JSON, где `line` и `column` указывают, где остановился разбор. Doctor по-прежнему отвечает на сломанный файл, проверяет остальное по той части файла, которая ещё загружается, и одни только проблемы настроек оставляют его код выхода равным 0. Текстовый вывод перечисляет их вместе с остальными проблемами.
+- **`memo config unset <key>` удаляет одну настройку по пути через точку** (`mail.accounts.0.colour`, `permissions.notes.edit`), даже ту, которую memo не знает, и даже в файле с другими проблемами, поэтому каждое исправление, которое печатает doctor, работает. Через MCP команда не предлагается: там она могла бы удалить сохранённое разрешение, которое применяет сервер.
+- **memo ведёт журнал запусков, как tg, max и wa.** Неудачная команда сохраняется как запуск: её слова (никогда не аргументы), как она закончилась, код ошибки и каждый вызов Himalaya (`himalaya.envelope.list`, статус выхода, длительность) и запрос RDAP (`rdap.domain`, HTTP-статус), которые она сделала, — никогда заметку, адрес, тему, папку или домен. Их читают `memo runs list [query] --limit --page --json`, `memo runs show <run-id> --json` и `memo runs path <run-id>`; страница Logs в WireCat Desktop читает `memo runs list … --json`. `--record` сохраняет удачный запуск, `--no-record` не сохраняет ни одного; ключи `record` и `keep_runs_for_days` (по умолчанию 30) в файле настроек задают и то и другое для всех команд. Вызов инструмента агентом сохраняется как `mcp <command>`.
+
+### Changed — may break callers
+
+- **`config.exists` в `memo doctor --json` теперь называется `config.found`**, рядом с новым `config.issues`.
+- **Файл настроек с проблемами отклоняется с первой проблемой, её исправлением и числом остальных, которые перечисляет `memo doctor`**: "<file>: setting default_profile is not a setting of memo — remove it with \`memo config unset default_profile\` (and 2 more problems — \`memo doctor\` lists them all)". Раньше отказ называл только первый ключ и фиксированную причину.
+- **Старые имена команд больше не распознаются как ключи разрешений.** Сохранённое разрешение или ключ `--permission` от удалённого пути команды (`auto.start`, `mail.trash`, `note` и остальные) получает тот же ответ, что и любой ключ, который не называет команду: `memo mcp` отказывается запускаться и называет `memo config unset`, который удаляет сохранённый ключ, или `--permission <key> names no command`, без указания замены. Любой другой неизвестный ключ разрешения отклоняется так же; раньше он игнорировался.
+- **`memo sync --account` удалён.** Называйте почтовые ящики через `--source email:<account>`.
+- **Используется cli-core 0.423.0.** С ним `--source obsidian:<id>` и `--source local:<id>` называют одну папку заметок; раньше они не находили аккаунт.
+
+### Fixed
+
+- **Справка memo описывает собственные команды memo.** Первый экран указывает на `answers create "…" --all` (команды `ask` нет). Инструкции сервера MCP открывают письмо через `messages show`, а не через `mail show`, которого в memo нет. `search messages` и `search mail` описывают `--brief` и `--full` для сообщения или письма, а `--full` поясняет, что JSON всё равно даёт фрагмент. Примеры встреч называют настоящий аккаунт встреч (`zoom:me@example.com`). Примеры `mail delete`, `mail restore` и `mail rules apply` — пробные запуски, а `upgrade` показывает только `--check`. memo сообщает cli-core, что он не мессенджер (`AppIdentity.messenger: false`). `minCompatible` хранилища не меняется.
+
+### Removed
+
+- **`search all` и `search notes` больше не принимают `--brief` и `--full`.** Оба флага принимались и затем игнорировались. Вызов с одним из них теперь завершается ошибкой неизвестного параметра.
+- Якоря для удалённых имён команд в `docs/commands.md` и таблица удалённых имён инструментов MCP в `docs/mcp.md`.
+
+## 0.103.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **memo работает с общим хранилищем из cli-core 0.420.0, которое переводит хранилище через версии 30–33.** Папки заметок теперь — аккаунты провайдера `obsidian` или `local`: `--account obsidian:<id>` и `local:<id>` называют одну из них, и `folder:<id>` по-прежнему тоже. Документы Google Drive хранятся в аккаунте `google-drive` инструмента drive, а не в замещающей папке; `memo folders list` по-прежнему помечает его «kept by drive», `memo folders update` по-прежнему его отклоняет, `search all` называет его среди прочитанных аккаунтов, а `notes:<id>` называет его источником. `vocabulary inspect` теперь отвечает `coverage.apply_supported: true`, значением cli-core: cli-core умеет применить предпросмотр, а в memo нет команды, которая это делает. Когда этот memo перевёл хранилище, более старый memo и любой CLI на более старом cli-core отказываются с ним работать и предлагают обновиться.
+
+## 0.101.0 — 25.10.2026
+
+### Added
+
+- **`memo projects evidence` по умолчанию читает подтверждённых участников проекта.** Для каждого человека, подтверждённого как участник проекта (`memo relationships add person:<id> project:<id>`), теперь читается то, что написали его сохранённые идентичности, как при `--contact person:<id>`, без явного указания; раньше участник, который ни разу не написал название проекта, отсутствовал в результате и в `people`. Предложенные участники не читаются, а человек, переданный ещё и через `--contact`, читается один раз. Псевдонимы участников не ищутся. Всего запускается не больше 16 линий, поэтому участники, которые не поместились, перечисляются как непрочитанные (`member`, `member-limit`) в фиксированном порядке и никогда не отбрасываются молча. MCP `project_evidence` возвращает то же.
+
+## 0.100.0 — 25.10.2026
+
+### Added
+
+- **`memo projects evidence` сообщает, кто участвует.** В результате есть `people`: кто написал сообщения и письма запуска, человек за человеком по вашим сохранённым контактам, с числом элементов от каждого. Связанные аккаунты человека в нескольких мессенджерах и почте считаются как один; ваши собственные сообщения не учитываются; не больше 20 человек, `people_omitted` считает остальных. Имена в тексте никогда не используются для догадок. Текстовый вывод добавляет одну строку «people who wrote these». MCP `project_evidence` возвращает то же. Используется cli-core 0.418.0, в котором есть и исправление из 0.417.0: `--discover` считает «?» в конце вопроса знаком препинания.
+
+## 0.99.0 — 25.10.2026
+
+### Added
+
+- Каждый раз, когда memo открывает общее хранилище для записи, он сообщает cli-core своё имя и версию. Когда другой CLI WireCat (tg, max) обновляет хранилище так, что старые CLI больше не могут с ним работать, он теперь может назвать memo и предложить выполнить `memo upgrade` вместо общей строки.
+
+## 0.98.0 — 25.10.2026
+
+### Fixed
+
+- **`memo projects evidence --cursor` вычитывает активный связанный чат на полной скорости, когда остальные чаты закончены.** Доля чата в элементах запуска теперь учитывает только связанные чаты, в которых ещё есть что читать, поэтому в проекте с десятью связанными чатами последнему активному нужно около 10 запусков вместо примерно 45. Используются cli-core 0.416.0 и cli-base 0.53.0.
+
+## 0.97.0 — 25.10.2026
+
+### Added
+
+- `memo mcp --http --public-url <https-origin>` предоставляет те же три инструмента MCP через аутентифицированный HTTP-транспорт cli-core, по умолчанию на локальном порту 8767. Общий вход по коду доступа OAuth, хеширование токенов и `--revoke` работают с теми же разрешениями на каждый вызов и более строгими ограничениями сервера, что и stdio. `--port` выбирает другой локальный порт; параметры только для HTTP без `--http` отклоняются. Руководство по удалённому подключению описывает туннели, вход приложения и отзыв доступа.
+
+### Fixed
+
+- Создание заметки через MCP передаёт текст один раз через сгенерированный исполнитель Core, а не сразу как позиционный аргумент и как `--text`. Общее исправление действует для stdio и HTTP.
+
+## 0.96.0 — 25.10.2026
+
+### Changed — may break callers
+
+- `mail rules list <account> protected:true` заменяет `--filter is:protected`. У удалённого параметра нет псевдонима.
+
+### Added
+
+- Списки организаций, проектов, напоминаний, ключевых документов, почтовых правил и запусков очистки объявляют запросы, выведенные из схемы, и отбирают записи в собственных читателях до ограничений списка.
+- **`memo search people <name>` находит человека во всех аккаунтах.** Поиск идёт по имени, логину или вашему
+  псевдониму без учёта регистра и диакритических знаков, в том числе кириллицей, и даёт `person:<id>`, который принимает
+  `memo projects evidence --contact`, с каждой идентичностью. `--source` сужает набор аккаунтов; ответ называет
+  прочитанные.
+- **`memo projects evidence` читает за один запуск только долю каждого связанного чата.** Один активный чат больше не
+  заполняет весь запуск: каждый связанный чат даёт не больше своей доли лимита элементов (50 для одного чата при лимите по
+  умолчанию 100, по 20 от четырёх чатов), вывод называет ограниченные чаты, а `--cursor` читает остальное. Записи JSON
+  `linked_chats` получают `items` и `capped`. Нужен cli-core 0.413.0.
+
+## 0.94.0 — 24.10.2026
+
+### Changed — may break callers
+
+- **Общие контракты команд требуют явных переопределений в исходном коде.** Обзор команд показывает схемы, объявленные причины и точные различия «до» и «после». Сохранённые метки тем встреч используют `--topic-name` в CLI и `topic_name` в продолжениях MCP.
+
+### Added
+
+- **`memo context` показывает файлы человека в Google Drive.** Файлы, которыми он владеет или которые последним изменял, видны в разделе «Files, as Google reports» со ссылкой Google и временем изменения от Google. Связи, которые угадала программа, по-прежнему ждут вашей проверки.
+- **`models list` и проверенные загрузки используют каталог Core.** Выбор модели — встроенный запрос, а `models download --offline` отказывает до любой работы с сетью. Обновления задач проекта сохраняют поля приоритета и родителя; задачи из источников сохраняют явную обработку аккаунта и исполнителей.
+
+### Security
+
+- **Разрешение зависимостей исключает уязвимые версии Zod, Vite и postal-mime.** Проверки выпуска отклоняют серьёзные уязвимости рабочих зависимостей в зафиксированных и свежих разрешениях пакетов.
+
+## 0.93.0 — 24.10.2026
+
+### Changed — may break callers
+
+- **MCP uses cli-core's discovery/read/write tools.** Reconnect saved clients, find commands with
+  `memo_tools_search`, and run CLI paths with `memo_read` or `memo_write`. Individual tool names are removed.
+  Command input and execution come from the CLI, including snake_case options, permission rechecks and
+  read locks. Discovery retains denied commands with their current availability and reason. Search inputs use `query`; `facts add` uses `statement`. The MCP guide maps saved calls to
+  their replacements. Cited meeting/project proposals keep their inline JSON `input`; annotation checks
+  take the existing snapshot and bindings file paths used by the CLI.
+- **Account selection uses only canonical flags.** Reads use `--source`; account-scoped writes use explicit
+  `--account provider:account`. Retired `--provider` and read-side `--account` flags are refused before the command runs.
+
+- **Commands use the shared vocabulary without aliases.** Rename saved calls and permission keys:
+
+  | Previous command | Current command |
+  |---|---|
+  | `agents log` | `agents list` |
+  | `auto start/stop/status` | `jobs start/stop/status` |
+  | `ask` | `answers create` |
+  | `note <identity> [path]`, `note --clear` | `notes links show/add/clear` |
+  | `folders attach` | `folders update` |
+  | `mail trash` | `mail delete` |
+  | `mail runs` | `mail runs list` |
+  | `mail rules import-filters` | `mail rules import --format gmail` |
+  | `memories stale` | `memories invalidate` |
+  | `relationships suggest` | `relationships scan` |
+  | `reminders poll`, `reminders ack` | `reminders claim`, `reminders acknowledge` |
+  | `tasks relations` | `tasks links` |
+
+  Moved permission keys stop with `configuration_error` naming the replacement, so saved denials cannot
+  silently stop applying. Note links have separate read and write commands with standard JSON answers.
+  Meeting searches select tags/topics with native `tag:` and `topic:` query terms; the old `--tag` and
+  `--topic` flags are removed. Memo rules imports keep their existing default format and behavior.
+- **Agent facts require cited evidence through both CLI and MCP.** The owner may still record an uncited
+  fact; proposed agent facts cannot bypass the evidence requirement by using the command runner.
+
+### Added
+
+- **`projects annotations show` reads selected annotations without creating a file**, through the same
+  snapshot service as export. It remains available under the read lock.
+
+### Fixed
+
+- **Supported commands remain discoverable with current availability and a reason**, including under the
+  read lock. Calls enforce the current permissions. CLI help and discovery also show the read lock.
+  Uses published cli-core 0.410.0 and cli-base 0.50.4.
+
+## 0.92.0 — 24.10.2026
+
+### Changed — may break callers
+
+- **Commands use cli-core 0.406.0's canonical names, with no aliases.** `tasks plan` is now part of
+  `tasks update`: one command sets the title and description of any task, `--due` and `--remind-time`, priority
+  and parent for a project task, and category and assignee for a task from a source, which names its `--account`.
+  `tasks update` is refused under `MEMO_READ_ONLY`, so a read-only agent no longer sets due dates or categories.
+  `models text download` is `models download`. The MCP tools follow: `tasks_plan` and `models_text_download` are
+  gone. Shared commands use cli-core's new names, and a saved permission key with an old path, such as
+  `tasks.plan`, stops with `configuration_error` naming its replacement.
+
+## 0.91.0 — 24.10.2026
+
+### Added
+
+- **The agent skill asks for two or three searches in other words before reporting no answer**, covering
+  paraphrases and language changes without a separate query-expansion model.
+
+- **Meeting search exposes every shared selector**, including meeting/person/identity/event/series ids,
+  tags and topics. The guide explains Memo's explicit stored-account scope and why calendar verification
+  and zm's extra semantic-search flags differ.
+
+- **`memo mail add <account> <address>` checks the explicit Himalaya account and matching configured email**
+  before saving it. `mail check <account>` repeats the local checks; neither command chooses a default account
+  or opens the mailbox. Use `--kind imap` and repeated `--folder` for other IMAP providers.
+
+- **`memo models text download <model>` downloads and checks the shared search model**, through cli-core's
+  downloader. Sync, search and setup instructions now point to `memo models text download e5-small`.
+
+- **MCP exposes the command tree, including writes**, with generated command names alongside all 37 existing
+  tools. Open cited notes with `notes_show`, stored messages and emails with `messages_show`, and tags with `tags_list`.
+  Source-folder and mail-rule changes need `mcp.authority` (denied by default). Meeting findings decisions
+  and selected annotation restore each need their own explicit permission. `agent_decisions` still applies.
+- **Saved dotted `permissions` and `mcp --permission key=level` limit tools.** Server overrides can only tighten
+  saved levels; locks and permissions are checked before every call. `MEMO_READ_ONLY` removes writing tools.
+
+### Fixed
+
+- **The shared mail-import hint names `--only mail`**, included with cli-core 0.404.0.
+- **cli-base is pinned at 0.50.3**, matching cli-core's required vocabulary. MCP server/client are pinned at 2.3.0.
+- **Install instructions name npm 11.17's `allowScripts` warning and npm 12's blocked scripts**, explain the
+  package-specific approval command, and keep `memo skill install --for all` explicit.
+- **The introduction describes file writes accurately:** `notes edit` can change a source note, `notes export`
+  writes files, and explicit Gmail Trash and restore commands need `--yes`.
 
 ## 0.90.0 — 24.10.2026
 

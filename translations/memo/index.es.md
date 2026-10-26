@@ -3,7 +3,7 @@ title: "Memo"
 ---
 
 Memo guarda en un solo lugar de tu ordenador lo que sabes sobre personas y proyectos: tus notas, tu
-correo y tus mensajes de Telegram y MAX. Tu agente de IA (por ejemplo Claude Code, Codex, Cursor o
+correo y tus mensajes de Telegram, MAX y WhatsApp. Tu agente de IA (por ejemplo Claude Code, Codex, Cursor o
 Gemini CLI) lo usa para encontrar lo que se dijo, reunir el contexto para una respuesta y recordar lo
 importante.
 
@@ -32,17 +32,18 @@ Tres palabras aparecen en todas las páginas:
 | Llevar la cuenta de lo que debes a otras personas y recibir recordatorios | [Tareas y recordatorios](./tasks.md) |
 | Dejar que tu agente recuerde lo que aprendió, y decidir tú qué se queda | [Recuerdos y hechos](./memories.md) |
 | Usar Memo desde una aplicación sin terminal, como Claude Desktop | [El servidor MCP](./mcp.md) |
+| Conectar una app del navegador o teléfono | [Conexión remota](./remote.md) |
 
 ## Cómo funciona
 
-1. **Tú eliges tus fuentes.** Añades una carpeta de notas, conectas una cuenta de correo o usas tg y
-   max para guardar tus chats. No se lee nada hasta que tú lo eliges.
+1. **Tú eliges tus fuentes.** Añades una carpeta de notas, conectas una cuenta de correo o usas tg, max
+   y wa para guardar tus chats. No se lee nada hasta que tú lo eliges.
 2. **Memo copia el texto en el almacén local.** La importación deja archivos y correo intactos.
    En Linux, un temporizador puede repetir la importación. Los [comandos de limpieza de Gmail](./mail.md#clean-up-gmail)
    mueven el correo elegido a la Papelera o lo restauran solo con `--yes`.
 3. **Tú o tu agente preguntáis.** Memo responde con el texto que coincide y una referencia a cada
    fuente, para que puedas abrir el original y comprobarlo.
-4. **Tú controlas las decisiones del proyecto.** Los nuevos recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas esperan revisión. Por defecto, el agente puede decidir propuestas de proyecto con un motivo registrado; [exige decisiones del propietario](./configuration.md#agent_decisions) si quieres revisar cada una. Las conclusiones de reuniones siguen requiriendo al propietario. Memo nunca envía mensajes ni correos.
+4. **Tú controlas las decisiones del proyecto.** Los nuevos recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas esperan revisión. Por defecto, el agente puede decidir propuestas de proyecto con un motivo registrado; [exige decisiones del propietario](./configuration.md#agent_decisions) si quieres revisar cada una. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos. Memo nunca envía mensajes ni correos.
 
 Memo conserva el almacén en tu ordenador. Memo envía tu texto a un proveedor de IA solo cuando configuras uno y
 lo permites para esa petición. [Cómo funciona Memo](./how-it-works.md) lo explica con más detalle.
@@ -67,7 +68,9 @@ memo search notes budget
 ```
 
 Memo necesita Node.js 22.16+ o 24+ ([qué instalar primero](./installation.md)). Tus archivos se
-quedan donde están; Memo solo los lee.
+quedan donde están. Memo lee los archivos e importa el correo sin modificarlo. `notes edit` puede cambiar
+el archivo original de una nota; `notes export` escribe notas en archivos. Los comandos explícitos `mail delete`
+y `mail restore` mueven correo de Gmail solo con `--yes`.
 
 ## Adónde ir después
 
@@ -90,3 +93,4 @@ quedan donde están; Memo solo los lee.
 | [Configuración](./configuration.md) | Cada ajuste del archivo de configuración |
 | [Solución de problemas](./troubleshooting.md) | Algo no funciona: qué dice la pantalla y qué hacer |
 | [Seguridad](./security.md) | ¿Qué lee, escribe y envía Memo? |
+| [Comparación con otras herramientas](./compare.md) | ¿En qué se diferencia Memo y cuándo conviene otra herramienta de memoria? |

@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test"
 
 for (const lang of ["en", "ru", "es"])
-  for (const tool of ["tg", "max"]) {
-    test(`${lang}/${tool}: reference entry is small and legacy anchors reach the right partition`, async ({
+  for (const tool of ["tg", "max", "wa"]) {
+    test(`${lang}/${tool}: reference entry is small and command anchors reach the right partition`, async ({
       page,
       request,
     }) => {
@@ -15,7 +15,7 @@ for (const lang of ["en", "ru", "es"])
         await expect(
           page.locator(`[data-command-index] a[href="/${lang}/docs/${tool}/commands-${group}"]`),
         ).toHaveCount(1)
-      // A fresh load, as a reader following an old link gets: changing only the hash of a page still hydrating
+      // A fresh load, as a reader following a link gets: changing only the hash of a page still hydrating
       // lets the router's first replaceState drop it before the redirect reads it.
       await page.goto("about:blank")
       await page.goto(`/${lang}/docs/${tool}/commands#${tool}-chats-members-add`)

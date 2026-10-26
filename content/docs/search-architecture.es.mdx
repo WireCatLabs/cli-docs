@@ -70,7 +70,7 @@ La respuesta JSON incluye las versiones del lenguaje, los campos y los presets, 
 
 `stats messages show` ejecuta la misma consulta y cuenta cada mensaje una vez, por chat, remitente, día de calendario u hora. Solo cuenta el archivo. Una búsqueda o recuento correcto guarda su consulta y opciones, nunca sus resultados, en un historial local de las 1000 ejecuciones más recientes; las búsquedas guardadas son entradas con nombre que se analizan de nuevo en cada ejecución.
 
-Lucene estricto es el único lenguaje de consulta. Los modos anteriores `--language legacy` y JavaScript `--regex` se eliminaron; en su lugar, escribe una expresión regular de Lucene como `body:/.*invoice.*/`.
+Lucene estricto es el único lenguaje de consulta. Para una expresión regular, escribe una de Lucene como `body:/.*invoice.*/`.
 
 ### Preguntas y evidencia parcial
 
@@ -92,7 +92,7 @@ Las formas de las palabras no corrigen erratas. La búsqueda estricta, el modo p
 
 Las raíces Snowball recuperan más formas que la coincidencia exacta, pero también pueden unir palabras sin relación. La [medición de formas de palabras](https://github.com/WireCatLabs/cli-core/blob/ca0ae248b4f743e395c5b022f742250876bbb818/bench/stemming/results.md) las compara con vecinos de escritura similar por trigramas. Usa `exact:` cuando la diferencia importe.
 
-Los stemmers son un ajuste de todo el almacén, compartido por cada perfil, tg y MAX: `search_stemmers.cyrillic` (`russian` o `none`) y `search_stemmers.latin` (`english`, `spanish`, ambos —el valor por defecto— o `none`). `store reindex` aplica un cambio tuyo. Mientras se construye el índice de raíces, una búsqueda encuentra las formas exactas y lo avisa; `serve` termina las raíces en segundo plano y `store migrate` al instante. Algunas palabras distintas comparten raíz —`часть`/`часто`, `caso`/`casa`— y `exact:` o `--exact` las separa. La respuesta JSON dice si se usaron raíces: `query.stemming` nombra el stemmer y la raíz de cada palabra, `stemsReady` está junto a `wordsReady`, y cada resultado lleva `exact: false` cuando solo coincidió otra forma.
+Los stemmers son un ajuste de todo el almacén, compartido por cada perfil, tg y MAX: `search_stemmers.cyrillic` (`russian` o `none`) y `search_stemmers.latin` (`english`, `spanish`, ambos —el valor por defecto— o `none`). `store rebuild` aplica un cambio tuyo. Mientras se construye el índice de raíces, una búsqueda encuentra las formas exactas y lo avisa; `serve` termina las raíces en segundo plano y `store migrate` al instante. Algunas palabras distintas comparten raíz —`часть`/`часто`, `caso`/`casa`— y `exact:` o `--exact` las separa. La respuesta JSON dice si se usaron raíces: `query.stemming` nombra el stemmer y la raíz de cada palabra, `stemsReady` está junto a `wordsReady`, y cada resultado lleva `exact: false` cuando solo coincidió otra forma.
 
 ### Búsqueda en el servidor junto al archivo
 
@@ -106,7 +106,7 @@ Solo se envía lo que reduce los candidatos: las palabras y frases obligatorias,
 
 <ArchitectureDiagram name="conversationSearch" lang="es" />
 
-`conversations build` recorre en orden temporal los mensajes guardados de un chat. Cada mensaje puede tener vínculos candidatos con mensajes anteriores. Un padre elegido lo une a esa conversación; sin padre empieza una nueva.
+`conversations links rebuild` recorre en orden temporal los mensajes guardados de un chat. Cada mensaje puede tener vínculos candidatos con mensajes anteriores. Un padre elegido lo une a esa conversación; sin padre empieza una nueva.
 
 Precedencia:
 
@@ -122,10 +122,10 @@ La construcción es explícita. Una construcción nueva publica nuevas pertenenc
 
 Vinculación con ayuda del agente: `skill show link-conversations` da al agente del dueño sus instrucciones; `conversations batches status` estima los mensajes, los lotes y el texto; `batches next` entrega una ventana de 10–200 mensajes (50 por defecto) con los mensajes anteriores; `conversations links add` guarda la respuesta JSON del agente, toda o nada, y `conversations links clear` borra las respuestas del agente para un chat. Guardar respuestas requiere el permiso de perfil `conversations.links`. En este flujo la CLI nunca llama a un modelo por su cuenta. Una respuesta que se refiere a un mensaje cambiado o eliminado queda obsoleta y no entra en construcciones posteriores.
 
-`conversations build --chat <chat> --analyze` es la alternativa explícita: la CLI envía lotes acotados a un endpoint configurado compatible con OpenAI o de Anthropic. Necesita un chat nombrado, indica el volumen, el endpoint y el límite de tokens, y pide consentimiento, que se recuerda para esa cuenta, chat y proveedor hasta revocarlo (`conversations consents list`, `conversations consents revoke`). Por defecto son 50 mensajes por lote y como máximo 100 000 tokens reservados por ejecución; `--yes` da el consentimiento en scripts.
+`conversations links rebuild --chat <chat> --analyze` es la alternativa explícita: la CLI envía lotes acotados a un endpoint configurado compatible con OpenAI o de Anthropic. Necesita un chat nombrado, indica el volumen, el endpoint y el límite de tokens, y pide consentimiento, que se recuerda para esa cuenta, chat y proveedor hasta revocarlo (`conversations consents list`, `conversations consents remove`). Por defecto son 50 mensajes por lote y como máximo 100 000 tokens reservados por ejecución; `--yes` da el consentimiento en scripts.
 
 ```sh
-tg personal conversations build --chat "Project team"
+tg personal conversations links rebuild --chat "Project team"
 tg personal conversations list "Project team" --json
 max personal conversations batches status --chat "Project team" --json
 ```
@@ -141,9 +141,9 @@ Los modelos locales se ejecutan con ONNX Runtime (WebAssembly) en Node o Bun. El
 Una sesión local usa `min(8, núcleos)` hilos. `--workers` inicia varias sesiones, cada una con su copia del modelo, y reparte los hilos entre ellas; `--threads` fija el total.
 
 ```sh
-tg personal models text download e5-small
+tg personal models download e5-small
 tg personal conversations embed --chat "Project team"
-tg personal conversations embed status --chat "Project team" --json
+tg personal conversations embeddings status --chat "Project team" --json
 ```
 
 Un proveedor remoto calcula los vectores con la clave del dueño: OpenAI, o cualquier servidor con la forma `/v1/embeddings` de OpenAI mediante `--base-url` junto con `--model` y `--dims`, como Gemini, Jina, Ollama o LM Studio. Eso envía el texto de los fragmentos, y cada búsqueda envía la pregunta. Antes de enviar nada, `embed` indica los fragmentos, el máximo de tokens y el precio máximo, y espera un sí (`--yes` en scripts, `--max-tokens` como tope).
@@ -182,7 +182,7 @@ max personal conversations related "Project team" 4521 --json
 
 - **Ediciones.** Un resultado cuyo fragmento cambió después de calcular el vector se marca `stale: true`; su puntuación corresponde al texto anterior hasta la siguiente construcción y cálculo.
 - **Eliminaciones.** Un mensaje eliminado conserva su fila, para que una sincronización posterior no lo traiga de vuelta, pero pierde su texto: en la fila, en la copia de búsqueda, en el historial de ediciones, en las transcripciones y en todos los vectores de los fragmentos que lo contenían, salvo que un fragmento actual sin mensajes eliminados use el mismo texto.
-- **Puesta al día.** `conversations build` y `embed` sin `--chat`, y `search conversations --catch-up`, construyen y calculan en este equipo los chats que cambiaron o nunca se construyeron: por defecto, como mucho 20 chats y 2000 fragmentos por ejecución (`--max-chats`, `--max-chunks`). Nunca descargan un modelo; un modelo remoto solo se usa por chat y con el sí del dueño. MCP ofrece la misma puesta al día como el comando de escritura `conversations refresh`.
+- **Puesta al día.** `conversations links rebuild` y `embed` sin `--chat`, y `search conversations --catch-up`, construyen y calculan en este equipo los chats que cambiaron o nunca se construyeron: por defecto, como mucho 20 chats y 2000 fragmentos por ejecución (`--max-chats`, `--max-chunks`). Nunca descargan un modelo; un modelo remoto solo se usa por chat y con el sí del dueño. MCP ofrece la misma puesta al día como el comando de escritura `conversations refresh`.
 
 ## 7. Pruebas y contexto para un agente
 

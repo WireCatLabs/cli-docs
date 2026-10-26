@@ -2,17 +2,23 @@
 title: "Roadmap"
 ---
 
-This page lists planned `max` features that are not available yet. Check it when a missing feature makes you look for a workaround: it may already be planned. Priorities are approximate and can change. Suggest a feature in [GitHub issues](https://github.com/WireCatLabs/max-cli/issues).
+These are planned features that `max` does not yet provide. Check before finding a workaround: your missing feature may already be planned. Priorities are approximate and may change. Suggest a feature in [GitHub issues](https://github.com/WireCatLabs/max-cli/issues).
 
-## Coming soon
+## Available now
 
+Personal accounts and bots: reading, local archive search, sending, groups and channels, contacts, tasks, voice transcription and an MCP server for agents. See [all commands](./commands.md) for the full list and [recipes](./recipes.md) for workflows.
 
-- **Optional local storage.** A setting that makes `max` save nothing to disk and retrieve everything from MAX.
+## In progress
+
+- **Attachment archives.** Download attachments to a folder, verify each file and check the archive offline.
 
 ## Later
 
-- **Event-triggered actions.** Run your own command when a new message arrives.
+- **Optional local archive.** A setting to save nothing on disk and get everything from MAX.
+- **Event actions.** Run your own command when a new message arrives.
 - **Video notes**, **setting and removing a cloud password**.
-- **Installers** for each platform, without Node or Bun.
+- **Pinning and archiving chats**, marking a chat unread.
+- **Channel comments** for personal accounts.
+- **Platform installers** without Node or Bun.
 
 See the [changelog](./changelog.md) for changes in each released version.

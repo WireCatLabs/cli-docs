@@ -31,7 +31,8 @@ memo tasks list --source telegram:1
 дважды, вы получите уже существующую.
 
 Папка заметок — тоже аккаунт: номер папки search выдаёт как `folder_id`, а Memo принимает его как
-`notes:<number>` или как `folder:<id>`, который показывают её сообщения. `--source notes` указывает вашу папку,
+`notes:<number>` или как `obsidian:<id>` либо `local:<id>`, которые показывают её сообщения; `folder:<id>` тоже её называет.
+`--source notes` указывает вашу папку,
 если она одна. `memo tasks list` и `memo reminders list` без `--source` читают все аккаунты и называют их в
 `meta.accounts`.
 
@@ -41,11 +42,13 @@ memo tasks list --source telegram:1
 
 ```sh
 memo tasks agenda --source telegram:1           # overdue, due, owed and waiting chats
-memo tasks plan 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
+memo tasks update 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
 memo tasks show 1a2b3c4d --source telegram:1
 memo stats tasks show --source telegram:1       # open tasks per chat
 memo tasks agenda --source notes                # tasks from your notes folder
 ```
+
+Чтобы изменить поля задачи, используйте `tasks update`.
 
 Без `--source` или `--account` команда перечисляет аккаунты в хранилище. tg и max открывают эти задачи при синхронизации; memo читает то же хранилище.
 
@@ -101,7 +104,7 @@ memo tasks close 7 --account telegram:1 --as dismissed
 memo tasks link HRB-2 HRB-1 --kind blocked-by     # HRB-2 waits for HRB-1
 memo tasks list project:HRB ready:true          # tasks with nothing left to wait for
 memo tasks status HRB-2                           # why HRB-2 can or cannot start
-memo tasks relations HRB-2
+memo tasks links HRB-2
 memo tasks unlink HRB-2 HRB-1 --kind blocked-by
 ```
 
@@ -139,11 +142,11 @@ memo reminders cancel 3 --account telegram:1
 Для программы, которая показывает напоминания:
 
 ```sh
-memo reminders poll --account telegram:1 --json
-memo reminders ack REMINDER_ID RECEIPT --account telegram:1
+memo reminders claim --account telegram:1 --json
+memo reminders acknowledge REMINDER_ID RECEIPT --account telegram:1
 ```
 
-`poll` выдаёт напоминания, срок которых наступил, каждое с квитанцией. `ack` с этой квитанцией
+`claim` выдаёт напоминания, срок которых наступил, каждое с квитанцией. `acknowledge` с этой квитанцией
 подтверждает, что напоминание показано. Напоминание, которое не подтвердили вовремя, выдаётся снова с
 новой квитанцией, поэтому сбой не приведёт к его потере. Используйте `deliveryId` из ответа, чтобы не
 показывать одно и то же напоминание дважды. Таймер импорта не доставляет напоминания.

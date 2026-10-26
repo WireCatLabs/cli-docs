@@ -17,8 +17,8 @@ memo sync
 ```
 
 Solo se leen los archivos cambiados y el correo nuevo, así que una segunda ejecución es rápida. En
-Linux, `memo auto start` lo ejecuta por ti cada pocos minutos ([mantener Memo al día](./archive.md)).
-Los mensajes de Telegram y MAX llegan a través de tg y max, no a través de Memo.
+Linux, `memo jobs start` lo ejecuta por ti cada pocos minutos ([mantener Memo al día](./archive.md)).
+Los mensajes de Telegram, MAX y WhatsApp llegan a través de tg, max y wa, no a través de Memo.
 
 ## Encontrar algo
 
@@ -107,5 +107,4 @@ Un comando que cambia algo, como añadir una tarea o un recordatorio, actúa com
 `--account`, con el proveedor y la cuenta juntos: `--account telegram:1`, `--account email:work`. Si falta,
 Memo te dice qué cuentas existen.
 
-El antiguo `--provider` con un `--account 1` simple sigue funcionando y muestra la nueva forma de escribirlo en stderr:
-usa `--source` y `--account provider:account` en su lugar.
+Las lecturas usan `--source`; las escrituras de una cuenta usan `--account provider:account`. Se rechazan las opciones de selección retiradas.

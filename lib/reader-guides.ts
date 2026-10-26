@@ -198,10 +198,11 @@ const copy = {
 export function readerGuide(slugs: string[], lang: string) {
   if (
     slugs.length !== 2 ||
-    !["tg", "max"].includes(slugs[0]) ||
+    !["tg", "max", "wa"].includes(slugs[0]) ||
     !["usage", "rankings", "bot", "groups"].includes(slugs[1])
   )
     return
+  if (slugs[0] === "wa" && slugs[1] !== "usage") return
   const words = copy[lang === "ru" || lang === "es" ? lang : "en"]
   const rankings = slugs[1] === "rankings"
   const role = roleGuide(slugs[0], slugs[1], lang)
@@ -239,7 +240,7 @@ export function readerGuide(slugs: string[], lang: string) {
   }
   return {
     title: role?.title ?? (rankings ? titles[locale][1] : roles.usage),
-    description: `${slugs[0] === "tg" ? "Telegram" : "MAX"}: ${role?.description ?? descriptions[locale][rankings ? 1 : 0]}`,
+    description: `${slugs[0] === "wa" ? "WhatsApp" : slugs[0] === "tg" ? "Telegram" : "MAX"}: ${role?.description ?? descriptions[locale][rankings ? 1 : 0]}`,
     intro:
       role?.intro ??
       (rankings

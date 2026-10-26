@@ -660,10 +660,12 @@
     "Source on GitHub": "Исходный код на GitHub",
     "Packages on npm": "Пакеты на npm",
     "To run the commands yourself, follow a tool’s step-by-step scenarios:": "Чтобы выполнять команды самостоятельно, откройте пошаговые сценарии нужного инструмента:",
-    "Start with the tools you use. Telegram and MAX are WireCat’s messaging tools; Zoom, Google Drive and Memo add your meetings, documents and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Начните с привычных инструментов. Telegram и MAX — инструменты WireCat для переписки; Zoom, Google Drive и Memo добавляют ваши встречи, документы и заметки. Почта через Himalaya и Markdown-заметки, в том числе Obsidian, могут работать вместе с ними через вашего агента.",
     "Every WireCat tool is free under the Apache 2.0 licence. Read the code, report an issue or contribute.": "Все инструменты WireCat бесплатны и доступны по лицензии Apache 2.0. Изучайте код, сообщайте о проблемах и участвуйте в разработке.",
     "zm · your meeting transcripts and recordings": "zm · расшифровки и записи ваших встреч",
-    "memo · notes, mail and messages in one place": "memo · заметки, почта и сообщения в одном месте"
+    "memo · notes, mail and messages in one place": "memo · заметки, почта и сообщения в одном месте",
+    "wa · your linked account and business bots": "wa · ваш личный аккаунт и бизнес-боты",
+    "Start with the tools you use. Telegram, MAX and WhatsApp are WireCat’s messaging tools; Zoom, Google Drive and Memo add your meetings, documents and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Начните с привычных инструментов. Telegram, MAX и WhatsApp — инструменты WireCat для переписки; Zoom, Google Drive и Memo добавляют ваши встречи, документы и заметки. Почта через Himalaya и Markdown-заметки, в том числе Obsidian, могут работать вместе с ними через вашего агента.",
+    "WhatsApp docs": "Документация WhatsApp"
   },
   "es": {
     "Put the context from your chats to work — for you, your bots and the groups you run.": "Aprovecha el contexto de tus chats: para ti, tus bots y los grupos que administras.",
@@ -1325,9 +1327,11 @@
     "Source on GitHub": "Código fuente en GitHub",
     "Packages on npm": "Paquetes en npm",
     "To run the commands yourself, follow a tool’s step-by-step scenarios:": "Para ejecutar los comandos tú mismo, sigue los escenarios paso a paso de cada herramienta:",
-    "Start with the tools you use. Telegram and MAX are WireCat’s messaging tools; Zoom, Google Drive and Memo add your meetings, documents and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Empieza con las herramientas que usas. Telegram y MAX son las herramientas de mensajería de WireCat; Zoom, Google Drive y Memo añaden tus reuniones, documentos y notas. El correo con Himalaya y las notas Markdown, incluidas las de Obsidian, pueden formar parte del mismo flujo con tu agente.",
     "Every WireCat tool is free under the Apache 2.0 licence. Read the code, report an issue or contribute.": "Todas las herramientas de WireCat son gratuitas bajo la licencia Apache 2.0. Lee el código, informa de problemas o contribuye.",
     "zm · your meeting transcripts and recordings": "zm · transcripciones y grabaciones de tus reuniones",
-    "memo · notes, mail and messages in one place": "memo · notas, correo y mensajes en un solo lugar"
+    "memo · notes, mail and messages in one place": "memo · notas, correo y mensajes en un solo lugar",
+    "wa · your linked account and business bots": "wa · tu cuenta vinculada y bots de empresa",
+    "Start with the tools you use. Telegram, MAX and WhatsApp are WireCat’s messaging tools; Zoom, Google Drive and Memo add your meetings, documents and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Empieza con las herramientas que usas. Telegram, MAX y WhatsApp son las herramientas de mensajería de WireCat; Zoom, Google Drive y Memo añaden tus reuniones, documentos y notas. El correo con Himalaya y las notas Markdown, incluidas las de Obsidian, pueden formar parte del mismo flujo con tu agente.",
+    "WhatsApp docs": "Documentación de WhatsApp"
   }
 }

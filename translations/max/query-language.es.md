@@ -5,8 +5,6 @@ title: "Lenguaje de consulta de la búsqueda"
 <a id="en-mcp" />
 <a id="los-modos-anteriores" />
 <a id="упоминания" />
-<a id="в-mcp" />
-<a id="прежние-режимы" />
 
 Si trabaja con `max` a través de un agente de IA, no necesita aprender este idioma: diga con palabras comunes lo que está buscando y el agente creará la solicitud. Esta página es para quienes escriben la búsqueda ellos mismos y para quienes necesitan todos los filtros: operadores exactos, todos los campos, ajustes preestablecidos, reglas de fecha y límites.
 

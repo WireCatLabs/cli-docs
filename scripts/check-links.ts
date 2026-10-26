@@ -9,6 +9,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
 import { dirname, join, relative } from "node:path"
 import { fileURLToPath } from "node:url"
 import { fromMarkdown } from "mdast-util-from-markdown"
+import { skillIndexProblems } from "./skills-index.ts"
 
 const outputFiles = (directory: string): string[] =>
   readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -115,7 +116,7 @@ export const markdownLinkProblems = (out: string, origin = "https://wirecat.dev"
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const out = join(dirname(fileURLToPath(import.meta.url)), "..", "out")
   const site = JSON.parse(readFileSync(join(out, "..", "site.config.json"), "utf8")) as { url: string }
-  const problems = [...linkProblems(out, site.url), ...markdownLinkProblems(out, site.url)]
+  const problems = [...linkProblems(out, site.url), ...markdownLinkProblems(out, site.url), ...skillIndexProblems(out)]
   for (const problem of problems) console.error(problem)
   if (problems.length > 0) process.exit(1)
   console.log("links: ok")

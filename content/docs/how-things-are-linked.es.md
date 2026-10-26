@@ -45,10 +45,10 @@ Solo tú unes identidades en una misma persona. El mismo nombre o el mismo domin
 tg personal contacts link "Kai Sample" max:Kai
 ```
 
-Después, `contacts timeline` sigue a la persona entre mensajerías. Muestra lo que escribió, dónde la mencionaron, y sus chats, correos, reuniones y tareas, de lo más reciente a lo más antiguo, solo desde el almacén.
+Después, `contacts events` sigue a la persona entre mensajerías. Muestra lo que escribió, dónde la mencionaron, y sus chats, correos, reuniones y tareas, de lo más reciente a lo más antiguo, solo desde el almacén.
 
 ```sh
-tg personal contacts timeline "Kai Sample" --since-time 2026-10-01 --limit 20
+tg personal contacts events "Kai Sample" 'at>=2026-10-01' --limit 20
 ```
 
 La herramienta también anota quién participó en qué (remitente, destinatario, participante, responsable, autor, mencionado, vinculado). Por eso «todo sobre Kai» es una sola consulta y no un recorrido por todos los mensajes.
@@ -63,7 +63,7 @@ Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dic
 - **Una regla de la herramienta.** Un mensaje que menciona a alguien, o que continúa al mismo remitente.
 - **Tu agente.** Una respuesta que guardó tras leer el chat. Guardarla requiere el permiso de perfil `conversations.links`.
 
-`conversations build` une esos punteros en conversaciones de un chat. `messages context` con `--thread` sigue la cadena desde un mensaje en lugar de mostrar sus vecinos en el tiempo. Un vínculo que quedó desactualizado tras una edición o un borrado se muestra, pero no se sigue. Al reconstruir, las conversaciones reciben ids nuevos, así que conserva la referencia `msg:` del mensaje, no el id de la conversación. Cómo se construye el grafo: [Cómo funciona la búsqueda](./search-architecture.mdx#3-reconstruir-conversaciones-con-un-grafo-de-mensajes).
+`conversations rebuild` une esos punteros en conversaciones de un chat. `messages context` con `--thread` sigue la cadena desde un mensaje en lugar de mostrar sus vecinos en el tiempo. Un vínculo que quedó desactualizado tras una edición o un borrado se muestra, pero no se sigue. Al reconstruir, las conversaciones reciben ids nuevos, así que conserva la referencia `msg:` del mensaje, no el id de la conversación. Cómo se construye el grafo: [Cómo funciona la búsqueda](./search-architecture.mdx#3-reconstruir-conversaciones-con-un-grafo-de-mensajes).
 
 ## Archivos, notas de voz e imágenes
 
@@ -126,6 +126,13 @@ tg personal tags add work --chat "Book club"
 
 Cada vínculo guardado anota su origen: `file` (escrito en un archivo de notas), `owner` (añadido por ti), `suggested` (propuesto, aún sin confirmar) o `message` (escrito en un mensaje guardado).
 
+El vínculo entre una identidad y su persona también guarda cómo se hizo, qué seguridad tiene y quién lo hizo, y cada
+paso de una identidad de una persona a otra queda registrado, así que un vínculo equivocado se puede deshacer. La regla
+para todas las herramientas es que un vínculo que hiciste tú nunca se sustituye por uno automático, y dos candidatos
+igual de buenos no producen ningún vínculo ([el estándar del modelo de datos](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+**Llega en la próxima versión de cli-core:** el mismo registro para eventos y documentos, y una lista de revisión
+donde decides los pares que las herramientas no pudieron distinguir.
+
 ## Usar los vínculos en una pregunta
 
 Cuatro peticiones que un agente puede responder gracias a los vínculos. Sustituye los nombres por los tuyos.
@@ -151,7 +158,7 @@ Usa memo. ¿Qué tarea nació del mensaje sobre la factura y qué mensaje la res
 | Síntoma | Causa probable | Qué hacer |
 | --- | --- | --- |
 | La cronología de una persona muestra una sola mensajería | Las identidades no están vinculadas | `contacts link`, y vuelve a preguntar |
-| `--thread` solo muestra vecinos en el tiempo | No hay conversaciones construidas para el chat | `conversations build --chat "Book club"` |
+| `--thread` solo muestra vecinos en el tiempo | No hay conversaciones construidas para el chat | `conversations rebuild --chat "Book club"` |
 | No se encuentra un teléfono o correo de un mensaje antiguo | El mensaje se guardó antes de que existieran las menciones | `mentions rebuild` |
 | No se encuentra el nombre de un contacto nuevo | Las menciones se construyeron antes de que existiera la persona | `mentions rebuild person-name` |
 | No se encuentran palabras dentro de un archivo | No se extrajo el texto del archivo | `attachments extract` |

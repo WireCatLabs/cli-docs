@@ -29,13 +29,13 @@ title: "Пошаговые сценарии"
    что говорили об этом на встречах, с фрагментом для цитаты
 
 4. ```sh
-   drive search venue
+   drive personal search venue
    ```
 
-   документы Drive на эту тему; команды drive начинаются с профиля, например drive personal search venue
+   документы Drive на эту тему
 
 5. ```sh
-   memo ask "what did we decide about the venue?" --all
+   memo answers create "what did we decide about the venue?" --all
    ```
 
    доказательства с источниками одним набором — для вас или вашего агента
@@ -85,31 +85,31 @@ title: "Пошаговые сценарии"
    встречи, где его упоминают, с фрагментом для цитаты
 
 5. ```sh
-   tg contacts context Kai
+   tg personal contacts context Kai
    ```
 
-   общие чаты Telegram, последние сообщения в обе стороны и где его упоминали другие; команды tg, max и drive начинаются с профиля, например tg personal contacts context Kai
+   общие чаты Telegram, последние сообщения в обе стороны и где его упоминали другие
 
 6. ```sh
-   max contacts context Kai
+   max personal contacts context Kai
    ```
 
    то же для MAX
 
 7. ```sh
-   zm meetings context person:42
+   zm personal meetings context person:42
    ```
 
    что о нём говорят сохранённые встречи Zoom, через связанные с ним идентичности
 
 8. ```sh
-   drive search Kai
+   drive personal search Kai
    ```
 
    документы Drive, где он назван
 
 9. ```sh
-   memo ask "what is open with Kai?" --all
+   memo answers create "what is open with Kai?" --all
    ```
 
    один набор доказательств с источниками по всем аккаунтам и заметкам, готовый для агента
@@ -151,7 +151,7 @@ memo объединяет то, что уже есть в хранилище; д
    сначала ключевые документы проекта, затем его заметки, находки и открытые задачи
 
 4. ```sh
-   memo ask "what is still open for the Harbour kickoff?" --all
+   memo answers create "what is still open for the Harbour kickoff?" --all
    ```
 
    один набор с источниками по всем аккаунтам и заметкам, из которого агент составит повестку
@@ -183,7 +183,7 @@ memo объединяет то, что уже есть в хранилище; д
    импортирует заметки сейчас; почтовые аккаунты берутся из настройки mail.accounts
 
 3. ```sh
-   memo auto start
+   memo jobs start
    ```
 
    с этого момента синхронизирует заметки и почту каждые 5 минут
@@ -214,7 +214,7 @@ memo объединяет то, что уже есть в хранилище; д
 Узнайте, что ждёт вас сегодня и что агенты сделали за ночь, не читая каждый чат и ящик.
 
 1. ```sh
-   memo auto status
+   memo jobs status
    ```
 
    синхронизировал ли таймер заметки и почту недавно; неудачный запуск будет назван здесь
@@ -238,7 +238,7 @@ memo объединяет то, что уже есть в хранилище; д
    факты, записанные агентами и ещё не подтверждённые вами
 
 5. ```sh
-   memo agents log --limit 20
+   memo agents list --limit 20
    ```
 
    каждый вызов инструмента агентом, никогда — с аргументами

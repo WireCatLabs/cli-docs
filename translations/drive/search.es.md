@@ -61,7 +61,7 @@ Drive utiliza la caché compartida del componente de búsqueda local. Descarga e
 (no necesita perfil ni inicio de sesión) y genera los vectores del texto importado:
 
 ```sh
-drive models text download e5-small
+drive models download e5-small
 drive personal sync --embed
 drive personal search 'what did we agree to spend?' --json
 ```
@@ -88,7 +88,7 @@ Lee el fragmento y metadatos guardados antes de interpretarlos como una decisió
 Google para comprobar la versión actual. Si aparece `meaning_skipped`, revisa la razón: la búsqueda
 semántica puede no haberse ejecutado. PDF escaneados, Slides, imágenes y otros formatos ilegibles
 no tienen texto; se encuentran por nombre y `not_read` indica la razón (es `null` en uno leído).
-Abre `source_url`, sin citar texto ausente. Consulta [formatos](./usage.md#which-document-types-are-searchable)
+Abre `url`, sin citar texto ausente. Consulta [formatos](./usage.md#which-document-types-are-searchable)
 y [recetas](./recipes.md#refresh-a-project-and-prepare-a-meeting-brief).
 
 ## Reunir contexto de distintas fuentes
@@ -104,7 +104,7 @@ sigue siendo un paso separado.
 
 Con `picture_search` activado en el perfil, `drive personal search "cat on a sofa"` también
 ofrece `pictures`: imágenes más cercanas al contenido del texto, con `ref`, `score`, `title` y
-`source_url`. Es una lista separada de `hits`. Con la opción desactivada no hay `pictures`.
+`url`. Es una lista separada de `hits`. Con la opción desactivada no hay `pictures`.
 
 Escribe consultas de imágenes en inglés: el modelo solo entiende inglés y el agente traduce
 primero otras preguntas. Si el modelo no está descargado, `pictures_skipped` informa de que falta el modelo; los `hits` habituales no se ven afectados.

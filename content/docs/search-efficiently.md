@@ -13,8 +13,8 @@ Put the tool name and your profile name in front of each command, as in `tg pers
 | --- | --- | --- |
 | Words in your Telegram or MAX messages | `search messages` in `tg` or `max` | Reads the local archive and, by default, the messenger's server |
 | A phone, email, link or person's name written in messages | `search messages` with `phone:`, `email:`, `domain:` or `mentions:`, or `mentions list` | Found by rules, in any spelling |
-| Everything about one person, in every messenger | `contacts timeline` | Needs the identities linked with `contacts link` |
-| A discussion, when you remember the subject and not the words | `search conversations` | Needs `conversations build` and `conversations embed` once for the chat |
+| Everything about one person, in every messenger | `contacts events` | Needs the identities linked with `contacts link` |
+| A discussion, when you remember the subject and not the words | `search conversations` | Needs `conversations rebuild` and `conversations embed` once for the chat |
 | A picture by what it shows | `search messages "dog on a beach"` | English only, and the picture setting must be on: [What gets indexed](./what-is-indexed.md#pictures) |
 | Mail, notes, or you do not know where it was written | `memo search all`, `memo search mail`, `memo search notes` | The answer lists the sources it skipped and why |
 | Messages of every messenger at once | `memo search messages` | Messages only |
@@ -82,7 +82,7 @@ The answer says whether more results exist (`has_more`). That describes the page
 | Command | Next page |
 | --- | --- |
 | `search messages` in `tg` and `max` | `--page <n>`, counting from 1 |
-| `contacts timeline` | `--cursor <cursor>`, with the cursor from the answer's `page.next` |
+| `contacts events` | `--cursor <cursor>`, with the cursor from the answer's `page.next` |
 | `mentions list`, `drive catalog list`, `drive catalog search` | `--page <n>` |
 | `memo search notes`, `drive search` | `--offset <n>` |
 | `memo search all`, `memo search mail`, `memo search messages` | `--limit` only, up to 100: narrow the query instead |
@@ -114,7 +114,7 @@ Replace the names with yours.
 | Goal | Command |
 | --- | --- |
 | An agreement and its source | `tg personal search messages 'chat:"Book club" agreed date>=2026-10-01' --limit 5` |
-| Everything about one person this month | `tg personal contacts timeline "Kai Sample" --since-time 2026-10-01` |
+| Everything about one person this month | `tg personal contacts events "Kai Sample" 'at>=2026-10-01'` |
 | Where a phone number appears | `tg personal search messages 'phone:"+1 555 010 0100"'` |
 | Files sent in a chat last week | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07'` |
 | What a Drive document says about a topic | `drive personal search 'budget' --exact --limit 5` |

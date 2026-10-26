@@ -46,7 +46,9 @@ Para un agente sin terminal, consulta [MCP y skills](./mcp.md).
 - **Para acceder a Zoom:** una cuenta autorizada para añadir la aplicación y un almacén de
   contraseñas del sistema: Keychain en macOS, Credential Manager en Windows o un servicio de
   secretos del escritorio en Linux. La organización puede exigir aprobación del administrador.
-  Un servidor sin ese almacén no guarda el acceso; importar archivos no lo necesita.
+  Antes de iniciar sesión, ejecuta `zm doctor --json` y revisa `authentication.keyring`: prueba y elimina
+  una entrada temporal sin leer accesos guardados. Un servidor sin ese almacén no guarda el acceso;
+  importar archivos no lo necesita.
 
 ## Instalar
 
@@ -74,10 +76,13 @@ un agente que ya estuviera abierto si no ve el nuevo comando.
 
 ## Elige cómo conectar
 
+zm no incluye un client ID y no hay una app de WireCat disponible para otras cuentas de Zoom.
+Usa tu propia General app de Zoom o una app de equipo que un compañero haya compartido con tu cuenta.
+
 | Tu punto de partida | Qué hacer |
 |---|---|
 | Ya creaste una aplicación de Zoom | [Abre sus credenciales](./zoom-app.md#use-an-app-you-already-created), activa Public Client OAuth y copia el **Public Client ID** |
-| Tu equipo proporciona una aplicación, incluida una de WireCat | Pide su **Public Client ID** al propietario y confirma que tu usuario de Zoom pueda autorizarla; [usa la aplicación compartida](./zoom-app.md#use-a-wirecat-or-team-app) |
+| Un compañero compartió una app de equipo con tu cuenta de Zoom | Pide su **Public Client ID** al propietario y confirma que tu usuario pueda autorizarla; [usa la app compartida](./zoom-app.md#use-a-wirecat-or-team-app) |
 | Necesitas una aplicación | [Crea una General app con User-managed](./zoom-app.md#create-your-own-app), configura la respuesta y los permisos, y vuelve aquí |
 | Tienes archivos de transcripciones | [Importa sin aplicación de Zoom](#import-without-a-zoom-app) y omite el acceso del navegador |
 
@@ -132,8 +137,11 @@ comprobar si el acceso sigue siendo válido. Sync hace las peticiones remotas y 
 disponibles de reuniones del anfitrión. List lee la copia local. Otro usuario de Zoom es otro perfil, con su propio acceso. Consulta [sesiones y perfiles](./sessions.md#select-a-local-profile).
 
 Si la lista está vacía, comprueba la cuenta, las fechas y [la disponibilidad de grabaciones y transcripciones](./zoom-app.md#before-your-first-zm-meetings-sync).
-Una reunión a la que asististe sin organizarla puede requerir un archivo del anfitrión. Un error
-de permiso indica cuál falta; guarda el cambio en la aplicación y autoriza de nuevo.
+Una reunión organizada por otra persona nunca llega mediante sync: la API de Zoom enumera las reuniones
+que programó tu usuario y no tiene una lista de las reuniones a las que solo asististe. Pide al anfitrión
+el archivo de transcripción `.vtt` e [impórtalo](#import-without-a-zoom-app); se incorpora al mismo almacén,
+búsqueda y revisión que una reunión sincronizada. Un error de permiso indica cuál falta; guarda el cambio
+en la app y autoriza de nuevo.
 
 ## Importar sin una aplicación de Zoom
 
@@ -162,7 +170,7 @@ zm skill install --for agents
 
 Instala instrucciones para Codex/Gemini. Para Claude Code usa `--for claude`; sin `--for` instala
 ambas variantes. Las instrucciones no autorizan Zoom ni recuperan reuniones. Para un agente que
-use MCP, sigue [MCP y skills](./mcp.md); sus herramientas de reuniones son de solo lectura.
+use MCP, sigue [MCP y skills](./mcp.md); los permisos del perfil limitan sus comandos de lectura y escritura.
 
 ## Comprueba el primer resultado
 
@@ -191,7 +199,8 @@ Cuando funcione, [busca un tema y lee el contexto de sus fuentes](./search.md).
 | Qué | Linux y macOS | Windows |
 |---|---|---|
 | ajustes (`config.json`) | `~/.config/zm/` | `%APPDATA%\zm\Config\` |
-| estado (ejecuciones registradas en `runs/`) | `~/.local/share/zm/` | `%LOCALAPPDATA%\zm\Data\` |
+| estado | `~/.local/share/zm/` | `%LOCALAPPDATA%\zm\Data\` |
+| ejecuciones registradas (`runs/`) | `~/.local/share/zoom-cli/` | `%LOCALAPPDATA%\zoom-cli\Data\` |
 | caché | `~/.cache/zm/` | `%LOCALAPPDATA%\zm\Cache\` |
 | el almacén local | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 
@@ -209,6 +218,8 @@ npm install -g @wirecat/zoom-cli
 zm --version
 ```
 
+Si iniciaste sesión por última vez con zm 0.34 o anterior, vuelve a ejecutar `zm <profile> session start`: ese acceso antiguo ya no se usa.
+
 Para quitar el comando:
 
 ```sh
@@ -217,8 +228,9 @@ npm uninstall -g @wirecat/zoom-cli
 
 La desinstalación quita solo el paquete. Para quitar todo lo demás, borra:
 
-- los directorios de ajustes, estado y caché: `~/.config/zm`, `~/.local/share/zm` y `~/.cache/zm` en Linux y
-  macOS; `%APPDATA%\zm` y `%LOCALAPPDATA%\zm` en Windows;
+- los directorios de ajustes, estado, ejecuciones registradas y caché: `~/.config/zm`, `~/.local/share/zm`,
+  `~/.local/share/zoom-cli` y `~/.cache/zm` en Linux y macOS; `%APPDATA%\zm`, `%LOCALAPPDATA%\zm` y
+  `%LOCALAPPDATA%\zoom-cli` en Windows;
 - las carpetas del skill del agente, si lo instalaste: `~/.claude/skills/zoom-cli` y
   `~/.agents/skills/zoom-cli` (`%USERPROFILE%\.claude\skills\zoom-cli` y
   `%USERPROFILE%\.agents\skills\zoom-cli` en Windows);

@@ -20,7 +20,8 @@ parity and fingerprints; it does not establish editorial quality or behavioral c
 claims remain owned by cli-memo; this update publishes its released roadmap without rewriting those claims.
 
 Local results: sync, lint, 333 unit tests, all five released command captures and release-note validation pass.
-The strict guide-version check flags two unchanged English Memo passages (configuration.md:54 and mail.md:249)
-that mention 0.32.0. Those passages are identical at v0.89.0 and v0.90.0. The command-reference browser run
+An initial guide-version check overlapped sync and read two English Memo passages before localization applied
+the existing corrections. After sync completes, the guide-version check passes; no new migration-wording fix
+is needed. Those passages are identical at v0.89.0 and v0.90.0. The command-reference browser run
 failed its legacy-anchor navigation in English, then lost the development server for RU/ES; its initial DOM
 assertions passed for English. The production export then found a missing Memo roadmap description; added explicit EN/RU/ES metadata. The complete export now passes, including /en/docs/memo/roadmap.html. All six command-reference browser cases pass against that frozen export, preserving the 3000-element limit and legacy-anchor checks. Strict command quality: 1452 entries, zero reference gaps and invalid examples; 147 examples remain classified for manual review.

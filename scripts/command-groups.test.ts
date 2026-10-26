@@ -1,6 +1,6 @@
-import { readFileSync } from "node:fs"
+import { readdirSync, readFileSync } from "node:fs"
 import { expect, it } from "vitest"
-import { commandGroupForAnchor, commandGroups, splitCommandReference } from "../lib/command-groups"
+import { commandGroup, commandGroupForAnchor, commandGroups, splitCommandReference } from "../lib/command-groups"
 import { commandReferences } from "../lib/remark-doc-usability"
 import { documentationDescription, seoLocales } from "../lib/seo"
 
@@ -20,7 +20,7 @@ it("covers every released Drive sidebar page with distinct localized metadata", 
 })
 
 it("partitions every generated command exactly once while retaining shared options and exit codes", () => {
-  for (const tool of ["tg", "max"]) {
+  for (const tool of ["tg", "max", "wa"]) {
     const source = readFileSync(`content/docs/${tool}/commands.md`, "utf8")
     const parts = splitCommandReference(source, "en")
     const commands = commandGroups.flatMap((group) => [...commandReferences(parts[group]).keys()])
@@ -35,12 +35,41 @@ it("partitions every generated command exactly once while retaining shared optio
 it("routes existing bot/admin/personal anchors, including multiword commands and malformed hashes", () => {
   expect(commandGroupForAnchor("#tg-bot-api-send-message")).toBe("bot")
   expect(commandGroupForAnchor("#max-chats-members-add")).toBe("admin")
-  expect(commandGroupForAnchor("#tg-chats-requests-accept")).toBe("admin")
+  expect(commandGroupForAnchor("#tg-chats-requests-confirm")).toBe("admin")
   expect(commandGroupForAnchor("#tg-stats-messages-show")).toBe("admin")
   expect(commandGroupForAnchor("#tg-topics-create")).toBe("admin")
   expect(commandGroupForAnchor("#tg-topics-list")).toBe("personal")
   expect(commandGroupForAnchor("#tg-store-export")).toBe("setup")
   expect(commandGroupForAnchor("#max-session-start")).toBe("setup")
-  expect(commandGroupForAnchor("#tg-messages-search")).toBe("personal")
+  expect(commandGroupForAnchor("#tg-search-messages")).toBe("personal")
   expect(commandGroupForAnchor("#%invalid")).toBe("personal")
+})
+
+it("gives every released and site-authored WhatsApp page a distinct localized description", () => {
+  const sidebar = JSON.parse(readFileSync("content/upstream/wa/meta.json", "utf8")) as { pages: string[] }
+  const authored = readdirSync("translations/pages/wa")
+    .filter((file) => file.endsWith(".en.md"))
+    .map((file) => file.replace(/\.en\.md$/, ""))
+  const pages = [...new Set([...sidebar.pages.filter((page) => !page.startsWith("---")), ...authored])]
+  for (const lang of seoLocales) {
+    const descriptions = pages.map((page) => documentationDescription(lang, page === "index" ? ["wa"] : ["wa", page]))
+    expect(new Set(descriptions).size).toBe(pages.length)
+  }
+})
+
+it("keeps canonical Telegram invite links and diagnostic search in their reader groups", () => {
+  expect(commandGroup("tg chats links create")).toBe("admin")
+  expect(commandGroup("tg search runs")).toBe("setup")
+})
+
+it("covers every site-authored page with reviewed metadata in every locale", () => {
+  for (const tool of readdirSync("translations/pages", { withFileTypes: true }).filter((entry) =>
+    entry.isDirectory(),
+  )) {
+    const pages = readdirSync(`translations/pages/${tool.name}`)
+      .filter((file) => file.endsWith(".en.md"))
+      .map((file) => file.replace(/\.en\.md$/, ""))
+    for (const page of pages)
+      for (const lang of seoLocales) expect(documentationDescription(lang, [tool.name, page])).not.toBe("")
+  }
 })

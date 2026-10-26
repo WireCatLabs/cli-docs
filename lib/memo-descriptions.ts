@@ -1,5 +1,7 @@
 export const memoDescriptions: Record<string, Record<string, string>> = {
   en: {
+    remote: "Connect a browser or phone app through your HTTPS tunnel, log in with a terminal code and revoke access.",
+    compare: "Compare Memo with other memory tools by sources, search, agent access and local data limits.",
     index: "Keep notes, mail and Telegram or MAX messages in one place your AI agent can search and cite.",
     installation: "Install Memo with npm, check what each source needs and find where its files are kept.",
     usage: "Import changes, find something, prepare for a conversation and review what your agent suggested.",
@@ -13,7 +15,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     mail: "Import Gmail or IMAP mail read-only through Himalaya, beside your notes and messages.",
     tasks: "Track requests, promises and project work, decide what can start and schedule local reminders.",
     memories: "Keep memories and facts with their evidence, and approve or reject actions an agent proposes.",
-    mcp: "Connect Claude Desktop, Cursor or another app to Memo's memories, facts and proposed actions.",
+    mcp: "Connect an agent to Memo commands, open cited sources and control writes with saved permissions.",
     archive: "Import changed notes and mail by hand or on a Linux timer, reading only what changed.",
     recipes: "Hand whole tasks to your agent: meeting preparation, decisions, tasks, tags and reviews.",
     commands: "Look up every Memo command, argument and option in the generated reference.",
@@ -24,6 +26,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     roadmap: "See Memo’s current capabilities and planned work on notes, mail, messages and project context.",
   },
   ru: {
+    remote: "Подключите приложение в браузере или на телефоне через HTTPS-туннель, войдите по коду и отзовите доступ.",
+    compare: "Сравните Memo с другими инструментами памяти по источникам, поиску, доступу агента и хранению данных.",
     index: "Храните заметки, почту и сообщения Telegram или MAX в одном месте для поиска ИИ-агентом.",
     installation: "Установите Memo через npm, проверьте требования источников и узнайте, где лежат файлы.",
     usage: "Импортируйте изменения, ищите, готовьтесь к разговору и проверяйте предложения агента.",
@@ -37,7 +41,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     mail: "Импортируйте почту Gmail или IMAP только для чтения через Himalaya рядом с заметками.",
     tasks: "Следите за просьбами, обещаниями и задачами проектов и ставьте локальные напоминания.",
     memories: "Храните память и факты с доказательствами и решайте, что делать с действиями агента.",
-    mcp: "Подключите Claude Desktop, Cursor или другое приложение к памяти и фактам Memo.",
+    mcp: "Подключите агента к командам Memo, открывайте источники и ограничивайте запись разрешениями.",
     archive: "Импортируйте изменённые заметки и почту вручную или по таймеру в Linux.",
     recipes: "Поручайте агенту целые задачи: подготовку к встрече, решения, задачи, теги и обзоры.",
     commands: "Все команды, аргументы и параметры Memo в справочнике, созданном из программы.",
@@ -48,6 +52,9 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     roadmap: "Посмотрите, что Memo уже умеет и что планируется для заметок, почты, сообщений и проектов.",
   },
   es: {
+    remote:
+      "Conecta una app del navegador o teléfono por tu túnel HTTPS, inicia sesión con un código y revoca el acceso.",
+    compare: "Compara Memo con otras herramientas de memoria por fuentes, búsqueda, acceso del agente y datos locales.",
     index: "Reúne notas, correo y mensajes de Telegram o MAX en un lugar que tu agente de IA puede buscar.",
     installation: "Instala Memo con npm, revisa qué necesita cada fuente y dónde guarda sus archivos.",
     usage: "Importa cambios, busca, prepara una conversación y revisa lo que sugirió tu agente.",
@@ -61,7 +68,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     mail: "Importa correo de Gmail o IMAP en modo solo lectura con Himalaya, junto a tus notas.",
     tasks: "Sigue peticiones, promesas y trabajo de proyectos, y programa recordatorios locales.",
     memories: "Guarda recuerdos y hechos con su evidencia, y aprueba o rechaza las acciones que propone un agente.",
-    mcp: "Conecta Claude Desktop, Cursor u otra aplicación a los recuerdos y hechos de Memo.",
+    mcp: "Conecta un agente a los comandos de Memo, abre las fuentes citadas y limita escrituras con permisos.",
     archive: "Importa notas y correo cambiados a mano o con un temporizador en Linux.",
     recipes: "Encarga tareas completas a tu agente: preparar reuniones, decisiones, tareas, etiquetas y revisiones.",
     commands: "Consulta todos los comandos, argumentos y opciones de Memo en la referencia generada.",

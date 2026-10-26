@@ -17,8 +17,8 @@ memo sync
 ```
 
 Читаются только изменённые файлы и новые письма, поэтому второй запуск проходит быстро. В Linux
-`memo auto start` запускает импорт за вас каждые несколько минут ([обновление данных Memo](./archive.md)).
-Сообщения Telegram и MAX приходят через tg и max, а не через Memo.
+`memo jobs start` запускает импорт за вас каждые несколько минут ([обновление данных Memo](./archive.md)).
+Сообщения Telegram, MAX и WhatsApp приходят через tg, max и wa, а не через Memo.
 
 ## Найдите нужное
 
@@ -109,5 +109,4 @@ Do not confirm or approve anything; I will decide.
 Укажите его через `--account` — сервис и аккаунт вместе: `--account telegram:1`, `--account email:work`.
 Без него Memo сообщает, какие аккаунты есть.
 
-Старая запись `--provider` с одним номером `--account 1` ещё работает и показывает новую запись в stderr: используйте `--source`
-и `--account provider:account`.
+Для чтения используйте `--source`; для записи от имени аккаунта — `--account provider:account`. Старые флаги выбора отклоняются.

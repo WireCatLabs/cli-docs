@@ -6,8 +6,8 @@ it("preserves adjoining aliases without requiring an extra paragraph between the
   const tree = fromMarkdown('<a id="choose-how-to-connect"></a>\n<a id="connect-your-account"></a>\n\n## 2. Connect')
   remarkAnchorAliases()(tree)
   expect(tree.children.slice(0, 2).map((node) => node.data)).toEqual([
-    { hName: "span", hProperties: { id: "choose-how-to-connect" } },
-    { hName: "span", hProperties: { id: "connect-your-account" } },
+    { hName: "span", hProperties: { id: "choose-how-to-connect", className: "block scroll-mt-28" } },
+    { hName: "span", hProperties: { id: "connect-your-account", className: "block scroll-mt-28" } },
   ])
 })
 
@@ -18,8 +18,8 @@ it("preserves standard and self-closing legacy anchors while leaving other HTML 
   const unsafe = structuredClone(tree.children[2])
   remarkAnchorAliases()(tree)
   expect(tree.children.slice(0, 2).map((node) => node.data)).toEqual([
-    { hName: "span", hProperties: { id: "old-section" } },
-    { hName: "span", hProperties: { id: "older-section" } },
+    { hName: "span", hProperties: { id: "old-section", className: "block scroll-mt-28" } },
+    { hName: "span", hProperties: { id: "older-section", className: "block scroll-mt-28" } },
   ])
   expect(tree.children[2]).toEqual(unsafe)
 })
@@ -30,5 +30,8 @@ it("avoids duplicate IDs when an upstream alias repeats a heading or another ali
   )
   remarkAnchorAliases()(tree)
   expect(tree.children.map((node) => node.type)).toEqual(["heading", "paragraph"])
-  expect(tree.children[1].data).toEqual({ hName: "span", hProperties: { id: "old-section" } })
+  expect(tree.children[1].data).toEqual({
+    hName: "span",
+    hProperties: { id: "old-section", className: "block scroll-mt-28" },
+  })
 })

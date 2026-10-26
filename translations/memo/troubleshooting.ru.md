@@ -29,7 +29,7 @@ Memo не установлен, или терминал был открыт до
 импорт:
 
 ```sh
-npx -y @wirecat/tg-cli local models text download e5-small
+memo models download e5-small
 memo sync
 ```
 
@@ -43,7 +43,7 @@ memo sync
 
 Каждой папке нужен ID из локального хранилища. Добавьте папку командой `memo folders add /path/to/folder`.
 Если папку добавили на другом компьютере, подключите её: `memo folders list` покажет её ID, а
-`memo folders attach ID /path/to/folder` подключит её ([подробнее](./notes.md#use-the-same-notes-on-another-computer)).
+`memo folders update ID /path/to/folder` подключит её ([подробнее](./notes.md#use-the-same-notes-on-another-computer)).
 
 ## Импорт ничего не удалил и вывел предупреждение
 
@@ -53,8 +53,8 @@ memo sync
 
 ## "no mail account" или импорт почты просит указать аккаунт
 
-`no mail account` означает, что в файле настроек ещё нет почтовых аккаунтов. Добавьте аккаунт в
-`mail.accounts` ([почта](./mail.md#add-the-account-to-memo)).
+`no mail account` означает, что в файле настроек ещё нет почтовых аккаунтов. Выполните `memo mail add <account> <address>` после настройки Himalaya
+или добавьте аккаунт в `mail.accounts` ([почта](./mail.md#add-the-account-to-memo)).
 
 `memo sync --source email:work` принимает имя аккаунта — `name` из `mail.accounts` файла настроек. При неверном имени Memo перечисляет известные аккаунты. Без `--source` читает все аккаунты.
 
@@ -84,7 +84,7 @@ memo sync
 
 ## Справка показывает все команды вместо одной
 
-Путь команды в одном аргументе, например `memo "projects add" --help`, отклоняется с подсказкой правильных слов. Цикл оболочки передаёт его именно так: в zsh `for c in "projects add"; do memo $c --help; done` сохраняет `$c` целиком. В zsh используйте `memo ${=c} --help` или перебирайте слова.
+Путь команды в одном аргументе, например `"projects add"`, отклоняется с подсказкой правильных слов. Цикл оболочки передаёт его именно так: в zsh `for c in "projects add"; do memo $c --help; done` сохраняет `$c` целиком. В zsh используйте `memo ${=c} --help` или перебирайте слова.
 
 ## Ничего не помогло
 

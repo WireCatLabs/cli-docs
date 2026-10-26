@@ -28,11 +28,11 @@ title: "Управление группами"
 | Итоги недели: решения, обещания, открытые вопросы | `tg personal review 'date>7d'` |
 | Держите список того, что вас ждет | `tg personal tasks list` |
 | Удалить спам по своим правилам | `tg personal chats rules set`, `tg personal chats moderate` |
-| Заменить утекшую ссылку-приглашение | `tg personal chats link reset` |
+| Заменить утекшую ссылку-приглашение | `tg personal chats links reset` |
 | Одобряйте или отклоняйте запросы на вступление | `tg personal chats requests list\|accept\|decline` |
 | Посмотрите активность за неделю и собственную статистику Telegram | `tg personal stats chats show`, `tg personal stats chats official` |
 | Сохраняйте список участников каждый день | `tg personal chats members fetch --track` |
-| Найдите участников, похожих на ботов или спамеров | `tg personal chats members audit` |
+| Найдите участников, похожих на ботов или спамеров | `tg personal chats members check` |
 
 Полный список групповых команд находится [ниже](#what-there-is). Подробности о каждой команде приведены в [группах и каналах в руководстве по использованию](./usage.md#groups-and-channels); каждая опция находится в [справке по командам](./commands.md).
 
@@ -106,7 +106,7 @@ tg personal chats events "Hiking" 'time>=7d' --json
 **Заменить ссылку:**
 
 ```sh
-tg personal chats link reset "Hiking" --json
+tg personal chats links reset "Hiking" --json
 ```
 
 **Ограничить добавление участников:**
@@ -209,8 +209,8 @@ cron не имеет терминала и часто не имеет `XDG_RUNTI
 | `tg personal chats members add\|remove <chat> <person...>` | добавлять людей (им сообщают; имена тех, кого не удалось добавить, называют) или удалять их (сообщения остаются) |
 | `tg personal chats admins add <chat> <person> --can <rights>` | сделать участника администратором со следующими правами: участники, администраторы, информация, закрепление, ссылка, публикация, редактирование, удаление |
 | `tg personal chats admins remove <chat> <person>` | снять права администратора; человек остаётся участником |
-| `tg personal chats link update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | изменить только предоставленное разрешение, срок действия или лимит использования вашей дополнительной ссылки-приглашения; предоставить хотя бы одно изменение |
-| `tg personal chats link show\|reset <chat>` | ссылка-приглашение; `reset` делает новый, а старый перестает работать |
+| `tg personal chats links update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | изменить только предоставленное разрешение, срок действия или лимит использования вашей дополнительной ссылки-приглашения; предоставить хотя бы одно изменение |
+| `tg personal chats links show\|reset <chat>` | ссылка-приглашение; `reset` делает новый, а старый перестает работать |
 | `tg personal chats requests list\|accept\|decline <chat>` | запросы на вступление в группу, требующую одобрения администратора: кто просил, впустите, отвергните; `--all` отвечает на каждый запрос |
 | `tg personal chats rules show\|set\|unset <chat>` | правила группы |
 | `tg personal chats moderate <chat>` | проверить группу по ее правилам; делает то, что позволяют правила |
@@ -262,7 +262,7 @@ tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --categ
 tg personal tasks list "assignee:any state:open"
 ```
 
-`--assignee sender` — тот, кто отправил сообщение; `--assignee person:<id>` называет другого человека, а `tasks plan <task> --assignee none` убирает исполнителя. Задача без исполнителя — это нормально: лучше, чем пропущенная.
+`--assignee sender` — тот, кто отправил сообщение; `--assignee person:<id>` называет другого человека, а `tasks update <task> --assignee none` убирает исполнителя. Задача без исполнителя — это нормально: лучше, чем пропущенная.
 
 Посмотрите, что вас ждет, сначала самые старые, потом только вопросы и упоминания в одной группе:
 
@@ -293,7 +293,7 @@ tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --categ
 
 `config set task_categories.garden "plants | seedling"` и `config unset task_categories.garden` пишут в тот же файл и сохраняют его другие разделы; `config unset task_categories` возвращает список по умолчанию. Хранилище, перенесённое через `MESSAGING_STORE`, читает `config.json` рядом с собой.
 
-Если задача может совпадать с открытой, `tasks add` отклоняет добавление с кодом 2 и показывает кандидатов. Повторите с `--into <task>`, чтобы связать сообщение с этой задачей, либо с `--new`, чтобы создать отдельную. Если она совпадает только с задачей, закрытой за последние 14 дней, `tasks add` открывает её как продолжение, связанное `follow-up-of` с закрытой. `tasks duplicates` показывает найденные правилами пары, а `tasks merge <task> --into <other>` объединяет задачи:
+Если задача может совпадать с открытой, `tasks add` отклоняет добавление с кодом 2 и показывает кандидатов. Повторите с `--into <task>`, чтобы связать сообщение с этой задачей, либо с `--new`, чтобы создать отдельную. Если она совпадает только с задачей, закрытой за последние 14 дней, `tasks add` открывает её как продолжение, связанное `follow-up-of` с закрытой. `tasks duplicates list` показывает найденные правилами пары, а `tasks merge <task> --into <other>` объединяет задачи:
 
 ```sh
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other --into <task>
@@ -317,7 +317,7 @@ tg personal tasks reject <task>
 она относится. Дата следующей проверки — для вас или вашего агента; tg никому не напоминает:
 
 ```sh
-tg personal tasks plan <task> --title "Send Anna the contract" --due 2d --remind-time 1d
+tg personal tasks update <task> --title "Send Anna the contract" --due 2d --remind-time 1d
 ```
 
 ```sh
@@ -332,7 +332,7 @@ tg personal tasks link <task> msg:telegram/<you>/<chat>/<message> --chat "Hiking
 tg personal tasks agenda
 ```
 
-`tasks agenda` и `tasks duplicates` принимают поля запроса:
+`tasks agenda` и `tasks duplicates list` принимают поля запроса:
 
 - `tag:` и `category:` оставляют задачи с этой меткой или категорией: `tag:urgent`, `category:money`.
 - `claimed:` говорит, кто взял задачу: `none`, `mine`, `others` или `any`. Без него в списке дел видны задачи,
@@ -345,7 +345,7 @@ tg personal tasks agenda category:money tag:urgent claimed:any
 ```
 
 ```sh
-tg personal tasks duplicates decision:unsure
+tg personal tasks duplicates list decision:unsure
 ```
 
 `tg skill show follow-ups` выводит ежедневный порядок работы для ИИ-агента: он готовит черновики
@@ -478,7 +478,7 @@ Telegram отвечает только для чата, в котором пок
 
 `tg personal chats members history` показывает записанные вступления, выходы и изменения профилей от старых к новым; период ограничивает запрос, например `time>=7d`. Команда никогда не обращается к Telegram. Для вступления используется время Telegram, если известно, иначе время первого наблюдения человека. Выход датируется первым полным снимком без человека, а не точным временем выхода. Первая загрузка записывает исходный состав: эти люди не обязательно вступили в тот день. `chats members list --offline` читает последний полностью сохранённый состав; частичное чтение его не заменяет. Без полного снимка список может быть пуст, хотя некоторые профили и события уже записаны. Профили и история остаются в локальном хранилище рядом с сообщениями.
 
-`tg personal chats members audit` перечисляет участников с признаками ботов и причинами; `--max-pages` ограничивает страницы, порог задаёт запрос, например `score>=3` (без него `score>=2`). Никого не удаляет и исключает администраторов и владельца. `meta.truncated` означает, что прочитаны не все участники. С `--offline` команда недоступна; оценки требуют проверки человеком. Telegram предоставляет сведения о bot, scam, fake, deleted, фото, вступлении и пригласившем, где они доступны. «Никогда не писал» означает, что в локальной истории сообщения не найдены, а не доказательство, что человек никогда не писал в группе.
+`tg personal chats members check` перечисляет участников с признаками ботов и причинами; `--max-pages` ограничивает страницы, порог задаёт запрос, например `score>=3` (без него `score>=2`). Никого не удаляет и исключает администраторов и владельца. `meta.truncated` означает, что прочитаны не все участники. С `--offline` команда недоступна; оценки требуют проверки человеком. Telegram предоставляет сведения о bot, scam, fake, deleted, фото, вступлении и пригласившем, где они доступны. «Никогда не писал» означает, что в локальной истории сообщения не найдены, а не доказательство, что человек никогда не писал в группе.
 
 `--deep <n>` также полностью проверяет первых n участников, по одному в секунду: профиль, самое старое фото профиля, до 1 000 сохранённых сообщений каждого и два публичных списка спама — Combot CAS и lols.bot. ID каждого участника отправляется этим спискам. Полная проверка попадает в `check` у каждого проверенного участника.
 
@@ -503,7 +503,7 @@ tg personal chats tracking show "Hiking Club" --offline --json
 ```
 
 ```sh
-tg personal chats members audit "Hiking Club" --json
+tg personal chats members check "Hiking Club" --json
 ```
 
 Попросите агента включить в отчёт сообщения, активных отправителей, вопросы без ответа, изменения состава и дни со снимками участников. Оставьте в отчёте видимыми записи `missing`, `meta.truncated` и промежутки между снимками. Для будущих отчётов держите `tg personal serve` запущенным или повторяйте загрузку участников; первый отчёт не может показать выходы до первого записанного состава.

@@ -36,13 +36,23 @@ ofrecen todas las CLI de WireCat:
 | `zm_write` | ejecuta un comando que cambia algo, como `remote-meetings create`, o `search meetings`, que primero actualiza el índice de palabras |
 
 Una llamada ejecuta la propia línea de comandos, así que responde y falla exactamente como
-`zm personal <command> --json`. El servidor habla por el perfil nombrado en sus `args`; el cliente no puede
-cambiarlo. El inicio de sesión, los ajustes, `watch` y el propio servidor no se ofrecen.
+`zm personal <command> --json`. El servidor habla por el perfil nombrado en sus `args`; el cliente no
+puede cambiarlo. `watch`, `complete` y el propio servidor no se ofrecen. El inventario compartido
+(`meetings scheduled`), el examen de proyectos y la actualización están disponibles según los permisos
+del perfil. El acceso interactivo (`session start`) se hace en la terminal.
 
-Lo que los permisos del perfil deniegan ni se ofrece ni se ejecuta, y `readonly` retiene los comandos que cambian
-algo. Un comando de nivel `ask` se ejecuta sin preguntar, porque nadie está en una terminal: el `ask` de fábrica de
-`remote-meetings` deja que un agente cree, modifique y cancele reuniones de Zoom. Para evitarlo, da al perfil que
-sirve `{"remote-meetings": "readonly"}`.
+Los cambios de ajustes, instalación de skills, actualización y temporizadores del archivo necesitan
+`mcp.authority` en `allow` o `ask`; los permisos del perfil solo se cambian desde una terminal.
+Para permitirlo, ejecuta `zm personal config set permissions '{"mcp.authority":"allow"}'` y vuelve a
+conectar la app si hace falta. Esto sustituye el mapa de permisos del perfil: incluye las restricciones
+que ya quieras conservar.
+
+Los comandos denegados permanecen en el listado completo y las búsquedas, con
+`availability.available: false`, un motivo y la clave de permiso. `readonly` marca las escrituras como
+no disponibles. La ayuda CLI y el catálogo con un perfil explícito muestran la misma información actual.
+Cada llamada vuelve a comprobar los permisos antes de ejecutarse. En MCP, `ask` permite la escritura
+sin una pregunta en la terminal: el `ask` de fábrica de `remote-meetings` deja que el agente cree,
+modifique y cancele reuniones. Para impedirlo, asigna `{"remote-meetings": "readonly"}` al perfil.
 
 En el formato `mcpServers` de
 [Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers):
@@ -60,13 +70,6 @@ Una app puede no ver el `PATH` de la terminal; un servidor stdio hereda parte de
 completa de `command -v zm` en Linux/macOS o `where.exe zm` en Windows como comando. Si configuraste
 `ZM_CONFIG_DIR` o `MESSAGING_STORE`, pasa los mismos valores en `env` de la entrada; de lo contrario el servidor
 leerá otro perfil o base. Reserva stdout para el protocolo: omite `--json` y `--jsonl`.
-
-### Actualizar desde la versión 0.34 o anterior
-
-`zm serve --mcp` y sus opciones (`--meeting-context`, `--meeting-preparation`, `--semantic` y las demás) han
-desaparecido; `zm serve` ahora lo indica. Cada herramienta que añadían es un comando que ofrece el servidor
-compartido: `meetings context`, `meetings prepare`, `meetings projects scan`, `meetings scheduled`, `search all`,
-`search meetings --model`. Cambia los `args` de la entrada a `["personal", "mcp"]`.
 
 ## Prueba la conexión
 

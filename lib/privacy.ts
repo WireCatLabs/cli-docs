@@ -7,8 +7,8 @@ export const privacyCopy: Record<
   en: {
     title: "Privacy Policy",
     intro:
-      "How WireCat handles Google and Zoom account data, local documents, optional AI processing and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
-    updated: "Last updated: 24 October 2026",
+      "How WireCat handles Google and Zoom account data, local documents, optional AI processing, bug reports from WireCat Desktop and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
+    updated: "Last updated: 26 October 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
@@ -50,6 +50,15 @@ export const privacyCopy: Record<
         ],
       },
       {
+        id: "bug-reports",
+        title: "Bug reports from WireCat Desktop",
+        paragraphs: [
+          "When you send a bug report from WireCat Desktop, the app sends your own text (summary, details and what you expected), the versions of the app, your system and the installed tools, and recent error logs. The logs are each installed tool's last 20 failed run records and, if the report came from a failed install, the install log. A run record holds the command and its words, with every value that may be content or a secret written as [redacted]; the profile name; the versions of the tool, Node.js and your system; timings and counts; the coding agent that ran the command, with its session id masked; and, for a failed run, the error's class, code, masked message and the program locations where it happened. A report started from an error message in the app also carries the app's last 10 errors (their messages and the program locations where they happened).",
+          "The app masks the logs on your computer before it sends them: email addresses, phone numbers, tokens, message text and your home folder path are removed or replaced. WireCat's server masks them again before it stores them. Logs can still contain personal details that you typed into a command yourself, such as a search query.",
+          "The logs are stored privately on WireCat's server for 90 days and then deleted. They are never published. The public GitHub issue for your report holds only your own text, the app, system and tool versions and a report id. To see or delete a report, write to hello@wirecat.dev with its report id.",
+        ],
+      },
+      {
         id: "disconnect-delete",
         title: "Disconnecting and deleting data",
         paragraphs: [
@@ -69,7 +78,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Who processes the data",
         paragraphs: [
-          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application and zm, the WireCat CLI app for Zoom. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
+          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application, zm, the WireCat CLI app for Zoom, and bug reports sent from WireCat Desktop. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
           "Cloudflare serves the pages and processes your IP address to deliver them and protect the site.",
         ],
       },
@@ -122,8 +131,8 @@ export const privacyCopy: Record<
   ru: {
     title: "Политика конфиденциальности",
     intro:
-      "Как WireCat обрабатывает данные аккаунтов Google и Zoom, локальные документы, дополнительные ИИ-запросы и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
-    updated: "Обновлено: 24 октября 2026 г.",
+      "Как WireCat обрабатывает данные аккаунтов Google и Zoom, локальные документы, дополнительные ИИ-запросы, отчёты об ошибках из WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
+    updated: "Обновлено: 26 октября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
@@ -165,6 +174,15 @@ export const privacyCopy: Record<
         ],
       },
       {
+        id: "bug-reports",
+        title: "Отчёты об ошибках из WireCat Desktop",
+        paragraphs: [
+          "Когда вы отправляете отчёт об ошибке из WireCat Desktop, приложение отправляет ваш собственный текст (кратко, подробности и что вы ожидали), версии приложения, системы и установленных инструментов, а также последние логи ошибок. Логи — это 20 последних записей упавших запусков каждого установленного инструмента и, если отчёт отправлен после неудачной установки, лог установки. Запись запуска хранит команду и её слова, где каждое значение, которое может быть содержимым или секретом, заменено на [redacted]; имя профиля; версии инструмента, Node.js и системы; время и счётчики; агента, запустившего команду (номер его сессии скрыт); а для упавшего запуска — класс, код и замаскированный текст ошибки и места в программе, где она произошла. Отчёт, начатый с сообщения об ошибке в приложении, также содержит 10 последних ошибок приложения (их тексты и места в программе, где они произошли).",
+          "Приложение скрывает данные в логах на вашем компьютере до отправки: адреса почты, номера телефонов, токены, текст сообщений и путь к домашней папке удаляются или заменяются. Сервер WireCat скрывает их ещё раз перед сохранением. В логах всё же могут остаться личные данные, которые вы сами ввели в команду, например поисковый запрос.",
+          "Логи хранятся закрыто на сервере WireCat 90 дней, затем удаляются. Они никогда не публикуются. Публичное обращение на GitHub по вашему отчёту содержит только ваш текст, версии приложения, системы и инструментов и идентификатор отчёта. Чтобы посмотреть или удалить отчёт, напишите на hello@wirecat.dev и укажите идентификатор отчёта.",
+        ],
+      },
+      {
         id: "disconnect-delete",
         title: "Отключение и удаление данных",
         paragraphs: [
@@ -184,7 +202,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Кто обрабатывает данные",
         paragraphs: [
-          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive и zm — приложение WireCat CLI для Zoom. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
+          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive, zm — приложение WireCat CLI для Zoom — и отчёты об ошибках, отправленные из WireCat Desktop. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
           "Страницы отдаёт Cloudflare; он обрабатывает ваш IP-адрес, чтобы доставить страницы и защитить сайт.",
         ],
       },
@@ -237,8 +255,8 @@ export const privacyCopy: Record<
   es: {
     title: "Política de privacidad",
     intro:
-      "Cómo WireCat trata los datos de Google y Zoom, los documentos locales, el procesamiento opcional con IA y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
-    updated: "Última actualización: 24 de octubre de 2026",
+      "Cómo WireCat trata los datos de Google y Zoom, los documentos locales, el procesamiento opcional con IA, los informes de errores desde WireCat Desktop y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
+    updated: "Última actualización: 26 de octubre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
@@ -280,6 +298,15 @@ export const privacyCopy: Record<
         ],
       },
       {
+        id: "bug-reports",
+        title: "Informes de errores desde WireCat Desktop",
+        paragraphs: [
+          "Cuando envías un informe de error desde WireCat Desktop, la aplicación envía tu propio texto (resumen, detalles y lo que esperabas), las versiones de la aplicación, de tu sistema y de las herramientas instaladas, y los logs de errores recientes. Los logs son los últimos 20 registros de ejecuciones fallidas de cada herramienta instalada y, si el informe viene de una instalación fallida, el log de instalación. Un registro de ejecución guarda el comando y sus palabras, con cada valor que pueda ser contenido o un secreto escrito como [redacted]; el nombre del perfil; las versiones de la herramienta, de Node.js y de tu sistema; tiempos y recuentos; el agente que ejecutó el comando, con el id de su sesión oculto; y, en una ejecución fallida, la clase, el código y el mensaje enmascarado del error y los lugares del programa donde ocurrió. Un informe iniciado desde un mensaje de error de la aplicación incluye también los últimos 10 errores de la aplicación (sus mensajes y el lugar del programa donde ocurrieron).",
+          "La aplicación oculta los datos de los logs en tu ordenador antes de enviarlos: las direcciones de correo, los números de teléfono, los tokens, el texto de los mensajes y la ruta de tu carpeta personal se eliminan o se sustituyen. El servidor de WireCat los oculta de nuevo antes de guardarlos. Los logs aún pueden contener datos personales que tú mismo escribiste en un comando, como una búsqueda.",
+          "Los logs se guardan de forma privada en el servidor de WireCat durante 90 días y después se eliminan. Nunca se publican. La incidencia pública de GitHub de tu informe contiene solo tu propio texto, las versiones de la aplicación, del sistema y de las herramientas y un identificador de informe. Para ver o eliminar un informe, escribe a hello@wirecat.dev con su identificador.",
+        ],
+      },
+      {
         id: "disconnect-delete",
         title: "Desconectar y eliminar datos",
         paragraphs: [
@@ -299,7 +326,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Quién trata los datos",
         paragraphs: [
-          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive y zm, la aplicación WireCat CLI para Zoom. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
+          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive, zm, la aplicación WireCat CLI para Zoom, y los informes de errores enviados desde WireCat Desktop. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
           "Cloudflare sirve las páginas y trata tu dirección IP para entregarlas y proteger el sitio.",
         ],
       },

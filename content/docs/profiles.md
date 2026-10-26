@@ -11,14 +11,12 @@ Put the profile before the command:
 
 ```sh
 tg work config show
-drive personal config show
+drive personal sync
 ```
 
 Name the profile in every command and agent request: `tg work …`, or `TG_PROFILE=work` for a whole
 session (`tg` reads `TG_PROFILE` and `max` reads `MAX_PROFILE`; `zm` uses the `account.profile` setting; `memo` and `drive` read no profile variable, so name the profile in the command). No profile is ever picked for you. A command
-that needs one and names none stops with an error that lists the profiles on this computer. A
-`default_profile` left in the settings file by an older version also stops the command;
-`tg config unset default_profile` removes it. A setting under `profiles.work` applies to that
+that needs one and names none stops with an error that lists the profiles on this computer. A setting under `profiles.work` applies to that
 profile; `defaults` supplies values it has not set.
 Profiles are not separate operating-system users: an agent with unrestricted file access
 can still reach other data on that computer.

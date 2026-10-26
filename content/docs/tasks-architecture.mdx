@@ -11,7 +11,7 @@ use, start with [Tasks](./tasks.md).
 The design comes from the approved tasks plan in cli-core
 ([WireCatLabs/cli-core#1216](https://github.com/WireCatLabs/cli-core/pull/1216)). All of it is built
 in cli-core except the parts marked **not built yet**. `tg` and `max` have all of it, except that `serve` in `max` opens only the tasks of auto-reply rules. `memo` lacks agent closes by certainty, follow-ups, the list of 59 categories with its unlisted categories, and duplicate checks that read linked messages; it has categories
-(`tasks plan --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
+(`tasks update --category`, `category:`), tags and the duplicate check in `tasks add`, but not yet
 `tasks categories`, claims, `tasks related`, `tasks duplicates` or `tasks merge`.
 
 ## The data
@@ -167,7 +167,7 @@ its own default list. `tasks categories` (MCP
 the list while tasks still carry it is named: `tasks categories` lists it under `unlisted` with open and
 total task counts (MCP `tasks_categories` too), a `config set` or `unset` of `task_categories` ends its
 note with the same lines, and `tasks agenda` names the ones open tasks carry (`unlisted_categories`).
-`tasks list category:<name>` finds their tasks, and `tasks plan <task> --category <name>` moves one.
+`tasks list category:<name>` finds their tasks, and `tasks update <task> --category <name>` moves one.
 
 The default list in `tg` and `max`:
 
@@ -269,7 +269,7 @@ project tasks (role `assignee`). An open task with an assignee is what that pers
 | --- | --- |
 | `tasks add <message> … --assignee sender` | the person who sent the task's message |
 | `tasks add <message> … --assignee person:<id>` | a named person; several values name several people |
-| `tasks plan <task> --assignee none` | removes the assignees |
+| `tasks update <task> --assignee none` | removes the assignees |
 | `tasks list "assignee:any state:open"` | open tasks with any assignee: what others owe the owner |
 | `tasks list assignee:none`, `tasks list assignee:person:<id>` | tasks with no assignee, or one person's tasks |
 
@@ -302,7 +302,7 @@ Without the global `--yes` (MCP `yes`) it changes nothing and lists, per chat, t
 each task that would open, with its source, type and category; with it, the tasks open through the
 duplicate check, as on a sync, and answered questions close. A message that already has a task is not
 listed again. The MCP tool's description tells an agent to ask the owner before it builds a chat's
-tasks. Neither `tg` nor `max` keeps the old name `tasks apply`.
+tasks.
 
 | Command | What it does |
 | --- | --- |

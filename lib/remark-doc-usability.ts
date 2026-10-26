@@ -36,14 +36,14 @@ export function commandReferences(markdown: string): Map<string, string> {
     if (heading.type !== "heading") continue
     const title = textOf(heading as Node)
     const anchor = slugger.slug(title)
-    if (/^(tg|max) [\w -]+$/.test(title)) index.set(title, anchor)
+    if (/^(tg|max|wa) [\w -]+$/.test(title)) index.set(title, anchor)
   }
   return index
 }
 
 export function resolveCommand(value: string, tool: string | undefined, indexes: Map<string, Map<string, string>>) {
   const normalized = value.replace(/\s+/g, " ").trim()
-  const provider = /^(tg|max)\b/.exec(normalized)?.[1] ?? tool
+  const provider = /^(tg|max|wa)\b/.exec(normalized)?.[1] ?? tool
   if (!provider) return
   const full = normalized.startsWith(`${provider} `) ? normalized : `${provider} ${normalized}`
   const index = indexes.get(provider)
@@ -57,7 +57,7 @@ export function resolveCommand(value: string, tool: string | undefined, indexes:
 /** Shared presentation for released Markdown; executable examples and anchors stay intact. */
 function loadCommandIndexes() {
   const indexes = new Map<string, Map<string, string>>()
-  for (const tool of ["tg", "max"]) {
+  for (const tool of ["tg", "max", "wa"]) {
     const file = join(process.cwd(), "content/docs", tool, "commands.md")
     if (existsSync(file)) indexes.set(tool, commandReferences(readFileSync(file, "utf8")))
   }
@@ -67,7 +67,7 @@ function loadCommandIndexes() {
 export function remarkDocUsability(indexes = loadCommandIndexes()) {
   return (tree: Node, file: { path?: string }) => {
     const path = (file.path ?? "").replaceAll("\\", "/")
-    const tool = /\/docs\/(tg|max)\//.exec(path)?.[1]
+    const tool = /\/docs\/(tg|max|wa)\//.exec(path)?.[1]
     const language = /\.(ru|es)\.mdx?$/.exec(path)?.[1] ?? "en"
     const reference = { en: "Command reference", ru: "Справочник команды", es: "Referencia del comando" }[language]
     const installation = /\/installation(?:\.(?:ru|es))?\.mdx?$/.test(path) && tool

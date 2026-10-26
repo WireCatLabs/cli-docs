@@ -75,6 +75,7 @@ describe("localized SEO", () => {
   it("covers all reviewed tool reference sections in every locale with provider-specific descriptions", () => {
     const slugs = [
       "installation",
+      "compare",
       "usage",
       "commands",
       "configuration",
@@ -101,9 +102,16 @@ describe("localized SEO", () => {
           expect(description).not.toContain("{messenger}")
           descriptions.add(description)
         }
-      expect(descriptions.size).toBe(34)
+      expect(descriptions.size).toBe(36)
     }
   })
+  it("renders the newly released Memo comparison metadata in every locale", () => {
+    for (const lang of seoLocales) {
+      expect(documentationDescription(lang, ["memo", "compare"])).toContain("Memo")
+      expect(documentationTitle(lang, ["memo", "compare"], "Comparison")).toContain("memo")
+    }
+  })
+
   it("describes released Drive installation and changelog without source-build setup", () => {
     for (const lang of seoLocales) {
       const installation = documentationDescription(lang, ["drive", "installation"])

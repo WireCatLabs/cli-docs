@@ -99,7 +99,7 @@ photos tomorrow", keep it as a task too, with that person as its **assignee**: t
 do it. Then you can ask your agent what others owe you and chase what is late. In `tg` and `max`, a task
 found in a message can have assignees; project tasks in `memo` have their own.
 
-`tasks add` and `tasks plan` take `--assignee`:
+`tasks add` and `tasks update` take `--assignee`:
 
 - `--assignee sender`: whoever sent the task's message.
 - `--assignee person:<id>`: a person you name. Give several values to name several people.
@@ -115,8 +115,8 @@ server pass `assignee` to `tasks_add` and `tasks_plan`.
 
 ```text
 tasks add msg:telegram/1/77/42 --type promise --category documents --assignee sender
-tasks plan PR-4 --assignee person:12
-tasks plan PR-4 --assignee none
+tasks update PR-4 --assignee person:12
+tasks update PR-4 --assignee none
 tasks list "assignee:any state:open"
 ```
 
@@ -144,7 +144,7 @@ The tag works in `tg` and `max`, on groups only; a channel never opens tasks. Wh
   from any member other than the one who asked. A later message that does not reply to the question
   closes nothing: close that task yourself, or let your agent close it with a certainty; see
   [When an agent closes a task](#when-an-agent-closes-a-task).
-- **No assignee.** A task a rule opens has no assignee; your agent can add one with `tasks plan`.
+- **No assignee.** A task a rule opens has no assignee; your agent can add one with `tasks update`.
 
 Tag only groups where you are responsible for the answers. A busy group with the tag gives you many
 tasks.
@@ -195,7 +195,7 @@ Add a task for a message, then plan it:
 
 ```sh
 tg personal tasks add msg:telegram/1/77/42 --type promise --category documents --title "Send Bob Sample the signed contract" --due 3d
-tg personal tasks plan <task> --description "Done when Bob confirms he has it." --remind-time 2d
+tg personal tasks update <task> --description "Done when Bob confirms he has it." --remind-time 2d
 ```
 
 Link more messages, then see everything in one place:
@@ -371,7 +371,7 @@ and a gift for dad with the same amount, differ in one word's meaning, so an age
 
 **Who decides.** The agent that reviews your chats after a sync goes through the review list. It
 merges the pairs that are one job and rejects the pairs that are not. When it cannot tell, it marks
-the pair unsure. You see only the unsure pairs, with `tasks duplicates decision:unsure`.
+the pair unsure. You see only the unsure pairs, with `tasks duplicates list decision:unsure`.
 
 When you or your agent link a message to a task (`tasks link`, `tasks add --into` or `tasks merge`), the
 check runs again for that task. New possible pairs go to the review list. The link always stays.
@@ -382,11 +382,11 @@ rejected pair does not come back.
 
 ```text
 tasks related REQ-23
-tasks duplicates
+tasks duplicates list
 tasks merge REQ-23 --into REQ-22
 tasks duplicates reject REQ-23 REQ-22
 tasks duplicates defer REQ-23 REQ-22
-tasks duplicates decision:unsure
+tasks duplicates list decision:unsure
 tasks unmerge REQ-23
 ```
 
@@ -401,7 +401,7 @@ tasks unmerge REQ-23
   prints each one with its meaning and its words. `tasks add` needs a category, and refuses a name
   that is not on the list. A rule picks the category from the words of the message, the narrower one
   when two fit (a utility bill is `bills`, not `money`), or `other` when no word matches; your agent
-  corrects it with `tasks plan --category`.
+  corrects it with `tasks update --category`.
 - **One list in a shared settings file.** `tg` and `max` read your changes to the list from
   `~/.config/WireCat/config.json`, section `task_categories`. This file is not a profile's settings
   file, so the list is the same in every profile, and "finance" and "payments" never live side by
@@ -422,7 +422,7 @@ tasks unmerge REQ-23
 - **A category that left the list.** Tasks keep their category when it leaves the list.
   `tasks categories` names such categories under `unlisted`, with their open and total tasks, and
   `tasks agenda` names the ones open tasks still carry (`unlisted_categories`). Find their tasks with
-  `tasks list category:<name>`, and move one with `tasks plan <task> --category <name>`.
+  `tasks list category:<name>`, and move one with `tasks update <task> --category <name>`.
 - **Tags** such as `urgent` or `waiting-for-them` work on tasks too: `tags add urgent --task REQ-22`.
   Tags are for filtering only; the duplicate check ignores them.
 - **Keys per type:** a task found in a message gets a short key, such as `Q-15` for a question,
@@ -435,7 +435,7 @@ tasks add msg:telegram/1/77/42 --type request --category money
 tasks categories
 tasks agenda category:money tag:urgent
 tasks list category:money
-tasks plan REQ-22 --category bills
+tasks update REQ-22 --category bills
 config set task_categories.travel "trips and tickets | flight, hotel, es:vuelo"
 config unset task_categories.travel
 config unset task_categories

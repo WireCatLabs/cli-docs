@@ -45,10 +45,10 @@ Only you join identities into one person. The same name or the same email domain
 tg personal contacts link "Kai Sample" max:Kai
 ```
 
-After that, `contacts timeline` follows the person across messengers. It lists what they wrote, where they were mentioned, and their chats, mail, meetings and tasks, newest first, from the store only.
+After that, `contacts events` follows the person across messengers. It lists what they wrote, where they were mentioned, and their chats, mail, meetings and tasks, newest first, from the store only.
 
 ```sh
-tg personal contacts timeline "Kai Sample" --since-time 2026-10-01 --limit 20
+tg personal contacts events "Kai Sample" 'at>=2026-10-01' --limit 20
 ```
 
 The tool also records who took part in what (sender, recipient, participant, assignee, author, mentioned, linked). That record is why "everything about Kai" is one lookup and not a scan of every message.
@@ -63,7 +63,7 @@ Every message can point at the earlier message it answers. Each pointer says whe
 - **A rule of the tool.** A message that mentions someone, or that continues the same sender.
 - **Your agent.** An answer it stored after reading the chat. Storing it needs the profile permission `conversations.links`.
 
-`conversations build` joins these pointers into conversations for one chat. `messages context` with `--thread` follows the chain from a message instead of showing its neighbours in time. A link that went out of date after an edit or a deletion is shown but never followed. A rebuild gives conversations new ids, so keep the `msg:` reference of the message, not the conversation id. How the graph is built: [How search works](./search-architecture.mdx#3-reconstruct-discussions-with-a-message-graph).
+`conversations rebuild` joins these pointers into conversations for one chat. `messages context` with `--thread` follows the chain from a message instead of showing its neighbours in time. A link that went out of date after an edit or a deletion is shown but never followed. A rebuild gives conversations new ids, so keep the `msg:` reference of the message, not the conversation id. How the graph is built: [How search works](./search-architecture.mdx#3-reconstruct-discussions-with-a-message-graph).
 
 ## Files, voice notes and pictures
 
@@ -126,6 +126,13 @@ tg personal tags add work --chat "Book club"
 
 Each stored link records its source: `file` (written in a note file), `owner` (added by you), `suggested` (proposed, not yet confirmed) or `message` (written in a stored message).
 
+A link between an identity and its person also keeps how it was made, how sure it is and who made it, and every move
+of an identity from one person to another is logged, so a wrong link can be undone. The rule for every tool is that
+a link you made is never replaced by an automatic one, and two equally good candidates make no link at all
+([the data-model standard](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+**Coming in the next cli-core release:** the same record for events and documents, and a review list where you
+decide the pairs the tools could not tell apart.
+
 ## Use links in a question
 
 Four requests an agent can answer because of links. Replace the names with yours.
@@ -151,7 +158,7 @@ Use memo. Which task came from the message about the invoice, and which message 
 | Symptom | Likely cause | What to do |
 | --- | --- | --- |
 | A person's timeline shows one messenger only | The identities are not linked | `contacts link`, then ask again |
-| `--thread` shows only neighbours in time | No conversations built for the chat | `conversations build --chat "Book club"` |
+| `--thread` shows only neighbours in time | No conversations built for the chat | `conversations rebuild --chat "Book club"` |
 | A phone or email in an old message is not found | The message was stored before mentions existed | `mentions rebuild` |
 | A name of a new contact is not found | Mentions were built before the person existed | `mentions rebuild person-name` |
 | Words inside a file are not found | The file text was not extracted | `attachments extract` |

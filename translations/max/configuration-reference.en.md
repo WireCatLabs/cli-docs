@@ -2,9 +2,6 @@
 title: "Configuration reference"
 ---
 
-<a id="порядок-в-котором-решается-настройка" />
-<a id="посмотреть-что-получилось" />
-
 Use this reference to look up setting names, types, defaults, scopes, environment variables and precedence. For ordinary changes and file examples, start with [configuration](./configuration.md). The [CLI contract](./cli-contract.md) covers command behaviour, output and exit codes.
 
 Terms used below:
@@ -53,7 +50,7 @@ Each setting shows its source: `flag`, `default` or `config file:` with its key,
 
 With `--json`, the response also includes `store_settings`: shared archive settings (`search_stemmers.*`, `task_agent_close*`) and their origin, `store` or `default`.
 
-`--bot` shows the settings as `max <имя> bot …` will receive them: the bot has its own section and its own sending limit. If the file does not exist, loading settings first creates one with the usual default values. The existing file is not overwritten. If one of the `MAX_*_DIR` variables is set, command will say this in stderr: with them, the profile has a different entry in the keyring, and login made without them looks like “no session”.
+`--bot` shows the settings as `max <имя> bot …` will receive them: the bot has its own section and its own sending limit. If the file does not exist, `config show` first creates one with the usual default values. The existing file is not overwritten. If one of the `MAX_*_DIR` variables is set, command will say this in stderr: with them, the profile has a different entry in the keyring, and login made without them looks like “no session”.
 
 ⚠ **The profile list includes all profiles on this machine:** those named in configuration, logged in as personal accounts, or configured as bots. Each is identified as personal, bot or both.
 
@@ -63,9 +60,9 @@ Output contains no secrets: the configuration file has no fields in which to sto
 
 ## Configuration file
 
-`~/.config/max-cli/config.json` on Linux; Paths on other systems are in the [Settings Guide](./configuration.md#где-лежит-файл). The first command reading the settings creates it from `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` and `skill_hint` into `defaults`. The file is created with the rights `0600`, and `max personal config set` writes it with the rights `0644`: there are no secrets in it.
+`~/.config/max-cli/config.json` on Linux; Paths on other systems are in the [Settings Guide](./configuration.md#где-лежит-файл). The first command that reads the settings, such as `config show`, `account list` or `chats list`, creates it with `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` and `skill_hint` in `defaults`. The file is created and written by `max personal config set` with mode `0600`, and its folder with `0700`. `max personal doctor` names a file or folder that other users can read in `files.problems` and prints the `chmod` that fixes it. `max personal doctor` only reads the file: if it is missing, it answers `config.found: false` and does not create it.
 
-Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`, `models.<назначение>.base_url`. A file with the old names (`sendsPerHour`, `keepRunsForDays`, `baseUrl`) is renamed by the first read, once, and only if the result passes validation. Profile names, paths in `permissions` and model purposes do not change. One setting under both names with different values is an error.
+Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`, `models.<назначение>.base_url`.
 
 ```json
 {
@@ -95,7 +92,6 @@ Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`,
 | `timeout_ms` | Milliseconds to wait for **one request** | None (`--timeout` is different; see below) | Transport-dependent |
 | `color` | Terminal colours; otherwise based on terminal detection | None; without the field, `NO_COLOR` disables colour | Terminal-dependent |
 | `sender_colors` | Separate author colours in `max personal messages`; `вы` is always blue. Requires `color`. Personal accounts only | None | `false` |
-| `catch_up_marks_read` | `max personal inbox`/`max personal review` mark displayed chats read through the last shown message. Other people see the receipt. Personal accounts only | `--mark-read`, `--no-mark-read` | `false` |
 | `search_catch_up` | After `messages sync` or gap repair, prepare this chat's graph and installed local vectors within limits; no automatic downloads or remote calls. Personal accounts only | `--catch-up`, `--no-catch-up` | `false` |
 | `record` | Save every run as with `--record` ([diagnostics](./diagnostics.md)) | `--record`, `--no-record` | `false` |
 | `keep_runs_for_days` | Run-record retention in days | None | `30` |
@@ -107,14 +103,10 @@ Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`,
 | `read_other_bots` | Permit requested `--all-bots`/`--bots` reads: `false`, `true` for all, or bot-profile names. **Only in `bot`** ([bots](./bot.md)) | None; flags request access, the setting allows it | `false` |
 | `update_check` | Check npm and show update notices once daily. **Only in `defaults`**: version is shared across profiles | Disabled by `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER`, `CI` | `true` |
 | `skill_hint` | Daily stderr notice for a missing/outdated `max` skill with `max skill install` guidance. Detects agents through `AI_AGENT` or `CLAUDECODE`. **Only in `defaults`** | None | `true` |
-| `allow` | Legacy setting, read for compatibility; use `permissions` instead | None | Cannot be changed when `permissions` is set |
 | `embedding_provider` | Local recognition (`local`) or `openai` | `--provider` | `local` |
 | `embedding_model` | Embedding model id | `--model` | Provider-dependent |
 | `embedding_base_url` | Vector API URL | `--base-url` | Provider-dependent |
 | `embedding_dims` | Vector size, integer 1–65,536 | `--dims` | Model-dependent |
-| `analysis_provider` | `agent`, `openai` or `anthropic` | `build --provider` | `agent` |
-| `analysis_model` | Analysis model id | `build --model` | Unset; explicitly required for `--analyze` |
-| `analysis_base_url` | Analysis API URL | `build --base-url` | Provider-dependent |
 | `models` | External AI configuration by purpose ([below](#модели-по-назначению)) | `MAX_MODELS_*` variables | Unset |
 | `search_stemmers.cyrillic`, `search_stemmers.latin` | Word-stem languages for the shared archive ([below](#языки-поиска)) | None | `russian`, `english,spanish` |
 | `task_first_pass_per_chat` | How many tasks the rules may open in each chat from history on an account's first sync; a whole number from 0 to 1000. Later only new messages are read, and `tasks scan <чат>` builds tasks from history when you ask. Shared across the archive | — | `0` |
@@ -143,7 +135,7 @@ There is no file setting for `--timeout`: a command budget belongs to a specific
 | `ask` | question in the terminal, the default answer is “no” ([below](#вопрос-перед-изменением)) |
 | `allow` | action is performed without question |
 
-**The key is the command path**: `messages`, `messages.delete`, `messages.send`, `reactions`, `chats.members`, `contacts`, `account.sessions.end`. It starts with a resource - `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `mentions`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` or `metadata`. `calls` and `stickers` are read-only and have no permission key: `config set` answers with code 2. The bot's keys start with `bot`, for example `bot.messages.send`. `config set` rejects the unknown command key, including inside the entire `permissions` object, with code 2. `config unset` allows you to delete the old unknown key. Reading an existing file with such a key warns in stderr and continues to work.
+**The key is the command path**: `messages`, `messages.delete`, `messages.send`, `reactions`, `chats.members`, `contacts`, `account.sessions.end`. It starts with a resource - `messages`, `reactions`, `polls`, `topics`, `chats`, `contacts`, `account`, `bot`, `conversations`, `tags`, `mentions`, `search`, `searches`, `tasks`, `replies`, `attachments`, `stats`, `store` or `metadata`. `calls` and `stickers` are read-only and have no permission key: `config set` answers with code 2. The bot's keys start with `bot`, for example `bot.messages.send`. `config set` rejects the unknown command key, including inside the entire `permissions` object, with code 2. If such a key is already in the file, commands do not run: the `configuration_error` names the key and the `config unset` command that removes it. `config show`, `set` and `unset` still work, so the file can be repaired.
 
 **A more specific key overrides its resource.** The example allows reading and deleting messages without confirmation, while denying other message writes. It does not restrict contacts, chats, reactions or other resources. `config show` displays effective permissions and their sources.
 
@@ -156,7 +148,7 @@ Permissions from file sections combine, but **the nearest section takes preceden
 }
 ```
 
-This works both ways: `messages: allow` on a profile also overrides `messages.delete: deny` from `defaults`, and then deletion asks again, as by default. Legacy `allow` applies in the section where it is written.
+This works both ways: `messages: allow` on a profile also overrides `messages.delete: deny` from `defaults`, and then deletion asks again, as by default.
 
 **By default, everything is allowed except for a few changes that are difficult to undo.** Asking: `messages.delete`, `bot.messages.delete`, `chats.delete`, `chats.clear`, `topics.enable`, `topics.delete`, and `account.sessions.end`. Automatic replies are not sent until you allow: `replies.send` - `deny`.
 
@@ -174,9 +166,11 @@ At level `ask` a question appears in the terminal with the default answer being 
 
 MCP has no confirmation forms: `ask` permits the requested write; `deny` and `readonly` still block it. `--permission ключ=уровень` temporarily tightens permissions for this process but never loosens them. In the CLI, `ask` still needs an answer or explicit confirmation flag. See [MCP](./mcp.md).
 
-### Old `allow` setting
+`mcp.authority` controls changes to settings, rules, recipients and other conditions for future runs; its default is `deny`. The commands stay in the catalogue; to run them, the owner sets `allow` or `ask`. Raw bot operations separately require explicit `bot.api: allow` or `ask`; a broader `bot: allow` does not enable them. The agent cannot change these keys or replace the entire `permissions` object; other individual keys can be changed when `mcp.authority` permits it.
 
-The list in `allow` (`send`, `forward`, `reaction`, `edit`, `pin`, `read`, `delete`, `groups`, `contacts`, `profile`, `folders`, `sessions`) is read as `allow` for these actions and `readonly` for the rest; deletion still asks. The key in `permissions` of the same section is more important. When the file has `permissions`, `config set allow` is refused and names the new setting.
+Archive maintenance, server control, model downloads and report creation have their own keys, for example `store.backup`, `server.start`, `models.download`, `doctor.reports.create`. Their default level is `ask`.
+
+Choosing read-only access at first run limits every profile of every WireCat tool, including MCP. A more specific profile `allow` cannot relax that limit. Change the answer through `max setup` in the terminal.
 
 ## Changing settings without opening the file
 
@@ -188,14 +182,13 @@ max work config unset limit             # убрать; снова решает 
 max agent config set permissions.messages readonly  # чтение сообщений без записи
 max shop config set --bot sends_per_hour 200    # только боту shop
 max config set --personal --defaults limit 30 # всем личным аккаунтам
-max config unset default_profile         # убрать старую настройку: профиль больше не подразумевается
 ```
 
-Values are checked with the same schema used for reading, **before writing**: `max personal config set limit 0` is refused and the file stays unchanged. `serve`, `sender_colors`, `catch_up_marks_read` and `search_catch_up` are not accepted with `--bot`: bots have no server, sender colors or unread state.
+Values are checked with the same schema used for reading, **before writing**: `max personal config set limit 0` is refused and the file stays unchanged. `serve`, `sender_colors` and `search_catch_up` are not accepted with `--bot`: bots have no server, sender colors or unread state.
 
 ### Search languages
 
-`search_stemmers.cyrillic` (`russian` or `none`) and `search_stemmers.latin` (`english`, `spanish`, both separated by commas - this is the default - or `none`) are stored not in the settings file, but in the general message archive: they are the same for all profiles and for both messengers. Therefore, `--defaults`, `--personal` and `--bot` are not accepted with them, and they cannot be changed under `MAX_PROFILE_LOCK`. `config unset` returns the built-in value. After the change, perform `max personal store reindex` - see [archive maintenance](./archive.md#обслуживание-архива).
+`search_stemmers.cyrillic` (`russian` or `none`) and `search_stemmers.latin` (`english`, `spanish`, both separated by commas - this is the default - or `none`) are stored not in the settings file, but in the general message archive: they are the same for all profiles and for both messengers. Therefore, `--defaults`, `--personal` and `--bot` are not accepted with them, and they cannot be changed under `MAX_PROFILE_LOCK`. `config unset` returns the built-in value. After the change, perform `max personal store rebuild` - see [archive maintenance](./archive.md#обслуживание-архива).
 
 ## Typos are errors, not ignored settings
 
@@ -228,7 +221,7 @@ A missing file is not an error: it means the program has not been configured.
 | `WIRECAT_STATE_DIR` | the WireCat folder shared by all CLIs: the local archive and speech models |
 | `NO_COLOR` | turns off the color, as in any other program |
 | `MAX_NO_UPDATE_CHECK`, `NO_UPDATE_NOTIFIER` | don't ask npm about a new version; `CI` works the same way |
-| `MAX_EMBEDDING_*`, `MAX_ANALYSIS_*`, `MAX_MODELS_*` | model settings ([below](#переменные-для-настроек-моделей)) |
+| `MAX_EMBEDDING_*`, `MAX_MODELS_*` | model settings ([below](#переменные-для-настроек-моделей)) |
 
 An empty string counts as unset: `MAX_PROFILE=` is equivalent to not setting `MAX_PROFILE`.
 
@@ -255,21 +248,18 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 
 | Key | Valid type or value | Scope |
 |---|---|---|
-| `default_profile` | not read: a command without a profile name stops — `max config unset default_profile` | file root |
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | integer ≥ 1 | profile |
 | `requests_per_minute` | integer ≥ 0 | profile |
 | `color`, `record` | boolean | profile |
-| `sender_colors`, `catch_up_marks_read`, `search_catch_up`, `serve` | boolean | personal account |
+| `sender_colors`, `search_catch_up`, `serve` | boolean | personal account |
 | `permissions` | object of command paths and levels `deny`, `readonly`, `ask`, `allow` | profile |
-| `allow` | array of allowed actions; old format | profile |
 | `read_other_bots` | boolean or array of profile names | only `bot` |
 | `update_check`, `skill_hint` | boolean | only `defaults` |
-| `transcribe_model` | string id from `max personal models audio list` | only `defaults` |
+| `transcribe_model` | string id from `max personal models list kind:audio` | only `defaults` |
 | `embedding_provider` | `local` or `openai` | profile |
-| `embedding_model`, `analysis_model` | non-empty string, no more than 200 characters | profile |
-| `embedding_base_url`, `analysis_base_url` | HTTP(S) URL without credentials, query and fragment | profile |
+| `embedding_model` | non-empty string, no more than 200 characters | profile |
+| `embedding_base_url` | HTTP(S) URL without credentials, query and fragment | profile |
 | `embedding_dims` | integer 1–65 536 | profile |
-| `analysis_provider` | `agent`, `openai`, `anthropic` | profile |
 | `models` | model assignment object; fields are described below | profile |
 | `search_stemmers.cyrillic` | `russian`, `none` | general archive, via `config set` |
 | `search_stemmers.latin` | `english`, `spanish`, both separated by commas, `none` | general archive, via `config set` |
@@ -287,13 +277,13 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 | `models.<назначение>.model` | Nonempty string, at most 200 characters | Unset; an enabled provider requires an explicit ID |
 | `models.<назначение>.base_url` | HTTP(S) URL without credentials, query or fragment | Provider endpoint |
 
-For each field, precedence is `MAX_MODELS_<НАЗНАЧЕНИЕ>_PROVIDER`, `_MODEL` or `_BASE_URL`, then the most specific file entry for the task, then explicit legacy `analysis*` fields for `analysis`, then `models.default` variables and entries. Hyphens in a task name become `_` in its environment variable. Provider tokens are not part of this object.
+For each field, precedence is `MAX_MODELS_<НАЗНАЧЕНИЕ>_PROVIDER`, `_MODEL` or `_BASE_URL`, then the most specific file entry for the task, then `models.default` variables and entries. Hyphens in a task name become `_` in its environment variable. Provider tokens are not part of this object.
 
-Vector and analysis settings are independent and may vary across profiles. The address is HTTP/S without a built-in password, query and fragment. The external vector service also receives the question from the MCP search. Keys are specified via `models text key set openai|anthropic` and are not written to `config.json`. The usual `build` does not run external analysis: an explicit `--analyze` is needed. Providers and examples are in [external models manual](./external-models.md).
+Vector and analysis settings are independent and may vary across profiles. The address is HTTP/S without a built-in password, query and fragment. The external vector service also receives the question from the MCP search. Keys are specified via `models keys set openai|anthropic` and are not written to `config.json`. The usual `build` does not run external analysis: an explicit `--analyze` is needed. Providers and examples are in [external models manual](./external-models.md).
 
 ### Model configuration variables
 
-Seven old fields support `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL`, `MAX_EMBEDDING_DIMS`, `MAX_ANALYSIS_PROVIDER`, `MAX_ANALYSIS_MODEL`, `MAX_ANALYSIS_BASE_URL`. They act before file values; command parameters are stronger than them. `MAX_MODELS_DEFAULT_PROVIDER`, `MAX_MODELS_DEFAULT_MODEL`, `MAX_MODELS_DEFAULT_BASE_URL` set the general fields of the new format; Instead of `DEFAULT`, you can specify a destination, for example `ANALYSIS`. An empty variable does not override the setting. `configuration_error` returns an incorrect value.
+Vector settings also read `MAX_EMBEDDING_PROVIDER`, `MAX_EMBEDDING_MODEL`, `MAX_EMBEDDING_BASE_URL` and `MAX_EMBEDDING_DIMS`. They act before file values; command parameters are stronger than them. `MAX_MODELS_DEFAULT_PROVIDER`, `MAX_MODELS_DEFAULT_MODEL`, `MAX_MODELS_DEFAULT_BASE_URL` set the general fields of the new format; Instead of `DEFAULT`, you can specify a destination, for example `ANALYSIS`. An empty variable does not override the setting. `configuration_error` returns an incorrect value.
 
 ## Next steps
 

@@ -9,7 +9,6 @@ title: "Решение проблем"
 <a id="tg-session-start-требует-терминала" />
 <a id="mytelegramorg-сообщил-о-создании-приложения-но-его-нет" />
 <a id="результат-относится-к-другому-профилю" />
-<a id="ошибка-is-not-a-valid-config" />
 <a id="неверное-значение---limit" />
 <a id="неверное-время---after-time" />
 <a id="неверное-время---at-time" />
@@ -34,7 +33,6 @@ title: "Решение проблем"
 <a id="чат-считается-загруженным-целиком-но-старых-сообщений-нет" />
 <a id="tg-serve-уже-работает-для-профиля" />
 <a id="serve-остановился-сам" />
-<a id="npx-leemourtg-cli-запускает-старую-версию" />
 <a id="запомненные-ожидания" />
 
 Используйте эту страницу, когда `tg` показывает ошибку или не делает то, что вы ожидали. Найдите сообщение, которое вы видите, или его код выхода, и страница расскажет вам, что оно означает и что делать дальше. Большинство решений требует одной команды.
@@ -53,7 +51,7 @@ title: "Решение проблем"
 |---|---|---|---|
 | `1` | `internal_error` | сбой самого `tg` | [сообщить](#report-a-problem) |
 | `2` | `validation_error` | опечатка в команде или опции, значение или сочетание параметров, которое `tg` не принимает; имя, совпадающее с несколькими чатами | [неизвестная команда](#unknown-command-), [значения](#--limit-takes-a-whole-number-from-1-upwards), [несколько чатов](#-matches-3-chats--name-one-by-its-id) |
-| `3` | `configuration_error` | ошибка `config.json`, прокси отказал или недоступен, либо база новее `tg` | [настройки](#-is-not-a-valid-config), [прокси](#the-proxy--cannot-be-reached-or--refused), [база](#the-message-store-was-written-by-a-newer-version-) |
+| `3` | `configuration_error` | ошибка `config.json`, прокси отказал или недоступен, либо база новее `tg` | [настройки](#-is-not-a-setting-of-tg), [прокси](#the-proxy--cannot-be-reached-or--refused), [база](#the-message-store-was-written-by-a-newer-version-) |
 | `4` | `authentication_error` | нет входа, сессия завершена или хранилище ключей недоступно | [нет сессии](#no-session-for-profile-personal--run-tg-personal-setup-in-a-local-terminal) |
 | `5` | `permission_error` | отказ `permissions` профиля или Telegram | [разрешения](#profile--does-not-let--write-or-profile--denies-), [Telegram](#telegram-refused-), [PEER_FLOOD](#telegram-limited-this-accounts-messages-as-spam-peer_flood) |
 | `6` | `not_found` | чат, сообщение или человек не найден; база пустая | [чат](#no-chat-matches-), [база](#nothing-recorded-for-profile--yet--run-the-command-once-without---offline) |
@@ -111,7 +109,7 @@ tg personal chats list         # the profile named in the message
 export TG_PROFILE=personal     # or for the whole shell session
 ```
 
-На компьютере, где ещё нет ни одного профиля, сообщение предлагает выполнить `tg personal setup`; вместо `personal` подойдёт любое имя. Если в сообщении сказано `default_profile is no longer read` (код выхода `2`), в файле настроек осталась эта настройка от старой версии `tg`: назовите профиль, а `tg config unset default_profile` уберёт настройку.
+На компьютере, где ещё нет ни одного профиля, сообщение предлагает выполнить `tg personal setup`; вместо `personal` подойдёт любое имя.
 
 ### "нет сессии для профиля "personal" — запустите `tg personal setup` в локальном терминале"
 
@@ -174,9 +172,12 @@ tg chat list
 
 ## Настройки и значения опций
 
-### «… недопустимая конфигурация»
+### «… не является настройкой tg»
 
-Код выхода `3`. `config.json` имеет настройку, которую `tg` не знает, или значение неправильного типа. В ошибке указывается параметр и профиль, в котором он находится. Это намеренный отказ: молчаливо игнорируемая настройка стоит полдня. Исправьте вручную или удалите с помощью `tg personal config unset <setting>` ([опечатка — ошибка](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
+Код выхода `3`. В `config.json` есть настройка, которую `tg` не знает, значение неправильного типа, или файл не является
+корректным JSON. Ошибка называет первую проблему и, если JSON не сломан, команду `config unset`, которая её
+убирает; выполните эту команду как есть. Это намеренный отказ: молчаливо пропущенная настройка стоит полдня.
+`tg personal doctor` перечисляет все проблемы в файле ([опечатка — ошибка](./configuration-reference.md#a-typo-is-an-error-not-a-default)).
 
 ### "--limit принимает целое число от 1 и выше"
 
@@ -254,7 +255,7 @@ tg chat list
 
 Код `5`, если аккаунту запрещено действие, `11` — остальные отказы. Имя причины приходит от Telegram и содержится в JSON как `provider_error`; введённые аргументы не повторяются. Некоторые причины объясняются отдельно:
 
-- **Telegram распознаёт речь только для Premium** — код `5`. Используйте локальную модель: `tg personal models audio download parakeet-v3`, затем `tg personal messages transcribe <chat> <id> --local`.
+- **Telegram распознаёт речь только для Premium** — код `5`. Используйте локальную модель: `tg personal models download parakeet-v3`, затем `tg personal messages transcribe <chat> <id> --local`.
 - **Сообщение не является голосовым или видеозаметкой** — код `2`: указан другой тип сообщения.
 - **Telegram не смог распознать речь** — код `11`; попробуйте `--local`.
 
@@ -347,9 +348,9 @@ tg personal messages send <chat> "<the same text>" --operation-id <id from the e
 ## Сообщить о проблеме
 
 ```sh
-tg personal doctor report  # what a report holds, and what it never holds; writes nothing
-tg personal doctor report create  # write it to a file, and say where to send it
-tg personal doctor report create --run <id>  # about another run; ids from tg personal runs list
+tg personal doctor reports show  # what a report holds, and what it never holds; writes nothing
+tg personal doctor reports create  # write it to a file, and say where to send it
+tg personal doctor reports create --run <id>  # about another run; ids from tg personal runs list
 ```
 
 `create` записывает `tg-report-<time>.json` в текущую папку (или `--output`), доступную для чтения только вам. Он содержит версию, среду выполнения и операционную систему, ответ `tg personal doctor`, последний неудачный запуск — операцию каждого запроса, продолжительность и код ошибки — и только последние 20 попыток отправки, результат и длину. Каждый идентификатор чата, сообщения и аккаунта заменяется меткой, которая ничего не значит за пределами файла. Он не содержит текста сообщения, заголовков чатов, имен, номеров телефонов, учетных данных сессии или приложения. Неудачный запуск сохраняется отдельно, даже без `--record` ([неудачные запуски](./diagnostics.md#a-failed-run-is-always-kept)).

@@ -22,9 +22,7 @@ decidimos qué viene después.
 Ya funcionan las reuniones de [Zoom](./zoom.mdx) y los documentos de [Google Drive](./drive/index.md).
 Consulta las [funciones](./features.mdx).
 
-## En curso
-
-- **WhatsApp**: mensajes, grupos y archivos.
+También están disponibles los chats de [WhatsApp](./wa/index.md) y los bots empresariales.
 
 ## A continuación
 
@@ -51,5 +49,6 @@ Consulta las [funciones](./features.mdx).
 - [Hoja de ruta de Zoom](./zm/roadmap.md)
 - [Hoja de ruta de Google Drive](./drive/roadmap.md)
 - [Hoja de ruta de Memo](./memo/roadmap.md)
+- [Hoja de ruta de WhatsApp](./wa/roadmap.md)
 
 Para proponer una fuente o función, abre un issue en el repositorio de GitHub de la herramienta.

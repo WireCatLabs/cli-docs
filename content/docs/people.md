@@ -23,8 +23,8 @@ messenger:
   selected account and does not change their name in your contacts.
 - **Notes.** Free text about the person that you or your agent can search later.
 
-The commands are in the [Telegram people guide](./tg/people.md#your-own-names-and-notes-contacts-alias-contacts-notes)
-and the [MAX reference](./max/commands.md#max-contacts-alias).
+The commands are in the [Telegram people guide](./tg/people.md#your-own-names-and-notes-contacts-aliases-contacts-notes)
+and the [MAX reference](./max/commands.md#max-contacts-aliases).
 
 The same human often has a Telegram account and a MAX account. The tools treat them as two people
 until you **link** them: you record on your computer that both accounts belong to one person. Then
@@ -57,8 +57,8 @@ and questions still open. The answer should say which history was available.
 Both messengers provide a profile with the person's identity and shared conversations:
 
 ```sh
-tg personal contacts profile @example_user
-max personal contacts profile 20000002
+tg personal contacts info @example_user
+max personal contacts info 20000002
 ```
 
 Use `contacts show` for a shorter lookup. Name a person by their ID or part of their name; in
@@ -128,13 +128,13 @@ On Telegram, `tg` also asks two public spam lists, [Combot Anti-Spam](https://ca
 [lols.bot](https://lols.bot). **The person's Telegram ID is sent to them.** Use `--no-registries`
 to skip those lookups. The lists cover Telegram accounts only, so `max` never sends anything to them.
 
-To check a whole group, `chats members audit` scores every member from the member list and your
+To check a whole group, `chats members check` scores every member from the member list and your
 saved history, and lists those with a reason. `--deep 10` then runs the full check on the ten
 highest, one person per second. The owner and admins are left out, and nobody is removed:
 
 ```sh
-tg personal chats members audit "Book club" --deep 10
-max personal chats members audit "Book club" --deep 10
+tg personal chats members check "Book club" --deep 10
+max personal chats members check "Book club" --deep 10
 ```
 
 <a id="link-your-accounts" />
@@ -149,7 +149,7 @@ tg personal contacts link @example_user max:"Example User"
 
 Both accounts must already be in the history on this computer, so use `tg` and `max` on the same
 computer. `contacts context` without `--chat` then gathers the linked identities.
-`contacts context --chat` and `contacts profile` show only the selected messenger identity. A shared
+`contacts context --chat` and `contacts info` show only the selected messenger identity. A shared
 name alone is not a match; only the links you record count. `contacts unlink` removes that local
 association.
 

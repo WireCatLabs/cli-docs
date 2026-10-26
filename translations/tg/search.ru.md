@@ -4,7 +4,6 @@ title: "Поиск"
 
 <a id="для-скриптов-и-агентов" />
 <a id="файлы-подготовка-и-пробелы-в-архиве" />
-<a id="for-scripts-and-agents" />
 
 Вам нужно найти что-то написанное: сообщение, соглашение, отправленный кем-то файл, код, полученный несколько месяцев назад. На этой странице показано, как искать все, что tg сохранил на этом компьютере — сообщения Telegram, почту и заметки, импортированные [memo](https://github.com/WireCatLabs/cli-memo), — и как одновременно обратиться к поиску Telegram.
 
@@ -78,7 +77,7 @@ tg personal search topics "Hiking" "gear"         # topic titles in one forum gr
 tg personal search all 'lease agreement' --offline  # the store only; nothing is sent to Telegram
 ```
 
-`search all` сообщает тип результата — сообщение (`msg:…`) или заметку (`note:…`). tg не ищет почту: `tg personal search mail` отвечает "mail is memo's: install @wirecat/cli-memo, then `memo search mail …`", а `search all --only mail` отклоняется так же. В `search messages` условия `NOT has:attachment`, `has:voice` и `has:file` в запросе оставляют только текст, голос или файлы; в `search notes` условия `source:internal` и `source:file` оставляют заметки, написанные в memo или импортированные из папки. Неподходящие поля — `chat:`/`from:` для заметок — заставляют `search all` пропустить источник и объяснить причину.
+`search all` сообщает тип результата — сообщение (`msg:…`) или заметку (`note:…`). tg не ищет почту: `search all --only mail` отклоняется с указанием на `memo search mail`. В `search messages` условия `NOT has:attachment`, `has:voice` и `has:file` в запросе оставляют только текст, голос или файлы; в `search notes` условия `source:internal` и `source:file` оставляют заметки, написанные в memo или импортированные из папки. Неподходящие поля — `chat:`/`from:` для заметок — заставляют `search all` пропустить источник и объяснить причину.
 
 Почта и заметки попадают в архив через memo: `memo sync --mail` и `memo import`. Без них `search all` ищет только сообщения.
 
@@ -268,7 +267,7 @@ tg personal attachments list 'chat:"Book club" is:needs_text'
 ```
 
 ```sh
-tg personal attachments text set "Book club" 204 --text-file ./scan.txt
+tg personal attachments update "Book club" 204 --text-file ./scan.txt
 ```
 
 `attachments extract` читает на этом компьютере обычный текст, файлы Word и PDF-файлы с текстовым слоем. Для `--download` требуется `--output-dir`; без них при извлечении читаются уже сохраненные файлы. Если в одном сообщении несколько вложений, выберите одно с `--attachment`, начиная с 1.
@@ -277,9 +276,9 @@ tg personal attachments text set "Book club" 204 --text-file ./scan.txt
 
 Для извлечения PDF требуется дополнительный пакет `unpdf`; Word требуется `mammoth`, установленный там, где находится `tg`. Для глобальной установки npm: `npm install -g unpdf mammoth`. Сообщается об отсутствующем пакете; Вместо этого ваш агент может предоставить текст.
 
-**Фотографии и сканы** не имеют текстового слоя. Ваш агент обычно читает их с помощью собственного оптического распознавания символов или инструментов машинного зрения и записывает текст с помощью `attachments text set`. `attachments list is:needs_text` предоставляет сохраненный путь, указатель сообщения и номер вложения; он показывает пути и статус текста, но не сам текст. Проверьте результат с помощью поиска `content:`. Путь на сервере MCP не перемещает файл к агенту на другом компьютере: агенту необходим доступ к файлу. Такой агент может получать байты сохраненного файла ограниченными частями и проверять их хэш через [показ вложений](./attachments.md); при доставке файла не распознается и не индексируется текст, поэтому он все равно записывает текст обратно с помощью `attachments text set`.
+**Фотографии и сканы** не имеют текстового слоя. Ваш агент обычно читает их с помощью собственного оптического распознавания символов или инструментов машинного зрения и записывает текст с помощью `attachments update`. `attachments list is:needs_text` предоставляет сохраненный путь, указатель сообщения и номер вложения; он показывает пути и статус текста, но не сам текст. Проверьте результат с помощью поиска `content:`. Путь на сервере MCP не перемещает файл к агенту на другом компьютере: агенту необходим доступ к файлу. Такой агент может получать байты сохраненного файла ограниченными частями и проверять их хэш через [показ вложений](./attachments.md); при доставке файла не распознается и не индексируется текст, поэтому он все равно записывает текст обратно с помощью `attachments update`.
 
-**Многие сканы одновременно** могут быть отправлены в выбранную вами провайдеру ИИ. Настройте модель для обработки изображений под `models.ocr` и сохраните ее ключ с обычным `models text key set`. Замените `your-vision-model` на название вашей модели.
+**Многие сканы одновременно** могут быть отправлены в выбранную вами провайдеру ИИ. Настройте модель для обработки изображений под `models.ocr` и сохраните ее ключ с обычным `models keys set`. Замените `your-vision-model` на название вашей модели.
 
 ```sh
 tg personal config set models.ocr.provider openai
@@ -290,7 +289,7 @@ tg personal config set models.ocr.model your-vision-model
 ```
 
 ```sh
-tg personal models text key set openai
+tg personal models keys set openai
 ```
 
 ```sh
@@ -374,19 +373,19 @@ tg personal tags remove work --chat "Book club"
 и без модели:
 
 ```sh
-tg personal metadata refresh --chat "Book club"  # read the chat's description from Telegram; the chat is not changed
+tg personal metadata sync --chat "Book club"  # read the chat's description from Telegram; the chat is not changed
 ```
 
 ```sh
-tg personal metadata refresh --only-missing  # every stored group and channel with no description read yet
+tg personal metadata sync --only-missing  # every stored group and channel with no description read yet
 ```
 
 ```sh
-tg personal tags auto --dry-run          # what it would tag, without writing
+tg personal tags rebuild --dry-run          # what it would tag, without writing
 ```
 
 ```sh
-tg personal tags auto                    # write the automatic tags
+tg personal tags rebuild                    # write the automatic tags
 ```
 
 ```sh
@@ -508,7 +507,7 @@ tg personal search messages 'invoice chat:"Book club"' --sync-first
 
 Пустой ответ означает «нет в просмотренном архиве», а не «никогда не отправляли». Проверьте, что хранится с помощью `tg personal store status`, и получите больше с помощью `tg personal messages sync`. При использовании `--json` в ответе указывается, в каких чатах производился поиск и насколько они полны, даже если ничего не соответствует. Если tg запрашивает `tg personal store migrate`, индекс слова все еще строится; поиск без слов (`has:file`, `date:today`) уже работает.
 
-**Пробелы в истории чата.** `tg personal store gaps plan <chat>` ищет на этом компьютере пробелы между участками истории, хранящимися в архиве. Отсутствующие идентификаторы сообщений и периоды молчания сами по себе не доказывают отсутствие истории; края сохраненной истории остаются `unknown`. Проверьте план, затем запустите `tg personal store gaps repair <chat> --fingerprint <hash>`, чтобы загрузить пробелы. По умолчанию — пять пробелов, 500 сообщений и 30 секунд; `--max-gaps`, `--limit`, `--repair-time`, `--page-size` и `--pause` устанавливают границы. Повтор исправляет оставшиеся пробелы и никогда не удаляет сообщение, потому что Telegram его не вернул. Страницы, на которых несколько сообщений имеют одну временную метку, остаются в ожидании. `--background` запускает его как задание, за которым следуют `store jobs show`, `store jobs list` и `store jobs cancel`. Для восстановления требуется разрешение на запись `store.gaps.repair` и разрешение на чтение сообщений. В MCP те же команды можно найти через `tg_tools_search` и запустить через `tg_read` или `tg_write`; задания относятся к одному профилю.
+**Пробелы в истории чата.** `tg personal store gaps show <chat>` ищет на этом компьютере пробелы между участками истории, хранящимися в архиве. Отсутствующие идентификаторы сообщений и периоды молчания сами по себе не доказывают отсутствие истории; края сохраненной истории остаются `unknown`. Проверьте план, затем запустите `tg personal store gaps repair <chat> --fingerprint <hash>`, чтобы загрузить пробелы. По умолчанию — пять пробелов, 500 сообщений и 30 секунд; `--max-gaps`, `--limit`, `--repair-time`, `--page-size` и `--pause` устанавливают границы. Повтор исправляет оставшиеся пробелы и никогда не удаляет сообщение, потому что Telegram его не вернул. Страницы, на которых несколько сообщений имеют одну временную метку, остаются в ожидании. `--background` запускает его как задание, за которым следуют `store jobs show`, `store jobs list` и `store jobs cancel`. Для восстановления требуется разрешение на запись `store.gaps.repair` и разрешение на чтение сообщений. В MCP те же команды можно найти через `tg_tools_search` и запустить через `tg_read` или `tg_write`; задания относятся к одному профилю.
 
 **Подготовьте поиск по теме во время загрузки.** `tg personal messages sync <chat> --catch-up` строит разговоры в этом чате и вычисляет его локальные векторы сразу после получения для [поиска по теме](./topic-search.md). По умолчанию он выключен; настройка профиля `search_catch_up: true` включает его, а `--no-catch-up` выключает на один запуск. Границы: `--catch-up-chunks 500 --catch-up-messages 10000 --catch-up-time 30s`. Он никогда не загружает модель и не вызывает удаленную службу. Отдельный результат `prepared` сообщает, что подготовка не завершена; полученная история сохраняется в любом случае. При восстановлении пробелов подготовка использует тот же лимит времени, что и восстановление.
 

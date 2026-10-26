@@ -131,6 +131,23 @@ Google originales y límites explícitos. Importar y buscar no crea pertenencia 
 ni tareas. Revísalos por separado con [las relaciones de documentos](#link-a-document-to-a-person-or-project)
 o [los flujos de proyectos de Memo](https://wirecat.dev/en/docs/memo/recipes).
 
+### Buscar solo documentos de Drive desde Memo
+
+`memo search notes` busca a la vez en tus notas y en los documentos importados. `--source` deja solo los
+documentos de un perfil de Drive:
+
+```sh
+memo search notes "budget decision" --source drive:personal --json
+```
+
+Los documentos de cada cuenta de Google se guardan en su propia cuenta dentro de la base compartida, aparte de
+tus notas. `drive:personal` nombra esa cuenta por su perfil de drive; `google-drive:<id>` nombra la misma cuenta
+por su ID de Google, el `principal` guardado para el perfil en `config.json`. Indica varios perfiles separados
+por comas, como `--source drive:personal,drive:work`. Un perfil que aún no se ha sincronizado se rechaza con la
+lista de perfiles que tiene la base. `memo search all` ordena mensajes,
+correo y notas juntos y no tiene filtro de origen; `drive personal search` devuelve los mismos documentos con
+los campos propios de Drive.
+
 ## Preparar un informe sin conexión
 
 ```text prompt
@@ -398,21 +415,29 @@ conserva el formato original; no convierte Markdown local en un Google Doc con f
 
 ## Usar un cliente MCP local
 
-Para agentes sin terminal, configura ejecutable `drive` y argumentos `personal --read-only mcp`.
+Añade `--read-only` si este servidor debe rechazar escrituras.
+
+Para agentes sin terminal, configura el ejecutable `drive` y los argumentos `personal mcp`.
 La cuenta conectada debe estar en el ordenador que ejecuta el servidor.
 
 ```sh
-drive personal --read-only mcp --tools --json
-drive personal --read-only mcp
+drive personal mcp --tools --json
+drive personal mcp
 ```
 
-El servidor ofrece tres tools: `drive_tools_search` encuentra un comando y muestra sus argumentos, y
-`drive_read` o `drive_write` lo ejecuta con `{ command, arguments }`. El primer comando de arriba lista
-esos comandos, así que revísalo antes de iniciar el servidor stdio. Usa el mismo árbol de comandos,
-perfil y controles; `drive_write` no se ofrece cuando el perfil no permite escrituras. Los comandos que
-cambian archivos de Google, leen Drive Activity o listan apps de Drive solo se ofrecen si el perfil
-inició sesión con `--grant write`, `activity` o `apps`; reinicia el servidor tras volver a iniciar sesión. No es un conector HTTP alojado para navegador. Consulta
-[la referencia completa](./commands.md) para otras operaciones.
+El servidor ofrece tres herramientas: `drive_tools_search` encuentra un comando y muestra sus argumentos,
+y `drive_read` o `drive_write` lo ejecuta con `{ command, arguments }`. El primer comando de arriba
+lista los comandos disponibles: revísalos antes de iniciar el servidor stdio. Los argumentos MCP
+usan snake_case, por ejemplo `file_id`; la opción CLI correspondiente es `--file-id`.
+El servidor usa el mismo árbol, perfil y controles. Los comandos denegados y sus argumentos siguen
+visibles: `availability.available: false` incluye el motivo y la clave de permiso necesaria. La herramienta
+de escritura permanece en la lista aunque escribir esté bloqueado. Los comandos sin las autorizaciones
+Google necesarias figuran como no disponibles: conecta con `--grant write`, `activity` o `apps` según la tarea
+y reinicia el servidor. Cambiar ajustes e instalar la habilidad requiere que el propietario permita
+`permissions.mcp.authority`; el agente no puede modificar ese control. Las exportaciones y descargas
+aceptan un nombre dentro de la carpeta de exportación de la caché del perfil. Para ChatGPT o Claude
+en el navegador o teléfono, consulta [MCP remoto](./remote.md). Las demás operaciones están en
+[la referencia completa](./commands.md).
 
 ## Encontrar un documento y la conversación donde se compartió
 

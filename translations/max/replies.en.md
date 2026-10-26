@@ -96,7 +96,7 @@ AI-generated text can change only the `ai` block. Everything outside remains you
 
 After substitutions, the block body is the instruction. Incoming text goes separately to the AI provider as data. The generated response is never executed as Liquid; overlong text and an exact repeat of the incoming message are rejected. Without a configured provider, consent or a successful call, `else` supplies the reply. Without a fallback, sending is skipped with a reason.
 
-Set `models.replies.provider` (`openai` or `anthropic`), the exact model ID in `models.replies.model`, and `models.replies.base_url` if needed. Shared values come from `models.default`; `provider off` disables the assignment. `config set` and `config unset` accept these keys; `config show` shows each field’s source. The older `analysis_provider`, `analysis_model` and `analysis_base_url` still work for analysis. Store the key with `max personal models text key set`; for a custom server, the key name is its host with port, and the public provider key is not sent there.
+Set `models.replies.provider` (`openai` or `anthropic`), the exact model ID in `models.replies.model`, and `models.replies.base_url` if needed. Shared values come from `models.default`; `provider off` disables the assignment. `config set` and `config unset` accept these keys; `config show` shows each field’s source. Store the key with `max personal models keys set`; for a custom server, the key name is its host with port, and the public provider key is not sent there.
 
 Consent to share data with an AI provider is separate from permission to send replies:
 

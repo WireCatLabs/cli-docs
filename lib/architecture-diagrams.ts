@@ -698,7 +698,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
     en: {
       title: "Conversation search, from build to evidence",
       rows: [
-        { boxes: [{ name: "conversations build", note: "per-chat graph: reply → agent answer → rules" }] },
+        { boxes: [{ name: "conversations rebuild", note: "per-chat graph: reply → agent answer → rules" }] },
         { boxes: [{ name: "chunks", note: "about 1,200 characters at message boundaries, with a content hash" }] },
         {
           label: "search conversations",
@@ -714,7 +714,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
     ru: {
       title: "Поиск разговоров: от построения до доказательств",
       rows: [
-        { boxes: [{ name: "conversations build", note: "граф внутри чата: reply → ответ агента → правила" }] },
+        { boxes: [{ name: "conversations rebuild", note: "граф внутри чата: reply → ответ агента → правила" }] },
         { boxes: [{ name: "chunks", note: "около 1 200 символов по границам сообщений, с хешем текста" }] },
         {
           label: "search conversations",
@@ -734,7 +734,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
     es: {
       title: "Búsqueda de conversaciones, de la construcción a las fuentes",
       rows: [
-        { boxes: [{ name: "conversations build", note: "grafo por chat: respuesta → agente → reglas" }] },
+        { boxes: [{ name: "conversations rebuild", note: "grafo por chat: respuesta → agente → reglas" }] },
         {
           boxes: [{ name: "fragmentos", note: "unos 1.200 caracteres en límites de mensaje, con hash del contenido" }],
         },

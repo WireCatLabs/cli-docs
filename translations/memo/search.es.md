@@ -27,9 +27,10 @@ cada una con `memo notes show` o en la aplicación original.
 | Tu correo | `memo search mail 'budget'` |
 | Mensajes de Telegram o MAX | `memo search messages 'budget'` |
 | Transcripciones y resúmenes de reuniones guardados | `memo search meetings 'budget' --source zoom:work` |
+| Una persona, por nombre, usuario o alias | `memo search people kai` |
 
 `search all` busca en mensajes, correo y notas a la vez. No busca reuniones, personas, recuerdos, proyectos ni
-tareas; para eso usa `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
+tareas; para eso usa `memo search people`, `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
 está algo, su propia búsqueda es mejor, porque entiende más palabras de búsqueda.
 
 ## Palabras de búsqueda
@@ -148,7 +149,12 @@ selección de cuentas: importaciones, ediciones o eliminaciones posteriores aún
 Cada nombre o alias es una búsqueda separada: todas sus palabras deben aparecer en un mismo texto, en cualquier orden,
 como palabras completas; los resultados se unen. También se lee cada mensaje de un chat confirmado como del proyecto
 cuando `--source` incluye su cuenta. Esos elementos llevan la etiqueta `linked-chat`: no nombran nada, pertenecen al
-chat. Un chat vinculado fuera de `--source` aparece como no leído. `--contact person:<id>` lee cada mensaje y correo
+chat. Una ejecución toma como máximo una parte del límite de elementos de cada chat vinculado (50 para un solo chat
+con el límite por defecto de 100, 20 de cada uno a partir de cuatro chats); un chat con más aparece como recortado
+y `--cursor` lee el resto. Un chat vinculado fuera de `--source` aparece como no leído. Las personas confirmadas como miembros del proyecto (`memo relationships add
+person:<id> project:<id>`) se leen igual que `--contact person:<id>` (ver abajo), sin nombrarlas, pero sin
+sus alias; una persona que también pasas con `--contact` se lee una vez. Como máximo corren 16 líneas en total, así que si los
+miembros no caben, el resto aparece como no leído (`member-limit`), en un orden fijo. `--contact person:<id>` lee cada mensaje y correo
 que escribieron las identidades guardadas de esa persona en `--source`, con la etiqueta `sender` (se encuentra por
 quién lo escribió, no por palabras), y busca los alias que les diste; su nombre visible en el mensajero no se busca,
 porque los textos rara vez lo escriben. Un `--contact "<name>"` literal se busca como palabras.
@@ -156,6 +162,12 @@ Un resultado de reunión conserva la referencia exacta del fragmento y usa la fe
 una reunión antigua importada hoy sigue siendo antigua. Lee el fragmento y sus vecinos con
 `memo meetings passage` antes de sacar conclusiones. La recopilación no crea vínculos al proyecto,
 no establece asistentes ni guarda hechos o tareas extraídos.
+
+Para ver quién participa, lee `people` en el resultado `--json` (la salida de texto imprime una línea «people who wrote these»):
+quién escribió los mensajes y correos de esta ejecución, contado a partir de los contactos guardados, nunca comparando nombres
+del texto. Las identidades de una persona en varios servicios de mensajería y en el correo cuentan como una entrada cuando están vinculadas ([enlaza las cuentas de una persona](./people.md#link-a-persons-accounts));
+una identidad no vinculada a nadie es su propia entrada. Tus propios mensajes quedan fuera. Cada ejecución cuenta solo sus elementos nuevos,
+así que suma los recuentos entre ejecuciones con `--cursor`.
 
 Un resultado de documento incluye párrafos breves alrededor del primer párrafo con una palabra buscada.
 Ayudan a localizar el pasaje, pero no prueban una conclusión. Si `oversized` enumera un documento,
@@ -185,7 +197,7 @@ Con el modelo de búsqueda en tu ordenador, Memo también busca por significado,
 puede encontrar una nota sobre unas vacaciones. tg o max descarga el modelo una vez:
 
 ```sh
-npx -y @wirecat/tg-cli local models text download e5-small
+memo models download e5-small
 ```
 
 El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo sync` para que tus notas
@@ -211,10 +223,10 @@ enlaces y cómo se encontró.
 
 ## Dar las fuentes a tu agente
 
-`memo ask` reúne las fuentes para una pregunta, para que tu agente pueda responder y citarlas:
+`memo answers create` reúne las fuentes para una pregunta, para que tu agente pueda responder y citarlas:
 
 ```sh
-memo ask 'What is the Harbour budget?' 'Harbour budget' --all
+memo answers create 'What is the Harbour budget?' 'Harbour budget' --all
 ```
 
 Las palabras después de la pregunta indican qué buscar; sin ellas, Memo busca toda la pregunta y cada palabra debe coincidir. `--all` busca en todas las cuentas; `--source telegram:1` elige una. La respuesta enumera fuentes con referencia y texto, el ámbito buscado y lo omitido. Memo no responde a la pregunta ni guarda la respuesta por sí solo.
@@ -225,3 +237,26 @@ respuesta: añade `--analyze`, y `--allow-remote` para un proveedor fuera de tu 
 generado: compárala con las fuentes.
 
 Siguiente: [ver todo sobre una persona](./people.md) o [convertir lo que encontraste en una tarea](./tasks.md).
+
+## Ámbito de lectura de reuniones
+
+Memo y zm comparten los selectores y analizadores de cli-core: identificadores de reunión, identidad, persona,
+evento y serie; proyecto, etiqueta y tema; límites de tiempo, cursor y presupuesto de lectura. Por ejemplo:
+
+Para las etiquetas y temas de reuniones, Memo usa los términos nativos `tag:` y `topic:` en la consulta; los temas guardados también se pueden seleccionar con la opción compartida `--topic-name`.
+
+```sh
+memo search meetings "draft topic:finance" --source zoom:work --meeting-id 12
+```
+
+La selección de cuenta difiere: Memo necesita un `--source provider:account` guardado, mientras zm selecciona
+la cuenta con su argumento de perfil. `meetings passage` reutiliza la gramática compartida de pasajes y
+`meetings prepare`, el generador de contexto y esquema de respuesta. La evidencia y cobertura JSON mantienen
+la forma común; los resúmenes de texto describen lo que realmente lee cada herramienta.
+
+Memo lee archivos guardados. Su preparación deja sin verificar la próxima reunión porque no consulta un
+calendario del proveedor. zm puede comprobarlo mediante la conexión del proveedor seleccionado. zm también
+añade búsqueda opcional por significado y ajustes de embeddings remotos a la gramática compartida;
+Memo busca reuniones guardadas por palabras. Esas opciones necesitan otro proceso de embeddings y no forman
+parte de su lector actual de reuniones. `search notes` y `search all` siguen usando el modelo local compartido
+para buscar notas y correo por significado.

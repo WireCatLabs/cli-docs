@@ -60,28 +60,28 @@
           "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
         },
         {
-          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
-          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
+          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
+          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ],
       "ru": [
         {
-          "before": "проверить новые сообщения и вступления по правилам группы и выполнить разрешённое от бота",
-          "after": "проверить новые сообщения по правилам группы и выполнить разрешённое от бота; вступления не проверяются"
+          "before": "\njudge a group's new messages and joins by its rules, and act as they allow — as the bot\n",
+          "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
         },
         {
-          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
-          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
+          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
+          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ],
       "es": [
         {
-          "before": "revisa como bot mensajes y entradas nuevos según las reglas y ejecuta lo permitido",
-          "after": "revisa como bot los mensajes nuevos según las reglas y ejecuta lo permitido; no evalúa incorporaciones al grupo"
+          "before": "\njudge a group's new messages and joins by its rules, and act as they allow — as the bot\n",
+          "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
         },
         {
-          "before": "**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot",
-          "after": "**Returns:** judge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged"
+          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
+          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ]
     }
@@ -395,20 +395,20 @@
     "replacements": {
       "en": [
         {
-          "before": "#### `tg chats requests decline`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
-          "after": "#### `tg chats requests decline`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
+          "before": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
+          "after": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
         }
       ],
       "ru": [
         {
-          "before": "#### `tg chats requests decline`\n\nотклонить запрос\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Аргумент | | Описание |\n|---|---|---|\n| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |\n| `person` | необязательный | кто запросил вступление: идентификатор из `chats requests list`. |\n\n| Параметр | Назначение |\n|---|---|\n| `--all` | все ожидающие запросы; сначала проверяются с учётом почасового лимита. |\n",
-          "after": "#### `tg chats requests decline`\n\nотклонить запрос\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Аргумент | | Описание |\n|---|---|---|\n| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |\n| `person` | необязательный | кто запросил вступление: идентификатор из `chats requests list`. |\n\n| Параметр | Назначение |\n|---|---|\n| `--all` | отклонить все ожидающие заявки; отклонения не учитываются в часовом лимите отправок. |\n"
+          "before": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
+          "after": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
         }
       ],
       "es": [
         {
-          "before": "#### `tg chats requests decline`\n\nrechazar la solicitud\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argumento | | Qué es |\n|---|---|---|\n| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |\n| `person` | opcional | quien solicitó entrar: un identificador de `chats requests list`. |\n\n| Opción | Qué hace |\n|---|---|\n| `--all` | todas las solicitudes pendientes, contabilizadas primero frente al límite por hora. |\n",
-          "after": "#### `tg chats requests decline`\n\nrechazar la solicitud\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests decline <chat> [person] [options]\n```\n\n| Argumento | | Qué es |\n|---|---|---|\n| `chat` | obligatorio | chat por título completo o parcial, identificador, @username o `me` para Mensajes guardados. |\n| `person` | opcional | quien solicitó entrar: un identificador de `chats requests list`. |\n\n| Opción | Qué hace |\n|---|---|\n| `--all` | rechazar todas las solicitudes pendientes; los rechazos no cuentan para el límite horario de envíos. |\n"
+          "before": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | every pending request, counted against the hourly limit first. |\n",
+          "after": "#### `tg chats requests reject`\n\nturn the request away\n\n**Changes something in Telegram.**\n\n```sh\ntg chats requests reject <chat> [person] [options]\n```\n\n| Argument | | What it is |\n|---|---|---|\n| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |\n| `person` | optional | who asked: an id from `chats requests list`. |\n\n| Option | What it does |\n|---|---|\n| `--all` | decline every pending request; declining does not count toward the hourly sending limit. |\n"
         }
       ]
     }
@@ -445,20 +445,20 @@
     "replacements": {
       "en": [
         {
-          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
         }
       ],
       "ru": [
         {
-          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
         }
       ],
       "es": [
         {
-          "before": "`tg personal chats link update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats link update <chat> <link> --approval --expire-time <time>`, `tg personal chats link update <chat> <link> --no-approval --max-uses <n>`"
+          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
+          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
         }
       ]
     }
@@ -491,24 +491,24 @@
   {
     "tool": "tg",
     "slug": "people",
-    "reason": "Owner approved replacing verdict-like account labels with signals/limits while retaining original heading anchors.",
+    "reason": "Owner approved replacing verdict-like account labels with signals/limits.",
     "replacements": {
       "en": [
         {
           "before": "## Bot, fake or spammer: `contacts check`",
-          "after": "<a id=\"bot-fake-or-spammer-contacts-check\" />\n\n## Check account signals and their limits: `contacts check`"
+          "after": "## Check account signals and their limits: `contacts check`"
         }
       ],
       "ru": [
         {
           "before": "## Бот, поддельный аккаунт или спамер: `contacts check`",
-          "after": "<a id=\"бот-поддельный-аккаунт-или-спамер-contacts-check\" />\n\n## Проверить признаки аккаунта и их ограничения: `contacts check`"
+          "after": "## Проверить признаки аккаунта и их ограничения: `contacts check`"
         }
       ],
       "es": [
         {
           "before": "## Bot, cuenta falsa o spammer: `contacts check`",
-          "after": "<a id=\"bot-cuenta-falsa-o-spammer-contacts-check\" />\n\n## Comprobar señales de la cuenta y sus límites: `contacts check`"
+          "after": "## Comprobar señales de la cuenta y sus límites: `contacts check`"
         }
       ]
     }
@@ -516,24 +516,24 @@
   {
     "tool": "max",
     "slug": "people",
-    "reason": "Owner approved replacing verdict-like account labels with signals/limits while retaining original heading anchors.",
+    "reason": "Owner approved replacing verdict-like account labels with signals/limits.",
     "replacements": {
       "en": [
         {
           "before": "## Bot, fake account or spammer: `contacts check`",
-          "after": "<a id=\"bot-fake-account-or-spammer-contacts-check\" />\n\n## Check account signals and their limits: `contacts check`"
+          "after": "## Check account signals and their limits: `contacts check`"
         }
       ],
       "ru": [
         {
           "before": "## Бот, фейк или спамер: `contacts check`",
-          "after": "<a id=\"бот-фейк-или-спамер-contacts-check\" />\n\n## Проверить признаки аккаунта и их ограничения: `contacts check`"
+          "after": "## Проверить признаки аккаунта и их ограничения: `contacts check`"
         }
       ],
       "es": [
         {
           "before": "## Bot, cuenta falsa o spam: `contacts check`",
-          "after": "<a id=\"bot-cuenta-falsa-o-spam-contacts-check\" />\n\n## Comprobar señales de la cuenta y sus límites: `contacts check`"
+          "after": "## Comprobar señales de la cuenta y sus límites: `contacts check`"
         }
       ]
     }
@@ -558,7 +558,7 @@
       "es": [
         {
           "before": "## Herramientas\n",
-          "after": "## Herramientas\n\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el mensajero y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal."
+          "after": "## Herramientas\n\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el servicio de mensajería y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal."
         }
       ]
     }
@@ -591,7 +591,7 @@
   {
     "tool": "max",
     "slug": "changelog",
-    "reason": "The source placeholders <слова>, <состояние>, <операция> and <профиль> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
+    "reason": "The source placeholders <слова>, <состояние>, <операция>, <профиль>, <чат>, <ключ> and <путь> are Russian; English and Spanish readers get placeholders in their language. Command tokens are unchanged.",
     "replacements": {
       "en": [
         {
@@ -613,6 +613,18 @@
         {
           "before": "`max <профиль> messages delete --for-everyone`",
           "after": "`max <profile> messages delete --for-everyone`"
+        },
+        {
+          "before": "`chats requests confirm|reject <чат> --all` answers",
+          "after": "`chats requests confirm|reject <chat> --all` answers"
+        },
+        {
+          "before": "(`max config unset <ключ>`)",
+          "after": "(`max config unset <key>`)"
+        },
+        {
+          "before": "`to make it private: chmod 600 '<путь>'`",
+          "after": "`to make it private: chmod 600 '<path>'`"
         }
       ],
       "es": [
@@ -635,177 +647,18 @@
         {
           "before": "`max <профиль> messages delete --for-everyone`",
           "after": "`max <perfil> messages delete --for-everyone`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "commands",
-    "reason": "`tg messages search`, `tg conversations search`, `tg topics search` and `tg bot messages search` were replaced by `tg search messages`, `tg search conversations`, `tg search topics` and `tg bot search messages`, and `tg store fetch` was renamed `tg messages sync` (0.52.0). Keep the published anchors of the removed commands pointing at their replacements so existing links still land on the right entry.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n### `tg search messages`\n",
-          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
         },
         {
-          "before": "\n### `tg search conversations`\n",
-          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
+          "before": "`chats requests confirm|reject <чат> --all` responde",
+          "after": "`chats requests confirm|reject <chat> --all` responde"
         },
         {
-          "before": "\n### `tg search topics`\n",
-          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
+          "before": "(`max config unset <ключ>`)",
+          "after": "(`max config unset <clave>`)"
         },
         {
-          "before": "\n#### `tg bot search messages`\n",
-          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
-        },
-        {
-          "before": "\n### `tg messages sync`\n",
-          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n### `tg search messages`\n",
-          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
-        },
-        {
-          "before": "\n### `tg search conversations`\n",
-          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
-        },
-        {
-          "before": "\n### `tg search topics`\n",
-          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
-        },
-        {
-          "before": "\n#### `tg bot search messages`\n",
-          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
-        },
-        {
-          "before": "\n### `tg messages sync`\n",
-          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n### `tg search messages`\n",
-          "after": "\n<a id=\"tg-messages-search\" />\n\n### `tg search messages`\n"
-        },
-        {
-          "before": "\n### `tg search conversations`\n",
-          "after": "\n<a id=\"tg-conversations-search\" />\n\n### `tg search conversations`\n"
-        },
-        {
-          "before": "\n### `tg search topics`\n",
-          "after": "\n<a id=\"tg-topics-search\" />\n\n### `tg search topics`\n"
-        },
-        {
-          "before": "\n#### `tg bot search messages`\n",
-          "after": "\n<a id=\"tg-bot-messages-search\" />\n\n#### `tg bot search messages`\n"
-        },
-        {
-          "before": "\n### `tg messages sync`\n",
-          "after": "\n<a id=\"tg-store-fetch\" />\n\n### `tg messages sync`\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "troubleshooting",
-    "reason": "The search command was renamed to search messages, which changed this heading's anchor; keep the old anchor so existing links still land here.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n### `search messages` doesn't find anything\n",
-          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` doesn't find anything\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n### `search messages` ничего не находит\n",
-          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` ничего не находит\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n### `search messages` no encuentra nada\n",
-          "after": "\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` no encuentra nada\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "commands",
-    "reason": "`max messages search`, `max conversations search` and `max bot messages search` were replaced by `max search messages`, `max search conversations` and `max bot search messages`. Keep the old anchors so existing links land on the replacement. In 0.55.0 `max tasks similar` became `max tasks related` and `max tasks duplicates unsure` became `max tasks duplicates defer`; their old anchors are kept the same way.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n### `max search messages`\n",
-          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
-        },
-        {
-          "before": "\n### `max search conversations`\n",
-          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
-        },
-        {
-          "before": "\n#### `max bot search messages`\n",
-          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
-        },
-        {
-          "before": "\n### `max tasks related`\n",
-          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
-        },
-        {
-          "before": "\n#### `max tasks duplicates defer`\n",
-          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n### `max search messages`\n",
-          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
-        },
-        {
-          "before": "\n### `max search conversations`\n",
-          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
-        },
-        {
-          "before": "\n#### `max bot search messages`\n",
-          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
-        },
-        {
-          "before": "\n### `max tasks related`\n",
-          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
-        },
-        {
-          "before": "\n#### `max tasks duplicates defer`\n",
-          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n### `max search messages`\n",
-          "after": "\n<a id=\"max-messages-search\" />\n\n### `max search messages`\n"
-        },
-        {
-          "before": "\n### `max search conversations`\n",
-          "after": "\n<a id=\"max-conversations-search\" />\n\n### `max search conversations`\n"
-        },
-        {
-          "before": "\n#### `max bot search messages`\n",
-          "after": "\n<a id=\"max-bot-messages-search\" />\n\n#### `max bot search messages`\n"
-        },
-        {
-          "before": "\n### `max tasks related`\n",
-          "after": "\n<a id=\"max-tasks-similar\" />\n\n### `max tasks related`\n"
-        },
-        {
-          "before": "\n#### `max tasks duplicates defer`\n",
-          "after": "\n<a id=\"max-tasks-duplicates-unsure\" />\n\n#### `max tasks duplicates defer`\n"
+          "before": "`to make it private: chmod 600 '<путь>'`",
+          "after": "`to make it private: chmod 600 '<ruta>'`"
         }
       ]
     }
@@ -980,31 +833,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "troubleshooting",
-    "reason": "Keep incoming pre-rename search troubleshooting hashes after the source moved this entry under a broader help section.",
-    "replacements": {
-      "en": [
-        {
-          "before": "### `search messages` finds nothing",
-          "after": "<a id=\"messages-search-finds-nothing\" />\n\n### `search messages` finds nothing"
-        }
-      ],
-      "ru": [
-        {
-          "before": "### `search messages` ничего не находит",
-          "after": "<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-ничего-не-находит\" />\n\n### `search messages` ничего не находит"
-        }
-      ],
-      "es": [
-        {
-          "before": "### `search messages` no encuentra nada",
-          "after": "<a id=\"messages-search-finds-nothing\" />\n\n<a id=\"messages-search-no-encuentra-nada\" />\n\n### `search messages` no encuentra nada"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "usage",
     "reason": "Released scheduled tests confirm outcome_unknown with no automatic retry; remove obsolete deduplication research caveat.",
@@ -1018,313 +846,26 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "archive",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"The local store\"\n---\n\n",
-          "after": "---\ntitle: \"The local store\"\n---\n\n<a id=\"tester-only-reply-rules\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "cli-contract",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"How tg behaves in scripts\"\n---\n\n",
-          "after": "---\ntitle: \"How tg behaves in scripts\"\n---\n\n<a id=\"headless-execution-and-limits\" />\n\n<a id=\"compact-results-and-discovery\" />\n\n<a id=\"previews-and-retry-safety\" />\n\n<a id=\"how-agent-behavior-is-checked\" />\n\n<a id=\"references\" />\n\n<a id=\"ambiguous-names\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "compare",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Compared with other tools\"\n---\n\n",
-          "after": "---\ntitle: \"Compared with other tools\"\n---\n\n<a id=\"login-profiles-and-the-background-service\" />\n\n<a id=\"reading-and-searching\" />\n\n<a id=\"sending\" />\n\n<a id=\"groups-and-folders\" />\n\n<a id=\"your-own-notes-on-chats-and-people\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "configuration",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Configuration\"\n---\n\n",
-          "after": "---\ntitle: \"Configuration\"\n---\n\n<a id=\"the-file\" />\n\n<a id=\"a-small-configuration\" />\n\n<a id=\"what-can-i-configure\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "diagnostics",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Diagnostics: what a command did\"\n---\n\n",
-          "after": "---\ntitle: \"Diagnostics: what a command did\"\n---\n\n<a id=\"command-discovery-for-scripts\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "people",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"People\"\n---\n\n",
-          "after": "---\ntitle: \"People\"\n---\n\n<a id=\"for-agents\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "query-language",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Search query language\"\n---\n\n",
-          "after": "---\ntitle: \"Search query language\"\n---\n\n<a id=\"in-mcp\" />\n\n<a id=\"the-older-modes\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "remote",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"ChatGPT, Codex or Claude in the browser\"\n---\n\n",
-          "after": "---\ntitle: \"ChatGPT, Codex or Claude in the browser\"\n---\n\n<a id=\"check-a-connection\" />\n\n<a id=\"mcp-and-host-capabilities\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "search",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Search\"\n---\n\n",
-          "after": "---\ntitle: \"Search\"\n---\n\n<a id=\"for-scripts-and-agents\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "topic-search",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Topic search\"\n---\n\n",
-          "after": "---\ntitle: \"Topic search\"\n---\n\n<a id=\"what-a-conversation-is\" />\n\n<a id=\"build-embed-search\" />\n\n<a id=\"read-what-was-found\" />\n\n<a id=\"keeping-it-current\" />\n\n<a id=\"for-agents\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "en": [
-        {
-          "before": "---\ntitle: \"Using tg\"\n---\n\n",
-          "after": "---\ntitle: \"Using tg\"\n---\n\n<a id=\"a-persons-profile\" />\n\n<a id=\"is-this-account-a-bot\" />\n\n<a id=\"local-person-context\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "cli-contract",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Как max ведёт себя в скриптах\"\n---\n\n",
-          "after": "---\ntitle: \"Как max ведёт себя в скриптах\"\n---\n\n<a id=\"запуск-без-вопросов-и-ограничения\" />\n\n<a id=\"узкий-результат-и-описание-команды\" />\n\n<a id=\"предпросмотр-и-повтор-записи\" />\n\n<a id=\"как-проверяют-работу-агента\" />\n\n<a id=\"неоднозначные-имена\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "configuration-reference",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Справочник настроек\"\n---\n\n",
-          "after": "---\ntitle: \"Справочник настроек\"\n---\n\n<a id=\"порядок-в-котором-решается-настройка\" />\n\n<a id=\"посмотреть-что-получилось\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "configuration",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Настройки\"\n---\n\n",
-          "after": "---\ntitle: \"Настройки\"\n---\n\n<a id=\"файл\" />\n\n<a id=\"короткий-пример\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "diagnostics",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Диагностика: что команда делала\"\n---\n\n",
-          "after": "---\ntitle: \"Диагностика: что команда делала\"\n---\n\n<a id=\"показать\" />\n\n<a id=\"сохранить\" />\n\n<a id=\"что-можно-с-этим-делать\" />\n\n<a id=\"справочник-для-скриптов\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "external-models",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Внешние модели: настройка API\"\n---\n\n",
-          "after": "---\ntitle: \"Внешние модели: настройка API\"\n---\n\n<a id=\"какие-задачи-используют-api\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "mcp",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
+    "reason": "Since MAX 0.73.0 the MCP catalogue includes unavailable commands (cli-core 0.412.0 mcp/server.js passes includeUnavailable: true), and mcp/surface.js registers max_write whenever the catalogue holds a writing command. The tool is therefore always present; a blocked write reports its availability and is refused on call. The native table still says max_write is absent when no write is permitted.",
     "replacements": {
       "ru": [
         {
-          "before": "---\ntitle: \"MCP-сервер\"\n---\n\n",
-          "after": "---\ntitle: \"MCP-сервер\"\n---\n\n<a id=\"права-профиля-управляют-инструментами\" />\n\n"
+          "before": "| `max_write` | Выполнить найденную команду записи; его нет, если профиль не разрешает ни одной |",
+          "after": "| `max_write` | Выполнить найденную команду записи; запрещённая правами команда видна в поиске как недоступная и при вызове получает отказ |"
         }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "people",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
+      ],
+      "en": [
         {
-          "before": "---\ntitle: \"Человек: профиль, сообщения, проверка на бота\"\n---\n\n",
-          "after": "---\ntitle: \"Человек: профиль, сообщения, проверка на бота\"\n---\n\n<a id=\"для-агентов\" />\n\n"
+          "before": "| `max_write` | Run a discovered write command; absent if no writes are permitted |",
+          "after": "| `max_write` | Run a discovered write command; a write the profile blocks is listed as unavailable and refused when called |"
         }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "query-language",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
+      ],
+      "es": [
         {
-          "before": "---\ntitle: \"Язык поисковых запросов\"\n---\n\n",
-          "after": "---\ntitle: \"Язык поисковых запросов\"\n---\n\n<a id=\"в-mcp\" />\n\n<a id=\"прежние-режимы\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "search",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Поиск\"\n---\n\n",
-          "after": "---\ntitle: \"Поиск\"\n---\n\n<a id=\"для-скриптов-и-агентов\" />\n\n<a id=\"подготовка-файлов-и-архива\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "sessions",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Вход, сессии и профили\"\n---\n\n",
-          "after": "---\ntitle: \"Вход, сессии и профили\"\n---\n\n<a id=\"откуда-берётся-токен\" />\n\n<a id=\"проверить-и-забыть\" />\n\n<a id=\"если-ключницы-нет\" />\n\n<a id=\"сколько-живёт-токен\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "topic-search",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Поиск по темам\"\n---\n\n",
-          "after": "---\ntitle: \"Поиск по темам\"\n---\n\n<a id=\"что-такое-разговор\" />\n\n<a id=\"построить-посчитать-векторы-искать\" />\n\n<a id=\"для-агентов\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "troubleshooting",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Когда не работает\"\n---\n\n",
-          "after": "---\ntitle: \"Когда не работает\"\n---\n\n<a id=\"проверка-со-входом-в-max\" />\n\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "usage",
-    "reason": "Preserve incoming anchors from the previously reviewed release. Retired sections resolve to the guide overview; unchanged sections retain their own headings.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "---\ntitle: \"Личный аккаунт: как пользоваться\"\n---\n\n",
-          "after": "---\ntitle: \"Личный аккаунт: как пользоваться\"\n---\n\n<a id=\"ответ-и-реакция\" />\n\n<a id=\"правка-пересылка-закрепление\" />\n\n<a id=\"опросы\" />\n\n<a id=\"локальная-копия-и-новые-сообщения\" />\n\n<a id=\"настройки\" />\n\n<a id=\"человек\" />\n\n"
+          "before": "| `max_write` | Ejecutar el comando de escritura encontrado; no aparece si el perfil no permite ninguno |",
+          "after": "| `max_write` | Ejecutar el comando de escritura encontrado; un comando que el perfil bloquea aparece como no disponible y se rechaza al llamarlo |"
         }
       ]
     }
@@ -1407,20 +948,6 @@
         {
           "before": "\n## La aplicación de my.telegram.org\n",
           "after": "\n## La aplicación de my.telegram.org\n\n> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del CLI por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "max",
-    "slug": "troubleshooting",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.43.0/docs/troubleshooting.md",
-    "reason": "Preserve the incoming native heading anchor after the npm package rename.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "### `npx @wirecat/max-cli` ставит не ту версию",
-          "after": "<a id=\"npx-leemourmax-cli-ставит-не-ту-версию\" />\n\n### `npx @wirecat/max-cli` ставит не ту версию"
         }
       ]
     }
@@ -1599,118 +1126,6 @@
   },
   {
     "tool": "tg",
-    "slug": "query-language",
-    "reason": "Preserve incoming anchors removed by the single-query-language and permissions-only settings cleanup in TG 0.57.0.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## What it can do",
-          "after": "<a id=\"a-javascript-regular-expression---regex\" />\n\n## What it can do"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Что можно выразить",
-          "after": "<a id=\"регулярное-выражение-javascript---regex\" />\n\n## Что можно выразить"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Qué puede hacer",
-          "after": "<a id=\"una-expresión-regular-de-javascript---regex\" />\n\n## Qué puede hacer"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "configuration-reference",
-    "reason": "Preserve incoming anchors removed by the single-query-language and permissions-only settings cleanup in TG 0.57.0.",
-    "replacements": {
-      "en": [
-        {
-          "before": "### Older settings",
-          "after": "<a id=\"older-settings-that-still-work\" />\n\n<a id=\"migrating-legacy-access-settings\" />\n\n### Older settings"
-        }
-      ],
-      "ru": [
-        {
-          "before": "### Старые настройки",
-          "after": "<a id=\"совместимость-со-старыми-настройками\" />\n\n<a id=\"перенос-устаревших-настроек-доступа\" />\n\n### Старые настройки"
-        }
-      ],
-      "es": [
-        {
-          "before": "### Ajustes anteriores",
-          "after": "<a id=\"ajustes-anteriores-que-siguen-funcionando\" />\n\n<a id=\"migrar-la-configuración-de-acceso-heredada\" />\n\n### Ajustes anteriores"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "commands",
-    "reason": "Retain links to retired migration and mail commands at the corresponding current reference sections.",
-    "replacements": {
-      "en": [
-        {
-          "before": "### `tg config set`",
-          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
-        },
-        {
-          "before": "### `tg search all`",
-          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "### `tg config set`",
-          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
-        },
-        {
-          "before": "### `tg search all`",
-          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
-        }
-      ],
-      "es": [
-        {
-          "before": "### `tg config set`",
-          "after": "<a id=\"tg-config-migrate\" />\n\n### `tg config set`"
-        },
-        {
-          "before": "### `tg search all`",
-          "after": "<a id=\"tg-search-mail\" />\n\n### `tg search all`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "search",
-    "reason": "TG 0.58.0 removed the mail subcommand; explain the rejected legacy path without presenting it as an executable command.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`tg personal search mail`",
-          "after": "the former mail-search command"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`tg personal search mail`",
-          "after": "прежняя команда поиска почты"
-        }
-      ],
-      "es": [
-        {
-          "before": "`tg personal search mail`",
-          "after": "el antiguo comando de búsqueda de correo"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "search",
     "reason": "Core 0.285.0 removed mail search from TG; the released guide opening still promises mail alongside notes. Keep the opening consistent with the supported search sources.",
     "replacements": {
@@ -1735,163 +1150,26 @@
     }
   },
   {
-    "tool": "memo",
-    "slug": "configuration",
-    "reason": "Current guides describe supported behavior; migration version numbers belong in changelogs.",
-    "replacements": {
-      "en": [
-        {
-          "before": "since 0.32.0 rules live there",
-          "after": "rules live there"
-        }
-      ],
-      "ru": [
-        {
-          "before": "с 0.32.0 они хранятся там",
-          "after": "они хранятся там"
-        }
-      ],
-      "es": [
-        {
-          "before": "desde 0.32.0 se guardan allí",
-          "after": "se guardan allí"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "mail",
-    "reason": "Describe the supported legacy rule migration without release-number prose in a current task guide.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Before 0.32.0 rules were kept in `config.json`.",
-          "after": "Older settings kept rules in `config.json`."
-        }
-      ],
-      "ru": [
-        {
-          "before": "До 0.32.0 правила находились в `config.json`.",
-          "after": "Прежние настройки содержали правила в `config.json`."
-        }
-      ],
-      "es": [
-        {
-          "before": "Antes de 0.32.0 las reglas estaban en `config.json`.",
-          "after": "Los ajustes antiguos guardaban las reglas en `config.json`."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "installation",
-    "reason": "Preserve incoming section anchors from the previously reviewed Memo release after task and command vocabulary updates.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## What it needs",
-          "after": "<a id=\"update-and-remove\" />\n\n## What it needs"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Что нужно для работы",
-          "after": "<a id=\"обновление-и-удаление\" />\n\n## Что нужно для работы"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Qué necesita",
-          "after": "<a id=\"actualizar-y-quitar\" />\n\n## Qué necesita"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "mail",
-    "reason": "Preserve incoming section anchors from the previously reviewed Memo release after task and command vocabulary updates.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## Before you start",
-          "after": "<a id=\"import-mail\" />\n\n## Before you start"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Перед началом",
-          "after": "<a id=\"импортируйте-почту\" />\n\n## Перед началом"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Antes de empezar",
-          "after": "<a id=\"importar-correo\" />\n\n## Antes de empezar"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "search",
-    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. MAX 0.54.0 still names memo import. MAX 0.54.0 has no search mail subcommand (it answers with a Memo hint), so the prose names it without a runnable invocation.",
+    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes.",
     "replacements": {
       "ru": [
         {
           "before": "`memo import`",
           "after": "`memo sync --only notes`"
-        },
-        {
-          "before": "`max personal search mail` отвечает",
-          "after": "команда `search mail` у `max` отвечает"
         }
       ],
       "en": [
         {
           "before": "`memo import`",
           "after": "`memo sync --only notes`"
-        },
-        {
-          "before": "`max personal search mail` answers with a hint",
-          "after": "the `search mail` command of `max` answers with a hint"
         }
       ],
       "es": [
         {
           "before": "`memo import`",
           "after": "`memo sync --only notes`"
-        },
-        {
-          "before": "`max personal search mail` responde con una indicación",
-          "after": "el comando `search mail` de `max` responde con una indicación"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "memo",
-    "slug": "troubleshooting",
-    "reason": "This is an intentionally refused single-argument path, not an executable command. Keep the quoted path illustration and the valid corrected invocation without presenting the refused form as runnable.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`memo \"projects add\" --help`",
-          "after": "`\"projects add\"`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`memo \"projects add\" --help`",
-          "after": "`\"projects add\"`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`memo \"projects add\" --help`",
-          "after": "`\"projects add\"`"
         }
       ]
     }
@@ -1922,32 +1200,6 @@
     }
   },
   {
-    "tool": "max",
-    "slug": "troubleshooting",
-    "source": "https://github.com/WireCatLabs/max-cli/blob/b471dd3a7fc2cdd2750c9e732069dd22dcbbcb77/docs/troubleshooting.md",
-    "reason": "Preserve the previous configuration-error incoming anchor after the released error heading changed.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "### «is an unknown setting»",
-          "after": "<a id=\"is-not-a-valid-config\" />\n\n### «is an unknown setting»"
-        }
-      ],
-      "en": [
-        {
-          "before": "### \"is an unknown setting\"",
-          "after": "<a id=\"is-not-a-valid-config\" />\n\n### \"is an unknown setting\""
-        }
-      ],
-      "es": [
-        {
-          "before": "### «is an unknown setting»",
-          "after": "<a id=\"is-not-a-valid-config\" />\n\n### «is an unknown setting»"
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "commands",
     "reason": "The Bot API getFile text carries a URL template with <token> and <file_path>; unquoted, the page reads them as HTML tags and the link stops at /file/bot, which is a 404.",
@@ -1969,6 +1221,1101 @@
         {
           "before": "via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken",
           "after": "via the link `https://api.telegram.org/file/bot<token>/<file_path>`, where `<file_path>` is taken"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "roadmap",
+    "reason": "whatsapp-cli v0.8.0 dropped the old-files item from Next, but its attachments guide still documents the limitation (media.retry-failed, nothing saved), the 0.7.0/0.8.0 changelogs claim no fix, and the released dist/reasons.js still carries media.retry-failed. Keep it as planned work until a release ships it. Re-checked for v0.10.0: roadmap, attachments guide and dist/reasons.js unchanged on this point; the 0.9.0/0.10.0 changelogs claim no fix.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- **Files in channels**: saving one from a post, and an album to a channel you run.\n",
+          "after": "- **Files in channels**: saving one from a post, and an album to a channel you run.\n- **Old files**: downloading a file that WhatsApp no longer keeps on its servers, from your phone.\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "- **Файлы в каналах**: сохранение файла из публикации и отправка альбома в канал, который вы ведёте.\n",
+          "after": "- **Файлы в каналах**: сохранение файла из публикации и отправка альбома в канал, который вы ведёте.\n- **Старые файлы**: скачивание с телефона файла, который WhatsApp больше не хранит на своих серверах.\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "- **Archivos en canales**: guardar uno de una publicación y enviar un álbum a un canal que administras.\n",
+          "after": "- **Archivos en canales**: guardar uno de una publicación y enviar un álbum a un canal que administras.\n- **Archivos antiguos**: descargar desde tu teléfono un archivo que WhatsApp ya no guarda en sus servidores.\n"
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/roadmap.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "mcp",
+    "reason": "Remove an unmeasured token-cost comparison; command availability is established by the release contract, token equivalence is not.",
+    "replacements": {
+      "en": [
+        {
+          "before": "which costs the same tokens and can do the same things",
+          "after": "which exposes the same commands"
+        }
+      ],
+      "ru": [
+        {
+          "before": "который стоит тех же токенов и может делать те же самые действия",
+          "after": "который предоставляет те же команды"
+        }
+      ],
+      "es": [
+        {
+          "before": "que cuesta los mismos tokens y puede hacer las mismas cosas",
+          "after": "que ofrece los mismos comandos"
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "search",
+    "reason": "The pinned Memo command contract uses sync --only mail and sync --only notes; sync --mail and import are obsolete. Preserve the native WhatsApp release while correcting its cross-tool examples.",
+    "replacements": {
+      "en": [
+        {
+          "before": "memo sync --mail",
+          "after": "memo sync --only mail"
+        },
+        {
+          "before": "memo import",
+          "after": "memo sync --only notes"
+        }
+      ],
+      "ru": [
+        {
+          "before": "memo sync --mail",
+          "after": "memo sync --only mail"
+        },
+        {
+          "before": "memo import",
+          "after": "memo sync --only notes"
+        }
+      ],
+      "es": [
+        {
+          "before": "memo sync --mail",
+          "after": "memo sync --only mail"
+        },
+        {
+          "before": "memo import",
+          "after": "memo sync --only notes"
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/search.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "usage",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "replacements": {
+      "en": [
+        {
+          "before": "WhatsApp names a message by who sent it as well as by its id, so these work on messages the local store holds; keep\n`serve` running. An edit works on your own message within 20 minutes of sending. A deletion is for you only: `wa`\nasks WhatsApp to take it from your phone and your other devices, to leave it with the others in the chat, and to\nkeep the photos and files the phone saved from it. That is not yet checked on a phone. `--for-everyone` removes it\nfor everyone. Every pin tells the chat's members: WhatsApp has no quiet pin, so no flag is needed. A pin lasts 24\nhours, 7 days or 30 days (`--expire-time 24h`, `7d`, `30d`); without `--expire-time`, `wa` pins for 7 days. Nothing\nis marked read by reading commands. Use `chats mark-read` to send a read receipt explicitly.",
+          "after": "WhatsApp names a message by who sent it as well as by its id, so these work on messages the local store holds; keep\n`serve` running. An edit works on your own message within 20 minutes of sending. A deletion is for you only: `wa`\nasks WhatsApp to take it from your phone and your other devices, to leave it with the others in the chat, and to\nkeep the photos and files the phone saved from it. `--for-everyone` removes it\nfor everyone. Every pin tells the chat's members: WhatsApp has no quiet pin, so no flag is needed. A pin lasts 24\nhours, 7 days or 30 days (`--expire-time 24h`, `7d`, `30d`); without `--expire-time`, `wa` pins for 7 days. Nothing\nis marked read by reading commands. Use `chats mark-read` to send a read receipt explicitly."
+        },
+        {
+          "before": "A star is your own mark, which WhatsApp syncs to your other devices; nobody in the chat is told. Like an edit, it\nneeds the message in the local store. The local store keeps a star you set with `wa`:\n`wa personal messages list \"Book club\" starred:true` and `wa personal search messages is:starred` find those\nmessages. While `serve` or `watch` runs, a star you set or take off on the phone reaches the store too, and\n`watch --events` prints it; so do the stars of the messages the phone pushes right after linking. Whether the phone\nshows a star set with `wa` has not been checked yet.\nStar a channel's post on the phone.",
+          "after": "A star is your own mark, which WhatsApp syncs to your other devices; nobody in the chat is told. Like an edit, it\nneeds the message in the local store. The local store keeps a star you set with `wa`:\n`wa personal messages list \"Book club\" starred:true` and `wa personal search messages is:starred` find those\nmessages. While `serve` or `watch` runs, a star you set or take off on the phone reaches the store too, and\n`watch --events` prints it; so do the stars of the messages the phone pushes right after linking.\nStar a channel's post on the phone."
+        },
+        {
+          "before": "Muting is your own setting, which WhatsApp syncs to your other devices; nobody in the chat is told. Whether the phone\napplies it to a one-to-one chat has not been checked yet. A device linked a few minutes ago may not have WhatsApp's\nsettings keys yet; keep `serve` running a while and try again. Mute a channel on the phone.",
+          "after": "Muting is your own setting, which WhatsApp syncs to your other devices; nobody in the chat is told. A device linked a few minutes ago may not have WhatsApp's\nsettings keys yet; keep `serve` running a while and try again. Mute a channel on the phone."
+        },
+        {
+          "before": "These are your own settings too, synced to your other devices; nobody in the chat is told. `chats pin` pins the\nchat, not a message. Archiving a chat also unpins it (whatsmeow's archive patch does both). WhatsApp's apps keep\nthree pinned chats; `wa` does not count them, and what the phone does with a fourth has not been checked. Archive,\nunarchive and mark-unread name the chat's newest message in the local store, as `chats delete` does, so a chat the\nstore holds nothing of is refused. Channels are refused. A chat marked unread sends no read receipt. In your own chat\nthe phone shows pin, unpin, archive, unarchive and mark-unread (checked 2026-10-18); other chats are not checked yet.",
+          "after": "These are your own settings too, synced to your other devices; nobody in the chat is told. `chats pin` pins the\nchat, not a message. Archiving a chat also unpins it (whatsmeow's archive patch does both). WhatsApp's apps keep\nthree pinned chats; `wa` does not count them. Archive,\nunarchive and mark-unread name the chat's newest message in the local store, as `chats delete` does, so a chat the\nstore holds nothing of is refused. Channels are refused. A chat marked unread sends no read receipt."
+        },
+        {
+          "before": "`chats mark-read` first sends the same settings change with \"read\", up to the newest stored message (or\n`--until-id`), then the read receipt; a receipt alone leaves a mark-unread on the phone. Until WhatsApp has sent the\nsettings keys it is refused and sends neither. A channel gets the receipt only. That the phone takes the mark off\nthis way is not checked yet.",
+          "after": "`chats mark-read` first sends the same settings change with \"read\", up to the newest stored message (or\n`--until-id`), then the read receipt; a receipt alone leaves a mark-unread on the phone. Until WhatsApp has sent the\nsettings keys it is refused and sends neither. A channel gets the receipt only."
+        },
+        {
+          "before": "Both are for your devices alone: the others in the chat keep it and its messages. Without `--allow-dangerous` they ask\nfirst in a terminal and refuse in a script. WhatsApp deletes up to a message `wa` names: the chat's newest one in the\nlocal store, so keep `serve` running for it to be current, and a chat the store holds nothing of is refused. `wa`\nasks WhatsApp to leave the photos and files the phone saved from the chat. `wa`'s local store still holds the\nmessages afterwards. None of this has been checked on a phone yet.",
+          "after": "Both are for your devices alone: the others in the chat keep it and its messages. Without `--allow-dangerous` they ask\nfirst in a terminal and refuse in a script. WhatsApp deletes up to a message `wa` names: the chat's newest one in the\nlocal store, so keep `serve` running for it to be current, and a chat the store holds nothing of is refused. `wa`\nasks WhatsApp to leave the photos and files the phone saved from the chat. `wa`'s local store still holds the\nmessages afterwards."
+        },
+        {
+          "before": "- **`--last-seen`, `--profile-photo` and `--about-text`** take everyone, contacts or nobody. A setting kept on the\n  phone as \"my contacts except…\" shows as `contacts_except`; `set` cannot choose it, since the list of exceptions\n  stays on the phone, and setting another value replaces it.\n- **`--hide-online on`** sets last seen to nobody and online to \"same as last seen\", so nobody sees either.\n  `--hide-online off` shows last seen to your contacts, since `wa` does not know the setting from before it was\n  hidden; `--last-seen everyone` instead chooses who. Give one of the two, not both.\n- **`--read-receipts off`** works both ways, as on the phone: others no longer see when you read their messages,\n  and you no longer see when they read yours. `chats mark-read` then marks a chat read on your own devices only\n  (whatsmeow sends a read receipt only to your devices while receipts are off; read in its code, not checked on a\n  real account).\n- **`--chat-invites`** takes everyone or contacts: WhatsApp is reported to refuse nobody, so `wa` refuses it. A\n  setting kept with exceptions on the phone is left out of `show`.\n- **`--calls contacts`** is meant as the phone's \"silence unknown callers\" (calls from people you do not know arrive\n  without ringing); this is not yet checked on a real account. WhatsApp has no `--calls nobody`, so `wa` refuses it.",
+          "after": "- **`--last-seen`, `--profile-photo` and `--about-text`** take everyone, contacts or nobody. A setting kept on the\n  phone as \"my contacts except…\" shows as `contacts_except`; `set` cannot choose it, since the list of exceptions\n  stays on the phone, and setting another value replaces it.\n- **`--hide-online on`** sets last seen to nobody and online to \"same as last seen\", so nobody sees either.\n  `--hide-online off` shows last seen to your contacts, since `wa` does not know the setting from before it was\n  hidden; `--last-seen everyone` instead chooses who. Give one of the two, not both.\n- **`--read-receipts off`** works both ways, as on the phone: others no longer see when you read their messages,\n  and you no longer see when they read yours. `chats mark-read` then marks a chat read on your own devices only\n  (whatsmeow sends a read receipt only to your devices while receipts are off).\n- **`--chat-invites`** takes everyone or contacts: WhatsApp is reported to refuse nobody, so `wa` refuses it. A\n  setting kept with exceptions on the phone is left out of `show`.\n- **`--calls contacts`** is meant as the phone's \"silence unknown callers\" (calls from people you do not know arrive\n  without ringing). WhatsApp has no `--calls nobody`, so `wa` refuses it."
+        }
+      ],
+      "ru": [
+        {
+          "before": "WhatsApp определяет сообщение по отправителю и идентификатору, поэтому эти команды работают с сообщениями из локального хранилища; оставьте `serve` работающим. Своё сообщение можно исправить в течение 20 минут после отправки. По умолчанию удаление затрагивает только вас: `wa` просит WhatsApp убрать сообщение с вашего телефона и других устройств, оставить его у собеседников и сохранить фотографии и файлы, уже сохранённые телефоном. Это ещё не проверено на телефоне. `--for-everyone` удаляет сообщение у всех. О каждом закреплении узнают участники чата: тихого закрепления в WhatsApp нет, поэтому отдельный флаг не нужен. Срок закрепления — 24 часа, 7 или 30 дней (`--expire-time 24h`, `7d`, `30d`); без `--expire-time` команда `wa` закрепляет на 7 дней. Чтение не помечает сообщения прочитанными. Чтобы явно отправить уведомление о прочтении, используйте `chats mark-read`.",
+          "after": "WhatsApp определяет сообщение по отправителю и идентификатору, поэтому эти команды работают с сообщениями из локального хранилища; оставьте `serve` работающим. Своё сообщение можно исправить в течение 20 минут после отправки. По умолчанию удаление затрагивает только вас: `wa` просит WhatsApp убрать сообщение с вашего телефона и других устройств, оставить его у собеседников и сохранить фотографии и файлы, уже сохранённые телефоном. `--for-everyone` удаляет сообщение у всех. О каждом закреплении узнают участники чата: тихого закрепления в WhatsApp нет, поэтому отдельный флаг не нужен. Срок закрепления — 24 часа, 7 или 30 дней (`--expire-time 24h`, `7d`, `30d`); без `--expire-time` команда `wa` закрепляет на 7 дней. Чтение не помечает сообщения прочитанными. Чтобы явно отправить уведомление о прочтении, используйте `chats mark-read`."
+        },
+        {
+          "before": "Звёздочка — ваша личная отметка, которую WhatsApp синхронизирует с другими вашими устройствами; участники чата не получают уведомлений. Как и для редактирования, сообщение должно быть в локальном хранилище. Хранилище сохраняет отметку, поставленную через `wa`: такие сообщения находят `wa personal messages list \"Book club\" starred:true` и `wa personal search messages is:starred`. Пока работает `serve` или `watch`, поставленная или снятая на телефоне отметка тоже попадает в хранилище, а `watch --events` выводит событие. Сохраняются и отметки сообщений из истории, которую телефон передаёт сразу после привязки. Отображение на телефоне звёздочки, поставленной через `wa`, ещё не проверено. Публикацию канала отмечайте на телефоне.",
+          "after": "Звёздочка — ваша личная отметка, которую WhatsApp синхронизирует с другими вашими устройствами; участники чата не получают уведомлений. Как и для редактирования, сообщение должно быть в локальном хранилище. Хранилище сохраняет отметку, поставленную через `wa`: такие сообщения находят `wa personal messages list \"Book club\" starred:true` и `wa personal search messages is:starred`. Пока работает `serve` или `watch`, поставленная или снятая на телефоне отметка тоже попадает в хранилище, а `watch --events` выводит событие. Сохраняются и отметки сообщений из истории, которую телефон передаёт сразу после привязки. Публикацию канала отмечайте на телефоне."
+        },
+        {
+          "before": "Отключение звука — ваша настройка, синхронизируемая между устройствами; участники чата не получают уведомлений. Применение этой настройки на телефоне к личной переписке ещё не проверено. У недавно привязанного устройства может пока не быть ключей настроек WhatsApp: оставьте `serve` работающим и повторите попытку позже. Звук канала отключайте на телефоне.",
+          "after": "Отключение звука — ваша настройка, синхронизируемая между устройствами; участники чата не получают уведомлений. У недавно привязанного устройства может пока не быть ключей настроек WhatsApp: оставьте `serve` работающим и повторите попытку позже. Звук канала отключайте на телефоне."
+        },
+        {
+          "before": "Это тоже ваши настройки, синхронизируемые между устройствами; участники чата не получают уведомлений. `chats pin` закрепляет чат, а не сообщение. Архивирование также открепляет чат: операция архивирования whatsmeow делает и то и другое. Приложения WhatsApp поддерживают три закреплённых чата; `wa` их не считает, а поведение телефона при четвёртом закреплении не проверено. Архивирование, возврат из архива и отметка непрочитанного используют последнее сообщение чата в локальном хранилище, как и `chats delete`; пустой для хранилища чат отклоняется. Каналы не поддерживаются. Отметка непрочитанного не отправляет уведомления о прочтении. В чате с собой телефон отображает закрепление, открепление, архивирование, возврат из архива и отметку непрочитанного (проверено 2026-10-18); другие чаты ещё не проверены.",
+          "after": "Это тоже ваши настройки, синхронизируемые между устройствами; участники чата не получают уведомлений. `chats pin` закрепляет чат, а не сообщение. Архивирование также открепляет чат: операция архивирования whatsmeow делает и то и другое. Приложения WhatsApp поддерживают три закреплённых чата; `wa` их не считает. Архивирование, возврат из архива и отметка непрочитанного используют последнее сообщение чата в локальном хранилище, как и `chats delete`; пустой для хранилища чат отклоняется. Каналы не поддерживаются. Отметка непрочитанного не отправляет уведомления о прочтении."
+        },
+        {
+          "before": "`chats mark-read` сначала отправляет изменение настройки «прочитано» до последнего сохранённого сообщения (либо `--until-id`), затем уведомление о прочтении: одно уведомление не снимает отметку непрочитанного на телефоне. Пока WhatsApp не прислал ключи настроек, команда отклоняется и не отправляет ни того, ни другого. Для канала отправляется только уведомление. Снятие отметки этим способом на телефоне ещё не проверено.",
+          "after": "`chats mark-read` сначала отправляет изменение настройки «прочитано» до последнего сохранённого сообщения (либо `--until-id`), затем уведомление о прочтении: одно уведомление не снимает отметку непрочитанного на телефоне. Пока WhatsApp не прислал ключи настроек, команда отклоняется и не отправляет ни того, ни другого. Для канала отправляется только уведомление."
+        },
+        {
+          "before": "Обе команды действуют только на ваших устройствах: у собеседников чат и сообщения остаются. Без `--allow-dangerous` в терминале запрашивается подтверждение, а в скрипте команда отклоняется. WhatsApp удаляет сообщения до указанного `wa` сообщения — последнего в локальном хранилище. Для актуальности оставьте `serve` работающим; чат без сохранённых сообщений отклоняется. `wa` просит WhatsApp оставить сохранённые телефоном фотографии и файлы. Локальное хранилище `wa` по-прежнему содержит сообщения. Это поведение ещё не проверено на телефоне.",
+          "after": "Обе команды действуют только на ваших устройствах: у собеседников чат и сообщения остаются. Без `--allow-dangerous` в терминале запрашивается подтверждение, а в скрипте команда отклоняется. WhatsApp удаляет сообщения до указанного `wa` сообщения — последнего в локальном хранилище. Для актуальности оставьте `serve` работающим; чат без сохранённых сообщений отклоняется. `wa` просит WhatsApp оставить сохранённые телефоном фотографии и файлы. Локальное хранилище `wa` по-прежнему содержит сообщения."
+        },
+        {
+          "before": "- **`--last-seen`, `--profile-photo` и `--about-text`** принимают everyone, contacts или nobody. Настройка телефона «мои контакты, кроме…» отображается как `contacts_except`; `set` не может выбрать её, поскольку список исключений остаётся на телефоне. Другое значение заменяет её.\n- **`--hide-online on`** скрывает время последнего посещения от всех, а присутствие в сети — от тех же людей. `--hide-online off` показывает последнее посещение контактам: `wa` не знает значение до скрытия. `--last-seen everyone` задаёт аудиторию явно. Выберите один из двух параметров.\n- **`--read-receipts off`** действует в обе стороны, как на телефоне: собеседники не видят, когда вы прочитали сообщение, и вы не видите их прочтения. Тогда `chats mark-read` помечает чат прочитанным только на ваших устройствах (при выключенных уведомлениях whatsmeow отправляет их только вашим устройствам; это следует из кода и не проверено на реальном аккаунте).\n- **`--chat-invites`** принимает everyone или contacts. По имеющимся данным WhatsApp отклоняет nobody, поэтому `wa` тоже отклоняет его. Настройка с исключениями на телефоне не выводится в `show`.\n- **`--calls contacts`** соответствует настройке телефона «заглушать неизвестных абонентов»: звонки незнакомых людей приходят без звука. Это ещё не проверено на реальном аккаунте. В WhatsApp нет `--calls nobody`, поэтому `wa` его отклоняет.",
+          "after": "- **`--last-seen`, `--profile-photo` и `--about-text`** принимают everyone, contacts или nobody. Настройка телефона «мои контакты, кроме…» отображается как `contacts_except`; `set` не может выбрать её, поскольку список исключений остаётся на телефоне. Другое значение заменяет её.\n- **`--hide-online on`** скрывает время последнего посещения от всех, а присутствие в сети — от тех же людей. `--hide-online off` показывает последнее посещение контактам: `wa` не знает значение до скрытия. `--last-seen everyone` задаёт аудиторию явно. Выберите один из двух параметров.\n- **`--read-receipts off`** действует в обе стороны, как на телефоне: собеседники не видят, когда вы прочитали сообщение, и вы не видите их прочтения. Тогда `chats mark-read` помечает чат прочитанным только на ваших устройствах (при выключенных уведомлениях whatsmeow отправляет их только вашим устройствам).\n- **`--chat-invites`** принимает everyone или contacts. По имеющимся данным WhatsApp отклоняет nobody, поэтому `wa` тоже отклоняет его. Настройка с исключениями на телефоне не выводится в `show`.\n- **`--calls contacts`** соответствует настройке телефона «заглушать неизвестных абонентов»: звонки незнакомых людей приходят без звука. В WhatsApp нет `--calls nobody`, поэтому `wa` его отклоняет."
+        }
+      ],
+      "es": [
+        {
+          "before": "WhatsApp identifica un mensaje por su remitente y su ID, así que estos comandos necesitan mensajes guardados localmente; mantén `serve` en marcha. Puedes editar un mensaje propio durante los 20 minutos posteriores al envío. La eliminación afecta solo a ti por defecto: `wa` pide a WhatsApp que quite el mensaje de tu teléfono y tus otros dispositivos, lo deje a los demás y conserve las fotos y archivos que el teléfono haya guardado. Esto aún no se ha comprobado en un teléfono. `--for-everyone` lo elimina para todos. Cada mensaje fijado avisa a los miembros: WhatsApp no tiene fijación silenciosa y no hace falta un indicador. Puede durar 24 horas, 7 días o 30 días (`--expire-time 24h`, `7d`, `30d`); sin `--expire-time`, `wa` fija durante 7 días. Leer no marca mensajes como leídos. Usa `chats mark-read` para enviar explícitamente una confirmación de lectura.",
+          "after": "WhatsApp identifica un mensaje por su remitente y su ID, así que estos comandos necesitan mensajes guardados localmente; mantén `serve` en marcha. Puedes editar un mensaje propio durante los 20 minutos posteriores al envío. La eliminación afecta solo a ti por defecto: `wa` pide a WhatsApp que quite el mensaje de tu teléfono y tus otros dispositivos, lo deje a los demás y conserve las fotos y archivos que el teléfono haya guardado. `--for-everyone` lo elimina para todos. Cada mensaje fijado avisa a los miembros: WhatsApp no tiene fijación silenciosa y no hace falta un indicador. Puede durar 24 horas, 7 días o 30 días (`--expire-time 24h`, `7d`, `30d`); sin `--expire-time`, `wa` fija durante 7 días. Leer no marca mensajes como leídos. Usa `chats mark-read` para enviar explícitamente una confirmación de lectura."
+        },
+        {
+          "before": "La estrella es una marca propia que WhatsApp sincroniza entre tus dispositivos; no avisa al chat. Como una edición, necesita el mensaje en el almacén local. El almacén conserva las estrellas puestas con `wa`: `wa personal messages list \"Book club\" starred:true` y `wa personal search messages is:starred` encuentran esos mensajes. Mientras funciona `serve` o `watch`, las estrellas que pongas o quites en el teléfono también llegan al almacén y `watch --events` muestra el evento. También se guardan las estrellas del historial que el teléfono envía tras vincular. Aún no se ha comprobado si el teléfono muestra una estrella puesta desde `wa`. Destaca las publicaciones de canales desde el teléfono.",
+          "after": "La estrella es una marca propia que WhatsApp sincroniza entre tus dispositivos; no avisa al chat. Como una edición, necesita el mensaje en el almacén local. El almacén conserva las estrellas puestas con `wa`: `wa personal messages list \"Book club\" starred:true` y `wa personal search messages is:starred` encuentran esos mensajes. Mientras funciona `serve` o `watch`, las estrellas que pongas o quites en el teléfono también llegan al almacén y `watch --events` muestra el evento. También se guardan las estrellas del historial que el teléfono envía tras vincular. Destaca las publicaciones de canales desde el teléfono."
+        },
+        {
+          "before": "Silenciar es un ajuste propio que WhatsApp sincroniza con tus dispositivos; no avisa al chat. Aún no se ha comprobado su aplicación en el teléfono para chats individuales. Un dispositivo recién vinculado puede carecer de las claves de ajustes: deja `serve` en marcha y vuelve a intentarlo más tarde. Silencia los canales desde el teléfono.",
+          "after": "Silenciar es un ajuste propio que WhatsApp sincroniza con tus dispositivos; no avisa al chat. Un dispositivo recién vinculado puede carecer de las claves de ajustes: deja `serve` en marcha y vuelve a intentarlo más tarde. Silencia los canales desde el teléfono."
+        },
+        {
+          "before": "También son ajustes propios sincronizados entre tus dispositivos, sin avisar al chat. `chats pin` fija el chat, no un mensaje. Archivar también quita la fijación: la operación de archivado de whatsmeow hace ambas cosas. Las aplicaciones de WhatsApp permiten tres chats fijados; `wa` no los cuenta y no se ha comprobado qué hace el teléfono con un cuarto. Archivar, desarchivar y marcar como no leído utilizan el mensaje más reciente del almacén, como `chats delete`; se rechaza un chat sin mensajes guardados. Los canales se rechazan. Marcar como no leído no envía confirmación de lectura. El teléfono muestra fijación, desfijación, archivo, desarchivo y marca de no leído en el chat contigo mismo (comprobado el 2026-10-18); faltan pruebas en otros chats.",
+          "after": "También son ajustes propios sincronizados entre tus dispositivos, sin avisar al chat. `chats pin` fija el chat, no un mensaje. Archivar también quita la fijación: la operación de archivado de whatsmeow hace ambas cosas. Las aplicaciones de WhatsApp permiten tres chats fijados; `wa` no los cuenta. Archivar, desarchivar y marcar como no leído utilizan el mensaje más reciente del almacén, como `chats delete`; se rechaza un chat sin mensajes guardados. Los canales se rechazan. Marcar como no leído no envía confirmación de lectura."
+        },
+        {
+          "before": "`chats mark-read` envía primero el cambio de ajuste a «leído», hasta el mensaje guardado más reciente (o `--until-id`), y después la confirmación: una confirmación por sí sola deja la marca de no leído en el teléfono. Hasta recibir las claves de ajustes de WhatsApp, se rechaza sin enviar ninguno de los dos cambios. Un canal solo recibe la confirmación. Aún no se ha comprobado que el teléfono quite la marca de esta forma.",
+          "after": "`chats mark-read` envía primero el cambio de ajuste a «leído», hasta el mensaje guardado más reciente (o `--until-id`), y después la confirmación: una confirmación por sí sola deja la marca de no leído en el teléfono. Hasta recibir las claves de ajustes de WhatsApp, se rechaza sin enviar ninguno de los dos cambios. Un canal solo recibe la confirmación."
+        },
+        {
+          "before": "Ambas acciones afectan solo a tus dispositivos: los demás conservan el chat y sus mensajes. Sin `--allow-dangerous`, preguntan en el terminal y se rechazan en scripts. WhatsApp borra hasta el mensaje que indique `wa`: el más reciente del almacén local. Mantén `serve` en marcha para actualizarlo; se rechazan chats sin mensajes guardados. `wa` pide conservar fotos y archivos guardados en el teléfono. El almacén local de `wa` sigue conservando los mensajes. Esto aún no se ha comprobado en un teléfono.",
+          "after": "Ambas acciones afectan solo a tus dispositivos: los demás conservan el chat y sus mensajes. Sin `--allow-dangerous`, preguntan en el terminal y se rechazan en scripts. WhatsApp borra hasta el mensaje que indique `wa`: el más reciente del almacén local. Mantén `serve` en marcha para actualizarlo; se rechazan chats sin mensajes guardados. `wa` pide conservar fotos y archivos guardados en el teléfono. El almacén local de `wa` sigue conservando los mensajes."
+        },
+        {
+          "before": "- **`--last-seen`, `--profile-photo` y `--about-text`** aceptan everyone, contacts o nobody. «Mis contactos, excepto…» aparece como `contacts_except`; `set` no puede elegirlo porque la lista de excepciones permanece en el teléfono. Otro valor lo reemplaza.\n- **`--hide-online on`** oculta la última conexión a todos y muestra el estado en línea solo a quienes pueden verla: nadie. `--hide-online off` muestra la última conexión a tus contactos, ya que `wa` desconoce el valor anterior. `--last-seen everyone` permite elegir la audiencia explícitamente. Usa una de las dos opciones.\n- **`--read-receipts off`** funciona en ambos sentidos, como en el teléfono: nadie ve cuándo lees y tú tampoco ves sus lecturas. Entonces `chats mark-read` marca el chat como leído solo en tus dispositivos (whatsmeow envía la confirmación solo a tus dispositivos cuando están desactivadas; se ha leído en su código y no se ha probado con una cuenta real).\n- **`--chat-invites`** acepta everyone o contacts. Según los informes, WhatsApp rechaza nobody y `wa` también. Un ajuste con excepciones guardado en el teléfono se omite en `show`.\n- **`--calls contacts`** corresponde a «silenciar llamadas de números desconocidos»: las llamadas llegan sin sonar. Aún no se ha comprobado con una cuenta real. WhatsApp no tiene `--calls nobody` y `wa` lo rechaza.",
+          "after": "- **`--last-seen`, `--profile-photo` y `--about-text`** aceptan everyone, contacts o nobody. «Mis contactos, excepto…» aparece como `contacts_except`; `set` no puede elegirlo porque la lista de excepciones permanece en el teléfono. Otro valor lo reemplaza.\n- **`--hide-online on`** oculta la última conexión a todos y muestra el estado en línea solo a quienes pueden verla: nadie. `--hide-online off` muestra la última conexión a tus contactos, ya que `wa` desconoce el valor anterior. `--last-seen everyone` permite elegir la audiencia explícitamente. Usa una de las dos opciones.\n- **`--read-receipts off`** funciona en ambos sentidos, como en el teléfono: nadie ve cuándo lees y tú tampoco ves sus lecturas. Entonces `chats mark-read` marca el chat como leído solo en tus dispositivos (whatsmeow envía la confirmación solo a tus dispositivos cuando están desactivadas).\n- **`--chat-invites`** acepta everyone o contacts. Según los informes, WhatsApp rechaza nobody y `wa` también. Un ajuste con excepciones guardado en el teléfono se omite en `show`.\n- **`--calls contacts`** corresponde a «silenciar llamadas de números desconocidos»: las llamadas llegan sin sonar. WhatsApp no tiene `--calls nobody` y `wa` lo rechaza."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/usage.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "mcp",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Here `agent` is the name of a profile. Writes keep the recipient list, the hourly limit and the send journal\n(`wa agent sends list`). Marking read is a separate write, under `chats.mark-read`: the other side sees it. An agent\nnever deletes for everyone, whatever the level: `messages delete` through MCP is for the owner only (`wa` asks\nWhatsApp to take the messages from the owner's devices; not yet checked on a phone) and has no `--for-everyone`.\nDeleting for everyone stays the owner's `wa <profile> messages delete --for-everyone`. `--permission key=level`\nnarrows a level for this server process only; one that would loosen the profile stops the server at startup.",
+          "after": "Here `agent` is the name of a profile. Writes keep the recipient list, the hourly limit and the send journal\n(`wa agent sends list`). Marking read is a separate write, under `chats.mark-read`: the other side sees it. An agent\nnever deletes for everyone, whatever the level: `messages delete` through MCP is for the owner only (`wa` asks\nWhatsApp to take the messages from the owner's devices) and has no `--for-everyone`.\nDeleting for everyone stays the owner's `wa <profile> messages delete --for-everyone`. `--permission key=level`\nnarrows a level for this server process only; one that would loosen the profile stops the server at startup."
+        }
+      ],
+      "ru": [
+        {
+          "before": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nЗдесь `agent` — имя профиля. При изменениях сохраняются ограничения получателей, часовой лимит и журнал отправки (`wa agent sends list`). Маркировка чтения — это отдельная запись, под `chats.mark-read`: другая сторона это видит. Агент никогда не удаляет сообщения для всех, независимо от уровня: `messages delete` через MCP предназначен только для владельца (`wa` просит WhatsApp убрать сообщения с устройств владельца; еще не проверено на телефоне) и не имеет `--for-everyone`. Удаление для всех остается `wa <profile> messages delete --for-everyone` владельца. `--permission key=level` сужает уровень только для этого серверного процесса; тот, который ослабит профиль, останавливает сервер при запуске.",
+          "after": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nЗдесь `agent` — имя профиля. При изменениях сохраняются ограничения получателей, часовой лимит и журнал отправки (`wa agent sends list`). Маркировка чтения — это отдельная запись, под `chats.mark-read`: другая сторона это видит. Агент никогда не удаляет сообщения для всех, независимо от уровня: `messages delete` через MCP предназначен только для владельца (`wa` просит WhatsApp убрать сообщения с устройств владельца) и не имеет `--for-everyone`. Удаление для всех остается `wa <profile> messages delete --for-everyone` владельца. `--permission key=level` сужает уровень только для этого серверного процесса; тот, который ослабит профиль, останавливает сервер при запуске."
+        }
+      ],
+      "es": [
+        {
+          "before": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nAquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos; aún no se ha verificado en un teléfono) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio.",
+          "after": "```sh\nwa agent config set permissions.messages readonly\nwa agent config set permissions.messages.send allow\n```\nAquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "groups",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "replacements": {
+      "en": [
+        {
+          "before": "In a group you administer, this removes another member's message for everyone; anywhere, it removes your own. It\nneeds the message in the local store, since WhatsApp addresses a message by its sender too. It asks first by\ndefault, and it cannot be undone. Without `--for-everyone` it is for you only: `wa` asks WhatsApp to take the\nmessage from all your devices and leave it with the others (not yet checked on a phone).",
+          "after": "In a group you administer, this removes another member's message for everyone; anywhere, it removes your own. It\nneeds the message in the local store, since WhatsApp addresses a message by its sender too. It asks first by\ndefault, and it cannot be undone. Without `--for-everyone` it is for you only: `wa` asks WhatsApp to take the\nmessage from all your devices and leave it with the others."
+        }
+      ],
+      "ru": [
+        {
+          "before": "В группе, которую вы администрируете, это удаляет сообщение другого участника для всех; где угодно, он удаляет ваши собственные. Ему нужно сообщение в локальном хранилище, поскольку WhatsApp также адресует сообщение отправителю. По умолчанию он запрашивает первым, и его нельзя отменить. Без `--for-everyone` это только для вас: `wa` просит WhatsApp забрать сообщение со всех ваших устройств и оставить его на других (пока не проверено на телефоне).",
+          "after": "В группе, которую вы администрируете, это удаляет сообщение другого участника для всех; где угодно, он удаляет ваши собственные. Ему нужно сообщение в локальном хранилище, поскольку WhatsApp также адресует сообщение отправителю. По умолчанию он запрашивает первым, и его нельзя отменить. Без `--for-everyone` это только для вас: `wa` просит WhatsApp забрать сообщение со всех ваших устройств и оставить его на других."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/groups.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "sessions",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The name goes to the phone and your other devices at once. Other people probably see it only once the phone next\ncomes online: a device tells WhatsApp its name when it says it is online, and `wa` never does (not checked yet). A\ndevice linked a few minutes ago may not have WhatsApp's settings keys yet; keep `serve` running a while and try again.",
+          "after": "The name goes to the phone and your other devices at once. Other people probably see it only once the phone next\ncomes online: a device tells WhatsApp its name when it says it is online, and `wa` never does. A\ndevice linked a few minutes ago may not have WhatsApp's settings keys yet; keep `serve` running a while and try again."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Имя одновременно передается на телефон и другие ваши устройства. Другие люди, вероятно, увидят его только после того, как телефон в следующий раз подключится к сети: устройство сообщает WhatsApp свое имя, когда сообщает, что оно онлайн, а `wa` никогда этого не делает (еще не проверено). Устройство, подключенное несколько минут назад, может еще не иметь ключей настроек WhatsApp; оставьте `serve` работать некоторое время и повторите попытку.`wa` воспринимает фотографию как квадратный JPEG со стороной от 190 до 720 пикселей, стороны, которые он принимает за группу; принимает ли WhatsApp другую сторону за ваше собственное фото, не проверяется. `wa` не преобразует и не обрезает его, а содержимое PNG или WebP отклоняется до того, как что-либо изменится. В совокупности сначала идет имя, затем описание, затем фотография; если более поздний произойдет сбой, в ошибке будет указано, что изменилось. Удаление фото производится на телефоне.",
+          "after": "Имя одновременно передается на телефон и другие ваши устройства. Другие люди, вероятно, увидят его только после того, как телефон в следующий раз подключится к сети: устройство сообщает WhatsApp свое имя, когда сообщает, что оно онлайн, а `wa` никогда этого не делает. Устройство, подключенное несколько минут назад, может еще не иметь ключей настроек WhatsApp; оставьте `serve` работать некоторое время и повторите попытку.`wa` воспринимает фотографию как квадратный JPEG со стороной от 190 до 720 пикселей, стороны, которые он принимает за группу; принимает ли WhatsApp другую сторону за ваше собственное фото, не проверяется. `wa` не преобразует и не обрезает его, а содержимое PNG или WebP отклоняется до того, как что-либо изменится. В совокупности сначала идет имя, затем описание, затем фотография; если более поздний произойдет сбой, в ошибке будет указано, что изменилось. Удаление фото производится на телефоне."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md"
+  },
+  {
+    "tool": "wa",
+    "slug": "diagnostics",
+    "reason": "Explain the actual Windows file-mode limitation, not test provenance. Source: whatsapp-cli v0.6.0 src/diagnose.ts deviceModes returns checked:false on win32; native docs/diagnostics.md. whatsapp-cli v0.10.0 adds the same sentence to the doctor files paragraph; cli-core 0.428 privateFiles returns checked:false on win32.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- **`engine`** — whether the engine program is there to start, and its path. When it is missing, the hint says what\n  to do: reinstall `wa` with optional packages on, set `WA_ENGINE`, or in a source checkout run `pnpm engine:build`.\n- **`device`** — whether the device keys exist, and whether `private.db`, its `-wal` and `-shm` files or their folder\n  can be read by other users of this machine. Each such file comes with the `chmod` command that fixes it. `doctor`\n  never opens the keys and never changes a file mode itself. Windows is not checked.\n- **`lock`** — who last held the device's one connection (`serve (pid 4242)`), and whether that process still runs.\n  The engine never clears the name, so a holder counts as running only while its process does.",
+          "after": "- **`engine`** — whether the engine program is there to start, and its path. When it is missing, the hint says what\n  to do: reinstall `wa` with optional packages on, set `WA_ENGINE`, or in a source checkout run `pnpm engine:build`.\n- **`device`** — whether the device keys exist, and whether `private.db`, its `-wal` and `-shm` files or their folder\n  can be read by other users of this machine. Each such file comes with the `chmod` command that fixes it. `doctor`\n  never opens the keys and never changes a file mode itself. Unix file-mode checks are skipped on Windows.\n- **`lock`** — who last held the device's one connection (`serve (pid 4242)`), and whether that process still runs.\n  The engine never clears the name, so a holder counts as running only while its process does."
+        },
+        {
+          "before": "checks the config file and its folder only.\n`doctor` never changes a file mode itself. Windows is not checked.",
+          "after": "checks the config file and its folder only.\n`doctor` never changes a file mode itself. Unix file-mode checks are skipped on Windows."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Помимо версии, среды выполнения, профиля, файла конфигурации и локального хранилища, `doctor` считывает с диска три вещи WhatsApp, ничего не запуская:\n\n- **`engine`** — есть ли программа движка для запуска и путь к ней. Когда он отсутствует, подсказка говорит, что делать: переустановить `wa` с включенными дополнительными пакетами, установить `WA_ENGINE` или при проверке исходного кода запустить `pnpm engine:build`.\n- **`device`** — существуют ли ключи устройства, и могут ли `private.db`, его файлы `-wal` и `-shm` или их папка быть прочитаны другими пользователями этой машины. К каждому такому файлу прилагается команда `chmod`, которая его исправляет. `doctor` никогда не открывает ключи и никогда не меняет режим файла сам. Windows не проверяется.\n- **`lock`** — кто последним удерживал одно соединение устройства (`serve (pid 4242)`), и выполняется ли этот процесс. Движок никогда не очищает имя, поэтому держатель считается запущенным только до тех пор, пока работает его процесс.",
+          "after": "Помимо версии, среды выполнения, профиля, файла конфигурации и локального хранилища, `doctor` считывает с диска три вещи WhatsApp, ничего не запуская:\n\n- **`engine`** — есть ли программа движка для запуска и путь к ней. Когда он отсутствует, подсказка говорит, что делать: переустановить `wa` с включенными дополнительными пакетами, установить `WA_ENGINE` или при проверке исходного кода запустить `pnpm engine:build`.\n- **`device`** — существуют ли ключи устройства, и могут ли `private.db`, его файлы `-wal` и `-shm` или их папка быть прочитаны другими пользователями этой машины. К каждому такому файлу прилагается команда `chmod`, которая его исправляет. `doctor` никогда не открывает ключи и никогда не меняет режим файла сам. В Windows проверка Unix-прав доступа к файлам не выполняется.\n- **`lock`** — кто последним удерживал одно соединение устройства (`serve (pid 4242)`), и выполняется ли этот процесс. Движок никогда не очищает имя, поэтому держатель считается запущенным только до тех пор, пока работает его процесс."
+        },
+        {
+          "before": "проверяет только файл конфигурации и его папку. `doctor` никогда не меняет режим файла сам. Windows не проверяется.",
+          "after": "проверяет только файл конфигурации и его папку. `doctor` никогда не меняет режим файла сам. В Windows проверка Unix-прав доступа к файлам не выполняется."
+        }
+      ],
+      "es": [
+        {
+          "before": "Además de la versión, el tiempo de ejecución, el perfil, el archivo de configuración y el almacén local, `doctor` lee tres cosas de WhatsApp desde el disco, sin iniciar nada:\n\n- **`engine`**: si el programa del motor está ahí para iniciarse y su ruta. Cuando falta, la sugerencia dice qué hacer: reinstalar `wa` con los paquetes opcionales activados, configurar `WA_ENGINE` o, en una verificación de código fuente, ejecutar `pnpm engine:build`.\n- **`device`**: si las claves del dispositivo existen y si otros usuarios de esta máquina pueden leer `private.db`, sus archivos `-wal` y `-shm` o su carpeta. Cada uno de estos archivos viene con el comando `chmod` que lo soluciona. `doctor` nunca abre las claves y nunca cambia el modo de un archivo. Windows no está marcado.\n- **`lock`**: quién mantuvo la última conexión del dispositivo (`serve (pid 4242)`) y si ese proceso aún se ejecuta. El motor nunca borra el nombre, por lo que un titular cuenta como en funcionamiento sólo mientras su proceso lo hace.",
+          "after": "Además de la versión, el tiempo de ejecución, el perfil, el archivo de configuración y el almacén local, `doctor` lee tres cosas de WhatsApp desde el disco, sin iniciar nada:\n\n- **`engine`**: si el programa del motor está ahí para iniciarse y su ruta. Cuando falta, la sugerencia dice qué hacer: reinstalar `wa` con los paquetes opcionales activados, configurar `WA_ENGINE` o, en una verificación de código fuente, ejecutar `pnpm engine:build`.\n- **`device`**: si las claves del dispositivo existen y si otros usuarios de esta máquina pueden leer `private.db`, sus archivos `-wal` y `-shm` o su carpeta. Cada uno de estos archivos viene con el comando `chmod` que lo soluciona. `doctor` nunca abre las claves y nunca cambia el modo de un archivo. En Windows se omite la comprobación de permisos Unix de los archivos.\n- **`lock`**: quién mantuvo la última conexión del dispositivo (`serve (pid 4242)`) y si ese proceso aún se ejecuta. El motor nunca borra el nombre, por lo que un titular cuenta como en funcionamiento sólo mientras su proceso lo hace."
+        },
+        {
+          "before": "comprueba solo el archivo de configuración y su carpeta. `doctor` nunca cambia el modo de un archivo por sí mismo. Windows no se comprueba.",
+          "after": "comprueba solo el archivo de configuración y su carpeta. `doctor` nunca cambia el modo de un archivo por sí mismo. En Windows se omite la comprobación de permisos Unix de los archivos."
+        }
+      ]
+    },
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/src/diagnose.ts"
+  },
+  {
+    "tool": "wa",
+    "slug": "usage",
+    "source": "https://faq.whatsapp.com/6614640168569481/",
+    "reason": "WhatsApp documents a 15-minute edit window for sent text. The native v0.6.0 guide says 20 minutes; do not promise a broader provider window. This changes portal guidance, not CLI runtime behavior.",
+    "replacements": {
+      "en": [
+        {
+          "before": "An edit works on your own message within 20 minutes of sending.",
+          "after": "Edit your own text messages within 15 minutes of sending; see [WhatsApp’s editing help](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Своё сообщение можно исправить в течение 20 минут после отправки.",
+          "after": "Своё текстовое сообщение можно исправить в течение 15 минут после отправки; см. [справку WhatsApp](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ],
+      "es": [
+        {
+          "before": "Puedes editar un mensaje propio durante los 20 minutos posteriores al envío.",
+          "after": "Puedes editar tus mensajes de texto hasta 15 minutos después de enviarlos; consulta [la ayuda de WhatsApp](https://faq.whatsapp.com/6614640168569481/)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "remote",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/remote.md",
+    "reason": "Use an authenticated public HTTPS endpoint, preserve revocation semantics, and link current client prerequisites instead of an unchecked plan/region matrix. Keep setup-test provenance internal.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| App | Plans | Documentation |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | any; one custom connector on the free plan | [custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | only adults in the US with a personal Google account | [connected apps](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Your account must be able to add a remote MCP connector. Check the app’s current account and region requirements before starting the tunnel.\n\n| App | Connector prerequisites |\n|---|---|\n| ChatGPT | [Connection guide](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Connection guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Connection guide](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Use this page when you want an AI app that runs in the browser or on your phone, for example ChatGPT, Codex web or\nClaude, to read and answer your WhatsApp messages. Such an app cannot start `wa` on your computer, so you give it an\ninternet address instead. At the end, the app is connected to `wa` through a private HTTPS address, it can do only\nwhat your profile permits, and you know how to stop it or take its access back.",
+          "after": "Connect a browser or phone MCP app, such as ChatGPT or Claude, to `wa` running on a computer you control. This guide connects the app through an HTTPS tunnel with sign-in, explains which actions the `wa` profile allows, and shows how to stop the connection or revoke access."
+        },
+        {
+          "before": "The setup steps for each operating system have not all been tried on that system. ",
+          "after": ""
+        }
+      ],
+      "ru": [
+        {
+          "before": "| Приложение | Планы | Документация |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [режим разработчика](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | любой; один специальный соединитель в бесплатном плане | [нестандартные разъемы](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | только взрослые в США имеют личный аккаунт Google | [связанные приложения](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Ваш аккаунт должен поддерживать добавление удалённого MCP-подключения. Перед запуском туннеля проверьте текущие требования приложения к аккаунту и региону.\n\n| Приложение | Условия подключения |\n|---|---|\n| ChatGPT | [Руководство подключения](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Руководство подключения](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Руководство подключения](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Используйте эту страницу, если вы хотите, чтобы приложение искусственного интеллекта, работающее в браузере или на вашем телефоне, например ChatGPT, Codex Web или Claude, читало ваши сообщения WhatsApp и отвечало на них. Такое приложение не может запустить `wa` на вашем компьютере, поэтому вместо этого вы указываете ему интернет-адрес. После настройки приложение подключается к `wa` через частный адрес HTTPS, оно может делать только то, что разрешено вашим профилем, и вы знаете, как остановить его или вернуть ему доступ.",
+          "after": "Подключите MCP-приложение в браузере или на телефоне, например ChatGPT или Claude, к `wa` на своём компьютере. Вы настроите HTTPS-туннель с входом, узнаете, какие действия разрешает профиль `wa`, и сможете остановить подключение или отозвать доступ приложения."
+        },
+        {
+          "before": "Не все шаги установки для каждой операционной системы были опробованы в этой системе. ",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "| Aplicación | Planes | Documentación |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |\n",
+          "after": "Tu cuenta debe permitir añadir un conector MCP remoto. Comprueba los requisitos actuales de cuenta y región antes de iniciar el túnel.\n\n| Aplicación | Requisitos de conexión |\n|---|---|\n| ChatGPT | [Guía de conexión](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Guía de conexión](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Guía de conexión](https://support.google.com/gemini/answer/17209137?hl=en) |\n"
+        },
+        {
+          "before": "Usa esta página cuando desee una aplicación de IA que se ejecute en el navegador o en tu teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de WhatsApp. Una aplicación de este tipo no puede iniciar `wa` en tu ordenador, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `wa` a través de una dirección HTTPS privada, solo puede hacer lo que tu perfil permite y ti sabe cómo detenerla o recuperar su acceso.",
+          "after": "Conecta una aplicación MCP del navegador o del teléfono, como ChatGPT o Claude, a `wa` en un ordenador que controlas. Configurarás un túnel HTTPS con inicio de sesión, comprobarás qué acciones permite el perfil de `wa` y aprenderás a detener la conexión o revocar el acceso."
+        },
+        {
+          "before": "No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. ",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "attachments",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/attachments.md",
+    "reason": "Distinguish an expired-media retry request from success: the same released guide documents media.retry-failed.",
+    "replacements": {
+      "en": [
+        {
+          "before": "and fetches the new copy.",
+          "after": "and attempts to fetch the new copy."
+        }
+      ],
+      "ru": [
+        {
+          "before": "и получает новую копию.",
+          "after": "и пытается скачать новую копию."
+        }
+      ],
+      "es": [
+        {
+          "before": "y recupera la nueva copia.",
+          "after": "e intenta descargar la nueva copia."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "sessions",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md",
+    "reason": "The portal resolves explicit relative Markdown links; preserve the native configuration reference destination.",
+    "replacements": {
+      "en": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ],
+      "ru": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ],
+      "es": [
+        {
+          "before": "](configuration-reference.md)",
+          "after": "](./configuration-reference.md)"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "sessions",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md",
+    "reason": "State the released CLI photo-format validation and keep unverified provider-side timing/dimension research out of the reader guide.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`wa` takes the photo as a square JPEG of 190 to 720 pixels a side, the sides it takes for a group; whether WhatsApp\ntakes other sides for your own photo is not checked. `wa` does not convert or crop one, and a PNG or WebP is refused by\nits content, before anything changes. Given together, the name goes first, then the about, then the\nphoto; if a later one fails, the error says which changed. Removing the photo is done on the phone.",
+          "after": "For a profile photo, `wa` requires a square JPEG from 190 to 720 pixels per side, using the same validation as for a group photo. `wa` does not convert or crop images and rejects PNG or WebP content before changing anything. When name, about and photo are supplied together, they are changed in that order; a later error names the changes already made. Remove the photo from the phone."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Имя одновременно передается на телефон и другие ваши устройства. Другие люди, вероятно, увидят его только после того, как телефон в следующий раз подключится к сети: устройство сообщает WhatsApp свое имя, когда сообщает, что оно онлайн, а `wa` никогда этого не делает. Устройство, подключенное несколько минут назад, может еще не иметь ключей настроек WhatsApp; оставьте `serve` работать некоторое время и повторите попытку.`wa` воспринимает фотографию как квадратный JPEG со стороной от 190 до 720 пикселей, стороны, которые он принимает за группу; принимает ли WhatsApp другую сторону за ваше собственное фото, не проверяется. `wa` не преобразует и не обрезает его, а содержимое PNG или WebP отклоняется до того, как что-либо изменится. В совокупности сначала идет имя, затем описание, затем фотография; если более поздний произойдет сбой, в ошибке будет указано, что изменилось. Удаление фото производится на телефоне.",
+          "after": "Изменение имени отправляется как настройка аккаунта через `wa`. У недавно привязанного устройства может ещё не быть ключей настроек WhatsApp: оставьте `serve` работающим и повторите попытку позже.\n\nДля фотографии профиля `wa` требует квадратный JPEG со стороной от 190 до 720 пикселей, как для фотографии группы. `wa` не преобразует и не обрезает изображение и отклоняет PNG или WebP до изменения данных. Если имя, описание и фотография заданы вместе, они меняются в этом порядке; при последующей ошибке указано, что уже изменилось. Удаляйте фотографию на телефоне."
+        }
+      ],
+      "es": [
+        {
+          "before": "El nombre va al teléfono y a sus otros dispositivos a la vez. Otras personas probablemente lo vean solo la próxima vez que el teléfono se conecte: un dispositivo le dice a WhatsApp su nombre cuando dice que está en línea, y `wa` nunca lo hace (aún no verificado). Es posible que un dispositivo vinculado hace unos minutos aún no tenga las claves de configuración de WhatsApp; Mantén `serve` ejecutándose por un tiempo e inténtelo nuevamente.`wa` toma la foto como un JPEG cuadrado de 190 a 720 píxeles por lado, los lados que toma para un grupo; No se comprueba si WhatsApp toma otros lados de su propia foto. `wa` no convierte ni recorta uno, y su contenido rechaza un PNG o WebP, antes de que algo cambie. En conjunto, primero va el nombre, luego acerca de y luego la foto; si falla uno posterior, el error dice cuál cambió. La eliminación de la foto se realiza en el teléfono.",
+          "after": "`wa` envía el cambio de nombre como un ajuste de la cuenta. Un dispositivo recién vinculado puede carecer de las claves de ajustes de WhatsApp: mantén `serve` en marcha y vuelve a intentarlo más tarde.\n\nPara la foto de perfil, `wa` exige un JPEG cuadrado de 190 a 720 píxeles por lado, con la misma validación que para una foto de grupo. `wa` no convierte ni recorta imágenes y rechaza contenido PNG o WebP antes de cambiar nada. Si indicas nombre, descripción y foto juntos, se cambian en ese orden; un error posterior identifica los cambios ya realizados. Quita la foto desde el teléfono."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md",
+    "reason": "Name the commands the released personal MCP server never offers. whatsapp-cli v0.8.0 marks session, setup, complete and mcp as mcp:false, and cli-core 0.411 toolsFromCommands drops any command with a lifetime (watch, serve) and excludes the bot group, which bot mcp serves. Every other command is listed with its availability (includeUnavailable); authority-changing commands need mcp.authority. Re-checked for v0.10.0 (cli-core 0.428.0): the same six commands are mcp:false or have a lifetime, and mcp/server.js still uses includeUnavailable: true with exclude [[\"bot\"]].",
+    "replacements": {
+      "en": [
+        {
+          "before": "Commands that change future permissions or automation require `permissions.mcp.authority` set to `allow`; raw\nCloud API calls require `permissions.bot.api` set to `allow`. Both keys default to `deny` over MCP. Other writes\nremain subject to their command permissions, recipient lists and send limits.",
+          "after": "Commands that change future permissions or automation require `permissions.mcp.authority` set to `allow`; raw\nCloud API calls require `permissions.bot.api` set to `allow`. Both keys default to `deny` over MCP. Other writes\nremain subject to their command permissions, recipient lists and send limits.\n\n<details>\n<summary>Commands kept in the terminal</summary>\n\nThe personal-account MCP server never offers `wa session`, `wa setup`, `wa complete` or `wa mcp` and their subcommands, nor the long-running `wa watch` and `wa serve`, which never return an answer to an agent. Business-bot commands (`wa bot …`) are served by their own server, `wa bot mcp`. Every other command is listed with its availability.\n\n</details>"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Командам, которые меняют будущие разрешения или автоматизацию, нужен `permissions.mcp.authority` со значением `allow`; прямым вызовам Cloud API нужен `permissions.bot.api` со значением `allow`. Через MCP оба ключа по умолчанию равны `deny`. Остальные изменения по-прежнему подчиняются разрешениям своих команд, спискам получателей и лимитам отправки.",
+          "after": "Командам, которые меняют будущие разрешения или автоматизацию, нужен `permissions.mcp.authority` со значением `allow`; прямым вызовам Cloud API нужен `permissions.bot.api` со значением `allow`. Через MCP оба ключа по умолчанию равны `deny`. Остальные изменения по-прежнему подчиняются разрешениям своих команд, спискам получателей и лимитам отправки.\n\n<details>\n<summary>Команды для терминала</summary>\n\nMCP-сервер личного аккаунта никогда не предлагает `wa session`, `wa setup`, `wa complete` и `wa mcp` с их подкомандами, а также долгоиграющие `wa watch` и `wa serve`, которые никогда не возвращают агенту ответ. Команды бизнес-бота (`wa bot …`) обслуживает отдельный сервер, `wa bot mcp`. Все остальные команды перечислены вместе с их доступностью.\n\n</details>"
+        }
+      ],
+      "es": [
+        {
+          "before": "Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.",
+          "after": "Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.\n\n<details>\n<summary>Comandos que quedan en el terminal</summary>\n\nEl servidor MCP de la cuenta personal nunca ofrece `wa session`, `wa setup`, `wa complete` ni `wa mcp` con sus subcomandos, ni los comandos de larga duración `wa watch` y `wa serve`, que nunca devuelven una respuesta al agente. Los comandos del bot comercial (`wa bot …`) los sirve su propio servidor, `wa bot mcp`. Todos los demás comandos aparecen con su disponibilidad.\n\n</details>"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "usage",
+    "reason": "whatsapp-cli v0.8.0 removed the old-file download from the not-built list, yet the same guide still links there for it and the released attachments guide and dist/reasons.js still document media.retry-failed. Restore the item. Re-checked for v0.10.0: usage guide still links the not-built list for it; media.retry-failed still in dist/reasons.js.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- making a channel (`chats create --channel`).\n",
+          "after": "- making a channel (`chats create --channel`);\n- downloading a file WhatsApp no longer keeps: the phone uploads it again under a key it does not share, so the\n  download ends with `media.retry-failed` and saves nothing ([file attachments](./attachments.md)).\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "- создание канала (`chats create --channel`).\n",
+          "after": "- создание канала (`chats create --channel`);\n- скачивание файла, который WhatsApp больше не хранит: телефон загружает его с новым ключом, который не передаёт, поэтому загрузка завершается с `media.retry-failed` и ничего не сохраняет ([вложения](./attachments.md)).\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "- crear un canal (`chats create --channel`).\n",
+          "after": "- crear un canal (`chats create --channel`);\n- descargar un archivo que WhatsApp ya no guarda: el teléfono lo sube con una clave que no comparte y la descarga termina con `media.retry-failed` sin guardar nada ([archivos adjuntos](./attachments.md)).\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "groups",
+    "reason": "The released request actions are confirm/reject (tg 0.90.0 contract: chats requests list|confirm|reject); the group task table and command table retained the retired accept/decline spellings.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/groups.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject`"
+        },
+        {
+          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
+          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "reason": "Remove an unmeasured token-cost comparison. CLI and MCP availability are explained separately by the released exclusions and permissions.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "which costs the same tokens and can do the\nsame things",
+          "after": "which uses the command-line interface directly"
+        }
+      ],
+      "ru": [
+        {
+          "before": "с теми же затратами токенов и может делать те же самые действия",
+          "after": "через интерфейс командной строки"
+        }
+      ],
+      "es": [
+        {
+          "before": "que cuesta los mismos tokens y puede hacer las mismas cosas",
+          "after": "mediante la interfaz de línea de comandos"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
+    "reason": "The server has three dispatcher tools and excludes some commands; describe catalogue coverage without claiming one MCP tool per command.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Every command is a tool, writes included; the profile's permissions limit what the agent may run. Read-only is\na choice you make in those permissions, not a default.",
+          "after": "The catalogue includes read and write commands, subject to the profile permissions and exclusions below. Read-only access is a choice you configure in those permissions."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Каждая команда — это инструмент, включая команды записи; что агенту можно запускать, ограничивают разрешения\nпрофиля. Только чтение — это ваш выбор в этих разрешениях, а не значение по умолчанию.",
+          "after": "Каталог включает команды чтения и записи с учётом разрешений профиля и исключений ниже. Доступ только для чтения настраивается в разрешениях."
+        }
+      ],
+      "es": [
+        {
+          "before": "Cada comando es una herramienta, incluidos los de escritura; los permisos del perfil limitan lo que el agente puede\nejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto.",
+          "after": "El catálogo incluye comandos de lectura y escritura, sujetos a los permisos del perfil y a las exclusiones siguientes. El acceso de solo lectura se configura mediante esos permisos."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "bot",
+    "reason": "tg 0.90.0 contract: bot messages sync has --until-id <id> (start at this message, by its t.me link, inclusive) and no --from option; Core 0.412 botMessagesSyncCommand passes --until-id as the internal from value, and the missing-start error says 'give --until-id <message link>'.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`--from` starts at that message, inclusive, and must name the same chat.",
+          "after": "`--until-id` starts at that message, given as its t.me link, inclusive, and must name the same chat."
+        },
+        {
+          "before": "it exits with code `2` and asks for `--from`.",
+          "after": "it exits with code `2` and asks for `--until-id`."
+        }
+      ],
+      "ru": [
+        {
+          "before": "`--from` начинает с указанного сообщения включительно;",
+          "after": "`--until-id` начинает с указанного сообщения (ссылка t.me) включительно;"
+        },
+        {
+          "before": "и просит указать `--from`.",
+          "after": "и просит указать `--until-id`."
+        }
+      ],
+      "es": [
+        {
+          "before": "`--from` empieza en ese mensaje, incluido,",
+          "after": "`--until-id` empieza en ese mensaje (su enlace t.me), incluido,"
+        },
+        {
+          "before": "y solicita `--from`.",
+          "after": "y solicita `--until-id`."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/commands.md",
+    "reason": "The released attachments extract command has no MCP exclusion or lifetime; remove the stale terminal-only restriction without claiming that installed parsers or provider consent are unnecessary.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Extracting text is done in the terminal only.",
+          "after": "Text extraction is governed by the profile’s attachment permissions."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Извлечение текста выполняется только в терминале.",
+          "after": "Извлечением текста управляют разрешения профиля на вложения."
+        }
+      ],
+      "es": [
+        {
+          "before": "La extracción de texto se realiza únicamente en la terminal.",
+          "after": "La extracción de texto está sujeta a los permisos de adjuntos del perfil."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "source": "https://github.com/WireCatLabs/cli-base/blob/v0.50.3/src/standards/output.ts",
+    "reason": "The released stream serializer emits item/end records, as the updated watch section states. Keep the general JSONL description and jq example consistent with that contract.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- `--jsonl`: one object per line, no wrapper; whether there is more is said on stderr only.\n  A report (`stats …`) is one object, so `--jsonl` on it is refused; `stats * evidence` lists still stream.",
+          "after": "- `--jsonl`: item records carry the result in `data`; a final end record carries completeness and page metadata. Check that record rather than treating the stream as bare messages. A report (`stats …`) is one object, so `--jsonl` on it is refused; `stats * evidence` lists still stream."
+        },
+        {
+          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
+          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
+        }
+      ],
+      "ru": [
+        {
+          "before": "- `--jsonl`: по одному объекту в строке, без оболочки; есть ли что-то еще, говорится только в stderr.\n  Отчет (`stats …`) — это один объект, поэтому `--jsonl` для него отклоняется; списки `stats * evidence` по-прежнему выдаются потоком.",
+          "after": "- `--jsonl`: записи элементов содержат результат в `data`; последняя запись завершения содержит полноту и данные страницы. Проверяйте её, а не считайте поток набором сообщений без оболочки. Отчёт (`stats …`) — один объект, поэтому `--jsonl` для него отклоняется; списки `stats * evidence` по-прежнему выдаются потоком."
+        },
+        {
+          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
+          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
+        }
+      ],
+      "es": [
+        {
+          "before": "- `--jsonl`: un objeto por línea, sin contenedor; si hay más se dice solo en stderr. Un informe (`stats …`) es un solo objeto, así que `--jsonl` se rechaza en él; las listas `stats * evidence` siguen emitiéndose por líneas.",
+          "after": "- `--jsonl`: los registros de elementos llevan el resultado en `data`; el registro final indica completitud y paginación. Compruébalo en vez de tratar el flujo como mensajes sin contenedor. Un informe (`stats …`) es un objeto, por lo que rechaza `--jsonl`; las listas `stats * evidence` siguen emitiéndose como flujo."
+        },
+        {
+          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
+          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "usage",
+    "reason": "Scope empty stdout to refusal before output; framed streams can retain earlier records after a later failure.",
+    "source": "https://github.com/WireCatLabs/cli-base/blob/v0.50.3/src/standards/output.ts",
+    "replacements": {
+      "en": [
+        {
+          "before": "- An error that ends the command is `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` on stderr, and stdout is empty, so a\n  refusal can never be taken for an empty result.",
+          "after": "- An error uses `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` on stderr. A refusal before output writes no result, so it cannot be mistaken for an empty result. If a stream already printed records, keep them and inspect its final completeness record; a missing end record also means the stream did not finish."
+        }
+      ],
+      "ru": [
+        {
+          "before": "- Ошибка, завершающая команду, — `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` на stderr, а stdout пуст, поэтому отказ никогда не может быть воспринят как пустой результат.",
+          "after": "- Ошибка выдаёт `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` в stderr. Отказ до начала вывода не пишет результат, поэтому его нельзя принять за пустой ответ. Если поток уже выдал записи, сохраните их и проверьте запись завершения; отсутствие такой записи тоже означает незавершённый поток."
+        }
+      ],
+      "es": [
+        {
+          "before": "- Un error que termina el comando aparece como `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` en stderr y la salida estándar está vacía, por lo que nunca se puede considerar un rechazo como un resultado vacío.",
+          "after": "- Un error usa `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` en stderr. Un rechazo anterior a la salida no escribe resultados y no se confunde con un resultado vacío. Si el flujo ya emitió registros, consérvalos y comprueba su registro final de completitud; si falta el final, el flujo tampoco terminó."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "permissions",
+    "reason": "Use the shared AI agent term for the actor; an agent with unrestricted file/terminal access can still edit the settings.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/permissions.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "An assistant that can edit configuration files",
+          "after": "An AI agent that can edit configuration files"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Do not promise provider plan/region eligibility from a stale matrix; retain direct primary prerequisites for each app, as in the reviewed WhatsApp guide.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "| App | Plans | Documentation |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | any; one custom connector on the free plan | [custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | only adults in the US with a personal Google account | [connected apps](https://support.google.com/gemini/answer/17209137?hl=en) |",
+          "after": "Check the app’s current account and region requirements before starting the tunnel.\n\n| App | Connector prerequisites |\n|---|---|\n| ChatGPT | [Connection guide](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Connection guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Connection guide](https://support.google.com/gemini/answer/17209137?hl=en) |"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| Приложение | Планы | Документация |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [режим разработчика](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | любой; один своё подключение в бесплатном плане | [свои подключения](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | взрослые пользователи в США с личным аккаунтом Google | [связанные приложения](https://support.google.com/gemini/answer/17209137?hl=en) |",
+          "after": "Перед запуском туннеля проверьте текущие требования приложения к аккаунту и региону.\n\n| Приложение | Условия подключения |\n|---|---|\n| ChatGPT | [Руководство по подключению](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Руководство по подключению](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Руководство по подключению](https://support.google.com/gemini/answer/17209137?hl=en) |"
+        }
+      ],
+      "es": [
+        {
+          "before": "| Aplicación | Planes | Documentación |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claudio | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Géminis | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |",
+          "after": "Comprueba los requisitos actuales de cuenta y región de la aplicación antes de iniciar el túnel.\n\n| Aplicación | Requisitos de conexión |\n|---|---|\n| ChatGPT | [Guía de conexión](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Guía de conexión](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Guía de conexión](https://support.google.com/gemini/answer/17209137?hl=en) |"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "remote",
+    "reason": "Lead with the remote-connection task and accurately describe a public HTTPS endpoint protected by sign-in. Use verified client examples and link current provider prerequisites.",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
+    "replacements": {
+      "en": [
+        {
+          "before": "title: \"ChatGPT, Codex or Claude in the browser\"",
+          "after": "title: \"Connect a browser or phone app\""
+        },
+        {
+          "before": "Use this page when you want an AI app that runs in the browser or on your phone, for example\nChatGPT, Codex web or Claude, to read and answer your Telegram messages. Such an app cannot start\n`tg` on your computer, so you give it an internet address instead. At the end, the app is connected\nto `tg` through a private HTTPS address, it can do only what your profile permits, and you know how\nto stop it or take its access back.",
+          "after": "Connect a browser or phone MCP app, such as ChatGPT or Claude, to tg running on a computer you control. You will start a public HTTPS endpoint with sign-in, connect the app under the chosen profile’s permissions and learn how to stop the server or revoke app access."
+        }
+      ],
+      "ru": [
+        {
+          "before": "title: \"ChatGPT, Codex или Claude в браузере\"",
+          "after": "title: \"Подключить приложение в браузере или на телефоне\""
+        },
+        {
+          "before": "Используйте эту страницу, если вы хотите, чтобы приложение агента, работающее в браузере или на вашем телефоне, например ChatGPT, Codex Web или Claude, читало ваши сообщения Telegram и отвечало на них. Такое приложение не может запустить `tg` на вашем компьютере, поэтому вместо этого вы указываете ему интернет-адрес. В результате приложение подключится к `tg` через частный адрес HTTPS, оно может делать только то, что разрешено вашим профилем, и вы знаете, как остановить его или отозвать доступ.",
+          "after": "Подключите приложение MCP в браузере или на телефоне, например ChatGPT или Claude, к tg на вашем компьютере. Вы запустите публичную точку HTTPS со входом, подключите приложение с разрешениями выбранного профиля и узнаете, как остановить сервер или отозвать доступ приложения."
+        }
+      ],
+      "es": [
+        {
+          "before": "title: \"ChatGPT, Codex o Claude en el navegador\"",
+          "after": "title: \"Conectar una aplicación del navegador o teléfono\""
+        },
+        {
+          "before": "Utilice esta página cuando desee una aplicación de IA que se ejecute en el navegador o en su teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de Telegram. Una aplicación de este tipo no puede iniciar `tg` en su computadora, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `tg` a través de una dirección HTTPS privada, solo puede hacer lo que su perfil permite y usted sabe cómo detenerla o recuperar su acceso.",
+          "after": "Conecta una aplicación MCP del navegador o teléfono, como ChatGPT o Claude, con tg en un equipo que controles. Iniciarás un endpoint HTTPS público con acceso autenticado, conectarás la aplicación con los permisos del perfil elegido y aprenderás a detener el servidor o revocar el acceso."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "security",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
+    "replacements": {
+      "en": [
+        {
+          "before": "chats requests confirm|decline",
+          "after": "chats requests confirm|reject"
+        }
+      ],
+      "ru": [
+        {
+          "before": "chats requests confirm|decline",
+          "after": "chats requests confirm|reject"
+        }
+      ],
+      "es": [
+        {
+          "before": "chats requests confirm|decline",
+          "after": "chats requests confirm|reject"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
+    "replacements": {
+      "en": [
+        {
+          "before": "впустить; decline — отказать",
+          "after": "впустить; reject — отказать"
+        }
+      ],
+      "ru": [
+        {
+          "before": "впустить; decline — отказать",
+          "after": "впустить; reject — отказать"
+        }
+      ],
+      "es": [
+        {
+          "before": "впустить; decline — отказать",
+          "after": "впустить; reject — отказать"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "MAX v0.74.0 (since 0.73.0) answers every join request with `chats requests confirm|reject <chat> --all` (cli-core admin-commands.js, services/admin.js answerAllRequests); only --link is refused, because MAX does not report a request's link (max-cli client/chat-writes.js). The command is `requests confirm`, not `requests accept`. The native usage guide still says --all is refused.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Ответить сразу всем (`--all`) и отобрать заявки по ссылке (`--link`) в MAX\nнельзя — команда откажет.",
+          "after": "Ответить сразу всем можно через `--all`; отобрать заявки по ссылке (`--link`)\nнельзя: MAX не сообщает, по какой ссылке пришла заявка."
+        },
+        {
+          "before": "`create`, `members add` и `requests accept` считаются",
+          "after": "`create`, `members add` и `requests confirm` считаются"
+        }
+      ],
+      "en": [
+        {
+          "before": "You cannot reply to everyone at once (`--all`) and select applications using the link (`--link`) in MAX - the command will refuse.",
+          "after": "You can answer every request at once with `--all`; selecting requests by invite link (`--link`) is not available, because MAX does not report which link a request came through."
+        },
+        {
+          "before": "`create`, `members add` and `requests accept` count",
+          "after": "`create`, `members add` and `requests confirm` count"
+        }
+      ],
+      "es": [
+        {
+          "before": "No puede responder a todos a la vez (`--all`) y seleccionar aplicaciones usando el enlace (`--link`) en MAX; el comando se negará.",
+          "after": "Puedes responder a todas las solicitudes a la vez con `--all`; no se pueden seleccionar por enlace de invitación (`--link`), porque MAX no indica por qué enlace llegó cada solicitud."
+        },
+        {
+          "before": "y `requests accept` cuentan",
+          "after": "y `requests confirm` cuentan"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "commands",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "Repair native generated empty-default backticks spanning two table rows; flags and behavior remain unchanged.",
+    "replacements": {
+      "en": [
+        {
+          "before": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. По умолчанию: ``. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. По умолчанию: ``. |",
+          "after": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. No files by default. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. No files by default. |"
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. По умолчанию: ``. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. По умолчанию: ``. |",
+          "after": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. No files by default. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. No files by default. |"
+        }
+      ],
+      "es": [
+        {
+          "before": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. По умолчанию: ``. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. По умолчанию: ``. |",
+          "after": "| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. No files by default. |\n| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. No files by default. |"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "roadmap",
+    "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
+    "reason": "Verified attachment archives shipped in v0.71.0 and service-event skipping in v0.72.0; keep actual future features separate.",
+    "replacements": {
+      "en": [
+        {
+          "before": "## In progress\n\n- **Attachment archives.** Download attachments to a folder, verify each file and check the archive offline.",
+          "after": "## Attachment archives are available\n\nVerified attachment archives, offline integrity checks, explicitly enabled daily Linux copying and moving older images are available now; see [independent file copies](./archive.md#независимые-копии-файлов)."
+        }
+      ],
+      "es": [
+        {
+          "before": "## En desarrollo\n\n- **Archivos de adjuntos.** Descargar adjuntos a una carpeta, verificar cada archivo y comprobar el archivo sin conexión.",
+          "after": "## Archivos de adjuntos disponibles\n\nYa están disponibles los archivos de adjuntos verificados, las comprobaciones sin red, las copias diarias de Linux habilitadas explícitamente y el traslado de imágenes antiguas; consulta [copias independientes](./archive.md#независимые-копии-файлов)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "## Сейчас в работе\n\n- **Архив вложений.** Скачать вложения в папку с проверкой каждого файла и проверять архив без сети.",
+          "after": "## Архив вложений доступен\n\nПроверяемый архив вложений, проверка без сети, ежедневное копирование в Linux с явным включением и перенос старых изображений уже доступны: [независимые копии файлов](./archive.md#независимые-копии-файлов)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "search",
+    "reason": "Commands have one name and no aliases: state where --since-time and --until-time apply without naming the list options they replaced.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The date query replaces the former list-only `--since-time` and `--until-time` flags;\nthose flags remain available on transcript search and ingestion commands. ",
+          "after": "Transcript search and ingestion commands take `--since-time` and `--until-time`. "
+        }
+      ],
+      "ru": [
+        {
+          "before": "Запрос по дате заменяет прежние параметры списка `--since-time` и `--until-time`;\nэти параметры сохраняются в поиске расшифровок и загрузке встреч. ",
+          "after": "Поиск расшифровок и загрузка встреч принимают `--since-time` и `--until-time`. "
+        }
+      ],
+      "es": [
+        {
+          "before": "La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;\nesos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.\n",
+          "after": "La búsqueda de transcripciones y la importación de reuniones aceptan `--since-time` y `--until-time`.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "configuration",
+    "phase": "before-translation",
+    "reason": "One name per setting: the document-source provider is local or obsidian; drop the sentence that keeps the old provider value folder in a guide.",
+    "replacements": {
+      "en": [
+        {
+          "before": "for a vault. A source\nsaved earlier with provider `folder` still resolves. `notes:5` resolves",
+          "after": "for a vault.\n`notes:5` resolves"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "installation",
+    "phase": "before-translation",
+    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the update step must.",
+    "replacements": {
+      "en": [
+        {
+          "before": "zm --version\n```\n\nRemove the command with:",
+          "after": "zm --version\n```\n\nIf you last signed in with zm 0.34 or earlier, run `zm <profile> session start` again: that older login is no longer used.\n\nRemove the command with:"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "sessions",
+    "phase": "before-translation",
+    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the login step must.",
+    "replacements": {
+      "en": [
+        {
+          "before": "If that password store is unavailable, login fails.\n",
+          "after": "If that password store is unavailable, login fails.\n\nIf you last signed in with zm 0.34 or earlier, run `zm <profile> session start` again: that older login is no longer used.\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "cli-contract",
+    "reason": "Commands have one name and no aliases: drop the note that names the removed messages/chats/tasks stats paths. The stats commands above are the only paths.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Старых путей `messages stats`, `chats stats` и `tasks stats` больше нет, псевдонимов для них тоже\nнет. Если в настройках были права для этих путей, перепишите их на новые пути. ",
+          "after": ""
+        }
+      ],
+      "en": [
+        {
+          "before": "The old paths `messages stats`, `chats stats` and `tasks stats` no longer exist, including aliases. If settings grant permissions for them, rewrite those permissions to the new paths. ",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "Las antiguas rutas `messages stats`, `chats stats` y `tasks stats` ya no existen y tampoco existen alias para ellas. Si la configuración tenía permisos para estas rutas, reescríbalos con las rutas nuevas. ",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "search",
+    "reason": "The legacy query language was removed (strict Lucene is the only language); do not name it as a mode discovery excludes.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Discovery does not combine with legacy,\nregular-expression search",
+          "after": "Discovery does not combine with\nregular-expression search"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Режим не совмещается с legacy, регулярными",
+          "after": "Режим не совмещается с регулярными"
+        }
+      ],
+      "es": [
+        {
+          "before": "No combina con legacy, expresiones",
+          "after": "No combina con expresiones"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "audio-recognition",
+    "reason": "The models audio and models text groups were removed; max v0.74.0 has one models group (list, download, keys). Drop the sentence that tells readers to keep the removed groups apart.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "Не путайте группы команд. `models audio` — модели речи. `models text` — модели для поиска и\nключи API, это другое. ",
+          "after": ""
+        }
+      ],
+      "en": [
+        {
+          "before": "Keep command groups distinct: `models audio` manages speech recognition; `models text` manages search components and API keys. ",
+          "after": ""
+        }
+      ],
+      "es": [
+        {
+          "before": "No confundas los grupos: `models audio` son modelos de voz; `models text` son modelos de búsqueda y claves de API. ",
+          "after": ""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "people",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.90.0/docs/people.md",
+    "reason": "Mirror the native anchor that the released people guide itself carries above this heading; the released changelog links to it.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "## Свои имена и заметки: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n## Свои имена и заметки: `contacts aliases`, `contacts notes`"
+        }
+      ],
+      "es": [
+        {
+          "before": "## Tus propios nombres y notas: `contacts aliases`, `contacts notes`",
+          "after": "<a id=\"your-own-names-and-notes-contacts-alias-contacts-notes\" />\n\n## Tus propios nombres y notas: `contacts aliases`, `contacts notes`"
         }
       ]
     }

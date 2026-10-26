@@ -54,12 +54,12 @@ No se guarda el token en un archivo de texto. Tras repararlo, repite login y com
 
 ### Las órdenes terminan con "Zoom token request failed"
 
-Cada solicitud de token registra su resultado en `~/.local/share/zm/runs/<date>/<run>/events.jsonl`
+Cada solicitud de token registra su resultado en `~/.local/share/zoom-cli/runs/<date>/<run>/events.jsonl`
 (la carpeta `runs` dentro de `ZM_STATE_DIR` cuando está definida). El registro contiene el estado HTTP,
 si llegó un nuevo token de actualización, si se guardó en el llavero, un tiempo de espera agotado o
 cancelación y el identificador del proceso. Nunca contiene el token. Dos registros cercanos con
 identificadores de proceso distintos sugieren dos órdenes actualizando a la vez. Léelos con
-`cat ~/.local/share/zm/runs/*/*/events.jsonl` y vuelve a ejecutar `zm personal session start`.
+`cat ~/.local/share/zoom-cli/runs/*/*/events.jsonl` y vuelve a ejecutar `zm personal session start`.
 Los registros de ejecuciones de más de 30 días se eliminan.
 
 ### Falta un permiso necesario
@@ -71,9 +71,11 @@ necesitan [permisos distintos](./zoom-app.md#add-archive-or-management-access).
 
 ## Configuración
 
-Comprueba cliente, fuente y perfil con `zm config show`. Una configuración dañada no impide
-`--help` o `--version`; `zm config show` indica el archivo y la primera clave incorrecta, y
-`zm doctor` informa en `config.error`. Cambiar la etiqueta no cambia el usuario.
+Comprueba cliente, fuente y perfil con `zm config show`. Una configuración con problemas no impide
+`--help`, `--version`, `zm config` ni `zm doctor`; los demás comandos se detienen en el primer problema y
+explican cómo quitarlo. `zm doctor --json` enumera todos los problemas en `config.issues`, cada uno con su
+`fix` cuando un comando puede quitarlo, y `zm config show` los muestra tras los ajustes que sí se cargan.
+Cambiar la etiqueta no cambia el usuario.
 Si terminal y MCP ven datos distintos, compara `ZM_CONFIG_DIR` y `MESSAGING_STORE`.
 
 ## Respuestas de Zoom
@@ -89,7 +91,7 @@ Al informar, conserva orden, código y permiso; excluye retornos OAuth, tokens y
 | No hay perfil o la lista está vacía (código de salida 3, «no stored meetings for the selected profile») | Elige perfil e importa/descarga; leer no registra cuentas | `zm personal meetings list --json` muestra sus reuniones |
 | No hay reuniones recientes del anfitrión | Revisa usuario, API y fechas; usa un `--since-time` anterior | Compara fechas con ocurrencias esperadas |
 | Reunión sin texto | Revisa generación/retención y permisos; texto nunca guardado o expirado no se recrea | Abre texto tras estar disponible y descargar otra vez |
-| Falta una reunión a la que asististe | Pide VTT al anfitrión o descarga con permiso e importa | Comprueba fecha, título y texto |
+| Falta una reunión organizada por otra persona | Sync no la obtiene: la API de Zoom solo enumera reuniones que programaste. Pide el VTT al anfitrión e impórtalo con `meetings import` | Comprueba fecha, título y texto |
 | El texto llegó después | Repite `zm personal meetings sync --lookback-days 7` o un `--since-time` anterior | Abre el nuevo texto |
 | Fallo parcial de descarga | Corrige y repite; la ocurrencia fallida no avanza el cursor | Revisa recibo y lista |
 | Nombre/hora de archivo inválido | Usa `YYYY-MM-DD_HHMM_topic.vtt` y su zona; resuelve conflictos | Importación con fecha/título correctos |

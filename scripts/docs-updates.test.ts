@@ -182,13 +182,19 @@ describe("site commands against the newest npm release", () => {
   }
   const newest: Program = { ...pinned, commands: [pinned.commands[0]], profile: true }
   const zm = { ...tool, name: "zm", docsRef: "v0.31.0" }
-  const site = (pages: string) => {
+  const site = (pages: string, html = "") => {
     const root = mkdtempSync(join(tmpdir(), "wirecat-newest-"))
     mkdirSync(join(root, "content/docs/zm"), { recursive: true })
     mkdirSync(join(root, "lib/landing"), { recursive: true })
+    mkdirSync(join(root, "lib/editorial"), { recursive: true })
     writeFileSync(join(root, "content/docs/zm/guide.md"), pages)
-    for (const lang of ["en", "ru", "es"])
+    for (const lang of ["en", "ru", "es"]) {
       writeFileSync(join(root, `lib/landing/${lang}.json`), JSON.stringify({ sessions: [], maxSessions: [] }))
+      writeFileSync(
+        join(root, `lib/editorial/${lang}.json`),
+        JSON.stringify({ home: html, features: "", examples: "" }),
+      )
+    }
     return root
   }
 
@@ -212,6 +218,20 @@ describe("site commands against the newest npm release", () => {
     try {
       const capture = vi.fn(async () => newest)
       expect(await newestRejections(root, zm, "0.35.0", capture)).toEqual([])
+    } finally {
+      rmSync(root, { recursive: true, force: true })
+    }
+  })
+  it("reports retired commands in published editorial snapshots", async () => {
+    const root = site("", "<code>zm serve</code>")
+    try {
+      const capture = vi.fn(async (target: { docsRef: string }) => (target.docsRef === "v0.35.0" ? newest : pinned))
+      const rejected = await newestRejections(root, zm, "0.35.0", capture)
+      expect(rejected.map(({ file, command }) => [file, command])).toEqual([
+        ["lib/editorial/en.json", "zm serve"],
+        ["lib/editorial/ru.json", "zm serve"],
+        ["lib/editorial/es.json", "zm serve"],
+      ])
     } finally {
       rmSync(root, { recursive: true, force: true })
     }

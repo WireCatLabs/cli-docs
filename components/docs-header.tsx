@@ -6,7 +6,7 @@ import { useTreeContext } from "fumadocs-ui/contexts/tree"
 import { useDocsLayout } from "fumadocs-ui/layouts/docs"
 import { Menu } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { type ComponentProps, useEffect } from "react"
 import { DocsSearchTrigger } from "@/components/docs-search-trigger"
 import { LanguageSwitcher } from "@/components/language-switcher"
@@ -25,27 +25,50 @@ const pageUrls = (nodes: readonly Node[]): string[] =>
 
 export function MessengerSwitch({ lang, pages }: { lang: string; pages: string[] }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const messengers = [
+    { name: "tg", label: "Telegram" },
+    { name: "max", label: "MAX" },
+    { name: "wa", label: "WhatsApp" },
+  ]
+  const selected = messengers.find(
+    (tool) => pathname === `/${lang}/docs/${tool.name}` || pathname.startsWith(`/${lang}/docs/${tool.name}/`),
+  )
   return (
     <nav
       aria-label={wordsFor(lang).navigation.messenger}
       className="flex items-center gap-0 rounded-lg border p-0.5 min-[24rem]:gap-1 min-[24rem]:p-1"
     >
-      {[
-        { name: "tg", label: "Telegram" },
-        { name: "max", label: "MAX" },
-      ].map((tool) => {
-        const active = pathname === `/${lang}/docs/${tool.name}` || pathname.startsWith(`/${lang}/docs/${tool.name}/`)
-        return (
-          <Link
-            key={tool.name}
-            href={messengerHref(pathname, lang, tool.name, pages)}
-            aria-current={active ? "page" : undefined}
-            className={`rounded-md px-1 py-1 text-xs font-medium transition-colors min-[24rem]:px-2 sm:px-3 sm:text-sm ${active ? "bg-fd-primary text-fd-primary-foreground" : "text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-foreground"}`}
-          >
+      <select
+        aria-label={wordsFor(lang).navigation.messenger}
+        value={selected?.name ?? ""}
+        onChange={(event) => router.push(messengerHref(pathname, lang, event.target.value, pages))}
+        className="max-w-24 rounded-md bg-fd-background px-1 py-1 text-xs sm:hidden"
+      >
+        <option value="" disabled>
+          {wordsFor(lang).navigation.messenger}
+        </option>
+        {messengers.map((tool) => (
+          <option key={tool.name} value={tool.name}>
             {tool.label}
-          </Link>
-        )
-      })}
+          </option>
+        ))}
+      </select>
+      <div className="hidden sm:flex">
+        {messengers.map((tool) => {
+          const active = pathname === `/${lang}/docs/${tool.name}` || pathname.startsWith(`/${lang}/docs/${tool.name}/`)
+          return (
+            <Link
+              key={tool.name}
+              href={messengerHref(pathname, lang, tool.name, pages)}
+              aria-current={active ? "page" : undefined}
+              className={`rounded-md px-1 py-1 text-xs font-medium transition-colors min-[24rem]:px-2 sm:px-3 sm:text-sm ${active ? "bg-fd-primary text-fd-primary-foreground" : "text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-foreground"}`}
+            >
+              {tool.label}
+            </Link>
+          )
+        })}
+      </div>
     </nav>
   )
 }

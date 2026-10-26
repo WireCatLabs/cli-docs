@@ -3,7 +3,6 @@ title: "Personas"
 ---
 
 <a id="para-agentes" />
-<a id="for-agents" />
 
 Utilice esta página cuando quiera saber más sobre una persona: quién es, qué le escribió a usted o a sus grupos, y si su cuenta parece un bot o un spammer. Aprenderá a leer el perfil de una persona, recopilar sus mensajes para obtener un resumen, verificar una cuenta antes de confiar en ella y conservar sus propios nombres y notas sobre las personas.
 
@@ -17,21 +16,21 @@ Algunas palabras en esta página:
 
 | Tarea | Comando |
 | --- | --- |
-| Ver quién es una persona y dónde hablas con ella | `tg personal contacts profile` |
+| Ver quién es una persona y dónde hablas con ella | `tg personal contacts info` |
 | Lee lo que dijeron, en cada chat o en los chats que nombras | `tg personal contacts context` |
 | Prepárese para hablar con la persona: chats, tareas abiertas, hechos, notas y reuniones | `tg personal contacts prepare` |
 | Compruebe si la cuenta parece un bot, una falsificación o un spammer | `tg personal contacts check` |
-| Consulta los miembros más sospechosos de un grupo | `tg personal chats members audit --deep` |
+| Consulta los miembros más sospechosos de un grupo | `tg personal chats members check --deep` |
 | Registra que una cuenta de Telegram y una cuenta MAX son la misma persona | `tg personal contacts link` |
-| Mantenga su propio nombre y notas para una persona | `tg personal contacts alias`, `tg personal contacts notes` |
+| Mantenga su propio nombre y notas para una persona | `tg personal contacts aliases`, `tg personal contacts notes` |
 
 Cada opción de estos comandos se encuentra en la [referencia de comando para contactos](./commands.md#tg-contacts).
 
-## Quién es: `contacts profile`
+## Quién es: `contacts info`
 
 ```sh
-tg personal contacts profile @example_user
-tg personal contacts profile @example_user --json
+tg personal contacts info @example_user
+tg personal contacts info @example_user --json
 ```
 
 Muestra todo lo que Telegram dice de la persona y cuántos mensajes suyos contiene tu almacén local en cada chat compartido:
@@ -190,14 +189,14 @@ La puntuación suma los pesos de todos los motivos encontrados. Es una pista, nu
 
 Por ahora, la clave de CAS es opcional. Si Combot te proporciona una, guárdala en el llavero del sistema como la cuenta `registries:cas` del servicio `tg-cli`, o en `TG_CAS_API_KEY`. `tg` la envía solo en una cabecera de solicitud, nunca en la dirección, y nunca la imprime.
 
-## Miembros de un grupo: `chats members audit --deep`
+## Miembros de un grupo: `chats members check --deep`
 
 ```sh
-tg personal chats members audit "Book club"
-tg personal chats members audit "Book club" --deep 10
+tg personal chats members check "Book club"
+tg personal chats members check "Book club" --deep 10
 ```
 
-`chats members audit` puntúa a cada miembro con la lista de miembros y el almacén, sin una solicitud por persona, y enumera a quienes tienen algún motivo, de mayor a menor puntuación. `--deep 10` ejecuta después el `contacts check` completo para los diez primeros, a una persona por segundo, incluidas las listas de spam. No elimina a nadie. Se excluyen el propietario y los administradores.
+`chats members check` puntúa a cada miembro con la lista de miembros y el almacén, sin una solicitud por persona, y enumera a quienes tienen algún motivo, de mayor a menor puntuación. `--deep 10` ejecuta después el `contacts check` completo para los diez primeros, a una persona por segundo, incluidas las listas de spam. No elimina a nadie. Se excluyen el propietario y los administradores.
 
 <a id="una-persona-en-dos-mensajeros-contacts-link" />
 
@@ -210,16 +209,16 @@ tg personal contacts link @example_user max:"Example User"
 tg personal contacts unlink @example_user
 ```
 
-Después de eso, `contacts context` sin `--chat` reúne ambas cuentas: los chats que compartes y los mensajes de la cuenta de Telegram y de la cuenta MAX. `contacts profile` y `contacts context --chat` aún muestran solo la cuenta que nombraste. El enlace es sólo lo que registras: el mismo nombre en ambos servicios de mensajería nunca se toma como la misma persona.
+Después de eso, `contacts context` sin `--chat` reúne ambas cuentas: los chats que compartes y los mensajes de la cuenta de Telegram y de la cuenta MAX. `contacts info` y `contacts context --chat` aún muestran solo la cuenta que nombraste. El enlace es sólo lo que registras: el mismo nombre en ambos servicios de mensajería nunca se toma como la misma persona.
 
-## Tus propios nombres y notas: `contacts alias`, `contacts notes`
+## Tus propios nombres y notas: `contacts aliases`, `contacts notes`
 
 ```sh
-tg personal contacts alias set "Bob Synthetic" Bobby   # your own name for a person, on this computer only
-tg personal contacts alias rm "Bob Synthetic"
-tg personal contacts notes add "Bob Synthetic" --file note.txt  # or the text from stdin
+tg personal contacts aliases set "Bob Synthetic" Bobby   # your own name for a person, on this computer only
+tg personal contacts aliases remove "Bob Synthetic"
+tg personal contacts notes add "Bob Synthetic" --text-file note.txt  # or the text from stdin
 tg personal contacts notes list "Bob Synthetic"
-tg personal contacts notes edit "Bob Synthetic" <id> --revision 1 --file note.txt
+tg personal contacts notes edit "Bob Synthetic" <id> --revision 1 --text-file note.txt
 tg personal contacts notes remove "Bob Synthetic" <id>
 tg personal contacts show "Bob Synthetic" --with-notes
 ```

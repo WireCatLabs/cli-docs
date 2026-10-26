@@ -21,6 +21,8 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Address-book entry | contact | контакт | contacto | A contact saved in a messenger's address book. Do not use contact as a synonym for every person. |
 | Separate automated messenger account | bot | бот | bot | A messenger bot and its account/API. Do not call an AI agent a bot merely because it automates a task. |
 | Program the agent runs | command-line tool; CLI where already introduced | инструмент командной строки; CLI | herramienta de línea de comandos; CLI | The messenger tool used through commands. Introduce CLI during setup; task guides can assume the reader knows it. Keep actual command names. |
+| Instructions for one tool | skill | навык | skill | The `SKILL.md` file that teaches an agent a tool's commands. It holds no login. Keep the file and command names. |
+| Place that lists skills from many authors | skill directory | каталог навыков | directorio de skills | ClawHub, skills.sh, a Hermes source or a plugin marketplace. Name the directory; do not call it a store. |
 | Reader's instruction | request | запрос | petición | What the reader asks their agent to do. Prompt may remain in API names or technical references; use request in ordinary task instructions. |
 
 ## Search, replies and access
@@ -58,6 +60,8 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Second task for the same thing | duplicate; merge | дубликат; объединить | duplicado; fusionar | A merge moves messages to the kept task and closes the duplicate; it can be undone and deletes nothing. |
 | Source collection | folder | папка | carpeta | Explain whether it is a local file folder, Google folder or messenger chat folder. |
 | Shared local file of the CLIs | local store | локальное хранилище | almacén local | The one file on the computer (`wirecat.db`) where tg, max and memo keep messages, mail, notes and records. A messenger's own pages may call its chat copy the local archive. |
+| The real thing a record is about | entity | сущность | entidad | A person, an event or a document as the owner means it, with no provider id. Used on technical and developer pages; task guides say person, event or document. |
+| One source's copy of an entity | source record | запись источника | registro de origen | What one source says about an entity: a Telegram user, a Zoom meeting, a calendar entry, a Drive file. It keeps the provider's id in `external_id`. Not a synonym for source (the evidence item). |
 | Pointer to one stored item | reference | ссылка на источник | referencia | The typed identifier a result returns, such as `note:12` or `msg:telegram/1/77/42`. Distinct from a link written inside a note. |
 | Link inside a note | link | ссылка | enlace | A note's link to another note, a person or a message. A name in plain text is not a link. |
 | Sources behind a record | evidence | доказательство | evidencia | The references that show a memory or fact. |
@@ -67,6 +71,16 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Company, team, family or community | organization | организация | organización | The owner's record, not tied to one messenger account. |
 | Stated tie between records | relationship | связь | relación | A person belongs to or relates to an organization or project. It never joins two accounts into one person. |
 | Version number of a note | revision | ревизия | revisión | Increases with each edit; an edit names the current revision so a newer change is not lost. |
+
+## Diagnostics and the desktop app
+
+| Concept | English | Russian | Spanish | Meaning |
+| --- | --- | --- | --- | --- |
+| The WireCat app on the computer | WireCat Desktop | WireCat Desktop | WireCat Desktop | The desktop app that installs the tools and shows their settings and logs. The name is not translated; its on-screen labels stay in English. |
+| One start of a tool | run | запуск | ejecución | One command of a tool, from start to exit. |
+| What a tool kept about a run | run record | запись запуска | registro de ejecución | The run's command line, profile, outcome, timing and codes. Secrets such as tokens are always hidden. A tool on cli-core 0.439.0 or later keeps the words typed on the command line unless `record_input` is off; an earlier one hides every typed value that may be text. |
+| One step inside a run | event | событие | evento | A request the tool made to the service, or a notable step, with its time and outcome. |
+| Value counts beside the logs | facet | фасет | faceta | A list of one field's values with the number of runs for each; clicking a value filters the list. |
 
 ## Technical words and protected text
 

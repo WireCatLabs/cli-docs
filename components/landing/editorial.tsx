@@ -280,7 +280,13 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
               ?.querySelector<HTMLElement>('[data-connect-provider][aria-pressed="true"]')?.dataset.connectProvider
             const tool =
               copiedInstallationTool(button.dataset.copy) ??
-              (button.matches(".copy-agent") ? (selectedProvider === "max" ? "max" : "tg") : undefined)
+              (button.matches(".copy-agent")
+                ? selectedProvider === "wa"
+                  ? "wa"
+                  : selectedProvider === "max"
+                    ? "max"
+                    : "tg"
+                : undefined)
             if (tool) trackSiteEvent("installation_command_copy", { tool, locale: lang, surface: surface(button) })
           } catch {
             if (!signal.aborted) notifyCopyFeedback(false)
@@ -295,11 +301,13 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
         }
         if (button.dataset.connectProvider) {
           const menu = button.closest<HTMLElement>("[data-connect]")
-          const tool = button.dataset.connectProvider === "max" ? "max" : "tg"
+          const tool =
+            button.dataset.connectProvider === "wa" ? "wa" : button.dataset.connectProvider === "max" ? "max" : "tg"
           if (menu) {
             for (const other of Array.from(menu.querySelectorAll<HTMLElement>("[data-connect-provider]")))
               other.setAttribute("aria-pressed", String(other === button))
-            const prompt = wordsFor(lang).onboarding.prompt(tool, `@wirecat/${tool}-cli`)
+            const packageName = tool === "wa" ? "@wirecat/whatsapp-cli" : `@wirecat/${tool}-cli`
+            const prompt = wordsFor(lang).onboarding.prompt(tool, packageName)
             const text = menu.querySelector<HTMLElement>(".agent-prompt")
             const copy = menu.querySelector<HTMLElement>(".copy-agent")
             if (text) text.textContent = prompt
@@ -310,7 +318,7 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
             const command = menu.querySelector<HTMLButtonElement>(".command [data-copy]")
             if (command) {
               resetCopy(command)
-              command.dataset.copy = `npm install -g @wirecat/${tool}-cli && ${tool} skill install --for all`
+              command.dataset.copy = `npm install -g ${packageName} && ${tool} skill install --for all`
               prepareInstallationButton(command)
               const code = menu.querySelector<HTMLElement>(".command code")
               if (code) code.textContent = command.dataset.copy ?? ""
@@ -374,7 +382,7 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
         }
         if (button instanceof HTMLAnchorElement && /\/docs\/installation/.test(button.pathname))
           trackSiteEvent("setup_guide_open", {
-            tool: button.hash === "#max" ? "max" : "tg",
+            tool: button.hash === "#wa" ? "wa" : button.hash === "#max" ? "max" : "tg",
             locale: lang,
             surface: surface(button),
           })

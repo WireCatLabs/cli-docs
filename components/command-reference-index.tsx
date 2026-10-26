@@ -1,6 +1,6 @@
 import { Bot, ShieldCheck, UserRound, Wrench } from "lucide-react"
 import Link from "next/link"
-import { commandGroup, commandGroupCopy, commandGroups, commandLanguage } from "@/lib/command-groups"
+import { commandCopy, commandGroup, commandGroups } from "@/lib/command-groups"
 import { CommandHashRedirect } from "./command-hash-redirect"
 import { CommandRules } from "./command-rules"
 export function CommandReferenceIndex({
@@ -16,7 +16,7 @@ export function CommandReferenceIndex({
   commands: [string, string][]
   aliases: string[]
 }) {
-  const text = commandGroupCopy[commandLanguage(lang)]
+  const text = commandCopy(tool, lang)
   const icons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
   return (
     <div className="not-prose space-y-5" data-command-index>

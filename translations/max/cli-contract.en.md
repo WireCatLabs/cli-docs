@@ -2,12 +2,6 @@
 title: "How max behaves in scripts"
 ---
 
-<a id="запуск-без-вопросов-и-ограничения" />
-<a id="узкий-результат-и-описание-команды" />
-<a id="предпросмотр-и-повтор-записи" />
-<a id="как-проверяют-работу-агента" />
-<a id="неоднозначные-имена" />
-
 Use this page when another program runs `max`: a script, scheduled task or AI agent issuing terminal commands. It explains shared command rules so the program can read results, identify failures and decide when to retry.
 
 You will learn to receive precise JSON from any command, select the fields you need, run without interactive questions, and handle writes whose outcomes are unknown.
@@ -29,7 +23,7 @@ Terms used below:
 | Run without interactive questions | `--no-input`; confirmation flags `--yes` and `--allow-dangerous` |
 | Avoid hanging or excessive output | Time limits and input/output size limits |
 | Return only needed fields | `--json=<поля>` |
-| Discover command options without reading the guide | `max commands` and `max commands schema` |
+| Discover command options without reading the guide | `max commands` and `max commands info` |
 | Preview an action | `--dry-run` |
 | Handle a write whose outcome is unknown | `outcome_unknown` and `details.operation_id` |
 
@@ -72,12 +66,12 @@ Stdin is limited to 16 MiB; `--max-input-bytes 33554432` increases it. Secret in
 ```sh
 max personal messages list <чат> --json=ref,text,reply_to.text
 max commands messages list --json
-max commands schema messages list --json
+max commands info messages list --json
 ```
 
 `--json=<поля>` keeps only the comma-separated fields of each item. A dot selects a nested field: `reply_to.text` keeps the text of the message that was replied to. Page information survives in the selected format. Use `--json` for `page` and `page.has_more`: JSONL lists emit items without a common wrapper. A missing field stays absent rather than becoming zero.
 
-`max commands` lists the commands by section, and `max commands --json` shows flags, allowed and default values, and exit codes. `max commands schema` returns [JSON Schema](https://json-schema.org/specification) (2020-12) for arguments and results. `schemaVersion` versions this description independently of the program; `contract` is the version of the response shape (currently 3). `outputSchemaCoverage` states where the result schema comes from: `declared-entity` means the command described its own entity; `envelope-with-open-items` means only the wrapper is described and the items are open. An open schema allows additional messenger fields and does not promise to validate every field.
+`max commands` lists the commands by section, and `max commands --json` shows flags, allowed and default values, and exit codes. `max commands info` returns [JSON Schema](https://json-schema.org/specification) (2020-12) for arguments and results. `schemaVersion` versions this description independently of the program; `contract` is the version of the response shape (currently 3). `outputSchemaCoverage` states where the result schema comes from: `declared-entity` means the command described its own entity; `envelope-with-open-items` means only the wrapper is described and the items are open. An open schema allows additional messenger fields and does not promise to validate every field.
 
 ## Preview and safe retries
 
@@ -97,6 +91,6 @@ Ask your agent to show the messages counted and the saved history coverage. An u
 
 ## Rules we follow
 
-`max` follows applicable parts of [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) and [Command Line Interface Guidelines](https://clig.dev/), as well as [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) and [Agent Skills](https://agentskills.io/specification). The [architecture](https://github.com/WireCatLabs/max-cli/blob/v0.66.0/docs/dev/ARCHITECTURE.md) and [shared CLI standard](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) explain how these apply and intentional exceptions. We do not claim full third-party certification.
+`max` follows applicable parts of [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) and [Command Line Interface Guidelines](https://clig.dev/), as well as [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) and [Agent Skills](https://agentskills.io/specification). The [architecture](https://github.com/WireCatLabs/max-cli/blob/v0.76.0/docs/dev/ARCHITECTURE.md) and [shared CLI standard](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) explain how these apply and intentional exceptions. We do not claim full third-party certification.
 
 See [configuration](./configuration.md) for setup steps and the [configuration reference](./configuration-reference.md) for all keys and environment variables.

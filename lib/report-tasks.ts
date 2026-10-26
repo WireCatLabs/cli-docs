@@ -258,16 +258,38 @@ export function reportTasks(tool: string, lang: string): ReportTask[] {
       `${tool} stats chats retention Project --since-time 30d --checkpoints 1d,7d,30d --within 7d --json`,
     ],
     person: [
-      `${tool} contacts profile Anna --json`,
+      `${tool} contacts info Anna --json`,
       `${tool} contacts context Anna --json`,
       `${tool} stats contacts top 'date:[2026-10-01 TO 2026-10-07] from:Anna' --chat Project --measure messages --json`,
     ],
     antibot: [
-      `${tool} chats members audit Project 'score>=2' --max-pages 2 --json`,
+      `${tool} chats members check Project 'score>=2' --max-pages 2 --json`,
       `${tool} contacts check 42 --offline --json`,
     ],
   }
-  if (tool === "tg") commands.group.push("tg personal stats chats official Project --json")
+  if (tool === "tg" || tool === "max") {
+    commands.authors = [
+      `${tool} stats contacts top 'date:[2026-10-01 TO 2026-10-07] chat:Project' --measure messages --limit 10 --json`,
+      `${tool} stats contacts top 'date:[2026-10-01 TO 2026-10-07] chat:Project min_messages:3' --score helpful --limit 10 --json`,
+    ]
+    commands.posts = [
+      `${tool} stats messages top 'date:[2026-10-01 TO 2026-10-07] chat:News' --measure reactions --limit 10 --json`,
+      `${tool} stats messages top 'date:[2026-10-01 TO 2026-10-07] chat:News' --measure views --limit 10 --json`,
+    ]
+    commands.responses = [
+      `${tool} stats messages unanswered 'chat:Project older_than:24h' --json`,
+      `${tool} stats contacts responses chat:Project --answerer 42 --answerer 73 --json`,
+    ]
+    commands.person = [
+      `${tool} contacts info Anna --json`,
+      `${tool} contacts context Anna --json`,
+      `${tool} stats contacts top 'date:[2026-10-01 TO 2026-10-07] from:Anna chat:Project' --measure messages --json`,
+    ]
+    commands.antibot[0] = `${tool} chats members check Project 'score>=2' --max-pages 2 --json`
+    if (tool === "tg") commands.group.push(`${tool} stats chats official Project --json`)
+    for (const [id, values] of Object.entries(commands))
+      commands[id] = values.map((command) => command.replace(new RegExp(`^${tool} `), `${tool} personal `))
+  }
   const examples: Record<string, ReportTask["example"]> = {
     group: {
       headers: labels.slice(0, 2),

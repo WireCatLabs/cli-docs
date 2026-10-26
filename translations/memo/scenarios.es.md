@@ -29,13 +29,13 @@ Encuentra la decisión sobre un tema y su evidencia en notas, correo, mensajes, 
    lo que se dijo sobre ello en reuniones, con el pasaje para citar
 
 4. ```sh
-   drive search venue
+   drive personal search venue
    ```
 
-   documentos de Drive sobre ello; los comandos de drive empiezan por tu perfil, como en drive personal search venue
+   documentos de Drive sobre ello
 
 5. ```sh
-   memo ask "what did we decide about the venue?" --all
+   memo answers create "what did we decide about the venue?" --all
    ```
 
    la evidencia citada en un solo paquete, para que la leas tú o tu agente
@@ -85,31 +85,31 @@ Sabe todo sobre una persona antes de una llamada — mensajes en tg y MAX, corre
    reuniones que la mencionan, con el pasaje para citar
 
 5. ```sh
-   tg contacts context Kai
+   tg personal contacts context Kai
    ```
 
-   chats de Telegram compartidos, los últimos mensajes en cada sentido y dónde la mencionaron otros; los comandos de tg, max y drive empiezan por tu perfil, como en tg personal contacts context Kai
+   chats de Telegram compartidos, los últimos mensajes en cada sentido y dónde la mencionaron otros
 
 6. ```sh
-   max contacts context Kai
+   max personal contacts context Kai
    ```
 
    lo mismo para MAX
 
 7. ```sh
-   zm meetings context person:42
+   zm personal meetings context person:42
    ```
 
    lo que dicen de ella las reuniones de Zoom guardadas, mediante las identidades vinculadas a esa persona
 
 8. ```sh
-   drive search Kai
+   drive personal search Kai
    ```
 
    documentos de Drive que la nombran
 
 9. ```sh
-   memo ask "what is open with Kai?" --all
+   memo answers create "what is open with Kai?" --all
    ```
 
    un paquete de evidencia citada de todas las cuentas y las notas, listo para dárselo a tu agente
@@ -151,7 +151,7 @@ Llega a una reunión periódica sabiendo qué se dijo la última vez, qué sigue
    primero los documentos clave del proyecto, luego sus notas, hallazgos y tareas abiertas
 
 4. ```sh
-   memo ask "what is still open for the Harbour kickoff?" --all
+   memo answers create "what is still open for the Harbour kickoff?" --all
    ```
 
    un paquete citado de todas las cuentas y las notas, para que tu agente redacte una agenda
@@ -183,7 +183,7 @@ Lleva notas y correo al almacén local, mantenlo al día y deja que tu agente lo
    importa las notas ahora; las cuentas de correo salen del ajuste mail.accounts
 
 3. ```sh
-   memo auto start
+   memo jobs start
    ```
 
    sincroniza notas y correo cada 5 minutos a partir de ahora
@@ -214,7 +214,7 @@ En la terminal: `memo guide set-up`
 Mira qué te necesita hoy y qué hicieron los agentes durante la noche, sin leer cada chat ni buzón.
 
 1. ```sh
-   memo auto status
+   memo jobs status
    ```
 
    si el temporizador sincronizó notas y correo hace poco; aquí aparece una ejecución fallida
@@ -238,7 +238,7 @@ Mira qué te necesita hoy y qué hicieron los agentes durante la noche, sin leer
    hechos que registraron los agentes y que no has confirmado
 
 5. ```sh
-   memo agents log --limit 20
+   memo agents list --limit 20
    ```
 
    cada llamada a herramienta que hizo un agente, nunca con sus argumentos

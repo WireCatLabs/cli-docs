@@ -3,9 +3,9 @@ import { expect, test } from "@playwright/test"
 const pages = [
   { tool: "tg", first: "agent-without-send", command: "tg sends list", crossTool: true },
   { tool: "max", first: "agent-on-a-timer", command: "max review 'date>1d' --unanswered 4h", crossTool: true },
-  { tool: "drive", first: "agent-access", command: "drive mcp --read-only", crossTool: true },
-  { tool: "zm", first: "archive-recordings", command: "zm recordings schedule run daily", crossTool: true },
-  { tool: "memo", first: "decision-trail", command: "tg contacts context Kai", crossTool: false },
+  { tool: "drive", first: "agent-access", command: "drive personal mcp --read-only", crossTool: true },
+  { tool: "zm", first: "archive-recordings", command: "zm personal recordings schedule run daily", crossTool: true },
+  { tool: "memo", first: "decision-trail", command: "tg personal contacts context Kai", crossTool: false },
 ]
 const headings = { en: "Step-by-step scenarios", ru: "Пошаговые сценарии", es: "Escenarios paso a paso" }
 const terminal = { en: "In the terminal:", ru: "В терминале:", es: "En la terminal:" }

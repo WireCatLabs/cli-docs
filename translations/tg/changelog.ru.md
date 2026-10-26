@@ -4,6 +4,168 @@ title: "История изменений"
 
 Основные изменения `@wirecat/tg-cli` по версиям, от новых к старым. Используется [семантическое версионирование](https://semver.org); до `1.0.0` интерфейс команд может меняться.
 
+## 0.92.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **Разрешения проверяются по полному ключу каждой команды (cli-core 0.421.0).** `messages sync` проверяется как `messages.sync`, а `bot messages sync` — как `bot.messages.sync`; уровень на `messages` или `bot.messages` по-прежнему действует на них. Сохранённый ключ читается только так, как он записан, поэтому `chats.mute` больше не распространяется на `chats unmute`.
+- **Сохранённый ключ разрешения, который не называет ни одной команды, отклоняется, в том числе для команд бота.** Для ключа под известным ресурсом любая команда, кроме `config show`, `set` и `unset`, останавливается с `configuration_error`, где названы ключ и `config unset`, который его убирает.
+- **`tg <profile> search mail` — неизвестная команда.** Почту ищет `memo search mail`.
+- **`doctor --json` сообщает о проблемах файла настроек в `config.issues` (cli-core 0.423.0).** Поля `config.error` больше нет. У каждой проблемы есть `kind` (`invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` или `invalid_value`), `file`, `profile` и `key`, где они применимы, `line` и `column` для некорректного JSON, фраза о том, каким должно быть значение (никогда не само значение), и `fix` — команда `config unset`, которая её убирает. `doctor` перечисляет все проблемы файла, по-прежнему завершается с кодом 0 и отвечает, даже когда JSON сломан. Блокировка профиля, флаг или переменная окружения, которые настройки отклоняют, попадают в `settings.error`.
+- **`default_profile`, `analysis_provider`, `analysis_model` и `analysis_base_url` — неизвестные настройки, а `TG_ANALYSIS_PROVIDER`, `TG_ANALYSIS_MODEL` и `TG_ANALYSIS_BASE_URL` не читаются.** Файл с одной из них отклоняется, как с любой неизвестной настройкой, вместе с `config unset`, который её убирает. Анализ задаётся через `models.analysis.provider`, `models.analysis.model` и `models.analysis.base_url` (`TG_MODELS_ANALYSIS_*`); `--model` и `--base-url` у `conversations links rebuild` переопределяют их.
+- **Команда, отклонённая из-за проблемы в файле настроек, называет первую проблему и команду, которая её убирает**, и говорит, сколько ещё проблем перечислит `doctor`. `config show`, `set` и `unset` работают с таким файлом, а `config unset` убирает настройку, которой не знает ни одна схема. Неизвестный ключ разрешения отклоняется в любом разделе файла, а не только в разделах, которые читает команда.
+- **`config set` сохраняет `config.json` с доступом только для вас (`0600`) (cli-core 0.428.0, cli-base 0.57.0).** Раньше файл перезаписывался как `0644`. Всё, что читает настройки от имени другого пользователя — общесистемная служба, контейнер с другим uid, — после следующего сохранения прочитать их не сможет; запускайте это от владельца или дайте ему собственные настройки.
+- **Запись о запуске говорит, как он был начат и почему не удался (cli-core 0.425.0).** В `run.json`, `runs list`, `runs show` и `search runs` появились `cli_command` (вся команда, `tg messages list`), `argv`, где каждое значение, которое может быть содержимым, записано как `[redacted]`, `agent` (агент для программирования и его сессия, если он их сообщает) и, для неудачного запуска, `error`. Запуск без названного профиля не содержит `profile`, вместо того чтобы записывать `default` (cli-core 0.424.0).
+- **Первый экран говорит, что zm и drive «можно искать вместе с другими данными WireCat»** (cli-core 0.426.0), а пример `guide` называет настоящий сценарий вместо `<name>`.
+
+### Added
+
+- **`tg skill status` и `tg skill show --for claude|agents`** (cli-base 0.56.0, через cli-core 0.427.0). `skill status` сообщает для Claude Code и для `~/.agents`, совпадает ли установленный SKILL.md с этой версией; `skill show --for` печатает установленную там копию.
+- **`tg store tables list` перечисляет все таблицы локального архива** с их видом и числом строк; `--full` добавляет размер каждой таблицы (cli-core 0.427.0). `store info` также говорит, какие инструменты открывали базу, её режим журнала, страницы, миграции и последнюю резервную копию, и считает данные по провайдеру, виду чата, аккаунту, году и виду вложений.
+
+### Security
+
+- **`doctor` сообщает о `config.json` или папке настроек, которые могут читать другие пользователи, и даёт исправляющий `chmod` (cli-core 0.428.0).** `files.problems` перечисляет файл настроек (нужен `0600`) и его папку (нужен `0700`), в том числе когда папку задаёт `TG_CONFIG_DIR`, а stderr печатает `to make it private: chmod 600 '<path>'`. `files` есть в ответе и без названного профиля, и когда настройки отклонены. На диске ничего не меняется; Windows не проверяется.
+
+### Fixed
+
+- **Каждая команда запускается быстрее: клиентская библиотека Telegram загружается, только когда команда подключается.** `tg --version`, `--help`, `config show` и `runs list` загружали около 1 900 файлов модулей, 650 из них — mtcute; теперь около 1 100.
+- **Сохранённый запрет на команду синхронизации теперь её останавливает.** `permissions.messages.sync: deny` можно сохранить, и он соблюдается, а `permissions.bot.messages.sync: deny` больше не игнорируется. Запрет на `bot.messages` также останавливает `bot messages list` и `bot messages sync` до подключения.
+- **Сбой посреди команды сообщается, как любая другая ошибка.** Раньше печаталась трассировка стека Node; теперь печатается ошибка `internal_error` (`command.crashed`) — одной строкой в терминале, иначе объектом ошибки JSON, — и код выхода по-прежнему 1. Трассировка стека ничего не говорит скрипту и может содержать текст, которому не место на экране. Скрипт, читавший трассировку в stderr, теперь читает объект ошибки.
+
+## 0.91.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **Общая база переходит на версию 33 (cli-core 0.420.0).** После того как эта версия откроет базу, CLI на более старом cli-core отказывается с ней работать и просит обновиться, поэтому обновляйте вместе все CLI WireCat, которые делят базу.
+
+## 0.90.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **`tg <bot> bot store fetch` теперь называется `tg <bot> bot messages sync`, группы `bot store` больше нет.** Команда загружает старые сообщения канала или супергруппы в локальную копию бота — то же, что делает личная `messages sync`, поэтому у неё то же имя; `store` относится к локальной базе данных. Параметры не изменились. Старый путь отвечает подсказкой с новым. Сохранённый ключ `permissions.bot.store.fetch` отклоняется, пока вы не переименуете его в `permissions.bot.messages.sync`.
+
+## 0.89.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **Заблокированный аккаунт Telegram возвращает `permission_error` (код выхода 5).** Новый вход не снимает блокировку; используется тот же контракт причин и кодов, что и в других CLI.
+
+- **Общие контракты CLI теперь требуют явно объявленных отличий провайдера.** Описание команд экспортирует унаследованные определения, схемы, причины ошибок и точные принятые отличия. Активность контакта фильтруется запросами `scope:` и `at:`; поиск диагностических запусков использует границы `started_at:` вместо параметров времени. Неизвестные списки участников чата и неограниченные списки типов вебхуков опускаются, а не возвращаются как `null`.
+
+### Security
+
+- **В разрешении зависимостей исключены уязвимые версии Zod и Vite.** Локальная и свежая производственная проверки используют исправленные версии.
+
+## 0.88.0 — 24.10.2026
+
+### Added
+
+- `messages send --draft` сохраняет текст в чате, чтобы вы проверили его и отправили из Telegram. Поддерживаются форматирование, ответы и темы форума; используется отдельное разрешение `drafts`, сообщение не отправляется. Пустые черновики и параметры только для отправки отклоняются.
+
+### Fixed
+
+- `watch --events` и `serve` получают снимки реакций, доставленные как изменения сообщения, включая удаление реакции. Счётчики остаются актуальными, даже если Telegram не присылает отдельное обновление реакций.
+
+## 0.87.0 — 24.10.2026
+
+### Fixed
+
+- Руководства MCP описывают операции записи с отдельными ключами разрешений и отдельное разрешение на прямые вызовы Bot API.
+- Сценарий catch-up использует `chats mark-read` как отдельную команду. Руководство по установке объясняет, как восстановить работу, если каталог глобальных команд pnpm отсутствует в PATH.
+- Запрещённые команды остаются видимыми в справке CLI и MCP с текущей доступностью, причинами и ключами разрешений. Настройки бота остаются в разделе бота, а вызовы проверяют текущие разрешения.
+- **`chats members check --help` снова использует описание tg**: что читает `--deep` и что идентификаторы отправляются в публичные списки блокировок. Начиная с 0.86.0 отображалось общее описание без этих подробностей.
+
+## 0.86.0 — 24.10.2026
+
+### Added
+
+- **Send up to ten attachments as one album** by repeating `messages send --photo` or `--file`.
+  Photos and videos can share an album; documents form a separate group. The caption belongs to the first
+  item, and JSON includes every sent message. Each item counts toward the hourly send limit. Retrying an
+  unscheduled send with the same operation id repeats the same per-item Telegram ids.
+
+### Changed — may break callers
+
+- **Shared commands have one name each, and the old names are gone** (cli-core 0.406.0). `contacts profile` is
+  `contacts info`, `contacts timeline` is `contacts events`, `contacts alias set|rm` is `contacts aliases set|remove`.
+  `chats link …` is `chats links …` and `chats link revoke` is `chats links remove`; `chats members audit` is
+  `chats members check`; `chats requests accept|decline` is `chats requests confirm|reject`. `metadata get|refresh` is
+  `metadata show|sync`, `tasks plan` is `tasks update`, `tags auto` is `tags rebuild`, `attachments text set` is
+  `attachments update`, `store reindex` is `store rebuild`, `store gaps plan` is `store gaps show` and
+  `stats messages counters refresh` is `stats messages counters sync`. `conversations build` is
+  `conversations links rebuild`, `conversations embed status|clear` is `conversations embeddings status|clear`,
+  `conversations batches next` is `conversations batches show` and `conversations consents revoke` is
+  `conversations consents remove`. `models audio list` and `models text list` are `models list kind:audio|kind:text`,
+  `models audio|text download` is `models download`, `models text key` is `models keys`. `doctor report create` is
+  `doctor reports create` and `doctor report` is `doctor reports show`. `mcp setup` is `mcp add`, `mcp doctor` is
+  `mcp check` and `commands schema` is `commands info`. An old name stops with the new one in the message; CLI and MCP
+  use the same paths.
+- **The hidden old option spellings are removed.** Use `--analysis-provider`, `--embedding-provider` or
+  `--consent-provider` for `--provider`, `--answer-model` on `conversations links clear`, `--template-mode` on reply
+  rules, `--claim` on `tags remove`, `--text-file` on `contacts notes`, and `kind:` in the `inbox` and `review` query.
+- **A saved permission key with an old path stops every command with `configuration_error`** and names the key to
+  rename it to, for example `permissions.conversations.embed` to `permissions.conversations.embeddings`. `config set`
+  and `config unset` stop too, so rename the key by hand in `config.json`
+  ([where it is](./configuration-reference.md)).
+
+## 0.85.0 — 24.10.2026
+
+### Added
+
+- **The first command at a terminal asks three questions once for every WireCat tool** (cli-core 0.404.0): which
+  languages you write and speak, which other WireCat tools to install, and whether commands and agents may only read.
+  Answered in any tool, they hold in all of them; "read only" caps every profile, over MCP too. `tg setup` asks them
+  again. Agents, `--json`, `--no-input`, `CI` and `TG_READ_ONLY` are never asked.
+
+## 0.84.0 — 24.10.2026
+
+### Added
+
+- **`permissions.mcp.authority` decides whether an MCP server offers the commands that change what a later run may
+  do** (cli-core 0.400.0): `config set|unset`, `schedule command|agent|remove`, reply rules and consents, recipient lists,
+  chat rules, `server install`, `skill install`, model keys, media archive timers and `flood clear`. It is `deny` by
+  default, so an agent still cannot loosen its own limits until you run
+  `tg <profile> config set permissions.mcp.authority allow` in a terminal (add `--bot` for a bot's server).
+  [Permissions](./permissions.md#let-an-agent-change-its-own-limits) and
+  [the MCP guide](./mcp.md#commands-that-change-what-a-later-run-may-do) explain it.
+
+### Changed — may break callers
+
+- **`tg mcp` offers the writes that had no permission key before, each `ask` by default** (cli-core 0.401.0): store
+  backup, restore, migrate, repair, reset, clear, decrypt and copy deletion, server start/stop/restart, model downloads,
+  `schedule run|exec`, `doctor report create` and `account sessions end`; the bot server offers `store fetch`. Over MCP
+  `ask` goes ahead, so set a key to `readonly` or `deny` to hide a tool. `tasks duplicates` is `tasks duplicates list`.
+
+- **`tg <profile> events list --json` writes times as ISO 8601 and ids as strings** (cli-core 0.401.0): `starts_at`,
+  `ends_at`, `deleted_at`, `created_at` and `updated_at`, as every other answer does.
+- **A bot's MCP server can offer `bot api`, behind `permissions.bot.api`** (cli-core 0.402.0). It is `deny` by default;
+  `tg <profile> config set --bot permissions.bot.api allow` in a terminal turns it on.
+
+- **`tg <profile> watch --jsonl` prints `{"type":"item","data":…}` lines and a final `{"type":"end","complete":true}`.**
+  Read each message or event from `data`, and stop at the `end` line. Fields are snake_case. A timeout or a normal stop
+  ends with `complete: true`; a failure ends with `complete: false` and its exit code.
+- **`runs search` is now `search runs`.** Filters are terms in the query: `status:failed`, `error_code:timeout`,
+  `operation:messages.download`, `profile:work`, next to plain words. Saved MCP requests use the new command path.
+- **`stats` reports take their filters as query terms.** `--message-kind` is `message_kind:posts|comments|all`,
+  `--min-messages 5` is `min_messages:5`, `--min-views` and `--max-replies` are `min_views:` and `max_replies:`,
+  `--older-than 24h` is `older_than:24h`, and `--chat` is `chat:<chat>` on the rankings and reports; exact words use `exact:` in place of `--exact`. Update saved
+  commands and MCP requests.
+
+- **Options have one meaning each** (cli-core 0.399.0). Use `--analysis-provider` for analysis and `--embedding-provider`
+  for vector search (`conversations build|embed|related|status`, `search conversations`), `--consent-provider` for
+  `conversations consents revoke`, `--claim` for `tags remove`, `--answer-model` for `conversations links clear`,
+  `--template-mode` for reply templates and `--text-file` for `contacts notes add|edit`. `inbox` and `review` take
+  `kind:group,channel` in their query. The old spellings still work, hidden, for one release.
+
+### Fixed
+
+- **Voice-note search no longer finds a different real English or Spanish word for the one you typed** (cli-core
+  0.402.0). A misheard spelling still turns up: "budget" finds "budjet", but "cost" no longer finds "cast".
+
+- **Downloading media skips service events and keyboards** (cli-core 0.400.0). A chat with a group event or an inline
+  keyboard no longer makes `attachments download` fail with `provider.invalid-response`.
+
 ## 0.83.0 — 23.10.2026
 
 ### Added

@@ -8,6 +8,18 @@ reúne en una sola respuesta los mensajes de la persona, su correo y tus notas, 
 fuente. Nunca decide que dos cuentas son una sola persona porque los nombres coinciden: las enlazas
 tú.
 
+## Buscar a una persona por su nombre
+
+```sh
+memo search people kai
+memo search people 'Kai Sample' --source telegram --json
+```
+
+Lee todas las cuentas del almacén, salvo que `--source` nombre algunas, y dice cuáles leyó. Una persona coincide
+cuando su nombre, su usuario o el alias que le diste contiene todas las palabras; no importan las mayúsculas ni los
+acentos. Cada resultado muestra el `person:<id>` de la persona, que acepta `memo projects evidence --contact`, y las
+cuentas que tiene detrás.
+
 ## Todo sobre una persona
 
 **Lo más fácil: pídeselo a tu agente.**
@@ -34,6 +46,8 @@ dirección. La respuesta reúne:
 - su correo, en cuanto la dirección está enlazada a ella;
 - la nota sobre ella, las notas que enlazan a ella y las notas que escribiste sobre ella en Memo;
 - las tareas abiertas que tratan sobre ella o que tiene asignadas.
+- los archivos de Google Drive que posee o que editó por última vez, tal como los indica Google. No has revisado estos
+  vínculos: vienen del propio registro de archivos de Google, no de una suposición.
 
 Una nota que solo menciona el nombre en su texto no se incluye; solo cuentan los enlaces
 ([por qué](./how-it-works.md#links-between-notes-and-people)). Si una parte no dio nada, la respuesta
@@ -127,7 +141,7 @@ Memo puede sugerir relaciones a partir del correo: personas que te escriben desd
 empresa.
 
 ```sh
-memo relationships suggest --source email:you@example.com
+memo relationships scan --source email:you@example.com
 memo relationships confirm 4
 ```
 

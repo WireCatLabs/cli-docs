@@ -41,7 +41,7 @@ The `max sales bot` token is stored separately under the same `max-cli` service,
 | Data | Location | Permissions |
 |---|---|---|
 | Profile state: device, login counter, `viewerId` | `~/.local/share/max-cli/profiles/<профиль>.json` | `0600` |
-| Configuration | `~/.config/max-cli/config.json` | `0644` |
+| Configuration | `~/.config/max-cli/config.json` | folder `0700`, file `0600`; `doctor` names open ones |
 | Run records, with `--record`, and always for failures: command words, IDs, timings, error code; no content | `~/.local/share/max-cli/runs/…` | Directory `0700`, files `0600` |
 | Send log, **always**: chat, time, ID, length, outcome; no text | `~/.local/share/max-cli/sends/<профиль>.jsonl` | Directory `0700`, files `0600` |
 | Recipient allowlist, if enabled | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
@@ -52,8 +52,8 @@ The `max sales bot` token is stored separately under the same `max-cli` service,
 | Old profile cache; no longer opened | `~/.cache/max-cli/<профиль>.db` and its `-wal`, `-shm` files | Directory `0700`, files `0600` |
 | Conversation export, **only through `max personal store export --output`** | Your chosen destination | `0600` |
 | Downloaded attachments, `max personal messages download` or `max personal attachments extract --download --output-dir` | Current directory or `--output` | `0600` |
-| Problem report, **only through `max personal doctor report create`** | Current directory or `--output` | `0600` |
-| Speech models, **only after `max personal models audio download`** | `~/.local/share/WireCat/models/audio/…` | Directory `0700`, files `0600` |
+| Problem report, **only through `max personal doctor reports create`** | Current directory or `--output` | `0600` |
+| Speech models, **only after `max personal models download`** | `~/.local/share/WireCat/models/audio/…` | Directory `0700`, files `0600` |
 
 ⚠ **The shared local store contains message text and voice transcripts**: it exists to answer offline. `max personal session end` does not remove it. `max personal store clear --left --allow-dangerous` removes only data for departed chats; there is no command to erase the entire shared store.
 
@@ -84,7 +84,7 @@ In the examples below, `agent` is the name of a profile you created just for the
 in the log is shorter: the command key (`messages.send`) and the kind of write, and the chat only if the command gives its numeric id.
 `--dry-run` under `MAX_READ_ONLY` gives the same refusal and writes nothing to the log.
 
-**Bots have their own `bot.*` keys, such as `bot.messages.send`.** They use the same levels. Common settings and `bot.defaults`/`bot.profiles` layers resolve in the same order; `config show --bot` reports effective permissions. The legacy `allow` is still read.
+**Bots have their own `bot.*` keys, such as `bot.messages.send`.** They use the same levels. Common settings and `bot.defaults`/`bot.profiles` layers resolve in the same order; `config show --bot` reports effective permissions.
 
 Each bot has its own recipient list (`max <имя> bot recipients add <чат>`) and log (`max <имя> bot sends list`). **Every** write passes them, including `messages send`, `messages pin` and `bot api`, preventing a generic API call from bypassing safeguards. Edits and deletions take the chat first: `max` fetches the message and refuses if it belongs to another chat. This comparison is unavailable for a chat addressed as `user:<id>`. Logs contain chat, action, outcome and text length, but not text. Bots have no hourly limit unless configured in `bot`: `max <имя> config set --bot sends_per_hour 200`.
 
@@ -98,8 +98,8 @@ The recipient list is optional: before anything is added, any chat is allowed. A
 
 ## Actions the tool never takes on its own
 
-- **Does not mark read without a request.** Fetching history and marking read are separate protocol operations. Only `max personal chats mark-read` and `messages list --mark-read` send the latter; ordinary reading does not.
-- **Makes only requested changes.** Changes come from `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats requests accept|decline`, `chats link reset`, `chats folders create|update|delete|order`, `chats moderate` (within group rules), `chats mark-read` and `messages list --mark-read`. Each performs the requested command-line action. `max commands --json` marks them `effects.remote: "write"`.
+- **Does not mark read without a request.** Fetching history and marking read are separate protocol operations. Only `max personal chats mark-read` sends the latter; ordinary reading does not.
+- **Makes only requested changes.** Changes come from `messages send|edit|delete|forward|pin|unpin|press`, `reactions add|remove`, `polls vote|close|create`, `contacts add|remove|import|rename|block|unblock`, `account update`, `account sessions end`, `session end`, `chats join|leave|create|update|start|app`, `chats members|admins …`, `chats requests confirm|decline`, `chats links reset`, `chats folders create|update|delete|order`, `chats moderate` (within group rules), `chats mark-read`. Each performs the requested command-line action. `max commands --json` marks them `effects.remote: "write"`.
 - **Deletion asks by default.** `messages.delete` at `ask` requires terminal confirmation or `--allow-dangerous`; explicit `allow` deletes without asking. Deleting for everyone also requires `--for-everyone`, which the general MCP tool does not permit.
 - **Keeps phone numbers off command lines.** `contacts lookup` reads interactively or through a pipe; `contacts import` reads a file. `ps` and shell history can expose arguments. Errors, send journals and run records omit the number; `max personal session start` and `max personal account show` mask it.
 - **Does not log messages**, including truncated text or hashes ([diagnostics](./diagnostics.md)).
@@ -112,7 +112,7 @@ Names, titles and text from other people cannot control the terminal: control an
 
 ## What other processes can see
 
-Tokens are not passed as arguments, but message text is, and it is visible in `ps` and in shell history ([shared page](https://wirecat.dev/ru/docs/security)). State files and the background server socket are protected by `0600` file permissions and `0700` directories. Other files may have different permissions, such as `0644` for configuration. Check permissions separately when moving files or redirecting output.
+Tokens are not passed as arguments, but message text is, and it is visible in `ps` and in shell history ([shared page](https://wirecat.dev/ru/docs/security)). State files and the background server socket are protected by `0600` file permissions and `0700` directories. `config set` writes `config.json` with mode `0600`; a file from an earlier version can stay `0644` until it is rewritten, and `max doctor` names such a file and the `chmod` command that fixes it. Check permissions separately when moving files or redirecting output.
 
 ## Network destinations
 
@@ -121,10 +121,10 @@ Tokens are not passed as arguments, but message text is, and it is visible in `p
 | `wss://api.oneme.ru/websocket`, with `Origin` set to `https://web.max.ru` | Any command needing MAX |
 | MAX file servers, using addresses provided by MAX | `messages send --file`, `messages download` |
 | `https://web.max.ru` in a temporary Chromium profile | `session start qr-chrome`, `session start sms`, `setup --method qr-chrome|sms` |
-| Hugging Face and GitHub, for speech-model files | Only `max personal models audio download`; voice audio stays on this computer |
-| Hugging Face, for text-model files | Only `max personal models text download`; the local model does not send messages |
+| Hugging Face and GitHub, for speech-model files | Only `max personal models download`; voice audio stays on this computer |
+| Hugging Face, for text-model files | Only `max personal models download`; the local model does not send messages |
 | Configured external embedding service | `conversations embed` sends conversation text after consent; `search conversations`, including MCP, sends the question when an external service is selected |
-| Configured OpenAI-compatible service or Anthropic | `conversations build --analyze --chat` sends bounded batches after consent for the account, chat and service |
+| Configured OpenAI-compatible service or Anthropic | `conversations links rebuild --analyze --chat` sends bounded batches after consent for the account, chat and service |
 | `https://platform-api2.max.ru`, official Bot API, token in `Authorization` | Only `max sales bot` commands |
 | npm registry, for the latest version number | `max upgrade`, and once a day when a person runs a terminal command; disabled by `update_check: false` |
 
@@ -132,7 +132,7 @@ Tokens are not passed as arguments, but message text is, and it is visible in `p
 
 `max sales bot` requests identify themselves as `max-cli/<версия>`, since MAX already recognizes the bot by token. `platform-api2.max.ru` uses a Russian Ministry of Digital Development root certificate absent from Node. In Node, `max` adds it to the trusted certificates for the whole process: after the first bot request, every TLS connection in that `max` invocation trusts it, not only Bot API requests. In Bun it is added only for Bot API requests. The system is unchanged.
 
-Personal-account traffic contains no tool name or custom user-agent; the user-agent and device description come from the MAX web client. Frames use its address, binary format and compression. `max personal serve` mimics hidden-tab telemetry: one “chat list shown” event 20 seconds after login, containing only account ID and time, never messages or chat titles. One-off commands send no telemetry. After login, `max personal serve` requests the same read-only data as a tab: folders, banners, call history, stickers and reactions. Responses are neither displayed nor saved. One-off commands do not request these. Differences remain: the web tab also requests contacts, stories and push subscriptions, while `max` does not. MAX can therefore distinguish `max` from its web client.
+Personal-account traffic contains no tool name or custom user-agent; the user-agent and device description come from the MAX web client. Frames use its address, binary format and compression. `max personal serve` mimics hidden-tab telemetry: one “chat list shown” event 20 seconds after login, containing only account ID and time, never messages or chat titles. One-off commands send no telemetry. After login, `max personal serve` requests the same kinds of data as the web tab: folders, banners, call history, sticker and reaction sets, and the profile cards and online status of direct-chat contacts. After the first login it also requests stories, missing folder chats and the next chat-list page. These are read requests; the responses are neither displayed nor stored. One-shot commands do not make them. Differences remain: `max` does not subscribe to push notifications or request animated emoji. The web tab chooses requests using its browser cache, which `max` does not have, so request counts differ. MAX can distinguish `max` from its web client.
 
 ## MAX rules and your account
 
@@ -163,7 +163,7 @@ MAX does not publish an API for user accounts. Everything that is known about th
 
 The tool stores other people’s conversations and contacts on your computer, including message text. Access to the local database gives access to this data. Sharing a `max personal store export` file also shares the conversation contents; photo links in it may open without login. Before sharing, check the contents and intended recipients. This page describes how the tool works and does not certify legal compliance for your use case.
 
-A problem report (`max personal doctor report create`) is attached to a **public** GitHub issue. It contains no message text, names or phone numbers; chat and message IDs are replaced with labels. Open and inspect the file before submitting it.
+A problem report (`max personal doctor reports create`) is attached to a **public** GitHub issue. It contains no message text, names or phone numbers; chat and message IDs are replaced with labels. Open and inspect the file before submitting it.
 
 ## If a token leaks
 

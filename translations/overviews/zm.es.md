@@ -27,9 +27,9 @@ deben estar disponibles para tu cuenta; puedes importar archivos de reuniones a 
 
 ## Conecta tus datos
 
-Empieza con [instalar y conectar](./installation.md). Explica reutilizar una app que creaste, una de WireCat/equipo disponible para tu usuario o crear la tuya. Necesitas Public Client ID y consentimiento del navegador, no un archivo de credenciales. Para archivos, [importa VTT](./archive.md#downloaded-transcripts) sin app Zoom.
+Empieza con [instalar y conectar](./installation.md). Explica reutilizar una app que creaste, una app de equipo compartida con tu cuenta o crear la tuya. No hay un Public Client ID integrado ni una app de WireCat disponible para otras cuentas de Zoom. Necesitas Public Client ID y consentimiento del navegador, no un archivo de credenciales. Para archivos, [importa VTT](./archive.md#downloaded-transcripts) sin app Zoom.
 
-Tras guardar una reunión, [conecta el agente](./mcp.md) mediante instrucciones de terminal o MCP de lectura. La conexión no obtiene datos por sí sola.
+Tras guardar una reunión, [conecta el agente](./mcp.md) mediante instrucciones de terminal o MCP con lecturas y escrituras limitadas por los permisos del perfil. La conexión no obtiene datos por sí sola.
 
 ## Elegir la próxima tarea
 

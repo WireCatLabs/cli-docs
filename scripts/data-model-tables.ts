@@ -27,7 +27,7 @@ export function parseSchema(markdown: string): Area[] {
     para = []
     return text
   }
-  const describe = () => {
+  const describeTable = () => {
     if (table && !table.described) {
       table.desc = takePara()
       table.described = true
@@ -35,7 +35,7 @@ export function parseSchema(markdown: string): Area[] {
   }
   for (const line of [...markdown.split("\n"), "## END"]) {
     if (line.startsWith("## ")) {
-      describe()
+      describeTable()
       const name = line.slice(3).trim()
       area = ["Conventions", "Dropped or merged", "END"].includes(name) ? undefined : { name, desc: "", tables: [] }
       if (area) areas.push(area)
@@ -45,7 +45,7 @@ export function parseSchema(markdown: string): Area[] {
     }
     if (!area) continue
     if (line.startsWith("### ")) {
-      if (table) describe()
+      if (table) describeTable()
       else area.desc = takePara()
       table = { name: /`([^`]+)`/.exec(line)?.[1] ?? "", desc: "", cols: [], fts: null }
       area.tables.push(table)
@@ -53,11 +53,11 @@ export function parseSchema(markdown: string): Area[] {
       continue
     }
     if (line.startsWith("*Change:*") || line.startsWith("*Keys")) {
-      describe()
+      describeTable()
       continue
     }
     if (line.startsWith("| `") && table) {
-      describe()
+      describeTable()
       const cells = line
         .trim()
         .replace(/^\|/, "")

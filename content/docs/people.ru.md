@@ -23,8 +23,8 @@ description: "Вспомните, кто вам написал и что вы о
   аккаунте и не меняет имя в ваших контактах.
 - **Заметки.** Свободный текст о человеке, по которому вы или агент потом сможете искать.
 
-Команды описаны в [руководстве Telegram о людях](./tg/people.md#your-own-names-and-notes-contacts-alias-contacts-notes)
-и в [справочнике MAX](./max/commands.md#max-contacts-alias).
+Команды описаны в [руководстве Telegram о людях](./tg/people.md#свои-имена-и-заметки-contacts-aliases-contacts-notes)
+и в [справочнике MAX](./max/commands.md#max-contacts-aliases).
 
 У одного человека часто есть аккаунт в Telegram и аккаунт в MAX. Инструменты считают их двумя людьми,
 пока вы их не **свяжете**: не запишете на своём компьютере, что оба аккаунта принадлежат одному
@@ -57,8 +57,8 @@ tg personal mentions confirm 1 person:7
 Оба мессенджера показывают профиль человека и общую переписку:
 
 ```sh
-tg personal contacts profile @example_user
-max personal contacts profile 20000002
+tg personal contacts info @example_user
+max personal contacts info 20000002
 ```
 
 Для краткой информации используйте `contacts show`. Человека называют по ID или части имени;
@@ -128,14 +128,14 @@ max personal contacts check 20000002
 и [lols.bot](https://lols.bot). **Им уходит ID человека в Telegram.** Параметр `--no-registries`
 отключает эти запросы. Списки ведут только аккаунты Telegram, поэтому `max` им ничего не отправляет.
 
-Чтобы проверить всю группу, `chats members audit` оценивает каждого участника по списку участников
+Чтобы проверить всю группу, `chats members check` оценивает каждого участника по списку участников
 и сохранённой истории и перечисляет тех, у кого нашлась причина. `--deep 10` затем делает полную
 проверку для десяти с самой высокой оценкой, по человеку в секунду. Владелец и администраторы в
 список не попадают, никто не удаляется:
 
 ```sh
-tg personal chats members audit "Книжный клуб" --deep 10
-max personal chats members audit "Книжный клуб" --deep 10
+tg personal chats members check "Книжный клуб" --deep 10
+max personal chats members check "Книжный клуб" --deep 10
 ```
 
 <a id="link-your-accounts" />
@@ -150,7 +150,7 @@ tg personal contacts link @example_user max:"Example User"
 
 Оба аккаунта уже должны быть в истории на этом компьютере, поэтому `tg` и `max` нужны на одном
 компьютере. После этого `contacts context` без `--chat` собирает связанные учётные записи.
-`contacts context --chat` и `contacts profile` показывают только выбранную учётную запись
+`contacts context --chat` и `contacts info` показывают только выбранную учётную запись
 мессенджера. Одинакового имени недостаточно: считается только то, что записали вы.
 `contacts unlink` убирает эту локальную связь.
 

@@ -19,34 +19,34 @@ tg [profile] [options] <resource> <verb> [arguments]
 
 ## Общие параметры
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `-V, --version` | показать номер версии. |
-| `-v, --verbose` | подробности: -v — идентификаторы, -vv — все известные данные. По умолчанию: `0`. |
-| `--json` | машиночитаемый вывод: единственное значение JSON в stdout; --json=id,text оставляет только эти поля. |
-| `--jsonl` | машиночитаемый вывод: объект JSON на строку для потоковой обработки и jq. |
-| `--quiet` | отключить диагностику; ошибки остаются. |
-| `--trace` | журнал соединения в stderr, без содержимого сообщений. |
-| `--debug` | при сбое — полная запись о нём, с причиной и стеком, вместо короткой строки. |
-| `--timeout <duration>` | ограничить время всей команды: 30s, 2m, 500ms. |
-| `--offline` | читать сохранённое без подключения; ошибка, если данных нет. |
-| `--no-input` | не запрашивать ввод и не открывать интерактивный вход; ввод через канал остаётся доступным. |
-| `--max-input-bytes <bytes>` | максимальный размер буферизованного ввода в байтах (по умолчанию: 16777216). |
-| `--max-output-bytes <bytes>` | максимальный размер машинного вывода в байтах (по умолчанию: 4194304; 0 отключает ограничение). |
-| `--brief` | найденные сообщения — только ссылка, заголовок, время, отправитель и фрагмент. |
-| `--full` | найденные сообщения с полным текстом и всеми полями провайдера. |
-| `--dry-run` | предварительно показать разобранные аргументы и разрешения перед выполнением действия. |
-| `--yes` | выполнить изменение без подтверждения уровня ask. |
-| `--record` | сохранить запуск: идентификаторы и время, без текста сообщений. |
-| `--no-record` | не сохранять независимо от настроек. |
+| `-V, --version` | output the version number. |
+| `-v, --verbose` | more detail in what is shown: -v ids, -vv everything we know. Default: `0`. |
+| `--json` | machine-readable output: one JSON value on stdout; --json=id,text keeps only those fields. |
+| `--jsonl` | machine-readable output: one JSON object per line, for streaming and jq. |
+| `--quiet` | diagnostics off; a failure is still said. |
+| `--trace` | the connection's own log lines on stderr — never message content. |
+| `--debug` | on a failure, its whole record — cause and stack — in place of the short line. |
+| `--timeout <duration>` | give up on the whole command after this — 30s, 2m, 500ms. |
+| `--offline` | answer from what was recorded and never connect; fails if nothing was. |
+| `--no-input` | never prompt or open interactive login; piped input remains available. |
+| `--max-input-bytes <bytes>` | maximum buffered input bytes (default: 16777216). |
+| `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
+| `--brief` | found messages as reference, title, time, sender and excerpt only. |
+| `--full` | found messages with their whole text and every provider field. |
+| `--dry-run` | preview parsed arguments and permissions before running the action. |
+| `--yes` | go ahead without the question an ask level puts before a write. |
+| `--record` | keep this run — ids and timings, never message content. |
+| `--no-record` | do not keep it, whatever the configuration says. |
 
 ## `tg session`
 
-войти в Telegram или выйти для этого профиля
+log this profile in to Telegram, or out
 
 ### `tg session start`
 
-войти по QR-коду (по умолчанию) или телефону, коду и паролю 2FA
+log in by QR code (default) or by phone number, code and 2FA password
 
 **Changes something in Telegram.**
 
@@ -54,14 +54,14 @@ tg [profile] [options] <resource> <verb> [arguments]
 tg session start [method] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `method` | необязателен | способ входа: `qr`, `phone`. По умолчанию: `qr`. |
+| `method` | optional | how to log in. One of: `qr`, `phone`. Default: `qr`. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--app <how>` | только первый раз: способ получения приложения профиля с my.telegram.org: `browser`, `auto`. По умолчанию: `browser`. |
-| `--sms` | вход по телефону: попросить код по SMS; Telegram всё равно может отказать. |
+| `--app <how>` | the first time only: how to get this profile's app from my.telegram.org. One of: `browser`, `auto`. Default: `browser`. |
+| `--sms` | phone login: ask Telegram to send the code by SMS, not to the app; Telegram may still refuse. |
 
 **Returns:** log in by QR code (default) or by phone number, code and 2FA password
 
@@ -69,7 +69,7 @@ tg session start [method] [options]
 
 ### `tg session end`
 
-завершить сессию профиля в Telegram и удалить её локально
+log this profile out on Telegram's side and forget the session here
 
 **Changes something in Telegram.**
 
@@ -83,7 +83,7 @@ tg session end
 
 ## `tg setup`
 
-настроить Telegram и подключить агента
+set up Telegram and connect your agent
 
 **Changes something in Telegram.**
 
@@ -91,11 +91,11 @@ tg session end
 tg setup [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--agent <agent>` | установить skill для агента; в терминале спрашивает выбор, иначе не устанавливает. Варианты: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`. |
-| `--app <how>` | как получить ключи приложения Telegram при первом входе. Варианты: `auto`, `browser`. По умолчанию: `auto`. |
-| `--method <method>` | как войти, если сессии нет. Варианты: `qr`, `phone`. По умолчанию: `qr`. |
+| `--agent <agent>` | install the skill for this agent; asks at a terminal, otherwise none. One of: `none`, `codex`, `cursor`, `claude`, `gemini`, `all`. |
+| `--app <how>` | how to get your Telegram app credentials the first time. One of: `auto`, `browser`. Default: `auto`. |
+| `--method <method>` | how to log in when there is no session. One of: `qr`, `phone`. Default: `qr`. |
 
 **Returns:** set up Telegram and connect your agent
 
@@ -103,39 +103,43 @@ tg setup [options]
 
 ## `tg account`
 
-аккаунт текущей сессии
+the logged-in account
 
 ### `tg account list`
 
-все профили на этом компьютере и аккаунт каждого; не обращается к мессенджеру
+every profile on this computer, and the account each is logged in as; asks the messenger nothing
 
 ```sh
-tg account list
+tg account list [query]
 ```
 
-**Returns:** profiles on this computer and their signed-in accounts
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** account profile — profile, current, account, name; every field: tg commands info account list
 
 **Example:** `tg personal account list`
 
 ### `tg account show`
 
-под каким аккаунтом вошёл профиль; последние четыре цифры телефона
+who this profile is logged in as; the phone number shows its last four digits
 
 ```sh
 tg account show [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--show-phone` | показать полный номер телефона. |
+| `--show-phone` | print the whole phone number. |
 
-**Returns:** account — provider, id, name, username, phone, scope; every field: tg commands schema account show
+**Returns:** account — provider, id, name, username, phone, scope; every field: tg commands info account show
 
 **Example:** `tg personal account show`
 
 ### `tg account update`
 
-изменить видимые всем имя, описание или фото профиля
+change the name, the description or the photo everyone sees on your profile
 
 **Changes something in Telegram.**
 
@@ -143,40 +147,40 @@ tg account show [options]
 tg account update [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--first-name <name>` | ваше имя. |
-| `--last-name <name>` | ваша фамилия. |
-| `--description <text>` | описание профиля. |
-| `--photo <file>` | новое фото профиля: файл изображения. |
+| `--first-name <name>` | your first name. |
+| `--last-name <name>` | your last name. |
+| `--description <text>` | about you. |
+| `--photo <file>` | a new profile photo — an image file. |
 
-**Returns:** change the name, the description or the photo everyone sees on your profile
+**Returns:** account change — operation_id, account; every field: tg commands info account update
 
 **Example:** `tg personal account update --first-name Alex`
 
 ### `tg account sessions`
 
-другие сессии аккаунта; `tg session` управляет только входом этого инструмента
+where else this account is logged in — not `tg session`, which is this tool's own login
 
 #### `tg account sessions list`
 
-все подключённые устройства и приложения; ничего не завершается
+every device and app logged in to this account; nothing is ended
 
 ```sh
 tg account sessions list [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** account session — current, client, device, location, last_active_at, created_at; every field: tg commands schema account sessions list
+**Returns:** account session — current, client, device, location, last_active_at, created_at; every field: tg commands info account sessions list
 
 **Example:** `tg personal account sessions list`
 
 #### `tg account sessions end`
 
-завершить все другие сессии, включая телефон; текущая остаётся
+log out every other device, your phone included; this one stays
 
 **Changes something in Telegram.**
 
@@ -184,37 +188,37 @@ tg account sessions list [query]
 tg account sessions end [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--others` | все сессии кроме текущей. |
+| `--others` | every session but this one. |
 
-**Returns:** log out every other device, your phone included; this one stays
+**Returns:** ended account sessions — operation_id, sessions; every field: tg commands info account sessions end
 
 **Example:** `tg personal account sessions end --others`
 
 ## `tg chats`
 
-чаты аккаунта
+the account's chats
 
 ### `tg chats list`
 
-чаты от новых к старым, включая архив; запрос выполняется по локальному хранилищу, поэтому в режиме онлайн, где мессенджер ничего не фильтрует, нужен --offline
+chats, newest first, archived ones included; the query is answered from the local store, so online, where the messenger filters nothing, it needs --offline
 
 ```sh
 tg chats list [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
-**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: tg commands schema chats list
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: tg commands info chats list
 
 **Next usually:** `tg chats events <chat> [query]`, `tg chats show <chat>`, `tg chats send-as <chat>`
 
@@ -222,192 +226,193 @@ tg chats list [query] [options]
 
 ### `tg chats events`
 
-кто вступил, вышел, кого добавили или удалили и кем: по служебным сообщениям; за последние 7 дней, если запрос не задаёт время
+who joined, left, was added or removed, and by whom — from the chat's service messages; the last 7 days unless the query names time
 
 ```sh
 tg chats events <chat> [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: tg commands schema chats events
+**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: tg commands info chats events
 
 **Example:** `tg personal chats events "Book club"`
 
 ### `tg chats inspect`
 
-куда ведёт публичная ссылка или приглашение, без вступления
+what an invite or public link leads to, without joining it
 
 ```sh
 tg chats inspect <link>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `link` | обязателен | приглашение или публичная ссылка. |
+| `link` | required | an invite link or a public one. |
 
-**Returns:** what an invite or public link leads to, without joining it
+**Returns:** chat inspection — kind, title, id, username, participants_count, description, member, approval_needed; every field: tg commands info chats inspect
 
 **Example:** `tg personal chats inspect https://example.com/invite/book-club`
 
 ### `tg chats show`
 
-один чат: тип, число непрочитанных, время последнего сообщения и участники
+one chat: its kind, unread count, last message time and who is in it
 
 ```sh
 tg chats show <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: tg commands schema chats show
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: tg commands info chats show
 
-**Next usually:** `tg chats events <chat> [query]`, `tg chats send-as <chat>`, `tg chats documents list <chat>`
+**Next usually:** `tg chats events <chat> [query]`, `tg chats send-as <chat>`, `tg chats documents list <chat> [query]`
 
 **Example:** `tg personal chats show "Book club"`
 
 ### `tg chats send-as`
 
-от чьего имени этот аккаунт может публиковать в чате; сохранённый выбор не меняется
+who this account may post as in a chat; changes no saved choice
 
 ```sh
 tg chats send-as <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** who this account may post as in a chat; changes no saved choice
+**Returns:** chat sender — id, title, kind, premium_required, default; every field: tg commands info chats send-as
 
 **Example:** `tg personal chats send-as "Project room"`
 
 ### `tg chats documents`
 
-документы Google Docs и Drive, ссылки на которые есть в сохранённых сообщениях чата
+the Google Docs and Drive documents linked in a chat's stored messages
 
 #### `tg chats documents list`
 
-все ссылки на документы в чате, сначала новые, и есть ли документ в хранилище
+every document link in the chat, newest first, and whether the store has it
 
 ```sh
-tg chats documents list <chat> [options]
+tg chats documents list <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
-**Returns:** every document link in the chat, newest first, and whether the store has it
+**Returns:** document link — ref, url, document_id, title, in_store, sent_at, sender; every field: tg commands info chats documents list
 
 **Example:** `tg personal chats documents list "Project room" --limit 10`
 
 ### `tg chats members`
 
-участники группы
+who is in a group
 
 #### `tg chats members list`
 
-все участники постранично с ролями и временем последнего появления
+everyone in a group, a page at a time, with their role and when they were last seen
 
 ```sh
 tg chats members list <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `query` | необязателен | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
-**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: tg commands schema chats members list
+**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: tg commands info chats members list
 
-**Next usually:** `tg contacts show <person>`, `tg contacts profile <person>`, `tg contacts context <person>`
+**Next usually:** `tg contacts show <person>`, `tg contacts info <person>`, `tg contacts context <person>`
 
 **Example:** `tg personal chats members list "Book club"`
 
-#### `tg chats members audit`
+#### `tg chats members check`
 
-участники, похожие на ботов, с причинами для каждого, по списку участников и локальному хранилищу; --deep проверяет выбранных людей отдельно; никого не удаляет
+members that look like bots, each with its reasons, from the member list and local store; --deep checks selected people individually; removes nobody
 
 ```sh
-tg chats members audit <chat> [query] [options]
+tg chats members check <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязательный | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--max-pages <pages>` | не больше этого числа страниц по 200 участников, с паузой между ними (по умолчанию 10). |
-| `--deep <n>` | также проверить первые n профилей, самые старые фотографии, до 1,000 сохранённых сообщений каждого и публичные списки блокировок, в которые отправляются их идентификаторы — один человек в секунду. |
+| `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
+| `--deep <n>` | also check the top n profiles, oldest photos, up to 1,000 stored messages each and public ban lists, which are sent their ids — one person a second. |
 
-**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: tg commands schema chats members audit
+**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: tg commands info chats members check
 
-**Next usually:** `tg contacts show <person>`, `tg contacts profile <person>`, `tg contacts context <person>`
+**Next usually:** `tg contacts show <person>`, `tg contacts info <person>`, `tg contacts context <person>`
 
-**Example:** `tg personal chats members audit "Book club"`
+**Example:** `tg personal chats members check "Book club"`
 
 #### `tg chats members history`
 
-кто вступил, кто вышел и чей профиль изменился, начиная с самых старых записей — данные, записанные chats members fetch в локальное хранилище; к мессенджеру не обращается
+who joined, who left and whose profile changed, oldest first — what chats members fetch recorded in the local store; never asks the messenger
 
 ```sh
 tg chats members history <chat> [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: tg commands schema chats members history
+**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: tg commands info chats members history
 
 **Example:** `tg personal chats members history "Book club"`
 
 #### `tg chats members fetch`
 
-прочитать полный список участников группы в историю участников локального хранилища: кто вступил, кто вышел, ежедневные числа участников и изменения профилей; выход участника фиксируется только после чтения полного списка
+read a group's whole member list into the local store's member history: who joined, who left, daily counts and profile changes; someone is recorded as gone only when every member was read
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg chats members fetch <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязательный | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--track` | также загружать его ежедневно, пока работает serve; chats tracking показывает и изменяет список таких чатов. |
-| `--max-pages <pages>` | не больше этого числа страниц по 200 участников, с паузой между ними (по умолчанию 10). |
+| `--track` | also fetch it daily while serve runs; chats tracking lists and edits those chats. |
+| `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
 
-**Returns:** save the group's current membership
+**Returns:** chat members fetch — chat_id, joined, gone, changed, read, participants, complete, more, and 1 more; every field: tg commands info chats members fetch
 
 **Example:** `tg personal chats members fetch "Book club"`
 
 #### `tg chats members add`
 
-добавить участников; они получат уведомление
+add people; they are told
 
 **Changes something in Telegram.**
 
@@ -415,18 +420,18 @@ tg chats members fetch <chat> [options]
 tg chats members add <chat> <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `person` | обязателен | идентификатор или часть имени. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `person` | required | an id, or part of a name. |
 
-**Returns:** add people; they are told
+**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: tg commands info chats members add
 
 **Example:** `tg personal chats members add "Book club" "Alex Example"`
 
 #### `tg chats members remove`
 
-удалить участников; сообщения сохраняются
+remove people; their messages stay
 
 **Changes something in Telegram.**
 
@@ -434,18 +439,18 @@ tg chats members add <chat> <person>
 tg chats members remove <chat> <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `person` | обязателен | идентификатор или часть имени. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `person` | required | an id, or part of a name. |
 
-**Returns:** remove people; their messages stay
+**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: tg commands info chats members remove
 
 **Example:** `tg personal chats members remove "Book club" "Alex Example"`
 
 ### `tg chats mark-read`
 
-отметить чат прочитанным; собеседник видит прочтение
+mark a chat read; the other side sees that you read it
 
 **Changes something in Telegram.**
 
@@ -453,90 +458,94 @@ tg chats members remove <chat> <person>
 tg chats mark-read <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязательный | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--until-id <id>` | до указанного идентификатора сообщения; по умолчанию до последнего. |
-| `--topic <id>` | отметить прочитанной только эту тему форума. |
+| `--until-id <id>` | only up to this message id; the newest by default. |
+| `--topic <id>` | mark only this forum topic read. |
 
-**Returns:** mark a chat read; the other side sees that you read it
+**Returns:** chat read — operation_id, chat_id, until, thread_id; every field: tg commands info chats mark-read
 
 **Example:** `tg personal chats mark-read "Book club" --until-id 101`
 
 ### `tg chats tracking`
 
-чаты, списки участников которых serve ежедневно загружает в локальное хранилище — chats members fetch --track добавляет чат
+the chats whose member lists serve fetches daily into the local store — chats members fetch --track adds one
 
 #### `tg chats tracking list`
 
-все отслеживаемые чаты: с какого момента и последнее число участников
+every tracked chat: since when, and its last member count
 
 ```sh
-tg chats tracking list
+tg chats tracking list [query]
 ```
 
-**Returns:** every tracked chat: since when, and its last member count
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** tracked chat — chat_id, title, tracked_at, last_count; every field: tg commands info chats tracking list
 
 **Example:** `tg personal chats tracking list`
 
 #### `tg chats tracking show`
 
-один чат: отслеживается ли он и число участников за каждый день последних 30 дней
+one chat: whether it is tracked, and its member count per day for the last 30 days
 
 ```sh
 tg chats tracking show <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** one chat's member tracking and daily counts
+**Returns:** tracked chat history — chat_id, tracked_at, counts; every field: tg commands info chats tracking show
 
 **Example:** `tg personal chats tracking show "Book club"`
 
 #### `tg chats tracking add`
 
-ежедневно загружать список участников этого чата, пока работает serve, начиная со следующего запуска
+fetch this chat's member list daily while serve runs, from its next run
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg chats tracking add <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** fetch this chat's member list daily while serve runs, from its next run
+**Returns:** chat tracking — chat_id, tracked; every field: tg commands info chats tracking add
 
 **Example:** `tg personal chats tracking add "Book club"`
 
 #### `tg chats tracking remove`
 
-прекратить ежедневную загрузку; уже сохранённая история остаётся
+stop fetching it daily; the history already kept stays
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg chats tracking remove <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** stop fetching it daily; the history already kept stays
+**Returns:** chat tracking — chat_id, tracked; every field: tg commands info chats tracking remove
 
 **Example:** `tg personal chats tracking remove "Book club"`
 
 ### `tg chats create`
 
-создать группу или канал; добавленные люди получают уведомление
+create a group or a channel; the people added are told
 
 **Changes something in Telegram.**
 
@@ -544,22 +553,22 @@ tg chats tracking remove <chat>
 tg chats create <title> [person] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `title` | обязателен | название группы. |
-| `person` | необязателен | участники для добавления: идентификатор или часть имени. |
+| `title` | required | the group's name. |
+| `person` | optional | people to add: an id, or part of a name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--channel` | приватный канал вместо группы; вступление по ссылке. |
+| `--channel` | a private channel instead of a group; people join it by its link. |
 
-**Returns:** create a group or a channel; the people added are told
+**Returns:** chat group change — operation_id, chat, requested; every field: tg commands info chats create
 
 **Example:** `tg personal chats create "Book club" "Alex Example"`
 
 ### `tg chats join`
 
-вступить в группу или канал по ссылке; участники видят вступление
+join a group or channel by its link; the others in it see that you joined
 
 **Changes something in Telegram.**
 
@@ -567,17 +576,17 @@ tg chats create <title> [person] [options]
 tg chats join <link>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `link` | обязателен | приглашение или публичная ссылка. |
+| `link` | required | an invite link, or a public one. |
 
-**Returns:** join a group or channel by its link; the others in it see that you joined
+**Returns:** chat group change — operation_id, chat, requested; every field: tg commands info chats join
 
 **Example:** `tg personal chats join https://example.com/invite/book-club`
 
 ### `tg chats leave`
 
-выйти из группы или канала; участники видят выход
+leave a group or channel; the others in it see that you left
 
 **Changes something in Telegram.**
 
@@ -585,17 +594,17 @@ tg chats join <link>
 tg chats leave <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** leave a group or channel; the others in it see that you left
+**Returns:** chat removal — operation_id, chat_id; every field: tg commands info chats leave
 
 **Example:** `tg personal chats leave "Book club"`
 
 ### `tg chats update`
 
-изменить название, описание или настройки группы либо канала
+rename a group or channel, change its description, or turn one of its settings on or off
 
 **Changes something in Telegram.**
 
@@ -603,232 +612,232 @@ tg chats leave <chat>
 tg chats update <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--title <title>` | новое название. |
-| `--description <text>` | новое описание. |
-| `--all-can-pin <on\|off>` | все участники могут закреплять сообщения. |
-| `--only-admins-add <on\|off>` | только администраторы могут добавлять участников. |
-| `--join-approval <on\|off>` | Люди просят присоединиться, и администратор впускает их. |
+| `--title <title>` | the new name. |
+| `--description <text>` | the new description. |
+| `--all-can-pin <on\|off>` | every member may pin messages. |
+| `--only-admins-add <on\|off>` | only admins may add members. |
+| `--join-approval <on\|off>` | people ask to join, and an admin lets them in. |
 
-**Returns:** change a group or channel's profile and settings
+**Returns:** chat group change — operation_id, chat, requested; every field: tg commands info chats update
 
 **Example:** `tg personal chats update "Book club" --title "Reading group"`
 
-### `tg chats link`
+### `tg chats links`
 
-приглашение в группу
+a group's invite link
 
-#### `tg chats link show`
+#### `tg chats links show`
 
-ссылка-приглашение, если у вас есть право её видеть
+the invite link, if you may see it
 
 ```sh
-tg chats link show <chat>
+tg chats links show <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** the invite link, if you may see it
+**Returns:** chat invite — chat_id, title, link; every field: tg commands info chats links show
 
-**Example:** `tg personal chats link show "Book club"`
+**Example:** `tg personal chats links show "Book club"`
 
-#### `tg chats link create`
+#### `tg chats links create`
 
-создать ещё одну ссылку запросы; никто не узнает о ней, пока вы ею не поделитесь
+make another invite link; nobody is told until you share it
 
 **Changes something in Telegram.**
 
 ```sh
-tg chats link create <chat> [options]
+tg chats links create <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--approval` | желающие вступить по ссылке сначала отправляют запрос, а администратор их впускает; тогда у ссылки нет лимита использований. |
-| `--expire-time <time>` | время прекращения действия: 2026-09-25T09:00 (местное время) или через 30m, 2h, 7d. |
-| `--max-uses <n>` | не более указанного числа людей смогут вступить по ссылке, от 1 до 99999. |
+| `--approval` | who joins by it asks first, and an admin lets them in; it then has no use limit. |
+| `--expire-time <time>` | it stops working then: 2026-09-25T09:00 (local time), or 30m, 2h, 7d from now. |
+| `--max-uses <n>` | at most this many people join by it, 1 to 99999. |
 
-**Returns:** make another invite link; nobody is told until you share it
+**Returns:** chat invite change — operation_id, chat_id, link, approval, expires_at, max_uses, primary, revoked, and 2 more; every field: tg commands info chats links create
 
-**Example:** `tg personal chats link create "Book club"`
+**Example:** `tg personal chats links create "Book club"`
 
-#### `tg chats link list`
+#### `tg chats links list`
 
-ваши ссылки запросы, сначала новые, с числом вступивших и ожидающих
+your invite links, newest first, with how many joined and how many wait
 
 ```sh
-tg chats link list <chat> [query] [options]
+tg chats links list <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
-**Returns:** invite link — link, approval, expires_at, max_uses, primary, revoked, pending_count, joined_count; every field: tg commands schema chats link list
+**Returns:** invite link — link, approval, expires_at, max_uses, primary, revoked, pending_count, joined_count; every field: tg commands info chats links list
 
-**Example:** `tg personal chats link list "Book club"`
+**Example:** `tg personal chats links list "Book club"`
 
-#### `tg chats link revoke`
+#### `tg chats links remove`
 
-прекратить действие одной ссылки; для основной ссылки группы ответ содержит новую
-
-**Changes something in Telegram.**
-
-```sh
-tg chats link revoke <chat> <link>
-```
-
-| Аргумент | | Описание |
-|---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `link` | обязательный | ссылка в том виде, как её показывает `chats link list`. |
-
-**Returns:** stop one link; for the group's own link, the answer is the new one
-
-**Example:** `tg personal chats link revoke "Book club" https://example.com/invite/book-club`
-
-#### `tg chats link update`
-
-изменить одну из своих ссылок-приглашений, в том числе основную ссылку группы
+stop one link; for the group's own link, the answer is the new one
 
 **Changes something in Telegram.**
 
 ```sh
-tg chats link update <chat> <link> [options]
+tg chats links remove <chat> <link>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `link` | обязательный | ссылка в том виде, как её показывает `chats link list`. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `link` | required | the link, as `chats links list` shows it. |
 
-| Параметр | Назначение |
+**Returns:** chat invite change — operation_id, chat_id, link, approval, expires_at, max_uses, primary, revoked, and 2 more; every field: tg commands info chats links remove
+
+**Example:** `tg personal chats links remove "Book club" https://example.com/invite/book-club`
+
+#### `tg chats links update`
+
+change one of your invite links, the group's own one too
+
+**Changes something in Telegram.**
+
+```sh
+tg chats links update <chat> <link> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `link` | required | the link, as `chats links list` shows it. |
+
+| Option | What it does |
 |---|---|
-| `--approval` | желающие вступить по ссылке сначала отправляют запрос, а администратор их впускает; тогда у ссылки нет лимита использований. |
-| `--no-approval` | любой со ссылкой сразу вступает. |
-| `--expire-time <time>` | время прекращения действия: 2026-09-25T09:00 (местное время) или через 30m, 2h, 7d; `never` снимает срок действия. |
-| `--max-uses <n>` | не более указанного числа людей смогут вступить по ссылке, от 1 до 99999. |
+| `--approval` | who joins by it asks first, and an admin lets them in; it then has no use limit. |
+| `--no-approval` | anyone with it joins at once. |
+| `--expire-time <time>` | it stops working then: 2026-09-25T09:00 (local time), or 30m, 2h, 7d from now; `never` takes the expiry away. |
+| `--max-uses <n>` | at most this many people join by it, 1 to 99999. |
 
-**Returns:** change one of your invite links, the group's own one too
+**Returns:** chat invite change — operation_id, chat_id, link, approval, expires_at, max_uses, primary, revoked, and 2 more; every field: tg commands info chats links update
 
-**Example:** `tg personal chats link update Team https://example.com/join/abc`
+**Example:** `tg personal chats links update "Book club" https://example.com/invite/book-club --max-uses 25`
 
-#### `tg chats link reset`
+#### `tg chats links reset`
 
-заменить приглашение; старая ссылка перестаёт работать
+replace the invite link; the old one stops working
 
 **Changes something in Telegram.**
 
 ```sh
-tg chats link reset <chat>
+tg chats links reset <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** replace the invite link; the old one stops working
+**Returns:** chat group change — operation_id, chat, requested; every field: tg commands info chats links reset
 
-**Example:** `tg personal chats link reset "Book club"`
+**Example:** `tg personal chats links reset "Book club"`
 
 ### `tg chats requests`
 
-запросы на вступление в группу с одобрением администратора
+requests to join a group that needs an admin's approval
 
 #### `tg chats requests list`
 
-кто запросил вступление, сначала новые; видны только администраторам, чтение никого не уведомляет
+who asked to join, newest first; only admins see them, and reading tells nobody
 
 ```sh
 tg chats requests list <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
-**Returns:** join request — person_id, name, username, requested_at, about; every field: tg commands schema chats requests list
+**Returns:** join request — person_id, name, username, requested_at, about; every field: tg commands info chats requests list
 
 **Example:** `tg personal chats requests list "Book club"`
 
-#### `tg chats requests accept`
+#### `tg chats requests confirm`
 
-впустить их; группа увидит, что они вступили
-
-**Changes something in Telegram.**
-
-```sh
-tg chats requests accept <chat> [person] [options]
-```
-
-| Аргумент | | Описание |
-|---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `person` | необязательный | кто запросил вступление: идентификатор из `chats requests list`. |
-
-| Параметр | Назначение |
-|---|---|
-| `--all` | все ожидающие запросы; сначала проверяются с учётом почасового лимита. |
-| `--link <link>` | с --all: только запросы по этой ссылке запросы. |
-
-**Returns:** let them in; the group sees them join
-
-**Example:** `tg personal chats requests accept "Book club" "Alex Example"`
-
-#### `tg chats requests decline`
-
-отклонить запрос
+let them in; the group sees them join
 
 **Changes something in Telegram.**
 
 ```sh
-tg chats requests decline <chat> [person] [options]
+tg chats requests confirm <chat> [person] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `person` | необязательный | кто запросил вступление: идентификатор из `chats requests list`. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `person` | optional | who asked: an id from `chats requests list`. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--all` | все ожидающие запросы; сначала проверяются с учётом почасового лимита. |
-| `--link <link>` | с --all: только запросы по этой ссылке запросы. |
+| `--all` | every pending request, counted against the hourly limit first. |
+| `--link <link>` | with --all: only the requests made by this invite link. |
 
-**Returns:** turn the request away
+**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: tg commands info chats requests confirm
 
-**Example:** `tg personal chats requests decline "Book club" "Alex Example"`
+**Example:** `tg personal chats requests confirm "Book club" "Alex Example"`
+
+#### `tg chats requests reject`
+
+turn the request away
+
+**Changes something in Telegram.**
+
+```sh
+tg chats requests reject <chat> [person] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `person` | optional | who asked: an id from `chats requests list`. |
+
+| Option | What it does |
+|---|---|
+| `--all` | every pending request, counted against the hourly limit first. |
+| `--link <link>` | with --all: only the requests made by this invite link. |
+
+**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: tg commands info chats requests reject
+
+**Example:** `tg personal chats requests reject "Book club" "Alex Example"`
 
 ### `tg chats admins`
 
-назначить или снять права администратора
+give or take back a member's admin rights
 
 #### `tg chats admins add`
 
-назначить участника администратором с заданными правами
+make a member an admin with these rights
 
 **Changes something in Telegram.**
 
@@ -836,22 +845,22 @@ tg chats requests decline <chat> [person] [options]
 tg chats admins add <chat> <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `person` | обязателен | идентификатор или часть имени. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `person` | required | an id, or part of a name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--can <rights>` | разрешённые действия через запятую: members, admins, info, pin, link, post, edit, delete. |
+| `--can <rights>` | what they may do, comma-separated: members, admins, info, pin, link, post, edit, delete. |
 
-**Returns:** make a member an admin with these rights
+**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: tg commands info chats admins add
 
 **Example:** `tg personal chats admins add "Book club" "Alex Example" --can members`
 
 #### `tg chats admins remove`
 
-снять права администратора; человек остаётся участником
+take an admin's rights back; they stay a member
 
 **Changes something in Telegram.**
 
@@ -859,32 +868,32 @@ tg chats admins add <chat> <person> [options]
 tg chats admins remove <chat> <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `person` | обязателен | идентификатор или часть имени. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `person` | required | an id, or part of a name. |
 
-**Returns:** take an admin's rights back; they stay a member
+**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: tg commands info chats admins remove
 
 **Example:** `tg personal chats admins remove "Book club" "Alex Example"`
 
 ### `tg chats folders`
 
-ваши папки чатов
+your chat folders
 
 #### `tg chats folders list`
 
-папки в порядке отображения в приложении
+your chat folders, in the order the app shows them
 
 ```sh
 tg chats folders list [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: tg commands schema chats folders list
+**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: tg commands info chats folders list
 
 **Next usually:** `tg chats folders show <folder>`, `tg chats folders update <folder>`, `tg chats folders delete <folder>`
 
@@ -892,17 +901,17 @@ tg chats folders list [query]
 
 #### `tg chats folders show`
 
-одна папка с названиями её чатов
+one chat folder, with the names of the chats in it
 
 ```sh
 tg chats folders show <folder>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `folder` | обязателен | идентификатор папки или её точное название. |
+| `folder` | required | the folder's id, or its title exactly. |
 
-**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: tg commands schema chats folders show
+**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: tg commands info chats folders show
 
 **Next usually:** `tg chats folders update <folder>`, `tg chats folders delete <folder>`, `tg chats folders order <folders>`
 
@@ -910,7 +919,7 @@ tg chats folders show <folder>
 
 #### `tg chats folders create`
 
-создать папку чатов
+create a chat folder
 
 **Changes something in Telegram.**
 
@@ -918,26 +927,26 @@ tg chats folders show <folder>
 tg chats folders create <title> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `title` | обязателен | название папки; приложение может отклонить слишком длинное. |
+| `title` | required | the folder's name; the app may refuse a long one. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат для добавления по идентификатору или названию; повторите для нескольких. |
-| `--include <kinds>` | все чаты этих типов: contacts, non-contacts, groups, channels, bots. |
-| `--skip <which>` | исключить чаты muted, read, archived. |
-| `--exclude-chat <chat>` | никогда не показывать этот чат в папке; для нескольких повторить. |
-| `--pin <chat>` | закрепить чат вверху папки; для нескольких повторить. |
-| `--emoji <emoji>` | значок папки. |
+| `--chat <chat>` | a chat to put in it, by id or name; repeat it for more. |
+| `--include <kinds>` | every chat of these kinds: contacts, non-contacts, groups, channels, bots. |
+| `--skip <which>` | leave out chats that are muted, read, archived. |
+| `--exclude-chat <chat>` | never show this chat in it; repeat it for more. |
+| `--pin <chat>` | pin this chat at the top of the folder; repeat it for more. |
+| `--emoji <emoji>` | the folder's icon. |
 
-**Returns:** create a chat folder
+**Returns:** chat folder change — operation_id, folder; every field: tg commands info chats folders create
 
 **Example:** `tg personal chats folders create "Reading" --chat "Book club"`
 
 #### `tg chats folders update`
 
-переименовать папку или изменить её чаты
+rename a folder, or change which chats are in it
 
 **Changes something in Telegram.**
 
@@ -945,28 +954,28 @@ tg chats folders create <title> [options]
 tg chats folders update <folder> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `folder` | обязателен | идентификатор папки или точное название. |
+| `folder` | required | folder id, or its title exactly. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--title <title>` | новое название. |
-| `--add <chat>` | добавить чат; повторите для нескольких. |
-| `--remove <chat>` | убрать чат из неё, а также из списков исключённых и закреплённых; повторите для нескольких чатов. |
-| `--include <kinds>` | все чаты типов contacts, non-contacts, groups, channels, bots; заменяет прежнее правило, none очищает. |
-| `--skip <which>` | исключить чаты muted, read, archived; заменяет прежнее правило, none очищает. |
-| `--exclude-chat <chat>` | никогда не показывать этот чат в папке; для нескольких повторить. |
-| `--pin <chat>` | закрепить чат вверху папки; для нескольких повторить. |
-| `--emoji <emoji>` | значок папки. |
+| `--title <title>` | a new name. |
+| `--add <chat>` | put a chat in it; repeat it for more. |
+| `--remove <chat>` | take a chat out of it, and off its excluded and pinned lists; repeat it for more. |
+| `--include <kinds>` | every chat of these kinds: contacts, non-contacts, groups, channels, bots; replaces what it had, none clears it. |
+| `--skip <which>` | leave out chats that are muted, read, archived; replaces what it had, none clears it. |
+| `--exclude-chat <chat>` | never show this chat in it; repeat it for more. |
+| `--pin <chat>` | pin this chat at the top of the folder; repeat it for more. |
+| `--emoji <emoji>` | the folder's icon. |
 
-**Returns:** rename a folder, or change which chats are in it
+**Returns:** chat folder change — operation_id, folder; every field: tg commands info chats folders update
 
 **Example:** `tg personal chats folders update "Reading" --title "Books"`
 
 #### `tg chats folders delete`
 
-удалить папку; чаты сохраняются
+delete a folder; the chats in it stay
 
 **Changes something in Telegram.**
 
@@ -974,17 +983,17 @@ tg chats folders update <folder> [options]
 tg chats folders delete <folder>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `folder` | обязателен | идентификатор папки или точное название. |
+| `folder` | required | folder id, or its title exactly. |
 
-**Returns:** delete a folder; the chats in it stay
+**Returns:** chat folder removal — operation_id, folder_id; every field: tg commands info chats folders delete
 
 **Example:** `tg personal chats folders delete "Reading"`
 
 #### `tg chats folders order`
 
-расположить папки в этом порядке; неуказанные папки сохранят свой порядок после них
+put folders in this order; the ones not named keep theirs after them
 
 **Changes something in Telegram.**
 
@@ -992,17 +1001,17 @@ tg chats folders delete <folder>
 tg chats folders order <folders>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `folders` | обязательный | идентификаторы папок или точные названия, первая идёт первой. |
+| `folders` | required | folder ids, or titles exactly, first one first. |
 
-**Returns:** put folders in this order; the ones not named keep theirs after them
+**Returns:** chat folder order — operation_id, folders; every field: tg commands info chats folders order
 
 **Example:** `tg personal chats folders order "Reading" "Work"`
 
 #### `tg chats folders join`
 
-добавить папку, которой поделились по ссылке; вступает в каждый чат в ней, и другие участники видят ваше вступление
+add a folder someone shared by a link; joins every chat in it, and the others there see you joined
 
 **Changes something in Telegram.**
 
@@ -1010,76 +1019,76 @@ tg chats folders order <folders>
 tg chats folders join <link>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `link` | обязательный | ссылка папки вида t.me/addlist/…. |
+| `link` | required | the folder's link, as t.me/addlist/…. |
 
-**Returns:** add a folder someone shared by a link; joins every chat in it, and the others there see…
+**Returns:** chat folder change — operation_id, folder; every field: tg commands info chats folders join
 
 **Example:** `tg personal chats folders join https://t.me/addlist/example`
 
 ### `tg chats rules`
 
-правила `chats moderate` для группы, хранящиеся в файле профиля
+what `chats moderate` judges a group by, kept in a file of this profile
 
 #### `tg chats rules show`
 
-правила группы; если не сохранены, значения по умолчанию с отметкой
+the group's rules; the defaults, marked not saved, if it has none yet
 
 ```sh
 tg chats rules show <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** the group's rules; the defaults, marked not saved, if it has none yet
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: tg commands info chats rules show
 
 **Example:** `tg personal chats rules show "Book club"`
 
 #### `tg chats rules set`
 
-изменить правило; первое изменение сохраняет все правила с исходными значениями
+change one rule; the group's first change writes every rule with its default
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg chats rules set <chat> <key> <value>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `key` | обязателен | одно из: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
-| `value` | обязателен | новое значение; элементы списка через запятую. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
+| `value` | required | the new value; a list is comma-separated. |
 
-**Returns:** change one rule; the group's first change writes every rule with its default
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: tg commands info chats rules set
 
 **Example:** `tg personal chats rules set "Book club" links report`
 
 #### `tg chats rules unset`
 
-вернуть правило к значению по умолчанию
+put one rule back to its default
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg chats rules unset <chat> <key>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `key` | обязателен | одно из: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
 
-**Returns:** put one rule back to its default
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: tg commands info chats rules unset
 
 **Example:** `tg personal chats rules unset "Book club" links`
 
 ### `tg chats moderate`
 
-проверить новые сообщения и участников по правилам группы и выполнить разрешённые действия
+judge a group's new messages and members by its rules, and act as they allow
 
 **Changes something in Telegram.**
 
@@ -1087,24 +1096,24 @@ tg chats rules unset <chat> <key>
 tg chats moderate <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--since-time <time>` | проверить после времени ISO 8601 или 2h / 1d назад; сохранённая позиция не меняется. |
-| `--dry-run` | проверить и составить план без действий. |
-| `--allow-dangerous` | подтвердить все действия с уровнем ask в правилах группы. |
-| `--max-actions <n>` | максимум действий за запуск; по умолчанию 10. |
+| `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
+| `--dry-run` | judge and plan; do nothing. |
+| `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
+| `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
 
-**Returns:** judge a group's new messages and members by its rules, and act as they allow
+**Returns:** chat moderation — chat_id, rows; every field: tg commands info chats moderate
 
 **Example:** `tg personal chats moderate "Book club" --dry-run`
 
 ### `tg chats mute`
 
-отключить уведомления чата, навсегда или до определённого времени; никто в нём об этом не узнает
+stop notifications from a chat, for good or until a time; nobody in it is told
 
 **Changes something in Telegram.**
 
@@ -1112,21 +1121,21 @@ tg chats moderate <chat> [options]
 tg chats mute <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--until <time>` | только до этого момента: 2026-09-25T09:00 (местное время) или через 30m, 2h, 7d. |
+| `--until <time>` | only until then: 2026-09-25T09:00 (local time), or 30m, 2h, 7d from now. |
 
-**Returns:** stop notifications from a chat, for good or until a time; nobody in it is told
+**Returns:** chat muting — operation_id, chat_id, muted_until; every field: tg commands info chats mute
 
 **Example:** `tg personal chats mute "Book club"`, `tg personal chats mute "Book club" --until 2h`
 
 ### `tg chats unmute`
 
-снова получать уведомления отключённого чата
+hear a muted chat again
 
 **Changes something in Telegram.**
 
@@ -1134,17 +1143,17 @@ tg chats mute <chat> [options]
 tg chats unmute <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** hear a muted chat again
+**Returns:** chat muting — operation_id, chat_id, muted_until; every field: tg commands info chats unmute
 
 **Example:** `tg personal chats unmute "Book club"`
 
 ### `tg chats archive`
 
-переместить чат в архив; никто в нём об этом не узнает
+move a chat into the archive; nobody in it is told
 
 **Changes something in Telegram.**
 
@@ -1152,17 +1161,17 @@ tg chats unmute <chat>
 tg chats archive <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** move a chat into the archive; nobody in it is told
+**Returns:** chat archive — operation_id, chat_id, archived; every field: tg commands info chats archive
 
 **Example:** `tg personal chats archive 123456789`
 
 ### `tg chats unarchive`
 
-вернуть чат из архива в список чатов
+bring an archived chat back to the chat list
 
 **Changes something in Telegram.**
 
@@ -1170,17 +1179,17 @@ tg chats archive <chat>
 tg chats unarchive <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** bring an archived chat back to the chat list
+**Returns:** chat archive — operation_id, chat_id, archived; every field: tg commands info chats unarchive
 
 **Example:** `tg personal chats unarchive 123456789`
 
 ### `tg chats pin`
 
-закрепить чат вверху списка чатов; никто в нём об этом не узнает
+keep a chat at the top of your chat list; nobody in it is told
 
 **Changes something in Telegram.**
 
@@ -1188,17 +1197,17 @@ tg chats unarchive <chat>
 tg chats pin <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** keep a chat at the top of your chat list; nobody in it is told
+**Returns:** chat pin — operation_id, chat_id, pinned; every field: tg commands info chats pin
 
 **Example:** `tg personal chats pin 123456789`
 
 ### `tg chats unpin`
 
-открепить чат, чтобы он снова двигался по списку
+let a pinned chat move down the chat list again
 
 **Changes something in Telegram.**
 
@@ -1206,17 +1215,17 @@ tg chats pin <chat>
 tg chats unpin <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** let a pinned chat move down the chat list again
+**Returns:** chat pin — operation_id, chat_id, pinned; every field: tg commands info chats unpin
 
 **Example:** `tg personal chats unpin 123456789`
 
 ### `tg chats mark-unread`
 
-отметить чат непрочитанным на ваших устройствах; никто в нём об этом не узнает
+mark a chat unread on your own devices; nobody in it is told
 
 **Changes something in Telegram.**
 
@@ -1224,17 +1233,17 @@ tg chats unpin <chat>
 tg chats mark-unread <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** mark a chat unread on your own devices; nobody in it is told
+**Returns:** chat unread — operation_id, chat_id, unread; every field: tg commands info chats mark-unread
 
 **Example:** `tg personal chats mark-unread 123456789`
 
 ### `tg chats start`
 
-запустить бота, как это делает его кнопка Start; бот видит, что вы его запустили
+start a bot, as its Start button does; the bot sees that you started it
 
 **Changes something in Telegram.**
 
@@ -1242,21 +1251,21 @@ tg chats mark-unread <chat>
 tg chats start <bot> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `bot` | обязателен | чат с ботом — его идентификатор или имя — либо ссылка на бота, даже если вы её ещё не открывали. |
+| `bot` | required | the chat with the bot — its id or its name — or the bot's link, even one never opened. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--start <param>` | параметр запуска, который читает бот; если не указан, берётся ?start= из самой ссылки. |
+| `--start <param>` | the start parameter the bot reads; a link's own ?start= when not given. |
 
 **Returns:** start a bot, as its Start button does; the bot sees that you started it
 
-**Example:** `tg personal chats start <bot>`
+**Example:** `tg personal chats start "Example Bot"`
 
 ### `tg chats app`
 
-адрес, который открывает мини-приложение бота от вашего имени; никому его не показывайте
+the address that opens a bot's mini app, signed in as you — keep it to yourself
 
 **Changes something in Telegram.**
 
@@ -1264,387 +1273,385 @@ tg chats start <bot> [options]
 tg chats app <bot> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `bot` | обязателен | чат с ботом: его идентификатор или имя. |
+| `bot` | required | the chat with the bot: its id or its name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--start <param>` | параметр запуска, который читает приложение. |
+| `--start <param>` | the start parameter the app reads. |
 
 **Returns:** the address that opens a bot's mini app, signed in as you — keep it to yourself
 
-**Example:** `tg personal chats app <bot>`
+**Example:** `tg personal chats app "Example Bot"`
 
 ## `tg contacts`
 
-люди с личными чатами у этого аккаунта
+people this account has a one-to-one chat with
 
 ### `tg contacts list`
 
-люди, с которыми у вас есть личный чат; name: ищет по имени, локальному псевдониму или @username, notes: — по вашим личным заметкам о них
+people you have a one-to-one chat with; name: matches the name, your local alias or the @username, notes: your private notes about them
 
 ```sh
 tg contacts list [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
-| `--order <recent\|name>` | сначала недавние переписки или по алфавиту. По умолчанию: `recent`. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
+| `--order <recent\|name>` | newest conversation first, or alphabetical. Default: `recent`. |
 
-**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 2 more; every field: tg commands schema contacts list
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 4 more; every field: tg commands info contacts list
 
-**Next usually:** `tg contacts show <person>`, `tg contacts profile <person>`, `tg contacts context <person>`
+**Next usually:** `tg contacts show <person>`, `tg contacts info <person>`, `tg contacts context <person>`
 
 **Example:** `tg personal contacts list --limit 10`
 
 ### `tg contacts show`
 
-человек и общие с ним чаты
+one person and the chats you share with them
 
 ```sh
 tg contacts show <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, @username или часть имени. |
+| `person` | required | their id, @username, or part of their name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--with-notes` | включить ваши личные заметки при наличии разрешения contacts.notes.list. |
+| `--with-notes` | include your private notes, subject to contacts.notes.list permission. |
 
-**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 2 more; every field: tg commands schema contacts show
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 4 more; every field: tg commands info contacts show
 
-**Next usually:** `tg contacts profile <person>`, `tg contacts context <person>`, `tg contacts prepare <person>`
+**Next usually:** `tg contacts info <person>`, `tg contacts context <person>`, `tg contacts prepare <person>`
 
 **Example:** `tg personal contacts show "Alex Example"`
 
-### `tg contacts profile`
+### `tg contacts info`
 
-всё, что мессенджер сообщает о человеке: имена пользователей, флаги, последний визит, дата регистрации; число его сообщений в хранилище для каждого вашего общего чата, первое и последнее сообщение, а также прежние имена и имена пользователей, зафиксированные хранилищем
+everything the messenger says about one person — handles, flags, last seen, when they registered — and how many of their messages the store holds in each chat you share, the first and the last, and the earlier names and usernames the store saw them with
 
 ```sh
-tg contacts profile <person> [options]
+tg contacts info <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, @username или часть имени. |
+| `person` | required | their id, @username, or part of their name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--show-phone` | показать полный номер телефона. |
+| `--show-phone` | print the whole phone number. |
 
-**Returns:** contact profile — id, name, usernames, bio, flags, chats, aliases, birthday, and 7 more; every field: tg commands schema contacts profile
+**Returns:** contact profile — id, name, usernames, bio, flags, chats, aliases, birthday, and 7 more; every field: tg commands info contacts info
 
-**Example:** `tg personal contacts profile "Alex Example"`
+**Example:** `tg personal contacts info "Alex Example"`
 
 ### `tg contacts context`
 
-сведения о человеке в локальном хранилище; --chat --refresh сначала явно обращается к Telegram
+what the local store holds about a person; --chat --sync-first explicitly asks Telegram first
 
 ```sh
 tg contacts context <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязательный | идентификатор, @username или часть имени. |
+| `person` | required | their id, @username, or part of their name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | не больше этого числа сообщений в каждом списке; по умолчанию 10. |
-| `--since-time <time>` | не старше времени ISO 8601 или 2h / 1d назад. |
-| `--chat <chat>` | чат по идентификатору или имени; повторите для нескольких — затем последние сообщения человека в каждом, 20, если не задан --limit, сокращённо, если не задан -v. |
-| `--sync-first` | с --chat сначала прочитать последние сообщения человека в каждом чате из мессенджера. |
+| `--limit <n>` | at most this many messages in each list; 10 if not given. |
+| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
+| `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
+| `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
 
-**Returns:** what the local archive knows about a person
+**Returns:** contact context — person, shared, last, recent, mentions, limits, complete, not_read, and 1 more; every field: tg commands info contacts context
 
 **Example:** `tg personal contacts context "Alex Example" --limit 10`
 
 ### `tg contacts prepare`
 
-перед разговором с человеком: то, что даёт contacts context, плюс личные чаты, где он писал последним, открытые задачи, принятые факты, ваши заметки и его недавние встречи, у каждого есть ссылка; никогда не подключается к мессенджеру
+before you talk to someone: what contacts context gives, plus the one-to-one chats where they wrote last, open tasks, accepted facts, your notes and their recent meetings, each with its reference; never connects
 
 ```sh
 tg contacts prepare <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, @username или часть имени. |
+| `person` | required | their id, @username, or part of their name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | не больше стольких сообщений и записей в каждом разделе; по умолчанию 10. |
-| `--since-time <time>` | без сообщений и встреч старше этого времени ISO 8601 или 2h / 1d назад. |
+| `--limit <n>` | at most this many messages, and items in each section; 10 if not given. |
+| `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 2h / 1d ago. |
 
-**Returns:** what to know before you talk to someone, each item with its reference
+**Returns:** contact preparation — person, shared, last, recent, mentions, limits, complete, not_read, and 1 more; every field: tg commands info contacts prepare
 
 **Example:** `tg personal contacts prepare Ana`
 
-### `tg contacts timeline`
+### `tg contacts events`
 
 everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
 
 ```sh
-tg contacts timeline <person> [options]
+tg contacts events <person> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязательный | идентификатор, @username или часть имени. |
+| `person` | required | their id, @username, or part of their name. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--scope <scope>` | только данные личных или рабочих аккаунтов: personal или work. |
-| `--since-time <time>` | не старше времени ISO 8601 или 2h / 1d назад. |
-| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
 | `--limit <n>` | at most this many; 50 if not given. |
-| `--cursor <cursor>` | продолжить с места, где остановилась предыдущая страница; его даёт page.next, с теми же фильтрами. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it, with the same filters. |
 
-**Returns:** one person's activity across their linked identities
+**Returns:** contact activity — at, subject, subject_id, role, scope, provider, account, chat_id, and 2 more; every field: tg commands info contacts events
 
-**Example:** `tg personal contacts timeline "Alex Example" --limit 10`
+**Example:** `tg personal contacts events "Alex Example" --limit 10`
 
 ### `tg contacts check`
 
-похож ли человек на бота, фальшивый аккаунт или спамера: профиль, его сообщения в хранилище и публичные списки блокировок (Combot Anti-Spam (CAS), lols.bot), в которые отправляется его идентификатор — готовый запрос, а не окончательный вывод
+whether one person looks like a bot, a fake or a spammer: their profile, what they wrote in the store, and the public ban lists (Combot Anti-Spam (CAS), lols.bot), which are sent their id — a hint, never a verdict
 
 ```sh
 tg contacts check <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, @username или часть имени. |
+| `person` | required | their id, @username, or part of their name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--no-registries` | пропустить публичные списки блокировок; профиль и фотографии всё равно запрашиваются у Telegram, если не задан --offline. |
+| `--no-registries` | skip public ban lists; still ask Telegram for the profile and photos unless --offline. |
 
-**Returns:** check a person's profile and messages for signs of abuse
+**Returns:** contact check — person, score, reasons, registries, unknown, checked_at; every field: tg commands info contacts check
 
 **Example:** `tg personal contacts check "Alex Example"`
 
 ### `tg contacts link`
 
-записать, что два человека в базе — один человек; одинакового имени для этого недостаточно
+record that two people in the store are one person — the same name is never enough
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg contacts link <person> <other>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, @username или часть имени. |
-| `other` | обязателен | тот же человек в другом мессенджере базы, в виде <messenger>:<person> — max:Ana; me: это вы, в виде zoom:<id> me. |
+| `person` | required | their id, @username, or part of their name. |
+| `other` | required | the same in another messenger of the store, as <messenger>:<person> — max:Ana; me: it is you, as zoom:<id> me. |
 
-**Returns:** link identities that belong to one person
+**Returns:** linked person — uid, name, identities; every field: tg commands info contacts link
 
 **Example:** `tg personal contacts link "Alex Example" zoom:101`
 
 ### `tg contacts unlink`
 
-отменить contacts link для одного аккаунта: она снова считается отдельным человеком
+undo contacts link for one identity: it is a person of its own again
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg contacts unlink <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, @username или часть имени; <messenger>:<person> для другого мессенджера. |
+| `person` | required | their id, @username, or part of their name; <messenger>:<person> for another messenger. |
 
-**Returns:** undo contacts link for one identity: it is a person of its own again
+**Returns:** linked person — uid, name, identities; every field: tg commands info contacts unlink
 
 **Example:** `tg personal contacts unlink "Alex Example"`
 
 ### `tg contacts lookup`
 
-владелец номера телефона: запрос или stdin, никогда аргумент
+who has this phone number — asks for it, or reads it from stdin; never an argument
 
 ```sh
 tg contacts lookup
 ```
 
-**Returns:** contact lookup — id, name, username; every field: tg commands schema contacts lookup
+**Returns:** contact lookup — id, name, username; every field: tg commands info contacts lookup
 
 **Example:** `tg personal contacts lookup`
 
 ### `tg contacts sync`
 
-сохранить полную адресную книгу мессенджера в локальной базе
+take the whole contact list from the messenger into the local store
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg contacts sync
 ```
 
-**Returns:** contact sync — added, changed, known; every field: tg commands schema contacts sync
+**Returns:** contact sync — added, changed, known; every field: tg commands info contacts sync
 
 **Example:** `tg personal contacts sync`
 
-### `tg contacts alias`
+### `tg contacts aliases`
 
-личное локальное отображаемое имя в выбранном аккаунте
+a private local display name in the selected account
 
-#### `tg contacts alias set`
+#### `tg contacts aliases set`
 
-ваше собственное имя для человека в этом аккаунте; хранится на этом компьютере и никуда не отправляется
+your own name for a person in this account; kept on this machine, never sent
 
-**Изменяет данные только на этом компьютере.**
-
-```sh
-tg contacts alias set <person> <alias>
-```
-
-| Аргумент | | Описание |
-|---|---|---|
-| `person` | обязателен | идентификатор, ссылка или известное имя человека. |
-| `alias` | обязателен | личное имя, под которым вы будете называть этого человека. |
-
-**Returns:** your own name for a person in this account; kept on this machine, never sent
-
-**Example:** `tg personal contacts alias set "Alex Example" "Reading partner"`
-
-#### `tg contacts alias rm`
-
-удалить ваше локальное имя для человека; снова показывается его собственное имя
-
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
-tg contacts alias rm <person>
+tg contacts aliases set <person> <alias>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, ссылка или известное имя человека. |
+| `person` | required | the person's id, reference or known name. |
+| `alias` | required | the private name to use for this person. |
 
-**Returns:** drop your local name for a person; their own name shows again
+**Returns:** contact alias — person_id, alias; every field: tg commands info contacts aliases set
 
-**Example:** `tg personal contacts alias rm "Alex Example"`
+**Example:** `tg personal contacts aliases set "Alex Example" "Reading partner"`
+
+#### `tg contacts aliases remove`
+
+drop your local name for a person; their own name shows again
+
+**Changes something on this computer only.**
+
+```sh
+tg contacts aliases remove <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the person's id, reference or known name. |
+
+**Returns:** contact alias — person_id, alias; every field: tg commands info contacts aliases remove
+
+**Example:** `tg personal contacts aliases remove "Alex Example"`
 
 ### `tg contacts notes`
 
-ваши личные заметки о сохранённом контакте, общие для всех аккаунтов, где он виден
+your private notes on a stored contact, the same in every account that sees them
 
 #### `tg contacts notes list`
 
-все личные заметки о человеке, от старых к новым
+every private note you keep on a person, oldest first
 
 ```sh
 tg contacts notes list <person> [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, ссылка или известное имя человека. |
-| `query` | необязателен | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
+| `person` | required | the person's id, reference or known name. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands schema contacts notes list
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands info contacts notes list
 
 **Example:** `tg personal contacts notes list "Alex Example"`
 
 #### `tg contacts notes show`
 
-одна личная заметка о человеке с её ревизией для правки
+one private note on a person, with its revision for edit
 
 ```sh
 tg contacts notes show <person> <id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, ссылка или известное имя человека. |
-| `id` | обязателен | идентификатор заметки из contacts notes list. |
+| `person` | required | the person's id, reference or known name. |
+| `id` | required | the note id from contacts notes list. |
 
-**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands schema contacts notes show
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands info contacts notes show
 
 **Example:** `tg personal contacts notes show "Alex Example" 1`
 
 #### `tg contacts notes add`
 
-добавить личную заметку о человеке из stdin или --file; никуда не отправляется
+add a private note on a person from stdin or --text-file; never sent
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg contacts notes add <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, ссылка или известное имя человека. |
+| `person` | required | the person's id, reference or known name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--file <path>` | читать текст заметки из файла; без параметра или с - читать stdin. |
+| `--text-file <path>` | read note text from a file; omitted or - reads stdin. |
 
-**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands schema contacts notes add
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands info contacts notes add
 
-**Example:** `tg personal contacts notes add "Alex Example" --file ./note.txt`
+**Example:** `tg personal contacts notes add "Alex Example" --text-file ./note.txt`
 
 #### `tg contacts notes edit`
 
-заменить текст заметки; --revision должна совпадать с прочитанной
+replace a note's text; --revision must match the one you read
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg contacts notes edit <person> <id> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, ссылка или известное имя человека. |
-| `id` | обязателен | идентификатор заметки из contacts notes list. |
+| `person` | required | the person's id, reference or known name. |
+| `id` | required | the note id from contacts notes list. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--file <path>` | читать текст заметки из файла; без параметра или с - читать stdin. |
-| `--revision <n>` | номер ревизии, которую вы прочитали перед редактированием. |
+| `--text-file <path>` | read note text from a file; omitted or - reads stdin. |
+| `--revision <n>` | the revision you read before editing. |
 
-**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands schema contacts notes edit
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: tg commands info contacts notes edit
 
-**Example:** `tg personal contacts notes edit "Alex Example" 1 --revision 1 --file ./note.txt`
+**Example:** `tg personal contacts notes edit "Alex Example" 1 --revision 1 --text-file ./note.txt`
 
 #### `tg contacts notes remove`
 
-удалить одну личную заметку о человеке
+delete one private note on a person
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg contacts notes remove <person> <id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор, ссылка или известное имя человека. |
-| `id` | обязателен | идентификатор заметки из contacts notes list. |
+| `person` | required | the person's id, reference or known name. |
+| `id` | required | the note id from contacts notes list. |
 
-**Returns:** delete one private note on a person
+**Returns:** contact note removal — id, person_id, removed; every field: tg commands info contacts notes remove
 
 **Example:** `tg personal contacts notes remove "Alex Example" 1`
 
 ### `tg contacts add`
 
-добавить контакт; `contacts list` по-прежнему показывает только личные чаты
+add a person to your contacts — `contacts list` still shows only people you have a dialog with
 
 **Changes something in Telegram.**
 
@@ -1652,17 +1659,17 @@ tg contacts notes remove <person> <id>
 tg contacts add <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор из `contacts lookup` или часть известного имени. |
+| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
-**Returns:** add a person to your contacts
+**Returns:** contact update — operation_id, person; every field: tg commands info contacts add
 
 **Example:** `tg personal contacts add "Alex Example"`
 
 ### `tg contacts remove`
 
-удалить контакт; чат остаётся, заданное вами имя может исчезнуть
+remove a person from your contacts; the chat stays, a name you gave them may not
 
 **Changes something in Telegram.**
 
@@ -1670,17 +1677,17 @@ tg contacts add <person>
 tg contacts remove <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор из `contacts lookup` или часть известного имени. |
+| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
-**Returns:** remove a person from your contacts; the chat stays, a name you gave them may not
+**Returns:** contact state change — operation_id, person_id; every field: tg commands info contacts remove
 
 **Example:** `tg personal contacts remove "Alex Example"`
 
 ### `tg contacts block`
 
-запретить человеку писать вам; контакт необязателен
+stop a person from writing to you — they need not be a contact
 
 **Changes something in Telegram.**
 
@@ -1688,17 +1695,17 @@ tg contacts remove <person>
 tg contacts block <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор из `contacts lookup` или часть известного имени. |
+| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
-**Returns:** stop a person from writing to you — they need not be a contact
+**Returns:** contact state change — operation_id, person_id; every field: tg commands info contacts block
 
 **Example:** `tg personal contacts block "Alex Example"`
 
 ### `tg contacts unblock`
 
-разрешить заблокированному человеку снова писать вам
+let a blocked person write to you again
 
 **Changes something in Telegram.**
 
@@ -1706,17 +1713,17 @@ tg contacts block <person>
 tg contacts unblock <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор из `contacts lookup` или часть известного имени. |
+| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
-**Returns:** let a blocked person write to you again
+**Returns:** contact state change — operation_id, person_id; every field: tg commands info contacts unblock
 
 **Example:** `tg personal contacts unblock "Alex Example"`
 
 ### `tg contacts rename`
 
-переименовать контакт в адресной книге мессенджера; для личного локального имени используйте contacts alias
+rename the contact in the messenger address book; use contacts alias for a private local name
 
 **Changes something in Telegram.**
 
@@ -1724,19 +1731,19 @@ tg contacts unblock <person>
 tg contacts rename <person> <first-name> [last-name]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязателен | идентификатор из `contacts lookup` или часть известного имени. |
-| `first-name` | обязателен | имя, под которым вы хотите видеть человека. |
-| `last-name` | необязателен | фамилия, которую вы хотите видеть у этого человека. |
+| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
+| `first-name` | required | the name you want to see for them. |
+| `last-name` | optional | the last name you want to see for them. |
 
-**Returns:** change a contact's name in the messenger address book
+**Returns:** contact update — operation_id, person; every field: tg commands info contacts rename
 
 **Example:** `tg personal contacts rename "Alex Example" Alex Example`
 
 ### `tg contacts import`
 
-загрузить телефоны и добавить найденных мессенджером людей
+upload phone numbers and add the people the messenger has under them
 
 **Changes something in Telegram.**
 
@@ -1744,60 +1751,60 @@ tg contacts rename <person> <first-name> [last-name]
 tg contacts import <file>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `file` | обязателен | один человек на строку: номер, запятая, табуляция или точка с запятой, затем имя. |
+| `file` | required | one person per line: number, then a comma, a tab or a semicolon, then the name. |
 
-**Returns:** upload phone numbers and add the people the messenger has under them
+**Returns:** contact import — operation_id, sent, recognised; every field: tg commands info contacts import
 
 **Example:** `tg personal contacts import ./contacts.csv`
 
 ## `tg messages`
 
-чтение и отправка сообщений
+read and send messages
 
 ### `tg messages evidence`
 
-ограниченный пакет исходных сообщений базы, от новых к старым
+general chat context, newest first, with references, coverage and fingerprints for verification
 
 ```sh
 tg messages evidence <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество, 1–100. |
-| `--cursor <cursor>` | продолжить с места, где, по page.next, остановилась предыдущая порция. |
+| `--limit <n>` | how many, 1–100. |
+| `--cursor <cursor>` | go on from where page.next says the last packet stopped. |
 
-**Returns:** a bounded evidence packet from stored messages, newest first
+**Returns:** evidence packet — schema_version, id, kind, source, fingerprint, limits, content_bytes, coverage, and 1 more; every field: tg commands info messages evidence
 
 **Example:** `tg personal messages evidence "Book club" --limit 10`
 
 ### `tg messages list`
 
-сообщения чата от старых к новым
+a chat's messages, oldest to newest
 
 ```sh
 tg messages list <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `query` | необязателен | откуда начать и какая тема: id<42, date>2026-10-01, topic:12. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | where to start and which topic: id<42, date>2026-10-01, topic:12. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество. |
-| `--cursor <cursor>` | продолжить с места, где остановилась предыдущая страница; его даёт page.next. |
-| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер, где он это умеет, иначе локальной моделью; может занять минуты. |
-| `--model <id>` | скачанная модель для --transcribe; список в `models audio list`. |
+| `--limit <n>` | how many. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
+| `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands schema messages list
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info messages list
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -1805,7 +1812,7 @@ tg messages list <chat> [query] [options]
 
 ### `tg messages send`
 
-отправить текст; без [text] читается из stdin
+send a text message; without [text], the text is read from stdin
 
 **Changes something in Telegram.**
 
@@ -1813,131 +1820,134 @@ tg messages list <chat> [query] [options]
 tg messages send <chat> [text] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `text` | необязателен | текст сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `text` | optional | the message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--topic <id>` | отправить в эту тему форума. |
-| `--reply-to <message>` | ответить на сообщение по идентификатору в том же чате. |
-| `--comment-to <post>` | комментарий к этой публикации канала; отправляется в группу обсуждения публикации. |
-| `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as`; обязательно, если чат по умолчанию публикует от другого имени. |
-| `--operation-id <id>` | повторить отправку с неизвестным результатом без риска дубликата. |
-| `--silent` | отправить без уведомления. |
-| `--no-preview` | отключить карточку предпросмотра ссылки. |
-| `--md` | использовать Markdown этого мессенджера; поддерживаемый синтаксис описан в руководстве по форматированию. |
-| `--file <file>` | прикрепить файл; текст становится подписью. |
-| `--photo <file>` | прикрепить .jpg, .png или .webp как фото; текст становится подписью. |
-| `--as-file` | отправить --file как скачиваемый файл, включая видео. |
-| `--voice <file>` | отправить Ogg Opus как голосовое без текста и других вложений. |
-| `--allow-any-file` | отправить файл даже из папки с учётными данными или собственной папки CLI. |
-| `--at-time <time>` | отложить отправку в мессенджере даже при выключенном компьютере: 2026-09-25T09:00 (местное время) или через 30m, 2h, 1d. |
-| `--spoiler` | скрыть --photo или видео под спойлером до нажатия. |
-| `--caption-above` | показать текст над --photo или --file, а не под ним. |
-| `--filename <name>` | имя --file, видимое другим, вместо имени файла на диске. |
-| `--html` | HTML-текст: <b>, <i>, <a href>, <code>. |
+| `--topic <id>` | send to this forum topic. |
+| `--draft` | save the text as a draft for the owner to review and send. |
+| `--reply-to <message>` | answer this message, by its id in the same chat. |
+| `--comment-to <post>` | comment on this post of the channel; it goes to the post's discussion group. |
+| `--send-as <id>` | post as one of the identities `chats send-as` lists; required where the chat posts as someone else by default. |
+| `--operation-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
+| `--silent` | deliver without a notification. |
+| `--no-preview` | no preview card for a link in the text. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. Default: ``. |
+| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. Default: ``. |
+| `--as-file` | send each --file as a file to download, a video included. |
+| `--voice <file>` | send an Ogg Opus file as a voice message, alone, with no text. |
+| `--allow-any-file` | send a file even from credential folders or this CLI's own folders. |
+| `--at-time <time>` | let the messenger send it later, even with this machine off: 2026-09-25T09:00 (local time), or 30m, 2h, 1d from now. |
+| `--spoiler` | hide the --photo or video behind a spoiler until tapped. |
+| `--caption-above` | show the text above the --photo or --file, not below it. |
+| `--filename <name>` | the name others see for the --file, instead of its name on disk. |
+| `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 
-**Returns:** send a text message; without [text], the text is read from stdin
+**Returns:** message send — operation_id, message, messages, scheduled_for, chat_id, saved; every field: tg commands info messages send
 
 **Example:** `tg personal messages send "Book club" "The meeting starts at 10."`
 
 ### `tg messages show`
 
-одно сообщение по чату и идентификатору или указателю msg:
+one message, by its chat and id or by its msg: locator
 
 ```sh
 tg messages show <chat> [message]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или часть, идентификатор, @username, `me` для «Избранного»; либо указатель msg: без следующего идентификатора. |
-| `message` | необязателен | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages; or a msg: locator, with no message id after it. |
+| `message` | optional | the message id. |
 
-**Returns:** one message, by its chat and id or by its msg: locator
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info messages show
+
+**Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
 **Example:** `tg personal messages show "Book club" 101`
 
 ### `tg messages context`
 
-сообщение и соседние от старых к новым
+a message and what came either side of it, oldest first
 
 ```sh
 tg messages context <chat> [message] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или часть, идентификатор, @username, `me` для «Избранного»; либо указатель msg: без следующего идентификатора. |
-| `message` | необязателен | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages; or a msg: locator, with no message id after it. |
+| `message` | optional | the message id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--thread` | сохранённая цепочка ответов и ответы на сообщение вместо соседей по времени; без графа — соседи по времени. |
-| `--thread-hops <n>` | не больше этого числа связей от найденного сообщения (по умолчанию 8). |
-| `--thread-messages <n>` | не больше этого числа сообщений в контексте каждой ветки (по умолчанию 50). |
-| `--thread-bytes <n>` | не больше этого числа байтов целых сообщений и связей в каждом контексте (по умолчанию 65536). |
-| `--thread-within <duration>` | сообщения в пределах этого времени по обе стороны от найденного (по умолчанию 1d). |
-| `--before-n <n>` | количество до него. По умолчанию: `5`. |
-| `--after-n <n>` | количество после него. По умолчанию: `5`. |
+| `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
+| `--thread-hops <n>` | at most this many links from the hit (default: 8). |
+| `--thread-messages <n>` | at most this many messages in each thread context (default: 50). |
+| `--thread-bytes <n>` | at most this many bytes of whole messages and links in each context (default: 65536). |
+| `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
+| `--before-n <n>` | how many before it. Default: `5`. |
+| `--after-n <n>` | how many after it. Default: `5`. |
 
-**Returns:** a message and what came either side of it, oldest first
+**Returns:** message context — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 40 more; every field: tg commands info messages context
 
 **Example:** `tg personal messages context "Book club" 101 --before-n 3 --after-n 3`
 
 ### `tg messages download`
 
-сохранить фото, файлы, видео и голосовые сообщения или все вложения чата с --all
+save a message's photos, files, videos and voice notes to a folder — or a whole chat's with --all
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg messages download <chat> [message] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | необязателен | идентификатор сообщения; не нужен с --all. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | optional | the message id; left out with --all. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--output-dir <dir>` | каталог сохранения; создаётся при отсутствии. По умолчанию: `.`. |
-| `--all` | все файлы чата от новых к старым; повтор продолжает загрузку. |
-| `--pause <duration>` | с --all пауза между страницами для соблюдения лимитов. По умолчанию: `1s`. |
-| `--extract` | прочитать текстовые слои файлов, которые эта загрузка сопоставляет с локальным индексом содержимого. |
+| `--output-dir <dir>` | where to save them; created if missing. Default: `.`. |
+| `--all` | every file of the chat, newest first; run it again to continue where it stopped. |
+| `--pause <duration>` | with --all, a pause between pages, to stay under the provider's limits. Default: `1s`. |
+| `--extract` | read text layers from the files this download maps into the local content index. |
 
-**Returns:** download files attached to stored messages
+**Returns:** message download — files, extraction, complete, batch, chat, saved, existing, stopped; every field: tg commands info messages download
 
 **Example:** `tg personal messages download "Book club" 101 --output-dir ./downloads`
 
 ### `tg messages transcribe`
 
-голосовое в текст через Telegram, если доступно, иначе локальной моделью
+a voice message as text — by Telegram where it can, else by a model on this machine
 
 ```sh
 tg messages transcribe <chat> <message> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор голосового сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the id of a voice message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--local` | только локальная модель, без мессенджера. |
-| `--model <id>` | скачанная модель; подразумевает --local (`models audio list`). |
+| `--local` | use the model on this machine, never the messenger. |
+| `--model <model>` | which downloaded model; implies --local (`models list`). |
 
-**Returns:** transcribe one voice message
+**Returns:** message transcript — message_id, text, pending, via, model; every field: tg commands info messages transcribe
 
 **Example:** `tg personal messages transcribe "Book club" 101`
 
 ### `tg messages edit`
 
-изменить своё сообщение; собеседник мог уже прочитать старый текст
+change the text of your own message; the other side may have read it already
 
 **Changes something in Telegram.**
 
@@ -1945,24 +1955,24 @@ tg messages transcribe <chat> <message> [options]
 tg messages edit <chat> <message> [text] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор своего сообщения. |
-| `text` | необязателен | новый текст; без аргумента читается из stdin. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the id of your own message. |
+| `text` | optional | the new text; without it, read from stdin. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--md` | использовать Markdown этого мессенджера; поддерживаемый синтаксис описан в руководстве по форматированию. |
-| `--html` | HTML-текст: <b>, <i>, <a href>, <code>. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 
-**Returns:** change the text of your own message; the other side may have read it already
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: tg commands info messages edit
 
 **Example:** `tg personal messages edit "Book club" 101 "The meeting starts at 11."`
 
 ### `tg messages delete`
 
-удалить сообщения у себя; с --for-everyone — у всех
+delete messages for you only; with --for-everyone, for everyone in the chat
 
 **Changes something in Telegram.**
 
@@ -1970,23 +1980,23 @@ tg messages edit <chat> <message> [text] [options]
 tg messages delete <chat> <message> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификаторы сообщений через пробел или запятую, не больше 10. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the message ids, by spaces or commas, at most 10. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--for-everyone` | удалить у всех участников чата; восстановить нельзя. |
-| `--allow-dangerous` | выполнить удаление без подтверждения уровня ask. |
+| `--for-everyone` | delete for everyone in the chat, not only for you — they cannot get it back. |
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
-**Returns:** delete messages for you only; with --for-everyone, for everyone in the chat
+**Returns:** message deletion — operation_id, chat_id, deleted, for_everyone; every field: tg commands info messages delete
 
 **Example:** `tg personal messages delete "Book club" 101`
 
 ### `tg messages forward`
 
-переслать сообщение в другой чат
+forward one message to another chat
 
 **Changes something in Telegram.**
 
@@ -1994,26 +2004,26 @@ tg messages delete <chat> <message> [options]
 tg messages forward <chat> <message> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | исходный чат: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения. |
+| `chat` | required | the chat the message is in: a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the message id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--to <chat>` | чат назначения: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--silent` | отправить без уведомления. |
-| `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as` для чата --to; обязательно, если чат по умолчанию публикует от другого имени. |
-| `--operation-id <id>` | повторить пересылку с неизвестным результатом без риска дубликата. |
-| `--topic <id>` | переслать в эту тему форума чата --to. |
+| `--to <chat>` | where it goes: a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--silent` | deliver it without a notification. |
+| `--send-as <id>` | post as one of the identities `chats send-as` lists for the --to chat; required where the chat posts as someone else by default. |
+| `--operation-id <id>` | repeat a forward whose outcome was unknown, without risking a second copy. |
+| `--topic <id>` | forward into this forum topic of the --to chat. |
 
-**Returns:** forward one message to another chat
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: tg commands info messages forward
 
 **Example:** `tg personal messages forward "Book club" 101 --to "Project room"`
 
 ### `tg messages pin`
 
-закрепить сообщение тихо, если нет --notify
+pin a message in a chat, quietly unless --notify
 
 **Changes something in Telegram.**
 
@@ -2021,22 +2031,22 @@ tg messages forward <chat> <message> [options]
 tg messages pin <chat> <message> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the message id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--notify` | уведомить участников о закреплении. |
+| `--notify` | tell the chat's members about the pin. |
 
-**Returns:** pin a message in a chat, quietly unless --notify
+**Returns:** message pin — operation_id, chat_id, message_id, pinned; every field: tg commands info messages pin
 
 **Example:** `tg personal messages pin <chat> <message>`, `tg personal messages pin <chat> <message> --notify`
 
 ### `tg messages unpin`
 
-открепить сообщение
+unpin a message in a chat
 
 **Changes something in Telegram.**
 
@@ -2044,18 +2054,18 @@ tg messages pin <chat> <message> [options]
 tg messages unpin <chat> <message>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the message id. |
 
-**Returns:** unpin a message in a chat
+**Returns:** message pin — operation_id, chat_id, message_id, pinned; every field: tg commands info messages unpin
 
 **Example:** `tg personal messages unpin <chat> <message>`
 
 ### `tg messages press`
 
-нажать кнопку бота под сообщением; бот видит, что вы её нажали
+press a bot's button under a message; the bot sees that you pressed it
 
 **Changes something in Telegram.**
 
@@ -2063,29 +2073,29 @@ tg messages unpin <chat> <message>
 tg messages press <chat> <message> <button>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения с кнопками. |
-| `button` | обязателен | её номер, как его печатает `messages show`, или её точный текст. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the id of the message with the buttons. |
+| `button` | required | its number as `messages show` prints it, or its exact text. |
 
 **Returns:** press a bot's button under a message; the bot sees that you pressed it
 
-**Example:** `tg personal messages press Team 1234 <button>`
+**Example:** `tg personal messages press "Example Bot" 101 1`
 
 ### `tg messages scheduled`
 
-отложенные сообщения от ближайших к поздним; отмена в приложении
+messages waiting to be sent later in a chat, soonest first; cancel one in the app
 
 ```sh
 tg messages scheduled <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands schema messages scheduled
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info messages scheduled
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -2093,18 +2103,18 @@ tg messages scheduled <chat>
 
 ### `tg messages link`
 
-постоянная ссылка на сообщение, если она поддерживается, и локатор, привязанный к аккаунту
+a message permalink when supported, and its account-scoped locator
 
 ```sh
 tg messages link <chat> [message]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или часть, идентификатор, @username, `me` для «Избранного»; либо указатель msg: без следующего идентификатора. |
-| `message` | необязателен | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages; or a msg: locator, with no message id after it. |
+| `message` | optional | the message id. |
 
-**Returns:** message link — ref, url, access, reason; every field: tg commands schema messages link
+**Returns:** message link — ref, url, access, reason; every field: tg commands info messages link
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -2112,24 +2122,24 @@ tg messages link <chat> [message]
 
 ### `tg messages comments`
 
-комментарии под публикацией канала, от старых к новым; находятся в её группе обсуждения
+the comments under a channel post, oldest to newest; they live in its discussion group
 
 ```sh
 tg messages comments <chat> <post> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязательный | канал: чат по названию или его части, идентификатору, @username либо `me` для Избранного. |
-| `post` | обязательный | идентификатор сообщения публикации в канале. |
-| `query` | необязателен | откуда начать: id<42. |
+| `chat` | required | the channel: a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `post` | required | the post's message id in the channel. |
+| `query` | optional | where to start: id<42. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество. |
-| `--cursor <cursor>` | продолжить с места, где остановилась предыдущая страница; его даёт page.next. |
+| `--limit <n>` | how many. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands schema messages comments
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info messages comments
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages links <chat> <message>`, `tg polls show <chat> <message>`
 
@@ -2137,62 +2147,62 @@ tg messages comments <chat> <post> [query] [options]
 
 ### `tg messages links`
 
-причина отнесения сообщения к разговору: связи и цепочка ответов к началу
+why a message is in its conversation: each link it has, and the chain of answers back to the start
 
 ```sh
 tg messages links <chat> <message>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the message id. |
 
-**Returns:** why a message belongs to its conversation
+**Returns:** message links — chat, message, links, chain; every field: tg commands info messages links
 
 **Example:** `tg personal messages links "Book club" 101`
 
 ### `tg messages sync`
 
-обновить историю чата в локальном хранилище, сначала новые сообщения; повторите запуск для продолжения; --all синхронизирует все чаты
+bring a chat's history in the local store up to date, newest first; run it again to continue; --all syncs every chat
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg messages sync [chat] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | необязательный | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | optional | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--all` | каждый чат, сначала недавно активные — это нужно для поиска; последние 90d, если не заданы --since-time или --last. |
-| `--limit <n>` | не более указанного числа сообщений за этот запуск, на чат с --all; 1000, если не указано. |
-| `--page-size <n>` | число сообщений в одном запросе; по умолчанию 100. |
-| `--pause <duration>` | пауза между страницами для соблюдения лимитов. По умолчанию: `1s`. |
-| `--since-time <time>` | остановиться у сообщений старше ISO 8601 или 2h / 1d назад. |
-| `--last <n>` | остановиться, когда сохранены последние n сообщений. |
-| `--catch-up` | подготовить локальный поиск после этого запуска; переопределяет search_catch_up. |
-| `--no-catch-up` | пропустить локальную подготовку после этого запуска. |
-| `--catch-up-chunks <n>` | не более указанного числа локальных векторных фрагментов. |
-| `--catch-up-messages <n>` | пропустить перестроение графа, если число сообщений превышает это значение. |
-| `--catch-up-time <duration>` | лимит времени локальной подготовки, по умолчанию 30s. |
-| `--background` | фоновое задание после завершения команды; следить через `store jobs show`. |
-| `--dry-run` | только оценить оставшиеся сообщения, запросы и минуты полной загрузки; по базе, без запросов. |
+| `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last. |
+| `--limit <n>` | at most this many messages in this run, per chat with --all; 1000 if not given. |
+| `--page-size <n>` | how many messages one request asks for; 100 if not given. |
+| `--pause <duration>` | pause between pages, to stay under the provider's limits. Default: `1s`. |
+| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
+| `--last <n>` | stop once the newest n messages are held. |
+| `--catch-up` | prepare local search after this run; overrides search_catch_up. |
+| `--no-catch-up` | skip local preparation after this run. |
+| `--catch-up-chunks <n>` | at most this many local vector chunks. |
+| `--catch-up-messages <n>` | skip a graph rebuild larger than this many messages. |
+| `--catch-up-time <duration>` | local preparation time budget, 30s by default. |
+| `--background` | run as a job that outlives this command; `store jobs show` follows it. |
+| `--dry-run` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
-**Returns:** fetch and save a chat's message history
+**Returns:** message sync — chat, held, ranges, missing, requests, runs, seconds, fetched, and 15 more; every field: tg commands info messages sync
 
 **Example:** `tg personal messages sync "Book club" --last 100`
 
 ## `tg reactions`
 
-реакции на сообщения
+react to messages
 
 ### `tg reactions add`
 
-поставить реакцию, заменив предыдущую
+put your reaction on a message; it replaces the one you had
 
 **Changes something in Telegram.**
 
@@ -2200,19 +2210,19 @@ tg messages sync [chat] [options]
 tg reactions add <chat> <message> <emoji>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения. |
-| `emoji` | обязателен | один эмодзи, например 👍. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the message id. |
+| `emoji` | required | one emoji, for example 👍. |
 
-**Returns:** put your reaction on a message; it replaces the one you had
+**Returns:** reaction change — operation_id, chat_id, message_id, reaction; every field: tg commands info reactions add
 
 **Example:** `tg personal reactions add "Book club" 101 👍`
 
 ### `tg reactions remove`
 
-убрать свою реакцию
+take your reaction off a message
 
 **Changes something in Telegram.**
 
@@ -2220,62 +2230,62 @@ tg reactions add <chat> <message> <emoji>
 tg reactions remove <chat> <message>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the message id. |
 
-**Returns:** take your reaction off a message
+**Returns:** reaction change — operation_id, chat_id, message_id, reaction; every field: tg commands info reactions remove
 
 **Example:** `tg personal reactions remove "Book club" 101`
 
 ## `tg polls`
 
-прочитать опрос, проголосовать, закрыть свой или создать
+read a poll, vote in it, close your own, create one
 
 ### `tg polls show`
 
-опрос и идентификаторы ответов из текущего сообщения
+a poll and its answer ids, as the message carries it now
 
 ```sh
 tg polls show <chat> <message>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения с опросом. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the id of the message that carries the poll. |
 
-**Returns:** a poll and its answer ids, as the message carries it now
+**Returns:** poll — chat_id, message_id, question, answers, closed, multiple, anonymous, voters, and 3 more; every field: tg commands info polls show
 
 **Example:** `tg personal polls show "Book club" 101`
 
 ### `tg polls voters`
 
-кто за что проголосовал, новое сверху; для неанонимного опроса
+who voted for what, newest first; not in an anonymous poll
 
 ```sh
 tg polls voters <chat> <message> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения с опросом. |
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the id of the message that carries the poll. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
-**Returns:** poll vote — person_id, name, username, answers, voted_at; every field: tg commands schema polls voters
+**Returns:** poll vote — person_id, name, username, answers, voted_at; every field: tg commands info polls voters
 
 **Example:** `tg personal polls voters "Book club" 101 answers:0 --limit 10`
 
 ### `tg polls vote`
 
-проголосовать или отозвать голос; виден другим, если опрос не анонимный
+vote in a poll, or take your vote back; the others see it unless the poll is anonymous
 
 **Changes something in Telegram.**
 
@@ -2283,23 +2293,23 @@ tg polls voters <chat> <message> [query] [options]
 tg polls vote <chat> <message> [answers] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения с опросом. |
-| `answers` | необязателен | идентификаторы ответов из `polls show`. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the id of the message that carries the poll. |
+| `answers` | optional | answer ids, as `polls show` prints them. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--retract` | отозвать голос. |
+| `--retract` | take your vote back. |
 
-**Returns:** vote in a poll, or take your vote back; the others see it unless the poll is anonymous
+**Returns:** poll change — operation_id, poll; every field: tg commands info polls vote
 
 **Example:** `tg personal polls vote "Book club" 101 0`
 
 ### `tg polls close`
 
-закрыть свой опрос; больше нельзя голосовать или открыть его снова
+close your own poll; nobody can vote after that, and it cannot be reopened
 
 **Changes something in Telegram.**
 
@@ -2307,18 +2317,18 @@ tg polls vote <chat> <message> [answers] [options]
 tg polls close <chat> <message>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор своего сообщения с опросом. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | the id of your own message that carries the poll. |
 
-**Returns:** close your own poll; nobody can vote after that, and it cannot be reopened
+**Returns:** poll change — operation_id, poll; every field: tg commands info polls close
 
 **Example:** `tg personal polls close "Book club" 101`
 
 ### `tg polls create`
 
-отправить опрос отдельным сообщением; публичный без --anonymous
+send a poll to a chat, as a message of its own; public unless --anonymous
 
 **Changes something in Telegram.**
 
@@ -2326,184 +2336,137 @@ tg polls close <chat> <message>
 tg polls create <chat> <question> <answers> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `question` | обязателен | вопрос. |
-| `answers` | обязателен | минимум два ответа. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `question` | required | the question. |
+| `answers` | required | two answers or more. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--topic <id>` | отправить в эту тему форума. |
-| `--multiple` | разрешить несколько вариантов. |
-| `--anonymous` | скрыть, кто как голосовал. |
-| `--revote` | разрешить менять голос. |
-| `--silent` | отправить без уведомления. |
-| `--send-as <id>` | публиковать от имени одной из сущностей в списке `chats send-as`; обязательно, если чат по умолчанию публикует от другого имени. |
-| `--operation-id <id>` | повторить создание с неизвестным результатом без второго опроса. |
-| `--quiz` | викторина: один правильный ответ, голос окончательный. |
-| `--correct <n>` | с --quiz: позиция правильного ответа, от 1. |
-| `--solution <text>` | с --quiz: пояснение, которое люди видят после ответа. |
-| `--close-time <delay>` | опрос закроется сам через это время после отправки: от 5s до 10m, например 90s или 5m. |
+| `--topic <id>` | send to this forum topic. |
+| `--multiple` | people may pick several answers. |
+| `--anonymous` | nobody sees who voted for what. |
+| `--revote` | people may change their vote. |
+| `--silent` | send without a notification. |
+| `--send-as <id>` | post as one of the identities `chats send-as` lists; required where the chat posts as someone else by default. |
+| `--operation-id <id>` | repeat a create whose outcome was unknown, without risking a second poll. |
+| `--quiz` | a quiz: one answer is right, and a vote is final. |
+| `--correct <n>` | with --quiz: the right answer's position, from 1. |
+| `--solution <text>` | with --quiz: what people see once they answered. |
+| `--close-time <delay>` | it closes by itself this long after sending: 5s to 10m, like 90s or 5m. |
 
-**Returns:** send a poll to a chat, as a message of its own; public unless --anonymous
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: tg commands info polls create
 
 **Example:** `tg personal polls create "Book club" "Which day?" Monday Tuesday`
 
 ## `tg models`
 
-модели, работающие на компьютере
+models that run on this machine
 
-### `tg models audio`
+### `tg models keys`
 
-модели распознавания голосовых сообщений
+API keys for embedding and analysis providers
 
-#### `tg models audio list`
+#### `tg models keys set`
 
-модели от наиболее подходящих, наличие загрузки и выбор по умолчанию
+store a key, typed at a hidden prompt or piped on stdin — never as an argument
 
-```sh
-tg models audio list [query]
-```
-
-| Аргумент | | Описание |
-|---|---|---|
-| `query` | необязателен | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
-
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands schema models audio list
-
-**Next usually:** `tg models audio download <model>`, `tg models text download <model>`, `tg images models download <model>`
-
-**Example:** `tg personal models audio list`
-
-#### `tg models audio download`
-
-однократно скачать модель с проверкой ожидаемого sha256
-
-**Читает из внешнего сервиса.**
+**Changes something on this computer only.**
 
 ```sh
-tg models audio download <model>
+tg models keys set <provider>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `model` | обязателен | идентификатор модели из `models audio list`. |
+| `provider` | required | openai, anthropic, or the host of a --base-url server that wants a key. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands schema models audio download
+**Returns:** model key stored — provider, stored; every field: tg commands info models keys set
 
-**Next usually:** `tg models text download <model>`, `tg images models download <model>`
+**Example:** `tg personal models keys set openai`
 
-**Example:** `tg personal models audio download parakeet-v3`
+#### `tg models keys remove`
 
-### `tg models text`
+forget a stored key
 
-модели векторизации для поиска разговоров по смыслу
-
-#### `tg models text list`
-
-модели от наиболее подходящих, наличие загрузки и выбор по умолчанию
+**Changes something on this computer only.**
 
 ```sh
-tg models text list [query]
+tg models keys remove <provider>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
+| `provider` | required | openai, anthropic, or a server's host. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands schema models text list
+**Returns:** model key removed — provider, removed; every field: tg commands info models keys remove
 
-**Next usually:** `tg models text download <model>`, `tg models audio download <model>`, `tg images models download <model>`
+**Example:** `tg personal models keys remove openai`
 
-**Example:** `tg personal models text list`
+### `tg models list`
 
-#### `tg models text download`
-
-однократно скачать модель с проверкой ожидаемого sha256
-
-**Читает из внешнего сервиса.**
+speech and embedding models, their download status and the default of each kind
 
 ```sh
-tg models text download <model> [options]
+tg models list [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `model` | обязателен | идентификатор из `models text list`. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands info models list
+
+**Next usually:** `tg models download <model>`, `tg images models download <model>`
+
+**Example:** `tg personal models list`, `tg personal models list kind:audio`
+
+### `tg models download`
+
+download and verify one speech or embedding model: tens to hundreds of MB, each size in models list
+
+**Reads from an outside service.**
+
+```sh
+tg models download <model> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `model` | required | a model id from models list. |
+
+| Option | What it does |
 |---|---|
-| `--accept-terms` | принять собственные лицензионные условия модели. |
+| `--accept-terms` | accept the model's licence terms, for a model that has its own. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands schema models text download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands info models download
 
-**Next usually:** `tg models audio download <model>`, `tg images models download <model>`
+**Next usually:** `tg images models download <model>`
 
-**Example:** `tg personal models text download e5-small`
-
-#### `tg models text key`
-
-ключи API сервисов векторов и анализа
-
-#### `tg models text key set`
-
-сохранить ключ через скрытый ввод или stdin, никогда аргументом
-
-**Изменяет данные только на этом компьютере.**
-
-```sh
-tg models text key set <provider>
-```
-
-| Аргумент | | Описание |
-|---|---|---|
-| `provider` | обязателен | openai, anthropic или хост сервера --base-url, требующего ключ. |
-
-**Returns:** store a key, typed at a hidden prompt or piped on stdin — never as an argument
-
-**Example:** `tg personal models text key set openai`
-
-#### `tg models text key remove`
-
-удалить сохранённый ключ
-
-**Изменяет данные только на этом компьютере.**
-
-```sh
-tg models text key remove <provider>
-```
-
-| Аргумент | | Описание |
-|---|---|---|
-| `provider` | обязателен | openai, anthropic или хост сервера. |
-
-**Returns:** forget a stored key
-
-**Example:** `tg personal models text key remove openai`
+**Example:** `tg personal models download e5-small`
 
 ## `tg inbox`
 
-чужие непрочитанные во всех чатах; --new — после последней проверки
+other people's unread messages in every chat; --new for what arrived since the last check
 
 ```sh
 tg inbox [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | с какого момента: date>2h, date>2026-10-01; сохранённая точка не сдвигается. |
+| `query` | optional | from when: date>2h, date>2026-10-01; the saved point stays put. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--new` | новые после проверки, каждое один раз; для расписания. |
-| `--limit <n>` | максимум на чат, самые новые. |
-| `--all` | включить чаты без уведомлений и архив; иначе только упоминания и ответы вам. |
-| `--kind <kinds>` | только чаты этих типов через запятую: dialog, group, channel, saved. |
-| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер, где он это умеет, иначе локальной моделью; может занять минуты. |
-| `--model <id>` | скачанная модель для --transcribe; список в `models audio list`. |
+| `--new` | what arrived since the last check, each message once — for scheduled runs. |
+| `--limit <n>` | at most this many per chat, the newest. |
+| `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
+| `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
 
-**Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: tg commands schema inbox
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: tg commands info inbox
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -2511,26 +2474,25 @@ tg inbox [query] [options]
 
 ## `tg review`
 
-все сообщения, включая ваши, в чатах с изменениями после границы; для анализа обязательств
+every message, yours too, in chats that changed since a point — for reviewing who owes what
 
 ```sh
 tg review [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | где закончился прошлый просмотр и какой чат: date>2h, chat:"Book club"; без даты — 3 дня назад. |
+| `query` | optional | where the last review ended and which chat: date>2h, chat:"Book club"; 3 days ago if no date. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--kind <kinds>` | только чаты этих типов через запятую: dialog, group, channel, saved. |
-| `--unanswered [duration]` | вопросы вам или администраторам без ответа старше срока: 4h, 1d; по умолчанию 24h. |
-| `--all` | включить чаты без уведомлений и архив; иначе только упоминания и ответы вам. |
-| `--transcribe` | распознать ещё не обработанные голосовые через мессенджер, где он это умеет, иначе локальной моделью; может занять минуты. |
-| `--model <id>` | скачанная модель для --transcribe; список в `models audio list`. |
-| `--new` | изменения после прошлого `review --new`, с позицией для каждого чата; для запусков по расписанию. |
+| `--unanswered [duration]` | only questions to you or a group's admins that nobody answered, asked at least this long ago — 4h, 1d; 24h if not given. |
+| `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
+| `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
+| `--new` | what changed since the last `review --new`, a point per chat — for scheduled runs. |
 
-**Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: tg commands schema review
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: tg commands info review
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -2538,42 +2500,45 @@ tg review [query] [options]
 
 ## `tg topics`
 
-темы группы-форума
+the topics of a forum group
 
 ### `tg topics list`
 
-темы форума по времени последней активности
+a forum group's topics, newest activity first
 
 ```sh
-tg topics list <chat> [options]
+tg topics list <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
-**Returns:** a forum group's topics, newest activity first
+**Returns:** topic — id, title, closed, pinned, unread_count, last_message_at, created_at, hidden; every field: tg commands info topics list
+
+**Next usually:** `tg topics show <chat> <topic>`, `tg topics edit <chat> <topic>`, `tg topics delete <chat> <topic>`
 
 **Example:** `tg personal topics list Team`
 
 ### `tg topics show`
 
-одна тема форума: название, состояние и последняя активность
+one forum topic: its title, state and last activity
 
 ```sh
 tg topics show <chat> <topic>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `topic` | обязательный | идентификатор темы из `topics list`. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `topic` | required | the topic id, from `topics list`. |
 
 **Returns:** one forum topic: its title, state and last activity
 
@@ -2581,7 +2546,7 @@ tg topics show <chat> <topic>
 
 ### `tg topics enable`
 
-включить темы форума; доступно только владельцу, обычная группа требует явного преобразования
+enable forum topics; only the owner, with an explicit upgrade for a basic group
 
 **Changes something in Telegram.**
 
@@ -2589,13 +2554,13 @@ tg topics show <chat> <topic>
 tg topics enable <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--upgrade` | сначала преобразовать обычную группу в супергруппу; идентификатор чата изменится. |
+| `--upgrade` | upgrade a basic group to a supergroup first; its chat id changes. |
 
 **Returns:** enable forum topics; only the owner, with an explicit upgrade for a basic group
 
@@ -2603,7 +2568,7 @@ tg topics enable <chat> [options]
 
 ### `tg topics create`
 
-создать тему с названием в существующем форуме; не включает темы и не преобразует группу автоматически
+create a named topic in an existing forum; never enable or upgrade a group implicitly
 
 **Changes something in Telegram.**
 
@@ -2611,22 +2576,22 @@ tg topics enable <chat> [options]
 tg topics create <chat> <title> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `title` | обязательно | название темы, максимум 128 байт UTF-8. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `title` | required | the topic title, at most 128 UTF-8 bytes. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--operation-id <id>` | идентификатор попытки создания; использованный идентификатор или идентификатор с неизвестным результатом отклоняется. |
+| `--operation-id <id>` | identify this creation attempt; an already sent or unknown id is refused. |
 
-**Returns:** create a named topic in an existing forum; never enable or upgrade a group implicitly
+**Returns:** create a named topic in an existing forum; never enable or upgrade a group…
 
 **Example:** `tg personal topics create Team "Weekly sync"`
 
 ### `tg topics edit`
 
-переименовать, закрыть или снова открыть тему форума
+rename, close or reopen a forum topic
 
 **Changes something in Telegram.**
 
@@ -2634,17 +2599,17 @@ tg topics create <chat> <title> [options]
 tg topics edit <chat> <topic> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `topic` | обязательный | идентификатор темы из `topics list`. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `topic` | required | the topic id, from `topics list`. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--title <title>` | новое название, не более 128 байт UTF-8. |
-| `--closed <on\|off>` | on закрывает тему для новых сообщений, off снова открывает её. |
-| `--pinned <on\|off>` | on закрепляет тему вверху списка, off открепляет её. |
-| `--hidden <on\|off>` | on скрывает тему General из списка тем, off показывает её. |
+| `--title <title>` | the new title, at most 128 UTF-8 bytes. |
+| `--closed <on\|off>` | on closes the topic to new messages, off reopens it. |
+| `--pinned <on\|off>` | on pins the topic at the top of the list, off unpins it. |
+| `--hidden <on\|off>` | on hides the General topic from the topic list, off shows it. |
 
 **Returns:** rename, close or reopen a forum topic
 
@@ -2652,7 +2617,7 @@ tg topics edit <chat> <topic> [options]
 
 ### `tg topics delete`
 
-удалить тему форума и все её сообщения у всех; действие необратимо
+delete a forum topic and every message in it, for everyone; it cannot be undone
 
 **Changes something in Telegram.**
 
@@ -2660,14 +2625,14 @@ tg topics edit <chat> <topic> [options]
 tg topics delete <chat> <topic> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `topic` | обязательный | идентификатор темы из `topics list`. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `topic` | required | the topic id, from `topics list`. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--allow-dangerous` | выполнить удаление без подтверждения уровня ask. |
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
 **Returns:** delete a forum topic and every message in it, for everyone; it cannot be undone
 
@@ -2675,7 +2640,7 @@ tg topics delete <chat> <topic> [options]
 
 ### `tg topics order`
 
-расположить закреплённые темы в этом порядке; ничего не закрепляет и не открепляет
+put the pinned topics in this order; it pins and unpins nothing
 
 **Changes something in Telegram.**
 
@@ -2683,10 +2648,10 @@ tg topics delete <chat> <topic> [options]
 tg topics order <chat> <topic>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `topic` | обязательный | идентификаторы закреплённых тем, от первой к последней. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `topic` | required | the pinned topics' ids, first to last. |
 
 **Returns:** put the pinned topics in this order; it pins and unpins nothing
 
@@ -2694,23 +2659,23 @@ tg topics order <chat> <topic>
 
 ## `tg watch`
 
-выводить новые сообщения до Ctrl-C или --timeout; оба завершают штатно
+print new messages as they arrive, until Ctrl-C or --timeout (either ends it normally)
 
 ```sh
 tg watch [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--events` | также правки, удаления, реакции, голоса в опросах и события чата; строка содержит тип события. |
+| `--events` | include changes and receipts; each item names its event. |
 
-**Returns:** stream new messages until interrupted or timed out
+**Returns:** watch item — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 30 more; every field: tg commands info watch
 
 **Example:** `tg personal watch --jsonl --timeout 30s`
 
 ## `tg serve`
 
-поддерживать базу актуальной до остановки; запускается systemd или launchd
+keep the local store current until stopped — what a systemd or launchd unit runs
 
 **Changes something in Telegram.**
 
@@ -2718,19 +2683,19 @@ tg watch [options]
 tg serve
 ```
 
-**Returns:** keep the local store current until stopped — what a systemd or launchd unit runs
+**Returns:** serve summary — profile, started_at, stopped_at, kept, replies, members, stems, tasks; every field: tg commands info serve
 
 **Example:** `tg personal serve`
 
 ## `tg server`
 
-`tg serve` в фоне: запуск, остановка, перезапуск, состояние, журнал; install добавляет systemd или launchd
+`tg serve` in the background: start, stop, restart, status, logs; install adds a systemd or launchd unit
 
 ### `tg server start`
 
-запустить serve в фоне, через установленную службу, и ответить после подключения
+start serve in the background — through the unit if one is installed — and answer once it connects
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg server start
@@ -2742,9 +2707,9 @@ tg server start
 
 ### `tg server stop`
 
-остановить serve профиля, через службу, если используется
+stop this profile's serve — through the unit if it runs under one
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg server stop
@@ -2756,9 +2721,9 @@ tg server stop
 
 ### `tg server restart`
 
-остановить и запустить снова
+stop it and start it again
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg server restart
@@ -2770,7 +2735,7 @@ tg server restart
 
 ### `tg server status`
 
-работает ли serve, с какого времени, кто запустил и какая служба используется
+whether serve runs for this profile, since when, who started it, and the unit if there is one
 
 ```sh
 tg server status
@@ -2782,15 +2747,15 @@ tg server status
 
 ### `tg server logs`
 
-последние строки serve из журнала systemd или файла
+serve's latest log lines — from the journal under systemd, else its log file
 
 ```sh
 tg server logs [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `-n, --limit <n>` | количество строк. По умолчанию: `50`. |
+| `-n, --limit <n>` | how many lines. Default: `50`. |
 
 **Returns:** serve's latest log lines — from the journal under systemd, else its log file
 
@@ -2798,9 +2763,9 @@ tg server logs [options]
 
 ### `tg server install`
 
-создать службу systemd или агент launchd профиля; ничего не запускает
+write a systemd user unit or a launchd agent for this profile; starts nothing
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg server install
@@ -2812,9 +2777,9 @@ tg server install
 
 ### `tg server uninstall`
 
-удалить службу профиля; сначала остановите
+remove this profile's unit; stop it first
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg server uninstall
@@ -2826,75 +2791,79 @@ tg server uninstall
 
 ## `tg schedule`
 
-запустить команду tg или агента позже или по таймеру (systemd, launchd, Task Scheduler); агент не может отправлять
+run a tg command or an agent later or on a timer (systemd, launchd, Task Scheduler); an agent cannot send
 
 ### `tg schedule command`
 
-запускать tg <args…> по таймеру — чтение сохраняет прочитанное, поэтому так история чата заполняет хранилище
+run tg <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg schedule command <name> <args> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name` | обязательный | строчные латинские буквы, цифры и дефисы. |
-| `args` | обязательный | команда tg после её имени, например -- messages list <chat> --limit 50. |
+| `name` | required | lowercase letters, digits and dashes. |
+| `args` | required | the tg command after its name, e.g. -- messages list <chat> --limit 50. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--every <duration>` | повторять: 30m, 2h, 1d. |
-| `--at <HH:MM>` | каждый день в это местное время. |
-| `--at-time <time>` | один запуск: через 30m, 2d или в момент ISO; после него расписание удаляет себя. |
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 
-**Returns:** run tg <args…> on a timer — reads save what they read, so this is how a chat's history…
+**Returns:** run tg <args…> on a timer — reads save what they read, so this is how a…
 
 **Example:** `tg personal schedule command daily <args>`
 
 ### `tg schedule agent`
 
-запускать агента (claude или codex) с запросом по таймеру; он работает с TG_READ_ONLY=1, поэтому читает и готовит черновики, но не может отправлять — его ответ сохраняется, и вы получаете уведомление
+start an agent (claude or codex) with a prompt on a timer; it runs with TG_READ_ONLY=1, so it reads and drafts and cannot send — its answer is kept and you are notified
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg schedule agent <name> <harness> <prompt> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name` | обязательный | строчные латинские буквы, цифры и дефисы. |
-| `harness` | обязательный | какой агент запустить. Одно из: `claude`, `codex`. |
-| `prompt` | обязательный | что сделать, например «проведи ежедневный разбор незакрытых дел: tg skill show follow-ups». |
+| `name` | required | lowercase letters, digits and dashes. |
+| `harness` | required | the agent to start. One of: `claude`, `codex`. |
+| `prompt` | required | what to do, e.g. "run the daily follow-up review: tg skill show follow-ups". |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--max-cost <usd>` | только claude: остановить запуск, который стоит больше этой суммы в долларах США. |
-| `--every <duration>` | повторять: 30m, 2h, 1d. |
-| `--at <HH:MM>` | каждый день в это местное время. |
-| `--at-time <time>` | один запуск: через 30m, 2d или в момент ISO; после него расписание удаляет себя. |
+| `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 
-**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with TG_READ_ONLY=1,…
+**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
 
 **Example:** `tg personal schedule agent daily claude <prompt>`
 
 ### `tg schedule list`
 
-расписания: когда они запускаются и чем закончился последний запуск
+the schedules, when they run and how their last run went
 
 ```sh
-tg schedule list
+tg schedule list [query]
 ```
 
-**Returns:** the schedules, when they run and how their last run went
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** scheduled job — name, kind, when, last; every field: tg commands info schedule list
 
 **Example:** `tg personal schedule list`
 
 ### `tg schedule run`
 
-запустить расписание сейчас, как это сделал бы таймер, и дождаться завершения
+run a schedule now, as its timer would, and wait for it
 
 **Changes something in Telegram.**
 
@@ -2902,9 +2871,9 @@ tg schedule list
 tg schedule run <name>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name` | обязателен |  |
+| `name` | required |  |
 
 **Returns:** run a schedule now, as its timer would, and wait for it
 
@@ -2912,17 +2881,17 @@ tg schedule run <name>
 
 ### `tg schedule remove`
 
-остановить расписание и удалить его таймер; прошлый вывод сохраняется
+stop a schedule and remove its timer; its past output stays
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg schedule remove <name>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name` | обязателен |  |
+| `name` | required |  |
 
 **Returns:** stop a schedule and remove its timer; its past output stays
 
@@ -2930,7 +2899,7 @@ tg schedule remove <name>
 
 ### `tg schedule exec`
 
-то, что запускает таймер по файлу расписания; чтобы запустить расписание вручную, используйте run
+what a timer runs, given the schedule's file; to run one by hand, use run
 
 **Changes something in Telegram.**
 
@@ -2938,9 +2907,9 @@ tg schedule remove <name>
 tg schedule exec <file>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `file` | обязателен |  |
+| `file` | required |  |
 
 **Returns:** what a timer runs, given the schedule's file; to run one by hand, use run
 
@@ -2948,350 +2917,350 @@ tg schedule exec <file>
 
 ## `tg store`
 
-локальная база сообщений
+the local store of messages
 
 ### `tg store status`
 
-по чатам: число сообщений, крайние даты, полностью сохранённые участки
+per chat: messages stored, the oldest and newest, and the stretches held completely
 
 ```sh
 tg store status [chat]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | необязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | optional | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** what the local archive holds and what is missing
+**Returns:** store chat status — chat_id, title, kind, messages, oldest_at, newest_at, last_stored_at, held; every field: tg commands info store status
 
 **Example:** `tg personal store status "Book club"`
 
 ### `tg store gaps`
 
-проверить записанные внутренние пробелы охвата и явно загрузить данные для них
+inspect recorded interior coverage gaps and explicitly fetch them
 
-#### `tg store gaps plan`
+#### `tg store gaps show`
 
-локальный план охвата; отсутствие идентификаторов сообщений само по себе не означает нехватку истории
+local coverage plan; missing message ids alone do not imply missing history
 
 ```sh
-tg store gaps plan <chat>
+tg store gaps show <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** local coverage plan; missing message ids alone do not imply missing history
+**Returns:** store gap plan — version, scope, account, chat, ordering, held, gaps, unknown, and 2 more; every field: tg commands info store gaps show
 
-**Example:** `tg personal store gaps plan "Book club"`
+**Example:** `tg personal store gaps show "Book club"`
 
 #### `tg store gaps repair`
 
-загрузить данные внутренних пробелов с ограничениями и перепроверить охват; никогда не удалять сообщения, которые не встретились при загрузке
+fetch bounded interior gaps and recheck coverage; never delete unseen messages
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store gaps repair <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | общее число сообщений при этом устранении пробелов, по умолчанию 500. |
-| `--max-gaps <n>` | не более указанного числа пробелов, по умолчанию 5. |
-| `--repair-time <duration>` | лимит времени устранения пробелов, по умолчанию 30s. По умолчанию: `30s`. |
-| `--page-size <n>` | число сообщений на страницу провайдера. |
-| `--pause <duration>` | пауза между страницами провайдера. По умолчанию: `1s`. |
-| `--fingerprint <hash>` | отказать, если этот ранее проверенный план охвата изменился. |
-| `--catch-up` | подготовить локальный поиск после устранения пробелов; переопределяет search_catch_up. |
-| `--no-catch-up` | пропустить подготовку локального поиска после устранения пробелов. |
-| `--catch-up-chunks <n>` | максимальное число подготавливаемых локальных фрагментов. |
-| `--catch-up-messages <n>` | максимальное число сохранённых сообщений, читаемых для подготовки. |
-| `--catch-up-time <duration>` | время подготовки в пределах оставшегося лимита устранения пробелов. |
-| `--background` | устранять пробелы через существующий механизм заданий хранилища; проверять через store jobs show. |
+| `--limit <n>` | total messages in this repair, 500 by default. |
+| `--max-gaps <n>` | at most this many gaps, 5 by default. |
+| `--repair-time <duration>` | time budget for the repair, 30s by default. Default: `30s`. |
+| `--page-size <n>` | messages per provider page. |
+| `--pause <duration>` | provider pause between pages. Default: `1s`. |
+| `--fingerprint <hash>` | refuse if this previously inspected coverage plan changed. |
+| `--catch-up` | prepare local search after repair; overrides search_catch_up. |
+| `--no-catch-up` | skip local search preparation after repair. |
+| `--catch-up-chunks <n>` | maximum local chunks prepared. |
+| `--catch-up-messages <n>` | maximum stored messages read for preparation. |
+| `--catch-up-time <duration>` | preparation time within the repair's remaining budget. |
+| `--background` | repair as an existing store job; inspect store jobs show. |
 
-**Returns:** fetch bounded interior gaps and recheck coverage; never delete unseen messages
+**Returns:** store gap repair — job, pid, chat, log, version, scope, before, after, and 6 more; every field: tg commands info store gaps repair
 
 **Example:** `tg personal store gaps repair "Book club" --limit 100`
 
 ### `tg store jobs`
 
-фоновые задания синхронизации
+background sync jobs
 
 #### `tg store jobs list`
 
-задания от новых к старым
+background sync jobs, newest first
 
 ```sh
 tg store jobs list [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
-**Returns:** job — id, chat, state, pid, started_at, fetched, finished_at, message_limit, and 5 more; every field: tg commands schema store jobs list
+**Returns:** job — id, chat, state, pid, started_at, fetched, finished_at, message_limit, and 5 more; every field: tg commands info store jobs list
 
 **Example:** `tg personal store jobs list`
 
 #### `tg store jobs show`
 
-задание (по умолчанию последнее) и сохранённые данные его чата
+one background job — the newest when none is named — and what the store now holds of its chat
 
 ```sh
 tg store jobs show [job]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `job` | необязателен | идентификатор задания из `messages sync --background`. |
+| `job` | optional | the job id `messages sync --background` printed. |
 
-**Returns:** one archive job's status and log
+**Returns:** store job details — chat, state, pid, started_at, fetched, job, profile, progress, and 11 more; every field: tg commands info store jobs show
 
 **Example:** `tg personal store jobs show`
 
 #### `tg store jobs cancel`
 
-остановить после текущей страницы; следующая синхронизация продолжит
+stop a running background job after its current page; a later sync resumes where it stopped
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store jobs cancel <job>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `job` | обязателен | идентификатор задания. |
+| `job` | required | the job id. |
 
-**Returns:** cancel a queued or running archive job
+**Returns:** store job cancel — job, cancelled; every field: tg commands info store jobs cancel
 
 **Example:** `tg personal store jobs cancel job-101`
 
 #### `tg store jobs retry`
 
-повторить неудачное или прерванное задание как новое; синхронизация продолжается с места остановки базы
+start a partial, failed or died job again, as a new job; the sync resumes where the store stopped
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store jobs retry [job] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `job` | необязателен | идентификатор задания. |
+| `job` | optional | the job id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--failed` | каждый чат, чьё последнее задание неудачно или прервано. |
+| `--failed` | every chat whose newest job partial, failed or died. |
 
-**Returns:** retry an archive job
+**Returns:** store job retry — job, pid, chat, log, retried, error; every field: tg commands info store jobs retry
 
 **Example:** `tg personal store jobs retry --failed`
 
 #### `tg store jobs clear`
 
-забыть завершённые задания и удалить их журналы; запущенное задание сохраняется
+forget finished jobs and remove their logs; a running job is kept
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store jobs clear
 ```
 
-**Returns:** forget finished jobs and remove their logs; a running job is kept
+**Returns:** store job clear — cleared; every field: tg commands info store jobs clear
 
 **Example:** `tg personal store jobs clear`
 
 ### `tg store export`
 
-сохранённые сообщения чата от старых к новым: --jsonl — сообщение на строку, --json — обёртка списка сообщений; без запросов
+a chat's stored messages, oldest first: --jsonl one message per line, --json the list envelope of messages; never asks the messenger
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store export [chat] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | необязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного»; несколько — вместе с --output-dir. |
+| `chat` | optional | a chat: its title or part of it, its id, @username, or `me` for Saved Messages; several with --output-dir. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--format <format>` | jsonl: сообщение на строку, по умолчанию с --output; markdown: переписка с дневными заголовками и цитатами ответов и пересылок. |
-| `--since-time <time>` | после времени ISO 8601 или 30m / 2h / 1d назад. |
-| `--output <file>` | записать JSON по строкам или переписку в новый закрытый файл. |
-| `--output-dir <dir>` | записать в этот каталог файл на каждый чат и manifest; повторный запуск добавляет только изменения. |
-| `--include <kinds>` | с --output-dir: все сохранённые чаты этих типов через запятую: dialog, group, channel, saved. |
-| `--all` | с --output-dir: все сохранённые чаты этого аккаунта. |
-| `--encrypt` | сжать и зашифровать паролем, введённым в скрытом запросе или переданным через stdin; пароль нигде не хранится — без него файл не открыть. |
+| `--format <format>` | jsonl: one message per line, the default with --output; markdown: a transcript with a heading per day, replies and forwards quoted. |
+| `--since-time <time>` | only from this ISO 8601 time, or 30m / 2h / 1d ago, on. |
+| `--output <file>` | write JSON lines, or the transcript, to this new file, readable only by you. |
+| `--output-dir <dir>` | write into this folder, a file per chat and a manifest; run again on it for only what changed since. |
+| `--include <kinds>` | with --output-dir: every stored chat of these kinds, comma-separated: dialog, group, channel, saved. |
+| `--all` | with --output-dir: every stored chat of this account. |
+| `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
-**Returns:** export stored messages to files
+**Returns:** store export — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 34 more; every field: tg commands info store export
 
 **Example:** `tg personal store export "Book club" --output ./messages.jsonl`
 
 ### `tg store clear`
 
-удалить покинутые чаты из базы вместе с сообщениями
+delete from the store the chats this account has left, with their messages
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store clear [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--left` | только покинутые этим аккаунтом чаты. |
-| `--allow-dangerous` | подтвердить необратимое удаление; историю покинутого чата нельзя загрузить снова. |
-| `--dry-run` | перечислить чаты, которые были бы удалены, и ничего не удалять. |
+| `--left` | the chats this account has left — the only thing this clears. |
+| `--allow-dangerous` | yes, delete — it cannot be undone, and a chat you left cannot be fetched again. |
+| `--dry-run` | list the chats it would delete, and delete nothing. |
 
-**Returns:** delete from the store the chats this account has left, with their messages
+**Returns:** store clear — cleared, chats, messages, left, dry_run; every field: tg commands info store clear
 
 **Example:** `tg personal store clear --left --dry-run`
 
 ### `tg store info`
 
-файл базы: путь, размер, структура, количество строк; без изменений
+the store file: where it is, its size, its schema against the one this tool speaks, which tools used it and how many rows it holds, by provider, chat kind, account, year (UTC) and attachment kind, over every account; changes nothing
 
 ```sh
 tg store info
 ```
 
-**Returns:** the local archive's format, size and contents
+**Returns:** store info — path, exists, schema, opens, error, bytes, journal_mode, pages, and 12 more; every field: tg commands info store info
 
 **Example:** `tg personal store info`
 
 ### `tg store check`
 
-проверка целостности, поисковых индексов, диска и отстающих чатов
+whether the store is healthy — integrity, search indexes, disk, and which chats are behind
 
 ```sh
 tg store check
 ```
 
-**Returns:** check the local archive for problems
+**Returns:** store check — path, exists, ok, opens, error, checks, schema, integrity, and 11 more; every field: tg commands info store check
 
 **Example:** `tg personal store check`
 
 ### `tg store migrate`
 
-обновить структуру до текущей версии, затем нормализовать, проиндексировать и разобрать на основы старые сообщения и заметки
+bring the store up to this build's schema, then normalize, index and stem the messages and notes stored before it
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store migrate
 ```
 
-**Returns:** migrate an older local archive
+**Returns:** store migration — path, exists, from, to, normalized, indexed, terms, stemmed, and 1 more; every field: tg commands info store migrate
 
 **Example:** `tg personal store migrate`
 
-### `tg store reindex`
+### `tg store rebuild`
 
-перестроить словесный индекс, словарь опечаток, основы слов, словесный индекс файлов и индексы заметок из сохранённых данных; ничего не теряется
+rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored; loses nothing
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
-tg store reindex
+tg store rebuild
 ```
 
-**Returns:** rebuild the local archive's search indexes
+**Returns:** store reindex — path, exists, normalized, indexed, terms, stemmed, notes_indexed, file_texts, and 1 more; every field: tg commands info store rebuild
 
-**Example:** `tg personal store reindex`
+**Example:** `tg personal store rebuild`
 
 ### `tg store backup`
 
-скопировать работающую базу в новый файл без перезаписи
+copy the store into a new file, while it is in use; never overwrites a file
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store backup <file> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `file` | обязателен | новый файл. |
+| `file` | required | the new file. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--encrypt` | сжать и зашифровать паролем, введённым в скрытом запросе или переданным через stdin; пароль нигде не хранится — без него файл не открыть. |
+| `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
-**Returns:** copy the store into a new file, while it is in use; never overwrites a file
+**Returns:** store backup — path, from, bytes, schema, rows, encrypted; every field: tg commands info store backup
 
 **Example:** `tg personal store backup ./backup.db`
 
 ### `tg store restore`
 
-восстановить копию вместо базы; заменяемая база сохраняется рядом
+put a backup in place of the store; the store it replaces is kept beside it, never deleted
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store restore <file>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `file` | обязателен | файл, созданный `store backup`; для файла, записанного с --encrypt, запрашивается пароль. |
+| `file` | required | a file `store backup` wrote; one written with --encrypt asks for its password. |
 
-**Returns:** restore a backup while keeping the current store
+**Returns:** store restore — path, restored_from, kept_at, schema; every field: tg commands info store restore
 
 **Example:** `tg personal store restore ./backup.db`
 
 ### `tg store decrypt`
 
-расшифровать файл, записанный с --encrypt, в новый файл; запрашивает пароль
+open a file written with --encrypt into a new file; asks for its password
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store decrypt <file> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `file` | обязателен | файл, созданный `store backup --encrypt` или `store export --encrypt`. |
+| `file` | required | a file `store backup --encrypt` or `store export --encrypt` wrote. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--output <file>` | новый файл, доступный только вам. |
+| `--output <file>` | the new file, readable only by you. |
 
-**Returns:** open a file written with --encrypt into a new file; asks for its password
+**Returns:** store decrypt — path, from, bytes; every field: tg commands info store decrypt
 
 **Example:** `tg personal store decrypt ./backup.enc --output ./restored.db`
 
 ### `tg store repair`
 
-привести каждую таблицу к виду этой сборки, ничего не удаляя: таблица неправильного вида сохраняется копией рядом с новой
+bring every table to this build's shape, deleting nothing: a table of the wrong shape is kept as a copy beside a new one
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store repair [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--dry-run` | показать, что будет сделано, ничего не меняя. |
+| `--dry-run` | say what it would do, and change nothing. |
 
-**Returns:** repair table shapes while keeping the old tables
+**Returns:** store repair — path, exists, dry_run, repaired, indexes_created, triggers_created, mismatches, foreign_key_violations, and 1 more; every field: tg commands info store repair
 
 **Example:** `tg personal store repair --dry-run`
 
@@ -3299,460 +3268,488 @@ tg store repair [options]
 
 back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store reset [options]
 ```
 
-| Опция | Что делает |
+| Option | What it does |
 |---|---|
 | `--no-backup` | delete the store without backing it up first. |
 
-**Returns:** back up the local archive and replace it with an empty one
+**Returns:** store reset — path, exists, reset, backup, backed_up, schema; every field: tg commands info store reset
 
 **Example:** `tg personal store reset`
 
 ### `tg store copies`
 
-таблицы, которые `store repair` сохранил копиями
+the tables `store repair` kept as copies
 
 #### `tg store copies delete`
 
-удалить одну копию, сохранённую `store repair`, по точному имени; другие таблицы не удаляет
+delete one copy `store repair` kept, named exactly; refuses any other table
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg store copies delete <name>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name` | обязателен | имя копии, как его вывел `store repair`. |
+| `name` | required | the copy's name, as `store repair` printed it. |
 
-**Returns:** delete one copy `store repair` kept, named exactly; refuses any other table
+**Returns:** store copy removal — path, deleted; every field: tg commands info store copies delete
 
 **Example:** `tg personal store copies delete messages_copy_1`
 
-## `tg conversations`
+### `tg store tables`
 
-разговоры в чате по сохранённым ответам, упоминаниям и очередности авторов
+the tables of the local archive
 
-### `tg conversations build`
+#### `tg store tables list`
 
-построить разговоры из базы вместо прошлого результата; без --chat — все чаты, изменившиеся после построения, и все ещё не построенные группы; без запросов
-
-**Отправляет текст во внешний сервис.**
+every table of the local archive: its kind (data, search index, part of a search index, internal) and its rows, a search index's rows not counted; --full adds each table's size on disk, which reads the whole file (about ten seconds for 3 GB); changes nothing
 
 ```sh
-tg conversations build [options]
+tg store tables list [query]
 ```
 
-| Параметр | Назначение |
-|---|---|
-| `--chat <chat>` | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--analyze` | связать пакеты через настроенный сервис анализа; требует --chat и запоминает согласие для этого чата и сервиса. |
-| `--provider <provider>` | анализ: agent, openai или anthropic. |
-| `--model <model>` | модель анализа; заменяет analysis_model. |
-| `--base-url <url>` | адрес API анализа; заменяет analysis_base_url. |
-| `--size <n>` | сообщений-ответов на пакет анализа, 10–200; по умолчанию 50. |
-| `--max-tokens <n>` | предел резерва входных и выходных токенов анализа за запуск; по умолчанию 100000. |
-| `--max-chats <n>` | не больше этого числа чатов за запуск; по умолчанию 20. |
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** build conversation links from stored messages
+**Returns:** store table — name, kind, rows, bytes; every field: tg commands info store tables list
 
-**Example:** `tg personal conversations build --chat "Book club"`
+**Example:** `tg personal store tables list`, `tg personal store tables list kind:data`, `tg personal store tables list --full --json`
+
+## `tg conversations`
+
+the conversations inside a chat, found in the stored messages by replies, mentions and who wrote next
 
 ### `tg conversations list`
 
-разговоры от новых к старым: время, количество сообщений и участников
+a chat's conversations, the newest first: when, how many messages, how many people
 
 ```sh
 tg conversations list <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество. |
+| `--limit <n>` | how many. |
 
-**Returns:** conversation — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 1 more; every field: tg commands schema conversations list
+**Returns:** conversation — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 1 more; every field: tg commands info conversations list
 
 **Example:** `tg personal conversations list "Book club"`
 
 ### `tg conversations show`
 
-сообщения разговора от старых к новым по его идентификатору или сообщению
+one conversation's messages, oldest first — by its id, or the one a message is in
 
 ```sh
 tg conversations show <conversation> [message]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `conversation` | обязателен | идентификатор из `conversations list` либо чат по названию, части, идентификатору, @username или `me` и сообщение. |
-| `message` | необязателен | идентификатор сообщения чата для выбора разговора. |
+| `conversation` | required | a conversation id from `conversations list`; or a chat: its title or part of it, its id, @username, or `me` for Saved Messages, with a message. |
+| `message` | optional | a message id in that chat: show the conversation it is in. |
 
-**Returns:** one conversation and its messages
+**Returns:** conversation details — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 38 more; every field: tg commands info conversations show
 
 **Example:** `tg personal conversations show "Book club" 101`
 
 ### `tg conversations related`
 
-разговоры, ближайшие по смыслу к тому, в котором находится сообщение, во всех построенных чатах, лучшие первыми — по векторам, сохранённым `conversations embed`; модель не запускается
+the conversations nearest in meaning to the one a message is in, in every built chat, best first — from the vectors `conversations embed` stored; runs no model
 
 ```sh
 tg conversations related <chat> <message> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `message` | обязателен | идентификатор сообщения в этом чате. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `message` | required | a message id in that chat. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество. |
-| `--model <model>` | локально: идентификатор из `models text list` (по умолчанию e5-small); удалённо: модель сервиса. |
-| `--provider <provider>` | сервис векторов: local или openai; параметры команды важнее настроек профиля. |
-| `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
-| `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
+| `--limit <n>` | how many. |
+| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
+| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
+| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 
-**Returns:** conversations nearest in meaning to a message's conversation
+**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in; every field: tg commands info conversations related
 
 **Example:** `tg personal conversations related "Book club" 101`
 
 ### `tg conversations status`
 
-насколько актуальны разговоры и векторы каждого построенного чата: сообщения, которых не видело построение, фрагменты с актуальным, устаревшим или отсутствующим вектором
+how fresh each built chat's conversations and vectors are: messages the build has not seen, chunks with a current, stale or missing vector
 
 ```sh
 tg conversations status [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--model <model>` | локально: идентификатор из `models text list` (по умолчанию e5-small); удалённо: модель сервиса. |
-| `--provider <provider>` | сервис векторов: local или openai; параметры команды важнее настроек профиля. |
-| `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
-| `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
+| `--chat <chat>` | only this chat: a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
+| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
+| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 
-**Returns:** which chats are ready for conversation search
+**Returns:** conversation readiness — chat, model, state, graph, pending, vectors; every field: tg commands info conversations status
 
 **Example:** `tg personal conversations status`
 
 ### `tg conversations batches`
 
-пакеты переписки для вашего ИИ-агента: на какое раннее сообщение отвечает каждое
+windows of a chat for your own AI agent to link: which earlier message each one answers
 
 #### `tg conversations batches status`
 
-число ожидающих обработки сообщений, пакетов и объём текста
+how many messages still wait for an answer, in how many batches, and how much text
 
 ```sh
 tg conversations batches status [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--size <n>` | сообщений на пакет: 10–200, по умолчанию 50. |
+| `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
 
-**Returns:** progress of conversation-link batches
+**Returns:** conversation batch status — chat, messages, characters, batches, tokens_estimate; every field: tg commands info conversations batches status
 
 **Example:** `tg personal conversations batches status --chat "Book club"`
 
-#### `tg conversations batches next`
+#### `tg conversations batches show`
 
-следующий пакет с предыдущим контекстом; текст только в stdout
+the next window to answer, with the messages before it; message text goes to stdout only
 
 ```sh
-tg conversations batches next [options]
+tg conversations batches show [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--size <n>` | сообщений на пакет: 10–200, по умолчанию 50. |
+| `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
 
-**Returns:** get the next batch of messages to link
+**Returns:** conversation batch — batch, chat, messages, remaining; every field: tg commands info conversations batches show
 
-**Example:** `tg personal conversations batches next --chat "Book club"`
+**Example:** `tg personal conversations batches show --chat "Book club"`
 
 ### `tg conversations links`
 
-связи агента: на какое раннее сообщение отвечает каждое сообщение пакета
+message links and the conversations derived from them
+
+#### `tg conversations links rebuild`
+
+find a chat's conversations in what the store holds, replacing the last build; without --chat, every chat that changed since its build and every group never built; never asks the messenger
+
+**Sends text to an outside service.**
+
+```sh
+tg conversations links rebuild [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--analyze` | link batches using the configured analysis provider; requires --chat and remembers consent for this chat/provider. |
+| `--analysis-provider <provider>` | analysis: agent, openai or anthropic. |
+| `--model <model>` | analysis model; overrides models.analysis.model. |
+| `--base-url <url>` | analysis API endpoint; overrides models.analysis.base_url. |
+| `--size <n>` | analysis answer messages per batch, 10–200; default 50. |
+| `--max-tokens <n>` | analysis input/output reservation cap per run; default 100000. |
+| `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
+
+**Returns:** conversation build — chat, messages, links, conversations, built_at, rules_version, model, model_available, and 10 more; every field: tg commands info conversations links rebuild
+
+**Example:** `tg personal conversations links rebuild --chat "Book club"`
 
 #### `tg conversations links add`
 
-сохранить ответы агента из stdin JSON: { "model", "answers": [{ "message", "parent", "confidence" }] }; атомарно
+store your agent's answer to a batch, read as JSON from stdin: { "model", "answers": [{ "message", "parent", "confidence" }] }; all or nothing
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg conversations links add [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--batch <id>` | идентификатор пакета из `conversations batches next`. |
+| `--batch <id>` | the batch id `conversations batches show` printed. |
 
-**Returns:** save an agent's conversation-link answers
+**Returns:** conversation change — chat, stored, cleared; every field: tg commands info conversations links add
 
 **Example:** `tg personal conversations links add --batch "$batch"`
 
 #### `tg conversations links clear`
 
-удалить связи агента для чата или модели без изменения сообщений
+drop your agent's answers for a chat, or only one model's; messages are never touched
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg conversations links clear [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--model <model>` | только ответы данной модели. |
+| `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--answer-model <model>` | only the stored answers this model gave. |
 
-**Returns:** remove an agent's saved conversation-link answers
+**Returns:** conversation change — chat, stored, cleared; every field: tg commands info conversations links clear
 
 **Example:** `tg personal conversations links clear --chat "Book club"`
 
+### `tg conversations embeddings`
+
+stored conversation vectors
+
+#### `tg conversations embeddings status`
+
+how many chunks of a chat have a vector of the model, how many are left, and what is left costs
+
+```sh
+tg conversations embeddings status [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
+| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
+| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+
+**Returns:** conversation embedding status — chat, model, chunks, embedded, left, estimate_seconds, tokens_at_most, price_at_most; every field: tg commands info conversations embeddings status
+
+**Example:** `tg personal conversations embeddings status --chat "Book club"`
+
+#### `tg conversations embeddings clear`
+
+drop a chat's vectors, or only one model's; messages and conversations are never touched
+
+**Changes something on this computer only.**
+
+```sh
+tg conversations embeddings clear [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
+| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
+| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+
+**Returns:** conversation change — chat, stored, cleared; every field: tg commands info conversations embeddings clear
+
+**Example:** `tg personal conversations embeddings clear --chat "Book club"`
+
 ### `tg conversations rebuild`
 
-построить и затем векторизовать моделью на этом компьютере чаты, изменившиеся после построения, и ещё не построенные группы — или только --chat; объём за запуск ограничен, остальное — следующим запуском; без запросов к мессенджеру, без скачивания моделей и без отправки текста
+build, then embed with the model on this machine, the chats that changed since their build and the group chats never built — or only --chat; bounded per run, so run it again for the rest; never asks the messenger, downloads no model and sends no text anywhere
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg conversations rebuild [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--max-chats <n>` | не больше этого числа чатов за запуск; по умолчанию 20. |
-| `--max-chunks <n>` | не больше этого числа векторизуемых фрагментов за запуск; по умолчанию 2000. |
+| `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
+| `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
 
-**Returns:** build and embed the chats that changed, on this machine only
+**Returns:** conversation preparation — model, model_available, built, embedded, left; every field: tg commands info conversations rebuild
 
 **Example:** `tg personal conversations rebuild --max-chats 5`
 
 ### `tg conversations consents`
 
-запомненные разрешения на анализ для чатов этого аккаунта и адресов сервисов
+remembered analysis permissions for this account's chats and provider endpoints
 
 #### `tg conversations consents list`
 
-каким чатам и конечным точкам провайдеров вы разрешили анализ и когда
+which chats and provider endpoints you allowed to analyse, and when
 
 ```sh
-tg conversations consents list
+tg conversations consents list [query]
 ```
 
-**Returns:** which chats and provider endpoints you allowed to analyse, and when
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** analysis consent — chat, provider, at; every field: tg commands info conversations consents list
 
 **Example:** `tg personal conversations consents list`
 
-#### `tg conversations consents revoke`
+#### `tg conversations consents remove`
 
-забыть разрешения на анализ, чтобы следующий анализ снова спросил
+forget analysis permissions so the next analysis asks again
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
-tg conversations consents revoke [options]
+tg conversations consents remove [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | отозвать согласия только этого чата; по умолчанию всех чатов. |
-| `--provider <identity>` | точное обозначение сервиса из consents list; по умолчанию все сервисы. |
+| `--chat <chat>` | revoke only this chat's consents; defaults to every chat. |
+| `--consent-provider <identity>` | exact provider identity from consents list; defaults to every provider. |
 
-**Returns:** forget analysis permissions so the next analysis asks again
+**Returns:** analysis consent revocation — revoked; every field: tg commands info conversations consents remove
 
-**Example:** `tg personal conversations consents revoke --chat "Book club"`
+**Example:** `tg personal conversations consents remove --chat "Book club"`
 
 ### `tg conversations embed`
 
-векторизовать фрагменты разговоров локально или через --provider со своим ключом; повтор продолжает работу; без --chat — все построенные чаты с оставшимися фрагментами, только локально
+compute a vector for each chunk of a chat's conversations for search by meaning — on this machine, or with --embedding-provider through a service and your key; resumes where it stopped; without --chat, every built chat with chunks left, on this machine only
 
-**Отправляет текст во внешний сервис.**
+**Sends text to an outside service.**
 
 ```sh
 tg conversations embed [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--model <model>` | локально: идентификатор из `models text list` (по умолчанию e5-small); удалённо: модель сервиса. |
-| `--provider <provider>` | сервис векторов: local или openai; параметры команды важнее настроек профиля. |
-| `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
-| `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
-| `--threads <n>` | локально: общее число потоков (по умолчанию min(8, cores)). |
-| `--concurrency <n>` | удалённо: параллельные запросы (по умолчанию 4). |
-| `--max-tokens <n>` | удалённо: не запускать задачу, превышающую лимит токенов. |
-| `--max-chats <n>` | не больше этого числа чатов за запуск; по умолчанию 20. |
-| `--max-chunks <n>` | не больше этого числа фрагментов за запуск; по умолчанию 2000, с --chat без ограничения. |
+| `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
+| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
+| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+| `--threads <n>` | local: threads in all (default: min(8, cores)). |
+| `--concurrency <n>` | remote: requests at once (default: 4). |
+| `--max-tokens <n>` | remote: stop before a run that could send more tokens than this. |
+| `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
+| `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given, and no limit with --chat. |
 
-#### `tg conversations embed status`
+**Returns:** conversation embedding — chat, model, embedded, skipped, model_available, built, left; every field: tg commands info conversations embed
 
-число готовых и оставшихся векторов модели и стоимость остатка
-
-```sh
-tg conversations embed status [options]
-```
-
-| Параметр | Назначение |
-|---|---|
-| `--chat <chat>` | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--model <model>` | локально: идентификатор из `models text list` (по умолчанию e5-small); удалённо: модель сервиса. |
-| `--provider <provider>` | сервис векторов: local или openai; параметры команды важнее настроек профиля. |
-| `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
-| `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
-
-**Returns:** which conversation vectors are ready or stale
-
-**Example:** `tg personal conversations embed status --chat "Book club"`
-
-#### `tg conversations embed clear`
-
-удалить векторы чата или модели без изменения сообщений и разговоров
-
-**Изменяет данные только на этом компьютере.**
-
-```sh
-tg conversations embed clear [options]
-```
-
-| Параметр | Назначение |
-|---|---|
-| `--chat <chat>` | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--model <model>` | локально: идентификатор из `models text list` (по умолчанию e5-small); удалённо: модель сервиса. |
-| `--provider <provider>` | сервис векторов: local или openai; параметры команды важнее настроек профиля. |
-| `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
-| `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
-
-**Returns:** remove stored conversation vectors
-
-**Example:** `tg personal conversations embed clear --chat "Book club"`
+**Example:** `tg personal conversations embed --chat "Book club"`
 
 ## `tg attachments`
 
-файлы сохранённых сообщений: их текст в локальной базе, где его находит поиск
+the files of stored messages: their text in the local store, where search finds it
 
 ### `tg attachments extract`
 
-сохранить текст скачанных файлов — текст, текстовые слои PDF/DOCX, ODT/ODS/XLSX/PPTX/EPUB — в локальном хранилище, где их находит поиск
+read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/PPTX/EPUB — into the local store, where search finds them
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg attachments extract [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только файлы этого чата: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--from-dir <dir>` | сопоставить файлы в этом каталоге без обхода подкаталогов; требуется --chat. |
-| `--cursor <cursor>` | продолжить с курсора, возвращённого извлечением с ограничениями. |
-| `--download` | сначала скачать из мессенджера в --output-dir файлы, которые ещё не скачивались. |
-| `--output-dir <dir>` | с --download: куда сохранить файлы; каталог создаётся при необходимости. |
-| `--limit <n>` | прочитать не больше этого числа файлов; повторный запуск продолжает. |
-| `--ocr` | явно вызвать models.ocr для массового извлечения текста из изображений и сканированных PDF. |
-| `--concurrency <n>` | удалённо: параллельные запросы (по умолчанию 4). |
+| `--chat <chat>` | only this chat's files; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--from-dir <dir>` | match files in this nonrecursive directory; needs --chat. |
+| `--cursor <cursor>` | continue from the cursor returned by a bounded extraction. |
+| `--download` | first save the files no download saved yet, from the messenger, into --output-dir. |
+| `--output-dir <dir>` | with --download, where to save them; created if missing. |
+| `--limit <n>` | read at most this many files; run it again to continue. |
+| `--ocr` | explicitly call models.ocr for bulk image and scanned-PDF text extraction. |
+| `--concurrency <n>` | remote: requests at once (default: 4). |
 
-**Returns:** extract text from retained message files
+**Returns:** attachment extraction — extracted, failed, needs_agent, complete, unchanged, not_downloaded, unsupported, engines_missing, and 15 more; every field: tg commands info attachments extract
 
 **Example:** `tg personal attachments extract --chat "Book club" --limit 10`
 
 ### `tg attachments list`
 
-файлы сохранённых сообщений, от новых к старым: где сохранён каждый и есть ли его текст — без самого текста
+files of stored messages, newest first: where each was saved and whether its text is held — never the text
 
 ```sh
 tg attachments list [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
-**Returns:** attachment — kind, message, position, url, name, title, mime, size, and 7 more; every field: tg commands schema attachments list
+**Returns:** attachment — kind, message, position, url, name, title, mime, size, and 7 more; every field: tg commands info attachments list
 
 **Example:** `tg personal attachments list --limit 10`
 
 ### `tg attachments show`
 
-прочитать ограниченную порцию сохранённого вложения; JSON содержит байты в base64
+read a bounded chunk of one retained attachment; JSON includes base64 bytes
 
 ```sh
 tg attachments show <chat> [message] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязательный | чат: название или его часть, ID, @username, либо `me` для Избранного; или только адрес msg:. |
-| `message` | необязательный | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages; or a msg: locator alone. |
+| `message` | optional | the message id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--attachment <n>` | позиция файла от 1; обязательна при нескольких файлах. |
-| `--page <n>` | отрисовать одну страницу PDF как PNG, от 1; необязательные unpdf/canvas, без OCR. |
-| `--offset-bytes <n>` | смещение в байтах от 0. |
-| `--chunk-bytes <n>` | число возвращаемых байтов, 1–1048576 (по умолчанию524288). |
-| `--expected-fingerprint <hash>` | требовать SHA-256 всего файла из предыдущей порции. |
+| `--attachment <n>` | file position from 1; required for several files. |
+| `--page <n>` | render one PDF page as PNG, from 1; optional unpdf/canvas, no OCR. |
+| `--offset-bytes <n>` | byte offset from 0. |
+| `--chunk-bytes <n>` | bytes to return, 1–1048576 (default524288). |
+| `--expected-fingerprint <hash>` | require the whole file SHA-256 from the preceding chunk. |
 
-**Returns:** read a bounded chunk of one retained attachment; JSON includes base64 bytes
+**Returns:** attachment bytes — ref, attachment, name, mime_type, total_bytes, sha256, offset_bytes, read_bytes, and 4 more; every field: tg commands info attachments show
 
 **Example:** `tg personal attachments show "Book club" 101 --attachment 1`
 
-### `tg attachments text`
+### `tg attachments update`
 
-текст одного файла в том виде, в каком его прочитал агент
+keep the text an agent read from a file — a scan, a photo — so search finds it; nothing is sent
 
-#### `tg attachments text set`
-
-сохранить текст, который агент прочитал из файла — скана, фотографии, — чтобы его находил поиск; ничего не отправляется
-
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
-tg attachments text set <chat> [message] [options]
+tg attachments update <chat> [message] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или часть, идентификатор, @username, `me` для «Избранного»; либо указатель msg: без следующего идентификатора. |
-| `message` | необязателен | идентификатор сообщения. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages; or a msg: locator, with no message id after it. |
+| `message` | optional | the message id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--attachment <n>` | какой файл сообщения, начиная с 1; нужен, если файлов больше одного. |
-| `--text-file <path>` | прочитать текст из этого файла; - или без значения — из stdin. |
+| `--attachment <n>` | which file of the message, from 1; needed when it has more than one. |
+| `--text-file <path>` | read the text from this file; - or none reads stdin. |
 
-**Returns:** save the text read from one message file
+**Returns:** attachment text change — ref, attachment, origin, chars, replaced; every field: tg commands info attachments update
 
-**Example:** `tg personal attachments text set "Book club" 101 --text-file ./transcript.txt`
+**Example:** `tg personal attachments update "Book club" 101 --text-file ./transcript.txt`
 
 ### `tg attachments download`
 
-архивировать медиа из выбранных чатов; проверить и сохранить уже имеющиеся копии
+archive media from selected chats; verify and keep existing copies
 
 **Changes something on this computer only.**
 
@@ -3760,43 +3757,43 @@ tg attachments text set <chat> [message] [options]
 tg attachments download <dir> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `dir` | обязателен | каталог архива; создаётся, если его нет. |
+| `dir` | required | archive directory; created if missing. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат; повторите для нескольких; чат: название или его часть, идентификатор, @username или `me` для «Избранного». По умолчанию: ``. |
-| `--since-time <time>` | включить сообщения начиная с этого времени ISO с часовым поясом. |
-| `--pause <duration>` | пауза между страницами истории. По умолчанию: `1s`. |
+| `--chat <chat>` | only this chat; repeat for more; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. Default: ``. |
+| `--since-time <time>` | include messages from this ISO timestamp with a time zone. |
+| `--pause <duration>` | pause between history pages. Default: `1s`. |
 
-**Returns:** archive media from selected chats; verify and keep existing copies
+**Returns:** media archive — directory, chats, saved, existing, complete; every field: tg commands info attachments download
 
 **Example:** `tg personal attachments download ./media-archive`
 
 ### `tg attachments check`
 
-заново посчитать хеши всех архивных файлов, не подключаясь к мессенджеру
+rehash all archived files without connecting to the messenger
 
 ```sh
 tg attachments check <dir>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `dir` | обязателен | каталог архива. |
+| `dir` | required | archive directory. |
 
-**Returns:** rehash all archived files without connecting to the messenger
+**Returns:** media archive check — valid, checked, files; every field: tg commands info attachments check
 
 **Example:** `tg personal attachments check ./media-archive`
 
 ### `tg attachments jobs`
 
-ежедневные таймеры архивации медиа для этого профиля
+daily media archive timers for this profile
 
 #### `tg attachments jobs install`
 
-установить ежедневный таймер архивации в Linux для этого каталога; ничего не запускает
+install a Linux daily archive timer for this directory; starts nothing
 
 **Changes something on this computer only.**
 
@@ -3804,24 +3801,24 @@ tg attachments check <dir>
 tg attachments jobs install <dir> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `dir` | обязателен | каталог архива; используется с тем же профилем, что и при установке. |
+| `dir` | required | archive directory, used with the same profile as install. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--at <HH:mm>` | время ежедневного запуска. По умолчанию: `03:00`. |
-| `--timezone <zone>` | часовой пояс IANA для времени ежедневного запуска. По умолчанию: `UTC`. |
-| `--chat <chat>` | только этот чат; повторите для нескольких; чат: название или его часть, идентификатор, @username или `me` для «Избранного». По умолчанию: ``. |
-| `--since-time <time>` | включить сообщения начиная с этого времени ISO с часовым поясом. |
+| `--at <HH:mm>` | daily start time. Default: `03:00`. |
+| `--timezone <zone>` | IANA time zone of the daily start time. Default: `UTC`. |
+| `--chat <chat>` | only this chat; repeat for more; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. Default: ``. |
+| `--since-time <time>` | include messages from this ISO timestamp with a time zone. |
 
-**Returns:** install a Linux daily archive timer for this directory; starts nothing
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs install
 
 **Example:** `tg personal attachments jobs install ./media-archive`
 
 #### `tg attachments jobs start`
 
-включить установленный таймер архивации при входе и запустить его ежедневное расписание
+enable the installed archive timer at login and start its daily schedule
 
 **Changes something on this computer only.**
 
@@ -3829,17 +3826,17 @@ tg attachments jobs install <dir> [options]
 tg attachments jobs start <dir>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `dir` | обязателен | каталог архива; используется с тем же профилем, что и при установке. |
+| `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** enable the installed archive timer at login and start its daily schedule
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs start
 
 **Example:** `tg personal attachments jobs start ./media-archive`
 
 #### `tg attachments jobs stop`
 
-выключить таймер архивации; уже идущая загрузка завершится
+disable the archive timer; a download already running finishes
 
 **Changes something on this computer only.**
 
@@ -3847,33 +3844,33 @@ tg attachments jobs start <dir>
 tg attachments jobs stop <dir>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `dir` | обязателен | каталог архива; используется с тем же профилем, что и при установке. |
+| `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** disable the archive timer; a download already running finishes
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs stop
 
 **Example:** `tg personal attachments jobs stop ./media-archive`
 
 #### `tg attachments jobs status`
 
-показать, установлен ли таймер архивации этого каталога и активен ли он
+show whether this directory's archive timer is installed and active
 
 ```sh
 tg attachments jobs status <dir>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `dir` | обязателен | каталог архива; используется с тем же профилем, что и при установке. |
+| `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** show whether this directory's archive timer is installed and active
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs status
 
 **Example:** `tg personal attachments jobs status ./media-archive`
 
 #### `tg attachments jobs uninstall`
 
-удалить остановленный таймер архивации этого каталога; архивные файлы остаются
+remove this directory's stopped archive timer; keep archived files
 
 **Changes something on this computer only.**
 
@@ -3881,17 +3878,17 @@ tg attachments jobs status <dir>
 tg attachments jobs uninstall <dir>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `dir` | обязателен | каталог архива; используется с тем же профилем, что и при установке. |
+| `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** remove this directory's stopped archive timer; keep archived files
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: tg commands info attachments jobs uninstall
 
 **Example:** `tg personal attachments jobs uninstall ./media-archive`
 
 ### `tg attachments move`
 
-перенести старые изображения в другой проверенный архив; запомнить их новое расположение
+move older images into another verified archive; remember their new locations
 
 **Changes something on this computer only.**
 
@@ -3899,1255 +3896,1249 @@ tg attachments jobs uninstall <dir>
 tg attachments move <dir> <archive-dir> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `dir` | обязателен | исходный каталог архива медиа. |
-| `archive-dir` | обязателен | каталог архива назначения; создаётся при необходимости. |
+| `dir` | required | source media archive directory. |
+| `archive-dir` | required | destination archive directory; created if needed. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--before-time <time>` | перенести изображения, у которых дата сообщения раньше этого времени ISO с часовым поясом. |
-| `--dry-run` | показать количество и размер, не перемещая файлы и не создавая каталог назначения. |
+| `--before-time <time>` | move images whose message date is before this ISO timestamp with zone. |
+| `--dry-run` | show counts and bytes without moving files or creating the destination. |
 
-**Returns:** move older images into another verified archive; remember their new locations
+**Returns:** media archive move — directory, archive_directory, before_time, selected, selected_bytes, moved, moved_bytes, already_archived, and 3 more; every field: tg commands info attachments move
 
 **Example:** `tg personal attachments move ./media-archive ./older-images --before-time 2026-10-01T00:00:00Z --dry-run`
 
 ## `tg tags`
 
-ваши метки чатов, людей, сообщений и задач, только в локальном хранилище; tag: находит их в поиске
+your own labels on chats, people, messages and tasks, kept in the local store and never sent; tag: in a search finds them
 
-### `tg tags auto`
+### `tg tags rebuild`
 
-назначить локальные теги группам и каналам по кешированным метаданным с помощью правил ключевых слов
+derive local group/channel tags from cached metadata using keyword rules
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
-tg tags auto [options]
+tg tags rebuild [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | сохранённая группа или канал; повторите для выбора нескольких. По умолчанию: ``. |
-| `--limit <number>` | обработать не более указанного числа чатов, от 1 до 500. По умолчанию: `50`. |
-| `--sync-first` | прочитать текущие описания из мессенджера перед классификацией. |
-| `--dry-run` | предварительно показать классификацию по кешу без изменения хранилища. |
+| `--chat <chat>` | a stored group/channel; repeat to select several. Default: ``. |
+| `--limit <n>` | process at most 1–500 chats. Default: `50`. |
+| `--sync-first` | read current descriptions from the messenger before classifying. |
+| `--dry-run` | preview cached classification without changing the store. |
 
-**Returns:** derive local group/channel tags from cached metadata using keyword rules
+**Returns:** automatic tags — items, has_more, dry_run; every field: tg commands info tags rebuild
 
-**Example:** `tg personal tags auto --chat "Book club" --dry-run`
+**Example:** `tg personal tags rebuild --chat "Book club" --dry-run`
 
 ### `tg tags add`
 
-назначить теги чату, человеку, сообщению или задаче
+put tags on one chat, person, message or task
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tags add <tag> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `tag` | обязательный | одна или несколько меток: 1–32 символа из латинских букв a–z, цифр и дефисов; заглавные буквы переводятся в строчные. |
+| `tag` | required | one or more tags: 1–32 letters a–z, digits and hyphens; upper case is lowered. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат для метки или чат сообщения из --message: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--contact <person>` | человек для метки: идентификатор, @username или имя, как они известны локальной базе. |
-| `--message <message>` | сообщение для метки: его идентификатор в --chat или отдельный указатель msg:. |
-| `--task <id>` | задача для тега: id или ключ из tasks list. |
+| `--chat <chat>` | the chat to tag, or the chat of --message; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--contact <person>` | the person to tag: their id, @username or name, as the local store knows them. |
+| `--message <message>` | the message to tag: its id in --chat, or a msg: locator alone. |
+| `--task <id>` | the task to tag: its id or key, as tasks list shows it. |
 
-**Returns:** put tags on one chat, person, message or task
+**Returns:** tag change — target, unchanged, added, removed; every field: tg commands info tags add
 
 **Example:** `tg personal tags add reading --chat "Book club"`
 
 ### `tg tags remove`
 
-снять теги с чата, человека, сообщения или задачи
+take tags off one chat, person, message or task
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tags remove <tag> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `tag` | обязательный | одна или несколько меток: 1–32 символа из латинских букв a–z, цифр и дефисов; заглавные буквы переводятся в строчные. |
+| `tag` | required | one or more tags: 1–32 letters a–z, digits and hyphens; upper case is lowered. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат, с которого снять метку, или чат сообщения из --message: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--contact <person>` | человек, с которого снять метку: идентификатор, @username или имя, как они известны локальной базе. |
-| `--message <message>` | сообщение, с которого снять метку: его идентификатор в --chat или отдельный указатель msg:. |
-| `--task <id>` | задача для снятия тега: id или ключ из tasks list. |
-| `--source <manual\|auto>` | удалить только отметку о принадлежности к этому источнику. |
+| `--chat <chat>` | the chat to untag, or the chat of --message; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--contact <person>` | the person to untag: their id, @username or name, as the local store knows them. |
+| `--message <message>` | the message to untag: its id in --chat, or a msg: locator alone. |
+| `--task <id>` | the task to untag: its id or key, as tasks list shows it. |
+| `--claim <claim>` | remove only this ownership claim: manual or auto. |
 
-**Returns:** take tags off one chat, person, message or task
+**Returns:** tag change — target, unchanged, added, removed; every field: tg commands info tags remove
 
 **Example:** `tg personal tags remove reading --chat "Book club"`
 
 ### `tg tags list`
 
-что помечено: чаты, сообщения и задачи этого аккаунта, а также люди его мессенджера
+what is tagged: this account's chats, messages and tasks, and the people of its messenger
 
 ```sh
 tg tags list [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** tagging — tag, type, target, name, sources, created_at; every field: tg commands schema tags list
+**Returns:** tagging — tag, type, target, name, sources, created_at; every field: tg commands info tags list
 
 **Example:** `tg personal tags list`, `tg personal tags list tag:reading`
 
 ## `tg mentions`
 
-телефоны, e-mail, ссылки, документы, имена и адреса в сохранённых сообщениях
+phones, e-mail, links, documents, names and addresses in stored messages
 
 ### `tg mentions list`
 
-упоминания аккаунта по запросу, от новых к старым; --new — найденные после последнего просмотра
+this account's mentions matching the query, newest first; --new for those found since the last review
 
 ```sh
 tg mentions list [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | поля ниже; простое слово — это значение, поэтому телефон, набранный с 8, находится и записанным с +7. |
+| `query` | optional | fields below; a bare word is a value, so a phone typed with 8 finds it written with +7. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--new` | нерассмотренные упоминания после последнего полного просмотра с --new; первый запуск показывает все. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--new` | undecided mentions found since the last --new run that showed them all; the first run shows every one. |
 
-**Returns:** this account's mentions matching the query, newest first
+**Returns:** mention — id, kind, value, domain, confidence, status, field, author, and 5 more; every field: tg commands info mentions list
 
 **Example:** `tg personal mentions list kind:phone`, `tg personal mentions list domain:google.com`, `tg personal mentions list --new`
 
 ### `tg mentions domains`
 
-сайты, на которые ссылается этот аккаунт: по числу ссылок, с чатами и временем первой и последней
+the sites this account's links point to, most linked first, with chats and first and last time
 
 ```sh
 tg mentions domains [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | сужает учитываемые ссылки по полям ниже; отклонённые ссылки не учитываются. |
+| `query` | optional | narrows the links counted: the fields below; dismissed links are never counted. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
-**Returns:** the sites this account's links point to, most linked first
+**Returns:** mention domain — domain, links, chats, first_at, last_at; every field: tg commands info mentions domains
 
 **Example:** `tg personal mentions domains`, `tg personal mentions domains status:found`
 
 ### `tg mentions places`
 
-подтверждённые адреса во всех аккаунтах, сначала самые упоминаемые; `mentions confirm <id>` добавляет адрес
+confirmed addresses, in every account, most mentioned first; `mentions confirm <id>` adds one
 
 ```sh
 tg mentions places [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
-**Returns:** confirmed street addresses, most mentioned first
+**Returns:** place — id, address, mentions; every field: tg commands info mentions places
 
 **Example:** `tg personal mentions places`
 
 ### `tg mentions show`
 
-одно упоминание, текст вокруг него и сколько ещё мест содержат его значение
+one mention, the text around it, and how many other places hold its value
 
 ```sh
 tg mentions show <id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `id` | обязателен | идентификатор упоминания из mentions list. |
+| `id` | required | the mention's id, from mentions list. |
 
-**Returns:** one mention, the text around it, and how many other places hold its value
+**Returns:** mention details — id, kind, value, domain, confidence, status, field, author, and 9 more; every field: tg commands info mentions show
 
 **Example:** `tg personal mentions show 12`
 
 ### `tg mentions confirm`
 
-указать, что такое упоминание: владелец телефона везде, где он записан, сохранённый документ, кого означает имя, адрес как место
+say what a mention is: a phone's owner everywhere it is written, the stored document, who a name means, an address as a place
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg mentions confirm <id> [person] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `id` | обязательный | идентификатор упоминания из mentions list. |
-| `person` | необязательный | person:<uid> или organization:<id>, которому принадлежит телефон или адрес e-mail; person:<uid>, которого означает имя; документу или почтовому адресу ничего не нужно. |
+| `id` | required | the mention's id, from mentions list. |
+| `person` | optional | person:<uid> or organization:<id> that owns the phone or the e-mail address; person:<uid> a name means; a document or a street address needs none. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--all-in-chat` | для имени: также все нерассмотренные случаи того же имени в этом чате. |
-| `--as-owner` | записать как ваше решение, хотя инструмент запущен из терминала агента (задан AI_AGENT или CLAUDECODE). |
+| `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
+| `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** say what a mention is, everywhere its value is written
+**Returns:** mention decision — kind, value, status, target, mentions; every field: tg commands info mentions confirm
 
 **Example:** `tg personal mentions confirm 12 person:7`, `tg personal mentions confirm 15`, `tg personal mentions confirm 31 person:7 --all-in-chat`
 
 ### `tg mentions reject`
 
-не настоящее упоминание: отклонить его значение везде и при следующих синхронизациях; имя — только в этом месте
+not a real mention: dismiss its value everywhere and on later syncs; a name only where it is
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg mentions reject <id> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `id` | обязательный | идентификатор упоминания из mentions list. |
+| `id` | required | the mention's id, from mentions list. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--all-in-chat` | для имени: также все нерассмотренные случаи того же имени в этом чате. |
-| `--as-owner` | записать как ваше решение, хотя инструмент запущен из терминала агента (задан AI_AGENT или CLAUDECODE). |
+| `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
+| `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** dismiss a mention's value everywhere, and on later syncs
+**Returns:** mention decision — kind, value, status, target, mentions; every field: tg commands info mentions reject
 
 **Example:** `tg personal mentions reject 12`
 
 ### `tg mentions rebuild`
 
-заново найти упоминания во всех сохранённых сообщениях; принятые решения сохраняются
+find the mentions of every stored message again; decisions are kept
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg mentions rebuild [kind]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `kind` | необязателен | только этот вид: person-name после того, как людей добавили или переименовали. Одно из: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
+| `kind` | optional | only this kind: person-name after people were added or renamed. One of: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
 
-**Returns:** find the mentions of every stored message again; decisions are kept
+**Returns:** mention rebuild — messages, attachments, documents, notes, emails, mentions; every field: tg commands info mentions rebuild
 
 **Example:** `tg personal mentions rebuild`, `tg personal mentions rebuild person-name`
 
 ## `tg images`
 
-поиск картинок по тому, что на них изображено, с моделью на этом компьютере
+search pictures by what they show, with a model on this machine
 
 ### `tg images embed`
 
-вычислить вектор для каждой картинки, которая известна хранилищу и у которой его ещё нет, — картинка скачивается через мессенджер, сохраняется только вектор; нужны включённый в профиле `picture_search` и `images models download clip-b32`; продолжает с места остановки
+compute a vector for each picture the store knows and has none for — downloading it through the messenger, keeping only the vector; needs `picture_search` on in the profile and `images models download clip-b32`; resumes where it stopped
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg images embed [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--limit <n>` | не больше стольких картинок за один запуск; по умолчанию 100. |
+| `--chat <chat>` | only this chat; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--limit <n>` | at most this many pictures in one run; 100 if not given. |
 
-**Returns:** compute a vector for each stored picture that has none; resumes where it stopped
+**Returns:** image embedding — model, embedded, skipped, failed, more; every field: tg commands info images embed
 
 **Example:** `tg personal images embed`, `tg personal images embed --limit 500`
 
 ### `tg images models`
 
-модели, которые читают картинки, для `images embed` и поиска по картинкам
+models that read pictures, for `images embed` and picture search
 
 #### `tg images models list`
 
-модели для картинок: какие скачаны и какая используется по умолчанию
+the picture models, which are downloaded, and which one is the default
 
 ```sh
 tg images models list [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands schema images models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands info images models list
 
-**Next usually:** `tg models audio download <model>`, `tg models text download <model>`, `tg images models download <model>`
+**Next usually:** `tg models download <model>`, `tg images models download <model>`
 
 **Example:** `tg personal images models list`
 
 #### `tg images models download`
 
-однократно скачать модель для картинок с проверкой ожидаемого sha256
+download a picture model once, checked against the sha256 this version expects
 
-**Читает из внешнего сервиса.**
+**Reads from an outside service.**
 
 ```sh
 tg images models download <model>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `model` | обязателен | идентификатор модели из `images models list`. |
+| `model` | required | a model id from `images models list`. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands schema images models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands info images models download
 
-**Next usually:** `tg models audio download <model>`, `tg models text download <model>`
+**Next usually:** `tg models download <model>`
 
 **Example:** `tg personal images models download clip-b32`
 
 ## `tg metadata`
 
-кешированные описания групп и каналов для локальных автоматических тегов
+cached group/channel descriptions for local automatic tags
 
-### `tg metadata get`
+### `tg metadata show`
 
-кэшированное описание сохранённого чата, как его читают автоматические теги
-
-```sh
-tg metadata get [options]
-```
-
-| Параметр | Назначение |
-|---|---|
-| `--chat <chat>` | сохранённый чат. |
-
-**Returns:** a stored chat's cached description, as automatic tags read it
-
-**Example:** `tg personal metadata get --chat 7`
-
-### `tg metadata refresh`
-
-заново получить описания групп и каналов и сохранить их в кэш
-
-**Изменяет данные только на этом компьютере.**
+a stored chat's cached description, as automatic tags read it
 
 ```sh
-tg metadata refresh [options]
+tg metadata show [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | сохранённая группа или канал; повторите для нескольких. По умолчанию: ``. |
-| `--only-missing` | только чаты без метаданных; без --chat — все сохранённые группы и каналы. |
-| `--limit <number>` | обработать не более указанного числа чатов, от 1 до 500. По умолчанию: `50`. |
+| `--chat <chat>` | a stored chat. |
 
-**Returns:** fetch group and channel descriptions again and cache them
+**Returns:** chat metadata — chat_id, metadata; every field: tg commands info metadata show
 
-**Example:** `tg personal metadata refresh --chat 7 --chat 8`, `tg personal metadata refresh --only-missing --limit 20`
+**Example:** `tg personal metadata show --chat 7`
+
+### `tg metadata sync`
+
+fetch group and channel descriptions again and cache them
+
+**Changes something on this computer only.**
+
+```sh
+tg metadata sync [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--chat <chat>` | stored group/channel; repeat for several. Default: ``. |
+| `--only-missing` | only chats with no metadata yet; without --chat, every stored group/channel. |
+| `--limit <n>` | process at most 1–500 chats. Default: `50`. |
+
+**Returns:** chat metadata refresh — chats, has_more; every field: tg commands info metadata sync
+
+**Example:** `tg personal metadata sync --chat 7 --chat 8`, `tg personal metadata sync --only-missing --limit 20`
 
 ## `tg stats`
 
-Статистика сообщений, чатов и их авторов
+statistics about messages, chats and their authors
 
 ### `tg stats messages`
 
-Статистика сообщений из локального хранилища
+message statistics from the local store
 
 #### `tg stats messages show`
 
-сколько сохранённых сообщений подходит, по чатам, авторам, дням или часам — только локальная база; с --sync-first сначала загружает новые сообщения
+how many stored messages match, by chat, sender, day or hour — the local store only; optionally fetches new messages with --sync-first
 
 ```sh
 tg stats messages show [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | строгий запрос Lucene, как для search messages; без него считаются все сохранённые сообщения; с --saved дополнительные слова добавляются через AND. |
+| `query` | optional | a strict Lucene query, as for search messages; none counts every stored message; with --saved, more words AND-ed to it. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--sync-first` | сначала загрузить новые сообщения в пределах ограничений по чатам, времени и сообщениям. |
-| `--max-chats <n>` | обновить не больше этого числа чатов (по умолчанию 5). |
-| `--sync-time <duration>` | прекратить загрузку через это время (по умолчанию 30s). |
-| `--max-messages <n>` | загрузить не больше этого числа сообщений всего (по умолчанию 500). |
-| `--by <chat\|sender\|day\|hour>` | по чему считать (по умолчанию chat). |
-| `--chat <chat>` | только чат, как chat: в запросе: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--source <accounts>` | все аккаунты мессенджера в базе: personal, bots, all, как in: в запросе. |
-| `--limit <n>` | количество строк. |
-| `--timezone <zone>` | часовой пояс IANA для календарных дней и часов. |
-| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
-| `--saved <name\|id>` | посчитать совпадения сохранённого поиска или прошлого запуска; указанные здесь параметры заменяют его собственные. |
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--max-chats <n>` | refresh at most this many chats (default: 5). |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--by <group>` | count by chat, sender, day or hour (default: chat). |
+| `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query. |
+| `--limit <n>` | how many rows. |
+| `--timezone <zone>` | the IANA timezone for calendar days and hours. |
+| `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
+| `--saved <name\|id>` | count what a saved search or an earlier run matches; options typed here replace its own. |
 
-**Returns:** message counts — by, total, rows; every field: tg commands schema stats messages show
+**Returns:** message counts — by, total, rows; every field: tg commands info stats messages show
 
 **Example:** `tg personal stats messages show --chat "Book club" --by day`
 
 #### `tg stats messages counters`
 
-наблюдения каждого счётчика и ограниченное обновление из мессенджера
+per-counter observations and bounded remote refresh
 
 #### `tg stats messages counters show`
 
-показать сохранённые значения счётчиков и свежесть наблюдений
+show saved counter values and their observation freshness
 
 ```sh
 tg stats messages counters show [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | optional | строгий запрос Lucene по сохранённым сообщениям. |
+| `query` | optional | strict Lucene query over stored messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат; название или его часть, идентификатор, @username либо `me` для Избранного. |
-| `--source <accounts>` | подключённые аккаунты этого мессенджера; обновление использует активный. |
-| `--exact` | слова без операторов совпадают по точной форме. |
-| `--timezone <zone>` | часовой пояс IANA для дат запроса. |
-| `--selection <json>` | фиксированная выборка целей из counters show; несовместима с запросом и областью. |
-| `--counters <names>` | разные поля views,reactions,comments; по умолчанию все три. |
-| `--limit <n>` | сообщения, 1–100; по умолчанию 20. |
-| `--max-age <duration>` | максимальный возраст свежего наблюдения; по умолчанию 24h. |
+| `--chat <chat>` | only this chat; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--source <accounts>` | held accounts of this messenger; refresh uses the active account. |
+| `--exact` | bare words match exact forms. |
+| `--timezone <zone>` | IANA timezone for query dates. |
+| `--selection <json>` | pinned counter-targets selection from counters show; conflicts with query and scope. |
+| `--counters <names>` | distinct views,reactions,comments fields; all three by default. |
+| `--limit <n>` | messages, 1–100; 20 by default. |
+| `--max-age <duration>` | maximum fresh observation age; 24h by default. |
 
-**Returns:** counters — cutoff, max_age_ms, selection, rows; every field: tg commands schema stats messages counters show
+**Returns:** counters — cutoff, max_age_ms, selection, rows; every field: tg commands info stats messages counters show
 
 **Example:** `tg personal stats messages counters show --chat "Book club" --limit 10`
 
-#### `tg stats messages counters refresh`
+#### `tg stats messages counters sync`
 
-прочитать достоверные счётчики ограниченного числа сообщений и обновить локальные наблюдения
+read authoritative counters for bounded messages and update their local observations
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
-tg stats messages counters refresh [query] [options]
+tg stats messages counters sync [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | optional | строгий запрос Lucene по сохранённым сообщениям. |
+| `query` | optional | strict Lucene query over stored messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат; название или его часть, идентификатор, @username либо `me` для Избранного. |
-| `--source <accounts>` | подключённые аккаунты этого мессенджера; обновление использует активный. |
-| `--exact` | слова без операторов совпадают по точной форме. |
-| `--timezone <zone>` | часовой пояс IANA для дат запроса. |
-| `--selection <json>` | фиксированная выборка целей из counters show; несовместима с запросом и областью. |
-| `--counters <names>` | разные поля views,reactions,comments; по умолчанию все три. |
-| `--limit <n>` | сообщения, 1–100; по умолчанию 20. |
-| `--max-messages <n>` | максимум сообщений для обновления, 1–100. |
-| `--sync-time <duration>` | время удалённого обновления; по умолчанию 30s, максимум 5m. |
-| `--dry-run` | показать точные сохранённые цели и поддерживаемые счётчики без подключения. |
+| `--chat <chat>` | only this chat; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--source <accounts>` | held accounts of this messenger; refresh uses the active account. |
+| `--exact` | bare words match exact forms. |
+| `--timezone <zone>` | IANA timezone for query dates. |
+| `--selection <json>` | pinned counter-targets selection from counters show; conflicts with query and scope. |
+| `--counters <names>` | distinct views,reactions,comments fields; all three by default. |
+| `--limit <n>` | messages, 1–100; 20 by default. |
+| `--max-messages <n>` | maximum messages to refresh, 1–100. |
+| `--sync-time <duration>` | remote refresh budget; 30s by default, maximum 5m. |
+| `--dry-run` | preview exact stored targets and counter capabilities without connecting. |
 
-**Returns:** counter refresh — dry_run, targets, counters, supported, unsupported, max_messages, time_ms, results, and 2 more; every field: tg commands schema stats messages counters refresh
+**Returns:** counter refresh — dry_run, targets, counters, supported, unsupported, max_messages, time_ms, results, and 2 more; every field: tg commands info stats messages counters sync
 
-**Example:** `tg personal stats messages counters refresh --chat "Book club" --dry-run`
+**Example:** `tg personal stats messages counters sync --chat "Book club" --dry-run`
 
 #### `tg stats messages unanswered`
 
-самые старые найденные вопросы без наблюдаемого подходящего прямого ответа
+oldest detected questions without an observed qualifying explicit reply
 
 ```sh
 tg stats messages unanswered [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | строгий запрос Lucene; без запроса выбираются все сохранённые сообщения. |
+| `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат; название или его часть, идентификатор, @username либо `me` для Избранного. |
-| `--source <accounts>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
-| `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
-| `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <person>` | сохранённое имя, псевдоним, @username, ID или person:provider/account/id; для неоднозначных имён нужен выбор; для нескольких повторить. |
-| `--older-than <duration>` | минимальный возраст вопроса без наблюдаемого подходящего ответа. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
+| `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
-**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands schema stats messages unanswered
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands info stats messages unanswered
 
-**Example:** `tg personal stats messages unanswered --chat "Project room"`
+**Example:** `tg personal stats messages unanswered chat:"Project room"`
 
 #### `tg stats messages discussion`
 
-просмотренные посты с малым сохранённым обсуждением
+viewed posts with little recorded discussion
 
 ```sh
 tg stats messages discussion [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | строгий запрос Lucene; без запроса выбираются все сохранённые сообщения. |
+| `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат; название или его часть, идентификатор, @username либо `me` для Избранного. |
-| `--source <accounts>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
-| `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
-| `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--min-views <n>` | минимум известных накопленных просмотров. |
-| `--max-replies <n>` | максимум наблюдаемых ответов в обсуждении. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
+| `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | report rows, 1–100; 20 if not given. |
 
-**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands schema stats messages discussion
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands info stats messages discussion
 
-**Example:** `tg personal stats messages discussion --chat "Book club"`
+**Example:** `tg personal stats messages discussion chat:"Book club"`
 
 #### `tg stats messages top`
 
-ранжировать сохранённые сообщения по метрике или объяснимой оценке; у каждого счётчика показана свежесть наблюдения
+rank stored messages by a measure or explainable score; counters are snapshots with per-field observation freshness
 
 ```sh
 tg stats messages top [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | строгий запрос Lucene; без запроса выбираются все сохранённые сообщения. |
+| `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--sync-first` | сначала загрузить новые сообщения в пределах ограничений по чатам, времени и сообщениям. |
-| `--max-chats <n>` | обновить не больше этого числа чатов (по умолчанию 5). |
-| `--sync-time <duration>` | прекратить загрузку через это время (по умолчанию 30s). |
-| `--max-messages <n>` | загрузить не больше этого числа сообщений всего (по умолчанию 500). |
-| `--measure <name>` | показатель ранжирования; не сочетается с score или weights. Одно из: `views`, `reactions`, `forwards`, `comments`, `replies`, `thread-size`. |
-| `--score <preset>` | helpful/active для авторов; engaging для обоих типов объектов. Одно из: `helpful`, `active`, `engaging`. |
-| `--weights <json>` | полный набор весов компонентов; заменяет веса предустановки. |
-| `--message-kind <kind>` | перед ранжированием выбрать все сообщения либо подтверждённые публикации или комментарии. Одно из: `all`, `posts`, `comments`. |
-| `--chat <chat>` | только этот чат; название или его часть, идентификатор, @username либо `me` для Избранного. |
-| `--source <accounts>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
-| `--timezone <zone>` | часовой пояс IANA для дат и активных дней. |
-| `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
-| `--limit <n>` | строки рейтинга, 1–100. |
-| `--saved <name\|id>` | выполнить сохранённый запрос или запуск ранжирования; явно введённые параметры заменяют сохранённые. |
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--max-chats <n>` | refresh at most this many chats (default: 5). |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--measure <name>` | the ranking metric; not with score or weights. One of: `views`, `reactions`, `forwards`, `comments`, `replies`, `thread-size`. |
+| `--score <preset>` | helpful/active for authors; engaging for either target. One of: `helpful`, `active`, `engaging`. |
+| `--weights <json>` | the complete component weights; replaces preset weights. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
+| `--timezone <zone>` | the IANA timezone for dates and active days. |
+| `--limit <n>` | ranked rows, 1–100. |
+| `--saved <name\|id>` | run a saved query or ranking run; typed options replace stored options. |
 
-**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: tg commands schema stats messages top
+**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: tg commands info stats messages top
 
-**Example:** `tg personal stats messages top --chat "Book club" --limit 10`
+**Example:** `tg personal stats messages top chat:"Book club" --limit 10`
 
 #### `tg stats messages evidence`
 
-ограниченная страница сообщений, пар ответов или участников когорты из точной выборки drilldown
+bounded messages, answer pairs or retention members from an exact drilldown selection
 
 ```sh
 tg stats messages evidence <message> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `message` | required | канонический адрес сообщения или ссылка когорты удержания из drilldown. |
+| `message` | required | the canonical message locator, or retention cohort reference, from drilldown. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--selection <json>` | полностью определённая выборка рейтинга, возвращённая в drilldown. |
-| `--component <name>` | доступный компонент рейтинга. |
-| `--limit <n>` | строки подтверждающих данных, 1–100; 20, если не указано. |
-| `--cursor <cursor>` | продолжить для того же компонента и отпечатка сохранённых подтверждающих данных. |
+| `--selection <json>` | the resolved ranking selection returned in drilldown. |
+| `--component <name>` | the exposed ranking component. |
+| `--limit <n>` | evidence rows, 1–100; 20 if not given. |
+| `--cursor <cursor>` | continue the same component and stored-evidence fingerprint. |
 
-**Returns:** evidence — ; every field: tg commands schema stats messages evidence
+**Returns:** evidence — message, contribution, related, counters, person_ref, joined_at, cohort, checkpoints, and 2 more; every field: tg commands info stats messages evidence
 
 **Example:** `tg personal stats messages evidence "$message" --selection "$selection" --component reactions`
 
 ### `tg stats contacts`
 
-Статистика о человеческих авторах
+statistics about human authors
 
 #### `tg stats contacts responses`
 
-число ответов и медиана/p90 времени ответа выбранных людей
+counts and median/p90 latency for selected human answering identities
 
 ```sh
 tg stats contacts responses [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | строгий запрос Lucene; без запроса выбираются все сохранённые сообщения. |
+| `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат; название или его часть, идентификатор, @username либо `me` для Избранного. |
-| `--source <accounts>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
-| `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
-| `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <person>` | сохранённое имя, псевдоним, @username, ID или person:provider/account/id; для неоднозначных имён нужен выбор; для нескольких повторить. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
+| `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
-**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands schema stats contacts responses
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands info stats contacts responses
 
-**Example:** `tg personal stats contacts responses --chat "Project room"`
+**Example:** `tg personal stats contacts responses chat:"Project room"`
 
 #### `tg stats contacts top`
 
-ранжировать авторов сохранённых сообщений по метрике или объяснимой оценке; у каждого счётчика показана свежесть наблюдения
+rank the human authors of stored messages by a measure or explainable score; counters are snapshots with per-field observation freshness
 
 ```sh
 tg stats contacts top [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | строгий запрос Lucene; без запроса выбираются все сохранённые сообщения. |
+| `query` | optional | a strict Lucene query; none selects every stored message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--sync-first` | сначала загрузить новые сообщения в пределах ограничений по чатам, времени и сообщениям. |
-| `--max-chats <n>` | обновить не больше этого числа чатов (по умолчанию 5). |
-| `--sync-time <duration>` | прекратить загрузку через это время (по умолчанию 30s). |
-| `--max-messages <n>` | загрузить не больше этого числа сообщений всего (по умолчанию 500). |
-| `--measure <name>` | показатель ранжирования; не сочетается с score или weights. Одно из: `messages`, `words`, `reactions`, `replies`, `answers`, `answer-time`, `threads`, `active-days`. |
-| `--score <preset>` | helpful/active для авторов; engaging для обоих типов объектов. Одно из: `helpful`, `active`, `engaging`. |
-| `--weights <json>` | полный набор весов компонентов; заменяет веса предустановки. |
-| `--message-kind <kind>` | перед ранжированием выбрать все сообщения либо подтверждённые публикации или комментарии. Одно из: `all`, `posts`, `comments`. |
-| `--chat <chat>` | только этот чат; название или его часть, идентификатор, @username либо `me` для Избранного. |
-| `--source <accounts>` | все имеющиеся аккаунты этого мессенджера; personal, bots или all. |
-| `--timezone <zone>` | часовой пояс IANA для дат и активных дней. |
-| `--exact` | слова без поля совпадают в точной форме, а не по основе слова. |
-| `--limit <n>` | строки рейтинга, 1–100. |
-| `--saved <name\|id>` | выполнить сохранённый запрос или запуск ранжирования; явно введённые параметры заменяют сохранённые. |
-| `--min-messages <n>` | минимальное число выбранных сообщений на автора; 1 либо 5 для engaging. |
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--max-chats <n>` | refresh at most this many chats (default: 5). |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--measure <name>` | the ranking metric; not with score or weights. One of: `messages`, `words`, `reactions`, `replies`, `answers`, `answer-time`, `threads`, `active-days`. |
+| `--score <preset>` | helpful/active for authors; engaging for either target. One of: `helpful`, `active`, `engaging`. |
+| `--weights <json>` | the complete component weights; replaces preset weights. |
+| `--source <accounts>` | every held account of this messenger; personal, bots or all. |
+| `--timezone <zone>` | the IANA timezone for dates and active days. |
+| `--limit <n>` | ranked rows, 1–100. |
+| `--saved <name\|id>` | run a saved query or ranking run; typed options replace stored options. |
 
-**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: tg commands schema stats contacts top
+**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: tg commands info stats contacts top
 
-**Example:** `tg personal stats contacts top --chat "Book club" --limit 10`
+**Example:** `tg personal stats contacts top chat:"Book club" --limit 10`
 
 #### `tg stats contacts evidence`
 
-ограниченная страница сообщений, пар ответов или участников когорты из точной выборки drilldown
+bounded messages, answer pairs or retention members from an exact drilldown selection
 
 ```sh
 tg stats contacts evidence <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `person` | обязательный | точный собственный идентификатор человека в мессенджере из строки рейтинга. |
+| `person` | required | the exact native person id from the ranking row. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--selection <json>` | полностью определённая выборка рейтинга, возвращённая в drilldown. |
-| `--component <name>` | доступный компонент рейтинга. |
-| `--limit <n>` | строки подтверждающих данных, 1–100; 20, если не указано. |
-| `--cursor <cursor>` | продолжить для того же компонента и отпечатка сохранённых подтверждающих данных. |
+| `--selection <json>` | the resolved ranking selection returned in drilldown. |
+| `--component <name>` | the exposed ranking component. |
+| `--limit <n>` | evidence rows, 1–100; 20 if not given. |
+| `--cursor <cursor>` | continue the same component and stored-evidence fingerprint. |
 
-**Returns:** evidence — ; every field: tg commands schema stats contacts evidence
+**Returns:** evidence — message, contribution, related, counters, person_ref, joined_at, cohort, checkpoints, and 2 more; every field: tg commands info stats contacts evidence
 
 **Example:** `tg personal stats contacts evidence 101 --selection "$selection" --component messages`
 
 ### `tg stats chats`
 
-Статистика одного чата
+statistics about one chat
 
 #### `tg stats chats show`
 
-показатели группы или канала за период: сообщения, активные участники, ответы, реакции, вопросы с ответом, вступления и выходы — по локальной базе; вступления и выходы запрашиваются у мессенджера
+a group's or channel's numbers for a period: messages, active members, replies, reactions, questions answered, joins and leaves — counted from the local store; joins and leaves are asked of the messenger
 
 ```sh
 tg stats chats show <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--since-time <time>` | ISO 8601 или 2h / 1d назад; по умолчанию 7 дней. |
-| `--by <day\|week>` | также по строке на календарный день или неделю (недели начинаются с понедельника). |
-| `--timezone <zone>` | часовой пояс IANA для календарных дней. |
+| `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
+| `--by <group>` | also one row per calendar day or week (weeks start on Monday). |
+| `--timezone <zone>` | the IANA timezone for calendar days. |
 
-**Returns:** chat stats — chat, since, until, complete, completeness, messages, senders, replies, and 10 more; every field: tg commands schema stats chats show
+**Returns:** chat stats — chat, since, until, complete, completeness, messages, senders, replies, and 10 more; every field: tg commands info stats chats show
 
 **Example:** `tg personal stats chats show "Book club"`
 
 #### `tg stats chats newcomers`
 
-участники с известным вступлением и помощь в окне после вступления
+known-join members and their help within a join window
 
 ```sh
 tg stats chats newcomers <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--since-time <time>` | с этого времени ISO 8601 или 2h / 1d назад; по умолчанию 30d назад. |
-| `--until-time <time>` | до этого времени ISO 8601 или 2h / 1d назад включительно. |
-| `--within <duration>` | окно помощи после известного вступления новичка. |
-| `--saved <name\|id>` | запустить сохранённый отчёт этого вида; указанные опции заменяют сохранённые. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--limit <n>` | строк отчёта, 1–100; по умолчанию 20. |
-| `--answerer <person>` | сохранённое имя, псевдоним, @username, ID или person:provider/account/id; для неоднозначных имён нужен выбор; для нескольких повторить. |
+| `--since-time <time>` | from this ISO 8601 time, or 2h / 1d ago; 30d ago if not given. |
+| `--until-time <time>` | through this ISO 8601 time, or 2h / 1d ago. |
+| `--within <duration>` | the help window after a known newcomer join. |
+| `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
-**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands schema stats chats newcomers
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: tg commands info stats chats newcomers
 
 **Example:** `tg personal stats chats newcomers "Book club"`
 
 #### `tg stats chats retention`
 
-когорты вступления и наблюдаемое участие в контрольные даты по сохранённым спискам состава
+joining cohorts and observed checkpoint membership from saved roster observations
 
 ```sh
 tg stats chats retention <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--since-time <time>` | начало периода вступления в ISO 8601 или относительное время; по умолчанию последние 90 дней. |
-| `--until-time <time>` | конец периода вступления; по умолчанию сейчас. |
-| `--checkpoints <durations>` | до 10 возрастающих сроков после вступления через запятую; по умолчанию 1d,7d,30d. |
-| `--within <duration>` | окно активности и раннего ухода после вступления; по умолчанию 7d. |
-| `--by <day\|week>` | группировать даты вступления по календарному дню или неделе с понедельника. Одно из: `day`, `week`. |
-| `--timezone <zone>` | часовой пояс IANA для когорт вступления. |
-| `--limit <n>` | когорты и доказательства участников, 1–100. |
+| `--since-time <time>` | joining period starts at ISO 8601 or a relative time; last 90 days by default. |
+| `--until-time <time>` | joining period ends at this time; now by default. |
+| `--checkpoints <durations>` | up to 10 increasing joining ages, comma separated; 1d,7d,30d by default. |
+| `--within <duration>` | activity and early departure window after joining; 7d by default. |
+| `--by <group>` | group joining dates by calendar day or Monday week. One of: `day`, `week`. |
+| `--timezone <zone>` | IANA timezone for joining cohorts. |
+| `--limit <n>` | cohorts and member evidence, 1–100. |
 
-**Returns:** retention — chat_ref, cutoff, since, until, checkpoints_ms, within_ms, by, timezone, and 5 more; every field: tg commands schema stats chats retention
+**Returns:** retention — chat_ref, cutoff, since, until, checkpoints_ms, within_ms, by, timezone, and 5 more; every field: tg commands info stats chats retention
 
 **Example:** `tg personal stats chats retention "Book club"`
 
 #### `tg stats chats official`
 
-статистика, вычисленная самим Telegram для группы или канала, которыми вы управляете: общие показатели в сравнении с предыдущим периодом, ведущие участники и все графики в виде рядов JSON; период выбирает мессенджер
+what Telegram itself computed for a group or channel you administer: totals against the previous period, top people and every graph as JSON series; the messenger picks the period
 
 ```sh
 tg stats chats official <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** official stats — chat_id, title, kind, since, until, totals, graphs, top, and 2 more; every field: tg commands schema stats chats official
+**Returns:** official stats — chat_id, title, kind, since, until, totals, graphs, top, and 2 more; every field: tg commands info stats chats official
 
 **Example:** `tg personal stats chats official Team`
 
 ### `tg stats tasks`
 
-Статистика задач
+task statistics
 
 #### `tg stats tasks show`
 
-для каждого чата: число открытых задач, самая старая открытая задача, медианное время до закрытия
+per chat: how many tasks are open, the oldest open one, the median time to close
 
 ```sh
 tg stats tasks show [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только этот чат: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--type <type>` | только этот тип: question, request, mention или promise. |
+| `--chat <chat>` | only this chat; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--type <type>` | only this type: question, request, mention or promise. |
 
-**Returns:** task stats — open, rows; every field: tg commands schema stats tasks show
+**Returns:** task stats — open, rows; every field: tg commands info stats tasks show
 
 **Example:** `tg personal stats tasks show --chat "Project room"`
 
 ### `tg stats charts`
 
-данные графика из статистики чата и, по желанию, изображение SVG или PNG с тёмным оформлением
+a chart's data from a chat's statistics, and optionally a dark SVG or PNG image
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg stats charts <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chart-kind <messages\|active\|membership>` | что рисовать: сообщения, активных авторов или вступления и выходы. По умолчанию: `messages`. |
-| `--by <day\|week>` | одна точка на календарный день или неделю (недели начинаются в понедельник). По умолчанию: `day`. |
-| `--since-time <time>` | ISO 8601 или 2h / 1d назад; по умолчанию 7 дней. |
-| `--timezone <zone>` | часовой пояс IANA для календарных дней. |
-| `--output <file>` | записать изображение с тёмным оформлением в новый файл .svg или .png. |
+| `--chart-kind <messages\|active\|membership>` | what to draw: messages, active authors, or joins and leaves. Default: `messages`. |
+| `--by <group>` | one point per calendar day or week (weeks start on Monday). Default: `day`. |
+| `--since-time <time>` | ISO 8601, or 2h / 1d ago; 7 days ago if not given. |
+| `--timezone <zone>` | the IANA timezone for calendar days. |
+| `--output <file>` | write a dark image to a new .svg or .png file. |
 
-**Returns:** chart — version, kind, title, x, series, unit, timezone, partial, and 2 more; every field: tg commands schema stats charts
+**Returns:** chart — version, kind, title, x, series, unit, timezone, partial, and 2 more; every field: tg commands info stats charts
 
 **Example:** `tg personal stats charts "Book club" --output ./activity.svg`
 
 ## `tg tasks`
 
-то, что требует вашего внимания — вопросы без ответа, упоминания, просьбы, обещания — в локальном хранилище; review и serve добавляют их
+what waits on you — unanswered questions, mentions, requests, promises — kept in the local store; review and serve add them
 
 ### `tg tasks list`
 
-задачи, сначала самые старые, с их источником — сообщением или заметкой
+tasks, oldest first, with their message or note source
 
 ```sh
 tg tasks list [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество. |
+| `--limit <n>` | how many. |
 
-**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 15 more; every field: tg commands schema tasks list
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 15 more; every field: tg commands info tasks list
 
-**Next usually:** `tg tasks show <task>`, `tg tasks related <task>`, `tg tasks plan <task>`
+**Next usually:** `tg tasks show <task>`, `tg tasks related <task>`, `tg tasks update <task>`
 
 **Example:** `tg personal tasks list --limit 10`
 
 ### `tg tasks add`
 
-добавить задачу для сохранённого сообщения или заметки — обещания или просьбы
+add a task for a stored message or note — a promise, a request
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks add <message> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `message` | обязательный | адрес сообщения msg:<provider>/<account>/<chat>/<message> или note:<id>. |
+| `message` | required | a message locator, msg:<provider>/<account>/<chat>/<message>, or note:<id>. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--type <type>` | тип задачи: question, request, mention или promise. |
-| `--category <name>` | тема задачи из tasks categories: money, documents, meeting, …. |
-| `--into <id>` | если tasks add показал похожие задачи: связать сообщение с этой вместо создания новой. |
-| `--new` | если tasks add показал похожие задачи: всё равно создать новую. |
-| `--title <title>` | одна строка: действие и его объект — отправить Алексу токен API. |
-| `--description <text>` | подробности в Markdown: кто кому должен, когда задача выполнена, следующий шаг, ключевые слова. |
-| `--due <time>` | срок выполнения: время ISO 8601 или через 2h, 3d; none очищает его. |
-| `--remind-time <time>` | когда проверить снова: время ISO 8601 или через 2h, 3d; none очищает его. |
-| `--assignee <person...>` | кто это делает: sender (тот, кто отправил сообщение задачи) или person:<id>; none очищает. Если не уверены, не указывайте: задача без исполнителя лучше, чем никакой. |
+| `--type <type>` | the task's type: question, request, mention or promise. |
+| `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …. |
+| `--into <id>` | when tasks add listed tasks that may be the same job: link the message to this one instead of opening a task. |
+| `--new` | when tasks add listed tasks that may be the same job: open the task anyway. |
+| `--title <title>` | one line: the action and its object — send Alex the API token. |
+| `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
+| `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--remind-time <time>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
 
-**Returns:** add a task for a stored message or note — a promise, a request
+**Returns:** task created — id, source, source_kind, account, group, kind, state, origin, and 16 more; every field: tg commands info tasks add
 
 **Example:** `tg personal tasks add note:101 --type promise --category documents --title "Review draft"`
 
-### `tg tasks plan`
+### `tg tasks update`
 
-задать заголовок, описание, срок, следующую проверку, категорию и исполнителя задачи; ничего не отправляется в мессенджер
+update a task's text, schedule, category, assignees, priority or parent; nothing reaches the messenger
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
-tg tasks plan <task> [options]
+tg tasks update <task> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
+| `task` | required | the task's id or key, as tasks list shows it. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--category <name>` | тема задачи из tasks categories: money, documents, meeting, …; изменение сохраняется в истории задачи. |
-| `--title <title>` | одна строка: действие и его объект — отправить Алексу токен API. |
-| `--description <text>` | подробности в Markdown: кто кому должен, когда задача выполнена, следующий шаг, ключевые слова. |
-| `--due <time>` | срок выполнения: время ISO 8601 или через 2h, 3d; none очищает его. |
-| `--remind-time <time>` | когда проверить снова: время ISO 8601 или через 2h, 3d; none очищает его. |
-| `--assignee <person...>` | кто это делает: sender (тот, кто отправил сообщение задачи) или person:<id>; none очищает. Если не уверены, не указывайте: задача без исполнителя лучше, чем никакой. |
+| `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …; a change is kept in the task's history. |
+| `--priority <n>` | priority from 0 (urgent) through 4 (low). |
+| `--parent <id>` | parent task in the same project; none clears it. |
+| `--title <title>` | one line: the action and its object — send Alex the API token. |
+| `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
+| `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--remind-time <time>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
 
-**Returns:** set a task's title, description, due date, next check, category and assignee
+**Returns:** task card — id, ref, key, project, title, description, type, status, and 18 more; every field: tg commands info tasks update
 
-**Example:** `tg personal tasks plan DOC-12 --title "Review draft"`
+**Example:** `tg personal tasks update DOC-12 --title "Review draft"`
 
 ### `tg tasks link`
 
-связать задачу с сообщениями, чатами, людьми или URL — или с другой задачей: task:<id>
+link a task to messages, chats, people or URLs — or to another task: task:<id>
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks link <task> [targets] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
-| `targets` | необязательный | локаторы msg:, person:<id>, document:<id>, note:<id>, URL; или task:<id>, который связывает две задачи проекта. |
+| `task` | required | the task's id or key, as tasks list shows it. |
+| `targets` | optional | msg: locators, person:<id>, document:<id>, note:<id>, a URL; or task:<id>, which links two project tasks. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | чат, которого она касается, можно повторять; чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `--kind <kind>` | related-to (по умолчанию), evidence — подтверждает существование задачи — или created-from; для task:<id> также blocked-by, follow-up-of, duplicate-of и discovered-from. |
+| `--chat <chat>` | a chat it concerns, repeatable; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by, follow-up-of, duplicate-of or discovered-from. |
 
-**Returns:** link a task to messages, chats, people or URLs — or to another task: task:<id>
+**Returns:** task links — id, ref, key, project, title, description, type, status, and 20 more; every field: tg commands info tasks link
 
 **Example:** `tg personal tasks link DOC-12 https://example.com/draft`
 
 ### `tg tasks show`
 
-одна задача: её план и всё, что с ней связано
+one task: its plan and everything linked to it
 
 ```sh
 tg tasks show <task>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязателен | идентификатор или ключ задачи, как показывает tasks list. |
+| `task` | required | the task's id or key, as tasks list shows it. |
 
-**Returns:** one task: its plan and everything linked to it
+**Returns:** task card — id, ref, key, project, title, description, type, status, and 18 more; every field: tg commands info tasks show
 
 **Example:** `tg personal tasks show DOC-12`
 
 ### `tg tasks related`
 
-задачи, которые могут оказаться той же работой: лучшие сначала, с группой likely, maybe или different и причинами; ничего не объединяет
+tasks that may be the same job as this one, best first, each with a band — likely, maybe, different — and the reasons; merges nothing
 
 ```sh
 tg tasks related <task> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
+| `task` | required | the task's id or key, as tasks list shows it. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | сколько показать, не больше 40 (по умолчанию 10). |
+| `--limit <n>` | how many, at most 40 (default 10). |
 
-**Returns:** tasks that may be the same job as this one, best first; merges nothing
+**Returns:** task similar — ref, key, title, status, created_at, found_by, score, band, and 3 more; every field: tg commands info tasks related
 
 **Example:** `tg personal tasks related PR-12`
 
 ### `tg tasks duplicates`
 
-пары созданных правилом задач, которые могут оказаться одной работой: новые сначала, с оценкой и причинами; объедините, отклоните или отложите; decision:unsure показывает отложенные владельцу
+pairs of tasks that may be one job
+
+#### `tg tasks duplicates list`
+
+pairs of tasks a rule opened that may be one job, newest first, with score and reasons: merge, reject or defer each; decision:unsure lists the ones deferred to the owner
 
 ```sh
-tg tasks duplicates [query] [options]
+tg tasks duplicates list [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество. |
+| `--limit <n>` | how many. |
+
+**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: tg commands info tasks duplicates list
+
+**Example:** `tg personal tasks duplicates list --limit 10`, `tg personal tasks duplicates list decision:unsure`
 
 #### `tg tasks duplicates reject`
 
-это разные задачи: пара уходит из списка и больше не предлагается
+two tasks are not the same job: the pair leaves the list and is never offered again
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks duplicates reject <task> <other-task>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязателен | задача, указанная как дубликат: по идентификатору или ключу. |
-| `other-task` | обязателен | задача, с которой она образовала пару. |
+| `task` | required | the task listed as the duplicate, by its id or key. |
+| `other-task` | required | the task it was paired with. |
 
-**Returns:** two tasks are not the same job: the pair is never offered again
+**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: tg commands info tasks duplicates reject
 
 **Example:** `tg personal tasks duplicates reject PR-14 PR-12`
 
 #### `tg tasks duplicates defer`
 
-полей и текста недостаточно: оставить пару владельцу, который найдёт её через decision:unsure
+the fields and the text cannot tell: leave the pair to the owner, who lists it with decision:unsure
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks duplicates defer <task> <other-task>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязателен | задача, указанная как дубликат: по идентификатору или ключу. |
-| `other-task` | обязателен | задача, с которой она образовала пару. |
+| `task` | required | the task listed as the duplicate, by its id or key. |
+| `other-task` | required | the task it was paired with. |
 
-**Returns:** the fields and the text cannot tell: leave the pair to the owner
+**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: tg commands info tasks duplicates defer
 
 **Example:** `tg personal tasks duplicates defer PR-14 PR-12`
 
 ### `tg tasks merge`
 
-одна работа найдена дважды: связать все сообщения дубликата с задачей и закрыть дубликат как dismissed со связью duplicate-of; ничего не удаляется, tasks unmerge отменяет объединение
+one job seen twice: link every message of the duplicate to the task and close the duplicate dismissed, duplicate-of the task; nothing is deleted, and tasks unmerge undoes it
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks merge <task> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязателен | дубликат: по идентификатору или ключу; задача должна быть открытой. |
+| `task` | required | the duplicate, by its id or key; it must be open. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--into <id>` | задача, которая остаётся, по id или ключу. |
+| `--into <id>` | the task that stays, by its id or key. |
 
-**Returns:** one job seen twice: fold the duplicate into the task that stays
+**Returns:** task merge — pair, linked, review, task; every field: tg commands info tasks merge
 
 **Example:** `tg personal tasks merge PR-14 --into PR-12`
 
 ### `tg tasks unmerge`
 
-отменить объединение: открыть задачу и убрать связь duplicate-of; добавленные объединением связи сообщений остаются
+undo a merge: reopen the task and remove its duplicate-of relation; messages the merge linked stay linked
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks unmerge <task>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязателен | объединённая задача: по идентификатору или ключу. |
+| `task` | required | the merged task, by its id or key. |
 
-**Returns:** undo a merge: reopen the task and remove its duplicate-of relation
+**Returns:** task unmerge — pair, task; every field: tg commands info tasks unmerge
 
 **Example:** `tg personal tasks unmerge PR-14`
 
 ### `tg tasks agenda`
 
-что нужно посмотреть сегодня, по локальному хранилищу и без текста сообщений: задачи просроченные, со сроком или к проверке, чаты, где вы должны ответить, чаты, где вы ждёте ответа, и открытые задачи, которые делает кто-то другой
+what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one, open tasks someone else does
 
 ```sh
 tg tasks agenda [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | условия поле:значение, сужающие список; поля перечислены ниже. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--due-within <duration>` | задачи со сроком в пределах этого времени: 30m, 2h, 1d (по умолчанию 1d). |
-| `--unanswered <duration>` | чаты, где последним написал кто-то другой не меньше этого времени назад (по умолчанию 1d). |
-| `--waiting <duration>` | чаты, где последними написали вы не меньше этого времени назад (по умолчанию 7d). |
-| `--within <duration>` | не показывать чаты, молчащие дольше этого: разговор закончился (по умолчанию 30d). |
-| `--holder <name>` | кто занимает задачу: id сессии или чата; по умолчанию WIRECAT_HOLDER, затем сессия Claude Code, затем имя агента. |
+| `--due-within <duration>` | list tasks due within this: 30m, 2h, 1d (default 1d). |
+| `--unanswered <duration>` | list chats where someone else wrote last this long ago (default 1d). |
+| `--waiting <duration>` | list chats where you wrote last this long ago (default 7d). |
+| `--within <duration>` | leave out chats silent longer than this: they ended (default 30d). |
+| `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
 
-**Returns:** agenda — at, account, stored_at, stale, tasks, owed, waiting, unsynced, and 2 more; every field: tg commands schema tasks agenda
+**Returns:** agenda — at, account, stored_at, stale, tasks, owed, waiting, unsynced, and 2 more; every field: tg commands info tasks agenda
 
 **Example:** `tg personal tasks agenda`
 
 ### `tg tasks categories`
 
-категории задач, их значения и слова, по которым правило выбирает категорию
+the categories a task takes, with what each means and the words a rule picks it by
 
 ```sh
 tg tasks categories
 ```
 
-**Returns:** the categories a task takes, with what each means
+**Returns:** task categories — categories, unlisted, file; every field: tg commands info tasks categories
 
 **Example:** `tg personal tasks categories`
 
 ### `tg tasks scan`
 
-правила задач над последними сохранёнными сообщениями чата: в личном чате вопрос, на который вы не ответили, в группе только вопрос в ответ вам и упоминание вас открывают задачу, а ваш ответ закрывает её; канал не открывает ни одной — для чата, который первая синхронизация не тронула (config task_first_pass_per_chat). Показывает, что откроется, и ничего не меняет без --yes; с --yes проверка дубликатов работает так же, как при синхронизации. Читает только локальное хранилище
+the task rules over a chat's newest stored messages: in a one-to-one chat a question you did not answer, in a group only a question in reply to you and a mention of you, open a task, and your answer closes one; a channel opens none — for a chat the first sync left alone (config task_first_pass_per_chat). Lists what would open and changes nothing unless --yes; with --yes the duplicate check runs as on a sync. Reads only the local store
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks scan <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--last <n>` | прочитать n последних сохранённых сообщений каждого чата (по умолчанию 50, не больше 1000). |
+| `--last <n>` | read the newest n stored messages of each chat (default 50, at most 1000). |
 
-**Returns:** build tasks from a chat's stored history: unanswered questions and mentions
+**Returns:** task scan — chat, messages, added, closed, review, tasks, held, held_chats; every field: tg commands info tasks scan
 
 **Example:** `tg personal tasks scan <chat>`, `tg personal tasks scan <chat> --last 300 --yes`
 
 ### `tg tasks claim`
 
-занять открытую задачу, чтобы другой агент не делал её одновременно; занятие истекает само
+take an open task so no other agent works it at once; the claim lapses by itself
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks claim <task> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
+| `task` | required | the task's id or key, as tasks list shows it. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--lease <duration>` | срок занятия: 30m, 2h (по умолчанию 30m); повторное занятие продлевает его. |
-| `--holder <name>` | кто занимает задачу: id сессии или чата; по умолчанию WIRECAT_HOLDER, затем сессия Claude Code, затем имя агента. |
+| `--lease <duration>` | how long the claim lasts: 30m, 2h (default 30m); claiming again extends it. |
+| `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
 
-**Returns:** take an open task so no other agent works it at once; the claim lapses by itself
+**Returns:** task card — id, ref, key, project, title, description, type, status, and 18 more; every field: tg commands info tasks claim
 
 **Example:** `tg personal tasks claim PR-12 --lease 2h`
 
 ### `tg tasks release`
 
-освободить занятую вами задачу до истечения срока; владелец может освободить любую
+give back a task you claimed, before the claim lapses; the owner may release any
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks release <task> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
+| `task` | required | the task's id or key, as tasks list shows it. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--holder <name>` | кто занимает задачу: id сессии или чата; по умолчанию WIRECAT_HOLDER, затем сессия Claude Code, затем имя агента. |
+| `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
 
-**Returns:** give back a task you claimed, before the claim lapses; the owner may release any
+**Returns:** task card — id, ref, key, project, title, description, type, status, and 18 more; every field: tg commands info tasks release
 
 **Example:** `tg personal tasks release PR-12`
 
 ### `tg tasks close`
 
-закрыть задачу как done или dismissed, если ответ не нужен. Агент (задана AI_AGENT или CLAUDECODE) указывает --certainty; ниже config task_agent_close_min или при task_agent_close off задача остаётся открытой, и закрытие ждёт владельца, который подтверждает его через tasks close или отклоняет через tasks reject. Закрытая задача остаётся закрытой, кроме повторного открытия объединённой через tasks unmerge
+close a task: done, or dismissed when it needs no answer. An agent (AI_AGENT or CLAUDECODE set) states its --certainty; below config task_agent_close_min, or with task_agent_close off, the task stays open and the close waits on the owner, who confirms it with tasks close or refuses it with tasks reject. A closed task stays closed, unless tasks unmerge reopens a merged one
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks close <task> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
+| `task` | required | the task's id or key, as tasks list shows it. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--as <state>` | как закрыть: done или dismissed — ответ не требуется; владелец может не указывать его, чтобы подтвердить закрытие агентом. |
-| `--reason <text>` | причина, сохраняемая с задачей — например, no-reply-needed. |
-| `--certainty <n>` | для агента: насколько он уверен, от 0 до 1, что задаче больше ничего не нужно. |
-| `--as-owner` | закрыть от вашего имени, хотя инструмент запущен в терминале агента (задана AI_AGENT или CLAUDECODE). |
+| `--as <state>` | how it is closed: done, or dismissed — it needs no answer; the owner may leave it out to confirm an agent's close. |
+| `--reason <text>` | why, kept with the task — no-reply-needed, for example. |
+| `--certainty <n>` | an agent's: how sure it is, 0 to 1, that the task needs nothing more. |
+| `--as-owner` | close it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** close a task as done or dismissed
+**Returns:** task closed — id, source, source_kind, account, group, kind, state, origin, and 13 more; every field: tg commands info tasks close
 
 **Example:** `tg personal tasks close Q-15 --as done --certainty 0.9 --reason answered-in-chat`, `tg personal tasks close Q-15`
 
 ### `tg tasks reject`
 
-отклонить закрытие, предложенное агентом: задача остаётся открытой и уходит из close:suggested; агент может снова её закрыть
+refuse the close an agent suggested: the task stays open and leaves close:suggested; the agent may close it again
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg tasks reject <task> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `task` | обязательный | идентификатор или ключ задачи, как показывает tasks list. |
+| `task` | required | the task's id or key, as tasks list shows it. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--as-owner` | отклонить от вашего имени, хотя инструмент запущен в терминале агента (задана AI_AGENT или CLAUDECODE). |
+| `--as-owner` | refuse it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** refuse an agent's close of a task: it stays open and the suggestion goes
+**Returns:** task card — id, ref, key, project, title, description, type, status, and 18 more; every field: tg commands info tasks reject
 
 **Example:** `tg personal tasks reject Q-15`
 
 ## `tg search`
 
-поиск по тексту: messages или notes, если источник известен, либо search all по обоим; для почты — отдельный CLI memo: memo search mail
+find things by text: one resource when you know it (messages, notes), or search all across messages and notes; for mail, the separate memo CLI: memo search mail
 
 ### `tg search all`
 
-поиск сообщений и заметок в локальном хранилище, по умолчанию сообщений также на сервере мессенджера (заметки только локальные; --backend archive или --offline оставляет поиск в локальном хранилище), а расшифровок — при выборе аккаунта встреч через --source; лучшие совпадения сначала; без почты (её ищет отдельный CLI memo: memo search mail), задач, людей, памяти и проектов. Подходит, если источник неизвестен; search messages или notes читает один вид со всеми полями
+search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes are local only; --backend archive or --offline keeps it to the local store), and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
 
 ```sh
 tg search all <query> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | обязательный | строгий запрос Lucene: слова, «фразы», AND/OR/NOT, группы полей и диапазоны дат. |
+| `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--only <resources>` | только эти источники через запятую: messages, notes; meetings, если --source задаёт аккаунт встреч. |
-| `--source <accounts>` | только эти аккаунты через запятую: provider:account, как его показывает результат, провайдер, вид или group:<name>; каждый ресурс читает аккаунты своего вида, а встречи — только если указан аккаунт встреч. |
-| `--max-meetings <n>` | сколько встреч аккаунта просмотреть, от новых к старым, либо all для всех (по умолчанию 100). |
-| `--limit <n>` | количество. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). Discovery читает только архив. |
-| `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
+| `--only <resources>` | only these resources, separated by commas: messages, notes; meetings when --source names a meeting account. |
+| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
+| `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
+| `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
+| `--exact` | bare words and quotes match their exact form only, as exact:word does. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both; message discovery uses archive only). |
+| `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 4 more; every field: tg commands schema search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 6 more; every field: tg commands info search all
 
 **Example:** `tg personal search all draft`
 
 ### `tg search messages`
 
-поиск сообщений мессенджера в локальном хранилище и на его сервере (--backend); по желанию загружает новые сообщения с --sync-first; --discover ищет только в архиве
+search messenger messages in the local store and on the messenger's server (--backend); optionally fetches new messages with --sync-first; --discover searches the archive only
 
 ```sh
 tg search messages [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | строгий запрос Lucene: слова, "фразы", AND/OR/NOT, группы полей и диапазоны дат; с --saved дополнительные слова соединяются через AND. |
+| `query` | optional | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; with --saved, more words AND-ed to it. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--sync-first` | сначала загрузить новые сообщения в пределах ограничений по чатам, времени и сообщениям. |
-| `--max-chats <n>` | обновить не больше этого числа чатов (по умолчанию 5). |
-| `--sync-time <duration>` | прекратить загрузку через это время (по умолчанию 30s). |
-| `--max-messages <n>` | загрузить не больше этого числа сообщений всего (по умолчанию 500). |
-| `--thread` | сохранённая цепочка ответов и ответы на сообщение вместо соседей по времени; без графа — соседи по времени. |
-| `--thread-hops <n>` | не больше этого числа связей от найденного сообщения (по умолчанию 8). |
-| `--thread-messages <n>` | не больше этого числа сообщений в контексте каждой ветки (по умолчанию 50). |
-| `--thread-bytes <n>` | не больше этого числа байтов целых сообщений и связей в каждом контексте (по умолчанию 65536). |
-| `--thread-within <duration>` | сообщения в пределах этого времени по обе стороны от найденного (по умолчанию 1d). |
-| `--backend <archive\|server\|both>` | где искать: локальный архив, сервер мессенджера или оба (по умолчанию: both). Discovery читает только архив. |
-| `--server-time <duration>` | прекратить ожидание ответа сервера через это время (по умолчанию: 5s). |
-| `--source <accounts>` | все аккаунты этого мессенджера в хранилище: personal, bots или all — как in: в запросе; либо список group:work,telegram:Alice. |
-| `--limit <n>` | количество. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--newest` | сначала новые вместо наиболее подходящих. |
-| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
-| `--context <n>` | контекст до и после результата: 2 сообщения в терминале, иначе 0. |
-| `--discover` | частичные совпадения слов и подходящие прямые ответы в локальном архиве; это свидетельства, а не подтверждённые ответы. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--saved <name\|id>` | запустить сохранённый поиск или прошлый запуск; указанные здесь параметры заменяют его собственные. |
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--max-chats <n>` | refresh at most this many chats (default: 5). |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
+| `--thread-hops <n>` | at most this many links from the hit (default: 8). |
+| `--thread-messages <n>` | at most this many messages in each thread context (default: 50). |
+| `--thread-bytes <n>` | at most this many bytes of whole messages and links in each context (default: 65536). |
+| `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
+| `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both; message discovery uses archive only). |
+| `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice. |
+| `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
+| `--newest` | newest first instead of best first. |
+| `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
+| `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
+| `--discover` | find partial lexical matches and eligible replies in the local archive; results are evidence, not confirmed answers. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
 
-**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 5 more; every field: tg commands schema search messages
+**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 5 more; every field: tg commands info search messages
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -5155,84 +5146,105 @@ tg search messages [query] [options]
 
 ### `tg search notes`
 
-поиск по заметкам — написанным в memo или импортированным из папки заметок — по словам и, с локальной текстовой моделью, по смыслу; каждый результат показывает, чем он найден и на что ссылается
+search the notes — written in memo, or imported from a notes folder — by words and, with the local text model, by meaning; each hit says which found it and what it links to
 
 ```sh
 tg search notes <query> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | обязателен | строгий запрос Lucene: слова, «фразы», AND/OR/NOT, tag:, source:internal (написано в memo) или source:file (из папки заметок) и диапазоны дат. |
+| `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, tag:, source:internal (written in memo) or source:file (from a notes folder) and date ranges. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--source <accounts>` | только эти аккаунты заметок через запятую: notes:internal — заметки, написанные в memo, notes:<folder id>, как его показывает результат, notes, documents или group:<name>. |
-| `--filter <query>` | запрос, которому должен соответствовать каждый результат; поиск по смыслу он не меняет. |
-| `--limit <n>` | количество. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--exact` | только слова в написанной форме; поиск по смыслу не выполняется. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
+| `--source <accounts>` | only these notes accounts, separated by commas: notes:internal for notes written in memo, notes:<folder id> as a hit shows it, notes, documents or group:<name>. |
+| `--filter <query>` | a query every hit must also match; it does not change the search by meaning. |
+| `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
+| `--exact` | words as written only; meaning is not searched. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 5 more; every field: tg commands schema search notes
+**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 5 more; every field: tg commands info search notes
 
 **Example:** `tg personal search notes draft --limit 10`
 
 ### `tg search conversations`
 
-ближайшие разговоры по смыслу и словам, лучшие первыми, один или все чаты; смысл после `conversations embed`; локальное выполнение
+the conversations nearest to a query in meaning and in words, best first, in one chat or every one — meaning after `conversations embed`; runs on this machine
 
-**Читает из внешнего сервиса.**
+**Reads from an outside service.**
 
 ```sh
 tg search conversations <query> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | обязательный | запрос своими словами на поддерживаемом моделью языке. |
+| `query` | required | what to look for, in your own words, in any language the model reads. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--model <model>` | локально: идентификатор из `models text list` (по умолчанию e5-small); удалённо: модель сервиса. |
-| `--provider <provider>` | сервис векторов: local или openai; параметры команды важнее настроек профиля. |
-| `--base-url <url>` | сервер с OpenAI /v1/embeddings: Gemini, Jina, локальные Ollama или LM Studio. |
-| `--dims <n>` | размер вектора сервиса; нужен с --base-url, уменьшает вектор модели OpenAI. |
-| `--max-chats <n>` | не больше этого числа чатов; без значения — 5 с --sync-first и 20 с --catch-up. |
-| `--max-chunks <n>` | не больше этого числа фрагментов за запуск; по умолчанию 2000. |
-| `--sync-first` | сначала загрузить новые сообщения в пределах ограничений по чатам, времени и сообщениям. |
-| `--sync-time <duration>` | прекратить загрузку через это время (по умолчанию 30s). |
-| `--max-messages <n>` | загрузить не больше этого числа сообщений всего (по умолчанию 500). |
-| `--chat <chat>` | только этот чат: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--since-time <time>` | разговоры, продолжавшиеся после ISO 8601 или 30m / 2h / 1d назад. |
-| `--filter <query>` | строгий фильтр Lucene: ему должно соответствовать хотя бы одно сообщение разговора; запрос по смыслу не меняется. |
-| `--source <accounts>` | аккаунты для поиска: personal, bots, all, сервис или список вроде group:work,telegram:Alice,email:me@example.com; по умолчанию активный аккаунт. |
-| `--timezone <zone>` | часовой пояс IANA для дат фильтра; по умолчанию системный. |
-| `--limit <n>` | количество. |
-| `--catch-up` | сначала локально построить и векторизовать изменившиеся или ещё не построенные чаты в выбранном охвате — в пределах --max-chats и --max-chunks. |
+| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
+| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
+| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+| `--max-chats <n>` | at most this many chats; 5 with --sync-first, 20 with --catch-up if not given. |
+| `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--chat <chat>` | only this chat: a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
+| `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
+| `--source <accounts>` | accounts to search: personal, bots, all, a provider, or a list like group:work,telegram:Alice,email:me@example.com; defaults to the active account. |
+| `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
+| `--limit <n>` | how many. |
+| `--catch-up` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
 
-**Returns:** find conversations by words and meaning
+**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in; every field: tg commands info search conversations
 
 **Example:** `tg personal search conversations "Reviewing the project draft"`
 
+### `tg search runs`
+
+search recorded diagnostic metadata and events; literal words and field:value terms joined by AND; no message contents
+
+```sh
+tg search runs [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | matches per page, at most 100. Default: `20`. |
+| `--page <n>` | result page. Default: `1`. |
+
+**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 18 more; every field: tg commands info search runs
+
+**Example:** `tg personal search runs timeout status:failed --limit 10`
+
 ### `tg search topics`
 
-темы форума с подходящим названием
+a forum group's topics whose title matches
 
 ```sh
 tg search topics <chat> <text> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
-| `text` | обязателен | слова из названия темы. |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `text` | required | words from the topic's title. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
 **Returns:** a forum group's topics whose title matches
 
@@ -5240,131 +5252,131 @@ tg search topics <chat> <text> [options]
 
 ## `tg searches`
 
-сохранённые поиски и история search messages и stats messages show в локальном хранилище; --saved выполняет один
+saved searches and the history of search messages and stats messages show, kept in the local store; --saved runs one
 
 ### `tg searches create`
 
-сохранить поиск под именем без запуска; его запускает search messages --saved <name>
+save a search under a name without running it; search messages --saved <name> runs it
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg searches create <name> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name` | обязательный | до 64 символов из латинских букв a–z, цифр и дефисов, не только цифры. |
-| `query` | необязательный | запрос, как для search messages; без него подходят все сохранённые сообщения. |
+| `name` | required | up to 64 letters a–z, digits and hyphens, not only digits. |
+| `query` | optional | the query, as for search messages; none matches every stored message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--chat <chat>` | только чат, как chat: в запросе: название или часть, идентификатор, @username или `me` для «Избранного». |
-| `--source <accounts>` | все аккаунты мессенджера в базе: personal, bots, all, как in: в запросе; или список: group:work,telegram:Alice,email:me@example.com. |
-| `--limit <n>` | количество. |
-| `--newest` | сначала новые вместо наиболее подходящих. |
-| `--exact` | слова без поля и фразы в кавычках совпадают только в точной форме, как exact:word; text: по-прежнему учитывает все словоформы. |
-| `--context <n>` | сообщения до и после каждого результата. |
-| `--timezone <zone>` | часовой пояс IANA для границ календарных дат. |
-| `--by <chat\|sender\|day\|hour>` | по чему группирует подсчёт stats messages show --saved. |
-| `--selection <json>` | сохранить полностью определённый исходный запрос рейтинга и параметры из детализации. |
-| `--replace` | перезаписать сохранённый поиск с тем же именем. |
+| `--chat <chat>` | only this chat — the same as chat: in the query; a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice,email:me@example.com. |
+| `--limit <n>` | how many. |
+| `--newest` | newest first instead of best first. |
+| `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
+| `--context <n>` | messages before and after each hit. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--by <group>` | count by chat, sender, day or hour for stats messages show --saved. |
+| `--selection <json>` | save the resolved parent ranking query and options from a drilldown. |
+| `--replace` | overwrite a saved search of the same name. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches create
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands info searches create
 
 **Example:** `tg personal searches create project-drafts draft --chat "Project room"`
 
 ### `tg searches show`
 
-один сохранённый поиск или прошлый запуск: запрос, параметры и сколько раз он выполнялся
+one saved search or earlier run: its query, options and how often it ran
 
 ```sh
 tg searches show <name|id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name\|id` | обязателен | имя сохранённого поиска или идентификатор любой строки searches history. |
+| `name\|id` | required | a saved search's name, or the id of any row of searches history. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches show
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands info searches show
 
 **Example:** `tg personal searches show project-drafts`
 
 ### `tg searches list`
 
-сохранённые поиски по имени
+the saved searches, by name
 
 ```sh
 tg searches list [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязателен | условия поле:значение; этот список пока ни по одному полю не фильтрует. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches list
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands info searches list
 
 **Example:** `tg personal searches list`
 
 ### `tg searches history`
 
-выполненные поиски и подсчёты от новых к старым, включая сохранённые; без их результатов
+the searches and counts that ran, newest first — saved ones included; never their results
 
 ```sh
 tg searches history [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches history
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands info searches history
 
 **Example:** `tg personal searches history --limit 10`
 
 ### `tg searches delete`
 
-удалить сохранённый поиск или один запуск из истории
+delete a saved search, or one run from the history
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg searches delete <name|id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name\|id` | обязателен | имя сохранённого поиска или идентификатор любой строки searches history. |
+| `name\|id` | required | a saved search's name, or the id of any row of searches history. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands schema searches delete
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: tg commands info searches delete
 
 **Example:** `tg personal searches delete project-drafts`
 
 ### `tg searches clear`
 
-очистить историю; сохранённые поиски остаются
+empty the history; saved searches stay
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg searches clear
 ```
 
-**Returns:** empty the history; saved searches stay
+**Returns:** search history clear — cleared; every field: tg commands info searches clear
 
 **Example:** `tg personal searches clear`
 
 ## `tg flood`
 
-ожидания, которые Telegram попросил соблюдать этот профиль, и запрет на его запись
+the waits Telegram asked this profile to keep, and a hold on its writes
 
 ### `tg flood clear`
 
-забыть их, снять блокировку и ограничение частоты профиля, когда Telegram больше не ограничивает аккаунт; в Telegram ничего не меняет
+forget them, lift the hold and the profile's pace, once Telegram no longer limits the account; changes nothing there
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg flood clear
@@ -5376,21 +5388,21 @@ tg flood clear
 
 ## `tg replies`
 
-правила, которые отвечают на сообщения за вас; хранятся в файле этого профиля
+rules that answer messages for you, kept in a file of this profile
 
 ### `tg replies add`
 
-добавить правило с явно указанными значениями по умолчанию; выключено, пока вы не отредактируете и не включите его
+add a rule with every default written out, off until you edit and enable it
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies add <id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `id` | обязательный | строчные буквы, цифры и -; уникален в этом профиле. |
+| `id` | required | lower-case letters, digits and -; unique in this profile. |
 
 **Returns:** add a rule with every default written out, off until you edit and enable it
 
@@ -5398,17 +5410,17 @@ tg replies add <id>
 
 ### `tg replies on`
 
-включить одно правило ответа; его шаблон должен быть готов
+enable one reply rule; its template must be ready
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies on <id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `id` | обязательный | идентификатор правила. |
+| `id` | required | the rule's id. |
 
 **Returns:** enable one reply rule; its template must be ready
 
@@ -5416,17 +5428,17 @@ tg replies on <id>
 
 ### `tg replies off`
 
-отключить одно правило ответа
+disable one reply rule
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies off <id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `id` | обязательный | идентификатор правила. |
+| `id` | required | the rule's id. |
 
 **Returns:** disable one reply rule
 
@@ -5434,43 +5446,43 @@ tg replies off <id>
 
 ### `tg replies edit`
 
-изменить только указанные поля правила ответа; списки заменяются целиком
+change only the named fields of a reply rule; lists replace the whole list
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies edit <id> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `id` | обязательный | идентификатор правила. |
+| `id` | required | the rule's id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--do <actions>` | действия: reply, task или оба через запятую. |
-| `--kinds <kinds>` | типы чатов: dialog, group; через запятую, пустое значение — любые. |
-| `--allow-chats <ids>` | только эти идентификаторы чатов через запятую; пустое значение — любые. |
-| `--deny-chats <ids>` | исключить эти идентификаторы чатов через запятую; пустое значение очищает список. |
-| `--words <words>` | совпадение с любым из этих целых слов через запятую; пустое значение очищает список. |
-| `--question` | совпадать только с вопросами. |
-| `--no-question` | не требовать вопроса. |
-| `--mentions-me` | требовать упоминания вас или ответа на ваше сообщение. |
-| `--no-mentions-me` | не требовать упоминания вас или ответа на ваше сообщение. |
-| `--allow-people <ids>` | только эти идентификаторы отправителей через запятую; пустое значение — любые. |
-| `--deny-people <ids>` | исключить эти идентификаторы отправителей через запятую; пустое значение очищает список. |
-| `--contacts-only` | совпадать только с контактами. |
-| `--no-contacts-only` | не требовать, чтобы отправитель был контактом. |
-| `--template <text>` | шаблон ответа. |
-| `--model <mode>` | устаревший режим шаблона: fill-only или may-reword; вместо него используйте блоки ai. |
-| `--as-reply` | отправить как ответ на совпавшее сообщение. |
-| `--no-as-reply` | отправить без привязки к совпавшему сообщению. |
-| `--per-chat <limit>` | не более указанного числа на чат, например 1/12h. |
-| `--per-person <limit>` | не более указанного числа на человека, например 1/1d. |
-| `--outside <hours>` | отвечать вне этого интервала в 24-часовом формате, например 09:00-19:00. |
-| `--days <days>` | дни рабочего интервала, например mon-fri или sat,sun. |
-| `--timezone <zone>` | часовой пояс IANA для рабочего интервала. |
-| `--no-hours` | очистить рабочий интервал. |
+| `--do <actions>` | actions: reply, task, or both, comma-separated. |
+| `--kinds <kinds>` | chat kinds: dialog, group; comma-separated, empty for any. |
+| `--allow-chats <ids>` | only these chat ids, comma-separated; empty for any. |
+| `--deny-chats <ids>` | leave these chat ids out, comma-separated; empty clears. |
+| `--words <words>` | match any of these whole words, comma-separated; empty clears. |
+| `--question` | match only questions. |
+| `--no-question` | do not require a question. |
+| `--mentions-me` | require a mention of you or a reply to you. |
+| `--no-mentions-me` | do not require a mention of you or a reply to you. |
+| `--allow-people <ids>` | only these sender ids, comma-separated; empty for any. |
+| `--deny-people <ids>` | leave these sender ids out, comma-separated; empty clears. |
+| `--contacts-only` | match only contacts. |
+| `--no-contacts-only` | do not require a contact. |
+| `--template <text>` | the reply template. |
+| `--template-mode <mode>` | legacy template mode: fill-only or may-reword; use ai blocks instead. |
+| `--as-reply` | send as a reply to the matched message. |
+| `--no-as-reply` | send without linking to the matched message. |
+| `--per-chat <limit>` | at most this many per chat, such as 1/12h. |
+| `--per-person <limit>` | at most this many per person, such as 1/1d. |
+| `--outside <hours>` | answer outside this 24-hour window, such as 09:00-19:00. |
+| `--days <days>` | days of the working window, such as mon-fri or sat,sun. |
+| `--timezone <zone>` | the IANA timezone for the working window. |
+| `--no-hours` | clear the working window. |
 
 **Returns:** change only the named fields of a reply rule; lists replace the whole list
 
@@ -5478,33 +5490,33 @@ tg replies edit <id> [options]
 
 ### `tg replies audience`
 
-показать ответной аудитории, кому могут отвечать правила, или заменить ее именованные поля; новый файл отвечает всем, кому соответствует правило
+show the reply audience, who the rules may answer, or replace its named fields; a new file answers everyone a rule matches
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies audience [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--reply <mode>` | отвечать всем или только указанным отправителям и чатам: all, listed. |
-| `--allow-people <ids>` | заменить разрешённые идентификаторы отправителей через запятую; пустое значение очищает список. |
-| `--allow-chats <ids>` | заменить разрешённые идентификаторы чатов через запятую; пустое значение очищает список. |
-| `--deny-people <ids>` | заменить запрещённые идентификаторы отправителей через запятую; пустое значение очищает список; запрет имеет приоритет. |
-| `--deny-chats <ids>` | заменить запрещённые идентификаторы чатов через запятую; пустое значение очищает список; запрет имеет приоритет. |
+| `--reply <mode>` | answer all or only listed senders and chats: all, listed. |
+| `--allow-people <ids>` | replace allowed sender ids, comma-separated; empty clears. |
+| `--allow-chats <ids>` | replace allowed chat ids, comma-separated; empty clears. |
+| `--deny-people <ids>` | replace denied sender ids, comma-separated; empty clears; deny wins. |
+| `--deny-chats <ids>` | replace denied chat ids, comma-separated; empty clears; deny wins. |
 
-**Returns:** show the reply audience, who the rules may answer, or replace its named fields; a new…
+**Returns:** show the reply audience, who the rules may answer, or replace its named…
 
 **Example:** `tg personal replies audience`
 
 ### `tg replies consents`
 
-согласие на модели ответа один раз для каждого профиля и адреса API, с исключениями для чатов
+consent for reply models once per profile and endpoint, with chat opt-outs
 
 #### `tg replies consents show`
 
-показать согласие на модель ответа и исключения чатов; никогда не вызывает модель
+show the reply model consent and chat opt-outs; never calls a model
 
 ```sh
 tg replies consents show
@@ -5516,23 +5528,23 @@ tg replies consents show
 
 #### `tg replies consents grant`
 
-разрешить передачу входящих данных сообщений настроенной модели ответа этого профиля; исключения чатов сохраняются
+allow incoming message data to go to the configured reply model for this profile; chat opt-outs remain
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies consents grant
 ```
 
-**Returns:** allow incoming message data to go to the configured reply model for this profile; chat…
+**Returns:** allow incoming message data to go to the configured reply model for this…
 
 **Example:** `tg personal replies consents grant`
 
 #### `tg replies consents revoke`
 
-немедленно отозвать согласие профиля на модель ответа; исключения чатов сохраняются
+revoke the profile's reply model consent immediately; chat opt-outs remain
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies consents revoke
@@ -5544,17 +5556,17 @@ tg replies consents revoke
 
 #### `tg replies consents deny`
 
-не передавать входящие данные этого чата модели ответа
+keep this chat's incoming data away from the reply model
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies consents deny <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязательный | собственный идентификатор чата в мессенджере, используемый как указан; никогда не разрешается через сеть. |
+| `chat` | required | the native chat id, used as written; never resolved over the network. |
 
 **Returns:** keep this chat's incoming data away from the reply model
 
@@ -5562,17 +5574,17 @@ tg replies consents deny <chat>
 
 #### `tg replies consents allow`
 
-снять исключение этого чата из обработки моделью; не даёт согласия за профиль
+remove this chat's model opt-out; does not grant profile consent
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies consents allow <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязательный | собственный идентификатор чата в мессенджере, используемый как указан; никогда не разрешается через сеть. |
+| `chat` | required | the native chat id, used as written; never resolved over the network. |
 
 **Returns:** remove this chat's model opt-out; does not grant profile consent
 
@@ -5580,44 +5592,44 @@ tg replies consents allow <chat>
 
 ### `tg replies test`
 
-что правила ответили бы на сохранённые сообщения, кому и почему — ничего не отправляет, ничего не меняет, без подключения
+what the rules would have answered in the stored messages, to whom and why — sends nothing, changes nothing, never connects
 
 ```sh
 tg replies test [rule] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `rule` | необязателен | только это правило, по идентификатору; без него — все правила в порядке файла. |
+| `rule` | optional | only this rule, by its id; every rule in file order if not given. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--since-time <time>` | с времени ISO 8601 или 2h / 1d назад; по умолчанию 7d назад. |
-| `--ai` | вызвать настроенную модель ответа с сохранёнными данными сообщений; требуется согласие на использование модели ответа, иначе применяется запасной вариант. |
+| `--since-time <time>` | from this ISO 8601 time, or 2h / 1d ago; 7d ago if not given. |
+| `--ai` | call the configured reply model with stored message data; requires reply consent, otherwise uses fallback. |
 
-**Returns:** what the rules would have answered in the stored messages, to whom and why — sends…
+**Returns:** what the rules would have answered in the stored messages, to whom and why —…
 
 **Example:** `tg personal replies test`
 
 ### `tg replies pause`
 
-сразу остановить все правила ответов этого профиля, в том числе в работающем serve; resume отменяет паузу
+stop every reply rule of this profile at once, a running serve too; resume undoes it
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies pause
 ```
 
-**Returns:** stop every reply rule of this profile at once, a running serve too; resume undoes it
+**Returns:** stop every reply rule of this profile at once, a running serve too; resume…
 
 **Example:** `tg personal replies pause`
 
 ### `tg replies resume`
 
-разрешить правилам ответов снова отвечать после pause
+let the reply rules answer again after pause
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg replies resume
@@ -5629,7 +5641,7 @@ tg replies resume
 
 ### `tg replies status`
 
-могут ли правила отправлять, какие включены и кому они могут отвечать
+whether the rules may send, which are on, and who they may answer
 
 ```sh
 tg replies status
@@ -5641,190 +5653,176 @@ tg replies status
 
 ## `tg recipients`
 
-чаты, куда профилю разрешено отправлять при включённом списке
+the chats this profile may send to, when the list is on
 
 ### `tg recipients list`
 
-разрешённые чаты; пусто и отключено до первого добавления
+the chats on the list; empty and off until the first add
 
 ```sh
-tg recipients list
+tg recipients list [query]
 ```
 
-**Returns:** the chats on the list; empty and off until the first add
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** recipient — id, title, added_at, partner_id; every field: tg commands info recipients list
 
 **Example:** `tg personal recipients list`
 
 ### `tg recipients add`
 
-разрешить отправку в чат; первое добавление включает ограничения
+allow sending to this chat; the first add turns the list on
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg recipients add <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | чат: название или его часть, идентификатор, @username или `me` для «Избранного». |
+| `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** allow sending to this chat; the first add turns the list on
+**Returns:** recipient change added — id, title, added; every field: tg commands info recipients add
 
 **Example:** `tg personal recipients add "Book club"`
 
 ### `tg recipients remove`
 
-запретить чат; список остаётся включённым
+stop allowing this chat; the list stays on
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg recipients remove <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор или название из списка. |
+| `chat` | required | chat id, or the title as the list shows it. |
 
-**Returns:** stop allowing this chat; the list stays on
+**Returns:** recipient change removed — id, title, removed; every field: tg commands info recipients remove
 
 **Example:** `tg personal recipients remove "Book club"`
 
 ### `tg recipients clear`
 
-удалить список и ограничения: снова разрешены все чаты
+delete the list, which turns it off: this profile may send to any chat again
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg recipients clear
 ```
 
-**Returns:** delete the list, which turns it off: this profile may send to any chat again
+**Returns:** recipient change off — off, was_on; every field: tg commands info recipients clear
 
 **Example:** `tg personal recipients clear`
 
 ## `tg sends`
 
-все попытки отправки профиля, без текста
+every attempt to send from this profile — never the text
 
 ### `tg sends list`
 
-попытки от новых к старым: отправлено, отклонено, ошибка, неизвестно
+attempts to send, newest first: sent, refused, failed, or not known
 
 ```sh
-tg sends list [options]
+tg sends list [query] [options]
 ```
 
-| Параметр | Назначение |
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество результатов. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--all` | все строки без страниц. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
 
-**Returns:** attempts to send, newest first: sent, refused, failed, or not known
+**Returns:** send attempt — at, profile, chat_id, outcome, kind, action, people, message_id, and 16 more; every field: tg commands info sends list
 
-**Example:** `tg personal sends list`
+**Example:** `tg personal sends list --limit 10`
 
 ## `tg runs`
 
-записи запусков: действия инструмента и время
+recorded runs — what this tool did, and when
 
 ### `tg runs list`
 
-записи от новых к старым
+recorded runs, newest first
 
 ```sh
-tg runs list [options]
+tg runs list [query] [options]
 ```
 
-| Параметр | Назначение |
-|---|---|
-| `--limit <n>` | количество результатов. По умолчанию: `20`. |
-| `--page <n>` | номер страницы, начиная с 1. По умолчанию: `1`. |
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** recorded runs, newest first
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. Default: `20`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+
+**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 20 more; every field: tg commands info runs list
 
 **Example:** `tg personal runs list --limit 10`
 
 ### `tg runs show`
 
-запуск: что это было, чем он закончился и все записанные им события
+one run: what it was, how it ended, and every event it logged
 
 ```sh
 tg runs show <run-id> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `run-id` | обязателен | идентификатор из `tg runs list`. |
+| `run-id` | required | an id from `tg runs list`. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--problems` | только неудачные ответы, предупреждения и сбои. |
+| `--problems` | only failed responses, warnings and crashes. |
 
-**Returns:** one run: what it was, how it ended, and every event it logged
+**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 19 more; every field: tg commands info runs show
 
 **Example:** `tg personal runs show run-101`
 
-### `tg runs search`
-
-search recorded diagnostic metadata and events; no message contents
-
-```sh
-tg runs search [query] [options]
-```
-
-| Аргумент | | Что это |
-|---|---|---|
-| `query` | необязательный | case-insensitive literal diagnostic text. |
-
-| Опция | Что делает |
-|---|---|
-| `--status <status>` | run outcome. Одно из: `success`, `failed`, `partial`, `running`. |
-| `--error-code <code>` | one stable error code. |
-| `--operation <name>` | one operation, such as messages.download. |
-| `--profile <name>` | one recorded profile. |
-| `--since-time <time>` | runs starting on or after an ISO time or 2h / 1d ago. |
-| `--limit <n>` | matches per page, at most 100. По умолчанию: `20`. |
-| `--page <n>` | result page. По умолчанию: `1`. |
-
-**Returns:** search recorded diagnostic metadata and events; no message contents
-
-**Example:** `tg personal runs search timeout --limit 10`
-
 ### `tg runs path`
 
-каталог запуска
+the directory holding one run
 
 ```sh
 tg runs path <run-id>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `run-id` | обязателен | идентификатор из `tg runs list`. |
+| `run-id` | required | an id from `tg runs list`. |
 
-**Returns:** the directory holding one run
+**Returns:** run location — path; every field: tg commands info runs path
 
 **Example:** `tg personal runs path run-101`
 
 ## `tg config`
 
-действующие настройки и источники значений
+the settings in force, and where each one came from
 
 ### `tg config show`
 
-профиль, существующие профили, настройки и их источники
+the profile, the profiles that exist, and each setting with where it came from
 
 ```sh
 tg config show [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--bot` | настройки бота этого профиля вместо личного аккаунта. |
+| `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
 **Returns:** the profile, the profiles that exist, and each setting with where it came from
 
@@ -5832,24 +5830,24 @@ tg config show [options]
 
 ### `tg config set`
 
-сохранить настройку в файл
+save a setting to the configuration file
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg config set <setting> <value> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
-| `value` | обязательный | число, true, false или список allow, например send,reaction; для группы — tg:work,max:Alice,email:me@x. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--defaults` | общая настройка всех профилей вместо текущего. |
-| `--personal` | только личные аккаунты: соответствующий раздел файла. |
-| `--bot` | только боты: раздел bot файла. |
+| `--defaults` | change what every profile gets, rather than this profile. |
+| `--personal` | only for personal accounts — the personal section of the file. |
+| `--bot` | only for bots — the bot section of the file. |
 
 **Returns:** save a setting to the configuration file
 
@@ -5857,23 +5855,23 @@ tg config set <setting> <value> [options]
 
 ### `tg config unset`
 
-удалить настройку из файла
+remove a setting from the configuration file
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg config unset <setting> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `setting` | обязательный | одно из: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, analysis_provider, analysis_model, analysis_base_url, models, proxy, read_other_bots, update_check, skill_hint, default_profile, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--defaults` | общая настройка всех профилей вместо текущего. |
-| `--personal` | только личные аккаунты: соответствующий раздел файла. |
-| `--bot` | только боты: раздел bot файла. |
+| `--defaults` | change what every profile gets, rather than this profile. |
+| `--personal` | only for personal accounts — the personal section of the file. |
+| `--bot` | only for bots — the bot section of the file. |
 
 **Returns:** remove a setting from the configuration file
 
@@ -5881,70 +5879,82 @@ tg config unset <setting> [options]
 
 ## `tg doctor`
 
-состояние установки без подключения, кроме --online
+the state this installation is in, without connecting unless --online
 
 ```sh
 tg doctor [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--online` | подключиться один раз и прочитать аккаунт; без отправки. |
+| `--online` | also connect once and read the account; sends nothing. |
 
-### `tg doctor report`
+### `tg doctor reports`
 
-содержимое отчёта без записи
+problem reports
 
-#### `tg doctor report create`
+#### `tg doctor reports show`
 
-записать отчёт в файл и показать, куда отправить
-
-**Изменяет данные только на этом компьютере.**
+what a problem report holds; writes nothing
 
 ```sh
-tg doctor report create [options]
+tg doctor reports show
 ```
 
-| Параметр | Назначение |
+**Returns:** what a problem report holds; writes nothing
+
+**Example:** `tg personal doctor reports show`
+
+#### `tg doctor reports create`
+
+write a problem report to a file, and say where to send it
+
+**Changes something on this computer only.**
+
+```sh
+tg doctor reports create [options]
+```
+
+| Option | What it does |
 |---|---|
-| `--run <id>` | запуск для отчёта; по умолчанию последний неудачный. |
-| `--output <file>` | путь записи; по умолчанию новый файл здесь. |
+| `--run <id>` | the run the report is about; the newest failed one if not given. |
+| `--output <file>` | where to write it; a new file in this directory if not given. |
 
 **Returns:** write a problem report to a file, and say where to send it
 
-**Example:** `tg personal doctor report create`
+**Example:** `tg personal doctor reports create --output ./problem-report.json`
 
 ## `tg commands`
 
-все команды по разделам, по одной строке; --json: контракт, один путь за вызов
+every command by section; --json prints its contract, one path per call
 
-### `tg commands schema`
+### `tg commands info`
 
-argv и схемы результатов одной команды, эффекты, разрешения и указания по повторным попыткам
+one command contract, or all schemas, error reasons and explicit overrides
 
 ```sh
-tg commands schema <path>
+tg commands info [path]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `path` | обязательный | один путь команды, например stats messages show. |
+| `path` | optional | one command path; without one, export schemas, error reasons and explicit overrides. |
 
-**Returns:** one command's argv and result schemas, effects, permissions and retry guidance
+**Returns:** one command contract, or all schemas, error reasons and explicit overrides
 
-**Example:** `tg commands schema <path>`
+**Example:** `tg commands info messages list`
 
 ## `tg complete`
 
-автодополнение: `tg complete zsh` выводит подключаемый скрипт
+shell completion: `tg complete zsh` prints the script to source
 
 ```sh
 tg complete [words]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `words` | необязателен | zsh для скрипта оболочки или слова команды, которые нужно дополнить. |
+| `words` | optional | zsh for the shell script, or command words to complete. |
 
 **Returns:** shell completion: `tg complete zsh` prints the script to source
 
@@ -5952,17 +5962,17 @@ tg complete [words]
 
 ## `tg upgrade`
 
-обновить tg установившим его менеджером пакетов; --check только проверяет
+upgrade tg with the package manager that installed it; --check only looks
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg upgrade [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--check` | проверить новую версию без установки. |
+| `--check` | say whether a newer version exists, and install nothing. |
 
 **Returns:** upgrade tg with the package manager that installed it; --check only looks
 
@@ -5970,7 +5980,7 @@ tg upgrade [options]
 
 ## `tg mcp`
 
-доступ агента к профилю через MCP по stdin/stdout: `claude mcp add tg -- tg <profile> mcp`
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add tg -- tg <profile> mcp`
 
 **Changes something in Telegram.**
 
@@ -5978,94 +5988,94 @@ tg upgrade [options]
 tg mcp [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--permission <key=level>` | сделать разрешение строже только для этого сервера, например messages.send=deny; профиль оно никогда не ослабляет; повторите для нескольких ключей. |
-| `--http` | обслуживать через HTTP на 127.0.0.1 для ChatGPT и Claude в браузере, за вашим туннелем. |
-| `--port <port>` | локальный порт для --http (по умолчанию 8765). |
-| `--public-url <url>` | https-адрес туннеля для браузерных приложений, например https://<name>.ts.net. |
-| `--revoke` | забыть все входы, выданные браузерным приложениям; каждому придётся войти заново. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
+| `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
+| `--port <port>` | the local port for --http (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
+| `--revoke` | forget every login given to a browser app; each must log in again. |
 
 ### `tg mcp config`
 
-вывести mcpServers для Claude Desktop, Cursor и других с полными путями; без записи
+print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes nothing
 
 ```sh
 tg mcp config [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--permission <key=level>` | сделать разрешение строже только для этого сервера, например messages.send=deny; профиль оно никогда не ослабляет; повторите для нескольких ключей. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
 **Returns:** print this profile's local MCP configuration
 
 **Example:** `tg personal mcp config`
 
-### `tg mcp setup`
+### `tg mcp add`
 
-добавить локальный MCP-сервер этого профиля в Codex или Claude Code
+add this profile's local MCP server to Codex or Claude Code
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
-tg mcp setup <client> [options]
+tg mcp add <client> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `client` | обязательно | codex или claude-code. |
+| `client` | required | codex or claude-code. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--allow-writes` | подтвердить, что профиль предоставляет инструменты изменения данных. |
-| `--permission <key=level>` | сделать разрешение строже только для этого сервера, например messages.send=deny; профиль оно никогда не ослабляет; повторите для нескольких ключей. |
+| `--allow-writes` | acknowledge that this profile offers writing tools. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
 **Returns:** add this profile's local MCP server to Codex or Claude Code
 
-**Example:** `tg personal mcp setup codex --allow-writes`
+**Example:** `tg personal mcp add codex --allow-writes`
 
-### `tg mcp doctor`
+### `tg mcp check`
 
-проверить локальное подключение MCP и список инструментов этого профиля
+check this profile's local MCP handshake and tool list
 
 ```sh
-tg mcp doctor [options]
+tg mcp check [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--permission <key=level>` | сделать разрешение строже только для этого сервера, например messages.send=deny; профиль оно никогда не ослабляет; повторите для нескольких ключей. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
 **Returns:** check this profile's local MCP handshake and tool list
 
-**Example:** `tg personal mcp doctor`
+**Example:** `tg personal mcp check`
 
 ## `tg bot`
 
-бот Telegram через официальный Bot API и токен, отдельно от личного аккаунта
+a Telegram bot, through the official Bot API and a bot token — not your personal account
 
 ### `tg bot auth`
 
-токен бота профиля
+the bot token this profile uses
 
 #### `tg bot auth set`
 
-проверить токен в Telegram и сохранить: скрытый ввод или stdin
+check a bot token with Telegram, then keep it — typed at a hidden prompt or piped on stdin
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg bot auth set
 ```
 
-**Returns:** check a bot token with Telegram, then keep it — typed at a hidden prompt or piped on stdin
+**Returns:** check a bot token, then keep it; or keep a named secret beside it
 
-**Example:** `tg personal bot auth set`
+**Example:** `tg sales bot auth set`
 
 #### `tg bot auth show`
 
-источник токена и сведения о боте
+where this profile's bot token comes from, and which bot it is
 
 ```sh
 tg bot auth show
@@ -6073,13 +6083,13 @@ tg bot auth show
 
 **Returns:** where this profile's bot token comes from, and which bot it is
 
-**Example:** `tg personal bot auth show`
+**Example:** `tg sales bot auth show`
 
 #### `tg bot auth remove`
 
-удалить токен профиля
+forget this profile's bot token
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg bot auth remove
@@ -6087,59 +6097,67 @@ tg bot auth remove
 
 **Returns:** forget this profile's bot token
 
-**Example:** `tg personal bot auth remove`
+**Example:** `tg sales bot auth remove`
 
 ### `tg bot list`
 
-имена ботов на компьютере; --check запрашивает сведения Telegram
+every name on this machine that has a bot token; --check asks Telegram which bot each is
 
 ```sh
-tg bot list [options]
+tg bot list [query] [options]
 ```
 
-| Параметр | Назначение |
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
 |---|---|
-| `--check` | запросить сведения о каждом боте в мессенджере с его токеном. |
+| `--check` | ask the messenger who each bot is, with its token. |
 
-**Returns:** every name on this machine that has a bot token; --check asks Telegram which bot each is
+**Returns:** bot profile — name, token, bot, id, problem; every field: tg commands info bot list
 
-**Example:** `tg personal bot list`
+**Example:** `tg sales bot list`, `tg sales bot list --check`
 
 ### `tg bot chats`
 
-чаты бота; Telegram не предоставляет список, поэтому `list` показывает увиденные
+the chats this bot is in — Telegram gives a bot no list of them, so `list` shows the ones it has seen
 
 #### `tg bot chats list`
 
-чаты, увиденные на компьютере; список Telegram может быть неполным
+chats this bot has seen on this machine — not a complete list from Telegram
 
 ```sh
-tg bot chats list
+tg bot chats list [query]
 ```
 
-**Returns:** chats this bot has seen on this machine — not a complete list from Telegram
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Example:** `tg personal bot chats list`
+**Returns:** bot seen chat — id, title, kind, unread_count, unread_mentions, last_message_at, participants_count, muted, and 9 more; every field: tg commands info bot chats list
+
+**Example:** `tg sales bot chats list`
 
 #### `tg bot chats show`
 
-получить чат Telegram и запомнить
+one chat from Telegram, and remember it
 
 ```sh
 tg bot chats show <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
 
 **Returns:** one chat from Telegram, and remember it
 
-**Example:** `tg personal bot chats show Team`
+**Example:** `tg sales bot chats show Team`
 
 #### `tg bot chats leave`
 
-вывести бота из чата; вернуть сможет только администратор
+take the bot out of a chat; only an admin of the chat can bring it back
 
 **Changes something in Telegram.**
 
@@ -6147,17 +6165,17 @@ tg bot chats show <chat>
 tg bot chats leave <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор или название увиденного чата. |
+| `chat` | required | a chat id, or the title of a chat this bot has seen. |
 
 **Returns:** take the bot out of a chat; only an admin of the chat can bring it back
 
-**Example:** `tg personal bot chats leave Team`
+**Example:** `tg sales bot chats leave Team`
 
 #### `tg bot chats action`
 
-показать действие бота на несколько секунд: печатает, отправляет фото
+show what the bot is doing in a chat — typing, sending a photo — for a few seconds
 
 **Changes something in Telegram.**
 
@@ -6165,38 +6183,39 @@ tg bot chats leave <chat>
 tg bot chats action <chat> <action>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
-| `action` | обязателен | действие: `typing`, `photo`, `video`, `voice`, `file`. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `action` | required | what the chat sees. One of: `typing`, `photo`, `video`, `voice`, `file`. |
 
-**Returns:** show what the bot is doing in a chat — typing, sending a photo — for a few seconds
+**Returns:** show what the bot is doing in a chat, for a few seconds
 
-**Example:** `tg personal bot chats action Team typing`
+**Example:** `tg sales bot chats action Team typing`
 
 #### `tg bot chats admins`
 
-администраторы чата, где бот администратор
+the admins of a chat the bot is an admin in
 
 #### `tg bot chats admins list`
 
-администраторы и их права
+the chat's admins and what each may do
 
 ```sh
-tg bot chats admins list <chat>
+tg bot chats admins list <chat> [query]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор или название увиденного чата. |
+| `chat` | required | a chat id, or the title of a chat this bot has seen. |
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** the chat's admins and what each may do
+**Returns:** bot admin — id, name, username, role, rights, title; every field: tg commands info bot chats admins list
 
-**Example:** `tg personal bot chats admins list Team`
+**Example:** `tg sales bot chats admins list Team`
 
 #### `tg bot chats admins add`
 
-назначить участника администратором с заданными правами
+make a member an admin with these rights
 
 **Changes something in Telegram.**
 
@@ -6204,23 +6223,23 @@ tg bot chats admins list <chat>
 tg bot chats admins add <chat> <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор или название увиденного чата. |
-| `person` | обязателен | идентификатор пользователя. |
+| `chat` | required | a chat id, or the title of a chat this bot has seen. |
+| `person` | required | the person's user id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--can <rights>` | разрешённые действия через запятую: members, admins, info, pin, link, post, edit, delete. |
-| `--title <title>` | титул рядом с именем. |
+| `--can <rights>` | what they may do, comma-separated: members, admins, info, pin, link, post, edit, delete. |
+| `--title <title>` | the title shown beside their name. |
 
 **Returns:** make a member an admin with these rights
 
-**Example:** `tg personal bot chats admins add Team Anna --can <rights>`
+**Example:** `tg sales bot chats admins add Team 42 --title Helper`
 
 #### `tg bot chats admins remove`
 
-снять права администратора; человек остаётся участником
+take an admin's rights back; they stay a member
 
 **Changes something in Telegram.**
 
@@ -6228,22 +6247,22 @@ tg bot chats admins add <chat> <person> [options]
 tg bot chats admins remove <chat> <person>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор или название увиденного чата. |
-| `person` | обязателен | идентификатор пользователя. |
+| `chat` | required | a chat id, or the title of a chat this bot has seen. |
+| `person` | required | the person's user id. |
 
 **Returns:** take an admin's rights back; they stay a member
 
-**Example:** `tg personal bot chats admins remove Team Anna`
+**Example:** `tg sales bot chats admins remove Team 42`
 
 #### `tg bot chats members`
 
-участники чата, где бот администратор
+the people in a chat the bot is an admin in
 
 #### `tg bot chats members remove`
 
-удалить участника; сообщения сохраняются
+take a person out of a chat; their messages stay
 
 **Changes something in Telegram.**
 
@@ -6251,81 +6270,81 @@ tg bot chats admins remove <chat> <person>
 tg bot chats members remove <chat> <person> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор или название увиденного чата. |
-| `person` | обязателен | идентификатор пользователя. |
+| `chat` | required | a chat id, or the title of a chat this bot has seen. |
+| `person` | required | the person's user id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--block` | также запретить возвращение по ссылке. |
+| `--block` | also keep them from coming back by the chat's link. |
 
 **Returns:** take a person out of a chat; their messages stay
 
-**Example:** `tg personal bot chats members remove Team Anna`
+**Example:** `tg sales bot chats members remove Team 42 --block`
 
 #### `tg bot chats rules`
 
-локальные правила модерации чата для бота
+a chat's moderation rules for this bot, kept on this machine
 
 #### `tg bot chats rules show`
 
-правила чата; если не сохранены, исходные значения с отметкой
+the chat's rules; the defaults, marked not saved, if it has none yet
 
 ```sh
 tg bot chats rules show <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор группы или название увиденной группы. |
+| `chat` | required | a group's id, or the title of a group this bot has seen. |
 
 **Returns:** the chat's rules; the defaults, marked not saved, if it has none yet
 
-**Example:** `tg personal bot chats rules show Team`
+**Example:** `tg sales bot chats rules show Team`
 
 #### `tg bot chats rules set`
 
-изменить правило: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove
+change one rule — trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg bot chats rules set <chat> <key> <value>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор группы или название увиденной группы. |
-| `key` | обязателен | правило. |
-| `value` | обязателен | новое значение. |
+| `chat` | required | a group's id, or the title of a group this bot has seen. |
+| `key` | required | the rule. |
+| `value` | required | its new value. |
 
-**Returns:** change one rule — trusted, blocked, blockedNames, links, invites, forwards,…
+**Returns:** change one moderation rule of a chat
 
-**Example:** `tg personal bot chats rules set Team <key> <value>`
+**Example:** `tg sales bot chats rules set Team links delete`
 
 #### `tg bot chats rules unset`
 
-вернуть правило к значению по умолчанию
+put one rule back to its default
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg bot chats rules unset <chat> <key>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор группы или название увиденной группы. |
-| `key` | обязателен | правило. |
+| `chat` | required | a group's id, or the title of a group this bot has seen. |
+| `key` | required | the rule. |
 
 **Returns:** put one rule back to its default
 
-**Example:** `tg personal bot chats rules unset Team <key>`
+**Example:** `tg sales bot chats rules unset Team links`
 
 #### `tg bot chats moderate`
 
-проверить новые сообщения и вступления по правилам группы и выполнить разрешённое от бота
+judge a group's new messages and joins by its rules, and act as they allow — as the bot
 
 **Changes something in Telegram.**
 
@@ -6333,29 +6352,29 @@ tg bot chats rules unset <chat> <key>
 tg bot chats moderate <chat> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязательный | идентификатор группы или название увиденной группы. |
+| `chat` | required | a group's id, or the title of a group this bot has seen. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--since-time <time>` | проверить после времени ISO 8601 или 2h / 1d назад; сохранённая позиция не меняется. |
-| `--dry-run` | проверить и составить план без действий. |
-| `--allow-dangerous` | подтвердить все действия с уровнем ask в правилах группы. |
-| `--no-block` | удалить без блокировки; по умолчанию возвращение по ссылке запрещено. |
-| `--max-actions <n>` | максимум действий за запуск; по умолчанию 10. |
+| `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
+| `--dry-run` | judge and plan; do nothing. |
+| `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
+| `--no-block` | remove without banning; by default a removed person cannot come back by the link. |
+| `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
 
-**Returns:** judge a group's new messages and joins by its rules, and act as they allow — as the bot
+**Returns:** act on a group's new messages and joins by its rules, as the bot
 
-**Example:** `tg personal bot chats moderate Team`
+**Example:** `tg sales bot chats moderate Team --dry-run`
 
 ### `tg bot messages`
 
-сообщения в чатах бота
+the messages in the chats this bot is in
 
 #### `tg bot messages send`
 
-отправить от бота; без [text] — stdin
+send a message as the bot; without [text], the text is read from stdin
 
 **Changes something in Telegram.**
 
@@ -6363,67 +6382,70 @@ tg bot chats moderate <chat> [options]
 tg bot messages send <chat> [text] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
-| `text` | необязателен | текст сообщения. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `text` | optional | the message. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--reply-to <message>` | ответить на сообщение по идентификатору в том же чате. |
-| `--silent` | отправить без уведомления. |
-| `--md` | использовать Markdown этого мессенджера; поддерживаемый синтаксис описан в руководстве по форматированию. |
-| `--html` | HTML-текст: <b>, <i>, <a href>, <code>. |
-| `--file <file>` | прикрепить файл; текст становится подписью. |
-| `--photo <file>` | прикрепить .jpg, .png или .webp как фото; текст становится подписью. |
-| `--as-file` | отправить --file как скачиваемый файл, включая видео. |
-| `--voice <file>` | отправить Ogg Opus как голосовое без текста и других вложений. |
-| `--allow-any-file` | отправить файл даже из папки с учётными данными или собственной папки CLI. |
+| `--reply-to <message>` | answer this message, by its id in the same chat. |
+| `--silent` | deliver without a notification. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
+| `--file <file>` | attach a file; the text becomes its caption. |
+| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption. |
+| `--as-file` | send the --file as a file to download, a video included. |
+| `--voice <file>` | send an Ogg Opus file as a voice message, alone, with no text. |
+| `--allow-any-file` | send a file even from credential folders or this CLI's own folders. |
 
 **Returns:** send a message as the bot; without [text], the text is read from stdin
 
-**Example:** `tg personal bot messages send Team "on my way"`
+**Example:** `tg sales bot messages send Team "Doors open at 9"`, `tg sales bot messages send Team "Here it is" --file report.pdf`
 
 #### `tg bot messages list`
 
-последние сообщения; без истории Telegram или с --offline — увиденное ботом на компьютере
+the latest messages in a chat; where Telegram gives a bot no history, and with --offline, the ones this bot has seen on this machine
 
 ```sh
-tg bot messages list <chat> [options]
+tg bot messages list <chat> [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--limit <n>` | количество последних. |
+| `--limit <n>` | how many, the newest. |
 
-**Returns:** the latest messages in a chat; where Telegram gives a bot no history, and with --offline,…
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info bot messages list
 
-**Example:** `tg personal bot messages list Team`
+**Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
+
+**Example:** `tg sales bot messages list Team --limit 20`
 
 #### `tg bot messages show`
 
-одно сообщение по идентификатору в чате
+one message by its id in a chat
 
 ```sh
 tg bot messages show <chat> <message>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
-| `message` | обязателен | идентификатор сообщения. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `message` | required | message id. |
 
 **Returns:** one message by its id in a chat
 
-**Example:** `tg personal bot messages show Team 1234`
+**Example:** `tg sales bot messages show Team 101`
 
 #### `tg bot messages edit`
 
-заменить текст сообщения бота
+replace the text of a message the bot sent
 
 **Changes something in Telegram.**
 
@@ -6431,24 +6453,24 @@ tg bot messages show <chat> <message>
 tg bot messages edit <chat> <message> <text> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
-| `message` | обязателен | идентификатор сообщения. |
-| `text` | обязателен | новый текст. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `message` | required | message id. |
+| `text` | required | the new text. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--md` | использовать Markdown этого мессенджера; поддерживаемый синтаксис описан в руководстве по форматированию. |
-| `--html` | HTML-текст: <b>, <i>, <a href>, <code>. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
 
 **Returns:** replace the text of a message the bot sent
 
-**Example:** `tg personal bot messages edit Team 1234 "on my way"`
+**Example:** `tg sales bot messages edit Team 101 "Doors open at 10"`
 
 #### `tg bot messages delete`
 
-удалить сообщения в доступном боту чате; необратимо
+delete messages in a chat the bot can delete in; it cannot be undone
 
 **Changes something in Telegram.**
 
@@ -6456,22 +6478,22 @@ tg bot messages edit <chat> <message> <text> [options]
 tg bot messages delete <chat> <messages> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
-| `messages` | обязателен | идентификаторы сообщений. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `messages` | required | message ids. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--allow-dangerous` | удалить без подтверждения. |
+| `--allow-dangerous` | delete without asking. |
 
 **Returns:** delete messages in a chat the bot can delete in; it cannot be undone
 
-**Example:** `tg personal bot messages delete Team <messages>`
+**Example:** `tg sales bot messages delete Team 101`
 
 #### `tg bot messages pin`
 
-закрепить тихо, если нет --notify
+pin a message in a chat; quietly unless --notify
 
 **Changes something in Telegram.**
 
@@ -6479,22 +6501,22 @@ tg bot messages delete <chat> <messages> [options]
 tg bot messages pin <chat> <message> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
-| `message` | обязателен | идентификатор сообщения. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `message` | required | message id. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--notify` | уведомить участников. |
+| `--notify` | tell the chat's members. |
 
 **Returns:** pin a message in a chat; quietly unless --notify
 
-**Example:** `tg personal bot messages pin Team 1234`
+**Example:** `tg sales bot messages pin Team 101`
 
 #### `tg bot messages unpin`
 
-открепить сообщение
+unpin a message in a chat
 
 **Changes something in Telegram.**
 
@@ -6502,123 +6524,154 @@ tg bot messages pin <chat> <message> [options]
 tg bot messages unpin <chat> <message>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен | идентификатор чата, user:<id> или название увиденного чата. |
-| `message` | обязателен | идентификатор сообщения. |
+| `chat` | required | a chat id, user:<id> for a person, or the title of a chat this bot has seen. |
+| `message` | required | message id. |
 
 **Returns:** unpin a message in a chat
 
-**Example:** `tg personal bot messages unpin Team 1234`
+**Example:** `tg sales bot messages unpin Team 101`
 
 #### `tg bot messages between`
 
-сообщения двух и более людей в чатах, где писали все, из локальной базы по чатам от старых к новым; --limit для каждого чата. Общие чаты определяются по сообщениям, а не списку участников Telegram
+what two or more people wrote in the chats they have all written in — from the local copy, grouped by chat, oldest first; --limit counts per chat. Common chats are the ones this copy saw each of them write in, not a member list from Telegram
 
 ```sh
 tg bot messages between <people> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `people` | обязателен | два или более человека по идентификатору, @username или части имени. |
+| `people` | required | two or more people — an id, @username or part of a name each. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--all-bots` | также копии всех других ботов, разрешённые read_other_bots. |
-| `--bots <profiles>` | также копии указанных через запятую ботов с разрешением read_other_bots. |
-| `--limit <n>` | число последних сообщений каждого чата. |
+| `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
+| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
+| `--limit <n>` | how many of the latest messages from each chat. |
 
-**Returns:** what two or more people wrote in the chats they have all written in — from the local…
+**Returns:** what two or more people wrote in the chats they share, from the local copy
 
-**Example:** `tg personal bot messages between Anna`
+**Example:** `tg sales bot messages between @ann @bob`
+
+#### `tg bot messages sync`
+
+fetch a chat's history into the bot's local copy, newest first; run it again to continue
+
+**Changes something on this computer only.**
+
+```sh
+tg bot messages sync <chat> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat id, or the title of a chat this bot has seen. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | at most this many messages in this run; 1000 if not given. |
+| `--page-size <n>` | how many messages one request asks for; 100 if not given. |
+| `--pause <duration>` | pause between pages, to stay under the messenger's limits. Default: `1s`. |
+| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
+| `--last <n>` | stop once the newest n messages are held. |
+| `--until-id <id>` | start at this message, by its t.me link, inclusive; otherwise the newest message already known. |
+
+**Returns:** fetch a chat's history into the bot's local copy, newest first; run it again…
+
+**Example:** `tg personal bot messages sync Team`
 
 ### `tg bot search`
 
-поиск по тексту в локальной копии этого бота
+find what this bot's local copy holds, by text
 
 #### `tg bot search messages`
 
-поиск прочитанных, отправленных и полученных этим ботом сообщений на этом компьютере: только локальная копия, лучшие совпадения сначала; Lucene: каждое слово, "фраза", -слово, a OR b, from: chat: date: has:; по тексту, --from или обоим
+search the messages this bot has read, sent or received on this machine — the local copy only, best match first; a Lucene query: every word must appear; "a phrase", -word, a OR b, from: chat: date: has:; by text, by --from, or both
 
 ```sh
 tg bot search messages [query] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `query` | необязательный | искомые слова. |
+| `query` | optional | the words to find. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--all-bots` | также копии всех других ботов, разрешённые read_other_bots. |
-| `--bots <profiles>` | также копии указанных через запятую ботов с разрешением read_other_bots. |
-| `--limit <n>` | количество. |
-| `--page <n>` | номер страницы, начиная с 1. |
-| `--newest` | сначала новые вместо наиболее подходящих. |
-| `--from <who>` | только автор: идентификатор, @username или часть имени; повторите для нескольких. |
+| `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
+| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
+| `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
+| `--newest` | newest first instead of best first. |
+| `--from <who>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
 
-**Returns:** search the messages this bot has read, sent or received on this machine — the local copy…
+**Returns:** search the messages this bot has seen, in the local copy, by text
 
-**Example:** `tg personal bot search messages "invoice"`
+**Example:** `tg sales bot search messages refund`, `tg sales bot search messages invoice --from @ann`
 
 ### `tg bot recipients`
 
-разрешённые чаты бота; без списка — все; `clear` удаляет список
+the chats this bot may write to; with no list, every chat — `clear` removes the list
 
 #### `tg bot recipients list`
 
-разрешённые чаты или пусто без списка
+the chats on the list, or nothing when there is no list
 
 ```sh
-tg bot recipients list
+tg bot recipients list [query]
 ```
 
-**Returns:** the chats on the list, or nothing when there is no list
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Example:** `tg personal bot recipients list`
+**Returns:** recipient — id, title, added_at, partner_id; every field: tg commands info bot recipients list
+
+**Example:** `tg sales bot recipients list`
 
 #### `tg bot recipients add`
 
-разрешить чат: идентификатор, `user:<id>` или название увиденного чата
+allow a chat: its id, `user:<id>`, or the title of a chat this bot has seen
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg bot recipients add <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен |  |
+| `chat` | required | a chat id, `user:<id>`, or the title of a chat this bot has seen. |
 
 **Returns:** allow a chat: its id, `user:<id>`, or the title of a chat this bot has seen
 
-**Example:** `tg personal bot recipients add Team`
+**Example:** `tg sales bot recipients add Team`
 
 #### `tg bot recipients remove`
 
-убрать чат из списка
+take a chat off the list
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg bot recipients remove <chat>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `chat` | обязателен |  |
+| `chat` | required | the chat id, or the title as the list shows it. |
 
 **Returns:** take a chat off the list
 
-**Example:** `tg personal bot recipients remove Team`
+**Example:** `tg sales bot recipients remove Team`
 
 #### `tg bot recipients clear`
 
-удалить список: снова разрешены все чаты
+remove the list: the bot may write to any chat again
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg bot recipients clear
@@ -6626,27 +6679,31 @@ tg bot recipients clear
 
 **Returns:** remove the list: the bot may write to any chat again
 
-**Example:** `tg personal bot recipients clear`
+**Example:** `tg sales bot recipients clear`
 
 ### `tg bot sends`
 
-отправки, правки и удаления бота с компьютера: идентификаторы и результат, без текста
+what this bot sent, edited and deleted from this machine — ids and outcomes, never text
 
 #### `tg bot sends list`
 
-каждая отправка, правка и удаление, сделанные этим ботом с этого компьютера, с результатом
+every send, edit and delete this bot made from this machine, with its outcome
 
 ```sh
-tg bot sends list
+tg bot sends list [query]
 ```
 
-**Returns:** every send, edit and delete this bot made from this machine, with its outcome
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Example:** `tg personal bot sends list`
+**Returns:** send attempt — at, profile, chat_id, outcome, kind, action, people, message_id, and 16 more; every field: tg commands info bot sends list
+
+**Example:** `tg sales bot sends list`
 
 ### `tg bot watch`
 
-выводить и сохранять новые сообщения до Ctrl-C или --timeout; оба завершают штатно
+print new messages as they arrive and keep them, until Ctrl-C or --timeout (either ends it normally)
 
 **Changes something in Telegram.**
 
@@ -6654,24 +6711,24 @@ tg bot sends list
 tg bot watch [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--events` | также правки, удаления, нажатия кнопок, вступления и выходы; строки имеют тип события. |
-| `--types <types>` | типы обновлений через запятую в обозначениях мессенджера. |
-| `--public-url <url>` | получать через webhook по https-адресу вашего туннеля вместо опроса, например https://<name>.ts.net. |
-| `--port <port>` | локальный порт за туннелем для --public-url (по умолчанию 8766). |
+| `--events` | also edits, deletions, buttons pressed and people coming and going; every line names its event. |
+| `--types <types>` | only these update types, comma-separated, in the messenger's words. |
+| `--public-url <url>` | receive by webhook at your tunnel's https address instead of polling, e.g. https://<name>.ts.net. |
+| `--port <port>` | the local port behind the tunnel for --public-url (default 8766). |
 
-**Returns:** print new messages as they arrive and keep them, until Ctrl-C or --timeout (either ends…
+**Returns:** print new messages as they arrive and keep them, until Ctrl-C
 
-**Example:** `tg personal bot watch`
+**Example:** `tg sales bot watch --jsonl`, `tg sales bot watch --events`
 
 ### `tg bot callbacks`
 
-ответы на нажатия кнопок под сообщениями бота
+answers to the buttons people press under the bot's messages
 
 #### `tg bot callbacks answer`
 
-ответить по callback: --notification — разовое уведомление человеку, --text — замена сообщения кнопки
+answer a pressed button by its callback id: --notification shows the person a one-time note, --text replaces the message the button was on
 
 **Changes something in Telegram.**
 
@@ -6679,38 +6736,42 @@ tg bot watch [options]
 tg bot callbacks answer <callback> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `callback` | обязателен | идентификатор callback из `bot watch`. |
+| `callback` | required | the callback id `bot watch` printed. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--text <text>` | новый текст сообщения. |
-| `--notification <text>` | уведомление только нажавшему кнопку. |
+| `--text <text>` | the message's new text. |
+| `--notification <text>` | a note only the person who pressed sees. |
 
-**Returns:** answer a pressed button by its callback id: --notification shows the person a one-time…
+**Returns:** answer a pressed button: a note to that person, or new message text
 
-**Example:** `tg personal bot callbacks answer <callback>`
+**Example:** `tg sales bot callbacks answer 4385 --notification "Saved"`
 
 ### `tg bot commands`
 
-меню команд бота после /
+the bot's command menu — what people see after /
 
 #### `tg bot commands list`
 
-текущие команды меню
+the commands in the menu now
 
 ```sh
-tg bot commands list
+tg bot commands list [query]
 ```
 
-**Returns:** the commands in the menu now
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Example:** `tg personal bot commands list`
+**Returns:** bot menu entry — name, description; every field: tg commands info bot commands list
+
+**Example:** `tg sales bot commands list`
 
 #### `tg bot commands set`
 
-заменить меню: команда как name=description, например start=Begin
+replace the whole menu: each command as name=description, e.g. start=Begin
 
 **Changes something in Telegram.**
 
@@ -6718,17 +6779,17 @@ tg bot commands list
 tg bot commands set <commands>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `commands` | обязателен | name=description для каждой команды. |
+| `commands` | required | name=description, one per command. |
 
 **Returns:** replace the whole menu: each command as name=description, e.g. start=Begin
 
-**Example:** `tg personal bot commands set <commands>`
+**Example:** `tg sales bot commands set "start=Begin here" "help=What I can do"`
 
 #### `tg bot commands clear`
 
-очистить меню
+empty the menu
 
 **Changes something in Telegram.**
 
@@ -6738,27 +6799,31 @@ tg bot commands clear
 
 **Returns:** empty the menu
 
-**Example:** `tg personal bot commands clear`
+**Example:** `tg sales bot commands clear`
 
 ### `tg bot webhooks`
 
-адрес обновлений бота; пока задан, `bot watch` ничего не получает
+where the messenger pushes this bot's updates — while one is set, `bot watch` gets nothing
 
 #### `tg bot webhooks list`
 
-вебхуки бота
+the webhooks this bot has
 
 ```sh
-tg bot webhooks list
+tg bot webhooks list [query]
 ```
 
-**Returns:** the webhooks this bot has
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
 
-**Example:** `tg personal bot webhooks list`
+**Returns:** bot webhook — url, types; every field: tg commands info bot webhooks list
+
+**Example:** `tg sales bot webhooks list`
 
 #### `tg bot webhooks set`
 
-передавать обновления на HTTPS-адрес; запрещено при другом вебхуке
+send this bot's updates to an HTTPS address; refused while another is set
 
 **Changes something in Telegram.**
 
@@ -6766,22 +6831,22 @@ tg bot webhooks list
 tg bot webhooks set <url> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `url` | обязателен | HTTPS-адрес. |
+| `url` | required | the HTTPS address. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--types <types>` | типы обновлений через запятую в обозначениях мессенджера. |
-| `--secret-stdin` | секрет для каждого обновления; ввод по запросу или stdin. |
+| `--types <types>` | only these update types, comma-separated, in the messenger's words. |
+| `--secret-stdin` | a secret the messenger sends back with each update — asked for, or read from a pipe. |
 
 **Returns:** send this bot's updates to an HTTPS address; refused while another is set
 
-**Example:** `tg personal bot webhooks set https://example.com`
+**Example:** `tg sales bot webhooks set https://bot.example.ts.net/`
 
 #### `tg bot webhooks delete`
 
-отключить адрес; без вебхуков `bot watch` снова работает
+stop sending updates to this address; with none left, `bot watch` works again
 
 **Changes something in Telegram.**
 
@@ -6789,99 +6854,68 @@ tg bot webhooks set <url> [options]
 tg bot webhooks delete <url>
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `url` | обязателен | адрес. |
+| `url` | required | the address. |
 
 **Returns:** stop sending updates to this address; with none left, `bot watch` works again
 
-**Example:** `tg personal bot webhooks delete https://example.com`
+**Example:** `tg sales bot webhooks delete https://bot.example.ts.net/`
 
 ### `tg bot contacts`
 
-увиденные ботом авторы из локальной базы; Telegram запрашивается только явно
+people this bot has seen write — from the local copy on this machine, never asking Telegram unless told to
 
 #### `tg bot contacts show`
 
-человек: чаты, где писал, последнее сообщение там, недавние сообщения личного чата с ботом
+one person: the chats they wrote in (with their last message there) and the latest messages of their private chat with the bot
 
 ```sh
 tg bot contacts show <who> [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `who` | обязательный | идентификатор, @username или часть имени. |
+| `who` | required | an id, @username or part of a name. |
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--all-bots` | также копии всех других ботов, разрешённые read_other_bots. |
-| `--bots <profiles>` | также копии указанных через запятую ботов с разрешением read_other_bots. |
-| `--limit <n>` | количество сообщений личного чата. |
-| `--sync-first` | сначала перечитать личный чат через мессенджер одним запросом. |
+| `--all-bots` | also read every other bot's copy on this machine that read_other_bots allows. |
+| `--bots <profiles>` | also read these bots' copies, comma separated — each allowed by read_other_bots. |
+| `--limit <n>` | how many messages from the private chat. |
+| `--sync-first` | read the private chat with them again from the messenger first — one request. |
 
-**Returns:** one person: the chats they wrote in (with their last message there) and the latest…
+**Returns:** one person: the chats they wrote in and their chat with the bot
 
-**Example:** `tg personal bot contacts show <who>`
+**Example:** `tg sales bot contacts show @ann`
 
 ### `tg bot me`
 
-бот, которому принадлежит токен профиля: идентификатор, имя и имя пользователя
+the bot this profile's token belongs to: id, name and username
 
 ```sh
 tg bot me
 ```
 
-**Returns:** the bot this profile's token belongs to: id, name and username
+**Returns:** the bot this profile's token belongs to
 
-**Example:** `tg personal bot me`
-
-### `tg bot store`
-
-локальная копия бота на этом компьютере
-
-#### `tg bot store fetch`
-
-загрузить историю чата в локальную копию бота, начиная с новых сообщений; повторите запуск для продолжения
-
-**Изменяет данные только на этом компьютере.**
-
-```sh
-tg bot store fetch <chat> [options]
-```
-
-| Аргумент | | Описание |
-|---|---|---|
-| `chat` | обязательный | идентификатор или название увиденного чата. |
-
-| Параметр | Назначение |
-|---|---|
-| `--limit <n>` | максимум сообщений за запуск; по умолчанию 1000. |
-| `--page-size <n>` | число сообщений в одном запросе; по умолчанию 100. |
-| `--pause <duration>` | пауза между страницами для соблюдения лимитов мессенджера. По умолчанию: `1s`. |
-| `--since-time <time>` | остановиться у сообщений старше ISO 8601 или 2h / 1d назад. |
-| `--last <n>` | остановиться, когда сохранены последние n сообщений. |
-| `--until-id <id>` | начать с этого сообщения по ссылке t.me, включая его; иначе — с самого нового известного сообщения. |
-
-**Returns:** fetch a chat's history into the bot's local copy, newest first; run it again to continue
-
-**Example:** `tg personal bot store fetch Team`
+**Example:** `tg sales bot me`
 
 ### `tg bot mcp`
 
-доступ агента к боту через MCP по stdin/stdout: `claude mcp add sales-bot -- tg sales bot mcp`
+serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- tg sales bot mcp`
 
 #### `tg bot mcp config`
 
-вывести mcpServers для Claude Desktop, Cursor и других с полными путями; без записи
+print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes nothing
 
 ```sh
 tg bot mcp config
 ```
 
-**Returns:** print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes…
+**Returns:** print the mcpServers entry for an MCP client; writes nothing
 
-**Example:** `tg personal bot mcp config`
+**Example:** `tg sales bot mcp config`
 
 ### `tg bot api`
 
@@ -6891,10 +6925,10 @@ every operation of the official Bot API, generated from its schema
 tg bot api [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--store-token <profile>` | keep a returned authentication token only in this bot profile's OS keyring; never print it. |
-| `--allow-any-file` | читать файлы @path даже из каталогов учётных данных или собственных каталогов CLI. |
+| `--allow-any-file` | read @path files even from credential folders or this CLI's own folders. |
 
 #### `tg bot api get-updates`
 
@@ -6906,7 +6940,7 @@ Use this method to receive incoming updates using long polling (wiki). Returns a
 tg bot api get-updates [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--offset <value>` | Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will be forgotten. |
 | `--limit <value>` | Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100. |
@@ -6915,7 +6949,7 @@ tg bot api get-updates [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to receive incoming updates using long polling (wiki). Returns an Array…
+**Returns:** Use this method to receive incoming updates using long polling (wiki).…
 
 **Example:** `tg personal bot api get-updates`
 
@@ -6929,7 +6963,7 @@ Use this method to specify a URL and receive incoming updates via an outgoing we
 tg bot api set-webhook [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--url <value>` | HTTPS URL to send updates to. Use an empty string to remove webhook integration. |
 | `--certificate <value>` | Upload your public key certificate so that the root certificate in use can be checked. See our self-signed guide for details. |
@@ -6940,7 +6974,7 @@ tg bot api set-webhook [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to specify a URL and receive incoming updates via an outgoing webhook.…
+**Returns:** Use this method to specify a URL and receive incoming updates via an…
 
 **Example:** `tg personal bot api set-webhook`
 
@@ -6954,13 +6988,13 @@ Use this method to remove webhook integration if you decide to switch back to ge
 tg bot api delete-webhook [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--drop-pending-updates <value>` | Pass True to drop all pending updates. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to remove webhook integration if you decide to switch back to getUpdates.…
+**Returns:** Use this method to remove webhook integration if you decide to switch back…
 
 **Example:** `tg personal bot api delete-webhook`
 
@@ -6972,7 +7006,7 @@ Use this method to get current webhook status. Requires no parameters. On succes
 tg bot api get-webhook-info
 ```
 
-**Returns:** Use this method to get current webhook status. Requires no parameters. On success,…
+**Returns:** Use this method to get current webhook status. Requires no parameters. On…
 
 **Example:** `tg personal bot api get-webhook-info`
 
@@ -6984,7 +7018,7 @@ A simple method for testing your bot's authentication token. Requires no paramet
 tg bot api get-me
 ```
 
-**Returns:** A simple method for testing your bot's authentication token. Requires no parameters.…
+**Returns:** A simple method for testing your bot's authentication token. Requires no…
 
 **Example:** `tg personal bot api get-me`
 
@@ -6998,7 +7032,7 @@ Use this method to log out from the cloud Bot API server before launching the bo
 tg bot api log-out
 ```
 
-**Returns:** Use this method to log out from the cloud Bot API server before launching the bot…
+**Returns:** Use this method to log out from the cloud Bot API server before launching…
 
 **Example:** `tg personal bot api log-out`
 
@@ -7012,7 +7046,7 @@ Use this method to close the bot instance before moving it from one local server
 tg bot api close
 ```
 
-**Returns:** Use this method to close the bot instance before moving it from one local server to…
+**Returns:** Use this method to close the bot instance before moving it from one local…
 
 **Example:** `tg personal bot api close`
 
@@ -7026,7 +7060,7 @@ Use this method to send text messages. On success, the sent Message is returned.
 tg bot api send-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7047,7 +7081,7 @@ tg bot api send-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send text messages. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send text messages. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-message`
 
@@ -7061,7 +7095,7 @@ Use this method to forward messages of any kind. Service messages and messages w
 tg bot api forward-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only. |
@@ -7076,7 +7110,7 @@ tg bot api forward-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to forward messages of any kind. Service messages and messages with…
+**Returns:** Use this method to forward messages of any kind. Service messages and…
 
 **Example:** `tg personal bot api forward-message`
 
@@ -7090,7 +7124,7 @@ Use this method to forward multiple messages of any kind. If some of the specifi
 tg bot api forward-messages [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only. |
@@ -7102,7 +7136,7 @@ tg bot api forward-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to forward multiple messages of any kind. If some of the specified…
+**Returns:** Use this method to forward multiple messages of any kind. If some of the…
 
 **Example:** `tg personal bot api forward-messages`
 
@@ -7116,7 +7150,7 @@ Use this method to copy messages of any kind. Service messages, paid media messa
 tg bot api copy-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only. |
@@ -7138,7 +7172,7 @@ tg bot api copy-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to copy messages of any kind. Service messages, paid media messages,…
+**Returns:** Use this method to copy messages of any kind. Service messages, paid media…
 
 **Example:** `tg personal bot api copy-message`
 
@@ -7152,7 +7186,7 @@ Use this method to copy messages of any kind. If some of the specified messages 
 tg bot api copy-messages [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only. |
@@ -7165,7 +7199,7 @@ tg bot api copy-messages [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to copy messages of any kind. If some of the specified messages can't be…
+**Returns:** Use this method to copy messages of any kind. If some of the specified…
 
 **Example:** `tg personal bot api copy-messages`
 
@@ -7179,7 +7213,7 @@ Use this method to send photos. On success, the sent Message is returned. — wr
 tg bot api send-photo [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7202,7 +7236,7 @@ tg bot api send-photo [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send photos. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send photos. On success, the sent Message is returned. —…
 
 **Example:** `tg personal bot api send-photo`
 
@@ -7216,7 +7250,7 @@ Use this method to send live photos. On success, the sent Message is returned. �
 tg bot api send-live-photo [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel (in the format @channelusername). |
@@ -7240,7 +7274,7 @@ tg bot api send-live-photo [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send live photos. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send live photos. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-live-photo`
 
@@ -7254,7 +7288,7 @@ Use this method to send audio files, if you want Telegram clients to display the
 tg bot api send-audio [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7279,7 +7313,7 @@ tg bot api send-audio [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send audio files, if you want Telegram clients to display them in the…
+**Returns:** Use this method to send audio files, if you want Telegram clients to display…
 
 **Example:** `tg personal bot api send-audio`
 
@@ -7293,7 +7327,7 @@ Use this method to send general files. On success, the sent Message is returned.
 tg bot api send-document [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7316,7 +7350,7 @@ tg bot api send-document [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send general files. On success, the sent Message is returned. Bots can…
+**Returns:** Use this method to send general files. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-document`
 
@@ -7330,7 +7364,7 @@ Use this method to send video files, Telegram clients support MPEG4 videos (othe
 tg bot api send-video [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7360,7 +7394,7 @@ tg bot api send-video [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send video files, Telegram clients support MPEG4 videos (other formats…
+**Returns:** Use this method to send video files, Telegram clients support MPEG4 videos…
 
 **Example:** `tg personal bot api send-video`
 
@@ -7374,7 +7408,7 @@ Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without s
 tg bot api send-animation [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7401,7 +7435,7 @@ tg bot api send-animation [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On…
+**Returns:** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video…
 
 **Example:** `tg personal bot api send-animation`
 
@@ -7415,7 +7449,7 @@ Use this method to send audio files, if you want Telegram clients to display the
 tg bot api send-voice [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7437,7 +7471,7 @@ tg bot api send-voice [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send audio files, if you want Telegram clients to display the file as…
+**Returns:** Use this method to send audio files, if you want Telegram clients to display…
 
 **Example:** `tg personal bot api send-voice`
 
@@ -7451,7 +7485,7 @@ Use this method to send a rounded square MPEG4 video of up to 1 minute long. On 
 tg bot api send-video-note [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7472,7 +7506,7 @@ tg bot api send-video-note [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success,…
+**Returns:** Use this method to send a rounded square MPEG4 video of up to 1 minute long.…
 
 **Example:** `tg personal bot api send-video-note`
 
@@ -7486,7 +7520,7 @@ Use this method to send paid media. On success, the sent Message is returned. �
 tg bot api send-paid-media [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance. |
@@ -7508,7 +7542,7 @@ tg bot api send-paid-media [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send paid media. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send paid media. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-paid-media`
 
@@ -7522,7 +7556,7 @@ Use this method to send a group of photos, live photos, videos, documents or aud
 tg bot api send-media-group [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7537,7 +7571,7 @@ tg bot api send-media-group [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a group of photos, live photos, videos, documents or audios as an…
+**Returns:** Use this method to send a group of photos, live photos, videos, documents or…
 
 **Example:** `tg personal bot api send-media-group`
 
@@ -7551,7 +7585,7 @@ Use this method to send point on the map. On success, the sent Message is return
 tg bot api send-location [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7574,7 +7608,7 @@ tg bot api send-location [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send point on the map. On success, the sent Message is returned. —…
+**Returns:** Use this method to send point on the map. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-location`
 
@@ -7588,7 +7622,7 @@ Use this method to send information about a venue. On success, the sent Message 
 tg bot api send-venue [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7613,7 +7647,7 @@ tg bot api send-venue [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send information about a venue. On success, the sent Message is…
+**Returns:** Use this method to send information about a venue. On success, the sent…
 
 **Example:** `tg personal bot api send-venue`
 
@@ -7627,7 +7661,7 @@ Use this method to send phone contacts. On success, the sent Message is returned
 tg bot api send-contact [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7648,7 +7682,7 @@ tg bot api send-contact [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send phone contacts. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send phone contacts. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-contact`
 
@@ -7662,7 +7696,7 @@ Use this method to send a native poll. On success, the sent Message is returned.
 tg bot api send-poll [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. Polls can't be sent to channel direct messages chats. |
@@ -7701,7 +7735,7 @@ tg bot api send-poll [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a native poll. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send a native poll. On success, the sent Message is…
 
 **Example:** `tg personal bot api send-poll`
 
@@ -7715,7 +7749,7 @@ Use this method to send a checklist on behalf of a connected business account. O
 tg bot api send-checklist [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot in the format @username. |
@@ -7728,7 +7762,7 @@ tg bot api send-checklist [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a checklist on behalf of a connected business account. On…
+**Returns:** Use this method to send a checklist on behalf of a connected business…
 
 **Example:** `tg personal bot api send-checklist`
 
@@ -7742,7 +7776,7 @@ Use this method to send an animated emoji that will display a random value. On s
 tg bot api send-dice [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -7759,7 +7793,7 @@ tg bot api send-dice [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send an animated emoji that will display a random value. On success,…
+**Returns:** Use this method to send an animated emoji that will display a random value.…
 
 **Example:** `tg personal bot api send-dice`
 
@@ -7773,7 +7807,7 @@ Use this method to stream a partial message to a user while the message is being
 tg bot api send-message-draft [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target private chat. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread. |
@@ -7786,7 +7820,7 @@ tg bot api send-message-draft [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to stream a partial message to a user while the message is being…
+**Returns:** Use this method to stream a partial message to a user while the message is…
 
 **Example:** `tg personal bot api send-message-draft`
 
@@ -7800,7 +7834,7 @@ Use this method when you need to tell the user that something is happening on th
 tg bot api send-chat-action [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the action will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot or supergroup in the format @username. Channel chats and channel direct messages chats aren't supported. |
@@ -7809,7 +7843,7 @@ tg bot api send-chat-action [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method when you need to tell the user that something is happening on the bot's…
+**Returns:** Use this method when you need to tell the user that something is happening…
 
 **Example:** `tg personal bot api send-chat-action`
 
@@ -7823,7 +7857,7 @@ Use this method to change the chosen reactions on a message. Service messages of
 tg bot api set-message-reaction [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
 | `--message-id <value>` | Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead. |
@@ -7832,7 +7866,7 @@ tg bot api set-message-reaction [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the chosen reactions on a message. Service messages of some…
+**Returns:** Use this method to change the chosen reactions on a message. Service…
 
 **Example:** `tg personal bot api set-message-reaction`
 
@@ -7844,7 +7878,7 @@ Use this method to get a list of profile pictures for a user. Returns a UserProf
 tg bot api get-user-profile-photos [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--offset <value>` | Sequential number of the first photo to be returned. By default, all photos are returned. |
@@ -7852,7 +7886,7 @@ tg bot api get-user-profile-photos [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos…
+**Returns:** Use this method to get a list of profile pictures for a user. Returns a…
 
 **Example:** `tg personal bot api get-user-profile-photos`
 
@@ -7864,7 +7898,7 @@ Use this method to get a list of profile audios for a user. Returns a UserProfil
 tg bot api get-user-profile-audios [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--offset <value>` | Sequential number of the first audio to be returned. By default, all audios are returned. |
@@ -7872,7 +7906,7 @@ tg bot api get-user-profile-audios [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get a list of profile audios for a user. Returns a UserProfileAudios…
+**Returns:** Use this method to get a list of profile audios for a user. Returns a…
 
 **Example:** `tg personal bot api get-user-profile-audios`
 
@@ -7886,7 +7920,7 @@ Changes the emoji status for a given user that previously allowed the bot to man
 tg bot api set-user-emoji-status [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--emoji-status-custom-emoji-id <value>` | Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status. |
@@ -7894,7 +7928,7 @@ tg bot api set-user-emoji-status [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the emoji status for a given user that previously allowed the bot to manage their…
+**Returns:** Changes the emoji status for a given user that previously allowed the bot to…
 
 **Example:** `tg personal bot api set-user-emoji-status`
 
@@ -7906,13 +7940,13 @@ Use this method to get basic information about a file and prepare it for downloa
 tg bot api get-file [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--file-id <value>` | File identifier to get information about. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get basic information about a file and prepare it for downloading. For…
+**Returns:** Use this method to get basic information about a file and prepare it for…
 
 **Example:** `tg personal bot api get-file`
 
@@ -7926,7 +7960,7 @@ Use this method to ban a user in a group, a supergroup or a channel. In the case
 tg bot api ban-chat-member [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target group or username of the target supergroup or channel in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
@@ -7935,7 +7969,7 @@ tg bot api ban-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to ban a user in a group, a supergroup or a channel. In the case of…
+**Returns:** Use this method to ban a user in a group, a supergroup or a channel. In the…
 
 **Example:** `tg personal bot api ban-chat-member`
 
@@ -7949,7 +7983,7 @@ Use this method to unban a previously banned user in a supergroup or channel. Th
 tg bot api unban-chat-member [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target group or username of the target supergroup or channel in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
@@ -7957,7 +7991,7 @@ tg bot api unban-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to unban a previously banned user in a supergroup or channel. The user…
+**Returns:** Use this method to unban a previously banned user in a supergroup or…
 
 **Example:** `tg personal bot api unban-chat-member`
 
@@ -7971,7 +8005,7 @@ Use this method to restrict a user in a supergroup. The bot must be an administr
 tg bot api restrict-chat-member [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
@@ -7981,7 +8015,7 @@ tg bot api restrict-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to restrict a user in a supergroup. The bot must be an administrator in…
+**Returns:** Use this method to restrict a user in a supergroup. The bot must be an…
 
 **Example:** `tg personal bot api restrict-chat-member`
 
@@ -7995,7 +8029,7 @@ Use this method to promote or demote a user in a supergroup or a channel. The bo
 tg bot api promote-chat-member [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
@@ -8020,7 +8054,7 @@ tg bot api promote-chat-member [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to promote or demote a user in a supergroup or a channel. The bot must be…
+**Returns:** Use this method to promote or demote a user in a supergroup or a channel.…
 
 **Example:** `tg personal bot api promote-chat-member`
 
@@ -8034,7 +8068,7 @@ Use this method to set a custom title for an administrator in a supergroup promo
 tg bot api set-chat-administrator-custom-title [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
@@ -8042,7 +8076,7 @@ tg bot api set-chat-administrator-custom-title [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set a custom title for an administrator in a supergroup promoted by…
+**Returns:** Use this method to set a custom title for an administrator in a supergroup…
 
 **Example:** `tg personal bot api set-chat-administrator-custom-title`
 
@@ -8056,7 +8090,7 @@ Use this method to set a tag for a regular member in a group or a supergroup. Th
 tg bot api set-chat-member-tag [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
@@ -8064,7 +8098,7 @@ tg bot api set-chat-member-tag [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set a tag for a regular member in a group or a supergroup. The bot…
+**Returns:** Use this method to set a tag for a regular member in a group or a…
 
 **Example:** `tg personal bot api set-chat-member-tag`
 
@@ -8078,14 +8112,14 @@ Use this method to ban a channel chat in a supergroup or a channel. Until the ch
 tg bot api ban-chat-sender-chat [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--sender-chat-id <value>` | Unique identifier of the target sender chat. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is…
+**Returns:** Use this method to ban a channel chat in a supergroup or a channel. Until…
 
 **Example:** `tg personal bot api ban-chat-sender-chat`
 
@@ -8099,14 +8133,14 @@ Use this method to unban a previously banned channel chat in a supergroup or cha
 tg bot api unban-chat-sender-chat [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--sender-chat-id <value>` | Unique identifier of the target sender chat. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to unban a previously banned channel chat in a supergroup or channel. The…
+**Returns:** Use this method to unban a previously banned channel chat in a supergroup or…
 
 **Example:** `tg personal bot api unban-chat-sender-chat`
 
@@ -8120,7 +8154,7 @@ Use this method to set default chat permissions for all members. The bot must be
 tg bot api set-chat-permissions [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--permissions <value>` | A JSON-serialized object for new default chat permissions. |
@@ -8128,7 +8162,7 @@ tg bot api set-chat-permissions [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set default chat permissions for all members. The bot must be an…
+**Returns:** Use this method to set default chat permissions for all members. The bot…
 
 **Example:** `tg personal bot api set-chat-permissions`
 
@@ -8142,13 +8176,13 @@ Use this method to generate a new primary invite link for a chat; any previously
 tg bot api export-chat-invite-link [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to generate a new primary invite link for a chat; any previously…
+**Returns:** Use this method to generate a new primary invite link for a chat; any…
 
 **Example:** `tg personal bot api export-chat-invite-link`
 
@@ -8162,7 +8196,7 @@ Use this method to create an additional invite link for a chat. The bot must be 
 tg bot api create-chat-invite-link [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--name <value>` | Invite link name; 0-32 characters. |
@@ -8172,7 +8206,7 @@ tg bot api create-chat-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create an additional invite link for a chat. The bot must be an…
+**Returns:** Use this method to create an additional invite link for a chat. The bot must…
 
 **Example:** `tg personal bot api create-chat-invite-link`
 
@@ -8186,7 +8220,7 @@ Use this method to edit a non-primary invite link created by the bot. The bot mu
 tg bot api edit-chat-invite-link [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--invite-link <value>` | The invite link to edit. |
@@ -8197,7 +8231,7 @@ tg bot api edit-chat-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit a non-primary invite link created by the bot. The bot must be an…
+**Returns:** Use this method to edit a non-primary invite link created by the bot. The…
 
 **Example:** `tg personal bot api edit-chat-invite-link`
 
@@ -8211,7 +8245,7 @@ Use this method to create a subscription invite link for a channel chat. The bot
 tg bot api create-chat-subscription-invite-link [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target channel chat or username of the target channel in the format @username. |
 | `--name <value>` | Invite link name; 0-32 characters. |
@@ -8220,7 +8254,7 @@ tg bot api create-chat-subscription-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create a subscription invite link for a channel chat. The bot must…
+**Returns:** Use this method to create a subscription invite link for a channel chat. The…
 
 **Example:** `tg personal bot api create-chat-subscription-invite-link`
 
@@ -8234,7 +8268,7 @@ Use this method to edit a subscription invite link created by the bot. The bot m
 tg bot api edit-chat-subscription-invite-link [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--invite-link <value>` | The invite link to edit. |
@@ -8242,7 +8276,7 @@ tg bot api edit-chat-subscription-invite-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit a subscription invite link created by the bot. The bot must have…
+**Returns:** Use this method to edit a subscription invite link created by the bot. The…
 
 **Example:** `tg personal bot api edit-chat-subscription-invite-link`
 
@@ -8256,14 +8290,14 @@ Use this method to revoke an invite link created by the bot. If the primary link
 tg bot api revoke-chat-invite-link [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier of the target chat or username of the target channel in the format @username. |
 | `--invite-link <value>` | The invite link to revoke. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to revoke an invite link created by the bot. If the primary link is…
+**Returns:** Use this method to revoke an invite link created by the bot. If the primary…
 
 **Example:** `tg personal bot api revoke-chat-invite-link`
 
@@ -8277,14 +8311,14 @@ Use this method to approve a chat join request. The bot must be an administrator
 tg bot api approve-chat-join-request [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to approve a chat join request. The bot must be an administrator in the…
+**Returns:** Use this method to approve a chat join request. The bot must be an…
 
 **Example:** `tg personal bot api approve-chat-join-request`
 
@@ -8298,14 +8332,14 @@ Use this method to decline a chat join request. The bot must be an administrator
 tg bot api decline-chat-join-request [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to decline a chat join request. The bot must be an administrator in the…
+**Returns:** Use this method to decline a chat join request. The bot must be an…
 
 **Example:** `tg personal bot api decline-chat-join-request`
 
@@ -8319,14 +8353,14 @@ Use this method to process a received chat join request query. Returns True on s
 tg bot api answer-chat-join-request-query [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-join-request-query-id <value>` | Unique identifier of the join request query. |
 | `--result <value>` | Result of the query. Must be either "approve" to allow the user to join the chat, "decline" to disallow the user to join the chat, or "queue" to leave the decision to other administrators. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to process a received chat join request query. Returns True on success. —…
+**Returns:** Use this method to process a received chat join request query. Returns True…
 
 **Example:** `tg personal bot api answer-chat-join-request-query`
 
@@ -8340,14 +8374,14 @@ Use this method to process a received chat join request query by showing a Mini 
 tg bot api send-chat-join-request-web-app [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-join-request-query-id <value>` | Unique identifier of the join request query. |
 | `--web-app-url <value>` | An HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web Apps. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to process a received chat join request query by showing a Mini App to…
+**Returns:** Use this method to process a received chat join request query by showing a…
 
 **Example:** `tg personal bot api send-chat-join-request-web-app`
 
@@ -8361,14 +8395,14 @@ Use this method to set a new profile photo for the chat. Photos can't be changed
 tg bot api set-chat-photo [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--photo <value>` | New chat photo, uploaded using multipart/form-data. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set a new profile photo for the chat. Photos can't be changed for…
+**Returns:** Use this method to set a new profile photo for the chat. Photos can't be…
 
 **Example:** `tg personal bot api set-chat-photo`
 
@@ -8382,13 +8416,13 @@ Use this method to delete a chat photo. Photos can't be changed for private chat
 tg bot api delete-chat-photo [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a chat photo. Photos can't be changed for private chats. The…
+**Returns:** Use this method to delete a chat photo. Photos can't be changed for private…
 
 **Example:** `tg personal bot api delete-chat-photo`
 
@@ -8402,14 +8436,14 @@ Use this method to change the title of a chat. Titles can't be changed for priva
 tg bot api set-chat-title [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--title <value>` | New chat title, 1-128 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the title of a chat. Titles can't be changed for private chats.…
+**Returns:** Use this method to change the title of a chat. Titles can't be changed for…
 
 **Example:** `tg personal bot api set-chat-title`
 
@@ -8423,14 +8457,14 @@ Use this method to change the description of a group, a supergroup or a channel.
 tg bot api set-chat-description [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--description <value>` | New chat description, 0-255 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the description of a group, a supergroup or a channel. The bot…
+**Returns:** Use this method to change the description of a group, a supergroup or a…
 
 **Example:** `tg personal bot api set-chat-description`
 
@@ -8444,7 +8478,7 @@ Use this method to add a message to the list of pinned messages in a chat. In pr
 tg bot api pin-chat-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be pinned. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
@@ -8453,7 +8487,7 @@ tg bot api pin-chat-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to add a message to the list of pinned messages in a chat. In private…
+**Returns:** Use this method to add a message to the list of pinned messages in a chat.…
 
 **Example:** `tg personal bot api pin-chat-message`
 
@@ -8467,7 +8501,7 @@ Use this method to remove a message from the list of pinned messages in a chat. 
 tg bot api unpin-chat-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be unpinned. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
@@ -8475,7 +8509,7 @@ tg bot api unpin-chat-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to remove a message from the list of pinned messages in a chat. In…
+**Returns:** Use this method to remove a message from the list of pinned messages in a…
 
 **Example:** `tg personal bot api unpin-chat-message`
 
@@ -8489,13 +8523,13 @@ Use this method to clear the list of pinned messages in a chat. In private chats
 tg bot api unpin-all-chat-messages [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to clear the list of pinned messages in a chat. In private chats and…
+**Returns:** Use this method to clear the list of pinned messages in a chat. In private…
 
 **Example:** `tg personal bot api unpin-all-chat-messages`
 
@@ -8509,13 +8543,13 @@ Use this method for your bot to leave a group, supergroup or channel. Returns Tr
 tg bot api leave-chat [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup or channel in the format @username. Channel direct messages chats aren't supported; leave the corresponding channel instead. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method for your bot to leave a group, supergroup or channel. Returns True on…
+**Returns:** Use this method for your bot to leave a group, supergroup or channel.…
 
 **Example:** `tg personal bot api leave-chat`
 
@@ -8527,13 +8561,13 @@ Use this method to get up-to-date information about the chat. Returns a ChatFull
 tg bot api get-chat [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup or channel in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get up-to-date information about the chat. Returns a ChatFullInfo…
+**Returns:** Use this method to get up-to-date information about the chat. Returns a…
 
 **Example:** `tg personal bot api get-chat`
 
@@ -8545,14 +8579,14 @@ Use this method to get a list of administrators in a chat. Returns an Array of C
 tg bot api get-chat-administrators [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup or channel in the format @username. |
 | `--return-bots <value>` | Pass True to additionally receive all bots that are administrators of the chat. By default, bots other than the current bot are omitted. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get a list of administrators in a chat. Returns an Array of ChatMember…
+**Returns:** Use this method to get a list of administrators in a chat. Returns an Array…
 
 **Example:** `tg personal bot api get-chat-administrators`
 
@@ -8564,13 +8598,13 @@ Use this method to get the number of members in a chat. Returns Integer on succe
 tg bot api get-chat-member-count [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup or channel in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the number of members in a chat. Returns Integer on success. —…
+**Returns:** Use this method to get the number of members in a chat. Returns Integer on…
 
 **Example:** `tg personal bot api get-chat-member-count`
 
@@ -8582,14 +8616,14 @@ Use this method to get information about a member of a chat. The method is only 
 tg bot api get-chat-member [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup or channel in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get information about a member of a chat. The method is only…
+**Returns:** Use this method to get information about a member of a chat. The method is…
 
 **Example:** `tg personal bot api get-chat-member`
 
@@ -8601,14 +8635,14 @@ Use this method to get the last messages from the personal chat (i.e., the chat 
 tg bot api get-user-personal-chat-messages [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier for the target user. |
 | `--limit <value>` | The maximum number of messages to return; 1-20. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the last messages from the personal chat (i.e., the chat currently…
+**Returns:** Use this method to get the last messages from the personal chat (i.e., the…
 
 **Example:** `tg personal bot api get-user-personal-chat-messages`
 
@@ -8622,14 +8656,14 @@ Use this method to set a new group sticker set for a supergroup. The bot must be
 tg bot api set-chat-sticker-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--sticker-set-name <value>` | Name of the sticker set to be set as the group sticker set. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set a new group sticker set for a supergroup. The bot must be an…
+**Returns:** Use this method to set a new group sticker set for a supergroup. The bot…
 
 **Example:** `tg personal bot api set-chat-sticker-set`
 
@@ -8643,13 +8677,13 @@ Use this method to delete a group sticker set from a supergroup. The bot must be
 tg bot api delete-chat-sticker-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a group sticker set from a supergroup. The bot must be an…
+**Returns:** Use this method to delete a group sticker set from a supergroup. The bot…
 
 **Example:** `tg personal bot api delete-chat-sticker-set`
 
@@ -8661,7 +8695,7 @@ Use this method to get custom emoji stickers, which can be used as a forum topic
 tg bot api get-forum-topic-icon-stickers
 ```
 
-**Returns:** Use this method to get custom emoji stickers, which can be used as a forum topic icon by…
+**Returns:** Use this method to get custom emoji stickers, which can be used as a forum…
 
 **Example:** `tg personal bot api get-forum-topic-icon-stickers`
 
@@ -8675,7 +8709,7 @@ Use this method to create a topic in a forum supergroup chat or a private chat w
 tg bot api create-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--name <value>` | Topic name, 1-128 characters. |
@@ -8684,7 +8718,7 @@ tg bot api create-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create a topic in a forum supergroup chat or a private chat with a…
+**Returns:** Use this method to create a topic in a forum supergroup chat or a private…
 
 **Example:** `tg personal bot api create-forum-topic`
 
@@ -8698,7 +8732,7 @@ Use this method to edit name and icon of a topic in a forum supergroup chat or a
 tg bot api edit-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread of the forum topic. |
@@ -8707,7 +8741,7 @@ tg bot api edit-forum-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit name and icon of a topic in a forum supergroup chat or a private…
+**Returns:** Use this method to edit name and icon of a topic in a forum supergroup chat…
 
 **Example:** `tg personal bot api edit-forum-topic`
 
@@ -8721,14 +8755,14 @@ Use this method to close an open topic in a forum supergroup chat. The bot must 
 tg bot api close-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread of the forum topic. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to close an open topic in a forum supergroup chat. The bot must be an…
+**Returns:** Use this method to close an open topic in a forum supergroup chat. The bot…
 
 **Example:** `tg personal bot api close-forum-topic`
 
@@ -8742,14 +8776,14 @@ Use this method to reopen a closed topic in a forum supergroup chat. The bot mus
 tg bot api reopen-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread of the forum topic. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an…
+**Returns:** Use this method to reopen a closed topic in a forum supergroup chat. The bot…
 
 **Example:** `tg personal bot api reopen-forum-topic`
 
@@ -8763,14 +8797,14 @@ Use this method to delete a forum topic along with all its messages in a forum s
 tg bot api delete-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread of the forum topic. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a forum topic along with all its messages in a forum supergroup…
+**Returns:** Use this method to delete a forum topic along with all its messages in a…
 
 **Example:** `tg personal bot api delete-forum-topic`
 
@@ -8784,14 +8818,14 @@ Use this method to clear the list of pinned messages in a forum topic in a forum
 tg bot api unpin-all-forum-topic-messages [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread of the forum topic. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to clear the list of pinned messages in a forum topic in a forum…
+**Returns:** Use this method to clear the list of pinned messages in a forum topic in a…
 
 **Example:** `tg personal bot api unpin-all-forum-topic-messages`
 
@@ -8805,14 +8839,14 @@ Use this method to edit the name of the 'General' topic in a forum supergroup ch
 tg bot api edit-general-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--name <value>` | New topic name, 1-128 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit the name of the 'General' topic in a forum supergroup chat. The…
+**Returns:** Use this method to edit the name of the 'General' topic in a forum…
 
 **Example:** `tg personal bot api edit-general-forum-topic`
 
@@ -8826,13 +8860,13 @@ Use this method to close an open 'General' topic in a forum supergroup chat. The
 tg bot api close-general-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to close an open 'General' topic in a forum supergroup chat. The bot must…
+**Returns:** Use this method to close an open 'General' topic in a forum supergroup chat.…
 
 **Example:** `tg personal bot api close-general-forum-topic`
 
@@ -8846,13 +8880,13 @@ Use this method to reopen a closed 'General' topic in a forum supergroup chat. T
 tg bot api reopen-general-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot…
+**Returns:** Use this method to reopen a closed 'General' topic in a forum supergroup…
 
 **Example:** `tg personal bot api reopen-general-forum-topic`
 
@@ -8866,13 +8900,13 @@ Use this method to hide the 'General' topic in a forum supergroup chat. The bot 
 tg bot api hide-general-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be…
+**Returns:** Use this method to hide the 'General' topic in a forum supergroup chat. The…
 
 **Example:** `tg personal bot api hide-general-forum-topic`
 
@@ -8886,13 +8920,13 @@ Use this method to unhide the 'General' topic in a forum supergroup chat. The bo
 tg bot api unhide-general-forum-topic [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be…
+**Returns:** Use this method to unhide the 'General' topic in a forum supergroup chat.…
 
 **Example:** `tg personal bot api unhide-general-forum-topic`
 
@@ -8906,13 +8940,13 @@ Use this method to clear the list of pinned messages in a General forum topic. T
 tg bot api unpin-all-general-forum-topic-messages [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to clear the list of pinned messages in a General forum topic. The bot…
+**Returns:** Use this method to clear the list of pinned messages in a General forum…
 
 **Example:** `tg personal bot api unpin-all-general-forum-topic-messages`
 
@@ -8926,7 +8960,7 @@ Use this method to send answers to callback queries sent from inline keyboards. 
 tg bot api answer-callback-query [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--callback-query-id <value>` | Unique identifier for the query to be answered. |
 | `--text <value>` | Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters. |
@@ -8936,7 +8970,7 @@ tg bot api answer-callback-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send answers to callback queries sent from inline keyboards. The…
+**Returns:** Use this method to send answers to callback queries sent from inline…
 
 **Example:** `tg personal bot api answer-callback-query`
 
@@ -8950,13 +8984,13 @@ Use this method to reply to a received guest message. On success, a SentGuestMes
 tg bot api answer-guest-query [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--guest-query-id <value>` | Unique identifier for the query to be answered. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to reply to a received guest message. On success, a SentGuestMessage…
+**Returns:** Use this method to reply to a received guest message. On success, a…
 
 **Example:** `tg personal bot api answer-guest-query`
 
@@ -8968,14 +9002,14 @@ Use this method to get the list of boosts added to a chat by a user. Requires ad
 tg bot api get-user-chat-boosts [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the chat or username of the channel in the format @username. |
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the list of boosts added to a chat by a user. Requires…
+**Returns:** Use this method to get the list of boosts added to a chat by a user.…
 
 **Example:** `tg personal bot api get-user-chat-boosts`
 
@@ -8987,13 +9021,13 @@ Use this method to get information about the connection of the bot with a busine
 tg bot api get-business-connection [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get information about the connection of the bot with a business…
+**Returns:** Use this method to get information about the connection of the bot with a…
 
 **Example:** `tg personal bot api get-business-connection`
 
@@ -9005,13 +9039,13 @@ Use this method to get the token of a managed bot. Returns the token as String o
 tg bot api get-managed-bot-token [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier of the managed bot whose token will be returned. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the token of a managed bot. Returns the token as String on…
+**Returns:** Use this method to get the token of a managed bot. Returns the token as…
 
 **Example:** `tg personal bot api get-managed-bot-token`
 
@@ -9025,13 +9059,13 @@ Use this method to revoke the current token of a managed bot and generate a new 
 tg bot api replace-managed-bot-token [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier of the managed bot whose token will be replaced. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to revoke the current token of a managed bot and generate a new one.…
+**Returns:** Use this method to revoke the current token of a managed bot and generate a…
 
 **Example:** `tg personal bot api replace-managed-bot-token`
 
@@ -9043,13 +9077,13 @@ Use this method to get the access settings of a managed bot. Returns a BotAccess
 tg bot api get-managed-bot-access-settings [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier of the managed bot whose access settings will be returned. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the access settings of a managed bot. Returns a BotAccessSettings…
+**Returns:** Use this method to get the access settings of a managed bot. Returns a…
 
 **Example:** `tg personal bot api get-managed-bot-access-settings`
 
@@ -9063,7 +9097,7 @@ Use this method to change the access settings of a managed bot. Returns True on 
 tg bot api set-managed-bot-access-settings [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier of the managed bot whose access settings will be changed. |
 | `--is-access-restricted <value>` | Pass True if only selected users can access the bot. The bot's owner can always access it. |
@@ -9071,7 +9105,7 @@ tg bot api set-managed-bot-access-settings [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the access settings of a managed bot. Returns True on success.…
+**Returns:** Use this method to change the access settings of a managed bot. Returns True…
 
 **Example:** `tg personal bot api set-managed-bot-access-settings`
 
@@ -9085,7 +9119,7 @@ Use this method to change the list of the bot's commands. See this manual for mo
 tg bot api set-my-commands [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--commands <value>` | A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified. |
 | `--scope <value>` | A JSON-serialized object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault. |
@@ -9093,7 +9127,7 @@ tg bot api set-my-commands [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the list of the bot's commands. See this manual for more…
+**Returns:** Use this method to change the list of the bot's commands. See this manual…
 
 **Example:** `tg personal bot api set-my-commands`
 
@@ -9107,14 +9141,14 @@ Use this method to delete the list of the bot's commands for the given scope and
 tg bot api delete-my-commands [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--scope <value>` | A JSON-serialized object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault. |
 | `--language-code <value>` | A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete the list of the bot's commands for the given scope and user…
+**Returns:** Use this method to delete the list of the bot's commands for the given scope…
 
 **Example:** `tg personal bot api delete-my-commands`
 
@@ -9126,14 +9160,14 @@ Use this method to get the current list of the bot's commands for the given scop
 tg bot api get-my-commands [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--scope <value>` | A JSON-serialized object, describing scope of users. Defaults to BotCommandScopeDefault. |
 | `--language-code <value>` | A two-letter ISO 639-1 language code or an empty string. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current list of the bot's commands for the given scope and…
+**Returns:** Use this method to get the current list of the bot's commands for the given…
 
 **Example:** `tg personal bot api get-my-commands`
 
@@ -9147,14 +9181,14 @@ Use this method to change the bot's name. Returns True on success. — write (se
 tg bot api set-my-name [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--name <value>` | New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language. |
 | `--language-code <value>` | A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the bot's name. Returns True on success. — write (setMyName)
+**Returns:** Use this method to change the bot's name. Returns True on success. — write…
 
 **Example:** `tg personal bot api set-my-name`
 
@@ -9166,13 +9200,13 @@ Use this method to get the current bot name for the given user language. Returns
 tg bot api get-my-name [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--language-code <value>` | A two-letter ISO 639-1 language code or an empty string. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current bot name for the given user language. Returns BotName…
+**Returns:** Use this method to get the current bot name for the given user language.…
 
 **Example:** `tg personal bot api get-my-name`
 
@@ -9186,14 +9220,14 @@ Use this method to change the bot's description, which is shown in the chat with
 tg bot api set-my-description [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--description <value>` | New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language. |
 | `--language-code <value>` | A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the bot's description, which is shown in the chat with the bot…
+**Returns:** Use this method to change the bot's description, which is shown in the chat…
 
 **Example:** `tg personal bot api set-my-description`
 
@@ -9205,13 +9239,13 @@ Use this method to get the current bot description for the given user language. 
 tg bot api get-my-description [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--language-code <value>` | A two-letter ISO 639-1 language code or an empty string. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current bot description for the given user language. Returns…
+**Returns:** Use this method to get the current bot description for the given user…
 
 **Example:** `tg personal bot api get-my-description`
 
@@ -9225,14 +9259,14 @@ Use this method to change the bot's short description, which is shown on the bot
 tg bot api set-my-short-description [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--short-description <value>` | New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language. |
 | `--language-code <value>` | A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the bot's short description, which is shown on the bot's…
+**Returns:** Use this method to change the bot's short description, which is shown on the…
 
 **Example:** `tg personal bot api set-my-short-description`
 
@@ -9244,13 +9278,13 @@ Use this method to get the current bot short description for the given user lang
 tg bot api get-my-short-description [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--language-code <value>` | A two-letter ISO 639-1 language code or an empty string. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current bot short description for the given user language.…
+**Returns:** Use this method to get the current bot short description for the given user…
 
 **Example:** `tg personal bot api get-my-short-description`
 
@@ -9264,13 +9298,13 @@ Changes the profile photo of the bot. Returns True on success. — write (setMyP
 tg bot api set-my-profile-photo [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--photo <value>` | The new profile photo to set. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the profile photo of the bot. Returns True on success. — write (setMyProfilePhoto)
+**Returns:** Changes the profile photo of the bot. Returns True on success. — write…
 
 **Example:** `tg personal bot api set-my-profile-photo`
 
@@ -9284,7 +9318,7 @@ Removes the profile photo of the bot. Requires no parameters. Returns True on su
 tg bot api remove-my-profile-photo
 ```
 
-**Returns:** Removes the profile photo of the bot. Requires no parameters. Returns True on success. —…
+**Returns:** Removes the profile photo of the bot. Requires no parameters. Returns True…
 
 **Example:** `tg personal bot api remove-my-profile-photo`
 
@@ -9298,14 +9332,14 @@ Use this method to change the bot's menu button in a private chat, or the defaul
 tg bot api set-chat-menu-button [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target private chat. If not specified, the bot's default menu button will be changed. |
 | `--menu-button <value>` | A JSON-serialized object for the bot's new menu button. Defaults to MenuButtonDefault. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the bot's menu button in a private chat, or the default menu…
+**Returns:** Use this method to change the bot's menu button in a private chat, or the…
 
 **Example:** `tg personal bot api set-chat-menu-button`
 
@@ -9317,13 +9351,13 @@ Use this method to get the current value of the bot's menu button in a private c
 tg bot api get-chat-menu-button [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target private chat. If not specified, the bot's default menu button will be returned. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current value of the bot's menu button in a private chat, or…
+**Returns:** Use this method to get the current value of the bot's menu button in a…
 
 **Example:** `tg personal bot api get-chat-menu-button`
 
@@ -9337,14 +9371,14 @@ Use this method to change the default administrator rights requested by the bot 
 tg bot api set-my-default-administrator-rights [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--rights <value>` | A JSON-serialized object describing new default administrator rights. If not specified, the default administrator rights will be cleared. |
 | `--for-channels <value>` | Pass True to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the default administrator rights requested by the bot when it's…
+**Returns:** Use this method to change the default administrator rights requested by the…
 
 **Example:** `tg personal bot api set-my-default-administrator-rights`
 
@@ -9356,13 +9390,13 @@ Use this method to get the current default administrator rights of the bot. Retu
 tg bot api get-my-default-administrator-rights [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--for-channels <value>` | Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get the current default administrator rights of the bot. Returns…
+**Returns:** Use this method to get the current default administrator rights of the bot.…
 
 **Example:** `tg personal bot api get-my-default-administrator-rights`
 
@@ -9374,7 +9408,7 @@ Returns the list of gifts that can be sent by the bot to users and channel chats
 tg bot api get-available-gifts
 ```
 
-**Returns:** Returns the list of gifts that can be sent by the bot to users and channel chats.…
+**Returns:** Returns the list of gifts that can be sent by the bot to users and channel…
 
 **Example:** `tg personal bot api get-available-gifts`
 
@@ -9388,7 +9422,7 @@ Sends a gift to the given user or channel chat. The gift can't be converted to T
 tg bot api send-gift [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Required if chat_id is not specified. Unique identifier of the target user who will receive the gift. |
 | `--chat-id <value>` | Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @username) that will receive the gift. |
@@ -9400,7 +9434,7 @@ tg bot api send-gift [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram…
+**Returns:** Sends a gift to the given user or channel chat. The gift can't be converted…
 
 **Example:** `tg personal bot api send-gift`
 
@@ -9414,7 +9448,7 @@ Gifts a Telegram Premium subscription to the given user. Returns True on success
 tg bot api gift-premium-subscription [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the target user who will receive a Telegram Premium subscription. |
 | `--month-count <value>` | Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12. |
@@ -9425,7 +9459,7 @@ tg bot api gift-premium-subscription [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Gifts a Telegram Premium subscription to the given user. Returns True on success. —…
+**Returns:** Gifts a Telegram Premium subscription to the given user. Returns True on…
 
 **Example:** `tg personal bot api gift-premium-subscription`
 
@@ -9439,14 +9473,14 @@ Verifies a user on behalf of the organization which is represented by the bot. R
 tg bot api verify-user [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--custom-description <value>` | Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Verifies a user on behalf of the organization which is represented by the bot. Returns…
+**Returns:** Verifies a user on behalf of the organization which is represented by the…
 
 **Example:** `tg personal bot api verify-user`
 
@@ -9460,14 +9494,14 @@ Verifies a chat on behalf of the organization which is represented by the bot. R
 tg bot api verify-chat [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. Channel direct messages chats can't be verified. |
 | `--custom-description <value>` | Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Verifies a chat on behalf of the organization which is represented by the bot. Returns…
+**Returns:** Verifies a chat on behalf of the organization which is represented by the…
 
 **Example:** `tg personal bot api verify-chat`
 
@@ -9481,13 +9515,13 @@ Removes verification from a user who is currently verified on behalf of the orga
 tg bot api remove-user-verification [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the target user. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Removes verification from a user who is currently verified on behalf of the organization…
+**Returns:** Removes verification from a user who is currently verified on behalf of the…
 
 **Example:** `tg personal bot api remove-user-verification`
 
@@ -9501,13 +9535,13 @@ Removes verification from a chat that is currently verified on behalf of the org
 tg bot api remove-chat-verification [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot or channel in the format @username. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Removes verification from a chat that is currently verified on behalf of the organization…
+**Returns:** Removes verification from a chat that is currently verified on behalf of the…
 
 **Example:** `tg personal bot api remove-chat-verification`
 
@@ -9521,7 +9555,7 @@ Marks incoming message as read on behalf of a business account. Requires the can
 tg bot api read-business-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which to read the message. |
 | `--chat-id <value>` | Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours. |
@@ -9543,14 +9577,14 @@ Delete messages on behalf of a business account. Requires the can_delete_sent_me
 tg bot api delete-business-messages [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which to delete the messages. |
 | `--message-ids <value>` | A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See deleteMessage for limitations on which messages can be deleted. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Delete messages on behalf of a business account. Requires the can_delete_sent_messages…
+**Returns:** Delete messages on behalf of a business account. Requires the…
 
 **Example:** `tg personal bot api delete-business-messages`
 
@@ -9564,7 +9598,7 @@ Changes the first and last name of a managed business account. Requires the can_
 tg bot api set-business-account-name [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--first-name <value>` | The new value of the first name for the business account; 1-64 characters. |
@@ -9586,14 +9620,14 @@ Changes the username of a managed business account. Requires the can_change_user
 tg bot api set-business-account-username [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--username <value>` | The new value of the username for the business account; 0-32 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the username of a managed business account. Requires the can_change_username…
+**Returns:** Changes the username of a managed business account. Requires the…
 
 **Example:** `tg personal bot api set-business-account-username`
 
@@ -9607,14 +9641,14 @@ Changes the bio of a managed business account. Requires the can_change_bio busin
 tg bot api set-business-account-bio [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--bio <value>` | The new value of the bio for the business account; 0-140 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the bio of a managed business account. Requires the can_change_bio business bot…
+**Returns:** Changes the bio of a managed business account. Requires the can_change_bio…
 
 **Example:** `tg personal bot api set-business-account-bio`
 
@@ -9628,7 +9662,7 @@ Changes the profile photo of a managed business account. Requires the can_edit_p
 tg bot api set-business-account-profile-photo [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--photo <value>` | The new profile photo to set. |
@@ -9650,14 +9684,14 @@ Removes the current profile photo of a managed business account. Requires the ca
 tg bot api remove-business-account-profile-photo [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--is-public <value>` | Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account's privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Removes the current profile photo of a managed business account. Requires the…
+**Returns:** Removes the current profile photo of a managed business account. Requires…
 
 **Example:** `tg personal bot api remove-business-account-profile-photo`
 
@@ -9671,7 +9705,7 @@ Changes the privacy settings pertaining to incoming gifts in a managed business 
 tg bot api set-business-account-gift-settings [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--show-gift-button <value>` | Pass True if a button for sending a gift to the user or by the business account must always be shown in the input field. |
@@ -9679,7 +9713,7 @@ tg bot api set-business-account-gift-settings [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Changes the privacy settings pertaining to incoming gifts in a managed business account.…
+**Returns:** Changes the privacy settings pertaining to incoming gifts in a managed…
 
 **Example:** `tg personal bot api set-business-account-gift-settings`
 
@@ -9691,13 +9725,13 @@ Returns the amount of Telegram Stars owned by a managed business account. Requir
 tg bot api get-business-account-star-balance [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the amount of Telegram Stars owned by a managed business account. Requires the…
+**Returns:** Returns the amount of Telegram Stars owned by a managed business account.…
 
 **Example:** `tg personal bot api get-business-account-star-balance`
 
@@ -9711,14 +9745,14 @@ Transfers Telegram Stars from the business account balance to the bot's balance.
 tg bot api transfer-business-account-stars [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--star-count <value>` | Number of Telegram Stars to transfer; 1-10000. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Transfers Telegram Stars from the business account balance to the bot's balance. Requires…
+**Returns:** Transfers Telegram Stars from the business account balance to the bot's…
 
 **Example:** `tg personal bot api transfer-business-account-stars`
 
@@ -9730,7 +9764,7 @@ Returns the gifts received and owned by a managed business account. Requires the
 tg bot api get-business-account-gifts [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--exclude-unsaved <value>` | Pass True to exclude gifts that aren't saved to the account's profile page. |
@@ -9746,7 +9780,7 @@ tg bot api get-business-account-gifts [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the gifts received and owned by a managed business account. Requires the…
+**Returns:** Returns the gifts received and owned by a managed business account. Requires…
 
 **Example:** `tg personal bot api get-business-account-gifts`
 
@@ -9758,7 +9792,7 @@ Returns the gifts owned and hosted by a user. Returns OwnedGifts on success. —
 tg bot api get-user-gifts [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the user. |
 | `--exclude-unlimited <value>` | Pass True to exclude gifts that can be purchased an unlimited number of times. |
@@ -9772,7 +9806,7 @@ tg bot api get-user-gifts [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the gifts owned and hosted by a user. Returns OwnedGifts on success. — read…
+**Returns:** Returns the gifts owned and hosted by a user. Returns OwnedGifts on success.…
 
 **Example:** `tg personal bot api get-user-gifts`
 
@@ -9784,7 +9818,7 @@ Returns the gifts owned by a chat. Returns OwnedGifts on success. — read (getC
 tg bot api get-chat-gifts [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target channel in the format @username. |
 | `--exclude-unsaved <value>` | Pass True to exclude gifts that aren't saved to the chat's profile page. Always True, unless the bot has the can_post_messages administrator right in the channel. |
@@ -9800,7 +9834,7 @@ tg bot api get-chat-gifts [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the gifts owned by a chat. Returns OwnedGifts on success. — read (getChatGifts)
+**Returns:** Returns the gifts owned by a chat. Returns OwnedGifts on success. — read…
 
 **Example:** `tg personal bot api get-chat-gifts`
 
@@ -9814,14 +9848,14 @@ Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_
 tg bot api convert-gift-to-stars [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--owned-gift-id <value>` | Unique identifier of the regular gift that should be converted to Telegram Stars. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars…
+**Returns:** Converts a given regular gift to Telegram Stars. Requires the…
 
 **Example:** `tg personal bot api convert-gift-to-stars`
 
@@ -9835,7 +9869,7 @@ Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_up
 tg bot api upgrade-gift [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--owned-gift-id <value>` | Unique identifier of the regular gift that should be upgraded to a unique one. |
@@ -9858,7 +9892,7 @@ Transfers an owned unique gift to another user. Requires the can_transfer_and_up
 tg bot api transfer-gift [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--owned-gift-id <value>` | Unique identifier of the regular gift that should be transferred. |
@@ -9881,7 +9915,7 @@ Posts a story on behalf of a managed business account. Requires the can_manage_s
 tg bot api post-story [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--content <value>` | Content of the story. |
@@ -9895,7 +9929,7 @@ tg bot api post-story [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Posts a story on behalf of a managed business account. Requires the can_manage_stories…
+**Returns:** Posts a story on behalf of a managed business account. Requires the…
 
 **Example:** `tg personal bot api post-story`
 
@@ -9909,7 +9943,7 @@ Reposts a story on behalf of a business account from another business account. B
 tg bot api repost-story [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--from-chat-id <value>` | Unique identifier of the chat which posted the story that should be reposted. |
@@ -9920,7 +9954,7 @@ tg bot api repost-story [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Reposts a story on behalf of a business account from another business account. Both…
+**Returns:** Reposts a story on behalf of a business account from another business…
 
 **Example:** `tg personal bot api repost-story`
 
@@ -9934,7 +9968,7 @@ Edits a story previously posted by the bot on behalf of a managed business accou
 tg bot api edit-story [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--story-id <value>` | Unique identifier of the story to edit. |
@@ -9946,7 +9980,7 @@ tg bot api edit-story [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Edits a story previously posted by the bot on behalf of a managed business account.…
+**Returns:** Edits a story previously posted by the bot on behalf of a managed business…
 
 **Example:** `tg personal bot api edit-story`
 
@@ -9960,14 +9994,14 @@ Deletes a story previously posted by the bot on behalf of a managed business acc
 tg bot api delete-story [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection. |
 | `--story-id <value>` | Unique identifier of the story to delete. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Deletes a story previously posted by the bot on behalf of a managed business account.…
+**Returns:** Deletes a story previously posted by the bot on behalf of a managed business…
 
 **Example:** `tg personal bot api delete-story`
 
@@ -9981,13 +10015,13 @@ Use this method to set the result of an interaction with a Web App and send a co
 tg bot api answer-web-app-query [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--web-app-query-id <value>` | Unique identifier for the query to be answered. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the result of an interaction with a Web App and send a…
+**Returns:** Use this method to set the result of an interaction with a Web App and send…
 
 **Example:** `tg personal bot api answer-web-app-query`
 
@@ -10001,7 +10035,7 @@ Stores a message that can be sent by a user of a Mini App. Returns a PreparedInl
 tg bot api save-prepared-inline-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the target user that can use the prepared message. |
 | `--allow-user-chats <value>` | Pass True if the message can be sent to private chats with users. |
@@ -10025,14 +10059,14 @@ Stores a keyboard button that can be used by a user within a Mini App. Returns a
 tg bot api save-prepared-keyboard-button [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Unique identifier of the target user that can use the button. |
 | `--button <value>` | A JSON-serialized object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Stores a keyboard button that can be used by a user within a Mini App. Returns a…
+**Returns:** Stores a keyboard button that can be used by a user within a Mini App.…
 
 **Example:** `tg personal bot api save-prepared-keyboard-button`
 
@@ -10046,7 +10080,7 @@ Use this method to edit text, rich and game messages. On success, if the edited 
 tg bot api edit-message-text [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message to be edited was sent. |
 | `--chat-id <value>` | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10061,7 +10095,7 @@ tg bot api edit-message-text [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit text, rich and game messages. On success, if the edited message…
+**Returns:** Use this method to edit text, rich and game messages. On success, if the…
 
 **Example:** `tg personal bot api edit-message-text`
 
@@ -10075,7 +10109,7 @@ Use this method to edit captions of messages. On success, if the edited message 
 tg bot api edit-message-caption [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message to be edited was sent. |
 | `--chat-id <value>` | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10089,7 +10123,7 @@ tg bot api edit-message-caption [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit captions of messages. On success, if the edited message is not an…
+**Returns:** Use this method to edit captions of messages. On success, if the edited…
 
 **Example:** `tg personal bot api edit-message-caption`
 
@@ -10103,7 +10137,7 @@ Use this method to edit animation, audio, document, live photo, photo, or video 
 tg bot api edit-message-media [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message to be edited was sent. |
 | `--chat-id <value>` | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10114,7 +10148,7 @@ tg bot api edit-message-media [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit animation, audio, document, live photo, photo, or video messages,…
+**Returns:** Use this method to edit animation, audio, document, live photo, photo, or…
 
 **Example:** `tg personal bot api edit-message-media`
 
@@ -10128,7 +10162,7 @@ Use this method to edit live location messages. A location can be edited until i
 tg bot api edit-message-live-location [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message to be edited was sent. |
 | `--chat-id <value>` | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10144,7 +10178,7 @@ tg bot api edit-message-live-location [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit live location messages. A location can be edited until its…
+**Returns:** Use this method to edit live location messages. A location can be edited…
 
 **Example:** `tg personal bot api edit-message-live-location`
 
@@ -10158,7 +10192,7 @@ Use this method to stop updating a live location message before live_period expi
 tg bot api stop-message-live-location [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message to be edited was sent. |
 | `--chat-id <value>` | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10168,7 +10202,7 @@ tg bot api stop-message-live-location [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to stop updating a live location message before live_period expires. On…
+**Returns:** Use this method to stop updating a live location message before live_period…
 
 **Example:** `tg personal bot api stop-message-live-location`
 
@@ -10182,7 +10216,7 @@ Use this method to edit a checklist on behalf of a connected business account. O
 tg bot api edit-message-checklist [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot in the format @username. |
@@ -10192,7 +10226,7 @@ tg bot api edit-message-checklist [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit a checklist on behalf of a connected business account. On…
+**Returns:** Use this method to edit a checklist on behalf of a connected business…
 
 **Example:** `tg personal bot api edit-message-checklist`
 
@@ -10206,7 +10240,7 @@ Use this method to edit only the reply markup of messages. On success, if the ed
 tg bot api edit-message-reply-markup [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message to be edited was sent. |
 | `--chat-id <value>` | Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10216,7 +10250,7 @@ tg bot api edit-message-reply-markup [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit only the reply markup of messages. On success, if the edited…
+**Returns:** Use this method to edit only the reply markup of messages. On success, if…
 
 **Example:** `tg personal bot api edit-message-reply-markup`
 
@@ -10230,7 +10264,7 @@ Use this method to stop a poll which was sent by the bot. On success, the stoppe
 tg bot api stop-poll [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message to be edited was sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10239,7 +10273,7 @@ tg bot api stop-poll [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is…
+**Returns:** Use this method to stop a poll which was sent by the bot. On success, the…
 
 **Example:** `tg personal bot api stop-poll`
 
@@ -10253,7 +10287,7 @@ Use this method to edit an ephemeral text or rich message. Note that it is not g
 tg bot api edit-ephemeral-message-text [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--receiver-user-id <value>` | Identifier of the user who received the message. |
@@ -10267,7 +10301,7 @@ tg bot api edit-ephemeral-message-text [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit an ephemeral text or rich message. Note that it is not guaranteed…
+**Returns:** Use this method to edit an ephemeral text or rich message. Note that it is…
 
 **Example:** `tg personal bot api edit-ephemeral-message-text`
 
@@ -10281,7 +10315,7 @@ Use this method to edit the media of an ephemeral message. Note that it is not g
 tg bot api edit-ephemeral-message-media [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--receiver-user-id <value>` | Identifier of the user who received the message. |
@@ -10291,7 +10325,7 @@ tg bot api edit-ephemeral-message-media [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit the media of an ephemeral message. Note that it is not guaranteed…
+**Returns:** Use this method to edit the media of an ephemeral message. Note that it is…
 
 **Example:** `tg personal bot api edit-ephemeral-message-media`
 
@@ -10305,7 +10339,7 @@ Use this method to edit the caption of an ephemeral message. Note that it is not
 tg bot api edit-ephemeral-message-caption [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--receiver-user-id <value>` | Identifier of the user who received the message. |
@@ -10318,7 +10352,7 @@ tg bot api edit-ephemeral-message-caption [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit the caption of an ephemeral message. Note that it is not…
+**Returns:** Use this method to edit the caption of an ephemeral message. Note that it is…
 
 **Example:** `tg personal bot api edit-ephemeral-message-caption`
 
@@ -10332,7 +10366,7 @@ Use this method to edit only the reply markup of an ephemeral message. Note that
 tg bot api edit-ephemeral-message-reply-markup [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--receiver-user-id <value>` | Identifier of the user who received the message. |
@@ -10341,7 +10375,7 @@ tg bot api edit-ephemeral-message-reply-markup [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to edit only the reply markup of an ephemeral message. Note that it is…
+**Returns:** Use this method to edit only the reply markup of an ephemeral message. Note…
 
 **Example:** `tg personal bot api edit-ephemeral-message-reply-markup`
 
@@ -10355,7 +10389,7 @@ Use this method to approve a suggested post in a direct messages chat. The bot m
 tg bot api approve-suggested-post [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target direct messages chat. |
 | `--message-id <value>` | Identifier of a suggested post message to approve. |
@@ -10363,7 +10397,7 @@ tg bot api approve-suggested-post [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to approve a suggested post in a direct messages chat. The bot must have…
+**Returns:** Use this method to approve a suggested post in a direct messages chat. The…
 
 **Example:** `tg personal bot api approve-suggested-post`
 
@@ -10377,7 +10411,7 @@ Use this method to decline a suggested post in a direct messages chat. The bot m
 tg bot api decline-suggested-post [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target direct messages chat. |
 | `--message-id <value>` | Identifier of a suggested post message to decline. |
@@ -10385,7 +10419,7 @@ tg bot api decline-suggested-post [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to decline a suggested post in a direct messages chat. The bot must have…
+**Returns:** Use this method to decline a suggested post in a direct messages chat. The…
 
 **Example:** `tg personal bot api decline-suggested-post`
 
@@ -10399,14 +10433,14 @@ Use this method to delete a message, including service messages, with the follow
 tg bot api delete-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
 | `--message-id <value>` | Identifier of the message to delete. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a message, including service messages, with the following…
+**Returns:** Use this method to delete a message, including service messages, with the…
 
 **Example:** `tg personal bot api delete-message`
 
@@ -10420,14 +10454,14 @@ Use this method to delete multiple messages simultaneously. If some of the speci
 tg bot api delete-messages [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
 | `--message-ids <value>` | A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete multiple messages simultaneously. If some of the specified…
+**Returns:** Use this method to delete multiple messages simultaneously. If some of the…
 
 **Example:** `tg personal bot api delete-messages`
 
@@ -10441,7 +10475,7 @@ Use this method to delete an ephemeral message. Note that it is not guaranteed t
 tg bot api delete-ephemeral-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--receiver-user-id <value>` | Identifier of the user who received the message. |
@@ -10449,7 +10483,7 @@ tg bot api delete-ephemeral-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete an ephemeral message. Note that it is not guaranteed that the…
+**Returns:** Use this method to delete an ephemeral message. Note that it is not…
 
 **Example:** `tg personal bot api delete-ephemeral-message`
 
@@ -10463,7 +10497,7 @@ Use this method to remove a reaction from a message in a group or a supergroup c
 tg bot api delete-message-reaction [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--message-id <value>` | Identifier of the target message. |
@@ -10472,7 +10506,7 @@ tg bot api delete-message-reaction [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to remove a reaction from a message in a group or a supergroup chat. The…
+**Returns:** Use this method to remove a reaction from a message in a group or a…
 
 **Example:** `tg personal bot api delete-message-reaction`
 
@@ -10486,7 +10520,7 @@ Use this method to remove up to 10000 recent reactions in a group or a supergrou
 tg bot api delete-all-message-reactions [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target supergroup in the format @username. |
 | `--user-id <value>` | Identifier of the user whose reactions will be removed, if the reactions were added by a user. |
@@ -10494,7 +10528,7 @@ tg bot api delete-all-message-reactions [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat…
+**Returns:** Use this method to remove up to 10000 recent reactions in a group or a…
 
 **Example:** `tg personal bot api delete-all-message-reactions`
 
@@ -10508,7 +10542,7 @@ Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On
 tg bot api send-sticker [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10527,7 +10561,7 @@ tg bot api send-sticker [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success,…
+**Returns:** Use this method to send static .WEBP, animated .TGS, or video .WEBM…
 
 **Example:** `tg personal bot api send-sticker`
 
@@ -10539,13 +10573,13 @@ Use this method to get a sticker set. On success, a StickerSet object is returne
 tg bot api get-sticker-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--name <value>` | Name of the sticker set. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get a sticker set. On success, a StickerSet object is returned. — read…
+**Returns:** Use this method to get a sticker set. On success, a StickerSet object is…
 
 **Example:** `tg personal bot api get-sticker-set`
 
@@ -10557,13 +10591,13 @@ Use this method to get information about custom emoji stickers by their identifi
 tg bot api get-custom-emoji-stickers [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--custom-emoji-ids <value>` | A JSON-serialized list of custom emoji identifiers. At most 200 custom emoji identifiers can be specified. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get information about custom emoji stickers by their identifiers.…
+**Returns:** Use this method to get information about custom emoji stickers by their…
 
 **Example:** `tg personal bot api get-custom-emoji-stickers`
 
@@ -10577,7 +10611,7 @@ Use this method to upload a file with a sticker for later use in the createNewSt
 tg bot api upload-sticker-file [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier of sticker file owner. |
 | `--sticker <value>` | A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See https://core.telegram.org/stickers for technical requirements. More information on Sending Files: https://core.telegram.org/bots/api#sending-files. |
@@ -10585,7 +10619,7 @@ tg bot api upload-sticker-file [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to upload a file with a sticker for later use in the createNewStickerSet,…
+**Returns:** Use this method to upload a file with a sticker for later use in the…
 
 **Example:** `tg personal bot api upload-sticker-file`
 
@@ -10599,7 +10633,7 @@ Use this method to create a new sticker set owned by a user. The bot will be abl
 tg bot api create-new-sticker-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier of created sticker set owner. |
 | `--name <value>` | Short name of sticker set, to be used in t.me/addstickers/ URLs (e.g., animals). Can contain only English letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and must end in "_by_<bot_username>". <bot_username> is case insensitive. 1-64 characters. |
@@ -10610,7 +10644,7 @@ tg bot api create-new-sticker-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create a new sticker set owned by a user. The bot will be able to edit…
+**Returns:** Use this method to create a new sticker set owned by a user. The bot will be…
 
 **Example:** `tg personal bot api create-new-sticker-set`
 
@@ -10624,7 +10658,7 @@ Use this method to add a new sticker to a set created by the bot. Emoji sticker 
 tg bot api add-sticker-to-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier of sticker set owner. |
 | `--name <value>` | Sticker set name. |
@@ -10632,7 +10666,7 @@ tg bot api add-sticker-to-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can…
+**Returns:** Use this method to add a new sticker to a set created by the bot. Emoji…
 
 **Example:** `tg personal bot api add-sticker-to-set`
 
@@ -10646,14 +10680,14 @@ Use this method to move a sticker in a set created by the bot to a specific posi
 tg bot api set-sticker-position-in-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--sticker <value>` | File identifier of the sticker. |
 | `--position <value>` | New sticker position in the set, zero-based. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to move a sticker in a set created by the bot to a specific position.…
+**Returns:** Use this method to move a sticker in a set created by the bot to a specific…
 
 **Example:** `tg personal bot api set-sticker-position-in-set`
 
@@ -10667,13 +10701,13 @@ Use this method to delete a sticker from a set created by the bot. Returns True 
 tg bot api delete-sticker-from-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--sticker <value>` | File identifier of the sticker. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a sticker from a set created by the bot. Returns True on…
+**Returns:** Use this method to delete a sticker from a set created by the bot. Returns…
 
 **Example:** `tg personal bot api delete-sticker-from-set`
 
@@ -10687,7 +10721,7 @@ Use this method to replace an existing sticker in a sticker set with a new one. 
 tg bot api replace-sticker-in-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier of the sticker set owner. |
 | `--name <value>` | Sticker set name. |
@@ -10696,7 +10730,7 @@ tg bot api replace-sticker-in-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to replace an existing sticker in a sticker set with a new one. The…
+**Returns:** Use this method to replace an existing sticker in a sticker set with a new…
 
 **Example:** `tg personal bot api replace-sticker-in-set`
 
@@ -10710,14 +10744,14 @@ Use this method to change the list of emoji assigned to a regular or custom emoj
 tg bot api set-sticker-emoji-list [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--sticker <value>` | File identifier of the sticker. |
 | `--emoji-list <value>` | A JSON-serialized list of 1-20 emoji associated with the sticker. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the list of emoji assigned to a regular or custom emoji…
+**Returns:** Use this method to change the list of emoji assigned to a regular or custom…
 
 **Example:** `tg personal bot api set-sticker-emoji-list`
 
@@ -10731,14 +10765,14 @@ Use this method to change search keywords assigned to a regular or custom emoji 
 tg bot api set-sticker-keywords [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--sticker <value>` | File identifier of the sticker. |
 | `--keywords <value>` | A JSON-serialized list of 0-20 search keywords for the sticker with total length of up to 64 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change search keywords assigned to a regular or custom emoji sticker.…
+**Returns:** Use this method to change search keywords assigned to a regular or custom…
 
 **Example:** `tg personal bot api set-sticker-keywords`
 
@@ -10752,14 +10786,14 @@ Use this method to change the mask position of a mask sticker. The sticker must 
 tg bot api set-sticker-mask-position [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--sticker <value>` | File identifier of the sticker. |
 | `--mask-position <value>` | A JSON-serialized object with the position where the mask should be placed on faces. Omit the parameter to remove the mask position. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to change the mask position of a mask sticker. The sticker must belong to…
+**Returns:** Use this method to change the mask position of a mask sticker. The sticker…
 
 **Example:** `tg personal bot api set-sticker-mask-position`
 
@@ -10773,14 +10807,14 @@ Use this method to set the title of a created sticker set. Returns True on succe
 tg bot api set-sticker-set-title [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--name <value>` | Sticker set name. |
 | `--title <value>` | Sticker set title, 1-64 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the title of a created sticker set. Returns True on success. —…
+**Returns:** Use this method to set the title of a created sticker set. Returns True on…
 
 **Example:** `tg personal bot api set-sticker-set-title`
 
@@ -10794,7 +10828,7 @@ Use this method to set the thumbnail of a regular or mask sticker set. The forma
 tg bot api set-sticker-set-thumbnail [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--name <value>` | Sticker set name. |
 | `--user-id <value>` | User identifier of the sticker set owner. |
@@ -10803,7 +10837,7 @@ tg bot api set-sticker-set-thumbnail [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the thumbnail of a regular or mask sticker set. The format of the…
+**Returns:** Use this method to set the thumbnail of a regular or mask sticker set. The…
 
 **Example:** `tg personal bot api set-sticker-set-thumbnail`
 
@@ -10817,14 +10851,14 @@ Use this method to set the thumbnail of a custom emoji sticker set. Returns True
 tg bot api set-custom-emoji-sticker-set-thumbnail [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--name <value>` | Sticker set name. |
 | `--custom-emoji-id <value>` | Custom emoji identifier of a sticker from the sticker set; pass an empty string to drop the thumbnail and use the first sticker as the thumbnail. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the thumbnail of a custom emoji sticker set. Returns True on…
+**Returns:** Use this method to set the thumbnail of a custom emoji sticker set. Returns…
 
 **Example:** `tg personal bot api set-custom-emoji-sticker-set-thumbnail`
 
@@ -10838,13 +10872,13 @@ Use this method to delete a sticker set that was created by the bot. Returns Tru
 tg bot api delete-sticker-set [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--name <value>` | Sticker set name. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to delete a sticker set that was created by the bot. Returns True on…
+**Returns:** Use this method to delete a sticker set that was created by the bot. Returns…
 
 **Example:** `tg personal bot api delete-sticker-set`
 
@@ -10858,7 +10892,7 @@ Use this method to send rich messages. If the message contains a block with a me
 tg bot api send-rich-message [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. Bot can send rich messages on behalf of a business account only if the corresponding user can send rich messages. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
@@ -10876,7 +10910,7 @@ tg bot api send-rich-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send rich messages. If the message contains a block with a media…
+**Returns:** Use this method to send rich messages. If the message contains a block with…
 
 **Example:** `tg personal bot api send-rich-message`
 
@@ -10890,7 +10924,7 @@ Use this method to stream a partial rich message to a user while the message is 
 tg bot api send-rich-message-draft [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target private chat. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread. |
@@ -10901,7 +10935,7 @@ tg bot api send-rich-message-draft [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to stream a partial rich message to a user while the message is being…
+**Returns:** Use this method to stream a partial rich message to a user while the message…
 
 **Example:** `tg personal bot api send-rich-message-draft`
 
@@ -10915,7 +10949,7 @@ Use this method to send answers to an inline query. On success, True is returned
 tg bot api answer-inline-query [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--inline-query-id <value>` | Unique identifier for the answered query. |
 | `--cache-time <value>` | The maximum amount of time in seconds that the result of the inline query may be cached on the server. Defaults to 300. |
@@ -10925,7 +10959,7 @@ tg bot api answer-inline-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send answers to an inline query. On success, True is returned. — write…
+**Returns:** Use this method to send answers to an inline query. On success, True is…
 
 **Example:** `tg personal bot api answer-inline-query`
 
@@ -10939,7 +10973,7 @@ Use this method to send invoices. On success, the sent Message is returned. — 
 tg bot api send-invoice [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot, supergroup or channel in the format @username. |
 | `--message-thread-id <value>` | Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only. |
@@ -10974,7 +11008,7 @@ tg bot api send-invoice [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send invoices. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send invoices. On success, the sent Message is returned.…
 
 **Example:** `tg personal bot api send-invoice`
 
@@ -10988,7 +11022,7 @@ Use this method to create a link for an invoice. Returns the created invoice lin
 tg bot api create-invoice-link [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the link will be created. For payments in Telegram Stars only. |
 | `--title <value>` | Product name, 1-32 characters. |
@@ -11014,7 +11048,7 @@ tg bot api create-invoice-link [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to create a link for an invoice. Returns the created invoice link as…
+**Returns:** Use this method to create a link for an invoice. Returns the created invoice…
 
 **Example:** `tg personal bot api create-invoice-link`
 
@@ -11028,7 +11062,7 @@ If you sent an invoice requesting a shipping address and the parameter is_flexib
 tg bot api answer-shipping-query [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--shipping-query-id <value>` | Unique identifier for the query to be answered. |
 | `--ok <value>` | Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible). |
@@ -11037,7 +11071,7 @@ tg bot api answer-shipping-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** If you sent an invoice requesting a shipping address and the parameter is_flexible was…
+**Returns:** If you sent an invoice requesting a shipping address and the parameter…
 
 **Example:** `tg personal bot api answer-shipping-query`
 
@@ -11051,7 +11085,7 @@ Once the user has confirmed their payment and shipping details, the Bot API send
 tg bot api answer-pre-checkout-query [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--pre-checkout-query-id <value>` | Unique identifier for the query to be answered. |
 | `--ok <value>` | Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. Use False if there are any problems. |
@@ -11059,7 +11093,7 @@ tg bot api answer-pre-checkout-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Once the user has confirmed their payment and shipping details, the Bot API sends the…
+**Returns:** Once the user has confirmed their payment and shipping details, the Bot API…
 
 **Example:** `tg personal bot api answer-pre-checkout-query`
 
@@ -11071,7 +11105,7 @@ A method to get the current Telegram Stars balance of the bot. Requires no param
 tg bot api get-my-star-balance
 ```
 
-**Returns:** A method to get the current Telegram Stars balance of the bot. Requires no parameters. On…
+**Returns:** A method to get the current Telegram Stars balance of the bot. Requires no…
 
 **Example:** `tg personal bot api get-my-star-balance`
 
@@ -11083,14 +11117,14 @@ Returns the bot's Telegram Star transactions in chronological order. On success,
 tg bot api get-star-transactions [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--offset <value>` | Number of transactions to skip in the response. |
 | `--limit <value>` | The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns the bot's Telegram Star transactions in chronological order. On success, returns…
+**Returns:** Returns the bot's Telegram Star transactions in chronological order. On…
 
 **Example:** `tg personal bot api get-star-transactions`
 
@@ -11104,14 +11138,14 @@ Refunds a successful payment in Telegram Stars. Returns True on success. — des
 tg bot api refund-star-payment [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Identifier of the user whose payment will be refunded. |
 | `--telegram-payment-charge-id <value>` | Telegram payment identifier. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Refunds a successful payment in Telegram Stars. Returns True on success. — destructive…
+**Returns:** Refunds a successful payment in Telegram Stars. Returns True on success. —…
 
 **Example:** `tg personal bot api refund-star-payment`
 
@@ -11125,7 +11159,7 @@ Allows the bot to cancel or re-enable extension of a subscription paid in Telegr
 tg bot api edit-user-star-subscription [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Identifier of the user whose subscription will be edited. |
 | `--telegram-payment-charge-id <value>` | Telegram payment identifier for the subscription. |
@@ -11133,7 +11167,7 @@ tg bot api edit-user-star-subscription [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.…
+**Returns:** Allows the bot to cancel or re-enable extension of a subscription paid in…
 
 **Example:** `tg personal bot api edit-user-star-subscription`
 
@@ -11147,14 +11181,14 @@ Informs a user that some of the Telegram Passport elements they provided contain
 tg bot api set-passport-data-errors [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier. |
 | `--errors <value>` | A JSON-serialized Array describing the errors. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Informs a user that some of the Telegram Passport elements they provided contains errors.…
+**Returns:** Informs a user that some of the Telegram Passport elements they provided…
 
 **Example:** `tg personal bot api set-passport-data-errors`
 
@@ -11168,7 +11202,7 @@ Use this method to send a game. On success, the sent Message is returned. — wr
 tg bot api send-game [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--business-connection-id <value>` | Unique identifier of the business connection on behalf of which the message will be sent. |
 | `--chat-id <value>` | Unique identifier for the target chat or username of the target bot in the format @username. Games can't be sent to channel direct messages chats and channel chats. |
@@ -11183,7 +11217,7 @@ tg bot api send-game [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to send a game. On success, the sent Message is returned. — write…
+**Returns:** Use this method to send a game. On success, the sent Message is returned. —…
 
 **Example:** `tg personal bot api send-game`
 
@@ -11197,7 +11231,7 @@ Use this method to set the score of the specified user in a game message. On suc
 tg bot api set-game-score [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | User identifier. |
 | `--score <value>` | New score, must be non-negative. |
@@ -11209,7 +11243,7 @@ tg bot api set-game-score [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to set the score of the specified user in a game message. On success, if…
+**Returns:** Use this method to set the score of the specified user in a game message. On…
 
 **Example:** `tg personal bot api set-game-score`
 
@@ -11221,7 +11255,7 @@ Use this method to get data for high score tables. Will return the score of the 
 tg bot api get-game-high-scores [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
 | `--user-id <value>` | Target user id. |
 | `--chat-id <value>` | Required if inline_message_id is not specified. Unique identifier for the target chat. |
@@ -11230,25 +11264,29 @@ tg bot api get-game-high-scores [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Use this method to get data for high score tables. Will return the score of the specified…
+**Returns:** Use this method to get data for high score tables. Will return the score of…
 
 **Example:** `tg personal bot api get-game-high-scores`
 
 ## `tg skill`
 
-инструкции агенту по инструменту
+the instructions an agent is given for this tool
 
 ### `tg skill show`
 
-вывести SKILL.md; `tg skill install` устанавливает для Claude Code, Codex и Gemini CLI
+print SKILL.md — `tg skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
 
 ```sh
-tg skill show [name]
+tg skill show [name] [options]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name` | необязателен | встроенный skill для задачи: follow-ups, link-conversations. |
+| `name` | optional | one of the skills shipped for a task: follow-ups, link-conversations. |
+
+| Option | What it does |
+|---|---|
+| `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
 
 **Returns:** print the tool's instructions for AI agents
 
@@ -11256,45 +11294,57 @@ tg skill show [name]
 
 ### `tg skill install`
 
-записать SKILL.md в \~/.claude/skills/tg-cli/ (Claude Code) и \~/.agents/skills/tg-cli/ (Codex, Gemini CLI)
+write SKILL.md to \~/.claude/skills/tg-cli/ (Claude Code) and \~/.agents/skills/tg-cli/ (Codex, Gemini CLI)
 
-**Изменяет данные только на этом компьютере.**
+**Changes something on this computer only.**
 
 ```sh
 tg skill install [options]
 ```
 
-| Параметр | Назначение |
+| Option | What it does |
 |---|---|
-| `--for <agents>` | агенты: `claude`, `agents`, `all`. По умолчанию: `all`. |
+| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
 
 **Returns:** install the tool's instructions for AI agents
 
 **Example:** `tg skill install --for agents`
 
+### `tg skill status`
+
+for each place `tg skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+
+```sh
+tg skill status
+```
+
+**Returns:** whether the installed instructions for AI agents match this version
+
+**Example:** `tg skill status`, `tg skill status --json`
+
 ## `tg guide`
 
-сценарии: команды для частой задачи по порядку и зачем каждая
+scenarios: the commands for a common task, in order, and why each
 
 ```sh
 tg guide [name]
 ```
 
-| Аргумент | | Описание |
+| Argument | | What it is |
 |---|---|---|
-| `name` | необязателен | один сценарий; без него — список. |
+| `name` | optional | one scenario; without it, the list. |
 
 **Returns:** scenarios: the commands for a common task, in order, and why each
 
-**Example:** `tg guide`, `tg guide <name> --json`
+**Example:** `tg guide`, `tg guide agent-without-send --json`
 
-## Коды завершения
+## Exit codes
 
-Выбирайте ветвь по коду, а не по тексту: текст может измениться, код — нет.
+Branch on the code, not on the text: the text can change, the code does not.
 
-| Код | Когда |
+| Code | When |
 |---|---|
-| `0` | успех |
+| `0` | it worked |
 | `2` | `validation_error` |
 | `3` | `configuration_error` |
 | `4` | `authentication_error` |
@@ -11309,7 +11359,7 @@ tg guide [name]
 | `13` | `invalid_response` |
 | `14` | `outcome_unknown` |
 | `130` | `cancelled` |
-| `1` | остальные случаи |
+| `1` | anything else |
 
-`0` и только `0` означает, что операция выполнена. `14` (`outcome_unknown`) означает, что сообщение **могло**
-быть отправлено: повторяйте только с тем же `--operation-id`, по которому Telegram отбрасывает вторую копию.
+`0` and only `0` means the operation was done. `14` (`outcome_unknown`) means a message **may**
+have gone: repeat it only with the same `--operation-id`, which Telegram uses to drop a second copy.

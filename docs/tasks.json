@@ -123,7 +123,7 @@
     "id": "memo-notes",
     "pages": ["memo/notes.md", "memo/tags.md", "memo/search.md"],
     "families": {
-      "memo": ["folders", "notes", "note", "tags", "search", "ask"]
+      "memo": ["folders", "notes", "tags", "search", "answers"]
     }
   },
   {
@@ -144,7 +144,7 @@
     "id": "memo-upkeep",
     "pages": ["memo/archive.md", "memo/configuration.md", "memo/commands.md"],
     "families": {
-      "memo": ["sync", "auto", "commands", "doctor", "upgrade", "skill"]
+      "memo": ["sync", "jobs", "commands", "doctor", "upgrade", "skill"]
     }
   },
   {

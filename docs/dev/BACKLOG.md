@@ -19,15 +19,6 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 ## Launch blockers (P1)
 
 
-- **DOCS-3 · P1 🟡 · max page lags npm.** Pinned max v0.66.0; npm has 0.71.0. Wait for
-  v0.72.0, which must include BUG-378's attachment-download fix, then issue #335 for max. The newest releases
-  dropped `messages list --mark-read`, still used in `max/usage*.md`. tg's scenario correction is merged in
-  tg-cli #680; wait for a release containing it before bumping the tg pin from v0.83.0.
-- **DOCS-4 · P1 🚩 · WhatsApp is missing from the site.** `wa` 0.6.0 is on npm, its docs include a roadmap
-  at v0.6.0, and the other tools' `--help` already names it. Needs a `tools.json` entry,
-  RU/ES translations, an install prompt in `lib/words.ts`, the landing and the global roadmap (which still
-  says "In progress"). Waits on the owner: advertise WhatsApp at launch or not.
-
 
 ## Next (P2)
 

@@ -2,8 +2,6 @@
 title: "External models: API setup"
 ---
 
-<a id="какие-задачи-используют-api" />
-
 Use this page when `max` needs to call an AI service itself: to read text from scans and images, analyse relationships between discussions or complete a reply template. You will learn to choose a provider, save its key, select a model for one task and test it on a small amount of data.
 
 Terms used below:
@@ -20,7 +18,7 @@ These settings do not control your AI agent. When the agent reads a file itself,
 | Task | Setting | How it runs |
 | --- | --- | --- |
 | OCR for images and scanned PDFs | `models.ocr` | `attachments extract --ocr`; requires an image-capable model |
-| Analyze conversation links in saved messages | `models.analysis` | `conversations build --analyze`; consent applies to a specific chat and provider |
+| Analyze conversation links in saved messages | `models.analysis` | `conversations links rebuild --analyze`; consent applies to a specific chat and provider |
 | AI block in a reply template | `models.replies` | A rule with an `{% ai %}` block and separate consent for replies; see [reply rules](./replies.md) |
 | Shared values for these tasks | `models.default` | Used for fields not set for a specific task |
 
@@ -33,7 +31,7 @@ Choose the exact ID of an image-capable model. The example below uses `gpt-4o-mi
 
 
 ```sh
-max personal models text key set openai
+max personal models keys set openai
 max personal config set models.ocr.provider openai
 max personal config set models.ocr.model gpt-4o-mini
 max config show
@@ -58,7 +56,7 @@ Choose the exact ID of a vision model available to you; `your-vision-model` belo
 
 
 ```sh
-max personal models text key set anthropic
+max personal models keys set anthropic
 max personal config set models.ocr.provider anthropic
 max personal config set models.ocr.model your-vision-model
 max personal config unset models.ocr.base_url
@@ -75,7 +73,7 @@ An OpenAI-compatible endpoint uses the `openai` adapter even if another provider
 max personal config set models.ocr.provider openai
 max personal config set models.ocr.model your-vision-model
 max personal config set models.ocr.base_url https://gateway.example.org/v1
-max personal models text key set gateway.example.org
+max personal models keys set gateway.example.org
 ```
 
 For a custom endpoint, the key name is its host, including the port if the URL specifies one. The `base_url` field itself is not a key. A server accepting text does not necessarily accept images; check its documentation.

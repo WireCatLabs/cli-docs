@@ -3,7 +3,6 @@ title: "Archivo local de mensajes"
 ---
 
 <a id="reglas-de-respuesta-solo-para-probadores" />
-<a id="tester-only-reply-rules" />
 
 tg guarda cada mensaje que lee en su computadora. Esta página es para cuando desea que el historial guardado esté completo y actualizado: para buscar meses atrás, para permitir que su agente responda sin conectarse o para exportar un chat a un archivo.
 
@@ -363,9 +362,9 @@ tg personal store clear --left --allow-dangerous  # delete the chats you have le
 
 ## Reparación y mantenimiento de índices
 
-`tg personal store migrate` crea índices sin terminar; `tg personal store reindex` los reconstruye. `store info` y `store check` muestran si el índice de palabras y el índice de raíz de palabras están listos. La búsqueda utiliza raíces (la parte de una palabra que permanece igual en sus formas) para encontrar formas de palabras; `exact:` y `--exact` seleccionan formas exactas.
+`tg personal store migrate` crea índices sin terminar; `tg personal store rebuild` los reconstruye. `store info` y `store check` muestran si el índice de palabras y el índice de raíz de palabras están listos. La búsqueda utiliza raíces (la parte de una palabra que permanece igual en sus formas) para encontrar formas de palabras; `exact:` y `--exact` seleccionan formas exactas.
 
-`tg config set search_stemmers.cyrillic russian` y `search_stemmers.latin english,spanish` configuran las raíces del archivo local compartido: el latín toma `english`, `spanish` o ambos (el valor predeterminado, por lo que una palabra latina coincide con las raíces de ambos) y `none` desactiva una; ejecute `store reindex` según su propia elección. Cuando una actualización de tg cambia el valor predeterminado, las raíces se reconstruyen por sí mismas: hasta que estén listas, una búsqueda coincide con las formas exactas de las palabras y lo dice, `tg personal serve` las finaliza en segundo plano y `store migrate` de inmediato. La configuración afecta tanto a los servicios de mensajería como a todos los perfiles; un proceso con perfil bloqueado no puede cambiarlo.
+`tg config set search_stemmers.cyrillic russian` y `search_stemmers.latin english,spanish` configuran las raíces del archivo local compartido: el latín toma `english`, `spanish` o ambos (el valor predeterminado, por lo que una palabra latina coincide con las raíces de ambos) y `none` desactiva una; ejecute `store rebuild` según su propia elección. Cuando una actualización de tg cambia el valor predeterminado, las raíces se reconstruyen por sí mismas: hasta que estén listas, una búsqueda coincide con las formas exactas de las palabras y lo dice, `tg personal serve` las finaliza en segundo plano y `store migrate` de inmediato. La configuración afecta tanto a los servicios de mensajería como a todos los perfiles; un proceso con perfil bloqueado no puede cambiarlo.
 
 `tg personal store repair --dry-run --json` obtiene una vista previa de una reparación estructural y la revierte. `store repair` lo aplica sin eliminar datos: las tablas que no coinciden se mantienen como copias y las filas o columnas que quedan allí se nombran en la respuesta. Inspeccione las copias antes de eliminar una con `store copies delete <exact name>`; `store repair` los nombra en su respuesta. Detenga los procesos que utilizan el archivo local antes de una reparación.
 
@@ -414,7 +413,7 @@ conservan su alternativa literal rellenada con advertencias; los archivos nuevos
 Elige `models.replies.provider`, `.model` y, opcionalmente, `.base_url`; `models.default` es la
 alternativa y `provider off` desactiva un propósito. Los ajustes de análisis existentes siguen admitidos.
 `config set` / `unset` aceptan campos con notación de puntos; `config show` indica el origen de cada uno. Las claves siguen en
-`models text key set`; los endpoints personalizados usan su clave de host y puerto, nunca la de un proveedor público.
+`models keys set`; los endpoints personalizados usan su clave de host y puerto, nunca la de un proveedor público.
 
 `tg personal replies consents show|grant|revoke` controla el consentimiento para el modelo por separado del permiso de envío.
 Grant permite explícitamente que los datos entrantes se envíen al proveedor configurado en todo este perfil,

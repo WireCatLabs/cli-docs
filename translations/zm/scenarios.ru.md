@@ -13,25 +13,25 @@ title: "Пошаговые сценарии"
 Каждый день скачивайте облачные записи Zoom в папку и проверяйте, что каждый файл пришёл целым.
 
 1. ```sh
-   zm recordings list --since-time 2026-10-01
+   zm personal recordings list --since-time 2026-10-01
    ```
 
    облачные записи Zoom за этот период, ещё до скачивания
 
 2. ```sh
-   zm recordings schedule create --name daily --output-dir /srv/zoom-archive --at 03:00 --timezone Europe/Madrid --since-time 2026-10-01
+   zm personal recordings schedule create --name daily --output-dir /srv/zoom-archive --at 03:00 --timezone Europe/Madrid --since-time 2026-10-01
    ```
 
    показывает ежедневное задание и его таймер; повторите с --yes, чтобы установить
 
 3. ```sh
-   zm recordings schedule run daily
+   zm personal recordings schedule run daily
    ```
 
    один запуск сейчас, чтобы увидеть работу задания до срабатывания таймера
 
 4. ```sh
-   zm recordings archive check /srv/zoom-archive
+   zm personal recordings archive check /srv/zoom-archive
    ```
 
    проверяет размер и контрольную сумму каждого файла в архиве, без Zoom и хранилища
@@ -53,25 +53,25 @@ title: "Пошаговые сценарии"
 Загрузите встречи за последние дни в хранилище и прочитайте, что решили на каждой.
 
 1. ```sh
-   zm meetings sync --since-time 2026-10-01 --lookback-days 3
+   zm personal meetings sync --since-time 2026-10-01 --lookback-days 3
    ```
 
    загружает новые встречи, расшифровки и сводки и перепроверяет недавние, расшифровка которых пришла позже
 
 2. ```sh
-   zm meetings list "started_at:[2026-10-01 TO 2026-10-08]"
+   zm personal meetings list "started_at:[2026-10-01 TO 2026-10-08]"
    ```
 
    сохранённые встречи за этот период, начиная с новых, с их локальными id
 
 3. ```sh
-   zm meetings summary 12
+   zm personal meetings summary 12
    ```
 
    собственная сводка Zoom по одной встрече: обзор, разделы и следующие шаги
 
 4. ```sh
-   zm meetings transcript 12
+   zm personal meetings transcript 12
    ```
 
    расшифровка, на которой основана сводка, если нужны точные слова
@@ -93,19 +93,19 @@ title: "Пошаговые сценарии"
 Найдите, где тема звучала на всех встречах, и прочитайте точные строки вокруг.
 
 1. ```sh
-   zm search meetings "budget review" --limit 20 --json=ref,excerpt,source.title,source.started_at
+   zm personal search meetings "budget review" --limit 20 --json=ref,excerpt,source.title,source.started_at
    ```
 
    слова во всех сохранённых расшифровках и сводках; у каждого результата есть ссылка на его строку
 
 2. ```sh
-   zm meetings passage meeting:1/12/3/140 --before-n 3 --after-n 3
+   zm personal meetings passage meeting:1/12/3/140 --before-n 3 --after-n 3
    ```
 
    цитируемая строка и по три строки до и после, с говорящими и временем
 
 3. ```sh
-   zm meetings evidence meeting:1/12
+   zm personal meetings evidence meeting:1/12
    ```
 
    сохранённые строки, чат или сводка за ссылкой на встречу — для результата, который не является строкой расшифровки
@@ -128,19 +128,19 @@ title: "Пошаговые сценарии"
 Найдите человека среди участников встреч и прочитайте, что о нём говорили на прошлых встречах.
 
 1. ```sh
-   zm meetings people "Alice Example"
+   zm personal meetings people "Alice Example"
    ```
 
    участники с подходящим именем или email, с id идентичностей и связанным человеком, если он есть
 
 2. ```sh
-   zm meetings context person:7 --meetings 5 --cues 40
+   zm personal meetings context person:7 --meetings 5 --cues 40
    ```
 
    встречи, на которых человек был через связанные идентичности, со строками, где его упоминают
 
 3. ```sh
-   zm search meetings "Alice" --person-id 7 --limit 20
+   zm personal search meetings "Alice" --person-id 7 --limit 20
    ```
 
    слова на встречах, где был этот человек, — когда нужна тема, а не всё подряд
@@ -151,7 +151,7 @@ title: "Пошаговые сценарии"
 - участник встречи — не автор каждой её строки
 - чтобы найти того же человека в сообщениях, почте и заметках, используйте memo guide person-brief
 
-Свяжите участника с человеком через `zm meetings link` (сначала показывает изменения; `--yes` применяет). Контекст учитывает только эти
+Свяжите участника с человеком через `zm personal meetings link` (сначала показывает изменения; `--yes` применяет). Контекст учитывает только эти
 связи.
 
 В терминале: `zm guide person-in-meetings`
@@ -163,19 +163,19 @@ title: "Пошаговые сценарии"
 Получите справку с источниками к следующей встрече серии на основе прошлых встреч.
 
 1. ```sh
-   zm meetings scheduled --json
+   zm personal meetings scheduled --json
    ```
 
    серии встреч на ближайшие семь дней с их id
 
 2. ```sh
-   zm meetings prepare 8123456789 --meetings 3 --cues 10
+   zm personal meetings prepare 8123456789 --meetings 3 --cues 10
    ```
 
    три последние встречи серии и важные строки, каждая со ссылкой
 
 3. ```sh
-   zm meetings passage meeting:1/12/3/140 --before-n 5 --after-n 5
+   zm personal meetings passage meeting:1/12/3/140 --before-n 5 --after-n 5
    ```
 
    больше контекста вокруг цитируемой строки, прежде чем на неё полагаться

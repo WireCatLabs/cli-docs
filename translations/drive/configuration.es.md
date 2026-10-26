@@ -26,18 +26,14 @@ En Linux, la base predeterminada es `~/.local/share/WireCat/wirecat.db`; las cop
 están en `profiles/PROFILE_NAME/`. Lee sobre [almacenamiento local](./usage.md#disk-use-index-without-an-export-directory)
 antes de moverlos o borrarlos.
 
-Los archivos con nombres antiguos en camelCase se migran a snake_case en la primera lectura
-correcta. Conservan sus permisos y no se reescriben si no hay cambios. Se mantienen los nombres
-de perfiles, las rutas de permisos y los nombres de usos de modelos. Los valores antiguos y
-nuevos que entren en conflicto se rechazan.
-
 ## Ajustes guardados
 
 | Clave | Qué controla | Alcance |
 | --- | --- | --- |
-| `read_only` | Rechaza cambios locales y remotos, incluida la sincronización y añadir notas | Perfil o `defaults` |
 | `permissions` | Acceso por comando: `deny`, `readonly`, `ask` o `allow` | Perfil o `defaults` |
 | `max_text_chars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
+| `record` | `true` guarda cada ejecución en `drive runs list`; predeterminado `false`, que guarda solo las ejecuciones fallidas. `false` definido aquí no guarda ninguna | Solo `defaults` |
+| `keep_runs_for_days` | Cuántos días se conserva una ejecución guardada; predeterminado `30` | Solo `defaults` |
 | `picture_search` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
 | `models.memories.provider` | Proveedor de IA para la extracción solicitada explícitamente | Perfil o `defaults` |
 | `models.memories.model` | Identificador del modelo del proveedor | Perfil o `defaults` |
@@ -65,15 +61,15 @@ drive personal config show --json
 ```
 
 Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización
-local y las notas tienen claves separadas. `read_only true` es más amplio: también bloquea cambios
-locales, así que no lo actives si quieres importar o etiquetar. Revisa la [referencia de comandos](./commands.md)
+local y las notas tienen claves separadas. `--read-only` es más amplio: también bloquea cambios
+locales, así que no lo uses si quieres importar o etiquetar. Revisa la [referencia de comandos](./commands.md)
 y los [permisos de datos](./security.md) antes de elegir reglas más amplias.
 
 `config set` cambia el perfil elegido salvo que añadas `--defaults`. Por ejemplo:
 
 ```sh
-drive personal config set read_only true --defaults
-drive work config set read_only false
+drive personal config set permissions.files '"readonly"' --defaults
+drive work config set permissions.files '"deny"'
 drive personal config show --json
 ```
 
@@ -91,7 +87,41 @@ drive images models download clip-b32
 `drive personal config set max_text_chars 500000` omite textos más largos con su razón; se leen
 en el siguiente sync después de aumentar el límite.
 
-El perfil es la primera palabra del comando o `DRIVE_PROFILE`; nada más lo elige. Omitirlo es un error que lista los perfiles existentes, y un antiguo perfil predeterminado guardado se nombra en ese error, pero no se usa.
+El perfil es la primera palabra del comando o `DRIVE_PROFILE`; nada más lo elige. Omitirlo es un error que lista los perfiles existentes.
+
+`config unset` elimina un ajuste: `drive personal config unset max_text_chars`, o
+`drive config unset --defaults permissions.files` para `defaults`.
+
+## Corregir un problema del archivo
+
+Todos los comandos salvo `config` y `doctor` rechazan un archivo de configuración con un problema: una clave que
+drive no conoce, un valor de tipo incorrecto, un permiso que no nombra ningún comando o un texto que no es JSON. El
+rechazo nombra el primer problema y el comando que lo elimina. `drive doctor --json` lista todos los problemas en
+`config.issues`; cada uno tiene un `kind`, el archivo `file`, el perfil `profile` y la clave `key` donde está, un
+`what` que dice cómo tiene que ser el valor (nunca cuál era) y un `fix` que puedes ejecutar tal como está escrito:
+
+```sh
+drive doctor --json
+drive personal config unset colour
+```
+
+Un problema sin `fix` (un texto que no es JSON, o que falte `principal` o `storage`) se corrige editando el
+archivo. `config show`, `config set` y `config unset` siguen funcionando con un archivo que es JSON válido pero
+tiene problemas: `show` nombra cada uno con su corrección, y `set` solo rechaza un cambio que añada un problema.
+
+## Mantener el archivo privado
+
+drive guarda `config.json` de modo que solo tú puedas leerlo (`0600`), en una carpeta en la que solo tú puedes
+entrar (`0700`). Un archivo guardado por una versión anterior de drive, o una carpeta creada a mano, puede estar abierto a
+otros usuarios del ordenador. `drive doctor` lista ese archivo o carpeta en `files.problems` (`path`, `mode`,
+`want`) e imprime el `chmod` que lo corrige:
+
+```sh
+drive doctor
+chmod 600 '/home/me/.config/drive-cli/config.json'
+```
+
+Windows no se comprueba: no tiene esos modos.
 
 ## Variables de entorno
 
@@ -127,10 +157,11 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 | `--dry-run` | Validar y mostrar una operación compatible sin ejecutarla |
 | `--json`, `--jsonl` | Salida estructurada; `--json=id,name` conserva solo esos campos; MCP muestra los caracteres de control de forma visible |
 | `--timeout DURATION`, `--max-output-bytes N` | Limitar el tiempo del comando y la salida almacenada en búfer |
+| `--record`, `--no-record` | Guardar esta ejecución en `drive runs list`, o no guardar nada aunque falle |
 
 Estas opciones no son ajustes del archivo. Las de cada comando, como `search --limit` y
 `sync --limit`, se explican en su referencia. Los permisos temporales tienen prioridad sobre los
-del perfil y después los compartidos. Un `read_only true` guardado sigue limitando incluso con
+del perfil y después los compartidos. La variable del proceso `DRIVE_READ_ONLY=1` sigue limitando incluso con
 permiso `allow`. Las variables de IA tienen prioridad sobre el modelo y proveedor del perfil
 o de los valores compartidos.
 

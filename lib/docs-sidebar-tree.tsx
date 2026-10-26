@@ -1,4 +1,4 @@
-import type { Folder, Item, Node, Root } from "fumadocs-core/page-tree"
+import type { Folder, Item, Node, Root, Separator } from "fumadocs-core/page-tree"
 import {
   Activity,
   Archive,
@@ -38,18 +38,22 @@ import {
   Mail,
   MessageSquare,
   Mic,
+  Monitor,
   Network,
   NotebookPen,
   Paperclip,
   PenLine,
   Reply,
+  Rocket,
   Route,
+  ScrollText,
   Search,
   Send,
   Settings2,
   ShieldCheck,
   SlidersHorizontal,
   StickyNote,
+  Store,
   Tag,
   Terminal,
   UserRound,
@@ -61,6 +65,8 @@ import {
 } from "lucide-react"
 import { commandGroupCopy, commandGroups, commandLanguage } from "./command-groups"
 import { readerGuide } from "./reader-guides"
+import { type Tool, tools } from "./shared"
+import { wordsFor } from "./words"
 
 export const sidebarIcons = {
   features: LayoutGrid,
@@ -90,6 +96,7 @@ export const sidebarIcons = {
   "cli-contract": FileCode2,
   limits: Gauge,
   compare: ArrowRightLeft,
+  mirrors: ArrowRightLeft,
   replies: Reply,
   index: BookOpen,
   installation: Download,
@@ -121,6 +128,7 @@ export const sidebarIcons = {
   mentions: AtSign,
   bot: Bot,
   mcp: Cable,
+  skills: Store,
   remote: Globe,
   recipes: ListChecks,
   scenarios: ListOrdered,
@@ -131,6 +139,14 @@ export const sidebarIcons = {
   security: ShieldCheck,
   changelog: History,
   roadmap: Route,
+  "build-create-cli": Rocket,
+  "build-concepts": Lightbulb,
+  "build-add-source": Cable,
+  "build-own-data": Database,
+  "build-sign-in": KeyRound,
+  "build-stay-compliant": ShieldCheck,
+  desktop: Monitor,
+  logs: ScrollText,
 }
 
 const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
@@ -151,23 +167,49 @@ function commandFolder(index: Item, lang: string): Folder {
   }
 }
 
+const folderTool = (node: Node): string | undefined => {
+  if (node.type !== "folder") return undefined
+  const first = node.index ?? node.children.find((child) => child.type === "page")
+  return first?.type === "page" ? /\/docs\/([a-z0-9-]+)(?:\/|$)/.exec(first.url)?.[1] : undefined
+}
+
+/** Community tools leave our Tools group for their own, which exists only while one is listed. */
+export function withCommunityGroup(children: Node[], lang: string, list: readonly Tool[] = tools): Node[] {
+  const community = new Set(list.filter((tool) => tool.community).map((tool) => tool.name))
+  const ours = new Set(list.filter((tool) => !tool.community).map((tool) => tool.name))
+  const isCommunity = (node: Node) => community.has(folderTool(node) ?? "")
+  const moved = children.filter(isCommunity)
+  if (!moved.length) return children
+  const rest = children.filter((node) => !isCommunity(node))
+  const lastOurs = rest.findLastIndex((node) => ours.has(folderTool(node) ?? ""))
+  const at = lastOurs < 0 ? rest.length : lastOurs + 1
+  const separator: Separator = {
+    type: "separator",
+    $id: `community-tools-${lang}`,
+    name: wordsFor(lang).navigation.communityTools,
+  }
+  return [...rest.slice(0, at), separator, ...moved, ...rest.slice(at)]
+}
+
 /** One navigation tree on every page: tool folders expand, never replace the shared menu. */
-export function unifiedDocsTree(tree: Root): Root {
+export function unifiedDocsTree(tree: Root, lang = "en"): Root {
   const decorate = (node: Node): Node => {
     if (node.type === "folder") {
       const firstPage = node.index ?? node.children.find((child) => child.type === "page")
       const tool =
-        firstPage?.type === "page" ? /\/docs\/(tg|max|drive|memo|zm)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
+        firstPage?.type === "page" ? /\/docs\/(tg|max|wa|drive|memo|zm)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
       const Icon =
         tool === "tg"
           ? Send
-          : tool === "max"
+          : tool === "max" || tool === "wa"
             ? MessageSquare
             : tool === "memo"
               ? NotebookPen
               : tool === "zm"
                 ? Video
-                : FolderOpen
+                : firstPage?.type === "page" && /\/docs\/desktop\//.test(firstPage.url)
+                  ? Monitor
+                  : FolderOpen
       return {
         ...node,
         root: false,
@@ -177,15 +219,15 @@ export function unifiedDocsTree(tree: Root): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|drive|memo|zm)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|memo|zm)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
-    const task = /^\/(en|ru|es)\/docs\/(tg|max)\/(usage|rankings|bot|groups)\/?$/.exec(node.url)
+    const task = /^\/(en|ru|es)\/docs\/(tg|max|wa)\/(usage|rankings|bot|groups)\/?$/.exec(node.url)
     const title = task ? readerGuide([task[2], task[3]], task[1])?.title : undefined
     const page = { ...node, name: title ?? node.name, icon: node.icon ?? <Icon aria-hidden="true" /> }
-    const commands = /^\/(en|ru|es)\/docs\/(?:tg|max)\/commands\/?$/.exec(node.url)
+    const commands = /^\/(en|ru|es)\/docs\/(?:tg|max|wa)\/commands\/?$/.exec(node.url)
     return commands ? commandFolder(page, commands[1]) : page
   }
-  return { ...tree, children: tree.children.map(decorate) }
+  return { ...tree, children: withCommunityGroup(tree.children, lang).map(decorate) }
 }

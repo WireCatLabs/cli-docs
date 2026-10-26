@@ -191,6 +191,13 @@ The store keeps message text so it can answer without the network. It is not enc
 What the store holds — the entities, how they connect and how a search narrows to context — is
 explained in [the data model](./data-model.mdx).
 
+The store keeps two kinds of record: **entities**, the real people, events and documents, and **source records**,
+what one source says about them, with the provider's id in `external_id`. A tool writes its source records through
+cli-core and never runs SQL against the file itself ([store rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md), [data-model rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md)).
+**Coming in the next cli-core release:** each tool records its provider in the store when it runs, so other tools
+learn about a new source without a cli-core release; rows of a provider no tool has recorded are skipped and
+reported, never searched as messages ([architecture rules](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/architecture.md)).
+
 ## Patterns that hold it together
 
 - **stdout carries data and nothing else** in machine mode: no spinner, no colour, no warning. Agents
@@ -203,8 +210,12 @@ explained in [the data model](./data-model.mdx).
   lists them, not a pick.
 - **One permission model, one guard**, used by every command, every MCP tool and, in max, by the
   background `max serve` process for anything that passes through it.
-- **Runs are recorded without content.** A run record holds the command's words, ids, counts and
-  timings. Private message text, tokens and phone numbers are excluded from diagnostic records; documentation and tests use synthetic examples.
+- **A run's events hold no content.** A run record holds the command line, ids, counts and
+  timings, the coding agent that ran it and, for a failed run, the error with a masked message. A secret
+  typed on the command line is always written as `[redacted]`. A tool whose `config show` lists `record_input` keeps
+  the other typed words as they were typed, so the owner can read back what was run; with `record_input: false`, and
+  in a tool without that setting, every argument value that may be content is `[redacted]` too. Message text, tokens and
+  phone numbers never reach a run's events; documentation and tests use synthetic examples.
 - **Generated, then checked.** The command reference (`commands.md`), max's operation wrappers and
   the Bot API types are generated; CI fails when the committed copy drifts from the generator.
 
@@ -262,6 +273,7 @@ MAX publishes no API for personal accounts, so max carries more of its own code 
 
 ## Contributing: where to start
 
+- A new tool on the shared store: [Build on WireCat](./build-concepts.md), from the concepts to staying compliant.
 - A new messenger: the [adapter guide](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ADAPTERS.md),
   then the contract cases.
 - The shared code: the

@@ -13,7 +13,7 @@ consultable automáticamente en la base.
 |---|---|---|
 | Reuniones del anfitrión accesibles para la app | `zm personal meetings sync --lookback-days 7` | Lista, una transcripción y partes ausentes |
 | Archivos VTT descargados | `zm personal meetings import ./downloaded-transcripts` | Fecha/título frente al original |
-| Grabaciones en la nube | Lista, descarga o sincronización | Manifiesto del destino y sumas |
+| Grabaciones en la nube | Lista o descarga | Manifiesto del destino y sumas |
 | VTT archivados para búsqueda | Importación del archivo | Recibo y búsqueda del texto guardado |
 
 Para la API, conecta la app con [los permisos de la tarea](./zoom-app.md#add-archive-or-management-access).
@@ -124,7 +124,7 @@ hoy en la zona del ordenador, o en `--timezone`, y `meta.timezone` nombra esa zo
 Para historial por meses:
 
 ```sh
-zm personal recordings sync --since-time 2026-01-01 --until-time 2026-10-10 --output-dir ./zoom-archive --jsonl
+zm personal recordings download --since-time 2026-01-01 --until-time 2026-10-10 --output-dir ./zoom-archive --jsonl
 ```
 
 Las fechas deben estar ordenadas y abarcar como máximo diez años. Se hacen peticiones mensuales,
@@ -132,7 +132,11 @@ se deduplican UUID y se descarga en serie. Cada registro item de JSONL confirma 
 anteriores permanecen si falla otra. Repite un período para descubrir archivos nuevos. Con perfil
 se guarda progreso y registros pendientes. `--recheck-since-time YYYY-MM-DD` revisa fechas recientes,
 `--checkpoint` elige su archivo, `--max-pages` y `--max-entries` limitan descubrimiento.
-Sin terminal necesita `--jsonl`.
+Usa `--jsonl` para recibir confirmaciones conforme termina cada descarga, o `--json` para una lista
+acotada que se devuelve al terminar todo el intervalo. Una tubería recibe JSON por defecto. Si falla una
+ejecución agregada, no imprime JSON parcial; los archivos completos y los puntos de control duraderos se
+conservan para el siguiente intento. No se puede combinar un ID de reunión con las opciones de intervalo;
+`--file-ids` solo sirve para una reunión.
 
 Los puntos de control confirman operaciones anteriores, no integridad actual ni acceso a todas
 las grabaciones. Comprueba archivos con `recordings archive check`. `--no-resume` examina de
@@ -219,14 +223,14 @@ los adaptadores antiguos no inventan cifras. Adiciones anteriores pueden quedar 
 Crea una transcripción independiente para una reunión guardada:
 
 ```sh
-zm models audio download parakeet-v3
+zm models download parakeet-v3
 zm personal meetings transcribe 1 ./AliceExample.m4a --model parakeet-v3 --json
 zm personal meetings transcribe 1 ./AliceExample.m4a --model parakeet-v3 --yes --json
 ```
 
 El plan verifica el archivo y describe el componente sin abrirlo. `--yes` reconoce con uno local
 instalado y añade atómicamente el resultado; `--dry-run` prevalece. La transcripción nunca descarga un
-componente: `zm models audio list` muestra los modelos que conoce esta versión y `zm models audio download <model>`
+componente: `zm models list kind:audio` muestra los modelos que conoce esta versión y `zm models download <model>`
 descarga uno a la carpeta que comparten todas las CLI de WireCat, comprobando el sha256 de cada archivo; ejecútalo
 de nuevo para reparar un modelo cuyos archivos son de otra versión. Un PCM16 WAV mono o estéreo a 16 o 48 kHz se
 lee tal cual; cualquier otra cosa (las grabaciones MP4 y M4A de Zoom, otro audio y vídeo) la decodifica antes el

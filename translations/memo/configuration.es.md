@@ -4,12 +4,17 @@ title: "Configuración"
 
 Usa esta referencia para consultar los ajustes y variables de entorno propios de Memo.
 Rara vez necesitas editar el archivo a mano.
-`memo folders add` añade una carpeta y `memo auto start` activa el temporizador por ti. Edita tú el
-archivo para indicar los archivos que se omiten, las cuentas de correo y dónde van las notas
-exportadas.
+`memo folders add` añade una carpeta y `memo jobs start` activa el temporizador por ti. `memo mail add` añade una cuenta explícita de Himalaya. Edita el
+archivo para indicar qué archivos se omiten y dónde van las notas exportadas.
 
 El archivo es `~/.config/cli-memo/config.json`. Es un archivo JSON: mantén las comillas, las comas y
 las llaves como en el ejemplo.
+
+Un archivo con un problema detiene todos los comandos excepto `memo doctor` y `memo config unset`. El rechazo nombra el
+primer problema y el comando que lo elimina; `memo doctor` los enumera todos, cada uno con su línea o su `memo config unset
+<key>`. `config unset` elimina un ajuste por su ruta con puntos, también uno que Memo no conoce, como
+`memo config unset mail.accounts.0.colour` o `memo config unset permissions.notes.edit`. Un archivo que no es JSON
+válido se corrige a mano en la línea y la columna que indica `memo doctor`.
 
 ```json
 {
@@ -52,7 +57,7 @@ Consulta [usar las mismas notas en otro ordenador](./notes.md#use-the-same-notes
 | `path` | Para `mbox`: archivo Takeout, como `~/Takeout/Mail/All mail Including Spam and Trash.mbox`. |
 | `folders` | Para `imap`: carpetas que se leerán, como `["INBOX", "Archive"]`. |
 | `embed` | `false` excluye el correo de esta cuenta de la búsqueda por significado. |
-| `rules` | Solo se lee para mover las reglas al almacén: desde 0.32.0 se guardan allí y se gestionan con `memo mail rules`. Véase [Correo](./mail.md#choose-what-to-import). |
+| `rules` | Solo se lee para mover las reglas al almacén: se guardan allí y se gestionan con `memo mail rules`. Véase [Correo](./mail.md#choose-what-to-import). |
 
 Junto a `accounts`:
 
@@ -71,14 +76,27 @@ Consulta [Correo](./mail.md).
 |---|---|
 | `enabled` | `true` si el temporizador de importación está activo. |
 | `every` | Frecuencia: `90s`, `5m`, `1h`; un minuto como mínimo. |
-| `places` | Variables de ubicación de memo y del almacén (`MEMO_CONFIG_DIR`, `MESSAGING_STORE`…) guardadas al ejecutar `memo auto start`; se pasan a cada ejecución del temporizador. |
+| `places` | Variables de ubicación de memo y del almacén (`MEMO_CONFIG_DIR`, `MESSAGING_STORE`…) guardadas al ejecutar `memo jobs start`; se pasan a cada ejecución del temporizador. |
 
-`memo auto start` y `memo auto stop` escriben estos valores. Si los editas a mano, el temporizador los
+`memo jobs start` y `memo jobs stop` escriben estos valores. Si los editas a mano, el temporizador los
 sigue en su siguiente ejecución. Consulta [importar con un temporizador](./archive.md#import-on-a-timer-linux).
 
 ## `update_check`
 
 `false` desactiva la comprobación diaria de nuevas versiones de memo. `MEMO_NO_UPDATE_CHECK=1` hace lo mismo para una sesión de terminal.
+
+## `record` y `keep_runs_for_days`
+
+Memo guarda un registro de ejecución de cada comando que falla: las palabras del comando, cómo terminó y las peticiones
+de correo y RDAP que hizo, con sus tiempos y códigos de estado. Nunca una nota, una dirección, un asunto ni el nombre de una carpeta.
+`memo runs list` los muestra, `memo runs show <run-id>` muestra uno.
+
+| Clave | Significado |
+|---|---|
+| `record` | `true` guarda todas las ejecuciones, no solo las fallidas; `false` no guarda ninguna, ni siquiera las fallidas. Sin definir: solo las fallidas. `--record` y `--no-record` deciden para un comando. |
+| `keep_runs_for_days` | Cuántos días se guardan las ejecuciones. Por defecto, 30. |
+
+Añade las claves a `config.json` a mano; `memo config unset <key>` elimina una.
 
 ## `agent_decisions`
 
@@ -97,8 +115,7 @@ por este breve ejemplo. Tanto CLI como MCP rechazan entonces `projects actions c
 leer y preparar propuestas sigue disponible. Las decisiones del propietario siguen disponibles en el terminal.
 El ajuste controla el modo de agente de Memo; el acceso al terminal conserva los permisos de su usuario.
 `--as-owner` etiqueta un comando como del propietario y el agente no debe usarlo para eludir este ajuste.
-El ajuste se aplica a propuestas de proyecto; no cambia la confirmación de hallazgos de reuniones reservada
-al propietario ni sustituye las demás comprobaciones de permisos de la herramienta.
+El ajuste se aplica a propuestas de proyecto; no cambia el permiso separado para confirmar hallazgos de reuniones ni sustituye las demás comprobaciones de permisos de la herramienta.
 
 ## Variables de entorno
 
@@ -106,10 +123,37 @@ al propietario ni sustituye las demás comprobaciones de permisos de la herramie
 |---|---|
 | `MEMO_CONFIG_DIR` | La carpeta que contiene `config.json`. |
 | `MEMO_STATE_DIR` | La carpeta de estado de Memo: cómo era cada carpeta en la última importación. |
-| `MEMO_MODELS_ANALYSIS_PROVIDER`, `MEMO_MODELS_ANALYSIS_MODEL` | El proveedor de IA y el identificador del modelo (el nombre que usa el proveedor para él) a los que llama `memo ask --analyze`. |
+| `MEMO_MODELS_ANALYSIS_PROVIDER`, `MEMO_MODELS_ANALYSIS_MODEL` | El proveedor de IA y el identificador del modelo (el nombre que usa el proveedor para él) a los que llama `memo answers create --analyze`. |
 | `MEMO_MODELS_ANALYSIS_BASE_URL` | Opcional: la dirección del proveedor. |
 | `MEMO_MODEL_API_KEY` | La clave del proveedor. |
-| `MEMO_READ_ONLY` | Cualquier valor salvo `0` rechaza todo cambio con `permission_error` (código de salida 5): escrituras en el almacén, en tus archivos, en el correo del proveedor, en el temporizador y en los archivos de la skill, además de `upgrade` y `ask --allow-remote`. Las lecturas, `memo sync`, `tasks plan` y `tasks link` siguen funcionando (el vínculo solo se propone y se rechaza vincular dos tareas); `reminders poll` se rechaza; `memo mcp` deja fuera sus herramientas de escritura. |
+| `MEMO_READ_ONLY` | Cualquier valor salvo `0` rechaza todo cambio con `permission_error` (código de salida 5): escrituras en el almacén, en tus archivos, en el correo del proveedor, en el temporizador y en los archivos de la skill, además de `upgrade` y `answers create --allow-remote`. Las lecturas, `memo sync`, `tasks link` siguen funcionando (el vínculo solo se propone y se rechaza vincular dos tareas); `reminders claim` se rechaza; `memo mcp` mantiene visibles los comandos de escritura, pero rechaza ejecutarlos. |
 
-Memo llama a un proveedor fuera de tu ordenador solo cuando `memo ask` tiene a la vez `--analyze` y
+Memo llama a un proveedor fuera de tu ordenador solo cuando `memo answers create` tiene a la vez `--analyze` y
 `--allow-remote`. Consulta [dar las fuentes a tu agente](./search.md#give-your-agent-the-sources).
+
+## `permissions`
+
+Las rutas de comandos con puntos limitan las herramientas MCP. Una clave cubre el comando y sus subcomandos;
+gana la clave guardada más específica. `deny` marca los comandos como no disponibles, `readonly` permite leer y `ask` o `allow`
+permiten escribir. En MCP, `ask` se ejecuta sin pregunta en el terminal; la aplicación cliente determina las solicitudes de aprobación.
+Las escrituras sin un nivel guardado usan `ask`.
+
+```json
+{
+  "permissions": {
+    "notes": "readonly",
+    "mail.delete": "deny",
+    "mcp.authority": "deny"
+  }
+}
+```
+
+`mcp.authority` tiene `deny` por defecto para cambiar carpetas de origen y reglas de correo.
+`meetings.actions.confirm`, `meetings.actions.reject` y `projects.annotations.restore` también tienen `deny`;
+configura explícitamente la clave correspondiente como `ask` o `allow` para delegar una de esas operaciones.
+`agent_decisions: false` sigue rechazando decisiones sobre propuestas de proyecto. El límite compartido de lectura
+de WireCat y `MEMO_READ_ONLY` restringen todos los permisos.
+
+Los permisos cambiados se aplican en la siguiente búsqueda de comandos y llamada, también en las
+conexiones abiertas. `memo mcp --permission notes.edit=deny` restringe una clave para ese servidor sin cambiar
+el archivo; se rechaza cualquier modificación que relaje una clave guardada.

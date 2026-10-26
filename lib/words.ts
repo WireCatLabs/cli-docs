@@ -14,6 +14,7 @@ export type Words = {
     overview: string
     prompting: string
     mcp: string
+    communityTools: string
     messenger: string
     language: string
     menu: string
@@ -41,10 +42,14 @@ export type Words = {
 // drive, memo and zm have no `setup`; each request follows that tool's own first steps.
 const toolPrompts: Record<string, Record<string, (pkg: string) => string>> = {
   en: {
+    wa: (pkg) => `Install wa with npm install -g ${pkg}. First check Node.js 22.16+ (22.x) or 24+ and npm.
+Read https://wirecat.dev/en/docs/wa/installation and wa personal setup --help. Explain device linking and help me choose an account and profile name before running setup; personal is an example.
+I will scan the QR code from WhatsApp on my phone under Linked devices. Allow about five minutes for recent history to arrive.
+After linking, run wa personal doctor with the profile I chose and offer to install the wa skill for my agent. Do not send messages.`,
     drive: (pkg) => `Install drive with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
 Read drive personal session start --help (personal is a profile name; any name works), then help me run it.
 Warn me first: Google may show an "unverified app" screen. Read https://wirecat.dev/en/docs/drive/installation for what to do.
-Check the sign-in with drive personal session list --json.
+Check that the profile was saved with drive session list --json.
 Then help me choose a first folder (drive personal folders --help) and import it with drive personal sync.`,
     memo: (pkg) => `Install memo with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
 Run memo doctor: it lists what needs attention and the command that fixes each. Help me work through it.
@@ -55,12 +60,16 @@ Run zm doctor. Read https://wirecat.dev/en/docs/zm/installation and zm personal 
 At the end, offer to install the zm skill for my agent: zm skill install --for all.`,
   },
   ru: {
+    wa: (pkg) => `Установи wa через npm install -g ${pkg}. Сначала проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
+Прочитай https://wirecat.dev/ru/docs/wa/installation и wa personal setup --help. Объясни привязку устройства и помоги выбрать аккаунт и имя профиля до запуска настройки; personal — пример.
+Я отсканирую QR-код в WhatsApp на телефоне, в разделе связанных устройств. На получение недавней истории отведи около пяти минут.
+После подключения выполни wa personal doctor с выбранным мной профилем и предложи установить навык wa для моего агента. Ничего не отправляй.`,
     drive: (
       pkg,
     ) => `Установи drive через npm install -g ${pkg}. Перед этим проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
 Прочитай drive personal session start --help (personal — имя профиля, подойдёт любое), затем помоги выполнить эту команду.
 Сначала предупреди: Google может показать экран «непроверенное приложение». Что делать — на https://wirecat.dev/ru/docs/drive/installation.
-Проверь вход командой drive personal session list --json.
+Проверь, что профиль сохранён: drive session list --json.
 Затем помоги выбрать первую папку (drive personal folders --help) и импортировать её командой drive personal sync.`,
     memo: (
       pkg,
@@ -73,10 +82,14 @@ At the end, offer to install the zm skill for my agent: zm skill install --for a
 В конце предложи установить zm skill для моего агента: zm skill install --for all.`,
   },
   es: {
+    wa: (pkg) => `Instala wa con npm install -g ${pkg}. Primero comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
+Lee https://wirecat.dev/es/docs/wa/installation y wa personal setup --help. Explica la vinculación del dispositivo y ayúdame a elegir cuenta y nombre de perfil antes de configurar; personal es un ejemplo.
+Escanearé el QR desde Dispositivos vinculados en WhatsApp en mi teléfono. Deja unos cinco minutos para recibir el historial reciente.
+Después ejecuta wa personal doctor con el perfil que elegí y ofrece instalar el skill de wa para mi agente. No envíes mensajes.`,
     drive: (pkg) => `Instala drive con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
 Lee drive personal session start --help (personal es un nombre de perfil; sirve cualquiera) y ayúdame a ejecutarlo.
 Avísame antes: Google puede mostrar una pantalla de «aplicación no verificada». Qué hacer: https://wirecat.dev/es/docs/drive/installation.
-Comprueba el acceso con drive personal session list --json.
+Comprueba que el perfil se guardó con drive session list --json.
 Después ayúdame a elegir una primera carpeta (drive personal folders --help) e importarla con drive personal sync.`,
     memo: (pkg) => `Instala memo con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
 Ejecuta memo doctor: indica lo que necesita atención y el comando que lo arregla. Ayúdame a recorrer la lista.
@@ -98,7 +111,7 @@ export const words: Record<string, Words> = {
   en: {
     tagline: "AI Messaging with CLI tools for agents",
     intro:
-      "Your Telegram and MAX accounts, Zoom meetings, Google Drive documents and notes, from the terminal — for you, your scripts and your AI agents.",
+      "Your Telegram, MAX and WhatsApp accounts, Zoom meetings, Google Drive documents and notes, from the terminal — for you, your scripts and your AI agents.",
     docs: "Documentation",
     source: "Source",
     install: "Install",
@@ -112,6 +125,7 @@ export const words: Record<string, Words> = {
       overview: "Overview",
       prompting: "Writing requests",
       mcp: "MCP and skills",
+      communityTools: "Community tools",
       messenger: "Choose a messenger",
       language: "Choose a language",
       menu: "Open documentation menu",
@@ -147,7 +161,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
   ru: {
     tagline: "AI Messaging with CLI tools for agents",
     intro:
-      "Ваши аккаунты Telegram и MAX, встречи Zoom, документы Google Drive и заметки в терминале — для вас, ваших скриптов и ИИ-агентов.",
+      "Ваши аккаунты Telegram, MAX и WhatsApp, встречи Zoom, документы Google Drive и заметки в терминале — для вас, ваших скриптов и ИИ-агентов.",
     docs: "Документация",
     source: "Исходный код",
     install: "Установка",
@@ -161,6 +175,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       overview: "Обзор",
       prompting: "Как формулировать запросы",
       mcp: "MCP и навыки",
+      communityTools: "Инструменты сообщества",
       messenger: "Выбрать мессенджер",
       language: "Выбрать язык",
       menu: "Открыть меню документации",
@@ -197,7 +212,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
   es: {
     tagline: "AI Messaging with CLI tools for agents",
     intro:
-      "Tus cuentas de Telegram y MAX, reuniones de Zoom, documentos de Google Drive y notas desde la terminal — para ti, tus scripts y tus agentes de IA.",
+      "Tus cuentas de Telegram, MAX y WhatsApp, reuniones de Zoom, documentos de Google Drive y notas desde la terminal — para ti, tus scripts y tus agentes de IA.",
     docs: "Documentación",
     source: "Código fuente",
     install: "Instalar",
@@ -211,6 +226,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       overview: "Resumen",
       prompting: "Cómo formular peticiones",
       mcp: "MCP y skills",
+      communityTools: "Herramientas de la comunidad",
       messenger: "Elegir servicio de mensajería",
       language: "Elegir idioma",
       menu: "Abrir el menú de documentación",

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { inFullText, isSecondaryPage } from "../lib/agent-docs"
+import { inFullText, isSecondaryPage, toolSections } from "../lib/agent-docs"
+import type { Tool } from "./sync"
 
 describe("agent documentation files", () => {
   it.each([["tg", "changelog"], ["max", "changelog"], ["changelog"]])(
@@ -15,5 +16,31 @@ describe("agent documentation files", () => {
     expect(inFullText(["max", "commands-bot"])).toBe(false)
     expect(inFullText(["installation"])).toBe(true)
     expect(inFullText(["tg", "roadmap"])).toBe(true)
+  })
+
+  describe("tool sections in llms.txt", () => {
+    const tool = (name: string, community?: true): Tool => ({
+      name,
+      repo: `someone/${name}-cli`,
+      package: `@someone/${name}-cli`,
+      lang: "en",
+      summary: {},
+      ...(community ? { community } : {}),
+    })
+    const section = (t: Tool) => `## ${t.name}`
+
+    it("adds no community heading while no community tool is listed", () => {
+      expect(toolSections([tool("tg"), tool("memo")], section)).toEqual(["## tg", "## memo"])
+    })
+
+    it("lists community tools under their own heading after ours", () => {
+      const sections = toolSections([tool("tg"), tool("acme", true), tool("memo")], section)
+      expect(sections.map((block) => block.split("\n")[0])).toEqual([
+        "## tg",
+        "## memo",
+        "## Community tools",
+        "## acme",
+      ])
+    })
   })
 })

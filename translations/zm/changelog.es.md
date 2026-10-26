@@ -4,6 +4,246 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.48.0 — 25.10.2026
+
+### Correcciones
+
+- **`zm --version` sin nada más en la línea responde antes de cargar el programa**: unos 50 archivos de módulos en lugar de 1150
+  (`cli/start` de cli-core). `--version` con cualquier otra cosa en la línea pasa por el programa como antes.
+
+## 0.47.0 — 25.10.2026
+
+### Añadido
+
+- `zm store info --json` describe el almacén compartido: dónde está, su esquema frente al que lee zm (`schema.reason`
+  y `schema.upgrade`, a qué lo lleva la próxima ejecución de zm) y qué herramientas lo usaron. Abre el almacén solo para
+  lectura y no necesita perfil, así WireCat Desktop puede saber si zm puede leer el almacén.
+
+### Cambiado — puede romper la compatibilidad
+
+- **El registro de ejecuciones viene de cli-core 0.430.0** (`commandRuns`) en lugar de la copia propia de zm. Las
+  ejecuciones se guardan como antes: un comando fallido siempre, uno correcto con `--record` o `record: true`, nada con
+  `--no-record`; el `meta.run_id` de una respuesta sigue nombrando su ejecución. Dos pequeñas diferencias: una ejecución
+  sin perfil omite `profile` en `runs list` y `runs show` en vez de `""`, y una respuesta de Zoom de 400 o más se
+  registra con `error_code: provider_error`.
+
+## 0.46.0 — 25.10.2026
+
+### Añadido
+
+- **`zm config unset <key>`** quita un ajuste, o cualquier parte del archivo en la que `doctor` informa un problema,
+  por la clave que nombra su `fix`. `zm config show`, `set` y `unset` funcionan con un archivo con problemas: `show`
+  muestra cada problema tras los ajustes que sí se cargan, y `set` y `unset` dejan el resto del archivo como estaba.
+- **Una ejecución dice qué se escribió y, si falló, qué salió mal** (cli-core 0.425.0). `zm runs list` y `zm runs show`
+  añaden `cli_command` (`zm config show`), `argv` con cada valor que puede ser contenido o un secreto escrito
+  `[redacted]`, `agent` cuando lo ejecutó un agente de programación, y `error`: su clase, código, mensaje enmascarado y
+  una pila corta.
+- **`zm skill status`** dice, para Claude Code y para Codex y Gemini CLI, si el SKILL.md instalado coincide con esta
+  versión, y **`zm skill show --for claude|agents`** muestra la copia instalada allí (cli-base 0.56.0).
+
+### Cambiado — puede romper la compatibilidad
+
+- **Si iniciaste sesión por última vez con zm 0.34 o anterior, vuelve a iniciarla: ejecuta `zm <profile> session start`.**
+  zm ya no traslada a un perfil un acceso guardado solo con el Public Client ID; zm no encuentra acceso para ese perfil
+  hasta que lo hagas.
+- **`zm doctor --json` enumera todos los problemas del archivo de configuración en `config.issues`, en lugar de
+  `config.error`** (cli-core 0.423.0). Cada problema es `{ kind, file, profile?, key?, line?, column?, what, fix? }`,
+  con `kind` igual a `invalid_json`, `unknown_setting`, `unknown_permission` o `invalid_value`. `what` dice qué tiene
+  que ser el valor y nunca muestra el valor guardado; `fix` es un comando `zm config unset` que funciona tal como está
+  escrito, y falta en el JSON no válido, donde `line` y `column` dicen dónde se detuvo la lectura. Con un archivo con
+  problemas, doctor termina con 0 sin `error` de nivel superior y sigue rellenando `profiles` y `authentication` con lo
+  que se carga. `config.readable` y `config.source` desaparecen; `config.found` dice si el archivo existe.
+- **Los nombres antiguos de ajustes ya no se leen.** `account_profile`, las claves camelCase (`clientId`, `filesFolder`,
+  `filesTimezone`, `accountProfile`) y el selector `zoom.clientId` son desconocidos como cualquier otra clave, sin pista
+  de en qué se convirtieron.
+- **Una clave de permiso guardada que no nombra ningún comando detiene todos los comandos salvo `config` y `doctor`**,
+  con el `config unset` que la quita. Incluye `recordings.sync`.
+- Todos los comandos salvo `config` y `doctor` rechazan un archivo con problemas por el primero, con cómo quitarlo y
+  cuántos más enumera `doctor`. `client_id`, `source` y `files_folder` pueden faltar en el archivo; `zm config set`
+  escribe solo el ajuste que cambia.
+- El comando oculto `zm serve` desaparece; `zm <profile> mcp` es el servidor MCP.
+- **Una vista previa `--dry-run` dice `effects.service_contacted: false` y ya no tiene `effects.messenger_contacted`**,
+  y su `permission.key` es la clave propia de zm para el comando, como ya era la disponibilidad en la ayuda: una vista
+  previa de `watch` nombra `watch`, no `messages` (cli-core 0.426.0).
+- **`zm config set` guarda `config.json` solo para el propietario (`0600`)** en lugar de `0644` (cli-base 0.57.0). Lo
+  que lea el archivo como otro usuario ya no podrá leerlo tras el siguiente guardado.
+- **Una parte rota de un ajuste se informa como el ajuste entero.** Una entrada incorrecta en `context_sources` es un
+  problema `invalid_value` en `context.sources` con la corrección `zm config unset context.sources`, y el resto del
+  archivo se sigue cargando. Un problema `invalid_json` siempre tiene `line` y `column` (cli-core 0.425.0).
+
+### Seguridad
+
+- **`zm doctor` informa de un `config.json` o una carpeta de configuración que otros usuarios pueden leer.**
+  `files.problems` en su respuesta enumera cada uno como `{ path, mode, want, fix }` (`0600` para el archivo, `0700`
+  para la carpeta), y stderr escribe `to make it private: chmod 600 '<path>'` para cada uno; no cambia nada en disco.
+  Windows no se comprueba.
+
+### Corregido
+
+- **`zm doctor` responde cuando la ruta de configuración es una carpeta o no se puede leer**, con un único problema
+  `invalid_value` para todo el archivo y sin corrección, en lugar de fallar. Los demás comandos rechazan ese archivo con
+  las mismas palabras.
+- **La ayuda muestra `config`, `doctor`, `models` y `runs` sin perfil**, porque no leen ninguno:
+  `Usage: zm doctor [options]` y `zm doctor --json`, no `zm <profile> doctor` y `zm personal doctor --json`. Una
+  palabra de perfil delante sigue funcionando.
+- Las herramientas MCP de lectura y escritura dicen "names, titles, what people wrote" en lugar de "names, titles,
+  messages", y su ejemplo es `runs list`, que funciona tal cual, en lugar del grupo `runs`. `zm --help` dice que drive
+  es "searchable with your other WireCat data".
+- MCP ya no ofrece un grupo de comandos que solo imprime su ayuda, como `config` o `meetings`; sus comandos se siguen
+  ofreciendo uno a uno.
+
+## 0.45.0 — 25.10.2026
+
+### Añadido
+
+- `zm runs list [query]`, `zm runs show <run-id>` y `zm runs path <run-id>` leen el registro de ejecuciones, sin
+  perfil. Un comando fallido se guarda como ejecución, `--record` guarda también uno correcto y `--no-record` no guarda
+  nada; los nuevos ajustes `record` y `keep_runs_for_days` cambian el comportamiento predeterminado y cuánto duran las
+  ejecuciones. Cada petición a Zoom se registra solo con su método, ruta enmascarada, estado y duración, y el
+  `meta.run_id` de una respuesta es ahora el id que acepta `runs show`.
+
+### Cambiado — puede romper la compatibilidad
+
+- Un cambio en Zoom que pregunta primero (permiso `ask`) ya no pregunta cuando la salida va a una tubería o a un
+  archivo: se niega con `confirmation_required` y pide añadir `--yes`, como ya hacía sin terminal. En una terminal
+  sigue preguntando.
+
+### Corregido
+
+- La ayuda, `commands`, las descripciones de herramientas MCP y la skill del agente describen zm, no un servicio de
+  mensajería (cli-core 0.422.0, `messenger: false`): `--brief` y `--full` hablan de elementos encontrados, `--trace` y
+  `--record` de contenido, `commands info` muestra `zm commands info commands`, y las herramientas MCP ya no sugieren
+  "unread" ni "send message". Los ejemplos que llegarían a Zoom o cambiarían algo llevan ahora `--dry-run` u omiten
+  `--yes`, así que cada uno funciona sin conexión tal como está escrito.
+- `zm <profile> session start` abre el navegador en macOS y Windows; antes siempre probaba `xdg-open`. `--browser`
+  sigue eligiendo el programa.
+
+## 0.44.0 — 25.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **El almacén compartido pasa a la versión 33 (cli-core 0.420.0).** En cuanto esta versión abre el almacén, una CLI
+  con un cli-core más antiguo lo rechaza y pide actualizarse, así que actualiza juntas todas las CLI de WireCat que
+  comparten el almacén.
+- Una fuente de documentos en `context.sources` nombra su carpeta de notas con el proveedor `local` u `obsidian`, como
+  hace el almacén desde la versión 32; una guardada con el proveedor `folder` se sigue resolviendo. Antes, una carpeta
+  que el almacén había renombrado hacía que la preparación rechazara la fuente.
+- `mentions list` recibe la ventana de reuniones como el campo de consulta `started_at`, por ejemplo `started_at>=30d`
+  o `started_at:[2026-10-01 TO 2026-10-31]`. Sus opciones `--since-time` y `--until-time` se eliminan, sin alias;
+  `review` y los comandos de estadísticas las conservan.
+
+### Añadido
+
+- Las menciones en reuniones aceptan una consulta de URL derivada del esquema, seleccionada dentro del lector de enlaces
+  compartido antes de los límites del resultado.
+
+## 0.43.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **Los contratos de comandos compartidos y los comandos de modelos vienen de Core.** Las diferencias de fuente y
+  transporte de cada proveedor son explícitas y descubribles; las ediciones silenciosas fallan antes de ejecutarse. Las
+  etiquetas de tema guardadas de las reuniones usan `--topic-name`; `--topic` de los foros conserva su significado de id.
+
+### Añadido
+
+- **Los enlaces de reuniones aceptan consultas nativas.** `mentions list event_id:1`, `project:RES` y `topic:planning`
+  seleccionan las reuniones antes de leer los enlaces. Los eventos guardados aceptan consultas nativas por id, origen y
+  hora.
+
+### Corregido
+
+- Las guías describen el descubrimiento actual de permisos, la paginación de la búsqueda unificada y los flujos de
+  reuniones ya publicados. Los nombres de comandos retirados se quitan de los ejemplos de solo lectura.
+
+## 0.42.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- `recordings download` acepta una reunión o un intervalo de fechas. `recordings sync` desaparece sin alias: usa `recordings download --since-time … --until-time …`. Los archivos, puntos de control y tareas programadas existentes siguen siendo compatibles.
+- Revisa los permisos guardados `recordings.sync` y cámbialos por `recordings.download`. Las entradas antiguas detienen los comandos que comprueban permisos, en lugar de perder sus restricciones.
+
+### Añadido
+
+- Las descargas por intervalo admiten listas JSON acotadas de confirmaciones, también por MCP. `--jsonl` sigue emitiendo cada confirmación al completarse, para conservar resultados anteriores si falla una descarga posterior.
+
+### Correcciones
+
+- Los comandos denegados siguen apareciendo en las búsquedas MCP con su disponibilidad actual y un motivo. La ayuda CLI con perfil explícito muestra esa disponibilidad; las llamadas siguen rechazándose antes de ejecutarse.
+
+## 0.41.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- Las duraciones usan la sintaxis CLI común: un entero seguido de `ms`, `s`, `m`, `h` o `d`. Se rechazan los números sin unidad y las duraciones fraccionarias.
+- Las respuestas tipadas usan ID como cadenas y fechas ISO de forma coherente, incluidos los recibos de archivo y cambios en reuniones.
+- Los comandos usan el ciclo de vida, plazos, cancelación, descubrimiento y metadatos de solo lectura de Core. El SDK requiere `parseAsync`; se rechaza el análisis síncrono antes de ejecutar el comando.
+
+### Añadido
+
+- `meetings status` y `recordings status <directory>` muestran progreso persistente sin acceder a la red ni abrir la base.
+- MCP expone inventario de reuniones programadas, examen de proyectos y actualización según los permisos del perfil; actualizar y cambiar temporizadores necesita autoridad.
+- `bin/release --local` valida y publica un único paquete comprobado con un token npm exportado explícitamente.
+
+### Correcciones
+
+- Las descargas de modelos usan la verificación de checksum y reparación de Core.
+- MCP comprueba la autoridad mediante anotaciones y permisos del catálogo compartido, también después de revocar un permiso.
+
+## 0.40.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- Los modelos de voz usan los nombres compartidos de cli-core 0.406.0: `models list` sustituye a `models audio list` y acepta `kind:audio`, `id:` y `downloaded:`; `models download <model>` sustituye a `models audio
+  download`. No hay alias. La respuesta `model` usa `size_bytes` en lugar de `sizeBytes` y `default`, siempre `false`, porque `meetings transcribe` recibe `--model`.
+
+### Correcciones
+
+- Los ejemplos de ayuda y escenarios del paquete incluyen el perfil.
+- La guía MCP describe escrituras y permisos; la instalación explica que cada usuario necesita su propia app de Zoom o una app de equipo autorizada.
+
+### Añadido
+
+- El catálogo MCP incluye lectura de ajustes, estado de sesión, lectura de la skill y vectores de reuniones. Los ajustes e instalación de skills necesitan `mcp.authority` explícito; el agente no puede cambiar permisos del perfil.
+- `doctor` muestra `authentication.keyring` tras probar y eliminar una entrada temporal, sin leer accesos guardados.
+
+## 0.39.0 — 24.10.2026
+
+### Añadido
+
+- El primer comando en una terminal pregunta una sola vez para todas las herramientas WireCat por tus idiomas, otras herramientas que instalar y si comandos y agentes solo pueden leer. Las respuestas se comparten; «solo lectura» impide los cambios de zm aunque el perfil permita más. `tg setup`, `max setup` o `wa setup` vuelve a preguntar. No pregunta a agentes, con `--json`, `--no-input`, `CI` ni `ZM_READ_ONLY`.
+
+## 0.38.0 — 24.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- `search all` devuelve una lista de coincidencias como tg, en vez de un único item con detalles internos. Cada coincidencia conserva `ref`, `title`, `timestamp`, `excerpt` (antes `text`), `offset_ms` (antes `start_ms`) y, para reuniones, `scope` e `id`. Las fuentes omitidas van a `meta.issues`, con el motivo por stderr; `missing` informa de un examen truncado. Continúa con `--page` o `--max-meetings all`; desaparece `--meeting-cursor`.
+- `meetings evidence` y `meetings context` identifican cada línea con `ref` (antes `reference`), su inicio con `offset_ms` (antes `start_ms`) y los ID como cadenas, igual que `meetings prepare`.
+- `events list` devuelve fechas ISO 8601 e ID como cadenas, antes milisegundos y números.
+
+### Añadido
+
+- Once comandos más declaran el tipo de respuesta: `review`, `mentions list`, `stats meetings show` y `top`, `meetings people`, `meetings passage`, `meetings task-proposal`, `meetings evidence`, `meetings
+  context`, `events list` y `search all`. `commands --json` y MCP describen sus campos, y `--json=a,b` valida sus nombres.
+
+### Correcciones
+
+- `search all` pagina las coincidencias de reuniones: `--page 2` ya no repite la primera página y `has_more` se conserva mientras quedan resultados.
+- `searches run` declara el tipo `meeting_hit`, como `search meetings`, en lugar de `hit`; `--json=scope` ya no se rechaza por ese esquema incorrecto.
+
+## 0.37.0 — 23.10.2026
+
+### Añadido
+
+- `zm <profile> review` muestra las reuniones desde una fecha, con decisiones y tiempo de palabra: los últimos siete días por defecto, con resumen, próximos pasos, proyectos, tamaño de la transcripción y las tres personas que más hablaron. Informa de resúmenes ausentes y transcripciones casi vacías.
+- La sincronización conserva el chat guardado por Zoom con una grabación en la nube, con `cloud_recording:read:list_recording_files`. `zm <profile> mentions list` enumera los enlaces más compartidos, quién los compartió y en qué reuniones.
+- `zm <profile> searches create|run|list|show|delete` guarda una consulta y sus opciones bajo un nombre. Se interpretan en cada ejecución: `date>=7d` sigue siendo la última semana. `searches run` responde como `search meetings`.
+- `search meetings` admite `date:`, `project:`, `tag:` y `topic:` en la consulta, igual que las opciones correspondientes: `zm personal search meetings "launch project:RES date>=30d"`.
+
+### Correcciones
+
+- Una transcripción que Zoom aún no ha terminado ya no se informa como una respuesta rota. Sync avisa de que todavía no está lista y puede obtenerla más tarde. Si no existe, fue borrada o Zoom no puede exportarla, la reunión se guarda sin transcripción y sin advertencia.
+
 ## 0.36.0 — 22.10.2026
 
 ### Cambiado — puede romper la compatibilidad

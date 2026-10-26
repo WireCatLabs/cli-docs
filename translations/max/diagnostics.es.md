@@ -6,10 +6,6 @@ title: "Diagnóstico: qué hizo un comando"
 <a id="guardar-eventos" />
 <a id="usar-los-registros" />
 <a id="referencia-para-scripts" />
-<a id="показать" />
-<a id="сохранить" />
-<a id="что-можно-с-этим-делать" />
-<a id="справочник-для-скриптов" />
 
 Esta página es necesaria cuando un comando falla, se congela o tarda demasiado y desea comprender por qué. Una vez que lo haya leído, podrá ver las solicitudes del comando mientras funcionan, guardar un registro de ejecución, probar la instalación y enviar un informe de problemas que no incluya ningún texto de mensaje.
 
@@ -29,7 +25,7 @@ Palabras que aparecen aquí:
 | Encontrar una ejecución fallida | `max personal runs list` | Los fallos se guardan automáticamente |
 | Guardar todas las ejecuciones | `max personal config set record true` | Cada registro |
 | Comprobar la instalación | `max personal doctor`, `max personal doctor --online` | Nada |
-| Crear un informe de problemas | `max personal doctor report create` | Un archivo que tú envías |
+| Crear un informe de problemas | `max personal doctor reports create` | Un archivo que tú envías |
 
 ## Mostrar: `--trace`
 
@@ -178,9 +174,11 @@ Para un bot, `max <имя> doctor` indica de dónde viene el token, cuántos cha
 ## Informe de problemas
 
 ```sh
-max personal doctor report create              # о последнем неудачном запуске
-max personal doctor report create --run <id>   # об этом запуске
+max personal doctor reports create              # о последнем неудачном запуске
+max personal doctor reports create --run <id>   # об этом запуске
 ```
+
+Si no se puede leer la configuración, ejecuta primero `max doctor --json`. En `config.issues` enumera cada error del archivo: el tipo, la clave, la línea y la columna si el JSON no es válido, y el comando `config unset` que quita la clave. Los valores de los ajustes no aparecen en la respuesta. Aunque el archivo tenga errores, `doctor` responde y termina con el código `0`. En `files.problems` nombra el archivo de ajustes y su carpeta si otros usuarios pueden leerlos, y en stderr imprime el `chmod` que lo corrige. Crear un archivo de informe requiere comprobar los permisos de escritura, así que corrige antes el ajuste inválido.
 
 El comando escribe un archivo JSON (lo que muestra y ejecuta `max personal doctor`) e imprime un enlace al nuevo problema en [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues). Leal archivo antes de enviarlo. No contiene textos de mensajes y los números de chats y mensajes se reemplazan por etiquetas. ¿Qué más contiene? En la sección [cómo informar un problema](./troubleshooting.md#как-сообщить-о-проблеме).
 
@@ -211,17 +209,17 @@ done
 ## Buscar errores y ejecuciones parciales
 
 ```sh
-max personal runs search --error-code rate_limited --json
-max personal runs search --status partial --since-time 2026-10-01 --json
+max personal search runs error_code:rate_limited --json
+max personal search runs status:partial 'started_at>=2026-10-01' --json
 ```
 
-`runs search` busca texto literal en metadatos y eventos de diagnóstico seguros.
-`--operation`, `--profile`, `--since-time`, `--limit` y `--page` acotan la búsqueda. Cada página admite hasta 100 ejecuciones;
+`search runs` busca texto literal en metadatos y eventos de diagnóstico seguros.
+Las condiciones `status:`, `error_code:`, `operation:`, `profile:` y las comparaciones o rangos de `started_at:` van en la consulta. `--limit` y `--page` eligen la página. Cada página admite hasta 100 ejecuciones;
 cada ejecución devuelve hasta 100 eventos coincidentes, con `events_truncated` si hay más.
 El fallo de un archivo o una página de historial genera `status: "partial"` con ID fallidos, etapas y códigos.
 El registro no copia el contenido de mensajes ni las respuestas de error del proveedor.
 Las ejecuciones parciales se conservan por defecto salvo que se desactive explícitamente el registro. La búsqueda no se registra a sí misma.
 
-En MCP llama a `max_read` con `command: "runs search"`; `arguments` acepta `query`, `status`, `error_code`, `operation`, `since_time`, `limit` y `page`.
+En MCP llama a `max_read` con `command: "search runs"`; `arguments` acepta `query` (con las condiciones y los límites de tiempo), `limit` y `page`.
 Solo lee registros del perfil activo, no conecta con MAX ni abre los logs sin filtrar de trabajos en segundo plano.
 El resultado completo del comando parcial nombra los elementos fallidos y sus códigos de error; el registro conserva solo identificadores y códigos seguros.

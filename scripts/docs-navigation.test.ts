@@ -1,8 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs"
-import type { Root } from "fumadocs-core/page-tree"
+import type { Node, Root } from "fumadocs-core/page-tree"
 import { describe, expect, it } from "vitest"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
-import { sidebarIcons, unifiedDocsTree } from "../lib/docs-sidebar-tree"
+import { sidebarIcons, unifiedDocsTree, withCommunityGroup } from "../lib/docs-sidebar-tree"
+import { type Tool, toolProblems } from "./sync"
 
 const pages = ["tg", "tg/installation", "tg/mcp", "max", "max/installation", "max/mcp", "max/bot"]
 
@@ -123,10 +124,10 @@ describe("sidebar icon coverage", () => {
     }
     const slugs = new Set(
       shared.pages
-        .filter((slug) => !slug.startsWith("---") && !["tg", "max"].includes(slug))
+        .filter((slug) => !slug.startsWith("---") && !["tg", "max", "wa"].includes(slug))
         .map((slug) => /^\[[^\]]+\]\(\/[a-z]{2}\/docs\/([^)]+)\)$/.exec(slug)?.[1].split("/").at(-1) ?? slug),
     )
-    for (const tool of ["tg", "max", "memo", "zm"])
+    for (const tool of ["tg", "max", "wa", "memo", "zm"])
       for (const file of readdirSync(new URL(`../translations/${tool}/`, import.meta.url)))
         if (/\.(en|ru|es)\.md$/.test(file)) slugs.add(file.replace(/\.(en|ru|es)\.md$/, ""))
     for (const slug of slugs) {
@@ -141,9 +142,83 @@ describe("sidebar icon coverage", () => {
 })
 
 it("links every current tool's roadmap from each global roadmap", () => {
-  const tools = JSON.parse(readFileSync("tools.json", "utf8")) as { name: string }[]
+  const tools = JSON.parse(readFileSync("tools.json", "utf8")) as Tool[]
   for (const suffix of ["", ".ru", ".es"]) {
     const roadmap = readFileSync(`content/docs/roadmap${suffix}.md`, "utf8")
-    for (const tool of tools) expect(roadmap).toContain(`](./${tool.name}/roadmap.md)`)
+    for (const tool of tools.filter((tool) => !tool.community))
+      expect(roadmap).toContain(`](./${tool.name}/roadmap.md)`)
   }
+})
+
+it("keeps the current section when switching to or from WhatsApp", () => {
+  expect(messengerHref("/ru/docs/wa/installation", "ru", "tg", ["tg/installation"])).toBe("/ru/docs/tg/installation")
+  expect(messengerHref("/es/docs/tg/usage", "es", "wa", ["wa/usage"])).toBe("/es/docs/wa/usage")
+})
+
+it("includes every released messenger in the full navigation used by the switcher", () => {
+  for (const suffix of ["", ".ru", ".es"]) {
+    const meta = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }
+    for (const tool of ["tg", "max", "wa"]) expect(meta.pages).toContain(tool)
+  }
+})
+
+describe("community tools", () => {
+  const tool = (name: string, community?: true): Tool => ({
+    name,
+    repo: community ? `someone/${name}-cli` : `WireCatLabs/${name}-cli`,
+    package: community ? `@someone/${name}-cli` : `@wirecat/${name}-cli`,
+    lang: "en",
+    summary: {},
+    ...(community ? { community } : {}),
+  })
+  const folder = (name: string): Node => ({
+    type: "folder",
+    name,
+    index: { type: "page", name, url: `/es/docs/${name}` },
+    children: [],
+  })
+  const children: Node[] = [
+    { type: "separator", name: "Herramientas" },
+    folder("tg"),
+    folder("acme"),
+    folder("memo"),
+    { type: "separator", name: "Detalles técnicos" },
+    { type: "page", name: "Architecture", url: "/es/docs/architecture" },
+  ]
+
+  it("adds no group heading while no community tool is listed", () => {
+    expect(withCommunityGroup(children, "es", [tool("tg"), tool("acme"), tool("memo")])).toBe(children)
+    expect(
+      unifiedDocsTree({ name: "Docs", children }, "es").children.filter((n) => n.type === "separator"),
+    ).toHaveLength(2)
+  })
+
+  it("moves community tools under their own heading after ours", () => {
+    const tree = withCommunityGroup(children, "es", [tool("tg"), tool("acme", true), tool("memo")])
+    expect(tree.map((node) => (node.type === "separator" ? `--${node.name}` : node.name))).toEqual([
+      "--Herramientas",
+      "tg",
+      "memo",
+      "--Herramientas de la comunidad",
+      "acme",
+      "--Detalles técnicos",
+      "Architecture",
+    ])
+  })
+
+  it("rejects a community entry under our scope or organization", () => {
+    expect(toolProblems(tool("acme", true))).toEqual([])
+    expect(toolProblems({ ...tool("acme", true), package: "@wirecat/acme-cli" })).toHaveLength(1)
+    expect(toolProblems({ ...tool("acme", true), repo: "WireCatLabs/acme-cli" })).toHaveLength(1)
+    expect(toolProblems({ ...tool("acme"), community: false } as unknown as Tool)).toHaveLength(1)
+  })
+
+  it("keeps every entry of tools.json valid and in every locale's sidebar", () => {
+    const tools = JSON.parse(readFileSync("tools.json", "utf8")) as Tool[]
+    expect(tools.flatMap(toolProblems)).toEqual([])
+    for (const suffix of ["", ".ru", ".es"]) {
+      const meta = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }
+      for (const { name } of tools) expect(meta.pages, `meta${suffix}.json lists ${name}`).toContain(name)
+    }
+  })
 })
