@@ -78,6 +78,7 @@
     "@types/shell-quote": "1.7.5",
     "@wirecat/cli-base": "0.57.1",
     "@wirecat/cli-core": "0.432.0",
+    "ajv": "8.20.0",
     "cspell": "10.4.0",
     "esbuild": "^0.28.2",
     "lefthook": "2.2.2",

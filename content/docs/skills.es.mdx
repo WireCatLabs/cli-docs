@@ -48,7 +48,8 @@ hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
 Hermes revisa cada skill antes de instalarlo. Si se detiene en una advertencia (caution), no fuerces la
 instalación: [avísanos](https://github.com/WireCatLabs/cli-docs/issues) con el hallazgo que muestra.
 `hermes skills search https://wirecat.dev --source well-known` los muestra todos. Hermes guarda la
-fuente, así que `hermes skills update` actualiza el skill más adelante.
+fuente, así que `hermes skills update` actualiza el skill más adelante. Los clientes del formato de descubrimiento
+más reciente leen los mismos skills en `https://wirecat.dev/.well-known/agent-skills/index.json`.
 
 También puedes añadir el repositorio de una herramienta como fuente permanente de skills (un tap):
 

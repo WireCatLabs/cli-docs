@@ -10,5 +10,8 @@
 /.well-known/skills/*/SKILL.md
   Content-Type: text/markdown; charset=utf-8
 
+/.well-known/agent-skills/*/SKILL.md
+  Content-Type: text/markdown; charset=utf-8
+
 /install.ps1
   Content-Type: text/plain; charset=utf-8

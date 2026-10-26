@@ -1,8 +1,16 @@
+import { createHash } from "node:crypto"
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
-import { publishSkills, SKILLS_DIR, skillEntry, skillIndexProblems, writeSkillsIndex } from "./skills-index.ts"
+import {
+  AGENT_SKILLS_DIR,
+  publishSkills,
+  SKILLS_DIR,
+  skillEntry,
+  skillIndexProblems,
+  writeSkillsIndex,
+} from "./skills-index.ts"
 
 const skill = (name: string) =>
   [
@@ -73,5 +81,41 @@ describe("publishSkills and writeSkillsIndex", () => {
     rmSync(join(root, SKILLS_DIR, "tg-cli", "SKILL.md"))
     expect(skillIndexProblems(out)).toEqual([".well-known/skills/tg-cli/SKILL.md: missing"])
     expect(skillIndexProblems(folder())).toEqual([".well-known/skills/index.json: missing from the export"])
+  })
+
+  it("publishes the same skills in the v0.2.0 shape, each digest the sha256 of the served bytes", () => {
+    const root = folder()
+    const checkout = folder()
+    mkdirSync(join(checkout, "skills", "tg-cli"), { recursive: true })
+    writeFileSync(join(checkout, "skills", "tg-cli", "SKILL.md"), skill("tg-cli"))
+    publishSkills(checkout, root, "0.92.0")
+    mkdirSync(join(root, AGENT_SKILLS_DIR, "dropped-skill"), { recursive: true })
+    writeSkillsIndex(root)
+
+    const served = readFileSync(join(root, AGENT_SKILLS_DIR, "tg-cli", "SKILL.md"))
+    expect(served).toEqual(readFileSync(join(root, SKILLS_DIR, "tg-cli", "SKILL.md")))
+    expect(JSON.parse(readFileSync(join(root, AGENT_SKILLS_DIR, "index.json"), "utf8"))).toEqual({
+      $schema: "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+      skills: [
+        {
+          name: "tg-cli",
+          type: "skill-md",
+          description: "Read the owner's chats. Use when asked.",
+          url: "/.well-known/agent-skills/tg-cli/SKILL.md",
+          digest: `sha256:${createHash("sha256").update(served).digest("hex")}`,
+        },
+      ],
+    })
+
+    const out = join(root, "public")
+    expect(skillIndexProblems(out)).toEqual([])
+    writeFileSync(join(root, AGENT_SKILLS_DIR, "tg-cli", "SKILL.md"), "changed")
+    expect(skillIndexProblems(out)).toEqual([
+      "/.well-known/agent-skills/tg-cli/SKILL.md: digest differs from the index",
+    ])
+    writeFileSync(join(root, AGENT_SKILLS_DIR, "index.json"), JSON.stringify({ skills: [] }))
+    expect(skillIndexProblems(out)).toEqual([
+      ".well-known/agent-skills/index.json: must have required property '$schema'",
+    ])
   })
 })
