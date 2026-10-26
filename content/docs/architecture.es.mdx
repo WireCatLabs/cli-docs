@@ -222,8 +222,8 @@ registrado se omiten y se informan, nunca se buscan como mensajes ([reglas de ar
 - **Los eventos de una ejecución no guardan contenido.** Un registro guarda la línea de comandos, ids,
   recuentos y tiempos, el agente que ejecutó el comando y, en una ejecución fallida, el error con su mensaje
   enmascarado. Un secreto escrito en la línea de comandos se escribe siempre como `[redacted]`. Una
-  herramienta con cli-core 0.439.0 o posterior guarda las demás palabras tal como se escribieron, para que el
-  propietario pueda revisar qué se ejecutó; con `record_input: false`, y en versiones anteriores, cada valor de
+  herramienta cuyo `config show` incluye `record_input` guarda las demás palabras tal como se escribieron, para que el
+  propietario pueda revisar qué se ejecutó; con `record_input: false`, y en una herramienta sin ese ajuste, cada valor de
   argumento que pueda ser contenido también se escribe como `[redacted]`. El texto de los mensajes, los tokens
   y los teléfonos nunca llegan a los eventos de una ejecución; la documentación y los tests usan ejemplos
   ficticios.
