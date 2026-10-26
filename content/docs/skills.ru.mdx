@@ -1,0 +1,105 @@
+---
+title: "Где взять навыки WireCat"
+description: "Установите навык инструмента через ClawHub, Hermes, skills.sh или маркетплейс плагинов Claude Code — по одной команде на каждый."
+---
+
+**Навык (skill)** — файл с инструкцией, `SKILL.md`, который учит ИИ-агента командам одного
+инструмента WireCat. Каждый инструмент сам ставит свой навык командой `skill install` (см.
+[Подключение ИИ-агента](./agents.mdx#connect-instructions)). На этой странице собраны каталоги
+навыков, где есть те же навыки, — на случай, если вы предпочитаете ставить и обновлять навыки так, как
+это делает ваш агент. В итоге у агента будет нужный навык из выбранного вами источника.
+
+Навык только учит. Сам инструмент всё равно должен быть установлен, и вход в аккаунт должен быть
+выполнен на том компьютере, где работает агент: см. [Установку](./installation.mdx).
+
+## Имена навыков
+
+В примерах используется `tg` для Telegram. Для другого инструмента замените репозиторий и имя навыка:
+
+- **Telegram** (`tg`): репозиторий `WireCatLabs/tg-cli`, навык `tg-cli`
+- **MAX** (`max`): репозиторий `WireCatLabs/max-cli`, навык `max-cli`
+- **WhatsApp** (`wa`): репозиторий `WireCatLabs/whatsapp-cli`, навык `whatsapp-cli`
+- **Google Drive** (`drive`): репозиторий `WireCatLabs/drive-cli`, навык `drive-cli`
+- **Zoom** (`zm`): репозиторий `WireCatLabs/zoom-cli`, навык `zoom-cli`
+- **Memo** (`memo`): репозиторий `WireCatLabs/cli-memo`, навык `cli-memo`
+
+## Из самого инструмента
+
+Эта копия соответствует установленной у вас версии инструмента. Она подходит для Codex, Claude Code,
+Cursor, Gemini CLI и OpenClaw:
+
+```sh
+tg skill install
+```
+
+Повторите команду после обновления инструмента.
+
+<a id="hermes" />
+
+## Hermes Agent
+
+Этот сайт публикует навык каждого инструмента — в той версии, которую описывают эти страницы, — в
+каталоге навыков, который читает Hermes. Установите один навык:
+
+```sh
+hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
+```
+
+Перед установкой Hermes проверяет каждый навык. Если он остановился на предупреждении (caution),
+не ставьте навык силой: [сообщите нам](https://github.com/WireCatLabs/cli-docs/issues) показанную находку.
+`hermes skills search https://wirecat.dev --source well-known` покажет все навыки. Hermes запоминает
+источник, поэтому позже `hermes skills update` обновит навык.
+
+Можно также добавить репозиторий инструмента как постоянный источник навыков (tap):
+
+```sh
+hermes skills tap add WireCatLabs/tg-cli
+```
+
+Источник-репозиторий читает основную ветку (main), которая может опережать выпущенную версию
+инструмента.
+[Инструкция Hermes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/#skills-hub).
+
+<a id="openclaw" />
+
+## OpenClaw и ClawHub
+
+**Скоро.** ClawHub — каталог навыков OpenClaw. Когда навыки WireCat появятся там, одна команда
+установит навык для всех рабочих пространств:
+
+```sh
+openclaw skills install @wirecat/tg-cli --global
+```
+
+А пока навык для OpenClaw ставит `tg skill install --for agents`: OpenClaw читает `~/.agents/skills`.
+[Инструкция OpenClaw](https://docs.openclaw.ai/tools/skills).
+
+## skills.sh
+
+Команда `skills` от skills.sh ставит навык из репозитория в папки агентов, которых находит на вашем
+компьютере:
+
+```sh
+npx skills add WireCatLabs/tg-cli --skill tg-cli
+```
+
+Не убирайте `--skill`: в некоторых репозиториях есть и навыки для тех, кто разрабатывает сам
+инструмент. Как и источник-репозиторий Hermes, команда читает основную ветку. [skills.sh](https://skills.sh/).
+
+## Маркетплейс плагинов Claude Code
+
+**Скоро.** Маркетплейс WireCat для Claude Code: по плагину на инструмент, и в каждом только его
+навык. Когда он будет опубликован, добавьте его в Claude Code командой:
+
+```text
+/plugin marketplace add WireCatLabs/claude-plugins
+```
+
+А пока навык для Claude Code ставит `tg skill install --for claude`.
+[Инструкция по плагинам Claude Code](https://code.claude.com/docs/en/plugins).
+
+## Проверьте результат
+
+Начните новую сессию с агентом и выполните проверку из раздела
+[Подключение ИИ-агента](./agents.mdx#check-connection). Если навык у агента есть, но инструмент не
+запускается, смотрите подсказки для [Hermes](./agents.mdx#hermes) и [OpenClaw](./agents.mdx#openclaw).

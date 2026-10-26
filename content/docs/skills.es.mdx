@@ -1,0 +1,106 @@
+---
+title: "Dónde conseguir los skills de WireCat"
+description: "Instala el skill de una herramienta desde ClawHub, Hermes, skills.sh o el marketplace de plugins de Claude Code, con un comando para cada uno."
+---
+
+Un **skill** es un archivo de instrucciones, `SKILL.md`, que enseña a tu agente de IA los comandos
+de una herramienta de WireCat. Cada herramienta instala su propio skill con `skill install` (consulta
+[Conectar tu agente de IA](./agents.mdx#connect-instructions)). Esta página reúne los directorios de
+skills que ofrecen los mismos skills, por si prefieres instalarlos y actualizarlos como lo hace tu
+agente. Al terminar, tu agente tendrá el skill que necesita, desde la fuente que elijas.
+
+Un skill solo enseña. La herramienta debe seguir instalada y con la sesión iniciada en el ordenador
+donde trabaja tu agente: consulta [Instalación](./installation.mdx).
+
+## Nombres de los skills
+
+Los ejemplos usan `tg` para Telegram. Para otra herramienta, cambia el repositorio y el nombre del skill:
+
+- **Telegram** (`tg`): repositorio `WireCatLabs/tg-cli`, skill `tg-cli`
+- **MAX** (`max`): repositorio `WireCatLabs/max-cli`, skill `max-cli`
+- **WhatsApp** (`wa`): repositorio `WireCatLabs/whatsapp-cli`, skill `whatsapp-cli`
+- **Google Drive** (`drive`): repositorio `WireCatLabs/drive-cli`, skill `drive-cli`
+- **Zoom** (`zm`): repositorio `WireCatLabs/zoom-cli`, skill `zoom-cli`
+- **Memo** (`memo`): repositorio `WireCatLabs/cli-memo`, skill `cli-memo`
+
+## Desde la propia herramienta
+
+Esta copia corresponde a la versión de la herramienta que instalaste. Sirve para Codex, Claude Code,
+Cursor, Gemini CLI y OpenClaw:
+
+```sh
+tg skill install
+```
+
+Vuelve a ejecutarlo después de actualizar la herramienta.
+
+<a id="hermes" />
+
+## Hermes Agent
+
+Este sitio publica el skill de cada herramienta, en la versión que describen estas páginas, en un
+índice de skills que Hermes lee. Instala un skill:
+
+```sh
+hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
+```
+
+Hermes revisa cada skill antes de instalarlo. Si se detiene en una advertencia (caution), no fuerces la
+instalación: [avísanos](https://github.com/WireCatLabs/cli-docs/issues) con el hallazgo que muestra.
+`hermes skills search https://wirecat.dev --source well-known` los muestra todos. Hermes guarda la
+fuente, así que `hermes skills update` actualiza el skill más adelante.
+
+También puedes añadir el repositorio de una herramienta como fuente permanente de skills (un tap):
+
+```sh
+hermes skills tap add WireCatLabs/tg-cli
+```
+
+Una fuente de repositorio lee la rama principal (main), que puede ir por delante de la versión
+publicada de la herramienta.
+[Guía de Hermes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/#skills-hub).
+
+<a id="openclaw" />
+
+## OpenClaw y ClawHub
+
+**Próximamente.** ClawHub es el directorio de skills de OpenClaw. Cuando los skills de WireCat estén
+allí, un comando instalará un skill para todos los espacios de trabajo:
+
+```sh
+openclaw skills install @wirecat/tg-cli --global
+```
+
+Mientras tanto, `tg skill install --for agents` da el skill a OpenClaw, porque OpenClaw lee
+`~/.agents/skills`. [Guía de OpenClaw](https://docs.openclaw.ai/tools/skills).
+
+## skills.sh
+
+El comando `skills` de skills.sh instala un skill desde un repositorio en las carpetas de los
+agentes que encuentra en tu ordenador:
+
+```sh
+npx skills add WireCatLabs/tg-cli --skill tg-cli
+```
+
+Mantén `--skill`: algunos repositorios también contienen skills para quienes desarrollan la propia
+herramienta. Igual que una fuente de repositorio de Hermes, lee la rama principal. [skills.sh](https://skills.sh/).
+
+## Marketplace de plugins de Claude Code
+
+**Próximamente.** Un marketplace de WireCat para Claude Code, con un plugin por herramienta que solo
+contiene su skill. Cuando esté publicado, añádelo en Claude Code con:
+
+```text
+/plugin marketplace add WireCatLabs/claude-plugins
+```
+
+Mientras tanto, `tg skill install --for claude` instala el skill para Claude Code.
+[Guía de plugins de Claude Code](https://code.claude.com/docs/en/plugins).
+
+## Comprueba el resultado
+
+Abre una nueva sesión con el agente y haz la comprobación de
+[Conectar tu agente de IA](./agents.mdx#check-connection). Si el agente tiene el skill pero no puede
+ejecutar la herramienta, consulta las notas para [Hermes](./agents.mdx#hermes) y
+[OpenClaw](./agents.mdx#openclaw).

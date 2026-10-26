@@ -41,6 +41,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
 | How do I review a reply in my messaging app or use an auto-reply template? | `drafts-and-templates.mdx` | Task guide and explanation | Keep template facts in step with the tools' auto-reply guides |
 | What does WireCat enable with my agent and sources? | `features.mdx` | Project capability orientation | Lead with messages and source-backed context, then people, notes/files, bots, groups and control; link tool-specific operations |
+| Where else can I get a tool's skill? | `skills.mdx` | Reference | Mark directories "coming soon" until each one lists the skills |
 | Which connection does my AI app need? | `mcp.mdx` | Explanation/setup | Explain the decision before client configuration |
 | How do I discover a bot method? | `bot-api.mdx` | Reference orientation | Link messenger-specific bot prerequisites and use cases |
 | What can read or change my data? | `security.mdx` | Explanation | Lead with user decisions, then verified detail |
