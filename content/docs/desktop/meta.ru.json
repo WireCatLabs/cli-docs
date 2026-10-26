@@ -1,4 +1,4 @@
 {
   "title": "WireCat Desktop",
-  "pages": ["logs"]
+  "pages": ["logs", "tailscale-funnel"]
 }

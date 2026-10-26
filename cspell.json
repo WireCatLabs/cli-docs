@@ -146,6 +146,12 @@
     "indexarlas",
     "созвоны",
     "PKCE",
-    "SECR"
+    "SECR",
+    "debian",
+    "nixos",
+    "opensuse",
+    "Zorin",
+    "zypper",
+    "пересоберите"
   ]
 }
