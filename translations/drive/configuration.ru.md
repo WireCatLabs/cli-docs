@@ -31,6 +31,7 @@ title: "Настройки"
 | `permissions` | Уровни доступа команд: `deny`, `readonly`, `ask` или `allow` | Профиль или `defaults` |
 | `max_text_chars` | Предел текста одного файла; значение по умолчанию и максимум `2000000`, предел читателей документов | Профиль или `defaults` |
 | `record` | `true` сохраняет каждый запуск в `drive runs list`; по умолчанию `false`, сохраняются только неудачные запуски. `false`, заданное здесь, не сохраняет ничего | Только `defaults` |
+| `record_input` | Сохранённый запуск хранит команду в том виде, в каком её ввели; секрет или номер телефона записан как `[redacted]`. `false` записывает как `[redacted]` и каждое значение, которое может быть содержимым | Только `defaults` |
 | `keep_runs_for_days` | Сколько дней хранится сохранённый запуск; по умолчанию `30` | Только `defaults` |
 | `picture_search` | `true` включает поиск изображений по содержимому: sync скачивает изображение до 25 МБ, а поиск возвращает `pictures`; по умолчанию `false` | Только профиль |
 | `models.memories.provider` | Провайдер ИИ для явно запрошенного извлечения памяти | Профиль или `defaults` |
@@ -52,10 +53,10 @@ Show the saved change; do not change Google files.
 Вручную:
 
 ```sh
-drive personal config show --json
+drive config show --json
 drive personal config set permissions.files '"readonly"'
 drive personal config set permissions.documents '"readonly"'
-drive personal config show --json
+drive config show --json
 ```
 
 Эти разрешения ограничивают группы команд для файлов и Google Docs. Для локальной синхронизации
@@ -68,7 +69,7 @@ drive personal config show --json
 ```sh
 drive personal config set permissions.files '"readonly"' --defaults
 drive work config set permissions.files '"deny"'
-drive personal config show --json
+drive config show --json
 ```
 
 Первая строка меняет общее значение, вторая переопределяет его для `work`. Последняя команда
@@ -157,7 +158,7 @@ chmod 600 '/home/me/.config/drive-cli/config.json'
 | `--dry-run` | Проверить и показать поддерживаемое действие без выполнения |
 | `--json`, `--jsonl` | Структурированный вывод; `--json=id,name` оставляет только эти поля; ответы MCP явно показывают управляющие символы |
 | `--timeout DURATION`, `--max-output-bytes N` | Ограничить время команды и размер буферизованного вывода |
-| `--record`, `--no-record` | Сохранить этот запуск в `drive runs list` или не сохранять ничего, даже при ошибке |
+| `--record`, `--no-record` | Сохранить этот запуск в `drive runs list` вместе с командой в том виде, в каком её ввели, со скрытыми секретами, или не сохранять ничего, даже при ошибке |
 
 Это не настройки файла. Параметры конкретных команд, например `search --limit` и `sync --limit`,
 описаны рядом с командами. Временные разрешения важнее разрешений профиля, затем идут общие
@@ -171,7 +172,7 @@ chmod 600 '/home/me/.config/drive-cli/config.json'
 ```sh
 drive personal config set models.memories.provider '"openai"'
 drive personal config set models.memories.model '"YOUR_MODEL_ID"'
-drive personal config show --json
+drive config show --json
 ```
 
 Замените `YOUR_MODEL_ID` идентификатором провайдера. Передайте ключ через окружение, а не в чат

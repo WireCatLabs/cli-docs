@@ -74,6 +74,16 @@ drive personal mcp --http --port 8765 --public-url https://mcp.example.com
 
 Временный Quick Tunnel (`cloudflared tunnel --url …`) не подходит: [Quick Tunnels не поддерживают SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), через которые HTTP MCP-сервер передаёт поток ответов.
 
+Чтобы сервер продолжал работать после закрытия окна, запустите его в фоне. Он ответит, как только начнёт слушать, и покажет адрес коннектора и код доступа:
+
+```sh
+drive personal mcp server start --port 8765 --public-url https://<device>.<network>.ts.net
+drive personal mcp server status   # running, port, connector address, the current login code, apps logged in
+drive personal mcp server stop     # stops only a server that `mcp server start` started
+```
+
+Код хранится рядом с файлом токена профиля (`mcp-http.lock`, режим 600) и обновляется каждые десять минут; сервер, запущенный так, не пишет его в свой журнал. WireCat Desktop показывает то же состояние в разделе Tools → Google Drive → MCP server.
+
 ## Подключите приложение
 
 Адрес для приложения — адрес туннеля с `/mcp` в конце, например `https://<device>.<network>.ts.net/mcp`. Добавьте его как удалённый MCP-коннектор:

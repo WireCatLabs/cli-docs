@@ -25,7 +25,7 @@ These options apply to the selected profile and current invocation.
 | `--yes` | answer a policy confirmation; cannot override deny or readonly. |
 | `--allow-dangerous` | answer a permanent-deletion confirmation. |
 | `--permission <key=level>` | temporary policy override; repeat to add keys. |
-| `--record` | keep this run — ids and timings, never document content. |
+| `--record` | keep this run, with the command as typed and secrets hidden; record_input false leaves the typed words out. |
 | `--no-record` | do not keep this run, even if it fails. |
 
 ## `drive session`
@@ -4192,7 +4192,7 @@ drive <profile> config set <key> <json-value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required | max_text_chars, picture_search, record, keep_runs_for_days, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
+| `key` | required | max_text_chars, picture_search, record, record_input, keep_runs_for_days, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
 | `json-value` | required | the new value, as JSON. |
 
 | Option | What it does |
@@ -4355,9 +4355,55 @@ drive <profile> mcp [options]
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
 | `--revoke` | forget every login given to a browser app; each must log in again. |
 
-**Returns:** serve drive's commands to an agent over MCP: search, then read or write
+### `drive mcp server`
 
-**Example:** `drive personal mcp --tools`, `drive personal mcp`, `drive personal mcp --http --public-url https://laptop.example.ts.net`
+start, stop and check `mcp --http` in the background; status shows the login code for a browser app
+
+#### `drive mcp server start`
+
+start `mcp --http` apart from this shell and answer once it listens, with its login code
+
+This command changes local state.
+
+```sh
+drive <profile> mcp server start [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--port <port>` | the local port (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
+| `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
+
+**Returns:** start the HTTP MCP server in the background
+
+**Example:** `drive personal mcp server start --public-url https://laptop.example.ts.net`
+
+#### `drive mcp server stop`
+
+stop `mcp --http` — only one that `mcp server start` started
+
+This command changes local state.
+
+```sh
+drive <profile> mcp server stop
+```
+
+**Returns:** stop the background HTTP MCP server
+
+**Example:** `drive personal mcp server stop`
+
+#### `drive mcp server status`
+
+whether `mcp --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
+
+```sh
+drive <profile> mcp server status
+```
+
+**Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
+
+**Example:** `drive personal mcp server status --json`
 
 ## `drive commands`
 
@@ -4401,7 +4447,7 @@ drive skill show [options]
 
 ### `drive skill install`
 
-write SKILL.md to \~/.claude/skills/drive-cli/ (Claude Code) and \~/.agents/skills/drive-cli/ (Codex, Gemini CLI)
+write SKILL.md to \~/.claude/skills/drive-cli/ (Claude Code) and \~/.agents/skills/drive-cli/ (Codex, Gemini CLI, OpenClaw); --for hermes also has Hermes read \~/.agents/skills, which changes Hermes's own settings, so all leaves it out
 
 This command changes local state.
 
@@ -4411,7 +4457,7 @@ drive skill install [options]
 
 | Option | What it does |
 |---|---|
-| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
+| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
 
 **Returns:** put SKILL.md where Claude Code, Codex and Gemini CLI look
 
@@ -4419,7 +4465,7 @@ drive skill install [options]
 
 ### `drive skill status`
 
-for each place `drive skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+for each place `drive skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
 
 ```sh
 drive skill status
@@ -4457,7 +4503,7 @@ drive upgrade [options]
 
 **Returns:** upgrade drive with the package manager that installed it; --check only looks
 
-**Example:** `drive upgrade --check`, `drive upgrade`
+**Example:** `drive upgrade --check`
 
 ## `drive runs`
 

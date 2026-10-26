@@ -33,6 +33,7 @@ antes de moverlos o borrarlos.
 | `permissions` | Acceso por comando: `deny`, `readonly`, `ask` o `allow` | Perfil o `defaults` |
 | `max_text_chars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
 | `record` | `true` guarda cada ejecución en `drive runs list`; predeterminado `false`, que guarda solo las ejecuciones fallidas. `false` definido aquí no guarda ninguna | Solo `defaults` |
+| `record_input` | Una ejecución guardada conserva el comando tal como se escribió, con los secretos o números de teléfono escritos como `[redacted]`. `false` escribe también como `[redacted]` cada valor que pueda ser contenido | Solo `defaults` |
 | `keep_runs_for_days` | Cuántos días se conserva una ejecución guardada; predeterminado `30` | Solo `defaults` |
 | `picture_search` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
 | `models.memories.provider` | Proveedor de IA para la extracción solicitada explícitamente | Perfil o `defaults` |
@@ -54,10 +55,10 @@ Show the saved change; do not change Google files.
 Para uso manual:
 
 ```sh
-drive personal config show --json
+drive config show --json
 drive personal config set permissions.files '"readonly"'
 drive personal config set permissions.documents '"readonly"'
-drive personal config show --json
+drive config show --json
 ```
 
 Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización
@@ -70,7 +71,7 @@ y los [permisos de datos](./security.md) antes de elegir reglas más amplias.
 ```sh
 drive personal config set permissions.files '"readonly"' --defaults
 drive work config set permissions.files '"deny"'
-drive personal config show --json
+drive config show --json
 ```
 
 La primera línea cambia el valor compartido; la segunda lo sustituye para `work`. La última
@@ -157,7 +158,7 @@ modelo y la creación de embeddings deben usar ese mismo directorio.
 | `--dry-run` | Validar y mostrar una operación compatible sin ejecutarla |
 | `--json`, `--jsonl` | Salida estructurada; `--json=id,name` conserva solo esos campos; MCP muestra los caracteres de control de forma visible |
 | `--timeout DURATION`, `--max-output-bytes N` | Limitar el tiempo del comando y la salida almacenada en búfer |
-| `--record`, `--no-record` | Guardar esta ejecución en `drive runs list`, o no guardar nada aunque falle |
+| `--record`, `--no-record` | Guardar esta ejecución en `drive runs list`, con el comando tal como se escribió y los secretos ocultos, o no guardar nada aunque falle |
 
 Estas opciones no son ajustes del archivo. Las de cada comando, como `search --limit` y
 `sync --limit`, se explican en su referencia. Los permisos temporales tienen prioridad sobre los
@@ -172,7 +173,7 @@ Configura la extracción una vez y revisa el resultado antes de guardar recuerdo
 ```sh
 drive personal config set models.memories.provider '"openai"'
 drive personal config set models.memories.model '"YOUR_MODEL_ID"'
-drive personal config show --json
+drive config show --json
 ```
 
 Sustituye `YOUR_MODEL_ID` por el identificador del proveedor. Proporciona la clave por el entorno,
