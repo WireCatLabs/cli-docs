@@ -120,7 +120,7 @@ Consulta [la página de Google sobre aplicaciones no verificadas](https://suppor
 ### Comprobar el perfil guardado
 
 ```sh
-drive personal session list --json
+drive session list --json
 ```
 
 Busca `personal` entre los perfiles. Esta lista muestra la configuración local sin imprimir

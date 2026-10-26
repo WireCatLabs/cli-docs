@@ -4,6 +4,55 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.41.0 — 26.10.2026
+
+### Security
+
+- **A run record hides a secret by what it looks like, not only by the option's name (cli-core 0.446.0).** A token in
+  a known format (GitHub, OpenAI, Anthropic, Slack, AWS, Google, Stripe, npm, Telegram, a JWT, a private key), a
+  `Bearer` credential, the value after `password=`, `pin 1234` or another secret name, and a random-looking string are
+  `[redacted]` inside the word, with the words around it kept: `drive work search documents "Kai password=tulip42"`
+  keeps `Kai password=[redacted]`. A config that will not load now hides every typed value, as `record_input` false
+  does.
+
+### Added
+
+- **`drive <profile> session start --json` also gives the Google sign-in page as one `open_url` line on stderr
+  (cli-core 0.443.0)**, before the plain `Open Google sign-in:` line, so WireCat Desktop can show it as a button.
+- **`drive <profile> mcp server start|stop|status` runs the HTTP MCP server in the background (cli-core 0.446.0).**
+  `start` takes `--public-url`, `--port` and `--permission` and answers once it listens; `status --json` gives the
+  port, the connector address, the current login code with when it runs out, and the apps logged in, each by the
+  name it gave itself; `stop` ends only a server `start` started. `mcp --http` now keeps a lock beside the profile's
+  token file, so a second server for the profile is refused, and its login code renews when it runs out. WireCat
+  Desktop uses these.
+
+### Changed — may break callers
+
+- **A run keeps the command as typed (cli-core 0.440.0).** `drive runs show` and `run.json` now carry `argv`, the
+  words after `drive`, so the owner can read back what was run: a search, a file's name. A secret is still
+  `[redacted]` (an option named for a token, password or API key, a password in a URL, a long opaque string), and so is
+  a phone number. `drive config set record_input false --defaults` writes every value that may be content as
+  `[redacted]`. `--record` help says so; it read "ids and timings, never document content".
+
+## 0.40.0 — 26.10.2026
+
+### Added
+
+- **`drive skill install --for hermes` gives Hermes Agent the skill, and `drive skill status` says what Hermes reads (cli-base 0.59.0).** It adds `~/.agents/skills` to Hermes's `skills.external_dirs` through `hermes config set`, keeping the folders already listed, or copies the file into Hermes's home when that fails. With no Hermes installed it fails with `not_found` and writes nothing. A bare `drive skill install` and `--for all` still write only the Claude Code and `~/.agents/skills` copies. `skill status --json` gains `hermes` beside `targets`.
+- **A run started by OpenClaw or Hermes Agent names that agent (cli-core 0.437.0).** `runs show` gives `agent` as `openclaw` for a command OpenClaw's agent ran, with `from_chat: true` when a chat message started it; a Hermes run carries its session, so a task claim from Hermes is held per session.
+- **The `drive-cli` skill tells OpenClaw and ClawHub that it needs `drive`, and how to install it** (`metadata.openclaw`: `requires.bins` and the npm package `@wirecat/drive-cli`). With `drive` missing from PATH, OpenClaw marks the skill not ready and offers to install the package. Claude Code and Codex ignore the block.
+
+### Fixed
+
+- **`drive runs --help` shows no profile**, as `drive runs list` already did: every command under `runs` reads the run log without one. A group shows the profile word only when a command under it needs a profile (`drive <profile> store`, for `store import`).
+
+## 0.39.0 — 26.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.435.0 moves the shared store to version 34**, which keeps an index for search by meaning (sqlite-vec, shipped in `@wirecat/cli-core-sqlite` 1.1.0). Once drive, or any WireCat CLI on cli-core 0.434.0 or later, has opened the store, drive 0.38 and older refuse it and ask to be upgraded, so upgrade every WireCat CLI together.
+- **`drive upgrade`'s help shows only `drive upgrade --check` as its example.** Copied and run, the bare `drive upgrade` example upgraded drive.
+
 ## 0.38.0 — 25.10.2026
 
 ### Changed — may break callers
