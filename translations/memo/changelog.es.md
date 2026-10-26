@@ -8,7 +8,12 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
-## Sin publicar
+## 0.108.0 — 25.10.2026
+
+### Fixed
+
+- El correo se analiza con postal-mime 4.1.4, que corrige cómo se leen algunos mensajes mal formados: un bloque de cabeceras termina en la primera línea que no es ni un campo ni su continuación, un mensaje adjunto en base64 o quoted-printable sigue siendo un adjunto, y solo se respetan las etiquetas de juego de caracteres UTF-16 reales. Al volver a importar un mensaje así, el texto guardado puede cambiar ligeramente.
+- **`memo --version` sin nada más responde antes de cargar el programa**: unos 50 archivos de módulos en lugar de 1.050 (`cli/start` de cli-core). `--version` con cualquier otra cosa en la línea pasa por el programa como antes.
 
 ## 0.107.0 — 25.10.2026
 
