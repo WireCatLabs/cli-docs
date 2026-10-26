@@ -2159,21 +2159,6 @@
     }
   },
   {
-    "tool": "memo",
-    "slug": "configuration",
-    "reason": "The released configuration page says Memo has no config command, but the same release adds memo config unset (its only subcommand, checked with memo config --help on 0.107.0). Keys are still added by hand.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "Memo has no `config` command: add the keys to `config.json` by hand.",
-          "after": "Add these keys to `config.json` by hand: `memo config` only removes settings."
-        }
-      ]
-    },
-    "source": "https://github.com/WireCatLabs/cli-memo/blob/v0.107.0/docs/configuration.md"
-  },
-  {
     "tool": "zm",
     "slug": "search",
     "reason": "Commands have one name and no aliases: state where --since-time and --until-time apply without naming the list options they replaced.",

@@ -96,7 +96,7 @@ de correo y RDAP que hizo, con sus tiempos y códigos de estado. Nunca una nota,
 | `record` | `true` guarda todas las ejecuciones, no solo las fallidas; `false` no guarda ninguna, ni siquiera las fallidas. Sin definir: solo las fallidas. `--record` y `--no-record` deciden para un comando. |
 | `keep_runs_for_days` | Cuántos días se guardan las ejecuciones. Por defecto, 30. |
 
-Añade estas claves a `config.json` a mano: `memo config` solo elimina ajustes.
+Añade las claves a `config.json` a mano; `memo config unset <key>` elimina una.
 
 ## `agent_decisions`
 
