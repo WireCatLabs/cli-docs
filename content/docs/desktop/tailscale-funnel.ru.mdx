@@ -45,6 +45,8 @@ curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list
 sudo apt-get update && sudo apt-get install tailscale
 ```
 
+Если `curl` нет, WireCat ставит первой строкой `sudo apt-get install -y curl`.
+
 Для другого выпуска `noble` меняется на кодовое имя выпуска: `jammy` для Ubuntu 22.04, `bookworm` или `trixie` для Debian 12 или 13, а `ubuntu` — на `debian`. У Raspberry Pi OS — `raspbian`. Linux Mint и другие системы на основе Ubuntu берут тот выпуск Ubuntu, на котором построены. Все выпуски есть на [странице пакетов Tailscale](https://pkgs.tailscale.com/stable/#linux).
 
 Если Tailscale установлен, а источника обновлений нет, выполненный шаг установки скажет об этом и покажет команды под **Add the update source**.
