@@ -1,3 +1,4 @@
+import { rmSync } from "node:fs"
 import { describe, expect, it, vi } from "vitest"
 import { createSandbox, sandboxEnv } from "./cli-sandbox.ts"
 
@@ -16,6 +17,7 @@ describe("sandbox env for released CLIs", () => {
     for (const key of ["HOME", "MESSAGING_STORE", "WIRECAT_STATE_DIR", "XDG_CONFIG_HOME", "XDG_DATA_HOME"])
       expect(env[key]?.startsWith(dir)).toBe(true)
     vi.unstubAllEnvs()
+    rmSync(dir, { recursive: true, force: true })
   })
 
   it("does not inherit other variables", () => {

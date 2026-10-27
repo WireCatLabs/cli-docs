@@ -1,4 +1,4 @@
-import { mkdtempSync } from "node:fs"
+import { mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
@@ -26,5 +26,6 @@ export function sandboxEnv(dir: string): NodeJS.ProcessEnv {
 
 export function createSandbox(label: string): { dir: string; env: NodeJS.ProcessEnv } {
   const dir = mkdtempSync(join(tmpdir(), `wirecat-doc-${label}-`))
+  process.once("exit", () => rmSync(dir, { recursive: true, force: true }))
   return { dir, env: sandboxEnv(dir) }
 }
