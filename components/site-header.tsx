@@ -5,11 +5,11 @@ import { Editorial } from "@/components/landing/editorial"
 import { languageSwitcherHtml } from "@/lib/language-switcher"
 
 /** One reviewed navigation for every public page. */
-export function SiteHeader({ lang, html }: { lang: string; html: string }) {
+export function SiteHeader({ lang, html, blogPaths }: { lang: string; html: string; blogPaths?: string[] }) {
   const pathname = usePathname()
   const header = html.replace(
     /<details class="language-switcher editorial-language"[\s\S]*?<\/details>/,
-    languageSwitcherHtml(lang, pathname),
+    languageSwitcherHtml(lang, pathname, blogPaths),
   )
   return (
     <>

@@ -21,7 +21,8 @@ export function pageAlternates(lang: string, suffix: string, available = seoLoca
   )
   return {
     canonical: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
-    languages: { ...languages, "x-default": languages.en ?? languages[available[0]] },
+    // A page with no English version has no x-default, rather than pretending another language is the default.
+    languages: { ...languages, ...(languages.en ? { "x-default": languages.en } : {}) },
   }
 }
 
@@ -32,6 +33,9 @@ export function pageMetadata({
   description,
   available = seoLocales,
   article = false,
+  socialImage,
+  canonical,
+  published,
 }: {
   lang: string
   suffix?: string
@@ -39,23 +43,35 @@ export function pageMetadata({
   description: string
   available?: SiteLocale[]
   article?: boolean
+  socialImage?: { pathname: string; alt: string }
+  /** Where the original lives, when the page republishes it. */
+  canonical?: string
+  published?: { date: string; updated?: string; tags: string[] }
 }): Metadata {
   const image = {
-    url: absoluteUrl(`/og/${localeOf(lang)}.png`),
+    url: absoluteUrl(socialImage?.pathname ?? `/og/${localeOf(lang)}.png`),
     width: 1200,
     height: 630,
-    alt: seoWords(lang).socialTitle,
+    alt: socialImage?.alt ?? seoWords(lang).socialTitle,
   }
+  const alternates = pageAlternates(lang, suffix, available)
   return {
     title: { absolute: title },
     description,
-    alternates: pageAlternates(lang, suffix, available),
+    alternates: canonical ? { ...alternates, canonical } : alternates,
     openGraph: {
       siteName: appName,
       title,
       description,
-      url: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
-      type: article ? "article" : "website",
+      url: canonical ?? absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
+      ...(article || published
+        ? {
+            type: "article",
+            ...(published
+              ? { publishedTime: published.date, modifiedTime: published.updated, tags: published.tags }
+              : {}),
+          }
+        : { type: "website" }),
       locale: { en: "en_US", ru: "ru_RU", es: "es_ES" }[localeOf(lang)],
       alternateLocale: available
         .filter((locale) => locale !== lang)
@@ -110,6 +126,7 @@ export function pageStructuredData({
   breadcrumbs = [],
   tool,
   aboutProject = false,
+  post,
 }: {
   lang: string
   pathname: string
@@ -118,6 +135,7 @@ export function pageStructuredData({
   breadcrumbs?: { name: string; pathname: string }[]
   tool?: (typeof tools)[number]
   aboutProject?: boolean
+  post?: { date: string; updated?: string; image: string; keywords: string[] }
 }) {
   const url = absoluteUrl(pathname)
   const organizationId = `${siteUrl}/#organization`
@@ -139,7 +157,7 @@ export function pageStructuredData({
       publisher: { "@id": organizationId },
     },
     {
-      "@type": tool ? "TechArticle" : aboutProject ? "AboutPage" : "WebPage",
+      "@type": tool ? "TechArticle" : aboutProject ? "AboutPage" : post ? "BlogPosting" : "WebPage",
       "@id": `${url}#page`,
       url,
       name: title,
@@ -147,6 +165,17 @@ export function pageStructuredData({
       inLanguage: lang,
       isPartOf: { "@id": `${siteUrl}/#website` },
       ...(aboutProject ? { mainEntity: { "@id": organizationId } } : {}),
+      ...(post
+        ? {
+            headline: title,
+            datePublished: post.date,
+            dateModified: post.updated ?? post.date,
+            image: absoluteUrl(post.image),
+            keywords: post.keywords,
+            author: { "@type": "Person", name: "Viacheslav Ptsarev", url: siteConfig.contacts.maintainerTelegram },
+            publisher: { "@id": organizationId },
+          }
+        : {}),
     },
   ]
   if (breadcrumbs.length > 1)

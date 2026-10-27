@@ -57,6 +57,27 @@ describe("production SEO guard", () => {
   })
   afterEach(() => rmSync(out, { recursive: true, force: true }))
 
+  it("lets a blog post republished from elsewhere keep its original canonical, out of the sitemap", () => {
+    const home = readFileSync(join(out, "index.html"), "utf8")
+    const original = "https://habr.com/ru/articles/1/"
+    const post = home
+      .replace('<link rel="canonical" href="https://example.test/">', `<link rel="canonical" href="${original}">`)
+      .replace(
+        'content="https://example.test/"><meta property="og:image"',
+        `content="${original}"><meta property="og:image"`,
+      )
+      .replace('"url":"https://example.test/"}', '"url":"https://example.test/en/blog/first"}')
+      .replace(/<link hreflang="[^>]+>/g, "")
+      .replace(
+        "</title>",
+        '</title><link hreflang="en" href="https://example.test/en/blog/first"><link hreflang="x-default" href="https://example.test/en/blog/first">',
+      )
+    write("en/blog/first.html", post)
+    expect(seoProblems(out, "https://example.test")).toEqual([])
+    write("en/about.html", post)
+    expect(seoProblems(out, "https://example.test")).toContain("/en/about: canonical must match the public HTTPS page")
+  })
+
   it("accepts matching public metadata and a complete reciprocal locale cluster", () => {
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([])
   })

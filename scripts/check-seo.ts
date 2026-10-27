@@ -18,6 +18,7 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
   const normalizedRoot = (url: string | undefined) => (url === origin ? `${origin}/` : url)
   const stableHome = existsSync(join(out, "index.html"))
   if (locales.includes("en") && !stableHome) problems.push("Missing stable English homepage at /")
+  const elsewhere = new Set<string>()
   const pages = new Map<
     string,
     { html: string; lang: string; metadata: Map<string, string>; alternates: Map<string, string> }
@@ -47,7 +48,14 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     if (pathname === "/" && (/<meta[^>]+http-equiv="refresh"/i.test(html) || /src="\/language\.js"/.test(raw)))
       fail("homepage must not redirect by language")
     const canonical = links.filter((link) => link.rel === "canonical")
-    if (canonical.length !== 1 || normalizedRoot(canonical[0]?.href) !== `${origin}${pathname}`)
+    // A blog post first published elsewhere points its canonical there and stays out of the sitemap.
+    const republished =
+      /^\/(?:en|ru|es)\/blog\/[^/]+$/.test(pathname) &&
+      canonical.length === 1 &&
+      /^https:\/\//.test(canonical[0]?.href ?? "") &&
+      new URL(canonical[0]?.href ?? "").origin !== origin
+    if (republished) elsewhere.add(pathname)
+    else if (canonical.length !== 1 || normalizedRoot(canonical[0]?.href) !== `${origin}${pathname}`)
       fail("canonical must match the public HTTPS page")
     const title = decode(/<title[^>]*>([\s\S]*?)<\/title>/.exec(html)?.[1] ?? "")
     if (!title.trim()) fail("missing title")
@@ -60,7 +68,8 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
       if (metadata.get(key) !== title) fail(`${key} must match the page title`)
     for (const key of ["og:description", "twitter:description"])
       if (metadata.get(key) !== metadata.get("description")) fail(`${key} must match the page description`)
-    if (normalizedRoot(metadata.get("og:url")) !== `${origin}${pathname}`) fail("Open Graph URL must match canonical")
+    if (normalizedRoot(metadata.get("og:url")) !== (republished ? canonical[0]?.href : `${origin}${pathname}`))
+      fail("Open Graph URL must match canonical")
     const image = metadata.get("og:image")
     if (!image?.startsWith(`${origin}/`) || !existsSync(join(out, new URL(image).pathname)))
       fail("missing or unavailable local social image")
@@ -87,7 +96,7 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
           !data["@graph"]?.some(
             (node) =>
               typeof node["@type"] === "string" &&
-              ["WebPage", "AboutPage", "TechArticle"].includes(node["@type"]) &&
+              ["WebPage", "AboutPage", "TechArticle", "BlogPosting"].includes(node["@type"]) &&
               node.url === `${origin}${pathname}`,
           )
         )
@@ -136,8 +145,12 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     if (!xml.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')) problems.push("Invalid sitemap namespace")
     const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => decode(match[1] ?? ""))
     if (new Set(urls).size !== urls.length) problems.push("Duplicate sitemap URLs")
-    for (const pathname of pages.keys())
-      if (!urls.includes(`${origin}${pathname}`)) problems.push(`${pathname}: missing from sitemap`)
+    for (const pathname of pages.keys()) {
+      const listed = urls.includes(`${origin}${pathname}`)
+      if (elsewhere.has(pathname) && listed)
+        problems.push(`${pathname}: canonical lives elsewhere; leave it out of the sitemap`)
+      if (!elsewhere.has(pathname) && !listed) problems.push(`${pathname}: missing from sitemap`)
+    }
     for (const url of urls)
       if (!pages.has(url.slice(origin.length)) || !url.startsWith(`${origin}/`))
         problems.push(`Non-public sitemap URL: ${url}`)

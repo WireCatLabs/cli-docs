@@ -20,7 +20,15 @@ const escapeHtml = (value: string) =>
   )
 
 /** Shared footer exported from the same reviewed source as the landing. */
-export function SiteFooter({ html, variant = "landing" }: { html: string; variant?: "landing" | "docs" }) {
+export function SiteFooter({
+  html,
+  variant = "landing",
+  blogPaths,
+}: {
+  html: string
+  variant?: "landing" | "docs"
+  blogPaths?: string[]
+}) {
   const pathname = usePathname()
   // Add configured contacts at render time so builds do not need to regenerate landing snapshots.
   const { email, telegram } = siteConfig.contacts
@@ -56,7 +64,7 @@ export function SiteFooter({ html, variant = "landing" }: { html: string; varian
   }
   footerHtml = footerHtml.replace(
     /<details class="language-switcher editorial-language"[\s\S]*?<\/details>/,
-    languageSwitcherHtml(lang, pathname),
+    languageSwitcherHtml(lang, pathname, blogPaths),
   )
   if (!footerHtml.includes('class="foot-legal"'))
     footerHtml = footerHtml.replace(

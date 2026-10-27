@@ -1,0 +1,92 @@
+[
+  {
+    "id": "ai-agents",
+    "aliases": ["agents", "ai-agent", "llm-agents", "claude-code", "codex"],
+    "label": { "en": "AI agents", "ru": "ИИ-агенты", "es": "Agentes de IA" },
+    "description": {
+      "en": "Working with coding agents such as Claude Code, Codex, Cursor and Gemini CLI.",
+      "ru": "Работа с агентами: Claude Code, Codex, Cursor, Gemini CLI.",
+      "es": "Trabajo con agentes como Claude Code, Codex, Cursor y Gemini CLI."
+    }
+  },
+  {
+    "id": "mcp",
+    "aliases": ["model-context-protocol", "mcp-server"],
+    "label": { "en": "MCP", "ru": "MCP", "es": "MCP" },
+    "description": {
+      "en": "Model Context Protocol servers and clients, and how agents call tools through them.",
+      "ru": "Серверы и клиенты Model Context Protocol и то, как агенты вызывают через них инструменты.",
+      "es": "Servidores y clientes de Model Context Protocol y cómo los agentes llaman herramientas con ellos."
+    }
+  },
+  {
+    "id": "cli",
+    "aliases": ["command-line", "terminal", "cli-tools"],
+    "label": { "en": "Command line", "ru": "Командная строка", "es": "Línea de comandos" },
+    "description": {
+      "en": "Designing and building command line tools that people and agents both use.",
+      "ru": "Проектирование и разработка инструментов командной строки для людей и агентов.",
+      "es": "Diseño y desarrollo de herramientas de línea de comandos para personas y agentes."
+    }
+  },
+  {
+    "id": "telegram",
+    "aliases": ["tg", "tg-cli"],
+    "label": { "en": "Telegram", "ru": "Telegram", "es": "Telegram" },
+    "description": {
+      "en": "The tg tool and working with Telegram accounts, chats and bots.",
+      "ru": "Инструмент tg и работа с аккаунтами, чатами и ботами Telegram.",
+      "es": "La herramienta tg y el trabajo con cuentas, chats y bots de Telegram."
+    }
+  },
+  {
+    "id": "max-messenger",
+    "aliases": ["max", "max-cli"],
+    "label": { "en": "MAX Messenger", "ru": "MAX", "es": "MAX Messenger" },
+    "description": {
+      "en": "The max tool and working with MAX accounts, chats and bots.",
+      "ru": "Инструмент max и работа с аккаунтами, чатами и ботами MAX.",
+      "es": "La herramienta max y el trabajo con cuentas, chats y bots de MAX."
+    }
+  },
+  {
+    "id": "search",
+    "aliases": ["full-text-search", "semantic-search", "retrieval"],
+    "label": { "en": "Search", "ru": "Поиск", "es": "Búsqueda" },
+    "description": {
+      "en": "Finding messages, notes and documents: indexes, ranking and embeddings.",
+      "ru": "Поиск по сообщениям, заметкам и документам: индексы, ранжирование, эмбеддинги.",
+      "es": "Buscar mensajes, notas y documentos: índices, ranking y embeddings."
+    }
+  },
+  {
+    "id": "benchmarks",
+    "aliases": ["benchmark", "performance", "measurements"],
+    "label": { "en": "Benchmarks", "ru": "Замеры", "es": "Mediciones" },
+    "description": {
+      "en": "Measurements and comparisons with the setup and the script that produced them.",
+      "ru": "Замеры и сравнения с описанием стенда и скриптом, который их получил.",
+      "es": "Mediciones y comparaciones con el entorno y el script que las produjo."
+    }
+  },
+  {
+    "id": "security",
+    "aliases": ["privacy", "safety"],
+    "label": { "en": "Security", "ru": "Безопасность", "es": "Seguridad" },
+    "description": {
+      "en": "Keeping accounts and data safe when an agent acts on the owner's behalf.",
+      "ru": "Как сохранить аккаунты и данные, когда агент действует от имени владельца.",
+      "es": "Cómo proteger cuentas y datos cuando un agente actúa en nombre del dueño."
+    }
+  },
+  {
+    "id": "release-notes",
+    "aliases": ["releases", "changelog", "announcement", "news"],
+    "label": { "en": "Releases", "ru": "Релизы", "es": "Versiones" },
+    "description": {
+      "en": "What a new version or a new tool brings, and why it was built.",
+      "ru": "Что приносит новая версия или новый инструмент и зачем их сделали.",
+      "es": "Qué trae una nueva versión o herramienta, y por qué se hizo."
+    }
+  }
+]

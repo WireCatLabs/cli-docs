@@ -25,6 +25,7 @@
     "docs:updates": "node --experimental-strip-types scripts/docs-updates.ts",
     "docs:freshness": "node --experimental-strip-types scripts/docs-freshness.ts",
     "check:seo": "node --experimental-strip-types scripts/check-seo.ts",
+    "blog:tags": "node --experimental-strip-types scripts/blog-tags.ts",
     "docs:pack": "node --experimental-strip-types scripts/source-pack.ts",
     "docs:contracts": "node --experimental-strip-types scripts/docs-contracts.ts",
     "docs:quality": "node --experimental-strip-types scripts/docs-quality.ts",

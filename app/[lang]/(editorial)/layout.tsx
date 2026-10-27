@@ -2,6 +2,7 @@ import { preload } from "react-dom"
 import { HomeProvider } from "@/components/home-provider"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
+import { blogPaths } from "@/lib/blog"
 import en from "@/lib/editorial/en.json"
 import es from "@/lib/editorial/es.json"
 import ru from "@/lib/editorial/ru.json"
@@ -21,16 +22,17 @@ export default async function Layout({
   const { lang } = await params
   for (const font of landingFonts(lang)) preload(font, { as: "font", type: "font/woff2", crossOrigin: "anonymous" })
   const content = { en, ru, es }[lang as "en" | "ru" | "es"] ?? en
+  const paths = blogPaths()
   return (
     <HomeProvider>
       <div className="wirecat-editorial public-site">
         <a className="skip" href="#main">
           {lang === "ru" ? "Перейти к содержимому" : lang === "es" ? "Ir al contenido" : "Skip to content"}
         </a>
-        <SiteHeader lang={lang} html={content.header} />
+        <SiteHeader lang={lang} html={content.header} blogPaths={paths} />
         {children}
         <div className="wirecat-landing footer-host">
-          <SiteFooter html={content.footer} />
+          <SiteFooter html={content.footer} blogPaths={paths} />
         </div>
       </div>
     </HomeProvider>
