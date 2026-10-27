@@ -9,6 +9,7 @@
   "files": ["content/docs/*.{md,mdx}", "content/docs/desktop/*.{md,mdx}"],
   "ignoreRegExpList": ["/<[^>]+>/g", "/^---[\\s\\S]*?^---/gm"],
   "words": [
+    "reranker",
     "Fellegi",
     "PKCE",
     "diacríticos",
