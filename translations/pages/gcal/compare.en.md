@@ -34,13 +34,13 @@ The tools:
 | **See your day and week** | | | | | | |
 | Today's or this week's meetings in one command | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [🟡](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Type dates in words, such as "tomorrow 3pm" or "next friday" | 🟡 | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/utils.py) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/dates.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | n/a | n/a |
-| Meetings from all your calendars and accounts in one list | 🟡 | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | 🟡 | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Meetings from all your calendars and accounts in one list | 🟡 | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | See what changed since a date: new, moved and cancelled meetings | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
 | Find meetings that overlap | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | **Find a meeting** | | | | | | |
-| Find a meeting by what it was about, not by its exact words | ✅ | ➖ | ➖ | ➖ | ➖ | 🟡 |
+| Find a meeting by what it was about, not by its exact words | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Search your meetings without the internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | ❌ | ❌ | ❌ |
-| One search over meetings, chats, mail and notes | 🟡 | ➖ | ➖ | ➖ | ➖ | 🟡 |
+| One search over meetings, chats, mail and notes | 🟡 | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **People** | | | | | | |
 | Know that an attendee is the person you write to in Telegram, WhatsApp or mail | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Prepare for the next meeting: who comes, what you last discussed, linked documents | ❌ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | ➖ |
@@ -52,9 +52,8 @@ The tools:
 | MCP server | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | Every calendar command of the tool is also an MCP tool | ✅ | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
 | An agent cannot change your calendar unless you allow it | ✅ | n/a | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
-| You name the account each time; the tool never picks one for you | ✅ | 🟡 | [❌](https://github.com/openclaw/gogcli#readme) | ➖ | [❌](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
+| You name the account each time; the tool never picks one for you | ✅ | ➖ | [❌](https://github.com/openclaw/gogcli#readme) | ➖ | [❌](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | Text from an invitation is marked for the agent as not to be obeyed | 🟡 | n/a | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ | ➖ |
-| Meeting passcodes left out of what the tool shows | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-update.md) | ➖ | ➖ | ➖ |
 | Instructions for agents that use a terminal | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | n/a |
 | **Setup** | | | | | | |
 | Start without creating your own Google Cloud project | ❌ | [❌](https://github.com/insanum/gcalcli#initial-setup) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#quick-start) | [❌](https://github.com/nspady/google-calendar-mcp#google-cloud-setup) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
@@ -77,8 +76,9 @@ Notes on the `gcal` column:
   profile, and a list reads one profile.
 - **Find by meaning.** It needs a model that you download once. Without one, search matches words and their other
   forms.
-- **One search over everything.** Meetings go into the store that the other WireCat tools share, and `search all`
-  in those tools reads them beside chats, mail and notes. `gcal search` itself finds meetings only.
+- **One search over everything.** Meetings go into the store that the other WireCat tools share. `search all` reads
+  them beside chats, mail and notes from cli-core 0.456.0 on; on 27 October 2026 no published WireCat tool had that
+  version yet. `gcal search` itself finds meetings only.
 - **When people are free.** `gcal api calendar-freebusy-query` calls Google's free/busy method directly. No command
   turns its answer into free times.
 - **An agent cannot change your calendar.** The read-only sign-in is the limit; each profile's permissions can also
@@ -86,7 +86,8 @@ Notes on the `gcal` column:
 - **Text from invitations.** Anyone can send you an invitation, so its title, notes and place are someone else's
   words. The MCP server and the agent instructions tell the agent this text is data, not instructions; the text
   itself is not wrapped or changed.
-- **Passcodes.** The meeting link is kept without the part where Google, Zoom and Teams put a passcode.
+- **Passcodes.** The stored meeting link is kept without the part where Google, Zoom and Teams put a passcode. The
+  raw `gcal api` commands return Google's answer as it is, passcodes included.
 - **Every command an MCP tool.** All commands except `mcp` itself, through three MCP tools: search, read and write.
 - **Speed and cost against a browser agent.** `gcal` calls Google's API and reads its own copy; it opens no
   browser. No measurement of it against a browser agent is published, so this page makes no claim.
