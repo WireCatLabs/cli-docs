@@ -3,6 +3,8 @@ title: El reranker nunca vio el mensaje que estaba puntuando
 description: En chats reales, una de cada siete respuestas tenía un mensaje original tan largo que el resultado quedaba fuera de la ventana del modelo. Recortar el original a 300 caracteres lo resolvió y ahorró un 40% del trabajo.
 date: 2026-10-27
 tags: [search, benchmarks]
+cover: ./cover.jpg
+coverAlt: Una ventana de lectura morada sobre una pila de mensajes; un mensaje largo la llena y uno verde queda justo debajo, fuera de la ventana
 draft: true
 ---
 

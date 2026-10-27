@@ -3,6 +3,8 @@ title: Making a reranker fast on a laptop, in four acts
 description: Batching a quantized reranker changed its answers, not its speed. A native runtime made it 2× faster, not 10×. Shipping that runtime took no new npm packages, and on Windows the library we needed was only inside an npm tarball.
 date: 2026-10-27
 tags: [search, benchmarks, cli]
+cover: ./cover.jpg
+coverAlt: A laptop sorting a list of bars, four tiles stepping up beside it, and five chips with green check marks
 draft: true
 ---
 

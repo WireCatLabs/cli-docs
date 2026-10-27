@@ -3,6 +3,8 @@ title: Cómo acelerar un reranker en un portátil, en cuatro actos
 description: Procesar por lotes un reranker cuantizado cambió sus respuestas, no su velocidad. Una biblioteca nativa lo hizo 2 veces más rápido, no 10. Distribuirla no necesitó paquetes npm nuevos, y para Windows la biblioteca que hacía falta solo estaba dentro de un archivo npm.
 date: 2026-10-27
 tags: [search, benchmarks, cli]
+cover: ./cover.jpg
+coverAlt: Un portátil ordena una lista de barras; a su lado suben cuatro fichas en escalera y hay cinco chips con marcas verdes
 draft: true
 ---
 

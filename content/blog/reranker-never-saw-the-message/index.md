@@ -3,6 +3,8 @@ title: The reranker never saw the message it was scoring
 description: On real chats, one reply in seven had a parent long enough to push the hit out of the reranker's window. Cutting the parent to 300 characters fixed it and saved 40% of the work.
 date: 2026-10-27
 tags: [search, benchmarks]
+cover: ./cover.jpg
+coverAlt: A purple reading window over a stack of chat bubbles; one long bubble fills it, and a green bubble sits just below the window, left out
 draft: true
 ---
 
