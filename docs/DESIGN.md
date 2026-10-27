@@ -48,6 +48,10 @@ wirecat.dev/
 ├── /{lang}/docs/{tool}            the tool's start page (its docs/index.md)                   ✅
 ├── /{lang}/docs/{tool}/{page}     one page of STRUCTURE.md                                    ✅
 ├── /{lang}/docs/{tool}/changelog  the tool's CHANGELOG.md                                     ✅
+├── /{lang}/blog                   posts, newest first, with a topic filter                    🟡 no post yet
+├── /{lang}/blog/{slug}            one post; /{lang}/blog/tags/{id} one topic                  🟡
+├── /{lang}/blog/rss.xml           the language's feed                                          🟡
+├── /llms.mdx/blog/{lang}/…        the post list and each post as Markdown                     🟡
 ├── /{lang}/compare                max and tg side by side, from parity.json                   ⚪ IDEA-107
 ├── /llms.txt                      every page once, as links to its Markdown                   ✅
 ├── /llms-full.txt                 every page in one file                                      ✅

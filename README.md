@@ -53,6 +53,18 @@ records the selected page, private studio, block library and every earlier desig
 The original landing exporter and scenario sources remain available for About and historical reference.
 Fonts and licences remain local in `public/fonts/`; contacts are configured in `site.config.json`.
 
+## Blog
+
+Posts live in `content/blog/<slug>/index.md`, with `index.ru.md` and `index.es.md` for the other
+languages and images beside them. Front matter: `title`, `description`, `date`, optional `updated`,
+`tags`, `cover` with `coverAlt`, optional `canonical` (the original elsewhere) and `draft`. Drafts
+show in `pnpm dev` and in builds with `BLOG_DRAFTS=1`; production builds leave them out of pages,
+lists, the feed, search and the sitemap. Tags come only from `content/blog/tags.json`: the build
+fails on an unknown tag or an alias, and `pnpm blog:tags` lists them with their use counts
+([how to choose](skills/blog-tags/SKILL.md)). Discord and Telegram discussion links and the
+newsletter endpoint are set in `site.config.json` (`community`, `newsletter`); each appears only
+once its URL is set.
+
 ## Adding a tool
 
 1. Lay out its `docs/` by [STRUCTURE.md](docs/STRUCTURE.md), with `docs/meta.json`, and have its
