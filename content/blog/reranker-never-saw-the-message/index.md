@@ -4,7 +4,7 @@ description: On real chats, one reply in seven had a parent long enough to push 
 date: 2026-10-27
 tags: [search, benchmarks]
 cover: ./cover.jpg
-coverAlt: A purple reading window over a stack of chat bubbles; one long bubble fills it, and a green bubble sits just below the window, left out
+coverAlt: "A printed chat under a black reading mask labelled 512 tokens: the window shows only one long message under a loupe, while a green note with the short reply sits half hidden below the mask"
 draft: true
 ---
 

@@ -4,7 +4,7 @@ description: En chats reales, una de cada siete respuestas tenía un mensaje ori
 date: 2026-10-27
 tags: [search, benchmarks]
 cover: ./cover.jpg
-coverAlt: Una ventana de lectura morada sobre una pila de mensajes; un mensaje largo la llena y uno verde queda justo debajo, fuera de la ventana
+coverAlt: "Un chat impreso bajo una máscara negra con la etiqueta 512 tokens: la ventana solo muestra un mensaje largo bajo una lupa, y una nota verde con la respuesta corta queda medio oculta bajo la máscara"
 draft: true
 ---
 

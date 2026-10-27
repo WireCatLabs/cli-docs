@@ -4,7 +4,7 @@ description: Batching a quantized reranker changed its answers, not its speed. A
 date: 2026-10-27
 tags: [search, benchmarks, cli]
 cover: ./cover.jpg
-coverAlt: A laptop sorting a list of bars, four tiles stepping up beside it, and five chips with green check marks
+coverAlt: "A laptop showing 4.6 s and 3.2 s bars, a stopwatch, and five small computers labelled linux x64, linux arm64, macos arm64, windows x64 and windows arm64, each with a green light"
 draft: true
 ---
 
