@@ -1,12 +1,12 @@
 import { staticClient } from "fumadocs-core/search/client/orama-static"
 
-type Options = { from: string; locale?: string }
+type Options = { from: string; locale?: string; tag?: string }
 type Loaded = { client: ReturnType<typeof staticClient>; objectUrl?: string }
 const clients = new Map<string, Promise<Loaded>>()
 
 /** Decode the asset separately from any HTTP compression applied by the static host. */
 export function compressedStaticClient(options: Options): ReturnType<typeof staticClient> {
-  const key = `${options.from}:${options.locale ?? ""}`
+  const key = `${options.from}:${options.locale ?? ""}:${options.tag ?? ""}`
   const load = () => {
     let promise = clients.get(key)
     if (!promise) {
@@ -23,7 +23,7 @@ export function compressedStaticClient(options: Options): ReturnType<typeof stat
     return promise
   }
   return {
-    deps: [options.locale, options.from],
+    deps: [options.locale, options.from, options.tag],
     async search(query) {
       const loaded = await load()
       try {

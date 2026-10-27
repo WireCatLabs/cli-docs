@@ -10,6 +10,7 @@ export default defineConfig(fullConfig, {
     "onboarding-merge.spec.ts",
     "search-playground.spec.ts",
     "browser-platform-setup.spec.ts",
+    "blog.spec.ts",
   ],
-  grep: /English root is complete|demo choices and return-home|term explanation opens on hover|installation deep links lead to tool guides|same query playground works|Windows visitors start|WhatsApp setup and guides/,
+  grep: /English root is complete|demo choices and return-home|term explanation opens on hover|installation deep links lead to tool guides|same query playground works|Windows visitors start|WhatsApp setup and guides|blog/,
 })

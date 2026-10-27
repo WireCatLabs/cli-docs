@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next"
+import { blogPath, blogPostLocales, blogPosts, blogTagLocales, blogTagsIn } from "@/lib/blog"
 import { absoluteUrl, pageAlternates, seoLocales } from "@/lib/seo"
 import { homePath } from "@/lib/site-routes"
 import { source } from "@/lib/source"
@@ -7,7 +8,7 @@ export const dynamic = "force-static"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return seoLocales.flatMap((lang) => [
-    ...["", "/about", "/features", "/examples", "/privacy", "/terms"].map((suffix) => ({
+    ...["", "/about", "/features", "/examples", "/privacy", "/terms", "/blog"].map((suffix) => ({
       url: absoluteUrl(suffix ? `/${lang}${suffix}` : homePath(lang)),
       alternates: { languages: pageAlternates(lang, suffix).languages },
     })),
@@ -21,5 +22,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
       }
     }),
+    ...blogPosts(lang)
+      .filter((post) => !post.canonical)
+      .map((post) => ({
+        url: absoluteUrl(post.url),
+        lastModified: post.updated ?? post.date,
+        alternates: { languages: pageAlternates(lang, `/blog/${post.slug}`, blogPostLocales(post.slug)).languages },
+      })),
+    ...blogTagsIn(lang).map((tag) => ({
+      url: absoluteUrl(blogPath(lang, "tags", tag.id)),
+      alternates: { languages: pageAlternates(lang, `/blog/tags/${tag.id}`, blogTagLocales(tag.id)).languages },
+    })),
   ])
 }

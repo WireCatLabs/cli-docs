@@ -1,19 +1,34 @@
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { ImageResponse } from "next/og"
+import { blogLocales, blogPost, blogPosts } from "@/lib/blog"
+import { blogWords } from "@/lib/blog-words"
 import { localeOf, seoLocales, seoWords } from "@/lib/seo"
 
 export const dynamic = "force-static"
 
 export function generateStaticParams() {
-  return seoLocales.map((lang) => ({ image: `${lang}.png` }))
+  return [
+    ...seoLocales.map((lang) => ({ image: `${lang}.png` })),
+    ...blogLocales.flatMap((lang) => blogPosts(lang).map((post) => ({ image: `blog-${lang}-${post.slug}.png` }))),
+  ]
 }
 
 export async function GET(_request: Request, { params }: { params: Promise<{ image: string }> }) {
   const { image } = await params
-  const lang = localeOf(image.replace(/\.png$/, ""))
+  const [, postLang, slug] = /^blog-(en|ru|es)-(.+)\.png$/.exec(image) ?? []
+  const post = postLang && slug ? blogPost(postLang, slug) : undefined
+  const lang = localeOf(post ? post.lang : image.replace(/\.png$/, ""))
   const words = seoWords(lang)
   const [memory, context] = words.socialTitle.split(/(?<=\.) /)
+  const headline = post ? (
+    <span style={{ fontSize: post.title.length > 60 ? 48 : 56, lineHeight: 1.2 }}>{post.title}</span>
+  ) : (
+    <>
+      <span>{memory}</span>
+      <span style={{ color: "#b8afff" }}>{context}</span>
+    </>
+  )
   const fonts = [
     {
       name: "Unbounded Latin",
@@ -52,11 +67,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
         </div>
         <span style={{ fontSize: 28, color: "#d3d9db" }}>wirecat.dev</span>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", fontSize: 56, lineHeight: 1.2, gap: 8 }}>
-        <span>{memory}</span>
-        <span style={{ color: "#b8afff" }}>{context}</span>
+      <div style={{ display: "flex", flexDirection: "column", fontSize: 56, lineHeight: 1.2, gap: 8 }}>{headline}</div>
+      <div style={{ display: "flex", fontSize: 28, color: "#d3d9db" }}>
+        {post ? `${blogWords(lang).title} · ${post.date}` : words.socialDescription}
       </div>
-      <div style={{ display: "flex", fontSize: 28, color: "#d3d9db" }}>{words.socialDescription}</div>
     </div>,
     { width: 1200, height: 630, fonts },
   )

@@ -1,5 +1,6 @@
 import type { Node } from "fumadocs-core/page-tree"
 import { isCommunity, isSecondaryPage, toolSections } from "@/lib/agent-docs"
+import { blogMarkdownPath, blogPosts } from "@/lib/blog"
 import { i18n } from "@/lib/i18n"
 import { documentationDescription } from "@/lib/seo"
 import { appName, getPageMarkdownUrl, siteUrl, tools } from "@/lib/shared"
@@ -68,6 +69,13 @@ export function GET() {
     "",
     `- [Privacy Policy](${siteUrl}/llms.mdx/legal/en/privacy/content.md): Google access, local data, AI transfers and website privacy.`,
     `- [Terms of Service](${siteUrl}/llms.mdx/legal/en/terms/content.md): Account permissions, your content and third-party services.`,
+    "",
+    "## Blog",
+    "",
+    `Research, benchmarks and how the tools work. Every post: ${siteUrl}${blogMarkdownPath("en")} (Russian and Spanish: replace /en/).`,
+    ...blogPosts(i18n.defaultLanguage).map(
+      (post) => `- [${post.title}](${siteUrl}${blogMarkdownPath(post.lang, post.slug)}): ${post.description}`,
+    ),
     "",
     "",
     ...toolSections(tools, (tool) =>

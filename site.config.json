@@ -10,5 +10,12 @@
   "analytics": {
     "posthogKey": "phc_84fSu0Ag4aCj1GoFASXAB2fY8XTPR5CCa8GQ9U8BPyv",
     "posthogHost": "https://eu.i.posthog.com"
+  },
+  "community": {
+    "discord": "",
+    "telegramGroup": ""
+  },
+  "newsletter": {
+    "endpoint": ""
   }
 }

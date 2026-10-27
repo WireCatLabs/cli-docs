@@ -5,6 +5,8 @@ import { expect, type Page, test } from "@playwright/test"
 // Discover every public page so adding a route cannot silently bypass the shell contract.
 const directory = fileURLToPath(new URL("../app/", import.meta.url))
 const routes = new Set<string>()
+// Posts and topics exist in only some languages; tests/blog.spec.ts covers them. The list exists in all three.
+const parameterFixtures: Record<string, string[]> = { "blog/[[...slug]]": ["/blog"] }
 for (const file of readdirSync(directory, { recursive: true }).map(String)) {
   const path = file.replaceAll("\\", "/")
   if (!/(?:^|\/)page\.(?:[jt]sx?|mdx)$/.test(path)) continue
@@ -15,9 +17,11 @@ for (const file of readdirSync(directory, { recursive: true }).map(String)) {
     if (parts[1] === "docs") continue
     parts = parts.slice(1)
   } else if (parts.length) throw new Error(`Public page ${path} needs an explicit locale fixture`)
-  if (parts.some((part) => /[[(@]/.test(part)))
+  const fixture = parameterFixtures[parts.join("/")]
+  if (fixture) for (const route of fixture) routes.add(route)
+  else if (parts.some((part) => /[[(@]/.test(part)))
     throw new Error(`Public page ${path} needs an explicit parameter fixture`)
-  routes.add(parts.length ? `/${parts.join("/")}` : "")
+  else routes.add(parts.length ? `/${parts.join("/")}` : "")
 }
 
 /** Compare stable navigation, not the language menu whose destinations follow the current page. */
