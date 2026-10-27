@@ -34,6 +34,11 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     const lang = pathname === "/" ? "en" : pathname.split("/")[1]
     if (!locales.includes(lang)) continue
     const raw = readFileSync(file, "utf8")
+    // Reached only from the confirmation email: kept out of the sitemap, so it must say noindex instead.
+    if (/^\/(?:en|ru|es)\/newsletter\/confirm$/.test(pathname)) {
+      if (!/<meta[^>]+name="robots"[^>]+noindex/i.test(raw)) problems.push(`${pathname}: must be noindex`)
+      continue
+    }
     const html = raw.replace(/<script\b[\s\S]*?<\/script>/g, "")
     const metadata = new Map(
       [...html.matchAll(/<meta\b[^>]*>/g)].map(([tag]) => {

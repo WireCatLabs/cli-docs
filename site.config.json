@@ -16,6 +16,7 @@
     "telegramGroup": ""
   },
   "newsletter": {
-    "endpoint": ""
+    "apiUrl": "",
+    "turnstileSiteKey": ""
   }
 }

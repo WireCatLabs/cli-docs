@@ -164,6 +164,12 @@ describe("production SEO guard", () => {
       expect.arrayContaining(["/ru: missing from sitemap", "Non-public sitemap URL: https://example.test/404"]),
     )
   })
+  it("lets the newsletter confirmation page stay out of the sitemap when it is noindex", () => {
+    write("en/newsletter/confirm.html", '<html lang="en"><meta name="robots" content="noindex, nofollow"></html>')
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([])
+    write("ru/newsletter/confirm.html", '<html lang="ru"></html>')
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(["/ru/newsletter/confirm: must be noindex"])
+  })
   it("rejects accidentally noindexed public pages and stale Twitter images", () => {
     const file = join(out, "index.html")
     writeFileSync(

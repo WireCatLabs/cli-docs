@@ -62,8 +62,8 @@ show in `pnpm dev` and in builds with `BLOG_DRAFTS=1`; production builds leave t
 lists, the feed, search and the sitemap. Tags come only from `content/blog/tags.json`: the build
 fails on an unknown tag or an alias, and `pnpm blog:tags` lists them with their use counts
 ([how to choose](skills/blog-tags/SKILL.md)). Discord and Telegram discussion links and the
-newsletter endpoint are set in `site.config.json` (`community`, `newsletter`); each appears only
-once its URL is set.
+newsletter (the wirecat-api URL and the Turnstile site key) are set in `site.config.json` (`community`,
+`newsletter`); each appears only once its values are set.
 
 ## Adding a tool
 
