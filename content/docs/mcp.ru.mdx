@@ -15,7 +15,7 @@ MCP-сервером без отдельной интеграции. Станд�
 
 - **Клиент** — ваше ИИ-приложение, например Claude Desktop, ChatGPT, Cursor или Gemini CLI. Он
   спрашивает у сервера, какие есть инструменты, и вызывает нужный, когда этого требует запрос.
-- **Сервер** — `tg mcp` или `max mcp`, часть инструмента командной строки. Он работает на вашем
+- **Сервер** — `tg <профиль> mcp serve` или `max <профиль> mcp serve`, часть инструмента командной строки. Он работает на вашем
   компьютере или на сервере, к которому чат в браузере обращается по публичному HTTPS-адресу.
 
 Через MCP ИИ может пользоваться только инструментами, которые предлагает сервер, и только в пределах
@@ -78,6 +78,11 @@ ChatGPT, Claude и другие веб-чаты подключаются чер�
 Она показывает конфигурацию, а не редактирует клиент. PATH у приложения с рабочего стола
 может отличаться от PATH терминала.
 
+Сервер работает только с профилем, который вы назвали: `tg personal mcp serve`. Чтобы один сервер работал
+с несколькими профилями, перечислите их: `tg mcp serve --profiles personal,work`, или укажите `--profiles all`
+для всех профилей; тогда каждый вызов инструмента называет свой профиль. Без профиля или `--profiles` сервер
+не запускается, а `tg mcp` без продолжения только показывает справку.
+
 ### Codex
 
 В терминале, где установленная команда уже работает:
@@ -87,7 +92,7 @@ tg personal mcp add codex
 codex mcp list
 ```
 
-Setup использует собственную команду Codex и не трогает другие серверы. Вручную то же делает `codex mcp add tg -- tg personal mcp`.
+Setup использует собственную команду Codex и не трогает другие серверы. Вручную то же делает `codex mcp add tg -- tg personal mcp serve`.
 
 Подключите только нужные мессенджеры. Codex хранит MCP в `~/.codex/config.toml`.
 Для Windows или IDE с другим PATH возьмите `command`, `args` и `env` из `mcp config`
@@ -101,7 +106,7 @@ tg personal mcp add claude-code
 claude mcp list
 ```
 
-Вручную то же делает `claude mcp add --scope user tg -- tg personal mcp`. Если профиль даёт инструменты записи, setup просит сначала проверить его [разрешения](./permissions.mdx) и повторить с `--allow-writes`. Флаг только подтверждает установку; разрешения он не меняет.
+Вручную то же делает `claude mcp add --scope user tg -- tg personal mcp serve`. Если профиль даёт инструменты записи, setup просит сначала проверить его [разрешения](./permissions.mdx) и повторить с `--allow-writes`. Флаг только подтверждает установку; разрешения он не меняет.
 
 В сессии проверьте состояние через `/mcp`. Для полных путей используйте значения из `mcp config`.
 [Официальная инструкция Claude Code MCP](https://code.claude.com/docs/en/mcp).
@@ -124,7 +129,7 @@ claude mcp list
 ### Gemini CLI
 
 ```sh
-gemini mcp add --scope user tg tg personal mcp
+gemini mcp add --scope user tg tg personal mcp serve
 gemini mcp list
 ```
 
@@ -144,9 +149,9 @@ Hermes использует `mcp_servers` в `~/.hermes/config.yaml`. Добав
 
 Каждый инструмент запускает свой сервер. Подключите его командой, которой ваш клиент добавляет MCP-серверы:
 
-- **Zoom:** `zm personal mcp`.
-- **Google Drive:** `drive personal --read-only mcp`.
-- **Memo:** `memo mcp`.
+- **Zoom:** `zm personal mcp serve`.
+- **Google Drive:** `drive personal --read-only mcp serve`.
+- **Memo:** `memo mcp serve`.
 
 ## Что агент может делать
 

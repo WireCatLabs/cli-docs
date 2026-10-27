@@ -201,7 +201,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "tg / max mcp --http",
+              name: "tg / max mcp serve --http",
               note: "on your computer; asks for the login code, then a form before each change",
               tone: "tool",
             },
@@ -218,7 +218,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "tg / max mcp --http",
+              name: "tg / max mcp serve --http",
               note: "на вашем компьютере; просит код входа, а перед каждым изменением — форму",
               tone: "tool",
             },
@@ -239,7 +239,7 @@ export const diagrams: Record<string, Record<Lang, { title: string; rows: Row[] 
         {
           boxes: [
             {
-              name: "tg / max mcp --http",
+              name: "tg / max mcp serve --http",
               note: "en tu ordenador; pide el código de acceso y un formulario antes de cada cambio",
               tone: "tool",
             },

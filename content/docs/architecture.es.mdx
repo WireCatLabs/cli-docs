@@ -69,7 +69,7 @@ Toma `tg work messages send "Book club" "See you at 7"`:
    todo lo que abrió el comando — socket, temporizador, base de datos — y el proceso termina.
 
 Un comando puntual que imprime su resultado y sigue en marcha se considera un defecto. Solo `watch`,
-`serve` y `mcp` mantienen una conexión, y solo mientras se ejecutan.
+`serve` y `mcp serve` mantienen una conexión, y solo mientras se ejecutan.
 
 ## Capas
 
@@ -247,7 +247,7 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
   envía web.max.ru; no hay un nombre propio en la red.
 - **`max serve` mantiene la conexión.** Lo arranca en segundo plano el primer comando que necesita MAX;
   los siguientes pasan por él, y se detiene solo tras 15 minutos sin actividad.
-- **Su propio servidor MCP.** `max mcp` mantiene una conexión con sesión iniciada por cada sesión del
+- **Su propio servidor MCP.** `max <perfil> mcp serve` mantiene una conexión con sesión iniciada por cada sesión del
   agente y la cierra tras poco tiempo inactiva; sus herramientas llaman a los mismos servicios comunes
   que los comandos.
 - **La Bot API es una parte aparte.** `max bot …` habla con la Bot API HTTP oficial de MAX. Sus tipos y

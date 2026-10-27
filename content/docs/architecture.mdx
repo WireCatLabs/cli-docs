@@ -66,7 +66,7 @@ Take `tg work messages send "Book club" "See you at 7"`:
    everything the command opened — socket, timer, database — is closed, and the process exits.
 
 A one-shot command that prints its result and keeps running is treated as a defect. Only `watch`,
-`serve` and `mcp` hold a connection, and only while they run.
+`serve` and `mcp serve` hold a connection, and only while they run.
 
 ## Layers
 
@@ -235,7 +235,7 @@ MAX publishes no API for personal accounts, so max carries more of its own code 
   copy what web.max.ru sends; there is no custom name on the wire.
 - **`max serve` holds the connection.** The first command that needs MAX starts it in the background;
   later commands go through it, and it stops itself after 15 minutes idle.
-- **Its own MCP server.** `max mcp` keeps one logged-in connection per agent session and drops it
+- **Its own MCP server.** `max <profile> mcp serve` keeps one logged-in connection per agent session and drops it
   after a short idle time; its tools call the same shared services as the commands.
 - **The Bot API is a separate slice.** `max bot …` talks to MAX's official HTTP Bot API. Its types and
   schemas are generated from the official OpenAPI document with cli-base's generator, and nothing in
