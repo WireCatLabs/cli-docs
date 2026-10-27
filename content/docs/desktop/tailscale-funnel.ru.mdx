@@ -53,7 +53,7 @@ sudo apt-get update && sudo apt-get install tailscale
 
 Этот раздел подходит и для Rocky Linux, AlmaLinux, CentOS Stream, Oracle Linux и Amazon Linux.
 
-Нажмите **Download Tailscale (.rpm)**: файловый менеджер покажет пакет, а двойной щелчок установит его. Как и на Debian, такой пакет сам не обновляется; команды ниже добавляют источник обновлений Tailscale.
+Нажмите **Download Tailscale (.rpm)**: файловый менеджер покажет пакет, а двойной щелчок установит его. В собственном репозитории Fedora Tailscale тоже есть, но часто более старый; команды ниже добавляют источник обновлений Tailscale, где есть каждый выпуск.
 
 Fedora 41 и новее:
 
@@ -84,7 +84,7 @@ sudo systemctl enable --now tailscaled
 
 ### openSUSE
 
-Здесь WireCat показывает команды как основной способ. Для Tumbleweed:
+Здесь WireCat показывает команды как основной способ. Они добавляют источник обновлений Tailscale, где каждый выпуск появляется сразу; в собственном репозитории Tumbleweed Tailscale тоже есть. Для Tumbleweed:
 
 ```sh
 sudo zypper ar -g -r https://pkgs.tailscale.com/stable/opensuse/tumbleweed/tailscale.repo
