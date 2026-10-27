@@ -63,6 +63,19 @@
     }
   },
   {
+    "name": "gcal",
+    "displayName": "Google Calendar",
+    "repo": "WireCatLabs/gcal-cli",
+    "package": "@wirecat/gcal-cli",
+    "lang": "en",
+    "docsRef": "v0.1.0",
+    "summary": {
+      "en": "Keep your Google Calendar on your computer, search meetings offline and know who the attendees are in your other chats.",
+      "ru": "Храните Google Календарь на своём компьютере, ищите встречи без интернета и узнавайте участников из других ваших чатов.",
+      "es": "Guarda tu Google Calendar en tu ordenador, busca reuniones sin conexión y reconoce a los asistentes de tus otros chats."
+    }
+  },
+  {
     "name": "memo",
     "displayName": "Memo",
     "repo": "WireCatLabs/cli-memo",
