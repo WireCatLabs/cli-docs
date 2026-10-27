@@ -34,8 +34,9 @@ made of short, tidy messages cannot fail this way.
 
 ## Nine ways to cut the input
 
-We ran the six questions we know the answers to on that chat, with nine forms of the input. We counted
-the questions that keep a direct answer in the top five, and the CPU time per call.
+We ran the six questions we know the answers to on that chat, with nine forms of the input; six are
+shown below, the other three combine them. We counted the questions that keep a direct answer in the top
+five, and the CPU time per call.
 
 | Input | Direct answer in top 5 | CPU per call |
 | --- | ---: | ---: |
