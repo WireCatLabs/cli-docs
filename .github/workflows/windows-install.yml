@@ -14,8 +14,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tool: [max, tg]
-        node: ["22.16.0", "24"]
+        include:
+          - { tool: max, node: "22.16.0" }
+          - { tool: max, node: "24" }
+          - { tool: tg, node: "22.19.0" }
+          - { tool: tg, node: "24" }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

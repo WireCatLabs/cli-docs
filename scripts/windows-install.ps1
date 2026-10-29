@@ -78,6 +78,7 @@ if ([System.IO.Path]::GetFullPath($store.path) -ne [System.IO.Path]::GetFullPath
 $skillJson = & $shim skill install --json
 if ($LASTEXITCODE -ne 0) { throw 'Skill installation failed' }
 $skill = ($skillJson -join "`n") | ConvertFrom-Json
+if ($null -ne $skill.item) { $skill = $skill.item }
 if ($skill.version -ne $version -or $skill.written.Count -ne 2) { throw 'Skill installation result is incomplete' }
 $skillContents = @{}
 foreach ($file in $skill.written) {
