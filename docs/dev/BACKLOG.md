@@ -22,3 +22,8 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 
 ## Next (P2)
 
+- **DOCS-13** · P2 · 🚩 Google Calendar on the landing: hero sources, "What you can use today" and the footer.
+  `gcal` is not on npm yet and its docs wait in #427; the owner chooses "coming soon" now or the release.
+- **DOCS-14** · P2 · 🚩 Installation block at the bottom of the landing: WireCat Desktop screenshots and
+  download links. Desktop has no release, tag or real screenshots yet; the owner chooses when and what it links.
+
