@@ -44,7 +44,7 @@ for (const post of posts) {
       await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.naturalWidth)).toBeGreaterThan(0)
     }
     for (const tag of post.tags)
-      await expect(page.locator(`.blog-post-head .blog-tags a[href="/${post.lang}/blog/tags/${tag}"]`)).toBeVisible()
+      await expect(page.locator(`.blog-sidebar .blog-tags a[href="/${post.lang}/blog/tags/${tag}"]`)).toBeVisible()
 
     const languages = posts.filter((other) => other.slug === post.slug).map((other) => other.lang)
     for (const lang of ["en", "ru", "es"]) {

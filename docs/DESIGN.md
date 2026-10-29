@@ -164,6 +164,51 @@ installation), Guides (usage, sessions, archive, mcp, recipes, and pages only on
 (commands — generated, configuration), When something goes wrong (diagnostics, troubleshooting,
 security), Project (changelog, roadmap).
 
+## The blog — `/{lang}/blog`
+
+Index: the masthead (title, intro, search), topic pills with counts, then one list of posts — the newest as a
+lead story when there are three or more — and the series shelf; widgets on the right. Post: breadcrumb, title,
+intro and one meta line (author, date, reading time, languages), the series switcher, "At a glance", the
+cover at text width and the text; sidebar on the right; share, author, previous/next at the end. "On this page"
+folds above the text, and sits in the page margin only on screens at least 110rem wide, so it never narrows the
+text. Both pages use the editorial header and footer; the blog adds nothing to them.
+
+**Content.** One folder per post, `content/blog/<slug>/index.md` (`index.ru.md`, `index.es.md`). Three registries
+beside the posts own every id a post may name, and the build fails on an unknown one:
+
+| File | Holds | A post names it as |
+|---|---|---|
+| `tags.json` | topics, with labels per language and aliases (`skills/blog-tags/SKILL.md`) | `tags: [search, cli]` |
+| `series.json` | a series' title per language and its parts in order | `series: laptop-search` |
+| `authors.json` | name per language, initials, links; role and bio only once the author approves them | `author: <id>` |
+
+Front matter: `title`, `description`, `date`, `tags` (required); `cover` + `coverAlt` (one image per post, shared by
+its languages; alt text quoted when it holds a colon), `updated` (only for a real update — the post then shows
+it), `author`, `series`, `glance`, `canonical`, `draft`. `glance` is a list of `{ value, label, href }`: the post's
+key numbers, `href` the heading they come from (`#act-two-…`, the ids `github-slugger` gives).
+
+**Components** — `components/blog/`, one job each; reuse them, and add a new one here when you add it.
+
+| Component | File | Shows |
+|---|---|---|
+| `BlogLayout`, `BlogWidget` | `blog-layout.tsx` | the page frame (main, sidebar, wide-screen margin) and one sidebar block |
+| `PostCard` | `blog-card.tsx` | a post as `lead`, `default` or `compact` card; a tag-tinted pattern when there is no cover |
+| `BlogMeta`, `BlogTags`, `formatDate` | `blog-meta.tsx` | date, reading time, "Updated" when set, draft badge; topic links |
+| `AuthorByline`, `AuthorCard` | `blog-author.tsx` | the author in the meta line; the author box (links to About) |
+| `SeriesSwitcher`, `SeriesBox`, `SeriesShelf` | `blog-series.tsx` | a series as dropdown, sidebar box, index shelf — only with two or more parts |
+| `Glance` | `blog-glance.tsx` | "At a glance", only when the post has `glance` |
+| `BlogToc` | `blog-toc.tsx` | "On this page" (`top` or `margin`), from three headings; Fumadocs' `AnchorProvider` marks the current one |
+| `TopicNav`, `TopicCloud` | `blog-topics.tsx` | the eight most used topics and an "All topics" panel; the sidebar cloud |
+| `BlogListSearch`, `BlogSearchForm` | `blog-search.tsx` | filters the index list in place (`/` focuses it, `?q=` fills it); the sidebar form that opens it |
+| `ShareLinks` | `blog-share.tsx` | copy link, X, LinkedIn, Telegram |
+| `FollowLinks`, `ArchiveList`, `NewsletterBlock` | `blog-widgets.tsx` | RSS, Markdown, GitHub, Telegram; months (from two); the newsletter once configured |
+| `GitHubIcon`, `TelegramIcon`, `LinkedInIcon`, `XIcon` | `components/brand-icons.tsx` | brand marks Lucide lacks — use these, never a generic icon |
+
+Data helpers live in `lib/blog.ts` (`relatedPosts`, `adjacentPosts`, `blogSeriesOf`, `blogTagCounts`,
+`blogArchive`); words in `lib/blog-words.ts`, all three languages at once. Styles: `components/blog/blog.css`,
+in the sections its first line lists. A widget with nothing real to show hides; nothing is filled with made-up
+data (no "popular posts" until there are view counts).
+
 ## For agents
 
 | What | Where | Status |

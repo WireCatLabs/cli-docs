@@ -5,6 +5,8 @@ date: 2026-10-27
 tags: [search, benchmarks]
 cover: ./cover.jpg
 coverAlt: "Un chat impreso bajo una máscara negra con la etiqueta 512 tokens: la ventana solo muestra un mensaje largo bajo una lupa, y una nota verde con la respuesta corta queda medio oculta bajo la máscara"
+author: viacheslav-ptsarev
+series: laptop-search
 draft: true
 ---
 
