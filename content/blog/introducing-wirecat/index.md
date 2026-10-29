@@ -4,7 +4,8 @@ description: What WireCat is, why its tools run locally, and what works today ac
 date: 2026-10-27
 tags: [ai-agents, cli, release-notes]
 cover: ./cover.jpg
-coverAlt: A laptop on a dark desk at dusk, showing the WireCat desktop app with its list of tools, next to a notebook, a phone and a mug, city lights behind the window
+coverAlt: "A black modular rail on a dark desk with six cartridges labelled tg, max, wa, memo, zm and drive, tg the most worn, and an empty seventh slot beside a card reading + your CLI; a phone, an envelope, a notebook and headphones behind"
+author: viacheslav-ptsarev
 draft: true
 ---
 
@@ -16,8 +17,22 @@ and none of it is in the repository.
 WireCat is a set of open source command line tools that give your agent that context. Each tool
 connects one source, keeps a copy on your computer and answers your agent in a shape it can rely
 on. You keep the agent you already use: Claude Code, Codex, Cursor, Gemini CLI, Hermes, OpenClaw,
-or a chat app through MCP. This post explains what the tools are, why they run locally and what
-works today.
+or a chat app through MCP. This post explains how it started, what the tools are, why they run
+locally and what works today.
+
+## How it started
+
+I started with one thing: the most convenient command line tool for Telegram I could make, with the whole
+account in it and search that is pleasant to use. Then I kept improving that search: indexing large chats,
+finding a message when its words are not quite the ones you typed, and then embeddings, so it can search by
+meaning.
+
+After that I wanted the same for the other tools I use, and added MAX, WhatsApp, mail and notes, Zoom and
+Google Drive. Each new tool raised the same question: how to make the next one easy to add, for me and for
+anyone else. That is how WireCat became a platform rather than a set of tools. The parts every command line
+tool needs live in [cli-base](https://github.com/WireCatLabs/cli-base); messages, the local store, search and
+MCP in [cli-core](https://github.com/WireCatLabs/cli-core); and a new connector starts from
+[cli-template](https://github.com/WireCatLabs/cli-template).
 
 ## What WireCat is
 
