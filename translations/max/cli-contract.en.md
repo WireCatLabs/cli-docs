@@ -11,7 +11,7 @@ Terms used below:
 - **stdout** and **stderr** are the command's two output streams. Results go to stdout; progress, warnings and errors go to stderr.
 - **Exit code** — the number returned when a command exits. `0` means success; other numbers identify the failure type.
 - **Machine mode** — JSON output for programs rather than text for people.
-- A **one-shot command** performs one action and exits, such as `max personal messages list`. A **long-running command** continues until stopped: `watch`, `serve` and `mcp`.
+- A **one-shot command** performs one action and exits, such as `max personal messages list`. A **long-running command** continues until stopped: `watch`, `serve` and `mcp serve`.
 - **Write** — an action changing something in MAX: sending, editing, deleting or marking read.
 
 ## What you can rely on
@@ -91,6 +91,6 @@ Ask your agent to show the messages counted and the saved history coverage. An u
 
 ## Rules we follow
 
-`max` follows applicable parts of [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) and [Command Line Interface Guidelines](https://clig.dev/), as well as [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) and [Agent Skills](https://agentskills.io/specification). The [architecture](https://github.com/WireCatLabs/max-cli/blob/v0.76.0/docs/dev/ARCHITECTURE.md) and [shared CLI standard](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) explain how these apply and intentional exceptions. We do not claim full third-party certification.
+`max` follows applicable parts of [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) and [Command Line Interface Guidelines](https://clig.dev/), as well as [JSON Schema](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) and [Agent Skills](https://agentskills.io/specification). The [architecture](https://github.com/WireCatLabs/max-cli/blob/v0.84.0/docs/dev/ARCHITECTURE.md) and [shared CLI standard](https://github.com/WireCatLabs/cli-core/blob/main/docs/dev/STANDARD.md) explain how these apply and intentional exceptions. We do not claim full third-party certification.
 
 See [configuration](./configuration.md) for setup steps and the [configuration reference](./configuration-reference.md) for all keys and environment variables.

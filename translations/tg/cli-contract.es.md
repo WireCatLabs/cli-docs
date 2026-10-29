@@ -18,7 +18,7 @@ Algunos términos que utiliza la página:
 - **stdout** y **stderr** son los dos flujos de salida de un comando. stdout lleva el resultado;   stderr transporta mensajes sobre la ejecución, como advertencias y errores.
 - **Código de salida** es el número que devuelve un comando cuando finaliza. `0` significa éxito; cualquier otro número indica el tipo de falla.
 - El **modo máquina** se genera como JSON para un programa, en lugar de texto para una persona.
-- **Comando de una sola vez** hace una cosa y sale, por ejemplo `tg personal messages list`. Un **comando persistente** sigue ejecutándose hasta que lo detienes: `watch`, `serve` y `mcp`.
+- **Comando de una sola vez** hace una cosa y sale, por ejemplo `tg personal messages list`. Un **comando persistente** sigue ejecutándose hasta que lo detienes: `watch`, `serve` y `mcp serve`.
 - **Escribir** es cualquier comando que cambia algo en Telegram: envía, edita, elimina o marca como leído.
 
 ## En qué puedes confiar
@@ -102,6 +102,6 @@ Pídale al agente que le muestre los mensajes que contó y cuánto del historial
 
 ## Estándares que seguimos
 
-`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.92.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
+`tg` sigue las partes que se aplican de [POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html), [GNU](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html) y [Pautas de interfaz de línea de comando](https://clig.dev/), además de [Esquema JSON](https://json-schema.org/specification), [MCP](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) y [Agent Skills](https://agentskills.io/specification). La [arquitectura](https://github.com/WireCatLabs/tg-cli/blob/v0.104.0/docs/dev/ARCHITECTURE.md) y el [estándar CLI compartido](https://github.com/WireCatLabs/cli-core/blob/v0.350.0/docs/dev/STANDARD.md) describen cómo se aplican y las excepciones realizadas intencionalmente. No reclamamos una certificación completa de terceros.
 
 Para la configuración, consulte la [guía de configuración](./configuration.md); para cada clave y variable de entorno, la [referencia de configuración](./configuration-reference.md).

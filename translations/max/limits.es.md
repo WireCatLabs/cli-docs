@@ -14,7 +14,7 @@ Palabras que aparecen en la página:
 
 ## Un ritmo de solicitudes por perfil
 
-Cada solicitud que `max` realiza en nombre de un perfil, desde un comando, `max personal mcp`, `max personal serve` o un trabajo en segundo plano, espera su turno dentro del ritmo compartido de ese perfil:
+Cada solicitud que `max` realiza en nombre de un perfil, desde un comando, `max personal mcp serve`, `max personal serve` o un trabajo en segundo plano, espera su turno dentro del ritmo compartido de ese perfil:
 
 - Las primeras **10 solicitudes** se ejecutan de inmediato, por lo que los comandos habituales no tienen que esperar.
 - Después, **20 solicitudes por minuto**, aproximadamente una cada 3 segundos, hasta que se reponga la capacidad inicial.
@@ -66,4 +66,4 @@ El bot tiene sus propias restricciones de Bot API, independientes de la cuenta. 
 
 ## Un inicio de sesión para todo
 
-`max personal serve` mantiene una conexión con MAX. Los comandos, `max personal mcp` y `max personal watch` la utilizan en lugar de iniciar sesión por separado, por lo que los comandos simultáneos no añaden inicios de sesión. Si el servidor no está en marcha, el comando lo inicia en segundo plano (ajuste `serve`). Tras una desconexión, el servidor vuelve a conectarse con una pausa creciente, de un segundo a un minuto.
+`max personal serve` mantiene una conexión con MAX. Los comandos, `max personal mcp serve` y `max personal watch` la utilizan en lugar de iniciar sesión por separado, por lo que los comandos simultáneos no añaden inicios de sesión. Si el servidor no está en marcha, el comando lo inicia en segundo plano (ajuste `serve`). Tras una desconexión, el servidor vuelve a conectarse con una pausa creciente, de un segundo a un minuto.

@@ -62,7 +62,7 @@ tg personal session start qr
 
 El agente lo ejecuta en segundo plano, porque el comando espera el escaneo y una herramienta de shell no muestra nada hasta que el comando termina. Lee la salida y pega el bloque QR en el chat como bloque de código, tal como se imprimió. Cuando Telegram renueva el código, se imprime un bloque nuevo: el agente lo pega y dice que el anterior caducó. Con `--json`, cada código también es una línea en stderr, `{"event":"qr","qr":{"text":…,"expires_at":…,"scan":…}}`.
 
-El código está dibujado para un tema de terminal oscuro. Sin terminal, esto funciona sólo cuando el perfil ya tiene su aplicación y la cuenta no tiene contraseña 2FA: cualquier otra cosa tienes que escribirla tú mismo. `tg personal setup` funciona igual. El inicio de sesión no se ofrece como herramienta MCP: un agente que solo tiene MCP le pide que ejecute el comando, o lo ejecuta desde su shell.
+El código está dibujado para un tema de terminal oscuro. Sin terminal, esto funciona sólo cuando el perfil ya tiene su aplicación y la cuenta no tiene contraseña 2FA: cualquier otra cosa tienes que escribirla tú mismo. Un programa que muestra las preguntas en su propia ventana, como WireCat Desktop, ejecuta `tg personal session start phone --json --answer-stdin`: cada pregunta es una línea `needs` en stderr y se responde con una línea en stdin. `tg personal setup` funciona igual. El inicio de sesión no se ofrece como herramienta MCP: un agente que solo tiene MCP le pide que ejecute el comando, o lo ejecuta desde su shell.
 
 ## Comprobar la cuenta y cerrar sesión
 

@@ -8,13 +8,13 @@ Esta página te ayuda a conectar una aplicación de IA sin terminal, como Claude
 
 Primero algunos términos:
 
-- **MCP** ([Model Context Protocol](https://modelcontextprotocol.io)): estándar para que una aplicación de IA use herramientas externas. La aplicación es el **cliente MCP**; `max personal mcp`, el **servidor MCP**.
+- **MCP** ([Model Context Protocol](https://modelcontextprotocol.io)): estándar para que una aplicación de IA use herramientas externas. La aplicación es el **cliente MCP**; `max personal mcp serve`, el **servidor MCP**.
 - **Herramienta**: acción ofrecida al agente, como leer o escribir.
 - **Petición preparada** (prompt): tarea que la aplicación muestra como comando, como revisar mensajes no leídos.
 - **Recurso**: datos que la aplicación puede adjuntar al chat con el agente.
 - **Perfil**: ajustes y sesión de `max`; consulta [perfiles](./profiles.md).
 
-El servidor se instala junto con `max`; no es necesario instalar nada por separado. De forma predeterminada, se comunica con la aplicación mediante stdin y stdout. En cambio, `max personal mcp --http --public-url` sirve las herramientas en un puerto local detrás de su túnel HTTPS.
+El servidor se instala junto con `max`; no es necesario instalar nada por separado. De forma predeterminada, se comunica con la aplicación mediante stdin y stdout. En cambio, `max personal mcp serve --http --public-url` sirve las herramientas en un puerto local detrás de su túnel HTTPS.
 
 ## ¿Lo necesitas?
 
@@ -23,7 +23,7 @@ Un agente de IA que puede ejecutar comandos en la terminal (por ejemplo, Claude 
 - aplicaciones sin terminal - Claude Desktop, Cursor chat;
 - aquellos que desean que la aplicación aplique derechos de perfil a cada operación.
 
-ChatGPT y Claude **en el navegador** se conectan a través de `max personal mcp --http` - consulte [conexión desde el navegador o teléfono](./remote.md).
+ChatGPT y Claude **en el navegador** se conectan a través de `max personal mcp serve --http` - consulte [conexión desde el navegador o teléfono](./remote.md).
 
 ## Lo que da el servidor
 
@@ -55,16 +55,16 @@ Para otro perfil, primero ponga su nombre: `max work mcp add codex`. El comando 
 **Claude Code manualmente:**
 
 ```sh
-claude mcp add max -- max personal mcp
+claude mcp add max -- max personal mcp serve
 ```
 
 Cuidado: por defecto, a través de este servidor el agente puede enviar mensajes en tu nombre. Limita antes los permisos: los niveles `readonly` y `deny` ([permisos](./permissions.md)) o la opción `--permission`, por ejemplo
-`claude mcp add max -- max personal mcp --permission messages.send=deny`.
+`claude mcp add max -- max personal mcp serve --permission messages.send=deny`.
 
 Con un perfil, su nombre va primero:
 
 ```sh
-claude mcp add max-work -- max work mcp
+claude mcp add max-work -- max work mcp serve
 ```
 
 **Claude Desktop, Cursor y otras aplicaciones**: la entrada finalizada para su archivo de configuración la imprime el propio `max`:
@@ -80,7 +80,7 @@ max work mcp config
     "max-personal": {
       "type": "stdio",
       "command": "C:\\Program Files\\nodejs\\node.exe",
-      "args": ["C:\\Users\\you\\AppData\\Roaming\\npm\\node_modules\\@wirecat\\max-cli\\dist\\bin\\max.js", "personal", "mcp"]
+      "args": ["C:\\Users\\you\\AppData\\Roaming\\npm\\node_modules\\@wirecat\\max-cli\\dist\\bin\\max.js", "personal", "mcp", "serve"]
     }
   }
 }
@@ -94,7 +94,7 @@ Si Node se entrega a través de nvm, fnm o Volta, la ruta hacia él se refiere a
 
 ⚠ **Las variables `MAX_CONFIG_DIR`, `MAX_STATE_DIR`, `MAX_CACHE_DIR` cambian dónde buscar la entrada.** Si están configuradas en el terminal, pero no para la aplicación MCP (o viceversa), el servidor responderá "sin sesión", aunque `max` funcione en el terminal. Pregúntales lo mismo o no les preguntes en ningún lado.
 
-El bot tiene su propio servidor, `max <имя> bot mcp`; consulta [bot para agente](./bot.md#бот-для-агента-mcp). El acceso depende de `permissions` en el perfil del bot.
+El bot tiene su propio servidor, `max <имя> bot mcp serve`; consulta [bot para agente](./bot.md#бот-для-агента-mcp). El acceso depende de `permissions` en el perfil del bot.
 
 ## Qué puede hacer un agente
 
@@ -153,7 +153,7 @@ El envío en `reply` utiliza `max_write` (`command: "messages send"`), por lo qu
 
 Los chats están disponibles como recursos `max://chat/<id>`; en Claude Code se pueden mencionar a través de `@`. El recurso proporciona el chat y sus mensajes más recientes. La lista de recursos se toma de una archivo local compartida de `wirecat.db` en la cuenta del perfil y no va a MAX; Si bien no hay una archivo local, está vacía. MAX sólo incluye la lectura de un chat.
 
-`max://skill` contiene la skill de `max`, igual que `max skill show`. Está disponible en `max personal mcp` y `max sales bot mcp`, sin conectarse a MAX.
+`max://skill` contiene la skill de `max`, igual que `max skill show`. Está disponible en `max personal mcp serve` y `max sales bot mcp serve`, sin conectarse a MAX.
 
 ## Gráficos de estadísticas
 
@@ -173,4 +173,4 @@ MAX no tiene los temas de Telegram, por lo que no hay comandos `topics …`. El 
 
 La primera llamada que necesita MAX abre la conexión; las siguientes la reutilizan. La búsqueda local, las estadísticas, la evidencia y la lectura de datos de sesión guardados no la necesitan. Se cierra tras 2 minutos sin llamadas y, en todo caso, 5 minutos después de iniciar sesión: la lista de chats procede de esa respuesta y podría quedar desactualizada. La siguiente llamada inicia sesión de nuevo. Las llamadas se ejecutan en serie aunque la aplicación las envíe a la vez.
 
-A través de stdin y stdout, el servidor sale cuando la aplicación cierra stdin y cierra la conexión a MAX. A través de HTTP funciona hasta Ctrl-C. Se puede acceder a `max personal mcp --http --public-url https://<имя>.ts.net` a través de un túnel HTTPS con inicio de sesión mediante un código del terminal. Los permisos son los mismos a través de HTTP y a través de stdin y stdout. `max personal mcp --revoke` finaliza los inicios de sesión de la aplicación y guarda la sesión MAX. Consulte [conectarse desde el navegador o el teléfono](./remote.md).
+A través de stdin y stdout, el servidor sale cuando la aplicación cierra stdin y cierra la conexión a MAX. A través de HTTP funciona hasta Ctrl-C. Se puede acceder a `max personal mcp serve --http --public-url https://<имя>.ts.net` a través de un túnel HTTPS con inicio de sesión mediante un código del terminal. `max personal mcp server start` inicia el mismo servidor en segundo plano y vuelve cuando ya escucha; `mcp server status` muestra el puerto, la dirección, el código de acceso y las aplicaciones conectadas, y `mcp server stop` detiene solo ese servidor. Los permisos son los mismos a través de HTTP y a través de stdin y stdout. `max personal mcp revoke` finaliza los inicios de sesión de la aplicación y guarda la sesión MAX. Consulte [conectarse desde el navegador o el teléfono](./remote.md).

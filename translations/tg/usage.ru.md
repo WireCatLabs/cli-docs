@@ -18,7 +18,7 @@ tg позволяет вам или вашему ИИ-агенту читать 
 - **Локальное хранилище**: база данных на этом компьютере, где tg хранит все прочитанные сообщения ([локальное хранилище](./archive.md)).
 - **Защита отправки**: проверка каждой отправки — профиль только для чтения, список разрешенных получателей и часовой лимит ([защита отправки](./security.md#the-send-guard)).
 
-Каждая команда выполняет одно действие, выводит результат и выходит. Только `tg personal watch`, `tg personal serve` и `tg personal mcp` продолжают работать и сообщают об этом.
+Каждая команда выполняет одно действие, выводит результат и выходит. Только `tg personal watch`, `tg personal serve` и `tg personal mcp serve` продолжают работать и сообщают об этом.
 
 ```sh
 tg [profile] [options] <resource> <action> [arguments]
@@ -1083,11 +1083,11 @@ tg personal server install  # a systemd user unit or a launchd agent; starts not
 ## Что сделала команда
 
 ```sh
-tg personal --trace chats list          # show each request on stderr, keep nothing
+tg personal --trace chats list          # also show each request on stderr
 ```
 
 ```sh
-tg personal --record chats list         # keep it, show nothing
+tg personal --no-record chats list      # keep nothing of this run
 ```
 
 ```sh

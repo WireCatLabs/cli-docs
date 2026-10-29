@@ -6,14 +6,14 @@ Connect an AI chat in your browser or on your phone, such as ChatGPT, Codex web 
 
 Terms used here:
 
-- **MCP** (Model Context Protocol) is a standard way for an AI app to call external tools. `max personal mcp` is the MCP server installed with `max`; apps on your computer are covered in the [MCP server guide](./mcp.md).
-- **Remote connection** means the app connects from its servers, over the internet, to the address you provide. `max personal mcp --http` serves the same tools over HTTP on `127.0.0.1`.
+- **MCP** (Model Context Protocol) is a standard way for an AI app to call external tools. `max personal mcp serve` is the MCP server installed with `max`; apps on your computer are covered in the [MCP server guide](./mcp.md).
+- **Remote connection** means the app connects from its servers, over the internet, to the address you provide. `max personal mcp serve --http` serves the same tools over HTTP on `127.0.0.1`.
 - **HTTPS tunnel** is a program that gives a port on your computer a public HTTPS address. This guide uses [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel); Cloudflare Tunnel also works. Funnel does not require you to buy a domain.
 - **Public address** is that address, for example `https://laptop.tail1234.ts.net`. Pass it to `max` as `--public-url` and to the app with `/mcp` appended.
 - **Login code** is the one-time code `max` prints in your terminal. The app's login page asks for it, so connecting an app requires access to that terminal.
 
 ```text
-ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ max personal mcp --http (вход) ──▶ MAX
+ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ max personal mcp serve --http (вход) ──▶ MAX
 ```
 
 If your Tailscale connection already works, keep it; you do not need a second tunnel. Local connections through stdin and stdout continue to work as before.
@@ -31,7 +31,7 @@ If your Tailscale connection already works, keep it; you do not need a second tu
 
 ## Before you begin
 
-- **Anyone who logs in can read your MAX.** Login requires the code from your terminal. Never put a tunnel in front of `max personal mcp` without `--http`: that mode has no login protection.
+- **Anyone who logs in can read your MAX.** Login requires the code from your terminal. Never put a tunnel in front of `max personal mcp serve` without `--http`: that mode has no login protection.
 - **Profile permissions decide what the app may change.** `deny` and `readonly` refuse changes; `ask` and `allow` let the requested change proceed through MCP without a server confirmation form. Approval inside the app is a separate control and depends on its settings. Recipient restrictions and the hourly send limit still apply ([agent permissions in MCP](./mcp.md#что-может-агент), [configuration guide](./configuration.md)).
 - **The computer running `max` must stay on.** To connect from a phone or a laptop with nothing installed, run the tool and tunnel on a small server that stays on, and log into `max` there (`max personal setup --agent none`). You then need only a browser on your device.
 - **Who can add a remote connector:**
@@ -46,7 +46,7 @@ The steps for each operating system have not all been tested on that system. If 
 
 ## 1. Prepare Tailscale
 
-First install the CLI and log into MAX ([installation guide](./installation.md)); for local setup without an agent, use `max personal setup --agent none`. Run the server as the same operating-system user and with the same profile. Put the profile first when needed: `max work mcp`. Tailscale is installed separately; both `max` and `tg` support this tunnel setup.
+First install the CLI and log into MAX ([installation guide](./installation.md)); for local setup without an agent, use `max personal setup --agent none`. Run the server as the same operating-system user and with the same profile. Put the profile first when needed: `max work mcp serve`. Tailscale is installed separately; both `max` and `tg` support this tunnel setup.
 
 Install [Tailscale](https://tailscale.com/download), sign in and enable [Funnel](https://tailscale.com/docs/features/tailscale-funnel). Your Tailscale network needs MagicDNS, HTTPS certificates and permission to use Funnel. The first Funnel run may print a link where you can grant that permission.
 
@@ -70,7 +70,7 @@ Second window: ordinary PowerShell as the user who signed in to MAX:
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Вставьте HTTPS origin из Funnel (без /mcp)'
-max.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
+max.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Run both processes in Windows itself. WSL is a separate environment: a Windows tunnel targeting a local Windows address may not reach a server inside WSL.
@@ -88,7 +88,7 @@ Second window, as the user who ran `max personal setup --agent none`. Works in z
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+max personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Terminal)
@@ -104,7 +104,7 @@ Second window: an ordinary user without `sudo`, so `max` finds the session creat
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+max personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## MAX and Telegram at the same time
@@ -118,7 +118,7 @@ If you already use Cloudflare, point its tunnel at the same local MCP server. A 
 Start the server in a second terminal:
 
 ```sh
-max personal mcp --http --port 8765 --public-url https://mcp.example.com
+max personal mcp serve --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Add `https://mcp.example.com/mcp` to the AI app with OAuth and DCR, as described under [adding it to the app](#3-добавить-в-приложение). `--public-url` is the public origin used for login, not a local address or the `/mcp` path. The tunnel does not change profile permissions. Check the JSON at `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, then login and the tool list. Stop only this tunnel's process so other routes keep running.
@@ -157,7 +157,7 @@ If Funnel was started with `--bg`, Ctrl-C does not stop that background route. C
 Revoking app access differs from stopping the process. To sign every app out of the profile:
 
 ```sh
-max personal mcp --revoke
+max personal mcp revoke
 ```
 
 Those apps must log in again with a new code. Your MAX session stays logged in.
@@ -165,10 +165,10 @@ Those apps must log in again with a new code. Your MAX session stays logged in.
 ## Troubleshooting
 
 - **The app says it cannot connect:** open `https://<устройство>.<сеть>.ts.net/.well-known/oauth-protected-resource/mcp` in a browser. It should return a short JSON document. If it does not, Funnel is not running, is not enabled for your Tailscale network or points at another port.
-- **The login page says “Too many wrong codes”:** five wrong codes disable it until `max personal mcp --http` restarts. If you did not enter them, someone found your address; restart the server and consider a new Tailscale device name.
+- **The login page says “Too many wrong codes”:** five wrong codes disable it until `max personal mcp serve --http` restarts. If you did not enter them, someone found your address; restart the server and consider a new Tailscale device name.
 - **It connects but no tools appear:** `max personal mcp check` checks that the MCP server starts and provides a tool list. It does not check the MAX login or tunnel. A command that contacts MAX, such as `max personal account show`, checks account access.
 - **Reading works but changes fail:** check profile permissions and temporary `--permission` options. `deny` and `readonly` refuse changes regardless of the app's approval.
-- **You need a record of calls:** use `max personal runs list`. Successful calls appear only when recording is enabled; failures are saved by default unless recording was disabled with `"record": false` or `--no-record` ([diagnostics guide](./diagnostics.md)).
+- **You need a record of calls:** use `max personal runs list`. Every call is recorded by default; with `"record": false` only failures remain, with `--no-record` nothing ([diagnostics guide](./diagnostics.md)).
 
 ## Transfer a retained file to an agent
 

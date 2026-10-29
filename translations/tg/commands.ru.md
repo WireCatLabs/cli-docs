@@ -37,8 +37,8 @@ tg [profile] [options] <resource> <verb> [arguments]
 | `--full` | found messages with their whole text and every provider field. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
-| `--record` | keep this run — ids and timings, never message content. |
-| `--no-record` | do not keep it, whatever the configuration says. |
+| `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
+| `--no-record` | do not keep this run, even if it fails. |
 
 ## `tg session`
 
@@ -62,6 +62,7 @@ tg session start [method] [options]
 |---|---|
 | `--app <how>` | the first time only: how to get this profile's app from my.telegram.org. One of: `browser`, `auto`. Default: `browser`. |
 | `--sms` | phone login: ask Telegram to send the code by SMS, not to the app; Telegram may still refuse. |
+| `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
 
 **Returns:** log in by QR code (default) or by phone number, code and 2FA password
 
@@ -117,7 +118,7 @@ tg account list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** account profile — profile, current, account, name; every field: tg commands info account list
+**Returns:** account profile — profile, current, account, name, signed_in; every field: tg commands info account list
 
 **Example:** `tg personal account list`
 
@@ -1375,7 +1376,7 @@ tg contacts context <person> [options]
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
 | `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
 
-**Returns:** contact context — person, shared, last, recent, mentions, limits, complete, not_read, and 1 more; every field: tg commands info contacts context
+**Returns:** contact context — person, shared, last, recent, mentions, limits, complete, not_read, and 2 more; every field: tg commands info contacts context
 
 **Example:** `tg personal contacts context "Alex Example" --limit 10`
 
@@ -1396,7 +1397,7 @@ tg contacts prepare <person> [options]
 | `--limit <n>` | at most this many messages, and items in each section; 10 if not given. |
 | `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 2h / 1d ago. |
 
-**Returns:** contact preparation — person, shared, last, recent, mentions, limits, complete, not_read, and 1 more; every field: tg commands info contacts prepare
+**Returns:** contact preparation — person, shared, last, recent, mentions, limits, complete, not_read, and 2 more; every field: tg commands info contacts prepare
 
 **Example:** `tg personal contacts prepare Ana`
 
@@ -1804,7 +1805,7 @@ tg messages list <chat> [query] [options]
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info messages list
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: tg commands info messages list
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -1864,7 +1865,7 @@ tg messages show <chat> [message]
 | `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages; or a msg: locator, with no message id after it. |
 | `message` | optional | the message id. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info messages show
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: tg commands info messages show
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -1893,7 +1894,7 @@ tg messages context <chat> [message] [options]
 | `--before-n <n>` | how many before it. Default: `5`. |
 | `--after-n <n>` | how many after it. Default: `5`. |
 
-**Returns:** message context — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 40 more; every field: tg commands info messages context
+**Returns:** message context — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 41 more; every field: tg commands info messages context
 
 **Example:** `tg personal messages context "Book club" 101 --before-n 3 --after-n 3`
 
@@ -2095,7 +2096,7 @@ tg messages scheduled <chat>
 |---|---|---|
 | `chat` | required | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info messages scheduled
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: tg commands info messages scheduled
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -2139,7 +2140,7 @@ tg messages comments <chat> <post> [query] [options]
 | `--limit <n>` | how many. |
 | `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info messages comments
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: tg commands info messages comments
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages links <chat> <message>`, `tg polls show <chat> <message>`
 
@@ -2406,7 +2407,7 @@ tg models keys remove <provider>
 
 ### `tg models list`
 
-speech and embedding models, their download status and the default of each kind
+speech, embedding and reranker models: downloaded or not, each kind's default
 
 ```sh
 tg models list [query]
@@ -2424,7 +2425,7 @@ tg models list [query]
 
 ### `tg models download`
 
-download and verify one speech or embedding model: tens to hundreds of MB, each size in models list
+download and verify one speech, embedding or reranker model: tens to hundreds of MB, each size in models list
 
 **Reads from an outside service.**
 
@@ -2444,7 +2445,7 @@ tg models download <model> [options]
 
 **Next usually:** `tg images models download <model>`
 
-**Example:** `tg personal models download e5-small`
+**Example:** `tg personal models download e5-small`, `tg personal models download mmarco`
 
 ## `tg inbox`
 
@@ -2521,7 +2522,7 @@ tg topics list <chat> [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** topic — id, title, closed, pinned, unread_count, last_message_at, created_at, hidden; every field: tg commands info topics list
+**Returns:** topic — id, title, closed, pinned, unread_count, last_message_at, created_at, hidden, and 1 more; every field: tg commands info topics list
 
 **Next usually:** `tg topics show <chat> <topic>`, `tg topics edit <chat> <topic>`, `tg topics delete <chat> <topic>`
 
@@ -2669,7 +2670,7 @@ tg watch [options]
 |---|---|
 | `--events` | include changes and receipts; each item names its event. |
 
-**Returns:** watch item — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 30 more; every field: tg commands info watch
+**Returns:** watch item — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 31 more; every field: tg commands info watch
 
 **Example:** `tg personal watch --jsonl --timeout 30s`
 
@@ -3108,7 +3109,7 @@ tg store export [chat] [options]
 | `--all` | with --output-dir: every stored chat of this account. |
 | `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
-**Returns:** store export — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 34 more; every field: tg commands info store export
+**Returns:** store export — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 35 more; every field: tg commands info store export
 
 **Example:** `tg personal store export "Book club" --output ./messages.jsonl`
 
@@ -3172,7 +3173,7 @@ tg store migrate
 
 ### `tg store rebuild`
 
-rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored; loses nothing
+rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored, and drop the vectors no stored text uses; loses nothing
 
 **Changes something on this computer only.**
 
@@ -3180,7 +3181,7 @@ rebuild the word index, its typo vocabulary, the stems, the files' word index, t
 tg store rebuild
 ```
 
-**Returns:** store reindex — path, exists, normalized, indexed, terms, stemmed, notes_indexed, file_texts, and 1 more; every field: tg commands info store rebuild
+**Returns:** store reindex — path, exists, normalized, indexed, terms, stemmed, notes_indexed, file_texts, and 2 more; every field: tg commands info store rebuild
 
 **Example:** `tg personal store rebuild`
 
@@ -3277,8 +3278,9 @@ tg store reset [options]
 | Option | What it does |
 |---|---|
 | `--no-backup` | delete the store without backing it up first. |
+| `--dry-run` | list every table it would empty, with its rows, and delete nothing. |
 
-**Returns:** store reset — path, exists, reset, backup, backed_up, schema; every field: tg commands info store reset
+**Returns:** store reset — path, exists, reset, dry_run, files, bytes, schema, tables, and 4 more; every field: tg commands info store reset
 
 **Example:** `tg personal store reset`
 
@@ -3362,7 +3364,7 @@ tg conversations show <conversation> [message]
 | `conversation` | required | a conversation id from `conversations list`; or a chat: its title or part of it, its id, @username, or `me` for Saved Messages, with a message. |
 | `message` | optional | a message id in that chat: show the conversation it is in. |
 
-**Returns:** conversation details — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 38 more; every field: tg commands info conversations show
+**Returns:** conversation details — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 39 more; every field: tg commands info conversations show
 
 **Example:** `tg personal conversations show "Book club" 101`
 
@@ -3541,7 +3543,7 @@ tg conversations embeddings status [options]
 
 #### `tg conversations embeddings clear`
 
-drop a chat's vectors, or only one model's; messages and conversations are never touched
+drop a chat's conversation and message vectors, or only one model's; messages and conversations are never touched
 
 **Changes something on this computer only.**
 
@@ -3563,7 +3565,7 @@ tg conversations embeddings clear [options]
 
 ### `tg conversations rebuild`
 
-build, then embed with the model on this machine, the chats that changed since their build and the group chats never built — or only --chat; bounded per run, so run it again for the rest; never asks the messenger, downloads no model and sends no text anywhere
+build, then embed with the model on this machine, the chats that changed since their build and the group chats never built — or only --chat; with the default model, also each message on its own, which `search messages --discover` reads; bounded per run, so run it again for the rest; never asks the messenger, downloads no model and sends no text anywhere
 
 **Changes something on this computer only.**
 
@@ -3577,7 +3579,7 @@ tg conversations rebuild [options]
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
 
-**Returns:** conversation preparation — model, model_available, built, embedded, left; every field: tg commands info conversations rebuild
+**Returns:** conversation preparation — model, model_available, built, embedded, left, messages; every field: tg commands info conversations rebuild
 
 **Example:** `tg personal conversations rebuild --max-chats 5`
 
@@ -3643,7 +3645,7 @@ tg conversations embed [options]
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given, and no limit with --chat. |
 
-**Returns:** conversation embedding — chat, model, embedded, skipped, model_available, built, left; every field: tg commands info conversations embed
+**Returns:** conversation embedding — chat, model, embedded, skipped, model_available, built, left, messages; every field: tg commands info conversations embed
 
 **Example:** `tg personal conversations embed --chat "Book club"`
 
@@ -5077,7 +5079,7 @@ find things by text: one resource when you know it (messages, notes), or search 
 
 ### `tg search all`
 
-search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes are local only; --backend archive or --offline keeps it to the local store), and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
+search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes and events are local only; --backend archive or --offline keeps it to the local store), calendar events when the store holds a calendar, and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
 
 ```sh
 tg search all <query> [options]
@@ -5089,7 +5091,7 @@ tg search all <query> [options]
 
 | Option | What it does |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: messages, notes; meetings when --source names a meeting account. |
+| `--only <resources>` | only these resources, separated by commas: messages, notes, events; meetings when --source names a meeting account. |
 | `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
 | `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
 | `--limit <n>` | how many. |
@@ -5099,7 +5101,7 @@ tg search all <query> [options]
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both; message discovery uses archive only). |
 | `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 6 more; every field: tg commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 7 more; every field: tg commands info search all
 
 **Example:** `tg personal search all draft`
 
@@ -5134,11 +5136,11 @@ tg search messages [query] [options]
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
-| `--discover` | find partial lexical matches and eligible replies in the local archive; results are evidence, not confirmed answers. |
+| `--discover` | find partial word matches, eligible replies and, once messages have vectors, messages close in meaning in the local archive; results are evidence, not confirmed answers. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
 
-**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 5 more; every field: tg commands info search messages
+**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 6 more; every field: tg commands info search messages
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -5165,7 +5167,7 @@ tg search notes <query> [options]
 | `--exact` | words as written only; meaning is not searched. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 5 more; every field: tg commands info search notes
+**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 6 more; every field: tg commands info search notes
 
 **Example:** `tg personal search notes draft --limit 10`
 
@@ -5223,7 +5225,7 @@ tg search runs [query] [options]
 | `--limit <n>` | matches per page, at most 100. Default: `20`. |
 | `--page <n>` | result page. Default: `1`. |
 
-**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 18 more; every field: tg commands info search runs
+**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 21 more; every field: tg commands info search runs
 
 **Example:** `tg personal search runs timeout status:failed --limit 10`
 
@@ -5768,7 +5770,7 @@ tg runs list [query] [options]
 | `--limit <n>` | how many to show. Default: `20`. |
 | `--page <n>` | which page, starting at 1. Default: `1`. |
 
-**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 20 more; every field: tg commands info runs list
+**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: tg commands info runs list
 
 **Example:** `tg personal runs list --limit 10`
 
@@ -5788,7 +5790,7 @@ tg runs show <run-id> [options]
 |---|---|
 | `--problems` | only failed responses, warnings and crashes. |
 
-**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 19 more; every field: tg commands info runs show
+**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 22 more; every field: tg commands info runs show
 
 **Example:** `tg personal runs show run-101`
 
@@ -5840,7 +5842,7 @@ tg config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -5865,7 +5867,7 @@ tg config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
 | Option | What it does |
 |---|---|
@@ -5976,25 +5978,110 @@ tg upgrade [options]
 
 **Returns:** upgrade tg with the package manager that installed it; --check only looks
 
-**Example:** `tg upgrade --check`, `tg upgrade`
+**Example:** `tg upgrade --check`
 
 ## `tg mcp`
 
-serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add tg -- tg <profile> mcp`
+serve this profile to an agent over MCP and set it up — `claude mcp add tg -- tg <profile> mcp serve`
+
+### `tg mcp serve`
+
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add tg -- tg <profile> mcp serve`; `tg mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
 
 **Changes something in Telegram.**
 
 ```sh
-tg mcp [options]
+tg mcp serve [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
-| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
-| `--revoke` | forget every login given to a browser app; each must log in again. |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+
+**Returns:** serve this profile's commands to an AI agent
+
+**Example:** `tg personal mcp serve`, `tg personal mcp serve --profiles work,personal`, `tg personal mcp serve --http --public-url https://laptop.example.ts.net`
+
+### `tg mcp revoke`
+
+forget every login `mcp serve --http` gave a browser app, of this profile or of the server `--profiles` names; each app must log in again
+
+**Changes something on this computer only.**
+
+```sh
+tg mcp revoke [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+
+**Returns:** forget every login given to a browser app
+
+**Example:** `tg personal mcp revoke`, `tg personal mcp revoke --profiles all`
+
+### `tg mcp server`
+
+start, stop and check `mcp serve --http` in the background; status shows the login code for a browser app
+
+#### `tg mcp server start`
+
+start `mcp serve --http` apart from this shell and answer once it listens, with its login code
+
+**Changes something on this computer only.**
+
+```sh
+tg mcp server start [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--port <port>` | the local port (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+| `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** start the HTTP MCP server in the background
+
+**Example:** `tg personal mcp server start --public-url https://laptop.example.ts.net`
+
+#### `tg mcp server stop`
+
+stop `mcp serve --http` — only one that `mcp server start` started
+
+**Changes something on this computer only.**
+
+```sh
+tg mcp server stop [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** stop the background HTTP MCP server
+
+**Example:** `tg personal mcp server stop`
+
+#### `tg mcp server status`
+
+whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
+
+```sh
+tg mcp server status [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
+
+**Example:** `tg personal mcp server status --json`
 
 ### `tg mcp config`
 
@@ -6007,10 +6094,11 @@ tg mcp config [options]
 | Option | What it does |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
-**Returns:** print this profile's local MCP configuration
+**Returns:** print the local MCP configuration of this profile, or of those --profiles names
 
-**Example:** `tg personal mcp config`
+**Example:** `tg personal mcp config`, `tg personal mcp config --profiles all`
 
 ### `tg mcp add`
 
@@ -6420,7 +6508,7 @@ tg bot messages list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | how many, the newest. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: tg commands info bot messages list
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: tg commands info bot messages list
 
 **Next usually:** `tg messages transcribe <chat> <message>`, `tg messages comments <chat> <post> [query]`, `tg messages links <chat> <message>`
 
@@ -6903,7 +6991,21 @@ tg bot me
 
 ### `tg bot mcp`
 
-serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- tg sales bot mcp`
+serve this bot to an agent over MCP and set it up — `claude mcp add sales-bot -- tg sales bot mcp serve`
+
+#### `tg bot mcp serve`
+
+serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- tg sales bot mcp serve`
+
+**Changes something in Telegram.**
+
+```sh
+tg bot mcp serve
+```
+
+**Returns:** serve this bot to an agent over MCP, on stdin and stdout
+
+**Example:** `tg sales bot mcp serve`
 
 #### `tg bot mcp config`
 
@@ -11274,7 +11376,7 @@ the instructions an agent is given for this tool
 
 ### `tg skill show`
 
-print SKILL.md — `tg skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
+print SKILL.md — `tg skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
 
 ```sh
 tg skill show [name] [options]
@@ -11294,7 +11396,7 @@ tg skill show [name] [options]
 
 ### `tg skill install`
 
-write SKILL.md to \~/.claude/skills/tg-cli/ (Claude Code) and \~/.agents/skills/tg-cli/ (Codex, Gemini CLI)
+write SKILL.md to \~/.claude/skills/tg-cli/ (Claude Code) and \~/.agents/skills/tg-cli/ (Codex, Gemini CLI, OpenClaw); --for hermes also has Hermes read \~/.agents/skills, which changes Hermes's own settings, so all leaves it out
 
 **Changes something on this computer only.**
 
@@ -11304,7 +11406,7 @@ tg skill install [options]
 
 | Option | What it does |
 |---|---|
-| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
+| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
 
 **Returns:** install the tool's instructions for AI agents
 
@@ -11312,7 +11414,7 @@ tg skill install [options]
 
 ### `tg skill status`
 
-for each place `tg skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+for each place `tg skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
 
 ```sh
 tg skill status

@@ -28,12 +28,12 @@ Without `--discover`, strict search remains the default. Boolean syntax, quoted 
 
 ## What you can do
 
-The entire search is in one command group, `max personal search`. If you don't know where it was written, start with `search all`.
+The entire search is in one command group, `max personal search`. Start with `search messages`; use `search all` when you need to search beyond messages.
 
 | Task | Command |
 |---|---|
-| Search immediately in messages and notes | `max personal search all '<запрос>'` |
-| Search messenger messages; without `--discover`, also on the MAX server in one chat | `max personal search messages '<запрос>'` |
+| Search messenger messages; in one chat (without `--discover`), also on the MAX server | `max personal search messages '<запрос>'` |
+| Search wider, in notes too | `max personal search all '<запрос>'` |
 | Search mail | `memo search mail '<запрос>'` — `max` has no such command |
 | Search notes from memo or folder | `max personal search notes '<запрос>'` |
 | Find a discussion by what it was about | `max personal search conversations '<вопрос>'` ([search by topic](./topic-search.md)) |
@@ -94,7 +94,7 @@ An empty result is not proof that the message never existed. Check the reported 
 
 ## Prepare your archive first
 
-Good search requires downloaded chats. The MAX server searches only one specified chat. Everything else uses only the archive: searching all chats, counting with `stats`, topic search, `has:`, `filename:`, regex, presets, tags and word forms. Start by downloading all chats:
+Good search requires downloaded chats. The MAX server searches only one specified chat. Everything else uses only the archive: searching all chats, counting with `stats`, topic search, `has:`, `filename:`, regex, presets, tags and word forms. Downloading runs from your account, so you start it (an agent only with your consent and one chat at a time). To download every chat at once:
 
 ```sh
 max personal messages sync --all --background     # последние 90 дней каждого чата, в фоне
@@ -109,7 +109,7 @@ By default, a run downloads at most 1,200 messages per chat; repeat to continue.
 Every search reports what it searched. If the archive could contain more history or no results were found, one line in the terminal shows how many messages and chats were searched, how many chats have never been downloaded or are out of date, and the command to fix that:
 
 ```text
-searched 12,430 messages in 37 chats — 5 never fetched; `max personal messages sync --all --background` fetches them
+searched 12,430 messages in 37 chats — 5 never fetched; `max personal messages sync <chat>` fetches one
 ```
 
 With `--json` the same is a `coverage` entry in `missing` and a `messages.sync` step in `next`. If nothing is found and `next` is specified, run this command (or ask the agent) before deciding there is no message.

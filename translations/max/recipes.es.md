@@ -8,7 +8,7 @@ Palabras en esta página:
 
 - **Agente**: agente de IA que ejecuta comandos por ti en el ordenador.
 - **Skill**: archivo de instrucciones para usar `max`. `max skill install` lo coloca donde el agente lo busca.
-- **Cliente MCP**: aplicación de IA sin terminal, como Claude Desktop. Usa el servidor `max personal mcp` en lugar de ejecutar comandos.
+- **Cliente MCP**: aplicación de IA sin terminal, como Claude Desktop. Usa el servidor `max personal mcp serve` en lugar de ejecutar comandos.
 - **Modo no interactivo**: recibe una petición, la ejecuta y termina. Claude Code usa `-p`; Codex, `codex exec`.
 - **cron**: programador de Linux y macOS que ejecuta comandos a horas indicadas.
 
@@ -204,7 +204,7 @@ Escribe: **solo después de tu aprobación**. Para conversación interactiva, no
 
 > Lee los últimos 20 mensajes con Iván Petrov y propón una respuesta a su última pregunta. No la envíes; muéstrame el texto.
 
-Tras tu aprobación, el agente envía el texto con `max personal messages send "Иван Петров" "…"`. El cliente MCP se conecta mediante `max personal mcp`. No configures una aprobación previa de `max_write`; así el cliente preguntará antes de enviar. Los permisos del perfil siguen limitando la escritura. Consulta [servidor MCP](./mcp.md).
+Tras tu aprobación, el agente envía el texto con `max personal messages send "Иван Петров" "…"`. El cliente MCP se conecta mediante `max personal mcp serve`. No configures una aprobación previa de `max_write`; así el cliente preguntará antes de enviar. Los permisos del perfil siguen limitando la escritura. Consulta [servidor MCP](./mcp.md).
 
 ## Un grupo que administras
 

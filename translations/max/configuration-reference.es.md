@@ -96,8 +96,12 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_ru
 | `color` |color en terminal; sin un campo se decide en función de si es una terminal|—; sin color de campo se apaga `NO_COLOR`|por terminal|
 | `sender_colors` |en `max personal messages` cada autor tiene su propio color; `вы` - siempre azul. Sin `color` no funciona. Solo para cuenta personal| — | `false` |
 | `search_catch_up` |después de `messages sync` o reparación de roturas, prepara el gráfico y establece los vectores locales de este chat dentro de límites especificados. Los modelos no se descargan, no se llama a proveedores remotos. Solo para cuenta personal| `--catch-up`, `--no-catch-up` | `false` |
-| `record` |si se debe registrar cada inicio como si se transfiriera `--record` ([diagnóstico](./diagnostics.md))| `--record`, `--no-record` | `false` |
-| `keep_runs_for_days` |¿Cuántos días se almacenan los registros de ejecución?| — | `30` |
+| `search_reranker` | con qué modelo `search messages --discover` reordena los primeros 50 resultados: `mmarco`, `bge-reranker-v2-m3` u `off`. Solo actúa cuando el modelo está descargado (`max personal models download mmarco`); no se descarga solo | — | `mmarco` |
+| `record` | si se registran las ejecuciones correctas; las fallidas se registran también con `false` ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` | `true` |
+| `record_input` | si el registro de ejecución guarda la línea de comandos tal como la escribiste; `false` oculta lo escrito, los secretos se ocultan siempre ([diagnóstico](./diagnostics.md#что-вы-набрали)) | — | `true` |
+| `keep_runs_for_days` | cuántos días se guardan los registros de ejecuciones fallidas | — | `30` |
+| `keep_successful_runs_for_days` | cuántos días se guardan los registros de ejecuciones correctas | — | `7` |
+| `runs_size_limit_mb` | cuántos megabytes puede ocupar la carpeta de ejecuciones; al superarlo se borran primero las correctas más antiguas | — | `200` |
 | `permissions` |niveles de derechos para recursos y comandos: `deny`, `readonly`, `ask`, `allow`; la clave más precisa tiene prioridad ([abajo](#права-доступа))|—; `--yes` y `--allow-dangerous` solo responden a `ask`, `deny` no eliminan|todo `allow`, excepto: eliminación, terminación de otras sesiones y algunos cambios irreversibles más - `ask`; respuestas automáticas `replies.send` – `deny`|
 | `sends_per_hour` |cuántos mensajes puede enviar un perfil en una hora, junto con reenvíos, ediciones, pines con notificaciones, mensajes eliminados, personas agregadas a grupos y solicitudes aceptadas de membresía; over - falla con código `8`. **El límite de bot** se establece solo en la sección `bot`; sin él el bot no está limitado ([enviar protección](./security.md#защита-от-отправки-не-туда))| — |`30`, el bot no lo tiene|
 | `requests_per_minute` |cuántas solicitudes por minuto realiza el perfil a MAX, después de las primeras 10 seguidas, juntas en todos los procesos de este perfil; `0` - sin limitación ([límites y esperas](./limits.md))| `MAX_REQUESTS_PER_MINUTE` | `20` |
@@ -179,7 +183,7 @@ Elegir solo lectura en el primer inicio limita todos los perfiles de todas las h
 
 ```sh
 max personal config set limit 50        # профилю personal
-max work config set record true         # профилю work
+max work config set record false        # профилю work
 max config set keep_runs_for_days 7 --defaults   # всем профилям сразу
 max work config unset limit             # убрать; снова решает defaults или встроенное
 max agent config set permissions.messages readonly  # чтение сообщений без записи
@@ -253,8 +257,9 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 |---|---|---|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` |entero ≥ 1|perfil|
 | `requests_per_minute` |entero ≥ 0|perfil|
-| `color`, `record` | boolean |perfil|
+| `color`, `record`, `record_input` | boolean |perfil|
 | `sender_colors`, `search_catch_up`, `serve` | boolean |cuenta personal|
+| `search_reranker` | `mmarco`, `bge-reranker-v2-m3`, `off` |perfil|
 | `permissions` |objeto de rutas y niveles de comando `deny`, `readonly`, `ask`, `allow`|perfil|
 | `read_other_bots` |booleano o conjunto de nombres de perfil|sólo `bot`|
 | `update_check`, `skill_hint` | boolean |solo `defaults`|

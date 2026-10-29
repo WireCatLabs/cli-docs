@@ -259,7 +259,7 @@ tg personal --timeout 30s --trace chats list
 
 `--timeout` cubre todo el comando, incluido el inicio de sesión, y lo finaliza con el código de salida `9` después de cerrar la conexión. En `--trace`, una línea `→` sin `←` después es una solicitud que salió y nunca regresó: la red o Telegram, no `tg` ([leyendo un rastro](./diagnostics.md#show-it---trace)).
 
-Si imprime la respuesta pero no termina, es un fallo. Cinco segundos después de terminar la tarea, `tg` identifica lo que sigue abierto (`tg: finished, but … stayed open`) y sale; informa del problema incluyendo esa línea. `watch`, `serve` y `mcp` sí están pensados para seguir activos hasta detenerlos.
+Si imprime la respuesta pero no termina, es un fallo. Cinco segundos después de terminar la tarea, `tg` identifica lo que sigue abierto (`tg: finished, but … stayed open`) y sale; informa del problema incluyendo esa línea. `watch`, `serve` y `mcp serve` sí están pensados para seguir activos hasta detenerlos.
 
 ## Después de un envío
 
@@ -325,7 +325,7 @@ tg personal doctor reports create  # write it to a file, and say where to send i
 tg personal doctor reports create --run <id>  # about another run; ids from tg personal runs list
 ```
 
-`create` escribe `tg-report-<time>.json` en la carpeta actual (o `--output`), que solo usted puede leer. Contiene la versión, el tiempo de ejecución y el sistema, lo que responde `tg personal doctor`, la ejecución fallida más reciente (la operación, duración y código de error de cada solicitud) y los últimos 20 intentos de envío, solo el resultado y la duración. Cada ID de chat, mensaje y cuenta se reemplaza por una etiqueta que no significa nada fuera del archivo. No contiene texto de mensaje, títulos de chat, nombres, números de teléfono, credenciales de sesión o aplicación. Una ejecución fallida se mantiene sola, incluso sin `--record` ([ejecuciones fallidas](./diagnostics.md#a-failed-run-is-always-kept)).
+`create` escribe `tg-report-<time>.json` en la carpeta actual (o `--output`), que solo usted puede leer. Contiene la versión, el tiempo de ejecución y el sistema, lo que responde `tg personal doctor`, la ejecución fallida más reciente (la operación, duración y código de error de cada solicitud) y los últimos 20 intentos de envío, solo el resultado y la duración. Cada ID de chat, mensaje y cuenta se reemplaza por una etiqueta que no significa nada fuera del archivo. No contiene texto de mensaje, títulos de chat, nombres, números de teléfono, credenciales de sesión o aplicación. Una ejecución fallida se mantiene sola, incluso con `record` configurado en `false` ([ejecuciones fallidas](./diagnostics.md#a-failed-run-is-always-kept)).
 
 Envíalo como nueva incidencia en [GitHub](https://github.com/WireCatLabs/tg-cli/issues/new): explica qué hiciste y qué ocurrió y adjuntal archivo. Tanto la incidencia como el archivo son públicos: revísalo antes.
 

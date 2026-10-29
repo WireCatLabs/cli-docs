@@ -39,7 +39,7 @@ Connect the tool's instructions to my agent. Then show my account and a few chat
 
 The agent goes through these steps with you:
 
-1. **It checks your computer.** tg needs Node.js 22.16 or newer. If it is missing, the agent explains how to install it.
+1. **It checks your computer.** tg needs Node.js 22.19 or newer. If it is missing, the agent explains how to install it.
 2. **It installs tg.** This does not touch your account yet.
 3. **It starts the login.** The agent runs `tg personal setup` in a terminal window. You confirm on your phone, as described in [Log in to Telegram](#log-in). If the agent cannot show you that window, it pastes the QR code into the chat as text instead: see [the agent cannot show me the terminal](#q-agent-qr).
 4. **It connects itself to tg.** The agent installs the tg instructions for itself.
@@ -53,7 +53,7 @@ You confirm the login yourself, on your phone. Do not paste codes or passwords i
 
 Open Terminal on macOS or Linux, or PowerShell on Windows.
 
-1. **Install Node.js 22.16 or newer** (22.x or 24+), or Bun. See [Node.js, npm and finding the command](/en/docs/installation#nodejs).
+1. **Install Node.js 22.19 or newer** (22.x or 24+), or Bun. See [Node.js, npm and finding the command](/en/docs/installation#nodejs).
 2. **Install tg:**
 
    ```sh

@@ -171,7 +171,7 @@ tg personal search messages 'mentions:"person:12"'
 
 ## Через MCP
 
-Когда агент выполняет поиск на сервере MCP tg, `tg_read` (`command: "search messages"`) принимает запрос в `query`, а `timezone` для календарной зоны. `chat` принимает идентификатор или сохраненное имя; `source`, `newest`, `context` и `limit` работают так же, как и параметры команды; `saved` запускает сохраненный поиск. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` и `sync_first` соответствуют опциям `--thread…` и `--sync-first`; `sync_first` предлагается только с `messages.sync-first: allow`. Ответ имеет те же поля, что и `--json`. `tg_read` (`command: "stats messages show"`) считает одни и те же запросы. История запросов следует за сервером: `tg personal mcp --no-record` или `record`, установленный на `false`, не записывает свои вызовы.
+Когда агент выполняет поиск на сервере MCP tg, `tg_read` (`command: "search messages"`) принимает запрос в `query`, а `timezone` для календарной зоны. `chat` принимает идентификатор или сохраненное имя; `source`, `newest`, `context` и `limit` работают так же, как и параметры команды; `saved` запускает сохраненный поиск. `thread`, `thread_hops`, `thread_messages`, `thread_bytes`, `thread_within` и `sync_first` соответствуют опциям `--thread…` и `--sync-first`; `sync_first` предлагается только с `messages.sync-first: allow`. Ответ имеет те же поля, что и `--json`. `tg_read` (`command: "stats messages show"`) считает одни и те же запросы. История запросов следует за сервером: `tg personal mcp serve --no-record` или `record`, установленный на `false`, не записывает свои вызовы.
 
 ## Дальше
 

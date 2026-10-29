@@ -4,6 +4,212 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.104.0 — 29.10.2026
+
+### Changed — may break callers
+
+- **Un servidor MCP atiende solo los perfiles que nombras.** `tg mcp serve` sin perfil ahora se niega (código 2) y muestra
+  tus perfiles. Nombra uno (`tg work mcp serve`), una lista (`tg mcp serve --profiles work,personal`) o todos los perfiles
+  (`tg mcp serve --profiles all`); la línea de stderr al arrancar nombra los perfiles atendidos. La misma elección vale para
+  `--http`, `mcp revoke`, `mcp config` y `mcp server start|stop|status`. Una entrada de aplicación que ejecuta `tg mcp serve` sin
+  perfil deja de funcionar: vuelve a imprimirla con `tg mcp config --profiles all`, o nombra un perfil. `tg upgrade` detiene un
+  servidor en segundo plano de todos los perfiles iniciado por un `tg` anterior; vuelve a iniciarlo con
+  `tg mcp server start --profiles all`. La entrada del MCP Registry ahora ejecuta `tg mcp serve --profiles all` (cli-core
+  0.470.0).
+
+### Added
+
+- **Cada mensaje que imprime `tg` tiene `sender_is_me`**, verdadero para un mensaje que enviaste tú, en `messages list`, `show`,
+  `context`, las ventanas de búsqueda e `inbox` (cli-core 0.473.0).
+- **`tg runs show` conserva el código de error de red de una ejecución fallida** (`error.cause_code`, como `ETIMEDOUT`), nunca
+  el texto del servidor (cli-core 0.473.0).
+
+### Fixed
+
+- **`--offline --transcribe` dice qué mensajes de voz no transcribió.** Están en `missing`, con el comando
+  `tg <profile> messages transcribe <chat> <id>` que hay que ejecutar (cli-core 0.473.0).
+- **Cada llamada a una herramienta MCP tiene su propio `run_id`** en su respuesta y en `tg runs` (cli-core 0.471.0).
+
+## 0.103.0 — 27.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.469.0 y cli-base 0.65.0.** cli-core 0.469 solo acepta cli-base 0.65, así que ambas versiones se mueven juntas.
+  cli-base 0.65 conoce los verbos `serve` y `revoke`, así que sus entradas en la base de lint desaparecen, y su `cli-dev bundle`
+  encuentra un servidor iniciado con una opción antes de `mcp serve`. Desde cli-core 0.468, un servidor MCP ofrece por su
+  herramienta de lectura un comando que solo descarga al almacén.
+
+### Fixed
+
+- **`tg --version` responde antes de cargar nada del paquete.** El paquete ahora lo genera el `cli-dev bundle` compartido de
+  cli-base en lugar del `scripts/bundle.ts` propio de tg; los fragmentos y toda la salida son iguales. Un servidor iniciado
+  con una opción antes de `mcp serve` (`tg work --read-only mcp serve`) ahora carga todos los fragmentos poco después de arrancar, como
+  hace un `mcp serve` simple, para que una actualización en el sitio no le quite un fragmento.
+
+## 0.102.0 — 27.10.2026
+
+### Changed — may break callers
+
+- **Ahora se conserva cada ejecución, también las que funcionaron.** Una ejecución que funcionó se conserva 7 días
+  (`keep_successful_runs_for_days`), una fallida 30 (`keep_runs_for_days`), y la carpeta de ejecuciones se mantiene por debajo de 200 MB
+  (`runs_size_limit_mb`). Con `record_input` activado, como por defecto, un `send` que funcionó ahora guarda lo que escribiste (el
+  mensaje, un chat nombrado por su título) en una ejecución que solo tú puedes leer, en esta computadora, durante 7 días.
+  `record_input failed` lo guarda solo en una ejecución fallida; `record false` conserva solo las ejecuciones fallidas; `--no-record`
+  no conserva nada. `watch`, `serve` y `mcp serve` conservan una ejecución que funcionó solo con `--record`. Una ejecución ahora dice quién
+  la pidió: la línea de comandos, una aplicación MCP (y su llamada a herramienta) o WireCat Desktop (cli-core 0.467.0).
+
+### Added
+
+- **`tg runs show` enumera cada solicitud que recibió Telegram, con su duración, reintentos y esperas.** La ejecución de un comando ahora tiene una
+  línea por cada llamada a Telegram, para una cuenta y para un bot: el método (`messages.getHistory`, `sendMessage`),
+  cuánto tardó y cómo terminó. Cuando Telegram pide esperar (`FLOOD_WAIT`, o un `429` de la Bot API) y `tg` espera
+  y vuelve a intentarlo, la ejecución muestra la llamada rechazada y luego el reintento como intento 2, con el tiempo de espera. El texto de los mensajes,
+  los nombres, los números de teléfono y el token del bot nunca se escriben.
+
+## 0.101.0 — 27.10.2026
+
+### Changed — may break callers
+
+- **El servidor MCP es `tg <profile> mcp serve`; `tg <profile> mcp` solo imprime la ayuda.** Los inicios de sesión del navegador
+  se olvidan con `tg <profile> mcp revoke` en lugar de `mcp --revoke`. El servidor de un bot es `tg <name> bot mcp serve`.
+  Una entrada de aplicación que ejecuta `tg personal mcp` debe cambiar a `tg personal mcp serve`: vuelve a ejecutar `tg personal mcp add <app>`
+  o `tg personal mcp config`. `mcp server start` y las entradas que imprime `mcp config` ya ejecutan el nuevo
+  comando (cli-core 0.463.0).
+- **`tg skill show|status|install --json` imprimen `{ item, meta }`.** Los campos del skill pasaron a `item`; el
+  instalador de Windows los lee de ahí (cli-core 0.462.0).
+- **Los resultados de búsqueda de todo tipo, y `tg topics show`, nombran los campos que un agente debe leer como datos** (`untrusted`, por
+  ejemplo `["title"]` en un tema de foro). Quien los valide con una copia antigua y estricta del esquema
+  rechaza el campo nuevo (cli-core 0.464.0).
+- **`tg account list` dice si cada perfil tiene la sesión iniciada en esta computadora** (`signed_in`). Quien valide
+  los elementos con una copia antigua y estricta del esquema rechaza el campo nuevo (cli-core 0.466.0).
+
+### Added
+
+- **`tg search all` también encuentra eventos de calendario en el almacén compartido**, marcados como texto no confiable para los agentes, y
+  `contacts context|prepare` nombran un campo más (cli-core 0.453.0–0.461.0).
+- **`tg upgrade` reinicia el servidor MCP del navegador que inició y nombra las sesiones de agente que siguen en la versión anterior.**
+  Tras una instalación, cada `tg mcp serve --http` que lanzó `tg mcp server start` vuelve a arrancar en el mismo puerto,
+  dirección y límites (`mcp_servers`, versión anterior → nueva); uno iniciado a mano sigue en marcha y se nombra. Las sesiones de agente
+  por stdio que siguen en la versión anterior se enumeran (`stale_sessions`): reinícialas desde tu aplicación de agente. Esto
+  funciona a partir de la próxima actualización (cli-core 0.464.0).
+
+### Fixed
+
+- **`tg mcp serve` sin perfil marca los perfiles que no tienen la sesión iniciada.** Enumeraba cada perfil con un
+  archivo de cuenta, así que una aplicación podía elegir uno sin sesión y fallar. Cada perfil ahora lleva una etiqueta
+  (`default — not signed in`) en el menú de la aplicación y en la descripción, y una llamada para uno sin sesión
+  responde cómo iniciarla: `tg <profile> setup`, o desde WireCat Desktop. La entrada del MCP Registry y la
+  imagen de Glama inician `tg mcp serve`.
+- **La página de inicio de sesión del servidor MCP del navegador dice que cada código sirve para un solo inicio de sesión.** Después de que una aplicación inicia sesión, aparece un código nuevo
+  en WireCat Desktop y en `tg mcp server status`; volver a escribir el anterior solo decía "Wrong code"
+  (cli-core 0.466.0).
+
+## 0.100.0 — 27.10.2026
+
+### Fixed
+
+- **Los comandos arrancan unos 0,2 s antes: el paquete se ejecuta desde un bundle.** Un comando cargaba unos 1.110 archivos de módulos
+  antes de hacer nada; ahora carga unos 55 que contienen el mismo código. `tg messages list --help` pasó de 389 a
+  192 ms, y de 534 a 272 ms en la primera ejecución tras una instalación o un reinicio. Un comando que se conecta sigue cargando
+  la biblioteca cliente de Telegram como antes. La salida no cambia. El paquete es más grande: 3,0 MB de descarga en lugar de
+  0,5 MB, 16 MB en disco en lugar de 4 MB. Un `tg serve`, `watch` o servidor MCP en marcha carga todo su código unos
+  segundos después de arrancar, así que actualizar `tg` debajo de él no le deja sin encontrar un archivo que aún no había usado.
+- **El skill de agente de tg vuelve a publicarse en ClawHub como `tg-cli`.** ClawHub guarda los nombres de skill por editor, así que
+  `wirecat/tg-cli` es el nombre propio de tg aunque otro editor también tenga un `tg-cli`, y el skill de cada herramienta de WireCat
+  ahora usa su nombre simple. `tg skill install` sigue escribiendo `skills/tg-cli/`.
+
+## 0.99.0 — 27.10.2026
+
+### Fixed
+
+- **Sin sesión, el error y las instrucciones MCP también ofrecen WireCat Desktop.** `no session`, `not logged in`
+  y la falta de claves de la aplicación ahora dicen: ejecuta el comando en una terminal, o inicia sesión desde WireCat Desktop (Tools → Telegram →
+  Manage). Por MCP se indica al agente que nunca pida códigos ni contraseñas (cli-core 0.452.0).
+- **El skill de agente de tg se publica en ClawHub como `wirecat-tg`.** El nombre `tg-cli` en ClawHub pertenece a otro editor,
+  así que el skill de tg no podía aparecer con él. `tg skill install` sigue escribiendo `skills/tg-cli/`.
+
+## 0.98.0 — 27.10.2026
+
+### Fixed
+
+- **La búsqueda por significado y `--discover` usan ONNX Runtime nativo también en Windows (cli-core 0.451.0).** Tras
+  `tg <profile> models download`, los modelos de texto y el reordenador usan la biblioteca nativa en Windows x64 y arm64, como
+  ya hacían en Linux y macOS: entre 2 y 3 veces más rápido que WebAssembly. La descarga toma `onnxruntime.dll` del
+  paquete npm `onnxruntime-node` (113,5 MB, una vez, comprobado con sha256). Los modelos de imágenes (CLIP, SigLIP2) ahora también usan la
+  biblioteca nativa, donde esté instalada. Los resultados son los mismos.
+
+## 0.97.0 — 27.10.2026
+
+### Added
+
+- **`tg mcp` sin perfil atiende todos los perfiles, por stdio y con `--http` (cli-core 0.450.0).** Una aplicación de IA necesita un
+  conector para Telegram, no uno por perfil. Cada herramienta (`tg_tools_search`, `tg_read`, `tg_write`) recibe un
+  `profile` obligatorio (todos los perfiles de este equipo, sin valor por defecto) y se indica al agente que pregunte si no nombraste la cuenta. La llamada
+  se ejecuta en el propio `tg <profile> mcp` de ese perfil, iniciado con el primer uso y cerrado tras 10 minutos sin actividad, así que los
+  permisos, la sesión y el registro de auditoría de cada perfil se aplican como antes. `tg mcp --revoke`, `tg mcp config` y
+  `tg mcp server start|stop|status` también funcionan sin perfil, con su propio inicio de sesión. `--public-url` admite una ruta,
+  `https://<name>.ts.net/tg`, para que las herramientas compartan una dirección de túnel. La entrada del MCP Registry inicia `tg mcp`.
+  `tg <profile> mcp` no cambia.
+
+### Changed — may break callers
+
+- **tg necesita cli-base 0.63.0 (cli-core 0.450.0).** No cambió nada de lo que tg usa en ella.
+
+## 0.96.0 — 27.10.2026
+
+### Fixed
+
+- **Cada comando tarda menos en prepararse (cli-base 0.62.0, cli-core 0.449.0).** La comprobación de los comandos compartidos ahora
+  describe cada comando una vez, no otra vez por cada grupo superior. Un `run(["--version"])` en caliente pasó de 49 a 29 ms.
+  Detecta los mismos cambios que antes.
+- **Los comandos fuera de `bot api` arrancan más rápido: sus 185 comandos generados de la Bot API se construyen solo cuando hacen falta.** `tg messages list`, `tg --help` y los demás comandos ya no cargan unos 1,5 MB de código generado. `bot api`, `bot --help`, `bot mcp`, `commands`, `complete`, `help`, `mcp`, `serve`, `config` y `doctor` siguen construyendo el grupo, igual que cualquier comando cuando la configuración guarda un permiso `bot.api`. La salida no cambia.
+- **La búsqueda por significado y el reordenador de `search messages --discover` van entre 2 y 3 veces más rápido en Linux y en Mac con Apple silicon tras el siguiente `tg models download` (cli-core 0.448.0).** La descarga instala un ONNX Runtime nativo y los modelos se ejecutan en él; sin él funcionan como antes. El reordenador ahora lee solo el comienzo del mensaje al que responde un resultado (cli-core 0.447.0).
+
+## 0.95.0 — 26.10.2026
+
+### Added
+
+- **`tg <profile> session start --json --answer-stdin` inicia sesión sin terminal, para WireCat Desktop (cli-core 0.443.0).** Cada pregunta es una línea `needs` en stderr (`{"event":"needs","field","secret","prompt","hint"}`: `api_id`, `api_hash`, `phone`, `code`, `password`) y su respuesta es una línea en stdin; my.telegram.org es una línea `open_url`. Sin `--answer-stdin`, una ejecución sin terminal sigue negándose, así que el shell de un agente nunca espera una pregunta. Las respuestas nunca se imprimen ni se guardan en un registro de ejecución.
+
+- **`tg <profile> mcp server start|stop|status` ejecuta el servidor MCP HTTP en segundo plano (cli-core 0.445.0).** `start` admite `--public-url`, `--port` y `--permission` como `mcp --http` y vuelve cuando el servidor escucha; `status` da el puerto, la dirección, el código de inicio de sesión de un solo uso y las aplicaciones que iniciaron sesión; `stop` termina solo el servidor que inició. WireCat Desktop lo inicia y lo detiene desde el panel Manage de la herramienta.
+
+### Changed — may break callers
+
+- **Un registro de ejecución guarda la línea de comandos tal como se escribió (cli-core 0.439.0 a 0.447.0).** `runs show` y `run.json` llevan `argv`, las palabras después de `tg`, con los secretos como `[redacted]` (una opción con nombre de secreto, una contraseña en una URL, un formato de token conocido, una cadena que parece aleatoria) y sin guardar nunca un número de teléfono. `tg <profile> config set record_input false` pone `[redacted]` en lugar de cada valor escrito que pueda ser texto. Los eventos registrados siguen conteniendo identificadores, nunca el título de un chat ni el texto de un mensaje.
+
+## 0.94.0 — 26.10.2026
+
+### Added
+
+- **`tg skill install --for hermes` da el skill a Hermes Agent, y `tg skill status` dice qué lee Hermes (cli-base 0.59.0).** Añade `~/.agents/skills` a `skills.external_dirs` de Hermes mediante `hermes config set`, conservando las carpetas ya listadas, o copia el archivo en la carpeta de Hermes si eso falla. Sin Hermes instalado falla con `not_found` y no escribe nada. Un `tg skill install` simple y `--for all` siguen escribiendo solo las copias de Claude Code y de `~/.agents/skills`. `skill status --json` añade `hermes` junto a `targets`.
+- **Una ejecución iniciada por OpenClaw o Hermes Agent nombra a ese agente (cli-core 0.437.0).** `runs show` da `agent` como `openclaw` para un comando que ejecutó el agente de OpenClaw, con `from_chat: true` cuando lo inició un mensaje de chat; una ejecución de Hermes lleva su sesión, así que una reserva de tarea de Hermes se mantiene por sesión.
+- **El skill `tg-cli` indica a OpenClaw y a ClawHub que necesita `tg` y cómo instalarlo** (`metadata.openclaw`: `requires.bins` y el paquete npm `@wirecat/tg-cli`). Si falta `tg` en el PATH, OpenClaw marca el skill como no listo y ofrece instalar el paquete. Claude Code y Codex ignoran ese bloque.
+
+## 0.93.0 — 25.10.2026
+
+### Added
+
+- **`store reset --dry-run` enumera lo que vaciaría un reinicio y no borra nada** (cli-core 0.429.0): los archivos y bytes del almacén, cada tabla de datos con sus filas, si antes se hace una copia de seguridad y si un serve u otro proceso tiene el archivo abierto.
+- **`search messages --discover` también encuentra mensajes cercanos en significado** una vez descargado e5-small y cuando `conversations rebuild` ha dado a los mensajes sus propios vectores (cli-core 0.432.0). El `discovery.found_by` de cada resultado dice qué búsqueda lo encontró. Hasta entonces el descubrimiento busca por palabras como antes y dice por qué. No se descarga nada y ningún texto sale de la computadora.
+- **`search messages --discover` reordena sus 50 primeros resultados una vez descargado un reordenador (cli-core 0.435.0).** Un modelo local lee la pregunta con cada resultado, y su puntuación se mezcla con la del propio descubrimiento; los resultados después de los 50 primeros mantienen su orden. El predeterminado es mMARCO (136 MB, `tg models download mmarco`); el ajuste de perfil `search_reranker` elige `bge-reranker-v2-m3` (588 MB) u `off`. Cada resultado reordenado tiene `discovery.reranker_score`; `score` sigue siendo el del descubrimiento. Sin el modelo, el descubrimiento mantiene su orden y dice `not reranked: …` (en `--json` y MCP: `missing` y `next`). Una búsqueda nunca descarga un modelo ni envía texto a ninguna parte; `--exact`, `--newest` y las consultas estrictas no cambian.
+- **`search all` también encuentra mensajes por significado, una vez descargado e5-small y cuando los mensajes tienen sus vectores (cli-core 0.435.0).** Los resultados por significado se combinan con los de palabras en una sola lista de mensajes; el `foundBy` de cada elemento dice qué búsqueda lo encontró. Una consulta con NOT, o con un filtro bajo OR o en un grupo, sigue siendo solo por palabras. Sin el modelo o los vectores, `search all` lee palabras como antes y dice por qué. `--exact` y `--backend server` siguen siendo solo por palabras.
+
+### Changed — may break callers
+
+- **Una orden `bot` fallida nombra en su ejecución la llamada a la Bot API que falló.** `runs show` y `runs list` dan a su `error.http` el `method` y el `endpoint_template` junto al estado — `{ "method": "POST", "endpoint_template": "/:token/sendMessage", "status": 400 }` — donde antes solo tenían el estado. El token siempre se escribe `:token`: Telegram lo pone en la dirección, y el real nunca llega a una ejecución ni a una traza. Las solicitudes del bot en `--trace` y en una ejecución registrada llevan los mismos dos campos, y una línea de traza legible los muestra tras el nombre del método (`← getMe  POST /:token/getMe  401 …`). Un script que analiza el texto de `--trace` ve esa columna extra.
+- **tg necesita Node 22.19+ o 24+ (antes 22.16+).** La compatibilidad con proxy de la Bot API usa undici 8, que requiere Node 22.19. Bun no se ve afectado.
+- **El almacén compartido pasa a la versión 34 (cli-core 0.434.0).** La búsqueda por significado ordena mediante un índice vectorial guardado en el almacén, creado en la primera apertura con esta versión. Una vez que esta versión abre el almacén, una CLI con cli-core 0.433.0 o anterior lo rechaza y pide actualizarse, así que actualiza a la vez todas las CLI de WireCat que comparten el almacén. Si falta la extensión SQLite del índice o no se carga, abrir el almacén falla con `store.vector-extension-missing` o `store.vector-extension-failed`: reinstala tg. `store check` informa de `vector_indexes` y falla cuando un índice está desfasado.
+- **`tg upgrade --help` muestra solo `tg upgrade --check` como ejemplo (cli-core 0.433.0).** El ejemplo de `tg upgrade` simple desaparece: copiado y ejecutado, actualizaba.
+- **El análisis con Anthropic envía la clave como `Authorization: Bearer` (cli-core 0.433.0).** Antes enviaba `X-Api-Key`. Una pasarela en un `models.<purpose>.base_url` propio que lea `X-Api-Key` debe leer `Authorization` en su lugar.
+
+### Fixed
+
+- **Hermes Agent instala el skill `tg-cli` sin advertencia de seguridad.** Su análisis de instalación dejaba el skill en "caution" porque una frase nombraba la carpeta SSH por su ruta, aunque la frase dice que tg se niega a enviarla. La frase ahora dice "SSH keys"; lo que tg rechaza no cambia.
+- **La subida de un archivo de un bot a través de un proxy SOCKS5 o HTTP envía el archivo.** Antes, la solicitud por proxy llevaba el texto `[object FormData]` en lugar del formulario, así que Telegram rechazaba fotos, documentos y notas de voz enviados con `--proxy`.
+- **Un `--version` simple responde antes de cargar el programa**: el ejecutable arranca mediante `@wirecat/cli-core/cli/start` (cli-core 0.429.0).
+- **Un vector guardado desaparece cuando ningún texto del almacén lo usa (cli-core 0.435.0).** Una imagen cuya foto cambió y un chat purgado (`store clear --left`, un chat fusionado en otro) dejaban vectores atrás, y ya no lo hacen. `store rebuild` elimina los que dejaron versiones anteriores (`unused_vectors_dropped`), y `store check` los cuenta (`vectors.unused`).
+- **`conversations embeddings clear --chat` también elimina los vectores de mensajes del chat (cli-core 0.435.0)**, no solo los de sus conversaciones.
+
 ## 0.92.0 — 25.10.2026
 
 ### Changed — may break callers

@@ -356,7 +356,7 @@ tg personal store clear --left --allow-dangerous  # delete the chats you have le
 ```
 
 - **`backup` nunca sobrescribe archivos:** indica una ruta nueva. Copia la base de datos mientras otros comandos y `serve` siguen utilizándola.
-- **`restore` conserva el archivo sustituido** junto al nuevo e indica dónde. Rechaza la restauración si hay un `serve` activo en cualquier perfil: ejecuta primero `tg personal server stop`. Comprueba que la copia sea legible y no esté dañada. Después reinicia todos los procesos `serve` y `mcp` activos de ambos CLI para que lean el archivo restaurado.
+- **`restore` conserva el archivo sustituido** junto al nuevo e indica dónde. Rechaza la restauración si hay un `serve` activo en cualquier perfil: ejecuta primero `tg personal server stop`. Comprueba que la copia sea legible y no esté dañada. Después reinicia todos los procesos `serve` y `mcp serve` activos de ambos CLI para que lean el archivo restaurado.
 - **Un chat del que has salido desaparece de `chats list --offline`** la próxima vez que `tg personal chats list` lea la lista completa; sus mensajes permanecen guardados. Si vuelves a unirte, reaparece. **`store clear --left`** elimina esos chats y mensajes. Sin `--allow-dangerous`, solo indica cuántos eliminaría. No se puede volver a descargar un chat del que has salido.
 - **`migrate`** solo es necesario si `info` o `check` indica que el archivo usa un esquema anterior. Haz una copia primero. Después normaliza los mensajes antiguos por lotes; detenerlo no pierde datos.
 

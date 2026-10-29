@@ -25,7 +25,8 @@ Estas son las configuraciones que se cambian con más frecuencia. Una descripci�
 | `sends_per_hour` |cuántos mensajes puede enviar un perfil en una hora; detiene el ciclo de envío|`30`; el bot no tiene límite hasta que se especifica en la sección `bot`|
 | `requests_per_minute` |¿Con qué frecuencia accede `max` a MAX después de una breve serie de solicitudes? `0` apaga el tempo ([limitaciones y expectativas](./limits.md))| `20` |
 | `permissions` |qué puede hacer el perfil: sólo leer, preguntar antes de cambiar o hacer sin preguntar ([permisos](./permissions.md))|todo está permitido excepto: primero se solicita la eliminación y algunos cambios irreversibles más; las respuestas automáticas no se envían|
-| `record` |registrar cada ejecución para verlo más tarde ([diagnóstico](./diagnostics.md))| `false` |
+| `record` | registrar también las ejecuciones correctas, no solo las fallidas ([diagnóstico](./diagnostics.md)) | `true` |
+| `record_input` | si el registro de ejecución guarda la línea de comandos tal como la escribiste; los secretos se ocultan siempre ([diagnóstico](./diagnostics.md#что-вы-набрали)) | `true` |
 | `keep_runs_for_days` |¿Cuántos días se almacenan los registros de ejecución?| `30` |
 | `color` |color en tablas|por terminal|
 | `sender_colors` |Cada autor tiene un color diferente en la lista de mensajes.| `false` |

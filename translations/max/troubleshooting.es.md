@@ -294,7 +294,7 @@ Código `6`. `--offline` utiliza solo el archivo local y este perfil todavía no
 
 ### `search messages` no encuentra nada
 
-Buscar todos los chats lee el archivo local; La búsqueda de palabras en un chat con nombre también solicita al servidor MAX. Una respuesta vacía no prueba que no haya mensaje. Consulte `coverage.next` en la respuesta de `--json`: ejecute el comando solicitado o solicite permiso, luego busque nuevamente. `max personal messages sync --all --background` comienza a descargar todos los chats; `max personal messages sync <чат>` - uno ([historial de descargas](./archive.md#скачать-историю), [preparar archivo para buscar](./search.md#сначала-подготовьте-архив)).
+Buscar todos los chats lee el archivo local; La búsqueda de palabras en un chat con nombre también solicita al servidor MAX. Una respuesta vacía no prueba que no haya mensaje. Consulte `coverage.next` en la respuesta de `--json`: ejecute el comando sugerido solo después de que el propietario esté de acuerdo, luego busque nuevamente. `max personal messages sync <чат>` descarga un chat; `max personal messages sync --all --background`, todos a la vez, y lo inicia el propio propietario ([historial de descargas](./archive.md#скачать-историю), [preparar archivo para buscar](./search.md#сначала-подготовьте-архив)).
 
 ### Lista de chat vacía
 
@@ -324,7 +324,7 @@ max personal doctor reports show          # что попадёт в отчёт 
 max personal doctor reports create   # записать отчёт в файл и показать, как его отправить
 ```
 
-`create` escribe el archivo `max-report-<время>.json` en el directorio actual (derechos `0600`). Contiene la versión, entorno y sistema, lo mismo que muestra `max personal doctor`, la última ejecución que terminó en error y las últimas 20 acciones de registro. No contiene mensajes de texto, nombres de chat, nombres, números de teléfono ni tokens. Los números de chat y mensaje se reemplazan con etiquetas: dentro de un informe, la etiqueta de un chat es la misma, pero en el siguiente informe es diferente. Un inicio que finaliza con un error se guarda solo, incluso sin `--record` ([ejecución fallido](./diagnostics.md#неудачный-запуск-сохраняется-всегда)). Sobre otro ejecución: `--run <id>`, los números mostrados por `max personal runs list`.
+`create` escribe el archivo `max-report-<время>.json` en el directorio actual (derechos `0600`). Contiene la versión, entorno y sistema, lo mismo que muestra `max personal doctor`, la última ejecución que terminó en error y las últimas 20 acciones de registro. No contiene mensajes de texto, nombres de chat, nombres, números de teléfono ni tokens. Los números de chat y mensaje se reemplazan con etiquetas: dentro de un informe, la etiqueta de un chat es la misma, pero en el siguiente informe es diferente. Cada ejecución, también la fallida, se guarda sola, incluso sin `--record` ([registro de ejecuciones](./diagnostics.md#каждый-запуск-сохраняется-сам)). Sobre otra ejecución: `--run <id>`, los números mostrados por `max personal runs list`.
 
 Después, el comando imprime un enlace para abrir una incidencia en [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues), con el título y un borrador del texto ya rellenados. Necesitas una cuenta de GitHub. Arrastral archivo del informe al campo de texto, describe qué hiciste y qué ocurrió y pulsa «Submit new issue».
 

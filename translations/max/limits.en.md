@@ -14,7 +14,7 @@ Terms used below:
 
 ## One request rate per profile
 
-Every request `max` makes on behalf of a profile, from a command, `max personal mcp`, `max personal serve` or a background job, waits its turn within that profile’s shared rate:
+Every request `max` makes on behalf of a profile, from a command, `max personal mcp serve`, `max personal serve` or a background job, waits its turn within that profile’s shared rate:
 
 - The first **10 requests** run immediately, so ordinary commands do not have to wait.
 - After that, **20 requests per minute**, about one every 3 seconds, until the initial allowance replenishes.
@@ -66,4 +66,4 @@ Bots have separate Bot API limits. On a 429 response with `retry-after`, a read 
 
 ## One sign-in for everything
 
-`max personal serve` maintains one connection to MAX. Commands, `max personal mcp` and `max personal watch` use it instead of signing in independently, so simultaneous commands do not add sign-ins. If the server is not running, a command starts it in the background (the `serve` setting). After a disconnection, the server reconnects with an increasing delay, from one second to one minute.
+`max personal serve` maintains one connection to MAX. Commands, `max personal mcp serve` and `max personal watch` use it instead of signing in independently, so simultaneous commands do not add sign-ins. If the server is not running, a command starts it in the background (the `serve` setting). After a disconnection, the server reconnects with an increasing delay, from one second to one minute.

@@ -49,8 +49,8 @@ max [профиль] [опции] <команда> <действие> [аргу�
 | `--full` | found messages with their whole text and every provider field. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
-| `--record` | keep this run under `max runs` — ids and timings, never message content. |
-| `--no-record` | do not keep it, whatever the configuration says. |
+| `--record` | keep this run under `max runs`, with the command as typed and secrets hidden; record_input false leaves the typed words out. |
+| `--no-record` | do not keep this run, even if it fails. |
 | `--serve` | start `max serve` in the background if it is not running (the default). |
 | `--no-serve` | do not start it; log in on this command's own connection unless one is running. |
 
@@ -65,12 +65,16 @@ log this profile in to MAX
 **Меняет что-то вне этого компьютера: в MAX или во внешнем сервисе.**
 
 ```sh
-max session start [method]
+max session start [method] [options]
 ```
 
 | Аргумент | | Что это |
 |---|---|---|
 | `method` | необязательный | token (pasted or piped), qr, qr-chrome or sms. Одно из: `token`, `qr`, `qr-chrome`, `sms`. По умолчанию: `token`. |
+
+| Опция | Что делает |
+|---|---|
+| `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
 
 **Returns:** log this profile in to MAX
 
@@ -125,7 +129,7 @@ max account list [query]
 |---|---|---|
 | `query` | необязательный | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** account profile — profile, current, account, name; every field: max commands info account list
+**Returns:** account profile — profile, current, account, name, signed_in; every field: max commands info account list
 
 **Example:** `max personal account list`
 
@@ -1458,8 +1462,12 @@ max contacts sync
 who MAX has under a phone number — asks for it, or reads it from stdin
 
 ```sh
-max contacts lookup
+max contacts lookup [phone]
 ```
+
+| Аргумент | | Что это |
+|---|---|---|
+| `phone` | необязательный | refused: the number is asked for, never typed here. |
 
 **Returns:** contact lookup — id, name, username; every field: max commands info contacts lookup
 
@@ -1594,7 +1602,7 @@ max contacts context <person> [options]
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
 | `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
 
-**Returns:** contact context — person, shared, last, recent, mentions, limits, complete, not_read, and 1 more; every field: max commands info contacts context
+**Returns:** contact context — person, shared, last, recent, mentions, limits, complete, not_read, and 2 more; every field: max commands info contacts context
 
 **Example:** `max personal contacts context "Alex Example" --limit 10`
 
@@ -1615,7 +1623,7 @@ max contacts prepare <person> [options]
 | `--limit <n>` | at most this many messages, and items in each section; 10 if not given. |
 | `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 2h / 1d ago. |
 
-**Returns:** contact preparation — person, shared, last, recent, mentions, limits, complete, not_read, and 1 more; every field: max commands info contacts prepare
+**Returns:** contact preparation — person, shared, last, recent, mentions, limits, complete, not_read, and 2 more; every field: max commands info contacts prepare
 
 **Example:** `max personal contacts prepare Ana`
 
@@ -2358,7 +2366,7 @@ max store migrate
 
 ### `max store rebuild`
 
-rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored; loses nothing
+rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored, and drop the vectors no stored text uses; loses nothing
 
 **Меняет что-то только на этом компьютере.**
 
@@ -2366,7 +2374,7 @@ rebuild the word index, its typo vocabulary, the stems, the files' word index, t
 max store rebuild
 ```
 
-**Returns:** store reindex — path, exists, normalized, indexed, terms, stemmed, notes_indexed, file_texts, and 1 more; every field: max commands info store rebuild
+**Returns:** store reindex — path, exists, normalized, indexed, terms, stemmed, notes_indexed, file_texts, and 2 more; every field: max commands info store rebuild
 
 **Example:** `max personal store rebuild`
 
@@ -2463,8 +2471,9 @@ max store reset [options]
 | Опция | Что делает |
 |---|---|
 | `--no-backup` | delete the store without backing it up first. |
+| `--dry-run` | list every table it would empty, with its rows, and delete nothing. |
 
-**Returns:** store reset — path, exists, reset, backup, backed_up, schema; every field: max commands info store reset
+**Returns:** store reset — path, exists, reset, dry_run, files, bytes, schema, tables, and 4 more; every field: max commands info store reset
 
 **Example:** `max personal store reset`
 
@@ -3530,7 +3539,7 @@ max conversations embeddings status [options]
 
 #### `max conversations embeddings clear`
 
-drop a chat's vectors, or only one model's; messages and conversations are never touched
+drop a chat's conversation and message vectors, or only one model's; messages and conversations are never touched
 
 **Меняет что-то только на этом компьютере.**
 
@@ -3552,7 +3561,7 @@ max conversations embeddings clear [options]
 
 ### `max conversations rebuild`
 
-build, then embed with the model on this machine, the chats that changed since their build and the group chats never built — or only --chat; bounded per run, so run it again for the rest; never asks the messenger, downloads no model and sends no text anywhere
+build, then embed with the model on this machine, the chats that changed since their build and the group chats never built — or only --chat; with the default model, also each message on its own, which `search messages --discover` reads; bounded per run, so run it again for the rest; never asks the messenger, downloads no model and sends no text anywhere
 
 **Меняет что-то только на этом компьютере.**
 
@@ -3566,7 +3575,7 @@ max conversations rebuild [options]
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
 
-**Returns:** conversation preparation — model, model_available, built, embedded, left; every field: max commands info conversations rebuild
+**Returns:** conversation preparation — model, model_available, built, embedded, left, messages; every field: max commands info conversations rebuild
 
 **Example:** `max personal conversations rebuild --max-chats 5`
 
@@ -3632,7 +3641,7 @@ max conversations embed [options]
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given, and no limit with --chat. |
 
-**Returns:** conversation embedding — chat, model, embedded, skipped, model_available, built, left; every field: max commands info conversations embed
+**Returns:** conversation embedding — chat, model, embedded, skipped, model_available, built, left, messages; every field: max commands info conversations embed
 
 **Example:** `max personal conversations embed --chat "Book club"`
 
@@ -4247,7 +4256,7 @@ find things by text: one resource when you know it (messages, notes), or search 
 
 ### `max search all`
 
-search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes are local only; --backend archive or --offline keeps it to the local store), and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
+search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes and events are local only; --backend archive or --offline keeps it to the local store), calendar events when the store holds a calendar, and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
 
 ```sh
 max search all <query> [options]
@@ -4259,7 +4268,7 @@ max search all <query> [options]
 
 | Опция | Что делает |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: messages, notes; meetings when --source names a meeting account. |
+| `--only <resources>` | only these resources, separated by commas: messages, notes, events; meetings when --source names a meeting account. |
 | `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
 | `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
 | `--limit <n>` | how many. |
@@ -4269,7 +4278,7 @@ max search all <query> [options]
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both; message discovery uses archive only). |
 | `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 6 more; every field: max commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 7 more; every field: max commands info search all
 
 **Example:** `max personal search all draft`
 
@@ -4304,11 +4313,11 @@ max search messages [query] [options]
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
-| `--discover` | find partial lexical matches and eligible replies in the local archive; results are evidence, not confirmed answers. |
+| `--discover` | find partial word matches, eligible replies and, once messages have vectors, messages close in meaning in the local archive; results are evidence, not confirmed answers. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
 
-**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 5 more; every field: max commands info search messages
+**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 6 more; every field: max commands info search messages
 
 **Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
 
@@ -4335,7 +4344,7 @@ max search notes <query> [options]
 | `--exact` | words as written only; meaning is not searched. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 5 more; every field: max commands info search notes
+**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 6 more; every field: max commands info search notes
 
 **Example:** `max personal search notes draft --limit 10`
 
@@ -4393,7 +4402,7 @@ max search runs [query] [options]
 | `--limit <n>` | matches per page, at most 100. По умолчанию: `20`. |
 | `--page <n>` | result page. По умолчанию: `1`. |
 
-**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 18 more; every field: max commands info search runs
+**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 21 more; every field: max commands info search runs
 
 **Example:** `max personal search runs timeout status:failed --limit 10`
 
@@ -4579,7 +4588,7 @@ max models keys remove <provider>
 
 ### `max models list`
 
-speech and embedding models, their download status and the default of each kind
+speech, embedding and reranker models: downloaded or not, each kind's default
 
 ```sh
 max models list [query]
@@ -4597,7 +4606,7 @@ max models list [query]
 
 ### `max models download`
 
-download and verify one speech or embedding model: tens to hundreds of MB, each size in models list
+download and verify one speech, embedding or reranker model: tens to hundreds of MB, each size in models list
 
 **Читает из внешнего сервиса.**
 
@@ -4617,7 +4626,7 @@ max models download <model> [options]
 
 **Next usually:** `max images models download <model>`
 
-**Example:** `max personal models download e5-small`
+**Example:** `max personal models download e5-small`, `max personal models download mmarco`
 
 ## `max polls`
 
@@ -5472,7 +5481,7 @@ max config set <setting> <value> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, sender_colors, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
+| `setting` | обязательный | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, search_reranker, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, sender_colors, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 | `value` | обязательный | a number, true or false, or a list like shop,news. |
 
 | Опция | Что делает |
@@ -5497,7 +5506,7 @@ max config unset <setting> [options]
 
 | Аргумент | | Что это |
 |---|---|---|
-| `setting` | обязательный | one of: limit, timeout_ms, color, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, sender_colors, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
+| `setting` | обязательный | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, search_reranker, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, sender_colors, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 
 | Опция | Что делает |
 |---|---|
@@ -5577,7 +5586,7 @@ max runs list [query] [options]
 | `--limit <n>` | how many to show. По умолчанию: `20`. |
 | `--page <n>` | which page, starting at 1. По умолчанию: `1`. |
 
-**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 20 more; every field: max commands info runs list
+**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: max commands info runs list
 
 **Example:** `max personal runs list --limit 10`
 
@@ -5597,7 +5606,7 @@ max runs show <run-id> [options]
 |---|---|
 | `--problems` | only failed responses, warnings and crashes. |
 
-**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 19 more; every field: max commands info runs show
+**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 22 more; every field: max commands info runs show
 
 **Example:** `max personal runs show run-101`
 
@@ -5623,7 +5632,7 @@ the instructions an agent is given for this tool
 
 ### `max skill show`
 
-print SKILL.md — `max skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
+print SKILL.md — `max skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
 
 ```sh
 max skill show [name] [options]
@@ -5643,7 +5652,7 @@ max skill show [name] [options]
 
 ### `max skill install`
 
-write SKILL.md to \~/.claude/skills/max-cli/ (Claude Code) and \~/.agents/skills/max-cli/ (Codex, Gemini CLI)
+write SKILL.md to \~/.claude/skills/max-cli/ (Claude Code) and \~/.agents/skills/max-cli/ (Codex, Gemini CLI, OpenClaw); --for hermes also has Hermes read \~/.agents/skills, which changes Hermes's own settings, so all leaves it out
 
 **Меняет что-то только на этом компьютере.**
 
@@ -5653,7 +5662,7 @@ max skill install [options]
 
 | Опция | Что делает |
 |---|---|
-| `--for <agents>` | which agents to install for. Одно из: `claude`, `agents`, `all`. По умолчанию: `all`. |
+| `--for <agents>` | which agents to install for. Одно из: `claude`, `agents`, `hermes`, `all`. По умолчанию: `all`. |
 
 **Returns:** install the tool's instructions for AI agents
 
@@ -5661,7 +5670,7 @@ max skill install [options]
 
 ### `max skill status`
 
-for each place `max skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+for each place `max skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
 
 ```sh
 max skill status
@@ -5707,7 +5716,7 @@ max upgrade [options]
 
 **Returns:** upgrade max with the package manager that installed it; --check only looks
 
-**Example:** `max upgrade --check`, `max upgrade`
+**Example:** `max upgrade --check`
 
 ## `max complete`
 
@@ -5727,12 +5736,16 @@ max complete [words]
 
 ## `max mcp`
 
-serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add max -- max <profile> mcp`
+serve this profile to an agent over MCP and set it up — `claude mcp add max -- max <profile> mcp serve`
+
+### `max mcp serve`
+
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add max -- max <profile> mcp serve`; with no profile, `max mcp serve` serves every profile and each tool asks which
 
 **Меняет что-то вне этого компьютера: в MAX или во внешнем сервисе.**
 
 ```sh
-max mcp [options]
+max mcp serve [options]
 ```
 
 | Опция | Что делает |
@@ -5740,8 +5753,75 @@ max mcp [options]
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
-| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
-| `--revoke` | forget every login given to a browser app; each must log in again. |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+
+**Returns:** serve this profile's commands to an AI agent
+
+**Example:** `max personal mcp serve`, `max personal mcp serve --http --public-url https://laptop.example.ts.net`
+
+### `max mcp revoke`
+
+forget every login `mcp serve --http` gave a browser app, of this profile or, with no profile, of the server of every profile; each app must log in again
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max mcp revoke
+```
+
+**Returns:** forget every login given to a browser app
+
+**Example:** `max personal mcp revoke`
+
+### `max mcp server`
+
+start, stop and check `mcp serve --http` in the background; status shows the login code for a browser app
+
+#### `max mcp server start`
+
+start `mcp serve --http` apart from this shell and answer once it listens, with its login code
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max mcp server start [options]
+```
+
+| Опция | Что делает |
+|---|---|
+| `--port <port>` | the local port (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+| `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
+
+**Returns:** start the HTTP MCP server in the background
+
+**Example:** `max personal mcp server start --public-url https://laptop.example.ts.net`
+
+#### `max mcp server stop`
+
+stop `mcp serve --http` — only one that `mcp server start` started
+
+**Меняет что-то только на этом компьютере.**
+
+```sh
+max mcp server stop
+```
+
+**Returns:** stop the background HTTP MCP server
+
+**Example:** `max personal mcp server stop`
+
+#### `max mcp server status`
+
+whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
+
+```sh
+max mcp server status
+```
+
+**Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
+
+**Example:** `max personal mcp server status --json`
 
 ### `max mcp config`
 
@@ -5755,7 +5835,7 @@ max mcp config [options]
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
 
-**Returns:** print this profile's local MCP configuration
+**Returns:** print the local MCP configuration, of this profile or of every profile
 
 **Example:** `max personal mcp config`
 
@@ -6679,7 +6759,21 @@ max bot contacts show <who> [options]
 
 ### `max bot mcp`
 
-serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- max sales bot mcp`
+serve this bot to an agent over MCP and set it up — `claude mcp add sales-bot -- max sales bot mcp serve`
+
+#### `max bot mcp serve`
+
+serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- max sales bot mcp serve`
+
+**Меняет что-то вне этого компьютера: в MAX или во внешнем сервисе.**
+
+```sh
+max bot mcp serve
+```
+
+**Returns:** serve this bot to an agent over MCP, on stdin and stdout
+
+**Example:** `max sales bot mcp serve`
 
 #### `max bot mcp config`
 

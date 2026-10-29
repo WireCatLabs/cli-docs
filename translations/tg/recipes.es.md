@@ -19,7 +19,7 @@ Términos en esta página:
 
 - **Agente**: un agente de IA que ejecuta comandos en su computadora por usted.
 - **Skill**: un archivo que le indica al agente cómo utilizar `tg`. `tg skill install` lo pone donde el agente lo busca.
-- **Cliente MCP**: una aplicación de IA sin terminal, como Claude Desktop. Llega a `tg` a través del servidor MCP `tg personal mcp` en lugar de ejecutar comandos.
+- **Cliente MCP**: una aplicación de IA sin terminal, como Claude Desktop. Llega a `tg` a través del servidor MCP `tg personal mcp serve` en lugar de ejecutar comandos.
 - **Modo sin cabeza**: el agente toma una solicitud, la ejecuta y sale, sin conversación. Claude Code lo llama modo `-p`; El Codex lo llama `codex exec`.
 - **cron**: el programador integrado en Linux y macOS. Inicia un comando en momentos establecidos.
 
@@ -186,7 +186,7 @@ Escribe a Telegram: **sólo después de tu sí**. Éste es para una conversació
 
 > Lee los últimos 20 mensajes del chat con @example_user y sugiere una respuesta a su última > pregunta. No lo envíes, muéstrame el texto.
 
-Una vez aceptado, el agente lo envía: `tg personal messages send @example_user "…"`. Un cliente MCP se conecta con `tg personal mcp`. Deje `tg_write` sin aprobar en el cliente y le preguntará antes de cada envío. Los permisos del perfil aún limitan lo que puede escribir. Consulte [el servidor MCP](./mcp.md).
+Una vez aceptado, el agente lo envía: `tg personal messages send @example_user "…"`. Un cliente MCP se conecta con `tg personal mcp serve`. Deje `tg_write` sin aprobar en el cliente y le preguntará antes de cada envío. Los permisos del perfil aún limitan lo que puede escribir. Consulte [el servidor MCP](./mcp.md).
 
 ## Un grupo que diriges
 

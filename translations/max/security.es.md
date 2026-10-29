@@ -44,7 +44,7 @@ El token de `max sales bot` está separado en el servicio `max-cli`, entrada `bo
 |---|---|---|
 | estado del perfil: dispositivo, accesos y `viewerId` | `~/.local/share/max-cli/profiles/<профиль>.json` | `0600` |
 | configuración | `~/.config/max-cli/config.json` | carpeta `0700`, archivo `0600`; `doctor` nombra los abiertos |
-| ejecuciones con `--record` y todos los fallos: comando, identificadores, tiempos y errores, sin texto | `~/.local/share/max-cli/runs/…` | carpeta `0700`, archivos `0600` |
+| registros de ejecución, de cada ejecución: las correctas 7 días, las fallidas 30 (`record false` deja solo las fallidas): palabras del comando, identificadores, tiempos y código de error; la línea de comandos tal como la escribiste, sin secretos (`record_input false` oculta lo escrito, [diagnóstico](./diagnostics.md#что-вы-набрали)) | `~/.local/share/max-cli/runs/…` | carpeta `0700`, archivos `0600` |
 | registro de envíos, **siempre**: chat, hora, identificador, longitud y resultado, sin texto | `~/.local/share/max-cli/sends/<профиль>.jsonl` | carpeta `0700`, archivos `0600` |
 | destinatarios permitidos, si está activo | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
 | reglas de moderación tras el primer `chats rules set` | `~/.local/share/max-cli/profiles/<профиль>.moderation.json` | `0600` |
@@ -105,6 +105,8 @@ La lista es opcional: sin destinatarios añadidos, cualquier chat; activa pero v
 - **La eliminación por defecto requiere confirmación.** El nivel `ask` para `messages.delete` requiere una respuesta en el terminal o `--allow-dangerous`; explícito `allow` realiza la eliminación sin lugar a dudas. Para eliminar a todos también necesitas `--for-everyone`; La herramienta MCP general no lo permite.
 - **No toma el número de teléfono de la línea de comando.** `contacts lookup` lo solicita o lo lee desde la tubería, `contacts import` - desde el archivo: la línea de comando es vista por `ps` y el historial del shell. No hay ningún número en los errores, el registro de envío y los registros de inicio, y `max personal session start` y `max personal account show` lo muestran oculto.
 - **No escribe mensajes en el registro.** Ni en forma recortada ni en hash - consulte [diagnóstico](./diagnostics.md).
+  Excepción: el texto que tú mismo escribiste en la línea de comandos puede quedar en el `argv` del registro de ejecución
+  mientras `record_input` no esté desactivado ([lo que escribiste](./diagnostics.md#что-вы-набрали)).
 - **No pasa por intermediarios.** Donde se conecta exactamente el `max` es en el apartado [“Qué entra a la red”](#что-уходит-в-сеть). `max` no tiene telemetría propia; `max personal serve` envía MAX un evento de servicio, como una pestaña oculta de la versión web; consulte en el mismo lugar.
 - **Mantiene la conexión sólo en `max personal serve`.** Se inicia en segundo plano con el primer comando que necesita MAX; se detiene solo después de 15 minutos sin nada que hacer. No ejecutar - `max personal config set serve false`.
 

@@ -87,8 +87,12 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `sender_colors` | `false` | un color por remitente en la vista de tabla de mensajes | ninguno |
 | `search_catch_up` | `false` | `messages sync` y `store gaps repair` también preparan el chat recuperado para búsqueda local: su gráfico y, si está instalado, sus vectores. Nunca descarga modelos ni llama a proveedores remotos | `--catch-up`, `--no-catch-up` |
 | `picture_search` | `false` | busca las imágenes guardadas por lo que muestran. `images embed` lee las imágenes guardadas una vez descargado el modelo, y entonces `search messages` también devuelve una lista `pictures` ([imágenes](./search.md#pictures-by-what-they-show)) | ninguno |
-| `record` | `false` | mantener cada ejecución ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` |
-| `keep_runs_for_days` | `30` | las ejecuciones registradas anteriores a esta se eliminan cuando se conserva la siguiente | ninguno |
+| `search_reranker` | `mmarco` | el modelo que reordena los 50 primeros resultados de `search messages --discover`: `mmarco` (136 MB), `bge-reranker-v2-m3` (588 MB) u `off`. Un reordenador que no está descargado se omite, y el descubrimiento lo indica; `tg models download mmarco` lo descarga | ninguno |
+| `record` | `true` | mantener cada ejecución; `false` mantiene solo las ejecuciones fallidas ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` (no mantiene nada) |
+| `record_input` | `true` | mantener la línea de comandos de una ejecución tal como se escribió, con los secretos ocultos; `failed` la mantiene solo en una ejecución fallida; `false` escribe `[redacted]` en lugar de cada valor escrito que pueda ser texto ([diagnóstico](./diagnostics.md#what-you-typed)) | ninguno |
+| `keep_runs_for_days` | `30` | las ejecuciones fallidas anteriores a esta se eliminan cuando se conserva la siguiente ejecución | ninguno |
+| `keep_successful_runs_for_days` | `7` | las ejecuciones que funcionaron, anteriores a esta, se eliminan cuando se conserva la siguiente ejecución | ninguno |
+| `runs_size_limit_mb` | `200` | lo máximo que puede ocupar la carpeta de ejecuciones; al superarlo se eliminan primero las ejecuciones más antiguas que funcionaron | ninguno |
 | `permissions` | todo está permitido, excepto: eliminar, finalizar sesiones y algunos otros cambios solicitados; las reglas de respuesta pueden no enviarse | qué puede hacer el perfil, por comando ([abajo](#what-a-profile-may-do)) | ninguno; `--yes` y `--allow-dangerous` solo responden `ask`, nunca levantan `deny` |
 | `sends_per_hour` | `30`; un bot no tiene ninguno hasta que se configura en la sección `bot` | la mayor cantidad de envíos en cualquier hora ([el control de envío](./security.md#the-send-guard)) | ninguno |
 | `requests_per_minute` | sin definir, lo que equivale a `60` | solicitudes un minuto después de una ráfaga de 20, compartida por todos los procesos del perfil; `0` lo apaga ([límites y esperas](./limits.md)) | `TG_REQUESTS_PER_MINUTE` |
@@ -278,13 +282,14 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 |---|---|---|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | entero ≥ 1 | perfil |
 | `requests_per_minute` | entero ≥ 0 | perfil |
-| `color`, `sender_colors`, `search_catch_up`, `record` | booleano | perfil |
+| `color`, `sender_colors`, `search_catch_up`, `record`, `record_input` | booleano | perfil |
 | `permissions` | objeto de rutas de comando y niveles `deny`, `readonly`, `ask`, `allow` | perfil |
 | `read_other_bots` | booleano o conjunto de nombres de perfil | solo bot |
 | `update_check`, `skill_hint` | booleano | raíz `defaults` solamente |
 | `transcribe_with` | `auto`, `messenger`, `local` | perfil |
 | `speech_model` | ID del modelo descargado como una cadena | perfil |
 | `proxy` | URL de proxy compatible como una cadena | perfil |
+| `search_reranker` | `mmarco`, `bge-reranker-v2-m3`, `off` | perfil |
 | `embedding_provider` | `local`, `openai` | perfil |
 | `embedding_model` | cadena no vacía, como máximo 200 caracteres | perfil |
 | `embedding_base_url` | URL HTTP(S) sin credenciales, consulta o fragmento | perfil |

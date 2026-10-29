@@ -18,7 +18,7 @@ Términos utilizados en esta página:
 - **Almacén local**: la base de datos de esta computadora donde tg guarda cada mensaje que lee ([el almacén local](./archive.md)).
 - **Control de envío**: comprueba cada envío aprobado: un perfil de solo lectura, la lista de destinatarios permitidos y un límite por hora ([el control de envío](./security.md#the-send-guard)).
 
-Cada comando realiza una tarea, imprime la respuesta y termina. Solo `tg personal watch`, `tg personal serve` y `tg personal mcp` permanecen activos, y cada uno lo indica.
+Cada comando realiza una tarea, imprime la respuesta y termina. Solo `tg personal watch`, `tg personal serve` y `tg personal mcp serve` permanecen activos, y cada uno lo indica.
 
 ```sh
 tg [profile] [options] <resource> <action> [arguments]
@@ -1079,11 +1079,11 @@ tg personal server install  # a systemd user unit or a launchd agent; starts not
 ## Qué hizo un comando
 
 ```sh
-tg personal --trace chats list          # show each request on stderr, keep nothing
+tg personal --trace chats list          # also show each request on stderr
 ```
 
 ```sh
-tg personal --record chats list         # keep it, show nothing
+tg personal --no-record chats list      # keep nothing of this run
 ```
 
 ```sh

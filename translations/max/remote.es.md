@@ -6,14 +6,14 @@ Esta página es necesaria si desea que una aplicación de IA en su navegador o t
 
 Términos en esta página:
 
-- **MCP** (Model Context Protocol) es una forma común para que una aplicación de IA llame a herramientas externas. `max personal mcp`: servidor MCP, que se instala junto con `max`; Las aplicaciones en su computadora se describen en [MCP Server Manual](./mcp.md).
-- **Conexión remota** - la aplicación se conecta desde sus servidores, vía Internet, a la dirección que le hayas proporcionado. Para ello, `max personal mcp --http` envía las mismas herramientas vía HTTP a `127.0.0.1`.
+- **MCP** (Model Context Protocol) es una forma común para que una aplicación de IA llame a herramientas externas. `max personal mcp serve`: servidor MCP, que se instala junto con `max`; Las aplicaciones en su computadora se describen en [MCP Server Manual](./mcp.md).
+- **Conexión remota** - la aplicación se conecta desde sus servidores, vía Internet, a la dirección que le hayas proporcionado. Para ello, `max personal mcp serve --http` envía las mismas herramientas vía HTTP a `127.0.0.1`.
 - **Túnel HTTPS** es un programa que le da a un puerto de su computadora una dirección HTTPS pública. Esto utiliza [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel); El túnel Cloudflare también es adecuado. No es necesario comprar un dominio para Funnel.
 - **Dirección pública**: esta dirección, por ejemplo `https://laptop.tail1234.ts.net`. Se lo pasas a `max` como `--public-url`, y a la aplicación con `/mcp` al final.
 - **Código de inicio de sesión** es un código de un solo uso que `max` imprime en su terminal. La página de inicio de sesión de la aplicación lo solicita, por lo que solo alguien que pueda ver ese terminal puede conectar la aplicación.
 
 ```text
-ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ max personal mcp --http (вход) ──▶ MAX
+ChatGPT / Claude ──интернет──▶ Tailscale Funnel ──▶ max personal mcp serve --http (вход) ──▶ MAX
 ```
 
 Si la conexión Tailscale ya está funcionando, manténgala: no es necesario un segundo túnel. La conexión local a través de stdin y stdout sigue funcionando como antes.
@@ -31,7 +31,7 @@ Si la conexión Tailscale ya está funcionando, manténgala: no es necesario un 
 
 ## Antes de empezar
 
-- **Quien inicia sesión puede leer tu MAX.** Necesita el código del terminal. No expongas `max personal mcp` mediante un túnel sin `--http`: no hay autenticación.
+- **Quien inicia sesión puede leer tu MAX.** Necesita el código del terminal. No expongas `max personal mcp serve` mediante un túnel sin `--http`: no hay autenticación.
 - **Los permisos del perfil determinan qué puede cambiar la aplicación.** `deny` y `readonly` bloquean escrituras; `ask` y `allow` permiten la escritura solicitada por MCP sin formulario del servidor. La confirmación del cliente depende de su configuración. Siguen vigentes la lista de destinatarios y el límite horario ([permisos MCP](./mcp.md#что-может-агент), [configuración](./configuration.md)).
 - **El ordenador con `max` debe estar encendido.** Para usarlo desde un móvil u ordenador sin instalar nada, inicia todo en un servidor que permanezca encendido e inicia sesión allí (`max personal setup --agent none`). Después solo necesitas un navegador.
 - **Quién puede añadir un conector remoto:**
@@ -46,7 +46,7 @@ Los pasos para cada sistema operativo no se han probado en todos los sistemas. S
 
 ## 1. Preparar Tailscale
 
-Primero instale la CLI e inicie sesión en MAX ([guía de instalación](./installation.md)); para la configuración local sin agente utilice `max personal setup --agent none`. Ejecute el servidor con el mismo usuario de sistema operativo y con el mismo perfil. Si es necesario, ponga primero el perfil: `max work mcp`. Tailscale se instala por separado; Tanto `max` como `tg` admiten dicho túnel.
+Primero instale la CLI e inicie sesión en MAX ([guía de instalación](./installation.md)); para la configuración local sin agente utilice `max personal setup --agent none`. Ejecute el servidor con el mismo usuario de sistema operativo y con el mismo perfil. Si es necesario, ponga primero el perfil: `max work mcp serve`. Tailscale se instala por separado; Tanto `max` como `tg` admiten dicho túnel.
 
 Instale [Tailscale](https://tailscale.com/download), inicie sesión y permita [Funnel](https://tailscale.com/docs/features/tailscale-funnel): su red Tailscale requiere MagicDNS, certificados HTTPS y permiso de Funnel. La primera ejecución de Funnel puede imprimir un enlace de permiso.
 
@@ -70,7 +70,7 @@ Segunda ventana: PowerShell normal con el usuario que inició sesión en MAX:
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Вставьте HTTPS origin из Funnel (без /mcp)'
-max.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
+max.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Ejecute ambos procesos en el propio Windows. WSL es un entorno independiente: es posible que un túnel de Windows dirigido a una dirección local de Windows no llegue al servidor dentro de WSL.
@@ -88,7 +88,7 @@ Segunda ventana, con el usuario que ejecutó `max personal setup --agent none`. 
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+max personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Terminal)
@@ -104,7 +104,7 @@ Segunda ventana: un usuario normal sin `sudo`, para que `max` encuentre una sesi
 ```sh
 printf 'Вставьте HTTPS origin из Funnel (без /mcp): '
 IFS= read -r mcpPublicUrl
-max personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+max personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## MAX y Telegram al mismo tiempo
@@ -118,7 +118,7 @@ Si ya está utilizando Cloudflare, apunte su túnel al mismo servidor MCP local.
 Inicia el servidor en otro terminal:
 
 ```sh
-max personal mcp --http --port 8765 --public-url https://mcp.example.com
+max personal mcp serve --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Agregue `https://mcp.example.com/mcp` a su aplicación de IA con OAuth y DCR como se describe en [agregar a app](#3-добавить-в-приложение). `--public-url` es el origen público para iniciar sesión, no la dirección local ni la ruta `/mcp`. El túnel no cambia los derechos del perfil. Verifique el JSON en `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, luego la entrada y la lista de herramientas. Detenga únicamente el proceso de este túnel para permitir que otras rutas sigan funcionando.
@@ -157,7 +157,7 @@ Si Funnel se inició con `--bg`, Ctrl-C no desactiva esta ruta en segundo plano.
 Revocar el acceso a las aplicaciones no es lo mismo que detener el proceso. Para cerrar sesión en todas las aplicaciones de perfil:
 
 ```sh
-max personal mcp --revoke
+max personal mcp revoke
 ```
 
 Estas aplicaciones deberán iniciar sesión nuevamente con un nuevo código. La sesión MAX no finaliza.
@@ -165,10 +165,10 @@ Estas aplicaciones deberán iniciar sesión nuevamente con un nuevo código. La 
 ## Solucionar problemas
 
 - **La aplicación dice que no se puede conectar:** abra `https://<устройство>.<сеть>.ts.net/.well-known/oauth-protected-resource/mcp` en el navegador; debería haber un JSON corto allí. Si no está allí, Funnel no se está ejecutando, no está habilitado en la red Tailscale o está buscando en un puerto diferente.
-- **La página de inicio de sesión dice "Demasiados códigos incorrectos":** después de cinco códigos incorrectos, se cierra hasta que se reinicia `max personal mcp --http`. Si no lo ingresó, alguien encontró su dirección: reinicie el servidor y piense en un nuevo nombre de dispositivo en Tailscale.
+- **La página de inicio de sesión dice "Demasiados códigos incorrectos":** después de cinco códigos incorrectos, se cierra hasta que se reinicia `max personal mcp serve --http`. Si no lo ingresó, alguien encontró su dirección: reinicie el servidor y piense en un nuevo nombre de dispositivo en Tailscale.
 - **Se conecta, pero no hay herramientas:** `max personal mcp check` comprueba que el servidor MCP se esté iniciando y proporciona una lista de herramientas. No controla la entrada al MAX ni al túnel. La conexión de la cuenta se verifica mediante el comando que va a MAX, por ejemplo `max personal account show`.
 - **La lectura funciona, la escritura no funciona:** verifique los derechos del perfil y el temporal `--permission`. `deny` y `readonly` prohíben la grabación, sin importar lo que confirme la aplicación.
-- **Se necesita grabación de llamadas:** la muestra `max personal runs list`. Las llamadas exitosas sólo son visibles cuando la grabación está habilitada; Los errores se guardan de forma predeterminada a menos que la grabación se desactive a través de `"record": false` o `--no-record` ([manual de diagnóstico](./diagnostics.md)).
+- **Se necesita grabación de llamadas:** la muestra `max personal runs list`. Cada llamada se registra de forma predeterminada; con `"record": false` solo quedan los errores, con `--no-record`, nada ([manual de diagnóstico](./diagnostics.md)).
 
 ## Transferir un archivo guardado al agente
 
