@@ -4,7 +4,7 @@ description: Procesar por lotes un reranker cuantizado cambió sus respuestas, n
 date: 2026-10-27
 tags: [search, benchmarks, cli]
 cover: ./cover.jpg
-coverAlt: "Un portátil con barras de 4,6 s y 3,2 s, un cronómetro y cinco ordenadores pequeños con etiquetas linux x64, linux arm64, macos arm64, windows x64 y windows arm64, cada uno con una luz verde"
+coverAlt: "Cincuenta mensajes impresos con una banda top 50, uno leído bajo una lupa, cinco ordenados del 1 al 5 con el primero marcado en verde y un cronómetro en 3,2 segundos"
 author: viacheslav-ptsarev
 series: laptop-search
 glance:
