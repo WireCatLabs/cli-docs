@@ -1,0 +1,82 @@
+---
+title: WireCat Desktop
+description: La aplicación para macOS, Windows y Linux que instala, actualiza y comprueba las herramientas de WireCat, las conecta a tus agentes de IA y te guía al iniciar sesión, sin terminal.
+---
+
+WireCat Desktop es una aplicación para quien quiere que su agente de IA trabaje con sus mensajes,
+reuniones, documentos y notas, pero no quiere instalar y mantener a mano herramientas de línea de comandos.
+Muestra qué herramientas de WireCat existen y cuáles tienes en el ordenador, instala las que elijas, da a
+tus agentes de IA las instrucciones para usarlas y abre el inicio de sesión de cada herramienta. Aquí
+verás qué hace la aplicación y cómo empezar. La aplicación es opcional: cada herramienta se sigue
+instalando y funcionando desde una terminal sin ella.
+
+## Descargar e instalar
+
+[Descarga WireCat Desktop](/es/download) para macOS (Apple silicon e Intel), Windows (64 bits) o Linux
+(AppImage, .deb o .rpm). La página de descarga elige el archivo para tu ordenador. La aplicación aún no
+está firmada con un certificado de desarrollador de Apple o Microsoft, así que el primer arranque necesita
+una confirmación; los [pasos del primer arranque](/es/download#first-launch) muestran dónde hacer clic.
+
+La aplicación no necesita nada más. Las herramientas funcionan con
+<DocTerm term="nodejs" lang="es" label="Node.js" /> 22.16 o posterior dentro de 22.x, o 24 o posterior, con
+npm. Si falta Node.js, es demasiado antiguo o npm necesita permisos de administrador para instalar, la
+aplicación ofrece instalar su propia copia de Node.js en tu carpeta de usuario. No necesita permisos de
+administrador para ello, y tu Node.js actual se queda como está.
+
+## El primer arranque
+
+En el primer arranque, la aplicación te guía por estos pasos en una sola pantalla:
+
+1. **Tu ordenador:** la aplicación comprueba el sistema, Node.js y npm.
+2. **Elige herramientas:** marca los servicios a los que debe llegar tu agente: Telegram, MAX, WhatsApp,
+   Zoom, Google Drive, Memo o el correo. Puedes añadir o quitar herramientas más tarde.
+3. **Instalación:** cada herramienta se instala desde npm y se comprueba que arranca.
+4. **Conecta agentes:** la aplicación da a cada agente de IA que encuentra la
+   <DocTerm term="skill" lang="es" label="skill" /> de la herramienta: una guía breve de sus comandos. Sabe
+   dónde leen las skills Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Hermes Agent y OpenClaw.
+5. **Inicia sesión:** cada herramienta se conecta a tu cuenta con su propio inicio de sesión. Telegram,
+   MAX y WhatsApp muestran su código QR o piden un código en la ventana de la aplicación; Zoom y Google
+   Drive abren el navegador.
+6. **Todo listo:** la aplicación muestra lo que está instalado. El signo de interrogación de la parte
+   superior tiene una visita guiada breve por la ventana.
+
+## Qué puedes hacer en la aplicación
+
+- **Herramientas:** todas las herramientas con su versión y su estado. Instala, actualiza o desinstala una
+  herramienta, ejecuta su comprobación para cada perfil, cambia lo que cada perfil permite hacer a tu
+  agente e inicia una sincronización. Los detalles de una herramienta también pueden arrancar su servidor
+  MCP, para que una aplicación de IA sin terminal, como ChatGPT o Claude, pueda usarla. Una guía paso a
+  paso publica ese servidor con [Tailscale Funnel](./tailscale-funnel.mdx) o con un túnel de Cloudflare.
+- **Agentes:** qué agentes de IA hay en el ordenador y qué skills tiene cada uno. La aplicación encuentra
+  una skill que falta o está anticuada, una herramienta que el agente no encuentra en su PATH y los
+  comandos que bloquean los permisos de un perfil, y arregla o explica cada caso.
+- **Almacenamiento:** cuánto guardan las herramientas en el ordenador, qué hay en el almacén local (el
+  único archivo, `wirecat.db`, donde las herramientas guardan mensajes, correo y notas), una copia de
+  seguridad y el borrado de las carpetas de herramientas que ya no usas.
+- **Registros:** [busca lo que las herramientas registraron de sus ejecuciones](./logs.mdx) cuando algo
+  falló.
+- **Ajustes:** el idioma y el tamaño de la interfaz de la aplicación, y los ajustes de cada herramienta.
+- **Informar de un problema:** envía un informe de error con los registros de errores recientes, con los
+  datos personales ocultos.
+
+## Las herramientas siguen siendo de línea de comandos
+
+La aplicación instala los mismos paquetes de npm que `npm install -g @wirecat/tg-cli` y ejecuta los
+propios comandos de las herramientas para versiones, comprobaciones, inicio de sesión y sincronización. Una
+herramienta instalada por la aplicación también funciona en una terminal y con cualquier agente, y una
+herramienta que instalaste tú aparece en la aplicación. La aplicación nunca elige una cuenta o un perfil por
+ti: un comando que lo necesita usa el que elegiste.
+
+Tus datos se quedan donde los guardan las herramientas, en este ordenador. La aplicación se conecta a
+internet para instalar herramientas desde npm, descargar Node.js cuando instala su propia copia, comprobar
+en GitHub si hay una versión nueva de sí misma y enviar un informe de error cuando lo envías.
+
+## Actualizar y desinstalar
+
+En macOS, Windows y con el AppImage, la aplicación se actualiza sola: ofrece la versión nueva en la parte
+superior de la ventana. Una copia instalada desde .deb o .rpm avisa de la versión nueva, y el paquete nuevo
+lo instalas tú. [Actualizaciones](/es/download#updates) y [desinstalar](/es/download#uninstall) en la página
+de descarga dan los pasos para cada sistema. Al quitar la aplicación, las herramientas y sus datos se
+quedan.
+
+¿Prefieres la terminal? [Instala una herramienta a mano o con tu agente](../installation.mdx).

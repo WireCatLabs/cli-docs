@@ -209,7 +209,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
               ? NotebookPen
               : tool === "zm"
                 ? Video
-                : firstPage?.type === "page" && /\/docs\/desktop\//.test(firstPage.url)
+                : firstPage?.type === "page" && /\/docs\/desktop(?:\/|$)/.test(firstPage.url)
                   ? Monitor
                   : FolderOpen
       return {
