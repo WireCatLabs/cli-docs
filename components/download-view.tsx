@@ -2,10 +2,11 @@
 
 import { ArrowRight, Download } from "lucide-react"
 import Link from "next/link"
-import { Fragment, type ReactNode, useEffect, useState } from "react"
+import { Fragment, type ReactNode, useEffect, useRef, useState } from "react"
 import {
   type DesktopFile,
   type DesktopRelease,
+  detectOs,
   fetchReleases,
   type Platform,
   releasesPage,
@@ -36,6 +37,13 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
   const words = downloadWords(lang)
   const links = sourceLinks(lang)
   const [releases, setReleases] = useState(initial)
+  const main = useRef<HTMLElement>(null)
+
+  // The inline script runs only on a full page load; after an in-site link it never runs.
+  useEffect(() => {
+    const wrapper = main.current?.closest<HTMLElement>(".wirecat-download")
+    if (wrapper && !wrapper.dataset.os) wrapper.dataset.os = detectOs(navigator)
+  }, [])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -98,7 +106,7 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
   }
 
   return (
-    <main id="main" className="wrap download-page">
+    <main id="main" className="wrap download-page" ref={main}>
       <header className="download-intro">
         <h1>{words.title}</h1>
         <p className="intro">{words.intro}</p>

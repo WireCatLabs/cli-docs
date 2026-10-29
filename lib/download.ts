@@ -289,8 +289,8 @@ const es: Words = {
       ],
       source: "Microsoft: SmartScreen y aplicaciones sin firma",
       smartAppControl:
-        "Si **Control inteligente de aplicaciones** (Smart App Control) está activado, Windows bloquea las aplicaciones sin firma y no permite autorizar una sola. WireCat no podrá arrancar en ese PC hasta que esté firmada.",
-      smartAppSource: "Microsoft: Control inteligente de aplicaciones",
+        "Si **Control Inteligente de Aplicaciones** (Smart App Control) está activado, Windows bloquea las aplicaciones sin firma y no permite autorizar una sola. WireCat no podrá arrancar en ese PC hasta que esté firmada.",
+      smartAppSource: "Microsoft: Control Inteligente de Aplicaciones",
     },
   },
   linux: {
