@@ -1,0 +1,11 @@
+[
+  {
+    "id": "laptop-search",
+    "title": {
+      "en": "Searching a messenger archive on a laptop",
+      "ru": "Поиск по архиву мессенджера на ноутбуке",
+      "es": "Buscar en un archivo de mensajería en un portátil"
+    },
+    "parts": ["making-a-reranker-fast", "reranker-never-saw-the-message"]
+  }
+]

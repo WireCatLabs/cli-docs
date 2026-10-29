@@ -11,6 +11,7 @@ import { landingFonts } from "@/lib/landing-fonts"
 import "@/lib/landing/fonts.css"
 import "@/lib/editorial/editorial.css"
 import "@/components/public-site.css"
+import "@/components/site-palette.css"
 
 export default async function Layout({
   children,

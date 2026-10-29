@@ -21,6 +21,7 @@ import { source } from "@/lib/source"
 import "@/lib/landing/fonts.css"
 import "@/lib/editorial/editorial.css"
 import "@/components/public-site.css"
+import "@/components/site-palette.css"
 import "@/lib/landing/docs-footer.css"
 
 export default async function Layout({

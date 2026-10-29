@@ -4,7 +4,22 @@ description: Procesar por lotes un reranker cuantizado cambió sus respuestas, n
 date: 2026-10-27
 tags: [search, benchmarks, cli]
 cover: ./cover.jpg
-coverAlt: "Un portátil con barras de 4,6 s y 3,2 s, un cronómetro y cinco ordenadores pequeños con etiquetas linux x64, linux arm64, macos arm64, windows x64 y windows arm64, cada uno con una luz verde"
+coverAlt: "Cincuenta mensajes impresos con una banda top 50, uno leído bajo una lupa, cinco ordenados del 1 al 5 con el primero marcado en verde y un cronómetro en 3,2 segundos"
+author: viacheslav-ptsarev
+series: laptop-search
+glance:
+  - value: "4,6 s → 3,2 s"
+    label: "un --discover real: WebAssembly frente a nativo"
+    href: "#segundo-acto-lo-nativo-fue-2-veces-más-rápido-no-10"
+  - value: "≤ 15%"
+    label: "ahorraron los lotes, y las puntuaciones cambiaron"
+    href: "#primer-acto-los-lotes-cambiaron-las-respuestas-no-la-velocidad"
+  - value: "113,5 MB"
+    label: "el archivo npm con la única DLL de Windows que funcionó"
+    href: "#cuarto-acto-la-biblioteca-de-windows-solo-estaba-dentro-de-un-archivo-npm"
+  - value: "5 + Alpine"
+    label: "sistemas que CI comprueba en nativo; Alpine sigue con WebAssembly"
+    href: "#cuarto-acto-la-biblioteca-de-windows-solo-estaba-dentro-de-un-archivo-npm"
 draft: true
 ---
 

@@ -1,0 +1,31 @@
+/* Warm neutrals: the editorial and landing grounds, turned a notch from green-grey toward yellow (owner, 2026-10-29).
+   Light is also 1.5% darker; dark keeps its lightness with half the tint. Accents and text keep their colours.
+   Loaded after editorial.css and public-site.css, with the same selectors, so it wins by order. */
+.wirecat-editorial {
+  --bg: #f1efed;
+  --soft: #e9e8e1;
+  --line: #d4d1c8;
+}
+html.dark .wirecat-editorial {
+  --bg: #171614;
+  --paper: #0f0f0e;
+  --soft: #22211d;
+  --line: #32312c;
+}
+.wirecat-editorial .wirecat-landing {
+  --wall: #171614;
+  --wall-ink: #21201d;
+  --app: #0f0f0e;
+  --app-2: #181715;
+  --app-3: #22211d;
+  --app-line: #32312c;
+  --card: #252421;
+}
+html.light .wirecat-editorial .wirecat-landing {
+  --wall: #f1efed;
+  --wall-ink: #e1ded8;
+  --app-2: #f3f1ef;
+  --app-3: #e9e8e1;
+  --app-line: #d4d1c8;
+  --bubble: #e9e8e1;
+}

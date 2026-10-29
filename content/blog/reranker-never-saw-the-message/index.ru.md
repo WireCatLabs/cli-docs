@@ -5,6 +5,8 @@ date: 2026-10-27
 tags: [search, benchmarks]
 cover: ./cover.jpg
 coverAlt: "Распечатка чата под чёрной маской с надписью 512 tokens: в окне видно только одно длинное сообщение под лупой, а зелёная записка с коротким ответом наполовину спрятана под маской"
+author: viacheslav-ptsarev
+series: laptop-search
 draft: true
 ---
 

@@ -1,3 +1,5 @@
+import authorRegistry from "../content/blog/authors.json" with { type: "json" }
+import seriesRegistry from "../content/blog/series.json" with { type: "json" }
 import registry from "../content/blog/tags.json" with { type: "json" }
 
 export const blogLocales = ["en", "ru", "es"] as const
@@ -10,6 +12,21 @@ export type BlogTag = {
   description: Record<BlogLocale, string>
 }
 
+export type BlogSeries = { id: string; title: Record<BlogLocale, string>; parts: string[] }
+
+export type BlogAuthor = {
+  id: string
+  name: Record<BlogLocale, string>
+  initials: string
+  avatar?: string
+  role?: Record<BlogLocale, string>
+  bio?: Record<BlogLocale, string>
+  links: { github?: string; linkedin?: string; telegram?: string }
+}
+
+/** One key number for the post's "At a glance" box; `href` points at the section that explains it. */
+export type BlogGlance = { value: string; label: string; href?: string }
+
 export type BlogFrontmatter = {
   title: string
   description: string
@@ -19,10 +36,15 @@ export type BlogFrontmatter = {
   cover?: string
   coverAlt?: string
   canonical?: string
+  author?: string
+  series?: string
+  glance?: BlogGlance[]
   draft: boolean
 }
 
 export const blogTags = registry as BlogTag[]
+export const blogSeries = seriesRegistry as BlogSeries[]
+export const blogAuthors = authorRegistry as BlogAuthor[]
 
 const idPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const datePattern = /^\d{4}-\d{2}-\d{2}$/
@@ -98,7 +120,29 @@ export function frontmatterProblems(data: unknown): { value?: BlogFrontmatter; p
     cover: text("cover", false),
     coverAlt: text("coverAlt", false),
     canonical: text("canonical", false),
+    author: text("author", false),
+    series: text("series", false),
     draft: input.draft === true,
+  }
+  if (value.author && !blogAuthors.some((author) => author.id === value.author))
+    problems.push(`author "${value.author}" is not in content/blog/authors.json`)
+  if (value.series && !blogSeries.some((series) => series.id === value.series))
+    problems.push(`series "${value.series}" is not in content/blog/series.json`)
+  if (input.glance !== undefined) {
+    const glance = input.glance
+    const valid =
+      Array.isArray(glance) &&
+      glance.length > 0 &&
+      glance.every(
+        (item) =>
+          item &&
+          typeof item === "object" &&
+          typeof item.value === "string" &&
+          typeof item.label === "string" &&
+          (item.href === undefined || typeof item.href === "string"),
+      )
+    if (valid) value.glance = glance as BlogGlance[]
+    else problems.push(`"glance" must be a list of { value, label, href? } with text values`)
   }
   if (input.draft !== undefined && typeof input.draft !== "boolean") problems.push(`"draft" must be true or false`)
   if (!Array.isArray(input.tags) || !input.tags.every((tag) => typeof tag === "string"))
@@ -113,8 +157,24 @@ export function frontmatterProblems(data: unknown): { value?: BlogFrontmatter; p
   return problems.length ? { problems } : { value, problems }
 }
 
-const registryErrors = registryProblems(blogTags)
-if (registryErrors.length) throw new Error(`content/blog/tags.json:\n- ${registryErrors.join("\n- ")}`)
+/** A series lists each part once, and every id is used once across the registries. */
+export function seriesProblems(series: readonly BlogSeries[]): string[] {
+  const problems: string[] = []
+  const ids = new Set<string>()
+  for (const entry of series) {
+    if (!idPattern.test(entry.id)) problems.push(`Series id "${entry.id}" must be lowercase words joined by hyphens`)
+    if (ids.has(entry.id)) problems.push(`Series id "${entry.id}" is used twice`)
+    ids.add(entry.id)
+    for (const locale of blogLocales)
+      if (!entry.title?.[locale]?.trim()) problems.push(`Series "${entry.id}" has no ${locale} title`)
+    if (!entry.parts.length) problems.push(`Series "${entry.id}" has no parts`)
+    if (new Set(entry.parts).size !== entry.parts.length) problems.push(`Series "${entry.id}" lists a part twice`)
+  }
+  return problems
+}
+
+const registryErrors = [...registryProblems(blogTags), ...seriesProblems(blogSeries)]
+if (registryErrors.length) throw new Error(`content/blog registries:\n- ${registryErrors.join("\n- ")}`)
 
 /** A Standard Schema (https://standardschema.dev), so fumadocs-mdx fails the build with these messages. */
 export const blogFrontmatterSchema = {
