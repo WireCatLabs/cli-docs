@@ -1,12 +1,12 @@
 ---
 title: "WireCat: your messages and notes, on your computer, for the agent you already use"
 description: What WireCat is, why its tools run locally, and what works today across Telegram, MAX, WhatsApp, notes, mail, Zoom and Google Drive.
-date: 2026-10-27
+date: 2026-10-29
 tags: [ai-agents, cli, release-notes]
 cover: ./cover.jpg
 coverAlt: "A black modular rail on a dark desk with six cartridges labelled tg, max, wa, memo, zm and drive, tg the most worn, and an empty seventh slot beside a card reading + your CLI; a phone, an envelope, a notebook and headphones behind"
 author: viacheslav-ptsarev
-draft: true
+draft: false
 ---
 
 A document in one chat, a customer's question in another, a promise you made last week. Your AI
