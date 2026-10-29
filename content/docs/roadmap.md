@@ -47,6 +47,7 @@ what comes next.
 - [MAX roadmap](./max/roadmap.md)
 - [Zoom roadmap](./zm/roadmap.md)
 - [Google Drive roadmap](./drive/roadmap.md)
+- [Google Calendar roadmap](./gcal/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
 - [WhatsApp roadmap](./wa/roadmap.md)
 
