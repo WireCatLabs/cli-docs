@@ -15,7 +15,7 @@ Palabras que utiliza esta página:
 
 ## El ritmo: un cupo por perfil
 
-Cada solicitud que `tg` hace para un perfil —desde un comando, `tg personal mcp`, `tg personal serve` o un trabajo en segundo plano—
+Cada solicitud que `tg` hace para un perfil —desde un comando, `tg personal mcp serve`, `tg personal serve` o un trabajo en segundo plano—
 usa el mismo ritmo regulado de ese perfil:
 
 - una ráfaga de **20 solicitudes** se ejecuta de inmediato, por lo que los comandos habituales no esperan;

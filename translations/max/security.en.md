@@ -42,7 +42,7 @@ The `max sales bot` token is stored separately under the same `max-cli` service,
 |---|---|---|
 | Profile state: device, login counter, `viewerId` | `~/.local/share/max-cli/profiles/<профиль>.json` | `0600` |
 | Configuration | `~/.config/max-cli/config.json` | folder `0700`, file `0600`; `doctor` names open ones |
-| Run records, with `--record`, and always for failures: command words, IDs, timings, error code; no content | `~/.local/share/max-cli/runs/…` | Directory `0700`, files `0600` |
+| Run records for every run: successful ones for 7 days, failed ones for 30 (`record false` keeps only failed ones): command words, IDs, timings, error code; the command line as you typed it, without secrets (`record_input false` hides what you typed, [diagnostics](./diagnostics.md#что-вы-набрали)) | `~/.local/share/max-cli/runs/…` | Directory `0700`, files `0600` |
 | Send log, **always**: chat, time, ID, length, outcome; no text | `~/.local/share/max-cli/sends/<профиль>.jsonl` | Directory `0700`, files `0600` |
 | Recipient allowlist, if enabled | `~/.local/share/max-cli/profiles/<профиль>.recipients.json` | `0600` |
 | Group moderation rules, after the first `chats rules set` | `~/.local/share/max-cli/profiles/<профиль>.moderation.json` | `0600` |
@@ -103,6 +103,8 @@ The recipient list is optional: before anything is added, any chat is allowed. A
 - **Deletion asks by default.** `messages.delete` at `ask` requires terminal confirmation or `--allow-dangerous`; explicit `allow` deletes without asking. Deleting for everyone also requires `--for-everyone`, which the general MCP tool does not permit.
 - **Keeps phone numbers off command lines.** `contacts lookup` reads interactively or through a pipe; `contacts import` reads a file. `ps` and shell history can expose arguments. Errors, send journals and run records omit the number; `max personal session start` and `max personal account show` mask it.
 - **Does not log messages**, including truncated text or hashes ([diagnostics](./diagnostics.md)).
+  The exception is text you typed on the command line yourself: it can stay in a run record's `argv` until
+  `record_input` is turned off ([what you typed](./diagnostics.md#что-вы-набрали)).
 - **Does not use intermediaries.** [Network destinations](#что-уходит-в-сеть) lists connections. There is no project telemetry; `max personal serve` sends MAX one service event like a hidden web-client tab, explained there.
 - **Keeps its connection in `max personal serve`.** The first command needing MAX starts it in the background; it stops after 15 idle minutes. Disable this with `max personal config set serve false`.
 

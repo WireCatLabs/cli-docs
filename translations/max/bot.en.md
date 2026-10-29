@@ -26,7 +26,7 @@ Terms used below:
 | Respond to buttons, set command menus and webhooks | `max <бот> bot callbacks`, `commands`, `webhooks` |
 | Limit chats where the bot can write | `max <бот> bot recipients` |
 | Call any Bot API operation | `max <бот> bot api <операция>` |
-| Transfer bot to AI agent | `max <бот> bot mcp` |
+| Transfer bot to AI agent | `max <бот> bot mcp serve` |
 
 A complete list of commands and options is in the [command reference](./commands.md).
 
@@ -195,7 +195,7 @@ max shop bot search messages заказ --bots news        # и тогда — �
 max shop bot contacts show @ann --all-bots            # все, кого разрешено
 ```
 
-`--all-bots` and `--bots` are supported by `search messages`, `contacts show` and `messages between`. Without `read_other_bots`, both refuse with code `5` and name the command that enables access. Through `max <имя> bot mcp`, the equivalent fields (`all_bots`, `bots`) are offered only when access is permitted.
+`--all-bots` and `--bots` are supported by `search messages`, `contacts show` and `messages between`. Without `read_other_bots`, both refuse with code `5` and name the command that enables access. Through `max <имя> bot mcp serve`, the equivalent fields (`all_bots`, `bots`) are offered only when access is permitted.
 
 ## Updates
 
@@ -316,7 +316,7 @@ max sales bot api answer-on-callback --callback-id f9LHodD0cOL5 --body '{"notifi
 max sales bot api send-message --user-id 4815162342 --body-file message.json
 ```
 
-Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.76.0/docs/dev/bot-api-coverage.md).
+Path and request parameters are flags, body is JSON in `--body`, `--body -` (from the pipe) or `--body-file`. `--body-file -` also reads stdin. The native parameter `timeout` is called `--poll-timeout`, and the global `--timeout` limits the entire command. The general option `--store-token <profile>` is not available for current MAX methods: they all reject it before performing the operation. Before sending, the body is checked against the schema, and the error message contains the field and what was expected in it, without the value itself. A list of all operations and which ones read and which ones write is [Bot API coverage](https://github.com/WireCatLabs/max-cli/blob/v0.84.0/docs/dev/bot-api-coverage.md).
 
 <a id="для-скриптов-и-агентов"></a>
 
@@ -341,10 +341,10 @@ The `platform-api2.max.ru` certificate is signed by a Russian Ministry of Digita
 
 ## Connecting a bot to an agent (MCP)
 
-`max <имя> bot mcp` gives your AI agent access to a bot, just as `max personal mcp` exposes your personal account:
+`max <имя> bot mcp serve` gives your AI agent access to a bot, just as `max personal mcp serve` exposes your personal account:
 
 ```sh
-claude mcp add sales-bot -- max sales bot mcp
+claude mcp add sales-bot -- max sales bot mcp serve
 max sales bot mcp config          # запись для Claude Desktop, Cursor и других приложений
 ```
 

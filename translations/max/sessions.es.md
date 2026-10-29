@@ -65,7 +65,7 @@ max personal session start qr
 
 Tras cualquiera de esos tres métodos, aparece un dispositivo nuevo en la lista de sesiones de MAX. Si la cuenta tiene una contraseña en la nube, `qr` la solicita sin mostrarla, con hasta tres intentos; después hay que volver a escanear el código.
 
-Los tres métodos requieren una persona ante el terminal; sin ella, fallan con código 2. Un agente sin terminal debe usar `token`. Si está definido `MAX_TOKEN`, los tres también fallan: tiene prioridad sobre el llavero e impediría usar la sesión nueva.
+Los tres métodos requieren una persona ante el terminal; sin ella, fallan con código 2. Un agente sin terminal debe usar `token`. Un programa que muestra las preguntas en su propia ventana, como WireCat Desktop, ejecuta `max personal session start qr --json --answer-stdin`: la contraseña en la nube se pide con una línea `needs` en stderr y la respuesta es una línea en stdin. Si está definido `MAX_TOKEN`, los tres también fallan: tiene prioridad sobre el llavero e impediría usar la sesión nueva.
 
 ### Introducir el token manualmente
 

@@ -30,7 +30,7 @@ Algunas palabras en esta página:
 | Botones de respuesta, configurar el menú de comandos y webhooks | `tg <bot> bot callbacks`, `commands`, `webhooks` |
 | Limitar los chats en los que el bot puede escribir | `tg <bot> bot recipients` |
 | Llame a cualquier método de API de Bot | `tg <bot> bot api <method>` |
-| Dale el bot a tu agente de IA | `tg <bot> bot mcp` |
+| Dale el bot a tu agente de IA | `tg <bot> bot mcp serve` |
 
 Cada comando y opción se encuentra en la [referencia de comando](./commands.md).
 
@@ -305,14 +305,14 @@ Un comando rechazado o fallido indica el motivo en su mensaje de error y termina
 | `8` | el `sends_per_hour` del bot está agotado | esperar o aumentar el límite |
 | `14` | no hubo respuesta: no se sabe si Telegram escribió | revisa el chat antes de repetirlo |
 
-Cada código está en la [referencia de comando](./commands.md). `--trace` y `--record` también funcionan para un bot: cada solicitud de API de Bot es una línea en stderr, nunca con su dirección, ya que el token está en ella. Una ejecución fallida se mantiene y se muestra en `tg personal runs list` (consulte [diagnósticos](./diagnostics.md)).
+Cada código está en la [referencia de comando](./commands.md). `--trace` y `--record` también funcionan para un bot: cada solicitud de API de Bot es una línea en stderr, nunca con su dirección, ya que el token está en ella. Una ejecución fallida se mantiene y se muestra en `tg personal runs list`, con cada solicitud de API de Bot, su duración y cualquier reintento (consulte [diagnósticos](./diagnostics.md)).
 
 ## Conectar el bot al agente mediante MCP
 
-`tg <name> bot mcp` entrega el bot a su agente de IA, del mismo modo que `tg personal mcp` sirve su cuenta:
+`tg <name> bot mcp serve` entrega el bot a su agente de IA, del mismo modo que `tg personal mcp serve` sirve su cuenta:
 
 ```sh
-claude mcp add sales-bot -- tg sales bot mcp
+claude mcp add sales-bot -- tg sales bot mcp serve
 tg sales bot mcp config          # the entry for Claude Desktop, Cursor and other apps
 ```
 

@@ -76,7 +76,7 @@ const groups = [
         "Members, admins, buttons, the command menu, webhooks and moderation.",
         "max sales bot api get-updates --limit 10",
       ],
-      ["A bot for your agent.", "An MCP server of its own, read-only by default.", "max sales bot mcp"],
+      ["A bot for your agent.", "An MCP server of its own, read-only by default.", "max sales bot mcp serve"],
     ],
   },
   {

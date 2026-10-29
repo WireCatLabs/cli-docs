@@ -39,7 +39,7 @@ Conecta las instrucciones de la herramienta a mi agente. Al final muestra mi cue
 
 El agente te guía por estos pasos:
 
-1. **Revisa tu ordenador.** tg necesita Node.js 22.16 o posterior. Si falta, el agente te explica cómo instalarlo.
+1. **Revisa tu ordenador.** tg necesita Node.js 22.19 o posterior. Si falta, el agente te explica cómo instalarlo.
 2. **Instala tg.** En este paso tu cuenta no se toca.
 3. **Inicia el acceso.** El agente ejecuta `tg personal setup` en una ventana de terminal. Confirmas en el teléfono, como se explica en [Inicia sesión en Telegram](#log-in). Si el agente no puede mostrarte esa ventana, pega el código QR en el chat como texto: consulta [el agente no puede mostrarme el terminal](#q-agent-qr).
 4. **Se conecta a tg.** El agente instala para sí las instrucciones de tg.
@@ -53,7 +53,7 @@ Tú confirmas el acceso, en tu teléfono. No pegues códigos ni contraseñas en 
 
 Abre Terminal en macOS o Linux, o PowerShell en Windows.
 
-1. **Instala Node.js 22.16 o posterior** (22.x o 24+), o Bun. Consulta [Node.js, npm y encontrar el comando](/es/docs/installation#nodejs).
+1. **Instala Node.js 22.19 o posterior** (22.x o 24+), o Bun. Consulta [Node.js, npm y encontrar el comando](/es/docs/installation#nodejs).
 2. **Instala tg:**
 
    ```sh

@@ -73,7 +73,7 @@ Notes on `memo`:
 - **Search.** All six tools search by words and by meaning. This page does not rank them. In `memo`, search by
   meaning uses a local model that `memo models download` fetches; without it, word search still works.
 - **No LLM key.** Sync and search need no remote language-model API key; meaning search uses a local model. `answers create --analyze` calls a model you configure, and only if you ask.
-- **MCP.** `memo mcp` uses stdio for local apps; `memo mcp --http` serves the same commands through the owner’s HTTPS tunnel and access-code OAuth login ([remote setup](./remote.md)). It offers `memo_tools_search`, `memo_read` and `memo_write`. Discovery retains blocked
+- **MCP.** `memo mcp serve` uses stdio for local apps; `memo mcp serve --http` serves the same commands through the owner’s HTTPS tunnel and access-code OAuth login ([remote setup](./remote.md)). It offers `memo_tools_search`, `memo_read` and `memo_write`. Discovery retains blocked
   commands with their current availability and reason. CLI-only exclusions are `mcp`, `upgrade`, `skill install`,
   `jobs start` and `jobs stop`. Saved permissions use `deny`, `readonly`, `ask` or `allow`.
   `MEMO_READ_ONLY=1` refuses writes. Agent memories, facts and proposed actions wait for review.

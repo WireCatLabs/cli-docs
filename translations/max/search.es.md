@@ -32,12 +32,12 @@ Sin `--discover`, la búsqueda estricta sigue siendo la predeterminada. Sintaxis
 
 ## ¿Qué se puede hacer?
 
-Toda la búsqueda se realiza en un grupo de comandos, `max personal search`. Si no sabes dónde fue escrito, comienza con `search all`.
+Toda la búsqueda se realiza en un grupo de comandos, `max personal search`. Empieza por `search messages`; usa `search all` cuando necesites buscar más allá de los mensajes.
 
 |Tarea|Comando|
 |---|---|
-|Busque inmediatamente en mensajes y notas.| `max personal search all '<запрос>'` |
-|Buscar solo mensajes del servicio; sin `--discover`, también en el servidor MAX en un chat| `max personal search messages '<запрос>'` |
+|Buscar mensajes del servicio; en un chat (sin `--discover`), también en el servidor MAX| `max personal search messages '<запрос>'` |
+|Buscar más ampliamente, también en las notas| `max personal search all '<запрос>'` |
 |Buscar en el correo| `memo search mail '<запрос>'`: `max` no tiene este comando |
 |Buscar notas desde una nota o carpeta| `max personal search notes '<запрос>'` |
 |Encuentre una discusión basada en su tema.|`max personal search conversations '<вопрос>'` ([búsqueda por temas](./topic-search.md))|
@@ -98,7 +98,7 @@ Un resultado vacío no demuestra que el mensaje nunca existiera. Revisa las lagu
 
 ## Primero, prepara el archivo
 
-Para obtener buenos resultados, necesitas descargar los chats. El servidor de MAX solo busca en un chat concreto. Todo lo demás utiliza únicamente el archivo: buscar en todos los chats, contar con `stats`, buscar por temas, `has:`, `filename:`, regex, presets, etiquetas y formas de palabras. Empieza por descargar todos los chats:
+Para obtener buenos resultados, necesitas descargar los chats. El servidor de MAX solo busca en un chat concreto. Todo lo demás utiliza únicamente el archivo: buscar en todos los chats, contar con `stats`, buscar por temas, `has:`, `filename:`, regex, presets, etiquetas y formas de palabras. La descarga se hace desde tu cuenta, así que la inicias tú (un agente, solo con tu consentimiento y de un chat en uno). Para descargar todos los chats a la vez:
 
 ```sh
 max personal messages sync --all --background     # последние 90 дней каждого чата, в фоне
@@ -113,7 +113,7 @@ Un inicio descarga no más de 1200 mensajes por chat de forma predeterminada; re
 Cada búsqueda indica qué ha consultado. Si al archivo le puede faltar historial o no se encuentra nada, una línea en el terminal muestra cuántos mensajes y chats se han consultado, cuántos chats no se han descargado o están desactualizados y el comando para solucionarlo:
 
 ```text
-searched 12,430 messages in 37 chats — 5 never fetched; `max personal messages sync --all --background` fetches them
+searched 12,430 messages in 37 chats — 5 never fetched; `max personal messages sync <chat>` fetches one
 ```
 
 Con `--json`, lo mismo llega como una entrada `coverage` en `missing` y un paso `messages.sync` en `next`. Si no se encuentra nada y se especifica `next`, ejecute este comando (o pregunte al agente) antes de decidir que no hay ningún mensaje.

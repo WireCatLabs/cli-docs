@@ -63,7 +63,7 @@ Ejecuta **la ventana 2 con tu usuario habitual**, que inició sesión en el serv
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
+tg.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Para MAX, cambia `tg.cmd` por `max.cmd` en la ventana 2. Ejecuta ambos procesos en Windows.
@@ -85,7 +85,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Para MAX, cambia `tg` por `max` en la ventana 2.
@@ -107,7 +107,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del servicio de mensajería con `sudo`.
@@ -117,9 +117,9 @@ Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del ser
 </PlatformSetupTabs>
 
 El servidor escucha en `127.0.0.1:8765` e imprime un código de acceso de un solo uso.
-El perfil precede al comando: `tg work mcp` o, en Windows, `tg.cmd work mcp`.
+El perfil precede al comando: `tg work mcp serve` o, en Windows, `tg.cmd work mcp serve`.
 
-Solo el servidor con `--http` tiene este acceso. Nunca dirijas un túnel a `tg mcp` o `max mcp` iniciado sin `--http`: esa conexión no tiene ningún acceso protegido.
+Solo el servidor con `--http` tiene este acceso. Nunca dirijas un túnel a `tg <perfil> mcp serve` o `max <perfil> mcp serve` iniciado sin `--http`: esa conexión no tiene ningún acceso protegido.
 
 <a id="conectar-codex--chatgpt-web-o-claude" />
 
@@ -231,12 +231,14 @@ Funnel admite los puertos públicos `443`, `8443` y `10000`
 ## Detener, reiniciar o revocar
 
 - **Detener:** Ctrl-C en ambas ventanas de primer plano detiene ese servidor y túnel.
+- **En segundo plano:** `tg personal mcp server start --public-url "$mcpPublicUrl"` ejecuta el mismo servidor
+  sin ventana. `tg personal mcp server status` lo muestra con su código de acceso; `tg personal mcp server stop` lo detiene.
 - **Reiniciar:** repite los comandos con el mismo perfil y URL. Las sesiones de las apps
   sobreviven a reinicios normales; caducan tras 30 días sin renovación.
 - **Funnel en segundo plano:** con `--bg`, Ctrl-C no lo desactiva. Consulta `tailscale funnel status`
   y desactiva solo esa ruta con `tailscale funnel --https=443 off` (o `8443` para el segundo servidor).
   Usa la ruta y elevación de tu SO arriba. Evita `funnel reset` si tienes otra ruta: las borra todas.
-- **Revocar acceso de apps:** `tg personal mcp --revoke` o `max personal mcp --revoke`; en PowerShell, usa
+- **Revocar acceso de apps:** `tg personal mcp revoke` o `max personal mcp revoke`; en PowerShell, usa
   `tg.cmd` / `max.cmd`. Las apps deben volver a entrar; la sesión del servicio de mensajería se mantiene.
 
 ## Si algo falla
@@ -268,7 +270,7 @@ Prueba esta opción después de que funcione en tu ordenador. Consulta la conexi
 <summary>Servidor Linux: mantener la conexión tras salir y reiniciar</summary>
 
 1. Usa el mismo usuario normal de Linux para instalar, entrar en el servicio de mensajería y ejecutar el servicio. Instala Node.js, CLI y Tailscale e inicia sesión con ese usuario. Comprueba primero la petición de cinco chats con el arranque normal de arriba.
-2. Ejecuta `tg personal mcp config` o `max personal mcp config`. Usa la ruta absoluta de Node de `command` y la entrada del CLI de `args`; conserva el perfil indicado. No guardes contraseñas ni tokens del bot en el servicio.
+2. Ejecuta `tg personal mcp config` o `max personal mcp config`. Usa la ruta absoluta de Node de `command` y la entrada del CLI de `args`; conserva el nombre del perfil antes de `mcp`: el servidor solo atiende el perfil que nombra. No guardes contraseñas ni tokens del bot en el servicio.
 3. Crea `~/.config/systemd/user/wirecat-mcp.service`. Sustituye rutas y dirección pública por valores reales. Los directorios de configuración y estado deben coincidir con los del acceso comprobado:
 
 ```ini
@@ -278,7 +280,7 @@ Description=WireCat messenger connection
 [Service]
 Type=simple
 WorkingDirectory=%h
-ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js mcp --http --port 8765 --public-url https://server.tailnet.ts.net
+ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js personal mcp serve --http --port 8765 --public-url https://server.tailnet.ts.net
 Restart=on-failure
 RestartSec=10
 

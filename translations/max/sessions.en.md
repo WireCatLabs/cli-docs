@@ -59,7 +59,7 @@ max personal session start qr
 
 After any of these three methods, a new device appears in the MAX app's session list. If your account has a cloud password, `qr` prompts for it without showing what you type, up to three times. After that, you must scan the code again.
 
-All three require a person at the terminal; otherwise they return code 2. An AI agent without a terminal can use `token`. While `MAX_TOKEN` is set, these three methods also refuse: it overrides the keyring and would hide the new session.
+All three require a person at the terminal; otherwise they return code 2. An AI agent without a terminal can use `token`. A program that shows the questions in its own window, such as WireCat Desktop, runs `max personal session start qr --json --answer-stdin`: the cloud password is asked as a `needs` line on stderr, and the answer is one line on stdin. While `MAX_TOKEN` is set, these three methods also refuse: it overrides the keyring and would hide the new session.
 
 ### Importing a token manually
 

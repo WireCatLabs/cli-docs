@@ -9,7 +9,7 @@ Utilice esta página cuando un comando falle, se cuelgue o tarde demasiado y qui
 Algunas palabras que utiliza esta página:
 
 - Una **ejecución** es una llamada de `tg`, desde el inicio hasta la salida.
-- Un **registro de ejecución** es una carpeta que guarda lo que hizo una ejecución: su comando, su resultado y una línea por solicitud a Telegram. Nunca contiene texto, nombres o títulos de mensajes.
+- Un **registro de ejecución** es una carpeta que guarda lo que hizo una ejecución: su línea de comandos, su resultado y una línea por solicitud a Telegram. Esas líneas nunca contienen texto de mensajes, nombres ni títulos. Lo que guarda de la línea de comandos que escribiste está en [Lo que escribiste](#what-you-typed).
 - **`tg personal doctor`** comprueba la instalación: la versión, el inicio de sesión, la configuración y el archivo local.
 - Un **informe de problema** es un archivo JSON creado a partir de `tg personal doctor` y una ejecución fallida. Lo adjuntas a un problema.
 
@@ -18,9 +18,9 @@ Algunas palabras que utiliza esta página:
 | Tarea | Comando | ¿Guarda algo? |
 |---|---|---|
 | Vea cada solicitud a medida que sucede | `tg personal --trace …` | no, imprime solo en stderr |
-| Mantenga un registro de una ejecución | `tg personal --record …` | sí, un registro de ejecución |
-| Encuentra una ejecución fallida más tarde | `tg personal runs list` | una ejecución fallida se mantiene sola |
-| Mantenga un registro de cada ejecución | `tg personal config set record true` | sí, cada ejecución |
+| Encuentra una ejecución más tarde | `tg personal runs list` | cada ejecución se mantiene sola |
+| Deja fuera una ejecución | `tg personal --no-record …` | nada |
+| Mantén solo las ejecuciones fallidas | `tg personal config set record false` | las ejecuciones fallidas |
 | Verifique la instalación | `tg personal doctor`, `tg personal doctor --online` | no |
 | Hacer un informe de problema | `tg personal doctor reports create` | sí, un archivo que envías |
 
@@ -41,49 +41,82 @@ También pasa por las líneas de registro de la biblioteca de Telegram que se en
 
 ## Guardar una ejecución: `--record`
 
+Cada ejecución se mantiene sola. `--record` solo importa para un comando que sigue hasta que lo detienes (`watch`, `serve`,
+`mcp serve`) y para un comando que WireCat Desktop ejecuta por su cuenta: esos mantienen una ejecución que funcionó solo con `--record`.
+
 ```sh
-tg personal --record chats list
 tg personal runs list        # recorded runs, newest first
-tg personal runs show <run-id>  # one run: its outcome, and one line per operation
+tg personal runs show <run-id>  # one run: its outcome, and one line per request
 tg personal runs path <run-id>  # the folder that holds it
 ```
+
+`runs show` enumera cada solicitud a Telegram: su método (`messages.getHistory`, o `sendMessage` de la Bot API), cuánto
+tardó y cómo terminó. Cuando Telegram pide esperar (`FLOOD_WAIT`, o un `429` de la Bot API) y `tg` espera y vuelve a
+intentarlo, la solicitud rechazada va seguida del reintento como intento 2, con el tiempo de espera. Una ejecución guarda como máximo 2.000 líneas o 1 MB de ellas, y
+después cuenta el resto.
 
 Un registro de ejecución es una carpeta en `runs/<day>/` en la carpeta de estado (`~/.local/share/tg-cli/runs/` en Linux). Su nombre es la hora y el comando. Contiene dos archivos:
 
 - `run.json`: comando, perfil, versiones de `tg`, Node y sistema, hora de inicio y fin, número de peticiones, resultado y código de error.
-- `events.jsonl`: las mismas operaciones que muestra `--trace`, una por línea.
+- `events.jsonl`: las mismas operaciones que muestra `--trace`, y cada solicitud dentro de ellas, una por línea.
+
+Una ejecución que funcionó y no registró solicitudes no deja carpeta: es una línea en el índice del día, y `runs show` la sigue
+encontrando.
 
 ## Las ejecuciones fallidas siempre se guardan
 
-Cuando un comando termina con un error, su ejecución se mantiene incluso sin `--record`. `run.json` entonces tiene `"kept_because_failed": true`. Esto es cierto para cada comando y cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo y comandos que nunca se conectan (`models`, `server`, `upgrade`). Un error antes de que se iniciara el comando, como un archivo de configuración que no se carga, se mantiene como una ejecución denominada `tg`. El registro contiene sólo las palabras del comando, como `messages list`, nunca lo que siguió.
+Cuando un comando termina con un error, su ejecución se mantiene, incluso con `record` configurado en `false`; `run.json` entonces tiene `"kept_because_failed": true`. Esto es cierto para cada comando y cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo y comandos que nunca se conectan (`models`, `server`, `upgrade`). Un error antes de que se iniciara el comando, como un archivo de configuración que no se carga, se mantiene como una ejecución denominada `tg`. Lo que el registro guarda de la línea de comandos está en [Lo que escribiste](#what-you-typed); una ejecución cuya configuración no se cargó oculta cada valor escrito que pueda ser texto.
 
-Una ejecución completamente exitosa no deja registro a menos que usted lo solicite. Por lo tanto, un informe de problema siempre tiene un error al adjuntarlo. `--no-record`, o `"record": false` en la configuración, también desactiva esto.
+Por lo tanto, un informe de problema siempre tiene un error que adjuntar. Solo `--no-record` deja fuera una ejecución fallida.
 
 Las búsquedas y consultas de estadísticas exitosas mantienen su propio historial, además de los registros de ejecución. Tiene sus propios controles: ver [búsquedas guardadas e historial](./search.md#saved-searches-and-history).
 
-## Cuándo registrar todas las ejecuciones
+## Cuándo mantener solo las ejecuciones fallidas
 
 ```sh
-tg personal config set record true          # profile "personal"
-tg personal --no-record chats list          # but not this one
+tg personal config set record false         # profile "personal": failed runs only
+tg personal --no-record chats list          # this run: nothing at all
 ```
 
-Luego se mantiene cada ejecución. De forma predeterminada, una ejecución que funcionó no se escribe hasta que usted la solicita. Una herramienta de mensajería que guarda una carpeta de a quién lees y cuándo sería un diario de tu vida que nadie pidió.
+Una ejecución que funcionó contiene los identificadores de los chats que leíste y, con `record_input` activado, lo que escribiste (un mensaje que
+enviaste, un chat nombrado por su título). Se guarda solo en esta computadora, solo tú puedes leerla, durante 7 días. Configura `record`
+en `false` si prefieres no guardarla en absoluto.
 
 ## Cuánto se conservan
 
-**30 días**, o el valor de `keep_runs_for_days` en la configuración. Los registros antiguos solo se eliminan al guardar uno nuevo; si la herramienta no escribe nada, no recorre ese directorio. Se eliminan días completos según el nombre de la carpeta, sin abrir los archivos.
+Una ejecución que funcionó se conserva **7 días** (`keep_successful_runs_for_days`), una fallida **30 días** (`keep_runs_for_days`).
+La carpeta de ejecuciones además se mantiene por debajo de **200 MB** (`runs_size_limit_mb`): al superarlo, se eliminan primero las ejecuciones más antiguas que funcionaron.
+Los registros antiguos solo se eliminan al guardar uno nuevo, se comprueba una vez al día, por días completos y según el nombre de la carpeta,
+sin abrir nada para decidir.
 
 ## Qué nunca contiene un registro
 
-Un registro de ejecución y `--trace` contienen el nombre, los identificadores, los recuentos, las duraciones y los códigos de error de una operación. Nunca llevan:
+Los eventos de una ejecución y `--trace` contienen el nombre, los identificadores, los recuentos, las duraciones y los códigos de error de una operación. Nunca llevan:
 
 - texto ni leyendas de mensajes;
 - títulos de chats, nombres de personas ni nombres de usuario;
-- **lo que introduces como `<chat>`**, ya que suele ser un título;
 - números de teléfono, códigos de inicio de sesión, contraseñas 2FA, sesiones ni hash de la aplicación.
 
-Lo mismo ocurre con un informe elaborado a partir de una ejecución.
+### Lo que escribiste
+
+`run.json` también guarda la línea de comandos. Lo que guarda depende de tu versión de `tg`:
+
+- **Una versión que muestra `record_input` en `tg personal config show`** guarda la línea de comandos tal como la
+  escribiste (el título de un chat, una búsqueda, el texto de un mensaje), para que puedas releer lo que ejecutaste. Un secreto
+  siempre es `[redacted]`: el valor de una opción cuyo nombre indica un token, contraseña, frase de contraseña, secreto,
+  credencial, cookie, autorización o clave de API; un valor que `tg` marca como secreto, como `bot api --body`; una
+  contraseña dentro de una URL; una cadena larga que parece un token. Para volver a ocultar cada valor escrito que pueda ser
+  texto:
+
+  ```sh
+  tg personal config set record_input false     # everywhere
+  tg personal config set record_input failed    # kept only in a run that failed
+  ```
+
+- **Una versión anterior** guarda las palabras del comando y los nombres de las opciones, como `messages list --limit`.
+  Cada valor que pueda ser texto, como lo que escribiste como `<chat>`, es `[redacted]`.
+
+Un informe de problema hecho a partir de una ejecución oculta esos valores escritos en todas las versiones.
 
 ## Comprobar la instalación: `tg personal doctor`
 

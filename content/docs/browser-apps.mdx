@@ -63,7 +63,7 @@ who logged into the messenger.
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
+tg.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 For MAX, replace `tg.cmd` with `max.cmd` in window 2. Run both processes in native Windows.
@@ -85,7 +85,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 For MAX, replace `tg` with `max` in window 2.
@@ -107,7 +107,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 For MAX, replace `tg` with `max` in window 2. Do not run the messenger server with `sudo`.
@@ -117,9 +117,9 @@ For MAX, replace `tg` with `max` in window 2. Do not run the messenger server wi
 </PlatformSetupTabs>
 
 The server listens on `127.0.0.1:8765` and prints a one-time login code. <DocTerm term="profile" lang="en" label="A named profile" /> goes
-before the command, for example `tg work mcp`; on Windows, `tg.cmd work mcp`.
+before the command, for example `tg work mcp serve`; on Windows, `tg.cmd work mcp serve`.
 
-Only the `--http` server has this login. Never point a tunnel at `tg mcp` or `max mcp` started without `--http`: that connection has no login at all.
+Only the `--http` server has this login. Never point a tunnel at `tg <profile> mcp serve` or `max <profile> mcp serve` started without `--http`: that connection has no login at all.
 
 <a id="add-it-to-codex--chatgpt-web-or-claude" />
 
@@ -229,13 +229,15 @@ for its connector. Funnel's permitted public ports are `443`, `8443` and `10000`
 ## Stop, restart or revoke
 
 - **Stop:** Ctrl-C in both foreground windows stops that server and tunnel.
+- **In the background:** `tg personal mcp server start --public-url "$mcpPublicUrl"` runs the same server
+  without a window. `tg personal mcp server status` shows it and its login code; `tg personal mcp server stop` stops it.
 - **Restart:** repeat the commands with the same profile and public URL. Browser logins survive
   ordinary restarts; they expire after 30 days without renewal.
 - **Background Funnel:** if you used `--bg`, Ctrl-C does not disable it. Check
   `tailscale funnel status`, then disable only that route with `tailscale funnel --https=443 off`
   (or `8443` for the second server). Use your OS's executable path and elevation above.
   Avoid `funnel reset` if you have another route: it clears them all.
-- **Revoke app access:** run `tg personal mcp --revoke` or `max personal mcp --revoke`; use `tg.cmd` / `max.cmd`
+- **Revoke app access:** run `tg personal mcp revoke` or `max personal mcp revoke`; use `tg.cmd` / `max.cmd`
   in PowerShell. Apps must log in again. Your messenger account stays logged in.
 
 ## Troubleshooting
@@ -267,7 +269,7 @@ Try this after the connection works on your computer. See remote setup for [Tele
 <summary>Linux server: keep the connection running after logout and reboot</summary>
 
 1. Use one ordinary Linux user for installation, messenger login and the service. Install Node.js, the CLI and Tailscale, then log into the messenger as that user. First verify the five-chat request using the foreground commands above.
-2. Run `tg personal mcp config` or `max personal mcp config`. Take the absolute Node path from `command` and the CLI entry path from `args`; preserve a named profile if present. Do not put account passwords or bot tokens in the service file.
+2. Run `tg personal mcp config` or `max personal mcp config`. Take the absolute Node path from `command` and the CLI entry path from `args`; keep the profile name before `mcp`, because the server serves only the profile it names. Do not put account passwords or bot tokens in the service file.
 3. Create `~/.config/systemd/user/wirecat-mcp.service`. Replace the two paths and public address in this template with the actual values. Use the same configuration/state directories as your successful login:
 
 ```ini
@@ -277,7 +279,7 @@ Description=WireCat messenger connection
 [Service]
 Type=simple
 WorkingDirectory=%h
-ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js mcp --http --port 8765 --public-url https://server.tailnet.ts.net
+ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js personal mcp serve --http --port 8765 --public-url https://server.tailnet.ts.net
 Restart=on-failure
 RestartSec=10
 

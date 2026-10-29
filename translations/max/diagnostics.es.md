@@ -12,7 +12,7 @@ Esta página es necesaria cuando un comando falla, se congela o tarda demasiado 
 Palabras que aparecen aquí:
 
 - **Ejecución** - una llamada `max`, desde el inicio hasta la salida.
-- **Registro de ejecución**: el directorio donde se almacena lo que hizo un ejecución: comando, total y una línea para cada solicitud a MAX. Nunca contiene mensajes de texto, nombres o títulos.
+- **Registro de ejecución**: el directorio donde se almacena lo que hizo un ejecución: comando, total y una línea para cada solicitud a MAX. Las líneas de las solicitudes nunca contienen textos de mensajes, nombres ni títulos. La línea de comandos el registro puede guardarla tal como la escribiste, pero sin secretos ([más detalles](#что-вы-набрали)).
 - **`max personal doctor`** comprueba la instalación: versión, entrada, configuración y archivo local.
 - **Informe de problema**: un archivo JSON de la respuesta `max personal doctor` y un inicio fallido. Está adjunto a un problema en GitHub.
 
@@ -22,8 +22,8 @@ Palabras que aparecen aquí:
 |---|---|---|
 | Ver peticiones durante la ejecución | `max … --trace` | Nada; solo stderr |
 | Guardar una ejecución | `max … --record` | Registro de ejecución |
-| Encontrar una ejecución fallida | `max personal runs list` | Los fallos se guardan automáticamente |
-| Guardar todas las ejecuciones | `max personal config set record true` | Cada registro |
+| Encontrar una ejecución más tarde | `max personal runs list` | Cada ejecución se guarda automáticamente |
+| Guardar solo las ejecuciones fallidas | `max personal config set record false` | Registro de la ejecución fallida |
 | Comprobar la instalación | `max personal doctor`, `max personal doctor --online` | Nada |
 | Crear un informe de problemas | `max personal doctor reports create` | Un archivo que tú envías |
 
@@ -67,10 +67,10 @@ max shop bot messages list -100 --trace
 ```
 
 ```text
-→ getMyInfo        
-← getMyInfo        200  143ms  211 B
-→ getMessages      chat -100
-← getMessages      200  chat -100  187ms  6.2 kB
+→ getMyInfo        GET /me
+← getMyInfo        GET /me  200  143ms  211 B
+→ getMessages      GET /messages  chat -100
+← getMessages      GET /messages  200  chat -100  187ms  6.2 kB
 ```
 
 Los rechazos muestran código y clave MAX, como `404  not_found  not.found`, nunca el texto de la respuesta. Las cargas (`--file`, `uploads put`) tienen dos líneas propias, `upload.image`, `upload.video`, etc., con tamaño, estado y tiempo. No incluyen URL ni nombre: la URL concede acceso por sí misma.
@@ -92,6 +92,8 @@ Directorio de ejecución:
   events.jsonl   по объекту JSON на запрос, без единого управляющего символа
 ```
 
+Cada solicitud en `events.jsonl` lleva `"level": "wire"` y su transporte: `"transport": "max-ws"` para una trama del protocolo personal (con `opcode` y `seq`), `"transport": "http"` para la Bot API (método y ruta con `:id` en lugar del id, sin la cadena de consulta). Una solicitud de la Bot API tiene `attempt`: `1` para el primer intento, `2` y siguientes para un reintento. Tras un rechazo `429` o un fallo de lectura, el registro muestra primero la respuesta con `"outcome": "error"` y luego el reintento con `"attempt": 2` y `"wait_ms"`: cuántos milisegundos esperó el cliente antes (`Retry-After` de MAX o su propia pausa). Igual se marcan los reintentos de `messages send` mientras MAX responde `attachment.not.ready`: la trama de cada reintento lleva `attempt` y `"wait_ms": 1000`.
+
 El directorio tiene permisos `0700` y ambos archivos, `0600`. `run.json` se escribe **dos veces**: al iniciar con estado `running`, y al terminar con el resultado. Así no queda un directorio con eventos sin una descripción de la ejecución.
 
 El resultado se escribe **en cualquier salida**, incluso si falla antes de conectar:
@@ -101,32 +103,51 @@ El resultado se escribe **en cualquier salida**, incluso si falla antes de conec
   "requests": 0, "error_code": "authentication_error", "duration_ms": 12 }
 ```
 
-## Las ejecuciones fallidas siempre se guardan
+## Cada ejecución se guarda sola
 
-Si el comando finaliza con un error, su ejecución se guarda sin `--record`, con la marca `"kept_because_failed": true` en `run.json`. Esto se aplica a cualquier comando y a cualquier error: indicador incorrecto, comando desconocido, verificación antes de comenzar a trabajar, comandos que no funcionan en MAX (`models`, `server`, `watch`, `upgrade`). La grabación contiene sólo las palabras del comando, por ejemplo `messages list`, sin lo que estaba escrito después de ellas.
+La ejecución se guarda incluso sin `--record`, también la correcta. Una fallida se guarda con cualquier error: indicador incorrecto, comando desconocido, verificación antes de empezar, comandos que no van a MAX (`models`, `server`, `watch`, `upgrade`). En `run.json` de ese registro está `argv`: la línea de comandos tal como la escribiste, con el nombre del chat, la consulta de búsqueda o el texto del mensaje. Los secretos siempre se ocultan, y lo escrito se puede ocultar con el ajuste `record_input` ([más detalles](#что-вы-набрали)).
 
-Una ejecución completamente satisfactoria sin `--record` no deja registro; los resultados parciales se conservan por defecto. Por lo tanto, un informe de problema siempre tiene algo que adjuntar. `--no-record` o `"record": false` en la configuración también lo desactiva.
+Una ejecución correcta que no registró ningún evento es una línea en la lista del día, sin carpeta; `runs show` la encuentra ahí. Los comandos que funcionan hasta que los detienes (`watch`, `serve`, `mcp serve`) y los que WireCat Desktop ejecuta para sí mismo guardan una ejecución correcta solo con `--record`. `--no-record` no guarda nada, ni siquiera una ejecución fallida.
 
 Las búsquedas y estadísticas exitosas mantienen su historial, separado de los registros de ejecución. Contiene parámetros de consulta, pero no se encontraron mensajes. Cómo gestionarlo - en la sección [búsquedas guardadas e historial](./search.md#сохранённые-поиски-и-история).
 
-## Registrar cada ejecución
+## Cómo registrar menos
 
 ```sh
-max personal config set record true          # этот профиль
-max personal chats list --no-record          # но не этот запуск
+max personal config set record false         # этот профиль: только неудачные запуски
+max personal chats list --no-record          # этот запуск: ничего
 ```
 
 Lo mismo en el archivo de configuración:
 
 ```json
-{ "profiles": { "personal": { "record": true } } }
+{ "profiles": { "personal": { "record": false } } }
 ```
 
-Luego se escribe cada ejecución. Por defecto, una ejecución completamente satisfactoria no se registra a menos que se lo soliciten: un directorio de quién lee y cuándo sería un diario de su vida que nadie solicitó. `--no-record` o `"record": false` desactivan tanto la grabación de ejecución como el historial de búsqueda.
+Con `"record": false` no se registran las ejecuciones correctas; las fallidas, sí. Una ejecución correcta guarda la línea de comandos escrita, por ejemplo el texto de un mensaje enviado; `record_input` decide si se guarda ([más detalles](#что-вы-набрали)). `--no-record` o `"record": false` también desactivan el historial de búsqueda.
 
 ## Conservación
 
-**30 días**, o `keep_runs_for_days` en [ajustes](./configuration.md). Lo antiguo sólo se elimina cuando se escribe algo: una herramienta que no escribe nada no tiene por qué pasar por este directorio. Se elimina durante días en su totalidad, por nombre de directorio, por lo que no es necesario abrir nada para solucionarlo.
+Una ejecución fallida, **30 días** (`keep_runs_for_days`); una correcta, **7 días** (`keep_successful_runs_for_days`), en [ajustes](./configuration.md). La carpeta de ejecuciones no crece más de `runs_size_limit_mb` (200 MB): primero se borran las correctas más antiguas. Lo antiguo sólo se elimina cuando se escribe algo: una herramienta que no escribe nada no tiene por qué pasar por este directorio. Se elimina durante días en su totalidad, por nombre de directorio, por lo que no es necesario abrir nada para solucionarlo.
+
+## Lo que escribiste
+
+En `run.json` de un registro de ejecución puede estar `argv`: las palabras después de `max`, tal como las escribiste. Muestran qué se ejecutó exactamente:
+
+```json
+{ "command": "messages list", "argv": ["personal", "messages", "list", "Семья", "--token=[redacted]"] }
+```
+
+En lugar de un secreto siempre aparece `[redacted]`, sea cual sea la configuración. Un secreto es el valor de un indicador cuyo nombre contiene token, password, secret, credential, cookie, authorization o API key; una contraseña dentro de una dirección; una cadena larga sin espacios que parece una clave; el cuerpo de `bot api … --body`. `max` no acepta un número de teléfono en la línea de comandos: si aun así lo escribes después de `contacts lookup`, el comando lo rechaza y el registro tendrá `[redacted]`.
+
+Para que lo escrito no llegue a los registros de ejecución:
+
+```sh
+max personal config set record_input false   # этот профиль
+max config set record_input false --defaults  # все профили
+```
+
+Entonces en `argv` quedan las palabras del comando, los nombres de los indicadores, el nombre del perfil y los valores que no pueden ser palabras de nadie: números cortos, fechas, duraciones, `true` y `false`. Todo lo demás se sustituye por `[redacted]`. Si el archivo de configuración no se puede leer, lo escrito también se oculta: quizá justo en él estaba desactivado `record_input`.
 
 ## Lo que nunca se registra
 
@@ -141,6 +162,8 @@ Luego se escribe cada ejecución. Por defecto, una ejecución completamente sati
 | Código de aviso, como `reactions_unread` | Texto del aviso |
 | Tipo de error y líneas de código del fallo | Texto del error de caída |
 | Versión, entorno (`node` o `bun`) y sistema | Ruta del directorio de ejecuciones |
+
+La tabla trata de las líneas de eventos y del resultado de la ejecución. La línea de comandos en `argv` es aparte, [arriba](#что-вы-набрали).
 
 **Ni truncado ni como hash.** El evento se construye con campos nombrados explícitamente, en lugar de filtrar una copia de la solicitud: un campo no previsto no puede llegar al registro. `session.login` tiene un campo `token`, y ninguna rama del código accede a él.
 

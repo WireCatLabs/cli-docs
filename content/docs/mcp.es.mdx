@@ -15,7 +15,7 @@ Participan dos partes:
 
 - El **cliente** es tu aplicación de IA, por ejemplo Claude Desktop, ChatGPT, Cursor o Gemini CLI.
   Pregunta al servidor qué herramientas hay y llama a una cuando tu petición la necesita.
-- El **servidor** es `tg mcp` o `max mcp`, parte de la herramienta de línea de comandos. Se ejecuta
+- El **servidor** es `tg <perfil> mcp serve` o `max <perfil> mcp serve`, parte de la herramienta de línea de comandos. Se ejecuta
   en tu ordenador o en un servidor al que un chat del navegador llega por una dirección HTTPS pública.
 
 Mediante MCP, la IA solo puede usar las herramientas que ofrece el servidor, y solo dentro de los
@@ -76,6 +76,11 @@ permisos del perfil que el CLI. El inicio de sesión y la descarga del archivo s
 muestra la configuración con las rutas reales de Node y del CLI. No edita el cliente.
 El PATH de una aplicación de escritorio puede ser diferente del de la terminal.
 
+El servidor atiende el perfil que nombras: `tg personal mcp serve`. En tg, un servidor puede atender varios
+perfiles con `tg mcp serve --profiles personal,work`, o todos con `--profiles all`; cada llamada a una herramienta
+indica entonces su perfil. Sin perfil ni `--profiles`, tg no arranca el servidor. max no tiene `--profiles`:
+`max mcp serve` sin perfil atiende todos los perfiles. `tg mcp` o `max mcp` solo muestra la ayuda.
+
 ### Codex
 
 En una terminal donde ya funcione el comando:
@@ -85,7 +90,7 @@ tg personal mcp add codex
 codex mcp list
 ```
 
-Setup usa el comando propio de Codex y deja intactos los demás servidores. A mano, el equivalente es `codex mcp add tg -- tg personal mcp`.
+Setup usa el comando propio de Codex y deja intactos los demás servidores. A mano, el equivalente es `codex mcp add tg -- tg personal mcp serve`.
 
 Conecta solo los mensajeros que uses. Codex guarda MCP en `~/.codex/config.toml`.
 Para Windows o un IDE con otro PATH, toma `command`, `args` y `env` de `mcp config` y añádelos
@@ -99,7 +104,7 @@ tg personal mcp add claude-code
 claude mcp list
 ```
 
-A mano, el equivalente es `claude mcp add --scope user tg -- tg personal mcp`. Si el perfil ofrece herramientas de escritura, setup te pide revisar antes sus [permisos](./permissions.mdx) y repetir con `--allow-writes`. Esa opción solo confirma la instalación; no cambia los permisos.
+A mano, el equivalente es `claude mcp add --scope user tg -- tg personal mcp serve`. Si el perfil ofrece herramientas de escritura, setup te pide revisar antes sus [permisos](./permissions.mdx) y repetir con `--allow-writes`. Esa opción solo confirma la instalación; no cambia los permisos.
 
 Comprueba el estado con `/mcp` en la sesión. Para rutas completas, usa los valores de `mcp config`.
 [Guía oficial de Claude Code MCP](https://code.claude.com/docs/en/mcp).
@@ -122,7 +127,7 @@ Reinicia el cliente y comprueba las herramientas disponibles.
 ### Gemini CLI
 
 ```sh
-gemini mcp add --scope user tg tg personal mcp
+gemini mcp add --scope user tg tg personal mcp serve
 gemini mcp list
 ```
 
@@ -140,9 +145,9 @@ JSON `mcpServers` entero. Reinicia Hermes.
 
 Cada herramienta inicia su propio servidor. Conéctalo con el comando que tu cliente usa para servidores MCP:
 
-- **Zoom:** `zm personal mcp`.
-- **Google Drive:** `drive personal --read-only mcp`.
-- **Memo:** `memo mcp`.
+- **Zoom:** `zm personal mcp serve`.
+- **Google Drive:** `drive personal --read-only mcp serve`.
+- **Memo:** `memo mcp serve`.
 
 ## Qué puede hacer el agente
 

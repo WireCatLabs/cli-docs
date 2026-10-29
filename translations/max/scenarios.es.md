@@ -81,10 +81,10 @@ En la terminal: `max guide catch-up`
 Recupera un mensaje, un archivo o una nota de voz cuando solo recuerdas una palabra o a la persona.
 
 1. ```sh
-   max search all "invoice"
+   max search messages "invoice"
    ```
 
-   mensajes, notas, el texto de archivos y transcripciones de voz en una sola búsqueda, la mejor coincidencia primero
+   mensajes, el texto de archivos y transcripciones de voz en una sola búsqueda, la mejor coincidencia primero
 
 2. ```sh
    max contacts events Anna
@@ -103,8 +103,8 @@ Qué mirar:
 - el chat y la hora de cada resultado
 - el localizador msg, para citarlo o abrir el mensaje
 
-Una búsqueda solo encuentra lo que guarda el almacén. Ejecuta `max messages sync --all` una vez, o `max schedule command` con un temporizador,
-para que el historial antiguo también se pueda encontrar.
+Una búsqueda solo encuentra lo que guarda el almacén. El propietario puede ejecutar `max messages sync <chat>` para un chat, o `max messages sync --all` una vez, o poner
+`max schedule command` con un temporizador, para que el historial antiguo también se pueda encontrar. Un agente solo sincroniza después de que el propietario lo apruebe.
 
 En la terminal: `max guide find-what-was-said`
 

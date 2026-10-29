@@ -4,6 +4,228 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.84.0 — 27.10.2026
+
+### Cambios que pueden romper scripts
+
+- **cli-core 0.469.0 y cli-base 0.65.0.** cli-core 0.469 solo acepta cli-base 0.65, por eso ambas versiones cambian
+  juntas. cli-base 0.65 incluye los verbos `serve` y `revoke`, así que sus entradas en la línea base del linter se
+  eliminaron, y su `cli-dev bundle` encuentra un servidor iniciado con una opción antes de `mcp serve`. Desde cli-core 0.468, el servidor MCP ofrece
+  un comando que solo carga datos en el almacén a través de la herramienta de lectura.
+
+## 0.83.0 — 27.10.2026
+
+### Cambios que pueden romper scripts
+
+- **El servidor MCP se inicia con `max mcp serve`, y `max mcp` solo muestra la ayuda (cli-core 0.463.0).**
+  Lo mismo para el bot: `max <бот> bot mcp serve`. Los inicios de sesión de las apps del navegador los termina `max mcp revoke` en lugar de
+  `max mcp --revoke`. Las entradas que imprimen `mcp config` y `mcp add`, `mcp server start`, `doctor --online`,
+  la entrada en el MCP Registry y la imagen de Docker ya ejecutan `mcp serve`. Qué hacer: en tu entrada del cliente MCP o en un
+  script, sustituye `max <профиль> mcp` por `max <профиль> mcp serve`, y `mcp --revoke` por `mcp revoke`. La forma antigua
+  del comando ya no existe.
+- **`skill show`, `skill status` y `skill install` con `--json` imprimen `{ item, meta }` (cli-core 0.462.0).** Los campos
+  que estaban en el nivel superior (`name`, `content`, `written`) ahora están dentro de `item`. El instalador de Windows ya
+  lee la forma nueva.
+- **`max account list` indica si el perfil tiene sesión iniciada en este equipo** (`signed_in`), y los resultados de búsqueda de cualquier
+  tipo nombran los campos que el agente lee como datos (`untrusted`). Un script que compara la respuesta con una copia estricta antigua
+  del esquema rechazará el campo nuevo (cli-core 0.464.0 y 0.466.0).
+- **Cada ejecución se registra de forma predeterminada, también la correcta (cli-core 0.467.0).** Las correctas se guardan 7 días
+  (`keep_successful_runs_for_days`), las fallidas 30 (`keep_runs_for_days`); la carpeta de ejecuciones no supera
+  `runs_size_limit_mb` (200). Con `record_input` predeterminado, un envío correcto deja el texto escrito en el registro
+  local con permisos `0600` durante 7 días. `record: false` ahora conserva las ejecuciones fallidas (antes, nada),
+  `record_input: false` oculta lo escrito en todas partes, `--no-record` no conserva nada. `kept_because_failed` ya no se
+  pone en `run.json`.
+- **max requiere cli-core 0.467.0 y cli-base 0.64.0.**
+
+### Novedades
+
+- **Una solicitud en el registro de ejecución se marca como de red y conoce su intento.** Cada trama del protocolo personal y cada
+  solicitud de la Bot API en `events.jsonl` recibe `"level": "wire"` y `transport` (`max-ws` o `http`). Una solicitud de la Bot API
+  recibe además `attempt`, y un reintento tras `429` o un fallo, `wait_ms`: cuánto esperó el cliente antes. Igual
+  se numeran los reintentos de `messages send` mientras el archivo no está listo (`attachment.not.ready`). Requiere un cli-core
+  que registre cada ejecución.
+- **`max upgrade` reinicia el servidor MCP del navegador que inició `max mcp server start`,** en el mismo puerto, con
+  la misma dirección y restricciones (`mcp_servers`, versión antigua → nueva); un servidor iniciado a mano se queda y
+  se nombra. Las sesiones de agentes por stdio en la versión antigua se enumeran (`stale_sessions`): reinícialas desde la app
+  del agente. Funciona a partir de la próxima actualización (cli-core 0.464.0).
+
+### Corregido
+
+- **`max mcp serve` sin perfil marca los perfiles sin sesión iniciada.** Antes la lista tenía todos los perfiles, y
+  la app podía elegir un perfil sin sesión y recibir un error. Ahora en el menú de la app y en la descripción ese
+  perfil lleva «— not signed in», los perfiles solo de bot no se muestran (el bot tiene su propio `bot mcp serve`), y una llamada
+  para un perfil sin sesión responde cómo entrar: `max <профиль> setup` o desde WireCat Desktop.
+- **La página de inicio de sesión del servidor MCP del navegador explica que un código sirve para un solo inicio de sesión.** Tras el inicio de sesión de una app,
+  el código nuevo aparece en WireCat Desktop y en `max mcp server status` (cli-core 0.466.0).
+- **El skill max-cli ya no envía al agente a `search all` ni a `messages sync --all`.** La búsqueda empieza por
+  `search messages`; las notas y Drive, solo si el propietario lo pide. Si no se encuentra nada, el agente lo dice y
+  propone una descarga limitada de un chat, que inicia tras el consentimiento del propietario. Los mismos cambios en README y
+  en docs (search, usage, index, troubleshooting).
+
+## 0.82.0 — 27.10.2026
+
+### Novedades
+
+- **Sin sesión, el error también propone WireCat Desktop.** `no session`, `has not logged in yet` y un token caducado ahora
+  dicen: un comando en el terminal o el inicio de sesión en WireCat Desktop (Tools → MAX → Manage). Por MCP se indica al agente que no pida
+  códigos ni contraseñas (cli-core 0.452.0; con él también 0.451.0: búsqueda por significado con ONNX Runtime nativo también en Windows).
+- **`max mcp` sin perfil atiende todos los perfiles, por stdio y con `--http` (cli-core 0.450.0).** En la app de IA basta
+  un conector para MAX, no uno por perfil. Cada herramienta (`max_tools_search`, `max_read`,
+  `max_write`) tiene el campo obligatorio `profile` (todos los perfiles de este equipo, sin valor por defecto), y se indica al agente
+  que pregunte si no nombraste la cuenta. La llamada va al propio `max <profile> mcp` de ese perfil: se inicia
+  con la primera llamada y se cierra tras 10 minutos de inactividad, así que los permisos, la sesión y el registro del perfil funcionan como antes.
+  `max mcp --revoke`, `max mcp config` y `max mcp server start|stop|status` funcionan sin perfil, con su propio inicio de sesión.
+  `--public-url` acepta una ruta, `https://<name>.ts.net/max`. La entrada en el MCP Registry ejecuta `max mcp`.
+  `max <profile> mcp` no cambió.
+
+### Cambios que pueden romper scripts
+
+- **max requiere cli-base 0.63.0 (cli-core 0.450.0).** Nada de lo que usa max cambió en ella.
+
+### Corregido
+
+- **Cada comando tarda menos en prepararse (cli-base 0.62.0, cli-core 0.449.0).** La comprobación de los comandos comunes
+  describe cada comando una vez, no de nuevo para cada grupo por encima. En tg, un `run(["--version"])` ya calentado es
+  más rápido: 29 ms en lugar de 49. Por qué: la comprobación ocupaba cerca del 60 % de la preparación de cada comando. Qué tener en cuenta: nada, la comprobación
+  detecta los mismos cambios.
+- **La búsqueda por significado y `--discover` funcionan con ONNX Runtime nativo también en Windows (cli-core 0.451.0).** Después de
+  `max <профиль> models download`, los modelos de texto y el reordenador usan la biblioteca nativa en Windows x64 y
+  arm64, como ya en Linux y macOS: de 2 a 3 veces más rápido que WebAssembly. La descarga toma `onnxruntime.dll` del paquete npm
+  `onnxruntime-node` (113,5 MB, una vez, verificado por sha256). Los modelos de imágenes (CLIP, SigLIP2) también usan la
+  biblioteca nativa donde está instalada: aproximadamente el doble de rápido. Los resultados son los mismos.
+
+## 0.81.0 — 26.10.2026
+
+### Novedades
+
+- **La búsqueda por significado y el reordenamiento de `search messages --discover` son de 2 a 3 veces más rápidos en Linux y en Mac con Apple Silicon (cli-core 0.448.0).** Los modelos ahora se calculan con la biblioteca nativa ONNX Runtime en lugar de WebAssembly: en un mismo archivo, `--discover` pasó de 4,6 a 3,2 s, con las mismas respuestas. La biblioteca (10–42 MB, versión oficial de Microsoft, verificada por sha256) la instala `max <профиль> models download`; la búsqueda no descarga nada por sí sola. Qué tener en cuenta: en una máquina ya configurada, la mejora aparece tras el próximo `models download e5-small` o `models download mmarco`. Windows, los Mac con Intel y Alpine siguen funcionando con WebAssembly.
+
+### Corregido
+
+- **El reordenamiento de `--discover` ve el propio mensaje encontrado, no solo aquel al que responde (cli-core 0.447.0).** Antes el modelo leía primero el mensaje original completo y cortaba el texto en 512 tokens, así que con un original largo la respuesta quedaba fuera de su ventana. Ahora del original se toman los primeros 300 caracteres.
+
+## 0.80.0 — 26.10.2026
+
+### Novedades
+
+- **`max <профиль> session start qr --json --answer-stdin` inicia sesión sin terminal, para WireCat Desktop (cli-core 0.443.0).** La contraseña en la nube de MAX se pide con una línea `needs` en stderr (`{"event":"needs","field":"password","secret":true,"prompt","hint"}`), y la respuesta se lee como una línea de stdin; `session start token` pide el token del mismo modo. Sin `--answer-stdin`, una ejecución sin terminal sigue rechazándose, para que el shell de un agente nunca espere una pregunta. La respuesta no se imprime ni llega a los registros de ejecución.
+- **`max <профиль> mcp server start|stop|status` mantiene el servidor MCP HTTP en segundo plano (cli-core 0.445.0).** `start` acepta `--public-url`, `--port` y `--permission`, como `mcp --http`, y vuelve cuando el servidor escucha; `status` muestra el puerto, la dirección, el código de acceso de un solo uso y las apps conectadas; `stop` detiene solo su propio servidor. WireCat Desktop lo inicia y lo detiene desde el panel Manage.
+- **`max <профиль> tasks list claimed_by:<кто>` muestra las tareas que tomó ese ejecutor (cli-core 0.441.0).** `claimed_by:*`: todas las tareas tomadas; `NOT claimed_by:*`: las que nadie tomó; un patrón como `claimed_by:claude-code:*` también funciona. Solo cuentan las tomas vigentes: una toma caducada no retiene nada.
+
+### Cambios que pueden romper scripts
+
+- **La ayuda de `--record` dice lo que de verdad guarda el registro de ejecución.** Antes: «ids and timings, never message content», aunque desde 0.79.0 el registro guarda la línea de comandos tal como la escribiste. Ahora: «with the command as typed and secrets hidden; record_input false leaves the typed words out». Qué tener en cuenta: cambia el texto de `max --help` y de `docs/commands.md`; una comprobación que compara la ayuda verá la línea nueva.
+
+### Corregido
+
+- **El código de acceso para una app del navegador de `mcp --http` se renueva cuando caduca (cli-core 0.445.0)**, no solo tras una entrada errónea o tardía. La página de inicio de sesión dice que el código se muestra en WireCat Desktop o en el terminal. Un segundo `mcp --http` para el mismo perfil ahora se niega a iniciarse.
+- **`search messages --discover` con reordenamiento lee solo los primeros 300 caracteres del mensaje al que responde el resultado (cli-core 0.447.0).** Por qué: un mensaje original largo ocupaba toda la ventana del modelo, y este evaluaba el original en lugar de la respuesta. Qué tener en cuenta: el orden de los resultados de `--discover` con un modelo de reordenamiento puede cambiar; el modelo hace cerca de un 40 % menos de trabajo.
+
+### Seguridad
+
+- **El registro de ejecución oculta más secretos por su forma, no solo por el nombre de la opción (cli-core 0.440.0–0.444.0).** Se sustituyen por `[redacted]` los tokens de formatos conocidos (GitHub, OpenAI y Anthropic, Slack, AWS, Google, Stripe, npm, token de bot de Telegram, JWT, clave privada PEM), `Bearer` y `Basic`, el valor tras un nombre «secreto» (`password=…`, `пароль 1234`, `pin 1234`, `код 123456`), las cadenas aleatorias largas y las claves hex; las demás palabras se quedan. Un número de teléfono con «+» o de 11 a 15 cifras seguidas se oculta dondequiera que se escriba, incluso en el texto de un mensaje. Qué tener en cuenta: un hash de commit completo y un id positivo de 11 a 15 cifras también se convierten en `[redacted]`; un número sin «+» escrito por grupos (`8 912 345-67-89`) no se reconoce.
+- **Si los ajustes no se cargaron, el registro de ejecución oculta las palabras escritas (cli-core 0.442.0).** Antes, en ese caso `record_input` se consideraba activado aunque los ajustes tuvieran `record_input: false`.
+
+## 0.79.0 — 26.10.2026
+
+### Novedades
+
+- **`max skill install --for hermes` instala el skill para Hermes Agent, y `max skill status` dice qué copia lee Hermes (cli-base 0.59.0).** El comando añade `~/.agents/skills` a `skills.external_dirs` de Hermes con `hermes config set`, sin tocar las carpetas ya escritas, y si eso no funciona, copia el archivo a la carpeta personal de Hermes. Si Hermes no está instalado, el comando falla con `not_found` y no escribe nada. `max skill install` sin más y `--for all` siguen escribiendo solo las copias para Claude Code y `~/.agents/skills`. En `skill status --json` aparece `hermes` junto a `targets`.
+- **Una ejecución iniciada por OpenClaw o Hermes Agent nombra a ese agente (cli-core 0.437.0).** En `runs show`, un comando que ejecutó el agente de OpenClaw tiene `agent` igual a `openclaw`, y si lo inició un mensaje de un chat, también `from_chat: true`; una ejecución de Hermes tiene su sesión, así que una tarea tomada por Hermes la retiene una sola sesión.
+- **Nuevo ajuste `record_input` (cli-core 0.439.0).** `max personal config set record_input false` oculta en los registros de ejecución lo que escribiste; `config set` y `config show` lo muestran.
+- **El skill `max-cli` declara a OpenClaw y ClawHub que necesita el programa `max` y cómo instalarlo** (`metadata.openclaw`: `requires.bins` y el paquete npm `@wirecat/max-cli`). Si `max` no está en el PATH, OpenClaw marca el skill como no listo y propone instalar el paquete. Claude Code y Codex no leen este bloque.
+
+### Cambios que pueden romper scripts
+
+- **El registro de ejecución guarda la línea de comandos tal como la escribiste (cli-core 0.439.0).** En `argv` de `run.json` y en `runs show` ahora se ven el nombre del chat, la consulta de búsqueda y el texto del mensaje; antes aparecía `[redacted]` en su lugar. Los secretos siempre se ocultan: valores de opciones como `--token` y `--password`, la contraseña en una dirección, una cadena larga que parece una clave, el cuerpo de `bot api … --body`, un número de teléfono escrito después de `contacts lookup`. Por qué: el registro debe mostrar qué se ejecutó exactamente. Qué tener en cuenta: `max personal config set record_input false` devuelve la ocultación anterior para un perfil, `max config set record_input false --defaults`, para todos; un script o una comprobación que espere solo `[redacted]` en `argv` verá las palabras escritas. `doctor reports create` sigue ocultándolas en el informe.
+
+### Seguridad
+
+- **La primera palabra que no puede ser un perfil no llega al registro de ejecución (cli-core 0.438.0).** Antes, esa ejecución la guardaba como `profile`, aunque podía ser el texto de un mensaje o el nombre de una persona.
+- **Un error que cita `--token=…` o `password=…` ya no guarda el valor (cli-core 0.439.0).**
+
+### Corregido
+
+- **El skill `max-cli` ya no propone al agente `npx @wirecat/max-cli` si no encuentra `max`.** Ejecuta el `max` ya instalado por su ruta completa: `"$(npm prefix -g)/bin/max" personal doctor` o `"$(pnpm bin -g)/max" personal doctor`. Por qué: `npx` descarga código, y los catálogos de plugins pueden prohibir esa ejecución; normalmente `max` está instalado, pero no está en el PATH del agente. Los agentes leen el skill con `max skill show`.
+
+## 0.78.0 — 26.10.2026
+
+### Corregido
+
+- **`max` se presenta como el cliente web actual de MAX: `appVersion` 26.10.7 y Chrome 154** (antes 26.9.8 y Chrome 151,
+  leído el 25.09). MAX rechaza las versiones de cliente que ya no admite; `max doctor` muestra la fecha
+  2026-10-26.
+- **`npx skills add WireCatLabs/max-cli` ofrece solo el skill `max-cli`.** Antes también mostraba cuatro skills para desarrolladores de max (`add-command`, `parity-audit`, `release`, `test-live`): estaban en `.claude/skills`, y skills.sh también busca skills ahí. Ahora están en `docs/dev/skills`.
+- **Un vector se elimina en cuanto ningún texto de la base lo usa** (cli-core 0.435.0). Antes, tras cambiar
+  la imagen de una foto, cambiar el texto de la transcripción de una reunión o limpiar un chat (`store clear --left`, la fusión de un chat con
+  otro), los vectores se quedaban. `conversations embeddings clear --chat` ahora quita también los vectores de los mensajes del chat, no
+  solo los de sus conversaciones; `conversations embed --chat` los vuelve a crear.
+  Qué tener en cuenta: `store rebuild` elimina los vectores que quedaron de versiones anteriores e informa su número en
+  `unused_vectors_dropped`; `store check` los cuenta en `vectors.unused`.
+- **La instalación tiene una sola copia de sherpa-onnx, no dos** (cli-core 0.433.0). En 0.77.0, max pasó a sherpa-onnx 2.0
+  antes que cli-core, y la instalación creció unos 15 MB; ahora cli-core también usa 2.0. Los comandos y su salida no cambian.
+
+### Cambios que pueden romper scripts
+
+- **La base común pasa a la versión 34: los CLI con cli-core 0.433.0 o anterior ya no la abrirán** (cli-core 0.434.0).
+  La búsqueda por significado toma los candidatos del índice sqlite-vec de la base, en lugar de recorrer todos los vectores; la respuesta es la misma que la del
+  recorrido. La primera apertura de la base con esta versión construye el índice con los vectores ya guardados, en porciones cortas.
+  Por qué: recorrer todos los vectores es más lento con cada mensaje que tiene vector.
+  Qué tener en cuenta: actualiza junto con max todos los CLI que leen la misma base (tg, wa, memo, zm, drive); los antiguos la rechazarán
+  y pedirán actualizarse. La extensión forma parte de la instalación (`@wirecat/cli-core-sqlite` 1.1.0); si no
+  se cargó, el comando que necesita la base termina con el error `store.vector-extension-missing` o
+  `store.vector-extension-failed`: reinstala max. `store check` muestra `vector_indexes` y no pasa
+  `checks.vector_indexes` cuando el índice no coincide con los vectores.
+- **La ayuda de `max upgrade` muestra solo el ejemplo `max upgrade --check`** (cli-core 0.433.0).
+  Por qué: el ejemplo `max upgrade` sin opción, copiado y ejecutado, actualizaba el programa de inmediato.
+  Qué tener en cuenta: en la salida de `max upgrade --help` y `max commands --json` solo cambia esa línea.
+- **El modelo de Anthropic recibe la clave en la cabecera `Authorization: Bearer`, no en `X-Api-Key`** (cli-core 0.433.0,
+  `@anthropic-ai/sdk` 1.3).
+  Por qué: así envía la clave la nueva versión de la biblioteca de Anthropic.
+  Qué tener en cuenta: afecta solo a `models.<назначение>.base_url` con el proveedor `anthropic`, es decir, a una pasarela propia en lugar de
+  la dirección de Anthropic: esa pasarela debe leer la clave de `Authorization`.
+
+### Novedades
+
+- **`search messages --discover` reordena los primeros 50 resultados con un modelo reordenador cuando está descargado**
+  (`max models download mmarco`, 136 MB; cli-core 0.435.0). El modelo lee la pregunta junto con cada resultado, su chat,
+  autor, fecha y el mensaje al que responde; su puntuación se mezcla con la de la búsqueda, y los demás resultados
+  mantienen su orden. Cada resultado reordenado tiene `discovery.reranker_score`, y `score` sigue siendo
+  la puntuación de la búsqueda. Sin el modelo el orden es el de antes, y la búsqueda lo dice: la nota `not reranked: …` en el terminal,
+  `missing`/`next` (`models.download`) en `--json` y MCP. El reordenamiento tiene 15 segundos además de la búsqueda por palabras;
+  si no le da tiempo, los resultados quedan sin él. El nuevo ajuste de perfil `search_reranker` elige `bge-reranker-v2-m3`
+  (588 MB) o desactiva el reordenamiento (`off`). Nada se descarga solo, y el texto no sale del equipo.
+  `models list` muestra los reordenadores con el tipo `reranker`.
+- **`search all` también busca mensajes por significado**, cuando el modelo e5-small está descargado y los mensajes tienen vectores (cli-core
+  0.435.0). Las coincidencias por palabras y por significado se combinan en una lista de mensajes, y `foundBy` de cada uno dice qué
+  búsqueda lo encontró. Una consulta con NOT o con un filtro dentro de OR y grupos, así como `--exact` y `--backend server`, buscan
+  solo por palabras. Sin modelo o sin vectores, `search all` busca por palabras como antes y dice por qué: la nota
+  `messages: meaning search not used: …`, `missing`/`next` en `--json` y MCP.
+
+## 0.77.0 — 25.10.2026
+
+### Cambios que pueden romper scripts
+
+- **El reconocimiento de mensajes de voz funciona con sherpa-onnx 2.0, y la instalación creció unos 15 MB.**
+  Antes max y cli-core usaban una sola copia de sherpa-onnx 1.13.8.
+  Por qué: todas las dependencias se actualizaron a sus últimas versiones; en 2.0 solo se quitaron partes de síntesis de voz,
+  el reconocimiento funciona como antes.
+  Qué tener en cuenta: hasta que cli-core pase a sherpa-onnx 2.0, la instalación tiene dos copias de este paquete.
+  Los comandos y su salida no cambian. `string-width` y `wrap-ansi`, que no se usaban, ya no se instalan
+  con max; si tu script los cargaba desde la instalación de max, instálalos aparte.
+- **Una ejecución de un comando `bot` que falló nombra la llamada de la Bot API en la que ocurrió.** En `runs show` y `runs list`, `error.http` tiene junto al código HTTP `method` y `endpoint_template`, por ejemplo `{ "method": "GET", "endpoint_template": "/chats/:id", "status": 403 }`; antes solo había el código.
+  Por qué: con el código solo no se ve cuál de las llamadas del comando falló.
+  Qué tener en cuenta: los id de chat, usuario y mensaje en la ruta se escriben como `:id`, el token de vídeo como `:token`, y los parámetros de la consulta no entran en la plantilla, así que los id y el token reales no llegan al registro. Los mismos dos campos están en las solicitudes del bot en `--trace` y en el registro de ejecución, y la línea de `--trace` los muestra tras el nombre de la operación (`← getMyInfo  GET /me  200 …`). Un script que analiza el texto de `--trace` verá una columna más.
+
+### Novedades
+
+- **`store reset --dry-run` enumera lo que vaciaría el reinicio y no borra nada** (cli-core 0.429.0): los archivos de la base y su tamaño, cada tabla con datos y su número de filas, si se hará antes una copia y si serve u otro proceso tiene el archivo abierto.
+- **`search messages --discover` también encuentra mensajes cercanos por significado**, cuando el modelo e5-small está descargado y `conversations rebuild` dio a los mensajes sus propios vectores (cli-core 0.432.0). En cada resultado, `discovery.found_by` dice qué búsqueda lo encontró. Hasta entonces la búsqueda es por palabras, como antes, y explica por qué. Nada se descarga, y el texto no sale del equipo.
+
+### Corregido
+
+- **Un `--version` sin más responde antes de cargar el programa**: el bin se inicia con `@wirecat/cli-core/cli/start` (cli-core 0.429.0).
+
 ## 0.76.0 — 25.10.2026
 
 ### Corregido
@@ -1889,7 +2111,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.76.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.84.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

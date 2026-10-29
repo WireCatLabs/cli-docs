@@ -63,7 +63,7 @@ description: "Подключите Telegram и MAX к AI-чату, наприм�
 
 ```powershell
 $mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
-tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
+tg.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Для MAX замените `tg.cmd` на `max.cmd` в окне 2. Оба процесса запускайте в Windows.
@@ -86,7 +86,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Для MAX замените `tg` на `max` в окне 2.
@@ -108,7 +108,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'HTTPS origin from Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 Для MAX замените `tg` на `max` в окне 2. Не запускайте сервер мессенджера с `sudo`.
@@ -118,9 +118,9 @@ tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 </PlatformSetupTabs>
 
 Сервер слушает `127.0.0.1:8765` и печатает одноразовый код входа. <DocTerm term="profile" lang="ru" label="Имя профиля" /> ставится перед
-командой: например, `tg work mcp`, а в Windows — `tg.cmd work mcp`.
+командой: например, `tg work mcp serve`, а в Windows — `tg.cmd work mcp serve`.
 
-Такой вход есть только у сервера с `--http`. Никогда не направляйте туннель на `tg mcp` или `max mcp`, запущенный без `--http`: у такого подключения входа нет совсем.
+Такой вход есть только у сервера с `--http`. Никогда не направляйте туннель на `tg <профиль> mcp serve` или `max <профиль> mcp serve`, запущенный без `--http`: у такого подключения входа нет совсем.
 
 <a id="подключить-codex--chatgpt-web-или-claude" />
 
@@ -230,13 +230,15 @@ tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 ## Остановить, запустить заново или отозвать вход
 
 - **Остановить:** Ctrl-C в обоих окнах переднего плана завершает этот сервер и туннель.
+- **В фоне:** `tg personal mcp server start --public-url "$mcpPublicUrl"` запускает тот же сервер
+  без окна. `tg personal mcp server status` показывает его и код входа; `tg personal mcp server stop` его останавливает.
 - **Запустить заново:** повторите команды с тем же профилем и адресом. Входы приложений переживают
   обычный перезапуск; без продления истекают через 30 дней.
 - **Funnel в фоне:** при `--bg` Ctrl-C его не выключает. Проверьте `tailscale funnel status`,
   затем выключите только нужный маршрут: `tailscale funnel --https=443 off`
   (или `8443` для второго сервера). Используйте путь и повышение прав вашей ОС выше.
   Не используйте `funnel reset`, если есть другой маршрут: он сбрасывает все.
-- **Отозвать входы приложений:** `tg personal mcp --revoke` или `max personal mcp --revoke`; в PowerShell
+- **Отозвать входы приложений:** `tg personal mcp revoke` или `max personal mcp revoke`; в PowerShell
   используйте `tg.cmd` / `max.cmd`. Приложениям придётся войти заново; сеанс мессенджера останется.
 
 ## Если не работает
@@ -268,7 +270,7 @@ tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
 <summary>Linux-сервер: работа после выхода и перезагрузки</summary>
 
 1. Используйте одного обычного пользователя Linux для установки, входа в мессенджер и службы. Установите Node.js, CLI и Tailscale, затем войдите в мессенджер от этого пользователя. Сначала проверьте запрос к пяти чатам с обычным запуском в двух окнах выше.
-2. Выполните `tg personal mcp config` или `max personal mcp config`. Возьмите абсолютный путь Node из `command`, а путь запуска CLI — из `args`; сохраните имя профиля, если оно есть. Пароли аккаунта и токены бота в файл службы не помещайте.
+2. Выполните `tg personal mcp config` или `max personal mcp config`. Возьмите абсолютный путь Node из `command`, а путь запуска CLI — из `args`; сохраните имя профиля перед `mcp`: сервер работает только с тем профилем, который назван. Пароли аккаунта и токены бота в файл службы не помещайте.
 3. Создайте `~/.config/systemd/user/wirecat-mcp.service`. В шаблоне замените оба пути и публичный адрес на свои. Каталоги настроек и состояния должны совпадать с теми, где вы успешно вошли:
 
 ```ini
@@ -278,7 +280,7 @@ Description=WireCat messenger connection
 [Service]
 Type=simple
 WorkingDirectory=%h
-ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js mcp --http --port 8765 --public-url https://server.tailnet.ts.net
+ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js personal mcp serve --http --port 8765 --public-url https://server.tailnet.ts.net
 Restart=on-failure
 RestartSec=10
 

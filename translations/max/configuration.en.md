@@ -22,7 +22,8 @@ These settings are changed most often. The [configuration reference](./configura
 | `sends_per_hour` | Messages a profile may send per hour; stops sending loops | `30`; bots have no limit until set in `bot` |
 | `requests_per_minute` | Request rate after an initial short burst; `0` disables pacing ([limits and waits](./limits.md)) | `20` |
 | `permissions` | Read, ask before changes or act without asking ([permissions](./permissions.md)) | All allowed except deletion and some other irreversible changes ask first; auto-reply sending is disabled |
-| `record` | Save each run for later inspection ([diagnostics](./diagnostics.md)) | `false` |
+| `record` | Save successful runs too, not only failed ones ([diagnostics](./diagnostics.md)) | `true` |
+| `record_input` | Whether a run record keeps the command line as you typed it; secrets are always hidden ([diagnostics](./diagnostics.md#что-вы-набрали)) | `true` |
 | `keep_runs_for_days` | Days to retain run records | `30` |
 | `color` | Table colours | Based on terminal |
 | `sender_colors` | Different colour for each message author | `false` |

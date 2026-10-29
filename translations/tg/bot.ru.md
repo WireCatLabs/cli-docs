@@ -30,7 +30,7 @@ title: "Бот Telegram"
 | Кнопки ответа, настройка командного меню и вебхуков | `tg <bot> bot callbacks`, `commands`, `webhooks` |
 | Ограничьте количество чатов, в которые бот может писать | `tg <bot> bot recipients` |
 | Вызов любого метода API бота | `tg <bot> bot api <method>` |
-| Подключите бота к своему ИИ-агенту | `tg <bot> bot mcp` |
+| Подключите бота к своему ИИ-агенту | `tg <bot> bot mcp serve` |
 
 Каждая команда и параметр находятся в [справке по командам](./commands.md).
 
@@ -307,14 +307,14 @@ tg sales bot sends list
 | `8` | `sends_per_hour` бота израсходован | подождите или увеличьте лимит |
 | `14` | ответ сервера не получен: неизвестно, отправил ли Telegram сообщение | проверяйте чат, прежде чем повторять его |
 
-Каждый код находится в [ссылке на команду](./commands.md). `--trace` и `--record` тоже работают для бота: каждый запрос API бота представляет собой строку в stderr, а не его адрес, поскольку в нем находится токен. Неудачный запуск сохраняется и отображается в `tg personal runs list` (см. [диагностика](./diagnostics.md)).
+Каждый код находится в [ссылке на команду](./commands.md). `--trace` и `--record` тоже работают для бота: каждый запрос API бота представляет собой строку в stderr, а не его адрес, поскольку в нем находится токен. Неудачный запуск сохраняется и отображается в `tg personal runs list` вместе с каждым запросом к Bot API, его временем и повторами, если они были (см. [диагностика](./diagnostics.md)).
 
 ## Подключение бота к агенту (MCP)
 
-`tg <name> bot mcp` предоставляет бота вашему ИИ-агенту, а `tg personal mcp` обслуживает ваш аккаунт:
+`tg <name> bot mcp serve` предоставляет бота вашему ИИ-агенту, а `tg personal mcp serve` обслуживает ваш аккаунт:
 
 ```sh
-claude mcp add sales-bot -- tg sales bot mcp
+claude mcp add sales-bot -- tg sales bot mcp serve
 tg sales bot mcp config          # the entry for Claude Desktop, Cursor and other apps
 ```
 

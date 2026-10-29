@@ -288,7 +288,7 @@ Code `6`. `--offline` uses only the local copy, and this profile has not yet ret
 
 ### `search messages` doesn't find anything
 
-Search all chats reads the local archive; searching for words in one named chat also asks the MAX server. An empty response does not prove that there is no message. Check `coverage.next` in the answer `--json`: run the prompted command or ask for permission, then search again. `max personal messages sync --all --background` starts downloading all chats; `max personal messages sync <чат>` - one ([download history](./archive.md#скачать-историю), [prepare archive for search](./search.md#сначала-подготовьте-архив)).
+Search all chats reads the local archive; searching for words in one named chat also asks the MAX server. An empty response does not prove that there is no message. Check `coverage.next` in the answer `--json`: run the suggested command only after the owner agrees, then search again. `max personal messages sync <чат>` downloads one chat; `max personal messages sync --all --background` downloads every chat at once, and the owner starts it ([download history](./archive.md#скачать-историю), [prepare archive for search](./search.md#сначала-подготовьте-архив)).
 
 ### Empty chat list
 
@@ -318,7 +318,7 @@ max personal doctor reports show          # что попадёт в отчёт 
 max personal doctor reports create   # записать отчёт в файл и показать, как его отправить
 ```
 
-`create` writes `max-report-<время>.json` in the current directory with permissions `0600`. It contains version, runtime/system, doctor results, the latest failed run and the latest 20 write actions. It excludes message text, chat/person names, phone numbers and tokens. Chat/message ids become consistent labels within the report but different labels in another report. Failed runs save automatically without `--record` ([failed runs](./diagnostics.md#неудачный-запуск-сохраняется-всегда)). Select another run with `--run <id>`; `max personal runs list` shows ids.
+`create` writes `max-report-<время>.json` in the current directory with permissions `0600`. It contains version, runtime/system, doctor results, the latest failed run and the latest 20 write actions. It excludes message text, chat/person names, phone numbers and tokens. Chat/message ids become consistent labels within the report but different labels in another report. Every run, failed ones included, is saved automatically without `--record` ([run records](./diagnostics.md#каждый-запуск-сохраняется-сам)). Select another run with `--run <id>`; `max personal runs list` shows ids.
 
 The command then prints a link for opening a new issue at [github.com/WireCatLabs/max-cli/issues](https://github.com/WireCatLabs/max-cli/issues), with the title and draft text already filled in. You need a GitHub account. Drag the report file into the text field, describe what you did and what happened, then click “Submit new issue”.
 

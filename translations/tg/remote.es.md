@@ -10,14 +10,14 @@ Utilice esta página cuando desee una aplicación de IA que se ejecute en el nav
 
 Términos utilizados en esta página:
 
-- **MCP** (Model Context Protocol) es la forma estándar en que una aplicación de IA llama a herramientas externas. `tg personal mcp` es el servidor MCP que viene con `tg`; la [guía del servidor MCP](./mcp.md) cubre aplicaciones en su propia computadora.
-- **Conexión remota** significa que la aplicación se conecta desde sus propios servidores, a través de Internet, a la dirección que usted le proporcione. `tg personal mcp --http` utiliza las mismas herramientas a través de HTTP en `127.0.0.1` para esto.
+- **MCP** (Model Context Protocol) es la forma estándar en que una aplicación de IA llama a herramientas externas. `tg personal mcp serve` es el servidor MCP que viene con `tg`; la [guía del servidor MCP](./mcp.md) cubre aplicaciones en su propia computadora.
+- **Conexión remota** significa que la aplicación se conecta desde sus propios servidores, a través de Internet, a la dirección que usted le proporcione. `tg personal mcp serve --http` utiliza las mismas herramientas a través de HTTP en `127.0.0.1` para esto.
 - **Túnel HTTPS** es un programa que le da a un puerto de su computadora una dirección HTTPS pública.   Esta página utiliza [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel); El túnel Cloudflare también funciona. No es necesario comprar un dominio para Funnel.
 - **URL pública** es esa dirección, por ejemplo `https://laptop.tail1234.ts.net`. Lo pasas a `tg` como `--public-url` y la aplicación lo obtiene con `/mcp` al final.
 - **Código de acceso** es un código de un solo uso que `tg` imprime en tu terminal. La página de inicio de sesión de la aplicación lo solicita, por lo que solo una persona que vea ese terminal puede conectar una aplicación.
 
 ```text
-ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ tg personal mcp --http (login) ──▶ Telegram
+ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ tg personal mcp serve --http (login) ──▶ Telegram
 ```
 
 Si su conexión Tailscale ya funciona, consérvela; No necesitas un segundo túnel. La conexión stdin/stdout local sigue funcionando como antes.
@@ -35,7 +35,7 @@ Si su conexión Tailscale ya funciona, consérvela; No necesitas un segundo tún
 
 ## Antes de empezar
 
-- **Quien inicia sesión lee tu Telegram.** El inicio de sesión necesita la clave de acceso de tu terminal.   Nunca coloques un túnel frente a `tg personal mcp` sin `--http`: ese modo no tiene ningún inicio de sesión.
+- **Quien inicia sesión lee tu Telegram.** El inicio de sesión necesita la clave de acceso de tu terminal.   Nunca coloques un túnel frente a `tg personal mcp serve` sin `--http`: ese modo no tiene ningún inicio de sesión.
 - **Los permisos de perfil deciden qué puede cambiar la aplicación.** `deny` y `readonly` bloquean escrituras;   `ask` y `allow` permiten que una escritura MCP solicitada se realice sin un formulario en el servidor. La aprobación de la aplicación es independiente y depende de su configuración. Aún se aplican restricciones de destinatarios y límites por horas ([lo que puede hacer un agente](./mcp.md#what-an-agent-may-do), [guía de configuración](./configuration.md)).
 - **La computadora que ejecuta `tg` debe permanecer encendida.** Para usarlo desde un teléfono o desde una computadora portátil sin nada instalado, ejecute todo esto en un servidor pequeño que esté siempre encendido e inicie sesión en `tg` allí (`tg personal setup --agent none`). Entonces sólo necesitas un navegador.
 - **Quién puede agregar un conector remoto:**
@@ -50,7 +50,7 @@ No se han probado todos los pasos de configuración para cada sistema operativo 
 
 ## Iniciar el túnel y el servidor
 
-Instale la CLI e inicie sesión en Telegram primero ([guía de instalación](./installation.md)). Utilice el mismo usuario y perfil del sistema operativo para la configuración y para el servidor MCP. Coloque un perfil antes del comando cuando sea necesario: `tg work mcp`. Tailscale es una instalación separada; Tanto `tg` como `max` admiten esta configuración.
+Instale la CLI e inicie sesión en Telegram primero ([guía de instalación](./installation.md)). Utilice el mismo usuario y perfil del sistema operativo para la configuración y para el servidor MCP. Coloque un perfil antes del comando cuando sea necesario: `tg work mcp serve`. Tailscale es una instalación separada; Tanto `tg` como `max` admiten esta configuración.
 
 Instale [Tailscale](https://tailscale.com/download), inicie sesión y habilite [Funnel](https://tailscale.com/docs/features/tailscale-funnel): MagicDNS, los certificados HTTPS y el permiso Funnel deben estar habilitados en su tailnet (su red Tailscale). El primer comando dFunnel puede imprimir un enlace de aprobación.
 
@@ -72,7 +72,7 @@ Segunda ventana: PowerShell normal, como el usuario que inició sesión en Teleg
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Paste the HTTPS origin printed by Funnel (no /mcp)'
-tg.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
+tg.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Ejecute ambos procesos en el propio Windows. WSL es un entorno separado: un túnel de Windows que apunta a la dirección de bucle invertido de Windows puede no llegar a un servidor dentro de WSL.
@@ -90,7 +90,7 @@ Segunda ventana de Terminal, como el mismo usuario que ejecutó `tg personal set
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Terminal)
@@ -106,7 +106,7 @@ Segunda ventana de terminal: su usuario normal, sin `sudo`, por lo que `tg` encu
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-tg personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## Ejecutar MAX y Telegram juntos
@@ -120,7 +120,7 @@ Si ya usa Cloudflare, apunte su túnel al mismo servidor MCP local. Un nombre de
 Inicia el servidor en otro terminal:
 
 ```sh
-tg personal mcp --http --port 8765 --public-url https://mcp.example.com
+tg personal mcp serve --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Agregue `https://mcp.example.com/mcp` a su aplicación de IA con OAuth y DCR, como se describe en [conectar la aplicación](#connect-the-app). `--public-url` es el origen público utilizado para iniciar sesión, no la dirección local ni la ruta `/mcp`. El túnel no cambia los permisos del perfil. Verifique el JSON en `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, luego inicie sesión y vea la lista de herramientas. Cuando te detengas, detén solo el proceso propio de este túnel, para que otras rutas sigan funcionando.
@@ -159,7 +159,7 @@ Si inició Funnel con `--bg`, Ctrl-C no detiene esa ruta en segundo plano. Verif
 Revocar el acceso de las aplicaciones es distinto de detener el proceso. Para cerrar sesión en todas las aplicaciones de un perfil:
 
 ```sh
-tg personal mcp --revoke --json
+tg personal mcp revoke --json
 ```
 
 Esas aplicaciones deben iniciar sesión nuevamente con un nuevo código. Esto no finaliza su sesión de Telegram.
@@ -167,7 +167,7 @@ Esas aplicaciones deben iniciar sesión nuevamente con un nuevo código. Esto no
 ## Si no funciona
 
 - **La aplicación dice que no se puede conectar:** abra `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` en un navegador. Debe mostrar un JSON corto. Si no es así, Funnel no se está ejecutando, no está habilitado en su red Tailscale o apunta a otro puerto.
-- **La página de inicio de sesión dice "Demasiados códigos incorrectos":** después de cinco códigos incorrectos, se bloquea hasta que se reinicie `tg personal mcp --http`. Si no los escribiste, alguien encontró tu dirección: reinicia y piensa en un nuevo nombre de dispositivo en Tailscale.
+- **La página de inicio de sesión dice "Demasiados códigos incorrectos":** después de cinco códigos incorrectos, se bloquea hasta que se reinicie `tg personal mcp serve --http`. Si no los escribiste, alguien encontró tu dirección: reinicia y piensa en un nuevo nombre de dispositivo en Tailscale.
 - **La aplicación se conecta, pero no hay herramientas:** `tg personal mcp check` verifica que el servidor MCP se inicie y enumere sus herramientas. No comprueba el inicio de sesión de Telegram ni el túnel. Un comando que va a Telegram, como `tg personal account show`, verifica la conexión de la cuenta.
 - **La lectura funciona, la escritura falla:** verifique los permisos del perfil y cualquier anulación de `--permission`. `deny` y `readonly` bloquean las escrituras, independientemente de lo que apruebe la aplicación.
 - **Necesita un registro de las llamadas:** `tg personal runs list` las muestra. Las llamadas exitosas aparecen sólo cuando la grabación está activada; las llamadas fallidas se mantienen de forma predeterminada, a menos que la grabación se haya desactivado con `"record": false` o `--no-record` ([guía de diagnóstico](./diagnostics.md)).

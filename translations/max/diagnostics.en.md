@@ -7,7 +7,7 @@ Use this page when a command fails, hangs or takes too long and you want to know
 Terms used below:
 
 - **Run** — one invocation of `max`, from startup to exit.
-- **Run record** — a directory describing one run: command, outcome and one line per MAX request. It never contains message text, people's names or chat names.
+- **Run record** — a directory describing one run: command, outcome and one line per MAX request. The request lines never contain message text, people's names or chat names. The record may keep the command line as you typed it, without secrets ([more](#что-вы-набрали)).
 - **`max personal doctor`** checks installation: version, login, settings and local archive.
 - **Problem report** — a JSON file combining `max personal doctor` results and a failed run, for a GitHub issue.
 
@@ -17,8 +17,8 @@ Terms used below:
 | --- | --- | --- |
 | Inspect requests as they happen | `max … --trace` | Nothing; stderr output only |
 | Save one run | `max … --record` | Run record |
-| Find a failed run later | `max personal runs list` | Failed runs are saved automatically |
-| Save every run | `max personal config set record true` | Every run's record |
+| Find a run later | `max personal runs list` | Every run is saved automatically |
+| Save only failed runs | `max personal config set record false` | A failed run's record |
 | Check installation | `max personal doctor`, `max personal doctor --online` | Nothing |
 | Prepare a problem report | `max personal doctor reports create` | One file you choose to submit |
 
@@ -62,10 +62,10 @@ max shop bot messages list -100 --trace
 ```
 
 ```text
-→ getMyInfo        
-← getMyInfo        200  143ms  211 B
-→ getMessages      chat -100
-← getMessages      200  chat -100  187ms  6.2 kB
+→ getMyInfo        GET /me
+← getMyInfo        GET /me  200  143ms  211 B
+→ getMessages      GET /messages  chat -100
+← getMessages      GET /messages  200  chat -100  187ms  6.2 kB
 ```
 
 A failure shows the error code and MAX's key, such as `404  not_found  not.found`, but never the response text. File uploads (`--file`, `uploads put`) have a separate pair of lines such as `upload.image`, `upload.video`, and so on, showing size, HTTP status and duration. Neither upload URLs nor filenames appear: the URL itself grants access.
@@ -87,6 +87,8 @@ A run directory:
   events.jsonl   по объекту JSON на запрос, без единого управляющего символа
 ```
 
+Each request in `events.jsonl` is marked `"level": "wire"` and with its transport: `"transport": "max-ws"` for a frame of the personal protocol (with `opcode` and `seq`), `"transport": "http"` for the Bot API (method and path with `:id` in place of IDs, without the query string). A Bot API request has `attempt`: `1` for the first try, `2` and up for a retry. After a `429` refusal or a read failure, the log first has the response with `"outcome": "error"`, then the retry with `"attempt": 2` and `"wait_ms"`, the milliseconds the client waited before it (MAX's `Retry-After` or its own pause). Retries of `messages send` while MAX answers `attachment.not.ready` are marked the same way: each retry's frame carries `attempt` and `"wait_ms": 1000`.
+
 The directory has permissions `0700`; both files use `0600`. `run.json` is written **twice**: at startup with status `running`, then with the outcome. An events directory therefore always has a run description.
 
 The outcome is saved **on every exit path**, including a command that fails before connecting:
@@ -96,32 +98,51 @@ The outcome is saved **on every exit path**, including a command that fails befo
   "requests": 0, "error_code": "authentication_error", "duration_ms": 12 }
 ```
 
-## Failed runs are always saved
+## Every run is saved automatically
 
-A failed command saves its run even without `--record`, marking `"kept_because_failed": true` in `run.json`. This applies to any command and error: an invalid flag, unknown command, preflight failure or commands that do not contact MAX (`models`, `server`, `watch`, `upgrade`). Records contain only the command path, such as `messages list`, without subsequent arguments.
+A run is saved even without `--record`, successful ones too. A failed run is saved for any error: an invalid flag, an unknown command, a preflight failure, or commands that do not contact MAX (`models`, `server`, `watch`, `upgrade`). Its `run.json` has `argv`, the command line as you typed it: a chat name, a search query, message text. Secrets in it are always hidden, and what you typed can be hidden with the `record_input` setting ([more](#что-вы-набрали)).
 
-Fully successful runs without `--record` leave no record; partial runs are retained by default, while a failed run provides evidence for a problem report. `--no-record` or configuration `"record": false` disables even this automatic failure record.
+A successful run that recorded no events is one line in the day's list, with no directory; `runs show` finds it there. Commands that run until stopped (`watch`, `serve`, `mcp serve`) and commands WireCat Desktop runs for itself keep a successful run only with `--record`. `--no-record` saves nothing, not even a failed run.
 
 Successful search and statistics requests keep separate history containing query parameters, not returned messages. See [saved searches and history](./search.md#сохранённые-поиски-и-история) for controls.
 
-## Recording every run
+## Recording less
 
 ```sh
-max personal config set record true          # этот профиль
-max personal chats list --no-record          # но не этот запуск
+max personal config set record false         # этот профиль: только неудачные запуски
+max personal chats list --no-record          # этот запуск: ничего
 ```
 
 The same in the settings file:
 
 ```json
-{ "profiles": { "personal": { "record": true } } }
+{ "profiles": { "personal": { "record": false } } }
 ```
 
-This records every run. Fully successful runs are otherwise not recorded unless requested: a directory tracking whom you read and when would create an unwanted personal diary. `--no-record` or `"record": false` disables run records and search history.
+With `"record": false`, successful runs are not recorded; failed runs still are. A successful run keeps the command line as typed, for example the text of a sent message; `record_input` decides whether to keep it ([more](#что-вы-набрали)). `--no-record` or `"record": false` also disables search history.
 
 ## Retention
 
-Records last **30 days**, or `keep_runs_for_days` in [configuration](./configuration.md). Old records are removed only when a new record is written. Entire days are removed by directory name, without opening their contents to decide.
+A failed run lasts **30 days** (`keep_runs_for_days`), a successful one **7 days** (`keep_successful_runs_for_days`), in [configuration](./configuration.md). The runs directory never grows beyond `runs_size_limit_mb` (200 MB): the oldest successful runs are removed first. Old records are removed only when a new record is written. Entire days are removed by directory name, without opening their contents to decide.
+
+## What you typed
+
+A run record's `run.json` can contain `argv`: the words after `max`, as you typed them. They show exactly what was run:
+
+```json
+{ "command": "messages list", "argv": ["personal", "messages", "list", "Семья", "--token=[redacted]"] }
+```
+
+A secret is always replaced by `[redacted]`, whatever the settings. A secret is the value of a flag whose name contains token, password, secret, credential, cookie, authorization or API key; a password inside an address; a long string without spaces that looks like a key; the body of `bot api … --body`. `max` does not accept a phone number on the command line: if you still type one after `contacts lookup`, the command refuses, and the record shows `[redacted]`.
+
+To keep what you typed out of run records:
+
+```sh
+max personal config set record_input false   # этот профиль
+max config set record_input false --defaults  # все профили
+```
+
+Then `argv` keeps the command words, flag names, the profile name and values that cannot be anyone's words: short numbers, dates, durations, `true` and `false`. Everything else becomes `[redacted]`. If the settings file cannot be read, what you typed is hidden too: `record_input` may have been turned off in that very file.
 
 ## What is never recorded
 
@@ -136,6 +157,8 @@ Records last **30 days**, or `keep_runs_for_days` in [configuration](./configura
 | warning - code, for example `reactions_unread` | warning text |
 | when it crashes - the type of error and lines of code where it happened | crash error text |
 | version, environment (`node` or `bun`), system | home directory path |
+
+The table covers the event lines and the run's outcome. The command line in `argv` is separate, [above](#что-вы-набрали).
 
 **Not even truncated or hashed.** Events are built from explicitly named fields, not by filtering a copy of the request, so an unexpected field cannot enter the log. `session.login` contains a `token` field, but no logging code reads it.
 

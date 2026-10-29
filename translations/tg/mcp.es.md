@@ -6,13 +6,13 @@ Esta página le ayuda cuando desea que una aplicación de IA sin terminal funcio
 
 Algunos términos primero:
 
-- **MCP** ([Model Context Protocol](https://modelcontextprotocol.io)) es una forma estándar para que una aplicación de IA utilice herramientas externas. La aplicación es el **cliente MCP**; `tg personal mcp` es el **servidor MCP**.
+- **MCP** ([Model Context Protocol](https://modelcontextprotocol.io)) es una forma estándar para que una aplicación de IA utilice herramientas externas. La aplicación es el **cliente MCP**; `tg personal mcp serve` es el **servidor MCP**.
 - Una **herramienta** es una acción que el servidor ofrece al agente, como "leer" o "escribir".
 - Una **petición preparada** (prompt) es una tarea lista que la aplicación muestra como un comando, como "ponerse al día con los chats no leídos".
 - Un **recurso** son datos que la aplicación puede adjuntar a la conversación, como un chat.
 - Un **perfil** es un conjunto de configuraciones y un inicio de sesión en `tg`; ver [perfiles](./profiles.md).
 
-El servidor viene con `tg`; no hay nada más que instalar. De forma predeterminada, se comunica con la aplicación a través de stdin y stdout. En su lugar, `tg personal mcp --http --public-url` lo sirve en un puerto local detrás de su túnel HTTPS.
+El servidor viene con `tg`; no hay nada más que instalar. De forma predeterminada, se comunica con la aplicación a través de stdin y stdout. En su lugar, `tg personal mcp serve --http --public-url` lo sirve en un puerto local detrás de su túnel HTTPS.
 
 ## ¿Lo necesitas?
 
@@ -21,7 +21,7 @@ Un agente de IA que puede ejecutar comandos en una terminal (por ejemplo, Claude
 - aplicaciones sin terminal, como Claude Desktop o Cursor Chat;
 - cualquiera que quiera que la aplicación pregunte antes de cada envío.
 
-Para ChatGPT o Claude **en el navegador**, use `tg personal mcp --http`; consulte [conectar un navegador o una aplicación de teléfono](./remote.md).
+Para ChatGPT o Claude **en el navegador**, use `tg personal mcp serve --http`; consulte [conectar un navegador o una aplicación de teléfono](./remote.md).
 
 ## Lo que da el servidor
 
@@ -55,14 +55,26 @@ Ponga un perfil primero, por ejemplo `tg work mcp add codex`. La instalación ut
 **Claude Code, manualmente:**
 
 ```sh
-claude mcp add tg -- tg personal mcp
+claude mcp add tg -- tg personal mcp serve
 ```
 
 Con un perfil, pon su nombre primero, como en cualquier comando:
 
 ```sh
-claude mcp add tg-work -- tg work mcp
+claude mcp add tg-work -- tg work mcp serve
 ```
+
+Un servidor puede atender varios perfiles. Nómbralos con `--profiles`, o atiende todos los perfiles con
+`--profiles all`. Cada llamada a una herramienta indica entonces su perfil:
+
+```sh
+claude mcp add tg -- tg mcp serve --profiles personal,work
+claude mcp add tg -- tg mcp serve --profiles all
+```
+
+`tg mcp serve` sin perfil y sin `--profiles` se niega y muestra tus perfiles: el servidor nunca elige perfiles
+por ti. La línea que escribe en stderr al arrancar nombra los perfiles que atiende.
+`mcp config`, `mcp revoke`, `--http` y `mcp server start|stop|status` admiten la misma elección.
 
 **Claude Desktop, Cursor y otras aplicaciones:** `tg` imprime la entrada de su archivo de configuración:
 
@@ -77,7 +89,7 @@ tg work mcp config                  # another profile
     "tg-personal": {
       "type": "stdio",
       "command": "/usr/bin/node",
-      "args": ["/usr/lib/node_modules/@wirecat/tg-cli/dist/bin/tg.js", "personal", "mcp"],
+      "args": ["/usr/lib/node_modules/@wirecat/tg-cli/dist/bin/tg.js", "personal", "mcp", "serve"],
       "env": { "XDG_RUNTIME_DIR": "/run/user/1000" }
     }
   }
@@ -94,7 +106,7 @@ Si Node proviene de nvm, fnm o Volta, su ruta pertenece a una versión de Node. 
 
 ⚠ **En Linux, las credenciales de la aplicación están en el llavero, al que se accede a través de `XDG_RUNTIME_DIR`.** Una aplicación que inicia servidores con un entorno recortado la omite y cada herramienta responde que el llavero probablemente esté fuera de su alcance. La entrada de `tg personal mcp config` lo incluye.
 
-Un bot tiene su propio servidor, `tg <name> bot mcp`; consulte [el bot para un agente](./bot.md#the-bot-for-an-agent-mcp).
+Un bot tiene su propio servidor, `tg <name> bot mcp serve`; consulte [el bot para un agente](./bot.md#the-bot-for-an-agent-mcp).
 
 ## Qué puede hacer el agente
 
@@ -141,10 +153,12 @@ Cada comando es una herramienta, incluidos los de escritura; los permisos del pe
 ejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto. Unos pocos comandos no se
 ofrecen nunca, y los ejecutas en una terminal:
 
-- **Inicio de sesión y configuración**: `setup`, `session start|end`, `complete`, `mcp config|add|check`,
+- **Inicio de sesión y configuración**: `setup`, `session start|end`, `complete`, `mcp config|add|check|revoke`,
   `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.
+  `mcp` y `bot mcp` solos solo muestran su ayuda.
 - **Comandos de larga duración**: `watch`, `serve` y `bot watch` siguen hasta que los detienes, y una llamada del
-  agente debe terminar. El propio servidor MCP (`mcp`, `bot mcp`) queda fuera por la misma razón.
+  agente debe terminar. El propio servidor MCP (`mcp serve`, `bot mcp serve`) queda fuera por la misma razón, igual que
+  `mcp server` y `mcp server start|stop|status`, que lo ejecutan en segundo plano.
 
 Los comandos `store backup|restore`, `server start|stop|restart`, las descargas de modelos,
 `schedule run|exec`, `doctor reports create` y `account sessions end` tienen claves de permisos propias, con `ask` por defecto. Se ofrecen al agente;
@@ -205,4 +219,4 @@ La petición preparada `link-conversations` permite al agente vincular las respu
 
 La primera llamada que necesita Telegram se conecta y las siguientes reutilizan la conexión. Se cierra después de 2 minutos sin una llamada y, en cualquier caso, 5 minutos después de su apertura, por lo que una sesión larga de agente nunca lee una instantánea obsoleta. La siguiente llamada se conecta nuevamente. Las llamadas se realizan una a la vez, incluso cuando la aplicación las envía juntas.
 
-A través de stdin y stdout, el servidor se cierra tan pronto como la aplicación cierra stdin y cierra su conexión a Telegram. A través de HTTP se ejecuta hasta Ctrl-C. `tg personal mcp --revoke` finaliza cada inicio de sesión realizado en una aplicación de navegador y mantiene su sesión de Telegram. Consulte [conectar un navegador o una aplicación de teléfono](./remote.md).
+A través de stdin y stdout, el servidor se cierra tan pronto como la aplicación cierra stdin y cierra su conexión a Telegram. A través de HTTP se ejecuta hasta Ctrl-C. `tg personal mcp revoke` finaliza cada inicio de sesión realizado en una aplicación de navegador y mantiene su sesión de Telegram. Consulte [conectar un navegador o una aplicación de teléfono](./remote.md).

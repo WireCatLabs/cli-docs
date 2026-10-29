@@ -8,7 +8,7 @@ Terms used below:
 
 - **Agent** — your AI agent running commands on this computer.
 - **Skill** — instructions for using `max`; `max skill install` puts them where the agent looks.
-- **MCP client** — an agent application without terminal access, such as Claude Desktop; it calls `max personal mcp` tools instead of commands.
+- **MCP client** — an agent application without terminal access, such as Claude Desktop; it calls `max personal mcp serve` tools instead of commands.
 - **Noninteractive mode** — the agent receives one request, executes it and exits: Claude Code `-p` or `codex exec`.
 - **cron** — the Linux/macOS scheduler running commands at specified times.
 
@@ -192,7 +192,7 @@ Writes to MAX: **only after your confirmation**. This recipe is for an interacti
 
 > Read the last 20 messages with Ivan Petrov and suggest a reply to his latest question. Do not send it; show me the text.
 
-When you agree, the agent sends himself: `max personal messages send "Иван Петров" "…"`. The MCP client connects via `max personal mcp`. Don't let the client pre-approve `max_write` and he will ask you before every submission. The profile rights still limit the recording. See [MCP Server](./mcp.md).
+When you agree, the agent sends himself: `max personal messages send "Иван Петров" "…"`. The MCP client connects via `max personal mcp serve`. Don't let the client pre-approve `max_write` and he will ask you before every submission. The profile rights still limit the recording. See [MCP Server](./mcp.md).
 
 ## A group you manage
 

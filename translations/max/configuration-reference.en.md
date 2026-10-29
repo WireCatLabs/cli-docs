@@ -93,8 +93,12 @@ Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`,
 | `color` | Terminal colours; otherwise based on terminal detection | None; without the field, `NO_COLOR` disables colour | Terminal-dependent |
 | `sender_colors` | Separate author colours in `max personal messages`; `вы` is always blue. Requires `color`. Personal accounts only | None | `false` |
 | `search_catch_up` | After `messages sync` or gap repair, prepare this chat's graph and installed local vectors within limits; no automatic downloads or remote calls. Personal accounts only | `--catch-up`, `--no-catch-up` | `false` |
-| `record` | Save every run as with `--record` ([diagnostics](./diagnostics.md)) | `--record`, `--no-record` | `false` |
-| `keep_runs_for_days` | Run-record retention in days | None | `30` |
+| `search_reranker` | Which model `search messages --discover` uses to reorder the first 50 results: `mmarco`, `bge-reranker-v2-m3` or `off`. Works only once the model is downloaded (`max personal models download mmarco`); it is never downloaded on its own | None | `mmarco` |
+| `record` | Whether to record successful runs; failed runs are recorded even with `false` ([diagnostics](./diagnostics.md)) | `--record`, `--no-record` | `true` |
+| `record_input` | Whether a run record keeps the command line as you typed it; `false` hides what you typed, secrets are always hidden ([diagnostics](./diagnostics.md#что-вы-набрали)) | None | `true` |
+| `keep_runs_for_days` | How many days failed-run records are kept | None | `30` |
+| `keep_successful_runs_for_days` | How many days successful-run records are kept | None | `7` |
+| `runs_size_limit_mb` | How many megabytes the runs folder may use; above it the oldest successful runs go first | None | `200` |
 | `permissions` | `deny`, `readonly`, `ask`, `allow` by resource/command; more specific keys win ([below](#права-доступа)) | None; `--yes` and `--allow-dangerous` answer `ask`, never override `deny` | `allow` except deletion, ending other sessions and some irreversible actions use `ask`; auto-reply `replies.send` uses `deny` |
 | `sends_per_hour` | Hourly sends including forwards, edits, notifying pins, deletions, member additions and accepted join requests; excess returns code `8`. Bot limits must be set in `bot` ([send protection](./security.md#защита-от-отправки-не-туда)) | None | `30`; no default bot limit |
 | `requests_per_minute` | Shared profile request rate after the initial 10-request burst; `0` disables pacing ([limits](./limits.md)) | `MAX_REQUESTS_PER_MINUTE` | `20` |
@@ -176,7 +180,7 @@ Choosing read-only access at first run limits every profile of every WireCat too
 
 ```sh
 max personal config set limit 50        # профилю personal
-max work config set record true         # профилю work
+max work config set record false        # профилю work
 max config set keep_runs_for_days 7 --defaults   # всем профилям сразу
 max work config unset limit             # убрать; снова решает defaults или встроенное
 max agent config set permissions.messages readonly  # чтение сообщений без записи
@@ -250,8 +254,9 @@ The "profile" area includes `defaults`, `profiles.<имя>`, `personal.defaults`
 |---|---|---|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | integer ≥ 1 | profile |
 | `requests_per_minute` | integer ≥ 0 | profile |
-| `color`, `record` | boolean | profile |
+| `color`, `record`, `record_input` | boolean | profile |
 | `sender_colors`, `search_catch_up`, `serve` | boolean | personal account |
+| `search_reranker` | `mmarco`, `bge-reranker-v2-m3`, `off` | profile |
 | `permissions` | object of command paths and levels `deny`, `readonly`, `ask`, `allow` | profile |
 | `read_other_bots` | boolean or array of profile names | only `bot` |
 | `update_check`, `skill_hint` | boolean | only `defaults` |
