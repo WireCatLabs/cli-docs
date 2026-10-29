@@ -1,0 +1,74 @@
+---
+title: Install and use WireCat Desktop
+description: The app for macOS, Windows and Linux that installs, updates and checks the WireCat tools, connects them to your AI agents and signs you in, with no terminal.
+---
+
+WireCat Desktop is an app for people who want their AI agent to work with their messages, meetings,
+documents and notes, but do not want to install and maintain command-line tools by hand. It shows which
+WireCat tools exist and which are on your computer, installs the ones you choose, gives your AI agents
+the instructions to use them and opens each tool's sign-in. This page explains what the app does and how
+to start. The app is optional: every tool still installs and works from a terminal without it.
+
+## Download and install
+
+[Download WireCat Desktop](/en/download) for macOS (Apple silicon and Intel), Windows (64-bit) or Linux
+(AppImage, .deb or .rpm). The download page picks the file for your computer. The app is not yet signed
+with an Apple or Microsoft developer certificate, so the first start needs one confirmation; the
+[first-start steps](/en/download#first-launch) show where to click.
+
+The app itself needs nothing else. The tools run on <DocTerm term="nodejs" lang="en" label="Node.js" />
+22.16 or later within 22.x, or 24 or later, with npm. If Node.js is missing, too old, or npm needs
+administrator rights to install, the app offers to set up its own copy of Node.js in your user folder.
+It does not need administrator rights for that, and your existing Node.js stays as it is.
+
+## The first start
+
+The first start walks you through these steps on one screen:
+
+1. **Your computer:** the app checks the system, Node.js and npm.
+2. **Choose tools:** pick the services your agent should reach: Telegram, MAX, WhatsApp, Zoom,
+   Google Drive, Memo or Email. You can add or remove tools later.
+3. **Install:** each tool is installed from npm and checked that it starts.
+4. **Connect agents:** the app gives each AI agent it finds the tool's <DocTerm term="skill" lang="en" label="skill" />:
+   a short guide to the tool's commands. It knows where Claude Code, Codex, Cursor, Gemini CLI, OpenCode,
+   Hermes Agent and OpenClaw read skills.
+5. **Sign in:** each tool connects to your account with its own sign-in. Telegram, MAX and WhatsApp
+   show their QR code or ask for a code in the app's window; Zoom and Google Drive open your browser.
+6. **Done:** the app shows what is installed. The question mark at the top has a short tour of the window.
+
+## What you can do in the app
+
+- **Tools:** see every tool with its version and health. Install, update or uninstall a tool, run its
+  health check for each profile, change what each profile allows your agent to do, and start a sync.
+  A tool's details can also start its MCP server, so an AI app without a terminal, such as ChatGPT or
+  Claude, can use the tool. A step-by-step guide publishes that server with
+  [Tailscale Funnel](./tailscale-funnel.mdx) or a Cloudflare tunnel.
+- **Agents:** see which AI agents are on the computer and which skills each one has. The app finds a
+  missing or old skill, a tool that the agent cannot find on its PATH and commands that a profile's
+  permissions block, and fixes or explains each one.
+- **Storage:** see how much the tools keep on the computer, look into the
+  local store (the one file, `wirecat.db`, where the tools keep messages, mail and notes), make a backup and delete the folders of
+  tools you no longer use.
+- **Logs:** [search what the tools recorded about their runs](./logs.mdx) when something failed.
+- **Settings:** change the app's language and interface size, and the settings of each tool.
+- **Report a problem:** send a bug report with masked recent error logs.
+
+## The tools stay command-line tools
+
+The app installs the same npm packages as `npm install -g @wirecat/tg-cli` and runs the tools' own
+commands for versions, health checks, sign-in and sync. A tool installed by the app also works in a
+terminal and for any agent, and a tool you installed yourself shows up in the app. The app never picks
+an account or profile for you: a command that needs one uses the one you chose.
+
+Your data stays where the tools keep it, on this computer. The app goes online to install tools from
+npm, to download Node.js when it sets one up, to check GitHub for its own new version and to send a bug
+report when you send one.
+
+## Updates and removal
+
+On macOS, Windows and with the AppImage, the app updates itself: it offers a new version at the top of
+the window. A .deb or .rpm copy tells you about a new version, and you install the new package yourself.
+[Updates](/en/download#updates) and [uninstall](/en/download#uninstall) on the download page give the
+steps for each system. Removing the app leaves the tools and their data in place.
+
+Prefer a terminal? [Install a tool by hand or with your agent](../installation.mdx).

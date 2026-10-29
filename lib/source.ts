@@ -79,7 +79,9 @@ export const docsLlms = llms(source, {
     const markdown = rewriteMarkdownLinks(expandDocTerms(body, page.locale ?? i18n.defaultLanguage), (href) =>
       resolveDocumentationLink(
         href,
-        page.slugs.length === 0 || (tool && page.slugs.length === 1) ? `${page.url}/` : page.url,
+        page.slugs.length === 0 || (tool && page.slugs.length === 1) || /(?:^|\/)index\.[^/]+$/.test(page.path)
+          ? `${page.url}/`
+          : page.url,
         siteUrl,
         (pathname) => markdownUrls.get(pathname),
       ),

@@ -64,7 +64,10 @@ jobs:
             pnpm docs:check
           fi
       - run: pnpm typecheck
+      # The download page lists WireCat Desktop releases at build time; without a token GitHub allows 60 calls an hour.
       - run: pnpm exec next build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - run: pnpm check:assets
       - run: pnpm check:links
       - run: pnpm check:seo

@@ -1,0 +1,261 @@
+.wirecat-download {
+  background: var(--bg);
+}
+.wirecat-download .download-page {
+  padding-block: clamp(32px, 4vw, 56px) 56px;
+}
+.wirecat-download .download-intro {
+  max-width: 800px;
+  margin-bottom: 32px;
+}
+.wirecat-editorial .wirecat-download .download-page h1 {
+  margin: 0 0 20px;
+  font-size: clamp(30px, 3.6vw, 46px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  text-transform: none;
+}
+.wirecat-download .download-intro .intro {
+  max-width: 52ch;
+  margin: 0;
+  font-size: clamp(19px, 2vw, 23px);
+  line-height: 1.6;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.wirecat-download .download-free {
+  margin-top: 16px;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 650;
+}
+.wirecat-download .download-page h2 {
+  margin: 0 0 16px;
+  font-size: clamp(20px, 2vw, 25px);
+  line-height: 1.3;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.wirecat-download .download-page h3 {
+  margin: 0 0 12px;
+  font-size: 17px;
+  font-weight: 700;
+}
+.wirecat-download .download-page h4 {
+  margin: 20px 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.wirecat-download .download-page p,
+.wirecat-download .download-page li {
+  max-width: 70ch;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.wirecat-download .download-page p {
+  margin: 0 0 14px;
+}
+.wirecat-download .download-page :is(ol, ul) {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+.wirecat-download .download-page :is(p, li) :is(strong, code) {
+  color: var(--ink);
+}
+.wirecat-download .download-page code {
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+.wirecat-download .download-page a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 5px;
+}
+.wirecat-download .text-link {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.wirecat-download .download-latest {
+  margin-bottom: 40px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--ink) 5%, transparent);
+}
+.wirecat-download .download-button {
+  min-height: 52px;
+  padding-inline: 24px;
+  font-size: 16px;
+}
+.wirecat-download .download-format {
+  margin: 14px 0 4px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.wirecat-download .download-latest .download-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 6px;
+  margin: 0;
+  font-size: 14px;
+}
+.wirecat-download .download-more {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.wirecat-download .download-more > p {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+.wirecat-download .download-file {
+  display: grid;
+  grid-template-columns: 18px auto;
+  align-items: center;
+  gap: 0 10px;
+  min-height: 44px;
+  padding-block: 6px;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 650;
+  text-decoration: none;
+}
+.wirecat-download .download-file > svg {
+  width: 18px;
+  height: 18px;
+}
+.wirecat-download .download-file-note {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+.wirecat-download .download-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 8px 0 18px;
+}
+.wirecat-download .download-card {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.wirecat-download .download-choose {
+  color: var(--ink);
+  font-weight: 600;
+}
+.wirecat-download .download-failed .button {
+  margin-top: 6px;
+}
+
+/* The inline script sets data-os before the first paint; without it every system is shown equally. */
+.wirecat-download .download-primary,
+.wirecat-download .download-mobile,
+.wirecat-download .download-other {
+  display: none;
+}
+.wirecat-download:is([data-os="macos"], [data-os="windows"], [data-os="linux"]) .download-choice {
+  display: none;
+}
+.wirecat-download[data-os="macos"] .download-primary[data-platform="macos"],
+.wirecat-download[data-os="windows"] .download-primary[data-platform="windows"],
+.wirecat-download[data-os="linux"] .download-primary[data-platform="linux"],
+.wirecat-download[data-os="mobile"] .download-mobile {
+  display: block;
+}
+.wirecat-download[data-os="mobile"] .download-mobile {
+  color: var(--ink);
+}
+.wirecat-download:is([data-os="macos"], [data-os="windows"], [data-os="linux"]) .download-other {
+  display: block;
+}
+.wirecat-download[data-os="macos"] .download-row[data-platform="macos"],
+.wirecat-download[data-os="windows"] .download-row[data-platform="windows"],
+.wirecat-download[data-os="linux"] .download-row[data-platform="linux"] {
+  display: none;
+}
+
+.wirecat-download :is(.download-other, .download-section) {
+  padding: 32px 0;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 100px;
+}
+.wirecat-download .download-row {
+  display: grid;
+  grid-template-columns: minmax(90px, 0.6fr) minmax(0, 2fr);
+  gap: 18px;
+  padding: 12px 0;
+}
+.wirecat-download .download-row + .download-row {
+  border-top: 1px solid var(--line);
+}
+.wirecat-download .download-row h3 {
+  margin: 10px 0 0;
+}
+.wirecat-download .download-earlier {
+  margin-bottom: 12px;
+}
+.wirecat-download .download-earlier > summary {
+  min-height: 44px;
+  padding-block: 10px;
+  color: var(--accent);
+  font-weight: 650;
+  cursor: pointer;
+}
+.wirecat-download .download-release {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.wirecat-download .download-release .download-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 6px;
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+}
+.wirecat-download .download-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin-top: 24px;
+}
+.wirecat-download .download-steps > section {
+  scroll-margin-top: 100px;
+}
+.wirecat-download .download-steps > section p,
+.wirecat-download .download-steps li {
+  font-size: 15px;
+}
+.wirecat-download .download-next {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.wirecat-download .download-page li + li {
+  margin-top: 6px;
+}
+
+@media (width < 60rem) {
+  .wirecat-download .download-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (width < 40rem) {
+  .wirecat-download .download-latest {
+    padding: 20px;
+  }
+  .wirecat-download .download-grid,
+  .wirecat-download .download-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .wirecat-download .download-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
