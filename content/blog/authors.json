@@ -3,6 +3,16 @@
     "id": "viacheslav-ptsarev",
     "name": { "en": "Viacheslav Ptsarev", "ru": "Вячеслав Пцарев", "es": "Viacheslav Ptsarev" },
     "initials": "VP",
+    "role": {
+      "en": "Software engineer, AI enthusiast",
+      "ru": "Разработчик, энтузиаст ИИ",
+      "es": "Ingeniero de software, entusiasta de la IA"
+    },
+    "bio": {
+      "en": "Helps startups automate workflows and improve conversion rates. Builds bots and knowledge graphs — and WireCat, the open-source tools that give AI agents your messages, mail and notes.",
+      "ru": "Помогает стартапам автоматизировать процессы и повышать конверсию. Делает ботов и графы знаний — и WireCat, открытые инструменты, которые дают ИИ-агентам доступ к вашим сообщениям, почте и заметкам.",
+      "es": "Ayuda a startups a automatizar procesos y mejorar la conversión. Crea bots y grafos de conocimiento, y también WireCat: herramientas de código abierto que dan a los agentes de IA acceso a tus mensajes, correo y notas."
+    },
     "links": { "github": "https://github.com/leemour" }
   }
 ]
