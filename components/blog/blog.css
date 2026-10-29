@@ -557,3 +557,26 @@ html.dark .wirecat-blog .blog-code pre span {
     margin-top: 24px;
   }
 }
+
+.wirecat-blog .blog-turnstile {
+  margin-top: 12px;
+}
+.wirecat-blog .blog-confirm {
+  max-width: 40rem;
+  margin-top: 24px;
+}
+.wirecat-blog .blog-confirm button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--bg);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.wirecat-blog .blog-confirm button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}

@@ -125,7 +125,13 @@ export function BlogPostPage({ lang, post }: { lang: string; post: BlogPost }) {
               </Link>
             </div>
           </section>
-          {siteConfig.newsletter.endpoint && <NewsletterForm lang={lang} endpoint={siteConfig.newsletter.endpoint} />}
+          {siteConfig.newsletter.apiUrl && siteConfig.newsletter.turnstileSiteKey && (
+            <NewsletterForm
+              lang={lang}
+              apiUrl={siteConfig.newsletter.apiUrl}
+              siteKey={siteConfig.newsletter.turnstileSiteKey}
+            />
+          )}
         </footer>
       </main>
     </div>
