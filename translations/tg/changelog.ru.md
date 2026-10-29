@@ -4,6 +4,50 @@ title: "История изменений"
 
 Основные изменения `@wirecat/tg-cli` по версиям, от новых к старым. Используется [семантическое версионирование](https://semver.org); до `1.0.0` интерфейс команд может меняться.
 
+## 0.106.0 — 29.10.2026
+
+### Added
+
+- **`contacts sync` сохраняет телефон каждого контакта**, когда Telegram его показывает, поэтому
+  `contacts show --offline` его отвечает. Онлайн-запрос `contacts show` тоже сохраняет прочитанный телефон. Нужен
+  cli-core 0.479.0 (версия хранилища 37).
+- **Общая карточка контакта показывает имя и телефон целиком**, онлайн и из хранилища (`--offline`). `contacts show`
+  несёт профиль, который давал `contacts info`, а `--hide-phone` убирает номер из `account show`, `account update` и
+  `contacts show`. Нужен cli-core 0.477.0.
+- **`tg <profile> reactions list <chat> <message>` показывает, кто отреагировал на сообщение**, от новых к старым, с
+  реакцией и временем. `reaction:<emoji>` оставляет одну эмодзи, `--limit` и `--cursor` листают список. Команда только
+  читает, поэтому её могут использовать профиль только для чтения и MCP (ключ разрешения `reactions.list`). Где Telegram
+  скрывает список — в канале (`reactions.broadcast`) или в чате, где его отключили (`reactions.list-hidden`), — команда
+  завершается ошибкой с этой причиной, а не пустым списком. Нужен cli-core 0.477.0.
+
+### Changed — may break callers
+
+- **Номера телефонов показываются целиком**, а `contacts info` стал `contacts show`. `--show-phone` больше нет:
+  скрипт, который его передаёт, падает с ошибкой неизвестного параметра, поэтому уберите его. Инструмента MCP
+  `contacts info` тоже больше нет; его место занял `contacts show`, а сохранённое разрешение `contacts.info`
+  отклоняется вместе с командой `config unset`, которая его удаляет.
+
+### Fixed
+
+- **Ответы `inbox`, `review`, `search messages` и `search all` содержат `sender_is_me`**, как обещал 0.473.0, поэтому
+  скрипт и в них может отличить собственные сообщения владельца от чужих (cli-core 0.478.0).
+
+## 0.105.0 — 29.10.2026
+
+### Changed — may break callers
+
+- **Навык для агента опубликован в ClawHub как `wirecat-tg`.** Установите его командой
+  `openclaw skills install @wirecat/wirecat-tg`. Запись `tg-cli` больше не обновляется.
+  `tg skill install` по-прежнему записывает `skills/tg-cli/`.
+
+### Fixed
+
+- **Справка и [справочник команд](./commands.md) показывают `tg mcp serve --profiles work,personal`** без профиля
+  впереди. 0.104.0 показывал `tg personal mcp serve --profiles work,personal`, что `tg` отклоняет ("name one
+  profile or --profiles, not both"); у примеров `--profiles all` для `mcp revoke` и `mcp config` была та же ошибка.
+  После `tg upgrade` подсказка перезапустить фоновый сервер нескольких профилей сохраняет `--profiles`
+  (cli-core 0.474.0).
+
 ## 0.104.0 — 29.10.2026
 
 ### Changed — may break callers

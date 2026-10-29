@@ -32,7 +32,7 @@ tg [profile] [options] <resource> <action> [arguments]
 | Ponerse al día | mensajes no leídos de otras personas; lo que prometiste y lo que está abierto | `tg personal inbox`, `tg personal review` |
 | Voz | convierte mensajes de voz en texto, en esta computadora | `tg personal messages transcribe` |
 | Archivos | descargar los archivos de un mensaje o de un chat completo | `tg personal messages download` |
-| Personas | contactos, el perfil de una persona, un bot check | `tg personal contacts list`, `tg personal contacts info` |
+| Personas | contactos, el perfil de una persona, un bot check | `tg personal contacts list`, `tg personal contacts show` |
 | Buscar | mensajes, archivos, fechas, personas; discusiones por significado | `tg personal search messages`, `tg personal search conversations` |
 | Enviar | texto, archivos, voz, respuestas, mensajes programados | `tg personal messages send` |
 | Cambiar | editar, reenviar, anclar, eliminar, reaccionar, votar, marcar como leído | `tg personal messages edit`, `tg personal reactions add` |
@@ -121,11 +121,8 @@ El primer inicio de sesión también solicita su propia aplicación Telegram des
 Para CI, `TG_API_ID` y `TG_API_HASH` proporcionan la aplicación sin usar el llavero y tienen prioridad sobre él.
 
 ```sh
-tg personal account show       # who this profile is logged in as; the phone as its last four digits
-```
-
-```sh
-tg personal account show --show-phone  # the whole phone number
+tg personal account show       # who this profile is logged in as, with the phone number
+tg personal account show --hide-phone  # the same without the phone number
 ```
 
 ```sh
@@ -369,7 +366,7 @@ tg personal contacts sync              # your whole Telegram contact list into t
 ```
 
 ```sh
-tg personal contacts info @example_user  # flags, last seen, registered, messages per shared chat
+tg personal contacts show @example_user  # flags, last seen, registered, messages per shared chat
 ```
 
 ```sh
@@ -601,6 +598,10 @@ tg personal reactions remove "Book club" 4242
 ```
 
 ```sh
+tg personal reactions list "Book club" 4242 reaction:🔥 --limit 20  # who reacted, newest first; --cursor goes on
+```
+
+```sh
 tg personal polls show "Book club" 4250    # the poll and its answer ids
 ```
 
@@ -632,7 +633,7 @@ tg personal polls close "Book club" 4250   # your own poll; it cannot be reopene
 tg personal polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution "Four."  # a quiz; a vote is final
 ```
 
-Al leer un chat, las reacciones aparecen bajo el mensaje: `👍 3  🔥 1  (you: 🔥)`. Votar en una encuesta pública muestra tu nombre a todos en el chat. Vota con los ID que imprime `polls show`, nunca por la posición de una respuesta. `--multiple` permite elegir varias respuestas. Solo se puede cambiar el voto en una encuesta creada con `--revote`. Se rechazan antes de enviar nada: votar en una encuesta cerrada, elegir dos respuestas en una de respuesta única, cambiar o retirar un voto definitivo y usar `--retract` sin haber votado; también se rechaza cerrar una encuesta ajena.
+Al leer un chat, las reacciones aparecen bajo el mensaje: `👍 3  🔥 1  (you: 🔥)`. `reactions list` dice quién reaccionó; Telegram lo rechaza en un canal y en un chat que oculta la lista, y el error dice cuál de los dos (`reactions.broadcast`, `reactions.list-hidden`) en lugar de responder con una lista vacía. Votar en una encuesta pública muestra tu nombre a todos en el chat. Vota con los ID que imprime `polls show`, nunca por la posición de una respuesta. `--multiple` permite elegir varias respuestas. Solo se puede cambiar el voto en una encuesta creada con `--revote`. Se rechazan antes de enviar nada: votar en una encuesta cerrada, elegir dos respuestas en una de respuesta única, cambiar o retirar un voto definitivo y usar `--retract` sin haber votado; también se rechaza cerrar una encuesta ajena.
 
 ### Bots y sus botones
 
@@ -1036,7 +1037,7 @@ Un agente sin terminal (por ejemplo Claude Desktop o Cursor) se conecta a travé
           edited 10:09:30
 ```
 
-Las horas son locales y una línea marca cada día nuevo. `↳` señala a qué responde el mensaje; `↪`, de quién se reenvió; `📎`, un adjunto. Los caracteres de control en mensajes y nombres se muestran como texto, sin ejecutarse. `-v` añade identificadores de mensaje, remitente y chat; `-vv`, todos los datos conocidos del mensaje.
+Las horas son locales y una línea marca cada día nuevo. `↳` señala a qué responde el mensaje; `↪`, de quién se reenvió; `📎`, un adjunto. Los caracteres de control en mensajes y nombres se muestran como texto, sin ejecutarse. Un contacto compartido se muestra como `👤` con su nombre y su teléfono; en JSON el adjunto tiene `contact` con `name`, `first_name`, `last_name`, `phone` (completo, tal como lo envió Telegram) y `user_id`, y el almacén lo guarda, así que `--offline` muestra lo mismo. `-v` añade identificadores de mensaje, remitente y chat; `-vv`, todos los datos conocidos del mensaje.
 
 ## Recibir nuevos mensajes
 
@@ -1146,7 +1147,7 @@ tg personal config set sends_per_hour 10
 
 ## Una persona
 
-`tg personal contacts info <person>` muestra lo que dice Telegram sobre una persona y qué tan activa es en los chats que compartes. `tg personal contacts check <person>` los califica como posible bot, falso o spammer, con todos los motivos. `tg personal contacts context <person>` lee lo que el archivo local tiene sobre ellos: sin `--chat`, en todas las cuentas vinculadas a ellos con `contacts link`; con `--chat`, sus mensajes más nuevos en cada chat que nombre. Lo que cada uno pide a Telegram o a una lista pública de spam, y lo que envía a dónde: [personas](./people.md).
+`tg personal contacts show <person>` muestra lo que dice Telegram sobre una persona y qué tan activa es en los chats que compartes. `tg personal contacts check <person>` los califica como posible bot, falso o spammer, con todos los motivos. `tg personal contacts context <person>` lee lo que el archivo local tiene sobre ellos: sin `--chat`, en todas las cuentas vinculadas a ellos con `contacts link`; con `--chat`, sus mensajes más nuevos en cada chat que nombre. Lo que cada uno pide a Telegram o a una lista pública de spam, y lo que envía a dónde: [personas](./people.md).
 
 Algunos límites que debe conocer: una fecha de registro estimada se adivina a partir de la identificación de la cuenta con una tabla comunitaria, y no hay una estimación posterior a diciembre de 2024. La verificación del bot lee hasta 1000 mensajes almacenados. `contacts context` devuelve cuerpos de mensajes, por lo que sigue los permisos `messages`; vincular y desvincular identidades está controlado por `contacts` y nunca cambia la libreta de direcciones de Telegram.
 
