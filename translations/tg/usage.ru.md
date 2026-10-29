@@ -32,7 +32,7 @@ tg [profile] [options] <resource> <action> [arguments]
 | Проверить новое | непрочитанные сообщения других людей; что вы обещали и что открыто | `tg personal inbox`, `tg personal review` |
 | Голос | превращать голосовые сообщения в текст на этом компьютере | `tg personal messages transcribe` |
 | Файлы | скачать файлы сообщения или весь чат | `tg personal messages download` |
-| Люди | контакты, профиль человека, проверка бота | `tg personal contacts list`, `tg personal contacts info` |
+| Люди | контакты, профиль человека, проверка бота | `tg personal contacts list`, `tg personal contacts show` |
 | Поиск | сообщения, файлы, даты, люди; дискуссии по смыслу | `tg personal search messages`, `tg personal search conversations` |
 | Отправить | текст, файлы, голос, ответы, запланированные сообщения | `tg personal messages send` |
 | Изменить | редактировать, пересылать, закреплять, удалять, реагировать, голосовать, отмечать как прочитанное | `tg personal messages edit`, `tg personal reactions add` |
@@ -121,11 +121,8 @@ tg personal session start qr  # without a terminal (an agent): the QR code as te
 В CI переменные `TG_API_ID` и `TG_API_HASH` передают данные приложения вместо хранилища ключей и имеют приоритет над ним.
 
 ```sh
-tg personal account show       # who this profile is logged in as; the phone as its last four digits
-```
-
-```sh
-tg personal account show --show-phone  # the whole phone number
+tg personal account show       # who this profile is logged in as, with the phone number
+tg personal account show --hide-phone  # the same without the phone number
 ```
 
 ```sh
@@ -370,7 +367,7 @@ tg personal contacts sync              # your whole Telegram contact list into t
 ```
 
 ```sh
-tg personal contacts info @example_user  # flags, last seen, registered, messages per shared chat
+tg personal contacts show @example_user  # flags, last seen, registered, messages per shared chat
 ```
 
 ```sh
@@ -603,6 +600,10 @@ tg personal reactions remove "Book club" 4242
 ```
 
 ```sh
+tg personal reactions list "Book club" 4242 reaction:🔥 --limit 20  # who reacted, newest first; --cursor goes on
+```
+
+```sh
 tg personal polls show "Book club" 4250    # the poll and its answer ids
 ```
 
@@ -634,7 +635,7 @@ tg personal polls close "Book club" 4250   # your own poll; it cannot be reopene
 tg personal polls create "Book club" "2+2?" 3 4 5 --quiz --correct 2 --solution "Four."  # a quiz; a vote is final
 ```
 
-При чтении чата реакции отображаются под сообщением — `👍 3  🔥 1  (you: 🔥)`. Голос в публичном опросе показывает ваше имя всем участникам чата. Голосуйте по ID из `polls show`, а не по порядковому номеру ответа. `--multiple` позволяет выбирать несколько ответов. Изменить голос можно только в опросе, созданном с `--revote`. Голосование в закрытом опросе, два ответа в опросе с одним вариантом, изменение или отзыв окончательного голоса и `--retract` без голоса отклоняются до отправки; закрытие чужого опроса тоже отклоняется.
+При чтении чата реакции отображаются под сообщением — `👍 3  🔥 1  (you: 🔥)`. `reactions list` называет тех, кто отреагировал; Telegram отказывает в канале и в чате, который скрывает список, а ошибка называет причину (`reactions.broadcast`, `reactions.list-hidden`) вместо пустого ответа. Голос в публичном опросе показывает ваше имя всем участникам чата. Голосуйте по ID из `polls show`, а не по порядковому номеру ответа. `--multiple` позволяет выбирать несколько ответов. Изменить голос можно только в опросе, созданном с `--revote`. Голосование в закрытом опросе, два ответа в опросе с одним вариантом, изменение или отзыв окончательного голоса и `--retract` без голоса отклоняются до отправки; закрытие чужого опроса тоже отклоняется.
 
 ### Боты и их кнопки
 
@@ -1040,7 +1041,7 @@ mkdir -p ~/.agents/skills/tg-cli && tg skill show > ~/.agents/skills/tg-cli/SKIL
           edited 10:09:30
 ```
 
-Время локальное, новый день отмечен строкой. `↳` — исходное сообщение ответа, `↪` — автор пересланного, `📎` — вложение. Управляющие символы показываются текстом и не исполняются. `-v` добавляет идентификаторы сообщения, автора и чата; `-vv` — все известные данные.
+Время локальное, новый день отмечен строкой. `↳` — исходное сообщение ответа, `↪` — автор пересланного, `📎` — вложение. Управляющие символы показываются текстом и не исполняются. Пересланная карточка контакта печатается как `👤` с именем и телефоном; в JSON у вложения есть `contact` с полями `name`, `first_name`, `last_name`, `phone` (целиком, как прислал Telegram) и `user_id`, и хранилище её сохраняет, так что `--offline` показывает то же. `-v` добавляет идентификаторы сообщения, автора и чата; `-vv` — все известные данные.
 
 ## Новые сообщения в реальном времени
 
@@ -1150,7 +1151,7 @@ tg personal config set sends_per_hour 10
 
 ## Один человек
 
-`tg personal contacts info <person>` показывает, что Telegram говорит об одном человеке и насколько он активен в чатах, которыми вы делитесь. `tg personal contacts check <person>` оценивает их как возможных ботов, фейков или спамеров по всем причинам. `tg personal contacts context <person>` считывает информацию о них в архиве: без `--chat`, для каждого аккаунта, связанного с ними с помощью `contacts link`; с `--chat`, их новейшими сообщениями в каждом названном вами чате. Что каждый спрашивает в Telegram или общедоступном спам-листе, и что он куда отправляет: [люди](./people.md).
+`tg personal contacts show <person>` показывает, что Telegram говорит об одном человеке и насколько он активен в чатах, которыми вы делитесь. `tg personal contacts check <person>` оценивает их как возможных ботов, фейков или спамеров по всем причинам. `tg personal contacts context <person>` считывает информацию о них в архиве: без `--chat`, для каждого аккаунта, связанного с ними с помощью `contacts link`; с `--chat`, их новейшими сообщениями в каждом названном вами чате. Что каждый спрашивает в Telegram или общедоступном спам-листе, и что он куда отправляет: [люди](./people.md).
 
 Несколько ограничений, которые следует знать: предполагаемая дата регистрации определяется на основе идентификатора аккаунта с таблицей сообщества, и нет оценки после декабря 2024 года. Проверка бота считывает до 1000 сохраненных сообщений. `contacts context` возвращает тела сообщений, поэтому он соответствует разрешениям `messages`; связывание и отключение идентификаторов контролируется `contacts` и никогда не меняет адресную книгу Telegram.
 
