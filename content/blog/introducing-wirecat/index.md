@@ -3,6 +3,8 @@ title: "WireCat: your messages and notes, on your computer, for the agent you al
 description: What WireCat is, why its tools run locally, and what works today across Telegram, MAX, WhatsApp, notes, mail, Zoom and Google Drive.
 date: 2026-10-27
 tags: [ai-agents, cli, release-notes]
+cover: ./cover.jpg
+coverAlt: A laptop on a dark desk at dusk, showing the WireCat desktop app with its list of tools, next to a notebook, a phone and a mug, city lights behind the window
 draft: true
 ---
 

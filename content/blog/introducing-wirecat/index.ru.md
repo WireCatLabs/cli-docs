@@ -3,6 +3,8 @@ title: "WireCat: переписки, заметки и созвоны для в�
 description: Что такое WireCat, почему инструменты работают локально и что уже можно попробовать в Telegram, MAX, WhatsApp, заметках, почте, Zoom и Google Drive.
 date: 2026-10-27
 tags: [ai-agents, cli, release-notes]
+cover: ./cover.jpg
+coverAlt: Ноутбук на тёмном столе в сумерках, на экране приложение WireCat со списком инструментов; рядом блокнот, телефон и кружка, за окном огни города
 draft: true
 ---
 
