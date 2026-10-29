@@ -4,7 +4,7 @@ description: Что такое WireCat, почему инструменты ра
 date: 2026-10-29
 tags: [ai-agents, cli, release-notes]
 cover: ./cover.jpg
-coverAlt: "Чёрная модульная панель на тёмном столе с шестью картриджами tg, max, wa, memo, zm и drive, tg самый потёртый, и пустой седьмой слот рядом с карточкой + your CLI; позади телефон, конверт, блокнот и наушники"
+coverAlt: "Карточки из Obsidian, Telegram, WhatsApp, Google Calendar, Drive, Gmail, MAX и Zoom об одном договоре, соединённые подписанными связями вроде «тот же человек», «упоминает» и «в повестке»; они ведут в небольшую локальную память, у которой Claude Code спрашивает: «о чём мы договорились с Анной?»"
 author: viacheslav-ptsarev
 draft: false
 ---

@@ -4,7 +4,7 @@ description: What WireCat is, why its tools run locally, and what works today ac
 date: 2026-10-29
 tags: [ai-agents, cli, release-notes]
 cover: ./cover.jpg
-coverAlt: "A black modular rail on a dark desk with six cartridges labelled tg, max, wa, memo, zm and drive, tg the most worn, and an empty seventh slot beside a card reading + your CLI; a phone, an envelope, a notebook and headphones behind"
+coverAlt: "Cards from Obsidian, Telegram, WhatsApp, Google Calendar, Drive, Gmail, MAX and Zoom about one contract, joined by labelled links such as same person, mentions and on the agenda; they feed a small local memory, which Claude Code asks: what did we agree with Anna?"
 author: viacheslav-ptsarev
 draft: false
 ---
