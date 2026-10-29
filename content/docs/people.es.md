@@ -58,19 +58,19 @@ El agente debe indicar qué historial estaba disponible.
 Ambos mensajeros ofrecen un perfil con la identidad y conversaciones compartidas:
 
 ```sh
-tg personal contacts info @example_user
-max personal contacts info 20000002
+tg personal contacts show @example_user
+max personal contacts show 20000002
 ```
 
-Usa `contacts show` para una consulta breve. Indica a la persona por su ID o parte de su nombre;
+`contacts show` también responde solo con el almacén local, con `--offline`. Indica a la persona por su ID o parte de su nombre;
 en Telegram también sirve su `@username`. Si parte de un nombre coincide con varias personas, el
 comando las lista y se detiene. Estas lecturas usan tu cuenta y los mensajes guardados en tu
 ordenador. No se envía nada a la persona y nada se marca como leído.
 
 Los campos del perfil dependen de lo que el mensajero comparte con tu cuenta:
 
-- **Teléfono:** solo las cuatro últimas cifras, y solo si el mensajero te muestra el número.
-  `--show-phone` lo imprime entero. Un agente conectado por MCP nunca recibe el número completo.
+- **Teléfono:** se muestra entero, en la línea de comandos y por MCP, si el mensajero se lo da a tu cuenta.
+  `--hide-phone` lo omite. Las versiones anteriores lo ocultaban y tenían `--show-phone`; ese indicador ya no existe.
 - **Fecha de registro:** siempre indica su origen. Telegram envía el mes cuando alguien te escribe
   por primera vez; si no, `tg` la calcula a partir del ID de la cuenta y la marca como `estimate`.
   El cálculo cubre cuentas creadas hasta agosto de 2026; las más nuevas no reciben fecha antes que
@@ -82,6 +82,17 @@ Los campos del perfil dependen de lo que el mensajero comparte con tu cuenta:
 - **Chats compartidos:** cuántos de sus mensajes tiene tu copia local en cada chat, y el primero y
   el último. Si un chat no está guardado desde el principio (`complete: false`), la cifra es un
   mínimo; `messages sync <chat>` lo completa.
+
+## Quién reaccionó
+
+```sh
+tg personal reactions list "Book club" 101
+tg personal reactions list "Book club" 101 reaction:🔥 --limit 20
+```
+
+`reactions list` muestra quién reaccionó a un mensaje, del más nuevo al más antiguo, con la reacción y la hora.
+`reaction:` con un emoji deja una sola reacción. Si el chat oculta la lista, como un canal, el comando lo dice en
+lugar de mostrar una lista vacía. WhatsApp aún no ofrece este comando.
 
 ## Qué escribió
 
@@ -155,7 +166,7 @@ tg personal contacts link @example_user max:"Example User"
 
 Las dos cuentas deben estar ya en el historial de este ordenador, así que usa `tg` y `max` en el
 mismo ordenador. Después, `contacts context` sin `--chat` reúne las identidades vinculadas.
-`contacts context --chat` y `contacts info` muestran solo la identidad seleccionada del mensajero.
+`contacts context --chat` y `contacts show` muestran solo la identidad seleccionada del mensajero.
 Un nombre igual no basta; solo cuenta lo que registras tú. `contacts unlink` elimina esa asociación
 local.
 

@@ -57,19 +57,19 @@ and questions still open. The answer should say which history was available.
 Both messengers provide a profile with the person's identity and shared conversations:
 
 ```sh
-tg personal contacts info @example_user
-max personal contacts info 20000002
+tg personal contacts show @example_user
+max personal contacts show 20000002
 ```
 
-Use `contacts show` for a shorter lookup. Name a person by their ID or part of their name; in
+`contacts show` also answers from the local store alone with `--offline`. Name a person by their ID or part of their name; in
 Telegram, a `@username` also works. If part of a name matches several people, the command lists
 them and stops. These reads use your account and the messages saved on your computer. Nothing is
 sent to the person, and nothing is marked as read.
 
 The available profile fields depend on what the messenger shares with your account:
 
-- **Phone number:** only the last four digits, and only when the messenger shows the number to you.
-  `--show-phone` prints it in full. An agent connected over MCP never gets the full number.
+- **Phone number:** shown in full, in the command line and over MCP, when the messenger gives it to your account.
+  `--hide-phone` leaves it out. Older releases masked it and had `--show-phone`; that flag is gone.
 - **Registration date:** always says where it came from. Telegram sends the month when someone
   writes to you for the first time; otherwise `tg` estimates it from the account ID and marks it
   `estimate`. The estimate covers accounts created up to August 2026; newer accounts get no date
@@ -80,6 +80,17 @@ The available profile fields depend on what the messenger shares with your accou
 - **Shared chats:** how many of their messages your local copy holds in each chat, and the first and
   last of them. When a chat is not saved from its start (`complete: false`), the count is a minimum;
   `messages sync <chat>` fills it in.
+
+## Who reacted
+
+```sh
+tg personal reactions list "Book club" 101
+tg personal reactions list "Book club" 101 reaction:🔥 --limit 20
+```
+
+`reactions list` shows who reacted to one message, newest first, with the reaction and the time. Add `reaction:`
+and an emoji to keep one reaction. Where a chat hides the list, such as a channel, the command says so instead of
+showing an empty list. WhatsApp does not offer this command yet.
 
 ## What they wrote
 
@@ -149,7 +160,7 @@ tg personal contacts link @example_user max:"Example User"
 
 Both accounts must already be in the history on this computer, so use `tg` and `max` on the same
 computer. `contacts context` without `--chat` then gathers the linked identities.
-`contacts context --chat` and `contacts info` show only the selected messenger identity. A shared
+`contacts context --chat` and `contacts show` show only the selected messenger identity. A shared
 name alone is not a match; only the links you record count. `contacts unlink` removes that local
 association.
 
