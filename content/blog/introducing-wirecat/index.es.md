@@ -4,7 +4,7 @@ description: Qué es WireCat, por qué sus herramientas funcionan en local y qu�
 date: 2026-10-29
 tags: [ai-agents, cli, release-notes]
 cover: ./cover.jpg
-coverAlt: "Un raíl modular negro en un escritorio oscuro con seis cartuchos etiquetados tg, max, wa, memo, zm y drive, tg el más gastado, y una séptima ranura vacía junto a una tarjeta que dice + your CLI; detrás, un teléfono, un sobre, un cuaderno y unos auriculares"
+coverAlt: "Tarjetas de Obsidian, Telegram, WhatsApp, Google Calendar, Drive, Gmail, MAX y Zoom sobre un mismo contrato, unidas por enlaces con etiquetas como misma persona, menciona y en la agenda; llevan a una pequeña memoria local, a la que Claude Code pregunta: ¿qué acordamos con Anna?"
 author: viacheslav-ptsarev
 draft: false
 ---
