@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest"
-import { type BlogTag, blogTags, frontmatterProblems, postTagProblems, registryProblems } from "../lib/blog-schema.ts"
+import {
+  type BlogTag,
+  blogSeries,
+  blogTags,
+  frontmatterProblems,
+  postTagProblems,
+  registryProblems,
+  seriesProblems,
+} from "../lib/blog-schema.ts"
 import { blogFrontmatters, tagUsage } from "./blog-tags.ts"
 
 const tag = (id: string, aliases: string[], label = id): BlogTag => ({
@@ -49,6 +57,31 @@ describe("blog tag registry", () => {
       '"date" is required',
       '"tags" needs at least one tag',
     ])
+  })
+
+  it("checks author, series and glance against their registries", () => {
+    const base = { ...post, tags: ["cli"] }
+    expect(frontmatterProblems({ ...base, author: "viacheslav-ptsarev", series: "laptop-search" }).problems).toEqual([])
+    expect(frontmatterProblems({ ...base, author: "nobody" }).problems).toEqual([
+      'author "nobody" is not in content/blog/authors.json',
+    ])
+    expect(frontmatterProblems({ ...base, series: "nope" }).problems).toEqual([
+      'series "nope" is not in content/blog/series.json',
+    ])
+    expect(
+      frontmatterProblems({ ...base, glance: [{ value: "4.6 s", label: "before", href: "#a" }] }).problems,
+    ).toEqual([])
+    expect(frontmatterProblems({ ...base, glance: [{ value: 4.6 }] }).problems).toEqual([
+      '"glance" must be a list of { value, label, href? } with text values',
+    ])
+  })
+
+  it("keeps each series' parts unique and every part a real post", () => {
+    expect(seriesProblems(blogSeries)).toEqual([])
+    const title = { en: "S", ru: "S", es: "S" }
+    expect(seriesProblems([{ id: "s", title, parts: ["a", "a"] }])).toEqual(['Series "s" lists a part twice'])
+    const slugs = new Set(blogFrontmatters().map((entry) => entry.file.split(/[\\/]/)[0]))
+    for (const series of blogSeries) for (const part of series.parts) expect(slugs, series.id).toContain(part)
   })
 
   it("passes every post in content/blog and counts each post once", () => {

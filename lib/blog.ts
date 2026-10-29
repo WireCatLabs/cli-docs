@@ -1,10 +1,11 @@
 import { rehypeCodeDefaultOptions } from "fumadocs-core/mdx-plugins"
 import { applyMdxPreset } from "fumadocs-mdx/config"
 import { defineCollections } from "fumadocs-mdx/macro"
-import { type BlogLocale, blogFrontmatterSchema, blogLocales, blogTags } from "./blog-schema"
+import { type BlogLocale, blogAuthors, blogFrontmatterSchema, blogLocales, blogSeries, blogTags } from "./blog-schema"
 import { rehypeCodeAccessibility } from "./rehype-code-accessibility"
 import { remarkBlogCover, remarkBlogFigures } from "./remark-blog-cover"
 
+export type { BlogAuthor, BlogGlance, BlogSeries } from "./blog-schema"
 export { type BlogLocale, blogLocales, blogTags }
 
 const collection = defineCollections({
@@ -80,6 +81,47 @@ export const blogTagsIn = (lang: string) =>
   blogTags.filter((tag) => blogPosts(lang).some((post) => post.tags.includes(tag.id)))
 export const blogTagLocales = (id: string) =>
   blogLocales.filter((lang) => blogPosts(lang).some((post) => post.tags.includes(id)))
+
+export const blogAuthor = (id?: string) => blogAuthors.find((author) => author.id === id)
+
+/** The post's series with the parts that exist in its language, in series order. */
+export function blogSeriesOf(post: BlogPost) {
+  const series = blogSeries.find((entry) => entry.id === post.series)
+  if (!series) return undefined
+  const parts = series.parts.flatMap((slug) => blogPost(post.lang, slug) ?? [])
+  return { series, parts, index: parts.findIndex((part) => part.slug === post.slug) }
+}
+
+/** Posts sharing the most tags with this one, newest first among equals; never the post itself. */
+export function relatedPosts(post: BlogPost, count = 3) {
+  return blogPosts(post.lang)
+    .filter((other) => other.slug !== post.slug)
+    .map((other) => ({ other, shared: other.tags.filter((tag) => post.tags.includes(tag)).length }))
+    .filter(({ shared }) => shared > 0)
+    .toSorted((a, b) => b.shared - a.shared)
+    .slice(0, count)
+    .map(({ other }) => other)
+}
+
+/** The newer and the older post in the same language, by date. */
+export function adjacentPosts(post: BlogPost) {
+  const posts = blogPosts(post.lang)
+  const index = posts.findIndex((other) => other.slug === post.slug)
+  return { newer: posts[index - 1], older: posts[index + 1] }
+}
+
+/** Tags used in this language with their post counts, most used first. */
+export const blogTagCounts = (lang: string) =>
+  blogTagsIn(lang)
+    .map((tag) => ({ tag, count: blogPosts(lang).filter((post) => post.tags.includes(tag.id)).length }))
+    .toSorted((a, b) => b.count - a.count)
+
+/** Posts per month, newest month first; `month` is YYYY-MM. */
+export function blogArchive(lang: string) {
+  const counts = new Map<string, number>()
+  for (const post of blogPosts(lang)) counts.set(post.date.slice(0, 7), (counts.get(post.date.slice(0, 7)) ?? 0) + 1)
+  return [...counts].map(([month, count]) => ({ month, count }))
+}
 
 /** Every blog page that exists, so the language menu can avoid sending a reader to a missing translation. */
 export const blogPaths = () =>

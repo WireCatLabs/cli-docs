@@ -1,12 +1,20 @@
-import { ArrowLeft, ArrowRight, FileText, FolderGit2, MessagesSquare, Rss } from "lucide-react"
+import { ArrowLeft, ArrowRight, Hash, MessagesSquare, Rss, Search, Sparkles } from "lucide-react"
 import Link from "next/link"
 import type { ComponentProps } from "react"
-import { type BlogPost, blogMarkdownPath, blogPath, blogPostLocales } from "@/lib/blog"
+import { adjacentPosts, type BlogPost, blogPath, blogPostLocales, blogTag, relatedPosts } from "@/lib/blog"
 import { blogWords } from "@/lib/blog-words"
 import siteConfig from "@/site.config.json"
+import { AuthorByline, AuthorCard } from "./blog-author"
+import { PostCard } from "./blog-card"
 import { BlogCode } from "./blog-code"
+import { Glance } from "./blog-glance"
+import { BlogLayout, BlogWidget } from "./blog-layout"
 import { BlogMeta, BlogTags } from "./blog-meta"
-import { NewsletterForm } from "./newsletter-form"
+import { BlogSearchForm } from "./blog-search"
+import { SeriesBox, SeriesSwitcher } from "./blog-series"
+import { ShareLinks } from "./blog-share"
+import { BlogToc } from "./blog-toc"
+import { FollowLinks, NewsletterBlock } from "./blog-widgets"
 
 function Figure({ src, alt, title, width, height }: ComponentProps<"img">) {
   const image = src as unknown as string | { src: string; width: number; height: number }
@@ -31,109 +39,132 @@ export function discussionLink(lang: string) {
 export function BlogPostPage({ lang, post }: { lang: string; post: BlogPost }) {
   const words = blogWords(lang)
   const Body = post.body
-  const translations = blogPostLocales(post.slug).filter((locale) => locale !== lang)
+  const languages = blogPostLocales(post.slug)
   const discussion = discussionLink(lang)
   const contents = post.toc.filter((item) => item.depth <= 3)
+  const related = relatedPosts(post)
+  const { newer, older } = adjacentPosts(post)
+  const topic = blogTag(post.tags[0])
+  const aside = (
+    <>
+      <BlogWidget title={words.search} icon={<Search aria-hidden="true" />}>
+        <BlogSearchForm lang={lang} />
+      </BlogWidget>
+      <SeriesBox lang={lang} post={post} />
+      {related.length > 0 && (
+        <BlogWidget title={words.related} icon={<Sparkles aria-hidden="true" />}>
+          <ul className="blog-related">
+            {related.map((other) => (
+              <li key={other.slug}>
+                <PostCard lang={lang} post={other} variant="compact" headingLevel={3} />
+              </li>
+            ))}
+          </ul>
+        </BlogWidget>
+      )}
+      <BlogWidget title={words.tags} icon={<Hash aria-hidden="true" />}>
+        <BlogTags lang={lang} tags={post.tags} />
+      </BlogWidget>
+      <BlogWidget title={words.follow} icon={<Rss aria-hidden="true" />}>
+        <FollowLinks lang={lang} />
+      </BlogWidget>
+    </>
+  )
   return (
-    <div className="wirecat-blog">
-      <main id="main" className="wrap blog-page blog-post">
-        <header className="blog-post-head">
-          <Link className="blog-back animated-text-link" href={blogPath(lang)}>
-            <ArrowLeft aria-hidden="true" />
-            <span className="link-label">{words.back}</span>
-          </Link>
+    <BlogLayout
+      className="blog-article"
+      aside={aside}
+      margin={<BlogToc title={words.contents} items={contents} variant="margin" />}
+    >
+      <nav className="blog-breadcrumb" aria-label={words.breadcrumb}>
+        <ol>
+          <li>
+            <Link href={blogPath(lang)}>{words.title}</Link>
+          </li>
+          {topic && (
+            <li>
+              <Link href={blogPath(lang, "tags", topic.id)}>{topic.label[lang as "en" | "ru" | "es"]}</Link>
+            </li>
+          )}
+        </ol>
+      </nav>
+      <header className="blog-post-head">
+        <h1>{post.title}</h1>
+        <p className="blog-standfirst">{post.description}</p>
+        <div className="blog-post-meta">
+          <AuthorByline lang={lang} id={post.author} />
           <BlogMeta lang={lang} post={post} />
-          <h1>{post.title}</h1>
-          <p className="intro">{post.description}</p>
-          <BlogTags lang={lang} tags={post.tags} />
-        </header>
-        {post.coverImage && (
-          <figure className="blog-cover">
-            {/* biome-ignore lint/performance/noImgElement: The static export has no image optimisation server. */}
-            <img
-              src={post.coverImage.src}
-              width={post.coverImage.width}
-              height={post.coverImage.height}
-              alt={post.coverAlt ?? ""}
-              fetchPriority="high"
-            />
-          </figure>
-        )}
-        <div className="blog-layout">
-          <article className="blog-prose" lang={lang}>
-            <Body components={{ pre: BlogCode, img: Figure }} />
-          </article>
-          <aside className="blog-aside" aria-label={words.contents}>
-            {contents.length > 2 && (
-              <nav className="blog-contents" aria-label={words.contents}>
-                <p>{words.contents}</p>
-                <ol>
-                  {contents.map((item) => (
-                    <li key={item.url} data-depth={item.depth}>
-                      <a href={item.url}>{item.title}</a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
-            )}
-            <div className="blog-aside-links">
-              {translations.map((locale) => (
-                <a
-                  key={locale}
-                  className="animated-text-link text-link"
-                  href={blogPath(locale, post.slug)}
-                  hrefLang={locale}
-                >
-                  <span className="link-label">
-                    {words.translation} {words.languages[locale]}
-                  </span>
-                  <ArrowRight aria-hidden="true" />
-                </a>
+          {languages.length > 1 && (
+            <ul className="blog-languages" aria-label={words.translation}>
+              {languages.map((locale) => (
+                <li key={locale}>
+                  {locale === lang ? (
+                    <span aria-current="page">{locale.toUpperCase()}</span>
+                  ) : (
+                    <a href={blogPath(locale, post.slug)} hrefLang={locale} lang={locale}>
+                      {locale.toUpperCase()}
+                    </a>
+                  )}
+                </li>
               ))}
-              <a className="animated-text-link text-link" href={blogMarkdownPath(lang, post.slug)}>
-                <FileText aria-hidden="true" />
-                <span className="link-label">{words.markdown}</span>
-              </a>
-            </div>
-          </aside>
+            </ul>
+          )}
         </div>
-        <footer className="blog-post-end">
-          {discussion && (
-            <section aria-labelledby="blog-discuss">
-              <h2 id="blog-discuss">{words.discussTitle}</h2>
-              <a className="blog-action" href={discussion.href} target="_blank" rel="noopener noreferrer">
-                <MessagesSquare aria-hidden="true" />
-                {discussion.label}
-              </a>
-            </section>
-          )}
-          <section aria-labelledby="blog-follow">
-            <h2 id="blog-follow">{words.follow}</h2>
-            <p>{words.followText}</p>
-            <div className="blog-actions">
-              <a className="blog-action" href={blogPath(lang, "rss.xml")}>
-                <Rss aria-hidden="true" />
-                {words.rss}
-              </a>
-              <a className="blog-action" href={siteConfig.github} target="_blank" rel="noopener noreferrer">
-                <FolderGit2 aria-hidden="true" />
-                GitHub
-              </a>
-              <Link className="blog-action" href={`/${lang}/docs`}>
-                <ArrowRight aria-hidden="true" />
-                {words.docs}
+        <SeriesSwitcher lang={lang} post={post} />
+      </header>
+      <BlogToc title={words.contents} items={contents} variant="top" />
+      <Glance lang={lang} items={post.glance} />
+      {post.coverImage && (
+        <figure className="blog-cover">
+          {/* biome-ignore lint/performance/noImgElement: The static export has no image optimisation server. */}
+          <img
+            src={post.coverImage.src}
+            width={post.coverImage.width}
+            height={post.coverImage.height}
+            alt={post.coverAlt ?? ""}
+            fetchPriority="high"
+          />
+        </figure>
+      )}
+      <article className="blog-prose" lang={lang}>
+        <Body components={{ pre: BlogCode, img: Figure }} />
+      </article>
+      <footer className="blog-post-end">
+        <div className="blog-share-row">
+          <span className="blog-kicker">{words.share}</span>
+          <ShareLinks lang={lang} title={post.title} url={post.url} />
+        </div>
+        <AuthorCard lang={lang} id={post.author} />
+        {(newer || older) && (
+          <nav className="blog-adjacent" aria-label={`${words.previous} / ${words.next}`}>
+            {older && (
+              <Link href={older.url} rel="prev">
+                <span className="blog-kicker">
+                  <ArrowLeft aria-hidden="true" />
+                  {words.previous}
+                </span>
+                {older.title}
               </Link>
-            </div>
-          </section>
-          {siteConfig.newsletter.apiUrl && siteConfig.newsletter.turnstileSiteKey && (
-            <NewsletterForm
-              lang={lang}
-              apiUrl={siteConfig.newsletter.apiUrl}
-              siteKey={siteConfig.newsletter.turnstileSiteKey}
-            />
-          )}
-        </footer>
-      </main>
-    </div>
+            )}
+            {newer && (
+              <Link href={newer.url} rel="next" className="blog-adjacent-next">
+                <span className="blog-kicker">
+                  {words.next}
+                  <ArrowRight aria-hidden="true" />
+                </span>
+                {newer.title}
+              </Link>
+            )}
+          </nav>
+        )}
+        {discussion && (
+          <a className="blog-action" href={discussion.href} target="_blank" rel="noopener noreferrer">
+            <MessagesSquare aria-hidden="true" />
+            {discussion.label}
+          </a>
+        )}
+        <NewsletterBlock lang={lang} />
+      </footer>
+    </BlogLayout>
   )
 }

@@ -5,6 +5,8 @@ date: 2026-10-27
 tags: [search, benchmarks]
 cover: ./cover.jpg
 coverAlt: "A printed chat under a black reading mask labelled 512 tokens: the window shows only one long message under a loupe, while a green note with the short reply sits half hidden below the mask"
+author: viacheslav-ptsarev
+series: laptop-search
 draft: true
 ---
 

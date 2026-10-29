@@ -5,6 +5,21 @@ date: 2026-10-27
 tags: [search, benchmarks, cli]
 cover: ./cover.jpg
 coverAlt: "A laptop showing 4.6 s and 3.2 s bars, a stopwatch, and five small computers labelled linux x64, linux arm64, macos arm64, windows x64 and windows arm64, each with a green light"
+author: viacheslav-ptsarev
+series: laptop-search
+glance:
+  - value: "4.6 s → 3.2 s"
+    label: "a real --discover, WebAssembly against native"
+    href: "#act-two-native-was-2-faster-not-10"
+  - value: "≤ 15%"
+    label: "saved by batching, and the scores changed"
+    href: "#act-one-batching-changed-the-answers-not-the-speed"
+  - value: "113.5 MB"
+    label: "the npm tarball that held the only Windows DLL that worked"
+    href: "#act-four-the-windows-library-was-only-inside-an-npm-tarball"
+  - value: "5 + Alpine"
+    label: "systems CI now runs natively; Alpine stays on WebAssembly"
+    href: "#act-four-the-windows-library-was-only-inside-an-npm-tarball"
 draft: true
 ---
 
