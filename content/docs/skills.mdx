@@ -63,14 +63,15 @@ A repository source reads the repository's main branch, which can be ahead of th
 
 ## OpenClaw and ClawHub
 
-**Coming soon.** ClawHub is OpenClaw's skill directory. When the WireCat skills are listed there,
-one command installs a skill for every workspace:
+ClawHub is OpenClaw's skill directory. The WireCat skills are listed there by the `wirecat` publisher:
+`wirecat-tg`, `wirecat-max`, `wirecat-whatsapp`, `wirecat-zoom`,
+`wirecat-memo` and `wirecat-drive`. One command installs a skill for every workspace:
 
 ```sh
-openclaw skills install @wirecat/tg-cli --global
+openclaw skills install @wirecat/wirecat-tg --global
 ```
 
-Until then, `tg skill install --for agents` gives OpenClaw the skill, because OpenClaw reads
+Without ClawHub, `tg skill install --for agents` gives OpenClaw the skill, because OpenClaw reads
 `~/.agents/skills`. [OpenClaw skills guide](https://docs.openclaw.ai/tools/skills).
 
 ## skills.sh
