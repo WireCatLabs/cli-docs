@@ -76,10 +76,10 @@ permisos del perfil que el CLI. El inicio de sesión y la descarga del archivo s
 muestra la configuración con las rutas reales de Node y del CLI. No edita el cliente.
 El PATH de una aplicación de escritorio puede ser diferente del de la terminal.
 
-El servidor solo atiende el perfil que nombras: `tg personal mcp serve`. Para atender varios perfiles con un
-servidor, nómbralos con `tg mcp serve --profiles personal,work`, o usa `--profiles all` para todos; cada llamada
-a una herramienta indica entonces su perfil. Sin perfil ni `--profiles`, el servidor no arranca, y `tg mcp`
-solo muestra la ayuda.
+El servidor atiende el perfil que nombras: `tg personal mcp serve`. En tg, un servidor puede atender varios
+perfiles con `tg mcp serve --profiles personal,work`, o todos con `--profiles all`; cada llamada a una herramienta
+indica entonces su perfil. Sin perfil ni `--profiles`, tg no arranca el servidor. max no tiene `--profiles`:
+`max mcp serve` sin perfil atiende todos los perfiles. `tg mcp` o `max mcp` solo muestra la ayuda.
 
 ### Codex
 
