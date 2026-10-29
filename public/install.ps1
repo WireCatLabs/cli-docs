@@ -97,8 +97,9 @@ if (-not $RepairOnly) {
     if ($LASTEXITCODE -ne 0 -or $nodeVersion -notmatch '^v(\d+)\.(\d+)\.') { throw 'Could not read the Node.js version.' }
     $major = [int] $Matches[1]
     $minor = [int] $Matches[2]
-    if (-not ($major -ge 24 -or ($major -eq 22 -and $minor -ge 16))) {
-        throw 'Node.js 22.16+ or 24+ is required. Install a supported Node.js release first.'
+    $minMinor = if ($Tool -eq 'tg') { 19 } else { 16 }
+    if (-not ($major -ge 24 -or ($major -eq 22 -and $minor -ge $minMinor))) {
+        throw "Node.js 22.$minMinor+ or 24+ is required. Install a supported Node.js release first."
     }
     $npm = (Get-Command npm.cmd -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
     $package = "@wirecat/$Tool-cli"

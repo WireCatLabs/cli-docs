@@ -68,7 +68,7 @@ export function InstallTool({
             <summary className="cursor-pointer text-sm font-medium">{ui.terminal}</summary>
             <div className="mt-4 space-y-4">
               <p className="text-sm text-fd-muted-foreground">
-                <RuntimeRequirements lang={lang} />
+                <RuntimeRequirements lang={lang} tool={tool.name} />
               </p>
               <Link href={`/${lang}/docs/installation#nodejs`} className="inline-block text-sm">
                 {ui.nodeHelp} →
