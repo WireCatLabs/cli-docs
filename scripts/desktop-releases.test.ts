@@ -81,6 +81,9 @@ describe("operating system detection", () => {
     expect(detectOs({ userAgent: ua.windows })).toBe("windows")
     expect(detectOs({ userAgent: ua.linux })).toBe("linux")
     expect(detectOs({ userAgent: "curl/8.0" })).toBe("unknown")
+    expect(detectOs({ userAgent: "Mozilla/5.0 (X11; FreeBSD amd64; rv:144.0) Gecko/20100101 Firefox/144.0" })).toBe(
+      "unknown",
+    )
   })
 
   it("treats phones and an iPad that reports a Mac as mobile", () => {

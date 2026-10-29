@@ -96,6 +96,6 @@ export function detectOs(nav: NavigatorLike): DetectedOs {
   if (/macintosh|mac os x/i.test(ua)) return (nav.maxTouchPoints ?? 0) > 1 ? "mobile" : "macos"
   if (/windows/i.test(ua)) return "windows"
   if (/cros/i.test(ua)) return "unknown"
-  if (/linux|x11/i.test(ua)) return "linux"
+  if (/linux/i.test(ua)) return "linux"
   return "unknown"
 }
