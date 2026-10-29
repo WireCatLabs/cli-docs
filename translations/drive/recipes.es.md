@@ -417,12 +417,14 @@ conserva el formato original; no convierte Markdown local en un Google Doc con f
 
 Añade `--read-only` si este servidor debe rechazar escrituras.
 
-Para agentes sin terminal, configura el ejecutable `drive` y los argumentos `personal mcp`.
-La cuenta conectada debe estar en el ordenador que ejecuta el servidor.
+Para agentes sin terminal, configura el ejecutable `drive` y los argumentos `personal mcp serve`.
+La cuenta conectada debe estar en el ordenador que ejecuta el servidor. Para dar a un agente
+varias cuentas, usa `mcp serve --profiles work,personal` o `--profiles all`; cada llamada a una herramienta
+indica entonces su perfil. `drive mcp serve` sin perfil se niega y muestra los perfiles.
 
 ```sh
-drive personal mcp --tools --json
-drive personal mcp
+drive personal mcp serve --tools --json
+drive personal mcp serve
 ```
 
 El servidor ofrece tres herramientas: `drive_tools_search` encuentra un comando y muestra sus argumentos,

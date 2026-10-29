@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test"
 const pages = [
   { tool: "tg", first: "agent-without-send", command: "tg sends list", crossTool: true },
   { tool: "max", first: "agent-on-a-timer", command: "max review 'date>1d' --unanswered 4h", crossTool: true },
-  { tool: "drive", first: "agent-access", command: "drive personal mcp --read-only", crossTool: true },
+  { tool: "drive", first: "agent-access", command: "drive personal mcp serve --read-only", crossTool: true },
   { tool: "zm", first: "archive-recordings", command: "zm personal recordings schedule run daily", crossTool: true },
   { tool: "memo", first: "decision-trail", command: "tg personal contacts context Kai", crossTool: false },
 ]

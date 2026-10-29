@@ -25,7 +25,7 @@ These options apply to the selected profile and current invocation.
 | `--yes` | answer a policy confirmation; cannot override deny or readonly. |
 | `--allow-dangerous` | answer a permanent-deletion confirmation. |
 | `--permission <key=level>` | temporary policy override; repeat to add keys. |
-| `--record` | keep this run, with the command as typed and secrets hidden; record_input false leaves the typed words out. |
+| `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
 | `--no-record` | do not keep this run, even if it fails. |
 
 ## `drive session`
@@ -4192,7 +4192,7 @@ drive <profile> config set <key> <json-value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required | max_text_chars, picture_search, record, record_input, keep_runs_for_days, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
+| `key` | required | max_text_chars, picture_search, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
 | `json-value` | required | the new value, as JSON. |
 
 | Option | What it does |
@@ -4339,12 +4339,16 @@ drive images models download <model>
 
 ## `drive mcp`
 
-serve drive's commands to an agent over MCP: search, then read or write
+serve this profile to an agent over MCP and set it up — `claude mcp add drive -- drive <profile> mcp serve`
+
+### `drive mcp serve`
+
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add drive -- drive <profile> mcp serve`; `drive mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
 
 This command can change Google data or send data to the configured model.
 
 ```sh
-drive <profile> mcp [options]
+drive <profile> mcp serve [options]
 ```
 
 | Option | What it does |
@@ -4352,16 +4356,38 @@ drive <profile> mcp [options]
 | `--tools` | list the commands the server offers instead of starting it. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
-| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
-| `--revoke` | forget every login given to a browser app; each must log in again. |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/drive. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+
+**Returns:** serve this profile's commands to an AI agent
+
+**Example:** `drive personal mcp serve --tools`, `drive personal mcp serve`, `drive personal mcp serve --http --public-url https://laptop.example.ts.net`
+
+### `drive mcp revoke`
+
+forget every login `mcp serve --http` gave a browser app, of this profile or of the server `--profiles` names; each app must log in again
+
+This command changes local state.
+
+```sh
+drive <profile> mcp revoke [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+
+**Returns:** forget every login given to a browser app
+
+**Example:** `drive personal mcp revoke`
 
 ### `drive mcp server`
 
-start, stop and check `mcp --http` in the background; status shows the login code for a browser app
+start, stop and check `mcp serve --http` in the background; status shows the login code for a browser app
 
 #### `drive mcp server start`
 
-start `mcp --http` apart from this shell and answer once it listens, with its login code
+start `mcp serve --http` apart from this shell and answer once it listens, with its login code
 
 This command changes local state.
 
@@ -4372,8 +4398,8 @@ drive <profile> mcp server start [options]
 | Option | What it does |
 |---|---|
 | `--port <port>` | the local port (default 8765). |
-| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
-| `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
 **Returns:** start the HTTP MCP server in the background
 
@@ -4381,13 +4407,17 @@ drive <profile> mcp server start [options]
 
 #### `drive mcp server stop`
 
-stop `mcp --http` — only one that `mcp server start` started
+stop `mcp serve --http` — only one that `mcp server start` started
 
 This command changes local state.
 
 ```sh
-drive <profile> mcp server stop
+drive <profile> mcp server stop [options]
 ```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
 **Returns:** stop the background HTTP MCP server
 
@@ -4395,11 +4425,15 @@ drive <profile> mcp server stop
 
 #### `drive mcp server status`
 
-whether `mcp --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
+whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
 
 ```sh
-drive <profile> mcp server status
+drive <profile> mcp server status [options]
 ```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
 **Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
 
@@ -4431,7 +4465,7 @@ the instructions an agent is given for this tool
 
 ### `drive skill show`
 
-print SKILL.md — `drive skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
+print SKILL.md — `drive skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
 
 ```sh
 drive skill show [options]
@@ -4459,7 +4493,7 @@ drive skill install [options]
 |---|---|
 | `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
 
-**Returns:** put SKILL.md where Claude Code, Codex and Gemini CLI look
+**Returns:** put SKILL.md for Claude Code, Codex, Gemini CLI, OpenClaw, and Hermes on request
 
 **Example:** `drive skill install --for all`
 
@@ -4526,7 +4560,7 @@ drive runs list [query] [options]
 | `--limit <n>` | how many to show. Default: `20`. |
 | `--page <n>` | which page, starting at 1. Default: `1`. |
 
-**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 20 more; every field: drive commands info runs list
+**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: drive commands info runs list
 
 **Example:** `drive runs list --limit 10`
 
@@ -4546,7 +4580,7 @@ drive runs show <run-id> [options]
 |---|---|
 | `--problems` | only failed responses, warnings and crashes. |
 
-**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 19 more; every field: drive commands info runs show
+**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 22 more; every field: drive commands info runs show
 
 **Example:** `drive runs show run-101`
 

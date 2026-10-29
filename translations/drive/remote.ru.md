@@ -6,21 +6,21 @@ title: "ChatGPT, Codex или Claude в браузере"
 
 Термины в этом руководстве:
 
-- **MCP** (Model Context Protocol) — стандарт, по которому приложение ИИ вызывает внешние инструменты. `drive personal mcp` запускает MCP-сервер `drive`; для приложений на своём компьютере см. [локальный MCP-клиент](./recipes.md#use-a-local-mcp-client).
-- **Удалённое подключение** означает, что приложение обращается со своих серверов через интернет к указанному вами адресу. Для этого `drive personal mcp --http` предоставляет те же инструменты по HTTP на `127.0.0.1`.
+- **MCP** (Model Context Protocol) — стандарт, по которому приложение ИИ вызывает внешние инструменты. `drive personal mcp serve` запускает MCP-сервер `drive`; для приложений на своём компьютере см. [локальный MCP-клиент](./recipes.md#use-a-local-mcp-client).
+- **Удалённое подключение** означает, что приложение обращается со своих серверов через интернет к указанному вами адресу. Для этого `drive personal mcp serve --http` предоставляет те же инструменты по HTTP на `127.0.0.1`.
 - **HTTPS-туннель** — программа, которая даёт порту вашего компьютера публичный HTTPS-адрес. Здесь используется [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel); подойдёт и Cloudflare Tunnel. Для Funnel не нужно покупать домен.
 - **Публичный URL** — этот адрес, например `https://laptop.tail1234.ts.net`. Вы передаёте его `drive` через `--public-url`, а приложению — с `/mcp` в конце.
 - **Код доступа** — одноразовый код, который `drive` выводит в терминале. Страница входа приложения запрашивает этот код, поэтому подключить приложение может только человек, который видит терминал.
 
 ```text
-ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ drive personal mcp --http (login) ──▶ Google Drive
+ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ drive personal mcp serve --http (login) ──▶ Google Drive
 ```
 
 Если Tailscale уже настроен, используйте существующее подключение: второй туннель не нужен. Локальное подключение через стандартные потоки ввода и вывода продолжает работать.
 
 ## Перед началом
 
-- **Вошедшее приложение получает доступ к вашим документам.** Для входа нужен код из терминала. Не публикуйте через туннель `drive personal mcp` без `--http`: в этом режиме нет страницы входа.
+- **Вошедшее приложение получает доступ к вашим документам.** Для входа нужен код из терминала. Не публикуйте через туннель `drive personal mcp serve` без `--http`: в этом режиме нет страницы входа.
 - **Права профиля определяют, что приложение может менять.** `deny` и `readonly` блокируют запись; `ask` и `allow` пропускают запрошенную запись через MCP без формы подтверждения на сервере. Подтверждение в самом приложении зависит от его настроек. Вход Google и права на файлы проверяются отдельно: для записи также нужно повторно подключиться с `--grant write` ([сценарии](./recipes.md), [настройки](./configuration.md), [безопасность](./security.md)).
 - **Компьютер с `drive` должен оставаться включённым.** Для работы с телефона можно запустить сервер на постоянно включённом компьютере и подключить свой аккаунт Google там.
 - **Проверьте, разрешены ли в приложении или рабочем пространстве пользовательские подключения MCP.** Доступность и ограничения администратора зависят от приложения. Следуйте актуальному [руководству OpenAI](https://developers.openai.com/api/docs/guides/custom-mcp-server) или [руководству Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
@@ -58,10 +58,10 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 Второе окно запустите от обычного пользователя, без `sudo` (в Windows используйте `drive.cmd`):
 
 ```sh
-drive personal mcp --http --port 8765 --public-url https://<device>.<network>.ts.net
+drive personal mcp serve --http --port 8765 --public-url https://<device>.<network>.ts.net
 ```
 
-Чтобы запустить `drive` рядом с `tg` или `max`, задайте каждому серверу отдельные локальный и публичный HTTPS-порты. Например, второй Funnel с `--https=8443 8766` и `drive personal mcp --http --port 8766
+Чтобы запустить `drive` рядом с `tg` или `max`, задайте каждому серверу отдельные локальный и публичный HTTPS-порты. Например, второй Funnel с `--https=8443 8766` и `drive personal mcp serve --http --port 8766
 --public-url https://<device>.<network>.ts.net:8443`. Funnel поддерживает публичные порты `443`, `8443` и `10000` ([справочник Funnel](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
 
 ### Вариант: Cloudflare Tunnel
@@ -69,7 +69,7 @@ drive personal mcp --http --port 8765 --public-url https://<device>.<network>.ts
 [Именованный туннель Cloudflare](https://developers.cloudflare.com/tunnel/get-started/) с публичным именем вроде `mcp.example.com` и локальным сервисом `http://127.0.0.1:8765` работает так же:
 
 ```sh
-drive personal mcp --http --port 8765 --public-url https://mcp.example.com
+drive personal mcp serve --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Временный Quick Tunnel (`cloudflared tunnel --url …`) не подходит: [Quick Tunnels не поддерживают SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), через которые HTTP MCP-сервер передаёт поток ответов.
@@ -81,6 +81,8 @@ drive personal mcp server start --port 8765 --public-url https://<device>.<netwo
 drive personal mcp server status   # running, port, connector address, the current login code, apps logged in
 drive personal mcp server stop     # stops only a server that `mcp server start` started
 ```
+
+Один сервер может обслуживать несколько профилей: `drive mcp serve --http --profiles work,personal` или `--profiles all` для всех профилей на этом компьютере. Тогда каждый вызов инструмента называет свой профиль. У списка свой вход, отдельный от входа каждого профиля и от `--profiles all`; `mcp server start|stop|status` и `mcp revoke` принимают тот же `--profiles`. Без профиля и без `--profiles` drive отказывается запускаться и перечисляет профили.
 
 Код хранится рядом с файлом токена профиля (`mcp-http.lock`, режим 600) и обновляется каждые десять минут; сервер, запущенный так, не пишет его в свой журнал. WireCat Desktop показывает то же состояние в разделе Tools → Google Drive → MCP server.
 
@@ -105,10 +107,11 @@ drive personal mcp server stop     # stops only a server that `mcp server start`
 
 Если Funnel был запущен с `--bg`, Ctrl-C не остановит фоновый маршрут. Проверьте `tailscale funnel status` и выключите только его порт, например `tailscale funnel --https=443 off`.
 
-Чтобы завершить вход всех приложений для профиля:
+Чтобы завершить вход всех приложений для профиля или для сервера нескольких профилей:
 
 ```sh
-drive personal mcp --revoke --json
+drive personal mcp revoke --json
+drive mcp revoke --profiles all --json
 ```
 
 Приложениям понадобится снова войти с новым кодом. Это не завершает вход `drive` в Google.
@@ -116,6 +119,6 @@ drive personal mcp --revoke --json
 ## Если не работает
 
 - **Приложение не подключается:** откройте в браузере `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp`. Должен появиться небольшой JSON. Если его нет, Funnel не работает, не разрешён в вашей сети Tailscale или направлен на другой порт.
-- **Страница входа сообщает "Too many wrong codes":** перезапустите `drive personal mcp --http`. Если коды вводили не вы, кто-то нашёл ваш адрес: рассмотрите смену имени устройства в Tailscale.
+- **Страница входа сообщает "Too many wrong codes":** перезапустите `drive personal mcp serve --http`. Если коды вводили не вы, кто-то нашёл ваш адрес: рассмотрите смену имени устройства в Tailscale.
 - **"port 8765 is in use":** порт занят другим сервером; задайте другой через `--port` и направьте туннель на него.
 - **Чтение работает, запись — нет:** проверьте права профиля, переопределения `--permission` и разрешение Google на запись. `deny` и `readonly` блокируют запись независимо от подтверждения приложения.

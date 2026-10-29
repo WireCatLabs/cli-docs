@@ -4,6 +4,144 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.45.1 — 29.10.2026
+
+### Fixed
+
+- **An error about a server of several profiles repeats its `--profiles`.** When `mcp server start` or `stop` tells
+  you to run `mcp server status` or `start` again, the command it shows now keeps `--profiles all` (or the list),
+  so it runs as written. This comes with cli-core 0.473.0 (cli-base stays 0.65.0), which now provides `--profiles`
+  for `mcp server start|stop|status`; its help reads "the server of several profiles that `mcp serve --profiles`
+  serves". Answers are unchanged, and a server of several profiles that drive 0.45.0 started is still stopped by
+  `mcp server stop --profiles`. `drive --help` lists `mail` under "Works with".
+
+## 0.45.0 — 27.10.2026
+
+### Changed — may break callers
+
+- **`drive mcp serve` no longer serves every profile by default.** A server serves one named
+  profile (`drive personal mcp serve`), a list (`drive mcp serve --profiles work,personal`) or every profile
+  (`--profiles all`). With neither it exits 2 (`validation_error`) and lists the profiles; a profile word together
+  with `--profiles`, an unknown name, or `all` inside a list is refused the same way, and under `DRIVE_PROFILE_LOCK`
+  `--profiles` may name only the locked profile (exit 5). `mcp revoke` and `mcp server start|stop|status` take the
+  same `--profiles`. Update a client set up with plain `drive mcp serve` to add `--profiles all`; the MCP registry
+  entry (`server.json`) now passes it. `--profiles all` keeps the browser login it had, so connected apps stay logged
+  in; a list gets a login of its own. The startup line names the profiles served. The Glama image runs
+  `drive glama mcp serve` again, not the help-only `mcp`.
+- **cli-core 0.469.0 and cli-base 0.65.0.** cli-core 0.469 accepts only cli-base 0.65, so both pins move together.
+  cli-base 0.65 knows the verbs `serve` and `revoke`, so their lint baseline entries are gone, and its `cli-dev bundle`
+  finds a server started with a flag before `mcp serve`. From cli-core 0.468, an MCP server offers a command that only
+  fetches into the store through its read tool.
+
+### Fixed
+
+- **`drive` starts in about half the time: the package runs from a bundle.** A command loaded about a thousand module
+  files before doing any work; it now loads a few dozen that hold the same code, built by cli-base's
+  `cli-dev bundle`. Warm `drive search --help` went from 453 to 219 ms, `drive --version` from 44 to 20 ms. Output is
+  unchanged; the Google client libraries still load from the package's own dependencies. A running `drive mcp serve`
+  loads all of its code soon after it starts, so upgrading `drive` in place does not break it. The package is larger:
+  3.3 MB to download instead of 0.57 MB.
+
+## 0.44.0 — 27.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.467.0 and cli-base 0.64.0.** cli-core accepts only cli-base 0.64, so both pins move together.
+- **A `drive search` hit marks the text someone else wrote (cli-core 0.464.0).** A document's title and excerpt come
+  from a shared drive, so each hit carries `untrusted: ["title", "excerpt"]` and an agent reads them as data. A caller
+  that checks hits against an older, strict copy of their shape refuses the new field.
+- **The MCP server is `drive <profile> mcp serve`; `drive mcp` only shows help (cli-core 0.463.0).** `mcp` is now a
+  group, like `session` and `skill`: `mcp serve` starts the server (stdio, or `--http`), `mcp serve --tools` lists
+  the commands it offers, and `mcp revoke` replaces `mcp --revoke`. With no profile, `drive mcp serve` and
+  `drive mcp revoke` still act on the server of every profile. No old spelling is kept: update a client set up with
+  `claude mcp add drive -- drive personal mcp` to end in `mcp serve`. `mcp server start` runs `mcp serve --http`,
+  and the MCP registry entry (`server.json`) passes `mcp serve`. `mcp revoke` is refused under `--read-only`.
+- **The shared store moves to schema 35 (cli-core 0.463.0).** The first run upgrades it and says so; every other
+  WireCat CLI that uses the same store then needs a version that speaks schema 35 — run `<cli> upgrade` for each.
+- **Every run is now kept, successes too (cli-core record-every-run).** Before, only failed runs were kept unless
+  `--record` or `record: true`. A successful run stays 7 days (`keep_successful_runs_for_days`), a failed one 30
+  (`keep_runs_for_days`), and the run log stays under `runs_size_limit_mb` (200 MB; the oldest successes go first).
+  **Privacy:** a kept run holds the command as typed (secrets and phone numbers hidden), so a successful `search` now
+  leaves its words in a local, 0600 file for 7 days. `record_input: "failed"` keeps them only in a failed run,
+  `record_input: false` everywhere masks them; `record: false` now keeps failed runs (before: nothing); `--no-record`
+  keeps nothing. `mcp serve` keeps a success only under `--record`.
+- **Re-run `drive <profile> mcp add` or `drive <profile> mcp config`** after this upgrade, so your AI app starts
+  `mcp serve`.
+- **`drive skill show`, `skill status` and `skill install` answer `--json` as `{ item, meta }` (cli-core
+  0.462.0).** What was the whole answer is now under `item`, like every other single-thing answer.
+- **A run says who asked for it (cli-core).** `run.json` gains `via` (`cli`, `mcp-stdio`, `mcp-http`, `desktop`),
+  `mcp` (tool, request and connection ids) and `agent.client` (the AI app's name and version). Over HTTP the agent
+  is the browser app's MCP session, no longer whichever agent started `mcp serve --http`. A reader that checks a run
+  against an older copy of its shape refuses the new fields.
+
+### Security
+
+- **The secret scan catches Google OAuth tokens.** gitleaks' own rules know Google API keys only, so an access token
+  (`ya29.…`) or a refresh token (`1//…`) with no keyword beside it reached a commit unnoticed. `.gitleaks.toml` now
+  has a rule for each; the pre-commit hook and CI use it.
+
+### Added
+
+- **Each Google request in a run is one line per attempt.** A request line now carries the method, the path with
+  every id as `:id`, `transport: "http"`, `attempt` (2 and up when the Google client retried) and `wait_ms`, the time
+  waited before the retry; a refused answer names Google's reason (`rateLimitExceeded`). A 429 shows as an error
+  answer, then the retry. Never the URL as sent, its query, or a body.
+- **`config set keep_successful_runs_for_days`, `runs_size_limit_mb` and `record_input "failed"`** (`--defaults`).
+- **`drive upgrade` restarts the HTTP MCP server and names the stdio MCP sessions still on the old version**
+  (cli-core). After an install it restarts each `mcp serve --http` that `mcp server start` launched, with the same
+  port, address and limits, and lists this install's stdio `mcp serve` processes as `stale_sessions` to restart from
+  your AI app. It works from the next upgrade on.
+- **A Drive file attached to a calendar event is linked to that event (cli-core 0.453.0).** When gcal and drive keep
+  one local store, the event's attachment points to the document drive saved for that file. The two can sync in either
+  order: the link is made when the second one stores its side.
+
+## 0.43.0 — 27.10.2026
+
+### Added
+
+- **Not signed in, the MCP answer and instructions also offer WireCat Desktop.** An expired or missing Google
+  sign-in tells the agent the owner runs `drive <profile> session start` or signs in from WireCat Desktop, and never to
+  ask for codes or passwords. The skill says the same.
+
+### Fixed
+
+- **Search by meaning answers in a fraction of a second on a large store (cli-core 0.451.0).** Ranking files by meaning
+  now uses the vector index instead of reading every chunk in the store: on one archive with 600,000 chunks it took
+  7–18 s a query and now about 0.05 s, with the same results. It still reads every chunk when the index is not ready.
+- **Meaning search runs on the native ONNX Runtime on Windows too.** After `drive models download e5-small`, the model
+  uses the native library on Windows x64 and arm64, as it already did on Linux and macOS: 2–3× faster than
+  WebAssembly. The download takes `onnxruntime.dll` from the `onnxruntime-node` npm package (113.5 MB, once, checked
+  by sha256). Picture models (`drive images models download`) use the native library as well.
+
+## 0.42.0 — 27.10.2026
+
+### Added
+
+- **`drive mcp` with no profile serves every profile, on stdio and with `--http` (cli-core 0.450).** An AI app needs
+  one connector for Drive, not one per profile. Each tool takes a required `profile` (every profile here, no default)
+  and the agent is told to ask when you did not name the account; the call runs in that profile's own
+  `drive <profile> mcp`, so its permissions and Google grant apply as before. `drive mcp --revoke` and
+  `drive mcp server start|stop|status` work without a profile too, with their own login. `--public-url` takes a path,
+  `https://<name>.ts.net/drive`, so several tools share one tunnel address. The MCP Registry entry starts
+  `drive mcp` with no profile.
+
+### Fixed
+
+- **`drive skill install` names every agent it installs for.** Its Returns line said only Claude Code, Codex and
+  Gemini CLI; it now also names OpenClaw, and Hermes, which `--for hermes` adds.
+
+- **Every command spends less time getting ready (cli-base 0.62.0, cli-core 0.449.0).** The check of shared commands now
+  describes each command once, not again for every group above it. It was about 60% of each command's setup; in tg a
+  warm `run(["--version"])` went from 49 to 29 ms. It catches the same changes as before.
+
+## 0.41.1 — 26.10.2026
+
+### Fixed
+
+- **Search by meaning runs 2–3× faster on Linux and Apple-silicon Macs (cli-core 0.448.0).** After the next
+  `drive models download`, the text and reranking models run on the native ONNX Runtime; where it is not
+  installed, they still run on WebAssembly.
+
 ## 0.41.0 — 26.10.2026
 
 ### Security

@@ -32,9 +32,11 @@ antes de moverlos o borrarlos.
 | --- | --- | --- |
 | `permissions` | Acceso por comando: `deny`, `readonly`, `ask` o `allow` | Perfil o `defaults` |
 | `max_text_chars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
-| `record` | `true` guarda cada ejecución en `drive runs list`; predeterminado `false`, que guarda solo las ejecuciones fallidas. `false` definido aquí no guarda ninguna | Solo `defaults` |
-| `record_input` | Una ejecución guardada conserva el comando tal como se escribió, con los secretos o números de teléfono escritos como `[redacted]`. `false` escribe también como `[redacted]` cada valor que pueda ser contenido | Solo `defaults` |
-| `keep_runs_for_days` | Cuántos días se conserva una ejecución guardada; predeterminado `30` | Solo `defaults` |
+| `record` | `false` guarda en `drive runs list` solo las ejecuciones fallidas; predeterminado `true`, todas | Solo `defaults` |
+| `record_input` | Una ejecución guardada conserva el comando tal como se escribió, con los secretos o números de teléfono escritos como `[redacted]`. `"failed"` conserva las palabras escritas solo en una ejecución fallida; `false` escribe también como `[redacted]` cada valor que pueda ser contenido | Solo `defaults` |
+| `keep_runs_for_days` | Cuántos días se conserva una ejecución fallida; predeterminado `30` | Solo `defaults` |
+| `keep_successful_runs_for_days` | Cuántos días se conserva una ejecución correcta; predeterminado `7` | Solo `defaults` |
+| `runs_size_limit_mb` | El tamaño máximo del registro de ejecuciones; primero se borran las ejecuciones correctas más antiguas; predeterminado `200` | Solo `defaults` |
 | `picture_search` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
 | `models.memories.provider` | Proveedor de IA para la extracción solicitada explícitamente | Perfil o `defaults` |
 | `models.memories.model` | Identificador del modelo del proveedor | Perfil o `defaults` |
