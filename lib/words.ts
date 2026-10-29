@@ -39,6 +39,9 @@ export type Words = {
   }
 }
 
+// From each pinned release's `engines.node`; every tool also accepts 24+.
+export const nodeMinimum = (tool: string) => (tool === "tg" ? "22.19" : "22.16")
+
 // drive, memo and zm have no `setup`; each request follows that tool's own first steps.
 const toolPrompts: Record<string, Record<string, (pkg: string) => string>> = {
   en: {
@@ -145,7 +148,7 @@ export const words: Record<string, Words> = {
       browser: "The browser gives you the instructions; your agent or terminal runs the installation on your computer.",
       nodeHelp: "Need Node.js? Ask your agent to prepare your computer.",
       nodePrompt: `Check whether Node.js and npm are installed.
-If needed, install a compatible stable version of Node.js with npm for my operating system: 22.16+ (22.x) or 24+.
+If needed, install a compatible stable version of Node.js with npm for my operating system: 22.19+ (22.x) or 24+.
 Verify node --version and npm --version, then continue setting up the messenger.`,
       login: "Log in",
       timing: "Allow about 5 minutes for setup. Downloading chat history is a separate step and may take longer.",
@@ -154,7 +157,7 @@ Verify node --version and npm --version, then continue setting up the messenger.
         `Install ${tool} with npm install -g ${pkg}.
 Read ${tool} setup --help, explain the steps and allow about five minutes, then help me run ${tool} personal setup (personal is a profile name; any name works).
 Run ${tool} personal doctor and suggest next steps.
-Before installation, check Node.js 22.16+ (22.x) or 24+ and npm; help me install them if needed.
+Before installation, check Node.js ${nodeMinimum(tool)}+ (22.x) or 24+ and npm; help me install them if needed.
 At the end, offer to install the ${tool} skill for my agent.`,
     },
   },
@@ -195,7 +198,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       browser: "Браузер показывает инструкцию; установку на вашем компьютере выполняет агент или терминал.",
       nodeHelp: "Если Node.js ещё нет, попросите агента подготовить компьютер.",
       nodePrompt: `Проверь, установлены ли Node.js и npm.
-Если нужно, установи подходящую стабильную версию Node.js с npm для моей операционной системы: 22.16+ (ветка 22.x) или 24+.
+Если нужно, установи подходящую стабильную версию Node.js с npm для моей операционной системы: 22.19+ (ветка 22.x) или 24+.
 Проверь node --version и npm --version, затем продолжи настройку мессенджера.`,
       login: "Войти в аккаунт",
       timing:
@@ -205,7 +208,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
         `Установи ${tool} через npm install -g ${pkg}.
 Прочитай ${tool} setup --help, предупреди о шагах и что понадобится около пяти минут, затем помоги выполнить ${tool} personal setup (personal — имя профиля, подойдёт любое).
 Выполни ${tool} personal doctor и предложи следующие шаги.
-Перед установкой проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm; если нужно, помоги их установить.
+Перед установкой проверь Node.js ${nodeMinimum(tool)}+ (ветка 22.x) или 24+ и npm; если нужно, помоги их установить.
 В конце предложи установить ${tool} skill для моего агента.`,
     },
   },
@@ -246,7 +249,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       browser: "El navegador muestra las instrucciones; tu agente o terminal ejecuta la instalación en tu ordenador.",
       nodeHelp: "¿Falta Node.js? Pide al agente que prepare tu ordenador.",
       nodePrompt: `Comprueba si Node.js y npm están instalados.
-Si hace falta, instala una versión estable compatible de Node.js con npm para mi sistema operativo: 22.16+ (rama 22.x) o 24+.
+Si hace falta, instala una versión estable compatible de Node.js con npm para mi sistema operativo: 22.19+ (rama 22.x) o 24+.
 Verifica node --version y npm --version y continúa con la configuración del servicio de mensajería.`,
       login: "Iniciar sesión",
       timing:
@@ -256,7 +259,7 @@ Verifica node --version y npm --version y continúa con la configuración del se
         `Instala ${tool} con npm install -g ${pkg}.
 Lee ${tool} setup --help, explica los pasos y que harán falta unos cinco minutos, y ayúdame a ejecutar ${tool} personal setup (personal es un nombre de perfil; sirve cualquiera).
 Ejecuta ${tool} personal doctor y propone los siguientes pasos.
-Antes de instalar, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm; ayúdame a instalarlos si hace falta.
+Antes de instalar, comprueba Node.js ${nodeMinimum(tool)}+ (rama 22.x) o 24+ y npm; ayúdame a instalarlos si hace falta.
 Al terminar, ofrece instalar el skill de ${tool} para mi agente.`,
     },
   },

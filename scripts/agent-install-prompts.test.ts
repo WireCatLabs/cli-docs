@@ -9,7 +9,7 @@ describe("agent installation requests", () => {
       expect(prompt).toContain(`${tool} setup --help`)
       expect(prompt).toContain(`${tool} personal setup`)
       expect(prompt).toContain(`${tool} personal doctor`)
-      expect(prompt).toContain("22.16+")
+      expect(prompt).toContain(tool === "tg" ? "22.19+" : "22.16+")
       expect(prompt.split("\n")).toHaveLength(5)
       expect(prompt.split("\n").at(-1)).toContain("skill")
       expect(prompt.length).toBeLessThan(550)
