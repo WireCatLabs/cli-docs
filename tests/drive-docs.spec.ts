@@ -114,8 +114,8 @@ for (const lang of ["en", "ru", "es"] as const) {
   }) => {
     await page.goto(`/${lang}/docs/drive/remote`)
     const body = page.locator("main")
-    await expect(body).toContainText("drive personal mcp --http --port 8765 --public-url")
-    await expect(body).toContainText("drive personal mcp --revoke --json")
+    await expect(body).toContainText("drive personal mcp serve --http --port 8765 --public-url")
+    await expect(body).toContainText("drive personal mcp revoke --json")
     await expect(body).toContainText("DCR")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
     const remoteLink = page.locator("#nd-sidebar").getByRole("link", { name: /ChatGPT.*Claude/ })
@@ -124,7 +124,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}drive/remote/content.md`)
     expect(markdown.ok()).toBe(true)
-    expect(await markdown.text()).toContain("drive personal mcp --revoke --json")
+    expect(await markdown.text()).toContain("drive personal mcp revoke --json")
     await page.goto(`/${lang}/docs/drive/recipes`)
     await expect(page.locator("main")).toContainText("availability.available: false")
     await expect(page.locator(`main a[href="/${lang}/docs/drive/remote"]`).first()).toBeVisible()

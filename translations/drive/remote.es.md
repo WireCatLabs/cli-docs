@@ -6,21 +6,21 @@ Conecta una aplicación de IA del navegador o del teléfono, como ChatGPT, Codex
 
 Términos de esta guía:
 
-- **MCP** (Model Context Protocol) es el estándar que permite a una aplicación de IA llamar a herramientas externas. `drive personal mcp` inicia el servidor MCP de `drive`; para aplicaciones del ordenador, consulta [el cliente MCP local](./recipes.md#use-a-local-mcp-client).
-- **Conexión remota** significa que la aplicación se conecta desde sus servidores, por internet, a la dirección que le das. `drive personal mcp --http` ofrece las mismas herramientas por HTTP en `127.0.0.1`.
+- **MCP** (Model Context Protocol) es el estándar que permite a una aplicación de IA llamar a herramientas externas. `drive personal mcp serve` inicia el servidor MCP de `drive`; para aplicaciones del ordenador, consulta [el cliente MCP local](./recipes.md#use-a-local-mcp-client).
+- **Conexión remota** significa que la aplicación se conecta desde sus servidores, por internet, a la dirección que le das. `drive personal mcp serve --http` ofrece las mismas herramientas por HTTP en `127.0.0.1`.
 - **Túnel HTTPS** es un programa que da una dirección HTTPS pública a un puerto del ordenador. Esta guía usa [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel); también funciona Cloudflare Tunnel. Funnel no requiere comprar un dominio.
 - **URL pública** es esa dirección, por ejemplo `https://laptop.tail1234.ts.net`. Se pasa a `drive` con `--public-url`, y a la aplicación con `/mcp` al final.
 - **Código de acceso** es un código de un solo uso que `drive` muestra en el terminal. La página de acceso lo solicita, de modo que solo alguien que vea ese terminal puede conectar una aplicación.
 
 ```text
-ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ drive personal mcp --http (login) ──▶ Google Drive
+ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ drive personal mcp serve --http (login) ──▶ Google Drive
 ```
 
 Si tu conexión de Tailscale ya funciona, consérvala: no necesitas otro túnel. La conexión local por entrada y salida estándar sigue funcionando.
 
 ## Antes de empezar
 
-- **La aplicación que inicia sesión accede a tus documentos.** El acceso necesita el código del terminal. No pongas un túnel delante de `drive personal mcp` sin `--http`: ese modo no tiene inicio de sesión.
+- **La aplicación que inicia sesión accede a tus documentos.** El acceso necesita el código del terminal. No pongas un túnel delante de `drive personal mcp serve` sin `--http`: ese modo no tiene inicio de sesión.
 - **Los permisos del perfil determinan qué puede cambiar la aplicación.** `deny` y `readonly` bloquean las escrituras; `ask` y `allow` permiten una escritura solicitada por MCP sin un formulario de confirmación en el servidor. La aprobación de la aplicación es independiente y depende de sus ajustes. El acceso a Google y los permisos de archivo se comprueban aparte: escribir también requiere volver a conectar con `--grant write` ([recetas](./recipes.md), [configuración](./configuration.md), [seguridad](./security.md)).
 - **El ordenador que ejecuta `drive` debe seguir encendido.** Para usarlo desde el teléfono, puedes ejecutarlo en un servidor siempre encendido y conectar allí tu cuenta de Google.
 - **Comprueba que tu aplicación o espacio de trabajo permite conexiones MCP personalizadas.** La disponibilidad y los controles administrativos dependen de la aplicación. Sigue la [guía actual de OpenAI](https://developers.openai.com/api/docs/guides/custom-mcp-server) o la [guía de conectores de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
@@ -58,10 +58,10 @@ En Windows, desde PowerShell como administrador:
 Segunda ventana, como usuario normal, sin `sudo` (en Windows, usa `drive.cmd`):
 
 ```sh
-drive personal mcp --http --port 8765 --public-url https://<device>.<network>.ts.net
+drive personal mcp serve --http --port 8765 --public-url https://<device>.<network>.ts.net
 ```
 
-Para ejecutar `drive` junto a `tg` o `max`, da a cada servidor un puerto local y un puerto HTTPS público distintos. Por ejemplo, otro Funnel con `--https=8443 8766` y `drive personal mcp --http --port 8766
+Para ejecutar `drive` junto a `tg` o `max`, da a cada servidor un puerto local y un puerto HTTPS público distintos. Por ejemplo, otro Funnel con `--https=8443 8766` y `drive personal mcp serve --http --port 8766
 --public-url https://<device>.<network>.ts.net:8443`. Funnel admite los puertos públicos `443`, `8443` y `10000` ([referencia de Funnel](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
 
 ### Alternativa: Cloudflare Tunnel
@@ -69,7 +69,7 @@ Para ejecutar `drive` junto a `tg` o `max`, da a cada servidor un puerto local y
 Un [túnel de Cloudflare con nombre](https://developers.cloudflare.com/tunnel/get-started/), con un nombre público como `mcp.example.com` y el servicio local `http://127.0.0.1:8765`, funciona igual:
 
 ```sh
-drive personal mcp --http --port 8765 --public-url https://mcp.example.com
+drive personal mcp serve --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Un Quick Tunnel temporal (`cloudflared tunnel --url …`) no funciona: [Quick Tunnels no admite SSE](https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/), que es como el servidor HTTP MCP transmite las respuestas.
@@ -81,6 +81,8 @@ drive personal mcp server start --port 8765 --public-url https://<device>.<netwo
 drive personal mcp server status   # running, port, connector address, the current login code, apps logged in
 drive personal mcp server stop     # stops only a server that `mcp server start` started
 ```
+
+Un servidor puede atender varios perfiles: `drive mcp serve --http --profiles work,personal`, o `--profiles all` para todos los perfiles de este ordenador. Cada llamada a una herramienta indica entonces su perfil. Una lista tiene su propio inicio de sesión, aparte del de cada perfil y del de `--profiles all`; `mcp server start|stop|status` y `mcp revoke` aceptan el mismo `--profiles`. Sin perfil ni `--profiles`, drive se niega y muestra los perfiles.
 
 El código se guarda junto al archivo de token del perfil (`mcp-http.lock`, modo 600) y se renueva cada diez minutos; un servidor iniciado así no lo escribe en su registro. WireCat Desktop muestra el mismo estado en Tools → Google Drive → MCP server.
 
@@ -105,10 +107,11 @@ Pulsa Ctrl-C en ambas ventanas para detener el servidor y el túnel. Las sesione
 
 Si iniciaste Funnel con `--bg`, Ctrl-C no detiene esa ruta en segundo plano. Comprueba `tailscale funnel status` y desactiva solo su puerto, por ejemplo `tailscale funnel --https=443 off`.
 
-Para cerrar las sesiones de todas las aplicaciones de un perfil:
+Para cerrar las sesiones de todas las aplicaciones de un perfil, o del servidor de varios perfiles:
 
 ```sh
-drive personal mcp --revoke --json
+drive personal mcp revoke --json
+drive mcp revoke --profiles all --json
 ```
 
 Las aplicaciones tendrán que iniciar sesión con un código nuevo. Esto no desconecta `drive` de Google.
@@ -116,6 +119,6 @@ Las aplicaciones tendrán que iniciar sesión con un código nuevo. Esto no desc
 ## Si no funciona
 
 - **La aplicación no se conecta:** abre `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` en el navegador. Debe mostrar un JSON breve. Si no aparece, Funnel no funciona, no está permitido en tu red de Tailscale o apunta a otro puerto.
-- **La página muestra "Too many wrong codes":** reinicia `drive personal mcp --http`. Si no los introdujiste tú, alguien encontró la dirección: considera cambiar el nombre del dispositivo en Tailscale.
+- **La página muestra "Too many wrong codes":** reinicia `drive personal mcp serve --http`. Si no los introdujiste tú, alguien encontró la dirección: considera cambiar el nombre del dispositivo en Tailscale.
 - **"port 8765 is in use":** otro servidor ocupa el puerto; elige otro con `--port` y dirige el túnel hacia él.
 - **Leer funciona, escribir no:** comprueba los permisos del perfil, las opciones `--permission` y el permiso de escritura de Google. `deny` y `readonly` bloquean la escritura aunque la aplicación la apruebe.

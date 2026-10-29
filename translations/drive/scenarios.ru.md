@@ -19,13 +19,13 @@ title: "Пошаговые сценарии"
    кладёт инструкции drive туда, где их ищут Claude Code, Codex и Gemini CLI
 
 2. ```sh
-   drive personal mcp --tools --read-only
+   drive personal mcp serve --tools --read-only
    ```
 
    показывает команды с текущей доступностью; запись остаётся видимой, но запрещена
 
 3. ```sh
-   drive personal mcp --read-only
+   drive personal mcp serve --read-only
    ```
 
    запускает три инструмента на stdio — drive_tools_search, drive_read и drive_write; запись по-прежнему запрещена

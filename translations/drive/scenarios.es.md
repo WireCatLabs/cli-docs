@@ -19,13 +19,13 @@ Un agente busca y lee los documentos importados sin que nada de lo que ejecute p
    coloca las instrucciones de drive donde las buscan Claude Code, Codex y Gemini CLI
 
 2. ```sh
-   drive personal mcp --tools --read-only
+   drive personal mcp serve --tools --read-only
    ```
 
    enumera comandos con su disponibilidad actual; las escrituras siguen visibles pero se rechazan
 
 3. ```sh
-   drive personal mcp --read-only
+   drive personal mcp serve --read-only
    ```
 
    sirve tres herramientas por stdio — drive_tools_search, drive_read y drive_write; las escrituras siguen bloqueadas
