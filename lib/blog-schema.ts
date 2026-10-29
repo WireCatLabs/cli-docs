@@ -18,6 +18,7 @@ export type BlogAuthor = {
   id: string
   name: Record<BlogLocale, string>
   initials: string
+  avatar?: string
   role?: Record<BlogLocale, string>
   bio?: Record<BlogLocale, string>
   links: { github?: string; linkedin?: string; telegram?: string }

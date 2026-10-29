@@ -3,7 +3,7 @@
    Components and when each part shows: docs/DESIGN.md, "Blog". */
 .wirecat-blog {
   --blog-measure: 44rem;
-  --blog-sidebar: 300px;
+  --blog-sidebar: 360px;
   --blog-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   background: var(--bg);
 }
@@ -126,9 +126,26 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--paper);
+  transition:
+    border-color 200ms ease-out,
+    box-shadow 200ms ease-out;
+}
+.wirecat-blog .blog-search label:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
 }
 .wirecat-blog .blog-search label:focus-within {
   border-color: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.wirecat-blog .blog-search label > svg,
+.wirecat-blog .blog-search button {
+  transition:
+    color 200ms ease-out,
+    background-color 200ms ease-out;
+}
+.wirecat-blog .blog-search label:focus-within > svg,
+.wirecat-blog .blog-search button:hover {
+  color: var(--accent);
 }
 .wirecat-blog .blog-search label > svg {
   width: 18px;
@@ -145,6 +162,9 @@
   font: inherit;
   font-size: 15px;
   outline: none;
+}
+.wirecat-blog .blog-search input::-webkit-search-cancel-button {
+  appearance: none;
 }
 .wirecat-blog .blog-search kbd {
   padding: 1px 7px;
@@ -274,6 +294,17 @@
 .wirecat-blog .blog-index[data-searching] .blog-list-featured > li:first-child {
   grid-column: auto;
 }
+/* While a search filters the list, the lead story drops to an ordinary card so the grid stays even. */
+.wirecat-blog .blog-index[data-searching] .blog-card-lead {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+.wirecat-blog .blog-index[data-searching] .blog-card-lead h2 {
+  font-size: 18px;
+}
 .wirecat-blog .blog-series-shelf {
   margin-top: 40px;
   padding: 20px 22px;
@@ -358,6 +389,13 @@
 .wirecat-blog .blog-card :is(h2, h3) a {
   color: var(--ink);
   text-decoration: none;
+}
+.wirecat-blog a {
+  transition:
+    color 180ms ease-out,
+    background-color 180ms ease-out,
+    border-color 180ms ease-out,
+    text-decoration-color 180ms ease-out;
 }
 .wirecat-blog .blog-card :is(h2, h3) a:hover {
   color: var(--accent);
@@ -487,6 +525,7 @@
 
 /* Author */
 .wirecat-blog .blog-avatar {
+  object-fit: cover;
   display: inline-grid;
   place-items: center;
   flex-shrink: 0;
@@ -510,9 +549,13 @@
   color: var(--accent);
 }
 .wirecat-blog .blog-author {
+  display: grid;
+  gap: 12px;
+}
+.wirecat-blog .blog-author-head {
   display: flex;
-  gap: 18px;
-  align-items: start;
+  gap: 14px;
+  align-items: center;
 }
 .wirecat-blog .blog-author:not(.blog-author-compact) {
   padding: 22px;
@@ -538,13 +581,12 @@
   font-size: 14px;
 }
 .wirecat-blog .blog-author .blog-author-bio {
-  margin-top: 8px;
   color: var(--ink);
   font-size: 15px;
   line-height: 1.6;
 }
 .wirecat-blog .blog-author .blog-icon-links {
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 /* Post */
@@ -1171,7 +1213,9 @@ html.dark .wirecat-blog .blog-code pre span {
 @media (prefers-reduced-motion: reduce) {
   .wirecat-blog .blog-topics :is(a, summary),
   .wirecat-blog .blog-card-media img,
-  .wirecat-blog .blog-action {
+  .wirecat-blog .blog-action,
+  .wirecat-blog a,
+  .wirecat-blog .blog-search :is(label, label > svg, button) {
     transition: none;
   }
 }

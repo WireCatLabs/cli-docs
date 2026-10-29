@@ -33,7 +33,7 @@ export function BlogList({
   posts: BlogPost[]
 }) {
   const words = blogWords(lang)
-  const featured = !activeTag && posts.length >= 3
+  const featured = posts.length >= 3
   const author = blogAuthor(posts.find((post) => post.author)?.author)
   const aside = (
     <>
