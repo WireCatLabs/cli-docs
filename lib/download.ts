@@ -28,7 +28,7 @@ type Words = {
   unsigned: {
     title: string
     intro: string
-    macos: { title: string; steps: string[]; source: string; damaged: string; damagedText: string }
+    macos: { title: string; steps: string[]; source: string }
     windows: { title: string; steps: string[]; source: string; smartAppControl: string; smartAppSource: string }
   }
   linux: { title: string; appimage: string[]; fuse: string; fuseSource: string; deb: string; rpm: string }
@@ -80,9 +80,6 @@ const en: Words = {
         "Enter your login password, then click **OK**. From now on WireCat opens like any other app.",
       ],
       source: "Apple: open a Mac app from an unknown developer",
-      damaged: "If macOS says that WireCat “is damaged”",
-      damagedText:
-        "This message has no **Open Anyway** button. Open **Terminal** and run `xattr -dr com.apple.quarantine /Applications/WireCat.app`, then open WireCat again. The command removes the mark that macOS puts on downloaded files. It does not change the app.",
     },
     windows: {
       title: "Windows",
@@ -181,9 +178,6 @@ const ru: Words = {
         "Введите пароль входа и нажмите **ОК**. Дальше WireCat открывается как любое другое приложение.",
       ],
       source: "Apple: как открыть приложение от неизвестного разработчика",
-      damaged: "Если macOS пишет, что WireCat «повреждён»",
-      damagedText:
-        "В этом сообщении нет кнопки **Все равно открыть**. Откройте **Терминал** и выполните `xattr -dr com.apple.quarantine /Applications/WireCat.app`, затем снова откройте WireCat. Команда снимает пометку, которую macOS ставит на скачанные файлы. Само приложение она не меняет.",
     },
     windows: {
       title: "Windows",
@@ -276,9 +270,6 @@ const es: Words = {
         "Introduce tu contraseña de inicio de sesión y haz clic en **Aceptar**. A partir de ahora WireCat se abre como cualquier otra aplicación.",
       ],
       source: "Apple: abrir una app de un desarrollador desconocido",
-      damaged: "Si macOS dice que WireCat «está dañada»",
-      damagedText:
-        "Este aviso no tiene el botón **Abrir igualmente**. Abre **Terminal** y ejecuta `xattr -dr com.apple.quarantine /Applications/WireCat.app`; después vuelve a abrir WireCat. El comando quita la marca que macOS pone a los archivos descargados. No cambia la aplicación.",
     },
     windows: {
       title: "Windows",

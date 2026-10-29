@@ -183,8 +183,6 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
               ))}
             </ol>
             <External href={links.apple}>{words.unsigned.macos.source}</External>
-            <h4>{words.unsigned.macos.damaged}</h4>
-            <p>{rich(words.unsigned.macos.damagedText)}</p>
           </section>
           <section id="windows" aria-labelledby="first-launch-windows">
             <h3 id="first-launch-windows">{words.unsigned.windows.title}</h3>
