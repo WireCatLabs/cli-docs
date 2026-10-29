@@ -4,7 +4,7 @@ description: Пакетная обработка квантованного пе
 date: 2026-10-27
 tags: [search, benchmarks, cli]
 cover: ./cover.jpg
-coverAlt: "Ноутбук с полосами 4,6 с и 3,2 с, секундомер и пять маленьких компьютеров с табличками linux x64, linux arm64, macos arm64, windows x64 и windows arm64, у каждого горит зелёный огонёк"
+coverAlt: "Пятьдесят распечатанных сообщений в пачке с надписью top 50, одно читают под лупой, пять разложены по порядку от 1 до 5, первое отмечено зелёным, секундомер показывает 3,2 секунды"
 author: viacheslav-ptsarev
 series: laptop-search
 glance:

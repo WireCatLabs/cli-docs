@@ -641,8 +641,8 @@
   z-index: 5;
   top: calc(100% + 6px);
   left: 0;
-  width: min(420px, 90vw);
-  padding: 10px 14px;
+  width: min(440px, 90vw);
+  padding: 10px 16px 10px 38px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--paper);
