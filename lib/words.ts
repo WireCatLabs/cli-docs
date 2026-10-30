@@ -164,7 +164,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
   ru: {
     tagline: "AI Messaging with CLI tools for agents",
     intro:
-      "Ваши аккаунты Telegram, MAX и WhatsApp, встречи Zoom, документы Google Drive, Google Календарь и заметки в терминале — для вас, ваших скриптов и ИИ-агентов.",
+      "Ваши аккаунты Telegram, MAX и WhatsApp, встречи Zoom, документы Google Drive, Google Calendar и заметки в терминале — для вас, ваших скриптов и ИИ-агентов.",
     docs: "Документация",
     source: "Исходный код",
     install: "Установка",
