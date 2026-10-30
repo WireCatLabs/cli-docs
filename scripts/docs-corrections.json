@@ -2344,5 +2344,16 @@
         }
       ]
     }
+  },
+  {
+    "tool": "gcal",
+    "slug": "index",
+    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.1.1/docs/index.md",
+    "reason": "The overview page's sidebar label is its title. gcal v0.1.1 titles it with the command name; the other tools' overview pages carry the product name, as Google Drive's does. Drop this once the release's own heading is Google Calendar.",
+    "replacements": {
+      "en": [{ "before": "title: \"gcal\"", "after": "title: \"Google Calendar\"" }],
+      "ru": [{ "before": "title: \"gcal\"", "after": "title: \"Google Calendar\"" }],
+      "es": [{ "before": "title: \"gcal\"", "after": "title: \"Google Calendar\"" }]
+    }
   }
 ]
