@@ -152,9 +152,9 @@ If Hermes stops at a caution from its security scan, don't force the install:
 [report it](https://github.com/WireCatLabs/cli-docs/issues) with the finding. Then start a new session and try the check above. Hermes's terminal must have the tool and the
 same account login.
 
-**Coming soon:** `skill install --for hermes` does this in one step. It puts the skill in
-`~/.agents/skills` and adds that folder to `skills.external_dirs` in Hermes's settings; if that
-fails, it saves a copy in `~/.hermes/skills` instead, and says which it did. Before you run it,
+**In one step:** `tg skill install --for hermes`. It puts the skill in `~/.agents/skills` and adds
+that folder to `skills.external_dirs` in Hermes's settings; if that fails, it saves a copy in
+`~/.hermes/skills` instead, and says which it did. Before you run it,
 delete the copy you saved in `~/.hermes/skills/tg-cli`, or run `hermes skills uninstall tg-cli` if
 you installed it from this site: Hermes prefers that folder, so an old copy would hide the new one.
 

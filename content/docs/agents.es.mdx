@@ -157,9 +157,9 @@ Si Hermes se detiene en una advertencia de su revisión de seguridad, no fuerces
 instalación: [avísanos](https://github.com/WireCatLabs/cli-docs/issues) con el hallazgo. Después abre una nueva sesión y repite la comprobación de
 arriba. El terminal de Hermes debe tener la herramienta y el mismo acceso a la cuenta.
 
-**Próximamente:** `skill install --for hermes` lo hará en un solo paso. Pondrá el skill en
-`~/.agents/skills` y añadirá esa carpeta a `skills.external_dirs` en los ajustes de Hermes; si eso
-falla, guardará una copia en `~/.hermes/skills` y dirá qué hizo. Antes de ejecutarlo, borra la copia
+**En un solo paso:** `tg skill install --for hermes`. Pone el skill en `~/.agents/skills` y añade esa
+carpeta a `skills.external_dirs` en los ajustes de Hermes; si eso falla, guarda una copia en
+`~/.hermes/skills` y dice qué hizo. Antes de ejecutarlo, borra la copia
 que guardaste en `~/.hermes/skills/tg-cli`, o ejecuta `hermes skills uninstall tg-cli` si lo
 instalaste desde este sitio: Hermes prefiere esa carpeta, así que una copia antigua ocultaría la nueva.
 
