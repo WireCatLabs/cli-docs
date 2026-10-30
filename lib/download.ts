@@ -1,8 +1,8 @@
 import type { Format, Platform } from "@/lib/desktop-releases"
 
 /**
- * Text uses `code` and **bold** marks. The `unsigned` block exists only while the builds have no Apple or
- * Microsoft certificate: delete it and its section once signing ships.
+ * Text uses `code` and **bold** marks. The macOS app is signed and notarized since 0.1.2; the Windows steps in
+ * `unsigned` exist only until the installer has a Microsoft certificate.
  */
 type Words = {
   title: string
@@ -28,7 +28,7 @@ type Words = {
   unsigned: {
     title: string
     intro: string
-    macos: { title: string; steps: string[]; source: string }
+    macos: { title: string; steps: string[] }
     windows: { title: string; steps: string[]; source: string; smartAppControl: string; smartAppSource: string }
   }
   linux: { title: string; appimage: string[]; fuse: string; fuseSource: string; deb: string; rpm: string }
@@ -69,17 +69,13 @@ const en: Words = {
   unsigned: {
     title: "Open it for the first time",
     intro:
-      "WireCat is not signed with an Apple or Microsoft developer certificate yet. Your computer therefore asks you to confirm the first start. You do this once.",
+      "The macOS app is signed and checked by Apple. The Windows installer is not signed with a Microsoft developer certificate yet, so Windows asks you to confirm the first start. You do this once.",
     macos: {
       title: "macOS",
       steps: [
         "Open the .dmg file and drag **WireCat** to **Applications**.",
-        "Open WireCat. macOS says that it cannot check the app. Close the message.",
-        "Choose **Apple menu > System Settings**, then click **Privacy & Security** in the sidebar.",
-        "Go to **Security**, then click **Open Anyway**. The button stays for about an hour after you try to open the app.",
-        "Enter your login password, then click **OK**. From now on WireCat opens like any other app.",
+        "Open WireCat. macOS asks once whether to open an app downloaded from the Internet: click **Open**. Apple has checked WireCat, so there is nothing else to allow.",
       ],
-      source: "Apple: open a Mac app from an unknown developer",
     },
     windows: {
       title: "Windows",
@@ -167,17 +163,13 @@ const ru: Words = {
   unsigned: {
     title: "Первый запуск",
     intro:
-      "WireCat пока не подписан сертификатом разработчика Apple или Microsoft. Поэтому при первом запуске компьютер попросит подтверждение. Это нужно сделать один раз.",
+      "Приложение для macOS подписано и проверено Apple. Установщик для Windows пока не подписан сертификатом разработчика Microsoft, поэтому при первом запуске Windows попросит подтверждение. Это нужно сделать один раз.",
     macos: {
       title: "macOS",
       steps: [
         "Откройте файл .dmg и перетащите **WireCat** в **Программы**.",
-        "Откройте WireCat. macOS сообщит, что не может проверить приложение. Закройте сообщение.",
-        "Выберите **меню Apple > Системные настройки** и нажмите **Конфиденциальность и безопасность** в боковом меню.",
-        "В разделе **Безопасность** нажмите **Все равно открыть**. Кнопка видна около часа после попытки открыть приложение.",
-        "Введите пароль входа и нажмите **ОК**. Дальше WireCat открывается как любое другое приложение.",
+        "Откройте WireCat. macOS один раз спросит, открыть ли приложение, загруженное из интернета: нажмите **Открыть**. Apple проверила WireCat, поэтому больше ничего разрешать не нужно.",
       ],
-      source: "Apple: как открыть приложение от неизвестного разработчика",
     },
     windows: {
       title: "Windows",
@@ -259,17 +251,13 @@ const es: Words = {
   unsigned: {
     title: "Ábrela por primera vez",
     intro:
-      "WireCat aún no está firmada con un certificado de desarrollador de Apple o Microsoft. Por eso tu ordenador te pide que confirmes el primer arranque. Solo hace falta una vez.",
+      "La app para macOS está firmada y comprobada por Apple. El instalador de Windows aún no está firmado con un certificado de desarrollador de Microsoft, así que Windows te pide que confirmes el primer arranque. Solo hace falta una vez.",
     macos: {
       title: "macOS",
       steps: [
         "Abre el archivo .dmg y arrastra **WireCat** a **Aplicaciones**.",
-        "Abre WireCat. macOS avisa de que no puede comprobar la aplicación. Cierra el aviso.",
-        "Elige **menú Apple > Ajustes del Sistema** y haz clic en **Privacidad y seguridad** en la barra lateral.",
-        "Ve a **Seguridad** y haz clic en **Abrir igualmente**. El botón está disponible durante una hora aproximadamente después de intentar abrir la aplicación.",
-        "Introduce tu contraseña de inicio de sesión y haz clic en **Aceptar**. A partir de ahora WireCat se abre como cualquier otra aplicación.",
+        "Abre WireCat. macOS pregunta una vez si quieres abrir una app descargada de Internet: haz clic en **Abrir**. Apple ha comprobado WireCat, así que no hay nada más que permitir.",
       ],
-      source: "Apple: abrir una app de un desarrollador desconocido",
     },
     windows: {
       title: "Windows",
@@ -326,7 +314,6 @@ const locales = { en: "en-us", ru: "ru-ru", es: "es-es" }
 export const sourceLinks = (lang: string) => {
   const locale = locales[lang as keyof typeof locales] ?? locales.en
   return {
-    apple: `https://support.apple.com/${locale}/guide/mac-help/mh40616/mac`,
     smartScreen: `https://learn.microsoft.com/${locale}/windows/apps/package-and-deploy/smartscreen-reputation`,
     smartAppControl: `https://support.microsoft.com/${locale}/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions`,
     fuse: "https://docs.appimage.org/user-guide/troubleshooting/fuse.html",
