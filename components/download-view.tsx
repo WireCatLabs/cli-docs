@@ -37,7 +37,17 @@ function External({ href, children }: { href: string; children: ReactNode }) {
   )
 }
 
-function AppImageSetup({ lang, file, onHide }: { lang: string; file: string; onHide: () => void }) {
+function AppImageSetup({
+  lang,
+  file,
+  started,
+  onHide,
+}: {
+  lang: string
+  file: string
+  started: boolean
+  onHide: () => void
+}) {
   const words = downloadWords(lang).appimageSetup
   const links = sourceLinks(lang)
   const title = useId()
@@ -58,7 +68,7 @@ function AppImageSetup({ lang, file, onHide }: { lang: string; file: string; onH
             <X aria-hidden="true" />
           </button>
         </div>
-        <p>{words.intro}</p>
+        <p>{started ? `${words.started} ${words.intro}` : words.intro}</p>
         <ol>
           {words.steps.map((step) => (
             <li key={step}>{rich(step)}</li>
@@ -84,6 +94,7 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
   const [releases, setReleases] = useState(initial)
   const [firstLaunch, setFirstLaunch] = useState<string>("macos")
   const [setupFrom, setSetupFrom] = useState<SetupFrom | null>(null)
+  const [tabSetup, setTabSetup] = useState(false)
   const main = useRef<HTMLElement>(null)
 
   const returnToHash = useRef<Platform | null>(null)
@@ -151,7 +162,7 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
 
   const appimage = latest?.files.find((file) => file.format === "appimage")
   const setup = appimage && (
-    <AppImageSetup lang={lang} file={appimage.name} onHide={() => setSetupFrom(null)} key="setup" />
+    <AppImageSetup lang={lang} file={appimage.name} started onHide={() => setSetupFrom(null)} key="setup" />
   )
 
   const primary = (platform: Platform) => {
@@ -310,11 +321,20 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
             <External href={links.smartAppControl}>{words.unsigned.windows.smartAppSource}</External>
           </TabsContent>
           <TabsContent className="download-panel" value="linux" id="linux" keepMounted>
-            <ol>
-              {words.linux.appimage.map((step) => (
-                <li key={step}>{rich(step.replace("{appimage}", fileName("appimage")))}</li>
-              ))}
-            </ol>
+            <p>{words.linux.appimage}</p>
+            {tabSetup && appimage ? (
+              <AppImageSetup lang={lang} file={appimage.name} started={false} onHide={() => setTabSetup(false)} />
+            ) : (
+              appimage && (
+                <button
+                  type="button"
+                  className="button secondary download-setup-open"
+                  onClick={() => setTabSetup(true)}
+                >
+                  {words.linux.setup}
+                </button>
+              )
+            )}
             <p>{rich(words.linux.fuse)}</p>
             <External href={links.fuse}>{words.linux.fuseSource}</External>
             <p>{rich(words.linux.deb.replace("{deb}", fileName("deb")))}</p>

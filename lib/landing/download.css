@@ -489,3 +489,6 @@
   white-space: pre;
   overflow-wrap: normal;
 }
+.wirecat-download .download-setup-open {
+  margin-bottom: 16px;
+}

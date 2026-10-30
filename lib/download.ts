@@ -31,9 +31,10 @@ type Words = {
     macos: { steps: string[] }
     windows: { steps: string[]; source: string; smartAppControl: string; smartAppSource: string }
   }
-  linux: { appimage: string[]; fuse: string; fuseSource: string; deb: string; rpm: string }
+  linux: { appimage: string; setup: string; fuse: string; fuseSource: string; deb: string; rpm: string }
   appimageSetup: {
     title: string
+    started: string
     intro: string
     steps: string[]
     helpers: string
@@ -101,10 +102,9 @@ const en: Words = {
     },
   },
   linux: {
-    appimage: [
-      "Make the AppImage executable: in your file manager, open its **Properties** and allow it to run as a program. In a terminal: `chmod +x {appimage}`.",
-      "Open the file. WireCat starts; nothing else is installed.",
-    ],
+    appimage:
+      "The AppImage runs without installing anything. To keep it in one place and open it from your app menu, follow the setup steps.",
+    setup: "Set up the AppImage",
     fuse: "If it says **AppImages require FUSE to run**, install FUSE 2: `sudo apt install libfuse2t64` on Ubuntu 24.04 and later, `sudo apt install libfuse2` on older Ubuntu and Debian.",
     fuseSource: "AppImage: FUSE",
     deb: "Install the .deb package: `sudo apt install ./{deb}`.",
@@ -112,7 +112,8 @@ const en: Words = {
   },
   appimageSetup: {
     title: "Set up the AppImage",
-    intro: "The download has started. Three steps turn the file into an app you open from the app menu.",
+    started: "The download has started.",
+    intro: "Three steps turn the file into an app you open from the app menu.",
     steps: [
       "Make it executable: open the file's **Properties** and allow it to run as a program.",
       "Move it to a folder where it can stay, such as `~/Applications`. The menu entry points to this place.",
@@ -216,10 +217,9 @@ const ru: Words = {
     },
   },
   linux: {
-    appimage: [
-      "Сделайте AppImage исполняемым: в файловом менеджере откройте **Свойства** файла и разрешите запускать его как программу. В терминале: `chmod +x {appimage}`.",
-      "Откройте файл. WireCat запустится; больше ничего не устанавливается.",
-    ],
+    appimage:
+      "AppImage работает без установки. Чтобы хранить его в одном месте и открывать из меню приложений, выполните шаги настройки.",
+    setup: "Настроить AppImage",
     fuse: "Если появится **AppImages require FUSE to run**, установите FUSE 2: `sudo apt install libfuse2t64` в Ubuntu 24.04 и новее, `sudo apt install libfuse2` в более старых Ubuntu и Debian.",
     fuseSource: "AppImage: FUSE",
     deb: "Установите пакет .deb: `sudo apt install ./{deb}`.",
@@ -227,7 +227,8 @@ const ru: Words = {
   },
   appimageSetup: {
     title: "Настройте AppImage",
-    intro: "Загрузка началась. Три шага превратят файл в приложение, которое открывается из меню.",
+    started: "Загрузка началась.",
+    intro: "Три шага превратят файл в приложение, которое открывается из меню.",
     steps: [
       "Сделайте файл исполняемым: откройте его **Свойства** и разрешите запускать как программу.",
       "Переместите его в папку, где он останется, например `~/Applications`. Пункт меню будет указывать на это место.",
@@ -325,10 +326,9 @@ const es: Words = {
     },
   },
   linux: {
-    appimage: [
-      "Haz ejecutable el AppImage: en el gestor de archivos, abre sus **Propiedades** y permite ejecutarlo como programa. En una terminal: `chmod +x {appimage}`.",
-      "Abre el archivo. WireCat arranca; no se instala nada más.",
-    ],
+    appimage:
+      "El AppImage funciona sin instalar nada. Para guardarlo en un sitio y abrirlo desde el menú de aplicaciones, sigue los pasos de preparación.",
+    setup: "Preparar el AppImage",
     fuse: "Si aparece **AppImages require FUSE to run**, instala FUSE 2: `sudo apt install libfuse2t64` en Ubuntu 24.04 o posterior, `sudo apt install libfuse2` en Ubuntu y Debian anteriores.",
     fuseSource: "AppImage: FUSE",
     deb: "Instala el paquete .deb: `sudo apt install ./{deb}`.",
@@ -336,7 +336,8 @@ const es: Words = {
   },
   appimageSetup: {
     title: "Prepara el AppImage",
-    intro: "La descarga ha empezado. Con tres pasos el archivo se convierte en una app que abres desde el menú.",
+    started: "La descarga ha empezado.",
+    intro: "Con tres pasos el archivo se convierte en una app que abres desde el menú.",
     steps: [
       "Hazlo ejecutable: abre las **Propiedades** del archivo y permite ejecutarlo como programa.",
       "Muévelo a una carpeta donde se quede, como `~/Applications`. La entrada del menú apunta a ese lugar.",
