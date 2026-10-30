@@ -41,16 +41,26 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
   const [firstLaunch, setFirstLaunch] = useState<string>("macos")
   const main = useRef<HTMLElement>(null)
 
+  const returnToHash = useRef<Platform | null>(null)
+
   // The inline script runs only on a full page load; after an in-site link it never runs.
-  // Layout effect: the tab panels change height, and a late change would move a reader who arrived on #updates.
   useLayoutEffect(() => {
     const wrapper = main.current?.closest<HTMLElement>(".wirecat-download")
     if (!wrapper) return
     if (!wrapper.dataset.os) wrapper.dataset.os = detectOs(navigator)
     const os = wrapper.dataset.os as Platform
     // A link to #windows or #linux has already opened its own tab.
-    if (platforms.includes(os) && !platforms.includes(location.hash.slice(1) as Platform)) setFirstLaunch(os)
+    if (os === "macos" || !platforms.includes(os) || platforms.includes(location.hash.slice(1) as Platform)) return
+    returnToHash.current = os
+    setFirstLaunch(os)
   }, [])
+
+  // The browser has already scrolled to #updates over the server's macOS panel; a taller panel would push it away.
+  useLayoutEffect(() => {
+    if (returnToHash.current !== firstLaunch) return
+    returnToHash.current = null
+    if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView()
+  }, [firstLaunch])
 
   useEffect(() => {
     const controller = new AbortController()
