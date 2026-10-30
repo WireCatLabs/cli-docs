@@ -1,5 +1,5 @@
 ---
-title: "Usarlo"
+title: "Uso"
 ---
 
 Esta página explica cómo se construye un comando y cómo usa la herramienta un agente. Léela antes de tu primer comando.

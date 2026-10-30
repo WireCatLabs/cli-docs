@@ -19,8 +19,8 @@ title: "История изменений"
 - **`gcal <profile> session start | status | end` входит в Google через браузер с доступом к Календарю только на
   чтение.** Пока используется ваш собственный клиент Google OAuth (`--client-file` или `GCAL_GOOGLE_CLIENT_ID` и
   `GCAL_GOOGLE_CLIENT_SECRET`); как его создать, описано в [настройках](./configuration.md#your-own-google-client).
-  Вход хранится в системной связке ключей или, с `--credential-storage file`, в личном файле (права 600) там, где
-  связка ключей не работает. `session status --check` спрашивает у Google, действует ли вход. `--grant write`
+  Вход хранится в системном хранилище ключей или, с `--credential-storage file`, в личном файле (права 600) там, где
+  хранилище ключей не работает. `session status --check` спрашивает у Google, действует ли вход. `--grant write`
   дополнительно запрашивает `calendar.events`, нужный для записи событий, а `--grant sharing` — `calendar.acls`,
   нужный для управления доступом. `gcal session list` выводит профили на этом компьютере, у каждого `signed_in`,
   `account` и `credential_storage`; ни одна команда не выбирает профиль за вас.
@@ -80,7 +80,7 @@ title: "История изменений"
 - **`gcal --help` показывает, что умеет gcal и с чего начать, а `gcal guide` даёт пошаговые сценарии**: настройка,
   доступ для агента, поиск времени. `gcal skill install` добавляет навык инструмента для Claude Code, Codex,
   Gemini CLI, OpenClaw и Hermes Agent.
-- **`gcal doctor` показывает, что настроено, без сети и без связки ключей**: версию, пути, хранилище, клиент OAuth,
+- **`gcal doctor` показывает, что настроено, без сети и без хранилища ключей**: версию, пути, хранилище, клиент OAuth,
   блокировку профиля и файлы входа.
 - **`gcal <profile> runs list | show` показывает сохранённые запуски gcal**, включая вход и выход: успешные — 7
   дней, неудачные — 30. Секреты скрыты; `config set record_input false` не сохраняет ни одного введённого вами
