@@ -1,8 +1,9 @@
 "use client"
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "fumadocs-ui/components/ui/tabs"
 import { ArrowRight, Download } from "lucide-react"
 import Link from "next/link"
-import { Fragment, type ReactNode, useEffect, useRef, useState } from "react"
+import { Fragment, type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react"
 import {
   type DesktopFile,
   type DesktopRelease,
@@ -37,12 +38,18 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
   const words = downloadWords(lang)
   const links = sourceLinks(lang)
   const [releases, setReleases] = useState(initial)
+  const [firstLaunch, setFirstLaunch] = useState<string>("macos")
   const main = useRef<HTMLElement>(null)
 
   // The inline script runs only on a full page load; after an in-site link it never runs.
-  useEffect(() => {
+  // Layout effect: the tab panels change height, and a late change would move a reader who arrived on #updates.
+  useLayoutEffect(() => {
     const wrapper = main.current?.closest<HTMLElement>(".wirecat-download")
-    if (wrapper && !wrapper.dataset.os) wrapper.dataset.os = detectOs(navigator)
+    if (!wrapper) return
+    if (!wrapper.dataset.os) wrapper.dataset.os = detectOs(navigator)
+    const os = wrapper.dataset.os as Platform
+    // A link to #windows or #linux has already opened its own tab.
+    if (platforms.includes(os) && !platforms.includes(location.hash.slice(1) as Platform)) setFirstLaunch(os)
   }, [])
 
   useEffect(() => {
@@ -174,17 +181,22 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
       <section id="first-launch" className="download-section" aria-labelledby="first-launch-title">
         <h2 id="first-launch-title">{words.unsigned.title}</h2>
         <p>{words.unsigned.intro}</p>
-        <div className="download-steps">
-          <section id="macos" aria-labelledby="first-launch-macos">
-            <h3 id="first-launch-macos">{words.unsigned.macos.title}</h3>
+        <Tabs className="download-tabs" value={firstLaunch} onValueChange={(value) => setFirstLaunch(String(value))}>
+          <TabsList className="download-tablist" activateOnFocus aria-labelledby="first-launch-title">
+            {platforms.map((platform) => (
+              <TabsTrigger className="download-tab" value={platform} key={platform}>
+                {words.platforms[platform]}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <TabsContent className="download-panel" value="macos" id="macos" keepMounted>
             <ol>
               {words.unsigned.macos.steps.map((step) => (
                 <li key={step}>{rich(step)}</li>
               ))}
             </ol>
-          </section>
-          <section id="windows" aria-labelledby="first-launch-windows">
-            <h3 id="first-launch-windows">{words.unsigned.windows.title}</h3>
+          </TabsContent>
+          <TabsContent className="download-panel" value="windows" id="windows" keepMounted>
             <ol>
               {words.unsigned.windows.steps.map((step) => (
                 <li key={step}>{rich(step)}</li>
@@ -193,9 +205,8 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
             <External href={links.smartScreen}>{words.unsigned.windows.source}</External>
             <p>{rich(words.unsigned.windows.smartAppControl)}</p>
             <External href={links.smartAppControl}>{words.unsigned.windows.smartAppSource}</External>
-          </section>
-          <section id="linux" aria-labelledby="first-launch-linux">
-            <h3 id="first-launch-linux">{words.linux.title}</h3>
+          </TabsContent>
+          <TabsContent className="download-panel" value="linux" id="linux" keepMounted>
             <ol>
               {words.linux.appimage.map((step) => (
                 <li key={step}>{rich(step.replace("{appimage}", fileName("appimage")))}</li>
@@ -205,8 +216,8 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
             <External href={links.fuse}>{words.linux.fuseSource}</External>
             <p>{rich(words.linux.deb.replace("{deb}", fileName("deb")))}</p>
             <p>{rich(words.linux.rpm.replace("{rpm}", fileName("rpm")))}</p>
-          </section>
-        </div>
+          </TabsContent>
+        </Tabs>
       </section>
 
       <section id="updates" className="download-section" aria-labelledby="updates-title">

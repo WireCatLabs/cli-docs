@@ -5,40 +5,40 @@
   padding-block: clamp(32px, 4vw, 56px) 56px;
 }
 .wirecat-download .download-intro {
-  max-width: 800px;
-  margin-bottom: 32px;
+  max-width: 720px;
+  margin-bottom: 28px;
 }
 .wirecat-editorial .wirecat-download .download-page h1 {
-  margin: 0 0 20px;
-  font-size: clamp(30px, 3.6vw, 46px);
-  line-height: 1.2;
-  letter-spacing: -0.035em;
+  margin: 0 0 14px;
+  font-size: clamp(24px, 2.4vw, 28px);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
   text-transform: none;
 }
 .wirecat-download .download-intro .intro {
-  max-width: 52ch;
+  max-width: 62ch;
   margin: 0;
-  font-size: clamp(19px, 2vw, 23px);
+  font-size: 17px;
   line-height: 1.6;
   color: var(--ink);
   text-wrap: pretty;
 }
-.wirecat-download .download-free {
-  margin-top: 16px;
+.wirecat-download .download-page .download-free {
+  margin: 10px 0 0;
   color: var(--ink);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 650;
 }
 .wirecat-download .download-page h2 {
-  margin: 0 0 16px;
-  font-size: clamp(20px, 2vw, 25px);
-  line-height: 1.3;
+  margin: 0 0 12px;
+  font-size: 19px;
+  line-height: 1.35;
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
 }
 .wirecat-download .download-page h3 {
-  margin: 0 0 12px;
-  font-size: 17px;
+  margin: 0 0 8px;
+  font-size: 15px;
   font-weight: 700;
 }
 .wirecat-download .download-page h4 {
@@ -49,8 +49,8 @@
 .wirecat-download .download-page p,
 .wirecat-download .download-page li {
   max-width: 70ch;
-  font-size: 16px;
-  line-height: 1.7;
+  font-size: 15px;
+  line-height: 1.65;
   color: var(--muted);
 }
 .wirecat-download .download-page p {
@@ -77,21 +77,17 @@
 }
 
 .wirecat-download .download-latest {
-  margin-bottom: 40px;
-  padding: 28px;
+  margin-bottom: 32px;
+  padding: 22px 24px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 12px;
   background: var(--paper);
-  box-shadow: 0 12px 30px color-mix(in srgb, var(--ink) 5%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--ink) 4%, transparent);
 }
-.wirecat-download .download-button {
-  min-height: 52px;
-  padding-inline: 24px;
-  font-size: 16px;
-}
-.wirecat-download .download-format {
-  margin: 14px 0 4px;
+.wirecat-download .download-page .download-format {
+  margin: 14px 0 2px;
   color: var(--ink);
+  font-size: 14px;
   font-weight: 600;
 }
 .wirecat-download .download-latest .download-meta {
@@ -100,32 +96,35 @@
   align-items: center;
   gap: 0 6px;
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
 }
 .wirecat-download .download-more {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid var(--line);
 }
-.wirecat-download .download-more > p {
-  margin-bottom: 4px;
-  font-size: 14px;
+.wirecat-download .download-page .download-more > p {
+  margin-bottom: 2px;
+  font-size: 13px;
 }
+/* fit-content and start: the hover underline and the click area stop at the words, not the row's edge. */
 .wirecat-download .download-file {
   display: grid;
-  grid-template-columns: 18px auto;
+  grid-template-columns: 16px auto;
   align-items: center;
-  gap: 0 10px;
+  justify-items: start;
+  gap: 0 8px;
+  width: fit-content;
   min-height: 44px;
-  padding-block: 6px;
+  padding-block: 4px;
   color: var(--accent);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 650;
   text-decoration: none;
 }
 .wirecat-download .download-file > svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 .wirecat-download .download-file-note {
   grid-column: 2;
@@ -136,8 +135,8 @@
 .wirecat-download .download-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  margin: 8px 0 18px;
+  gap: 20px;
+  margin: 8px 0 16px;
 }
 .wirecat-download .download-card {
   padding-top: 16px;
@@ -179,21 +178,21 @@
 }
 
 .wirecat-download :is(.download-other, .download-section) {
-  padding: 32px 0;
+  padding: 28px 0;
   border-top: 1px solid var(--line);
   scroll-margin-top: 100px;
 }
 .wirecat-download .download-row {
   display: grid;
   grid-template-columns: minmax(90px, 0.6fr) minmax(0, 2fr);
-  gap: 18px;
-  padding: 12px 0;
+  gap: 16px;
+  padding: 8px 0;
 }
 .wirecat-download .download-row + .download-row {
   border-top: 1px solid var(--line);
 }
 .wirecat-download .download-row h3 {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
 }
 .wirecat-download .download-earlier {
   margin-bottom: 12px;
@@ -202,6 +201,7 @@
   min-height: 44px;
   padding-block: 10px;
   color: var(--accent);
+  font-size: 14px;
   font-weight: 650;
   cursor: pointer;
 }
@@ -216,20 +216,57 @@
   gap: 0 6px;
   margin: 0;
   color: var(--ink);
-  font-size: 15px;
+  font-size: 14px;
 }
-.wirecat-download .download-steps {
+
+.wirecat-download .download-tabs {
+  max-width: 760px;
+  margin-top: 20px;
+}
+.wirecat-download .download-tablist {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 32px;
-  margin-top: 24px;
+  border-bottom: 1px solid var(--line);
 }
-.wirecat-download .download-steps > section {
+.wirecat-download .download-tab {
+  min-height: 52px;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    background-color 160ms ease-out;
+}
+.wirecat-download .download-tab:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+}
+.wirecat-download .download-tab[aria-selected="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+.wirecat-download .download-tab:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+.wirecat-download .download-panel {
+  padding-top: 20px;
   scroll-margin-top: 100px;
 }
-.wirecat-download .download-steps > section p,
-.wirecat-download .download-steps li {
-  font-size: 15px;
+.wirecat-download .download-panel:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+.wirecat-download .download-panel[hidden] {
+  display: none;
 }
 .wirecat-download .download-next {
   display: flex;
@@ -241,14 +278,17 @@
   margin-top: 6px;
 }
 
-@media (width < 60rem) {
-  .wirecat-download .download-steps {
-    grid-template-columns: minmax(0, 1fr);
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-download .download-tab {
+    transition: none;
   }
 }
 @media (width < 40rem) {
   .wirecat-download .download-latest {
-    padding: 20px;
+    padding: 18px;
+  }
+  .wirecat-download .download-tab {
+    font-size: 15px;
   }
   .wirecat-download .download-grid,
   .wirecat-download .download-row {
