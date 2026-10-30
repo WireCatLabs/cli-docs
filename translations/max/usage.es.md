@@ -116,11 +116,11 @@ MAX_TOKEN="$(cat /path/to/token)" max personal chats list
 Comprueba tu identidad:
 
 ```sh
-max personal account show                # номер телефона — только последние 4 цифры
+max personal account show                # номер телефона целиком
 ```
 
 ```sh
-max personal account show --show-phone   # номер целиком
+max personal account show --hide-phone   # без номера
 ```
 
 ```sh
@@ -139,7 +139,7 @@ max personal session end
 
 `session end` termina la sesión en el servidor de MAX (`revoked_on_server: true`). Si copiaste el token de una pestaña de web.max.ru, también se cierra la sesión de esa pestaña.
 
-`account show --json` contiene los campos MAX `id`, `name`, `phone`, `description` y `username: null` como formato de cuenta general. El número está enmascarado; `--show-phone` lo muestra claramente en su totalidad.
+`account show --json` contiene los campos MAX `id`, `name`, `phone`, `description` y `username: null` como formato de cuenta general. El número se muestra completo; `--hide-phone` lo quita de la respuesta.
 
 ## El perfil es la primera palabra
 
@@ -553,7 +553,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 El JSON es `{item}` con la descripción del gráfico y, al guardar la imagen, también `file` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.84.0/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.86.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 
@@ -802,7 +802,7 @@ max personal contacts unblock 20000002
 ```
 
 ```sh
-max personal contacts info 20000002               # профиль, дата создания, его сообщения по общим чатам
+max personal contacts show 20000002               # профиль, дата создания, его сообщения по общим чатам
 ```
 
 ```sh
@@ -1243,7 +1243,7 @@ Los niveles `deny`, `readonly`, `ask`, `allow` se utilizan tanto en CLI como en 
 
 ## Una persona
 
-`max personal contacts info <человек>` muestra lo que MAX y el archivo local saben sobre la persona. `max personal contacts check <человек>` evalúa si parece un bot. `max personal contacts context <человек>` lee sus últimos mensajes de chat a partir de una copia y `max personal contacts link` vincula su cuenta MAX con su cuenta de Telegram. Detalles - [personas](./people.md).
+`max personal contacts show <человек>` muestra lo que MAX y el archivo local saben sobre la persona. `max personal contacts check <человек>` evalúa si parece un bot. `max personal contacts context <человек>` lee sus últimos mensajes de chat a partir de una copia y `max personal contacts link` vincula su cuenta MAX con su cuenta de Telegram. Detalles - [personas](./people.md).
 
 ## Siguiente paso
 

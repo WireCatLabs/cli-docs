@@ -128,7 +128,7 @@ max account list [query]
 
 ### `max account show`
 
-who this profile is logged in as; the phone number shows its last four digits
+who this profile is logged in as, with the phone number
 
 ```sh
 max account show [options]
@@ -136,7 +136,7 @@ max account show [options]
 
 | Option | Purpose |
 |---|---|
-| `--show-phone` | print the whole phone number. |
+| `--hide-phone` | leave the phone number out. |
 
 **Returns:** account — provider, id, name, username, phone, scope; every field: max commands info account show
 
@@ -158,6 +158,7 @@ max account update [options]
 | `--last-name <name>` | your last name. |
 | `--description <text>` | about you. |
 | `--photo <file>` | a new profile photo — an image file. |
+| `--hide-phone` | leave the phone number out of the answer. |
 
 **Returns:** account change — operation_id, account; every field: max commands info account update
 
@@ -498,7 +499,7 @@ max chats members list <chat> [query] [options]
 
 **Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: max commands info chats members list
 
-**Next usually:** `max contacts show <person>`, `max contacts info <person>`, `max contacts notes list <person> [query]`
+**Next usually:** `max contacts show <person>`, `max contacts notes list <person> [query]`, `max contacts notes show <person> <id>`
 
 **Example:** `max personal chats members list "Book club"`
 
@@ -522,7 +523,7 @@ max chats members check <chat> [query] [options]
 
 **Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: max commands info chats members check
 
-**Next usually:** `max contacts show <person>`, `max contacts info <person>`, `max contacts notes list <person> [query]`
+**Next usually:** `max contacts show <person>`, `max contacts notes list <person> [query]`, `max contacts notes show <person> <id>`
 
 **Example:** `max personal chats members check "Book club"`
 
@@ -1244,15 +1245,15 @@ max contacts list [query] [options]
 | `--all` | every row, no paging. |
 | `--order <recent\|name>` | newest conversation first, or alphabetical. Default: `recent`. |
 
-**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 4 more; every field: max commands info contacts list
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: max commands info contacts list
 
-**Next usually:** `max contacts show <person>`, `max contacts info <person>`, `max contacts context <person>`
+**Next usually:** `max contacts show <person>`, `max contacts context <person>`, `max contacts prepare <person>`
 
 **Example:** `max personal contacts list --limit 10`
 
 ### `max contacts show`
 
-one person and the chats you share with them
+one person: what the messenger says about them — handles, flags, last seen, phone, when they registered — your alias, the chats you share, how many of their messages the store holds in each, and the earlier names and usernames the store saw them with; --offline answers from the store alone
 
 ```sh
 max contacts show <person> [options]
@@ -1265,32 +1266,13 @@ max contacts show <person> [options]
 | Option | Purpose |
 |---|---|
 | `--with-notes` | include your private notes, subject to contacts.notes.list permission. |
+| `--hide-phone` | leave the phone number out. |
 
-**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 4 more; every field: max commands info contacts show
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: max commands info contacts show
 
-**Next usually:** `max contacts info <person>`, `max contacts context <person>`, `max contacts prepare <person>`
+**Next usually:** `max contacts context <person>`, `max contacts prepare <person>`, `max contacts events <person> [query]`
 
 **Example:** `max personal contacts show "Alex Example"`
-
-### `max contacts info`
-
-everything the messenger says about one person — handles, flags, last seen, when they registered — and how many of their messages the store holds in each chat you share, the first and the last, and the earlier names and usernames the store saw them with
-
-```sh
-max contacts info <person> [options]
-```
-
-| Argument | | Meaning |
-|---|---|---|
-| `person` | required | their id, @username, or part of their name. |
-
-| Option | Purpose |
-|---|---|
-| `--show-phone` | print the whole phone number. |
-
-**Returns:** contact profile — id, name, usernames, bio, flags, chats, aliases, birthday, and 7 more; every field: max commands info contacts info
-
-**Example:** `max personal contacts info "Alex Example"`
 
 ### `max contacts aliases`
 
@@ -1723,7 +1705,7 @@ max messages list <chat> [query] [options]
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: max commands info messages list
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: max commands info messages list
 
 **Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
 
@@ -1742,7 +1724,7 @@ max messages show <chat> [message]
 | `chat` | required | a chat: its id, or part of its title; or a msg: locator, with no message id after it. |
 | `message` | optional | the message id. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: max commands info messages show
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: max commands info messages show
 
 **Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
 
@@ -1771,7 +1753,7 @@ max messages context <chat> [message] [options]
 | `--before-n <n>` | how many before it. Default: `5`. |
 | `--after-n <n>` | how many after it. Default: `5`. |
 
-**Returns:** message context — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 40 more; every field: max commands info messages context
+**Returns:** message context — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 41 more; every field: max commands info messages context
 
 **Example:** `max personal messages context "Book club" 101 --before-n 3 --after-n 3`
 
@@ -1960,7 +1942,7 @@ max messages scheduled <chat>
 |---|---|---|
 | `chat` | required | a chat: its id, or part of its title. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: max commands info messages scheduled
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: max commands info messages scheduled
 
 **Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
 
@@ -2295,7 +2277,7 @@ max store export [chat] [options]
 | `--all` | with --output-dir: every stored chat of this account. |
 | `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
-**Returns:** store export — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 34 more; every field: max commands info store export
+**Returns:** store export — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 35 more; every field: max commands info store export
 
 **Example:** `max personal store export "Book club" --output ./messages.jsonl`
 
@@ -3353,7 +3335,7 @@ max conversations show <conversation> [message]
 | `conversation` | required | a conversation id from `conversations list`; or a chat: its id, or part of its title, with a message. |
 | `message` | optional | a message id in that chat: show the conversation it is in. |
 
-**Returns:** conversation details — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 38 more; every field: max commands info conversations show
+**Returns:** conversation details — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 39 more; every field: max commands info conversations show
 
 **Example:** `max personal conversations show "Book club" 101`
 
@@ -3685,7 +3667,7 @@ max attachments list [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** attachment — kind, message, position, url, name, title, mime, size, and 7 more; every field: max commands info attachments list
+**Returns:** attachment — kind, message, position, url, name, title, mime, size, and 8 more; every field: max commands info attachments list
 
 **Example:** `max personal attachments list --limit 10`
 
@@ -4271,7 +4253,7 @@ max search all <query> [options]
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server, or both (default: both; message discovery uses archive only). |
 | `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 7 more; every field: max commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 8 more; every field: max commands info search all
 
 **Example:** `max personal search all draft`
 
@@ -4310,7 +4292,7 @@ max search messages [query] [options]
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
 
-**Returns:** message hit — ref, timestamp, sender_name, chat_title, excerpt, matched_in, score, match, and 6 more; every field: max commands info search messages
+**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 7 more; every field: max commands info search messages
 
 **Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
 
@@ -4873,7 +4855,7 @@ max inbox [query] [options]
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
 
-**Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: max commands info inbox
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 2 more; every field: max commands info inbox
 
 **Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
 
@@ -4899,7 +4881,7 @@ max review [query] [options]
 | `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
 | `--new` | what changed since the last `review --new`, a point per chat — for scheduled runs. |
 
-**Returns:** message summary — ref, chat_id, timestamp, sender_name, outgoing, text, attachments, chat_title, and 1 more; every field: max commands info review
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 2 more; every field: max commands info review
 
 **Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max stats messages evidence <message>`
 
@@ -5438,7 +5420,7 @@ max watch [options]
 |---|---|
 | `--events` | also print edits, deletions, reactions, reads and chat changes; every line then names its event. |
 
-**Returns:** watch item — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 30 more; every field: max commands info watch
+**Returns:** watch item — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 31 more; every field: max commands info watch
 
 **Example:** `max personal watch --jsonl --timeout 30s`
 
@@ -5733,7 +5715,7 @@ serve this profile to an agent over MCP and set it up — `claude mcp add max --
 
 ### `max mcp serve`
 
-serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add max -- max <profile> mcp serve`; with no profile, `max mcp serve` serves every profile and each tool asks which
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add max -- max <profile> mcp serve`; `max mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
 
 **Changes something outside this computer: in MAX or in an external service.**
 
@@ -5744,27 +5726,32 @@ max mcp serve [options]
 | Option | Purpose |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
 
 **Returns:** serve this profile's commands to an AI agent
 
-**Example:** `max personal mcp serve`, `max personal mcp serve --http --public-url https://laptop.example.ts.net`
+**Example:** `max personal mcp serve`, `max mcp serve --profiles work,personal`, `max personal mcp serve --http --public-url https://laptop.example.ts.net`
 
 ### `max mcp revoke`
 
-forget every login `mcp serve --http` gave a browser app, of this profile or, with no profile, of the server of every profile; each app must log in again
+forget every login `mcp serve --http` gave a browser app, of this profile or of the server `--profiles` names; each app must log in again
 
 **Меняет что-то только на этом компьютере.**
 
 ```sh
-max mcp revoke
+max mcp revoke [options]
 ```
+
+| Опция | Что делает |
+|---|---|
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
 **Returns:** forget every login given to a browser app
 
-**Example:** `max personal mcp revoke`
+**Example:** `max personal mcp revoke`, `max mcp revoke --profiles all`
 
 ### `max mcp server`
 
@@ -5785,6 +5772,7 @@ max mcp server start [options]
 | `--port <port>` | the local port (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
 | `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
 **Returns:** start the HTTP MCP server in the background
 
@@ -5797,8 +5785,12 @@ stop `mcp serve --http` — only one that `mcp server start` started
 **Меняет что-то только на этом компьютере.**
 
 ```sh
-max mcp server stop
+max mcp server stop [options]
 ```
+
+| Опция | Что делает |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
 **Returns:** stop the background HTTP MCP server
 
@@ -5809,8 +5801,12 @@ max mcp server stop
 whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
 
 ```sh
-max mcp server status
+max mcp server status [options]
 ```
+
+| Опция | Что делает |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
 **Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
 
@@ -5827,10 +5823,11 @@ max mcp config [options]
 | Option | Purpose |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
-**Returns:** print the local MCP configuration, of this profile or of every profile
+**Returns:** print the local MCP configuration of this profile, or of those --profiles names
 
-**Example:** `max personal mcp config`
+**Example:** `max personal mcp config`, `max mcp config --profiles all`
 
 ### `max mcp add`
 
@@ -6281,7 +6278,7 @@ max bot messages list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | how many, the newest. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, timestamp, edited_at, text, and 29 more; every field: max commands info bot messages list
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 30 more; every field: max commands info bot messages list
 
 **Next usually:** `max messages links <chat> <message>`, `max messages transcribe <chat> <message>`, `max bot messages show <chat> <message>`
 

@@ -65,6 +65,15 @@ With a profile, put its name first as in any command:
 claude mcp add max-work -- max work mcp serve
 ```
 
+One server for several profiles: `--profiles` with a list or `all`; each tool then has a `profile` field:
+
+```sh
+claude mcp add max -- max mcp serve --profiles work,personal
+claude mcp add max -- max mcp serve --profiles all
+```
+
+Without a profile and without `--profiles`, the server does not start and lists the profiles on this computer: `max` never picks a profile by itself.
+
 **Claude Desktop, Cursor and other applications:** `max` prints the configuration entry:
 
 ```sh
