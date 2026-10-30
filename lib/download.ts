@@ -28,10 +28,22 @@ type Words = {
   unsigned: {
     title: string
     intro: string
-    macos: { title: string; steps: string[] }
-    windows: { title: string; steps: string[]; source: string; smartAppControl: string; smartAppSource: string }
+    macos: { steps: string[] }
+    windows: { steps: string[]; source: string; smartAppControl: string; smartAppSource: string }
   }
-  linux: { title: string; appimage: string[]; fuse: string; fuseSource: string; deb: string; rpm: string }
+  linux: { appimage: string[]; fuse: string; fuseSource: string; deb: string; rpm: string }
+  appimageSetup: {
+    title: string
+    intro: string
+    steps: string[]
+    helpers: string
+    gearLever: string
+    appImageLauncher: string
+    terminal: string
+    agent: string
+    prompt: (file: string) => string
+    hide: string
+  }
   updates: { title: string; auto: string; packages: string }
   uninstall: { title: string; macos: string; windows: string; appimage: string; packages: string; tools: string }
   next: { title: string; docs: string; terminal: string }
@@ -71,14 +83,12 @@ const en: Words = {
     intro:
       "The macOS app is signed and checked by Apple. The Windows installer is not signed with a Microsoft developer certificate yet, so Windows asks you to confirm the first start. You do this once.",
     macos: {
-      title: "macOS",
       steps: [
         "Open the .dmg file and drag **WireCat** to **Applications**.",
         "Open WireCat. macOS asks once whether to open an app downloaded from the Internet: click **Open**. Apple has checked WireCat, so there is nothing else to allow.",
       ],
     },
     windows: {
-      title: "Windows",
       steps: [
         "Open the installer.",
         "If Windows shows **Windows protected your PC**, select **More info**, then **Run anyway**.",
@@ -91,7 +101,6 @@ const en: Words = {
     },
   },
   linux: {
-    title: "Linux",
     appimage: [
       "Make the AppImage executable: in your file manager, open its **Properties** and allow it to run as a program. In a terminal: `chmod +x {appimage}`.",
       "Open the file. WireCat starts; nothing else is installed.",
@@ -101,11 +110,35 @@ const en: Words = {
     deb: "Install the .deb package: `sudo apt install ./{deb}`.",
     rpm: "Install the .rpm package: `sudo dnf install ./{rpm}`. If you installed version 0.1.0 from an .rpm, remove it first: `sudo dnf remove wire-cat`.",
   },
+  appimageSetup: {
+    title: "Set up the AppImage",
+    intro: "The download has started. Three steps turn the file into an app you open from the app menu.",
+    steps: [
+      "Make it executable: open the file's **Properties** and allow it to run as a program.",
+      "Move it to a folder where it can stay, such as `~/Applications`. The menu entry points to this place.",
+      "Add it to the app menu with its icon.",
+    ],
+    helpers: "An app can do this for you:",
+    gearLever: "keeps AppImages in one folder and adds them to the app menu. Install it from Flathub.",
+    appImageLauncher: "offers to do the same when you first open an AppImage.",
+    terminal: "Or in a terminal. It replaces an earlier `WireCat.AppImage` and its menu entry if you have them.",
+    agent: "Or let your AI agent do it:",
+    prompt: (file) =>
+      `Set up the WireCat AppImage on my Linux computer, for my user only, without sudo.
+
+1. The file I downloaded is ~/Downloads/${file}. If it is not there, ask me where it is.
+2. Make it executable and move it to ~/Applications/WireCat.AppImage. Create the folder if it is missing.
+3. Get its icon: in a temporary folder, run \`~/Applications/WireCat.AppImage --appimage-extract wirecat.png\` and copy squashfs-root/wirecat.png to ~/.local/share/icons/hicolor/256x256/apps/wirecat-desktop.png. Then delete the temporary folder.
+4. Create ~/.local/share/applications/wirecat.desktop with Type=Application, Name=WireCat, Exec=<the full path of the AppImage>, Icon=wirecat-desktop, StartupWMClass=wirecat-desktop, Categories=Development; and Terminal=false.
+
+Before you overwrite or delete any file that already exists, show it to me and ask. When you finish, list what you created or changed.`,
+    hide: "Hide",
+  },
   updates: {
     title: "Updates",
-    auto: "On macOS, Windows and with the AppImage, WireCat updates itself. When a new version is out, the app offers it at the top of the window: choose **Install and restart**. Your tools, profiles and data stay as they are.",
+    auto: "On macOS, Windows and with the AppImage, WireCat updates itself. When a new version is out, the app offers it at the top of the window: choose **Install and restart**. Your accounts and data will not be deleted.",
     packages:
-      "A .deb or .rpm copy tells you that a new version is out, but cannot install it. Download the new package from this page and install it the same way. From version 0.1.1 the package is called `wirecat`; the .deb replaces `wire-cat` from 0.1.0 by itself.",
+      "From version 0.1.3 a .deb or .rpm copy updates too: choose **Download and install**. WireCat downloads the new package and opens your system's installer, which asks for your password; it also shows the `apt` or `dnf` command if you prefer a terminal. An older copy only tells you that a new version is out: download the package from this page and install it the same way. From version 0.1.1 the package is called `wirecat`; the .deb replaces `wire-cat` from 0.1.0 by itself.",
   },
   uninstall: {
     title: "Uninstall",
@@ -165,14 +198,12 @@ const ru: Words = {
     intro:
       "Приложение для macOS подписано и проверено Apple. Установщик для Windows пока не подписан сертификатом разработчика Microsoft, поэтому при первом запуске Windows попросит подтверждение. Это нужно сделать один раз.",
     macos: {
-      title: "macOS",
       steps: [
         "Откройте файл .dmg и перетащите **WireCat** в **Программы**.",
         "Откройте WireCat. macOS один раз спросит, открыть ли приложение, загруженное из интернета: нажмите **Открыть**. Apple проверила WireCat, поэтому больше ничего разрешать не нужно.",
       ],
     },
     windows: {
-      title: "Windows",
       steps: [
         "Откройте установщик.",
         "Если Windows покажет **Система Windows защитила ваш компьютер**, нажмите **Подробнее**, затем **Выполнить в любом случае**.",
@@ -185,7 +216,6 @@ const ru: Words = {
     },
   },
   linux: {
-    title: "Linux",
     appimage: [
       "Сделайте AppImage исполняемым: в файловом менеджере откройте **Свойства** файла и разрешите запускать его как программу. В терминале: `chmod +x {appimage}`.",
       "Откройте файл. WireCat запустится; больше ничего не устанавливается.",
@@ -195,11 +225,35 @@ const ru: Words = {
     deb: "Установите пакет .deb: `sudo apt install ./{deb}`.",
     rpm: "Установите пакет .rpm: `sudo dnf install ./{rpm}`. Если раньше вы ставили версию 0.1.0 из .rpm, сначала удалите её: `sudo dnf remove wire-cat`.",
   },
+  appimageSetup: {
+    title: "Настройте AppImage",
+    intro: "Загрузка началась. Три шага превратят файл в приложение, которое открывается из меню.",
+    steps: [
+      "Сделайте файл исполняемым: откройте его **Свойства** и разрешите запускать как программу.",
+      "Переместите его в папку, где он останется, например `~/Applications`. Пункт меню будет указывать на это место.",
+      "Добавьте его в меню приложений со значком.",
+    ],
+    helpers: "Это может сделать приложение:",
+    gearLever: "хранит AppImage в одной папке и добавляет их в меню. Устанавливается из Flathub.",
+    appImageLauncher: "предлагает сделать то же самое, когда вы впервые открываете AppImage.",
+    terminal: "Или в терминале. Команды заменят прежний `WireCat.AppImage` и его пункт меню, если они есть.",
+    agent: "Или поручите это ИИ-агенту:",
+    prompt: (file) =>
+      `Настрой AppImage WireCat на моём компьютере с Linux, только для моего пользователя и без sudo.
+
+1. Скачанный файл: ~/Downloads/${file}. Если его там нет, спроси меня, где он.
+2. Сделай его исполняемым и перемести в ~/Applications/WireCat.AppImage. Если папки нет, создай её.
+3. Достань значок: во временной папке выполни \`~/Applications/WireCat.AppImage --appimage-extract wirecat.png\` и скопируй squashfs-root/wirecat.png в ~/.local/share/icons/hicolor/256x256/apps/wirecat-desktop.png. Потом удали временную папку.
+4. Создай ~/.local/share/applications/wirecat.desktop с Type=Application, Name=WireCat, Exec=<полный путь к AppImage>, Icon=wirecat-desktop, StartupWMClass=wirecat-desktop, Categories=Development; и Terminal=false.
+
+Прежде чем перезаписать или удалить уже существующий файл, покажи его мне и спроси. В конце перечисли, что ты создал или изменил.`,
+    hide: "Скрыть",
+  },
   updates: {
     title: "Обновления",
-    auto: "В macOS, Windows и в AppImage WireCat обновляется сам. Когда выходит новая версия, приложение предлагает её вверху окна: нажмите **Установить и перезапустить**. Инструменты, профили и данные остаются как есть.",
+    auto: "В macOS, Windows и в AppImage WireCat обновляется сам. Когда выходит новая версия, приложение предлагает её вверху окна: нажмите **Установить и перезапустить**. Ваши аккаунты и данные не удалятся.",
     packages:
-      "Копия из .deb или .rpm сообщает о новой версии, но установить её не может. Скачайте новый пакет на этой странице и установите его так же, как первый. С версии 0.1.1 пакет называется `wirecat`; .deb сам заменяет `wire-cat` из версии 0.1.0.",
+      "С версии 0.1.3 копия из .deb или .rpm тоже обновляется: нажмите **Скачать и установить**. WireCat скачает новый пакет и откроет установщик программ вашей системы — там нужно будет ввести пароль; если удобнее терминал, приложение покажет команду `apt` или `dnf`. Более старая копия только сообщает о новой версии: скачайте пакет на этой странице и установите его так же, как первый. С версии 0.1.1 пакет называется `wirecat`; .deb сам заменяет `wire-cat` из версии 0.1.0.",
   },
   uninstall: {
     title: "Удаление",
@@ -253,14 +307,12 @@ const es: Words = {
     intro:
       "La app para macOS está firmada y comprobada por Apple. El instalador de Windows aún no está firmado con un certificado de desarrollador de Microsoft, así que Windows te pide que confirmes el primer arranque. Solo hace falta una vez.",
     macos: {
-      title: "macOS",
       steps: [
         "Abre el archivo .dmg y arrastra **WireCat** a **Aplicaciones**.",
         "Abre WireCat. macOS pregunta una vez si quieres abrir una app descargada de Internet: haz clic en **Abrir**. Apple ha comprobado WireCat, así que no hay nada más que permitir.",
       ],
     },
     windows: {
-      title: "Windows",
       steps: [
         "Abre el instalador.",
         "Si Windows muestra **Windows protegió su PC**, selecciona **Más información** y después **Ejecutar de todas formas**.",
@@ -273,7 +325,6 @@ const es: Words = {
     },
   },
   linux: {
-    title: "Linux",
     appimage: [
       "Haz ejecutable el AppImage: en el gestor de archivos, abre sus **Propiedades** y permite ejecutarlo como programa. En una terminal: `chmod +x {appimage}`.",
       "Abre el archivo. WireCat arranca; no se instala nada más.",
@@ -283,11 +334,35 @@ const es: Words = {
     deb: "Instala el paquete .deb: `sudo apt install ./{deb}`.",
     rpm: "Instala el paquete .rpm: `sudo dnf install ./{rpm}`. Si instalaste la versión 0.1.0 desde un .rpm, quítala primero: `sudo dnf remove wire-cat`.",
   },
+  appimageSetup: {
+    title: "Prepara el AppImage",
+    intro: "La descarga ha empezado. Con tres pasos el archivo se convierte en una app que abres desde el menú.",
+    steps: [
+      "Hazlo ejecutable: abre las **Propiedades** del archivo y permite ejecutarlo como programa.",
+      "Muévelo a una carpeta donde se quede, como `~/Applications`. La entrada del menú apunta a ese lugar.",
+      "Añádelo al menú de aplicaciones con su icono.",
+    ],
+    helpers: "Una app puede hacerlo por ti:",
+    gearLever: "guarda los AppImage en una carpeta y los añade al menú. Se instala desde Flathub.",
+    appImageLauncher: "ofrece hacer lo mismo la primera vez que abres un AppImage.",
+    terminal: "O en una terminal. Sustituye un `WireCat.AppImage` anterior y su entrada del menú si los tienes.",
+    agent: "O deja que lo haga tu agente de IA:",
+    prompt: (file) =>
+      `Prepara el AppImage de WireCat en mi ordenador con Linux, solo para mi usuario y sin sudo.
+
+1. El archivo que descargué es ~/Downloads/${file}. Si no está ahí, pregúntame dónde está.
+2. Hazlo ejecutable y muévelo a ~/Applications/WireCat.AppImage. Crea la carpeta si no existe.
+3. Saca su icono: en una carpeta temporal, ejecuta \`~/Applications/WireCat.AppImage --appimage-extract wirecat.png\` y copia squashfs-root/wirecat.png a ~/.local/share/icons/hicolor/256x256/apps/wirecat-desktop.png. Después borra la carpeta temporal.
+4. Crea ~/.local/share/applications/wirecat.desktop con Type=Application, Name=WireCat, Exec=<la ruta completa del AppImage>, Icon=wirecat-desktop, StartupWMClass=wirecat-desktop, Categories=Development; y Terminal=false.
+
+Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúntame. Al terminar, di qué has creado o cambiado.`,
+    hide: "Ocultar",
+  },
   updates: {
     title: "Actualizaciones",
-    auto: "En macOS, Windows y con el AppImage, WireCat se actualiza sola. Cuando sale una versión nueva, la aplicación la ofrece en la parte superior de la ventana: elige **Instalar y reiniciar**. Tus herramientas, perfiles y datos se quedan como están.",
+    auto: "En macOS, Windows y con el AppImage, WireCat se actualiza sola. Cuando sale una versión nueva, la aplicación la ofrece en la parte superior de la ventana: elige **Instalar y reiniciar**. Tus cuentas y tus datos no se borran.",
     packages:
-      "Una copia instalada desde .deb o .rpm avisa de la versión nueva, pero no puede instalarla. Descarga el paquete nuevo en esta página e instálalo igual que el primero. Desde la versión 0.1.1 el paquete se llama `wirecat`; el .deb sustituye por sí solo a `wire-cat` de la 0.1.0.",
+      "Desde la versión 0.1.3, una copia instalada desde .deb o .rpm también se actualiza: elige **Descargar e instalar**. WireCat descarga el paquete nuevo y abre el instalador de tu sistema, que te pedirá la contraseña; si prefieres la terminal, muestra el comando de `apt` o `dnf`. Una copia anterior solo avisa de la versión nueva: descarga el paquete en esta página e instálalo igual que el primero. Desde la versión 0.1.1 el paquete se llama `wirecat`; el .deb sustituye por sí solo a `wire-cat` de la 0.1.0.",
   },
   uninstall: {
     title: "Desinstalar",
@@ -317,5 +392,28 @@ export const sourceLinks = (lang: string) => {
     smartScreen: `https://learn.microsoft.com/${locale}/windows/apps/package-and-deploy/smartscreen-reputation`,
     smartAppControl: `https://support.microsoft.com/${locale}/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions`,
     fuse: "https://docs.appimage.org/user-guide/troubleshooting/fuse.html",
+    gearLever: "https://flathub.org/apps/it.mijorus.gearlever",
+    appImageLauncher: "https://github.com/TheAssassin/AppImageLauncher",
   }
 }
+
+// The bundled wirecat.desktop names the icon and window class wirecat-desktop; matching them groups the window
+// under this entry. Desktop files do not expand ~, so Exec gets $HOME from the unquoted heredoc.
+export const appimageCommands = (
+  file: string,
+) => `mkdir -p ~/Applications ~/.local/share/applications ~/.local/share/icons/hicolor/256x256/apps
+mv ~/Downloads/${file} ~/Applications/WireCat.AppImage
+chmod +x ~/Applications/WireCat.AppImage
+cd "$(mktemp -d)" && ~/Applications/WireCat.AppImage --appimage-extract wirecat.png > /dev/null
+cp squashfs-root/wirecat.png ~/.local/share/icons/hicolor/256x256/apps/wirecat-desktop.png
+cd ~ && cat > ~/.local/share/applications/wirecat.desktop <<DESKTOP
+[Desktop Entry]
+Type=Application
+Name=WireCat
+Comment=Install and manage WireCat tools
+Exec=$HOME/Applications/WireCat.AppImage
+Icon=wirecat-desktop
+StartupWMClass=wirecat-desktop
+Categories=Development;
+Terminal=false
+DESKTOP`

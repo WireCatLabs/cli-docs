@@ -6,6 +6,7 @@ import { downloadWords } from "@/lib/download"
 import { i18n } from "@/lib/i18n"
 import { pageMetadata, pageStructuredData, seoWords } from "@/lib/seo"
 import { homePath } from "@/lib/site-routes"
+import "@/lib/docs-usability.css"
 import "@/lib/landing/download.css"
 
 type Props = { params: Promise<{ lang: string }> }

@@ -150,6 +150,10 @@
   margin-top: 6px;
 }
 
+.wirecat-download .download-other {
+  padding-top: 4px;
+}
+
 /* The inline script sets data-os before the first paint; without it every system is shown equally. */
 .wirecat-download .download-primary,
 .wirecat-download .download-mobile,
@@ -177,14 +181,26 @@
   display: none;
 }
 
-.wirecat-download :is(.download-other, .download-section) {
+.wirecat-download .download-section {
   padding: 28px 0;
   border-top: 1px solid var(--line);
   scroll-margin-top: 100px;
 }
+.wirecat-download .download-top {
+  margin-bottom: 32px;
+}
+.wirecat-download .download-top .download-latest {
+  margin-bottom: 0;
+}
+.wirecat-download:is([data-os="macos"], [data-os="windows"], [data-os="linux"]) .download-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 24px 48px;
+  align-items: start;
+}
 .wirecat-download .download-row {
   display: grid;
-  grid-template-columns: minmax(90px, 0.6fr) minmax(0, 2fr);
+  grid-template-columns: minmax(80px, 0.45fr) minmax(0, 2fr);
   gap: 16px;
   padding: 8px 0;
 }
@@ -194,29 +210,182 @@
 .wirecat-download .download-row h3 {
   margin: 12px 0 0;
 }
-.wirecat-download .download-earlier {
-  margin-bottom: 12px;
+
+.wirecat-download .download-setup-hide svg {
+  width: 18px;
+  height: 18px;
 }
-.wirecat-download .download-earlier > summary {
+.wirecat-download .download-earlier-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 24px;
+}
+.wirecat-download .download-page .download-earlier-head :is(h2, p) {
+  margin: 0;
+}
+.wirecat-download .download-earlier-head h2 {
+  margin-right: 8px;
+}
+.wirecat-download .download-earlier-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   min-height: 44px;
-  padding-block: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
   color: var(--accent);
+  font: inherit;
   font-size: 14px;
   font-weight: 650;
   cursor: pointer;
 }
-.wirecat-download .download-release {
-  padding: 14px 0;
-  border-top: 1px solid var(--line);
+.wirecat-download .download-earlier-toggle svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.wirecat-download .download-release .download-meta {
+.wirecat-download .download-earlier-toggle[data-panel-open] svg {
+  transform: rotate(180deg);
+}
+.wirecat-download .download-earlier-toggle:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+.wirecat-download .download-earlier-panel {
+  overflow: hidden;
+  height: var(--collapsible-panel-height);
+  transition: height 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wirecat-download .download-earlier-panel:is([data-starting-style], [data-ending-style]) {
+  height: 0;
+}
+.wirecat-download .download-earlier-panel[hidden] {
+  display: none;
+}
+.wirecat-download .download-page .download-releases {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.wirecat-download .download-page .download-release {
+  display: grid;
+  grid-template-columns: 4em minmax(10em, auto) 1fr auto;
+  align-items: center;
+  gap: 4px 20px;
+  max-width: none;
+  margin: 0;
+  padding: 2px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+.wirecat-download .download-release-version {
+  color: var(--ink);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.wirecat-download .download-release-date {
+  font-variant-numeric: tabular-nums;
+}
+.wirecat-download .download-release-files {
   display: flex;
   flex-wrap: wrap;
+  gap: 0 16px;
+}
+.wirecat-download .download-release-files a {
+  display: inline-flex;
   align-items: center;
-  gap: 0 6px;
-  margin: 0;
+  min-height: 44px;
+  color: var(--accent);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.wirecat-download .download-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 48px;
+}
+
+/* The shared copy blocks come from the docs, which name their colours with docs variables. */
+.wirecat-download {
+  --color-fd-border: var(--line);
+  --color-fd-card: var(--paper);
+  --color-fd-foreground: var(--ink);
+  --docs-outline: var(--line);
+  --docs-prompt-label: var(--muted);
+  --docs-accent: var(--ink);
+}
+.wirecat-download .download-setup {
+  display: grid;
+  grid-template-rows: 1fr;
+  margin-top: 16px;
+  animation: download-setup-open 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wirecat-download .download-setup-body {
+  min-height: 0;
+  overflow: hidden;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+@keyframes download-setup-open {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+.wirecat-download .download-setup-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.wirecat-download .download-page .download-setup h3 {
+  margin: 4px 0 6px;
+  font-size: 15px;
+}
+.wirecat-download .download-setup-hide {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  margin: -2px -8px 0 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.wirecat-download .download-setup-hide:hover {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
   color: var(--ink);
+}
+.wirecat-download .download-setup-hide:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.wirecat-download .download-page .download-setup :is(p, li) {
   font-size: 14px;
+}
+.wirecat-download .download-page .download-setup-label {
+  margin: 14px 0 0;
+  color: var(--ink);
+  font-weight: 600;
+}
+.wirecat-download .download-page .download-setup-helpers {
+  margin-top: 4px;
+  padding-left: 0;
+  list-style: none;
+}
+.wirecat-download .download-setup-helpers a {
+  color: var(--accent);
+  font-weight: 650;
+  text-decoration: none;
+}
+.wirecat-download .download-setup .docs-snippet {
+  margin-block: 6px 12px;
 }
 
 .wirecat-download .download-tabs {
@@ -279,8 +448,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wirecat-download .download-tab {
+  .wirecat-download :is(.download-tab, .download-earlier-panel, .download-earlier-toggle svg) {
     transition: none;
+  }
+  .wirecat-download .download-setup {
+    animation: none;
+  }
+}
+@media (width < 60rem) {
+  .wirecat-download:is([data-os="macos"], [data-os="windows"], [data-os="linux"]) .download-top,
+  .wirecat-download .download-pair {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 @media (width < 40rem) {
@@ -294,8 +472,20 @@
   .wirecat-download .download-row {
     grid-template-columns: minmax(0, 1fr);
   }
+  .wirecat-download .download-page .download-release {
+    grid-template-columns: auto 1fr auto;
+    padding-top: 6px;
+  }
+  .wirecat-download .download-release-files {
+    grid-column: 1 / -1;
+    order: 1;
+  }
   .wirecat-download .download-button {
     width: 100%;
     justify-content: center;
   }
+}
+.wirecat-download .download-setup .docs-command pre {
+  white-space: pre;
+  overflow-wrap: normal;
 }
