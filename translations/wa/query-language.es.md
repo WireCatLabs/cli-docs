@@ -138,7 +138,7 @@ Un error conlleva la posición del problema en la consulta y una pista.
 
 ## Sobre MCP
 
-Cuando un agente busca en el servidor MCP de `wa`, `wa_read` (`command: "search messages"`) toma la consulta como `query` y `timezone` para la zona del calendario. `chat` toma una identificación o un nombre almacenado; `source`, `newest`, `context` y `limit` funcionan como lo hacen las opciones de comando; `saved` ejecuta una búsqueda guardada. `thread`, `thread_hops`, `thread_messages`, `thread_bytes` y `thread_within` coinciden con las opciones `--thread…`. La respuesta tiene los mismos campos que `--json`. `wa_read` (`command: "stats messages show"`) cuenta las mismas consultas. `wa personal mcp --no-record`, o `record` configurado en `false`, mantiene las llamadas del servidor fuera del historial de consultas ([MCP](./mcp.md)).
+Cuando un agente busca en el servidor MCP de `wa`, `wa_read` (`command: "search messages"`) toma la consulta como `query` y `timezone` para la zona del calendario. `chat` toma una identificación o un nombre almacenado; `source`, `newest`, `context` y `limit` funcionan como lo hacen las opciones de comando; `saved` ejecuta una búsqueda guardada. `thread`, `thread_hops`, `thread_messages`, `thread_bytes` y `thread_within` coinciden con las opciones `--thread…`. La respuesta tiene los mismos campos que `--json`. `wa_read` (`command: "stats messages show"`) cuenta las mismas consultas. `wa personal mcp serve --no-record`, o `record` configurado en `false`, mantiene las llamadas del servidor fuera del historial de consultas ([MCP](./mcp.md)).
 
 ## Siguiente
 

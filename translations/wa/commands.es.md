@@ -36,8 +36,8 @@ wa [profile] [options] <resource> <verb> [arguments]
 | `--full` | found messages with their whole text and every provider field. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
-| `--record` | keep this run — ids and timings, never message content. |
-| `--no-record` | do not keep it, whatever the configuration says. |
+| `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
+| `--no-record` | do not keep this run, even if it fails. |
 
 ## `wa session`
 
@@ -100,7 +100,7 @@ wa account list [query]
 
 ### `wa account show`
 
-who this profile is logged in as; the phone number shows its last four digits
+who this profile is logged in as, with the phone number
 
 ```sh
 wa account show [options]
@@ -108,7 +108,7 @@ wa account show [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--show-phone` | print the whole phone number. |
+| `--hide-phone` | leave the phone number out. |
 
 ### `wa account update`
 
@@ -126,6 +126,7 @@ wa account update [options]
 | `--last-name <name>` | your last name. |
 | `--description <text>` | about you. |
 | `--photo <file>` | a new profile photo — a .jpg or .jpeg file. |
+| `--hide-phone` | leave the phone number out of the answer. |
 
 ### `wa account sessions`
 
@@ -933,7 +934,7 @@ wa contacts list [query] [options]
 
 ### `wa contacts show`
 
-one person and the chats you share with them
+one person: what the messenger says about them — handles, flags, last seen, phone, when they registered — your alias, the chats you share, how many of their messages the store holds in each, and the earlier names and usernames the store saw them with; --offline answers from the store alone
 
 ```sh
 wa contacts show <person> [options]
@@ -946,22 +947,7 @@ wa contacts show <person> [options]
 | Opción | Qué hace |
 |---|---|
 | `--with-notes` | include your private notes, subject to contacts.notes.list permission. |
-
-### `wa contacts info`
-
-everything the messenger says about one person — handles, flags, last seen, when they registered — and how many of their messages the store holds in each chat you share, the first and the last, and the earlier names and usernames the store saw them with
-
-```sh
-wa contacts info <person> [options]
-```
-
-| Argumento | | Qué es |
-|---|---|---|
-| `person` | required | their id, @username, or part of their name. |
-
-| Opción | Qué hace |
-|---|---|
-| `--show-phone` | print the whole phone number. |
+| `--hide-phone` | leave the phone number out. |
 
 ### `wa contacts context`
 
@@ -1616,6 +1602,25 @@ wa messages sync [chat] [options]
 
 react to messages
 
+### `wa reactions list`
+
+who reacted to a message, newest first; refused where the chat hides the list
+
+```sh
+wa reactions list <chat> <message> [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
+| `message` | required | the message id. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
+
 ### `wa reactions add`
 
 put your reaction on a message; it replaces the one you had
@@ -1762,7 +1767,7 @@ wa models keys remove <provider>
 
 ### `wa models list`
 
-speech and embedding models, their download status and the default of each kind
+speech, embedding and reranker models: downloaded or not, each kind's default
 
 ```sh
 wa models list [query]
@@ -1774,7 +1779,7 @@ wa models list [query]
 
 ### `wa models download`
 
-download and verify one speech or embedding model: tens to hundreds of MB, each size in models list
+download and verify one speech, embedding or reranker model: tens to hundreds of MB, each size in models list
 
 **Reads from an outside service.**
 
@@ -2131,7 +2136,7 @@ wa store migrate
 
 ### `wa store rebuild`
 
-rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored; loses nothing
+rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored, and drop the vectors no stored text uses; loses nothing
 
 **Changes something on this computer only.**
 
@@ -2216,6 +2221,7 @@ wa store reset [options]
 | Opción | Qué hace |
 |---|---|
 | `--no-backup` | delete the store without backing it up first. |
+| `--dry-run` | list every table it would empty, with its rows, and delete nothing. |
 
 ### `wa store copies`
 
@@ -2428,7 +2434,7 @@ wa conversations embeddings status [options]
 
 #### `wa conversations embeddings clear`
 
-drop a chat's vectors, or only one model's; messages and conversations are never touched
+drop a chat's conversation and message vectors, or only one model's; messages and conversations are never touched
 
 **Changes something on this computer only.**
 
@@ -2446,7 +2452,7 @@ wa conversations embeddings clear [options]
 
 ### `wa conversations rebuild`
 
-build, then embed with the model on this machine, the chats that changed since their build and the group chats never built — or only --chat; bounded per run, so run it again for the rest; never asks the messenger, downloads no model and sends no text anywhere
+build, then embed with the model on this machine, the chats that changed since their build and the group chats never built — or only --chat; with the default model, also each message on its own, which `search messages --discover` reads; bounded per run, so run it again for the rest; never asks the messenger, downloads no model and sends no text anywhere
 
 **Changes something on this computer only.**
 
@@ -3666,7 +3672,7 @@ find things by text: one resource when you know it (messages, notes), or search 
 
 ### `wa search all`
 
-search messenger messages and notes in the local store, and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
+search messenger messages and notes in the local store, calendar events when the store holds a calendar, and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
 
 ```sh
 wa search all <query> [options]
@@ -3678,7 +3684,7 @@ wa search all <query> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: messages, notes; meetings when --source names a meeting account. |
+| `--only <resources>` | only these resources, separated by commas: messages, notes, events; meetings when --source names a meeting account. |
 | `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
 | `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
 | `--limit <n>` | how many. |
@@ -3711,7 +3717,7 @@ wa search messages [query] [options]
 | `--newest` | newest first instead of best first. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
-| `--discover` | find partial lexical matches and eligible replies in the local archive; results are evidence, not confirmed answers. |
+| `--discover` | find partial word matches, eligible replies and, once messages have vectors, messages close in meaning in the local archive; results are evidence, not confirmed answers. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
 
@@ -4044,7 +4050,7 @@ wa config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Opción | Qué hace |
@@ -4065,7 +4071,7 @@ wa config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, keep_runs_for_days, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
 | Opción | Qué hace |
 |---|---|
@@ -4156,21 +4162,86 @@ wa upgrade [options]
 
 ## `wa mcp`
 
-serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add wa -- wa <profile> mcp`
+serve this profile to an agent over MCP and set it up — `claude mcp add wa -- wa <profile> mcp serve`
+
+### `wa mcp serve`
+
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add wa -- wa <profile> mcp serve`; `wa mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
 
 **Changes something in WhatsApp.**
 
 ```sh
-wa mcp [options]
+wa mcp serve [options]
 ```
 
 | Opción | Qué hace |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
-| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net. |
-| `--revoke` | forget every login given to a browser app; each must log in again. |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+
+### `wa mcp revoke`
+
+forget every login `mcp serve --http` gave a browser app, of this profile or of the server `--profiles` names; each app must log in again
+
+**Changes something on this computer only.**
+
+```sh
+wa mcp revoke [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+
+### `wa mcp server`
+
+start, stop and check `mcp serve --http` in the background; status shows the login code for a browser app
+
+#### `wa mcp server start`
+
+start `mcp serve --http` apart from this shell and answer once it listens, with its login code
+
+**Changes something on this computer only.**
+
+```sh
+wa mcp server start [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--port <port>` | the local port (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+| `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+#### `wa mcp server stop`
+
+stop `mcp serve --http` — only one that `mcp server start` started
+
+**Changes something on this computer only.**
+
+```sh
+wa mcp server stop [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+#### `wa mcp server status`
+
+whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
+
+```sh
+wa mcp server status [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
 ### `wa mcp config`
 
@@ -4183,6 +4254,7 @@ wa mcp config [options]
 | Opción | Qué hace |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.send=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
 ### `wa mcp add`
 
@@ -4882,7 +4954,17 @@ wa bot me
 
 ### `wa bot mcp`
 
-serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- wa sales bot mcp`
+serve this bot to an agent over MCP and set it up — `claude mcp add sales-bot -- wa sales bot mcp serve`
+
+#### `wa bot mcp serve`
+
+serve this bot to an agent over MCP, on stdin and stdout — `claude mcp add sales-bot -- wa sales bot mcp serve`
+
+**Changes something in WhatsApp.**
+
+```sh
+wa bot mcp serve
+```
 
 #### `wa bot mcp config`
 
@@ -5921,7 +6003,7 @@ the instructions an agent is given for this tool
 
 ### `wa skill show`
 
-print SKILL.md — `wa skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
+print SKILL.md — `wa skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
 
 ```sh
 wa skill show [name] [options]
@@ -5937,7 +6019,7 @@ wa skill show [name] [options]
 
 ### `wa skill install`
 
-write SKILL.md to \~/.claude/skills/whatsapp-cli/ (Claude Code) and \~/.agents/skills/whatsapp-cli/ (Codex, Gemini CLI)
+write SKILL.md to \~/.claude/skills/whatsapp-cli/ (Claude Code) and \~/.agents/skills/whatsapp-cli/ (Codex, Gemini CLI, OpenClaw); --for hermes also has Hermes read \~/.agents/skills, which changes Hermes's own settings, so all leaves it out
 
 **Changes something on this computer only.**
 
@@ -5947,11 +6029,11 @@ wa skill install [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
+| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
 
 ### `wa skill status`
 
-for each place `wa skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+for each place `wa skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
 
 ```sh
 wa skill status

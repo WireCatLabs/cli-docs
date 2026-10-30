@@ -5,6 +5,107 @@ title: "Historial de cambios"
 Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest first; versions follow
 [semantic versioning](https://semver.org), so before `1.0.0` the command interface may still change.
 
+## 0.17.0 — 29.10.2026
+
+### Added
+
+- **Una tarjeta de contacto compartida muestra su nombre y teléfono**, en línea y desde el almacén: en JSON el adjunto tiene `contact` (`name`, `first_name`, `last_name`, `phone`). La vCard en sí sigue sin imprimirse nunca. Requiere cli-core 0.477.0.
+- **`reactions list <chat> <message>`** muestra quién reaccionó a un mensaje, de la más reciente a la más antigua, y acepta `reaction:🔥` y `--limit`/`--cursor`. WhatsApp no tiene una petición para esto, así que la lista es lo que recibió el almacén local (el envío del historial, `serve` y `watch`), no una respuesta en vivo: falta una reacción enviada con `reactions add` o una que llegó mientras nada escuchaba. Cada persona aparece una vez, con su reacción más reciente; una retirada se omite. Un canal la rechaza (`reactions.broadcast`). Requiere cli-core 0.480.0.
+
+### Changed — may break callers
+
+- **`contacts info` pasa a ser `contacts show`**, que acepta `--offline` para responder solo desde el almacén. `--show-phone` desaparece, así que un script que lo pase falla como opción desconocida; quítalo. `--hide-phone` es la opción para dejar fuera un número (WhatsApp no da ninguno para la cuenta ni para una persona, así que aquí no cambia nada). La herramienta MCP `contacts info` desaparece y un permiso guardado `contacts.info` se rechaza con el `config unset` que lo elimina; `contacts.show` lo cubre.
+
+## 0.16.0 — 29.10.2026
+
+### Changed — may break callers
+
+- **La skill del agente figura en ClawHub como `wirecat-whatsapp`.** Instálala con `openclaw skills install @wirecat/wirecat-whatsapp`. La ficha `whatsapp-cli` ya no se actualiza. `wa skill install` sigue escribiendo `skills/whatsapp-cli/`.
+
+## 0.15.0 — 29.10.2026
+
+### Changed — may break callers
+
+- **`wa mcp serve` sin perfil se rechaza; indica qué sirve.** Ejecuta `wa <profile> mcp serve` para un perfil, `wa mcp serve --profiles work,personal` para una lista, o `wa mcp serve --profiles all` para todos los perfiles. Sin ninguno sale con `2` y `validation_error` y lista los perfiles. Lo mismo vale para `--http`, `mcp revoke`, `mcp server start|stop|status` y `mcp config`. Una entrada de app que ejecuta `wa mcp serve` sin perfil deja de funcionar: imprímela de nuevo con `wa mcp config --profiles all`, o `wa <profile> mcp config`. La entrada del MCP Registry ahora ejecuta `wa mcp serve --profiles all` (cli-core 0.470.0).
+- **cli-core 0.473.0.** Cada mensaje que imprime `wa` dice si lo enviaste tú (`sender_is_me`). El registro de una ejecución fallida conserva el código de error de la red (`runs show`, `error.cause_code`). `--offline --transcribe` lista bajo `missing` los mensajes de voz que no pudo transcribir, con el comando que lo hace.
+
+## 0.14.0 — 29.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.469.0 y cli-base 0.65.0.** cli-core 0.469 acepta solo cli-base 0.65, así que ambas versiones fijadas se mueven juntas. cli-base 0.65 conoce los verbos `serve` y `revoke`, por lo que sus excepciones de lint desaparecen, y su `cli-dev bundle` encuentra un servidor iniciado con una opción antes de `mcp serve`. Desde cli-core 0.467 cada ejecución se registra por defecto, también las correctas, y dice quién la pidió (`via`); `record: false` ahora conserva los fallos. Desde cli-core 0.468, un servidor MCP ofrece mediante su herramienta de lectura un comando que solo descarga al almacén.
+- **El servidor MCP es `wa <profile> mcp serve`; `wa <profile> mcp` a secas imprime la ayuda.** Los inicios de sesión del navegador se olvidan con `wa <profile> mcp revoke` en lugar de `mcp --revoke`, y `wa mcp serve` sin perfil sirve todos los perfiles. El servidor de un bot es `wa <name> bot mcp serve`. Una entrada de app que ejecuta `wa personal mcp` debe cambiar a `wa personal mcp serve`: ejecuta de nuevo `wa personal mcp add <app>` o `wa personal mcp config`. `mcp server start`, las entradas que imprime `mcp config` y la entrada del MCP Registry ya ejecutan el comando nuevo (cli-core 0.463.0).
+- **`wa skill show|status|install --json` imprimen `{ item, meta }`.** Los campos de la skill pasaron a `item`; el instalador de Windows los lee de ahí (cli-core 0.462.0).
+- **`wa account list` dice si cada perfil tiene la sesión iniciada en este equipo** (`signed_in`), y los resultados de búsqueda de todo tipo nombran los campos que un agente debe leer como datos (`untrusted`). Un llamador que los compare con una copia antigua y estricta del esquema rechazará el campo nuevo (cli-core 0.464.0 y 0.466.0).
+
+### Added
+
+- **`wa <profile> mcp server status` dice qué hizo por última vez cada app de navegador con la sesión iniciada** (cli-core 0.454.0).
+- **`wa upgrade` reinicia el servidor MCP de navegador que lanzó `wa mcp server start`** con el mismo puerto, dirección y límites (`mcp_servers`, versión antigua → nueva); uno iniciado a mano se deja en marcha y se nombra. Las sesiones de agente por stdio que siguen en la versión antigua se listan (`stale_sessions`): reinícialas desde tu app de agente. Esto funciona a partir de la próxima actualización (cli-core 0.464.0).
+
+### Fixed
+
+- **`wa` arranca en aproximadamente la mitad de tiempo: el paquete se ejecuta desde un bundle.** Un comando cargaba unos mil archivos de módulos antes de hacer nada; ahora carga unas pocas decenas que contienen el mismo código, generadas por `cli-dev bundle` de cli-base. `wa messages list --help` en caliente pasó de 416 a 200 ms, `wa --version` de 39 a 18 ms. La salida no cambia; el motor de WhatsApp se sigue encontrando en su paquete de plataforma. Un `wa serve` o `wa mcp serve` en marcha carga todo su código poco después de arrancar, así que actualizar `wa` en el sitio no lo rompe. El paquete es más grande: 2,7 MB de descarga en lugar de 0,3 MB.
+- **`wa mcp serve` sin perfil marca los perfiles que no tienen la sesión iniciada.** Listaba todos los perfiles, así que una app podía elegir uno sin dispositivo vinculado y fallar. Ahora cada perfil lleva una etiqueta (`default — not signed in`) en el menú de la app y en la descripción, y una llamada a uno sin sesión responde cómo iniciarla: `wa <profile> setup`, o desde WireCat Desktop.
+- **La página de inicio de sesión del servidor MCP de navegador dice que cada código sirve para un solo inicio de sesión.** Cuando una app inicia sesión, aparece un código nuevo en WireCat Desktop y en `wa mcp server status` (cli-core 0.466.0).
+
+## 0.13.0 — 27.10.2026
+
+### Added
+
+- **`wa mcp` sin perfil sirve todos los perfiles, por stdio y con `--http` (cli-core 0.450.0).** Una app de IA necesita un solo conector para WhatsApp, no uno por perfil. Cada herramienta recibe un `profile` obligatorio (todos los perfiles de aquí, sin valor por defecto) y se le dice al agente que pregunte cuando no nombraste la cuenta; la llamada se ejecuta en el propio `wa <profile> mcp` de ese perfil, así que sus permisos se aplican como antes. WhatsApp permite una conexión por cuenta: ejecuta `wa <profile> serve` mientras otro proceso `wa` pueda tenerla. `--public-url` acepta una ruta, `https://<name>.ts.net/wa`.
+- **El error de un perfil sin vincular también ofrece WireCat Desktop.** `is not linked to WhatsApp` ahora dice: ejecuta `wa <profile>
+setup` en una terminal, o vincula desde WireCat Desktop (Tools → WhatsApp → Manage). La skill ya no dice que `chats
+delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
+- **`wa skill install --for hermes` da la skill a Hermes Agent, y `wa skill status` dice qué lee Hermes (cli-base 0.59.0).** Añade `~/.agents/skills` a `skills.external_dirs` de Hermes mediante `hermes config set`, conservando las carpetas ya listadas, o copia el archivo en el directorio de Hermes cuando eso falla. Sin Hermes instalado falla con `not_found` y no escribe nada. Un `wa skill install` a secas y `--for all` siguen escribiendo solo las copias de Claude Code y `~/.agents/skills`. `skill status --json` añade `hermes` junto a `targets`.
+- **Una ejecución iniciada por OpenClaw o Hermes Agent nombra a ese agente (cli-core 0.437.0).** `runs show` da `agent` como `openclaw` para un comando que ejecutó el agente de OpenClaw, con `from_chat: true` cuando lo inició un mensaje de chat; una ejecución de Hermes lleva su sesión, así que una reclamación de tarea de Hermes se mantiene por sesión.
+- **La skill `whatsapp-cli` le dice a OpenClaw y ClawHub que necesita `wa`, y cómo instalarlo** (`metadata.openclaw`: `requires.bins` y el paquete npm `@wirecat/whatsapp-cli`). Con `wa` ausente del PATH, OpenClaw marca la skill como no lista y ofrece instalar el paquete. Claude Code y Codex ignoran el bloque.
+- **`wa <profile> mcp server start|stop|status` ejecuta el servidor MCP HTTP en segundo plano (cli-core 0.445.0).** `start` acepta `--public-url`, `--port` y `--permission` como `mcp --http` y vuelve cuando el servidor escucha; `status` da el puerto, la dirección, el código de inicio de sesión de un solo uso y las apps que iniciaron sesión; `stop` termina solo el servidor que inició.
+
+### Changed — may break callers
+
+- **wa necesita cli-base 0.63.0 (cli-core 0.452.0).** Nada de lo que usa wa cambió en él.
+- **El registro de una ejecución conserva la línea de comandos tal como se escribió (cli-core 0.439.0 a 0.447.0).** `runs show` y `run.json` llevan `argv`, las palabras después de `wa`, con los secretos como `[redacted]` (una opción con nombre de secreto, una contraseña en una URL, un formato de token conocido, una cadena de aspecto aleatorio) y un número de teléfono nunca se conserva. `wa <profile> config set record_input false` deja `[redacted]` en lugar de cada valor escrito que pueda ser texto. Los eventos registrados siguen guardando ids, nunca el título de un chat ni el texto de un mensaje.
+
+### Fixed
+
+- **La búsqueda por significado y `--discover` se ejecutan también en el ONNX Runtime nativo en Windows (cli-core 0.451.0).** Tras `wa <profile> models download`, los modelos de texto y el reranker usan la biblioteca nativa en Windows x64 y arm64, como ya hacían en Linux y macOS: de 2 a 3 veces más rápido que WebAssembly. La descarga toma `onnxruntime.dll` del paquete npm `onnxruntime-node` (113,5 MB, una sola vez, comprobado con sha256). Los modelos de imagen (CLIP, SigLIP2) también usan la biblioteca nativa, donde esté instalada. Los resultados son los mismos.
+- **Cada comando tarda menos en prepararse (cli-base 0.62.0, cli-core 0.449.0).** La comprobación de los comandos compartidos ahora describe cada comando una vez, no de nuevo por cada grupo que tiene encima. Era cerca del 60 % de la preparación de cada comando; en tg un `run(["--version"])` en caliente pasó de 49 a 29 ms. Detecta los mismos cambios que antes.
+- **La búsqueda por significado y el reranker de `search messages --discover` van de 2 a 3 veces más rápido en Linux y en Macs con Apple silicon tras el próximo `wa models download` (cli-core 0.448.0).** La descarga instala un ONNX Runtime nativo y los modelos se ejecutan en él; sin él se ejecutan como antes. El reranker ahora lee solo el comienzo del mensaje al que responde un resultado (cli-core 0.447.0).
+
+## 0.12.0 — 26.10.2026
+
+### Added
+
+- **`search messages --discover` reordena sus primeros 50 resultados una vez descargado un reranker (cli-core 0.435.0).** Un modelo local lee la pregunta junto con cada resultado, y su puntuación se mezcla con la propia de discovery; los resultados posteriores a los 50 primeros conservan su orden. Por defecto es mMARCO (136 MB, `wa models download mmarco`); el ajuste de perfil `search_reranker` elige `bge-reranker-v2-m3` (588 MB) u `off`. Cada resultado reordenado tiene `discovery.reranker_score`; `score` sigue siendo el de discovery. Sin el modelo, discovery conserva su orden y dice `not reranked: …` (en `--json` y MCP: `missing` y `next`). Una búsqueda nunca descarga un modelo ni envía texto a ningún sitio; `--exact`, `--newest` y las consultas estrictas no se tocan.
+- **`search all` también encuentra mensajes por significado, una vez descargado e5-small y con los mensajes ya vectorizados (cli-core 0.435.0).** Los resultados por significado se mezclan con los de palabras en una sola lista de mensajes; el `foundBy` de cada elemento dice qué búsqueda lo encontró. Una consulta con NOT, o con un filtro bajo OR o en un grupo, sigue usando solo palabras. Sin el modelo o los vectores, `search all` lee palabras como antes y dice por qué. `--exact` y `--backend server` siguen usando solo palabras.
+
+### Changed — may break callers
+
+- **El almacén compartido pasa a la versión 34 (cli-core 0.434.0).** La búsqueda por significado ordena mediante un índice vectorial guardado en el almacén, construido en la primera apertura con esta versión. Una vez que esta versión abre el almacén, una CLI con cli-core 0.433.0 o anterior lo rechaza y pide actualizarse, así que actualiza juntas todas las CLI de WireCat que comparten el almacén. Cuando falta la extensión de SQLite del índice o no se carga, abrir el almacén falla con `store.vector-extension-missing` o `store.vector-extension-failed`: reinstala wa. `store check` informa de `vector_indexes` y falla cuando un índice no está sincronizado.
+- **`wa upgrade --help` muestra solo `wa upgrade --check` como ejemplo (cli-core 0.433.0).** El ejemplo de `wa upgrade` a secas desaparece: copiado y ejecutado, actualizaba.
+- **El análisis a través de Anthropic envía la clave como `Authorization: Bearer` (cli-core 0.433.0).** Antes enviaba `X-Api-Key`. Una pasarela en un `models.<purpose>.base_url` personalizado que lea `X-Api-Key` debe leer `Authorization`.
+
+### Fixed
+
+- **Un vector almacenado desaparece cuando ningún texto del almacén lo usa (cli-core 0.435.0).** Una imagen cuya foto cambió y un chat purgado (`store clear --left`, un chat fusionado con otro) dejaban vectores atrás, y ya no. `store rebuild` elimina los que dejaron versiones anteriores (`unused_vectors_dropped`), y `store check` los cuenta (`vectors.unused`).
+- **`conversations embeddings clear --chat` también elimina los vectores de mensajes del chat (cli-core 0.435.0)**, no solo los de sus conversaciones.
+
+## 0.11.0 — 25.10.2026
+
+### Changed — may break callers
+
+- **La ejecución de un comando `bot` fallido nombra la llamada a la Cloud API que falló.** `runs show` y `runs list` dan a su `error.http` el `method` y el `endpoint_template` junto al estado — `{ "method": "POST", "endpoint_template": "/v23.0/:id/messages", "status": 400 }` — donde antes solo tenían el estado. Cada id de la ruta se escribe `:id`, así que el id del número de teléfono, el id de la cuenta de negocio y el id de un medio nunca llegan a una ejecución ni a una traza. Las peticiones del bot en `--trace` y en una ejecución registrada llevan los mismos dos campos, y una línea de traza legible los muestra tras el nombre de la operación. Un script que analice el texto de `--trace` verá esa columna extra.
+
+### Added
+
+- **`store reset --dry-run` lista lo que vaciaría un reset y no borra nada** (cli-core 0.429.0): los archivos del almacén y sus bytes, cada tabla de datos con sus filas, si antes se hace una copia de seguridad, y si un serve u otro proceso tiene el archivo abierto.
+- **`search messages --discover` también encuentra mensajes cercanos en significado** una vez descargado e5-small y tras dar `conversations rebuild` a los mensajes sus propios vectores (cli-core 0.432.0). El `discovery.found_by` de cada resultado dice qué búsqueda lo encontró. Hasta entonces discovery busca por palabras como antes y dice por qué. No se descarga nada y ningún texto sale del equipo.
+
+### Fixed
+
+- **Un `--version` a secas responde antes de que se cargue el programa**: el bin arranca a través de `@wirecat/cli-core/cli/start` (cli-core 0.429.0).
+
 ## 0.10.0 — 25.10.2026
 
 ### Changed — may break callers

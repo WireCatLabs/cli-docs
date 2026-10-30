@@ -19,7 +19,7 @@ title: "Un número de WhatsApp Business como bot"
 | `bot webhooks set <url>` | Dirige el webhook de este número a una dirección; `bot webhooks list` y `delete` leen y eliminan. |
 | `bot media download <id> --output <file>` | Guarda un archivo que alguien envió, con el ID de medio `bot watch --jsonl` impreso. |
 | `bot api <operation>` | Cada operación de Cloud API que mantiene `wa` se genera a partir del archivo OpenAPI de Meta. |
-| `bot mcp` | Los comandos del bot como herramientas MCP para un agente. |
+| `bot mcp serve` | Los comandos del bot como herramientas MCP para un agente. |
 
 Un chat es el número de teléfono de la persona en dígitos, como `70000000001`. Meta nombra a algunas personas solo mediante una identificación de usuario de ámbito empresarial; `bot watch` muestra ese chat como `user:<id>` y lo envías de la misma manera.
 
@@ -69,7 +69,7 @@ wa cloudtest bot watch --public-url https://<name>.ts.net:8443
 - Responde a la verificación de suscripción de Meta con el token de verificación que conservaste.
 - Rechaza cualquier entrega cuyo `X-Hub-Signature-256` no coincida con el secreto de tu aplicación.
 - Responde a Meta sólo después de que el mensaje está en el almacén local, por lo que una falla o un disco lleno no pierde nada: Meta lo envía nuevamente.
-- `--port` cambia el puerto local. El receptor necesita su propio puerto y su propia dirección pública además de `mcp --http`.
+- `--port` cambia el puerto local. El receptor necesita su propio puerto y su propia dirección pública además de `mcp serve --http`.
 
 El túnel debe conservar una dirección: Meta comprueba cada nueva dirección nuevamente. Usa Tailscale Funnel o un túnel de Cloudflare con nombre, configurado como en [ChatGPT, Codex o Claude en el navegador](./remote.md#webhook-receiver-for-a-bot). Un Quick Tunnel de Cloudflare cambia su dirección cada vez que se inicia.
 

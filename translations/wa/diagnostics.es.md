@@ -7,7 +7,7 @@ Usa esta página cuando un comando falle, se cuelgue o tarde demasiado y quiera 
 Algunas palabras que utiliza esta página:
 
 - Una **ejecución** es una llamada de `wa`, desde el inicio hasta la salida.
-- Un **registro de ejecución** es una carpeta que guarda lo que hizo una ejecución: su comando, su resultado y una línea por operación. Nunca contiene texto de mensajes, nombres o títulos de chat.
+- Un **registro de ejecución** es una carpeta que guarda lo que hizo una ejecución: su línea de comando, su resultado y una línea por operación. Esas líneas nunca contienen texto de mensajes, nombres o títulos de chat. Lo que guarda de la línea de comando que escribiste está en [Lo que escribiste](#what-you-typed).
 - **`wa personal doctor`** comprueba la instalación: la versión, el perfil, la configuración, el almacén local y las partes propias de WhatsApp: el motor, las claves del dispositivo y la cerradura.
 - Un **informe de problema** es un archivo JSON creado a partir de `wa personal doctor` y una ejecución fallida. Lo adjuntas a un problema.
 
@@ -17,9 +17,9 @@ Algunas palabras que utiliza esta página:
 |---|---|---|
 | Vea cada operación tal como sucede | `wa --trace …` | no, imprime solo en stderr |
 | Ver el fracaso completo | `wa --debug …` | no, imprime solo en stderr |
-| Mantén un registro de una ejecución | `wa --record …` | sí, un récord de carrera |
-| Encuentra una ejecución fallida más tarde | `wa personal runs list` | una ejecución fallida se mantiene sola |
-| Mantén un registro de cada ejecución | `wa personal config set record true` | sí, cada carrera |
+| Encuentra una ejecución más tarde | `wa personal runs list` | cada ejecución se mantiene sola |
+| Deja una ejecución fuera | `wa personal --no-record …` | nada |
+| Mantén solo las ejecuciones fallidas | `wa personal config set record false` | las ejecuciones fallidas |
 | Verifique la instalación | `wa personal doctor`, `wa personal doctor --online` | no |
 | Hacer un informe de problema | `wa personal doctor reports create` | sí, un archivo que envías |
 
@@ -52,35 +52,46 @@ Un registro de ejecución es una carpeta bajo `runs/<day>/` en la carpeta de est
 
 ## Una ejecución fallida siempre se mantiene
 
-Cuando un comando termina con un error, su ejecución se mantiene incluso sin `--record`. `run.json` entonces tiene `"keptBecauseFailed": true`. Esto se aplica a cada comando y a cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo, un rechazo porque otro comando retiene el dispositivo. El registro contiene sólo las palabras del comando, como `messages send`, nunca lo que siguió.
+Cuando un comando termina con un error, su ejecución se mantiene incluso sin `--record`. `run.json` entonces tiene `"keptBecauseFailed": true`. Esto se aplica a cada comando y a cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo, un rechazo porque otro comando retiene el dispositivo. Lo que el registro guarda de la línea de comando está en [Lo que escribiste](#what-you-typed); una ejecución cuya configuración no cargó oculta todo valor escrito que pueda ser texto.
 
-Una ejecución que funcionó no deja ningún registro a menos que ti lo solicite, por lo que un informe de problema siempre no se puede adjuntar. `--no-record`, o `"record": false` en la configuración, también desactiva esto.
+Cada ejecución se registra, también las que funcionaron, por lo que un informe de problema siempre tiene la ejecución que adjuntar. `--no-record` no guarda nada en una ejecución; `"record": false` en la configuración guarda solo las ejecuciones fallidas.
 
 Las búsquedas exitosas mantienen su propio historial, aparte de los registros de ejecución: consulte [búsqueda](./search.md).
 
-## Cuándo registrar cada ejecución
+## Cuándo mantener solo las ejecuciones fallidas
 
 ```sh
-wa personal config set record true          # this profile
-wa personal --no-record chats list          # but not this one
+wa personal config set record false         # profile "personal": failed runs only
+wa personal --no-record chats list          # this run: nothing at all
 ```
 
-De forma predeterminada, una ejecución que funcionó no se escribe hasta que ti la solicita. Una herramienta de mensajería que guarda una carpeta de a quién lees y cuándo sería un diario de tu vida que nadie pidió.
+Una ejecución que funcionó guarda los identificadores de los chats que leíste y, con `record_input` activado, lo que escribiste (un mensaje que enviaste, un chat nombrado por su título). Se guarda solo en este ordenador, legible solo por ti, durante 7 días. Pon `record` en `false` si prefieres no guardarla en absoluto.
 
 ## ¿Cuánto tiempo vive?
 
-**30 días**, o `keep_runs_for_days` en la configuración. Las ejecuciones antiguas se eliminan sólo cuando se guarda una nueva, un día entero a la vez, por el nombre de la carpeta, por lo que no es necesario abrir nada para decidir.
+Una ejecución que funcionó vive **7 días** (`keep_successful_runs_for_days`), una fallida **30 días** (`keep_runs_for_days`). La carpeta de ejecuciones también se mantiene por debajo de **200 MB** (`runs_size_limit_mb`): al superarlo, las ejecuciones más antiguas que funcionaron se eliminan primero. Las ejecuciones antiguas se eliminan sólo cuando se guarda una nueva, un día entero a la vez, por el nombre de la carpeta, por lo que no es necesario abrir nada para decidir.
 
 ## Lo que nunca está en un registro
 
-Un registro de ejecución y `--trace` contienen el nombre, los identificadores, los recuentos, las duraciones y los códigos de error de una operación. Nunca llevan:
+Los eventos de una ejecución y `--trace` contienen el nombre, los identificadores, los recuentos, las duraciones y los códigos de error de una operación. Nunca llevan:
 
 - el texto de un mensaje;
 - un título de chat o el nombre de una persona;
-- **lo que escribiste como `<chat>`**, porque un chat escrito suele ser un nombre;
 - un número de teléfono, un código de emparejamiento o las claves del dispositivo.
 
-Lo mismo ocurre con un informe elaborado a partir de una ejecución.
+### Lo que escribiste
+
+`run.json` también guarda la línea de comando. Lo que guarda depende de tu versión de `wa`:
+
+- **Una versión que lista `record_input` en `wa personal config show`** guarda la línea de comando tal como la escribiste (el nombre de un chat, una búsqueda, el texto de un mensaje) para que puedas leer lo que ejecutaste. Un secreto siempre es `[redacted]`: el valor de una opción llamada token, password, passphrase, secret, credential, cookie, authorization o API key; una contraseña dentro de una URL; una cadena larga que parece un token. Para volver a ocultar todo valor escrito que pueda ser texto:
+
+  ```sh
+  wa personal config set record_input false
+  ```
+
+- **Una versión anterior** guarda las palabras del comando y los nombres de las opciones, como `messages send --md`. Todo valor que pueda ser texto, como lo que escribiste como `<chat>`, es `[redacted]`.
+
+Un informe de problema hecho a partir de una ejecución oculta esos valores escritos en todas las versiones.
 
 ## Verifique la instalación: `wa doctor`
 

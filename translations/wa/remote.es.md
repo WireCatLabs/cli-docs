@@ -6,16 +6,16 @@ Usa esta página cuando desee una aplicación de IA que se ejecute en el navegad
 
 Términos utilizados en esta página:
 
-- **MCP** (Protocolo de contexto modelo) es la forma estándar en que una aplicación de IA llama a herramientas externas. `wa personal mcp` es el servidor MCP que viene con `wa`; la [guía del servidor MCP](./mcp.md) cubre aplicaciones en su propia computadora.
+- **MCP** (Protocolo de contexto modelo) es la forma estándar en que una aplicación de IA llama a herramientas externas. `wa personal mcp serve` es el servidor MCP que viene con `wa`; la [guía del servidor MCP](./mcp.md) cubre aplicaciones en su propia computadora.
 - **Conexión remota** significa que la aplicación se conecta desde sus propios servidores, a través de Internet, a la dirección que ti le proporcione.
-  `wa personal mcp --http` ofrece las mismas herramientas a través de HTTP en `127.0.0.1` para esto.
+  `wa personal mcp serve --http` ofrece las mismas herramientas a través de HTTP en `127.0.0.1` para esto.
 - **Túnel HTTPS** es un programa que le da a un puerto de tu ordenador una dirección HTTPS pública. Esta página utiliza [Embudo de escala de cola](https://tailscale.com/docs/features/tailscale-funnel); El túnel Cloudflare también funciona. No es necesario comprar un dominio para Funnel.
 - **URL pública** es esa dirección, por ejemplo `https://laptop.tail1234.ts.net`. Se lo pasas a `wa` como
   `--public-url`, y la aplicación lo obtiene con `/mcp` al final.
 - **Código de acceso** es un código de un solo uso que `wa` imprime en tu terminal. La página de inicio de sesión de la aplicación lo solicita, por lo que solo una persona que vea ese terminal puede conectar una aplicación.
 
 ```text
-ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal mcp --http (login) ──▶ WhatsApp
+ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal mcp serve --http (login) ──▶ WhatsApp
 ```
 
 ## Qué puedes hacer
@@ -30,9 +30,9 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal 
 
 ## Antes de empezar
 
-- **Quien inicia sesión lee tu WhatsApp.** El inicio de sesión necesita la clave de acceso de tu terminal. Nunca pongas un túnel delante de `wa personal mcp` sin `--http`: ese modo no tiene ningún inicio de sesión.
+- **Quien inicia sesión lee tu WhatsApp.** El inicio de sesión necesita la clave de acceso de tu terminal. Nunca pongas un túnel delante de `wa personal mcp serve` sin `--http`: ese modo no tiene ningún inicio de sesión.
 - **Los permisos de perfil deciden qué puede cambiar la aplicación.** `deny` y `readonly` bloquean escrituras; `ask` y `allow` permiten que una escritura MCP solicitada se realice sin un formulario en el servidor. La aprobación de la aplicación es independiente y depende de tu configuración. La lista de destinatarios y el límite por horas aún se aplican ([lo que puede hacer un agente](./mcp.md#what-an-agent-may-do), [permisos](./permissions.md)).
-- **El servidor comparte la única conexión del dispositivo con `serve`.** Las lecturas del almacén local funcionan mientras se ejecuta `serve`. A diferencia del terminal y `wa personal mcp`, el servidor HTTP no pasa por `serve`: un envío, una edición o una reacción de la aplicación se rechaza hasta que `serve` se detiene, y `serve` no puede iniciarse mientras el servidor mantiene una conexión ([una conexión, compartida con `serve`](./mcp.md#one-connection-shared-with-serve)).
+- **El servidor comparte la única conexión del dispositivo con `serve`.** Las lecturas del almacén local funcionan mientras se ejecuta `serve`. A diferencia del terminal y `wa personal mcp serve`, el servidor HTTP no pasa por `serve`: un envío, una edición o una reacción de la aplicación se rechaza hasta que `serve` se detiene, y `serve` no puede iniciarse mientras el servidor mantiene una conexión ([una conexión, compartida con `serve`](./mcp.md#one-connection-shared-with-serve)).
 - **La computadora que ejecuta `wa` debe permanecer encendida.** Para usarlo desde un teléfono, o desde una computadora portátil sin nada instalado, ejecute todo esto en un servidor pequeño que esté siempre encendido y vincule allí `wa` (`wa personal setup --agent none`). Ese es un dispositivo vinculado más en tu teléfono.
 - **Quién puede agregar un conector remoto:**
 
@@ -46,7 +46,7 @@ No se han probado todos los pasos de configuración para cada sistema operativo 
 
 ## Inicie el túnel y el servidor.
 
-Instale `wa` y vincule un perfil primero ([instalación](./installation.md), [vinculación](./sessions.md)). Usa el mismo usuario y perfil del sistema operativo para la configuración y para el servidor MCP. Coloque un perfil antes del comando cuando sea necesario: `wa work mcp`. Tailscale es una instalación separada.
+Instale `wa` y vincule un perfil primero ([instalación](./installation.md), [vinculación](./sessions.md)). Usa el mismo usuario y perfil del sistema operativo para la configuración y para el servidor MCP. Coloque un perfil antes del comando cuando sea necesario: `wa work mcp serve`. Tailscale es una instalación separada.
 
 Instale [Tailscale](https://tailscale.com/download), inicie sesión y habilite [Funnel](https://tailscale.com/docs/features/tailscale-funnel): MagicDNS, los certificados HTTPS y el permiso Funnel deben estar habilitados en su tailnet (su red Tailscale). El primer comando del embudo puede imprimir un enlace de aprobación.Mantén dos ventanas de terminal abiertas. El primero recorre el túnel. Copie el origen HTTPS que imprime en la segunda ventana cuando se le solicite. El origen es la dirección sin `/mcp` ni ninguna otra ruta. Mantén un puerto público explícito como `:8443` en él.
 
@@ -66,7 +66,7 @@ Segunda ventana: PowerShell normal, como el usuario que vinculó `wa`:
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Paste the HTTPS origin printed by Funnel (no /mcp)'
-wa.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
+wa.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Ejecuta ambos procesos en el propio Windows. WSL es un entorno separado: un túnel de Windows que apunta a la dirección de bucle invertido de Windows puede no llegar a un servidor dentro de WSL.
@@ -84,7 +84,7 @@ Segunda ventana de Terminal, como el mismo usuario que ejecutó `wa personal set
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-wa personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+wa personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Terminal)
@@ -100,7 +100,7 @@ Segunda ventana de terminal: su usuario normal, sin `sudo`, por lo que `wa` encu
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-wa personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+wa personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## Ejecuta varios servidores juntos
@@ -125,7 +125,7 @@ Si ya usa Cloudflare, apunte su túnel al mismo servidor MCP local. Un nombre de
 Inicie el servidor en una segunda terminal:
 
 ```sh
-wa personal mcp --http --port 8765 --public-url https://mcp.example.com
+wa personal mcp serve --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Añade `https://mcp.example.com/mcp` a su aplicación de IA con OAuth y DCR, como se describe en [conectar la aplicación](#connect-the-app). `--public-url` es el origen público utilizado para iniciar sesión, no la dirección local ni la ruta `/mcp`. El túnel no cambia los permisos del perfil. Verifique el JSON en `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, luego inicie sesión y vea la lista de herramientas.
@@ -161,7 +161,7 @@ Si inició Funnel con `--bg`, Ctrl-C no detiene esa ruta en segundo plano. Verif
 Revocar el acceso de las aplicaciones es independiente de detener un proceso. Para cerrar sesión en todas las aplicaciones de un perfil:
 
 ```sh
-wa personal mcp --revoke --json
+wa personal mcp revoke --json
 ```
 
 Esas aplicaciones deben iniciar sesión nuevamente con un nuevo código. Esto no desvincula el dispositivo de WhatsApp.
