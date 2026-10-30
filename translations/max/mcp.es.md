@@ -67,6 +67,15 @@ Con un perfil, su nombre va primero:
 claude mcp add max-work -- max work mcp serve
 ```
 
+Un servidor para varios perfiles: `--profiles` con una lista o `all`; cada herramienta tiene entonces el campo `profile`:
+
+```sh
+claude mcp add max -- max mcp serve --profiles work,personal
+claude mcp add max -- max mcp serve --profiles all
+```
+
+Sin perfil y sin `--profiles`, el servidor no arranca y enumera los perfiles de este ordenador: `max` nunca elige un perfil por sí mismo.
+
 **Claude Desktop, Cursor y otras aplicaciones**: la entrada finalizada para su archivo de configuración la imprime el propio `max`:
 
 ```sh

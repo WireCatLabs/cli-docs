@@ -14,7 +14,7 @@ Terms used below:
 
 | Task | Command |
 | --- | --- |
-| Learn who someone is and where you chat with them | `max personal contacts info` |
+| Learn who someone is and where you chat with them | `max personal contacts show` |
 | Read their messages across all chats or selected chats | `max personal contacts context` |
 | Prepare for a conversation: messages, tasks, notes and meetings | `max personal contacts prepare` |
 | Check an account for bot, fake or spammer signals | `max personal contacts check` |
@@ -24,11 +24,11 @@ Terms used below:
 
 See the [contacts command reference](./commands.md#max-contacts) for all options.
 
-## Who they are: `contacts info`
+## Who they are: `contacts show`
 
 ```sh
-max personal contacts info 20000002
-max personal contacts info 20000002 --json
+max personal contacts show 20000002
+max personal contacts show 20000002 --json
 ```
 
 The command shows what MAX reports about the person and how many of their messages are saved locally in each shared chat. In JSON this is the `item` field of the response, as with `contacts context` and `contacts check` below:
@@ -61,7 +61,7 @@ The command shows what MAX reports about the person and how many of their messag
 - **`flags`**: `bot: true` identifies a bot. MAX does not provide scammer or verified flags for personal accounts.
 - **`has_photo`**: whether the person has a profile photo.
 - **`seen`**: the last time the person was in MAX, or `online`. MAX is asked separately on each call; the field is absent when MAX supplies no presence.
-- **`phone`**: only the last four digits, and only if MAX shows you the number. `--show-phone` prints the full number. The MCP tool always hides it.
+- **`phone`**: the whole number, if MAX shows it to you. `--hide-phone` leaves it out of the answer. `--offline` answers from the local copy only, without asking MAX.
 - **`chats`**: all shared chats and any other chats where the local copy contains their messages.
 - **`aliases`**: previous names observed by the local copy, oldest first. `source: profile` means the name changed while the copy was tracking it; `source: messages` means a name found in saved messages. The latter is approximate: downloading a message again gives it the current name. This is empty until the local copy has observed a name change.
 
@@ -184,7 +184,7 @@ max personal contacts link 20000002 telegram:1000001
 max personal contacts unlink 20000002
 ```
 
-After linking, `contacts context` without `--chat` combines both accounts: shared chats and messages from MAX and Telegram. `contacts info` and `contacts context --chat` still show only the account you named. A link is your explicit record: matching names in two messengers never establish that they are one person. This record does not change the MAX address book.
+After linking, `contacts context` without `--chat` combines both accounts: shared chats and messages from MAX and Telegram. `contacts show` and `contacts context --chat` still show only the account you named. A link is your explicit record: matching names in two messengers never establish that they are one person. This record does not change the MAX address book.
 
 ## Your names and notes: `contacts aliases`, `contacts notes`
 

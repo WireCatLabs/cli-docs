@@ -16,7 +16,7 @@ Unas palabras que aparecerán a continuación:
 
 |Tarea|Comando|
 | --- | --- |
-|Descubra quién es y dónde se corresponde con él.| `max personal contacts info` |
+|Descubra quién es y dónde se corresponde con él.| `max personal contacts show` |
 |Lea lo que escribió en todos los chats o en los nombrados.| `max personal contacts context` |
 | Preparar una conversación: mensajes, tareas, notas y reuniones | `max personal contacts prepare` |
 |Comprueba si la cuenta parece un bot, una falsificación o un spammer| `max personal contacts check` |
@@ -26,11 +26,11 @@ Unas palabras que aparecerán a continuación:
 
 Todas las opciones para estos comandos están en [referencia de comandos para contactos](./commands.md#max-contacts).
 
-## Quién es: `contacts info`
+## Quién es: `contacts show`
 
 ```sh
-max personal contacts info 20000002
-max personal contacts info 20000002 --json
+max personal contacts show 20000002
+max personal contacts show 20000002 --json
 ```
 
 El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos están guardados localmente en cada chat compartido. En JSON es el campo `item` de la respuesta, igual que en `contacts context` y `contacts check` más abajo:
@@ -63,7 +63,7 @@ El comando muestra lo que MAX informa sobre la persona y cuántos mensajes suyos
 - **`flags`**: `bot: true` identifica un bot. MAX no proporciona marcas de estafador o verificado para cuentas personales.
 - **`has_photo`**: si la persona tiene foto de perfil.
 - **`seen`**: cuándo estuvo la persona en MAX por última vez, o `online`. Se consulta MAX aparte en cada llamada; el campo no aparece si MAX no comunica presencia.
-- **`phone`**: solo los últimos cuatro dígitos, y únicamente si MAX te muestra el número. `--show-phone` imprime el número completo. La herramienta MCP siempre lo oculta.
+- **`phone`**: el número completo, si MAX te lo muestra. `--hide-phone` lo quita de la respuesta. `--offline` responde solo desde la copia local, sin consultar a MAX.
 - **`chats`**: todos los chats compartidos y cualquier otro chat donde el archivo local contenga mensajes de esa persona.
 - **`aliases`**: nombres anteriores observados por el archivo local, del más antiguo al más reciente. `source: profile` indica que el nombre cambió mientras la copia lo seguía; `source: messages` indica un nombre encontrado en mensajes guardados. Este último es aproximado: al descargar de nuevo un mensaje, lleva el nombre actual. Está vacío hasta que el archivo local observe un cambio de nombre.
 
@@ -188,7 +188,7 @@ max personal contacts link 20000002 telegram:1000001
 max personal contacts unlink 20000002
 ```
 
-Luego de esto, `contacts context` sin `--chat` recopila ambas cuentas: chats generales y mensajes de MAX y de Telegram. `contacts info` y `contacts context --chat` todavía solo muestran la cuenta que nombraste. La conexión es solo lo que anotaste: el mismo nombre en dos servicios de mensajería nunca se considera una sola persona. Esta entrada no cambia la libreta de direcciones MAX.
+Luego de esto, `contacts context` sin `--chat` recopila ambas cuentas: chats generales y mensajes de MAX y de Telegram. `contacts show` y `contacts context --chat` todavía solo muestran la cuenta que nombraste. La conexión es solo lo que anotaste: el mismo nombre en dos servicios de mensajería nunca se considera una sola persona. Esta entrada no cambia la libreta de direcciones MAX.
 
 ## Sus nombres y notas: `contacts aliases`, `contacts notes`
 

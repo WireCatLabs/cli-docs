@@ -76,10 +76,10 @@ same profile permissions as the CLI. It does not log in for you or download the 
 to print a configuration with the actual Node and CLI paths on your machine. This command prints
 settings; it does not edit your client. Desktop clients may have a different PATH from your terminal.
 
-The server serves the profile you name: `tg personal mcp serve`. For tg, you can serve several profiles from one
-server with `tg mcp serve --profiles personal,work`, or every profile with `--profiles all`; each tool call then
-says which profile it is for. Without a profile or `--profiles`, tg refuses to start the server. max has no
-`--profiles`: `max mcp serve` without a profile serves every profile. `tg mcp` or `max mcp` on its own only shows help.
+The server serves the profile you name: `tg personal mcp serve`. You can serve several profiles from one server
+with `tg mcp serve --profiles personal,work`, or every profile with `--profiles all`; each tool call then says which
+profile it is for. max works the same way. Without a profile or `--profiles`, neither starts the server. `tg mcp` or
+`max mcp` on its own only shows help.
 
 ### Codex
 

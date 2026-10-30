@@ -4,6 +4,26 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.86.0 — 29.10.2026
+
+### Changed — may break scripts
+
+- **`max contacts info` is replaced by `max contacts show` (cli-core 0.477.0).** It shows the whole contact, and the phone number is now printed in full, without a mask. What to do: in scripts, replace `contacts info` with `contacts show`. The old form of the command no longer exists.
+- **max requires cli-core 0.478.0** (cli-base stays at 0.65.0).
+
+### Fixed
+
+- **`sender_is_me` in `inbox`, `review`, `search messages` and `search all` (cli-core 0.478.0).** These answers did not mark your own messages; now they have the field, as `messages list` does.
+
+## 0.85.0 — 29.10.2026
+
+### Changed — may break scripts
+
+- **`max mcp serve` without a profile no longer serves every profile (cli-core 0.470.0).** It exits with code 2 (`validation_error`) and lists the profiles on this computer. Name a profile as the first word (`max work mcp serve`), a list (`max mcp serve --profiles work,personal`) or all of them (`--profiles all`). `--http`, `mcp server start|stop|status`, `mcp revoke` and `mcp config` work the same way. Who is affected: an MCP client entry from 0.83.0–0.84.0 with `max mcp serve` and no profile stops starting — print it again with `max mcp config --profiles all` or add the profile. Restart a background server of all profiles started by those versions with `max mcp server start --profiles all`. The MCP Registry entry already runs `mcp serve --profiles all`, the Docker image the profile `glama`, and `doctor --online` the profile it checks.
+- **Every message in the answers of `messages list`, `show`, `context`, search and `inbox` has `sender_is_me` (cli-core 0.473.0).** It is true for your own messages, including in MAX, where the owner has no sender id. A script that checks the answer against a strict copy of the schema will reject the new field.
+- **max requires cli-core 0.473.0** (cli-base stays at 0.65.0). `max --help` now also names `mail` under "Works with".
+- **The agent skill is published on ClawHub as `wirecat-max`.** Install: `openclaw skills install @wirecat/wirecat-max`. The `max-cli` entry is no longer updated. `max skill install` still writes `skills/max-cli/`.
+
 ## 0.84.0 — 27.10.2026
 
 ### Changed — may break scripts
@@ -2010,7 +2030,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.84.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.86.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

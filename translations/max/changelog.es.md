@@ -4,6 +4,26 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/max-cli`, con una sección por versión, recientes primero. Se utiliza [versionado semántico](https://semver.org/lang/ru/); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.86.0 — 29.10.2026
+
+### Cambios que pueden romper scripts
+
+- **`max contacts info` se sustituye por `max contacts show` (cli-core 0.477.0).** Muestra el contacto completo, y el número de teléfono ahora se imprime entero, sin máscara. Qué hacer: en los scripts, cambia `contacts info` por `contacts show`. La forma antigua del comando ya no existe.
+- **max requiere cli-core 0.478.0** (cli-base sigue en 0.65.0).
+
+### Corregido
+
+- **`sender_is_me` en `inbox`, `review`, `search messages` y `search all` (cli-core 0.478.0).** Estas respuestas no marcaban tus propios mensajes; ahora tienen el campo, como `messages list`.
+
+## 0.85.0 — 29.10.2026
+
+### Cambios que pueden romper scripts
+
+- **`max mcp serve` sin perfil ya no sirve todos los perfiles (cli-core 0.470.0).** Termina con código 2 (`validation_error`) y enumera los perfiles de este ordenador. Nombra un perfil como primera palabra (`max work mcp serve`), una lista (`max mcp serve --profiles work,personal`) o todos (`--profiles all`). `--http`, `mcp server start|stop|status`, `mcp revoke` y `mcp config` funcionan igual. A quién afecta: una entrada de cliente MCP de 0.83.0–0.84.0 con `max mcp serve` sin perfil deja de arrancar; imprímela de nuevo con `max mcp config --profiles all` o añade el perfil. Un servidor en segundo plano de todos los perfiles iniciado por esas versiones se reinicia con `max mcp server start --profiles all`. La entrada del MCP Registry ya ejecuta `mcp serve --profiles all`, la imagen de Docker el perfil `glama` y `doctor --online` el perfil que comprueba.
+- **Cada mensaje en las respuestas de `messages list`, `show`, `context`, la búsqueda e `inbox` tiene `sender_is_me` (cli-core 0.473.0).** Es verdadero para tus propios mensajes, también en MAX, donde el propietario no tiene id de remitente. Un script que compara la respuesta con una copia estricta del esquema rechazará el campo nuevo.
+- **max requiere cli-core 0.473.0** (cli-base sigue en 0.65.0). `max --help` ahora también nombra `mail` en "Works with".
+- **La habilidad para agentes se publica en ClawHub como `wirecat-max`.** Instalación: `openclaw skills install @wirecat/wirecat-max`. La entrada `max-cli` ya no se actualiza. `max skill install` sigue escribiendo `skills/max-cli/`.
+
 ## 0.84.0 — 27.10.2026
 
 ### Cambios que pueden romper scripts
@@ -2111,7 +2131,7 @@ Los comandos siguen una misma regla: primero el objeto y después la acción. Lo
 
 ### Novedades
 
-- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.84.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
+- **`max bot` usa el Bot API oficial.** `max bot auth set` valida y guarda el token separado de la cuenta personal. Perfil primero: `max рабочий bot me`. `max bot me` muestra el bot; `max bot api <операция>` ejecuta las 33 operaciones con parámetros y cuerpo JSON, generadas desde la [especificación oficial](https://github.com/WireCatLabs/max-cli/blob/v0.86.0/docs/dev/bot-api-coverage.md). IDs mayores que 2^53 son cadenas para conservar dígitos; los scripts deben tratarlos así.
 - **Comandos prácticos para bots.** `max <имя> bot messages send <чат> <текст>` envía a un chat por número, a una persona como `user:<номер>` o por el título de un chat que el bot ya ha visto; también hay `edit`, `delete`, `list` y `get`. `max <имя> bot chats list` muestra los chats que ha visto el bot; también están `chats get|pin|unpin|leave|action`. `max bot list` muestra todos los nombres con un token de bot.
   Por qué «que ha visto»: MAX no ofrece una lista de chats del bot, por lo que `max` los recuerda por su cuenta.
 - **Destinatarios y registro del bot.** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Se comprueban todas las escrituras, incluidas `bot api`. Aún no hay límite por hora; llega en 0.17.0. Consulta [Bots](./bot.md).

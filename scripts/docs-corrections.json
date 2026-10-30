@@ -2319,5 +2319,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "max",
+    "slug": "usage",
+    "reason": "MAX v0.86.0 replaced contacts info with contacts show (cli-core 0.477.0); docs/usage.md's overview table still names the removed command.",
+    "replacements": {
+      "ru": [
+        {
+          "before": "| Люди | контакты, свои имена и заметки, профиль человека, проверка на бота | `max personal contacts list`, `max personal contacts info` |",
+          "after": "| Люди | контакты, свои имена и заметки, профиль человека, проверка на бота | `max personal contacts list`, `max personal contacts show` |"
+        }
+      ],
+      "en": [
+        {
+          "before": "| People | Contacts, aliases, notes, profiles and bot signals | `max personal contacts list`, `max personal contacts info` |",
+          "after": "| People | Contacts, aliases, notes, profiles and bot signals | `max personal contacts list`, `max personal contacts show` |"
+        }
+      ],
+      "es": [
+        {
+          "before": "|Gente|contactos, sus nombres y notas, perfil de persona, verificación de bots| `max personal contacts list`, `max personal contacts info` |",
+          "after": "|Gente|contactos, sus nombres y notas, perfil de persona, verificación de bots| `max personal contacts list`, `max personal contacts show` |"
+        }
+      ]
+    }
   }
 ]
