@@ -1,0 +1,86 @@
+name: ClawHub
+
+# One ClawHub command by hand, with the org's CLAWHUB_TOKEN: republish a skill stuck in ClawHub's scan under a new
+# version (openclaw/clawhub#4046), soft-delete or restore a skill, or inspect one. Releases publish on their own.
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "publish | delete | undelete | inspect"
+        type: choice
+        options: [publish, delete, undelete, inspect]
+      slug:
+        description: "ClawHub skill name, e.g. wirecat-tg"
+        type: string
+      repo:
+        description: "publish: the WireCatLabs repository whose skills/<repo> folder is published, e.g. tg-cli"
+        type: string
+        default: ""
+      version:
+        description: "publish: the version to publish; it must be higher than any taken one"
+        type: string
+        default: ""
+      reason:
+        description: "delete/undelete: the note ClawHub keeps"
+        type: string
+        default: ""
+
+permissions: {}
+
+jobs:
+  clawhub:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      CLAWHUB_SHA: 52358852d3510f1150756d48e8a72cb8c8e698e0
+      CLAWHUB_URL: https://clawhub.ai
+      COMMAND: ${{ inputs.command }}
+      SLUG: ${{ inputs.slug }}
+      REPO: ${{ inputs.repo }}
+      VERSION: ${{ inputs.version }}
+      REASON: ${{ inputs.reason }}
+    steps:
+      - name: latest release tag
+        id: tag
+        if: inputs.command == 'publish'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: echo "tag=$(gh release view --repo "WireCatLabs/$REPO" --json tagName --jq .tagName)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: inputs.command == 'publish'
+        with:
+          repository: WireCatLabs/${{ inputs.repo }}
+          ref: ${{ steps.tag.outputs.tag }}
+          path: source
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: openclaw/clawhub
+          ref: ${{ env.CLAWHUB_SHA }}
+          path: clawhub-source
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.4.4
+      - run: bun install --frozen-lockfile
+        working-directory: clawhub-source
+      - name: run
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+          CLAWHUB_CONFIG_PATH: ${{ runner.temp }}/clawhub-config.json
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          (umask 077; jq -n --arg r "$CLAWHUB_URL" --arg t "$CLAWHUB_TOKEN" '{registry: $r, token: $t}' > "$CLAWHUB_CONFIG_PATH")
+          clawhub() { bun clawhub-source/packages/clawhub/src/cli.ts --site "$CLAWHUB_URL" --registry "$CLAWHUB_URL" "$@"; }
+          case "$COMMAND" in
+            publish)
+              commit=$(git -C source rev-parse HEAD)
+              clawhub --workdir "$GITHUB_WORKSPACE/source" skill publish "skills/$REPO" --slug "$SLUG" \
+                --version "$VERSION" --owner wirecat --tags latest --json --source-repo "WireCatLabs/$REPO" \
+                --source-commit "$commit" --source-path "skills/$REPO" --source-ref "refs/tags/$TAG" ;;
+            delete | undelete)
+              clawhub "$COMMAND" "$SLUG" --yes ${REASON:+--reason "$REASON"} ;;
+            inspect)
+              clawhub inspect "$SLUG" --versions --json ;;
+          esac
