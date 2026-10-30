@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
 import { driveDescriptions } from "./drive-descriptions"
+import { gcalDescriptions } from "./gcal-descriptions"
 import { memoDescriptions } from "./memo-descriptions"
 import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
@@ -95,9 +96,12 @@ export function documentationDescription(lang: string, slugs: string[], authored
   if (taskDescription) return taskDescription
   if (authored?.trim()) return authored
   const selectedTool = tools.find((candidate) => candidate.name === slugs[0])
-  const reviewed = { drive: driveDescriptions, memo: memoDescriptions, wa: whatsappDescriptions }[
-    selectedTool?.name ?? ""
-  ]
+  const reviewed = {
+    drive: driveDescriptions,
+    gcal: gcalDescriptions,
+    memo: memoDescriptions,
+    wa: whatsappDescriptions,
+  }[selectedTool?.name ?? ""]
   if (reviewed) {
     const description = reviewed[localeOf(lang)][slugs[1] ?? "index"]
     if (!description) throw new Error(`Missing reviewed ${selectedTool?.displayName} description: ${slugs.join("/")}`)

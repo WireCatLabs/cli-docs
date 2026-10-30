@@ -48,6 +48,7 @@ También están disponibles los chats de [WhatsApp](./wa/index.md) y los bots em
 - [Hoja de ruta de MAX](./max/roadmap.md)
 - [Hoja de ruta de Zoom](./zm/roadmap.md)
 - [Hoja de ruta de Google Drive](./drive/roadmap.md)
+- [Hoja de ruta de Google Calendar](./gcal/roadmap.md)
 - [Hoja de ruta de Memo](./memo/roadmap.md)
 - [Hoja de ruta de WhatsApp](./wa/roadmap.md)
 
