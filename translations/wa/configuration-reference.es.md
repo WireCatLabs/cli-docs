@@ -30,8 +30,12 @@ Cinco, el valor predeterminado incorporado
 | `sender_colors` | `false` | un color por remitente en la vista de tabla de mensajes | ninguno |
 | `search_catch_up` | `false` | preparar chats recién almacenados para búsqueda local: su gráfico y, cuando estén instalados, sus vectores | `--catch-up`, `--no-catch-up` |
 | `picture_search` | `false` | buscar imágenes almacenadas por lo que muestran, una vez descargado el modelo | ninguno |
-| `record` | `false` | mantener cada carrera | `--record`, `--no-record` |
-| `keep_runs_for_days` | `30` | las ejecuciones registradas anteriores a esta se eliminan cuando se conserva la siguiente | ninguno |
+| `search_reranker` | `mmarco` | el modelo que reordena los primeros 50 resultados de `search messages --discover`: `mmarco` (136 MB), `bge-reranker-v2-m3` (588 MB) o `off`. Un reranker que no está descargado se omite, y el descubrimiento lo dice; `wa models download mmarco` lo descarga | ninguno |
+| `record` | `true` | mantener cada ejecución; `false` mantiene solo las ejecuciones fallidas ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` (no mantiene nada) |
+| `record_input` | `true` | mantener la línea de comando de una ejecución tal como se escribió, con los secretos ocultos; `failed` la mantiene solo en una ejecución fallida; `false` escribe `[redacted]` para cada valor escrito que pueda ser texto ([diagnóstico](./diagnostics.md#what-you-typed)) | ninguno |
+| `keep_runs_for_days` | `30` | las ejecuciones fallidas anteriores a esta se eliminan cuando se conserva la siguiente | ninguno |
+| `keep_successful_runs_for_days` | `7` | las ejecuciones que funcionaron, anteriores a esta, se eliminan cuando se conserva la siguiente | ninguno |
+| `runs_size_limit_mb` | `200` | el límite de tamaño de la carpeta de ejecuciones; al superarlo, se eliminan primero las ejecuciones más antiguas que funcionaron | ninguno |
 | `permissions` | todo permitido, excepto eliminar y algunos otros cambios preguntar | qué puede hacer el perfil, por comando | ninguno; `--yes` solo responde `ask`, nunca levanta `deny` |
 | `sends_per_hour` | `30` | la mayor cantidad de envíos en cualquier hora | ninguno |
 | `requests_per_minute` | el ritmo del CLI | solicita un minuto, compartido por cada proceso del perfil; `0` lo apaga | `WA_REQUESTS_PER_MINUTE` |

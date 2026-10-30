@@ -24,7 +24,7 @@ Esto no es una espera: `wa` no pone en cola el segundo comando. Detén el proces
 
 ## El ritmo
 
-Cada solicitud que `wa` realiza para un perfil (desde un comando, `wa personal mcp` o `wa personal serve`) toma un turno en un ritmo para ese perfil. La cola se guarda en la carpeta de estado, por lo que dos terminales se alinean una detrás de la otra en lugar de ir cada una a toda velocidad. Los distintos perfiles tienen su propio ritmo cada uno.
+Cada solicitud que `wa` realiza para un perfil (desde un comando, `wa personal mcp serve` o `wa personal serve`) toma un turno en un ritmo para ese perfil. La cola se guarda en la carpeta de estado, por lo que dos terminales se alinean una detrás de la otra en lugar de ir cada una a toda velocidad. Los distintos perfiles tienen su propio ritmo cada uno.
 
 Un comando que tiene que esperar más de 5 segundos para su turno lo dice en stderr. Un turno que tardaría más de 5 minutos se rechaza de inmediato con el código de salida `8` (`rate_limited`).
 

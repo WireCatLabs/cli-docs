@@ -9,7 +9,7 @@ Términos en esta página:
 - **Agente**: un programa de inteligencia artificial que ejecuta comandos en tu ordenador por ti.
 - **Habilidad**: un archivo que le indica al agente cómo usar `wa`. `wa skill install` lo pone donde el agente lo busca.
 - **Cliente MCP**: una aplicación de IA sin terminal, como Claude Desktop. Llega a `wa` a través del servidor MCP
-  `wa personal mcp` en lugar de ejecutar comandos.
+  `wa personal mcp serve` en lugar de ejecutar comandos.
 - **Modo sin cabeza**: el agente toma una solicitud, la ejecuta y sale, sin conversación. Código Claude lo llama
   Modo `-p`; El Códice lo llama `codex exec`.
 - **cron**: el programador integrado en Linux y macOS. Inicia un comando en momentos establecidos.

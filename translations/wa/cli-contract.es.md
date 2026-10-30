@@ -11,7 +11,7 @@ Algunos términos que utiliza la página:
 - **stdout** y **stderr** son los dos flujos de salida de un comando. stdout lleva el resultado; stderr transporta mensajes sobre la ejecución, como advertencias y errores.
 - **Código de salida** es el número que devuelve un comando cuando finaliza. `0` significa éxito; cualquier otro número indica el tipo de falla.
 - El **modo máquina** se genera como JSON para un programa, en lugar de texto para una persona.
-- **Comando de una sola vez** hace una cosa y sale, por ejemplo `wa personal messages list`. Un **comando persistente** sigue ejecutándose hasta que lo detienes: `watch`, `serve` y `mcp`.
+- **Comando de una sola vez** hace una cosa y sale, por ejemplo `wa personal messages list`. Un **comando persistente** sigue ejecutándose hasta que lo detienes: `watch`, `serve` y `mcp serve`.
 - **Escribir** es cualquier comando que cambia algo en WhatsApp: envía, edita, elimina, reacciona o marca como leído.
 
 ## En qué puedes confiar

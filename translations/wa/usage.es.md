@@ -47,6 +47,7 @@ wa personal messages edit "Book club" 3EB0A1B2C3D4E5F6A7B8 "the new text"
 wa personal messages delete "Book club" 3EB0A1B2C3D4E5F6A7B8                 # for you only
 wa personal messages delete "Book club" 3EB0A1B2C3D4E5F6A7B8 --for-everyone
 wa personal reactions add "Book club" 3EB0A1B2C3D4E5F6A7B8 👍
+wa personal reactions list "Book club" 3EB0A1B2C3D4E5F6A7B8 reaction:🔥   # from the archive, not live
 wa personal messages pin "Book club" 3EB0A1B2C3D4E5F6A7B8 --expire-time 24h
 wa personal messages unpin "Book club" 3EB0A1B2C3D4E5F6A7B8
 wa personal chats mark-read "Book club"
@@ -156,7 +157,7 @@ wa personal messages transcribe "Book club" 3EB0A1B2C3D4E5F6A7B8 --local
 wa personal messages forward "Book club" 3EB0A1B2C3D4E5F6A7B8 --to "Ann Lee"
 ```
 
-Un mensaje lleva un archivo; el texto es su pie, salvo las notas de voz, que van solas. `.mp4`, `.m4v` y `.mov` se envían como vídeo salvo con `--as-file`. `--photo` junto con un vídeo `--file` forman un álbum y el texto es el pie de la foto. `--sticker-file` envía un `.webp` de hasta 500 KiB como sticker, solo y sin texto. WhatsApp no tiene conjuntos de stickers para elegir por ID, así que no hay `--sticker`. Puedes guardar y reenviar las fotos, vídeos, notas de voz, archivos y stickers que lleguen al almacén, que conserva los datos necesarios para descargarlos. WhatsApp los guarda por tiempo limitado; descargar uno que ya no conserva pide al teléfono que lo suba de nuevo, pero aún no funciona ([lo que falta en wa](#not-in-wa-yet)). También se guardan ubicaciones y tarjetas de contacto para reenviarlas, aunque no son archivos descargables. WhatsApp no reconoce voz por sí mismo: `transcribe` usa un modelo local (`wa models list kind:audio`). Consulta [archivos adjuntos](./attachments.md) para saber qué se guarda, qué se puede volver a descargar y cómo buscar dentro de archivos.
+Un mensaje lleva un archivo; el texto es su pie, salvo las notas de voz, que van solas. `.mp4`, `.m4v` y `.mov` se envían como vídeo salvo con `--as-file`. `--photo` junto con un vídeo `--file` forman un álbum y el texto es el pie de la foto. `--sticker-file` envía un `.webp` de hasta 500 KiB como sticker, solo y sin texto. WhatsApp no tiene conjuntos de stickers para elegir por ID, así que no hay `--sticker`. Puedes guardar y reenviar las fotos, vídeos, notas de voz, archivos y stickers que lleguen al almacén, que conserva los datos necesarios para descargarlos. WhatsApp los guarda por tiempo limitado; descargar uno que ya no conserva pide al teléfono que lo suba de nuevo, pero aún no funciona ([lo que falta en wa](#not-in-wa-yet)). También se guardan ubicaciones y tarjetas de contacto para reenviarlas, aunque no son archivos descargables. Una tarjeta de contacto muestra su nombre y teléfono, y en JSON el adjunto tiene un campo `contact`; el vCard en sí nunca se imprime. WhatsApp no reconoce voz por sí mismo: `transcribe` usa un modelo local (`wa models list kind:audio`). Consulta [archivos adjuntos](./attachments.md) para saber qué se guarda, qué se puede volver a descargar y cómo buscar dentro de archivos.
 
 ## Mensajes antiguos
 

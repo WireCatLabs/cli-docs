@@ -77,7 +77,7 @@ wa personal contacts notes list 100000000000001@lid
 Они соединяются; пока работает `serve`, они проходят через соединение `serve`.
 
 ```sh
-wa personal contacts info 100000000000001@lid        # their name, about line and whether they show a photo
+wa personal contacts show 100000000000001@lid        # their name, about line and whether they show a photo
 wa personal contacts block 100000000000001@lid
 wa personal contacts unblock 100000000000001@lid
 wa personal contacts lookup < number.txt                # whether this number has WhatsApp, and its id
@@ -86,7 +86,7 @@ wa personal contacts sync                                # the phone's address b
 
 Для `contacts lookup` сначала напишите номер `number.txt` в одной строке в международном формате.
 
-- `contacts info` ничего не говорит человеку. Не показывает номер телефона.
+- `contacts show` ничего не говорит человеку. Не показывает номер телефона, поэтому `--hide-phone` здесь ничего не меняет. `--offline` отвечает только из локального хранилища.
 - `contacts lookup` считывает число из стандартного ввода, а не из командной строки, и ничего на него не отправляет. Для профиля требуется одно число, максимум одно каждые 10 секунд: множество поисков подряд — вот за что WhatsApp запрещает парсеры.
 - WhatsApp хранит вашу адресную книгу на телефоне, поэтому `contacts add`, `remove`, `rename` и `import` отклоняются.
 

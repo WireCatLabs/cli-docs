@@ -138,7 +138,7 @@ wa personal search messages 'mentions:"person:12"'
 
 ## Через MCP
 
-Когда агент выполняет поиск на сервере MCP `wa`, `wa_read` (`command: "search messages"`) принимает запрос как `query`, а `timezone` — для календарной зоны. `chat` принимает идентификатор или сохраненное имя; `source`, `newest`, `context` и `limit` работают так же, как параметры команды; `saved` запускает сохраненный поиск. `thread`, `thread_hops`, `thread_messages`, `thread_bytes` и `thread_within` соответствуют опциям `--thread…`. Ответ имеет те же поля, что и `--json`. `wa_read` (`command: "stats messages show"`) считает одни и те же запросы. `wa personal mcp --no-record` или `record`, установленный на `false`, исключает вызовы сервера из истории запросов ([MCP](./mcp.md)).
+Когда агент выполняет поиск на сервере MCP `wa`, `wa_read` (`command: "search messages"`) принимает запрос как `query`, а `timezone` — для календарной зоны. `chat` принимает идентификатор или сохраненное имя; `source`, `newest`, `context` и `limit` работают так же, как параметры команды; `saved` запускает сохраненный поиск. `thread`, `thread_hops`, `thread_messages`, `thread_bytes` и `thread_within` соответствуют опциям `--thread…`. Ответ имеет те же поля, что и `--json`. `wa_read` (`command: "stats messages show"`) считает одни и те же запросы. `wa personal mcp serve --no-record` или `record`, установленный на `false`, исключает вызовы сервера из истории запросов ([MCP](./mcp.md)).
 
 ## Далее
 

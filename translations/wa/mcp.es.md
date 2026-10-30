@@ -8,13 +8,13 @@ Esta página le ayuda cuando desea que una aplicación de IA sin terminal funcio
 
 Algunos términos primero:
 
-- **MCP** ([Protocolo de contexto del modelo](https://modelcontextprotocol.io)) es una forma estándar para que una aplicación de IA utilice herramientas externas. La aplicación es el **cliente MCP**; `wa personal mcp` es el **servidor MCP**.
+- **MCP** ([Protocolo de contexto del modelo](https://modelcontextprotocol.io)) es una forma estándar para que una aplicación de IA utilice herramientas externas. La aplicación es el **cliente MCP**; `wa personal mcp serve` es el **servidor MCP**.
 - Una **herramienta** es una acción que el servidor ofrece al agente, como "leer" o "escribir".
 - Un **mensaje** es una tarea lista que la aplicación muestra como un comando, como "ponerse al día con los chats no leídos".
 - Un **recurso** son datos que la aplicación puede adjuntar a la conversación, como un chat.
 - Un **perfil** es un conjunto de configuraciones y un dispositivo vinculado en `wa`; ver [perfiles](./profiles.md).
 
-El servidor viene con `wa`; no hay nada más que instalar. De forma predeterminada, se comunica con la aplicación a través de stdin y stdout. En su lugar, `wa personal mcp --http --public-url` lo sirve en un puerto local detrás de su túnel HTTPS.
+El servidor viene con `wa`; no hay nada más que instalar. De forma predeterminada, se comunica con la aplicación a través de stdin y stdout. En su lugar, `wa personal mcp serve --http --public-url` lo sirve en un puerto local detrás de su túnel HTTPS.
 
 Los permisos denegados no ocultan comandos. Los listados completos y las búsquedas incluyen la `availability` de cada comando: los comandos bloqueados tienen `available: false`, un motivo y la clave del permiso correspondiente; los permitidos tienen `available: true`. Los argumentos siguen visibles y la ejecución vuelve a comprobar los permisos actuales. Con un perfil indicado, la ayuda de la CLI y el descubrimiento de comandos también muestran la disponibilidad.
 
@@ -25,7 +25,7 @@ Un agente de IA que puede ejecutar comandos en una terminal (por ejemplo, Claude
 - aplicaciones sin terminal, como Claude Desktop o el chat de Cursor;
 - cualquiera que quiera que la aplicación pregunte antes de cada envío.
 
-Para ChatGPT o Claude **en el navegador**, use `wa personal mcp --http`; consulte [ChatGPT, Codex o Claude en el navegador](./remote.md).
+Para ChatGPT o Claude **en el navegador**, use `wa personal mcp serve --http`; consulte [ChatGPT, Codex o Claude en el navegador](./remote.md).
 
 ## Lo que da el servidor
 
@@ -62,7 +62,7 @@ Ponga un perfil primero, por ejemplo `wa work mcp add codex`. La instalación ut
 **Código Claude, a mano:**
 
 ```sh
-claude mcp add wa -- wa personal mcp
+claude mcp add wa -- wa personal mcp serve
 ```
 
 
@@ -70,9 +70,17 @@ claude mcp add wa -- wa personal mcp
 Con otro perfil, va primero, como en cualquier comando:
 
 ```sh
-claude mcp add wa-work -- wa work mcp
+claude mcp add wa-work -- wa work mcp serve
 ```
 
+Un servidor para varios perfiles; cada llamada a una herramienta indica entonces su perfil:
+
+```sh
+claude mcp add wa -- wa mcp serve --profiles work,personal
+claude mcp add wa -- wa mcp serve --profiles all   # every profile on this computer
+```
+
+`wa mcp serve` sin perfil y sin `--profiles` se rechaza y lista los perfiles; `wa` nunca elige uno por ti.
 
 
 **Claude Desktop, Cursor y otras aplicaciones:** `wa` imprime la entrada de su archivo de configuración:
@@ -90,7 +98,7 @@ wa work mcp config                  # another profile
     "wa-personal": {
       "type": "stdio",
       "command": "/usr/bin/node",
-      "args": ["/usr/lib/node_modules/@wirecat/whatsapp-cli/dist/bin/wa.js", "personal", "mcp"],
+      "args": ["/usr/lib/node_modules/@wirecat/whatsapp-cli/dist/bin/wa.js", "personal", "mcp", "serve"],
       "env": { "XDG_RUNTIME_DIR": "/run/user/1000" }
     }
   }
@@ -176,4 +184,4 @@ Los puntos de control de la bandeja de entrada y de revisión en MCP están sepa
 
 La primera llamada que necesita WhatsApp se conecta y las siguientes reutilizan la conexión. Cierra a los 2 minutos sin llamada, y en cualquier caso a los 5 minutos de su apertura. La siguiente llamada se conecta nuevamente. Las llamadas se realizan una a la vez, incluso cuando la aplicación las envía juntas.
 
-Sobre stdin y stdout, el servidor sale tan pronto como la aplicación cierra stdin y cierra su conexión a WhatsApp. A través de HTTP se ejecuta hasta Ctrl-C. `wa personal mcp --revoke` finaliza cada inicio de sesión realizado en una aplicación de navegador y mantiene el dispositivo vinculado. Consulta [ChatGPT, Codex o Claude en el navegador](./remote.md).
+Sobre stdin y stdout, el servidor sale tan pronto como la aplicación cierra stdin y cierra su conexión a WhatsApp. A través de HTTP se ejecuta hasta Ctrl-C. `wa personal mcp revoke` finaliza cada inicio de sesión realizado en una aplicación de navegador y mantiene el dispositivo vinculado. Consulta [ChatGPT, Codex o Claude en el navegador](./remote.md).

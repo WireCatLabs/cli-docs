@@ -6,16 +6,16 @@ title: "WhatsApp из браузера"
 
 Термины, используемые на этой странице:
 
-- **MCP** (протокол контекста модели) — это стандартный способ, которым приложение ИИ вызывает внешние инструменты. `wa personal mcp` — это сервер MCP, входящий в состав `wa`; [Руководство по серверу MCP](./mcp.md) описывает приложения на вашем компьютере.
+- **MCP** (протокол контекста модели) — это стандартный способ, которым приложение ИИ вызывает внешние инструменты. `wa personal mcp serve` — это сервер MCP, входящий в состав `wa`; [Руководство по серверу MCP](./mcp.md) описывает приложения на вашем компьютере.
 - **Удаленное подключение** означает, что приложение подключается со своих серверов через Интернет по указанному вами адресу.
-  `wa personal mcp --http` предоставляет для этого те же инструменты через HTTP, что и `127.0.0.1`.
+  `wa personal mcp serve --http` предоставляет для этого те же инструменты через HTTP, что и `127.0.0.1`.
 - **HTTPS-туннель** — это программа, которая присваивает порту вашего компьютера общедоступный HTTPS-адрес. На этой странице используется [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel); Cloudflare Tunnel также работает. Вам не нужно покупать домен для Funnel.
 - **Публичный URL** — это адрес, например `https://laptop.tail1234.ts.net`. Вы передаете его `wa` как
   `--public-url`, и приложение получает его с `/mcp` в конце.
 - **Код доступа** — это одноразовый код, который `wa` печатает на вашем терминале. Страница входа в приложение запрашивает это, поэтому только тот, кто видит этот терминал, может подключить приложение.
 
 ```text
-ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal mcp --http (login) ──▶ WhatsApp
+ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal mcp serve --http (login) ──▶ WhatsApp
 ```
 
 ## Что можно сделать
@@ -30,9 +30,9 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal 
 
 ## Прежде чем начать
 
-- **Кто бы ни вошел в систему, он читает ваш WhatsApp.** Для входа требуется код доступа с вашего терминала. Никогда не ставьте туннель перед `wa personal mcp` без `--http`: в этом режиме вообще нет входа в систему.
+- **Кто бы ни вошел в систему, он читает ваш WhatsApp.** Для входа требуется код доступа с вашего терминала. Никогда не ставьте туннель перед `wa personal mcp serve` без `--http`: в этом режиме вообще нет входа в систему.
 - **Разрешения профиля определяют, что приложение может изменить.** `deny` и `readonly` блокируют запись; `ask` и `allow` позволяют запрошенной записи MCP проходить без формы на сервере. Одобрение приложения является отдельным и зависит от его настроек. Список получателей и почасовой лимит по-прежнему применяются ([что может делать агент](./mcp.md#what-an-agent-may-do), [разрешения](./permissions.md)).
-- **Сервер использует одно соединение устройства с `serve`.** Чтение из локального хранилища работает во время работы `serve`. В отличие от терминала и `wa personal mcp`, HTTP-сервер не проходит через `serve`: отправка, редактирование или реакция приложения отклоняются до тех пор, пока `serve` не остановится, а `serve` не может запуститься, пока сервер удерживает соединение ([одно соединение, совместно используемое с `serve`](./mcp.md#one-connection-shared-with-serve)).
+- **Сервер использует одно соединение устройства с `serve`.** Чтение из локального хранилища работает во время работы `serve`. В отличие от терминала и `wa personal mcp serve`, HTTP-сервер не проходит через `serve`: отправка, редактирование или реакция приложения отклоняются до тех пор, пока `serve` не остановится, а `serve` не может запуститься, пока сервер удерживает соединение ([одно соединение, совместно используемое с `serve`](./mcp.md#one-connection-shared-with-serve)).
 - **Компьютер, на котором работает `wa`, должен оставаться включенным.** Чтобы использовать его с телефона или с ноутбука, на котором ничего не установлено, запустите все это на небольшом постоянно включенном сервере и свяжите туда `wa` (`wa personal setup --agent none`). Это еще одно подключенное устройство на вашем телефоне.
 - **Кто может добавить удаленный соединитель:**
 
@@ -46,7 +46,7 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal 
 
 ## Запускаем туннель и сервер
 
-Установите `wa` и сначала свяжите профиль ([установка](./installation.md), [связывание](./sessions.md)). Используйте одного и того же пользователя и профиль инструмента для настройки и для сервера MCP. При необходимости поместите профиль перед командой: `wa work mcp`. Tailscale представляет собой отдельную установку.
+Установите `wa` и сначала свяжите профиль ([установка](./installation.md), [связывание](./sessions.md)). Используйте одного и того же пользователя и профиль инструмента для настройки и для сервера MCP. При необходимости поместите профиль перед командой: `wa work mcp serve`. Tailscale представляет собой отдельную установку.
 
 Установите [Tailscale](https://tailscale.com/download), войдите в систему и включите [Funnel](https://tailscale.com/docs/features/tailscale-funnel): сертификаты MagicDNS, HTTPS и разрешение Funnel должны быть включены в вашей Tailnet (вашей сети Tailscale). Первая команда Funnel может распечатать ссылку для подтверждения.
 
@@ -68,7 +68,7 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal 
 
 ```powershell
 $mcpPublicUrl = Read-Host 'Paste the HTTPS origin printed by Funnel (no /mcp)'
-wa.cmd personal mcp --http --port 8765 --public-url $mcpPublicUrl
+wa.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
 ```
 
 Запустите оба процесса в самой Windows. WSL — это отдельная среда: туннель Windows, указывающий на адрес обратной связи Windows, может не достигать сервера внутри WSL.
@@ -86,7 +86,7 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-wa personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+wa personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ### Linux (Терминал)
@@ -102,7 +102,7 @@ sudo tailscale funnel 8765
 ```sh
 printf 'Paste the HTTPS origin printed by Funnel (no /mcp): '
 IFS= read -r mcpPublicUrl
-wa personal mcp --http --port 8765 --public-url "$mcpPublicUrl"
+wa personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
 ```
 
 ## Запускаем несколько серверов вместе
@@ -127,7 +127,7 @@ wa cloudtest bot watch --public-url https://<name>.ts.net:10000
 Запустите сервер во втором терминале:
 
 ```sh
-wa personal mcp --http --port 8765 --public-url https://mcp.example.com
+wa personal mcp serve --http --port 8765 --public-url https://mcp.example.com
 ```
 
 Добавьте `https://mcp.example.com/mcp` в свое приложение ИИ с помощью OAuth и DCR, как описано в разделе [подключение приложения](#connect-the-app). `--public-url` — это общедоступный источник, используемый для входа в систему, а не локальный адрес и не путь `/mcp`. Туннель не меняет разрешения профиля. Проверьте JSON по адресу `https://mcp.example.com/.well-known/oauth-protected-resource/mcp`, затем войдите в систему и просмотрите список инструментов.
@@ -163,7 +163,7 @@ wa personal mcp --http --port 8765 --public-url https://mcp.example.com
 Отзыв доступа приложений отличается от остановки процесса. Чтобы выйти из каждого приложения для профиля:
 
 ```sh
-wa personal mcp --revoke --json
+wa personal mcp revoke --json
 ```
 
 Эти приложения должны снова войти в систему с новым кодом. Это не отключает устройство от WhatsApp.

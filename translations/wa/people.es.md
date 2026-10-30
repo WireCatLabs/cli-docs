@@ -77,7 +77,7 @@ Los alias y notas permanecen en el almacén local y nunca llegan a WhatsApp ni a
 Estos se conectan; Mientras se ejecuta `serve`, pasan por la conexión de `serve`.
 
 ```sh
-wa personal contacts info 100000000000001@lid        # their name, about line and whether they show a photo
+wa personal contacts show 100000000000001@lid        # their name, about line and whether they show a photo
 wa personal contacts block 100000000000001@lid
 wa personal contacts unblock 100000000000001@lid
 wa personal contacts lookup < number.txt                # whether this number has WhatsApp, and its id
@@ -86,7 +86,7 @@ wa personal contacts sync                                # the phone's address b
 
 Para `contacts lookup`, primero escriba el número a `number.txt`, en una línea, en formato internacional.
 
-- `contacts info` no le dice nada a la persona. No muestra ningún número de teléfono.
+- `contacts show` no le dice nada a la persona. No muestra ningún número de teléfono, así que `--hide-phone` no cambia nada aquí. `--offline` responde solo desde el almacén local.
 - `contacts lookup` lee el número desde la entrada estándar, nunca desde la línea de comando, y no le envía nada. Se necesita un número, como máximo uno cada 10 segundos para el perfil: muchas búsquedas seguidas son el motivo por el que WhatsApp prohíbe los scrapers.
 - WhatsApp mantiene su libreta de direcciones en el teléfono, por lo que se rechazan `contacts add`, `remove`, `rename` y `import`.
 
