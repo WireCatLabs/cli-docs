@@ -50,19 +50,6 @@
     }
   },
   {
-    "name": "zm",
-    "displayName": "Zoom",
-    "repo": "WireCatLabs/zoom-cli",
-    "package": "@wirecat/zoom-cli",
-    "lang": "en",
-    "docsRef": "v0.48.0",
-    "summary": {
-      "en": "Keep Zoom transcripts and recordings, search meeting evidence and give your agent context for the next call.",
-      "ru": "Сохраняйте расшифровки и записи Zoom, ищите обсуждения и давайте агенту контекст для следующего созвона.",
-      "es": "Guarda transcripciones y grabaciones de Zoom, busca lo hablado y da contexto al agente para la próxima llamada."
-    }
-  },
-  {
     "name": "gcal",
     "displayName": "Google Calendar",
     "repo": "WireCatLabs/gcal-cli",
@@ -73,6 +60,19 @@
       "en": "Keep your Google Calendar on your computer, search meetings offline and know who the attendees are in your other chats.",
       "ru": "Храните Google Календарь на своём компьютере, ищите встречи без интернета и узнавайте участников из других ваших чатов.",
       "es": "Guarda tu Google Calendar en tu ordenador, busca reuniones sin conexión y reconoce a los asistentes de tus otros chats."
+    }
+  },
+  {
+    "name": "zm",
+    "displayName": "Zoom",
+    "repo": "WireCatLabs/zoom-cli",
+    "package": "@wirecat/zoom-cli",
+    "lang": "en",
+    "docsRef": "v0.48.0",
+    "summary": {
+      "en": "Keep Zoom transcripts and recordings, search meeting evidence and give your agent context for the next call.",
+      "ru": "Сохраняйте расшифровки и записи Zoom, ищите обсуждения и давайте агенту контекст для следующего созвона.",
+      "es": "Guarda transcripciones y grabaciones de Zoom, busca lo hablado y da contexto al agente para la próxima llamada."
     }
   },
   {

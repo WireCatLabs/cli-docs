@@ -65,6 +65,7 @@ import {
   Webhook,
   Wrench,
 } from "lucide-react"
+import { WhatsAppIcon } from "../components/brand-icons"
 import { commandGroupCopy, commandGroups, commandLanguage } from "./command-groups"
 import { readerGuide } from "./reader-guides"
 import { type Tool, tools } from "./shared"
@@ -153,6 +154,17 @@ export const sidebarIcons = {
   "tailscale-funnel": GlobeLock,
 }
 
+const folderIcons = {
+  tg: Send,
+  max: MessageSquare,
+  wa: WhatsAppIcon,
+  drive: FolderOpen,
+  gcal: CalendarDays,
+  memo: NotebookPen,
+  zm: Video,
+  desktop: Monitor,
+}
+
 const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
 
 function commandFolder(index: Item, lang: string): Folder {
@@ -199,21 +211,7 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 export function unifiedDocsTree(tree: Root, lang = "en"): Root {
   const decorate = (node: Node): Node => {
     if (node.type === "folder") {
-      const firstPage = node.index ?? node.children.find((child) => child.type === "page")
-      const tool =
-        firstPage?.type === "page" ? /\/docs\/(tg|max|wa|drive|memo|zm)(?:\/|$)/.exec(firstPage.url)?.[1] : undefined
-      const Icon =
-        tool === "tg"
-          ? Send
-          : tool === "max" || tool === "wa"
-            ? MessageSquare
-            : tool === "memo"
-              ? NotebookPen
-              : tool === "zm"
-                ? Video
-                : firstPage?.type === "page" && /\/docs\/desktop(?:\/|$)/.test(firstPage.url)
-                  ? Monitor
-                  : FolderOpen
+      const Icon = folderIcons[folderTool(node) as keyof typeof folderIcons] ?? FolderOpen
       return {
         ...node,
         root: false,
@@ -223,7 +221,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|memo|zm)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|gcal|memo|zm)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText

@@ -1,6 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs"
 import type { Node, Root } from "fumadocs-core/page-tree"
+import { CalendarDays, MessageSquare } from "lucide-react"
+import type { ReactElement } from "react"
 import { describe, expect, it } from "vitest"
+import { WhatsAppIcon } from "../components/brand-icons"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
 import { sidebarIcons, unifiedDocsTree, withCommunityGroup } from "../lib/docs-sidebar-tree"
 import { type Tool, toolProblems } from "./sync"
@@ -137,6 +140,28 @@ describe("sidebar icon coverage", () => {
         children: [{ type: "page", name: slug, url: `/en/docs/tg/${slug}` }],
       })
       expect(tree.children[0]).toHaveProperty("icon")
+    }
+  })
+})
+
+describe("tool folders in the sidebar", () => {
+  it("gives Google Calendar a calendar and WhatsApp its own mark", () => {
+    const folder = (tool: string): Node => ({
+      type: "folder",
+      name: tool,
+      index: { type: "page", name: tool, url: `/en/docs/${tool}` },
+      children: [],
+    })
+    const icons = unifiedDocsTree({ name: "Docs", children: ["gcal", "wa", "max"].map(folder) }).children.map((node) =>
+      node.type === "folder" ? (node.icon as ReactElement).type : undefined,
+    )
+    expect(icons).toEqual([CalendarDays, WhatsAppIcon, MessageSquare])
+  })
+
+  it("lists Google Calendar right after Google Drive in every language", () => {
+    for (const suffix of ["", ".ru", ".es"]) {
+      const { pages } = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }
+      expect(pages[pages.indexOf("drive") + 1]).toBe("gcal")
     }
   })
 })

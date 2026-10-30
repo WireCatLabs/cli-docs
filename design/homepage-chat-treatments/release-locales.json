@@ -669,7 +669,9 @@
     "Blog": "Блог",
     "Download": "Скачать",
     "Desktop app": "Приложение для компьютера",
-    "Download the desktop app": "Скачать приложение для компьютера"
+    "Download the desktop app": "Скачать приложение для компьютера",
+    "Calendar": "Календарь",
+    "gcal · your Google calendars, searched offline": "gcal · ваши Google Календари, поиск без интернета"
   },
   "es": {
     "Put the context from your chats to work — for you, your bots and the groups you run.": "Aprovecha el contexto de tus chats: para ti, tus bots y los grupos que administras.",
@@ -1340,6 +1342,7 @@
     "Blog": "Blog",
     "Download": "Descargar",
     "Desktop app": "Aplicación de escritorio",
-    "Download the desktop app": "Descargar la aplicación de escritorio"
+    "Download the desktop app": "Descargar la aplicación de escritorio",
+    "gcal · your Google calendars, searched offline": "gcal · tus calendarios de Google, búsqueda sin conexión"
   }
 }

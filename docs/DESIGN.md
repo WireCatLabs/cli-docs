@@ -148,8 +148,8 @@ with motion disabled when the reader requests reduced motion.
   the target's overview. Changing language keeps the current page. Getting started remains selected throughout the
   shared installation, agent and MCP guides, including in the sidebar.
 - **Sidebar** ✅ — the current section title (Telegram, MAX or localized Getting started),
-  shared getting-started links, then the tool's own `docs/meta.json` groups. The brand logo appears
-  only in the top bar.
+  shared getting-started links, then the tool's own `docs/meta.json` groups. Tool folders carry line
+  icons; WhatsApp alone uses its official green mark, because Meta's rules forbid a recoloured one.
   `root: true` from sync still scopes the sidebar to the active tool; the old tabs dropdown is off.
 - **The version line** 🟡 — under the switch: the release the pages come from, and its changelog.
 - **Page header** ✅ — title; **Copy Markdown**; **Open** (in ChatGPT, Claude, GitHub); the note
@@ -202,7 +202,7 @@ key numbers, `href` the heading they come from (`#act-two-…`, the ids `github-
 | `BlogListSearch`, `BlogSearchForm` | `blog-search.tsx` | filters the index list in place (`/` focuses it, `?q=` fills it); the sidebar form that opens it |
 | `ShareLinks` | `blog-share.tsx` | copy link, X, LinkedIn, Telegram |
 | `FollowLinks`, `ArchiveList`, `NewsletterBlock` | `blog-widgets.tsx` | RSS, Markdown, GitHub, Telegram; months (from two); the newsletter once configured |
-| `GitHubIcon`, `TelegramIcon`, `LinkedInIcon`, `XIcon` | `components/brand-icons.tsx` | brand marks Lucide lacks — use these, never a generic icon |
+| `GitHubIcon`, `TelegramIcon`, `LinkedInIcon`, `XIcon`, `WhatsAppIcon` | `components/brand-icons.tsx` | brand marks Lucide lacks — use these, never a generic icon; WhatsApp keeps its green |
 
 Data helpers live in `lib/blog.ts` (`relatedPosts`, `adjacentPosts`, `blogSeriesOf`, `blogTagCounts`,
 `blogArchive`); words in `lib/blog-words.ts`, all three languages at once. Styles: `components/blog/blog.css`,
