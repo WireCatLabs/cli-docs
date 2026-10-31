@@ -7,7 +7,7 @@ title: "Сравнение с другими инструментами"
 
 `gcal` — это командная строка и MCP-сервер для Google Календаря вашего собственного аккаунта. Здесь он стоит рядом с
 другими командными строками, MCP-серверами и коннекторами ассистентов, которые читают Google Календарь, чтобы вы
-могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.3.0, его команд и
+могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.4.0, его команд и
 исходного кода, проверенных 31 октября 2026 года; они проверяются заново при каждом выпуске. Оценки для остальных
 инструментов взяты из их собственных README, документации и исходного кода, проверенных 27 октября 2026 года. Ни в
 один инструмент не выполнялся вход, и ничего не проверялось вживую; инструмент может делать больше, чем говорят его
@@ -43,7 +43,7 @@ title: "Сравнение с другими инструментами"
 | Найти встречи, которые пересекаются | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | **Найти встречу** | | | | | | |
 | Найти встречу по смыслу, а не по точным словам | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
-| Искать по встречам без интернета | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | ❌ | ❌ | ❌ |
+| Искать по встречам без интернета | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Один поиск по встречам, чатам, почте и заметкам | 🟡 | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Люди** | | | | | | |
 | Узнать, что участник — это человек, с которым вы переписываетесь в Telegram, WhatsApp или почте | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
@@ -61,7 +61,7 @@ title: "Сравнение с другими инструментами"
 | Инструкции для агентов, работающих в терминале | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | n/a |
 | **Подготовка** | | | | | | |
 | Начать без собственного проекта Google Cloud | ❌ | [❌](https://github.com/insanum/gcalcli#initial-setup) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#quick-start) | [❌](https://github.com/nspady/google-calendar-mcp#google-cloud-setup) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
-| Работает из claude.ai в браузере и на телефоне | 🟡 | ❌ | ❌ | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
+| Работает из claude.ai в браузере и на телефоне | 🟡 | [❌](https://github.com/insanum/gcalcli#readme) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 
 | | gcal | gcalcli | gog | Workspace MCP | google-calendar-mcp | Claude |
 |---|---|---|---|---|---|---|

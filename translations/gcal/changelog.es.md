@@ -4,6 +4,15 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.4.0 — 31.10.2026
+
+### Corregido
+
+- **gcal mantiene el almacén local compartido en la misma versión que las demás herramientas de WireCat (versión 40 del
+  almacén).** El almacén gana el índice de trigramas que usa la búsqueda en notas y documentos; gcal no tiene notas
+  propias, pero un gcal antiguo ya no deja un almacén escrito por una herramienta más nueva sin las entradas de índice
+  que debería escribir.
+
 ## 0.3.0 — 31.10.2026
 
 ### Añadido
