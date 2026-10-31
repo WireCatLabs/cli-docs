@@ -4,6 +4,107 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.3.0 — 31.10.2026
+
+### Añadido
+
+- **`gcal models list` y `gcal models download <model>` descargan el modelo que usa la búsqueda por significado.** La
+  pista de la búsqueda nombraba `gcal models download e5-small`, que no existía. El modelo va a la carpeta que comparten
+  todas las herramientas de WireCat, así que uno ya descargado por otra herramienta de WireCat se usa tal cual.
+- **`events move <event> --to-calendar <id>` mueve un evento, con su id, a otro calendario de la misma cuenta.**
+  Rechaza un calendario en el que no puedes escribir, el mismo calendario, un evento que Google no mueve (tiempo de
+  concentración, fuera de la oficina, lugar de trabajo, cumpleaños) y un caso sin `--series`. Por MCP es el comando
+  `events move`.
+- **`events update --following` y `events delete --following` cambian o borran «este y todos los siguientes»
+  casos.** Un cambio termina la serie justo antes del caso y empieza ahí una serie nueva con el cambio, conservando a
+  los asistentes; un borrado solo termina la serie. Una serie que termina tras un número de veces necesita `--repeat`
+  para la parte nueva.
+- **`events list changed:<date>` muestra lo que cambió desde una fecha**, a partir del almacén: cada evento indica
+  `change` (`new`, `moved` o `cancelled`) y `changed_at`, y uno movido dónde estaba en `was`.
+- **`events list overlapping` muestra las reuniones que se solapan**, cada una con `overlaps`, los demás eventos. Solo
+  cuentan los eventos que ocupan tu tiempo: no cancelados, no de todo el día, no rechazados ni marcados como libres.
+
+### Cambios — pueden romper scripts
+
+- **Crear, cambiar, mover y responder eventos se hace sin preguntar por defecto.** `events.create`, `events.update`,
+  `events.respond` y el nuevo `events.move` están en `allow` (estaban en `ask`); un script ya no necesita `--yes` para
+  ellos. `events.delete` sigue en `ask`, incluido `--following`. Para que vuelva a preguntar, pon una clave en `ask`,
+  como `gcal personal config set permissions.events.create ask`. Las claves `api.calendar.events.*` detienen las
+  escrituras de eventos en cuanto las fijas; su `ask` predeterminado vale solo para los comandos `api`.
+- **Un cambio de serie cuya nueva regla la termina antes también necesita `events.delete.series`**, que está en `deny`
+  por defecto. Un `COUNT` nuevo, un `UNTIL` anterior o un límite en una serie que no lo tenía borraban los casos
+  posteriores solo con `events.update`.
+- **Un `sync` en el que falla un calendario no imprime nada en stdout y termina con `sync.partial`.** Su mensaje nombra
+  cada calendario que falló y su error, `details.calendars` contiene el resultado de cada calendario (`error` en los que
+  fallaron), y el error dice que reintentar es seguro. Los calendarios que se sincronizaron quedan guardados. Una
+  sincronización detenida por su límite de tiempo o de peticiones sigue respondiendo `state: "partial"` y termina bien.
+- **`search` responde con una lista: los eventos en `items`, con `page` en modo cursor, como cualquier otra lista.**
+  Respondía con un `item` que contenía `hits`, `has_more` y `untrusted` (WC-OUT-4). Un script lee `items` en lugar de
+  `item.hits`, y `page.next_cursor` es el valor para `--cursor`. Cada evento indica sus propios campos `untrusted`, y
+  por qué no se buscó por significado está en `missing`. `query` y `by` desaparecen; cada evento sigue indicando
+  `found_by`.
+- **`links review` responde con sus revisiones en `items`, sin `accounts: "all"`.** Respondía con un `item` que
+  contenía la lista. Las elecciones de vínculos se siguen guardando por almacén, así que se listan las revisiones de
+  todas las cuentas.
+- **`search --backend server` rechaza `--newest`.** Google devuelve sus resultados sin un orden indicado y gcal lee solo
+  la primera página de cada calendario, así que en una respuesta «los más recientes primero» podía faltar el evento más
+  reciente. Sus resultados se listan del más temprano al más tardío, y el `found_by` de cada evento es `["google"]`,
+  como lo escribe una búsqueda en el almacén.
+
+### Corregido
+
+- **`gcal --help` ya no ofrece una opción `--read-only`, que no existe.** `GCAL_READ_ONLY=1` es la forma de que una
+  ejecución rechace cualquier cambio.
+- **`events delete` de un evento ya borrado en Google termina bien y quita la copia guardada.** Google responde a ese
+  borrado con 410, y con 404 cuando ya no muestra el evento; gcal fallaba en ambos casos y mantenía el evento en el
+  almacén hasta la siguiente sincronización.
+- **La sincronización completa diaria ya no marca como borrados los eventos fuera de su ventana.** Los eventos sueltos
+  más antiguos y posteriores, los casos movidos y las series terminadas se marcaban como borrados y sus eventos como
+  cancelados. Un almacén dañado así se repara en su siguiente sincronización.
+- **Un evento periódico movido a otra hora ya no conserva sus casos a la hora antigua** tras una sincronización
+  incremental.
+- **Un `sync --rescan` detenido por su límite ya no deja en rondas incrementales los calendarios a los que no llegó.**
+- **Una creación que Google hizo pero el almacén no pudo guardar indica el id del evento**, así que repetirla con
+  `--id` lo encuentra.
+- **`sync` escribe en el almacén con muchas menos transacciones, y la ronda completa diaria pide sus casos solo a las
+  series que cambiaron.** `events list` por hora y `people list` leen el almacén más rápido.
+- **Un rechazo de Google por un elemento que falta o está prohibido indica un motivo**: `google.not-found` o
+  `google.denied`, para que un script decida según él y no según el mensaje.
+- **Un inicio de sesión interrumpido por un tiempo de espera o Ctrl-C sigue cerrando el almacén que abrió.**
+- **`gcal api call --help` ya no muestra `Default: [object Object]` para `--params`.** Si se omite, sigue sin enviar
+  parámetros.
+- **`gcal` arranca en más o menos la mitad de tiempo** (`gcal --help`: 0,40 s antes, 0,19 s ahora, en un portátil con
+  Node 24). El paquete trae un único programa empaquetado en lugar de cientos de módulos. Una sincronización también
+  procesa cada evento más rápido.
+
+### Seguridad
+
+- **`search --backend server` marca los campos correctos como escritos por otros.** Su lista `untrusted` nombraba
+  `title` y `location`, mientras que la respuesta los tenía en `hits`, así que un agente que sigue la lista no los
+  trataba como datos. Ahora cada evento nombra `title` y `location` por sí mismo.
+- **`gcal api` rechaza un id vacío, `.` o `..` en la dirección de una petición** (`api.bad-path-id`). Un id así hacía
+  que la dirección apuntara a otro método de Google, `calendars/primary/events/..` al propio calendario; ahora no se
+  envía nada.
+- **`session end` en una ejecución con carpetas movidas conserva el inicio de sesión del propietario en el llavero del
+  sistema, y lo dice.** Una ejecución con `GCAL_CONFIG_DIR`, `GCAL_STATE_DIR` o un `HOME` movido usa la entrada del
+  llavero que comparten todas las ejecuciones de gcal; terminar la sesión ahí habría cerrado la sesión del propietario
+  en todas partes. Ahora responde `kept: "keyring"` y dice que la ejecución sigue con la sesión iniciada; `ended` es
+  `true` solo cuando la ejecución tenía un inicio de sesión propio que borrar. Una ejecución en las carpetas normales
+  termina la sesión como antes.
+- **Un inicio de sesión en una ejecución con carpetas movidas ya no sustituye el del propietario en el llavero del
+  sistema.** Va a la entrada propia de la ejecución, `gcal-cli:<config folder>`, que la ejecución lee primero y que su
+  `session end` borra; por lo demás, la ejecución lee la entrada del propietario y nunca la cambia. Así, un inicio de
+  sesión de prueba con otra cuenta de Google ya no puede cambiar el perfil del propietario.
+
+## 0.2.0 — 30.10.2026
+
+### Añadido
+
+- **La skill `gcal-cli` se publica en ClawHub como `wirecat-gcal` después de cada versión, y le dice a OpenClaw que
+  necesita `gcal` y cómo instalarlo** (`metadata.openclaw`: `requires.bins` y el paquete npm `@wirecat/gcal-cli`). Si
+  `gcal` no está en el PATH, OpenClaw marca la skill como no lista y ofrece instalar el paquete. Claude Code y Codex
+  ignoran ese bloque.
+
 ## 0.1.1 — 29.10.2026
 
 ### Corregido

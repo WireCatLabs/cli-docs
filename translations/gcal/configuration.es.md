@@ -59,17 +59,22 @@ Si no defines nada:
   una compartición debe indicar `--send-notifications false`.
 - Vaciar un calendario (`calendar.calendars.clear`, todos los eventos del calendario principal) está en `deny` y nunca
   se ofrece por MCP.
-- Las escrituras de eventos (`events create`, `update`, `delete`, `respond`) están en `ask`, cada una con su propia
-  clave, como `events.create`.
+- Las escrituras de eventos fáciles de deshacer se hacen sin preguntar: `events create`, `update`, `move` y `respond`
+  están en `allow`, cada una con su propia clave, como `events.create`. `events delete`, incluido `--following`, está
+  en `ask`.
 - `events.notify`, que deja a Google enviar un correo a los demás asistentes (`--notify`), está en `deny`. Por MCP,
   `ask` deja que un comando se ejecute, así que de otro modo un agente podría enviar correos a otras personas.
 - `events.delete.series`, borrar todos los casos de un evento periódico (`events delete --series`), está en `deny`.
+  También lo necesita un cambio de la serie cuya nueva regla `--repeat` la termina antes (un `COUNT` nuevo o un
+  `UNTIL` anterior).
 
-Una escritura de eventos también necesita la clave del método de Google al que llama: `api.calendar.events.insert`
-para `create`, `api.calendar.events.patch` para `respond`, `api.calendar.events.patch` y `api.calendar.events.update`
-para `update` (pasar de evento con hora a evento de todo el día, o al revés, envía el evento completo),
-`api.calendar.events.delete` para `delete`. Por eso `permissions.api readonly` también detiene las escrituras de
-eventos. Una sola pregunta cubre todas las claves de una escritura.
+Una escritura de eventos también responde a la clave del método de Google al que llama, en cuanto fijas esa clave:
+`api.calendar.events.insert` para `create`, `api.calendar.events.patch` para `respond`, `api.calendar.events.patch` y
+`api.calendar.events.update` para `update` (pasar de evento con hora a evento de todo el día, o al revés, envía el
+evento completo), `api.calendar.events.delete` para `delete`, `api.calendar.events.move` para `move`. Por eso
+`permissions.api readonly` también detiene las escrituras de eventos, y `permissions.api.calendar.events.insert ask`
+hace que `events create` pregunte. El `ask` predeterminado de esos métodos vale solo para los comandos `api`. Una sola
+pregunta cubre todas las claves de una escritura.
 
 Los comandos `api` responden a las mismas claves. Un método que hace que Google envíe un correo a los asistentes
 (`--send-updates` distinto de `none`, o `--send-notifications true`) también necesita `events.notify`. Borrar un
@@ -83,7 +88,7 @@ nivel, y no llama a nada.
 ```sh
 gcal personal config set permissions.events.notify allow     # let --notify mail attendees
 gcal personal config set permissions.sharing.notify allow    # let a share mail the person it is shared with
-gcal personal config set permissions.events.create allow     # add events without the question
+gcal personal config set permissions.events.create ask       # be asked before each new event
 ```
 
 Frente a una clave más general, estos valores por defecto solo se vuelven más estrictos: `permissions.api allow`

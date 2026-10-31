@@ -1,5 +1,5 @@
 ---
-title: "gcal"
+title: "Google Calendar"
 ---
 
 `gcal` читает ваш Google Календарь из терминала, из скриптов и через ИИ-агентов. У Google он просит доступ только на
@@ -7,6 +7,6 @@ title: "gcal"
 
 Он входит в Google (`session start`, `session status`, `session end`), синхронизирует ваши календари в локальное
 хранилище WireCat (`sync`, `status`, `calendars`) и читает их оттуда: `events`, `search`, `people` и `links`.
-`calendars busy` спрашивает у Google, когда люди свободны. С правом записи `events create | update | delete | respond`
-меняют Google Календарь. Есть и команды, общие для всех CLI WireCat: `doctor`, `commands`, `guide`, `config`,
+`calendars busy` спрашивает у Google, когда люди свободны. С правом записи `events create | update | delete | move |
+respond` меняют Google Календарь. Есть и команды, общие для всех CLI WireCat: `doctor`, `commands`, `guide`, `config`,
 `skill`, `mcp`, `runs` и `upgrade`. Начните с [установки](./installation.md), затем перейдите к [работе с инструментом](./usage.md).

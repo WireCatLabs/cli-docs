@@ -59,17 +59,20 @@ gcal personal config set permissions.api.calendar.events.insert allow    # add e
   нужно указать `--send-notifications false`.
 - Очистка календаря (`calendar.calendars.clear`, все события основного календаря) — `deny` и никогда не предлагается
   через MCP.
-- Запись событий (`events create`, `update`, `delete`, `respond`) — `ask`, у каждой команды свой ключ, например
-  `events.create`.
+- Записи событий, которые легко отменить, выполняются без вопроса: `events create`, `update`, `move` и `respond` —
+  `allow`, у каждой команды свой ключ, например `events.create`. `events delete`, включая `--following`, — `ask`.
 - `events.notify`, разрешение Google отправить письмо остальным участникам (`--notify`), — `deny`. Через MCP `ask`
   разрешает команде выполниться, так что иначе агент мог бы рассылать людям письма.
-- `events.delete.series`, удаление всех повторений повторяющегося события (`events delete --series`), — `deny`.
+- `events.delete.series`, удаление всех повторений повторяющегося события (`events delete --series`), — `deny`. Он
+  нужен и изменению серии, чьё новое правило `--repeat` заканчивает её раньше (новый `COUNT` или более ранний `UNTIL`).
 
-Запись события требует ещё и ключ метода Google, который она вызывает: `api.calendar.events.insert` для `create`,
-`api.calendar.events.patch` для `respond`, `api.calendar.events.patch` и `api.calendar.events.update` для `update`
-(переключение между событием со временем и событием на весь день отправляет событие целиком),
-`api.calendar.events.delete` для `delete`. Поэтому `permissions.api readonly` останавливает и запись событий. Один
-вопрос покрывает все ключи одной записи.
+Запись события подчиняется и ключу метода Google, который она вызывает, как только вы этот ключ зададите:
+`api.calendar.events.insert` для `create`, `api.calendar.events.patch` для `respond`, `api.calendar.events.patch` и
+`api.calendar.events.update` для `update` (переключение между событием со временем и событием на весь день отправляет
+событие целиком), `api.calendar.events.delete` для `delete`, `api.calendar.events.move` для `move`. Поэтому
+`permissions.api readonly` останавливает и запись событий, а `permissions.api.calendar.events.insert ask` заставляет
+`events create` спрашивать. Встроенное значение `ask` этих методов действует только для команд `api`. Один вопрос
+покрывает все ключи одной записи.
 
 Команды `api` подчиняются тем же ключам. Методу, после которого Google рассылает письма участникам (`--send-updates`
 со значением кроме `none` или `--send-notifications true`), нужен ещё и `events.notify`. Удалению события или его
@@ -83,7 +86,7 @@ gcal personal config set permissions.api.calendar.events.insert allow    # add e
 ```sh
 gcal personal config set permissions.events.notify allow     # let --notify mail attendees
 gcal personal config set permissions.sharing.notify allow    # let a share mail the person it is shared with
-gcal personal config set permissions.events.create allow     # add events without the question
+gcal personal config set permissions.events.create ask       # be asked before each new event
 ```
 
 Более общий ключ может сделать эти значения по умолчанию только строже: при `permissions.api allow` и вопрос, и
