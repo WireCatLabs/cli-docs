@@ -61,7 +61,7 @@ keep this profile's app password in the OS keyring
 
 ### `mail session start`
 
-sign this profile in. A new profile needs its mailbox: --address, or it is asked at a terminal; the server is found (built-in providers, the MX record, ISPDB, the domain's autoconfig; all providers: https://github.com/WireCatLabs/mail-cli/blob/main/docs/providers.md), the steps to prepare the mailbox are shown, the app password is asked (hidden) or read from MAIL_PASSWORD, checked against the server, and only then the profile and the keyring entry are saved. An existing profile only asks for the password again. Without a terminal nothing is asked: a missing --address or password is a validation error
+sign this profile in. A new profile needs its mailbox: --address, or it is asked at a terminal; the server is found (built-in providers, the MX record, ISPDB, the domain's autoconfig; all providers: https://github.com/WireCatLabs/mail-cli/blob/main/docs/providers.md); for a domain the built-in table does not know, the domain, never the address, goes to the DNS resolver, autoconfig.thunderbird.net and autoconfig.<domain>, and --provider or --host skips those lookups; the steps to prepare the mailbox are shown, the app password is asked (hidden) or read from MAIL_PASSWORD, checked against the server, and only then the profile and the keyring entry are saved. An existing profile only asks for the password again. Without a terminal nothing is asked: a missing --address or password is a validation error
 
 **Changes something on this computer only.**
 
@@ -78,6 +78,7 @@ mail session start [options]
 | `--security <mode>` | tls or starttls (default tls). |
 | `--login <login>` | the login name, when it is not the full address. |
 | `--folder <folder>` | sync only this folder; repeat it for more. |
+| `--credential-storage <storage>` | where the password is kept: keyring (the default, which falls back to a private file by itself when no keyring works), or file, not recommended. Default: `keyring`. |
 
 **Returns:** sign in; a new profile is created first
 
@@ -95,7 +96,7 @@ mail session status [options]
 |---|---|
 | `--check` | log in to the server to prove the password still works. |
 
-**Returns:** show where this profile's app password comes from; the password is never printed
+**Returns:** mail session status — profile, state, password_from, address, verified; every field: mail commands info session status
 
 **Example:** `mail ya session status`, `mail ya session status --check --json`
 
@@ -113,6 +114,18 @@ mail session end
 
 **Example:** `mail ya session end`
 
+### `mail session list`
+
+list the profiles on this computer, each with its address and where its app password comes from; picks none and asks no server
+
+```sh
+mail session list
+```
+
+**Returns:** mail profile — profile, address, password_from; every field: mail commands info session list
+
+**Example:** `mail session list`, `mail session list --json`
+
 ## `mail account`
 
 the mailbox behind this profile
@@ -125,7 +138,7 @@ log in to the server and list what it supports (IDLE, CONDSTORE, MOVE, Gmail ext
 mail account check
 ```
 
-**Returns:** log in and list what the server supports
+**Returns:** mail account check — profile, host, port, security, password_from, login, capabilities, features, and 1 more; every field: mail commands info account check
 
 **Example:** `mail ya account check`, `mail ya account check --json`
 
@@ -141,7 +154,7 @@ the folders of the mailbox with their role (inbox, sent, trash, ...) and message
 mail folders list
 ```
 
-**Returns:** the folders with their role and message counts
+**Returns:** mail folder — path, name, role, messages, unseen; every field: mail commands info folders list
 
 **Example:** `mail ya folders list`, `mail ya folders list --json`
 
@@ -157,15 +170,15 @@ mail sync [options]
 
 | Option | What it does |
 |---|---|
-| `--since-time <time>` | only mail received since this ISO date or timestamp (default: 30 days). |
+| `--since-time <time>` | only mail received since this date or time; a date alone starts at local midnight, a time without a zone is local (default: 30 days). |
 | `--limit <n>` | save at most this many new emails in this run, newest first. |
 | `--max-pages <pages>` | at most this many requests to the mail server in this run; as many as fit the deadline if not given. |
 | `--folder <folder>` | a folder to read; repeat it for more (default: the profile's folders, else INBOX and Sent). |
 | `--rescan` | list every message in the window again, not only those an earlier run left. |
 
-**Returns:** read mail from the server into the shared store; mail already stored is skipped
+**Returns:** mail sync — address, since, timezone, folders, state, requests, listed, saved, and 8 more; every field: mail commands info sync
 
-**Example:** `mail ya sync`, `mail ya sync --since-time 2026-10-01T00:00:00Z --limit 200`, `mail ya sync --folder INBOX`
+**Example:** `mail ya sync`, `mail ya sync --since-time 2026-10-01 --limit 200`, `mail ya sync --folder INBOX`
 
 ## `mail status`
 
@@ -175,19 +188,23 @@ how many messages of the synced window are read and how many are left, per folde
 mail status
 ```
 
-**Returns:** how far the sync is, from what the runs saved
+**Returns:** mail sync status — job, profile, done, total, remaining, state, updated_at, cursor_age_ms, and 1 more; every field: mail commands info status
 
 **Example:** `mail ya status`, `mail ya status --json`
 
 ## `mail doctor`
 
-check this installation: version, paths, config, profiles, store; no keyring or network
+the state this installation is in, without connecting unless --online
 
 ```sh
-mail doctor
+mail doctor [options]
 ```
 
-**Returns:** check this installation: version, paths, config, profiles, store; no keyring…
+| Option | What it does |
+|---|---|
+| `--online` | also connect once and read the account; sends nothing. |
+
+**Returns:** the state this installation is in, without connecting unless --online
 
 **Example:** `mail doctor`, `mail doctor --json`
 
@@ -427,12 +444,8 @@ the settings in force, and where each one came from
 the profile, the profiles that exist, and each setting with where it came from
 
 ```sh
-mail config show [options]
+mail config show
 ```
-
-| Option | What it does |
-|---|---|
-| `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
 **Returns:** the profile, the profiles that exist, and each setting with where it came from
 
@@ -456,8 +469,6 @@ mail config set <setting> <value> [options]
 | Option | What it does |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
-| `--personal` | only for personal accounts — the personal section of the file. |
-| `--bot` | only for bots — the bot section of the file. |
 
 **Returns:** save a setting to the configuration file
 
@@ -480,8 +491,6 @@ mail config unset <setting> [options]
 | Option | What it does |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
-| `--personal` | only for personal accounts — the personal section of the file. |
-| `--bot` | only for bots — the bot section of the file. |
 
 **Returns:** remove a setting from the configuration file
 

@@ -290,6 +290,8 @@ export function exampleFindings(
   for (const file of filesIn(join(root, "content/docs"))) {
     if (
       file.includes(`/content/docs/${cli === "tg" ? "max" : "tg"}/`) ||
+      // memo's own `mail delete`, `mail restore` and `mail inspect` are not commands of the mail tool.
+      (cli === "mail" && file.includes("/content/docs/memo/")) ||
       /\/(commands(?:-(?:personal|bot|admin))?|changelog|roadmap|compare)(?:\.[a-z]{2})?\.md$/.test(file)
     )
       continue

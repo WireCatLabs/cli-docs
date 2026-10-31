@@ -22,10 +22,10 @@ de cada proveedor, y `session start` también los imprime.
 
 ```sh
 mail ya session start --address me@example.com # new profile: finds the server, shows the steps, asks for the app password
-mail ya session start                # an existing profile: asks for the app password again (checked, kept in the keyring)
-mail ya account check                # logs in and lists what the server supports
-mail ya folders list                 # folders with role and counts
-mail ya sync --since-time 2026-10-01 # reads new mail into the shared store; stored mail is skipped
+mail ya session start                 # an existing profile: asks for the app password again (checked, kept in the keyring)
+mail ya account check                 # logs in and lists what the server supports
+mail ya folders list                  # folders with role and counts
+mail ya sync --since-time 2026-10-01  # reads new mail into the shared store; stored mail is skipped
 ```
 
 `session start` en un perfil nuevo busca la dirección en una tabla integrada (Yandex, Gmail, iCloud, Mail.ru, Fastmail,
@@ -38,7 +38,8 @@ la contraseña es un error de validación, y la contraseña se lee de `MAIL_PASS
 `config set` o un nombre de perfil nuevo.
 
 `session start` toma la contraseña de la terminal o de `MAIL_PASSWORD`, nunca de una opción ni de una dirección. Solo se guarda cuando el
-servidor la ha aceptado. Cuando el llavero no tiene ninguna, `mail` lee la entrada que dejó Himalaya (`secret-tool`, servicio
+servidor la ha aceptado, en el llavero; si el llavero falla, en un archivo privado, se avisa una vez por stderr y nunca se pregunta
+(`--credential-storage file` elige el archivo, no recomendado). Cuando ninguno la tiene, `mail` lee la entrada que dejó Himalaya (`secret-tool`, servicio
 `himalaya`, cuenta el nombre del perfil), así que una configuración existente no necesita una contraseña nueva.
 
 `sync` lee INBOX y la carpeta Sent salvo que `--folder` o el `folders` del perfil digan otra cosa, de las más nuevas a las más antiguas,

@@ -15,7 +15,7 @@ petición de soporte.
 | "no app password for profile" | Ejecuta `mail <profile> session start`, o define `MAIL_PASSWORD` para una ejecución. |
 | "the mail server refused the login" | La contraseña de aplicación es incorrecta, o IMAP y las contraseñas de aplicación están desactivados. Los pasos de cada proveedor están en [preparar el buzón](./providers.md). Yandex además necesita de 2 a 3 horas tras crear una contraseña de aplicación nueva. Después ejecuta `session start` otra vez. |
 | `rate_limited` | El servidor está limitando esta cuenta. Espera y ejecuta `sync` otra vez; el correo ya guardado se omite. |
-| "the OS keyring is not available" | El llavero está bloqueado o no hay ningún servicio de secretos en marcha. Desbloquéalo y prueba otra vez; la contraseña nunca se guarda en un archivo. |
+| "could not reach the OS keyring" | El llavero está bloqueado o no hay ningún servicio de secretos en marcha. La contraseña se guardó en su lugar en un archivo privado (`credential_storage: "file"`). Desbloquea el llavero y ejecuta `session start` otra vez para devolverla allí. |
 | Se rechaza una escritura | Lo impiden los permisos del perfil o `MAIL_READ_ONLY`; consulta [los ajustes](./configuration.md#permissions). |
 
 Nunca pegues un token, una contraseña ni contenido privado en una petición de soporte.

@@ -23,10 +23,10 @@ mail ya folders list
 
 ```sh
 mail ya session start --address me@example.com # new profile: finds the server, shows the steps, asks for the app password
-mail ya session start                # an existing profile: asks for the app password again (checked, kept in the keyring)
-mail ya account check                # logs in and lists what the server supports
-mail ya folders list                 # folders with role and counts
-mail ya sync --since-time 2026-10-01 # reads new mail into the shared store; stored mail is skipped
+mail ya session start                 # an existing profile: asks for the app password again (checked, kept in the keyring)
+mail ya account check                 # logs in and lists what the server supports
+mail ya folders list                  # folders with role and counts
+mail ya sync --since-time 2026-10-01  # reads new mail into the shared store; stored mail is skipped
 ```
 
 `session start` для нового профиля ищет адрес во встроенной таблице (Yandex, Gmail, iCloud, Mail.ru, Fastmail,
@@ -39,7 +39,8 @@ Outlook), затем запись MX, затем ISPDB Thunderbird и собст
 используйте `config set` или новое имя профиля.
 
 `session start` берёт пароль из терминала или `MAIL_PASSWORD`, но никогда не из параметра или ссылки. Он сохраняется только после того, как
-сервер его принял. Если в хранилище ключей пароля нет, `mail` читает запись, оставленную Himalaya (`secret-tool`, служба
+сервер его принял, в хранилище ключей; если хранилище ключей не работает, в закрытом файле, о чём один раз сообщается в
+stderr и ничего не спрашивается (`--credential-storage file` выбирает файл, не рекомендуется). Если пароля нет ни там, ни там, `mail` читает запись, оставленную Himalaya (`secret-tool`, служба
 `himalaya`, аккаунт — имя профиля), так что существующей настройке новый пароль не нужен.
 
 `sync` читает INBOX и папку Sent, если `--folder` или `folders` профиля не говорят иначе, сначала самые новые,

@@ -8,10 +8,22 @@ Lo que comparten las CLI de WireCat —el llavero, los permisos, MCP y lo que nu
 `mail` guarda sus ajustes en `config.json` y su estado en las carpetas que muestra `mail doctor`. Solo se comunica con el
 servidor IMAP de cada perfil, por TLS o STARTTLS; una conexión sin cifrado se rechaza. No puede enviar correo.
 
+`session start` en un perfil nuevo busca el servidor de una dirección cuyo dominio no está en su tabla integrada (Yandex,
+Gmail, iCloud, Mail.ru, Fastmail, Outlook). Envía el dominio, nunca la dirección completa, a tres sitios: tu resolvedor
+DNS, para el registro MX del dominio; el ISPDB de Thunderbird en `https://autoconfig.thunderbird.net`; y
+`https://autoconfig.<domain>`, el servidor propio del dominio. Se detiene en la primera respuesta. `--provider` (un nombre
+de la tabla) o `--host` omite toda búsqueda, y nada sale del ordenador antes del inicio de sesión en ese servidor.
+
 La contraseña de aplicación se escribe en una terminal sin eco, o se recibe por stdin, y va al llavero del sistema operativo (servicio
 `mail-cli`, cuenta el nombre del perfil) solo después de que el servidor la acepte. Nunca es un argumento, nunca forma parte de una
-dirección, nunca se escribe en `config.json`, en un registro ni en un registro de ejecución, y no se usa ningún archivo cuando el llavero falla. `session end`
-la borra. `mail` puede leer la antigua entrada de Himalaya; nunca la escribe.
+dirección, nunca se escribe en `config.json`, en un registro ni en un registro de ejecución. Cuando el llavero falla, va en su lugar a `credentials.json` en la carpeta
+de configuración de `mail`, con modo 600, y `mail` lo avisa una vez por stderr; `--credential-storage file` elige ese
+archivo directamente, algo que no recomendamos. `session end` la borra. `mail` puede leer la antigua entrada de Himalaya; nunca la escribe.
+
+Una ejecución con carpetas movidas (`MAIL_CONFIG_DIR` y sus vecinas, o un `HOME` o una carpeta XDG distintos de los tuyos)
+lee tu entrada `mail-cli`, pero nunca la reemplaza ni la elimina; la contraseña que guarda va a una entrada temporal
+propia. `session end` allí elimina solo esa entrada temporal; con tu contraseña no elimina nada y responde
+`"kept": "owners-sign-in"`.
 
 Todo lo que hay en un mensaje lo escribe otra persona: el asunto, el cuerpo, las cabeceras, el nombre del remitente, los nombres de
 carpetas y de archivos. `sync` lo guarda como texto y nunca sigue un enlace ni ejecuta nada de lo que contiene. Los bytes de los adjuntos

@@ -87,4 +87,5 @@ Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-setting
 Comprueba que IMAP está activado en el buzón y, si el proveedor ofrece contraseñas de aplicación, crea una: una contraseña normal suele rechazarse.
 
 `session start` busca el servidor de un perfil nuevo mediante el registro MX, el ISPDB de Thunderbird y el archivo autoconfig del dominio. Si no encuentra
-ninguno, pasa `--host`, `--port` y `--security` tú mismo. Consulta [el uso](./usage.md).
+ninguno, pasa `--host`, `--port` y `--security` tú mismo. Consulta [el uso](./usage.md). Esas búsquedas envían el dominio de la dirección, nunca la dirección
+misma, a tu resolvedor DNS, a `autoconfig.thunderbird.net` y a `autoconfig.<domain>`; `--provider` o `--host` las omite.
