@@ -70,9 +70,9 @@
     "lang": "en",
     "docsRef": "v0.1.0",
     "summary": {
-      "en": "Sync your mailbox over IMAP into a local store, so you and your AI agent can search mail offline. Read only.",
-      "ru": "Синхронизируйте почтовый ящик по IMAP в локальное хранилище: вы и ваш ИИ-агент ищете письма без интернета. Только чтение.",
-      "es": "Sincroniza tu buzón por IMAP en un almacén local para que tú y tu agente de IA busquéis correo sin conexión. Solo lectura."
+      "en": "Sync your mailbox over IMAP into the shared WireCat store; memo searches it, offline. mail only reads your mailbox.",
+      "ru": "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat; memo ищет по нему без интернета. mail только читает ящик.",
+      "es": "Sincroniza tu buzón por IMAP en el almacén compartido de WireCat; memo busca en él sin conexión. mail solo lee tu buzón."
     }
   },
   {

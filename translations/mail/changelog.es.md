@@ -11,7 +11,7 @@ Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más
 - **`mail` lee un buzón por IMAP en el almacén compartido de WireCat y nunca modifica el buzón.** `memo` y las demás
   herramientas de WireCat buscan y leen después ese correo en tu ordenador. `mail` no envía correo.
 - **`session start` inicia sesión de un perfil con una contraseña de aplicación.** Un perfil nuevo necesita `--address`,
-  o lo pide en un terminal. Encuentra el servidor mediante una tabla incorporada (Yandex, Gmail, iCloud, Mail.ru,
+  o lo pide en una terminal. Encuentra el servidor mediante una tabla incorporada (Yandex, Gmail, iCloud, Mail.ru,
   Fastmail), el registro MX, el ISPDB de Thunderbird y el archivo autoconfig del dominio; `--provider`, o `--host` con
   `--port` y `--security`, lo fija a mano y se salta esas búsquedas. Muestra los pasos para preparar el buzón, pide la
   contraseña de aplicación sin eco (o lee `MAIL_PASSWORD`), la comprueba en el servidor y solo entonces guarda el perfil
@@ -31,7 +31,7 @@ Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más
   `--limit` limita los mensajes nuevos de una ejecución y `--rescan` vuelve a listar toda la ventana. Guarda el texto y
   las cabeceras, no los adjuntos.
 - **Un buzón grande se sincroniza en varias ejecuciones.** `sync` gasta un presupuesto de peticiones calculado según su
-  plazo (15 minutos en un terminal, 45 segundos por MCP; `--timeout` y `--max-pages` lo cambian), guarda tras cada parte
+  plazo (15 minutos en una terminal, 45 segundos por MCP; `--timeout` y `--max-pages` lo cambian), guarda tras cada parte
   y responde `state: partial` con el comando para continuar. `mail <profile> status` muestra cuánto lleva, también
   mientras se sincroniza. Si quedaron mensajes sin leer o no se comprobaron las eliminaciones, la respuesta lo indica en
   `meta.issues`.

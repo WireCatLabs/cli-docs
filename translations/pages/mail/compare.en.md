@@ -33,9 +33,9 @@ and its pages say little about agents. It is named below.
 | Task | mail | [Himalaya](https://github.com/pimalaya/himalaya#usage) | [mu](https://github.com/djcb/mu#readme) | [gog](https://github.com/openclaw/gogcli#readme) | [Workspace MCP](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [Microsoft 365 MCP](https://github.com/Softeria/ms-365-mcp-server#readme) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
 | **Read and search** | | | | | | |
-| See new or unread mail | 🟡¹ | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-query.7.org) | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
-| Search by sender, date and words in one query | 🟡¹ | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-query.7.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | ➖ |
-| Read and search with no internet | 🟡¹ | [🟡](https://github.com/pimalaya/himalaya#features) | [✅](https://github.com/djcb/mu#readme) | ➖ | ➖ | ➖ |
+| See new or unread mail | ❌¹ | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-query.7.org) | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
+| Search by sender, date and words in one query | ❌¹ | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-query.7.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | ➖ |
+| Read and search with no internet | ❌¹ | [🟡](https://github.com/pimalaya/himalaya#features) | [✅](https://github.com/djcb/mu#readme) | ➖ | ➖ | ➖ |
 | Find a message with an attachment and save the file | ❌ | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-extract.1.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
 | **Keep a copy** | | | | | | |
 | Copy a big mailbox in parts and carry on after a stop | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
@@ -55,7 +55,7 @@ and its pages say little about agents. It is named below.
 | Preview what a command would do before it runs | 🟡⁶ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ |
 | Tell the agent that mail text is data, not instructions | ✅ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ |
 | MCP server | ✅ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
-| Mailbox password kept only in the system keyring | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
+| Mailbox password kept in the system keyring | 🟡⁷ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Setup** | | | | | | |
 | Start from just an address, with no cloud app to register first | ✅ | [✅](https://github.com/pimalaya/himalaya#features) | ➖ | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
 | Sign in with OAuth | ❌⁴ | [❌](https://github.com/pimalaya/himalaya#faq) | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
@@ -66,8 +66,8 @@ and its pages say little about agents. It is named below.
 | Install | npm, Node 22.16 or later | [brew, cargo or a release file](https://github.com/pimalaya/himalaya#installation) | [distro package or meson build](https://github.com/djcb/mu#readme) | [brew or go install](https://github.com/openclaw/gogcli#readme) | [uvx](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [npx](https://github.com/Softeria/ms-365-mcp-server#readme) |
 | Licence | Apache-2.0 | Apache-2.0 | GPL-3.0 | MIT | MIT | MIT |
 
-¹ `mail` has no list, show or search command. It fills the store, and [memo](../memo/mail.md) lists, searches and
-reads what is in it, with no internet.
+¹ memo does this. `mail` has no list, show or search command. It fills the store, and [memo](../memo/mail.md) lists,
+searches and reads what is in it, with no internet.
 
 ² The store is shared with the other WireCat tools. The search across all of it is done by memo.
 
@@ -78,10 +78,14 @@ turns app passwords off cannot be used.
 Microsoft 365 mailboxes cannot be added yet.
 
 ⁵ `mail` has no command that sends, moves, flags or deletes mail. `MAIL_READ_ONLY=1` also refuses every write to the
-local store.
+local store. `memo mail delete` is a separate command of [memo](../memo/mail.md), not of `mail`: it moves Gmail mail
+to Trash.
 
 ⁶ `--dry-run` shows the parsed arguments and the permissions of a command before it runs. It does not list the mail a
 command would change.
+
+⁷ The system keyring is the default. When it fails, `mail` keeps the password in a private file (mode 600) and says so
+once. It also reads `MAIL_PASSWORD` and an entry that Himalaya left in the keyring.
 
 Notes on the Himalaya column: its marks come from its README, and from the read only `--help` of v2.2.1. Nothing was
 run against a mailbox. Its pages name no read only mode, no command allowlist and no MCP server.
@@ -89,7 +93,7 @@ run against a mailbox. Its pages name no read only mode, no command allowlist an
 Notes on the `mail` column:
 
 - **Read only.** `mail` cannot change or send mail, so an agent that uses it cannot either. Sending is not planned in
-  the [roadmap](./roadmap.md).
+  the [roadmap](./roadmap.md). Memo's own `memo mail delete` moves Gmail mail to Trash, so give an agent `mail` alone if it must change nothing.
 - **Attachments.** `mail` stores text and headers. It does not store attachment bytes.
 - **Permissions.** Each profile sets `allow`, `ask`, `readonly` or `deny` per command. Over MCP no one can answer an
   `ask`, so the command runs. `--permission` on `mcp serve` can only make a profile stricter. See
@@ -105,7 +109,6 @@ Notes on the `mail` column:
   commands compiled in so the agent cannot widen them.
 - **Microsoft 365 MCP**: your mailbox is Outlook or Microsoft 365 and an agent must use it today. `mail` has no OAuth
   yet.
-- **NeoMutt**: you read and write mail yourself all day. `mail` is not a mail client.
 - **mu**: you already keep a Maildir and want a fast search over it with attachments and threads.
 
 If `mail` fits, start with [installation](./installation.md). To connect an agent, see [use it](./usage.md).

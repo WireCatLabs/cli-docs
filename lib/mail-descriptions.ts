@@ -1,7 +1,8 @@
 export const mailDescriptions: Record<string, Record<string, string>> = {
   en: {
-    compare: "See what Mail does and does not do: read-only IMAP sync, offline search, no sending, no Outlook yet.",
-    index: "Sync your mailbox over IMAP into a local store, so you and your AI agent can search mail offline.",
+    compare:
+      "See what Mail does and does not do: read-only IMAP sync into the shared store, search left to memo, no sending, no Outlook yet.",
+    index: "Sync your mailbox over IMAP into the shared WireCat store; memo searches it, offline.",
     installation: "Install the Mail CLI with npm, check the Node.js version and run doctor.",
     usage: "Connect a mailbox with an app password, sync mail in parts, script the output and connect an agent.",
     providers:
@@ -15,8 +16,8 @@ export const mailDescriptions: Record<string, Record<string, string>> = {
   },
   ru: {
     compare:
-      "Что Mail умеет и чего нет: синхронизация IMAP только для чтения, поиск без сети, без отправки, пока без Outlook.",
-    index: "Синхронизируйте почтовый ящик по IMAP в локальное хранилище: вы и ваш ИИ-агент ищете письма без интернета.",
+      "Что Mail умеет и чего нет: синхронизация IMAP только для чтения в общее хранилище, поиск делает memo, без отправки, пока без Outlook.",
+    index: "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat; memo ищет по нему без интернета.",
     installation: "Установите Mail CLI через npm, проверьте версию Node.js и запустите doctor.",
     usage:
       "Подключите ящик с паролем приложения, синхронизируйте почту частями, получайте вывод для скриптов и подключайте агента.",
@@ -32,9 +33,8 @@ export const mailDescriptions: Record<string, Record<string, string>> = {
   },
   es: {
     compare:
-      "Qué hace y qué no hace Mail: sincronización IMAP de solo lectura, búsqueda sin conexión, sin envío y aún sin Outlook.",
-    index:
-      "Sincroniza tu buzón por IMAP en un almacén local para que tú y tu agente de IA busquéis correo sin conexión.",
+      "Qué hace y qué no hace Mail: sincronización IMAP de solo lectura al almacén compartido, búsqueda a cargo de memo, sin envío y aún sin Outlook.",
+    index: "Sincroniza tu buzón por IMAP en el almacén compartido de WireCat; memo busca en él sin conexión.",
     installation: "Instala la CLI de Mail con npm, comprueba la versión de Node.js y ejecuta doctor.",
     usage:
       "Conecta un buzón con una contraseña de aplicación, sincroniza el correo por partes, usa la salida en scripts y conecta un agente.",
