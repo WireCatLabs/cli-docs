@@ -160,6 +160,7 @@ const folderIcons = {
   wa: WhatsAppIcon,
   drive: FolderOpen,
   gcal: CalendarDays,
+  mail: Mail,
   memo: NotebookPen,
   zm: Video,
   desktop: Monitor,
@@ -221,7 +222,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|gcal|memo|zm)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|gcal|mail|memo|zm)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText

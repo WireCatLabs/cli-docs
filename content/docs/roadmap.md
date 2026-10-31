@@ -48,6 +48,7 @@ what comes next.
 - [Zoom roadmap](./zm/roadmap.md)
 - [Google Drive roadmap](./drive/roadmap.md)
 - [Google Calendar roadmap](./gcal/roadmap.md)
+- [Mail roadmap](./mail/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
 - [WhatsApp roadmap](./wa/roadmap.md)
 

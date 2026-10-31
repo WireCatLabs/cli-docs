@@ -297,5 +297,21 @@
   "gcal/troubleshooting.es": "a8ce4abd019287d1e5acf8f22ea84d4b6a749e9d470676e8ff6e8c18382daadc",
   "gcal/security.es": "8a653bf9bbec42bf7c96d85a9e3b7e0b7aec8d4feb7cd676b4eaa54bd438cdb0",
   "gcal/changelog.es": "32fc129aa2b7626e8df7f5cdfe98160c8a8603a7944d83eeb0045a10811e07ad",
-  "gcal/roadmap.es": "0222e89f68a261f1da692ee0589028b687275311a9e2efa77008127a92a04f31"
+  "gcal/roadmap.es": "0222e89f68a261f1da692ee0589028b687275311a9e2efa77008127a92a04f31",
+  "mail/index.ru": "03730cbec693617d3a3146de6e3a9bc6db326f3884c63c4cadbb997fa077828f",
+  "mail/index.es": "03730cbec693617d3a3146de6e3a9bc6db326f3884c63c4cadbb997fa077828f",
+  "mail/installation.ru": "6419d0ef083e64d5ba342bcbb3ae1db007a1f71a2cf0e125bbcc39342349c1b7",
+  "mail/installation.es": "6419d0ef083e64d5ba342bcbb3ae1db007a1f71a2cf0e125bbcc39342349c1b7",
+  "mail/usage.ru": "561ff3b9fe785c52dc72bfcab59b704549731b6797bdee2c696040cab2c01eea",
+  "mail/usage.es": "561ff3b9fe785c52dc72bfcab59b704549731b6797bdee2c696040cab2c01eea",
+  "mail/providers.ru": "8189f75e217c8035e57344771dd6e78691213685a797bfabc234b330198a3800",
+  "mail/providers.es": "8189f75e217c8035e57344771dd6e78691213685a797bfabc234b330198a3800",
+  "mail/configuration.ru": "91f9c4ae84927a141c4414f86593a57a96192855c3e3620c48999ad59ebe36be",
+  "mail/configuration.es": "91f9c4ae84927a141c4414f86593a57a96192855c3e3620c48999ad59ebe36be",
+  "mail/troubleshooting.ru": "822660ed08b234c8571e414d41b4f009bc53fe2b0bdebf3c34bc2b190f1749eb",
+  "mail/troubleshooting.es": "822660ed08b234c8571e414d41b4f009bc53fe2b0bdebf3c34bc2b190f1749eb",
+  "mail/security.ru": "7b57656133376013d4f802dbe9d622d0bfcdb2d38d5e24dcf3cf70ba1d7ac890",
+  "mail/security.es": "7b57656133376013d4f802dbe9d622d0bfcdb2d38d5e24dcf3cf70ba1d7ac890",
+  "mail/commands.ru": "b4e4211a1274fddb856e7373350b5b3e9262934ddcf74c2ec766368bf26a6ae7",
+  "mail/commands.es": "b4e4211a1274fddb856e7373350b5b3e9262934ddcf74c2ec766368bf26a6ae7"
 }
