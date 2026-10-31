@@ -129,7 +129,9 @@ después del inicio de ese día, así que también se queda un evento que ya est
 y deja fuera un evento que termina justo en ese momento. Una hora exacta va entre comillas, con su desfase horario:
 `starts_at>="2026-11-03T10:00:00+01:00"`. Cada campo se nombra una vez; un campo nombrado dos veces se rechaza, así que
 escribe un intervalo. `calendar:<id>` y `person:<email>` acotan la lista. Sin `starts_at` ni `ends_at`, la lista
-empieza al inicio de hoy. `gcal personal events list --help` muestra los campos.
+empieza al inicio de hoy. `gcal personal events list --help` muestra los campos. Una página tiene `--limit` eventos
+(100); si hay más, `page.next_page` es el valor para `--page`, y el paso `next` de la respuesta ejecuta la misma consulta
+una página más allá.
 
 `changed_at>=<date>` deja los eventos guardados por primera vez, movidos, cancelados o eliminados desde esa fecha, cada uno
 con `change` (`new`, `moved` o `cancelled`) y `changed_at`; uno movido dice además dónde estaba en `was` (`starts_at`,
@@ -146,10 +148,16 @@ resultados en un orden que no indica, así que `gcal` los lista del más tempran
 gcal personal search events --backend server quarterly review
 ```
 
-`--backend both` se rechaza: el almacén y Google ordenan y paginan los eventos de forma distinta, así que una lista
-combinada no tendría un orden único ni una página siguiente. Haz las dos búsquedas una tras otra.
+`--backend both` hace las dos búsquedas: primero los resultados del almacén en su orden, y cada uno que Google también
+encontró lleva `server` en `found_by`; después los eventos que solo encontró Google, del más temprano al más tardío. El
+almacén y Google ordenan y paginan de forma distinta, así que `both` responde una sola página sin `next_cursor` y
+rechaza `--cursor` y `--newest`; para ver más, sube `--limit`. Como `server`, necesita red.
 
-Las dos responden con una lista de eventos en `items`. Una búsqueda en el almacén pagina con un cursor: si hay más,
+```sh
+gcal personal search events --backend both quarterly review
+```
+
+Cada una responde con una lista de eventos en `items`. Una búsqueda en el almacén pagina con un cursor: si hay más,
 `page.next_cursor` es el valor para `--cursor`. Cada evento indica en `untrusted` los campos que escribió quien envió
 la invitación.
 
@@ -241,14 +249,14 @@ gcal personal events delete event:42 --following --no-notify
   rechaza hasta que permitas `events.notify` (consulta los [permisos](./configuration.md#permissions)).
 - Un cambio lleva la versión que vio la última sincronización. Si el evento ha cambiado en Google desde entonces, la
   escritura se detiene con `event.conflict`: ejecuta `sync` y vuelve a intentarlo. No se sobrescribe nada.
-- Una creación cuya respuesta se perdió termina en `outcome_unknown` e indica un id; repítela con `--id <id>` y Google
-  encuentra el evento en lugar de crear un segundo.
+- Una creación cuya respuesta se perdió termina en `outcome_unknown` e indica su `operation_id`; repítela con
+  `--operation-id <id>` y Google encuentra el evento en lugar de crear un segundo.
 - En un evento periódico, una escritura cambia el caso que indicas; `--series` cambia toda la serie, y `--following`
   este caso y todos los siguientes. Borrar una serie completa se rechaza hasta que permitas `events.delete.series`, y
   también una regla `--repeat` nueva que termina la serie antes (un `COUNT` nuevo o un `UNTIL` anterior).
 - `update --following` termina la serie justo antes del caso y empieza ahí una serie nueva con tu cambio, conservando
   a los asistentes. Una serie que termina tras un número de veces (`COUNT`) necesita `--repeat` para la parte nueva. Si
-  falla terminar la serie antigua, el error indica el id de la serie nueva; repite con `--id <id>`.
+  falla terminar la serie antigua, el error indica el id de la serie nueva; repite con `--operation-id <id>`.
   `delete --following` solo termina la serie y, como todo borrado, pregunta antes.
 - `move --to-calendar <id>` mueve un evento, con su id, a otro calendario de la misma cuenta en el que puedas
   escribir. Un caso se mueve solo con toda su serie (`--series`). Google solo mueve eventos normales, no tiempo de
