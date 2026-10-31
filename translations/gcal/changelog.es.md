@@ -4,6 +4,43 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.9.0 — 31.10.2026
+
+### Cambios — pueden romper scripts
+
+- **`events create --id` y `events update --following --id` ahora son `--operation-id`**, el nombre que usa toda
+  escritura de WireCat para reintentar tras `outcome_unknown` (WC-CMD-10, WC-OUT-10). El valor es el mismo: el
+  `operation_id` que indica el error de la escritura perdida. `--id` se rechaza como opción desconocida; cambia los
+  scripts y las instrucciones de agentes que lo pasan.
+- **El registro de lo que hicieron los agentes por `gcal mcp` nombra al agente que llamó, no al servidor**
+  (cli-core 0.509.0): el nombre propio del cliente, como `claude-code`, donde siempre ponía `gcal-mcp`. Un filtro por
+  `gcal-mcp` ya no encuentra filas nuevas. gcal funciona ahora con cli-core 0.510.0 y cli-base 0.68.1.
+
+### Añadido
+
+- **`events list --page <n>`**: la página siguiente de eventos guardados. Una lista con más eventos que `--limit` (100)
+  indica `page.next_page`, y su paso `next` ejecuta la misma consulta una página más allá; antes decía `has_more` sin
+  forma de seguir leyendo.
+- **`search events --backend both`** consulta el almacén y la búsqueda del propio Google Calendar a la vez. Primero van
+  los resultados del almacén en su orden, y cada uno que Google también encontró lleva `server` en `found_by`; después
+  los eventos que solo encontró Google, del más temprano al más tardío. Una sola página sin cursor: rechaza `--cursor`
+  y `--newest`, y necesita red. Antes `both` se ofrecía y siempre se rechazaba.
+
+### Corregido
+
+- **La ayuda de `search events --cursor`** ya no nombra `next_offset`, una clave que la respuesta no tiene; el valor
+  sale de `page.next_cursor`.
+
+## 0.8.0 — 31.10.2026
+
+### Corregido
+
+- **El archivo de respaldo del llavero ahora viene de cli-base 0.68.0 y cli-core 0.507.0**, sin un rodeo propio de
+  gcal. cli-base corrigió el fallo que gcal rodeaba: quitar la copia del llavero tras `--credential-storage file`
+  vaciaba también el archivo. Un inicio de sesión guardado en el archivo privado se lee de ahí y sus renovaciones se
+  quedan ahí; el siguiente `session start` que llega al llavero lo devuelve allí y quita la copia del archivo. Las
+  respuestas son como en 0.7.0, y el aviso del llavero sigue saliendo una vez por ejecución.
+
 ## 0.7.0 — 31.10.2026
 
 ### Cambios — pueden romper scripts

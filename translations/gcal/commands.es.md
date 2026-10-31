@@ -255,11 +255,12 @@ gcal events list [query] [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | events at most, 1–1000. Default: `100`. |
+| `--limit <n>` | events per page, 1–1000. Default: `100`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
 
 **Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 12 more; every field: gcal commands info events list
 
-**Example:** `gcal personal events list starts_at>=2026-11-02 starts_at<2026-11-07 --json`, `gcal personal events list ends_at>=today person:ana@example.com`
+**Example:** `gcal personal events list starts_at>=2026-11-02 starts_at<2026-11-07 --json`, `gcal personal events list ends_at>=today person:ana@example.com`, `gcal personal events list starts_at>=2026-11-02 --limit 50 --page 2`
 
 ### `gcal events show`
 
@@ -304,7 +305,7 @@ gcal events create <calendar> [options]
 | `--repeat <rule>` | how it repeats: an RFC 5545 rule: FREQ=DAILY\|WEEKLY\|MONTHLY, and INTERVAL, BYDAY (MO,WE; in MONTHLY also 1MO or -1FR), COUNT or UNTIL (a date, YYYYMMDD, for an all-day event; a UTC time, YYYYMMDDTHHMMSSZ, for a timed one). |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
-| `--id <id>` | the id a create that ended in outcome_unknown named: a retry finds that event. |
+| `--operation-id <id>` | the operation_id a create that ended in outcome_unknown named: a retry finds that event. |
 
 **Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events create
 
@@ -338,7 +339,7 @@ gcal events update <event> [options]
 | `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
 | `--series` | change the whole repeating event, not only this occurrence. |
 | `--following` | change this occurrence and every later one: the repeating event ends before it and a new one starts with the change. |
-| `--id <id>` | with --following, the id an outcome_unknown named: a retry finds that new series. |
+| `--operation-id <id>` | with --following, the operation_id an outcome_unknown named: a retry finds that new series. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
 
@@ -429,7 +430,7 @@ find stored things by text: events
 
 ### `gcal search events`
 
-find stored events by words, and by meaning when its model is downloaded; with --backend server, ask the provider instead
+find stored events by words, and by meaning when its model is downloaded; with --backend server, ask the provider instead, or with --backend both, ask both
 
 ```sh
 gcal search events <query> [options]
@@ -442,14 +443,14 @@ gcal search events <query> [options]
 | Option | What it does |
 |---|---|
 | `--limit <n>` | events per page. Default: `20`. |
-| `--cursor <cursor>` | continue from a page's next_offset. Default: `0`. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. Default: `0`. |
 | `--exact` | every word as written, no word stems. |
 | `--newest` | latest start first instead of best first. |
-| `--backend <archive\|server\|both>` | where to search: archive, the local store, or server, the provider's own search over the synced calendars, earliest first. One of: `archive`, `server`, `both`. Default: `archive`. |
+| `--backend <archive\|server\|both>` | where to search: archive, the local store, or server, the provider's own search over the synced calendars, earliest first; both gives the store's hits, each the provider also found marked server, then the provider's other hits, one page with no cursor. One of: `archive`, `server`, `both`. Default: `archive`. |
 
 **Returns:** calendar search hit — provider, account, title, starts_at, ends_at, all_day, status, location, and 9 more; every field: gcal commands info search events
 
-**Example:** `gcal personal search events roadmap planning --json`, `gcal personal search events --backend server quarterly review`
+**Example:** `gcal personal search events roadmap planning --json`, `gcal personal search events --backend server quarterly review`, `gcal personal search events --backend both quarterly review`
 
 ## `gcal people`
 
