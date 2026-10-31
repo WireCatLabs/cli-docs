@@ -49,13 +49,13 @@ title: "Пошаговые сценарии"
 Посмотрите, когда люди заняты и какие промежутки свободны у всех, не копируя их календари.
 
 1. ```sh
-   gcal personal calendars busy week person:ana@example.com
+   gcal personal calendars busy person:ana@example.com
    ```
 
    спрашивает у Google, когда на этой неделе заняты Ана и ваши календари; ничего не сохраняется
 
 2. ```sh
-   gcal personal calendars busy week person:ana@example.com --duration-minutes 30 --hours 10:00-16:00
+   gcal personal calendars busy person:ana@example.com --duration-minutes 30 --hours 10:00-16:00
    ```
 
    общие свободные получасовые промежутки в рабочие часы

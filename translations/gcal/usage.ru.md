@@ -58,13 +58,16 @@ gcal session list                       # every profile here, and whether each h
 принимает профиль и не выбирает его: она выводит профили, названные в настройках или хоть раз выполнившие вход, у
 каждого `signed_in`, `account` и `credential_storage`. Она читает хранилище ключей и никогда не обращается к сети.
 
-На компьютере без хранилища ключей, например на сервере без рабочего стола, храните вход в файле. Это
-`credentials.json` в папке состояния `gcal`, доступный для чтения только вам. `gcal doctor` показывает его путь и
-профили в нём. Следующий `session start` без этого параметра переносит вход обратно в хранилище ключей.
+На компьютере, где хранилище ключей не работает, например на сервере без рабочего стола, `session start` сам
+сохраняет вход в файле, один раз сообщает об этом в stderr и отвечает `credential_storage: "file"`. Он никогда не
+спрашивает. Это `credentials.json` в папке состояния `gcal`, доступный для чтения только вам. `gcal doctor` показывает
+его путь и профили в нём. Файл можно выбрать и явно, хотя хранилище ключей надёжнее и мы этого не советуем:
 
 ```sh
 gcal personal session start --credential-storage file
 ```
+
+Следующий `session start`, которому удастся добраться до хранилища ключей, переносит вход обратно туда.
 
 ## Синхронизировать календари
 
@@ -107,6 +110,7 @@ gcal personal store status                  # how far each calendar's sync is, a
 ```sh
 gcal personal events list                                       # from today on, earliest first
 gcal personal events list ends_at>=2026-11-02 starts_at<=2026-11-06 person:ana@example.com
+gcal personal events list starts_at>=2026-11-02                 # events that start on or after a day
 gcal personal events list changed_at>=2026-10-25                # what changed since a date
 gcal personal events show event:42                              # attendees, Drive files and history
 gcal personal search events roadmap planning                    # by words, and by meaning with the model
@@ -117,13 +121,15 @@ gcal personal links review                                      # copies the too
 ```
 
 `events list` принимает тот же запрос по полям, что и любой список WireCat, и никаких собственных слов.
-`ends_at>=<date>` оставляет события, которые заканчиваются после начала этого дня, а `starts_at<=<date>` — те, что
-начинаются до его конца, так что вместе они дают события за несколько дней подряд. Точное время пишется в кавычках со
-смещением: `ends_at>"2026-11-03T10:00:00+01:00"`. `starts_at` задаёт только самое позднее начало, а `ends_at` — только
-самый ранний конец, потому что хранилище находит события по отрезкам времени, которые они занимают; `starts_at>=…`
-отклоняется, и в ответе названо условие `ends_at`, которое нужно написать вместо него. `calendar:<id>` и
-`person:<email>` сужают список. Без `starts_at` или `ends_at` список начинается с начала сегодняшнего дня.
-`gcal personal events list --help` перечисляет поля.
+`starts_at` ограничивает начало события с любой стороны: `starts_at>=2026-11-02` оставляет события, которые начинаются
+в этот день или позже, `starts_at<2026-11-07` — те, что начинаются раньше этого дня, `starts_at:[2026-11-02 TO 2026-11-07}`
+— и то и другое, а `starts_at:2026-11-02` — события одного этого дня. `ends_at>=<date>` оставляет события, которые
+заканчиваются после начала этого дня, так что событие, которое в этот момент уже идёт, тоже остаётся:
+`ends_at>=2026-11-02 starts_at<=2026-11-06` даёт всё, что касается этих дней. `ends_at` задаёт только самый ранний
+конец, и событие, которое заканчивается ровно в этот момент, в список не попадает. Точное время пишется в кавычках со
+смещением: `starts_at>="2026-11-03T10:00:00+01:00"`. Каждое поле называется один раз; поле, названное дважды,
+отклоняется, поэтому пишите промежуток. `calendar:<id>` и `person:<email>` сужают список. Без `starts_at` или
+`ends_at` список начинается с начала сегодняшнего дня. `gcal personal events list --help` перечисляет поля.
 
 `changed_at>=<date>` оставляет события, которые впервые сохранились, были перенесены, отменены или удалены с этой даты, у
 каждого `change` (`new`, `moved` или `cancelled`) и `changed_at`; у перенесённого есть ещё `was` — где оно было
@@ -153,12 +159,15 @@ gcal personal search events --backend server quarterly review
 нужна сеть, и она ничего не сохраняет: человек появляется в ответе только под тем адресом, который вы указали.
 
 ```sh
-gcal personal calendars busy week person:ana@example.com           # busy times only, never what fills them
-gcal personal calendars busy from:2026-11-02 to:2026-11-06 person:ana@example.com --duration-minutes 30
-gcal personal calendars busy today calendar:3 --duration-minutes 60 --hours 10:00-16:00
+gcal personal calendars busy person:ana@example.com                # this week; busy times only, never what fills them
+gcal personal calendars busy start>=2026-11-02 end<=2026-11-06 person:ana@example.com --duration-minutes 30
+gcal personal calendars busy start>=today end<=today calendar:3 --duration-minutes 60 --hours 10:00-16:00
 ```
 
-- Без слова времени берётся эта неделя; без `calendar:` — все синхронизируемые календари.
+- Запрос задаёт окно через собственные `start` и `end` ответа: `start>=<date>` — с начала этого дня,
+  `end<=<date>` — до его конца. Без `start` окно начинается сегодня; без `end` оно длится семь дней.
+- `person:<email>` и `calendar:<id>` можно повторять, по одному условию на каждый: спрашиваются все названные. Без
+  `calendar:` спрашиваются все синхронизируемые календари.
 - `--duration-minutes` добавляет `slots`: промежутки не короче указанного, свободные у всех, в рабочие часы
   (`--hours`, по умолчанию 09:00-17:00) с понедельника по пятницу, в вашем часовом поясе.
 - Google показывает занятость человека, только если его календарь открыт вам или вашей организации. У каждого, кого

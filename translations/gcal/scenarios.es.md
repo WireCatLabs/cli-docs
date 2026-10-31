@@ -49,13 +49,13 @@ En la terminal: `gcal guide agent-access`
 Mira cuándo están ocupadas las personas y los huecos libres que compartís, sin copiar sus calendarios.
 
 1. ```sh
-   gcal personal calendars busy week person:ana@example.com
+   gcal personal calendars busy person:ana@example.com
    ```
 
    pregunta a Google cuándo están ocupados Ana y tus calendarios esta semana; no se guarda nada
 
 2. ```sh
-   gcal personal calendars busy week person:ana@example.com --duration-minutes 30 --hours 10:00-16:00
+   gcal personal calendars busy person:ana@example.com --duration-minutes 30 --hours 10:00-16:00
    ```
 
    las medias horas libres que compartís dentro del horario laboral

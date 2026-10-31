@@ -57,13 +57,17 @@ la ejecución sigue leyendo tu inicio de sesión habitual, y `session status` lo
 perfil ni elige ninguno: muestra los perfiles que aparecen en los ajustes o que iniciaron sesión alguna vez, cada uno
 con `signed_in`, `account` y `credential_storage`. Lee el llavero, nunca la red.
 
-En un ordenador sin llavero, como un servidor sin escritorio, guarda la sesión en un archivo. El archivo es
-`credentials.json` en la carpeta de estado de `gcal`, legible solo por ti. `gcal doctor` muestra su ruta y los
-perfiles que contiene. El siguiente `session start` sin esa opción devuelve la sesión al llavero.
+En un ordenador donde el llavero no funciona, como un servidor sin escritorio, `session start` guarda la sesión
+en un archivo por sí solo, lo avisa una vez en stderr y responde `credential_storage: "file"`. Nunca pregunta. El
+archivo es `credentials.json` en la carpeta de estado de `gcal`, legible solo por ti. `gcal doctor` muestra su ruta y
+los perfiles que contiene. También puedes elegir el archivo directamente, aunque el llavero es más seguro y no lo
+recomendamos:
 
 ```sh
 gcal personal session start --credential-storage file
 ```
+
+El siguiente `session start` que llegue al llavero devuelve la sesión allí.
 
 ## Sincronizar tus calendarios
 
@@ -106,6 +110,7 @@ Estos comandos leen el almacén local, así que funcionan sin red:
 ```sh
 gcal personal events list                                       # from today on, earliest first
 gcal personal events list ends_at>=2026-11-02 starts_at<=2026-11-06 person:ana@example.com
+gcal personal events list starts_at>=2026-11-02                 # events that start on or after a day
 gcal personal events list changed_at>=2026-10-25                # what changed since a date
 gcal personal events show event:42                              # attendees, Drive files and history
 gcal personal search events roadmap planning                    # by words, and by meaning with the model
@@ -116,13 +121,15 @@ gcal personal links review                                      # copies the too
 ```
 
 `events list` acepta la consulta por campos que acepta cualquier lista de WireCat, y ninguna palabra propia.
-`ends_at>=<date>` deja los eventos que terminan después del inicio de ese día, y `starts_at<=<date>` los que empiezan
-antes de su final, así que juntos dan los eventos de un tramo de días. Una hora exacta va entre comillas, con su
-desfase horario: `ends_at>"2026-11-03T10:00:00+01:00"`. `starts_at` solo admite un inicio más tardío y `ends_at` solo
-un final más temprano, porque el almacén encuentra los eventos por los momentos que abarcan; `starts_at>=…` se
-rechaza e indica el término `ends_at` que hay que escribir en su lugar. `calendar:<id>` y `person:<email>` acotan la
-lista. Sin `starts_at` ni `ends_at`, la lista empieza al inicio de hoy. `gcal personal events list --help` muestra los
-campos.
+`starts_at` acota cuándo empieza un evento, por cualquiera de los dos lados: `starts_at>=2026-11-02` deja los eventos
+que empiezan ese día o después, `starts_at<2026-11-07` los que empiezan antes de él, `starts_at:[2026-11-02 TO 2026-11-07}`
+ambas cosas, y `starts_at:2026-11-02` los eventos de ese único día. `ends_at>=<date>` deja los eventos que terminan
+después del inicio de ese día, así que también se queda un evento que ya está en curso entonces:
+`ends_at>=2026-11-02 starts_at<=2026-11-06` da todo lo que toca esos días. `ends_at` solo admite un final más temprano,
+y deja fuera un evento que termina justo en ese momento. Una hora exacta va entre comillas, con su desfase horario:
+`starts_at>="2026-11-03T10:00:00+01:00"`. Cada campo se nombra una vez; un campo nombrado dos veces se rechaza, así que
+escribe un intervalo. `calendar:<id>` y `person:<email>` acotan la lista. Sin `starts_at` ni `ends_at`, la lista
+empieza al inicio de hoy. `gcal personal events list --help` muestra los campos.
 
 `changed_at>=<date>` deja los eventos guardados por primera vez, movidos, cancelados o eliminados desde esa fecha, cada uno
 con `change` (`new`, `moved` o `cancelled`) y `changed_at`; uno movido dice además dónde estaba en `was` (`starts_at`,
@@ -152,12 +159,15 @@ la invitación.
 Necesita red y no guarda nada: una persona aparece en la respuesta solo con la dirección que diste.
 
 ```sh
-gcal personal calendars busy week person:ana@example.com           # busy times only, never what fills them
-gcal personal calendars busy from:2026-11-02 to:2026-11-06 person:ana@example.com --duration-minutes 30
-gcal personal calendars busy today calendar:3 --duration-minutes 60 --hours 10:00-16:00
+gcal personal calendars busy person:ana@example.com                # this week; busy times only, never what fills them
+gcal personal calendars busy start>=2026-11-02 end<=2026-11-06 person:ana@example.com --duration-minutes 30
+gcal personal calendars busy start>=today end<=today calendar:3 --duration-minutes 60 --hours 10:00-16:00
 ```
 
-- Sin una palabra de tiempo lee esta semana; sin `calendar:`, todos los calendarios que se sincronizan.
+- La consulta nombra la ventana con los propios `start` y `end` de la respuesta: `start>=<date>` desde el inicio de
+  ese día, `end<=<date>` hasta su final. Sin `start` la ventana empieza hoy; sin `end` dura siete días.
+- `person:<email>` y `calendar:<id>` se pueden repetir, un término por cada uno: se pregunta a todos los nombrados. Sin
+  `calendar:` se pregunta a todos los calendarios que se sincronizan.
 - `--duration-minutes` añade `slots`: los huecos de al menos esa duración libres para todos, dentro del horario
   laboral (`--hours`, 09:00-17:00 por defecto), de lunes a viernes, en tu zona horaria.
 - Google muestra los periodos ocupados de una persona solo cuando su calendario está compartido contigo o con tu
