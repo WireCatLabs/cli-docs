@@ -4,6 +4,36 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.6.0 — 31.10.2026
+
+### Añadido
+
+- **`events list` encuentra eventos por su inicio más temprano: `starts_at>=<date>`.** `starts_at` ahora admite
+  cualquiera de los dos lados y un intervalo: `starts_at>=2026-11-02`, `starts_at:[2026-11-02 TO 2026-11-07}` y
+  `starts_at:2026-11-02` para los eventos de un día. Un evento que empieza justo en ese momento se mantiene; un evento
+  de todo el día se compara por su fecha en tu zona horaria. En 0.5.0 `starts_at>=…` se rechazaba. `ends_at` no
+  cambia: solo un final más temprano, estrictamente después.
+
+### Cambios — pueden romper scripts
+
+- **`session start` recurre a un archivo privado cuando el llavero falla, y nunca pregunta.** Antes se detenía con
+  `oauth.not-saved` y te pedía pasar `--credential-storage file`. Ahora inicia sesión, avisa una vez en stderr de que
+  usó `credentials.json` en la carpeta de estado y responde `credential_storage: "file"`. La opción sigue eligiendo
+  el archivo directamente; el llavero sigue siendo el predeterminado y la opción más segura. `session status` y
+  `session end` ya no responden `keyring: "unreachable"`: el fallo del llavero es el aviso en stderr.
+- Una ejecución con carpetas movidas nombra su entrada temporal del llavero según su carpeta de estado, cuando antes
+  la nombraba según su carpeta de configuración; una entrada temporal que dejó una ejecución anterior ya no se lee.
+  `bin/keyring-dedupe` la elimina.
+- **`calendars busy` acepta la consulta estándar por campos, y ninguna palabra propia.** `today`, `week`, `from:` y
+  `to:` se rechazan. La ventana son los propios `start` y `end` de la respuesta: `from:2026-11-02 to:2026-11-06` es
+  `start>=2026-11-02 end<=2026-11-06`, y `today` es `start>=today end<=today`. Sin `start` la ventana empieza hoy,
+  sin `end` dura siete días, así que un `calendars busy` sin más sigue siendo esta semana. `calendar:` y `person:` se
+  mantienen y se pueden seguir repitiendo. Por MCP la entrada es `query`, ya no `words`. La primera pantalla muestra
+  `calendars busy --duration-minutes 30`.
+- **gcal necesita `@wirecat/cli-base` 0.67 y `@wirecat/cli-core` 0.502**, que ahora construyen ellos mismos
+  `store status`, `search events <query>` y las consultas por campos; los comandos, sus respuestas y las claves de
+  permisos son los mismos que en 0.5.0.
+
 ## 0.5.0 — 31.10.2026
 
 ### Añadido
