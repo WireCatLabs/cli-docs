@@ -509,7 +509,7 @@
     "With your agent": "С агентом",
     "Based on the volumes and timings you entered.": "На основе введённого объёма работы и времени.",
     "Give your agent somewhere useful to start.": "Дайте агенту полезную отправную точку.",
-    "Connect Telegram or MAX, then ask a question about a conversation you already have. Add email and notes when you want them in the same workflow.": "Подключите Telegram или MAX и задайте вопрос о своей переписке. Добавьте почту и заметки, когда захотите работать с ними вместе.",
+    "Connect Telegram, WhatsApp or MAX, then ask a question about a conversation you already have. Add email and notes when you want them in the same workflow.": "Подключите Telegram, WhatsApp или MAX и задайте вопрос о своей переписке. Добавьте почту и заметки, когда захотите работать с ними вместе.",
     "Installation guide": "Руководство по установке",
     "Free tools. Your existing agent or model may have its own costs.": "Инструменты бесплатны. Ваш агент или модель могут иметь собственную стоимость.",
     "Search by topic, person and date.": "Ищите по теме, человеку и дате.",
@@ -664,14 +664,15 @@
     "zm · your meeting transcripts and recordings": "zm · расшифровки и записи ваших встреч",
     "memo · notes, mail and messages in one place": "memo · заметки, почта и сообщения в одном месте",
     "wa · your linked account and business bots": "wa · ваш личный аккаунт и бизнес-боты",
-    "Start with the tools you use. Telegram, MAX and WhatsApp are WireCat’s messaging tools; Zoom, Google Drive, Google Calendar and Memo add your meetings, documents, calendars and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Начните с привычных инструментов. Telegram, MAX и WhatsApp — инструменты WireCat для переписки; Zoom, Google Drive, Google Calendar и Memo добавляют ваши встречи, документы, календари и заметки. Почта через Himalaya и Markdown-заметки, в том числе Obsidian, могут работать вместе с ними через вашего агента.",
+    "Start with the tools you use. Telegram, WhatsApp and MAX are WireCat’s messaging tools; Zoom, Google Drive, Google Calendar and Memo add your meetings, documents, calendars and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Начните с привычных инструментов. Telegram, WhatsApp и MAX — инструменты WireCat для переписки; Zoom, Google Drive, Google Calendar и Memo добавляют ваши встречи, документы, календари и заметки. Почта через Himalaya и Markdown-заметки, в том числе Obsidian, могут работать вместе с ними через вашего агента.",
     "WhatsApp docs": "Документация WhatsApp",
     "Blog": "Блог",
     "Download": "Скачать",
     "Desktop app": "Приложение для компьютера",
     "Download the desktop app": "Скачать приложение для компьютера",
     "Calendar": "Календарь",
-    "gcal · your Google calendars, searched offline": "gcal · ваши Google Календари, поиск без интернета"
+    "gcal · your Google calendars, searched offline": "gcal · ваши Google Календари, поиск без интернета",
+    "Google Drive docs": "Google Drive — документация"
   },
   "es": {
     "Put the context from your chats to work — for you, your bots and the groups you run.": "Aprovecha el contexto de tus chats: para ti, tus bots y los grupos que administras.",
@@ -1171,7 +1172,7 @@
     "With your agent": "Con tu agente",
     "Based on the volumes and timings you entered.": "Según los volúmenes y tiempos que has indicado.",
     "Give your agent somewhere useful to start.": "Dale a tu agente un punto de partida útil.",
-    "Connect Telegram or MAX, then ask a question about a conversation you already have. Add email and notes when you want them in the same workflow.": "Conecta Telegram o MAX y pregunta sobre una conversación que ya tengas. Añade correo y notas cuando quieras usarlos en el mismo flujo.",
+    "Connect Telegram, WhatsApp or MAX, then ask a question about a conversation you already have. Add email and notes when you want them in the same workflow.": "Conecta Telegram, WhatsApp o MAX y pregunta sobre una conversación que ya tengas. Añade correo y notas cuando quieras usarlos en el mismo flujo.",
     "Installation guide": "Guía de instalación",
     "Free tools. Your existing agent or model may have its own costs.": "Las herramientas son gratuitas. Tu agente o modelo pueden tener sus propios costes.",
     "Search by topic, person and date.": "Busca por tema, persona y fecha.",
@@ -1337,12 +1338,13 @@
     "zm · your meeting transcripts and recordings": "zm · transcripciones y grabaciones de tus reuniones",
     "memo · notes, mail and messages in one place": "memo · notas, correo y mensajes en un solo lugar",
     "wa · your linked account and business bots": "wa · tu cuenta vinculada y bots de empresa",
-    "Start with the tools you use. Telegram, MAX and WhatsApp are WireCat’s messaging tools; Zoom, Google Drive, Google Calendar and Memo add your meetings, documents, calendars and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Empieza con las herramientas que usas. Telegram, MAX y WhatsApp son las herramientas de mensajería de WireCat; Zoom, Google Drive, Google Calendar y Memo añaden tus reuniones, documentos, calendarios y notas. El correo con Himalaya y las notas Markdown, incluidas las de Obsidian, pueden formar parte del mismo flujo con tu agente.",
+    "Start with the tools you use. Telegram, WhatsApp and MAX are WireCat’s messaging tools; Zoom, Google Drive, Google Calendar and Memo add your meetings, documents, calendars and notes. Email through Himalaya and Markdown notes, including Obsidian, can join the same agent workflow.": "Empieza con las herramientas que usas. Telegram, WhatsApp y MAX son las herramientas de mensajería de WireCat; Zoom, Google Drive, Google Calendar y Memo añaden tus reuniones, documentos, calendarios y notas. El correo con Himalaya y las notas Markdown, incluidas las de Obsidian, pueden formar parte del mismo flujo con tu agente.",
     "WhatsApp docs": "Documentación de WhatsApp",
     "Blog": "Blog",
     "Download": "Descargar",
     "Desktop app": "Aplicación de escritorio",
     "Download the desktop app": "Descargar la aplicación de escritorio",
-    "gcal · your Google calendars, searched offline": "gcal · tus calendarios de Google, búsqueda sin conexión"
+    "gcal · your Google calendars, searched offline": "gcal · tus calendarios de Google, búsqueda sin conexión",
+    "Google Drive docs": "Docs de Google Drive"
   }
 }
