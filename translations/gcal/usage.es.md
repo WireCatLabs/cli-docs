@@ -51,7 +51,9 @@ gcal session list                       # every profile here, and whether each h
 `session status` da la dirección de correo de la cuenta, los permisos que concedió Google (`scopes`, y `grants` con
 las palabras de `--grant`), `state`: `saved` o `missing`, y `credential_storage`: `keyring` o `file`. Con `--check`,
 `verified: true` significa que Google acaba de aceptar la sesión. `session end` borra la sesión de donde está
-guardada; conserva qué cuenta es la del perfil y los datos de tus calendarios guardados. `session list` no recibe
+guardada; conserva qué cuenta es la del perfil y los datos de tus calendarios guardados. En una ejecución con carpetas
+movidas borra solo el inicio de sesión propio de esa ejecución: la respuesta dice entonces `kept: "keyring"`, porque
+la ejecución sigue leyendo tu inicio de sesión habitual, y `session status` lo sigue mostrando. `session list` no recibe
 perfil ni elige ninguno: muestra los perfiles que aparecen en los ajustes o que iniciaron sesión alguna vez, cada uno
 con `signed_in`, `account` y `credential_storage`. Lee el llavero, nunca la red.
 
@@ -85,9 +87,14 @@ donde se quedó el anterior. El límite es de 15 minutos en una terminal y de 45
 MCP; `--timeout` lo cambia, y el número de peticiones a Google se ajusta a él. `--max-pages <n>` reduce todavía más ese
 número. `--rescan` vuelve a empezar todos los calendarios.
 
+Cuando un calendario no se puede sincronizar, `sync` no imprime nada en stdout y termina con `sync.partial`. El mensaje
+nombra cada calendario que falló y su error; `details.calendars` contiene el resultado de cada calendario, con `error`
+en los que fallaron. Los calendarios que sí se sincronizaron quedan guardados, y volver a ejecutar `sync` es seguro.
+
 Los casos de un evento periódico se leen uno a uno, incluidos los cancelados. Un evento borrado del pasado conserva su
 registro; un evento futuro borrado se marca como cancelado. `--embed` necesita el modelo de significado, que `gcal`
-nunca descarga por sí solo.
+nunca descarga por sí solo: `gcal models download e5-small` lo descarga una vez en la carpeta que comparten todas las
+herramientas de WireCat, y `gcal models list` muestra qué modelos hay.
 
 `gcal` nunca guarda el código de acceso ni el PIN de una reunión. Un enlace para unirse se guarda sin su query string,
 y se descarta cualquier línea de la descripción que mencione un código de acceso, una contraseña o un PIN.
@@ -99,6 +106,8 @@ Estos comandos leen el almacén local, así que funcionan sin red:
 ```sh
 gcal personal events list week                                  # this week's events, earliest first
 gcal personal events list from:2026-11-02 to:2026-11-06 person:ana@example.com
+gcal personal events list changed:2026-10-25                    # what changed since a date
+gcal personal events list week overlapping                      # meetings that clash
 gcal personal events show event:42                              # attendees, Drive files and history
 gcal personal search roadmap planning                           # by words, and by meaning with the model
 gcal personal people list                                       # everyone in this week's events
@@ -106,10 +115,18 @@ gcal personal people link email:ana@example.com telegram:12345  # the same perso
 gcal personal links review                                      # copies the tool could not join to one event
 ```
 
+`changed:<date>` deja los eventos guardados por primera vez, movidos, cancelados o eliminados desde esa fecha, cada uno
+con `change` (`new`, `moved` o `cancelled`) y `changed_at`; uno movido dice además dónde estaba en `was` (`starts_at`,
+`ends_at`). Lee lo que guardaron las sincronizaciones, así que solo ve lo que trajo una sincronización, y una reunión
+movida y devuelta a su hora no cuenta como cambio. `overlapping` deja los eventos con hora que se solapan con otro, cada
+uno con `overlaps`, los ids de los demás. Un evento cuenta solo cuando ocupa tu tiempo: no cancelado, no de todo el
+día, y no rechazado ni marcado como libre por ti.
+
 `search` lee el almacén por defecto (`--backend archive`). `--backend server` usa en su lugar la búsqueda del propio
 Google Calendar, en los calendarios que se sincronizan. También encuentra eventos fuera del periodo sincronizado (un
-año atrás, tres meses por delante). Solo lee, no guarda nada en el almacén y necesita red; `--exact` y `--cursor` no
-se aplican:
+año atrás, tres meses por delante). Solo lee, no guarda nada en el almacén y necesita red. Google devuelve sus
+resultados en un orden que no indica, así que `gcal` los lista del más temprano al más tardío y rechaza `--newest`;
+`--exact` y `--cursor` tampoco se aplican:
 
 ```sh
 gcal personal search --backend server quarterly review
@@ -117,6 +134,10 @@ gcal personal search --backend server quarterly review
 
 `--backend both` se rechaza: el almacén y Google ordenan y paginan los eventos de forma distinta, así que una lista
 combinada no tendría un orden único ni una página siguiente. Haz las dos búsquedas una tras otra.
+
+Las dos responden con una lista de eventos en `items`. Una búsqueda en el almacén pagina con un cursor: si hay más,
+`page.next_cursor` es el valor para `--cursor`. Cada evento indica en `untrusted` los campos que escribió quien envió
+la invitación.
 
 ## Cuándo están libres las personas
 
@@ -177,7 +198,7 @@ Un perfil con sesión iniciada sin `--grant write` solo lee:
 
 ## Cambiar eventos
 
-Tras `session start --grant write`, `events create | update | delete | respond` cambian Google Calendar y el almacén a
+Tras `session start --grant write`, `events create | update | delete | move | respond` cambian Google Calendar y el almacén a
 la vez. Un calendario se indica por su id de `calendars list`, como `3` abajo. Son las escrituras de calendario comunes
 de cli-core; se llega a Google con los mismos métodos generados que usa `gcal api`.
 
@@ -189,19 +210,32 @@ gcal personal events create 3 --title "Standup" --start-time 2026-11-02T09:30 --
 gcal personal events update event:42 --series --repeat "FREQ=WEEKLY;BYDAY=TU" --no-notify
 gcal personal events update event:42 --start-date 2026-11-02 --end-date 2026-11-02 --no-notify
 gcal personal events update event:42 --start-time 2026-11-02T14:00 --end-time 2026-11-02T15:00 --no-notify
+gcal personal events update event:42 --following --start-time 2026-11-09T10:00 --end-time 2026-11-09T10:30 --no-notify
 gcal personal events respond event:42 accepted --notify
+gcal personal events move event:42 --to-calendar 4 --no-notify
 gcal personal events delete event:42 --no-notify
+gcal personal events delete event:42 --following --no-notify
 ```
 
-- Cada escritura pregunta antes; `--yes` responde por un script, y `--dry-run` muestra la escritura sin hacerla.
+- Crear, cambiar, mover y responder se hacen sin preguntar. Un borrado pregunta antes; `--yes` responde por un script.
+  `--dry-run` muestra cualquier escritura sin hacerla. Para que también pregunte por las demás, pon sus claves en `ask`
+  (consulta los [permisos](./configuration.md#permissions)).
 - Si hay asistentes además de ti, indica si Google les envía un correo: `--notify` o `--no-notify`. `--notify` se
   rechaza hasta que permitas `events.notify` (consulta los [permisos](./configuration.md#permissions)).
 - Un cambio lleva la versión que vio la última sincronización. Si el evento ha cambiado en Google desde entonces, la
   escritura se detiene con `event.conflict`: ejecuta `sync` y vuelve a intentarlo. No se sobrescribe nada.
 - Una creación cuya respuesta se perdió termina en `outcome_unknown` e indica un id; repítela con `--id <id>` y Google
   encuentra el evento en lugar de crear un segundo.
-- En un evento periódico, una escritura cambia el caso que indicas; `--series` cambia toda la serie. Borrar una serie
-  completa se rechaza hasta que permitas `events.delete.series`.
+- En un evento periódico, una escritura cambia el caso que indicas; `--series` cambia toda la serie, y `--following`
+  este caso y todos los siguientes. Borrar una serie completa se rechaza hasta que permitas `events.delete.series`, y
+  también una regla `--repeat` nueva que termina la serie antes (un `COUNT` nuevo o un `UNTIL` anterior).
+- `update --following` termina la serie justo antes del caso y empieza ahí una serie nueva con tu cambio, conservando
+  a los asistentes. Una serie que termina tras un número de veces (`COUNT`) necesita `--repeat` para la parte nueva. Si
+  falla terminar la serie antigua, el error indica el id de la serie nueva; repite con `--id <id>`.
+  `delete --following` solo termina la serie y, como todo borrado, pregunta antes.
+- `move --to-calendar <id>` mueve un evento, con su id, a otro calendario de la misma cuenta en el que puedas
+  escribir. Un caso se mueve solo con toda su serie (`--series`). Google solo mueve eventos normales, no tiempo de
+  concentración, fuera de la oficina, lugar de trabajo ni cumpleaños.
 - `--repeat` recibe una regla RFC 5545: `FREQ` es `DAILY`, `WEEKLY` o `MONTHLY`, con `INTERVAL`, `BYDAY` (`MO,WE`; en
   una regla mensual también `1MO` o `-1FR`) y `COUNT` o `UNTIL`. `UNTIL` es una fecha, `20261231`, para un evento de
   todo el día, y una hora UTC, `20261231T230000Z`, para uno con hora. Una regla nueva necesita `--series` y conserva
@@ -237,3 +271,5 @@ El servidor ofrece todos los comandos, también los que escriben. Los permisos d
 consulta los [ajustes](./configuration.md#permissions). Eso incluye compartir un calendario (`acl`) y cederlo a otra
 cuenta (`calendars.transferOwnership`): un agente puede hacer ambas cosas sin preguntar. Hay dos comandos que nunca se
 ofrecen a un agente: `api call` y `calendars.clear`, que vacía un calendario. Esos los ejecutas tú, en una terminal.
+Tampoco los comandos que configuran el inicio de sesión y la conexión con el agente: `session start` y `session end`,
+y `mcp serve`, `mcp add`, `mcp config`, `mcp check`, `mcp revoke` y `mcp server start | stop | status`.

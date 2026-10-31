@@ -23,7 +23,10 @@ La sesión de Google se guarda en el llavero del sistema, con el servicio `gcal-
 también guarda el ID y el secreto de tu cliente de OAuth, así que renovar la sesión no vuelve a necesitar el archivo del
 cliente. Google dice que el secreto de cliente de una aplicación de escritorio no es confidencial, pero `gcal` nunca lo
 muestra. Ningún comando, error, registro ni registro de ejecución muestra un token ni el secreto del cliente; la
-dirección de la página de inicio de sesión no contiene ninguno de los dos. `session end` borra la entrada.
+dirección de la página de inicio de sesión no contiene ninguno de los dos. `session end` borra la entrada. Una
+ejecución con carpetas movidas (`GCAL_CONFIG_DIR`, `GCAL_STATE_DIR` u otro `HOME`) lee esa entrada pero nunca la
+cambia: su propio inicio de sesión va a una entrada aparte, `gcal-cli:<config folder>`, y su `session end` borra solo
+esa.
 
 Con `session start --credential-storage file`, esa misma entrada va a `credentials.json` en la carpeta de estado de
 `gcal`, con modo 600: cualquiera que pueda leer tus archivos como tú puede leer la sesión. Úsalo solo donde no funcione

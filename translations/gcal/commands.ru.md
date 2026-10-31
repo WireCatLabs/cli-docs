@@ -338,7 +338,7 @@ gcal events create <calendar> [options]
 
 ### `gcal events update`
 
-change an event; with --series every occurrence of the repeating event; new times or dates switch it between timed and all-day
+change an event; with --series every occurrence of the repeating event, with --following this occurrence and every later one; new times or dates switch it between timed and all-day
 
 **Changes something in the service.**
 
@@ -363,18 +363,20 @@ gcal events update <event> [options]
 | `--repeat <rule>` | how it repeats, with --series: an RFC 5545 rule: FREQ=DAILY\|WEEKLY\|MONTHLY, and INTERVAL, BYDAY (MO,WE; in MONTHLY also 1MO or -1FR), COUNT or UNTIL (a date, YYYYMMDD, for an all-day event; a UTC time, YYYYMMDDTHHMMSSZ, for a timed one). |
 | `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
 | `--series` | change the whole repeating event, not only this occurrence. |
+| `--following` | change this occurrence and every later one: the repeating event ends before it and a new one starts with the change. |
+| `--id <id>` | with --following, the id an outcome_unknown named: a retry finds that new series. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 
-**Returns:** change an event; with --series every occurrence of the repeating event; new…
+**Returns:** change an event; with --series every occurrence of the repeating event, with…
 
-**Example:** `gcal personal events update event:42 --start-time 2026-11-02T14:00 --end-time 2026-11-02T15:00 --notify`, `gcal personal events update event:42 --series --repeat 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20261231T230000Z' --no-notify`
+**Example:** `gcal personal events update event:42 --start-time 2026-11-02T14:00 --end-time 2026-11-02T15:00 --notify`, `gcal personal events update event:42 --series --repeat 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20261231T230000Z' --no-notify`, `gcal personal events update event:42 --following --start-time 2026-11-09T10:00 --end-time 2026-11-09T10:30 --no-notify`
 
 ### `gcal events delete`
 
-delete an event; a whole repeating event needs events.delete.series allowed first
+delete an event; a whole repeating event, or every later occurrence, needs events.delete.series allowed first
 
 **Changes something in the service.**
 
@@ -390,14 +392,43 @@ gcal events delete <event> [options]
 |---|---|
 | `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
 | `--series` | delete the whole repeating event, not only this occurrence. |
+| `--following` | delete this occurrence and every later one: the repeating event ends before it. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 
-**Returns:** delete an event; a whole repeating event needs events.delete.series allowed…
+**Returns:** delete an event; a whole repeating event, or every later occurrence, needs…
 
-**Example:** `gcal personal events delete event:42 --no-notify`
+**Example:** `gcal personal events delete event:42 --no-notify`, `gcal personal events delete event:42 --following --no-notify`
+
+### `gcal events move`
+
+move an event, with its id, to another calendar of the account; a repeating one moves whole
+
+**Changes something in the service.**
+
+```sh
+gcal events move <event> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `event` | required | the event's id, or event:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
+| `--to-calendar <id>` | the calendar to move it to: its id, or the provider's id. |
+| `--series` | move the whole repeating event an occurrence belongs to. |
+| `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
+| `--no-notify` | the provider mails nobody. |
+| `--json` | one JSON value. |
+| `--jsonl` | one JSON object per item. |
+
+**Returns:** move an event, with its id, to another calendar of the account; a repeating…
+
+**Example:** `gcal personal events move event:42 --to-calendar 4 --no-notify`
 
 ### `gcal events respond`
 
@@ -446,7 +477,7 @@ gcal search <words> [options]
 | `--cursor <cursor>` | continue from a page's next_offset. Default: `0`. |
 | `--exact` | every word as written, no word stems. |
 | `--newest` | latest start first instead of best first. |
-| `--backend <archive\|server\|both>` | where to search: archive, the local store, or server, Google Calendar's own search over the synced calendars. One of: `archive`, `server`, `both`. Default: `archive`. |
+| `--backend <archive\|server\|both>` | where to search: archive, the local store, or server, Google Calendar's own search over the synced calendars, earliest first. One of: `archive`, `server`, `both`. Default: `archive`. |
 
 **Returns:** find stored events by words and meaning, or with --backend server ask Google
 
@@ -598,7 +629,7 @@ gcal api call <method> [options]
 
 | Option | What it does |
 |---|---|
-| `--params <json>` | query and path parameters as a JSON object. Default: `[object Object]`. |
+| `--params <json>` | query and path parameters as a JSON object; none if left out. |
 | `--body <json>` | request body as a JSON object. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
@@ -1488,6 +1519,51 @@ gcal doctor
 **Returns:** check this installation; no keyring or network
 
 **Example:** `gcal doctor`, `gcal doctor --json`
+
+## `gcal models`
+
+models that run on this machine
+
+### `gcal models list`
+
+speech and embedding models, their download status and the default of each kind
+
+```sh
+gcal models list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: gcal commands info models list
+
+**Next usually:** `gcal models download <model>`
+
+**Example:** `gcal models list`, `gcal models list kind:text`
+
+### `gcal models download`
+
+download and verify one speech or embedding model
+
+**Changes something on this computer only.**
+
+```sh
+gcal models download <model> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `model` | required | a model id from models list. |
+
+| Option | What it does |
+|---|---|
+| `--offline` | refuse a download that needs the network. |
+| `--accept-terms` | accept the model's licence terms, for a model that has its own. |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: gcal commands info models download
+
+**Example:** `gcal models download e5-small`
 
 ## `gcal guide`
 

@@ -4,8 +4,8 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.1.0 (0.1.1 changed only its agent guide), its commands and
-its source, checked on 29 October 2026; they are checked again at each release. The marks for the other tools come from their own
+your job. The marks for `gcal` come from its release 0.3.0, its commands and its source, checked on 31 October 2026; they are
+checked again at each release. The marks for the other tools come from their own
 READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
 
@@ -13,7 +13,7 @@ The tools:
 
 - **gcal**: this tool. Keeps a copy of the calendars you choose on your computer, searches it without the internet,
   and joins attendees to the people you know from your other WireCat tools. It signs in read-only; after you allow
-  writing, it also adds, changes and deletes events and answers invitations.
+  writing, it also adds, changes, moves and deletes events and answers invitations.
 - **[gcalcli](https://github.com/insanum/gcalcli)**: the classic Google Calendar command line, in Python: agenda,
   week and month views, search, add and edit (3,778 stars, last release 4 October 2024).
 - **[gog](https://github.com/openclaw/gogcli)**: a Go command line for all of Google Workspace, built for agents, with
@@ -35,8 +35,8 @@ The tools:
 | Today's or this week's meetings in one command | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [🟡](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Type dates in words, such as "tomorrow 3pm" or "next friday" | 🟡 | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/utils.py) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/dates.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | n/a | n/a |
 | Meetings from all your calendars and accounts in one list | 🟡 | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
-| See what changed since a date: new, moved and cancelled meetings | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
-| Find meetings that overlap | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| See what changed since a date: new, moved and cancelled meetings | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
+| Find meetings that overlap | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | **Find a meeting** | | | | | | |
 | Find a meeting by what it was about, not by its exact words | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Search your meetings without the internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | ❌ | ❌ | ❌ |
@@ -67,9 +67,13 @@ The tools:
 Notes on the `gcal` column:
 
 - **Read only until you allow more.** `gcal session start` asks Google for read-only access. With `--grant write` it
-  also adds, changes and deletes events, repeating ones included, and answers invitations (`events create`,
-  `update`, `delete`, `respond`); `--grant sharing` adds who can see a calendar. It cannot yet move an event to
-  another calendar, or change "this and all following" occurrences of a repeating event.
+  also adds, changes, moves and deletes events and answers invitations (`events create`, `update`, `move`, `delete`,
+  `respond`). On a repeating event a change or delete covers one occurrence, the whole series, or this and all
+  following occurrences (`--following`). `events move --to-calendar` moves an event, with its id, to another calendar
+  of the same account. `--grant sharing` adds who can see a calendar.
+- **What changed and what clashes.** `events list changed:<date>` lists the meetings first saved, moved or cancelled
+  since that date, with each moved one's old time. It reads the copy on your computer, so it sees what the syncs
+  brought in. `events list overlapping` lists the meetings that clash with another one you attend.
 - **Your own Google app.** Today every user of `gcal` makes a Google Cloud project and an OAuth client, and gives
   `gcal` the client file at sign-in. See [installation](./installation.md).
 - **Dates in words.** `events list` takes `today`, `week`, and `from:` and `to:` with a date. It does not read
@@ -86,9 +90,11 @@ Notes on the `gcal` column:
 - **When people are free.** `calendars busy` asks Google when your calendars and other people are taken, and with
   `--duration-minutes` gives the free stretches they share within working hours.
 - **An agent cannot change your calendar unless you allow it.** Without `--grant write` the sign-in itself is the
-  limit. After it, a change asks first at a terminal, but over MCP no one is there to ask, so an agent changes
-  events, and with `--grant sharing` shares the calendar, without a question. To stop that, set the profile's
-  permissions to `deny` or `readonly` (for example `permissions.api.calendar.acl deny`), or start the server with
+  limit. After it, adding, changing, moving and answering go ahead without a question; a delete asks first at a
+  terminal. Over MCP no one is there to ask, so an agent also deletes events, and with `--grant sharing` shares the
+  calendar, without a question. Mailing attendees and deleting a whole series stay refused until you allow them. To
+  be asked, or to stop writes, set the profile's permissions to `ask`, `deny` or `readonly` (for example
+  `permissions.events.create ask` or `permissions.api.calendar.acl deny`), or start the server with
   `mcp serve --permission` to make one key stricter for that server.
 - **Text from invitations.** Anyone can send you an invitation, so its title, notes and place are someone else's
   words. Each answer with events lists these fields under `untrusted`, and the MCP server and the agent instructions
@@ -104,8 +110,7 @@ Notes on the `gcal` column:
 
 ## When another tool fits better
 
-- **gog**: you want to move a meeting to another calendar, find meetings that overlap, or see what changed since a
-  date.
+- **gog**: you work across all of Google Workspace from one command line, not only the calendar.
 - **Claude's connector**: you want help with your calendar in Claude on the web or the phone, with nothing to install
   and no Google Cloud project.
 - **Google Workspace MCP**: you need one MCP server for a whole team on Google Workspace, reached over HTTP.

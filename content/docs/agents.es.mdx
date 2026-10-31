@@ -55,6 +55,7 @@ Un agente no tiene terminal en la que dibujar un código QR ni desde la que abri
 - **Los códigos de MAX caducan rápido:** un código QR de MAX dura unos 2 minutos, así que el agente lo pega enseguida. Cuando caduca, el agente vuelve a ejecutar el comando para obtener uno nuevo.
 - **Zoom:** sin terminal, `zm personal session start` imprime `Open this URL to approve Zoom login:` y la URL. El agente te da la URL como enlace. Ábrela en un navegador de este mismo ordenador, porque Zoom responde a un receptor que está aquí.
 - **Google Drive:** `drive personal session start` siempre imprime su URL de acceso a Google y además intenta abrir un navegador. Si no se abre ninguno, el agente te da la URL impresa como enlace para abrirla en este mismo ordenador.
+- **Google Calendar:** `gcal personal session start` siempre imprime `Open Google sign-in:` y la URL, y además intenta abrir un navegador. Si no se abre ninguno, el agente te da la URL como enlace para abrirla en este mismo ordenador. Antes necesita tu propio cliente de Google; consulta la [configuración de Google Calendar](./gcal/configuration.md#your-own-google-client).
 
 El acceso con número de teléfono, la contraseña de verificación en dos pasos y el primer registro de tu app de Telegram siguen necesitándote en una terminal.
 
