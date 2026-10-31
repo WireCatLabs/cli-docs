@@ -134,17 +134,16 @@ list the account's calendars from the provider, and which of them sync
 **Changes something on this computer only.**
 
 ```sh
-gcal calendars list [options]
+gcal calendars list [query]
 ```
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** list the account's calendars from the provider, and which of them sync
+**Returns:** calendar — id, external_id, title, timezone, access_role, primary, synced, seen_at; every field: gcal commands info calendars list
 
-**Example:** `gcal personal calendars list --json`
+**Example:** `gcal personal calendars list --json`, `gcal personal calendars list synced:true`
 
 ### `gcal calendars sync`
 
@@ -153,19 +152,14 @@ sync this calendar from now on
 **Changes something on this computer only.**
 
 ```sh
-gcal calendars sync <calendar> [options]
+gcal calendars sync <calendar>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `calendar` | required | the calendar's id, or the provider's id. |
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** sync this calendar from now on
+**Returns:** calendar — id, external_id, title, timezone, access_role, primary, synced, seen_at; every field: gcal commands info calendars sync
 
 **Example:** `gcal personal calendars sync 3`
 
@@ -176,19 +170,14 @@ stop syncing this calendar; what is stored stays
 **Changes something on this computer only.**
 
 ```sh
-gcal calendars unsync <calendar> [options]
+gcal calendars unsync <calendar>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `calendar` | required | the calendar's id, or the provider's id. |
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** stop syncing this calendar; what is stored stays
+**Returns:** calendar — id, external_id, title, timezone, access_role, primary, synced, seen_at; every field: gcal commands info calendars unsync
 
 **Example:** `gcal personal calendars unsync 3`
 
@@ -206,12 +195,10 @@ gcal calendars busy [words] [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 | `--duration-minutes <minutes>` | find free stretches at least this long, 5–1440. |
 | `--hours <from-to>` | working hours in your time zone, Monday to Friday, with --duration-minutes. Default: `09:00-17:00`. |
 
-**Returns:** when calendars and people are taken, asked of the provider and not stored;…
+**Returns:** calendar busy — start, end, timezone, calendars, slots, unknown; every field: gcal commands info calendars busy
 
 **Example:** `gcal personal calendars busy week person:ana@example.com --json`, `gcal personal calendars busy from:2026-11-02 to:2026-11-06 person:ana@example.com --duration-minutes 30 --hours 10:00-16:00`
 
@@ -227,32 +214,13 @@ gcal sync [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 | `--rescan` | list every synced calendar's window again, dropping a round in progress. |
 | `--max-pages <pages>` | at most this many requests to the provider in this run; as many as fit the deadline if not given. |
 | `--embed` | also index new events for meaning search, with a model already downloaded. |
 
-**Returns:** bring the synced calendars up to date: what changed since the last sync, or…
+**Returns:** calendar sync — provider, account_id, window, calendars, synced, not_synced, complete, state, and 4 more; every field: gcal commands info sync
 
 **Example:** `gcal personal sync`, `gcal personal sync --rescan --embed`, `gcal personal sync --timeout 2m`
-
-## `gcal status`
-
-how far each synced calendar's sync is: entries done, partial or complete, and when it last moved
-
-```sh
-gcal status [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** how far each synced calendar's sync is: entries done, partial or complete,…
-
-**Example:** `gcal personal status --json`
 
 ## `gcal events`
 
@@ -263,41 +231,34 @@ the account's stored events
 list stored events, earliest first
 
 ```sh
-gcal events list [words] [options]
+gcal events list [query] [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `words` | optional | today, week, from:<date>, to:<date>, person:<who>, calendar:<id>. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 | `--limit <n>` | events at most, 1–1000. Default: `100`. |
 
-**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 8 more; every field: gcal commands info events list
+**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 12 more; every field: gcal commands info events list
 
-**Example:** `gcal personal events list week --json`, `gcal personal events list from:2026-11-02 to:2026-11-06 person:ana@example.com`
+**Example:** `gcal personal events list ends_at>=2026-11-02 starts_at<2026-11-07 --json`, `gcal personal events list ends_at>=today person:ana@example.com`
 
 ### `gcal events show`
 
 one event: its calendar copies, attendees with their person, Drive files and history
 
 ```sh
-gcal events show <event> [options]
+gcal events show <event>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `event` | required | the event's id, or event:<id>. |
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** one event: its calendar copies, attendees with their person, Drive files and…
+**Returns:** calendar event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 17 more; every field: gcal commands info events show
 
 **Example:** `gcal personal events show event:42 --json`
 
@@ -329,10 +290,8 @@ gcal events create <calendar> [options]
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
 | `--id <id>` | the id a create that ended in outcome_unknown named: a retry finds that event. |
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 
-**Returns:** add an event to a calendar; with --repeat, one that repeats
+**Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events create
 
 **Example:** `gcal personal events create 3 --title 'Example planning' --start-time 2026-11-02T10:00 --end-time 2026-11-02T11:00`, `gcal personal events create 3 --title 'Example review' --start-date 2026-11-03 --end-date 2026-11-03 --attendee ana@example.com --no-notify`, `gcal personal events create 3 --title 'Example standup' --start-time 2026-11-02T09:30 --end-time 2026-11-02T09:45 --repeat 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=12'`
 
@@ -367,10 +326,8 @@ gcal events update <event> [options]
 | `--id <id>` | with --following, the id an outcome_unknown named: a retry finds that new series. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 
-**Returns:** change an event; with --series every occurrence of the repeating event, with…
+**Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events update
 
 **Example:** `gcal personal events update event:42 --start-time 2026-11-02T14:00 --end-time 2026-11-02T15:00 --notify`, `gcal personal events update event:42 --series --repeat 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20261231T230000Z' --no-notify`, `gcal personal events update event:42 --following --start-time 2026-11-09T10:00 --end-time 2026-11-09T10:30 --no-notify`
 
@@ -395,10 +352,8 @@ gcal events delete <event> [options]
 | `--following` | delete this occurrence and every later one: the repeating event ends before it. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 
-**Returns:** delete an event; a whole repeating event, or every later occurrence, needs…
+**Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events delete
 
 **Example:** `gcal personal events delete event:42 --no-notify`, `gcal personal events delete event:42 --following --no-notify`
 
@@ -423,10 +378,8 @@ gcal events move <event> [options]
 | `--series` | move the whole repeating event an occurrence belongs to. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 
-**Returns:** move an event, with its id, to another calendar of the account; a repeating…
+**Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events move
 
 **Example:** `gcal personal events move event:42 --to-calendar 4 --no-notify`
 
@@ -450,38 +403,10 @@ gcal events respond <event> <response> [options]
 | `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 
-**Returns:** answer an invitation; the organiser is told only with --notify
+**Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events respond
 
 **Example:** `gcal personal events respond event:42 accepted --notify`
-
-## `gcal search`
-
-find stored events by words, and by meaning when its model is downloaded; with --backend server, ask Google instead
-
-```sh
-gcal search <words> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `words` | required | what to find in titles, descriptions, places and attendees. |
-
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-| `--limit <n>` | events per page. Default: `20`. |
-| `--cursor <cursor>` | continue from a page's next_offset. Default: `0`. |
-| `--exact` | every word as written, no word stems. |
-| `--newest` | latest start first instead of best first. |
-| `--backend <archive\|server\|both>` | where to search: archive, the local store, or server, Google Calendar's own search over the synced calendars, earliest first. One of: `archive`, `server`, `both`. Default: `archive`. |
-
-**Returns:** find stored events by words and meaning, or with --backend server ask Google
-
-**Example:** `gcal personal search roadmap planning --json`, `gcal personal search --backend server quarterly review`
 
 ## `gcal people`
 
@@ -492,19 +417,14 @@ the people in the account's events
 one event's attendees, or everyone attending this week's events
 
 ```sh
-gcal people list [event] [options]
+gcal people list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `event` | optional | the event's id, or event:<id>. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** one event's attendees, or everyone attending this week's events
+**Returns:** calendar attendee — email, name, response, organizer, optional, resource, self, person, and 2 more; every field: gcal commands info people list
 
 **Example:** `gcal personal people list --json`, `gcal personal people list event:42`
 
@@ -515,7 +435,7 @@ join an attendee to a person the owner knows elsewhere
 **Changes something on this computer only.**
 
 ```sh
-gcal people link <person> <other> [options]
+gcal people link <person> <other>
 ```
 
 | Argument | | What it is |
@@ -523,12 +443,7 @@ gcal people link <person> <other> [options]
 | `person` | required | an attendee's address as email:<address>, or a person:<id>. |
 | `other` | required | the same person in another tool, as <provider>:<person>, or me. |
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** join an attendee to a person the owner knows elsewhere
+**Returns:** calendar linked person — person, name, identities; every field: gcal commands info people link
 
 **Example:** `gcal personal people link email:ana@example.com telegram:12345`
 
@@ -541,15 +456,10 @@ calendar copies the rules could not join alone
 copies that fit two or more events equally well, waiting for the owner's choice
 
 ```sh
-gcal links review [options]
+gcal links review
 ```
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** copies that fit two or more events equally well, waiting for the owner's choice
+**Returns:** calendar link review — id, entry_id, reason, candidates, untrusted; every field: gcal commands info links review
 
 **Example:** `gcal personal links review --json`
 
@@ -560,7 +470,7 @@ join a copy to the event you choose, or keep it apart
 **Changes something on this computer only.**
 
 ```sh
-gcal links resolve <review> <choice> [options]
+gcal links resolve <review> <choice>
 ```
 
 | Argument | | What it is |
@@ -568,14 +478,53 @@ gcal links resolve <review> <choice> [options]
 | `review` | required | the review's id from links review. |
 | `choice` | required | one of its candidates, as event:<id>, or apart. |
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** join a copy to the event you choose, or keep it apart
+**Returns:** calendar link resolution — id, status, chosen; every field: gcal commands info links resolve
 
 **Example:** `gcal personal links resolve 7 event:42`
+
+## `gcal store`
+
+the local store of calendar events
+
+### `gcal store status`
+
+how far each synced calendar's sync is: entries done, partial or complete, and when it last moved
+
+```sh
+gcal store status
+```
+
+**Returns:** calendar sync progress — calendar_id, external_id, title, round, job, profile, done, total, and 5 more; every field: gcal commands info store status
+
+**Example:** `gcal personal store status --json`
+
+## `gcal search`
+
+find stored things by text: events
+
+### `gcal search events`
+
+find stored events by words, and by meaning when its model is downloaded; with --backend server, ask the provider instead
+
+```sh
+gcal search events <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | what to find in titles, descriptions, places and attendees. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | events per page. Default: `20`. |
+| `--cursor <cursor>` | continue from a page's next_offset. Default: `0`. |
+| `--exact` | every word as written, no word stems. |
+| `--newest` | latest start first instead of best first. |
+| `--backend <archive\|server\|both>` | where to search: archive, the local store, or server, the provider's own search over the synced calendars, earliest first. One of: `archive`, `server`, `both`. Default: `archive`. |
+
+**Returns:** calendar search hit — provider, account, title, starts_at, ends_at, all_day, status, location, and 9 more; every field: gcal commands info search events
+
+**Example:** `gcal personal search events roadmap planning --json`, `gcal personal search events --backend server quarterly review`
 
 ## `gcal api`
 
@@ -1817,12 +1766,8 @@ the settings in force, and where each one came from
 the profile, the profiles that exist, and each setting with where it came from
 
 ```sh
-gcal config show [options]
+gcal config show
 ```
-
-| Option | What it does |
-|---|---|
-| `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
 **Returns:** the profile, the profiles that exist, and each setting with where it came from
 
@@ -1846,8 +1791,6 @@ gcal config set <setting> <value> [options]
 | Option | What it does |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
-| `--personal` | only for personal accounts — the personal section of the file. |
-| `--bot` | only for bots — the bot section of the file. |
 
 **Returns:** save a setting to the configuration file
 
@@ -1870,8 +1813,6 @@ gcal config unset <setting> [options]
 | Option | What it does |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
-| `--personal` | only for personal accounts — the personal section of the file. |
-| `--bot` | only for bots — the bot section of the file. |
 
 **Returns:** remove a setting from the configuration file
 

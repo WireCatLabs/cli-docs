@@ -50,10 +50,12 @@ Si no defines nada:
 
 - Un método que cambia Calendar está en `ask`. En una terminal, `gcal` pregunta antes de llamar a Google; en un
   script, añade `--yes`. Por MCP no hay nadie a quien preguntar, así que `ask` deja que el comando se ejecute.
-- Compartir un calendario (`calendar.acl.insert`, `patch`, `update`, `delete`) y cederlo a otra cuenta
-  (`calendar.calendars.transferOwnership`) están en `ask`, como cualquier otro cambio. Por MCP eso significa que un
-  agente puede compartir tu calendario con cualquiera, o cederlo, sin preguntar. Define
+- Compartir un calendario (`calendar.acl.insert`, `patch`, `update`, `delete`) está en `ask`, como cualquier otro
+  cambio. Por MCP eso significa que un agente puede compartir tu calendario con cualquiera sin preguntar. Define
   `permissions.api.calendar.acl deny` para impedirlo.
+- Borrar un calendario entero (`calendar.calendars.delete`) y cederlo a otra cuenta
+  (`calendar.calendars.transferOwnership`) están en `deny`: ninguna de las dos cosas se puede deshacer. Pon la clave
+  en `ask` o `allow` para dejar que se ejecuten.
 - `sharing.notify`, que deja a Google enviar un correo a la persona con quien se comparte un calendario, está en
   `deny`. Google envía ese correo salvo que `sendNotifications` sea `false`, así que mientras la clave esté en `deny`
   una compartición debe indicar `--send-notifications false`.

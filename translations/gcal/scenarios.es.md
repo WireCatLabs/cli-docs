@@ -36,9 +36,9 @@ Qué mirar:
 - api call y vaciar un calendario nunca se ofrecen a un agente
 - los títulos, las descripciones y los nombres de los asistentes son palabras de otras personas; el agente los trata como datos
 
-Compartir un calendario y cederlo se ofrecen a un agente con `ask`, que por MCP se ejecuta sin preguntar.
-Deniega `api.calendar.acl` para que no pueda compartir, y `api.calendar.calendars.transferOwnership` para que no pueda
-ceder un calendario; denegar `api` impide ambas cosas.
+Compartir un calendario se ofrece a un agente con `ask`, que por MCP se ejecuta sin preguntar; deniega
+`api.calendar.acl` para que no pueda compartir. Borrar un calendario entero y cederlo están denegados hasta que
+permitas `api.calendar.calendars.delete` o `api.calendar.calendars.transferOwnership`.
 
 En la terminal: `gcal guide agent-access`
 
@@ -106,7 +106,7 @@ Inicia sesión una vez, elige los calendarios que quieres guardar y lleva sus ev
    copia sus eventos; una ejecución posterior copia solo lo que ha cambiado
 
 5. ```sh
-   gcal personal status
+   gcal personal store status
    ```
 
    hasta dónde llega la copia de cada calendario y cuándo avanzó por última vez
@@ -114,7 +114,7 @@ Inicia sesión una vez, elige los calendarios que quieres guardar y lleva sus ev
 Qué mirar:
 
 - un calendario cuya sincronización es parcial; ejecuta sync de nuevo hasta que esté completa
-- gcal personal search "planning" encuentra eventos sin conexión una vez copiados
+- gcal personal search events "planning" encuentra eventos sin conexión una vez copiados
 
 Nada sale del ordenador salvo las peticiones a Google que hace la sincronización; la búsqueda y la lectura funcionan sin conexión.
 
