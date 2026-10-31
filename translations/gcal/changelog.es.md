@@ -4,6 +4,22 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.7.0 — 31.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Una escritura directa por `api` que es fácil de deshacer ya no pregunta.** `api calendar-events-insert`, `-patch`,
+  `-move`, `-quickAdd`, `calendar-calendars-insert` y los demás métodos que cambian Calendar sin borrar están en
+  `allow`, como ya lo estaban `events create` y `events update`. Un método que borra (`calendar.events.delete`,
+  `calendar.calendarList.delete`, `calendar.acl.delete`) y compartir un calendario siguen en `ask`; vaciar, borrar o
+  ceder un calendario sigue en `deny`, y `events.notify`, `events.delete.series` y `sharing.notify` siguen valiendo en
+  cada escritura por `api`. Para mantener la pregunta, define `permissions.api ask`.
+
+### Corregido
+
+- **`session start --help` deja cada opción en una sola línea corta.** Qué permiten `--grant write` y
+  `--grant sharing`, y cuándo elegir `--credential-storage file`, ahora se explica debajo de las opciones.
+
 ## 0.6.0 — 31.10.2026
 
 ### Añadido
