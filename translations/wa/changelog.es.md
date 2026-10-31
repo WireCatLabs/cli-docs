@@ -5,6 +5,59 @@ title: "Historial de cambios"
 Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest first; versions follow
 [semantic versioning](https://semver.org), so before `1.0.0` the command interface may still change.
 
+## 0.21.0 — 31.10.2026
+
+### Added
+
+- **Una ejecución registrada lista cada solicitud bajo su operación (cli-core 0.467.0).** Cada solicitud al motor de WhatsApp, y cada llamada a la Graph API y cada descarga de medios de `wa <profile> bot`, es una línea `wire` en el `events.jsonl` de la ejecución con su duración, resultado y código de error. Las líneas del motor guardan el identificador de un mensaje, nunca el identificador de un chat, un número de teléfono ni texto; las líneas de Graph guardan la ruta con los identificadores como `:id`, nunca la dirección tal como se envió ni su consulta.
+- **`search messages` dice cuántos mensajes coinciden en total: `page.total`** (cli-core 0.501.0). `--json` añade `page.total: { value, relation }`, con la forma de `hits.total` de Elasticsearch: `eq` es el recuento exacto, `gte` un límite inferior (el recuento se detiene en 10.000). El terminal añade `showing 1–20 of 144` debajo de los resultados.
+- **`search messages --discover` muestra seguimientos**, mensajes posteriores que pueden cancelar o cambiar un resultado, y ya no falla con una pregunta que lleva una hora o una proporción («until 22:00?») (cli-core 0.492.0, 0.496.0).
+- **`messages list --offline`, `search messages` y `search all` indican cuándo el almacén guarda un chat solo en parte**, con el paso `messages sync` que lo completaría (cli-core 0.493.0).
+
+### Changed — may break callers
+
+- **`search messages --discover` busca por significado cuando la consulta usa `-`, `NOT`, `OR`, grupos, frases o `exact:`** (cli-core 0.506.0). Una consulta así ejecutaba solo la búsqueda estricta. Ahora sus palabras siguen coincidiendo con toda la consulta (`discovery.method: "lexical-strict"`), y se les suman los mensajes cercanos en significado a sus palabras buscadas. Cada resultado encontrado por significado, y cada respuesta y seguimiento añadidos, coincide con cada campo de la consulta y con cada palabra excluida.
+
+- **whatsapp-cli requiere cli-base 0.67.0** (cli-core 0.501.0).
+- **`search messages`, `search all` y `messages list --offline` responden `meta.complete: false`** cuando un chat que leen se guarda solo en parte, con `missing` y `next` que lo nombran (cli-core 0.493.0). Un script que leía `meta.complete` como «todas las fuentes respondieron» ahora también ve los huecos del archivo.
+- **Un `transcribeWith` desconocido en un perfil se niega a transcribir** con `validation_error`, nombrando los cuatro valores; cualquier valor distinto de `local` significaba antes preguntar primero al mensajero (cli-core 0.499.0).
+
+### Fixed
+
+- **`search messages --discover` con un filtro estrecho (`chat:`, `date:`) ordena por significado los propios mensajes de ese filtro** cuando contiene como máximo 100.000 mensajes, en lugar de los 100 más cercanos en general, de modo que llena su página (cli-core 0.506.0).
+- **`search messages --discover` funciona con un almacén de solo lectura** (cli-core 0.506.0).
+- **Una reconstrucción larga en un proceso ya no hace que la escritura de otro proceso falle con "database is locked"** (cli-core 0.506.0).
+
+### Security
+
+- **Una ejecución con carpetas movidas ya no copia el inicio de sesión del propietario en el llavero al renovar un token** (cli-core 0.494.0).
+
+## 0.20.0 — 31.10.2026
+
+### Changed — may break callers
+
+- **Las notas, los documentos y las notas de contactos se encuentran por cualquier parte de una palabra, en cualquier caso de letra.** `search notes 'bud'` encuentra «Budget», y una palabra en cirílico coincide sea cual sea su caso; también se busca el título, no solo el texto, y los resultados llegan en milisegundos. Una búsqueda de uno o dos caracteres se rechaza con "search needs at least three characters", como ya hace la búsqueda de mensajes; una vacía sigue sin filtrar nada. La primera ejecución tras la actualización pasa su almacén local a un formato nuevo (versión 40); las notas guardadas antes se indexan por lotes con `search notes` o `store migrate`, y hasta entonces coinciden como antes. No se descarga nada de WhatsApp. Actualice todas las herramientas de línea de comandos de WireCat a esta versión el mismo día: una más antigua no indexa notas nuevas en un almacén que ya está en la versión 40. cli-core 0.490.0.
+
+### Fixed
+
+- **Una sincronización de correo con presupuesto termina de localizar una carpeta grande** en el almacén compartido (`memo`, `mail`). cli-core 0.491.0.
+
+## 0.19.0 — 30.10.2026
+
+### Fixed
+
+- **`tags list name:` ignora el caso de letra en cualquier alfabeto, no solo en el latino.** `tags list 'name:*ТАРТ*'` ahora encuentra un chat o contacto llamado «Тартус»; antes solo se igualaban A–Z, así que un nombre cirílico, griego o con acentos no se encontraba si el caso no coincidía. La primera ejecución tras la actualización pasa su almacén local a un formato nuevo (versión 38) y rellena las copias normalizadas de los títulos de chat y los nombres de contacto; no se descarga nada de WhatsApp. cli-core 0.484.0.
+
+### Changed — may break callers
+
+- **La primera pantalla (`--help`) lista `gcal` en "Works with"**, junto a `drive`. cli-core 0.482.0.
+
+## 0.18.0 — 30.10.2026
+
+### Added
+
+- **`messages transcribe` transcribe un archivo de audio que alguien envió, no solo una nota de voz.** Una grabación de iPhone llega a WhatsApp como un archivo `audio/mp4`; ahora la transcribe el modelo local. MP3, FLAC y Ogg Vorbis no necesitan nada más; AAC/M4A necesita `ffmpeg` en la máquina, y sin él el comando lo indica. Se rechaza el audio de más de una hora. cli-core 0.481.0.
+
 ## 0.17.0 — 29.10.2026
 
 ### Added
