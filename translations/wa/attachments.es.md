@@ -17,7 +17,7 @@ Algunas palabras en esta página:
 | Enviar un archivo, una foto, un vídeo o una nota de voz | `wa personal messages send --file`, `--photo`, `--voice` |
 | Guardar los archivos de un mensaje, o de un chat completo | `wa personal messages download` |
 | Enviar nuevamente un mensaje almacenado, archivo incluido | `wa personal messages forward` |
-| Escuche una nota de voz como texto | `wa personal messages transcribe` |
+| Escuche una nota de voz o un archivo de audio como texto | `wa personal messages transcribe` |
 | Vea los archivos que conoce el almacén local y que aún necesitan texto | `wa personal attachments list` |
 | Leer texto de archivos guardados en el índice de búsqueda | `wa personal attachments extract` |
 | Mantén el texto que tu agente leyó de un escaneo o una foto | `wa personal attachments update` |
@@ -77,7 +77,7 @@ Un reenvío envía nuevamente el texto y el archivo del almacén local, marcados
 
 Un reenvío reutiliza las claves del archivo y no comprueba que WhatsApp aún conserva el archivo: comprobarlo significaría descargarlo primero. Un archivo antiguo puede llegar al destinatario como si no se pudiera abrir. Para estar seguro, descárgalo y envíalo como un archivo nuevo.
 
-## Notas de voz como texto
+## Notas de voz y archivos de audio como texto
 
 ```sh
 wa personal models list kind:audio                    # the speech models, and which are downloaded
@@ -85,7 +85,9 @@ wa personal models download parakeet-v3    # once, about 670 MB
 wa personal messages transcribe "Book club" 3EB0A1B2C3D4E5F6A7B8 --local
 ```
 
-WhatsApp no tiene reconocimiento de voz propio, por lo que `transcribe` siempre utiliza un modelo en esta máquina; `--local` lo dice explícitamente y `--model` elige uno. La nota de voz no sale de tu computadora. Sin un modelo descargado, el comando se detiene con la salida `6` y nombra el modelo a descargar.
+WhatsApp no tiene reconocimiento de voz propio, por lo que `transcribe` siempre utiliza un modelo en esta máquina; `--local` lo dice explícitamente y `--model` elige uno. La grabación no sale de tu computadora. Sin un modelo descargado, el comando se detiene con la salida `6` y nombra el modelo a descargar.
+
+Un archivo de audio que alguien envió se escucha de la misma manera: una grabación hecha en otra app, como las Notas de voz del iPhone, llega como archivo, no como nota de voz. Los archivos MP3, FLAC y Ogg no necesitan nada más. AAC y M4A, el formato del iPhone, necesitan `ffmpeg` instalado en esta máquina; sin él, el comando lo indica. Se rechaza el audio de más de una hora.
 
 ## Leer el texto de los archivos.
 

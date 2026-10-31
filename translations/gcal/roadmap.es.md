@@ -12,8 +12,8 @@ para algo que falta: puede que ya esté en camino. El orden es aproximado y pued
 desde un año atrás hasta tres meses por delante; después, solo lo que ha cambiado. Una sincronización grande continúa a
 lo largo de varias ejecuciones. Puedes listar, ver y buscar eventos por palabras y por significado, ver a las personas
 que participan y sus archivos de Drive, todo sin red, y buscar en el propio Google Calendar con
-`search --backend server`. `calendars busy` muestra cuándo están ocupadas las personas y los huecos libres para todas,
-`events list changed:<date>` qué cambió desde una fecha y `events list overlapping` las reuniones que se solapan. Tras
+`search events --backend server`. `calendars busy` muestra cuándo están ocupadas las personas y los huecos libres para
+todas, y `events list changed_at>=<date>` qué cambió desde una fecha. Tras
 `session start --grant write` crea, cambia, mueve y borra eventos, también los periódicos: un caso, toda la serie o
 «este y todos los siguientes»; mueve un evento a otro calendario, pasa un evento de tener hora a durar todo el día y al
 revés, y responde invitaciones; un borrado pregunta antes. `gcal api` llega a cualquier

@@ -58,13 +58,16 @@ gcal session list                       # every profile here, and whether each h
 принимает профиль и не выбирает его: она выводит профили, названные в настройках или хоть раз выполнившие вход, у
 каждого `signed_in`, `account` и `credential_storage`. Она читает хранилище ключей и никогда не обращается к сети.
 
-На компьютере без хранилища ключей, например на сервере без рабочего стола, храните вход в файле. Это
-`credentials.json` в папке состояния `gcal`, доступный для чтения только вам. `gcal doctor` показывает его путь и
-профили в нём. Следующий `session start` без этого параметра переносит вход обратно в хранилище ключей.
+На компьютере, где хранилище ключей не работает, например на сервере без рабочего стола, `session start` сам
+сохраняет вход в файле, один раз сообщает об этом в stderr и отвечает `credential_storage: "file"`. Он никогда не
+спрашивает. Это `credentials.json` в папке состояния `gcal`, доступный для чтения только вам. `gcal doctor` показывает
+его путь и профили в нём. Файл можно выбрать и явно, хотя хранилище ключей надёжнее и мы этого не советуем:
 
 ```sh
 gcal personal session start --credential-storage file
 ```
+
+Следующий `session start`, которому удастся добраться до хранилища ключей, переносит вход обратно туда.
 
 ## Синхронизировать календари
 
@@ -78,7 +81,7 @@ gcal personal sync                          # what changed since the last sync
 gcal personal calendars list                # every calendar of the account, and which of them sync
 gcal personal calendars sync 3             # sync calendar 3 of the list from now on; unsync stops it
 gcal personal sync --embed                  # also index new events for search by meaning
-gcal personal status                        # how far each calendar's sync is, and when it last moved
+gcal personal store status                  # how far each calendar's sync is, and when it last moved
 ```
 
 Синхронизация сама останавливается до истечения лимита времени и сохраняет каждую страницу по ходу, поэтому ничего
@@ -105,38 +108,56 @@ gcal personal status                        # how far each calendar's sync is, a
 Эти команды читают локальное хранилище, поэтому работают без сети:
 
 ```sh
-gcal personal events list week                                  # this week's events, earliest first
-gcal personal events list from:2026-11-02 to:2026-11-06 person:ana@example.com
-gcal personal events list changed:2026-10-25                    # what changed since a date
-gcal personal events list week overlapping                      # meetings that clash
+gcal personal events list                                       # from today on, earliest first
+gcal personal events list ends_at>=2026-11-02 starts_at<=2026-11-06 person:ana@example.com
+gcal personal events list starts_at>=2026-11-02                 # events that start on or after a day
+gcal personal events list changed_at>=2026-10-25                # what changed since a date
 gcal personal events show event:42                              # attendees, Drive files and history
-gcal personal search roadmap planning                           # by words, and by meaning with the model
+gcal personal search events roadmap planning                    # by words, and by meaning with the model
 gcal personal people list                                       # everyone in this week's events
+gcal personal people list event:42                              # one event's attendees
 gcal personal people link email:ana@example.com telegram:12345  # the same person in another WireCat tool
 gcal personal links review                                      # copies the tool could not join to one event
 ```
 
-`changed:<date>` оставляет события, которые впервые сохранились, были перенесены, отменены или удалены с этой даты, у
+`events list` принимает тот же запрос по полям, что и любой список WireCat, и никаких собственных слов.
+`starts_at` ограничивает начало события с любой стороны: `starts_at>=2026-11-02` оставляет события, которые начинаются
+в этот день или позже, `starts_at<2026-11-07` — те, что начинаются раньше этого дня, `starts_at:[2026-11-02 TO 2026-11-07}`
+— и то и другое, а `starts_at:2026-11-02` — события одного этого дня. `ends_at>=<date>` оставляет события, которые
+заканчиваются после начала этого дня, так что событие, которое в этот момент уже идёт, тоже остаётся:
+`ends_at>=2026-11-02 starts_at<=2026-11-06` даёт всё, что касается этих дней. `ends_at` задаёт только самый ранний
+конец, и событие, которое заканчивается ровно в этот момент, в список не попадает. Точное время пишется в кавычках со
+смещением: `starts_at>="2026-11-03T10:00:00+01:00"`. Каждое поле называется один раз; поле, названное дважды,
+отклоняется, поэтому пишите промежуток. `calendar:<id>` и `person:<email>` сужают список. Без `starts_at` или
+`ends_at` список начинается с начала сегодняшнего дня. `gcal personal events list --help` перечисляет поля.
+На странице `--limit` событий (100); если есть ещё, `page.next_page` — значение для `--page`, а шаг `next` в ответе
+запускает тот же запрос на страницу дальше.
+
+`changed_at>=<date>` оставляет события, которые впервые сохранились, были перенесены, отменены или удалены с этой даты, у
 каждого `change` (`new`, `moved` или `cancelled`) и `changed_at`; у перенесённого есть ещё `was` — где оно было
 (`starts_at`, `ends_at`). Фильтр читает то, что сохранили синхронизации, поэтому видит только принесённое ими, а
-встреча, перенесённая и возвращённая обратно, изменением не считается. `overlapping` оставляет события со временем,
-которые пересекаются с другим, у каждого `overlaps` — ID остальных. Событие учитывается, только если занимает ваше
-время: не отменено, не на весь день, и вы его не отклонили и не отметили как свободное время.
+встреча, перенесённая и возвращённая обратно, изменением не считается.
 
-По умолчанию `search` читает хранилище (`--backend archive`). `--backend server` вместо этого использует
+По умолчанию `search events` читает хранилище (`--backend archive`). `--backend server` вместо этого использует
 собственный поиск Google Календаря по синхронизируемым календарям. Он находит и события за пределами
 синхронизированного периода (год назад, три месяца вперёд). Он только читает, ничего не сохраняет в хранилище и
 требует сети. Google возвращает совпадения в порядке, который не указывает, поэтому `gcal` выводит их от ранних к
 поздним и отклоняет `--newest`; `--exact` и `--cursor` тоже не применяются:
 
 ```sh
-gcal personal search --backend server quarterly review
+gcal personal search events --backend server quarterly review
 ```
 
-`--backend both` отклоняется: хранилище и Google по-разному ранжируют и разбивают события на страницы, поэтому у
-объединённого списка не было бы ни единого порядка, ни следующей страницы. Выполните два поиска один за другим.
+`--backend both` выполняет оба поиска: сначала совпадения из хранилища в его порядке, и у каждого, которое нашёл и
+Google, в `found_by` есть `server`; затем события, которые нашёл только Google, от ранних к поздним. Хранилище и Google
+по-разному ранжируют и разбивают события на страницы, поэтому `both` отвечает одной страницей без `next_cursor` и
+отклоняет `--cursor` и `--newest`; чтобы увидеть больше, увеличьте `--limit`. Как и `server`, ему нужна сеть.
 
-Оба отвечают списком событий в `items`. Поиск по хранилищу разбивает результаты на страницы курсором: если есть ещё,
+```sh
+gcal personal search events --backend both quarterly review
+```
+
+Каждый отвечает списком событий в `items`. Поиск по хранилищу разбивает результаты на страницы курсором: если есть ещё,
 `page.next_cursor` — значение для `--cursor`. Каждое событие называет в `untrusted` поля, которые написал отправитель
 приглашения.
 
@@ -146,12 +167,15 @@ gcal personal search --backend server quarterly review
 нужна сеть, и она ничего не сохраняет: человек появляется в ответе только под тем адресом, который вы указали.
 
 ```sh
-gcal personal calendars busy week person:ana@example.com           # busy times only, never what fills them
-gcal personal calendars busy from:2026-11-02 to:2026-11-06 person:ana@example.com --duration-minutes 30
-gcal personal calendars busy today calendar:3 --duration-minutes 60 --hours 10:00-16:00
+gcal personal calendars busy person:ana@example.com                # this week; busy times only, never what fills them
+gcal personal calendars busy start>=2026-11-02 end<=2026-11-06 person:ana@example.com --duration-minutes 30
+gcal personal calendars busy start>=today end<=today calendar:3 --duration-minutes 60 --hours 10:00-16:00
 ```
 
-- Без слова времени берётся эта неделя; без `calendar:` — все синхронизируемые календари.
+- Запрос задаёт окно через собственные `start` и `end` ответа: `start>=<date>` — с начала этого дня,
+  `end<=<date>` — до его конца. Без `start` окно начинается сегодня; без `end` оно длится семь дней.
+- `person:<email>` и `calendar:<id>` можно повторять, по одному условию на каждый: спрашиваются все названные. Без
+  `calendar:` спрашиваются все синхронизируемые календари.
 - `--duration-minutes` добавляет `slots`: промежутки не короче указанного, свободные у всех, в рабочие часы
   (`--hours`, по умолчанию 09:00-17:00) с понедельника по пятницу, в вашем часовом поясе.
 - Google показывает занятость человека, только если его календарь открыт вам или вашей организации. У каждого, кого
@@ -225,14 +249,14 @@ gcal personal events delete event:42 --following --no-notify
   `--notify` отклоняется, пока вы не разрешите `events.notify` (см. [разрешения](./configuration.md#permissions)).
 - Изменение несёт версию, которую видела последняя синхронизация. Если с тех пор событие изменилось в Google, запись
   останавливается с `event.conflict`: выполните `sync` и попробуйте снова. Ничего не перезаписывается.
-- Создание, ответ на которое потерялся, заканчивается `outcome_unknown` и называет ID; повторите его с `--id <id>`,
-  и Google найдёт событие вместо того, чтобы создать второе.
+- Создание, ответ на которое потерялся, заканчивается `outcome_unknown` и называет его `operation_id`; повторите его с
+  `--operation-id <id>`, и Google найдёт событие вместо того, чтобы создать второе.
 - В повторяющемся событии запись меняет одно названное вами повторение; `--series` меняет всю серию, а `--following` —
   это повторение и все следующие. Удаление всей серии отклоняется, пока вы не разрешите `events.delete.series`, как
   и новое правило `--repeat`, которое заканчивает серию раньше (новый `COUNT` или более ранний `UNTIL`).
 - `update --following` заканчивает серию прямо перед повторением и начинает с него новую серию с вашим изменением,
   сохраняя участников. Серии, которая заканчивается после заданного числа раз (`COUNT`), для новой части нужен
-  `--repeat`. Если закончить старую серию не удалось, ошибка называет ID новой серии; повторите с `--id <id>`.
+  `--repeat`. Если закончить старую серию не удалось, ошибка называет ID новой серии; повторите с `--operation-id <id>`.
   `delete --following` только заканчивает серию и, как любое удаление, сначала спрашивает.
 - `move --to-calendar <id>` переносит событие, сохраняя его ID, в другой календарь того же аккаунта, в который вы
   можете писать. Повторение переносится только вместе со всей серией (`--series`). Google переносит только обычные
@@ -269,8 +293,9 @@ gcal personal mcp check                             # start it once, as the agen
 любого другого клиента. `gcal guide agent-access` проводит через всю настройку.
 
 Сервер предлагает все команды, включая те, что пишут. Что выполняется, решают разрешения профиля; см.
-[настройки](./configuration.md#permissions). Это касается и открытия доступа к календарю (`acl`), и передачи его
-другому аккаунту (`calendars.transferOwnership`): агент может сделать и то и другое без вопроса. Две команды агенту
+[настройки](./configuration.md#permissions). Это касается и открытия доступа к календарю (`acl`): агент может сделать
+это без вопроса. Удаление целого календаря (`calendars.delete`) и передача его другому аккаунту
+(`calendars.transferOwnership`) запрещены, пока вы их не разрешите. Две команды агенту
 никогда не предлагаются: `api call` и `calendars.clear`, которая очищает календарь. Их вы запускаете сами, в
 терминале. Не предлагаются и команды, которые настраивают вход и связь с агентом: `session start` и `session end`, а
 также `mcp serve`, `mcp add`, `mcp config`, `mcp check`, `mcp revoke` и `mcp server start | stop | status`.

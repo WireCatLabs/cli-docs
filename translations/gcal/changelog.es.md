@@ -4,6 +4,165 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.9.0 — 31.10.2026
+
+### Cambios — pueden romper scripts
+
+- **`events create --id` y `events update --following --id` ahora son `--operation-id`**, el nombre que usa toda
+  escritura de WireCat para reintentar tras `outcome_unknown` (WC-CMD-10, WC-OUT-10). El valor es el mismo: el
+  `operation_id` que indica el error de la escritura perdida. `--id` se rechaza como opción desconocida; cambia los
+  scripts y las instrucciones de agentes que lo pasan.
+- **El registro de lo que hicieron los agentes por `gcal mcp` nombra al agente que llamó, no al servidor**
+  (cli-core 0.509.0): el nombre propio del cliente, como `claude-code`, donde siempre ponía `gcal-mcp`. Un filtro por
+  `gcal-mcp` ya no encuentra filas nuevas. gcal funciona ahora con cli-core 0.510.0 y cli-base 0.68.1.
+
+### Añadido
+
+- **`events list --page <n>`**: la página siguiente de eventos guardados. Una lista con más eventos que `--limit` (100)
+  indica `page.next_page`, y su paso `next` ejecuta la misma consulta una página más allá; antes decía `has_more` sin
+  forma de seguir leyendo.
+- **`search events --backend both`** consulta el almacén y la búsqueda del propio Google Calendar a la vez. Primero van
+  los resultados del almacén en su orden, y cada uno que Google también encontró lleva `server` en `found_by`; después
+  los eventos que solo encontró Google, del más temprano al más tardío. Una sola página sin cursor: rechaza `--cursor`
+  y `--newest`, y necesita red. Antes `both` se ofrecía y siempre se rechazaba.
+
+### Corregido
+
+- **La ayuda de `search events --cursor`** ya no nombra `next_offset`, una clave que la respuesta no tiene; el valor
+  sale de `page.next_cursor`.
+
+## 0.8.0 — 31.10.2026
+
+### Corregido
+
+- **El archivo de respaldo del llavero ahora viene de cli-base 0.68.0 y cli-core 0.507.0**, sin un rodeo propio de
+  gcal. cli-base corrigió el fallo que gcal rodeaba: quitar la copia del llavero tras `--credential-storage file`
+  vaciaba también el archivo. Un inicio de sesión guardado en el archivo privado se lee de ahí y sus renovaciones se
+  quedan ahí; el siguiente `session start` que llega al llavero lo devuelve allí y quita la copia del archivo. Las
+  respuestas son como en 0.7.0, y el aviso del llavero sigue saliendo una vez por ejecución.
+
+## 0.7.0 — 31.10.2026
+
+### Cambios — pueden romper scripts
+
+- **Una escritura directa por `api` que es fácil de deshacer ya no pregunta.** `api calendar-events-insert`, `-patch`,
+  `-move`, `-quickAdd`, `calendar-calendars-insert` y los demás métodos que cambian Calendar sin borrar están en
+  `allow`, como ya lo estaban `events create` y `events update`. Un método que borra (`calendar.events.delete`,
+  `calendar.calendarList.delete`, `calendar.acl.delete`) y compartir un calendario siguen en `ask`; vaciar, borrar o
+  ceder un calendario sigue en `deny`, y `events.notify`, `events.delete.series` y `sharing.notify` siguen valiendo en
+  cada escritura por `api`. Para mantener la pregunta, define `permissions.api ask`.
+
+### Corregido
+
+- **`session start --help` deja cada opción en una sola línea corta.** Qué permiten `--grant write` y
+  `--grant sharing`, y cuándo elegir `--credential-storage file`, ahora se explica debajo de las opciones.
+
+## 0.6.0 — 31.10.2026
+
+### Añadido
+
+- **`events list` encuentra eventos por su inicio más temprano: `starts_at>=<date>`.** `starts_at` ahora admite
+  cualquiera de los dos lados y un intervalo: `starts_at>=2026-11-02`, `starts_at:[2026-11-02 TO 2026-11-07}` y
+  `starts_at:2026-11-02` para los eventos de un día. Un evento que empieza justo en ese momento se mantiene; un evento
+  de todo el día se compara por su fecha en tu zona horaria. En 0.5.0 `starts_at>=…` se rechazaba. `ends_at` no
+  cambia: solo un final más temprano, estrictamente después.
+
+### Cambios — pueden romper scripts
+
+- **`session start` recurre a un archivo privado cuando el llavero falla, y nunca pregunta.** Antes se detenía con
+  `oauth.not-saved` y te pedía pasar `--credential-storage file`. Ahora inicia sesión, avisa una vez en stderr de que
+  usó `credentials.json` en la carpeta de estado y responde `credential_storage: "file"`. La opción sigue eligiendo
+  el archivo directamente; el llavero sigue siendo el predeterminado y la opción más segura. `session status` y
+  `session end` ya no responden `keyring: "unreachable"`: el fallo del llavero es el aviso en stderr.
+- Una ejecución con carpetas movidas nombra su entrada temporal del llavero según su carpeta de estado, cuando antes
+  la nombraba según su carpeta de configuración; una entrada temporal que dejó una ejecución anterior ya no se lee.
+  `bin/keyring-dedupe` la elimina.
+- **`calendars busy` acepta la consulta estándar por campos, y ninguna palabra propia.** `today`, `week`, `from:` y
+  `to:` se rechazan. La ventana son los propios `start` y `end` de la respuesta: `from:2026-11-02 to:2026-11-06` es
+  `start>=2026-11-02 end<=2026-11-06`, y `today` es `start>=today end<=today`. Sin `start` la ventana empieza hoy,
+  sin `end` dura siete días, así que un `calendars busy` sin más sigue siendo esta semana. `calendar:` y `person:` se
+  mantienen y se pueden seguir repitiendo. Por MCP la entrada es `query`, ya no `words`. La primera pantalla muestra
+  `calendars busy --duration-minutes 30`.
+- **gcal necesita `@wirecat/cli-base` 0.67 y `@wirecat/cli-core` 0.502**, que ahora construyen ellos mismos
+  `store status`, `search events <query>` y las consultas por campos; los comandos, sus respuestas y las claves de
+  permisos son los mismos que en 0.5.0.
+
+## 0.5.0 — 31.10.2026
+
+### Añadido
+
+- **`calendars list` acepta una consulta**: `synced:`, `primary:` y `access_role:` acotan la lista, como en
+  `gcal personal calendars list synced:true`.
+- **`commands info` describe con qué responde cada comando de calendario**, y `--fields` puede elegir de ahí.
+
+### Cambios — pueden romper scripts
+
+- **`gcal search <words>` ahora es `gcal search events <query>`, y `gcal status` ahora es `gcal store status`**, la
+  forma que usan las demás herramientas de WireCat (max: `search messages <query>`, `store status`). Las rutas antiguas
+  ya no existen, sin alias. Por MCP el comando es `search events`, y su entrada es `query` (antes `words`); el paso a
+  la página siguiente de una búsqueda en el almacén también nombra `query`. La pista de una sincronización parcial
+  apunta a `store status`. Las claves de permisos se mueven con ellos: `permissions.store.status` y
+  `permissions.search.events`; `permissions.search` sigue cubriendo la búsqueda. Una configuración que aún define
+  `permissions.status` se rechaza con `config.invalid`, que nombra
+  `gcal <profile> config unset permissions.status`.
+- **`events list` acepta solo la consulta estándar por campos, y ninguna palabra propia.** `today`, `week`, `from:`,
+  `to:`, `changed:` y `overlapping` se rechazan. Escribe el intervalo como campos: `from:2026-11-02 to:2026-11-06` es
+  `ends_at>=2026-11-02 starts_at<=2026-11-06`, y `changed:2026-10-25` es `changed_at>=2026-10-25`; `calendar:` y
+  `person:` se mantienen. Por MCP la entrada es `query` (`"ends_at>=2026-11-02"`), ya no `words`. Lo que pierden los
+  scripts:
+  - `today` y `week`: escribe las fechas. El lenguaje de consulta tiene `today`, pero ninguna palabra para un día más
+    adelante, así que el final de un intervalo es una fecha ISO.
+  - `overlapping` y el campo `overlaps`: ningún término estándar pide los eventos que se solapan, así que la lista ya
+    no los encuentra. Compara en su lugar `starts_at` y `ends_at` de los eventos listados.
+  - `starts_at>=…` se rechaza e indica el término `ends_at>=…` que hay que escribir en su lugar: el almacén encuentra
+    los eventos por los momentos que abarcan, así que solo puede acotar el inicio más tardío y el final más temprano.
+    Un evento que termina justo en el momento de `ends_at` queda fuera.
+  - Sin un término de tiempo, la lista sigue empezando al inicio de hoy.
+- **Borrar un calendario de Google entero y cederlo a otra cuenta están en `deny` por defecto**, como vaciarlo.
+  `api.calendar.calendars.delete` y `api.calendar.calendars.transferOwnership` estaban en `ask`, que por MCP se ejecuta
+  sin preguntar. Pon cualquiera de las dos claves en `ask` o `allow` para dejar que se ejecute.
+- **`session status` y `session end` responden donde no se puede acceder a ningún llavero y no se guarda ningún
+  archivo de sesión.** Antes fallaban con `oauth.not-saved`. Ahora `session status` dice `state: missing` con
+  `keyring: unreachable`, y `session end` dice `ended: false` con `keyring: unreachable`: esta ejecución no puede usar
+  ninguna sesión, así que no hay nada que mostrar ni que cerrar. Una sesión guardada con `--credential-storage file` se
+  lee como antes. `session start` y los comandos que llaman a Google siguen fallando con `oauth.not-saved`, que se
+  explica en [Cuando algo falla](./troubleshooting.md). Un script que interpretaba ese fallo como «llavero fuera de
+  alcance» lee ahora `keyring` en la respuesta.
+- **`people list` acepta un evento como `event:<id>`.** `gcal personal people list 42` se rechaza como una palabra sin
+  campo; escribe `people list event:42`. Por MCP la entrada es `query` (`"event:42"`), ya no `event`.
+- **`search --backend server` responde como la búsqueda compartida.** El `found_by` de cada evento es `["server"]`
+  (antes `["google"]`). Los rechazos tienen motivos nuevos: ningún calendario sincronizado es `search.no-calendars`
+  (antes `calendars.none-synced`), `--offline` es `search.offline` (antes `offline.refused`), `--exact`, `--cursor` o
+  `--newest` es `search.server-options`, y `--backend both` es `search.one-backend` (antes `search.backend-both`).
+- **La ayuda de los comandos de calendario ya no muestra `--json` y `--jsonl` en cada comando**, y sus herramientas MCP
+  ya no aceptan las entradas `json` o `jsonl`. Las opciones globales `--json` y `--jsonl` funcionan como antes; a un
+  agente que enviaba `jsonl: true` se le rechazaba.
+- **`config show --bot` y `config set|unset --personal|--bot` quedan ocultos.** gcal no tiene bots, así que no había
+  nada detrás. Se siguen aceptando, así que un script que pase uno sigue funcionando.
+
+### Corregido
+
+- **Las llamadas que un agente envía a la vez a `gcal mcp serve` reciben cada una su propia respuesta.** Dos lecturas
+  de calendario enviadas juntas podían responder a una de ellas vacía (`{"item":{"value":null}}`) o hacerla fallar con
+  `command.crashed`, porque las llamadas compartían qué comando se estaba ejecutando y el almacén que había abierto.
+  Ahora cada llamada tiene los suyos
+  ([WC-ARCH-22](https://github.com/WireCatLabs/cli-base/blob/v0.65.5/docs/standards/architecture.md#wc-arch-22--build-the-command-tree-once-keep-each-calls-state-out-of-it)).
+- **Un evento de todo el día sin zona horaria propia ni de su calendario empieza a medianoche en la zona horaria de tu
+  ordenador.** gcal lo leía como medianoche UTC: en un ordenador en Madrid empezaba una hora tarde, y en Nueva York la
+  tarde anterior. El `timezone` de ese evento nombra ahora la zona en la que se leyó, donde antes era `null`. Un evento
+  o calendario que nombra su zona se lee en esa zona, como antes. Un evento ya guardado conserva su inicio antiguo
+  hasta que Google lo envíe de nuevo, después de que cambie
+  ([WC-TIME-3](https://github.com/WireCatLabs/cli-base/blob/v0.65.5/docs/standards/time.md#wc-time-3--read-a-time-that-has-no-zone-in-the-zone-in-use-and-say-which-zone-that-was)).
+
+## 0.4.0 — 31.10.2026
+
+### Corregido
+
+- **gcal mantiene el almacén local compartido en la misma versión que las demás herramientas de WireCat (versión 40 del
+  almacén).** El almacén gana el índice de trigramas que usa la búsqueda en notas y documentos; gcal no tiene notas
+  propias, pero un gcal antiguo ya no deja un almacén escrito por una herramienta más nueva sin las entradas de índice
+  que debería escribir.
+
 ## 0.3.0 — 31.10.2026
 
 ### Añadido

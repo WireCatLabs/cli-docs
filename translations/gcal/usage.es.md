@@ -57,13 +57,17 @@ la ejecución sigue leyendo tu inicio de sesión habitual, y `session status` lo
 perfil ni elige ninguno: muestra los perfiles que aparecen en los ajustes o que iniciaron sesión alguna vez, cada uno
 con `signed_in`, `account` y `credential_storage`. Lee el llavero, nunca la red.
 
-En un ordenador sin llavero, como un servidor sin escritorio, guarda la sesión en un archivo. El archivo es
-`credentials.json` en la carpeta de estado de `gcal`, legible solo por ti. `gcal doctor` muestra su ruta y los
-perfiles que contiene. El siguiente `session start` sin esa opción devuelve la sesión al llavero.
+En un ordenador donde el llavero no funciona, como un servidor sin escritorio, `session start` guarda la sesión
+en un archivo por sí solo, lo avisa una vez en stderr y responde `credential_storage: "file"`. Nunca pregunta. El
+archivo es `credentials.json` en la carpeta de estado de `gcal`, legible solo por ti. `gcal doctor` muestra su ruta y
+los perfiles que contiene. También puedes elegir el archivo directamente, aunque el llavero es más seguro y no lo
+recomendamos:
 
 ```sh
 gcal personal session start --credential-storage file
 ```
+
+El siguiente `session start` que llegue al llavero devuelve la sesión allí.
 
 ## Sincronizar tus calendarios
 
@@ -77,7 +81,7 @@ gcal personal sync                          # what changed since the last sync
 gcal personal calendars list                # every calendar of the account, and which of them sync
 gcal personal calendars sync 3             # sync calendar 3 of the list from now on; unsync stops it
 gcal personal sync --embed                  # also index new events for search by meaning
-gcal personal status                        # how far each calendar's sync is, and when it last moved
+gcal personal store status                  # how far each calendar's sync is, and when it last moved
 ```
 
 Una sincronización se detiene por sí sola antes de su límite de tiempo y guarda cada página sobre la marcha, así que
@@ -104,38 +108,56 @@ y se descarta cualquier línea de la descripción que mencione un código de acc
 Estos comandos leen el almacén local, así que funcionan sin red:
 
 ```sh
-gcal personal events list week                                  # this week's events, earliest first
-gcal personal events list from:2026-11-02 to:2026-11-06 person:ana@example.com
-gcal personal events list changed:2026-10-25                    # what changed since a date
-gcal personal events list week overlapping                      # meetings that clash
+gcal personal events list                                       # from today on, earliest first
+gcal personal events list ends_at>=2026-11-02 starts_at<=2026-11-06 person:ana@example.com
+gcal personal events list starts_at>=2026-11-02                 # events that start on or after a day
+gcal personal events list changed_at>=2026-10-25                # what changed since a date
 gcal personal events show event:42                              # attendees, Drive files and history
-gcal personal search roadmap planning                           # by words, and by meaning with the model
+gcal personal search events roadmap planning                    # by words, and by meaning with the model
 gcal personal people list                                       # everyone in this week's events
+gcal personal people list event:42                              # one event's attendees
 gcal personal people link email:ana@example.com telegram:12345  # the same person in another WireCat tool
 gcal personal links review                                      # copies the tool could not join to one event
 ```
 
-`changed:<date>` deja los eventos guardados por primera vez, movidos, cancelados o eliminados desde esa fecha, cada uno
+`events list` acepta la consulta por campos que acepta cualquier lista de WireCat, y ninguna palabra propia.
+`starts_at` acota cuándo empieza un evento, por cualquiera de los dos lados: `starts_at>=2026-11-02` deja los eventos
+que empiezan ese día o después, `starts_at<2026-11-07` los que empiezan antes de él, `starts_at:[2026-11-02 TO 2026-11-07}`
+ambas cosas, y `starts_at:2026-11-02` los eventos de ese único día. `ends_at>=<date>` deja los eventos que terminan
+después del inicio de ese día, así que también se queda un evento que ya está en curso entonces:
+`ends_at>=2026-11-02 starts_at<=2026-11-06` da todo lo que toca esos días. `ends_at` solo admite un final más temprano,
+y deja fuera un evento que termina justo en ese momento. Una hora exacta va entre comillas, con su desfase horario:
+`starts_at>="2026-11-03T10:00:00+01:00"`. Cada campo se nombra una vez; un campo nombrado dos veces se rechaza, así que
+escribe un intervalo. `calendar:<id>` y `person:<email>` acotan la lista. Sin `starts_at` ni `ends_at`, la lista
+empieza al inicio de hoy. `gcal personal events list --help` muestra los campos. Una página tiene `--limit` eventos
+(100); si hay más, `page.next_page` es el valor para `--page`, y el paso `next` de la respuesta ejecuta la misma consulta
+una página más allá.
+
+`changed_at>=<date>` deja los eventos guardados por primera vez, movidos, cancelados o eliminados desde esa fecha, cada uno
 con `change` (`new`, `moved` o `cancelled`) y `changed_at`; uno movido dice además dónde estaba en `was` (`starts_at`,
 `ends_at`). Lee lo que guardaron las sincronizaciones, así que solo ve lo que trajo una sincronización, y una reunión
-movida y devuelta a su hora no cuenta como cambio. `overlapping` deja los eventos con hora que se solapan con otro, cada
-uno con `overlaps`, los ids de los demás. Un evento cuenta solo cuando ocupa tu tiempo: no cancelado, no de todo el
-día, y no rechazado ni marcado como libre por ti.
+movida y devuelta a su hora no cuenta como cambio.
 
-`search` lee el almacén por defecto (`--backend archive`). `--backend server` usa en su lugar la búsqueda del propio
+`search events` lee el almacén por defecto (`--backend archive`). `--backend server` usa en su lugar la búsqueda del propio
 Google Calendar, en los calendarios que se sincronizan. También encuentra eventos fuera del periodo sincronizado (un
 año atrás, tres meses por delante). Solo lee, no guarda nada en el almacén y necesita red. Google devuelve sus
 resultados en un orden que no indica, así que `gcal` los lista del más temprano al más tardío y rechaza `--newest`;
 `--exact` y `--cursor` tampoco se aplican:
 
 ```sh
-gcal personal search --backend server quarterly review
+gcal personal search events --backend server quarterly review
 ```
 
-`--backend both` se rechaza: el almacén y Google ordenan y paginan los eventos de forma distinta, así que una lista
-combinada no tendría un orden único ni una página siguiente. Haz las dos búsquedas una tras otra.
+`--backend both` hace las dos búsquedas: primero los resultados del almacén en su orden, y cada uno que Google también
+encontró lleva `server` en `found_by`; después los eventos que solo encontró Google, del más temprano al más tardío. El
+almacén y Google ordenan y paginan de forma distinta, así que `both` responde una sola página sin `next_cursor` y
+rechaza `--cursor` y `--newest`; para ver más, sube `--limit`. Como `server`, necesita red.
 
-Las dos responden con una lista de eventos en `items`. Una búsqueda en el almacén pagina con un cursor: si hay más,
+```sh
+gcal personal search events --backend both quarterly review
+```
+
+Cada una responde con una lista de eventos en `items`. Una búsqueda en el almacén pagina con un cursor: si hay más,
 `page.next_cursor` es el valor para `--cursor`. Cada evento indica en `untrusted` los campos que escribió quien envió
 la invitación.
 
@@ -145,12 +167,15 @@ la invitación.
 Necesita red y no guarda nada: una persona aparece en la respuesta solo con la dirección que diste.
 
 ```sh
-gcal personal calendars busy week person:ana@example.com           # busy times only, never what fills them
-gcal personal calendars busy from:2026-11-02 to:2026-11-06 person:ana@example.com --duration-minutes 30
-gcal personal calendars busy today calendar:3 --duration-minutes 60 --hours 10:00-16:00
+gcal personal calendars busy person:ana@example.com                # this week; busy times only, never what fills them
+gcal personal calendars busy start>=2026-11-02 end<=2026-11-06 person:ana@example.com --duration-minutes 30
+gcal personal calendars busy start>=today end<=today calendar:3 --duration-minutes 60 --hours 10:00-16:00
 ```
 
-- Sin una palabra de tiempo lee esta semana; sin `calendar:`, todos los calendarios que se sincronizan.
+- La consulta nombra la ventana con los propios `start` y `end` de la respuesta: `start>=<date>` desde el inicio de
+  ese día, `end<=<date>` hasta su final. Sin `start` la ventana empieza hoy; sin `end` dura siete días.
+- `person:<email>` y `calendar:<id>` se pueden repetir, un término por cada uno: se pregunta a todos los nombrados. Sin
+  `calendar:` se pregunta a todos los calendarios que se sincronizan.
 - `--duration-minutes` añade `slots`: los huecos de al menos esa duración libres para todos, dentro del horario
   laboral (`--hours`, 09:00-17:00 por defecto), de lunes a viernes, en tu zona horaria.
 - Google muestra los periodos ocupados de una persona solo cuando su calendario está compartido contigo o con tu
@@ -224,14 +249,14 @@ gcal personal events delete event:42 --following --no-notify
   rechaza hasta que permitas `events.notify` (consulta los [permisos](./configuration.md#permissions)).
 - Un cambio lleva la versión que vio la última sincronización. Si el evento ha cambiado en Google desde entonces, la
   escritura se detiene con `event.conflict`: ejecuta `sync` y vuelve a intentarlo. No se sobrescribe nada.
-- Una creación cuya respuesta se perdió termina en `outcome_unknown` e indica un id; repítela con `--id <id>` y Google
-  encuentra el evento en lugar de crear un segundo.
+- Una creación cuya respuesta se perdió termina en `outcome_unknown` e indica su `operation_id`; repítela con
+  `--operation-id <id>` y Google encuentra el evento en lugar de crear un segundo.
 - En un evento periódico, una escritura cambia el caso que indicas; `--series` cambia toda la serie, y `--following`
   este caso y todos los siguientes. Borrar una serie completa se rechaza hasta que permitas `events.delete.series`, y
   también una regla `--repeat` nueva que termina la serie antes (un `COUNT` nuevo o un `UNTIL` anterior).
 - `update --following` termina la serie justo antes del caso y empieza ahí una serie nueva con tu cambio, conservando
   a los asistentes. Una serie que termina tras un número de veces (`COUNT`) necesita `--repeat` para la parte nueva. Si
-  falla terminar la serie antigua, el error indica el id de la serie nueva; repite con `--id <id>`.
+  falla terminar la serie antigua, el error indica el id de la serie nueva; repite con `--operation-id <id>`.
   `delete --following` solo termina la serie y, como todo borrado, pregunta antes.
 - `move --to-calendar <id>` mueve un evento, con su id, a otro calendario de la misma cuenta en el que puedas
   escribir. Un caso se mueve solo con toda su serie (`--series`). Google solo mueve eventos normales, no tiempo de
@@ -268,8 +293,9 @@ gcal personal mcp check                             # start it once, as the agen
 cliente. `gcal guide agent-access` lo explica paso a paso.
 
 El servidor ofrece todos los comandos, también los que escriben. Los permisos del perfil deciden qué se ejecuta;
-consulta los [ajustes](./configuration.md#permissions). Eso incluye compartir un calendario (`acl`) y cederlo a otra
-cuenta (`calendars.transferOwnership`): un agente puede hacer ambas cosas sin preguntar. Hay dos comandos que nunca se
+consulta los [ajustes](./configuration.md#permissions). Eso incluye compartir un calendario (`acl`): un agente puede hacerlo
+sin preguntar. Borrar un calendario entero (`calendars.delete`) y cederlo a otra cuenta
+(`calendars.transferOwnership`) están denegados hasta que los permitas. Hay dos comandos que nunca se
 ofrecen a un agente: `api call` y `calendars.clear`, que vacía un calendario. Esos los ejecutas tú, en una terminal.
 Tampoco los comandos que configuran el inicio de sesión y la conexión con el agente: `session start` y `session end`,
 y `mcp serve`, `mcp add`, `mcp config`, `mcp check`, `mcp revoke` y `mcp server start | stop | status`.

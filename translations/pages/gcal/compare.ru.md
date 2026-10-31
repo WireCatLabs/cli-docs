@@ -7,7 +7,7 @@ title: "Сравнение с другими инструментами"
 
 `gcal` — это командная строка и MCP-сервер для Google Календаря вашего собственного аккаунта. Здесь он стоит рядом с
 другими командными строками, MCP-серверами и коннекторами ассистентов, которые читают Google Календарь, чтобы вы
-могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.3.0, его команд и
+могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.5.0, его команд и
 исходного кода, проверенных 31 октября 2026 года; они проверяются заново при каждом выпуске. Оценки для остальных
 инструментов взяты из их собственных README, документации и исходного кода, проверенных 27 октября 2026 года. Ни в
 один инструмент не выполнялся вход, и ничего не проверялось вживую; инструмент может делать больше, чем говорят его
@@ -40,10 +40,10 @@ title: "Сравнение с другими инструментами"
 | Даты словами, например «завтра в 15:00» или «в следующую пятницу» | 🟡 | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/utils.py) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/dates.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | n/a | n/a |
 | Встречи из всех ваших календарей и аккаунтов в одном списке | 🟡 | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | Что изменилось с какой-то даты: новые, перенесённые и отменённые встречи | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
-| Найти встречи, которые пересекаются | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Найти встречи, которые пересекаются | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | **Найти встречу** | | | | | | |
 | Найти встречу по смыслу, а не по точным словам | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
-| Искать по встречам без интернета | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | ❌ | ❌ | ❌ |
+| Искать по встречам без интернета | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Один поиск по встречам, чатам, почте и заметкам | 🟡 | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Люди** | | | | | | |
 | Узнать, что участник — это человек, с которым вы переписываетесь в Telegram, WhatsApp или почте | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
@@ -61,7 +61,7 @@ title: "Сравнение с другими инструментами"
 | Инструкции для агентов, работающих в терминале | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | n/a |
 | **Подготовка** | | | | | | |
 | Начать без собственного проекта Google Cloud | ❌ | [❌](https://github.com/insanum/gcalcli#initial-setup) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#quick-start) | [❌](https://github.com/nspady/google-calendar-mcp#google-cloud-setup) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
-| Работает из claude.ai в браузере и на телефоне | 🟡 | ❌ | ❌ | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
+| Работает из claude.ai в браузере и на телефоне | 🟡 | [❌](https://github.com/insanum/gcalcli#readme) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 
 | | gcal | gcalcli | gog | Workspace MCP | google-calendar-mcp | Claude |
 |---|---|---|---|---|---|---|
@@ -75,14 +75,17 @@ title: "Сравнение с другими инструментами"
   `update`, `move`, `delete`, `respond`). В повторяющемся событии изменение или удаление касается одного повторения,
   всей серии или этого и всех следующих повторений (`--following`). `events move --to-calendar` переносит событие,
   сохраняя его id, в другой календарь того же аккаунта. `--grant sharing` добавляет управление тем, кто видит календарь.
-- **Что изменилось и что пересекается.** `events list changed:<date>` показывает встречи, которые впервые сохранились,
-  были перенесены или отменены с этой даты, и для каждой перенесённой — её прежнее время. Он читает копию на вашем
-  компьютере, поэтому видит то, что принесли синхронизации. `events list overlapping` показывает встречи, которые
-  пересекаются с другой вашей встречей.
+- **Что изменилось.** `events list changed_at>=<date>` показывает встречи, которые впервые сохранились, были
+  перенесены или отменены с этой даты, и для каждой перенесённой — её прежнее время. Он читает копию на вашем
+  компьютере, поэтому видит то, что принесли синхронизации.
+- **Встречи, которые пересекаются.** С выпуска 0.5.0 `events list` принимает только запрос по полям, общий для всех
+  списков WireCat, а в нём нет условия для пересекающихся встреч. Список даёт начало и конец каждой встречи, так что
+  вы или агент можете их сравнить.
 - **Ваше собственное приложение Google.** Сейчас каждый пользователь `gcal` создаёт проект Google Cloud и клиент OAuth
   и передаёт `gcal` файл клиента при входе. См. [установку](./installation.md).
-- **Даты словами.** `events list` понимает `today`, `week`, а также `from:` и `to:` с датой. «В следующую пятницу» он
-  не понимает.
+- **Даты словами.** `events list` принимает в условиях по полям дату или время, например
+  `ends_at>=today starts_at<=2026-11-06`, и слова `today` и `yesterday`. «Неделю» и «следующую пятницу» он не
+  понимает.
 - **Подготовка к встрече.** `events show` выдаёт участников, каждого — связанным с человеком, которого вы знаете по
   другим инструментам, и файлы Drive встречи. То, что вы обсуждали с ними в прошлый раз, хранится в `memo`, а не в `gcal`.
 - **Все календари.** Один список охватывает календари, которые вы выбрали для синхронизации в одном профиле. Каждый
@@ -90,15 +93,16 @@ title: "Сравнение с другими инструментами"
 - **Поиск по смыслу.** Для него нужна модель, которую вы скачиваете один раз. Без неё поиск находит слова и их другие
   формы.
 - **Один поиск по всему.** Встречи попадают в хранилище, общее для других инструментов WireCat. `search all` в других
-  инструментах WireCat, например в `tg`, читает их рядом с чатами, почтой и заметками. Сам `gcal search` находит
+  инструментах WireCat, например в `tg`, читает их рядом с чатами, почтой и заметками. Сам `gcal search events` находит
   только встречи.
 - **Когда люди свободны.** `calendars busy` спрашивает у Google, когда заняты ваши календари и другие люди, а с
   `--duration-minutes` выдаёт общие для всех свободные промежутки в рабочее время.
 - **Агент не может менять ваш календарь, пока вы это не разрешите.** Без `--grant write` ограничением служит сам
   вход. После него добавление, изменение, перенос и ответы на приглашения выполняются без вопроса; удаление в
   терминале сначала спрашивает. Через MCP спросить некого, поэтому агент также удаляет события, а с
-  `--grant sharing` открывает доступ к календарю без вопроса. Рассылка писем участникам и удаление всей серии
-  запрещены, пока вы их не разрешите. Чтобы получать вопрос или запретить запись, задайте разрешениям профиля `ask`,
+  `--grant sharing` открывает доступ к календарю без вопроса. Рассылка писем участникам, удаление всей серии,
+  удаление целого календаря и передача его другому аккаунту запрещены, пока вы их не разрешите. Чтобы получать
+  вопрос или запретить запись, задайте разрешениям профиля `ask`,
   `deny` или `readonly` (например, `permissions.events.create ask` или `permissions.api.calendar.acl deny`) либо
   запустите сервер с `mcp serve --permission`, чтобы ужесточить один ключ только для этого сервера.
 - **Текст из приглашений.** Приглашение может прислать кто угодно, поэтому его название, заметки и место — чужие

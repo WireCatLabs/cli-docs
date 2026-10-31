@@ -28,9 +28,9 @@ ejecución con carpetas movidas (`GCAL_CONFIG_DIR`, `GCAL_STATE_DIR` u otro `HOM
 cambia: su propio inicio de sesión va a una entrada aparte, `gcal-cli:<config folder>`, y su `session end` borra solo
 esa.
 
-Con `session start --credential-storage file`, esa misma entrada va a `credentials.json` en la carpeta de estado de
-`gcal`, con modo 600: cualquiera que pueda leer tus archivos como tú puede leer la sesión. Úsalo solo donde no funcione
-ningún llavero.
+Cuando el llavero falla, o con `session start --credential-storage file`, esa misma entrada va a `credentials.json`
+en la carpeta de estado de `gcal`, con modo 600: cualquiera que pueda leer tus archivos como tú puede leer la sesión.
+`gcal` lo avisa una vez en stderr y nunca pregunta. Elige el archivo solo donde no funcione ningún llavero.
 
 `gcal` rechaza un archivo de cliente de OAuth que puedan leer otros usuarios del ordenador. La dirección de correo de
 la cuenta se guarda en la carpeta de estado de `gcal`, legible solo por ti, para que `session status` pueda responder

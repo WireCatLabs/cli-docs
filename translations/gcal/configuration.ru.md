@@ -43,17 +43,22 @@ gcal personal session start --client-file ~/client_secret.json
 
 ```sh
 gcal personal config set permissions.api readonly                        # reads only, every method
-gcal personal config set permissions.api.calendar.events.insert allow    # add events without the question
+gcal personal config set permissions.api.calendar.events.insert ask      # be asked before each new event
 ```
 
 Если вы ничего не задали:
 
-- Метод, который меняет Календарь, — `ask`. В терминале `gcal` спрашивает перед обращением к Google; в скрипте
-  добавьте `--yes`. Через MCP спросить некого, поэтому `ask` разрешает команде выполниться.
-- Предоставление доступа к календарю (`calendar.acl.insert`, `patch`, `update`, `delete`) и передача его другому
-  аккаунту (`calendar.calendars.transferOwnership`) — `ask`, как и любое другое изменение. Через MCP это значит, что
-  агент может открыть ваш календарь кому угодно или отдать его без вопроса. Чтобы это запретить, задайте
+- Метод, который меняет Календарь и который легко отменить, например `calendar.events.insert` или
+  `calendar.events.patch`, — `allow`, как `events create` и `events update`.
+- Метод, который удаляет, например `calendar.events.delete` или `calendar.calendarList.delete`, — `ask`. В терминале
+  `gcal` спрашивает перед обращением к Google; в скрипте добавьте `--yes`. Через MCP спросить некого, поэтому `ask`
+  разрешает команде выполниться.
+- Предоставление доступа к календарю (`calendar.acl.insert`, `patch`, `update`, `delete`) — `ask`. Через MCP это
+  значит, что агент может открыть ваш календарь кому угодно без вопроса. Чтобы это запретить, задайте
   `permissions.api.calendar.acl deny`.
+- Удаление целого календаря (`calendar.calendars.delete`) и передача его другому аккаунту
+  (`calendar.calendars.transferOwnership`) — `deny`: ни то, ни другое нельзя отменить. Чтобы разрешить их, задайте
+  ключу `ask` или `allow`.
 - `sharing.notify`, разрешение Google отправить письмо человеку, которому открыт календарь, — `deny`. Google
   отправляет это письмо, если `sendNotifications` не равно `false`, поэтому пока ключ в `deny`, при открытии доступа
   нужно указать `--send-notifications false`.
@@ -71,8 +76,8 @@ gcal personal config set permissions.api.calendar.events.insert allow    # add e
 `api.calendar.events.update` для `update` (переключение между событием со временем и событием на весь день отправляет
 событие целиком), `api.calendar.events.delete` для `delete`, `api.calendar.events.move` для `move`. Поэтому
 `permissions.api readonly` останавливает и запись событий, а `permissions.api.calendar.events.insert ask` заставляет
-`events create` спрашивать. Встроенное значение `ask` этих методов действует только для команд `api`. Один вопрос
-покрывает все ключи одной записи.
+`events create` спрашивать. Встроенное значение `ask` у `api.calendar.events.delete` действует только для команд
+`api`: `events delete` спрашивает по своему ключу. Один вопрос покрывает все ключи одной записи.
 
 Команды `api` подчиняются тем же ключам. Методу, после которого Google рассылает письма участникам (`--send-updates`
 со значением кроме `none` или `--send-notifications true`), нужен ещё и `events.notify`. Удалению события или его

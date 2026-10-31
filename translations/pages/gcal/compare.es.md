@@ -7,7 +7,7 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.3.0, sus comandos y su código, revisados
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.5.0, sus comandos y su código, revisados
 el 31 de octubre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
 propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
@@ -40,10 +40,10 @@ Las herramientas:
 | Escribir fechas con palabras, como «mañana a las 15» o «el viernes que viene» | 🟡 | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/utils.py) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/dates.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | n/a | n/a |
 | Reuniones de todos tus calendarios y cuentas en una sola lista | 🟡 | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | Qué cambió desde una fecha: reuniones nuevas, movidas y canceladas | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
-| Encontrar reuniones que se solapan | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Encontrar reuniones que se solapan | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | **Encontrar una reunión** | | | | | | |
 | Encontrar una reunión por su tema, no por sus palabras exactas | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
-| Buscar en tus reuniones sin internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | ❌ | ❌ | ❌ |
+| Buscar en tus reuniones sin internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Una sola búsqueda en reuniones, chats, correo y notas | 🟡 | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Personas** | | | | | | |
 | Saber que un asistente es la persona con la que escribes en Telegram, WhatsApp o el correo | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
@@ -61,7 +61,7 @@ Las herramientas:
 | Instrucciones para agentes que usan una terminal | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | n/a |
 | **Configuración** | | | | | | |
 | Empezar sin crear tu propio proyecto de Google Cloud | ❌ | [❌](https://github.com/insanum/gcalcli#initial-setup) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#quick-start) | [❌](https://github.com/nspady/google-calendar-mcp#google-cloud-setup) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
-| Funciona desde claude.ai en la web y en el móvil | 🟡 | ❌ | ❌ | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
+| Funciona desde claude.ai en la web y en el móvil | 🟡 | [❌](https://github.com/insanum/gcalcli#readme) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 
 | | gcal | gcalcli | gog | Workspace MCP | google-calendar-mcp | Claude |
 |---|---|---|---|---|---|---|
@@ -75,14 +75,17 @@ Notas sobre la columna de `gcal`:
   `move`, `delete`, `respond`). En un evento periódico, un cambio o un borrado afecta a una repetición, a toda la serie
   o a esta y todas las siguientes (`--following`). `events move --to-calendar` mueve un evento, con su id, a otro
   calendario de la misma cuenta. `--grant sharing` añade quién puede ver un calendario.
-- **Qué cambió y qué se solapa.** `events list changed:<date>` muestra las reuniones guardadas por primera vez, movidas
-  o canceladas desde esa fecha, con la hora anterior de cada una que se movió. Lee la copia de tu ordenador, así que
-  ve lo que trajeron las sincronizaciones. `events list overlapping` muestra las reuniones que se solapan con otra a
-  la que asistes.
+- **Qué cambió.** `events list changed_at>=<date>` muestra las reuniones guardadas por primera vez, movidas o
+  canceladas desde esa fecha, con la hora anterior de cada una que se movió. Lee la copia de tu ordenador, así que ve
+  lo que trajeron las sincronizaciones.
+- **Reuniones que se solapan.** Desde la versión 0.5.0, `events list` solo acepta la consulta por campos que aceptan
+  todas las listas de WireCat, y esa consulta no tiene un término para las reuniones que se solapan. La lista da el
+  inicio y el fin de cada reunión, así que tú o un agente podéis compararlos.
 - **Tu propia aplicación de Google.** Hoy cada usuario de `gcal` crea un proyecto de Google Cloud y un cliente OAuth,
   y entrega a `gcal` el archivo del cliente al iniciar sesión. Consulta la [instalación](./installation.md).
-- **Fechas con palabras.** `events list` acepta `today`, `week`, y `from:` y `to:` con una fecha. No entiende «el
-  viernes que viene».
+- **Fechas con palabras.** `events list` acepta una fecha o una hora en sus términos por campo, como
+  `ends_at>=today starts_at<=2026-11-06`, y las palabras `today` y `yesterday`. No entiende «semana» ni «el viernes
+  que viene».
 - **Preparar una reunión.** `events show` da los asistentes, cada uno vinculado a la persona que conoces de otras
   herramientas, y los archivos de Drive de la reunión. Lo que hablasteis la última vez está en `memo`, no en `gcal`.
 - **Todos los calendarios.** Una lista abarca los calendarios que elegiste sincronizar en un perfil. Cada cuenta de
@@ -90,15 +93,16 @@ Notas sobre la columna de `gcal`:
 - **Buscar por significado.** Necesita un modelo que descargas una vez. Sin él, la búsqueda encuentra las palabras y
   sus otras formas.
 - **Una búsqueda sobre todo.** Las reuniones van al almacén que comparten las demás herramientas de WireCat.
-  `search all` en las otras herramientas de WireCat, como `tg`, las lee junto a chats, correo y notas. `gcal search`
+  `search all` en las otras herramientas de WireCat, como `tg`, las lee junto a chats, correo y notas. `gcal search events`
   por sí mismo solo encuentra reuniones.
 - **Cuándo están libres las personas.** `calendars busy` pregunta a Google cuándo están ocupados tus calendarios y
   otras personas, y con `--duration-minutes` da los huecos libres que comparten dentro del horario laboral.
 - **Un agente no puede cambiar tu calendario si no lo permites.** Sin `--grant write`, el propio inicio de sesión es el
   límite. Después, añadir, cambiar, mover y responder se hacen sin preguntar; un borrado pregunta antes en una
   terminal. Por MCP no hay nadie a quien preguntar, así que un agente también borra eventos y, con `--grant sharing`,
-  comparte el calendario sin preguntar. Enviar correos a los asistentes y borrar una serie entera siguen rechazados
-  hasta que los permitas. Para que te pregunte o para impedir escrituras, pon los permisos del perfil en `ask`, `deny`
+  comparte el calendario sin preguntar. Enviar correos a los asistentes, borrar una serie entera, y borrar un
+  calendario entero o dárselo a otra cuenta siguen rechazados hasta que los permitas. Para que te pregunte o para
+  impedir escrituras, pon los permisos del perfil en `ask`, `deny`
   o `readonly` (por ejemplo `permissions.events.create ask` o `permissions.api.calendar.acl deny`), o inicia el
   servidor con `mcp serve --permission` para endurecer una clave solo en ese servidor.
 - **Texto de las invitaciones.** Cualquiera puede enviarte una invitación, así que su título, notas y lugar son
