@@ -50,10 +50,12 @@ gcal personal config set permissions.api.calendar.events.insert allow    # add e
 
 - Метод, который меняет Календарь, — `ask`. В терминале `gcal` спрашивает перед обращением к Google; в скрипте
   добавьте `--yes`. Через MCP спросить некого, поэтому `ask` разрешает команде выполниться.
-- Предоставление доступа к календарю (`calendar.acl.insert`, `patch`, `update`, `delete`) и передача его другому
-  аккаунту (`calendar.calendars.transferOwnership`) — `ask`, как и любое другое изменение. Через MCP это значит, что
-  агент может открыть ваш календарь кому угодно или отдать его без вопроса. Чтобы это запретить, задайте
-  `permissions.api.calendar.acl deny`.
+- Предоставление доступа к календарю (`calendar.acl.insert`, `patch`, `update`, `delete`) — `ask`, как и любое
+  другое изменение. Через MCP это значит, что агент может открыть ваш календарь кому угодно без вопроса. Чтобы это
+  запретить, задайте `permissions.api.calendar.acl deny`.
+- Удаление целого календаря (`calendar.calendars.delete`) и передача его другому аккаунту
+  (`calendar.calendars.transferOwnership`) — `deny`: ни то, ни другое нельзя отменить. Чтобы разрешить их, задайте
+  ключу `ask` или `allow`.
 - `sharing.notify`, разрешение Google отправить письмо человеку, которому открыт календарь, — `deny`. Google
   отправляет это письмо, если `sendNotifications` не равно `false`, поэтому пока ключ в `deny`, при открытии доступа
   нужно указать `--send-notifications false`.

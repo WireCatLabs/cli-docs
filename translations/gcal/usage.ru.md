@@ -78,7 +78,7 @@ gcal personal sync                          # what changed since the last sync
 gcal personal calendars list                # every calendar of the account, and which of them sync
 gcal personal calendars sync 3             # sync calendar 3 of the list from now on; unsync stops it
 gcal personal sync --embed                  # also index new events for search by meaning
-gcal personal status                        # how far each calendar's sync is, and when it last moved
+gcal personal store status                  # how far each calendar's sync is, and when it last moved
 ```
 
 Синхронизация сама останавливается до истечения лимита времени и сохраняет каждую страницу по ходу, поэтому ничего
@@ -105,32 +105,39 @@ gcal personal status                        # how far each calendar's sync is, a
 Эти команды читают локальное хранилище, поэтому работают без сети:
 
 ```sh
-gcal personal events list week                                  # this week's events, earliest first
-gcal personal events list from:2026-11-02 to:2026-11-06 person:ana@example.com
-gcal personal events list changed:2026-10-25                    # what changed since a date
-gcal personal events list week overlapping                      # meetings that clash
+gcal personal events list                                       # from today on, earliest first
+gcal personal events list ends_at>=2026-11-02 starts_at<=2026-11-06 person:ana@example.com
+gcal personal events list changed_at>=2026-10-25                # what changed since a date
 gcal personal events show event:42                              # attendees, Drive files and history
-gcal personal search roadmap planning                           # by words, and by meaning with the model
+gcal personal search events roadmap planning                    # by words, and by meaning with the model
 gcal personal people list                                       # everyone in this week's events
+gcal personal people list event:42                              # one event's attendees
 gcal personal people link email:ana@example.com telegram:12345  # the same person in another WireCat tool
 gcal personal links review                                      # copies the tool could not join to one event
 ```
 
-`changed:<date>` оставляет события, которые впервые сохранились, были перенесены, отменены или удалены с этой даты, у
+`events list` принимает тот же запрос по полям, что и любой список WireCat, и никаких собственных слов.
+`ends_at>=<date>` оставляет события, которые заканчиваются после начала этого дня, а `starts_at<=<date>` — те, что
+начинаются до его конца, так что вместе они дают события за несколько дней подряд. Точное время пишется в кавычках со
+смещением: `ends_at>"2026-11-03T10:00:00+01:00"`. `starts_at` задаёт только самое позднее начало, а `ends_at` — только
+самый ранний конец, потому что хранилище находит события по отрезкам времени, которые они занимают; `starts_at>=…`
+отклоняется, и в ответе названо условие `ends_at`, которое нужно написать вместо него. `calendar:<id>` и
+`person:<email>` сужают список. Без `starts_at` или `ends_at` список начинается с начала сегодняшнего дня.
+`gcal personal events list --help` перечисляет поля.
+
+`changed_at>=<date>` оставляет события, которые впервые сохранились, были перенесены, отменены или удалены с этой даты, у
 каждого `change` (`new`, `moved` или `cancelled`) и `changed_at`; у перенесённого есть ещё `was` — где оно было
 (`starts_at`, `ends_at`). Фильтр читает то, что сохранили синхронизации, поэтому видит только принесённое ими, а
-встреча, перенесённая и возвращённая обратно, изменением не считается. `overlapping` оставляет события со временем,
-которые пересекаются с другим, у каждого `overlaps` — ID остальных. Событие учитывается, только если занимает ваше
-время: не отменено, не на весь день, и вы его не отклонили и не отметили как свободное время.
+встреча, перенесённая и возвращённая обратно, изменением не считается.
 
-По умолчанию `search` читает хранилище (`--backend archive`). `--backend server` вместо этого использует
+По умолчанию `search events` читает хранилище (`--backend archive`). `--backend server` вместо этого использует
 собственный поиск Google Календаря по синхронизируемым календарям. Он находит и события за пределами
 синхронизированного периода (год назад, три месяца вперёд). Он только читает, ничего не сохраняет в хранилище и
 требует сети. Google возвращает совпадения в порядке, который не указывает, поэтому `gcal` выводит их от ранних к
 поздним и отклоняет `--newest`; `--exact` и `--cursor` тоже не применяются:
 
 ```sh
-gcal personal search --backend server quarterly review
+gcal personal search events --backend server quarterly review
 ```
 
 `--backend both` отклоняется: хранилище и Google по-разному ранжируют и разбивают события на страницы, поэтому у
@@ -269,8 +276,9 @@ gcal personal mcp check                             # start it once, as the agen
 любого другого клиента. `gcal guide agent-access` проводит через всю настройку.
 
 Сервер предлагает все команды, включая те, что пишут. Что выполняется, решают разрешения профиля; см.
-[настройки](./configuration.md#permissions). Это касается и открытия доступа к календарю (`acl`), и передачи его
-другому аккаунту (`calendars.transferOwnership`): агент может сделать и то и другое без вопроса. Две команды агенту
+[настройки](./configuration.md#permissions). Это касается и открытия доступа к календарю (`acl`): агент может сделать
+это без вопроса. Удаление целого календаря (`calendars.delete`) и передача его другому аккаунту
+(`calendars.transferOwnership`) запрещены, пока вы их не разрешите. Две команды агенту
 никогда не предлагаются: `api call` и `calendars.clear`, которая очищает календарь. Их вы запускаете сами, в
 терминале. Не предлагаются и команды, которые настраивают вход и связь с агентом: `session start` и `session end`, а
 также `mcp serve`, `mcp add`, `mcp config`, `mcp check`, `mcp revoke` и `mcp server start | stop | status`.

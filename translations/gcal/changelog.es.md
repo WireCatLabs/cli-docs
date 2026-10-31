@@ -4,6 +4,73 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.5.0 — 31.10.2026
+
+### Añadido
+
+- **`calendars list` acepta una consulta**: `synced:`, `primary:` y `access_role:` acotan la lista, como en
+  `gcal personal calendars list synced:true`.
+- **`commands info` describe con qué responde cada comando de calendario**, y `--fields` puede elegir de ahí.
+
+### Cambios — pueden romper scripts
+
+- **`gcal search <words>` ahora es `gcal search events <query>`, y `gcal status` ahora es `gcal store status`**, la
+  forma que usan las demás herramientas de WireCat (max: `search messages <query>`, `store status`). Las rutas antiguas
+  ya no existen, sin alias. Por MCP el comando es `search events`, y su entrada es `query` (antes `words`); el paso a
+  la página siguiente de una búsqueda en el almacén también nombra `query`. La pista de una sincronización parcial
+  apunta a `store status`. Las claves de permisos se mueven con ellos: `permissions.store.status` y
+  `permissions.search.events`; `permissions.search` sigue cubriendo la búsqueda. Una configuración que aún define
+  `permissions.status` se rechaza con `config.invalid`, que nombra
+  `gcal <profile> config unset permissions.status`.
+- **`events list` acepta solo la consulta estándar por campos, y ninguna palabra propia.** `today`, `week`, `from:`,
+  `to:`, `changed:` y `overlapping` se rechazan. Escribe el intervalo como campos: `from:2026-11-02 to:2026-11-06` es
+  `ends_at>=2026-11-02 starts_at<=2026-11-06`, y `changed:2026-10-25` es `changed_at>=2026-10-25`; `calendar:` y
+  `person:` se mantienen. Por MCP la entrada es `query` (`"ends_at>=2026-11-02"`), ya no `words`. Lo que pierden los
+  scripts:
+  - `today` y `week`: escribe las fechas. El lenguaje de consulta tiene `today`, pero ninguna palabra para un día más
+    adelante, así que el final de un intervalo es una fecha ISO.
+  - `overlapping` y el campo `overlaps`: ningún término estándar pide los eventos que se solapan, así que la lista ya
+    no los encuentra. Compara en su lugar `starts_at` y `ends_at` de los eventos listados.
+  - `starts_at>=…` se rechaza e indica el término `ends_at>=…` que hay que escribir en su lugar: el almacén encuentra
+    los eventos por los momentos que abarcan, así que solo puede acotar el inicio más tardío y el final más temprano.
+    Un evento que termina justo en el momento de `ends_at` queda fuera.
+  - Sin un término de tiempo, la lista sigue empezando al inicio de hoy.
+- **Borrar un calendario de Google entero y cederlo a otra cuenta están en `deny` por defecto**, como vaciarlo.
+  `api.calendar.calendars.delete` y `api.calendar.calendars.transferOwnership` estaban en `ask`, que por MCP se ejecuta
+  sin preguntar. Pon cualquiera de las dos claves en `ask` o `allow` para dejar que se ejecute.
+- **`session status` y `session end` responden donde no se puede acceder a ningún llavero y no se guarda ningún
+  archivo de sesión.** Antes fallaban con `oauth.not-saved`. Ahora `session status` dice `state: missing` con
+  `keyring: unreachable`, y `session end` dice `ended: false` con `keyring: unreachable`: esta ejecución no puede usar
+  ninguna sesión, así que no hay nada que mostrar ni que cerrar. Una sesión guardada con `--credential-storage file` se
+  lee como antes. `session start` y los comandos que llaman a Google siguen fallando con `oauth.not-saved`, que se
+  explica en [Cuando algo falla](./troubleshooting.md). Un script que interpretaba ese fallo como «llavero fuera de
+  alcance» lee ahora `keyring` en la respuesta.
+- **`people list` acepta un evento como `event:<id>`.** `gcal personal people list 42` se rechaza como una palabra sin
+  campo; escribe `people list event:42`. Por MCP la entrada es `query` (`"event:42"`), ya no `event`.
+- **`search --backend server` responde como la búsqueda compartida.** El `found_by` de cada evento es `["server"]`
+  (antes `["google"]`). Los rechazos tienen motivos nuevos: ningún calendario sincronizado es `search.no-calendars`
+  (antes `calendars.none-synced`), `--offline` es `search.offline` (antes `offline.refused`), `--exact`, `--cursor` o
+  `--newest` es `search.server-options`, y `--backend both` es `search.one-backend` (antes `search.backend-both`).
+- **La ayuda de los comandos de calendario ya no muestra `--json` y `--jsonl` en cada comando**, y sus herramientas MCP
+  ya no aceptan las entradas `json` o `jsonl`. Las opciones globales `--json` y `--jsonl` funcionan como antes; a un
+  agente que enviaba `jsonl: true` se le rechazaba.
+- **`config show --bot` y `config set|unset --personal|--bot` quedan ocultos.** gcal no tiene bots, así que no había
+  nada detrás. Se siguen aceptando, así que un script que pase uno sigue funcionando.
+
+### Corregido
+
+- **Las llamadas que un agente envía a la vez a `gcal mcp serve` reciben cada una su propia respuesta.** Dos lecturas
+  de calendario enviadas juntas podían responder a una de ellas vacía (`{"item":{"value":null}}`) o hacerla fallar con
+  `command.crashed`, porque las llamadas compartían qué comando se estaba ejecutando y el almacén que había abierto.
+  Ahora cada llamada tiene los suyos
+  ([WC-ARCH-22](https://github.com/WireCatLabs/cli-base/blob/v0.65.5/docs/standards/architecture.md#wc-arch-22--build-the-command-tree-once-keep-each-calls-state-out-of-it)).
+- **Un evento de todo el día sin zona horaria propia ni de su calendario empieza a medianoche en la zona horaria de tu
+  ordenador.** gcal lo leía como medianoche UTC: en un ordenador en Madrid empezaba una hora tarde, y en Nueva York la
+  tarde anterior. El `timezone` de ese evento nombra ahora la zona en la que se leyó, donde antes era `null`. Un evento
+  o calendario que nombra su zona se lee en esa zona, como antes. Un evento ya guardado conserva su inicio antiguo
+  hasta que Google lo envíe de nuevo, después de que cambie
+  ([WC-TIME-3](https://github.com/WireCatLabs/cli-base/blob/v0.65.5/docs/standards/time.md#wc-time-3--read-a-time-that-has-no-zone-in-the-zone-in-use-and-say-which-zone-that-was)).
+
 ## 0.4.0 — 31.10.2026
 
 ### Corregido
