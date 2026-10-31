@@ -48,11 +48,11 @@ La identificación de ejecución anterior está inventada; `runs list` muestra l
 Un registro de ejecución es una carpeta bajo `runs/<day>/` en la carpeta de estado. Su nombre es la hora y el comando. Contiene dos archivos:
 
 - `run.json`: el comando, el perfil, la versión de `wa`, el nodo y el sistema, cuándo comenzó y finalizó, el resultado y el código de error;
-- `events.jsonl`: las mismas operaciones que muestra `--trace`, una por línea.
+- `events.jsonl`: las mismas operaciones que muestra `--trace`, una por línea. Bajo cada operación están las solicitudes que hizo, marcadas `"level": "wire"`: al motor de WhatsApp (`"transport": "wa-engine"`, el nombre de la solicitud del motor, como `send` u `older`) o a la Graph API de Meta para los comandos `bot` (`"transport": "http"`, el método y la ruta con los identificadores como `:id`). Cada una tiene su duración, resultado y código de error. Una solicitud al motor guarda el identificador de un mensaje cuando lo tiene y nunca el de un chat: el identificador de un chat contiene un número de teléfono. Una descarga de medios no guarda ninguna dirección.
 
-## Una ejecución fallida siempre se mantiene
+## Se mantiene cada ejecución
 
-Cuando un comando termina con un error, su ejecución se mantiene incluso sin `--record`. `run.json` entonces tiene `"keptBecauseFailed": true`. Esto se aplica a cada comando y a cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo, un rechazo porque otro comando retiene el dispositivo. Lo que el registro guarda de la línea de comando está en [Lo que escribiste](#what-you-typed); una ejecución cuya configuración no cargó oculta todo valor escrito que pueda ser texto.
+Cada ejecución se mantiene sin `--record`, también la que funcionó. Una ejecución fallida se mantiene para cada comando y cada error: una mala opción, un comando desconocido, una verificación antes de cualquier trabajo, un rechazo porque otro comando retiene el dispositivo. Lo que el registro guarda de la línea de comando está en [Lo que escribiste](#what-you-typed); una ejecución cuya configuración no cargó oculta todo valor escrito que pueda ser texto.
 
 Cada ejecución se registra, también las que funcionaron, por lo que un informe de problema siempre tiene la ejecución que adjuntar. `--no-record` no guarda nada en una ejecución; `"record": false` en la configuración guarda solo las ejecuciones fallidas.
 
