@@ -28,8 +28,8 @@ export function MessengerSwitch({ lang, pages }: { lang: string; pages: string[]
   const router = useRouter()
   const messengers = [
     { name: "tg", label: "Telegram" },
-    { name: "max", label: "MAX" },
     { name: "wa", label: "WhatsApp" },
+    { name: "max", label: "MAX" },
   ]
   const selected = messengers.find(
     (tool) => pathname === `/${lang}/docs/${tool.name}` || pathname.startsWith(`/${lang}/docs/${tool.name}/`),

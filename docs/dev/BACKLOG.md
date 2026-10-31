@@ -22,3 +22,6 @@ this repository owns: [STRUCTURE.md](../STRUCTURE.md).
 
 ## Next (P2)
 
+- **DOCS-13** · P2 · Google Calendar in the landing's hero sources and footer docs list. gcal is on npm and
+  "What you can use today" lists it (as "Calendar"); the hero row and the footer still name only Google Drive.
+
