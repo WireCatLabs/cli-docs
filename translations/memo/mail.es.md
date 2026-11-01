@@ -3,19 +3,71 @@ title: "Correo"
 ---
 
 Esta página te ayuda a traer tu correo a Memo. Así el correo está junto a tus notas y mensajes en la
-búsqueda, en el contexto de una persona y en las fuentes que lee tu agente. Memo lee el correo a
-través de [Himalaya](https://github.com/pimalaya/himalaya), un programa de correo que configuras
-primero. La importación lee el buzón sin cambiarlo ni marcar correo como leído. Los comandos de
-[limpieza de Gmail](#clean-up-gmail) mueven el correo elegido a la Papelera o lo restauran solo con
-`--yes`. Memo nunca envía correo.
+búsqueda, en el contexto de una persona y en las fuentes que lee tu agente. La vía de entrada es el
+programa aparte [mail](https://github.com/WireCatLabs/mail-cli): `mail` copia tu buzón al almacén compartido de
+WireCat, y Memo busca y muestra lo que hay en él. `mail` solo lee tu buzón. Memo nunca envía correo.
+
+Memo todavía puede importar correo con Himalaya. Ese camino antiguo funciona por ahora y se eliminará en una versión
+posterior; se describe en [Importación antigua con Himalaya](#older-import-through-himalaya-legacy).
 
 <a id="importar-correo" />
 
-## Antes de empezar
+## Trae el correo con mail
+
+Instala `mail` y añade tu buzón. Su [documentación](https://github.com/WireCatLabs/mail-cli/blob/main/docs/index.md) lista los pasos de cada proveedor,
+como el ajuste IMAP y la contraseña de aplicación (una contraseña aparte para un solo programa, que puedes revocar
+en cualquier momento).
+
+```sh
+npm install -g @wirecat/mail-cli
+mail ya session start --address me@example.com
+mail ya sync
+mail ya status
+```
+
+`ya` es un nombre de perfil que eliges para un buzón. `session start` inicia sesión, `sync` lee los últimos 30 días
+al almacén compartido y `status` muestra cuánto ha avanzado un buzón grande. Ejecuta `mail ya sync` otra vez para traer
+correo nuevo. Memo no necesita ningún ajuste para este correo: lee el mismo almacén.
+
+`mail` guarda el texto y las cabeceras de cada mensaje, no los adjuntos. Consulta su
+[documentación](https://github.com/WireCatLabs/mail-cli/blob/main/docs/index.md) para saber qué guarda y cómo mantener un buzón al día.
+
+## Busca y lee el correo en Memo
+
+```sh
+memo search mail 'invoice'
+memo messages show <ref>
+```
+
+`<ref>` es el `ref` de un resultado de búsqueda. `memo search all` encuentra este correo junto con tus notas y
+mensajes. Hay más palabras de búsqueda en [Encontrar tu correo](#find-your-mail) y [Búsqueda](./search.md#search-mail).
+
+## Los comandos memo mail
+
+`memo mail inspect`, `rules`, `delete`, `restore` y `status` se mantienen por ahora. Toman una cuenta de la lista
+`mail.accounts` de Memo, que `memo mail add` rellena a partir de una cuenta de Himalaya, así que no funcionan con una
+cuenta que solo añadió `mail`.
+
+| Comando | Qué necesita | Qué hace |
+|---|---|---|
+| `memo mail inspect <account>` | Una cuenta de Himalaya en la configuración de Memo | Lee cabeceras del buzón y agrupa el correo por remitente ([Elegir qué importar](#choose-what-to-import)) |
+| `memo mail rules ...` | Lo mismo | Guarda y cambia las reglas de lo que almacena una importación. `rules apply` también lee cabeceras del buzón |
+| `memo mail delete <account>` | Lo mismo, y `--yes` | Mueve el correo de Gmail elegido a la Papelera de Gmail ([Limpia Gmail](#clean-up-gmail)) |
+| `memo mail restore <account>` | Lo mismo, y `--yes` | Devuelve de la Papelera una ejecución registrada |
+| `memo mail status <account>` | Lo mismo | Cuenta solo la importación con Himalaya. Para una cuenta sincronizada con `mail`, ejecuta `mail <profile> status` |
+
+`memo mail delete` es el único sitio donde Memo cambia un buzón. `mail` nunca lo hace.
+
+## Importación antigua con Himalaya (legacy)
+
+Esta importación se eliminará en una versión posterior. Usa [mail](#bring-mail-in-with-mail) para cuentas nuevas.
+Aquí Memo lee el correo a través de [Himalaya](https://github.com/pimalaya/himalaya), un programa de correo que
+configuras primero. La importación lee tu buzón sin cambiarlo ni marcar correo como leído.
+
+### Antes de empezar
 
 Configura tu cuenta de correo en Himalaya. Para Gmail, usa una cuenta IMAP con una
-[contraseña de aplicación](https://myaccount.google.com/apppasswords) de Gmail (una contraseña aparte
-para un solo programa, que puedes revocar en cualquier momento). Memo funciona con Himalaya 2.x (`himalaya --version`).
+[contraseña de aplicación](https://myaccount.google.com/apppasswords) de Gmail. Memo funciona con Himalaya 2.x (`himalaya --version`).
 
 Himalaya lee sus cuentas de `~/.config/himalaya/config.toml` (`HIMALAYA_CONFIG` o `-c` le indican otro
 archivo). Una cuenta de Gmail llamada `work` se ve así; la contraseña sale de un comando, aquí el llavero
@@ -37,7 +89,7 @@ Help me set up Himalaya for my Gmail account with an app password, and check tha
 Then add the account to Memo's config and import the last 30 days of mail.
 ```
 
-## Añadir la cuenta a Memo
+### Añadir la cuenta a Memo
 
 Indica explícitamente el nombre de la cuenta de Himalaya y su correo configurado:
 
@@ -62,7 +114,7 @@ Gmail es el tipo predeterminado. Estos comandos admiten un archivo de configurac
 `HIMALAYA_CONFIG` o su ubicación normal. Mantén el mismo entorno para importar. Una lista combinada de archivos
 requiere configuración manual. Google Takeout `mbox` sigue usando `mode: "mbox"`, descrito más abajo.
 
-## Sincronizar correo
+### Sincronizar correo
 
 ```sh
 memo sync --source email:work --since-time 2026-09-01
@@ -75,7 +127,8 @@ memo sync --source email:work --since-time 2026-09-01
 - Un listado completo marca el correo eliminado en origen y actualiza etiquetas y estado de lectura. Se ejecuta al menos una vez al día, tras cambiar reglas y con `--rescan`; una ventana de menos de 5000 correos se lista entera cada vez.
 - `memo sync` y el temporizador leen todas las cuentas de los ajustes.
 
-Comprueba el progreso sin consultar el buzón:
+Comprueba el progreso sin consultar el buzón. Esto cuenta solo la importación con Himalaya; para una cuenta
+sincronizada con `mail`, ejecuta `mail <profile> status`:
 
 ```sh
 memo mail status work
@@ -84,6 +137,8 @@ memo mail status work
 La primera línea cuenta la ventana más amplia importada, por ejemplo todo desde 2004, y muestra «complete» solo cuando está guardada entera. Una ejecución posterior más estrecha, como los 30 días del temporizador, aparece por separado como última ejecución. No representa todo el buzón.
 
 ## Elegir qué importar
+
+Esto funciona con una cuenta de la importación con Himalaya.
 
 Un buzón grande contiene muchas suscripciones y notificaciones. Revísalo antes de una primera importación grande:
 
@@ -234,6 +289,9 @@ Los ajustes antiguos guardaban las reglas en `config.json`. El primer comando me
 
 ## Limpia Gmail
 
+Esto funciona con una cuenta de la importación con Himalaya. Es el único sitio donde Memo cambia un buzón: mueve el
+correo a la Papelera de Gmail, y Gmail vacía la Papelera definitivamente a los 30 días.
+
 `memo mail delete` mueve a la Papelera de Gmail los correos de los que decidiste conservar solo el sobre. Gmail los conserva allí 30 días y después los elimina definitivamente.
 
 ```sh
@@ -289,13 +347,16 @@ Las etiquetas de Gmail, como Recibidos, Importantes, Destacados y tus propias et
 en carpetas de correo, así que `mailbox:important` las encuentra. Consulta
 [Búsqueda](./search.md#search-mail).
 
-`memo messages show <msg:email/…>` muestra un correo entero y el texto extraído de cada adjunto, como una factura PDF: los primeros 4 000 caracteres, o todo con `--full`. Si no hay texto, indica el motivo, por ejemplo `needs-agent` para una página escaneada.
+`memo messages show <msg:email/…>` muestra un correo entero. Para el correo de la importación con Himalaya añade el texto extraído de cada adjunto, como una factura PDF: los primeros 4 000 caracteres, o todo con `--full`. Si no hay texto, indica el motivo, por ejemplo `needs-agent` para una página escaneada. El correo sincronizado con `mail` no tiene texto de adjuntos.
 
 ## Qué se guarda
 
+Esta lista es para la importación con Himalaya. El correo que sincronizó `mail` guarda solo el texto y las cabeceras:
+sin adjuntos, y por tanto sin texto de adjuntos.
+
 - El remitente, los destinatarios (Para, CC y CCO), el asunto, la fecha y el texto de cada correo.
 - Si un correo está leído o destacado, tal como lo muestra tu buzón.
-- El texto de los adjuntos legibles, que se busca junto con el correo ([archivos compatibles](./notes.md#files-memo-can-read)).
+- Para la importación con Himalaya: el texto de los adjuntos legibles, que se busca junto con el correo ([archivos compatibles](./notes.md#files-memo-can-read)).
   Los lectores de PDF y Word se incluyen con Memo. Si un adjunto quedó sin leer porque faltaba su lector
   (`engine-missing`, por un Memo antiguo o una instalación dañada), `memo sync --source email:work --retry-attachments`
   solo vuelve a leer esos correos por su id Gmail, hasta `--limit`. No lista el buzón, así que es rápido;
@@ -308,7 +369,7 @@ ordenador; `--no-embed` omite este paso.
 
 ## Cuando se borra un correo
 
-Cuando borras un correo en tu buzón, su texto sale del almacén local en la siguiente importación. El
+Cuando borras un correo en tu buzón, su texto sale del almacén local en la siguiente importación con Himalaya. El
 correo movido a Spam cuenta como borrado. Para protegerte de errores:
 
 - los dos primeros días del periodo no se revisan en busca de correos borrados;

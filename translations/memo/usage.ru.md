@@ -31,7 +31,7 @@ Show the matching text and the source of each result.
 Если вы знаете, где что-то лежит, ищите только там:
 
 ```sh
-memo search all 'venue'               # messages, mail and notes together
+memo search all 'venue'               # messages, mail, notes and calendar events together
 memo search notes 'venue'             # notes only
 memo search mail 'from:kai invoice'   # mail only
 ```

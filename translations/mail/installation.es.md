@@ -25,4 +25,15 @@ mail ya session start --address me@example.com
 mail ya account check
 ```
 
+## Buscar en tu correo
+
+Tras `sync`, el correo está en el almacén común. `mail` llena el almacén. [memo](https://github.com/WireCatLabs/cli-memo)
+busca en él y muestra lo que contiene:
+
+```sh
+memo search mail "invoice"
+```
+
+Las palabras de la consulta están en [memo search](https://github.com/WireCatLabs/cli-memo/blob/main/docs/search.md).
+
 Siguiente: [úsalo](./usage.md).

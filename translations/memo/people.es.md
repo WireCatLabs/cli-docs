@@ -44,6 +44,9 @@ dirección. La respuesta reúne:
 - el último mensaje en cada sentido, los mensajes recientes en chats directos y grupos, y los chats
   que compartís;
 - su correo, en cuanto la dirección está enlazada a ella;
+- los eventos de calendario a los que está invitada, los próximos y los últimos pasados, de cada calendario que gcal
+  guardó. La respuesta nombra los calendarios que leyó. El título y el lugar de un evento los escribe quien envió la
+  invitación, y `--json` lista esos campos bajo `untrusted`;
 - la nota sobre ella, las notas que enlazan a ella y las notas que escribiste sobre ella en Memo;
 - las tareas abiertas que tratan sobre ella o que tiene asignadas.
 - los archivos de Google Drive que posee o que editó por última vez, tal como los indica Google. No has revisado estos

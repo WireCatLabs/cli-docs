@@ -6,15 +6,18 @@ Lo que comparten las CLI de WireCat —el llavero, los permisos, MCP y lo que nu
 [página de seguridad común](https://wirecat.dev/en/docs/security). Esta página recoge solo lo propio de `mail`.
 
 `mail` guarda sus ajustes en `config.json` y su estado en las carpetas que muestra `mail doctor`. Solo se comunica con el
-servidor IMAP de cada perfil, por TLS o STARTTLS; una conexión sin cifrado se rechaza. No puede enviar correo.
+servidor IMAP de cada perfil, por TLS o STARTTLS; una conexión sin cifrado se rechaza. No puede enviar correo y nunca cambia el buzón. Pero `memo` tiene
+`memo mail delete`, que mueve el correo de Gmail a la papelera. Un agente con acceso de escritura a memo puede cambiar el correo; un
+agente que solo tiene `mail` no puede.
 
 `session start` en un perfil nuevo busca el servidor de una dirección cuyo dominio no está en su tabla integrada (Yandex,
 Gmail, iCloud, Mail.ru, Fastmail, Outlook). Envía el dominio, nunca la dirección completa, a tres sitios: tu resolvedor
-DNS, para el registro MX del dominio; el ISPDB de Thunderbird en `https://autoconfig.thunderbird.net`; y
+DNS, para el registro MX del dominio; la lista de servidores de correo de Thunderbird en `https://autoconfig.thunderbird.net`; y
 `https://autoconfig.<domain>`, el servidor propio del dominio. Se detiene en la primera respuesta. `--provider` (un nombre
 de la tabla) o `--host` omite toda búsqueda, y nada sale del ordenador antes del inicio de sesión en ese servidor.
 
-La contraseña de aplicación se escribe en una terminal sin eco, o se recibe por stdin, y va al llavero del sistema operativo (servicio
+La contraseña de aplicación se escribe en una terminal sin eco, o se fija en `MAIL_PASSWORD` para una ejecución sin terminal. Va al
+llavero del sistema operativo (servicio
 `mail-cli`, cuenta el nombre del perfil) solo después de que el servidor la acepte. Nunca es un argumento, nunca forma parte de una
 dirección, nunca se escribe en `config.json`, en un registro ni en un registro de ejecución. Cuando el llavero falla, va en su lugar a `credentials.json` en la carpeta
 de configuración de `mail`, con modo 600, y `mail` lo avisa una vez por stderr; `--credential-storage file` elige ese
@@ -33,18 +36,11 @@ no se guardan. Un agente que lee correo sincronizado debe tratarlo como datos, n
 túnel. Cada aplicación inicia sesión con un código de un solo uso, y el servidor guarda un hash de cada inicio de sesión que concede, en la carpeta
 de estado, legible solo por ti. `mail ya mcp revoke` los olvida todos.
 
-Un registro de ejecución guarda la línea de comandos tal como la escribiste, así que `mail runs show` te dice qué se ejecutó. Aun así, un secreto se guarda como
-`[redacted]`: una opción con nombre de token o contraseña, una contraseña dentro de un enlace, una cadena larga y opaca. Un
-número de teléfono se sustituye por `[redacted]` dentro de la palabra que escribiste, también en el texto de un mensaje: uno escrito con su "+" y
-el código de país, o de 11 a 15 dígitos seguidos, así que también se oculta un id largo de esa longitud. Para no guardar ninguna de las palabras
-que escribes, ejecuta `mail personal config set record_input false`.
-
-Un secreto también se detecta por su aspecto, en un registro de ejecución y en un mensaje de error guardado: un token con un
-formato conocido (GitHub, OpenAI, Slack, AWS, Stripe, npm y similares), una credencial `Bearer`, una cadena de aspecto aleatorio de 20 o
-más caracteres, y una secuencia de aspecto aleatorio de 20 o más caracteres hexadecimales en minúscula, como una clave hexadecimal o el hash completo de un commit. También se oculta el valor que sigue al nombre de un secreto, tanto si va tras `=`, `:` o un espacio: `password=`, `API_TOKEN=`,
-`password hunter2`, `pin 1234`. Algunos secretos parecen palabras normales y se quedan: un valor solo de letras tras un
-nombre de secreto y un espacio (`pin this message` se queda), una clave hexadecimal en mayúsculas, un hash de commit corto o un UUID, una
-contraseña corta escrita sin nombre de secreto delante, y un secreto dentro de un enlace o de una ruta de archivo, salvo que tenga un formato conocido o vaya tras un nombre de secreto.
+Un registro de ejecución guarda la línea de comandos tal como la escribiste, así que `mail runs show` te dice qué se ejecutó. Un
+registro de ejecución y un mensaje de error sustituyen parte del texto por `[redacted]`: el valor de una opción o de un enlace que
+contiene un token o una contraseña, un token con formato conocido, una cadena larga de aspecto aleatorio y un número de teléfono,
+también dentro del texto de un mensaje. Un secreto con aspecto de palabra normal puede quedarse, así que no escribas uno. Para no
+guardar ninguna de las palabras que escribes, ejecuta `mail personal config set record_input false`.
 
 `config.json` se guarda legible solo por ti (`0600`), y su carpeta se crea solo para ti (`0700`). Un archivo o una
 carpeta creados por una versión anterior pueden estar abiertos a otros usuarios del ordenador: `mail doctor` muestra cada uno en

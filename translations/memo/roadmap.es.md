@@ -8,12 +8,12 @@ cambiar. Puedes proponer ideas en [las incidencias de GitHub](https://github.com
 
 ## Qué funciona hoy
 
-Memo lee carpetas de notas y sus documentos, importa correo de Gmail e IMAP a través de Himalaya y lee los
+Memo lee carpetas de notas y sus documentos, busca en el correo que sincroniza la CLI `mail` (aún lo importa a través de Himalaya, hasta que una versión posterior lo quite) y lee los
 mensajes que tg, max y wa guardan en el almacén local. Puedes buscar en todas esas fuentes, consultar lo que
 sabes de una persona o proyecto, etiquetar contenido, mantener tareas y recordatorios locales y dejar que
 un agente registre recuerdos, hechos y propuestas para que los revises, desde el terminal o mediante MCP.
 MCP ofrece comandos, incluidas escrituras, limitados por permisos guardados, y abre las fuentes completas.
-Descarga el modelo con `models download` y añade una cuenta explícita de Himalaya con `mail add`.
+Descarga el modelo con `models download` y añade una cuenta de la importación anterior con Himalaya con `mail add`.
 Todos los comandos y opciones están en [la referencia de comandos](./commands.md); las guías empiezan en
 [la introducción](./index.md).
 
@@ -38,7 +38,7 @@ Ahora mismo no hay nada en desarrollo. Los primeros elementos del apartado sigui
 - Recordatorios de las propias tareas de un proyecto.
 - Compatibilidad con macOS y Windows. Hoy Memo solo está probado en Linux.
 - Búsqueda de imágenes por la conversación que las rodea y por los datos de la foto.
-- Leer el correo sin Himalaya: Memo se conecta él mismo a tu buzón, así que no hay un programa de correo aparte
-  que instalar y configurar.
+- Quitar la importación con Himalaya. El correo llega a través de la CLI `mail`, que llena el almacén compartido; Memo
+  solo busca en él. Memo no se conectará a un buzón para importar.
 
 Los cambios de cada versión están en el [historial de cambios](./changelog.md).

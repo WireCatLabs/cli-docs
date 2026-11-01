@@ -25,4 +25,15 @@ mail ya session start --address me@example.com
 mail ya account check
 ```
 
+## Поиск по почте
+
+После `sync` почта лежит в общем хранилище. `mail` наполняет хранилище. [memo](https://github.com/WireCatLabs/cli-memo)
+ищет в нём и показывает его содержимое:
+
+```sh
+memo search mail "invoice"
+```
+
+Слова запроса описаны в [memo search](https://github.com/WireCatLabs/cli-memo/blob/main/docs/search.md).
+
 Дальше: [работа с инструментом](./usage.md).

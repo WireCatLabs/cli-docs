@@ -46,13 +46,37 @@ memo actions list status:proposed
 ```sh
 memo memories add 'Kai Sample prefers Friday meetings' --kind preference --scope work --evidence note:12
 memo memories list kind:preference scope:work
-memo memories show memory:3
+memo memories show memory:3 --sources
 memo search memories friday meetings scope:work
 memo memories confirm memory:3
 memo memories invalidate memory:3
 ```
 
 Память, которую вы добавляете командой `memo`, подтверждается сразу. Запись агента остаётся `proposed`, пока вы не проверите основания и не выполните `confirm`. Если основания устарели, например Kai теперь предпочитает понедельники, пометьте запись `stale`. `--subject person:…` задаёт предмет записи. `memories list` фильтруется полями `kind`, `status`, `scope` и `subject` запроса: `subject:"person:42"`.
+У каждой записи есть `subject_name` — как называется её предмет, и `subject_is_owner`, если запись о вас.
+`show --sources` возвращает каждое основание: отправителя или заголовок, время, короткую выдержку и
+`missing: true`, если источник с тех пор удалён.
+
+## Исправить или забыть
+
+Три способа обойтись с неверной записью или фактом, от сохранения максимума до сохранения ничего:
+
+```sh
+memo memories add 'Kai Sample prefers Monday calls' --kind preference --scope work --evidence note:12 --supersedes memory:3
+memo memories invalidate memory:3
+memo memories remove memory:3
+memo facts reject fact:4
+memo facts remove fact:4
+```
+
+- **Исправить**: добавьте верную запись с `--supersedes`. Старая остаётся с пометкой `superseded`, так что след ошибки
+  сохраняется. Запись исправляете только вы; `--supersedes` от агента отклоняется.
+- **Больше не верно**: `invalidate` помечает запись `stale`; `facts reverse` делает это для принятого решения, а
+  `facts reject` отклоняет факт, который предложил агент. Каждая команда сохраняет запись.
+- **Забыть**: `remove` стирает запись: её текст, связи с источниками и её строку в поиске Memo. Сообщения, заметки
+  и встречи, на которые она ссылалась, остаются. Резервная копия хранилища, сделанная раньше, сохраняет запись, пока копию не удалят.
+
+Агент не может забывать или отклонять через сервер MCP и не может исправлять там запись.
 
 ## Факты
 
@@ -67,8 +91,9 @@ memo facts confirm fact:4
 
 Факт, который вы добавляете командой `memo`, принимается сразу. Запись агента остаётся `proposed` до `memo facts confirm`; `author` и `source` показывают автора. `facts list` фильтруется полями `kind`, `status`, `project` и `subject` запроса. `--project project:1` относит факт к проекту, а `--occurred-time` задаёт дату события.
 
-Решение может заменить более раннее: добавьте `--supersedes fact:2`. Когда вы примете новое решение,
-старое перестанет действовать. Если решение больше не действует и ничем не заменено, выполните
+Чтобы исправить факт любого вида, добавьте верный с `--supersedes fact:2`. Старый остаётся с пометкой
+`superseded`, когда новый принят, а ваш принимается сразу. Исправить можно только предложенный или принятый факт.
+Агент может предложить исправление другого предложенного факта; принятый вами факт исправляете только вы. Если решение больше не действует и ничем не заменено, выполните
 `memo facts reverse fact:4`.
 
 ## Итоги встреч

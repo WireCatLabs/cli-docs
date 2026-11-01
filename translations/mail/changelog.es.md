@@ -4,6 +4,16 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.1.1 — 01.11.2026
+
+### Corregido
+
+- **La documentación lleva de `sync` al primer correo encontrado y dice cómo se guarda de verdad la contraseña.** La instalación, el uso y
+  el índice de la documentación terminan con `memo search mail`, porque `mail` llena el almacén común y memo busca en él. La
+  contraseña se guarda en el llavero, pasa a un archivo privado cuando el llavero falla y puede venir de `MAIL_PASSWORD`; nunca se lee de
+  stdin. `rate_limited` nombra las dos causas: el servidor limita la cuenta y `sync` agotó su propio presupuesto de peticiones.
+  La documentación también dice que `memo mail delete` mueve el correo de Gmail a la papelera.
+
 ## 0.1.0 — 31.10.2026
 
 ### Añadido

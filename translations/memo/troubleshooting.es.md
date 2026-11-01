@@ -53,8 +53,9 @@ funciona, y luego importa de nuevo.
 
 ## Aparece "no mail account" o la importación de correo pide una cuenta
 
-`no mail account` significa que el archivo de configuración todavía no tiene cuentas de correo. Ejecuta `memo mail add <account> <address>` tras configurar Himalaya
-o añade una en `mail.accounts` ([correo](./mail.md#add-the-account-to-memo)).
+`no mail account` significa que el archivo de configuración no tiene cuentas para la importación anterior con Himalaya. Para traer correo, usa
+[correo](./mail.md#bring-mail-in-with-mail): `mail <profile> sync` llena el almacén y `memo search mail` lo encuentra, sin cuenta en la configuración de Memo. Solo para la importación anterior, ejecuta `memo mail add <account> <address>` tras configurar
+Himalaya o añade una en `mail.accounts` ([correo](./mail.md#add-the-account-to-memo)).
 
 `memo sync --source email:work` acepta el nombre de cuenta: el `name` de `mail.accounts` en los ajustes. Si es incorrecto, Memo enumera las cuentas conocidas. Sin `--source`, lee todas.
 

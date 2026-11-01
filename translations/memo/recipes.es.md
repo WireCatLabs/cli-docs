@@ -275,7 +275,7 @@ con el mensaje como evidencia en el proyecto Harbour.
 
 Un hecho que registras directamente queda aceptado; uno añadido por un agente sigue propuesto.
 La [revisión del proyecto](#review-project-facts-and-follow-ups) reúne los hallazgos citados antes de
-decidir. Si un hecho sustituye a una decisión anterior, pide al agente que lo indique con `--supersedes`.
+decidir. Si un hecho sustituye a uno propuesto antes, pide al agente que lo indique con `--supersedes`; un hecho que aceptaste lo corriges tú.
 
 ## Revisión semanal
 

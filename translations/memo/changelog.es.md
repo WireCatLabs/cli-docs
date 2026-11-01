@@ -8,6 +8,268 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
+## Unreleased
+
+## 0.131.2 — 01.11.2026
+
+### Added
+
+- **Las tareas de proyecto tienen cinco estados: `open`, `todo`, `in_progress`, `done`, `dismissed`** (página Tasks de WireCat Desktop, cli-core 0.513.0). `tasks update --status` mueve una tarea de proyecto a cualquiera de ellos, también de vuelta desde `done` o `dismissed`, y cada cambio queda en el historial de la tarea. `todo` e `in_progress` cuentan como trabajo abierto para la disponibilidad, las reservas y la lista por defecto.
+- **`tasks list` con `project:` admite una consulta completa**: `project:*` para todos los proyectos, un proyecto por su nombre o alias, `assignee:`, `priority:` (etiquetas, `none`, rangos), `agent:`, `due:` y `closed:` con rangos, `overdue:`, OR dentro de un campo, NOT y palabras sueltas sobre el título y la descripción. `--sort` y `--desc` la ordenan, `--cursor` lee más allá de 500 y `page.total` indica cuántas coinciden. Cada tarea incluye `assignments`, `ready`, `blocked_by`, `agent`, `priority_label` y `revision`.
+- **`tasks counts [query]`** cuenta las tareas de proyecto que coinciden por proyecto, responsable, prioridad y estado, cada una sin los términos propios de la consulta sobre ese campo, para un selector.
+- **`tasks move <id> --before|--after <id> [--status s]`** coloca una tarea de proyecto junto a otra en su columna del tablero dándole una prioridad intermedia; la respuesta indica si cambió su etiqueta y qué tareas se separaron para hacer sitio.
+- **`tasks history <id>`** muestra quién cambió una tarea, qué y cuándo; **`tasks assign --clear`** quita a una persona de una tarea; **`tasks update --agent`** nombra al agente que trabaja en ella, aparte de sus responsables; **`people list`** lista a usted y a todas las personas que nombran las tareas, para un selector de responsable.
+- **`--revision`** en `tasks update`, `close`, `assign` y `move` rechaza una escritura hecha sobre una copia obsoleta: `configuration_error`, motivo `task.stale`, código de salida 3.
+
+### Changed — may break callers
+
+- **La prioridad de una tarea es una etiqueta sobre un número de 0 a 1, de mayor a menor.** `--priority` acepta `low`, `medium`, `high`, `critical` o `none`, y sigue leyendo 0 (urgente) … 4 (baja) como critical, high, medium, low, low. `--json` da `priority` como número (0.875 para lo que era 0) y `priority_label`. Las listas se ordenan por ella, de mayor a menor.
+- **Un `tasks list` simple lee `state:` como trabajo abierto**: sin `state:`, lista `open`, `todo` e `in_progress`. Un `state:open` explícito significa ahora solo las tareas nuevas.
+
+### Fixed
+
+- **`tasks update --parent none`** convierte una subtarea en tarea de primer nivel; fallaba con «no task none».
+- **`tasks add`, `close` y `assign` registran al agente** cuyo terminal ejecuta memo, como hacía `update`; antes siempre registraban al propietario.
+- **La lista de un proyecto indica `has_more` en 500 tareas**; decía que no había más.
+- **El README nombra `tasks links`**, no `relations`.
+
+## 0.131.1 — 01.11.2026
+
+### Fixed
+
+- **La documentación dice que la CLI `mail` trae el correo y que la importación de Himalaya se eliminará en una versión posterior.** `mail <profile> session start` y `mail <profile> sync` llenan el almacén compartido; memo busca y muestra ese correo. La importación de Himalaya y `memo mail inspect`, `rules`, `delete`, `restore` y `status` siguen funcionando sin cambios. Solo cambian la documentación y el texto de ayuda: `memo mail status` ahora dice que cuenta solo la importación de Himalaya y remite a `mail <profile> status`. La documentación también dice que el correo sincronizado por `mail` no tiene texto de adjuntos, que `memo mail delete` mueve el correo de Gmail a la Papelera, y escribe `memo mail delete`, `memo mail restore` y `memo mail inspect` completos.
+
+## 0.131.0 — 31.10.2026
+
+### Fixed
+
+- **El rellenado de cabeceras y la reparación del texto HTML ya no bloquean a otras CLI en el almacén.** Ambos guardaban un correo por transacción. Ahora guardan 50 por transacción mediante `MailStore.saveThreads` de cli-core (cli-core 0.506.0, ya en uso en 0.509.0), hacen una pausa de 100 ms entre lotes y guardan su progreso en la misma transacción: el rellenado guarda su cursor con cada lote y la reparación se marca como terminada con el último. Una ejecución que falla se reanuda tras el último lote guardado.
+
+## 0.130.0 — 31.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.509.0** (desde 0.507.0) trae los dos cambios siguientes; 0.508.0 solo cambió comandos de calendario que memo no ofrece.
+- **`agents list` nombra al agente que hizo una llamada MCP, no `memo-mcp`.** Una llamada a través de `memo mcp serve` se registra, y un hecho, recuerdo o acción que añade se firma, con el nombre que el cliente se dio a sí mismo (MCP `clientInfo.name`, como `claude-code`), si no con el agente de programación que inició el servidor, si no con `memo-mcp`. Un filtro por `agent:memo-mcp` ya no encuentra llamadas nuevas. El nombre es lo que el cliente afirma de sí mismo: se muestra, pero no se confía en él.
+- **`facts add --supersedes` corrige un hecho de cualquier tipo**, no solo una decisión aceptada. El hecho anterior debe estar propuesto o aceptado; pasa a `superseded` cuando el nuevo se acepta, lo cual ocurre de inmediato si es del propietario (uno propuesto antes seguía propuesto). Un `--supersedes` de un agente sobre un hecho que el propietario aceptó se rechaza (código de salida 5); sobre uno propuesto espera, como antes, a que el propietario lo confirme.
+
+## 0.129.0 — 31.10.2026
+
+### Added
+
+- **`memo doctor --online` indica si hay publicada una versión más nueva de memo.** La respuesta incorpora `online` con la forma de los demás doctor de WireCat: `ok`, `duration_ms` y `version: { current, latest, newer }` (`latest` es `null` cuando no se puede llegar a npm, lo cual no hace fallar el comando). Sin `--online`, el doctor de memo sigue sin conectarse a nada. Requiere cli-core 0.507.0 y cli-base 0.68.1.
+
+## 0.128.0 — 31.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.506.0: `search messages --discover` también busca por significado cuando la consulta usa `-`, `NOT`, `OR`, grupos, frases o `exact:`**, donde antes ejecutaba solo la búsqueda estricta; cada resultado sigue coincidiendo con toda la consulta.
+
+### Added
+
+- **`projects evidence --sync-first` sincroniza los chats vinculados del proyecto antes de leer.** Desactivado por defecto y no disponible por MCP. Para cada chat vinculado que el almacén no tiene hasta `--since-time`, memo ejecuta la CLI de mensajería de ese chat como `<tg|max|wa> <profile> messages sync --since-time <start> -- <chat>`, un chat cada vez, dentro de `--sync-time` (3 minutos en total). El perfil es el que tiene la sesión iniciada en la cuenta del chat, según el propio registro del mensajero; ninguno o varios es un rechazo para ese chat que los lista, nunca una suposición. memo ejecuta `wcat-<tool>` cuando se describe como esa herramienta, o el nombre corto solo cuando es el paquete de WireCat. El stderr del proceso hijo se pasa como progreso. Un chat que el tiempo corta, o cuya sincronización falla (otra ejecución tiene la sesión, MAX necesita `serve`), queda parcial con el motivo, y sus `missing` y `next` permanecen.
+- **El texto nombra el comando que sincroniza un chat vinculado parcial**, con su CLI y perfil: `tg work messages sync 9 --since-time 2026-09-01`.
+- **`projects evidence` viene de cli-core** (`gatherStoredProject`, compartido con tg y max). El comando se declara fetch por `--sync-first`. Requiere cli-core 0.504.0.
+
+### Fixed
+
+- **El número de un recuerdo o hecho olvidado nunca se da a uno nuevo** (cli-core 0.506.0). Tras `memories remove` o `facts remove` del registro más reciente, el siguiente tomaba su número, de modo que un `memory:N` o `fact:N` leído antes de olvidar nombraba otro registro.
+- **`memo doctor`, `memo mcp` y `memo mcp serve` usan los resúmenes que comparten todas las CLI de WireCat.** `memo doctor --help` ahora empieza con «the state this installation is in, without connecting unless --online» (memo sigue sin conectarse a nada y no tiene `--online`), `memo mcp` con «serve this profile's commands to an AI agent, and set that up» y `memo mcp serve` con «serve this profile's commands to an AI agent». Solo cambió el texto de ayuda.
+
+## 0.127.0 — 31.10.2026
+
+### Added
+
+- **Corregir, rechazar y olvidar recuerdos y hechos.** `memories add --supersedes memory:<id>` corrige un recuerdo: el anterior queda como `superseded` (solo los suyos; el de un agente se rechaza con `permission_error`). `facts reject fact:<id>` rechaza un hecho propuesto (nuevo estado `rejected`). `memories remove` y `facts remove` borran el registro, sus vínculos con las fuentes y su entrada de búsqueda, y responden `{ ref, removed: true, links }`; una copia de seguridad del almacén hecha antes lo conserva. Ninguno de los tres se ofrece por MCP.
+- **`subject_name` y `subject_is_owner`** en `memories list`, `memories show`, `facts list` y `facts show`: cómo se llama el sujeto, sin una segunda consulta.
+- **`memories show --sources` y `facts show --sources`** leen cada prueba en una sola llamada: `ref`, `kind`, `title`, `sender`, `at`, `excerpt`, `tool` y `missing` para una fuente borrada después.
+
+## 0.126.0 — 31.10.2026
+
+### Added
+
+- **`search notes`, `search messages` y `search mail` indican cuántos resultados coinciden en total.** `--json` añade `page.total: { value, relation }`, con la forma de `hits.total` de Elasticsearch: `eq` es el recuento exacto, `gte` un límite inferior (el recuento se detiene en 10 000). La vista de texto añade `showing 1–20 of 144` bajo los resultados. Las notas cuentan las que encuentran las palabras y las que se encuentran por significado, todas las páginas juntas (cli-core 0.501.0).
+
+### Fixed
+
+- **La búsqueda por significado dentro de un filtro encuentra las notas del propio filtro.** Con un filtro de como máximo 2000 notas, cada una se ordena por significado, en lugar de las 50 más cercanas en total recortadas al filtro (cli-core 0.501.0). memo requiere cli-base 0.67.0.
+
+### Changed — may break callers
+
+- **`projects evidence` indica lo que el almacén tiene de cada chat vinculado, y `search messages` y `search all` conservan en sus respuestas la laguna de cobertura** (cli-core 0.498.0). Cada fila de `linked_chats` incorpora `title`, `completeness` y `held`; un chat al que la ejecución no llegó es `state: "pending"` sin `items` ni `capped`, donde decía `in-scope` con `items: 0`. El `completeness` de la respuesta es `partial`, `unknown` o `complete`, y `meta.complete` es verdadero solo cuando las lecturas previstas terminaron y cada chat vinculado se tiene completo; `complete` conserva su significado, «las lecturas previstas terminaron». Un chat tenido en parte da `missing` (`field: "history"`) y una línea en el texto que lo nombra y da el comando de sincronización; el código de salida sigue siendo 0. memo no tiene `messages sync`, así que `next` (el paso `messages.sync` de cli-core) se elimina de las respuestas de memo: la CLI de mensajería sincroniza el chat. `search messages` y `search all` respondían `meta.complete:
+  true` sin `missing` para un chat tenido en parte, porque los constructores de respuestas de memo descartaban lo que devolvía cli-core; ahora llevan ambos.
+
+- **0.125.0 también traía las respuestas de cobertura de cli-core, que cambian la salida JSON** (cli-core 0.493.0, no indicado en esa versión). `memo search all --json` responde `meta.complete: false` con `missing` y `next` cuando un chat que buscó se tiene solo en parte o nunca se obtuvo, donde decía `true`; el código de salida sigue siendo 0. Las filas de `memo tasks agenda --json` incorporan `completeness` y `held`, y la respuesta puede llevar `meta.complete: false`, `missing` y `next`. Un llamador que leía `meta.complete` como «ninguna fuente falló» debe leer `missing` para saber el motivo.
+
+## 0.125.0 — 31.10.2026
+
+### Fixed
+
+- **`search notes` y `search all` conservan los campos de la consulta para las notas encontradas por significado.** `date:today` o `tag:work` sin `--exact` devolvían unas 20 notas que no coincidían con ninguno de los dos; ahora cada campo y cada palabra excluida se cumplen para cada resultado, y una consulta solo de campos lista las notas coincidentes, las más recientes primero. Para un documento de Google Drive, `date:` lee su última edición en Drive, la hora que su resultado muestra como `updated_at`, donde antes leía cuándo se importó por última vez (cli-core 0.496.0, con cli-base 0.65.5).
+
+## 0.124.0 — 31.10.2026
+
+### Changed — may break callers
+
+- **La búsqueda en notas, documentos, anotaciones y notas de contacto encuentra parte de una palabra, con cualquier combinación de mayúsculas y minúsculas.** Una palabra cirílica en mayúsculas y minúsculas mezcladas ya no se pierde, y el título se busca junto con el texto. Una búsqueda de uno o dos caracteres se rechaza con «search needs at least three characters», como la búsqueda de mensajes. El almacén pasa a la versión 40 la primera vez que esta versión lo abre; las notas guardadas antes reciben su índice de búsqueda por lotes mientras se ejecuta `search notes` o `store migrate`. Un memo más antiguo u otra CLI de WireCat debe actualizarse el mismo día, o dejará de indexar las notas nuevas. Este memo usa cli-core 0.491.0, que además termina de localizar una carpeta de correo grande a lo largo de varias sincronizaciones con presupuesto.
+
+## 0.123.0 — 30.10.2026
+
+### Fixed
+
+- **`memo sync` ya no falla con «database is locked» mientras otra herramienta escribe en el almacén compartido.** El almacén espera el bloqueo de escritura intentándolo cada milisegundo, de modo que una herramienta que escribe sin pausa (`mail sync`) no puede retenerlo durante toda la espera de 5 segundos.
+- **Los nombres coinciden sin distinguir mayúsculas en cualquier alfabeto, no solo en el latino.** `memo projects list 'name:*ТАРТ*'` ahora encuentra «Тартус». Lo mismo vale para títulos de chat, nombres de contacto, asuntos de correo y nombres de buzón y de etiqueta, en `tags list name:` y en la búsqueda de correo `mailbox:` y `label:`. El almacén pasa a la versión 38 la primera vez que esta versión lo abre, y rellena las copias en minúsculas con las que compara. Un memo más antiguo u otra CLI de WireCat sigue leyendo el almacén y avisa de que hay que actualizar.
+
+### Added
+
+- **Los resultados de `search all`, `search messages` y `search mail` llevan `sender_is_me`**, verdadero cuando el mensaje lo envió usted.
+
+### Changed — may break callers
+
+- **`--help` lista `gcal` en «Works with».** Un script o una prueba que fije la primera pantalla gana esa línea. Instale gcal con `@wirecat/gcal-cli`.
+
+## 0.122.0 — 29.10.2026
+
+### Changed — may break callers
+
+- **La skill del agente está publicada en ClawHub como `wirecat-memo`.** Instálela con `openclaw skills install @wirecat/wirecat-memo`. La entrada `cli-memo` ya no se actualiza. `memo skill install` sigue escribiendo `skills/cli-memo/`.
+
+### Added
+
+- **`person:me` le nombra a usted** en `context`, `relationships add`, sujetos de `notes`, `tasks assign`, `mentions confirm` y `projects gather --contact`. Es la persona que el almacén marca como propietario; si no hay ninguna marcada, el error dice cómo marcarla (`tg <profile> contacts link <your id> me`).
+- **`memo context person:<id>` lee a una persona cuya referencia ya tiene.** Antes pedía una cuenta de mensajería. La persona se lee de la única cuenta que la vio; cuando fueron varias, las lista y pide `--source provider:account`.
+
+### Fixed
+
+- **`memo messages show <email>` ya no imprime las versiones AMP y HTML del cuerpo** (unos 4000 caracteres de marcado) después del texto sin formato. `--full` las devuelve.
+- **La skill enviaba a los agentes a `memo commands search <word>`, que parece una búsqueda por palabra clave y responde `not_found`.** `memo commands` toma una ruta de comando (`memo commands search notes --json`); ahora la skill lo dice, y una prueba comprueba que cada línea de comando `memo` que contiene nombra un comando que existe.
+
+## 0.121.0 — 29.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.473.0.** `memo projects list` omite la bandeja de tareas que tiene cada cuenta de mensajería (un proyecto con nombre como `telegram:100`, su clave `IN` y ocho caracteres); `memo projects list kind:inbox` lista solo esas, y `name:` admite comodines `*`.
+
+## 0.120.0 — 27.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.469.0 y cli-base 0.65.0.** cli-core 0.469 solo acepta cli-base 0.65, así que ambas versiones cambian juntas. cli-base 0.65 conoce los verbos `serve` y `revoke`, por lo que sus entradas en la línea base de lint desaparecen, y su `cli-dev bundle` encuentra un servidor iniciado con una opción antes de `mcp serve`. Desde cli-core 0.468, un servidor MCP ofrece, mediante su herramienta de lectura, un comando que solo obtiene datos hacia el almacén.
+- **La sincronización de correo, las reglas y la puntuación se ejecutan desde cli-core 0.472.0.** El motor pasó a `@wirecat/cli-core/mail`; memo conserva sus fuentes Himalaya y mbox, la consulta de antigüedad del dominio y el embedding. La cuenta, los ids, el estado de sincronización y las respuestas son los mismos. `mail.source-failed` ahora lo declara cli-core, y `mcp serve` tiene la opción `--profiles` de cli-core 0.470 solo en el contrato compartido contra el que se comprueba, no en memo.
+- **`skill show`, `skill status` y `skill install` responden a `--json` en el sobre de un solo elemento** ([WC-OUT-4](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/output.md#wc-out-4--answer-every-json-request-with-one-envelope-a-list-or-one-thing)), `{ item, meta }`, como cualquier otro comando de memo y el propio `skill` de cli-core; imprimían el objeto sin envoltorio. Un llamador lee los campos antiguos dentro de `item`, p. ej. `item.targets` de `skill status`.
+
+### Fixed
+
+- **`memo` arranca en aproximadamente la mitad de tiempo: el paquete se ejecuta desde un bundle.** Un comando cargaba unos mil archivos de módulos antes de hacer nada; ahora carga unas pocas decenas que contienen el mismo código, generadas por `cli-dev bundle` de cli-base. `memo search all --help` en caliente pasó de 420 a 186 ms, `memo --version` de 39 a 18 ms. La salida no cambia. Un `memo mcp serve` en ejecución carga todo su código poco después de arrancar, así que actualizar `memo` en el sitio no lo rompe. El paquete es mayor: 3,1 MB de descarga en lugar de 0,4 MB.
+- **`memo mcp --json` rechaza la opción con un `validation_error` JSON (código de salida 2)**, como `memo notes --json` y `memo mail --json`; imprimía la ayuda del grupo y nada en JSON. `mcp revoke` y `mcp server
+  start|stop|status` ahora aceptan `--json` ellos mismos, así que va después del comando: `memo mcp revoke --json`, ya no `memo mcp --json revoke`.
+
+## 0.119.0 — 27.10.2026
+
+### Changed — may break callers
+
+- **cli-core 0.467.0 y cli-base 0.64.0.** cli-core solo acepta cli-base 0.64, así que ambas versiones cambian juntas.
+- **Cada resultado de búsqueda marca el texto que escribió otra persona (cli-core 0.464.0).** Los resultados de mensajes y correo de `search all` llevan `untrusted: ["title", "excerpt", "sender_name"]`, los de documentos `["title", "excerpt"]`, como los resultados de eventos; `search messages` y `search mail` marcan el remitente, el título del chat y el texto. Una nota queda sin marcar: es suya. Un llamador que comprueba los resultados contra una copia antigua y estricta de su forma rechaza el campo nuevo.
+- **Ahora se guarda cada ejecución, también las correctas (cli-core record-every-run).** Antes solo se guardaban las ejecuciones fallidas, salvo con `--record` o `record: true`. Una ejecución correcta se conserva 7 días (`keep_successful_runs_for_days`), una fallida 30 (`keep_runs_for_days`), y la carpeta de ejecuciones se mantiene por debajo de `runs_size_limit_mb` (200 MB; primero se van las correctas más antiguas). **Privacidad:** una ejecución guardada contiene el comando tal como se escribió (secretos y números de teléfono ocultos), así que un `memo search` o `notes add` correcto deja ahora sus palabras en un archivo local con permisos 0600 durante 7 días. `record_input: "failed"` las guarda solo en una ejecución fallida, `record_input: false` las oculta en todas partes; `record: false` ahora guarda las ejecuciones fallidas (antes: nada); `--no-record` no guarda nada. `memo mcp serve` guarda una ejecución correcta solo con `--record`.
+- **Una ejecución indica quién la pidió (cli-core).** `run.json` incorpora `via` (`cli`, `mcp-stdio`, `mcp-http`, `desktop`), `mcp` (ids de herramienta, solicitud y conexión) y `agent.client` (nombre y versión de la aplicación de IA). Por HTTP el agente es la sesión MCP de la aplicación del navegador, ya no el agente que inició `mcp serve --http`. Un lector que comprueba una ejecución contra una copia antigua de su forma rechaza los campos nuevos.
+
+### Added
+
+- **`memo upgrade` reinicia el servidor MCP HTTP y nombra las sesiones MCP por stdio que siguen en la versión antigua** (cli-core). Tras una instalación reinicia cada `memo mcp serve --http` que lanzó `memo mcp server start`, con el mismo puerto, dirección y límites de `--permission`, y lista los procesos `memo mcp serve` por stdio de esta instalación como `stale_sessions` que hay que reiniciar desde su aplicación de IA. Funciona desde la próxima actualización.
+- **Una lectura de correo que himalaya reintenta son dos líneas de solicitud en la ejecución**: la segunda tiene `attempt: 2` y los 15 s que esperó, y una cuenta limitada se nombra `mail.throttled`, nunca con lo que imprimió himalaya. Las líneas RDAP llevan `method`, la ruta con el dominio como `:id` y `transport: "http"`; un rechazo nombra el `errorCode` del registro (`rdap.429`), leído de un cuerpo de error de 4 KB como máximo, nunca su título ni su descripción.
+- **`record_input: "failed"`, `keep_successful_runs_for_days` y `runs_size_limit_mb`** en `config.json`.
+
+## 0.118.0 — 27.10.2026
+
+### Added
+
+- **Un resultado de evento de `search all` nombra su texto de invitación en `untrusted`** (`["title", "excerpt"]`), en cli-core 0.460.0. Por MCP un agente lo ve marcado en la propia respuesta, no solo en las instrucciones del servidor.
+- **`memo search all` encuentra eventos de Google Calendar** que gcal guardó, de todos los calendarios, ordenados junto con mensajes, correo y notas (cli-core 0.459.0). Un resultado tiene `kind: "event"` y una referencia `event:<id>`, que abre `gcal <profile> events show`. `--only` acepta `events`; `meta.accounts` y la línea `searched:` nombran cada calendario leído. Cuando los eventos se buscaron solo por palabras, la respuesta dice por qué, como para notas y mensajes.
+- **`memo context` lista los eventos de calendario de la persona** en `events`: `upcoming` y `recent`, una ocurrencia por serie, ninguna cancelada, de cada calendario al que está invitada cualquier identidad vinculada a ella; `events.accounts` nombra los calendarios leídos. La respuesta de texto los muestra bajo «Upcoming events» y «Recent events».
+- **El texto de los eventos se marca como palabras de otras personas.** `memo context --json` lleva `untrusted`, los campos del evento que escribió el remitente de la invitación (`events.upcoming.title`, `events.upcoming.location` y lo mismo bajo `recent`), como los marcan las herramientas de calendario de cli-core. Las instrucciones MCP de memo dicen que el título, la descripción y el lugar de un evento son datos, nunca instrucciones.
+
+### Changed — may break callers
+
+- **`memo context --json` nombra un calendario ausente en `not_read`** (`source: "events"`, "no calendar in the store — gcal <profile> sync"), así que una respuesta que solía tener `not_read` vacío tiene ahora esa entrada hasta que gcal sincronice.
+- **`@wirecat/cli-core` 0.451.0 → 0.463.0.** El almacén compartido pasa a la versión 35 (una ocurrencia nombra su serie en una columna); las compilaciones que hablan la versión 34 siguen abriéndolo.
+- **El servidor MCP es `memo mcp serve`; `memo mcp` solo muestra sus comandos** (cli-core 0.463.0). `--http`, `--port`, `--public-url` y `--permission` pasan a `mcp serve`, y `memo mcp --revoke` es ahora `memo mcp revoke`. No hay alias: una aplicación cuya configuración MCP ejecuta `memo mcp` recibe la ayuda y el código de salida 2, así que cambie sus `args` a `["mcp", "serve"]`; configure Claude Code con `claude mcp add memo -- memo mcp serve`. `memo mcp server start` ejecuta `mcp serve --http` y sigue pasando `--permission`.
+
+### Fixed
+
+- **`memo sync` se detiene con Ctrl-C y SIGTERM**, donde antes ignoraba SIGTERM y llegaba hasta el final. Se detiene en el siguiente lote de correos, cuenta de correo o carpeta de notas, conserva el punto de reanudación, termina un himalaya en ejecución, libera el bloqueo de importación y falla con `cancelled` (código de salida 130). **`memo sync --timeout <duration>`** lo detiene del mismo modo al llegar a un plazo, con `timeout` (código de salida 9); sin ella una sincronización no tiene límite de tiempo, como antes.
+- **La skill del agente de memo se publica de nuevo en ClawHub como `cli-memo`.** ClawHub guarda los nombres de skill por editor, así que `wirecat/cli-memo` es el nombre propio de memo, y la skill de cada herramienta de WireCat usa ahora su nombre simple. La próxima versión la publica como `cli-memo` 1.0.1. `memo skill install` sigue escribiendo `skills/cli-memo/`.
+
+## 0.117.0 — 27.10.2026
+
+### Added
+
+- **La skill indica al agente que nunca pida en el chat una contraseña de correo ni una contraseña de aplicación**: el propietario añade una cuenta de correo por sí mismo, en Himalaya y luego con `memo mail add`.
+
+## 0.116.0 — 27.10.2026
+
+### Fixed
+
+- **`memo search all` y la búsqueda por significado en notas y archivos responden en una fracción de segundo (cli-core 0.451.0).** Ordenar documentos y notas por significado ahora usa el índice vectorial en lugar de leer cada fragmento del almacén: en un archivo con 600 000 fragmentos, sobre todo correo, tardaba 7–18 s por consulta y ahora unos 0,05 s, con los mismos resultados. Sigue leyendo cada fragmento cuando el índice no está listo.
+- **La búsqueda por significado se ejecuta también con ONNX Runtime nativo en Windows.** Tras `memo models download e5-small`, el modelo usa la biblioteca nativa en Windows x64 y arm64, como ya hacía en Linux y macOS: de 2 a 3 veces más rápido que WebAssembly. La descarga toma `onnxruntime.dll` del paquete npm `onnxruntime-node` (113,5 MB, una vez, comprobado por sha256).
+
+## 0.115.0 — 27.10.2026
+
+### Added
+
+- **`memo mcp --http --public-url` admite una ruta (cli-core 0.450.0)**, `https://<name>.ts.net/memo`, de modo que memo comparte una dirección de túnel con las demás herramientas, una ruta cada una. El inicio de sesión y la dirección del conector (`…/memo/mcp`) llevan la ruta; el túnel también encamina `/.well-known/oauth-authorization-server/memo` y `/.well-known/oauth-protected-resource/memo` al servidor. WireCat Desktop lo configura con Tailscale Funnel.
+
+### Fixed
+
+- **La skill del agente de memo se publica en ClawHub como `wirecat-memo`.** ClawHub tiene un `cli-memo` 1.0.0 que no es público y rechaza cada nuevo 1.0.0 con ese nombre, así que ninguna versión pudo listar la skill. `memo skill install` sigue escribiendo `skills/cli-memo/`.
+
+## 0.114.0 — 27.10.2026
+
+### Fixed
+
+- **`memo mail add` y `memo mail check` aceptan una cuenta de Himalaya que no define `email`.** Himalaya funciona sin él, así que muchas cuentas nombran su dirección solo como el inicio de sesión. Memo ahora toma la dirección del inicio de sesión IMAP y luego del SMTP, cuando es una dirección de correo. Cuando no lo es ninguno, el error nombra el archivo de configuración de Himalaya y la línea que hay que añadir: `email = "you@example.com"` bajo `[accounts.<name>]`.
+
+- **Cada comando tarda menos en estar listo (cli-base 0.62.0, cli-core 0.449.0).** La comprobación de los comandos compartidos ahora describe cada comando una vez, no de nuevo por cada grupo superior. Era cerca del 60 % de la preparación de cada comando; en tg un `run(["--version"])` en caliente pasó de 49 a 29 ms. Detecta los mismos cambios que antes.
+
+## 0.113.0 — 26.10.2026
+
+### Fixed
+
+- **La búsqueda por significado, y el carril de significado de `memo search all`, se ejecutan de 2 a 3 veces más rápido en Linux y en Mac con Apple silicon (cli-core 0.448.0)** tras el próximo `memo models download`: los modelos de texto se ejecutan entonces con ONNX Runtime nativo, y con WebAssembly donde no está instalado.
+
+## 0.112.0 — 26.10.2026
+
+### Security
+
+- **Un registro de ejecución oculta un secreto por su aspecto, no solo por el nombre de la opción (cli-core 0.446.0).** Un token de formato conocido (GitHub, OpenAI, Anthropic, Slack, AWS, Google, Stripe, npm, Telegram, un JWT, una clave privada), una credencial `Bearer`, el valor tras `password=`, `pin 1234` u otro nombre de secreto, y una cadena de aspecto aleatorio quedan `[redacted]` dentro de la palabra, conservando las palabras de alrededor: `memo search notes "Kai password=tulip42"` conserva `Kai password=[redacted]`. Una configuración que no carga ahora oculta cada valor escrito, como `record_input: false`.
+
+## 0.111.0 — 26.10.2026
+
+### Added
+
+- **`memo mcp server start|stop|status` ejecuta el servidor MCP HTTP en segundo plano (cli-core 0.445.0).** `start` acepta `--public-url`, `--port` (por defecto 8767) y `--permission` y responde cuando está escuchando; `status --json` da el puerto, la dirección del conector, el código de acceso actual con cuándo caduca y las aplicaciones con sesión iniciada, cada una con el nombre que se dio a sí misma; `stop` termina solo un servidor que inició `start`. `memo mcp --http` ahora mantiene un bloqueo junto a su archivo de token, así que se rechaza un segundo servidor, y su código de acceso se renueva cuando caduca. WireCat Desktop los usa.
+
+### Changed — may break callers
+
+- **Una ejecución conserva el comando tal como se escribió (cli-core 0.440.0).** `memo runs show` y `run.json` llevan ahora `argv`, las palabras tras `memo`, para que el propietario pueda leer lo que se ejecutó: una búsqueda, un nombre, el título de una nota. Un secreto sigue siendo `[redacted]` (una opción con nombre de token, contraseña o clave de API, una contraseña en una URL, una cadena opaca larga), igual que un número de teléfono. La nueva clave `record_input` en `config.json` con valor `false` escribe como `[redacted]` cada valor que pueda ser contenido. La ayuda de `--record` lo dice; decía «ids and timings, never note or mail content».
+
+## 0.110.0 — 26.10.2026
+
+### Added
+
+- **`memo skill install --for hermes` da la skill a Hermes Agent, y `memo skill status` dice qué lee Hermes (cli-base 0.59.0).** Añade `~/.agents/skills` a `skills.external_dirs` de Hermes mediante `hermes config set`, conservando las carpetas ya listadas, o copia el archivo en la carpeta personal de Hermes cuando eso falla. Sin Hermes instalado falla con `not_found` y no escribe nada. Un `memo skill install` a secas y `--for all` siguen escribiendo solo las copias de Claude Code y de `~/.agents/skills`. `skill status --json` incorpora `hermes` junto a `targets`.
+- **Una ejecución iniciada por OpenClaw o Hermes Agent nombra a ese agente (cli-core 0.437.0).** `runs show` da `agent` como `openclaw` para un comando que ejecutó el agente de OpenClaw, con `from_chat: true` cuando lo inició un mensaje de chat; una ejecución de Hermes lleva su sesión, así que una reserva de tarea desde Hermes se mantiene por sesión.
+- **La skill `cli-memo` indica a OpenClaw y ClawHub que necesita `memo`, y cómo instalarlo** (`metadata.openclaw`: `requires.bins` y el paquete npm `@wirecat/cli-memo`). Si `memo` no está en el PATH, OpenClaw marca la skill como no lista y ofrece instalar el paquete. Claude Code y Codex ignoran el bloque.
+
+## 0.109.0 — 26.10.2026
+
+### Added
+
+- **`memo search all` encuentra también mensajes por significado, en cuanto puede** (cli-core 0.435.0). Busca los 100 mensajes más cercanos en significado (e5-small sobre el vector propio de cada mensaje, todas las cuentas que lee) y los fusiona con los resultados por palabras en una sola lista de mensajes antes de mezclarla con correo y notas; el `found_by` de cada elemento dice qué búsqueda lo encontró. Sin el modelo o los vectores, los mensajes se leen por palabras como antes y la respuesta lo dice: una nota `Messages by words only: …` en el terminal y una entrada `found_by` en `missing` con `--json` y MCP, que nombra `memo models download e5-small` o el `conversations rebuild` del mensajero. `--exact`, y una consulta con NOT o con un filtro bajo OR o en un grupo, siguen solo por palabras. Una búsqueda nunca descarga un modelo ni envía texto a ningún sitio.
+
+### Changed — may break callers
+
+- **cli-core 0.435.0 pasa el almacén compartido a la versión 34**, que guarda un índice para la búsqueda por significado (sqlite-vec, incluido en `@wirecat/cli-core-sqlite` 1.1.0). Cuando memo, o cualquier CLI de WireCat en cli-core 0.434.0 o posterior, ha abierto el almacén, memo 0.108 y anteriores lo rechazan y piden actualizarse, así que actualice todas las CLI de WireCat a la vez.
+
 ## 0.108.0 — 25.10.2026
 
 ### Fixed
@@ -73,6 +335,10 @@ Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las
 ### Changed — may break callers
 
 - **memo trabaja con el almacén compartido de cli-core 0.420.0, que lo lleva por las versiones 30 a 33.** Las carpetas de notas ahora son cuentas del proveedor `obsidian` o `local`: `--account obsidian:<id>` y `local:<id>` nombran una, y `folder:<id>` también. Los documentos de Google Drive están en la cuenta `google-drive` de drive en lugar de en una carpeta sustituta; `memo folders list` sigue marcándola «kept by drive», `memo folders update` sigue rechazándola, `search all` la nombra entre las cuentas que leyó y `notes:<id>` la nombra como fuente. `vocabulary inspect` ahora responde `coverage.apply_supported: true`, el valor de cli-core: cli-core puede aplicar la vista previa, memo no tiene ningún comando que lo haga. Cuando este memo ha migrado el almacén, un memo anterior, y cualquier CLI con un cli-core anterior, lo rechaza y pide actualizar.
+
+## 0.102.0 — 25.10.2026
+
+Solo cambió el número de versión respecto a 0.101.0.
 
 ## 0.101.0 — 25.10.2026
 

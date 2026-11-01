@@ -17,6 +17,9 @@ un ajuste: vive en el llavero, o en `MAIL_PASSWORD` para una ejecución sin llav
 
 `config show` lista cada ajuste y de dónde viene: el archivo, una variable o el valor por defecto.
 
+`config set` también lista ajustes de búsqueda, voz y embeddings (`embedding_*`, `speech_model`, `picture_search` y
+otros). Todas las CLI de WireCat comparten esa lista. `mail` los ignora.
+
 ## Permisos
 
 `permissions` decide qué puede hacer un comando para este perfil: `allow`, `ask`, `readonly` o `deny`, por cada clave

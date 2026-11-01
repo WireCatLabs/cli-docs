@@ -58,33 +58,102 @@ Una tarea en un proyecto no necesita fuente. Recibe una clave formada por la cla
 número, como `HRB-1`:
 
 ```sh
-memo tasks add --project HRB --title 'Book the venue' --priority 1
+memo tasks add --project HRB --title 'Book the venue' --priority high
 memo tasks add --project HRB --title 'Export drops the last row' --type bug
 memo tasks list project:HRB
-memo tasks update HRB-1 --priority 0 --description 'Call before Friday'
+memo tasks update HRB-1 --priority critical --description 'Call before Friday'
 ```
 
 Un `memo tasks list` sin más muestra solo las tareas de tus cuentas; las tareas de un proyecto se listan con
-`project:` y la clave del proyecto.
+`project:` y la clave del proyecto, su nombre o un alias, y las de todos los proyectos con `project:*`.
 
 | Opción | Significado |
 |---|---|
 | `--type` | `chore` (el predeterminado), `bug` o `feature` |
-| `--priority` | un número de 0 (urgente) a 4 (baja) |
+| `--priority` | `low`, `medium`, `high` o `critical`; `none` la quita. 0 (urgente) a 4 (baja) siguen funcionando como antes |
 | `--parent` | una tarea más grande de la que esta forma parte, en el mismo proyecto |
 | `--description` | más detalles, en Markdown |
 | `--assignee` | quién la hace, por el ID de la persona |
 
 Para crear antes el proyecto, consulta [organizaciones y proyectos](./people.md#organizations-and-projects).
 
+## Prioridad y orden
+
+Una prioridad es un número de 0 a 1, de mayor a menor, y la ves como una de cuatro etiquetas por cuartos: `low`
+(menos de 0,25), `medium`, `high` y `critical` (0,75 o más). `--json` da ambos, `priority` y
+`priority_label`. El número también ordena las tareas de un proyecto, así que una columna del tablero conserva el orden que le des:
+
+```sh
+memo tasks move HRB-3 --before HRB-1                      # HRB-3 goes just above HRB-1
+memo tasks move HRB-3 --status in_progress --after HRB-2  # into another column, below HRB-2
+```
+
+`tasks move` da a la tarea una prioridad entre sus nuevos vecinos. Cuando eso cruza un cuarto, su etiqueta cambia
+y la respuesta lo indica (`label.changed`). Cuando dos vecinos no dejan espacio, Memo reparte ese cuarto de la
+columna de forma uniforme y nombra las tareas que renumeró.
+
+## Estados
+
+Una tarea de proyecto es `open` (nueva), `todo` (decidida), `in_progress`, `done` o `dismissed`. Cámbiala con
+`tasks update --status`, también de vuelta desde `done` o `dismissed`; cada cambio queda en su historial. `todo` y
+`in_progress` cuentan como trabajo abierto en todas partes: una tarea que espera a una de ellas no está lista, y un agente puede reclamar una.
+Una tarea de un mensaje es solo `open`, `done` o `dismissed`.
+
+```sh
+memo tasks update HRB-1 --status in_progress
+memo tasks history HRB-1 --json      # who changed what, and when
+```
+
+## Buscar tareas de proyecto
+
+`memo tasks list` con `project:` acepta una consulta: campos unidos con AND, OR dentro de un campo, NOT y palabras
+sueltas, que buscan en el título y la descripción:
+
+```sh
+memo tasks list project:* 'assignee:"person:3"' priority:[high TO critical] invoice
+memo tasks list project:(HRB OR OPS) state:(done OR dismissed) closed:>=14d
+memo tasks list project:* overdue:true --sort due
+memo tasks list project:* NOT due:* NOT priority:*
+memo tasks counts project:* --json   # how many per project, assignee, priority and state
+```
+
+| Campo | Significado |
+|---|---|
+| `state:` | `open`, `todo`, `in_progress`, `done`, `dismissed`; sin él, los tres estados abiertos |
+| `project:` | una clave, un nombre, `project:<id>` o `*` para todos los proyectos |
+| `assignee:` | `any`, `none` o una persona: `"person:3"` entre comillas, o `3` |
+| `priority:` | una etiqueta, `none` o un rango de etiquetas o números |
+| `agent:` | el agente que trabaja en ella, `none` o `any` |
+| `due:`, `closed:` | una fecha o un rango: `due:[today TO 2026-12-31]`, `closed:>=14d` |
+| `overdue:`, `ready:` | `true` o `false` |
+
+`--sort` acepta `priority` (el predeterminado), `due`, `created`, `updated`, `key` o `state`; `--desc` invierte el orden.
+Una lista contiene como máximo 500 tareas; `page.next_cursor` y `--cursor` leen las siguientes, y `page.total` dice
+cuántas coinciden. Cada tarea lleva sus `assignments`, `ready` y `blocked_by`, y su `revision`.
+
+## Cambiada en otro sitio
+
+Un agente puede editar una tarea mientras la miras. Pasa la `revision` que leíste y Memo rechaza la escritura si la
+tarea cambió desde entonces, con el motivo `task.stale` y el código de salida 3:
+
+```sh
+memo tasks update HRB-1 --title 'Book the hall' --revision 4
+```
+
+`tasks update`, `close`, `assign` y `move` aceptan `--revision`.
+
 ## Quién trabaja en ella
 
 ```sh
 memo tasks assign HRB-1 PERSON_UID
 memo tasks assign HRB-1 PERSON_UID --role reviewer
+memo tasks assign HRB-1 PERSON_UID --clear     # take them off it
+memo people list                               # you, and everyone tasks already name
+memo tasks update HRB-1 --agent hermes         # the agent working on it; --agent none clears it
 ```
 
-El rol es `assignee` (el predeterminado), `reviewer` o `watcher`. El ID de una persona sale de su
+Un agente no es un asignado: `agent` nombra al agente que trabaja en ella hasta que alguien lo cambie, mientras que un claim
+(`tasks claim`) es una cesión que caduca sola. El rol es `assignee` (el predeterminado), `reviewer` o `watcher`. El ID de una persona sale de su
 contexto (`memo context … --json`). Las tareas asignadas a alguien aparecen en
 [su contexto](./people.md#everything-about-a-person).
 

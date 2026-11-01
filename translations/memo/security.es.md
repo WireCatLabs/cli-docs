@@ -12,7 +12,7 @@ Aquí verás qué lee y escribe Memo y qué puede salir del ordenador, para eleg
 - Las **carpetas de notas** solo se leen. Las carpetas ocultas como `.obsidian` se omiten. La exportación
   de notas escribe en la carpeta elegida y nunca sobrescribe un archivo que editaste. La exportación
   de anotaciones seleccionadas crea un archivo privado nuevo en la ruta elegida, como se explica abajo.
-- **La importación de correo** abre el buzón solo para lectura y no marca correo como leído. Memo nunca envía correo.
+- **La importación de correo** abre el buzón solo para lectura y no marca correo como leído, y `mail` hace lo mismo. Memo nunca envía correo.
 - **La limpieza de Gmail** es independiente: `memo mail delete` y `memo mail restore` muestran una vista previa sin `--yes`. La limpieza mueve el correo elegido a la Papelera de Gmail; Gmail lo elimina definitivamente a los 30 días. La restauración devuelve el correo de una ejecución registrada mientras siga en la Papelera. La limpieza requiere una copia reciente del almacén y nunca se ejecuta desde el temporizador. Consulta [la limpieza de Gmail](./mail.md#clean-up-gmail).
 - Las **etiquetas** dejan tus archivos, las etiquetas de Gmail y los indicadores del buzón tal como
   están.
@@ -46,12 +46,12 @@ carpeta o de un buzón, no borra nada y te avisa.
   no confirma una propuesta de nuevo. Las lecturas MCP siguen creando su entrada normal de auditoría.
   El formato omite varios aspectos del proyecto y no sustituye una copia completa del archivo.
 - El registro del agente conserva agente, herramienta, resultado y hora, sin el contenido enviado.
-- Un agente que solo debe leer se ejecuta con `MEMO_READ_ONLY=1`. Entonces todo comando que cambia algo se detiene con `permission_error` (código de salida 5), y `memo mcp` mantiene visibles los comandos de escritura, pero rechaza ejecutarlos. Las lecturas y `memo sync` siguen funcionando, igual que las escrituras de tareas que hace un agente programado con `tasks link`, como en tg y max: el vínculo solo se propone y se rechaza vincular dos tareas. `reminders claim` se rechaza.
+- Un agente que solo debe leer se ejecuta con `MEMO_READ_ONLY=1`. Entonces todo comando que cambia algo se detiene con `permission_error` (código de salida 5), y `memo mcp serve` mantiene visibles los comandos de escritura, pero rechaza ejecutarlos. Las lecturas y `memo sync` siguen funcionando, igual que las escrituras de tareas que hace un agente programado con `tasks link`, como en tg y max: el vínculo solo se propone y se rechaza vincular dos tareas. `reminders claim` se rechaza.
 - Dos cuentas solo representan a una persona después de que las enlaces. Coincidir en nombre o dominio nunca basta.
 
 ## Qué puede salir de tu ordenador
 
-- Las apps del navegador y teléfono se conectan por tu túnel HTTPS y el acceso compartido por código. Usan los mismos permisos de comandos que los clientes MCP locales. `memo mcp --revoke` invalida sus sesiones guardadas, también en un servidor en ejecución; consulta [el acceso remoto](./remote.md).
+- Las apps del navegador y teléfono se conectan por tu túnel HTTPS y el acceso compartido por código. Usan los mismos permisos de comandos que los clientes MCP locales. `memo mcp revoke` invalida sus sesiones guardadas, también en un servidor en ejecución; consulta [el acceso remoto](./remote.md).
 
 - `memo answers create` prepara fuentes para tu agente. Solo las envía a un proveedor con `--analyze` y, si es externo al equipo, también `--allow-remote`. La respuesta generada debe comprobarse con las fuentes.
 - Lo que tu agente haga con el texto depende de él y su proveedor; Memo no puede controlarlo. Dale acceso solo a fuentes que quieras compartir.
