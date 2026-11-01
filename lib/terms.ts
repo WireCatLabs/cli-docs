@@ -15,7 +15,7 @@ export const termsCopy: Record<
         id: "project",
         title: "The project",
         paragraphs: [
-          "WireCat is an independent, personally maintained open-source project. These terms cover wirecat.dev and the WireCat tools, including WireCat Drive and zm, the WireCat CLI app for Zoom. WireCat is not affiliated with or endorsed by Google, Zoom or the other services its tools connect to.",
+          "WireCat is an independent, personally maintained open-source project. These terms cover wirecat.dev and the WireCat tools, including WireCat Drive, gcal for Google Calendar and zm, the WireCat CLI app for Zoom. WireCat is not affiliated with or endorsed by Google, Zoom or the other services its tools connect to.",
         ],
       },
       {
@@ -70,7 +70,7 @@ export const termsCopy: Record<
         id: "project",
         title: "Проект",
         paragraphs: [
-          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эти условия охватывают wirecat.dev и инструменты WireCat, включая WireCat Drive и zm — приложение WireCat CLI для Zoom. WireCat не связан с Google, Zoom или другими подключаемыми сервисами и не утверждает, что они одобряют проект.",
+          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эти условия охватывают wirecat.dev и инструменты WireCat, включая WireCat Drive, gcal для Google Календаря и zm — приложение WireCat CLI для Zoom. WireCat не связан с Google, Zoom или другими подключаемыми сервисами и не утверждает, что они одобряют проект.",
         ],
       },
       {
@@ -125,7 +125,7 @@ export const termsCopy: Record<
         id: "project",
         title: "El proyecto",
         paragraphs: [
-          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Estos términos cubren wirecat.dev y las herramientas de WireCat, incluidas WireCat Drive y zm, la aplicación WireCat CLI para Zoom. WireCat no está afiliado a Google, Zoom ni a los otros servicios que conecta, ni cuenta con su respaldo.",
+          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Estos términos cubren wirecat.dev y las herramientas de WireCat, incluidas WireCat Drive, gcal para Google Calendar y zm, la aplicación WireCat CLI para Zoom. WireCat no está afiliado a Google, Zoom ni a los otros servicios que conecta, ni cuenta con su respaldo.",
         ],
       },
       {
