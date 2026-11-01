@@ -107,7 +107,7 @@ const en: Words = {
     setup: "Set up the AppImage",
     fuse: "If it says **AppImages require FUSE to run**, install FUSE 2: `sudo apt install libfuse2t64` on Ubuntu 24.04 and later, `sudo apt install libfuse2` on older Ubuntu and Debian.",
     fuseSource: "AppImage: FUSE",
-    deb: "Install the .deb package: `sudo apt install ./{deb}`.",
+    deb: "Install the .deb package from a terminal: `wget -O /tmp/{deb} {url} && sudo apt install /tmp/{deb}`. It downloads the package into /tmp, because apt reads the file as its own restricted user, which cannot open your home folder, and prints a notice about it. The install ends with what to do next.",
     rpm: "Install the .rpm package: `sudo dnf install ./{rpm}`. If you installed version 0.1.0 from an .rpm, remove it first: `sudo dnf remove wire-cat`.",
   },
   appimageSetup: {
@@ -222,7 +222,7 @@ const ru: Words = {
     setup: "Настроить AppImage",
     fuse: "Если появится **AppImages require FUSE to run**, установите FUSE 2: `sudo apt install libfuse2t64` в Ubuntu 24.04 и новее, `sudo apt install libfuse2` в более старых Ubuntu и Debian.",
     fuseSource: "AppImage: FUSE",
-    deb: "Установите пакет .deb: `sudo apt install ./{deb}`.",
+    deb: "Установите пакет .deb из терминала: `wget -O /tmp/{deb} {url} && sudo apt install /tmp/{deb}`. Пакет скачивается в /tmp: apt читает файл от имени своего пользователя с ограниченными правами, который не может открыть вашу домашнюю папку, и пишет об этом предупреждение. В конце установки появится подсказка, что делать дальше.",
     rpm: "Установите пакет .rpm: `sudo dnf install ./{rpm}`. Если раньше вы ставили версию 0.1.0 из .rpm, сначала удалите её: `sudo dnf remove wire-cat`.",
   },
   appimageSetup: {
@@ -331,7 +331,7 @@ const es: Words = {
     setup: "Preparar el AppImage",
     fuse: "Si aparece **AppImages require FUSE to run**, instala FUSE 2: `sudo apt install libfuse2t64` en Ubuntu 24.04 o posterior, `sudo apt install libfuse2` en Ubuntu y Debian anteriores.",
     fuseSource: "AppImage: FUSE",
-    deb: "Instala el paquete .deb: `sudo apt install ./{deb}`.",
+    deb: "Instala el paquete .deb desde una terminal: `wget -O /tmp/{deb} {url} && sudo apt install /tmp/{deb}`. El paquete se descarga en /tmp, porque apt lee el archivo con su propio usuario restringido, que no puede abrir tu carpeta personal, y muestra un aviso. Al terminar, la instalación indica los siguientes pasos.",
     rpm: "Instala el paquete .rpm: `sudo dnf install ./{rpm}`. Si instalaste la versión 0.1.0 desde un .rpm, quítala primero: `sudo dnf remove wire-cat`.",
   },
   appimageSetup: {
