@@ -1,9 +1,11 @@
 import { uiTranslations } from "fumadocs-ui/i18n"
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared"
+import { DiscordIcon, TelegramIcon } from "@/components/brand-icons"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { i18n } from "@/lib/i18n"
 import { github } from "@/lib/shared"
 import { homePath } from "@/lib/site-routes"
+import siteConfig from "@/site.config.json"
 
 export const translations = i18n
   .translations()
@@ -50,6 +52,22 @@ export function baseOptions(lang: string): BaseLayoutProps {
   return {
     nav: { title: <WirecatLogo />, url: homePath(lang) },
     links: [
+      {
+        type: "icon",
+        url: siteConfig.community.discord,
+        text: "Discord",
+        label: "Discord",
+        icon: <DiscordIcon />,
+        external: true,
+      },
+      {
+        type: "icon",
+        url: siteConfig.community.telegramGroup,
+        text: "Telegram",
+        label: "Telegram",
+        icon: <TelegramIcon />,
+        external: true,
+      },
       {
         type: "icon",
         url: github,
