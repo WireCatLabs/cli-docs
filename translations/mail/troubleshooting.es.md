@@ -11,6 +11,7 @@ petición de soporte.
 | No se encuentra `mail` | Abre una terminal nueva y comprueba que la carpeta global de npm está en `PATH`. |
 | "name a profile" | Pon el perfil primero, como en `mail ya folders list`, o define `MAIL_PROFILE`. |
 | El archivo de ajustes no se lee | `doctor` lista cada problema del archivo en `config.issues`. Ejecuta el `config unset` que da cada uno, o corrige el archivo a mano. |
+| `doctor` lista `changes.unfinished` o `changes.expiring` | Una ejecución de cambios se detuvo a medias, o el correo que una ejecución movió a la papelera de Gmail está a pocos días de que la vacíen. Ejecuta el `messages restore --run <id> --yes` que imprime `doctor`, con el perfil de ese buzón, o ejecuta de nuevo el primer comando para terminarla. |
 | `doctor` lista `files.problems` | Otros usuarios del ordenador pueden leer `config.json` o entrar en su carpeta. Ejecuta cada `chmod` que `doctor` imprime tras "to make it private:". `doctor` nunca cambia por sí mismo los permisos de un archivo. |
 | "no app password for profile" | Ejecuta `mail <profile> session start`, o define `MAIL_PASSWORD` para una ejecución. |
 | "the mail server refused the login" | La contraseña de aplicación es incorrecta, o IMAP y las contraseñas de aplicación están desactivados. Los pasos de cada proveedor están en [preparar el buzón](./providers.md). Yandex además necesita de 2 a 3 horas tras crear una contraseña de aplicación nueva. Después ejecuta `session start` otra vez. |

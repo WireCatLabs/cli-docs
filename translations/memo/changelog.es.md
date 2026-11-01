@@ -10,6 +10,134 @@ Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las
 
 ## Unreleased
 
+## 0.131.10 — 01.11.2026
+
+### Fixed
+
+- **Construido sobre cli-base 0.71.0**, que cli-core 0.529.0 necesita (su rango de peer es `>=0.71.0 <0.72.0`).
+
+## 0.131.9 — 01.11.2026
+
+### Added
+
+- **`people add <name...>`** añade una persona por su nombre, para asignarle una tarea antes de que algún mensaje la
+  nombre. `people list` lista a todos los que Memo conoce, primero el propietario y luego por cuántas tareas los
+  nombran, con `--limit` (por defecto 500); antes listaba solo al propietario y a las personas con un rol en una tarea.
+- **`tasks add --due <time> --status <state> --agent <name>`** los fija en una tarea de proyecto en una sola
+  escritura. `tasks update --description none` borra la descripción. `--priority` acepta una puntuación de `0.0` a
+  `1.0` con su punto decimal; un `0` … `4` sin más conserva la escala anterior.
+- **`when:` en la consulta de tareas**: `when:overdue`, `when:today`, `when:upcoming` (los 7 días después de hoy),
+  `when:later`, `when:none`. `tasks counts` las cuenta en `due` y cuenta `agent`, y cada recuento de `project` lleva
+  `ref`; los elementos de la lista llevan `project_key` y `project_name`, así que la lista y los recuentos nombran un
+  proyecto igual.
+- **Hallazgos sobre cualquiera**: un hallazgo de hecho en `projects actions add` puede nombrar un `subject`
+  (`person:`, `organization:`, `task:` o `project:`) y ningún proyecto, y citar una `note:`; un hallazgo de tarea sigue
+  nombrando su proyecto. `notes show` da el `fingerprint` con el que citar una nota. `actions show` y `list` llevan
+  `subject` y `subject_name` para un lote de hallazgos.
+- **`actions confirm <id> [findings...] --fingerprint <hash>`** y **`actions reject <id> --fingerprint <hash>`**
+  deciden un lote de hallazgos por su id, sin proyecto. Confirmar sin IDs de hallazgo crea todos. Un agente decide por
+  el propietario solo con `--reason`, como en `projects actions`. Los hechos que el propietario conserva se aceptan al
+  instante.
+
+### Fixed
+
+- **`tasks list overdue:true` ya no coincide con una tarea que vence más tarde hoy**: es trabajo abierto que vence
+  antes de hoy.
+- **`tasks history` da las fechas límite en ISO**, como `tasks list`, no en milisegundos de época.
+
+## 0.131.8 — 01.11.2026
+
+### Fixed
+
+- **Los ids y los hilos del correo vienen de `mailIds` de cli-core, la función que usa mail**, así que memo y mail dan
+  un solo id a un correo en cualquier servidor. Los ids ya guardados no cambian; una respuesta cuyo In-Reply-To lleva
+  un nombre antes del `<id>` ahora se une al hilo de su padre, como en mail.
+- **memo avisa cuando deja fuera reglas de correo guardadas**: una regla con una condición que este memo no conoce se
+  nombra en stderr con lo que no conoce, en lugar de descartarse en silencio.
+- **Las reglas las escribe `ruleInput` de cli-core**, el mismo con el que las escribe mail; la copia de memo ya no
+  existe.
+- Sobre cli-core 0.526.0, la versión que mail también fija.
+
+## 0.131.7 — 01.11.2026
+
+### Added
+
+- **Un recuerdo puede pertenecer a un proyecto**: `memories add --project <key>`, `memories list project:<key>` y
+  `memories update <ref> --project <key>` (`none` lo saca). Los recuerdos llevan `project` y `project_name`; los hechos
+  llevan `project_name` junto a `project`.
+- **`actions list` y `actions show` dicen qué haría cada acción**, en `summary` («Create 1 fact and 1 task in
+  Synthetic Port», «Reply Synthetic Port: Friday works»), y nombran su proyecto en `project` y `project_name`.
+- **Un lote de hallazgos en `actions list` y `actions show` lleva su `fingerprint`**, que necesitan `projects actions
+  confirm` y `reject`, y cada fuente citada leída de vuelta en `sources` (`kind`, `title`, `sender`, `at`, un
+  `excerpt` de como máximo 280 caracteres, `tool`, `missing`). `actions list --brief` omite las fuentes.
+
+### Fixed
+
+- **Un lote de hallazgos rechazado entero aparece como `rejected`** en `actions list` y `actions show`, no como
+  `approved`, y `actions list status:rejected` lo encuentra.
+
+## 0.131.6 — 01.11.2026
+
+### Fixed
+
+- **memo abre un almacén pasado al esquema 43** por mail 0.4.0 y otras CLI sobre cli-core 0.520.0; 0.131.5 lo
+  rechazaba y pedía actualizar. `memo search mail` y `messages show` ahora usan el mismo código que la búsqueda propia
+  de mail, con las mismas respuestas.
+
+## 0.131.5 — 01.11.2026
+
+### Added
+
+- **`"import": false` en una entrada de `mail.accounts` pasa su importación a la CLI `mail`.** `memo sync` y el
+  temporizador omiten la cuenta, `memo sync --source email:<name>` avisa de que la importación pasó a `mail`
+  (`meta.handed_to_mail` en `--json`), y `memo mail inspect`, `rules`, `delete` y `restore` siguen funcionando con
+  ella. Memo sigue reparando el texto HTML, puntuando remitentes e incrustando el correo en el almacén; solo se
+  detiene el relleno de cabeceras de Himalaya.
+
+## 0.131.4 — 01.11.2026
+
+### Changed — may break callers
+
+- **La `revision` de una tarea sube solo con un cambio que una persona podría sobrescribir** (cli-core 0.516.0,
+  versión de almacén 42): título, descripción, estado, prioridad, asignados, agente, fecha límite, proyecto, padre o
+  etiquetas. La reclamación de un agente, su renovación y devolución, y `--remind-time` la dejan como está, así que un
+  tablero ya no dice «cambiada en otro sitio» mientras trabaja un agente.
+- **`tasks move <id> --before|--after <other>` junto a una tarea de otra columna la mueve a esa columna.** Un
+  `--status` que nombra otra columna que la del vecino se rechaza con el motivo `task.column`
+  (`HRB-2 is in in_progress, not todo: pick a task in the todo column`).
+
+### Fixed
+
+- **`tasks update --priority none` borra la prioridad** en lugar de fallar con «a priority score is 0 to 1».
+
+## 0.131.3 — 01.11.2026
+
+### Added
+
+- **`projects evidence --sync-profile <tool>=<profile>`** nombra el perfil de mensajería con el que `--sync-first`
+  sincroniza cuando hay varios con sesión en la cuenta de un chat (`--sync-profile max=default`; repítelo para otra
+  herramienta). El perfil debe tener la sesión iniciada en la cuenta de ese chat, o el chat no se sincroniza y la
+  respuesta dice por qué.
+- **`projects evidence --json` lleva el `sync_command` de cada chat vinculado**: la línea exacta de `tg`, `max` o `wa`
+  que sincroniza un chat guardado en parte hasta `--since-time`, o `null` cuando no necesita sincronización o aquí no
+  se puede elegir perfil; entonces una entrada de `missing` con el campo `sync_command` dice por qué.
+
+### Fixed
+
+- **`projects evidence` sale con 0 ante una respuesta parcial.** Un chat guardado en parte lo hacía salir con 1 sin
+  nada en stderr; `meta.complete: false`, `missing` y `next` ahora dicen qué falta, como en las búsquedas.
+- **`projects evidence --sync-first` avisa cuando hay varios perfiles con sesión en la cuenta de un chat**, y los
+  nombra, en lugar de «no profile is signed in».
+- **`--sync-first` ya no deja pasar las líneas de progreso JSON de la CLI de mensajería**; se conserva su frase para el
+  mismo progreso.
+
+### Removed
+
+- **`memo mail status` se elimina.** Contaba solo la importación con Himalaya, mientras que `mail <profile> status`
+  cuenta los buzones que sincroniza la CLI `mail`, así que dos comandos de estado daban dos números distintos. Usa
+  `mail <profile> status` para un buzón sincronizado por `mail`; la importación con Himalaya no tiene comando de estado
+  hasta que llegue uno mejor que cubra ambos. La herramienta MCP `mail status` desaparece con él.
+
 ## 0.131.2 — 01.11.2026
 
 ### Added

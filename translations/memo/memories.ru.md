@@ -52,8 +52,9 @@ memo memories confirm memory:3
 memo memories invalidate memory:3
 ```
 
-Память, которую вы добавляете командой `memo`, подтверждается сразу. Запись агента остаётся `proposed`, пока вы не проверите основания и не выполните `confirm`. Если основания устарели, например Kai теперь предпочитает понедельники, пометьте запись `stale`. `--subject person:…` задаёт предмет записи. `memories list` фильтруется полями `kind`, `status`, `scope` и `subject` запроса: `subject:"person:42"`.
-У каждой записи есть `subject_name` — как называется её предмет, и `subject_is_owner`, если запись о вас.
+Память, которую вы добавляете командой `memo`, подтверждается сразу. Запись агента остаётся `proposed`, пока вы не проверите основания и не выполните `confirm`. Если основания устарели, например Kai теперь предпочитает понедельники, пометьте запись `stale`. `--subject person:…` задаёт предмет записи. `--project SYH` относит запись к проекту по ключу или `project:<id>`; `memories update memory:4 --project LHT` переносит её, а `--project none` убирает из проекта.
+`memories list` фильтруется полями `kind`, `status`, `scope`, `subject` и `project` запроса: `subject:"person:42"`, `project:SYH`.
+У каждой записи есть `subject_name` — как называется её предмет, `subject_is_owner`, если запись о вас, и `project_name` рядом с `project`.
 `show --sources` возвращает каждое основание: отправителя или заголовок, время, короткую выдержку и
 `missing: true`, если источник с тех пор удалён.
 

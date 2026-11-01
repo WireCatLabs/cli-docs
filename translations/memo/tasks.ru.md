@@ -84,12 +84,17 @@ memo tasks update HRB-1 --priority critical --description 'Call before Friday'
 
 ```sh
 memo tasks move HRB-3 --before HRB-1                      # HRB-3 goes just above HRB-1
-memo tasks move HRB-3 --status in_progress --after HRB-2  # into another column, below HRB-2
+memo tasks move HRB-3 --after HRB-2                       # into HRB-2's column, below it
+memo tasks move HRB-3 --status in_progress                # into an empty column
 ```
 
 `tasks move` задаёт задаче приоритет между новыми соседями. Если при этом она попадает в другую четверть, её метка
 меняется, и ответ сообщает об этом (`label.changed`). Если между двумя соседями нет места, Memo равномерно
 распределяет эту четверть колонки и называет задачи, которым дал новые номера.
+
+Рядом с задачей из другой колонки задача переходит в эту колонку. `--status` вместе с `--before` или `--after` должен
+называть колонку соседа; иначе команда откажет с причиной `task.column` (`HRB-2 is in in_progress, not todo: pick a task
+in the todo column`). Один `--status` переносит задачу в пустую колонку.
 
 ## Состояния
 
@@ -140,6 +145,11 @@ memo tasks update HRB-1 --title 'Book the hall' --revision 4
 ```
 
 `tasks update`, `close`, `assign` и `move` принимают `--revision`.
+
+Ревизия растёт, когда человек мог бы что-то перезаписать: название, описание, состояние, приоритет, исполнители,
+агент, срок, проект, родитель или теги. Когда агент берёт задачу, продлевает или возвращает её либо задаёт, когда
+снова посмотрит на неё (`--remind-time`), ревизия не меняется, поэтому работа над задачей не делает вашу копию
+устаревшей.
 
 ## Кто работает над задачей
 

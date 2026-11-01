@@ -68,11 +68,11 @@
     "repo": "WireCatLabs/mail-cli",
     "package": "@wirecat/mail-cli",
     "lang": "en",
-    "docsRef": "v0.1.1",
+    "docsRef": "v0.6.0",
     "summary": {
-      "en": "Sync your mailbox over IMAP into the shared WireCat store; memo searches it, offline. mail only reads your mailbox.",
-      "ru": "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat; memo ищет по нему без интернета. mail только читает ящик.",
-      "es": "Sincroniza tu buzón por IMAP en el almacén compartido de WireCat; memo busca en él sin conexión. mail solo lee tu buzón."
+      "en": "Sync your mailbox over IMAP into the shared WireCat store, search it offline, and organise it on the server (flags, moves, Trash with undo, folders), keep drafts, and send mail over SMTP.",
+      "ru": "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat, ищите по нему без интернета и наводите порядок на сервере: флаги, перемещение, корзина с отменой, папки, храните черновики и отправляйте письма по SMTP.",
+      "es": "Sincroniza tu buzón por IMAP en el almacén compartido de WireCat, busca en él sin conexión y ordénalo en el servidor: marcas, mover, papelera con deshacer, carpetas, guarda borradores y envía correo por SMTP."
     }
   },
   {
@@ -99,7 +99,7 @@
       "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
       "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.131.2",
+    "docsRef": "v0.131.10",
     "profile": false
   }
 ]

@@ -52,8 +52,12 @@ memo memories confirm memory:3
 memo memories invalidate memory:3
 ```
 
-Un recuerdo que añades con `memo` se confirma al instante. El de un agente queda `proposed` hasta que revises las fuentes y lo marques con `confirm`. Si la evidencia deja de ser válida, por ejemplo Kai prefiere ahora los lunes, márcalo `stale`. `--subject person:…` indica de quién o de qué trata. `memories list` filtra por `kind`, `status`, `scope` y `subject` en la consulta: `subject:"person:42"`.
-Cada recuerdo lleva `subject_name`, cómo se llama su sujeto, y `subject_is_owner` cuando trata de ti.
+Un recuerdo que añades con `memo` se confirma al instante. El de un agente queda `proposed` hasta que revises las fuentes y lo marques con `confirm`. Si la evidencia deja de ser válida, por ejemplo Kai prefiere ahora los lunes, márcalo `stale`. `--subject person:…` indica de quién o de qué trata.
+`--project SYH` lo pone en un proyecto, por clave o `project:<id>`; `memories update memory:4 --project LHT` lo mueve, y
+`--project none` lo saca. `memories list` filtra por `kind`, `status`, `scope`, `subject` y `project` en la consulta:
+`subject:"person:42"`, `project:SYH`.
+Cada recuerdo lleva `subject_name`, cómo se llama su sujeto, `subject_is_owner` cuando trata de ti, y `project_name`
+junto a `project`.
 `show --sources` lee de vuelta cada prueba: el remitente o el título, la hora, un extracto corto y
 `missing: true` si la fuente se borró desde entonces.
 

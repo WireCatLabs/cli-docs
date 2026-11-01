@@ -10,6 +10,128 @@ title: "История изменений"
 
 ## Unreleased
 
+## 0.131.10 — 01.11.2026
+
+### Fixed
+
+- **Built on cli-base 0.71.0**, which cli-core 0.529.0 needs (its peer range is `>=0.71.0 <0.72.0`).
+
+## 0.131.9 — 01.11.2026
+
+### Added
+
+- **`people add <name...>`** adds a person by name, to assign a task to before any message names them.
+  `people list` lists everyone memo knows, the owner first, then by how many tasks name them, with `--limit`
+  (default 500); it listed only the owner and people with a task role.
+- **`tasks add --due <time> --status <state> --agent <name>`** sets them on a project task in one write.
+  `tasks update --description none` clears the description. `--priority` takes a score from `0.0` to `1.0` with its
+  decimal point; a bare `0` … `4` keeps the old scale.
+- **`when:` in the tasks query**: `when:overdue`, `when:today`, `when:upcoming` (the 7 days after today),
+  `when:later`, `when:none`. `tasks counts` counts them in `due` and counts `agent`, and each `project` count carries
+  `ref`; list items carry `project_key` and `project_name`, so the list and the counts name a project alike.
+- **Findings about anyone**: a fact finding in `projects actions add` may name a `subject` (`person:`,
+  `organization:`, `task:` or `project:`) and no project, and cite a `note:`; a task finding still names its project.
+  `notes show` gives the `fingerprint` to cite a note with. `actions show` and `list` carry `subject` and
+  `subject_name` for a findings batch.
+- **`actions confirm <id> [findings...] --fingerprint <hash>`** and **`actions reject <id> --fingerprint <hash>`**
+  decide a findings batch by its id, with no project. Confirm with no finding IDs creates every finding. An agent
+  decides for the owner only with `--reason`, as in `projects actions`. Facts the owner keeps are accepted at once.
+
+### Fixed
+
+- **`tasks list overdue:true` no longer matches a task due later today**: it is open work due before today.
+- **`tasks history` gives due dates as ISO**, as `tasks list` does, not epoch milliseconds.
+
+## 0.131.8 — 01.11.2026
+
+### Fixed
+
+- **Mail ids and threads come from cli-core's `mailIds`, the function mail uses**, so memo and mail give one email one
+  id on every server. Ids already stored do not change; a reply whose In-Reply-To holds a name before the `<id>` now
+  joins its parent's thread, as in mail.
+- **memo says when it leaves stored mail rules out**: a rule with a condition this memo does not know is named on
+  stderr with what it does not know, instead of being dropped silently.
+- **Rules are written by cli-core's `ruleInput`**, the one mail writes them with; memo's copy is gone.
+- On cli-core 0.526.0, the version mail pins too.
+
+## 0.131.7 — 01.11.2026
+
+### Added
+
+- **A memory can belong to a project**: `memories add --project <key>`, `memories list project:<key>`, and
+  `memories update <ref> --project <key>` (`none` takes it out). Memories carry `project` and `project_name`; facts
+  carry `project_name` beside `project`.
+- **`actions list` and `actions show` say what each action would do**, in `summary` ("Create 1 fact and 1 task in
+  Synthetic Port", "Reply Synthetic Port: Friday works"), and name its project in `project` and `project_name`.
+- **A findings batch in `actions list` and `actions show` carries its `fingerprint`**, which `projects actions
+  confirm` and `reject` need, and each cited source read back in `sources` (`kind`, `title`, `sender`, `at`, an
+  `excerpt` of at most 280 characters, `tool`, `missing`). `actions list --brief` leaves the sources out.
+
+### Fixed
+
+- **A findings batch rejected as a whole reads as `rejected`** in `actions list` and `actions show`, not `approved`,
+  and `actions list status:rejected` finds it.
+
+## 0.131.6 — 01.11.2026
+
+### Fixed
+
+- **memo opens a store moved to schema 43** by mail 0.4.0 and other CLIs on cli-core 0.520.0; 0.131.5 refused it and
+  asked for an upgrade. `memo search mail` and `messages show` now run on the same code as mail's own search, with the
+  same answers.
+
+## 0.131.5 — 01.11.2026
+
+### Added
+
+- **`"import": false` on a `mail.accounts` entry hands its import to the `mail` CLI.** `memo sync` and the timer skip
+  the account, `memo sync --source email:<name>` says the import is handed to `mail` (`meta.handed_to_mail` in
+  `--json`), and `memo mail inspect`, `rules`, `delete` and `restore` keep working on it. Memo still repairs HTML
+  text, scores senders and embeds the mail in the store for it; only the Himalaya header backfill stops.
+
+## 0.131.4 — 01.11.2026
+
+### Changed — may break callers
+
+- **A task's `revision` goes up only for a change a person could overwrite** (cli-core 0.516.0, store version 42):
+  title, description, state, priority, assignees, agent, due date, project, parent or tags. An agent's claim, its
+  renewal and release, and `--remind-time` leave it as it is, so a board no longer says "changed elsewhere" while an
+  agent works.
+- **`tasks move <id> --before|--after <other>` beside a task in another column moves it into that column.** A
+  `--status` that names another column than the neighbour's is refused with reason `task.column`
+  (`HRB-2 is in in_progress, not todo: pick a task in the todo column`).
+
+### Fixed
+
+- **`tasks update --priority none` clears the priority** instead of failing with "a priority score is 0 to 1".
+
+## 0.131.3 — 01.11.2026
+
+### Added
+
+- **`projects evidence --sync-profile <tool>=<profile>`** names the messenger profile `--sync-first` syncs as when
+  several are signed in to a chat's account (`--sync-profile max=default`; repeat for another tool). The profile must
+  be signed in to that chat's account, or the chat is not synced and the answer says why.
+- **`projects evidence --json` carries each linked chat's `sync_command`**: the exact `tg`, `max` or `wa` line that
+  syncs a chat held in part back to `--since-time`, or `null` when it needs no sync or no profile can be chosen here;
+  then a `missing` entry with field `sync_command` says why.
+
+### Fixed
+
+- **`projects evidence` exits 0 on a partial answer.** A chat held in part made it exit 1 with nothing on stderr;
+  `meta.complete: false`, `missing` and `next` now say what is missing, as in the searches.
+- **`projects evidence --sync-first` says when several profiles are signed in to a chat's account**, and names them,
+  instead of "no profile is signed in".
+- **`--sync-first` no longer passes the messenger CLI's JSON progress lines through**; its sentence for the same
+  progress is kept.
+
+### Removed
+
+- **`memo mail status` is removed.** It counted only the Himalaya import, while `mail <profile> status` counts the
+  mailboxes the `mail` CLI syncs, so two status commands gave two different numbers. Use `mail <profile> status`
+  for a mailbox synced by `mail`; the Himalaya import has no status command until a better one, covering both,
+  comes later. The MCP tool `mail status` goes with it.
+
 ## 0.131.2 — 01.11.2026
 
 ### Added
