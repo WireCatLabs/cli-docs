@@ -7,8 +7,8 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.5.0, sus comandos y su código, revisados
-el 31 de octubre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.10.0, sus comandos y su código, revisados
+el 1 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
 propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
 

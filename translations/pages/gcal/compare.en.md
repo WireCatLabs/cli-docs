@@ -4,8 +4,8 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.5.0, its commands and its source, checked on 31 October 2026; they are
-checked again at each release. The marks for the other tools come from their own
+your job. The marks for `gcal` come from its release 0.10.0, its commands and its source, checked on 1 November 2026;
+they are checked again at each release. The marks for the other tools come from their own
 READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
 
