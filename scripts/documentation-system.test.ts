@@ -62,6 +62,7 @@ describe("released documentation contracts", () => {
       validateInvocation('tg work --timeout 20s messages send "Book club" "Hi there" --json', program, true),
     ).toBeNull()
     expect(validateInvocation('tg messages list "Book club" --limit 5 2>&1 | jq .', program, true)).toBeNull()
+    expect(validateInvocation("tg messages list -kind:sticker --limit 5", program, true)).toBeNull()
     const extracted = examples('```sh\ntg messages list \\\n  "Book club" --limit 5\n```')
     expect(extracted).toHaveLength(1)
     expect(validateInvocation(extracted[0].text, program, true)).toBeNull()
