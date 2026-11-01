@@ -29,9 +29,7 @@ Configura `permissions` en la [configuración](./configuration.md#permissions) p
 La clave es una ruta con puntos, como `notes.edit`; una clave superior como `notes` cubre sus comandos.
 `deny` marca el comando como no disponible, `readonly` permite lecturas y `ask` o `allow` permite escrituras.
 Por MCP, `ask` se ejecuta sin una pregunta en el terminal; las preguntas de aprobación dependen de la aplicación cliente. Las escrituras sin nivel guardado usan `ask`.
-`memo mail delete` y `memo mail restore` también necesitan `yes: true`, igual que sus comandos CLI necesitan `--yes`.
-
-Los cambios en carpetas de origen o reglas de correo necesitan `mcp.authority`, cuyo valor inicial es `deny`.
+Los cambios en carpetas de origen necesitan `mcp.authority`, cuyo valor inicial es `deny`.
 Las decisiones sobre hallazgos de reuniones (`meetings.actions.confirm` y `meetings.actions.reject`) y
 `projects.annotations.restore` también tienen `deny`: el propietario debe permitir expresamente cada operación.
 Guarda los permisos en la configuración; la búsqueda y la siguiente llamada leen los niveles actuales.

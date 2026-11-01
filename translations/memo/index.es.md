@@ -39,8 +39,8 @@ Tres palabras aparecen en todas las páginas:
 1. **Tú eliges tus fuentes.** Añades una carpeta de notas, conectas una cuenta de correo o usas tg, max
    y wa para guardar tus chats. No se lee nada hasta que tú lo eliges.
 2. **Memo copia el texto en el almacén local.** La importación deja archivos y correo intactos.
-   En Linux, un temporizador puede repetir la importación. Los [comandos de limpieza de Gmail](./mail.md#clean-up-gmail)
-   mueven el correo elegido a la Papelera o lo restauran solo con `--yes`.
+   En Linux, un temporizador puede repetir la importación. La [limpieza de Gmail](./mail.md#clean-up-gmail) es un comando del
+   programa independiente `mail`.
 3. **Tú o tu agente preguntáis.** Memo responde con el texto que coincide y una referencia a cada
    fuente, para que puedas abrir el original y comprobarlo.
 4. **Tú controlas las decisiones del proyecto.** Los nuevos recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas esperan revisión. Por defecto, el agente puede decidir propuestas de proyecto con un motivo registrado; [exige decisiones del propietario](./configuration.md#agent_decisions) si quieres revisar cada una. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos. Memo nunca envía mensajes ni correos.
@@ -69,8 +69,7 @@ memo search notes budget
 
 Memo necesita Node.js 22.16+ o 24+ ([qué instalar primero](./installation.md)). Tus archivos se
 quedan donde están. Memo lee los archivos y el correo sin modificarlos. `notes edit` puede cambiar
-el archivo original de una nota; `notes export` escribe notas en archivos. Los comandos explícitos `memo mail delete`
-y `memo mail restore` mueven correo de Gmail a la Papelera solo con `--yes`.
+el archivo original de una nota; `notes export` escribe notas en archivos. Memo nunca modifica tu buzón.
 
 ## Adónde ir después
 

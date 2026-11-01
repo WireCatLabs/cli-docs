@@ -12,8 +12,7 @@ Aquí verás qué lee y escribe Memo y qué puede salir del ordenador, para eleg
 - Las **carpetas de notas** solo se leen. Las carpetas ocultas como `.obsidian` se omiten. La exportación
   de notas escribe en la carpeta elegida y nunca sobrescribe un archivo que editaste. La exportación
   de anotaciones seleccionadas crea un archivo privado nuevo en la ruta elegida, como se explica abajo.
-- **La importación de correo** abre el buzón solo para lectura y no marca correo como leído, y `mail` hace lo mismo. Memo nunca envía correo.
-- **La limpieza de Gmail** es independiente: `memo mail delete` y `memo mail restore` muestran una vista previa sin `--yes`. La limpieza mueve el correo elegido a la Papelera de Gmail; Gmail lo elimina definitivamente a los 30 días. La restauración devuelve el correo de una ejecución registrada mientras siga en la Papelera. La limpieza requiere una copia reciente del almacén y nunca se ejecuta desde el temporizador. Consulta [la limpieza de Gmail](./mail.md#clean-up-gmail).
+- **La importación de correo** abre el buzón solo para lectura y no marca correo como leído. Memo nunca envía correo ni cambia un buzón: la [limpieza de Gmail](./mail.md#clean-up-gmail) es un comando del programa independiente `mail`.
 - Las **etiquetas** dejan tus archivos, las etiquetas de Gmail y los indicadores del buzón tal como
   están.
 

@@ -58,7 +58,7 @@ title: "Настройки"
 | `path` | Для `mbox`: файл Takeout, например `~/Takeout/Mail/All mail Including Spam and Trash.mbox`. |
 | `folders` | Для `imap`: папки почты, например `["INBOX", "Archive"]`. |
 | `embed` | `false` исключает почту аккаунта из поиска по смыслу. |
-| `rules` | Читается только для переноса правил в хранилище: они хранятся там, управление — `memo mail rules`. См. [Почта](./mail.md#choose-what-to-import). |
+| `rules` | Читается только для переноса правил в хранилище: они хранятся там, управление — CLI `mail` (`mail <profile> rules`). См. [Почта](./mail.md#choose-what-to-import). |
 
 Рядом с `accounts`:
 
@@ -155,7 +155,7 @@ Memo обращается к провайдеру за пределами ваш
 }
 ```
 
-`mcp.authority` по умолчанию имеет `deny` для изменения папок-источников и почтовых правил.
+`mcp.authority` по умолчанию имеет `deny` для изменения папок-источников.
 `meetings.actions.confirm`, `meetings.actions.reject` и `projects.annotations.restore` тоже имеют `deny`;
 явно задайте нужному ключу `ask` или `allow`, чтобы делегировать операцию владельца.
 `agent_decisions: false` по-прежнему запрещает решения по предложениям проекта. Общий предел WireCat

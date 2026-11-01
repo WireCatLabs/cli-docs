@@ -21,9 +21,8 @@ mensajes, correo y notas a la vez.
 | Tus propias notas, etiquetas, tareas, recuerdos y hechos | Memo, cuando tú o tu agente los añadís |
 
 La importación deja los originales intactos: los archivos no cambian y el buzón se abre solo para lectura.
-El almacén local conserva una copia del texto. Los [comandos de limpieza de Gmail](./mail.md#clean-up-gmail)
-(`memo mail delete` y `memo mail restore`) mueven el correo de Gmail elegido a la Papelera o lo restauran solo con `--yes`;
-el temporizador nunca ejecuta la limpieza.
+El almacén local conserva una copia del texto. Memo nunca cambia un buzón: la [limpieza de Gmail](./mail.md#clean-up-gmail)
+es un comando del programa independiente `mail`.
 
 ## Qué hace una importación
 

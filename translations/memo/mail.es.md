@@ -5,7 +5,7 @@ title: "Correo"
 Esta página te ayuda a traer tu correo a Memo. Así el correo está junto a tus notas y mensajes en la
 búsqueda, en el contexto de una persona y en las fuentes que lee tu agente. La vía de entrada es el
 programa aparte [mail](https://github.com/WireCatLabs/mail-cli): `mail` copia tu buzón al almacén compartido de
-WireCat, y Memo busca y muestra lo que hay en él. `mail` solo lee tu buzón. Memo nunca envía correo.
+WireCat, y Memo busca y muestra lo que hay en él. Memo nunca cambia tu buzón ni envía correo.
 
 Memo todavía puede importar correo con Himalaya. Ese camino antiguo funciona por ahora y se eliminará en una versión
 posterior; se describe en [Importación antigua con Himalaya](#older-import-through-himalaya-legacy).
@@ -44,24 +44,28 @@ mensajes. Hay más palabras de búsqueda en [Encontrar tu correo](#find-your-mai
 
 ## Los comandos memo mail
 
-`memo mail inspect`, `rules`, `delete` y `restore` se mantienen por ahora. Toman una cuenta de la lista
-`mail.accounts` de Memo, que `memo mail add` rellena a partir de una cuenta de Himalaya, así que no funcionan con una
-cuenta que solo añadió `mail`.
+`memo mail inspect` se mantiene. Toma una cuenta de la lista `mail.accounts` de Memo, que `memo mail add` rellena a
+partir de una cuenta de Himalaya, así que no funciona con una cuenta que solo añadió `mail`.
 
 Cuando `mail` sincroniza una cuenta que también está en `mail.accounts`, pon `"import": false` en ella, por ejemplo
 `{ "name": "personal", "address": "you@gmail.com", "import": false }`. `memo sync` y el temporizador omiten entonces
-su importación con Himalaya, y `memo sync --source email:personal` avisa de que la importación pasó a `mail`. Los
-cuatro comandos anteriores siguen funcionando, y cada sync sigue reparando el texto HTML, puntuando remitentes e
+su importación con Himalaya, y `memo sync --source email:personal` avisa de que la importación pasó a `mail`. `memo mail inspect`
+sigue funcionando, y cada sync sigue reparando el texto HTML, puntuando remitentes e
 incrustando el correo que ya está en el almacén. Solo el relleno de cabeceras necesita Himalaya, así que se detiene.
 
 | Comando | Qué necesita | Qué hace |
 |---|---|---|
 | `memo mail inspect <account>` | Una cuenta de Himalaya en la configuración de Memo | Lee cabeceras del buzón y agrupa el correo por remitente ([Elegir qué importar](#choose-what-to-import)) |
-| `memo mail rules ...` | Lo mismo | Guarda y cambia las reglas de lo que almacena una importación. `rules apply` también lee cabeceras del buzón |
-| `memo mail delete <account>` | Lo mismo, y `--yes` | Mueve el correo de Gmail elegido a la Papelera de Gmail ([Limpia Gmail](#clean-up-gmail)) |
-| `memo mail restore <account>` | Lo mismo, y `--yes` | Devuelve de la Papelera una ejecución registrada |
 
-`memo mail delete` es el único sitio donde Memo cambia un buzón. `mail` nunca lo hace.
+Las reglas, la limpieza de Gmail y la restauración son comandos de `mail`. Los antiguos comandos de Memo solo nombran su
+sustituto y no cambian nada. `<profile>` es el perfil de `mail` que guarda la dirección; `mail session status` los lista.
+
+| Comando antiguo de Memo | Ejecuta en su lugar |
+|---|---|
+| `memo mail rules list\|add\|remove\|apply\|export\|import <account> …` | `mail <profile> rules list\|add\|remove\|apply\|export\|import …`, las mismas opciones, sin cuenta |
+| `memo mail delete <account>` | `mail <profile> messages delete --rules` (una vista previa; `--yes` mueve el correo) |
+| `memo mail restore <account> --run <id>` | `mail <profile> messages restore --run <id>`; los id de ejecución de Memo sirven allí |
+| `memo mail runs list <account>` | `mail doctor`, que nombra las ejecuciones que se detuvieron a medias o cuya Papelera de Gmail se vaciará pronto; cada ejecución es un archivo `<id>.jsonl` en la carpeta de estado de Memo, en `mail-trash/<profile>/` |
 
 ## Importación antigua con Himalaya (legacy)
 
@@ -168,147 +172,28 @@ Cada grupo recibe una **puntuación** de parecido con spam, estafa o robot, con 
 
 memo consulta mediante RDAP el registro propio de cada dominio, usando la lista de IANA, a un dominio por segundo, y conserva la respuesta en el equipo para siempre. **Cada consulta comunica al registro el nombre del dominio**: este sabe que alguien revisa correo procedente de él. No consulta grandes proveedores como gmail.com. La mayoría de dominios territoriales, como .ru, .de, .es y .io, carece de RDAP: su edad queda desconocida y no suma puntos.
 
-Tú decides:
-
-```sh
-memo mail rules add work --domain shop.example --do envelope --reason 'newsletters'
-memo mail rules add work --domain spam.example --do skip
-memo mail rules add work --sender orders@shop.example --do keep
-memo mail rules list work
-```
-
-Las acciones básicas de `--do` se muestran abajo; la protección y las etiquetas se explican en la siguiente sección:
+Decides con reglas, que `mail <profile> rules add` escribe en el almacén (consulta la
+[documentación de mail](https://github.com/WireCatLabs/mail-cli/blob/main/docs/index.md)). `memo sync` lee las reglas
+de la cuenta del almacén en cada importación con Himalaya:
 
 - `skip`: `memo sync` no lee ni guarda el correo y lo cuenta como omitido.
-- `envelope`: `memo sync` guarda remitente, fecha, tamaño, etiquetas e id de Gmail, sin texto ni adjuntos. El asunto queda en los metadatos, por lo que el correo no aparece en búsquedas. `memo mail rules list` muestra cantidad y tamaño por regla para valorar una limpieza. El sobre no pide a Gmail más datos que omitir: sus campos vienen con el listado.
+- `envelope`: `memo sync` guarda remitente, fecha, tamaño, etiquetas e id de Gmail, sin texto ni adjuntos. El asunto queda en los metadatos, por lo que el correo no aparece en búsquedas. El sobre no pide a Gmail más datos que omitir: sus campos vienen con el listado.
 - `keep`: importa el correo aunque coincida con una regla de omisión o sobre.
+- Una etiqueta en una regla pone una etiqueta de memo en cada correo que la regla encuentra y que una sincronización guarda o registra. Una etiqueta que el almacén rechaza por parecerse demasiado a otra existente se pone como esa etiqueta; una rechazada sin nada que reutilizar se omite, y el correo se guarda igualmente.
+- Una regla protegida gana a todas las demás y siempre guarda el correo completo.
 
-Conservar tiene prioridad sobre el sobre, y el sobre sobre omitir. Si eliminas una regla de sobre o la cambias por conservar, la siguiente sincronización leerá esos correos completos. El correo guardado antes de una regla permanece intacto.
+Conservar tiene prioridad sobre el sobre, y el sobre sobre omitir. Si eliminas una regla de sobre o la cambias por conservar, la siguiente sincronización leerá esos correos completos. El correo guardado antes de una regla permanece intacto. Las reglas que juzgan a un remitente por su correo (una puntuación o un tipo) lo juzgan por el correo del mismo listado, así que una sincronización que lista solo correo nuevo juzga al remitente por ese correo.
 
-### Más condiciones, etiquetas y protección
-
-Además de `--sender`, `--domain` y `--list-id`, una regla admite una consulta `--filter` y un `--kind`.
-Deben cumplirse todas las condiciones indicadas:
-
-| En `--filter` | Correo que coincide |
-|---|---|
-| `from:<address>`, `from:<domain>` | de ese remitente o de ese dominio y sus subdominios |
-| `from:<word>` | la dirección o el nombre visible contiene la palabra, sin distinguir mayúsculas |
-| `to:<address>` | enviado a esa dirección en To o Cc |
-| `subject:<word>` o una palabra sola | el asunto contiene cada palabra, sin distinguir mayúsculas |
-| `older:<n>d` | recibido hace más de n días |
-| `larger:<size>` | tamaño en origen mayor que `5MB`, `300KB` o un número de bytes |
-| `has:attachment` | enviado como `multipart/mixed`: una estimación de adjuntos por la cabecera |
-| `label:<name>` | con esa etiqueta Gmail, como `label:Promotions` o `label:"Two words"` |
-| `is:unread` | nunca abierto |
-| `is:bulk` | masivo: tiene List-Id, List-Unsubscribe o `Precedence: bulk` |
-| `score:<n>` | la puntuación del remitente de arriba es al menos n |
-
-`--do` acepta una acción y cualquier número de etiquetas, separadas por comas: `skip`, `envelope`,
-`keep` o `protect`, más `tag:<name>`.
-
-```sh
-memo mail rules add work --filter 'label:Promotions older:365d' --do envelope
-memo mail rules add work --domain shop.example --do keep,tag:shopping
-memo mail rules add work --domain tax.gov.example --do protect
-memo mail rules list work protected:true
-```
-
-- **`tag:<name>`** etiqueta cada correo coincidente, sea cual sea la regla que decida la acción. La sincronización
-  etiqueta el correo que guarda o registra; `memo mail rules apply`, el guardado antes. Si el almacén rechaza
-  una etiqueta por parecerse a otra, reutiliza esa y actualiza la regla (`tags_reused` en `--json`). Si no hay
-  ninguna que reutilizar, omite la etiqueta, guarda el correo y muestra `tags skipped` (`tags_skipped`) en la regla.
-  Una etiqueta rechazada nunca detiene la sincronización.
-- **`protect`** conserva el correo completo y fuera de toda limpieza, independientemente de otras reglas o tipos.
-  Una regla protegida tiene prioridad y siempre guarda todo: `memo mail rules apply` nunca recorta ese correo
-  y una limpieza posterior del buzón debe rechazarlo. Úsala para correo oficial, fiscal o bancario.
-  `memo mail rules list` muestra primero las reglas protegidas, como `PROTECTED`.
-- **`score:` y `--kind`** evalúan al remitente por el correo del mismo listado: si una sincronización solo enumera
-  correo nuevo, lo evalúan con ese correo.
-
-### Tipos de correo
-
-`--kind` nombra un tipo incorporado, por quién envía y cómo, en lugar de por tu lista de remitentes:
-
-| Tipo | Coincide con |
-|---|---|
-| `social` | notificaciones de redes sociales |
-| `newsletters` | listas con List-Id y List-Unsubscribe y servicios de boletines |
-| `developer` | notificaciones de alojamiento de código, CI, paquetes y seguimiento de errores |
-| `shopping` | tiendas y lo que Gmail clasifica como Promotions |
-| `alerts` | avisos de monitorización y disponibilidad |
-
-`memo mail inspect` termina mostrando cuánto correo coincidiría con cada tipo. Nada se aplica hasta añadir una regla:
-
-```sh
-memo mail rules add work --kind social --do envelope
-```
-
-El correo de alguien a quien escribiste nunca coincide con un tipo, y una regla explícita gana a una de `--kind`.
-
-### Filtros de Gmail
-
-La exportación Mail de Google Takeout incluye los filtros de Gmail en `Mail/User settings/Filters.json`.
-Memo propone una regla por cada filtro que puede expresar:
-
-```sh
-memo mail rules import work Filters.json --format gmail        # shows the proposed rules and the skipped filters
-memo mail rules import work Filters.json --format gmail --yes  # adds them
-```
-
-Primero compara las etiquetas Gmail que añade el filtro con las de Memo: reutiliza el mismo nombre con otras
-mayúsculas y propone una etiqueta parecida en lugar de crear otra. La propuesta muestra cada cambio como `label … → …`.
-
-Un filtro que omite Recibidos, marca como leído o elimina se convierte en una regla de sobre; uno que solo añade
-una etiqueta, en una regla de conservación con esa etiqueta. Varios remitentes o destinatarios
-(`from:a from:b`, `from:(a OR b)`) se convierten en reglas separadas: un correo no puede proceder de ambos.
-Las palabras del filtro pasan a buscarse en el asunto: Gmail buscaba en todo el correo, Memo solo en el asunto,
-y el motivo de la regla lo indica. Los filtros que excluyen palabras o usan campos no admitidos (`list:`, `size:`)
-se omiten y enumeran. Lee Takeout `{"filter": [{query, labelsToAdd, labelsToRemove}]}`, la forma de la API Gmail
-(`criteria` y `action`) y las propiedades planas de la exportación de ajustes (`from`, `shouldArchive`, `label`).
-Una etiqueta indicada solo por su id Gmail se etiqueta con ese id.
-
-El correo guardado completo antes de una regla de sobre sigue completo hasta que lo recortes:
-
-```sh
-memo mail rules apply work        # says how many emails and how much text each rule would cut
-memo mail rules apply work --yes  # cuts them to envelopes
-```
-
-Lee las cabeceras del buzón como `memo sync`, porque los correos guardados antes de conservar List-Id no lo tienen. Cada coincidencia pierde texto, adjuntos e índices de búsqueda y conserva remitente, fecha, tamaño, etiquetas y asunto en metadatos. El correo que solo coincide con omitir no cambia. El buzón permanece intacto; cambiar la regla a conservar permite leer de nuevo el correo completo en la siguiente sincronización.
-
-Las reglas viven en el almacén local junto al correo; `memo mail rules list` cuenta los correos por regla en una consulta. Cada sobre recuerda la regla que lo registró. Para revisar, copiar o trasladar reglas:
-
-```sh
-memo mail rules export work > rules.json
-memo mail rules import work rules.json   # a rule with the same sender, domain or list is replaced
-```
-
-Los ajustes antiguos guardaban las reglas en `config.json`. El primer comando memo que las lee las mueve al almacén, comprueba la copia y solo entonces las quita de los ajustes. Conserva al lado `config.json.<time>.before-rules-in-store`, legible solo por ti, y lo comunica una vez por stderr. Una regla de conservación con «never remove» en el motivo queda protegida: ninguna limpieza puede recortar ni eliminar lo que coincida.
+Los ajustes antiguos guardaban las reglas en `config.json`. La primera `memo sync` que lee las reglas las mueve al almacén, comprueba que llegaron todas y solo entonces las quita de los ajustes. Conserva al lado `config.json.<time>.before-rules-in-store`, legible solo por ti, y lo comunica una vez por stderr. Una regla de conservación con «never remove» en el motivo queda protegida.
 
 ## Limpia Gmail
 
-Esto funciona con una cuenta de la importación con Himalaya. Es el único sitio donde Memo cambia un buzón: mueve el
-correo a la Papelera de Gmail, y Gmail vacía la Papelera definitivamente a los 30 días.
-
-`memo mail delete` mueve a la Papelera de Gmail los correos de los que decidiste conservar solo el sobre. Gmail los conserva allí 30 días y después los elimina definitivamente.
-
-```sh
-memo mail delete work                  # says what would move, per rule, and what stays and why
-memo mail delete work --yes            # a first run moves at most 100, to check by hand in Gmail's Trash
-memo mail delete work --yes            # later runs move up to 5,000, oldest first (--limit changes it)
-memo mail delete work --yes --since-time 2012-01-01   # only mail from 2012 on; older mail stays for now
-memo mail runs list work                   # each run: how much moved, and until when it can be restored
-memo mail restore work --run <id> --yes   # moves a run back, to the inbox if it was there, with its labels
-```
-
-Cada correo se evalúa otra vez con las reglas actuales y los datos de la última sincronización. Antes de moverlo, Memo consulta en Gmail las etiquetas y marcas actuales solo de los correos elegidos. Se conserva si coincide con una regla de protección o conservación, alguna vez respondiste al remitente, tiene estrella o está marcado como importante, es enviado o borrador, tiene una etiqueta tuya que su regla no añade, o tiene menos de 30 días. `--since-time` deja intacto el correo anterior a esa fecha.
-
-Sin `--yes`, el comando muestra el plan. La primera ejecución con `--yes` mueve como máximo 100 correos para revisarlos en la Papelera; las siguientes, hasta 5 000, del más antiguo al más reciente, salvo otro `--limit`. Se necesita una copia verificada del almacén de menos de 8 días: el script de copia registra `backups/last.json` junto al almacén. Se aconseja un archivo Google Takeout `mbox` para conservar el texto completo, pero no es obligatorio; la vista previa y `memo doctor` indican si se ha importado.
-
-Antes de cada lote, los identificadores Gmail, etiquetas y marcas se escriben en el registro de restauración `mail-trash/<account>/<run>.jsonl` en la carpeta de estado de Memo. La Papelera quita el correo de Todos y la etiqueta Recibidos; conserva las demás etiquetas. memo mail runs list muestra las ejecuciones y hasta cuándo se pueden restaurar. memo mail restore muestra el plan sin `--yes`; con él devuelve de la Papelera los correos de la ejecución indicada con sus etiquetas anteriores, incluida Recibidos si la tenían. También restaura un lote que Gmail movió sin confirmar la operación.
-
-El correo movido queda marcado como eliminado en el almacén; la siguiente sincronización tras restaurarlo lo importa según las reglas actuales. El temporizador nunca ejecuta la limpieza.
+Memo ya no cambia un buzón. Mover a la Papelera de Gmail el correo de sobre y devolver una ejecución son comandos de
+`mail`: `mail <profile> messages delete --rules` muestra el plan y `--yes` mueve, `mail <profile> messages restore
+--run <id>` deshace una ejecución, y `mail doctor` nombra las ejecuciones que se detuvieron a medias o cuya Papelera de
+Gmail se vaciará pronto. `mail` lee los registros de restauración que escribieron versiones anteriores de Memo, así que
+sus id de ejecución siguen sirviendo: cada uno es un archivo `<id>.jsonl` en la carpeta de estado de Memo, en
+`mail-trash/<profile>/` (`memo doctor` muestra la carpeta).
 
 ## Correo antiguo de Google Takeout
 

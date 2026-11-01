@@ -360,7 +360,7 @@ memo messages show <message> [options]
 
 ## `memo mail`
 
-look at a mail account before importing it, and the owner's rules
+look at a mail account before importing it
 
 ### `memo mail add`
 
@@ -429,226 +429,6 @@ memo mail inspect <account> [options]
 **Returns:** group an account's mail by sender and list, to decide what to keep or skip
 
 **Example:** `memo mail inspect personal --limit 30`, `memo mail inspect work --since-time 365d --json`
-
-### `memo mail delete`
-
-move envelope mail to Gmail's Trash, decided again; dry run unless --yes
-
-This command can send data to the configured AI provider.
-
-```sh
-memo mail delete <account> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-
-| Option | What it does |
-|---|---|
-| `--limit <n>` | most emails to move this run (default 5000; a first run moves at most 100). |
-| `--since-time <time>` | only mail received from this time, ISO 8601 or 30d ago; older mail stays. |
-| `--yes` | move the mail; without it, only say what would move. |
-| `--json` | print JSON; --json=id,title keeps only those fields. |
-
-**Returns:** move envelope mail to Gmail's Trash, decided again; dry run unless --yes
-
-**Example:** `memo mail delete personal`, `memo mail delete personal --limit 100 --json`
-
-### `memo mail restore`
-
-move a cleanup run's mail back from Gmail's Trash; dry run unless --yes
-
-This command can send data to the configured AI provider.
-
-```sh
-memo mail restore <account> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-
-| Option | What it does |
-|---|---|
-| `--run <id>` | the run, as memo mail runs list lists it. |
-| `--yes` | move the mail back; without it, only say what would move. |
-| `--json` | print JSON; --json=id,title keeps only those fields. |
-
-**Returns:** move a cleanup run's mail back from Gmail's Trash; dry run unless --yes
-
-**Example:** `memo mail restore personal --run 2026-10-16T09-00-00-000Z-ab12`
-
-### `memo mail runs`
-
-an account’s cleanup runs
-
-#### `memo mail runs list`
-
-an account's cleanup runs, how much moved, and until when restorable
-
-```sh
-memo mail runs list <account> [query] [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
-
-| Option | What it does |
-|---|---|
-| `--json` | print JSON; --json=id,title keeps only those fields. |
-
-**Returns:** memo mail run — id, started_at, ended_at, trashed, restored, restorable_until; every field: memo commands info mail runs list
-
-**Example:** `memo mail runs list personal`, `memo mail runs list personal --json`
-
-### `memo mail rules`
-
-the owner's decisions on which mail to keep, record, skip, tag or protect
-
-#### `memo mail rules list`
-
-one account's rules, protected ones first
-
-```sh
-memo mail rules list <account> [query] [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
-
-| Option | What it does |
-|---|---|
-| `--json` | print JSON; --json=id,title keeps only those fields. |
-
-**Returns:** memo mail rule — match, action, decided_at, id, tags, reason, protected, source; every field: memo commands info mail rules list
-
-**Example:** `memo mail rules list personal --json`, `memo mail rules list personal protected:true`
-
-#### `memo mail rules add`
-
-decide mail by sender, list, subject, age, size, label or kind; repeats replace
-
-This command changes the local store or your files.
-
-```sh
-memo mail rules add <account> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-
-| Option | What it does |
-|---|---|
-| `--sender <address>` | one sender address. |
-| `--domain <domain>` | a sender domain, and its subdomains. |
-| `--list-id <id>` | a mailing list, by its List-Id. |
-| `--filter <query>` | from:<address, domain or word>, to:<address>, subject:<word> (or a bare word), older:<n>d, larger:<size> (5MB, 300KB), has:attachment, label:<name> (label:"Two words"), is:unread, is:bulk, score:<n> (at least); all must hold. |
-| `--kind <kind>` | a built-in kind of mail: social, newsletters, developer, shopping, alerts. |
-| `--do <actions>` | one of skip (never read or store), envelope (store only sender, date, size and labels: counted, out of search, cleanable later), keep (store in full even when a skip or envelope rule matches) or protect (keep, and no cleanup may ever cut, archive or trash it); add tag:<name> to also tag the mail, e.g. envelope,tag:promo. |
-| `--reason <text>` | why, for the owner later. |
-| `--json` | print JSON; --json=id,title keeps only those fields. |
-
-**Returns:** decide mail by sender, list, subject, age, size, label or kind; repeats replace
-
-**Example:** `memo mail rules add personal --domain news.example --do envelope,tag:newsletter --reason 'newsletters'`, `memo mail rules add personal --domain tax.gov.example --do protect`, `memo mail rules add personal --filter 'label:Promotions older:365d' --do envelope`
-
-#### `memo mail rules remove`
-
-drop the rule with exactly these conditions
-
-This command changes the local store or your files.
-
-```sh
-memo mail rules remove <account> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-
-| Option | What it does |
-|---|---|
-| `--sender <address>` | one sender address. |
-| `--domain <domain>` | a sender domain, and its subdomains. |
-| `--list-id <id>` | a mailing list, by its List-Id. |
-| `--filter <query>` | from:<address, domain or word>, to:<address>, subject:<word> (or a bare word), older:<n>d, larger:<size> (5MB, 300KB), has:attachment, label:<name> (label:"Two words"), is:unread, is:bulk, score:<n> (at least); all must hold. |
-| `--kind <kind>` | a built-in kind of mail: social, newsletters, developer, shopping, alerts. |
-| `--json` | print JSON; --json=id,title keeps only those fields. |
-
-**Returns:** drop the rule with exactly these conditions
-
-**Example:** `memo mail rules remove personal --domain news.example`
-
-#### `memo mail rules apply`
-
-cut stored mail an envelope rule matches to its envelope; dry run unless --yes
-
-This command changes the local store or your files.
-
-```sh
-memo mail rules apply <account> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-
-| Option | What it does |
-|---|---|
-| `--since-time <time>` | only mail from this time, ISO 8601 or 30d ago (default: all mail). |
-| `--yes` | change the store; without it, only say what would change. |
-| `--json` | print JSON; --json=id,title keeps only those fields. |
-
-**Returns:** cut stored mail an envelope rule matches to its envelope; dry run unless --yes
-
-**Example:** `memo mail rules apply personal`, `memo mail rules apply personal --json`
-
-#### `memo mail rules export`
-
-print one account's rules as JSON, to review, keep or move elsewhere
-
-```sh
-memo mail rules export <account>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-
-**Returns:** print one account's rules as JSON, to review, keep or move elsewhere
-
-**Example:** `memo mail rules export personal`
-
-#### `memo mail rules import`
-
-import saved Memo rules, or preview Gmail filters with --format gmail; same match replaces
-
-This command changes the local store or your files.
-
-```sh
-memo mail rules import <account> <file> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-| `file` | required | a Memo rules JSON file, or Takeout Filters.json with --format gmail. |
-
-| Option | What it does |
-|---|---|
-| `--format <format>` | memo (default) or gmail. Default: `memo`. |
-| `--yes` | with --format gmail: add the proposed rules instead of only previewing them. |
-| `--json` | print JSON; --json=id,title keeps only those fields. |
-
-**Returns:** import saved rules, or preview Gmail filters
-
-**Example:** `memo mail rules import personal rules.json`, `memo mail rules import personal Filters.json --format gmail`, `memo mail rules import personal Filters.json --format gmail --yes`
 
 ## `memo people`
 
@@ -915,7 +695,7 @@ memo tasks list [query] [options]
 | `--desc` | project tasks: the --sort order reversed. |
 | `--cursor <cursor>` | project tasks: the next page, from page.next_cursor, with the same query and order. |
 
-**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 23 more; every field: memo commands info tasks list
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 24 more; every field: memo commands info tasks list
 
 **Next usually:** `memo tasks links <task>`, `memo tasks status <task>`, `memo tasks show <task>`
 
@@ -937,11 +717,59 @@ memo tasks counts [query] [options]
 |---|---|
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
-**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 23 more; every field: memo commands info tasks counts
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 24 more; every field: memo commands info tasks counts
 
 **Next usually:** `memo tasks links <task>`, `memo tasks status <task>`, `memo tasks show <task>`
 
 **Example:** `memo tasks counts project:* --json`
+
+### `memo tasks comments`
+
+what people and agents wrote on a task
+
+#### `memo tasks comments add`
+
+comment on a task, in your name or the agent's that runs memo
+
+This command changes the local store or your files.
+
+```sh
+memo tasks comments add <id> <text> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the task's id or key. |
+| `text` | required | what to say, in Markdown. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** comment on a task, in your name or the agent's that runs memo
+
+**Example:** `memo tasks comments add HRB-1 Booked the hall for Friday`
+
+#### `memo tasks comments list`
+
+a task's comments, oldest first, with who wrote each and when
+
+```sh
+memo tasks comments list <id> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the task's id or key. |
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** a task's comments, oldest first, with who wrote each and when
+
+**Example:** `memo tasks comments list HRB-1 --json`
 
 ### `memo tasks history`
 
@@ -1094,10 +922,12 @@ memo tasks update <task> [options]
 | `--account <account>` | the account it acts as: telegram:<account>, email:<account>, notes:<id>. |
 | `--json` | print JSON. |
 | `--agent <agent>` | a project task: the agent working on it, apart from its assignees; none clears it. |
+| `--project <project>` | a project task: move it to another project, by key or project:<id>; it takes a new key there, and the old key still finds it. |
+| `--type <type>` | a project task's kind: bug, feature, chore. |
 | `--revision <n>` | refuse the write unless the task is still at this revision (task.stale, exit 3). |
 | `--status <state>` | a project task's state: open, todo, in_progress, done, dismissed; a closed one reopens. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, title, description, and 23 more; every field: memo commands info tasks update
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 24 more; every field: memo commands info tasks update
 
 **Example:** `memo tasks update HRB-1 --title 'Send the budget' --priority high --account telegram:1`, `memo tasks update 1a2b3c4d --due 2d --title 'Send the revised budget' --account telegram:1`
 
@@ -1118,7 +948,7 @@ memo tasks show <task> [options]
 | `--source <accounts>` | the account: telegram:<account>, email:<account>, notes:<id>, or group:<name> of one. |
 | `--json` | print JSON. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, title, description, and 23 more; every field: memo commands info tasks show
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 24 more; every field: memo commands info tasks show
 
 **Example:** `memo tasks show 1a2b3c4d --source telegram:1 --json`
 
@@ -1144,7 +974,7 @@ memo tasks link <task> [targets] [options]
 | `--account <account>` | the account it acts as: telegram:<account>, email:<account>, notes:<id>. |
 | `--json` | print JSON. |
 
-**Returns:** task links — id, ref, key, project, project_key, project_name, title, description, and 25 more; every field: memo commands info tasks link
+**Returns:** task links — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: memo commands info tasks link
 
 **Example:** `memo tasks link HRB-2 HRB-1 --kind blocked-by`
 
@@ -1169,7 +999,7 @@ memo tasks claim <task> [options]
 | `--account <account>` | the account it acts as: telegram:<account>, email:<account>, notes:<id>. |
 | `--json` | print JSON. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, title, description, and 23 more; every field: memo commands info tasks claim
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 24 more; every field: memo commands info tasks claim
 
 **Example:** `memo tasks claim HRB-1 --lease 2h --account telegram:1`
 
@@ -1193,7 +1023,7 @@ memo tasks release <task> [options]
 | `--account <account>` | the account it acts as: telegram:<account>, email:<account>, notes:<id>. |
 | `--json` | print JSON. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, title, description, and 23 more; every field: memo commands info tasks release
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 24 more; every field: memo commands info tasks release
 
 **Example:** `memo tasks release HRB-1 --account telegram:1`
 
