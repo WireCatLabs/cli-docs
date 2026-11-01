@@ -4,6 +4,41 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.11.0 — 01.11.2026
+
+### Añadido
+
+- **`session start` puede usar una aplicación de Google de WireCat incluida en el paquete**, cuando una versión la
+  trae; `gcal doctor` muestra entonces `oauth_client.client: wirecat`. Esta versión no trae ninguna, así que sigues
+  creando tu propia aplicación y la pasas con `--client-file`, o con `GCAL_GOOGLE_CLIENT_ID` y
+  `GCAL_GOOGLE_CLIENT_SECRET`, que también tienen prioridad sobre una aplicación incluida.
+- **Todas tus cuentas en una lista.** `gcal <profile> events list --source all` muestra en una sola lista los eventos
+  de todas las cuentas de Google que gcal ha guardado; `--source gcal:personal,gcal:work` nombra perfiles. La respuesta
+  nombra las cuentas en `meta.accounts` y dice `meta.complete: false`, con un problema por cada cuenta cuya
+  sincronización falta o no ha terminado. Una reunión que tienen dos cuentas aparece una vez. Con `GCAL_PROFILE_LOCK`,
+  `--source` solo lee la cuenta del perfil bloqueado. Un perfil con sesión iniciada pero nunca sincronizado también
+  aparece, como una cuenta sin calendario sincronizado.
+- **Reuniones que se solapan.** `events list overlapping:true` muestra las reuniones cuyo horario se solapa con el de
+  otra, cada una con `overlaps`; con `--source` compara entre cuentas. Cuenta las reuniones con hora que no están
+  canceladas, rechazadas, marcadas como libre ni son un bloque de lugar de trabajo; los eventos de todo el día y las
+  reuniones seguidas nunca se solapan.
+- **Una guía paso a paso para crear tu propia aplicación de Google.**
+  [Crea tu propia aplicación de Google](./installation.md#make-your-own-google-app) recorre Google Cloud Console: el
+  proyecto, la Google Calendar API, Branding, Audience, Data Access con los permisos que pide `gcal`, y un cliente
+  Desktop app. Explica cuándo dejar la aplicación en Testing, donde un inicio de sesión termina a los 7 días, y cuándo
+  publicarla. [Problemas al iniciar sesión](./troubleshooting.md#sign-in-problems) recoge lo que muestran Google y
+  `gcal` cuando faltó un paso. Las versiones actuales no traen ninguna aplicación de Google de WireCat, así que cada
+  usuario crea la suya.
+- gcal funciona sobre cli-core 0.527.0.
+- **El servidor MCP de gcal aparece en el MCP Registry oficial** como `dev.wirecat/gcal-cli`, a partir de la próxima
+  versión: `server.json`, `mcpName` y las tareas del registro de cli-template 0.12.0.
+
+### Corregido
+
+- **La sección de la guía de uso sobre llamadas directas a `api` coincide ahora con la 0.7.0**: una escritura fácil de
+  deshacer se ejecuta sin preguntar; borrar y compartir preguntan; vaciar, borrar o ceder un calendario se rechaza
+  hasta que lo permitas.
+
 ## 0.10.0 — 01.11.2026
 
 - gcal funciona ahora sobre cli-core 0.512.0. Nada cambia en los comandos de gcal ni en su servidor MCP: cli-core

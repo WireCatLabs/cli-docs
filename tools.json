@@ -55,7 +55,7 @@
     "repo": "WireCatLabs/gcal-cli",
     "package": "@wirecat/gcal-cli",
     "lang": "en",
-    "docsRef": "v0.10.0",
+    "docsRef": "v0.11.0",
     "summary": {
       "en": "Keep your Google Calendar on your computer, search meetings offline and know who the attendees are in your other chats.",
       "ru": "Храните Google Календарь на своём компьютере, ищите встречи без интернета и узнавайте участников из других ваших чатов.",

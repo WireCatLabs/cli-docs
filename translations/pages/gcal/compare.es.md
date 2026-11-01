@@ -7,7 +7,7 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.10.0, sus comandos y su código, revisados
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.11.0, sus comandos y su código, revisados
 el 1 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
 propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
@@ -38,9 +38,9 @@ Las herramientas:
 | **Tu día y tu semana** | | | | | | |
 | Las reuniones de hoy o de esta semana con un solo comando | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [🟡](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Escribir fechas con palabras, como «mañana a las 15» o «el viernes que viene» | 🟡 | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/utils.py) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/dates.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | n/a | n/a |
-| Reuniones de todos tus calendarios y cuentas en una sola lista | 🟡 | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Reuniones de todos tus calendarios y cuentas en una sola lista | ✅ | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | Qué cambió desde una fecha: reuniones nuevas, movidas y canceladas | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
-| Encontrar reuniones que se solapan | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Encontrar reuniones que se solapan | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | **Encontrar una reunión** | | | | | | |
 | Encontrar una reunión por su tema, no por sus palabras exactas | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Buscar en tus reuniones sin internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
@@ -78,18 +78,24 @@ Notas sobre la columna de `gcal`:
 - **Qué cambió.** `events list changed_at>=<date>` muestra las reuniones guardadas por primera vez, movidas o
   canceladas desde esa fecha, con la hora anterior de cada una que se movió. Lee la copia de tu ordenador, así que ve
   lo que trajeron las sincronizaciones.
-- **Reuniones que se solapan.** Desde la versión 0.5.0, `events list` solo acepta la consulta por campos que aceptan
-  todas las listas de WireCat, y esa consulta no tiene un término para las reuniones que se solapan. La lista da el
-  inicio y el fin de cada reunión, así que tú o un agente podéis compararlos.
+- **Reuniones que se solapan.** `events list overlapping:true` deja las reuniones cuyo horario se solapa con otra, cada
+  una con las otras con las que se solapa. Una reunión cuenta solo si ocupa tu tiempo: tiene hora de inicio y de fin,
+  y no está cancelada, rechazada, marcada como libre ni es un bloque de lugar de trabajo. Los eventos de todo el día y
+  las reuniones seguidas nunca se solapan. Con `--source all` compara reuniones entre tus cuentas de Google, así que
+  encuentra una reunión de trabajo que choca con una personal.
 - **Tu propia aplicación de Google.** Hoy cada usuario de `gcal` crea un proyecto de Google Cloud y un cliente OAuth,
-  y entrega a `gcal` el archivo del cliente al iniciar sesión. Consulta la [instalación](./installation.md).
+  y entrega a `gcal` el archivo del cliente al iniciar sesión.
+  [Crea tu propia aplicación de Google](./installation.md#make-your-own-google-app) recorre Google Cloud Console paso
+  a paso.
 - **Fechas con palabras.** `events list` acepta una fecha o una hora en sus términos por campo, como
-  `ends_at>=today starts_at<=2026-11-06`, y las palabras `today` y `yesterday`. No entiende «semana» ni «el viernes
-  que viene».
+  `ends_at>=today starts_at<=2026-11-06`, las palabras `today` y `yesterday`, y cantidades hacia el pasado como `7d`.
+  No entiende «semana» ni «el viernes que viene», y es a propósito: las fechas las escribe un agente, y una fecha
+  exacta nunca se lee mal.
 - **Preparar una reunión.** `events show` da los asistentes, cada uno vinculado a la persona que conoces de otras
   herramientas, y los archivos de Drive de la reunión. Lo que hablasteis la última vez está en `memo`, no en `gcal`.
 - **Todos los calendarios.** Una lista abarca los calendarios que elegiste sincronizar en un perfil. Cada cuenta de
-  Google es su propio perfil, y una lista lee un perfil.
+  Google es su propio perfil; `events list --source all` lee todas las cuentas en una sola lista, las nombra en
+  `meta.accounts` y avisa cuando una no ha terminado su sincronización.
 - **Buscar por significado.** Necesita un modelo que descargas una vez. Sin él, la búsqueda encuentra las palabras y
   sus otras formas.
 - **Una búsqueda sobre todo.** Las reuniones van al almacén que comparten las demás herramientas de WireCat.

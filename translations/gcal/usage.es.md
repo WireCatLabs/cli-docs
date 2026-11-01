@@ -34,9 +34,10 @@ gcal personal session start --grant write
 gcal personal session start --grant write,sharing
 ```
 
-Por ahora `gcal` no tiene una aplicación de Google propia, así que necesita la tuya: consulta
-[tu propio cliente de Google](./configuration.md#your-own-google-client). Añade `--no-browser` para recibir la
-dirección de inicio de sesión en stderr y abrirla en cualquier navegador de este ordenador.
+Sin `--client-file`, `gcal` inicia sesión con la aplicación de Google de WireCat cuando el paquete trae una, y si no
+con la tuya: consulta [conecta tu cuenta de Google](./installation.md#connect-your-google-account). Añade
+`--no-browser` para recibir la dirección de inicio de sesión en stderr y abrirla en cualquier navegador de este
+ordenador.
 
 Una cuenta de Google pertenece a un solo perfil. Se rechaza iniciar sesión en un perfil con otra cuenta, y también un
 segundo perfil para la misma cuenta.
@@ -112,6 +113,8 @@ gcal personal events list                                       # from today on,
 gcal personal events list ends_at>=2026-11-02 starts_at<=2026-11-06 person:ana@example.com
 gcal personal events list starts_at>=2026-11-02                 # events that start on or after a day
 gcal personal events list changed_at>=2026-10-25                # what changed since a date
+gcal personal events list --source all                          # every account's events in one list
+gcal personal events list overlapping:true --source all         # meetings that overlap, across accounts
 gcal personal events show event:42                              # attendees, Drive files and history
 gcal personal search events roadmap planning                    # by words, and by meaning with the model
 gcal personal people list                                       # everyone in this week's events
@@ -132,6 +135,22 @@ escribe un intervalo. `calendar:<id>` y `person:<email>` acotan la lista. Sin `s
 empieza al inicio de hoy. `gcal personal events list --help` muestra los campos. Una página tiene `--limit` eventos
 (100); si hay más, `page.next_page` es el valor para `--page`, y el paso `next` de la respuesta ejecuta la misma consulta
 una página más allá.
+
+`--source` lee más que la cuenta del propio perfil, como una sola lista: `--source all` lee todas las cuentas de
+Google que `gcal` ha guardado, `--source gcal:personal,gcal:work` nombra perfiles, y `--source group:<name>` lee un
+grupo de cuentas guardado con `config set account_groups.<name>`. Una reunión que tienen dos cuentas aparece una vez.
+La respuesta nombra las cuentas que leyó en `meta.accounts`. Cuando una de ellas no tiene calendario sincronizado, o su
+sincronización no ha terminado, la respuesta dice `meta.complete: false` con un problema para esa cuenta
+(`calendar.unsynced`, `calendar.sync-incomplete`): ejecuta `gcal <that profile> sync`. Se lee cada perfil con sesión
+iniciada en este ordenador, también uno que nunca se ha sincronizado. Con `GCAL_PROFILE_LOCK`, `--source` solo puede
+nombrar la cuenta del perfil bloqueado.
+
+`overlapping:true` deja las reuniones cuyo horario se solapa con otra reunión, cada una con `overlaps`, las otras
+reuniones como `event:<id>`. Con `--source` compara reuniones entre cuentas, así que encuentra una reunión de trabajo
+que choca con una personal. Una reunión cuenta solo si ocupa tu tiempo: tiene hora de inicio y de fin, no está
+cancelada, no la rechazaste, no está marcada como libre y no es un bloque de lugar de trabajo. Los eventos de todo el
+día nunca se solapan, y una reunión que termina cuando empieza la siguiente no se solapa con ella.
+`overlapping:false` deja todos los demás eventos.
 
 `changed_at>=<date>` deja los eventos guardados por primera vez, movidos, cancelados o eliminados desde esa fecha, cada uno
 con `change` (`new`, `moved` o `cancelled`) y `changed_at`; uno movido dice además dónde estaba en `was` (`starts_at`,
@@ -216,8 +235,10 @@ Un perfil con sesión iniciada sin `--grant write` solo lee:
   incluido `calendars.transferOwnership`, necesitan un permiso que `gcal` no pide.
 - `calendars.transferOwnership` necesita además un administrador de Google Workspace con el privilegio Manage
   Calendars y `--use-admin-access true`. Solo mueve un calendario secundario entre usuarios de una misma organización.
-- Un método que cambia datos pregunta antes, y `--yes` responde por un script. `calendars.clear` (todos los eventos del
-  calendario principal) se rechaza hasta que lo permitas en los [permisos](./configuration.md#permissions) del perfil.
+- Un método que cambia datos y es fácil de deshacer, como `events.insert` o `events.patch`, se ejecuta sin preguntar.
+  Un método que borra, y compartir un calendario, preguntan antes; `--yes` responde por un script. `calendars.clear`
+  (todos los eventos del calendario principal), `calendars.delete` y `calendars.transferOwnership` se rechazan hasta
+  que los permitas en los [permisos](./configuration.md#permissions) del perfil.
 - No se ofrecen las notificaciones de cambios de Google (`watch` y `channels.stop`). Necesitan una dirección web
   pública, y un programa en tu ordenador no la tiene.
 

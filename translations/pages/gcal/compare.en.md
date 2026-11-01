@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.10.0, its commands and its source, checked on 1 November 2026;
+your job. The marks for `gcal` come from its release 0.11.0, its commands and its source, checked on 1 November 2026;
 they are checked again at each release. The marks for the other tools come from their own
 READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
@@ -34,9 +34,9 @@ The tools:
 | **See your day and week** | | | | | | |
 | Today's or this week's meetings in one command | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [🟡](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Type dates in words, such as "tomorrow 3pm" or "next friday" | 🟡 | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/utils.py) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/dates.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | n/a | n/a |
-| Meetings from all your calendars and accounts in one list | 🟡 | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Meetings from all your calendars and accounts in one list | ✅ | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | See what changed since a date: new, moved and cancelled meetings | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
-| Find meetings that overlap | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Find meetings that overlap | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | **Find a meeting** | | | | | | |
 | Find a meeting by what it was about, not by its exact words | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Search your meetings without the internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
@@ -73,18 +73,23 @@ Notes on the `gcal` column:
   of the same account. `--grant sharing` adds who can see a calendar.
 - **What changed.** `events list changed_at>=<date>` lists the meetings first saved, moved or cancelled since that
   date, with each moved one's old time. It reads the copy on your computer, so it sees what the syncs brought in.
-- **Meetings that clash.** Since release 0.5.0, `events list` takes only the field query every WireCat list takes,
-  which has no term for meetings that overlap. The list gives each meeting's start and end, so you or an agent can
-  compare them.
+- **Meetings that clash.** `events list overlapping:true` keeps the meetings whose time overlaps another, each with
+  the others it overlaps. A meeting counts only when it takes your time: it has a start and an end time, and it is not
+  cancelled, declined, marked free or a working-location block. All-day events and back-to-back meetings never
+  overlap. With `--source all` it compares meetings across your Google accounts, so a work meeting that clashes with a
+  personal one is found.
 - **Your own Google app.** Today every user of `gcal` makes a Google Cloud project and an OAuth client, and gives
-  `gcal` the client file at sign-in. See [installation](./installation.md).
+  `gcal` the client file at sign-in. [Make your own Google app](./installation.md#make-your-own-google-app) walks
+  through Google Cloud Console step by step.
 - **Dates in words.** `events list` takes a date or a time in its field terms, such as
-  `ends_at>=today starts_at<=2026-11-06`, and the words `today` and `yesterday`. It does not read "week" or
-  "next friday".
+  `ends_at>=today starts_at<=2026-11-06`, the words `today` and `yesterday`, and amounts in the past such as `7d`.
+  It does not read "week" or "next friday", by design: an agent writes the dates, and an exact date is never read
+  wrong.
 - **Prepare for a meeting.** `events show` gives the attendees, each joined to the person you know elsewhere, and
   the meeting's Drive files. What you last discussed with them is in `memo`, not in `gcal`.
 - **All calendars.** One list covers the calendars you chose to sync in one profile. Each Google account is its own
-  profile, and a list reads one profile.
+  profile; `events list --source all` reads every account in one list, names them in `meta.accounts`, and says when
+  one has not finished its sync.
 - **Find by meaning.** It needs a model that you download once. Without one, search matches words and their other
   forms.
 - **One search over everything.** Meetings go into the store that the other WireCat tools share. `search all` in the
