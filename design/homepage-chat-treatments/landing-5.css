@@ -42,3 +42,17 @@
 .brand:is(:hover,:focus-visible) .wirecat-logo-pulse{animation:wirecat-pulse .9s .35s ease-out}
 .brand:is(:hover,:focus-visible) .wirecat-logo-ring{animation:wirecat-ring .9s .2s ease-out}
 @media(prefers-reduced-motion:reduce){.brand .wirecat-logo-mark{transition:none}.brand:is(:hover,:focus-visible) .wirecat-logo-mark{transform:none}.brand:is(:hover,:focus-visible) :is(.wirecat-logo-wire,.wirecat-logo-pulse,.wirecat-logo-ring),.chat-down{animation:none}}
+.connect-desktop{padding-bottom:18px;border-bottom:1px solid var(--line)}
+.connect-lede{font-size:13px;color:var(--muted);margin-top:6px}
+.connect-download{width:100%;margin-top:14px}
+.connect-download svg{width:17px;height:17px;flex-shrink:0}
+.connect-desktop .connect-small{margin-top:10px}
+.connect-cli{padding-top:16px}
+.connect-cli-title{font-size:14px;font-weight:650}
+.connect-cli .connect-provider{margin:12px 0 10px}
+.connect-cli .copy-agent{margin-top:12px}
+.button.secondary.copy-agent:is(:hover,:focus-visible){background:var(--soft);color:var(--accent);box-shadow:none}
+.button.secondary.copy-agent:active{background:color-mix(in srgb,var(--soft) 80%,var(--ink));color:var(--accent)}
+.manual-install.prompt-preview{margin-top:14px}
+.manual-install.prompt-preview+.manual-install{margin-top:12px}
+.prompt-preview .agent-prompt{margin:12px 0 4px}

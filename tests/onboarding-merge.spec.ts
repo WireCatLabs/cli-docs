@@ -58,7 +58,8 @@ for (const lang of ["en", "ru", "es"] as const) {
   for (const tool of ["tg", "max"]) {
     test(`${lang}/${tool}: installation deep links lead from landing to tool guides`, async ({ page }) => {
       await page.goto(lang === "en" ? "/" : `/${lang}`)
-      const menu = page.locator(".site-header [data-connect]")
+      // MAX is offered at the top of the page only in Russian; the setup section offers it everywhere.
+      const menu = page.locator(tool === "max" ? ".setup [data-connect]" : ".site-header [data-connect]")
       await menu.locator(":scope > summary").click()
       await menu.locator(`[data-connect-provider="${tool}"]`).click()
       await expect(menu.locator(".agent-prompt")).toContainText(`@wirecat/${tool}-cli`)

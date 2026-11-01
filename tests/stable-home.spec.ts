@@ -23,12 +23,13 @@ test("English home is published only at /, and English subpages stay under /en",
 })
 
 test("demo choices and return-home navigation keep the URL clean", async ({ page }) => {
-  await page.goto("/?scenario=commitments&messenger=max#search-playground")
+  await page.goto("/?scenario=commitments&messenger=wa#search-playground")
   await expect(page.locator("[data-hero-case=commitments]")).toHaveAttribute("aria-selected", "true")
+  await expect(page.locator('[data-demo-provider="wa"]')).toHaveAttribute("aria-pressed", "true")
   await expect.poll(() => new URL(page.url()).search).toBe("")
   expect(new URL(page.url()).hash).toBe("#search-playground")
   await page.locator("[data-hero-case]").nth(1).click()
-  await page.locator('[data-demo-provider="max"]').click()
+  await page.locator('[data-demo-provider="tg"]').click()
   expect(new URL(page.url()).search).toBe("")
   await page.locator('.site-header nav a[href="/en/about"]').click()
   await page.locator(".site-header .site-brand").click()

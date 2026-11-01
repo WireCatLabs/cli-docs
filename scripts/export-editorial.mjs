@@ -33,7 +33,14 @@ for (const lang of ["en", "ru", "es"]) {
   }
   const pages = {}
   for (const [kind, original] of Object.entries(source)) {
-    let html = original.replace(/<nav[^>]*class="[^"]*compact-compare-nav[^>]*>[\s\S]*?<\/nav>/, "")
+    // MAX is offered only to Russian readers at the top of the page; everywhere else it stays.
+    let html = original
+      .replace(/<!--ru-only-->([\s\S]*?)<!--\/ru-only-->/g, (_, kept) => (lang === "ru" ? kept : ""))
+      .replace(/<nav[^>]*class="[^"]*compact-compare-nav[^>]*>[\s\S]*?<\/nav>/, "")
+    const setupPrompt = escapeHtml(wordsFor(lang).onboarding.prompt("tg", "@wirecat/tg-cli"))
+    html = html
+      .replace(/(<pre class="agent-prompt">)[\s\S]*?(<\/pre>)/g, (_, open, close) => open + setupPrompt + close)
+      .replace(/(<button class="[^"]*\bcopy-agent\b[^"]*"[^>]*\bdata-copy=")[^"]*/g, (_, open) => open + setupPrompt)
     // Generated sample result is rendered afresh by the shared search engine.
     html = html
       .replace(/(<div class="mini-search-status"[^>]*>)[\s\S]*?(<\/div>)/, "$1$2")
@@ -57,20 +64,13 @@ for (const lang of ["en", "ru", "es"]) {
     html = html.replace(/(aria-label|title|placeholder|data-copy)="([^"]*)"/g, (_, attr, value) => {
       let translated = text(value)
       const decoded = decode(value)
-      const prompt = /^Use (tg|max) cli\. ([\s\S]+)$/.exec(decoded)
+      const prompt = /^Use (tg|max|wa) cli\. ([\s\S]+)$/.exec(decoded)
       if (prompt && dict[prompt[2]])
         translated = escapeHtml(
           `${lang === "ru" ? "Используй" : lang === "es" ? "Usa" : "Use"} ${prompt[1]} cli. ${dict[prompt[2]]}`,
         )
       return `${attr}="${translated}"`
     })
-    for (const tool of ["tg", "max"]) {
-      const english = wordsFor("en").onboarding.prompt(tool, `@wirecat/${tool}-cli`)
-      html = html.replaceAll(
-        escapeHtml(english),
-        escapeHtml(wordsFor(lang).onboarding.prompt(tool, `@wirecat/${tool}-cli`)),
-      )
-    }
     html = html.replace(
       /href="(https:\/\/wirecat\.dev)?\/(en|ru|es)\/([^"#]*)([^"]*)"/g,
       (_, _origin, _locale, path, rest) => `href="/${lang}/${path}${rest}"`,

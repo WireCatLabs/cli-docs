@@ -12033,6 +12033,58 @@ html[data-why-icons="hide"] .wirecat-editorial .reasons-nine dd {
     animation: none;
   }
 }
+.wirecat-editorial .connect-desktop {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.wirecat-editorial .connect-lede {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.wirecat-editorial .connect-download {
+  width: 100%;
+  margin-top: 14px;
+}
+.wirecat-editorial .connect-download svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+.wirecat-editorial .connect-desktop .connect-small {
+  margin-top: 10px;
+}
+.wirecat-editorial .connect-cli {
+  padding-top: 16px;
+}
+.wirecat-editorial .connect-cli-title {
+  font-size: 14px;
+  font-weight: 650;
+}
+.wirecat-editorial .connect-cli .connect-provider {
+  margin: 12px 0 10px;
+}
+.wirecat-editorial .connect-cli .copy-agent {
+  margin-top: 12px;
+}
+.wirecat-editorial .button.secondary.copy-agent:is(:hover, :focus-visible) {
+  background: var(--soft);
+  color: var(--accent);
+  box-shadow: none;
+}
+.wirecat-editorial .button.secondary.copy-agent:active {
+  background: color-mix(in srgb, var(--soft) 80%, var(--ink));
+  color: var(--accent);
+}
+.wirecat-editorial .manual-install.prompt-preview {
+  margin-top: 14px;
+}
+.wirecat-editorial .manual-install.prompt-preview + .manual-install {
+  margin-top: 12px;
+}
+.wirecat-editorial .prompt-preview .agent-prompt {
+  margin: 12px 0 4px;
+}
 
 /* Immediate control feedback, shared by the released landing, features and examples. */
 .wirecat-editorial .button,

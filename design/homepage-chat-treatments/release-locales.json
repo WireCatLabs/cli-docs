@@ -291,8 +291,6 @@
     "Features": "Возможности",
     "Examples": "Примеры",
     "Email": "Почта",
-    "Copy a setup request into your AI agent.": "Скопируйте запрос на настройку в своего ИИ-агента.",
-    "Ask your agent to install and connect": "Попросите агента установить и подключить",
     "Copy request for your agent": "Скопировать запрос для агента",
     "Or copy the terminal command": "Или скопируйте команду для терминала",
     "Setup and sign-in guide": "Установка и вход в аккаунт",
@@ -338,7 +336,6 @@
     "confirm an owner and deadline for each action.": "закрепить ответственного и срок для каждого действия.",
     "This is a draft agenda. Nothing has been sent.": "Это черновик повестки. Ничего не отправлено.",
     "Find the SQL courses people recommended. I want practice and feedback on mistakes.": "Найди курсы SQL, которые рекомендовали в чатах. Мне нужны практика и разбор ошибок.",
-    "Searched Telegram and MAX recommendations": "Найдены рекомендации в Telegram и MAX",
     "2 more calls": "Ещё 2 вызова",
     "I’d look at the": "Я бы сначала рассмотрел",
     "workshop first.": "практикум.",
@@ -671,7 +668,14 @@
     "Desktop app": "Приложение для компьютера",
     "Download the desktop app": "Скачать приложение для компьютера",
     "gcal · your Google calendars, searched offline": "gcal · ваши Google Календари, поиск без интернета",
-    "Google Drive docs": "Google Drive — документация"
+    "Google Drive docs": "Google Drive — документация",
+    "Get WireCat Desktop": "Установите WireCat Desktop",
+    "The app installs the tools, signs you in and gives your AI agent what it needs to use them. No terminal needed.": "Приложение установит инструменты, поможет войти в аккаунты и даст вашему ИИ-агенту всё, чтобы ими пользоваться. Терминал не нужен.",
+    "Free and open source, for macOS, Windows and Linux.": "Бесплатно, с открытым кодом, для macOS, Windows и Linux.",
+    "Or connect from the command line": "Или подключите через командную строку",
+    "Copy a request for your agent: it installs the tool, helps you sign in and checks that it works.": "Скопируйте запрос для агента: он установит инструмент, поможет войти и проверит, что всё работает.",
+    "Show the full request": "Показать запрос целиком",
+    "Searched recommendations in your chats": "Найдены рекомендации в ваших чатах"
   },
   "es": {
     "Put the context from your chats to work — for you, your bots and the groups you run.": "Aprovecha el contexto de tus chats: para ti, tus bots y los grupos que administras.",
@@ -953,8 +957,6 @@
     "Features": "Funciones",
     "Examples": "Ejemplos",
     "Email": "Correo",
-    "Copy a setup request into your AI agent.": "Copia la petición de configuración en tu agente de IA.",
-    "Ask your agent to install and connect": "Pide a tu agente que instale y conecte",
     "Copy request for your agent": "Copiar petición para tu agente",
     "Or copy the terminal command": "O copia el comando de terminal",
     "Setup and sign-in guide": "Guía de instalación e inicio de sesión",
@@ -1000,7 +1002,6 @@
     "confirm an owner and deadline for each action.": "confirmar responsable y plazo de cada acción.",
     "This is a draft agenda. Nothing has been sent.": "Es un borrador de agenda. No se ha enviado nada.",
     "Find the SQL courses people recommended. I want practice and feedback on mistakes.": "Busca los cursos de SQL recomendados en los chats. Quiero práctica y comentarios sobre mis errores.",
-    "Searched Telegram and MAX recommendations": "Recomendaciones buscadas en Telegram y MAX",
     "2 more calls": "2 llamadas más",
     "I’d look at the": "Miraría primero el",
     "workshop first.": "taller.",
@@ -1344,6 +1345,13 @@
     "Desktop app": "Aplicación de escritorio",
     "Download the desktop app": "Descargar la aplicación de escritorio",
     "gcal · your Google calendars, searched offline": "gcal · tus calendarios de Google, búsqueda sin conexión",
-    "Google Drive docs": "Docs de Google Drive"
+    "Google Drive docs": "Docs de Google Drive",
+    "Get WireCat Desktop": "Instala WireCat Desktop",
+    "The app installs the tools, signs you in and gives your AI agent what it needs to use them. No terminal needed.": "La app instala las herramientas, te ayuda a iniciar sesión y le da a tu agente de IA lo que necesita para usarlas. Sin terminal.",
+    "Free and open source, for macOS, Windows and Linux.": "Gratis y de código abierto, para macOS, Windows y Linux.",
+    "Or connect from the command line": "O conéctalo desde la línea de comandos",
+    "Copy a request for your agent: it installs the tool, helps you sign in and checks that it works.": "Copia una petición para tu agente: instala la herramienta, te ayuda a iniciar sesión y comprueba que funciona.",
+    "Show the full request": "Ver la petición completa",
+    "Searched recommendations in your chats": "Recomendaciones buscadas en tus chats"
   }
 }

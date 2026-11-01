@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { useEffect, useRef } from "react"
 import { notifyCopyFeedback } from "@/lib/copy-feedback"
+import { detectOs } from "@/lib/desktop-releases"
 import { bindDisclosureMenus } from "@/lib/disclosure-menus"
+import { downloadWords } from "@/lib/download"
 import { prepareInstallationButton } from "@/lib/installation-command"
 import { searchDemo } from "@/lib/search-playground/engine"
 import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
@@ -180,6 +182,10 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
       copyLabels.set(button, button.getAttribute("aria-label"))
     }
     for (const code of all<HTMLElement>("pre,code")) code.tabIndex = 0
+    const os = detectOs(navigator)
+    if (os === "macos" || os === "windows" || os === "linux")
+      for (const label of all<HTMLElement>(".connect-download-label"))
+        label.textContent = downloadWords(lang).downloadFor[os]
     const selectTab = (button: HTMLElement, focus = false) => {
       const list = button.closest('[role="tablist"]')
       if (!list) return
@@ -460,9 +466,10 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
       (b) => b.dataset.heroCase === parameters.searchParams.get("scenario"),
     )
     if (initialScenario) selectTab(initialScenario)
-    if (parameters.searchParams.get("messenger") === "max")
+    const messenger = parameters.searchParams.get("messenger")
+    if (messenger && messenger !== "tg")
       all<HTMLButtonElement>("[data-demo-provider]")
-        .find((b) => b.dataset.demoProvider === "max")
+        .find((b) => b.dataset.demoProvider === messenger)
         ?.click()
     if (
       root.querySelector("[data-hero-case]") &&
