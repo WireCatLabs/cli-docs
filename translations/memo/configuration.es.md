@@ -4,7 +4,7 @@ title: "Configuración"
 
 Usa esta referencia para consultar los ajustes y variables de entorno propios de Memo.
 Rara vez necesitas editar el archivo a mano.
-`memo folders add` añade una carpeta y `memo jobs start` activa el temporizador por ti. `memo mail add` añade una cuenta explícita de Himalaya. Edita el
+`memo folders add` añade una carpeta y `memo jobs start` activa el temporizador por ti. `memo mail add` añade una cuenta explícita de la importación de correo antigua con Himalaya. Edita el
 archivo para indicar qué archivos se omiten y dónde van las notas exportadas.
 
 El archivo es `~/.config/cli-memo/config.json`. Es un archivo JSON: mantén las comillas, las comas y
@@ -47,7 +47,8 @@ Consulta [usar las mismas notas en otro ordenador](./notes.md#use-the-same-notes
 
 ## `mail`
 
-`accounts` muestra las cuentas de correo que se importan. Cada cuenta tiene:
+`accounts` muestra las cuentas de correo de la importación antigua con Himalaya, que se eliminará en una versión posterior.
+El correo sincronizado con [mail](./mail.md#bring-mail-in-with-mail) no necesita una entrada aquí. Cada cuenta tiene:
 
 | Clave | Significado |
 |---|---|
@@ -85,16 +86,21 @@ sigue en su siguiente ejecución. Consulta [importar con un temporizador](./arch
 
 `false` desactiva la comprobación diaria de nuevas versiones de memo. `MEMO_NO_UPDATE_CHECK=1` hace lo mismo para una sesión de terminal.
 
-## `record` y `keep_runs_for_days`
+## `record`, `record_input` y `keep_runs_for_days`
 
-Memo guarda un registro de ejecución de cada comando que falla: las palabras del comando, cómo terminó y las peticiones
-de correo y RDAP que hizo, con sus tiempos y códigos de estado. Nunca una nota, una dirección, un asunto ni el nombre de una carpeta.
+Memo guarda un registro de ejecución de cada comando: el comando tal como lo escribiste, cómo terminó y las peticiones
+de correo y RDAP que hizo, con sus tiempos, códigos de estado y, en una lectura de correo repetida, el intento y la espera antes de él.
+Un secreto en el comando (una opción con nombre de token, contraseña o clave de API, una contraseña en una URL, una cadena larga y opaca) y un número de teléfono se escriben como `[redacted]`.
+Lo que el comando leyó o escribió nunca se guarda: ni una nota, ni el texto de un correo, ni el nombre de una carpeta a la que llegó.
 `memo runs list` los muestra, `memo runs show <run-id>` muestra uno.
 
 | Clave | Significado |
 |---|---|
-| `record` | `true` guarda todas las ejecuciones, no solo las fallidas; `false` no guarda ninguna, ni siquiera las fallidas. Sin definir: solo las fallidas. `--record` y `--no-record` deciden para un comando. |
-| `keep_runs_for_days` | Cuántos días se guardan las ejecuciones. Por defecto, 30. |
+| `record` | `false` guarda solo las ejecuciones fallidas. Sin definir o `true`: todas las ejecuciones. `--record` guarda de todos modos la ejecución de un comando, `--no-record` no guarda nada para él. `memo mcp serve` y otros comandos que se ejecutan hasta que los detienes guardan una ejecución correcta solo con `--record`. |
+| `record_input` | `false` escribe como `[redacted]` cada valor escrito que pueda ser contenido y conserva solo las palabras del comando, los nombres de opciones, los números, las fechas y las opciones elegidas. `"failed"` hace eso en una ejecución correcta y conserva las palabras en una fallida. Sin definir: el comando se guarda tal como se escribió, con los secretos ocultos. |
+| `keep_runs_for_days` | Cuántos días se guarda una ejecución fallida. Por defecto, 30. |
+| `keep_successful_runs_for_days` | Cuántos días se guarda una ejecución correcta. Por defecto, 7. |
+| `runs_size_limit_mb` | Lo máximo que puede ocupar la carpeta de ejecuciones; las ejecuciones correctas más antiguas salen primero. Por defecto, 200. |
 
 Añade las claves a `config.json` a mano; `memo config unset <key>` elimina una.
 
@@ -126,7 +132,7 @@ El ajuste se aplica a propuestas de proyecto; no cambia el permiso separado para
 | `MEMO_MODELS_ANALYSIS_PROVIDER`, `MEMO_MODELS_ANALYSIS_MODEL` | El proveedor de IA y el identificador del modelo (el nombre que usa el proveedor para él) a los que llama `memo answers create --analyze`. |
 | `MEMO_MODELS_ANALYSIS_BASE_URL` | Opcional: la dirección del proveedor. |
 | `MEMO_MODEL_API_KEY` | La clave del proveedor. |
-| `MEMO_READ_ONLY` | Cualquier valor salvo `0` rechaza todo cambio con `permission_error` (código de salida 5): escrituras en el almacén, en tus archivos, en el correo del proveedor, en el temporizador y en los archivos de la skill, además de `upgrade` y `answers create --allow-remote`. Las lecturas, `memo sync`, `tasks link` siguen funcionando (el vínculo solo se propone y se rechaza vincular dos tareas); `reminders claim` se rechaza; `memo mcp` mantiene visibles los comandos de escritura, pero rechaza ejecutarlos. |
+| `MEMO_READ_ONLY` | Cualquier valor salvo `0` rechaza todo cambio con `permission_error` (código de salida 5): escrituras en el almacén, en tus archivos, en el correo del proveedor, en el temporizador y en los archivos de la skill, además de `upgrade` y `answers create --allow-remote`. Las lecturas, `memo sync`, `tasks link` siguen funcionando (el vínculo solo se propone y se rechaza vincular dos tareas); `reminders claim` se rechaza; `memo mcp serve` mantiene visibles los comandos de escritura, pero rechaza ejecutarlos. |
 
 Memo llama a un proveedor fuera de tu ordenador solo cuando `memo answers create` tiene a la vez `--analyze` y
 `--allow-remote`. Consulta [dar las fuentes a tu agente](./search.md#give-your-agent-the-sources).
@@ -155,5 +161,5 @@ configura explícitamente la clave correspondiente como `ask` o `allow` para del
 de WireCat y `MEMO_READ_ONLY` restringen todos los permisos.
 
 Los permisos cambiados se aplican en la siguiente búsqueda de comandos y llamada, también en las
-conexiones abiertas. `memo mcp --permission notes.edit=deny` restringe una clave para ese servidor sin cambiar
+conexiones abiertas. `memo mcp serve --permission notes.edit=deny` restringe una clave para ese servidor sin cambiar
 el archivo; se rechaza cualquier modificación que relaje una clave guardada.

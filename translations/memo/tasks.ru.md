@@ -57,33 +57,102 @@ memo tasks agenda --source notes                # tasks from your notes folder
 Задаче в проекте не нужен источник. Она получает ключ из ключа проекта и номера, например `HRB-1`:
 
 ```sh
-memo tasks add --project HRB --title 'Book the venue' --priority 1
+memo tasks add --project HRB --title 'Book the venue' --priority high
 memo tasks add --project HRB --title 'Export drops the last row' --type bug
 memo tasks list project:HRB
-memo tasks update HRB-1 --priority 0 --description 'Call before Friday'
+memo tasks update HRB-1 --priority critical --description 'Call before Friday'
 ```
 
 Простой `memo tasks list` показывает только задачи ваших аккаунтов; задачи проекта выводятся через
-`project:` и ключ проекта.
+`project:` и ключ проекта, его название или псевдоним, а задачи всех проектов — через `project:*`.
 
 | Параметр | Значение |
 |---|---|
 | `--type` | `chore` (по умолчанию), `bug` или `feature` |
-| `--priority` | число от 0 (срочно) до 4 (низкий приоритет) |
+| `--priority` | `low`, `medium`, `high` или `critical`; `none` снимает приоритет. 0 (срочно) – 4 (низкий приоритет) работают как раньше |
 | `--parent` | более крупная задача в том же проекте, частью которой является эта |
 | `--description` | подробности в формате Markdown |
 | `--assignee` | кто выполняет задачу, по ID человека |
 
 Как сначала создать проект, см. [организации и проекты](./people.md#organizations-and-projects).
 
+## Приоритет и порядок
+
+Приоритет — число от 0 до 1, чем больше, тем выше; вы видите его как одну из четырёх меток по четвертям: `low`
+(ниже 0,25), `medium`, `high` и `critical` (от 0,75). `--json` отдаёт оба значения: `priority` и
+`priority_label`. Число задаёт и порядок задач проекта, поэтому колонка доски сохраняет заданный вами порядок:
+
+```sh
+memo tasks move HRB-3 --before HRB-1                      # HRB-3 goes just above HRB-1
+memo tasks move HRB-3 --status in_progress --after HRB-2  # into another column, below HRB-2
+```
+
+`tasks move` задаёт задаче приоритет между новыми соседями. Если при этом она попадает в другую четверть, её метка
+меняется, и ответ сообщает об этом (`label.changed`). Если между двумя соседями нет места, Memo равномерно
+распределяет эту четверть колонки и называет задачи, которым дал новые номера.
+
+## Состояния
+
+Задача проекта бывает `open` (новая), `todo` (решено делать), `in_progress`, `done` или `dismissed`. Меняйте
+состояние через `tasks update --status`, в том числе возвращайте из `done` или `dismissed`; каждое изменение
+сохраняется в истории. `todo` и `in_progress` везде считаются открытой работой: задача, которая ждёт такую, не
+готова, а агент может такую взять. Задача из сообщения бывает только `open`, `done` или `dismissed`.
+
+```sh
+memo tasks update HRB-1 --status in_progress
+memo tasks history HRB-1 --json      # who changed what, and when
+```
+
+## Поиск задач проекта
+
+`memo tasks list` с `project:` принимает запрос: поля, соединённые через AND, OR внутри поля, NOT и обычные слова,
+которые ищут по названию и описанию:
+
+```sh
+memo tasks list project:* 'assignee:"person:3"' priority:[high TO critical] invoice
+memo tasks list project:(HRB OR OPS) state:(done OR dismissed) closed:>=14d
+memo tasks list project:* overdue:true --sort due
+memo tasks list project:* NOT due:* NOT priority:*
+memo tasks counts project:* --json   # how many per project, assignee, priority and state
+```
+
+| Поле | Значение |
+|---|---|
+| `state:` | `open`, `todo`, `in_progress`, `done`, `dismissed`; без него — три открытых состояния |
+| `project:` | ключ, название, `project:<id>` или `*` для всех проектов |
+| `assignee:` | `any`, `none` или человек: `"person:3"` в кавычках либо `3` |
+| `priority:` | метка, `none` или диапазон меток или чисел |
+| `agent:` | агент, который над ней работает, `none` или `any` |
+| `due:`, `closed:` | дата или диапазон: `due:[today TO 2026-12-31]`, `closed:>=14d` |
+| `overdue:`, `ready:` | `true` или `false` |
+
+`--sort` принимает `priority` (по умолчанию), `due`, `created`, `updated`, `key` или `state`; `--desc` меняет
+порядок на обратный. В списке не больше 500 задач; `page.next_cursor` и `--cursor` читают следующие, а `page.total`
+показывает, сколько всего подходит. У каждой задачи есть `assignments`, `ready` и `blocked_by`, а также `revision`.
+
+## Изменено в другом месте
+
+Агент может изменить задачу, пока вы на неё смотрите. Передайте прочитанную вами `revision`, и Memo откажет в записи,
+если задача с тех пор изменилась, с причиной `task.stale` и кодом выхода 3:
+
+```sh
+memo tasks update HRB-1 --title 'Book the hall' --revision 4
+```
+
+`tasks update`, `close`, `assign` и `move` принимают `--revision`.
+
 ## Кто работает над задачей
 
 ```sh
 memo tasks assign HRB-1 PERSON_UID
 memo tasks assign HRB-1 PERSON_UID --role reviewer
+memo tasks assign HRB-1 PERSON_UID --clear     # take them off it
+memo people list                               # you, and everyone tasks already name
+memo tasks update HRB-1 --agent hermes         # the agent working on it; --agent none clears it
 ```
 
-Роль — `assignee` (по умолчанию), `reviewer` или `watcher`. ID человека берётся из его контекста
+Агент — не исполнитель: `agent` называет агента, занятого работой, пока кто-то это не изменит, а захват
+(`tasks claim`) — аренда, которая истекает сама. Роль — `assignee` (по умолчанию), `reviewer` или `watcher`. ID человека берётся из его контекста
 (`memo context … --json`). Задачи, назначенные человеку, видны в
 [его контексте](./people.md#everything-about-a-person).
 

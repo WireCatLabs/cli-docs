@@ -31,7 +31,7 @@ Tu agente busca en tus notas, tu correo y tus mensajes a la vez y muestra de dó
 resultado. Cuando sabes dónde está algo, busca solo ahí:
 
 ```sh
-memo search all 'venue'               # messages, mail and notes together
+memo search all 'venue'               # messages, mail, notes and calendar events together
 memo search notes 'venue'             # notes only
 memo search mail 'from:kai invoice'   # mail only
 ```

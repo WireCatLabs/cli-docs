@@ -15,7 +15,7 @@ Prepara un túnel HTTPS que admita respuestas en streaming. Por ejemplo, instala
 Deja el túnel en ejecución en un terminal. En otro, sustituye el origen del ejemplo por el origen HTTPS que te da el túnel, incluido el puerto si aparece:
 
 ```sh
-memo mcp --http --public-url https://device.example
+memo mcp serve --http --public-url https://device.example
 ```
 
 Memo escucha solo en `127.0.0.1:8767` y muestra un código de acceso de un solo uso y la dirección del conector. Dirige el túnel a `http://127.0.0.1:8767`. El origen público no debe tener credenciales, ruta, consulta ni fragmento; Memo añade `/mcp` para el conector. Los orígenes públicos remotos deben usar HTTPS.
@@ -23,10 +23,20 @@ Memo escucha solo en `127.0.0.1:8767` y muestra un código de acceso de un solo 
 Para usar otro puerto local, pasa `--port` y cambia el destino del túnel:
 
 ```sh
-memo mcp --http --port 8768 --public-url https://device.example:8443
+memo mcp serve --http --port 8768 --public-url https://device.example:8443
 ```
 
 Cada servidor WireCat necesita su propio puerto local y origen público. El puerto inicial de Memo, 8767, deja libres los habituales de tg y MAX. Sigue las reglas del proveedor del túnel al elegir el puerto público.
+
+Para que siga funcionando después de cerrar el terminal, inícialo en segundo plano. Responde en cuanto escucha, con la dirección del conector y el código de acceso:
+
+```sh
+memo mcp server start --public-url https://device.example
+memo mcp server status   # running, port, connector address, the current login code, apps logged in
+memo mcp server stop     # stops only a server that `mcp server start` started
+```
+
+El código se guarda junto al archivo de tokens (`mcp-http/memo.lock`, modo 600) y se renueva cada diez minutos; un servidor iniciado así no lo escribe en su registro. WireCat Desktop muestra el mismo estado en Tools → Memo → MCP server.
 
 ## Conectar la app
 
@@ -43,7 +53,7 @@ HTTP usa los mismos [permisos guardados](./configuration.md#permissions) que std
 Una modificación del servidor solo puede restringir los permisos guardados:
 
 ```sh
-memo mcp --http --public-url https://device.example --permission notes.add=deny
+memo mcp serve --http --public-url https://device.example --permission notes.add=deny
 ```
 
 Repite `--permission` para otras claves. `MEMO_READ_ONLY=1` rechaza escrituras. Las decisiones sobre hallazgos de reuniones, la restauración de anotaciones y los cambios de carpetas de origen o reglas de correo siguen necesitando sus permisos explícitos. Memo nunca envía mensajes ni correo. La [guía MCP](./mcp.md) explica esos límites.
@@ -55,7 +65,7 @@ Pulsa Ctrl-C para detener Memo y detén por separado la ruta de este túnel. Un 
 Para cerrar las sesiones de todas las apps del navegador en esta instalación de Memo:
 
 ```sh
-memo mcp --revoke --json
+memo mcp revoke --json
 ```
 
 La revocación también afecta al servidor en ejecución: los tokens existentes dejan de funcionar y las apps deben iniciar sesión de nuevo. No desconecta un servicio de mensajería ni elimina notas o correo. Los hashes de tokens y registros de clientes se guardan bajo la carpeta de estado de Memo en `mcp-http/memo.json`; allí no se guardan tokens sin hash. La revocación usa esa carpeta, así que ejecútala con el mismo entorno que el servidor.

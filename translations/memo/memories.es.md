@@ -46,13 +46,37 @@ reuniones que lo demuestran. Tiene un tipo y un ámbito:
 ```sh
 memo memories add 'Kai Sample prefers Friday meetings' --kind preference --scope work --evidence note:12
 memo memories list kind:preference scope:work
-memo memories show memory:3
+memo memories show memory:3 --sources
 memo search memories friday meetings scope:work
 memo memories confirm memory:3
 memo memories invalidate memory:3
 ```
 
 Un recuerdo que añades con `memo` se confirma al instante. El de un agente queda `proposed` hasta que revises las fuentes y lo marques con `confirm`. Si la evidencia deja de ser válida, por ejemplo Kai prefiere ahora los lunes, márcalo `stale`. `--subject person:…` indica de quién o de qué trata. `memories list` filtra por `kind`, `status`, `scope` y `subject` en la consulta: `subject:"person:42"`.
+Cada recuerdo lleva `subject_name`, cómo se llama su sujeto, y `subject_is_owner` cuando trata de ti.
+`show --sources` lee de vuelta cada prueba: el remitente o el título, la hora, un extracto corto y
+`missing: true` si la fuente se borró desde entonces.
+
+## Corregir u olvidar
+
+Tres formas de tratar un recuerdo o un hecho erróneo, de conservar lo máximo a no conservar nada:
+
+```sh
+memo memories add 'Kai Sample prefers Monday calls' --kind preference --scope work --evidence note:12 --supersedes memory:3
+memo memories invalidate memory:3
+memo memories remove memory:3
+memo facts reject fact:4
+memo facts remove fact:4
+```
+
+- **Corregir**: añade el recuerdo correcto con `--supersedes`. El antiguo queda marcado `superseded`, así que conservas
+  el registro del error. Solo tú corriges un recuerdo; el `--supersedes` de un agente se rechaza.
+- **Ya no es cierto**: `invalidate` marca un recuerdo como `stale`; `facts reverse` lo hace con una decisión aceptada y
+  `facts reject` rechaza un hecho que propuso un agente. Cada uno conserva el registro.
+- **Olvidar**: `remove` borra el registro: su texto, sus vínculos con las fuentes y su entrada en la búsqueda de Memo. Los
+  mensajes, notas y reuniones que cita se quedan. Una copia de seguridad del almacén hecha antes lo conserva hasta que se borre esa copia.
+
+Un agente no puede olvidar ni rechazar a través del servidor MCP, y tampoco puede corregir allí un recuerdo.
 
 ## Hechos
 
@@ -67,8 +91,9 @@ memo facts confirm fact:4
 
 Un hecho que añades con `memo` se acepta al instante. El de un agente queda `proposed` hasta `memo facts confirm`; `author` y `source` identifican al autor. `facts list` filtra por `kind`, `status`, `project` y `subject` en la consulta. `--project project:1` lo incorpora a un proyecto y `--occurred-time` indica cuándo ocurrió.
 
-Una decisión puede sustituir a otra anterior: añade `--supersedes fact:2`. Cuando aceptas la nueva
-decisión, la antigua deja de ser válida. Cuando una decisión ya no es válida y nada la sustituyó,
+Para corregir un hecho de cualquier clase, añade el correcto con `--supersedes fact:2`. El antiguo queda marcado
+`superseded` cuando se acepta el nuevo, lo cual ocurre al instante con el tuyo. Solo se puede corregir un hecho propuesto o aceptado.
+Un agente puede proponer la corrección de otro hecho propuesto; uno que aceptaste solo lo corriges tú. Cuando una decisión ya no es válida y nada la sustituyó,
 ejecuta `memo facts reverse fact:4`.
 
 ## Conclusiones de reuniones

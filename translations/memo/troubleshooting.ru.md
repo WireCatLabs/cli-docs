@@ -53,8 +53,9 @@ memo sync
 
 ## "no mail account" или импорт почты просит указать аккаунт
 
-`no mail account` означает, что в файле настроек ещё нет почтовых аккаунтов. Выполните `memo mail add <account> <address>` после настройки Himalaya
-или добавьте аккаунт в `mail.accounts` ([почта](./mail.md#add-the-account-to-memo)).
+`no mail account` означает, что в файле настроек нет аккаунтов для прежнего импорта через Himalaya. Чтобы получить почту, используйте
+[почту](./mail.md#bring-mail-in-with-mail): `mail <profile> sync` наполняет хранилище, а `memo search mail` находит письма, и аккаунт в настройках Memo не нужен. Только для прежнего импорта выполните `memo mail add <account> <address>` после настройки
+Himalaya или добавьте аккаунт в `mail.accounts` ([почта](./mail.md#add-the-account-to-memo)).
 
 `memo sync --source email:work` принимает имя аккаунта — `name` из `mail.accounts` файла настроек. При неверном имени Memo перечисляет известные аккаунты. Без `--source` читает все аккаунты.
 

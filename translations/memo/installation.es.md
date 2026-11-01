@@ -29,7 +29,7 @@ Cada fuente necesita algo más, solo cuando vayas a utilizarla:
 | Notas y documentos | Ninguno: [archivos compatibles](./notes.md#files-memo-can-read) |
 | Mensajes de Telegram o MAX | [tg](https://github.com/WireCatLabs/tg-cli) o [max](https://github.com/WireCatLabs/max-cli). Guardan los chats en el almacén local; Memo no inicia sesión en un servicio de mensajería |
 | Búsqueda por significado | Un modelo de búsqueda en el equipo, de unos 135 MB. Descárgalo una vez: `memo models download e5-small`. Sin él, Memo busca por palabras |
-| Correo | [Himalaya](https://github.com/pimalaya/himalaya) 2.x, el programa con el que Memo lee el buzón. Lee sus cuentas de `~/.config/himalaya/config.toml` ([correo](./mail.md#before-you-start)) |
+| Correo | La CLI [mail](https://github.com/WireCatLabs/mail-cli). Copia tu buzón al almacén local y Memo busca en él ([correo](./mail.md#bring-mail-in-with-mail)). La importación antigua necesita [Himalaya](https://github.com/pimalaya/himalaya) 2.x y se eliminará en una versión posterior ([correo](./mail.md#before-you-start)) |
 | Sincronización periódica (`memo jobs`) | Linux con systemd. En macOS y Windows, ejecuta `memo sync` personalmente o con tu planificador ([mantener Memo al día](./archive.md)) |
 
 ## Instalar
@@ -68,11 +68,11 @@ Comprueba que funciona:
 ```sh
 memo --version
 memo --help            # the list of commands
-memo doctor            # where Memo keeps its files and what needs attention; connects to nothing
+memo doctor            # the state this installation is in; --online also asks npm for a newer memo
 memo commands --json   # every command and option, for agents and scripts
 ```
 
-`memo doctor` revisa los ajustes, el almacén, las carpetas de notas, las cuentas de correo y Himalaya, el modelo de búsqueda, el temporizador y el skill. Cada problema incluye el comando para corregirlo; termina con código 1 mientras algo requiera atención. Los problemas del archivo de ajustes también se enumeran, en `config.issues` de `memo doctor --json`, con la misma forma que usa el doctor de cada herramienta de WireCat. El archivo de ajustes, su carpeta, el almacén y la carpeta de registros de ejecución se revisan por si otros usuarios pueden leerlos; los que sí aparecen en `files.problems` con el modo que tienen y el que deberían tener, y se imprime el `chmod` que corrige cada uno. Ni los problemas de ajustes ni los archivos que otros pueden leer cambian el código de salida 0, así que el informe se sigue leyendo como una respuesta. `memo doctor --json` devuelve lo mismo para un agente.
+`memo doctor` revisa los ajustes, el almacén, las carpetas de notas, las cuentas de correo de la importación antigua con Himalaya, el modelo de búsqueda, el temporizador y el skill. Cada problema incluye el comando para corregirlo; termina con código 1 mientras algo requiera atención. Los problemas del archivo de ajustes también se enumeran, en `config.issues` de `memo doctor --json`, con la misma forma que usa el doctor de cada herramienta de WireCat. El archivo de ajustes, su carpeta, el almacén y la carpeta de registros de ejecución se revisan por si otros usuarios pueden leerlos; los que sí aparecen en `files.problems` con el modo que tienen y el que deberían tener, y se imprime el `chmod` que corrige cada uno. Ni los problemas de ajustes ni los archivos que otros pueden leer cambian el código de salida 0, así que el informe se sigue leyendo como una respuesta. `memo doctor --json` devuelve lo mismo para un agente.
 
 `memo --help` muestra comandos como `notes`, `search`, `mail` y `sync`. Si la instalación terminó pero no se encuentra `memo`, abre un terminal nuevo: uno que ya estaba abierto puede no ver el comando. Si sigue sin aparecer, la carpeta de comandos del gestor de paquetes no está en PATH. `npm prefix -g` muestra esa carpeta (en Linux y macOS el comando está en su subcarpeta `bin`); añádela a PATH o pide ayuda al agente.
 
@@ -156,7 +156,7 @@ memo skill install --for all   # the skill of the new version
 Una vez al día Memo pregunta a npm si existe una versión nueva y, si la hay, escribe una línea en stderr tras el comando. Solo aparece ante una persona en el terminal: no con `--json`, en una tubería ni en ejecuciones periódicas. Desactívala con `"update_check": false` en los ajustes o `MEMO_NO_UPDATE_CHECK=1`. Memo nunca se actualiza por sí solo.
 
 - **El temporizador** usa el Memo actualizado en su siguiente ejecución, sin reiniciarlo. Tras cambiar de Node.js (por ejemplo con nvm) e instalar Memo allí, el siguiente comando `memo` actualiza la ruta del temporizador, de modo que eliminar el Node.js anterior no lo rompe. Solo una instalación global cambia la ruta del temporizador: ejecutarlo desde el código, con `npx` o desde los `node_modules` de otra herramienta no lo modifica.
-- **`memo mcp`** conserva la versión anterior hasta que el agente lo reinicie. Reinicia el agente o su servidor MCP.
+- **`memo mcp serve`** conserva la versión anterior hasta que el agente lo reinicie. Reinicia el agente o su servidor MCP.
 
 Desde el código fuente: `git pull && pnpm install && pnpm build`.
 

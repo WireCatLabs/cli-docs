@@ -29,7 +29,10 @@ cada una con `memo notes show` o en la aplicación original.
 | Transcripciones y resúmenes de reuniones guardados | `memo search meetings 'budget' --source zoom:work` |
 | Una persona, por nombre, usuario o alias | `memo search people kai` |
 
-`search all` busca en mensajes, correo y notas a la vez. No busca reuniones, personas, recuerdos, proyectos ni
+`search all` busca en mensajes, correo, notas y eventos de calendario a la vez. Los eventos vienen de cada calendario
+que gcal guardó; la respuesta nombra cada calendario que leyó, y `--only events` busca solo en ellos. El título, la descripción y el lugar de un evento
+los escribe quien envió la invitación, y `--json` nombra esos campos en `untrusted` del resultado. Memo no puede abrir una referencia `event:`;
+lo hace `gcal <profile> events show <ref>`. No busca reuniones, personas, recuerdos, proyectos ni
 tareas; para eso usa `memo search people`, `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
 está algo, su propia búsqueda es mejor, porque entiende más palabras de búsqueda.
 
@@ -67,6 +70,10 @@ memo search notes 'budget' --filter 'date:2026-10-08'    # and a second conditio
 
 `source:file` muestra solo notas de archivos. El campo de consulta `source:` indica el origen de la nota; la opción `--source` elige las carpetas donde buscar. Los resultados llegan de 20 en 20; `--page 2` abre la siguiente página y `page.next_page` indica su número.
 
+Un campo en la consulta funciona como `--filter`: `memo search notes 'budget tag:work'` busca por significado solo en las notas
+etiquetadas `work`. Solo las palabras se buscan por significado, así que `memo search notes 'date:today'` lista solo las notas de hoy, las más recientes primero.
+Para un documento de Google Drive, `date:` y la fecha que muestra un resultado son su última edición en Drive.
+
 ## Buscar en el correo
 
 ```sh
@@ -77,7 +84,7 @@ memo search mail 'budget' --source email:you@example.com
 
 `mailbox:` encuentra una carpeta de correo o una etiqueta de Gmail, como `inbox`, `important` o
 `starred`. Sin `--source`, Memo busca en todas las cuentas de correo; `--source email:work,email:personal`
-busca en esas dos. También se busca el texto dentro de los adjuntos (`filename:` y `content:`).
+busca en esas dos. También se busca el texto dentro de los adjuntos en el correo de la importación anterior con Himalaya (`filename:` y `content:`). El correo sincronizado por `mail` conserva solo texto y cabeceras, así que no tiene texto de adjuntos.
 
 ## Buscar en reuniones guardadas
 

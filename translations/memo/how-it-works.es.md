@@ -16,13 +16,14 @@ mensajes, correo y notas a la vez.
 | De dónde viene | Quién lo pone en el almacén local |
 |---|---|
 | Mensajes de Telegram, MAX y WhatsApp | tg, max y wa, cuando descargan tus chats |
-| Correo | `memo sync --only mail` o `memo sync` |
+| Correo | La CLI [mail](https://github.com/WireCatLabs/mail-cli), con `mail <profile> sync`. La importación antigua con Himalaya se ejecuta con `memo sync --only mail` y se eliminará en una versión posterior |
 | Archivos de tus carpetas de notas | `memo sync --only notes` o `memo sync` |
 | Tus propias notas, etiquetas, tareas, recuerdos y hechos | Memo, cuando tú o tu agente los añadís |
 
 La importación deja los originales intactos: los archivos no cambian y el buzón se abre solo para lectura.
 El almacén local conserva una copia del texto. Los [comandos de limpieza de Gmail](./mail.md#clean-up-gmail)
-mueven el correo elegido a la Papelera o lo restauran solo con `--yes`; el temporizador nunca ejecuta la limpieza.
+(`memo mail delete` y `memo mail restore`) mueven el correo de Gmail elegido a la Papelera o lo restauran solo con `--yes`;
+el temporizador nunca ejecuta la limpieza.
 
 ## Qué hace una importación
 
@@ -43,6 +44,10 @@ Una importación lee tus carpetas y tus cuentas de correo y pone al día el alma
   este paso.
 
 Dos importaciones de Memo nunca se ejecutan a la vez, y una fuente que falla no detiene las demás.
+
+Una importación se puede detener en cualquier momento con Ctrl-C o `kill <pid>` (SIGTERM). Se detiene en el siguiente
+lote de correos o en la siguiente carpeta, conserva lo que leyó y el siguiente `memo sync` continúa desde ahí. `--timeout 10m`
+la detiene del mismo modo a los diez minutos; sin `--timeout` no tiene límite de tiempo.
 
 ## Carpetas en más de un ordenador
 

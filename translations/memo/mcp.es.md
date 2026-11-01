@@ -29,7 +29,7 @@ Configura `permissions` en la [configuración](./configuration.md#permissions) p
 La clave es una ruta con puntos, como `notes.edit`; una clave superior como `notes` cubre sus comandos.
 `deny` marca el comando como no disponible, `readonly` permite lecturas y `ask` o `allow` permite escrituras.
 Por MCP, `ask` se ejecuta sin una pregunta en el terminal; las preguntas de aprobación dependen de la aplicación cliente. Las escrituras sin nivel guardado usan `ask`.
-`mail delete` y `mail restore` también necesitan `yes: true`, igual que sus comandos CLI necesitan `--yes`.
+`memo mail delete` y `memo mail restore` también necesitan `yes: true`, igual que sus comandos CLI necesitan `--yes`.
 
 Los cambios en carpetas de origen o reglas de correo necesitan `mcp.authority`, cuyo valor inicial es `deny`.
 Las decisiones sobre hallazgos de reuniones (`meetings.actions.confirm` y `meetings.actions.reject`) y
@@ -37,12 +37,12 @@ Las decisiones sobre hallazgos de reuniones (`meetings.actions.confirm` y `meeti
 Guarda los permisos en la configuración; la búsqueda y la siguiente llamada leen los niveles actuales.
 Los permisos y el límite compartido de WireCat de solo lectura se comprueban en cada llamada.
 
-`memo mcp --permission notes.edit=deny` restringe un permiso para ese servidor; repite la opción para más claves.
+`memo mcp serve --permission notes.edit=deny` restringe un permiso para ese servidor; repite la opción para más claves.
 No puede ampliar los permisos guardados, incluidas las claves más específicas.
 `MEMO_READ_ONLY=1` marca todos los comandos de escritura como no disponibles y los rechaza en una conexión abierta.
 La búsqueda conserva los comandos bloqueados con su `availability` actual y el motivo, como hace cli-core.
 
-Las exclusiones reservadas a CLI son `mcp`, `upgrade`, `skill install`, `jobs start` y `jobs stop`: inician otro
+Las exclusiones reservadas a CLI son los comandos `mcp`, `upgrade`, `skill install`, `jobs start` y `jobs stop`: inician otro
 servidor, sustituyen el programa, instalan instrucciones en otras aplicaciones o gestionan un temporizador.
 
 `memories add`, `facts add`, `actions add`, `meetings actions add` y `projects actions add` guardan propuestas.
@@ -54,7 +54,7 @@ tanto por CLI como por MCP. Memo nunca envía mensajes ni correo.
 
 Pasa el `ref` del resultado a `notes show` como `note`, o una referencia de mensaje o correo a `messages show`
 como `message`. `notes show` devuelve la nota completa; `messages show`, el mensaje o correo guardado, y con
-`full: true` todo el texto de los adjuntos. `mail inspect` lee cabeceras de una cuenta explícita y `tags list`
+`full: true` todo el texto de los adjuntos. `memo mail inspect` lee cabeceras de una cuenta explícita y `tags list`
 lista etiquetas. Los mensajes usan la cuenta y el chat de la referencia; no se consulta al proveedor.
 
 ## Conectar una aplicación
@@ -63,7 +63,7 @@ Añade Memo a la configuración MCP de la aplicación. La mayoría de las aplica
 como este:
 
 ```json
-{ "mcpServers": { "memo": { "command": "memo", "args": ["mcp"] } } }
+{ "mcpServers": { "memo": { "command": "memo", "args": ["mcp", "serve"] } } }
 ```
 
 Añade la entrada `memo` junto a los servidores que ya haya en el archivo:

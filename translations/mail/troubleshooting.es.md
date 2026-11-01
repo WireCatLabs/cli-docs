@@ -1,0 +1,21 @@
+---
+title: "Cuando algo falla"
+---
+
+Empieza por el síntoma, ejecuta la comprobación y vuelve a probar el comando. Guarda el código de error y el nombre del perfil para una
+petición de soporte.
+
+| Síntoma | Qué hacer |
+| --- | --- |
+| No sé qué está configurado | Ejecuta `mail doctor`. No lee el llavero y no usa la red. |
+| No se encuentra `mail` | Abre una terminal nueva y comprueba que la carpeta global de npm está en `PATH`. |
+| "name a profile" | Pon el perfil primero, como en `mail ya folders list`, o define `MAIL_PROFILE`. |
+| El archivo de ajustes no se lee | `doctor` lista cada problema del archivo en `config.issues`. Ejecuta el `config unset` que da cada uno, o corrige el archivo a mano. |
+| `doctor` lista `files.problems` | Otros usuarios del ordenador pueden leer `config.json` o entrar en su carpeta. Ejecuta cada `chmod` que `doctor` imprime tras "to make it private:". `doctor` nunca cambia por sí mismo los permisos de un archivo. |
+| "no app password for profile" | Ejecuta `mail <profile> session start`, o define `MAIL_PASSWORD` para una ejecución. |
+| "the mail server refused the login" | La contraseña de aplicación es incorrecta, o IMAP y las contraseñas de aplicación están desactivados. Los pasos de cada proveedor están en [preparar el buzón](./providers.md). Yandex además necesita de 2 a 3 horas tras crear una contraseña de aplicación nueva. Después ejecuta `session start` otra vez. |
+| `rate_limited` | Dos causas. **El servidor limita la cuenta:** el comando falla con el error «the mail server is limiting this account»; espera y ejecútalo otra vez. **`sync` gastó su propio presupuesto de peticiones:** `sync` no falla. Responde `state: partial` con `stopped: "requests"`, y `meta.issues` tiene `rate_limited` con el motivo `budget.requests`; ejecuta `sync` otra vez para continuar, o sube `--max-pages`. En ambos casos el correo ya guardado se omite. |
+| "could not reach the OS keyring" | El llavero está bloqueado o no hay ningún servicio de secretos en marcha. La contraseña se guardó en su lugar en un archivo privado (`credential_storage: "file"`). Desbloquea el llavero y ejecuta `session start` otra vez para devolverla allí. |
+| Se rechaza una escritura | Lo impiden los permisos del perfil o `MAIL_READ_ONLY`; consulta [los ajustes](./configuration.md#permissions). |
+
+Nunca pegues un token, una contraseña ni contenido privado en una petición de soporte.

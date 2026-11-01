@@ -160,5 +160,20 @@
     "families": {
       "zm": ["mcp", "skill", "search", "commands", "complete"]
     }
+  },
+  {
+    "id": "mail-connect",
+    "pages": ["mail/installation.md", "mail/providers.md", "mail/security.md"],
+    "families": { "mail": ["session", "account", "skill", "mcp"] }
+  },
+  {
+    "id": "mail-sync",
+    "pages": ["mail/usage.md", "mail/commands.md"],
+    "families": { "mail": ["folders", "sync", "status", "commands"] }
+  },
+  {
+    "id": "mail-upkeep",
+    "pages": ["mail/configuration.md", "mail/troubleshooting.md"],
+    "families": { "mail": ["config", "doctor", "runs", "upgrade"] }
   }
 ]

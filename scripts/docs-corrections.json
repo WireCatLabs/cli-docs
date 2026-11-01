@@ -2344,5 +2344,14 @@
         }
       ]
     }
+  },
+  {
+    "tool": "mail",
+    "slug": "index",
+    "source": "https://github.com/WireCatLabs/mail-cli/blob/main/docs/index.md",
+    "reason": "The overview page's sidebar label is its title. mail's overview is titled with the command name; the other tools' overview pages carry the product name. Drop this once the release's own heading is Mail.",
+    "replacements": {
+      "en": [{ "before": "title: \"mail\"", "after": "title: \"Mail\"" }]
+    }
   }
 ]

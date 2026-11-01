@@ -63,6 +63,19 @@
     }
   },
   {
+    "name": "mail",
+    "displayName": "Mail",
+    "repo": "WireCatLabs/mail-cli",
+    "package": "@wirecat/mail-cli",
+    "lang": "en",
+    "docsRef": "v0.1.1",
+    "summary": {
+      "en": "Sync your mailbox over IMAP into the shared WireCat store; memo searches it, offline. mail only reads your mailbox.",
+      "ru": "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat; memo ищет по нему без интернета. mail только читает ящик.",
+      "es": "Sincroniza tu buzón por IMAP en el almacén compartido de WireCat; memo busca en él sin conexión. mail solo lee tu buzón."
+    }
+  },
+  {
     "name": "zm",
     "displayName": "Zoom",
     "repo": "WireCatLabs/zoom-cli",
@@ -86,7 +99,7 @@
       "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
       "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.108.0",
+    "docsRef": "v0.131.2",
     "profile": false
   }
 ]

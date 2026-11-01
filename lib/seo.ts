@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
 import { driveDescriptions } from "./drive-descriptions"
 import { gcalDescriptions } from "./gcal-descriptions"
+import { mailDescriptions } from "./mail-descriptions"
 import { memoDescriptions } from "./memo-descriptions"
 import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
@@ -99,6 +100,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
   const reviewed = {
     drive: driveDescriptions,
     gcal: gcalDescriptions,
+    mail: mailDescriptions,
     memo: memoDescriptions,
     wa: whatsappDescriptions,
   }[selectedTool?.name ?? ""]
