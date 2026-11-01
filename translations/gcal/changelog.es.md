@@ -4,6 +4,13 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.10.0 — 01.11.2026
+
+- gcal funciona ahora sobre cli-core 0.512.0. Nada cambia en los comandos de gcal ni en su servidor MCP: cli-core
+  0.512.0 renombró `id` a `operation_id` en sus propias herramientas MCP de calendario, que gcal no ofrece. Los
+  agentes de gcal escriben con `gcal_write`, donde `events create` y `events update` ya aceptan `operation_id` desde la
+  0.9.0, y paginan `events list` con `gcal_read` y `page`.
+
 ## 0.9.0 — 31.10.2026
 
 ### Cambios — pueden romper scripts
