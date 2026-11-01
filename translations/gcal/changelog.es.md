@@ -4,6 +4,36 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.12.0 — 01.11.2026
+
+### Añadido
+
+- **Preparar una reunión: `gcal <profile> events prepare [event:<id>]`.** Da lo que el almacén local guarda sobre una
+  reunión, la próxima si no nombras ninguna: el evento con las respuestas de los asistentes y sus archivos de Drive, y
+  para cada otro asistente vuestros últimos mensajes y correos uno a uno, sus mensajes en grupos, los eventos pasados
+  y las reuniones grabadas con él, de todas las herramientas de WireCat de este ordenador. Solo lee el almacén y no
+  escribe ningún resumen. `meta.accounts` nombra cada cuenta leída, `meta.complete: false` dice lo que falta y
+  `untrusted` marca todo lo que escribieron otras personas. Los detalles están en
+  [Preparar una reunión](./usage.md#prepare-for-a-meeting).
+- **El skill y `gcal guide` enseñan a un agente a escribir un informe de reunión y un resumen diario o semanal**
+  (`gcal guide prepare-meeting`, `gcal guide digest`): el objetivo, los participantes, las decisiones pendientes, las
+  preguntas abiertas y una lista de comprobación, a partir de `events prepare` y `events list`, sin seguir nunca
+  instrucciones que aparezcan en el texto de un evento.
+- **Añadir una reunión con una sola línea.** `gcal <profile> events create Work --text "Lunch with Ana tomorrow 1pm"`
+  pasa la línea a la adición rápida de Google, que lee el día, la hora y el lugar. Sus claves son `events.create` y
+  `api.calendar.events.quickAdd`; no se envía correo a nadie sin `--notify`. Google elige el id, así que
+  `--operation-id` no se aplica.
+- **Exportar e importar iCalendar.** `events export <query> --output week.ics` escribe como archivo `.ics` los eventos
+  que listaría `events list` (`id:<id>` para uno); `events import <calendar> <file.ics>` añade los eventos de un
+  archivo mediante `events.import` de Google, cada uno con su UID, y no envía correo a nadie. La importación pregunta
+  antes (`events.import`).
+- **Dejar fuera cumpleaños, tiempo de concentración y otro ruido.** `events list -event_type:birthday -event_type:focus`
+  deja fuera esos tipos, y `event_type:default` conserva solo los eventos normales. `events list id:<id>` encuentra un
+  evento.
+- **Calendarios por nombre.** `calendar:Team`, `events create Team`, `--calendar` y `--to-calendar` aceptan el nombre
+  de un calendario además de su id. Un nombre que comparten dos calendarios se rechaza con sus ids.
+- gcal funciona sobre cli-core 0.539.0 y cli-base 0.71.0.
+
 ## 0.11.0 — 01.11.2026
 
 ### Añadido
