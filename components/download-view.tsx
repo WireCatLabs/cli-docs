@@ -135,8 +135,7 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
     release.files.filter((file) => file.platform === platform)
   const fileName = (format: DesktopFile["format"]) =>
     latest?.files.find((file) => file.format === format)?.name ?? `*.${format}`
-  const fileUrl = (format: DesktopFile["format"]) =>
-    latest?.files.find((file) => file.format === format)?.url ?? `${releasesPage}/latest`
+  const latestDeb = latest?.files.find((file) => file.format === "deb")
 
   const meta = (release: DesktopRelease, file?: DesktopFile) => (
     <p className="download-meta">
@@ -339,7 +338,9 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
             )}
             <p>{rich(words.linux.fuse)}</p>
             <External href={links.fuse}>{words.linux.fuseSource}</External>
-            <p>{rich(words.linux.deb.replace("{url}", fileUrl("deb")).replace("{deb}", fileName("deb")))}</p>
+            {latestDeb && (
+              <p>{rich(words.linux.deb.replace("{url}", latestDeb.url).replaceAll("{deb}", latestDeb.name))}</p>
+            )}
             <p>{rich(words.linux.rpm.replace("{rpm}", fileName("rpm")))}</p>
           </TabsContent>
         </Tabs>
