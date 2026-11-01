@@ -33,6 +33,17 @@ export const privacyCopy: Record<
         ],
       },
       {
+        id: "calendar-access",
+        title: "Google Calendar access (gcal)",
+        paragraphs: [
+          "gcal connects to Google Calendar only after you start its sign-in and approve access on Google’s consent screen. It signs in through WireCat’s Google app, or through your own Google app if you give it one. The default permission reads your calendars and your Google account’s email address. Creating, changing and deleting events and answering invitations need the separate write permission. Seeing and changing who can see a calendar you own needs the separate sharing permission. A change runs only when you, or an agent you connected, give the command for it.",
+          "With these permissions gcal reads your list of calendars and, for each event, its title, time, description, location, recurrence, video call link, organizer, and the attendees’ names, email addresses and answers. It reads busy times for the calendars and people you ask about. With the sharing permission it reads and changes the sharing rules of your calendars.",
+          "We use this access to keep a searchable copy of your events on your computer, answer questions about free and busy time, and make the event and sharing changes you ask for. When you choose Google’s own search, gcal sends your search words to Google Calendar and stores none of the results.",
+          "gcal calls Google’s API directly from your computer. Your Google sign-in stays in your system’s keyring, or in a private file if you choose one, and your events stay in gcal’s local database. Nothing goes to a WireCat server. An agent you connect to gcal receives the events and details its commands return; its provider and settings decide what happens to them next.",
+          "gcal’s session end command deletes a profile’s sign-in from your computer; the copied events stay until you delete gcal’s local data. To stop all access, remove WireCat from your Google Account’s third-party connections.",
+        ],
+      },
+      {
         id: "local-storage",
         title: "Local storage and security",
         paragraphs: [
@@ -45,7 +56,7 @@ export const privacyCopy: Record<
         id: "sharing-ai",
         title: "Sharing and optional AI processing",
         paragraphs: [
-          "WireCat does not sell Google user data, use it for advertising or use it to train general-purpose AI models. WireCat Drive's use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements. Project maintainers do not receive or routinely inspect your documents or tokens. If you contact support, share only what you choose to disclose; never include tokens or private documents unless needed for your request.",
+          "WireCat does not sell Google user data, use it for advertising or use it to train general-purpose AI models. The use and transfer by WireCat Drive and gcal of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements. Project maintainers do not receive or routinely inspect your documents or tokens. If you contact support, share only what you choose to disclose; never include tokens or private documents unless needed for your request.",
           "When you explicitly request AI memory extraction, selected cached document text is sent to the AI provider you configured, using your provider credentials. That provider receives the text and extraction request; its processing, retention and data-use settings apply. Choose a provider and settings that do not use Google data to train general-purpose models. Local keyword search and local embeddings do not require this transfer.",
           "An agent or MCP application you connect can receive the document passages and metadata returned by the commands it calls. Its provider and settings control any further processing. Review those settings before giving an agent access to sensitive sources.",
         ],
@@ -90,7 +101,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Who processes the data",
         paragraphs: [
-          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application, zm, the WireCat CLI app for Zoom, and WireCat Desktop. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
+          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application, gcal, the WireCat CLI for Google Calendar, zm, the WireCat CLI app for Zoom, and WireCat Desktop. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
           "Cloudflare serves the pages and WireCat's server (api.wirecat.dev) and processes your IP address to deliver them and protect them.",
         ],
       },
@@ -169,6 +180,17 @@ export const privacyCopy: Record<
         ],
       },
       {
+        id: "calendar-access",
+        title: "Доступ к Google Календарю (gcal)",
+        paragraphs: [
+          "gcal подключается к Google Календарю только после того, как вы запустите вход и разрешите доступ на экране согласия Google. Вход идёт через Google-приложение WireCat или через ваше собственное, если вы его укажете. Разрешение по умолчанию даёт чтение ваших календарей и адреса электронной почты аккаунта Google. Чтобы создавать, менять и удалять события и отвечать на приглашения, нужно отдельное разрешение на запись. Чтобы видеть и менять, кто видит ваш календарь, нужно отдельное разрешение на совместный доступ. Изменение выполняется, только когда команду даёте вы или подключённый вами агент.",
+          "С этими разрешениями gcal читает список ваших календарей и для каждого события — название, время, описание, место, повторение, ссылку на видеозвонок, организатора, а также имена, адреса электронной почты и ответы участников. Он читает занятое время календарей и людей, о которых вы спрашиваете. С разрешением на совместный доступ он читает и меняет правила доступа к вашим календарям.",
+          "Мы используем этот доступ, чтобы хранить на вашем компьютере копию событий с поиском, отвечать на вопросы о свободном и занятом времени и вносить изменения в события и доступ, о которых вы просите. Когда вы выбираете поиск самого Google, gcal отправляет слова запроса в Google Календарь и не сохраняет результаты.",
+          "gcal обращается к API Google напрямую с вашего компьютера. Вход в Google хранится в системной связке ключей или, если вы так выберете, в закрытом файле, а события — в локальной базе gcal. Ничего не отправляется на сервер WireCat. Агент, которого вы подключили к gcal, получает события и сведения, которые возвращают его команды; что с ними происходит дальше, решают его провайдер и настройки.",
+          "Команда gcal session end удаляет вход профиля с вашего компьютера; скопированные события остаются, пока вы не удалите локальные данные gcal. Чтобы полностью закрыть доступ, удалите WireCat из сторонних подключений в аккаунте Google.",
+        ],
+      },
+      {
         id: "local-storage",
         title: "Локальное хранение и защита",
         paragraphs: [
@@ -181,7 +203,7 @@ export const privacyCopy: Record<
         id: "sharing-ai",
         title: "Передача данных и дополнительные ИИ-запросы",
         paragraphs: [
-          "WireCat не продаёт данные пользователей Google, не использует их для рекламы или обучения универсальных ИИ-моделей. Использование и передача WireCat Drive сведений, полученных через API Google, соответствуют Правилам в отношении пользовательских данных в сервисах Google API (Google API Services User Data Policy), включая требования об ограниченном использовании (Limited Use). Сопровождающие проекта не получают и не просматривают ваши документы или токены в обычной работе. При обращении в поддержку передавайте только выбранные вами сведения; не включайте токены или приватные документы без необходимости для запроса.",
+          "WireCat не продаёт данные пользователей Google, не использует их для рекламы или обучения универсальных ИИ-моделей. Использование и передача WireCat Drive и gcal сведений, полученных через API Google, соответствуют Правилам в отношении пользовательских данных в сервисах Google API (Google API Services User Data Policy), включая требования об ограниченном использовании (Limited Use). Сопровождающие проекта не получают и не просматривают ваши документы или токены в обычной работе. При обращении в поддержку передавайте только выбранные вами сведения; не включайте токены или приватные документы без необходимости для запроса.",
           "При явном запросе извлечения записей памяти с помощью ИИ выбранный текст из локальных документов отправляется настроенному вами провайдеру ИИ с вашими учётными данными провайдера. Он получает текст и запрос; действуют его правила обработки, хранения и использования данных. Выбирайте провайдера и настройки, которые не используют данные Google для обучения универсальных моделей. Поиск по словам и локальные эмбеддинги не требуют такой передачи.",
           "Подключённый агент или MCP-приложение может получать фрагменты документов и метаданные, возвращаемые вызываемыми командами. Дальнейшая обработка определяется его провайдером и настройками. Проверьте их, прежде чем дать агенту доступ к чувствительным источникам.",
         ],
@@ -226,7 +248,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Кто обрабатывает данные",
         paragraphs: [
-          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive, zm — приложение WireCat CLI для Zoom — и WireCat Desktop. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
+          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive, gcal — WireCat CLI для Google Календаря, zm — приложение WireCat CLI для Zoom — и WireCat Desktop. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
           "Страницы и сервер WireCat (api.wirecat.dev) обслуживает Cloudflare; он обрабатывает ваш IP-адрес, чтобы доставить ответы и защитить их.",
         ],
       },
@@ -305,6 +327,17 @@ export const privacyCopy: Record<
         ],
       },
       {
+        id: "calendar-access",
+        title: "Acceso a Google Calendar (gcal)",
+        paragraphs: [
+          "gcal se conecta a Google Calendar solo después de que inicies su acceso y apruebes el permiso en la pantalla de consentimiento de Google. Accede a través de la aplicación de Google de WireCat, o de tu propia aplicación de Google si se la indicas. El permiso predeterminado lee tus calendarios y la dirección de correo de tu cuenta de Google. Crear, cambiar y eliminar eventos y responder a invitaciones requiere el permiso de escritura, que es aparte. Ver y cambiar quién puede ver un calendario tuyo requiere el permiso de uso compartido, también aparte. Un cambio se hace solo cuando lo ordenas tú o un agente que conectaste.",
+          "Con estos permisos, gcal lee tu lista de calendarios y, de cada evento, su título, hora, descripción, ubicación, repetición, enlace de videollamada, organizador y los nombres, direcciones de correo y respuestas de los asistentes. Lee las horas ocupadas de los calendarios y las personas por las que preguntas. Con el permiso de uso compartido, lee y cambia las reglas de acceso de tus calendarios.",
+          "Usamos este acceso para guardar en tu ordenador una copia de tus eventos en la que puedes buscar, responder a preguntas sobre horas libres y ocupadas, y hacer los cambios en eventos y accesos que pidas. Cuando eliges la búsqueda propia de Google, gcal envía tus palabras de búsqueda a Google Calendar y no guarda ningún resultado.",
+          "gcal llama a la API de Google directamente desde tu ordenador. Tu acceso a Google se guarda en el llavero del sistema, o en un archivo privado si lo eliges, y tus eventos en la base de datos local de gcal. Nada se envía a un servidor de WireCat. Un agente que conectes a gcal recibe los eventos y datos que devuelven sus comandos; su proveedor y su configuración deciden qué pasa después con ellos.",
+          "El comando session end de gcal borra de tu ordenador el acceso de un perfil; los eventos copiados se quedan hasta que borres los datos locales de gcal. Para cortar todo acceso, quita WireCat de las conexiones de terceros de tu cuenta de Google.",
+        ],
+      },
+      {
         id: "local-storage",
         title: "Almacenamiento local y seguridad",
         paragraphs: [
@@ -317,7 +350,7 @@ export const privacyCopy: Record<
         id: "sharing-ai",
         title: "Datos compartidos y procesamiento opcional con IA",
         paragraphs: [
-          "WireCat no vende datos de usuarios de Google, no los usa para publicidad ni para entrenar modelos de IA de propósito general. El uso y la transferencia por WireCat Drive de la información recibida de las API de Google cumplen la Política de datos de usuario de los servicios de API de Google (Google API Services User Data Policy), incluidos los requisitos de uso limitado (Limited Use). Los responsables del proyecto no reciben ni inspeccionan habitualmente tus documentos o tokens. Si contactas con soporte, comparte solo lo que decidas revelar; no incluyas tokens ni documentos privados salvo que sean necesarios para tu petición.",
+          "WireCat no vende datos de usuarios de Google, no los usa para publicidad ni para entrenar modelos de IA de propósito general. El uso y la transferencia por WireCat Drive y gcal de la información recibida de las API de Google cumplen la Política de datos de usuario de los servicios de API de Google (Google API Services User Data Policy), incluidos los requisitos de uso limitado (Limited Use). Los responsables del proyecto no reciben ni inspeccionan habitualmente tus documentos o tokens. Si contactas con soporte, comparte solo lo que decidas revelar; no incluyas tokens ni documentos privados salvo que sean necesarios para tu petición.",
           "Cuando solicitas explícitamente extraer recuerdos con IA, el texto local seleccionado se envía al proveedor de IA que configuraste, con tus credenciales del proveedor. Este recibe el texto y la petición; se aplican sus reglas de procesamiento, conservación y uso de datos. Elige un proveedor y ajustes que no utilicen datos de Google para entrenar modelos de propósito general. La búsqueda por palabras y los embeddings locales no requieren esta transferencia.",
           "Un agente o una aplicación MCP conectados pueden recibir los fragmentos y metadatos devueltos por los comandos que ejecutan. Su proveedor y ajustes controlan el procesamiento posterior. Revísalos antes de dar al agente acceso a fuentes sensibles.",
         ],
@@ -362,7 +395,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Quién trata los datos",
         paragraphs: [
-          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive, zm, la aplicación WireCat CLI para Zoom, y WireCat Desktop. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
+          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive, gcal, la CLI de WireCat para Google Calendar, zm, la aplicación WireCat CLI para Zoom, y WireCat Desktop. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
           "Cloudflare sirve las páginas y el servidor de WireCat (api.wirecat.dev) y trata tu dirección IP para entregarlos y protegerlos.",
         ],
       },
