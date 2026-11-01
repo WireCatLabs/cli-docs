@@ -15,24 +15,14 @@ gcal personal config unset limit
 
 ## Tu propio cliente de Google
 
-`gcal` todavía no tiene su propia aplicación de Google, así que `session start` inicia sesión a través de la tuya.
-Créala una vez en [Google Cloud Console](https://console.cloud.google.com/):
+`session start` inicia sesión a través de una aplicación de Google tuya: pasa el archivo de su cliente Desktop app con
+`--client-file`, o define `GCAL_GOOGLE_CLIENT_ID` y `GCAL_GOOGLE_CLIENT_SECRET`. Cualquiera de los dos gana sobre la
+aplicación de WireCat, que las versiones actuales todavía no incluyen. `gcal` rechaza un archivo de cliente que puedan
+leer otros usuarios del ordenador. El cliente solo hace falta al iniciar sesión: `gcal` lo guarda junto con el inicio de
+sesión, así que los comandos siguientes funcionan sin el archivo.
 
-1. Crea un proyecto y activa en él la API de Google Calendar.
-2. Configura la pantalla de consentimiento de OAuth. Mientras la aplicación esté en Testing, añade tu cuenta de Google
-   como usuario de prueba.
-3. Crea un ID de cliente de OAuth del tipo **Desktop app** y descarga su archivo JSON.
-
-Después pasa el archivo a `gcal`, legible solo por ti:
-
-```sh
-chmod 600 ~/client_secret.json
-gcal personal session start --client-file ~/client_secret.json
-```
-
-`gcal` rechaza un archivo de cliente que puedan leer otros usuarios del ordenador. En lugar del archivo, puedes definir
-`GCAL_GOOGLE_CLIENT_ID` y `GCAL_GOOGLE_CLIENT_SECRET`. El cliente solo hace falta al iniciar sesión: `gcal` lo guarda
-junto con la sesión en el llavero del sistema, así que los comandos siguientes funcionan sin el archivo.
+[Crea tu propia aplicación de Google](./installation.md#make-your-own-google-app) recorre Google Cloud Console paso a
+paso.
 
 ## Permisos
 
