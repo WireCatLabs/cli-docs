@@ -7,8 +7,8 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.11.0, sus comandos y su código, revisados
-el 1 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.12.0, sus comandos y su código, revisados
+el 2 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
 propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
 
@@ -41,17 +41,19 @@ Las herramientas:
 | Reuniones de todos tus calendarios y cuentas en una sola lista | ✅ | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | Qué cambió desde una fecha: reuniones nuevas, movidas y canceladas | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
 | Encontrar reuniones que se solapan | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Dejar fuera de la lista los cumpleaños, el tiempo de concentración y los bloques de lugar de trabajo | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | ➖ | ➖ |
 | **Encontrar una reunión** | | | | | | |
 | Encontrar una reunión por su tema, no por sus palabras exactas | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Buscar en tus reuniones sin internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Una sola búsqueda en reuniones, chats, correo y notas | 🟡 | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Personas** | | | | | | |
 | Saber que un asistente es la persona con la que escribes en Telegram, WhatsApp o el correo | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
-| Preparar la próxima reunión: quién viene, de qué hablasteis la última vez, documentos vinculados | 🟡 | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | ➖ |
+| Preparar la próxima reunión: quién viene, de qué hablasteis la última vez, documentos vinculados | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | ➖ |
 | Ver cuándo están libres las personas | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | **Cambiar el calendario** | | | | | | |
 | Añadir una reunión | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Aceptar o rechazar una invitación | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
+| Exportar reuniones a un archivo .ics e importar uno | ✅ | [🟡](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
 | **Agentes y seguridad** | | | | | | |
 | Servidor MCP | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | Cada comando de calendario es también una herramienta MCP | ✅ | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
@@ -72,7 +74,9 @@ Notas sobre la columna de `gcal`:
 
 - **Solo lectura hasta que permitas más.** `gcal session start` pide a Google acceso de solo lectura. Con
   `--grant write` también añade, cambia, mueve y borra eventos y responde a invitaciones (`events create`, `update`,
-  `move`, `delete`, `respond`). En un evento periódico, un cambio o un borrado afecta a una repetición, a toda la serie
+  `move`, `delete`, `respond`), e importa un archivo `.ics` (`events import`).
+  `events create --text "Lunch with Ana tomorrow 1pm"` pasa una línea a la adición rápida de Google, que lee el día, la
+  hora y el lugar. En un evento periódico, un cambio o un borrado afecta a una repetición, a toda la serie
   o a esta y todas las siguientes (`--following`). `events move --to-calendar` mueve un evento, con su id, a otro
   calendario de la misma cuenta. `--grant sharing` añade quién puede ver un calendario.
 - **Qué cambió.** `events list changed_at>=<date>` muestra las reuniones guardadas por primera vez, movidas o
@@ -90,12 +94,21 @@ Notas sobre la columna de `gcal`:
 - **Fechas con palabras.** `events list` acepta una fecha o una hora en sus términos por campo, como
   `ends_at>=today starts_at<=2026-11-06`, las palabras `today` y `yesterday`, y cantidades hacia el pasado como `7d`.
   No entiende «semana» ni «el viernes que viene», y es a propósito: las fechas las escribe un agente, y una fecha
-  exacta nunca se lee mal.
-- **Preparar una reunión.** `events show` da los asistentes, cada uno vinculado a la persona que conoces de otras
-  herramientas, y los archivos de Drive de la reunión. Lo que hablasteis la última vez está en `memo`, no en `gcal`.
+  exacta nunca se lee mal. Solo `events create --text` acepta palabras, y las lee Google, no `gcal`.
+- **Preparar una reunión.** `events prepare` toma tu próxima reunión, o la que nombres, y da sus asistentes con sus
+  respuestas, sus archivos de Drive y tus eventos pasados con cada asistente. Tus últimos mensajes y correos con cada
+  uno vienen de las otras herramientas de WireCat del mismo ordenador, como `tg` o `mail`; solo con `gcal` esas
+  listas están vacías. Solo lee el almacén local y no escribe ningún resumen: el skill y `gcal guide prepare-meeting`
+  enseñan al agente a escribir el informe, y `gcal guide digest` un resumen diario o semanal.
+- **Cumpleaños y otro ruido.** `events list -event_type:birthday -event_type:working-location` deja fuera esos tipos,
+  y `event_type:default` conserva solo los eventos normales.
+- **Archivos iCalendar.** `events export <query> --output week.ics` escribe como archivo `.ics` los eventos que
+  mostraría una lista. `events import <calendar> <file.ics>` añade los eventos de un archivo mediante Google, no envía
+  correo a nadie y pregunta antes.
 - **Todos los calendarios.** Una lista abarca los calendarios que elegiste sincronizar en un perfil. Cada cuenta de
   Google es su propio perfil; `events list --source all` lee todas las cuentas en una sola lista, las nombra en
-  `meta.accounts` y avisa cuando una no ha terminado su sincronización.
+  `meta.accounts` y avisa cuando una no ha terminado su sincronización. `calendar:Team` nombra un calendario por su
+  nombre.
 - **Buscar por significado.** Necesita un modelo que descargas una vez. Sin él, la búsqueda encuentra las palabras y
   sus otras formas.
 - **Una búsqueda sobre todo.** Las reuniones van al almacén que comparten las demás herramientas de WireCat.
@@ -104,8 +117,9 @@ Notas sobre la columna de `gcal`:
 - **Cuándo están libres las personas.** `calendars busy` pregunta a Google cuándo están ocupados tus calendarios y
   otras personas, y con `--duration-minutes` da los huecos libres que comparten dentro del horario laboral.
 - **Un agente no puede cambiar tu calendario si no lo permites.** Sin `--grant write`, el propio inicio de sesión es el
-  límite. Después, añadir, cambiar, mover y responder se hacen sin preguntar; un borrado pregunta antes en una
-  terminal. Por MCP no hay nadie a quien preguntar, así que un agente también borra eventos y, con `--grant sharing`,
+  límite. Después, añadir, cambiar, mover y responder se hacen sin preguntar; un borrado o una importación pregunta
+  antes en una terminal. Por MCP no hay nadie a quien preguntar, así que un agente también borra e importa eventos y,
+  con `--grant sharing`,
   comparte el calendario sin preguntar. Enviar correos a los asistentes, borrar una serie entera, y borrar un
   calendario entero o dárselo a otra cuenta siguen rechazados hasta que los permitas. Para que te pregunte o para
   impedir escrituras, pon los permisos del perfil en `ask`, `deny`
@@ -130,8 +144,7 @@ Notas sobre la columna de `gcal`:
 - **El conector de Claude**: quieres ayuda con tu calendario en Claude en la web o en el móvil, sin instalar nada ni
   crear un proyecto de Google Cloud.
 - **Google Workspace MCP**: necesitas un servidor MCP para todo un equipo en Google Workspace, accesible por HTTP.
-- **gcalcli**: quieres una cuadrícula de calendario en la terminal, o añadir un evento con una línea de texto como
-  «comida con Ana mañana a las 13».
+- **gcalcli**: quieres una cuadrícula de calendario en la terminal, como una vista de semana o de mes.
 
 Si `gcal` encaja, empieza por la [instalación](./installation.md). Para usarlo con un agente, consulta el
 [uso](./usage.md).
