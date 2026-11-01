@@ -199,7 +199,8 @@ export function validateInvocation(
       literal = true
       continue
     }
-    if (!literal && /^--|^-[a-zA-Z]/.test(token)) {
+    // A query term can be negated with a minus (`-event_type:birthday`); that is an argument, not an option.
+    if (!literal && /^--|^-[a-zA-Z]/.test(token) && !/^-[a-zA-Z][\w.-]*:/.test(token)) {
       const name = token.split("=")[0]
       if (name === "--help" || name === "-h") return null
       const option = options.get(name)

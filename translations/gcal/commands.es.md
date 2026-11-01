@@ -156,7 +156,7 @@ gcal calendars sync <calendar>
 
 | Argument | | What it is |
 |---|---|---|
-| `calendar` | required | the calendar's id, or the provider's id. |
+| `calendar` | required | the calendar's id, the provider's id, or its title. |
 
 **Returns:** calendar — id, external_id, title, timezone, access_role, primary, synced, seen_at; every field: gcal commands info calendars sync
 
@@ -174,7 +174,7 @@ gcal calendars unsync <calendar>
 
 | Argument | | What it is |
 |---|---|---|
-| `calendar` | required | the calendar's id, or the provider's id. |
+| `calendar` | required | the calendar's id, the provider's id, or its title. |
 
 **Returns:** calendar — id, external_id, title, timezone, access_role, primary, synced, seen_at; every field: gcal commands info calendars unsync
 
@@ -263,6 +263,28 @@ gcal events list [query] [options]
 
 **Example:** `gcal personal events list starts_at>=2026-11-02 starts_at<2026-11-07 --json`, `gcal personal events list ends_at>=today person:ana@example.com`, `gcal personal events list overlapping:true --source all`
 
+### `gcal events export`
+
+write stored events as iCalendar (.ics), at most 1000: one with id:<id>, or those the query finds; each occurrence of a repeating event as an event of its own
+
+**Changes something on this computer only.**
+
+```sh
+gcal events export [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--output <file>` | the file to write; printed in the answer when absent. |
+
+**Returns:** calendar export — format, events, content, output, untrusted; every field: gcal commands info events export
+
+**Example:** `gcal personal events export id:42 --output planning.ics`, `gcal personal events export starts_at:[2026-11-02 TO 2026-11-09} NOT event_type:birthday --output week.ics`
+
 ### `gcal events show`
 
 one event: its calendar copies, attendees with their person, Drive files and history
@@ -279,9 +301,30 @@ gcal events show <event>
 
 **Example:** `gcal personal events show event:42 --json`
 
+### `gcal events prepare`
+
+before a meeting: the event, its attendees with their answer, and each one's latest messages, mail and meetings the store holds; the next meeting when no event is named
+
+```sh
+gcal events prepare [event] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `event` | optional | the event's id, or event:<id>; the next meeting with other attendees when absent. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | messages per person in each list, 1–50; 5 if not given. |
+| `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 30d ago. |
+
+**Returns:** calendar event preparation — event, people, limits, untrusted; every field: gcal commands info events prepare
+
+**Example:** `gcal personal events prepare --json`, `gcal personal events prepare event:42 --limit 3`, `gcal personal events prepare event:42 --since-time 2026-10-01`
+
 ### `gcal events create`
 
-add an event to a calendar; with --repeat, one that repeats
+add an event to a calendar; with --repeat, one that repeats; with --text, one the provider reads from a line such as 'Lunch with Ana tomorrow 1pm'
 
 **Changes something in the service.**
 
@@ -291,7 +334,7 @@ gcal events create <calendar> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `calendar` | required | the calendar's id, or the provider's id. |
+| `calendar` | required | the calendar's id, the provider's id, or its title. |
 
 | Option | What it does |
 |---|---|
@@ -307,10 +350,11 @@ gcal events create <calendar> [options]
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
 | `--operation-id <id>` | the operation_id a create that ended in outcome_unknown named: a retry finds that event. |
+| `--text <text>` | one line the provider reads the title, date, time and place from, in place of the other fields; nobody is mailed without --notify, and a retry after outcome_unknown may add the event twice. |
 
 **Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events create
 
-**Example:** `gcal personal events create 3 --title 'Example planning' --start-time 2026-11-02T10:00 --end-time 2026-11-02T11:00`, `gcal personal events create 3 --title 'Example review' --start-date 2026-11-03 --end-date 2026-11-03 --attendee ana@example.com --no-notify`, `gcal personal events create 3 --title 'Example standup' --start-time 2026-11-02T09:30 --end-time 2026-11-02T09:45 --repeat 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=12'`
+**Example:** `gcal personal events create Work --text 'Example lunch with Ana tomorrow 1pm at Example Cafe'`, `gcal personal events create 3 --title 'Example review' --start-date 2026-11-03 --end-date 2026-11-03 --attendee ana@example.com --no-notify`, `gcal personal events create 3 --title 'Example standup' --start-time 2026-11-02T09:30 --end-time 2026-11-02T09:45 --repeat 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=12'`
 
 ### `gcal events update`
 
@@ -337,7 +381,7 @@ gcal events update <event> [options]
 | `--description <text>` | the details; empty clears it. |
 | `--attendee <email>` | an attendee; repeat for each, replacing the list. Default: ``. |
 | `--repeat <rule>` | how it repeats, with --series: an RFC 5545 rule: FREQ=DAILY\|WEEKLY\|MONTHLY, and INTERVAL, BYDAY (MO,WE; in MONTHLY also 1MO or -1FR), COUNT or UNTIL (a date, YYYYMMDD, for an all-day event; a UTC time, YYYYMMDDTHHMMSSZ, for a timed one). |
-| `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
+| `--calendar <id>` | the calendar, by id or title, when the event is on more than one of the account's. |
 | `--series` | change the whole repeating event, not only this occurrence. |
 | `--following` | change this occurrence and every later one: the repeating event ends before it and a new one starts with the change. |
 | `--operation-id <id>` | with --following, the operation_id an outcome_unknown named: a retry finds that new series. |
@@ -364,7 +408,7 @@ gcal events delete <event> [options]
 
 | Option | What it does |
 |---|---|
-| `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
+| `--calendar <id>` | the calendar, by id or title, when the event is on more than one of the account's. |
 | `--series` | delete the whole repeating event, not only this occurrence. |
 | `--following` | delete this occurrence and every later one: the repeating event ends before it. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
@@ -373,6 +417,25 @@ gcal events delete <event> [options]
 **Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events delete
 
 **Example:** `gcal personal events delete event:42 --no-notify`, `gcal personal events delete event:42 --following --no-notify`
+
+### `gcal events import`
+
+add the events of an iCalendar (.ics) file to a calendar, at most 500, each under its own UID; nobody is mailed; a changed occurrence of a repeating event (RECURRENCE-ID) is skipped
+
+**Changes something in the service.**
+
+```sh
+gcal events import <calendar> <file>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `calendar` | required | the calendar's id, the provider's id, or its title. |
+| `file` | required | the .ics file to read. |
+
+**Returns:** calendar import — operation_id, calendar, imported, skipped, untrusted; every field: gcal commands info events import
+
+**Example:** `gcal personal events import Work planning.ics`
 
 ### `gcal events move`
 
@@ -390,8 +453,8 @@ gcal events move <event> [options]
 
 | Option | What it does |
 |---|---|
-| `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
-| `--to-calendar <id>` | the calendar to move it to: its id, or the provider's id. |
+| `--calendar <id>` | the calendar, by id or title, when the event is on more than one of the account's. |
+| `--to-calendar <id>` | the calendar to move it to: its id, the provider's id, or its title. |
 | `--series` | move the whole repeating event an occurrence belongs to. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
@@ -417,7 +480,7 @@ gcal events respond <event> <response> [options]
 
 | Option | What it does |
 |---|---|
-| `--calendar <id>` | the calendar, when the event is on more than one of the account's. |
+| `--calendar <id>` | the calendar, by id or title, when the event is on more than one of the account's. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
 
