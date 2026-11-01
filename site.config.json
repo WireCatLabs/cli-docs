@@ -12,8 +12,8 @@
     "posthogHost": "https://eu.i.posthog.com"
   },
   "community": {
-    "discord": "",
-    "telegramGroup": ""
+    "discord": "https://discord.gg/DebENqbRrJ",
+    "telegramGroup": "https://t.me/wirecatdev"
   },
   "newsletter": {
     "apiUrl": "",
