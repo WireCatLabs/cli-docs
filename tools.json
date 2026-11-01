@@ -70,9 +70,9 @@
     "lang": "en",
     "docsRef": "v0.1.1",
     "summary": {
-      "en": "Sync your mailbox over IMAP into the shared WireCat store; memo searches it, offline. mail only reads your mailbox.",
-      "ru": "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat; memo ищет по нему без интернета. mail только читает ящик.",
-      "es": "Sincroniza tu buzón por IMAP en el almacén compartido de WireCat; memo busca en él sin conexión. mail solo lee tu buzón."
+      "en": "Sync your mailbox over IMAP into the shared WireCat store, search it offline, and organise it on the server: flags, moves, Trash with undo, folders, drafts. Sending is not available yet.",
+      "ru": "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat, ищите по нему без интернета и наводите порядок на сервере: флаги, перемещение, корзина с отменой, папки, черновики. Отправки пока нет.",
+      "es": "Sincroniza tu buzón por IMAP en el almacén compartido de WireCat, busca en él sin conexión y ordénalo en el servidor: marcas, mover, papelera con deshacer, carpetas, borradores. El envío aún no está disponible."
     }
   },
   {
