@@ -2362,24 +2362,73 @@
   {
     "tool": "mail",
     "slug": "usage",
-    "reason": "`mail delete` is not a mail command; the run ids come from memo's old `memo mail delete`.",
+    "reason": "`mail delete` is not a mail command and memo's old command is gone; the prose names it without code.",
     "replacements": {
       "en": [
         {
           "before": "memo's old `mail delete`",
-          "after": "memo's old `memo mail delete`"
+          "after": "memo's old cleanup command"
         }
       ],
       "ru": [
         {
           "before": "старого `mail delete` из memo",
-          "after": "старого `memo mail delete`"
+          "after": "старой команды очистки memo"
         }
       ],
       "es": [
         {
           "before": "antiguo `mail delete` de memo",
-          "after": "antiguo `memo mail delete`"
+          "after": "antiguo comando de limpieza de memo"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "mail",
+    "reason": "The removed memo mail commands are named as old commands, not as runnable examples.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`memo mail delete <account>`",
+          "after": "`memo mail delete …`"
+        },
+        {
+          "before": "`memo mail restore <account> --run <id>`",
+          "after": "`memo mail restore …`"
+        },
+        {
+          "before": "`memo mail runs list <account>`",
+          "after": "`memo mail runs list …`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`memo mail delete <account>`",
+          "after": "`memo mail delete …`"
+        },
+        {
+          "before": "`memo mail restore <account> --run <id>`",
+          "after": "`memo mail restore …`"
+        },
+        {
+          "before": "`memo mail runs list <account>`",
+          "after": "`memo mail runs list …`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`memo mail delete <account>`",
+          "after": "`memo mail delete …`"
+        },
+        {
+          "before": "`memo mail restore <account> --run <id>`",
+          "after": "`memo mail restore …`"
+        },
+        {
+          "before": "`memo mail runs list <account>`",
+          "after": "`memo mail runs list …`"
         }
       ]
     }

@@ -10,7 +10,7 @@ not say which finds better answers, because nobody has measured that here.
 
 The marks come from each project's own documentation and source, checked on 24 October 2026; a tool may do more
 than its documentation says. Each mark for another tool links to the page it comes from. The marks for `memo` were
-checked against version 0.90.0.
+checked against version 0.131.12 on 1 November 2026.
 
 The tools:
 
@@ -38,7 +38,6 @@ The tools:
 | Search mail offline, together with chats and notes | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Choose what to import by sender, kind of mail or your Gmail filters | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Find likely spam or fraud senders | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
-| Move chosen mail to Gmail's Trash and restore it | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Import years of old mail from a Google Takeout file | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Know a person or a project** | | | | | | |
 | People, organizations and projects with links between them | ✅ | ✅ [↗][hs-core] | 🟡 [↗][m0-price] | ✅ [↗][gr] | ✅ [↗][cg] | ✅ [↗][bm] |
@@ -67,8 +66,8 @@ The tools:
 Notes on `memo`:
 
 - **Sources.** Telegram, MAX, WhatsApp, Zoom meetings and Google Drive reach the store through the sister tools
-  `tg`, `max`, `wa`, `zm` and `drive`. `memo` reads that store. It imports notes folders and mail itself; mail
-  goes through [Himalaya](https://github.com/pimalaya/himalaya), and [mail](./mail.md) is covered below. `search all` covers messages, mail and notes;
+  `tg`, `max`, `wa`, `zm` and `drive`. `memo` reads that store. The [mail](../mail/index.md) program fills the store with your mailbox and
+  `memo` searches it; an older import through [Himalaya](https://github.com/pimalaya/himalaya) still works and will be removed. `search all` covers messages, mail and notes;
   meetings have their own `search meetings`.
 - **Search.** All six tools search by words and by meaning. This page does not rank them. In `memo`, search by
   meaning uses a local model that `memo models download` fetches; without it, word search still works.
@@ -91,10 +90,10 @@ Notes on `memo`:
 ## memo mail compared with email tools
 
 Mail is a tool of its own in `memo`. The memory tools above do not do this job, so this table puts `memo` next to
-tools people use for mail. `memo` reads mail through Himalaya, so Himalaya is the layer under it, not only a rival.
+tools people use for mail. `memo` searches and reads mail; it does not change or send it. The [mail](../mail/index.md) program does that.
 The marks come from each project's documentation, checked on 24 October 2026.
 
-- **[Himalaya][hm]** — a mail command line for IMAP, SMTP, JMAP, Gmail and others. `memo` calls it to read mail.
+- **[Himalaya][hm]** — a mail command line for IMAP, SMTP, JMAP, Gmail and others. `memo` can still call it for an older import.
 - **[gog][gg]** — one command line for Google services; its `gmail` commands read, send and manage Gmail.
 - **[Google Workspace MCP][ws]** — a maintained MCP server for Google services, with Gmail tools. The best known
   Gmail MCP server is archived, so it is not compared.
@@ -117,10 +116,11 @@ The marks come from each project's documentation, checked on 24 October 2026.
 
 Notes on `memo`:
 
-- **Himalaya.** `memo` needs it installed and set up first. It reads mailboxes through it and changes nothing there,
-  except `memo mail delete` and `memo mail restore`, which move mail to and from Gmail's Trash only with `--yes`.
-- **Filters.** `memo` does not create filters in Gmail. It reads a Gmail filter export and turns each filter into
-  a rule for what to import.
+- **Himalaya.** `memo` no longer needs it. Mail reaches the store through the `mail` program, and the older Himalaya
+  import is on its way out. `memo` changes no mailbox. Mail rules, Gmail cleanup and restore are commands of `mail`;
+  the old `memo mail delete` and `memo mail restore` only name the `mail` command to run.
+- **Filters.** `memo` does not create filters in Gmail. A Gmail filter export becomes rules for what to import
+  with `mail rules import`; `memo sync` follows those rules.
 - **Sending.** `memo` never sends mail. It has no code for it.
 - **Himalaya marks.** The partial marks mean: a Maildir folder can be read and listed, but Himalaya builds no search
   index; mbox is a supported format, but Takeout is not named. Himalaya also manages server-side Sieve filters,
@@ -133,7 +133,7 @@ Notes on `memo`:
 - **You want an agent to write, reply to or send mail.** Himalaya, gog and the Google Workspace MCP send mail;
   `memo` only reads it.
 - **You manage Gmail itself: labels, archive, filters.** gog and the Google Workspace MCP change Gmail's own
-  settings; `memo` only trashes and restores mail.
+  settings; `memo` does not change a mailbox. The `mail` program moves mail to Trash with undo and keeps folders and rules.
 - **You live in a mail client and want fast tag-based search with no other tools.** notmuch is built for that,
   and a text editor or terminal client sits on top of it.
 

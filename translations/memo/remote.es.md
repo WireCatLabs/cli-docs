@@ -56,7 +56,7 @@ Una modificación del servidor solo puede restringir los permisos guardados:
 memo mcp serve --http --public-url https://device.example --permission notes.add=deny
 ```
 
-Repite `--permission` para otras claves. `MEMO_READ_ONLY=1` rechaza escrituras. Las decisiones sobre hallazgos de reuniones, la restauración de anotaciones y los cambios de carpetas de origen o reglas de correo siguen necesitando sus permisos explícitos. Memo nunca envía mensajes ni correo. La [guía MCP](./mcp.md) explica esos límites.
+Repite `--permission` para otras claves. `MEMO_READ_ONLY=1` rechaza escrituras. Las decisiones sobre hallazgos de reuniones, la restauración de anotaciones y los cambios de carpetas de origen siguen necesitando sus permisos explícitos. Memo nunca envía mensajes ni correo. La [guía MCP](./mcp.md) explica esos límites.
 
 ## Detener o revocar el acceso
 

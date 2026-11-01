@@ -58,7 +58,7 @@ El correo sincronizado con [mail](./mail.md#bring-mail-in-with-mail) no necesita
 | `path` | Para `mbox`: archivo Takeout, como `~/Takeout/Mail/All mail Including Spam and Trash.mbox`. |
 | `folders` | Para `imap`: carpetas que se leerán, como `["INBOX", "Archive"]`. |
 | `embed` | `false` excluye el correo de esta cuenta de la búsqueda por significado. |
-| `rules` | Solo se lee para mover las reglas al almacén: se guardan allí y se gestionan con `memo mail rules`. Véase [Correo](./mail.md#choose-what-to-import). |
+| `rules` | Solo se lee para mover las reglas al almacén: se guardan allí y se gestionan con el CLI `mail` (`mail <profile> rules`). Véase [Correo](./mail.md#choose-what-to-import). |
 
 Junto a `accounts`:
 
@@ -154,7 +154,7 @@ Las escrituras sin un nivel guardado usan `ask`.
 }
 ```
 
-`mcp.authority` tiene `deny` por defecto para cambiar carpetas de origen y reglas de correo.
+`mcp.authority` tiene `deny` por defecto para cambiar carpetas de origen.
 `meetings.actions.confirm`, `meetings.actions.reject` y `projects.annotations.restore` también tienen `deny`;
 configura explícitamente la clave correspondiente como `ask` o `allow` para delegar una de esas operaciones.
 `agent_decisions: false` sigue rechazando decisiones sobre propuestas de proyecto. El límite compartido de lectura

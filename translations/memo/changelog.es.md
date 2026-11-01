@@ -10,6 +10,42 @@ Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las
 
 ## Unreleased
 
+## 0.131.12 — 01.11.2026
+
+### Removed
+
+- **Mail rules, Gmail cleanup and restore moved to the `mail` CLI; memo no longer changes a mailbox.** The old
+  commands stay, hidden from help, `memo commands` and MCP, only to answer `validation_error` with reason
+  `mail.moved-to-mail-cli`, the new command in the message and in `details.alternative`. They change nothing.
+  `<profile>` is the `mail` profile that holds the address; `mail session status` lists them.
+
+  | Old | Run instead |
+  |---|---|
+  | `memo mail delete <account>` | `mail <profile> messages delete --rules` (a preview; `--yes` moves the mail) |
+  | `memo mail restore <account> --run <id>` | `mail <profile> messages restore --run <id>`; memo's run ids work there |
+  | `memo mail runs list <account>` | `mail doctor` (the runs that stopped part way or whose Gmail Trash empties soon); every run is a file `<id>.jsonl` in memo's state folder under `mail-trash/<profile>/` |
+  | `memo mail rules list\|add\|remove\|apply\|export\|import <account> …` | `mail <profile> rules <same verb> …`, same options, no account |
+
+  The MCP tools for these commands go with them. `memo sync` still reads each account's rules from the store, and
+  `memo mail inspect` stays.
+- **`memo doctor` no longer reports Gmail cleanup** (`mail.cleanup` in `--json`: store backup, Takeout, cleanup runs
+  and their restore deadlines); cleanup is the `mail` CLI's now.
+
+## 0.131.11 — 01.11.2026
+
+### Added
+
+- **`tasks update <id> --project <key>`** moves a project task to another project. It takes the next key there
+  and the answer gives the new `key`, `id` and `ref`; the old key still finds the task.
+  A subtask leaves its parent; a task with subtasks is refused (`task.has-subtasks`).
+- **`tasks update <id> --type bug|feature|chore`** changes a project task's kind.
+- **Tasks say who added them**: `created_by` (`{ type, id, name, owner }`) on `tasks add`, `list`, `show` and every
+  task answer. A task added over MCP or from an agent's terminal is the agent's, also when it comes from a message
+  or note; memo recorded the owner there.
+- **Task comments**: `tasks comments add <id> <text...>` comments in the owner's or the agent's name, over MCP too;
+  `tasks comments list <id>` lists `ref`, `text`, `author` and `at`, oldest first.
+- **`due:tomorrow`** in task queries, and in any other time field.
+
 ## 0.131.10 — 01.11.2026
 
 ### Fixed
