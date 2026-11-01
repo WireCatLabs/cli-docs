@@ -27,13 +27,13 @@ mail ya account check
 
 ## Buscar en tu correo
 
-Tras `sync`, el correo está en el almacén común. `mail` llena el almacén. [memo](https://github.com/WireCatLabs/cli-memo)
-busca en él y muestra lo que contiene:
+Tras `sync`, el correo está en el almacén común, y `mail` busca en él:
 
 ```sh
-memo search mail "invoice"
+mail ya search messages invoice
 ```
 
-Las palabras de la consulta están en [memo search](https://github.com/WireCatLabs/cli-memo/blob/main/docs/search.md).
+Las palabras de la consulta están en [el uso](./usage.md#search-your-mail). [memo](https://github.com/WireCatLabs/cli-memo) busca
+en todos los buzones junto con tus mensajes y notas.
 
 Siguiente: [úsalo](./usage.md).

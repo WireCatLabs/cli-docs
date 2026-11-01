@@ -4,15 +4,15 @@ title: "Compared with other tools"
 
 `mail` is a command line and an MCP server that copies your mailbox over IMAP into the shared WireCat store on your
 computer, searches it, and organises the mailbox on the server. This page puts it next to the other mail command lines
-and MCP servers, so you can see which one fits your job. The marks for `mail` come from its documentation and source on
-`main`, checked on 1 November 2026 (commit `bdcfa9e`, the code after release 0.5.0 that the next release carries). The
+and MCP servers, so you can see which one fits your job. The marks for `mail` come from its documentation and source for
+release 0.6.0, checked on 1 November 2026. The
 marks for the other tools come from their own READMEs and documentation, checked on 28 October 2026. Nothing was logged
 in to or tested against a real mailbox, and a tool may do more than its pages say.
 
 The tools:
 
 - **mail**: this tool. Copies a mailbox over IMAP into the shared store, searches and reads it, and organises the
-  mailbox on the server (flags, moves, Trash, folders, drafts). It does not send mail yet.
+  mailbox on the server (flags, moves, Trash, folders, drafts), and sends mail over SMTP.
   [memo](../memo/mail.md) searches the same mail together with your chats and notes.
 - **[Himalaya](https://github.com/pimalaya/himalaya)**: a Rust command line for mail over IMAP, SMTP, JMAP, Gmail,
   Microsoft Graph, Maildir and mbox (v2.2.1, 2 October 2026).
@@ -39,7 +39,7 @@ and its pages say little about agents. It is named below.
 | Search the mail server for mail not copied yet | ✅¹ | [✅](https://github.com/pimalaya/himalaya#usage) | [❌](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | ➖ |
 | Read a whole conversation at once | ✅ | ➖ | [✅](https://github.com/djcb/mu/blob/master/man/mu-find.1.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | ➖ |
 | Read and search with no internet | ✅ | [🟡](https://github.com/pimalaya/himalaya#features) | [✅](https://github.com/djcb/mu#readme) | ➖ | ➖ | ➖ |
-| Find a message with an attachment and save the file | 🟡² | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-extract.1.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
+| Find a message with an attachment and save the file | ✅² | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-extract.1.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
 | **Keep a copy** | | | | | | |
 | Keep mail in one store with chats, meetings and notes, and search them together | ✅³ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Organise** | | | | | | |
@@ -50,7 +50,7 @@ and its pages say little about agents. It is named below.
 | Sort new mail with rules you can export and review | ✅ | [🟡](https://github.com/pimalaya/himalaya#features) | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
 | **Reply and send** | | | | | | |
 | Keep a draft without sending it | ✅⁶ | [✅](https://github.com/pimalaya/himalaya#usage) | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
-| Send, reply or forward | ❌⁷ | [✅](https://github.com/pimalaya/himalaya#features) | [🟡](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
+| Send, reply or forward | ✅⁷ | [✅](https://github.com/pimalaya/himalaya#features) | [🟡](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
 | **Mailboxes and providers** | | | | | | |
 | Any IMAP mailbox that offers app passwords (Yandex, iCloud, Fastmail, your own server) | ✅ | [✅](https://github.com/pimalaya/himalaya#features) | [❌](https://github.com/djcb/mu#readme) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [❌](https://github.com/Softeria/ms-365-mcp-server#readme) |
 | Gmail with its labels | 🟡⁸ | [✅](https://github.com/pimalaya/himalaya#configuration) | [🟡](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | n/a |
@@ -76,8 +76,8 @@ All Mail with Gmail's own syntax. Other servers are searched with IMAP `SEARCH` 
 profile's folders. What the server finds is stored, and each hit says where it was found. `--offline` keeps to the
 store.
 
-² `mail` finds mail by the text inside attachments and shows the first 4,000 characters of each. It does not download
-the file. Downloading attachments comes with sending and is not available yet.
+² `attachments list` and `attachments download` read the files of one email from the server and save them readable
+by you only. `mail` also finds mail by the text inside attachments.
 
 ³ The store is shared with the other WireCat tools. `mail` searches its own mailbox; [memo](../memo/mail.md) searches
 every mailbox together with chats and notes.
@@ -92,10 +92,12 @@ server. Flags and keywords on the server are changed with `messages update --fla
 `messages move` and `copy`.
 
 ⁶ Drafts are saved in the mailbox's own Drafts folder, so you can check and send one from any mail app. There are no
-templates.
+templates. `drafts send` sends a saved draft.
 
-⁷ Sending, reply, forward and downloading attachments are in progress and not available yet. See the
-[roadmap](./roadmap.md).
+⁷ `messages send`, `messages forward` and `--reply-to` send over the provider's SMTP server with the same app
+password. Mail to anyone but you asks first, each recipient counts toward an hourly limit (30 by default), and a
+copy goes to Sent and into the store. `--file` refuses credential and WireCat folders unless the owner passes
+`--allow-any-file`.
 
 ⁸ `mail` signs in to Gmail with an app password and reads All Mail. A Google Workspace domain that turns app
 passwords off cannot be used.
@@ -105,7 +107,8 @@ mailboxes cannot be added yet. `mail` reads IMAP only: no JMAP, no Microsoft Gra
 PGP.
 
 ¹⁰ Over MCP, `mail` changes the mailbox only when the server is started with `--allow-writes`, and then only within the
-profile's permissions. `MAIL_READ_ONLY=1` refuses every change.
+profile's permissions. An agent over MCP mails only you until the owner sets `permissions.messages.send.others`, and it
+cannot change the mail servers, the login or that key. `MAIL_READ_ONLY=1` refuses every change.
 
 ¹¹ A deletion, deleting a folder that holds mail, and a change of many messages ask by default, and `deny` forbids
 them. Without `--yes` they answer with a preview and the command to repeat. Over MCP there is no one to answer an
@@ -128,10 +131,10 @@ Notes on the `mail` column:
 
 ## When another tool fits better
 
-- **Himalaya**: you want to send, reply or forward mail from the terminal today, download attachments, or use a
-  provider that is not IMAP, such as JMAP or Microsoft Graph.
-- **gog**: you use Gmail only and want an agent that can read, draft and send, with a switch that stops sending, and
-  commands compiled in so the agent cannot widen them.
+- **Himalaya**: you use a provider that is not IMAP, such as JMAP or Microsoft Graph, or you want server-side Sieve
+  filters.
+- **gog**: you use Gmail only and want commands compiled in so the agent cannot widen them, or its Calendar and Drive
+  commands beside Gmail.
 - **Microsoft 365 MCP**: your mailbox is Outlook or Microsoft 365 and an agent must use it today. `mail` has no OAuth
   yet.
 - **mu**: you already keep a Maildir and want a fast search over it with attachments and threads.

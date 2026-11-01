@@ -85,8 +85,13 @@ Una prioridad es un número de 0 a 1, de mayor a menor, y la ves como una de cua
 
 ```sh
 memo tasks move HRB-3 --before HRB-1                      # HRB-3 goes just above HRB-1
-memo tasks move HRB-3 --status in_progress --after HRB-2  # into another column, below HRB-2
+memo tasks move HRB-3 --after HRB-2                       # into HRB-2's column, below it
+memo tasks move HRB-3 --status in_progress                # into an empty column
 ```
+
+Junto a una tarea de otra columna, la tarea pasa a esa columna. `--status` con `--before` o `--after` debe nombrar la
+columna del vecino; otra se rechaza con el motivo `task.column` (`HRB-2 is in in_progress, not todo: pick a task
+in the todo column`). `--status` solo mueve la tarea a una columna vacía.
 
 `tasks move` da a la tarea una prioridad entre sus nuevos vecinos. Cuando eso cruza un cuarto, su etiqueta cambia
 y la respuesta lo indica (`label.changed`). Cuando dos vecinos no dejan espacio, Memo reparte ese cuarto de la
@@ -141,6 +146,11 @@ memo tasks update HRB-1 --title 'Book the hall' --revision 4
 ```
 
 `tasks update`, `close`, `assign` y `move` aceptan `--revision`.
+
+La revisión sube cuando una persona podría sobrescribir algo: el título, la descripción, el estado, la prioridad, los
+asignados, el agente, la fecha límite, el proyecto, el padre o las etiquetas. Un agente que toma, renueva o devuelve su
+reclamación, o que fija cuándo vuelve a mirar (`--remind-time`), la deja como está, así que trabajar en una tarea no
+vuelve obsoleta tu copia.
 
 ## Quién trabaja en ella
 

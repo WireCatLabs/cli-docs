@@ -26,6 +26,8 @@ title: "Подготовка почтового ящика"
 
 Прочитано здесь: <https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/others>, <https://yandex.ru/support/id/ru/authorization/app-passwords>
 
+Отправка: `smtp.yandex.ru`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://yandex.ru/support/mail/mail-clients/others.html>
+
 ## Gmail
 
 1. Личный аккаунт Google: IMAP всегда включён, переключать ничего не нужно. Google Workspace: им управляет администратор, а вкладки "Forwarding and POP/IMAP" в настройках Gmail, "See all settings", может не быть.
@@ -36,6 +38,8 @@ title: "Подготовка почтового ящика"
 - Пароли приложений недоступны, если двухэтапная аутентификация настроена только для ключей безопасности, на рабочем или учебном аккаунте, а также при включённой расширенной защите (Advanced Protection).
 
 Прочитано здесь: <https://support.google.com/mail/answer/7126229>, <https://support.google.com/accounts/answer/185833>
+
+Отправка: `smtp.gmail.com`, порт 465, TLS, с тем же паролем приложения. Провайдер сам кладёт отправленные письма в «Отправленные». Прочитано здесь: <https://knowledge.workspace.google.com/admin/gmail/send-email-from-a-printer-scanner-or-app>, <https://support.google.com/mail/answer/78892>
 
 ## iCloud
 
@@ -49,6 +53,8 @@ title: "Подготовка почтового ящика"
 
 Прочитано здесь: <https://support.apple.com/en-us/102654>, <https://support.apple.com/en-us/102525>
 
+Отправка: `smtp.mail.me.com`, порт 587, STARTTLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://support.apple.com/en-us/102525>
+
 ## Mail.ru
 
 1. Откройте <https://e.mail.ru/inbox>.
@@ -60,6 +66,8 @@ title: "Подготовка почтового ящика"
 - Справка Mail.ru требует номер телефона, привязанный к ящику (проверьте его в «Контакты и адреса»). Отдельного переключателя IMAP в ней нет, только данные сервера.
 
 Прочитано здесь: <https://help.mail.ru/mail/login/mailer/>
+
+Отправка: `smtp.mail.ru`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://help.mail.ru/mail/login/mailer/>
 
 ## Fastmail
 
@@ -73,6 +81,8 @@ title: "Подготовка почтового ящика"
 
 Прочитано здесь: <https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwords>
 
+Отправка: `smtp.fastmail.com`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports>
+
 ## Outlook
 
 1. Outlook.com: откройте Settings (шестерёнка), "Mail", "Forwarding and IMAP", включите "Let devices and apps use IMAP" и сохраните.
@@ -82,10 +92,12 @@ title: "Подготовка почтового ящика"
 
 Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
 
+Отправка: `smtp-mail.outlook.com`, порт 587, STARTTLS, после появления входа через OAuth, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
+
 ## Любой другой провайдер
 
 Убедитесь, что для ящика включён IMAP и, если провайдер предлагает пароли приложений, создайте такой пароль: обычный пароль часто отклоняется.
 
 `session start` находит сервер нового профиля по записи MX, по ISPDB Thunderbird и по файлу autoconfig домена. Если он ничего
-не находит, передайте `--host`, `--port` и `--security` сами. См. [работу с инструментом](./usage.md). Эти запросы отправляют домен адреса, но никогда не сам
+не находит, передайте `--host`, `--port` и `--security` сами, а для отправки задайте `smtp_host`, `smtp_port` и `smtp_security` через `config set`. См. [работу с инструментом](./usage.md). Эти запросы отправляют домен адреса, но никогда не сам
 адрес, вашему DNS-резолверу, на `autoconfig.thunderbird.net` и на `autoconfig.<domain>`; `--provider` или `--host` их пропускает.

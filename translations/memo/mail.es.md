@@ -44,9 +44,15 @@ mensajes. Hay más palabras de búsqueda en [Encontrar tu correo](#find-your-mai
 
 ## Los comandos memo mail
 
-`memo mail inspect`, `rules`, `delete`, `restore` y `status` se mantienen por ahora. Toman una cuenta de la lista
+`memo mail inspect`, `rules`, `delete` y `restore` se mantienen por ahora. Toman una cuenta de la lista
 `mail.accounts` de Memo, que `memo mail add` rellena a partir de una cuenta de Himalaya, así que no funcionan con una
 cuenta que solo añadió `mail`.
+
+Cuando `mail` sincroniza una cuenta que también está en `mail.accounts`, pon `"import": false` en ella, por ejemplo
+`{ "name": "personal", "address": "you@gmail.com", "import": false }`. `memo sync` y el temporizador omiten entonces
+su importación con Himalaya, y `memo sync --source email:personal` avisa de que la importación pasó a `mail`. Los
+cuatro comandos anteriores siguen funcionando, y cada sync sigue reparando el texto HTML, puntuando remitentes e
+incrustando el correo que ya está en el almacén. Solo el relleno de cabeceras necesita Himalaya, así que se detiene.
 
 | Comando | Qué necesita | Qué hace |
 |---|---|---|
@@ -54,7 +60,6 @@ cuenta que solo añadió `mail`.
 | `memo mail rules ...` | Lo mismo | Guarda y cambia las reglas de lo que almacena una importación. `rules apply` también lee cabeceras del buzón |
 | `memo mail delete <account>` | Lo mismo, y `--yes` | Mueve el correo de Gmail elegido a la Papelera de Gmail ([Limpia Gmail](#clean-up-gmail)) |
 | `memo mail restore <account>` | Lo mismo, y `--yes` | Devuelve de la Papelera una ejecución registrada |
-| `memo mail status <account>` | Lo mismo | Cuenta solo la importación con Himalaya. Para una cuenta sincronizada con `mail`, ejecuta `mail <profile> status` |
 
 `memo mail delete` es el único sitio donde Memo cambia un buzón. `mail` nunca lo hace.
 
@@ -127,14 +132,8 @@ memo sync --source email:work --since-time 2026-09-01
 - Un listado completo marca el correo eliminado en origen y actualiza etiquetas y estado de lectura. Se ejecuta al menos una vez al día, tras cambiar reglas y con `--rescan`; una ventana de menos de 5000 correos se lista entera cada vez.
 - `memo sync` y el temporizador leen todas las cuentas de los ajustes.
 
-Comprueba el progreso sin consultar el buzón. Esto cuenta solo la importación con Himalaya; para una cuenta
-sincronizada con `mail`, ejecuta `mail <profile> status`:
-
-```sh
-memo mail status work
-```
-
-La primera línea cuenta la ventana más amplia importada, por ejemplo todo desde 2004, y muestra «complete» solo cuando está guardada entera. Una ejecución posterior más estrecha, como los 30 días del temporizador, aparece por separado como última ejecución. No representa todo el buzón.
+Para ver hasta dónde llegó un buzón que sincronizó `mail`, ejecuta `mail <profile> status`. La importación con
+Himalaya ya no tiene un comando de estado.
 
 ## Elegir qué importar
 

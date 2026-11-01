@@ -2351,7 +2351,37 @@
     "source": "https://github.com/WireCatLabs/mail-cli/blob/main/docs/index.md",
     "reason": "The overview page's sidebar label is its title. mail's overview is titled with the command name; the other tools' overview pages carry the product name. Drop this once the release's own heading is Mail.",
     "replacements": {
-      "en": [{ "before": "title: \"mail\"", "after": "title: \"Mail\"" }]
+      "en": [
+        {
+          "before": "title: \"mail\"",
+          "after": "title: \"Mail\""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "mail",
+    "slug": "usage",
+    "reason": "`mail delete` is not a mail command; the run ids come from memo's old `memo mail delete`.",
+    "replacements": {
+      "en": [
+        {
+          "before": "memo's old `mail delete`",
+          "after": "memo's old `memo mail delete`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "старого `mail delete` из memo",
+          "after": "старого `memo mail delete`"
+        }
+      ],
+      "es": [
+        {
+          "before": "antiguo `mail delete` de memo",
+          "after": "antiguo `memo mail delete`"
+        }
+      ]
     }
   }
 ]

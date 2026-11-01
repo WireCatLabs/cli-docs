@@ -26,6 +26,8 @@ sus pantallas; la página de ayuda es la fuente de verdad.
 
 Leído en: <https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/others>, <https://yandex.ru/support/id/ru/authorization/app-passwords>
 
+Envío: `smtp.yandex.ru` puerto 465, TLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://yandex.ru/support/mail/mail-clients/others.html>
+
 ## Gmail
 
 1. Cuenta de Google personal: IMAP siempre está activado, no hay nada que cambiar. Google Workspace: lo controla el administrador, y puede faltar la pestaña "Forwarding and POP/IMAP" en Ajustes de Gmail, "See all settings".
@@ -36,6 +38,8 @@ Leído en: <https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/
 - No se ofrecen contraseñas de aplicación si la verificación en dos pasos solo está configurada con llaves de seguridad, en una cuenta de trabajo o de centro educativo, o con la Protección avanzada activada.
 
 Leído en: <https://support.google.com/mail/answer/7126229>, <https://support.google.com/accounts/answer/185833>
+
+Envío: `smtp.gmail.com` puerto 465, TLS, con la misma contraseña de aplicación. El proveedor guarda el correo enviado en Enviados por sí mismo. Leído en: <https://knowledge.workspace.google.com/admin/gmail/send-email-from-a-printer-scanner-or-app>, <https://support.google.com/mail/answer/78892>
 
 ## iCloud
 
@@ -49,6 +53,8 @@ Leído en: <https://support.google.com/mail/answer/7126229>, <https://support.go
 
 Leído en: <https://support.apple.com/en-us/102654>, <https://support.apple.com/en-us/102525>
 
+Envío: `smtp.mail.me.com` puerto 587, STARTTLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://support.apple.com/en-us/102525>
+
 ## Mail.ru
 
 1. Abre <https://e.mail.ru/inbox>.
@@ -60,6 +66,8 @@ Leído en: <https://support.apple.com/en-us/102654>, <https://support.apple.com/
 - La página de ayuda de Mail.ru exige un número de teléfono vinculado al buzón (compruébalo en «Контакты и адреса»). No lista un interruptor de IMAP aparte, solo los datos del servidor.
 
 Leído en: <https://help.mail.ru/mail/login/mailer/>
+
+Envío: `smtp.mail.ru` puerto 465, TLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://help.mail.ru/mail/login/mailer/>
 
 ## Fastmail
 
@@ -73,6 +81,8 @@ Leído en: <https://help.mail.ru/mail/login/mailer/>
 
 Leído en: <https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwords>
 
+Envío: `smtp.fastmail.com` puerto 465, TLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports>
+
 ## Outlook
 
 1. Outlook.com: abre Settings (la rueda dentada), "Mail", "Forwarding and IMAP", activa "Let devices and apps use IMAP" y guarda.
@@ -82,10 +92,12 @@ Leído en: <https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwor
 
 Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
 
+Envío: `smtp-mail.outlook.com` puerto 587, STARTTLS, cuando llegue el inicio de sesión con OAuth. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
+
 ## Cualquier otro proveedor
 
 Comprueba que IMAP está activado en el buzón y, si el proveedor ofrece contraseñas de aplicación, crea una: una contraseña normal suele rechazarse.
 
 `session start` busca el servidor de un perfil nuevo mediante el registro MX, el ISPDB de Thunderbird y el archivo autoconfig del dominio. Si no encuentra
-ninguno, pasa `--host`, `--port` y `--security` tú mismo. Consulta [el uso](./usage.md). Esas búsquedas envían el dominio de la dirección, nunca la dirección
+ninguno, pasa `--host`, `--port` y `--security` tú mismo, y para enviar fija `smtp_host`, `smtp_port` y `smtp_security` con `config set`. Consulta [el uso](./usage.md). Esas búsquedas envían el dominio de la dirección, nunca la dirección
 misma, a tu resolvedor DNS, a `autoconfig.thunderbird.net` y a `autoconfig.<domain>`; `--provider` o `--host` las omite.
