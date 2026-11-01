@@ -35,9 +35,9 @@ gcal personal session start --grant write
 gcal personal session start --grant write,sharing
 ```
 
-Пока у `gcal` нет собственного приложения Google, поэтому нужно ваше: см.
-[свой клиент Google](./configuration.md#your-own-google-client). Добавьте `--no-browser`, чтобы получить адрес входа
-в stderr, и откройте его в любом браузере на этом компьютере.
+Без `--client-file` `gcal` входит через приложение Google от WireCat, если оно есть в пакете, а иначе через ваше:
+см. [подключите аккаунт Google](./installation.md#connect-your-google-account). Добавьте `--no-browser`, чтобы
+получить адрес входа в stderr, и откройте его в любом браузере на этом компьютере.
 
 Один аккаунт Google принадлежит одному профилю. Вход в профиль с другим аккаунтом отклоняется, как и второй профиль
 для того же аккаунта.
@@ -112,6 +112,8 @@ gcal personal events list                                       # from today on,
 gcal personal events list ends_at>=2026-11-02 starts_at<=2026-11-06 person:ana@example.com
 gcal personal events list starts_at>=2026-11-02                 # events that start on or after a day
 gcal personal events list changed_at>=2026-10-25                # what changed since a date
+gcal personal events list --source all                          # every account's events in one list
+gcal personal events list overlapping:true --source all         # meetings that overlap, across accounts
 gcal personal events show event:42                              # attendees, Drive files and history
 gcal personal search events roadmap planning                    # by words, and by meaning with the model
 gcal personal people list                                       # everyone in this week's events
@@ -132,6 +134,22 @@ gcal personal links review                                      # copies the too
 `ends_at` список начинается с начала сегодняшнего дня. `gcal personal events list --help` перечисляет поля.
 На странице `--limit` событий (100); если есть ещё, `page.next_page` — значение для `--page`, а шаг `next` в ответе
 запускает тот же запрос на страницу дальше.
+
+`--source` читает не только аккаунт профиля, а одним списком: `--source all` читает все аккаунты Google, которые
+`gcal` сохранил, `--source gcal:personal,gcal:work` называет профили, а `--source group:<name>` читает группу
+аккаунтов, сохранённую через `config set account_groups.<name>`. Встречу, которая есть в двух аккаунтах, список
+показывает один раз. Ответ называет прочитанные аккаунты в `meta.accounts`. Если у одного из них нет
+синхронизированного календаря или его синхронизация не закончилась, ответ сообщает `meta.complete: false` с проблемой
+для этого аккаунта (`calendar.unsynced`, `calendar.sync-incomplete`): запустите `gcal <that profile> sync`. Читается
+каждый профиль, в который вошли на этом компьютере, даже ни разу не синхронизированный. Если задан
+`GCAL_PROFILE_LOCK`, `--source` может назвать только аккаунт закреплённого профиля.
+
+`overlapping:true` оставляет встречи, время которых пересекается с другой встречей, у каждой — `overlaps`, другие
+встречи в виде `event:<id>`. С `--source` встречи сравниваются между аккаунтами, так что рабочая встреча, которая
+совпала с личной, найдётся. Встреча учитывается, только если занимает ваше время: у неё есть время начала и конца,
+она не отменена, вы её не отклонили, она не отмечена как «свободен» и не является блоком места работы. События на
+весь день никогда не пересекаются, а встреча, которая заканчивается, когда начинается следующая, с ней не
+пересекается. `overlapping:false` оставляет все остальные события.
 
 `changed_at>=<date>` оставляет события, которые впервые сохранились, были перенесены, отменены или удалены с этой даты, у
 каждого `change` (`new`, `moved` или `cancelled`) и `changed_at`; у перенесённого есть ещё `was` — где оно было
@@ -215,9 +233,10 @@ SIP-адрес — последовательность набора после 
   включая `calendars.transferOwnership`, нужно разрешение, которое `gcal` не запрашивает.
 - Для `calendars.transferOwnership` нужен ещё администратор Google Workspace с правом Manage Calendars и
   `--use-admin-access true`. Метод переносит дополнительный календарь только между пользователями одной организации.
-- Метод, который меняет данные, сначала спрашивает, а `--yes` отвечает за скрипт. `calendars.clear` (все события
-  основного календаря) отклоняется, пока вы не разрешите его в [разрешениях](./configuration.md#permissions)
-  профиля.
+- Метод, который меняет данные и который легко отменить, например `events.insert` или `events.patch`, выполняется
+  без вопроса. Метод, который удаляет, и открытие доступа к календарю сначала спрашивают; `--yes` отвечает за скрипт.
+  `calendars.clear` (все события основного календаря), `calendars.delete` и `calendars.transferOwnership`
+  отклоняются, пока вы не разрешите их в [разрешениях](./configuration.md#permissions) профиля.
 - Уведомления Google об изменениях (`watch` и `channels.stop`) не предлагаются. Им нужен публичный веб-адрес, а у
   программы на вашем компьютере его нет.
 

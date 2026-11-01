@@ -7,7 +7,7 @@ title: "Сравнение с другими инструментами"
 
 `gcal` — это командная строка и MCP-сервер для Google Календаря вашего собственного аккаунта. Здесь он стоит рядом с
 другими командными строками, MCP-серверами и коннекторами ассистентов, которые читают Google Календарь, чтобы вы
-могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.10.0, его команд и
+могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.11.0, его команд и
 исходного кода, проверенных 1 ноября 2026 года; они проверяются заново при каждом выпуске. Оценки для остальных
 инструментов взяты из их собственных README, документации и исходного кода, проверенных 27 октября 2026 года. Ни в
 один инструмент не выполнялся вход, и ничего не проверялось вживую; инструмент может делать больше, чем говорят его
@@ -38,9 +38,9 @@ title: "Сравнение с другими инструментами"
 | **Ваш день и неделя** | | | | | | |
 | Встречи на сегодня или на неделю одной командой | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [🟡](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Даты словами, например «завтра в 15:00» или «в следующую пятницу» | 🟡 | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/utils.py) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/dates.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | n/a | n/a |
-| Встречи из всех ваших календарей и аккаунтов в одном списке | 🟡 | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Встречи из всех ваших календарей и аккаунтов в одном списке | ✅ | [🟡](https://github.com/insanum/gcalcli#readme) | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | Что изменилось с какой-то даты: новые, перенесённые и отменённые встречи | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
-| Найти встречи, которые пересекаются | ❌ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
+| Найти встречи, которые пересекаются | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | **Найти встречу** | | | | | | |
 | Найти встречу по смыслу, а не по точным словам | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Искать по встречам без интернета | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
@@ -78,18 +78,22 @@ title: "Сравнение с другими инструментами"
 - **Что изменилось.** `events list changed_at>=<date>` показывает встречи, которые впервые сохранились, были
   перенесены или отменены с этой даты, и для каждой перенесённой — её прежнее время. Он читает копию на вашем
   компьютере, поэтому видит то, что принесли синхронизации.
-- **Встречи, которые пересекаются.** С выпуска 0.5.0 `events list` принимает только запрос по полям, общий для всех
-  списков WireCat, а в нём нет условия для пересекающихся встреч. Список даёт начало и конец каждой встречи, так что
-  вы или агент можете их сравнить.
+- **Встречи, которые пересекаются.** `events list overlapping:true` оставляет встречи, время которых пересекается с
+  другой встречей, и у каждой называет те, с которыми она пересекается. Встреча учитывается, только если занимает ваше
+  время: у неё есть время начала и конца, и она не отменена, не отклонена, не отмечена как «свободен» и не является
+  блоком места работы. События на весь день и встречи встык никогда не пересекаются. С `--source all` встречи
+  сравниваются между вашими аккаунтами Google, так что рабочая встреча, которая совпала с личной, найдётся.
 - **Ваше собственное приложение Google.** Сейчас каждый пользователь `gcal` создаёт проект Google Cloud и клиент OAuth
-  и передаёт `gcal` файл клиента при входе. См. [установку](./installation.md).
+  и передаёт `gcal` файл клиента при входе. [Создайте своё приложение Google](./installation.md#make-your-own-google-app)
+  шаг за шагом проводит по Google Cloud Console.
 - **Даты словами.** `events list` принимает в условиях по полям дату или время, например
-  `ends_at>=today starts_at<=2026-11-06`, и слова `today` и `yesterday`. «Неделю» и «следующую пятницу» он не
-  понимает.
+  `ends_at>=today starts_at<=2026-11-06`, слова `today` и `yesterday` и отрезки в прошлое вроде `7d`. «Неделю» и
+  «следующую пятницу» он не понимает, и так задумано: даты пишет агент, а точную дату нельзя прочитать неверно.
 - **Подготовка к встрече.** `events show` выдаёт участников, каждого — связанным с человеком, которого вы знаете по
   другим инструментам, и файлы Drive встречи. То, что вы обсуждали с ними в прошлый раз, хранится в `memo`, а не в `gcal`.
 - **Все календари.** Один список охватывает календари, которые вы выбрали для синхронизации в одном профиле. Каждый
-  аккаунт Google — отдельный профиль, и список читает один профиль.
+  аккаунт Google — отдельный профиль; `events list --source all` читает все аккаунты одним списком, называет их в
+  `meta.accounts` и сообщает, если синхронизация какого-то из них не закончилась.
 - **Поиск по смыслу.** Для него нужна модель, которую вы скачиваете один раз. Без неё поиск находит слова и их другие
   формы.
 - **Один поиск по всему.** Встречи попадают в хранилище, общее для других инструментов WireCat. `search all` в других
