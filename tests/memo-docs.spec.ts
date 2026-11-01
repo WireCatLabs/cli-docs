@@ -36,7 +36,7 @@ for (const lang of ["en", "ru", "es"]) {
     await remote.press("Enter")
     await expect(page).toHaveURL(`/${lang}/docs/memo/remote`)
     await expect(page.locator("main h1")).toBeVisible()
-    await expect(page.locator("main")).toContainText("memo mcp --revoke --json")
+    await expect(page.locator("main")).toContainText("memo mcp revoke --json")
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
     const scan = await new AxeBuilder({ page })
       .include("main")
@@ -46,6 +46,6 @@ for (const lang of ["en", "ru", "es"]) {
     const prefix = lang === "en" ? "" : `${lang}/`
     const markdown = await request.get(`/llms.mdx/docs/${prefix}memo/remote/content.md`)
     expect(markdown.ok()).toBe(true)
-    expect(await markdown.text()).toContain("memo mcp --http --public-url https://device.example")
+    expect(await markdown.text()).toContain("memo mcp serve --http --public-url https://device.example")
   })
 }
