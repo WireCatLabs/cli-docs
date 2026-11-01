@@ -1,11 +1,11 @@
 {
   "en": {
-    "homeTitle": "WireCat — Memory for your messages",
-    "homeDescription": "Connect your AI agent to Telegram, MAX, WhatsApp, email and notes. Search conversations, gather context and prepare replies with free, open-source tools.",
+    "homeTitle": "WireCat — Everything you’ve said, ready for your agent",
+    "homeDescription": "Connect the AI agent you already use to your Telegram and WhatsApp chats, mail, meetings, documents, calendar and notes. Free, open-source tools that keep everything on your computer.",
     "homeLabel": "Home",
     "docsLabel": "Documentation",
-    "socialTitle": "Memory for your messages. Context for your agent.",
-    "socialDescription": "Connect Messengers, Notes, Meetings and Tasks",
+    "socialTitle": "Everything you’ve said. Ready for your agent.",
+    "socialDescription": "Connect your chats, mail, meetings, documents and notes",
     "reference": {
       "installation": "Install the {messenger} CLI on Windows, macOS or Linux, check requirements, update it and find its local files.",
       "usage": "Read {messenger} conversations, prepare replies and choose when your agent may send them.",
@@ -48,12 +48,12 @@
     }
   },
   "ru": {
-    "homeTitle": "WireCat — Память для вашей переписки",
-    "homeDescription": "Подключите ИИ-агента к Telegram, MAX, WhatsApp, почте и заметкам. Ищите в переписке, собирайте контекст и готовьте ответы с бесплатными инструментами с открытым кодом.",
+    "homeTitle": "WireCat — Всё, что вы сказали, под рукой у агента",
+    "homeDescription": "Подключите своего ИИ-агента к чатам в Telegram, WhatsApp и MAX, почте, встречам, документам, календарю и заметкам. Бесплатные инструменты с открытым кодом, всё хранится на вашем компьютере.",
     "homeLabel": "Главная",
     "docsLabel": "Документация",
-    "socialTitle": "Память для ваших сообщений. Контекст для вашего агента.",
-    "socialDescription": "Подключите мессенджеры, заметки, встречи и задачи",
+    "socialTitle": "Всё, что вы сказали, — под рукой у агента.",
+    "socialDescription": "Подключите чаты, почту, встречи, документы и заметки",
     "reference": {
       "installation": "Установите CLI для {messenger} на Windows, macOS или Linux: требования, обновление и расположение локальных файлов.",
       "usage": "Читайте переписки {messenger}, готовьте ответы и выбирайте, когда агент может их отправлять.",
@@ -96,12 +96,12 @@
     }
   },
   "es": {
-    "homeTitle": "WireCat — Memoria para tus mensajes",
-    "homeDescription": "Conecta tu agente de IA con Telegram, MAX, WhatsApp, correo y notas. Busca conversaciones, reúne contexto y prepara respuestas con herramientas gratuitas de código abierto.",
+    "homeTitle": "WireCat — Todo lo que has dicho, listo para tu agente",
+    "homeDescription": "Conecta el agente de IA que ya usas con tus chats de Telegram y WhatsApp, correo, reuniones, documentos, calendario y notas. Herramientas gratuitas de código abierto que guardan todo en tu ordenador.",
     "homeLabel": "Inicio",
     "docsLabel": "Documentación",
-    "socialTitle": "Memoria para tus mensajes. Contexto para tu agente.",
-    "socialDescription": "Conecta mensajería, notas, reuniones y tareas",
+    "socialTitle": "Todo lo que has dicho. Listo para tu agente.",
+    "socialDescription": "Conecta chats, correo, reuniones, documentos y notas",
     "reference": {
       "installation": "Instala la CLI de {messenger} en Windows, macOS o Linux: requisitos, actualizaciones y ubicación de los archivos locales.",
       "usage": "Lee conversaciones de {messenger}, prepara respuestas y decide cuándo puede enviarlas tu agente.",

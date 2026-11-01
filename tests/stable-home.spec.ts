@@ -8,7 +8,7 @@ test("English root is complete and stable with JavaScript disabled and non-Engli
   await page.goto("/")
   await expect(page).toHaveURL(/\/$/)
   await expect(page.locator("html")).toHaveAttribute("lang", "en")
-  await expect(page.locator("main h1")).toContainText(/memory for your messages/i)
+  await expect(page.locator("main h1")).toContainText(/everything you’ve said/i)
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /^https:\/\/wirecat\.dev\/?$/)
   await expect(page.locator('link[hreflang="en"]')).toHaveAttribute("href", /^https:\/\/wirecat\.dev\/?$/)
   await expect(page.locator('script[src="/language.js"]')).toHaveCount(0)

@@ -9,9 +9,9 @@ web
 ## Users
 
 Primary (owner, 2026-10-02): developers who already work with AI agents — Claude Code, Codex,
-Gemini CLI, Cursor, Claude Desktop — and want the agent to read, sort and answer their Telegram and
-MAX messages for them. They live in a terminal and an editor, they install from npm, and they are
-drowning in chats they cannot keep up with.
+Gemini CLI, Cursor, Claude Desktop — and want the agent to read, sort and answer their messages for them, then work across their mail,
+meetings, documents, calendar and notes too. They are drowning in chats they cannot keep up with.
+Since 2026-11 they need no terminal: WireCat Desktop installs the tools and connects the agent.
 
 Secondary: people who look up a command in the docs; MAX bot and group owners (Russian-speaking);
 agents that read the docs as Markdown.
@@ -19,19 +19,28 @@ agents that read the docs as Markdown.
 ## Product Purpose
 
 WireCat's mission is to help people and AI agents work with conversations, remember agreements
-and turn messages into useful actions. WireCat supplies the Telegram and MAX tools available today.
-WireCat also has its own mail tool for IMAP mailboxes. The user's existing agent can read or update Markdown
-notes in Obsidian or another editor; these workflows are publicly usable today. Other messengers
-and Notion integrations remain planned. About describes an open-source project building and connecting tools for knowledge
+and turn messages into useful actions. Released tools: Telegram (`tg`), WhatsApp (`wa`), MAX
+(`max`), Zoom (`zm`), Google Drive (`drive`), Google Calendar (`gcal`) and Memo (`memo`), plus WireCat
+Desktop, the app for macOS, Windows and Linux that installs and connects them. The user's existing
+agent can also use the separate Himalaya email tool and Markdown notes in Obsidian or another editor.
+More sources and Notion remain planned. About describes an open-source project building and connecting tools for knowledge
 and conversations; personal project enquiries go to the configured maintainer Telegram.
 
 
-WireCat (`wirecat.dev`) is the home of two command line tools, `tg` (Telegram) and `max` (MAX
-Messenger). Each one puts the owner's own account in the terminal: for the owner, their scripts and
-their AI agents. Success on the landing page: a visitor understands in seconds that their agent can
+WireCat (`wirecat.dev`) is the home of these command-line tools and the desktop app. Each tool puts
+the owner's own account on their computer: for the owner, their scripts and their AI agents. Success on the landing page: a visitor understands in seconds that their agent can
 now handle their messages safely, and installs a tool or connects their agent.
 
 ## Positioning
+
+Owner, 2026-11-02. Slogan: **"Everything you've said. Ready for your agent."** (RU «Всё, что вы
+сказали, — под рукой у агента.», ES «Todo lo que has dicho. Listo para tu agente.»). WireCat
+connects the AI agent the user already uses (Claude, ChatGPT, Codex…) to their chats, mail,
+meetings, documents, calendar and notes, and keeps them on the user's computer. Messengers lead: they
+are the obvious first use, because nothing else gives an agent easy access to them. Name the
+concrete messengers first (Telegram, WhatsApp; MAX only for Russian readers at the top of the
+landing), then the other sources. "Personal context" may explain what WireCat does, but is never a
+headline or the category name: it is too vague to be understood at a glance.
 
 Your own messenger account, handed to your AI agent with one command: it clears the inbox, tells
 you who is still waiting for an answer, searches years of history offline, turns voice notes into
@@ -58,7 +67,8 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
   live watch of new messages; CLI and MCP share profile permissions; most writes are allowed by default, while deletion asks for confirmation. Read-only permissions and confirmation forms can restrict access.
 - Safety by design: nothing is sent, marked read or deleted unless the command asked for it.
 - Site languages: English, Russian, Spanish. Tool guides are localized from reviewed releases; the generated Telegram Bot API method appendix retains its English descriptions with an explicit locale-specific notice.
-- Hero headline (implemented): "Memory for your messages. Context for your agent." The selected editorial landing is released in English, Russian and Spanish, with reviewed localized copy. Its open Personal/Bots/Admin capability lists, paper outcomes band, complete conversations, trust strip and editable estimate retain the owner-selected composition.
+- Hero headline (implemented, 2026-11-02): "Everything you've said. Ready for your agent." Until then
+  it was "Memory for your messages. Context for your agent." The selected editorial landing is released in English, Russian and Spanish, with reviewed localized copy. Its open Personal/Bots/Admin capability lists, paper outcomes band, complete conversations, trust strip and editable estimate retain the owner-selected composition.
 
 ## Brand Commitments
 
