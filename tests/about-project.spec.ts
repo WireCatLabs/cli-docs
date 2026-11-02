@@ -1,6 +1,10 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
+import siteConfig from "../site.config.json" with { type: "json" }
 import { observeExternalRequests } from "./site-network"
+
+// The "Suggest an idea" button comes first once the ideas API is configured (lib/ideas/config.ts).
+const ideasLive = !!siteConfig.ideas?.apiUrl
 
 for (const lang of ["en", "ru", "es"]) {
   for (const colorScheme of ["light", "dark"] as const) {
@@ -20,11 +24,15 @@ for (const lang of ["en", "ru", "es"]) {
           expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
           const contacts = page.locator(".about-contact-actions:visible")
           await expect(contacts).toHaveCount(1)
-          await expect(contacts.locator("a").first()).toHaveAttribute("href", "mailto:hello@wirecat.dev")
-          await expect(contacts.locator("a").last()).toHaveAttribute("href", "https://t.me/hurrykan")
-          await contacts.locator("a").first().focus()
-          await page.keyboard.press("Tab")
-          await expect(contacts.locator("a").last()).toBeFocused()
+          const links = contacts.locator("a")
+          expect(await links.evaluateAll((items) => items.map((item) => item.getAttribute("href")))).toEqual([
+            ...(ideasLive ? [`/${lang}/ideas`] : []),
+            "mailto:hello@wirecat.dev",
+            "https://t.me/hurrykan",
+          ])
+          await links.first().focus()
+          for (let step = 1; step < (await links.count()); step++) await page.keyboard.press("Tab")
+          await expect(links.last()).toBeFocused()
           await expect(page.locator("#open-source strong")).toBeVisible()
           await expect(page.locator(".about-contents, .about-mobile-contents, .about-open")).toHaveCount(0)
           const telegram = page
