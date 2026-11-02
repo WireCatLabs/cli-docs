@@ -40,7 +40,7 @@ const words = (text: string) =>
     .filter((word) => word.length > 2)
 
 /** Waits like a network call would, so the loading states show; the "loading" preview never answers. */
-const answer = async <T>(value: () => T, delay = 300): Promise<T> => {
+export const answer = async <T>(value: () => T, delay = 300): Promise<T> => {
   const { mode } = read()
   if (mode === "loading") return new Promise(() => {})
   await new Promise((resolve) => setTimeout(resolve, delay))
@@ -48,7 +48,7 @@ const answer = async <T>(value: () => T, delay = 300): Promise<T> => {
   return value()
 }
 
-const all = (): Idea[] => {
+export const all = (): Idea[] => {
   const { votes, posted } = read()
   return [...posted, ...sampleIdeas].map((idea) =>
     votes.includes(idea.id) ? { ...idea, voted: true, votes: idea.votes + 1 } : idea,

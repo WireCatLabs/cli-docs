@@ -4,17 +4,23 @@ import { useEffect, useState } from "react"
 import { ideas, ideasPath, returnPath } from "@/lib/ideas"
 import type { Member } from "@/lib/ideas/types"
 
+export const memberChanged = "wirecat-ideas-member"
+
 /** undefined while the session is loading, null when signed out or when the API cannot say. */
 export function useMember() {
   const [member, setMember] = useState<Member | null>()
   useEffect(() => {
     let current = true
-    ideas
-      .member()
-      .then((value) => current && setMember(value))
-      .catch(() => current && setMember(null))
+    const load = () =>
+      ideas
+        .member()
+        .then((value) => current && setMember(value))
+        .catch(() => current && setMember(null))
+    load()
+    window.addEventListener(memberChanged, load)
     return () => {
       current = false
+      window.removeEventListener(memberChanged, load)
     }
   }, [])
   return member

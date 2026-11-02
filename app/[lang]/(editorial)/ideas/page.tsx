@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react"
 import Link from "next/link"
 import { Suspense } from "react"
+import { VariantGate } from "@/components/ideas/board/variant-gate"
 import { IdeasBoard } from "@/components/ideas/ideas-board"
 import { IdeasFrame, type IdeasPageProps, ideasMetadata, ideasStaticParams } from "@/components/ideas/ideas-frame"
 import { IdeasSkeleton } from "@/components/ideas/ideas-states"
@@ -13,7 +14,7 @@ export const generateStaticParams = ideasStaticParams
 export default async function IdeasPage({ params }: IdeasPageProps) {
   const { lang } = await params
   const words = ideasWords(lang)
-  return (
+  const page = (
     <IdeasFrame lang={lang}>
       <header className="ideas-masthead">
         <div>
@@ -29,5 +30,10 @@ export default async function IdeasPage({ params }: IdeasPageProps) {
         <IdeasBoard lang={lang} />
       </Suspense>
     </IdeasFrame>
+  )
+  return (
+    <Suspense fallback={page}>
+      <VariantGate lang={lang}>{page}</VariantGate>
+    </Suspense>
   )
 }

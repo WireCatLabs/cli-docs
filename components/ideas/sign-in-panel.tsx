@@ -6,13 +6,15 @@ import { useRouter } from "next/navigation"
 import { type FormEvent, type MouseEvent, useEffect, useState } from "react"
 import { GoogleIcon } from "@/components/brand-icons"
 import { ideas, ideasPath, maskEmail, safeReturnPath } from "@/lib/ideas"
+import { boardWords } from "@/lib/ideas/board/words"
 import { asLocale, IdeasError } from "@/lib/ideas/types"
 import { errorText, ideasWords } from "@/lib/ideas/words"
+import { announceSignIn, isSignInPopup } from "./board/popup"
 import { justSignedInKey } from "./member-bar"
 import { TurnstileField } from "./turnstile-field"
 import { useMember } from "./use-member"
 
-type State = "idle" | "verifying" | "expired" | "sending" | "sent" | "failed" | "deleted"
+type State = "idle" | "verifying" | "expired" | "sending" | "sent" | "failed" | "deleted" | "popup-done"
 
 /** Reads `#token=` from the emailed link and takes it out of the address bar before anything else runs. */
 function takeLinkToken() {
@@ -49,6 +51,10 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
     ideas
       .startSession(linkToken)
       .then(({ returnTo: landing }) => {
+        if (isSignInPopup()) {
+          setState("popup-done")
+          return announceSignIn()
+        }
         try {
           sessionStorage.setItem(justSignedInKey, "1")
         } catch {}
@@ -60,6 +66,16 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
         setState("failed")
       })
   }, [lang, next, router, words.failed])
+
+  useEffect(() => {
+    if (!isSignInPopup()) return
+    const error = new URLSearchParams(window.location.search).get("sign_in_error")
+    if (error) return announceSignIn(error)
+    if (member) {
+      setState("popup-done")
+      announceSignIn()
+    }
+  }, [member])
 
   const fail = (error: unknown) => {
     setFailure(errorText(lang, error, words.failed))
@@ -102,6 +118,13 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
   }
 
   const Heading = embedded ? "h2" : "h1"
+
+  if (state === "popup-done")
+    return (
+      <section className="ideas-panel">
+        <p role="status">{boardWords(lang).popupDone}</p>
+      </section>
+    )
 
   if (state === "verifying")
     return (

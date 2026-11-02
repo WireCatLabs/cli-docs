@@ -19,3 +19,18 @@ STORY: see what others asked, vote instead of posting a duplicate, post when not
 FIRST VIEWPORT: title, one line on what the page is for, filters, the first ranked rows. Sidebar on desktop: post an idea, what goes where (GitHub, Discord, Telegram).
 FORM: list, idea, post, sign in as separate routes; states via sample data.
 FINISH: detector, one screenshot round, fixes, one confirm round, finish review.
+
+## Redesign round, 2026-11-02 (three variants behind `?variant=a|b|c`)
+
+Owner on the first build: chips flicker with no transition, posting leaves the page, the look is bulky, the form is
+too rounded and toy-like, black buttons, no comments, no tags. Seed 1c409e6a (surface, operate) dealt 3, 4, 2 of the
+ranked list (1 ledger + side sheet, 2 split view, 3 search-first, 4 status roadmap, 5 by tool, 6 activity feed,
+7 tiles). All three are built for the owner to choose; the old screens stay the default until he picks.
+
+THESIS: one page for the whole loop (find, vote, discuss, post, sign in), never a route change.
+OWN-WORLD: editorial tokens, Unbounded only for the page title, Onest everywhere else, 6px controls, 8px panels,
+brand `--button` for primary actions, quiet ruled rows, status as a small tinted label, tags as plain `#words`.
+A: search-first. The ask box searches and becomes the title of a new idea; ideas open inline in the list.
+B: roadmap strip (in progress, planned, shipped) over a filter rail and list; the idea and the composer open as dialogs.
+C: split view. List left, the idea or the composer right; on a phone the right pane slides over the list.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.

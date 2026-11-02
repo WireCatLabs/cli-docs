@@ -1,0 +1,175 @@
+const ruPlural = (count: number, one: string, few: string, many: string) => {
+  const tens = count % 100
+  const units = count % 10
+  if (tens > 10 && tens < 20) return many
+  if (units === 1) return one
+  if (units > 1 && units < 5) return few
+  return many
+}
+
+const en = {
+  intro: "Tell me what WireCat should do next, or vote for what others asked. I read every idea and answer here.",
+  search: "Search ideas",
+  ask: "Search or describe an idea",
+  newIdea: "New idea",
+  sorts: { top: "Top", trending: "Trending", new: "New" },
+  tag: "Tag",
+  anyTag: "Any tag",
+  tags: "Tags",
+  tagsHint: "Up to 3",
+  filters: "Filters",
+  clear: "Clear filters",
+  close: "Close",
+  back: "Back to ideas",
+  found: (count: number): string => (count === 1 ? "1 idea" : `${count} ideas`),
+  updating: "Updating the list",
+  nothing: "No idea matches this yet",
+  nothingText: "Try fewer filters, or post it. Someone else probably wants it too.",
+  postThis: (title: string) => `Post “${title}” as a new idea`,
+  comments: "Comments",
+  commentCount: (count: number): string => (count === 1 ? "1 comment" : `${count} comments`),
+  noComments: "No comments yet. Ask a question or say how you'd use it.",
+  commentLabel: "Add a comment",
+  commentPlaceholder: "What would you use it for?",
+  commentSend: "Comment",
+  commentSending: "Sending…",
+  commentFailed: "The comment did not go through. Your text is still here, try again.",
+  commentsFailed: "Comments did not load.",
+  signInToComment: "Sign in to comment",
+  team: "Team",
+  you: "You",
+  postedBy: "Posted by",
+  postedOn: "Posted",
+  roadmap: { in_progress: "In progress", planned: "Planned", done: "Shipped" },
+  seeAll: (count: number): string => `All ${count}`,
+  already: "Already asked? Vote for it instead.",
+  composeTitle: "New idea",
+  composeIntro: "One idea per post. Something broken? That goes to GitHub issues.",
+  cancel: "Cancel",
+  signInTitle: "Sign in to go on",
+  signInVote: "Sign in to vote. It takes one click with Google.",
+  signInPost: "Sign in to post. Your text stays here.",
+  signInComment: "Sign in to comment. Your text stays here.",
+  waiting: "Finish signing in in the Google window.",
+  popupBlocked: "The browser blocked the sign-in window. Allow pop-ups for wirecat.dev, or use the email link.",
+  popupDone: "You're signed in. You can close this window.",
+  signedIn: "Signed in",
+  select: "Select an idea to read it and its comments.",
+}
+
+export type BoardWords = typeof en
+
+const ru: BoardWords = {
+  intro: "Расскажите, что WireCat делать дальше, или проголосуйте за чужие идеи. Я читаю каждую и отвечаю здесь.",
+  search: "Поиск по идеям",
+  ask: "Найдите или опишите идею",
+  newIdea: "Новая идея",
+  sorts: { top: "Лучшие", trending: "Набирают", new: "Новые" },
+  tag: "Тег",
+  anyTag: "Любой тег",
+  tags: "Теги",
+  tagsHint: "До трёх",
+  filters: "Фильтры",
+  clear: "Сбросить фильтры",
+  close: "Закрыть",
+  back: "Ко всем идеям",
+  found: (count) => `${count} ${ruPlural(count, "идея", "идеи", "идей")}`,
+  updating: "Список обновляется",
+  nothing: "Такой идеи пока нет",
+  nothingText: "Уберите часть фильтров или предложите её. Скорее всего, она нужна не только вам.",
+  postThis: (title) => `Предложить «${title}» как новую идею`,
+  comments: "Комментарии",
+  commentCount: (count) => `${count} ${ruPlural(count, "комментарий", "комментария", "комментариев")}`,
+  noComments: "Комментариев пока нет. Задайте вопрос или расскажите, как бы вы это использовали.",
+  commentLabel: "Комментарий",
+  commentPlaceholder: "Для чего вам это нужно?",
+  commentSend: "Отправить",
+  commentSending: "Отправляю…",
+  commentFailed: "Комментарий не отправился. Текст остался здесь, попробуйте ещё раз.",
+  commentsFailed: "Комментарии не загрузились.",
+  signInToComment: "Войдите, чтобы комментировать",
+  team: "Команда",
+  you: "Вы",
+  postedBy: "Автор",
+  postedOn: "Опубликовано",
+  roadmap: { in_progress: "В работе", planned: "В планах", done: "Готово" },
+  seeAll: (count) => `Все ${count}`,
+  already: "Уже предлагали? Проголосуйте за неё.",
+  composeTitle: "Новая идея",
+  composeIntro: "Одна идея на пост. Если что-то сломалось, лучше открыть issue на GitHub.",
+  cancel: "Отмена",
+  signInTitle: "Войдите, чтобы продолжить",
+  signInVote: "Войдите, чтобы голосовать. С Google это один клик.",
+  signInPost: "Войдите, чтобы предложить идею. Текст никуда не денется.",
+  signInComment: "Войдите, чтобы комментировать. Текст никуда не денется.",
+  waiting: "Закончите вход в окне Google.",
+  popupBlocked:
+    "Браузер не открыл окно входа. Разрешите всплывающие окна для wirecat.dev или войдите по ссылке из письма.",
+  popupDone: "Вы вошли. Это окно можно закрыть.",
+  signedIn: "Вы вошли",
+  select: "Выберите идею, чтобы прочитать её и комментарии.",
+}
+
+const es: BoardWords = {
+  intro: "Cuéntame qué debería hacer WireCat después, o vota lo que pidieron otros. Leo cada idea y respondo aquí.",
+  search: "Buscar ideas",
+  ask: "Busca o describe una idea",
+  newIdea: "Nueva idea",
+  sorts: { top: "Más votadas", trending: "En alza", new: "Nuevas" },
+  tag: "Etiqueta",
+  anyTag: "Cualquier etiqueta",
+  tags: "Etiquetas",
+  tagsHint: "Hasta 3",
+  filters: "Filtros",
+  clear: "Quitar filtros",
+  close: "Cerrar",
+  back: "Todas las ideas",
+  found: (count) => (count === 1 ? "1 idea" : `${count} ideas`),
+  updating: "Actualizando la lista",
+  nothing: "Aún no hay una idea así",
+  nothingText: "Prueba con menos filtros, o publícala. Seguro que alguien más la quiere.",
+  postThis: (title) => `Publicar «${title}» como idea nueva`,
+  comments: "Comentarios",
+  commentCount: (count) => (count === 1 ? "1 comentario" : `${count} comentarios`),
+  noComments: "Aún no hay comentarios. Pregunta algo o cuenta cómo lo usarías.",
+  commentLabel: "Añadir un comentario",
+  commentPlaceholder: "¿Para qué lo usarías?",
+  commentSend: "Comentar",
+  commentSending: "Enviando…",
+  commentFailed: "El comentario no se envió. Tu texto sigue aquí, inténtalo de nuevo.",
+  commentsFailed: "Los comentarios no se cargaron.",
+  signInToComment: "Inicia sesión para comentar",
+  team: "Equipo",
+  you: "Tú",
+  postedBy: "Publicada por",
+  postedOn: "Publicada",
+  roadmap: { in_progress: "En curso", planned: "Planeadas", done: "Publicadas" },
+  seeAll: (count) => `Las ${count}`,
+  already: "¿Ya la pidieron? Vota esa en su lugar.",
+  composeTitle: "Nueva idea",
+  composeIntro: "Una idea por publicación. ¿Algo no funciona? Eso va a los issues de GitHub.",
+  cancel: "Cancelar",
+  signInTitle: "Inicia sesión para seguir",
+  signInVote: "Inicia sesión para votar. Con Google es un clic.",
+  signInPost: "Inicia sesión para publicar. Tu texto se queda aquí.",
+  signInComment: "Inicia sesión para comentar. Tu texto se queda aquí.",
+  waiting: "Termina de iniciar sesión en la ventana de Google.",
+  popupBlocked:
+    "El navegador bloqueó la ventana de inicio de sesión. Permite ventanas emergentes para wirecat.dev o usa el enlace por correo.",
+  popupDone: "Ya iniciaste sesión. Puedes cerrar esta ventana.",
+  signedIn: "Sesión iniciada",
+  select: "Elige una idea para leerla con sus comentarios.",
+}
+
+export const boardWords = (lang: string): BoardWords => ({ en, ru, es })[lang as "en"] ?? en
+
+export const formatAgo = (lang: string, iso: string) => {
+  const days = Math.round((Date.now() - Date.parse(iso)) / 86_400_000)
+  const format = new Intl.RelativeTimeFormat(lang, { numeric: "auto" })
+  if (Math.abs(days) < 1) {
+    const hours = Math.round((Date.now() - Date.parse(iso)) / 3_600_000)
+    return format.format(-Math.max(hours, 0), "hour")
+  }
+  if (days < 30) return format.format(-days, "day")
+  return new Intl.DateTimeFormat(lang, { day: "numeric", month: "short" }).format(new Date(iso))
+}
