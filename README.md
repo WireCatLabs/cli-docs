@@ -27,6 +27,10 @@ pnpm sync                # reviewed released tools, with source-matched translat
 pnpm dev                 # http://localhost:3000
 ```
 
+`pnpm dev` shows the ideas page on sample data. `bin/ideas-local` runs it on the real API instead: wirecat-api on
+:3000 and this site on :4321, each from its own worktree at `origin/main`, with `NEXT_PUBLIC_IDEAS_API_URL` pointing the
+page at the local API (read only by `next dev`; builds use `ideas.apiUrl`). It prints how to sign in. Ctrl+C stops both.
+
 `pnpm build` is `pnpm sync` (release tags) and `next build`, into `out/`. Then:
 
 ```sh

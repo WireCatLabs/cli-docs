@@ -5,7 +5,11 @@ import tools from "@/tools.json"
  * The page ships only once the API exists: until `ideas.apiUrl` is set, production builds export a 404 for every
  * ideas route and leave the footer link out. `next dev` shows the screens with sample data.
  */
-export const ideasLive = !!siteConfig.ideas.apiUrl
+const devApiUrl = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_IDEAS_API_URL : undefined
+
+/** `next dev` can point at a local API without touching site.config.json; builds read only the config. */
+export const ideasApiUrl = devApiUrl || siteConfig.ideas.apiUrl
+export const ideasLive = !!ideasApiUrl
 export const ideasEnabled = ideasLive || process.env.NODE_ENV === "development"
 export const ideasSample = !ideasLive
 
