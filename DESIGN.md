@@ -140,6 +140,18 @@ About concentrates soft corners in the supporting facts panel (16px), purpose st
 
 About text links underline on hover with a 5px underline offset. Keyboard focus uses a 2px ink outline with a 5px offset. Retain semantic main/header/article/section/aside/navigation structure, one h1, meaningful h2s and accessible navigation labels. Decorative arrows and contact icons stay `aria-hidden`; tool documentation and repository links have distinct accessible names. Preserve the shared-shell reduced-motion behavior when extending interactions. These are implementation facts, not a claim of a complete accessibility audit.
 
+## Ideas page
+
+`/{lang}/ideas` reuses the blog frame: the masthead heading and standfirst, `blog-columns` with a main column and a
+sticky `blog-sidebar` of `BlogWidget`s (roadmap, tags with counts, what goes where), then the email note. The main
+column is one ask box that searches and, after "New idea", becomes the new idea's title with "already asked?"
+suggestions under it, then sort tabs, tool/status/tag selects and ruled rows with a vote box on the left. An opened
+idea turns its row into a paper panel (8px corners, thin line, soft shadow) with the answer and comments inside.
+The page's own controls use 4 to 6px corners, and the one primary action uses the brand `--button` colour, never
+ink. A filter change keeps the old rows until the new ones arrive and moves them with a view transition, a plain
+swap under reduced motion. Source: [components/ideas/board](components/ideas/board) and
+[.impeccable/surfaces/app-lang-editorial-ideas-page-tsx.md](.impeccable/surfaces/app-lang-editorial-ideas-page-tsx.md).
+
 ## Do's and Don'ts
 
 ### Do:

@@ -1,4 +1,4 @@
-import type { Idea, IdeaStatus, IdeaTool } from "./types"
+import type { Comment, Idea, IdeaStatus, IdeaTool, Tag } from "./types"
 
 type Row = [
   title: string,
@@ -272,6 +272,132 @@ const slug = (title: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
 
+// The API's starting tags (wirecat-api db/seeds/tags.yml) and the seed ideas' tags.
+export const sampleTags: Tag[] = [
+  { slug: "integration", name: { en: "Integrations", ru: "Интеграции", es: "Integraciones" } },
+  { slug: "search", name: { en: "Search", ru: "Поиск", es: "Búsqueda" } },
+  { slug: "memory", name: { en: "Memory", ru: "Память", es: "Memoria" } },
+  { slug: "agents", name: { en: "Agents", ru: "Агенты", es: "Agentes" } },
+  { slug: "privacy", name: { en: "Privacy", ru: "Приватность", es: "Privacidad" } },
+  { slug: "desktop", name: { en: "Desktop app", ru: "Приложение для компьютера", es: "App de escritorio" } },
+  { slug: "mobile", name: { en: "Mobile", ru: "Телефон", es: "Móvil" } },
+  { slug: "docs", name: { en: "Docs", ru: "Документация", es: "Documentación" } },
+]
+
+const ideaTags: Record<string, string[]> = {
+  "desktop-memory-page": ["memory", "desktop"],
+  "press-buttons-on-bot-messages": ["agents"],
+  "private-notes-on-a-chat": ["memory"],
+  "keep-nothing-on-disk": ["privacy"],
+  "run-my-command-on-a-new-message": ["integration"],
+  "outlook-and-microsoft-365-sign-in": ["integration"],
+  "google-sign-in-without-making-your-own-client": ["integration"],
+  "write-as-google-suggestions": ["agents"],
+  "box-and-microsoft-documents": ["integration"],
+  "record-calls-i-only-attend": ["privacy"],
+  "notes-for-every-meeting": ["memory"],
+  "meetings-someone-else-hosted": ["search"],
+  "reviewed-brief-before-a-meeting": ["memory"],
+  "meetings-in-search-everywhere": ["search", "memory"],
+  "find-pictures-by-the-chat-around-them": ["search"],
+  "accounts-page": ["desktop"],
+  notion: ["integration", "search"],
+  slack: ["integration"],
+  "google-meet-and-microsoft-teams": ["integration", "search"],
+  github: ["integration", "search"],
+  "jira-linear-todoist-and-ticktick": ["integration"],
+  "one-timeline-per-person": ["memory", "search"],
+  "morning-brief": ["memory", "agents"],
+  "who-am-i-waiting-on": ["memory"],
+  "what-did-i-promise": ["memory"],
+  "forget-one-person-or-chat": ["privacy", "memory"],
+  "notes-as-plain-files": ["memory"],
+  "approve-before-an-agent-sends": ["agents", "desktop"],
+  "tray-icon-with-sync-status": ["desktop"],
+  "search-everything-at-once": ["search", "desktop"],
+  "ready-made-agent-skills": ["agents"],
+}
+
+const at = (days: number, hour = 10) => new Date(Date.UTC(2026, 10, 2, hour) - days * 86_400_000).toISOString()
+const team = { name: "WireCat team", team: true }
+const comment = (id: string, body: string, author: Comment["author"], createdAt: string): Comment => ({
+  id,
+  body,
+  author,
+  createdAt,
+  hidden: false,
+  mine: false,
+})
+
+export const sampleComments: Record<string, Comment[]> = {
+  "press-buttons-on-bot-messages": [
+    comment(
+      "c1",
+      "Half my bots are behind inline buttons. Being able to say “press Approve” from the agent would save me a lot of clicks.",
+      { name: "Marta", team: false },
+      at(2, 9),
+    ),
+    comment(
+      "c2",
+      "Same here, mostly for the deploy bot at work. Would it also work for buttons that open a URL?",
+      { name: "Daniil", team: false },
+      at(1, 15),
+    ),
+    comment(
+      "c3",
+      "URL buttons would come back as a link, so the agent can open it or show it to you. Callback buttons get pressed by label. I'll post here when it's in a release.",
+      team,
+      at(1, 18),
+    ),
+  ],
+  "approve-before-an-agent-sends": [
+    comment(
+      "c4",
+      "This is the one thing stopping me from letting the agent answer anything on its own.",
+      { name: "Alex", team: false },
+      at(4, 11),
+    ),
+    comment(
+      "c5",
+      "+1. A daily limit is nice, but I want to read each message the first week.",
+      { name: null, team: false },
+      at(3, 8),
+    ),
+  ],
+  "speaker-names-in-transcripts": [
+    comment(
+      "c6",
+      "Zoom already knows who talks when in the cloud recording, so this should be doable for those.",
+      { name: "Tom", team: false },
+      at(6, 14),
+    ),
+    comment(
+      "c7",
+      "Right, cloud recordings first. Local ones need a model on your machine, which I'd rather keep optional.",
+      team,
+      at(5, 10),
+    ),
+  ],
+  "desktop-memory-page": [
+    comment(
+      "c8",
+      "Just tried it, finally I can see what my agent saved without opening a terminal. Thanks!",
+      { name: "Sofia", team: false },
+      at(9, 16),
+    ),
+  ],
+  notion: [
+    comment(
+      "c9",
+      "Our whole team wiki is in Notion. Read-only would already be enough for me.",
+      { name: "Pavel", team: false },
+      at(1, 12),
+    ),
+  ],
+}
+
+const tagsOf = (id: string) => (ideaTags[id] ?? []).map((slug) => sampleTags.find((tag) => tag.slug === slug) as Tag)
+
 const shipped: Idea = {
   id: "desktop-memory-page",
   title: "See what my agent remembers",
@@ -280,7 +406,9 @@ const shipped: Idea = {
   status: "done",
   votes: 21,
   voted: false,
-  author: { name: null, team: true },
+  tags: tagsOf("desktop-memory-page"),
+  commentsCount: sampleComments["desktop-memory-page"].length,
+  author: team,
   createdAt: "2026-10-20T09:00:00Z",
   statusReason: null,
   answer: "This shipped in WireCat Desktop 0.2 as the Memory page, next to Search, Tasks and Guides.",
@@ -298,7 +426,9 @@ export const sampleIdeas: Idea[] = [
     status,
     votes,
     voted: false,
-    author: { name: null, team: true },
+    tags: tagsOf(slug(title)),
+    commentsCount: sampleComments[slug(title)]?.length ?? 0,
+    author: team,
     createdAt: new Date(Date.UTC(2026, 10, 2) - day * 86_400_000).toISOString(),
     statusReason: status === "not_planned" ? (answer ?? null) : null,
     answer: status === "not_planned" ? null : (answer ?? null),

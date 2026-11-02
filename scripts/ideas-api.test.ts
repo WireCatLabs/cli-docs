@@ -15,6 +15,8 @@ const apiIdea = {
   answer: null,
   links: [{ url: "https://github.com/WireCatLabs/max-cli/pull/90", label: "PR" }],
   votes_count: 14,
+  comments_count: 3,
+  tags: [{ slug: "integration", name: { en: "Integrations", ru: "Интеграции", es: "Integraciones" }, position: 0 }],
   voted: false,
   hidden: false,
   merged_into_id: null,
@@ -64,8 +66,11 @@ describe("ideas API client", () => {
       links: [{ url: "https://github.com/WireCatLabs/max-cli/pull/90", label: "PR" }],
       votes: 14,
       voted: false,
+      tags: [{ slug: "integration", name: { en: "Integrations", ru: "Интеграции", es: "Integraciones" } }],
+      commentsCount: 3,
       author: { name: null, team: false },
       mergedIntoId: null,
+      statusChangedAt: null,
       createdAt: "2026-11-02T09:00:00Z",
     })
   })
@@ -78,14 +83,23 @@ describe("ideas API client", () => {
 
   it("posts an idea as JSON with the Turnstile token", async () => {
     const { source, fetcher } = client(json(201, { idea: { ...apiIdea, votes_count: 1, voted: true } }))
-    const idea = await source.create({ title: "Slack support", body: "", tool: "other", turnstileToken: "t" })
+    const idea = await source.create({
+      title: "Slack support",
+      body: "",
+      tool: "other",
+      tags: ["integration"],
+      turnstileToken: "t",
+    })
     const { init, body } = request(fetcher)
     expect(init).toMatchObject({
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
     })
-    expect(body).toEqual({ idea: { title: "Slack support", body: "", tool: "other" }, turnstile_token: "t" })
+    expect(body).toEqual({
+      idea: { title: "Slack support", body: "", tool: "other", tags: ["integration"] },
+      turnstile_token: "t",
+    })
     expect(idea).toMatchObject({ votes: 1, voted: true })
   })
 
@@ -101,6 +115,61 @@ describe("ideas API client", () => {
     expect(request(fetcher, 1).init.method).toBe("DELETE")
     expect(await rejection(source.vote("12"))).toBe("already_voted")
     expect(await rejection(source.vote("12"))).toBe("idea_merged")
+  })
+
+  it("searches from 3 characters, sorts by trending and filters by tag", async () => {
+    const { source, fetcher } = client(
+      json(200, { ideas: [apiIdea], meta: { page: 1, per_page: 20, total: 1 } }),
+      json(200, { ideas: [], meta: { page: 1, per_page: 20, total: 0 } }),
+    )
+    await source.list({ tag: "integration", q: "slack msg", sort: "trending" })
+    expect(request(fetcher).url).toBe(`${base}/v1/ideas?tag=integration&q=slack+msg&sort=trending&page=1&per_page=20`)
+    await source.list({ q: "sl", sort: "top" })
+    expect(request(fetcher, 1).url).toBe(`${base}/v1/ideas?sort=top&page=1&per_page=20`)
+  })
+
+  it("reads the tags with their names in every language", async () => {
+    const { source, fetcher } = client(json(200, { tags: [apiIdea.tags[0]] }))
+    expect(await source.tags()).toEqual([
+      { slug: "integration", name: { en: "Integrations", ru: "Интеграции", es: "Integraciones" } },
+    ])
+    expect(request(fetcher).url).toBe(`${base}/v1/tags`)
+  })
+
+  it("reads every page of comments, posts one with Turnstile and deletes your own", async () => {
+    const apiComment = {
+      id: 5,
+      idea_id: 12,
+      body: "I would use this every day.",
+      hidden: false,
+      mine: true,
+      author: { name: "Ann", team: false },
+      created_at: "2026-11-21T10:00:00Z",
+    }
+    const { source, fetcher } = client(
+      json(200, { comments: [apiComment], meta: { page: 1, per_page: 50, total: 2 } }),
+      json(200, { comments: [{ ...apiComment, id: 6, mine: false }], meta: { page: 2, per_page: 50, total: 2 } }),
+      json(201, { comment: apiComment }),
+      json(204),
+      failure(403, "not_comment_author"),
+      failure(429, "comment_limit"),
+    )
+    const comments = await source.comments("12")
+    expect(comments.map((comment) => [comment.id, comment.mine])).toEqual([
+      ["5", true],
+      ["6", false],
+    ])
+    expect(request(fetcher, 1).url).toBe(`${base}/v1/ideas/12/comments?page=2&per_page=50`)
+    expect(await source.addComment("12", "I would use this every day.", "t")).toMatchObject({
+      id: "5",
+      author: { name: "Ann", team: false },
+      createdAt: "2026-11-21T10:00:00Z",
+    })
+    expect(request(fetcher, 2).body).toEqual({ comment: { body: "I would use this every day." }, turnstile_token: "t" })
+    await source.deleteComment("12", "5")
+    expect(request(fetcher, 3)).toMatchObject({ url: `${base}/v1/ideas/12/comments/5`, init: { method: "DELETE" } })
+    expect(await rejection(source.deleteComment("12", "6"))).toBe("not_comment_author")
+    expect(await rejection(source.addComment("12", "again", "t"))).toBe("comment_limit")
   })
 
   it("skips the similar search under 3 characters", async () => {
@@ -179,6 +248,10 @@ describe("API error codes", () => {
     [422, "invalid_unsubscribe_token", "invalid_token"],
     [422, "validation_error", "validation_error"],
     [429, "idea_limit", "idea_limit"],
+    [429, "comment_limit", "comment_limit"],
+    [403, "not_comment_author", "not_comment_author"],
+    [422, "duplicate_is_hidden", "merge_refused"],
+    [422, "kept_is_merged", "merge_refused"],
     [429, "rate_limited", "rate_limited"],
   ])("%i %s is %s", (status, code, expected) => {
     expect(errorCode(status, code)).toBe(expected)
