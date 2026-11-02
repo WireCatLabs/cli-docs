@@ -4,6 +4,28 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.18.0 — 02.11.2026
+
+### Añadido
+
+- **Una guía para usar `gcal` desde ChatGPT o Claude en el navegador o en el móvil**, `docs/remote.md`: un túnel de
+  Tailscale Funnel o de Cloudflare, `mcp serve --http --public-url`, el código de acceso de un solo uso, los permisos
+  que rigen por MCP (`ask` deja pasar el comando, así que para este servidor hay `--permission api=readonly` o
+  `api.calendar.acl=deny`), cómo dejarlo en segundo plano con `mcp server start`, y cómo detenerlo y cerrar la sesión
+  de todas las aplicaciones con `mcp revoke`. El README, la introducción, la página de uso y la skill enlazan a ella.
+
+### Corregido
+
+- **Se leen los eventos de un feed de Outlook o Exchange.** Esos feeds nombran las zonas horarias al modo de
+  Windows (`TZID:W. Europe Standard Time`), y `calendars add` y `sync` se saltaban todos sus eventos con hora. Ahora se
+  leen en la zona IANA correspondiente (`Europe/Berlin`). Desde cli-core 0.551.0.
+- **`--help` ya no ofrece `OR` donde la consulta lo rechaza.** Una lista que filtra Google acepta términos
+  `field:value` unidos por AND, y su línea `Syntax:` ahora solo dice eso (`@wirecat/cli-base` 0.75.0).
+- **La página de inicio de sesión de `mcp serve --http` habla de tu calendario.** Decía que una aplicación pedía llegar
+  a «tus mensajes» mediante `gcal mcp --http`; ahora dice «tu Google Calendar» y `gcal mcp serve --http`.
+- **El apartado «Qué funciona hoy» de la hoja de ruta nombra lo que añadieron 0.11.0–0.17.0**: todas las cuentas en
+  una lista, solapamientos, preparar una reunión, añadido rápido, archivos `.ics`, feeds, `search all` y `schedule`.
+
 ## 0.17.0 — 02.11.2026
 
 ### Añadido

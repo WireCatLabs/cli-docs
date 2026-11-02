@@ -13,4 +13,6 @@ respond` cambian Google Calendar. También tiene los comandos que comparten toda
 CLI de WireCat: `doctor`, `commands`, `guide`, `config`, `skill`, `mcp`, `runs` y `upgrade`. Empieza por la
 [instalación](./installation.md) y sigue con el [uso](./usage.md).
 
+Para usarlo desde ChatGPT o Claude en el navegador o en el móvil: [conexión remota](./remote.md).
+
 En qué se diferencia `gcal` de otras herramientas de Google Calendar: [comparación](./compare.md).

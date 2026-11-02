@@ -669,8 +669,8 @@ gcal personal mcp check                             # start it once, as the agen
 ```
 
 `mcp serve` nunca elige un perfil: indica uno, varios con `--profiles work,personal`, o todos con `--profiles all`.
-`--http` lo ofrece por HTTP para una aplicación del navegador, y `mcp config` imprime la entrada para cualquier otro
-cliente. `gcal guide agent-access` lo explica paso a paso.
+`--http` lo ofrece por HTTP para ChatGPT o Claude en el navegador o en el móvil, detrás de tu propio túnel HTTPS:
+[paso a paso](./remote.md). `mcp config` imprime la entrada para cualquier otro cliente. `gcal guide agent-access` lo explica paso a paso.
 
 El servidor ofrece todos los comandos, también los que escriben. Los permisos del perfil deciden qué se ejecuta;
 consulta los [ajustes](./configuration.md#permissions). Eso incluye compartir un calendario (`acl`): un agente puede hacerlo

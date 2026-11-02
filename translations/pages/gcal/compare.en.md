@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.17.0, its commands and its source, checked on 2 November 2026;
+your job. The marks for `gcal` come from its release 0.18.0, its commands and its source, checked on 2 November 2026;
 they are checked again at each release. The marks for the other tools come from their own
 READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
@@ -107,7 +107,8 @@ Notes on the `gcal` column:
   lock refuses it.
 - **Calendar feeds.** `calendars add <url> --title Holidays` follows a published `.ics` address, such as a holiday
   calendar, a sports schedule or a colleague's calendar, as a read-only calendar beside your Google ones. Google's API
-  has no way to add a calendar from an address, so `gcal` reads the feed itself. Each `sync` reads it again, and first
+  documents no way to add a calendar from an address, so `gcal` reads the feed itself. Feeds from Outlook or Exchange,
+  which name their time zones the Windows way, are read in the matching zone. Each `sync` reads it again, and first
   asks the server whether it changed (`ETag`, `Last-Modified`); the first `sync` of a day and `sync --rescan` read it in
   full. Its events show in `events list`, search and reminders, and a change to one refuses with `calendar.read-only`.
   The address often holds a private token, so it is kept in the system keyring and never printed, and an `http://`
@@ -152,8 +153,9 @@ Notes on the `gcal` column:
   runs a program of yours, so through it an agent could run any program on your computer; `calendars add` and
   `remove`, since a feed's address can hold a private token; and `schedule`, which installs a timer that runs on its
   own.
-- **claude.ai on the web.** `mcp serve --http` serves the tool to Claude and ChatGPT in the browser, behind a tunnel
-  you set up yourself, such as Tailscale Funnel.
+- **claude.ai on the web.** `mcp serve --http` serves the tool to Claude and ChatGPT in the browser or on the phone,
+  behind an HTTPS tunnel you set up and keep running yourself, such as Tailscale Funnel, so this row stays partly.
+  [ChatGPT or Claude in the browser](./remote.md) walks through it, login code and permissions included.
 - **Speed and cost against a browser agent.** `gcal` calls Google's API and reads its own copy; it opens no
   browser. No measurement of it against a browser agent is published, so this page makes no claim.
 

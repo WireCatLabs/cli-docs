@@ -17,13 +17,18 @@ todas, y `events list changed_at>=<date>` qué cambió desde una fecha. Tras
 `session start --grant write` crea, cambia, mueve y borra eventos, también los periódicos: un caso, toda la serie o
 «este y todos los siguientes»; mueve un evento a otro calendario, pasa un evento de tener hora a durar todo el día y al
 revés, y responde invitaciones; un borrado pregunta antes. `events remind`, ejecutado por cron o un temporizador,
-avisa una vez de cada reunión que empieza pronto, o ejecuta tu propio programa para ella. `gcal api` llega a cualquier
+avisa una vez de cada reunión que empieza pronto, o ejecuta tu propio programa para ella, y `schedule` instala ese temporizador por ti.
+`events list --source all` muestra los eventos de todas las cuentas con sesión iniciada en una sola lista, y
+`overlapping:true` encuentra las reuniones que se solapan. `events prepare` reúne lo que necesitas para la siguiente
+reunión, `events create --text` añade una a partir de una línea de texto, y `events export` y `events import` leen y
+escriben archivos `.ics`. `calendars add <url>` sigue un calendario publicado como dirección `.ics`, solo para leer.
+`search all` busca a la vez en reuniones, chats y notas guardados. `gcal api` llega a cualquier
 método de la API de Google Calendar por su nombre. Todos los comandos están en la
 [referencia de comandos](./commands.md).
 
 ## Siguiente
 
 - **Iniciar sesión sin un cliente de Google propio.** `gcal` usará la aplicación de Google compartida de WireCat en
-  cuanto Google la haya revisado para Calendar. Hasta entonces, [crea tu propio cliente](./configuration.md#your-own-google-client).
+  cuanto Google la haya revisado para Calendar. Hasta entonces, [crea tu propia aplicación de Google](./installation.md#make-your-own-google-app).
 
 Lo que cambió en cada versión publicada está en el [historial de cambios](./changelog.md).
