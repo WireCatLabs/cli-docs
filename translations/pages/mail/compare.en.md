@@ -5,9 +5,10 @@ title: "Compared with other tools"
 `mail` is a command line and an MCP server that copies your mailbox over IMAP into the shared WireCat store on your
 computer, searches it, and organises the mailbox on the server. This page puts it next to the other mail command lines
 and MCP servers, so you can see which one fits your job. The marks for `mail` come from its documentation and source for
-release 0.6.0, checked on 1 November 2026. The
-marks for the other tools come from their own READMEs and documentation, checked on 28 October 2026. Nothing was logged
-in to or tested against a real mailbox, and a tool may do more than its pages say.
+release 0.9.0, checked on 2 November 2026. The
+marks for the other tools come from their own READMEs and documentation, checked on 28 October 2026. Sign-in, sync and
+sending of `mail` were also run against a real Outlook.com mailbox on 2 November 2026. Nothing else was logged in to or
+tested against a real mailbox, and a tool may do more than its pages say.
 
 The tools:
 
@@ -53,9 +54,9 @@ and its pages say little about agents. It is named below.
 | Send, reply or forward | ✅⁷ | [✅](https://github.com/pimalaya/himalaya#features) | [🟡](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
 | **Mailboxes and providers** | | | | | | |
 | Any IMAP mailbox that offers app passwords (Yandex, iCloud, Fastmail, your own server) | ✅ | [✅](https://github.com/pimalaya/himalaya#features) | [❌](https://github.com/djcb/mu#readme) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [❌](https://github.com/Softeria/ms-365-mcp-server#readme) |
-| Gmail with its labels | 🟡⁸ | [✅](https://github.com/pimalaya/himalaya#configuration) | [🟡](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | n/a |
-| Outlook and Microsoft 365 | ❌⁹ | [🟡](https://github.com/pimalaya/himalaya#configuration) | ➖ | n/a | n/a | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
-| Use JMAP or Microsoft Graph instead of IMAP | ❌⁹ | [✅](https://github.com/pimalaya/himalaya#features) | ➖ | n/a | n/a | n/a |
+| Gmail with its labels | ✅⁸ | [✅](https://github.com/pimalaya/himalaya#configuration) | [🟡](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | n/a |
+| Outlook and Microsoft 365 | ✅⁹ | [🟡](https://github.com/pimalaya/himalaya#outlook) | ➖ | n/a | n/a | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
+| Use JMAP or Microsoft Graph instead of IMAP | ❌¹² | [✅](https://github.com/pimalaya/himalaya#features) | ➖ | n/a | n/a | n/a |
 | **Agents and safety** | | | | | | |
 | An agent can read mail but not send or change it | ✅¹⁰ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/safety-profiles.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
 | Allow or deny single commands for an agent | ✅ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
@@ -63,8 +64,8 @@ and its pages say little about agents. It is named below.
 | Tell the agent that mail text is data, not instructions | ✅ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ |
 | MCP server | ✅ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
 | **Setup** | | | | | | |
-| Start from just an address, with no cloud app to register first | ✅ | [✅](https://github.com/pimalaya/himalaya#features) | ➖ | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
-| Sign in with OAuth | ❌⁹ | [❌](https://github.com/pimalaya/himalaya#faq) | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
+| Start from just an address, with no cloud app to register first | ✅⁹ | [✅](https://github.com/pimalaya/himalaya#features) | ➖ | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
+| Sign in with OAuth | ✅⁹ | [🟡](https://github.com/pimalaya/himalaya#faq) | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
 
 | | mail | Himalaya | mu | gog | Workspace MCP | Microsoft 365 MCP |
 |---|---|---|---|---|---|---|
@@ -99,12 +100,15 @@ password. Mail to anyone but you asks first, each recipient counts toward an hou
 copy goes to Sent and into the store. `--file` refuses credential and WireCat folders unless the owner passes
 `--allow-any-file`.
 
-⁸ `mail` signs in to Gmail with an app password and reads All Mail. A Google Workspace domain that turns app
-passwords off cannot be used.
+⁸ `mail` signs in to Gmail with an app password by default and reads All Mail. A Google Workspace domain that turns app
+passwords off, or an account without 2-Step Verification, signs in with OAuth through a Google app you create
+yourself ([steps](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)); `mail` ships no Google app of its own for mail.
 
-⁹ OAuth sign-in is on the [roadmap](./roadmap.md). Microsoft accepts only OAuth for IMAP, so Outlook and Microsoft 365
-mailboxes cannot be added yet. `mail` reads IMAP only: no JMAP, no Microsoft Graph, no Sieve filters on the server, no
-PGP.
+⁹ Outlook.com and Microsoft 365 take only OAuth for IMAP and SMTP. `mail session start` opens the browser, you sign in
+and approve access, and no password is typed. WireCat's Microsoft app is built in, so there is nothing to register
+([steps](https://github.com/WireCatLabs/mail-cli/blob/main/docs/outlook.md)). Sign-in, sync and sending were run against a real Outlook.com mailbox. A Microsoft 365 work
+account was not tried: its admin may have to allow the app, and sending needs "Authenticated SMTP" on for the mailbox.
+Outlook.com also needs IMAP turned on in its settings. Gmail over OAuth needs your own Google app.
 
 ¹⁰ Over MCP, `mail` changes the mailbox only when the server is started with `--allow-writes`, and then only within the
 profile's permissions. An agent over MCP mails only you until the owner sets `permissions.messages.send.others`, and it
@@ -114,14 +118,20 @@ cannot change the mail servers, the login or that key. `MAIL_READ_ONLY=1` refuse
 them. Without `--yes` they answer with a preview and the command to repeat. Over MCP there is no one to answer an
 `ask`, so `ask` lets the command run; `deny` still refuses. `--dry-run` previews any command.
 
+¹² `mail` reads IMAP only: no JMAP, no Microsoft Graph, no Sieve filters on the server, no PGP.
+
 Notes on the Himalaya column: its marks come from its README, and from the read only `--help` of v2.2.1. Nothing was
-run against a mailbox. Its pages name no read only mode, no command allowlist and no MCP server. Its mbox and Maildir
+run against a mailbox. It has no OAuth sign-in of its own: its README says v2 "ships no OAuth flow" and points to a
+separate token helper (ortie), which supplies the token for Outlook, Microsoft Graph and Gmail, so those marks are 🟡.
+Its pages name no read only mode, no command allowlist and no MCP server. Its mbox and Maildir
 support is a backend; its pages name no command that exports a mailbox to them.
 
 Notes on the `mail` column:
 
 - **Changes.** Each change run keeps, in a private file, what it needs to undo itself: the folder, UID, flags, Gmail
   labels and Message-ID of each message, never a subject or a body. Each attempt goes into the send journal.
+- **Scheduled sync.** `schedule command <name> --every 5m -- sync` keeps the store current from the system's timer.
+  `sync` reads INBOX and Sent by default.
 - **Export.** `messages export` writes the original messages that match a query to mbox files or a Maildir tree, for
   backup or for mu and notmuch.
 - **Permissions.** Each profile sets `allow`, `ask`, `readonly` or `deny` per command. `--permission` on `mcp serve`
@@ -135,8 +145,8 @@ Notes on the `mail` column:
   filters.
 - **gog**: you use Gmail only and want commands compiled in so the agent cannot widen them, or its Calendar and Drive
   commands beside Gmail.
-- **Microsoft 365 MCP**: your mailbox is Outlook or Microsoft 365 and an agent must use it today. `mail` has no OAuth
-  yet.
+- **Microsoft 365 MCP**: your organisation turns IMAP or Authenticated SMTP off for your mailbox, or you want Microsoft
+  Graph beyond mail. `mail` reaches Outlook and Microsoft 365 over IMAP and SMTP only.
 - **mu**: you already keep a Maildir and want a fast search over it with attachments and threads.
 
 If `mail` fits, start with [installation](./installation.md). To connect an agent, see [use it](./usage.md).
