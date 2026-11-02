@@ -16,6 +16,8 @@ export const mailDescriptions: Record<string, Record<string, string>> = {
       "Sign in to Gmail with OAuth through a Google app you create yourself, when app passwords are not available.",
     "oauth-microsoft":
       "Register your own Microsoft app for Outlook.com and Microsoft 365 sign-in, with the redirect and permissions Mail needs.",
+    outlook:
+      "Connect an Outlook.com, Hotmail or Microsoft 365 mailbox: turn IMAP on, sign in in the browser, and what an admin must allow for a work account.",
     roadmap: "See which Mail CLI capabilities are available and which work remains planned.",
   },
   ru: {
@@ -37,6 +39,8 @@ export const mailDescriptions: Record<string, Record<string, string>> = {
       "Войдите в Gmail через OAuth в приложении Google, которое вы создаёте сами, если пароли приложений недоступны.",
     "oauth-microsoft":
       "Зарегистрируйте собственное приложение Microsoft для входа в Outlook.com и Microsoft 365: адрес перенаправления и права, которые нужны Mail.",
+    outlook:
+      "Подключите ящик Outlook.com, Hotmail или Microsoft 365: включите IMAP, войдите в браузере и узнайте, что должен разрешить администратор рабочего аккаунта.",
     roadmap: "Какие возможности Mail CLI уже есть и какие работы ещё запланированы.",
   },
   es: {
@@ -58,6 +62,8 @@ export const mailDescriptions: Record<string, Record<string, string>> = {
       "Inicia sesión en Gmail con OAuth mediante una aplicación de Google que creas tú, cuando no hay contraseñas de aplicación.",
     "oauth-microsoft":
       "Registra tu propia aplicación de Microsoft para iniciar sesión en Outlook.com y Microsoft 365, con la redirección y los permisos que Mail necesita.",
+    outlook:
+      "Conecta un buzón de Outlook.com, Hotmail o Microsoft 365: activa IMAP, inicia sesión en el navegador y qué debe permitir un administrador en una cuenta de trabajo.",
     roadmap: "Qué capacidades de la CLI de Mail están disponibles y qué trabajo sigue previsto.",
   },
 }

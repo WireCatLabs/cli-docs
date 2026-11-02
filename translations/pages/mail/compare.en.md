@@ -5,7 +5,7 @@ title: "Compared with other tools"
 `mail` is a command line and an MCP server that copies your mailbox over IMAP into the shared WireCat store on your
 computer, searches it, and organises the mailbox on the server. This page puts it next to the other mail command lines
 and MCP servers, so you can see which one fits your job. The marks for `mail` come from its documentation and source for
-release 0.10.0, checked on 2 November 2026. The
+release 0.12.0, checked on 2 November 2026. The
 marks for the other tools come from their own READMEs and documentation, checked on 28 October 2026. Sign-in, sync and
 sending of `mail` were also run against a real Outlook.com mailbox on 2 November 2026. Nothing else was logged in to or
 tested against a real mailbox, and a tool may do more than its pages say.
@@ -106,7 +106,7 @@ yourself ([steps](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-g
 
 ⁹ Outlook.com and Microsoft 365 take only OAuth for IMAP and SMTP. `mail session start` opens the browser, you sign in
 and approve access, and no password is typed. WireCat's Microsoft app is built in, so there is nothing to register
-([steps](https://github.com/WireCatLabs/mail-cli/blob/main/docs/outlook.md)). Sign-in, sync and sending were run against a real Outlook.com mailbox. A Microsoft 365 work
+([steps](./outlook.md)). Sign-in, sync and sending were run against a real Outlook.com mailbox. A Microsoft 365 work
 account was not tried: its admin may have to allow the app, and sending needs "Authenticated SMTP" on for the mailbox.
 Outlook.com also needs IMAP turned on in its settings. Gmail over OAuth needs your own Google app.
 

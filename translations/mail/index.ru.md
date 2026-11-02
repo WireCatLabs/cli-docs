@@ -12,7 +12,8 @@ title: "Mail"
 `folders create|rename|delete`, `drafts`, `attachments`, `rules` и `tags`, а также команды, общие для всех
 CLI WireCat: `doctor`, `commands`, `config`, `skill`, `mcp`, `runs` и `upgrade`.
 Начните с [установки](./installation.md), затем прочитайте [работу с инструментом](./usage.md). Перед первым входом
-подготовьте почтовый ящик: [шаги для каждого провайдера](./providers.md).
+подготовьте почтовый ящик: [шаги для каждого провайдера](./providers.md). Для Outlook.com или Microsoft 365:
+[подключение Outlook](./outlook.md).
 
 ## Поиск по почте
 
