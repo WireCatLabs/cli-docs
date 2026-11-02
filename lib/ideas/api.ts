@@ -1,4 +1,5 @@
 import {
+  type Comment,
   type Idea,
   type IdeaQuery,
   IdeasError,
@@ -7,6 +8,7 @@ import {
   isStatus,
   isTool,
   type Member,
+  type Tag,
 } from "./types"
 
 export const perPage = 20
@@ -21,12 +23,39 @@ type ApiIdea = {
   answer: string | null
   links: { url: string; label: string }[] | null
   votes_count: number
+  comments_count?: number
+  tags?: ApiTag[] | null
   voted: boolean
   merged_into_id: number | string | null
+  status_changed_at?: string | null
+  author: { name: string | null; team: boolean } | null
+  created_at: string
+}
+type ApiTag = { slug: string; name: Partial<Tag["name"]> | string }
+type ApiComment = {
+  id: number | string
+  body: string
+  hidden?: boolean
+  mine?: boolean
   author: { name: string | null; team: boolean } | null
   created_at: string
 }
 type ApiError = { error?: { code?: string; message?: string; fields?: Record<string, string[]> } }
+
+export const fromApiTag = ({ slug, name }: ApiTag): Tag => {
+  const names = typeof name === "string" ? { en: name } : (name ?? {})
+  const fallback = names.en ?? slug
+  return { slug, name: { en: fallback, ru: names.ru ?? fallback, es: names.es ?? fallback } }
+}
+
+export const fromApiComment = (comment: ApiComment): Comment => ({
+  id: String(comment.id),
+  body: comment.body,
+  hidden: comment.hidden ?? false,
+  mine: comment.mine ?? false,
+  author: { name: comment.author?.name ?? null, team: comment.author?.team ?? false },
+  createdAt: comment.created_at,
+})
 
 export const fromApi = (idea: ApiIdea): Idea => ({
   id: String(idea.id),
@@ -39,25 +68,37 @@ export const fromApi = (idea: ApiIdea): Idea => ({
   links: idea.links ?? [],
   votes: idea.votes_count,
   voted: idea.voted,
+  tags: (idea.tags ?? []).map(fromApiTag),
+  commentsCount: idea.comments_count ?? 0,
   author: { name: idea.author?.name ?? null, team: idea.author?.team ?? false },
   mergedIntoId: idea.merged_into_id == null ? null : String(idea.merged_into_id),
+  statusChangedAt: idea.status_changed_at ?? null,
   createdAt: idea.created_at,
 })
+
+const mergeRefusals = ["same_idea", "already_merged", "duplicate_is_hidden", "kept_is_merged", "kept_is_hidden"]
 
 /** One HTTP status and API code to the few failures the screens tell apart. */
 export function errorCode(status: number, code = ""): IdeasErrorCode {
   if (code === "mail_unavailable" || code === "google_unavailable") return "sign_in_unavailable"
   if (status >= 500) return "unavailable"
   if (status === 401) return "sign_in_required"
-  if (status === 403) return code === "turnstile_failed" ? "turnstile_failed" : "forbidden"
+  if (status === 403) {
+    if (code === "turnstile_failed") return "turnstile_failed"
+    return code === "not_comment_author" ? "not_comment_author" : "forbidden"
+  }
   if (status === 404) return code === "not_voted" ? "not_voted" : "not_found"
   if (status === 409) return "already_voted"
   if (status === 422) {
     if (code === "idea_merged") return "idea_merged"
     if (code === "invalid_sign_in_token" || code === "invalid_unsubscribe_token") return "invalid_token"
+    if (mergeRefusals.includes(code)) return "merge_refused"
     return "validation_error"
   }
-  if (status === 429) return code === "idea_limit" ? "idea_limit" : "rate_limited"
+  if (status === 429) {
+    if (code === "idea_limit" || code === "comment_limit") return code as IdeasErrorCode
+    return "rate_limited"
+  }
   return "unavailable"
 }
 
@@ -101,10 +142,11 @@ export function apiSource(base: string, fetcher: typeof fetch = (...args) => fet
   })
 
   return {
-    async list({ tool, status, sort, page = 1 }: IdeaQuery) {
+    async list({ tool, status, tag, q, sort, page = 1, perPage: size = perPage }: IdeaQuery) {
+      const search = q?.trim().slice(0, 120)
       const result = await call<{ ideas: ApiIdea[]; meta: { page: number; per_page: number; total: number } }>(
         "GET",
-        `/v1/ideas?${query({ tool, status, sort, page, per_page: perPage })}`,
+        `/v1/ideas?${query({ tool, status, tag, q: search && search.length >= 3 ? search : undefined, sort, page, per_page: size })}`,
       )
       return {
         ideas: result.ideas.map(fromApi),
@@ -126,12 +168,35 @@ export function apiSource(base: string, fetcher: typeof fetch = (...args) => fet
       if (q.length < 3) return []
       return (await call<{ ideas: ApiIdea[] }>("GET", `/v1/ideas/similar?${query({ q })}`)).ideas.map(fromApi)
     },
-    async create({ title, body, tool, turnstileToken }) {
+    tags: async () => (await call<{ tags: ApiTag[] }>("GET", "/v1/tags")).tags.map(fromApiTag),
+    async create({ title, body, tool, tags, turnstileToken }) {
       const result = await call<{ idea: ApiIdea }>("POST", "/v1/ideas", {
-        idea: { title, body, tool },
+        idea: { title, body, tool, tags },
         turnstile_token: turnstileToken,
       })
       return fromApi(result.idea)
+    },
+    async comments(ideaId) {
+      const all: Comment[] = []
+      for (let page = 1; page <= 10; page++) {
+        const result = await call<{ comments: ApiComment[]; meta: { total: number } }>(
+          "GET",
+          `/v1/ideas/${id(ideaId)}/comments?${query({ page, per_page: 50 })}`,
+        )
+        for (const comment of result.comments) all.push(fromApiComment(comment))
+        if (all.length >= result.meta.total || !result.comments.length) break
+      }
+      return all
+    },
+    async addComment(ideaId, body, turnstileToken) {
+      const result = await call<{ comment: ApiComment }>("POST", `/v1/ideas/${id(ideaId)}/comments`, {
+        comment: { body },
+        turnstile_token: turnstileToken,
+      })
+      return fromApiComment(result.comment)
+    },
+    deleteComment: async (ideaId, commentId) => {
+      await call("DELETE", `/v1/ideas/${id(ideaId)}/comments/${id(commentId)}`)
     },
     vote: async (ideaId) => votes(await call("POST", `/v1/ideas/${id(ideaId)}/vote`)),
     unvote: async (ideaId) => votes(await call("DELETE", `/v1/ideas/${id(ideaId)}/vote`)),

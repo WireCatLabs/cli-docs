@@ -12,6 +12,7 @@ import { PreviewBar } from "./preview-bar"
 import { SignInNotice } from "./sign-in-notice"
 import "@/components/blog/blog.css"
 import "./ideas.css"
+import "./board/board.css"
 
 export type IdeasPageProps = { params: Promise<{ lang: string }> }
 
@@ -30,7 +31,16 @@ export async function ideasMetadata(params: IdeasPageProps["params"], suffix = "
 
 export const ideasStaticParams = () => i18n.languages.map((lang) => ({ lang }))
 
-export function IdeasFrame({ lang, children }: { lang: string; children: ReactNode }) {
+/** `columns={false}` hands the columns to the page, whose sidebar needs the page's own state. */
+export function IdeasFrame({
+  lang,
+  children,
+  columns = true,
+}: {
+  lang: string
+  children: ReactNode
+  columns?: boolean
+}) {
   if (!ideasEnabled) notFound()
   return (
     <div className="wirecat-blog wirecat-ideas">
@@ -41,12 +51,16 @@ export function IdeasFrame({ lang, children }: { lang: string; children: ReactNo
         </Suspense>
         <MemberBar lang={lang} />
         <SignInNotice lang={lang} />
-        <div className="blog-columns">
-          <div className="blog-main">{children}</div>
-          <aside className="blog-sidebar ideas-sidebar">
-            <IdeasAside lang={lang} />
-          </aside>
-        </div>
+        {columns ? (
+          <div className="blog-columns">
+            <div className="blog-main">{children}</div>
+            <aside className="blog-sidebar ideas-sidebar">
+              <IdeasAside lang={lang} />
+            </aside>
+          </div>
+        ) : (
+          children
+        )}
       </main>
     </div>
   )

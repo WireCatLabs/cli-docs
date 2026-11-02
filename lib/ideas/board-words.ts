@@ -8,6 +8,13 @@ const ruPlural = (count: number, one: string, few: string, many: string) => {
 }
 
 const en = {
+  roadmapTitle: "Roadmap",
+  laneEmpty: "Nothing here yet.",
+  whereShort: "Ideas and votes go here. Bugs go to GitHub issues, questions to Discord or Telegram.",
+  hidden: "Hidden",
+  delete: "Delete",
+  deleting: "Deleting…",
+  deleteFailed: "The comment was not deleted. Try again.",
   intro: "Tell me what WireCat should do next, or vote for what others asked. I read every idea and answer here.",
   search: "Search ideas",
   ask: "Search or describe an idea",
@@ -60,6 +67,13 @@ const en = {
 export type BoardWords = typeof en
 
 const ru: BoardWords = {
+  roadmapTitle: "Планы",
+  laneEmpty: "Пока пусто.",
+  whereShort: "Идеи и голоса сюда. Ошибки в issues на GitHub, вопросы в Discord или Telegram.",
+  hidden: "Скрыт",
+  delete: "Удалить",
+  deleting: "Удаляю…",
+  deleteFailed: "Комментарий не удалился. Попробуйте ещё раз.",
   intro: "Расскажите, что WireCat делать дальше, или проголосуйте за чужие идеи. Я читаю каждую и отвечаю здесь.",
   search: "Поиск по идеям",
   ask: "Найдите или опишите идею",
@@ -111,6 +125,14 @@ const ru: BoardWords = {
 }
 
 const es: BoardWords = {
+  roadmapTitle: "Hoja de ruta",
+  laneEmpty: "Nada por ahora.",
+  whereShort:
+    "Las ideas y los votos van aquí. Los errores, a los issues de GitHub, y las preguntas, a Discord o Telegram.",
+  hidden: "Oculto",
+  delete: "Eliminar",
+  deleting: "Eliminando…",
+  deleteFailed: "El comentario no se eliminó. Inténtalo de nuevo.",
   intro: "Cuéntame qué debería hacer WireCat después, o vota lo que pidieron otros. Leo cada idea y respondo aquí.",
   search: "Buscar ideas",
   ask: "Busca o describe una idea",

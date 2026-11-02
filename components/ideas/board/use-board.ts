@@ -1,20 +1,24 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
-import { boardSource } from "@/lib/ideas/board/sample"
+import { ideas, ideasSample, returnPath } from "@/lib/ideas"
+import { boardWords } from "@/lib/ideas/board-words"
+import { setPreviewMode } from "@/lib/ideas/sample"
 import {
-  type BoardIdea,
-  type BoardQuery,
-  type BoardSort,
+  asLocale,
   type Comment,
-  isBoardSort,
+  type Idea,
+  type IdeaQuery,
+  IdeasError,
+  type IdeaTool,
+  isSort,
+  isStatus,
+  isTool,
+  type Member,
   maxTags,
   type Tag,
-} from "@/lib/ideas/board/types"
-import { boardWords } from "@/lib/ideas/board/words"
-import { sampleSource, setPreviewMode } from "@/lib/ideas/sample"
-import { asLocale, IdeasError, type IdeaTool, isStatus, isTool, type Member } from "@/lib/ideas/types"
+} from "@/lib/ideas/types"
 import { errorText, ideasWords } from "@/lib/ideas/words"
 import { memberChanged } from "../use-member"
 import { listenForSignIn, popupReturnPath } from "./popup"
@@ -32,21 +36,23 @@ export function smoothly(update: () => void) {
   transition.finished.catch(() => {})
 }
 
-const readQuery = (): BoardQuery => {
+type Query = Omit<IdeaQuery, "page" | "perPage">
+
+const readQuery = (): Query => {
   const params = new URLSearchParams(window.location.search)
   const sort = params.get("sort")
   return {
     tool: isTool(params.get("tool")) ? (params.get("tool") as IdeaTool) : undefined,
-    status: isStatus(params.get("status")) ? (params.get("status") as BoardQuery["status"]) : undefined,
+    status: isStatus(params.get("status")) ? (params.get("status") as Query["status"]) : undefined,
     tag: params.get("tag") || undefined,
     q: params.get("q") || undefined,
-    sort: isBoardSort(sort) ? sort : "top",
+    sort: isSort(sort) ? sort : "top",
   }
 }
 
-function writeUrl(query: BoardQuery, selected: string | null) {
+function writeUrl(query: Query, selected: string | null) {
   const params = new URLSearchParams(window.location.search)
-  for (const key of ["tool", "status", "tag", "q", "sort", "id", "preview"]) params.delete(key)
+  for (const key of ["tool", "status", "tag", "q", "sort", "id", "preview", "compose", "merged"]) params.delete(key)
   if (query.tool) params.set("tool", query.tool)
   if (query.status) params.set("status", query.status)
   if (query.tag) params.set("tag", query.tag)
@@ -57,31 +63,49 @@ function writeUrl(query: BoardQuery, selected: string | null) {
   window.history.replaceState(window.history.state, "", `${window.location.pathname}${search ? `?${search}` : ""}`)
 }
 
-type List = { ideas: BoardIdea[]; total: number }
+type List = { ideas: Idea[]; total: number; page: number }
 
-/** Everything the three variants share: filters in the address, a list that never blanks, votes, sign-in. */
+/** Every idea, for the sidebar's roadmap and tag counts: up to 3 pages of 50, so a few calls cover the board. */
+async function overview() {
+  const found: Idea[] = []
+  for (let page = 1; page <= 3; page++) {
+    const result = await ideas.list({ sort: "top", page, perPage: 50 })
+    for (const idea of result.ideas) found.push(idea)
+    if (found.length >= result.total || !result.ideas.length) break
+  }
+  return found
+}
+
+/** The page's state: filters in the address, a list that never blanks, votes, the open idea, sign-in. */
 export function useIdeasBoard(lang: string) {
-  const source = useMemo(() => boardSource(lang), [lang])
-  const [query, setQueryState] = useState<BoardQuery>({ sort: "top" })
+  const [query, setQueryState] = useState<Query>({ sort: "top" })
   const [search, setSearchState] = useState("")
   const [list, setList] = useState<List>()
   const [pending, setPending] = useState(false)
   const [failed, setFailed] = useState(false)
+  const [more, setMore] = useState<"idle" | "loading" | "failed">("idle")
   const [tags, setTags] = useState<Tag[]>([])
+  const [all, setAll] = useState<Idea[]>([])
   const [selected, setSelected] = useState<string | null>(null)
-  const [patches, setPatches] = useState<Record<string, Partial<BoardIdea>>>({})
+  const [merged, setMerged] = useState(false)
+  const [composeAsked, setComposeAsked] = useState(false)
+  const [patches, setPatches] = useState<Record<string, Partial<Idea>>>({})
   const [member, setMember] = useState<Member | null>()
   const [ready, setReady] = useState(false)
   const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
     const initial = readQuery()
+    const params = new URLSearchParams(window.location.search)
     setQueryState(initial)
     setSearchState(initial.q ?? "")
-    setSelected(new URLSearchParams(window.location.search).get("id"))
+    setSelected(params.get("id"))
+    setMerged(params.has("merged"))
+    setComposeAsked(params.get("compose") === "1")
     setReady(true)
-    source.tags().then(setTags, () => setTags([]))
-  }, [source])
+    ideas.tags().then(setTags, () => setTags([]))
+    overview().then(setAll, () => setAll([]))
+  }, [])
 
   useEffect(() => {
     if (ready) writeUrl(query, selected)
@@ -94,12 +118,13 @@ export function useIdeasBoard(lang: string) {
     // Only a slow answer dims the list; a quick one swaps straight in.
     const dim = setTimeout(() => current && setPending(true), 140)
     setFailed(false)
-    source
+    setMore("idle")
+    ideas
       .list(query)
       .then((next) => {
         if (!current) return
         smoothly(() => {
-          setList(next)
+          setList({ ideas: next.ideas, total: next.total, page: next.page })
           setPending(false)
         })
       })
@@ -113,24 +138,26 @@ export function useIdeasBoard(lang: string) {
       current = false
       clearTimeout(dim)
     }
-  }, [ready, query, source, attempt])
+  }, [ready, query, attempt])
 
   useEffect(() => {
     if (!ready) return
     const timer = setTimeout(() => {
-      const q = search.trim() || undefined
+      const trimmed = search.trim()
+      // The API searches from 3 characters; shorter text leaves the list as it is.
+      const q = trimmed.length >= 3 ? trimmed : undefined
       setQueryState((before) => (before.q === q ? before : { ...before, q }))
-    }, 220)
+    }, 250)
     return () => clearTimeout(timer)
   }, [ready, search])
 
   const refreshMember = useCallback(
     () =>
-      source.member().then(
+      ideas.member().then(
         (value) => setMember(value),
         () => setMember(null),
       ),
-    [source],
+    [],
   )
   useEffect(() => {
     refreshMember()
@@ -139,48 +166,71 @@ export function useIdeasBoard(lang: string) {
     return () => document.removeEventListener("visibilitychange", onVisible)
   }, [refreshMember])
 
-  const setQuery = useCallback(
-    (change: Partial<BoardQuery>) => setQueryState((before) => ({ ...before, ...change })),
-    [],
-  )
+  const setQuery = useCallback((change: Partial<Query>) => setQueryState((before) => ({ ...before, ...change })), [])
   const clear = useCallback(() => {
     setSearchState("")
     setQueryState((before) => ({ sort: before.sort }))
   }, [])
 
   const patch = useCallback(
-    (id: string, change: Partial<BoardIdea>) =>
-      setPatches((before) => ({ ...before, [id]: { ...before[id], ...change } })),
+    (id: string, change: Partial<Idea>) => setPatches((before) => ({ ...before, [id]: { ...before[id], ...change } })),
     [],
   )
-  const view = useCallback((idea: BoardIdea): BoardIdea => ({ ...idea, ...patches[idea.id] }), [patches])
+  const view = useCallback((idea: Idea): Idea => ({ ...idea, ...patches[idea.id] }), [patches])
 
   const signIn = useSignIn(lang, member, refreshMember)
 
   const vote = useCallback(
-    async (idea: BoardIdea) => {
+    async (idea: Idea) => {
       const before = { voted: idea.voted, votes: idea.votes }
       patch(idea.id, { voted: !before.voted, votes: before.votes + (before.voted ? -1 : 1) })
       try {
-        patch(idea.id, await (before.voted ? source.unvote(idea.id) : source.vote(idea.id)))
+        patch(idea.id, await (before.voted ? ideas.unvote(idea.id) : ideas.vote(idea.id)))
       } catch (error) {
-        patch(idea.id, before)
-        if (error instanceof IdeasError && error.code === "sign_in_required") refreshMember()
+        const code = error instanceof IdeasError ? error.code : "unavailable"
+        // The server already had it the way the reader wanted; only the button was stale.
+        if (code === "already_voted") patch(idea.id, { voted: true, votes: before.votes })
+        else if (code === "not_voted") patch(idea.id, { voted: false, votes: before.votes })
+        else patch(idea.id, before)
+        if (code === "sign_in_required") refreshMember()
       }
     },
-    [patch, source, refreshMember],
+    [patch, refreshMember],
   )
   const askVote = useCallback(
-    (idea: BoardIdea) => (member ? vote(idea) : signIn.ask("vote", () => vote(idea))),
+    (idea: Idea) => (member ? vote(idea) : signIn.ask("vote", () => vote(idea))),
     [member, vote, signIn],
   )
 
-  const select = useCallback((id: string | null) => smoothly(() => setSelected(id)), [])
+  const loadMore = async () => {
+    if (!list) return
+    setMore("loading")
+    try {
+      const next = await ideas.list({ ...query, page: list.page + 1 })
+      const seen = new Set(list.ideas.map((idea) => idea.id))
+      setList({
+        ideas: [...list.ideas, ...next.ideas.filter((idea) => !seen.has(idea.id))],
+        total: next.total,
+        page: next.page,
+      })
+      setMore("idle")
+    } catch {
+      setMore("failed")
+    }
+  }
+
+  const select = useCallback((id: string | null) => {
+    setMerged(false)
+    smoothly(() => setSelected(id))
+  }, [])
+  const forward = useCallback((id: string) => {
+    setMerged(true)
+    setSelected(id)
+  }, [])
   const retry = useCallback(() => setAttempt((count) => count + 1), [])
 
   return {
     lang,
-    source,
     query,
     setQuery,
     search,
@@ -188,19 +238,29 @@ export function useIdeasBoard(lang: string) {
     clear,
     filtered: !!(query.tool || query.status || query.tag || query.q),
     list: list && { ...list, ideas: list.ideas.map(view) },
+    more,
+    loadMore,
     pending,
     failed,
     retry,
     tags,
+    all: all.map(view),
     selected,
     select,
+    merged,
+    forward,
+    composeAsked,
     view,
     patch,
     member,
     vote: askVote,
     signIn,
-    addPosted: (idea: BoardIdea) =>
-      smoothly(() => setList((before) => before && { ideas: [idea, ...before.ideas], total: before.total + 1 })),
+    addPosted: (idea: Idea) => {
+      setAll((before) => [idea, ...before])
+      smoothly(() =>
+        setList((before) => before && { ...before, ideas: [idea, ...before.ideas], total: before.total + 1 }),
+      )
+    },
   }
 }
 
@@ -226,8 +286,8 @@ function useSignIn(lang: string, member: Member | null | undefined, refreshMembe
         setState("idle")
         return
       }
-      // In the sample the pop-up has its own session storage, so this window takes the signed-in state itself.
-      setPreviewMode("signed-in")
+      // The sample keeps its session in session storage, and the pop-up has its own copy.
+      if (ideasSample) setPreviewMode("signed-in")
       await refreshMember()
       window.dispatchEvent(new Event(memberChanged))
       setState("idle")
@@ -255,25 +315,37 @@ function useSignIn(lang: string, member: Member | null | undefined, refreshMembe
     return () => clearInterval(timer)
   }, [state, refreshMember])
 
-  const google = () => {
+  // The window opens on the click, before any await, or the browser blocks it; Google's address follows once the
+  // API says Google sign-in is set up.
+  const google = async () => {
     setError("")
-    const url = sampleSource.googleSignInUrl(asLocale(lang), popupReturnPath(lang))
+    const locale = asLocale(lang)
+    const back = popupReturnPath(lang)
     const width = 480
     const height = 640
     const left = window.screenX + Math.max(0, (window.outerWidth - width) / 2)
     const top = window.screenY + Math.max(0, (window.outerHeight - height) / 3)
-    popup.current = window.open(url, "wirecat-sign-in", `popup,width=${width},height=${height},left=${left},top=${top}`)
-    if (!popup.current) return setState("blocked")
+    const opened = window.open("", "wirecat-sign-in", `popup,width=${width},height=${height},left=${left},top=${top}`)
+    if (!opened) return setState("blocked")
+    popup.current = opened
     setState("waiting")
+    try {
+      await ideas.googleSignInReady(locale, back)
+      opened.location.href = ideas.googleSignInUrl(locale, back)
+    } catch (failure) {
+      opened.close()
+      setState("idle")
+      setError(errorText(lang, failure, ideasWords(lang).signIn.failed))
+    }
   }
 
   const sendLink = async (email: string, turnstileToken: string) => {
     setError("")
     try {
-      await sampleSource.requestSignInLink({
+      await ideas.requestSignInLink({
         email,
         locale: asLocale(lang),
-        returnTo: `${window.location.pathname}${window.location.search}`,
+        returnTo: returnPath(lang, window.location.pathname, window.location.search),
         turnstileToken,
       })
       return true
@@ -304,74 +376,88 @@ function useSignIn(lang: string, member: Member | null | undefined, refreshMembe
 
 export type SignIn = ReturnType<typeof useSignIn>
 
-/** One idea with its comments, loaded when it opens. */
-export function useIdeaThread(board: Board, id: string | null) {
-  const [idea, setIdea] = useState<BoardIdea | null>()
+/** One idea with its comments, loaded when it opens. A merged duplicate forwards to the idea that kept its votes. */
+export function useIdeaThread(board: Board, id: string) {
+  const [idea, setIdea] = useState<Idea | null>()
   const [comments, setComments] = useState<Comment[]>()
   const [failed, setFailed] = useState(false)
-  const { source } = board
+  const { forward } = board
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Only a new id starts a load, list updates reach it through board.view.
   useEffect(() => {
-    if (!id) return
     let current = true
     const known = board.list?.ideas.find((item) => item.id === id)
     setIdea(known)
     setComments(undefined)
     setFailed(false)
     if (!known)
-      source.get(id).then(
-        (found) => current && setIdea(found),
+      ideas.get(id).then(
+        (found) => {
+          if (!current) return
+          if (found?.mergedIntoId) return forward(found.mergedIntoId)
+          setIdea(found)
+        },
         () => current && setIdea(null),
       )
-    source.comments(id).then(
+    ideas.comments(id).then(
       (found) => current && setComments(found),
       () => current && setFailed(true),
     )
     return () => {
       current = false
     }
-  }, [id, source])
+  }, [id, forward])
 
-  const add = async (body: string) => {
-    if (!id) return
-    const comment = await source.addComment(id, body)
-    setComments((before) => [...(before ?? []), comment])
+  const count = (change: number) => {
     const base = idea && board.view(idea)
-    if (base) board.patch(id, { commentsCount: base.commentsCount + 1 })
+    if (base) board.patch(id, { commentsCount: Math.max(0, base.commentsCount + change) })
   }
 
-  return { idea: idea && board.view(idea), comments, failed, add }
+  const add = async (body: string, turnstileToken: string) => {
+    const comment = await ideas.addComment(id, body, turnstileToken)
+    setComments((before) => [...(before ?? []), comment])
+    count(1)
+  }
+
+  const remove = async (commentId: string) => {
+    await ideas.deleteComment(id, commentId)
+    setComments((before) => before?.filter((comment) => comment.id !== commentId))
+    count(-1)
+  }
+
+  return { idea: idea && board.view(idea), comments, failed, add, remove }
 }
 
-/** The new-idea form's state, shared so each variant only lays it out. */
-export function useComposer(board: Board, onPosted: (idea: BoardIdea) => void) {
+export type Thread = ReturnType<typeof useIdeaThread>
+
+/** The new-idea form's state. */
+export function useComposer(board: Board, onPosted: (idea: Idea) => void) {
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
   const [tool, setTool] = useState<IdeaTool | "">("")
   const [tags, setTags] = useState<string[]>([])
-  const [similar, setSimilar] = useState<BoardIdea[]>([])
+  const [similar, setSimilar] = useState<Idea[]>([])
   const [token, setToken] = useState("")
   const [resetKey, setResetKey] = useState(0)
   const [checked, setChecked] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState("")
-  const { source, lang } = board
+  const { lang } = board
 
   useEffect(() => {
     if (title.trim().length < 4) return setSimilar([])
     let current = true
     const timer = setTimeout(() => {
-      source.similar(title).then(
+      ideas.similar(title).then(
         (found) => current && setSimilar(found),
         () => current && setSimilar([]),
       )
-    }, 250)
+    }, 300)
     return () => {
       current = false
       clearTimeout(timer)
     }
-  }, [title, source])
+  }, [title])
 
   const form = ideasWords(lang).form
   const titleError = checked && title.trim().length < 5 ? form.tooShort : ""
@@ -402,7 +488,7 @@ export function useComposer(board: Board, onPosted: (idea: BoardIdea) => void) {
     setSending(true)
     setError("")
     try {
-      const idea = await source.create({ title: title.trim(), body: body.trim(), tool, tags, turnstileToken: token })
+      const idea = await ideas.create({ title: title.trim(), body: body.trim(), tool, tags, turnstileToken: token })
       reset()
       onPosted(idea)
     } catch (failure) {
@@ -436,5 +522,3 @@ export function useComposer(board: Board, onPosted: (idea: BoardIdea) => void) {
 }
 
 export type Composer = ReturnType<typeof useComposer>
-
-export const sortLabel = (lang: string, sort: BoardSort) => boardWords(lang).sorts[sort]

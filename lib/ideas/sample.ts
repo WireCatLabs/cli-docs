@@ -1,6 +1,14 @@
 import { perPage } from "./api"
-import { sampleIdeas } from "./sample-data"
-import { type Idea, type IdeaQuery, IdeasError, type IdeasSource, type Member, type NewIdea } from "./types"
+import { sampleComments, sampleIdeas, sampleTags } from "./sample-data"
+import {
+  type Comment,
+  type Idea,
+  type IdeaQuery,
+  IdeasError,
+  type IdeasSource,
+  type Member,
+  type NewIdea,
+} from "./types"
 
 export const previewModes = ["signed-out", "signed-in", "loading", "down"] as const
 export type PreviewMode = (typeof previewModes)[number]
@@ -8,20 +16,28 @@ export type PreviewMode = (typeof previewModes)[number]
 const storageKey = "wirecat-ideas-sample"
 const sampleMember: Member = { email: "you@example.com", name: null }
 
-type Saved = { mode: PreviewMode; votes: string[]; posted: Idea[] }
+type Saved = {
+  mode: PreviewMode
+  votes: string[]
+  posted: Idea[]
+  comments: Record<string, Comment[]>
+  deleted: string[]
+}
+
+const empty = { votes: [], posted: [], comments: {}, deleted: [] }
 
 const read = (): Saved => {
   try {
     const asked = new URLSearchParams(window.location.search).get("preview") as PreviewMode | null
     if (asked && previewModes.includes(asked)) {
-      const saved = { votes: [], posted: [], ...JSON.parse(sessionStorage.getItem(storageKey) ?? "{}"), mode: asked }
+      const saved = { ...empty, ...JSON.parse(sessionStorage.getItem(storageKey) ?? "{}"), mode: asked }
       sessionStorage.setItem(storageKey, JSON.stringify(saved))
       return saved
     }
     const saved = JSON.parse(sessionStorage.getItem(storageKey) ?? "null") as Saved | null
-    if (saved && previewModes.includes(saved.mode)) return saved
+    if (saved && previewModes.includes(saved.mode)) return { ...empty, ...saved }
   } catch {}
-  return { mode: "signed-out", votes: [], posted: [] }
+  return { mode: "signed-out", ...empty }
 }
 
 const write = (saved: Saved) => {
@@ -40,7 +56,7 @@ const words = (text: string) =>
     .filter((word) => word.length > 2)
 
 /** Waits like a network call would, so the loading states show; the "loading" preview never answers. */
-export const answer = async <T>(value: () => T, delay = 300): Promise<T> => {
+const answer = async <T>(value: () => T, delay = 300): Promise<T> => {
   const { mode } = read()
   if (mode === "loading") return new Promise(() => {})
   await new Promise((resolve) => setTimeout(resolve, delay))
@@ -48,11 +64,26 @@ export const answer = async <T>(value: () => T, delay = 300): Promise<T> => {
   return value()
 }
 
-export const all = (): Idea[] => {
-  const { votes, posted } = read()
-  return [...posted, ...sampleIdeas].map((idea) =>
-    votes.includes(idea.id) ? { ...idea, voted: true, votes: idea.votes + 1 } : idea,
-  )
+export const commentsOf = (id: string, saved = read()) =>
+  [...(sampleComments[id] ?? []), ...(saved.comments[id] ?? [])].filter((item) => !saved.deleted.includes(item.id))
+
+const all = (): Idea[] => {
+  const saved = read()
+  return [...saved.posted, ...sampleIdeas].map((idea) => ({
+    ...idea,
+    ...(saved.votes.includes(idea.id) ? { voted: true, votes: idea.votes + 1 } : {}),
+    commentsCount: commentsOf(idea.id, saved).length,
+  }))
+}
+
+const ageDays = (iso: string) => Math.max(0, (Date.now() - Date.parse(iso)) / 86_400_000)
+/** Stands in for the API's "most votes in the last 14 days": young ideas with votes first. */
+const trending = (idea: Idea) => idea.votes / (ageDays(idea.createdAt) + 2) ** 1.4
+
+const matches = (idea: Idea, q: string | undefined) => {
+  const wanted = q && q.trim().length >= 3 ? words(q) : []
+  const text = words(`${idea.title} ${idea.body}`)
+  return wanted.every((word) => text.some((have) => have.startsWith(word)))
 }
 
 const signedIn = () => read().mode !== "signed-out"
@@ -69,14 +100,22 @@ function setVote(id: string, voted: boolean) {
 
 /** Preview only: the screens with seeded ideas and no API, switched by the preview bar or `?preview=`. */
 export const sampleSource: IdeasSource = {
-  list: ({ tool, status, sort, page = 1 }: IdeaQuery) =>
+  list: ({ tool, status, tag, q, sort, page = 1, perPage: size = perPage }: IdeaQuery) =>
     answer(() => {
       const found = all()
-        .filter((idea) => (!tool || idea.tool === tool) && (!status || idea.status === status))
-        .sort((a, b) =>
-          sort === "new" ? b.createdAt.localeCompare(a.createdAt) : b.votes - a.votes || a.title.localeCompare(b.title),
+        .filter(
+          (idea) =>
+            (!tool || idea.tool === tool) &&
+            (!status || idea.status === status) &&
+            (!tag || idea.tags.some((item) => item.slug === tag)) &&
+            matches(idea, q),
         )
-      return { ideas: found.slice((page - 1) * perPage, page * perPage), total: found.length, page, perPage }
+        .sort((a, b) => {
+          if (sort === "new") return b.createdAt.localeCompare(a.createdAt)
+          if (sort === "trending") return trending(b) - trending(a) || b.votes - a.votes
+          return b.votes - a.votes || a.title.localeCompare(b.title)
+        })
+      return { ideas: found.slice((page - 1) * size, page * size), total: found.length, page, perPage: size }
     }),
   get: (id) => answer(() => all().find((idea) => idea.id === id) ?? null),
   similar: (title) =>
@@ -90,7 +129,30 @@ export const sampleSource: IdeasSource = {
         .slice(0, 5)
         .map(({ idea }) => idea)
     }, 150),
-  create: ({ title, body, tool }: NewIdea) =>
+  tags: () => answer(() => sampleTags, 100),
+  comments: (id) => answer(() => commentsOf(id).map((item) => ({ ...item, mine: item.id.startsWith("mine-") })), 250),
+  addComment: (id, body) =>
+    answer(() => {
+      if (!signedIn()) throw new IdeasError("sign_in_required")
+      const saved = read()
+      const item: Comment = {
+        id: `mine-${Date.now()}`,
+        body,
+        hidden: false,
+        mine: true,
+        author: { name: sampleMember.name, team: false },
+        createdAt: new Date().toISOString(),
+      }
+      write({ ...saved, comments: { ...saved.comments, [id]: [...(saved.comments[id] ?? []), item] } })
+      return item
+    }, 350),
+  deleteComment: (_id, commentId) =>
+    answer(() => {
+      if (!commentId.startsWith("mine-")) throw new IdeasError("not_comment_author")
+      const saved = read()
+      write({ ...saved, deleted: [...saved.deleted, commentId] })
+    }, 200),
+  create: ({ title, body, tool, tags }: NewIdea) =>
     answer(() => {
       const saved = read()
       const idea: Idea = {
@@ -104,6 +166,8 @@ export const sampleSource: IdeasSource = {
         links: [],
         votes: 1,
         voted: true,
+        tags: sampleTags.filter((tag) => tags.includes(tag.slug)),
+        commentsCount: 0,
         author: { name: sampleMember.name, team: false },
         mergedIntoId: null,
         createdAt: new Date().toISOString(),
@@ -132,7 +196,7 @@ export const sampleSource: IdeasSource = {
       return { returnTo: null }
     }, 500),
   signOut: () => answer(() => setPreviewMode("signed-out"), 100),
-  deleteAccount: () => answer(() => write({ mode: "signed-out", votes: [], posted: [] }), 400),
+  deleteAccount: () => answer(() => write({ mode: "signed-out", ...empty }), 400),
   unsubscribe: (token) =>
     answer(() => {
       if (token === "expired") throw new IdeasError("invalid_token")

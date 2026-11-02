@@ -20,17 +20,20 @@ FIRST VIEWPORT: title, one line on what the page is for, filters, the first rank
 FORM: list, idea, post, sign in as separate routes; states via sample data.
 FINISH: detector, one screenshot round, fixes, one confirm round, finish review.
 
-## Redesign round, 2026-11-02 (three variants behind `?variant=a|b|c`)
+## Redesign round, 2026-11-02 (shipped)
 
 Owner on the first build: chips flicker with no transition, posting leaves the page, the look is bulky, the form is
-too rounded and toy-like, black buttons, no comments, no tags. Seed 1c409e6a (surface, operate) dealt 3, 4, 2 of the
-ranked list (1 ledger + side sheet, 2 split view, 3 search-first, 4 status roadmap, 5 by tool, 6 activity feed,
-7 tiles). All three are built for the owner to choose; the old screens stay the default until he picks.
+too rounded and toy-like, black buttons, no comments or tags. Three variants were built (seed 1c409e6a: search-first,
+status roadmap, split view); the owner picked search-first, on the site's standard blog frame with a sidebar.
 
 THESIS: one page for the whole loop (find, vote, discuss, post, sign in), never a route change.
-OWN-WORLD: editorial tokens, Unbounded only for the page title, Onest everywhere else, 6px controls, 8px panels,
-brand `--button` for primary actions, quiet ruled rows, status as a small tinted label, tags as plain `#words`.
-A: search-first. The ask box searches and becomes the title of a new idea; ideas open inline in the list.
-B: roadmap strip (in progress, planned, shipped) over a filter rail and list; the idea and the composer open as dialogs.
-C: split view. List left, the idea or the composer right; on a phone the right pane slides over the list.
+OWN-WORLD: the blog frame (`blog-columns`, `blog-main`, `blog-sidebar`, `BlogWidget`), editorial tokens, Unbounded
+only for the page title, Onest everywhere else, 4/6/8px corners on the page's own controls, the brand `--button`
+for the primary action, status as a small tinted label, tags as `#Name`.
+FIRST VIEWPORT: title and one line; the ask box (search, and the new idea's title once "New idea" is pressed);
+sort tabs and tool/status/tag selects; ruled rows with the vote box on the left. Sidebar: roadmap (in progress,
+planned, shipped), tags with counts, what goes where, the email note.
+OPEN IDEA: the row becomes a paper panel in place, with the answer and the comments inside; `?id=` opens it.
+FORM: `/ideas` only. `/ideas/idea?id=` and `/ideas/new` forward to it; `/ideas/sign-in` stays for the email link
+and the Google pop-up.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.

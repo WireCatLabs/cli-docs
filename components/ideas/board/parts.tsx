@@ -1,19 +1,18 @@
 "use client"
 
-import { ArrowRight, ChevronUp, LoaderCircle, MailCheck, MessageSquare } from "lucide-react"
+import { ArrowRight, ChevronUp, EyeOff, LoaderCircle, MailCheck, MessageSquare, X } from "lucide-react"
 import { type FormEvent, type ReactNode, useId, useState } from "react"
 import { GoogleIcon } from "@/components/brand-icons"
 import { ideaPath } from "@/lib/ideas"
-import { type BoardIdea, type Comment, maxTags } from "@/lib/ideas/board/types"
-import { boardWords, formatAgo } from "@/lib/ideas/board/words"
-import { ideaTools } from "@/lib/ideas/types"
+import { boardWords, formatAgo } from "@/lib/ideas/board-words"
+import { type Comment, type Idea, ideaTools, maxTags, tagName } from "@/lib/ideas/types"
 import { errorText, ideasWords } from "@/lib/ideas/words"
 import { localizedPath } from "@/lib/site-routes"
 import { StatusLabel } from "../status-label"
 import { TurnstileField } from "../turnstile-field"
-import { type Board, type Composer, type SignInReason, useIdeaThread } from "./use-board"
+import { type Board, type Composer, type SignInReason, type Thread, useIdeaThread } from "./use-board"
 
-export function Vote({ board, idea, className = "" }: { board: Board; idea: BoardIdea; className?: string }) {
+export function Vote({ board, idea, className = "" }: { board: Board; idea: Idea; className?: string }) {
   const words = ideasWords(board.lang)
   return (
     <button
@@ -32,7 +31,7 @@ export function Vote({ board, idea, className = "" }: { board: Board; idea: Boar
   )
 }
 
-export function TagLinks({ board, idea }: { board: Board; idea: BoardIdea }) {
+export function TagLinks({ board, idea }: { board: Board; idea: Idea }) {
   if (!idea.tags.length) return null
   return (
     <span className="board-tags">
@@ -47,7 +46,7 @@ export function TagLinks({ board, idea }: { board: Board; idea: BoardIdea }) {
             board.setQuery({ tag: board.query.tag === tag.slug ? undefined : tag.slug })
           }}
         >
-          #{tag.name}
+          #{tagName(tag, board.lang)}
         </button>
       ))}
     </span>
@@ -65,7 +64,7 @@ export function CommentCount({ lang, count }: { lang: string; count: number }) {
   )
 }
 
-export function IdeaMeta({ board, idea, tags = true }: { board: Board; idea: BoardIdea; tags?: boolean }) {
+export function IdeaMeta({ board, idea, tags = true }: { board: Board; idea: Idea; tags?: boolean }) {
   return (
     <span className="board-meta">
       <StatusLabel lang={board.lang} status={idea.status} />
@@ -84,7 +83,7 @@ export function IdeaLink({
   className,
 }: {
   board: Board
-  idea: BoardIdea
+  idea: Idea
   children: ReactNode
   className?: string
 }) {
@@ -103,7 +102,7 @@ export function IdeaLink({
   )
 }
 
-export function Answer({ lang, idea }: { lang: string; idea: BoardIdea }) {
+export function Answer({ lang, idea }: { lang: string; idea: Idea }) {
   const words = ideasWords(lang)
   if (!idea.answer && !idea.statusReason && !idea.links.length) return null
   return (
@@ -134,29 +133,64 @@ const initials = (name: string) =>
     .slice(0, 2)
     .toUpperCase()
 
-function CommentItem({ lang, comment }: { lang: string; comment: Comment }) {
-  const words = boardWords(lang)
-  const name = comment.author.name ?? ideasWords(lang).aMember
+function CommentItem({ board, comment, thread }: { board: Board; comment: Comment; thread: Thread }) {
+  const words = boardWords(board.lang)
+  const name = comment.author.team
+    ? ideasWords(board.lang).team
+    : (comment.author.name ?? ideasWords(board.lang).aMember)
+  const [deleting, setDeleting] = useState(false)
+  const [error, setError] = useState("")
+  const remove = async () => {
+    setDeleting(true)
+    setError("")
+    try {
+      await thread.remove(comment.id)
+    } catch (failure) {
+      setError(errorText(board.lang, failure, words.deleteFailed))
+      setDeleting(false)
+    }
+  }
   return (
-    <li className="board-comment" data-team={comment.author.team || undefined}>
+    <li
+      className="board-comment"
+      data-team={comment.author.team || undefined}
+      data-hidden={comment.hidden || undefined}
+    >
       <span className="board-avatar" aria-hidden="true">
-        {initials(name)}
+        {comment.author.team ? "W" : initials(name)}
       </span>
       <div>
         <p className="board-comment-head">
-          <strong>{name}</strong>
-          {comment.author.team && <span className="board-team">{words.team}</span>}
-          <time dateTime={comment.createdAt}>{formatAgo(lang, comment.createdAt)}</time>
+          {comment.author.team ? <strong className="board-team">{name}</strong> : <strong>{name}</strong>}
+          <time dateTime={comment.createdAt}>{formatAgo(board.lang, comment.createdAt)}</time>
+          {comment.hidden && (
+            <span className="board-hidden">
+              <EyeOff aria-hidden="true" />
+              {words.hidden}
+            </span>
+          )}
+          {comment.mine && (
+            <button type="button" className="board-link-button board-delete" disabled={deleting} onClick={remove}>
+              {deleting ? words.deleting : words.delete}
+            </button>
+          )}
         </p>
         <p className="board-comment-body">{comment.body}</p>
+        {error && (
+          <p className="board-error" role="alert">
+            {error}
+          </p>
+        )}
       </div>
     </li>
   )
 }
 
-export function Comments({ board, thread }: { board: Board; thread: ReturnType<typeof useIdeaThread> }) {
+export function Comments({ board, thread }: { board: Board; thread: Thread }) {
   const words = boardWords(board.lang)
   const [body, setBody] = useState("")
+  const [token, setToken] = useState("")
+  const [resetKey, setResetKey] = useState(0)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState("")
   const fieldId = useId()
@@ -167,12 +201,14 @@ export function Comments({ board, thread }: { board: Board; thread: ReturnType<t
     setSending(true)
     setError("")
     try {
-      await thread.add(body.trim())
+      await thread.add(body.trim(), token)
       setBody("")
     } catch (failure) {
       setError(errorText(board.lang, failure, words.commentFailed))
     }
     setSending(false)
+    setToken("")
+    setResetKey((key) => key + 1)
   }
 
   const submit = (event: FormEvent) => {
@@ -198,7 +234,7 @@ export function Comments({ board, thread }: { board: Board; thread: ReturnType<t
       {thread.comments && count > 0 && (
         <ol className="board-comments">
           {thread.comments.map((comment) => (
-            <CommentItem key={comment.id} lang={board.lang} comment={comment} />
+            <CommentItem key={comment.id} board={board} comment={comment} thread={thread} />
           ))}
         </ol>
       )}
@@ -217,13 +253,18 @@ export function Comments({ board, thread }: { board: Board; thread: ReturnType<t
             if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) send()
           }}
         />
+        {board.member && body.trim() && <TurnstileField lang={board.lang} onToken={setToken} resetKey={resetKey} />}
         <div className="board-comment-actions">
           {error && (
             <p className="board-error" role="alert">
               {error}
             </p>
           )}
-          <button type="submit" className="board-button board-button-primary" disabled={sending || !body.trim()}>
+          <button
+            type="submit"
+            className="board-button board-button-primary"
+            disabled={sending || !body.trim() || (!!board.member && !token)}
+          >
             {sending ? words.commentSending : board.member === null ? words.signInToComment : words.commentSend}
           </button>
         </div>
@@ -232,13 +273,12 @@ export function Comments({ board, thread }: { board: Board; thread: ReturnType<t
   )
 }
 
-export function Byline({ lang, idea }: { lang: string; idea: BoardIdea }) {
+export function Byline({ lang, idea }: { lang: string; idea: Idea }) {
   const words = ideasWords(lang)
-  const name = idea.author.name ?? (idea.author.team ? words.team : words.aMember)
+  const name = idea.author.team ? words.team : (idea.author.name ?? words.aMember)
   return (
     <p className="board-byline">
-      <span>{name}</span>
-      {idea.author.team && idea.author.name && <span className="board-team">{boardWords(lang).team}</span>}
+      <span className={idea.author.team ? "board-team" : undefined}>{name}</span>
       <span aria-hidden="true">·</span>
       <time dateTime={idea.createdAt}>{formatAgo(lang, idea.createdAt)}</time>
     </p>
@@ -328,7 +368,7 @@ export function ComposerFields({
                     disabled={!on && composer.tags.length >= maxTags}
                     onChange={() => composer.toggleTag(tag.slug)}
                   />
-                  <span>#{tag.name}</span>
+                  <span>#{tagName(tag, board.lang)}</span>
                 </label>
               )
             })}
@@ -587,12 +627,12 @@ export function IdeaDetail({
   board,
   id,
   title = true,
-  head,
+  onClose,
 }: {
   board: Board
   id: string
   title?: boolean
-  head?: ReactNode
+  onClose?: () => void
 }) {
   const thread = useIdeaThread(board, id)
   const { idea } = thread
@@ -606,7 +646,16 @@ export function IdeaDetail({
     )
   return (
     <article className="board-detail" aria-labelledby={title ? `idea-${idea.id}` : undefined}>
-      {head}
+      {onClose && (
+        <button
+          type="button"
+          className="board-detail-close"
+          onClick={onClose}
+          aria-label={boardWords(board.lang).close}
+        >
+          <X aria-hidden="true" />
+        </button>
+      )}
       {title && (
         <header className="board-detail-head">
           <IdeaMeta board={board} idea={idea} tags={false} />
