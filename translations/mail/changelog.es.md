@@ -4,6 +4,22 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.12.0 — 02.11.2026
+
+### Añadido
+
+- **Cuentas de trabajo o de centro educativo: qué hacer cuando Microsoft pide la aprobación de un administrador**
+  ([docs/outlook.md](./outlook.md)): por qué aparece `AADSTS90094`, el enlace de consentimiento de administrador para la
+  aplicación de WireCat con la forma de revocarlo, y cómo una organización registra su propia aplicación.
+
+## 0.11.0 — 02.11.2026
+
+### Añadido
+
+- **Una guía para conectar Outlook.com o Microsoft 365** ([docs/outlook.md](./outlook.md)): activar IMAP, iniciar
+  sesión en el navegador, sincronizar y enviar, y qué hacer cuando se rechaza el token o un administrador debe permitir
+  la aplicación.
+
 ## 0.10.0 — 02.11.2026
 
 ### Cambiado — puede romper a quien llama

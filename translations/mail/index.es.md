@@ -10,7 +10,7 @@ Comandos: `session` (start: crea el perfil, comprueba y guarda la contraseña de
 `folders create|rename|delete`, `drafts`, `attachments`, `rules` y `tags`, además de los comandos que comparten
 todas las CLI de WireCat: `doctor`, `commands`, `config`, `skill`, `mcp`, `runs` y `upgrade`.
 Empieza por [la instalación](./installation.md) y sigue con [el uso](./usage.md). Antes del primer inicio de sesión, prepara el buzón:
-[los pasos de cada proveedor](./providers.md).
+[los pasos de cada proveedor](./providers.md). Para Outlook.com o Microsoft 365: [conectar Outlook](./outlook.md).
 
 ## Buscar en tu correo
 

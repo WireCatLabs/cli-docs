@@ -35,8 +35,8 @@ Thunderbird y el archivo de ajustes del propio dominio. Si ninguno conoce el ser
 
 En una terminal, `session start` pregunta lo que falta: el proveedor y la dirección. Sin terminal no pregunta nada. Entonces la
 falta de `--address` o de la contraseña es un error, y lee la contraseña de `MAIL_PASSWORD`. El perfil se guarda solo después
-de que el servidor acepte la contraseña de aplicación. Outlook solo acepta OAuth para IMAP, así que `session start` lo rechaza
-por ahora. Para cambiar el servidor de un perfil existente, usa `config set` o un nombre de perfil nuevo.
+de que el servidor acepte la contraseña de aplicación. Outlook.com y Microsoft 365 solo aceptan OAuth, así que `session start` abre el navegador
+para ellos ([conectar Outlook](./outlook.md)). Para cambiar el servidor de un perfil existente, usa `config set` o un nombre de perfil nuevo.
 
 `session start` toma la contraseña de la terminal o de `MAIL_PASSWORD`. Nunca la toma de una opción ni de una dirección. Cuando
 el servidor la acepta, `mail` la guarda en el llavero del sistema operativo. Si el llavero falla, `mail` la guarda en un archivo
