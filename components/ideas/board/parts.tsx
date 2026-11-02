@@ -217,6 +217,7 @@ export function Comments({ board, thread }: { board: Board; thread: Thread }) {
   }
 
   const count = thread.comments?.length ?? 0
+  const expected = thread.idea?.commentsCount ?? 0
   return (
     <section className="board-thread" aria-label={words.comments}>
       <h3>
@@ -224,13 +225,18 @@ export function Comments({ board, thread }: { board: Board; thread: Thread }) {
         {count > 0 && <span className="board-thread-count">{count}</span>}
       </h3>
       {thread.failed && <p className="board-error">{words.commentsFailed}</p>}
-      {!thread.comments && !thread.failed && (
+      {!thread.comments && !thread.failed && expected > 0 && (
+        // As many quiet rows as comments are coming, so the panel barely moves when they arrive.
         <div className="board-thread-loading" aria-busy="true">
-          <span />
-          <span />
+          {Array.from({ length: Math.min(expected, 4) }, (_, row) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: Placeholder rows have no identity.
+            <span key={row} />
+          ))}
         </div>
       )}
-      {thread.comments && count === 0 && <p className="board-quiet">{words.noComments}</p>}
+      {(thread.comments ? count === 0 : expected === 0 && !thread.failed) && (
+        <p className="board-quiet">{words.noComments}</p>
+      )}
       {thread.comments && count > 0 && (
         <ol className="board-comments">
           {thread.comments.map((comment) => (
@@ -668,7 +674,7 @@ export function IdeaDetail({
       {idea.body && <p className="board-detail-body">{idea.body}</p>}
       <div className="board-detail-facts">
         <Byline lang={board.lang} idea={idea} />
-        <TagLinks board={board} idea={idea} />
+        {title && <TagLinks board={board} idea={idea} />}
       </div>
       <Answer lang={board.lang} idea={idea} />
       <Comments board={board} thread={thread} />

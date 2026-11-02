@@ -36,6 +36,39 @@ export function smoothly(update: () => void) {
   transition.finished.catch(() => {})
 }
 
+const motionMs = 280
+
+/**
+ * While an idea opens, closes or another one closes above it, the row that was clicked stays where it was on
+ * screen; once the panel has settled it scrolls smoothly, and only if the panel ends below the fold.
+ */
+function keepInPlace(id: string | null) {
+  const row = id ? document.querySelector<HTMLElement>(`[data-idea="${CSS.escape(id)}"]`) : null
+  if (!row) return
+  const start = row.getBoundingClientRect().top
+  const onScreen = start >= 0 && start < window.innerHeight
+  const end = performance.now() + motionMs + 40
+  const step = () => {
+    const now = row.getBoundingClientRect().top
+    if (onScreen && Math.abs(now - start) >= 1) window.scrollBy(0, now - start)
+    if (performance.now() < end) requestAnimationFrame(step)
+    else reveal(row)
+  }
+  requestAnimationFrame(step)
+}
+
+function reveal(row: HTMLElement) {
+  if (!row.matches("[data-open]")) return
+  const box = row.getBoundingClientRect()
+  const room = 24
+  const top = 72
+  let delta = 0
+  if (box.top < 0 || box.top > window.innerHeight - room) delta = box.top - top
+  else if (box.bottom > window.innerHeight - room)
+    delta = Math.min(box.bottom - window.innerHeight + room, box.top - top)
+  if (Math.abs(delta) >= 1) window.scrollBy({ top: delta, behavior: reducedMotion() ? "auto" : "smooth" })
+}
+
 type Query = Omit<IdeaQuery, "page" | "perPage">
 
 const readQuery = (): Query => {
@@ -219,9 +252,12 @@ export function useIdeasBoard(lang: string) {
     }
   }
 
+  const selectedNow = useRef<string | null>(null)
+  selectedNow.current = selected
   const select = useCallback((id: string | null) => {
     setMerged(false)
-    smoothly(() => setSelected(id))
+    keepInPlace(id ?? selectedNow.current)
+    setSelected(id)
   }, [])
   const forward = useCallback((id: string) => {
     setMerged(true)
