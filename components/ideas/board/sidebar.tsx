@@ -120,12 +120,14 @@ export function IdeasSidebar({ board }: { board: Board }) {
               Discord
             </a>
           </li>
-          <li>
-            <a href={siteConfig.community.telegramGroup} target="_blank" rel="noopener noreferrer">
-              <TelegramIcon />
-              Telegram
-            </a>
-          </li>
+          {board.lang === "ru" && (
+            <li>
+              <a href={siteConfig.community.telegramGroup} target="_blank" rel="noopener noreferrer">
+                <TelegramIcon />
+                Telegram
+              </a>
+            </li>
+          )}
         </ul>
       </BlogWidget>
       <p className="ideas-emails">

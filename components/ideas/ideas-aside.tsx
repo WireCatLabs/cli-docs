@@ -29,12 +29,14 @@ export function IdeasAside({ lang, tool }: { lang: string; tool?: string }) {
               Discord
             </a>
           </li>
-          <li>
-            <a href={siteConfig.community.telegramGroup} target="_blank" rel="noopener noreferrer">
-              <TelegramIcon />
-              Telegram
-            </a>
-          </li>
+          {lang === "ru" && (
+            <li>
+              <a href={siteConfig.community.telegramGroup} target="_blank" rel="noopener noreferrer">
+                <TelegramIcon />
+                Telegram
+              </a>
+            </li>
+          )}
         </ul>
       </BlogWidget>
       <p className="ideas-emails">

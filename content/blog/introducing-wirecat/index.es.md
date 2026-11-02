@@ -173,6 +173,6 @@ Los calendarios, Notion, Slack, Google Meet, Microsoft Teams, GitHub y los gesto
 Empieza con una fuente; no necesitas todas las herramientas. La [guía de instalación](/es/docs/installation)
 cubre Windows, macOS y Linux con Node 22.16+ o 24+, o Bun.
 
-¿Qué debería venir después? Propón una fuente o una función en el [chat de WireCat en
-Telegram](https://t.me/wirecatdev). Los errores y los pull requests van al
+¿Qué debería venir después? Propón una fuente o una función en el [Discord de
+WireCat](https://discord.gg/DebENqbRrJ). Los errores y los pull requests van al
 [repositorio de GitHub](https://github.com/WireCatLabs) de cada herramienta.

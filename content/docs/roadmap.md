@@ -13,7 +13,7 @@ This page lists what we build next. A planned item is not an available feature, 
 can change. There are no promised dates. What already works is in [features](./features.mdx).
 
 **You can shape this roadmap.** Suggest a source or a feature, tell us what you need first, or discuss an item
-in the [WireCat chat on Telegram](https://t.me/wirecatdev). We read every request there and use them to decide
+in the [WireCat Discord](https://discord.gg/DebENqbRrJ). We read every request there and use them to decide
 what comes next.
 
 ## Recently added

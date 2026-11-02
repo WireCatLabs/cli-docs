@@ -60,14 +60,18 @@ export function baseOptions(lang: string): BaseLayoutProps {
         icon: <DiscordIcon />,
         external: true,
       },
-      {
-        type: "icon",
-        url: siteConfig.community.telegramGroup,
-        text: "Telegram",
-        label: "Telegram",
-        icon: <TelegramIcon />,
-        external: true,
-      },
+      ...(lang === "ru"
+        ? [
+            {
+              type: "icon" as const,
+              url: siteConfig.community.telegramGroup,
+              text: "Telegram",
+              label: "Telegram",
+              icon: <TelegramIcon />,
+              external: true,
+            },
+          ]
+        : []),
       {
         type: "icon",
         url: github,

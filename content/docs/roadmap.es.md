@@ -14,7 +14,7 @@ disponible, y el orden puede cambiar. No hay fechas prometidas. Lo que ya funcio
 [funciones](./features.mdx).
 
 **Puedes influir en esta hoja de ruta.** Propón una fuente o una función, cuéntanos qué necesitas primero o
-comenta un punto en el [chat de WireCat en Telegram](https://t.me/wirecatdev). Leemos cada petición y con ellas
+comenta un punto en el [Discord de WireCat](https://discord.gg/DebENqbRrJ). Leemos cada petición y con ellas
 decidimos qué viene después.
 
 ## Novedades
