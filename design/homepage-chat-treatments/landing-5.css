@@ -57,12 +57,15 @@
 .manual-install.prompt-preview+.manual-install{margin-top:12px}
 .prompt-preview .agent-prompt{margin:12px 0 4px}
 .connect-panel{border-color:color-mix(in srgb,var(--line) 70%,var(--ink) 12%);box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 8%,transparent),0 10px 20px -6px color-mix(in srgb,var(--ink) 12%,transparent),0 28px 56px -16px color-mix(in srgb,var(--ink) 22%,transparent)}
-.dark .connect-panel{background:color-mix(in srgb,var(--soft) 88%,var(--ink));border-color:color-mix(in srgb,var(--line) 45%,var(--ink) 28%);box-shadow:inset 0 1px 0 color-mix(in srgb,var(--ink) 9%,transparent),0 2px 4px #0007,0 16px 32px -8px #000b,0 40px 80px -20px #000d}
-.dark .connect-provider{background:color-mix(in srgb,var(--paper) 80%,transparent)}
+.dark .connect-panel{background:color-mix(in srgb,var(--bg) 95%,var(--ink));border-color:color-mix(in srgb,var(--line) 55%,var(--ink) 22%);box-shadow:inset 0 1px 0 color-mix(in srgb,var(--ink) 9%,transparent),0 2px 4px #0007,0 16px 32px -8px #000b,0 40px 80px -20px #000d}
+.dark .connect-provider{background:var(--paper)}
 .dark .connect-provider button[aria-pressed="true"]{background:color-mix(in srgb,var(--soft) 85%,var(--ink))}
 .dark .button.secondary.copy-agent{background:transparent;color:color-mix(in srgb,var(--accent) 55%,var(--ink));border:1px solid color-mix(in srgb,var(--line) 50%,var(--ink) 25%)}
 .dark .button.secondary.copy-agent:is(:hover,:focus-visible){background:color-mix(in srgb,var(--paper) 60%,transparent);color:var(--ink)}
-@media(min-width:1101px){.landing5 .hero.memory-hero h1{font-size:clamp(30px,2.4vw,34.5px);max-width:none}}
+.landing5 .hero.memory-hero{align-items:start}
+.landing5 .hero.memory-hero .hero-copy{padding-top:0}
+.landing5 .hero.memory-hero h1{text-box:trim-both cap alphabetic}
+@media(min-width:1101px){.landing5 .hero.memory-hero{grid-template-columns:minmax(0,.88fr) minmax(0,1fr)}.landing5 .hero.memory-hero.memory-hero::after{left:calc(46.8085% + 1.34px)}.landing5 .hero.memory-hero h1{font-size:clamp(30px,2.9vw,42px);max-width:none}}
 .integrations-desktop{display:grid;grid-template-columns:auto 1fr;gap:14px;margin-top:24px;padding:18px 20px;max-width:46ch;background:var(--paper);border:1px solid var(--line);border-radius:12px}
 .integrations-desktop>svg{width:20px;height:20px;margin-top:2px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .integrations-desktop p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}

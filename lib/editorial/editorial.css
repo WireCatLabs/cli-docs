@@ -12093,8 +12093,8 @@ html[data-why-icons="hide"] .wirecat-editorial .reasons-nine dd {
     0 28px 56px -16px color-mix(in srgb, var(--ink) 22%, transparent);
 }
 html.dark .wirecat-editorial .connect-panel {
-  background: color-mix(in srgb, var(--soft) 88%, var(--ink));
-  border-color: color-mix(in srgb, var(--line) 45%, var(--ink) 28%);
+  background: color-mix(in srgb, var(--bg) 95%, var(--ink));
+  border-color: color-mix(in srgb, var(--line) 55%, var(--ink) 22%);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ink) 9%, transparent),
     0 2px 4px #0007,
@@ -12102,7 +12102,7 @@ html.dark .wirecat-editorial .connect-panel {
     0 40px 80px -20px #000d;
 }
 html.dark .wirecat-editorial .connect-provider {
-  background: color-mix(in srgb, var(--paper) 80%, transparent);
+  background: var(--paper);
 }
 html.dark .wirecat-editorial .connect-provider button[aria-pressed="true"] {
   background: color-mix(in srgb, var(--soft) 85%, var(--ink));
@@ -12116,9 +12116,24 @@ html.dark .wirecat-editorial .button.secondary.copy-agent:is(:hover, :focus-visi
   background: color-mix(in srgb, var(--paper) 60%, transparent);
   color: var(--ink);
 }
+.wirecat-editorial .landing5 .hero.memory-hero {
+  align-items: start;
+}
+.wirecat-editorial .landing5 .hero.memory-hero .hero-copy {
+  padding-top: 0;
+}
+.wirecat-editorial .landing5 .hero.memory-hero h1 {
+  text-box: trim-both cap alphabetic;
+}
 @media (min-width: 1101px) {
+  .wirecat-editorial .landing5 .hero.memory-hero {
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1fr);
+  }
+  .wirecat-editorial .landing5 .hero.memory-hero.memory-hero::after {
+    left: calc(46.8085% + 1.34px);
+  }
   .wirecat-editorial .landing5 .hero.memory-hero h1 {
-    font-size: clamp(30px, 2.4vw, 34.5px);
+    font-size: clamp(30px, 2.9vw, 42px);
     max-width: none;
   }
 }
