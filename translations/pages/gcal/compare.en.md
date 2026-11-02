@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.12.0, its commands and its source, checked on 2 November 2026;
+your job. The marks for `gcal` come from its release 0.14.0, its commands and its source, checked on 2 November 2026;
 they are checked again at each release. The marks for the other tools come from their own
 READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
@@ -38,6 +38,7 @@ The tools:
 | See what changed since a date: new, moved and cancelled meetings | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
 | Find meetings that overlap | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | Leave birthdays, focus time and working-location blocks out of the list | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | ➖ | ➖ |
+| Get a reminder before a meeting, through your own program | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
 | **Find a meeting** | | | | | | |
 | Find a meeting by what it was about, not by its exact words | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Search your meetings without the internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
@@ -88,6 +89,9 @@ Notes on the `gcal` column:
   `ends_at>=today starts_at<=2026-11-06`, the words `today` and `yesterday`, and amounts in the past such as `7d`.
   It does not read "week" or "next friday", by design: an agent writes the dates, and an exact date is never read
   wrong. Only `events create --text` takes words, and Google reads them, not `gcal`.
+- **The time in every answer.** `events list`, `events prepare`, `doctor` and `session status` carry `meta.now`,
+  `meta.now_local` and `meta.timezone`, so an agent reads "today" and "next Monday" from the answer it already has,
+  not from its own guess. google-calendar-mcp gives the time through a tool of its own, `get-current-time`.
 - **Prepare for a meeting.** `events prepare` takes your next meeting, or the one you name, and gives its attendees
   with their answers, its Drive files and your past events with each attendee. Your latest messages and mail with each
   one come from the other WireCat tools on the same computer, such as `tg` or `mail`; with `gcal` alone those lists
@@ -97,6 +101,16 @@ Notes on the `gcal` column:
   out, and `event_type:default` keeps ordinary events only.
 - **iCalendar files.** `events export <query> --output week.ics` writes the events a list would show as an `.ics`
   file. `events import <calendar> <file.ics>` adds a file's events through Google, mails nobody, and asks first.
+  Over MCP an agent gets the `.ics` text in the answer through `gcal_read`, so a read-only profile
+  (`GCAL_READ_ONLY`) can export too. Writing a file with `--output` stays on the command line, and the read-only
+  lock refuses it.
+- **Reminders.** `events remind`, run every few minutes by cron, a systemd timer, launchd or Task Scheduler, tells
+  you once about each meeting that starts within `--due-within` (`10m` if not given). After `--` it runs your own
+  program for each one instead, such as a desktop notification or a Telegram message, with the event as JSON on its
+  standard input. No shell runs the program, so a title that someone else wrote never reaches a command line.
+  Running a program is `deny` until you set `permissions.events.remind.hook allow`; `--yes` does not lift it,
+  `GCAL_READ_ONLY` refuses it, and no MCP tool offers the command. `--dry-run` shows what it would remind and
+  changes nothing.
 - **All calendars.** One list covers the calendars you chose to sync in one profile. Each Google account is its own
   profile; `events list --source all` reads every account in one list, names them in `meta.accounts`, and says when
   one has not finished its sync. `calendar:Team` names one calendar by its name.
@@ -121,8 +135,9 @@ Notes on the `gcal` column:
   tell the agent they are data, not instructions. The text itself is not changed.
 - **Passcodes.** Passcodes, PINs and passwords are removed from every answer, the raw `gcal api` commands included:
   a link loses its query string, and a line of the notes that names a passcode is dropped.
-- **Every command an MCP tool.** Through three MCP tools, `gcal_tools_search`, `gcal_read` and `gcal_write`. Two
-  commands are kept for you at a terminal: `api call`, and emptying a calendar (`calendars.clear`).
+- **Every command an MCP tool.** Through three MCP tools, `gcal_tools_search`, `gcal_read` and `gcal_write`. Three
+  commands are kept for you at a terminal: `api call`, emptying a calendar (`calendars.clear`), and
+  `events remind`, which runs a program of yours: through it an agent could run any program on your computer.
 - **claude.ai on the web.** `mcp serve --http` serves the tool to Claude and ChatGPT in the browser, behind a tunnel
   you set up yourself, such as Tailscale Funnel.
 - **Speed and cost against a browser agent.** `gcal` calls Google's API and reads its own copy; it opens no

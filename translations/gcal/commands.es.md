@@ -322,6 +322,29 @@ gcal events prepare [event] [options]
 
 **Example:** `gcal personal events prepare --json`, `gcal personal events prepare event:42 --limit 3`, `gcal personal events prepare event:42 --since-time 2026-10-01`
 
+### `gcal events remind`
+
+tell once about each event that starts within --due-within: print it, or run your program for it with the event as JSON on its standard input; for cron or a timer every few minutes, syncing first unless --offline
+
+**Changes something on this computer only.**
+
+```sh
+gcal events remind [program] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `program` | optional | after --: the program to run for each event, and its own arguments; no shell. Needs events.remind.hook allowed. |
+
+| Option | What it does |
+|---|---|
+| `--due-within <duration>` | the events that start within this long from now, 1m to 1d. Default: `10m`. |
+| `--dry-run` | say what it would remind; run nothing, sync nothing, remember nothing. |
+
+**Returns:** calendar reminder — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 9 more; every field: gcal commands info events remind
+
+**Example:** `gcal personal events remind --due-within 10m`, `gcal personal events remind --due-within 15m -- /home/me/bin/meeting-reminder`
+
 ### `gcal events create`
 
 add an event to a calendar; with --repeat, one that repeats; with --text, one the provider reads from a line such as 'Lunch with Ana tomorrow 1pm'

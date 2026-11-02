@@ -19,6 +19,13 @@ comparte: eso necesita `sharing.notify`, que está en `deny`. Aun así puede com
 `gcal personal config set permissions.api.calendar.acl deny`, o inicia sesión sin `--grant sharing`. Vaciar un
 calendario nunca se ofrece a un agente.
 
+`events remind -- <program>` ejecuta un programa tuyo en este equipo, una vez por cada reunión que empieza pronto.
+Está en `deny` hasta que ejecutes `gcal personal config set permissions.events.remind.hook allow`; `--yes` no lo
+levanta, y `GCAL_READ_ONLY` lo rechaza en cualquier nivel. Ninguna herramienta MCP ofrece `events remind`. El programa
+arranca sin shell, y el evento llega como JSON en su entrada estándar: el título, el lugar y la descripción los escribe
+quien envió la invitación, así que nunca llegan a una línea de órdenes donde una shell podría ejecutarlos. Tu programa
+también debe tratarlos como datos. Su entorno es el de la ejecución de `gcal`, más `GCAL_EVENT` y `GCAL_PROFILE`.
+
 La sesión de Google se guarda en el llavero del sistema, con el servicio `gcal-cli`, una entrada por perfil. Esa entrada
 también guarda el ID y el secreto de tu cliente de OAuth, así que renovar la sesión no vuelve a necesitar el archivo del
 cliente. Google dice que el secreto de cliente de una aplicación de escritorio no es confidencial, pero `gcal` nunca lo

@@ -229,6 +229,158 @@ gcal personal events prepare event:42 --since-time 2026-10-01
 агента, а не инструкции. `gcal guide prepare-meeting` и `gcal guide digest` показывают, как агент превращает этот ответ
 и `events list` в справку к встрече или в ежедневную или еженедельную сводку.
 
+## Напоминание перед встречей
+
+`events remind` один раз сообщает о каждом событии, которое скоро начнётся. Команда сделана для таймера, который
+запускает её каждые несколько минут, так же как `remind` в gcalcli запускают из cron:
+
+```sh
+gcal personal events remind                          # what starts in the next 10 minutes
+gcal personal events remind --due-within 15m --json  # the next 15 minutes, as JSON
+gcal personal events remind --dry-run                # what it would remind; nothing changes
+gcal personal events remind -- /home/me/bin/meeting-reminder
+```
+
+Каждый запуск сначала синхронизирует календари (`--offline` читает только хранилище), а потом берёт события, которые
+начинаются в пределах `--due-within`: это длительность от `1m` до `1d`, по умолчанию `10m`. Считаются только события,
+которые занимают ваше время: со временем начала и конца, не отменённые, не отклонённые вами и не время для
+сосредоточенной работы, не отсутствие и не рабочее место. `gcal` запоминает, о каких событиях уже напомнил, и следующий
+запуск о них молчит. О встрече, перенесённой на другое время, он напомнит снова. Делайте `--due-within` не короче
+промежутка между двумя запусками: при запуске каждые 5 минут `10m` находит каждую встречу не меньше чем за 5 минут до
+начала.
+
+Если синхронизация не удалась, например без сети, запуск всё равно напоминает по тому, что есть в хранилище. Об этом
+говорят `meta.complete:
+false` и `meta.issues`, а запуск завершается с кодом ошибки синхронизации, так что cron или
+`systemctl --user status` показывают сбой.
+
+### Запуск своей программы для каждого события
+
+Без программы `events remind` выводит события: cron присылает вам по почте то, что выводит задание. После `--` команда
+вместо этого запускает вашу программу по одному разу на событие:
+
+- Событие приходит одной строкой JSON на стандартный ввод программы, в том же виде, что элемент `events list`, с
+  добавленными `ref` (`event:<id>`) и `untrusted`.
+- `GCAL_EVENT` (`event:<id>`) и `GCAL_PROFILE` есть в её окружении, так что она сама может запустить `gcal`.
+- Её запускает не оболочка. Слова после `--` — это программа и её аргументы, ровно как вы их написали. Название, место
+  и описание события никогда не попадают в её командную строку: их пишут другие люди, и в оболочке они могли бы
+  выполнить команды. Сохраните это и в своей программе: передавайте их как данные и никогда не вставляйте в строку
+  оболочки.
+- Программа, которая завершилась с кодом 0, напомнила вам. Любой другой код оставляет событие для следующего запуска, и
+  `gcal` отвечает `configuration_error` (`remind.hook-failed`) с кодом выхода для каждого события. Программа, которая
+  всё ещё работает через 60 секунд, останавливается.
+- В Windows укажите `.exe` или запускайте скрипт через его интерпретатор: `-- powershell.exe -File C:\me\remind.ps1`.
+  Node.js отказывается запускать файл `.cmd` или `.bat` без оболочки.
+
+`gcal` не запускает ни одной программы, пока вы это не разрешите, один раз на профиль:
+
+```sh
+gcal personal config set permissions.events.remind.hook allow
+```
+
+До этого ключ в `deny`, а `GCAL_READ_ONLY` отказывает при любом уровне. `--yes` на него не отвечает, и ни один
+инструмент MCP не предлагает `events remind`: иначе агент, который может набрать команду `gcal`, мог бы запустить любую
+программу на вашем компьютере.
+
+Уведомление на рабочем столе в Linux, с `jq` и `notify-send`:
+
+```sh
+#!/bin/sh
+# /home/me/bin/meeting-reminder
+event=$(cat)
+title=$(printf '%s' "$event" | jq -r '.title // "(no title)"')
+start=$(printf '%s' "$event" | jq -r '.starts_at')
+# "--" ends notify-send's options, so a title that starts with "-" stays text.
+notify-send -- "Meeting at $start" "$title"
+```
+
+Сообщение в ваше «Избранное» в Telegram через `tg`, и данные о встрече для агента, который пишет справку:
+
+```sh
+#!/bin/sh
+# /home/me/bin/meeting-to-telegram
+title=$(jq -r '.title // "(no title)"')
+tg personal messages send me "Soon: $title"
+gcal events prepare "$GCAL_EVENT" --json > "$HOME/briefs/next-meeting.json"
+```
+
+### Запуск по таймеру
+
+Запускайте её каждые 5 минут. Указывайте полный путь к `gcal` (его выводит `command -v gcal`): таймер запускается с
+коротким `PATH`.
+
+cron (`crontab -e`):
+
+```text
+*/5 * * * * /usr/local/bin/gcal personal events remind --due-within 10m -- /home/me/bin/meeting-reminder
+```
+
+Пользовательский таймер systemd в Linux, который заодно достаёт до вашего сеанса рабочего стола для `notify-send`.
+Сохраните `~/.config/systemd/user/gcal-remind.service`:
+
+```ini
+[Unit]
+Description=gcal meeting reminders
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/gcal personal events remind --due-within 10m -- /home/me/bin/meeting-reminder
+```
+
+и `~/.config/systemd/user/gcal-remind.timer`:
+
+```ini
+[Unit]
+Description=gcal meeting reminders every 5 minutes
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target
+```
+
+затем запустите его командой `systemctl --user daemon-reload && systemctl --user enable --now gcal-remind.timer`.
+
+launchd в macOS: сохраните `~/Library/LaunchAgents/dev.wirecat.gcal-remind.plist`, затем выполните
+`launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/dev.wirecat.gcal-remind.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>dev.wirecat.gcal-remind</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/gcal</string>
+    <string>personal</string>
+    <string>events</string>
+    <string>remind</string>
+    <string>--due-within</string>
+    <string>10m</string>
+    <string>--</string>
+    <string>/Users/me/bin/meeting-reminder</string>
+  </array>
+  <key>StartInterval</key><integer>300</integer>
+</dict>
+</plist>
+```
+
+Планировщик заданий в Windows, в PowerShell:
+
+```powershell
+$gcal = (Get-Command gcal).Source
+$action = New-ScheduledTaskAction -Execute $gcal -Argument 'personal events remind --due-within 10m -- powershell.exe -File C:\me\remind.ps1'
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 5)
+$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew
+Register-ScheduledTask -TaskName gcal-remind -Action $action -Trigger $trigger -Settings $settings
+```
+
+Два запуска одновременно не напоминают дважды: второй отвечает `validation_error` (`remind.running`) и ничего не
+делает.
+
 ## Экспорт и импорт файлов iCalendar
 
 `events export` записывает сохранённые события в файл iCalendar (`.ics`), который открывают другие программы
@@ -242,7 +394,9 @@ gcal personal events export id:42                               # the text in th
 
 Она экспортирует не больше 1000 событий; чтобы получить больше, сузьте запрос. Время записывается в UTC. Каждое
 повторение повторяющегося события записывается как отдельное событие, а его правило повторения — нет. Новый файл может
-читать только вы. Через MCP `--output` не предлагается: агент получает текст в ответе.
+читать только вы. Через MCP `--output` не предлагается: агент получает текст в ответе, через `gcal_read`, поэтому
+экспортировать может и профиль только для чтения (`GCAL_READ_ONLY`). Запись файла — это всё-таки изменение: при
+заданном `GCAL_READ_ONLY` `--output` отклоняется.
 
 `events import` добавляет события из файла `.ics` в календарь через
 [events.import](https://developers.google.com/workspace/calendar/api/v3/reference/events/import) Google. Каждое
@@ -385,6 +539,11 @@ gcal personal events delete event:42 --following --no-notify
 
 Каждая команда, кроме `mcp serve`, принимает `--json` и выводит одно значение JSON в stdout. Ошибки выводятся как JSON
 в stderr, с кодом, по которому можно ветвиться. Коды перечислены в [справочнике команд](./commands.md).
+
+`events list`, `events prepare`, `doctor` и `session status` также сообщают, когда они ответили и в каком часовом
+поясе: `meta.now` (UTC), `meta.now_local` (тот же момент со смещением вашего пояса) и `meta.timezone`. Агент берёт
+«сегодня» и «следующий понедельник» из них, а не из своей догадки. Пояс — пояс вашего компьютера (`TZ`), в нём
+читаются `today` и дата без времени. Собственный пояс каждого календаря есть в `calendars list` (`timezone`).
 
 ## Агенты
 
