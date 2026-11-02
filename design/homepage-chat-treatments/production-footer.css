@@ -61,7 +61,7 @@
 }
 
 .wirecat-landing .foot a:focus-visible,
-.wirecat-landing .footer-install button:focus-visible {
+.wirecat-landing .footer-install a:focus-visible {
   outline: 2px solid var(--app-ink);
   outline-offset: 5px;
 }
@@ -75,45 +75,53 @@
   padding-top: 24px;
 }
 
+.wirecat-landing .footer-download {
+  grid-column: 2 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+
+.wirecat-landing .footer-download-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: #4b53f0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+  transition: background-color 160ms ease-out;
+}
+
+.wirecat-landing .footer-download-button:hover {
+  background: #3d44d8;
+}
+
+.wirecat-landing .footer-download-button svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wirecat-landing .footer-install .footer-download-other {
+  color: var(--app-ink);
+  font-size: 14px;
+}
+
 .wirecat-landing .footer-install-label {
   color: var(--app-ink);
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
-}
-
-.wirecat-landing .footer-install .cmd {
-  grid-column: 2 / -1;
-  font-family: var(--body);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  width: 100%;
-  padding: 10px 12px 10px 16px;
-  border: 1px solid var(--app-line);
-  border-radius: 12px;
-  background: var(--app-2);
-  box-shadow: none;
-}
-
-.wirecat-landing .footer-install .cmd code {
-  font-family: var(--code);
-  min-width: 0;
-  padding-block: 4px;
-  font-size: 13px;
-  line-height: 1.6;
-  white-space: nowrap;
-  overflow-wrap: normal;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--app-line) transparent;
-}
-
-.wirecat-landing .footer-install .copy {
-  min-width: 100px;
-  min-height: 40px;
-  padding: 10px 14px;
 }
 
 .wirecat-landing .foot-bottom {
@@ -151,7 +159,7 @@
     gap: 12px;
   }
 
-  .wirecat-landing .footer-install .cmd {
+  .wirecat-landing .footer-download {
     grid-column: 1;
   }
 }
@@ -172,22 +180,6 @@
   }
 
   .wirecat-landing .foot a:not(.mark) {
-    min-height: 44px;
-  }
-
-  .wirecat-landing .footer-install .cmd {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 14px;
-  }
-
-  .wirecat-landing .footer-install .cmd code {
-    white-space: normal;
-  }
-
-  .wirecat-landing .footer-install .copy {
-    align-self: flex-end;
     min-height: 44px;
   }
 

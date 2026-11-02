@@ -1,15 +1,14 @@
 import { expect, test } from "@playwright/test"
 
 for (const lang of ["en", "ru", "es"] as const) {
-  test(`${lang}: header, page and footer copy buttons share one toast`, async ({ page, context }) => {
+  test(`${lang}: header and page copy buttons share one toast`, async ({ page, context }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"])
     await page.goto(lang === "en" ? "/" : `/${lang}`)
     const toast = page.locator("[data-copy-feedback]")
     await page.locator("header [data-connect] > summary").click()
     const headerCopy = page.locator("header .copy-agent")
     const bodyCopy = page.locator(".setup [data-copy]").first()
-    const footerCopy = page.locator("footer [data-copy]")
-    for (const button of [headerCopy, bodyCopy, footerCopy]) {
+    for (const button of [headerCopy, bodyCopy]) {
       if (button === bodyCopy) await page.locator(".setup [data-connect] > summary").click()
       await button.click()
       await expect(toast).toBeVisible()
@@ -19,7 +18,8 @@ for (const lang of ["en", "ru", "es"] as const) {
     }
     await expect(toast).toBeHidden({ timeout: 4500 })
     await page.goto(`/${lang}/about`)
-    await page.locator("footer [data-copy]").click()
+    await page.locator("header [data-connect] > summary").click()
+    await page.locator("header .copy-agent").click()
     await expect(toast).toBeVisible()
   })
 }
@@ -33,7 +33,8 @@ test("failed clipboard writes show an error instead of a success toast", async (
       },
     })
   })
-  await page.locator("footer [data-copy]").click()
+  await page.locator(".setup [data-connect] > summary").click()
+  await page.locator(".setup .copy-agent").click()
   await expect(page.locator("[data-copy-feedback]")).toContainText("Не удалось скопировать")
-  await expect(page.locator("footer [data-copy]")).not.toHaveAttribute("data-copied", "")
+  await expect(page.locator(".setup .copy-agent")).not.toHaveAttribute("data-copied", "")
 })

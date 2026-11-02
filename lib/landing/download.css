@@ -492,3 +492,60 @@
 .wirecat-download .download-setup-open {
   margin-bottom: 16px;
 }
+.wirecat-download .desktop-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px 24px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.wirecat-download .desktop-gallery-open {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  cursor: zoom-in;
+  transition:
+    box-shadow 180ms ease-out,
+    translate 180ms ease-out;
+}
+.wirecat-download .desktop-gallery-open:is(:hover, :focus-visible) {
+  translate: 0 -2px;
+}
+.wirecat-download .desktop-gallery-open:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.wirecat-download .desktop-gallery-open > svg {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 30px;
+  height: 30px;
+  padding: 7px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+.wirecat-download .desktop-gallery-open:is(:hover, :focus-visible) > svg {
+  opacity: 1;
+}
+@media (max-width: 900px) {
+  .wirecat-download .desktop-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .wirecat-download .desktop-gallery-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-download .desktop-gallery-open,
+  .wirecat-download .desktop-gallery-open > svg {
+    transition: none;
+  }
+}

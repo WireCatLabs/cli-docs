@@ -73,9 +73,8 @@ for (const lang of ["en", "ru", "es"]) {
         }
         const installation = page.locator("footer.site .footer-install")
         await expect(installation).toBeVisible()
-        const command = installation.locator(".cmd code")
-        await expect(command).not.toBeEmpty()
-        await expect(installation.locator("button[data-copy]")).toHaveAttribute("data-copy", await command.innerText())
+        await expect(installation.locator(".footer-download-button")).toHaveAttribute("href", `/${lang}/download`)
+        await expect(installation.locator(".cmd")).toHaveCount(0)
 
         await expect(page.locator(".site-header .editorial-language summary")).toBeVisible()
         const connect = page.locator(".site-header [data-connect]")

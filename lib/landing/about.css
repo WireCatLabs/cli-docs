@@ -10,7 +10,7 @@
 }
 .wirecat-editorial .wirecat-about .about-page h1 {
   margin: 0 0 20px;
-  font-size: clamp(30px, 3.6vw, 46px);
+  font-size: clamp(28px, 3vw, 40px);
   line-height: 1.2;
   letter-spacing: -0.035em;
   text-transform: none;
@@ -18,7 +18,7 @@
 .wirecat-about .about-intro .intro {
   max-width: 52ch;
   margin: 0;
-  font-size: clamp(19px, 2vw, 23px);
+  font-size: clamp(17px, 1.5vw, 19px);
   line-height: 1.6;
   color: var(--ink);
   text-wrap: pretty;
@@ -59,8 +59,25 @@
   border-radius: 12px;
   background: var(--soft);
   color: var(--ink);
-  font-size: 20px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.65;
+}
+.wirecat-about .about-principles ul {
+  display: grid;
+  gap: 14px;
+  max-width: 70ch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.wirecat-about .about-principles li {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.wirecat-about .about-principles strong {
+  color: var(--ink);
+  font-weight: 650;
 }
 .wirecat-about .about-tool-links {
   margin-top: 24px;
@@ -286,11 +303,11 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 0 16px;
   }
-  .wirecat-about .about-project-card dl > div:last-child {
+  .wirecat-about .about-project-card dl > div:is(:first-child, :nth-child(2)) {
     grid-column: 1 / -1;
   }
   .wirecat-about .about-purpose .about-statement {
     padding: 20px;
-    font-size: 18px;
+    font-size: 16px;
   }
 }
