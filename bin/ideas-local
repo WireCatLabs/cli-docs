@@ -5,91 +5,93 @@
 # WIRECAT_API_REPO: the wirecat-api checkout, by default next to this repository's main checkout.
 set -euo pipefail
 
-docs_repo="$(cd "$(git -C "$(dirname "$0")" rev-parse --git-common-dir)/.." && pwd)"
-api_repo="${WIRECAT_API_REPO:-$(dirname "$docs_repo")/wirecat-api}"
-api_dir="$api_repo/.worktrees/ideas-local-run"
-docs_dir="$docs_repo/.worktrees/ideas-local-run"
-api_url="http://localhost:3000"
-site_url="http://localhost:4321"
+# One function, read whole before it runs: refreshing the worktree this script lives in may rewrite the file.
+main() {
+  docs_repo="$(cd "$(git -C "$(dirname "$0")" rev-parse --git-common-dir)/.." && pwd)"
+  api_repo="${WIRECAT_API_REPO:-$(dirname "$docs_repo")/wirecat-api}"
+  api_dir="$api_repo/.worktrees/ideas-local-run"
+  docs_dir="$docs_repo/.worktrees/ideas-local-run"
+  api_url="http://localhost:3000"
+  site_url="http://localhost:4321"
 
-say() { printf '\n== %s\n' "$*"; }
+  say() { printf '\n== %s\n' "$*"; }
 
-for port in 3000 4321; do
-  if ss -ltn "sport = :$port" | grep -q LISTEN; then
-    echo "Port $port is taken. Stop what runs there first (ss -ltnp 'sport = :$port' shows it)." >&2
-    exit 1
-  fi
-done
-[[ -f "$api_repo/.env" ]] || { echo "No $api_repo/.env with the database settings (see its README)." >&2; exit 1; }
-
-# A detached checkout of origin/main, so no branch is held and the shared main checkouts stay untouched.
-fresh_worktree() {
-  local repo="$1" dir="$2"
-  git -C "$repo" fetch --quiet origin main
-  if [[ -d "$dir" ]]; then
-    if [[ -n "$(git -C "$dir" status --porcelain --untracked-files=no)" ]]; then
-      echo "$dir has local changes; commit or discard them first." >&2
+  for port in 3000 4321; do
+    if ss -ltn "sport = :$port" | grep -q LISTEN; then
+      echo "Port $port is taken. Stop what runs there first (ss -ltnp 'sport = :$port' shows it)." >&2
       exit 1
     fi
-    git -C "$dir" checkout --quiet --detach origin/main
-  else
-    git -C "$repo" worktree add --quiet --detach "$dir" origin/main
-  fi
-  echo "$dir at $(git -C "$dir" log -1 --format='%h %s')"
-}
-
-say "Worktrees"
-fresh_worktree "$api_repo" "$api_dir"
-fresh_worktree "$docs_repo" "$docs_dir"
-
-logs="$api_dir/log"
-mkdir -p "$logs"
-
-say "API: gems, database, seed ideas (output in $logs/ideas-local-setup.log)"
-# Linked, not copied, so the database password lives in one file only.
-ln -sfn "$api_repo/.env" "$api_dir/.env"
-(cd "$api_dir" && bundle install --quiet && bin/rails db:prepare && bin/rails ideas:seed) >"$logs/ideas-local-setup.log" 2>&1 ||
-  { tail -20 "$logs/ideas-local-setup.log" >&2; exit 1; }
-# db:prepare dumps the schema with the local database's column order; keep the checkout clean for the next run.
-git -C "$api_dir" checkout --quiet -- db/schema.rb
-grep '^Created' "$logs/ideas-local-setup.log"
-
-say "Site: packages"
-(cd "$docs_dir" && pnpm install --frozen-lockfile --silent)
-
-pids=()
-stop() {
-  trap - INT TERM EXIT
-  say "Stopping"
-  for pid in "${pids[@]}"; do
-    # Each process leads its own group (setsid), so the group id is the PID started here; this also stops the
-    # server next dev spawns.
-    kill -TERM -- "-$pid" 2>/dev/null && echo "stopped $pid"
   done
-  wait 2>/dev/null || true
-}
-trap stop INT TERM EXIT
+  [[ -f "$api_repo/.env" ]] || { echo "No $api_repo/.env with the database settings (see its README)." >&2; exit 1; }
 
-say "Starting"
-(cd "$api_dir" && exec setsid bin/rails server -p 3000 >"$logs/ideas-local-api.log" 2>&1) &
-pids+=("$!")
-# Sidekiq sends the status emails; in development they are recorded in idea_status_emails, never delivered.
-(cd "$api_dir" && exec setsid bundle exec sidekiq >"$logs/ideas-local-sidekiq.log" 2>&1) &
-pids+=("$!")
-(cd "$docs_dir" && export NEXT_PUBLIC_IDEAS_API_URL="$api_url" &&
-  exec setsid node_modules/.bin/next dev -p 4321 >"$logs/ideas-local-site.log" 2>&1) &
-pids+=("$!")
-echo "API $api_url (PID ${pids[0]}), Sidekiq (PID ${pids[1]}), site $site_url (PID ${pids[2]})"
+  # A detached checkout of origin/main, so no branch is held and the shared main checkouts stay untouched.
+  fresh_worktree() {
+    local repo="$1" dir="$2"
+    git -C "$repo" fetch --quiet origin main
+    if [[ -d "$dir" ]]; then
+      if [[ -n "$(git -C "$dir" status --porcelain --untracked-files=no)" ]]; then
+        echo "$dir has local changes; commit or discard them first." >&2
+        exit 1
+      fi
+      git -C "$dir" checkout --quiet --detach origin/main
+    else
+      git -C "$repo" worktree add --quiet --detach "$dir" origin/main
+    fi
+    echo "$dir at $(git -C "$dir" log -1 --format='%h %s')"
+  }
 
-for url in "$api_url/up" "$site_url/en/ideas"; do
-  for _ in $(seq 120); do
-    curl -fs -o /dev/null "$url" && break
-    sleep 1
+  say "Worktrees"
+  fresh_worktree "$api_repo" "$api_dir"
+  fresh_worktree "$docs_repo" "$docs_dir"
+
+  logs="$api_dir/log"
+  mkdir -p "$logs"
+
+  say "API: gems, database, seed ideas (output in $logs/ideas-local-setup.log)"
+  # Linked, not copied, so the database password lives in one file only.
+  ln -sfn "$api_repo/.env" "$api_dir/.env"
+  (cd "$api_dir" && bundle install --quiet && bin/rails db:prepare && bin/rails ideas:seed) >"$logs/ideas-local-setup.log" 2>&1 ||
+    { tail -20 "$logs/ideas-local-setup.log" >&2; exit 1; }
+  # db:prepare dumps the schema with the local database's column order; keep the checkout clean for the next run.
+  git -C "$api_dir" checkout --quiet -- db/schema.rb
+  grep '^Created' "$logs/ideas-local-setup.log"
+
+  say "Site: packages"
+  (cd "$docs_dir" && pnpm install --frozen-lockfile --silent)
+
+  pids=()
+  stop() {
+    trap - INT TERM EXIT
+    say "Stopping"
+    for pid in "${pids[@]}"; do
+      # Each process leads its own group (setsid), so the group id is the PID started here; this also stops the
+      # server next dev spawns.
+      kill -TERM -- "-$pid" 2>/dev/null && echo "stopped $pid"
+    done
+    wait 2>/dev/null || true
+  }
+  trap stop INT TERM EXIT
+
+  say "Starting"
+  (cd "$api_dir" && exec setsid bin/rails server -p 3000 >"$logs/ideas-local-api.log" 2>&1) &
+  pids+=("$!")
+  # Sidekiq sends the status emails; in development they are recorded in idea_status_emails, never delivered.
+  (cd "$api_dir" && exec setsid bundle exec sidekiq >"$logs/ideas-local-sidekiq.log" 2>&1) &
+  pids+=("$!")
+  (cd "$docs_dir" && export NEXT_PUBLIC_IDEAS_API_URL="$api_url" &&
+    exec setsid node_modules/.bin/next dev -p 4321 >"$logs/ideas-local-site.log" 2>&1) &
+  pids+=("$!")
+  echo "API $api_url (PID ${pids[0]}), Sidekiq (PID ${pids[1]}), site $site_url (PID ${pids[2]})"
+
+  for url in "$api_url/up" "$site_url/en/ideas"; do
+    for _ in $(seq 120); do
+      curl -fs -o /dev/null "$url" && break
+      sleep 1
+    done
+    curl -fs -o /dev/null "$url" || { echo "$url did not answer in 2 minutes; logs are in $logs" >&2; exit 1; }
   done
-  curl -fs -o /dev/null "$url" || { echo "$url did not answer in 2 minutes; logs are in $logs" >&2; exit 1; }
-done
 
-cat <<EOF
+  cat <<EOF
 
 Ready.
   Site:  $site_url/en/ideas
@@ -104,4 +106,7 @@ Make that address the owner, to change statuses:
 Ctrl+C stops everything.
 EOF
 
-wait
+  wait
+}
+
+main "$@"
