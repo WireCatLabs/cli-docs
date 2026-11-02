@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import { apiSource, errorCode } from "../lib/ideas/api.ts"
 import { maskEmail, returnPath, safeReturnPath } from "../lib/ideas/config.ts"
 import { IdeasError } from "../lib/ideas/types.ts"
@@ -219,5 +219,29 @@ describe("who is signed in", () => {
       "google_failed",
       "google_use_email",
     ])
+  })
+})
+
+describe("API address", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    vi.resetModules()
+  })
+
+  async function configWith(nodeEnv: string, apiUrl: string) {
+    vi.stubEnv("NODE_ENV", nodeEnv)
+    vi.stubEnv("NEXT_PUBLIC_IDEAS_API_URL", apiUrl)
+    vi.resetModules()
+    return import("../lib/ideas/config.ts")
+  }
+
+  it("takes NEXT_PUBLIC_IDEAS_API_URL in development, so the local page talks to the local API", async () => {
+    const config = await configWith("development", "http://localhost:3000")
+    expect(config).toMatchObject({ ideasApiUrl: "http://localhost:3000", ideasLive: true, ideasSample: false })
+  })
+
+  it("ignores it in a build, where no apiUrl in site.config.json still hides the page", async () => {
+    const config = await configWith("production", "http://localhost:3000")
+    expect(config).toMatchObject({ ideasApiUrl: "", ideasLive: false, ideasEnabled: false })
   })
 })
