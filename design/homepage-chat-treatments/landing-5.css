@@ -65,7 +65,10 @@
 .landing5 .hero.memory-hero{align-items:start}
 .landing5 .hero.memory-hero .hero-copy{padding-top:0}
 .landing5 .hero.memory-hero h1{text-box:trim-both cap alphabetic}
-@media(min-width:1101px){.landing5 .hero.memory-hero{grid-template-columns:minmax(0,.88fr) minmax(0,1fr)}.landing5 .hero.memory-hero.memory-hero::after{left:calc(46.8085% + 1.34px)}.landing5 .hero.memory-hero h1{font-size:clamp(30px,2.9vw,42px);max-width:none}}
+/* Each sentence of the heading keeps one line: the size follows the copy column, side by side or stacked. */
+.landing5 .hero.memory-hero h1{max-width:none;grid-row:auto}
+@media(min-width:1101px){.landing5 .hero.memory-hero{grid-template-columns:minmax(0,.88fr) minmax(0,1fr)}.landing5 .hero.memory-hero.memory-hero::after{left:calc(46.8085% + 1.34px)}.landing5 .hero.memory-hero h1{font-size:min(calc(3.02vw - 2px),42px)}}
+@media(max-width:1100px){.landing5 .hero.memory-hero{grid-template-columns:minmax(0,1fr)}.landing5 .hero.memory-hero .hero-copy{display:block}.landing5 .hero.memory-hero.memory-hero::after{display:none}.landing5 .hero.memory-hero h1{font-size:clamp(20px,calc(6.3vw - 1.5px),46px)}.landing5 .hero.memory-hero .hero-copy .lede{max-width:62ch}}
 .integrations-desktop{display:grid;grid-template-columns:auto 1fr;gap:14px;margin-top:24px;padding:18px 20px;max-width:46ch;background:var(--paper);border:1px solid var(--line);border-radius:12px}
 .integrations-desktop>svg{width:20px;height:20px;margin-top:2px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .integrations-desktop p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}
