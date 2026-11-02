@@ -1,10 +1,11 @@
-import { ArrowRight, Mail, MessageCircle } from "lucide-react"
+import { ArrowRight, Lightbulb, Mail, MessageCircle } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { StructuredData } from "@/components/structured-data"
 import { WirecatLogo } from "@/components/wirecat-logo"
 import { aboutCopy } from "@/lib/about"
 import { i18n } from "@/lib/i18n"
+import { ideasEnabled } from "@/lib/ideas/config"
 import { pageMetadata, pageStructuredData, seoWords } from "@/lib/seo"
 import { homePath } from "@/lib/site-routes"
 import siteConfig from "@/site.config.json"
@@ -59,6 +60,12 @@ export default async function AboutPage({ params }: Props) {
       <h2>{words.contactTitle}</h2>
       <p>{words.contactText}</p>
       <div className="about-contact-actions">
+        {ideasEnabled && (
+          <Link href={`/${lang}/ideas`}>
+            <Lightbulb aria-hidden="true" />
+            {words.ideasButton}
+          </Link>
+        )}
         <a href={`mailto:${siteConfig.contacts.email}`}>
           <Mail aria-hidden="true" />
           {words.emailButton}
