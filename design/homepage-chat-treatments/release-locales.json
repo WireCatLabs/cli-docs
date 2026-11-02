@@ -665,7 +665,7 @@
     "Copy a request for your agent: it installs the tool, helps you sign in and checks that it works.": "Скопируйте запрос для агента: он установит инструмент, поможет войти и проверит, что всё работает.",
     "Show the full request": "Показать запрос целиком",
     "Searched recommendations in your chats": "Найдены рекомендации в ваших чатах",
-    "Everything you’ve said.": "Всё, что вы сказали, —",
+    "Everything you’ve said.": "Всё, что вы сказали —",
     "Ready for your agent.": "под рукой у агента.",
     "WireCat connects the AI agent you already use — Claude, ChatGPT, Codex — to your Telegram and WhatsApp chats, then to your mail, meetings, documents, calendar and notes. Everything stays on your computer.": "WireCat подключает ИИ-агента, которым вы уже пользуетесь, — Claude, ChatGPT, Codex — к вашим чатам в Telegram, WhatsApp и MAX, а также к почте, встречам, документам, календарю и заметкам. Всё хранится на вашем компьютере.",
     "Start with your chats.": "Начните с переписки.",
@@ -675,7 +675,7 @@
     "Your chats, mail, meetings and documents stay on your computer. WireCat has no servers to send them to. Only your AI agent receives your data, and only for your task. You choose where its model runs.": "Переписка, почта, встречи и документы хранятся на вашем компьютере. У WireCat нет серверов, куда бы они отправлялись. Данные получает только ваш ИИ-агент — и только для вашей задачи. Где работает его модель, выбираете вы.",
     "Use Claude, ChatGPT, Codex, Cursor, Gemini CLI, Hermes or another agent that works with CLI tools or MCP.": "Используйте Claude, ChatGPT, Codex, Cursor, Gemini CLI, Hermes или другого агента, работающего с CLI или MCP.",
     "Start with Telegram, WhatsApp or MAX, then ask a question about a conversation you already have. Add mail, meetings, documents and notes when you want your agent to see them together.": "Начните с Telegram, WhatsApp или MAX и задайте вопрос о своей переписке. Добавьте почту, встречи, документы и заметки, когда захотите, чтобы агент видел их вместе.",
-    "Everything you’ve said, ready for your agent: your chats, mail, meetings, documents and notes, kept on your computer.": "Всё, что вы сказали, — под рукой у агента: чаты, почта, встречи, документы и заметки хранятся на вашем компьютере.",
+    "Everything you’ve said, ready for your agent: your chats, mail, meetings, documents and notes, kept on your computer.": "Всё, что вы сказали — под рукой у агента: чаты, почта, встречи, документы и заметки хранятся на вашем компьютере.",
     "All WireCat tools on GitHub": "Все инструменты WireCat на GitHub",
     "WireCat Desktop installs and updates every tool here, signs you in and connects your agent. No terminal needed.": "WireCat Desktop установит и обновит все эти инструменты, поможет войти в аккаунты и подключит вашего агента. Терминал не нужен."
   },

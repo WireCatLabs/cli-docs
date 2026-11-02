@@ -34,7 +34,7 @@ now handle their messages safely, and installs a tool or connects their agent.
 ## Positioning
 
 Owner, 2026-11-02. Slogan: **"Everything you've said. Ready for your agent."** (RU «Всё, что вы
-сказали, — под рукой у агента.», ES «Todo lo que has dicho. Listo para tu agente.»). WireCat
+сказали — под рукой у агента.», ES «Todo lo que has dicho. Listo para tu agente.»). WireCat
 connects the AI agent the user already uses (Claude, ChatGPT, Codex…) to their chats, mail,
 meetings, documents, calendar and notes, and keeps them on the user's computer. Messengers lead: they
 are the obvious first use, because nothing else gives an agent easy access to them. Name the

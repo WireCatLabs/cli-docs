@@ -7,7 +7,7 @@
 Слоган на лендинге (решение владельца):
 
 - EN: Everything you’ve said. Ready for your agent.
-- RU: Всё, что вы сказали, — под рукой у агента.
+- RU: Всё, что вы сказали — под рукой у агента.
 - ES: Todo lo que has dicho. Listo para tu agente.
 
 Сначала конкретные мессенджеры (Telegram, WhatsApp; MAX — только для русскоязычных читателей вверху
