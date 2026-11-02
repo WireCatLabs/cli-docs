@@ -20,9 +20,9 @@ agents that read the docs as Markdown.
 
 WireCat's mission is to help people and AI agents work with conversations, remember agreements
 and turn messages into useful actions. Released tools: Telegram (`tg`), WhatsApp (`wa`), MAX
-(`max`), Zoom (`zm`), Google Drive (`drive`), Google Calendar (`gcal`) and Memo (`memo`), plus WireCat
-Desktop, the app for macOS, Windows and Linux that installs and connects them. The user's existing
-agent can also use the separate Himalaya email tool and Markdown notes in Obsidian or another editor.
+(`max`), Zoom (`zm`), Google Drive (`drive`), Google Calendar (`gcal`), Mail (`mail`, IMAP mailboxes) and
+Memo (`memo`), plus WireCat Desktop, the app for macOS, Windows and Linux that installs and connects them.
+The user's existing agent can also read or update Markdown notes in Obsidian or another editor.
 More sources and Notion remain planned. About describes an open-source project building and connecting tools for knowledge
 and conversations; personal project enquiries go to the configured maintainer Telegram.
 
