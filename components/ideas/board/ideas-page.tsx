@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { boardWords } from "@/lib/ideas/board-words"
 import { ideaSorts, ideaStatuses, ideaTools, tagName } from "@/lib/ideas/types"
 import { ideasWords } from "@/lib/ideas/words"
+import { Collapse } from "./collapse"
 import {
   ComposerFields,
   ComposerSubmit,
@@ -70,9 +71,13 @@ export function IdeasPage({ lang }: { lang: string }) {
     return () => window.removeEventListener("keydown", onKey)
   }, [])
 
+  // An idea opened by its link scrolls into view once, when the list first arrives; clicks keep the row in place.
+  const arrived = useRef(false)
   useEffect(() => {
-    if (board.list && board.selected)
-      document.querySelector(`[data-idea="${CSS.escape(board.selected)}"]`)?.scrollIntoView({ block: "nearest" })
+    if (arrived.current || !board.list) return
+    arrived.current = true
+    if (board.selected)
+      document.querySelector(`[data-idea="${CSS.escape(board.selected)}"]`)?.scrollIntoView({ block: "start" })
   }, [board.selected, board.list])
 
   const typed = board.search.trim()
@@ -228,10 +233,26 @@ export function IdeasPage({ lang }: { lang: string }) {
                           {idea.title}
                         </IdeaLink>
                       </h2>
-                      {!open && idea.body && <p className="board-snippet">{idea.body}</p>}
-                      <IdeaMeta board={board} idea={idea} tags={!open} />
-                      {open && <IdeaDetail board={board} id={idea.id} title={false} />}
+                      {idea.body && (
+                        <Collapse open={!open}>
+                          <p className="board-snippet">{idea.body}</p>
+                        </Collapse>
+                      )}
+                      <IdeaMeta board={board} idea={idea} />
+                      <Collapse open={open}>
+                        <IdeaDetail board={board} id={idea.id} title={false} />
+                      </Collapse>
                     </div>
+                    {open && (
+                      <button
+                        type="button"
+                        className="board-detail-close"
+                        onClick={() => board.select(null)}
+                        aria-label={words.close}
+                      >
+                        <X aria-hidden="true" />
+                      </button>
+                    )}
                   </li>
                 )
               })}

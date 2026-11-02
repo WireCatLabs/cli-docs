@@ -903,12 +903,29 @@ html.dark .wirecat-editorial .board {
   width: 16px;
   height: 16px;
 }
+.wirecat-editorial .board {
+  --row-inset: clamp(12px, 1.6vw, 20px);
+  --open-ms: 280ms;
+}
+.wirecat-editorial .board .board-results {
+  overflow-anchor: none;
+}
 .wirecat-editorial .board .board-row {
+  position: relative;
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr);
   gap: 16px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--hair);
+  margin: 0 calc(-1 * var(--row-inset));
+  padding: 16px var(--row-inset);
+  border: 1px solid transparent;
+  border-bottom-color: var(--hair);
+  border-radius: var(--r-3);
+  transition:
+    margin var(--open-ms) var(--ease),
+    padding var(--open-ms) var(--ease),
+    background-color var(--open-ms) ease-out,
+    border-color var(--open-ms) ease-out,
+    box-shadow var(--open-ms) ease-out;
 }
 .wirecat-editorial .board .board-row-text {
   display: grid;
@@ -929,10 +946,6 @@ html.dark .wirecat-editorial .board {
   text-decoration: underline;
   text-decoration-color: var(--line);
 }
-.wirecat-editorial .board .board-row[data-open] .board-row h2,
-.wirecat-editorial .board .board-row[data-open] h2 {
-  font-size: 18px;
-}
 .wirecat-editorial .board .board-snippet {
   display: -webkit-box;
   overflow: hidden;
@@ -945,26 +958,13 @@ html.dark .wirecat-editorial .board {
 .wirecat-editorial .board .board-row .board-meta {
   margin-top: 4px;
 }
-.wirecat-editorial .board .board-open {
-  display: grid;
-  gap: 14px;
-  padding-top: 4px;
-  animation: board-reveal 280ms var(--ease);
-}
 
-/* The open idea: the row becomes its own panel, comments inside */
-.wirecat-editorial .board .board-row {
-  position: relative;
-  transition:
-    background-color 220ms ease-out,
-    border-color 220ms ease-out,
-    padding 220ms var(--ease);
-}
+/* The open idea: the row becomes its own panel, comments inside. One measured height change (Collapse) carries it,
+   the panel's fill and line fade in alongside, the content fades and rises once the height is moving. */
 .wirecat-editorial .board .board-row[data-open] {
-  margin: 10px calc(-1 * clamp(12px, 1.6vw, 20px));
-  padding: 20px clamp(12px, 1.6vw, 20px) 22px;
-  border: 1px solid var(--line);
-  border-radius: var(--r-3);
+  margin-block: 8px;
+  padding-block: 20px 22px;
+  border-color: var(--line);
   background: var(--paper);
   box-shadow: 0 10px 28px -18px color-mix(in srgb, var(--ink) 30%, transparent);
 }
@@ -974,14 +974,31 @@ html.dark .wirecat-editorial .board {
 }
 .wirecat-editorial .board .board-row[data-open] h2 {
   padding-right: 32px;
-  font-size: 19px;
-  line-height: 1.35;
 }
-.wirecat-editorial .board .board-row[data-open] .board-detail {
-  margin-top: 10px;
-  animation: board-reveal 280ms var(--ease);
+.wirecat-editorial .board .board-collapse {
+  overflow: hidden;
+  transition: height var(--open-ms) var(--ease);
+}
+.wirecat-editorial .board .board-collapse-inner {
+  transition: opacity 140ms ease-out;
+}
+.wirecat-editorial .board .board-collapse[data-state="open"] > .board-collapse-inner {
+  animation: board-rise 240ms var(--ease) 60ms both;
+}
+.wirecat-editorial .board .board-collapse[data-state="closed"] > .board-collapse-inner {
+  opacity: 0;
+}
+.wirecat-editorial .board .board-row .board-detail {
+  padding-top: 10px;
+}
+@keyframes board-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 .wirecat-editorial .board .board-detail-close {
+  animation: board-rise 200ms var(--ease) 80ms both;
   position: absolute;
   top: 12px;
   right: 12px;
@@ -1187,10 +1204,12 @@ html.dark .wirecat-editorial .board {
   .wirecat-editorial .board .board-compose {
     padding: 14px;
   }
-  .wirecat-editorial .board .board-row[data-open] {
-    margin-inline: calc(-1 * clamp(16px, 2.7vw, 48px));
-    padding-inline: clamp(16px, 2.7vw, 48px);
-    border-width: 1px 0;
+  .wirecat-editorial .board {
+    --row-inset: clamp(16px, 2.7vw, 48px);
+  }
+  .wirecat-editorial .board .board-row {
+    border-right-width: 0;
+    border-left-width: 0;
     border-radius: 0;
   }
   .wirecat-editorial .board .board-inline-field {
@@ -1204,6 +1223,7 @@ html.dark .wirecat-editorial .board {
   .wirecat-editorial .board *::after {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
     transition-duration: 1ms !important;
   }
   .wirecat-editorial .board .board-progress > span {
