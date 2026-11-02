@@ -48,6 +48,13 @@ type Words = {
   updates: { title: string; auto: string; packages: string }
   uninstall: { title: string; macos: string; windows: string; appimage: string; packages: string; tools: string }
   next: { title: string; docs: string; terminal: string }
+  gallery: {
+    title: string
+    intro: string
+    open: string
+    close: string
+    shots: Record<"tools" | "agents" | "search-hit" | "tasks" | "memory" | "connect", { alt: string; caption: string }>
+  }
 }
 
 const en: Words = {
@@ -156,6 +163,38 @@ Before you overwrite or delete any file that already exists, show it to me and a
     title: "Next",
     docs: "What WireCat Desktop does",
     terminal: "Prefer the terminal? Install the tools with npm",
+  },
+  gallery: {
+    title: "Inside the app",
+    intro: "Screens from WireCat Desktop with sample data.",
+    open: "Show larger",
+    close: "Close",
+    shots: {
+      tools: {
+        alt: "The Tools page: Telegram, MAX, WhatsApp, Zoom, Google Drive and Memo installed and synced",
+        caption: "Every messenger, meeting and file tool, installed, signed in and synced.",
+      },
+      agents: {
+        alt: "The Agents page: Claude Code with a current skill for every tool",
+        caption: "Claude Code, Codex, Cursor and Gemini CLI get current skills for every tool.",
+      },
+      "search-hit": {
+        alt: "The Search page: a result opened with the messages around it",
+        caption: "Open any result to see the conversation around it.",
+      },
+      tasks: {
+        alt: "The Tasks board with open, in-progress and done tasks shared with agents",
+        caption: "One task list that you and your agents share.",
+      },
+      memory: {
+        alt: "The Memory page: facts and decisions from your agents waiting for your approval",
+        caption: "Nothing an agent remembers counts until you approve it.",
+      },
+      connect: {
+        alt: "Connecting ChatGPT to Telegram: every step checked and the first call received",
+        caption: "ChatGPT can now use your Telegram, set up in a few clicks.",
+      },
+    },
   },
 }
 
@@ -272,6 +311,38 @@ const ru: Words = {
     docs: "Что умеет WireCat Desktop",
     terminal: "Удобнее в терминале? Установите инструменты через npm",
   },
+  gallery: {
+    title: "Как выглядит приложение",
+    intro: "Экраны WireCat Desktop с примерами данных.",
+    open: "Открыть крупнее",
+    close: "Закрыть",
+    shots: {
+      tools: {
+        alt: "Страница «Инструменты»: Telegram, MAX, WhatsApp, Zoom, Google Drive и Memo установлены и синхронизированы",
+        caption: "Все инструменты установлены, вход выполнен, данные синхронизированы.",
+      },
+      agents: {
+        alt: "Страница «Агенты»: у Claude Code актуальный навык для каждого инструмента",
+        caption: "Claude Code, Codex, Cursor и Gemini CLI получают актуальные навыки для каждого инструмента.",
+      },
+      "search-hit": {
+        alt: "Страница «Поиск»: открытый результат с сообщениями вокруг него",
+        caption: "Откройте результат и увидите переписку вокруг него.",
+      },
+      tasks: {
+        alt: "Доска задач: открытые, текущие и выполненные задачи, общие с агентами",
+        caption: "Общий список задач для вас и ваших агентов.",
+      },
+      memory: {
+        alt: "Страница «Память»: факты и решения от агентов ждут вашего одобрения",
+        caption: "Ничто из того, что запомнил агент, не считается, пока вы не одобрите.",
+      },
+      connect: {
+        alt: "Подключение ChatGPT к Telegram: все шаги пройдены, первый вызов получен",
+        caption: "ChatGPT теперь работает с вашим Telegram — настройка в пару кликов.",
+      },
+    },
+  },
 }
 
 const es: Words = {
@@ -380,6 +451,38 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
     title: "Siguiente paso",
     docs: "Qué hace WireCat Desktop",
     terminal: "¿Prefieres la terminal? Instala las herramientas con npm",
+  },
+  gallery: {
+    title: "Así es la aplicación",
+    intro: "Pantallas de WireCat Desktop con datos de ejemplo.",
+    open: "Ver más grande",
+    close: "Cerrar",
+    shots: {
+      tools: {
+        alt: "La página Herramientas: Telegram, MAX, WhatsApp, Zoom, Google Drive y Memo instalados y sincronizados",
+        caption: "Todas tus herramientas instaladas, con sesión iniciada y sincronizadas.",
+      },
+      agents: {
+        alt: "La página Agentes: Claude Code con una habilidad al día para cada herramienta",
+        caption: "Claude Code, Codex, Cursor y Gemini CLI reciben habilidades al día para cada herramienta.",
+      },
+      "search-hit": {
+        alt: "La página Búsqueda: un resultado abierto con los mensajes que lo rodean",
+        caption: "Abre cualquier resultado y ve la conversación que lo rodea.",
+      },
+      tasks: {
+        alt: "El tablero de tareas con tareas abiertas, en curso y hechas, compartidas con los agentes",
+        caption: "Una lista de tareas que compartes con tus agentes.",
+      },
+      memory: {
+        alt: "La página Memoria: hechos y decisiones de tus agentes esperan tu aprobación",
+        caption: "Nada de lo que recuerda un agente cuenta hasta que lo apruebas.",
+      },
+      connect: {
+        alt: "Conectar ChatGPT con Telegram: todos los pasos comprobados y la primera llamada recibida",
+        caption: "ChatGPT ya puede usar tu Telegram, configurado en unos clics.",
+      },
+    },
   },
 }
 

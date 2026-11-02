@@ -42,6 +42,10 @@ describe("selected editorial production snapshots", () => {
         lang === "ru" ? ["tg", "wa", "max", "zm", "drive", "memo"] : ["tg", "wa", "zm", "drive", "memo"],
       )
       expect(options(setup)).toEqual(["tg", "wa", "max", "zm", "drive", "memo"])
+      const showcase = pages.home.indexOf('class="wrap section desktop-showcase"')
+      expect(showcase).toBeGreaterThan(pages.home.indexOf('class="wrap section roles5'))
+      expect(pages.home).toContain(`/screenshots/desktop/tools-dark-${lang}.webp`)
+      expect(pages.home).toContain("/screenshots/desktop/memory-dark-en.webp")
       const prompt = /<pre class="agent-prompt">([^\n]*)/.exec(pages.home)?.[1]
       expect(prompt).toMatch({ en: /^Install tg/, ru: /^Установи tg/, es: /^Instala tg/ }[lang] as RegExp)
     })

@@ -61,7 +61,7 @@ for (const lang of ["en", "ru", "es"]) {
     })
     html = html.replace(/>([^<>]*)</g, (_, value) => `>${text(value)}<`)
     html = html.replace(/<!--EDITORIAL-CODE-(\d+)-->/g, (_, i) => protectedBlocks[Number(i)])
-    html = html.replace(/(aria-label|title|placeholder|data-copy)="([^"]*)"/g, (_, attr, value) => {
+    html = html.replace(/(aria-label|title|placeholder|data-copy|alt)="([^"]*)"/g, (_, attr, value) => {
       let translated = text(value)
       const decoded = decode(value)
       const prompt = /^Use (tg|max|wa) cli\. ([\s\S]+)$/.exec(decoded)
@@ -71,6 +71,9 @@ for (const lang of ["en", "ru", "es"]) {
         )
       return `${attr}="${translated}"`
     })
+    // Desktop screenshots exist per language only for the screens whose labels change.
+    if (lang !== "en")
+      html = html.replace(/(\/screenshots\/desktop\/(?:tools|connect)-(?:light|dark)-)en\.webp/g, `$1${lang}.webp`)
     html = html.replace(
       /href="(https:\/\/wirecat\.dev)?\/(en|ru|es)\/([^"#]*)([^"]*)"/g,
       (_, _origin, _locale, path, rest) => `href="/${lang}/${path}${rest}"`,
