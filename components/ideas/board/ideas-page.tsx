@@ -39,9 +39,10 @@ export function IdeasPage({ lang }: { lang: string }) {
   })
 
   const startPost = () => {
+    // Synchronous, so the next key typed already lands in the title. The form has its own reveal animation.
     composer.setTitle(board.search.trim())
     board.setSearch("")
-    smoothly(() => setComposing(true))
+    setComposing(true)
     ask.current?.focus()
   }
   const stopPost = () => {
