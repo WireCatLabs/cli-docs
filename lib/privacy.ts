@@ -7,8 +7,8 @@ export const privacyCopy: Record<
   en: {
     title: "Privacy Policy",
     intro:
-      "How WireCat handles Google and Zoom account data, local documents, optional AI processing, WireCat Desktop's update and news checks and bug reports, and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
-    updated: "Last updated: 1 November 2026",
+      "How WireCat handles Google, Microsoft, Zoom and email account data, local documents, optional AI processing, WireCat Desktop's update and news checks and bug reports, and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
+    updated: "Last updated: 2 November 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
@@ -41,6 +41,18 @@ export const privacyCopy: Record<
           "We use this access to keep a searchable copy of your events on your computer, answer questions about free and busy time, and make the event and sharing changes you ask for. When you choose Google’s own search, gcal sends your search words to Google Calendar and stores none of the results.",
           "gcal calls Google’s API directly from your computer. Your Google sign-in stays in your system’s keyring, or in a private file if you choose one, and your events stay in gcal’s local database. Your events and your Google sign-in never go to a WireCat server. An agent you connect to gcal receives the events and details its commands return; its provider and settings decide what happens to them next.",
           "gcal’s session end command deletes a profile’s sign-in from your computer; the copied events stay until you delete gcal’s local data. To stop all access, remove WireCat from your Google Account’s third-party connections.",
+        ],
+      },
+      {
+        id: "mail-access",
+        title: "Email and other connected accounts (mail)",
+        paragraphs: [
+          "mail connects to a mailbox only after you start its sign-in. Outlook.com and Microsoft 365 sign in through WireCat’s Microsoft app: your browser goes to Microsoft, you approve access on Microsoft’s consent screen, and Microsoft sends the answer back to mail on your own computer only. The app asks for three permissions: to read and change your mail over IMAP, to send mail as you over SMTP, and to stay signed in (offline access) so a scheduled sync needs no new sign-in. Gmail signs in with an app password you make, or with a Google app of your own; WireCat has no Google app for mail. The Google permission is Google’s one mail permission, which reads, changes and sends your Gmail, plus your account’s email address. Yandex, iCloud, Mail.ru, Fastmail and other IMAP providers use an app password, a password made for one program.",
+          "mail copies the messages you ask it to sync into the local store on your computer: sender, recipients, subject, dates, folders, message text and the text of readable attachments. It saves an attachment file only when you download it. It changes your mailbox or sends mail only when you, or an agent you connected, give the command. An agent connected through MCP may mail only you until you allow more.",
+          "mail talks to your provider’s IMAP and SMTP servers directly from your computer, over an encrypted connection; a connection with no encryption is refused. Your mail, tokens and passwords never go to a WireCat server. Microsoft, Google and your mail provider handle your sign-in and your mailbox under their own privacy policies. When you add an address whose mail server mail does not know, it looks the server up with the domain only, never the full address, at your DNS resolver, at Thunderbird’s public list of mail servers (autoconfig.thunderbird.net) and at the domain’s own server. Choosing the provider or server yourself skips the lookup.",
+          "Access tokens, refresh tokens and app passwords stay in your system’s keyring, or in a private file only you can read if no keyring works or you choose the file. They are never printed, logged or put on a command line.",
+          "WireCat’s Microsoft app is a public app with no secret, shared by WireCat tools so that one name shows on Microsoft’s consent screen. Today only mail uses it. Each tool asks Microsoft only for the permissions its own features need, and this page names them before a tool uses the app for something new. You give the permissions for your own mailbox; on a work or school account your administrator can restrict the app or have to approve it.",
+          "Zoom, Google Drive and Google Calendar work as described above. The same rules apply to any account WireCat connects later: it talks to the provider directly from your computer, keeps the credentials on your computer, leaves no copy on a WireCat server, and this page changes before the connector ships.",
         ],
       },
       {
@@ -86,6 +98,7 @@ export const privacyCopy: Record<
         title: "Disconnecting and deleting data",
         paragraphs: [
           "Use the CLI’s session end command for each named profile to remove its local sign-in credentials. To revoke the application’s Google permission, remove WireCat from your Google Account’s third-party connections. Revocation stops future authorized access but does not delete copies already stored on your computer.",
+          "To revoke access at the provider: for a Microsoft account, open account.microsoft.com/privacy/app-access (work or school account: myapps.microsoft.com) and remove the WireCat app; for Google, open myaccount.google.com/permissions; delete a Gmail app password at myaccount.google.com/apppasswords; for Zoom, see above. mail’s session end command removes a profile’s sign-in from your computer, but Microsoft gives a desktop app no way to revoke it, so remove the app at Microsoft as well. For Gmail with your own Google app, session end with --revoke also asks Google to revoke the sign-in, which removes every permission of that Google app. Copied mail stays on your computer until you delete mail’s local data.",
           "To erase local data, close the CLI and remove its local configuration and data directories, including any explicitly configured shared store, exports and backups you intend to delete. A shared store can contain data from other tools; do not delete it unless you intend to remove that data too. WireCat cannot remotely erase files on your computer.",
           "Contact hello@wirecat.dev for privacy questions or requests concerning website or support data. Access, correction, deletion, restriction, portability and objection rights may apply under your local law. You can withdraw website consent and complain to the relevant data protection authority.",
         ],
@@ -101,7 +114,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Who processes the data",
         paragraphs: [
-          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application, gcal, the WireCat CLI for Google Calendar, zm, the WireCat CLI app for Zoom, and WireCat Desktop. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
+          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application, gcal, the WireCat CLI for Google Calendar, zm, the WireCat CLI app for Zoom, mail, the WireCat CLI for email, and WireCat Desktop. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
           "Cloudflare serves the pages and WireCat's server (api.wirecat.dev) and processes your IP address to deliver them and protect them.",
         ],
       },
@@ -154,8 +167,8 @@ export const privacyCopy: Record<
   ru: {
     title: "Политика конфиденциальности",
     intro:
-      "Как WireCat обрабатывает данные аккаунтов Google и Zoom, локальные документы, дополнительные ИИ-запросы, проверку обновлений и новостей и отчёты об ошибках в WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
-    updated: "Обновлено: 1 ноября 2026 г.",
+      "Как WireCat обрабатывает данные аккаунтов Google, Microsoft, Zoom и почты, локальные документы, дополнительные ИИ-запросы, проверку обновлений и новостей и отчёты об ошибках в WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
+    updated: "Обновлено: 2 ноября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
@@ -188,6 +201,18 @@ export const privacyCopy: Record<
           "Мы используем этот доступ, чтобы хранить на вашем компьютере копию событий с поиском, отвечать на вопросы о свободном и занятом времени и вносить изменения в события и доступ, о которых вы просите. Когда вы выбираете поиск самого Google, gcal отправляет слова запроса в Google Календарь и не сохраняет результаты.",
           "gcal обращается к API Google напрямую с вашего компьютера. Вход в Google хранится в системной связке ключей или, если вы так выберете, в закрытом файле, а события — в локальной базе gcal. События и вход в Google никогда не отправляются на сервер WireCat. Агент, которого вы подключили к gcal, получает события и сведения, которые возвращают его команды; что с ними происходит дальше, решают его провайдер и настройки.",
           "Команда gcal session end удаляет вход профиля с вашего компьютера; скопированные события остаются, пока вы не удалите локальные данные gcal. Чтобы полностью закрыть доступ, удалите WireCat из сторонних подключений в аккаунте Google.",
+        ],
+      },
+      {
+        id: "mail-access",
+        title: "Почта и другие подключённые аккаунты (mail)",
+        paragraphs: [
+          "mail подключается к почтовому ящику только после того, как вы запустите вход. Outlook.com и Microsoft 365 входят через приложение Microsoft от WireCat: браузер открывает Microsoft, вы разрешаете доступ на экране согласия Microsoft, а Microsoft возвращает ответ в mail только на ваш компьютер. Приложение запрашивает три разрешения: читать и менять вашу почту по IMAP, отправлять письма от вашего имени по SMTP и оставаться в системе (offline access), чтобы плановой синхронизации не требовался новый вход. В Gmail вход идёт по паролю приложения, который создаёте вы, или через ваше собственное приложение Google; приложения Google для почты у WireCat нет. Разрешение Google — единственное почтовое разрешение Google: оно читает, меняет и отправляет вашу почту Gmail, а также даёт адрес электронной почты аккаунта. Yandex, iCloud, Mail.ru, Fastmail и другие IMAP-провайдеры используют пароль приложения — пароль, созданный для одной программы.",
+          "mail копирует письма, которые вы просите синхронизировать, в локальное хранилище на вашем компьютере: отправителя, получателей, тему, даты, папки, текст письма и текст читаемых вложений. Файл вложения сохраняется, только когда вы его скачиваете. mail меняет ваш ящик или отправляет письма, только когда команду даёте вы или подключённый вами агент. Агент, подключённый через MCP, может писать только вам, пока вы не разрешите больше.",
+          "mail обращается к серверам IMAP и SMTP вашего провайдера напрямую с вашего компьютера по зашифрованному соединению; соединение без шифрования отклоняется. Ваша почта, токены и пароли никогда не отправляются на сервер WireCat. Microsoft, Google и ваш почтовый провайдер обрабатывают ваш вход и ваш ящик по своим политикам конфиденциальности. Когда вы добавляете адрес, почтовый сервер которого mail не знает, он ищет сервер, используя только домен, а не полный адрес: у вашего DNS-резолвера, в публичном списке почтовых серверов Thunderbird (autoconfig.thunderbird.net) и на собственном сервере домена. Если вы сами выберете провайдера или сервер, поиск не выполняется.",
+          "Токены доступа, токены обновления и пароли приложений хранятся в системной связке ключей или, если она не работает либо вы выбрали файл, в закрытом файле, который можете читать только вы. Они никогда не выводятся на экран, не попадают в логи и в командную строку.",
+          "Приложение Microsoft от WireCat — публичное приложение без секрета; им пользуются инструменты WireCat, поэтому на экране согласия Microsoft показывается одно название. Сейчас его использует только mail. Каждый инструмент запрашивает у Microsoft только те разрешения, которые нужны его функциям, и эта страница называет их до того, как инструмент применит приложение для чего-то нового. Вы даёте разрешения для своего почтового ящика; в рабочем или учебном аккаунте администратор может ограничить приложение или должен его одобрить.",
+          "Zoom, Google Drive и Google Календарь работают так, как описано выше. Те же правила действуют для любого аккаунта, который WireCat подключит позже: обращение к провайдеру напрямую с вашего компьютера, учётные данные на вашем компьютере, никаких копий на сервере WireCat; эта страница изменится до выхода нового подключения.",
         ],
       },
       {
@@ -233,6 +258,7 @@ export const privacyCopy: Record<
         title: "Отключение и удаление данных",
         paragraphs: [
           "Команда session end для каждого явно названного профиля удаляет локальные учётные данные входа. Чтобы отозвать разрешение Google, удалите WireCat из сторонних подключений в аккаунте Google. Отзыв прекращает дальнейший разрешённый доступ, но не удаляет уже сохранённые на компьютере копии.",
+          "Чтобы отозвать доступ у провайдера: для аккаунта Microsoft откройте account.microsoft.com/privacy/app-access (рабочий или учебный аккаунт: myapps.microsoft.com) и удалите приложение WireCat; для Google откройте myaccount.google.com/permissions; пароль приложения Gmail удалите на myaccount.google.com/apppasswords; для Zoom см. выше. Команда mail session end удаляет вход профиля с вашего компьютера, но Microsoft не даёт настольному приложению отозвать вход, поэтому удалите приложение и в Microsoft. Для Gmail с вашим приложением Google команда session end с --revoke также просит Google отозвать вход, что снимает все разрешения этого приложения Google. Скопированная почта остаётся на вашем компьютере, пока вы не удалите локальные данные mail.",
           "Чтобы стереть локальные данные, закройте CLI и удалите его каталоги настроек и данных, а также явно выбранное общее хранилище, экспорт и резервные копии, которые хотите удалить. Общее хранилище может содержать данные других инструментов; удаляйте его только если хотите удалить и их. WireCat не может удалённо стереть файлы на вашем компьютере.",
           "Для вопросов о конфиденциальности и запросов о данных сайта или поддержки пишите на hello@wirecat.dev. Местное право может предоставлять права на доступ, исправление, удаление, ограничение обработки, переносимость и возражение. Можно отозвать согласие на сайте и обратиться в орган по защите данных.",
         ],
@@ -248,7 +274,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Кто обрабатывает данные",
         paragraphs: [
-          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive, gcal — WireCat CLI для Google Календаря, zm — приложение WireCat CLI для Zoom — и WireCat Desktop. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
+          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive, gcal — WireCat CLI для Google Календаря, zm — приложение WireCat CLI для Zoom, mail — WireCat CLI для почты — и WireCat Desktop. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
           "Страницы и сервер WireCat (api.wirecat.dev) обслуживает Cloudflare; он обрабатывает ваш IP-адрес, чтобы доставить ответы и защитить их.",
         ],
       },
@@ -301,8 +327,8 @@ export const privacyCopy: Record<
   es: {
     title: "Política de privacidad",
     intro:
-      "Cómo WireCat trata los datos de Google y Zoom, los documentos locales, el procesamiento opcional con IA, las comprobaciones de actualizaciones y novedades y los informes de errores de WireCat Desktop, y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
-    updated: "Última actualización: 1 de noviembre de 2026",
+      "Cómo WireCat trata los datos de cuentas de Google, Microsoft, Zoom y correo, los documentos locales, el procesamiento opcional con IA, las comprobaciones de actualizaciones y novedades y los informes de errores de WireCat Desktop, y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
+    updated: "Última actualización: 2 de noviembre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
@@ -335,6 +361,18 @@ export const privacyCopy: Record<
           "Usamos este acceso para guardar en tu ordenador una copia de tus eventos en la que puedes buscar, responder a preguntas sobre horas libres y ocupadas, y hacer los cambios en eventos y accesos que pidas. Cuando eliges la búsqueda propia de Google, gcal envía tus palabras de búsqueda a Google Calendar y no guarda ningún resultado.",
           "gcal llama a la API de Google directamente desde tu ordenador. Tu acceso a Google se guarda en el llavero del sistema, o en un archivo privado si lo eliges, y tus eventos en la base de datos local de gcal. Tus eventos y tu acceso a Google nunca se envían a un servidor de WireCat. Un agente que conectes a gcal recibe los eventos y datos que devuelven sus comandos; su proveedor y su configuración deciden qué pasa después con ellos.",
           "El comando session end de gcal borra de tu ordenador el acceso de un perfil; los eventos copiados se quedan hasta que borres los datos locales de gcal. Para cortar todo acceso, quita WireCat de las conexiones de terceros de tu cuenta de Google.",
+        ],
+      },
+      {
+        id: "mail-access",
+        title: "Correo y otras cuentas conectadas (mail)",
+        paragraphs: [
+          "mail se conecta a un buzón solo después de que inicies su acceso. Outlook.com y Microsoft 365 acceden a través de la aplicación de Microsoft de WireCat: el navegador va a Microsoft, apruebas el acceso en la pantalla de consentimiento de Microsoft y Microsoft devuelve la respuesta a mail solo en tu propio ordenador. La aplicación pide tres permisos: leer y cambiar tu correo por IMAP, enviar correo como tú por SMTP y mantener la sesión (offline access) para que una sincronización programada no necesite un nuevo acceso. Gmail accede con una contraseña de aplicación que creas tú, o con una aplicación de Google propia; WireCat no tiene una aplicación de Google para el correo. El permiso de Google es el único permiso de correo de Google: lee, cambia y envía tu Gmail, y da la dirección de correo de tu cuenta. Yandex, iCloud, Mail.ru, Fastmail y otros proveedores IMAP usan una contraseña de aplicación, una contraseña creada para un solo programa.",
+          "mail copia en el almacén local de tu ordenador los mensajes que le pides sincronizar: remitente, destinatarios, asunto, fechas, carpetas, texto del mensaje y texto de los adjuntos legibles. Guarda el archivo de un adjunto solo cuando lo descargas. Cambia tu buzón o envía correo solo cuando das la orden tú o un agente que conectaste. Un agente conectado por MCP solo puede escribirte a ti hasta que permitas más.",
+          "mail habla con los servidores IMAP y SMTP de tu proveedor directamente desde tu ordenador, con una conexión cifrada; una conexión sin cifrar se rechaza. Tu correo, tus tokens y tus contraseñas nunca van a un servidor de WireCat. Microsoft, Google y tu proveedor de correo tratan tu acceso y tu buzón según sus propias políticas de privacidad. Cuando añades una dirección cuyo servidor de correo mail no conoce, busca el servidor usando solo el dominio, nunca la dirección completa: en tu resolvedor de DNS, en la lista pública de servidores de correo de Thunderbird (autoconfig.thunderbird.net) y en el servidor del propio dominio. Si eliges tú el proveedor o el servidor, no se hace esa búsqueda.",
+          "Los tokens de acceso, los tokens de actualización y las contraseñas de aplicación se quedan en el llavero de tu sistema o, si ninguno funciona o eliges el archivo, en un archivo privado que solo tú puedes leer. Nunca se imprimen, ni se registran, ni se ponen en una línea de comandos.",
+          "La aplicación de Microsoft de WireCat es una aplicación pública, sin secreto, que comparten las herramientas de WireCat para que la pantalla de consentimiento de Microsoft muestre un solo nombre. Hoy solo la usa mail. Cada herramienta pide a Microsoft solo los permisos que necesitan sus funciones, y esta página los nombra antes de que una herramienta use la aplicación para algo nuevo. Tú das los permisos para tu propio buzón; en una cuenta de trabajo o de centro educativo, el administrador puede restringir la aplicación o tener que aprobarla.",
+          "Zoom, Google Drive y Google Calendar funcionan como se describe arriba. Las mismas reglas valen para cualquier cuenta que WireCat conecte más adelante: habla con el proveedor directamente desde tu ordenador, guarda las credenciales en tu ordenador, no deja copia en un servidor de WireCat y esta página cambia antes de que salga el conector.",
         ],
       },
       {
@@ -380,6 +418,7 @@ export const privacyCopy: Record<
         title: "Desconectar y eliminar datos",
         paragraphs: [
           "Usa el comando session end para cada perfil nombrado para eliminar sus credenciales locales. Para revocar el permiso de Google, elimina WireCat de las conexiones de terceros de tu cuenta de Google. La revocación detiene el acceso autorizado futuro, pero no borra las copias ya guardadas en tu ordenador.",
+          "Para revocar el acceso en el proveedor: en una cuenta de Microsoft, abre account.microsoft.com/privacy/app-access (cuenta de trabajo o de centro educativo: myapps.microsoft.com) y elimina la aplicación de WireCat; en Google, abre myaccount.google.com/permissions; borra la contraseña de aplicación de Gmail en myaccount.google.com/apppasswords; para Zoom, mira más arriba. El comando session end de mail borra de tu ordenador el acceso de un perfil, pero Microsoft no permite que una aplicación de escritorio lo revoque, así que elimina también la aplicación en Microsoft. Para Gmail con tu propia aplicación de Google, session end con --revoke además pide a Google que revoque el acceso, lo que quita todos los permisos de esa aplicación de Google. El correo copiado se queda en tu ordenador hasta que borres los datos locales de mail.",
           "Para borrar datos locales, cierra el CLI y elimina sus directorios de configuración y datos, incluidos el almacén compartido que hayas configurado, las exportaciones y las copias de seguridad que quieras borrar. Un almacén compartido puede contener datos de otras herramientas; bórralo solo si también quieres eliminar esos datos. WireCat no puede borrar remotamente los archivos de tu ordenador.",
           "Escribe a hello@wirecat.dev para preguntas de privacidad o solicitudes sobre datos del sitio o de soporte. Según la ley aplicable, puedes tener derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición. Puedes retirar el consentimiento del sitio y reclamar ante la autoridad de protección de datos correspondiente.",
         ],
@@ -395,7 +434,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Quién trata los datos",
         paragraphs: [
-          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive, gcal, la CLI de WireCat para Google Calendar, zm, la aplicación WireCat CLI para Zoom, y WireCat Desktop. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
+          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive, gcal, la CLI de WireCat para Google Calendar, zm, la aplicación WireCat CLI para Zoom, mail, la CLI de WireCat para el correo, y WireCat Desktop. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
           "Cloudflare sirve las páginas y el servidor de WireCat (api.wirecat.dev) y trata tu dirección IP para entregarlos y protegerlos.",
         ],
       },
