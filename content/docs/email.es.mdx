@@ -61,6 +61,35 @@ Memo aún puede importar correo con Himalaya, un programa de correo independient
 para configuraciones existentes y se eliminará; para cuentas nuevas usa `mail` y consulta la
 [importación antigua](./memo/mail.md) solo si ya dependes de ella.
 
+## Outlook.com y Microsoft 365
+
+Outlook.com y Microsoft 365 no usan contraseña de aplicación. Inicias sesión en Microsoft en el navegador. La aplicación
+de Microsoft de WireCat ya viene incluida, así que no registras nada.
+
+1. Solo Outlook.com: activa IMAP, porque Microsoft lo tiene desactivado por defecto. Abre
+   [outlook.live.com](https://outlook.live.com), elige Configuración (el engranaje), luego "Correo" y "Reenvío e IMAP".
+   Activa "Permitir que los dispositivos y las aplicaciones usen IMAP" y elige "Guardar". Sin esto, el inicio de sesión
+   funciona pero el servidor de correo rechaza el token.
+2. Inicia sesión. Se abre el navegador: entra en Microsoft y aprueba el acceso. La pestaña dice "Sign-in received; you
+   can close this tab". Con `--no-browser` se imprime el enlace.
+
+   ```sh
+   mail outlook session start --address you@outlook.com
+   ```
+
+3. Lee el correo y mantenlo al día:
+
+   ```sh
+   mail outlook sync
+   mail outlook schedule command mail-outlook --every 5m -- sync
+   ```
+
+   `sync` lee por defecto INBOX y Sent. El envío funciona con el mismo inicio de sesión.
+
+En una cuenta de trabajo o de centro educativo, puede que el administrador deba permitir la aplicación. Si Microsoft lo
+indica, pídele que dé su consentimiento. Para enviar también hace falta "Authenticated SMTP" activado en el buzón; leer
+funciona sin él. Consulta [los pasos de preparación del buzón](./mail/providers.md) para Outlook y Microsoft 365.
+
 ## Vincula el correo a la misma persona
 
 <a id="link-email-to-the-same-person" />

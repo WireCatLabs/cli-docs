@@ -61,6 +61,34 @@ Memo can still import mail through Himalaya, a separate mail program. That older
 setups and will be removed; use `mail` for new accounts and see [the older import](./memo/mail.md) only if you
 already rely on it.
 
+## Outlook.com and Microsoft 365
+
+Outlook.com and Microsoft 365 take no app password. You sign in to Microsoft in your browser, and WireCat's own
+Microsoft app is built in, so you register nothing.
+
+1. Outlook.com only: turn IMAP on, because Microsoft has it off by default. Open [outlook.live.com](https://outlook.live.com),
+   select Settings (the cog), then "Mail", then "Forwarding and IMAP". Turn on "Let devices and apps use IMAP" and
+   select "Save". Without it, the sign-in works but the mail server refuses the token.
+2. Sign in. The browser opens; sign in to Microsoft and approve access. The tab says "Sign-in received; you can close
+   this tab". `--no-browser` prints the link instead.
+
+   ```sh
+   mail outlook session start --address you@outlook.com
+   ```
+
+3. Read and keep the mail current:
+
+   ```sh
+   mail outlook sync
+   mail outlook schedule command mail-outlook --every 5m -- sync
+   ```
+
+   `sync` reads INBOX and Sent by default. Sending works over the same sign-in.
+
+For a work or school account, your admin may need to allow the app. If Microsoft says so, ask the admin to grant
+consent. Sending also needs "Authenticated SMTP" on for the mailbox; reading works without it. See
+[the mailbox setup steps](./mail/providers.md) for Outlook and Microsoft 365.
+
 ## Link email to the same person
 
 An email address and a Telegram or MAX identity remain separate until you explicitly link
