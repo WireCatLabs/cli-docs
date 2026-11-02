@@ -18,14 +18,16 @@ export function IdeasDown({ lang, onRetry }: { lang: string; onRetry: () => void
           <DiscordIcon />
           Discord
         </a>
-        <a
-          className="ideas-button ideas-button-quiet"
-          href={siteConfig.community.telegramGroup}
-          rel="noopener noreferrer"
-        >
-          <TelegramIcon />
-          Telegram
-        </a>
+        {lang === "ru" && (
+          <a
+            className="ideas-button ideas-button-quiet"
+            href={siteConfig.community.telegramGroup}
+            rel="noopener noreferrer"
+          >
+            <TelegramIcon />
+            Telegram
+          </a>
+        )}
       </div>
     </section>
   )

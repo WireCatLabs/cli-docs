@@ -3,7 +3,7 @@ import Link from "next/link"
 import { blogArchive, blogMarkdownPath, blogPath } from "@/lib/blog"
 import { blogWords } from "@/lib/blog-words"
 import siteConfig from "@/site.config.json"
-import { GitHubIcon, TelegramIcon } from "../brand-icons"
+import { DiscordIcon, GitHubIcon, TelegramIcon } from "../brand-icons"
 import { formatMonth } from "./blog-meta"
 import { NewsletterForm } from "./newsletter-form"
 
@@ -40,10 +40,17 @@ export function FollowLinks({ lang }: { lang: string }) {
         </a>
       </li>
       <li>
-        <a href={siteConfig.contacts.telegram} target="_blank" rel="noopener noreferrer">
-          <TelegramIcon />
-          Telegram
-        </a>
+        {lang === "ru" ? (
+          <a href={siteConfig.contacts.telegram} target="_blank" rel="noopener noreferrer">
+            <TelegramIcon />
+            Telegram
+          </a>
+        ) : (
+          <a href={siteConfig.community.discord} target="_blank" rel="noopener noreferrer">
+            <DiscordIcon />
+            Discord
+          </a>
+        )}
       </li>
     </ul>
   )

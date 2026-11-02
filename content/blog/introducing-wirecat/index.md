@@ -173,8 +173,8 @@ Calendars, Notion, Slack, Google Meet, Microsoft Teams, GitHub and task trackers
 Start with one source; you do not need every tool. The [installation guide](/en/docs/installation)
 covers Windows, macOS and Linux with Node 22.16+ or 24+, or Bun.
 
-What should come next? Suggest a source or a feature in the [WireCat chat on
-Telegram](https://t.me/wirecatdev). Bugs and pull requests go to the tool's
+What should come next? Suggest a source or a feature in the [WireCat
+Discord](https://discord.gg/DebENqbRrJ). Bugs and pull requests go to the tool's
 [GitHub repository](https://github.com/WireCatLabs).
 
 <!-- Owner: add the Discord invite here once the server exists (site.config.json community.discord). -->

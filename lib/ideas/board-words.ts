@@ -10,7 +10,7 @@ const ruPlural = (count: number, one: string, few: string, many: string) => {
 const en = {
   roadmapTitle: "Roadmap",
   laneEmpty: "Nothing here yet.",
-  whereShort: "Ideas and votes go here. Bugs go to GitHub issues, questions to Discord or Telegram.",
+  whereShort: "Ideas and votes go here. Bugs go to GitHub issues, questions to Discord.",
   hidden: "Hidden",
   delete: "Delete",
   deleting: "Deleting…",
@@ -127,8 +127,7 @@ const ru: BoardWords = {
 const es: BoardWords = {
   roadmapTitle: "Hoja de ruta",
   laneEmpty: "Nada por ahora.",
-  whereShort:
-    "Las ideas y los votos van aquí. Los errores, a los issues de GitHub, y las preguntas, a Discord o Telegram.",
+  whereShort: "Las ideas y los votos van aquí. Los errores, a los issues de GitHub, y las preguntas, a Discord.",
   hidden: "Oculto",
   delete: "Eliminar",
   deleting: "Eliminando…",
