@@ -4,6 +4,70 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.17.0 — 02.11.2026
+
+### Añadido
+
+- **Una búsqueda en reuniones, chats y notas: `gcal <profile> search all <query>`**, como la tienen `tg` y `max`.
+  Lee el almacén que comparten todas las herramientas de WireCat, así que tus reuniones vuelven junto a los mensajes
+  que `tg`, `max` o `wa` guardaron y tus notas, la mejor coincidencia primero, cada una con su `kind` y su `ref`. La
+  respuesta nombra cada cuenta que leyó en `meta.accounts` y, en una terminal, en una línea `searched:`. `--only`,
+  `--source`, `--limit`, `--page`, `--exact` y `--timezone` funcionan como en las demás herramientas. Las
+  transcripciones de reuniones solo se leen cuando `--source` nombra una cuenta de reuniones, y el correo se queda con
+  `memo search mail`. Lee solo el almacén local, nunca Google. Los agentes la tienen por MCP como lectura, y
+  `permissions.search.all` puede denegarla. Con `@wirecat/cli-core` 0.548.0 → 0.549.0 y `@wirecat/cli-base`
+  0.73.0 → 0.74.0.
+- **`sync` pregunta a un feed si cambió** (`ETag` / `Last-Modified`), y conserva los eventos guardados cuando el
+  servidor dice que nada cambió; el `feeds` de la respuesta dice entonces `unchanged: true`. El primer `sync` del día, y
+  `sync --rescan`, leen cada feed completo.
+- **`calendars add` avisa una vez en stderr ante una dirección `http://`**: el feed y cualquier token de su dirección
+  viajan sin cifrar. Sigue funcionando.
+- [Mantener los feeds al día](./usage.md#keep-feeds-fresh) da el temporizador que ejecuta `sync` cada hora junto al de
+  los avisos: `gcal personal schedule command feeds --every 1h -- sync`.
+
+### Cambios — pueden romper scripts
+
+- **`calendars remove` borra los eventos del feed** en vez de dejarlos en `events list` como cancelados: el calendario
+  del feed y cada evento guardado de él desaparecen, también de la búsqueda, y el `events` de la respuesta los cuenta.
+  Un evento que también está en uno de tus calendarios de Google se queda. `calendars remove` acepta solo un feed;
+  `calendars unsync` sigue dejando de sincronizar un calendario de Google y conserva sus eventos. Con
+  `@wirecat/cli-core` 0.546.0 → 0.548.0.
+
+## 0.16.0 — 02.11.2026
+
+### Añadido
+
+- **Seguir un feed iCalendar: `gcal <profile> calendars add <url>`**, como un calendario público de festivos, el
+  calendario de una liga deportiva o la dirección `.ics` que publica un colega, como calendario de solo lectura junto a
+  tus calendarios de Google. `sync` lo vuelve a leer cada vez, y sus eventos aparecen en `events list`,
+  `search events`, `overlapping:true` y `events remind`. Los eventos que se repiten se expanden en su propia zona
+  horaria. Una escritura en un evento del feed se rechaza antes de enviar nada, y `calendars busy` deja fuera los feeds.
+  La dirección se guarda en el llavero como el inicio de sesión y nunca se imprime. `calendars remove` deja de seguirlo.
+  La API de Google no documenta ninguna forma de añadir un calendario desde una URL, así que `gcal` lee el feed por sí
+  mismo. Consulta [Seguir un feed de calendario](./usage.md#follow-a-calendar-feed).
+
+### Corregido
+
+- Una escritura en un calendario que solo puedes leer, como uno compartido contigo como `reader`, ahora se rechaza con
+  `calendar.read-only` antes de preguntar o enviar nada; antes la rechazaba Google.
+- El lector de tu propio `--client-file` viene de `@wirecat/cli-core`, no de una copia en gcal. Los formatos del
+  archivo, la comprobación de `chmod 600` y los errores no cambian.
+
+## 0.15.0 — 02.11.2026
+
+### Añadido
+
+- **Una orden instala el temporizador de avisos de reuniones: `gcal <profile> schedule`**, como la tienen `tg` y
+  `mail`. `gcal personal schedule command reminders --every 5m -- events remind --due-within 10m -- /home/me/bin/remind`
+  instala un temporizador de usuario de systemd en Linux, un agente de launchd en macOS o una tarea del Programador de
+  tareas en Windows; `schedule
+  list`, `run` y `remove` se ocupan de él. Instalarlo no permite tu programa: mientras
+  `events.remind.hook` no esté en `allow`, la orden lo dice y da la línea `config set`. También avisa cuando `--every`
+  es más largo que `--due-within`, o cuando la ruta del programa es relativa. `GCAL_READ_ONLY` rechaza
+  `schedule command` y `remove`, y ninguna herramienta MCP ofrece `schedule`. Las líneas de cron y los temporizadores
+  escritos a mano siguen en [Recibir un aviso antes de una reunión](./usage.md#run-it-on-a-timer) para una máquina sin
+  sesión de usuario de systemd.
+
 ## 0.14.0 — 02.11.2026
 
 ### Añadido

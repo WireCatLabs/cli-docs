@@ -26,6 +26,24 @@ arranca sin shell, y el evento llega como JSON en su entrada estándar: el títu
 quien envió la invitación, así que nunca llegan a una línea de órdenes donde una shell podría ejecutarlos. Tu programa
 también debe tratarlos como datos. Su entorno es el de la ejecución de `gcal`, más `GCAL_EVENT` y `GCAL_PROFILE`.
 
+`schedule command` instala un temporizador (systemd, launchd o el Programador de tareas) que ejecuta `gcal` por su
+cuenta, sin terminal. El temporizador ejecuta `gcal schedule exec <file>`, y el archivo de la programación, en la
+carpeta de estado, guarda las palabras, el perfil y tu `PATH`, nunca una credencial. Instalar un temporizador no levanta
+`events.remind.hook`: cada ejecución lo vuelve a comprobar. `GCAL_READ_ONLY` rechaza `schedule command`, `remove`, `run`
+y `exec`, y ninguna herramienta MCP ofrece `schedule`.
+
+Un feed que sigue `calendars add` se guarda por su dirección, y la dirección de un calendario publicado a menudo lleva un
+token privado. `gcal` guarda los feeds del perfil en el llavero del sistema, con el servicio `gcal-cli` y la cuenta
+`feeds:<profile>`, o en `credentials.json` (modo 600) cuando la sesión del perfil se guarda en el archivo. Ninguna
+respuesta, error, registro ni registro de ejecución muestra la dirección: el registro de ejecución la guarda como
+`[redacted]`, y un error nombra el feed por el id de su calendario y el estado HTTP del servidor. `gcal` lee un feed por
+`https://` o `http://`, sigue como máximo 5 redirecciones y solo a `https://`, lee como máximo 10 MB y espera como
+máximo 30 segundos. Una dirección `http://` envía el feed y su token sin cifrar, así que `calendars add` avisa una vez
+en stderr. El texto de un feed es de otra persona, como el de una invitación: MCP marca como no fiables los eventos y los
+nombres de los feeds. El `ETag` y el `Last-Modified` que envió el servidor de un feed se guardan en el almacén, junto al
+estado de sincronización del calendario, y no contienen nada de la dirección. `calendars remove` borra la dirección, y
+los eventos del feed del almacén.
+
 La sesión de Google se guarda en el llavero del sistema, con el servicio `gcal-cli`, una entrada por perfil. Esa entrada
 también guarda el ID y el secreto de tu cliente de OAuth, así que renovar la sesión no vuelve a necesitar el archivo del
 cliente. Google dice que el secreto de cliente de una aplicación de escritorio no es confidencial, pero `gcal` nunca lo
