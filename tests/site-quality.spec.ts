@@ -188,7 +188,7 @@ for (const lang of ["en", "ru", "es"]) {
     await expect(button).toBeVisible()
     await expect(page.locator('[data-copy-feedback][role="status"]')).toContainText(copied)
     await page.keyboard.press("Escape")
-    await page.locator('[data-demo-provider="max"]').click()
+    await page.locator('[data-demo-provider="wa"]').click()
     await page.locator(".hero [data-connect]>summary").click()
     const original = { en: "Copy", ru: "Скопировать", es: "Copiar" }[lang] ?? "Copy"
     await expect(button).toHaveAccessibleName(new RegExp(original))

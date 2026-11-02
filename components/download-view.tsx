@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "fumadocs-ui/components
 import { ArrowRight, ChevronDown, Download, X } from "lucide-react"
 import Link from "next/link"
 import { Fragment, type ReactNode, useEffect, useId, useLayoutEffect, useRef, useState } from "react"
+import { DesktopGallery } from "@/components/desktop-gallery"
 import { CopyText } from "@/components/text-snippet"
 import {
   type DesktopFile,
@@ -248,6 +249,8 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
           </section>
         )}
       </div>
+
+      <DesktopGallery lang={lang} />
 
       <section className="download-section" aria-labelledby="earlier-versions">
         <Collapsible className="download-earlier">

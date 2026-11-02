@@ -1,4 +1,5 @@
 /** Export the owner-selected editorial source. Private variants never enter public/. */
+import { existsSync } from "node:fs"
 import { readFile, writeFile } from "node:fs/promises"
 import postcss from "postcss"
 import { languageSwitcherHtml } from "../lib/language-switcher.ts"
@@ -33,7 +34,14 @@ for (const lang of ["en", "ru", "es"]) {
   }
   const pages = {}
   for (const [kind, original] of Object.entries(source)) {
-    let html = original.replace(/<nav[^>]*class="[^"]*compact-compare-nav[^>]*>[\s\S]*?<\/nav>/, "")
+    // MAX is offered only to Russian readers at the top of the page; everywhere else it stays.
+    let html = original
+      .replace(/<!--ru-only-->([\s\S]*?)<!--\/ru-only-->/g, (_, kept) => (lang === "ru" ? kept : ""))
+      .replace(/<nav[^>]*class="[^"]*compact-compare-nav[^>]*>[\s\S]*?<\/nav>/, "")
+    const setupPrompt = escapeHtml(wordsFor(lang).onboarding.prompt("tg", "@wirecat/tg-cli"))
+    html = html
+      .replace(/(<pre class="agent-prompt">)[\s\S]*?(<\/pre>)/g, (_, open, close) => open + setupPrompt + close)
+      .replace(/(<button class="[^"]*\bcopy-agent\b[^"]*"[^>]*\bdata-copy=")[^"]*/g, (_, open) => open + setupPrompt)
     // Generated sample result is rendered afresh by the shared search engine.
     html = html
       .replace(/(<div class="mini-search-status"[^>]*>)[\s\S]*?(<\/div>)/, "$1$2")
@@ -54,23 +62,21 @@ for (const lang of ["en", "ru", "es"]) {
     })
     html = html.replace(/>([^<>]*)</g, (_, value) => `>${text(value)}<`)
     html = html.replace(/<!--EDITORIAL-CODE-(\d+)-->/g, (_, i) => protectedBlocks[Number(i)])
-    html = html.replace(/(aria-label|title|placeholder|data-copy)="([^"]*)"/g, (_, attr, value) => {
+    html = html.replace(/(aria-label|title|placeholder|data-copy|alt)="([^"]*)"/g, (_, attr, value) => {
       let translated = text(value)
       const decoded = decode(value)
-      const prompt = /^Use (tg|max) cli\. ([\s\S]+)$/.exec(decoded)
+      const prompt = /^Use (tg|max|wa) cli\. ([\s\S]+)$/.exec(decoded)
       if (prompt && dict[prompt[2]])
         translated = escapeHtml(
           `${lang === "ru" ? "Используй" : lang === "es" ? "Usa" : "Use"} ${prompt[1]} cli. ${dict[prompt[2]]}`,
         )
       return `${attr}="${translated}"`
     })
-    for (const tool of ["tg", "max"]) {
-      const english = wordsFor("en").onboarding.prompt(tool, `@wirecat/${tool}-cli`)
-      html = html.replaceAll(
-        escapeHtml(english),
-        escapeHtml(wordsFor(lang).onboarding.prompt(tool, `@wirecat/${tool}-cli`)),
+    // Each desktop screenshot shows the page's language; English stands in until a capture exists.
+    if (lang !== "en")
+      html = html.replace(/(\/screenshots\/desktop\/[a-z-]+-(?:light|dark)-)en\.webp/g, (path, stem) =>
+        existsSync(new URL(`../public${stem}${lang}.webp`, import.meta.url)) ? `${stem}${lang}.webp` : path,
       )
-    }
     html = html.replace(
       /href="(https:\/\/wirecat\.dev)?\/(en|ru|es)\/([^"#]*)([^"]*)"/g,
       (_, _origin, _locale, path, rest) => `href="/${lang}/${path}${rest}"`,
@@ -113,7 +119,7 @@ for (const lang of ["en", "ru", "es"]) {
             "AI conversation examples": "Примеры диалогов с ИИ",
             "Choose a conversation": "Выберите диалог",
             "Messenger in this example": "Мессенджер в примере",
-            "Choose messenger for setup": "Мессенджер для подключения",
+            "Choose a tool for setup": "Инструмент для подключения",
             "Copy terminal installation command": "Скопировать команду установки",
             "Choose an example": "Выберите пример",
             "Choose a use of WireCat": "Выберите вариант использования",
@@ -128,7 +134,7 @@ for (const lang of ["en", "ru", "es"]) {
               "AI conversation examples": "Conversaciones con IA",
               "Choose a conversation": "Elige una conversación",
               "Messenger in this example": "Mensajería de este ejemplo",
-              "Choose messenger for setup": "Servicio para conectar",
+              "Choose a tool for setup": "Herramienta para conectar",
               "Copy terminal installation command": "Copiar el comando de instalación",
               "Choose an example": "Elige un ejemplo",
             }
@@ -155,7 +161,7 @@ for (const lang of ["en", "ru", "es"]) {
   }
   pages.header = pages.home
     .match(/<header class="wrap site-header"[\s\S]*?<\/header>/)[0]
-    .replace(/<a\b[^>]*href="\/(?:en|ru|es)\/features"[^>]*>[\s\S]*?<\/a>/, "")
+    .replace(/<a\b[^>]*href="\/(?:en|ru|es)\/(?:features|examples)"[^>]*>[\s\S]*?<\/a>/g, "")
     .replace(
       '<nav aria-label="Site navigation">',
       '<nav class="public-site-menu" id="public-site-menu" aria-label="Site navigation">',

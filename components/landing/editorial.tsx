@@ -4,8 +4,11 @@ import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { useEffect, useRef } from "react"
 import { notifyCopyFeedback } from "@/lib/copy-feedback"
+import { detectOs } from "@/lib/desktop-releases"
 import { bindDisclosureMenus } from "@/lib/disclosure-menus"
+import { downloadWords } from "@/lib/download"
 import { prepareInstallationButton } from "@/lib/installation-command"
+import { bindScreenshotLightbox } from "@/lib/screenshot-lightbox"
 import { searchDemo } from "@/lib/search-playground/engine"
 import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
 import { wordsFor } from "@/lib/words"
@@ -48,6 +51,17 @@ const copyWords = {
     file: "archivo",
   },
 }
+const setupPackages: Record<string, string> = {
+  tg: "@wirecat/tg-cli",
+  wa: "@wirecat/whatsapp-cli",
+  max: "@wirecat/max-cli",
+  zm: "@wirecat/zoom-cli",
+  drive: "@wirecat/drive-cli",
+  memo: "@wirecat/cli-memo",
+}
+// The general installation guide has a section for these; the others have their own installation page.
+const sharedGuide = new Set(["tg", "wa", "max", "memo"])
+const trackedTool = (tool: string | undefined) => (tool === "tg" || tool === "wa" || tool === "max" ? tool : undefined)
 const escapeHtml = (text: string) =>
   text.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c)
 
@@ -179,7 +193,28 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
       prepareInstallationButton(button)
       copyLabels.set(button, button.getAttribute("aria-label"))
     }
-    for (const code of all<HTMLElement>("pre,code")) code.tabIndex = 0
+    for (const code of all<HTMLElement>("pre,code")) if (!code.closest(".cli-picker")) code.tabIndex = 0
+    const pickerList = (picker: Element) => picker.querySelector<HTMLElement>(".cli-picker-list")
+    const pickerButton = (picker: Element) => picker.querySelector<HTMLButtonElement>(".cli-picker-button")
+    const closePicker = (picker: Element, focus = false) => {
+      const list = pickerList(picker)
+      if (!list || list.hidden) return
+      list.hidden = true
+      pickerButton(picker)?.setAttribute("aria-expanded", "false")
+      if (focus) pickerButton(picker)?.focus()
+    }
+    const openPicker = (picker: Element) => {
+      const list = pickerList(picker)
+      if (!list) return
+      for (const other of all<HTMLElement>("[data-cli-picker]")) if (other !== picker) closePicker(other)
+      list.hidden = false
+      pickerButton(picker)?.setAttribute("aria-expanded", "true")
+      list.querySelector<HTMLElement>('[aria-selected="true"]')?.focus()
+    }
+    const os = detectOs(navigator)
+    if (os === "macos" || os === "windows" || os === "linux")
+      for (const label of all<HTMLElement>(".connect-download-label"))
+        label.textContent = downloadWords(lang).downloadFor[os]
     const selectTab = (button: HTMLElement, focus = false) => {
       const list = button.closest('[role="tablist"]')
       if (!list) return
@@ -277,16 +312,10 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
             notifyCopyFeedback(true)
             const selectedProvider = button
               .closest("[data-connect]")
-              ?.querySelector<HTMLElement>('[data-connect-provider][aria-pressed="true"]')?.dataset.connectProvider
+              ?.querySelector<HTMLElement>('[data-connect-provider][aria-selected="true"]')?.dataset.connectProvider
             const tool =
               copiedInstallationTool(button.dataset.copy) ??
-              (button.matches(".copy-agent")
-                ? selectedProvider === "wa"
-                  ? "wa"
-                  : selectedProvider === "max"
-                    ? "max"
-                    : "tg"
-                : undefined)
+              (button.matches(".copy-agent") ? trackedTool(selectedProvider) : undefined)
             if (tool) trackSiteEvent("installation_command_copy", { tool, locale: lang, surface: surface(button) })
           } catch {
             if (!signal.aborted) notifyCopyFeedback(false)
@@ -299,14 +328,24 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
           for (const panel of all<HTMLElement>("[data-dialogue-provider]"))
             panel.hidden = panel.dataset.dialogueProvider !== button.dataset.demoProvider
         }
+        if (button.matches(".cli-picker-button")) {
+          const picker = button.closest("[data-cli-picker]")
+          if (picker) {
+            if (pickerList(picker)?.hidden) openPicker(picker)
+            else closePicker(picker)
+          }
+        }
         if (button.dataset.connectProvider) {
           const menu = button.closest<HTMLElement>("[data-connect]")
-          const tool =
-            button.dataset.connectProvider === "wa" ? "wa" : button.dataset.connectProvider === "max" ? "max" : "tg"
-          if (menu) {
+          const tool = button.dataset.connectProvider
+          const packageName = setupPackages[tool]
+          if (menu && packageName) {
             for (const other of Array.from(menu.querySelectorAll<HTMLElement>("[data-connect-provider]")))
-              other.setAttribute("aria-pressed", String(other === button))
-            const packageName = tool === "wa" ? "@wirecat/whatsapp-cli" : `@wirecat/${tool}-cli`
+              other.setAttribute("aria-selected", String(other === button))
+            const current = menu.querySelector<HTMLElement>(".cli-picker-current")
+            if (current) current.innerHTML = button.innerHTML
+            const picker = button.closest("[data-cli-picker]")
+            if (picker) closePicker(picker, true)
             const prompt = wordsFor(lang).onboarding.prompt(tool, packageName)
             const text = menu.querySelector<HTMLElement>(".agent-prompt")
             const copy = menu.querySelector<HTMLElement>(".copy-agent")
@@ -324,7 +363,10 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
               if (code) code.textContent = command.dataset.copy ?? ""
             }
             const guide = menu.querySelector<HTMLAnchorElement>(".connect-guide")
-            if (guide) guide.href = `/${lang}/docs/installation#${tool}`
+            if (guide)
+              guide.href = sharedGuide.has(tool)
+                ? `/${lang}/docs/installation#${tool}`
+                : `/${lang}/docs/${tool}/installation`
           }
         }
         if (button.hasAttribute("data-reveal-next")) {
@@ -380,12 +422,9 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
             search(panel)
           }
         }
-        if (button instanceof HTMLAnchorElement && /\/docs\/installation/.test(button.pathname))
-          trackSiteEvent("setup_guide_open", {
-            tool: button.hash === "#wa" ? "wa" : button.hash === "#max" ? "max" : "tg",
-            locale: lang,
-            surface: surface(button),
-          })
+        const guideTool = trackedTool(button instanceof HTMLAnchorElement ? button.hash.slice(1) || "tg" : undefined)
+        if (button instanceof HTMLAnchorElement && /\/docs\/installation$/.test(button.pathname) && guideTool)
+          trackSiteEvent("setup_guide_open", { tool: guideTool, locale: lang, surface: surface(button) })
         if (
           button instanceof HTMLAnchorElement &&
           button.origin === location.origin &&
@@ -429,6 +468,51 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
     root.addEventListener(
       "keydown",
       (event) => {
+        if (!(event.target instanceof HTMLElement)) return
+        const picker = event.target.closest("[data-cli-picker]")
+        if (!picker) return
+        const list = pickerList(picker)
+        if (!list) return
+        if (event.target.matches(".cli-picker-button") && ["ArrowDown", "ArrowUp"].includes(event.key)) {
+          event.preventDefault()
+          openPicker(picker)
+          return
+        }
+        if (list.hidden || !list.contains(event.target)) return
+        const options = Array.from(list.querySelectorAll<HTMLElement>('[role="option"]'))
+        const index = options.indexOf(event.target)
+        const next =
+          event.key === "ArrowDown"
+            ? options[(index + 1) % options.length]
+            : event.key === "ArrowUp"
+              ? options[(index - 1 + options.length) % options.length]
+              : event.key === "Home"
+                ? options[0]
+                : event.key === "End"
+                  ? options.at(-1)
+                  : undefined
+        if (next) {
+          event.preventDefault()
+          next.focus()
+        } else if (event.key === "Escape") {
+          event.preventDefault()
+          event.stopPropagation()
+          closePicker(picker, true)
+        } else if (event.key === "Tab") closePicker(picker)
+      },
+      { signal },
+    )
+    root.addEventListener(
+      "click",
+      (event) => {
+        for (const picker of all<HTMLElement>("[data-cli-picker]"))
+          if (!(event.target instanceof Node && picker.contains(event.target))) closePicker(picker)
+      },
+      { signal },
+    )
+    root.addEventListener(
+      "keydown",
+      (event) => {
         if (!(event.target instanceof HTMLElement) || event.target.getAttribute("role") !== "tab") return
         const tabs = Array.from(
           event.target.closest('[role="tablist"]')?.querySelectorAll<HTMLElement>('[role="tab"]') ?? [],
@@ -455,14 +539,16 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
       { signal },
     )
     bindDisclosureMenus(root, "[data-connect],[data-language-switcher]", signal)
+    bindScreenshotLightbox(root, downloadWords(lang).gallery, signal)
     const parameters = new URL(location.href)
     const initialScenario = all<HTMLElement>("[data-hero-case]").find(
       (b) => b.dataset.heroCase === parameters.searchParams.get("scenario"),
     )
     if (initialScenario) selectTab(initialScenario)
-    if (parameters.searchParams.get("messenger") === "max")
+    const messenger = parameters.searchParams.get("messenger")
+    if (messenger && messenger !== "tg")
       all<HTMLButtonElement>("[data-demo-provider]")
-        .find((b) => b.dataset.demoProvider === "max")
+        .find((b) => b.dataset.demoProvider === messenger)
         ?.click()
     if (
       root.querySelector("[data-hero-case]") &&

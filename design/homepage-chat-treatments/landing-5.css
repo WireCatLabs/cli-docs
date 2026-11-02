@@ -42,3 +42,92 @@
 .brand:is(:hover,:focus-visible) .wirecat-logo-pulse{animation:wirecat-pulse .9s .35s ease-out}
 .brand:is(:hover,:focus-visible) .wirecat-logo-ring{animation:wirecat-ring .9s .2s ease-out}
 @media(prefers-reduced-motion:reduce){.brand .wirecat-logo-mark{transition:none}.brand:is(:hover,:focus-visible) .wirecat-logo-mark{transform:none}.brand:is(:hover,:focus-visible) :is(.wirecat-logo-wire,.wirecat-logo-pulse,.wirecat-logo-ring),.chat-down{animation:none}}
+.connect-desktop{padding-bottom:18px;border-bottom:1px solid var(--line)}
+.connect-lede{font-size:13px;color:var(--muted);margin-top:6px}
+.connect-download{width:100%;margin-top:14px}
+.connect-download svg{width:17px;height:17px;flex-shrink:0}
+.connect-desktop .connect-small{margin-top:10px}
+.connect-cli{padding-top:16px}
+.connect-cli-title{font-size:14px;font-weight:650}
+.connect-cli .copy-agent{margin-top:12px}
+.button.secondary.copy-agent:is(:hover,:focus-visible){background:var(--soft);color:var(--accent);box-shadow:none}
+.button.secondary.copy-agent:active{background:color-mix(in srgb,var(--soft) 80%,var(--ink));color:var(--accent)}
+.manual-install.prompt-preview{margin-top:14px}
+.manual-install.prompt-preview+.manual-install{margin-top:12px}
+.prompt-preview .agent-prompt{margin:12px 0 4px}
+.connect-panel{border-color:color-mix(in srgb,var(--line) 70%,var(--ink) 12%);box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 8%,transparent),0 10px 20px -6px color-mix(in srgb,var(--ink) 12%,transparent),0 28px 56px -16px color-mix(in srgb,var(--ink) 22%,transparent)}
+.dark .connect-panel{background:color-mix(in srgb,var(--bg) 95%,var(--ink));border-color:color-mix(in srgb,var(--line) 55%,var(--ink) 22%);box-shadow:inset 0 1px 0 color-mix(in srgb,var(--ink) 9%,transparent),0 2px 4px #0007,0 16px 32px -8px #000b,0 40px 80px -20px #000d}
+.dark .button.secondary.copy-agent{background:transparent;color:color-mix(in srgb,var(--accent) 55%,var(--ink));border:1px solid color-mix(in srgb,var(--line) 50%,var(--ink) 25%)}
+.dark .button.secondary.copy-agent:is(:hover,:focus-visible){background:color-mix(in srgb,var(--paper) 60%,transparent);color:var(--ink)}
+.landing5 .hero.memory-hero{align-items:start}
+.landing5 .hero.memory-hero .hero-copy{padding-top:0}
+.landing5 .hero.memory-hero h1{text-box:trim-both cap alphabetic}
+/* Each sentence of the heading keeps one line: the size follows the copy column, side by side or stacked. */
+.landing5 .hero.memory-hero h1{max-width:none;grid-row:auto}
+@media(min-width:1101px){.landing5 .hero.memory-hero{grid-template-columns:minmax(0,.88fr) minmax(0,1fr)}.landing5 .hero.memory-hero.memory-hero::after{left:calc(46.8085% + 1.34px)}.landing5 .hero.memory-hero h1{font-size:min(calc(3.02vw - 2px),42px)}}
+@media(max-width:1100px){.landing5 .hero.memory-hero{grid-template-columns:minmax(0,1fr)}.landing5 .hero.memory-hero .hero-copy{display:block}.landing5 .hero.memory-hero.memory-hero::after{display:none}.landing5 .hero.memory-hero h1{font-size:clamp(20px,calc(6.3vw - 1.5px),46px)}.landing5 .hero.memory-hero .hero-copy .lede{max-width:62ch}}
+.integrations-desktop{display:grid;grid-template-columns:auto 1fr;gap:14px;margin-top:24px;padding:18px 20px;max-width:46ch;background:var(--paper);border:1px solid var(--line);border-radius:12px}
+.integrations-desktop>svg{width:20px;height:20px;margin-top:2px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.integrations-desktop p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}
+.integrations-desktop .text-link{margin-top:10px}
+.cli-picker{position:relative;margin:12px 0 10px}
+.cli-picker-button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit;font-size:14px;text-align:left;cursor:pointer;transition:border-color .15s ease-out}
+.cli-picker-button:hover,.cli-picker-button[aria-expanded="true"]{border-color:color-mix(in srgb,var(--line) 40%,var(--accent))}
+.cli-picker-current,.cli-picker-list [role="option"]{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.cli-picker svg{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cli-picker [viewBox="0 0 720 720"]{stroke:none}
+.cli-picker-name{font-weight:650}
+.cli-picker code{margin-left:auto;font:12px/1 "JetBrains Mono",ui-monospace,monospace;color:var(--muted);background:none;padding:0}
+.cli-picker-button>.cli-picker-chevron{width:16px;height:16px;color:var(--muted);transition:rotate .2s cubic-bezier(.16,1,.3,1)}
+.cli-picker-button[aria-expanded="true"]>.cli-picker-chevron{rotate:180deg}
+.cli-picker-list{position:absolute;inset-inline:0;top:calc(100% + 6px);z-index:5;display:grid;gap:2px;padding:6px;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 8%,transparent),0 12px 28px -8px color-mix(in srgb,var(--ink) 22%,transparent);animation:cli-picker-in .18s cubic-bezier(.16,1,.3,1)}
+.cli-picker-list [role="option"]{width:100%;min-height:40px;padding:8px 10px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.cli-picker-list [role="option"]:is(:hover,:focus-visible){background:var(--soft);outline:none}
+.cli-picker-list [role="option"]:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.cli-picker-list [role="option"][aria-selected="true"]{color:var(--accent)}
+.cli-picker-list [role="option"][aria-selected="true"] code{color:var(--accent)}
+.dark .cli-picker-list{background:color-mix(in srgb,var(--bg) 88%,var(--ink));border-color:color-mix(in srgb,var(--line) 55%,var(--ink) 22%);box-shadow:0 2px 4px #0007,0 16px 32px -8px #000c}
+.dark .cli-picker-button{background:color-mix(in srgb,var(--paper) 70%,transparent)}
+.dark .cli-picker-list [role="option"]:is(:hover,:focus-visible){background:color-mix(in srgb,var(--soft) 80%,var(--ink) 6%)}
+.dark .cli-picker-list [role="option"][aria-selected="true"],.dark .cli-picker-list [role="option"][aria-selected="true"] code{color:color-mix(in srgb,var(--accent) 55%,var(--ink))}
+@keyframes cli-picker-in{from{opacity:0;translate:0 -4px}}
+@media(prefers-reduced-motion:reduce){.cli-picker-list{animation:none}.cli-picker-button>.cli-picker-chevron{transition:none}}
+.desktop-showcase{padding-block:32px!important;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);grid-template-rows:auto 1fr;gap:28px 56px;align-items:start;border-top:1px solid var(--line)}
+.desktop-showcase-copy{grid-row:span 2;align-self:start;padding-top:8px}
+.desktop-showcase h2{font-size:26px;line-height:1.3;margin:0 0 18px;text-wrap:balance}
+.desktop-showcase ul{list-style:none;display:grid;gap:12px;margin:0 0 24px;padding:0}
+.desktop-showcase li{font-size:15px;line-height:1.65;color:var(--muted)}
+.desktop-showcase li b{color:var(--ink);font-weight:650}
+.desktop-showcase .connect-download{width:auto}
+.desktop-showcase .micro{margin-top:12px}
+.desktop-shot{margin:0;min-width:0}
+.desktop-shot-frame{overflow:hidden;border:1px solid var(--line);border-radius:12px;background:var(--paper);box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 6%,transparent),0 18px 40px -18px color-mix(in srgb,var(--ink) 30%,transparent)}
+.desktop-shot-frame img{display:block;width:100%;height:auto}
+.desktop-shot figcaption{margin-top:10px;font-size:13px;line-height:1.5;color:var(--muted)}
+.desktop-shot-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.desktop-shot-dark{display:none!important}
+.dark .desktop-shot-light{display:none!important}
+.dark .desktop-shot-dark{display:block!important}
+@media(prefers-color-scheme:dark){html:not(.light) .desktop-shot-light{display:none!important}html:not(.light) .desktop-shot-dark{display:block!important}}
+@media(max-width:900px){.desktop-showcase{grid-template-columns:minmax(0,1fr)}.desktop-showcase-copy{grid-row:auto}}
+@media(max-width:560px){.desktop-shot-row{grid-template-columns:minmax(0,1fr)}}
+.shot-open{display:block;width:100%;padding:0;cursor:zoom-in;transition:translate .18s ease-out}
+.shot-open:is(:hover,:focus-visible){translate:0 -2px}
+.shot-open:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.shot-lightbox{position:fixed;inset:0;margin:auto;width:min(1100px,calc(100vw - 32px));max-width:none;height:fit-content;max-height:calc(100dvh - 32px);padding:16px;overflow:auto;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--ink);box-shadow:0 30px 80px -20px #0009}
+.shot-lightbox[open]{animation:shot-lightbox-in .2s cubic-bezier(.16,1,.3,1)}
+.shot-lightbox::backdrop{background:color-mix(in srgb,#000 58%,transparent);backdrop-filter:blur(2px)}
+.shot-lightbox .desktop-shot-frame img{animation:shot-lightbox-fade .2s ease-out}
+.shot-lightbox figcaption{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+.shot-lightbox-position{flex-shrink:0;font:12px/1 "JetBrains Mono",ui-monospace,monospace;color:var(--muted)}
+.shot-lightbox-controls{display:flex;gap:8px;margin-top:12px}
+.shot-lightbox-controls button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:inherit;font-size:14px;cursor:pointer;transition:background-color .15s ease-out,border-color .15s ease-out}
+.shot-lightbox-controls button:is(:hover,:focus-visible){border-color:color-mix(in srgb,var(--line) 40%,var(--accent));background:var(--soft)}
+.shot-lightbox-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.shot-lightbox-controls svg{width:18px;height:18px;flex-shrink:0}
+.shot-lightbox-close{margin-left:auto}
+.dark .shot-lightbox{background:color-mix(in srgb,var(--bg) 95%,var(--ink));border-color:color-mix(in srgb,var(--line) 55%,var(--ink) 22%)}
+.dark .shot-lightbox-controls button{background:color-mix(in srgb,var(--paper) 60%,transparent);border-color:color-mix(in srgb,var(--line) 50%,var(--ink) 25%)}
+@keyframes shot-lightbox-in{from{opacity:0;scale:.98}}
+@keyframes shot-lightbox-fade{from{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.shot-lightbox[open],.shot-lightbox .desktop-shot-frame img{animation:none}.shot-open{transition:none}}

@@ -20,7 +20,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
   const post = postLang && slug ? blogPost(postLang, slug) : undefined
   const lang = localeOf(post ? post.lang : image.replace(/\.png$/, ""))
   const words = seoWords(lang)
-  const [memory, context] = words.socialTitle.split(/(?<=\.) /)
+  const [memory, context] = words.socialTitle.split(/(?<=[.—]) /)
   const headline = post ? (
     <span style={{ fontSize: post.title.length > 60 ? 48 : 56, lineHeight: 1.2 }}>{post.title}</span>
   ) : (
