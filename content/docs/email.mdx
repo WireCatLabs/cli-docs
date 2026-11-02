@@ -1,86 +1,65 @@
 ---
 title: "Email"
-description: "Connect mail accounts, import the period you need, and link messages to the people you already know."
+description: "Connect a mailbox with the mail tool, then search it in Memo and link messages to the people you already know."
 ---
 
-This guide explains how WireCat brings email into your agent's context: connect a mailbox,
-import the period you need and find mail alongside information about the people you know.
+This guide explains how WireCat brings email into your agent's context: connect a mailbox with the
+[mail tool](./mail/index.md), then find its messages in Memo next to your notes and chats.
 Use it when you want to find a decision in email or prepare for a conversation.
 
 After following the guide, you will be able to:
 
-- connect the mailboxes you choose and import the period you need;
+- connect a mailbox and read the period you need into the shared store;
 - link an email address to a person you already know;
-- search and label mail with source references and check import coverage.
+- search and label mail with source references and check sync coverage;
 - spot senders that look like spam or scams.
 
-WireCat uses Memo for these tasks. Memo is a tool that runs on your computer and imports
-email into a local, searchable copy. Your agent can use that mail together with notes and
-downloaded messenger history.
+Mail is WireCat's own email tool. It copies your mailbox into the shared WireCat store. Memo is a tool
+that runs on your computer and searches that store, so your agent can use mail together with notes and
+downloaded messenger history. Memo does not change your mailbox.
 
 ## Before you start
 
-[Install Memo using the notes guide](./memo/installation.md). You do not need to import a notes
-folder to use email. Use a <DocTerm term="local-agent" lang="en" label="local AI agent" /> on the
-same computer. Memo reads mail through Himalaya; configure the mailbox there before importing.
-Messenger history is optional, but must already be downloaded if you want it in the same answer.
+[Install Mail](./mail/installation.md) and prepare the mailbox: turn on IMAP and make an app password
+(a separate password for one program that you can revoke). The [mailbox setup steps](./mail/providers.md)
+list this for each provider. [Install Memo using the notes guide](./memo/installation.md) to search mail.
+You do not need to import a notes folder. Use a <DocTerm term="local-agent" lang="en" label="local AI agent" /> on the
+same computer. Messenger history is optional, but must already be downloaded if you want it in the same answer.
 
 ## Add email
 
-Memo reads email through [Himalaya](https://github.com/pimalaya/himalaya), a separate mail
-program. Your mail account is configured there; Memo uses its name and address without needing
-a separate copy of the mail password. Ask your agent to help:
+Choose a profile name for the mailbox (here `ya`), then sign in and read the mail. Ask your agent to help:
 
 ```text prompt
-Help me connect the mail account I choose through Himalaya and add it to Memo.
-Explain the account setup, then import mail from the date I choose.
-Show the import result and tell me whether I need another run to finish that period.
+Help me connect the mail account I choose with the mail tool.
+Explain the provider steps, then read mail from the date I choose.
+Show the sync result and tell me whether I need another run to finish that period.
 ```
 
-The account must work in Himalaya before Memo can import its mail. For manual configuration:
-
-Add `mail.accounts` to Memo's configuration, keeping any existing settings. Default file locations:
-
-| OS | Configuration file |
-| --- | --- |
-| Linux | `~/.config/cli-memo/config.json` |
-| macOS | `~/.config/cli-memo/config.json` |
-| Windows | `%APPDATA%\cli-memo\Config\config.json` |
-
-`MEMO_CONFIG_DIR` overrides the directory; on Linux and macOS, `XDG_CONFIG_HOME` also affects the default.
-The example uses a Himalaya account named `gmail`; replace the name and address with yours.
-
-```json
-{
-  "mail": {
-    "accounts": [{ "name": "gmail", "address": "you@example.com" }]
-  }
-}
-```
-
-`name` is the account label in Himalaya; `address` is your mailbox's address in Memo's store.
-To use several mailboxes, add one entry per account to `mail.accounts`. To import, run `memo sync --source email:<name>`,
-where `<name>` is the Himalaya name, such as `gmail`. Search results identify mailboxes by their addresses,
-such as `you@example.com`. Addresses you link to people later are the senders/recipients,
-not additional accounts you must log into.
-
-Gmail is the default mode and imports All Mail. For another IMAP provider, configure
-`"mode": "imap"` and `"folders": ["INBOX", "Archive"]` in the account entry, using your
-mailbox's actual folder names. Gmail labels — Inbox, Important, Sent, Starred and your own — are
-imported as mailboxes and refreshed on every run.
+For manual setup:
 
 ```sh
-memo sync --only mail --source email:gmail --since-time 2026-09-01 --json
+mail ya session start --address you@example.com
+mail ya sync --since-time 2026-09-01
+mail ya status
 ```
 
-Choose the first date you want to include. Each run reads at most 200 new messages by default;
-run it again to continue if the result says the import is incomplete. The mailbox is read-only:
-import does not send email or mark it read. Imported mail is stored locally; rerunning import
-can remove the stored text of mail that has disappeared from the source.
+`session start` finds the server, checks the app password and keeps it in the system keyring. `sync` reads new mail
+into the shared store and skips mail it already has. A large mailbox does not fit in one run: when `sync` reports
+`state: partial`, run it again, and use `mail ya status` to see how far it got. To keep the mailbox current, schedule it:
+`mail ya schedule command mail-ya --every 5m -- sync`. See [everyday use of mail](./mail/usage.md) for folders,
+limits and the other commands.
 
-The text of a readable attachment is kept with its email and found with it. Import also prepares
-new mail for search by meaning, so `tg personal search conversations` and `max personal search conversations`
-can find it; `--no-embed` skips that step.
+Memo needs no setting for this mail. It reads the same store, so `memo search mail` finds it at once. Search results
+identify mailboxes by their addresses, such as `you@example.com`. Addresses you link to people later are the
+senders and recipients, not additional accounts you must log into.
+
+The text of a readable attachment is kept with its email and found with it. Memo also prepares new mail for search by
+meaning, so `tg personal search conversations` and `max personal search conversations` can find it.
+
+Memo can still import mail through Himalaya, a separate mail program. That older import is kept for existing
+setups and will be removed; use `mail` for new accounts and see [the older import](./memo/mail.md) only if you
+already rely on it.
 
 ## Link email to the same person
 
@@ -129,7 +108,7 @@ Show each suspicious sender with its score, the signals behind it and one exampl
 Leave out senders that score only because I never open their newsletters.
 ```
 
-`memo mail inspect gmail` lists senders with their score and signals. Each import also scores the senders of
+Each sync also scores the senders of
 stored mail, at most once a day, and a search hit in `--json` carries its sender's `sender_score`. Mail from a
 sender with signs of fraud, such as a brand name sent from another domain or a domain registered in the last
 six months, comes after the other results; a domain you have written to is never moved, and `--plain-order`
@@ -159,15 +138,15 @@ See [creating, editing and exporting notes](./memo/notes.md#write-your-own-notes
 
 ## Check the result
 
-Check the selected mailbox, import date window and whether another run is needed. A context
+Check the selected mailbox, synced date window and whether another run is needed. A context
 answer should list the email identity you linked and point to the relevant mail. If it does not,
 check that the address is linked, the needed date range was imported and the account was selected.
 An empty result from a partial import does not prove there were no agreements.
 
 ## If mail is missing
 
-- **No mail account:** check the Himalaya account name and its entry in `mail.accounts`.
-- **Only part of the period imported:** rerun the import; `--limit` bounds new messages per run.
+- **No mail account:** run `mail session list` and check the profile name in your command.
+- **Only part of the period read:** run `mail <profile> sync` again; `--limit` bounds new messages per run.
 - **Results include another mailbox:** check the source references and keep the intended address.
 - **Mail is missing from person context:** check the exact email identity link and imported history.
 
