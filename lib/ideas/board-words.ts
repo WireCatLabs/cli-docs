@@ -62,6 +62,11 @@ const en = {
   popupDone: "You're signed in. You can close this window.",
   signedIn: "Signed in",
   select: "Select an idea to read it and its comments.",
+  idea: "Idea",
+  pages: "Pages",
+  previous: "Previous page",
+  next: "Next page",
+  page: (page: number): string => `Page ${page}`,
 }
 
 export type BoardWords = typeof en
@@ -122,6 +127,11 @@ const ru: BoardWords = {
   popupDone: "Вы вошли. Это окно можно закрыть.",
   signedIn: "Вы вошли",
   select: "Выберите идею, чтобы прочитать её и комментарии.",
+  idea: "Идея",
+  pages: "Страницы",
+  previous: "Предыдущая страница",
+  next: "Следующая страница",
+  page: (page) => `Страница ${page}`,
 }
 
 const es: BoardWords = {
@@ -180,6 +190,11 @@ const es: BoardWords = {
   popupDone: "Ya iniciaste sesión. Puedes cerrar esta ventana.",
   signedIn: "Sesión iniciada",
   select: "Elige una idea para leerla con sus comentarios.",
+  idea: "Idea",
+  pages: "Páginas",
+  previous: "Página anterior",
+  next: "Página siguiente",
+  page: (page) => `Página ${page}`,
 }
 
 export const boardWords = (lang: string): BoardWords => ({ en, ru, es })[lang as "en"] ?? en

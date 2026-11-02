@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { ideas, ideasSample, returnPath } from "@/lib/ideas"
+import { perPage } from "@/lib/ideas/api"
 import { boardWords } from "@/lib/ideas/board-words"
 import { setPreviewMode } from "@/lib/ideas/sample"
 import {
@@ -36,40 +37,7 @@ export function smoothly(update: () => void) {
   transition.finished.catch(() => {})
 }
 
-const motionMs = 280
-
-/**
- * While an idea opens, closes or another one closes above it, the row that was clicked stays where it was on
- * screen; once the panel has settled it scrolls smoothly, and only if the panel ends below the fold.
- */
-function keepInPlace(id: string | null) {
-  const row = id ? document.querySelector<HTMLElement>(`[data-idea="${CSS.escape(id)}"]`) : null
-  if (!row) return
-  const start = row.getBoundingClientRect().top
-  const onScreen = start >= 0 && start < window.innerHeight
-  const end = performance.now() + motionMs + 40
-  const step = () => {
-    const now = row.getBoundingClientRect().top
-    if (onScreen && Math.abs(now - start) >= 1) window.scrollBy(0, now - start)
-    if (performance.now() < end) requestAnimationFrame(step)
-    else reveal(row)
-  }
-  requestAnimationFrame(step)
-}
-
-function reveal(row: HTMLElement) {
-  if (!row.matches("[data-open]")) return
-  const box = row.getBoundingClientRect()
-  const room = 24
-  const top = 72
-  let delta = 0
-  if (box.top < 0 || box.top > window.innerHeight - room) delta = box.top - top
-  else if (box.bottom > window.innerHeight - room)
-    delta = Math.min(box.bottom - window.innerHeight + room, box.top - top)
-  if (Math.abs(delta) >= 1) window.scrollBy({ top: delta, behavior: reducedMotion() ? "auto" : "smooth" })
-}
-
-type Query = Omit<IdeaQuery, "page" | "perPage">
+type Query = Omit<IdeaQuery, "perPage" | "voted">
 
 const readQuery = (): Query => {
   const params = new URLSearchParams(window.location.search)
@@ -80,17 +48,20 @@ const readQuery = (): Query => {
     tag: params.get("tag") || undefined,
     q: params.get("q") || undefined,
     sort: isSort(sort) ? sort : "top",
+    page: Math.max(1, Number.parseInt(params.get("page") ?? "1", 10) || 1),
   }
 }
 
 function writeUrl(query: Query, selected: string | null) {
   const params = new URLSearchParams(window.location.search)
-  for (const key of ["tool", "status", "tag", "q", "sort", "id", "preview", "compose", "merged"]) params.delete(key)
+  for (const key of ["tool", "status", "tag", "q", "sort", "page", "id", "preview", "compose", "merged"])
+    params.delete(key)
   if (query.tool) params.set("tool", query.tool)
   if (query.status) params.set("status", query.status)
   if (query.tag) params.set("tag", query.tag)
   if (query.q) params.set("q", query.q)
   if (query.sort !== "top") params.set("sort", query.sort)
+  if (query.page && query.page > 1) params.set("page", String(query.page))
   if (selected) params.set("id", selected)
   const search = params.toString()
   window.history.replaceState(window.history.state, "", `${window.location.pathname}${search ? `?${search}` : ""}`)
@@ -116,7 +87,6 @@ export function useIdeasBoard(lang: string) {
   const [list, setList] = useState<List>()
   const [pending, setPending] = useState(false)
   const [failed, setFailed] = useState(false)
-  const [more, setMore] = useState<"idle" | "loading" | "failed">("idle")
   const [tags, setTags] = useState<Tag[]>([])
   const [all, setAll] = useState<Idea[]>([])
   const [selected, setSelected] = useState<string | null>(null)
@@ -151,7 +121,6 @@ export function useIdeasBoard(lang: string) {
     // Only a slow answer dims the list; a quick one swaps straight in.
     const dim = setTimeout(() => current && setPending(true), 140)
     setFailed(false)
-    setMore("idle")
     ideas
       .list(query)
       .then((next) => {
@@ -179,7 +148,7 @@ export function useIdeasBoard(lang: string) {
       const trimmed = search.trim()
       // The API searches from 3 characters; shorter text leaves the list as it is.
       const q = trimmed.length >= 3 ? trimmed : undefined
-      setQueryState((before) => (before.q === q ? before : { ...before, q }))
+      setQueryState((before) => (before.q === q ? before : { ...before, q, page: undefined }))
     }, 250)
     return () => clearTimeout(timer)
   }, [ready, search])
@@ -199,7 +168,11 @@ export function useIdeasBoard(lang: string) {
     return () => document.removeEventListener("visibilitychange", onVisible)
   }, [refreshMember])
 
-  const setQuery = useCallback((change: Partial<Query>) => setQueryState((before) => ({ ...before, ...change })), [])
+  // Any other change starts again from page 1.
+  const setQuery = useCallback(
+    (change: Partial<Query>) => setQueryState((before) => ({ ...before, page: undefined, ...change })),
+    [],
+  )
   const clear = useCallback(() => {
     setSearchState("")
     setQueryState((before) => ({ sort: before.sort }))
@@ -235,28 +208,8 @@ export function useIdeasBoard(lang: string) {
     [member, vote, signIn],
   )
 
-  const loadMore = async () => {
-    if (!list) return
-    setMore("loading")
-    try {
-      const next = await ideas.list({ ...query, page: list.page + 1 })
-      const seen = new Set(list.ideas.map((idea) => idea.id))
-      setList({
-        ideas: [...list.ideas, ...next.ideas.filter((idea) => !seen.has(idea.id))],
-        total: next.total,
-        page: next.page,
-      })
-      setMore("idle")
-    } catch {
-      setMore("failed")
-    }
-  }
-
-  const selectedNow = useRef<string | null>(null)
-  selectedNow.current = selected
   const select = useCallback((id: string | null) => {
     setMerged(false)
-    keepInPlace(id ?? selectedNow.current)
     setSelected(id)
   }, [])
   const forward = useCallback((id: string) => {
@@ -274,8 +227,7 @@ export function useIdeasBoard(lang: string) {
     clear,
     filtered: !!(query.tool || query.status || query.tag || query.q),
     list: list && { ...list, ideas: list.ideas.map(view) },
-    more,
-    loadMore,
+    pages: list ? Math.max(1, Math.ceil(list.total / perPage)) : 1,
     pending,
     failed,
     retry,

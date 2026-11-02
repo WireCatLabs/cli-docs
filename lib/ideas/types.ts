@@ -47,6 +47,8 @@ export type IdeaQuery = {
   sort: IdeaSort
   page?: number
   perPage?: number
+  /** only the signed-in member's votes; needs a session */
+  voted?: boolean
 }
 export type IdeaPage = { ideas: Idea[]; total: number; page: number; perPage: number }
 export type NewIdea = { title: string; body: string; tool: IdeaTool; tags: string[]; turnstileToken: string }

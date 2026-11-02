@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight, ChevronUp, EyeOff, LoaderCircle, MailCheck, MessageSquare, X } from "lucide-react"
+import { ArrowRight, ChevronUp, EyeOff, LoaderCircle, MailCheck, MessageSquare } from "lucide-react"
 import { type FormEvent, type ReactNode, useId, useState } from "react"
 import { GoogleIcon } from "@/components/brand-icons"
 import { ideaPath } from "@/lib/ideas"
@@ -43,6 +43,7 @@ export function TagLinks({ board, idea }: { board: Board; idea: Idea }) {
           aria-pressed={board.query.tag === tag.slug}
           onClick={(event) => {
             event.stopPropagation()
+            board.select(null)
             board.setQuery({ tag: board.query.tag === tag.slug ? undefined : tag.slug })
           }}
         >
@@ -75,7 +76,7 @@ export function IdeaMeta({ board, idea, tags = true }: { board: Board; idea: Ide
   )
 }
 
-/** A link for people who open it in a new tab; a click stays on the page and opens the idea in place. */
+/** A link for people who open it in a new tab; a click stays on the page and opens the idea in the modal. */
 export function IdeaLink({
   board,
   idea,
@@ -628,18 +629,8 @@ export function FilterSelect<T extends string>({
   )
 }
 
-/** The open idea: what it asks, the answer, who posted it, and the comments. Each variant frames it. */
-export function IdeaDetail({
-  board,
-  id,
-  title = true,
-  onClose,
-}: {
-  board: Board
-  id: string
-  title?: boolean
-  onClose?: () => void
-}) {
+/** The open idea in the same order as its row in the list: title, text, status and tags, then the answer and comments. */
+export function IdeaDetail({ board, id }: { board: Board; id: string }) {
   const thread = useIdeaThread(board, id)
   const { idea } = thread
   if (idea === null) return <p className="board-quiet">{ideasWords(board.lang).goneText}</p>
@@ -651,30 +642,15 @@ export function IdeaDetail({
       </div>
     )
   return (
-    <article className="board-detail" aria-labelledby={title ? `idea-${idea.id}` : undefined}>
-      {onClose && (
-        <button
-          type="button"
-          className="board-detail-close"
-          onClick={onClose}
-          aria-label={boardWords(board.lang).close}
-        >
-          <X aria-hidden="true" />
-        </button>
-      )}
-      {title && (
-        <header className="board-detail-head">
-          <IdeaMeta board={board} idea={idea} tags={false} />
-          <div className="board-detail-title">
-            <h2 id={`idea-${idea.id}`}>{idea.title}</h2>
-            <Vote board={board} idea={idea} className="board-vote-wide" />
-          </div>
-        </header>
-      )}
+    <article className="board-detail" aria-labelledby={`idea-${idea.id}`}>
+      <header className="board-detail-title">
+        <Vote board={board} idea={idea} />
+        <h2 id={`idea-${idea.id}`}>{idea.title}</h2>
+      </header>
       {idea.body && <p className="board-detail-body">{idea.body}</p>}
       <div className="board-detail-facts">
+        <IdeaMeta board={board} idea={idea} />
         <Byline lang={board.lang} idea={idea} />
-        {title && <TagLinks board={board} idea={idea} />}
       </div>
       <Answer lang={board.lang} idea={idea} />
       <Comments board={board} thread={thread} />

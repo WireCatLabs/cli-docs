@@ -14,7 +14,7 @@ import { justSignedInKey } from "./member-bar"
 import { TurnstileField } from "./turnstile-field"
 import { useMember } from "./use-member"
 
-type State = "idle" | "verifying" | "expired" | "sending" | "sent" | "failed" | "deleted" | "popup-done"
+type State = "idle" | "verifying" | "expired" | "sending" | "sent" | "failed" | "popup-done"
 
 /** Reads `#token=` from the emailed link and takes it out of the address bar before anything else runs. */
 function takeLinkToken() {
@@ -39,8 +39,6 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
   const [token, setToken] = useState("")
   const [resetKey, setResetKey] = useState(0)
   const [returnTo, setReturnTo] = useState(next ?? ideasPath(lang))
-  const [confirming, setConfirming] = useState(false)
-  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     const target = next ?? safeReturnPath(lang, new URLSearchParams(window.location.search).get("next"))
@@ -106,17 +104,6 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
     }
   }
 
-  const deleteAccount = async () => {
-    setDeleting(true)
-    try {
-      await ideas.deleteAccount()
-      setState("deleted")
-    } catch (error) {
-      setFailure(errorText(lang, error, account.failed))
-    }
-    setDeleting(false)
-  }
-
   const Heading = embedded ? "h2" : "h1"
 
   if (state === "popup-done")
@@ -147,18 +134,6 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
       </section>
     )
 
-  if (state === "deleted")
-    return (
-      <section className="ideas-panel" aria-labelledby="account-deleted">
-        <Heading id="account-deleted" tabIndex={-1} ref={(heading: HTMLHeadingElement | null) => heading?.focus()}>
-          {account.done}
-        </Heading>
-        <Link className="ideas-button ideas-button-quiet" href={ideasPath(lang)}>
-          {words.continue}
-        </Link>
-      </section>
-    )
-
   if (member && state === "idle" && !embedded)
     return (
       <section className="ideas-panel" aria-labelledby="sign-in-title">
@@ -168,43 +143,9 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
           <Link className="ideas-button" href={returnTo}>
             {words.continue}
           </Link>
-          <button
-            type="button"
-            className="ideas-button ideas-button-quiet"
-            onClick={() => ideas.signOut().then(() => window.location.reload(), fail)}
-          >
-            {words.signOut}
-          </button>
-        </div>
-        <div className="ideas-danger">
-          {confirming ? (
-            <section aria-labelledby="account-confirm">
-              <h2 id="account-confirm">{account.confirm}</h2>
-              <p>{account.confirmText}</p>
-              <div className="ideas-actions">
-                <button
-                  type="button"
-                  className="ideas-button ideas-button-danger"
-                  disabled={deleting}
-                  onClick={deleteAccount}
-                >
-                  {deleting ? account.deleting : account.yes}
-                </button>
-                <button type="button" className="ideas-button ideas-button-quiet" onClick={() => setConfirming(false)}>
-                  {account.no}
-                </button>
-              </div>
-              {failure && (
-                <p className="ideas-error" role="alert">
-                  {failure}
-                </p>
-              )}
-            </section>
-          ) : (
-            <button type="button" className="ideas-text-button" onClick={() => setConfirming(true)}>
-              {account.delete}
-            </button>
-          )}
+          <Link className="ideas-button ideas-button-quiet" href={ideasPath(lang, "account")}>
+            {account.link}
+          </Link>
         </div>
       </section>
     )
