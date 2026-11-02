@@ -33,9 +33,9 @@ for (const lang of ["en", "ru", "es"]) {
           "aria-current",
           "page",
         )
-      await expect(page.locator(".site-footer-docs [data-copy]")).toHaveAttribute(
-        "data-copy",
-        "npm install -g @wirecat/whatsapp-cli && wa skill install --for all",
+      await expect(page.locator(".site-footer-docs .footer-download-button")).toHaveAttribute(
+        "href",
+        `/${lang}/download`,
       )
       await expect(page.locator("main #log-in")).toHaveCount(1)
       await expect(page.locator("main #connect-agent")).toHaveCount(1)

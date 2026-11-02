@@ -677,7 +677,9 @@
     "Start with Telegram, WhatsApp or MAX, then ask a question about a conversation you already have. Add mail, meetings, documents and notes when you want your agent to see them together.": "Начните с Telegram, WhatsApp или MAX и задайте вопрос о своей переписке. Добавьте почту, встречи, документы и заметки, когда захотите, чтобы агент видел их вместе.",
     "Everything you’ve said, ready for your agent: your chats, mail, meetings, documents and notes, kept on your computer.": "Всё, что вы сказали — под рукой у агента: чаты, почта, встречи, документы и заметки хранятся на вашем компьютере.",
     "All WireCat tools on GitHub": "Все инструменты WireCat на GitHub",
-    "WireCat Desktop installs and updates every tool here, signs you in and connects your agent. No terminal needed.": "WireCat Desktop установит и обновит все эти инструменты, поможет войти в аккаунты и подключит вашего агента. Терминал не нужен."
+    "WireCat Desktop installs and updates every tool here, signs you in and connects your agent. No terminal needed.": "WireCat Desktop установит и обновит все эти инструменты, поможет войти в аккаунты и подключит вашего агента. Терминал не нужен.",
+    "WireCat Desktop · every tool, no terminal": "WireCat Desktop · все инструменты без терминала",
+    "Other systems": "Другие системы"
   },
   "es": {
     "Personal chats": "Chats personales",
@@ -1356,6 +1358,8 @@
     "Start with Telegram, WhatsApp or MAX, then ask a question about a conversation you already have. Add mail, meetings, documents and notes when you want your agent to see them together.": "Empieza con Telegram, WhatsApp o MAX y pregunta sobre una conversación que ya tengas. Añade correo, reuniones, documentos y notas cuando quieras que tu agente los vea juntos.",
     "Everything you’ve said, ready for your agent: your chats, mail, meetings, documents and notes, kept on your computer.": "Todo lo que has dicho, listo para tu agente: tus chats, correo, reuniones, documentos y notas, guardados en tu ordenador.",
     "All WireCat tools on GitHub": "Todas las herramientas de WireCat en GitHub",
-    "WireCat Desktop installs and updates every tool here, signs you in and connects your agent. No terminal needed.": "WireCat Desktop instala y actualiza todas estas herramientas, te ayuda a iniciar sesión y conecta tu agente. Sin terminal."
+    "WireCat Desktop installs and updates every tool here, signs you in and connects your agent. No terminal needed.": "WireCat Desktop instala y actualiza todas estas herramientas, te ayuda a iniciar sesión y conecta tu agente. Sin terminal.",
+    "WireCat Desktop · every tool, no terminal": "WireCat Desktop · todas las herramientas, sin terminal",
+    "Other systems": "Otros sistemas"
   }
 }
