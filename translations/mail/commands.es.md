@@ -369,13 +369,13 @@ mail rules import <file> [options]
 
 ## `mail status`
 
-how many messages of the synced window are read and how many are left, per folder; it asks no server, so it answers while a sync runs
+how many messages of the synced window are read and how many are left, per folder, and how far each holder of a processing mark got and what it skipped; it asks no server, so it answers while a sync runs
 
 ```sh
 mail status
 ```
 
-**Returns:** mail sync status — job, profile, done, total, remaining, state, updated_at, cursor_age_ms, and 1 more; every field: mail commands info status
+**Returns:** mail sync status — job, profile, done, total, remaining, state, updated_at, cursor_age_ms, and 2 more; every field: mail commands info status
 
 **Example:** `mail ya status`, `mail ya status --json`
 
@@ -412,6 +412,31 @@ mail search messages <query> [options]
 
 **Example:** `mail personal search messages invoice`, `mail personal search messages 'from:ann@example.com has:attachment date>30d'`, `mail personal search messages 'list:github.com is:unread' --newest`
 
+## `mail review`
+
+every stored email, yours too, in threads that changed since a point — for reviewing who owes what. It reads what sync stored, so it asks the mail server nothing
+
+```sh
+mail review [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | where the last review ended: date>2h; 3 days ago if no date. |
+
+| Option | What it does |
+|---|---|
+| `--unanswered [duration]` | only threads whose newest email came to you, in To or Cc, with no answer for this long — 4h, 1d; 24h if not given. |
+| `--waiting [duration]` | only threads where you wrote last and nobody answered for this long — 3d; 7d if not given. |
+| `--holder <name>` | read for this holder — an agent or a pipeline — what is stored past its processing mark, by store order; bulk, envelopes, drafts and partial mail left out; `messages acknowledge` moves the mark. |
+| `--new` | what changed since the last `review --new` of this mailbox, a point per thread — for scheduled runs. |
+
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 3 more; every field: mail commands info review
+
+**Next usually:** `mail messages show <message>`, `mail attachments list <message>`, `mail messages forward <message> [text]`
+
+**Example:** `mail personal review "date>2h"`, `mail personal review --new`, `mail personal review --unanswered 1d`, `mail personal review --waiting 7d`
+
 ## `mail messages`
 
 read the emails sync stored
@@ -436,6 +461,25 @@ mail messages show <message> [options]
 **Returns:** one stored email whole, with the text of its attachments
 
 **Example:** `mail personal messages show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'`, `mail personal messages show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --before-n 2`
+
+### `mail messages acknowledge`
+
+record that a holder — an agent or a pipeline — processed the mail `review --holder` gave it, with the cursor that review gave; the mark only moves forward, and mail still partial waits for the next review
+
+**Changes something on this computer only.**
+
+```sh
+mail messages acknowledge [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--holder <name>` | whose mark: lower-case letters, digits and dashes, such as mail-triage. |
+| `--cursor <cursor>` | the cursor `review --holder` gave. |
+
+**Returns:** mail mark — holder, through_id, through_received_at, held, read, skipped, updated_at; every field: mail commands info messages acknowledge
+
+**Example:** `mail personal messages acknowledge --holder mail-triage --cursor 9123.1762090000000`
 
 ### `mail messages export`
 
@@ -1359,6 +1403,24 @@ mail config unset <setting> [options]
 
 **Example:** `mail personal config unset limit`
 
+### `mail config repair`
+
+fix broken JSON syntax in the settings file — comments, a missing or extra comma, unquoted keys, single quotes, missing closing brackets at the end — keeping every value, with a backup beside it; refuses anything with more than one reading and changes nothing then
+
+**Changes something on this computer only.**
+
+```sh
+mail config repair [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--dry-run` | say what it would fix, and change nothing. |
+
+**Returns:** fix the settings file's JSON syntax, keeping every value
+
+**Example:** `mail config repair`, `mail config repair --dry-run`
+
 ## `mail runs`
 
 recorded runs — what this tool did, and when
@@ -1463,7 +1525,7 @@ mail schedule agent <name> <harness> <prompt> [options]
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
 | `harness` | required | the agent to start. One of: `claude`, `codex`. |
-| `prompt` | required | what to do, e.g. "run the daily follow-up review: mail skill show follow-ups". |
+| `prompt` | required | what to do, e.g. "summarize what came in during the last day: mail personal search messages 'date>1d' --newest --limit 20". |
 
 | Option | What it does |
 |---|---|

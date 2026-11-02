@@ -8,7 +8,7 @@ title: "Comparado con otras herramientas"
 `mail` es una línea de comandos y un servidor MCP que copia tu buzón por IMAP en el almacén compartido de WireCat en tu
 ordenador, busca en él y organiza el buzón en el servidor. Esta página lo pone junto a otras líneas de comandos y
 servidores MCP de correo para que veas cuál se ajusta a tu trabajo. Las marcas de `mail` provienen de su documentación
-y su código fuente para la versión 0.12.0, revisadas el 2 de noviembre de 2026. Las marcas de las demás herramientas
+y su código fuente para la versión 0.13.0, revisadas el 2 de noviembre de 2026. Las marcas de las demás herramientas
 provienen de sus propios README y documentación, revisadas el 28 de octubre de 2026. El inicio de sesión, la
 sincronización y el envío de `mail` también se probaron con un buzón real de Outlook.com el 2 de noviembre de 2026. En
 ningún otro buzón real se inició sesión ni se probó nada, y una herramienta puede hacer más de lo que dicen sus páginas.

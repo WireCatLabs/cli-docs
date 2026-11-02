@@ -98,5 +98,5 @@ de correo. El id es público; una aplicación de escritorio no tiene secreto.
 Los tokens se quedan en el llavero del sistema del ordenador que inició sesión, igual que las contraseñas de
 aplicación. `mail <profile> session
 end` los olvida; Microsoft sigue listando la aplicación hasta que la quitas en
-<https://account.live.com/consent/Manage> (cuenta personal) o <https://myapps.microsoft.com> (cuenta de trabajo o de
+<https://www.microsoft.com/consent> (cuenta personal) o <https://myapps.microsoft.com> (cuenta de trabajo o de
 centro educativo).

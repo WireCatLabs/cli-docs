@@ -96,4 +96,4 @@ mail config set --defaults microsoft_client_id <application-client-id>
 
 Токены хранятся в системной связке ключей компьютера, на котором выполнен вход, так же как и пароли приложений. `mail <profile> session
 end` забывает их; Microsoft продолжает показывать приложение в списке, пока вы не удалите его на
-<https://account.live.com/consent/Manage> (личный аккаунт) или <https://myapps.microsoft.com> (рабочий или учебный).
+<https://www.microsoft.com/consent> (личный аккаунт) или <https://myapps.microsoft.com> (рабочий или учебный).

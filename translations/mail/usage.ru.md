@@ -102,6 +102,38 @@ claude mcp add mail -- mail personal mcp serve
 сервер в фоне, `mcp server status` показывает его порт, код входа и вошедшие приложения, а
 `mcp server stop` его останавливает.
 
+## Обзор: что нового, кому вы должны ответить, чего ждёте
+
+`review` читает почту, которую сохранил sync, и ничего не спрашивает у сервера. Он говорит словами tg:
+
+```sh
+mail ya review "date>2h"            # every email, yours too, in threads that changed in the last 2 hours
+mail ya review --new                # what changed since the last `review --new`; 3 days back the first time
+mail ya review --unanswered 1d      # threads whose newest email came to you (To or Cc) and has no answer for a day
+mail ya review --waiting 7d         # threads where you wrote last and nobody answered for a week
+mail ya review "bulk:false"         # leave out threads of mail sent to many, lists and envelopes
+```
+
+Показываются все письма, массовые тоже; поле `email` каждого элемента содержит `bulk`, `list_id` и `rule_id` рядом с
+оценкой отправителя, чтобы вы или агент могли их рассортировать. Почта новее последней законченной синхронизации ждёт
+следующего обзора. `--new` хранит отметку для каждого ящика и читателя: вашу, агента через MCP и отдельную для каждого
+запуска по расписанию, так что расписание никогда не сдвигает вашу. Без даты `--unanswered` и `--waiting` смотрят на
+цепочки, активные за последние 30 дней. `memo tasks agenda --source email:<address>` показывает те же цепочки, где вы
+должны ответить или ждёте ответа.
+
+Агент или конвейер, который обрабатывает вашу почту, хранит свою отметку о том, докуда он дошёл, в общем хранилище и в
+порядке сохранения почты — поэтому письмо, сохранённое поздно и со старой датой, не пропускается:
+
+```sh
+mail ya review --holder mail-triage --json        # what is stored past its mark; the answer gives a cursor
+mail ya messages acknowledge --holder mail-triage --cursor <cursor>   # once processed: move the mark there
+mail ya status                                    # how far each holder got, what it held and skipped
+```
+
+Отметка движется только вперёд. Массовые письма, конверты и черновики пропускаются и считаются; письмо, которое ещё
+читается целиком (частичное), задерживается, пока не прочитано, но не дольше 7 дней. Новый держатель начинает с почты,
+сохранённой сейчас.
+
 ## Поиск по почте
 
 `mail` ищет и читает почту, которую синхронизировал его профиль, в локальном хранилище, и спрашивает почтовый сервер о

@@ -5,7 +5,7 @@ title: "Compared with other tools"
 `mail` is a command line and an MCP server that copies your mailbox over IMAP into the shared WireCat store on your
 computer, searches it, and organises the mailbox on the server. This page puts it next to the other mail command lines
 and MCP servers, so you can see which one fits your job. The marks for `mail` come from its documentation and source for
-release 0.12.0, checked on 2 November 2026. The
+release 0.13.0, checked on 2 November 2026. The
 marks for the other tools come from their own READMEs and documentation, checked on 28 October 2026. Sign-in, sync and
 sending of `mail` were also run against a real Outlook.com mailbox on 2 November 2026. Nothing else was logged in to or
 tested against a real mailbox, and a tool may do more than its pages say.
