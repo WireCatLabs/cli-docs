@@ -4,6 +4,14 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.19.0 — 02.11.2026
+
+### Añadido
+
+- **`wcat gcal` ejecuta la herramienta, y `wcat --help` la muestra en la lista.** El paquete instala `wcat-gcal` junto a
+  `gcal`, y `wcat-gcal --wcat-describe` imprime el nombre, la versión y la descripción de la herramienta para `wcat`.
+  `gcal` sigue funcionando.
+
 ## 0.18.0 — 02.11.2026
 
 ### Añadido
