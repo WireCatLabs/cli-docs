@@ -15,8 +15,8 @@ wanted after using the app every day.
 
 ## Search on real data
 
-The worst one was a message that said "The search did not run" when it had run and simply found nothing. Telegram,
-MAX and WhatsApp always mention the chats they haven't downloaded yet, and the app read that note as a failure. In my
+The worst one was a message that said "The search did not run" when it had run and simply found nothing. Telegram
+and WhatsApp always mention the chats they haven't downloaded yet, and the app read that note as a failure. In my
 test that was 326 of 726 searches. Now an empty search says "No results" and shows the tool's note under it, for
 example how many chats were never downloaded.
 
