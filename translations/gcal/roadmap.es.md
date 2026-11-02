@@ -16,7 +16,8 @@ que participan y sus archivos de Drive, todo sin red, y buscar en el propio Goog
 todas, y `events list changed_at>=<date>` qué cambió desde una fecha. Tras
 `session start --grant write` crea, cambia, mueve y borra eventos, también los periódicos: un caso, toda la serie o
 «este y todos los siguientes»; mueve un evento a otro calendario, pasa un evento de tener hora a durar todo el día y al
-revés, y responde invitaciones; un borrado pregunta antes. `gcal api` llega a cualquier
+revés, y responde invitaciones; un borrado pregunta antes. `events remind`, ejecutado por cron o un temporizador,
+avisa una vez de cada reunión que empieza pronto, o ejecuta tu propio programa para ella. `gcal api` llega a cualquier
 método de la API de Google Calendar por su nombre. Todos los comandos están en la
 [referencia de comandos](./commands.md).
 

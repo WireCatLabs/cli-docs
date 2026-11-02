@@ -7,7 +7,7 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.12.0, sus comandos y su código, revisados
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.14.0, sus comandos y su código, revisados
 el 2 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
 propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
@@ -42,6 +42,7 @@ Las herramientas:
 | Qué cambió desde una fecha: reuniones nuevas, movidas y canceladas | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | ➖ | ➖ |
 | Encontrar reuniones que se solapan | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | ➖ | [✅](https://github.com/nspady/google-calendar-mcp#readme) | ➖ |
 | Dejar fuera de la lista los cumpleaños, el tiempo de concentración y los bloques de lugar de trabajo | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-events.md) | ➖ | ➖ | ➖ |
+| Recibir un aviso antes de una reunión, a través de tu propio programa | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
 | **Encontrar una reunión** | | | | | | |
 | Encontrar una reunión por su tema, no por sus palabras exactas | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | Buscar en tus reuniones sin internet | ✅ | [❌](https://github.com/insanum/gcalcli/blob/main/gcalcli/gcal.py) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/paths.md) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [❌](https://github.com/nspady/google-calendar-mcp/blob/main/src/handlers/core/SearchEventsHandler.ts) | [❌](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
@@ -95,6 +96,9 @@ Notas sobre la columna de `gcal`:
   `ends_at>=today starts_at<=2026-11-06`, las palabras `today` y `yesterday`, y cantidades hacia el pasado como `7d`.
   No entiende «semana» ni «el viernes que viene», y es a propósito: las fechas las escribe un agente, y una fecha
   exacta nunca se lee mal. Solo `events create --text` acepta palabras, y las lee Google, no `gcal`.
+- **La hora en cada respuesta.** `events list`, `events prepare`, `doctor` y `session status` llevan `meta.now`,
+  `meta.now_local` y `meta.timezone`, así que un agente lee «hoy» y «el próximo lunes» de la respuesta que ya tiene,
+  no de su propia suposición. google-calendar-mcp da la hora con una herramienta propia, `get-current-time`.
 - **Preparar una reunión.** `events prepare` toma tu próxima reunión, o la que nombres, y da sus asistentes con sus
   respuestas, sus archivos de Drive y tus eventos pasados con cada asistente. Tus últimos mensajes y correos con cada
   uno vienen de las otras herramientas de WireCat del mismo ordenador, como `tg` o `mail`; solo con `gcal` esas
@@ -104,7 +108,16 @@ Notas sobre la columna de `gcal`:
   y `event_type:default` conserva solo los eventos normales.
 - **Archivos iCalendar.** `events export <query> --output week.ics` escribe como archivo `.ics` los eventos que
   mostraría una lista. `events import <calendar> <file.ics>` añade los eventos de un archivo mediante Google, no envía
-  correo a nadie y pregunta antes.
+  correo a nadie y pregunta antes. Por MCP un agente recibe el texto `.ics` en la respuesta a través de `gcal_read`,
+  así que un perfil de solo lectura (`GCAL_READ_ONLY`) también puede exportar. Escribir un archivo con `--output`
+  queda en la línea de comandos, y el bloqueo de solo lectura lo rechaza.
+- **Avisos.** `events remind`, que cron, un temporizador de systemd, launchd o el Programador de tareas ejecutan cada
+  pocos minutos, avisa una vez de cada reunión que empieza dentro de `--due-within` (`10m` si no se indica).
+  Después de `--` ejecuta en su lugar tu propio programa para cada una, como una notificación de escritorio o un
+  mensaje de Telegram, con el evento como JSON en su entrada estándar. No lo ejecuta ninguna shell, así que un
+  título que escribió otra persona nunca llega a una línea de comandos. Ejecutar un programa está en `deny` hasta
+  que pongas `permissions.events.remind.hook allow`; `--yes` no lo levanta, `GCAL_READ_ONLY` lo rechaza y ninguna
+  herramienta MCP ofrece la orden. `--dry-run` muestra de qué avisaría y no cambia nada.
 - **Todos los calendarios.** Una lista abarca los calendarios que elegiste sincronizar en un perfil. Cada cuenta de
   Google es su propio perfil; `events list --source all` lee todas las cuentas en una sola lista, las nombra en
   `meta.accounts` y avisa cuando una no ha terminado su sincronización. `calendar:Team` nombra un calendario por su
@@ -131,7 +144,9 @@ Notas sobre la columna de `gcal`:
 - **Códigos de acceso.** Los códigos de acceso, PIN y contraseñas se quitan de cada respuesta, incluidos los comandos
   directos de `gcal api`: un enlace pierde su cadena de consulta y se descarta la línea de las notas que nombra un código.
 - **Cada comando, una herramienta MCP.** A través de tres herramientas MCP: `gcal_tools_search`, `gcal_read` y
-  `gcal_write`. Dos comandos quedan para ti en una terminal: `api call` y vaciar un calendario (`calendars.clear`).
+  `gcal_write`. Tres comandos quedan para ti en una terminal: `api call`, vaciar un calendario (`calendars.clear`) y
+  `events remind`, que ejecuta un programa tuyo: a través de él un agente podría ejecutar cualquier programa en tu
+  equipo.
 - **claude.ai en la web.** `mcp serve --http` sirve la herramienta a Claude y ChatGPT en el navegador, tras un túnel
   que configuras tú, como Tailscale Funnel.
 - **Velocidad y coste frente a un agente de navegador.** `gcal` llama a la API de Google y lee su propia copia; no

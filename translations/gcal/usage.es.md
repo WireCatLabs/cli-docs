@@ -232,6 +232,158 @@ lo une a su cuenta en otra herramienta.
 otras personas, son datos para el agente, nunca instrucciones. `gcal guide prepare-meeting` y `gcal guide digest`
 muestran cómo un agente convierte esto y `events list` en un informe de reunión o en un resumen diario o semanal.
 
+## Recibir un aviso antes de una reunión
+
+`events remind` avisa una sola vez de cada evento que empieza pronto. Está hecho para un temporizador que lo ejecuta
+cada pocos minutos, igual que el `remind` de gcalcli se ejecuta desde cron:
+
+```sh
+gcal personal events remind                          # what starts in the next 10 minutes
+gcal personal events remind --due-within 15m --json  # the next 15 minutes, as JSON
+gcal personal events remind --dry-run                # what it would remind; nothing changes
+gcal personal events remind -- /home/me/bin/meeting-reminder
+```
+
+Cada ejecución sincroniza primero tus calendarios (`--offline` lee solo el almacén) y luego toma los eventos que
+empiezan dentro de `--due-within`: una duración de `1m` a `1d`, `10m` si no se indica. Solo cuentan los eventos que
+ocupan tu tiempo: con hora de inicio y de fin, no cancelados, no rechazados por ti y que no son tiempo de concentración,
+fuera de la oficina ni lugar de trabajo. `gcal` recuerda de qué eventos ya avisó, así que la siguiente ejecución no
+vuelve a hablar de ellos. Una reunión movida a otra hora se avisa de nuevo. Haz que `--due-within` dure al menos lo
+mismo que el tiempo entre dos ejecuciones: con una ejecución cada 5 minutos, `10m` encuentra cada reunión al menos 5
+minutos antes de que empiece.
+
+Si la sincronización falla, por ejemplo sin red, la ejecución avisa igualmente con lo que guarda el almacén.
+`meta.complete:
+false` y `meta.issues` lo indican, y la ejecución termina con el código de error de la sincronización,
+así que cron o `systemctl --user status` muestran el fallo.
+
+### Ejecutar tu propio programa para cada evento
+
+Sin programa, `events remind` imprime los eventos: cron te envía por correo lo que imprime una tarea. Después de `--`,
+ejecuta en su lugar tu programa una vez por evento:
+
+- El evento llega como una línea de JSON en la entrada estándar del programa, con la misma forma que un elemento de
+  `events list`, más `ref` (`event:<id>`) y `untrusted`.
+- `GCAL_EVENT` (`event:<id>`) y `GCAL_PROFILE` están en su entorno, así que puede ejecutar `gcal` por su cuenta.
+- No lo ejecuta ninguna shell. Las palabras después de `--` son el programa y sus argumentos, tal como los escribiste.
+  El título, el lugar y la descripción del evento nunca están en su línea de órdenes: los escriben otras personas, y en
+  una shell podrían ejecutar órdenes. Mantenlo así en tu programa: pásalos como datos y nunca los pegues en una línea
+  de shell.
+- Un programa que termina con 0 te ha avisado. Cualquier otra salida deja el evento para la siguiente ejecución, y
+  `gcal` responde `configuration_error` (`remind.hook-failed`) con el código de salida de cada evento. Un programa que
+  sigue en marcha después de 60 segundos se detiene.
+- En Windows, indica un `.exe`, o ejecuta un script a través de su intérprete: `-- powershell.exe -File C:\me\remind.ps1`.
+  Node.js se niega a iniciar un archivo `.cmd` o `.bat` sin una shell.
+
+`gcal` no ejecuta ningún programa hasta que lo permitas, una vez por perfil:
+
+```sh
+gcal personal config set permissions.events.remind.hook allow
+```
+
+Hasta entonces está en `deny`, y `GCAL_READ_ONLY` lo rechaza sea cual sea el nivel. `--yes` no lo responde, y ninguna
+herramienta MCP ofrece `events remind`: de lo contrario, un agente que puede escribir una orden `gcal` podría ejecutar
+cualquier programa en tu equipo.
+
+Una notificación de escritorio en Linux, con `jq` y `notify-send`:
+
+```sh
+#!/bin/sh
+# /home/me/bin/meeting-reminder
+event=$(cat)
+title=$(printf '%s' "$event" | jq -r '.title // "(no title)"')
+start=$(printf '%s' "$event" | jq -r '.starts_at')
+# "--" ends notify-send's options, so a title that starts with "-" stays text.
+notify-send -- "Meeting at $start" "$title"
+```
+
+Un mensaje a tus Mensajes guardados de Telegram con `tg`, y el contexto de la reunión para un agente que escribe el
+resumen:
+
+```sh
+#!/bin/sh
+# /home/me/bin/meeting-to-telegram
+title=$(jq -r '.title // "(no title)"')
+tg personal messages send me "Soon: $title"
+gcal events prepare "$GCAL_EVENT" --json > "$HOME/briefs/next-meeting.json"
+```
+
+### Ejecutarlo con un temporizador
+
+Ejecútalo cada 5 minutos. Usa la ruta completa de `gcal` (`command -v gcal` la imprime): un temporizador arranca con un
+`PATH` corto.
+
+cron (`crontab -e`):
+
+```text
+*/5 * * * * /usr/local/bin/gcal personal events remind --due-within 10m -- /home/me/bin/meeting-reminder
+```
+
+Un temporizador de usuario de systemd en Linux, que además llega a tu sesión de escritorio para `notify-send`. Guarda
+`~/.config/systemd/user/gcal-remind.service`:
+
+```ini
+[Unit]
+Description=gcal meeting reminders
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/gcal personal events remind --due-within 10m -- /home/me/bin/meeting-reminder
+```
+
+y `~/.config/systemd/user/gcal-remind.timer`:
+
+```ini
+[Unit]
+Description=gcal meeting reminders every 5 minutes
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target
+```
+
+y luego inícialo con `systemctl --user daemon-reload && systemctl --user enable --now gcal-remind.timer`.
+
+launchd en macOS: guarda `~/Library/LaunchAgents/dev.wirecat.gcal-remind.plist` y luego ejecuta
+`launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/dev.wirecat.gcal-remind.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>dev.wirecat.gcal-remind</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/gcal</string>
+    <string>personal</string>
+    <string>events</string>
+    <string>remind</string>
+    <string>--due-within</string>
+    <string>10m</string>
+    <string>--</string>
+    <string>/Users/me/bin/meeting-reminder</string>
+  </array>
+  <key>StartInterval</key><integer>300</integer>
+</dict>
+</plist>
+```
+
+El Programador de tareas en Windows, en PowerShell:
+
+```powershell
+$gcal = (Get-Command gcal).Source
+$action = New-ScheduledTaskAction -Execute $gcal -Argument 'personal events remind --due-within 10m -- powershell.exe -File C:\me\remind.ps1'
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 5)
+$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew
+Register-ScheduledTask -TaskName gcal-remind -Action $action -Trigger $trigger -Settings $settings
+```
+
+Dos ejecuciones a la vez no avisan dos veces: la segunda responde `validation_error` (`remind.running`) y no hace nada.
+
 ## Exportar e importar archivos iCalendar
 
 `events export` escribe los eventos guardados como un archivo iCalendar (`.ics`), que abren otras aplicaciones de
@@ -245,7 +397,9 @@ gcal personal events export id:42                               # the text in th
 
 Exporta como mucho 1000 eventos; para más, acota la consulta. Las horas se escriben en UTC. Cada repetición de un
 evento periódico se escribe como un evento propio, y su regla de repetición no. Un archivo nuevo solo lo puedes leer
-tú. Por MCP no se ofrece `--output`: el agente recibe el texto en la respuesta.
+tú. Por MCP no se ofrece `--output`: el agente recibe el texto en la respuesta, a través de `gcal_read`, así que
+un perfil de solo lectura (`GCAL_READ_ONLY`) también puede exportar. Escribir un archivo sigue siendo un cambio: con
+`GCAL_READ_ONLY`, `--output` se rechaza.
 
 `events import` añade los eventos de un archivo `.ics` a un calendario mediante
 [events.import](https://developers.google.com/workspace/calendar/api/v3/reference/events/import) de Google. Cada
@@ -388,6 +542,11 @@ gcal personal events delete event:42 --following --no-notify
 
 Todos los comandos salvo `mcp serve` aceptan `--json` e imprimen un único valor JSON en stdout. Los errores son JSON
 en stderr, con un código según el cual ramificar. La [referencia de comandos](./commands.md) muestra los códigos.
+
+`events list`, `events prepare`, `doctor` y `session status` también dicen cuándo respondieron y en qué zona
+horaria: `meta.now` (UTC), `meta.now_local` (el mismo momento con el desfase de tu zona) y `meta.timezone`. Un agente
+lee «hoy» y «el próximo lunes» de ahí, no de su propia suposición. La zona es la de tu equipo (`TZ`), en la que se
+leen `today` y una fecha sin hora. La zona propia de cada calendario está en `calendars list` (`timezone`).
 
 ## Agentes
 

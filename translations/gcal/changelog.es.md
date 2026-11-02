@@ -4,6 +4,35 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.14.0 — 02.11.2026
+
+### Añadido
+
+- **Avisos de reuniones: `gcal <profile> events remind`, para cron o un temporizador cada pocos minutos**, como el
+  `remind` de gcalcli. Cada ejecución sincroniza y luego avisa una vez de cada evento que empieza dentro de
+  `--due-within` (`10m` si no se indica): los imprime o, después de `--`, ejecuta tu propio programa una vez por evento,
+  con el evento como JSON en su entrada estándar y `GCAL_EVENT` en su entorno. No lo ejecuta ninguna shell, y el texto
+  del evento nunca llega a su línea de órdenes. La forma con programa está en `deny` hasta que la permitas con
+  `config set permissions.events.remind.hook allow`, y ninguna herramienta MCP ofrece la orden.
+  [Recibir un aviso antes de una reunión](./usage.md#get-reminded-before-a-meeting) muestra una notificación de
+  escritorio, un mensaje de Telegram y las líneas para cron, systemd, launchd y el Programador de tareas.
+
+## 0.13.0 — 02.11.2026
+
+### Añadido
+
+- **Las respuestas dan la hora y la zona horaria.** `events list`, `events prepare`, `doctor` y `session status` llevan
+  `meta.now`, `meta.now_local` y `meta.timezone`, así que un agente planifica «mañana» desde la fecha real y tu zona, no
+  desde una suposición (WC-TIME-7).
+- **Por MCP, el `query` de una lista nombra sus campos.** Decía «los campos están abajo», y abajo no había nada. Ahora
+  enumera cada campo con sus valores y dice que `-event_type:<kind>` (o `NOT event_type:<kind>`) deja fuera un tipo.
+
+### Corregido
+
+- **`events export` ya no necesita la herramienta de escritura.** Sin `--output` solo responde el texto `.ics`, así que
+  pasa por `gcal_read`, y un perfil de solo lectura (`GCAL_READ_ONLY`) puede exportar. `--output` sigue sin ofrecerse
+  por MCP, y el bloqueo de solo lectura sigue rechazándolo en la línea de órdenes.
+
 ## 0.12.0 — 01.11.2026
 
 ### Añadido
