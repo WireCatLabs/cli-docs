@@ -1,5 +1,6 @@
 export const gcalDescriptions: Record<string, Record<string, string>> = {
   en: {
+    remote: "Connect ChatGPT or Claude in the browser to Google Calendar through your own HTTPS tunnel and login code.",
     compare: "Compare Google Calendar tools for offline search, free times, event changes and agent permissions.",
     index: "Keep your Google Calendar on your computer, search events offline and let your AI agent read them.",
     installation: "Install the Google Calendar CLI with npm, check the Node.js version and run doctor.",
@@ -13,6 +14,7 @@ export const gcalDescriptions: Record<string, Record<string, string>> = {
     roadmap: "See which Google Calendar CLI capabilities are available and which work remains planned.",
   },
   ru: {
+    remote: "Подключите ChatGPT или Claude в браузере к Google Календарю через свой HTTPS-туннель и код входа.",
     compare: "Сравните инструменты Google Календаря: поиск без сети, свободное время, изменения и права агента.",
     index: "Храните Google Календарь на компьютере, ищите встречи без сети и дайте ИИ-агенту их читать.",
     installation: "Установите CLI Google Календаря через npm, проверьте версию Node.js и запустите doctor.",
@@ -26,6 +28,7 @@ export const gcalDescriptions: Record<string, Record<string, string>> = {
     roadmap: "Что CLI Google Календаря уже умеет и какие функции ещё запланированы.",
   },
   es: {
+    remote: "Conecta ChatGPT o Claude en el navegador a Google Calendar con tu propio túnel HTTPS y código de acceso.",
     compare: "Compara herramientas de Google Calendar: búsqueda sin conexión, huecos libres, cambios y permisos.",
     index: "Guarda tu Google Calendar en tu ordenador, busca eventos sin conexión y deja que tu agente de IA los lea.",
     installation: "Instala la CLI de Google Calendar con npm, comprueba la versión de Node.js y ejecuta doctor.",

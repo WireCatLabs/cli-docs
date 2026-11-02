@@ -7,7 +7,7 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.17.0, sus comandos y su código, revisados
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.18.0, sus comandos y su código, revisados
 el 2 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
 propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
@@ -114,8 +114,9 @@ Notas sobre la columna de `gcal`:
   queda en la línea de comandos, y el bloqueo de solo lectura lo rechaza.
 - **Feeds de calendario.** `calendars add <url> --title Holidays` sigue una dirección `.ics` publicada, como un
   calendario de festivos, el de una liga deportiva o el de un colega, como calendario de solo lectura junto a los de
-  Google. La API de Google no ofrece forma de añadir un calendario desde una dirección, así que `gcal` lee el feed por
-  sí mismo. Cada `sync` lo vuelve a leer, y antes pregunta al servidor si cambió (`ETag`, `Last-Modified`); el primer
+  Google. La API de Google no documenta ninguna forma de añadir un calendario desde una dirección, así que `gcal` lee el
+  feed por sí mismo. Los feeds de Outlook o Exchange, que nombran sus zonas horarias al modo de Windows, se leen en la
+  zona correspondiente. Cada `sync` lo vuelve a leer, y antes pregunta al servidor si cambió (`ETag`, `Last-Modified`); el primer
   `sync` del día y `sync --rescan` lo leen completo. Sus eventos aparecen en `events list`, en la búsqueda y en los
   avisos, y un cambio en uno se rechaza con `calendar.read-only`. La dirección suele llevar un token privado, así que
   se guarda en el llavero del sistema y nunca se imprime, y una dirección `http://` recibe un aviso.
@@ -163,8 +164,9 @@ Notas sobre la columna de `gcal`:
   `events remind`, que ejecuta un programa tuyo, así que a través de él un agente podría ejecutar cualquier programa en
   tu equipo; `calendars add` y `remove`, porque la dirección de un feed puede llevar un token privado; y `schedule`,
   que instala un temporizador que se ejecuta solo.
-- **claude.ai en la web.** `mcp serve --http` sirve la herramienta a Claude y ChatGPT en el navegador, tras un túnel
-  que configuras tú, como Tailscale Funnel.
+- **claude.ai en la web.** `mcp serve --http` sirve la herramienta a Claude y ChatGPT en el navegador o en el móvil,
+  tras un túnel HTTPS que configuras y mantienes tú, como Tailscale Funnel, así que esta fila sigue en «en parte».
+  [ChatGPT o Claude en el navegador](./remote.md) lo explica paso a paso, con el código de acceso y los permisos.
 - **Velocidad y coste frente a un agente de navegador.** `gcal` llama a la API de Google y lee su propia copia; no
   abre ningún navegador. No hay ninguna medición publicada frente a un agente de navegador, así que esta página no
   afirma nada.
