@@ -32,8 +32,12 @@ export function SiteFooter({
   const pathname = usePathname()
   // Add configured contacts at render time so builds do not need to regenerate landing snapshots.
   const { email, telegram } = siteConfig.contacts
-  const contacts = `<ul class="foot-contacts"><li><!--email_off--><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a><!--/email_off--></li><li><a href="${escapeHtml(telegram)}">Telegram · ${escapeHtml(`@${new URL(telegram).pathname.replace(/^\//, "")}`)}</a></li></ul>`
   const lang = localeFromPath(pathname)
+  const telegramItem =
+    lang === "ru"
+      ? `<li><a href="${escapeHtml(telegram)}">Telegram · ${escapeHtml(`@${new URL(telegram).pathname.replace(/^\//, "")}`)}</a></li>`
+      : ""
+  const contacts = `<ul class="foot-contacts"><li><!--email_off--><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a><!--/email_off--></li>${telegramItem}</ul>`
   const legal = {
     en: { privacy: "Privacy", terms: "Terms", settings: "Cookie settings" },
     ru: { privacy: "Конфиденциальность", terms: "Условия", settings: "Настройки cookie" },
