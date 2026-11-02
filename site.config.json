@@ -18,5 +18,9 @@
   "newsletter": {
     "apiUrl": "",
     "turnstileSiteKey": ""
+  },
+  "ideas": {
+    "apiUrl": "",
+    "turnstileSiteKey": ""
   }
 }

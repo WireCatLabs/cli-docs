@@ -8,6 +8,7 @@ import { wirecatLogoSvg } from "@/lib/brand"
 import { detectOs } from "@/lib/desktop-releases"
 import { bindDisclosureMenus } from "@/lib/disclosure-menus"
 import { downloadWords } from "@/lib/download"
+import { ideasEnabled } from "@/lib/ideas/config"
 import { languageSwitcherHtml } from "@/lib/language-switcher"
 import { homePath, localeFromPath } from "@/lib/site-routes"
 import siteConfig from "@/site.config.json"
@@ -53,6 +54,12 @@ export function SiteFooter({
     footerHtml = footerHtml.replace(
       '<div class="footer-controls">',
       `<span class="foot-legal"><a class="animated-text-link" href="/${lang}/privacy"><span class="link-label">${escapeHtml(legal.privacy)}</span></a><a class="animated-text-link" href="/${lang}/terms"><span class="link-label">${escapeHtml(legal.terms)}</span></a><button type="button" class="foot-consent" data-consent-settings hidden>${escapeHtml(legal.settings)}</button></span><div class="footer-controls">`,
+    )
+  if (ideasEnabled && !footerHtml.includes(`href="/${lang}/ideas"`))
+    footerHtml = footerHtml.replace(
+      new RegExp(`<li><a class="animated-text-link" href="/${lang}/blog">[\\s\\S]*?</li>`),
+      (blog) =>
+        `${blog}<li><a class="animated-text-link" href="/${lang}/ideas"><span class="link-label">${{ en: "Ideas", ru: "Идеи", es: "Ideas" }[lang] ?? "Ideas"}</span></a></li>`,
     )
   footerHtml = footerHtml.replaceAll('href="/en"', 'href="/"')
   const rootRef = useRef<HTMLDivElement>(null)
