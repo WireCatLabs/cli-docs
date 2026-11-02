@@ -2432,5 +2432,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "gcal",
+    "slug": "usage",
+    "reason": "gcal v0.17.0 docs/usage.md names the words before a scheduled command as `gcal personal`, which the checker reads as a command with an unknown subcommand; mark it as the start of a command line.",
+    "replacements": {
+      "en": [
+        {
+          "before": "as you would type them after `gcal personal`;",
+          "after": "as you would type them after `gcal personal …`;"
+        }
+      ],
+      "ru": [
+        {
+          "before": "так, как вы набрали бы их после `gcal personal`;",
+          "after": "так, как вы набрали бы их после `gcal personal …`;"
+        }
+      ],
+      "es": [
+        {
+          "before": "como las escribirías después de\n`gcal personal`;",
+          "after": "como las escribirías después de\n`gcal personal …`;"
+        }
+      ]
+    }
   }
 ]
