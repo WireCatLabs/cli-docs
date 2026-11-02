@@ -12085,6 +12085,74 @@ html[data-why-icons="hide"] .wirecat-editorial .reasons-nine dd {
 .wirecat-editorial .prompt-preview .agent-prompt {
   margin: 12px 0 4px;
 }
+.wirecat-editorial .connect-panel {
+  border-color: color-mix(in srgb, var(--line) 70%, var(--ink) 12%);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--ink) 8%, transparent),
+    0 10px 20px -6px color-mix(in srgb, var(--ink) 12%, transparent),
+    0 28px 56px -16px color-mix(in srgb, var(--ink) 22%, transparent);
+}
+html.dark .wirecat-editorial .connect-panel {
+  background: color-mix(in srgb, var(--soft) 88%, var(--ink));
+  border-color: color-mix(in srgb, var(--line) 45%, var(--ink) 28%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ink) 9%, transparent),
+    0 2px 4px #0007,
+    0 16px 32px -8px #000b,
+    0 40px 80px -20px #000d;
+}
+html.dark .wirecat-editorial .connect-provider {
+  background: color-mix(in srgb, var(--paper) 80%, transparent);
+}
+html.dark .wirecat-editorial .connect-provider button[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--soft) 85%, var(--ink));
+}
+html.dark .wirecat-editorial .button.secondary.copy-agent {
+  background: transparent;
+  color: color-mix(in srgb, var(--accent) 55%, var(--ink));
+  border: 1px solid color-mix(in srgb, var(--line) 50%, var(--ink) 25%);
+}
+html.dark .wirecat-editorial .button.secondary.copy-agent:is(:hover, :focus-visible) {
+  background: color-mix(in srgb, var(--paper) 60%, transparent);
+  color: var(--ink);
+}
+@media (min-width: 1101px) {
+  .wirecat-editorial .landing5 .hero.memory-hero h1 {
+    font-size: clamp(30px, 2.4vw, 34.5px);
+    max-width: none;
+  }
+}
+.wirecat-editorial .integrations-desktop {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  margin-top: 24px;
+  padding: 18px 20px;
+  max-width: 46ch;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.wirecat-editorial .integrations-desktop > svg {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  color: var(--accent);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.wirecat-editorial .integrations-desktop p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+.wirecat-editorial .integrations-desktop .text-link {
+  margin-top: 10px;
+}
 
 /* Immediate control feedback, shared by the released landing, features and examples. */
 .wirecat-editorial .button,

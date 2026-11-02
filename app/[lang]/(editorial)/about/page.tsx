@@ -22,31 +22,36 @@ export default async function AboutPage({ params }: Props) {
   const { lang } = await params
   const words = copyFor(lang)
   const [purpose, tools, future, services] = words.sections
+  const external = (href: string) => (href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})
   const paragraphs = (section: typeof purpose) => section.paragraphs.map((text) => <p key={text}>{text}</p>)
+  const tool = (command: string, name: string, repo: string, pkg: string) => ({
+    name,
+    command,
+    description: words.toolDescriptions[command as keyof typeof words.toolDescriptions],
+    docs: `/${lang}/docs/${command}`,
+    sources: [
+      ["GitHub", `https://github.com/WireCatLabs/${repo}`],
+      ["npm", `https://www.npmjs.com/package/@wirecat/${pkg}`],
+    ],
+  })
   const products = [
+    tool("tg", "Telegram", "tg-cli", "tg-cli"),
+    tool("wa", "WhatsApp", "whatsapp-cli", "whatsapp-cli"),
+    tool("max", "MAX", "max-cli", "max-cli"),
+    tool("zm", "Zoom", "zoom-cli", "zoom-cli"),
+    tool("drive", "Google Drive", "drive-cli", "drive-cli"),
+    tool("gcal", "Google Calendar", "gcal-cli", "gcal-cli"),
+    tool("mail", words.names.mail, "mail-cli", "mail-cli"),
+    tool("memo", "Memo", "cli-memo", "cli-memo"),
     {
-      name: "Telegram",
-      command: "tg",
-      description: words.toolDescriptions.tg,
-      docs: `/${lang}/docs/tg`,
-      source: "https://github.com/WireCatLabs/tg-cli",
-      npm: "https://www.npmjs.com/package/@wirecat/tg-cli",
-    },
-    {
-      name: "MAX",
-      command: "max",
-      description: words.toolDescriptions.max,
-      docs: `/${lang}/docs/max`,
-      source: "https://github.com/WireCatLabs/max-cli",
-      npm: "https://www.npmjs.com/package/@wirecat/max-cli",
-    },
-    {
-      name: words.emailTool,
-      command: "memo",
-      description: words.toolDescriptions.memo,
-      docs: `/${lang}/docs/memo`,
-      source: "https://github.com/WireCatLabs/cli-memo",
-      npm: "https://www.npmjs.com/package/@wirecat/cli-memo",
+      name: words.names.desktop,
+      command: "",
+      description: words.toolDescriptions.desktop,
+      docs: `/${lang}/docs/desktop`,
+      sources: [
+        ["GitHub", "https://github.com/WireCatLabs/wirecat-desktop"],
+        [words.downloadShort, `/${lang}/download`],
+      ],
     },
   ]
   const contacts = () => (
@@ -103,27 +108,23 @@ export default async function AboutPage({ params }: Props) {
               {paragraphs(tools)}
               <nav className="about-tool-links" aria-label={tools.title}>
                 {products.map((product) => (
-                  <div className="about-tool-row" key={product.command}>
+                  <div className="about-tool-row" key={product.name}>
                     <a
                       className="about-tool-docs animated-text-link"
                       href={product.docs}
                       aria-label={`${product.name}: ${words.docs}`}
                     >
                       <span className="link-label">{product.name}</span>
-                      <code>{product.command}</code>
+                      {product.command && <code>{product.command}</code>}
                     </a>
                     <p>{product.description}</p>
                     <span className="about-tool-sources">
-                      {[
-                        ["GitHub", product.source],
-                        ["npm", product.npm],
-                      ].map(([label, href]) => (
+                      {product.sources.map(([label, href]) => (
                         <a
                           key={label}
                           className="about-tool-source animated-text-link text-link"
                           href={href}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          {...external(href)}
                           aria-label={`${product.name}: ${label}`}
                         >
                           <span className="link-label">{label}</span>
@@ -143,7 +144,25 @@ export default async function AboutPage({ params }: Props) {
                   <span className="link-label">{words.agentGuide}</span>
                   <ArrowRight aria-hidden="true" />
                 </Link>
+                <Link className="animated-text-link text-link" href={`/${lang}/download`}>
+                  <span className="link-label">{words.download}</span>
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+                <Link className="animated-text-link text-link" href={`/${lang}/blog`}>
+                  <span className="link-label">{words.blog}</span>
+                  <ArrowRight aria-hidden="true" />
+                </Link>
               </div>
+            </section>
+            <section id="principles" className="about-principles">
+              <h2>{words.principles.title}</h2>
+              <ul>
+                {words.principles.items.map((item) => (
+                  <li key={item.title}>
+                    <strong>{item.title}</strong> {item.text}
+                  </li>
+                ))}
+              </ul>
             </section>
             <section id="future" className="about-future">
               <h2>{future.title}</h2>
@@ -172,17 +191,28 @@ export default async function AboutPage({ params }: Props) {
                 <div>
                   <dt>{words.project.tools}</dt>
                   <dd>
-                    <Link className="animated-text-link" href={`/${lang}/docs/tg`}>
-                      <span className="link-label">Telegram</span>
-                    </Link>{" "}
-                    ·{" "}
-                    <Link className="animated-text-link" href={`/${lang}/docs/max`}>
-                      <span className="link-label">MAX</span>
-                    </Link>{" "}
-                    ·{" "}
-                    <Link className="animated-text-link" href={`/${lang}/docs/memo`}>
-                      <span className="link-label">{words.emailTool}</span>
-                    </Link>
+                    {products.slice(0, -1).map((product, index) => (
+                      <span key={product.name}>
+                        {index > 0 && " · "}
+                        <Link className="animated-text-link" href={product.docs}>
+                          <span className="link-label">{product.name}</span>
+                        </Link>
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+                <div>
+                  <dt>{words.project.source}</dt>
+                  <dd>
+                    <a
+                      className="animated-text-link"
+                      href={siteConfig.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="link-label">github.com/WireCatLabs</span>
+                      <ArrowRight aria-hidden="true" />
+                    </a>
                   </dd>
                 </div>
                 <div>

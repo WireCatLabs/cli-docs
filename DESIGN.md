@@ -20,7 +20,7 @@ colors:
 typography:
   about-title:
     fontFamily: '"Unbounded", sans-serif'
-    fontSize: "clamp(30px, 3.6vw, 46px)"
+    fontSize: "clamp(28px, 3vw, 40px)"
     fontWeight: 800
     lineHeight: 1.2
     letterSpacing: "-0.035em"
@@ -32,7 +32,7 @@ typography:
     letterSpacing: "-0.025em"
   about-intro:
     fontFamily: '"Onest", system-ui, sans-serif'
-    fontSize: "clamp(19px, 2vw, 23px)"
+    fontSize: "clamp(17px, 1.5vw, 19px)"
     fontWeight: 400
     lineHeight: 1.6
   body:
@@ -101,7 +101,7 @@ Dark values originate on the public-site wrapper; `.light` supplies the light ov
 
 **Body:** Onest, system-ui, sans-serif. **Code:** JetBrains Mono, ui-monospace, Menlo, monospace. The shared footer retains its own `var(--font-docs, "Inter", sans-serif)` body override.
 
-The frontmatter's `about-title`, `about-headline` and `about-intro` roles describe About only. Its title spans 30–46px, followed by a compact opening paragraph limited to 52ch and a bold 16px open-source statement. Article paragraphs use the body role and a maximum width of 70ch. Sidebar headings step down to 17px with a 1.45 line-height; sidebar paragraphs and fact values use 15px. Mobile contact keeps these smaller heading and copy sizes. Command names and fact labels are smaller supporting text. Funding paragraphs use 16px while retaining the article line-height.
+The frontmatter's `about-title`, `about-headline` and `about-intro` roles describe About only. Its title spans 28–40px, followed by a compact opening paragraph limited to 52ch and a bold 16px open-source statement. Article paragraphs use the body role and a maximum width of 70ch. Sidebar headings step down to 17px with a 1.45 line-height; sidebar paragraphs and fact values use 15px. Mobile contact keeps these smaller heading and copy sizes. Command names and fact labels are smaller supporting text. Funding paragraphs use 16px while retaining the article line-height.
 
 Headings retain sentence case, tight tracking and balanced wrapping; introductory copy uses pretty wrapping. The wide heading family is part of the identity. Allow localized headings to wrap naturally rather than substituting a condensed face.
 
@@ -115,7 +115,7 @@ On wide screens, the article and sidebar use `minmax(0, 2.2fr) minmax(260px, 1fr
 
 Below 60rem, contact text and buttons appear immediately after the introduction, the desktop sidebar contact is hidden, and the article layout becomes one column. The mobile contact is separated by a thin top rule. The sidebar follows the entire story. Its grid has two tracks at this breakpoint, with contributions spanning both. Below 40rem, the sidebar becomes one column; project facts arrange in two columns with the maintainer spanning both, and panel padding reduces to the reading inset. Tool descriptions move below each row's documentation and GitHub links. Preserve this order across English, Russian and Spanish.
 
-About's four article sections proceed through purpose, available tools, future plans and funding with a maintainer contact link. Open-source identity is stated in the introduction; its `#open-source` anchor remains there for existing links. Available tools include Telegram, MAX and Memo for email and notes. Future copy addresses owned data, personal context, knowledge, tasks and productivity; funding explains how custom AI work supports development and maintenance. Project facts and contribution routes support that story. This hierarchy belongs to About, not every public-site page.
+About's five article sections proceed through purpose, what WireCat is today (with its tools), how it is built, future plans and funding with a maintainer contact link (2026-11-02). Open-source identity is stated in the introduction; its `#open-source` anchor remains there for existing links. Tools listed: Telegram, WhatsApp, MAX, Zoom, Google Drive, Google Calendar, Mail, Memo and WireCat Desktop. Future copy addresses owned data, personal context, knowledge, tasks and productivity; funding explains how custom AI work supports development and maintenance. Project facts and contribution routes support that story. This hierarchy belongs to About, not every public-site page.
 
 ## Elevation & Depth
 
@@ -131,7 +131,7 @@ About concentrates soft corners in the supporting facts panel (16px), purpose st
 
 - **Shared header and footer:** retain the existing shell and WireCat logo. The active About navigation item carries `aria-current="page"`. Language selection preserves the route, and the theme control switches the semantic palette.
 - **Article introduction:** one h1, a concise opening paragraph and a bold open-source statement, directly on the page ground. The statement preserves `#open-source` with a 100px scroll margin. Contact follows the introduction on mobile; the story follows on desktop. Demo promotion belongs to the homepage's established composition.
-- **Tool navigation:** three ruled rows pair Telegram, MAX and the localized email/notes label with the monospace commands `tg`, `max` and `memo`. Each bold name/command link opens documentation; a separate GitHub link with an arrow opens that tool's repository. Telegram, MAX and Memo documentation use localized site routes; Memo opens `/{lang}/docs/memo`. Descriptions sit between these links on larger screens and beneath them below 40rem. Documentation and agent setup links follow as a wrapping inline group.
+- **Tool navigation:** one ruled row per tool pairs its name with its monospace command (`tg`, `wa`, `max`, `zm`, `drive`, `gcal`, `mail`, `memo`); the WireCat Desktop row has no command and links GitHub and the download page instead of npm. Each bold name/command link opens documentation; a separate GitHub link with an arrow opens that tool's repository. Telegram, MAX and Memo documentation use localized site routes; Memo opens `/{lang}/docs/memo`. Descriptions sit between these links on larger screens and beneath them below 40rem. Documentation and agent setup links follow as a wrapping inline group.
 - **Purpose statement:** a bordered tonal inset emphasizes the project's purpose within the first section. It uses the reading inset on larger screens and a smaller inset on narrow screens.
 - **Project facts panel:** the shared logo, a supporting heading and a semantic definition list identify tools, Apache 2.0 licence and maintainer. Its padding is 28px, reducing to the reading inset below 40rem. Keep this supporting context smaller than article headings.
 - **Contact actions:** a supporting heading and short invitation precede two outlined buttons for configured email (`mailto:`) and the maintainer's direct Telegram URL. The same content renders in the desktop sidebar after project facts and on mobile immediately after the introduction; CSS displays only the appropriate instance. Buttons wrap with a 12px gap, retain at least 44px height and use theme-aware surface fill, ink and borders. Hover changes the fill to the secondary tonal layer without underlining the label; keyboard focus retains the common ink outline.

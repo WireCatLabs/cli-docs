@@ -155,7 +155,7 @@ for (const lang of ["en", "ru", "es"]) {
   }
   pages.header = pages.home
     .match(/<header class="wrap site-header"[\s\S]*?<\/header>/)[0]
-    .replace(/<a\b[^>]*href="\/(?:en|ru|es)\/features"[^>]*>[\s\S]*?<\/a>/, "")
+    .replace(/<a\b[^>]*href="\/(?:en|ru|es)\/(?:features|examples)"[^>]*>[\s\S]*?<\/a>/g, "")
     .replace(
       '<nav aria-label="Site navigation">',
       '<nav class="public-site-menu" id="public-site-menu" aria-label="Site navigation">',
