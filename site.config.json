@@ -16,11 +16,11 @@
     "telegramGroup": "https://t.me/wirecatdev"
   },
   "newsletter": {
-    "apiUrl": "https://api.wirecat.dev",
+    "apiUrl": "",
     "turnstileSiteKey": ""
   },
   "ideas": {
-    "apiUrl": "",
+    "apiUrl": "https://api.wirecat.dev",
     "turnstileSiteKey": ""
   }
 }
