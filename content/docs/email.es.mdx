@@ -1,87 +1,65 @@
 ---
 title: "Correo"
-description: "Conecta cuentas de correo, importa el periodo que necesites y vincula mensajes a las personas que ya conoces."
+description: "Conecta un buzón con la herramienta mail, busca después en Memo y vincula mensajes a las personas que ya conoces."
 ---
 
-Esta guía explica cómo WireCat incorpora correo al contexto de tu agente: conectar un buzón,
-importar el periodo necesario y encontrar correos junto a información sobre las personas que conoces.
+Esta guía explica cómo WireCat incorpora correo al contexto de tu agente: conecta un buzón con la
+[herramienta mail](./mail/index.md) y encuentra sus mensajes en Memo junto a tus notas y conversaciones.
 Úsala cuando quieras encontrar una decisión en el correo o preparar una conversación.
 
 Después de seguir la guía, podrás:
 
-- conectar los buzones que elijas e importar el periodo necesario;
+- conectar un buzón y leer el periodo necesario en el almacén compartido;
 - vincular una dirección a una persona que ya conoces;
-- buscar y etiquetar correo con fuentes y comprobar la cobertura de importación.
+- buscar y etiquetar correo con fuentes y comprobar la cobertura de la sincronización;
 - detectar remitentes que parecen spam o estafas.
 
-WireCat utiliza Memo para estas tareas. Memo es una herramienta de tu ordenador que importa
-el correo a una copia local en la que puedes buscar. Tu agente puede usarla junto con notas
-y el historial de mensajes descargado.
+Mail es la herramienta de correo de WireCat. Copia tu buzón al almacén compartido de WireCat. Memo es una herramienta
+de tu ordenador que busca en ese almacén, así que tu agente puede usar el correo junto con notas y el historial de
+mensajes descargado. Memo no cambia tu buzón.
 
 ## Antes de empezar
 
-[Instala Memo con la guía de notas](./memo/installation.md). No necesitas importar una carpeta
-de notas para usar correo. Usa un <DocTerm term="local-agent" lang="es" label="agente de IA local" />
-en el mismo ordenador. Memo lee correo a través de Himalaya; configura allí la cuenta antes
-de importar. El historial de mensajería es opcional, pero debe descargarse antes si lo necesitas en la misma respuesta.
+[Instala Mail](./mail/installation.md) y prepara el buzón: activa IMAP y crea una contraseña de aplicación
+(una contraseña aparte para un solo programa, que puedes revocar). Los [pasos para preparar el buzón](./mail/providers.md)
+están descritos para cada proveedor. Para buscar correo, [instala Memo con la guía de notas](./memo/installation.md).
+No necesitas importar una carpeta de notas. Usa un <DocTerm term="local-agent" lang="es" label="agente de IA local" />
+en el mismo ordenador. El historial de mensajería es opcional, pero debe descargarse antes si lo necesitas en la misma respuesta.
 
 ## Añade correo
 
-Memo lee correo a través de [Himalaya](https://github.com/pimalaya/himalaya), un programa de
-correo independiente. Tu cuenta se configura allí; Memo usa su nombre y dirección sin necesitar
-otra copia de la contraseña. Pide ayuda a tu agente:
+Elige un nombre de perfil para el buzón (aquí `ya`), inicia sesión y lee el correo. Pide ayuda a tu agente:
 
 ```text prompt
-Ayúdame a conectar la cuenta de correo que elija a través de Himalaya y añadirla a Memo.
-Explica la configuración de la cuenta e importa el correo desde la fecha que elija.
-Muestra el resultado e indica si hace falta otra ejecución para terminar ese periodo.
+Ayúdame a conectar la cuenta de correo que elija con la herramienta mail.
+Explica los pasos del proveedor y lee el correo desde la fecha que elija.
+Muestra el resultado de la sincronización e indica si hace falta otra ejecución para terminar ese periodo.
 ```
 
-La cuenta debe funcionar en Himalaya antes de que Memo pueda importar el correo. Para configurarlo manualmente:
-
-Añade `mail.accounts` a la configuración de Memo, conservando los ajustes existentes. Rutas predeterminadas:
-
-| OS | Archivo de configuración |
-| --- | --- |
-| Linux | `~/.config/cli-memo/config.json` |
-| macOS | `~/.config/cli-memo/config.json` |
-| Windows | `%APPDATA%\cli-memo\Config\config.json` |
-
-`MEMO_CONFIG_DIR` cambia el directorio; en Linux y macOS, `XDG_CONFIG_HOME` también afecta a la ruta predeterminada.
-El ejemplo usa una cuenta de Himalaya llamada `gmail`; sustituye el nombre y la dirección por los tuyos.
-
-```json
-{
-  "mail": {
-    "accounts": [{ "name": "gmail", "address": "you@example.com" }]
-  }
-}
-```
-
-`name` es el nombre de la cuenta en Himalaya; `address` es la dirección de tu buzón en Memo.
-Para varios buzones, añade una entrada por cuenta en `mail.accounts`. Para importar, ejecuta `memo sync --source email:<nombre>`,
-donde `<nombre>` es el nombre de Himalaya, como `gmail`. Los resultados de búsqueda identifican el buzón por su dirección,
-como `you@example.com`. Las direcciones que vinculas a personas son las de remitentes o
-destinatarios, no otras cuentas en las que tengas que iniciar sesión.
-
-Gmail es el modo predeterminado e importa All Mail. Para otro proveedor IMAP, añade
-`"mode": "imap"` y `"folders": ["INBOX", "Archive"]` a la cuenta, con los nombres reales
-de las carpetas de tu buzón. Las etiquetas de Gmail (Inbox, Important, Sent, Starred y las tuyas)
-se importan como buzones y se actualizan en cada ejecución.
+Para configurarlo manualmente:
 
 ```sh
-memo sync --only mail --source email:gmail --since-time 2026-09-01 --json
+mail ya session start --address you@example.com
+mail ya sync --since-time 2026-09-01
+mail ya status
 ```
 
-Elige la fecha inicial que quieras incluir. Cada ejecución lee hasta 200 mensajes nuevos
-por defecto; repítela para continuar si el resultado indica que la importación está incompleta.
-El buzón se abre solo para lectura: importar no envía correo ni lo marca como leído.
-El correo importado se almacena localmente; repetir la importación puede eliminar del almacén
-el texto de los mensajes que hayan desaparecido de la fuente.
+`session start` encuentra el servidor, comprueba la contraseña de aplicación y la guarda en el llavero del sistema.
+`sync` lee el correo nuevo al almacén compartido y omite el que ya tiene. Un buzón grande no cabe en una sola ejecución:
+si `sync` responde `state: partial`, ejecútalo de nuevo, y `mail ya status` muestra cuánto ha avanzado. Para mantener
+el buzón al día, prográmalo: `mail ya schedule command mail-ya --every 5m -- sync`. Las carpetas, los límites y el resto
+de comandos están en el [uso diario de mail](./mail/usage.md).
 
-El texto de un adjunto legible se guarda con su correo y se encuentra con él. La importación también
-prepara el correo nuevo para la búsqueda por significado, de modo que
-`tg personal search conversations` y `max personal search conversations` pueden encontrarlo; `--no-embed` omite ese paso.
+Memo no necesita ningún ajuste para este correo. Lee el mismo almacén, así que `memo search mail` lo encuentra al
+momento. Los resultados identifican los buzones por su dirección, como `you@example.com`. Las direcciones que vincules
+después a personas son remitentes y destinatarios, no cuentas adicionales en las que debas iniciar sesión.
+
+El texto de un adjunto legible se guarda con su correo y se encuentra con él. Memo también prepara el correo nuevo para
+la búsqueda por significado, así que `tg personal search conversations` y `max personal search conversations` pueden encontrarlo.
+
+Memo aún puede importar correo con Himalaya, un programa de correo independiente. Esa importación antigua se conserva
+para configuraciones existentes y se eliminará; para cuentas nuevas usa `mail` y consulta la
+[importación antigua](./memo/mail.md) solo si ya dependes de ella.
 
 ## Vincula el correo a la misma persona
 
@@ -133,7 +111,7 @@ Muestra cada remitente sospechoso con su puntuación, las señales que la forman
 Deja fuera a los remitentes que puntúan solo porque nunca abro sus boletines.
 ```
 
-`memo mail inspect gmail` lista los remitentes con su puntuación y sus señales. Cada importación puntúa
+Cada sincronización puntúa
 también a los remitentes del correo guardado, como mucho una vez al día, y un resultado de búsqueda en
 `--json` lleva el `sender_score` de su remitente. El correo de un
 remitente con indicios de fraude, como una marca en el nombre enviada desde otro dominio o un dominio registrado
@@ -171,8 +149,8 @@ Un resultado vacío de una importación parcial no demuestra que no hubiera acue
 
 ## Si falta correo
 
-- **No hay cuenta:** comprueba el nombre de Himalaya y su entrada en `mail.accounts`.
-- **Solo se importó parte del periodo:** repite la importación; `--limit` limita los mensajes nuevos por ejecución.
+- **No hay cuenta:** ejecuta `mail session list` y comprueba el nombre del perfil en tu comando.
+- **Solo se leyó parte del periodo:** ejecuta `mail <profile> sync` de nuevo; `--limit` limita los mensajes nuevos por ejecución.
 - **Hay resultados de otro buzón:** comprueba las referencias y conserva la dirección correcta.
 - **Falta correo en el contexto de una persona:** comprueba la dirección exacta, su enlace y el historial importado.
 

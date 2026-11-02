@@ -12,7 +12,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     scenarios:
       "Common Memo tasks step by step: set up, start the day, prepare for a meeting, trace a person or a decision across tools.",
     people: "See a person's messages, mail and notes in one answer, and record organizations and projects.",
-    mail: "Import Gmail or IMAP mail read-only through Himalaya, beside your notes and messages.",
+    mail: "Search the mail that the mail tool syncs, beside your notes and messages.",
     tasks: "Track requests, promises and project work, decide what can start and schedule local reminders.",
     memories: "Keep memories and facts with their evidence, and approve or reject actions an agent proposes.",
     mcp: "Connect an agent to Memo commands, open cited sources and control writes with saved permissions.",
@@ -38,7 +38,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     scenarios:
       "Частые задачи Memo по шагам: настройка, начало дня, подготовка к встрече, человек или решение во всех инструментах.",
     people: "Смотрите сообщения, письма и заметки о человеке в одном ответе, ведите организации и проекты.",
-    mail: "Импортируйте почту Gmail или IMAP только для чтения через Himalaya рядом с заметками.",
+    mail: "Ищите в почте, которую синхронизирует инструмент mail, рядом с заметками и сообщениями.",
     tasks: "Следите за просьбами, обещаниями и задачами проектов и ставьте локальные напоминания.",
     memories: "Храните память и факты с доказательствами и решайте, что делать с действиями агента.",
     mcp: "Подключите агента к командам Memo, открывайте источники и ограничивайте запись разрешениями.",
@@ -65,7 +65,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     scenarios:
       "Tareas habituales de Memo paso a paso: configurar, empezar el día, preparar una reunión, seguir a una persona o una decisión.",
     people: "Ve los mensajes, correos y notas de una persona en una respuesta, y registra organizaciones y proyectos.",
-    mail: "Importa correo de Gmail o IMAP en modo solo lectura con Himalaya, junto a tus notas.",
+    mail: "Busca en el correo que sincroniza la herramienta mail, junto a tus notas y mensajes.",
     tasks: "Sigue peticiones, promesas y trabajo de proyectos, y programa recordatorios locales.",
     memories: "Guarda recuerdos y hechos con su evidencia, y aprueba o rechaza las acciones que propone un agente.",
     mcp: "Conecta un agente a los comandos de Memo, abre las fuentes citadas y limita escrituras con permisos.",

@@ -20,7 +20,7 @@ agents that read the docs as Markdown.
 
 WireCat's mission is to help people and AI agents work with conversations, remember agreements
 and turn messages into useful actions. WireCat supplies the Telegram and MAX tools available today.
-The user's existing agent can also use the separate Himalaya email tool and read or update Markdown
+WireCat also has its own mail tool for IMAP mailboxes. The user's existing agent can read or update Markdown
 notes in Obsidian or another editor; these workflows are publicly usable today. Other messengers
 and Notion integrations remain planned. About describes an open-source project building and connecting tools for knowledge
 and conversations; personal project enquiries go to the configured maintainer Telegram.
