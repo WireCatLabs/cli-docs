@@ -32,6 +32,16 @@ describe("selected editorial production snapshots", () => {
       expect(pages.header).not.toContain(`href="/${lang}/examples"`)
       expect(pages.footer).toContain(`href="/${lang}/examples"`)
       expect(pages.home).toContain('href="https://github.com/WireCatLabs"')
+      const options = (html: string) =>
+        [
+          ...(html.match(/<div class="cli-picker-list"[\s\S]*?<\/div>/)?.[0] ?? "").matchAll(
+            /data-connect-provider="(\w+)"/g,
+          ),
+        ].map((match) => match[1])
+      expect(options(hero)).toEqual(
+        lang === "ru" ? ["tg", "wa", "max", "zm", "drive", "memo"] : ["tg", "wa", "zm", "drive", "memo"],
+      )
+      expect(options(setup)).toEqual(["tg", "wa", "max", "zm", "drive", "memo"])
       const prompt = /<pre class="agent-prompt">([^\n]*)/.exec(pages.home)?.[1]
       expect(prompt).toMatch({ en: /^Install tg/, ru: /^Установи tg/, es: /^Instala tg/ }[lang] as RegExp)
     })

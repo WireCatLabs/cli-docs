@@ -113,7 +113,7 @@ for (const lang of ["en", "ru", "es"]) {
             "AI conversation examples": "Примеры диалогов с ИИ",
             "Choose a conversation": "Выберите диалог",
             "Messenger in this example": "Мессенджер в примере",
-            "Choose messenger for setup": "Мессенджер для подключения",
+            "Choose a tool for setup": "Инструмент для подключения",
             "Copy terminal installation command": "Скопировать команду установки",
             "Choose an example": "Выберите пример",
             "Choose a use of WireCat": "Выберите вариант использования",
@@ -128,7 +128,7 @@ for (const lang of ["en", "ru", "es"]) {
               "AI conversation examples": "Conversaciones con IA",
               "Choose a conversation": "Elige una conversación",
               "Messenger in this example": "Mensajería de este ejemplo",
-              "Choose messenger for setup": "Servicio para conectar",
+              "Choose a tool for setup": "Herramienta para conectar",
               "Copy terminal installation command": "Copiar el comando de instalación",
               "Choose an example": "Elige un ejemplo",
             }

@@ -8,7 +8,9 @@ for (const lang of ["en", "ru", "es"]) {
       await page.goto(lang === "en" ? "/" : `/${lang}`)
       const menu = page.locator(width === 390 ? ".hero [data-connect]" : ".site-header [data-connect]").first()
       await menu.locator(":scope > summary").click()
+      await menu.locator(".cli-picker-button").click()
       await menu.locator('[data-connect-provider="wa"]').click()
+      await expect(menu.locator(".cli-picker-current")).toContainText("WhatsApp")
       await expect(menu.locator(".agent-prompt")).toContainText("@wirecat/whatsapp-cli")
       await expect(menu.locator(".agent-prompt")).not.toContainText("@wirecat/wa-cli")
       await expect(menu.locator(".command [data-copy]")).toHaveAttribute(
