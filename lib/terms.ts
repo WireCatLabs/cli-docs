@@ -8,14 +8,14 @@ export const termsCopy: Record<
     title: "Terms of Service",
     intro:
       "The conditions for using the WireCat website and tools, connecting your accounts and reviewing actions taken with your data.",
-    updated: "Last updated: 24 October 2026",
+    updated: "Last updated: 2 November 2026",
     contact: "Questions about these terms:",
     sections: [
       {
         id: "project",
         title: "The project",
         paragraphs: [
-          "WireCat is an independent, personally maintained open-source project. These terms cover wirecat.dev and the WireCat tools, including WireCat Drive, gcal for Google Calendar and zm, the WireCat CLI app for Zoom. WireCat is not affiliated with or endorsed by Google, Zoom or the other services its tools connect to.",
+          "WireCat is an independent, personally maintained open-source project. These terms cover wirecat.dev and the WireCat tools, including WireCat Drive, gcal for Google Calendar, zm, the WireCat CLI app for Zoom, and mail for email. WireCat is not affiliated with or endorsed by Google, Microsoft, Zoom or the other services its tools connect to.",
         ],
       },
       {
@@ -23,7 +23,8 @@ export const termsCopy: Record<
         title: "Your accounts and permissions",
         paragraphs: [
           "Connect only accounts and data you are authorized to use. You remain responsible for following the connected service’s terms, your organization’s rules and applicable law. Do not use the tools to bypass access controls, obtain unauthorized data or harm others.",
-          "Google access requires your browser consent. Selected folders control local ingestion; they do not narrow the account-wide OAuth permission. Zoom access requires your approval of the WireCat CLI app on Zoom’s consent screen. Remote writes require the relevant permission and an explicit command. Review commands, account profiles and agent permissions before allowing changes.",
+          "Google access requires your browser consent. Selected folders control local ingestion; they do not narrow the account-wide OAuth permission. Zoom access requires your approval of the WireCat CLI app on Zoom’s consent screen. Microsoft access requires your approval of WireCat’s app on Microsoft’s consent screen, and a work or school administrator may restrict it. Remote writes require the relevant permission and an explicit command. Review commands, account profiles and agent permissions before allowing changes.",
+          "Mail, calendars, files and meetings stay at the provider that holds them, such as Microsoft, Google, Zoom or an IMAP mail service. Using them through WireCat tools must follow each provider’s terms, including its limits on automated access and on sending mail. A provider can limit, refuse or end access, and the tools connect to it as is, without any promise that it keeps allowing this. Send mail only as you are allowed to. The same applies to any service WireCat connects later.",
         ],
       },
       {
@@ -38,7 +39,7 @@ export const termsCopy: Record<
         id: "third-parties",
         title: "Third-party services",
         paragraphs: [
-          "Google, AI providers, hosting services and other connected services operate under their own terms and privacy policies. Their availability, API limits, permissions and changes can affect the tools. WireCat does not promise uninterrupted access or complete source history.",
+          "Google, Microsoft, your mail provider, AI providers, hosting services and other connected services operate under their own terms and privacy policies. Their availability, API limits, permissions and changes can affect the tools. WireCat does not promise uninterrupted access or complete source history.",
         ],
       },
       {
@@ -53,7 +54,7 @@ export const termsCopy: Record<
         id: "stopping",
         title: "Stopping use and changes",
         paragraphs: [
-          "You can stop using the website or tools at any time. End each profile’s session and revoke the application in your Google Account, or remove the WireCat CLI app in the Zoom App Marketplace, if you want to disconnect; remove local data separately. See the Privacy Policy for the data-handling details.",
+          "You can stop using the website or tools at any time. End each profile’s session and revoke the application in your Google Account, remove the WireCat app in your Microsoft account, or remove the WireCat CLI app in the Zoom App Marketplace, if you want to disconnect; remove local data separately. See the Privacy Policy for the data-handling details.",
           "We update this page when these terms change and show the date above. Software versions and connected providers can change independently. Review the current terms before enabling a new integration.",
         ],
       },
@@ -63,14 +64,14 @@ export const termsCopy: Record<
     title: "Условия использования",
     intro:
       "Условия использования сайта и инструментов WireCat, подключения аккаунтов и проверки действий с вашими данными.",
-    updated: "Обновлено: 24 октября 2026 г.",
+    updated: "Обновлено: 2 ноября 2026 г.",
     contact: "Вопросы об этих условиях:",
     sections: [
       {
         id: "project",
         title: "Проект",
         paragraphs: [
-          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эти условия охватывают wirecat.dev и инструменты WireCat, включая WireCat Drive, gcal для Google Календаря и zm — приложение WireCat CLI для Zoom. WireCat не связан с Google, Zoom или другими подключаемыми сервисами и не утверждает, что они одобряют проект.",
+          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эти условия охватывают wirecat.dev и инструменты WireCat, включая WireCat Drive, gcal для Google Календаря, zm — приложение WireCat CLI для Zoom — и mail для почты. WireCat не связан с Google, Microsoft, Zoom или другими подключаемыми сервисами и не утверждает, что они одобряют проект.",
         ],
       },
       {
@@ -78,7 +79,8 @@ export const termsCopy: Record<
         title: "Ваши аккаунты и разрешения",
         paragraphs: [
           "Подключайте только аккаунты и данные, к которым у вас есть законный доступ. Вы отвечаете за соблюдение условий подключённого сервиса, правил своей организации и применимого права. Не используйте инструменты для обхода контроля доступа, получения чужих данных без разрешения или причинения вреда.",
-          "Доступ к Google требует вашего согласия в браузере. Выбранные папки ограничивают локальный импорт, но не разрешение OAuth на Drive аккаунта. Доступ к Zoom требует вашего одобрения приложения WireCat CLI на экране согласия Zoom. Запись в Google или Zoom требует нужного разрешения и явной команды. Проверяйте команды, профили и разрешения агента перед изменениями.",
+          "Доступ к Google требует вашего согласия в браузере. Выбранные папки ограничивают локальный импорт, но не разрешение OAuth на Drive аккаунта. Доступ к Zoom требует вашего одобрения приложения WireCat CLI на экране согласия Zoom. Доступ к Microsoft требует вашего одобрения приложения WireCat на экране согласия Microsoft, а администратор рабочего или учебного аккаунта может его ограничить. Запись в Google или Zoom требует нужного разрешения и явной команды. Проверяйте команды, профили и разрешения агента перед изменениями.",
+          "Почта, календари, файлы и встречи остаются у провайдера, который их хранит, например Microsoft, Google, Zoom или почтовый сервис с IMAP. Работа с ними через инструменты WireCat должна соответствовать условиям каждого провайдера, включая его ограничения на автоматический доступ и отправку писем. Провайдер может ограничить, отклонить или прекратить доступ, а инструменты подключаются к нему как есть, без обещания, что он продолжит это разрешать. Отправляйте письма только в рамках того, что вам разрешено. То же относится к любому сервису, который WireCat подключит позже.",
         ],
       },
       {
@@ -93,7 +95,7 @@ export const termsCopy: Record<
         id: "third-parties",
         title: "Сторонние сервисы",
         paragraphs: [
-          "Google, провайдеры ИИ, хостинг и другие подключённые сервисы работают по собственным условиям и политикам конфиденциальности. Их доступность, ограничения API, разрешения и изменения могут влиять на инструменты. WireCat не обещает непрерывный доступ или полную историю источников.",
+          "Google, Microsoft, ваш почтовый провайдер, провайдеры ИИ, хостинг и другие подключённые сервисы работают по собственным условиям и политикам конфиденциальности. Их доступность, ограничения API, разрешения и изменения могут влиять на инструменты. WireCat не обещает непрерывный доступ или полную историю источников.",
         ],
       },
       {
@@ -108,7 +110,7 @@ export const termsCopy: Record<
         id: "stopping",
         title: "Прекращение использования и изменения",
         paragraphs: [
-          "Вы можете прекратить использование сайта и инструментов в любой момент. Для отключения завершите сессию каждого профиля и отзовите доступ приложения в аккаунте Google или удалите приложение WireCat CLI в Zoom App Marketplace; локальные данные удаляются отдельно. Подробности обработки данных приведены в политике конфиденциальности.",
+          "Вы можете прекратить использование сайта и инструментов в любой момент. Для отключения завершите сессию каждого профиля и отзовите доступ приложения в аккаунте Google, удалите приложение WireCat в аккаунте Microsoft или удалите приложение WireCat CLI в Zoom App Marketplace; локальные данные удаляются отдельно. Подробности обработки данных приведены в политике конфиденциальности.",
           "При изменении условий мы обновляем страницу и дату выше. Версии программ и подключённые провайдеры могут меняться независимо. Прочитайте действующие условия перед включением новой интеграции.",
         ],
       },
@@ -118,14 +120,14 @@ export const termsCopy: Record<
     title: "Términos de servicio",
     intro:
       "Las condiciones para usar el sitio y las herramientas de WireCat, conectar tus cuentas y revisar las acciones realizadas con tus datos.",
-    updated: "Última actualización: 24 de octubre de 2026",
+    updated: "Última actualización: 2 de noviembre de 2026",
     contact: "Preguntas sobre estos términos:",
     sections: [
       {
         id: "project",
         title: "El proyecto",
         paragraphs: [
-          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Estos términos cubren wirecat.dev y las herramientas de WireCat, incluidas WireCat Drive, gcal para Google Calendar y zm, la aplicación WireCat CLI para Zoom. WireCat no está afiliado a Google, Zoom ni a los otros servicios que conecta, ni cuenta con su respaldo.",
+          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Estos términos cubren wirecat.dev y las herramientas de WireCat, incluidas WireCat Drive, gcal para Google Calendar, zm, la aplicación WireCat CLI para Zoom, y mail para el correo. WireCat no está afiliado a Google, Microsoft, Zoom ni a los otros servicios que conecta, ni cuenta con su respaldo.",
         ],
       },
       {
@@ -133,7 +135,8 @@ export const termsCopy: Record<
         title: "Tus cuentas y permisos",
         paragraphs: [
           "Conecta solo cuentas y datos que tengas autorización para usar. Eres responsable de cumplir los términos del servicio conectado, las reglas de tu organización y la ley aplicable. No uses las herramientas para eludir controles de acceso, obtener datos sin permiso ni perjudicar a otros.",
-          "El acceso a Google requiere tu consentimiento en el navegador. Las carpetas elegidas limitan la importación local, pero no el permiso OAuth sobre el Drive de la cuenta. El acceso a Zoom requiere que apruebes la aplicación WireCat CLI en la pantalla de consentimiento de Zoom. Escribir en Google o Zoom requiere el permiso correspondiente y un comando explícito. Revisa los comandos, perfiles y permisos del agente antes de permitir cambios.",
+          "El acceso a Google requiere tu consentimiento en el navegador. Las carpetas elegidas limitan la importación local, pero no el permiso OAuth sobre el Drive de la cuenta. El acceso a Zoom requiere que apruebes la aplicación WireCat CLI en la pantalla de consentimiento de Zoom. El acceso a Microsoft requiere que apruebes la aplicación de WireCat en la pantalla de consentimiento de Microsoft, y el administrador de una cuenta de trabajo o de centro educativo puede restringirlo. Escribir en Google o Zoom requiere el permiso correspondiente y un comando explícito. Revisa los comandos, perfiles y permisos del agente antes de permitir cambios.",
+          "El correo, los calendarios, los archivos y las reuniones se quedan en el proveedor que los guarda, como Microsoft, Google, Zoom o un servicio de correo IMAP. Usarlos con las herramientas de WireCat debe respetar los términos de cada proveedor, incluidos sus límites al acceso automatizado y al envío de correo. Un proveedor puede limitar, rechazar o terminar el acceso, y las herramientas se conectan a él tal cual, sin ninguna promesa de que lo siga permitiendo. Envía correo solo como tengas permiso para hacerlo. Lo mismo vale para cualquier servicio que WireCat conecte más adelante.",
         ],
       },
       {
@@ -148,7 +151,7 @@ export const termsCopy: Record<
         id: "third-parties",
         title: "Servicios de terceros",
         paragraphs: [
-          "Google, los proveedores de IA, el alojamiento y otros servicios conectados tienen sus propios términos y políticas de privacidad. Su disponibilidad, límites de API, permisos y cambios pueden afectar a las herramientas. WireCat no promete acceso ininterrumpido ni un historial completo de las fuentes.",
+          "Google, Microsoft, tu proveedor de correo, los proveedores de IA, el alojamiento y otros servicios conectados tienen sus propios términos y políticas de privacidad. Su disponibilidad, límites de API, permisos y cambios pueden afectar a las herramientas. WireCat no promete acceso ininterrumpido ni un historial completo de las fuentes.",
         ],
       },
       {
@@ -163,7 +166,7 @@ export const termsCopy: Record<
         id: "stopping",
         title: "Dejar de usar el servicio y cambios",
         paragraphs: [
-          "Puedes dejar de usar el sitio o las herramientas en cualquier momento. Cierra la sesión de cada perfil y revoca la aplicación en tu cuenta de Google, o elimina la aplicación WireCat CLI en Zoom App Marketplace, para desconectarla; elimina los datos locales por separado. Consulta la Política de privacidad para los detalles del tratamiento de datos.",
+          "Puedes dejar de usar el sitio o las herramientas en cualquier momento. Cierra la sesión de cada perfil y revoca la aplicación en tu cuenta de Google, elimina la aplicación de WireCat en tu cuenta de Microsoft o elimina la aplicación WireCat CLI en Zoom App Marketplace, para desconectarla; elimina los datos locales por separado. Consulta la Política de privacidad para los detalles del tratamiento de datos.",
           "Actualizamos esta página cuando cambian los términos y mostramos la fecha arriba. Las versiones del software y los proveedores conectados pueden cambiar de forma independiente. Revisa los términos actuales antes de activar una nueva integración.",
         ],
       },
