@@ -103,6 +103,48 @@ gcal personal store status                  # how far each calendar's sync is, a
 `gcal` никогда не хранит код доступа или PIN встречи. Ссылка для подключения сохраняется без строки запроса, а
 строка описания, где упоминается код доступа, пароль или PIN, отбрасывается.
 
+## Подписка на ленту календаря
+
+Календарь праздников, расписание матчей или опубликованный календарь коллеги часто доступны по адресу iCalendar —
+ссылке `.ics`. `calendars add` подписывается на такой адрес как на календарь профиля только для чтения, рядом с вашими
+календарями Google:
+
+```sh
+gcal personal calendars add webcal://example.com/holidays.ics --title Holidays
+gcal personal sync                          # reads Google, then every feed again
+gcal personal events list calendar:Holidays
+gcal personal calendars remove Holidays     # forget the address and delete the feed's events
+```
+
+`gcal` читает ленту сам: в API Google нет документированного способа добавить календарь по URL, как это делает пункт
+«Добавить по URL» на его веб-странице. `calendars add` один раз читает ленту, чтобы её проверить, и ответ показывает,
+сколько в ней событий. Каждый `sync` спрашивает ленту, изменилась ли она с прошлого чтения, с помощью `ETag` и
+`Last-Modified`, которые прислал её сервер. Когда сервер отвечает, что ничего не изменилось, `sync` оставляет
+сохранённые события и ничего не читает; тогда `feeds` в ответе говорит `unchanged: true`. Иначе, а также при первом
+`sync` за день, он читает всю ленту заново, оставляет события внутри окна синхронизации и отменяет те, которых в ленте
+больше нет. `sync --rescan` всегда читает её целиком. События ленты видны в `events list`, `search events`,
+`overlapping:true` и `events remind`, как события любого календаря. `events remind` читает то, что сохранил последний
+`sync`, и сам ленты не читает, потому что таймер запускает его каждые несколько минут. Чтобы лента оставалась свежей,
+запускайте по расписанию и `sync`, каждый час: см. [Свежие ленты](#keep-feeds-fresh). Повторяющиеся события
+разворачиваются в их собственном часовом поясе, поэтому еженедельная встреча в 10:00 остаётся в 10:00 при переводе
+часов; правило, которое `gcal` не умеет читать, например повторение каждый час, пропускается и считается в `skipped`
+ответа синхронизации.
+
+События ленты нельзя изменить: `events update`, `delete`, `respond` и `create` в её календаре отклоняются с
+`calendar.read-only` до того, как что-либо отправлено. `calendars busy` не учитывает ленты. Адрес может содержать
+закрытый токен, поэтому `gcal` хранит его так же, как ваш вход, и никогда не выводит; см. [Безопасность](./security.md).
+Адрес бывает `https://`, `http://` или `webcal://`. Адрес `webcal://` читается по `https://`. Адрес `http://`
+работает, но лента и любой токен в её адресе передаются без шифрования, поэтому `calendars add` выводит одно
+предупреждение в stderr; используйте `https://`, если сервер его поддерживает. Ни один инструмент MCP не предлагает
+`calendars add` или `remove`.
+
+`calendars remove` принимает только ленту. Он удаляет адрес, календарь ленты и все сохранённые из неё события: они сразу
+пропадают из `events list` и `search events`, и ничего не остаётся как отменённая история, потому что лента — чужой
+календарь и ничего из того, что вы с ней делаете, обратно не уходит. Событие, которое есть и в одном из ваших
+календарей Google, остаётся таким, каким его хранит тот календарь. Чтобы прекратить синхронизацию календаря Google,
+используйте `calendars unsync`: он оставляет сохранённые события календаря как есть, а `calendars sync` снова его
+включает.
+
 ## Читать события
 
 Эти команды читают локальное хранилище, поэтому работают без сети:
@@ -118,6 +160,7 @@ gcal personal events list -event_type:birthday -event_type:focus  # without birt
 gcal personal events list calendar:Team                         # one calendar, by its name
 gcal personal events show event:42                              # attendees, Drive files and history
 gcal personal search events roadmap planning                    # by words, and by meaning with the model
+gcal personal search all roadmap                                # events, messages and notes of every WireCat tool
 gcal personal people list                                       # everyone in this week's events
 gcal personal people list event:42                              # one event's attendees
 gcal personal people link email:ana@example.com telegram:12345  # the same person in another WireCat tool
@@ -193,6 +236,32 @@ gcal personal search events --backend both quarterly review
 Каждый отвечает списком событий в `items`. Поиск по хранилищу разбивает результаты на страницы курсором: если есть ещё,
 `page.next_cursor` — значение для `--cursor`. Каждое событие называет в `untrusted` поля, которые написал отправитель
 приглашения.
+
+### Искать везде сразу
+
+`search all` читает общее хранилище, в которое пишут все инструменты WireCat на этом компьютере. Один запрос находит
+ваши встречи рядом с сообщениями, которые сохранили `tg`, `max` или `wa`, и с вашими заметками, лучшие совпадения
+сверху:
+
+```sh
+gcal personal search all roadmap
+gcal personal search all "quarterly review" --source telegram,gcal --json
+gcal personal search all roadmap --only events,notes
+```
+
+Каждое совпадение называет свой `kind` (`event`, `message`, `note` или `meeting` для расшифровки встречи) и свой `ref`.
+`meta.accounts` называет все прочитанные аккаунты; в терминале тот же список идёт первым, как `searched:`. Команда
+читает только локальное хранилище и никогда не спрашивает Google или мессенджер, поэтому сначала выполните
+`gcal personal sync` (и синхронизацию других инструментов). `--only` оставляет некоторые виды: `messages`, `notes`,
+`events`, `meetings`. `--source` читает только названные аккаунты, как в `events list`: провайдера (`telegram`),
+профиль (`gcal:work`), вид или `group:<name>`.
+
+Расшифровки встреч, например те, что сохраняет `zm`, читаются, только если `--source` называет аккаунт встреч,
+например `--source gcal,zoom`. Без этого ответ сообщает в `meta.issues`, что `meetings` не искались, и
+`meta.complete` равно `false`. Почта не читается: её ищет `memo search mail`, и `--only mail` говорит об этом. Когда
+задан `GCAL_PROFILE_LOCK`, `search all` читает только календарь этого профиля и отклоняет `--source`. Каждое
+совпадение называет в `untrusted` поля, которые написал кто-то другой: текст и отправителя сообщения, название
+события.
 
 ## Подготовка к встрече
 
@@ -306,7 +375,47 @@ gcal events prepare "$GCAL_EVENT" --json > "$HOME/briefs/next-meeting.json"
 
 ### Запуск по таймеру
 
-Запускайте её каждые 5 минут. Указывайте полный путь к `gcal` (его выводит `command -v gcal`): таймер запускается с
+Одна команда устанавливает таймер: пользовательский таймер systemd в Linux, агент launchd в macOS, задачу
+планировщика заданий в Windows. Запускайте его каждые 5 минут, а `--due-within` держите не короче этого:
+
+```sh
+gcal personal schedule command reminders --every 5m -- events remind --due-within 10m -- /home/me/bin/meeting-reminder
+```
+
+Слова после первого `--` — то, что запускает таймер, так, как вы набрали бы их после `gcal personal`; ваша программа
+идёт после второго `--`. Называйте программу полным путём или именем из вашего `PATH`: таймер сохраняет ваш `PATH`,
+но запускается из собственной папки расписания.
+
+- `gcal personal schedule list` показывает расписание и то, как прошёл его последний запуск. Пока он продолжает
+  завершаться ошибкой, каждая команда `gcal` сообщает об этом одной строкой в stderr.
+- `gcal personal schedule run reminders` запускает его сейчас, как это сделал бы таймер.
+- `gcal personal schedule remove reminders` удаляет таймер. Вывод прошлых запусков остаётся рядом с файлом
+  расписания, в `schedules/reminders/runs/` папки состояния.
+
+#### Свежие ленты
+
+`events remind` читает только сохранённое и не читает [ленты](#follow-a-calendar-feed), на которые вы подписаны.
+Второй таймер, который запускает `sync` каждый час, поддерживает их свежими:
+
+```sh
+gcal personal schedule command feeds --every 1h -- sync
+```
+
+`sync` читает Google, а затем каждую ленту; у него нет параметра, чтобы читать только ленты. Лента, которая не
+изменилась, стоит одного короткого запроса, потому что `sync` сначала спрашивает сервер.
+`gcal personal schedule remove feeds` удаляет таймер. Если лента не читается, `sync` завершается с `sync.partial`, а
+остальные календари всё равно сохраняются.
+
+Установка таймера не разрешает запуск вашей программы. Если `events.remind.hook` ещё не `allow`, команда говорит об
+этом и даёт строку `config set`; пока вы её не выполните, каждый запуск отказывается запускать программу.
+`GCAL_READ_ONLY` отклоняет `schedule command` и `schedule remove`, и ни один инструмент MCP не предлагает `schedule`.
+
+В Linux без пользовательского сеанса systemd (некоторые контейнеры, WSL без systemd) `schedule command` завершается
+ошибкой на `systemctl`; используйте cron, как ниже.
+
+#### Вручную
+
+Тот же таймер без `schedule`. Указывайте полный путь к `gcal` (его выводит `command -v gcal`): таймер запускается с
 коротким `PATH`.
 
 cron (`crontab -e`):

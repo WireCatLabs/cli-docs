@@ -104,6 +104,48 @@ herramientas de WireCat, y `gcal models list` muestra qué modelos hay.
 `gcal` nunca guarda el código de acceso ni el PIN de una reunión. Un enlace para unirse se guarda sin su query string,
 y se descarta cualquier línea de la descripción que mencione un código de acceso, una contraseña o un PIN.
 
+## Seguir un feed de calendario
+
+Un calendario de festivos, el calendario de una liga deportiva o el calendario que publica un colega suele ser una
+dirección iCalendar, un enlace `.ics`. `calendars add` sigue uno como calendario de solo lectura del perfil, junto a tus
+calendarios de Google:
+
+```sh
+gcal personal calendars add webcal://example.com/holidays.ics --title Holidays
+gcal personal sync                          # reads Google, then every feed again
+gcal personal events list calendar:Holidays
+gcal personal calendars remove Holidays     # forget the address and delete the feed's events
+```
+
+`gcal` lee el feed por sí mismo: la API de Google no documenta ninguna forma de añadir un calendario desde una URL, como
+hace la opción "From URL" de su página web. `calendars add` lee el feed una vez para comprobarlo, y la respuesta muestra
+cuántos eventos tiene. Cada `sync` pregunta al feed si cambió desde la última lectura, con el `ETag` y el
+`Last-Modified` que envió el servidor del feed. Cuando el servidor responde que nada cambió, `sync` conserva los eventos
+guardados y no lee nada; el `feeds` de la respuesta dice entonces `unchanged: true`. Si no, y en el primer `sync` de cada
+día, vuelve a leer el feed completo, conserva los eventos dentro de la ventana de sincronización y cancela los que el
+feed ya no tiene. `sync --rescan` siempre lo lee completo. Los eventos del feed aparecen en `events list`,
+`search events`, `overlapping:true` y `events remind` como los de cualquier calendario.
+`events remind` lee lo que guardó el último `sync` y no lee los feeds por sí mismo, ya que un temporizador lo ejecuta
+cada pocos minutos. Programa también `sync`, cada hora, para mantener un feed al día: consulta
+[Mantener los feeds al día](#keep-feeds-fresh).
+Los eventos que se repiten se expanden en su propia zona horaria, así que una cita semanal a las 10:00 sigue a las 10:00
+cuando cambia la hora; una regla que `gcal` no sabe leer, como una que se repite por horas, se deja fuera y se cuenta en
+el `skipped` de la respuesta de sincronización.
+
+Los eventos de un feed no se pueden cambiar: `events update`, `delete`, `respond` y `create` en su calendario se rechazan
+con `calendar.read-only` antes de enviar nada. `calendars busy` deja fuera los feeds. La dirección puede llevar un token
+privado, así que `gcal` la guarda como guarda tu sesión y nunca la imprime; consulta [Seguridad](./security.md). Una
+dirección es `https://`, `http://` o `webcal://`. Una dirección `webcal://` se lee por `https://`. Una dirección
+`http://` funciona, pero el feed y cualquier token de su dirección viajan sin cifrar, así que `calendars add` imprime un
+aviso en stderr; usa `https://` cuando el servidor lo ofrezca. Ninguna herramienta MCP ofrece `calendars add` ni
+`remove`.
+
+`calendars remove` acepta solo un feed. Borra la dirección, el calendario del feed y cada evento guardado de él: salen de
+`events list` y `search events` al momento, sin quedar nada como historial cancelado, porque un feed es el calendario de
+otra persona y nada de lo que le hagas vuelve a él. Un evento que también está en uno de tus calendarios de Google se
+queda, como lo tiene ese calendario. Para dejar de sincronizar un calendario de Google, usa `calendars unsync`: conserva
+los eventos guardados del calendario tal como están, y `calendars sync` vuelve a empezar.
+
 ## Leer tus eventos
 
 Estos comandos leen el almacén local, así que funcionan sin red:
@@ -119,6 +161,7 @@ gcal personal events list -event_type:birthday -event_type:focus  # without birt
 gcal personal events list calendar:Team                         # one calendar, by its name
 gcal personal events show event:42                              # attendees, Drive files and history
 gcal personal search events roadmap planning                    # by words, and by meaning with the model
+gcal personal search all roadmap                                # events, messages and notes of every WireCat tool
 gcal personal people list                                       # everyone in this week's events
 gcal personal people list event:42                              # one event's attendees
 gcal personal people link email:ana@example.com telegram:12345  # the same person in another WireCat tool
@@ -194,6 +237,32 @@ gcal personal search events --backend both quarterly review
 Cada una responde con una lista de eventos en `items`. Una búsqueda en el almacén pagina con un cursor: si hay más,
 `page.next_cursor` es el valor para `--cursor`. Cada evento indica en `untrusted` los campos que escribió quien envió
 la invitación.
+
+### Buscar en todo a la vez
+
+`search all` lee el almacén compartido en el que escriben todas las herramientas de WireCat de este equipo. Una consulta
+encuentra tus reuniones junto a los mensajes que `tg`, `max` o `wa` guardaron y tus notas, la mejor coincidencia
+primero:
+
+```sh
+gcal personal search all roadmap
+gcal personal search all "quarterly review" --source telegram,gcal --json
+gcal personal search all roadmap --only events,notes
+```
+
+Cada resultado indica su `kind` (`event`, `message`, `note`, o `meeting` para la transcripción de una reunión) y su
+`ref`. `meta.accounts` nombra cada cuenta leída; en una terminal la misma lista sale primero, como `searched:`. Lee solo
+el almacén local y nunca pregunta a Google ni a un mensajero, así que ejecuta antes `gcal personal sync` (y las
+sincronizaciones de las otras herramientas). `--only` se queda con algunos tipos: `messages`, `notes`, `events`,
+`meetings`. `--source` lee solo las cuentas nombradas, como en `events list`: un proveedor (`telegram`), un perfil
+(`gcal:work`), un tipo o `group:<name>`.
+
+Las transcripciones de reuniones, como las que guarda `zm`, solo se leen cuando `--source` nombra una cuenta de
+reuniones, por ejemplo `--source gcal,zoom`. Sin eso, la respuesta dice en `meta.issues` que no se buscó en `meetings`,
+y `meta.complete` es `false`. El correo no se lee: lo busca `memo search mail`, y `--only mail` lo dice. Cuando
+`GCAL_PROFILE_LOCK` está definido, `search all` lee solo el calendario de ese perfil y rechaza `--source`. Cada
+resultado indica en `untrusted` los campos que escribió otra persona: el texto y el remitente de un mensaje, el título
+de un evento.
 
 ## Preparar una reunión
 
@@ -310,8 +379,47 @@ gcal events prepare "$GCAL_EVENT" --json > "$HOME/briefs/next-meeting.json"
 
 ### Ejecutarlo con un temporizador
 
-Ejecútalo cada 5 minutos. Usa la ruta completa de `gcal` (`command -v gcal` la imprime): un temporizador arranca con un
-`PATH` corto.
+Una orden instala el temporizador: un temporizador de usuario de systemd en Linux, un agente de launchd en macOS, una
+tarea del Programador de tareas en Windows. Ejecútalo cada 5 minutos, y deja `--due-within` al menos así de largo:
+
+```sh
+gcal personal schedule command reminders --every 5m -- events remind --due-within 10m -- /home/me/bin/meeting-reminder
+```
+
+Las palabras después del primer `--` son lo que ejecuta el temporizador, como las escribirías después de
+`gcal personal`; tu programa va después del segundo `--`. Nombra el programa por su ruta completa o por un nombre de tu
+`PATH`: el temporizador conserva tu `PATH`, pero se ejecuta desde la carpeta propia de la programación.
+
+- `gcal personal schedule list` muestra la programación y cómo fue su última ejecución. Mientras siga fallando, cada
+  orden de `gcal` lo dice en una línea en stderr.
+- `gcal personal schedule run reminders` la ejecuta ahora, como lo haría el temporizador.
+- `gcal personal schedule remove reminders` quita el temporizador. La salida de las ejecuciones pasadas se queda junto
+  al archivo de la programación, en `schedules/reminders/runs/` de la carpeta de estado.
+
+#### Mantener los feeds al día
+
+`events remind` lee solo lo guardado, y no lee los [feeds](#follow-a-calendar-feed) que sigues. Un segundo temporizador
+que ejecuta `sync` cada hora los mantiene al día:
+
+```sh
+gcal personal schedule command feeds --every 1h -- sync
+```
+
+`sync` lee Google y luego cada feed; no tiene opción para leer solo los feeds. Un feed que no ha cambiado cuesta una
+petición corta, ya que `sync` pregunta antes al servidor. `gcal personal schedule remove feeds` quita el temporizador.
+Si un feed falla, `sync` falla con `sync.partial` y los demás calendarios se guardan igualmente.
+
+Instalar el temporizador no permite tu programa. Si `events.remind.hook` aún no está en `allow`, la orden lo dice y da
+la línea `config set`; hasta que la ejecutes, cada ejecución se niega a arrancar el programa. `GCAL_READ_ONLY` rechaza
+`schedule command` y `schedule remove`, y ninguna herramienta MCP ofrece `schedule`.
+
+En Linux sin sesión de usuario de systemd (algunos contenedores, WSL sin systemd), `schedule command` falla en
+`systemctl`; usa cron como se muestra abajo.
+
+#### A mano
+
+El mismo temporizador sin `schedule`. Usa la ruta completa de `gcal` (`command -v gcal` la imprime): un temporizador
+arranca con un `PATH` corto.
 
 cron (`crontab -e`):
 

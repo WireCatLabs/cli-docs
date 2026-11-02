@@ -30,6 +30,7 @@ se detiene si no lo tiene y muestra los perfiles de este ordenador.
 | `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
 | `--brief` | found items as reference, title, time, author and excerpt only. |
 | `--full` | found items with their whole text and every provider field. |
+| `--compact` | one line per item for an agent: reference first, text last, paging and next steps as # lines. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
 | `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
@@ -180,6 +181,46 @@ gcal calendars unsync <calendar>
 
 **Example:** `gcal personal calendars unsync 3`
 
+### `gcal calendars add`
+
+follow an iCalendar feed, such as a holiday calendar or a published .ics address, as a read-only calendar of this profile; sync reads it again each time. The address is kept as a secret and never printed
+
+**Changes something on this computer only.**
+
+```sh
+gcal calendars add <url> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `url` | required | the feed's https://, http:// or webcal:// address. |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the calendar's title; the feed's own name if not given. |
+
+**Returns:** calendar feed — id, external_id, title, timezone, access_role, primary, synced, seen_at, and 2 more; every field: gcal commands info calendars add
+
+**Example:** `gcal personal calendars add webcal://example.com/holidays.ics --title Holidays`
+
+### `gcal calendars remove`
+
+stop following a feed calendars add added: its address is forgotten and its stored events are deleted, not cancelled. Only a feed; calendars unsync stops a provider's calendar
+
+**Changes something on this computer only.**
+
+```sh
+gcal calendars remove <calendar>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `calendar` | required | the feed calendar's id, its ics: id, or its title. |
+
+**Returns:** calendar feed removal — id, external_id, title, timezone, access_role, primary, synced, seen_at, and 2 more; every field: gcal commands info calendars remove
+
+**Example:** `gcal personal calendars remove 7`
+
 ### `gcal calendars busy`
 
 when calendars and people are taken, asked of the provider and not stored; with --duration-minutes, the free stretches they share
@@ -217,7 +258,7 @@ gcal sync [options]
 | `--max-pages <pages>` | at most this many requests to the provider in this run; as many as fit the deadline if not given. |
 | `--embed` | also index new events for meaning search, with a model already downloaded. |
 
-**Returns:** calendar sync — provider, account_id, window, calendars, synced, not_synced, complete, state, and 4 more; every field: gcal commands info sync
+**Returns:** calendar sync — provider, account_id, window, calendars, synced, not_synced, complete, state, and 5 more; every field: gcal commands info sync
 
 **Example:** `gcal personal sync`, `gcal personal sync --rescan --embed`, `gcal personal sync --timeout 2m`
 
@@ -513,7 +554,33 @@ gcal events respond <event> <response> [options]
 
 ## `gcal search`
 
-find stored things by text: events
+find stored things by text: events, or all of messages, notes and events
+
+### `gcal search all`
+
+search calendar events, messages from the other WireCat tools and notes in the local store, and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail). Use it when you do not know where something was written; search events reads the calendar with all its fields
+
+```sh
+gcal search all <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges. |
+
+| Option | What it does |
+|---|---|
+| `--only <resources>` | only these resources, separated by commas: messages, notes, events; meetings when --source names a meeting account. |
+| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
+| `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
+| `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
+| `--exact` | bare words and quotes match their exact form only, as exact:word does. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 10 more; every field: gcal commands info search all
+
+**Example:** `gcal personal search all roadmap`, `gcal personal search all "quarterly review" --source telegram,gcal --json`
 
 ### `gcal search events`
 
@@ -1965,6 +2032,132 @@ gcal runs path <run-id>
 **Returns:** run location — path; every field: gcal commands info runs path
 
 **Example:** `gcal personal runs path run-101`
+
+## `gcal schedule`
+
+run a gcal command or an agent later or on a timer (systemd, launchd, Task Scheduler); an agent cannot send
+
+### `gcal schedule command`
+
+run gcal <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
+
+**Changes something on this computer only.**
+
+```sh
+gcal schedule command <name> <args> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `args` | required | the gcal command after its name, e.g. -- messages list <chat> --limit 50. |
+
+| Option | What it does |
+|---|---|
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+
+**Returns:** run gcal <args…> on a timer — reads save what they read, so this is how a…
+
+**Example:** `gcal personal schedule command health --every 1h -- doctor`, `gcal personal schedule command morning-check --at 08:00 -- doctor`
+
+### `gcal schedule agent`
+
+start an agent (claude or codex) with a prompt on a timer; it runs with GCAL_READ_ONLY=1, so it reads and drafts and cannot send — its answer is kept and you are notified
+
+**Changes something on this computer only.**
+
+```sh
+gcal schedule agent <name> <harness> <prompt> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `harness` | required | the agent to start. One of: `claude`, `codex`. |
+| `prompt` | required | what to do, e.g. "run the daily follow-up review: gcal skill show follow-ups". |
+
+| Option | What it does |
+|---|---|
+| `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+
+**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
+
+**Example:** `gcal personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `gcal personal schedule agent triage codex "list what needs an answer today" --every 2h --max-cost 1`
+
+### `gcal schedule list`
+
+the schedules, when they run and how their last run went
+
+```sh
+gcal schedule list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** scheduled job — name, kind, when, last; every field: gcal commands info schedule list
+
+**Example:** `gcal personal schedule list`, `gcal personal schedule list kind:agent`
+
+### `gcal schedule run`
+
+run a schedule now, as its timer would, and wait for it
+
+**Changes something in the service.**
+
+```sh
+gcal schedule run <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** run a schedule now, as its timer would, and wait for it
+
+**Example:** `gcal personal schedule run health`
+
+### `gcal schedule remove`
+
+stop a schedule and remove its timer; its past output stays
+
+**Changes something on this computer only.**
+
+```sh
+gcal schedule remove <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** stop a schedule and remove its timer; its past output stays
+
+**Example:** `gcal personal schedule remove health`
+
+### `gcal schedule exec`
+
+what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Changes something in the service.**
+
+```sh
+gcal schedule exec <file>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the schedule's schedule.json in the state folder, as the timer passes it. |
+
+**Returns:** what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Example:** `gcal personal schedule exec ~/.local/share/gcal-cli/schedules/health/schedule.json`
 
 ## Exit codes
 
