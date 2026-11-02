@@ -371,10 +371,6 @@ html.dark .wirecat-editorial .board {
   display: grid;
   gap: 16px;
 }
-.wirecat-editorial .board .board-detail-head {
-  display: grid;
-  gap: 10px;
-}
 .wirecat-editorial .board .board-detail-title {
   display: flex;
   align-items: start;
@@ -735,6 +731,17 @@ html.dark .wirecat-editorial .board {
 
 /* Main column: the ask box, the bar, the list, the open idea */
 .wirecat-editorial .board .board-ask {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+.wirecat-editorial .board .board-ask-box {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 0 14px;
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   background: var(--paper);
@@ -743,15 +750,18 @@ html.dark .wirecat-editorial .board {
     border-color 160ms ease-out,
     box-shadow 160ms ease-out;
 }
-.wirecat-editorial .board .board-ask:focus-within {
+.wirecat-editorial .board .board-ask-box:focus-within {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--ring);
 }
-.wirecat-editorial .board .board-ask-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 6px 6px 14px;
+.wirecat-editorial .board .board-new {
+  flex: none;
+  gap: 6px;
+  min-height: 46px;
+}
+.wirecat-editorial .board .board-new > svg {
+  width: 16px;
+  height: 16px;
 }
 .wirecat-editorial .board .board-ask-box > svg {
   width: 18px;
@@ -773,12 +783,6 @@ html.dark .wirecat-editorial .board {
 }
 .wirecat-editorial .board .board-ask-box input::-webkit-search-cancel-button {
   display: none;
-}
-.wirecat-editorial .board .board-ask[data-composing] .board-ask-box {
-  border-bottom: 1px solid var(--hair);
-}
-.wirecat-editorial .board .board-ask[data-composing] .board-ask-box input {
-  font-weight: 600;
 }
 .wirecat-editorial .board .board-ask-close {
   display: grid;
@@ -803,8 +807,6 @@ html.dark .wirecat-editorial .board {
 .wirecat-editorial .board .board-compose {
   display: grid;
   gap: 16px;
-  padding: 16px 18px 18px;
-  animation: board-reveal 260ms var(--ease);
 }
 .wirecat-editorial .board .board-signin-row {
   position: relative;
@@ -905,7 +907,6 @@ html.dark .wirecat-editorial .board {
 }
 .wirecat-editorial .board {
   --row-inset: clamp(12px, 1.6vw, 20px);
-  --open-ms: 280ms;
 }
 .wirecat-editorial .board .board-results {
   overflow-anchor: none;
@@ -920,12 +921,6 @@ html.dark .wirecat-editorial .board {
   border: 1px solid transparent;
   border-bottom-color: var(--hair);
   border-radius: var(--r-3);
-  transition:
-    margin var(--open-ms) var(--ease),
-    padding var(--open-ms) var(--ease),
-    background-color var(--open-ms) ease-out,
-    border-color var(--open-ms) ease-out,
-    box-shadow var(--open-ms) ease-out;
 }
 .wirecat-editorial .board .board-row-text {
   display: grid;
@@ -946,6 +941,22 @@ html.dark .wirecat-editorial .board {
   text-decoration: underline;
   text-decoration-color: var(--line);
 }
+.wirecat-editorial .board .board-row-arrow {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  color: var(--muted);
+  vertical-align: -2px;
+  transition:
+    transform 160ms var(--ease),
+    color 160ms ease-out;
+}
+.wirecat-editorial .board .board-row-title:hover .board-row-arrow,
+.wirecat-editorial .board .board-row-title:focus-visible .board-row-arrow {
+  color: var(--primary);
+  transform: translateX(3px);
+}
 .wirecat-editorial .board .board-snippet {
   display: -webkit-box;
   overflow: hidden;
@@ -959,70 +970,93 @@ html.dark .wirecat-editorial .board {
   margin-top: 4px;
 }
 
-/* The open idea: the row becomes its own panel, comments inside. One measured height change (Collapse) carries it,
-   the panel's fill and line fade in alongside, the content fades and rises once the height is moving. */
-.wirecat-editorial .board .board-row[data-open] {
-  margin-block: 8px;
-  padding-block: 20px 22px;
-  border-color: var(--line);
-  background: var(--paper);
-  box-shadow: 0 10px 28px -18px color-mix(in srgb, var(--ink) 30%, transparent);
-}
-.wirecat-editorial .board .board-row-alone {
-  display: block;
-  margin-top: 8px;
-}
-.wirecat-editorial .board .board-row[data-open] h2 {
-  padding-right: 32px;
-}
-.wirecat-editorial .board .board-collapse {
+/* One idea or the new-idea form, in a native modal dialog. The page behind keeps its place: its scroll is locked
+   with the scrollbar's room kept, so nothing shifts sideways either. */
+:root:has(.board-modal[open]) {
   overflow: hidden;
-  transition: height var(--open-ms) var(--ease);
+  scrollbar-gutter: stable;
 }
-.wirecat-editorial .board .board-collapse-inner {
-  transition: opacity 140ms ease-out;
+.wirecat-editorial .board .board-modal {
+  width: min(720px, calc(100vw - 32px));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  overflow: visible;
 }
-.wirecat-editorial .board .board-collapse[data-state="open"] > .board-collapse-inner {
-  animation: board-rise 240ms var(--ease) 60ms both;
+.wirecat-editorial .board .board-modal::backdrop {
+  background: color-mix(in srgb, var(--ink) 40%, transparent);
 }
-.wirecat-editorial .board .board-collapse[data-state="closed"] > .board-collapse-inner {
-  opacity: 0;
+.wirecat-editorial .board .board-modal[open] {
+  animation: board-rise 180ms var(--ease);
 }
-.wirecat-editorial .board .board-row .board-detail {
-  padding-top: 10px;
+.wirecat-editorial .board .board-modal[open]::backdrop {
+  animation: board-fade 180ms ease-out;
+}
+@keyframes board-fade {
+  from {
+    opacity: 0;
+  }
+}
+.wirecat-editorial .board .board-modal-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 64px);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  background: var(--paper);
+  box-shadow: 0 24px 60px -24px color-mix(in srgb, var(--ink) 45%, transparent);
+}
+.wirecat-editorial .board .board-modal-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 28px 32px 32px;
+}
+.wirecat-editorial .board .board-modal-title {
+  padding-right: 40px;
+  font-size: 22px;
+  font-weight: 700;
+}
+.wirecat-editorial .board .board-modal-close {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-2);
+  background: var(--paper);
+  color: var(--muted);
+  cursor: pointer;
+}
+.wirecat-editorial .board .board-modal-close:hover {
+  background: var(--soft);
+  color: var(--ink);
+}
+.wirecat-editorial .board .board-modal-close > svg {
+  width: 18px;
+  height: 18px;
+}
+.wirecat-editorial .board .board-modal .board-detail-title {
+  justify-content: start;
+  padding-right: 40px;
+}
+.wirecat-editorial .board .board-modal .board-answer {
+  background: color-mix(in srgb, var(--soft) 60%, var(--paper));
 }
 @keyframes board-rise {
   from {
     opacity: 0;
     transform: translateY(6px);
   }
-}
-.wirecat-editorial .board .board-detail-close {
-  animation: board-rise 200ms var(--ease) 80ms both;
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--r-2);
-  background: none;
-  color: var(--muted);
-  cursor: pointer;
-}
-.wirecat-editorial .board .board-detail-close:hover {
-  background: var(--soft);
-  color: var(--ink);
-}
-.wirecat-editorial .board .board-detail-close > svg {
-  width: 16px;
-  height: 16px;
-}
-.wirecat-editorial .board .board-row[data-open] .board-answer {
-  background: color-mix(in srgb, var(--soft) 60%, var(--paper));
 }
 .wirecat-editorial .board .board-hidden {
   display: inline-flex;
@@ -1046,14 +1080,63 @@ html.dark .wirecat-editorial .board {
 .wirecat-editorial .board .board-comment-head .board-team {
   font-size: 12px;
 }
-.wirecat-editorial .board .board-more {
+.wirecat-editorial .board .board-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding-top: 24px;
+}
+.wirecat-editorial .board .board-pager button {
   display: grid;
-  justify-items: center;
-  gap: 8px;
-  padding-top: 20px;
+  place-items: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--r-2);
+  background: none;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.wirecat-editorial .board .board-pager button:hover:not(:disabled) {
+  background: var(--soft);
+  color: var(--ink);
+}
+.wirecat-editorial .board .board-pager button[aria-current="page"] {
+  border-color: var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+.wirecat-editorial .board .board-pager button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.wirecat-editorial .board .board-pager button > svg {
+  width: 16px;
+  height: 16px;
+}
+.wirecat-editorial .board .board-pager-gap {
+  min-width: 20px;
+  color: var(--muted);
+  text-align: center;
 }
 .wirecat-editorial .board .ideas-masthead {
   margin-bottom: 20px;
+}
+/* Title and account button share the first row at every width; the intro runs full width below. */
+.wirecat-editorial .board .board-masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 16px;
+}
+.wirecat-editorial .board .board-masthead > .blog-standfirst {
+  grid-column: 1 / -1;
 }
 
 /* Sidebar: the blog's widgets */
@@ -1185,8 +1268,22 @@ html.dark .wirecat-editorial .board {
     grid-template-columns: 40px minmax(0, 1fr);
     gap: 12px;
   }
-  .wirecat-editorial .board .board-ask-box .board-button {
+  .wirecat-editorial .board .board-new {
     padding: 0 12px;
+  }
+  .wirecat-editorial .board .board-modal {
+    width: 100%;
+    margin: auto 0 0;
+  }
+  .wirecat-editorial .board .board-modal-panel {
+    max-height: calc(100dvh - 24px);
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: var(--r-3) var(--r-3) 0 0;
+  }
+  .wirecat-editorial .board .board-modal-body {
+    padding: 24px 16px 28px;
   }
   /* nowrap: a wrapping column is as wide as its widest line, so the filters pushed the page sideways. */
   .wirecat-editorial .board .board-bar {
@@ -1202,9 +1299,6 @@ html.dark .wirecat-editorial .board {
     padding: 0 clamp(16px, 2.7vw, 48px) 10px;
     overflow-x: auto;
     scrollbar-width: none;
-  }
-  .wirecat-editorial .board .board-compose {
-    padding: 14px;
   }
   .wirecat-editorial .board {
     --row-inset: clamp(16px, 2.7vw, 48px);

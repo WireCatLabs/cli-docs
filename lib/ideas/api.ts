@@ -142,11 +142,11 @@ export function apiSource(base: string, fetcher: typeof fetch = (...args) => fet
   })
 
   return {
-    async list({ tool, status, tag, q, sort, page = 1, perPage: size = perPage }: IdeaQuery) {
+    async list({ tool, status, tag, q, sort, page = 1, perPage: size = perPage, voted }: IdeaQuery) {
       const search = q?.trim().slice(0, 120)
       const result = await call<{ ideas: ApiIdea[]; meta: { page: number; per_page: number; total: number } }>(
         "GET",
-        `/v1/ideas?${query({ tool, status, tag, q: search && search.length >= 3 ? search : undefined, sort, page, per_page: size })}`,
+        `/v1/ideas?${query({ tool, status, tag, q: search && search.length >= 3 ? search : undefined, sort, page, per_page: size, voted: voted ? "true" : undefined })}`,
       )
       return {
         ideas: result.ideas.map(fromApi),

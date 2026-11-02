@@ -49,6 +49,12 @@ const rejection = async (promise: Promise<unknown>) => {
 }
 
 describe("ideas API client", () => {
+  it("asks only for the member's votes on the account page", async () => {
+    const { source, fetcher } = client(json(200, { ideas: [], meta: { page: 1, per_page: 8, total: 0 } }))
+    await source.list({ sort: "new", voted: true, perPage: 8 })
+    expect(request(fetcher).url).toBe(`${base}/v1/ideas?sort=new&page=1&per_page=8&voted=true`)
+  })
+
   it("lists a page with filters and sends the session cookie", async () => {
     const { source, fetcher } = client(json(200, { ideas: [apiIdea], meta: { page: 2, per_page: 20, total: 41 } }))
     const page = await source.list({ tool: "other", status: "not_planned", sort: "new", page: 2 })

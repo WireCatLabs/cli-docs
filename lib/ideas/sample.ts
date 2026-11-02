@@ -100,7 +100,7 @@ function setVote(id: string, voted: boolean) {
 
 /** Preview only: the screens with seeded ideas and no API, switched by the preview bar or `?preview=`. */
 export const sampleSource: IdeasSource = {
-  list: ({ tool, status, tag, q, sort, page = 1, perPage: size = perPage }: IdeaQuery) =>
+  list: ({ tool, status, tag, q, sort, page = 1, perPage: size = perPage, voted }: IdeaQuery) =>
     answer(() => {
       const found = all()
         .filter(
@@ -108,6 +108,7 @@ export const sampleSource: IdeasSource = {
             (!tool || idea.tool === tool) &&
             (!status || idea.status === status) &&
             (!tag || idea.tags.some((item) => item.slug === tag)) &&
+            (!voted || idea.voted) &&
             matches(idea, q),
         )
         .sort((a, b) => {

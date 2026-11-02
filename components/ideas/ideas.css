@@ -869,40 +869,189 @@ html.dark .wirecat-editorial .wirecat-ideas {
   justify-items: start;
   gap: 8px;
 }
+/* The account button beside the page title. Its room is kept while the session loads. */
 .wirecat-editorial .wirecat-ideas .ideas-member-bar {
-  display: flex;
-  align-items: start;
-  gap: 8px;
-  margin: 0 0 20px;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
+  position: relative;
+  flex: none;
+  min-width: 44px;
+  min-height: 42px;
 }
-.wirecat-editorial .wirecat-ideas .ideas-member-bar[data-just] {
-  padding: 10px 14px;
-  border: 1px solid var(--green-line);
-  border-radius: 12px;
-  background: var(--green);
+.wirecat-editorial .wirecat-ideas .ideas-member-chip {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px 5px 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3, 8px);
+  background: var(--paper);
   color: var(--ink);
+  text-decoration: none;
+  transition:
+    border-color 160ms ease-out,
+    box-shadow 160ms ease-out;
 }
-.wirecat-editorial .wirecat-ideas .ideas-member-bar > svg {
+.wirecat-editorial .wirecat-ideas .ideas-member-chip:hover {
+  border-color: color-mix(in srgb, var(--ink) 30%, var(--line));
+  box-shadow: 0 4px 14px -8px color-mix(in srgb, var(--ink) 35%, transparent);
+}
+.wirecat-editorial .wirecat-ideas .ideas-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--button);
+  color: var(--button-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-who {
+  display: grid;
+  line-height: 1.2;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-email {
+  color: var(--muted);
+  font-size: 12px;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-arrow {
   width: 16px;
   height: 16px;
-  margin-top: 3px;
-  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform 160ms ease-out;
 }
-.wirecat-editorial .wirecat-ideas .ideas-member-actions {
-  display: inline-flex;
+.wirecat-editorial .wirecat-ideas .ideas-member-chip:hover .ideas-member-arrow {
+  transform: translateX(2px);
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-just {
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+  top: calc(100% + 8px);
+  right: 0;
+  width: max-content;
+  max-width: min(22rem, 80vw);
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--green-line);
+  border-radius: var(--r-2, 6px);
+  background: var(--green);
+  color: var(--ink);
+  font-size: 13px;
+  animation: ideas-just 6s ease-out forwards;
+}
+@keyframes ideas-just {
+  0%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+.wirecat-editorial .wirecat-ideas .ideas-avatar-empty {
+  background: var(--soft, color-mix(in srgb, var(--ink) 8%, transparent));
+  color: var(--muted);
+}
+.wirecat-editorial .wirecat-ideas .ideas-avatar-empty > svg {
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 40rem) {
+  .wirecat-editorial .wirecat-ideas .ideas-member-who,
+  .wirecat-editorial .wirecat-ideas .ideas-member-chip > .ideas-member-label,
+  .wirecat-editorial .wirecat-ideas .ideas-member-arrow {
+    display: none;
+  }
+  .wirecat-editorial .wirecat-ideas .ideas-member-chip {
+    padding: 5px;
+  }
+}
+
+/* The account page */
+.wirecat-editorial .wirecat-ideas .ideas-account {
+  display: grid;
+  gap: 24px;
+  max-width: 40rem;
+}
+.wirecat-editorial .wirecat-ideas .ideas-account > h1 {
+  margin: 0;
+}
+.wirecat-editorial .wirecat-ideas .ideas-identity {
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 8px;
+  gap: 12px 14px;
 }
-.wirecat-editorial .wirecat-ideas .ideas-member-bar .ideas-text-button {
-  min-height: 24px;
-  color: var(--ink);
+.wirecat-editorial .wirecat-ideas .ideas-identity .ideas-avatar {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+}
+.wirecat-editorial .wirecat-ideas .ideas-identity > div {
+  flex: 1;
+  min-width: 12rem;
+}
+.wirecat-editorial .wirecat-ideas .ideas-identity p {
+  margin: 0;
+}
+.wirecat-editorial .wirecat-ideas .ideas-identity-name {
   font-weight: 600;
 }
-.wirecat-editorial .wirecat-ideas .ideas-member-bar a {
+.wirecat-editorial .wirecat-ideas .ideas-identity-email {
+  color: var(--muted);
+  font-size: 14px;
+}
+.wirecat-editorial .wirecat-ideas .ideas-account-votes h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+.wirecat-editorial .wirecat-ideas .ideas-quiet {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.wirecat-editorial .wirecat-ideas .ideas-voted {
+  display: grid;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+.wirecat-editorial .wirecat-ideas .ideas-voted li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hair, var(--line));
+}
+.wirecat-editorial .wirecat-ideas .ideas-voted a {
+  flex: 1;
+  min-width: 0;
   color: var(--ink);
   font-weight: 600;
+  text-decoration: none;
+}
+.wirecat-editorial .wirecat-ideas .ideas-voted a:hover {
+  text-decoration: underline;
+}
+.wirecat-editorial .wirecat-ideas .ideas-voted-count {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  min-width: 44px;
+  color: var(--button);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.wirecat-editorial .wirecat-ideas .ideas-voted-count > svg {
+  width: 14px;
+  height: 14px;
 }
