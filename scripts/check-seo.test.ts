@@ -170,6 +170,13 @@ describe("production SEO guard", () => {
     write("ru/newsletter/confirm.html", '<html lang="ru"></html>')
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(["/ru/newsletter/confirm: must be noindex"])
   })
+  it("lets the ideas pages stay out of the sitemap while they are noindex", () => {
+    write("en/ideas.html", '<html lang="en"><meta name="robots" content="noindex"></html>')
+    write("en/ideas/idea.html", '<html lang="en"><meta name="robots" content="noindex, nofollow"></html>')
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([])
+    write("ru/ideas/new.html", '<html lang="ru"></html>')
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(["/ru/ideas/new: must be noindex"])
+  })
   it("rejects accidentally noindexed public pages and stale Twitter images", () => {
     const file = join(out, "index.html")
     writeFileSync(
