@@ -35,7 +35,7 @@ guarde nada. Los tokens de acceso y de renovación se guardan como la contraseñ
 `oauth:microsoft:<profile>` (o en el archivo privado cuando no funciona ningún llavero), y nunca se imprimen, registran ni
 pasan por la línea de comandos. La renovación ocurre bajo un bloqueo que comparten todos los procesos `mail`. `session end`
 quita la entrada; Microsoft no ofrece a una aplicación de escritorio forma de revocarla, así que quita la aplicación en
-<https://account.live.com/consent/Manage> o <https://myapps.microsoft.com>.
+<https://www.microsoft.com/consent> o <https://myapps.microsoft.com>.
 Cada ejecución de cambios guarda, en la carpeta de estado de `mail` y legible solo por ti, la carpeta, el UID, las
 marcas, las etiquetas de Gmail y el Message-ID de cada mensaje que cambió, para que `messages restore` pueda deshacerla;
 nunca un asunto ni un cuerpo.

@@ -5,7 +5,8 @@ title: "Mail"
 `mail` es una herramienta de línea de comandos de WireCat que lee un buzón por IMAP hacia el almacén común, para la terminal, para scripts y para agentes de IA. Inicia sesión con una contraseña de aplicación guardada en el llavero del sistema operativo. Ordena el buzón en el servidor, guarda borradores, y envía, responde y reenvía por SMTP con la misma contraseña de aplicación.
 
 Comandos: `session` (start: crea el perfil, comprueba y guarda la contraseña de aplicación; status; end; list),
-`account check`, `folders list`, `sync` y `status` (cuánto lleva una sincronización), `search messages`, `messages show` y
+`account check`, `folders list`, `sync` y `status` (cuánto lleva una sincronización), `review` (qué hay de nuevo, qué debes y qué esperas),
+`search messages`, `messages show` y
 `conversations list|show` (leen lo que guardó sync), `messages mark-read|move|copy|delete|restore|send|forward`,
 `folders create|rename|delete`, `drafts`, `attachments`, `rules` y `tags`, además de los comandos que comparten
 todas las CLI de WireCat: `doctor`, `commands`, `config`, `skill`, `mcp`, `runs` y `upgrade`.

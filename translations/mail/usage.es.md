@@ -100,6 +100,39 @@ Para ChatGPT y Claude en el navegador,
 servidor en segundo plano, `mcp server status` muestra su puerto, el código de inicio de sesión y las aplicaciones conectadas,
 y `mcp server stop` lo termina.
 
+## Revisión: qué hay de nuevo, qué debes y qué esperas
+
+`review` lee el correo que guardó sync y no pregunta nada al servidor. Usa las palabras de tg:
+
+```sh
+mail ya review "date>2h"            # every email, yours too, in threads that changed in the last 2 hours
+mail ya review --new                # what changed since the last `review --new`; 3 days back the first time
+mail ya review --unanswered 1d      # threads whose newest email came to you (To or Cc) and has no answer for a day
+mail ya review --waiting 7d         # threads where you wrote last and nobody answered for a week
+mail ya review "bulk:false"         # leave out threads of mail sent to many, lists and envelopes
+```
+
+Se muestran todos los correos, también los enviados a muchos; el `email` de cada elemento indica `bulk`, `list_id` y
+`rule_id` junto a la puntuación del remitente, para que tú o un agente podáis ordenarlos. El correo más reciente que la
+última sincronización terminada espera a la siguiente revisión. `--new` guarda un punto por buzón y lector: el tuyo, el
+de un agente por MCP y uno por cada ejecución programada, así que una programación nunca mueve el tuyo. Sin fecha,
+`--unanswered` y `--waiting` miran los hilos activos en los últimos 30 días.
+`memo tasks agenda --source email:<address>` lista los mismos hilos que debes o que esperan respuesta.
+
+Un agente o una cadena de proceso que trata tu correo guarda su propia marca de hasta dónde llegó, en el almacén
+compartido y por el orden en que se guardó el correo, así que el correo guardado tarde, con una fecha antigua, no se
+salta:
+
+```sh
+mail ya review --holder mail-triage --json        # what is stored past its mark; the answer gives a cursor
+mail ya messages acknowledge --holder mail-triage --cursor <cursor>   # once processed: move the mark there
+mail ya status                                    # how far each holder got, what it held and skipped
+```
+
+La marca solo avanza. El correo enviado a muchos, los sobres y los borradores se saltan y se cuentan; un correo que aún
+se está leyendo entero (parcial) se retiene hasta que lo esté, como máximo 7 días. Un titular nuevo empieza por el correo
+guardado ahora.
+
 ## Buscar en tu correo
 
 `mail` busca y lee el correo que sincronizó su perfil, en el almacén local, y pregunta al servidor de correo por lo que

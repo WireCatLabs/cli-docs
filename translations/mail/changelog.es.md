@@ -4,6 +4,28 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.13.0 — 02.11.2026
+
+### Añadido
+
+- **`review`: qué hay de nuevo, qué debes y qué espera respuesta**, con las palabras de tg: `review "date>2h"`, `--new`
+  (un punto por buzón y lector), `--unanswered [duration]` (el último correo te llegó en To o Cc, sin respuesta),
+  `--waiting [duration]` (escribiste tú al final) y `bulk:false` para dejar fuera el correo enviado a muchos. Cada
+  correo lleva `bulk`, `list_id` y `rule_id`. Solo lee el almacén; por MCP es la herramienta de lectura `review`. De
+  cli-core.
+- **Una marca de proceso por agente**: `review --holder <name>` lee lo guardado después de la marca de ese titular, por
+  el orden del almacén, así que el correo sincronizado tarde no se salta;
+  `messages acknowledge --holder <name> --cursor <cursor>` la mueve hacia delante. El correo enviado a muchos, los sobres y los borradores se saltan y se
+  cuentan, el correo parcial se retiene. `status` lista cada titular: hasta dónde llegó, cuánto retuvo, leyó y saltó
+  por cada motivo. De cli-core 0.556.0.
+- **`config repair`** arregla un archivo de ajustes cuyo JSON solo tiene roto la sintaxis, con una copia de seguridad;
+  `--dry-run` muestra lo que haría. De cli-core.
+
+### Corregido
+
+- **La página de inicio de sesión en el navegador de `mail mcp serve --http` dice que la aplicación pide acceso a tu
+  correo** y nombra `mail mcp serve --http`. Antes decía «tus mensajes» y `mail mcp --http`. De cli-core 0.551.0.
+
 ## 0.12.0 — 02.11.2026
 
 ### Añadido

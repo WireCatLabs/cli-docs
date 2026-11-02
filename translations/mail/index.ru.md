@@ -7,7 +7,8 @@ title: "Mail"
 порядок в ящике на сервере, хранит черновики, отправляет письма, отвечает и пересылает по SMTP с тем же паролем приложения.
 
 Команды: `session` (start: создать профиль, проверить и сохранить пароль приложения; status; end; list),
-`account check`, `folders list`, `sync` и `status` (как далеко ушла синхронизация), `search messages`, `messages show` и
+`account check`, `folders list`, `sync` и `status` (как далеко ушла синхронизация), `review` (что нового, кому вы должны ответить и чего ждёте),
+`search messages`, `messages show` и
 `conversations list|show` (читают то, что сохранил sync), `messages mark-read|move|copy|delete|restore|send|forward`,
 `folders create|rename|delete`, `drafts`, `attachments`, `rules` и `tags`, а также команды, общие для всех
 CLI WireCat: `doctor`, `commands`, `config`, `skill`, `mcp`, `runs` и `upgrade`.
