@@ -4,6 +4,128 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.10.0 — 02.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **`search messages` responde `search.server-partial`, no `search.server-too-large`.** Descarga los primeros 256 KiB de
+  cada mensaje que encuentra el servidor y guarda uno más grande con su texto y sin sus adjuntos; el siguiente `sync` lo
+  lee entero. Antes, un candidato de más de 5 MB se quedaba en el servidor y uno menor se descargaba con todos sus
+  adjuntos. Un script que comparaba con `search.server-too-large` ahora recibe `search.server-partial`.
+- **Tras `messages send`, `stored` es verdadero solo si este mensaje está en el almacén**, no si lo está cualquier otro
+  correo de los últimos 10 minutos. Quien leía `stored: true` como "se sincronizó algún correo" ahora lo lee como "este
+  mensaje está guardado".
+- **`mail.search-refused` es ahora el motivo de cli-core** (cli-core 0.550.0); el motivo, su código y su mensaje son los
+  mismos.
+
+### Añadido
+
+- **`--compact` responde una línea por elemento** (cli-base 0.74.0). mail ahora necesita `@wirecat/cli-core` 0.550.0 y
+  `@wirecat/cli-base` 0.74.0.
+- **`sync` informa de qué pasó con los correos que una búsqueda guardó primero como texto**: `partial_emails` con
+  `completed` (leídos enteros en esta ejecución), `left` (esperan a una ejecución posterior) y `stuck` (se desistió de
+  ellos: el servidor ya no los da donde se guardaron). Falta cuando no hay ninguno.
+
+### Corregido
+
+- **Un inicio de sesión de Microsoft cuyo nuevo token rechaza el servidor de correo explica cómo activar IMAP.** En
+  Outlook.com IMAP está desactivado por defecto; el error ahora nombra el interruptor (Configuración, "Correo",
+  "Reenvío e IMAP", "Permitir que dispositivos y aplicaciones usen IMAP") y ya no afirma que se intentó una renovación. La
+  respuesta lleva el código de respuesta del servidor como `cause_code`, nunca su texto.
+- **Un servidor que rechaza SEARCH ya no parece una carpeta vacía.** `sync` deja esa carpeta sin leer y lee el resto: la
+  respuesta es parcial, la nombra en `refused_folders` con una incidencia `mail.search-refused`, y nada de ella se marca
+  como eliminado. `messages move`, `copy`, `delete`, `restore` y `drafts` se detienen con `mail.search-refused` en lugar
+  de actuar sobre nada (cli-core).
+- **En Gmail, un correo que una búsqueda guardó primero como texto lo lee entero el siguiente `sync`.** Allí nunca se
+  completaba: mail calculaba su id a partir del Message-ID, y el correo de Gmail se guarda bajo su X-GM-MSGID, así que
+  cada sync descargaba de nuevo el mensaje entero y lo descartaba. Ahora `fetchRaw` lee los ids de Gmail junto a los
+  bytes.
+- **Un correo que una búsqueda guardó primero como texto ya no se descarga entero en cada sync cuando el servidor ya no
+  lo da.** Se lee bajo el UIDVALIDITY con el que se guardó, y se desiste de él tras tres intentos fallidos, o de inmediato
+  cuando su lugar lo ocupa otro mensaje; ya no retrasa a los más nuevos (cli-core).
+- **Una búsqueda ya no guarda una copia "primero texto" sobre un correo que un sync de otro proceso guardó entero entre
+  tanto**, lo que perdía sus adjuntos (cli-core).
+- **El lector de tu propio `--client-file` de Google y el abridor del navegador vienen de `@wirecat/cli-core` 0.546.0**,
+  no de copias en mail. Los formatos de archivo, la comprobación de `chmod 600` y los errores no cambian.
+
+## 0.9.0 — 02.11.2026
+
+### Añadido
+
+- **El inicio de sesión de Microsoft funciona sin configuración**: la aplicación de WireCat para Microsoft está integrada.
+  El inicio de sesión envía `http://localhost:<port>/callback`, la dirección registrada para ello
+  (docs/oauth-microsoft.md). Google mantiene `127.0.0.1`.
+
+## 0.8.0 — 02.11.2026
+
+### Añadido
+
+- **La `meta` de cada respuesta incluye `now` y `now_local`**, el momento en que se hizo (cli-core 0.541.0, cli-base
+  0.72.0).
+
+### Corregido
+
+- **`search messages` espera 20 segundos a un servidor de Yandex por defecto, no 5**: un IMAP SEARCH de un INBOX grande de
+  Yandex tarda de 5 a 7 segundos, así que el valor anterior siempre se agotaba. `--server-time` sigue fijándolo; el
+  registro de proveedores guarda el valor.
+- **Un sync programado ya no falla a los 30 segundos mientras sigue en ejecución.** `schedule exec` esperaba al sync con
+  el plazo de 30 s de un comando de una sola vez, respondía `timeout` (código de salida 9) y dejaba al sync escribiendo
+  hasta 15 minutos. Ahora espera lo que permite el plazo propio del sync, y detener la ejecución también detiene el sync
+  (cli-core).
+- **Un sync de Gmail usa unos 200 MB, no de 1 a 1,7 GB.** Cada ronda preguntaba al almacén por todos los correos guardados
+  de la cuenta; en un buzón de 260 000 correos, un sync de 30 días ahora tarda segundos en lugar de minutos (cli-core).
+- **`search messages --backend` se mantiene dentro de su límite de tiempo**: leer lo encontrado y sus adjuntos cuenta para
+  `--server-time`, el límite termina antes del plazo del comando, no se escribe nada después de detener el comando, y un
+  hallazgo de más de 5 MB se deja en el servidor (`search.server-too-large`) (cli-core).
+
+## 0.7.0 — 01.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **`drafts delete` toma `--allow-dangerous`, no `--yes`**, porque un borrador eliminado así no vuelve (WC-PERM-9). Solo
+  lo pasa el propietario; un agente por MCP recibe una vista previa.
+
+### Añadido
+
+- **`messages export --output` rechaza las carpetas de credenciales** y las carpetas de las aplicaciones de WireCat, como
+  hace `attachments download`.
+- **Outlook.com y Microsoft 365 inician sesión con OAuth.** `mail <profile> session start --address <you>@outlook.com`
+  muestra lo que va a pedir, abre la página de Microsoft en el navegador, inicia sesión en IMAP con el nuevo token y solo
+  entonces guarda el perfil y los tokens (entrada del llavero `oauth:microsoft:<profile>`). Sync y `messages send` usan
+  el token por IMAP y SMTP (XOAUTH2), renovándolo cuando hace falta; un token que el servidor rechaza se renueva una vez,
+  y después el error `mail.oauth-refused` pide un nuevo inicio de sesión. `session status` muestra la aplicación, los
+  permisos y la caducidad, nunca un token; `session end` olvida el inicio de sesión e indica dónde Microsoft lista la
+  aplicación. `--no-browser` solo imprime el enlace.
+- **`microsoft_client_id`**: la aplicación de Microsoft con la que iniciar sesión, que fijas una vez
+  (`config set --defaults`); un agente por MCP no puede cambiarla. La aplicación propia de WireCat aún no está
+  registrada, así que por ahora es obligatorio; [register a Microsoft app](./oauth-microsoft.md) da los pasos.
+- **Gmail con OAuth y tu propia aplicación de Google**: `session start --client-file <Desktop client JSON>`
+  (o, en un perfil cambiado con `config set auth oauth`, `MAIL_GOOGLE_CLIENT_ID` y `MAIL_GOOGLE_CLIENT_SECRET`), para una
+  cuenta que no puede crear una contraseña de aplicación. La dirección con la que se inicia sesión debe coincidir con la
+  del perfil. Los perfiles de Gmail mantienen las contraseñas de aplicación mientras no se cambien.
+  [Gmail with your own Google app](./oauth-google.md) da los pasos: un proyecto de Google solo para el correo, publicado
+  sin verificación. `session end --revoke` pide a Google que lo revoque, lo que termina todos los inicios de sesión de ese
+  proyecto.
+- **`mail doctor` lista cada perfil OAuth** con su aplicación y su último inicio de sesión, solo desde el disco, y avisa
+  desde el día 6 de que una aplicación de Google que sigue en Testing termina sus inicios de sesión el día 7.
+- `session status` y `session list` también responden `auth`.
+
+### Corregido
+
+- **Un agente por MCP puede adjuntar varios archivos**: `--file` de `messages send` y `messages forward` es allí una
+  lista.
+- **Enviar un mensaje ya no acorta la cobertura del archivo** a los últimos 10 minutos, que memo informaba hasta el
+  siguiente sync completo.
+- **`attachments list` y `download` muestran todos los adjuntos**, no los primeros 50, y `drafts update` los conserva
+  todos.
+- **Los adjuntos se guardan mediante la escritura atómica de cli-core**, que además sincroniza con el disco el archivo y
+  la carpeta.
+- El comando `memo mail delete` se nombra como se llama ahora, en la documentación y en la ayuda de
+  `messages delete --rules`.
+- **Microsoft 365 es un proveedor propio**, que se detecta por su registro MX, y envía por `smtp.office365.com:587`
+  ([Microsoft](https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365));
+  Outlook.com mantiene `smtp-mail.outlook.com`.
+
 ## 0.6.0 — 01.11.2026
 
 ### Añadido

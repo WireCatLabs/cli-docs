@@ -68,7 +68,7 @@
     "repo": "WireCatLabs/mail-cli",
     "package": "@wirecat/mail-cli",
     "lang": "en",
-    "docsRef": "v0.6.0",
+    "docsRef": "v0.10.0",
     "summary": {
       "en": "Sync your mailbox over IMAP into the shared WireCat store, search it offline, and organise it on the server (flags, moves, Trash with undo, folders), keep drafts, and send mail over SMTP.",
       "ru": "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat, ищите по нему без интернета и наводите порядок на сервере: флаги, перемещение, корзина с отменой, папки, храните черновики и отправляйте письма по SMTP.",

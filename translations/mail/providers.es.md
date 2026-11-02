@@ -4,7 +4,7 @@ title: "Preparar el buzón"
 
 <!-- Generated from src/providers.ts by pnpm generate. Do not edit. -->
 
-Usa esta página antes de `mail <profile> session start`, que pide la contraseña de aplicación. Cada proveedor necesita IMAP activado y, la mayoría, una contraseña de aplicación:
+Usa esta página antes de `mail <profile> session start`, que pide la contraseña de aplicación o, para Outlook.com y Microsoft 365, abre en el navegador el inicio de sesión de Microsoft. Cada proveedor necesita IMAP activado y, la mayoría, una contraseña de aplicación:
 una contraseña creada solo para este programa. Al final tendrás una contraseña de aplicación lista para escribir en el aviso.
 
 `mail <profile> session start` imprime estos mismos pasos y repite la
@@ -83,16 +83,26 @@ Leído en: <https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwor
 
 Envío: `smtp.fastmail.com` puerto 465, TLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports>
 
+## Microsoft 365
+
+1. No hay nada que preparar en el buzón: `mail` abre en el navegador la página de inicio de sesión de Microsoft; inicia sesión con la cuenta de trabajo o de centro educativo y permite el acceso.
+
+- Tu organización puede dejar que solo un administrador permita una aplicación nueva. Si Microsoft dice que un administrador debe aprobarla, pídele que dé el consentimiento o que registre la aplicación propia de la organización y te dé su id.
+- Para enviar hace falta "Authenticated SMTP" activado en tu buzón; las organizaciones con valores de seguridad predeterminados, y las creadas después de enero de 2020, lo tienen desactivado hasta que un administrador lo activa. Leer funciona igualmente.
+- El servidor IMAP de Microsoft 365 no aparece en ninguna página oficial: outlook.office365.com es el que usa Outlook.com.
+
+Leído en: <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>, <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>, <https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission>, <https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent>
+
+Envío: `smtp.office365.com` puerto 587, STARTTLS, con el mismo inicio de sesión con OAuth. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>
+
 ## Outlook
 
 1. Outlook.com: abre Settings (la rueda dentada), "Mail", "Forwarding and IMAP", activa "Let devices and apps use IMAP" y guarda.
-2. La página de Microsoft lista solo OAuth2 (Modern Auth) para IMAP y no lista contraseñas de aplicación para él. El inicio de sesión con OAuth llegará en una fase posterior de `mail`, así que todavía no se puede guardar un perfil.
+2. Después `mail` abre en el navegador la página de inicio de sesión de Microsoft: inicia sesión y permite el acceso. Outlook.com solo acepta OAuth para IMAP y SMTP, nunca una contraseña de aplicación.
 
-- Las cuentas de trabajo y de centro educativo de Microsoft 365 no se leyeron en una página oficial: sus pasos no están verificados.
+Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>, <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>
 
-Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
-
-Envío: `smtp-mail.outlook.com` puerto 587, STARTTLS, cuando llegue el inicio de sesión con OAuth. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
+Envío: `smtp-mail.outlook.com` puerto 587, STARTTLS, con el mismo inicio de sesión con OAuth. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
 
 ## Cualquier otro proveedor
 

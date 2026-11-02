@@ -124,7 +124,12 @@ en bruto que mostrar.
 `search messages` también pregunta al servidor de correo, así que se encuentra además el correo que sync aún no ha leído:
 en Gmail con su propia búsqueda sobre All Mail, en otros servidores con IMAP SEARCH en INBOX, Sent y Archive (o las
 `folders` del perfil). Lo que encuentra el servidor se guarda y decide la misma consulta, así que cada resultado dice
-`found_in`: `archive`, `server` (nuevo del servidor) o `both`. `--backend archive` se queda en el almacén, `--backend server` responde solo lo que encontró el servidor, y `--server-time 20s` espera más que los 5 segundos por defecto. El
+`found_in`: `archive`, `server` (nuevo del servidor) o `both`. `--backend archive` se queda en el almacén, `--backend server` responde solo lo que encontró el servidor, y `--server-time 20s` espera más que el valor por defecto: 5 segundos, 20 en Yandex, cuya búsqueda en un INBOX grande
+tarda de 5 a 7 segundos. La espera siempre termina antes del plazo del propio comando, así que un servidor lento da una
+respuesta parcial, no un timeout. Una búsqueda descarga solo los primeros 256 KiB de cada mensaje que encuentra el servidor:
+uno mayor se guarda con su texto y sin sus adjuntos, y la respuesta lo dice (`search.server-partial`). El siguiente `sync` lo
+lee entero y dice cuántos en `partial_emails` (`completed`, `left`); uno que el servidor ya no entrega donde se guardó se
+descarta tras tres intentos y se cuenta en `stuck`, y sigue legible sin sus adjuntos. El
 servidor lee palabras, `from:`, `to:`, `cc:`, `subject:`, `body:`, `is:` y `date:`; el resto de la consulta se aplica a lo que
 devuelve. IMAP SEARCH encuentra partes de palabras y ninguna otra forma de una palabra, así que un servidor puede perder un
 resultado que el almacén, con todas las formas, encuentra tras sync. `permissions.messages.server-search=deny` en el perfil
@@ -179,7 +184,7 @@ mail ya folders create Receipts                                  # also folders 
 - **Deshacer.** Cada cambio responde con un id de `run`. Antes de preguntar al servidor, la ejecución registra el lugar,
   las marcas y las etiquetas de Gmail de cada mensaje; `messages restore --run <id>` devuelve lo que sigue donde la
   ejecución lo dejó: de la papelera a su carpeta, un movimiento deshecho, una copia eliminada, las marcas como estaban.
-  Las ejecuciones del antiguo `mail delete` de memo también se restauran aquí. El correo con texto vuelve a la búsqueda
+  Las ejecuciones del antiguo `memo mail delete` también se restauran aquí. El correo con texto vuelve a la búsqueda
   con el siguiente `sync`; un sobre, al instante.
 - **Gmail.** Todo el correo está en All Mail y una carpeta es una etiqueta: `move --folder Work` añade la etiqueta `Work`
   y quita `Inbox`, `copy` solo la añade, `--folder archive` solo quita `Inbox`, y `delete` mueve el correo de All Mail a
@@ -209,7 +214,7 @@ mail ya drafts create --reply-to '<ref>' --reply-all 'Thanks, agreed.'   # in th
 mail ya drafts create --to anna@example.com --subject Notes - < notes.txt # - reads the text from stdin
 mail ya drafts list                                                       # newest first, read from the server
 mail ya drafts update '<id>' 'New text'                                   # only what you give changes
-mail ya drafts delete '<id>' --yes                                        # gone for good; a preview without --yes
+mail ya drafts delete '<id>' --allow-dangerous                             # the owner's; gone for good, a preview without it
 ```
 
 - **El id** es el Message-ID del borrador, tal como lo muestra `drafts list`, con o sin `<>`. No cambia cuando cambia el
@@ -220,7 +225,7 @@ mail ya drafts delete '<id>' --yes                                        # gone
   dos borradores, nunca ninguno, y el texto antiguo aún se puede encontrar. El texto, `--to`, `--cc`, `--bcc` y
   `--subject` que des sustituyen a los anteriores; lo demás, el hilo y los adjuntos se quedan. Necesita una carpeta de
   papelera.
-- **Borrar** es para siempre: `drafts delete` y `drafts send` eliminan el borrador con UID EXPUNGE, que necesita UIDPLUS
+- **Borrar** es para siempre, así que `drafts delete` admite `--allow-dangerous`, que solo pasa el propietario: `drafts delete` y `drafts send` eliminan el borrador con UID EXPUNGE, que necesita UIDPLUS
   en el servidor.
 - **La carpeta** es la que el servidor marca `\Drafts`, o si no el nombre propio del proveedor (Gmail «[Gmail]/Drafts»,
   Yandex «Черновики»).

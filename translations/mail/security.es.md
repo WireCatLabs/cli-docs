@@ -22,11 +22,20 @@ definitivos, sin restauración: `drafts delete` y `drafts send` eliminan el borr
 Gmail elimina la copia (solo por el UID que dio el servidor, nunca un mensaje hallado de nuevo por su Message-ID), y
 `folders delete
 --allow-dangerous` borra una carpeta con su correo. Solo tú pasas `--allow-dangerous`, en una terminal:
-un agente por MCP nunca lo recibe, así que solo borra una carpeta vacía. `messages delete --rules` se niega a ejecutarse
+un agente por MCP nunca lo recibe, así que solo borra una carpeta vacía y solo muestra la vista previa de `drafts delete`. `messages delete --rules` se niega a ejecutarse
 desde una programación.
 
 Un agente que tiene `mcp.authority` puede cambiar ajustes, pero no los del servidor del buzón (`imap_host`, `smtp_host`
-y el resto), que deciden adónde va la contraseña de aplicación, ni `permissions.messages.send.others`.
+y el resto), que deciden adónde va la contraseña de aplicación o el token, ni `microsoft_client_id`, ni
+`permissions.messages.send.others`.
+
+Un perfil de Outlook.com o Microsoft 365 inicia sesión con OAuth: el navegador va a Microsoft, que devuelve la respuesta a
+`mail` solo en `127.0.0.1`, comprobada con PKCE y un `state` aleatorio. El token nuevo inicia sesión en IMAP antes de que se
+guarde nada. Los tokens de acceso y de renovación se guardan como la contraseña de aplicación, en la entrada del llavero
+`oauth:microsoft:<profile>` (o en el archivo privado cuando no funciona ningún llavero), y nunca se imprimen, registran ni
+pasan por la línea de comandos. La renovación ocurre bajo un bloqueo que comparten todos los procesos `mail`. `session end`
+quita la entrada; Microsoft no ofrece a una aplicación de escritorio forma de revocarla, así que quita la aplicación en
+<https://account.live.com/consent/Manage> o <https://myapps.microsoft.com>.
 Cada ejecución de cambios guarda, en la carpeta de estado de `mail` y legible solo por ti, la carpeta, el UID, las
 marcas, las etiquetas de Gmail y el Message-ID de cada mensaje que cambió, para que `messages restore` pueda deshacerla;
 nunca un asunto ni un cuerpo.
