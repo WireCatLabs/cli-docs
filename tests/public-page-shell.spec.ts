@@ -31,7 +31,10 @@ const shellLinks = (page: Page, html?: string) =>
     const links = (selector: string) =>
       [...root.querySelectorAll(selector)].map((node) => ({
         href: node.getAttribute("href"),
-        label: node.textContent?.replace(/\s+/g, " ").trim(),
+        // The download label names the visitor's system once scripts run; the parsed reference has no scripts.
+        label: node.querySelector(".connect-download-label")
+          ? "download"
+          : node.textContent?.replace(/\s+/g, " ").trim(),
       }))
     return {
       header: links(".public-site-menu > a"),
