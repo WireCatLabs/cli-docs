@@ -50,6 +50,8 @@ main() {
   say "API: gems, database, seed ideas (output in $logs/ideas-local-setup.log)"
   # Linked, not copied, so the database password lives in one file only.
   ln -sfn "$api_repo/.env" "$api_dir/.env"
+  # Credentials (Google, Resend) are encrypted in the repo; only the main checkout holds their key.
+  if [[ -f "$api_repo/config/master.key" ]]; then ln -sfn "$api_repo/config/master.key" "$api_dir/config/master.key"; fi
   (cd "$api_dir" && bundle install --quiet && bin/rails db:prepare && bin/rails ideas:seed) >"$logs/ideas-local-setup.log" 2>&1 ||
     { tail -20 "$logs/ideas-local-setup.log" >&2; exit 1; }
   # db:prepare dumps the schema with the local database's column order; keep the checkout clean for the next run.
