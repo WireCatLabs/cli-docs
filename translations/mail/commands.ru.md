@@ -31,6 +31,7 @@ title: "Команды mail"
 | `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
 | `--brief` | found items as reference, title, time, author and excerpt only. |
 | `--full` | found items with their whole text and every provider field. |
+| `--compact` | one line per item for an agent: reference first, text last, paging and next steps as # lines. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
 | `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
@@ -62,7 +63,7 @@ keep this profile's app password in the OS keyring
 
 ### `mail session start`
 
-sign this profile in. A new profile needs its mailbox: --address, or it is asked at a terminal; the server is found (built-in providers, the MX record, ISPDB, the domain's autoconfig; all providers: https://github.com/WireCatLabs/mail-cli/blob/main/docs/providers.md); for a domain the built-in table does not know, the domain, never the address, goes to the DNS resolver, autoconfig.thunderbird.net and autoconfig.<domain>, and --provider or --host skips those lookups; the steps to prepare the mailbox are shown, the app password is asked (hidden) or read from MAIL_PASSWORD, checked against the server, and only then the profile and the keyring entry are saved. An existing profile only asks for the password again. Without a terminal nothing is asked: a missing --address or password is a validation error
+sign this profile in. A new profile needs its mailbox: --address, or it is asked at a terminal; the server is found (built-in providers, the MX record, ISPDB, the domain's autoconfig; all providers: https://github.com/WireCatLabs/mail-cli/blob/main/docs/providers.md); for a domain the built-in table does not know, the domain, never the address, goes to the DNS resolver, autoconfig.thunderbird.net and autoconfig.<domain>, and --provider or --host skips those lookups; the steps to prepare the mailbox are shown, the app password is asked (hidden) or read from MAIL_PASSWORD, checked against the server, and only then the profile and the keyring entry are saved. Outlook.com and Microsoft 365 sign in with OAuth instead, and Gmail with your own Google app (--client-file): the browser opens the provider's page, and the token is checked against the server before it is kept. An existing profile only asks for the password, or signs in, again. Without a terminal nothing is asked: a missing --address or password is a validation error
 
 **Changes something on this computer only.**
 
@@ -73,21 +74,23 @@ mail session start [options]
 | Option | What it does |
 |---|---|
 | `--address <email>` | the full mail address of a new profile, also the login for most providers. |
-| `--provider <provider>` | skip discovery and use a built-in provider: Yandex, Gmail, iCloud, Mail.ru, Fastmail, Outlook. |
+| `--provider <provider>` | skip discovery and use a built-in provider: Yandex, Gmail, iCloud, Mail.ru, Fastmail, Microsoft 365, Outlook. |
 | `--host <host>` | skip discovery and use this IMAP host. |
 | `--port <port>` | IMAP port (default 993). |
 | `--security <mode>` | tls or starttls (default tls). |
 | `--login <login>` | the login name, when it is not the full address. |
-| `--folder <folder>` | sync only this folder; repeat it for more. |
+| `--folder <folder>` | sync only this folder; repeat it for more. Default: ``. |
+| `--no-browser` | OAuth: print the sign-in link instead of opening the browser. |
+| `--client-file <file>` | Gmail over OAuth: your own Google Desktop app client JSON (chmod 600). |
 | `--credential-storage <storage>` | where the password is kept: keyring (the default, which falls back to a private file by itself when no keyring works), or file, not recommended. Default: `keyring`. |
 
 **Returns:** sign in; a new profile is created first
 
-**Example:** `mail ya session start --address me@example.com`, `mail ya session start`, `mail me session start --address me@example.com --host imap.example.com --security tls`
+**Example:** `mail ya session start --address me@example.com`, `mail work session start --address me@outlook.com`, `mail gm session start --address me@gmail.com --client-file ~/client.json`
 
 ### `mail session status`
 
-show where this profile's app password comes from; the password is never printed
+show where this profile's app password comes from, or what its OAuth sign-in allows and until when; no password or token is ever printed
 
 ```sh
 mail session status [options]
@@ -95,23 +98,27 @@ mail session status [options]
 
 | Option | What it does |
 |---|---|
-| `--check` | log in to the server to prove the password still works. |
+| `--check` | log in to the server to prove the password or sign-in still works. |
 
-**Returns:** mail session status — profile, state, password_from, address, verified; every field: mail commands info session status
+**Returns:** mail session status — profile, state, auth, password_from, address, verified, oauth; every field: mail commands info session status
 
 **Example:** `mail ya session status`, `mail ya session status --check --json`
 
 ### `mail session end`
 
-forget this profile's app password on this computer; synced mail stays
+forget this profile's app password or OAuth sign-in on this computer; synced mail stays
 
 **Changes something on this computer only.**
 
 ```sh
-mail session end
+mail session end [options]
 ```
 
-**Returns:** forget this profile's app password on this computer; synced mail stays
+| Option | What it does |
+|---|---|
+| `--revoke` | Gmail over OAuth: also ask Google to revoke the sign-in, which ends every sign-in of that Google project. |
+
+**Returns:** forget this profile's password or sign-in; synced mail stays
 
 **Example:** `mail ya session end`
 
@@ -123,7 +130,7 @@ list the profiles on this computer, each with its address and where its app pass
 mail session list
 ```
 
-**Returns:** mail profile — profile, address, password_from; every field: mail commands info session list
+**Returns:** mail profile — profile, address, auth, password_from; every field: mail commands info session list
 
 **Example:** `mail session list`, `mail session list --json`
 
@@ -235,10 +242,10 @@ mail sync [options]
 | `--since-time <time>` | only mail received since this date or time; a date alone starts at local midnight, a time without a zone is local (default: 30 days). |
 | `--limit <n>` | save at most this many new emails in this run, newest first. |
 | `--max-pages <pages>` | at most this many requests to the mail server in this run; as many as fit the deadline if not given. |
-| `--folder <folder>` | a folder to read; repeat it for more (default: the profile's folders, else INBOX and Sent; All Mail on Gmail). |
+| `--folder <folder>` | a folder to read; repeat it for more (default: the profile's folders, else INBOX and Sent; All Mail on Gmail). Default: ``. |
 | `--rescan` | list the whole window again; also moves stored replies into their thread where the server has no thread ids. |
 
-**Returns:** mail sync — address, since, timezone, folders, state, requests, listed, saved, and 11 more; every field: mail commands info sync
+**Returns:** mail sync — address, since, timezone, folders, state, requests, listed, saved, and 13 more; every field: mail commands info sync
 
 **Example:** `mail ya sync`, `mail ya sync --since-time 2026-10-01 --limit 200`, `mail ya sync --folder INBOX`
 
@@ -398,13 +405,13 @@ mail search messages <query> [options]
 | `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--backend <archive\|server\|both>` | where to search: the local archive, the mail server (default: both), or both. |
-| `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
+| `--server-time <duration>` | stop waiting for the server after this long (default: 5s, 20s on Yandex). |
 
-**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 8 more; every field: mail commands info search messages
+**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 9 more; every field: mail commands info search messages
 
 **Next usually:** `mail messages show <message>`, `mail attachments list <message>`, `mail messages forward <message> [text]`
 
-**Example:** `mail ya search messages invoice`, `mail ya search messages 'from:ann@example.com has:attachment date>30d'`, `mail ya search messages 'list:github.com is:unread' --newest`
+**Example:** `mail personal search messages invoice`, `mail personal search messages 'from:ann@example.com has:attachment date>30d'`, `mail personal search messages 'list:github.com is:unread' --newest`
 
 ## `mail messages`
 
@@ -429,7 +436,7 @@ mail messages show <message> [options]
 
 **Returns:** one stored email whole, with the text of its attachments
 
-**Example:** `mail ya messages show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'`, `mail ya messages show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --before-n 2`
+**Example:** `mail personal messages show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'`, `mail personal messages show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --before-n 2`
 
 ### `mail messages export`
 
@@ -449,7 +456,7 @@ mail messages export [query] [options]
 |---|---|
 | `--format <format>` | mbox files or a Maildir++ tree. One of: `mbox`, `maildir`. Default: `mbox`. |
 | `--output <file>` | the folder to write the export into (not one file); made private if it does not exist. |
-| `--folder <folder>` | only mail filed in this folder; repeat it for more (default: the folders sync reads). |
+| `--folder <folder>` | only mail filed in this folder; repeat it for more (default: the folders sync reads). Default: ``. |
 | `--limit <n>` | write at most this many messages in this run, newest first. |
 | `--max-pages <pages>` | at most this many requests to the mail server in this run; as many as fit the deadline if not given. |
 | `--resume` | go on with the export already in the folder, skipping what it holds. |
@@ -579,8 +586,8 @@ mail messages update [message] [options]
 | `--limit <n>` | with --filter, at most this many, newest first (default 500, at most 5000). |
 | `--yes` | make the change; a deletion or a change of many is only a preview without it. |
 | `--dry-run` | only preview what would change, even with --yes. |
-| `--flag <flag>` | a flag or keyword to set; repeat it for more. |
-| `--unflag <flag>` | a flag or keyword to take away; repeat it for more. |
+| `--flag <flag>` | a flag or keyword to set; repeat it for more. Default: ``. |
+| `--unflag <flag>` | a flag or keyword to take away; repeat it for more. Default: ``. |
 | `--replace` | --flag is the whole set: every other flag and keyword is taken away. |
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages update
@@ -659,7 +666,7 @@ mail messages delete [message] [options]
 | `--limit <n>` | with --filter, at most this many, newest first (default 5000, at most 5000). |
 | `--yes` | make the change; a deletion or a change of many is only a preview without it. |
 | `--dry-run` | only preview what would change, even with --yes. |
-| `--rules` | the envelope mail the owner's rules let go, each decided again (memo's mail delete). |
+| `--rules` | the envelope mail the owner's rules let go, each decided again (`memo mail delete` did this before). |
 | `--since-time <time>` | with --rules, only mail received from this time; older mail stays. |
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages delete
@@ -702,10 +709,10 @@ mail messages send [text] [options]
 
 | Option | What it does |
 |---|---|
-| `--to <address>` | who it goes to: an address, or several split by commas; repeat it for more (a reply: instead of its sender). |
-| `--cc <address>` | a copy to this address; repeat it for more. |
-| `--bcc <address>` | a hidden copy to this address; repeat it for more. |
-| `--file <file>` | attach this file, as named, never a pattern; repeat it for more. |
+| `--to <address>` | who it goes to: an address, or several split by commas; repeat it for more (a reply: instead of its sender). Default: ``. |
+| `--cc <address>` | a copy to this address; repeat it for more. Default: ``. |
+| `--bcc <address>` | a hidden copy to this address; repeat it for more. Default: ``. |
+| `--file <file>` | attach this file, as named, never a pattern; repeat it for more. Default: ``. |
 | `--allow-any-file` | attach a file even from credential folders or this CLI's own folders. |
 | `--operation-id <id>` | repeat a send whose outcome was unknown; Sent is checked first, so it goes once. |
 | `--yes` | answer the question before sending to anyone but you. |
@@ -735,10 +742,10 @@ mail messages forward <message> [text] [options]
 
 | Option | What it does |
 |---|---|
-| `--to <address>` | who it goes to: an address, or several split by commas; repeat it for more (a reply: instead of its sender). |
-| `--cc <address>` | a copy to this address; repeat it for more. |
-| `--bcc <address>` | a hidden copy to this address; repeat it for more. |
-| `--file <file>` | attach this file, as named, never a pattern; repeat it for more. |
+| `--to <address>` | who it goes to: an address, or several split by commas; repeat it for more (a reply: instead of its sender). Default: ``. |
+| `--cc <address>` | a copy to this address; repeat it for more. Default: ``. |
+| `--bcc <address>` | a hidden copy to this address; repeat it for more. Default: ``. |
+| `--file <file>` | attach this file, as named, never a pattern; repeat it for more. Default: ``. |
 | `--allow-any-file` | attach a file even from credential folders or this CLI's own folders. |
 | `--operation-id <id>` | repeat a send whose outcome was unknown; Sent is checked first, so it goes once. |
 | `--yes` | answer the question before sending to anyone but you. |
@@ -772,7 +779,7 @@ mail conversations list [query] [options]
 
 **Returns:** mail thread — ref, subject, emails_count, last_email_at, untrusted; every field: mail commands info conversations list
 
-**Example:** `mail ya conversations list`, `mail ya conversations list subject:invoice emails_count>1`
+**Example:** `mail personal conversations list`, `mail personal conversations list subject:invoice emails_count>1`
 
 ### `mail conversations show`
 
@@ -788,7 +795,7 @@ mail conversations show <conversation>
 
 **Returns:** one email thread, every email oldest first
 
-**Example:** `mail ya conversations show 'chat:email/me%40example.com/thread-1'`, `mail ya conversations show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'`
+**Example:** `mail personal conversations show 'chat:email/me%40example.com/thread-1'`, `mail personal conversations show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'`
 
 ## `mail attachments`
 
@@ -893,9 +900,9 @@ mail drafts create [text] [options]
 
 | Option | What it does |
 |---|---|
-| `--to <address>` | who it goes to; repeat it for more. |
-| `--cc <address>` | a copy to; repeat it for more. |
-| `--bcc <address>` | a blind copy to; repeat it for more. |
+| `--to <address>` | who it goes to: an address, or several split by commas; repeat it for more. Default: ``. |
+| `--cc <address>` | a copy to; repeat it for more. Default: ``. |
+| `--bcc <address>` | a blind copy to; repeat it for more. Default: ``. |
 | `--subject <text>` | the subject line. |
 | `--dry-run` | build the draft and show it; store nothing. |
 | `--reply-to <message>` | answer this stored message: its sender, its subject with Re:, in its thread. |
@@ -922,9 +929,9 @@ mail drafts update <draft> [text] [options]
 
 | Option | What it does |
 |---|---|
-| `--to <address>` | who it goes to; repeat it for more. |
-| `--cc <address>` | a copy to; repeat it for more. |
-| `--bcc <address>` | a blind copy to; repeat it for more. |
+| `--to <address>` | who it goes to: an address, or several split by commas; repeat it for more. Default: ``. |
+| `--cc <address>` | a copy to; repeat it for more. Default: ``. |
+| `--bcc <address>` | a blind copy to; repeat it for more. Default: ``. |
 | `--subject <text>` | the subject line. |
 | `--dry-run` | build the draft and show it; store nothing. |
 
@@ -934,7 +941,7 @@ mail drafts update <draft> [text] [options]
 
 ### `mail drafts delete`
 
-delete a draft from the Drafts folder for good, with no restore; a preview without --yes
+delete a draft from the Drafts folder for good, with no restore; the owner adds --allow-dangerous to do it, without it a preview
 
 **Changes something in the service.**
 
@@ -948,12 +955,12 @@ mail drafts delete <draft> [options]
 
 | Option | What it does |
 |---|---|
-| `--yes` | delete it; without it, only a preview. |
-| `--dry-run` | only preview, even with --yes. |
+| `--allow-dangerous` | delete it for good, no restore; without it, only a preview. |
+| `--dry-run` | only preview, even with --allow-dangerous. |
 
 **Returns:** mail draft change — action, applied, id, folder, uid, replaced_uid, old_version_in, subject, and 3 more; every field: mail commands info drafts delete
 
-**Example:** `mail ya drafts delete 5b0e1c2a@example.com --yes`
+**Example:** `mail ya drafts delete 5b0e1c2a@example.com --allow-dangerous`
 
 ### `mail drafts send`
 
@@ -1320,7 +1327,7 @@ mail config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, speech_model, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, folders, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, speech_model, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, microsoft_client_id, folders, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1343,7 +1350,7 @@ mail config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, speech_model, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, folders, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, speech_model, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, microsoft_client_id, folders, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
 
 | Option | What it does |
 |---|---|
@@ -1441,7 +1448,7 @@ mail schedule command <name> <args> [options]
 
 **Returns:** run mail <args…> on a timer — reads save what they read, so this is how a…
 
-**Example:** `mail personal schedule command daily <args>`
+**Example:** `mail personal schedule command health --every 1h -- doctor`, `mail personal schedule command morning-check --at 08:00 -- doctor`
 
 ### `mail schedule agent`
 
@@ -1468,7 +1475,7 @@ mail schedule agent <name> <harness> <prompt> [options]
 
 **Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
 
-**Example:** `mail personal schedule agent daily claude <prompt>`
+**Example:** `mail personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `mail personal schedule agent triage codex "list what needs an answer today" --every 2h --max-cost 1`
 
 ### `mail schedule list`
 
@@ -1484,7 +1491,7 @@ mail schedule list [query]
 
 **Returns:** scheduled job — name, kind, when, last; every field: mail commands info schedule list
 
-**Example:** `mail personal schedule list`
+**Example:** `mail personal schedule list`, `mail personal schedule list kind:agent`
 
 ### `mail schedule run`
 
@@ -1498,11 +1505,11 @@ mail schedule run <name>
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | required |  |
+| `name` | required | the schedule's name, as `schedule list` shows it. |
 
 **Returns:** run a schedule now, as its timer would, and wait for it
 
-**Example:** `mail personal schedule run daily`
+**Example:** `mail personal schedule run health`
 
 ### `mail schedule remove`
 
@@ -1516,11 +1523,11 @@ mail schedule remove <name>
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | required |  |
+| `name` | required | the schedule's name, as `schedule list` shows it. |
 
 **Returns:** stop a schedule and remove its timer; its past output stays
 
-**Example:** `mail personal schedule remove daily`
+**Example:** `mail personal schedule remove health`
 
 ### `mail schedule exec`
 
@@ -1534,11 +1541,11 @@ mail schedule exec <file>
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required |  |
+| `file` | required | the schedule's schedule.json in the state folder, as the timer passes it. |
 
 **Returns:** what a timer runs, given the schedule's file; to run one by hand, use run
 
-**Example:** `mail personal schedule exec ./report.pdf`
+**Example:** `mail personal schedule exec ~/.local/share/mail-cli/schedules/health/schedule.json`
 
 ## Exit codes
 

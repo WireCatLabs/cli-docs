@@ -2360,31 +2360,6 @@
     }
   },
   {
-    "tool": "mail",
-    "slug": "usage",
-    "reason": "`mail delete` is not a mail command and memo's old command is gone; the prose names it without code.",
-    "replacements": {
-      "en": [
-        {
-          "before": "memo's old `mail delete`",
-          "after": "memo's old cleanup command"
-        }
-      ],
-      "ru": [
-        {
-          "before": "старого `mail delete` из memo",
-          "after": "старой команды очистки memo"
-        }
-      ],
-      "es": [
-        {
-          "before": "antiguo `mail delete` de memo",
-          "after": "antiguo comando de limpieza de memo"
-        }
-      ]
-    }
-  },
-  {
     "tool": "memo",
     "slug": "mail",
     "reason": "The removed memo mail commands are named as old commands, not as runnable examples.",
@@ -2454,6 +2429,68 @@
         {
           "before": "como las escribirías después de\n`gcal personal`;",
           "after": "como las escribirías después de\n`gcal personal …`;"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "mail",
+    "slug": "usage",
+    "reason": "mail v0.10.0 docs/usage.md names memo's old `memo mail delete` in code, which the checker reads as an unknown subcommand; the prose names it without code.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The runs of `memo mail delete` restore here",
+          "after": "The runs of memo's old cleanup command restore here"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Запуски старого `memo mail delete` восстанавливаются здесь",
+          "after": "Запуски старой команды очистки memo восстанавливаются здесь"
+        }
+      ],
+      "es": [
+        {
+          "before": "Las ejecuciones del antiguo `memo mail delete` también",
+          "after": "Las ejecuciones del antiguo comando de limpieza de memo también"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "mail",
+    "slug": "oauth-google",
+    "reason": "mail v0.10.0 docs/oauth-google.md writes the example project name `mail for me` as code, which the checker reads as a command with an unknown subcommand; quote it as a name instead.",
+    "replacements": {
+      "en": [
+        {
+          "before": "for example, `mail for me`,",
+          "after": "for example, \"mail for me\","
+        },
+        {
+          "before": "app name (`mail for me`)",
+          "after": "app name (\"mail for me\")"
+        }
+      ],
+      "ru": [
+        {
+          "before": "например `mail for me`,",
+          "after": "например «mail for me»,"
+        },
+        {
+          "before": "приложения (`mail for me`)",
+          "after": "приложения («mail for me»)"
+        }
+      ],
+      "es": [
+        {
+          "before": "por ejemplo `mail for me`,",
+          "after": "por ejemplo «mail for me»,"
+        },
+        {
+          "before": "aplicación (`mail for me`)",
+          "after": "aplicación («mail for me»)"
         }
       ]
     }

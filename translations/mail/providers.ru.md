@@ -4,7 +4,7 @@ title: "Подготовка почтового ящика"
 
 <!-- Generated from src/providers.ts by pnpm generate. Do not edit. -->
 
-Эта страница нужна перед `mail <profile> session start`, который запрашивает пароль приложения. Каждому провайдеру нужен включённый IMAP и, в большинстве случаев, пароль приложения:
+Эта страница нужна перед `mail <profile> session start`, который запрашивает пароль приложения, а для Outlook.com и Microsoft 365 открывает в браузере страницу входа Microsoft. Каждому провайдеру нужен включённый IMAP и, в большинстве случаев, пароль приложения:
 пароль, созданный только для этой программы. В конце у вас будет пароль приложения, готовый к вводу, когда `session start` его спросит.
 
 `mail <profile> session start` печатает те же шаги и повторяет
@@ -83,16 +83,26 @@ title: "Подготовка почтового ящика"
 
 Отправка: `smtp.fastmail.com`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports>
 
+## Microsoft 365
+
+1. В ящике готовить ничего не нужно: `mail` открывает в браузере страницу входа Microsoft; войдите рабочим или учебным аккаунтом и разрешите доступ.
+
+- Ваша организация может разрешать новое приложение только администратору. Если Microsoft пишет, что приложение должен одобрить администратор, попросите его дать согласие или зарегистрировать собственное приложение организации и сообщить вам его id.
+- Для отправки в ящике должен быть включён "Authenticated SMTP"; в организациях с настройками безопасности по умолчанию и созданных после января 2020 года он выключен, пока администратор его не включит. Чтение работает и без него.
+- IMAP-сервер Microsoft 365 не назван ни на одной официальной странице: outlook.office365.com — тот, что использует Outlook.com.
+
+Прочитано здесь: <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>, <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>, <https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission>, <https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent>
+
+Отправка: `smtp.office365.com`, порт 587, STARTTLS, с тем же входом через OAuth. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>
+
 ## Outlook
 
 1. Outlook.com: откройте Settings (шестерёнка), "Mail", "Forwarding and IMAP", включите "Let devices and apps use IMAP" и сохраните.
-2. Страница Microsoft для IMAP называет только OAuth2 (Modern Auth) и не упоминает для него пароли приложений. Вход через OAuth появится в одной из следующих фаз `mail`, поэтому профиль пока сохранить нельзя.
+2. Затем `mail` открывает в браузере страницу входа Microsoft: войдите и разрешите доступ. Outlook.com принимает для IMAP и SMTP только OAuth, пароль приложения не подходит.
 
-- Рабочие и учебные аккаунты Microsoft 365 не читались по официальной странице: их шаги не проверены.
+Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>, <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>
 
-Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
-
-Отправка: `smtp-mail.outlook.com`, порт 587, STARTTLS, после появления входа через OAuth, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
+Отправка: `smtp-mail.outlook.com`, порт 587, STARTTLS, с тем же входом через OAuth. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
 
 ## Любой другой провайдер
 

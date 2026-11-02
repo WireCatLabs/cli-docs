@@ -16,7 +16,13 @@ Un perfil creado por `session start` guarda también el buzón: `address`, `logi
 sesión con una contraseña de aplicación) y `folders` (las carpetas que lee `sync`). `smtp_host`, `smtp_port` y
 `smtp_security` indican el servidor al que envía `messages send`; fíjalos solo para un proveedor que la
 [lista integrada](./providers.md) no conozca. La contraseña de aplicación no es
-un ajuste: vive en el llavero, o en `MAIL_PASSWORD` para una ejecución sin llavero.
+un ajuste: vive en el llavero, o en `MAIL_PASSWORD` para una ejecución sin llavero. Tampoco lo es un inicio de sesión con
+OAuth: sus tokens también viven en el llavero.
+
+`microsoft_client_id` es la aplicación de Microsoft con la que se inicia sesión en Outlook.com y Microsoft 365, cuando usas la
+tuya en lugar de la de WireCat. Fíjalo una vez para todos los perfiles con `mail config set --defaults microsoft_client_id <id>`;
+cómo conseguir un id está en [registrar una aplicación de Microsoft](./oauth-microsoft.md). Un perfil que ya inició sesión sigue
+renovando con la aplicación con la que lo hizo.
 
 `config show` lista cada ajuste y de dónde viene: el archivo, una variable o el valor por defecto.
 
@@ -24,8 +30,8 @@ un ajuste: vive en el llavero, o en `MAIL_PASSWORD` para una ejecución sin llav
 otros). Todas las CLI de WireCat comparten esa lista. `mail` los ignora.
 
 Un agente por MCP que tenga `mcp.authority` puede cambiar ajustes con `config set`, pero nunca estos: los ajustes del
-buzón de arriba, que deciden adónde va la contraseña de aplicación, y `permissions.messages.send.others`, que permite a
-un agente escribir a otras personas. Solo tú los cambias, en una terminal.
+buzón de arriba, que deciden adónde va la contraseña de aplicación, `microsoft_client_id`, que decide en qué aplicación
+inicias sesión, y `permissions.messages.send.others`, que permite a un agente escribir a otras personas. Solo tú los cambias, en una terminal.
 
 ## Permisos
 

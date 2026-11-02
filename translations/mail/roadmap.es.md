@@ -21,8 +21,7 @@ Todos los comandos están en la [referencia de comandos](./commands.md).
 
 ## Siguiente
 
-- **Inicio de sesión con OAuth para Outlook, Microsoft 365 y Google Workspace.** Microsoft solo acepta OAuth para IMAP,
-  así que estos buzones todavía no se pueden añadir; lo necesita también un dominio de Workspace que desactive las
-  contraseñas de aplicación.
+- **La aplicación de Microsoft propia de WireCat**, para que Outlook.com y Microsoft 365 inicien sesión sin registrar una;
+  después, la verificación del editor, que algunas organizaciones exigen.
 
 Lo que cambió cada versión publicada está en el [historial de cambios](./changelog.md).
