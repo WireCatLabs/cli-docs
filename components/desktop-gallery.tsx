@@ -14,6 +14,7 @@ function ThemedShot({ shot, lang, alt, eager }: { shot: Shot; lang: string; alt:
   return (
     <>
       {(["light", "dark"] as const).map((theme) => (
+        // biome-ignore lint/performance/noImgElement: The static export has no image optimisation server.
         <img
           key={theme}
           className={`desktop-shot-${theme}`}
