@@ -59,7 +59,8 @@ export function SiteFooter({
       '<div class="footer-controls">',
       `<span class="foot-legal"><a class="animated-text-link" href="/${lang}/privacy"><span class="link-label">${escapeHtml(legal.privacy)}</span></a><a class="animated-text-link" href="/${lang}/terms"><span class="link-label">${escapeHtml(legal.terms)}</span></a><button type="button" class="foot-consent" data-consent-settings hidden>${escapeHtml(legal.settings)}</button></span><div class="footer-controls">`,
     )
-  if (ideasEnabled && !footerHtml.includes(`href="/${lang}/ideas"`))
+  // Only the footer's own list counts: the language menu on an ideas page links to /<lang>/ideas too.
+  if (ideasEnabled && !footerHtml.includes(`<a class="animated-text-link" href="/${lang}/ideas">`))
     footerHtml = footerHtml.replace(
       new RegExp(`<li><a class="animated-text-link" href="/${lang}/blog">[\\s\\S]*?</li>`),
       (blog) =>

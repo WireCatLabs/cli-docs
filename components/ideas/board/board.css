@@ -1188,9 +1188,11 @@ html.dark .wirecat-editorial .board {
   .wirecat-editorial .board .board-ask-box .board-button {
     padding: 0 12px;
   }
+  /* nowrap: a wrapping column is as wide as its widest line, so the filters pushed the page sideways. */
   .wirecat-editorial .board .board-bar {
     align-items: stretch;
     flex-direction: column;
+    flex-wrap: nowrap;
     gap: 0;
   }
   .wirecat-editorial .board .board-filters {
