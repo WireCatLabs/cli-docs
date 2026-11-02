@@ -26,6 +26,8 @@ for (const file of readdirSync(directory, { recursive: true }).map(String)) {
 // Until ideas.apiUrl is set, production exports a 404 for every ideas route (lib/ideas/config.ts).
 const siteConfig = JSON.parse(readFileSync(new URL("../site.config.json", import.meta.url), "utf8"))
 if (!siteConfig.ideas?.apiUrl) for (const route of routes) if (/^\/ideas(?:\/|$)/.test(route)) routes.delete(route)
+// Older addresses that only forward to /ideas: the page is gone before the shell can be read.
+for (const route of ["/ideas/new", "/ideas/idea"]) routes.delete(route)
 
 /** Compare stable navigation, not the language menu whose destinations follow the current page. */
 const shellLinks = (page: Page, html?: string) =>
