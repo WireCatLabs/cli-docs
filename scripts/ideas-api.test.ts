@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest"
 import { apiSource, errorCode } from "../lib/ideas/api.ts"
-import { returnPath, safeReturnPath } from "../lib/ideas/config.ts"
+import { maskEmail, returnPath, safeReturnPath } from "../lib/ideas/config.ts"
 import { IdeasError } from "../lib/ideas/types.ts"
+import { ideasWords } from "../lib/ideas/words.ts"
 
 const base = "https://api.wirecat.dev"
 const apiIdea = {
@@ -202,5 +203,21 @@ describe("sign-in return paths", () => {
     ])
       expect(safeReturnPath("en", path)).toBe("/en/ideas")
     expect(safeReturnPath("en", "/en/ideas/new")).toBe("/en/ideas/new")
+  })
+})
+
+describe("who is signed in", () => {
+  it("masks the address but keeps it recognisable", () => {
+    expect(maskEmail("ann@example.com")).toBe("a•••@e•••.com")
+    expect(maskEmail("viacheslav@mail.example.ru")).toBe("vi•••@m•••.ru")
+  })
+
+  it.each(["en", "ru", "es"])("has every Google sign-in error in %s", (lang) => {
+    expect(Object.keys(ideasWords(lang).google).sort()).toEqual([
+      "google_cancelled",
+      "google_expired",
+      "google_failed",
+      "google_use_email",
+    ])
   })
 })

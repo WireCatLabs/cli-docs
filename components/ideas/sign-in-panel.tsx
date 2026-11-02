@@ -5,9 +5,10 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { type FormEvent, type MouseEvent, useEffect, useState } from "react"
 import { GoogleIcon } from "@/components/brand-icons"
-import { ideas, ideasPath, safeReturnPath } from "@/lib/ideas"
+import { ideas, ideasPath, maskEmail, safeReturnPath } from "@/lib/ideas"
 import { asLocale, IdeasError } from "@/lib/ideas/types"
 import { errorText, ideasWords } from "@/lib/ideas/words"
+import { justSignedInKey } from "./member-bar"
 import { TurnstileField } from "./turnstile-field"
 import { useMember } from "./use-member"
 
@@ -47,7 +48,12 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
     setState("verifying")
     ideas
       .startSession(linkToken)
-      .then(({ returnTo: landing }) => router.replace(safeReturnPath(lang, landing ?? target)))
+      .then(({ returnTo: landing }) => {
+        try {
+          sessionStorage.setItem(justSignedInKey, "1")
+        } catch {}
+        router.replace(safeReturnPath(lang, landing ?? target))
+      })
       .catch((error) => {
         if (error instanceof IdeasError && error.code === "invalid_token") return setState("expired")
         setFailure(errorText(lang, error, words.failed))
@@ -134,7 +140,7 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
     return (
       <section className="ideas-panel" aria-labelledby="sign-in-title">
         <Heading id="sign-in-title">{words.title}</Heading>
-        <p>{words.signedIn(member.email)}</p>
+        <p>{words.signedIn(maskEmail(member.email))}</p>
         <div className="ideas-actions">
           <Link className="ideas-button" href={returnTo}>
             {words.continue}

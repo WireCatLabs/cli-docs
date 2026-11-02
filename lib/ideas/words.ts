@@ -128,6 +128,8 @@ const en = {
     google_cancelled: "Sign-in was cancelled.",
     google_expired: "Google sign-in took too long. Try again.",
     google_failed: "Google sign-in did not work. Try the email link instead.",
+    google_use_email:
+      "This email already has an account here. Sign in with an email link first, then Google will work too.",
   },
   unsubscribe: {
     title: "Status emails",
@@ -139,6 +141,8 @@ const en = {
   },
   account: {
     memberLine: (email: string): string => `Signed in as ${email}.`,
+    justSignedIn: (who: string): string => `You are now signed in as ${who}.`,
+    notYou: "Not you?",
     link: "Account",
     delete: "Delete my account",
     confirm: "Delete your account?",
@@ -284,6 +288,8 @@ const ru: IdeasWords = {
     google_cancelled: "Вход отменён.",
     google_expired: "Вход через Google занял слишком много времени. Попробуйте ещё раз.",
     google_failed: "Войти через Google не получилось. Попробуйте ссылку на почту.",
+    google_use_email:
+      "У этого адреса уже есть аккаунт здесь. Сначала войдите по ссылке на почту, потом заработает и вход через Google.",
   },
   unsubscribe: {
     title: "Письма о статусе",
@@ -295,6 +301,8 @@ const ru: IdeasWords = {
   },
   account: {
     memberLine: (email) => `Вы вошли как ${email}.`,
+    justSignedIn: (who) => `Теперь вы вошли как ${who}.`,
+    notYou: "Не вы?",
     link: "Аккаунт",
     delete: "Удалить мой аккаунт",
     confirm: "Удалить аккаунт?",
@@ -437,6 +445,8 @@ const es: IdeasWords = {
     google_cancelled: "Se canceló el inicio de sesión.",
     google_expired: "El inicio de sesión con Google tardó demasiado. Inténtalo de nuevo.",
     google_failed: "No se pudo entrar con Google. Prueba con el enlace por correo.",
+    google_use_email:
+      "Este correo ya tiene una cuenta aquí. Entra primero con un enlace por correo y después Google también funcionará.",
   },
   unsubscribe: {
     title: "Correos de estado",
@@ -448,6 +458,8 @@ const es: IdeasWords = {
   },
   account: {
     memberLine: (email) => `Has iniciado sesión como ${email}.`,
+    justSignedIn: (who) => `Ahora has iniciado sesión como ${who}.`,
+    notYou: "¿No eres tú?",
     link: "Cuenta",
     delete: "Eliminar mi cuenta",
     confirm: "¿Eliminar tu cuenta?",

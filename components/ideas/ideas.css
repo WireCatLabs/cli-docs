@@ -825,10 +825,6 @@ html.dark .wirecat-editorial .wirecat-ideas {
 .wirecat-editorial .wirecat-ideas .idea-answer > h3:first-child {
   margin-top: 0;
 }
-.wirecat-editorial .wirecat-ideas .ideas-member a {
-  color: var(--ink);
-  font-weight: 600;
-}
 .wirecat-editorial .wirecat-ideas .ideas-danger {
   margin-top: 24px;
   padding-top: 16px;
@@ -872,4 +868,41 @@ html.dark .wirecat-editorial .wirecat-ideas {
   display: grid;
   justify-items: start;
   gap: 8px;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-bar {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-bar[data-just] {
+  padding: 10px 14px;
+  border: 1px solid var(--green-line);
+  border-radius: 12px;
+  background: var(--green);
+  color: var(--ink);
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-bar > svg {
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 8px;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-bar .ideas-text-button {
+  min-height: 24px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member-bar a {
+  color: var(--ink);
+  font-weight: 600;
 }

@@ -7,6 +7,7 @@ import { ideasWords } from "@/lib/ideas/words"
 import { pageMetadata } from "@/lib/seo"
 import { IdeasAside } from "./ideas-aside"
 import { LanguageLinksKeepQuery } from "./language-links"
+import { MemberBar } from "./member-bar"
 import { PreviewBar } from "./preview-bar"
 import { SignInNotice } from "./sign-in-notice"
 import "@/components/blog/blog.css"
@@ -38,6 +39,7 @@ export function IdeasFrame({ lang, children }: { lang: string; children: ReactNo
         <Suspense>
           <LanguageLinksKeepQuery />
         </Suspense>
+        <MemberBar lang={lang} />
         <SignInNotice lang={lang} />
         <div className="blog-columns">
           <div className="blog-main">{children}</div>

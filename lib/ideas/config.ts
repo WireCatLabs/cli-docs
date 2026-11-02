@@ -32,3 +32,13 @@ export function returnPath(lang: string, pathname: string, search: string) {
   const query = params.toString()
   return safeReturnPath(lang, query && ideasPage(lang).test(`${pathname}?${query}`) ? `${pathname}?${query}` : pathname)
 }
+
+const hide = (part: string, keep: number) => `${part.slice(0, keep)}•••`
+
+/** Enough of the address to recognise your own, not enough to read someone else's over a shoulder. */
+export function maskEmail(email: string) {
+  const [local, domain = ""] = email.split("@")
+  const dot = domain.lastIndexOf(".")
+  const host = dot > 0 ? `${hide(domain.slice(0, dot), 1)}${domain.slice(dot)}` : hide(domain, 1)
+  return `${hide(local, local.length > 3 ? 2 : 1)}@${host}`
+}
