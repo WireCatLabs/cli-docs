@@ -111,3 +111,23 @@
 @media(prefers-color-scheme:dark){html:not(.light) .desktop-shot-light{display:none!important}html:not(.light) .desktop-shot-dark{display:block!important}}
 @media(max-width:900px){.desktop-showcase{grid-template-columns:minmax(0,1fr)}.desktop-showcase-copy{grid-row:auto}}
 @media(max-width:560px){.desktop-shot-row{grid-template-columns:minmax(0,1fr)}}
+.shot-open{display:block;width:100%;padding:0;cursor:zoom-in;transition:translate .18s ease-out}
+.shot-open:is(:hover,:focus-visible){translate:0 -2px}
+.shot-open:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.shot-lightbox{position:fixed;inset:0;margin:auto;width:min(1100px,calc(100vw - 32px));max-width:none;height:fit-content;max-height:calc(100dvh - 32px);padding:16px;overflow:auto;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--ink);box-shadow:0 30px 80px -20px #0009}
+.shot-lightbox[open]{animation:shot-lightbox-in .2s cubic-bezier(.16,1,.3,1)}
+.shot-lightbox::backdrop{background:color-mix(in srgb,#000 58%,transparent);backdrop-filter:blur(2px)}
+.shot-lightbox .desktop-shot-frame img{animation:shot-lightbox-fade .2s ease-out}
+.shot-lightbox figcaption{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+.shot-lightbox-position{flex-shrink:0;font:12px/1 "JetBrains Mono",ui-monospace,monospace;color:var(--muted)}
+.shot-lightbox-controls{display:flex;gap:8px;margin-top:12px}
+.shot-lightbox-controls button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:inherit;font-size:14px;cursor:pointer;transition:background-color .15s ease-out,border-color .15s ease-out}
+.shot-lightbox-controls button:is(:hover,:focus-visible){border-color:color-mix(in srgb,var(--line) 40%,var(--accent));background:var(--soft)}
+.shot-lightbox-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.shot-lightbox-controls svg{width:18px;height:18px;flex-shrink:0}
+.shot-lightbox-close{margin-left:auto}
+.dark .shot-lightbox{background:color-mix(in srgb,var(--bg) 95%,var(--ink));border-color:color-mix(in srgb,var(--line) 55%,var(--ink) 22%)}
+.dark .shot-lightbox-controls button{background:color-mix(in srgb,var(--paper) 60%,transparent);border-color:color-mix(in srgb,var(--line) 50%,var(--ink) 25%)}
+@keyframes shot-lightbox-in{from{opacity:0;scale:.98}}
+@keyframes shot-lightbox-fade{from{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.shot-lightbox[open],.shot-lightbox .desktop-shot-frame img{animation:none}.shot-open{transition:none}}

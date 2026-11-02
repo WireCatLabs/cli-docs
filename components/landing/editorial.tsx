@@ -8,6 +8,7 @@ import { detectOs } from "@/lib/desktop-releases"
 import { bindDisclosureMenus } from "@/lib/disclosure-menus"
 import { downloadWords } from "@/lib/download"
 import { prepareInstallationButton } from "@/lib/installation-command"
+import { bindScreenshotLightbox } from "@/lib/screenshot-lightbox"
 import { searchDemo } from "@/lib/search-playground/engine"
 import { copiedInstallationTool, trackSiteEvent } from "@/lib/site-events"
 import { wordsFor } from "@/lib/words"
@@ -538,6 +539,7 @@ export function Editorial({ html, lang, className }: { html: string; lang: strin
       { signal },
     )
     bindDisclosureMenus(root, "[data-connect],[data-language-switcher]", signal)
+    bindScreenshotLightbox(root, downloadWords(lang).gallery, signal)
     const parameters = new URL(location.href)
     const initialScenario = all<HTMLElement>("[data-hero-case]").find(
       (b) => b.dataset.heroCase === parameters.searchParams.get("scenario"),

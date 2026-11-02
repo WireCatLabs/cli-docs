@@ -1,4 +1,5 @@
 /** Export the owner-selected editorial source. Private variants never enter public/. */
+import { existsSync } from "node:fs"
 import { readFile, writeFile } from "node:fs/promises"
 import postcss from "postcss"
 import { languageSwitcherHtml } from "../lib/language-switcher.ts"
@@ -71,9 +72,11 @@ for (const lang of ["en", "ru", "es"]) {
         )
       return `${attr}="${translated}"`
     })
-    // Desktop screenshots exist per language only for the screens whose labels change.
+    // Each desktop screenshot shows the page's language; English stands in until a capture exists.
     if (lang !== "en")
-      html = html.replace(/(\/screenshots\/desktop\/(?:tools|connect)-(?:light|dark)-)en\.webp/g, `$1${lang}.webp`)
+      html = html.replace(/(\/screenshots\/desktop\/[a-z-]+-(?:light|dark)-)en\.webp/g, (path, stem) =>
+        existsSync(new URL(`../public${stem}${lang}.webp`, import.meta.url)) ? `${stem}${lang}.webp` : path,
+      )
     html = html.replace(
       /href="(https:\/\/wirecat\.dev)?\/(en|ru|es)\/([^"#]*)([^"]*)"/g,
       (_, _origin, _locale, path, rest) => `href="/${lang}/${path}${rest}"`,

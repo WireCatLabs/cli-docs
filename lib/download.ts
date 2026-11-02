@@ -51,7 +51,8 @@ type Words = {
   gallery: {
     title: string
     intro: string
-    open: string
+    previous: string
+    next: string
     close: string
     shots: Record<"tools" | "agents" | "search-hit" | "tasks" | "memory" | "connect", { alt: string; caption: string }>
   }
@@ -167,7 +168,8 @@ Before you overwrite or delete any file that already exists, show it to me and a
   gallery: {
     title: "Inside the app",
     intro: "Screens from WireCat Desktop with sample data.",
-    open: "Show larger",
+    previous: "Previous screenshot",
+    next: "Next screenshot",
     close: "Close",
     shots: {
       tools: {
@@ -314,7 +316,8 @@ const ru: Words = {
   gallery: {
     title: "Как выглядит приложение",
     intro: "Экраны WireCat Desktop с примерами данных.",
-    open: "Открыть крупнее",
+    previous: "Предыдущий снимок",
+    next: "Следующий снимок",
     close: "Закрыть",
     shots: {
       tools: {
@@ -455,7 +458,8 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
   gallery: {
     title: "Así es la aplicación",
     intro: "Pantallas de WireCat Desktop con datos de ejemplo.",
-    open: "Ver más grande",
+    previous: "Captura anterior",
+    next: "Captura siguiente",
     close: "Cerrar",
     shots: {
       tools: {

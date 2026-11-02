@@ -12414,6 +12414,128 @@ html.dark .wirecat-editorial .desktop-shot-dark {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+.wirecat-editorial .shot-open {
+  display: block;
+  width: 100%;
+  padding: 0;
+  cursor: zoom-in;
+  transition: translate 0.18s ease-out;
+}
+.wirecat-editorial .shot-open:is(:hover, :focus-visible) {
+  translate: 0 -2px;
+}
+.wirecat-editorial .shot-open:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.wirecat-editorial .shot-lightbox {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(1100px, calc(100vw - 32px));
+  max-width: none;
+  height: fit-content;
+  max-height: calc(100dvh - 32px);
+  padding: 16px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: 0 30px 80px -20px #0009;
+}
+.wirecat-editorial .shot-lightbox[open] {
+  animation: shot-lightbox-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wirecat-editorial .shot-lightbox::backdrop {
+  background: color-mix(in srgb, #000 58%, transparent);
+  backdrop-filter: blur(2px);
+}
+.wirecat-editorial .shot-lightbox .desktop-shot-frame img {
+  animation: shot-lightbox-fade 0.2s ease-out;
+}
+.wirecat-editorial .shot-lightbox figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: baseline;
+}
+.wirecat-editorial .shot-lightbox-position {
+  flex-shrink: 0;
+  font:
+    12px / 1 "JetBrains Mono",
+    ui-monospace,
+    monospace;
+  color: var(--muted);
+}
+.wirecat-editorial .shot-lightbox-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.wirecat-editorial .shot-lightbox-controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-out,
+    border-color 0.15s ease-out;
+}
+.wirecat-editorial .shot-lightbox-controls button:is(:hover, :focus-visible) {
+  border-color: color-mix(in srgb, var(--line) 40%, var(--accent));
+  background: var(--soft);
+}
+.wirecat-editorial .shot-lightbox-controls button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.wirecat-editorial .shot-lightbox-controls svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.wirecat-editorial .shot-lightbox-close {
+  margin-left: auto;
+}
+html.dark .wirecat-editorial .shot-lightbox {
+  background: color-mix(in srgb, var(--bg) 95%, var(--ink));
+  border-color: color-mix(in srgb, var(--line) 55%, var(--ink) 22%);
+}
+html.dark .wirecat-editorial .shot-lightbox-controls button {
+  background: color-mix(in srgb, var(--paper) 60%, transparent);
+  border-color: color-mix(in srgb, var(--line) 50%, var(--ink) 25%);
+}
+@keyframes shot-lightbox-in {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+@keyframes shot-lightbox-fade {
+  from {
+    opacity: 0.4;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wirecat-editorial .shot-lightbox[open],
+  .wirecat-editorial .shot-lightbox .desktop-shot-frame img {
+    animation: none;
+  }
+  .wirecat-editorial .shot-open {
+    transition: none;
+  }
+}
 
 /* Immediate control feedback, shared by the released landing, features and examples. */
 .wirecat-editorial .button,
