@@ -4,16 +4,16 @@ import { CircleCheck } from "lucide-react"
 import Link from "next/link"
 import { type FormEvent, useEffect, useState } from "react"
 import { ideaPath, ideas, ideasPath } from "@/lib/ideas"
-import { type Idea, type IdeaTool, ideaTools, isTool } from "@/lib/ideas/types"
-import { ideasWords } from "@/lib/ideas/words"
+import { type Idea, IdeasError, type IdeaTool, ideaTools, isTool } from "@/lib/ideas/types"
+import { errorText, ideasWords } from "@/lib/ideas/words"
 import { IdeasSkeleton } from "./ideas-states"
 import { SignInPanel } from "./sign-in-panel"
 import { StatusLabel } from "./status-label"
 import { TurnstileField } from "./turnstile-field"
-import { useMember } from "./use-member"
+import { signInHref, useMember } from "./use-member"
 import { VoteButton } from "./vote-button"
 
-const minTitle = 8
+const minTitle = 5
 
 export function IdeaForm({ lang }: { lang: string }) {
   const words = ideasWords(lang)
@@ -27,6 +27,7 @@ export function IdeaForm({ lang }: { lang: string }) {
   const [resetKey, setResetKey] = useState(0)
   const [checked, setChecked] = useState(false)
   const [state, setState] = useState<"idle" | "sending" | "failed">("idle")
+  const [failure, setFailure] = useState({ text: "", signIn: false })
   const [posted, setPosted] = useState<Idea>()
 
   useEffect(() => {
@@ -97,8 +98,12 @@ export function IdeaForm({ lang }: { lang: string }) {
     try {
       setPosted(await ideas.create({ title: title.trim(), body: body.trim(), tool, turnstileToken: token }))
       setState("idle")
-    } catch {
+    } catch (error) {
       setState("failed")
+      setFailure({
+        text: errorText(lang, error, form.failed),
+        signIn: error instanceof IdeasError && error.code === "sign_in_required",
+      })
     }
     setToken("")
     setResetKey((key) => key + 1)
@@ -153,7 +158,7 @@ export function IdeaForm({ lang }: { lang: string }) {
       <textarea
         id="idea-body"
         rows={5}
-        maxLength={2000}
+        maxLength={5000}
         aria-describedby="idea-body-hint"
         value={body}
         onChange={(event) => setBody(event.target.value)}
@@ -188,7 +193,8 @@ export function IdeaForm({ lang }: { lang: string }) {
       </button>
       {state === "failed" && (
         <p className="ideas-error" role="alert">
-          {form.failed}
+          {failure.text}{" "}
+          {failure.signIn && <Link href={signInHref(lang, ideasPath(lang, "new"))}>{words.signIn.title}</Link>}
         </p>
       )}
     </form>

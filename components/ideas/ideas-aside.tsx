@@ -4,6 +4,7 @@ import { DiscordIcon, GitHubIcon, TelegramIcon } from "@/components/brand-icons"
 import { issuesUrl } from "@/lib/ideas"
 import { ideasWords } from "@/lib/ideas/words"
 import siteConfig from "@/site.config.json"
+import { MemberLine } from "./member-line"
 
 /** What the page is for, and where bugs and chat go instead. */
 export function IdeasAside({ lang, tool }: { lang: string; tool?: string }) {
@@ -41,6 +42,7 @@ export function IdeasAside({ lang, tool }: { lang: string; tool?: string }) {
         <Mail aria-hidden="true" />
         {words.emails}
       </p>
+      <MemberLine lang={lang} />
     </>
   )
 }

@@ -25,6 +25,8 @@ export function TurnstileField({
   const siteKey = siteConfig.ideas.turnstileSiteKey || (ideasSample ? sampleSiteKey : "")
 
   useEffect(() => {
+    // No key means the API runs without Turnstile (development), so the form needs no widget.
+    if (!siteKey) return callback.current("off")
     let cancelled = false
     loadTurnstile()
       .then((turnstile) => {
@@ -48,5 +50,5 @@ export function TurnstileField({
     if (resetKey && widgetId.current) window.turnstile?.reset(widgetId.current)
   }, [resetKey])
 
-  return <div ref={widget} className="ideas-turnstile" />
+  return siteKey ? <div ref={widget} className="ideas-turnstile" /> : null
 }

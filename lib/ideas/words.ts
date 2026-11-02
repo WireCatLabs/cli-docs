@@ -1,4 +1,4 @@
-import type { IdeaStatus, IdeaTool } from "./types"
+import { type IdeaStatus, IdeasError, type IdeaTool } from "./types"
 
 const ruPlural = (count: number, one: string, few: string, many: string) => {
   const tens = count % 100
@@ -24,7 +24,7 @@ const en = {
     zm: "Zoom",
     memo: "Memo",
     desktop: "Desktop app",
-    all: "Everything else",
+    other: "Everything else",
   } satisfies Record<IdeaTool, string>,
   statuses: {
     new: "New",
@@ -85,7 +85,7 @@ const en = {
     toolPick: "Pick a tool",
     submit: "Post idea",
     sending: "Posting…",
-    tooShort: "Write at least 8 characters.",
+    tooShort: "Write at least 5 characters.",
     noTool: "Pick a tool.",
     failed: "The idea did not go through. Your text is still here, try again.",
     done: "Thanks, your idea is up",
@@ -112,6 +112,43 @@ const en = {
     signedIn: (email: string) => `You are signed in as ${email}.`,
     signOut: "Sign out",
     continue: "Back to ideas",
+  },
+  aMember: "A member",
+  mergedNote: "The idea you opened was merged into this one, so its votes are here now.",
+  errors: {
+    signInUnavailable: "Sign in is not available yet. I'm still setting it up, so try again later.",
+    turnstile: "The spam check did not pass. Wait for a new check and try again.",
+    slowDown: "Too many tries in a short time. Wait a minute and try again.",
+    ideaLimit: "You posted 5 ideas today. Post more tomorrow.",
+    merged: "This idea was merged into another one. Open it to vote there.",
+    sessionEnded: "You were signed out. Sign in again to go on.",
+    invalidTitle: "Check the title: 5 to 120 characters.",
+  },
+  google: {
+    google_cancelled: "Sign-in was cancelled.",
+    google_expired: "Google sign-in took too long. Try again.",
+    google_failed: "Google sign-in did not work. Try the email link instead.",
+  },
+  unsubscribe: {
+    title: "Status emails",
+    working: "Turning off status emails…",
+    done: "Done. You won't get status emails any more.",
+    doneText: "You can still read ideas and vote.",
+    invalid: "This link does not work any more. Open the latest status email and use its link.",
+    missing: "This page needs the link from a status email.",
+  },
+  account: {
+    memberLine: (email: string): string => `Signed in as ${email}.`,
+    link: "Account",
+    delete: "Delete my account",
+    confirm: "Delete your account?",
+    confirmText:
+      "This removes your email address and your votes. Your ideas stay, without your name. There is no undo.",
+    yes: "Delete account",
+    no: "Keep it",
+    deleting: "Deleting…",
+    done: "Your account is deleted.",
+    failed: "The account was not deleted. Try again in a minute.",
   },
   preview: {
     label: "Preview with sample data",
@@ -140,7 +177,7 @@ const ru: IdeasWords = {
     zm: "Zoom",
     memo: "Memo",
     desktop: "Приложение",
-    all: "Всё остальное",
+    other: "Всё остальное",
   },
   statuses: {
     new: "Новая",
@@ -203,7 +240,7 @@ const ru: IdeasWords = {
     toolPick: "Выберите инструмент",
     submit: "Отправить идею",
     sending: "Отправляем…",
-    tooShort: "Напишите хотя бы 8 символов.",
+    tooShort: "Напишите хотя бы 5 символов.",
     noTool: "Выберите инструмент.",
     failed: "Идея не отправилась. Текст остался в форме, попробуйте ещё раз.",
     done: "Спасибо, идея опубликована",
@@ -232,6 +269,42 @@ const ru: IdeasWords = {
     signOut: "Выйти",
     continue: "К идеям",
   },
+  aMember: "Участник",
+  mergedNote: "Идею, которую вы открыли, объединили с этой, и её голоса теперь здесь.",
+  errors: {
+    signInUnavailable: "Вход пока не работает. Я ещё настраиваю его, попробуйте позже.",
+    turnstile: "Проверка на спам не прошла. Дождитесь новой проверки и попробуйте ещё раз.",
+    slowDown: "Слишком много попыток подряд. Подождите минуту и попробуйте снова.",
+    ideaLimit: "Сегодня вы уже предложили 5 идей. Новые можно будет завтра.",
+    merged: "Эту идею объединили с другой. Откройте её, чтобы проголосовать там.",
+    sessionEnded: "Вы вышли из аккаунта. Войдите снова, чтобы продолжить.",
+    invalidTitle: "Проверьте название: от 5 до 120 символов.",
+  },
+  google: {
+    google_cancelled: "Вход отменён.",
+    google_expired: "Вход через Google занял слишком много времени. Попробуйте ещё раз.",
+    google_failed: "Войти через Google не получилось. Попробуйте ссылку на почту.",
+  },
+  unsubscribe: {
+    title: "Письма о статусе",
+    working: "Отключаем письма…",
+    done: "Готово. Письма о статусе больше не придут.",
+    doneText: "Читать идеи и голосовать можно как раньше.",
+    invalid: "Эта ссылка больше не работает. Откройте последнее письмо о статусе и нажмите ссылку в нём.",
+    missing: "Эта страница открывается по ссылке из письма о статусе.",
+  },
+  account: {
+    memberLine: (email) => `Вы вошли как ${email}.`,
+    link: "Аккаунт",
+    delete: "Удалить мой аккаунт",
+    confirm: "Удалить аккаунт?",
+    confirmText: "Удалятся ваш адрес почты и ваши голоса. Ваши идеи останутся, но без имени. Отменить это нельзя.",
+    yes: "Удалить аккаунт",
+    no: "Оставить",
+    deleting: "Удаляем…",
+    done: "Аккаунт удалён.",
+    failed: "Аккаунт не удалился. Попробуйте через минуту.",
+  },
   preview: {
     label: "Просмотр на примерах",
     "signed-out": "Не вошёл",
@@ -257,7 +330,7 @@ const es: IdeasWords = {
     zm: "Zoom",
     memo: "Memo",
     desktop: "App de escritorio",
-    all: "Todo lo demás",
+    other: "Todo lo demás",
   },
   statuses: {
     new: "Nueva",
@@ -320,7 +393,7 @@ const es: IdeasWords = {
     toolPick: "Elige una herramienta",
     submit: "Publicar idea",
     sending: "Publicando…",
-    tooShort: "Escribe al menos 8 caracteres.",
+    tooShort: "Escribe al menos 5 caracteres.",
     noTool: "Elige una herramienta.",
     failed: "La idea no se envió. Tu texto sigue aquí, inténtalo de nuevo.",
     done: "Gracias, tu idea ya está publicada",
@@ -349,6 +422,42 @@ const es: IdeasWords = {
     signOut: "Cerrar sesión",
     continue: "Volver a las ideas",
   },
+  aMember: "Un miembro",
+  mergedNote: "La idea que abriste se unió a esta, y sus votos están ahora aquí.",
+  errors: {
+    signInUnavailable: "Todavía no se puede iniciar sesión. Lo estoy configurando, prueba más tarde.",
+    turnstile: "La comprobación antispam no pasó. Espera una nueva comprobación e inténtalo otra vez.",
+    slowDown: "Demasiados intentos seguidos. Espera un minuto e inténtalo de nuevo.",
+    ideaLimit: "Hoy ya propusiste 5 ideas. Mañana puedes proponer más.",
+    merged: "Esta idea se unió a otra. Ábrela para votar allí.",
+    sessionEnded: "Se cerró tu sesión. Vuelve a entrar para seguir.",
+    invalidTitle: "Revisa el título: de 5 a 120 caracteres.",
+  },
+  google: {
+    google_cancelled: "Se canceló el inicio de sesión.",
+    google_expired: "El inicio de sesión con Google tardó demasiado. Inténtalo de nuevo.",
+    google_failed: "No se pudo entrar con Google. Prueba con el enlace por correo.",
+  },
+  unsubscribe: {
+    title: "Correos de estado",
+    working: "Desactivando los correos…",
+    done: "Hecho. Ya no recibirás correos de estado.",
+    doneText: "Puedes seguir leyendo ideas y votando.",
+    invalid: "Este enlace ya no funciona. Abre el último correo de estado y usa su enlace.",
+    missing: "Esta página necesita el enlace de un correo de estado.",
+  },
+  account: {
+    memberLine: (email) => `Has iniciado sesión como ${email}.`,
+    link: "Cuenta",
+    delete: "Eliminar mi cuenta",
+    confirm: "¿Eliminar tu cuenta?",
+    confirmText: "Se borran tu correo y tus votos. Tus ideas se quedan, sin tu nombre. No se puede deshacer.",
+    yes: "Eliminar cuenta",
+    no: "Mantenerla",
+    deleting: "Eliminando…",
+    done: "Tu cuenta está eliminada.",
+    failed: "La cuenta no se eliminó. Inténtalo de nuevo en un minuto.",
+  },
   preview: {
     label: "Vista previa con datos de ejemplo",
     "signed-out": "Sin sesión",
@@ -364,3 +473,22 @@ export const formatIdeaDate = (lang: string, iso: string) =>
   new Intl.DateTimeFormat(lang, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
     new Date(iso),
   )
+
+/** The sentence for an API failure the screens tell apart, or `fallback` for the rest. */
+export function errorText(lang: string, error: unknown, fallback: string) {
+  const { errors } = ideasWords(lang)
+  const code = error instanceof IdeasError ? error.code : "unavailable"
+  return (
+    (
+      {
+        sign_in_unavailable: errors.signInUnavailable,
+        turnstile_failed: errors.turnstile,
+        rate_limited: errors.slowDown,
+        idea_limit: errors.ideaLimit,
+        idea_merged: errors.merged,
+        sign_in_required: errors.sessionEnded,
+        validation_error: errors.invalidTitle,
+      } as Partial<Record<string, string>>
+    )[code] ?? fallback
+  )
+}

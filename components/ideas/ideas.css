@@ -808,3 +808,68 @@ html.dark .wirecat-editorial .wirecat-ideas {
 .wirecat-editorial .wirecat-ideas [tabindex="-1"]:focus {
   outline: none;
 }
+.wirecat-editorial .wirecat-ideas .ideas-note {
+  max-width: 44rem;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.wirecat-editorial .wirecat-ideas .idea-answer + .idea-answer {
+  margin-top: 16px;
+}
+.wirecat-editorial .wirecat-ideas .idea-answer > h3:first-child {
+  margin-top: 0;
+}
+.wirecat-editorial .wirecat-ideas .ideas-member a {
+  color: var(--ink);
+  font-weight: 600;
+}
+.wirecat-editorial .wirecat-ideas .ideas-danger {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.wirecat-editorial .wirecat-ideas .ideas-danger h2 {
+  margin: 0 0 6px;
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 0;
+}
+.wirecat-editorial .wirecat-ideas .ideas-danger p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.wirecat-editorial .wirecat-ideas .ideas-text-button {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.wirecat-editorial .wirecat-ideas .ideas-text-button:is(:hover, :focus-visible) {
+  background: none;
+  color: var(--ideas-error);
+}
+.wirecat-editorial .wirecat-ideas .ideas-button-danger,
+.wirecat-editorial .wirecat-ideas .ideas-button-danger:hover {
+  border-color: var(--ideas-error);
+  background: var(--ideas-error);
+  color: var(--paper);
+}
+.wirecat-editorial .wirecat-ideas .ideas-more {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+}

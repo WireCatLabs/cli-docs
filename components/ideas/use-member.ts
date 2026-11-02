@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ideas } from "@/lib/ideas"
+import { ideas, ideasPath, returnPath } from "@/lib/ideas"
 import type { Member } from "@/lib/ideas/types"
 
-/** undefined while the session is loading, null when signed out. */
+/** undefined while the session is loading, null when signed out or when the API cannot say. */
 export function useMember() {
   const [member, setMember] = useState<Member | null>()
   useEffect(() => {
@@ -20,9 +20,12 @@ export function useMember() {
   return member
 }
 
-/** The page's path and query once mounted, so links built from it match the static HTML first. */
-export function useCurrentPath(fallback: string) {
-  const [path, setPath] = useState(fallback)
-  useEffect(() => setPath(`${window.location.pathname}${window.location.search}`), [])
+/** This page as a sign-in `return_to`, once mounted, so links built from it match the static HTML first. */
+export function useReturnPath(lang: string) {
+  const [path, setPath] = useState(ideasPath(lang))
+  useEffect(() => setPath(returnPath(lang, window.location.pathname, window.location.search)), [lang])
   return path
 }
+
+export const signInHref = (lang: string, next: string) =>
+  `${ideasPath(lang, "sign-in")}?next=${encodeURIComponent(next)}`

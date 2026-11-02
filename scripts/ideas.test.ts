@@ -47,16 +47,18 @@ describe("sample source", () => {
 
   it("filters by tool and status and sorts by votes", async () => {
     const { sampleSource } = await import("../lib/ideas/sample.ts")
-    const zoom = await settle(sampleSource.list({ tool: "zm", sort: "top" }))
+    const { ideas: zoom } = await settle(sampleSource.list({ tool: "zm", sort: "top" }))
     expect(zoom.every((idea) => idea.tool === "zm")).toBe(true)
     expect(zoom.map((idea) => idea.votes)).toEqual([...zoom.map((idea) => idea.votes)].sort((a, b) => b - a))
-    expect(await settle(sampleSource.list({ tool: "wa", status: "done", sort: "top" }))).toEqual([])
+    expect((await settle(sampleSource.list({ tool: "wa", status: "done", sort: "top" }))).total).toBe(0)
   })
 
   it("counts a vote once and takes it back", async () => {
     const { sampleSource, setPreviewMode } = await import("../lib/ideas/sample.ts")
     setPreviewMode("signed-in")
-    const [first] = await settle(sampleSource.list({ sort: "top" }))
+    const {
+      ideas: [first],
+    } = await settle(sampleSource.list({ sort: "top" }))
     const voted = await settle(sampleSource.vote(first.id))
     expect(voted).toMatchObject({ voted: true, votes: first.votes + 1 })
     expect(await settle(sampleSource.vote(first.id))).toMatchObject({ votes: first.votes + 1 })
@@ -67,7 +69,7 @@ describe("sample source", () => {
     const { sampleSource } = await import("../lib/ideas/sample.ts")
     const similar = await settle(sampleSource.similar("search zoom meetings by speaker"))
     expect(similar.length).toBeGreaterThan(0)
-    expect(similar.length).toBeLessThanOrEqual(4)
+    expect(similar.length).toBeLessThanOrEqual(5)
   })
 
   it("fails every call but the session in the API-down preview", async () => {

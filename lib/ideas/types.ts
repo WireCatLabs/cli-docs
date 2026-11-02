@@ -1,12 +1,14 @@
-export const ideaTools = ["tg", "max", "wa", "mail", "gcal", "drive", "zm", "memo", "desktop", "all"] as const
+export const ideaTools = ["tg", "max", "wa", "mail", "gcal", "drive", "zm", "memo", "desktop", "other"] as const
 export const ideaStatuses = ["new", "planned", "in_progress", "done", "not_planned"] as const
 export const ideaSorts = ["top", "new"] as const
+export const locales = ["en", "ru", "es"] as const
 
 export type IdeaTool = (typeof ideaTools)[number]
 export type IdeaStatus = (typeof ideaStatuses)[number]
 export type IdeaSort = (typeof ideaSorts)[number]
+export type Locale = (typeof locales)[number]
 
-export type IdeaLink = { kind: "release" | "pull_request"; title: string; url: string }
+export type IdeaLink = { label: string; url: string }
 
 export type Idea = {
   id: string
@@ -14,44 +16,75 @@ export type Idea = {
   body: string
   tool: IdeaTool
   status: IdeaStatus
-  votes: number
-  voted: boolean
-  /** null for ideas the WireCat team seeded */
-  author: string | null
-  createdAt: string
+  /** set only for not_planned */
+  statusReason: string | null
   answer: string | null
   links: IdeaLink[]
+  votes: number
+  voted: boolean
+  /** name is null for a member with no name or a deleted account; team marks the seeded ideas */
+  author: { name: string | null; team: boolean }
+  mergedIntoId: string | null
+  createdAt: string
 }
 
-export type Member = { email: string; name: string }
+export type Member = { email: string; name: string | null }
 
-export type IdeaQuery = { tool?: IdeaTool; status?: IdeaStatus; sort: IdeaSort }
+export type IdeaQuery = { tool?: IdeaTool; status?: IdeaStatus; sort: IdeaSort; page?: number }
+export type IdeaPage = { ideas: Idea[]; total: number; page: number; perPage: number }
 export type NewIdea = { title: string; body: string; tool: IdeaTool; turnstileToken: string }
-
-export type SignInLinkResult = "sent" | "failed"
-export type SessionResult = "signed_in" | "expired" | "failed"
-
-/** Thrown when the API cannot be reached or answers with a server error, so screens can show the outage state. */
-export class IdeasUnavailable extends Error {}
+export type SignInLink = { email: string; locale: Locale; returnTo: string; turnstileToken: string }
 
 /**
- * What the screens need from the ideas API (`docs/ideas-api.md` in wirecat-api). The sample source and the
- * API client implement the same shape, so switching is one line in `lib/ideas/index.ts`.
+ * Every failure the screens tell apart, from the API's `error.code` (docs/ideas-api.md, "Errors"). `unavailable`
+ * covers no answer at all and server errors, and shows as the "API down" state.
  */
+export type IdeasErrorCode =
+  | "unavailable"
+  | "sign_in_required"
+  | "sign_in_unavailable"
+  | "turnstile_failed"
+  | "already_voted"
+  | "not_voted"
+  | "not_found"
+  | "idea_merged"
+  | "validation_error"
+  | "invalid_token"
+  | "idea_limit"
+  | "rate_limited"
+  | "forbidden"
+
+export class IdeasError extends Error {
+  constructor(
+    readonly code: IdeasErrorCode,
+    message: string = code,
+    readonly fields: Record<string, string[]> = {},
+  ) {
+    super(message)
+  }
+}
+
+/** The screens' view of `docs/ideas-api.md` in wirecat-api. The sample source and the API client both implement it. */
 export type IdeasSource = {
-  list(query: IdeaQuery): Promise<Idea[]>
+  list(query: IdeaQuery): Promise<IdeaPage>
   get(id: string): Promise<Idea | null>
   similar(title: string): Promise<Idea[]>
   create(idea: NewIdea): Promise<Idea>
-  vote(id: string): Promise<Idea>
-  unvote(id: string): Promise<Idea>
+  vote(id: string): Promise<Pick<Idea, "voted" | "votes">>
+  unvote(id: string): Promise<Pick<Idea, "voted" | "votes">>
   member(): Promise<Member | null>
-  requestSignInLink(email: string, turnstileToken: string, returnTo: string): Promise<SignInLinkResult>
-  googleSignInUrl(returnTo: string): string
-  exchangeToken(token: string): Promise<SessionResult>
+  requestSignInLink(link: SignInLink): Promise<void>
+  googleSignInUrl(locale: Locale, returnTo: string): string
+  /** Throws `sign_in_unavailable` while Google sign-in is not set up, before the page navigates away to it. */
+  googleSignInReady(locale: Locale, returnTo: string): Promise<void>
+  /** Trades the emailed token for a session and gives where to go next. */
+  startSession(token: string): Promise<{ returnTo: string | null }>
   signOut(): Promise<void>
+  deleteAccount(): Promise<void>
+  unsubscribe(token: string): Promise<void>
 }
 
 export const isTool = (value: string | null | undefined): value is IdeaTool => ideaTools.includes(value as IdeaTool)
 export const isStatus = (value: string | null | undefined): value is IdeaStatus =>
   ideaStatuses.includes(value as IdeaStatus)
+export const asLocale = (value: string): Locale => (locales.includes(value as Locale) ? (value as Locale) : "en")

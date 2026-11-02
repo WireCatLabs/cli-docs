@@ -12,9 +12,7 @@ import { StatusIcon, StatusLabel } from "./status-label"
 import { useMember } from "./use-member"
 import { VoteButton } from "./vote-button"
 
-const pageSize = 20
-
-type Load = { state: "loading" } | { state: "down" } | { state: "ready"; ideas: Idea[] }
+type Load = { state: "loading" } | { state: "down" } | { state: "ready"; ideas: Idea[]; total: number; page: number }
 
 export function IdeasBoard({ lang }: { lang: string }) {
   const words = ideasWords(lang)
@@ -24,21 +22,39 @@ export function IdeasBoard({ lang }: { lang: string }) {
   const sort = params.get("sort") === "new" ? "new" : "top"
   const member = useMember()
   const [load, setLoad] = useState<Load>({ state: "loading" })
-  const [shown, setShown] = useState(pageSize)
+  const [more, setMore] = useState<"idle" | "loading" | "failed">("idle")
 
   const fetchIdeas = useCallback(() => {
     setLoad({ state: "loading" })
-    setShown(pageSize)
+    setMore("idle")
     let current = true
     ideas
       .list({ tool, status, sort })
-      .then((list) => current && setLoad({ state: "ready", ideas: list }))
+      .then((page) => current && setLoad({ state: "ready", ideas: page.ideas, total: page.total, page: page.page }))
       .catch(() => current && setLoad({ state: "down" }))
     return () => {
       current = false
     }
   }, [tool, status, sort])
   useEffect(fetchIdeas, [fetchIdeas])
+
+  const loadMore = async () => {
+    if (load.state !== "ready") return
+    setMore("loading")
+    try {
+      const next = await ideas.list({ tool, status, sort, page: load.page + 1 })
+      const seen = new Set(load.ideas.map((idea) => idea.id))
+      setLoad({
+        ...load,
+        ideas: [...load.ideas, ...next.ideas.filter((idea) => !seen.has(idea.id))],
+        total: next.total,
+        page: next.page,
+      })
+      setMore("idle")
+    } catch {
+      setMore("failed")
+    }
+  }
 
   const href = (change: Record<string, string | undefined>) => {
     const next = new URLSearchParams(params)
@@ -97,7 +113,7 @@ export function IdeasBoard({ lang }: { lang: string }) {
       </nav>
 
       <div className="ideas-list-head">
-        <h2 aria-live="polite">{load.state === "ready" ? words.count(load.ideas.length) : words.title}</h2>
+        <h2 aria-live="polite">{load.state === "ready" ? words.count(load.total) : words.title}</h2>
         <nav className="ideas-sort" aria-label={words.sort}>
           {ideaSorts.map((option) => (
             <Link
@@ -117,7 +133,7 @@ export function IdeasBoard({ lang }: { lang: string }) {
       {load.state === "ready" && !load.ideas.length && <IdeasEmpty lang={lang} />}
       {load.state === "ready" && load.ideas.length > 0 && (
         <ol className="ideas-list">
-          {load.ideas.slice(0, shown).map((idea) => (
+          {load.ideas.map((idea) => (
             <li key={idea.id} className="idea-row">
               <VoteButton lang={lang} idea={idea} member={member} />
               <div className="idea-row-text">
@@ -128,7 +144,7 @@ export function IdeasBoard({ lang }: { lang: string }) {
                 <p className="idea-meta">
                   <StatusLabel lang={lang} status={idea.status} />
                   <span>{words.tools[idea.tool]}</span>
-                  {idea.answer && (
+                  {(idea.answer || idea.statusReason) && (
                     <span className="idea-has-answer">
                       <MessageSquareText aria-hidden="true" />
                       {words.answer}
@@ -140,14 +156,22 @@ export function IdeasBoard({ lang }: { lang: string }) {
           ))}
         </ol>
       )}
-      {load.state === "ready" && load.ideas.length > shown && (
-        <button
-          type="button"
-          className="ideas-button ideas-button-quiet ideas-more"
-          onClick={() => setShown((count) => count + pageSize)}
-        >
-          {words.more(load.ideas.length - shown)}
-        </button>
+      {load.state === "ready" && load.total > load.ideas.length && (
+        <div className="ideas-more">
+          <button
+            type="button"
+            className="ideas-button ideas-button-quiet"
+            disabled={more === "loading"}
+            onClick={loadMore}
+          >
+            {words.more(load.total - load.ideas.length)}
+          </button>
+          {more === "failed" && (
+            <p className="ideas-error" role="alert">
+              {words.down}
+            </p>
+          )}
+        </div>
       )}
     </div>
   )

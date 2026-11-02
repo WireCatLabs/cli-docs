@@ -2,9 +2,9 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
-import { ideas, ideasPath } from "@/lib/ideas"
+import { ideaPath, ideas, ideasPath } from "@/lib/ideas"
 import type { Idea } from "@/lib/ideas/types"
 import { formatIdeaDate, ideasWords } from "@/lib/ideas/words"
 import { localizedPath } from "@/lib/site-routes"
@@ -17,7 +17,10 @@ type Load = { state: "loading" } | { state: "down" } | { state: "missing" } | { 
 
 export function IdeaView({ lang }: { lang: string }) {
   const words = ideasWords(lang)
-  const id = useSearchParams().get("id") ?? ""
+  const params = useSearchParams()
+  const id = params.get("id") ?? ""
+  const merged = params.has("merged")
+  const router = useRouter()
   const member = useMember()
   const [load, setLoad] = useState<Load>({ state: "loading" })
 
@@ -26,12 +29,17 @@ export function IdeaView({ lang }: { lang: string }) {
     let current = true
     ideas
       .get(id)
-      .then((idea) => current && setLoad(idea ? { state: "ready", idea } : { state: "missing" }))
+      .then((idea) => {
+        if (!current) return
+        // A merged duplicate still answers, so old links in emails forward to the idea that kept its votes.
+        if (idea?.mergedIntoId) return router.replace(`${ideaPath(lang, idea.mergedIntoId)}&merged=1`)
+        setLoad(idea ? { state: "ready", idea } : { state: "missing" })
+      })
       .catch(() => current && setLoad({ state: "down" }))
     return () => {
       current = false
     }
-  }, [id])
+  }, [id, lang, router])
   useEffect(fetchIdea, [fetchIdea])
 
   useEffect(() => {
@@ -71,10 +79,32 @@ export function IdeaView({ lang }: { lang: string }) {
     )
 
   const { idea } = load
-  const answerTitle = idea.status === "not_planned" ? words.whyNot : words.answer
+  const links = idea.links.length > 0 && (
+    <>
+      <h3>{words.shipped}</h3>
+      <ul>
+        {idea.links.map((link) => (
+          <li key={link.url}>
+            <a
+              className="animated-text-link text-link"
+              href={link.url.startsWith("/") ? localizedPath(link.url, lang) : link.url}
+            >
+              <span className="link-label">{link.label}</span>
+              <ArrowRight aria-hidden="true" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
+  )
   return (
     <article className="idea-detail" aria-labelledby="idea-title">
       {back}
+      {merged && (
+        <p className="ideas-note" role="status">
+          {words.mergedNote}
+        </p>
+      )}
       <p className="idea-meta">
         <StatusLabel lang={lang} status={idea.status} />
         <span>{words.tools[idea.tool]}</span>
@@ -83,32 +113,33 @@ export function IdeaView({ lang }: { lang: string }) {
         <h1 id="idea-title">{idea.title}</h1>
         <VoteButton lang={lang} idea={idea} member={member} wide />
       </div>
-      <p className="idea-body">{idea.body}</p>
-      <p className="idea-byline">{words.postedBy(idea.author ?? words.team, formatIdeaDate(lang, idea.createdAt))}</p>
-      {idea.answer && (
-        <section className="idea-answer" data-status={idea.status} aria-labelledby="idea-answer">
-          <h2 id="idea-answer">{answerTitle}</h2>
-          <p>{idea.answer}</p>
-          {idea.links.length > 0 && (
+      {idea.body && <p className="idea-body">{idea.body}</p>}
+      <p className="idea-byline">
+        {words.postedBy(
+          idea.author.team ? words.team : (idea.author.name ?? words.aMember),
+          formatIdeaDate(lang, idea.createdAt),
+        )}
+      </p>
+      {idea.statusReason && (
+        <section className="idea-answer" data-status={idea.status} aria-labelledby="idea-reason">
+          <h2 id="idea-reason">{words.whyNot}</h2>
+          <p>{idea.statusReason}</p>
+        </section>
+      )}
+      {(idea.answer || links) && (
+        <section
+          className="idea-answer"
+          data-status={idea.status}
+          aria-labelledby={idea.answer ? "idea-answer" : undefined}
+          aria-label={idea.answer ? undefined : words.shipped}
+        >
+          {idea.answer && (
             <>
-              <h3>{words.shipped}</h3>
-              <ul>
-                {idea.links.map((link) => (
-                  <li key={link.url}>
-                    <a
-                      className="animated-text-link text-link"
-                      href={link.url.startsWith("/") ? localizedPath(link.url, lang) : link.url}
-                    >
-                      <span className="link-label">
-                        {link.kind === "release" ? words.releasePost : words.pullRequest}: {link.title}
-                      </span>
-                      <ArrowRight aria-hidden="true" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <h2 id="idea-answer">{words.answer}</h2>
+              <p>{idea.answer}</p>
             </>
           )}
+          {links}
         </section>
       )}
     </article>

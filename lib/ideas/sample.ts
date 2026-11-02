@@ -1,12 +1,12 @@
-import { localeFromPath } from "../site-routes"
+import { perPage } from "./api"
 import { sampleIdeas } from "./sample-data"
-import { type Idea, type IdeaQuery, type IdeasSource, IdeasUnavailable, type Member, type NewIdea } from "./types"
+import { type Idea, type IdeaQuery, IdeasError, type IdeasSource, type Member, type NewIdea } from "./types"
 
 export const previewModes = ["signed-out", "signed-in", "loading", "down"] as const
 export type PreviewMode = (typeof previewModes)[number]
 
 const storageKey = "wirecat-ideas-sample"
-const sampleMember: Member = { email: "you@example.com", name: "You" }
+const sampleMember: Member = { email: "you@example.com", name: null }
 
 type Saved = { mode: PreviewMode; votes: string[]; posted: Idea[] }
 
@@ -44,7 +44,7 @@ const answer = async <T>(value: () => T, delay = 300): Promise<T> => {
   const { mode } = read()
   if (mode === "loading") return new Promise(() => {})
   await new Promise((resolve) => setTimeout(resolve, delay))
-  if (mode === "down") throw new IdeasUnavailable("sample: API down")
+  if (mode === "down") throw new IdeasError("unavailable")
   return value()
 }
 
@@ -58,24 +58,26 @@ const all = (): Idea[] => {
 const signedIn = () => read().mode !== "signed-out"
 
 function setVote(id: string, voted: boolean) {
-  if (!signedIn()) throw new Error("sign in to vote")
+  if (!signedIn()) throw new IdeasError("sign_in_required")
   const saved = read()
   const votes = saved.votes.filter((vote) => vote !== id)
   write({ ...saved, votes: voted ? [...votes, id] : votes })
   const idea = all().find((item) => item.id === id)
-  if (!idea) throw new Error(`no idea ${id}`)
-  return idea
+  if (!idea) throw new IdeasError("not_found")
+  return { voted: idea.voted, votes: idea.votes }
 }
 
+/** Preview only: the screens with seeded ideas and no API, switched by the preview bar or `?preview=`. */
 export const sampleSource: IdeasSource = {
-  list: ({ tool, status, sort }: IdeaQuery) =>
-    answer(() =>
-      all()
+  list: ({ tool, status, sort, page = 1 }: IdeaQuery) =>
+    answer(() => {
+      const found = all()
         .filter((idea) => (!tool || idea.tool === tool) && (!status || idea.status === status))
         .sort((a, b) =>
           sort === "new" ? b.createdAt.localeCompare(a.createdAt) : b.votes - a.votes || a.title.localeCompare(b.title),
-        ),
-    ),
+        )
+      return { ideas: found.slice((page - 1) * perPage, page * perPage), total: found.length, page, perPage }
+    }),
   get: (id) => answer(() => all().find((idea) => idea.id === id) ?? null),
   similar: (title) =>
     answer(() => {
@@ -85,7 +87,7 @@ export const sampleSource: IdeasSource = {
         .map((idea) => ({ idea, score: words(`${idea.title} ${idea.body}`).filter((word) => wanted.has(word)).length }))
         .filter(({ score }) => score > 0)
         .sort((a, b) => b.score - a.score || b.idea.votes - a.idea.votes)
-        .slice(0, 4)
+        .slice(0, 5)
         .map(({ idea }) => idea)
     }, 150),
   create: ({ title, body, tool }: NewIdea) =>
@@ -97,12 +99,14 @@ export const sampleSource: IdeasSource = {
         body,
         tool,
         status: "new",
-        votes: 1,
-        voted: true,
-        author: sampleMember.name,
-        createdAt: new Date().toISOString(),
+        statusReason: null,
         answer: null,
         links: [],
+        votes: 1,
+        voted: true,
+        author: { name: sampleMember.name, team: false },
+        mergedIntoId: null,
+        createdAt: new Date().toISOString(),
       }
       write({
         ...saved,
@@ -118,14 +122,19 @@ export const sampleSource: IdeasSource = {
     if (read().mode === "down") return sampleMember
     return answer(() => (signedIn() ? sampleMember : null), 100)
   },
-  requestSignInLink: () => answer(() => "sent" as const, 600),
-  googleSignInUrl: (returnTo) =>
-    `/${localeFromPath(returnTo)}/ideas/sign-in?token=google&next=${encodeURIComponent(returnTo)}`,
-  exchangeToken: (token) =>
+  requestSignInLink: () => answer(() => undefined, 600),
+  googleSignInUrl: (locale, returnTo) => `/${locale}/ideas/sign-in?next=${encodeURIComponent(returnTo)}#token=google`,
+  googleSignInReady: () => answer(() => undefined, 100),
+  startSession: (token) =>
     answer(() => {
-      if (token === "expired") return "expired" as const
+      if (token === "expired") throw new IdeasError("invalid_token")
       setPreviewMode("signed-in")
-      return "signed_in" as const
+      return { returnTo: null }
     }, 500),
   signOut: () => answer(() => setPreviewMode("signed-out"), 100),
+  deleteAccount: () => answer(() => write({ mode: "signed-out", votes: [], posted: [] }), 400),
+  unsubscribe: (token) =>
+    answer(() => {
+      if (token === "expired") throw new IdeasError("invalid_token")
+    }, 400),
 }

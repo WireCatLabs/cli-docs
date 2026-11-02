@@ -1,12 +1,14 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import type { ReactNode } from "react"
+import { type ReactNode, Suspense } from "react"
 import { i18n } from "@/lib/i18n"
 import { ideasEnabled, ideasSample } from "@/lib/ideas"
 import { ideasWords } from "@/lib/ideas/words"
 import { pageMetadata } from "@/lib/seo"
 import { IdeasAside } from "./ideas-aside"
+import { LanguageLinksKeepQuery } from "./language-links"
 import { PreviewBar } from "./preview-bar"
+import { SignInNotice } from "./sign-in-notice"
 import "@/components/blog/blog.css"
 import "./ideas.css"
 
@@ -33,6 +35,10 @@ export function IdeasFrame({ lang, children }: { lang: string; children: ReactNo
     <div className="wirecat-blog wirecat-ideas">
       <main id="main" className="wrap blog-page ideas-page">
         {ideasSample && <PreviewBar lang={lang} />}
+        <Suspense>
+          <LanguageLinksKeepQuery />
+        </Suspense>
+        <SignInNotice lang={lang} />
         <div className="blog-columns">
           <div className="blog-main">{children}</div>
           <aside className="blog-sidebar ideas-sidebar">

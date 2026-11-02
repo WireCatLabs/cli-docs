@@ -3,10 +3,10 @@
 import { ChevronUp } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
-import { ideas, ideasPath } from "@/lib/ideas"
-import type { Idea, Member } from "@/lib/ideas/types"
-import { ideasWords } from "@/lib/ideas/words"
-import { useCurrentPath } from "./use-member"
+import { ideas } from "@/lib/ideas"
+import { type Idea, IdeasError, type Member } from "@/lib/ideas/types"
+import { errorText, ideasWords } from "@/lib/ideas/words"
+import { signInHref, useReturnPath } from "./use-member"
 
 /** The count is always shown; signed out, the button is a link to sign in that comes back here. */
 export function VoteButton({
@@ -23,8 +23,8 @@ export function VoteButton({
   const words = ideasWords(lang)
   const [state, setState] = useState({ voted: idea.voted, votes: idea.votes })
   const [busy, setBusy] = useState(false)
-  const [failed, setFailed] = useState(false)
-  const here = useCurrentPath(ideasPath(lang))
+  const [error, setError] = useState("")
+  const here = useReturnPath(lang)
   const className = wide ? "idea-vote idea-vote-wide" : "idea-vote"
   const count = (
     <>
@@ -38,7 +38,7 @@ export function VoteButton({
     return (
       <Link
         className={className}
-        href={`${ideasPath(lang, "sign-in")}?next=${encodeURIComponent(here)}`}
+        href={signInHref(lang, here)}
         aria-label={`${words.signInToVote}: ${idea.title}, ${state.votes} ${words.votes(state.votes)}`}
         title={words.signInToVote}
         aria-disabled={member === undefined}
@@ -50,14 +50,20 @@ export function VoteButton({
   const toggle = async () => {
     const before = state
     setBusy(true)
-    setFailed(false)
+    setError("")
     setState({ voted: !before.voted, votes: before.votes + (before.voted ? -1 : 1) })
     try {
-      const updated = await (before.voted ? ideas.unvote(idea.id) : ideas.vote(idea.id))
-      setState({ voted: updated.voted, votes: updated.votes })
-    } catch {
-      setState(before)
-      setFailed(true)
+      setState(await (before.voted ? ideas.unvote(idea.id) : ideas.vote(idea.id)))
+    } catch (failure) {
+      const code = failure instanceof IdeasError ? failure.code : "unavailable"
+      // The server already had it the way the reader wanted; only the button was stale.
+      if (code === "already_voted") setState({ voted: true, votes: before.votes })
+      else if (code === "not_voted") setState({ voted: false, votes: before.votes })
+      else if (code === "sign_in_required") window.location.assign(signInHref(lang, here))
+      else {
+        setState(before)
+        setError(errorText(lang, failure, words.voteFailed))
+      }
     }
     setBusy(false)
   }
@@ -74,9 +80,9 @@ export function VoteButton({
       >
         {count}
       </button>
-      {failed && (
+      {error && (
         <span className="idea-vote-error" role="alert">
-          {words.voteFailed}
+          {error}
         </span>
       )}
     </span>
