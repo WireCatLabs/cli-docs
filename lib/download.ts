@@ -171,7 +171,7 @@ Before you overwrite or delete any file that already exists, show it to me and a
     close: "Close",
     shots: {
       tools: {
-        alt: "The Tools page: Telegram, MAX, WhatsApp, Zoom, Google Drive and Memo installed and synced",
+        alt: "The Tools page: Telegram synced and WhatsApp opened with its signed-in account",
         caption: "Every messenger, meeting and file tool, installed, signed in and synced.",
       },
       agents: {
@@ -318,7 +318,7 @@ const ru: Words = {
     close: "Закрыть",
     shots: {
       tools: {
-        alt: "Страница «Инструменты»: Telegram, MAX, WhatsApp, Zoom, Google Drive и Memo установлены и синхронизированы",
+        alt: "Страница «Инструменты»: Telegram и MAX синхронизированы, у WhatsApp открыт подключённый аккаунт",
         caption: "Все инструменты установлены, вход выполнен, данные синхронизированы.",
       },
       agents: {
@@ -459,7 +459,7 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
     close: "Cerrar",
     shots: {
       tools: {
-        alt: "La página Herramientas: Telegram, MAX, WhatsApp, Zoom, Google Drive y Memo instalados y sincronizados",
+        alt: "La página Herramientas: Telegram sincronizado y WhatsApp abierto con su cuenta conectada",
         caption: "Todas tus herramientas instaladas, con sesión iniciada y sincronizadas.",
       },
       agents: {

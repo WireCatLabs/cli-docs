@@ -687,12 +687,12 @@
     "— Claude Code, Codex, Cursor, or ChatGPT through MCP.": "— Claude Code, Codex, Cursor или ChatGPT через MCP.",
     "Search, tasks and memory on your computer": "Поиск, задачи и память на вашем компьютере",
     "— and you approve what your agent remembers.": "— а то, что запомнил агент, вы одобряете сами.",
-    "WireCat Desktop, the Tools page: Telegram, MAX, WhatsApp, Zoom, Google Drive and Memo installed and synced": "WireCat Desktop, страница «Инструменты»: Telegram, MAX, WhatsApp, Zoom, Google Drive и Memo установлены и синхронизированы",
     "Every messenger, meeting and file tool, installed, signed in and synced.": "Все инструменты установлены, вход выполнен, данные синхронизированы.",
     "WireCat Desktop, the Memory page: facts and decisions from your agents waiting for your approval": "WireCat Desktop, страница «Память»: факты и решения от агентов ждут вашего одобрения",
     "Nothing an agent remembers counts until you approve it.": "Ничто из того, что запомнил агент, не считается, пока вы не одобрите.",
     "WireCat Desktop, the Search page: a result opened with the messages around it": "WireCat Desktop, страница «Поиск»: открытый результат с сообщениями вокруг него",
-    "Open any result to see the conversation around it.": "Откройте результат и увидите переписку вокруг него."
+    "Open any result to see the conversation around it.": "Откройте результат и увидите переписку вокруг него.",
+    "WireCat Desktop, the Tools page: Telegram synced and WhatsApp opened with its signed-in account": "WireCat Desktop, страница «Инструменты»: Telegram и MAX синхронизированы, у WhatsApp открыт подключённый аккаунт"
   },
   "es": {
     "Personal chats": "Chats personales",
@@ -1381,11 +1381,11 @@
     "— Claude Code, Codex, Cursor, or ChatGPT through MCP.": "— Claude Code, Codex, Cursor o ChatGPT mediante MCP.",
     "Search, tasks and memory on your computer": "Búsqueda, tareas y memoria en tu ordenador",
     "— and you approve what your agent remembers.": "— y tú apruebas lo que recuerda tu agente.",
-    "WireCat Desktop, the Tools page: Telegram, MAX, WhatsApp, Zoom, Google Drive and Memo installed and synced": "WireCat Desktop, la página Herramientas: Telegram, MAX, WhatsApp, Zoom, Google Drive y Memo instalados y sincronizados",
     "Every messenger, meeting and file tool, installed, signed in and synced.": "Todas tus herramientas instaladas, con sesión iniciada y sincronizadas.",
     "WireCat Desktop, the Memory page: facts and decisions from your agents waiting for your approval": "WireCat Desktop, la página Memoria: hechos y decisiones de tus agentes esperan tu aprobación",
     "Nothing an agent remembers counts until you approve it.": "Nada de lo que recuerda un agente cuenta hasta que lo apruebas.",
     "WireCat Desktop, the Search page: a result opened with the messages around it": "WireCat Desktop, la página Búsqueda: un resultado abierto con los mensajes que lo rodean",
-    "Open any result to see the conversation around it.": "Abre cualquier resultado y ve la conversación que lo rodea."
+    "Open any result to see the conversation around it.": "Abre cualquier resultado y ve la conversación que lo rodea.",
+    "WireCat Desktop, the Tools page: Telegram synced and WhatsApp opened with its signed-in account": "WireCat Desktop, la página Herramientas: Telegram sincronizado y WhatsApp abierto con su cuenta conectada"
   }
 }
