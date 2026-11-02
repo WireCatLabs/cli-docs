@@ -3,6 +3,7 @@ import { apiSource, errorCode } from "../lib/ideas/api.ts"
 import { maskEmail, returnPath, safeReturnPath } from "../lib/ideas/config.ts"
 import { IdeasError } from "../lib/ideas/types.ts"
 import { ideasWords } from "../lib/ideas/words.ts"
+import siteConfig from "../site.config.json"
 
 const base = "https://api.wirecat.dev"
 const apiIdea = {
@@ -313,8 +314,9 @@ describe("API address", () => {
     expect(config).toMatchObject({ ideasApiUrl: "http://localhost:3000", ideasLive: true, ideasSample: false })
   })
 
-  it("ignores it in a build, where no apiUrl in site.config.json still hides the page", async () => {
+  it("ignores it in a build, where only site.config.json decides", async () => {
     const config = await configWith("production", "http://localhost:3000")
-    expect(config).toMatchObject({ ideasApiUrl: "", ideasLive: false, ideasEnabled: false })
+    const committed = siteConfig.ideas.apiUrl
+    expect(config).toMatchObject({ ideasApiUrl: committed, ideasLive: !!committed, ideasEnabled: !!committed })
   })
 })
