@@ -208,3 +208,7 @@ Its localized captions are reviewed portal corrections for the Telegram sessions
 Documentation authoring: [rules](docs/AUTHORING.md), [task index](docs/README.md) and
 [tooling](docs/TOOLING.md). The [implementation plan](https://github.com/WireCatLabs/cli-private/blob/main/archive/public-repo-workfiles/cli-docs/docs/plans/2026-10-07-documentation-system.md)
 (private) records the source baseline and validation.
+
+## Maintainers
+
+- [Viacheslav Ptsarev](https://github.com/leemour) — founder and maintainer

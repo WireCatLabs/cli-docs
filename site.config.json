@@ -5,7 +5,8 @@
   "contacts": {
     "email": "hello@wirecat.dev",
     "telegram": "https://t.me/wirecatdev",
-    "maintainerTelegram": "https://t.me/hurrykan"
+    "maintainerTelegram": "https://t.me/hurrykan",
+    "founderGithub": "https://github.com/leemour"
   },
   "analytics": {
     "posthogKey": "phc_84fSu0Ag4aCj1GoFASXAB2fY8XTPR5CCa8GQ9U8BPyv",
