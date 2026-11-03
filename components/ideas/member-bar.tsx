@@ -2,13 +2,10 @@
 
 import { ChevronRight, UserRound } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
 import { ideasPath, maskEmail } from "@/lib/ideas"
 import type { Member } from "@/lib/ideas/types"
 import { ideasWords } from "@/lib/ideas/words"
 import { signInHref, useMember, useReturnPath } from "./use-member"
-
-export const justSignedInKey = "wirecat-ideas-just-signed-in"
 
 export function MemberAvatar({ member }: { member: Member }) {
   const letter = (member.name?.trim() || member.email).charAt(0).toUpperCase()
@@ -28,15 +25,6 @@ export function MemberBar({ lang }: { lang: string }) {
   const words = ideasWords(lang)
   const member = useMember()
   const here = useReturnPath(lang)
-  const [just, setJust] = useState(false)
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem(justSignedInKey)) {
-        sessionStorage.removeItem(justSignedInKey)
-        setJust(true)
-      }
-    } catch {}
-  }, [])
   if (member === undefined) return <div className="ideas-member-bar" aria-hidden="true" />
   if (!member)
     return (
@@ -65,11 +53,6 @@ export function MemberBar({ lang }: { lang: string }) {
         </span>
         <ChevronRight className="ideas-member-arrow" aria-hidden="true" />
       </Link>
-      {just && (
-        <p className="ideas-member-just" role="status">
-          {words.account.justSignedIn(who)}
-        </p>
-      )}
     </div>
   )
 }

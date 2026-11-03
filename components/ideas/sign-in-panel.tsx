@@ -1,20 +1,22 @@
 "use client"
 
-import { MailCheck } from "lucide-react"
+import { CircleCheck, LoaderCircle, MailCheck } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { type FormEvent, type MouseEvent, useEffect, useState } from "react"
+import { type FormEvent, type MouseEvent, useEffect, useLayoutEffect, useState } from "react"
 import { GoogleIcon } from "@/components/brand-icons"
 import { ideas, ideasPath, maskEmail, safeReturnPath } from "@/lib/ideas"
 import { boardWords } from "@/lib/ideas/board-words"
 import { asLocale, IdeasError } from "@/lib/ideas/types"
 import { errorText, ideasWords } from "@/lib/ideas/words"
 import { announceSignIn, isSignInPopup } from "./board/popup"
-import { justSignedInKey } from "./member-bar"
 import { TurnstileField } from "./turnstile-field"
 import { useMember } from "./use-member"
 
-type State = "idle" | "verifying" | "expired" | "sending" | "sent" | "failed" | "popup-done"
+type State = "idle" | "verifying" | "signed-in" | "expired" | "sending" | "sent" | "failed" | "popup-done"
+
+/** Long enough to read "You are signed in", short enough not to feel like a wait. */
+const landingPauseMs = 1200
 
 /** Reads `#token=` from the emailed link and takes it out of the address bar before anything else runs. */
 function takeLinkToken() {
@@ -39,6 +41,7 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
   const [token, setToken] = useState("")
   const [resetKey, setResetKey] = useState(0)
   const [returnTo, setReturnTo] = useState(next ?? ideasPath(lang))
+  const [who, setWho] = useState("")
 
   useEffect(() => {
     const target = next ?? safeReturnPath(lang, new URLSearchParams(window.location.search).get("next"))
@@ -48,15 +51,15 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
     setState("verifying")
     ideas
       .startSession(linkToken)
-      .then(({ returnTo: landing }) => {
+      .then(async ({ returnTo: landing }) => {
         if (isSignInPopup()) {
           setState("popup-done")
           return announceSignIn()
         }
-        try {
-          sessionStorage.setItem(justSignedInKey, "1")
-        } catch {}
-        router.replace(safeReturnPath(lang, landing ?? target))
+        const signedIn = await ideas.member().catch(() => null)
+        setWho(signedIn ? maskEmail(signedIn.email) : "")
+        setState("signed-in")
+        window.setTimeout(() => router.replace(safeReturnPath(lang, landing ?? target)), landingPauseMs)
       })
       .catch((error) => {
         if (error instanceof IdeasError && error.code === "invalid_token") return setState("expired")
@@ -64,6 +67,11 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
         setState("failed")
       })
   }, [lang, next, router, words.failed])
+
+  // The sign-in page's inline script hid the form before React loaded; React's own state takes over from here.
+  useLayoutEffect(() => {
+    if (state !== "idle") delete document.documentElement.dataset.signInLink
+  }, [state])
 
   useEffect(() => {
     if (!isSignInPopup()) return
@@ -113,13 +121,6 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
       </section>
     )
 
-  if (state === "verifying")
-    return (
-      <section className="ideas-panel" aria-busy="true">
-        <p role="status">{words.verifying}</p>
-      </section>
-    )
-
   if (state === "sent")
     return (
       <section className="ideas-panel" aria-labelledby="sign-in-sent">
@@ -150,38 +151,61 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
       </section>
     )
 
+  const linkStatus = state === "verifying" || state === "signed-in"
   return (
-    <section className="ideas-panel" aria-labelledby="sign-in-title">
-      <Heading id="sign-in-title">{state === "expired" ? words.expired : words.title}</Heading>
-      <p>{state === "expired" ? words.expiredText : words.intro}</p>
-      <a className="ideas-button ideas-google" href={ideas.googleSignInUrl(locale, returnTo)} onClick={google}>
-        <GoogleIcon />
-        {words.google}
-      </a>
-      <p className="ideas-or">
-        <span>{words.or}</span>
-      </p>
-      <form className="ideas-form" onSubmit={send}>
-        <label htmlFor="sign-in-email">{words.emailLabel}</label>
-        <input
-          id="sign-in-email"
-          type="email"
-          autoComplete="email"
-          inputMode="email"
-          required
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <TurnstileField lang={lang} onToken={setToken} resetKey={resetKey} />
-        <button type="submit" className="ideas-button" disabled={state === "sending" || !token}>
-          {state === "sending" ? words.sending : words.send}
-        </button>
-        {state === "failed" && (
-          <p className="ideas-error" role="alert">
-            {failure}
-          </p>
+    <section
+      className="ideas-panel ideas-sign-in"
+      data-link-status={linkStatus || undefined}
+      aria-labelledby="sign-in-title"
+      aria-busy={state === "verifying"}
+    >
+      <div className="ideas-sign-in-form" inert={linkStatus}>
+        <Heading id="sign-in-title">{state === "expired" ? words.expired : words.title}</Heading>
+        <p>{state === "expired" ? words.expiredText : words.intro}</p>
+        <a className="ideas-button ideas-google" href={ideas.googleSignInUrl(locale, returnTo)} onClick={google}>
+          <GoogleIcon />
+          {words.google}
+        </a>
+        <p className="ideas-or">
+          <span>{words.or}</span>
+        </p>
+        <form className="ideas-form" onSubmit={send}>
+          <label htmlFor="sign-in-email">{words.emailLabel}</label>
+          <input
+            id="sign-in-email"
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <TurnstileField lang={lang} onToken={setToken} resetKey={resetKey} />
+          <button type="submit" className="ideas-button" disabled={state === "sending" || !token}>
+            {state === "sending" ? words.sending : words.send}
+          </button>
+          {state === "failed" && (
+            <p className="ideas-error" role="alert">
+              {failure}
+            </p>
+          )}
+        </form>
+      </div>
+      {/* Laid over the form, which keeps its room, so the card and the footer below it do not jump. */}
+      <div className="ideas-sign-in-status" role="status">
+        {state === "signed-in" ? (
+          <>
+            <CircleCheck className="ideas-panel-icon ideas-panel-icon-done" aria-hidden="true" />
+            {who && <p className="ideas-sign-in-who">{words.signedIn(who)}</p>}
+            <p>{words.returning}</p>
+          </>
+        ) : (
+          <>
+            <LoaderCircle className="ideas-panel-icon ideas-spin" aria-hidden="true" />
+            <p>{words.verifying}</p>
+          </>
         )}
-      </form>
+      </div>
     </section>
   )
 }
