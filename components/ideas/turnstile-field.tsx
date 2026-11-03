@@ -32,7 +32,8 @@ export function TurnstileField({
       .then((turnstile) => {
         if (cancelled || !widget.current) return
         widgetId.current = turnstile.render(widget.current, {
-          sitekey: siteKey,
+          // The real key allows wirecat.dev only; the local API skips the check, so any token passes there.
+          sitekey: window.location.hostname === "localhost" ? sampleSiteKey : siteKey,
           language: lang,
           callback: (value: string) => callback.current(value),
           "expired-callback": () => callback.current(""),

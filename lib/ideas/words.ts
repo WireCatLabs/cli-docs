@@ -107,6 +107,7 @@ const en = {
     checkText: (email: string) => `I sent a sign-in link to ${email}. Open it on this device. It works once.`,
     other: "Use another address",
     verifying: "Signing you in…",
+    returning: "Taking you back…",
     expired: "This link has expired",
     expiredText: "Sign-in links work once and only for a short time. Get a new one below.",
     signedIn: (email: string) => `You are signed in as ${email}.`,
@@ -144,7 +145,6 @@ const en = {
   },
   account: {
     memberLine: (email: string): string => `Signed in as ${email}.`,
-    justSignedIn: (who: string): string => `You are now signed in as ${who}.`,
     notYou: "Not you?",
     link: "Account",
     delete: "Delete my account",
@@ -278,6 +278,7 @@ const ru: IdeasWords = {
       `Я отправил ссылку для входа на ${email}. Откройте её на этом устройстве. Она сработает один раз.`,
     other: "Указать другой адрес",
     verifying: "Входим…",
+    returning: "Возвращаем на страницу…",
     expired: "Ссылка устарела",
     expiredText: "Ссылка для входа работает один раз и недолго. Получите новую ниже.",
     signedIn: (email) => `Вы вошли как ${email}.`,
@@ -315,7 +316,6 @@ const ru: IdeasWords = {
   },
   account: {
     memberLine: (email) => `Вы вошли как ${email}.`,
-    justSignedIn: (who) => `Теперь вы вошли как ${who}.`,
     notYou: "Не вы?",
     link: "Аккаунт",
     delete: "Удалить мой аккаунт",
@@ -445,6 +445,7 @@ const es: IdeasWords = {
       `Te envié un enlace para entrar a ${email}. Ábrelo en este dispositivo. Funciona una sola vez.`,
     other: "Usar otra dirección",
     verifying: "Iniciando sesión…",
+    returning: "Volviendo a la página…",
     expired: "Este enlace caducó",
     expiredText: "Los enlaces para entrar funcionan una vez y por poco tiempo. Pide uno nuevo abajo.",
     signedIn: (email) => `Has iniciado sesión como ${email}.`,
@@ -482,7 +483,6 @@ const es: IdeasWords = {
   },
   account: {
     memberLine: (email) => `Has iniciado sesión como ${email}.`,
-    justSignedIn: (who) => `Ahora has iniciado sesión como ${who}.`,
     notYou: "¿No eres tú?",
     link: "Cuenta",
     delete: "Eliminar mi cuenta",
