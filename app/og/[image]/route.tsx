@@ -24,10 +24,12 @@ export async function GET(_request: Request, { params }: { params: Promise<{ ima
   const headline = post ? (
     <span style={{ fontSize: post.title.length > 60 ? 48 : 56, lineHeight: 1.2 }}>{post.title}</span>
   ) : (
-    <>
-      <span>{memory}</span>
-      <span style={{ color: "#b8afff" }}>{context}</span>
-    </>
+    [
+      <span key="memory">{memory}</span>,
+      <span key="context" style={{ color: "#b8afff" }}>
+        {context}
+      </span>,
+    ]
   )
   const fonts = [
     {
