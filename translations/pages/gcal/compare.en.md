@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.18.0, its commands and its source, checked on 2 November 2026;
+your job. The marks for `gcal` come from its release 0.19.0, its commands and its source, checked on 2 November 2026;
 they are checked again at each release. The marks for the other tools come from their own
 READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
@@ -54,7 +54,7 @@ The tools:
 | Export meetings to an .ics file, and import one | ✅ | [🟡](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
 | **Agents and safety** | | | | | | |
 | MCP server | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
-| Every calendar command of the tool is also an MCP tool | ✅ | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
+| Every calendar command of the tool is also an MCP tool | 🟡 | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
 | An agent cannot change your calendar unless you allow it | ✅ | n/a | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | You name the account each time; the tool never picks one for you | ✅ | ➖ | [❌](https://github.com/openclaw/gogcli#readme) | ➖ | [❌](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | Text from an invitation is marked for the agent as not to be obeyed | ✅ | n/a | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ | ➖ |
@@ -148,11 +148,11 @@ Notes on the `gcal` column:
   tell the agent they are data, not instructions. The text itself is not changed.
 - **Passcodes.** Passcodes, PINs and passwords are removed from every answer, the raw `gcal api` commands included:
   a link loses its query string, and a line of the notes that names a passcode is dropped.
-- **Every command an MCP tool.** Through three MCP tools, `gcal_tools_search`, `gcal_read` and `gcal_write`. Some
+- **Most commands are MCP tools.** Through three MCP tools, `gcal_tools_search`, `gcal_read` and `gcal_write`. Some
   commands are kept for you at a terminal: `api call`; emptying a calendar (`calendars.clear`); `events remind`, which
   runs a program of yours, so through it an agent could run any program on your computer; `calendars add` and
   `remove`, since a feed's address can hold a private token; and `schedule`, which installs a timer that runs on its
-  own.
+  own. So this row is partly.
 - **claude.ai on the web.** `mcp serve --http` serves the tool to Claude and ChatGPT in the browser or on the phone,
   behind an HTTPS tunnel you set up and keep running yourself, such as Tailscale Funnel, so this row stays partly.
   [ChatGPT or Claude in the browser](./remote.md) walks through it, login code and permissions included.

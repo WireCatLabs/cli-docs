@@ -7,7 +7,7 @@ title: "Сравнение с другими инструментами"
 
 `gcal` — это командная строка и MCP-сервер для Google Календаря вашего собственного аккаунта. Здесь он стоит рядом с
 другими командными строками, MCP-серверами и коннекторами ассистентов, которые читают Google Календарь, чтобы вы
-могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.18.0, его команд и
+могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.19.0, его команд и
 исходного кода, проверенных 2 ноября 2026 года; они проверяются заново при каждом выпуске. Оценки для остальных
 инструментов взяты из их собственных README, документации и исходного кода, проверенных 27 октября 2026 года. Ни в
 один инструмент не выполнялся вход, и ничего не проверялось вживую; инструмент может делать больше, чем говорят его
@@ -58,7 +58,7 @@ title: "Сравнение с другими инструментами"
 | Выгрузить встречи в файл .ics и загрузить такой файл | ✅ | [🟡](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
 | **Агенты и безопасность** | | | | | | |
 | MCP-сервер | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
-| Каждая команда календаря доступна и как инструмент MCP | ✅ | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
+| Каждая команда календаря доступна и как инструмент MCP | 🟡 | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
 | Агент не может менять ваш календарь, пока вы это не разрешите | ✅ | n/a | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Аккаунт вы называете каждый раз; инструмент никогда не выбирает его за вас | ✅ | ➖ | [❌](https://github.com/openclaw/gogcli#readme) | ➖ | [❌](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | Текст из приглашения помечен для агента как данные, а не указания | ✅ | n/a | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ | ➖ |
@@ -162,11 +162,11 @@ title: "Сравнение с другими инструментами"
   агенту, что это данные, а не указания. Сам текст не меняется.
 - **Коды доступа.** Коды доступа, PIN-коды и пароли удаляются из каждого ответа, включая прямые команды `gcal api`:
   ссылка теряет строку запроса, а строка заметок, где назван код, отбрасывается.
-- **Каждая команда — инструмент MCP.** Через три инструмента MCP: `gcal_tools_search`, `gcal_read` и `gcal_write`.
+- **Большинство команд — инструменты MCP.** Через три инструмента MCP: `gcal_tools_search`, `gcal_read` и `gcal_write`.
   Некоторые команды оставлены вам в терминале: `api call`; очистка календаря (`calendars.clear`); `events remind`,
   который запускает вашу программу, так что через него агент мог бы запустить любую программу на вашем компьютере;
   `calendars add` и `remove`, потому что в адресе ленты может быть закрытый токен; и `schedule`, который ставит таймер,
-  работающий сам по себе.
+  работающий сам по себе. Поэтому в этой строке — частично.
 - **claude.ai в браузере.** `mcp serve --http` отдаёт инструмент Claude и ChatGPT в браузере или на телефоне через
   HTTPS-туннель, который вы сами настраиваете и держите запущенным, например Tailscale Funnel, поэтому оценка остаётся
   «частично». Руководство [ChatGPT или Claude в браузере](./remote.md) проводит через настройку, включая код входа и

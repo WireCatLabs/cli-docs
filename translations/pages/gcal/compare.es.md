@@ -7,7 +7,7 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.18.0, sus comandos y su código, revisados
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.19.0, sus comandos y su código, revisados
 el 2 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
 propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
@@ -58,7 +58,7 @@ Las herramientas:
 | Exportar reuniones a un archivo .ics e importar uno | ✅ | [🟡](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
 | **Agentes y seguridad** | | | | | | |
 | Servidor MCP | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
-| Cada comando de calendario es también una herramienta MCP | ✅ | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
+| Cada comando de calendario es también una herramienta MCP | 🟡 | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
 | Un agente no puede cambiar tu calendario si no lo permites | ✅ | n/a | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Indicas la cuenta cada vez; la herramienta nunca la elige por ti | ✅ | ➖ | [❌](https://github.com/openclaw/gogcli#readme) | ➖ | [❌](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | El texto de una invitación se marca para el agente como datos, no instrucciones | ✅ | n/a | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ | ➖ |
@@ -159,11 +159,11 @@ Notas sobre la columna de `gcal`:
   instrucciones del agente le dicen que son datos, no instrucciones. El texto en sí no cambia.
 - **Códigos de acceso.** Los códigos de acceso, PIN y contraseñas se quitan de cada respuesta, incluidos los comandos
   directos de `gcal api`: un enlace pierde su cadena de consulta y se descarta la línea de las notas que nombra un código.
-- **Cada comando, una herramienta MCP.** A través de tres herramientas MCP: `gcal_tools_search`, `gcal_read` y
+- **Casi todos los comandos son herramientas MCP.** A través de tres herramientas MCP: `gcal_tools_search`, `gcal_read` y
   `gcal_write`. Algunos comandos quedan para ti en una terminal: `api call`; vaciar un calendario (`calendars.clear`);
   `events remind`, que ejecuta un programa tuyo, así que a través de él un agente podría ejecutar cualquier programa en
   tu equipo; `calendars add` y `remove`, porque la dirección de un feed puede llevar un token privado; y `schedule`,
-  que instala un temporizador que se ejecuta solo.
+  que instala un temporizador que se ejecuta solo. Por eso esta fila queda en parte.
 - **claude.ai en la web.** `mcp serve --http` sirve la herramienta a Claude y ChatGPT en el navegador o en el móvil,
   tras un túnel HTTPS que configuras y mantienes tú, como Tailscale Funnel, así que esta fila sigue en «en parte».
   [ChatGPT o Claude en el navegador](./remote.md) lo explica paso a paso, con el código de acceso y los permisos.
