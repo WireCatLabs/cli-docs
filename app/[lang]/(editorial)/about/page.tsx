@@ -231,7 +231,7 @@ export default async function AboutPage({ params }: Props) {
                   <dd>
                     <a
                       className="animated-text-link"
-                      href={siteConfig.contacts.maintainerTelegram}
+                      href={siteConfig.contacts.founderGithub}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
