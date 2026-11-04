@@ -104,7 +104,7 @@ Telegram asks for two confirmations. First, tg registers its own Telegram app fo
    ![Telegram message with the login code for my.telegram.org](/screenshots/telegram/code-message.jpg)
 
 3. Next, wait for the account-login QR code on your computer. These are separate confirmations: the earlier code prepares the connection, while this QR code signs tg in to your account.
-4. In Telegram on your phone, open **Settings → Devices** and choose **Link Desktop Device** or **Add Device**. Allow camera access if asked, then point the scanner at the QR code shown by setup on your computer. Use Telegram's scanner, not the phone's regular camera app.
+4. In Telegram on your phone, open **Settings → Devices** and choose **Link Desktop Device** or **Add Device**. Allow camera access if asked, then point the scanner at the QR code shown by setup on your computer. Use Telegram's scanner, not the phone's regular camera app. Not sure where it is? See the [iOS and Android steps](#q-scan).
 
    ![Telegram Settings → Devices, with Add Device highlighted](/screenshots/telegram/add-device.jpg)
 
@@ -177,20 +177,59 @@ tg fills in the my.telegram.org form for you. If Telegram changes that site, reg
 
 **By hand:** run `tg personal setup --app browser`, then:
 
-1. Open my.telegram.org/apps and sign in with your phone number. Enter the code from the Telegram service chat on that page, not in the agent chat.
+1. Open my.telegram.org/apps. Choose your country, type your phone number and press **Next**.
 
-   ![my.telegram.org form for entering the phone number and confirmation code](/screenshots/telegram/my-telegram-login.png)
+   ![The my.telegram.org sign-in page with a country and a phone number field](/screenshots/telegram/telegram-app-1-sign-in.png)
 
-2. Choose **API development tools**. You need the application settings, not Delete account.
+2. Telegram sends a confirmation code as a message in your Telegram app, not by SMS. Type it on the page and press **Sign in**. Never give this code to anyone, and never type it in the agent chat.
 
-   ![my.telegram.org menu with API development tools highlighted](/screenshots/telegram/my-telegram-api-tools.png)
+   ![The confirmation code page of my.telegram.org](/screenshots/telegram/telegram-app-2-code.png)
 
-3. If there is no application yet, choose a title and short name, select **Desktop** and create it. If an application already exists, use it.
-4. Enter App api_id and App api_hash in the setup terminal when asked. The hash stays hidden while you type. These are connection values, not a bot token.
+3. Open **Development Tools**, then choose **Create new application**.
 
-   ![App configuration with App api_id and App api_hash highlighted](/screenshots/telegram/my-telegram-credentials.png)
+   ![The my.telegram.org home page with the Development Tools card](/screenshots/telegram/telegram-app-3-development-tools.png)
 
-5. Continue with the QR login.
+4. Fill in the form. The title needs at least 5 characters. The short name is letters and digits only, 5 to 32 characters. Avoid the word "Telegram" in both. Choose a platform, for example **Desktop**. The URL and the description are optional. Press **Create application**. If an application already exists, use it.
+
+   ![The Create new application form](/screenshots/telegram/telegram-app-4-create-application.png)
+
+5. Copy App api_id and App api_hash, and enter them in the setup terminal when asked. Keep the hash private, because anyone who has it can use your app's quota. The hash stays hidden while you type. These are connection values, not a bot token.
+
+   ![The Credentials section with App api_id and App api_hash](/screenshots/telegram/telegram-app-5-credentials.png)
+
+6. Continue with the QR login. The values in these screenshots are examples.
+
+<a id="q-scan" />
+
+### Where is the QR scanner in Telegram?
+
+Open Telegram on your phone and use Telegram's own scanner, not the phone's camera app. The menu depends on your phone.
+
+<Tabs items={["iOS", "Android"]}>
+
+<Tab value="iOS">
+
+1. Open **Settings**, then **Devices**.
+2. Press **Link Desktop Device** and allow camera access if Telegram asks.
+3. Point the camera at the QR code in your terminal.
+
+</Tab>
+
+<Tab value="Android">
+
+1. Open **Settings**, then **Devices**.
+2. Press **Add Device** and allow camera access if Telegram asks.
+3. Point the camera at the QR code in your terminal.
+
+![Telegram for Android, Settings and Devices, with the Add Device button](/screenshots/telegram/telegram-android-add-device.png)
+
+</Tab>
+
+</Tabs>
+
+If your account has an additional Telegram password, tg asks for it after the scan. If you scanned the code but did not enter that password, the attempt appears in **Devices** under **Incomplete login attempts**. It has no access to your messages. Finish the login in tg, or terminate the attempt in that list.
+
+![The Incomplete login attempts list in Telegram's Devices screen](/screenshots/telegram/telegram-android-incomplete-login.png)
 
 ### The QR code expired, or setup stopped
 
