@@ -4,7 +4,7 @@ description: A new Analytics page shows what WireCat keeps and how you use it. A
 date: 2026-11-04
 tags: [release-notes, ai-agents, security]
 author: viacheslav-ptsarev
-draft: true
+draft: false
 ---
 
 WireCat Desktop is the app that installs the WireCat tools, signs you in and gives your AI agent your chats, mail,

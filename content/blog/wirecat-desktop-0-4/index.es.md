@@ -4,7 +4,7 @@ description: Una página nueva, Analítica, muestra lo que guarda WireCat y cóm
 date: 2026-11-04
 tags: [release-notes, ai-agents, security]
 author: viacheslav-ptsarev
-draft: true
+draft: false
 ---
 
 WireCat Desktop es la app que instala las herramientas de WireCat, inicia sesión por ti y le da a tu agente de IA tus

@@ -4,7 +4,7 @@ description: Новая страница Аналитики показывает
 date: 2026-11-04
 tags: [release-notes, ai-agents, security]
 author: viacheslav-ptsarev
-draft: true
+draft: false
 ---
 
 WireCat Desktop это приложение, которое ставит инструменты WireCat, входит в ваши аккаунты и даёт вашему ИИ-агенту
