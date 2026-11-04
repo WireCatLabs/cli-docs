@@ -21,7 +21,7 @@ This is an unofficial client. Read [security](./security.md) and [limits](./limi
 
 ### With your agent
 
-Use an agent with terminal access on this computer, such as Codex, Claude Code, Cursor or Gemini CLI. For a browser-only chat, use [web or mobile access](/en/docs/agents#use-from-web-or-mobile) instead.
+Use an agent with terminal access on this computer, such as Codex, Claude Code, Cursor or Gemini CLI. For a browser-only chat, use [web or mobile access](/en/docs/browser-apps) instead.
 
 ```text prompt
 Use wa CLI. Help connect my WhatsApp account to my AI agent. Follow https://wirecat.dev/en/docs/wa/installation. Check the required programs and install the tool. Ask which account and profile name I want; personal is an example. I will approve device linking on my phone. Install the skill and show my account and a few chats. Do not send messages or start background work without asking.

@@ -5,7 +5,7 @@ description: "The shared store model, how to bring a provider's records in as so
 
 You are building a command-line tool, or an agent integration, that reads or writes the shared WireCat store. This page
 gives you the model in five minutes: what kinds of record exist, how they connect, and which rules keep your tool from
-breaking other tools. The next pages show how to add a source, keep your own data, sign in and stay compliant.
+breaking other tools. Below it also shows how to add a source and keep your own data. [Sign in and stay compliant](./build-sign-in.md) comes next.
 
 ## The shared store
 
@@ -186,4 +186,4 @@ A private table inside the shared store breaks when cli-core migrates, and other
 shared field in your table goes stale when the owner edits the original. Another tool that opens your file breaks on
 your next change.
 
-Next: [Sign in to a service](./build-sign-in.md).
+Next: [Sign in and stay compliant](./build-sign-in.md).
