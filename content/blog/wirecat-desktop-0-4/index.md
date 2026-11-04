@@ -7,9 +7,14 @@ author: viacheslav-ptsarev
 draft: true
 ---
 
-0.3 was about search holding up on real data. After a few more days with the app I wanted two things it couldn't
-give me. I wanted to see what it actually keeps, and I wanted to change my mind about something I'd already approved.
-0.4.0 does both, and it fixes what I found on my first day with 0.3 in the real app.
+WireCat Desktop is the app that installs the WireCat tools, signs you in and gives your AI agent your chats, mail,
+meetings, documents and notes, all kept on your computer. 0.3 was about search holding up on real data. After a few
+more days with the app I wanted two things it couldn't give me. I wanted to see what it actually keeps, and I wanted
+to change my mind about something I'd already approved. 0.4.0 does both, and it fixes what I found on my first day
+with 0.3 in the real app.
+
+The tools moved fast too, and I never wrote about most of it. So the second half of this post catches up: a Google
+Calendar tool, a mail tool, a WhatsApp Business bot and more.
 
 ## Analytics: what WireCat keeps
 
@@ -57,7 +62,35 @@ agent reads all of it, keys included, and sends it to its AI provider. That's no
 Two more safety changes. The app installs a tool update only when the tool's own GitHub release workflow built it from
 its main branch. And bug reports and diagnostics now mask chat titles and contact names, not only tokens and keys.
 
-## Smaller fixes
+## New in the tools since the last post
+
+The app installs and updates these tools for you, and your agent can use each of them on its own too.
+
+- **Google Calendar** has its own tool now. Your agent can read your calendar offline, find a free slot, spot
+  overlaps, create and answer invitations, and prepare a short brief before a meeting. It can also follow iCalendar
+  feeds. ([gcal releases](https://github.com/WireCatLabs/gcal-cli/releases))
+- **Mail** has its own tool too. It keeps your mailbox in the same local store over IMAP, signs in to Gmail and
+  Outlook, and `review` shows what is new, what you owe and what waits for an answer. Sending has safety limits.
+  ([mail releases](https://github.com/WireCatLabs/mail-cli/releases))
+- **WhatsApp Business**: the WhatsApp tool can run a bot on a Business number through Meta's Cloud API, with
+  templates, files and webhooks. ([wa 0.6.0](https://github.com/WireCatLabs/whatsapp-cli/releases/tag/v0.6.0))
+- **Zoom**: `zm review` lists your meetings since a point in time, with what was decided and who talked.
+  ([zm 0.37.0](https://github.com/WireCatLabs/zoom-cli/releases/tag/v0.37.0))
+- **Telegram**: your agent can leave a message as a draft in the chat for you to check and send, and send up to 10
+  photos or files as one album.
+- **Google Drive**: a local folder can stay in sync with Google Docs and Sheets in both directions.
+- **Memo**: `memo review` puts everything that waits for you in one list, from proposed tasks to invoices.
+
+## In case you missed it
+
+Two things have been in the app since 0.1, and I never showed them properly.
+
+- **Your agent in ChatGPT or Claude on the web.** On the Tools page, the MCP server section starts a tool's server and
+  walks you through a Tailscale or Cloudflare address, so ChatGPT or Claude in the browser can reach your messages on
+  your computer. You choose what it may do, and sending can stay off.
+- **Backups.** The Storage page backs up everything WireCat keeps, with an optional password.
+
+## Smaller fixes in the app
 
 - A tool's panel closes again after an update, and **Remove this copy** cleans up an extra copy of a tool installed by
   another package manager.
