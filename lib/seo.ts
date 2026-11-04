@@ -153,7 +153,7 @@ export function pageStructuredData({
       url: siteUrl,
       logo: absoluteUrl("/android-chrome-512x512.png"),
       email: siteConfig.contacts.email,
-      sameAs: [siteConfig.contacts.telegram, siteConfig.contacts.facebook],
+      sameAs: [siteConfig.community.discord, siteConfig.contacts.telegram, siteConfig.contacts.facebook],
     },
     {
       "@type": "WebSite",
