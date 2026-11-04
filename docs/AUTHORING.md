@@ -104,7 +104,10 @@ artificial “Next steps” section.
 - Shared pages explain common tasks once. Messenger-specific facts belong to their tool's
   source pages. Give both destinations when behavior differs; replacing `tg` with `max` is not
   evidence that a command works.
-- Preserve current URLs and anchors. A route move requires an explicit redirect map. A command has one
+- Preserve current URLs and anchors. A route move requires an explicit redirect map. The export is static, so a removed or moved
+  page gets a stub at `public/<lang>/docs/<old-slug>/index.html` in all three languages: a meta refresh to the new
+  page (with the heading anchor when the content moved into a section), a canonical link, `noindex` and a visible
+  link. A command has one
   name: a renamed command or heading keeps no old anchor, and no guide names the old command or says it
   was renamed. Changelogs keep what each release did.
 - A new page needs a sidebar or hub entry and a contextual inbound link from the task that leads

@@ -160,7 +160,7 @@ by default; `--backend archive` keeps it to the saved history. Telegram's search
 only, so reading the discussion around a match and checking a whole month need the saved history.
 `messages context` checks what was said around a match. Neither the latest 20 messages nor an empty
 local search proves that a month has been checked. [Archive and search](./tg/archive.md) ·
-[Search](./search.md).
+[Search](./search.mdx).
 
 <a id="check-promises-and-prepare-replies" />
 

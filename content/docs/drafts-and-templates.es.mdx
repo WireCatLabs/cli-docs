@@ -32,7 +32,7 @@ Indica el nombre de tu herramienta de mensajería en la petición; por ejemplo, 
 
 ### Pide a tu agente que envíe un borrador aprobado
 
-Si prefieres terminar en el chat con tu agente, revisa allí el texto propuesto y aprueba el texto exacto y el destinatario: «Envía exactamente esa respuesta al chat privado de Anna». Si editaste la respuesta, proporciona el texto final completo. Los [permisos de envío](./permissions.mdx) del perfil siguen aplicándose. Consulta [más peticiones para preparar respuestas](./prompting.mdx#revisar-compromisos-y-preparar-respuestas).
+Si prefieres terminar en el chat con tu agente, revisa allí el texto propuesto y aprueba el texto exacto y el destinatario: «Envía exactamente esa respuesta al chat privado de Anna». Si editaste la respuesta, proporciona el texto final completo. Los [permisos de envío](./configuration.mdx#permisos) del perfil siguen aplicándose. Consulta [más peticiones para preparar respuestas](./prompting.mdx#revisar-compromisos-y-preparar-respuestas).
 
 ## Plantillas: reglas que responden solas
 
@@ -40,7 +40,7 @@ Una regla de respuesta automática dice cuándo responder, por ejemplo fuera del
 plantilla dice qué enviar. Antes de que salga una respuesta:
 
 - la audiencia de la regla debe permitir responder a quien escribe. [Elige quién puede recibir respuestas automáticas](#elige-quién-puede-recibir-respuestas-automáticas) antes de activar la regla;
-- el envío debe estar permitido en los [permisos](./permissions.mdx) del perfil con
+- el envío debe estar permitido en los [permisos](./configuration.mdx#permisos) del perfil con
   `permissions.replies.send allow`; `ask` cuenta como no, porque el servidor en segundo plano no tiene
   a quién preguntar;
 - cada regla tiene un límite por chat y por persona, por ejemplo una respuesta por chat cada 12 horas.

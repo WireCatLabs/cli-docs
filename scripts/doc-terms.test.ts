@@ -32,7 +32,7 @@ describe("documentation explanations for Markdown readers", () => {
   it.each(["en", "ru", "es"])("points %s agents to the browser instead of an empty search playground", (lang) => {
     const result = expandDocTerms(`<SearchPlayground lang="${lang}" embedded />`, lang)
     expect(result).not.toContain("<SearchPlayground")
-    expect(result).toContain(`https://wirecat.dev/${lang}/docs/search-playground`)
+    expect(result).toContain(`https://wirecat.dev/${lang}/docs/search`)
   })
   it("fails an unknown term so broken hints do not reach published agent docs", () => {
     expect(() => expandDocTerms('<DocTerm term="typo" />', "en")).toThrow("Unknown documentation term")

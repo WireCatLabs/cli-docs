@@ -7,7 +7,7 @@ Averigua antes de buscar si lo que recuerdas se puede encontrar: una frase, un P
 
 ## Antes de empezar
 
-La búsqueda lee el archivo local, no el servicio de mensajería. Descarga primero el historial del chat: [Búsqueda](./search.md#descarga-primero-el-historial-de-los-chats-pertinentes). Un resultado vacío no prueba que no se enviara nada.
+La búsqueda lee el archivo local, no el servicio de mensajería. Descarga primero el historial del chat: [Búsqueda](./search.mdx#descarga-primero-el-historial-de-los-chats-pertinentes). Un resultado vacío no prueba que no se enviara nada.
 
 ## Qué necesita cada tipo
 
@@ -98,7 +98,7 @@ tg personal search messages 'email:"ana@example.com"'
 tg personal search messages 'domain:example.com'
 ```
 
-`phone:` encuentra igual `+1 555 010 0100` y `+1 (555) 010-0100`; sin `+`, solo se reconocen números rusos. `domain:` encuentra todos los enlaces y direcciones de ese sitio. Las menciones se encuentran con reglas, sin modelo. Una mención que rechazas sigue descartada. Cómo revisar menciones y registrar quién es: [Teléfonos, enlaces y nombres](./mentions.md). Cómo se conectan las menciones con personas y organizaciones: [Cómo se vincula todo](./how-things-are-linked.md#menciones).
+`phone:` encuentra igual `+1 555 010 0100` y `+1 (555) 010-0100`; sin `+`, solo se reconocen números rusos. `domain:` encuentra todos los enlaces y direcciones de ese sitio. Las menciones se encuentran con reglas, sin modelo. Una mención que rechazas sigue descartada. Cómo revisar menciones y registrar quién es: [Teléfonos, enlaces y nombres](./people.md#teléfonos-enlaces-nombres-y-direcciones). Cómo se conectan las menciones con personas y organizaciones: [Cómo se vincula todo](./how-things-are-linked.md#menciones).
 
 ## Imágenes
 
@@ -162,4 +162,4 @@ Drive deja solo por nombre los PDF escaneados, Slides, audio y vídeo: una palab
 
 Busca una palabra que sepas que está en un archivo, una nota de voz o el chat alrededor de una imagen, y mira dónde se encontró. Cada resultado de mensajes indica si la coincidencia viene del texto del mensaje, de una transcripción, del nombre de un archivo o del texto de un archivo. Si un tipo de contenido nunca aparece, revisa el único paso que necesita en la tabla de arriba.
 
-Siguiente: [Búsqueda](./search.md) para las consultas habituales, o el lenguaje de consultas de [Telegram](./tg/query-language.md) y [MAX](./max/query-language.md).
+Siguiente: [Búsqueda](./search.mdx) para las consultas habituales, o el lenguaje de consultas de [Telegram](./tg/query-language.md) y [MAX](./max/query-language.md).

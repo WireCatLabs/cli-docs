@@ -519,4 +519,4 @@ En `tg` y `max`, `tasks_close` necesita `certainty`, igual que el `tasks close` 
 - [Cómo funcionan las tareas](./tasks-architecture.mdx): los datos, las claves, la reserva y la
   detección de duplicados paso a paso.
 - [Tareas y recordatorios en Memo](./memo/tasks.md): tareas de proyecto, responsables y recordatorios.
-- [Búsqueda](./search.md): encuentra los mensajes de los que trata una tarea.
+- [Búsqueda](./search.mdx): encuentra los mensajes de los que trata una tarea.

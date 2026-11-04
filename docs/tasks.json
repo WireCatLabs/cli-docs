@@ -17,7 +17,7 @@
   },
   {
     "id": "find-history",
-    "pages": ["search.md", "first-tasks.md", "tg/archive.md", "max/archive.md", "tg/search.md", "max/search.md"],
+    "pages": ["search.mdx", "first-tasks.md", "tg/archive.md", "max/archive.md", "tg/search.md", "max/search.md"],
     "families": {
       "tg": ["store", "messages", "conversations"],
       "max": ["store", "messages", "conversations"]
@@ -43,7 +43,7 @@
   {
     "id": "manage-group",
     "pages": [
-      "group-admins.md",
+      "group-analytics.mdx",
       "tg/groups.md",
       "max/groups.md",
       "tg/bot.md",

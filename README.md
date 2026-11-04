@@ -49,7 +49,7 @@ The scoped stylesheet preserves the reviewed cascade without affecting docs or A
 `components/landing/editorial.tsx` adds agent setup, copy, scenario/provider choices, follow-ups,
 search and the editable estimate; event listeners are cleaned up on navigation.
 `/{lang}/features` and `/{lang}/examples` provide the reviewed capability and scenario pages.
-The full search playground remains at `/{lang}/docs/search-playground`.
+The full search playground remains at `/{lang}/docs/search`.
 
 All exploratory pages stay in `design/`, outside the static export. Run `pnpm design:serve` to
 restore the five local preview collections. [The durable design inventory](design/homepage-chat-treatments/DESIGN-LINKS.md)

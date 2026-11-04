@@ -26,7 +26,7 @@ export function expandDocTerms(markdown: string, lang: string): string {
             text = `${props.label ?? entry.title} (${entry.description})`
           } else if (match[2] === "SearchPlayground") {
             // Plain text, not a link: link rewriting would turn it back into this Markdown page.
-            text = `${{ en: "The interactive playground runs only in a browser:", ru: "Интерактивная песочница работает только в браузере:", es: "El área de pruebas interactiva solo funciona en un navegador:" }[language] ?? "The interactive playground runs only in a browser:"} ${siteUrl}/${language}/docs/search-playground`
+            text = `${{ en: "The interactive playground runs only in a browser:", ru: "Интерактивная песочница работает только в браузере:", es: "El área de pruebas interactiva solo funciona en un navegador:" }[language] ?? "The interactive playground runs only in a browser:"} ${siteUrl}/${language}/docs/search`
           } else if (match[2] === "NodeSetupPrompt") {
             text = `\`\`\`text\n${wordsFor(language).onboarding.nodePrompt}\n\`\`\``
           } else if (match[2] === "AgentInstallPrompt") {

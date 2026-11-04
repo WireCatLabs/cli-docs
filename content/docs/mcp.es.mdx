@@ -19,7 +19,7 @@ Participan dos partes:
   en tu ordenador o en un servidor al que un chat del navegador llega por una dirección HTTPS pública.
 
 Mediante MCP, la IA solo puede usar las herramientas que ofrece el servidor, y solo dentro de los
-[permisos](./permissions.mdx) del perfil: un perfil de solo lectura no puede enviar. Conectar MCP no
+[permisos](./configuration.mdx#permisos) del perfil: un perfil de solo lectura no puede enviar. Conectar MCP no
 inicia sesión en tu mensajero por ti; inicias sesión una vez con la herramienta de línea de comandos.
 Tampoco descarga todo tu archivo.
 
@@ -104,7 +104,7 @@ tg personal mcp add claude-code
 claude mcp list
 ```
 
-A mano, el equivalente es `claude mcp add --scope user tg -- tg personal mcp serve`. Si el perfil ofrece herramientas de escritura, setup te pide revisar antes sus [permisos](./permissions.mdx) y repetir con `--allow-writes`. Esa opción solo confirma la instalación; no cambia los permisos.
+A mano, el equivalente es `claude mcp add --scope user tg -- tg personal mcp serve`. Si el perfil ofrece herramientas de escritura, setup te pide revisar antes sus [permisos](./configuration.mdx#permisos) y repetir con `--allow-writes`. Esa opción solo confirma la instalación; no cambia los permisos.
 
 Comprueba el estado con `/mcp` en la sesión. Para rutas completas, usa los valores de `mcp config`.
 [Guía oficial de Claude Code MCP](https://code.claude.com/docs/en/mcp).

@@ -96,12 +96,12 @@ Hay dos formas de conectar un agente ([la guía](/es/docs/agents)):
 
 El tamaño de la salida importa cuando un agente paga por cada token que lee. Lo medimos con 5000 mensajes
 sintéticos: pedir solo los campos que necesitas con `--json=<fields>` hizo las respuestas [entre un 31 % y un
-64 % más pequeñas](/es/docs/search-efficiently) que el `--json` completo. La [configuración y el
+64 % más pequeñas](/es/docs/search) que el `--json` completo. La [configuración y el
 script](https://github.com/WireCatLabs/cli-testing/tree/main/performance/agents/output-size) son públicos.
 
 ## Tú decides qué puede hacer el agente
 
-Cada perfil tiene [permisos](/es/docs/permissions) por acción: `deny`, `readonly`, `ask` (confirmar en la
+Cada perfil tiene [permisos](/es/docs/configuration#permisos) por acción: `deny`, `readonly`, `ask` (confirmar en la
 terminal) o `allow`. También puedes limitar los destinatarios y fijar un límite de envíos por hora. Algunos
 valores por defecto que conviene conocer:
 

@@ -170,7 +170,7 @@ búsqueda de Telegram solo encuentra palabras, así que leer la conversación al
 resultado y revisar un mes entero necesitan el historial guardado. `messages context` comprueba qué
 se dijo alrededor de un resultado. Ni los últimos 20 mensajes ni una búsqueda local vacía
 demuestran que se haya revisado un mes. [Archivo y búsqueda](./tg/archive.md) ·
-[Búsqueda](./search.md).
+[Búsqueda](./search.mdx).
 
 <a id="check-promises-and-prepare-replies" />
 

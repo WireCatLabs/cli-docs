@@ -5,7 +5,7 @@ description: "Find the settings file, view and change a value, and open the full
 
 Save settings for the command-line tools so you do not repeat the same options on every run, such as how many results to show. Learn where your settings are stored, how to check and change them, and where each messenger lists every available setting. The defaults work for most people; change a setting when you keep repeating the same option or want different values for different accounts.
 
-Two terms help here. The **settings file** (`config.json`) keeps these values on your computer. A <DocTerm term="profile" lang="en" label="profile" /> is a named configuration for an account or bot connection, such as `work`, with its own values; values under `defaults` apply to every profile. Login data is never stored in this file, and what your agent may do is set in [Permissions](./permissions.mdx).
+Two terms help here. The **settings file** (`config.json`) keeps these values on your computer. A <DocTerm term="profile" lang="en" label="profile" /> is a named configuration for an account or bot connection, such as `work`, with its own values; values under `defaults` apply to every profile. Login data is never stored in this file, and what your agent may do is set in [Permissions](./configuration.mdx#permissions).
 
 ## Where the file is
 
@@ -78,4 +78,115 @@ The other tools have their own settings files: [Zoom](./zm/configuration.md), [G
 
 ## Profiles and bots
 
-Put a profile's name before the command, such as `tg work config show`. Add `bot` after it to work as a bot rather than your personal account. [Profiles and bots](./profiles.md) explains choosing and switching them.
+Use profiles when you have multiple accounts, a bot or different access settings for your agents. A profile is a named configuration for one account or bot connection on this computer, with its own login and permissions. This page shows how to choose the right one and distinguish a bot command from a personal-account command.
+
+### Choose a profile
+
+Put the profile before the command:
+
+```sh
+tg work config show
+drive personal sync
+```
+
+Name the profile in every command and agent request: `tg work …`, or `TG_PROFILE=work` for a whole
+session (`tg` reads `TG_PROFILE` and `max` reads `MAX_PROFILE`; `zm` uses the `account.profile` setting; `memo` and `drive` read no profile variable, so name the profile in the command). No profile is ever picked for you. A command
+that needs one and names none stops with an error that lists the profiles on this computer. A setting under `profiles.work` applies to that
+profile; `defaults` supplies values it has not set.
+Profiles are not separate operating-system users: an agent with unrestricted file access
+can still reach other data on that computer.
+
+### Switch to a bot
+
+Use `bot` after the profile name:
+
+```sh
+tg support bot api get-me --json
+max support bot api get-my-info --json
+```
+
+These commands require an already connected bot profile. The bot's account and rights come
+from the messenger, not from your personal account. [Bots](./bot-api.mdx) explains setup and examples.
+
+For login, use the [Telegram](./tg/sessions.md) or [MAX](./max/sessions.md) guide, or [connect Google Drive](./drive/installation.md).
+
+## Permissions
+
+Choose which actions your agent may perform: reading messages, sending replies or changing a group. This page helps you set access for the chosen account or bot and check limits before a real task. Permissions belong to <DocTerm term="profile" lang="en" label="a profile" />, a named set of settings for an account or bot; [Profiles](./configuration.mdx#profiles-and-bots) explains choosing one.
+
+### Choose an access level
+
+| Level | What happens |
+|---|---|
+| `deny` | The action is refused, including reading. |
+| `readonly` | Reading works; changes are refused. |
+| `ask` | A change requires confirmation in the terminal. |
+| `allow` | The action can run without another question. |
+
+A refusal tells you to check the requested action and settings. It does not mean your account
+connection is broken. Do not ask an agent to remove a restriction just to finish a task.
+
+### Allow one action
+
+```sh
+tg work config set permissions.messages.send ask
+max work config set permissions.messages.send ask
+```
+
+Replace `work` with your profile. For a default that allows reading messages and refuses changes:
+
+```sh
+tg work config set permissions.messages readonly
+max work config set permissions.messages readonly
+```
+
+More specific keys win. A saved `permissions.messages.send ask` still permits sending; set it
+to `readonly` to refuse sends. Check other exceptions with `config show`.
+
+This controls messages. Other actions, such as reactions or chat administration, have their own
+permission keys. Use the complete read-only profile examples in
+[Telegram’s permission reference](./tg/configuration-reference.md#what-a-profile-may-do) or [MAX’s permission reference](./max/configuration-reference.md#права-доступа).
+
+### Permissions for a bot
+
+Bot permissions and limits belong to the bot section. To ask before sends in the terminal:
+
+```sh
+tg support config set permissions.bot.messages.send ask --bot
+max support config set permissions.bot.messages.send ask --bot
+tg support config set sends_per_hour 30 --bot
+max support config set sends_per_hour 30 --bot
+```
+
+### Restrict recipients and repeated sends
+
+A recipient list limits which chats the profile may send to. An hourly send limit helps stop a
+loop. These checks remain active when a particular command is allowed.
+Read the [Telegram security guide](./tg/security.md) or [MAX security guide](./max/security.md)
+for the commands to manage these controls.
+
+### A temporary change for an MCP server
+
+Add `--permission messages.send=deny` to the server startup command to refuse sending for that
+process. Saved settings stay the same. The flag only tightens: an override that would loosen the profile's
+level is refused at startup, so to allow more, change the profile's permissions. Over MCP, `ask` does not require a confirmation form on the server: the app controls
+its own approvals and may allow a call without asking again. Use `deny` or `readonly` to refuse changes. [Browser setup](./browser-apps.mdx) explains the full connection.
+
+### Lock a whole run to reading
+
+Each tool also reads a variable in its environment that refuses changes for the whole run, whatever
+the saved permissions allow. A refused change exits with code 5. Set it for an agent that should only read.
+
+| Tool | Variable | What it refuses |
+|---|---|---|
+| tg, max | `TG_READ_ONLY=1`, `MAX_READ_ONLY=1` | Sending and other changes; the agent can still read and prepare reply text. |
+| Zoom | `ZM_READ_ONLY=1` | Changes to Zoom, the login, settings and what you added; reading and syncing from Zoom still run. |
+| Google Drive | `DRIVE_READ_ONLY` (any value except `0` or empty) | Every change, on this computer or in Google, as `--read-only` does. |
+| Google Calendar | `GCAL_READ_ONLY` (any value except `0` or empty) | Every change to Google Calendar and to the settings; reading and `gcal sync` still run. |
+| Memo | `MEMO_READ_ONLY` (any value except `0`) | Every change; reading, `memo sync` and a scheduled agent's `tasks link` still run. `memo mcp serve` keeps writing commands discoverable but refuses them. |
+
+### Limits and detailed rules
+
+An agent that can edit configuration files or run unrestricted terminal commands may be able
+to change these settings. Read [Security](./security.mdx) before giving that access.
+For nested permissions and exact command keys, see [Telegram](./tg/configuration-reference.md#what-a-profile-may-do) or [MAX](./max/configuration-reference.md#права-доступа).

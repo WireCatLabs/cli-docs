@@ -5,7 +5,7 @@ description: "Dónde está el archivo de ajustes, cómo ver y cambiar un valor y
 
 Guarda ajustes para las herramientas de línea de comandos y evita repetir las mismas opciones en cada ejecución, como cuántos resultados mostrar. Aprende dónde se guardan, cómo comprobarlos y cambiarlos, y dónde cada servicio de mensajería enumera todos sus ajustes. Los valores predeterminados sirven a la mayoría; cambia un ajuste cuando repites siempre la misma opción o quieres valores distintos para distintas cuentas.
 
-Dos términos. El **archivo de ajustes** (`config.json`) guarda estos valores en tu ordenador. Un <DocTerm term="profile" lang="es" label="perfil" /> es una configuración con nombre para la conexión de una cuenta o bot, como `work`, con sus propios valores; los valores de `defaults` se aplican a todos los perfiles. Los datos de inicio de sesión nunca se guardan en este archivo, y lo que puede hacer tu agente se define en [Permisos](./permissions.mdx).
+Dos términos. El **archivo de ajustes** (`config.json`) guarda estos valores en tu ordenador. Un <DocTerm term="profile" lang="es" label="perfil" /> es una configuración con nombre para la conexión de una cuenta o bot, como `work`, con sus propios valores; los valores de `defaults` se aplican a todos los perfiles. Los datos de inicio de sesión nunca se guardan en este archivo, y lo que puede hacer tu agente se define en [Permisos](./configuration.mdx#permisos).
 
 ## Dónde está el archivo
 
@@ -78,4 +78,113 @@ Las demás herramientas tienen sus propios archivos de ajustes: [Zoom](./zm/conf
 
 ## Perfiles y bots
 
-Pon el nombre del perfil antes del comando, como `tg work config show`. Añade `bot` después para trabajar como bot en lugar de con tu cuenta personal. [Perfiles y bots](./profiles.md) explica cómo elegirlos y cambiar entre ellos.
+Usa perfiles si tienes varias cuentas, un bot o permisos distintos para tus agentes. Un perfil es una configuración con nombre para la conexión de una cuenta o bot en este ordenador, con sus propios datos de acceso y permisos. Aquí aprenderás a elegir el adecuado y distinguir un comando del bot de uno de tu cuenta personal.
+
+### Elegir un perfil
+
+Pon el nombre antes del comando:
+
+```sh
+tg work config show
+drive personal sync
+```
+
+Indica el perfil en cada comando y petición al agente: `tg work …`, o `TG_PROFILE=work` para toda
+una sesión (`tg` lee `TG_PROFILE` y `max` lee `MAX_PROFILE`; `zm` usa el ajuste `account.profile`; `memo` y `drive` no leen ninguna variable de perfil, así que indica el perfil en el comando). Nunca se elige un perfil por ti. Un
+comando que necesita perfil y no lo indica se detiene con un error que lista los perfiles de este
+ordenador. `profiles.work` se aplica a ese
+perfil y `defaults` aporta valores ausentes. Un perfil no es otro usuario del SO: un agente con acceso
+completo a archivos puede acceder a otros datos del mismo ordenador.
+
+### Cambiar a un bot
+
+Pon `bot` después del perfil:
+
+```sh
+tg support bot api get-me --json
+max support bot api get-my-info --json
+```
+
+Necesitas un perfil de bot conectado. Su cuenta y derechos los define el servicio de mensajería, no tu
+cuenta personal. [Bots](./bot-api.mdx) explica la conexión y ejemplos.
+
+Consulta el acceso de [Telegram](./tg/sessions.md) o [MAX](./max/sessions.md), o [conecta Google Drive](./drive/installation.md).
+
+## Permisos
+
+Elige qué puede hacer tu agente: leer mensajes, enviar respuestas o cambiar un grupo. Esta página te ayuda a configurar el acceso para una cuenta o bot y comprobar los límites antes de una tarea. Los permisos pertenecen a <DocTerm term="profile" lang="es" label="un perfil" />, un conjunto de ajustes con nombre para una cuenta o bot; [Perfiles](./configuration.mdx#perfiles-y-bots) explica cómo elegirlo.
+
+### Elegir el nivel de acceso
+
+| Nivel | Qué ocurre |
+|---|---|
+| `deny` | Se rechaza la acción, incluso leer. |
+| `readonly` | Permite leer, pero no cambiar. |
+| `ask` | Un cambio requiere confirmación en el terminal. |
+| `allow` | Puede ejecutarse sin otra pregunta. |
+
+Un rechazo indica que debes revisar acción y ajustes, no que la conexión esté rota.
+No pidas al agente que elimine una restricción solo para terminar una tarea.
+
+### Permitir una acción
+
+```sh
+tg work config set permissions.messages.send ask
+max work config set permissions.messages.send ask
+```
+
+Cambia `work` por tu perfil. Para permitir lectura y rechazar cambios de forma predeterminada:
+
+```sh
+tg work config set permissions.messages readonly
+max work config set permissions.messages readonly
+```
+
+Las claves más específicas tienen prioridad. `permissions.messages.send ask` permite enviar;
+cámbiala a `readonly` para impedirlo. Revisa las demás excepciones con `config show`.
+
+Esto controla mensajes. Reacciones y administración tienen claves propias. Consulta los ejemplos
+completos de solo lectura en las referencias de permisos de [Telegram](./tg/configuration-reference.md#what-a-profile-may-do) y [MAX](./max/configuration-reference.md#права-доступа).
+
+### Permisos del bot
+
+Los permisos y límites pertenecen a la sección del bot. Para confirmar envíos en el terminal:
+
+```sh
+tg support config set permissions.bot.messages.send ask --bot
+max support config set permissions.bot.messages.send ask --bot
+tg support config set sends_per_hour 30 --bot
+max support config set sends_per_hour 30 --bot
+```
+
+### Limitar destinatarios y envíos repetidos
+
+La lista de destinatarios limita los chats a los que puede enviar el perfil. Un límite por hora
+ayuda a detener un bucle. Siguen activos aunque se permita el comando.
+Las instrucciones están en la seguridad de [Telegram](./tg/security.md) y [MAX](./max/security.md).
+
+### Cambiar temporalmente un servidor MCP
+
+Añade `--permission messages.send=deny` al inicio del servidor para impedir enviar durante
+ese proceso. No cambia los ajustes guardados. La opción solo endurece: una anulación que aflojaría el nivel
+del perfil se rechaza al iniciar, así que para permitir más cambia los permisos del perfil. Por MCP, `ask` no exige un formulario de confirmación en el servidor: la app
+controla sus aprobaciones y puede permitir otra llamada sin preguntar. Usa `deny` o `readonly` para impedir cambios. Consulta [la conexión web](./browser-apps.mdx).
+
+### Bloquear toda una ejecución en solo lectura
+
+Cada herramienta lee además una variable de entorno que rechaza los cambios durante toda la ejecución,
+permitan lo que permitan los permisos guardados. Un cambio rechazado sale con el código 5. Úsala con un agente que solo deba leer.
+
+| Herramienta | Variable | Qué rechaza |
+|---|---|---|
+| tg, max | `TG_READ_ONLY=1`, `MAX_READ_ONLY=1` | Enviar y otros cambios; el agente puede leer y preparar el texto de la respuesta. |
+| Zoom | `ZM_READ_ONLY=1` | Cambios en Zoom, el acceso, la configuración y lo que añadiste; leer y sincronizar desde Zoom siguen funcionando. |
+| Google Drive | `DRIVE_READ_ONLY` (cualquier valor salvo `0` o vacío) | Cualquier cambio, en este ordenador o en Google, como `--read-only`. |
+| Google Calendar | `GCAL_READ_ONLY` (cualquier valor salvo `0` o vacío) | Cualquier cambio en Google Calendar y en la configuración; leer y `gcal sync` siguen funcionando. |
+| Memo | `MEMO_READ_ONLY` (cualquier valor salvo `0`) | Cualquier cambio; leer, `memo sync` y el `tasks link` de un agente programado siguen funcionando. `memo mcp serve` mantiene visibles los comandos de escritura, pero rechaza ejecutarlos. |
+
+### Límites y reglas detalladas
+
+Un agente con acceso a archivos de configuración o a un terminal sin restricciones puede
+cambiar estos permisos. Lee [Seguridad](./security.mdx) antes de darle ese acceso.
+Las claves y reglas anidadas están en las referencias de [Telegram](./tg/configuration-reference.md#what-a-profile-may-do) y [MAX](./max/configuration-reference.md#права-доступа).

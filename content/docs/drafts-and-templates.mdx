@@ -32,7 +32,7 @@ Use the name of your messenger tool in the request; for example, use "Use max CL
 
 ### Have your agent send an approved draft
 
-If you prefer to finish in your agent chat, review the proposed text there and approve the exact text and recipient: "Send exactly that reply to Anna's direct chat." Give the full final text if you edited it. The profile's [sending permissions](./permissions.mdx) still apply. See [more requests for preparing replies](./prompting.mdx#draft-a-reply-then-decide-whether-to-send).
+If you prefer to finish in your agent chat, review the proposed text there and approve the exact text and recipient: "Send exactly that reply to Anna's direct chat." Give the full final text if you edited it. The profile's [sending permissions](./configuration.mdx#permissions) still apply. See [more requests for preparing replies](./prompting.mdx#draft-a-reply-then-decide-whether-to-send).
 
 ## Templates: rules that answer by themselves
 
@@ -40,7 +40,7 @@ An auto-reply rule says when to answer, for example outside working hours, and i
 what to send. Before any reply goes out:
 
 - the rule's audience must permit the sender. [Choose who may receive auto-replies](#choose-who-may-receive-auto-replies) before enabling the rule;
-- sending must be allowed in the profile's [permissions](./permissions.mdx) with
+- sending must be allowed in the profile's [permissions](./configuration.mdx#permissions) with
   `permissions.replies.send allow`; `ask` counts as no, because the background server has nobody
   to ask;
 - every rule has a limit per chat and per person, such as one reply per chat in 12 hours.

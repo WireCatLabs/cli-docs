@@ -40,7 +40,7 @@ const texts = {
       "Где вопросы ждут ответа",
       "В группе «Проект» покажи вопросы, которые ждут ответа больше суток. Отдельно посчитай ответы Анны и Бориса, медианное время ответа и время, за которое отвечают на 90% найденных вопросов. Покажи самые долгие ожидания с контекстом.",
       "Получите очередь вопросов и время ответа выбранных людей. Например: медиана 18 минут, 90% найденных ответов — в пределах двух часов. Это отчёт о прямых ответах в сохранённой переписке; агент не должен считать выбранного человека администратором без проверки.",
-      "group-admins",
+      "group-analytics",
       "Как разбирать вопросы группы",
     ],
     [
@@ -98,7 +98,7 @@ const texts = {
       "Questions waiting for an answer",
       "In Project, find questions waiting more than a day. Separately count Anna and Boris's answers, median response time and the time covering 90% of found answers. Show the longest waits with context.",
       "Expect a queue and response timings. For example: median 18 minutes, 90% of observed answers within two hours. Reports use direct replies in saved history; selected answerers are not automatically verified admins.",
-      "group-admins",
+      "group-analytics",
       "Review group questions",
     ],
     [
@@ -156,7 +156,7 @@ const texts = {
       "Preguntas pendientes",
       "En Proyecto, busca preguntas esperando más de un día. Cuenta las respuestas de Anna y Boris, la mediana y el tiempo que cubre el 90% de las respuestas encontradas. Muestra las esperas más largas con contexto.",
       "Recibirás preguntas y tiempos. Por ejemplo: mediana de 18 minutos, el 90% de respuestas observadas en dos horas. Son respuestas directas del historial; elegir a alguien no confirma que sea administrador.",
-      "group-admins",
+      "group-analytics",
       "Revisar preguntas del grupo",
     ],
     [

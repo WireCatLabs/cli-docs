@@ -34,7 +34,7 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | What should I ask first? | `first-tasks.md` | Tutorial/task hub | Pilot catch-up, older-history search and draft workflows here |
 | What do my accounts know about a person? | `people.md` | Task guide | Review source and data boundaries |
 | How should I connect documents, people and work? | `organize.md` | Explanation and worked task | Distinguish tags, notes, memories, projects/tasks and source-folder scope |
-| How do I find a message or agreement? | `search.md` | Task guide | Lead with an agent request; keep terminal syntax optional |
+| How do I find a message or agreement? | `search.mdx` | Task guide | Lead with an agent request; keep terminal syntax optional |
 | How do I keep track of what waits on me in my chats? | `tasks.md` | Task guide and explanation | Keep planned sections marked until cli-core ships them |
 | How do I recover a meeting decision and connect it to other sources? | `zoom.mdx` (Meetings, existing address) | Task guide | Keep participant identity, project links and cited findings explicit |
 | How do I connect a browser AI app? | `browser-apps.mdx` | Connection guide | Preserve current web setup instructions |
@@ -45,18 +45,18 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | Which connection does my AI app need? | `mcp.mdx` | Explanation/setup | Explain the decision before client configuration |
 | How do I discover a bot method? | `bot-api.mdx` | Reference orientation | Link messenger-specific bot prerequisites and use cases |
 | What can read or change my data? | `security.mdx` | Explanation | Lead with user decisions, then verified detail |
-| Can I try search without connecting? | `search-playground.mdx` | Interactive explanation | Keep sample behavior and limitations accurate |
+| Can I try search without connecting? | `search.mdx` (Try it with sample messages) | Interactive explanation | Keep sample behavior and limitations accurate |
 | How do the tools work internally? | `architecture.mdx` | Technical explanation | Trial beautiful-mermaid on one existing diagram |
 | What do tests prove and how can I repeat them? | `testing.mdx` | Technical explanation | Keep evidence and reproduction paths aligned with cli-testing and owning repositories |
 | How do search and conversation processing work? | `search-architecture.mdx` | Technical explanation | Reconcile playground description; keep source/release boundary |
 | How are tasks stored and how are duplicates found? | `tasks-architecture.mdx` | Technical explanation | Move planned sections to current behaviour as cli-core ships them |
 | What sources and integrations come next? | `roadmap.md` | Planned work | Keep planned items separate from available features; update when a source ships |
-| How do I check questions and activity in my group? | `group-admins.md` | Task guide | Start with a request and sources; inspect coverage before changes |
-| How do I get a full report on a Telegram channel? | `group-analytics.md` | Task guide | Recipe with an example report; privacy of readers before publishing |
-| What does a channel report look like? | `group-analytics-example.mdx` | Example | The full example report, rendered inside the docs layout; readers counted, never named |
+| How do I check questions and activity in my group? | `group-analytics.mdx` (Group admins) | Task guide | Start with a request and sources; inspect coverage before changes |
+| How do I get a full report on a Telegram channel? | `group-analytics.mdx` | Task guide | Recipe with an example report; privacy of readers before publishing |
+| What does a channel report look like? | `group-analytics.mdx` (Example channel report) | Example | The full example report, rendered inside the docs layout; readers counted, never named |
 | How do I save or override settings? | `configuration.mdx` | Configuration guide | Explain when settings matter and how to verify the effective value |
-| What may the agent change? | `permissions.mdx` | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
-| Which account or bot will run the task? | `profiles.md` | Account selection | Explain named profiles before configuration syntax |
+| What may the agent change? | `configuration.mdx` (Permissions) | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
+| Which account or bot will run the task? | `configuration.mdx` (Profiles and bots) | Account selection | Explain named profiles before configuration syntax |
 
 ## Messenger pages
 

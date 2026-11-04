@@ -3,7 +3,7 @@ title: How search works
 description: "The technical side of search: saved content, indexes, word forms and ranking."
 ---
 
-Understand why a search finds a result or misses it: what gets indexed, how matches are ranked and how to return to the source. Search covers messages, notes and saved text from files or meeting transcripts. The examples below focus on the shared message-search engine behind `tg` and `max`. For everyday requests and commands, start with [Searching](./search.md).
+Understand why a search finds a result or misses it: what gets indexed, how matches are ranked and how to return to the source. Search covers messages, notes and saved text from files or meeting transcripts. The examples below focus on the shared message-search engine behind `tg` and `max`. For everyday requests and commands, start with [Searching](./search.mdx).
 
 ## Choose the right path
 
@@ -188,13 +188,13 @@ max personal conversations related "Project team" 4521 --json
 
 After retrieval, open the original message or the reconstructed conversation. An answer should keep four things apart: an exact message match, a candidate by meaning, a relationship from the graph and the agent's own conclusion. Keep the locator, chat, author, date and the relevant surrounding text with each claim.
 
-`--context` follows time, not the graph. `--thread` follows the stored reply graph instead (by default 8 hops, 50 messages, 65,536 bytes and one day around each hit) and falls back to time order when a chat has no graph. `messages links` explains graph relations and the chosen chain of parents; `conversations show` reads the grouped messages. Evidence packets add source identities, content fingerprints, bounds and truncation metadata; even so, a page of evidence cannot prove a chat's full history. The report example in [group administration](./group-admins.md) shows why complete relationships between saved messages do not imply complete history.
+`--context` follows time, not the graph. `--thread` follows the stored reply graph instead (by default 8 hops, 50 messages, 65,536 bytes and one day around each hit) and falls back to time order when a chat has no graph. `messages links` explains graph relations and the chosen chain of parents; `conversations show` reads the grouped messages. Evidence packets add source identities, content fingerprints, bounds and truncation metadata; even so, a page of evidence cannot prove a chat's full history. The report example in [group administration](./group-analytics.mdx#group-admins) shows why complete relationships between saved messages do not imply complete history.
 
 Reading, searching and context never mark messages read or send anything. Fetching history, building, embedding and remote providers are separate, explicit actions.
 
 ## 8. What the playground demonstrates
 
-The [interactive playground](./search-playground.mdx) runs the shared query parser over 50 fictional messages in six chats. It shows strict matching, field and value suggestions, removable filters, dates, file and link predicates, and context around a hit. An invalid edit keeps the last valid results and marks the syntax problem.
+The [interactive playground](./search.mdx#try-it-with-sample-messages) runs the shared query parser over 50 fictional messages in six chats. It shows strict matching, field and value suggestions, removable filters, dates, file and link predicates, and context around a hit. An invalid edit keeps the last valid results and marks the syntax problem.
 
 The browser opens no account and runs no conversation build, embedding or live AI. Its short summaries are prepared examples shown only when their evidence is retrieved. The interface is translated; the sample messages stay in English. Use it to learn how to inspect a source, then use the messenger guides for a real archive.
 
