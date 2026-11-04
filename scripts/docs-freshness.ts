@@ -47,7 +47,7 @@ export function freshnessReport(rows: Freshness[]): string {
   const next = lagging.map((row) =>
     row.source === "tools.json"
       ? `- ${row.name}: pnpm docs:updates --prepare, then review per docs/REVIEWING.md`
-      : `- ${row.name}: read the changelog since ${row.docsRef}, update content/docs/{${(row.pages ?? []).join(",")}}*.mdx in every locale, then raise docsRef in authored-docs.json`,
+      : `- ${row.name}: read the changelog since ${row.docsRef}, update ${(row.pages ?? []).map((page) => `${page}.{en,ru,es}.md`).join(", ")}, then raise docsRef in authored-docs.json`,
   )
   return `${lines.join("\n")}\n\nDocs to update:\n${next.join("\n")}`
 }

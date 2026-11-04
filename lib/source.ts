@@ -61,7 +61,8 @@ export const docsLlms = llms(source, {
     const raw = await page.data.getText("raw")
     const text =
       /^```mermaid\b/m.test(raw) ||
-      (page.slugs.length === 1 && ["installation", "memo", "email"].includes(page.slugs[0]))
+      (page.slugs.length === 1 && ["installation", "memo"].includes(page.slugs[0])) ||
+      page.slugs.join("/") === "mail/email"
         ? raw
         : dedentDocComponents(await page.data.getText("processed"))
     const body =

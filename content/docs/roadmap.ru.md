@@ -17,7 +17,7 @@ WireCat собирает ваш контекст в одном месте. Со�
 
 ## Недавно добавлено
 
-Уже работают встречи [Zoom](./zoom.mdx) и документы [Google Drive](./drive/index.md). См.
+Уже работают встречи [Zoom](./zm/meetings.md) и документы [Google Drive](./drive/index.md). См.
 [возможности](./features.mdx).
 
 Также доступны чаты [WhatsApp](./wa/index.md) и боты бизнес-номеров.

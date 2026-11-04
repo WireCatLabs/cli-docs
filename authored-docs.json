@@ -3,12 +3,12 @@
     "name": "email",
     "package": "@wirecat/cli-memo",
     "docsRef": "v0.11.0",
-    "pages": ["email"]
+    "pages": ["translations/pages/mail/email"]
   },
   {
     "name": "zoom",
     "package": "@wirecat/zoom-cli",
     "docsRef": "v0.7.1",
-    "pages": ["zoom"]
+    "pages": ["translations/pages/zm/meetings"]
   }
 ]

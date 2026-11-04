@@ -18,7 +18,7 @@ what comes next.
 
 ## Recently added
 
-[Zoom](./zoom.mdx) meetings and [Google Drive](./drive/index.md) documents now work. See
+[Zoom](./zm/meetings.md) meetings and [Google Drive](./drive/index.md) documents now work. See
 [features](./features.mdx).
 
 [WhatsApp](./wa/index.md) chats and business-number bots are also available.

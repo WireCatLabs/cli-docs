@@ -25,7 +25,14 @@
   },
   {
     "id": "prepare-meeting",
-    "pages": ["first-tasks.md", "prompting.mdx", "zoom.mdx", "zm/search.md", "zm/remote-meetings.md", "zm/usage.md"],
+    "pages": [
+      "first-tasks.md",
+      "prompting.mdx",
+      "zm/meetings.md",
+      "zm/search.md",
+      "zm/remote-meetings.md",
+      "zm/usage.md"
+    ],
     "families": {
       "tg": ["contacts", "chats", "messages"],
       "max": ["contacts", "chats", "messages"],
@@ -156,7 +163,7 @@
   },
   {
     "id": "meeting-agent-access",
-    "pages": ["zm/mcp.md", "zoom.mdx"],
+    "pages": ["zm/mcp.md", "zm/meetings.md"],
     "families": {
       "zm": ["mcp", "skill", "search", "commands", "complete"]
     }

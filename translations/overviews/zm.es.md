@@ -36,7 +36,7 @@ Tras guardar una reunión, [conecta el agente](./mcp.md) mediante instrucciones 
 - [Buscar y leer fuentes de reuniones](./search.md).
 - [Guardar grabaciones y transcripciones](./archive.md).
 - [Encontrar próximas reuniones de Zoom](./remote-meetings.md).
-- [Relacionar reuniones con proyectos, personas y otras fuentes](../zoom.mdx).
+- [Relacionar reuniones con proyectos, personas y otras fuentes](../zm/meetings.md).
 
 Para los controles exactos, usa [todos los comandos](./commands.md). Si faltan datos o el acceso
 falla, consulta [solución de problemas](./troubleshooting.md).

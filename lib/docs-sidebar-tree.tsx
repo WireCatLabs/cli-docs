@@ -83,7 +83,7 @@ export const sidebarIcons = {
   tasks: ListTodo,
   memories: Brain,
   "how-it-works": Lightbulb,
-  zoom: Video,
+  meetings: Video,
   zm: Video,
   gcal: CalendarDays,
   "zoom-app": KeyRound,

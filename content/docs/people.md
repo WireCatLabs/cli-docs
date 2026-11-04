@@ -166,7 +166,7 @@ association.
 
 ### Link an email identity
 
-[Import your email](./email.mdx) first, then link a known address to the stored messenger contact:
+[Import your email](./mail/email.md) first, then link a known address to the stored messenger contact:
 
 ```sh
 tg personal contacts link @example_user email:rin@example.test
@@ -286,7 +286,7 @@ you made stay with their numbers.
 
 #### Search your mail
 
-Your saved mail takes the same fields. Mail search belongs to [memo](./email.mdx):
+Your saved mail takes the same fields. Mail search belongs to [memo](./mail/email.md):
 
 ```sh
 memo search mail 'domain:example.com'
@@ -423,7 +423,7 @@ tg personal mentions places
 
 `confirm` keeps the address as a place of its own, with everything written there. Every mention of the same
 address follows, and later ones are linked without you. `mentions places` lists the places, most mentioned first.
-Most addresses are in email signatures; [memo](./email.mdx) lists mentions in mail with `memo mentions list --source email:<name>`.
+Most addresses are in email signatures; [memo](./mail/email.md) lists mentions in mail with `memo mentions list --source email:<name>`.
 
 ### Messages saved earlier
 
@@ -444,7 +444,7 @@ logs, error messages or run records. A link is never opened and a site is never 
 
 ### What is not there yet
 
-- A list of the mentions in [notes and documents](./memo/notes.md) and in [email](./email.mdx): they are found and
+- A list of the mentions in [notes and documents](./memo/notes.md) and in [email](./mail/email.md): they are found and
   searchable, but `mentions list` does not show them.
 - A link to an ordinary website tied to anything. Such a link can only be dismissed.
 - Places other than street addresses: a city alone, a building's name, a place described in words.

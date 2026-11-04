@@ -36,7 +36,7 @@ After storing a first meeting, [connect your agent](./mcp.md) through a terminal
 - [Search and read meeting evidence](./search.md).
 - [Keep cloud recordings and transcripts](./archive.md).
 - [Find upcoming Zoom meetings](./remote-meetings.md).
-- [Connect meetings to projects, people and other sources](../zoom.mdx).
+- [Connect meetings to projects, people and other sources](../zm/meetings.md).
 
 For exact controls, use [the command reference](./commands.md). If a source is missing or access
 fails, follow [troubleshooting](./troubleshooting.md).

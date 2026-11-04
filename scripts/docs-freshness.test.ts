@@ -4,7 +4,13 @@ import { checkFreshness, freshnessReport, type VersionRecord } from "./docs-fres
 
 const records = [
   { name: "tg", package: "@wirecat/tg-cli", docsRef: "v0.9.0", source: "tools.json" },
-  { name: "memo", package: "@wirecat/cli-memo", docsRef: "v0.11.0", pages: ["memo"], source: "authored-docs.json" },
+  {
+    name: "memo",
+    package: "@wirecat/cli-memo",
+    docsRef: "v0.11.0",
+    pages: ["translations/pages/mail/email"],
+    source: "authored-docs.json",
+  },
 ]
 const registry = (versions: Record<string, string>) => async (url: string) => ({
   version: versions[decodeURIComponent(url.split("/").at(-2) ?? "")],
@@ -39,7 +45,7 @@ describe("docs freshness", () => {
 
   it("names the authored pages to update when a hand-written guide lags", async () => {
     const rows = await checkFreshness(records, registry({ "@wirecat/tg-cli": "0.9.0", "@wirecat/cli-memo": "0.12.0" }))
-    expect(freshnessReport(rows)).toContain("content/docs/{memo}*.mdx")
+    expect(freshnessReport(rows)).toContain("translations/pages/mail/email.{en,ru,es}.md")
   })
 
   it("records authored guides that exist in every locale and are not synced", () => {
@@ -49,8 +55,7 @@ describe("docs freshness", () => {
       expect(record.docsRef).toMatch(/^v\d+\.\d+\.\d+$/)
       expect(synced).not.toContain(record.name)
       for (const page of record.pages ?? [])
-        for (const suffix of [".mdx", ".ru.mdx", ".es.mdx"])
-          expect(existsSync(`content/docs/${page}${suffix}`)).toBe(true)
+        for (const suffix of [".en.md", ".ru.md", ".es.md"]) expect(existsSync(`${page}${suffix}`)).toBe(true)
     }
   })
 })

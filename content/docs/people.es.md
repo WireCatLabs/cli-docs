@@ -172,7 +172,7 @@ local.
 
 ### Vincula una dirección de correo
 
-[Importa el correo](./email.mdx) primero y vincula una dirección conocida al contacto almacenado:
+[Importa el correo](./mail/email.md) primero y vincula una dirección conocida al contacto almacenado:
 
 ```sh
 tg personal contacts link @example_user email:rin@example.test
@@ -296,7 +296,7 @@ decisiones que tomaste se quedan con sus números.
 
 #### Buscar en el correo
 
-El correo guardado admite los mismos campos. La búsqueda de correo es de [memo](./email.mdx):
+El correo guardado admite los mismos campos. La búsqueda de correo es de [memo](./mail/email.md):
 
 ```sh
 memo search mail 'domain:example.com'
@@ -435,7 +435,7 @@ tg personal mentions places
 
 `confirm` guarda la dirección como un lugar propio, con todo lo que estaba escrito. Todas las menciones de la misma
 dirección lo siguen, y las nuevas se vinculan sin ti. `mentions places` lista los lugares, los más mencionados
-primero. La mayoría de las direcciones están en firmas de correo; [memo](./email.mdx) lista las menciones del
+primero. La mayoría de las direcciones están en firmas de correo; [memo](./mail/email.md) lista las menciones del
 correo con `memo mentions list --source email:<nombre>`.
 
 ### Mensajes guardados antes
@@ -457,7 +457,7 @@ registros, mensajes de error ni registros de ejecución. Nunca se abre un enlace
 
 ### Lo que aún no existe
 
-- Una lista de las menciones en [notas y documentos](./memo/notes.md) y en el [correo](./email.mdx): se encuentran y
+- Una lista de las menciones en [notas y documentos](./memo/notes.md) y en el [correo](./mail/email.md): se encuentran y
   se pueden buscar, pero `mentions list` no las muestra.
 - Vincular un enlace a un sitio web corriente con algo. Ese enlace solo se puede descartar.
 - Lugares que no son direcciones postales: una ciudad sola, el nombre de un edificio, un lugar descrito con palabras.
