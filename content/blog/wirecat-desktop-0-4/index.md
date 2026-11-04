@@ -53,7 +53,7 @@ On Windows, tools now install without administrator rights.
 
 ## Settings repair stays on your computer
 
-When a tool's settings file is broken, the Health check now offers **Repair**. It runs the tool's own repair command
+When a tool's settings file is broken, the Health check now offers **Repair the file**. It runs the tool's own repair command
 on your computer, tells you what changed and where the old file is kept, and checks again.
 
 I also tried a button that handed the problem to your AI agent, and dropped it before release. To fix the file, the
