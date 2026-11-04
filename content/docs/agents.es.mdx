@@ -15,7 +15,7 @@ Una **CLI** es una herramienta de línea de comandos: se controla con instruccio
 
 ## Dónde quieres usar el agente
 
-- **[En ChatGPT, Claude u otro chat de IA en el navegador o móvil](./browser-apps.mdx)** — Sigue la guía de navegador y móvil.
+- **[En ChatGPT, Claude u otro chat de IA en el navegador o móvil](./agents.mdx#usar-desde-la-web-o-el-móvil)** — Sigue la guía de navegador y móvil.
 - **[En Codex, Claude Code, Cursor, Gemini CLI, Hermes u OpenClaw con terminal](#connect-instructions)** — Conecta la herramienta abajo.
 - **[Mi aplicación no puede ejecutar comandos, o mi agente trabaja en otro ordenador](#chat-apps-and-remote-agents)** — Mira las otras vías, incluida una conexión MCP opcional.
 - **[Quiero comprobar una conexión existente](#check-connection)** — Pide la cuenta y los chats.
@@ -78,7 +78,7 @@ Dónde busca cada agente el archivo del skill:
 
 `~` es tu carpeta personal, también en Windows. Sin `--for`, `skill install` escribe las dos
 copias: en `.agents` y en `.claude`. También puedes conseguir los skills en un directorio de skills,
-como ClawHub o skills.sh: [Dónde conseguir los skills de WireCat](./skills.mdx).
+como ClawHub o skills.sh: [Dónde conseguir los skills de WireCat](./agents.mdx#dónde-conseguir-los-skills-de-wirecat).
 
 **Después de actualizar la herramienta, vuelve a ejecutar `tg skill install`**, para que las
 instrucciones correspondan a la nueva versión. Para Hermes, o cualquier archivo guardado a mano, vuelve a
@@ -148,7 +148,7 @@ tg skill show > ~/.hermes/skills/tg-cli/SKILL.md
 ```
 
 Hermes también puede instalar el skill desde este sitio; las demás fuentes están en
-[Dónde conseguir los skills de WireCat](./skills.mdx#hermes):
+[Dónde conseguir los skills de WireCat](./agents.mdx#hermes-agent):
 
 ```sh
 hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
@@ -210,11 +210,115 @@ emparejamiento (pairing) o lista de permitidos, y considera un perfil que solo l
 
 ### Otro agente
 
-Los ejemplos anteriores no son una lista cerrada. Cualquier agente con acceso a la línea de comandos puede usar la herramienta. Dale la salida de `tg skill show`, o la [documentación en Markdown](./mcp.mdx#documentación-para-tu-agente). Encuentra qué hacer con `tg guide`, que enumera escenarios paso a paso para tareas habituales, y `tg commands`, que enumera todos los comandos por secciones y marca los que cambian algo. Los mismos escenarios están en este sitio, una página por herramienta: [Telegram](./tg/scenarios.md), [MAX](./max/scenarios.md), [Zoom](./zm/scenarios.md), [Google Drive](./drive/scenarios.md), [Google Calendar](./gcal/scenarios.md) y [Memo](./memo/scenarios.md). `--help` tras un comando, como `tg chats list --help`, muestra sus opciones.
+Los ejemplos anteriores no son una lista cerrada. Cualquier agente con acceso a la línea de comandos puede usar la herramienta. Dale la salida de `tg skill show`, o la [documentación en Markdown](./agents.mdx#documentación-para-tu-agente). Encuentra qué hacer con `tg guide`, que enumera escenarios paso a paso para tareas habituales, y `tg commands`, que enumera todos los comandos por secciones y marca los que cambian algo. Los mismos escenarios están en este sitio, una página por herramienta: [Telegram](./tg/scenarios.md), [MAX](./max/scenarios.md), [Zoom](./zm/scenarios.md), [Google Drive](./drive/scenarios.md), [Google Calendar](./gcal/scenarios.md) y [Memo](./memo/scenarios.md). `--help` tras un comando, como `tg chats list --help`, muestra sus opciones.
 
 Un agente en la nube trabaja en otro ordenador. Instala allí la herramienta e inicia sesión; tu acceso local no está disponible para él.
 
 Las opciones de instalación preparadas cubren clientes concretos; los demás usan sus propios ajustes de instrucciones o herramientas.
+
+## Dónde conseguir los skills de WireCat
+
+Un **skill** es un archivo de instrucciones, `SKILL.md`, que enseña a tu agente de IA los comandos
+de una herramienta de WireCat. Cada herramienta instala su propio skill con `skill install` (consulta
+[Conectar tu agente de IA](./agents.mdx#connect-instructions)). Esta página reúne los directorios de
+skills que ofrecen los mismos skills, por si prefieres instalarlos y actualizarlos como lo hace tu
+agente. Al terminar, tu agente tendrá el skill que necesita, desde la fuente que elijas.
+
+Un skill solo enseña. La herramienta debe seguir instalada y con la sesión iniciada en el ordenador
+donde trabaja tu agente: consulta [Instalación](./installation.mdx).
+
+### Nombres de los skills
+
+Los ejemplos usan `tg` para Telegram. Para otra herramienta, cambia el repositorio y el nombre del skill:
+
+- **Telegram** (`tg`): repositorio `WireCatLabs/tg-cli`, skill `tg-cli`
+- **MAX** (`max`): repositorio `WireCatLabs/max-cli`, skill `max-cli`
+- **WhatsApp** (`wa`): repositorio `WireCatLabs/whatsapp-cli`, skill `whatsapp-cli`
+- **Google Drive** (`drive`): repositorio `WireCatLabs/drive-cli`, skill `drive-cli`
+- **Google Calendar** (`gcal`): repositorio `WireCatLabs/gcal-cli`, skill `gcal-cli`
+- **Mail** (`mail`): repositorio `WireCatLabs/mail-cli`, skill `mail-cli`
+- **Zoom** (`zm`): repositorio `WireCatLabs/zoom-cli`, skill `zoom-cli`
+- **Memo** (`memo`): repositorio `WireCatLabs/cli-memo`, skill `cli-memo`
+
+### Desde la propia herramienta
+
+Esta copia corresponde a la versión de la herramienta que instalaste. Sirve para Codex, Claude Code,
+Cursor, Gemini CLI y OpenClaw:
+
+```sh
+tg skill install
+```
+
+Vuelve a ejecutarlo después de actualizar la herramienta.
+
+### Hermes Agent
+
+Este sitio publica el skill de cada herramienta, en la versión que describen estas páginas, en un
+índice de skills que Hermes lee. Instala un skill:
+
+```sh
+hermes skills install well-known:https://wirecat.dev/.well-known/skills/tg-cli
+```
+
+Hermes revisa cada skill antes de instalarlo. Si se detiene en una advertencia (caution), no fuerces la
+instalación: [avísanos](https://github.com/WireCatLabs/cli-docs/issues) con el hallazgo que muestra.
+`hermes skills search https://wirecat.dev --source well-known` los muestra todos. Hermes guarda la
+fuente, así que `hermes skills update` actualiza el skill más adelante. Los clientes del formato de descubrimiento
+más reciente leen los mismos skills en `https://wirecat.dev/.well-known/agent-skills/index.json`.
+
+También puedes añadir el repositorio de una herramienta como fuente permanente de skills (un tap):
+
+```sh
+hermes skills tap add WireCatLabs/tg-cli
+```
+
+Una fuente de repositorio lee la rama principal (main), que puede ir por delante de la versión
+publicada de la herramienta.
+[Guía de Hermes](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/#skills-hub).
+
+### OpenClaw y ClawHub
+
+ClawHub es el directorio de skills de OpenClaw. Los skills de WireCat están allí, del editor `wirecat`:
+`wirecat-tg`, `wirecat-max`, `wirecat-whatsapp`, `wirecat-zoom`,
+`wirecat-memo` y `wirecat-drive`. Un comando instala un skill para todos los espacios de trabajo:
+
+```sh
+openclaw skills install @wirecat/wirecat-tg --global
+```
+
+Sin ClawHub, `tg skill install --for agents` da el skill a OpenClaw, porque OpenClaw lee
+`~/.agents/skills`. [Guía de OpenClaw](https://docs.openclaw.ai/tools/skills).
+
+### skills.sh
+
+El comando `skills` de skills.sh instala un skill desde un repositorio en las carpetas de los
+agentes que encuentra en tu ordenador:
+
+```sh
+npx skills add WireCatLabs/tg-cli --skill tg-cli
+```
+
+Mantén `--skill`: algunos repositorios también contienen skills para quienes desarrollan la propia
+herramienta. Igual que una fuente de repositorio de Hermes, lee la rama principal. [skills.sh](https://skills.sh/).
+
+### Marketplace de plugins de Claude Code
+
+**Próximamente.** Un marketplace de WireCat para Claude Code, con un plugin por herramienta que solo
+contiene su skill. Cuando esté publicado, añádelo en Claude Code con:
+
+```text
+/plugin marketplace add WireCatLabs/claude-plugins
+```
+
+Mientras tanto, `tg skill install --for claude` instala el skill para Claude Code.
+[Guía de plugins de Claude Code](https://code.claude.com/docs/en/plugins).
+
+### Comprueba el resultado
+
+Abre una nueva sesión con el agente y haz la comprobación de
+[Conectar tu agente de IA](./agents.mdx#check-connection). Si el agente tiene el skill pero no puede
+ejecutar la herramienta, consulta las notas para [Hermes](./agents.mdx#hermes) y
+[OpenClaw](./agents.mdx#openclaw).
 
 <a id="chat-apps-and-remote-agents" />
 
@@ -225,13 +329,505 @@ ordenador es la vía más rápida, y puedes ejecutar tú el mismo comando cuando
 es una conexión opcional para aplicaciones que no pueden ejecutar programas:
 
 - **ChatGPT, Claude u otro chat en el navegador o en una app del móvil:** sigue la
-  [guía de navegador y móvil](./browser-apps.mdx).
-- **Una aplicación de escritorio con ajustes MCP, como Claude Desktop:** sigue la [configuración MCP](./mcp.mdx#cursor-y-claude-desktop).
+  [guía de navegador y móvil](./agents.mdx#usar-desde-la-web-o-el-móvil).
+- **Una aplicación de escritorio con ajustes MCP, como Claude Desktop:** sigue la [configuración MCP](./agents.mdx#cursor-y-claude-desktop).
 - **Un agente en otro ordenador:** instala allí la herramienta e inicia sesión, como se explica en
-  [Otro agente](#other-agents). Si solo puede llegar a tu ordenador a través de una conexión, usa la [configuración MCP](./mcp.mdx).
+  [Otro agente](#other-agents). Si solo puede llegar a tu ordenador a través de una conexión, usa la [configuración MCP](./agents.mdx#mcp-y-skills).
 
 El acceso no es una herramienta MCP: un agente que solo tiene MCP te pide que ejecutes tú el comando de inicio de sesión.
 
+## MCP y skills
+
+### Qué es MCP
+
+**MCP (Model Context Protocol)** es un estándar abierto para conectar aplicaciones de IA con
+herramientas. Funciona como un enchufe universal: una aplicación compatible con MCP puede usar
+un servidor MCP compatible sin una integración propia. El estándar está publicado en [modelcontextprotocol.io](https://modelcontextprotocol.io/).
+
+Participan dos partes:
+
+- El **cliente** es tu aplicación de IA, por ejemplo Claude Desktop, ChatGPT, Cursor o Gemini CLI.
+  Pregunta al servidor qué herramientas hay y llama a una cuando tu petición la necesita.
+- El **servidor** es `tg <perfil> mcp serve` o `max <perfil> mcp serve`, parte de la herramienta de línea de comandos. Se ejecuta
+  en tu ordenador o en un servidor al que un chat del navegador llega por una dirección HTTPS pública.
+
+Mediante MCP, la IA solo puede usar las herramientas que ofrece el servidor, y solo dentro de los
+[permisos](./configuration.mdx#permisos) del perfil: un perfil de solo lectura no puede enviar. Conectar MCP no
+inicia sesión en tu mensajero por ti; inicias sesión una vez con la herramienta de línea de comandos.
+Tampoco descarga todo tu archivo.
+
+Un agente con terminal, como Claude Code o Codex, no necesita MCP: puede ejecutar los comandos `tg` y
+`max` directamente, y un **skill** le explica cómo. Una aplicación de IA sin terminal, como Claude
+Desktop o un chat del navegador, usa MCP. La [comparación de abajo](#cli-skill-o-mcp) te ayuda a elegir.
+
+<Callout type="info" title="¿Usas un chat de IA en el navegador o en el móvil?">
+
+ChatGPT, Claude y otros chats web se conectan mediante una dirección HTTPS pública: sigue la [guía de navegador y móvil](./agents.mdx#usar-desde-la-web-o-el-móvil).
+
+</Callout>
+
+### Qué hace el servidor MCP
+
+Nuestro servidor da acceso al mensajero conectado: chats, mensajes, archivos adjuntos, búsqueda e informes. Tú pides un resultado; el agente llama una herramienta y el servidor realiza la acción.
+
+El servidor está incluido en la herramienta de línea de comandos y **debe funcionar mientras el agente lo utiliza**. Una aplicación local puede iniciarlo en tu ordenador. Para navegador o móvil, se mantiene en un ordenador o servidor y se conecta con una dirección HTTPS pública y autenticación. Sigue la [guía de navegador y móvil](./agents.mdx#usar-desde-la-web-o-el-móvil).
+
+### Cómo encuentra y ejecuta acciones el agente
+
+El servidor ofrece pocas herramientas: el agente descubre primero la acción y sus parámetros, y después la ejecuta. Para encontrar un acuerdo, descubre la búsqueda de mensajes, la ejecuta y abre los resultados.
+
+Los ejemplos usan nombres de Telegram. Para MAX cambia `tg` por `max`, también en nombres de herramientas y ajustes.
+
+| Herramienta | Función |
+|---|---|
+| `tg_tools_search` | Descubre la acción, parámetros y efectos. Busca acciones disponibles, no mensajes. |
+| `tg_read` | Ejecuta una lectura: chats, búsqueda de mensajes, archivos o informes. |
+| `tg_write` | Ejecuta cambios: enviar, guardar texto extraído o gestionar grupos según los permisos. |
+
+### Qué hace un skill
+
+Un **skill** enseña al agente qué herramientas elegir, cómo reunir contexto, comprobar fuentes y preparar resultados. MCP permite ejecutar acciones; el skill explica cómo usarlas. No contiene credenciales.
+
+Las instrucciones vienen con la herramienta. [Conectar tu agente](./agents.mdx) explica cómo añadirlas; `tg skill show` muestra el texto. Con terminal, el agente puede seguirlas y ejecutar la CLI directamente.
+
+### ¿CLI, skill o MCP?
+
+| Conexión | Qué ofrece | Cuándo elegirla |
+|---|---|---|
+| CLI | Comandos de terminal con resultados JSON | Tu agente ya tiene una terminal local |
+| Skill + CLI | Instrucciones de comandos y flujos de trabajo | Tu agente puede ejecutar comandos en la terminal, por ejemplo Codex, Cursor Agent, Claude Code, Gemini CLI, Hermes u OpenClaw |
+| MCP | Herramientas con parámetros directamente en el cliente | Tu aplicación de IA no tiene terminal, por ejemplo Claude Desktop, o prefieres su interfaz de herramientas |
+| MCP por HTTP | Las mismas herramientas para un chat de IA en el navegador, como ChatGPT o Claude, tras tu propio túnel | Chateas en el navegador — [ChatGPT y Claude en el navegador](./agents.mdx#usar-desde-la-web-o-el-móvil) |
+| Markdown | Explicaciones y referencia de comandos | El agente necesita consultar cómo funciona algo |
+
+Con una terminal, empieza con [un skill](./agents.mdx). MCP es opcional y respeta los mismos
+permisos del perfil que el CLI. El inicio de sesión y la descarga del archivo se hacen por separado.
+
+### Antes de conectar
+
+[Instala e inicia sesión](./installation.mdx). `tg personal mcp config` o `max personal mcp config`
+muestra la configuración con las rutas reales de Node y del CLI. No edita el cliente.
+El PATH de una aplicación de escritorio puede ser diferente del de la terminal.
+
+El servidor atiende el perfil que nombras: `tg personal mcp serve`. Un servidor puede atender varios perfiles con
+`tg mcp serve --profiles personal,work`, o todos con `--profiles all`; cada llamada a una herramienta indica entonces
+su perfil. max funciona igual. Sin perfil ni `--profiles`, ninguno arranca el servidor. `tg mcp` o `max mcp` solo
+muestra la ayuda.
+
+#### Codex
+
+En una terminal donde ya funcione el comando:
+
+```sh
+tg personal mcp add codex
+codex mcp list
+```
+
+Setup usa el comando propio de Codex y deja intactos los demás servidores. A mano, el equivalente es `codex mcp add tg -- tg personal mcp serve`.
+
+Conecta solo los mensajeros que uses. Codex guarda MCP en `~/.codex/config.toml`.
+Para Windows o un IDE con otro PATH, toma `command`, `args` y `env` de `mcp config` y añádelos
+en `[mcp_servers.tg]` o `[mcp_servers.max]`. Codex utiliza TOML.
+[Guía oficial de Codex MCP](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
+
+#### Claude Code
+
+```sh
+tg personal mcp add claude-code
+claude mcp list
+```
+
+A mano, el equivalente es `claude mcp add --scope user tg -- tg personal mcp serve`. Si el perfil ofrece herramientas de escritura, setup te pide revisar antes sus [permisos](./configuration.mdx#permisos) y repetir con `--allow-writes`. Esa opción solo confirma la instalación; no cambia los permisos.
+
+Comprueba el estado con `/mcp` en la sesión. Para rutas completas, usa los valores de `mcp config`.
+[Guía oficial de Claude Code MCP](https://code.claude.com/docs/en/mcp).
+
+#### Cursor y Claude Desktop
+
+Copia la entrada de `tg personal mcp config` o `max personal mcp config` en `mcpServers`, conservando las rutas
+y el entorno. Combínala con los servidores que ya tengas.
+
+| Cliente | Archivo |
+|---|---|
+| Cursor, personal | `~/.cursor/mcp.json` |
+| Cursor, proyecto | `.cursor/mcp.json` |
+| Claude Desktop, macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Claude Desktop, Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+
+Reinicia el cliente y comprueba las herramientas disponibles.
+[Guía oficial de Cursor MCP](https://cursor.com/help/customization/mcp).
+
+#### Gemini CLI
+
+```sh
+gemini mcp add --scope user tg tg personal mcp serve
+gemini mcp list
+```
+
+Para rutas completas y variables de entorno, añade la entrada generada en `mcpServers` de
+`~/.gemini/settings.json`. [Guía oficial de Gemini MCP](https://geminicli.com/docs/tools/mcp-server/).
+
+#### Hermes
+
+Hermes usa `mcp_servers` en `~/.hermes/config.yaml`. Añade `tg` o `max` con `command`, `args`
+y `env` de la configuración generada, conservando tus ajustes. Utiliza YAML: no pegues el objeto
+JSON `mcpServers` entero. Reinicia Hermes.
+[Inicio oficial de Hermes](https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/).
+
+### Zoom, Google Drive y Memo
+
+Cada herramienta inicia su propio servidor. Conéctalo con el comando que tu cliente usa para servidores MCP:
+
+- **Zoom:** `zm personal mcp serve`.
+- **Google Drive:** `drive personal --read-only mcp serve`.
+- **Google Calendar:** `gcal personal mcp serve`.
+- **Mail:** `mail personal mcp serve`.
+- **Memo:** `memo mcp serve`.
+
+### Qué puede hacer el agente
+
+MCP cubre la mayoría de operaciones habituales: leer y buscar mensajes, consultar personas y grupos, trabajar con adjuntos, crear informes, responder y administrar grupos con permisos.
+
+Consulta sintaxis y disponibilidad MCP en las referencias:
+
+- [Herramientas y cobertura MCP de Telegram](./tg/mcp.md#tools) · [Comandos de Telegram](./tg/commands.md).
+- [Herramientas y cobertura MCP de MAX](./max/mcp.md#инструменты) · [Comandos de MAX](./max/commands.md).
+
+El catálogo depende del mensajero y del perfil. Pide descubrir la acción: el resultado muestra comando y parámetros. Un perfil de solo lectura excluye cambios. El servidor no tiene un paso de confirmación propio: las confirmaciones las muestra la aplicación, y el servidor no puede comprobar que una persona las aceptó.
+
+Después de conectar pide cinco chats recientes. Sigue con [Primeras tareas](./first-tasks.md).
+
+### Documentación para tu agente
+
+El MCP del mensajero accede a tu cuenta. La documentación se consulta por separado:
+
+| Recurso | Qué compartir |
+|---|---|
+| [Índice](/llms.txt) | `https://wirecat.dev/llms.txt` — buscar una página y seguir su enlace Markdown |
+| [Todas las páginas](/llms-full.txt) | `https://wirecat.dev/llms-full.txt` — referencia completa para herramientas que admitan documentos grandes |
+| Una página | **Copiar Markdown** o **Abrir** en la cabecera |
+| La propia herramienta | Para un agente que ejecuta la herramienta: `tg guide` enumera escenarios paso a paso y `tg commands`, todos los comandos por secciones |
+
+Prueba: **«Lee https://wirecat.dev/llms.txt, busca la documentación de los mensajes entrantes
+de Telegram y úsala para resumir mis mensajes sin leer».** Si no puede abrir URL, pega el Markdown
+de la página en el chat.
+
+Estas páginas Markdown se leen directamente. Da al agente el índice o la página necesaria; no hace falta otro servidor de documentación.
+
+Si falla la conexión, comprueba las rutas, Node y que cliente y terminal usan el mismo perfil
+y los mismos directorios. Los detalles están en la referencia MCP de [Telegram](./tg/mcp.md)
+y [MAX](./max/mcp.md).
+
+## Usar desde la web o el móvil
+
+Usa Telegram y MAX desde un chat de IA en el navegador o la aplicación móvil: encuentra mensajes, reúne contexto y prepara respuestas. Se configura con unos comandos y una dirección en los ajustes del chat. No necesitas instalar ChatGPT o Claude en el ordenador. La aplicación debe admitir MCP remoto por HTTP y un acceso OAuth compatible con este servidor; elige tu aplicación abajo.
+
+Esta guía conecta el servicio de mensajería que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al servicio de mensajería; tu chat de IA llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al agente. A continuación obtendremos la dirección y la añadiremos a la aplicación. Mantén el ordenador encendido y el servidor MCP de la herramienta de línea de comandos y el túnel HTTPS en ejecución mientras uses la conexión. No necesitas la aplicación de escritorio del servicio de mensajería.
+
+### Antes de empezar
+
+- Instala la [herramienta de línea de comandos de Telegram o MAX](./installation.mdx) e inicia sesión en tu cuenta. No necesitas un agente local para usar el navegador: `tg personal setup --agent none` o `max personal setup --agent none`.
+- Haz la configuración inicial en el ordenador que ejecuta la herramienta y mantenlo encendido durante el uso. Al final explicamos la opción de un servidor siempre encendido.
+- Tu cuenta del chat de IA debe permitir añadir una conexión propia. Si no aparece esa opción en tu cuenta de trabajo, consulta al administrador. Las [instrucciones de OpenAI](https://developers.openai.com/plugins/quickstart) y de [Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) muestran las opciones actuales.
+
+En el siguiente paso instalaremos el programa para obtener la dirección pública y explicaremos dónde hacer clic.
+
+### 1. Preparar una dirección pública
+
+Usaremos **Tailscale**, un programa que hace accesible por internet la conexión de tu ordenador. No hace falta instalarlo en el móvil ni en otro dispositivo donde abras el chat.
+
+Si usas WireCat Desktop, la ventana Start del servidor MCP de una herramienta hace este paso por ti: [Configurar Tailscale Funnel para el MCP de WireCat](./desktop/tailscale-funnel.mdx).
+
+#### Instalar Tailscale e iniciar sesión
+
+1. Abre la [página de descarga](https://tailscale.com/download) y elige Windows, macOS o Linux.
+2. En Windows o macOS, descarga y ejecuta el instalador y abre la aplicación. Pulsa el icono de Tailscale junto al reloj en Windows o en la barra superior de macOS, y elige **Log in**. Para Linux, sigue las [instrucciones de instalación y acceso](https://tailscale.com/download/linux).
+3. En el navegador que se abre, inicia sesión o crea una cuenta de Tailscale y confirma la conexión del ordenador. Debe aparecer en la [lista de dispositivos](https://console.tailscale.com/admin/machines).
+
+#### Habilitar la dirección segura
+
+1. Abre la [sección DNS de Tailscale](https://console.tailscale.com/admin/dns).
+2. En **MagicDNS**, pulsa **Enable MagicDNS** si está desactivado. Así el ordenador tendrá un nombre para su dirección.
+3. En **HTTPS Certificates**, pulsa **Enable HTTPS** y acepta el aviso mostrado. Esto habilita direcciones seguras; consulta las [instrucciones de Tailscale](https://tailscale.com/docs/how-to/set-up-https-certificates).
+4. El primer comando del siguiente paso puede mostrar un enlace para activar **Funnel**, la función de acceso público. Ábrelo, entra con la misma cuenta y confirma la activación. Tailscale prepara automáticamente el certificado y el permiso. Si no tienes acceso, un administrador puede abrir **Access controls → Funnel → Add Funnel to policy**: [instrucciones de Funnel](https://tailscale.com/docs/features/tailscale-funnel).
+
+<a id="iniciar-el-túnel-y-el-servidor" />
+
+### 2. Obtener la dirección e iniciar la conexión
+
+Elige tu sistema operativo y <DocTerm term="terminal" lang="es" label="abre dos ventanas de terminal" />. **Pega el primer bloque en la ventana 1**: mostrará una dirección como `https://ordenador.red.ts.net`. Si primero muestra un enlace de autorización, completa el punto 4 anterior y vuelve aquí.
+
+**Pega el segundo bloque en la ventana 2** e introduce la dirección HTTPS cuando la pida, sin `/mcp`. Conserva `:8443` si aparece. Deja ambas ventanas abiertas. Los permisos del perfil deciden lo que puede hacer el agente; [cómo elegir los permisos](#elegir-qué-puede-hacer-el-asistente) se explica abajo.
+
+<PlatformSetupTabs>
+
+<Tab value="Windows">
+
+**Windows · PowerShell**
+
+Instala la app Tailscale e inicia sesión desde su icono en la bandeja. Tras instalar Node.js,
+el CLI y Tailscale, abre ventanas nuevas de PowerShell para actualizar PATH. Usa `.cmd` para
+los comandos npm y evitar errores de la política de ejecución. Configuración inicial:
+`tg.cmd personal setup --agent none` o `max.cmd personal setup --agent none`.
+
+Ejecuta **la ventana 1 como Administrador** para Funnel. `&` gestiona el espacio de la ruta
+predeterminada; cambia la ruta si instalaste Tailscale en otro lugar.
+Ejecuta **la ventana 2 con tu usuario habitual**, que inició sesión en el servicio de mensajería.
+
+```powershell
+& "$env:ProgramFiles\Tailscale\tailscale.exe" funnel 8765
+```
+
+```powershell
+$mcpPublicUrl = Read-Host 'HTTPS origin from Funnel (no /mcp)'
+tg.cmd personal mcp serve --http --port 8765 --public-url $mcpPublicUrl
+```
+
+Para MAX, cambia `tg.cmd` por `max.cmd` en la ventana 2. Ejecuta ambos procesos en Windows.
+WSL tiene rutas y red loopback propias; no mezcles su servidor con esta configuración de Windows.
+
+</Tab>
+
+<Tab value="macOS">
+
+**macOS · Terminal (zsh o bash)**
+
+Instala la app Tailscale e inicia sesión. Su [CLI integrado](https://tailscale.com/docs/reference/tailscale-cli?tab=macos)
+funciona aunque `tailscale` no esté en PATH. Usa dos ventanas normales de Terminal.
+
+```sh
+TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8765
+```
+
+```sh
+printf 'HTTPS origin from Funnel (no /mcp): '
+IFS= read -r mcpPublicUrl
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
+```
+
+Para MAX, cambia `tg` por `max` en la ventana 2.
+
+</Tab>
+
+<Tab value="Linux">
+
+**Linux · Terminal (bash o zsh)**
+
+Instala Tailscale según las [instrucciones de Linux](https://tailscale.com/download/linux)
+e inicia sesión con `sudo tailscale up`. Solo el túnel de la ventana 1 necesita `sudo`.
+La ventana 2 debe usar tu usuario habitual para encontrar la sesión configurada.
+
+```sh
+sudo tailscale funnel 8765
+```
+
+```sh
+printf 'HTTPS origin from Funnel (no /mcp): '
+IFS= read -r mcpPublicUrl
+tg personal mcp serve --http --port 8765 --public-url "$mcpPublicUrl"
+```
+
+Para MAX, cambia `tg` por `max` en la ventana 2. No ejecutes el servidor del servicio de mensajería con `sudo`.
+
+</Tab>
+
+</PlatformSetupTabs>
+
+El servidor escucha en `127.0.0.1:8765` e imprime un código de acceso de un solo uso.
+El perfil precede al comando: `tg work mcp serve` o, en Windows, `tg.cmd work mcp serve`.
+
+Solo el servidor con `--http` tiene este acceso. Nunca dirijas un túnel a `tg <perfil> mcp serve` o `max <perfil> mcp serve` iniciado sin `--http`: esa conexión no tiene ningún acceso protegido.
+
+<a id="conectar-codex--chatgpt-web-o-claude" />
+
+<a id="3-añadir-la-conexión-a-chatgpt-o-claude" />
+
+### 3. Añadir la conexión a tu chat de IA
+
+Añade **`/mcp` a la dirección HTTPS**. Por ejemplo, `https://ordenador.red.ts.net` pasa a ser `https://ordenador.red.ts.net/mcp`. Es la dirección de la conexión, no la web de Telegram o MAX. Crea una conexión distinta para cada servicio de mensajería.
+
+<Tabs items={["ChatGPT", "Claude", "Gemini", "DeepSeek"]}>
+
+<Tab value="ChatGPT" keepMounted>
+
+#### ChatGPT
+
+1. Abre **Plugins → + Add custom MCP server**, ponle un nombre como «Mi Telegram» y pega la dirección con `/mcp`.
+2. Elige <DocTerm term="oauth" lang="es" label="OAuth" />, no un token copiado a mano. Si se ofrece, selecciona el registro automático (**DCR**): el servidor admite DCR y la comprobación S256 que piden los [requisitos OAuth de OpenAI](https://developers.openai.com/plugins/build/auth). Usa el código de un solo uso de la ventana 2 para entrar.
+3. Instala el plugin, abre un chat **Work** y selecciónalo con `@`. Después escribe peticiones normales. [Instrucciones oficiales de OpenAI](https://developers.openai.com/plugins/quickstart).
+
+Los mismos pasos añaden la conexión para Codex en la web. El `config.toml` local de Codex configura solo el cliente local de Codex, no esta conexión.
+
+</Tab>
+
+<Tab value="Claude" keepMounted>
+
+#### Claude
+
+1. En claude.ai, abre **Customize → Connectors → + Add → Add custom connector**. Introduce el nombre y la dirección con `/mcp`, y pulsa **Continue**.
+2. Elige iniciar sesión y **Register automatically**, si se ofrece. Termina de añadir el conector y conecta con el código de la ventana 2.
+3. En el chat, pulsa **+ → Connectors** para activarlo. También funciona en Claude móvil. En una cuenta de trabajo puede tener que añadirlo primero el administrador: [instrucciones oficiales de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+
+</Tab>
+
+<Tab value="Gemini" keepMounted>
+
+#### Gemini
+
+1. En [gemini.google.com](https://gemini.google.com), abre **Settings → Connected Apps**. Si no aparece, mira en **Personal Intelligence → Connected Apps**.
+2. En **Custom apps**, pulsa **Add a custom app**, pega la dirección terminada en `/mcp` y pulsa **Next**.
+3. Conecta con el código de un solo uso de la ventana 2. Escribe `@` en el chat y selecciona la conexión. Después también puedes usarla en Gemini móvil.
+
+Si no aparece Custom apps: Google exige actualmente una cuenta personal, tener al menos 18 años, estar en EE. UU., activar **Keep Activity** y usar inglés. [Requisitos e instrucciones de Google](https://support.google.com/gemini/answer/17209137?hl=en).
+
+</Tab>
+
+<Tab value="DeepSeek" keepMounted>
+
+#### DeepSeek
+
+DeepSeek ofrece [Harness](https://www.deepseek.com/en/harness/), un cliente aparte con interfaz web y soporte MCP. Se configura de forma distinta al chat habitual de chat.deepseek.com.
+
+Para usar un modelo DeepSeek, elige un cliente compatible con ese modelo y MCP. En el ordenador donde se ejecuta `tg` o `max`, añade una conexión local con la [guía MCP](./agents.mdx#mcp-y-skills); no necesitas dirección pública, así que omite los pasos 1 y 2 de esta página. Harness tiene [instrucciones MCP](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md).
+
+</Tab>
+
+</Tabs>
+
+Antes de introducir el código, comprueba que la página de acceso nombra la aplicación que conectas. El código funciona una vez y caduca a los 10 minutos; el servidor imprime un código nuevo después de cada acceso. Tras cinco códigos incorrectos, el acceso queda bloqueado hasta que reinicies el servidor.
+
+### Probar primero la lectura
+
+Con el plugin o conector activado en el chat, pide:
+
+```text prompt
+Muéstrame mis cinco chats recientes de Telegram y sus recuentos de mensajes sin leer.
+```
+
+Después pide un borrador o, cuando quieras enviar, indica el destinatario y el texto exacto.
+[Cómo escribir peticiones](./prompting.mdx) explica cómo pedir una revisión antes de enviar.
+
+<a id="elegir-qué-puede-hacer-el-asistente" />
+
+### Elegir qué puede hacer el agente
+
+El servidor puede hacer lo que permiten los permisos guardados del perfil. Para restringirlos solo en este proceso,
+añade `--permission messages.send=deny` o `--permission messages=readonly` al comando de inicio; la opción
+solo endurece, y una anulación que aflojaría el perfil se rechaza al iniciar. Para permitir el envío, cambia los
+permisos del perfil. La app controla sus aprobaciones. Por MCP, `ask` no fuerza una confirmación del servidor. Para
+solo leer, elige un perfil de solo lectura.
+
+Los ajustes de aprobación de la aplicación y las comprobaciones de permisos del servidor son controles separados. Si permites una herramienta
+en la aplicación y el servidor autoriza el envío, otra llamada puede enviar sin volver a preguntar. Pide un borrador para revisar
+el texto antes. Siguen activos los destinatarios permitidos y el límite por hora.
+Consulta los ejemplos de [permisos](./configuration.mdx#permisos).
+
+<a id="connection-recovery" />
+
+### Antes funcionaba y ahora no conecta
+
+La conexión del navegador requiere el ordenador con la herramienta de línea de comandos, su servidor MCP y el túnel HTTPS en ejecución. Después de suspender o reiniciar, sigue este orden:
+
+1. Activa el ordenador y comprueba la cuenta en un terminal con `tg personal account show` o `max personal account show`. En PowerShell usa `tg.cmd` o `max.cmd`. Si falla, sigue la guía de acceso de [Telegram](./tg/sessions.md) o [MAX](./max/sessions.md).
+2. Reinicia el túnel y el servidor en las dos ventanas indicadas arriba. Usa el mismo perfil y comprueba que la dirección HTTPS coincide con la del conector. Si cambió, actualiza la dirección pública del servidor y la del conector.
+3. Repite la petición de cinco chats. Si la aplicación pide conectar de nuevo, usa el nuevo código de un solo uso que muestra el servidor en ejecución.
+
+La conexión funciona cuando el agente muestra los chats de la cuenta esperada. Si sigue fallando, las comprobaciones de abajo distinguen problemas de cuenta, túnel o aplicación. Los archivos requieren otro paso: una ruta en este ordenador no entrega el archivo al agente del navegador. Consulta la transferencia para [Telegram](./tg/remote.md) o [MAX](./max/remote.md).
+
+<a id="ambos-mensajeros-a-la-vez" />
+
+### Ambos servicios de mensajería a la vez
+
+Usa puertos locales y direcciones HTTPS públicas distintos. Por ejemplo: Telegram en local
+`8765` y público `443`; MAX en local `8766` y público `8443`. Para el segundo túnel, usa el
+comando Tailscale de tu SO con `funnel --https=8443 8766` y añade `--port 8766` a MAX.
+Copia su origen HTTPS con `:8443` al comando de MAX y añade `/mcp` para el conector.
+Funnel admite los puertos públicos `443`, `8443` y `10000`
+([referencia](https://tailscale.com/docs/reference/tailscale-cli/funnel)).
+
+### Detener, reiniciar o revocar
+
+- **Detener:** Ctrl-C en ambas ventanas de primer plano detiene ese servidor y túnel.
+- **En segundo plano:** `tg personal mcp server start --public-url "$mcpPublicUrl"` ejecuta el mismo servidor
+  sin ventana. `tg personal mcp server status` lo muestra con su código de acceso; `tg personal mcp server stop` lo detiene.
+- **Reiniciar:** repite los comandos con el mismo perfil y URL. Las sesiones de las apps
+  sobreviven a reinicios normales; caducan tras 30 días sin renovación.
+- **Funnel en segundo plano:** con `--bg`, Ctrl-C no lo desactiva. Consulta `tailscale funnel status`
+  y desactiva solo esa ruta con `tailscale funnel --https=443 off` (o `8443` para el segundo servidor).
+  Usa la ruta y elevación de tu SO arriba. Evita `funnel reset` si tienes otra ruta: las borra todas.
+- **Revocar acceso de apps:** `tg personal mcp revoke` o `max personal mcp revoke`; en PowerShell, usa
+  `tg.cmd` / `max.cmd`. Las apps deben volver a entrar; la sesión del servicio de mensajería se mantiene.
+
+### Si algo falla
+
+- **No conecta:** abre el origen con `/.well-known/oauth-protected-resource/mcp` añadido.
+  Debe mostrar JSON. Si no, comprueba Funnel, su autorización y el puerto local.
+- **Lee pero no envía tras aprobar en la app:** comprueba los permisos de inicio y el permiso
+  efectivo. `deny` y `readonly` impiden cambios en el servidor; revisa también las aprobaciones de la app.
+- **PowerShell rechaza scripts:** usa `tg.cmd` o `max.cmd`. Si no encuentra el comando, abre una
+  ventana nueva y comprueba la instalación del CLI; no cambies la política de ejecución de todo el sistema.
+- **Sin herramientas:** `tg personal mcp check` o `max personal mcp check` verifica el handshake local, no el
+  túnel ni el acceso al servicio de mensajería. Un `account show` explícito verifica esa cuenta.
+- **Puerto ocupado:** cambia el puerto local y apunta Funnel al mismo número. Para dos servidores,
+  asigna también puertos HTTPS públicos distintos, como arriba.
+
+### Cómo funciona la conexión
+
+<ArchitectureDiagram name="remote" lang="es" />
+
+### Conectar sin mantener encendido el portátil
+
+Puedes instalar `tg` o `max` en un servidor que esté siempre en marcha y conectar tu chat de IA a su dirección. Así podrás usar tu servicio de mensajería desde el chat aunque el portátil esté apagado.
+
+Instala la herramienta en el servidor, inicia sesión en la cuenta elegida, arranca la conexión MCP y proporciona una dirección HTTPS pública. Configura el inicio automático tras un reinicio: tanto el servidor MCP de la herramienta de línea de comandos como su túnel HTTPS deben seguir funcionando. El servidor necesita su propio inicio de sesión; la instalación del portátil no lo conecta automáticamente.
+
+Prueba esta opción después de que funcione en tu ordenador. Consulta la conexión remota para [Telegram](./tg/remote.md) y [MAX](./max/remote.md). Repite la petición de cinco chats: si funciona con el portátil apagado, el servidor mantiene la conexión.
+
+<details>
+<summary>Servidor Linux: mantener la conexión tras salir y reiniciar</summary>
+
+1. Usa el mismo usuario normal de Linux para instalar, entrar en el servicio de mensajería y ejecutar el servicio. Instala Node.js, CLI y Tailscale e inicia sesión con ese usuario. Comprueba primero la petición de cinco chats con el arranque normal de arriba.
+2. Ejecuta `tg personal mcp config` o `max personal mcp config`. Usa la ruta absoluta de Node de `command` y la entrada del CLI de `args`; conserva el nombre del perfil antes de `mcp`: el servidor solo atiende el perfil que nombra. No guardes contraseñas ni tokens del bot en el servicio.
+3. Crea `~/.config/systemd/user/wirecat-mcp.service`. Sustituye rutas y dirección pública por valores reales. Los directorios de configuración y estado deben coincidir con los del acceso comprobado:
+
+```ini
+[Unit]
+Description=WireCat messenger connection
+
+[Service]
+Type=simple
+WorkingDirectory=%h
+ExecStart=/absolute/path/to/node /absolute/path/to/cli-entry.js personal mcp serve --http --port 8765 --public-url https://server.tailnet.ts.net
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+```
+
+4. Activa el servicio con los comandos siguientes. Un administrador también debe permitir servicios sin sesión activa, por ejemplo con `loginctl enable-linger wirecat`. Consulta [servicios systemd](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html) y [lingering](https://www.freedesktop.org/software/systemd/man/latest/loginctl.html).
+
+```sh
+systemctl --user daemon-reload
+systemctl --user enable --now wirecat-mcp.service
+systemctl --user status wirecat-mcp.service
+```
+
+5. Ejecuta `tailscale funnel --bg 8765` en el servidor, con los permisos necesarios. La [referencia de Funnel](https://tailscale.com/docs/reference/tailscale-cli/funnel#effects-of-rebooting-and-restarting) explica cómo vuelve tras reiniciar. Su puerto debe coincidir con el servicio MCP.
+6. Comprueba el acceso del servicio a la misma sesión y al almacén de claves desbloqueado. Un endpoint HTTP activo no prueba el acceso a la cuenta. Si falla tras reiniciar, restablece el acceso al almacén de claves; no copies credenciales al archivo.
+7. Cierra SSH, apaga el portátil y repite la petición desde la aplicación. Repítela tras reiniciar el servidor. Cuenta y dirección pública deben funcionar sin arrancar manualmente un terminal.
+
+Para parar o desactivar el inicio automático:
+
+```sh
+systemctl --user stop wirecat-mcp.service
+systemctl --user disable wirecat-mcp.service
+```
+
+`journalctl --user -u wirecat-mcp.service -n 30` ayuda a diagnosticar. Puede mostrar el código de conexión de un solo uso: úsalo para entrar y no publiques el registro completo. Otras plataformas usan su gestor de servicios con las mismas comprobaciones de cuenta y rutas.
+
+</details>
+
 ## Empieza tu primera tarea
 
-Pide encontrar un acuerdo, resumir conversaciones o preparar un borrador: [Primeras tareas](./first-tasks.md). Si no encuentra la herramienta, comprueba la instalación y que el agente trabaja en el mismo ordenador. Para otro dispositivo, sigue la [guía de navegador y móvil](./browser-apps.mdx).
+Pide encontrar un acuerdo, resumir conversaciones o preparar un borrador: [Primeras tareas](./first-tasks.md). Si no encuentra la herramienta, comprueba la instalación y que el agente trabaja en el mismo ordenador. Para otro dispositivo, sigue la [guía de navegador y móvil](./agents.mdx#usar-desde-la-web-o-el-móvil).

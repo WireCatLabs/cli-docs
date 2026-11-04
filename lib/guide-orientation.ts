@@ -243,6 +243,11 @@ export function guideStartLink(slugs: string[], lang: string) {
 
 /** Pages merged into another page keep their label and link to the heading that replaced them. */
 const pageAnchors: Record<string, { page: string; anchor: { en: string; ru: string; es: string } }> = {
+  mcp: { page: "agents", anchor: { en: "mcp-and-skills", ru: "mcp-и-навыки", es: "mcp-y-skills" } },
+  "browser-apps": {
+    page: "agents",
+    anchor: { en: "use-from-web-or-mobile", ru: "в-браузере-или-на-телефоне", es: "usar-desde-la-web-o-el-móvil" },
+  },
   "group-admins": {
     page: "group-analytics",
     anchor: { en: "group-admins", ru: "администраторам-групп", es: "administradores-de-grupos" },

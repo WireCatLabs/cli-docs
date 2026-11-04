@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test"
 for (const lang of ["en", "ru", "es"]) {
   test(`${lang}: remote setup tabs work on mobile, by keyboard and in Markdown`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 900 })
-    await page.goto(`/${lang}/docs/browser-apps`)
+    await page.goto(`/${lang}/docs/agents`)
     const windows = page.getByRole("tab", { name: "Windows", exact: true })
     const mac = page.getByRole("tab", { name: "macOS", exact: true })
     const linux = page.getByRole("tab", { name: "Linux", exact: true })
@@ -26,12 +26,12 @@ for (const lang of ["en", "ru", "es"]) {
     }
     await page.getByRole("tab", { name: "Gemini", exact: true }).click()
     await expect(page.getByRole("tabpanel").filter({ hasText: "Custom apps" })).toContainText("Keep Activity")
-    await page.goto(`/${lang}/docs/browser-apps#claude`)
+    await page.goto(`/${lang}/docs/agents#claude`)
     await expect(page.getByRole("heading", { name: /^Claude/ })).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
     const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
     expect(scan.violations).toEqual([])
-    const md = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}browser-apps/content.md`)
+    const md = await page.request.get(`/llms.mdx/docs/${lang === "en" ? "" : `${lang}/`}agents/content.md`)
     expect(md.status()).toBe(200)
     const text = await md.text()
     expect(text).not.toMatch(/<(?:PlatformSetupTabs|Tab)\b/)
@@ -46,7 +46,7 @@ for (const lang of ["en", "ru", "es"]) {
 test("Windows visitors start with PowerShell commands", async ({ browser }) => {
   const context = await browser.newContext({ userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" })
   const page = await context.newPage()
-  await page.goto("/en/docs/browser-apps")
+  await page.goto("/en/docs/agents")
   await expect(page.getByRole("tab", { name: "Windows", exact: true })).toHaveAttribute("aria-selected", "true")
   await expect(page.locator("main pre").filter({ hasText: "tg.cmd personal mcp serve --http" })).toBeVisible()
   await context.close()

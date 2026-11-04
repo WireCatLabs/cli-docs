@@ -174,7 +174,7 @@ for (const lang of ["en", "ru", "es"]) {
     .replaceAll('href="https://wirecat.dev/', 'href="/')
   html = html
     .replaceAll(`href="/${lang}/docs/tg/installation"`, `href="/${lang}/docs/installation"`)
-    .replaceAll(`href="/${lang}/docs/tg/mcp"`, `href="/${lang}/docs/mcp"`)
+    .replaceAll(`href="/${lang}/docs/tg/mcp"`, `href="/${lang}/docs/agents"`)
   html = html.replace(/<section id="about">[\s\S]*?<\/section>/, "")
   html = html.replaceAll('href="#about"', `href="/${lang}/about"`)
   html = html.replace(
