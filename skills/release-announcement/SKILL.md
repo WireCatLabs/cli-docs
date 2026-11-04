@@ -38,7 +38,7 @@ Always say it is **WireCat Desktop** (the app), not a tool release. Model: the 0
 ## Telegram and Discord
 
 Telegram in Russian to the WireCat Community group (`@wirecatdev`, chat id `-1004382826499`), Discord in English to
-the announcements channel. Same shape:
+the releases channel. Same shape:
 
 1. A headline with an emoji: `🚀 WireCat Desktop X.Y`.
 2. One or two sentences on what the release is for and who it helps.
@@ -50,4 +50,5 @@ the announcements channel. Same shape:
 
 Show both texts to the owner before posting. Telegram goes out from the owner's account with
 `tg personal messages send -1004382826499` (text on stdin). Discord goes out with
-`bin/post-discord <file>` in cli-docs, which reads the webhook from the keyring.
+`bin/post-discord <file>` in cli-docs, which reads the webhook from the keyring
+(`service discord account wirecat-releases-webhook`).

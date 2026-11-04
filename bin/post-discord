@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Posts a Markdown file to the WireCat Discord announcements channel.
+# Posts a Markdown file to the WireCat Discord releases webhook channel.
 # The webhook stays in the keyring and never reaches the screen, even when curl fails.
 set -euo pipefail
 
 file="${1:?usage: bin/post-discord <message.md>}"
-webhook="$(secret-tool lookup service discord account wirecat-announcements || true)"
+webhook="$(secret-tool lookup service discord account wirecat-releases-webhook || true)"
 if [ -z "$webhook" ]; then
   echo "No webhook in the keyring. Store it with:" >&2
-  echo "  secret-tool store --label='WireCat Discord announcements' service discord account wirecat-announcements" >&2
+  echo "  secret-tool store --label='WireCat Discord releases webhook' service discord account wirecat-releases-webhook" >&2
   exit 1
 fi
 
