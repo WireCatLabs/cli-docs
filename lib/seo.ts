@@ -153,6 +153,7 @@ export function pageStructuredData({
       url: siteUrl,
       logo: absoluteUrl("/android-chrome-512x512.png"),
       email: siteConfig.contacts.email,
+      sameAs: [siteConfig.contacts.telegram, siteConfig.contacts.facebook],
     },
     {
       "@type": "WebSite",
@@ -178,7 +179,12 @@ export function pageStructuredData({
             dateModified: post.updated ?? post.date,
             image: absoluteUrl(post.image),
             keywords: post.keywords,
-            author: { "@type": "Person", name: "Viacheslav Ptsarev", url: siteConfig.contacts.maintainerTelegram },
+            author: {
+              "@type": "Person",
+              name: "Viacheslav Ptsarev",
+              url: siteConfig.contacts.maintainerTelegram,
+              sameAs: [siteConfig.contacts.founderLinkedin, siteConfig.contacts.founderGithub],
+            },
             publisher: { "@id": organizationId },
           }
         : {}),
