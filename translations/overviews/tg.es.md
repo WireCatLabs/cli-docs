@@ -25,7 +25,7 @@ instalará la herramienta, te ayudará a iniciar sesión y comprobará la conexi
 y confirmas el acceso.
 
 Después sigue [la guía de tu agente](/es/docs/agents). Las aplicaciones que necesitan un servidor
-MCP tienen una [guía de MCP](/es/docs/mcp).
+MCP tienen una [guía de MCP](/es/docs/agents#mcp-y-skills).
 
 ### Empezar desde la terminal
 

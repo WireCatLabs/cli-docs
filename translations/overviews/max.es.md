@@ -34,7 +34,7 @@ Abre [la instalación con un agente](/es/docs/installation#max) y copia la petic
 agente instalará la herramienta, te ayudará a iniciar sesión y comprobará la conexión. Tú escaneas el QR.
 
 Después sigue [la guía de tu agente](/es/docs/agents): Codex, Claude Code, Cursor, Gemini CLI o
-Hermes. Las aplicaciones que usan MCP tienen una [guía de MCP](/es/docs/mcp).
+Hermes. Las aplicaciones que usan MCP tienen una [guía de MCP](/es/docs/agents#mcp-y-skills).
 
 ### Empezar desde la terminal
 

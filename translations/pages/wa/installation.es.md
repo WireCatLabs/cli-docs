@@ -21,7 +21,7 @@ Es un cliente no oficial. Lee [seguridad](./security.md) y [límites](./limits.m
 
 ### Con tu agente
 
-Usa un agente con acceso al terminal de este ordenador, como Codex, Claude Code, Cursor o Gemini CLI. Para un chat solo en el navegador, consulta [acceso web o móvil](/es/docs/browser-apps).
+Usa un agente con acceso al terminal de este ordenador, como Codex, Claude Code, Cursor o Gemini CLI. Para un chat solo en el navegador, consulta [acceso web o móvil](/es/docs/agents#usar-desde-la-web-o-el-móvil).
 
 ```text prompt
 Usa wa CLI. Ayúdame a conectar mi WhatsApp al agente siguiendo https://wirecat.dev/es/docs/wa/installation. Comprueba los programas necesarios e instala la herramienta. Pregunta qué cuenta y nombre de perfil quiero; personal es un ejemplo. Yo confirmaré la vinculación en el teléfono. Instala el skill y muestra mi cuenta y algunos chats. No envíes mensajes ni inicies trabajo en segundo plano sin preguntar.

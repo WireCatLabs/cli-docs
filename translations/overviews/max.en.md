@@ -34,7 +34,7 @@ Open [the agent installation guide](/en/docs/installation#max) and copy the shor
 Your agent will install the tool, help you log in and check the connection. You scan the QR code.
 
 Then follow [the guide for your agent](/en/docs/agents): Codex, Claude Code, Cursor, Gemini CLI
-or Hermes. Apps that use MCP have a [separate MCP guide](/en/docs/mcp).
+or Hermes. Apps that use MCP have a [separate MCP guide](/en/docs/agents#mcp-and-skills).
 
 ### Start in a terminal
 
