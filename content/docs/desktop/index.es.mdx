@@ -145,8 +145,8 @@ encuentra y pregunta antes de cambiar nada.
   shot="agents"
   folder="desktop/docs"
   lang="es"
-  alt="La página Agentes: Claude Code con una habilidad al día para cada herramienta"
-  caption="Claude Code, Codex, Cursor y Gemini CLI reciben habilidades al día para cada herramienta."
+  alt="La página Agentes: Claude Code con una skill al día para cada herramienta"
+  caption="Claude Code, Codex, Cursor y Gemini CLI reciben skills al día para cada herramienta."
 />
 
 ### Buscar
@@ -312,3 +312,51 @@ de descarga dan los pasos para cada sistema. Al quitar la aplicación, las herra
 quedan.
 
 ¿Prefieres la terminal? [Instala una herramienta a mano o con tu agente](../installation.mdx).
+
+## Problemas frecuentes
+
+Busca el mensaje que ves y sigue la solución. Si ninguno encaja, [Informar de un problema](#informar-de-un-problema) en la app reúne lo que necesita el soporte.
+
+### Windows dice «Windows protegió su PC»
+
+El instalador de Windows aún no está firmado con un certificado de desarrollador de Microsoft, así que Windows te pide confirmar el primer arranque. Selecciona **Más información** y después **Ejecutar de todas formas**. Si **Smart App Control** está activado, Windows bloquea toda app sin firmar y no deja permitir una sola; WireCat no puede arrancar en ese ordenador hasta que esté firmado. Los [pasos del primer arranque](/es/download#first-launch) muestran dónde hacer clic.
+
+### El AppImage dice «AppImages require FUSE to run»
+
+El AppImage necesita FUSE 2. Instala FUSE con `sudo apt install libfuse2t64` en Ubuntu 24.04 o posterior, o con `sudo apt install libfuse2` en Ubuntu y Debian anteriores, y abre el archivo de nuevo. Lo mismo dicen los [pasos del primer arranque en Linux](/es/download#first-launch).
+
+### «Se necesita Node.js para instalar las herramientas de WireCat», «Node.js es demasiado antiguo» o «npm necesita permisos de administrador»
+
+Las herramientas funcionan con Node.js 22.16 o posterior dentro de 22.x, o 24 o posterior, con npm. WireCat Desktop funciona sin él. Pulsa **Instalar Node.js por mí**: WireCat descarga Node.js, lo comprueba con las sumas de verificación que publica Node.js y lo descomprime en tu carpeta de usuario, sin permisos de administrador. Tu Node.js se queda como está. Si prefieres instalarlo tú, elige **Lo instalo yo** y pulsa **Comprobar de nuevo** después.
+
+### Una herramienta instalada no se encuentra en un terminal o en una app de IA
+
+Los terminales y las apps de IA que ya estaban abiertos antes de instalar solo ven las herramientas nuevas tras reiniciarlos. Si un terminal nuevo sigue sin encontrar la herramienta y Node.js lo instaló WireCat, abre la entrada de Node.js en **Tu ordenador** y pulsa **Añadir al PATH**; después abre un terminal nuevo. Para un shell que WireCat no edita, el mismo diálogo muestra una línea que debes añadir tú al archivo de inicio del shell. **Quitar del PATH** lo deshace.
+
+### Instalar una herramienta falla con «No se pudo conectar con el registro de npm»
+
+WireCat instala las herramientas desde npm, así que necesita internet. Comprueba tu conexión o el proxy y pulsa **Reintentar**. Una instalación que tarda más de 15 minutos se detiene; la comprobación es la misma. Si el mensaje dice que no se pudo confirmar que WireCat compiló la versión, nada cambió en tu ordenador: inténtalo más tarde.
+
+### Una herramienta muestra «Instalada, pero no se inicia»
+
+La luz de la herramienta está en rojo y su botón dice **Arreglar**. Abre **Arreglar con un agente de IA**: WireCat escribe lo que falló en un prompt y abre con él Claude Code, Codex o Gemini CLI en un terminal. El agente explica lo que encuentra y pregunta antes de cambiar nada. Cuando diga que el problema está resuelto, pulsa **Reintentar**. Si WireCat no encuentra ningún agente, copia el prompt en tu propio agente. En macOS, si Terminal no se abre, permite a WireCat en Ajustes del Sistema, Privacidad y seguridad, Automatización. Una segunda copia de la misma herramienta también puede dar problemas: **Gestionar** lista las copias y cómo quitar la sobrante.
+
+### El inicio de sesión no termina
+
+**Iniciar sesión aquí** espera a que termines en el navegador o en el teléfono. Un código o un QR caduca a los pocos segundos y aparece uno nuevo solo; usa el último. Un mensajero puede tardar un minuto en enviar su historial: déjalo abierto en el teléfono o pulsa **Detener y conservar lo recibido**. Si el mensaje dice que la versión todavía no puede iniciar sesión aquí, actualiza la herramienta en la página Herramientas o usa **Abrir terminal**. Si WireCat no encuentra ningún terminal, ejecuta tú el comando que muestra y pulsa **Comprobar sesión**.
+
+### Comprobar estado muestra un archivo de ajustes roto
+
+Una coma que falta o sobra, un comentario, comillas simples o un corchete sin cerrar en el archivo de ajustes de una herramienta le impiden leer sus ajustes. En **Gestionar**, **Comprobar estado** nombra el problema; pulsa **Reparar el archivo**. La herramienta conserva el archivo como estaba, dice qué cambió y no cambia nada que no pueda arreglar con seguridad. Si se niega, el mensaje señala la línea que debes corregir a mano en un editor de texto.
+
+### Una herramienta «no puede leer el almacenamiento»
+
+Otra herramienta de WireCat pasó el almacenamiento compartido a un formato más nuevo que el que lee esta. Actualiza la herramienta en la página Herramientas; [Almacenamiento](#almacenamiento) lista cuáles lo necesitan. Si aún no hay una versión más nueva, la página lo dice.
+
+### «No se ha podido instalar la actualización»
+
+Pulsa **Reintentar** o descarga WireCat en la [página de descargas](/es/download). Si el mensaje dice que la descarga no coincide con la firma de WireCat, no se ha abierto y no se guardó nada. Una copia .deb o .rpm abre el instalador de tu sistema, que pide tu contraseña. Una copia que WireCat no reconoce no puede actualizarse sola: instala la versión nueva como instalaste esta. Tus cuentas y tus datos no se borran. Más en [Actualizar y desinstalar](#actualizar-y-desinstalar).
+
+### ChatGPT o Claude en el navegador no llegan a la herramienta
+
+Una dirección nueva de Tailscale Funnel puede tardar hasta 10 minutos en aparecer en internet; espera y vuelve a añadir el servidor en la app. Los demás mensajes de ese paso están en la [sección «Solución de problemas» de la guía de Tailscale Funnel](./tailscale-funnel.mdx#solución-de-problemas).

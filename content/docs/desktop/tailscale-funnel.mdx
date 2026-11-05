@@ -1,34 +1,74 @@
 ---
 title: Set up Tailscale Funnel for WireCat MCP
-description: Give a tool's MCP server a fixed public https address, so ChatGPT, Claude and other browser apps can use it. Install Tailscale on macOS, Windows or your Linux, log in, allow Funnel, then press Start.
+description: Give a tool's MCP server a fixed public https address, so ChatGPT, Claude and other browser apps can use it. Step by step for macOS, Windows and Linux.
 ---
 
-You want ChatGPT, Claude or another AI app in the browser to read and send your messages through a WireCat tool. Such an app reaches a tool through its **MCP server**: a small server that each command-line tool starts on your computer for AI apps. A browser app runs on its provider's servers, so it cannot reach a server on your computer by itself. **Tailscale Funnel** gives this computer a fixed public https address that leads to that one server and to nothing else.
+ChatGPT, Claude and other AI apps in the browser run on their provider's servers, so they cannot reach anything on your computer by themselves. A WireCat tool offers its messages to AI apps through an **MCP server**, a small server it starts on your computer. **Tailscale Funnel** gives this computer a fixed public https address that leads to that server and to nothing else. You need it only to use a tool from a browser app; an AI app on the same computer, such as Claude Code, connects locally without it.
 
-On this page you set up Funnel once, in the four steps of the **Start** dialog of an MCP server in WireCat Desktop. After that, Start gives the server its public address with one click. You need a Tailscale account, which the login step creates if you have none, and your computer password once, to install Tailscale.
+You set Funnel up once. Afterwards, **Start** in WireCat Desktop gives the server its public address in one click. You need a Tailscale account (the login step creates one if you have none) and your computer password once, to install Tailscale.
 
-## What WireCat Desktop does for you
+**Jump to your system:** [macOS](#macos) · [Windows](#windows) · [Linux](#linux) · [Troubleshooting](#troubleshooting)
 
-The Start dialog shows four steps. Each step has a **Check** button, and the dialog checks again when you come back to the window, so you can do a step in your browser or terminal and return.
+## How WireCat Desktop helps
 
-- **Install**: on macOS and Windows, WireCat downloads Tailscale's official installer into Downloads, checks it against the checksum that Tailscale publishes, and opens it. On Debian, Ubuntu, Fedora and related systems, it downloads Tailscale's package and shows it in your file manager. On Linux it also shows Tailscale's own commands for your release, with **Open a terminal with them**.
-- **Log in**: WireCat runs `tailscale login` and opens the login page in your browser.
-- **Allow Funnel**: WireCat opens the page of the Tailscale admin console where you switch on what Funnel needs.
-- **Connect**: WireCat turns Funnel on for the server's local port and starts the server with the public address.
+Open the tool, then **MCP server (or connect web)**, then **Start and connect**, choose your AI app and, under **Public address**, choose **Tailscale Funnel**. Four steps follow. Each has a **Check** button, and the page checks again when you come back to the window, so you can do a step in your browser or terminal and return.
 
-WireCat never asks for your computer password and never runs `sudo`. The installer, the Software app or your terminal asks for the password. Stopping the server turns off only the Funnel that WireCat turned on; your own Funnels and Tailscale settings stay as they are.
+| Step | What WireCat does |
+| --- | --- |
+| Install Tailscale | On macOS and Windows it downloads Tailscale's official installer into Downloads, checks it against the checksum that Tailscale publishes, and opens it. On Debian, Ubuntu, Fedora and related systems it downloads Tailscale's package and shows it in your file manager. On Linux it also shows Tailscale's own commands for your release, with **Open a terminal with them**. |
+| Log in to Tailscale | Runs `tailscale login` and opens the login page in your browser. |
+| Allow Funnel | Opens the page of the Tailscale admin console where you switch on what Funnel needs. |
+| Connect this server | Turns Funnel on for the server's local port and starts the server with the public address. |
 
-## Install Tailscale
+WireCat never asks for your computer password and never runs `sudo`. The installer, the Software app or your terminal asks for it. Stopping the server turns off only the Funnel that WireCat turned on; your own Funnels and Tailscale settings stay as they are.
 
-Use the section for your system. On Linux, WireCat shows the commands for your release already filled in; this page shows one example of each.
+All your tools share one public address and take one path each, for example `https://laptop.tail4a2c.ts.net/tg`. The address stays the same the next time you start the server, so browser apps stay logged in. Funnel allows only the public ports 443, 8443 and 10000; WireCat uses another one only when the first is taken by a Funnel you set up yourself, and the step reports it if all three are in use.
 
-### macOS
+## macOS
 
-Select **Download and open the installer**. The macOS Installer opens Tailscale's package from `pkgs.tailscale.com` and asks for your password. Then open Tailscale from Applications and follow its onboarding, which installs Tailscale's VPN configuration. Tailscale requires macOS Monterey 12.0 or later. To get the installer yourself, use [Tailscale's download page for macOS](https://tailscale.com/download/mac).
+Tailscale requires macOS Monterey 12.0 or later.
 
-### Windows
+1. **Install.** In the **Install Tailscale** step, select **Download and open the installer**. The macOS Installer opens Tailscale's package from `pkgs.tailscale.com` and asks for your password. Open Tailscale from Applications and follow its onboarding, which installs Tailscale's VPN configuration. To get the installer yourself, use [Tailscale's download page for macOS](https://tailscale.com/download/mac). If the step says Tailscale is turned off, turn it on from the Tailscale icon in the menu bar.
+2. **Log in.** Select **Log in** and follow [Log in to Tailscale](#log-in-to-tailscale).
+3. **Allow Funnel.** Once for your Tailscale network, follow [Allow Funnel](#allow-funnel).
+4. **Start Funnel for the MCP port.** Select **Start the server**. WireCat turns Funnel on from the public address to the server's local port (8765 unless you chose another) and starts the server. See [Start the server](#start-the-server).
+5. **Check it works.** Follow [Check that it works](#check-that-it-works). By hand, in Terminal:
 
-Select **Download and open the installer**. Windows runs Tailscale's setup and asks for permission to install. After the installation, the Tailscale icon appears in the system tray, near the clock. Tailscale requires Windows 10 or later. To get the installer yourself, use [Tailscale's download page for Windows](https://tailscale.com/download/windows).
+   ```sh
+   TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel status
+   ```
+
+   The Mac app's own program acts as the command-line tool only with `TAILSCALE_BE_CLI=1`; see [Tailscale's CLI page](https://tailscale.com/kb/1080/cli).
+6. **Connect from the web app.** Follow [Connect from the web app](#connect-from-the-web-app).
+7. **Stop.** In the tool's MCP server section, select **Stop**. To turn Funnel off by hand, see [Stop Funnel](#stop-funnel).
+
+## Windows
+
+Tailscale requires Windows 10 or later.
+
+1. **Install.** In the **Install Tailscale** step, select **Download and open the installer**. Windows runs Tailscale's setup and asks for permission to install. Afterwards the Tailscale icon appears in the system tray, near the clock. To get the installer yourself, use [Tailscale's download page for Windows](https://tailscale.com/download/windows). If the step says Tailscale is turned off, turn it on from the icon next to the clock.
+2. **Log in.** Select **Log in** and follow [Log in to Tailscale](#log-in-to-tailscale).
+3. **Allow Funnel.** Once for your Tailscale network, follow [Allow Funnel](#allow-funnel).
+4. **Start Funnel for the MCP port.** Select **Start the server**. WireCat turns Funnel on from the public address to the server's local port (8765 unless you chose another) and starts the server. See [Start the server](#start-the-server).
+5. **Check it works.** Follow [Check that it works](#check-that-it-works). By hand, in PowerShell:
+
+   ```powershell
+   & "$env:ProgramFiles\Tailscale\tailscale.exe" funnel status
+   ```
+
+6. **Connect from the web app.** Follow [Connect from the web app](#connect-from-the-web-app).
+7. **Stop.** In the tool's MCP server section, select **Stop**. To turn Funnel off by hand, see [Stop Funnel](#stop-funnel).
+
+## Linux
+
+1. **Install.** In the **Install Tailscale** step, WireCat shows the commands for your release already filled in. The sections below show one example of each; pick your system.
+2. **Let your user control Tailscale.** Once, see [Let your user control Tailscale](#let-your-user-control-tailscale).
+3. **Log in.** Select **Log in** and follow [Log in to Tailscale](#log-in-to-tailscale).
+4. **Allow Funnel.** Once for your Tailscale network, follow [Allow Funnel](#allow-funnel).
+5. **Start Funnel for the MCP port.** Select **Start the server**. WireCat turns Funnel on from the public address to the server's local port (8765 unless you chose another) and starts the server. See [Start the server](#start-the-server).
+6. **Check it works.** Follow [Check that it works](#check-that-it-works). By hand, in a terminal: `tailscale funnel status`.
+7. **Connect from the web app.** Follow [Connect from the web app](#connect-from-the-web-app).
+8. **Stop.** In the tool's MCP server section, select **Stop**. To turn Funnel off by hand, see [Stop Funnel](#stop-funnel).
 
 ### Debian and Ubuntu
 
@@ -127,7 +167,7 @@ curl -fsSL https://tailscale.com/install.sh | sh
 
 If the script does not support your system, [Tailscale's Linux installation page](https://tailscale.com/docs/install/linux) explains the alternatives, and [Tailscale's static binaries](https://pkgs.tailscale.com/stable/#static) run on any Linux.
 
-### Let your user control Tailscale on Linux
+### Let your user control Tailscale
 
 On Linux, Tailscale takes orders only from the administrator unless you name your user as its **operator**. WireCat shows this command with your user name filled in. Run it once in a terminal; it asks for your password:
 
@@ -137,25 +177,72 @@ sudo tailscale set --operator=$USER
 
 After that, WireCat can log in and turn Funnel on without asking for your password each time. WireCat does not run this command for you, because it changes who controls Tailscale.
 
-## Log in to Tailscale
+
+## Steps that are the same on every system
+
+### Log in to Tailscale
 
 Select **Log in**. Your browser opens a Tailscale page that asks you to sign in with Google, Microsoft, GitHub, Apple or a passkey. If you do not have a Tailscale account yet, the same page creates one. The step finishes by itself when you finish in the browser.
 
 If your Tailscale network asks an administrator to approve each new computer, the step says so. If you are the administrator, approve this computer on the [Machines page](https://console.tailscale.com/admin/machines) of the admin console.
 
-## Allow Funnel
+### Allow Funnel
 
-Funnel needs two settings in your Tailscale network. You change them once in the admin console, and they apply to every computer in the network.
+Funnel needs two settings in your Tailscale network. You change them once in the admin console, and they apply to every computer in the network. To change them, you must be an Owner, Admin or Network admin of the Tailscale network.
 
 1. On the [DNS page](https://console.tailscale.com/admin/dns), turn on **MagicDNS** if it is off. Then, under **HTTPS Certificates**, select **Enable HTTPS**. Tailscale says that the names of your computers then appear in a public certificate log; rename a computer first if its name is private.
 2. On the [Access controls page](https://console.tailscale.com/admin/acls), open the **Funnel** section and select **Add Funnel to policy**.
 
-Select **Check** in WireCat. The step is done when Tailscale reports that HTTPS and Funnel are allowed for this computer. To change these settings, you must be an Owner, Admin or Network admin of the Tailscale network. [Tailscale's Funnel documentation](https://tailscale.com/docs/features/tailscale-funnel) describes both settings.
+Select **Check** in WireCat. The step is done when Tailscale reports that HTTPS and Funnel are allowed for this computer. [Tailscale's Funnel documentation](https://tailscale.com/kb/1223/funnel) describes both settings and asks for Tailscale 1.38.3 or later.
 
-## Connect the server
+### Start the server
 
-Select **Start**. WireCat turns Funnel on from a public address, such as `https://laptop.tail4a2c.ts.net`, to the server's local port, then starts the server with that address. Funnel opens only this address, and the server still asks each AI app for its login code.
+Select **Start the server**. WireCat turns Funnel on from the public address to the server's local port, then starts the server with that address. Funnel opens only this tool's paths, and the server still asks each AI app for a login code.
 
-The address stays the same the next time you start the server, so browser apps stay logged in. Funnel allows three public addresses per computer (ports 443, 8443 and 10000), so up to three servers can use Funnel at once. When you stop the server, WireCat turns its Funnel off. A new address can take up to ten minutes to work everywhere, while public DNS learns it.
+On the first start Tailscale can ask you to approve Funnel for your network in a page that opens in your browser; approve it there. If another program uses the port, open **Use another port**, choose a port from 1024 to 65535 and start again.
 
-Next, add the address to your AI app: [Add the connection to your AI chat](../agents.mdx#3-add-the-connection-to-chatgpt-or-claude) shows where ChatGPT, Claude, Gemini and DeepSeek take it.
+### Check that it works
+
+After **Start the server**, WireCat waits for the address to appear on the internet and moves on by itself, checking every 15 seconds. A new address can take up to ten minutes to work everywhere, while public DNS learns it. If this computer cannot open its own public address, which is usual, the last part is tested when the AI app connects.
+
+By hand, `tailscale funnel status` lists the public addresses and where each goes, for example `proxy http://127.0.0.1:8765/tg`. Opening `https://<your computer's Tailscale name>/.well-known/oauth-protected-resource/tg` in a browser should show a page of JSON.
+
+### Connect from the web app
+
+Add the address in your AI app. [Add the connection to your AI chat](../browser-apps.mdx#3-add-the-connection-to-chatgpt-or-claude) shows where ChatGPT, Claude, Gemini and DeepSeek take it. WireCat's Connect guide shows the exact address and the login code.
+
+### Stop Funnel
+
+**Stop** in the tool's MCP server section stops the server and turns off the Funnel paths that WireCat turned on. The record stays, so the next start reuses the same address.
+
+To turn them off by hand, add `off` to the command that turned them on, once per path (`tg` is an example; use your tool's name), with the `tailscale` of your system as in the check above:
+
+```sh
+tailscale funnel --https=443 --set-path=/tg off
+tailscale funnel --https=443 --set-path=/.well-known/oauth-authorization-server/tg off
+tailscale funnel --https=443 --set-path=/.well-known/oauth-protected-resource/tg off
+```
+
+Use the port that `tailscale funnel status` shows in place of `443`. Do not run `tailscale funnel reset`: it clears every Funnel on the computer, yours included. [Tailscale's Funnel reference](https://tailscale.com/docs/reference/tailscale-cli/funnel) describes `off` and `reset`.
+
+## Troubleshooting
+
+**"Tailscale is installed, but only the administrator may change its settings."** Linux only. Run `sudo tailscale set --operator=$USER` once; see [Let your user control Tailscale](#let-your-user-control-tailscale).
+
+**"This computer is not logged in" or "Your Tailscale network's admin has not approved this computer yet."** Select **Log in** again, or approve the computer on the [Machines page](https://console.tailscale.com/admin/machines).
+
+**"HTTPS certificates are off for your Tailscale network" or "Your Tailscale network does not allow Funnel yet."** Do the two settings in [Allow Funnel](#allow-funnel). Only an Owner, Admin or Network admin can.
+
+**"This computer has no Tailscale name."** Turn on MagicDNS on the DNS page of the admin console.
+
+**"Another program already answers on port…"** Open **Use another port**, choose another port and start again, or stop that program.
+
+**"All of Funnel's public addresses on this computer are in use."** Turn off a Funnel you set up yourself (`tailscale funnel status` lists them). WireCat never turns off Funnels it did not set up.
+
+**The AI app says it cannot reach the address, or "couldn't discover OAuth settings".** The address is probably not on the internet yet. Wait up to ten minutes after the first start, then add the server in the app again. If it still fails, the Connect guide shows the OAuth values to type by hand.
+
+**"The address answers, but not with the tool's server."** Another Funnel or tunnel uses the same address. Check **Server details**, or use another port.
+
+**The browser app stopped working after a restart.** Funnel is off while the server is off. Start the server again; the address stays the same. If the server row says Funnel is off while the server runs, select **Stop**, then **Start**.
+
+If a step still fails, **Report a problem** in the app collects what the support team needs.
