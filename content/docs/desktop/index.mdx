@@ -1,13 +1,14 @@
 ---
 title: Install and set up WireCat Desktop
-description: The app for macOS, Windows and Linux that installs, updates and checks the WireCat tools, connects them to your AI agents and signs you in, with no terminal.
+description: The app for macOS, Windows and Linux that installs, updates and checks the WireCat tools, connects them to your AI agents and signs you in, with no terminal. A walkthrough of every screen.
 ---
 
 WireCat Desktop is an app for people who want their AI agent to work with their messages, meetings,
-documents and notes, but do not want to install and maintain command-line tools by hand. It shows which
-WireCat tools exist and which are on your computer, installs the ones you choose, gives your AI agents
-the instructions to use them and opens each tool's sign-in. This page explains what the app does and how
-to start. The app is optional: every tool still installs and works from a terminal without it.
+documents and notes, but do not want to install and maintain command-line tools by hand. It installs the
+WireCat tools, gives your AI agents the instructions to use them, opens each tool's sign-in and shows what
+the tools keep on your computer. This page follows the app in the order you meet it: install, first start,
+then each page of the window. The app is optional: every tool still installs and works from a terminal
+without it.
 
 ## Download and install
 
@@ -23,35 +24,238 @@ It does not need administrator rights for that, and your existing Node.js stays 
 
 ## The first start
 
-The first start walks you through these steps on one screen:
+The first start opens a setup in the app's window. Its steps are listed at the left: **Welcome**,
+**Your computer**, **Choose tools**, **Install**, **Agents**, **Sign in** and **Done**. **Continue** goes to
+the next step and **Back** to the one before. **Set up later** closes the setup; **Finish setup** in the
+sidebar opens it again at the step you reached.
 
-1. **Your computer:** the app checks the system, Node.js and npm.
-2. **Choose tools:** pick the services your agent should reach: Telegram, MAX, WhatsApp, Zoom,
-   Google Drive, Memo or Email. You can add or remove tools later.
-3. **Install:** each tool is installed from npm and checked that it starts.
-4. **Connect agents:** the app gives each AI agent it finds the tool's <DocTerm term="skill" lang="en" label="skill" />:
+<DesktopShot
+  shot="onboarding-welcome"
+  lang="en"
+  alt="The Welcome step of the setup: what WireCat does and the Get started button"
+  caption="Welcome: the setup lists what WireCat does. Everything it handles stays on this computer."
+/>
+
+1. **Welcome:** a short note on what WireCat does. The tools keep your messages, mail, meetings and files
+   in storage on this computer, not in a WireCat cloud. Each tool is an open command-line tool from npm;
+   the app installs it and runs its own commands. **Get started** begins.
+2. **Your computer:** the app checks the system, Node.js and npm. **Check again** repeats the check after
+   you fix something.
+3. **Choose tools:** pick the services your agent should reach: Telegram, MAX, WhatsApp, Zoom,
+   Google Drive, Memo or Email. You can add or remove tools later on the **Tools** page.
+4. **Install:** each tool is installed from npm and checked that it starts. One install runs at a time.
+   A bar shows the progress: looking up packages, downloading, unpacking, setting up and checking that the
+   tool starts, with the time so far and an estimate of what is left. A tool usually takes a minute or
+   two, longer on a slow connection. While you wait, short tips show what each tool is for. The installs
+   keep going if you move to the next step, and each one is also shown on the **Tools** page with its full log.
+5. **Agents:** the app gives each AI agent it finds the tool's <DocTerm term="skill" lang="en" label="skill" />:
    a short guide to the tool's commands. It knows where Claude Code, Codex, Cursor, Gemini CLI, OpenCode,
-   Hermes Agent and OpenClaw read skills.
-5. **Sign in:** each tool connects to your account with its own sign-in. Telegram, MAX and WhatsApp
-   show their QR code or ask for a code in the app's window; Zoom and Google Drive open your browser.
-6. **Done:** the app shows what is installed. The question mark at the top has a short tour of the window.
+   Hermes Agent and OpenClaw read skills. With a skill you ask your agent in plain words, for example
+   "What did Anna send me yesterday?", and the agent knows which tool can answer.
+6. **Sign in:** signing in connects a tool to your account, so your agent can reach it. The app does it in its
+   own window for Telegram (a QR code or your phone number), MAX and WhatsApp (a QR code), and opens your browser for
+   Zoom and Google Drive. Where a tool has no sign-in window, **Open terminal to sign in** opens a terminal
+   that runs the tool's own setup. Memo needs no sign-in, and Email reads a mail account that you first set up
+   in Himalaya, a mail program for the terminal.
+7. **Done:** the app lists what is installed and offers three next steps: let ChatGPT or Claude use a tool,
+   see which agents use the tools, or try your first guide.
+
+<DesktopShot
+  shot="onboarding-install"
+  lang="en"
+  alt="The Install step: a progress bar for the tool that installs, with the tools waiting behind it"
+  caption="Install: one tool at a time, with the step, the time so far and a tip while you wait."
+/>
+
+Terminals and AI apps that were already open see the new tools only after you restart them.
+
+The question mark at the top (**Help**) has **Take the tour**, a short tour of the window, and **Show the
+welcome again**. The version number at the bottom left opens the same menu.
 
 ## What you can do in the app
 
-- **Tools:** see every tool with its version and health. Install, update or uninstall a tool, run its
-  health check for each profile, change what each profile allows your agent to do, and start a sync.
-  A tool's details can also start its MCP server, so an AI app without a terminal, such as ChatGPT or
-  Claude, can use the tool. A step-by-step guide publishes that server with
-  [Tailscale Funnel](./tailscale-funnel.mdx) or a Cloudflare tunnel.
-- **Agents:** see which AI agents are on the computer and which skills each one has. The app finds a
-  missing or old skill, a tool that the agent cannot find on its PATH and commands that a profile's
-  permissions block, and fixes or explains each one.
-- **Storage:** see how much the tools keep on the computer, look into the
-  local store (the one file, `wirecat.db`, where the tools keep messages, mail and notes), make a backup and delete the folders of
-  tools you no longer use.
-- **Logs:** [search what the tools recorded about their runs](./logs.mdx) when something failed.
-- **Settings:** change the app's language and interface size, and the settings of each tool.
-- **Report a problem:** send a bug report with masked recent error logs.
+The sidebar lists the pages in this order: **Tools**, **Agents**, **Search**, **Tasks**, **Guides**,
+**Memory** and **Analytics**. **Storage**, **Logs** and **Settings** sit below, apart, because they are about
+data and the app itself. The top of the window has **Report a problem**, **Notifications** (security fixes,
+updates and news from WireCat) and **Help**; when a new version is ready, an update button joins them.
+**Help** also holds **Privacy**, **About WireCat** and the settings of the Node.js that WireCat set up.
+
+### Tools
+
+You use this page to install the tools and to connect each one to your account.
+Every tool has a status lamp. Green means installed and current, amber means an update is ready, red means installed
+but it does not start, and a hollow ring means not installed. Each row has one button:
+**Install**, **Update to** a version, **Fix** or **Manage**.
+
+<DesktopShot
+  shot="tools"
+  lang="en"
+  alt="The Tools page: Telegram synced and WhatsApp opened with its signed-in account"
+  caption="Every messenger, meeting and file tool, installed, signed in and synced."
+/>
+
+**Manage** opens the tool's details:
+
+- **Accounts:** add an account by name, such as `personal` or `work`, and sign in with **Sign in here** or
+  **Open terminal**. The app never picks an account for you.
+- **Check health:** runs the tool's own health check for the profile and explains each problem in plain words.
+  When the tool's settings file is broken, such as a missing comma, **Repair the file** asks the tool to mend it.
+  The tool keeps the file as it was, and changes nothing it cannot fix safely.
+- **Sync now:** copies the new messages, files or meetings of a profile to this computer.
+- **Permissions:** what agents may do with each group of commands, set per profile: **Allow**, **Ask first**,
+  **Read only** or **Block**.
+- **MCP server (or connect web):** lets ChatGPT or Claude in the browser use the tool. The
+  [Tailscale Funnel](./tailscale-funnel.mdx) guide publishes the server, or you use a Cloudflare tunnel.
+- **Uninstall:** removes the tool. Its data stays on this computer until you delete it, and the dialog
+  offers **Uninstall and delete data**.
+
+<DesktopShot
+  shot="connect"
+  lang="en"
+  alt="Connecting ChatGPT to Telegram: every step checked and the first call received"
+  caption="ChatGPT can now use your Telegram, set up in a few clicks."
+/>
+
+### Agents
+
+You use this page to see which AI agents are on the computer and which skills each one has. **Connect** gives an
+agent the skills of the tools you choose. The app finds a missing or old skill, a tool that a new terminal
+cannot find on its PATH, and commands that a profile's permissions block, and it fixes or explains each one.
+When a problem needs more than a click, **Fix** can also open your agent (Claude Code, Codex or Gemini CLI) in a
+terminal with a prompt that describes the problem. The agent explains what it finds and asks before it changes
+anything.
+
+<DesktopShot
+  shot="agents"
+  lang="en"
+  alt="The Agents page: Claude Code with a current skill for every tool"
+  caption="Claude Code, Codex, Cursor and Gemini CLI get current skills for every tool."
+/>
+
+### Search
+
+You use this page to look through what one tool keeps on this computer. Choose a **Tool** and a **Profile**,
+then type what to look for. The search reads the local copy only and never asks the service, so what was
+never synced is not found. Open a result to see the messages around it, the whole mail thread or the
+meeting's transcript.
+
+<DesktopShot
+  shot="search-hit"
+  lang="en"
+  alt="The Search page: a result opened with the messages around it"
+  caption="Open any result to see the conversation around it."
+/>
+
+### Tasks
+
+What you and your agents plan to do. Agents read and change the same list, so a task you ask for in your
+agent's chat appears here. Switch between **Table** and **Board**, add one with **New task**, and search
+with filters such as `project:HRB priority:high when:overdue`. A board column is a state: **Open**, **Todo**,
+**Progress**, **Done** or **Dismissed**. Memo keeps the tasks; the page says so if Memo is not installed.
+
+<DesktopShot
+  shot="tasks"
+  lang="en"
+  alt="The Tasks board with open, in-progress and done tasks shared with agents"
+  caption="One task list that you and your agents share."
+/>
+
+### Guides
+
+Ready prompts for a catch-up every morning, a brief before each call and tasks from what people asked you. They are
+grouped by goal: **Catch up**, **Prepare**, **Gather**, **Analyze**, **Verify**, **Remember**, **Plan** and
+**Schedule**. A guide shows what it needs. **Copy prompt** copies it for your agent, and **Open in** an agent
+starts that agent in a terminal with it. The guides that came with the app work offline, and new ones arrive
+when you are online.
+
+<DesktopShot
+  shot="guides"
+  lang="en"
+  alt="The Guides page: guides grouped by goal, each with the prompt to copy"
+  caption="Guides: pick a goal, copy the prompt or open it in your agent."
+/>
+
+### Memory
+
+You use this page to decide what your agents may remember about you and the people you talk to. An agent
+connected to WireCat saves what it learns, such as "Kai prefers Friday calls", with the messages that show it.
+Nothing it writes counts, and nothing it proposes happens, until you approve it. Memo keeps the memory.
+
+The tabs are **Review**, **In use**, **Rejected** and **All**. Each entry shows the messages and notes it rests on. For each entry you can:
+
+- **Approve** it, or **Reject** it.
+- **Edit** it, with the pencil or from **More**. Your correction is saved as yours and approved; the agent's
+  version stays under **Rejected**.
+- Take back what you decided. **More** has the undo that fits the entry: **Reject**, **No longer true** or
+  **Undo approval**. WireCat can undo the approval of a decision only; to change a fact, edit it.
+- **Erase…** it, also in **More**. WireCat erases it from this computer, and agents stop finding it. The
+  messages, notes and meetings it rests on stay, and a backup made before still holds it.
+
+<DesktopShot
+  shot="memory"
+  lang="en"
+  alt="The Memory page: facts and decisions from your agents waiting for your approval"
+  caption="Nothing an agent remembers counts until you approve it."
+/>
+
+### Analytics
+
+What WireCat keeps and how it is used. The page is read-only. Choose a period (**7 days**, **30 days**,
+**90 days** or **All time**) and read: **What WireCat keeps** (messages, chats, emails, documents, meetings,
+attachments and accounts, with the space on disk), messages over time, **Who you hear from**, projects, tasks,
+memory, and **How WireCat helps**, which counts what your agents did with the tools. **Explore** builds your own
+chart. **Hide names** hides the people and chat names, for example before you share your screen.
+
+<DesktopShot
+  shot="analytics"
+  lang="en"
+  alt="The Analytics page: messages over time and the people you hear from most"
+  caption="Analytics: what WireCat keeps on this computer and how it is used."
+/>
+
+### Storage
+
+You use this page to see how much space the tools take and to clean up. It shows each tool's folders as
+**Settings**, **Data** and **Cache**, the **Shared storage** (the file `wirecat.db`, where the tools keep
+messages, mail, documents and notes) with its counts, and a **Tables** view of what is inside.
+
+- **Backups:** **Back up now** makes a copy of the whole storage, which you can protect with a password.
+  The page shows how to restore a copy.
+- **Clear storage…:** deletes every message, chat, email, document and meeting in the shared storage. Settings
+  and sign-ins stay. The dialog backs up first, unless you untick it.
+- **Delete:** removes a tool's folders once no installed tool uses them. **Delete all leftover data** removes
+  all of them. Sign-in tokens in your system keyring are not touched.
+
+<DesktopShot
+  shot="storage"
+  lang="en"
+  alt="The Storage page: folders of each tool, the shared storage and its backups"
+  caption="Storage: what each tool keeps, backups and clean-up."
+/>
+
+### Logs
+
+[Search what the tools recorded about their runs](./logs.mdx) when something failed.
+
+### Settings
+
+**Language** and **Interface size** of the app are at the top: Ctrl and + or − change the size anywhere in the
+app, and Ctrl and 0 resets it (Cmd on macOS). Tool names, commands and what the tools print are not translated.
+Below, **Tools** shows the settings of each tool and of WireCat itself, as a list or as **JSON**. The app
+reads them from the tool and saves them through the tool's own `config` command, so the tool checks every value
+before it is written.
+
+<DesktopShot
+  shot="settings"
+  lang="en"
+  alt="The Settings page: language, interface size and the settings of a tool"
+  caption="Settings: how the app looks, and the settings of each tool."
+/>
+
+### Report a problem
+
+**Report a problem** at the top sends a bug report with the versions and recent failed runs, with personal
+details hidden. Nothing is sent until you send it. **Privacy** in the **Help** menu lists what the app sends and when.
 
 ## The tools stay command-line tools
 

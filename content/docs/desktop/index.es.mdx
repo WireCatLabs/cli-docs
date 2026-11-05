@@ -1,14 +1,15 @@
 ---
 title: Instalar y usar WireCat Desktop
-description: La aplicación para macOS, Windows y Linux que instala, actualiza y comprueba las herramientas de WireCat, las conecta a tus agentes de IA y te guía al iniciar sesión, sin terminal.
+description: La aplicación para macOS, Windows y Linux que instala, actualiza y comprueba las herramientas de WireCat, las conecta a tus agentes de IA y te guía al iniciar sesión, sin terminal. Un recorrido por cada página.
 ---
 
 WireCat Desktop es una aplicación para quien quiere que su agente de IA trabaje con sus mensajes,
 reuniones, documentos y notas, pero no quiere instalar y mantener a mano herramientas de línea de comandos.
-Muestra qué herramientas de WireCat existen y cuáles tienes en el ordenador, instala las que elijas, da a
-tus agentes de IA las instrucciones para usarlas y abre el inicio de sesión de cada herramienta. Aquí
-verás qué hace la aplicación y cómo empezar. La aplicación es opcional: cada herramienta se sigue
-instalando y funcionando desde una terminal sin ella.
+Instala las herramientas de WireCat, da a tus agentes de IA las instrucciones para usarlas, abre el inicio de
+sesión de cada herramienta y muestra lo que las herramientas guardan en tu ordenador. Esta página sigue la
+aplicación en el orden en que la vas conociendo: instalación, primer arranque y luego cada página de la
+ventana. La aplicación es opcional: cada herramienta se sigue instalando y funcionando desde una terminal
+sin ella.
 
 ## Descargar e instalar
 
@@ -26,39 +27,256 @@ administrador para ello, y tu Node.js actual se queda como está.
 
 ## El primer arranque
 
-En el primer arranque, la aplicación te guía por estos pasos en una sola pantalla:
+El primer arranque abre una configuración en la ventana de la aplicación. Sus pasos aparecen a la izquierda:
+**Bienvenida**, **Tu ordenador**, **Herramientas**, **Instalación**, **Agentes**, **Inicio de sesión** y
+**Listo**. **Continuar** pasa al siguiente paso y **Atrás** al anterior. **Configurar más tarde** cierra la
+configuración; **Terminar la configuración** en la barra lateral la abre de nuevo en el paso al que llegaste.
 
-1. **Tu ordenador:** la aplicación comprueba el sistema, Node.js y npm.
-2. **Elige herramientas:** marca los servicios a los que debe llegar tu agente: Telegram, MAX, WhatsApp,
-   Zoom, Google Drive, Memo o el correo. Puedes añadir o quitar herramientas más tarde.
-3. **Instalación:** cada herramienta se instala desde npm y se comprueba que arranca.
-4. **Conecta agentes:** la aplicación da a cada agente de IA que encuentra la
+<DesktopShot
+  shot="onboarding-welcome"
+  lang="es"
+  alt="El paso Bienvenida de la configuración: qué hace WireCat y el botón Empezar"
+  caption="Bienvenida: la configuración explica qué hace WireCat. Todo lo que maneja se queda en este ordenador."
+/>
+
+1. **Bienvenida:** una nota breve sobre lo que hace WireCat. Las herramientas guardan tus mensajes, correo,
+   reuniones y archivos en un almacenamiento de este ordenador, no en una nube de WireCat. Cada herramienta es
+   una herramienta abierta de línea de comandos desde npm; la aplicación la instala y ejecuta sus propios
+   comandos. **Empezar** inicia la configuración.
+2. **Tu ordenador:** la aplicación comprueba el sistema, Node.js y npm. **Comprobar de nuevo** repite la
+   comprobación cuando arreglas algo.
+3. **Herramientas:** marca los servicios a los que debe llegar tu agente: Telegram, MAX, WhatsApp,
+   Zoom, Google Drive, Memo o el correo. Puedes añadir o quitar herramientas más tarde en la página
+   **Herramientas**.
+4. **Instalación:** cada herramienta se instala desde npm y se comprueba que arranca. Las instalaciones van de
+   una en una. Una barra muestra el avance: buscar paquetes, descargar, desempaquetar, preparar en el ordenador
+   y comprobar que arranca, con el tiempo transcurrido y una estimación de lo que falta. Una herramienta suele
+   tardar uno o dos minutos, más con una conexión lenta. Mientras esperas, unos consejos breves explican para
+   qué sirve cada herramienta. Las instalaciones siguen aunque pases al siguiente paso, y cada una aparece
+   también en la página **Herramientas** con su registro completo.
+5. **Agentes:** la aplicación da a cada agente de IA que encuentra la
    <DocTerm term="skill" lang="es" label="skill" /> de la herramienta: una guía breve de sus comandos. Sabe
-   dónde leen las skills Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Hermes Agent y OpenClaw.
-5. **Inicia sesión:** cada herramienta se conecta a tu cuenta con su propio inicio de sesión. Telegram,
-   MAX y WhatsApp muestran su código QR o piden un código en la ventana de la aplicación; Zoom y Google
-   Drive abren el navegador.
-6. **Todo listo:** la aplicación muestra lo que está instalado. El signo de interrogación de la parte
-   superior tiene una visita guiada breve por la ventana.
+   dónde leen las skills Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Hermes Agent y OpenClaw. Con una
+   skill le pides las cosas a tu agente con palabras normales, por ejemplo «¿Qué me envió Ana ayer?», y el
+   agente sabe qué herramienta puede responder.
+6. **Inicio de sesión:** iniciar sesión conecta una herramienta con tu cuenta, para que tu agente llegue a
+   ella. La aplicación lo hace en su propia ventana para Telegram (un código QR o tu número de teléfono), MAX y
+   WhatsApp (un código QR), y abre el navegador para Zoom y Google Drive. Si una herramienta no tiene ventana
+   de inicio de sesión, **Iniciar sesión en la terminal** abre una terminal que ejecuta la configuración propia
+   de la herramienta. Memo no necesita iniciar sesión, y el correo lee una cuenta que antes configuras en
+   Himalaya, un programa de correo para la terminal.
+7. **Listo:** la aplicación muestra lo que está instalado y propone tres pasos siguientes: dejar que ChatGPT o
+   Claude usen una herramienta, ver qué agentes las usan o probar tu primera guía.
+
+<DesktopShot
+  shot="onboarding-install"
+  lang="es"
+  alt="El paso Instalación: una barra de avance de la herramienta que se instala, con las demás esperando"
+  caption="Instalación: una herramienta cada vez, con el paso actual, el tiempo transcurrido y un consejo mientras esperas."
+/>
+
+Las terminales y las aplicaciones de IA que ya estaban abiertas ven las herramientas nuevas solo después de
+reiniciarlas.
+
+El signo de interrogación de la parte superior (**Ayuda**) tiene **Hacer el recorrido**, una visita guiada
+breve por la ventana, y **Ver de nuevo la bienvenida**. El número de versión de abajo a la izquierda abre el
+mismo menú.
 
 ## Qué puedes hacer en la aplicación
 
-- **Herramientas:** todas las herramientas con su versión y su estado. Instala, actualiza o desinstala una
-  herramienta, ejecuta su comprobación para cada perfil, cambia lo que cada perfil permite hacer a tu
-  agente e inicia una sincronización. Los detalles de una herramienta también pueden arrancar su servidor
-  MCP, para que una aplicación de IA sin terminal, como ChatGPT o Claude, pueda usarla. Una guía paso a
-  paso publica ese servidor con [Tailscale Funnel](./tailscale-funnel.mdx) o con un túnel de Cloudflare.
-- **Agentes:** qué agentes de IA hay en el ordenador y qué skills tiene cada uno. La aplicación encuentra
-  una skill que falta o está anticuada, una herramienta que el agente no encuentra en su PATH y los
-  comandos que bloquean los permisos de un perfil, y arregla o explica cada caso.
-- **Almacenamiento:** cuánto guardan las herramientas en el ordenador, qué hay en el almacén local (el
-  único archivo, `wirecat.db`, donde las herramientas guardan mensajes, correo y notas), una copia de
-  seguridad y el borrado de las carpetas de herramientas que ya no usas.
-- **Registros:** [busca lo que las herramientas registraron de sus ejecuciones](./logs.mdx) cuando algo
-  falló.
-- **Ajustes:** el idioma y el tamaño de la interfaz de la aplicación, y los ajustes de cada herramienta.
-- **Informar de un problema:** envía un informe de error con los registros de errores recientes, con los
-  datos personales ocultos.
+La barra lateral enumera las páginas en este orden: **Herramientas**, **Agentes**, **Buscar**, **Tareas**,
+**Guías**, **Memoria** y **Analítica**. Debajo, aparte, están **Almacenamiento**, **Registros** y **Ajustes**,
+que tratan de los datos y de la propia aplicación. La parte superior de la ventana tiene **Informar de un
+problema**, **Avisos** (arreglos de seguridad, actualizaciones y noticias de WireCat) y **Ayuda**; cuando hay una
+versión nueva, se suma un botón de actualización. **Ayuda** también contiene **Privacidad**, **Acerca de WireCat**
+y los ajustes del Node.js que instaló WireCat.
+
+### Herramientas
+
+Aquí instalas las herramientas y conectas cada una a tu cuenta. Cada herramienta tiene un indicador de estado.
+Verde significa instalada y al día, ámbar que hay una actualización, rojo que está instalada pero no
+arranca, y un anillo vacío que no está instalada. Cada fila tiene un botón: **Instalar**, **Actualizar a** una
+versión, **Arreglar** o **Gestionar**.
+
+<DesktopShot
+  shot="tools"
+  lang="es"
+  alt="La página Herramientas: Telegram sincronizado y WhatsApp abierto con su cuenta conectada"
+  caption="Todas tus herramientas instaladas, con sesión iniciada y sincronizadas."
+/>
+
+**Gestionar** abre los detalles de la herramienta:
+
+- **Cuentas:** añade una cuenta con un nombre, como `personal` o `work`, e inicia sesión con **Iniciar sesión
+  aquí** o **Abrir terminal**. La aplicación nunca elige una cuenta por ti.
+- **Comprobar estado:** ejecuta la comprobación propia de la herramienta para el perfil y explica cada problema
+  con palabras sencillas. Si el archivo de ajustes de la herramienta está roto, por ejemplo por una coma que
+  falta, **Reparar el archivo** pide a la herramienta que lo arregle. La herramienta conserva el archivo tal como
+  estaba y no cambia nada que no pueda arreglar con seguridad.
+- **Sincronizar ahora:** copia a este ordenador los mensajes, archivos o reuniones nuevos de un perfil.
+- **Permisos:** lo que los agentes pueden hacer con cada grupo de comandos, por perfil: **Permitir**,
+  **Preguntar antes**, **Solo lectura** o **Bloquear**.
+- **Servidor MCP (o conectar la web):** deja que ChatGPT o Claude en el navegador usen la herramienta. La guía de
+  [Tailscale Funnel](./tailscale-funnel.mdx) publica el servidor, o puedes usar un túnel de Cloudflare.
+- **Desinstalar:** quita la herramienta. Sus datos se quedan en este ordenador hasta que los borres, y el
+  diálogo ofrece **Desinstalar y borrar datos**.
+
+<DesktopShot
+  shot="connect"
+  lang="es"
+  alt="Conectar ChatGPT con Telegram: todos los pasos comprobados y la primera llamada recibida"
+  caption="ChatGPT ya puede usar tu Telegram, configurado en unos clics."
+/>
+
+### Agentes
+
+Aquí ves qué agentes de IA hay en el ordenador y qué skills tiene cada uno. **Conectar** da a un agente las skills
+de las herramientas que elijas. La aplicación encuentra una skill que falta o está anticuada, una herramienta que
+una terminal nueva no encuentra en su PATH y los comandos que bloquean los permisos de un perfil, y arregla o
+explica cada caso. Cuando un problema pide más que un clic, **Arreglar** también puede abrir tu agente (Claude
+Code, Codex o Gemini CLI) en una terminal con un prompt que describe el problema. El agente explica lo que
+encuentra y pregunta antes de cambiar nada.
+
+<DesktopShot
+  shot="agents"
+  lang="es"
+  alt="La página Agentes: Claude Code con una habilidad al día para cada herramienta"
+  caption="Claude Code, Codex, Cursor y Gemini CLI reciben habilidades al día para cada herramienta."
+/>
+
+### Buscar
+
+Aquí buscas en lo que una herramienta guarda en este ordenador. Elige una **Herramienta** y un **Perfil** y escribe
+qué buscar. La búsqueda solo lee la copia local y nunca consulta el servicio, así que lo que nunca se sincronizó
+no aparece. Abre un resultado para ver los mensajes de alrededor, el hilo completo de un correo o la transcripción
+de la reunión.
+
+<DesktopShot
+  shot="search-hit"
+  lang="es"
+  alt="La página Buscar: un resultado abierto con los mensajes que lo rodean"
+  caption="Abre cualquier resultado y ve la conversación que lo rodea."
+/>
+
+### Tareas
+
+Lo que tú y tus agentes pensáis hacer. Los agentes leen y cambian la misma lista, así que una tarea que pides en el
+chat con tu agente aparece aquí. Cambia entre la vista **Tabla** y la vista **Tablero**, añade una con **Nueva
+tarea** y busca con filtros como `project:HRB priority:high when:overdue`. Cada columna del tablero es un estado:
+**Abiertas**, **Por hacer**, **En curso**, **Hechas** o **Descartadas**. Memo guarda las tareas; la página lo
+indica si Memo no está instalado.
+
+<DesktopShot
+  shot="tasks"
+  lang="es"
+  alt="El tablero de tareas con tareas abiertas, en curso y hechas, compartidas con los agentes"
+  caption="Una lista de tareas que compartes con tus agentes."
+/>
+
+### Guías
+
+Prompts listos para un resumen cada mañana, un repaso antes de cada llamada y tareas a partir de lo que te
+pidieron. Están agrupados por objetivo: **Ponerte al día**, **Prepararte**, **Reunir**, **Analizar**,
+**Verificar**, **Recordar**, **Planificar** y **Programar**. Una guía muestra lo que necesita. **Copiar prompt** lo
+copia para tu agente, y **Abrir en** un agente inicia ese agente en una terminal con él. Las guías que vinieron
+con la aplicación funcionan sin conexión, y las nuevas llegan cuando la tengas.
+
+<DesktopShot
+  shot="guides"
+  lang="es"
+  alt="La página Guías: guías agrupadas por objetivo, cada una con el prompt para copiar"
+  caption="Guías: elige un objetivo, copia el prompt o ábrelo en tu agente."
+/>
+
+### Memoria
+
+Aquí decides qué pueden recordar tus agentes sobre ti y las personas con las que hablas. Un agente conectado a
+WireCat guarda lo que aprende, por ejemplo «Kai prefiere las llamadas del viernes», con los mensajes que lo
+muestran. Nada de lo que escribe cuenta, y nada de lo que propone ocurre, hasta que lo apruebas. Memo guarda la
+memoria.
+
+Las pestañas son **Revisar**, **En uso**, **Rechazado** y **Todo**. Cada entrada muestra los mensajes y notas en
+los que se basa. Con cada entrada puedes:
+
+- **Aprobarla** o **Rechazarla**.
+- **Editarla**, con el lápiz o desde **Más**. Tu corrección se guarda como tuya y aprobada; la versión del agente
+  queda en **Rechazado**.
+- Deshacer lo que decidiste. **Más** tiene el paso atrás que corresponde a la entrada: **Rechazar**, **Ya no es
+  cierto** o **Deshacer aprobación**. WireCat solo puede deshacer la aprobación de una decisión; para cambiar un
+  hecho, usa **Editar**.
+- **Borrar…** la entrada, también en **Más**. WireCat la borra de este ordenador y los agentes dejan de
+  encontrarla. Los mensajes, notas y reuniones en los que se basa se quedan, y una copia de seguridad hecha antes
+  aún la conserva.
+
+<DesktopShot
+  shot="memory"
+  lang="es"
+  alt="La página Memoria: hechos y decisiones de tus agentes esperan tu aprobación"
+  caption="Nada de lo que recuerda un agente cuenta hasta que lo apruebas."
+/>
+
+### Analítica
+
+Lo que WireCat guarda y cómo se usa. La página es de solo lectura. Elige un periodo (**7 días**, **30 días**,
+**90 días** o **Todo**) y lee: **Lo que guarda WireCat** (mensajes, chats, correos, documentos, reuniones,
+adjuntos y cuentas, con el espacio en disco), los mensajes en el tiempo, **Quién te escribe**, proyectos, tareas,
+memoria y **Cómo ayuda WireCat**, que cuenta lo que tus agentes hicieron con las herramientas. **Explorar** crea tu
+propio gráfico. **Ocultar nombres** oculta los nombres de personas y chats, por ejemplo antes de compartir la
+pantalla.
+
+<DesktopShot
+  shot="analytics"
+  lang="es"
+  alt="La página Analítica: mensajes en el tiempo y las personas que más te escriben"
+  caption="Analítica: lo que WireCat guarda en este ordenador y cómo se usa."
+/>
+
+### Almacenamiento
+
+Aquí ves cuánto espacio ocupan las herramientas y puedes hacer limpieza. Muestra las carpetas de cada herramienta
+como **Ajustes**, **Datos** y **Caché**, el **Almacenamiento compartido** (el archivo `wirecat.db`, donde las
+herramientas guardan mensajes, correo, documentos y notas) con sus recuentos, y una vista de **Tablas** con lo que
+hay dentro.
+
+- **Copias de seguridad:** **Hacer copia ahora** copia todo el almacenamiento, y puedes protegerla con una
+  contraseña. La página muestra cómo restaurar una copia.
+- **Vaciar el almacenamiento…:** borra todos los mensajes, chats, correos, documentos y reuniones del
+  almacenamiento compartido. Los ajustes y las sesiones se quedan. El diálogo hace antes una copia, salvo que
+  desmarques la casilla.
+- **Borrar:** quita las carpetas de una herramienta cuando ninguna herramienta instalada las usa. **Borrar todos
+  los datos sobrantes** las quita todas. Los tokens de inicio de sesión del llavero del sistema no se tocan.
+
+<DesktopShot
+  shot="storage"
+  lang="es"
+  alt="La página Almacenamiento: carpetas de cada herramienta, el almacenamiento compartido y sus copias"
+  caption="Almacenamiento: lo que guarda cada herramienta, copias de seguridad y limpieza."
+/>
+
+### Registros
+
+[Busca lo que las herramientas registraron de sus ejecuciones](./logs.mdx) cuando algo falló.
+
+### Ajustes
+
+Arriba están el **Idioma** y el **Tamaño de la interfaz** de la aplicación: Ctrl y + o − cambian el tamaño en
+cualquier parte de la aplicación, y Ctrl y 0 lo restablecen (Cmd en macOS). Los nombres de las herramientas, los
+comandos y lo que imprimen las herramientas no se traducen. Debajo, **Herramientas** muestra los ajustes de cada
+herramienta y de WireCat, como lista o como **JSON**. La aplicación los lee de la herramienta y los guarda con
+el comando `config` de la propia herramienta, así que la herramienta comprueba cada valor antes de escribirlo.
+
+<DesktopShot
+  shot="settings"
+  lang="es"
+  alt="La página Ajustes: idioma, tamaño de la interfaz y los ajustes de una herramienta"
+  caption="Ajustes: cómo se ve la aplicación y los ajustes de cada herramienta."
+/>
+
+### Informar de un problema
+
+**Informar de un problema**, arriba, envía un informe de error con las versiones y las últimas ejecuciones
+fallidas, con los datos personales ocultos. No se envía nada hasta que lo envías tú. **Privacidad**, en el menú
+**Ayuda**, enumera lo que envía la aplicación y cuándo.
 
 ## Las herramientas siguen siendo de línea de comandos
 
