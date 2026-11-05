@@ -3,7 +3,7 @@ title: "Cómo se vincula todo"
 description: "Qué registros conectan las herramientas (mensajes, personas, chats, archivos, menciones, notas, tareas, hechos, documentos de Drive, etiquetas), quién crea cada vínculo y qué ejecutar cuando falta uno."
 ---
 
-Puedes pedirle a tu agente todo sobre una persona, o los mensajes que respaldan una decisión, porque las herramientas guardan vínculos entre registros. Esta página explica qué vínculos existen, quién crea cada uno (la herramienta, tú o tu agente) y cómo seguirlos. Después podrás saber por qué falta un vínculo y qué comando lo añade. La búsqueda y los vínculos trabajan con lo que ya está en el almacén local, así que descarga antes el historial: [Buscar](./search.md#descarga-primero-el-historial-de-los-chats-pertinentes).
+Puedes pedirle a tu agente todo sobre una persona, o los mensajes que respaldan una decisión, porque las herramientas guardan vínculos entre registros. Esta página explica qué vínculos existen, quién crea cada uno (la herramienta, tú o tu agente) y cómo seguirlos. Después podrás saber por qué falta un vínculo y qué comando lo añade. La búsqueda y los vínculos trabajan con lo que ya está en el almacén local, así que descarga antes el historial: [Buscar](./search.mdx#descarga-primero-el-historial-de-los-chats-pertinentes).
 
 ## La idea
 
@@ -164,4 +164,4 @@ Usa memo. ¿Qué tarea nació del mensaje sobre la factura y qué mensaje la res
 | No se encuentran palabras dentro de un archivo | No se extrajo el texto del archivo | `attachments extract` |
 | Un chat no tiene mensajes | Nunca se descargó el historial | `messages sync` |
 
-Siguiente: [Busca con eficacia](./search-efficiently.md) muestra cómo elegir el comando y acotar una búsqueda. Las columnas del almacén que sostienen estos vínculos están en [el modelo de datos](./data-model.mdx#cómo-se-conectan).
+Siguiente: [Busca con eficacia](./search.mdx) muestra cómo elegir el comando y acotar una búsqueda. Las columnas del almacén que sostienen estos vínculos están en [el modelo de datos](./data-model.mdx#cómo-se-conectan).

@@ -498,4 +498,4 @@ builds a chat's tasks from its history.
 - [How tasks work](./tasks-architecture.mdx): the data, the keys, claiming and the duplicate check
   step by step.
 - [Tasks and reminders in Memo](./memo/tasks.md): project tasks, assignees and reminders.
-- [Searching](./search.md): find the messages a task is about.
+- [Searching](./search.mdx): find the messages a task is about.

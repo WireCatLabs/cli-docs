@@ -95,13 +95,13 @@ There are two ways to connect an agent ([the guide](/en/docs/agents)):
 
 Output size matters when an agent pays for every token it reads. We measured it on 5,000 synthetic
 messages: asking for only the fields you need with `--json=<fields>` made answers [31% to 64%
-smaller](/en/docs/search-efficiently) than full `--json`. The [setup and the
+smaller](/en/docs/search) than full `--json`. The [setup and the
 script](https://github.com/WireCatLabs/cli-testing/tree/main/performance/agents/output-size) are
 public.
 
 ## You decide what the agent may do
 
-Each profile has [permissions](/en/docs/permissions) per action: `deny`, `readonly`, `ask` (confirm
+Each profile has [permissions](/en/docs/configuration#permissions) per action: `deny`, `readonly`, `ask` (confirm
 in the terminal) or `allow`. You can also restrict recipients and set an hourly send limit. A few
 defaults worth knowing:
 

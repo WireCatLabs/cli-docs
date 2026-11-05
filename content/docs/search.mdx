@@ -1,0 +1,313 @@
+---
+title: "Searching"
+description: "Find a message, person, chat or file using words, word forms, typos or meaning."
+---
+
+Find messages, agreements, people, chats and documents across your chats. Learn what you can search, how to choose a search method and how to check the source messages, even when you remember only part of a phrase or its subject.
+
+**What you can search:**
+
+- **Messages and discussions** — by text, sender, date, subject and nearby messages.
+- **Contacts and people** — by name, username or ID, then recall what you discussed.
+- **Chats, groups and channels** — by title among your account's chats.
+- **Files** — by filename, extension and contents, once the document's text has been extracted and saved.
+- **Links and attachments** — for example, messages with a link, PDF or voice note; voice transcripts become searchable once their text is saved.
+
+Content search supports text files, Word and PDFs with text layers. Scans and photos need text
+recognition first; ask your agent to do that. Details: [Telegram files](./tg/search.md#text-inside-files)
+and [MAX](./max/search.md#текст-внутри-файлов). See [People](./people.md) for finding a person.
+
+For word forms, typo handling and meaning-based search, see [How search works](./search-architecture.mdx).
+
+Which kinds of content are indexed, and what each one needs (a command, a model or a setting): [What gets indexed](./what-is-indexed.md).
+
+## Fetch the relevant chat history first
+
+Before searching older messages, download the conversations for the period you need. Logging
+in does not download all history. Word search can also query the messenger’s server by default: `tg` asks Telegram for word candidates, and so does `max` with MAX: within the chat you name, or across all chats with one best match from each. `--backend archive` keeps word searches local. Topic search and counts use saved messages. File filters are evaluated against the local archive, even when a word search also retrieves server candidates. If that conversation is missing, an empty result does not mean the
+message was never sent.
+
+Ask your agent to fetch the selected chats or run your messenger's command. Replace `Project`
+with the chat title; this example downloads the past month, up to 1,000 messages per run:
+
+```sh
+tg personal messages sync "Project" --since-time 30d --limit 1000
+```
+
+```sh
+max personal messages sync "Project" --since-time 30d --limit 1000
+```
+
+If the limit is reached, that month's history may still be incomplete. Instructions for fetching,
+resuming and checking history: [Telegram](./tg/archive.md#fetch-a-chats-history) and
+[MAX](./max/archive.md#скачать-историю).
+
+## Search everything at once
+
+When you do not know where something was written — a chat or your own notes — search both together:
+
+```sh
+tg personal search all invoice
+max personal search all invoice
+```
+
+Each result says whether it is a message or a note. `tg` and `max` do not search mail: `memo search mail`
+does, and `memo search all invoice` searches messages, mail and notes at once. The sections below search one
+kind.
+
+## Find a word or phrase
+
+Start by asking your agent. For MAX, write “max CLI” instead of “tg CLI”:
+
+```text prompt
+Use tg CLI. Find where we agreed the renovation deadline in the group and my chat with the contractor. Show the final agreement, check later replies and cite the messages. If history is missing, tell me what needs fetching. Don't send anything.
+```
+
+You should get the agreed date and the messages behind it. If the date was only proposed or later changed, the answer should make that clear. You do not need to know the search syntax.
+
+<details>
+<summary>Optional: commands for the terminal</summary>
+
+```sh
+tg personal search messages invoice
+max personal search messages invoice
+```
+
+</details>
+
+For an exact phrase, keep the quotes inside the query:
+
+<details>
+<summary>Optional: commands for the terminal</summary>
+
+```sh
+tg personal search messages 'exact:"final invoice"'
+max personal search messages 'exact:"final invoice"'
+```
+
+</details>
+
+Results link back to messages. Ask your agent to show nearby messages before interpreting
+an agreement: one line may miss a correction or a later answer.
+
+## When you don't remember the exact wording
+
+Message search offers several approaches:
+
+- **A word or exact phrase:** when you remember the wording. Use `exact:` for literal matching.
+- **Part of a word:** `flat*` finds words starting with that part, such as “flat” and “flats”.
+- **Word forms and shared stems:** “invoice” can find “invoices”. Which forms match depends on the archive's language settings.
+- **Typos:** the default search does not correct typos. Ask your agent to allow misspellings: it can add `--discover`, which also tries close spellings of the words in the local archive, or search by the start of the word.
+- **Meaning:** when you remember the subject, such as “the renovation deadline we agreed”, rather than the words. This needs a prepared discussion index.
+
+Word forms, exact matching, indexes and meaning-based search: **[How search works](./search-architecture.mdx)**.
+Detailed syntax: [Telegram](./tg/query-language.md) and [MAX](./max/query-language.md). The `--discover` option is listed in the command references for [Telegram](./tg/commands.md#tg-search-messages) and [MAX](./max/commands.md#max-search-messages). These modes describe message search;
+chat-title and person-name lookup can behave differently.
+
+## Narrow the conversation
+
+<details>
+<summary>Optional: commands for the terminal</summary>
+
+```sh
+tg personal search messages 'invoice chat:"Project"'
+max personal search messages 'invoice chat:"Project"'
+```
+
+</details>
+
+You can also filter by person, date or attachments. The [Telegram](./tg/search.md) and
+[MAX](./max/search.md) guides give examples you can adapt.
+
+## Choose the command
+
+You have a lot stored, and an agent pays for every result it reads. This page shows how to get the right records in the fewest steps: pick the command, narrow before you search, page through results and trim the output. After it, you can turn a vague question into one precise search and check what the search covered. It assumes the history you need is already downloaded: [Searching](./search.mdx#fetch-the-relevant-chat-history-first).
+
+Put the tool name and your profile name in front of each command, as in `tg personal search messages`.
+
+| You want | Run | Notes |
+| --- | --- | --- |
+| Words in your Telegram or MAX messages | `search messages` in `tg` or `max` | Reads the local archive and, by default, the messenger's server |
+| A phone, email, link or person's name written in messages | `search messages` with `phone:`, `email:`, `domain:` or `mentions:`, or `mentions list` | Found by rules, in any spelling |
+| Everything about one person, in every messenger | `contacts events` | Needs the identities linked with `contacts link` |
+| A discussion, when you remember the subject and not the words | `search conversations` | Needs `conversations rebuild` and `conversations embed` once for the chat |
+| A picture by what it shows | `search messages "dog on a beach"` | English only, and the picture setting must be on: [What gets indexed](./what-is-indexed.md#pictures) |
+| Mail, notes, or you do not know where it was written | `memo search all`, `memo search mail`, `memo search notes` | The answer lists the sources it skipped and why |
+| Messages of every messenger at once | `memo search messages` | Messages only |
+| A decision or a promise | `memo facts list` | Each fact links to its evidence |
+| A Drive document, by words or meaning | `drive search` | `--exact` for words only |
+| A Drive file, by name, type, folder, person or tag | `drive catalog list` or `drive catalog search` | Metadata only, works offline |
+
+## Narrow first, then search
+
+A search that names a chat, a sender and a period reads fewer records and returns fewer wrong ones. Add filters in this order: chat, sender, date, kind, attachment, then the words.
+
+| Filter | Finds | Example |
+| --- | --- | --- |
+| `chat:` | One chat, by name or id | `chat:"Book club"` |
+| `from:` | One sender | `from:"Kai Sample"` |
+| `date:` | A period, or everything after a day | `date:[2026-01-01 TO 2026-02-01}`, `date>=2026-10-01` |
+| `kind:` | Private chats, groups, channels, bots | `kind:group` |
+| `has:` | Messages with a file, photo, voice note, link or text | `has:file` |
+| `filename:` | A file by its name | `filename:*.pdf` |
+| `mime:` | A file by its type (Telegram only) | `mime:"application/pdf"` |
+| `size:` | Files by size | `size>10MB` |
+| `content:` | Words inside a file | `content:invoice` |
+| `transcript:` | Words said in a voice note | `transcript:invoice` |
+| `tag:` | Your own labels | `tag:work` |
+| `phone:`, `email:`, `url:`, `domain:`, `mentions:` | A value found in the text | `phone:"+1 555 010 0100"`, `mentions:"person:7"` |
+
+Field names are case sensitive, and an unknown field is an error, not an empty answer. The full list of fields is in the query language of [Telegram](./tg/query-language.md) and [MAX](./max/query-language.md). The last row is in the latest releases of `tg` and `max`.
+
+```sh
+tg personal search messages 'chat:"Book club" from:"Kai Sample" date>=2026-10-01 delivery' --limit 10
+```
+
+When the messenger's own server is asked too, only the words, one chat, one sender and the dates go to it. `has:`, `tag:`, negations and wildcards are applied locally. Details: [How search works](./search-architecture.mdx#server-search-beside-the-archive).
+
+## The operators
+
+| Write | Meaning |
+| --- | --- |
+| `invoice paid` | Both words, in any order (AND is the default) |
+| `alpha OR beta` | Either word |
+| `alpha NOT beta`, `alpha -beta` | The first word without the second |
+| `+alpha` | The word must be there |
+| `(alpha OR beta) gamma` | A group |
+| `from:(alice OR bob)` | One field for several values |
+| `date:[2026-01-01 TO 2026-02-01}` | A range: `[ ]` includes the end, `{ }` excludes it |
+| `invo*` | Any ending |
+| `text:/pass(port)?/` | A regular expression, matched against whole words |
+
+Three rules prevent most surprises:
+
+- A query that is only a negation selects nothing. Pair it with a positive condition: `has:photo NOT has:text`.
+- An explicit `AND` binds tighter than `OR`. `alpha OR beta gamma` means `(alpha OR beta) AND gamma`.
+- `and`, `or` and `not` in lower case are ordinary words. Typos such as `invoice~1` and boosts such as `invoice^2` are errors.
+
+## Words, forms and meaning
+
+A plain word finds its other forms: "invoice" finds "invoices". For the exact form only, use `exact:invoice`. Search does not correct typos: use the part you are sure of (`invoi*`), or add `--discover` to also try close spellings in the local archive. Words inside files and transcripts match the exact form only.
+
+Use `search conversations` when you remember what a discussion was about and not which words were used. Ask in your own words, in any language the model reads. It always returns the nearest conversations, even when none of them answers, so open the messages before you rely on one. For an exact name, number or id, use a field search instead. More: [Topic search](./tg/topic-search.md).
+
+## Page through the results
+
+The answer says whether more results exist (`has_more`). That describes the page, not whether the messenger holds more. Repeat the same command with the same filters and ask for the next page. Which flag does it depends on the command:
+
+| Command | Next page |
+| --- | --- |
+| `search messages` in `tg` and `max` | `--page <n>`, counting from 1 |
+| `contacts events` | `--cursor <cursor>`, with the cursor from the answer's `page.next` |
+| `mentions list`, `drive catalog list`, `drive catalog search` | `--page <n>` |
+| `memo search notes`, `drive search` | `--offset <n>` |
+| `memo search all`, `memo search mail`, `memo search messages` | `--limit` only, up to 100: narrow the query instead |
+
+## Keep the output small
+
+- `--limit <n>` caps the hits.
+- `--json=<fields>` keeps only the fields you name, for example `--json=ref,date,text`. It is the one option that
+  shrinks every answer: 31% to 64% smaller than full `--json` in [our measurement](https://github.com/WireCatLabs/cli-testing/tree/main/performance/agents/output-size).
+- `--jsonl` prints one result per line. It is no smaller than `--json`. `--full` returns whole texts.
+- `--max-output-bytes` caps machine output at 4 MiB by default. A result over the cap fails visibly instead of being cut.
+- `--context <n>` adds `n` neighbouring messages on each side of a hit. It is 0 when the output is not a terminal.
+
+## Read the evidence, then widen
+
+Open one hit with its neighbours, or follow its reply chain:
+
+```sh
+tg personal messages context "msg:telegram/1/77/42" --before-n 3 --after-n 3
+tg personal messages context "msg:telegram/1/77/42" --thread
+```
+
+If an answer looks thin, read its `missing` entry. It names what was not searched and the step that fixes it, such as downloading a chat. Each hit says where it matched (`matched_in`: `text`, `transcript`, `filename` or `file`). To compare the count with what you expect, `stats messages show` (in the latest releases) counts matches by chat, sender, day or hour.
+
+## Recipes
+
+Replace the names with yours.
+
+| Goal | Command |
+| --- | --- |
+| An agreement and its source | `tg personal search messages 'chat:"Book club" agreed date>=2026-10-01' --limit 5` |
+| Everything about one person this month | `tg personal contacts events "Kai Sample" 'at>=2026-10-01'` |
+| Where a phone number appears | `tg personal search messages 'phone:"+1 555 010 0100"'` |
+| Files sent in a chat last week | `tg personal search messages 'chat:"Book club" has:file date>=2026-10-07'` |
+| What a Drive document says about a topic | `drive personal search 'budget' --exact --limit 5` |
+
+For longer ones, see the recipes for [Telegram](./tg/recipes.md) and [MAX](./max/recipes.md).
+
+## Common mistakes
+
+| Mistake | What happens | Instead |
+| --- | --- | --- |
+| Searching before the history is downloaded | Few or no results | Download the chat first; read `missing` in the answer |
+| Reading an empty answer as "never sent" | The archive may be incomplete | Check what the answer says it covered |
+| Quoting a phrase to get the exact form | Quotes match any word form | `exact:"final invoice"` |
+| `mime:application/pdf` without quotes | The `/` starts a regular expression | `mime:"application/pdf"`, or `filename:*.pdf` |
+| `mime:` in MAX | MAX does not report file types | `filename:*.pdf` |
+| `has:photo` to find what a picture shows | It only says a photo is attached | Picture search, in English |
+| A message field in a Drive search | Drive has its own filters | `tag:` and `--exact`, or `catalog list` |
+| `From:` instead of `from:` | An error | Field names are lower case |
+| Asking a picture search in another language | The model knows English only | Have your agent translate first |
+
+## If a result is missing
+
+By default, word search can also ask Telegram’s or MAX’s server. Topic search,
+counts and filters such as files or links need saved history: fetch the missing period, then
+search again. A word search is different from a search by meaning; try both when you remember
+only roughly how something was said. Check dates, chat scope and whether history is complete.
+
+## Try it with sample messages
+
+Practise combining filters and checking sources before connecting an account. This playground contains 50 fictional messages in 6 chats, runs on your device and never connects to a messenger. The sample messages are in English: try `invoice`, `budget` or `coffee`.
+
+1. Start with a word or choose a filter.
+2. Narrow the results by person, chat, date or attachment type.
+3. Open a match to read its context, then change a filter and compare the results.
+
+Sample dates run from two days before today to two days after it and use UTC. Type a field such as `has:` or `in:` to see its values. Press Space after a word or completed filter to see fields and operators; use ↑ / ↓ and Enter to insert a suggestion, or Esc to close it. Clear the query or choose **All** to browse every message.
+
+<SearchPlayground lang="en" embedded />
+
+## Build a Lucene query
+
+Lucene syntax combines words with fields and logical operators. Start with `invoice`, then add conditions to narrow the result. Use uppercase `AND`, `OR` and `NOT`, and parentheses to make the grouping clear.
+
+| Query | What it finds |
+| --- | --- |
+| `invoice AND budget` | Messages containing both words. |
+| `Atlas AND (invoice OR budget)` | Atlas messages containing either invoice or budget. |
+| `invoice NOT has:file` | Invoice messages without a file attachment. |
+| `"final invoice"` | The words together, in that order. |
+| `text:cof*` | Words starting with `cof`, including coffee. |
+| `text:*off*` | Words containing `off`, such as coffee or office. `?` replaces one character. |
+| `chat:"Client studio" AND from:Mia` | Messages from Mia in Client studio. Quote names containing spaces. |
+| `in:max AND has:voice` | Voice notes from a selected messenger. Choose a messenger from the `in:` suggestions. |
+
+`text:coffee` finds the word coffee. `text:cof` searches for the whole word cof, so it does not match coffee; add `*` when you only remember part of a word.
+
+`has:` also offers `attachment`, `link`, `file`, `photo`, `image`, `video`, `audio`, `sticker`, `contact`, `location` and `poll`. `has:attachment` includes attached media; `has:link` finds links in the message text. You can combine them: `(has:file OR has:link) AND text:budget`.
+
+Choose **Date** for today's date, the current month or the five-day sample window. The inserted query uses `date:YYYY-MM-DD` for a day or `date:[START TO END]` for an inclusive range. An asterisk leaves one end open; braces exclude the boundary. For example, the **Before tomorrow** suggestion uses `date:{* TO YYYY-MM-DD}` with tomorrow's date.
+
+This playground implements the supported WireCat Lucene fields, rather than every Apache Lucene feature. Fuzzy matching (`~`), boosting (`^`) and fields such as `filename:` are unavailable here. An unfinished or unsupported query keeps the previous valid results visible and marks the problem; it does not silently broaden the search.
+
+## Check the result
+
+Open the source of the best hit and compare it with what you remembered. If a kind of content never turns up, check the one step it needs: [What gets indexed](./what-is-indexed.md#what-each-kind-needs). If a link between records is missing, see [How things are linked](./how-things-are-linked.md#if-a-link-is-missing).
+
+Next: the query language of [Telegram](./tg/query-language.md) or [MAX](./max/query-language.md) lists every field, preset and date form.
+
+## More precise queries and technical details
+
+Learn filters and operators in the [Telegram query guide](./tg/query-language.md) or
+[MAX query guide](./max/query-language.md). [How search works](./search-architecture.mdx)
+explains indexing, conversations and ranking after the practical guides.
+
+For the general grammar, read the official [Apache Lucene query parser syntax](https://lucene.apache.org/core/10_5_1/queryparser/org/apache/lucene/queryparser/classic/package-summary.html). WireCat's references define which features work in the tools. The [search architecture guide](./search-architecture.mdx) explains how message search, conversation graphs and embeddings fit together.
+
+## Search pages
+
+- [What gets indexed](./what-is-indexed.md): what can be found and what each kind of content needs.
+- [How things are linked](./how-things-are-linked.md): how messages, people, files, notes and tasks connect.

@@ -237,5 +237,19 @@ export function guideStartLink(slugs: string[], lang: string) {
     search: ["Find a message or discussion", "Найти сообщение или обсуждение", "Encontrar mensajes o conversaciones"],
   }
   const label = labels[page][lang === "ru" ? 1 : lang === "es" ? 2 : 0]
-  return { href: `/${lang}/docs/${page}`, label }
+  const moved = pageAnchors[page]
+  return { href: `/${lang}/docs/${moved ? `${moved.page}#${moved.anchor[lang as "en" | "ru" | "es"]}` : page}`, label }
+}
+
+/** Pages merged into another page keep their label and link to the heading that replaced them. */
+const pageAnchors: Record<string, { page: string; anchor: { en: string; ru: string; es: string } }> = {
+  "group-admins": {
+    page: "group-analytics",
+    anchor: { en: "group-admins", ru: "администраторам-групп", es: "administradores-de-grupos" },
+  },
+  permissions: { page: "configuration", anchor: { en: "permissions", ru: "права", es: "permisos" } },
+  profiles: {
+    page: "configuration",
+    anchor: { en: "profiles-and-bots", ru: "профили-и-боты", es: "perfiles-y-bots" },
+  },
 }

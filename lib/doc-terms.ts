@@ -345,19 +345,19 @@ const terms = {
       title: "Profile",
       description:
         "A name for a particular account or bot and its settings, such as work. It helps you choose the right account and permissions when you have several.",
-      page: "profiles",
+      page: "configuration",
     },
     ru: {
       title: "Профиль",
       description:
         "Имя для определённого аккаунта или бота и его настроек, например work. Помогает выбрать нужный аккаунт и права, когда их несколько.",
-      page: "profiles",
+      page: "configuration",
     },
     es: {
       title: "Perfil",
       description:
         "Un nombre para una cuenta o bot y sus ajustes, por ejemplo work. Permite elegir la cuenta y los permisos adecuados cuando tienes varios.",
-      page: "profiles",
+      page: "configuration",
     },
   },
   "local-archive": {

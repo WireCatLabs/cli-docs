@@ -3,7 +3,7 @@ title: Cómo funciona la búsqueda
 description: "La parte técnica de la búsqueda: contenido guardado, índices, formas de palabras y clasificación."
 ---
 
-Comprende por qué una búsqueda encuentra un resultado o lo omite: qué se indexa, cómo se ordenan las coincidencias y cómo volver a la fuente. Se pueden buscar mensajes, notas y texto guardado de archivos o transcripciones de reuniones. Los ejemplos siguientes se centran en el motor de búsqueda de mensajes compartido por `tg` y `max`. Para peticiones cotidianas y comandos, empieza por [Búsqueda](./search.md).
+Comprende por qué una búsqueda encuentra un resultado o lo omite: qué se indexa, cómo se ordenan las coincidencias y cómo volver a la fuente. Se pueden buscar mensajes, notas y texto guardado de archivos o transcripciones de reuniones. Los ejemplos siguientes se centran en el motor de búsqueda de mensajes compartido por `tg` y `max`. Para peticiones cotidianas y comandos, empieza por [Búsqueda](./search.mdx).
 
 ## Elige la vía adecuada
 
@@ -188,13 +188,13 @@ max personal conversations related "Project team" 4521 --json
 
 Después de buscar, abre el mensaje original o la conversación reconstruida. Una respuesta debe distinguir cuatro cosas: una coincidencia exacta de mensaje, un candidato por significado, una relación del grafo y la conclusión del propio agente. Conserva junto a cada afirmación el localizador, el chat, el autor, la fecha y el texto relevante alrededor.
 
-`--context` sigue el tiempo, no el grafo. `--thread`, en cambio, sigue el grafo de respuestas guardado (por defecto 8 saltos, 50 mensajes, 65 536 bytes y un día alrededor de cada resultado) y vuelve al orden temporal cuando un chat no tiene grafo. `messages links` explica las relaciones del grafo y la cadena de padres elegida; `conversations show` lee los mensajes agrupados. Los paquetes de pruebas añaden identidades de fuente, huellas del contenido, límites y datos de truncado; aun así, una página de pruebas no demuestra que el historial de un chat esté completo. El ejemplo de [administración de grupos](./group-admins.md) muestra por qué relaciones completas entre mensajes guardados no implican un historial completo.
+`--context` sigue el tiempo, no el grafo. `--thread`, en cambio, sigue el grafo de respuestas guardado (por defecto 8 saltos, 50 mensajes, 65 536 bytes y un día alrededor de cada resultado) y vuelve al orden temporal cuando un chat no tiene grafo. `messages links` explica las relaciones del grafo y la cadena de padres elegida; `conversations show` lee los mensajes agrupados. Los paquetes de pruebas añaden identidades de fuente, huellas del contenido, límites y datos de truncado; aun así, una página de pruebas no demuestra que el historial de un chat esté completo. El ejemplo de [administración de grupos](./group-analytics.mdx#administradores-de-grupos) muestra por qué relaciones completas entre mensajes guardados no implican un historial completo.
 
 Leer, buscar y ver el contexto nunca marca mensajes como leídos ni envía nada. Descargar historial, construir, calcular vectores y usar proveedores remotos son acciones separadas y explícitas.
 
 ## 8. Qué muestra el playground
 
-El [playground interactivo](./search-playground.mdx) ejecuta el analizador de consultas compartido sobre 50 mensajes ficticios en seis chats. Muestra la coincidencia estricta, sugerencias de campos y valores, filtros que se pueden quitar, fechas, predicados de archivos y enlaces y el contexto alrededor de un resultado. Una edición inválida conserva los últimos resultados válidos y marca el error de sintaxis.
+El [playground interactivo](./search.mdx#prueba-con-mensajes-de-ejemplo) ejecuta el analizador de consultas compartido sobre 50 mensajes ficticios en seis chats. Muestra la coincidencia estricta, sugerencias de campos y valores, filtros que se pueden quitar, fechas, predicados de archivos y enlaces y el contexto alrededor de un resultado. Una edición inválida conserva los últimos resultados válidos y marca el error de sintaxis.
 
 El navegador no abre ninguna cuenta ni ejecuta construcción de conversaciones, vectores ni IA en vivo. Sus resúmenes breves son ejemplos preparados que solo se muestran cuando se recuperan sus pruebas. La interfaz está traducida; los mensajes de ejemplo siguen en inglés. Aprende allí a comprobar fuentes y usa las guías del mensajero para un archivo real.
 

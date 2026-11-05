@@ -3,7 +3,7 @@ title: "How things are linked"
 description: "Which records the tools connect (messages, people, chats, files, mentions, notes, tasks, facts, Drive documents, tags), who creates each link, and what to run when one is missing."
 ---
 
-You can ask your agent for everything about one person, or for the messages behind a decision, because the tools keep links between records. This page explains which links exist, who creates each one (the tool, you or your agent) and how to follow them. After it, you can tell why a link is missing and which command adds it. Search and links work on what is already in the local store, so download the history first: [Searching](./search.md#fetch-the-relevant-chat-history-first).
+You can ask your agent for everything about one person, or for the messages behind a decision, because the tools keep links between records. This page explains which links exist, who creates each one (the tool, you or your agent) and how to follow them. After it, you can tell why a link is missing and which command adds it. Search and links work on what is already in the local store, so download the history first: [Searching](./search.mdx#fetch-the-relevant-chat-history-first).
 
 ## The idea
 
@@ -164,4 +164,4 @@ Use memo. Which task came from the message about the invoice, and which message 
 | Words inside a file are not found | The file text was not extracted | `attachments extract` |
 | A chat has no messages at all | The history was never downloaded | `messages sync` |
 
-Next: [Search efficiently](./search-efficiently.md) shows how to pick the right command and narrow a search. For the stored columns behind these links, see [the data model](./data-model.mdx#how-they-connect).
+Next: [Search efficiently](./search.mdx) shows how to pick the right command and narrow a search. For the stored columns behind these links, see [the data model](./data-model.mdx#how-they-connect).

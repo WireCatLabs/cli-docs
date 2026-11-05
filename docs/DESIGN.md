@@ -42,7 +42,7 @@ wirecat.dev/
 ├── /{lang}/docs/architecture     packages, layers, adapters, store, patterns, limits         ✅
 ├── /{lang}/docs/security         shared security: store, send guard, MCP, reporting          ✅
 ├── /{lang}/docs/search-architecture  message/graph/embedding architecture, shared guide       🟡
-├── /{lang}/docs/search-playground  interactive search on a fictional local archive            🟡
+├── /{lang}/docs/search            search, with an interactive playground on a fictional archive 🟡
 ├── /{lang}/docs/mcp               MCP connections and documentation for agents                ✅
 ├── /{lang}/docs/build-create-cli  build a CLI from cli-template: questions, reference tools, upgrade ✅
 ├── /{lang}/docs/{tool}            the tool's start page (its docs/index.md)                   ✅

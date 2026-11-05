@@ -12,8 +12,8 @@ for (const lang of ["en", "ru", "es"] as const) {
         const main = page.locator("main")
         if (route === "features") {
           await expect(main.locator("table")).toHaveCount(0)
-          for (const target of ["agents", "search", "people", "memo", "bot-api", "group-admins", "permissions"]) {
-            await expect(main.locator(`a[href="/${lang}/docs/${target}"]`).first()).toBeVisible()
+          for (const target of ["agents", "search", "people", "memo", "bot-api", "group-analytics", "configuration"]) {
+            await expect(main.locator(`a[href^="/${lang}/docs/${target}"]`).first()).toBeVisible()
           }
         } else {
           for (const target of [
@@ -23,7 +23,7 @@ for (const lang of ["en", "ru", "es"] as const) {
             "drive/installation",
             "zm/installation",
           ]) {
-            await expect(main.locator(`a[href="/${lang}/docs/${target}"]`).first()).toBeVisible()
+            await expect(main.locator(`a[href^="/${lang}/docs/${target}"]`).first()).toBeVisible()
           }
           await expect(main.locator(".docs-term-trigger").first()).toBeEnabled()
           if (route === "installation")

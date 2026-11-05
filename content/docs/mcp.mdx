@@ -19,7 +19,7 @@ Two sides take part:
   on a server that a browser chat reaches over a public HTTPS address.
 
 Through MCP, the AI can use only the tools the server offers, and only within the profile's
-[permissions](./permissions.mdx): a read-only profile cannot send. Connecting MCP does not log in to
+[permissions](./configuration.mdx#permissions): a read-only profile cannot send. Connecting MCP does not log in to
 your messenger for you; you log in once with the command-line tool. It does not download your whole
 archive either.
 
@@ -104,7 +104,7 @@ tg personal mcp add claude-code
 claude mcp list
 ```
 
-By hand, the equivalent is `claude mcp add --scope user tg -- tg personal mcp serve`. If the profile exposes write tools, setup asks you to check its [permissions](./permissions.mdx) first and then repeat with `--allow-writes`. That flag only confirms the installation; it does not change the permissions.
+By hand, the equivalent is `claude mcp add --scope user tg -- tg personal mcp serve`. If the profile exposes write tools, setup asks you to check its [permissions](./configuration.mdx#permissions) first and then repeat with `--allow-writes`. That flag only confirms the installation; it does not change the permissions.
 
 Use `/mcp` in a session to check status. For full paths, use the values from `mcp config`.
 [Official Claude Code MCP guide](https://code.claude.com/docs/en/mcp).

@@ -34,7 +34,7 @@ const pages = {
           "Проверить, какой бот подключён",
           "Используй {cli} CLI с профилем моего бота sales. Покажи имя бота и проверь доступ к группе «Клуб». Объясни, что он может делать и каких прав не хватает. Ничего не отправляй и не меняй.",
           "Ожидайте имя бота, выбранную группу и понятное объяснение доступа. Имя должно совпадать с ботом, которого вы подключили выше.",
-          "profiles",
+          "configuration",
           "Выбрать профиль бота",
         ],
         [
@@ -80,7 +80,7 @@ const pages = {
           "Check the connected bot",
           "Use {cli} CLI with my sales bot profile. Show the bot's name and check access to Club. Explain what it can do and which permissions are missing. Do not send or change anything.",
           "Expect the bot's identity, selected group and access explanation. The name should match the bot you connected above.",
-          "profiles",
+          "configuration",
           "Choose a bot profile",
         ],
         [
@@ -126,7 +126,7 @@ const pages = {
           "Comprobar el bot conectado",
           "Usa {cli} CLI con el perfil sales de mi bot. Muestra su nombre y comprueba acceso a Club. Explica qué puede hacer y qué permisos faltan. No envíes ni cambies nada.",
           "Recibirás identidad, grupo y explicación del acceso. El nombre debe coincidir con el bot conectado arriba.",
-          "profiles",
+          "configuration",
           "Elegir perfil del bot",
         ],
         [

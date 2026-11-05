@@ -7,7 +7,7 @@ Find out before you search whether the thing you remember can be found at all: a
 
 ## Before you start
 
-Search reads the local archive, not the messenger. Download the chat history first: [Searching](./search.md#fetch-the-relevant-chat-history-first). An empty result does not prove that nothing was sent.
+Search reads the local archive, not the messenger. Download the chat history first: [Searching](./search.mdx#fetch-the-relevant-chat-history-first). An empty result does not prove that nothing was sent.
 
 ## What each kind needs
 
@@ -98,7 +98,7 @@ tg personal search messages 'email:"ana@example.com"'
 tg personal search messages 'domain:example.com'
 ```
 
-`phone:` finds `+1 555 010 0100` and `+1 (555) 010-0100` alike; without the `+`, only Russian numbers are recognized. `domain:` finds every link and address on that site. Mentions are found by rules, not by a model. A mention you reject stays dismissed. How to review mentions and record who they are: [Phones, links and names](./mentions.md). How mentions connect to people and organizations: [How things are linked](./how-things-are-linked.md#mentions).
+`phone:` finds `+1 555 010 0100` and `+1 (555) 010-0100` alike; without the `+`, only Russian numbers are recognized. `domain:` finds every link and address on that site. Mentions are found by rules, not by a model. A mention you reject stays dismissed. How to review mentions and record who they are: [Phones, links and names](./people.md#phones-links-names-and-addresses). How mentions connect to people and organizations: [How things are linked](./how-things-are-linked.md#mentions).
 
 ## Pictures
 
@@ -162,4 +162,4 @@ Drive leaves scanned PDFs, Slides, audio and video as names only: a word from th
 
 Search for a word you know is in a file, a voice note or a picture's chat, and look at where it was found. Each message result says whether the match came from the message text, a transcript, a file name or file text. If a kind of content never appears, check the one step that kind needs in the table above.
 
-Next: [Searching](./search.md) for everyday queries, or the query language for [Telegram](./tg/query-language.md) and [MAX](./max/query-language.md).
+Next: [Searching](./search.mdx) for everyday queries, or the query language for [Telegram](./tg/query-language.md) and [MAX](./max/query-language.md).
