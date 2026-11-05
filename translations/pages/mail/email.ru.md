@@ -39,15 +39,15 @@ Mail — собственный почтовый инструмент WireCat. �
 Для настройки вручную:
 
 ```sh
-mail ya session start --address you@example.com
-mail ya sync --since-time 2026-09-01
-mail ya status
+mail personal session start --address you@example.com
+mail personal sync --since-time 2026-09-01
+mail personal status
 ```
 
 `session start` находит сервер, проверяет пароль приложения и сохраняет его в системной связке ключей. `sync` читает
 новую почту в общее хранилище и пропускает уже сохранённую. Большой ящик не помещается в один запуск: если `sync`
-отвечает `state: partial`, запустите его снова, а `mail ya status` покажет, как далеко он ушёл. Чтобы ящик оставался
-актуальным, поставьте синхронизацию на таймер: `mail ya schedule command mail-ya --every 5m -- sync`. Папки, ограничения
+отвечает `state: partial`, запустите его снова, а `mail personal status` покажет, как далеко он ушёл. Чтобы ящик оставался
+актуальным, поставьте синхронизацию на таймер: `mail personal schedule command mail-personal --every 5m -- sync`. Папки, ограничения
 и остальные команды описаны в разделе [повседневная работа с mail](./usage.md).
 
 Для этой почты Memo ничего настраивать не нужно. Он читает то же хранилище, поэтому `memo search mail` находит письма

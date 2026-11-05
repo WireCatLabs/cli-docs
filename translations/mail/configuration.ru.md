@@ -6,9 +6,9 @@ title: "Настройки"
 часть, а `defaults` действуют для всех профилей. Здесь описано, как их посмотреть и изменить.
 
 ```sh
-mail ya config show
-mail ya config set limit 50
-mail ya config unset limit
+mail personal config show
+mail personal config set limit 50
+mail personal config unset limit
 ```
 
 Профиль, созданный командой `session start`, хранит и данные ящика: `address`, `login` (если он не совпадает с адресом), `imap_host`,
@@ -48,7 +48,10 @@ id, описано в [регистрации приложения Microsoft](./
 (флаги, перемещение, копирование, создание и переименование папок, сохранение черновиков), а эти спрашивают:
 `messages.delete`, `folders.delete`, `drafts.delete` и `messages.bulk`, через который проходит и каждое изменение более
 чем 20 писем или выбранное через `--filter`. В терминале
-`ask` — вопрос y/N; `--yes` отвечает на него.
+`ask` — вопрос y/N, по умолчанию «нет». Вместо него отвечает флаг: `--allow-dangerous` для `drafts delete`, потому что удалённый
+черновик не возвращается, и `--yes` для любого другого изменения, включая `messages delete`, потому что корзина и
+`messages restore` возвращают письма. Без терминала и без флага команда останавливается с `confirmation_required`
+(код выхода 7) и ничего не меняет.
 
 У отправки два ключа. `messages.send` и `messages.forward` — сами команды, они выполняются сразу, если письмо уходит только
 вам. Письмо, которое доходит до кого-то ещё, проходит и `messages.send.others`, который по умолчанию спрашивает;
@@ -57,9 +60,9 @@ id, описано в [регистрации приложения Microsoft](./
 `allow`); `mcp serve --permission` его открыть не может. Каждый получатель учитывается в `sends_per_hour` (по умолчанию 30).
 
 ```sh
-mail ya config set permissions.messages readonly      # no flag, move, deletion or send on this profile
-mail ya config set permissions.messages.bulk deny     # one message at a time only
-mail ya config set permissions.messages.send.others allow   # send to others without the question, agents too
+mail personal config set permissions.messages readonly      # no flag, move, deletion or send on this profile
+mail personal config set permissions.messages.bulk deny     # one message at a time only
+mail personal config set permissions.messages.send.others allow   # send to others without the question, agents too
 ```
 
 Каждая попытка изменить ящик или отправить письмо попадает в журнал отправок профиля с ключом, числом писем и итогом,

@@ -95,13 +95,13 @@ Your agent installs the tool; you make the app password or approve the Microsoft
 1. [Install `mail`](/en/docs/mail/installation) from npm.
 2. [Prepare the mailbox](/en/docs/mail/providers): turn on IMAP and make an app password. For Outlook or Microsoft 365,
    [connect Outlook](/en/docs/mail/outlook) instead.
-3. Create a profile, check the login, read your mail and search it. `ya` is a profile name you choose for one mailbox.
+3. Create a profile, check the login, read your mail and search it. `personal` is a profile name you choose for one mailbox.
 
 ```sh
-mail ya session start --address me@example.com
-mail ya account check
-mail ya sync
-mail ya search messages invoice
+mail personal session start --address me@example.com
+mail personal account check
+mail personal sync
+mail personal search messages invoice
 ```
 
 `session start` finds the mail server, asks for the app password and keeps it in the OS keyring. `sync` reads the last 30 days

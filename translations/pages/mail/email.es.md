@@ -39,15 +39,15 @@ Muestra el resultado de la sincronización e indica si hace falta otra ejecució
 Para configurarlo manualmente:
 
 ```sh
-mail ya session start --address you@example.com
-mail ya sync --since-time 2026-09-01
-mail ya status
+mail personal session start --address you@example.com
+mail personal sync --since-time 2026-09-01
+mail personal status
 ```
 
 `session start` encuentra el servidor, comprueba la contraseña de aplicación y la guarda en el llavero del sistema.
 `sync` lee el correo nuevo al almacén compartido y omite el que ya tiene. Un buzón grande no cabe en una sola ejecución:
-si `sync` responde `state: partial`, ejecútalo de nuevo, y `mail ya status` muestra cuánto ha avanzado. Para mantener
-el buzón al día, prográmalo: `mail ya schedule command mail-ya --every 5m -- sync`. Las carpetas, los límites y el resto
+si `sync` responde `state: partial`, ejecútalo de nuevo, y `mail personal status` muestra cuánto ha avanzado. Para mantener
+el buzón al día, prográmalo: `mail personal schedule command mail-personal --every 5m -- sync`. Las carpetas, los límites y el resto
 de comandos están en el [uso diario de mail](./usage.md).
 
 Memo no necesita ningún ajuste para este correo. Lee el mismo almacén, así que `memo search mail` lo encuentra al
