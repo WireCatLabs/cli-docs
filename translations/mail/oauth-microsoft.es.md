@@ -76,12 +76,9 @@ de correo. El id es público; una aplicación de escritorio no tiene secreto.
 
 ## Más adelante, y no hace falta para empezar
 
-- **Publisher verification** (verificación del editor) añade una insignia de verificado a la página de consentimiento, y
-  algunas organizaciones solo permiten aplicaciones verificadas. Es gratis, pero necesita una cuenta del Microsoft AI
-  Cloud Partner Program y un dominio propio verificado
-  ([verificación del editor](https://learn.microsoft.com/en-us/entra/identity-platform/publisher-verification-overview)).
-  Hasta entonces, un usuario de Microsoft 365 cuyo administrador restringe el consentimiento pide al administrador que
-  apruebe la aplicación, o que registre la aplicación propia de la organización con estos pasos y le dé su id.
+- **Una aplicación compartida para toda la organización.** Hacer pública una aplicación compartida de Microsoft es
+  complejo, así que un administrador que restringe el consentimiento puede rechazar la aplicación de WireCat. El
+  administrador la aprueba, o registra la aplicación propia de la organización con estos pasos y te da su id.
 - **Enviar desde Microsoft 365** necesita «Authenticated SMTP» activado en el buzón. Los valores de seguridad
   predeterminados y las organizaciones creadas después de enero de 2020 lo desactivan; un administrador lo activa por
   buzón
