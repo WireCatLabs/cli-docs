@@ -36,9 +36,9 @@ export function expandDocTerms(markdown: string, lang: string): string {
           } else if (match[2] === "Screenshot" && props.src) {
             text = `![${(props.alt ?? "").replace(/[[\]]/g, "\\$&")}](${props.src})`
           } else if (match[2] === "DesktopShot" && props.shot) {
-            const from = desktopShotLang(props.shot, "light", language)
+            const from = desktopShotLang(props.shot, "light", language, props.folder)
             if (from)
-              text = `![${(props.alt ?? "").replace(/[[\]]/g, "\\$&")}](/screenshots/desktop/${props.shot}-light-${from}.webp)`
+              text = `![${(props.alt ?? "").replace(/[[\]]/g, "\\$&")}](/screenshots/${props.folder ?? "desktop"}/${props.shot}-light-${from}.webp)`
           } else if (match[2] === "Tab" && props.value) {
             text = `**${props.value}**\n`
           } else if (match[2] === "Accordion" && props.title) {
