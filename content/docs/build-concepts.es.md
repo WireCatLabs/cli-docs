@@ -5,8 +5,8 @@ description: "El modelo del almacén compartido, cómo añadir los registros de 
 
 Estás creando una herramienta de línea de comandos, o una integración para un agente, que lee o escribe el almacén
 compartido de WireCat. Esta página te da el modelo en cinco minutos: qué tipos de registro existen, cómo se conectan y
-qué reglas evitan que tu herramienta rompa las demás. Las páginas siguientes muestran cómo añadir una fuente, guardar
-tus propios datos, iniciar sesión y cumplir los estándares.
+qué reglas evitan que tu herramienta rompa las demás. Más abajo se muestra cómo añadir una fuente y guardar
+tus propios datos. Después: [iniciar sesión y cumplir los estándares](./build-sign-in.md).
 
 ## El almacén compartido
 
@@ -198,4 +198,4 @@ Una tabla privada dentro del almacén compartido se rompe cuando cli-core migra,
 Una copia de un campo compartido en tu tabla queda desfasada cuando el propietario edita el original. Otra herramienta
 que abre tu archivo se rompe con tu siguiente cambio.
 
-Siguiente: [Iniciar sesión en un servicio](./build-sign-in.md).
+Siguiente: [Iniciar sesión y cumplir los estándares](./build-sign-in.md).

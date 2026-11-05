@@ -205,19 +205,19 @@ const terms = {
       title: "Tunnel",
       description:
         "A service that gives a program on your computer a public https address, so apps on the internet can reach it while your computer stays behind your home router. Nothing else on your computer becomes reachable. We use Tailscale Funnel; it closes when you stop it.",
-      page: "agents#use-from-web-or-mobile",
+      page: "browser-apps",
     },
     ru: {
       title: "Туннель",
       description:
         "Сервис, который даёт программе на вашем компьютере публичный адрес https, чтобы приложения из интернета могли до неё достучаться, хотя компьютер остаётся за домашним роутером. Больше ничего на компьютере доступным не становится. Мы используем Tailscale Funnel; он закрывается, когда вы его останавливаете.",
-      page: "agents#в-браузере-или-на-телефоне",
+      page: "browser-apps",
     },
     es: {
       title: "Túnel",
       description:
         "Un servicio que da a un programa de tu ordenador una dirección https pública, para que las apps de internet lleguen a él aunque tu ordenador siga detrás del router. Nada más de tu ordenador queda accesible. Usamos Tailscale Funnel; se cierra cuando lo detienes.",
-      page: "agents#usar-desde-la-web-o-el-móvil",
+      page: "browser-apps",
     },
   },
   tailscale: {
@@ -225,19 +225,19 @@ const terms = {
       title: "Tailscale",
       description:
         "A free service that connects your devices into a private network. Its Funnel feature publishes one port of your computer at an address like https://laptop.tail1234.ts.net, with a certificate, so no domain or router setup is needed.",
-      page: "agents#use-from-web-or-mobile",
+      page: "browser-apps",
     },
     ru: {
       title: "Tailscale",
       description:
         "Бесплатный сервис, который объединяет ваши устройства в частную сеть. Его функция Funnel открывает один порт компьютера по адресу вида https://laptop.tail1234.ts.net, с сертификатом, поэтому ни домен, ни настройка роутера не нужны.",
-      page: "agents#в-браузере-или-на-телефоне",
+      page: "browser-apps",
     },
     es: {
       title: "Tailscale",
       description:
         "Un servicio gratuito que une tus dispositivos en una red privada. Su función Funnel publica un puerto de tu ordenador en una dirección como https://laptop.tail1234.ts.net, con certificado, así que no hace falta dominio ni configurar el router.",
-      page: "agents#usar-desde-la-web-o-el-móvil",
+      page: "browser-apps",
     },
   },
   connector: {
@@ -245,19 +245,19 @@ const terms = {
       title: "Connector",
       description:
         "What Claude and ChatGPT call a tool you add from outside: you give the app an address, sign in once, and the agent can then call that tool in your chats. The name may be plugin, app or connector, depending on the AI client.",
-      page: "agents#use-from-web-or-mobile",
+      page: "browser-apps",
     },
     ru: {
       title: "Коннектор",
       description:
         "Так Claude и ChatGPT называют инструмент, который вы добавляете извне: даёте приложению адрес, один раз входите, и агент может пользоваться этим инструментом в ваших чатах. Название зависит от приложения: плагин, приложение или коннектор.",
-      page: "agents#в-браузере-или-на-телефоне",
+      page: "browser-apps",
     },
     es: {
       title: "Conector",
       description:
         "Así llaman Claude y ChatGPT a una herramienta que añades desde fuera: le das a la app una dirección, inicias sesión una vez y el agente puede usarla en tus chats. El nombre puede ser plugin, aplicación o conector según el cliente de IA.",
-      page: "agents#usar-desde-la-web-o-el-móvil",
+      page: "browser-apps",
     },
   },
   "supported-agents": {
@@ -305,19 +305,19 @@ const terms = {
       title: "Public HTTPS address",
       description:
         "An internet address your AI app can reach, even when your messenger tool runs on your computer. The tool’s server still requires sign-in; knowing the address alone does not grant account access.",
-      page: "agents#use-from-web-or-mobile",
+      page: "browser-apps",
     },
     ru: {
       title: "Публичный HTTPS-адрес",
       description:
         "Адрес в интернете, по которому ИИ-приложение может обратиться к программе на вашем компьютере. Сервер инструмента по-прежнему требует входа: одного знания адреса недостаточно для доступа к аккаунту.",
-      page: "agents#в-браузере-или-на-телефоне",
+      page: "browser-apps",
     },
     es: {
       title: "Dirección HTTPS pública",
       description:
         "Una dirección de internet desde la que la aplicación de IA llega al programa de tu ordenador. El servidor de la herramienta sigue exigiendo autenticación; conocer la dirección no da acceso a la cuenta.",
-      page: "agents#usar-desde-la-web-o-el-móvil",
+      page: "browser-apps",
     },
   },
   oauth: {
@@ -325,19 +325,19 @@ const terms = {
       title: "OAuth",
       description:
         "A way to sign into this connection and approve access for the named AI app. Here you use the one-time code from your messenger server, not your Telegram or MAX login code.",
-      page: "agents#use-from-web-or-mobile",
+      page: "browser-apps",
     },
     ru: {
       title: "OAuth",
       description:
         "Способ войти в подключение и разрешить доступ указанному ИИ-приложению. Здесь используется одноразовый код сервера мессенджера, а не код входа в Telegram или MAX.",
-      page: "agents#в-браузере-или-на-телефоне",
+      page: "browser-apps",
     },
     es: {
       title: "OAuth",
       description:
         "Una forma de autenticar la conexión y autorizar a la aplicación de IA indicada. Aquí usas el código de un solo uso del servidor, no el código de acceso de Telegram o MAX.",
-      page: "agents#usar-desde-la-web-o-el-móvil",
+      page: "browser-apps",
     },
   },
   profile: {

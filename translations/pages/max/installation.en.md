@@ -30,7 +30,7 @@ There are two ways to install. Both give the same result.
 
 ### With your agent
 
-Use an agent that can run programs on this computer, for example Claude Code, Codex, Cursor or Gemini CLI. If you only use an agent chat in a browser or on your phone, follow [Connect from the web or your phone](/en/docs/agents#use-from-web-or-mobile) instead.
+Use an agent that can run programs on this computer, for example Claude Code, Codex, Cursor or Gemini CLI. If you only use an agent chat in a browser or on your phone, follow [Connect from the web or your phone](/en/docs/browser-apps) instead.
 
 Copy this request into your agent. It will help you install and log in on your computer.
 

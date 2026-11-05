@@ -26,7 +26,7 @@ Hay dos formas de instalarlo. El resultado es el mismo.
 
 ### Con tu agente
 
-Usa un agente que pueda ejecutar programas en este ordenador, por ejemplo Claude Code, Codex, Cursor o Gemini CLI. Si solo usas un chat con el agente en el navegador o en el teléfono, sigue la guía [Conectar desde la web o el teléfono](/es/docs/agents#usar-desde-la-web-o-el-móvil).
+Usa un agente que pueda ejecutar programas en este ordenador, por ejemplo Claude Code, Codex, Cursor o Gemini CLI. Si solo usas un chat con el agente en el navegador o en el teléfono, sigue la guía [Conectar desde la web o el teléfono](/es/docs/browser-apps).
 
 Copia esta petición en el chat con tu agente. Te ayudará a instalar la herramienta e iniciar sesión en tu ordenador.
 

@@ -34,7 +34,7 @@ for (const lang of ["en", "ru", "es"]) {
     expect(await markdown.text()).toContain(injection)
     const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
     expect(scan.violations).toEqual([])
-    await page.goto(`/${lang}/docs/agents`)
+    await page.goto(`/${lang}/docs/browser-apps`)
     const title = {
       en: "Use from web or mobile",
       ru: "В браузере или на телефоне",
