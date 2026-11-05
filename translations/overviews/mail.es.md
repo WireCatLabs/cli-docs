@@ -6,7 +6,7 @@ description: "Conecta tu buzón a un agente: búscalo sin conexión, mira qué e
 `mail` es una herramienta de línea de comandos que copia tu buzón a un almacén local en tu ordenador. Después, tu agente
 de IA puede buscar en tu correo, leer hilos y adjuntos y decirte qué espera respuesta, incluso sin conexión a internet.
 También puede ordenar el buzón en el servidor y redactar respuestas para que las revises. Tú mismo puedes usarla con
-comandos en la terminal.
+comandos en la terminal. Funciona en Windows, macOS y Linux.
 
 **En esta página**
 
@@ -40,7 +40,7 @@ proveedor y lo envía solo por su servidor SMTP, ambos cifrados. Consulta [acces
 
 | Proveedor | Cómo inicias sesión | Guía |
 |---|---|---|
-| Gmail | Contraseña de aplicación (por defecto) u OAuth con una app de Google que creas tú | [Preparar el buzón](/es/docs/mail/providers), [Gmail con tu propia app de Google](/es/docs/mail/oauth-google) |
+| Gmail | Contraseña de aplicación (por defecto) u OAuth, con la app de Google de WireCat o la tuya | [Preparar el buzón](/es/docs/mail/providers), [Gmail con tu propia app de Google](/es/docs/mail/oauth-google) |
 | Outlook.com, Hotmail, Microsoft 365 | Solo OAuth: inicias sesión en Microsoft desde el navegador | [Conectar Outlook](/es/docs/mail/outlook), [Registrar una app de Microsoft](/es/docs/mail/oauth-microsoft) |
 | Yandex | Contraseña de aplicación | [Preparar el buzón](/es/docs/mail/providers) |
 | iCloud, Mail.ru, Fastmail | Contraseña de aplicación | [Preparar el buzón](/es/docs/mail/providers) |
@@ -48,16 +48,16 @@ proveedor y lo envía solo por su servidor SMTP, ambos cifrados. Consulta [acces
 
 Una contraseña de aplicación es una contraseña creada para un solo programa, que puedes revocar. Cada proveedor necesita
 IMAP activado y, en la mayoría, una contraseña de aplicación antes: los pasos de cada uno están en
-[Preparar el buzón](/es/docs/mail/providers). Gmail por OAuth necesita una app de Google propia; desde mail 0.15 `mail` usa la app de WireCat si no indicas otra, pero Google aún no la ha revisado y puede rechazar el inicio de sesión.
+[Preparar el buzón](/es/docs/mail/providers). Gmail por OAuth usa la app de Google de WireCat si no indicas otra. Google aún no ha revisado la app de WireCat para correo; si Google rechaza el inicio de sesión, usa la tuya.
 
-Desde mail 0.15, un perfil de Gmail también puede añadir un archivo de Google Takeout (un fichero `.mbox`) al correo
-guardado; consulta [mira antes de sincronizar y trae un archivo, en GitHub](https://github.com/WireCatLabs/mail-cli/blob/main/docs/usage.md#look-before-you-sync-and-bring-in-an-archive).
+Un perfil de Gmail también puede añadir un archivo de Google Takeout (un fichero `.mbox`) al correo
+guardado; consulta [mira antes de sincronizar y trae un archivo](/es/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive).
 
 ## Qué puedes hacer
 
 - **Leer el buzón sin conexión.** `sync` copia el correo nuevo al almacén local, el más reciente primero, y omite lo que
   ya tiene. Un buzón grande se lee por partes: vuelve a ejecutarlo hasta que `status` indique que terminó. Guarda texto y
-  cabeceras, y el texto de los adjuntos, no los archivos.
+  cabeceras, y el texto de los adjuntos de hasta 10 MB cada uno (es un ajuste), no los archivos.
   [Conectar un buzón](/es/docs/mail/usage#connect-a-mailbox)
 - **Mantenerlo al día solo.** Pon `sync` en un temporizador, por ejemplo cada cinco minutos; `schedule list` muestra
   cómo fue cada ejecución. [Conectar un buzón](/es/docs/mail/usage#connect-a-mailbox)
@@ -67,9 +67,9 @@ guardado; consulta [mira antes de sincronizar y trae un archivo, en GitHub](http
   [Buscar en tu correo](/es/docs/mail/usage#search-your-mail)
 - **Revisar.** Qué hay de nuevo desde la última vez, a qué correos debes respuesta y cuáles esperan una.
   [Revisión](/es/docs/mail/usage#review-what-is-new-what-you-owe-what-waits)
-- **Mirar antes de sincronizar** (mail 0.15). `account inspect` agrupa el buzón por remitente y lista, con tamaño,
+- **Mirar antes de sincronizar**. `account inspect` agrupa el buzón por remitente y lista, con tamaño,
   proporción de no leídos y una puntuación de spam o estafa, y no guarda nada.
-  [Mirar antes de sincronizar, en GitHub](https://github.com/WireCatLabs/mail-cli/blob/main/docs/usage.md#look-before-you-sync-and-bring-in-an-archive)
+  [Mirar antes de sincronizar](/es/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive)
 - **Reglas.** Omitir un remitente o una lista, guardar solo el sobre (remitente, fecha y tamaño), guardarlo entero o
   protegerlo de cualquier limpieza. [Ordenar el buzón](/es/docs/mail/usage#organise-the-mailbox)
 - **Ordenar en el servidor.** Marcar como leído, destacar, mover, copiar y crear o renombrar carpetas. En Gmail las
@@ -82,7 +82,7 @@ guardado; consulta [mira antes de sincronizar y trae un archivo, en GitHub](http
 - **Borradores, envío, respuesta y reenvío.** [Borradores](/es/docs/mail/usage#drafts) ·
   [Enviar, responder y reenviar](/es/docs/mail/usage#send-reply-and-forward)
 - **Etiquetas, exportación y recuentos.** Tus etiquetas se quedan en tu ordenador. `messages export` escribe archivos mbox
-  o Maildir; `stats messages top` clasifica remitentes, listas y dominios. [Tus etiquetas](/es/docs/mail/usage#your-own-tags) · [Exportar correo](/es/docs/mail/usage#export-mail)
+  o Maildir; `stats` cuenta el correo por día, semana o remitente y clasifica remitentes, listas y dominios. [Tus etiquetas](/es/docs/mail/usage#your-own-tags) · [Exportar correo](/es/docs/mail/usage#export-mail)
 - **Dejar que un agente clasifique el correo nuevo.** Con [Memo](/es/docs/memo/mail), un agente `mail-triage`
   programado lee el correo nuevo y propone tareas, datos y cambios para que los confirmes. Solo propone: no envía
   correo ni cambia tu buzón.

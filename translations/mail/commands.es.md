@@ -149,6 +149,25 @@ mail account check
 
 **Example:** `mail ya account check`, `mail ya account check --json`
 
+### `mail account inspect`
+
+read the headers of the mailbox's mail, store nothing, and group it by mailing list or sender, the largest group first; each group's suggest is skip when a group has at least 20 emails, at least 80% of them list or bulk mail (List-Id, List-Unsubscribe or Precedence: bulk) and the owner never sent mail to its sender. Its score adds: in Gmail's Spam +4, Gmail's DMARC check failed +3 (only beside another sign of fraud), a brand in the display name sent from another domain +3, the domain under 180 days old when the mail came +5 (only with looked-up ages), Reply-To on another domain +1, none of its mail ever opened +2, Gmail's DKIM check not passed +2, a throwaway-mail domain +2, bulk mail never replied to +1, replied to by the owner -5. The owner decides; rules add adds a rule
+
+```sh
+mail account inspect [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | only mail received since this date or time; a date alone starts at local midnight (default: all mail). |
+| `--limit <n>` | show this many of the largest groups. Default: `50`. |
+| `--folder <folder>` | a folder to read; repeat it for more (default: the profile's folders, else INBOX and Sent; All Mail on Gmail). Default: ``. |
+| `--domain-age` | ask each shown sender domain's registry when it was registered (RDAP); tells each registry its domain. |
+
+**Returns:** mail account inspect — address, folders, emails, bytes, sent, without_headers, groups, items, and 3 more; every field: mail commands info account inspect
+
+**Example:** `mail gm account inspect`, `mail gm account inspect --since-time 2025-01-01 --limit 20 --domain-age`
+
 ## `mail folders`
 
 the folders of this profile's mailbox
@@ -242,9 +261,12 @@ mail sync [options]
 | `--limit <n>` | save at most this many new emails in this run, newest first. |
 | `--max-pages <pages>` | at most this many requests to the mail server in this run; as many as fit the deadline if not given. |
 | `--folder <folder>` | a folder to read; repeat it for more (default: the profile's folders, else INBOX and Sent; All Mail on Gmail). Default: ``. |
+| `--attachments` | read attachments into the search index this run, whatever the profile's read_attachments. |
+| `--no-attachments` | read no attachment this run; each is stored with its name and size, without text. |
+| `--max-attachment-mb <mb>` | the largest attachment to read this run, in MB (default: the profile's max_attachment_mb, else 10). |
 | `--rescan` | list the whole window again; also moves stored replies into their thread where the server has no thread ids. |
 
-**Returns:** mail sync — address, since, timezone, folders, state, requests, listed, saved, and 13 more; every field: mail commands info sync
+**Returns:** mail sync — address, since, timezone, folders, state, requests, listed, saved, and 14 more; every field: mail commands info sync
 
 **Example:** `mail ya sync`, `mail ya sync --since-time 2026-10-01 --limit 200`, `mail ya sync --folder INBOX`
 
@@ -408,7 +430,7 @@ mail search messages <query> [options]
 
 **Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 9 more; every field: mail commands info search messages
 
-**Next usually:** `mail messages show <message>`, `mail attachments list <message>`, `mail messages forward <message> [text]`
+**Next usually:** `mail attachments list <message>`, `mail messages show <message>`, `mail messages forward <message> [text]`
 
 **Example:** `mail personal search messages invoice`, `mail personal search messages 'from:ann@example.com has:attachment date>30d'`, `mail personal search messages 'list:github.com is:unread' --newest`
 
@@ -428,14 +450,14 @@ mail review [query] [options]
 |---|---|
 | `--unanswered [duration]` | only threads whose newest email came to you, in To or Cc, with no answer for this long — 4h, 1d; 24h if not given. |
 | `--waiting [duration]` | only threads where you wrote last and nobody answered for this long — 3d; 7d if not given. |
-| `--holder <name>` | read for this holder — an agent or a pipeline — what is stored past its processing mark, by store order; bulk, envelopes, drafts and partial mail left out; `messages acknowledge` moves the mark. |
+| `--holder <name>` | read for this holder — an agent or a pipeline — what is stored past its processing mark, by store order; bulk, envelopes, drafts, suspicious senders and partial mail left out; each text without quoted earlier mail or the signature; `messages acknowledge` moves the mark. |
 | `--new` | what changed since the last `review --new` of this mailbox, a point per thread — for scheduled runs. |
 
-**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 3 more; every field: mail commands info review
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 4 more; every field: mail commands info review
 
-**Next usually:** `mail messages show <message>`, `mail attachments list <message>`, `mail messages forward <message> [text]`
+**Next usually:** `mail attachments list <message>`, `mail messages show <message>`, `mail messages forward <message> [text]`
 
-**Example:** `mail personal review "date>2h"`, `mail personal review --new`, `mail personal review --unanswered 1d`, `mail personal review --waiting 7d`
+**Example:** `mail personal review "date>2h"`, `mail personal review --new`, `mail personal review --unanswered 1d`
 
 ## `mail messages`
 
@@ -444,6 +466,8 @@ read the emails sync stored
 ### `mail messages show`
 
 one stored email: its people, folders, whole text and the first 4000 characters of each attachment's text; --full gives all of it and the HTML body. The store keeps text, not the original message source
+
+**Changes something on this computer only.**
 
 ```sh
 mail messages show <message> [options]
@@ -508,6 +532,29 @@ mail messages export [query] [options]
 **Returns:** mail export — address, format, destination, folders, state, matched, exported, already_exported, and 5 more; every field: mail commands info messages export
 
 **Example:** `mail ya messages export 'from:ann@example.com' --output ~/mail-backup`, `mail ya messages export --folder INBOX --format maildir --output ~/Maildir`, `mail ya messages export 'date>30d' --limit 500 --output ~/mail-backup --resume`
+
+### `mail messages import`
+
+add the mail of a Gmail mbox file from Google Takeout to this Gmail profile's stored mail; Takeout keeps Gmail's own ids, so an email both the file and sync bring is stored once. Only adds: mail missing from the file is never marked deleted, Spam and Trash are left out, and the owner's rules skip what they skip. An unchanged file read to the end is not read again
+
+**Changes something on this computer only.**
+
+```sh
+mail messages import <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the .mbox file Google Takeout wrote. |
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | only mail received since this date or time; a date alone starts at local midnight (default: the whole file). |
+| `--limit <n>` | save at most this many new emails in this run, newest first. |
+
+**Returns:** mail import — address, file, since, listed, saved, already_stored, skipped, envelopes, and 4 more; every field: mail commands info messages import
+
+**Example:** `mail gm messages import ~/Takeout/Mail/All\ mail\ Including\ Spam\ and\ Trash.mbox`, `mail gm messages import archive.mbox --since-time 2015-01-01 --limit 5000`
 
 ### `mail messages mark-read`
 
@@ -889,6 +936,28 @@ counts over the mail sync stored
 ### `mail stats messages`
 
 counts of stored emails
+
+#### `mail stats messages show`
+
+how much of this profile's stored mail matches the query, received and sent, per calendar day, week (from Monday) or sender; by sender counts received mail only. Counts only, from the store; records no search
+
+```sh
+mail stats messages show [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | the same query as `search messages`; every stored email if left out. |
+
+| Option | What it does |
+|---|---|
+| `--by <group>` | what to count by. One of: `day`, `week`, `sender`. Default: `day`. |
+| `--timezone <zone>` | the IANA timezone where days and weeks start. |
+| `--limit <n>` | how many rows: the latest days or weeks, or the busiest senders. Default: `30`. |
+
+**Returns:** mail counts — by, received, sent, rows; every field: mail commands info stats messages show
+
+**Example:** `mail ya stats messages show --by day --timezone Europe/Madrid -- 'date>=30d'`, `mail ya stats messages show --by sender --limit 10`
 
 #### `mail stats messages top`
 
@@ -1370,7 +1439,7 @@ mail config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, speech_model, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, microsoft_client_id, folders, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1393,7 +1462,7 @@ mail config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, speech_model, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, microsoft_client_id, folders, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin. |
 
 | Option | What it does |
 |---|---|
@@ -1402,6 +1471,20 @@ mail config unset <setting> [options]
 **Returns:** remove a setting from the configuration file
 
 **Example:** `mail personal config unset limit`
+
+### `mail config migrate`
+
+write each setting the file lacks at its default, keeping yours
+
+**Changes something on this computer only.**
+
+```sh
+mail config migrate
+```
+
+**Returns:** write each setting the file lacks at its default, keeping yours
+
+**Example:** `mail config migrate`
 
 ### `mail config repair`
 
@@ -1529,14 +1612,16 @@ mail schedule agent <name> <harness> <prompt> [options]
 
 | Option | What it does |
 |---|---|
+| `--model <model>` | the model it runs on: an alias such as sonnet, or a model id; "" for the harness's default (default sonnet for claude, codex's own for codex, or the config file's). |
 | `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--max-cost-per-day <usd>` | claude only: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
 | `--at <HH:MM>` | every day at this local time. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 
 **Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
 
-**Example:** `mail personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `mail personal schedule agent triage codex "list what needs an answer today" --every 2h --max-cost 1`
+**Example:** `mail personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `mail personal schedule agent triage codex "list what needs an answer today" --every 2h --max-cost 1`, `mail personal schedule agent weekly claude "review the week's open threads" --at 09:00 --model opus`
 
 ### `mail schedule list`
 
@@ -1628,5 +1713,6 @@ Branch on the code, not on the text: the text can change, the code does not.
 | `12` | `provider_unavailable` |
 | `13` | `invalid_response` |
 | `14` | `outcome_unknown` |
+| `15` | `conflict` |
 | `130` | `cancelled` |
 | `1` | anything else |

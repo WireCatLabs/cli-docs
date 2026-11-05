@@ -46,6 +46,12 @@ DNS, para el registro MX del dominio; la lista de servidores de correo de Thunde
 `https://autoconfig.<domain>`, el servidor propio del dominio. Se detiene en la primera respuesta. `--provider` (un nombre
 de la tabla) o `--host` omite toda búsqueda, y nada sale del ordenador antes del inicio de sesión en ese servidor.
 
+`account inspect --domain-age` y `sync` preguntan cuándo se registró el dominio de un remitente: primero la lista de
+registros de IANA (`https://data.iana.org/rdap/dns.json`, una vez al mes) y después el registro propio de cada dominio
+por RDAP, nunca un intermediario, así que cada registro solo conoce los nombres de sus propios dominios. Nunca
+preguntan por el dominio de un gran proveedor de buzones ni por un remitente al que respondiste. Las respuestas se
+guardan en `domain-ages.json` en la carpeta de estado de `mail`. `messages import` lee solo el archivo que indicas.
+
 La contraseña de aplicación se escribe en una terminal sin eco, o se fija en `MAIL_PASSWORD` para una ejecución sin terminal. Va al
 llavero del sistema operativo (servicio
 `mail-cli`, cuenta el nombre del perfil) solo después de que el servidor la acepte. Nunca es un argumento, nunca forma parte de una

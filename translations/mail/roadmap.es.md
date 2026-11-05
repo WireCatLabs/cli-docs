@@ -18,7 +18,7 @@ Encuentra por sí mismo el servidor de una dirección nueva: una tabla incorpora
 Thunderbird y el archivo autoconfig del dominio. Inicia sesión con una contraseña de aplicación guardada en el llavero
 del sistema, lo que sirve para Yandex, Gmail, iCloud, Mail.ru, Fastmail y otros proveedores que ofrecen contraseñas de
 aplicación. Outlook.com y Microsoft 365 inician sesión con OAuth mediante la aplicación de Microsoft propia de WireCat,
-sin nada que registrar ([guía](./outlook.md)); Gmail puede usar OAuth con tu propia aplicación de Google
+sin nada que registrar ([guía](./outlook.md)); Gmail puede usar OAuth con la aplicación de Google de WireCat o con la tuya
 ([pasos](./oauth-google.md)).
 
 Busca y lee el correo guardado de un perfil (`search messages`, `messages show`, `conversations`) y pregunta al servidor

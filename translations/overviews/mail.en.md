@@ -6,7 +6,7 @@ description: "Connect your mailbox to an agent: search it offline, see what need
 `mail` is a command-line tool that copies your mailbox into a local store on your computer. Your AI agent can then
 search your email, read threads and attachments, and tell you what needs an answer, even without an internet connection.
 It can also tidy the mailbox on the server and write replies for you to check. You can use it yourself with terminal
-commands too.
+commands too. It runs on Windows, macOS and Linux.
 
 **On this page**
 
@@ -40,7 +40,7 @@ it only through your provider's SMTP server, both encrypted. See [access and saf
 
 | Provider | How you sign in | Guide |
 |---|---|---|
-| Gmail | An app password (default), or OAuth with a Google app you create | [Prepare the mailbox](/en/docs/mail/providers), [Gmail with your own Google app](/en/docs/mail/oauth-google) |
+| Gmail | An app password (default), or OAuth, with WireCat's Google app or your own | [Prepare the mailbox](/en/docs/mail/providers), [Gmail with your own Google app](/en/docs/mail/oauth-google) |
 | Outlook.com, Hotmail, Microsoft 365 | OAuth only: you sign in to Microsoft in your browser | [Connect Outlook](/en/docs/mail/outlook), [Register a Microsoft app](/en/docs/mail/oauth-microsoft) |
 | Yandex | An app password | [Prepare the mailbox](/en/docs/mail/providers) |
 | iCloud, Mail.ru, Fastmail | An app password | [Prepare the mailbox](/en/docs/mail/providers) |
@@ -48,15 +48,15 @@ it only through your provider's SMTP server, both encrypted. See [access and saf
 
 An app password is a password made for one program only, which you can revoke. Each provider needs IMAP switched on
 and, for most, an app password first: the steps for each one are in [Prepare the mailbox](/en/docs/mail/providers).
-Gmail OAuth needs a Google app of your own; from mail 0.15 `mail` uses WireCat's app when you name none, but Google has not reviewed it yet, so Google may refuse the sign-in.
+Gmail OAuth uses WireCat's Google app unless you name your own. Google has not reviewed WireCat's app for mail yet; if Google refuses the sign-in, use your own.
 
-From mail 0.15, a Gmail profile can also add a Google Takeout archive (an `.mbox` file) to its stored mail; see [look before you sync, and bring in an archive on GitHub](https://github.com/WireCatLabs/mail-cli/blob/main/docs/usage.md#look-before-you-sync-and-bring-in-an-archive).
+A Gmail profile can also add a Google Takeout archive (an `.mbox` file) to its stored mail; see [look before you sync, and bring in an archive](/en/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive).
 
 ## What you can do
 
 - **Read the mailbox offline.** `sync` copies new mail into the local store, newest first, and skips what it already
   has. A big mailbox is read in parts: run it again until `status` shows it is done. It keeps text and headers, and the
-  text of attachments, not the files themselves.
+  text of attachments up to 10 MB each (a setting changes that), not the files themselves.
   [Connect a mailbox](/en/docs/mail/usage#connect-a-mailbox)
 - **Keep it current by itself.** Put `sync` on a timer, for example every five minutes; `schedule list` shows how
   each run went. [Connect a mailbox](/en/docs/mail/usage#connect-a-mailbox)
@@ -65,8 +65,8 @@ From mail 0.15, a Gmail profile can also add a Google Takeout archive (an `.mbox
   keeps it to the local store. [Search your mail](/en/docs/mail/usage#search-your-mail)
 - **Review.** See what is new since you last looked, which emails you owe an answer, and which wait for a reply.
   [Review](/en/docs/mail/usage#review-what-is-new-what-you-owe-what-waits)
-- **Look before you sync** (mail 0.15). `account inspect` groups the mailbox by sender and list, with size, how much is unread
-  and a spam or scam score, and stores nothing. [Look before you sync on GitHub](https://github.com/WireCatLabs/mail-cli/blob/main/docs/usage.md#look-before-you-sync-and-bring-in-an-archive)
+- **Look before you sync**. `account inspect` groups the mailbox by sender and list, with size, how much is unread
+  and a spam or scam score, and stores nothing. [Look before you sync](/en/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive)
 - **Rules.** Skip a sender or list, keep only its envelope (sender, date and size), keep it in full, or protect it
   from any cleanup. [Organise the mailbox](/en/docs/mail/usage#organise-the-mailbox)
 - **Organise on the server.** Mark read, star, move, copy, and create or rename folders. Gmail folders are labels.
@@ -79,7 +79,7 @@ From mail 0.15, a Gmail profile can also add a Google Takeout archive (an `.mbox
 - **Drafts, send, reply and forward.** [Drafts](/en/docs/mail/usage#drafts) ·
   [Send, reply and forward](/en/docs/mail/usage#send-reply-and-forward)
 - **Tags, export and counts.** Your own tags stay on your computer. `messages export` writes mbox or Maildir files;
-  `stats messages top` ranks senders, lists and domains. [Your own tags](/en/docs/mail/usage#your-own-tags) · [Export mail](/en/docs/mail/usage#export-mail)
+  `stats` counts mail by day, week or sender and ranks senders, lists and domains. [Your own tags](/en/docs/mail/usage#your-own-tags) · [Export mail](/en/docs/mail/usage#export-mail)
 - **Let an agent triage new mail.** With [Memo](/en/docs/memo/mail), a scheduled `mail-triage` agent reads new mail and
   proposes tasks, facts and updates for you to confirm. It proposes only: it never sends mail or changes your mailbox.
 
