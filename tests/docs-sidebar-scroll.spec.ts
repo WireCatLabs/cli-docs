@@ -47,8 +47,8 @@ for (const lang of ["en", "ru", "es"]) {
       await viewport.evaluate((element) => {
         element.scrollTop = element.scrollHeight
       })
-      // The menu's order changes with the docs; what matters is that its last link scrolls into view.
-      await expect(viewport.locator("a").last()).toBeInViewport()
+      // The menu's order changes with the docs; what matters is that its last shown link scrolls into view (folded sections hide theirs).
+      await expect(viewport.locator("a:visible").last()).toBeInViewport()
       await viewport.evaluate((element) => {
         element.scrollTop = 0
       })
