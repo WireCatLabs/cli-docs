@@ -106,7 +106,7 @@ mail session status [options]
 
 ### `mail session end`
 
-forget this profile's app password or OAuth sign-in on this computer; synced mail stays
+forget this profile's app password or OAuth sign-in on this computer; synced mail stays. With --revoke (Gmail over OAuth) it also asks Google to revoke the sign-in: that changes your Google account and signs out every tool that uses the same Google project
 
 **Changes something on this computer only.**
 
@@ -120,7 +120,7 @@ mail session end [options]
 
 **Returns:** forget this profile's password or sign-in; synced mail stays
 
-**Example:** `mail personal session end`
+**Example:** `mail personal session end`, `mail personal session end --revoke`
 
 ### `mail session list`
 

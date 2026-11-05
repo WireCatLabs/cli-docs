@@ -16,6 +16,16 @@ import {
 } from "./localize.ts"
 
 describe("released documentation translations", () => {
+  it("ignores a section marked translation-only when it compares the structure", () => {
+    const original = "## Yandex\n\nSteps with `a`.\n\n## Other\n\nText."
+    const section =
+      "<!-- translation-only -->\n## Mail.ru\n\nSteps with `b` and [x](https://example.com).\n<!-- /translation-only -->"
+    const translated = `## Яндекс\n\nШаги с \`a\`.\n\n${section}\n\n## Другое\n\nТекст.`
+    expect(translationProblems(original, translated)).toEqual([])
+    expect(withOriginalAnchors(original, translated)).toContain('<a id="other" />')
+    expect(translationProblems(original, translated.replace("`a`", "`c`"))).toContain("Inline code changed")
+  })
+
   it("translates marked reader prompts while preserving ordinary text and executable fences", () => {
     const original = "```text prompt\nFind my latest meeting.\n```\n\n```sh\nzm meetings list --json\n```"
     const translated = "```text prompt\nНайди последнюю встречу.\n```\n\n```sh\nzm meetings list --json\n```"

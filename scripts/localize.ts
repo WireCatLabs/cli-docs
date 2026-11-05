@@ -74,7 +74,11 @@ type MarkdownNode = {
 }
 const nodes = (text: string) => {
   // Blank the YAML header without moving the body line numbers used for anchor aliases.
-  const body = text.replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, (header) => header.replace(/[^\n]/g, " "))
+  // A section marked <!-- translation-only --> ... <!-- /translation-only --> exists in one language only (a provider
+  // that one audience uses); it is blanked the same way, so it takes no part in the structure comparison.
+  const body = text
+    .replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, (header) => header.replace(/[^\n]/g, " "))
+    .replace(/<!-- translation-only -->[\s\S]*?<!-- \/translation-only -->/g, (block) => block.replace(/[^\n]/g, " "))
   const result: MarkdownNode[] = []
   const visit = (node: MarkdownNode) => {
     result.push(node)

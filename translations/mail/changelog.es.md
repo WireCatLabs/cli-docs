@@ -4,6 +4,21 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.16.2 — 05.11.2026
+
+### Corregido
+
+- **La página «Preparar el buzón» lista primero a los proveedores internacionales**: Gmail, Outlook, Microsoft 365,
+  iCloud, Fastmail y después Yandex. Mail.ru ya no está en la página en inglés; sigue siendo un proveedor integrado y
+  sus pasos están en la traducción al ruso. El comportamiento no cambia.
+- **Las notas de inicio de sesión de Google y Microsoft ya no describen el estado de revisión o verificación de
+  WireCat.** Dicen que hacer pública una aplicación de Google compartida para el correo es complejo, así que Google puede
+  rechazar la aplicación de WireCat, y señalan el camino: tu propia aplicación de Google o una contraseña de aplicación. El
+  comportamiento no cambia.
+- **La ayuda de `session end` dice qué hace `--revoke` en tu cuenta.** Con Gmail por OAuth pide a Google que revoque el
+  inicio de sesión, lo que cierra la sesión de todas las herramientas que usan el mismo proyecto de Google. La
+  descripción y los ejemplos del comando ahora lo dicen. El comportamiento no cambia.
+
 ## 0.16.1 — 05.11.2026
 
 ### Corregido
