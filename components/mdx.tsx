@@ -8,6 +8,7 @@ import type { MDXComponents } from "mdx/types"
 import type { ComponentProps, ComponentType } from "react"
 import { ArchitectureDiagram } from "@/components/architecture-diagram"
 import { ChannelReport } from "@/components/channel-report/channel-report"
+import { DesktopShot } from "@/components/desktop-shot"
 import { DocTerm } from "@/components/doc-term"
 import { DocsCodeBlock } from "@/components/docs-code-block"
 import {
@@ -53,6 +54,7 @@ export function getMDXComponents(components?: MDXComponents) {
     InstallationOsTabs,
     PlatformSetupTabs,
     Screenshot,
+    DesktopShot,
     Tabs,
     Tab,
     Steps,
