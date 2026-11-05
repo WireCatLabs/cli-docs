@@ -183,7 +183,7 @@ gcal calendars unsync <calendar>
 
 ### `gcal calendars add`
 
-follow an iCalendar feed, such as a holiday calendar or a published .ics address, as a read-only calendar of this profile; sync reads it again each time. The address is kept as a secret and never printed
+follow an iCalendar feed, such as a holiday calendar or a published .ics address, as a read-only calendar of this profile that sync reads again each time; the address is kept as a secret and never printed
 
 **Changes something on this computer only.**
 
@@ -205,7 +205,7 @@ gcal calendars add <url> [options]
 
 ### `gcal calendars remove`
 
-stop following a feed calendars add added: its address is forgotten and its stored events are deleted, not cancelled. Only a feed; calendars unsync stops a provider's calendar
+stop following a feed calendars add added: its address is forgotten and its stored events are deleted, not cancelled; only a feed, as calendars unsync stops a provider's calendar
 
 **Changes something on this computer only.**
 
@@ -238,9 +238,9 @@ gcal calendars busy [query] [options]
 | `--duration-minutes <minutes>` | find free stretches at least this long, 5–1440. |
 | `--hours <from-to>` | working hours in your time zone, Monday to Friday, with --duration-minutes. Default: `09:00-17:00`. |
 
-**Returns:** calendar busy — start, end, timezone, calendars, slots, unknown; every field: gcal commands info calendars busy
+**Returns:** calendar busy — starts_at, ends_at, timezone, calendars, slots, unknown; every field: gcal commands info calendars busy
 
-**Example:** `gcal personal calendars busy person:ana@example.com --json`, `gcal personal calendars busy start>=2026-11-02 end<=2026-11-06 person:ana@example.com --duration-minutes 30 --hours 10:00-16:00`
+**Example:** `gcal personal calendars busy person:ana@example.com --json`, `gcal personal calendars busy starts_at>=2026-11-02 ends_at<=2026-11-06 person:ana@example.com --duration-minutes 30 --hours 10:00-16:00`
 
 ## `gcal sync`
 
@@ -302,7 +302,7 @@ gcal events list [query] [options]
 
 **Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 13 more; every field: gcal commands info events list
 
-**Example:** `gcal personal events list starts_at>=2026-11-02 starts_at<2026-11-07 --json`, `gcal personal events list ends_at>=today person:ana@example.com`, `gcal personal events list overlapping:true --source all`
+**Example:** `gcal personal events list 'starts_at:[2026-11-02 TO 2026-11-07}' --json`, `gcal personal events list ends_at>=today person:ana@example.com`, `gcal personal events list overlapping:true --source all`
 
 ### `gcal events export`
 
@@ -324,7 +324,7 @@ gcal events export [query] [options]
 
 **Returns:** calendar export — format, events, content, output, untrusted; every field: gcal commands info events export
 
-**Example:** `gcal personal events export id:42 --output planning.ics`, `gcal personal events export starts_at:[2026-11-02 TO 2026-11-09} NOT event_type:birthday --output week.ics`
+**Example:** `gcal personal events export id:42 --output planning.ics`, `gcal personal events export 'starts_at:[2026-11-02 TO 2026-11-09}' NOT event_type:birthday --output week.ics`
 
 ### `gcal events show`
 
@@ -414,7 +414,7 @@ gcal events create <calendar> [options]
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
 | `--operation-id <id>` | the operation_id a create that ended in outcome_unknown named: a retry finds that event. |
-| `--text <text>` | one line the provider reads the title, date, time and place from, in place of the other fields; nobody is mailed without --notify, and a retry after outcome_unknown may add the event twice. |
+| `--text <text>` | one line the provider reads the title, date, time and place from, in place of the other fields; nobody is mailed without --notify. |
 
 **Returns:** calendar event write — operation_id, event, entry, scope, removed, ended, converted, from_calendar, and 3 more; every field: gcal commands info events create
 
@@ -578,7 +578,7 @@ gcal search all <query> [options]
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 10 more; every field: gcal commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 13 more; every field: gcal commands info search all
 
 **Example:** `gcal personal search all roadmap`, `gcal personal search all "quarterly review" --source telegram,gcal --json`
 
@@ -1613,13 +1613,17 @@ gcal api calendar-settings-list [options]
 
 ## `gcal doctor`
 
-check this installation: version, paths, config, profiles, store, OAuth client, where each sign-in is kept; no keyring or network
+the state this installation is in, without connecting unless --online
 
 ```sh
-gcal doctor
+gcal doctor [options]
 ```
 
-**Returns:** check this installation; no keyring or network
+| Option | What it does |
+|---|---|
+| `--online` | also connect once and read the account; sends nothing. |
+
+**Returns:** the state this installation is in, without connecting unless --online
 
 **Example:** `gcal doctor`, `gcal doctor --json`
 
@@ -1939,7 +1943,7 @@ gcal config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, speech_model, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1962,7 +1966,7 @@ gcal config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, speech_model, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
 
 | Option | What it does |
 |---|---|
@@ -1971,6 +1975,38 @@ gcal config unset <setting> [options]
 **Returns:** remove a setting from the configuration file
 
 **Example:** `gcal personal config unset limit`
+
+### `gcal config migrate`
+
+write each setting the file lacks at its default, keeping yours
+
+**Changes something on this computer only.**
+
+```sh
+gcal config migrate
+```
+
+**Returns:** write each setting the file lacks at its default, keeping yours
+
+**Example:** `gcal config migrate`
+
+### `gcal config repair`
+
+fix broken JSON syntax in the settings file — comments, a missing or extra comma, unquoted keys, single quotes, missing closing brackets at the end — keeping every value, with a backup beside it; refuses anything with more than one reading and changes nothing then
+
+**Changes something on this computer only.**
+
+```sh
+gcal config repair [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--dry-run` | say what it would fix, and change nothing. |
+
+**Returns:** fix the settings file's JSON syntax, keeping every value
+
+**Example:** `gcal config repair`, `gcal config repair --dry-run`
 
 ## `gcal runs`
 
@@ -2076,7 +2112,7 @@ gcal schedule agent <name> <harness> <prompt> [options]
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
 | `harness` | required | the agent to start. One of: `claude`, `codex`. |
-| `prompt` | required | what to do, e.g. "run the daily follow-up review: gcal skill show follow-ups". |
+| `prompt` | required | what to do, e.g. "summarize what came in during the last day: gcal personal search messages 'date>1d' --newest --limit 20". |
 
 | Option | What it does |
 |---|---|
@@ -2179,5 +2215,6 @@ Branch on the code, not on the text: the text can change, the code does not.
 | `12` | `provider_unavailable` |
 | `13` | `invalid_response` |
 | `14` | `outcome_unknown` |
+| `15` | `conflict` |
 | `130` | `cancelled` |
 | `1` | anything else |

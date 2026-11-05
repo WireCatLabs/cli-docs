@@ -55,15 +55,17 @@ TAILSCALE_BE_CLI=1 /Applications/Tailscale.app/Contents/MacOS/Tailscale funnel 8
 & "$env:ProgramFiles\Tailscale\tailscale.exe" funnel 8765
 ```
 
-Второе окно, от вашего обычного пользователя, без `sudo`:
+Второе окно, от вашего обычного пользователя, без `sudo`. Во всех командах ниже стоит пример адреса
+`https://laptop.example-tailnet.ts.net`, который ни у кого не работает: подставьте вместо него HTTPS-адрес, который
+напечатал ваш туннель.
 
 ```sh
-gcal personal mcp serve --http --port 8765 --public-url https://<device>.<network>.ts.net
+gcal personal mcp serve --http --port 8765 --public-url https://laptop.example-tailnet.ts.net
 ```
 
 Он отвечает локальным адресом, на котором работает, адресом коннектора для приложения и кодом входа.
 
-Чтобы запустить `gcal` рядом с `tg`, `drive` или другим инструментом WireCat, дайте каждому серверу свой локальный порт. Затем либо дайте каждому свой публичный HTTPS-порт, например второй Funnel с `--https=8443 8766` и `gcal personal mcp serve --http --port 8766 --public-url https://<device>.<network>.ts.net:8443` (Funnel поддерживает публичные порты `443`, `8443` и `10000`), либо используйте один адрес с отдельным путём для каждого инструмента: `--public-url https://<device>.<network>.ts.net/gcal`, а `--set-path /gcal` в Funnel направляет этот путь на нужный порт. Адрес коннектора тогда `…/gcal/mcp`. См. [справочник команды Funnel](https://tailscale.com/docs/reference/tailscale-cli/funnel).
+Чтобы запустить `gcal` рядом с `tg`, `drive` или другим инструментом WireCat, дайте каждому серверу свой локальный порт. Затем либо дайте каждому свой публичный HTTPS-порт, например второй Funnel с `--https=8443 8766` и `gcal personal mcp serve --http --port 8766 --public-url https://laptop.example-tailnet.ts.net:8443` (Funnel поддерживает публичные порты `443`, `8443` и `10000`), либо используйте один адрес с отдельным путём для каждого инструмента: `--public-url https://laptop.example-tailnet.ts.net/gcal`, а `--set-path /gcal` в Funnel направляет этот путь на нужный порт. Адрес коннектора тогда `…/gcal/mcp`. См. [справочник команды Funnel](https://tailscale.com/docs/reference/tailscale-cli/funnel).
 
 ### Вариант: Cloudflare Tunnel
 
@@ -80,7 +82,7 @@ gcal personal mcp serve --http --port 8765 --public-url https://mcp.example.com
 Чтобы сервер продолжал работать после закрытия окна, запустите его в фоне. Он отвечает, как только начинает слушать, и выводит адрес коннектора и код входа:
 
 ```sh
-gcal personal mcp server start --port 8765 --public-url https://<device>.<network>.ts.net
+gcal personal mcp server start --port 8765 --public-url https://laptop.example-tailnet.ts.net
 gcal personal mcp server status   # running, port, connector address, the current login code, apps logged in
 gcal personal mcp server stop     # stops only a server that `mcp server start` started
 ```
@@ -91,7 +93,7 @@ gcal personal mcp server stop     # stops only a server that `mcp server start` 
 
 ## Подключите приложение
 
-Адрес для приложения — ваш публичный URL с `/mcp` в конце, например `https://<device>.<network>.ts.net/mcp`. Добавьте его как удалённый MCP-коннектор:
+Адрес для приложения — ваш публичный URL с `/mcp` в конце, например `https://laptop.example-tailnet.ts.net/mcp`. Добавьте его как удалённый MCP-коннектор:
 
 - **ChatGPT:** откройте **Plugins**, выберите **+ Add custom MCP server** и создайте плагин с адресом `/mcp` и OAuth, как описано в [руководстве OpenAI](https://developers.openai.com/api/docs/guides/custom-mcp-server). Если предложат, выберите динамическую регистрацию клиента (DCR), затем установите плагин, прежде чем использовать его в разговоре.
 - **Claude:** добавьте пользовательский коннектор с этим адресом, как описано в [руководстве по коннекторам Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
@@ -105,8 +107,8 @@ gcal personal mcp server stop     # stops only a server that `mcp server start` 
 Сервер не видит, спросило ли вас приложение перед вызовом. Повторяйте `--permission key=level`, чтобы ужесточить права только для этого процесса сервера:
 
 ```sh
-gcal personal mcp serve --http --public-url https://<device>.<network>.ts.net --permission api=readonly
-gcal personal mcp serve --http --public-url https://<device>.<network>.ts.net --permission api.calendar.acl=deny
+gcal personal mcp serve --http --public-url https://laptop.example-tailnet.ts.net --permission api=readonly
+gcal personal mcp serve --http --public-url https://laptop.example-tailnet.ts.net --permission api.calendar.acl=deny
 ```
 
 `api=readonly` отклоняет любое изменение, включая события; `api.calendar.acl=deny` не даёт приложению открыть доступ к календарю. Такая настройка только ужесточает права и никогда не ослабляет уровень профиля. Чтобы разрешить больше, измените права профиля ([настройки](./configuration.md#permissions)). `GCAL_READ_ONLY=1` в окружении сервера тоже отклоняет любое изменение.
@@ -128,7 +130,7 @@ gcal mcp revoke --profiles all
 
 ## Если не работает
 
-- **Приложение пишет, что не может подключиться:** откройте в браузере `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` (с путём: `…/.well-known/oauth-protected-resource/gcal/mcp`). Там должен быть короткий JSON. Если его нет, Funnel не запущен, не включён в вашей сети Tailscale или направлен на другой порт.
+- **Приложение пишет, что не может подключиться:** откройте в браузере `https://laptop.example-tailnet.ts.net/.well-known/oauth-protected-resource/mcp` (с путём: `…/.well-known/oauth-protected-resource/gcal/mcp`). Там должен быть короткий JSON. Если его нет, Funnel не запущен, не включён в вашей сети Tailscale или направлен на другой порт.
 - **Страница входа пишет «Too many wrong codes»:** подождите тридцать секунд и введите самый новый код. Если вы их не вводили, кто-то нашёл ваш адрес: выполните `gcal personal mcp revoke` и подумайте о новом имени устройства в Tailscale.
 - **«already serves MCP over HTTP for this profile»:** сервер для этого профиля уже работает, возможно в фоне. `gcal personal mcp server status` покажет где; `mcp server stop` останавливает сервер, запущенный через `server start`.
 - **«port 8765 is in use»:** порт занят другой программой; укажите другой `--port` и направьте на него туннель.

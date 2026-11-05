@@ -4,6 +4,111 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.20.0 — 05.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Los motivos de error usan los nombres que comparten cli-core y drive.** `sign-in.expired` es ahora
+  `oauth.expired`. `sign-in.scope-missing` y `api.scope-missing` son ambos `oauth.scope-missing`.
+  `profile.not-signed-in` es `oauth.missing`, `google.denied` es `access.denied`, `google.not-found` es
+  `item.not-found` y `google.usage-limit` es `provider.usage-limit`. `file.*`, `offline.refused`, `api.unknown-method`
+  y `api.disabled` mantienen sus nombres y ahora vienen de cli-core.
+- **`calendars busy` recibe y responde `starts_at` y `ends_at`**, como toda respuesta de evento, en lugar de `start` y
+  `end`: `gcal personal calendars busy starts_at>=2026-11-02 ends_at<=2026-11-06`.
+- **Una sincronización en la que falla un calendario responde con los demás.** Antes no imprimía nada y fallaba con
+  `sync.partial`. Ahora guarda e imprime lo que trajeron los calendarios sanos, con `meta.complete: false` y un aviso
+  `sync.partial` por cada calendario que falló. El código de salida es 0.
+- **cli-core 0.566.0 y cli-base 0.77.1.** Un fallo ahora puede ser `conflict` (código de salida 15). `doctor` no se
+  conecta a nada por defecto. `doctor --online` se conecta una vez y lee la cuenta, sin enviar nada.
+- **gcal inicia sesión con la aplicación de Google de WireCat sin archivo de cliente y sin variables de entorno.** 0.19.0
+  esperaba un `google-client.json` que el flujo de publicación escribía desde un secreto que faltaba, así que no podía
+  iniciar sesión sin `--client-file`. La aplicación de WireCat viene ahora del `constants.json` de cli-core. El orden no
+  cambia: `--client-file`, luego `GCAL_GOOGLE_CLIENT_ID` (con `GCAL_GOOGLE_CLIENT_SECRET`) y luego la aplicación de
+  WireCat.
+- **`GCAL_GOOGLE_CLIENT_SECRET` sin `GCAL_GOOGLE_CLIENT_ID` falla con el motivo `sign-in.secret-without-id`** (antes
+  `sign-in.no-client`). `sign-in.no-client` y `sign-in.bundled-client-invalid` ya no existen: siempre hay una
+  aplicación.
+- **El `oauth_client` de `doctor` dice de dónde viene la aplicación:** `{ "client": "wirecat", "source": "constants" }`,
+  o `"own"` con `"flag"` o `"env"`.
+
+### Seguridad
+
+- **El paquete publicado es el que pasó las comprobaciones.** La publicación ya no añade un archivo al paquete
+  comprobado, y el paso de publicación vuelve a comprobar su hash antes de `npm publish`.
+- **La prueba en seco de ClawHub en la publicación no recibe de GitHub ningún token de inicio de sesión.** Ejecuta el
+  código del propio ClawHub, así que ahora ejecuta la CLI de ClawHub directamente, como hace el paso real de ClawHub,
+  sin `id-token: write`.
+- **Las pruebas de `bin/gcal-live-check` y `bin/gcal-write-check` no pueden llegar al llavero del sistema.** Iniciaban
+  los scripts con la dirección D-Bus del propietario. Ahora pasan `DBUS_SESSION_BUS_ADDRESS=disabled:`.
+- **`events export --output` escribe el archivo entero y privado.** Antes escribía sobre el mismo archivo, así que una
+  ejecución interrumpida dejaba medio archivo, y un archivo existente conservaba su modo anterior, como 0644, de modo
+  que otros usuarios del equipo podían leer tus reuniones. Ahora escribe un archivo nuevo con modo 0600 y lo mueve sobre
+  el antiguo.
+
+### Añadido
+
+- **`gcal config migrate` escribe en `defaults` cada ajuste que le falta al archivo, con su valor por defecto**, y
+  conserva tus valores, su orden y las claves que gcal no conoce. Una segunda ejecución no cambia nada (cli-core
+  0.563.0).
+- **`gcal config repair`** corrige la sintaxis JSON rota del archivo de ajustes y deja una copia de seguridad al lado.
+  Viene de cli-core.
+- **`gcal doctor --online`** también mira en npm si hay un gcal más nuevo. `doctor` es ahora el compartido de cli-core,
+  con el `credential_file` de gcal, y sigue respondiendo `meta.now` y la zona horaria.
+
+### Corregido
+
+- **`events create --text` se puede repetir sin riesgo tras perder la respuesta.** Indica un `operation_id`: ejecuta
+  la misma línea otra vez con `--operation-id <that id>` y gcal busca el evento que creó ese intento antes de añadir
+  otro.
+- **`session start` no abre el navegador con `--json`, `--no-input` o `CI`.** En su lugar imprime la dirección que hay
+  que abrir.
+- **Un `--dry-run` de una escritura de evento muestra la clave de Google que comprueba**, `api.calendar.events.insert`
+  para una creación, en `permission.also`, y se niega donde se negaría la ejecución real.
+- **Los comandos de calendario conservan todos los datos que cli-core pone en `meta`.** gcal descartaba uno que no
+  encajaba en su propia copia del esquema. Ahora cli-core imprime las respuestas por sí mismo, y el adaptador de gcal ya
+  no existe.
+- **gcal funciona sobre cli-base 0.75.2.** Su propia comprobación de una prueba que llega al llavero del sistema pasó a
+  cli-base, así que la copia de gcal ya no existe. La comprobación es la misma. `cli-dev lint` ya no avisa del comando
+  corto `gcal`: la decisión de mantenerlo junto a `wcat-gcal` es ahora una excepción con su motivo.
+- **Un perfil mal escrito muestra los perfiles que tienes.** `gcal persona events list` decía solo "profile persona has
+  no Google account yet; run gcal persona session start", lo que invitaba a iniciar sesión con la errata. Cuando existen
+  otros perfiles, ahora dice `no profile named "persona" — profiles here: personal, work` antes de la indicación de
+  inicio de sesión, y `details.profiles` los enumera. El código y el motivo siguen siendo `authentication_error` y
+  `profile.not-signed-in`.
+- **El límite de uso de Google Calendar ya no se llama límite de frecuencia breve.** El `quotaExceeded` de Google decía
+  "retry the command" y se marcaba como seguro de repetir. La guía de Google remite a los límites de uso, no a repetir.
+  Ahora es `google.usage-limit`, no se repite, y enlaza la [guía de errores de
+  Google](https://developers.google.com/workspace/calendar/api/guides/errors).
+- **Un cambio que solo puede hacer el organizador lo dice.** El `forbiddenForNonOrganizer` de Google era "Google
+  denied this operation; check access to the calendar". Ahora es `event.organizer-only`: solo el organizador puede
+  cambiar esto, así que cambia solo los campos de tu propia copia.
+- **La comprobación de actualización lee un almacén que escribió 0.19.0.** Empezaba en 0.6.0, así que ninguna
+  comprobación cubría lo que escribieron las versiones de 0.7.0 a 0.19.0.
+- **Los comandos de lectura ya no escriben en el almacén compartido.** `events list`, `events show`, `store status`, `people
+  list` y las demás lecturas abren el almacén en solo lectura una vez guardado el perfil, así que las lecturas
+  que corren a la vez por MCP no toman el bloqueo de escritura. El primer comando de un perfil, `sync`, las búsquedas y
+  cada escritura lo siguen abriendo para escribir, y guardan las filas de la cuenta y del perfil como antes.
+- **Una lista de calendarios o los huecos de una serie que Google pagina sin fin se detienen con un error.** Un token de
+  página repetido, o más de 1000 páginas, termina ahora la lectura con `invalid_response` en lugar de dar vueltas hasta
+  el límite de tiempo.
+- **El programa recibe la señal de parada de cli-core y los motivos de error de gcal desde la entrada, como drive.**
+  Un fallo nombra ahora los motivos propios de gcal.
+- **Los comandos de la guía remota ya no llevan el marcador `<device>.<network>`.** [Uso remoto](./remote.md) escribe
+  una dirección de ejemplo con su etiqueta, igual en cada shell, que sustituyes por la de tu túnel.
+- **`links review` con `GCAL_PROFILE_LOCK` muestra solo las opciones de enlace del perfil fijado**, y muestra un evento
+  candidato del que el perfil no tiene copia solo por su referencia, así que no se ven los títulos de eventos de otra
+  cuenta. Sin el bloqueo sigue mostrando las de todas las cuentas, y ahora las nombra en `meta.accounts`. Viene de
+  cli-core 0.562.0.
+- **En una terminal, las horas de los eventos se muestran en la zona horaria de tu ordenador, y la última línea la
+  nombra** (`times in
+  Europe/Madrid`). `--json` y `--jsonl` mantienen las horas en UTC. Viene de cli-core 0.562.0.
+- **`calendars busy` dice cuándo Google no respondió para un calendario o una persona.** `meta.complete` es false con un
+  aviso por cada uno, así que las horas libres ya no se muestran como seguras, y `meta` nombra `now` y la zona horaria.
+  Viene de cli-core 0.562.0.
+- **El primer ejemplo de la ayuda de `events list` funciona:** `gcal personal events list 'starts_at:[2026-11-02 TO 2026-11-07}'`.
+- **Las escrituras de `gcal api` usan la protección de permisos de cli-core** (`keyedGuard`) en lugar de una copia, así
+  que un arreglo allí les llega también.
+
 ## 0.19.0 — 02.11.2026
 
 ### Añadido
