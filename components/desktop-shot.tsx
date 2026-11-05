@@ -6,17 +6,20 @@ export function DesktopShot({
   alt,
   caption,
   lang = "en",
+  folder = "desktop",
 }: {
   shot: string
   alt: string
   caption?: string
   lang?: string
+  folder?: string
 }) {
-  const light = desktopShotLang(shot, "light", lang)
-  const dark = desktopShotLang(shot, "dark", lang)
+  const [width, height, maxWidth] = folder === "install" ? [1440, 480, "max-w-4xl"] : [1040, 650, "max-w-3xl"]
+  const light = desktopShotLang(shot, "light", lang, folder)
+  const dark = desktopShotLang(shot, "dark", lang, folder)
   if (!light || !dark) return null
   return (
-    <figure className="not-prose my-6 max-w-3xl">
+    <figure className={`not-prose my-6 ${maxWidth}`}>
       {(
         [
           ["light", light, "[.dark_&]:hidden"],
@@ -27,9 +30,9 @@ export function DesktopShot({
         <img
           key={theme}
           className={`h-auto w-full rounded-xl border shadow-sm ${visibility}`}
-          src={`/screenshots/desktop/${shot}-${theme}-${from}.webp`}
-          width={1040}
-          height={650}
+          src={`/screenshots/${folder}/${shot}-${theme}-${from}.webp`}
+          width={width}
+          height={height}
           loading="lazy"
           decoding="async"
           alt={alt}

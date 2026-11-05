@@ -18,6 +18,12 @@ const crops = {
   tasks: { box: { left: 208, top: 120, width: 1232, height: 770 } },
   memory: { box: { left: 0, top: 100, width: 1040, height: 650 } },
   connect: { box: { left: 200, top: 100, width: 1200, height: 750 } },
+  "onboarding-welcome": { box: { left: 0, top: 0, width: 1440, height: 900 } },
+  "onboarding-install": { box: { left: 0, top: 0, width: 1440, height: 900 } },
+  guides: { box: { left: 0, top: 0, width: 1400, height: 875 } },
+  analytics: { box: { left: 0, top: 0, width: 1400, height: 875 } },
+  storage: { box: { left: 0, top: 0, width: 1400, height: 875 } },
+  settings: { box: { left: 0, top: 0, width: 1400, height: 875 } },
 }
 
 const langs = ["en", "ru", "es"]
