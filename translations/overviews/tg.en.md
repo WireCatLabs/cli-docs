@@ -24,7 +24,7 @@ If you use Codex, Claude Code, Cursor, Gemini CLI or Hermes, open the
 install the tool, help you log in and check the connection. You scan the QR code and confirm the login.
 
 Then follow [the guide for your agent](/en/docs/agents). Apps that use an MCP server have a
-[separate MCP guide](/en/docs/mcp).
+[separate MCP guide](/en/docs/agents#mcp-and-skills).
 
 ### Start in a terminal
 

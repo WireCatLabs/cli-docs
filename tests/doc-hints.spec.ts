@@ -127,7 +127,7 @@ for (const lang of languages) {
       },
       { label: "CLI", page: "installation" },
       { label: "skill", page: "agents" },
-      { label: "MCP", page: "mcp" },
+      { label: "MCP", page: `agents#${{ en: "mcp-and-skills", ru: "mcp-и-навыки", es: "mcp-y-skills" }[lang]}` },
     ]
     await expect(page.locator(".docs-term-trigger")).toHaveCount(4)
     for (const definition of definitions) {

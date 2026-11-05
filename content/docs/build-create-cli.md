@@ -17,7 +17,7 @@ Both start from the same template and get the same foundation. The only differen
   your agent learns, a server for AI agents and safe sign-in. You do not need any other WireCat tool.
 - **Part of WireCat.** You already have WireCat tools for chats, mail or meetings, and want one search over all of
   it. Then connect your tool to the others: what it saves sits next to everything else, and one question finds it.
-  This takes a few more steps, described in [Add a source](./build-add-source.md).
+  This takes a few more steps, described in [Add a source](./build-concepts.md#add-a-source).
 
 You can start with the first and connect your tool later.
 
@@ -80,7 +80,7 @@ node dist/bin/acme.js personal doctor
 3. **Try each command on your own account.** The agent builds commands one by one, such as one that lists your deals.
    Run them, and tell the agent what looks wrong or what is missing.
 4. **Make it searchable.** Ask the agent to save what the service returns into WireCat, so search and your agents find
-   it next to your chats and mail. [Add a source](./build-add-source.md) shows how.
+   it next to your chats and mail. [Add a source](./build-concepts.md#add-a-source) shows how.
 5. **Share it, if you want.** When the built-in checks pass, publish the tool on npm, and others install it like any
    other WireCat tool.
 
@@ -174,7 +174,7 @@ compared with our tools without a pull request to cli-base.
 ## Where to go next
 
 1. [Concepts in five minutes](./build-concepts.md) — how WireCat keeps records from many sources.
-2. [Add a source](./build-add-source.md) — save your service's data so search and agents can use it.
-3. [Keep your own data](./build-own-data.md) — where your tool keeps what only it needs.
+2. [Add a source](./build-concepts.md#add-a-source) — save your service's data so search and agents can use it.
+3. [Keep your own data](./build-concepts.md#keep-your-own-data) — where your tool keeps what only it needs.
 4. [Sign in to a service](./build-sign-in.md) — keys, the keychain and accounts.
-5. [Stay compliant and current](./build-stay-compliant.md) — checks, versions and upgrades.
+5. [Stay compliant and current](./build-sign-in.md#stay-compliant-and-current) — checks, versions and upgrades.

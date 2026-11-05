@@ -91,7 +91,7 @@ There are two ways to connect an agent ([the guide](/en/docs/agents)):
 - **A skill.** `tg skill install` adds a short instruction file that teaches a terminal agent the
   commands. You do not need to memorise them.
 - **MCP.** Apps that cannot run commands, such as Claude Desktop, connect through [the MCP
-  server](/en/docs/mcp). It uses the same profiles and permissions as the command line.
+  server](/en/docs/agents#mcp-and-skills). It uses the same profiles and permissions as the command line.
 
 Output size matters when an agent pays for every token it reads. We measured it on 5,000 synthetic
 messages: asking for only the fields you need with `--json=<fields>` made answers [31% to 64%

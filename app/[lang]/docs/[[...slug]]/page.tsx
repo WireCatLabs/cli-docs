@@ -140,7 +140,7 @@ export default async function Page(props: Props) {
       {written !== lang && <p className="text-sm text-fd-muted-foreground">{wordsFor(lang).inLanguage(written)}</p>}
       {guide === "mcp" && (
         <Link
-          href={`/${lang}/docs/mcp`}
+          href={`/${lang}/docs/agents#${{ en: "mcp-and-skills", ru: "mcp-и-навыки", es: "mcp-y-skills" }[lang] ?? "mcp-and-skills"}`}
           className="rounded-xl border bg-fd-card p-4 transition-colors hover:bg-fd-accent"
         >
           <span className="block text-sm font-semibold">{ui.mcp} →</span>

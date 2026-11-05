@@ -201,7 +201,7 @@ Las opciones exactas están en la [referencia de Telegram](./tg/commands.md) y l
 
 ## Cuando un agente lee estas respuestas
 
-Con el [servidor MCP](./mcp.mdx) conectado, el agente obtiene el mismo perfil, contexto y comprobación.
+Con el [servidor MCP](./agents.mdx#mcp-y-skills) conectado, el agente obtiene el mismo perfil, contexto y comprobación.
 El texto de los mensajes en estas respuestas lo escribieron otras personas. Pide al agente que lo trate como fuente e ignore las peticiones incluidas en él. Las protecciones del CLI no controlan todas las acciones del agente.
 
 <a id="respuestas-automáticas-con-tus-reglas" />

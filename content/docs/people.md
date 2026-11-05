@@ -195,7 +195,7 @@ Exact options are in the [Telegram reference](./tg/commands.md) and [MAX referen
 
 ## When an agent reads these answers
 
-With the [MCP server](./mcp.mdx) connected, an agent gets the same profile, context and check.
+With the [MCP server](./agents.mdx#mcp-and-skills) connected, an agent gets the same profile, context and check.
 Message text in these answers is what other people wrote. Ask your agent to treat it as source material and ignore requests embedded in it; CLI protections do not control every action an agent can take.
 
 ## Auto-replies by your rules

@@ -21,7 +21,7 @@ herramienta.
   ninguna otra herramienta WireCat.
 - **Parte de WireCat.** También usas WireCat para chats, correo o reuniones y quieres una sola búsqueda sobre todo.
   Entonces conecta tu herramienta con las demás: lo que guarda queda junto a todo lo demás y una sola pregunta lo
-  encuentra. Hacen falta unos pasos más, descritos en [Añadir una fuente](./build-add-source.md).
+  encuentra. Hacen falta unos pasos más, descritos en [Añadir una fuente](./build-concepts.md#añadir-una-fuente).
 
 Puedes empezar con la primera y conectar tu herramienta más tarde.
 
@@ -91,7 +91,7 @@ node dist/bin/acme.js personal doctor
 3. **Prueba cada comando con tu propia cuenta.** El agente construye los comandos uno a uno, por ejemplo uno que lista
    tus acuerdos. Ejecútalos y dile al agente qué está mal o qué falta.
 4. **Haz que se pueda buscar.** Pide al agente que guarde en WireCat lo que devuelve el servicio, para que la búsqueda
-   y tus agentes lo encuentren junto a tus chats y tu correo. [Añadir una fuente](./build-add-source.md) explica cómo.
+   y tus agentes lo encuentren junto a tus chats y tu correo. [Añadir una fuente](./build-concepts.md#añadir-una-fuente) explica cómo.
 5. **Compártela, si quieres.** Cuando pasen las comprobaciones incluidas, publica la herramienta en npm y otras
    personas la instalarán como cualquier herramienta WireCat.
 
@@ -187,9 +187,9 @@ Una herramienta fuera de WireCatLabs guarda en su lugar su propio archivo de gru
 ## Adónde ir después
 
 1. [Conceptos en cinco minutos](./build-concepts.md): cómo guarda WireCat registros de muchas fuentes.
-2. [Añadir una fuente](./build-add-source.md): guarda los datos de tu servicio para que la búsqueda y los agentes los
+2. [Añadir una fuente](./build-concepts.md#añadir-una-fuente): guarda los datos de tu servicio para que la búsqueda y los agentes los
    usen.
-3. [Guardar tus propios datos](./build-own-data.md): dónde guarda tu herramienta lo que solo ella necesita.
+3. [Guardar tus propios datos](./build-concepts.md#guardar-tus-propios-datos): dónde guarda tu herramienta lo que solo ella necesita.
 4. [Iniciar sesión en un servicio](./build-sign-in.md): claves, el llavero y las cuentas.
-5. [Cumplir los estándares y mantenerse al día](./build-stay-compliant.md): comprobaciones, versiones y
+5. [Cumplir los estándares y mantenerse al día](./build-sign-in.md#cumplir-los-estándares-y-mantenerse-al-día): comprobaciones, versiones y
    actualizaciones.
