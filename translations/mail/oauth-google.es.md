@@ -4,9 +4,15 @@ title: "Gmail con tu propia aplicación de Google"
 
 Gmail funciona con una contraseña de aplicación, y `mail` usa una por defecto. Usa OAuth en su lugar cuando no puedas
 crear una contraseña de aplicación: la cuenta no tiene verificación en dos pasos, o un dominio de Google Workspace
-desactiva las contraseñas de aplicación. `mail` no tiene una aplicación de Google propia para el correo (Google exige
-una revisión de seguridad de pago a una aplicación que lee el correo de otras personas), así que inicias sesión a
-través de una aplicación que creas tú. Lleva unos 20 minutos y no cuesta nada.
+desactiva las contraseñas de aplicación.
+
+Un inicio de sesión de Gmail con OAuth usa la aplicación de Google de WireCat, salvo que indiques la tuya. Gana la
+primera coincidencia: `--client-file <Desktop client JSON>`, luego `MAIL_GOOGLE_CLIENT_ID` (con
+`MAIL_GOOGLE_CLIENT_SECRET`), luego el ajuste `google_client_id` del perfil (su secreto sigue viniendo de
+`MAIL_GOOGLE_CLIENT_SECRET`) y, por último, la aplicación de WireCat. `mail doctor` muestra cuál usa un perfil en
+`oauth_client`. Google exige una revisión de seguridad de pago a una aplicación que lee el correo de otras personas, y
+la aplicación de WireCat aún no ha pasado por una: si Google rechaza el inicio de sesión o avisa de que la aplicación
+no está verificada, crea tu propia aplicación como se indica abajo. Lleva unos 20 minutos y no cuesta nada.
 
 ## 1. Un proyecto de Google Cloud solo para el correo
 
@@ -73,7 +79,7 @@ Un perfil nuevo:
 mail gm session start --address me@gmail.com --client-file ~/Downloads/client_secret_XXXX.json
 ```
 
-`--client-file` es lo que hace que un perfil nuevo de Gmail inicie sesión con OAuth. Un perfil de Gmail que ahora usa
+`--client-file` hace que un perfil nuevo de Gmail inicie sesión con OAuth. Un perfil de Gmail que ahora usa
 una contraseña de aplicación: cámbialo primero, en una terminal (un agente no puede cambiar `auth`):
 
 ```sh
@@ -83,7 +89,8 @@ mail gm session start --client-file ~/Downloads/client_secret_XXXX.json
 
 El navegador abre la página de Google. Elige la cuenta, permite el acceso, y `mail` comprueba la dirección e inicia
 sesión en IMAP antes de guardar nada. En un perfil que ya cambió a OAuth, `MAIL_GOOGLE_CLIENT_ID` y
-`MAIL_GOOGLE_CLIENT_SECRET` pueden sustituir a `--client-file`.
+`MAIL_GOOGLE_CLIENT_SECRET` pueden sustituir a `--client-file`; sin ninguno de los dos, `mail gm session start` inicia sesión con la
+aplicación de WireCat.
 
 ## Cerrar sesión
 

@@ -4,6 +4,89 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.16.0 — 05.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **mail funciona sobre cli-core 0.569.0: una programación de agente usa Sonnet, arranca ligera y se detiene por hoy al
+  llegar a un tope de coste.** `mail <profile> schedule agent` admite `--model <model>` y `--max-cost-per-day <usd>`. Sin
+  ellos, una programación de claude usa `sonnet` y una de codex el modelo por defecto de codex, una programación nueva de
+  claude arranca sin tus servidores MCP, skills, ajustes ni CLAUDE.md, y no arranca ninguna ejecución el resto del día
+  cuando las ejecuciones del día cuestan 5 dólares estadounidenses. `schedule_model_claude`, `schedule_model_codex`,
+  `schedule_lean_start` y `schedule_max_cost_per_day` en `defaults` del archivo de configuración lo cambian para cada
+  programación nueva; `mail config show` los lista.
+
+## 0.15.0 — 05.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **El perfil fija si `sync` lee adjuntos y hasta qué tamaño, y una ejecución puede anularlo.** Lo fijan
+  `read_attachments` del perfil (por defecto `true`) y `max_attachment_mb` (por defecto 10); `--no-attachments`,
+  `--attachments` y `--max-attachment-mb <n>` lo anulan para una ejecución. Un archivo sin leer se guarda con su nombre y
+  su tamaño, y su extracción queda en `not-read` o `too-large`. En ningún caso se conserva el archivo.
+- **`messages show` vuelve a leer un correo cuando uno de sus adjuntos quedó sin leer**, cada adjunto sea cual sea su
+  tamaño, así que el comando ahora llega al servidor de correo para ese correo. `--offline` o una lectura fallida
+  muestra el correo guardado con `meta.complete: false` y el problema `mail.attachments-unread`. `attachments download`
+  conserva un archivo.
+- **Gmail por OAuth inicia sesión con la app de Google de WireCat cuando no nombras ninguna.** Antes necesitaba
+  `--client-file` o `MAIL_GOOGLE_CLIENT_ID` y fallaba con `mail.oauth-no-client` sin ellos. El orden es `--client-file`,
+  luego `MAIL_GOOGLE_CLIENT_ID` (con `MAIL_GOOGLE_CLIENT_SECRET`), luego el nuevo `google_client_id` del perfil y por
+  último la app de WireCat. Google aún no ha revisado la app de WireCat para correo: si Google la rechaza, usa la tuya
+  ([pasos](./oauth-google.md)). Elegir OAuth para un perfil de Gmail no cambia.
+- **`MAIL_MICROSOFT_CLIENT_ID` elige la app de Microsoft para una ejecución**, antes que `microsoft_client_id` del perfil
+  y que la app de WireCat, que ahora viene de `constants.json` de cli-core. `mail.oauth-no-client` desaparece: siempre
+  hay una app.
+- **Las filas `oauth` de `doctor` dicen qué app usa cada perfil como `oauth_client: { client, source }`**, en lugar de
+  `client`: `source` es `flag`, `env`, `config` o `constants` (la de WireCat). La fila de un perfil informa de la app con
+  la que inició sesión cuando su inicio de sesión la registró. `session start` responde `source` junto a `client`.
+- **mail funciona sobre cli-base 0.77.1 y cli-core 0.566.0.**
+
+### Añadido
+
+- **`stats messages show` cuenta el correo guardado del perfil por día, semana o remitente**, recibido y enviado, sobre
+  la misma consulta que `search messages`: `{ by, received, sent, rows: [{ key, name, received, sent }] }`, una clave de
+  día o semana `YYYY-MM-DD` en `--timezone` (una semana por su lunes), un remitente con su dirección como clave y `sent`
+  0. Solo recuentos, sin búsqueda registrada. Para el correo por día de WireCat Desktop (`mailStats` de cli-core,
+  0.564.0).
+- **`account inspect` agrupa el correo del buzón por remitente y lista antes de sincronizarlo**: correos, MB, partes sin
+  leer y enviadas a muchos, años, si respondiste, una sugerencia `skip` y una puntuación de spam o estafa, más los tipos
+  de regla que casaría el correo. Solo cabeceras, no guarda nada. `--domain-age` pregunta al registro (RDAP) de cada
+  dominio de remitente cuándo se registró. Pasó de `memo mail inspect`.
+- **`messages import <file.mbox>` añade un archivo de Google Takeout al correo guardado de un perfil de Gmail**, unido a
+  lo que guarda `sync` por los ids de Gmail; solo añade, deja fuera Spam y Trash y sigue las reglas del perfil. Pasó de
+  las cuentas de correo de memo con `mode: "mbox"`.
+- **`sync` puntúa a los remitentes del correo guardado, como mucho una vez al día**, y pregunta a los registros por los
+  dominios de remitente nuevos hasta su plazo; la búsqueda pone más abajo el correo de remitentes con señales de fraude.
+  El `senders` de la respuesta dice cuántos. Antes lo hacía `memo sync`; ya no lee correo.
+
+### Corregido
+
+- **El servidor MCP dice a un agente que el texto de los adjuntos son datos, no instrucciones**, junto a asuntos,
+  cuerpos y nombres de archivo. `sync` indexa el texto de los adjuntos y `messages show` lo devuelve.
+- **`session start` escribe cada ajuste en su valor por defecto al guardar un perfil nuevo**, como hace `config set`. El
+  primer archivo que creaba un inicio de sesión solo contenía el perfil, así que el dueño no veía los demás ajustes
+  hasta un `config set` o `config migrate` posterior.
+
+## 0.14.0 — 05.11.2026
+
+### Añadido
+
+- **`config migrate` escribe cada ajuste que falta en tu archivo de configuración, en su valor por defecto**, y conserva
+  tus valores, su orden y las claves que no conoce; no crea ninguna sección y ejecutarlo otra vez no añade nada. Una
+  primera ejecución ahora escribe en el archivo cada ajuste compartido, y `config set` y `config unset` rellenan los que
+  faltan. `config show` da a cada ajuste su valor por defecto y su descripción, y ya no crea un archivo que falta. Desde
+  cli-core 0.563.0.
+
+### Cambiado — puede romper a quien llama
+
+- **La sincronización de correo lee adjuntos de hasta 10 MB por archivo por defecto**, y puede omitirlos. Desde cli-core
+  0.563.0.
+- **`review --holder` deja fuera también el correo de remitentes sospechosos**, junto al enviado a muchos, los sobres,
+  los borradores y el correo parcial. Desde cli-core 0.560.0.
+- **Una respuesta por encima del tope de salida nombra qué ejecutar en su lugar** (WC-OUT-22). Desde cli-core 0.563.0.
+- **El almacén pasa a la versión 48** (facturas y pagos, importaciones por un solo sobre, la limpieza de filas de prueba
+  que se colaron en un almacén real). La primera ejecución de esta versión lo migra. Desde cli-core 0.557.0–0.560.0.
+
 ## 0.13.0 — 02.11.2026
 
 ### Añadido

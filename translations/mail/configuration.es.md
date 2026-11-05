@@ -19,10 +19,17 @@ sesión con una contraseña de aplicación) y `folders` (las carpetas que lee `s
 un ajuste: vive en el llavero, o en `MAIL_PASSWORD` para una ejecución sin llavero. Tampoco lo es un inicio de sesión con
 OAuth: sus tokens también viven en el llavero.
 
+`read_attachments` (por defecto `true`) y `max_attachment_mb` (por defecto 10) deciden si `sync` lee el texto de los adjuntos en el
+índice de búsqueda y el archivo más grande que lee. No se guarda ningún archivo. `sync --no-attachments`, `--attachments` y
+`--max-attachment-mb` los reemplazan en una ejecución; `messages show` lee los adjuntos de un correo sea lo que sea que digan.
+
 `microsoft_client_id` es la aplicación de Microsoft con la que se inicia sesión en Outlook.com y Microsoft 365, cuando usas la
 tuya en lugar de la de WireCat. Fíjalo una vez para todos los perfiles con `mail config set --defaults microsoft_client_id <id>`;
 cómo conseguir un id está en [registrar una aplicación de Microsoft](./oauth-microsoft.md). Un perfil que ya inició sesión sigue
-renovando con la aplicación con la que lo hizo.
+`google_client_id` hace lo mismo para Gmail con OAuth; su secreto sale de `MAIL_GOOGLE_CLIENT_SECRET`, nunca del archivo.
+`MAIL_MICROSOFT_CLIENT_ID` y `MAIL_GOOGLE_CLIENT_ID` prevalecen sobre ambos ajustes en una ejecución, y `--client-file`
+prevalece sobre todo para Gmail. Un perfil que ya inició sesión sigue renovando con la aplicación con la que lo hizo.
+`mail doctor` muestra la aplicación de cada perfil en `oauth_client`.
 
 `config show` lista cada ajuste y de dónde viene: el archivo, una variable o el valor por defecto.
 
@@ -30,8 +37,8 @@ renovando con la aplicación con la que lo hizo.
 otros). Todas las CLI de WireCat comparten esa lista. `mail` los ignora.
 
 Un agente por MCP que tenga `mcp.authority` puede cambiar ajustes con `config set`, pero nunca estos: los ajustes del
-buzón de arriba, que deciden adónde va la contraseña de aplicación, `microsoft_client_id`, que decide en qué aplicación
-inicias sesión, y `permissions.messages.send.others`, que permite a un agente escribir a otras personas. Solo tú los cambias, en una terminal.
+buzón de arriba, que deciden adónde va la contraseña de aplicación, `microsoft_client_id` y `google_client_id`, que deciden en qué
+aplicación inicias sesión, y `permissions.messages.send.others`, que permite a un agente escribir a otras personas. Solo tú los cambias, en una terminal.
 
 ## Permisos
 

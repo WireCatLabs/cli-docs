@@ -9,6 +9,9 @@
   "files": ["content/docs/*.{md,mdx}", "content/docs/desktop/*.{md,mdx}"],
   "ignoreRegExpList": ["/<[^>]+>/g", "/^---[\\s\\S]*?^---/gm"],
   "words": [
+    "Fastmail",
+    "Maildir",
+    "mbox",
     "созвон",
     "созвона",
     "созвонах",

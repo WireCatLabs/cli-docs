@@ -71,7 +71,8 @@ mail config set --defaults microsoft_client_id <application-client-id>
    перенаправления не совпадает), убедитесь, что адрес в **Mobile and desktop applications** точно равен
    `http://localhost/callback`.
 9. Для собственного приложения WireCat: отправьте Application (client) ID сопровождающим. Они впишут его в
-   `WIRECAT_MICROSOFT_CLIENT_ID` в `src/oauth.ts`, и следующий релиз будет входить без какой-либо конфигурации.
+   `microsoft.app.client_id` в `constants.json` из cli-core, и следующий релиз cli-core и обновление `mail` будут входить
+   без какой-либо конфигурации.
 
 ## Позже, для начала не нужно
 

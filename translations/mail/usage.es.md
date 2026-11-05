@@ -47,7 +47,11 @@ existente de Himalaya no necesita una contraseña nueva.
 `sync` lee INBOX y la carpeta Sent; en Gmail lee All Mail, porque el correo archivado sale de INBOX. `--folder` o el
 ajuste `folders` del perfil indican otras carpetas. Lee primero el correo más nuevo. `--limit` limita el correo nuevo de
 una ejecución. `--rescan` lista de nuevo toda la ventana. Guarda el texto y las cabeceras, y el texto de cada adjunto que
-puede leer, no los archivos. Las reglas de la cuenta (`mail <profile> rules`, la misma tabla que lee memo) también valen
+puede leer, no los archivos. Lee adjuntos de hasta 10 MB cada uno: los ajustes del perfil `read_attachments` (`false` no
+lee ninguno) y `max_attachment_mb` lo cambian, y `--no-attachments`, `--attachments` y `--max-attachment-mb <n>` lo
+cambian para una ejecución. Un archivo sin leer conserva su nombre y su tamaño. `messages show` de un correo con un
+archivo así vuelve a leer ese correo del servidor, cada adjunto sea cual sea su tamaño, y muestra el texto; `--offline`
+muestra el correo guardado. Para conservar un archivo, usa `attachments download`. Las reglas de la cuenta (`mail <profile> rules`, la misma tabla que lee memo) también valen
 aquí: el correo que nombra una regla de omisión no se lee, y una regla de sobre conserva solo su remitente, su fecha y su
 tamaño.
 
@@ -184,6 +188,15 @@ mail ya messages export 'date>30d' --limit 500 --output ~/mail-backup --resume
 mail ya stats messages top --by list --limit 10                          # which lists send the most
 ```
 
+`stats messages show` cuenta el correo guardado que coincide con una consulta, recibido y enviado, por día natural, semana
+(con el lunes como clave) o remitente, en `--timezone`. Solo recuentos, y no registra ninguna búsqueda:
+
+```sh
+mail ya stats messages show --by day --timezone Europe/Madrid -- 'date>=30d'
+# {"item":{"by":"day","received":14,"sent":3,"rows":[{"key":"2026-11-01","name":null,"received":4,"sent":1}]}}
+mail ya stats messages show --by sender --limit 10                       # by sender counts received mail only
+```
+
 - **Qué se escribe.** Cada mensaje tal como lo guarda el servidor, byte a byte, en cada carpeta en que está archivado
   (Gmail archiva un mensaje en All Mail e INBOX a la vez: pasa `--folder` para exportar una). Los archivos mbox son
   mboxrd: una línea del cuerpo que empieza por la palabra From recibe un `>` delante. Los nombres de archivo de Maildir
@@ -194,6 +207,35 @@ mail ya stats messages top --by list --limit 10                          # which
 - **Por partes.** Una ejecución se detiene en `--limit`, `--max-pages` o antes de su plazo y dice `state: "partial"`;
   ejecútala otra vez con `--resume`. El correo para el que el almacén no tiene UID (haz sync otra vez) o que el servidor
   ya no tiene se cuenta, no se escribe.
+
+## Mirar antes de sincronizar y traer un archivo
+
+`account inspect` lee del servidor las cabeceras del correo del buzón, no guarda nada y lo agrupa por lista de correo o
+remitente, el grupo más grande primero, para que decidas qué conservar antes de un primer `sync` grande:
+
+```sh
+mail gm account inspect                                    # every email the profile's folders hold
+mail gm account inspect --since-time 2025-01-01 --limit 20
+mail gm account inspect --domain-age                       # also asks when each sender's domain was registered
+mail gm messages import ~/Takeout/Mail/archive.mbox         # a Google Takeout file of the same Gmail account
+```
+
+- **Qué muestra un grupo.** Cuántos correos y MB, la parte sin leer y la enviada a muchos, los años, si respondiste, una
+  sugerencia `skip` y una puntuación: cuánto se parece el remitente a spam, una estafa o un robot. Los tipos de correo que
+  casaría una regla integrada cierran la lista; `rules add --kind <kind> --do envelope` convierte un tipo en regla.
+- **Antigüedad del dominio del remitente.** Un dominio registrado pocos meses antes de que llegara su correo es señal de
+  fraude. `--domain-age` pregunta al registro del dominio de cada grupo mostrado por RDAP, una pregunta por segundo, y
+  guarda la respuesta para siempre en la carpeta de estado de `mail`. `sync` puntúa a cada remitente del correo guardado
+  como mucho una vez al día, pregunta a los registros por los dominios de los que se supo en los últimos dos años y que
+  aún no conoce, y deja de preguntar antes de su plazo; la búsqueda pone más abajo el correo de un remitente con señales
+  de fraude. Nunca se pregunta por los grandes proveedores de buzón ni por los remitentes a quienes respondiste, y la
+  mayoría de los dominios de país (.ru, .de, .es, .io) no tienen RDAP y quedan desconocidos.
+- **Un archivo de Takeout.** `messages import` lee un archivo mbox de Gmail que Google Takeout escribió en el correo
+  guardado de este perfil de Gmail. Takeout conserva los ids propios de Gmail, así que un correo que traen el archivo y
+  `sync` se guarda una vez. Solo añade: Spam y Trash se dejan fuera, las reglas del perfil omiten lo que omiten, y el
+  correo que falta en el archivo nunca se marca como borrado. Un archivo sin cambios leído hasta el final no se vuelve a
+  leer; `--limit` y `--since-time` acotan una ejecución. Se rechaza un perfil que no es de Gmail, porque sus ids guardarían
+  cada correo dos veces.
 
 ## Ordenar el buzón
 

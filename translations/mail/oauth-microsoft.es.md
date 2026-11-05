@@ -71,7 +71,8 @@ de correo. El id es público; una aplicación de escritorio no tiene secreto.
    redirección no coincide), comprueba que la dirección bajo **Mobile and desktop applications** es exactamente
    `http://localhost/callback`.
 9. Para la aplicación propia de WireCat: envía el Application (client) ID a los responsables del mantenimiento. Ellos
-   lo ponen en `WIRECAT_MICROSOFT_CLIENT_ID` en `src/oauth.ts`, y la próxima versión inicia sesión sin configuración.
+   lo ponen en `microsoft.app.client_id` en el `constants.json` de cli-core, y la próxima versión de cli-core y la
+   actualización de `mail` inician sesión sin configuración.
 
 ## Más adelante, y no hace falta para empezar
 
