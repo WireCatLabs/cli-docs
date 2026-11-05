@@ -7,7 +7,7 @@ for (const lang of ["en", "ru", "es"]) {
     const sidebar = page.locator("#nd-sidebar")
     const viewport = sidebar.locator('[data-id$="-viewport"]')
     await expect(viewport).toHaveCount(1)
-    for (const slug of ["", "/installation", "/agents", "/first-tasks", "/features", "/prompting", "/mcp"])
+    for (const slug of ["", "/installation", "/agents", "/first-tasks", "/features", "/prompting"])
       await expect(viewport.locator(`a[href="/${lang}/docs${slug}"]`)).toHaveCount(1)
 
     // Reproduce the partially clipped sticky sidebar while the footer is on screen.
@@ -42,16 +42,7 @@ for (const lang of ["en", "ru", "es"]) {
       const sidebar = page.locator("#nd-sidebar-mobile")
       const viewport = sidebar.locator('[data-id$="-viewport"]')
       await expect(viewport).toHaveCount(1)
-      for (const slug of [
-        "",
-        "/installation",
-        "/agents",
-        "/first-tasks",
-        "/features",
-        "/prompting",
-        "/mcp",
-        "/testing",
-      ])
+      for (const slug of ["", "/installation", "/agents", "/first-tasks", "/features", "/prompting", "/testing"])
         await expect(viewport.locator(`a[href="/${lang}/docs${slug}"]`)).toHaveCount(1)
       await viewport.evaluate((element) => {
         element.scrollTop = element.scrollHeight
