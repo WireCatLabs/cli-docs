@@ -91,9 +91,9 @@ gcal personal store status                  # how far each calendar's sync is, a
 меняет, и число запросов к Google следует за ним. `--max-pages <n>` дополнительно уменьшает это число. `--rescan`
 начинает все календари заново.
 
-Если календарь не удалось синхронизировать, `sync` ничего не выводит в stdout и завершается с `sync.partial`.
-Сообщение называет каждый неудавшийся календарь и его ошибку; `details.calendars` содержит результат каждого
-календаря, с `error` у неудавшихся. Календари, которые синхронизировались, сохранены, и повторный `sync` безопасен.
+Если календарь не удалось синхронизировать, календари, которые синхронизировались, сохраняются и попадают в ответ. В
+ответе стоит `meta.complete: false` и замечание `sync.partial` для каждого неудавшегося календаря; `synced` содержит
+результат каждого календаря, с `error` у неудавшихся, а `hint` их называет. Повторный `sync` безопасен.
 
 Повторения повторяющегося события читаются по отдельности, включая отменённые. Удалённое прошедшее событие
 сохраняет свою запись; удалённое будущее событие помечается как отменённое. Для `--embed` нужна модель для поиска по
@@ -403,8 +403,8 @@ gcal personal schedule command feeds --every 1h -- sync
 
 `sync` читает Google, а затем каждую ленту; у него нет параметра, чтобы читать только ленты. Лента, которая не
 изменилась, стоит одного короткого запроса, потому что `sync` сначала спрашивает сервер.
-`gcal personal schedule remove feeds` удаляет таймер. Если лента не читается, `sync` завершается с `sync.partial`, а
-остальные календари всё равно сохраняются.
+`gcal personal schedule remove feeds` удаляет таймер. Если лента не читается, `sync` отвечает с замечанием `sync.partial` о
+ней, а остальные календари всё равно сохраняются.
 
 Установка таймера не разрешает запуск вашей программы. Если `events.remind.hook` ещё не `allow`, команда говорит об
 этом и даёт строку `config set`; пока вы её не выполните, каждый запуск отказывается запускать программу.
@@ -531,12 +531,12 @@ gcal personal events import Team planning.ics
 
 ```sh
 gcal personal calendars busy person:ana@example.com                # this week; busy times only, never what fills them
-gcal personal calendars busy start>=2026-11-02 end<=2026-11-06 person:ana@example.com --duration-minutes 30
-gcal personal calendars busy start>=today end<=today calendar:3 --duration-minutes 60 --hours 10:00-16:00
+gcal personal calendars busy starts_at>=2026-11-02 ends_at<=2026-11-06 person:ana@example.com --duration-minutes 30
+gcal personal calendars busy starts_at>=today ends_at<=today calendar:3 --duration-minutes 60 --hours 10:00-16:00
 ```
 
-- Запрос задаёт окно через собственные `start` и `end` ответа: `start>=<date>` — с начала этого дня,
-  `end<=<date>` — до его конца. Без `start` окно начинается сегодня; без `end` оно длится семь дней.
+- Запрос задаёт окно через собственные `starts_at` и `ends_at` ответа: `starts_at>=<date>` — с начала этого дня,
+  `ends_at<=<date>` — до его конца. Без `starts_at` окно начинается сегодня; без `ends_at` оно длится семь дней.
 - `person:<email>` и `calendar:<id>` можно повторять, по одному условию на каждый: спрашиваются все названные. Без
   `calendar:` спрашиваются все синхронизируемые календари.
 - `--duration-minutes` добавляет `slots`: промежутки не короче указанного, свободные у всех, в рабочие часы
@@ -640,9 +640,10 @@ gcal personal events delete event:42 --following --no-notify
   [быстрое добавление](https://developers.google.com/workspace/calendar/api/v3/reference/events/quickAdd) Google,
   которое находит в ней название, день, время и место так же, как быстрое добавление в самом Google Календаре. Другие
   параметры полей с ним не используются. Её ключ — `events.create`, а также `api.calendar.events.quickAdd`. Без
-  `--notify` никому не приходит письмо. Id события выбирает Google, поэтому `--operation-id` не применяется: если ответ
-  потерялся (`outcome_unknown`), запустите `sync` и посмотрите `events list changed_at>=today`, прежде чем добавлять
-  событие снова, иначе оно может появиться дважды.
+  `--notify` никому не приходит письмо. Id события выбирает Google. Если ответ потерялся (`outcome_unknown`), в нём есть
+  `operation_id`: запустите ту же строку снова с `--operation-id <that id>`, и gcal сначала поищет событие, которое этот
+  аккаунт создал в том календаре с тех пор и в названии которого все слова есть в строке. Он возьмёт это событие, а не
+  добавит ещё одно, и откажет, если подходят два.
 
 ## Вывод для скриптов
 

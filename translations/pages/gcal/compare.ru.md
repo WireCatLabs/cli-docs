@@ -7,8 +7,8 @@ title: "Сравнение с другими инструментами"
 
 `gcal` — это командная строка и MCP-сервер для Google Календаря вашего собственного аккаунта. Здесь он стоит рядом с
 другими командными строками, MCP-серверами и коннекторами ассистентов, которые читают Google Календарь, чтобы вы
-могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.19.0, его команд и
-исходного кода, проверенных 2 ноября 2026 года; они проверяются заново при каждом выпуске. Оценки для остальных
+могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.20.0, его команд и
+исходного кода, проверенных 5 ноября 2026 года; они проверяются заново при каждом выпуске. Оценки для остальных
 инструментов взяты из их собственных README, документации и исходного кода, проверенных 27 октября 2026 года. Ни в
 один инструмент не выполнялся вход, и ничего не проверялось вживую; инструмент может делать больше, чем говорят его
 страницы.
@@ -64,7 +64,7 @@ title: "Сравнение с другими инструментами"
 | Текст из приглашения помечен для агента как данные, а не указания | ✅ | n/a | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ | ➖ |
 | Инструкции для агентов, работающих в терминале | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | n/a |
 | **Подготовка** | | | | | | |
-| Начать без собственного проекта Google Cloud | ❌ | [❌](https://github.com/insanum/gcalcli#initial-setup) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#quick-start) | [❌](https://github.com/nspady/google-calendar-mcp#google-cloud-setup) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
+| Начать без собственного проекта Google Cloud | 🟡 | [❌](https://github.com/insanum/gcalcli#initial-setup) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#quick-start) | [❌](https://github.com/nspady/google-calendar-mcp#google-cloud-setup) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Работает из claude.ai в браузере и на телефоне | 🟡 | [❌](https://github.com/insanum/gcalcli#readme) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 
 | | gcal | gcalcli | gog | Workspace MCP | google-calendar-mcp | Claude |
@@ -89,9 +89,11 @@ title: "Сравнение с другими инструментами"
   время: у неё есть время начала и конца, и она не отменена, не отклонена, не отмечена как «свободен» и не является
   блоком места работы. События на весь день и встречи встык никогда не пересекаются. С `--source all` встречи
   сравниваются между вашими аккаунтами Google, так что рабочая встреча, которая совпала с личной, найдётся.
-- **Ваше собственное приложение Google.** Сейчас каждый пользователь `gcal` создаёт проект Google Cloud и клиент OAuth
-  и передаёт `gcal` файл клиента при входе. [Создайте своё приложение Google](./installation.md#make-your-own-google-app)
-  шаг за шагом проводит по Google Cloud Console.
+- **Приложение Google от WireCat.** С версии 0.20.0 `gcal` входит через собственное приложение Google от WireCat,
+  поэтому проект Google Cloud не нужен. Google ещё не проверил это приложение: он может показать страницу «unverified
+  app» и пускает всего 100 пользователей, общих с другими инструментами WireCat для Google. Поэтому в этой строке
+  частично. Своё приложение этот предел ни с кем не делит, а руководство [Создайте своё приложение
+  Google](./installation.md#make-your-own-google-app) шаг за шагом проводит по Google Cloud Console.
 - **Даты словами.** `events list` принимает в условиях по полям дату или время, например
   `ends_at>=today starts_at<=2026-11-06`, слова `today` и `yesterday` и отрезки в прошлое вроде `7d`. «Неделю» и
   «следующую пятницу» он не понимает, и так задумано: даты пишет агент, а точную дату нельзя прочитать неверно.

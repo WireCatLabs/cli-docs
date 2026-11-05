@@ -55,15 +55,17 @@ En Windows, en PowerShell ejecutado como administrador:
 & "$env:ProgramFiles\Tailscale\tailscale.exe" funnel 8765
 ```
 
-Segunda ventana, con tu usuario normal, sin `sudo`:
+Segunda ventana, con tu usuario normal, sin `sudo`. Todos los comandos de abajo usan
+`https://laptop.example-tailnet.ts.net` como dirección de ejemplo, que no funciona para nadie: pon en su lugar la
+dirección HTTPS que imprimió tu túnel.
 
 ```sh
-gcal personal mcp serve --http --port 8765 --public-url https://<device>.<network>.ts.net
+gcal personal mcp serve --http --port 8765 --public-url https://laptop.example-tailnet.ts.net
 ```
 
 Responde con la dirección local en la que sirve, la dirección del conector para la aplicación y el código de acceso.
 
-Para ejecutar `gcal` junto a `tg`, `drive` u otra herramienta de WireCat, da a cada servidor su propio puerto local. Después, o bien da a cada uno su propio puerto HTTPS público, por ejemplo un segundo Funnel con `--https=8443 8766` y `gcal personal mcp serve --http --port 8766 --public-url https://<device>.<network>.ts.net:8443` (Funnel admite los puertos públicos `443`, `8443` y `10000`), o bien comparte una dirección con una ruta por herramienta: `--public-url https://<device>.<network>.ts.net/gcal`, con el `--set-path /gcal` de Funnel apuntando a ese puerto. La dirección del conector es entonces `…/gcal/mcp`. Consulta la [referencia del comando Funnel](https://tailscale.com/docs/reference/tailscale-cli/funnel).
+Para ejecutar `gcal` junto a `tg`, `drive` u otra herramienta de WireCat, da a cada servidor su propio puerto local. Después, o bien da a cada uno su propio puerto HTTPS público, por ejemplo un segundo Funnel con `--https=8443 8766` y `gcal personal mcp serve --http --port 8766 --public-url https://laptop.example-tailnet.ts.net:8443` (Funnel admite los puertos públicos `443`, `8443` y `10000`), o bien comparte una dirección con una ruta por herramienta: `--public-url https://laptop.example-tailnet.ts.net/gcal`, con el `--set-path /gcal` de Funnel apuntando a ese puerto. La dirección del conector es entonces `…/gcal/mcp`. Consulta la [referencia del comando Funnel](https://tailscale.com/docs/reference/tailscale-cli/funnel).
 
 ### Alternativa: Cloudflare Tunnel
 
@@ -80,7 +82,7 @@ Un Quick Tunnel temporal (`cloudflared tunnel --url …`) no funciona: [los Quic
 Para que el servidor siga funcionando después de cerrar su ventana, inícialo en segundo plano. Responde en cuanto escucha, con la dirección del conector y el código de acceso:
 
 ```sh
-gcal personal mcp server start --port 8765 --public-url https://<device>.<network>.ts.net
+gcal personal mcp server start --port 8765 --public-url https://laptop.example-tailnet.ts.net
 gcal personal mcp server status   # running, port, connector address, the current login code, apps logged in
 gcal personal mcp server stop     # stops only a server that `mcp server start` started
 ```
@@ -91,7 +93,7 @@ Un servidor puede atender varios perfiles: `gcal mcp serve --http --profiles wor
 
 ## Conecta la aplicación
 
-La dirección para la aplicación es tu URL pública con `/mcp` al final, por ejemplo `https://<device>.<network>.ts.net/mcp`. Añádela como conector MCP remoto:
+La dirección para la aplicación es tu URL pública con `/mcp` al final, por ejemplo `https://laptop.example-tailnet.ts.net/mcp`. Añádela como conector MCP remoto:
 
 - **ChatGPT:** abre **Plugins**, elige **+ Add custom MCP server** y crea un plugin con la dirección `/mcp` y OAuth, como describe la [guía de conexión de OpenAI](https://developers.openai.com/api/docs/guides/custom-mcp-server). Elige el registro dinámico de clientes (DCR) cuando se ofrezca y luego instala el plugin antes de usarlo en una conversación.
 - **Claude:** añade un conector personalizado con esta dirección, como se describe en [conectores personalizados de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
@@ -105,8 +107,8 @@ El servidor ofrece las mismas tres herramientas que por la entrada y la salida e
 El servidor no puede ver si la aplicación te preguntó antes de una llamada. Repite `--permission key=level` para endurecer los permisos solo para este proceso del servidor:
 
 ```sh
-gcal personal mcp serve --http --public-url https://<device>.<network>.ts.net --permission api=readonly
-gcal personal mcp serve --http --public-url https://<device>.<network>.ts.net --permission api.calendar.acl=deny
+gcal personal mcp serve --http --public-url https://laptop.example-tailnet.ts.net --permission api=readonly
+gcal personal mcp serve --http --public-url https://laptop.example-tailnet.ts.net --permission api.calendar.acl=deny
 ```
 
 `api=readonly` rechaza cualquier cambio, también en los eventos; `api.calendar.acl=deny` impide que la aplicación comparta un calendario. Un ajuste así solo endurece: nunca afloja el nivel del perfil. Para permitir más, cambia los permisos del perfil ([ajustes](./configuration.md#permissions)). `GCAL_READ_ONLY=1` en el entorno del servidor también rechaza cualquier cambio.
@@ -128,7 +130,7 @@ Esas aplicaciones deben iniciar sesión de nuevo con un código nuevo. Esto no c
 
 ## Si no funciona
 
-- **La aplicación dice que no puede conectarse:** abre `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` en un navegador (con una ruta: `…/.well-known/oauth-protected-resource/gcal/mcp`). Debe mostrar un JSON breve. Si no, Funnel no está en marcha, no está activado en tu red de Tailscale o apunta a otro puerto.
+- **La aplicación dice que no puede conectarse:** abre `https://laptop.example-tailnet.ts.net/.well-known/oauth-protected-resource/mcp` en un navegador (con una ruta: `…/.well-known/oauth-protected-resource/gcal/mcp`). Debe mostrar un JSON breve. Si no, Funnel no está en marcha, no está activado en tu red de Tailscale o apunta a otro puerto.
 - **La página de inicio de sesión dice «Too many wrong codes»:** espera treinta segundos y escribe el código más reciente. Si no los escribiste tú, alguien encontró tu dirección: ejecuta `gcal personal mcp revoke` y plantéate un nuevo nombre de dispositivo en Tailscale.
 - **«already serves MCP over HTTP for this profile»:** ya hay un servidor para este perfil, quizá en segundo plano. `gcal personal mcp server status` dice dónde; `mcp server stop` detiene uno que inició `server start`.
 - **«port 8765 is in use»:** otro programa lo ocupa; pasa otro `--port` y apunta el túnel a él.

@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.19.0, its commands and its source, checked on 2 November 2026;
+your job. The marks for `gcal` come from its release 0.20.0, its commands and its source, checked on 5 November 2026;
 they are checked again at each release. The marks for the other tools come from their own
 READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
@@ -60,7 +60,7 @@ The tools:
 | Text from an invitation is marked for the agent as not to be obeyed | ✅ | n/a | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ | ➖ |
 | Instructions for agents that use a terminal | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/agent-skills.md) | ➖ | ➖ | n/a |
 | **Setup** | | | | | | |
-| Start without creating your own Google Cloud project | ❌ | [❌](https://github.com/insanum/gcalcli#initial-setup) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#quick-start) | [❌](https://github.com/nspady/google-calendar-mcp#google-cloud-setup) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
+| Start without creating your own Google Cloud project | 🟡 | [❌](https://github.com/insanum/gcalcli#initial-setup) | [❌](https://github.com/openclaw/gogcli#readme) | [❌](https://github.com/taylorwilsdon/google_workspace_mcp#quick-start) | [❌](https://github.com/nspady/google-calendar-mcp#google-cloud-setup) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Works from claude.ai on the web and the phone | 🟡 | [❌](https://github.com/insanum/gcalcli#readme) | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [🟡](https://github.com/nspady/google-calendar-mcp#readme) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 
 | | gcal | gcalcli | gog | Workspace MCP | google-calendar-mcp | Claude |
@@ -83,9 +83,11 @@ Notes on the `gcal` column:
   cancelled, declined, marked free or a working-location block. All-day events and back-to-back meetings never
   overlap. With `--source all` it compares meetings across your Google accounts, so a work meeting that clashes with a
   personal one is found.
-- **Your own Google app.** Today every user of `gcal` makes a Google Cloud project and an OAuth client, and gives
-  `gcal` the client file at sign-in. [Make your own Google app](./installation.md#make-your-own-google-app) walks
-  through Google Cloud Console step by step.
+- **WireCat's Google app.** Since 0.20.0, `gcal` signs in through WireCat's own Google app, so you need no Google
+  Cloud project. Google has not verified that app yet: it may show an "unverified app" page, and it allows 100 users in
+  total, shared with WireCat's other Google tools. So this row is partly. Your own app does not share that limit, and the guide
+  [Make your own Google app](./installation.md#make-your-own-google-app) walks through Google Cloud Console step by
+  step.
 - **Dates in words.** `events list` takes a date or a time in its field terms, such as
   `ends_at>=today starts_at<=2026-11-06`, the words `today` and `yesterday`, and amounts in the past such as `7d`.
   It does not read "week" or "next friday", by design: an agent writes the dates, and an exact date is never read

@@ -92,9 +92,10 @@ donde se quedó el anterior. El límite es de 15 minutos en una terminal y de 45
 MCP; `--timeout` lo cambia, y el número de peticiones a Google se ajusta a él. `--max-pages <n>` reduce todavía más ese
 número. `--rescan` vuelve a empezar todos los calendarios.
 
-Cuando un calendario no se puede sincronizar, `sync` no imprime nada en stdout y termina con `sync.partial`. El mensaje
-nombra cada calendario que falló y su error; `details.calendars` contiene el resultado de cada calendario, con `error`
-en los que fallaron. Los calendarios que sí se sincronizaron quedan guardados, y volver a ejecutar `sync` es seguro.
+Cuando un calendario no se puede sincronizar, los calendarios que sí se sincronizaron quedan guardados y salen en la
+respuesta. La respuesta lleva `meta.complete: false` y un aviso `sync.partial` por cada calendario que falló; `synced`
+contiene el resultado de cada calendario, con `error` en los que fallaron, y `hint` los nombra. Volver a ejecutar `sync`
+es seguro.
 
 Los casos de un evento periódico se leen uno a uno, incluidos los cancelados. Un evento borrado del pasado conserva su
 registro; un evento futuro borrado se marca como cancelado. `--embed` necesita el modelo de significado, que `gcal`
@@ -407,7 +408,7 @@ gcal personal schedule command feeds --every 1h -- sync
 
 `sync` lee Google y luego cada feed; no tiene opción para leer solo los feeds. Un feed que no ha cambiado cuesta una
 petición corta, ya que `sync` pregunta antes al servidor. `gcal personal schedule remove feeds` quita el temporizador.
-Si un feed falla, `sync` falla con `sync.partial` y los demás calendarios se guardan igualmente.
+Si un feed falla, `sync` responde con un aviso `sync.partial` para él y los demás calendarios se guardan igualmente.
 
 Instalar el temporizador no permite tu programa. Si `events.remind.hook` aún no está en `allow`, la orden lo dice y da
 la línea `config set`; hasta que la ejecutes, cada ejecución se niega a arrancar el programa. `GCAL_READ_ONLY` rechaza
@@ -533,12 +534,13 @@ Necesita red y no guarda nada: una persona aparece en la respuesta solo con la d
 
 ```sh
 gcal personal calendars busy person:ana@example.com                # this week; busy times only, never what fills them
-gcal personal calendars busy start>=2026-11-02 end<=2026-11-06 person:ana@example.com --duration-minutes 30
-gcal personal calendars busy start>=today end<=today calendar:3 --duration-minutes 60 --hours 10:00-16:00
+gcal personal calendars busy starts_at>=2026-11-02 ends_at<=2026-11-06 person:ana@example.com --duration-minutes 30
+gcal personal calendars busy starts_at>=today ends_at<=today calendar:3 --duration-minutes 60 --hours 10:00-16:00
 ```
 
-- La consulta nombra la ventana con los propios `start` y `end` de la respuesta: `start>=<date>` desde el inicio de
-  ese día, `end<=<date>` hasta su final. Sin `start` la ventana empieza hoy; sin `end` dura siete días.
+- La consulta nombra la ventana con los propios `starts_at` y `ends_at` de la respuesta: `starts_at>=<date>` desde el
+  inicio de ese día, `ends_at<=<date>` hasta su final. Sin `starts_at` la ventana empieza hoy; sin `ends_at` dura siete
+  días.
 - `person:<email>` y `calendar:<id>` se pueden repetir, un término por cada uno: se pregunta a todos los nombrados. Sin
   `calendar:` se pregunta a todos los calendarios que se sincronizan.
 - `--duration-minutes` añade `slots`: los huecos de al menos esa duración libres para todos, dentro del horario
@@ -642,9 +644,10 @@ gcal personal events delete event:42 --following --no-notify
   [adición rápida](https://developers.google.com/workspace/calendar/api/v3/reference/events/quickAdd) de Google, que
   lee de ella el título, el día, la hora y el lugar como lo hace la adición rápida del propio Google Calendar. No
   admite ninguna otra opción de campo. Su clave es `events.create`, y `api.calendar.events.quickAdd`. No se envía
-  correo a nadie salvo que añadas `--notify`. Google elige el id del evento, así que `--operation-id` no se aplica:
-  cuando se pierde la respuesta (`outcome_unknown`), ejecuta `sync` y mira con `events list changed_at>=today` antes
-  de volver a añadirlo, o puede que lo tengas dos veces.
+  correo a nadie salvo que añadas `--notify`. Google elige el id del evento. Cuando se pierde la respuesta
+  (`outcome_unknown`), esta indica un `operation_id`: ejecuta la misma línea otra vez con `--operation-id <that id>`, y
+  gcal busca primero un evento que esta cuenta haya creado en ese calendario desde entonces y cuyo título tenga todas
+  sus palabras en la línea. Usa ese en lugar de añadir otro, y se niega si dos podrían serlo.
 
 ## Salida para scripts
 
