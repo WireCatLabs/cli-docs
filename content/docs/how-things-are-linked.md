@@ -73,7 +73,7 @@ Every message can point at the earlier message it answers. Each pointer says whe
 
 ## Meeting transcripts
 
-A transcript cue has a `meeting:` reference that retains its meeting and transcript revision. Use it to read the surrounding passage and keep its coverage. A participant can be explicitly linked to a person, and a meeting can have confirmed project membership; a name match alone creates neither link. A participant link does not establish who spoke a cue. [Meeting evidence and links](./zoom.mdx) explains how to inspect these associations before saving a sourced finding.
+A transcript cue has a `meeting:` reference that retains its meeting and transcript revision. Use it to read the surrounding passage and keep its coverage. A participant can be explicitly linked to a person, and a meeting can have confirmed project membership; a name match alone creates neither link. A participant link does not establish who spoke a cue. [Meeting evidence and links](./zm/meetings.md) explains how to inspect these associations before saving a sourced finding.
 
 ## Mentions
 

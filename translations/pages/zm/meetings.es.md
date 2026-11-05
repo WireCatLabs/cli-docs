@@ -8,7 +8,7 @@ con mensajes, archivos y notas relacionados. Tu agente puede preparar un resumen
 que indiquen qué se dijo, cuándo y en qué reunión.
 
 Una transcripción es el texto de la conversación; una grabación contiene el audio o vídeo. Los datos
-de una reunión también incluyen fecha, título y participantes registrados. [Zoom](./zm/index.md)
+de una reunión también incluyen fecha, título y participantes registrados. [Zoom](./index.md)
 obtiene estas fuentes mediante su API o archivos que importas. Participas en las llamadas desde
 Zoom; la herramienta de línea de comandos da al agente acceso a la información guardada.
 
@@ -23,8 +23,8 @@ Busca reuniones sobre Research Example del último mes. Muestra fechas y pasajes
 El agente comprueba los datos, busca en las transcripciones disponibles y abre los pasajes relevantes.
 Una respuesta útil identifica la reunión, fecha, cita o paráfrasis fiel y referencia. Una transcripción
 ausente o una búsqueda vacía no demuestra que la discusión no ocurriera.
-[Buscar con fuentes](./zm/search.md) explica palabras, referencias y cobertura del índice;
-[buscar por significado](./zm/topic-search.md) necesita un componente de búsqueda configurado.
+[Buscar con fuentes](./search.md) explica palabras, referencias y cobertura del índice;
+[buscar por significado](./topic-search.md) necesita un componente de búsqueda configurado.
 
 ## Relacionar reuniones con otras fuentes
 
@@ -42,12 +42,12 @@ encontrar pasajes con fuentes, incluso en reuniones aún sin vincular. También 
 confirmadas y etiquetas junto con otras fuentes. Revisa los pasajes antes de aceptar una asociación.
 La búsqueda de alias lee el índice existente: tras importar transcripciones, ejecuta primero una
 búsqueda normal de palabras para indexarlas. Revisas los vínculos dudosos y las nuevas etiquetas.
-Si partes de una reunión y no conoces su proyecto, [sugiere proyectos existentes](./zm/search.md#suggest-projects-for-one-meeting)
+Si partes de una reunión y no conoces su proyecto, [sugiere proyectos existentes](./search.md#suggest-projects-for-one-meeting)
 a partir del título y pasajes citados. Usa `meeting` del resultado como referencia principal;
 la `ref` de transcripción señala un pasaje. Las sugerencias siguen sin confirmar hasta revisarlas.
 
-Usa [Memo](./memo/index.md) para notas, etiquetas, hechos y proyectos, [organizar fuentes](./organize.md)
-para el enfoque común y [Google Drive](./drive/index.md) para importar los documentos elegidos.
+Usa [Memo](../memo/index.md) para notas, etiquetas, hechos y proyectos, [organizar fuentes](../organize.md)
+para el enfoque común y [Google Drive](../drive/index.md) para importar los documentos elegidos.
 Puedes vincular un evento de calendario existente; una próxima reunión de Zoom no implica
 sincronización con un calendario de Google u Outlook.
 
@@ -57,16 +57,16 @@ sincronización con un calendario de Google u Outlook.
 Busca mi próxima reunión Zoom con Alice Example. Prepara un informe con reuniones anteriores de la serie, fuentes del proyecto y contexto de participantes. Lista decisiones confirmadas, preguntas abiertas y posibles seguimientos con evidencia. Si proyecto o persona es incierto, muestra candidatos y motivos. No cambies reunión ni vínculos guardados.
 ```
 
-El agente primero [descubre una página acotada de posibles series](./zm/usage.md#find-a-scheduled-meeting-series)
+El agente primero [descubre una página acotada de posibles series](./usage.md#find-a-scheduled-meeting-series)
 en Zoom, verifica la serie elegida y busca contexto guardado. Fechas antiguas o ausentes son pistas,
 no pruebas de una llamada futura. La lista no incluye todas las invitaciones del calendario. Comprueba que el resumen se refiere
 a la reunión correcta y separa decisiones confirmadas de sugerencias. Pide que indique períodos,
-transcripciones o documentos ausentes. [Próximas reuniones de Zoom](./zm/remote-meetings.md) describe
+transcripciones o documentos ausentes. [Próximas reuniones de Zoom](./remote-meetings.md) describe
 la agenda y las invitaciones; el agente prepara el resumen con las fuentes que eliges.
 En una serie recurrente, confirma la siguiente ocurrencia concreta: la fecha inicial de la serie
 no verifica la próxima llamada. Si faltan permisos para comprobarla, marca la fecha como no verificada.
 
-Para una serie elegida, [reúne contexto con fuentes](./zm/usage.md#prepare-for-an-upcoming-meeting)
+Para una serie elegida, [reúne contexto con fuentes](./usage.md#prepare-for-an-upcoming-meeting)
 con `zm personal meetings prepare <series-id> --json`. Lee la próxima fecha en Zoom y une historial guardado
 acotado, participantes observados, proyectos confirmados, hechos aceptados y tareas con fuentes
 directas. Incluye también llamadas guardadas relacionadas mediante vínculos existentes a personas
@@ -87,7 +87,7 @@ no aporta otra prueba. Revisa indexación pendiente, límites de salida y
 `project_evidence.continuation`; continúa con la búsqueda existente del proyecto incluso tras una
 página vacía si quedan resultados. Esto no deduce ni confirma el proyecto de la próxima llamada.
 
-También puedes [elegir cuentas de mensajes/correo y carpetas de documentos guardadas](./zm/configuration.md#select-communications-for-preparation)
+También puedes [elegir cuentas de mensajes/correo y carpetas de documentos guardadas](./configuration.md#select-communications-for-preparation)
 para este perfil. Pide al agente que incluya esas fuentes con palabras literales; ninguna se elige
 automáticamente. El permiso cubre toda la cuenta o carpeta, así que elige el alcance adecuado.
 Los pasajes aparecen separados en `communications.items`; `communications.coverage` conserva
@@ -98,7 +98,7 @@ Los documentos, el correo y los mensajes no se consultan sin pedir las fuentes c
 explícitamente. Los vocabularios de proyectos no elegidos siguen sin consultar; el agente puede
 investigarlos aparte. La preparación no completa índices ni descarga transcripciones ausentes,
 y coincidir nombres no vincula personas. Si hay lagunas, comprueba los
-[límites y continuación](./zm/usage.md#include-selected-messages-mail-and-documents).
+[límites y continuación](./usage.md#include-selected-messages-mail-and-documents).
 
 ## Guardar los resultados útiles
 
@@ -108,7 +108,7 @@ un vínculo de identidad. Reutiliza el proyecto y las etiquetas existentes cuand
 
 Si el agente puede ejecutar órdenes en una terminal, pídele que prepare las decisiones y tareas siguientes de la reunión como un lote para revisar en Memo. La reunión ya debe tener un vínculo confirmado con el proyecto. Preparar el lote no crea hechos ni tareas: lee los pasajes citados y la vista previa, y confirma personalmente las propuestas que quieras conservar. Las demás propuestas nuevas se rechazan juntas.
 
-Una repetición exacta reutiliza el resultado de la revisión y los registros aceptados. Si cambian la transcripción o los vínculos del proyecto antes de revisar, pide otra vista previa. Un seguimiento inferido se distingue de un compromiso explícito, y las fechas o personas asignadas desconocidas quedan sin completar. Consulta [Revisar conclusiones de reuniones en Memo](./memo/memories.md#meeting-findings) para las órdenes del propietario y los límites.
+Una repetición exacta reutiliza el resultado de la revisión y los registros aceptados. Si cambian la transcripción o los vínculos del proyecto antes de revisar, pide otra vista previa. Un seguimiento inferido se distingue de un compromiso explícito, y las fechas o personas asignadas desconocidas quedan sin completar. Consulta [Revisar conclusiones de reuniones en Memo](../memo/memories.md#meeting-findings) para las órdenes del propietario y los límites.
 
 ## Más control
 
@@ -128,11 +128,11 @@ zm personal meetings scheduled --limit 20 --json
 ```
 
 La búsqueda usa los datos disponibles en el perfil elegido. Si faltan, [descarga o importa las
-transcripciones necesarias](./zm/archive.md) antes de confiar en la respuesta.
+transcripciones necesarias](./archive.md) antes de confiar en la respuesta.
 `zm personal meetings passage` muestra las líneas guardadas cercanas con referencias; no descarga datos
 ausentes de Zoom.
 
 ## Guías relacionadas
 
-Empieza por [configurar Zoom](./zm/installation.md) o continúa con [relacionar y organizar
-fuentes](./organize.md) cuando los pasajes estén disponibles.
+Empieza por [configurar Zoom](./installation.md) o continúa con [relacionar y organizar
+fuentes](../organize.md) cuando los pasajes estén disponibles.

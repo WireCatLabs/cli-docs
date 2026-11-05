@@ -8,7 +8,7 @@ related messages, files and notes. Your agent can turn those sources into a brie
 showing what was said, when and in which meeting.
 
 A transcript is the text of a conversation; a recording is its audio or video. Meeting information
-also includes the date, title and available participant records. [Zoom](./zm/index.md) supplies these
+also includes the date, title and available participant records. [Zoom](./index.md) supplies these
 sources through its API or transcript files you import. You attend calls in Zoom; the command-line
 tool gives your agent access to the saved information.
 
@@ -23,8 +23,8 @@ Find meetings about Research Example from the last month. Show dates and the pas
 The agent checks meeting information, searches available transcripts and opens the matching passages.
 A useful answer gives the meeting, date, quotation or faithful paraphrase and its source reference.
 A missing transcript or an empty search result does not establish that the discussion never happened.
-[Search and evidence](./zm/search.md) explains word search, source references and index coverage;
-[search by meaning](./zm/topic-search.md) needs a configured search component.
+[Search and evidence](./search.md) explains word search, source references and index coverage;
+[search by meaning](./topic-search.md) needs a configured search component.
 
 ## Connect meetings to your other sources
 
@@ -42,12 +42,12 @@ cited meeting candidates, including meetings that have not been linked yet. It a
 membership and related labels alongside the other available sources. Review the cited passages before
 accepting a project association. The alias search reads the existing index; after importing new
 transcripts, run ordinary word search to index them first. You review uncertain links and new labels.
-If you start with one meeting and do not know its project, [suggest existing projects](./zm/search.md#suggest-projects-for-one-meeting)
+If you start with one meeting and do not know its project, [suggest existing projects](./search.md#suggest-projects-for-one-meeting)
 from its title and cited transcript evidence. Use the search hit’s `meeting` field as the parent
 reference; a transcript `ref` identifies a passage. Suggestions remain unconfirmed until reviewed.
 
-Use [Memo](./memo/index.md) for notes, tags, facts and project records, [organising sources](./organize.md)
-for the common approach, and [Google Drive](./drive/index.md) to import the documents you want included.
+Use [Memo](../memo/index.md) for notes, tags, facts and project records, [organising sources](../organize.md)
+for the common approach, and [Google Drive](../drive/index.md) to import the documents you want included.
 An existing calendar event can be linked explicitly; an upcoming Zoom meeting is not itself a
 synchronised Google or Outlook calendar.
 
@@ -57,16 +57,16 @@ synchronised Google or Outlook calendar.
 Find my next Zoom meeting with Alice Example. Prepare a brief from earlier meetings in the series, linked project sources and participant context. List confirmed decisions, open questions and possible follow-ups with evidence. If a project or person is uncertain, show candidates and reasons. Keep the meeting and stored links unchanged.
 ```
 
-The agent first [discovers a bounded page of candidate series](./zm/usage.md#find-a-scheduled-meeting-series)
+The agent first [discovers a bounded page of candidate series](./usage.md#find-a-scheduled-meeting-series)
 in Zoom, then verifies the selected series and searches stored context. Old or missing inventory
 dates are hints, not proof of a future call. This list does not include every calendar invitation. Check that the brief
 names the intended meeting and separates confirmed decisions from suggestions. Ask it to show
-missing periods, transcripts or documents. [Upcoming Zoom meetings](./zm/remote-meetings.md) covers
+missing periods, transcripts or documents. [Upcoming Zoom meetings](./remote-meetings.md) covers
 schedule and invitation reads; your agent assembles the brief from the sources you choose.
 For a recurring series, confirm the actual next occurrence; its original start date alone does not
 verify the next call. If permissions prevent that check, mark the date as unverified.
 
-For one selected series, [prepare cited context](./zm/usage.md#prepare-for-an-upcoming-meeting)
+For one selected series, [prepare cited context](./usage.md#prepare-for-an-upcoming-meeting)
 with `zm personal meetings prepare <series-id> --json`. It reads the upcoming time from Zoom and joins
 bounded stored prior calls, observed people, confirmed projects, accepted facts and directly sourced
 tasks. It also includes related stored calls through existing person links or confirmed projects,
@@ -86,7 +86,7 @@ including unlinked meetings, separately from confirmed project membership. Repea
 across aliases are the same evidence. Check pending indexing, output limits and
 `project_evidence.continuation`; continue with the existing project-evidence search even after an
 empty page when more remains. This does not infer or confirm the upcoming call's project.
-You can also [choose stored message accounts, mail accounts and document folders](./zm/configuration.md#select-communications-for-preparation)
+You can also [choose stored message accounts, mail accounts and document folders](./configuration.md#select-communications-for-preparation)
 for this profile. Ask the agent to include those sources with a literal word query; no source is
 selected automatically. A grant covers a whole account or folder, so choose the scope you intend.
 Preparation returns the excerpts separately in `communications.items`; `communications.coverage`
@@ -96,7 +96,7 @@ statements stay separately cited rather than silently becoming a new accepted de
 Documents, mail and messages are not searched unless explicitly requested through those configured
 sources. Unselected project vocabularies are not searched; the agent can investigate them separately.
 Preparation neither fills missing indexes nor downloads absent transcripts, and matching names
-never creates a person link. See [source limits and continuation](./zm/usage.md#include-selected-messages-mail-and-documents)
+never creates a person link. See [source limits and continuation](./usage.md#include-selected-messages-mail-and-documents)
 when the brief has gaps.
 
 ## Keep useful findings afterwards
@@ -107,7 +107,7 @@ saving an identity link. Reuse an existing project and label when they fit.
 
 With terminal access, your agent can stage the meeting's decisions and follow-up tasks as a review batch in Memo. The meeting must already have a confirmed project link. Staging creates no facts or tasks: read the cited passages and the preview, then personally confirm the candidates you want to keep. The other new candidates are rejected together.
 
-An exact retry reuses its receipt and accepted records. If the transcript or project links change before review, ask for a new preview. An inferred follow-up stays distinguished from an explicit commitment, and unknown dates or assignees stay absent. See [Review meeting findings in Memo](./memo/memories.md#meeting-findings) for the owner commands and limits.
+An exact retry reuses its receipt and accepted records. If the transcript or project links change before review, ask for a new preview. An inferred follow-up stays distinguished from an explicit commitment, and unknown dates or assignees stay absent. See [Review meeting findings in Memo](../memo/memories.md#meeting-findings) for the owner commands and limits.
 
 ## More control
 
@@ -127,11 +127,11 @@ zm personal meetings scheduled --limit 20 --json
 ```
 
 Search uses the data available in the selected profile. If it is missing, [pull or import the
-required transcripts](./zm/archive.md) before relying on the answer.
+required transcripts](./archive.md) before relying on the answer.
 `zm personal meetings passage` shows the surrounding stored lines with source references; it does not fetch
 missing Zoom data.
 
 ## Related guides
 
-Start with [Zoom setup](./zm/installation.md), or continue with [connecting and organising your
-sources](./organize.md) once the meeting passages are available.
+Start with [Zoom setup](./installation.md), or continue with [connecting and organising your
+sources](../organize.md) once the meeting passages are available.

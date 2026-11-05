@@ -4,7 +4,7 @@ description: "Conecta un buzón con la herramienta mail, busca después en Memo 
 ---
 
 Esta guía explica cómo WireCat incorpora correo al contexto de tu agente: conecta un buzón con la
-[herramienta mail](./mail/index.md) y encuentra sus mensajes en Memo junto a tus notas y conversaciones.
+[herramienta mail](./index.md) y encuentra sus mensajes en Memo junto a tus notas y conversaciones.
 Úsala cuando quieras encontrar una decisión en el correo o preparar una conversación.
 
 Después de seguir la guía, podrás:
@@ -20,10 +20,10 @@ mensajes descargado. Memo no cambia tu buzón.
 
 ## Antes de empezar
 
-[Instala Mail](./mail/installation.md) y prepara el buzón: activa IMAP y crea una contraseña de aplicación
-(una contraseña aparte para un solo programa, que puedes revocar). Los [pasos para preparar el buzón](./mail/providers.md)
-están descritos para cada proveedor. Para buscar correo, [instala Memo con la guía de notas](./memo/installation.md).
-No necesitas importar una carpeta de notas. Usa un <DocTerm term="local-agent" lang="es" label="agente de IA local" />
+[Instala Mail](./installation.md) y prepara el buzón: activa IMAP y crea una contraseña de aplicación
+(una contraseña aparte para un solo programa, que puedes revocar). Los [pasos para preparar el buzón](./providers.md)
+están descritos para cada proveedor. Para buscar correo, [instala Memo con la guía de notas](../memo/installation.md).
+No necesitas importar una carpeta de notas. Usa un agente de IA local
 en el mismo ordenador. El historial de mensajería es opcional, pero debe descargarse antes si lo necesitas en la misma respuesta.
 
 ## Añade correo
@@ -48,7 +48,7 @@ mail ya status
 `sync` lee el correo nuevo al almacén compartido y omite el que ya tiene. Un buzón grande no cabe en una sola ejecución:
 si `sync` responde `state: partial`, ejecútalo de nuevo, y `mail ya status` muestra cuánto ha avanzado. Para mantener
 el buzón al día, prográmalo: `mail ya schedule command mail-ya --every 5m -- sync`. Las carpetas, los límites y el resto
-de comandos están en el [uso diario de mail](./mail/usage.md).
+de comandos están en el [uso diario de mail](./usage.md).
 
 Memo no necesita ningún ajuste para este correo. Lee el mismo almacén, así que `memo search mail` lo encuentra al
 momento. Los resultados identifican los buzones por su dirección, como `you@example.com`. Las direcciones que vincules
@@ -59,7 +59,7 @@ la búsqueda por significado, así que `tg personal search conversations` y `max
 
 Memo aún puede importar correo con Himalaya, un programa de correo independiente. Esa importación antigua se conserva
 para configuraciones existentes y se eliminará; para cuentas nuevas usa `mail` y consulta la
-[importación antigua](./memo/mail.md) solo si ya dependes de ella.
+[importación antigua](../memo/mail.md) solo si ya dependes de ella.
 
 ## Outlook.com y Microsoft 365
 
@@ -88,7 +88,7 @@ de Microsoft de WireCat ya viene incluida, así que no registras nada.
 
 En una cuenta de trabajo o de centro educativo, puede que el administrador deba permitir la aplicación. Si Microsoft lo
 indica, pídele que dé su consentimiento. Para enviar también hace falta "Authenticated SMTP" activado en el buzón; leer
-funciona sin él. Consulta [la guía para conectar Outlook](./mail/outlook.md#work-or-school-account-microsoft-365), que incluye el enlace para el administrador.
+funciona sin él. Consulta [la guía para conectar Outlook](./outlook.md#work-or-school-account-microsoft-365), que incluye el enlace para el administrador.
 
 ## Vincula el correo a la misma persona
 
@@ -106,7 +106,7 @@ memo context telegram:"Rin Example" --json
 Para MAX, usa `max personal contacts link` con el ID o nombre de la persona. Comprueba las identidades
 y referencias devueltas. Un nombre parecido no demuestra identidad. Si hay varias cuentas
 del proveedor, usa `memo context telegram:"Rin Example" --source telegram:1 --json` con el ID de cuenta
-que utilizas. Consulta [vincular y separar personas](./people.md#link-your-accounts).
+que utilizas. Consulta [vincular y separar personas](../people.md#link-your-accounts).
 
 ## Busca en tu correo
 
@@ -145,7 +145,7 @@ también a los remitentes del correo guardado, como mucho una vez al día, y un 
 `--json` lleva el `sender_score` de su remitente. El correo de un
 remitente con indicios de fraude, como una marca en el nombre enviada desde otro dominio o un dominio registrado
 en los últimos seis meses, aparece después del resto; un dominio al que has escrito nunca se mueve, y
-`--plain-order` mantiene el orden normal. Una puntuación por correo que nunca abres solo indica un boletín. Consulta [qué significa cada señal](./memo/mail.md#choose-what-to-import).
+`--plain-order` mantiene el orden normal. Una puntuación por correo que nunca abres solo indica un boletín. Consulta [qué significa cada señal](../memo/mail.md#choose-what-to-import).
 
 ## Etiqueta correos y guarda notas sobre ellos
 
@@ -166,8 +166,8 @@ no cambian las de Gmail ni los indicadores del buzón. Para guardar una valoraci
 memo notes add 'Waiting for a revised quote' --subject 'msg:email/you%40example.com/12345/67890' --json
 ```
 
-Consulta [crear, editar y exportar notas](./memo/notes.md#write-your-own-notes) y
-[etiquetar notas, personas y mensajes](./memo/tags.md) para el proceso completo.
+Consulta [crear, editar y exportar notas](../memo/notes.md#write-your-own-notes) y
+[etiquetar notas, personas y mensajes](../memo/tags.md) para el proceso completo.
 
 ## Comprueba el resultado
 
@@ -183,5 +183,5 @@ Un resultado vacío de una importación parcial no demuestra que no hubiera acue
 - **Hay resultados de otro buzón:** comprueba las referencias y conserva la dirección correcta.
 - **Falta correo en el contexto de una persona:** comprueba la dirección exacta, su enlace y el historial importado.
 
-Continúa con [notas y etiquetas de fuentes](./memo/notes.md#write-your-own-notes) para guardar
+Continúa con [notas y etiquetas de fuentes](../memo/notes.md#write-your-own-notes) para guardar
 contexto propio sobre el correo que encontraste.

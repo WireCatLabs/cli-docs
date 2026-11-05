@@ -53,7 +53,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     const drive = roots.indexOf(`/${lang}/docs/drive`)
     expect(drive).toBeGreaterThan(-1)
     expect(roots[drive + 1]).toBe(`/${lang}/docs/zm`)
-    await expect(page.locator(`#nd-sidebar a[href="/${lang}/docs/zoom"]`)).toHaveText(titles[lang])
+    await expect(page.locator(`#nd-sidebar a[href="/${lang}/docs/zm/meetings"]`)).toHaveText(titles[lang])
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
 
@@ -92,9 +92,9 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
   })
 
-  test(`${lang}: Meetings keeps its address and readable cross-source workflow`, async ({ page, request }) => {
+  test(`${lang}: Meetings keeps readable cross-source workflow`, async ({ page, request }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto(`/${lang}/docs/zoom`)
+    await page.goto(`/${lang}/docs/zm/meetings`)
     await expect(page.getByRole("heading", { level: 1, name: titles[lang], exact: true })).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/zm/search"]`)).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/drive"]`)).toBeVisible()
@@ -102,7 +102,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(page.locator("main")).toContainText('zm personal search meetings "launch decision"')
     await expect(page.locator("main")).toContainText("zm personal meetings passage meeting:3/15/20/4")
     const prefix = lang === "en" ? "" : `${lang}/`
-    const markdown = await request.get(`/llms.mdx/docs/${prefix}zoom/content.md`)
+    const markdown = await request.get(`/llms.mdx/docs/${prefix}zm/meetings/content.md`)
     expect(markdown.ok()).toBe(true)
     const text = await markdown.text()
     expect(text).toContain("Research Example")

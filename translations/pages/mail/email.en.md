@@ -4,7 +4,7 @@ description: "Connect a mailbox with the mail tool, then search it in Memo and l
 ---
 
 This guide explains how WireCat brings email into your agent's context: connect a mailbox with the
-[mail tool](./mail/index.md), then find its messages in Memo next to your notes and chats.
+[mail tool](./index.md), then find its messages in Memo next to your notes and chats.
 Use it when you want to find a decision in email or prepare for a conversation.
 
 After following the guide, you will be able to:
@@ -20,10 +20,10 @@ downloaded messenger history. Memo does not change your mailbox.
 
 ## Before you start
 
-[Install Mail](./mail/installation.md) and prepare the mailbox: turn on IMAP and make an app password
-(a separate password for one program that you can revoke). The [mailbox setup steps](./mail/providers.md)
-list this for each provider. [Install Memo using the notes guide](./memo/installation.md) to search mail.
-You do not need to import a notes folder. Use a <DocTerm term="local-agent" lang="en" label="local AI agent" /> on the
+[Install Mail](./installation.md) and prepare the mailbox: turn on IMAP and make an app password
+(a separate password for one program that you can revoke). The [mailbox setup steps](./providers.md)
+list this for each provider. [Install Memo using the notes guide](../memo/installation.md) to search mail.
+You do not need to import a notes folder. Use a local AI agent on the
 same computer. Messenger history is optional, but must already be downloaded if you want it in the same answer.
 
 ## Add email
@@ -47,7 +47,7 @@ mail ya status
 `session start` finds the server, checks the app password and keeps it in the system keyring. `sync` reads new mail
 into the shared store and skips mail it already has. A large mailbox does not fit in one run: when `sync` reports
 `state: partial`, run it again, and use `mail ya status` to see how far it got. To keep the mailbox current, schedule it:
-`mail ya schedule command mail-ya --every 5m -- sync`. See [everyday use of mail](./mail/usage.md) for folders,
+`mail ya schedule command mail-ya --every 5m -- sync`. See [everyday use of mail](./usage.md) for folders,
 limits and the other commands.
 
 Memo needs no setting for this mail. It reads the same store, so `memo search mail` finds it at once. Search results
@@ -58,7 +58,7 @@ The text of a readable attachment is kept with its email and found with it. Memo
 meaning, so `tg personal search conversations` and `max personal search conversations` can find it.
 
 Memo can still import mail through Himalaya, a separate mail program. That older import is kept for existing
-setups and will be removed; use `mail` for new accounts and see [the older import](./memo/mail.md) only if you
+setups and will be removed; use `mail` for new accounts and see [the older import](../memo/mail.md) only if you
 already rely on it.
 
 ## Outlook.com and Microsoft 365
@@ -87,7 +87,7 @@ Microsoft app is built in, so you register nothing.
 
 For a work or school account, your admin may need to allow the app. If Microsoft says so, ask the admin to grant
 consent. Sending also needs "Authenticated SMTP" on for the mailbox; reading works without it. See
-[the guide to connect Outlook](./mail/outlook.md#work-or-school-account-microsoft-365), which has the admin's link.
+[the guide to connect Outlook](./outlook.md#work-or-school-account-microsoft-365), which has the admin's link.
 
 ## Link email to the same person
 
@@ -103,7 +103,7 @@ memo context telegram:"Rin Example" --json
 For MAX, use `max personal contacts link` with that person's MAX ID or name. Check the returned identities
 and source references. A similar display name is not proof of identity. If several accounts of
 the requested provider are stored, use `memo context telegram:"Rin Example" --source telegram:1 --json`
-with the account ID you actually use. See [linking and unlinking people](./people.md#link-your-accounts).
+with the account ID you actually use. See [linking and unlinking people](../people.md#link-your-accounts).
 
 ## Search your mail
 
@@ -140,7 +140,7 @@ Each sync also scores the senders of
 stored mail, at most once a day, and a search hit in `--json` carries its sender's `sender_score`. Mail from a
 sender with signs of fraud, such as a brand name sent from another domain or a domain registered in the last
 six months, comes after the other results; a domain you have written to is never moved, and `--plain-order`
-keeps the plain order. A score from mail you never open only marks a newsletter. See [what each signal means](./memo/mail.md#choose-what-to-import).
+keeps the plain order. A score from mail you never open only marks a newsletter. See [what each signal means](../memo/mail.md#choose-what-to-import).
 
 ## Label emails and keep notes about them
 
@@ -161,8 +161,8 @@ labels or mailbox flags. To save an assessment linked to one email:
 memo notes add 'Waiting for a revised quote' --subject 'msg:email/you%40example.com/12345/67890' --json
 ```
 
-See [creating, editing and exporting notes](./memo/notes.md#write-your-own-notes) and
-[tagging notes, people and messages](./memo/tags.md) for the full workflow.
+See [creating, editing and exporting notes](../memo/notes.md#write-your-own-notes) and
+[tagging notes, people and messages](../memo/tags.md) for the full workflow.
 
 ## Check the result
 
@@ -178,5 +178,5 @@ An empty result from a partial import does not prove there were no agreements.
 - **Results include another mailbox:** check the source references and keep the intended address.
 - **Mail is missing from person context:** check the exact email identity link and imported history.
 
-Continue with [notes and source labels](./memo/notes.md#write-your-own-notes) to keep your own context
+Continue with [notes and source labels](../memo/notes.md#write-your-own-notes) to keep your own context
 about the mail you found.

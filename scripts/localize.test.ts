@@ -7,11 +7,12 @@ import {
   correctDocumentation,
   fingerprint,
   localizeTool,
-  missingComparisons,
+  missingSitePages,
   reviewedSource,
   siteLinks,
   translationProblems,
   withOriginalAnchors,
+  withSitePages,
 } from "./localize.ts"
 
 describe("released documentation translations", () => {
@@ -180,6 +181,29 @@ describe("site-written comparison pages", () => {
   it("exist in English for every tool in tools.json", () => {
     const root = join(import.meta.dirname, "..")
     const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as { name: string }[]
-    expect(missingComparisons(root, tools)).toEqual([])
+    expect(missingSitePages(root, tools)).toEqual([])
+  })
+})
+
+describe("site-written pages in a tool's sidebar", () => {
+  const release = ["---Start---", "index", "---Tasks---", "usage", "providers", "---Reference---", "commands"]
+
+  it("places a tool's own page after the page it follows, and the comparison at the end of the tasks", () => {
+    expect(withSitePages(release, "mail")).toEqual([
+      "---Start---",
+      "index",
+      "---Tasks---",
+      "usage",
+      "email",
+      "providers",
+      "compare",
+      "---Reference---",
+      "commands",
+    ])
+  })
+
+  it("adds no page twice and no other tool's page", () => {
+    expect(withSitePages(withSitePages(release, "mail"), "mail")).toEqual(withSitePages(release, "mail"))
+    expect(withSitePages(release, "tg")).not.toContain("email")
   })
 })

@@ -73,7 +73,7 @@ Cada mensaje puede apuntar al mensaje anterior al que responde. Cada puntero dic
 
 ## Transcripciones de reuniones
 
-Un fragmento de transcripción tiene una referencia `meeting:` que conserva su reunión y revisión. Úsala para leer el contexto y conservar la cobertura. Un participante puede vincularse explícitamente a una persona y una reunión puede pertenecer a un proyecto confirmado; coincidir en el nombre no crea esos vínculos. Vincular un participante no demuestra quién pronunció un fragmento. [Evidencia y vínculos de reuniones](./zoom.mdx) explica cómo comprobar esas asociaciones antes de guardar un hallazgo con fuentes.
+Un fragmento de transcripción tiene una referencia `meeting:` que conserva su reunión y revisión. Úsala para leer el contexto y conservar la cobertura. Un participante puede vincularse explícitamente a una persona y una reunión puede pertenecer a un proyecto confirmado; coincidir en el nombre no crea esos vínculos. Vincular un participante no demuestra quién pronunció un fragmento. [Evidencia y vínculos de reuniones](./zm/meetings.md) explica cómo comprobar esas asociaciones antes de guardar un hallazgo con fuentes.
 
 ## Menciones
 

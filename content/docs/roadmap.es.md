@@ -19,7 +19,7 @@ decidimos qué viene después.
 
 ## Novedades
 
-Ya funcionan las reuniones de [Zoom](./zoom.mdx) y los documentos de [Google Drive](./drive/index.md).
+Ya funcionan las reuniones de [Zoom](./zm/meetings.md) y los documentos de [Google Drive](./drive/index.md).
 Consulta las [funciones](./features.mdx).
 
 También están disponibles los chats de [WhatsApp](./wa/index.md) y los bots empresariales.
