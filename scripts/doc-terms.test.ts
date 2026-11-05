@@ -34,6 +34,13 @@ describe("documentation explanations for Markdown readers", () => {
     expect(result).not.toContain("<SearchPlayground")
     expect(result).toContain(`https://wirecat.dev/${lang}/docs/search`)
   })
+  it("exports the links diagram as its wide light image", () => {
+    const result = expandDocTerms(
+      '<LinksDiagram\n  alt="Sources [grouped]"\n  caption="Each tool reads one source."\n/>',
+      "en",
+    )
+    expect(result).toBe("![Sources \\[grouped\\]](/screenshots/start-here/how-wirecat-links-wide-light.webp)")
+  })
   it("fails an unknown term so broken hints do not reach published agent docs", () => {
     expect(() => expandDocTerms('<DocTerm term="typo" />', "en")).toThrow("Unknown documentation term")
   })

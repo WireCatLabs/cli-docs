@@ -17,6 +17,7 @@ import {
   InstallationMessengerTabs,
   InstallationOsTabs,
 } from "@/components/installation-guide"
+import { LinksDiagram } from "@/components/links-diagram"
 import { Mermaid } from "@/components/mermaid"
 import { NodeSetupPrompt } from "@/components/node-setup-prompt"
 import { PlatformPaths } from "@/components/platform-paths"
@@ -54,6 +55,7 @@ export function getMDXComponents(components?: MDXComponents) {
     InstallationOsTabs,
     PlatformSetupTabs,
     Screenshot,
+    LinksDiagram,
     DesktopShot,
     Tabs,
     Tab,
