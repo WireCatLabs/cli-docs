@@ -1,5 +1,7 @@
 export const mailDescriptions: Record<string, Record<string, string>> = {
   en: {
+    email:
+      "Connect a mailbox with the mail tool, then search it in Memo and link messages to the people you already know.",
     compare:
       "Compare Mail with Himalaya, mu, gog and other mail tools: IMAP sync, search, organising, sending, OAuth sign-in for Outlook and Gmail, and agent safety.",
     index: "Sync your mailbox over IMAP into the shared WireCat store; memo searches it, offline.",
@@ -21,6 +23,8 @@ export const mailDescriptions: Record<string, Record<string, string>> = {
     roadmap: "See which Mail CLI capabilities are available and which work remains planned.",
   },
   ru: {
+    email:
+      "Подключите почтовый ящик через инструмент mail, затем ищите письма в Memo и связывайте их со знакомыми людьми.",
     compare:
       "Сравнение Mail с Himalaya, mu, gog и другими почтовыми инструментами: синхронизация IMAP, поиск, порядок в ящике, отправка, вход через OAuth для Outlook и Gmail, безопасность для агентов.",
     index: "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat; memo ищет по нему без интернета.",
@@ -44,6 +48,8 @@ export const mailDescriptions: Record<string, Record<string, string>> = {
     roadmap: "Какие возможности Mail CLI уже есть и какие работы ещё запланированы.",
   },
   es: {
+    email:
+      "Conecta un buzón con la herramienta mail, busca después en Memo y vincula mensajes a las personas que ya conoces.",
     compare:
       "Compara Mail con Himalaya, mu, gog y otras herramientas de correo: sincronización IMAP, búsqueda, organización, envío, inicio de sesión con OAuth para Outlook y Gmail y seguridad para agentes.",
     index: "Sincroniza tu buzón por IMAP en el almacén compartido de WireCat; memo busca en él sin conexión.",
