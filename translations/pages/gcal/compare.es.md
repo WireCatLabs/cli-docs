@@ -90,9 +90,9 @@ Notas sobre la columna de `gcal`:
   las reuniones seguidas nunca se solapan. Con `--source all` compara reuniones entre tus cuentas de Google, así que
   encuentra una reunión de trabajo que choca con una personal.
 - **La aplicación de Google de WireCat.** Desde la versión 0.20.0, `gcal` inicia sesión con la aplicación de Google
-  de WireCat, así que no necesitas un proyecto de Google Cloud. Google todavía no ha verificado esa aplicación: puede
-  mostrar una página «unverified app» y admite 100 usuarios en total, compartidos con las otras herramientas de WireCat
-  para Google. Por eso esta fila queda en parte. Tu propia aplicación no comparte ese límite, y la guía
+  de WireCat, así que no necesitas un proyecto de Google Cloud. Hacer pública una aplicación de Google compartida para
+  Calendar es complejo, así que Google puede rechazar el inicio de sesión con ella. Por eso esta fila queda en parte. Tu
+  propia aplicación lo evita, y la guía
   [Crea tu propia aplicación de Google](./installation.md#make-your-own-google-app) recorre Google Cloud Console paso
   a paso.
 - **Fechas con palabras.** `events list` acepta una fecha o una hora en sus términos por campo, como

@@ -12,22 +12,6 @@ causa probable cuando el servidor rechaza el inicio de sesión. Los pasos de aba
 citada bajo cada uno. Las etiquetas se citan en el idioma de la interfaz del proveedor. Un proveedor puede cambiar
 sus pantallas; la página de ayuda es la fuente de verdad.
 
-## Yandex
-
-1. Abre <https://mail.yandex.ru/#setup/client> (o el engranaje, «Все настройки», «Почтовые программы»).
-2. En «Разрешить доступ к почтовому ящику с помощью почтовых клиентов» activa «С сервера imap.yandex.ru по протоколу IMAP».
-3. Comprueba que «Пароли приложений и OAuth токены» está activado y guarda.
-4. Abre <https://id.yandex.ru/security>, pestaña «Безопасность», sección «Доступ к вашим данным», «Пароли приложений».
-5. En «Создать пароль приложения» elige el tipo «Почта», pon un nombre a la contraseña y pulsa «Далее».
-6. Copia la contraseña enseguida: Yandex la muestra una sola vez.
-
-- Una contraseña de aplicación nueva empieza a funcionar de 2 a 3 horas después de crearla (ayuda de Yandex ID).
-- En un dominio empresarial de Yandex 360, un ajuste del administrador podría bloquear las contraseñas de aplicación. Las páginas de ayuda no lo confirman; pregunta al administrador del dominio si el inicio de sesión sigue fallando.
-
-Leído en: <https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/others>, <https://yandex.ru/support/id/ru/authorization/app-passwords>
-
-Envío: `smtp.yandex.ru` puerto 465, TLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://yandex.ru/support/mail/mail-clients/others.html>
-
 ## Gmail
 
 1. Cuenta de Google personal: IMAP siempre está activado, no hay nada que cambiar. Google Workspace: lo controla el administrador, y puede faltar la pestaña "Forwarding and POP/IMAP" en Ajustes de Gmail, "See all settings".
@@ -40,6 +24,27 @@ Envío: `smtp.yandex.ru` puerto 465, TLS, con la misma contraseña de aplicació
 Leído en: <https://support.google.com/mail/answer/7126229>, <https://support.google.com/accounts/answer/185833>
 
 Envío: `smtp.gmail.com` puerto 465, TLS, con la misma contraseña de aplicación. El proveedor guarda el correo enviado en Enviados por sí mismo. Leído en: <https://knowledge.workspace.google.com/admin/gmail/send-email-from-a-printer-scanner-or-app>, <https://support.google.com/mail/answer/78892>
+
+## Outlook
+
+1. Outlook.com: abre Settings (la rueda dentada), "Mail", "Forwarding and IMAP", activa "Let devices and apps use IMAP" y guarda.
+2. Después `mail` abre en el navegador la página de inicio de sesión de Microsoft: inicia sesión y permite el acceso. Outlook.com solo acepta OAuth para IMAP y SMTP, nunca una contraseña de aplicación.
+
+Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>, <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>
+
+Envío: `smtp-mail.outlook.com` puerto 587, STARTTLS, con el mismo inicio de sesión con OAuth. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
+
+## Microsoft 365
+
+1. No hay nada que preparar en el buzón: `mail` abre en el navegador la página de inicio de sesión de Microsoft; inicia sesión con la cuenta de trabajo o de centro educativo y permite el acceso.
+
+- Tu organización puede dejar que solo un administrador permita una aplicación nueva. Si Microsoft dice que un administrador debe aprobarla, pídele que dé el consentimiento o que registre la aplicación propia de la organización y te dé su id.
+- Para enviar hace falta "Authenticated SMTP" activado en tu buzón; las organizaciones con valores de seguridad predeterminados, y las creadas después de enero de 2020, lo tienen desactivado hasta que un administrador lo activa. Leer funciona igualmente.
+- El servidor IMAP de Microsoft 365 no aparece en ninguna página oficial: outlook.office365.com es el que usa Outlook.com.
+
+Leído en: <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>, <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>, <https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission>, <https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent>
+
+Envío: `smtp.office365.com` puerto 587, STARTTLS, con el mismo inicio de sesión con OAuth. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>
 
 ## iCloud
 
@@ -55,20 +60,6 @@ Leído en: <https://support.apple.com/en-us/102654>, <https://support.apple.com/
 
 Envío: `smtp.mail.me.com` puerto 587, STARTTLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://support.apple.com/en-us/102525>
 
-## Mail.ru
-
-1. Abre <https://e.mail.ru/inbox>.
-2. Abajo a la izquierda pulsa «Настройки», luego «Все настройки», «Безопасность», «Пароли для внешних приложений».
-3. Pulsa «Создать», escribe un nombre y pulsa «Продолжить».
-4. Elige «Полный доступ к Почте» como tipo de protocolo y pulsa «Продолжить».
-5. Copia la contraseña: Mail.ru no la conserva, así que no se puede ver después.
-
-- La página de ayuda de Mail.ru exige un número de teléfono vinculado al buzón (compruébalo en «Контакты и адреса»). No lista un interruptor de IMAP aparte, solo los datos del servidor.
-
-Leído en: <https://help.mail.ru/mail/login/mailer/>
-
-Envío: `smtp.mail.ru` puerto 465, TLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://help.mail.ru/mail/login/mailer/>
-
 ## Fastmail
 
 1. En la interfaz web de Fastmail ve a Settings, "Privacy & Security".
@@ -83,26 +74,21 @@ Leído en: <https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwor
 
 Envío: `smtp.fastmail.com` puerto 465, TLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports>
 
-## Microsoft 365
+## Yandex
 
-1. No hay nada que preparar en el buzón: `mail` abre en el navegador la página de inicio de sesión de Microsoft; inicia sesión con la cuenta de trabajo o de centro educativo y permite el acceso.
+1. Abre <https://mail.yandex.ru/#setup/client> (o el engranaje, «Все настройки», «Почтовые программы»).
+2. En «Разрешить доступ к почтовому ящику с помощью почтовых клиентов» activa «С сервера imap.yandex.ru по протоколу IMAP».
+3. Comprueba que «Пароли приложений и OAuth токены» está activado y guarda.
+4. Abre <https://id.yandex.ru/security>, pestaña «Безопасность», sección «Доступ к вашим данным», «Пароли приложений».
+5. En «Создать пароль приложения» elige el tipo «Почта», pon un nombre a la contraseña y pulsa «Далее».
+6. Copia la contraseña enseguida: Yandex la muestra una sola vez.
 
-- Tu organización puede dejar que solo un administrador permita una aplicación nueva. Si Microsoft dice que un administrador debe aprobarla, pídele que dé el consentimiento o que registre la aplicación propia de la organización y te dé su id.
-- Para enviar hace falta "Authenticated SMTP" activado en tu buzón; las organizaciones con valores de seguridad predeterminados, y las creadas después de enero de 2020, lo tienen desactivado hasta que un administrador lo activa. Leer funciona igualmente.
-- El servidor IMAP de Microsoft 365 no aparece en ninguna página oficial: outlook.office365.com es el que usa Outlook.com.
+- Una contraseña de aplicación nueva empieza a funcionar de 2 a 3 horas después de crearla (ayuda de Yandex ID).
+- En un dominio empresarial de Yandex 360, un ajuste del administrador podría bloquear las contraseñas de aplicación. Las páginas de ayuda no lo confirman; pregunta al administrador del dominio si el inicio de sesión sigue fallando.
 
-Leído en: <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>, <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>, <https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission>, <https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent>
+Leído en: <https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/others>, <https://yandex.ru/support/id/ru/authorization/app-passwords>
 
-Envío: `smtp.office365.com` puerto 587, STARTTLS, con el mismo inicio de sesión con OAuth. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>
-
-## Outlook
-
-1. Outlook.com: abre Settings (la rueda dentada), "Mail", "Forwarding and IMAP", activa "Let devices and apps use IMAP" y guarda.
-2. Después `mail` abre en el navegador la página de inicio de sesión de Microsoft: inicia sesión y permite el acceso. Outlook.com solo acepta OAuth para IMAP y SMTP, nunca una contraseña de aplicación.
-
-Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>, <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>
-
-Envío: `smtp-mail.outlook.com` puerto 587, STARTTLS, con el mismo inicio de sesión con OAuth. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
+Envío: `smtp.yandex.ru` puerto 465, TLS, con la misma contraseña de aplicación. Su ayuda no dice que guarde en Enviados el correo SMTP, así que `mail` añade la copia salvo que Enviados ya la tenga. Leído en: <https://yandex.ru/support/mail/mail-clients/others.html>
 
 ## Cualquier otro proveedor
 

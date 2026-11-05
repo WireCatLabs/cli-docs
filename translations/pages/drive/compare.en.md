@@ -72,11 +72,10 @@ the files themselves.
 
 ⁵ See the next section.
 
-## Sign in is limited for now
+## If Google refuses the sign-in
 
-Google has not finished reviewing WireCat's Google application. Until it does, Google shows an "unverified app"
-screen when you sign in with it, and lets at most 100 new users in. When that limit is reached, new users cannot sign
-in with WireCat's application. You can sign in with your own Google application instead, which has its own limits.
+Making a shared Google application public for Drive is complex, so Google may refuse the sign-in with WireCat's
+application. You can sign in with your own Google application instead.
 Steps and the links to Google's pages are in [installation](./installation.md#google-shows-an-unverified-app-warning).
 
 ## Where another tool fits better

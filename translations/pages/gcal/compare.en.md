@@ -84,8 +84,8 @@ Notes on the `gcal` column:
   overlap. With `--source all` it compares meetings across your Google accounts, so a work meeting that clashes with a
   personal one is found.
 - **WireCat's Google app.** Since 0.20.0, `gcal` signs in through WireCat's own Google app, so you need no Google
-  Cloud project. Google has not verified that app yet: it may show an "unverified app" page, and it allows 100 users in
-  total, shared with WireCat's other Google tools. So this row is partly. Your own app does not share that limit, and the guide
+  Cloud project. Making a shared Google app public for Calendar is complex, so Google may refuse the sign-in with it.
+  So this row is partly. Your own app avoids that, and the guide
   [Make your own Google app](./installation.md#make-your-own-google-app) walks through Google Cloud Console step by
   step.
 - **Dates in words.** `events list` takes a date or a time in its field terms, such as

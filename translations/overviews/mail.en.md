@@ -3,18 +3,22 @@ title: "Mail: start here"
 description: "Connect your mailbox to an agent: search it offline, see what needs an answer, tidy it with undo, and draft or send replies."
 ---
 
-`mail` is a command-line tool that copies your mailbox into a local store on your computer. Your AI agent can then
-search your email, read threads and attachments, and tell you what needs an answer, even without an internet connection.
-It can also tidy the mailbox on the server and write replies for you to check. You can use it yourself with terminal
-commands too. It runs on Windows, macOS and Linux.
+This page explains what `mail` is, what you get from it, which mailboxes it works with and where to start.
 
 **On this page**
 
+- [What mail is](#what-mail-is)
 - [What you get](#what-you-get)
 - [Supported providers](#supported-providers)
-- [What you can do](#what-you-can-do)
+- [Features](#features)
 - [Start here](#start-here)
 - [Find the guide for your task](#find-the-guide-for-your-task)
+
+## What mail is
+
+`mail` is a command-line tool that keeps a copy of your mailbox on your computer. Your AI agent, or you, can then
+search and work with that copy, even without an internet connection. It is part of WireCat, the set of tools that give
+your agent access to your messages. It runs on Windows, macOS and Linux.
 
 ## What you get
 
@@ -42,46 +46,27 @@ it only through your provider's SMTP server, both encrypted. See [access and saf
 |---|---|---|
 | Gmail | An app password (default), or OAuth, with WireCat's Google app or your own | [Prepare the mailbox](/en/docs/mail/providers), [Gmail with your own Google app](/en/docs/mail/oauth-google) |
 | Outlook.com, Hotmail, Microsoft 365 | OAuth only: you sign in to Microsoft in your browser | [Connect Outlook](/en/docs/mail/outlook), [Register a Microsoft app](/en/docs/mail/oauth-microsoft) |
-| Yandex | An app password | [Prepare the mailbox](/en/docs/mail/providers) |
-| iCloud, Mail.ru, Fastmail | An app password | [Prepare the mailbox](/en/docs/mail/providers) |
+| iCloud, Fastmail | An app password | [Prepare the mailbox](/en/docs/mail/providers) |
 | Any other IMAP server | An app password, if the provider offers one; `mail` finds the server from your address, or you pass the host and port | [Any other provider](/en/docs/mail/providers) |
+| Yandex | An app password | [Prepare the mailbox](/en/docs/mail/providers) |
 
 An app password is a password made for one program only, which you can revoke. Each provider needs IMAP switched on
 and, for most, an app password first: the steps for each one are in [Prepare the mailbox](/en/docs/mail/providers).
-Gmail OAuth uses WireCat's Google app unless you name your own. Google has not reviewed WireCat's app for mail yet; if Google refuses the sign-in, use your own.
+Gmail OAuth uses WireCat's Google app unless you name your own. Making a shared Google app public for mail is complex, so Google may refuse the sign-in; if it does, use your own Google app or an app password.
 
 A Gmail profile can also add a Google Takeout archive (an `.mbox` file) to its stored mail; see [look before you sync, and bring in an archive](/en/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive).
 
-## What you can do
+## Features
 
-- **Read the mailbox offline.** `sync` copies new mail into the local store, newest first, and skips what it already
-  has. A big mailbox is read in parts: run it again until `status` shows it is done. It keeps text and headers, and the
-  text of attachments up to 10 MB each (a setting changes that), not the files themselves.
-  [Connect a mailbox](/en/docs/mail/usage#connect-a-mailbox)
-- **Keep it current by itself.** Put `sync` on a timer, for example every five minutes; `schedule list` shows how
-  each run went. [Connect a mailbox](/en/docs/mail/usage#connect-a-mailbox)
-- **Search.** Words, sender, mailing list, subject, date, size, attachments and the text inside them, with the query
-  language every WireCat tool uses. Search also asks the mail server for mail not synced yet. `--backend archive`
-  keeps it to the local store. [Search your mail](/en/docs/mail/usage#search-your-mail)
-- **Review.** See what is new since you last looked, which emails you owe an answer, and which wait for a reply.
-  [Review](/en/docs/mail/usage#review-what-is-new-what-you-owe-what-waits)
-- **Look before you sync**. `account inspect` groups the mailbox by sender and list, with size, how much is unread
-  and a spam or scam score, and stores nothing. [Look before you sync](/en/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive)
-- **Rules.** Skip a sender or list, keep only its envelope (sender, date and size), keep it in full, or protect it
-  from any cleanup. [Organise the mailbox](/en/docs/mail/usage#organise-the-mailbox)
-- **Organise on the server.** Mark read, star, move, copy, and create or rename folders. Gmail folders are labels.
-  [Organise the mailbox](/en/docs/mail/usage#organise-the-mailbox)
-- **Clean up and undo.** A deletion, or a change of more than 20 messages, is a preview until you confirm. Deleted
-  mail goes to Trash and `messages restore` puts back what a run changed.
-  [Organise the mailbox](/en/docs/mail/usage#organise-the-mailbox)
-- **Attachments.** Their text is searchable; `attachments list` and `attachments download` save the files.
-  [Send, reply and forward](/en/docs/mail/usage#send-reply-and-forward)
-- **Drafts, send, reply and forward.** [Drafts](/en/docs/mail/usage#drafts) ·
-  [Send, reply and forward](/en/docs/mail/usage#send-reply-and-forward)
-- **Tags, export and counts.** Your own tags stay on your computer. `messages export` writes mbox or Maildir files;
-  `stats` counts mail by day, week or sender and ranks senders, lists and domains. [Your own tags](/en/docs/mail/usage#your-own-tags) · [Export mail](/en/docs/mail/usage#export-mail)
-- **Let an agent triage new mail.** With [Memo](/en/docs/memo/mail), a scheduled `mail-triage` agent reads new mail and
-  proposes tasks, facts and updates for you to confirm. It proposes only: it never sends mail or changes your mailbox.
+- Read your mailbox offline and keep it current on a timer. [Connect a mailbox](/en/docs/mail/usage#connect-a-mailbox)
+- Search by words, sender, date, size and the text inside attachments. [Search your mail](/en/docs/mail/usage#search-your-mail)
+- See what is new, which emails you owe an answer and which wait for a reply. [Review](/en/docs/mail/usage#review-what-is-new-what-you-owe-what-waits)
+- Look at a mailbox by sender before you copy it, and bring in a Google Takeout archive. [Look before you sync](/en/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive)
+- Set rules to skip a sender or list, keep only its envelope, or protect it from cleanup. [Organise the mailbox](/en/docs/mail/usage#organise-the-mailbox)
+- Tidy the mailbox on the server, with a preview before big changes and an undo. [Organise the mailbox](/en/docs/mail/usage#organise-the-mailbox)
+- Save drafts, then send, reply and forward, with attachments. [Send, reply and forward](/en/docs/mail/usage#send-reply-and-forward)
+- Add your own tags, export mail and count it by day, week or sender. [Your own tags](/en/docs/mail/usage#your-own-tags)
+- Let a scheduled agent triage new mail and propose tasks and facts for you to confirm, with Memo. [Mail in Memo](/en/docs/memo/mail)
 
 ## Start here
 
@@ -118,7 +103,7 @@ mail skill install
 | Task | Guide |
 |---|---|
 | Connect a mailbox and read mail | [Everyday use](/en/docs/mail/usage) |
-| Prepare Gmail, Yandex, iCloud, Mail.ru, Fastmail or another server | [Prepare the mailbox](/en/docs/mail/providers) |
+| Prepare Gmail, iCloud, Fastmail, Yandex or another server | [Prepare the mailbox](/en/docs/mail/providers) |
 | Connect Outlook.com or Microsoft 365 | [Connect Outlook](/en/docs/mail/outlook) |
 | Use Gmail without an app password | [Gmail with your own Google app](/en/docs/mail/oauth-google) |
 | Search mail with your agent, link senders to people and spot scams | [Email with Memo](/en/docs/mail/email) |
