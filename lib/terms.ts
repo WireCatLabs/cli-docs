@@ -8,7 +8,7 @@ export const termsCopy: Record<
     title: "Terms of Service",
     intro:
       "The conditions for using the WireCat website and tools, connecting your accounts and reviewing actions taken with your data.",
-    updated: "Last updated: 2 November 2026",
+    updated: "Last updated: 5 November 2026",
     contact: "Questions about these terms:",
     sections: [
       {
@@ -40,6 +40,7 @@ export const termsCopy: Record<
         title: "Third-party services",
         paragraphs: [
           "Google, Microsoft, your mail provider, AI providers, hosting services and other connected services operate under their own terms and privacy policies. Their availability, API limits, permissions and changes can affect the tools. WireCat does not promise uninterrupted access or complete source history.",
+          "wirecat-funnel gives an MCP server on your computer a public address through Tailscale Funnel, so it also depends on Tailscale and works under Tailscale's own terms. WireCat turns off Tailscale's log upload and support data in this helper, so Tailscale support cannot use its logs to help you. Anyone who knows the address can reach the server's login page while Funnel is on. The privacy policy says what Tailscale still sees.",
         ],
       },
       {
@@ -64,7 +65,7 @@ export const termsCopy: Record<
     title: "Условия использования",
     intro:
       "Условия использования сайта и инструментов WireCat, подключения аккаунтов и проверки действий с вашими данными.",
-    updated: "Обновлено: 2 ноября 2026 г.",
+    updated: "Обновлено: 5 ноября 2026 г.",
     contact: "Вопросы об этих условиях:",
     sections: [
       {
@@ -96,6 +97,7 @@ export const termsCopy: Record<
         title: "Сторонние сервисы",
         paragraphs: [
           "Google, Microsoft, ваш почтовый провайдер, провайдеры ИИ, хостинг и другие подключённые сервисы работают по собственным условиям и политикам конфиденциальности. Их доступность, ограничения API, разрешения и изменения могут влиять на инструменты. WireCat не обещает непрерывный доступ или полную историю источников.",
+          "wirecat-funnel даёт MCP-серверу на вашем компьютере публичный адрес через Tailscale Funnel, поэтому он зависит и от Tailscale и работает по условиям Tailscale. В этом помощнике WireCat выключает отправку логов и данных для поддержки в Tailscale, поэтому поддержка Tailscale не сможет помочь вам по этим логам. Пока Funnel включён, любой, кто знает адрес, может открыть страницу входа сервера. Что Tailscale всё же видит, описано в политике конфиденциальности.",
         ],
       },
       {
@@ -120,7 +122,7 @@ export const termsCopy: Record<
     title: "Términos de servicio",
     intro:
       "Las condiciones para usar el sitio y las herramientas de WireCat, conectar tus cuentas y revisar las acciones realizadas con tus datos.",
-    updated: "Última actualización: 2 de noviembre de 2026",
+    updated: "Última actualización: 5 de noviembre de 2026",
     contact: "Preguntas sobre estos términos:",
     sections: [
       {
@@ -152,6 +154,7 @@ export const termsCopy: Record<
         title: "Servicios de terceros",
         paragraphs: [
           "Google, Microsoft, tu proveedor de correo, los proveedores de IA, el alojamiento y otros servicios conectados tienen sus propios términos y políticas de privacidad. Su disponibilidad, límites de API, permisos y cambios pueden afectar a las herramientas. WireCat no promete acceso ininterrumpido ni un historial completo de las fuentes.",
+          "wirecat-funnel da una dirección pública a un servidor MCP de tu ordenador a través de Tailscale Funnel, así que también depende de Tailscale y funciona según sus propios términos. En este asistente WireCat desactiva el envío de logs y de datos de soporte a Tailscale, así que el soporte de Tailscale no podrá ayudarte con esos logs. Mientras Funnel está activado, cualquiera que conozca la dirección puede abrir la página de inicio de sesión del servidor. La política de privacidad explica lo que Tailscale sigue viendo.",
         ],
       },
       {

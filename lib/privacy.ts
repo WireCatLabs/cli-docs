@@ -8,7 +8,7 @@ export const privacyCopy: Record<
     title: "Privacy Policy",
     intro:
       "How WireCat handles Google, Microsoft, Zoom and email account data, local documents, optional AI processing, WireCat Desktop's update and news checks and bug reports, and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
-    updated: "Last updated: 2 November 2026",
+    updated: "Last updated: 5 November 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
@@ -81,6 +81,7 @@ export const privacyCopy: Record<
           "The app sends something to WireCat's server in two cases only. It checks for WireCat news when it starts and then once an hour: the request carries only the app version and your operating system, the same for every copy of that version, and the answer holds every notification in every language. Which notifications you read or removed stays on your computer. Nothing records who asked: neither WireCat's server nor the web server in front of it logs the IP address or country for this check. The second case is a bug report, only when you send one (next section).",
           "To find app updates, the app downloads a small release file from WireCat Desktop's releases on GitHub when it starts and then every six hours, and downloads an update from GitHub when you install one. The request carries no version, id or other detail about you. GitHub receives your IP address as for any download, under GitHub's own privacy statement.",
           "When you open the Tools page, the app asks the npm registry, through your own npm, for the newest version of each WireCat tool; the answer is reused for an hour. npm sends what it sends for any such request, and nothing from WireCat is added. Other services are contacted only when you use a feature that needs them: the npm registry to install or update a tool, nodejs.org when Node.js is missing or too old, to offer and install it, Tailscale or Cloudflare and their downloads when you set up a public address for an AI app, and public DNS services (Google, Cloudflare, NextDNS) to check that address. Each applies its own privacy policy.",
+          "To give an AI app in the browser a public address without installing Tailscale, the app can use WireCat's own Funnel helper, wirecat-funnel, which you can also run yourself. It joins your Tailscale network as one more device, named wirecat, and makes the MCP server on your computer reachable from the internet through Tailscale Funnel while you keep it on. WireCat turns off Tailscale's log upload and support data in this helper. Tailscale's own log settings file stays in the helper's folder on your computer. Tailscale still sees this device in your network, with its name, system and versions, and the addresses, times and sizes of its connections. It cannot read what passes through them, because the connection stays encrypted until it reaches your computer. The address gets a public HTTPS certificate, so its name appears in public certificate logs.",
           "The tools keep a record of their own runs on your computer, by default successful runs for 7 days and failed runs for 30. The app shows them on its Logs page. They leave your computer only inside a bug report you send.",
         ],
       },
@@ -114,7 +115,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Who processes the data",
         paragraphs: [
-          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application, gcal, the WireCat CLI for Google Calendar, zm, the WireCat CLI app for Zoom, mail, the WireCat CLI for email, and WireCat Desktop. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
+          "WireCat is an independent, personally maintained open-source project. This policy covers wirecat.dev, the WireCat Drive application, gcal, the WireCat CLI for Google Calendar, zm, the WireCat CLI app for Zoom, mail, the WireCat CLI for email, WireCat Desktop, and wirecat-funnel, WireCat's Funnel helper. For website analytics we use PostHog Cloud EU, hosted in Frankfurt, Germany. PostHog processes the data on our behalf.",
           "Cloudflare serves the pages and WireCat's server (api.wirecat.dev) and processes your IP address to deliver them and protect them.",
         ],
       },
@@ -168,7 +169,7 @@ export const privacyCopy: Record<
     title: "Политика конфиденциальности",
     intro:
       "Как WireCat обрабатывает данные аккаунтов Google, Microsoft, Zoom и почты, локальные документы, дополнительные ИИ-запросы, проверку обновлений и новостей и отчёты об ошибках в WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
-    updated: "Обновлено: 2 ноября 2026 г.",
+    updated: "Обновлено: 5 ноября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
@@ -241,6 +242,7 @@ export const privacyCopy: Record<
           "Приложение отправляет что-то на сервер WireCat только в двух случаях. Оно проверяет новости WireCat при запуске и затем раз в час: запрос содержит только версию приложения и вашу операционную систему, одинаковые для всех копий этой версии, а ответ содержит все уведомления на всех языках. Какие уведомления вы прочитали или убрали, остаётся на вашем компьютере. Никто не записывает, кто спрашивал: ни сервер WireCat, ни веб-сервер перед ним не пишут в лог IP-адрес и страну для этой проверки. Второй случай — отчёт об ошибке, только когда вы его отправляете (следующий раздел).",
           "Чтобы найти обновления, приложение скачивает небольшой файл выпуска из выпусков WireCat Desktop на GitHub при запуске и затем раз в шесть часов, а само обновление скачивает с GitHub, когда вы его устанавливаете. Запрос не содержит версии, идентификатора или других сведений о вас. GitHub получает ваш IP-адрес, как при любом скачивании, по своей политике конфиденциальности.",
           "Когда вы открываете страницу инструментов, приложение через ваш npm спрашивает у реестра npm последнюю версию каждого инструмента WireCat; ответ используется повторно в течение часа. npm отправляет то же, что и при любом таком запросе, и WireCat ничего не добавляет. К другим сервисам приложение обращается, только когда вы пользуетесь функцией, которой они нужны: к реестру npm — чтобы установить или обновить инструмент, к nodejs.org — когда Node.js нет или он устарел, чтобы предложить и установить его, к Tailscale или Cloudflare и их загрузкам — когда вы настраиваете публичный адрес для ИИ-приложения, и к публичным DNS-сервисам (Google, Cloudflare, NextDNS) — чтобы проверить этот адрес. У каждого из них своя политика конфиденциальности.",
+          "Чтобы дать ИИ-приложению в браузере публичный адрес без установки Tailscale, приложение может использовать собственный помощник WireCat для Funnel, wirecat-funnel. Его можно запускать и самому. Он подключается к вашей сети Tailscale как ещё одно устройство с именем wirecat и делает MCP-сервер на вашем компьютере доступным из интернета через Tailscale Funnel, пока вы его не выключите. В этом помощнике WireCat выключает отправку логов и данных для поддержки в Tailscale. Файл настроек логов Tailscale остаётся в папке помощника на вашем компьютере. Tailscale по-прежнему видит это устройство в вашей сети, его имя, систему и версии, а также адреса, время и объём его соединений. Прочитать их содержимое он не может, потому что соединение остаётся зашифрованным до самого вашего компьютера. Адрес получает публичный HTTPS-сертификат, поэтому его имя попадает в открытые журналы сертификатов.",
           "Инструменты ведут записи своих запусков на вашем компьютере: по умолчанию успешные хранятся 7 дней, упавшие — 30. Приложение показывает их на странице «Логи». Они покидают компьютер только в отчёте об ошибке, который вы отправляете.",
         ],
       },
@@ -274,7 +276,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Кто обрабатывает данные",
         paragraphs: [
-          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive, gcal — WireCat CLI для Google Календаря, zm — приложение WireCat CLI для Zoom, mail — WireCat CLI для почты — и WireCat Desktop. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
+          "WireCat — независимый проект с открытым исходным кодом, который поддерживает его автор. Эта политика охватывает wirecat.dev, приложение WireCat Drive, gcal — WireCat CLI для Google Календаря, zm — приложение WireCat CLI для Zoom, mail — WireCat CLI для почты — и WireCat Desktop. Она охватывает и wirecat-funnel, помощник WireCat для Funnel. Для аналитики сайта мы используем PostHog Cloud EU; данные хранятся во Франкфурте, Германия. PostHog обрабатывает их по нашему поручению.",
           "Страницы и сервер WireCat (api.wirecat.dev) обслуживает Cloudflare; он обрабатывает ваш IP-адрес, чтобы доставить ответы и защитить их.",
         ],
       },
@@ -328,7 +330,7 @@ export const privacyCopy: Record<
     title: "Política de privacidad",
     intro:
       "Cómo WireCat trata los datos de cuentas de Google, Microsoft, Zoom y correo, los documentos locales, el procesamiento opcional con IA, las comprobaciones de actualizaciones y novedades y los informes de errores de WireCat Desktop, y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
-    updated: "Última actualización: 2 de noviembre de 2026",
+    updated: "Última actualización: 5 de noviembre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
@@ -401,6 +403,7 @@ export const privacyCopy: Record<
           "La aplicación envía algo al servidor de WireCat solo en dos casos. Comprueba las novedades de WireCat al iniciarse y después una vez por hora: la petición lleva solo la versión de la aplicación y tu sistema operativo, iguales en todas las copias de esa versión, y la respuesta contiene todos los avisos en todos los idiomas. Qué avisos leíste o quitaste se queda en tu ordenador. Nada registra quién preguntó: ni el servidor de WireCat ni el servidor web que está delante anotan en su log la dirección IP ni el país para esta comprobación. El segundo caso es un informe de error, solo cuando envías uno (siguiente sección).",
           "Para buscar actualizaciones, la aplicación descarga un pequeño archivo de versión desde las publicaciones de WireCat Desktop en GitHub al iniciarse y después cada seis horas, y descarga la actualización desde GitHub cuando la instalas. La petición no lleva versión, identificador ni otros datos sobre ti. GitHub recibe tu dirección IP como en cualquier descarga, según su propia declaración de privacidad.",
           "Cuando abres la página de herramientas, la aplicación pregunta al registro de npm, a través de tu propio npm, por la versión más reciente de cada herramienta de WireCat; la respuesta se reutiliza durante una hora. npm envía lo mismo que en cualquier petición de este tipo, y WireCat no añade nada. La aplicación contacta con otros servicios solo cuando usas una función que los necesita: el registro de npm para instalar o actualizar una herramienta, nodejs.org cuando falta Node.js o es antiguo, para ofrecerlo e instalarlo, Tailscale o Cloudflare y sus descargas cuando configuras una dirección pública para una aplicación de IA, y servicios DNS públicos (Google, Cloudflare, NextDNS) para comprobar esa dirección. Cada uno aplica su propia política de privacidad.",
+          "Para dar una dirección pública a una aplicación de IA en el navegador sin instalar Tailscale, la aplicación puede usar el asistente de Funnel de WireCat, wirecat-funnel, que también puedes ejecutar tú mismo. Se une a tu red de Tailscale como un dispositivo más, llamado wirecat, y hace que el servidor MCP de tu ordenador sea accesible desde internet a través de Tailscale Funnel mientras lo mantengas activado. En este asistente WireCat desactiva el envío de logs y de datos de soporte a Tailscale. El archivo de ajustes de logs de Tailscale se queda en la carpeta del asistente en tu ordenador. Tailscale sigue viendo este dispositivo en tu red, con su nombre, sistema y versiones, y las direcciones, horas y tamaños de sus conexiones. No puede leer lo que pasa por ellas, porque la conexión va cifrada hasta llegar a tu ordenador. La dirección recibe un certificado HTTPS público, así que su nombre aparece en los registros públicos de certificados.",
           "Las herramientas guardan un registro de sus propias ejecuciones en tu ordenador: por defecto, las correctas durante 7 días y las fallidas durante 30. La aplicación las muestra en su página de Logs. Solo salen de tu ordenador dentro de un informe de error que tú envías.",
         ],
       },
@@ -434,7 +437,7 @@ export const privacyCopy: Record<
         id: "provider",
         title: "Quién trata los datos",
         paragraphs: [
-          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive, gcal, la CLI de WireCat para Google Calendar, zm, la aplicación WireCat CLI para Zoom, mail, la CLI de WireCat para el correo, y WireCat Desktop. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
+          "WireCat es un proyecto independiente de código abierto mantenido por su autor. Esta política cubre wirecat.dev, la aplicación WireCat Drive, gcal, la CLI de WireCat para Google Calendar, zm, la aplicación WireCat CLI para Zoom, mail, la CLI de WireCat para el correo, y WireCat Desktop. También cubre wirecat-funnel, el asistente de Funnel de WireCat. Para la analítica del sitio usamos PostHog Cloud EU, alojado en Fráncfort (Alemania). PostHog trata los datos por encargo nuestro.",
           "Cloudflare sirve las páginas y el servidor de WireCat (api.wirecat.dev) y trata tu dirección IP para entregarlos y protegerlos.",
         ],
       },
