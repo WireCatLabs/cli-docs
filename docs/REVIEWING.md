@@ -101,6 +101,39 @@ The tests reject a community entry with a `@wirecat/` package or a `WireCatLabs/
 sidebar only while at least one such entry exists. The entry is also listed in `content/docs/meta.json`,
 `meta.ru.json` and `meta.es.json`, like any tool.
 
+### In WireCat Desktop
+
+A community entry may also carry a `desktop` object: the catalog entry WireCat Desktop needs to install, check and
+sign in the tool. Every deploy builds the entries that have one into
+`https://wirecat.dev/registry/v1/desktop-tools.json` (`scripts/desktop-registry.ts`), signs it with minisign, and
+serves the signature beside it as `desktop-tools.json.minisig`. The app shows these tools only to an owner who turned
+on Settings → Advanced → "Show community tools", and only from a list whose signature matches the key built into the
+app. Merging the pull request is what publishes the entry, so the review below is the gate.
+
+**For the submitter.** Add `desktop` with every key of a
+[wirecat-desktop catalog entry](https://github.com/WireCatLabs/wirecat-desktop/blob/main/catalog/tools.json) except
+the ones the entry already holds (`id`, `name`, `package`, `repo`, `summary`, `docs` and `community` are filled from
+it). Write `null` for a command the tool does not have. `tagline` is at most 55 characters, `bin` is the program npm
+installs, `storage` is the folder name and environment prefix the tool passes to cli-base's `resolvePaths`. Every
+list holds plain command words only: letters, digits, `._:=,/+@-`, at most two leading dashes, and `{profile}`-style
+slots. A community tool cannot set `partOf`, `commandPrefix`, `memory`, `taskBoard`, `bot`, `storeReset`,
+`storeResetPreview`, `configRepair` or `signIn.command`. The tool must publish to npm with trusted publishing from its
+own repository's `release.yml` on `main`: the app refuses a release that npm's provenance does not tie to it.
+
+**For the reviewer**, in addition to the four points above:
+
+5. `pnpm test` is green: `desktopProblems` and `registryProblems` run the app's rules (no shell syntax, no name,
+   program, package or data folder of ours or of another entry, https links only). The app checks again on its own.
+6. On the tagged release, `<bin> <doctor words>` and `<bin> <setup words>` run as written for a fresh profile, and
+   every other command the entry names exists in that release.
+7. The data folder in `storage` is the tool's own: once the tool is uninstalled, the app's Storage page offers to
+   delete the folders it names.
+
+The signing key's secret half is only in this repository's `production` environment (`REGISTRY_MINISIGN_KEY`,
+`REGISTRY_MINISIGN_PASSWORD`), set by the owner with `bin/registry-key`; its public half is `registry/minisign.pub`
+here and `src-tauri/registry-key.pub` in wirecat-desktop. Each deploy signs a list with a newer `version` that expires
+after 30 days, so the daily deploy keeps it alive and a list nobody re-signs stops working.
+
 ## Required evidence before merge or release
 
 The PR description should state what the reader can do after the change, the pages/locales

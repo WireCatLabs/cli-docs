@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Checks and backs up the key that signs WireCat Desktop's community tools list. Prints no secret.
+#
+#   bin/registry-key-backup check            the key file, the password and your keyring copy work together
+#   bin/registry-key-backup save             store the whole key file in the keyring (service wirecat, account signing_key)
+#   bin/registry-key-backup copy key         put the key file's text on the clipboard for 45 s, to paste into a password manager
+#   bin/registry-key-backup copy password    the same for its password
+#   bin/registry-key-backup restore          rebuild the key file from the keyring copy (after a lost or new disk)
+set -euo pipefail
+
+dir="$HOME/.config/wirecat-registry"
+key="$dir/registry.key"
+pub="$dir/registry.pub"
+password() { secret-tool lookup service wirecat-registry account minisign; }
+saved() { secret-tool lookup service wirecat account signing_key; }
+
+# Proves a key and a password belong together: sign a scratch file, then verify it with the public key.
+works() { # $1 = key file
+  local tmp
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' RETURN
+  echo test > "$tmp/m"
+  password 2>/dev/null | minisign -S -s "$1" -m "$tmp/m" -x "$tmp/m.sig" > /dev/null 2>&1 &&
+    minisign -V -q -p "$pub" -m "$tmp/m" -x "$tmp/m.sig" > /dev/null 2>&1
+}
+
+clip() {
+  if command -v wl-copy > /dev/null && [ -n "${WAYLAND_DISPLAY:-}" ]; then
+    wl-copy; (sleep 45; wl-copy --clear) > /dev/null 2>&1 &
+  else
+    xclip -selection clipboard; (sleep 45; printf '' | xclip -selection clipboard) > /dev/null 2>&1 &
+  fi
+  echo "On the clipboard for 45 s. Paste it into your password manager now."
+}
+
+case "${1:-}" in
+  check)
+    [ -f "$key" ] && echo "key file: present ($key)" || echo "key file: MISSING ($key)"
+    password > /dev/null 2>&1 && echo "password in keyring: present" || echo "password in keyring: MISSING (service wirecat-registry, account minisign)"
+    if [ -f "$key" ] && works "$key"; then echo "key file + password: they sign, and the public key accepts it"; else echo "key file + password: DO NOT WORK"; fi
+    if saved > /dev/null 2>&1; then
+      umask 077; copy=$(mktemp)
+      saved > "$copy"; printf '\n' >> "$copy"
+      if works "$copy"; then echo "keyring copy (wirecat/signing_key): a complete key, works with the password"
+      elif [ -f "$key" ] && [ "$(saved)" = "$(sed -n 2p "$key")" ]; then
+        echo "keyring copy (wirecat/signing_key): only the key line, without the comment line. It works, but 'save' stores the whole file."
+      else echo "keyring copy (wirecat/signing_key): DOES NOT MATCH the key"; fi
+      rm -f "$copy"
+    else echo "keyring copy (wirecat/signing_key): none"; fi
+    ;;
+  save)
+    secret-tool store --label="WireCat community list signing key" service wirecat account signing_key < "$key"
+    echo "Stored the whole key file. Run 'check' to confirm."
+    ;;
+  copy)
+    case "${2:-}" in
+      key) clip < "$key" ;;
+      password) password | tr -d '\n' | clip ;;
+      *) echo "copy key | copy password" >&2; exit 2 ;;
+    esac
+    ;;
+  restore)
+    [ -e "$key" ] && { echo "$key exists; move it away first." >&2; exit 1; }
+    mkdir -p "$dir"; chmod 700 "$dir"; umask 077
+    saved > "$key"; printf '\n' >> "$key"
+    works "$key" && echo "Restored $key, and it works with the password." || echo "Restored $key, but it does NOT work: check the keyring copy." >&2
+    ;;
+  *) sed -n '2,9p' "$0"; exit 2 ;;
+esac
