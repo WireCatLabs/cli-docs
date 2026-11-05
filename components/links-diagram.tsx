@@ -1,6 +1,6 @@
 export const linksDiagramPath = "/screenshots/start-here/how-wirecat-links"
 
-const size = { wide: { width: 3200, height: 2163 }, tall: { width: 1800, height: 3405 } }
+const size = { wide: { width: 3200, height: 2164 }, tall: { width: 1800, height: 3406 } }
 
 function Variant({ theme, alt, className }: { theme: "light" | "dark"; alt: string; className: string }) {
   const wide = `${linksDiagramPath}-wide-${theme}.webp`

@@ -423,7 +423,8 @@
     const right = mem.x + mem.w + 22
     const bottom = Math.max(mem.y + mem.h, ...pills.map((p) => p.y + p.h)) + 62
     Object.assign(document.getElementById("region").style, { left: `${left}px`, top: `${top}px`, width: `${right - left}px`, height: `${bottom - top}px` })
-    Object.assign(document.getElementById("region-label").style, { left: `${left + 24}px`, top: `${bottom - 44}px` })
+    const label = document.getElementById("region-label")
+    Object.assign(label.style, { left: `${mem.x + (mem.w - label.offsetWidth) / 2}px`, top: `${mem.y + mem.h + 18}px` })
   }
 
   const ready = async () => {
