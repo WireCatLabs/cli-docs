@@ -9,10 +9,10 @@ Esta página explica cómo se construye un comando y cómo usa la herramienta un
 Un perfil es un nombre que eliges para una cuenta. Es la primera palabra de todo comando que usa una cuenta:
 
 ```sh
-mail ya folders list
+mail personal folders list
 ```
 
-`MAIL_PROFILE=ya` hace lo mismo para una sesión de la terminal. Nunca se da un perfil por supuesto, ni siquiera el único: un
+`MAIL_PROFILE=personal` hace lo mismo para una sesión de la terminal. Nunca se da un perfil por supuesto, ni siquiera el único: un
 comando sin perfil se detiene con el código de salida 2 y muestra los perfiles de este ordenador.
 
 ## Conectar un buzón
@@ -21,11 +21,11 @@ Primero prepara el buzón: activa IMAP y crea una contraseña de aplicación. [P
 de cada proveedor, y `session start` también los imprime.
 
 ```sh
-mail ya session start --address me@example.com # new profile: finds the server, shows the steps, asks for the app password
-mail ya session start                 # an existing profile: asks for the app password again (checked, kept in the keyring)
-mail ya account check                 # logs in and lists what the server supports
-mail ya folders list                  # folders with role and counts
-mail ya sync --since-time 2026-10-01  # reads new mail into the shared store; stored mail is skipped
+mail personal session start --address me@example.com # new profile: finds the server, shows the steps, asks for the app password.
+mail personal session start                 # an existing profile: asks for the app password again (checked, kept in the keyring)
+mail personal account check                 # logs in and lists what the server supports
+mail personal folders list                  # folders with role and counts
+mail personal sync --since-time 2026-10-01  # reads new mail into the shared store; stored mail is skipped
 ```
 
 `session start` en un perfil nuevo debe encontrar el servidor de correo. Primero mira en una tabla integrada (Yandex, Gmail,
@@ -61,7 +61,7 @@ guarda lo que leyó, responde `state: partial` y da el mismo comando en `next`. 
 `mail <profile> status` muestra cuánto lleva la sincronización.
 
 Para mantener un perfil al día, pon su sync en un temporizador (systemd, launchd o el Programador de tareas):
-`mail ya schedule command mail-ya --every 5m -- sync`. `mail ya schedule list` muestra cada programación y cómo fue su
+`mail personal schedule command mail-personal --every 5m -- sync`. `mail personal schedule list` muestra cada programación y cómo fue su
 última ejecución, y `doctor` avisa cuando una ejecución falla una y otra vez.
 
 Yandex no da identificador de mensaje. Con un servidor así, `sync` lista solo el número, los indicadores, la fecha y el tamaño de
@@ -109,11 +109,11 @@ y `mcp server stop` lo termina.
 `review` lee el correo que guardó sync y no pregunta nada al servidor. Usa las palabras de tg:
 
 ```sh
-mail ya review "date>2h"            # every email, yours too, in threads that changed in the last 2 hours
-mail ya review --new                # what changed since the last `review --new`; 3 days back the first time
-mail ya review --unanswered 1d      # threads whose newest email came to you (To or Cc) and has no answer for a day
-mail ya review --waiting 7d         # threads where you wrote last and nobody answered for a week
-mail ya review "bulk:false"         # leave out threads of mail sent to many, lists and envelopes
+mail personal review "date>2h"            # every email, yours too, in threads that changed in the last 2 hours
+mail personal review --new                # what changed since the last `review --new`; 3 days back the first time
+mail personal review --unanswered 1d      # threads whose newest email came to you (To or Cc) and has no answer for a day
+mail personal review --waiting 7d         # threads where you wrote last and nobody answered for a week
+mail personal review "bulk:false"         # leave out threads of mail sent to many, lists and envelopes
 ```
 
 Se muestran todos los correos, también los enviados a muchos; el `email` de cada elemento indica `bulk`, `list_id` y
@@ -128,9 +128,9 @@ compartido y por el orden en que se guardó el correo, así que el correo guarda
 salta:
 
 ```sh
-mail ya review --holder mail-triage --json        # what is stored past its mark; the answer gives a cursor
-mail ya messages acknowledge --holder mail-triage --cursor <cursor>   # once processed: move the mark there
-mail ya status                                    # how far each holder got, what it held and skipped
+mail personal review --holder mail-triage --json        # what is stored past its mark; the answer gives a cursor
+mail personal messages acknowledge --holder mail-triage --cursor <cursor>   # once processed: move the mark there
+mail personal status                                    # how far each holder got, what it held and skipped
 ```
 
 La marca solo avanza. El correo enviado a muchos, los sobres y los borradores se saltan y se cuentan; un correo que aún
@@ -143,12 +143,12 @@ guardado ahora.
 `sync` aún no ha leído (`--backend archive` se queda en el almacén):
 
 ```sh
-mail ya search messages invoice                                  # best match first, any form of the word
-mail ya search messages 'from:ann@example.com has:attachment date>30d'
-mail ya search messages 'list:github.com is:unread' --newest     # a mailing list, newest first
-mail ya messages show '<ref from a search>'                      # the whole email and its attachments' text
-mail ya conversations list emails_count>1                        # threads, newest first
-mail ya conversations show '<chat:email/… ref>'                  # one thread, oldest first
+mail personal search messages invoice                                  # best match first, any form of the word
+mail personal search messages 'from:ann@example.com has:attachment date>30d'
+mail personal search messages 'list:github.com is:unread' --newest     # a mailing list, newest first
+mail personal messages show '<ref from a search>'                      # the whole email and its attachments' text
+mail personal conversations list emails_count>1                        # threads, newest first
+mail personal conversations show '<chat:email/… ref>'                  # one thread, oldest first
 ```
 
 El lenguaje de consulta es el que usan todas las CLI de WireCat ([guía de búsqueda](https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language.md)):
@@ -182,19 +182,19 @@ El almacén guarda texto, no el mensaje original, así que `messages export` vue
 Selecciona con la misma consulta que `search messages` y escribe una carpeta privada (modo 700, archivos 600):
 
 ```sh
-mail ya messages export 'from:ann@example.com' --output ~/mail-backup     # one mbox file per folder
-mail ya messages export --folder INBOX --format maildir --output ~/Maildir # Maildir++, for mu and notmuch
-mail ya messages export 'date>30d' --limit 500 --output ~/mail-backup --resume
-mail ya stats messages top --by list --limit 10                          # which lists send the most
+mail personal messages export 'from:ann@example.com' --output ~/mail-backup     # one mbox file per folder
+mail personal messages export --folder INBOX --format maildir --output ~/Maildir # Maildir++, for mu and notmuch
+mail personal messages export 'date>30d' --limit 500 --output ~/mail-backup --resume
+mail personal stats messages top --by list --limit 10                          # which lists send the most
 ```
 
 `stats messages show` cuenta el correo guardado que coincide con una consulta, recibido y enviado, por día natural, semana
 (con el lunes como clave) o remitente, en `--timezone`. Solo recuentos, y no registra ninguna búsqueda:
 
 ```sh
-mail ya stats messages show --by day --timezone Europe/Madrid -- 'date>=30d'
+mail personal stats messages show --by day --timezone Europe/Madrid -- 'date>=30d'
 # {"item":{"by":"day","received":14,"sent":3,"rows":[{"key":"2026-11-01","name":null,"received":4,"sent":1}]}}
-mail ya stats messages show --by sender --limit 10                       # by sender counts received mail only
+mail personal stats messages show --by sender --limit 10                       # by sender counts received mail only
 ```
 
 - **Qué se escribe.** Cada mensaje tal como lo guarda el servidor, byte a byte, en cada carpeta en que está archivado
@@ -243,14 +243,14 @@ Cada cambio va primero al servidor y luego al almacén, así que `search message
 nombran con el `ref` que da una búsqueda, o se eligen con `--filter` con la misma consulta:
 
 ```sh
-mail ya messages mark-read '<ref>'                               # also mark-unread, star, unstar
-mail ya messages update '<ref>' --flag answered --unflag '$Junk'  # flags and keywords; --replace sets the whole set
-mail ya messages move '<ref>' --folder archive                   # a folder by path, name or role
-mail ya messages copy --filter 'list:github.com' --folder Lists --yes
-mail ya messages delete --filter 'from:shop@example.com date<2025-01-01'   # a preview: nothing moves
-mail ya messages delete --filter 'from:shop@example.com date<2025-01-01' --yes
-mail ya messages restore --run '<run id the change answered with>' --yes
-mail ya folders create Receipts                                  # also folders rename, folders delete
+mail personal messages mark-read '<ref>'                               # also mark-unread, star, unstar
+mail personal messages update '<ref>' --flag answered --unflag '$Junk'  # flags and keywords; --replace sets the whole set
+mail personal messages move '<ref>' --folder archive                   # a folder by path, name or role
+mail personal messages copy --filter 'list:github.com' --folder Lists --yes
+mail personal messages delete --filter 'from:shop@example.com date<2025-01-01'   # a preview: nothing moves
+mail personal messages delete --filter 'from:shop@example.com date<2025-01-01' --yes
+mail personal messages restore --run '<run id the change answered with>' --yes
+mail personal folders create Receipts                                  # also folders rename, folders delete
 ```
 
 - **Primero una vista previa.** Un borrado, un cambio elegido con `--filter` y un cambio de más de 20 mensajes responden
@@ -284,12 +284,12 @@ Un borrador va a la carpeta Borradores del propio buzón, así que aparece en cu
 agente; tú lo lees y lo envías desde tu aplicación de correo, o con `drafts send`.
 
 ```sh
-mail ya drafts create --to anna@example.com --subject 'Monday' 'Shall we meet at ten?'
-mail ya drafts create --reply-to '<ref>' --reply-all 'Thanks, agreed.'   # in the thread, to everyone but you
-mail ya drafts create --to anna@example.com --subject Notes - < notes.txt # - reads the text from stdin
-mail ya drafts list                                                       # newest first, read from the server
-mail ya drafts update '<id>' 'New text'                                   # only what you give changes
-mail ya drafts delete '<id>' --allow-dangerous                             # the owner's; gone for good, a preview without it
+mail personal drafts create --to anna@example.com --subject 'Monday' 'Shall we meet at ten?'
+mail personal drafts create --reply-to '<ref>' --reply-all 'Thanks, agreed.'   # in the thread, to everyone but you
+mail personal drafts create --to anna@example.com --subject Notes - < notes.txt # - reads the text from stdin
+mail personal drafts list                                                       # newest first, read from the server
+mail personal drafts update '<id>' 'New text'                                   # only what you give changes
+mail personal drafts delete '<id>' --allow-dangerous                             # the owner's; gone for good, a preview without it
 ```
 
 - **El id** es el Message-ID del borrador, tal como lo muestra `drafts list`, con o sin `<>`. No cambia cuando cambia el
@@ -313,10 +313,10 @@ Las etiquetas propias van en el correo guardado y se quedan en este ordenador: e
 etiquetas que lee memo, y una búsqueda las encuentra.
 
 ```sh
-mail ya tags add invoices --message '<ref>'     # one email; --chat '<conversation ref>' tags a whole conversation
-mail ya search messages 'tag:invoices date>30d'
-mail ya tags list tag:invoices                  # what is tagged; type:message or type:chat
-mail ya tags remove invoices --message '<ref>'
+mail personal tags add invoices --message '<ref>'     # one email; --chat '<conversation ref>' tags a whole conversation
+mail personal search messages 'tag:invoices date>30d'
+mail personal tags list tag:invoices                  # what is tagged; type:message or type:chat
+mail personal tags remove invoices --message '<ref>'
 ```
 
 Una etiqueta tiene de 1 a 32 letras a–z, dígitos y guiones; las mayúsculas se pasan a minúsculas. Lo que guarda el
@@ -328,13 +328,13 @@ servidor son las palabras clave (`messages update --flag '$Work'`) y, en Gmail, 
 [lista de proveedores](./providers.md), o de `smtp_host`, `smtp_port` y `smtp_security` en el perfil.
 
 ```sh
-mail ya messages send --to ann@example.com --subject Lunch "See you at noon."
-echo "The report." | mail ya messages send --to ann@example.com --subject Report --file ./report.pdf
-mail ya messages send --reply-to '<ref>' "Paid today."                # Re:, In-Reply-To, References, the quote
-mail ya messages send --reply-to '<ref>' --reply-all "Thanks, all."   # also to the original's To and Cc, not you
-mail ya messages forward '<ref>' --to bob@example.com "FYI"           # the original attached whole
-mail ya messages send --to ann@example.com --subject Hi "Hello" --dry-run   # build it, send nothing
-mail ya drafts send '<draft id>'                                     # send a saved draft, then remove it
+mail personal messages send --to ann@example.com --subject Lunch "See you at noon."
+echo "The report." | mail personal messages send --to ann@example.com --subject Report --file ./report.pdf
+mail personal messages send --reply-to '<ref>' "Paid today."                # Re:, In-Reply-To, References, the quote
+mail personal messages send --reply-to '<ref>' --reply-all "Thanks, all."   # also to the original's To and Cc, not you
+mail personal messages forward '<ref>' --to bob@example.com "FYI"           # the original attached whole
+mail personal messages send --to ann@example.com --subject Hi "Hello" --dry-run   # build it, send nothing
+mail personal drafts send '<draft id>'                                     # send a saved draft, then remove it
 ```
 
 - **La pregunta.** El correo para cualquiera que no seas tú pregunta antes, y muestra remitente, to, cc, bcc, asunto, cada

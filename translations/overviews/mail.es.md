@@ -99,13 +99,13 @@ Tu agente instala la herramienta; tú creas la contraseña de aplicación o apru
 1. [Instala `mail`](/es/docs/mail/installation) desde npm.
 2. [Prepara el buzón](/es/docs/mail/providers): activa IMAP y crea una contraseña de aplicación. Para Outlook o
    Microsoft 365, [conecta Outlook](/es/docs/mail/outlook) en su lugar.
-3. Crea un perfil, comprueba el acceso, lee tu correo y búscalo. `ya` es un nombre de perfil que eliges para un buzón.
+3. Crea un perfil, comprueba el acceso, lee tu correo y búscalo. `personal` es un nombre de perfil que eliges para un buzón.
 
 ```sh
-mail ya session start --address me@example.com
-mail ya account check
-mail ya sync
-mail ya search messages invoice
+mail personal session start --address me@example.com
+mail personal account check
+mail personal sync
+mail personal search messages invoice
 ```
 
 `session start` encuentra el servidor de correo, pide la contraseña de aplicación y la guarda en el llavero del sistema.

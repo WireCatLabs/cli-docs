@@ -39,15 +39,15 @@ Show the sync result and tell me whether I need another run to finish that perio
 For manual setup:
 
 ```sh
-mail ya session start --address you@example.com
-mail ya sync --since-time 2026-09-01
-mail ya status
+mail personal session start --address you@example.com
+mail personal sync --since-time 2026-09-01
+mail personal status
 ```
 
 `session start` finds the server, checks the app password and keeps it in the system keyring. `sync` reads new mail
 into the shared store and skips mail it already has. A large mailbox does not fit in one run: when `sync` reports
-`state: partial`, run it again, and use `mail ya status` to see how far it got. To keep the mailbox current, schedule it:
-`mail ya schedule command mail-ya --every 5m -- sync`. See [everyday use of mail](./usage.md) for folders,
+`state: partial`, run it again, and use `mail personal status` to see how far it got. To keep the mailbox current, schedule it:
+`mail personal schedule command mail-personal --every 5m -- sync`. See [everyday use of mail](./usage.md) for folders,
 limits and the other commands.
 
 Memo needs no setting for this mail. It reads the same store, so `memo search mail` finds it at once. Search results

@@ -21,8 +21,8 @@ existen y si otros usuarios del ordenador pueden leer los ajustes.
 Después conecta un buzón. Tú eliges el nombre del perfil, la primera palabra de cada comando:
 
 ```sh
-mail ya session start --address me@example.com
-mail ya account check
+mail personal session start --address me@example.com
+mail personal account check
 ```
 
 ## Buscar en tu correo
@@ -30,7 +30,7 @@ mail ya account check
 Tras `sync`, el correo está en el almacén común, y `mail` busca en él:
 
 ```sh
-mail ya search messages invoice
+mail personal search messages invoice
 ```
 
 Las palabras de la consulta están en [el uso](./usage.md#search-your-mail). [memo](https://github.com/WireCatLabs/cli-memo) busca
