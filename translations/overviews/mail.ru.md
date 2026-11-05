@@ -98,14 +98,14 @@ Gmail через OAuth использует Google-приложение WireCat,
 1. [Установите `mail`](/ru/docs/mail/installation) из npm.
 2. [Подготовьте ящик](/ru/docs/mail/providers): включите IMAP и создайте пароль приложения. Для Outlook или
    Microsoft 365 вместо этого [подключите Outlook](/ru/docs/mail/outlook).
-3. Создайте профиль, проверьте вход, прочитайте почту и поищите по ней. `ya` — имя профиля, которое вы выбираете для
+3. Создайте профиль, проверьте вход, прочитайте почту и поищите по ней. `personal` — имя профиля, которое вы выбираете для
    одного ящика.
 
 ```sh
-mail ya session start --address me@example.com
-mail ya account check
-mail ya sync
-mail ya search messages invoice
+mail personal session start --address me@example.com
+mail personal account check
+mail personal sync
+mail personal search messages invoice
 ```
 
 `session start` находит почтовый сервер, спрашивает пароль приложения и хранит его в связке ключей ОС. `sync` по умолчанию

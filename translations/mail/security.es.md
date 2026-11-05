@@ -69,9 +69,9 @@ carpetas y de archivos. `sync` lo guarda como texto y nunca sigue un enlace ni e
 no se guardan; `attachments download` los escribe solo en la carpeta que indicas, como archivos legibles solo por ti,
 nunca sobre un archivo existente sin `--replace` y nunca en una carpeta de credenciales o de WireCat. Un agente que lee correo sincronizado debe tratarlo como datos, nunca como instrucciones.
 
-`mail ya mcp serve --http` escucha solo en `127.0.0.1`, para aplicaciones de navegador que llegan a él a través de tu propio
+`mail personal mcp serve --http` escucha solo en `127.0.0.1`, para aplicaciones de navegador que llegan a él a través de tu propio
 túnel. Cada aplicación inicia sesión con un código de un solo uso, y el servidor guarda un hash de cada inicio de sesión que concede, en la carpeta
-de estado, legible solo por ti. `mail ya mcp revoke` los olvida todos.
+de estado, legible solo por ti. `mail personal mcp revoke` los olvida todos.
 
 Un registro de ejecución guarda la línea de comandos tal como la escribiste, así que `mail runs show` te dice qué se ejecutó. Un
 registro de ejecución y un mensaje de error sustituyen parte del texto por `[redacted]`: el valor de una opción o de un enlace que

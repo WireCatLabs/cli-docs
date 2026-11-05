@@ -7,10 +7,10 @@ aplicación de Microsoft. Esta página es para quien registra esa aplicación: W
 Lleva alrededor de media hora y no cuesta nada.
 
 Cuando la aplicación existe, su **Application (client) ID** va o bien dentro de `mail` (la aplicación de WireCat), o
-bien, una sola vez, en tu configuración:
+bien, una sola vez, en tu configuración, con el id de tu aplicación en lugar del id de ejemplo:
 
 ```sh
-mail config set --defaults microsoft_client_id <application-client-id>
+mail config set --defaults microsoft_client_id 11111111-2222-3333-4444-555555555555
 ```
 
 Solo puedes establecerlo tú, en una terminal: a un agente por MCP se le rechaza, igual que con los ajustes del servidor
