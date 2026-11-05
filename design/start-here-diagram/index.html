@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How WireCat links</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Backgrounds match the docs page (fumadocs neutral), so the image reads as part of the page. */
+  :root {
+    --page: #f5f5f5;
+    --card: #ffffff;
+    --card-line: #dedede;
+    --ink: #171717;
+    --ink-soft: #505050;
+    --ink-faint: #6b6b6b;
+    --accent: #4b53f0;
+    --accent-ink: #3239c4;
+    --chip-bg: #eef0ff;
+    --chip-line: #c5c9ff;
+    --wire: #8b91f5;
+    --region: #4b53f00a;
+    --region-line: #b9bdf5;
+    --agent-bg: #ffffff;
+    --agent-line: #c5c9ff;
+    --shadow: 0 10px 30px -18px #0003, 0 1px 3px #0000000f;
+  }
+  :root[data-theme="dark"] {
+    --page: #121212;
+    --card: #1b1b1b;
+    --card-line: #2f2f2f;
+    --ink: #ededed;
+    --ink-soft: #b4b4b4;
+    --ink-faint: #9a9a9a;
+    --accent: #6d74ff;
+    --accent-ink: #b9bdff;
+    --chip-bg: #1a1c3a;
+    --chip-line: #383e7a;
+    --wire: #7c83ff;
+    --region: #4b53f00f;
+    --region-line: #3a3f78;
+    --agent-bg: #16183a;
+    --agent-line: #3a3f78;
+    --shadow: 0 18px 40px -18px #000c, 0 2px 6px #0006;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: transparent; }
+  body { font-family: "Onest", system-ui, sans-serif; color: var(--ink); }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .frame { position: relative; background: transparent; }
+  svg.wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+
+  .col-head {
+    font: 600 22px "JetBrains Mono", monospace;
+    letter-spacing: 0.02em;
+    color: var(--ink-faint);
+    margin: 0 0 16px;
+    white-space: nowrap;
+  }
+
+  .group {
+    position: relative;
+    border: 1px solid var(--card-line);
+    border-radius: 18px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    padding: 14px 20px 10px;
+  }
+  .group h3 {
+    display: flex; align-items: center; gap: 10px;
+    margin: 0 0 4px;
+    font: 600 22px "JetBrains Mono", monospace;
+    color: var(--ink-faint);
+  }
+  .row { display: flex; align-items: center; gap: 14px; padding: 8px 0; }
+  .row + .row { border-top: 1px solid var(--card-line); }
+  .row img { width: 34px; height: 34px; object-fit: contain; flex: none; }
+  img.sq { border-radius: 22%; }
+  .row .tag { display: none; }
+  .row b { display: block; font-size: 25px; font-weight: 600; line-height: 1.2; }
+  .row span { display: block; font-size: 22px; line-height: 1.3; color: var(--ink-soft); }
+
+  .tool {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 92px; height: 46px; padding: 0 16px;
+    border: 1.5px solid var(--accent);
+    border-radius: 12px;
+    background: var(--card);
+    font: 600 24px "JetBrains Mono", monospace;
+    color: var(--accent-ink);
+  }
+
+  .region {
+    position: absolute;
+    border: 2px dashed var(--region-line);
+    border-radius: 26px;
+    background: var(--region);
+  }
+  .region-label {
+    position: absolute;
+    font: 600 22px "JetBrains Mono", monospace;
+    color: var(--accent-ink);
+    white-space: nowrap;
+  }
+
+  .memory {
+    border: 1.5px solid var(--accent);
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: 0 0 0 8px #4b53f014, var(--shadow);
+    padding: 18px 20px 8px;
+  }
+  .memory header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .memory header svg { width: 40px; height: 40px; flex: none; }
+  .memory header b { font-size: 27px; font-weight: 700; }
+  .link { padding: 12px 0; }
+  .link + .link { border-top: 1px solid var(--card-line); }
+  .chip {
+    display: inline-block;
+    padding: 3px 12px;
+    border: 1px solid var(--chip-line);
+    border-radius: 999px;
+    background: var(--chip-bg);
+    color: var(--accent-ink);
+    font: 500 22px "JetBrains Mono", monospace;
+  }
+  .link .what { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 25px; font-weight: 600; }
+  .link .what i { display: flex; gap: 6px; margin-left: auto; }
+  .link .what img { width: 28px; height: 28px; object-fit: contain; }
+
+  .agent {
+    border: 1.5px solid var(--agent-line);
+    border-radius: 20px;
+    background: var(--agent-bg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .agent .bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--agent-line);
+    font-size: 22px; color: var(--ink-soft);
+  }
+  .agent .bar img { width: 30px; height: 30px; }
+  .agent .bar b { font-size: 25px; color: var(--ink); font-weight: 600; }
+  .agent .bar .mono { margin-left: auto; font-size: 22px; }
+  .agent .q { padding: 18px 20px 4px; font: 500 24px/1.45 "JetBrains Mono", monospace; }
+  .agent .q::before { content: "› "; color: var(--accent); }
+  .agent .a { padding: 8px 20px 20px; font-size: 24px; line-height: 1.45; color: var(--ink-soft); }
+  .agent .a strong { color: var(--ink); font-weight: 600; }
+  .cites { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .cites span {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 12px 4px 6px;
+    border: 1px solid var(--agent-line); border-radius: 999px;
+    background: var(--card);
+    font: 500 22px "JetBrains Mono", monospace; color: var(--ink-soft);
+  }
+  .cites img { width: 24px; height: 24px; object-fit: contain; }
+
+  .others {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px;
+    padding: 14px 20px;
+    border: 2px dashed var(--agent-line); border-radius: 18px;
+    font-size: 23px; color: var(--ink-soft);
+  }
+  .others em { font-style: normal; display: inline-flex; align-items: center; gap: 8px; }
+  .others img { width: 28px; height: 28px; object-fit: contain; }
+  .others .any { font: 600 22px "JetBrains Mono", monospace; color: var(--ink-faint); }
+
+  /* Wide: four columns, wires drawn by the script. */
+  .wide .frame { width: 1600px; padding: 36px 40px 40px; }
+  .wide .grid {
+    display: grid;
+    grid-template-columns: 420px 120px 380px 420px;
+    column-gap: 60px;
+    align-items: stretch;
+  }
+  .wide .sources { display: flex; flex-direction: column; gap: 16px; }
+  .wide .tools { position: relative; align-self: stretch; }
+  .wide .tools .tool { position: absolute; left: 0; width: 120px; transform: translateY(-50%); }
+  .wide .mid, .wide .right { display: flex; flex-direction: column; }
+  .wide .mid .col-head { visibility: hidden; }
+  .wide .mid .memory { margin: auto 0; }
+  .wide .right .agent { margin-top: auto; }
+  .wide .right .others { margin: 22px 0 auto; }
+  .wide .arrow { display: none; }
+
+  /* Tall: one column for a phone. Stories are dropped, each group shows its tools. */
+  .tall .frame { width: 900px; padding: 40px 36px 44px; }
+  .tall .grid { display: flex; flex-direction: column; }
+  .tall .col-head { font-size: 26px; text-align: center; }
+  .tall .sources { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .tall .sources .group[data-g="mail"] { order: 3; }
+  .tall .sources .group[data-g="meet"] { order: 4; }
+  .tall .group { padding: 16px 18px 8px; }
+  .tall .group h3 { font-size: 26px; }
+  .tall .row .tag { display: inline-flex; margin-left: auto; min-width: 0; height: 40px; padding: 0 10px; font-size: 26px; border-radius: 10px; }
+  .tall .link .what img { width: 36px; height: 36px; }
+  .tall .row span { display: none; }
+  .tall .row b { font-size: 28px; }
+  .tall .row img { width: 38px; height: 38px; }
+  .tall .tools-col, .tall .tools { display: none; }
+  .tall .chip, .tall .cites span, .tall .agent .bar .mono, .tall .others .any, .tall .region-label { font-size: 26px; }
+  .tall .link .what, .tall .row b, .tall .memory header b { font-size: 28px; }
+  .tall .agent .q, .tall .agent .a { font-size: 27px; }
+  .tall .others { font-size: 26px; }
+  .tall .agent .bar { font-size: 26px; }
+  .tall .agent .bar b { font-size: 28px; }
+  .tall .mid { position: relative; margin: 0; padding: 70px 30px 30px; border: 2px dashed var(--region-line); border-radius: 26px; background: var(--region); }
+  .tall .mid .col-head { display: none; }
+  .tall .region { display: none; }
+  .tall .region-label { top: 22px; left: 0; right: 0; text-align: center; }
+  .tall .right { display: flex; flex-direction: column; gap: 20px; }
+  .tall .right .col-head { display: none; }
+  .tall .arrow {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 8px 0 10px;
+    font-size: 26px; color: var(--ink-soft); text-align: center;
+  }
+  .tall .arrow svg { width: 30px; height: 56px; }
+  .tall .arrow b { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <svg class="wires" id="wires" aria-hidden="true"></svg>
+  <div class="region" id="region"></div>
+  <div class="grid">
+    <div class="sources-col">
+      <p class="col-head">Your accounts</p>
+      <div class="sources" id="sources"></div>
+    </div>
+
+    <div class="arrow">
+      <svg viewBox="0 0 30 56" aria-hidden="true"><path d="M15 2 V50 M5 40 L15 52 L25 40" fill="none" stroke="var(--wire)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b>Each tool reads one source</b> onto your computer</div>
+    </div>
+
+    <div class="tools-col">
+      <p class="col-head">WireCat tools</p>
+      <div class="tools" id="tools"></div>
+    </div>
+
+    <div class="mid" id="mid">
+      <p class="col-head">Memory</p>
+      <div class="region-label" id="region-label">on your computer</div>
+      <section class="memory" id="memory">
+        <header>
+          <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path d="M7.25 22.25 V9.75 l5 5 3.75 -5 3.75 5 5 -5 v12.5" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          <b>Linked memory</b>
+        </header>
+        <div id="links"></div>
+      </section>
+    </div>
+
+    <div class="arrow">
+      <svg viewBox="0 0 30 56" aria-hidden="true"><path d="M15 2 V50 M5 40 L15 52 L25 40" fill="none" stroke="var(--wire)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b>Your agent asks</b> and gets answers with sources</div>
+    </div>
+
+    <div class="right">
+      <p class="col-head">Your agent</p>
+      <section class="agent" id="agent">
+        <div class="bar"><img src="../logos/claude-spark.svg" alt=""><b>Claude Code</b><span class="mono">skills · MCP</span></div>
+        <div class="q">what did we agree with Anna?</div>
+        <div class="a">
+          <strong>12‑month term, invoices monthly.</strong> Mark has two edits to clause 4. Sign v3 by Friday.
+          <div class="cites">
+            <span><img src="../logos/zoom-app-icon-appstore.png" alt="" class="sq">Wed call</span>
+            <span><img src="../logos/gmail.svg" alt="">Mark</span>
+            <span><img src="../logos/google-drive.svg" alt="">v3</span>
+          </div>
+        </div>
+      </section>
+      <div class="others" id="others">
+        <em><img data-logo="openai" alt="">ChatGPT</em>
+        <em><img data-logo="cursor" alt="">Cursor</em>
+        <em><img src="../logos/openclaw.svg" alt="">OpenClaw</em>
+        <span class="any">any agent</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search)
+  const theme = params.get("theme") === "dark" ? "dark" : "light"
+  const layout = params.get("layout") === "tall" ? "tall" : "wide"
+  document.documentElement.dataset.theme = theme
+  document.body.className = layout
+
+  const L = "../logos/"
+  const logo = {
+    telegram: L + "telegram.svg",
+    whatsapp: L + "whatsapp.svg",
+    max: L + "max.svg",
+    gmail: L + "gmail.svg",
+    outlook: L + "outlook.svg",
+    calendar: L + "google-calendar.svg",
+    zoom: L + "zoom-app-icon-appstore.png",
+    drive: L + "google-drive.svg",
+    obsidian: L + "obsidian.svg",
+    openai: L + (theme === "dark" ? "openai-blossom-dark.svg" : "openai-blossom.svg"),
+    cursor: L + (theme === "dark" ? "cursor-dark.svg" : "cursor.svg"),
+  }
+  const squareLogos = new Set(["zoom"])
+
+  // Mail is last so Outlook lands in the bottom-left corner of both layouts.
+  const groups = [
+    { id: "docs", name: "Docs and notes", rows: [
+      ["drive", "drive", "Google Drive", "Lisbon contract v3"],
+      ["memo", "obsidian", "Obsidian", "Note on Anna Petrova"],
+    ] },
+    { id: "msg", name: "Messages", rows: [
+      ["tg", "telegram", "Telegram", "Anna: sign by Friday?"],
+      ["wa", "whatsapp", "WhatsApp", "Voice note from Anna"],
+      ["max", "max", "MAX", "Deposit invoice"],
+    ] },
+    { id: "meet", name: "Meetings", rows: [
+      ["gcal", "calendar", "Google Calendar", "Contract review, Wed"],
+      ["zm", "zoom", "Zoom", "Transcript of the call"],
+    ] },
+    { id: "mail", name: "Mail", rows: [
+      ["mail", "gmail", "Gmail", "Mark: edits to clause 4"],
+      ["mail", "outlook", "Outlook", "Lisbon office: signed NDA"],
+    ] },
+  ]
+
+  const links = [
+    ["same person", "Anna Petrova", ["telegram", "whatsapp", "obsidian"]],
+    ["mentions", "Lisbon contract v3", ["telegram", "gmail", "drive"]],
+    ["on the agenda", "Contract review", ["calendar", "zoom", "drive"]],
+  ]
+
+  const el = (tag, attrs = {}, ...kids) => {
+    const node = document.createElement(tag)
+    for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v)
+    node.append(...kids)
+    return node
+  }
+  const img = (key) => el("img", { src: logo[key], alt: "", ...(squareLogos.has(key) ? { class: "sq" } : {}) })
+
+  for (const node of document.querySelectorAll("img[data-logo]")) node.src = logo[node.dataset.logo]
+
+  const sources = document.getElementById("sources")
+  const tools = document.getElementById("tools")
+  for (const g of groups) {
+    const toolNames = [...new Set(g.rows.map((r) => r[0]))]
+    const card = el("article", { class: "group", "data-g": g.id }, el("h3", {}, g.name))
+    for (const [tool, key, name, story] of g.rows) {
+      const tag = el("code", { class: "tool tag" }, tool)
+      card.append(el("div", { class: "row", "data-tool": tool }, img(key), el("div", {}, el("b", {}, name), el("span", {}, story)), tag))
+    }
+    sources.append(card)
+    for (const t of toolNames) tools.append(el("code", { class: "tool", id: `tool-${t}` }, t))
+  }
+
+  const linksBox = document.getElementById("links")
+  for (const [label, what, keys] of links) {
+    linksBox.append(el("div", { class: "link" }, el("span", { class: "chip" }, label), el("div", { class: "what" }, what, el("i", {}, ...keys.map(img)))))
+  }
+
+  const NS = "http://www.w3.org/2000/svg"
+  const svg = document.getElementById("wires")
+  const frame = document.getElementById("frame")
+  const rect = (node) => {
+    const f = frame.getBoundingClientRect()
+    const r = node.getBoundingClientRect()
+    return { x: r.left - f.left, y: r.top - f.top, w: r.width, h: r.height }
+  }
+  const wire = (a, b, attrs = {}) => {
+    const mx = (a.x + b.x) / 2
+    const p = document.createElementNS(NS, "path")
+    p.setAttribute("d", `M${a.x},${a.y} C${mx},${a.y} ${mx},${b.y} ${b.x},${b.y}`)
+    p.setAttribute("fill", "none")
+    p.setAttribute("stroke", "var(--wire)")
+    p.setAttribute("stroke-width", 2)
+    for (const [k, v] of Object.entries(attrs)) p.setAttribute(k, v)
+    svg.append(p)
+  }
+  const dot = (p) => {
+    const c = document.createElementNS(NS, "circle")
+    c.setAttribute("cx", p.x); c.setAttribute("cy", p.y); c.setAttribute("r", 4.5)
+    c.setAttribute("fill", "var(--page)"); c.setAttribute("stroke", "var(--wire)"); c.setAttribute("stroke-width", 2)
+    svg.append(c)
+  }
+
+  const drawWide = () => {
+    const toolsBox = rect(tools)
+    const rowsByTool = {}
+    for (const row of document.querySelectorAll(".row")) (rowsByTool[row.dataset.tool] ??= []).push(row)
+    for (const [t, rows] of Object.entries(rowsByTool)) {
+      const ys = rows.map((r) => { const b = rect(r); return b.y + b.h / 2 })
+      document.getElementById(`tool-${t}`).style.top = `${(ys[0] + ys.at(-1)) / 2 - toolsBox.y}px`
+    }
+    const mem = rect(document.getElementById("memory"))
+    const tl = document.querySelectorAll(".tools .tool")
+    tl.forEach((pill, i) => {
+      const p = rect(pill)
+      const cardRight = rect(sources).x + rect(sources).w
+      for (const row of rowsByTool[pill.textContent]) {
+        const r = rect(row)
+        const a = { x: cardRight, y: r.y + r.h / 2 }
+        wire(a, { x: p.x, y: p.y + p.h / 2 })
+        dot(a)
+      }
+      const end = { x: mem.x, y: mem.y + 60 + (i * (mem.h - 120)) / (tl.length - 1) }
+      wire({ x: p.x + p.w, y: p.y + p.h / 2 }, end, { "stroke-opacity": 0.7 })
+    })
+    const ag = rect(document.getElementById("agent"))
+    const ot = rect(document.getElementById("others"))
+    wire({ x: mem.x + mem.w, y: mem.y + mem.h * 0.4 }, { x: ag.x, y: ag.y + ag.h * 0.35 }, { "stroke-width": 3 })
+    wire({ x: mem.x + mem.w, y: mem.y + mem.h * 0.6 }, { x: ot.x, y: ot.y + ot.h / 2 }, { "stroke-dasharray": "6 7", "stroke-width": 2.5 })
+
+    const toolsHead = rect(document.querySelector(".tools-col .col-head"))
+    const pills = [...tl].map(rect)
+    const left = toolsHead.x - 26
+    const top = toolsHead.y - 18
+    const right = mem.x + mem.w + 22
+    const bottom = Math.max(mem.y + mem.h, ...pills.map((p) => p.y + p.h)) + 62
+    Object.assign(document.getElementById("region").style, { left: `${left}px`, top: `${top}px`, width: `${right - left}px`, height: `${bottom - top}px` })
+    Object.assign(document.getElementById("region-label").style, { left: `${left + 24}px`, top: `${bottom - 44}px` })
+  }
+
+  const ready = async () => {
+    await document.fonts.ready
+    await Promise.all([...document.images].map((i) => i.complete ? null : new Promise((r) => { i.onload = i.onerror = r })))
+    if (layout === "wide") drawWide()
+    document.body.dataset.ready = "1"
+  }
+  ready()
+</script>
+</body>
+</html>
