@@ -4,6 +4,14 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.16.3 — 05.11.2026
+
+### Corregido
+
+- **Las notas de inicio de sesión de Microsoft ya no describen la verificación del editor.** Dicen que hacer pública
+  una aplicación compartida de Microsoft es complejo, y apuntan a tu propia aplicación de Microsoft. No cambia ningún
+  comportamiento.
+
 ## 0.16.2 — 05.11.2026
 
 ### Corregido

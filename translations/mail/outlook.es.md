@@ -89,8 +89,8 @@ en cada entrada. Para quitar la aplicación de la organización, el administrado
 
 ### Opción B: la organización registra su propia aplicación
 
-Si tu organización no permite aplicaciones de terceros, un administrador registra una aplicación privada, que dentro de
-su propio tenant no necesita verificación del editor:
+Si tu organización no permite aplicaciones de terceros, un administrador registra una aplicación privada, que funciona dentro de
+su propio tenant:
 
 1. En el Microsoft Entra admin center, registra una aplicación. Plataforma: "Mobile and desktop applications". Redirect
    URI: `http://localhost/callback`. Pon "Allow public client flows" en Yes.

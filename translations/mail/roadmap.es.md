@@ -42,8 +42,6 @@ comandos están en la [referencia de comandos](./commands.md).
 
 ## Siguiente
 
-- **La verificación del editor de Microsoft**, que pone una insignia de verificado en la página de consentimiento y que
-  algunas organizaciones exigen antes de permitir la aplicación. Se espera a que lleguen usuarios con cuentas de trabajo.
 - **Una prueba en vivo de Gmail con OAuth.** El inicio de sesión está construido y aún no se ha probado con una cuenta
   real de Google.
 
