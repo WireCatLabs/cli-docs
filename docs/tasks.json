@@ -1,7 +1,7 @@
 [
   {
     "id": "connect-account",
-    "pages": ["installation.mdx", "agents.mdx", "first-tasks.md"],
+    "pages": ["installation.mdx", "agents.mdx", "first-tasks.mdx"],
     "families": {
       "tg": ["setup", "session", "account", "skill", "mcp"],
       "max": ["setup", "session", "account", "skill", "mcp"]
@@ -9,7 +9,7 @@
   },
   {
     "id": "catch-up",
-    "pages": ["first-tasks.md", "tg/usage.md", "max/usage.md"],
+    "pages": ["first-tasks.mdx", "tg/usage.md", "max/usage.md"],
     "families": {
       "tg": ["inbox", "review", "chats", "messages"],
       "max": ["inbox", "review", "chats", "messages"]
@@ -17,7 +17,7 @@
   },
   {
     "id": "find-history",
-    "pages": ["search.mdx", "first-tasks.md", "tg/archive.md", "max/archive.md", "tg/search.md", "max/search.md"],
+    "pages": ["search.mdx", "first-tasks.mdx", "tg/archive.md", "max/archive.md", "tg/search.md", "max/search.md"],
     "families": {
       "tg": ["store", "messages", "conversations"],
       "max": ["store", "messages", "conversations"]
@@ -26,7 +26,7 @@
   {
     "id": "prepare-meeting",
     "pages": [
-      "first-tasks.md",
+      "first-tasks.mdx",
       "prompting.mdx",
       "zm/meetings.md",
       "zm/search.md",
@@ -41,7 +41,7 @@
   },
   {
     "id": "draft-reply",
-    "pages": ["first-tasks.md", "prompting.mdx", "security.mdx", "tg/usage.md", "max/usage.md"],
+    "pages": ["first-tasks.mdx", "prompting.mdx", "security.mdx", "tg/usage.md", "max/usage.md"],
     "families": {
       "tg": ["messages", "config", "recipients", "sends"],
       "max": ["messages", "config", "recipients", "sends"]

@@ -13,6 +13,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { CommandReferenceIndex } from "@/components/command-reference-index"
 import { CommandRules } from "@/components/command-rules"
+import { DesktopTip } from "@/components/desktop-tip"
 import { DocsDisclosures } from "@/components/docs-disclosures"
 import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
@@ -177,6 +178,13 @@ export default async function Page(props: Props) {
         ) : (
           <>
             {tool && page.slugs.at(-1) === "commands" && <CommandRules tool={tool.name} lang={lang} />}
+            {tool && page.slugs.at(-1) === "installation" && (
+              <DesktopTip
+                name={tool.displayName ?? (tool.name === "tg" ? "Telegram" : "MAX")}
+                signIn={tool.name !== "memo"}
+                lang={lang}
+              />
+            )}
             <MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
           </>
         )}
