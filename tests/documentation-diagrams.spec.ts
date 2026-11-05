@@ -5,7 +5,7 @@ for (const lang of ["en", "ru", "es"]) {
   test(`${lang}: task onboarding, Markdown equivalents and sidebar icons`, async ({ page, request }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto(`/${lang}/docs/first-tasks`)
-    await expect(page.locator('main figure [role="img"]')).toHaveCount(1)
+    await expect(page.locator("main figure img:visible")).toHaveCount(1)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
     const violations = await new AxeBuilder({ page }).include("main").analyze()
     expect(violations.violations).toEqual([])
@@ -13,9 +13,9 @@ for (const lang of ["en", "ru", "es"]) {
     const response = await request.get(`/llms.mdx/docs/${locale}first-tasks/content.md`)
     expect(response.ok()).toBe(true)
     const markdown = await response.text()
-    expect(markdown).toContain("```mermaid")
+    expect(markdown).toContain("/screenshots/desktop/tasks-light-")
     expect(markdown).toContain("installation")
-    expect(markdown).not.toContain("<Mermaid")
+    expect(markdown).not.toContain("<DesktopShot")
     await page.goto(`/${lang}/docs/agents`)
     // The agent guide is cards, not a comparison table; only the MCP reference folded in below it has tables.
     const mcpHeading = page.locator('main h2[id^="mcp-"]')

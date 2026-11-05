@@ -9,43 +9,17 @@ in your own words; the agent chooses the commands.
 If you still need setup, start with [installation](./installation.mdx) or
 [connecting your agent](./agents.mdx).
 
-```mermaid How your request reaches your messenger
-graph TD
-  You["You"] --> Agents
-  subgraph Agents["Your AI agent"]
-    direction LR
-    Claude["Claude Code"]
-    Codex["Codex"]
-    OpenClaw["OpenClaw"]
-    Hermes["Hermes"]
-  end
-  Agents --> WireCat["WireCat"]
-  WireCat --> Core["Shared core: local store and search"]
-  Core --> Tools
-  subgraph Tools["Command-line tools"]
-    direction LR
-    TgCli["tg"]
-    MaxCli["max"]
-    MemoCli["memo"]
-    ZoomCli["zoom"]
-    DriveCli["drive"]
-  end
-  Tools --> Services
-  subgraph Services["Your accounts and files"]
-    direction LR
-    Telegram["Telegram"]
-    Max["MAX"]
-    Mail["Email and notes"]
-    Zoom["Zoom"]
-    Drive["Google Drive"]
-  end
-```
+<DesktopShot
+  shot="tasks"
+  lang="en"
+  alt="The Tasks board in WireCat Desktop: demo tasks in the Open, Todo, Progress, Done and Dismissed columns, two of them taken by an agent"
+  caption="The Tasks page of WireCat Desktop, with demo data. You and your agents share this list: a task you ask your agent to add appears here, with the agent that works on it."
+/>
 
-Read the picture from the top. You describe the task to your AI agent, for example Claude Code, Codex,
-OpenClaw or Hermes. Below the agent is WireCat: a shared core that keeps a local store of your messages,
-mail and notes and searches it, and a command-line tool for each service (`tg`, `max`, `memo`, `zoom`,
-`drive`) talks to Telegram, MAX, your email and notes, Zoom or Google Drive. The tools run on your
-computer; your agent's own settings determine where it processes the messages.
+You describe the task to your AI agent, for example Claude Code, Codex, OpenClaw or Hermes. The agent runs
+WireCat's command-line tools (`tg`, `max`, `memo`, `zm`, `drive`) on your computer, and they read your messages,
+mail, notes, meetings and files. Your agent's own settings determine where it processes the messages.
+[WireCat Desktop](./desktop/index.mdx) is optional: it shows the same tasks, searches and memory in a window.
 
 ## Your first five minutes
 
