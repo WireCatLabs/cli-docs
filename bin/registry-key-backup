@@ -20,7 +20,7 @@ works() { # $1 = key file
   tmp=$(mktemp -d)
   trap 'rm -rf "$tmp"' RETURN
   echo test > "$tmp/m"
-  password | minisign -S -s "$1" -m "$tmp/m" -x "$tmp/m.sig" > /dev/null 2>&1 &&
+  password 2>/dev/null | minisign -S -s "$1" -m "$tmp/m" -x "$tmp/m.sig" > /dev/null 2>&1 &&
     minisign -V -q -p "$pub" -m "$tmp/m" -x "$tmp/m.sig" > /dev/null 2>&1
 }
 
