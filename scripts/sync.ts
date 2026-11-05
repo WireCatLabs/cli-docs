@@ -13,6 +13,7 @@ import { dirname, join, normalize } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 import { structureProblems } from "@wirecat/cli-base/release"
+import { type Desktop, desktopProblems, registryProblems } from "./desktop-registry.ts"
 import { captureUpstream, localizeTool, siteOwnedFor } from "./localize.ts"
 import { crossToolScenarios, readScenarios, type Scenario, scenarioPage } from "./scenarios.ts"
 import { publishSkills, writeSkillsIndex } from "./skills-index.ts"
@@ -32,6 +33,8 @@ export type Tool = {
   profile?: boolean
   /** An outside tool, reviewed against docs/REVIEWING.md#community-tools; an entry without it is one of ours. */
   community?: true
+  /** A community tool's catalog entry for WireCat Desktop, published signed by the deploy (desktop-registry.ts). */
+  desktop?: Desktop
 }
 
 /** What makes a tools.json entry unfit to list; empty when it is fine. */
@@ -43,6 +46,7 @@ export const toolProblems = (tool: Tool): string[] => {
     problems.push(`${tool.name}: a community tool publishes under its own npm scope, not @wirecat`)
   if (flag === true && tool.repo.startsWith("WireCatLabs/"))
     problems.push(`${tool.name}: a WireCatLabs repository is one of ours, not a community tool`)
+  problems.push(...desktopProblems(tool))
   return problems
 }
 
@@ -320,7 +324,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     options: { ref: { type: "string" }, tool: { type: "string" }, "capture-only": { type: "boolean", default: false } },
   })
   if (values.tool && !tools.some((tool) => tool.name === values.tool)) throw new Error(`Unknown tool: ${values.tool}`)
-  const problems = tools.flatMap(toolProblems)
+  const problems = [...tools.flatMap((tool) => toolProblems(tool)), ...registryProblems(tools)]
   if (problems.length) throw new Error(`tools.json:\n${problems.join("\n")}`)
   for (const tool of tools.filter((tool) => !values.tool || values.tool === tool.name))
     syncTool(tool, root, values.ref, values["capture-only"])

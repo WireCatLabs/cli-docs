@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest"
 import { WhatsAppIcon } from "../components/brand-icons"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
 import { sidebarIcons, unifiedDocsTree, withCommunityGroup, withFoldingSections } from "../lib/docs-sidebar-tree"
+import { registryProblems } from "./desktop-registry"
 import { type Tool, toolProblems } from "./sync"
 
 const pages = ["tg", "tg/installation", "tg/mcp", "max", "max/installation", "max/mcp", "max/bot"]
@@ -240,7 +241,8 @@ describe("community tools", () => {
 
   it("keeps every entry of tools.json valid and in every locale's sidebar", () => {
     const tools = JSON.parse(readFileSync("tools.json", "utf8")) as Tool[]
-    expect(tools.flatMap(toolProblems)).toEqual([])
+    expect(tools.flatMap((tool) => toolProblems(tool))).toEqual([])
+    expect(registryProblems(tools)).toEqual([])
     for (const suffix of ["", ".ru", ".es"]) {
       const meta = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }
       for (const { name } of tools) expect(meta.pages, `meta${suffix}.json lists ${name}`).toContain(name)

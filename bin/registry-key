@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# Makes the minisign key pair that signs WireCat Desktop's community tools list, once, and hands the secret half to
+# this repository's deploy as the `production` environment secrets REGISTRY_MINISIGN_KEY and
+# REGISTRY_MINISIGN_PASSWORD. Prints only the public key. Run again to set the secrets again from the same key.
+#
+# The secret key stays in a 0600 file outside the repository; its password stays in the keyring
+# (service wirecat-registry, account minisign). Neither is ever printed. Never the app updater's key.
+set -euo pipefail
+
+repo="WireCatLabs/cli-docs"
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+dir="${XDG_CONFIG_HOME:-$HOME/.config}/wirecat-registry"
+key="$dir/registry.key"
+pub="$dir/registry.pub"
+
+for tool in minisign gh secret-tool; do
+  if ! command -v "$tool" > /dev/null; then
+    case "$tool" in
+      minisign) echo "minisign is missing: sudo apt install minisign (macOS: brew install minisign)." >&2 ;;
+      gh) echo "gh is missing: https://cli.github.com" >&2 ;;
+      secret-tool) echo "secret-tool is missing: sudo apt install libsecret-tools" >&2 ;;
+    esac
+    exit 1
+  fi
+done
+
+umask 077
+mkdir -p "$dir"
+chmod 700 "$dir"
+
+if [ -f "$key" ]; then
+  echo "Using the key made earlier: $key"
+  password="$(secret-tool lookup service wirecat-registry account minisign || true)"
+  if [ -z "$password" ]; then
+    echo "Its password is not in the keyring (service wirecat-registry, account minisign)." >&2
+    exit 1
+  fi
+else
+  password="$(head -c 32 /dev/urandom | base64 | tr -d '\n')"
+  printf '%s' "$password" |
+    secret-tool store --label="WireCat community list signing key password" service wirecat-registry account minisign
+  printf '%s\n%s\n' "$password" "$password" | minisign -G -p "$pub" -s "$key" > /dev/null 2>&1
+  chmod 600 "$key"
+  echo "Made a new key pair in $dir"
+fi
+
+gh secret set REGISTRY_MINISIGN_KEY --env production --repo "$repo" < "$key"
+printf '%s' "$password" | gh secret set REGISTRY_MINISIGN_PASSWORD --env production --repo "$repo"
+unset password
+
+cp "$pub" "$here/registry/minisign.pub"
+public="$(sed -n 2p "$pub")"
+
+cat << EOF
+
+The public key (safe to share):
+
+  $public
+
+1. In wirecat-desktop, replace the last line of src-tauri/registry-key.pub with it and commit.
+2. In cli-docs, commit registry/minisign.pub (just written) so the deploy checks its own signature.
+3. Back up $key and the keyring entry "WireCat community list signing key password" together, offline.
+   Losing them means a new key, and only an app release with the new public key trusts lists signed with it.
+EOF
