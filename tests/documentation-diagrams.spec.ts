@@ -17,7 +17,15 @@ for (const lang of ["en", "ru", "es"]) {
     expect(markdown).toContain("installation")
     expect(markdown).not.toContain("<Mermaid")
     await page.goto(`/${lang}/docs/agents`)
-    await expect(page.locator("main table")).toHaveCount(0)
+    // The agent guide is cards, not a comparison table; only the MCP reference folded in below it has tables.
+    const mcpHeading = page.locator('main h2[id^="mcp-"]')
+    await expect(mcpHeading).toHaveCount(1)
+    const tablesAboveMcp = await page.locator("main table").evaluateAll((tables) => {
+      const heading = document.querySelector('main h2[id^="mcp-"]')
+      if (!heading) return tables.length
+      return tables.filter((table) => heading.compareDocumentPosition(table) & Node.DOCUMENT_POSITION_PRECEDING).length
+    })
+    expect(tablesAboveMcp).toBe(0)
     await expect(page.locator("main h3 > a[data-card]").filter({ hasText: /^OpenClaw$/ })).toBeVisible()
     const headings = await page.locator("main h3 > a[data-card]").allTextContents()
     expect(headings).toContain("Hermes")
