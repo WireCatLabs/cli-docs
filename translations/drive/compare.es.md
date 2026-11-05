@@ -52,7 +52,7 @@ Las herramientas:
 | Comentarios e historial de revisiones | ✅ | ✅ | 🟡 | ❌ |
 | Exportar a PDF, Word, Excel y CSV | ✅ | ✅ | 🟡 | ✅ |
 
-¹ Hasta que Google termine de revisar la aplicación de WireCat, Google muestra una pantalla de «aplicación no verificada» al iniciar sesión y admite como máximo 100 usuarios nuevos; también puedes iniciar sesión con tu propia aplicación de Google. Consulta la [instalación](./installation.md#google-shows-an-unverified-app-warning).
+¹ Hacer pública una aplicación de Google compartida para Drive es complejo, así que Google puede rechazar el inicio de sesión con la aplicación de WireCat; entonces inicia sesión con tu propia aplicación de Google. Consulta la [instalación](./installation.md#google-shows-an-unverified-app-warning).
 
 ² [La documentación de rclone](https://rclone.org/drive/#making-your-own-client-id) indica que su cliente compartido de Google se retira durante 2026 y pide crear un client ID propio.
 

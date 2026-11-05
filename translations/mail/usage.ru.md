@@ -10,10 +10,10 @@ title: "Работа с инструментом"
 аккаунтом:
 
 ```sh
-mail ya folders list
+mail personal folders list
 ```
 
-`MAIL_PROFILE=ya` делает то же для одного сеанса оболочки. Профиль никогда не подставляется сам, даже единственный:
+`MAIL_PROFILE=personal` делает то же для одного сеанса оболочки. Профиль никогда не подставляется сам, даже единственный:
 команда без профиля останавливается с кодом выхода 2 и показывает профили на этом компьютере.
 
 ## Подключить почтовый ящик
@@ -22,11 +22,11 @@ mail ya folders list
 [подготовке почтового ящика](./providers.md), их же печатает `session start`.
 
 ```sh
-mail ya session start --address me@example.com # new profile: finds the server, shows the steps, asks for the app password
-mail ya session start                 # an existing profile: asks for the app password again (checked, kept in the keyring)
-mail ya account check                 # logs in and lists what the server supports
-mail ya folders list                  # folders with role and counts
-mail ya sync --since-time 2026-10-01  # reads new mail into the shared store; stored mail is skipped
+mail personal session start --address me@example.com # new profile: finds the server, shows the steps, asks for the app password.
+mail personal session start                 # an existing profile: asks for the app password again (checked, kept in the keyring)
+mail personal account check                 # logs in and lists what the server supports
+mail personal folders list                  # folders with role and counts
+mail personal sync --since-time 2026-10-01  # reads new mail into the shared store; stored mail is skipped
 ```
 
 `session start` для нового профиля должен найти почтовый сервер. Сначала он смотрит во встроенную таблицу (Яндекс, Gmail,
@@ -62,7 +62,7 @@ memo) действуют и здесь: письмо, названное пра�
 показывает, как далеко ушла синхронизация.
 
 Чтобы профиль оставался актуальным, поставьте его `sync` на таймер (systemd, launchd или Планировщик заданий Windows):
-`mail ya schedule command mail-ya --every 5m -- sync`. `mail ya schedule list` показывает каждое расписание и итог его
+`mail personal schedule command mail-personal --every 5m -- sync`. `mail personal schedule list` показывает каждое расписание и итог его
 последнего запуска, а `doctor` сообщает, когда запуск раз за разом не удаётся.
 
 Яндекс не выдаёт id сообщения. Для такого сервера `sync` перечисляет только номер, флаги, дату и размер каждого сообщения, а
@@ -111,11 +111,11 @@ claude mcp add mail -- mail personal mcp serve
 `review` читает почту, которую сохранил sync, и ничего не спрашивает у сервера. Он говорит словами tg:
 
 ```sh
-mail ya review "date>2h"            # every email, yours too, in threads that changed in the last 2 hours
-mail ya review --new                # what changed since the last `review --new`; 3 days back the first time
-mail ya review --unanswered 1d      # threads whose newest email came to you (To or Cc) and has no answer for a day
-mail ya review --waiting 7d         # threads where you wrote last and nobody answered for a week
-mail ya review "bulk:false"         # leave out threads of mail sent to many, lists and envelopes
+mail personal review "date>2h"            # every email, yours too, in threads that changed in the last 2 hours
+mail personal review --new                # what changed since the last `review --new`; 3 days back the first time
+mail personal review --unanswered 1d      # threads whose newest email came to you (To or Cc) and has no answer for a day
+mail personal review --waiting 7d         # threads where you wrote last and nobody answered for a week
+mail personal review "bulk:false"         # leave out threads of mail sent to many, lists and envelopes
 ```
 
 Показываются все письма, массовые тоже; поле `email` каждого элемента содержит `bulk`, `list_id` и `rule_id` рядом с
@@ -129,9 +129,9 @@ mail ya review "bulk:false"         # leave out threads of mail sent to many, li
 порядке сохранения почты — поэтому письмо, сохранённое поздно и со старой датой, не пропускается:
 
 ```sh
-mail ya review --holder mail-triage --json        # what is stored past its mark; the answer gives a cursor
-mail ya messages acknowledge --holder mail-triage --cursor <cursor>   # once processed: move the mark there
-mail ya status                                    # how far each holder got, what it held and skipped
+mail personal review --holder mail-triage --json        # what is stored past its mark; the answer gives a cursor
+mail personal messages acknowledge --holder mail-triage --cursor <cursor>   # once processed: move the mark there
+mail personal status                                    # how far each holder got, what it held and skipped
 ```
 
 Отметка движется только вперёд. Массовые письма, конверты и черновики пропускаются и считаются; письмо, которое ещё
@@ -144,12 +144,12 @@ mail ya status                                    # how far each holder got, wha
 письмах, которых `sync` ещё не прочитал (`--backend archive` оставляет только хранилище):
 
 ```sh
-mail ya search messages invoice                                  # best match first, any form of the word
-mail ya search messages 'from:ann@example.com has:attachment date>30d'
-mail ya search messages 'list:github.com is:unread' --newest     # a mailing list, newest first
-mail ya messages show '<ref from a search>'                      # the whole email and its attachments' text
-mail ya conversations list emails_count>1                        # threads, newest first
-mail ya conversations show '<chat:email/… ref>'                  # one thread, oldest first
+mail personal search messages invoice                                  # best match first, any form of the word
+mail personal search messages 'from:ann@example.com has:attachment date>30d'
+mail personal search messages 'list:github.com is:unread' --newest     # a mailing list, newest first
+mail personal messages show '<ref from a search>'                      # the whole email and its attachments' text
+mail personal conversations list emails_count>1                        # threads, newest first
+mail personal conversations show '<chat:email/… ref>'                  # one thread, oldest first
 ```
 
 Язык запросов тот же, что у всех CLI WireCat ([руководство по поиску](https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language.md)):
@@ -182,19 +182,19 @@ sync. `permissions.messages.server-search=deny` в профиле отключа
 запросом, что и `search messages`, и пишет закрытую папку (режим 700, файлы 600):
 
 ```sh
-mail ya messages export 'from:ann@example.com' --output ~/mail-backup     # one mbox file per folder
-mail ya messages export --folder INBOX --format maildir --output ~/Maildir # Maildir++, for mu and notmuch
-mail ya messages export 'date>30d' --limit 500 --output ~/mail-backup --resume
-mail ya stats messages top --by list --limit 10                          # which lists send the most
+mail personal messages export 'from:ann@example.com' --output ~/mail-backup     # one mbox file per folder
+mail personal messages export --folder INBOX --format maildir --output ~/Maildir # Maildir++, for mu and notmuch
+mail personal messages export 'date>30d' --limit 500 --output ~/mail-backup --resume
+mail personal stats messages top --by list --limit 10                          # which lists send the most
 ```
 
 `stats messages show` считает сохранённые письма, подходящие запросу, полученные и отправленные, по календарным дням,
 неделям (ключ — её понедельник) или отправителям в часовом поясе `--timezone`. Только счётчики, поиск не записывается:
 
 ```sh
-mail ya stats messages show --by day --timezone Europe/Madrid -- 'date>=30d'
+mail personal stats messages show --by day --timezone Europe/Madrid -- 'date>=30d'
 # {"item":{"by":"day","received":14,"sent":3,"rows":[{"key":"2026-11-01","name":null,"received":4,"sent":1}]}}
-mail ya stats messages show --by sender --limit 10                       # by sender counts received mail only
+mail personal stats messages show --by sender --limit 10                       # by sender counts received mail only
 ```
 
 - **Что записывается.** Каждое письмо так, как его хранит сервер, байт в байт, в каждой папке, где оно лежит (Gmail
@@ -243,14 +243,14 @@ mail gm messages import ~/Takeout/Mail/archive.mbox         # a Google Takeout f
 называют через `ref`, который выдаёт поиск, или выбирают через `--filter` тем же запросом:
 
 ```sh
-mail ya messages mark-read '<ref>'                               # also mark-unread, star, unstar
-mail ya messages update '<ref>' --flag answered --unflag '$Junk'  # flags and keywords; --replace sets the whole set
-mail ya messages move '<ref>' --folder archive                   # a folder by path, name or role
-mail ya messages copy --filter 'list:github.com' --folder Lists --yes
-mail ya messages delete --filter 'from:shop@example.com date<2025-01-01'   # a preview: nothing moves
-mail ya messages delete --filter 'from:shop@example.com date<2025-01-01' --yes
-mail ya messages restore --run '<run id the change answered with>' --yes
-mail ya folders create Receipts                                  # also folders rename, folders delete
+mail personal messages mark-read '<ref>'                               # also mark-unread, star, unstar
+mail personal messages update '<ref>' --flag answered --unflag '$Junk'  # flags and keywords; --replace sets the whole set
+mail personal messages move '<ref>' --folder archive                   # a folder by path, name or role
+mail personal messages copy --filter 'list:github.com' --folder Lists --yes
+mail personal messages delete --filter 'from:shop@example.com date<2025-01-01'   # a preview: nothing moves
+mail personal messages delete --filter 'from:shop@example.com date<2025-01-01' --yes
+mail personal messages restore --run '<run id the change answered with>' --yes
+mail personal folders create Receipts                                  # also folders rename, folders delete
 ```
 
 - **Сначала предпросмотр.** Удаление, изменение, выбранное через `--filter`, и изменение более чем 20 писем отвечают тем,
@@ -283,12 +283,12 @@ mail ya folders create Receipts                                  # also folders 
 агент; вы читаете его и отправляете из почтового приложения или через `drafts send`.
 
 ```sh
-mail ya drafts create --to anna@example.com --subject 'Monday' 'Shall we meet at ten?'
-mail ya drafts create --reply-to '<ref>' --reply-all 'Thanks, agreed.'   # in the thread, to everyone but you
-mail ya drafts create --to anna@example.com --subject Notes - < notes.txt # - reads the text from stdin
-mail ya drafts list                                                       # newest first, read from the server
-mail ya drafts update '<id>' 'New text'                                   # only what you give changes
-mail ya drafts delete '<id>' --allow-dangerous                             # the owner's; gone for good, a preview without it
+mail personal drafts create --to anna@example.com --subject 'Monday' 'Shall we meet at ten?'
+mail personal drafts create --reply-to '<ref>' --reply-all 'Thanks, agreed.'   # in the thread, to everyone but you
+mail personal drafts create --to anna@example.com --subject Notes - < notes.txt # - reads the text from stdin
+mail personal drafts list                                                       # newest first, read from the server
+mail personal drafts update '<id>' 'New text'                                   # only what you give changes
+mail personal drafts delete '<id>' --allow-dangerous                             # the owner's; gone for good, a preview without it
 ```
 
 - **Id** — это Message-ID черновика, как его показывает `drafts list`, с `<>` или без. Он остаётся прежним при изменении
@@ -310,10 +310,10 @@ mail ya drafts delete '<id>' --allow-dangerous                             # the
 memo, и поиск их находит.
 
 ```sh
-mail ya tags add invoices --message '<ref>'     # one email; --chat '<conversation ref>' tags a whole conversation
-mail ya search messages 'tag:invoices date>30d'
-mail ya tags list tag:invoices                  # what is tagged; type:message or type:chat
-mail ya tags remove invoices --message '<ref>'
+mail personal tags add invoices --message '<ref>'     # one email; --chat '<conversation ref>' tags a whole conversation
+mail personal search messages 'tag:invoices date>30d'
+mail personal tags list tag:invoices                  # what is tagged; type:message or type:chat
+mail personal tags remove invoices --message '<ref>'
 ```
 
 Тег — это 1–32 символа: буквы a–z, цифры и дефисы; заглавные становятся строчными. Сервер хранит вместо них ключевые слова
@@ -325,13 +325,13 @@ mail ya tags remove invoices --message '<ref>'
 [списка провайдеров](./providers.md) или из `smtp_host`, `smtp_port` и `smtp_security` в профиле.
 
 ```sh
-mail ya messages send --to ann@example.com --subject Lunch "See you at noon."
-echo "The report." | mail ya messages send --to ann@example.com --subject Report --file ./report.pdf
-mail ya messages send --reply-to '<ref>' "Paid today."                # Re:, In-Reply-To, References, the quote
-mail ya messages send --reply-to '<ref>' --reply-all "Thanks, all."   # also to the original's To and Cc, not you
-mail ya messages forward '<ref>' --to bob@example.com "FYI"           # the original attached whole
-mail ya messages send --to ann@example.com --subject Hi "Hello" --dry-run   # build it, send nothing
-mail ya drafts send '<draft id>'                                     # send a saved draft, then remove it
+mail personal messages send --to ann@example.com --subject Lunch "See you at noon."
+echo "The report." | mail personal messages send --to ann@example.com --subject Report --file ./report.pdf
+mail personal messages send --reply-to '<ref>' "Paid today."                # Re:, In-Reply-To, References, the quote
+mail personal messages send --reply-to '<ref>' --reply-all "Thanks, all."   # also to the original's To and Cc, not you
+mail personal messages forward '<ref>' --to bob@example.com "FYI"           # the original attached whole
+mail personal messages send --to ann@example.com --subject Hi "Hello" --dry-run   # build it, send nothing
+mail personal drafts send '<draft id>'                                     # send a saved draft, then remove it
 ```
 
 - **Вопрос.** Письмо кому-либо, кроме вас, сначала спрашивает и показывает от кого, кому, копию, скрытую копию, тему,

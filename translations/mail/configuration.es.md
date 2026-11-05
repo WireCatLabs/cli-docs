@@ -6,9 +6,9 @@ Los ajustes viven en un solo archivo, `config.json`, en la carpeta que muestra `
 y `defaults` se aplica a todos los perfiles. Esta página explica cómo verlos y cambiarlos.
 
 ```sh
-mail ya config show
-mail ya config set limit 50
-mail ya config unset limit
+mail personal config show
+mail personal config set limit 50
+mail personal config unset limit
 ```
 
 Un perfil creado por `session start` guarda también el buzón: `address`, `login` (cuando no es la dirección), `imap_host`,
@@ -50,7 +50,10 @@ La clave de un comando es su ruta: `messages.move`, `folders.delete`. De fábric
 adelante (marcas, movimientos, copias, carpetas creadas o renombradas, borradores guardados), y estos preguntan:
 `messages.delete`, `folders.delete`, `drafts.delete` y `messages.bulk`, por la que pasa además todo cambio de más de 20
 mensajes o elegido con `--filter`. En una terminal
-`ask` es una pregunta s/N; `--yes` la responde.
+`ask` es una pregunta s/N, y la respuesta por defecto es no. Un flag la responde en su lugar: `--allow-dangerous` para
+`drafts delete`, porque un borrador eliminado no vuelve, y `--yes` para cualquier otro cambio, incluido `messages delete`,
+porque la papelera y `messages restore` devuelven el correo. Sin terminal y sin flag el comando se detiene con
+`confirmation_required` (código de salida 7) y no cambia nada.
 
 El envío tiene dos claves. `messages.send` y `messages.forward` son los comandos mismos y siguen adelante cuando el
 correo va solo a ti. El correo que llega a cualquier otra persona pasa también por `messages.send.others`, que por
@@ -60,9 +63,9 @@ Un agente por MCP, donde nadie puede responder la pregunta, escribe solo a ti ha
 destinatario cuenta para `sends_per_hour` (30 por defecto).
 
 ```sh
-mail ya config set permissions.messages readonly      # no flag, move, deletion or send on this profile
-mail ya config set permissions.messages.bulk deny     # one message at a time only
-mail ya config set permissions.messages.send.others allow   # send to others without the question, agents too
+mail personal config set permissions.messages readonly      # no flag, move, deletion or send on this profile
+mail personal config set permissions.messages.bulk deny     # one message at a time only
+mail personal config set permissions.messages.send.others allow   # send to others without the question, agents too
 ```
 
 Cada intento de cambiar el buzón o de enviar va al diario de envíos del perfil con su clave, el número y el resultado,

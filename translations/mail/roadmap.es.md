@@ -14,6 +14,20 @@ el servidor, envía, responde y reenvía por SMTP con una comprobación de desti
 descarga archivos adjuntos. Exporta el correo guardado a mbox o Maildir, y un temporizador (`schedule`) puede ejecutar
 cualquier comando. Las reglas de correo del propietario y la limpieza de sobres pasaron aquí desde memo.
 
+`review` muestra qué hay de nuevo desde la última vez, a qué correos debes respuesta (`--unanswered`) y cuáles esperan una
+(`--waiting`), y `--holder` da a cada agente su propia marca de procesamiento, que mueve `messages acknowledge`.
+`stats messages show` cuenta el correo guardado recibido y enviado por día, semana o remitente, y `stats messages top`
+lista los remitentes, listas o dominios con más correo. `account inspect` agrupa un buzón por remitente y lista antes de
+sincronizarlo, con una sugerencia `skip` y una puntuación de spam. `messages import` añade un archivo mbox de Google
+Takeout a un perfil de Gmail. `sync` lee adjuntos hasta un tamaño que tú fijas (`read_attachments`,
+`max_attachment_mb`) y puntúa a los remitentes del correo guardado, de modo que la búsqueda clasifica más abajo a los
+remitentes sospechosos. `config migrate` y `config repair` mantienen el archivo de ajustes completo y válido.
+
+Un `schedule agent` se ejecuta por defecto con Sonnet, arranca sin tus servidores MCP, habilidades ni ajustes y no inicia
+más ejecuciones durante el resto del día cuando las suyas han costado 5 dólares estadounidenses. `--model` y
+`--max-cost-per-day` lo cambian para una programación, y los ajustes `schedule_model_claude`, `schedule_model_codex`,
+`schedule_lean_start` y `schedule_max_cost_per_day` lo cambian para cada una nueva.
+
 Encuentra por sí mismo el servidor de una dirección nueva: una tabla incorporada, el registro MX, el ISPDB de
 Thunderbird y el archivo autoconfig del dominio. Inicia sesión con una contraseña de aplicación guardada en el llavero
 del sistema, lo que sirve para Yandex, Gmail, iCloud, Mail.ru, Fastmail y otros proveedores que ofrecen contraseñas de

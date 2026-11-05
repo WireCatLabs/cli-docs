@@ -4,6 +4,45 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.16.2 — 05.11.2026
+
+### Corregido
+
+- **La página «Preparar el buzón» lista primero a los proveedores internacionales**: Gmail, Outlook, Microsoft 365,
+  iCloud, Fastmail y después Yandex. Mail.ru ya no está en la página en inglés; sigue siendo un proveedor integrado y
+  sus pasos están en la traducción al ruso. El comportamiento no cambia.
+- **Las notas de inicio de sesión de Google y Microsoft ya no describen el estado de revisión o verificación de
+  WireCat.** Dicen que hacer pública una aplicación de Google compartida para el correo es complejo, así que Google puede
+  rechazar la aplicación de WireCat, y señalan el camino: tu propia aplicación de Google o una contraseña de aplicación. El
+  comportamiento no cambia.
+- **La ayuda de `session end` dice qué hace `--revoke` en tu cuenta.** Con Gmail por OAuth pide a Google que revoque el
+  inicio de sesión, lo que cierra la sesión de todas las herramientas que usan el mismo proyecto de Google. La
+  descripción y los ejemplos del comando ahora lo dicen. El comportamiento no cambia.
+
+## 0.16.1 — 05.11.2026
+
+### Corregido
+
+- **Las pruebas de los permisos privados de archivos omiten la comprobación de permisos en Windows**, donde los archivos
+  no tienen permisos de Unix.
+- **La documentación, los ejemplos de la ayuda y la skill llaman `personal` al perfil de ejemplo, no `ya`**, como en tg.
+  Un segundo buzón en un ejemplo se llama `work`. El comportamiento no cambia.
+- **`docs/configuration.md` dice qué flag responde a `ask`**: `--allow-dangerous` para `drafts delete`, `--yes` para
+  cualquier otro cambio y `confirmation_required` sin terminal y sin flag.
+- **La caché de las edades de dominio de remitentes y la carpeta de los registros de inicio de sesión son solo tuyas.**
+  `domain-ages.json` se escribe con permisos 600 y la carpeta que contiene `sign-ins.json` con 700, como todo otro
+  archivo privado de mail.
+- **Cada error y cada motivo de incidencia que mail genera está en su registro**, así que `mail commands info` los lista
+  y un agente puede ramificar según ellos: `mail.smtp-login-refused`, `mail.no-drafts`, `mail.draft-unknown`,
+  `mail.gmail-objectid`, `mail.export-destination-exists`, `download.exists`, `mail.unreadable`,
+  `mail.deletions-skipped`, `mail.rules-unreadable` y `mail.export-unreadable`. Una prueba mantiene la lista completa.
+- **El análisis de secretos conoce los tokens de acceso, los tokens de renovación y los secretos de cliente de Google
+  OAuth.**
+- **`mail commands info` dice con qué responden `rules remove`, `rules apply` y `rules import`**, como cualquier otro
+  comando: `mail_rule_change`, `mail_rules_apply` y `mail_rule_import`. Las respuestas no cambian.
+- **`rules apply` cierra su conexión con el servidor de correo antes de responder**, y los comandos de etiquetas entregan
+  el almacén a la ejecución, así que un tiempo de espera o una señal también lo cierran.
+
 ## 0.16.0 — 05.11.2026
 
 ### Cambiado — puede romper a quien llama

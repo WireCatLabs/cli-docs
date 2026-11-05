@@ -54,9 +54,8 @@ por esta sección.
 
 ### Qué ves y por qué
 
-La aplicación de Microsoft de WireCat aún no tiene el editor verificado. Una cuenta de trabajo o de centro educativo
-pertenece a una organización (un "tenant"), y Microsoft no deja que los usuarios corrientes de otro tenant aprueben una
-aplicación multitenant sin editor verificado. En su lugar, el inicio de sesión se detiene en una página que dice "Need
+Una cuenta de trabajo o de centro educativo pertenece a una organización (un "tenant"), y un tenant puede no dejar que
+los usuarios corrientes aprueben una aplicación multitenant como la de WireCat. En su lugar, el inicio de sesión se detiene en una página que dice "Need
 admin approval" o con el error `AADSTS90094` (el administrador debe dar el consentimiento). Esa página la muestra el
 navegador, así que `mail` no imprime ningún código de error de Microsoft. No es un fallo de tu cuenta ni de `mail`. Un
 administrador debe actuar una vez, y después todos en la organización inician sesión como siempre. Microsoft describe la
@@ -80,8 +79,7 @@ un enlace) y un `redirect_uri` registrado para la aplicación. La cuenta necesit
 en nombre de la organización, como Cloud Application Administrator o Privileged Role Administrator
 ([roles](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/grant-admin-consent#prerequisites)).
 
-El administrador ve la página de consentimiento de Microsoft para WireCat. Lista los tres permisos y marca al editor como
-no verificado. El administrador pulsa "Accept". Después Microsoft envía el navegador a `http://localhost/callback`; la
+El administrador ve la página de consentimiento de Microsoft para WireCat. Lista los tres permisos. El administrador pulsa "Accept". Después Microsoft envía el navegador a `http://localhost/callback`; la
 pestaña puede mostrar un error de conexión porque nada escucha ahí, y es lo esperado. El consentimiento ya está guardado.
 
 Para deshacerlo, el administrador abre el [Microsoft Entra admin center](https://entra.microsoft.com), luego "Entra ID",
@@ -126,10 +124,10 @@ Más errores: [solución de problemas](./troubleshooting.md).
 
 Úsalo solo si tu organización exige su propia aplicación. Regístrala ([pasos](./oauth-microsoft.md)): plataforma "Mobile
 and desktop applications", redirección `http://localhost/callback` sin puerto, nunca "Web". Después configura su id una
-vez, en una terminal:
+vez, en una terminal, con el id de tu aplicación en lugar del id de ejemplo:
 
 ```sh
-mail config set --defaults microsoft_client_id <application-client-id>
+mail config set --defaults microsoft_client_id 11111111-2222-3333-4444-555555555555
 ```
 
 Solo tú puedes configurarlo; a un agente por MCP se le rechaza.

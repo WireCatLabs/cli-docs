@@ -21,8 +21,8 @@ mail doctor
 Затем подключите почтовый ящик. Имя профиля выбираете вы: это первое слово каждой команды:
 
 ```sh
-mail ya session start --address me@example.com
-mail ya account check
+mail personal session start --address me@example.com
+mail personal account check
 ```
 
 ## Поиск по почте
@@ -30,7 +30,7 @@ mail ya account check
 После `sync` почта лежит в общем хранилище, и `mail` ищет в нём:
 
 ```sh
-mail ya search messages invoice
+mail personal search messages invoice
 ```
 
 Слова запроса описаны в [работе с инструментом](./usage.md#search-your-mail). [memo](https://github.com/WireCatLabs/cli-memo)

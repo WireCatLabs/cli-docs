@@ -86,7 +86,7 @@ mail session start [options]
 
 **Returns:** sign in; a new profile is created first
 
-**Example:** `mail ya session start --address me@example.com`, `mail work session start --address me@outlook.com`, `mail gm session start --address me@gmail.com --client-file ~/client.json`
+**Example:** `mail personal session start --address me@example.com`, `mail work session start --address me@outlook.com`, `mail gm session start --address me@gmail.com --client-file ~/client.json`
 
 ### `mail session status`
 
@@ -102,11 +102,11 @@ mail session status [options]
 
 **Returns:** mail session status — profile, state, auth, password_from, address, verified, oauth; every field: mail commands info session status
 
-**Example:** `mail ya session status`, `mail ya session status --check --json`
+**Example:** `mail personal session status`, `mail personal session status --check --json`
 
 ### `mail session end`
 
-forget this profile's app password or OAuth sign-in on this computer; synced mail stays
+forget this profile's app password or OAuth sign-in on this computer; synced mail stays. With --revoke (Gmail over OAuth) it also asks Google to revoke the sign-in: that changes your Google account and signs out every tool that uses the same Google project
 
 **Changes something on this computer only.**
 
@@ -120,7 +120,7 @@ mail session end [options]
 
 **Returns:** forget this profile's password or sign-in; synced mail stays
 
-**Example:** `mail ya session end`
+**Example:** `mail personal session end`, `mail personal session end --revoke`
 
 ### `mail session list`
 
@@ -148,7 +148,7 @@ mail account check
 
 **Returns:** mail account check — profile, host, port, security, password_from, login, capabilities, features, and 1 more; every field: mail commands info account check
 
-**Example:** `mail ya account check`, `mail ya account check --json`
+**Example:** `mail personal account check`, `mail personal account check --json`
 
 ### `mail account inspect`
 
@@ -183,7 +183,7 @@ mail folders list
 
 **Returns:** mail folder — path, name, role, messages, unseen; every field: mail commands info folders list
 
-**Example:** `mail ya folders list`, `mail ya folders list --json`
+**Example:** `mail personal folders list`, `mail personal folders list --json`
 
 ### `mail folders create`
 
@@ -201,7 +201,7 @@ mail folders create <folder>
 
 **Returns:** mail folder change — action, folder, to, messages, applied, hint; every field: mail commands info folders create
 
-**Example:** `mail ya folders create Receipts`, `mail ya folders create Work/2026`
+**Example:** `mail personal folders create Receipts`, `mail personal folders create Work/2026`
 
 ### `mail folders rename`
 
@@ -220,7 +220,7 @@ mail folders rename <folder> <name>
 
 **Returns:** mail folder change — action, folder, to, messages, applied, hint; every field: mail commands info folders rename
 
-**Example:** `mail ya folders rename Receipts Invoices`
+**Example:** `mail personal folders rename Receipts Invoices`
 
 ### `mail folders delete`
 
@@ -244,7 +244,7 @@ mail folders delete <folder> [options]
 
 **Returns:** mail folder change — action, folder, to, messages, applied, hint; every field: mail commands info folders delete
 
-**Example:** `mail ya folders delete Old --yes`
+**Example:** `mail personal folders delete Old --yes`
 
 ## `mail sync`
 
@@ -269,7 +269,7 @@ mail sync [options]
 
 **Returns:** mail sync — address, since, timezone, folders, state, requests, listed, saved, and 14 more; every field: mail commands info sync
 
-**Example:** `mail ya sync`, `mail ya sync --since-time 2026-10-01 --limit 200`, `mail ya sync --folder INBOX`
+**Example:** `mail personal sync`, `mail personal sync --since-time 2026-10-01 --limit 200`, `mail personal sync --folder INBOX`
 
 ## `mail rules`
 
@@ -289,7 +289,7 @@ mail rules list [query]
 
 **Returns:** mail rule — match, action, decided_at, id, tags, reason, protected, source; every field: mail commands info rules list
 
-**Example:** `mail ya rules list`, `mail ya rules list protected:true --json`
+**Example:** `mail personal rules list`, `mail personal rules list protected:true --json`
 
 ### `mail rules add`
 
@@ -313,7 +313,7 @@ mail rules add [options]
 
 **Returns:** mail rule — match, action, decided_at, id, tags, reason, protected, source; every field: mail commands info rules add
 
-**Example:** `mail ya rules add --domain shop.example --do envelope,tag:promo`, `mail ya rules add --sender boss@example.com --do protect --reason "never lose these"`, `mail ya rules add --filter "older:365d larger:5MB" --do envelope`
+**Example:** `mail personal rules add --domain shop.example --do envelope,tag:promo`, `mail personal rules add --sender boss@example.com --do protect --reason "never lose these"`, `mail personal rules add --filter "older:365d larger:5MB" --do envelope`
 
 ### `mail rules remove`
 
@@ -335,7 +335,7 @@ mail rules remove [options]
 
 **Returns:** drop the rule with exactly these conditions
 
-**Example:** `mail ya rules remove --domain shop.example`, `mail ya rules remove --filter "older:365d larger:5MB"`
+**Example:** `mail personal rules remove --domain shop.example`, `mail personal rules remove --filter "older:365d larger:5MB"`
 
 ### `mail rules apply`
 
@@ -354,7 +354,7 @@ mail rules apply [options]
 
 **Returns:** cut stored mail an envelope rule matches to its envelope; dry run unless --yes
 
-**Example:** `mail ya rules apply`, `mail ya rules apply --since-time 2026-01-01 --yes`
+**Example:** `mail personal rules apply`, `mail personal rules apply --since-time 2026-01-01 --yes`
 
 ### `mail rules export`
 
@@ -366,7 +366,7 @@ mail rules export
 
 **Returns:** print this mailbox's rules as JSON, to review, keep or move elsewhere
 
-**Example:** `mail ya rules export`
+**Example:** `mail personal rules export`
 
 ### `mail rules import`
 
@@ -388,7 +388,7 @@ mail rules import <file> [options]
 
 **Returns:** import saved rules, or preview Gmail filters
 
-**Example:** `mail ya rules import rules.json`, `mail ya rules import Filters.json --format gmail`, `mail ya rules import Filters.json --format gmail --yes`
+**Example:** `mail personal rules import rules.json`, `mail personal rules import Filters.json --format gmail`, `mail personal rules import Filters.json --format gmail --yes`
 
 ## `mail status`
 
@@ -400,7 +400,7 @@ mail status
 
 **Returns:** mail sync status — job, profile, done, total, remaining, state, updated_at, cursor_age_ms, and 2 more; every field: mail commands info status
 
-**Example:** `mail ya status`, `mail ya status --json`
+**Example:** `mail personal status`, `mail personal status --json`
 
 ## `mail search`
 
@@ -532,7 +532,7 @@ mail messages export [query] [options]
 
 **Returns:** mail export — address, format, destination, folders, state, matched, exported, already_exported, and 5 more; every field: mail commands info messages export
 
-**Example:** `mail ya messages export 'from:ann@example.com' --output ~/mail-backup`, `mail ya messages export --folder INBOX --format maildir --output ~/Maildir`, `mail ya messages export 'date>30d' --limit 500 --output ~/mail-backup --resume`
+**Example:** `mail personal messages export 'from:ann@example.com' --output ~/mail-backup`, `mail personal messages export --folder INBOX --format maildir --output ~/Maildir`, `mail personal messages export 'date>30d' --limit 500 --output ~/mail-backup --resume`
 
 ### `mail messages import`
 
@@ -580,7 +580,7 @@ mail messages mark-read [message] [options]
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages mark-read
 
-**Example:** `mail ya messages mark-read msg:email/me%40example.com/t1/m1`, `mail ya messages mark-read --filter 'from:shop@example.com is:unread' --yes`
+**Example:** `mail personal messages mark-read msg:email/me%40example.com/t1/m1`, `mail personal messages mark-read --filter 'from:shop@example.com is:unread' --yes`
 
 ### `mail messages mark-unread`
 
@@ -605,7 +605,7 @@ mail messages mark-unread [message] [options]
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages mark-unread
 
-**Example:** `mail ya messages mark-unread msg:email/me%40example.com/t1/m1`, `mail ya messages mark-unread --filter 'from:shop@example.com is:unread' --yes`
+**Example:** `mail personal messages mark-unread msg:email/me%40example.com/t1/m1`, `mail personal messages mark-unread --filter 'from:shop@example.com is:unread' --yes`
 
 ### `mail messages star`
 
@@ -630,7 +630,7 @@ mail messages star [message] [options]
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages star
 
-**Example:** `mail ya messages star msg:email/me%40example.com/t1/m1`, `mail ya messages star --filter 'from:shop@example.com is:unread' --yes`
+**Example:** `mail personal messages star msg:email/me%40example.com/t1/m1`, `mail personal messages star --filter 'from:shop@example.com is:unread' --yes`
 
 ### `mail messages unstar`
 
@@ -655,7 +655,7 @@ mail messages unstar [message] [options]
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages unstar
 
-**Example:** `mail ya messages unstar msg:email/me%40example.com/t1/m1`, `mail ya messages unstar --filter 'from:shop@example.com is:unread' --yes`
+**Example:** `mail personal messages unstar msg:email/me%40example.com/t1/m1`, `mail personal messages unstar --filter 'from:shop@example.com is:unread' --yes`
 
 ### `mail messages update`
 
@@ -683,7 +683,7 @@ mail messages update [message] [options]
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages update
 
-**Example:** `mail ya messages update msg:email/me%40example.com/t1/m1 --flag answered --unflag '$Junk'`, `mail ya messages update msg:email/me%40example.com/t1/m1 --flag read --flag flagged --replace`
+**Example:** `mail personal messages update msg:email/me%40example.com/t1/m1 --flag answered --unflag '$Junk'`, `mail personal messages update msg:email/me%40example.com/t1/m1 --flag read --flag flagged --replace`
 
 ### `mail messages move`
 
@@ -709,7 +709,7 @@ mail messages move [message] [options]
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages move
 
-**Example:** `mail ya messages move msg:email/me%40example.com/t1/m1 --folder Archive`, `mail ya messages move --filter 'list:github.com date<2026-01-01' --folder Lists --yes`
+**Example:** `mail personal messages move msg:email/me%40example.com/t1/m1 --folder Archive`, `mail personal messages move --filter 'list:github.com date<2026-01-01' --folder Lists --yes`
 
 ### `mail messages copy`
 
@@ -735,7 +735,7 @@ mail messages copy [message] [options]
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages copy
 
-**Example:** `mail ya messages copy msg:email/me%40example.com/t1/m1 --folder Archive`, `mail ya messages copy --filter 'list:github.com date<2026-01-01' --folder Lists --yes`
+**Example:** `mail personal messages copy msg:email/me%40example.com/t1/m1 --folder Archive`, `mail personal messages copy --filter 'list:github.com date<2026-01-01' --folder Lists --yes`
 
 ### `mail messages delete`
 
@@ -762,7 +762,7 @@ mail messages delete [message] [options]
 
 **Returns:** mail change — action, applied, run, selected, located, changed, missing, already_deleted, and 6 more; every field: mail commands info messages delete
 
-**Example:** `mail ya messages delete msg:email/me%40example.com/t1/m1 --yes`, `mail ya messages delete --filter 'from:shop@example.com date<2025-01-01'`, `mail ya messages delete --rules --yes`
+**Example:** `mail personal messages delete msg:email/me%40example.com/t1/m1 --yes`, `mail personal messages delete --filter 'from:shop@example.com date<2025-01-01'`, `mail personal messages delete --rules --yes`
 
 ### `mail messages restore`
 
@@ -782,7 +782,7 @@ mail messages restore [options]
 
 **Returns:** mail restore — run, applied, restore_run, command, logged, restorable, missing, restored, and 2 more; every field: mail commands info messages restore
 
-**Example:** `mail ya messages restore --run 20261101T101500Z-messages-delete-1a2b3c`, `mail ya messages restore --run 20261101T101500Z-messages-delete-1a2b3c --yes`
+**Example:** `mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c`, `mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c --yes`
 
 ### `mail messages send`
 
@@ -814,7 +814,7 @@ mail messages send [text] [options]
 
 **Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 9 more; every field: mail commands info messages send
 
-**Example:** `mail ya messages send --to ann@example.com --subject "Lunch" "See you at noon."`, `mail ya messages send --reply-to 'msg:email/me%40example.com/thread-1/1001' "Thanks, done."`, `mail ya messages send --to ann@example.com --subject Report --file ./report.pdf "The report."`
+**Example:** `mail personal messages send --to ann@example.com --subject "Lunch" "See you at noon."`, `mail personal messages send --reply-to 'msg:email/me%40example.com/thread-1/1001' "Thanks, done."`, `mail personal messages send --to ann@example.com --subject Report --file ./report.pdf "The report."`
 
 ### `mail messages forward`
 
@@ -845,7 +845,7 @@ mail messages forward <message> [text] [options]
 
 **Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 9 more; every field: mail commands info messages forward
 
-**Example:** `mail ya messages forward 'msg:email/me%40example.com/thread-1/1001' --to bob@example.com`, `mail ya messages forward 'msg:email/me%40example.com/thread-1/1001' --to bob@example.com "FYI"`
+**Example:** `mail personal messages forward 'msg:email/me%40example.com/thread-1/1001' --to bob@example.com`, `mail personal messages forward 'msg:email/me%40example.com/thread-1/1001' --to bob@example.com "FYI"`
 
 ## `mail conversations`
 
@@ -904,7 +904,7 @@ mail attachments list <message>
 
 **Returns:** mail attachment — number, name, mime, bytes; every field: mail commands info attachments list
 
-**Example:** `mail ya attachments list 'msg:email/me%40example.com/thread-1/1001'`
+**Example:** `mail personal attachments list 'msg:email/me%40example.com/thread-1/1001'`
 
 ### `mail attachments download`
 
@@ -928,7 +928,7 @@ mail attachments download <message> [number] [options]
 
 **Returns:** mail attachments saved — folder, files; every field: mail commands info attachments download
 
-**Example:** `mail ya attachments download 'msg:email/me%40example.com/thread-1/1001' --output-dir ./invoices`, `mail ya attachments download 'msg:email/me%40example.com/thread-1/1001' 2 --output-dir ./invoices`
+**Example:** `mail personal attachments download 'msg:email/me%40example.com/thread-1/1001' --output-dir ./invoices`, `mail personal attachments download 'msg:email/me%40example.com/thread-1/1001' 2 --output-dir ./invoices`
 
 ## `mail stats`
 
@@ -958,7 +958,7 @@ mail stats messages show [query] [options]
 
 **Returns:** mail counts — by, received, sent, rows; every field: mail commands info stats messages show
 
-**Example:** `mail ya stats messages show --by day --timezone Europe/Madrid -- 'date>=30d'`, `mail ya stats messages show --by sender --limit 10`
+**Example:** `mail personal stats messages show --by day --timezone Europe/Madrid -- 'date>=30d'`, `mail personal stats messages show --by sender --limit 10`
 
 #### `mail stats messages top`
 
@@ -975,7 +975,7 @@ mail stats messages top [options]
 
 **Returns:** mail group — group, emails, unread, bytes, last_email_at, untrusted; every field: mail commands info stats messages top
 
-**Example:** `mail ya stats messages top`, `mail ya stats messages top --by list --limit 10`
+**Example:** `mail personal stats messages top`, `mail personal stats messages top --by list --limit 10`
 
 ## `mail drafts`
 
@@ -995,7 +995,7 @@ mail drafts list [options]
 
 **Returns:** mail draft — id, uid, subject, from, to, cc, bcc, date, and 3 more; every field: mail commands info drafts list
 
-**Example:** `mail ya drafts list`, `mail ya drafts list --limit 5 --json`
+**Example:** `mail personal drafts list`, `mail personal drafts list --limit 5 --json`
 
 ### `mail drafts create`
 
@@ -1023,7 +1023,7 @@ mail drafts create [text] [options]
 
 **Returns:** mail draft change — action, applied, id, folder, uid, replaced_uid, old_version_in, subject, and 3 more; every field: mail commands info drafts create
 
-**Example:** `mail ya drafts create --to anna@example.com --subject 'Monday' 'Shall we meet at ten?'`, `mail ya drafts create --reply-to msg:email/me%40example.com/t1/m1 --reply-all 'Thanks, agreed.'`
+**Example:** `mail personal drafts create --to anna@example.com --subject 'Monday' 'Shall we meet at ten?'`, `mail personal drafts create --reply-to msg:email/me%40example.com/t1/m1 --reply-all 'Thanks, agreed.'`
 
 ### `mail drafts update`
 
@@ -1050,7 +1050,7 @@ mail drafts update <draft> [text] [options]
 
 **Returns:** mail draft change — action, applied, id, folder, uid, replaced_uid, old_version_in, subject, and 3 more; every field: mail commands info drafts update
 
-**Example:** `mail ya drafts update 5b0e1c2a@example.com 'New text, the rest kept'`, `mail ya drafts update 5b0e1c2a@example.com --to anna@example.com --to boris@example.com`
+**Example:** `mail personal drafts update 5b0e1c2a@example.com 'New text, the rest kept'`, `mail personal drafts update 5b0e1c2a@example.com --to anna@example.com --to boris@example.com`
 
 ### `mail drafts delete`
 
@@ -1073,7 +1073,7 @@ mail drafts delete <draft> [options]
 
 **Returns:** mail draft change — action, applied, id, folder, uid, replaced_uid, old_version_in, subject, and 3 more; every field: mail commands info drafts delete
 
-**Example:** `mail ya drafts delete 5b0e1c2a@example.com --allow-dangerous`
+**Example:** `mail personal drafts delete 5b0e1c2a@example.com --allow-dangerous`
 
 ### `mail drafts send`
 
@@ -1097,7 +1097,7 @@ mail drafts send <draft> [options]
 
 **Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 9 more; every field: mail commands info drafts send
 
-**Example:** `mail ya drafts send 5b0e1c2a@example.com`
+**Example:** `mail personal drafts send 5b0e1c2a@example.com`
 
 ## `mail tags`
 
@@ -1124,7 +1124,7 @@ mail tags add <tag> [options]
 
 **Returns:** mail tag change — target, unchanged, added, removed; every field: mail commands info tags add
 
-**Example:** `mail ya tags add invoices --message msg:email/me%40example.com/t1/m1`
+**Example:** `mail personal tags add invoices --message msg:email/me%40example.com/t1/m1`
 
 ### `mail tags remove`
 
@@ -1147,7 +1147,7 @@ mail tags remove <tag> [options]
 
 **Returns:** mail tag change — target, unchanged, added, removed; every field: mail commands info tags remove
 
-**Example:** `mail ya tags remove invoices --message msg:email/me%40example.com/t1/m1`
+**Example:** `mail personal tags remove invoices --message msg:email/me%40example.com/t1/m1`
 
 ### `mail tags list`
 
@@ -1167,7 +1167,7 @@ mail tags list [query] [options]
 
 **Returns:** mail tag — tag, type, target, name, created_at; every field: mail commands info tags list
 
-**Example:** `mail ya tags list`, `mail ya tags list tag:invoices`
+**Example:** `mail personal tags list`, `mail personal tags list tag:invoices`
 
 ## `mail doctor`
 

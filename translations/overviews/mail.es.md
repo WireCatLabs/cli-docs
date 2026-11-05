@@ -3,18 +3,22 @@ title: "Correo: empieza aquí"
 description: "Conecta tu buzón a un agente: búscalo sin conexión, mira qué espera respuesta, ordénalo con deshacer y prepara respuestas."
 ---
 
-`mail` es una herramienta de línea de comandos que copia tu buzón a un almacén local en tu ordenador. Después, tu agente
-de IA puede buscar en tu correo, leer hilos y adjuntos y decirte qué espera respuesta, incluso sin conexión a internet.
-También puede ordenar el buzón en el servidor y redactar respuestas para que las revises. Tú mismo puedes usarla con
-comandos en la terminal. Funciona en Windows, macOS y Linux.
+Esta página explica qué es `mail`, qué obtienes con él, con qué buzones funciona y por dónde empezar.
 
 **En esta página**
 
+- [Qué es mail](#qué-es-mail)
 - [Qué obtienes](#qué-obtienes)
 - [Proveedores compatibles](#proveedores-compatibles)
-- [Qué puedes hacer](#qué-puedes-hacer)
+- [Funciones](#funciones)
 - [Empieza aquí](#empieza-aquí)
 - [Encuentra la guía para tu tarea](#encuentra-la-guía-para-tu-tarea)
+
+## Qué es mail
+
+`mail` es una herramienta de línea de comandos que guarda una copia de tu buzón en tu ordenador. Tu agente de IA, o
+tú mismo, puede buscar y trabajar con esa copia, incluso sin conexión a internet. Forma parte de WireCat, el conjunto de
+herramientas que dan a tu agente acceso a tus mensajes. Funciona en Windows, macOS y Linux.
 
 ## Qué obtienes
 
@@ -42,50 +46,28 @@ proveedor y lo envía solo por su servidor SMTP, ambos cifrados. Consulta [acces
 |---|---|---|
 | Gmail | Contraseña de aplicación (por defecto) u OAuth, con la app de Google de WireCat o la tuya | [Preparar el buzón](/es/docs/mail/providers), [Gmail con tu propia app de Google](/es/docs/mail/oauth-google) |
 | Outlook.com, Hotmail, Microsoft 365 | Solo OAuth: inicias sesión en Microsoft desde el navegador | [Conectar Outlook](/es/docs/mail/outlook), [Registrar una app de Microsoft](/es/docs/mail/oauth-microsoft) |
-| Yandex | Contraseña de aplicación | [Preparar el buzón](/es/docs/mail/providers) |
-| iCloud, Mail.ru, Fastmail | Contraseña de aplicación | [Preparar el buzón](/es/docs/mail/providers) |
+| iCloud, Fastmail | Contraseña de aplicación | [Preparar el buzón](/es/docs/mail/providers) |
 | Cualquier otro servidor IMAP | Contraseña de aplicación, si el proveedor la ofrece; `mail` encuentra el servidor a partir de tu dirección, o indicas el host y el puerto | [Cualquier otro proveedor](/es/docs/mail/providers) |
+| Yandex | Contraseña de aplicación | [Preparar el buzón](/es/docs/mail/providers) |
 
 Una contraseña de aplicación es una contraseña creada para un solo programa, que puedes revocar. Cada proveedor necesita
 IMAP activado y, en la mayoría, una contraseña de aplicación antes: los pasos de cada uno están en
-[Preparar el buzón](/es/docs/mail/providers). Gmail por OAuth usa la app de Google de WireCat si no indicas otra. Google aún no ha revisado la app de WireCat para correo; si Google rechaza el inicio de sesión, usa la tuya.
+[Preparar el buzón](/es/docs/mail/providers). Gmail por OAuth usa la app de Google de WireCat si no indicas otra. Hacer pública una app de Google compartida para correo es complejo, así que Google puede rechazar el inicio de sesión; si lo hace, usa tu propia app de Google o una contraseña de aplicación.
 
 Un perfil de Gmail también puede añadir un archivo de Google Takeout (un fichero `.mbox`) al correo
 guardado; consulta [mira antes de sincronizar y trae un archivo](/es/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive).
 
-## Qué puedes hacer
+## Funciones
 
-- **Leer el buzón sin conexión.** `sync` copia el correo nuevo al almacén local, el más reciente primero, y omite lo que
-  ya tiene. Un buzón grande se lee por partes: vuelve a ejecutarlo hasta que `status` indique que terminó. Guarda texto y
-  cabeceras, y el texto de los adjuntos de hasta 10 MB cada uno (es un ajuste), no los archivos.
-  [Conectar un buzón](/es/docs/mail/usage#connect-a-mailbox)
-- **Mantenerlo al día solo.** Pon `sync` en un temporizador, por ejemplo cada cinco minutos; `schedule list` muestra
-  cómo fue cada ejecución. [Conectar un buzón](/es/docs/mail/usage#connect-a-mailbox)
-- **Buscar.** Por palabras, remitente, lista de correo, asunto, fecha, tamaño, adjuntos y el texto que contienen, con el
-  lenguaje de consultas de todas las herramientas de WireCat. La búsqueda también pregunta al servidor de correo por el
-  correo aún no sincronizado; `--backend archive` la limita al almacén local.
-  [Buscar en tu correo](/es/docs/mail/usage#search-your-mail)
-- **Revisar.** Qué hay de nuevo desde la última vez, a qué correos debes respuesta y cuáles esperan una.
-  [Revisión](/es/docs/mail/usage#review-what-is-new-what-you-owe-what-waits)
-- **Mirar antes de sincronizar**. `account inspect` agrupa el buzón por remitente y lista, con tamaño,
-  proporción de no leídos y una puntuación de spam o estafa, y no guarda nada.
-  [Mirar antes de sincronizar](/es/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive)
-- **Reglas.** Omitir un remitente o una lista, guardar solo el sobre (remitente, fecha y tamaño), guardarlo entero o
-  protegerlo de cualquier limpieza. [Ordenar el buzón](/es/docs/mail/usage#organise-the-mailbox)
-- **Ordenar en el servidor.** Marcar como leído, destacar, mover, copiar y crear o renombrar carpetas. En Gmail las
-  carpetas son etiquetas. [Ordenar el buzón](/es/docs/mail/usage#organise-the-mailbox)
-- **Limpiar y deshacer.** Un borrado, o un cambio de más de 20 mensajes, es una vista previa hasta que lo confirmes. Lo
-  borrado va a la papelera y `messages restore` devuelve lo que cambió una ejecución.
-  [Ordenar el buzón](/es/docs/mail/usage#organise-the-mailbox)
-- **Adjuntos.** Su texto se puede buscar; `attachments list` y `attachments download` guardan los archivos.
-  [Enviar, responder y reenviar](/es/docs/mail/usage#send-reply-and-forward)
-- **Borradores, envío, respuesta y reenvío.** [Borradores](/es/docs/mail/usage#drafts) ·
-  [Enviar, responder y reenviar](/es/docs/mail/usage#send-reply-and-forward)
-- **Etiquetas, exportación y recuentos.** Tus etiquetas se quedan en tu ordenador. `messages export` escribe archivos mbox
-  o Maildir; `stats` cuenta el correo por día, semana o remitente y clasifica remitentes, listas y dominios. [Tus etiquetas](/es/docs/mail/usage#your-own-tags) · [Exportar correo](/es/docs/mail/usage#export-mail)
-- **Dejar que un agente clasifique el correo nuevo.** Con [Memo](/es/docs/memo/mail), un agente `mail-triage`
-  programado lee el correo nuevo y propone tareas, datos y cambios para que los confirmes. Solo propone: no envía
-  correo ni cambia tu buzón.
+- Leer el buzón sin conexión y mantenerlo al día con un temporizador. [Conectar un buzón](/es/docs/mail/usage#connect-a-mailbox)
+- Buscar por palabras, remitente, fecha, tamaño y el texto dentro de los adjuntos. [Buscar en tu correo](/es/docs/mail/usage#search-your-mail)
+- Ver qué hay de nuevo, a qué correos debes respuesta y cuáles esperan respuesta. [Revisión](/es/docs/mail/usage#review-what-is-new-what-you-owe-what-waits)
+- Ver un buzón por remitente antes de copiarlo e incorporar un archivo de Google Takeout. [Mirar antes de sincronizar](/es/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive)
+- Fijar reglas: omitir un remitente o lista, guardar solo su sobre o protegerlo de la limpieza. [Ordenar el buzón](/es/docs/mail/usage#organise-the-mailbox)
+- Ordenar el buzón en el servidor, con vista previa antes de cambios grandes y deshacer. [Ordenar el buzón](/es/docs/mail/usage#organise-the-mailbox)
+- Guardar borradores, enviar, responder y reenviar, también con adjuntos. [Enviar, responder y reenviar](/es/docs/mail/usage#send-reply-and-forward)
+- Añadir tus propias etiquetas, exportar el correo y contarlo por día, semana o remitente. [Tus etiquetas](/es/docs/mail/usage#your-own-tags)
+- Dejar que un agente programado clasifique el correo nuevo y proponga tareas y datos para que los confirmes, con Memo. [Correo en Memo](/es/docs/memo/mail)
 
 ## Empieza aquí
 
@@ -99,13 +81,13 @@ Tu agente instala la herramienta; tú creas la contraseña de aplicación o apru
 1. [Instala `mail`](/es/docs/mail/installation) desde npm.
 2. [Prepara el buzón](/es/docs/mail/providers): activa IMAP y crea una contraseña de aplicación. Para Outlook o
    Microsoft 365, [conecta Outlook](/es/docs/mail/outlook) en su lugar.
-3. Crea un perfil, comprueba el acceso, lee tu correo y búscalo. `ya` es un nombre de perfil que eliges para un buzón.
+3. Crea un perfil, comprueba el acceso, lee tu correo y búscalo. `personal` es un nombre de perfil que eliges para un buzón.
 
 ```sh
-mail ya session start --address me@example.com
-mail ya account check
-mail ya sync
-mail ya search messages invoice
+mail personal session start --address me@example.com
+mail personal account check
+mail personal sync
+mail personal search messages invoice
 ```
 
 `session start` encuentra el servidor de correo, pide la contraseña de aplicación y la guarda en el llavero del sistema.
@@ -122,7 +104,7 @@ mail skill install
 | Tarea | Guía |
 |---|---|
 | Conectar un buzón y leer correo | [Uso diario](/es/docs/mail/usage) |
-| Preparar Gmail, Yandex, iCloud, Mail.ru, Fastmail u otro servidor | [Preparar el buzón](/es/docs/mail/providers) |
+| Preparar Gmail, iCloud, Fastmail, Yandex u otro servidor | [Preparar el buzón](/es/docs/mail/providers) |
 | Conectar Outlook.com o Microsoft 365 | [Conectar Outlook](/es/docs/mail/outlook) |
 | Usar Gmail sin contraseña de aplicación | [Gmail con tu propia app de Google](/es/docs/mail/oauth-google) |
 | Buscar correo con tu agente, vincular remitentes con personas y detectar estafas | [Correo en Memo](/es/docs/mail/email) |
