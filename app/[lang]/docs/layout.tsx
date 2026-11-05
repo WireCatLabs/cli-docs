@@ -9,6 +9,7 @@ import { DocsProvider } from "@/components/docs-provider"
 import { DocsSearchTrigger } from "@/components/docs-search-trigger"
 import { DocsSidebarFolder } from "@/components/docs-sidebar-folder"
 import { DocsSidebarItem } from "@/components/docs-sidebar-item"
+import { DocsSidebarSeparator } from "@/components/docs-sidebar-separator"
 import { DocsSidebarTitle } from "@/components/docs-sidebar-title"
 import { DocsLanguageSwitcher, LanguageSwitcherText } from "@/components/language-switcher"
 import { SiteFooter } from "@/components/site-footer"
@@ -56,7 +57,7 @@ export default async function Layout({
               <DocsSearchTrigger full className="flex w-full" />
             </div>
           ),
-          components: { Item: DocsSidebarItem, Folder: DocsSidebarFolder },
+          components: { Item: DocsSidebarItem, Folder: DocsSidebarFolder, Separator: DocsSidebarSeparator },
         }}
         containerProps={{
           className: "wirecat-docs",

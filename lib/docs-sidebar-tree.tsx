@@ -208,6 +208,42 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
   return [...rest.slice(0, at), separator, ...moved, ...rest.slice(at)]
 }
 
+// Keyed by the section's first page, so one entry covers every language. The value is whether it starts open.
+const foldingSections: Record<string, boolean> = {
+  prompting: true,
+  configuration: false,
+  "build-create-cli": false,
+  architecture: false,
+}
+
+export const sectionFolderId = (id: string) => `section-${id}`
+
+/** A folding section is a folder with no page of its own, so its pages keep their URLs. */
+export function withFoldingSections(children: Node[]): Node[] {
+  const out: Node[] = []
+  for (let i = 0; i < children.length; i++) {
+    const node = children[i]
+    const first = children[i + 1]
+    const slug = first?.type === "page" ? first.url.split("/").filter(Boolean).at(-1) : undefined
+    const open = node.type === "separator" && slug ? foldingSections[slug] : undefined
+    if (open === undefined) {
+      out.push(node)
+      continue
+    }
+    const next = children.findIndex((child, at) => at > i && child.type === "separator")
+    const end = next < 0 ? children.length : next
+    out.push({
+      type: "folder",
+      $id: sectionFolderId(node.$id ?? String(i)),
+      name: node.name ?? "",
+      defaultOpen: open,
+      children: children.slice(i + 1, end),
+    })
+    i = end - 1
+  }
+  return out
+}
+
 /** One navigation tree on every page: tool folders expand, never replace the shared menu. */
 export function unifiedDocsTree(tree: Root, lang = "en"): Root {
   const decorate = (node: Node): Node => {
@@ -232,5 +268,5 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
     const commands = /^\/(en|ru|es)\/docs\/(?:tg|max|wa)\/commands\/?$/.exec(node.url)
     return commands ? commandFolder(page, commands[1]) : page
   }
-  return { ...tree, children: withCommunityGroup(tree.children, lang).map(decorate) }
+  return { ...tree, children: withFoldingSections(withCommunityGroup(tree.children, lang).map(decorate)) }
 }

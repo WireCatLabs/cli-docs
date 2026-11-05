@@ -5,7 +5,7 @@ import type { ReactElement } from "react"
 import { describe, expect, it } from "vitest"
 import { WhatsAppIcon } from "../components/brand-icons"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
-import { sidebarIcons, unifiedDocsTree, withCommunityGroup } from "../lib/docs-sidebar-tree"
+import { sidebarIcons, unifiedDocsTree, withCommunityGroup, withFoldingSections } from "../lib/docs-sidebar-tree"
 import { type Tool, toolProblems } from "./sync"
 
 const pages = ["tg", "tg/installation", "tg/mcp", "max", "max/installation", "max/mcp", "max/bot"]
@@ -207,8 +207,8 @@ describe("community tools", () => {
     folder("tg"),
     folder("acme"),
     folder("memo"),
-    { type: "separator", name: "Detalles técnicos" },
-    { type: "page", name: "Architecture", url: "/es/docs/architecture" },
+    { type: "separator", name: "Seguridad" },
+    { type: "page", name: "Security", url: "/es/docs/security" },
   ]
 
   it("adds no group heading while no community tool is listed", () => {
@@ -226,8 +226,8 @@ describe("community tools", () => {
       "memo",
       "--Herramientas de la comunidad",
       "acme",
-      "--Detalles técnicos",
-      "Architecture",
+      "--Seguridad",
+      "Security",
     ])
   })
 
@@ -245,5 +245,29 @@ describe("community tools", () => {
       const meta = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }
       for (const { name } of tools) expect(meta.pages, `meta${suffix}.json lists ${name}`).toContain(name)
     }
+  })
+})
+
+describe("withFoldingSections", () => {
+  const page = (slug: string): Node => ({ type: "page", name: slug, url: `/en/docs/${slug}` })
+  const separator = (name: string): Node => ({ type: "separator", $id: name, name })
+
+  it("folds a known section into a folder and keeps its page URLs", () => {
+    const tree = withFoldingSections([
+      separator("Start"),
+      page("index"),
+      separator("Reference"),
+      page("architecture"),
+      page("testing"),
+      separator("Other"),
+      page("security"),
+    ])
+    expect(tree.map((node) => node.type)).toEqual(["separator", "page", "folder", "separator", "page"])
+    const folder = tree[2]
+    expect(folder.type === "folder" && folder.defaultOpen).toBe(false)
+    expect(folder.type === "folder" && folder.children.map((child) => child.type === "page" && child.url)).toEqual([
+      "/en/docs/architecture",
+      "/en/docs/testing",
+    ])
   })
 })
