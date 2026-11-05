@@ -170,6 +170,16 @@ describe("production SEO guard", () => {
     write("ru/newsletter/confirm.html", '<html lang="ru"></html>')
     expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual(["/ru/newsletter/confirm: must be noindex"])
   })
+  it("lets a docs page that forwards to its new address stay out of the sitemap when it is noindex", () => {
+    const stub = (robots: string) =>
+      `<html lang="en"><head>${robots}<meta http-equiv="refresh" content="0; url=/en/docs/people"></head></html>`
+    write("en/docs/mentions/index.html", stub('<meta name="robots" content="noindex">'))
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([])
+    write("en/docs/profiles/index.html", stub(""))
+    expect(seoProblems(out, "https://example.test", ["en", "ru"])).toEqual([
+      "/en/docs/profiles: a forwarding page must be noindex",
+    ])
+  })
   it("lets the ideas pages stay out of the sitemap while they are noindex", () => {
     write("en/ideas.html", '<html lang="en"><meta name="robots" content="noindex"></html>')
     write("en/ideas/idea.html", '<html lang="en"><meta name="robots" content="noindex, nofollow"></html>')

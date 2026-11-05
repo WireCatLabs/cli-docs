@@ -37,6 +37,11 @@ export function seoProblems(out: string, origin: string, locales = ["en", "ru", 
     const noindex = /<meta[^>]+name="robots"[^>]+noindex/i.test(raw)
     // Kept out of the sitemap, so they must say noindex instead: the newsletter confirmation is reached only from its
     // email, an idea's own pages only from the ideas list. The list itself is noindex until the ideas API exists.
+    // A merged or moved docs page leaves a stub that only forwards to its new address.
+    if (/^\/(?:en|ru|es)\/docs\//.test(pathname) && /<meta[^>]+http-equiv="refresh"/i.test(raw)) {
+      if (!noindex) problems.push(`${pathname}: a forwarding page must be noindex`)
+      continue
+    }
     const keptOut = /^\/(?:en|ru|es)\/(?:newsletter\/confirm|ideas\/[\w-]+)$/.test(pathname)
     if (keptOut || (noindex && /^\/(?:en|ru|es)\/ideas$/.test(pathname))) {
       if (!noindex) problems.push(`${pathname}: must be noindex`)
