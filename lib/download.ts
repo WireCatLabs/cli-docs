@@ -467,11 +467,11 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
         caption: "Todas tus herramientas instaladas, con sesión iniciada y sincronizadas.",
       },
       agents: {
-        alt: "La página Agentes: Claude Code con una habilidad al día para cada herramienta",
-        caption: "Claude Code, Codex, Cursor y Gemini CLI reciben habilidades al día para cada herramienta.",
+        alt: "La página Agentes: Claude Code con una skill al día para cada herramienta",
+        caption: "Claude Code, Codex, Cursor y Gemini CLI reciben skills al día para cada herramienta.",
       },
       "search-hit": {
-        alt: "La página Búsqueda: un resultado abierto con los mensajes que lo rodean",
+        alt: "La página Buscar: un resultado abierto con los mensajes que lo rodean",
         caption: "Abre cualquier resultado y ve la conversación que lo rodea.",
       },
       tasks: {
