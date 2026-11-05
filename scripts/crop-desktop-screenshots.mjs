@@ -3,7 +3,7 @@
  * 16:10 WebP files under public/screenshots/desktop/. Each crop keeps the sidebar edge and the left-to-centre
  * content, and leaves out the window controls.
  *
- *   node scripts/crop-desktop-screenshots.mjs <folder with wirecat-<screen>-<theme>-<lang>-1440x900.png> [screen…]
+ *   node scripts/crop-desktop-screenshots.mjs <folder with wirecat-<screen>-<theme>-<lang>-1440x900.png> [screen…] [--docs]
  */
 import { existsSync } from "node:fs"
 import { createRequire } from "node:module"
@@ -18,21 +18,33 @@ const crops = {
   tasks: { box: { left: 208, top: 120, width: 1232, height: 770 } },
   memory: { box: { left: 0, top: 100, width: 1040, height: 650 } },
   connect: { box: { left: 200, top: 100, width: 1200, height: 750 } },
-  "onboarding-welcome": { box: { left: 0, top: 0, width: 1440, height: 900 } },
-  "onboarding-install": { box: { left: 0, top: 0, width: 1440, height: 900 } },
-  guides: { box: { left: 0, top: 0, width: 1400, height: 875 } },
-  analytics: { box: { left: 0, top: 0, width: 1400, height: 875 } },
-  storage: { box: { left: 0, top: 0, width: 1400, height: 875 } },
-  settings: { box: { left: 0, top: 0, width: 1400, height: 875 } },
 }
 
+// The docs page shows the whole window. `--docs` writes every screen, uncropped, to public/screenshots/desktop/docs/.
+const docsScreens = [
+  "onboarding-welcome",
+  "onboarding-install",
+  "tools",
+  "connect",
+  "agents",
+  "search-hit",
+  "tasks",
+  "guides",
+  "memory",
+  "analytics",
+  "storage",
+  "settings",
+]
+const docs = process.argv.includes("--docs")
+const full = { left: 0, top: 0, width: 1440, height: 900 }
+
 const langs = ["en", "ru", "es"]
-const [source, ...only] = process.argv.slice(2)
+const [source, ...only] = process.argv.slice(2).filter((a) => a !== "--docs")
 if (!source) {
   console.error("Usage: node scripts/crop-desktop-screenshots.mjs <source folder> [screen…]")
   process.exit(2)
 }
-for (const [screen, { box }] of Object.entries(crops)) {
+for (const [screen, { box }] of docs ? docsScreens.map((name) => [name, { box: full }]) : Object.entries(crops)) {
   if (only.length && !only.includes(screen)) continue
   for (const lang of langs)
     for (const theme of ["light", "dark"]) {
@@ -42,7 +54,7 @@ for (const [screen, { box }] of Object.entries(crops)) {
         console.warn(`skipped ${screen} ${theme} ${lang}: no ${input}`)
         continue
       }
-      const output = `public/screenshots/desktop/${screen}-${theme}-${lang}.webp`
+      const output = `public/screenshots/desktop/${docs ? "docs/" : ""}${screen}-${theme}-${lang}.webp`
       const info = await sharp(input).extract(box).resize(1040, 650).webp({ quality: 80, effort: 6 }).toFile(output)
       console.log(`${output} ${Math.round(info.size / 1024)} KB`)
     }

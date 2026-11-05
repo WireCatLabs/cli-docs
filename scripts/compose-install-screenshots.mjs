@@ -1,6 +1,6 @@
 /**
  * Builds public/screenshots/install/install-and-connect-<theme>-<lang>.webp: a terminal with an agent installing a
- * tool on the left, and the WireCat Desktop Tools screen (public/screenshots/desktop/tools-*) on the right.
+ * tool on the left, and the WireCat Desktop Tools screen (public/screenshots/desktop/docs/tools-*) on the right.
  * The terminal is plain HTML rendered by Playwright; the prompt is the first two lines of the request in
  * content/docs/installation*.mdx, the command is the one the site hands out for Telegram.
  *
@@ -68,7 +68,7 @@ const context = await browser.newContext({ viewport: { width: 1440, height: 480 
 const tab = await context.newPage()
 for (const lang of ["en", "ru", "es"])
   for (const theme of ["light", "dark"]) {
-    const shot = readFileSync(`public/screenshots/desktop/tools-${theme}-${lang}.webp`).toString("base64")
+    const shot = readFileSync(`public/screenshots/desktop/docs/tools-${theme}-${lang}.webp`).toString("base64")
     await tab.setContent(page(text[lang], theme, shot))
     const png = await tab.screenshot()
     const output = `public/screenshots/install/install-and-connect-${theme}-${lang}.webp`
