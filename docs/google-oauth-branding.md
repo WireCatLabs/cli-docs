@@ -1,5 +1,8 @@
 # Google app branding
 
+> This page covers WireCat Drive only. The checklist for the shared Google app, with Calendar and Gmail, is
+> [google-verification.md](google-verification.md). Where the two differ, follow that page.
+
 Configure WireCat Drive's public links and verify the domain before submitting its Google OAuth
 application. These are owner steps; connecting users do not create a Google Cloud project.
 
