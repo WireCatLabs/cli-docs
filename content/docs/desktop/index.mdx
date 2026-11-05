@@ -289,3 +289,51 @@ will not be deleted. [Updates](/en/download#updates) and [uninstall](/en/downloa
 steps for each system. Removing the app leaves the tools and their data in place.
 
 Prefer a terminal? [Install a tool by hand or with your agent](../installation.mdx).
+
+## Common issues
+
+Find the message you see, then follow the fix. If none fits, [Report a problem](#report-a-problem) in the app collects what the support team needs.
+
+### Windows says "Windows protected your PC"
+
+The Windows installer is not yet signed with a Microsoft developer certificate, so Windows asks you to confirm the first start. Select **More info**, then **Run anyway**. If **Smart App Control** is on, Windows blocks every unsigned app and offers no way to allow one; WireCat cannot start on that computer until it is signed. The [first-start steps](/en/download#first-launch) show where to click.
+
+### The AppImage says "AppImages require FUSE to run"
+
+The AppImage needs FUSE 2. Install it with `sudo apt install libfuse2t64` on Ubuntu 24.04 and later, or `sudo apt install libfuse2` on older Ubuntu and Debian, then open the file again. The [first-start steps for Linux](/en/download#first-launch) say the same.
+
+### "Node.js is needed to install WireCat tools", "Node.js is too old" or "npm needs administrator rights"
+
+The tools run on Node.js 22.16 or later within 22.x, or 24 or later, with npm. WireCat Desktop itself runs without it. Select **Set up Node.js for me**: WireCat downloads Node.js, checks it against the checksums Node.js publishes and unpacks it in your user folder, without administrator rights. Your own Node.js stays as it is. If you prefer to install it yourself, choose **I'll install it myself** and select **Check again** afterwards.
+
+### An installed tool is not found in a terminal or an AI app
+
+Terminals and AI apps that were open before the install see the new tools only after you restart them. If a new terminal still does not find the tool and WireCat set up Node.js for you, open the Node.js entry under **Your computer** and select **Add to PATH**, then open a new terminal. For a shell that WireCat does not edit, the same dialog shows a line to add to the shell's startup file yourself. **Remove from PATH** undoes it.
+
+### Installing a tool fails with "Could not reach the npm registry"
+
+WireCat installs tools from npm, so it needs the internet. Check your connection or proxy and select **Try again**. An install that takes longer than 15 minutes is stopped; the same check applies. If the message says the release "could not be confirmed as built by WireCat", nothing on your computer changed: try again later.
+
+### A tool shows "Installed, but it does not start"
+
+The tool's lamp is red and its button says **Fix**. **Fix** opens **Fix with an AI agent**: WireCat writes what went wrong into a prompt and opens Claude Code, Codex or Gemini CLI with it in a terminal. The agent explains what it finds and asks before it changes anything. When it says the problem is fixed, select **Try again**. If WireCat finds no agent, copy the prompt into your own agent. On macOS, if Terminal does not open, allow WireCat under System Settings, Privacy & Security, Automation. A second copy of the same tool can also cause trouble: **Manage** lists the copies and how to remove the extra one.
+
+### Sign-in does not finish
+
+**Sign in here** waits for you to finish in the browser or on the phone. A code or QR code expires after a few seconds, and a new one appears by itself; use the latest one. A messenger can take a minute to send its history: keep it open on the phone, or select **Stop and keep what came**. If the message says the version "cannot sign in here yet", update the tool on the Tools page or use **Open terminal**. If WireCat finds no terminal program, run the command it shows yourself, then select **Check sign-in**.
+
+### Check health reports a broken settings file
+
+A missing or extra comma, a comment, single quotes or an unclosed bracket in a tool's settings file stops the tool from reading its settings. Under **Manage**, **Check health** names the problem; select **Repair the file**. The tool keeps the file as it was, says what it changed, and changes nothing it cannot fix safely. If it refuses, the message points at the line to correct by hand in a text editor.
+
+### A tool "can't read storage"
+
+Another WireCat tool moved the shared storage to a newer format than this tool reads. Update the tool on the Tools page; [Storage](#storage) lists which tools need it. If no newer version is out yet, the page says so.
+
+### "The update could not be installed"
+
+Select **Try again**, or get WireCat from the [download page](/en/download). If the message says the download "did not match WireCat's signature", WireCat did not open it and saved nothing. A .deb or .rpm copy opens your system's installer, which asks for your password. A copy that WireCat cannot recognize cannot update itself: install the new version the way you installed this one. Your accounts and data will not be deleted. More in [Updates and removal](#updates-and-removal).
+
+### ChatGPT or Claude in the browser cannot reach the tool
+
+A new Tailscale Funnel address can take up to 10 minutes to appear on the internet; wait, then add the server in the app again. The [Troubleshooting section of the Tailscale Funnel guide](./tailscale-funnel.mdx#troubleshooting) covers the other messages of that step.
