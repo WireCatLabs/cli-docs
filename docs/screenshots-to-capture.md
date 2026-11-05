@@ -47,3 +47,31 @@ Before publishing:
 
 Optional later captures: `telegram/phone-prompt.png`, `telegram/logged-in.png` and
 `max/logged-in.png`. These are not required to replace the current login placeholders.
+
+# WireCat Desktop walkthrough screenshots
+
+`content/docs/desktop/index{,.ru,.es}.mdx` place each screen with `<DesktopShot shot="…" />`
+(`components/desktop-shot.tsx`). The component shows a light/dark pair and falls back to the English
+capture for a language that lacks one. It renders nothing until `{shot}-light-en.webp` and
+`{shot}-dark-en.webp` exist, so the pages are complete without them and each shot appears by itself once the
+files are in `public/screenshots/desktop/`. Nothing else needs editing.
+
+Capture from the browser build of `wirecat-desktop` (`node scripts/capture.mjs out.png "<query>" [--dark]`,
+see its CLAUDE.md), with the sample data of `?showcase`. The language comes from the browser's language or
+`localStorage["wirecat.language"]` (`en`, `ru`, `es`). Use the size and framing of the existing shots
+(1040x650 webp). Each shot needs six files: `{shot}-{light,dark}-{en,ru,es}.webp`.
+
+| Shot (file stem) | Screen | Query for the browser build | Status |
+| --- | --- | --- | --- |
+| `onboarding-welcome` | Setup, Welcome step | `?state=fresh` | Missing |
+| `onboarding-install` | Setup, Install step with the progress bar | `?state=fresh&onboarding=install&install=tg,wa&hold=wa` | Missing |
+| `guides` | Guides page | `?showcase&section=guides` | Missing |
+| `analytics` | Analytics page, without the Preview parts | `?showcase&section=analytics&analytics=real` | Missing |
+| `storage` | Storage page with folders, backups and tables | `?showcase&section=storage` | Missing |
+| `settings` | Settings page: language, interface size, a tool's settings | `?showcase&section=settings` | Missing |
+
+Existing and used: `tools`, `agents`, `search-hit`, `tasks`, `memory`, `connect`. At least `tools` and `memory`
+predate 0.4: the sidebar has no Analytics, and Memory has no Edit or More menu. Recapture them when convenient
+with `?showcase`, `?showcase&section=agents`, `?showcase&search=tg`, `?showcase&view=board`,
+`?showcase&section=memory` and `?showcase&connect=called`. The queries come from the flags in
+wirecat-desktop's CLAUDE.md; none was run for this list.

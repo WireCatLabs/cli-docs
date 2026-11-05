@@ -1,5 +1,6 @@
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { architectureDiagramMarkdown } from "./architecture-diagrams"
+import { desktopShotLang } from "./desktop-shots"
 import { type DocTermId, docTerm } from "./doc-terms"
 import { agentPromptMarkdown } from "./installation-markdown"
 import { siteUrl } from "./shared"
@@ -12,7 +13,7 @@ export function expandDocTerms(markdown: string, lang: string): string {
   const visit = (node: Node) => {
     if ((node.type === "html" || node.type === "text") && node.position) {
       const pattern =
-        /<(\/?)(ArchitectureDiagram|DocTerm|NodeSetupPrompt|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|SearchPlayground|Screenshot|Tabs|Tab|Steps|Step|Accordions|Accordion|Callout)\b([^>]*)>/g
+        /<(\/?)(ArchitectureDiagram|DocTerm|NodeSetupPrompt|AgentInstallPrompt|InstallationMessengerTabs|InstallationOsTabs|PlatformSetupTabs|SearchPlayground|Screenshot|DesktopShot|Tabs|Tab|Steps|Step|Accordions|Accordion|Callout)\b([^>]*)>/g
       const authored = markdown.slice(node.position.start.offset, node.position.end.offset)
       for (const match of authored.matchAll(pattern)) {
         const props = Object.fromEntries([...match[3].matchAll(/(\w+)="([^"]*)"/g)].map((attr) => [attr[1], attr[2]]))
@@ -34,6 +35,10 @@ export function expandDocTerms(markdown: string, lang: string): string {
             text = agentPromptMarkdown(props.tool, language)
           } else if (match[2] === "Screenshot" && props.src) {
             text = `![${(props.alt ?? "").replace(/[[\]]/g, "\\$&")}](${props.src})`
+          } else if (match[2] === "DesktopShot" && props.shot) {
+            const from = desktopShotLang(props.shot, "light", language)
+            if (from)
+              text = `![${(props.alt ?? "").replace(/[[\]]/g, "\\$&")}](/screenshots/desktop/${props.shot}-light-${from}.webp)`
           } else if (match[2] === "Tab" && props.value) {
             text = `**${props.value}**\n`
           } else if (match[2] === "Accordion" && props.title) {
