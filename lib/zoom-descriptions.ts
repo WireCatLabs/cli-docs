@@ -1,5 +1,6 @@
 export const zoomDescriptions: Record<string, Record<string, string>> = {
   en: {
+    meetings: "Find what was discussed, connect it to your projects and prepare for the next call.",
     compare: "Compare Zoom tools for meetings, recordings, transcripts, search and agent access.",
     index: "Use Zoom transcripts, recordings and meeting evidence as context for your AI agent.",
     installation: "Install zm and choose API access or downloaded transcript files for your first result.",
@@ -21,6 +22,7 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
     roadmap: "See which meeting intake, preparation and shared archive workflows are planned.",
   },
   ru: {
+    meetings: "Находите обсуждения, связывайте их с проектами и готовьтесь к следующему созвону.",
     compare: "Сравните инструменты Zoom для встреч, записей, расшифровок, поиска и доступа ИИ-агента.",
     index: "Используйте расшифровки, записи и фрагменты встреч Zoom как контекст для ИИ-агента.",
     installation: "Установите zm и начните с API или скачанных файлов расшифровок.",
@@ -42,6 +44,7 @@ export const zoomDescriptions: Record<string, Record<string, string>> = {
     roadmap: "Планы разбора встреч, подготовки и общего архивирования.",
   },
   es: {
+    meetings: "Encuentra lo hablado, relaciónalo con tus proyectos y prepara la próxima llamada.",
     compare: "Compara herramientas de Zoom para reuniones, grabaciones, transcripciones, búsqueda y acceso del agente.",
     index: "Usa transcripciones, grabaciones y fuentes de Zoom como contexto para tu agente de IA.",
     installation: "Instala zm y empieza con acceso API o archivos de transcripción descargados.",
