@@ -29,7 +29,6 @@ const REQUIRED = [
   "setup",
   "signIn",
   "skill",
-  "mcp",
   "mcpServer",
   "tasks",
   "sync",
