@@ -153,8 +153,7 @@ then a listed tool appears on the site only.
 
 ## Updates
 
-- **New releases** reach desktop users through npm. Each one passes the same provenance check before the app
-  installs it.
+- **New versions.** How new versions are checked and reach users is being designed.
 - **Pages** on the site come from the `docsRef` tag. A daily check opens an issue in cli-docs when a newer release
   exists. A pull request that moves `docsRef` to the new tag updates your pages after review. You can open it
   yourself.

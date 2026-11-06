@@ -156,8 +156,7 @@ entonces, una herramienta incluida aparece solo en el sitio.
 
 ## Actualizaciones
 
-- **Las nuevas versiones** llegan a la app a través de npm. Cada una pasa la misma comprobación de procedencia antes
-  de instalarse.
+- **Nuevas versiones.** Cómo se comprueban las nuevas versiones y cómo llegan a los usuarios se está diseñando.
 - **Las páginas** del sitio vienen de la etiqueta `docsRef`. Una comprobación diaria abre un issue en cli-docs cuando
   hay una versión más nueva. Un pull request que mueve `docsRef` a la nueva etiqueta actualiza tus páginas tras la
   revisión. Puedes abrirlo tú.
