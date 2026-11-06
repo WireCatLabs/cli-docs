@@ -87,8 +87,32 @@ editorial rules.
 
 A tool from outside WireCatLabs joins the site's "Community tools" group through a pull request that adds it to
 `tools.json` with `"community": true`. Its pages then sync from its repository at the reviewed tag in `docsRef`, as
-ours do; it never joins cli-core's list of WireCat tools. Review the entry against this list, and hold it until every
-point has evidence linked in the pull request:
+ours do; it never joins cli-core's list of WireCat tools.
+
+WireCat tools hold personal data, so listing is not open submission (owner, 2026-11-06). Only approved publishers list
+tools (an application or an invitation; the admission rule is still open). Each listing needs proof that our checks
+passed on the tool, as much of it automated as possible, and a maintainer's approval last. The repository must be
+public: npm generates no provenance for a private repository
+([npm docs](https://docs.npmjs.com/trusted-publishers)), and its code cannot be reviewed. A private tool can only be
+added on the owner's own computer, unchecked.
+
+Automated checks on the pull request:
+
+- **Built:** `pnpm test` runs `desktopProblems` and `registryProblems` (point 5 below).
+- **Planned:** the release's provenance names the tool's repository and `release.yml` on `main` and, once it exists,
+  the pinned WireCatLabs reusable workflow as the Build Signer URI (`job_workflow_ref`), with the tool's own
+  `release.yml` as the Build Config URI (`workflow_ref`)
+  ([Fulcio OIDs](https://github.com/sigstore/fulcio/blob/main/docs/oid-info.md)). npm checks trusted publishing
+  against the calling workflow's name and needs `id-token: write` in both workflows
+  ([npm docs](https://docs.npmjs.com/trusted-publishers)), so a publish step inside our reusable workflow fits it. A
+  cross-organization call is not covered by the npm docs and needs a test release first.
+- **Planned:** our standards checks re-run on the public source at the tagged commit, so no part of the proof rests on
+  the maker's own CI.
+- **Planned:** a secret and malware scan of the npm tarball.
+- **Planned:** the fresh-agent audit (point 2) run by CI.
+
+Until a planned check exists, the maintainer does it by hand. Review the entry against this list, and hold it until
+every point has evidence linked in the pull request:
 
 1. Every "Done when" check of the
    [New CLI checklist](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/new-cli.md#done-when) is
@@ -99,7 +123,8 @@ point has evidence linked in the pull request:
 
 The tests reject a community entry with a `@wirecat/` package or a `WireCatLabs/` repository, and add the group to the
 sidebar only while at least one such entry exists. The entry is also listed in `content/docs/meta.json`,
-`meta.ru.json` and `meta.es.json`, like any tool.
+`meta.ru.json` and `meta.es.json`, like any tool. The steps for the tool's maker are on the public page
+[List your tool in WireCat](../content/docs/build-list-tool.md).
 
 ### In WireCat Desktop
 
@@ -107,7 +132,7 @@ A community entry may also carry a `desktop` object: the catalog entry WireCat D
 sign in the tool. Every deploy builds the entries that have one into
 `https://wirecat.dev/registry/v1/desktop-tools.json` (`scripts/desktop-registry.ts`), signs it with minisign, and
 serves the signature beside it as `desktop-tools.json.minisig`. The app shows these tools only to an owner who turned
-on Settings → Advanced → "Show community tools", and only from a list whose signature matches the key built into the
+on "Enable community tools" in Settings, and only from a list whose signature matches the key built into the
 app. Merging the pull request is what publishes the entry, so the review below is the gate.
 
 **For the submitter.** Add `desktop` with every key of a

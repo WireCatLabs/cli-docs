@@ -108,6 +108,7 @@ node dist/bin/acme.js personal doctor
 [Список проверки](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools) говорит, что
 мы проверяем. Инструмент сообщества публикуется в своём пространстве имён npm: `@wirecat` и название «WireCat»
 остаются нашими.
+[Добавьте свой инструмент в WireCat](./build-list-tool.md) описывает все шаги, от pull request до WireCat Desktop.
 
 ## Обновляйтесь
 
