@@ -11,6 +11,13 @@ qué comprobamos y qué pasa después de fusionarla. Una herramienta incluida ap
 Estar en la lista no convierte tu herramienta en parte de WireCat. Conserva tu nombre, tu ámbito de npm y tu
 repositorio. Tú sigues haciéndola y publicándola.
 
+## Quién puede incluir una herramienta
+
+Las herramientas de WireCat leen mensajes, correo y archivos de las personas. Por eso no incluimos herramientas de
+cualquiera que lo pida. Vienen de autores aprobados, que lo solicitan o reciben una invitación, y cada una necesita la
+prueba de que nuestras comprobaciones pasaron y, al final, la aprobación de una persona del equipo. Las solicitudes
+aún no están abiertas. Para preguntar, abre un issue en [cli-docs](https://github.com/WireCatLabs/cli-docs/issues).
+
 ## Qué necesita tu herramienta
 
 - **Está hecha con la plantilla o cumple el mismo estándar.** Empieza por [Crea tu CLI](./build-create-cli.md). Todas
@@ -20,10 +27,17 @@ repositorio. Tú sigues haciéndola y publicándola.
 - **Cada comando nombra su perfil.** Un perfil es el nombre de una de tus cuentas, como `personal`. La herramienta
   nunca elige una cuenta por sí sola, y sin perfil da un error que lista las opciones. Esto vale para cada comando,
   ejemplo, texto de ayuda y página.
+- **Su repositorio es público.** npm no genera registro de procedencia para un paquete construido en un repositorio
+  privado, y no podemos revisar código que no vemos. Una herramienta de un repositorio privado solo se puede añadir en
+  tu propio ordenador, como herramienta sin comprobar.
 - **Publica en npm desde GitHub Actions con trusted publishing.** La publicación se ejecuta desde `release.yml` en el
   repositorio de la propia herramienta, en la rama `main`. WireCat Desktop comprueba la procedencia en npm
   (provenance) de cada versión, un registro firmado de dónde npm construyó el paquete. Rechaza una versión cuyo
   registro no apunte a ese workflow en tu repositorio. La plantilla lo configura por ti.
+- **Previsto: publica a través de nuestro workflow de publicación.** Tu `release.yml` llamará a una versión fija de
+  un workflow de WireCatLabs que ejecuta nuestras comprobaciones de estándares y después publica. El registro de
+  procedencia nombra entonces nuestro workflow como el que construyó el paquete, y cualquiera puede ver que nuestras
+  comprobaciones pasaron en esa versión.
 - **Tiene su propio nombre.** Publica en tu propio ámbito de npm, como `@example/acme-cli`. El ámbito `@wirecat` y el
   nombre «WireCat» siguen siendo nuestros. No tomes un nombre que WireCat reserva para sus herramientas, como `tg`,
   `max` o `mail`.
@@ -99,21 +113,30 @@ Los campos:
 Una entrada de la comunidad no puede fijar `partOf`, `commandPrefix`, `memory`, `taskBoard`, `bot`, `storeReset`,
 `storeResetPreview`, `configRepair` ni `signIn.command`. Son solo para las herramientas de WireCat.
 
-## Qué comprueba la revisión
+## Qué comprobamos
 
-Quien revisa sigue la
+Las comprobaciones van en orden. Primero las automáticas, y una persona aprueba al final.
+
+**Automáticas, en el pull request:**
+
+- **Ya existe:** las pruebas de cli-docs ejecutan las mismas reglas de entrada que la app de escritorio, así que una
+  entrada `desktop` incorrecta hace fallar el pull request.
+- **Previsto:** la procedencia de la versión nombra tu repositorio y, cuando exista, nuestro workflow de publicación.
+- **Previsto:** nuestras comprobaciones de estándares se ejecutan de nuevo sobre el código de tu etiqueta.
+- **Previsto:** un análisis del paquete de npm en busca de secretos y malware.
+- **Previsto:** un agente nuevo audita la herramienta en el CI, solo con nuestro manual y tu repositorio.
+
+**Una persona del equipo aprueba**, siguiendo la
 [lista de revisión de herramientas de la comunidad](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools).
-En resumen:
+Mientras las comprobaciones previstas no existan, comprueba esto a mano:
 
 1. La lista del nuevo CLI está en verde en tu CI, en el commit etiquetado.
 2. La auditoría con un agente nuevo no encontró huecos abiertos.
 3. Cada comando, ejemplo, texto de ayuda y página nombra su perfil.
 4. Nada usa el ámbito `@wirecat` ni el nombre «WireCat».
-5. Las pruebas de cli-docs pasan. Ejecutan las mismas reglas que la app de escritorio, así que una entrada `desktop`
-   incorrecta hace fallar el pull request.
-6. En la versión etiquetada, los comandos doctor y setup de la entrada funcionan tal como están escritos para un
+5. En la versión etiquetada, los comandos doctor y setup de la entrada funcionan tal como están escritos para un
    perfil nuevo, y cada otro comando que nombra la entrada existe.
-7. La carpeta de datos de `storage` es solo de tu herramienta.
+6. La carpeta de datos de `storage` es solo de tu herramienta.
 
 La revisión comprueba cómo se construye y publica tu herramienta. No comprueba todo lo que hace.
 
@@ -153,15 +176,18 @@ Retiramos una herramienta cuando incumple las reglas de arriba o cuando su autor
 
 ## Prueba tu herramienta antes de pedir la inclusión
 
-Puedes ver tu herramienta en WireCat Desktop antes de cualquier revisión.
+Puedes ver tu herramienta en WireCat Desktop antes de cualquier revisión. Lleva entonces la insignia **Sin comprobar**.
 
 - **Hoy, para desarrolladores.** Inicia la app con la variable de entorno `WIRECAT_EXTRA_TOOLS=1` y pon tu entrada en
   el archivo `extra-tools.json` de la carpeta de datos de la app. La app comprueba la entrada con las mismas reglas y
   escribe cada rechazo en su consola. Las
   [notas de la app sobre herramientas de la comunidad](https://github.com/WireCatLabs/wirecat-desktop/blob/main/docs/dev/cli-registry.md#your-own-tools-not-checked)
   muestran el formato del archivo.
-- **Previsto, para todos.** «Añadir tu propia herramienta» en Ajustes acepta un nombre de paquete de npm. La app
-  muestra la insignia «Sin comprobar» y pide confirmación antes de instalar y antes del primer uso.
+- **Previsto, para todos.** Activa «Permitir herramientas que WireCat no ha comprobado» en Ajustes y confirma el
+  aviso. La página Agentes tendrá entonces un botón «Añadir tu propia herramienta» que acepta un nombre de paquete de
+  npm. Avisa de que la herramienta tendrá acceso a todos tus datos personales en WireCat, de que solo debes añadirla si
+  confías por completo en sus autores, y de que WireCat no se hace responsable. Antes de instalar llega una
+  confirmación más.
 
 ## Siguientes pasos
 

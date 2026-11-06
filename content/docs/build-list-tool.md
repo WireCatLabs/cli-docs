@@ -11,6 +11,13 @@ people who turn community tools on.
 A listing does not make your tool part of WireCat. It keeps your own name, your npm scope and your repository. You
 keep making and releasing it.
 
+## Who can list a tool
+
+WireCat tools read people's messages, mail and files. So we do not list tools from anyone who asks. Tools come from
+approved publishers, who apply or are invited, and each listing needs proof that our checks passed on the tool and a
+maintainer's approval last. The application process is not open yet. To ask, open an issue in
+[cli-docs](https://github.com/WireCatLabs/cli-docs/issues).
+
 ## What your tool needs
 
 - **It is built from the template, or meets the same standard.** Start with
@@ -20,10 +27,16 @@ keep making and releasing it.
 - **Every command names its profile.** A profile is a name for one of your accounts, such as `personal`. The tool
   never picks an account by itself, and a missing profile is an error that lists the choices. This applies to every
   command, example, help text and page.
+- **Its repository is public.** npm makes no provenance record for a package built in a private repository, and we
+  cannot review code we cannot read. A tool from a private repository can only be added on your own computer, as an
+  unchecked tool.
 - **It publishes to npm from GitHub Actions with trusted publishing.** The release runs from `release.yml` in the
   tool's own repository, on the `main` branch. WireCat Desktop checks the npm provenance of each release, which is a
   signed record of where npm built the package. It refuses a release whose record does not point at that workflow in
   your repository. The template sets this up for you.
+- **Planned: it publishes through our release workflow.** Your `release.yml` will call a pinned version of a
+  WireCatLabs workflow that runs our standards checks and then publishes. The provenance record then names our
+  workflow as the one that built the package, so anyone can see that our checks passed on that release.
 - **It has its own name.** Publish under your own npm scope, such as `@example/acme-cli`. The `@wirecat` scope and the
   name "WireCat" stay ours. Do not take a name WireCat reserves for its tools, such as `tg`, `max` or `mail`.
 - **It has a release tag and pages.** A tag `vX.Y.Z` that matches an npm version, and at that tag a `docs` folder with
@@ -97,21 +110,30 @@ The fields:
 A community entry cannot set `partOf`, `commandPrefix`, `memory`, `taskBoard`, `bot`, `storeReset`,
 `storeResetPreview`, `configRepair` or `signIn.command`. These belong to WireCat's own tools.
 
-## What the review checks
+## What we check
 
-The reviewer follows the
+Checks run in this order. The automated ones come first, and a person approves last.
+
+**Automated, on the pull request:**
+
+- **Built:** the tests in cli-docs run the same entry rules as the desktop app, so a bad `desktop` entry fails the pull
+  request.
+- **Planned:** the provenance of the release names your repository and, once it exists, our release workflow.
+- **Planned:** our standards checks run again on the source at your release tag.
+- **Planned:** a scan of the npm package for secrets and malware.
+- **Planned:** a fresh agent audits the tool in CI, given only our handbook and your repository.
+
+**A maintainer approves**, following the
 [review list for community tools](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools).
-In short:
+Until the planned checks exist, the maintainer checks these by hand:
 
 1. The New CLI checklist is green in your CI, on the tagged commit.
 2. The fresh agent audit found no open gap.
 3. Every command, example, help text and page names its profile.
 4. Nothing uses the `@wirecat` scope or the name "WireCat".
-5. The tests in cli-docs pass. They run the same rules as the desktop app, so a bad `desktop` entry fails the pull
-   request.
-6. On the tagged release, the doctor and setup commands of the entry run as written for a new profile, and every
+5. On the tagged release, the doctor and setup commands of the entry run as written for a new profile, and every
    other command the entry names exists.
-7. The data folder in `storage` belongs to your tool alone.
+6. The data folder in `storage` belongs to your tool alone.
 
 The review checks how your tool is built and released. It does not check everything your tool does.
 
@@ -121,7 +143,8 @@ The review checks how your tool is built and released. It does not check everyth
 - **The desktop list is rebuilt.** Each deploy of the site builds the list of community tools for WireCat Desktop and
   signs it. The deploy runs on every merge and once a day.
 - **Desktop users see it only when they choose to.** The tool appears after a person turns on "Enable community
-  tools" in Settings and restarts the app. It carries a **Community** badge, and before install the note "Made by `<owner>`, not by WireCat. The app checks where npm built it, not what it does."
+  tools" in Settings and restarts the app. It carries a **Community** badge, and before install the note "Made by
+  `<owner>`, not by WireCat. The app checks where npm built it, not what it does."
 - **Each install is checked.** Before it installs your tool, the app checks that npm built that release from your
   repository's `release.yml` on `main`.
 
@@ -149,15 +172,17 @@ the next deploy publishes a list without it.
 
 ## Try it before listing
 
-You can see your tool in WireCat Desktop before anyone reviews it.
+You can see your tool in WireCat Desktop before anyone reviews it. It then carries a **Not checked** badge.
 
 - **Today, for developers.** Start the app with the environment variable `WIRECAT_EXTRA_TOOLS=1`, and put your entry
   in the file `extra-tools.json` in the app's data folder. The app checks the entry with the same rules and shows
   every refusal in its console. The desktop
   [notes on community tools](https://github.com/WireCatLabs/wirecat-desktop/blob/main/docs/dev/cli-registry.md#your-own-tools-not-checked)
   show the file's shape.
-- **Planned, for everyone.** "Add your own tool" in Settings takes an npm package name. The app shows a
-  "Not checked" badge and asks you to confirm before install and before the first run.
+- **Planned, for everyone.** Turn on "Allow tools WireCat has not checked" in Settings and confirm the warning. The
+  Agents page then has an "Add your own tool" button that takes an npm package name. It warns that the tool gets
+  access to all your personal data in WireCat, that you should add it only if you trust its authors completely, and
+  that WireCat takes no responsibility. One more confirmation comes before the install.
 
 ## Where to go next
 
