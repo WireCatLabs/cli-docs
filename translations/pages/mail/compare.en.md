@@ -5,7 +5,7 @@ title: "Compared with other tools"
 `mail` is a command line and an MCP server that copies your mailbox over IMAP into the shared WireCat store on your
 computer, searches it, and organises the mailbox on the server. This page puts it next to the other mail command lines
 and MCP servers, so you can see which one fits your job. The marks for `mail` come from its documentation and source for
-release 0.15.0, checked on 5 November 2026. The
+release 0.17.0, checked on 6 November 2026. The
 marks for the other tools come from their own READMEs and documentation, checked on 28 October 2026. Sign-in, sync and
 sending of `mail` were also run against a real Outlook.com mailbox on 2 November 2026. Nothing else was logged in to or
 tested against a real mailbox, and a tool may do more than its pages say.
@@ -85,8 +85,9 @@ every mailbox together with chats and notes.
 
 ⁴ Flags, moves, copies and folders change the mailbox on the server. A deletion moves mail to Trash and never expunges
 it. `messages restore --run <id>` undoes a run, last step first, as long as the provider has not emptied Trash;
-`mail doctor` warns when that is close on Gmail. A deletion, a change chosen by a query, and a change of more than 20
-messages are shown as a preview first and run only with `--yes`.
+`mail doctor` warns when that is close on Gmail. `--write <id>` undoes one write of a run and leaves the others. A
+deletion, a change chosen by a query, and a change of more than 20 messages are shown as a preview first and run only
+with `--yes`.
 
 ⁵ `mail` tags stored mail and conversations with your own tags. They stay in the local store and never reach the
 server. Flags and keywords on the server are changed with `messages update --flag`, and Gmail labels with
@@ -101,14 +102,15 @@ copy goes to Sent and into the store. `--file` refuses credential and WireCat fo
 `--allow-any-file`.
 
 ⁸ `mail` signs in to Gmail with an app password by default and reads All Mail. A Google Workspace domain that turns app
-passwords off, or an account without 2-Step Verification, signs in with OAuth through a Google app you create
-yourself ([steps](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)); `mail` ships no Google app of its own for mail.
+passwords off, or an account without 2-Step Verification, signs in with OAuth. That sign-in uses WireCat's Google app
+unless you name your own. Google may refuse WireCat's app for mail, and then a Google app you create yourself
+([steps](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)) or an app password is the way in.
 
 ⁹ Outlook.com and Microsoft 365 take only OAuth for IMAP and SMTP. `mail session start` opens the browser, you sign in
 and approve access, and no password is typed. WireCat's Microsoft app is built in, so there is nothing to register
 ([steps](./outlook.md)). Sign-in, sync and sending were run against a real Outlook.com mailbox. A Microsoft 365 work
 account was not tried: its admin may have to allow the app, and sending needs "Authenticated SMTP" on for the mailbox.
-Outlook.com also needs IMAP turned on in its settings. Gmail over OAuth needs your own Google app.
+Outlook.com also needs IMAP turned on in its settings. Gmail over OAuth may need your own Google app (note 8).
 
 ¹⁰ Over MCP, `mail` changes the mailbox only when the server is started with `--allow-writes`, and then only within the
 profile's permissions. An agent over MCP mails only you until the owner sets `permissions.messages.send.others`, and it
