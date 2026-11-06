@@ -8,7 +8,7 @@ title: "Comparado con otras herramientas"
 `mail` es una línea de comandos y un servidor MCP que copia tu buzón por IMAP en el almacén compartido de WireCat en tu
 ordenador, busca en él y organiza el buzón en el servidor. Esta página lo pone junto a otras líneas de comandos y
 servidores MCP de correo para que veas cuál se ajusta a tu trabajo. Las marcas de `mail` provienen de su documentación
-y su código fuente para la versión 0.15.0, revisadas el 5 de noviembre de 2026. Las marcas de las demás herramientas
+y su código fuente para la versión 0.17.0, revisadas el 6 de noviembre de 2026. Las marcas de las demás herramientas
 provienen de sus propios README y documentación, revisadas el 28 de octubre de 2026. El inicio de sesión, la
 sincronización y el envío de `mail` también se probaron con un buzón real de Outlook.com el 2 de noviembre de 2026. En
 ningún otro buzón real se inició sesión ni se probó nada, y una herramienta puede hacer más de lo que dicen sus páginas.
@@ -90,6 +90,7 @@ busca en todos los buzones junto con chats y notas.
 ⁴ Las marcas, los movimientos, las copias y las carpetas cambian el buzón en el servidor. Una eliminación mueve el
 correo a la papelera y nunca lo borra definitivamente. `messages restore --run <id>` deshace una ejecución, empezando por
 el último paso, mientras el proveedor no haya vaciado la papelera; `mail doctor` avisa cuando eso está cerca en Gmail.
+`--write <id>` deshace una sola escritura de la ejecución y deja las demás.
 Una eliminación, un cambio elegido por una consulta y un cambio de más de 20 mensajes se muestran primero como vista
 previa y se ejecutan solo con `--yes`.
 
@@ -107,17 +108,17 @@ propietario pase `--allow-any-file`.
 
 ⁸ Por defecto `mail` inicia sesión en Gmail con una contraseña de aplicación y lee «Todos los mensajes». Un dominio de
 Google Workspace que desactiva las contraseñas de aplicación, o una cuenta sin verificación en dos pasos, inicia sesión
-con OAuth mediante una aplicación de Google que creas tú
-([pasos](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)); `mail` no incluye ninguna aplicación
-de Google propia para el correo.
+con OAuth. Ese inicio de sesión usa la aplicación de Google de WireCat salvo que indiques la tuya. Google puede rechazar
+la aplicación de WireCat para el correo, y entonces se entra con una aplicación de Google que creas tú
+([pasos](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)) o con una contraseña de aplicación.
 
 ⁹ Outlook.com y Microsoft 365 aceptan solo OAuth para IMAP y SMTP. `mail session start` abre el navegador, inicias
 sesión y apruebas el acceso, sin escribir ninguna contraseña. La aplicación de Microsoft de WireCat viene incluida, así
 que no hay nada que registrar ([pasos](./outlook.md)). El inicio de
 sesión, la sincronización y el envío se probaron con un buzón real de Outlook.com. No se probó una cuenta de trabajo de
 Microsoft 365: su administrador puede tener que permitir la aplicación, y para enviar hace falta «Authenticated SMTP»
-activado en el buzón. Outlook.com además necesita IMAP activado en su configuración. Gmail con OAuth necesita tu propia
-aplicación de Google.
+activado en el buzón. Outlook.com además necesita IMAP activado en su configuración. Gmail con OAuth puede
+necesitar tu propia aplicación de Google (nota 8).
 
 ¹⁰ Por MCP, `mail` cambia el buzón solo si el servidor se inicia con `--allow-writes`, y entonces solo dentro de los
 permisos del perfil. Un agente por MCP escribe solo a ti hasta que el propietario fije `permissions.messages.send.others`,
