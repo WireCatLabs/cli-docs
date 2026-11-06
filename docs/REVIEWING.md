@@ -99,7 +99,8 @@ point has evidence linked in the pull request:
 
 The tests reject a community entry with a `@wirecat/` package or a `WireCatLabs/` repository, and add the group to the
 sidebar only while at least one such entry exists. The entry is also listed in `content/docs/meta.json`,
-`meta.ru.json` and `meta.es.json`, like any tool.
+`meta.ru.json` and `meta.es.json`, like any tool. The steps for the tool's maker are on the public page
+[List your tool in WireCat](../content/docs/build-list-tool.md).
 
 ### In WireCat Desktop
 
@@ -107,7 +108,7 @@ A community entry may also carry a `desktop` object: the catalog entry WireCat D
 sign in the tool. Every deploy builds the entries that have one into
 `https://wirecat.dev/registry/v1/desktop-tools.json` (`scripts/desktop-registry.ts`), signs it with minisign, and
 serves the signature beside it as `desktop-tools.json.minisig`. The app shows these tools only to an owner who turned
-on Settings → Advanced → "Show community tools", and only from a list whose signature matches the key built into the
+on "Enable community tools" in Settings, and only from a list whose signature matches the key built into the
 app. Merging the pull request is what publishes the entry, so the review below is the gate.
 
 **For the submitter.** Add `desktop` with every key of a

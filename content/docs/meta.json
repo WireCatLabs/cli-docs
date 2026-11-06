@@ -36,6 +36,7 @@
     "build-create-cli",
     "build-concepts",
     "build-sign-in",
+    "build-list-tool",
     "---Reference and internals---",
     "architecture",
     "code-design",
