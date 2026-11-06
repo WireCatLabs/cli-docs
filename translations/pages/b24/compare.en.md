@@ -15,13 +15,17 @@ The tools:
   an agent may do. It signs in with an incoming webhook of the portal.
 - **[Vibecode MCP](https://vibecode.bitrix24.com/docs-content-en/mcp.md)**: Bitrix24's own MCP server, on its
   Vibecode API, with 53 tools across the whole platform (npm `@bitrix24/mcp-vibecode-api`, release 3.4.1 on
-  6 November 2026). It needs a paid Bitrix24 plan.
+  6 November 2026).
 - **[Zapier MCP](https://zapier.com/mcp/bitrix24-crm-new)**: Zapier's hosted MCP server with the Bitrix24 CRM app.
   Each tool call uses two Zapier tasks.
 - **[MCP Bridge](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/)**: a hosted MCP
   connector from the Bitrix24 Market, made by a partner company (604 installs on 7 November 2026).
 - **[bitrix24-mcp-server](https://github.com/gunnit/bitrix24-mcp-server)**: the most starred open-source MCP server
   that covers the whole CRM (35 stars, last change July 2025).
+
+`b24`, Vibecode MCP and bitrix24-mcp-server call the portal's REST API, which a cloud portal has only on a paid
+plan ([Bitrix24's page](https://apidocs.bitrix24.com/first-steps/access-to-rest-api.html)).
+The Zapier app also works with paid plans only ([its listing](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/)).
 
 ✅ yes · 🟡 partly · ❌ no · ➖ not in its documentation · n/a cannot apply
 
@@ -33,7 +37,7 @@ The tools:
 | List the open deals of a stage or a pipeline | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | [✅](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L470-L500) |
 | See a pipeline's funnel: how many deals reached each stage | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | ➖ |
 | Read deals and leads without the internet | ✅ | ➖ | ➖ | ➖ | ➖ |
-| Find a deal or a lead by a word in its title | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | ➖ | ➖ |
+| Find a deal or a lead by a word in its title | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | ➖ | ➖ |
 | One search over deals and the messages and notes of your other tools | ✅ | ➖ | ➖ | ➖ | ➖ |
 | See the portal's own fields, with their labels and options | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/) | ➖ | ➖ |
 | Read products and employees | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L805) |
@@ -53,7 +57,7 @@ The tools:
 | Giving a record to another employee is refused until you allow it | ✅ | ➖ | ➖ | ➖ | ➖ |
 | See what a write would do, without making it | ✅ | ➖ | ➖ | ➖ | ➖ |
 | A write is never sent twice after a lost answer | ✅ | ➖ | ➖ | ➖ | ➖ |
-| The webhook or key is kept in the system keyring | ✅ | [❌](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | n/a | n/a | ➖ |
+| The webhook or key is kept in the system keyring | ✅ | ➖ | n/a | n/a | ➖ |
 | **Setup** | | | | | |
 | Several portals, each named in the command | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/keys-auth.md) | ➖ | ➖ | ➖ |
 | Works from ChatGPT or Claude in the browser | 🟡 | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/mcp) | [✅](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/server.js#L91) |
@@ -62,7 +66,7 @@ The tools:
 |---|---|---|---|---|---|
 | Install | npm, Node 22.16+ or 24+ | npm, Node 18+ | none: hosted | from the Bitrix24 Market | from source |
 | Licence | Apache-2.0 | MIT | closed service | closed service | MIT in `package.json`, no licence file |
-| Price | free | a paid Bitrix24 plan | two Zapier tasks per call | free, with paid extras | free |
+| Price | free, on a paid Bitrix24 plan | free, on a paid Bitrix24 plan | two Zapier tasks per call, on a paid Bitrix24 plan | free, with paid extras | free, on a paid Bitrix24 plan |
 
 Notes on the `b24` column:
 

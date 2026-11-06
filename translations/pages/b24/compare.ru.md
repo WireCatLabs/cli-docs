@@ -19,13 +19,17 @@ CRM Битрикс24, чтобы вы могли выбрать тот, что �
   что может агент. Входит через входящий вебхук портала.
 - **[Vibecode MCP](https://vibecode.bitrix24.com/docs-content-en/mcp.md)** — собственный MCP-сервер Битрикс24, на
   его Vibecode API, с 53 инструментами для всей платформы (npm `@bitrix24/mcp-vibecode-api`, выпуск 3.4.1 от
-  6 ноября 2026 года). Нужен платный тариф Битрикс24.
+  6 ноября 2026 года).
 - **[Zapier MCP](https://zapier.com/mcp/bitrix24-crm-new)** — MCP-сервер Zapier в облаке, с приложением Bitrix24 CRM.
   Каждый вызов инструмента расходует две задачи Zapier.
 - **[MCP Bridge](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/)** — облачный
   MCP-коннектор из Маркета Битрикс24, его сделала компания-партнёр (604 установки на 7 ноября 2026 года).
 - **[bitrix24-mcp-server](https://github.com/gunnit/bitrix24-mcp-server)** — MCP-сервер с открытым кодом для всей
   CRM с наибольшим числом звёзд (35 звёзд, последнее изменение в июле 2025 года).
+
+`b24`, Vibecode MCP и bitrix24-mcp-server вызывают REST API портала, а облачный портал получает его только на
+платном тарифе ([страница Битрикс24](https://apidocs.bitrix24.com/first-steps/access-to-rest-api.html)).
+Приложение для Zapier тоже работает только на платных тарифах ([его страница](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/)).
 
 ✅ да · 🟡 частично · ❌ нет · ➖ нет в документации · n/a неприменимо
 
@@ -37,7 +41,7 @@ CRM Битрикс24, чтобы вы могли выбрать тот, что �
 | Открытые сделки одной стадии или воронки | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | [✅](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L470-L500) |
 | Воронка: сколько сделок дошло до каждой стадии | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | ➖ |
 | Читать сделки и лиды без интернета | ✅ | ➖ | ➖ | ➖ | ➖ |
-| Найти сделку или лид по слову из названия | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | ➖ | ➖ |
+| Найти сделку или лид по слову из названия | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | ➖ | ➖ |
 | Один поиск по сделкам и по сообщениям и заметкам из других ваших инструментов | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Свои поля портала, с названиями и вариантами | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/) | ➖ | ➖ |
 | Читать товары и сотрудников | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L805) |
@@ -57,7 +61,7 @@ CRM Битрикс24, чтобы вы могли выбрать тот, что �
 | Передать запись другому сотруднику нельзя, пока вы это не разрешите | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Увидеть, что сделает запись, не выполняя её | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Запись не отправляется дважды, если ответ потерялся | ✅ | ➖ | ➖ | ➖ | ➖ |
-| Вебхук или ключ хранится в системном хранилище ключей | ✅ | [❌](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | n/a | n/a | ➖ |
+| Вебхук или ключ хранится в системном хранилище ключей | ✅ | ➖ | n/a | n/a | ➖ |
 | **Подготовка** | | | | | |
 | Несколько порталов, каждый назван в команде | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/keys-auth.md) | ➖ | ➖ | ➖ |
 | Работает из ChatGPT или Claude в браузере | 🟡 | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/mcp) | [✅](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/server.js#L91) |
@@ -66,7 +70,7 @@ CRM Битрикс24, чтобы вы могли выбрать тот, что �
 |---|---|---|---|---|---|
 | Установить | npm, Node 22.16+ или 24+ | npm, Node 18+ | не нужно: в облаке | из Маркета Битрикс24 | из исходного кода |
 | Лицензия | Apache-2.0 | MIT | закрытый сервис | закрытый сервис | MIT в `package.json`, файла лицензии нет |
-| Цена | бесплатно | платный тариф Битрикс24 | две задачи Zapier за вызов | бесплатно, с платными дополнениями | бесплатно |
+| Цена | бесплатно, на платном тарифе Битрикс24 | бесплатно, на платном тарифе Битрикс24 | две задачи Zapier за вызов, на платном тарифе Битрикс24 | бесплатно, с платными дополнениями | бесплатно, на платном тарифе Битрикс24 |
 
 Пояснения к столбцу `b24`:
 
