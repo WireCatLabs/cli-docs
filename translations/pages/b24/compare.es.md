@@ -5,7 +5,7 @@ title: "Comparado con otras herramientas"
 <a id="features" />
 <a id="when-another-tool-fits-better" />
 
-`b24` es una línea de comandos y un servidor MCP para los datos de ventas de un portal de Bitrix24: ofertas,
+`b24` es una línea de comandos y un servidor MCP para los datos de ventas de un portal de Bitrix24: negociaciones,
 prospectos, contactos, empresas, embudos, productos y empleados. Esta página lo pone junto a las otras herramientas
 con las que un agente de IA lee y cambia un CRM de Bitrix24, para que veas cuál encaja con tu trabajo. Las marcas de
 `b24` salen de su versión 0.5.0, sus comandos y su código, revisados el 7 de noviembre de 2026; se revisan de nuevo en
@@ -15,17 +15,21 @@ puede hacer más de lo que dicen sus páginas.
 
 Las herramientas:
 
-- **b24**: esta herramienta. Guarda una copia de ofertas, prospectos y embudos en tu ordenador, y decide para cada
+- **b24**: esta herramienta. Guarda una copia de negociaciones, prospectos y embudos en tu ordenador, y decide para cada
   acción qué puede hacer un agente. Inicia sesión con un webhook entrante del portal.
 - **[Vibecode MCP](https://vibecode.bitrix24.com/docs-content-en/mcp.md)**: el servidor MCP propio de Bitrix24, sobre
   su API Vibecode, con 53 herramientas para toda la plataforma (npm `@bitrix24/mcp-vibecode-api`, versión 3.4.1 del
-  6 de noviembre de 2026). Necesita un plan de pago de Bitrix24.
+  6 de noviembre de 2026).
 - **[Zapier MCP](https://zapier.com/mcp/bitrix24-crm-new)**: el servidor MCP alojado de Zapier, con la app Bitrix24
   CRM. Cada llamada a una herramienta usa dos tareas de Zapier.
 - **[MCP Bridge](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/)**: un conector
   MCP alojado del Bitrix24 Market, hecho por una empresa socia (604 instalaciones el 7 de noviembre de 2026).
 - **[bitrix24-mcp-server](https://github.com/gunnit/bitrix24-mcp-server)**: el servidor MCP de código abierto con
   más estrellas que cubre todo el CRM (35 estrellas, último cambio en julio de 2025).
+
+`b24`, Vibecode MCP y bitrix24-mcp-server llaman a la API REST del portal, que un portal en la nube tiene solo con un
+plan de pago ([la página de Bitrix24](https://apidocs.bitrix24.com/first-steps/access-to-rest-api.html)).
+La app de Zapier también funciona solo con planes de pago ([su ficha](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/)).
 
 ✅ sí · 🟡 en parte · ❌ no · ➖ no está en su documentación · n/a no aplica
 
@@ -34,19 +38,19 @@ Las herramientas:
 | Tarea | b24 | [Vibecode MCP](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [Zapier MCP](https://zapier.com/mcp/bitrix24-crm-new) | [MCP Bridge](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [bitrix24-mcp-server](https://github.com/gunnit/bitrix24-mcp-server) |
 |---|:-:|:-:|:-:|:-:|:-:|
 | **Buscar y leer** | | | | | |
-| Las ofertas abiertas de una etapa o un embudo | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | [✅](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L470-L500) |
-| El embudo: cuántas ofertas llegaron a cada etapa | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | ➖ |
-| Leer ofertas y prospectos sin internet | ✅ | ➖ | ➖ | ➖ | ➖ |
-| Encontrar una oferta o un prospecto por una palabra del título | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | ➖ | ➖ |
-| Una búsqueda en las ofertas y en los mensajes y notas de tus otras herramientas | ✅ | ➖ | ➖ | ➖ | ➖ |
+| Las negociaciones abiertas de una etapa o un embudo | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | [✅](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L470-L500) |
+| El embudo: cuántas negociaciones llegaron a cada etapa | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | ➖ |
+| Leer negociaciones y prospectos sin internet | ✅ | ➖ | ➖ | ➖ | ➖ |
+| Encontrar una negociación o un prospecto por una palabra del título | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://zapier.com/mcp/bitrix24-crm-new) | ➖ | ➖ |
+| Una búsqueda en las negociaciones y en los mensajes y notas de tus otras herramientas | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Los campos propios del portal, con sus nombres y opciones | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/) | ➖ | ➖ |
 | Leer productos y empleados | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L805) |
 | **Cambiar el CRM** | | | | | |
-| Crear y cambiar una oferta o un prospecto | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/apps/bitrix24-crm-new/integrations) | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L79-L147) |
+| Crear y cambiar una negociación o un prospecto | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/apps/bitrix24-crm-new/integrations) | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L79-L147) |
 | Crear y cambiar contactos y empresas | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/apps/bitrix24-crm-new/integrations) | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L6-L78) |
-| Pasar una oferta a una etapa por el nombre de la etapa | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
-| Cerrar una oferta como ganada o perdida en un paso | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
-| Borrar una oferta o un prospecto | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [❌](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts) |
+| Pasar una negociación a una etapa por el nombre de la etapa | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
+| Cerrar una negociación como ganada o perdida en un paso | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
+| Borrar una negociación o un prospecto | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [❌](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts) |
 | Rellenar un campo personalizado por su nombre | 🟡 | ➖ | ➖ | ➖ | ➖ |
 | Llamar a cualquier otro método de Bitrix24 | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | ➖ |
 | **Agentes y seguridad** | | | | | |
@@ -57,7 +61,7 @@ Las herramientas:
 | Dar un registro a otro empleado se niega hasta que lo permitas | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Ver qué haría una escritura, sin hacerla | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Una escritura nunca se envía dos veces tras perder la respuesta | ✅ | ➖ | ➖ | ➖ | ➖ |
-| El webhook o la clave se guarda en el llavero del sistema | ✅ | [❌](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | n/a | n/a | ➖ |
+| El webhook o la clave se guarda en el llavero del sistema | ✅ | ➖ | n/a | n/a | ➖ |
 | **Configuración** | | | | | |
 | Varios portales, cada uno nombrado en el comando | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/keys-auth.md) | ➖ | ➖ | ➖ |
 | Funciona desde ChatGPT o Claude en el navegador | 🟡 | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/mcp) | [✅](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/server.js#L91) |
@@ -66,13 +70,13 @@ Las herramientas:
 |---|---|---|---|---|---|
 | Instalar | npm, Node 22.16+ o 24+ | npm, Node 18+ | nada: alojado | desde el Bitrix24 Market | desde el código |
 | Licencia | Apache-2.0 | MIT | servicio cerrado | servicio cerrado | MIT en `package.json`, sin archivo de licencia |
-| Precio | gratis | un plan de pago de Bitrix24 | dos tareas de Zapier por llamada | gratis, con extras de pago | gratis |
+| Precio | gratis, con un plan de pago de Bitrix24 | gratis, con un plan de pago de Bitrix24 | dos tareas de Zapier por llamada, con un plan de pago de Bitrix24 | gratis, con extras de pago | gratis, con un plan de pago de Bitrix24 |
 
 Notas sobre la columna de `b24`:
 
 - **Solo lectura.** `B24_READ_ONLY=1` niega toda escritura, digan lo que digan los ajustes. El nivel `readonly` hace
   lo mismo para una clave. Sin ninguno de los dos, un perfil nuevo deja a un agente crear, cambiar, mover y cerrar
-  ofertas y prospectos.
+  negociaciones y prospectos.
 - **Permitir, preguntar o negar.** Cada comando tiene su clave de permiso, como `deals.delete` o `leads.move`, con el
   valor `allow`, `ask`, `readonly` o `deny` en [los ajustes](./configuration.md#permissions). `mcp serve --permission`
   hace una clave más estricta solo para un servidor. Un agente por MCP no puede cambiar estos ajustes.
@@ -84,13 +88,13 @@ Notas sobre la columna de `b24`:
   Consulta la [seguridad](./security.md).
 - **Otro empleado.** Bitrix24 avisa a un empleado cuando le dan un registro, así que `--owner` con otra persona se
   niega hasta que pongas `crm.assign-others` en `allow`.
-- **Sin internet.** `sync` copia embudos, ofertas, prospectos, contactos y empresas al almacén local, y `deals`,
+- **Sin internet.** `sync` copia embudos, negociaciones, prospectos, contactos y empresas al almacén local, y `deals`,
   `leads`, `pipelines` y `stages` lo leen, también con `--offline`. `people`, `organizations`, `products` y `users`
   siempre preguntan al portal.
-- **Una búsqueda.** `search all` encuentra ofertas y prospectos por las palabras del título, junto a los mensajes,
+- **Una búsqueda.** `search all` encuentra negociaciones y prospectos por las palabras del título, junto a los mensajes,
   notas y eventos que otras herramientas de WireCat guardaron en el mismo ordenador, sin internet.
 - **Campos personalizados por nombre.** Contactos y empresas aceptan un campo personalizado por su nombre o su código.
-  Ofertas y prospectos lo aceptan por su código, como lo imprime `fields list`. Por eso esta fila es en parte.
+  Negociaciones y prospectos lo aceptan por su código, como lo imprime `fields list`. Por eso esta fila es en parte.
 - **Una escritura se envía una vez.** Una escritura sin respuesta no se envía de nuevo: termina como
   `outcome_unknown` con su `operation_id`, que Bitrix24 recibe como su `Idempotency-Key`. Revisa el portal antes de
   repetirla.
