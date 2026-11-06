@@ -59,20 +59,20 @@ de correo. El id es público; una aplicación de escritorio no tiene secreto.
    Elige **Add permissions**. No concedas el consentimiento del administrador para ellos: cada persona los permite para
    su propio buzón al iniciar sesión. Microsoft deja que los usuarios lo hagan por defecto para su propio correo
    ([consentimiento del usuario](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent)).
-8. Prueba la redirección. Pon el id en tu configuración como arriba y luego inicia sesión dos veces:
+8. Prueba la redirección. Pon el id en tu configuración como arriba y luego inicia sesión dos veces. El id y la dirección de abajo son
+   ejemplos: usa el Application (client) ID de tu aplicación y tu propia dirección.
 
    ```sh
-   mail config set --defaults microsoft_client_id <application-client-id>
-   mail outlook-test session start --address <your-address>@outlook.com
+   mail config set --defaults microsoft_client_id 11111111-2222-3333-4444-555555555555
+   mail outlook-test session start --address you@outlook.com
    mail outlook-test session start
    ```
 
    Ambos deben terminar con `signed_in: true`. Si la página de Microsoft muestra un error con `AADSTS50011` (el URI de
    redirección no coincide), comprueba que la dirección bajo **Mobile and desktop applications** es exactamente
    `http://localhost/callback`.
-9. Para la aplicación propia de WireCat: envía el Application (client) ID a los responsables del mantenimiento. Ellos
-   lo ponen en `microsoft.app.client_id` en el `constants.json` de cli-core, y la próxima versión de cli-core y la
-   actualización de `mail` inician sesión sin configuración.
+9. Para la aplicación propia de WireCat: envía el Application (client) ID a los responsables del mantenimiento. Una
+   versión posterior de `mail` inicia sesión con él sin configuración.
 
 ## Más adelante, y no hace falta para empezar
 

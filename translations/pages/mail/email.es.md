@@ -179,7 +179,7 @@ Un resultado vacío de una importación parcial no demuestra que no hubiera acue
 ## Si falta correo
 
 - **No hay cuenta:** ejecuta `mail session list` y comprueba el nombre del perfil en tu comando.
-- **Solo se leyó parte del periodo:** ejecuta `mail <profile> sync` de nuevo; `--limit` limita los mensajes nuevos por ejecución.
+- **Solo se leyó parte del periodo:** ejecuta `mail <profile> sync` de nuevo; `--max-messages` limita los mensajes nuevos por ejecución.
 - **Hay resultados de otro buzón:** comprueba las referencias y conserva la dirección correcta.
 - **Falta correo en el contexto de una persona:** comprueba la dirección exacta, su enlace y el historial importado.
 

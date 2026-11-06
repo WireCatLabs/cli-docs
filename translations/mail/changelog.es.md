@@ -4,6 +4,99 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.17.0 — 06.11.2026
+
+### Añadido
+
+- **mail funciona sobre cli-core 0.587.0 y cli-base 0.80.0.** `messages reset --holder <name> --since-time <time> | --last
+  <n>` permite al propietario mover hacia atrás la marca de un agente, así que su siguiente `review --holder` le da ese
+  correo otra vez (`--dry-run` cuenta primero). `review --holder` da la clave de hallazgos y deja fuera los boletines en
+  lugar de todo el correo masivo. `schedule list` da los límites de coste de cada programación de agente. El almacén
+  compartido pasa a la versión 52 (acuerdos) la primera vez que mail lo abre, y una herramienta de WireCat más antigua lo
+  sigue leyendo.
+- **`messages restore --write <id>` deshace una escritura de una ejecución y deja las demás.** El id es un
+  `operation_id` que la respuesta de la ejecución listó en `writes`. Una restauración posterior de toda la ejecución
+  deshace el resto. Una ejecución registrada antes de que las escrituras tuvieran id, o un id que no contiene, se rechaza
+  como `not_found` (`mail.write-unknown`).
+- **`drafts send` lista en `writes` la retirada del borrador de Drafts** (`op: "delete"`), con su propio
+  `operation_id` junto al del envío. **Una restauración de Gmail desde la papelera lista la devolución de las
+  etiquetas** como una escritura `label` que nombra la escritura que deshace, y el registro de cambios la guarda. Las dos
+  escrituras ya se hacían antes, pero no respondían con id.
+- **Cada escritura responde con su propio `operation_id`, y el registro de cambios lo guarda.**
+  Los cambios de `messages`, `messages
+  delete` y `messages restore` listan `writes`: una entrada por cada escritura en el servidor, con
+  su `operation_id`, lo que hizo (`op`), la carpeta, `to` en un movimiento y cuántos mensajes. La escritura de una
+  restauración también nombra la escritura que deshace (`undoes`). `folders create|rename|delete` y
+  `drafts create|update|delete` dan el `operation_id` de su escritura. Los mismos ids están en el diario de envíos.
+- **`account inspect` y `messages import` dicen en qué zona horaria leen `--since-time`.** La respuesta da
+  `meta.timezone` y la ventana en UTC (`meta.window.since`), como hace `sync`. `messages import` también da
+  `timezone` junto a `since`, y `account inspect` añade una línea a su tabla.
+
+### Cambiado — puede romper a quien llama
+
+- **La ejecución que hizo un cambio de `messages` es `run_id` en su respuesta, como en las demás herramientas de
+  WireCat.** `messages mark-read|mark-unread|star|unstar|update|move|copy|delete` la respondían como `run`.
+  `messages restore` responde `run_id` para la ejecución que hizo ella misma (antes `restore_run`, `null` en una vista
+  previa) y `restored_run_id` para la ejecución que deshizo (antes `run`). La opción `--run` mantiene su nombre: es la
+  opción del vocabulario compartido para «la ejecución de la que se trata».
+- **`sync`, `messages import` y `messages export` limitan una ejecución con `--max-messages`, y `messages export`
+  escribe en `--output-dir`.** `--limit` limitaba ahí el trabajo de una ejecución, no las filas de la respuesta, y ahora
+  es el límite de trabajo por mensajes del vocabulario compartido. `--output` recibía una carpeta, y `--output` es en el
+  vocabulario la opción para un solo archivo. Los `args` del siguiente paso siguen el cambio: `max_messages` y
+  `output_dir`. Las opciones antiguas ya no existen. `--limit` se queda donde cuenta lo que muestra la respuesta:
+  `account inspect`, `stats`, `drafts list`, `tags list` y, en los cambios de `messages`, la selección `--filter`.
+- **`attachments download` recibe `[attachment...]` en lugar de `[number...]`.** El argumento nombra lo que recibe,
+  como los demás argumentos de WireCat. Un agente pasa los números en `attachment` en lugar de `number`, y un rechazo
+  nombra `param: "attachment"`. Los valores siguen siendo los números que muestra `attachments list`.
+
+### Corregido
+
+- **`status` responde sobre un almacén que una herramienta de WireCat más antigua dejó en un esquema anterior.** Abre
+  el almacén solo para lectura, así que responde mientras corre una sincronización, y una apertura solo para lectura
+  rechaza un esquema más antiguo que el suyo. Tras una actualización, `status` fallaba (`configuration_error`, "needs
+  schema … maintenance") hasta que otro comando actualizaba el almacén. Ahora lo actualiza una vez él mismo.
+- **Una señal de parada deja que `messages import` termine la lectura en curso y guarde lo leído, como `sync`.** Antes,
+  Ctrl-C o una cancelación por MCP cortaba la importación al instante, mientras aún leía. Ahora se detiene antes de la
+  siguiente lectura y responde `stopped: "cancelled"`. También recibe el plazo de una sincronización reanudable: 15
+  minutos en una terminal, 45 segundos por MCP, en lugar de 30 segundos.
+- **Los pasos de iCloud explican con palabras sencillas cómo iniciar sesión con el usuario corto.** Ya no citan una
+  línea de comando con sus opciones, y `session start --help` sigue listando `--login`.
+- **Cada pantalla muestra a una persona sus horas en la zona horaria local:** `status`, `sync`, `messages restore` y,
+  con cli-core 0.587.0, `search messages`, `messages show`, `conversations list|show`, `review` y `runs list|show`. Una
+  tabla mostraba `2025-12-31T14:00:00.000Z`, y ahora muestra `2026-01-01 00:00`, sin desfase, y una línea
+  `times in <zone>` nombra la zona (el `TZ` del ordenador o la zona fijada). Las respuestas JSON y JSONL siguen en UTC.
+- **Los comandos que hablan con el servidor de correo responden solo después de cerrar la conexión y el almacén.** `account
+  check`, `account inspect`, `folders`, `sync`, `messages export`, los cambios de `messages`, `drafts` y los
+  envíos imprimían antes su respuesta. Un cierre que falla termina ahora en error en lugar de después de un éxito. Las
+  respuestas JSON no cambian.
+- **Un envío cuyo almacén no logra cerrarse después lo dice y nombra su `operation_id`.** `messages send|forward` y
+  `drafts send` terminan entonces en `outcome_unknown`: el mensaje probablemente salió, y el mismo comando con
+  `--operation-id <id>` lo encuentra en Sent en lugar de enviarlo dos veces. Antes, el error no tenía `operation_id`.
+- **Once rechazos más llevan un motivo registrado**, así que `commands info` los lista y un script puede distinguirlos:
+  `mail.flag-deleted`, `mail.no-selection`, `mail.refs-and-filter`, `mail.move-to-trash`, `mail.original-gone`,
+  `mail.others-for-agent`, `mail.no-submission`, `mail.config-unreadable`, `mail.profile-exists`,
+  `mail.server-unknown` y `mail.export-other`. Sus mensajes no cambian. Una escritura de resultado desconocido dice
+  ahora "check the mailbox before running it again", sin nombrar `sync`.
+- **Las páginas para el usuario dan valores de ejemplo en lugar de marcadores y dicen cada dato una sola vez.** Los
+  comandos de la guía de uso, las páginas de Outlook y la vista general usan referencias e ids de ejemplo
+  (`msg:email/me%40example.com/…`) donde tenían `<ref>` o `<id>`. La lista de proveedores está solo en la página para
+  preparar el buzón, y la vista general enlaza la guía de búsqueda en lugar de repetirla. La guía de uso ya no habla de
+  mail 0.1, y la página de la aplicación de Microsoft ya no describe cómo los responsables publican un client id. No
+  cambia ningún comportamiento.
+- **Los archivos que `mail` vuelve a leer se comprueban campo por campo en lugar de darse por buenos.** Un archivo de
+  reglas cuya condición tiene el tipo equivocado se rechaza con el número de la regla. Una cabecera dañada del diario de
+  exportación, un registro de inicio de sesión, una respuesta RDAP o una caché de antigüedad de dominio se tratan como
+  ausentes en lugar de romper el comando.
+- **El README y `SECURITY.md` dicen qué envía `sync` fuera para puntuar a remitentes nuevos:** el dominio del
+  remitente, nunca una dirección, a la lista de registros de IANA y al registro propio de ese dominio. Antes solo lo
+  decía la página de seguridad. No cambia ningún comportamiento.
+
+### Eliminado
+
+- **El paquete ya no incluye `dist/index.js`.** Reexportaba `run`, `createProgram`, `definition` e `IDENTITY`, pero
+  `package.json` nunca lo nombraba y ninguna herramienta de WireCat lo importaba. `mail` es un comando, no una
+  biblioteca.
+
 ## 0.16.3 — 05.11.2026
 
 ### Corregido

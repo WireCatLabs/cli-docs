@@ -3,6 +3,8 @@ title: "Uso"
 ---
 
 Esta página explica cómo se construye un comando y cómo usa la herramienta un agente. Léela antes de tu primer comando.
+Las referencias, los ids y los cursores de sus ejemplos son inventados (`me%40example.com`, `5b0e1c2a@example.com`): usa
+los que den tu búsqueda, tu ejecución o tu lista.
 
 ## El perfil va primero
 
@@ -28,8 +30,8 @@ mail personal folders list                  # folders with role and counts
 mail personal sync --since-time 2026-10-01  # reads new mail into the shared store; stored mail is skipped
 ```
 
-`session start` en un perfil nuevo debe encontrar el servidor de correo. Primero mira en una tabla integrada (Yandex, Gmail,
-iCloud, Mail.ru, Fastmail, Outlook). Después mira el registro MX del dominio. Después consulta la lista de servidores de correo de
+`session start` en un perfil nuevo debe encontrar el servidor de correo. Primero mira en su tabla de
+[proveedores](./providers.md). Después mira el registro MX del dominio. Después consulta la lista de servidores de correo de
 Thunderbird y el archivo de ajustes del propio dominio. Si ninguno conoce el servidor, fíjalo tú con `--host`, `--port` y
 `--security`, o nombra un proveedor de la tabla: `--provider yandex`.
 
@@ -45,20 +47,20 @@ contraseña, lee la que dejó Himalaya (`secret-tool`, servicio `himalaya`, cuen
 existente de Himalaya no necesita una contraseña nueva.
 
 `sync` lee INBOX y la carpeta Sent; en Gmail lee All Mail, porque el correo archivado sale de INBOX. `--folder` o el
-ajuste `folders` del perfil indican otras carpetas. Lee primero el correo más nuevo. `--limit` limita el correo nuevo de
+ajuste `folders` del perfil indican otras carpetas. Lee primero el correo más nuevo. `--max-messages` limita el correo nuevo de
 una ejecución. `--rescan` lista de nuevo toda la ventana. Guarda el texto y las cabeceras, y el texto de cada adjunto que
 puede leer, no los archivos. Lee adjuntos de hasta 10 MB cada uno: los ajustes del perfil `read_attachments` (`false` no
 lee ninguno) y `max_attachment_mb` lo cambian, y `--no-attachments`, `--attachments` y `--max-attachment-mb <n>` lo
 cambian para una ejecución. Un archivo sin leer conserva su nombre y su tamaño. `messages show` de un correo con un
 archivo así vuelve a leer ese correo del servidor, cada adjunto sea cual sea su tamaño, y muestra el texto; `--offline`
-muestra el correo guardado. Para conservar un archivo, usa `attachments download`. Las reglas de la cuenta (`mail <profile> rules`, la misma tabla que lee memo) también valen
+muestra el correo guardado. Para conservar un archivo, usa `attachments download`. Las reglas de la cuenta (`mail personal rules`, que memo también guarda) también valen
 aquí: el correo que nombra una regla de omisión no se lee, y una regla de sobre conserva solo su remitente, su fecha y su
 tamaño.
 
 Un buzón grande no cabe en una sola ejecución. `sync` tiene un presupuesto de peticiones al servidor, fijado por su plazo: 15
 minutos en una terminal, 45 segundos por MCP. `--timeout` cambia el plazo. `--max-pages` reduce el presupuesto. La ejecución
 guarda lo que leyó, responde `state: partial` y da el mismo comando en `next`. Ejecútalo otra vez para continuar.
-`mail <profile> status` muestra cuánto lleva la sincronización.
+`mail personal status` muestra cuánto lleva la sincronización.
 
 Para mantener un perfil al día, pon su sync en un temporizador (systemd, launchd o el Programador de tareas):
 `mail personal schedule command mail-personal --every 5m -- sync`. `mail personal schedule list` muestra cada programación y cómo fue su
@@ -67,9 +69,8 @@ Para mantener un perfil al día, pon su sync en un temporizador (systemd, launch
 Yandex no da identificador de mensaje. Con un servidor así, `sync` lista solo el número, los indicadores, la fecha y el tamaño de
 cada mensaje, y descarga cada mensaje nuevo una vez. Omite el correo guardado por ese número, así que una nueva ejecución no lee
 nada dos veces. No detecta el correo borrado en el servidor ni los indicadores cambiados en el correo que omite. `--rescan` hace
-ambas cosas. También mueve una respuesta guardada por mail 0.1 al hilo del primer correo al que responde: ejecuta una vez
-`mail <profile> sync --rescan --since-time <date>`, con una fecha tan antigua como el correo guardado, y `rethreaded` dice
-cuántas movió.
+ambas cosas. También mueve una respuesta guardada que está fuera de su hilo al hilo del primer correo al que responde,
+hasta `--since-time`. `rethreaded` dice cuántas movió.
 
 A veces el servidor no puede responder por un mensaje (Yandex responde `NO [UNAVAILABLE]` a algunos). `sync` lo pide otra vez al
 final de la ejecución. Si sigue fallando, `sync` lo cuenta en `unreadable` y lo deja para la siguiente ejecución.
@@ -121,7 +122,7 @@ Se muestran todos los correos, también los enviados a muchos; el `email` de cad
 última sincronización terminada espera a la siguiente revisión. `--new` guarda un punto por buzón y lector: el tuyo, el
 de un agente por MCP y uno por cada ejecución programada, así que una programación nunca mueve el tuyo. Sin fecha,
 `--unanswered` y `--waiting` miran los hilos activos en los últimos 30 días.
-`memo tasks agenda --source email:<address>` lista los mismos hilos que debes o que esperan respuesta.
+`memo tasks agenda --source email:me@example.com` lista los mismos hilos que debes o que esperan respuesta.
 
 Un agente o una cadena de proceso que trata tu correo guarda su propia marca de hasta dónde llegó, en el almacén
 compartido y por el orden en que se guardó el correo, así que el correo guardado tarde, con una fecha antigua, no se
@@ -129,7 +130,7 @@ salta:
 
 ```sh
 mail personal review --holder mail-triage --json        # what is stored past its mark; the answer gives a cursor
-mail personal messages acknowledge --holder mail-triage --cursor <cursor>   # once processed: move the mark there
+mail personal messages acknowledge --holder mail-triage --cursor 9123.1762090000000   # once processed: move the mark there
 mail personal status                                    # how far each holder got, what it held and skipped
 ```
 
@@ -146,9 +147,9 @@ guardado ahora.
 mail personal search messages invoice                                  # best match first, any form of the word
 mail personal search messages 'from:ann@example.com has:attachment date>30d'
 mail personal search messages 'list:github.com is:unread' --newest     # a mailing list, newest first
-mail personal messages show '<ref from a search>'                      # the whole email and its attachments' text
+mail personal messages show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' # the whole email and its attachments' text
 mail personal conversations list emails_count>1                        # threads, newest first
-mail personal conversations show '<chat:email/… ref>'                  # one thread, oldest first
+mail personal conversations show 'chat:email/me%40example.com/thread-1' # one thread, oldest first
 ```
 
 El lenguaje de consulta es el que usan todas las CLI de WireCat ([guía de búsqueda](https://github.com/WireCatLabs/cli-core/blob/main/docs/search/query-language.md)):
@@ -182,9 +183,9 @@ El almacén guarda texto, no el mensaje original, así que `messages export` vue
 Selecciona con la misma consulta que `search messages` y escribe una carpeta privada (modo 700, archivos 600):
 
 ```sh
-mail personal messages export 'from:ann@example.com' --output ~/mail-backup     # one mbox file per folder
-mail personal messages export --folder INBOX --format maildir --output ~/Maildir # Maildir++, for mu and notmuch
-mail personal messages export 'date>30d' --limit 500 --output ~/mail-backup --resume
+mail personal messages export 'from:ann@example.com' --output-dir ~/mail-backup     # one mbox file per folder
+mail personal messages export --folder INBOX --format maildir --output-dir ~/Maildir # Maildir++, for mu and notmuch
+mail personal messages export 'date>30d' --max-messages 500 --output-dir ~/mail-backup --resume
 mail personal stats messages top --by list --limit 10                          # which lists send the most
 ```
 
@@ -204,7 +205,7 @@ mail personal stats messages show --by sender --limit 10                       #
 - **Nunca sobre lo que hay.** Se rechaza una carpeta que ya tiene algo. `--resume` continúa una exportación empezada allí
   (un archivo de diario, `.mail-export.jsonl`, lista lo que está hecho y la longitud de cada archivo mbox después);
   `--replace` escribe en cualquier carpeta sobre archivos del mismo nombre y no borra nada.
-- **Por partes.** Una ejecución se detiene en `--limit`, `--max-pages` o antes de su plazo y dice `state: "partial"`;
+- **Por partes.** Una ejecución se detiene en `--max-messages`, `--max-pages` o antes de su plazo y dice `state: "partial"`;
   ejecútala otra vez con `--resume`. El correo para el que el almacén no tiene UID (haz sync otra vez) o que el servidor
   ya no tiene se cuenta, no se escribe.
 
@@ -234,7 +235,7 @@ mail gm messages import ~/Takeout/Mail/archive.mbox         # a Google Takeout f
   guardado de este perfil de Gmail. Takeout conserva los ids propios de Gmail, así que un correo que traen el archivo y
   `sync` se guarda una vez. Solo añade: Spam y Trash se dejan fuera, las reglas del perfil omiten lo que omiten, y el
   correo que falta en el archivo nunca se marca como borrado. Un archivo sin cambios leído hasta el final no se vuelve a
-  leer; `--limit` y `--since-time` acotan una ejecución. Se rechaza un perfil que no es de Gmail, porque sus ids guardarían
+  leer; `--max-messages` y `--since-time` acotan una ejecución. Se rechaza un perfil que no es de Gmail, porque sus ids guardarían
   cada correo dos veces.
 
 ## Ordenar el buzón
@@ -243,13 +244,13 @@ Cada cambio va primero al servidor y luego al almacén, así que `search message
 nombran con el `ref` que da una búsqueda, o se eligen con `--filter` con la misma consulta:
 
 ```sh
-mail personal messages mark-read '<ref>'                               # also mark-unread, star, unstar
-mail personal messages update '<ref>' --flag answered --unflag '$Junk'  # flags and keywords; --replace sets the whole set
-mail personal messages move '<ref>' --folder archive                   # a folder by path, name or role
+mail personal messages mark-read 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'                               # also mark-unread, star, unstar
+mail personal messages update 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --flag answered --unflag '$Junk'  # flags and keywords; --replace sets the whole set
+mail personal messages move 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --folder archive                   # a folder by path, name or role
 mail personal messages copy --filter 'list:github.com' --folder Lists --yes
 mail personal messages delete --filter 'from:shop@example.com date<2025-01-01'   # a preview: nothing moves
 mail personal messages delete --filter 'from:shop@example.com date<2025-01-01' --yes
-mail personal messages restore --run '<run id the change answered with>' --yes
+mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c --yes
 mail personal folders create Receipts                                  # also folders rename, folders delete
 ```
 
@@ -259,7 +260,8 @@ mail personal folders create Receipts                                  # also fo
 - **Deshacer.** Cada cambio responde con un id de `run`. Antes de preguntar al servidor, la ejecución registra el lugar,
   las marcas y las etiquetas de Gmail de cada mensaje; `messages restore --run <id>` devuelve lo que sigue donde la
   ejecución lo dejó: de la papelera a su carpeta, un movimiento deshecho, una copia eliminada, las marcas como estaban.
-  Las ejecuciones del antiguo `memo mail delete` también se restauran aquí. El correo con texto vuelve a la búsqueda
+  Cada escritura de una ejecución en el servidor aparece en `writes` con su `operation_id`, y `--write <id>` deshace
+  solo esa escritura. Las ejecuciones del antiguo `memo mail delete` también se restauran aquí. El correo con texto vuelve a la búsqueda
   con el siguiente `sync`; un sobre, al instante.
 - **Gmail.** Todo el correo está en All Mail y una carpeta es una etiqueta: `move --folder Work` añade la etiqueta `Work`
   y quita `Inbox`, `copy` solo la añade, `--folder archive` solo quita `Inbox`, y `delete` mueve el correo de All Mail a
@@ -285,11 +287,11 @@ agente; tú lo lees y lo envías desde tu aplicación de correo, o con `drafts s
 
 ```sh
 mail personal drafts create --to anna@example.com --subject 'Monday' 'Shall we meet at ten?'
-mail personal drafts create --reply-to '<ref>' --reply-all 'Thanks, agreed.'   # in the thread, to everyone but you
+mail personal drafts create --reply-to 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --reply-all 'Thanks, agreed.'   # in the thread, to everyone but you
 mail personal drafts create --to anna@example.com --subject Notes - < notes.txt # - reads the text from stdin
 mail personal drafts list                                                       # newest first, read from the server
-mail personal drafts update '<id>' 'New text'                                   # only what you give changes
-mail personal drafts delete '<id>' --allow-dangerous                             # the owner's; gone for good, a preview without it
+mail personal drafts update 5b0e1c2a@example.com 'New text'                                   # only what you give changes
+mail personal drafts delete 5b0e1c2a@example.com --allow-dangerous                             # the owner's; gone for good, a preview without it
 ```
 
 - **El id** es el Message-ID del borrador, tal como lo muestra `drafts list`, con o sin `<>`. No cambia cuando cambia el
@@ -313,10 +315,10 @@ Las etiquetas propias van en el correo guardado y se quedan en este ordenador: e
 etiquetas que lee memo, y una búsqueda las encuentra.
 
 ```sh
-mail personal tags add invoices --message '<ref>'     # one email; --chat '<conversation ref>' tags a whole conversation
+mail personal tags add invoices --message 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'     # one email; --chat 'chat:email/me%40example.com/thread-1' tags a whole conversation
 mail personal search messages 'tag:invoices date>30d'
 mail personal tags list tag:invoices                  # what is tagged; type:message or type:chat
-mail personal tags remove invoices --message '<ref>'
+mail personal tags remove invoices --message 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'
 ```
 
 Una etiqueta tiene de 1 a 32 letras a–z, dígitos y guiones; las mayúsculas se pasan a minúsculas. Lo que guarda el
@@ -330,11 +332,11 @@ servidor son las palabras clave (`messages update --flag '$Work'`) y, en Gmail, 
 ```sh
 mail personal messages send --to ann@example.com --subject Lunch "See you at noon."
 echo "The report." | mail personal messages send --to ann@example.com --subject Report --file ./report.pdf
-mail personal messages send --reply-to '<ref>' "Paid today."                # Re:, In-Reply-To, References, the quote
-mail personal messages send --reply-to '<ref>' --reply-all "Thanks, all."   # also to the original's To and Cc, not you
-mail personal messages forward '<ref>' --to bob@example.com "FYI"           # the original attached whole
+mail personal messages send --reply-to 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' "Paid today."                # Re:, In-Reply-To, References, the quote
+mail personal messages send --reply-to 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --reply-all "Thanks, all."   # also to the original's To and Cc, not you
+mail personal messages forward 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --to bob@example.com "FYI"           # the original attached whole
 mail personal messages send --to ann@example.com --subject Hi "Hello" --dry-run   # build it, send nothing
-mail personal drafts send '<draft id>'                                     # send a saved draft, then remove it
+mail personal drafts send 5b0e1c2a@example.com                                     # send a saved draft, then remove it
 ```
 
 - **La pregunta.** El correo para cualquiera que no seas tú pregunta antes, y muestra remitente, to, cc, bcc, asunto, cada
@@ -352,7 +354,7 @@ mail personal drafts send '<draft id>'                                     # sen
   con un `operation_id`. Ejecuta el mismo comando con `--operation-id <id>`: cuando Sent tiene el mensaje, no se envía
   nada otra vez. En un proveedor que no archiva por sí mismo el correo enviado, el primer intento puede haber salido;
   mira en el correo del destinatario antes de reintentar.
-- **Adjuntos.** `attachments list '<ref>'` numera los archivos de un correo; `attachments download '<ref>'
-  --output-dir ./folder` los guarda, legibles solo por ti, con sus nombres sencillos; `attachments download '<ref>' 2
+- **Adjuntos.** `attachments list 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'` numera los archivos de un correo; `attachments download 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'
+  --output-dir ./folder` los guarda, legibles solo por ti, con sus nombres sencillos; `attachments download 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' 2
   --output-dir ./folder` guarda solo el segundo. Los bytes vienen del
   servidor y nunca van al almacén. Un archivo existente se queda salvo con `--replace`.

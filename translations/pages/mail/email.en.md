@@ -174,7 +174,7 @@ An empty result from a partial import does not prove there were no agreements.
 ## If mail is missing
 
 - **No mail account:** run `mail session list` and check the profile name in your command.
-- **Only part of the period read:** run `mail <profile> sync` again; `--limit` bounds new messages per run.
+- **Only part of the period read:** run `mail <profile> sync` again; `--max-messages` bounds new messages per run.
 - **Results include another mailbox:** check the source references and keep the intended address.
 - **Mail is missing from person context:** check the exact email identity link and imported history.
 

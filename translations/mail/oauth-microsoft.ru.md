@@ -59,20 +59,20 @@ mail config set --defaults microsoft_client_id 11111111-2222-3333-4444-555555555
    Выберите **Add permissions**. Не предоставляйте для них согласие администратора: каждый человек разрешает их для
    своего почтового ящика при входе. Microsoft по умолчанию позволяет пользователям делать это для собственной почты
    ([согласие пользователя](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent)).
-8. Проверьте перенаправление. Запишите идентификатор в конфигурацию, как описано выше, затем войдите дважды:
+8. Проверьте перенаправление. Запишите идентификатор в конфигурацию, как описано выше, затем войдите дважды. Id и адрес ниже даны для примера: укажите Application (client) ID вашего
+   приложения и свой адрес.
 
    ```sh
-   mail config set --defaults microsoft_client_id <application-client-id>
-   mail outlook-test session start --address <your-address>@outlook.com
+   mail config set --defaults microsoft_client_id 11111111-2222-3333-4444-555555555555
+   mail outlook-test session start --address you@outlook.com
    mail outlook-test session start
    ```
 
    Оба входа должны завершиться `signed_in: true`. Если страница Microsoft показывает ошибку с `AADSTS50011` (URI
    перенаправления не совпадает), убедитесь, что адрес в **Mobile and desktop applications** точно равен
    `http://localhost/callback`.
-9. Для собственного приложения WireCat: отправьте Application (client) ID сопровождающим. Они впишут его в
-   `microsoft.app.client_id` в `constants.json` из cli-core, и следующий релиз cli-core и обновление `mail` будут входить
-   без какой-либо конфигурации.
+9. Для собственного приложения WireCat: отправьте Application (client) ID сопровождающим. Тогда один из следующих
+   релизов `mail` будет входить с ним без какой-либо настройки.
 
 ## Позже, для начала не нужно
 

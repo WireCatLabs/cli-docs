@@ -23,7 +23,7 @@ mail personal config unset limit
 `--max-attachment-mb` переопределяют их для одного запуска; `messages show` читает вложения одного письма независимо от них.
 
 `microsoft_client_id` — приложение Microsoft, через которое входят в Outlook.com и Microsoft 365, если вы используете своё, а не
-приложение WireCat. Задайте его один раз для всех профилей: `mail config set --defaults microsoft_client_id <id>`; как получить
+приложение WireCat. Задайте его один раз для всех профилей командой `config set --defaults microsoft_client_id` с id приложения. Как получить
 id, описано в [регистрации приложения Microsoft](./oauth-microsoft.md). `google_client_id` делает то же для Gmail через OAuth; его
 секрет берётся из `MAIL_GOOGLE_CLIENT_SECRET`, но не из файла. `MAIL_MICROSOFT_CLIENT_ID` и `MAIL_GOOGLE_CLIENT_ID` важнее обеих
 настроек для одного запуска, а `--client-file` важнее всего для Gmail. Профиль, который уже вошёл, продолжает обновлять токен
