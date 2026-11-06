@@ -15,7 +15,6 @@ const desktop = (): Desktop => ({
   setup: ["{profile}", "setup"],
   signIn: { gives: "your notes", asks: "an API token", guide: "https://example.com/acme/token" },
   skill: null,
-  mcp: null,
   mcpServer: null,
   tasks: null,
   sync: null,
