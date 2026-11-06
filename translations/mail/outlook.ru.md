@@ -91,10 +91,10 @@ permission" у каждой записи. Чтобы убрать приложе
 1. В Microsoft Entra admin center зарегистрируйте приложение. Платформа: "Mobile and desktop applications". Redirect
    URI: `http://localhost/callback`. Переключите "Allow public client flows" в Yes.
 2. Скопируйте Application (client) ID.
-3. Каждый пользователь задаёт его один раз, в терминале:
+3. Каждый пользователь задает его один раз, в терминале, подставив id из шага 2 вместо этого примера:
 
    ```sh
-   mail config set --defaults microsoft_client_id <application-client-id>
+   mail config set --defaults microsoft_client_id 11111111-2222-3333-4444-555555555555
    ```
 
 Полные шаги со списком прав есть в разделе [регистрация приложения Microsoft](./oauth-microsoft.md).

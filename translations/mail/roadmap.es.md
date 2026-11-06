@@ -12,7 +12,7 @@ para algo que falta: puede que ya esté en camino. El orden es aproximado y pued
 copias, borrado a la papelera y carpetas, y cada cambio se puede deshacer con `messages restore`. Guarda borradores en
 el servidor, envía, responde y reenvía por SMTP con una comprobación de destinatarios y un límite por hora, y lista y
 descarga archivos adjuntos. Exporta el correo guardado a mbox o Maildir, y un temporizador (`schedule`) puede ejecutar
-cualquier comando. Las reglas de correo del propietario y la limpieza de sobres pasaron aquí desde memo.
+cualquier comando. Guarda las reglas de correo del propietario y hace la limpieza de sobres.
 
 `review` muestra qué hay de nuevo desde la última vez, a qué correos debes respuesta (`--unanswered`) y cuáles esperan una
 (`--waiting`), y `--holder` da a cada agente su propia marca de procesamiento, que mueve `messages acknowledge`.
@@ -30,8 +30,8 @@ más ejecuciones durante el resto del día cuando las suyas han costado 5 dólar
 
 Encuentra por sí mismo el servidor de una dirección nueva: una tabla incorporada, el registro MX, el ISPDB de
 Thunderbird y el archivo autoconfig del dominio. Inicia sesión con una contraseña de aplicación guardada en el llavero
-del sistema, lo que sirve para Yandex, Gmail, iCloud, Mail.ru, Fastmail y otros proveedores que ofrecen contraseñas de
-aplicación. Outlook.com y Microsoft 365 inician sesión con OAuth mediante la aplicación de Microsoft propia de WireCat,
+del sistema, lo que sirve para los
+[proveedores](./providers.md) que ofrecen contraseñas de aplicación. Outlook.com y Microsoft 365 inician sesión con OAuth mediante la aplicación de Microsoft propia de WireCat,
 sin nada que registrar ([guía](./outlook.md)); Gmail puede usar OAuth con la aplicación de Google de WireCat o con la tuya
 ([pasos](./oauth-google.md)).
 

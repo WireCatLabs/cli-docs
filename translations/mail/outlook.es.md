@@ -95,10 +95,10 @@ su propio tenant:
 1. En el Microsoft Entra admin center, registra una aplicación. Plataforma: "Mobile and desktop applications". Redirect
    URI: `http://localhost/callback`. Pon "Allow public client flows" en Yes.
 2. Copia el Application (client) ID.
-3. Cada usuario lo configura una vez, en una terminal:
+3. Cada usuario lo configura una vez, en una terminal, con el id del paso 2 en lugar de este de ejemplo:
 
    ```sh
-   mail config set --defaults microsoft_client_id <application-client-id>
+   mail config set --defaults microsoft_client_id 11111111-2222-3333-4444-555555555555
    ```
 
 Los pasos completos, con los permisos que hay que listar, están en [registro de la aplicación de Microsoft](./oauth-microsoft.md).

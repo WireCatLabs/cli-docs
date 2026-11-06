@@ -54,7 +54,7 @@ Envío: `smtp.office365.com` puerto 587, STARTTLS, con el mismo inicio de sesió
 4. Selecciona "Generate an app specific password" y sigue los pasos en pantalla.
 5. Copia la contraseña cuando aparezca; la página de Apple no dice si se puede volver a mostrar.
 
-- `mail` inicia sesión con la dirección completa. Apple dice que lo habitual es usar como usuario el nombre anterior a @icloud.com; si se rechaza la dirección completa, inicia sesión con un nombre de perfil nuevo: `mail <profile> session start --address <address> --login <name>`.
+- El inicio de sesión usa la dirección completa como usuario. Apple dice que lo habitual es usar como usuario el nombre anterior a @icloud.com. Si se rechaza la dirección completa, inicia sesión otra vez con un nombre de perfil nuevo y da como usuario el nombre anterior a @icloud.com.
 
 Leído en: <https://support.apple.com/en-us/102654>, <https://support.apple.com/en-us/102525>
 

@@ -24,8 +24,8 @@ OAuth: sus tokens también viven en el llavero.
 `--max-attachment-mb` los reemplazan en una ejecución; `messages show` lee los adjuntos de un correo sea lo que sea que digan.
 
 `microsoft_client_id` es la aplicación de Microsoft con la que se inicia sesión en Outlook.com y Microsoft 365, cuando usas la
-tuya en lugar de la de WireCat. Fíjalo una vez para todos los perfiles con `mail config set --defaults microsoft_client_id <id>`;
-cómo conseguir un id está en [registrar una aplicación de Microsoft](./oauth-microsoft.md). Un perfil que ya inició sesión sigue
+tuya en lugar de la de WireCat. Fíjalo una vez para todos los perfiles con `config set --defaults microsoft_client_id` y el id de la aplicación.
+Cómo conseguir un id está en [registrar una aplicación de Microsoft](./oauth-microsoft.md). Un perfil que ya inició sesión sigue
 `google_client_id` hace lo mismo para Gmail con OAuth; su secreto sale de `MAIL_GOOGLE_CLIENT_SECRET`, nunca del archivo.
 `MAIL_MICROSOFT_CLIENT_ID` y `MAIL_GOOGLE_CLIENT_ID` prevalecen sobre ambos ajustes en una ejecución, y `--client-file`
 prevalece sobre todo para Gmail. Un perfil que ya inició sesión sigue renovando con la aplicación con la que lo hizo.
