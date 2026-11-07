@@ -96,6 +96,9 @@ Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_ru
 | `color` |color en terminal; sin un campo se decide en función de si es una terminal|—; sin color de campo se apaga `NO_COLOR`|por terminal|
 | `sender_colors` |en `max personal messages` cada autor tiene su propio color; `вы` - siempre azul. Sin `color` no funciona. Solo para cuenta personal| — | `false` |
 | `search_catch_up` |después de `messages sync` o reparación de roturas, prepara el gráfico y establece los vectores locales de este chat dentro de límites especificados. Los modelos no se descargan, no se llama a proveedores remotos. Solo para cuenta personal| `--catch-up`, `--no-catch-up` | `false` |
+| `history_dialog_days` |cuántos días atrás lee `messages sync` un chat personal, de 1 a 1095| `messages sync --full-history` | `1095` |
+| `history_group_days` |cuántos días atrás lee `messages sync` un grupo, de 1 a 1095| `messages sync --full-history` | `365` |
+| `history_group_members_max` |`messages sync` no lee el historial de un grupo con más personas que este número; `store status` muestra lo que se omitió. Los mensajes nuevos de `serve` se guardan siempre| `messages sync --full-history` | `50` |
 | `search_reranker` | con qué modelo `search messages --discover` reordena los primeros 50 resultados: `mmarco`, `bge-reranker-v2-m3` u `off`. Solo actúa cuando el modelo está descargado (`max personal models download mmarco`); no se descarga solo | — | `mmarco` |
 | `record` | si se registran las ejecuciones correctas; las fallidas se registran también con `false` ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` | `true` |
 | `record_input` | si el registro de ejecución guarda la línea de comandos tal como la escribiste; `false` oculta lo escrito, los secretos se ocultan siempre ([diagnóstico](./diagnostics.md#что-вы-набрали)) | — | `true` |
@@ -257,6 +260,8 @@ El área de "perfil" incluye `defaults`, `profiles.<имя>`, `personal.defaults
 |---|---|---|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` |entero ≥ 1|perfil|
 | `requests_per_minute` |entero ≥ 0|perfil|
+| `history_dialog_days`, `history_group_days` |entero de 1 a 1095|perfil|
+| `history_group_members_max` |entero ≥ 1|perfil|
 | `color`, `record`, `record_input` | boolean |perfil|
 | `sender_colors`, `search_catch_up`, `serve` | boolean |cuenta personal|
 | `search_reranker` | `mmarco`, `bge-reranker-v2-m3`, `off` |perfil|

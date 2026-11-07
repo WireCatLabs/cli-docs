@@ -247,8 +247,8 @@ max personal server status           # работает ли, с какого в
 max personal server restart          # остановить и запустить снова — например, после обновления max
 max personal server stop             # остановить сервер профиля, как бы он ни был запущен
 max personal server logs             # последние строки его журнала; --limit 200 — больше
-max personal server install          # служба systemd (Linux) или launchd (macOS) для профиля; ничего не запускает
-max personal server uninstall        # убрать службу; сначала max personal server stop
+max personal server install          # служба systemd (Linux) или launchd (macOS) для профиля, включена; ничего не запускает
+max personal server uninstall        # выключить и убрать службу; сначала max personal server stop
 max personal watch                   # в другом: новые сообщения по мере прихода
 max personal watch --jsonl           # для скрипта: записи item/data и завершающая end
 max personal watch --jsonl | ./on-message.sh
@@ -258,7 +258,9 @@ max personal watch --events --jsonl  # ещё правки, удаления, р
 In `watch --jsonl`, each data record has the form `{"type":"item","data":…}`. The message or event is inside `data`, with snake_case field names. `watch --json` refuses before connecting: a stream needs `--jsonl`. A separate `{"type":"end",…}` record states whether the stream is complete. A source failure ends it as incomplete and returns an error code. Check `type` before reading the data.
 
 - **After updating `max`**, an automatically started server replaces itself with the new version. A manually started server keeps its old version until restarted. `max personal server status` shows this; `max personal server restart` fixes it.
-- **Running as a service.** After `max personal server install`, `max personal server start` and `max personal server stop` control the server through systemd or launchd. The service runs `max personal serve` as a manual server, without an idle timeout. If MAX rejects login, the service **does not** restart it: every retry would be another account login. `max personal server status` shows the service and log location.
+- **Running as a service.** After `max personal server install`, `max personal server start` and `max personal server stop` control the server through systemd or launchd. The service runs `max personal serve` as a manual server, without an idle timeout. If MAX rejects login, the service **does not** restart it: every retry would be another account login. If the keyring is still locked (right after boot, before you log in), the server exits with code 12 and the service retries every 30 seconds. `max personal server status` shows the service, where its log is, and `starts_at_login`.
+- **The service is enabled.** `max personal server install` enables it, so the server starts at every login and after a reboot. To enable a service that an earlier `max` installed, run `max personal server install` again. A service from a max source checkout (with its own `MAX_*_DIR` folders) is written but not enabled.
+- **After downtime, the server catches up on what it missed.** 30 seconds after it connects, it reads the chats that have messages newer than the ones in the local copy when it started: no more than 7 days back, up to 500 messages per chat, and for at most 5 minutes. After more than a week of downtime, run `max personal messages sync --all` once.
 - **One server per profile.** A second `max personal serve` for that profile refuses to start. The socket lives beside profile state with permissions 600, so only the owner can listen.
 - **Network behavior matches a web.max.ru tab:** a ping every 30 seconds, replies to MAX pings and acknowledgements for incoming messages. It **does not mark messages as read** or send messages.
 - **If MAX disconnects**, the server reconnects after 1, 2, 4… seconds, with the delay capped at one minute. `max personal watch` reports this on stderr. If MAX no longer accepts the token, the server stops with an authentication error.

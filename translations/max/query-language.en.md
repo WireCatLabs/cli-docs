@@ -162,6 +162,7 @@ messages only.
   `page.next` — the next page with the same query.
 - `meta.accounts` — which accounts were searched.
 - `page.has_more` is about the page, not about whether MAX holds more.
+- `page.total` is how many messages match in all: `{ "value": 144, "relation": "eq" }`. `eq` is an exact number, `gte` means at least: counting stops at 10 000. The terminal shows the same as `showing 1–20 of 144`.
 
 An error carries the position of the problem in the query and a hint.
 

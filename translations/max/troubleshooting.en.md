@@ -121,7 +121,7 @@ max shop bot messages list -100
 
 ### "no token found for profile "personal", although it has logged in on this machine"
 
-Return code `4`. The profile on this computer has already been logged in, but the token is not readable. Almost always this is a password storage that `max` cannot reach: the command is launched from cron, via ssh, or from another environment without `XDG_RUNTIME_DIR`. **Do not log in again** - this will add another device to your account, and the next time from the same environment the token will not be read again. `max personal doctor` will show whether it sees the token; how to set up cron - in the section [run according to schedule](./recipes.md#как-запускать-по-расписанию).
+Return code `4`; for `max serve` and a scheduled run it is `12` with reason `credentials.unreachable`: they try again later. The profile on this computer has already been logged in, but the token is not readable. Almost always this is a password storage that `max` cannot reach: the command is launched from cron, via ssh, or from another environment without `XDG_RUNTIME_DIR`. **Do not log in again** - this will add another device to your account, and the next time from the same environment the token will not be read again. `max personal doctor` will show whether it sees the token; how to set up cron - in the section [run according to schedule](./recipes.md#как-запускать-по-расписанию).
 
 ### “MAX refused this profile's last login for too many attempts”
 
@@ -309,7 +309,7 @@ Code `2`: only one `serve` per profile. `max personal server status` shows the p
 
 ### The server does not start in the background
 
-The reason will be shown by `max personal server logs`. The usual reason for the service is the keyring: the service starts before the keyring is open, or without `XDG_RUNTIME_DIR`. If you transferred Node or `max`, run `max personal server install` again: the service starts the paths with which it was installed ([background server](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch)).
+The reason will be shown by `max personal server logs`. The usual reason for the service is the keyring: the service starts before the keyring is open, or without `XDG_RUNTIME_DIR`. While the keyring is locked, `serve` exits with code `12`, and systemd starts it again after 30 seconds. If you transferred Node or `max`, run `max personal server install` again: the service starts the paths with which it was installed ([background server](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch)).
 
 ## Reporting a problem
 

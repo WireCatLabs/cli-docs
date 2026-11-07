@@ -4,6 +4,208 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.103.0 — 07.11.2026
+
+### Changed — may break scripts
+
+- **`max schedule agent` and `max schedule command` take `--deliver-to <маршрут>` instead of `--to <маршрут>`**, and `schedule list` names the field `deliver_to` (cli-core 0.600.0). Schedules saved with `--to` deliver the result as before.
+
+### Fixed
+
+- **Opening the store no longer drops the SQLite file's locks.** The file used to be opened with truncation, which released the POSIX locks that other processes held, so two writes could overlap (cli-core 0.599.0).
+- **`max mcp serve --permission <ключ>=deny` now also applies to `max`'s own commands.** Before, the levels given to the MCP server did not reach `max`'s checks: an agent could run `contacts sync`, `messages transcribe`, `watch` and the `max bot` commands (for example, `bot comments send`) under the profile's saved levels, and the request went to MAX. Now such a command gets `permission_error` before it connects. What to consider: an agent run with such levels no longer goes through the shared `max serve` (it knows only the saved levels); it opens its own connection, as a run with `--permission` in the terminal does.
+
+## 0.102.0 — 05.11.2026
+
+### Fixed
+
+- **`max bot list` and `max bot list --check` work without a profile name again.** In 0.101.0, on a computer without profiles they answered with the error `name a profile`, and the only way to get the list of bots was to put any word first: `max personal bot list`. The command reads every bot on this computer, so it needs no profile, as in `tg` and `wa`. What to consider: the other `max bot …` commands still need a profile, and `max` does not pick one for you.
+
+## 0.101.0 — 05.11.2026
+
+### Fixed
+
+- **A Bot API request and a file upload no longer keep a finished command in memory until the end of their time limit.** The limit timer ran to the end even after MAX had answered, and held everything the command had loaded. A process that makes many requests in a row, such as `max bot mcp` or `max bot updates watch`, grew with every request. The same is fixed for `--timeout` of the `max bot` commands.
+
+## 0.100.0 — 05.11.2026
+
+### What's new
+
+- **`max config migrate` adds to the file every setting that is missing there, with its built-in value, and every write by `max` to the file does the same.** All settings are visible and editable in `config.json`, `serve` and `transcribe_model` included, without the documentation. Your values, their order and unknown keys stay; `config unset` does not write the removed setting back, and a plain read does not rewrite the file (cli-core 0.563.0).
+- **`max config show` shows the built-in value of each setting and what it does**, and also `keep_successful_runs_for_days` and `runs_size_limit_mb`, which were missing from the list.
+- **From cli-core 0.563.0:** `config repair` fixes the JSON syntax of the settings file; `stats messages responses` and `stats messages waiting`; `tasks status`, `tasks review` and `tasks acknowledge`.
+- **From cli-core 0.564.0–0.566.0:** `store chats status` counts the chats the archive holds from the first message, in part, or not at all; `stats tasks show` takes a query and counts the tasks opened and closed in a period (`-- created>=30d`); `has:transcript` finds voice messages with a transcript.
+
+### Changed — may break scripts
+
+- **A write to a task that was changed after you read it now ends with the code `conflict`, exit 15**, not `configuration_error`, exit 3. The reason is still `task.stale` (cli-core 0.567.0, cli-base 0.77.1).
+- **`max account list` no longer shows a bot as an account without a sign-in.** A name that only a bot has is left out; a name that is both your account and a bot is marked `bot: true` (cli-core 0.567.0).
+- **The new error code `conflict` (exit code 15) is in `max commands --json` and in the MCP tools' error schema** (cli-base 0.77.1). It means a write was refused because what it changes was changed after the read. A write to a task from a stale copy returns it (see above).
+- **`search all` ranks every source in one list, searches mail by meaning too, and finds records for a question written as a sentence** (cli-core 0.564.0). Before, the hits of each source came one source after another, and a question found only the records that held all its words.
+
+## 0.99.0 — 03.11.2026
+
+### What's new
+
+- **`wcat max` runs the program, and `wcat --help` shows it.** The package installs the command `wcat-max` next to `max`, and `wcat-max --wcat-describe` prints the program's name, version and description for `wcat`.
+
+## 0.98.0 — 02.11.2026
+
+### What's new
+
+- **`projects evidence` and `projects status` read the linked chats by purpose**: `--purpose sales,work` or `--purpose all`. Without the flag they take the default purposes (the built-in one is `work`). A chat left out of the selection does not disappear silently: it is a `missing` row with the purpose, the number of messages and the command that reads it (cli-core 0.553.0).
+- **`projects evidence --include-proposed`** also reads chats with people who are proposed for the project but not yet confirmed; everything they bring is marked `proposed` (cli-core 0.553.0).
+- **`projects evidence --compact`** prints one line per finding, linked chat, skipped chat and member (cli-core 0.553.0).
+
+### Changed — may break scripts
+
+- **The JSON of `projects status` has a new field `purposes`**, and a chat skipped by purpose has the account, the chat id and the counts (cli-core 0.553.0).
+
+## 0.97.0 — 02.11.2026
+
+### What's new
+
+- **`max serve` catches up on what arrived while it was not running.** 30 seconds after it connects, it reads the chats that have messages newer than the ones in the local copy when it started: no more than 7 days back, up to 500 messages per chat, and for at most 5 minutes. After more than a week of downtime, run `max <profile> messages sync --all` once (cli-core 0.552.0).
+- **`server install` enables the service**, and `serve` starts at every login and after a reboot. To enable a service that an earlier `max` installed, run `max <profile> server install` again; `server status` shows `starts_at_login`. A service from a max source checkout is written but not enabled (cli-core 0.552.0).
+- **`messages sync` follows history limits**: by default it does not read a group of more than 50 people (`history_group_members_max`), reads a group 365 days back and a personal chat 1095 days back (`history_group_days`, `history_dialog_days`), and says what it skipped in `limited`. `--full-history` reads further for one run; to always read large groups, raise the setting. New messages are never lost (cli-core 0.551.0).
+- **`max <profile> projects status <проект>`** shows where a project stands, from the local copy only (cli-core 0.551.0).
+- **`--compact`** prints one line per item for an agent, from the same answer as `--json` (cli-core 0.550.0).
+- **`messages list` reads a window from both sides**, offline too: `'date>=2026-10-01 date<2026-10-20'` reads forward from the start and stops at the end. Before, such a query was refused (cli-core 0.547.0).
+- **A command that needs a chat or a message also takes the reference that other WireCat programs print** (`msg:…`, `chat:…`) (cli-core 0.546.0).
+
+### Changed — may break scripts
+
+- **A search that ran out of time ends with `timeout` and the reason `query.time-limit`** after about 2 seconds, not with `validation_error` / `query.too-large` after a long run. The query is valid; add `chat:` or `date:` to search a smaller part of the copy (cli-core 0.552.0).
+- **Text of the form `<вид>:<без пробелов>` in place of a chat is read as a reference**, and a reference to another account or messenger is refused with its own reason. A key after `--` is read as a key (cli-core 0.546.0).
+
+### Fixed
+
+- **A sync whose output was closed finishes its work.** A closed pipe (EPIPE) used to cut it off (cli-core 0.552.0).
+- **`messages delete` without a message number refuses before it connects** (cli-core 0.551.0).
+- **`page.next` of `messages list` runs as written, and an "inclusive" start keeps a message sent at exactly that moment** (cli-core 0.547.0).
+- **If the keyring is locked, `max serve` and a scheduled run try again instead of asking you to sign in again.** A profile that had already signed in on this computer but could not read its token answered `authentication_error` (code 4). The `serve` service with `RestartPreventExitStatus=4` then did not restart until a manual `server start`, and a timer that fired at boot before login lost its run for the whole day. Now `max serve` and a run under a timer (`MAX_SCHEDULED`) answer `provider_unavailable` (code 12) with the reason `credentials.unreachable`: systemd restarts the service, and `schedule exec` (cli-core) repeats the run until a login opens the keyring. A command typed by hand answers as before.
+
+## 0.96.0 — 02.11.2026
+
+### What's new
+
+- **`max <profile> messages download --offline` copies a file that is already on this computer**, without connecting; `--attachment <n>` picks one file of the message, and a `msg:` reference can be passed in place of the chat and the message (cli-core 0.532.0).
+- **The first run of a new version updates the agent instructions that an old version installed.** An outdated copy of `SKILL.md` (Claude Code, `~/.agents/skills`, Hermes) is rewritten once, with one line on stderr; the command does not touch a copy that is missing, has no version, or is a link. `MAX_NO_SKILL_REFRESH=1` turns this off (cli-core 0.544.0).
+
+### Security
+
+- **An agent can no longer weaken permissions from its own shell.** `max <profile> config set|unset permissions…` run by an agent (Hermes, OpenClaw, Claude Code and others that mark their shell) can only make a level stricter, not weaker, and only the owner changes `mcp.authority` and `bot.api`. So the read-only mode that the WireCat app sets holds even if a chat message talks the agent into running `config set`. Change permissions in a terminal outside the agent (cli-core 0.544.0).
+
+## 0.95.0 — 01.11.2026
+
+### What's new
+
+- **`projects evidence --json` gives a fetch command for each linked chat** in `linked_chats[].sync_command`: the same line as in the text, or null if the chat is fully loaded (cli-core 0.517.0).
+
+### Fixed
+
+- **`projects evidence` no longer writes "held from <date> only"** about a chat that reached its first message: now it is "held from its first message, behind since <date>" or "with gaps". The progress of `messages sync` shows how far it got as a date ("back to <date>"), not as a message key, which in MAX was a number of milliseconds (cli-core 0.517.0).
+
+## 0.94.0 — 01.11.2026
+
+### What's new
+
+- **`max <profile> projects evidence <project>`** (`projectsCommand` from cli-core). Shows what this account's saved messages hold about a project: the name, key, other names, words, contacts, confirmed members and linked chats. **`--sync-first`** (off by default, not in MCP) first fetches the linked chats that the store does not hold back to `--since-time`, one at a time, within `--sync-time` (3 minutes for all of them). A chat that ran out of time stays partial, with `missing` and `next`. If a fetch fails (for example, it needs a running `serve`), the chat is marked `failed` with a reason, and the read goes on. Access is closed by the `messages` permission (cli-core 0.511.0).
+
+### Changed — may break scripts
+
+- **The MCP call log names the agent that made the call, not `max-mcp`** (cli-core 0.509.0): the name the client gave itself (`clientInfo.name`, for example `claude-code`), else the agent that started the server, else `max-mcp`. A filter on `max-mcp` does not find new calls. The name is the client's own words, a label only.
+
+## 0.93.0 — 31.10.2026
+
+### What's new
+
+- **`messages sync --json` writes the sync progress to stderr** (cli-core 0.507.0): one JSON line at a time, counts only, without ids or chat names. stdout still carries one answer.
+
+### Changed — may break scripts
+
+- **`search messages --discover` searches by meaning even when the query has `-`, `NOT`, `OR`, brackets, phrases or `exact:`** (cli-core 0.506.0). Before, such a query ran only as a strict search. Now the words are still searched with the whole query (`discovery.method: "lexical-strict"`), and messages close in meaning to its words are added. Each message found by meaning, and each added reply or follow-up, matches every field of the query and holds none of the excluded words.
+
+### Fixed
+
+- **The description of `doctor` is the same as in the other CLIs: "the state this installation is in, without connecting unless --online"** (cli-core 0.507.0). Before, max replaced it with its own, and the summary differed from the shared one.
+- **`search messages --discover` with a narrow filter (`chat:`, `date:`) ranks by meaning the messages of the filter itself**, if there are no more than 100 000 of them, not the 100 nearest in the whole archive, so the page fills up (cli-core 0.506.0).
+- **`search messages --discover` works with a database opened read-only** (cli-core 0.506.0).
+- **A long rebuild in one process no longer breaks a write in another with the error "database is locked"** (cli-core 0.506.0).
+- **The fallback file for the token is now handled by cli-base 0.68.0, with no code of its own in max** (cli-core 0.507.0). A token from the private file is read from there, and rotation leaves it there; `session start` moves it back to the keyring and deletes the copy in the file, as in 0.92.0. The warning about an unavailable keyring is still one per run.
+
+## 0.92.0 — 31.10.2026
+
+### What's new
+
+- **`search messages` says how many messages match in all: `page.total`** (cli-core 0.501.0). `--json` has a new `page.total: { value, relation }` in the shape of Elasticsearch's `hits.total`: `eq` is an exact number, `gte` means at least (counting stops at 10 000). In the terminal, below the results: `showing 1–20 of 144`.
+- **`session start --credential-storage keyring|file`.** By default the token goes to the system password store, and if that is unavailable, to a file only you can read, with no questions and one warning. `file` picks the file right away; we do not recommend it. A token from the file is read first, so a locked store is no longer touched for it; the next sign-in with the store moves the token back there. The answer says where the token went: `credential_storage`. Needs cli-core 0.503.0.
+
+### Changed — may break scripts
+
+- **max requires cli-base 0.67.0** (cli-core 0.501.0).
+
+## 0.91.0 — 31.10.2026
+
+### What's new
+
+- **`messages list --offline`, `tasks agenda` and `search all` say when the local copy holds a chat only in part** (cli-core 0.493.0). A chat not fetched back to its start, or never fetched, gives `meta.complete: false`, `missing` and `next` with the step `messages sync <чат>` (first for the answer's window, if it has one). In `tasks agenda` each row has `completeness` and `held`, and in the text such a chat is marked `[partial]` or `[never fetched]`. The exit code stays 0.
+
+### Changed — may break scripts
+
+- **`search messages`, `search all`, `tasks agenda` and `messages list --offline` answer `meta.complete: false` if a chat they read is held in the copy only in part** (cli-core 0.493.0). Before, it was `true`, and the gap was visible only in `missing` and `next`. A script that took `meta.complete` as a sign that "no source failed" must read the reason in `missing`. The exit code is still 0.
+- **Follow-ups in `search messages --discover --json` come as a snippet of up to 240 characters, like the result itself: `items[].follow_ups[].excerpt` instead of `text`** (cli-core 0.496.0). In 0.90.0 a follow-up came as the whole message, and on a real archive one long message added 7 KB to an answer of five results. `messages context <ref>` shows the whole message. The terminal output did not change.
+
+### Fixed
+
+- **`search messages --discover` with a quoted date and time no longer fails with `query.invalid-date`** (cli-core 0.496.0). The "22:00" fix in 0.90.0 replaced the colon between digits inside quotes too, so `date:["2026-08-21T21:30:00Z" TO "…"]` with `--discover` did not work.
+- **`search notes` and the notes in `search all` follow the query's fields for what is found by meaning too** (cli-core 0.496.0). `date:today` or `tag:work` without `--exact` returned about 20 notes that matched none of the fields. Now only the query's words are searched by meaning, and every field and every excluded word (`-draft`) applies to all results.
+- **For a Drive document, `date:` and the shown `updated_at` are one time, the time of the edit in Drive** (cli-core 0.496.0). Before, `date:` read the time the copy changed, and of 20 results for `date>=30d`, 16 showed an older date.
+- **A run with moved folders can no longer erase the owner's sign-in from the keyring, and does not sign out of MAX** (cli-base 0.65.5, WC-SECR-24). Before, only a run with `MAX_*_DIR` counted as moved; a run with a different `HOME` or XDG folder touched the real `max-cli` entry, and `session end` in it erased that entry. Now such a run reads the owner's sign-in but does not change or delete it, and a new sign-in is written to a temporary entry. `session end` on the owner's sign-in ends nothing and answers `kept: "owners-sign-in"`.
+- **`bin/max` in a source checkout no longer copies tokens**: the checkout reads the owner's sign-in, and `scripts/seed-worktree.ts` moves only the profile's state.
+- **max requires cli-base 0.65.5 and cli-core 0.496.0.**
+
+## 0.90.0 — 31.10.2026
+
+### What's new
+
+- **`max <профиль> search messages '<вопрос>' --discover` shows follow-ups: later messages that may cancel or change what was found (cli-core 0.492.0).** Up to two later messages are added to the first five results, from any chat the search reads, that share a rare word with it (its stem is in no more than three messages of the archive): this shows when a decision was later cancelled and the cancellation was not a reply. In `--json` this is `items[].follow_ups`, in the terminal the lines `later, shares a rare word`. What to consider: follow-ups appear once the word stems are built.
+
+### Fixed
+
+- **`search messages --discover` no longer fails on a question with a time or a ratio ("before 22:00", "1:1")** (cli-core 0.492.0). The colon between digits was read as a field filter, and the search ended with the error `query.invalid-syntax`.
+- **Correction to 0.89.0: in that version, a write to the store also stopped failing with "database is locked" while another WireCat program writes to it** (cli-core 0.485.0). The 0.89.0 entry does not say so.
+- **max requires cli-core 0.492.0** (cli-base stays at 0.65.0).
+
+## 0.89.0 — 31.10.2026
+
+### What's new
+
+- **`contacts list notes:` finds part of a word in any letter case, Cyrillic included (cli-core 0.490.0).** Before, `notes:КВАРТ` did not find a note with the word «квартира»: case-insensitive matching worked only for Latin letters, and the search read every note. Now notes are searched through a three-character index and answer in milliseconds. What to consider: a query shorter than three characters is refused with the error «search needs at least three characters» (an empty query still selects nothing). The store is upgraded to version 40 the first time it is opened; notes saved earlier get the index in batches during `search notes` or `store migrate`, and until then the old method searches them. A build of another WireCat program with an old cli-core does not write the index into an already upgraded store, so update all WireCat programs at once.
+
+### Fixed
+
+- **Correction to 0.88.0: the contact card's fields are named `firstName`, `lastName` and `userId`.** The 0.88.0 entry about the `CONTACT` attachment calls them `first_name`, `last_name` and `user_id`; #874 renamed them, and the entry stayed as it was.
+- **max requires cli-core 0.491.0** (cli-base stays at 0.65.0). 0.491.0 fixes only the mail sync, which max does not use.
+
+## 0.88.0 — 31.10.2026
+
+### What's new
+
+- **A contact card in a message (`CONTACT`) is read as a contact: the attachment has `contact` with the name, `first_name`, `last_name` and `user_id`.** Before, such an attachment came only with the kind `contact`, without a name. What to consider: MAX does not send the phone number in the card, so there is no `phone` field.
+
+### Fixed
+
+- **A search by chat title and by contact name ignores letter case in any alphabet (cli-core 0.484.0).** Before, `max <профиль> chats list 'title:СТАС*' --offline` did not find the chat «Стас»: the local store compared case-insensitively only for Latin letters. Now it finds it; `name:` in `tags list` works the same way for chat titles and contact names. What to consider: the store is upgraded to version 38 the first time it is opened, with nothing for you to do. If an older build of another WireCat program opens the same store and renames something, the search by the new name works after the store is next opened by a new build.
+- **`max --help` shows `gcal` in the "Works with" list (cli-core 0.482.0).** It is Google Calendar next to the other WireCat data; `max setup` offers to install `@wirecat/gcal-cli`. If a script checks the text of the first screen, it has one more line.
+- **max requires cli-core 0.484.0** (cli-base stays at 0.65.0).
+
+## 0.87.0 — 30.10.2026
+
+### Fixed
+
+- **Personal chats in the local store get a title from the other person's name, and `max <профиль> chats list 'title:Стас*' --offline` finds them.** Before, a personal chat had no title in the store, and each sign-in to MAX erased what `chats list` had managed to write, so an offline search by title found no personal chat at all, and agents had to go through every chat. Now, after a sign-in, the title is taken from the other person's name (the same name `contacts` shows), for personal chats written earlier too. What to consider: a personal chat whose other person is neither in the contacts nor among the members of chats stays without a title until `chats list` runs with the network.
+
 ## 0.86.0 — 29.10.2026
 
 ### Changed — may break scripts
@@ -2030,7 +2232,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.86.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.103.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).
