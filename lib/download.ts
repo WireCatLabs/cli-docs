@@ -1,9 +1,10 @@
 import type { Format, Platform } from "@/lib/desktop-releases"
 
-/**
- * Text uses `code` and **bold** marks. The macOS app is signed and notarized since 0.1.2; the Windows steps in
- * `unsigned` exist only until the installer has a Microsoft certificate.
- */
+/** Text uses `code` and **bold** marks. The macOS app is signed and notarized since 0.1.2. */
+
+// The first version with a signed Windows installer and the Open in terminal update. If 0.5.0 is re-cut, change it here.
+const signedVersion = "0.5.0"
+const publisher = "Open Source Developer Viacheslav Ptsarev"
 type Words = {
   title: string
   description: string
@@ -25,7 +26,7 @@ type Words = {
   failed: string
   openReleases: string
   allReleases: string
-  unsigned: {
+  firstLaunch: {
     title: string
     intro: string
     macos: { steps: string[] }
@@ -87,10 +88,9 @@ const en: Words = {
   failed: "The list of downloads did not load. All files are on the GitHub releases page.",
   openReleases: "Open GitHub releases",
   allReleases: "All releases on GitHub",
-  unsigned: {
+  firstLaunch: {
     title: "Open it for the first time",
-    intro:
-      "The macOS app is signed and checked by Apple. The Windows installer is not signed with a Microsoft developer certificate yet, so Windows asks you to confirm the first start. You do this once.",
+    intro: `The macOS app is signed and checked by Apple. From version ${signedVersion} the Windows installer is signed too, with an Open Source Developer certificate from Certum, and Windows names **${publisher}** as its publisher.`,
     macos: {
       steps: [
         "Open the .dmg file and drag **WireCat** to **Applications**.",
@@ -100,12 +100,11 @@ const en: Words = {
     windows: {
       steps: [
         "Open the installer.",
-        "If Windows shows **Windows protected your PC**, select **More info**, then **Run anyway**.",
+        `Windows may still show **Windows protected your PC**. SmartScreen trusts a signed app only after enough people have installed it, and the certificate is new. Select **More info**, check that the publisher is **${publisher}**, then select **Run anyway**.`,
         "The installer puts WireCat in the Start menu and opens it.",
       ],
-      source: "Microsoft: SmartScreen and unsigned apps",
-      smartAppControl:
-        "If **Smart App Control** is on, Windows blocks apps that are not signed and has no way to allow a single app. WireCat cannot start on that PC until it is signed.",
+      source: "Microsoft: SmartScreen reputation",
+      smartAppControl: `**Smart App Control** lets an app with a valid signature run, so WireCat ${signedVersion} and later start with it on. Earlier versions are not signed, and Smart App Control blocks them.`,
       smartAppSource: "Microsoft: Smart App Control",
     },
   },
@@ -146,8 +145,7 @@ Before you overwrite or delete any file that already exists, show it to me and a
   updates: {
     title: "Updates",
     auto: "On macOS, Windows and with the AppImage, WireCat updates itself. When a new version is out, the app offers it at the top of the window: choose **Install and restart**. Your accounts and data will not be deleted.",
-    packages:
-      "From version 0.1.3 a .deb or .rpm copy updates too: choose **Download and install**. WireCat downloads the new package and opens your system's installer, which asks for your password; it also shows the `apt` or `dnf` command if you prefer a terminal. An older copy only tells you that a new version is out: download the package from this page and install it the same way. From version 0.1.1 the package is called `wirecat`; the .deb replaces `wire-cat` from 0.1.0 by itself.",
+    packages: `From version 0.1.3 a .deb or .rpm copy updates too: choose **Download and install**. WireCat downloads the new package and opens your system's installer, which asks for your password; it also shows the \`apt\` or \`dnf\` command if you prefer a terminal. From version ${signedVersion} **Open in terminal** runs that command in your terminal: type your password there, then restart WireCat when the install ends. A copy on 0.4.0 or earlier stops with "The update's package has an unexpected name": install the new package from this page once, and later updates work from the app. An older copy only tells you that a new version is out: download the package from this page and install it the same way. From version 0.1.1 the package is called \`wirecat\`; the .deb replaces \`wire-cat\` from 0.1.0 by itself.`,
   },
   uninstall: {
     title: "Uninstall",
@@ -235,10 +233,9 @@ const ru: Words = {
   failed: "Список загрузок не открылся. Все файлы есть на странице выпусков в GitHub.",
   openReleases: "Открыть выпуски в GitHub",
   allReleases: "Все выпуски в GitHub",
-  unsigned: {
+  firstLaunch: {
     title: "Первый запуск",
-    intro:
-      "Приложение для macOS подписано и проверено Apple. Установщик для Windows пока не подписан сертификатом разработчика Microsoft, поэтому при первом запуске Windows попросит подтверждение. Это нужно сделать один раз.",
+    intro: `Приложение для macOS подписано и проверено Apple. С версии ${signedVersion} установщик для Windows тоже подписан, сертификатом Open Source Developer от Certum, и Windows показывает издателя **${publisher}**.`,
     macos: {
       steps: [
         "Откройте файл .dmg и перетащите **WireCat** в **Программы**.",
@@ -248,12 +245,11 @@ const ru: Words = {
     windows: {
       steps: [
         "Откройте установщик.",
-        "Если Windows покажет **Система Windows защитила ваш компьютер**, нажмите **Подробнее**, затем **Выполнить в любом случае**.",
+        `Windows может по-прежнему показать **Система Windows защитила ваш компьютер**. SmartScreen доверяет подписанному приложению, только когда его установит достаточно людей, а сертификат новый. Нажмите **Подробнее**, проверьте, что издатель **${publisher}**, затем нажмите **Выполнить в любом случае**.`,
         "Установщик добавит WireCat в меню «Пуск» и откроет его.",
       ],
-      source: "Microsoft: SmartScreen и неподписанные приложения",
-      smartAppControl:
-        "Если включено **Интеллектуальное управление приложениями** (Smart App Control), Windows блокирует неподписанные приложения, и разрешить одно приложение нельзя. На таком компьютере WireCat запустится только после того, как его подпишут.",
+      source: "Microsoft: репутация SmartScreen",
+      smartAppControl: `**Интеллектуальное управление приложениями** (Smart App Control) пропускает приложения с действительной подписью, поэтому WireCat ${signedVersion} и новее запускается, даже когда оно включено. Более ранние версии не подписаны, и Smart App Control их блокирует.`,
       smartAppSource: "Microsoft: Smart App Control",
     },
   },
@@ -294,8 +290,7 @@ const ru: Words = {
   updates: {
     title: "Обновления",
     auto: "В macOS, Windows и в AppImage WireCat обновляется сам. Когда выходит новая версия, приложение предлагает её вверху окна: нажмите **Установить и перезапустить**. Ваши аккаунты и данные не удалятся.",
-    packages:
-      "С версии 0.1.3 копия из .deb или .rpm тоже обновляется: нажмите **Скачать и установить**. WireCat скачает новый пакет и откроет установщик программ вашей системы — там нужно будет ввести пароль; если удобнее терминал, приложение покажет команду `apt` или `dnf`. Более старая копия только сообщает о новой версии: скачайте пакет на этой странице и установите его так же, как первый. С версии 0.1.1 пакет называется `wirecat`; .deb сам заменяет `wire-cat` из версии 0.1.0.",
+    packages: `С версии 0.1.3 копия из .deb или .rpm тоже обновляется: нажмите **Скачать и установить**. WireCat скачает новый пакет и откроет установщик программ вашей системы — там нужно будет ввести пароль; если удобнее терминал, приложение покажет команду \`apt\` или \`dnf\`. С версии ${signedVersion} кнопка **Открыть в терминале** запускает эту команду в вашем терминале: введите там пароль и перезапустите WireCat после установки. Копия версии 0.4.0 или старше останавливается с ошибкой «The update's package has an unexpected name»: один раз установите новый пакет с этой страницы, дальше обновления работают из приложения. Более старая копия только сообщает о новой версии: скачайте пакет на этой странице и установите его так же, как первый. С версии 0.1.1 пакет называется \`wirecat\`; .deb сам заменяет \`wire-cat\` из версии 0.1.0.`,
   },
   uninstall: {
     title: "Удаление",
@@ -377,10 +372,9 @@ const es: Words = {
   failed: "La lista de descargas no se ha cargado. Todos los archivos están en la página de versiones de GitHub.",
   openReleases: "Abrir las versiones en GitHub",
   allReleases: "Todas las versiones en GitHub",
-  unsigned: {
+  firstLaunch: {
     title: "Ábrela por primera vez",
-    intro:
-      "La app para macOS está firmada y comprobada por Apple. El instalador de Windows aún no está firmado con un certificado de desarrollador de Microsoft, así que Windows te pide que confirmes el primer arranque. Solo hace falta una vez.",
+    intro: `La app para macOS está firmada y comprobada por Apple. Desde la versión ${signedVersion}, el instalador de Windows también está firmado, con un certificado Open Source Developer de Certum, y Windows muestra **${publisher}** como editor.`,
     macos: {
       steps: [
         "Abre el archivo .dmg y arrastra **WireCat** a **Aplicaciones**.",
@@ -390,12 +384,11 @@ const es: Words = {
     windows: {
       steps: [
         "Abre el instalador.",
-        "Si Windows muestra **Windows protegió su PC**, selecciona **Más información** y después **Ejecutar de todas formas**.",
+        `Windows aún puede mostrar **Windows protegió su PC**. SmartScreen confía en una app firmada solo cuando la han instalado suficientes personas, y el certificado es nuevo. Selecciona **Más información**, comprueba que el editor es **${publisher}** y después selecciona **Ejecutar de todas formas**.`,
         "El instalador añade WireCat al menú Inicio y la abre.",
       ],
-      source: "Microsoft: SmartScreen y aplicaciones sin firma",
-      smartAppControl:
-        "Si **Control Inteligente de Aplicaciones** (Smart App Control) está activado, Windows bloquea las aplicaciones sin firma y no permite autorizar una sola. WireCat no podrá arrancar en ese PC hasta que esté firmada.",
+      source: "Microsoft: reputación de SmartScreen",
+      smartAppControl: `**Control Inteligente de Aplicaciones** (Smart App Control) deja arrancar las apps con una firma válida, así que WireCat ${signedVersion} y posteriores arrancan aunque esté activado. Las versiones anteriores no están firmadas y Smart App Control las bloquea.`,
       smartAppSource: "Microsoft: Control Inteligente de Aplicaciones",
     },
   },
@@ -436,8 +429,7 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
   updates: {
     title: "Actualizaciones",
     auto: "En macOS, Windows y con el AppImage, WireCat se actualiza sola. Cuando sale una versión nueva, la aplicación la ofrece en la parte superior de la ventana: elige **Instalar y reiniciar**. Tus cuentas y tus datos no se borran.",
-    packages:
-      "Desde la versión 0.1.3, una copia instalada desde .deb o .rpm también se actualiza: elige **Descargar e instalar**. WireCat descarga el paquete nuevo y abre el instalador de tu sistema, que te pedirá la contraseña; si prefieres la terminal, muestra el comando de `apt` o `dnf`. Una copia anterior solo avisa de la versión nueva: descarga el paquete en esta página e instálalo igual que el primero. Desde la versión 0.1.1 el paquete se llama `wirecat`; el .deb sustituye por sí solo a `wire-cat` de la 0.1.0.",
+    packages: `Desde la versión 0.1.3, una copia instalada desde .deb o .rpm también se actualiza: elige **Descargar e instalar**. WireCat descarga el paquete nuevo y abre el instalador de tu sistema, que te pedirá la contraseña; si prefieres la terminal, muestra el comando de \`apt\` o \`dnf\`. Desde la versión ${signedVersion}, **Abrir en la terminal** ejecuta ese comando en tu terminal: escribe ahí tu contraseña y reinicia WireCat cuando termine la instalación. Una copia de la 0.4.0 o anterior se detiene con «The update's package has an unexpected name»: instala una vez el paquete nuevo desde esta página y las siguientes actualizaciones funcionan desde la app. Una copia anterior solo avisa de la versión nueva: descarga el paquete en esta página e instálalo igual que el primero. Desde la versión 0.1.1 el paquete se llama \`wirecat\`; el .deb sustituye por sí solo a \`wire-cat\` de la 0.1.0.`,
   },
   uninstall: {
     title: "Desinstalar",

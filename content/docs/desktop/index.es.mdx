@@ -15,9 +15,9 @@ sin ella.
 
 [Descarga WireCat Desktop](/es/download) para macOS (Apple silicon e Intel), Windows (64 bits) o Linux
 (AppImage, .deb o .rpm). La página de descarga elige el archivo para tu ordenador. La app para macOS
-está firmada y comprobada por Apple. El instalador de Windows aún no está firmado con un certificado de
-desarrollador de Microsoft, así que su primer arranque necesita una confirmación; los
-[pasos del primer arranque](/es/download#first-launch) muestran dónde hacer clic.
+está firmada y comprobada por Apple. El instalador de Windows está firmado con un certificado Open Source
+Developer de Certum, y Windows muestra Open Source Developer Viacheslav Ptsarev como editor. Windows aún puede
+pedirte que confirmes el primer arranque; los [pasos del primer arranque](/es/download#first-launch) muestran dónde hacer clic.
 
 La aplicación no necesita nada más. Las herramientas funcionan con
 <DocTerm term="nodejs" lang="es" label="Node.js" /> 22.16 o posterior dentro de 22.x, o 24 o posterior, con
@@ -100,6 +100,14 @@ Verde significa instalada y al día, ámbar que hay una actualización, rojo que
 arranca, y un anillo vacío que no está instalada. Cada fila tiene un botón: **Instalar**, **Actualizar a** una
 versión, **Arreglar** o **Gestionar**.
 
+Todas las herramientas guardan tus mensajes y notas en un almacenamiento compartido, y una versión nueva de una
+herramienta puede pasarlo a un formato más nuevo. Antes de **Instalar** o **Actualizar a**, la aplicación lo
+comprueba. Si otra herramienta instalada necesita su propia versión nueva para seguir leyendo el almacenamiento,
+la aplicación la actualiza también, justo después de la que elegiste, y la línea de progreso lo dice. Solo ves un
+aviso cuando esa otra herramienta aún no tiene esa versión o cuando la versión nueva no puede abrir tu
+almacenamiento. Entonces eliges **Ahora no** o **Actualizar de todos modos**. Una herramienta que no dice qué
+formato lee, como Zoom, queda fuera de la comprobación.
+
 <DesktopShot
   shot="tools"
   folder="desktop/docs"
@@ -121,6 +129,9 @@ versión, **Arreglar** o **Gestionar**.
   **Preguntar antes**, **Solo lectura** o **Bloquear**.
 - **Servidor MCP (o conectar la web):** deja que ChatGPT o Claude en el navegador usen la herramienta. La guía de
   [Tailscale Funnel](./tailscale-funnel.mdx) publica el servidor, o puedes usar un túnel de Cloudflare.
+- **Ejecutar con horario** (solo Email): activa el agente de correo de Memo. Lee el correo nuevo cada 5 minutos
+  y propone tareas, facturas, pedidos y hechos para que los aceptes, y nunca envía nada. Necesita Memo y
+  Claude Code.
 - **Desinstalar:** quita la herramienta. Sus datos se quedan en este ordenador hasta que los borres, y el
   diálogo ofrece **Desinstalar y borrar datos**.
 
@@ -210,8 +221,8 @@ los que se basa. Con cada entrada puedes:
 - **Editarla**, con el lápiz o desde **Más**. Tu corrección se guarda como tuya y aprobada; la versión del agente
   queda en **Rechazado**.
 - Deshacer lo que decidiste. **Más** tiene el paso atrás que corresponde a la entrada: **Rechazar**, **Ya no es
-  cierto** o **Deshacer aprobación**. WireCat solo puede deshacer la aprobación de una decisión; para cambiar un
-  hecho, usa **Editar**.
+  cierto** o **Deshacer aprobación**. **Deshacer aprobación** sirve para una decisión y para un hecho que escribió
+  un agente, que vuelve a **Revisar**. Un hecho que escribiste tú tiene **Editar** y **Borrar…** en su lugar.
 - **Borrar…** la entrada, también en **Más**. WireCat la borra de este ordenador y los agentes dejan de
   encontrarla. Los mensajes, notas y reuniones en los que se basa se quedan, y una copia de seguridad hecha antes
   aún la conserva.
@@ -307,6 +318,8 @@ en GitHub si hay una versión nueva de sí misma y enviar un informe de error cu
 En macOS, Windows y con el AppImage, la aplicación se actualiza sola: ofrece la versión nueva en la parte
 superior de la ventana, la instala y se reinicia. Una copia instalada desde .deb o
 .rpm descarga sola el paquete nuevo y abre el instalador del sistema, y también muestra el comando de `apt` o `dnf`.
+**Abrir en la terminal** ejecuta ese comando en tu terminal: escribe ahí tu contraseña y reinicia WireCat cuando
+termine la instalación.
 Tus cuentas y tus datos no se borran. [Actualizaciones](/es/download#updates) y [desinstalar](/es/download#uninstall) en la página
 de descarga dan los pasos para cada sistema. Al quitar la aplicación, las herramientas y sus datos se
 quedan.
@@ -319,7 +332,7 @@ Busca el mensaje que ves y sigue la solución. Si ninguno encaja, [Informar de u
 
 ### Windows dice «Windows protegió su PC»
 
-El instalador de Windows aún no está firmado con un certificado de desarrollador de Microsoft, así que Windows te pide confirmar el primer arranque. Selecciona **Más información** y después **Ejecutar de todas formas**. Si **Smart App Control** está activado, Windows bloquea toda app sin firmar y no deja permitir una sola; WireCat no puede arrancar en ese ordenador hasta que esté firmado. Los [pasos del primer arranque](/es/download#first-launch) muestran dónde hacer clic.
+El instalador está firmado, pero SmartScreen confía en una app firmada solo cuando la han instalado suficientes personas, y el certificado es nuevo, así que Windows aún puede pedirte que confirmes el primer arranque. Selecciona **Más información**, comprueba que el editor es **Open Source Developer Viacheslav Ptsarev** y después selecciona **Ejecutar de todas formas**. Si el editor es otro o no aparece, no ejecutes el archivo: descárgalo de nuevo desde la [página de descarga](/es/download). **Smart App Control** deja arrancar las apps con una firma válida; bloquea una versión antigua de WireCat, que no está firmada. Los [pasos del primer arranque](/es/download#first-launch) muestran dónde hacer clic.
 
 ### El AppImage dice «AppImages require FUSE to run»
 
@@ -351,7 +364,7 @@ Una coma que falta o sobra, un comentario, comillas simples o un corchete sin ce
 
 ### Una herramienta «no puede leer el almacenamiento»
 
-Otra herramienta de WireCat pasó el almacenamiento compartido a un formato más nuevo que el que lee esta. Actualiza la herramienta en la página Herramientas; [Almacenamiento](#almacenamiento) lista cuáles lo necesitan. Si aún no hay una versión más nueva, la página lo dice.
+Otra herramienta de WireCat pasó el almacenamiento compartido a un formato más nuevo que el que lee esta. Actualiza la herramienta en la página Herramientas; [Almacenamiento](#almacenamiento) lista cuáles lo necesitan. Si aún no hay una versión más nueva, la página lo dice. La aplicación lo comprueba antes de instalar o actualizar una herramienta, así que normalmente solo pasa después de **Actualizar de todos modos** o de una actualización hecha fuera de la aplicación, por ejemplo con npm en una terminal.
 
 ### «No se ha podido instalar la actualización»
 

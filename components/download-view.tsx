@@ -297,8 +297,8 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
       </section>
 
       <section id="first-launch" className="download-section" aria-labelledby="first-launch-title">
-        <h2 id="first-launch-title">{words.unsigned.title}</h2>
-        <p>{words.unsigned.intro}</p>
+        <h2 id="first-launch-title">{words.firstLaunch.title}</h2>
+        <p>{rich(words.firstLaunch.intro)}</p>
         <Tabs className="download-tabs" value={firstLaunch} onValueChange={(value) => setFirstLaunch(String(value))}>
           <TabsList className="download-tablist" activateOnFocus aria-labelledby="first-launch-title">
             {platforms.map((platform) => (
@@ -309,20 +309,20 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
           </TabsList>
           <TabsContent className="download-panel" value="macos" id="macos" keepMounted>
             <ol>
-              {words.unsigned.macos.steps.map((step) => (
+              {words.firstLaunch.macos.steps.map((step) => (
                 <li key={step}>{rich(step)}</li>
               ))}
             </ol>
           </TabsContent>
           <TabsContent className="download-panel" value="windows" id="windows" keepMounted>
             <ol>
-              {words.unsigned.windows.steps.map((step) => (
+              {words.firstLaunch.windows.steps.map((step) => (
                 <li key={step}>{rich(step)}</li>
               ))}
             </ol>
-            <External href={links.smartScreen}>{words.unsigned.windows.source}</External>
-            <p>{rich(words.unsigned.windows.smartAppControl)}</p>
-            <External href={links.smartAppControl}>{words.unsigned.windows.smartAppSource}</External>
+            <External href={links.smartScreen}>{words.firstLaunch.windows.source}</External>
+            <p>{rich(words.firstLaunch.windows.smartAppControl)}</p>
+            <External href={links.smartAppControl}>{words.firstLaunch.windows.smartAppSource}</External>
           </TabsContent>
           <TabsContent className="download-panel" value="linux" id="linux" keepMounted>
             <p>{words.linux.appimage}</p>
