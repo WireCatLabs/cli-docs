@@ -113,8 +113,7 @@ tg personal tags add work --chat "Book club"
 
 A business relationship says how two of your records stand to each other: Alice is a contact of Acme Ltd, Emma
 reports to Dana, Acme Ltd buys from your company. `memo` and a CRM tool such as `b24` keep these relationships in
-the shared store. So your agent, `memo` and WireCat Desktop read the same answer, with the source of each
-relationship.
+the shared store. So your agent and `memo` read the same answer, with the source of each relationship.
 
 ### Kinds and roles
 
@@ -144,7 +143,7 @@ Every relationship in an answer has a standing:
 | --- | --- |
 | `confirmed` | You wrote it, or you confirmed it. |
 | `reported` | A CRM account says so, and nobody confirmed it. The answer names the account. |
-| `proposed` | Your agent or a scan suggested it. It waits for you in `memo review`. |
+| `proposed` | Your agent, a scan, or a CRM account whose links are set to `review` suggested it. It waits for you in `memo review`. |
 | `ended` | It held, and it does not hold now. You ended it, or the source stopped reporting it. |
 
 Your word wins. A CRM sync never changes or ends a relationship you made or confirmed, and it never writes again

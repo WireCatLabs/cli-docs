@@ -388,10 +388,12 @@ $ memo relationships list 'about:"person:3"' include:ended
 1  Person «Alice» → Organization «Acme Ltd»  member-of as contact (Procurement manager)  ended by bitrix24:example.bitrix24.com
 
 $ memo review list kind:relationship
+no project or account
 2  relationship  Deal «Acme renewal · New» (Atlas) → Person «Bob» as contact  bitrix24  11-07
    reported by bitrix24:example.bitrix24.com
 1  relationship  Person «Alice» → Person «Bob»  claude-code  11-07
    Alice said so on the renewal call
+2 shown
 ```
 
 La pertenencia de Alice está `ended`, y sigue ahí con su historial. El nuevo rol de Bob espera en `memo review`,

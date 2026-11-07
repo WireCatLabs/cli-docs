@@ -113,8 +113,7 @@ tg personal tags add work --chat "Book club"
 
 Una relación de negocio dice qué son dos de tus registros el uno para el otro: Alice es un contacto de Acme Ltd, Emma
 depende de Dana, Acme Ltd le compra a tu empresa. `memo` y una herramienta de CRM como `b24` guardan estas relaciones
-en el almacén compartido. Así tu agente, `memo` y WireCat Desktop leen la misma respuesta, con la fuente de cada
-relación.
+en el almacén compartido. Así tu agente y `memo` leen la misma respuesta, con la fuente de cada relación.
 
 ### Tipos y roles
 
@@ -144,7 +143,7 @@ Cada relación de una respuesta tiene un estado (standing):
 | --- | --- |
 | `confirmed` | La escribiste tú o la confirmaste. |
 | `reported` | Lo dice una cuenta de CRM y nadie lo confirmó. La respuesta nombra la cuenta. |
-| `proposed` | La sugirió tu agente o un análisis del almacén. Te espera en `memo review`. |
+| `proposed` | La sugirió tu agente, un análisis del almacén o una cuenta de CRM con sus vínculos en `review`. Te espera en `memo review`. |
 | `ended` | Existió y ya no existe. La terminaste tú, o la fuente dejó de informarla. |
 
 Tu palabra manda. Una sincronización del CRM nunca cambia ni termina una relación que tú creaste o confirmaste, y
