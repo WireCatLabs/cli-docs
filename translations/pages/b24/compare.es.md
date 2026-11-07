@@ -51,7 +51,7 @@ La app de Zapier también funciona solo con planes de pago ([su ficha](https://w
 | Pasar una negociación a una etapa por el nombre de la etapa | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
 | Cerrar una negociación como ganada o perdida en un paso | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
 | Borrar una negociación o un prospecto | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [❌](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts) |
-| Rellenar un campo personalizado por su nombre | 🟡 | ➖ | ➖ | ➖ | ➖ |
+| Rellenar un campo personalizado por su nombre | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Llamar a cualquier otro método de Bitrix24 | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | ➖ |
 | **Agentes y seguridad** | | | | | |
 | Dejar al agente solo lectura | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/keys-auth/access-mode.md) | [🟡](https://zapier.com/mcp) | ➖ | ➖ |
@@ -92,9 +92,11 @@ Notas sobre la columna de `b24`:
   `leads`, `pipelines` y `stages` lo leen, también con `--offline`. `people`, `organizations`, `products` y `users`
   siempre preguntan al portal.
 - **Una búsqueda.** `search all` encuentra negociaciones y prospectos por las palabras del título, junto a los mensajes,
-  notas y eventos que otras herramientas de WireCat guardaron en el mismo ordenador, sin internet.
-- **Campos personalizados por nombre.** Contactos y empresas aceptan un campo personalizado por su nombre o su código.
-  Negociaciones y prospectos lo aceptan por su código, como lo imprime `fields list`. Por eso esta fila es en parte.
+  notas y eventos que otras herramientas de WireCat guardaron en el mismo ordenador, sin internet. Con
+  `deals.list: deny` deja fuera las negociaciones, con `leads.list: deny` los prospectos, y nombra lo que dejó fuera.
+- **Campos personalizados por nombre.** Negociaciones, prospectos, contactos y empresas aceptan un campo personalizado
+  por su nombre o su código, y la opción de una lista por su nombre. Negociaciones y prospectos leen los nombres que
+  guardó el último `sync`.
 - **Una escritura se envía una vez.** Una escritura sin respuesta no se envía de nuevo: termina como
   `outcome_unknown` con su `operation_id`, que Bitrix24 recibe como su `Idempotency-Key`. Revisa el portal antes de
   repetirla.

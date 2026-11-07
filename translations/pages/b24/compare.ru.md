@@ -51,7 +51,7 @@ CRM Битрикс24, чтобы вы могли выбрать тот, что �
 | Перевести сделку на стадию по её названию | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
 | Закрыть сделку как выигранную или проигранную одним шагом | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
 | Удалить сделку или лид | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [❌](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts) |
-| Заполнить пользовательское поле по его названию | 🟡 | ➖ | ➖ | ➖ | ➖ |
+| Заполнить пользовательское поле по его названию | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Вызвать любой другой метод Битрикс24 | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | ➖ |
 | **Агенты и безопасность** | | | | | |
 | Оставить агенту только чтение | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/keys-auth/access-mode.md) | [🟡](https://zapier.com/mcp) | ➖ | ➖ |
@@ -93,9 +93,10 @@ CRM Битрикс24, чтобы вы могли выбрать тот, что �
   `leads`, `pipelines` и `stages` читают его, в том числе с `--offline`. `people`, `organizations`, `products` и
   `users` всегда обращаются к порталу.
 - **Один поиск.** `search all` находит сделки и лиды по словам названия рядом с сообщениями, заметками и событиями,
-  которые сохранили другие инструменты WireCat на том же компьютере, без интернета.
-- **Пользовательские поля по названию.** Контакты и компании принимают пользовательское поле по названию или коду.
-  Сделки и лиды — по коду, как его печатает `fields list`. Поэтому эта строка — частично.
+  которые сохранили другие инструменты WireCat на том же компьютере, без интернета. При `deals.list: deny` он
+  не ищет сделки, при `leads.list: deny` — лиды, и называет, что пропустил.
+- **Пользовательские поля по названию.** Сделки, лиды, контакты и компании принимают пользовательское поле по
+  названию или коду, а вариант списка — по названию. Сделки и лиды берут названия из последнего `sync`.
 - **Запись отправляется один раз.** Запись, на которую не пришёл ответ, не отправляется снова: она заканчивается
   `outcome_unknown` со своим `operation_id`, который Битрикс24 получает как `Idempotency-Key`. Проверьте портал,
   прежде чем повторять её.

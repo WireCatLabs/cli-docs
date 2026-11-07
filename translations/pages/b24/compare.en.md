@@ -47,7 +47,7 @@ The Zapier app also works with paid plans only ([its listing](https://www.bitrix
 | Move a deal to a stage by the stage's name | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
 | Close a deal as won or lost in one step | ✅ | [🟡](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/dist/tools/entities.js) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L142) |
 | Delete a deal or a lead | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [❌](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts) |
-| Set a custom field by its label | 🟡 | ➖ | ➖ | ➖ | ➖ |
+| Set a custom field by its label | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Call any other Bitrix24 method | ✅ | [🟡](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | ➖ |
 | **Agents and safety** | | | | | |
 | Make the agent read-only | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/keys-auth/access-mode.md) | [🟡](https://zapier.com/mcp) | ➖ | ➖ |
@@ -87,9 +87,10 @@ Notes on the `b24` column:
   `deals`, `leads`, `pipelines` and `stages` read it, with `--offline` too. `people`, `organizations`, `products` and
   `users` always ask the portal.
 - **One search.** `search all` finds deals and leads by the words of their title, beside the messages, notes and
-  events that other WireCat tools on the same computer stored, without the internet.
-- **Custom fields by label.** Contacts and companies take a custom field by its label or code. Deals and leads take
-  it by its code, as `fields list` prints it. So this row is partly.
+  events that other WireCat tools on the same computer stored, without the internet. Under `deals.list: deny` it
+  leaves deals out, and under `leads.list: deny` leads, and names what it left out.
+- **Custom fields by label.** Deals, leads, contacts and companies take a custom field by its label or code, and a
+  list field's option by its label. Deals and leads read the labels that the last `sync` stored.
 - **A write is sent once.** A write that got no answer is not sent again: it ends as `outcome_unknown` with its
   `operation_id`, which Bitrix24 receives as its `Idempotency-Key`. Check the portal before you repeat it.
 - **Only one call.** `api call` is kept for you at a terminal; no MCP tool offers it.
