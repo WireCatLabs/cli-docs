@@ -121,48 +121,25 @@ each one reads and writes, and the commands Desktop runs to check, set up, sync 
 - **It is generated, never typed.** `cli-dev manifest` writes it from your built program and an identity you export.
   You type only what code cannot know: a `tagline` (at most 55 characters), the sign-in texts `signIn.gives` and
   `signIn.asks`, and, with a `sync` command, `syncs` (what it copies, at most 40 characters).
-- **It is committed and shipped.** Commit the file, and list `contracts/wirecat.json` in `files` in `package.json`, so
-  it is inside the package on npm.
-- **CI keeps it current.** `cli-dev manifest … --check` fails when the file no longer matches the program.
+- **It is committed and shipped.** Commit the file. `files` in `package.json` lists `contracts/wirecat.json`, so it is
+  inside the package on npm.
+- **CI keeps it current.** `pnpm contracts:check` fails when the file no longer matches the program.
 - **It holds no version.** Desktop reads the version from npm, so a release does not change the file.
 
-cli-template 0.18.0, the current release, does not set this up yet. In a tool made from it, add it once:
+A tool made with cli-template 0.19.0 or later has all of this from `new`:
 
-1. Export the identity for the manifest, in a new file `src/wcat.ts`:
+- The bin calls `wcatStart` before the program loads, with `DESKTOP` from `src/identity.ts`: the docs link, the tagline
+  (`--tagline`, made from the description when left out) and sign-in texts made from your `--sign-in` answer. Rewrite
+  the texts in your own words. `src/wcat.ts` adds each command's permission key and exports it all as `WCAT`.
+- `package.json` names the program twice: the command word (`acme-crm`) and `wcat-acme-crm`, which `wcat acme-crm`
+  runs.
+- `pnpm generate` writes `contracts/wirecat.json` with `cli-dev manifest`, and `pnpm contracts:check` checks it.
 
-   ```ts
-   import type { ManifestIdentity } from "@wirecat/cli-base/wcat/manifest"
-   import { IDENTITY } from "./identity.js"
-
-   export const WCAT: ManifestIdentity = {
-     ...IDENTITY,
-     docs: "https://github.com/leemour/acme-crm-cli#readme",
-     tagline: "Your Acme CRM deals, searchable on your computer",
-     signIn: { gives: "your Acme CRM contacts and deals", asks: "an Acme CRM API token" },
-   }
-   ```
-
-2. Start the bin with `wcatStart`, before the program loads, and pass it `WCAT` so the two never differ:
-
-   ```ts
-   import { wcatStart } from "@wirecat/cli-base/wcat/start"
-   import { WCAT } from "../wcat.js"
-
-   const { code } = await wcatStart(WCAT)
-   if (code !== undefined) process.exitCode = code
-   else {
-     // the bin's existing start
-   }
-   ```
-
-3. Name the program `wcat-<command>` in `package.json`, for example `"bin": { "wcat-acme-crm": "dist/bin/acme-crm.js" }`.
-   `cli-dev lint` warns about a name without `wcat-`.
-4. Write the file after each build, and check it in CI:
-
-   ```sh
-   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js
-   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js --check
-   ```
+**For a CLI made before 0.19.0:** add these by hand, since `src/` and `package.json` are yours and `upgrade` does not
+change them. Add the `wcatStart` call in the bin, `DESKTOP` in `src/identity.ts`, `src/wcat.ts`, the `wcat-<command>`
+program name, and `cli-dev manifest --program dist/program.js --identity dist/wcat.js` (with `--check` for the
+checks) in the `generate`, `generate:check` and `contracts:check` scripts. Move to `@wirecat/cli-base` 0.82.0. A new
+CLI made with 0.19.0 shows each file.
 
 With the file shipped, `wcat-acme-crm --wcat-describe` answers format 2: the name, version, description and docs link
 with `"wcat_describe": 2`, plus the file's `desktop` part and `manifest_sha256`, the hash of the file. After the
@@ -175,9 +152,10 @@ has the exact format.
 Desktop's **Uninstall and delete data** deletes only folders named after the tool, so the name must belong to your
 tool. For a package `@<scope>/<name>`, the identity's `appName`, in lower case, is `<scope>-<name>` or starts with
 `<scope>-<name>-`. Every `.` and `_` of the package name becomes `-`, and the whole name has at most 64 characters:
-`@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. cli-template 0.18.0 writes `appName` without the scope
-(`acme-crm-cli`), so change it in `src/identity.ts` before your first release. Desktop refuses a manifest that breaks
-this rule.
+`@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. cli-template 0.19.0 and later write it this way for every package
+outside `@wirecat`, and use the same name for the skill and the keyring entries; keep it when you rename the tool. A
+CLI made before 0.19.0 has `appName` without the scope (`acme-crm-cli`): change it in `src/identity.ts` before its
+first release. Desktop refuses a manifest that breaks this rule.
 
 ### Publish under your own scope
 
@@ -211,22 +189,23 @@ and no such package exists. Use your own scope and service.
 1. **Make the tool.**
 
    ```sh
-   npx @wirecat/cli-template new acme-crm-cli --command acme-crm --package @leemour/acme-crm-cli --owner leemour
+   npx @wirecat/cli-template new acme-crm-cli --command acme-crm --package @leemour/acme-crm-cli --owner leemour \
+     --category crm --tagline "Your Acme CRM deals, searchable on your computer"
    cd acme-crm-cli && pnpm install
    ```
 
 2. **Add a command with your agent.** Open the folder with your AI agent and ask: "Add `deals list`: it lists my
    deals from the Acme CRM API, docs at https://example.com/api. It only reads." Try it on your account
    after `pnpm build`: `node dist/bin/acme-crm.js personal deals list`.
-3. **Make it addable.** Set it up once as [Make it addable in WireCat Desktop](#make-it-addable-in-wirecat-desktop)
-   says, with `appName` set to `leemour-acme-crm-cli`.
-4. **Generate and check.** `pnpm generate` builds the tool and rewrites its command contracts. Then write the
-   manifest, and commit it with the contracts:
+3. **Check what Desktop will show.** Rewrite the sign-in texts in `DESKTOP` in `src/identity.ts`, for example
+   `gives: "your Acme CRM contacts and deals"` and `asks: "an Acme CRM API token"`. `appName` is already
+   `leemour-acme-crm-cli`.
+4. **Generate and commit.** `pnpm generate` builds the tool and rewrites its contracts, the manifest
+   `contracts/wirecat.json` among them:
 
    ```sh
    pnpm generate
-   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js
-   git add contracts && git commit -m "feat: deals list"
+   git add contracts src && git commit -m "feat: deals list"
    ```
 
 5. **Publish.** The first time with `bin/release --local`, then set the trusted publisher and use `bin/release`, as
@@ -261,21 +240,22 @@ source code and your pages, are never touched. `--dry-run` lists what would chan
 
 For when you or your agent need the exact options.
 
-### The seven questions
+### The eight questions
 
-Each answer except the languages is a choice from a short list, and also takes `other:<your answer>`. Without a
+Each answer except the tagline and the languages is a choice from a short list, and also takes `other:<your answer>`. Without a
 terminal, for example in a script or an agent's shell, pass them as flags. A missing one is then an error that lists
 the choices; nothing is guessed.
 
 | Question | Flag | Choices (several are comma-separated) |
 | --- | --- | --- |
-| What kind of tool is it? | `--category` | `messenger`, `mail`, `notes`, `files`, `calendar`, `meetings` |
+| What line should WireCat Desktop show? | `--tagline` | at most 55 characters; left out, it is made from the description |
+| What kind of tool is it? | `--category` | `messenger`, `mail`, `notes`, `files`, `meetings`, `calendar`, `crm` |
 | Which languages is the content in? | `--content-lang` | language codes, several allowed: `en,ru` |
 | How does a person sign in? | `--sign-in` | `oauth`, `token`, `session` (phone code, QR), `none` |
 | What does the service offer to build on? | `--api` | `official-client`, `official-docs`, `unofficial` |
 | How do people filter what they find? | `--filters` | several of `time`, `person`, `container`, `text`, `status` |
 | What must never reach the store, a log or the output? | `--never-store` | several of `tokens`, `codes`, `secret-links`, `content` |
-| What untrusted input arrives? | `--untrusted` | several of `messages`, `files`, `links`, `names`; or `none` alone |
+| What untrusted input arrives? | `--untrusted` | several of `files`, `links`, `names`, and `messages` (messenger, mail), `records` (crm), `invitations` (calendar) or `transcripts` (meetings); or `none` alone |
 
 The same tool, made without any question:
 
@@ -297,6 +277,7 @@ The template has no sample code. Your agent learns from the WireCat tool closest
 | notes | [`cli-memo`](https://github.com/WireCatLabs/cli-memo) |
 | calendar | [`gcal-cli`](https://github.com/WireCatLabs/gcal-cli) |
 | mail | [`mail-cli`](https://github.com/WireCatLabs/mail-cli) |
+| CRM | [`bitrix24-cli`](https://github.com/WireCatLabs/bitrix24-cli) |
 | other | none yet: choose the nearest one with your agent |
 
 ### Four steps that need a person

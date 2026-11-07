@@ -131,50 +131,25 @@ Desktop). Прежде чем что-то установить, он читае�
 - **Его генерируют, а не пишут руками.** `cli-dev manifest` пишет его по собранной программе и экспортированному
   вами описанию. Вы пишете только то, чего код знать не может: `tagline` (не длиннее 55 символов), тексты входа
   `signIn.gives` и `signIn.asks` и, если есть команда `sync`, `syncs` (что она копирует, не длиннее 40 символов).
-- **Его коммитят и публикуют.** Закоммитьте файл и добавьте `contracts/wirecat.json` в `files` в `package.json`,
-  чтобы он попал в пакет в npm.
-- **CI следит, чтобы он был свежим.** `cli-dev manifest … --check` падает, когда файл больше не совпадает с
-  программой.
+- **Его коммитят и публикуют.** Закоммитьте файл. `files` в `package.json` перечисляет `contracts/wirecat.json`,
+  поэтому он попадает в пакет в npm.
+- **CI следит, чтобы он был свежим.** `pnpm contracts:check` падает, когда файл больше не совпадает с программой.
 - **В нём нет версии.** Desktop берёт версию из npm, так что выпуск файл не меняет.
 
-cli-template 0.18.0, текущий выпуск, этого пока не настраивает. В инструменте, созданном из него, сделайте это один
-раз:
+В инструменте, созданном cli-template 0.19.0 или новее, всё это `new` делает сам:
 
-1. Экспортируйте описание для манифеста в новом файле `src/wcat.ts`:
+- bin до загрузки программы вызывает `wcatStart` с `DESKTOP` из `src/identity.ts`: ссылкой на документацию, строкой
+  для Desktop (`--tagline`, а без него — из описания) и текстами входа по вашему ответу на `--sign-in`. Перепишите
+  тексты своими словами. `src/wcat.ts` добавляет ключ разрешения каждой команды и экспортирует всё как `WCAT`.
+- `package.json` называет программу дважды: словом команды (`acme-crm`) и `wcat-acme-crm`, которую запускает
+  `wcat acme-crm`.
+- `pnpm generate` пишет `contracts/wirecat.json` через `cli-dev manifest`, а `pnpm contracts:check` его проверяет.
 
-   ```ts
-   import type { ManifestIdentity } from "@wirecat/cli-base/wcat/manifest"
-   import { IDENTITY } from "./identity.js"
-
-   export const WCAT: ManifestIdentity = {
-     ...IDENTITY,
-     docs: "https://github.com/leemour/acme-crm-cli#readme",
-     tagline: "Your Acme CRM deals, searchable on your computer",
-     signIn: { gives: "your Acme CRM contacts and deals", asks: "an Acme CRM API token" },
-   }
-   ```
-
-2. Начните bin с `wcatStart`, до загрузки программы, и передайте ему `WCAT`, чтобы они никогда не расходились:
-
-   ```ts
-   import { wcatStart } from "@wirecat/cli-base/wcat/start"
-   import { WCAT } from "../wcat.js"
-
-   const { code } = await wcatStart(WCAT)
-   if (code !== undefined) process.exitCode = code
-   else {
-     // the bin's existing start
-   }
-   ```
-
-3. Назовите программу `wcat-<команда>` в `package.json`, например
-   `"bin": { "wcat-acme-crm": "dist/bin/acme-crm.js" }`. `cli-dev lint` предупреждает об имени без `wcat-`.
-4. Пишите файл после каждой сборки и проверяйте его в CI:
-
-   ```sh
-   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js
-   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js --check
-   ```
+**Для CLI, созданного до 0.19.0:** добавьте это сами, потому что `src/` и `package.json` ваши и `upgrade` их не
+меняет. Добавьте вызов `wcatStart` в bin, `DESKTOP` в `src/identity.ts`, `src/wcat.ts`, имя программы
+`wcat-<команда>` и `cli-dev manifest --program dist/program.js --identity dist/wcat.js` (с `--check` для проверок) в
+скрипты `generate`, `generate:check` и `contracts:check`. Перейдите на `@wirecat/cli-base` 0.82.0. Новый CLI,
+созданный с 0.19.0, показывает каждый файл.
 
 Когда файл есть в пакете, `wcat-acme-crm --wcat-describe` отвечает в формате 2: имя, версия, описание и ссылка на
 документацию с `"wcat_describe": 2`, а также часть `desktop` из файла и `manifest_sha256` — хеш файла. После установки
@@ -187,9 +162,10 @@ Desktop запускает эту команду один раз и отказы
 **Удалить вместе с данными** в Desktop стирает только папки с именем инструмента, поэтому это имя должно
 принадлежать вашему инструменту. Для пакета `@<scope>/<name>` значение `appName` в описании, в нижнем регистре, равно
 `<scope>-<name>` или начинается с `<scope>-<name>-`. Каждая `.` и `_` имени пакета становится `-`, а всё имя — не
-длиннее 64 символов: `@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. cli-template 0.18.0 пишет `appName` без
-области имён (`acme-crm-cli`), поэтому исправьте его в `src/identity.ts` до первого выпуска. Desktop отказывает
-манифесту, который нарушает это правило.
+длиннее 64 символов: `@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. cli-template 0.19.0 и новее пишет его так для
+каждого пакета вне `@wirecat` и даёт то же имя навыку и записям в связке ключей; сохраните его, если переименуете
+инструмент. У CLI, созданного до 0.19.0, `appName` без области имён (`acme-crm-cli`): исправьте его в
+`src/identity.ts` до первого выпуска. Desktop отказывает манифесту, который нарушает это правило.
 
 ### Публикация в своей области имён
 
@@ -224,23 +200,23 @@ Desktop запускает эту команду один раз и отказы
 1. **Создайте инструмент.**
 
    ```sh
-   npx @wirecat/cli-template new acme-crm-cli --command acme-crm --package @leemour/acme-crm-cli --owner leemour
+   npx @wirecat/cli-template new acme-crm-cli --command acme-crm --package @leemour/acme-crm-cli --owner leemour \
+     --category crm --tagline "Your Acme CRM deals, searchable on your computer"
    cd acme-crm-cli && pnpm install
    ```
 
 2. **Добавьте команду с агентом.** Откройте папку с ИИ-агентом и попросите: «Добавь `deals list`: она показывает мои
    сделки из API Acme CRM, документация — https://example.com/api. Она только читает». Проверьте на своём аккаунте
    после `pnpm build`: `node dist/bin/acme-crm.js personal deals list`.
-3. **Подготовьте его для Desktop.** Настройте один раз, как сказано в разделе
-   [Подготовьте его для WireCat Desktop](#подготовьте-его-для-wirecat-desktop), с `appName`, равным
+3. **Проверьте, что покажет Desktop.** Перепишите тексты входа в `DESKTOP` в `src/identity.ts`, например
+   `gives: "your Acme CRM contacts and deals"` и `asks: "an Acme CRM API token"`. `appName` уже равен
    `leemour-acme-crm-cli`.
-4. **Сгенерируйте и проверьте.** `pnpm generate` собирает инструмент и переписывает контракты его команд. Затем
-   запишите манифест и закоммитьте его вместе с контрактами:
+4. **Сгенерируйте и закоммитьте.** `pnpm generate` собирает инструмент и переписывает его контракты, среди них
+   манифест `contracts/wirecat.json`:
 
    ```sh
    pnpm generate
-   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js
-   git add contracts && git commit -m "feat: deals list"
+   git add contracts src && git commit -m "feat: deals list"
    ```
 
 5. **Опубликуйте.** В первый раз — `bin/release --local`, затем настройте доверенного издателя и выпускайте через
@@ -275,21 +251,22 @@ npx @wirecat/cli-template upgrade
 
 Для случаев, когда вам или агенту нужны точные параметры.
 
-### Семь вопросов
+### Восемь вопросов
 
-Каждый ответ, кроме языков, — выбор из короткого списка, и каждый также принимает `other:<ваш ответ>`. Без терминала,
+Каждый ответ, кроме строки для Desktop и языков, — выбор из короткого списка, и каждый также принимает `other:<ваш ответ>`. Без терминала,
 например в скрипте или в оболочке агента, передайте ответы флагами. Тогда пропущенный ответ — ошибка со списком
 вариантов; ничего не угадывается.
 
 | Вопрос | Флаг | Варианты (несколько — через запятую) |
 | --- | --- | --- |
-| Что это за инструмент? | `--category` | `messenger`, `mail`, `notes`, `files`, `calendar`, `meetings` |
+| Какую строку показывать в WireCat Desktop? | `--tagline` | не длиннее 55 символов; без него строка делается из описания |
+| Что это за инструмент? | `--category` | `messenger`, `mail`, `notes`, `files`, `meetings`, `calendar`, `crm` |
 | На каких языках содержимое? | `--content-lang` | коды языков, можно несколько: `en,ru` |
 | Как человек входит в сервис? | `--sign-in` | `oauth`, `token`, `session` (код по телефону, QR), `none` |
 | На чём можно строить? | `--api` | `official-client`, `official-docs`, `unofficial` |
 | Как люди фильтруют найденное? | `--filters` | несколько из `time`, `person`, `container`, `text`, `status` |
 | Что никогда не должно попасть в хранилище, журнал или вывод? | `--never-store` | несколько из `tokens`, `codes`, `secret-links`, `content` |
-| Какие недоверенные данные приходят? | `--untrusted` | несколько из `messages`, `files`, `links`, `names`; или `none` отдельно |
+| Какие недоверенные данные приходят? | `--untrusted` | несколько из `files`, `links`, `names`, а также `messages` (messenger, mail), `records` (crm), `invitations` (calendar) или `transcripts` (meetings); или `none` отдельно |
 
 Тот же инструмент, созданный без единого вопроса:
 
@@ -311,6 +288,7 @@ npx @wirecat/cli-template new acme-cli --command acme --package @example/acme-cl
 | заметки | [`cli-memo`](https://github.com/WireCatLabs/cli-memo) |
 | календарь | [`gcal-cli`](https://github.com/WireCatLabs/gcal-cli) |
 | почта | [`mail-cli`](https://github.com/WireCatLabs/mail-cli) |
+| CRM | [`bitrix24-cli`](https://github.com/WireCatLabs/bitrix24-cli) |
 | другое | пока нет: выберите ближайший вместе с агентом |
 
 ### Четыре шага, которые делает человек
