@@ -5,9 +5,9 @@ description: Da al servidor MCP de una herramienta una dirección https pública
 
 ChatGPT, Claude y otras aplicaciones de IA en el navegador funcionan en los servidores de su empresa, así que no pueden llegar por sí solas a nada de tu ordenador. Una herramienta de WireCat ofrece sus mensajes a las aplicaciones de IA a través de un **servidor MCP**, un pequeño servidor que inicia en tu ordenador. **Tailscale Funnel** da a este ordenador una dirección https pública y fija que lleva a ese servidor y a nada más. Solo lo necesitas para usar una herramienta desde una aplicación del navegador; una aplicación de IA en el mismo ordenador, como Claude Code, se conecta en local sin él.
 
-Configuras Funnel una sola vez. Después, **Iniciar** en WireCat Desktop da al servidor su dirección pública con un clic. Necesitas una cuenta de Tailscale (el paso de inicio de sesión crea una si no tienes) y la contraseña de tu ordenador una vez, para instalar Tailscale.
+Configuras Funnel una sola vez. Después, **Iniciar** en WireCat Desktop da al servidor su dirección pública con un clic. Necesitas una cuenta de Tailscale (el paso de inicio de sesión crea una si no tienes) y, para la aplicación de Tailscale, la contraseña de tu ordenador una vez para instalarla. [Sin la aplicación de Tailscale](#sin-la-aplicación-de-tailscale), WireCat se conecta a Tailscale por sí sola y no necesita contraseña.
 
-**Ve a tu sistema:** [macOS](#macos) · [Windows](#windows) · [Linux](#linux) · [Solución de problemas](#solución-de-problemas)
+**Ve a tu sistema:** [Sin la aplicación de Tailscale](#sin-la-aplicación-de-tailscale) · [macOS](#macos) · [Windows](#windows) · [Linux](#linux) · [Solución de problemas](#solución-de-problemas)
 
 ## Qué hace WireCat Desktop por ti
 
@@ -23,6 +23,18 @@ Abre la herramienta, luego **Servidor MCP (o conectar la web)**, luego **Iniciar
 WireCat nunca pide la contraseña de tu ordenador ni ejecuta `sudo`. La contraseña la pide el instalador, la aplicación de Software o tu terminal. Al detener el servidor se desactiva solo el Funnel que activó WireCat; tus propios Funnel y los ajustes de Tailscale quedan como estaban.
 
 Todas tus herramientas comparten una dirección pública y cada una tiene su ruta, por ejemplo `https://laptop.tail4a2c.ts.net/tg`. La dirección es la misma la próxima vez que inicies el servidor, así que las aplicaciones del navegador siguen con la sesión iniciada. Funnel solo admite los puertos públicos 443, 8443 y 10000; WireCat usa otro solo si el primero lo ocupa un Funnel que configuraste tú, y el paso avisa si los tres están en uso.
+
+## Sin la aplicación de Tailscale
+
+Si Tailscale no está instalado en este ordenador, la opción **Tailscale Funnel** ofrece **la conexión propia de WireCat a Tailscale**. Es un programa pequeño, `wirecat-funnel`, que entra en tu red de Tailscale como un dispositivo más. No necesita la aplicación de Tailscale ni contraseña de administrador, en macOS, Windows y Linux.
+
+1. **Instalarla.** WireCat la instala desde npm, como una herramienta, en tu carpeta de usuario.
+2. **Conectar con Tailscale.** Selecciona **Conectar con Tailscale**. El navegador abre el inicio de sesión de Tailscale; basta una cuenta gratuita. Si tu red de Tailscale aprueba los dispositivos nuevos, la página siguiente te pide aprobar este. Si Funnel aún no está permitido para él, la página siguiente te deja permitirlo. WireCat abre cada página una vez, y **Abrir la página otra vez** la vuelve a abrir.
+3. **Iniciar.** WireCat añade las rutas de la herramienta a su conexión e inicia el servidor. La dirección es `https://wirecat.<tu red de Tailscale>.ts.net`, la misma para todas las herramientas, con una ruta para cada una. La primera llamada puede tardar un minuto mientras Tailscale crea el certificado HTTPS.
+
+WireCat apaga los registros y los datos de soporte de Tailscale para esta conexión. Tailscale sigue viendo el dispositivo en tu red y la hora y el tamaño de cada conexión, pero no puede leer lo que se envía. La dirección recibe un certificado público, así que aparece en los registros públicos de certificados; su nombre es `wirecat`, no el de tu ordenador.
+
+Para usar la aplicación de Tailscale, selecciona **Instalar la aplicación de Tailscale** y sigue los pasos de tu sistema más abajo. Cuando la aplicación está instalada, WireCat la usa.
 
 ## macOS
 
@@ -244,5 +256,7 @@ Usa en lugar de `443` el puerto que muestra `tailscale funnel status`. No ejecut
 **«La dirección responde, pero no con el servidor de la herramienta».** Otro Funnel o túnel usa la misma dirección. Mira «Detalles del servidor» o usa otro puerto.
 
 **La aplicación del navegador dejó de funcionar tras reiniciar.** Funnel está desactivado mientras lo está el servidor. Inicia el servidor otra vez; la dirección sigue igual. Si la fila del servidor dice que Funnel está desactivado aunque el servidor funciona, pulsa **Detener** y luego **Iniciar**.
+
+**«La conexión de WireCat a Tailscale está apagada».** La conexión propia de WireCat se detuvo, por ejemplo tras reiniciar. Selecciona **Encenderla**; la dirección sigue siendo la misma.
 
 Si un paso sigue fallando, el botón «Informar de un problema» de la app reúne lo que necesita el soporte.

@@ -5,9 +5,9 @@ description: Give a tool's MCP server a fixed public https address, so ChatGPT, 
 
 ChatGPT, Claude and other AI apps in the browser run on their provider's servers, so they cannot reach anything on your computer by themselves. A WireCat tool offers its messages to AI apps through an **MCP server**, a small server it starts on your computer. **Tailscale Funnel** gives this computer a fixed public https address that leads to that server and to nothing else. You need it only to use a tool from a browser app; an AI app on the same computer, such as Claude Code, connects locally without it.
 
-You set Funnel up once. Afterwards, **Start** in WireCat Desktop gives the server its public address in one click. You need a Tailscale account (the login step creates one if you have none) and your computer password once, to install Tailscale.
+You set Funnel up once. Afterwards, **Start** in WireCat Desktop gives the server its public address in one click. You need a Tailscale account (the login step creates one if you have none) and, for the Tailscale app, your computer password once to install it. [Without the Tailscale app](#without-the-tailscale-app), WireCat connects to Tailscale by itself and needs no password.
 
-**Jump to your system:** [macOS](#macos) · [Windows](#windows) · [Linux](#linux) · [Troubleshooting](#troubleshooting)
+**Jump to your system:** [Without the Tailscale app](#without-the-tailscale-app) · [macOS](#macos) · [Windows](#windows) · [Linux](#linux) · [Troubleshooting](#troubleshooting)
 
 ## How WireCat Desktop helps
 
@@ -23,6 +23,18 @@ Open the tool, then **MCP server (or connect web)**, then **Start and connect**,
 WireCat never asks for your computer password and never runs `sudo`. The installer, the Software app or your terminal asks for it. Stopping the server turns off only the Funnel that WireCat turned on; your own Funnels and Tailscale settings stay as they are.
 
 All your tools share one public address and take one path each, for example `https://laptop.tail4a2c.ts.net/tg`. The address stays the same the next time you start the server, so browser apps stay logged in. Funnel allows only the public ports 443, 8443 and 10000; WireCat uses another one only when the first is taken by a Funnel you set up yourself, and the step reports it if all three are in use.
+
+## Without the Tailscale app
+
+If Tailscale is not installed on this computer, the **Tailscale Funnel** choice offers **WireCat's own Tailscale connection**. It is a small program, `wirecat-funnel`, that joins your Tailscale network as one more device. It needs no Tailscale app and no administrator password, on macOS, Windows and Linux.
+
+1. **Install it.** WireCat installs it from npm, like a tool, into your user folder.
+2. **Connect to Tailscale.** Select **Connect to Tailscale**. Your browser opens Tailscale's sign-in page; a free account is enough. If your Tailscale network approves new devices, the next page asks you to approve this one. If Funnel is not allowed for it yet, the next page lets you allow it. WireCat opens each page once, and **Open the page again** brings it back.
+3. **Start.** WireCat adds the tool's paths to its connection and starts the server. The address is `https://wirecat.<your Tailscale network>.ts.net`, the same for every tool, with one path per tool. The first call can take a minute while Tailscale makes the HTTPS certificate.
+
+WireCat turns off Tailscale's logs and support data for this connection. Tailscale still sees the device in your network and the time and size of each connection, but it cannot read what is sent. The address gets a public certificate, so it appears in public certificate logs; its name is `wirecat`, not your computer's name.
+
+To use the Tailscale app instead, select **Install the Tailscale app instead** and follow the steps for your system below. When the app is installed, WireCat uses it.
 
 ## macOS
 
@@ -244,5 +256,7 @@ Use the port that `tailscale funnel status` shows in place of `443`. Do not run 
 **"The address answers, but not with the tool's server."** Another Funnel or tunnel uses the same address. Check **Server details**, or use another port.
 
 **The browser app stopped working after a restart.** Funnel is off while the server is off. Start the server again; the address stays the same. If the server row says Funnel is off while the server runs, select **Stop**, then **Start**.
+
+**"WireCat's Tailscale connection is off."** WireCat's own connection stopped, for example after a restart. Select **Turn it on**; the address stays the same.
 
 If a step still fails, **Report a problem** in the app collects what the support team needs.
