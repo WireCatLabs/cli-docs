@@ -29,6 +29,9 @@ Los metadatos están en detalles y listados; no son una API universal de búsque
 Usa etiquetas y filtros de personas/listados compatibles, sin inventar campos de Google en
 el texto. La búsqueda no indexa comentarios, permisos ni historial de revisiones en Google.
 
+Las notas se buscan aparte de los documentos: `drive personal notes list DOC_ID text:review` encuentra parte de una palabra,
+sin distinguir mayúsculas, en el título y el texto de la nota. Un término de menos de tres caracteres se rechaza.
+
 Para uso manual:
 
 ```sh
@@ -38,7 +41,7 @@ drive personal documents show DOC_ID --json
 drive personal tags list DOC_ID --json
 ```
 
-Sustituye `DOC_ID` por el ID Google de un resultado. `--exact` busca palabras. El detalle incluye
+Sustituye `DOC_ID` por el ID Google de un resultado, o pasa su `ref` (`document:42`) tal cual. `--exact` busca palabras. El detalle incluye
 IDs, títulos y texto de pestañas, tablas y notas al pie. Encabezados, pies, comentarios, imágenes
 y sugerencias no forman parte del texto indexado. Usa `tag:follow-up` solo o con palabras para
 buscar etiquetas locales. `drive personal search` no tiene opción `--tag`; no admite campos
@@ -65,6 +68,11 @@ drive models download e5-small
 drive personal sync --embed
 drive personal search 'what did we agree to spend?' --json
 ```
+
+Los campos de la consulta valen para cada resultado, encontrado por palabras o por significado: `budget tag:follow-up` encuentra
+por significado solo documentos con la etiqueta `follow-up`, y `-tag:draft` excluye los etiquetados. Solo las palabras se buscan
+por significado, así que una consulta solo de campos (`date>=30d`, `tag:follow-up`) lista los documentos que coinciden, los más
+recientes primero. `date:` lee la última edición del documento en Google Drive, la misma hora que un resultado muestra como `updated_at`.
 
 La descarga utiliza internet; la generación de vectores es local. Drive no descarga automáticamente
 un componente ausente. La generación procesa notas y documentos pendientes de toda la base

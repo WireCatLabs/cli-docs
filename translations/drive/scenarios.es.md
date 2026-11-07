@@ -19,12 +19,18 @@ Un agente busca y lee los documentos importados sin que nada de lo que ejecute p
    coloca las instrucciones de drive donde las buscan Claude Code, Codex y Gemini CLI
 
 2. ```sh
-   drive personal mcp serve --tools --read-only
+   drive personal commands --json
    ```
 
-   enumera comandos con su disponibilidad actual; las escrituras siguen visibles pero se rechazan
+   enumera comandos con su disponibilidad actual; el servidor ofrece los mismos al agente
 
 3. ```sh
+   drive personal mcp check
+   ```
+
+   inicia el servidor una vez y cuenta las herramientas que ofrece y las que pueden escribir
+
+4. ```sh
    drive personal mcp serve --read-only
    ```
 

@@ -13,20 +13,252 @@ These options apply to the selected profile and current invocation.
 | Option | What it does |
 |---|---|
 | `-V, --version` | output the version number. |
-| `--json` | print machine-readable JSON; --json=id,name keeps only those fields. |
-| `--jsonl` | print machine-readable JSON lines. |
-| `--quiet` | suppress optional diagnostics. |
-| `--debug` | on failure, show the full error record: cause and stack. |
-| `--timeout <duration>` | whole-command deadline, e.g. 30s. |
-| `--max-output-bytes <bytes>` | largest result to print, in bytes; 0 for no limit. Default: `4194304`. |
-| `--read-only` | refuse local and remote mutations. |
-| `--offline` | answer only operations that use local cached data. |
-| `--dry-run` | validate command/policy and preview without acting. |
-| `--yes` | answer a policy confirmation; cannot override deny or readonly. |
-| `--allow-dangerous` | answer a permanent-deletion confirmation. |
-| `--permission <key=level>` | temporary policy override; repeat to add keys. |
+| `-v, --verbose` | more detail in what is shown: -v ids, -vv everything we know. Default: `0`. |
+| `--json` | machine-readable output: one JSON value on stdout; --json=id,text keeps only those fields. |
+| `--jsonl` | machine-readable output: one JSON object per line, for streaming and jq. |
+| `--quiet` | diagnostics off; a failure is still said. |
+| `--trace` | the connection's own log lines on stderr — never content. |
+| `--debug` | on a failure, its whole record — cause and stack — in place of the short line. |
+| `--timeout <duration>` | give up on the whole command after this — 30s, 2m, 500ms. |
+| `--offline` | answer from what was recorded and never connect; fails if nothing was. |
+| `--no-input` | never prompt or open interactive login; piped input remains available. |
+| `--max-input-bytes <bytes>` | maximum buffered input bytes (default: 16777216). |
+| `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
+| `--brief` | found items as reference, title, time, author and excerpt only. |
+| `--full` | found items with their whole text and every provider field. |
+| `--compact` | one line per item for an agent: reference first, text last, paging and next steps as # lines. |
+| `--dry-run` | preview parsed arguments and permissions before running the action. |
+| `--yes` | go ahead without the question an ask level puts before a write. |
 | `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
 | `--no-record` | do not keep this run, even if it fails. |
+| `--read-only` | refuse local and remote mutations. |
+| `--allow-dangerous` | answer a permanent-deletion confirmation. |
+| `--permission <key=level>` | make a permission stricter for this run only; repeat to add keys. |
+
+## `drive doctor`
+
+the state this installation is in, without connecting unless --online
+
+```sh
+drive doctor [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--online` | also connect once and read the account; sends nothing. |
+
+**Returns:** the state this installation is in, without connecting unless --online
+
+**Example:** `drive doctor`, `drive doctor --json`
+
+## `drive skill`
+
+the instructions an agent is given for this tool
+
+### `drive skill show`
+
+print SKILL.md — `drive skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
+
+```sh
+drive skill show [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
+
+**Returns:** print the tool's instructions for AI agents
+
+**Example:** `drive skill show`
+
+### `drive skill install`
+
+write SKILL.md to \~/.claude/skills/drive-cli/ (Claude Code) and \~/.agents/skills/drive-cli/ (Codex, Gemini CLI, OpenClaw); --for hermes also has Hermes read \~/.agents/skills, which changes Hermes's own settings, so all leaves it out
+
+This command changes local state.
+
+```sh
+drive skill install [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
+
+**Returns:** install the tool's instructions for AI agents
+
+**Example:** `drive skill install --for agents`
+
+### `drive skill status`
+
+for each place `drive skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
+
+```sh
+drive skill status
+```
+
+**Returns:** whether the installed instructions for AI agents match this version
+
+**Example:** `drive skill status`, `drive skill status --json`
+
+## `drive mcp`
+
+serve this profile to an agent over MCP and set it up — `claude mcp add drive -- drive <profile> mcp serve`
+
+### `drive mcp serve`
+
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add drive -- drive <profile> mcp serve`; `drive mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> mcp serve [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--permission <key=level>` | make a permission stricter for this server only, like files.trash=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+| `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
+| `--port <port>` | the local port for --http (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+
+**Returns:** serve this profile's commands to an AI agent
+
+**Example:** `drive personal mcp serve`, `drive mcp serve --profiles work,personal`, `drive personal mcp serve --http --public-url https://laptop.example.ts.net`
+
+### `drive mcp revoke`
+
+forget every login `mcp serve --http` gave a browser app, of this profile or of the server `--profiles` names; each app must log in again
+
+This command changes local state.
+
+```sh
+drive <profile> mcp revoke [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+
+**Returns:** forget every login given to a browser app
+
+**Example:** `drive personal mcp revoke`, `drive mcp revoke --profiles all`
+
+### `drive mcp server`
+
+start, stop and check `mcp serve --http` in the background; status shows the login code for a browser app
+
+#### `drive mcp server start`
+
+start `mcp serve --http` apart from this shell and answer once it listens, with its login code
+
+This command changes local state.
+
+```sh
+drive <profile> mcp server start [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--port <port>` | the local port (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+| `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** start the HTTP MCP server in the background
+
+**Example:** `drive personal mcp server start --public-url https://laptop.example.ts.net`
+
+#### `drive mcp server stop`
+
+stop `mcp serve --http` — only one that `mcp server start` started
+
+This command changes local state.
+
+```sh
+drive <profile> mcp server stop [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** stop the background HTTP MCP server
+
+**Example:** `drive personal mcp server stop`
+
+#### `drive mcp server status`
+
+whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
+
+```sh
+drive <profile> mcp server status [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
+
+**Example:** `drive personal mcp server status --json`
+
+### `drive mcp config`
+
+print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes nothing
+
+```sh
+drive <profile> mcp config [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--permission <key=level>` | make a permission stricter for this server only, like files.trash=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+
+**Returns:** print the local MCP configuration of this profile, or of those --profiles names
+
+**Example:** `drive personal mcp config`, `drive mcp config --profiles all`
+
+### `drive mcp add`
+
+add this profile's local MCP server to Codex or Claude Code
+
+This command changes local state.
+
+```sh
+drive <profile> mcp add <client> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `client` | required | codex or claude-code. |
+
+| Option | What it does |
+|---|---|
+| `--allow-writes` | acknowledge that this profile offers writing tools. |
+| `--permission <key=level>` | make a permission stricter for this server only, like files.trash=deny; it never loosens the profile; repeat for more keys. |
+
+**Returns:** add this profile's local MCP server to Codex or Claude Code
+
+**Example:** `drive personal mcp add codex --allow-writes`
+
+### `drive mcp check`
+
+check this profile's local MCP handshake and tool list
+
+```sh
+drive <profile> mcp check [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--permission <key=level>` | make a permission stricter for this server only, like files.trash=deny; it never loosens the profile; repeat for more keys. |
+
+**Returns:** check this profile's local MCP handshake and tool list
+
+**Example:** `drive personal mcp check`
 
 ## `drive session`
 
@@ -45,13 +277,14 @@ drive <profile> session start [options]
 | Option | What it does |
 |---|---|
 | `--client-file <file>` | path to your own Desktop OAuth client JSON, used instead of WireCat's. |
-| `--credential-storage <storage>` | where the sign-in is kept: keyring, or file for a private file. Default: `keyring`. |
+| `--client-id <id>` | your own Desktop OAuth client ID, used instead of WireCat's; its secret comes from DRIVE_GOOGLE_CLIENT_SECRET. |
+| `--credential-storage <storage>` | where the sign-in is kept: keyring (the default, which falls back to a private file by itself when no keyring works), or file, not recommended. Default: `keyring`. |
 | `--no-browser` | print the sign-in URL instead of opening a browser. |
 | `--grant <scopes>` | also ask for these permissions, comma-separated: write (change Drive files and Docs), activity (read Drive Activity history), apps (see installed Drive apps). |
 
 **Returns:** sign in to Google in the browser; read-only unless you pass --grant write
 
-**Example:** `drive personal session start`, `drive work session start --grant write,activity`
+**Example:** `drive personal session start`, `drive work session start --grant write,activity`, `drive work session start --client-id 1234-abc.apps.googleusercontent.com`
 
 ### `drive session list`
 
@@ -262,11 +495,11 @@ drive <profile> documents show <document>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | document id or Google Docs URL. |
+| `document` | required | document id, Google Docs URL, or a search hit's document: ref. |
 
 **Returns:** show an imported document's text, tabs and metadata
 
-**Example:** `drive personal documents show DOC_ID`
+**Example:** `drive personal documents show DOC_ID`, `drive personal documents show document:42 --offline`
 
 ### `drive documents export`
 
@@ -280,7 +513,7 @@ drive <profile> documents export <document> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | document id or Google Docs URL. |
+| `document` | required | document id, Google Docs URL, or a search hit's document: ref. |
 
 | Option | What it does |
 |---|---|
@@ -300,7 +533,7 @@ drive <profile> documents context <document>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 
 **Returns:** show a document with its tags, relationships, notes, memories and editors
 
@@ -321,6 +554,22 @@ drive <profile> documents get <document>
 **Returns:** read a document live from Google Docs, as JSON with every tab
 
 **Example:** `drive personal documents get DOC_ID --json`
+
+### `drive documents check`
+
+ask Google whether an imported document changed since its local copy was made
+
+```sh
+drive <profile> documents check <document>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | document id or Google Docs URL. |
+
+**Returns:** ask Google whether an imported document changed since its local copy was made
+
+**Example:** `drive personal documents check DOC_ID`
 
 ### `drive documents create`
 
@@ -394,7 +643,7 @@ drive <profile> search <query> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | required | words to look for. |
+| `query` | required | words to look for, and fields such as tag: and date: that every hit must match. |
 
 | Option | What it does |
 |---|---|
@@ -581,7 +830,7 @@ drive <profile> tags list <document> [query]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 **Returns:** drive document tag — tag; every field: drive commands info tags list
@@ -600,7 +849,7 @@ drive <profile> tags add <document> <tags>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `tags` | required | one or more tags. |
 
 **Returns:** tag a document
@@ -619,7 +868,7 @@ drive <profile> tags remove <document> <tags>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `tags` | required | one or more tags. |
 
 **Returns:** untag a document
@@ -640,7 +889,7 @@ drive <profile> relationships list <document> [query]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 **Returns:** drive document relationship — id, from, to, kind, role, confirmed, origin; every field: drive commands info relationships list
@@ -659,7 +908,7 @@ drive <profile> relationships add <document> <reference> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `reference` | required | what it connects to, such as person:<uid>, project:<id> or note:<id>. |
 
 | Option | What it does |
@@ -684,7 +933,7 @@ drive <profile> relationships remove <document> <relationship-id>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `relationship-id` | required | id, as relationships list prints it. |
 
 **Returns:** remove one of a document's relationships
@@ -707,7 +956,7 @@ drive <profile> notes add <document> <text> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `text` | required | the note's text. |
 
 | Option | What it does |
@@ -730,7 +979,7 @@ drive <profile> notes list <document> [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
@@ -754,7 +1003,7 @@ drive <profile> notes show <document> <note>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `note` | required | note:<id> reference, as notes list prints it. |
 
 **Returns:** note — ref, id, source, folder_id, path, title, text, revision, and 15 more; every field: drive commands info notes show
@@ -775,7 +1024,7 @@ drive <profile> notes edit <document> <note> <text> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `note` | required | note:<id> reference, as notes list prints it. |
 | `text` | required | the note's new text. |
 
@@ -801,7 +1050,7 @@ drive <profile> notes remove <document> <note>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `note` | required | note:<id> reference, as notes list prints it. |
 
 **Returns:** delete one note
@@ -824,7 +1073,7 @@ drive <profile> memories add <document> <text> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `text` | required | what to remember. |
 
 | Option | What it does |
@@ -847,14 +1096,14 @@ drive <profile> memories list <document> [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many memories to return. Default: `50`. |
 
-**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 7 more; every field: drive commands info memories list
+**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 12 more; every field: drive commands info memories list
 
 **Example:** `drive personal memories list DOC_ID scope:work`, `drive personal memories list DOC_ID kind:preference status:confirmed`
 
@@ -868,7 +1117,7 @@ drive <profile> memories show <document> <memory>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `memory` | required | memory:<id> reference, as memories list prints it. |
 
 **Returns:** show one memory
@@ -887,7 +1136,7 @@ drive <profile> memories confirm <document> <memory>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `memory` | required | memory:<id> reference, as memories list prints it. |
 
 **Returns:** confirm a proposed memory as true
@@ -906,7 +1155,7 @@ drive <profile> memories stale <document> <memory>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `memory` | required | memory:<id> reference, as memories list prints it. |
 
 **Returns:** mark a memory as out of date
@@ -923,10 +1172,10 @@ drive <profile> memories search <document> <query>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | required | words to look for, and scope:personal or scope:work — the fields are below. |
 
-**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 7 more; every field: drive commands info memories search
+**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 12 more; every field: drive commands info memories search
 
 **Example:** `drive personal memories search DOC_ID reviews scope:work`, `drive personal memories search DOC_ID "async reviews"`
 
@@ -942,7 +1191,7 @@ drive <profile> memories extract <document> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 
 | Option | What it does |
 |---|---|
@@ -970,7 +1219,7 @@ drive <profile> facts add <document> <statement> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `statement` | required | the fact, in one sentence. |
 
 | Option | What it does |
@@ -994,14 +1243,14 @@ drive <profile> facts list <document> [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many facts to return. Default: `50`. |
 
-**Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 9 more; every field: drive commands info facts list
+**Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 13 more; every field: drive commands info facts list
 
 **Example:** `drive personal facts list DOC_ID status:proposed`, `drive personal facts list DOC_ID kind:decision`
 
@@ -1015,7 +1264,7 @@ drive <profile> facts show <document> <fact>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `fact` | required | fact:<id> reference, as facts list prints it. |
 
 **Returns:** show one fact
@@ -1034,7 +1283,7 @@ drive <profile> facts confirm <document> <fact>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `fact` | required | fact:<id> reference, as facts list prints it. |
 
 **Returns:** confirm a proposed fact; a decision it supersedes stops holding
@@ -1053,7 +1302,7 @@ drive <profile> facts reverse <document> <fact>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `fact` | required | fact:<id> reference, as facts list prints it. |
 
 **Returns:** an accepted decision no longer holds, and nothing replaced it
@@ -1074,7 +1323,7 @@ drive <profile> identities list <document> [query]
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 **Returns:** drive document identity — google_id, role, person; every field: drive commands info identities list
@@ -1093,7 +1342,7 @@ drive <profile> identities link <document> <google-id> <person>
 
 | Argument | | What it is |
 |---|---|---|
-| `document` | required | Google file or folder id or URL in the local catalog. |
+| `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `google-id` | required | Google account id, as identities list prints it. |
 | `person` | required | person:<uid> reference of someone already known. |
 
@@ -4192,7 +4441,7 @@ drive <profile> config set <key> <json-value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required | max_text_chars, picture_search, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
+| `key` | required | max_text_chars, picture_search, google_client_id, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
 | `json-value` | required | the new value, as JSON. |
 
 | Option | What it does |
@@ -4224,6 +4473,20 @@ drive <profile> config unset <key> [options]
 **Returns:** remove one setting from this profile, the defaults or the top of the file
 
 **Example:** `drive personal config unset max_text_chars`, `drive personal config unset permissions.files --defaults`
+
+### `drive config migrate`
+
+write each setting the file lacks at its default, keeping yours
+
+This command changes local state.
+
+```sh
+drive config migrate
+```
+
+**Returns:** write each setting the file lacks at its default, keeping yours
+
+**Example:** `drive config migrate`
 
 ## `drive complete`
 
@@ -4337,108 +4600,6 @@ drive images models download <model>
 
 **Example:** `drive images models download clip-b32`
 
-## `drive mcp`
-
-serve this profile to an agent over MCP and set it up — `claude mcp add drive -- drive <profile> mcp serve`
-
-### `drive mcp serve`
-
-serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add drive -- drive <profile> mcp serve`; `drive mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
-
-This command can change Google data or send data to the configured model.
-
-```sh
-drive <profile> mcp serve [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--tools` | list the commands the server offers instead of starting it. |
-| `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
-| `--port <port>` | the local port for --http (default 8765). |
-| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/drive. |
-| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
-
-**Returns:** serve this profile's commands to an AI agent
-
-**Example:** `drive personal mcp serve --tools`, `drive personal mcp serve`, `drive personal mcp serve --http --public-url https://laptop.example.ts.net`
-
-### `drive mcp revoke`
-
-forget every login `mcp serve --http` gave a browser app, of this profile or of the server `--profiles` names; each app must log in again
-
-This command changes local state.
-
-```sh
-drive <profile> mcp revoke [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
-
-**Returns:** forget every login given to a browser app
-
-**Example:** `drive personal mcp revoke`
-
-### `drive mcp server`
-
-start, stop and check `mcp serve --http` in the background; status shows the login code for a browser app
-
-#### `drive mcp server start`
-
-start `mcp serve --http` apart from this shell and answer once it listens, with its login code
-
-This command changes local state.
-
-```sh
-drive <profile> mcp server start [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--port <port>` | the local port (default 8765). |
-| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
-| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
-
-**Returns:** start the HTTP MCP server in the background
-
-**Example:** `drive personal mcp server start --public-url https://laptop.example.ts.net`
-
-#### `drive mcp server stop`
-
-stop `mcp serve --http` — only one that `mcp server start` started
-
-This command changes local state.
-
-```sh
-drive <profile> mcp server stop [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
-
-**Returns:** stop the background HTTP MCP server
-
-**Example:** `drive personal mcp server stop`
-
-#### `drive mcp server status`
-
-whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
-
-```sh
-drive <profile> mcp server status [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
-
-**Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
-
-**Example:** `drive personal mcp server status --json`
-
 ## `drive commands`
 
 every command by section; --json prints its contract, one path per call
@@ -4458,68 +4619,6 @@ drive commands info [path]
 **Returns:** one command contract, or all schemas, error reasons and explicit overrides
 
 **Example:** `drive commands info --json`
-
-## `drive skill`
-
-the instructions an agent is given for this tool
-
-### `drive skill show`
-
-print SKILL.md — `drive skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
-
-```sh
-drive skill show [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
-
-**Returns:** print drive's SKILL.md
-
-**Example:** `drive skill show`
-
-### `drive skill install`
-
-write SKILL.md to \~/.claude/skills/drive-cli/ (Claude Code) and \~/.agents/skills/drive-cli/ (Codex, Gemini CLI, OpenClaw); --for hermes also has Hermes read \~/.agents/skills, which changes Hermes's own settings, so all leaves it out
-
-This command changes local state.
-
-```sh
-drive skill install [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
-
-**Returns:** put SKILL.md for Claude Code, Codex, Gemini CLI, OpenClaw, and Hermes on request
-
-**Example:** `drive skill install --for all`
-
-### `drive skill status`
-
-for each place `drive skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
-
-```sh
-drive skill status
-```
-
-**Returns:** whether the installed instructions for AI agents match this version
-
-**Example:** `drive skill status`, `drive skill status --json`
-
-## `drive doctor`
-
-check this installation: config, profiles, paths; no keyring, store or network
-
-```sh
-drive doctor
-```
-
-**Returns:** check this installation: config, profiles, paths; no keyring, store or network
-
-**Example:** `drive doctor`, `drive doctor --json`
 
 ## `drive upgrade`
 
@@ -4636,5 +4735,6 @@ Failures use the shared WireCat error contract.
 | `12` | `provider_unavailable` |
 | `13` | `invalid_response` |
 | `14` | `outcome_unknown` |
+| `15` | `conflict` |
 | `130` | `cancelled` |
 | `1` | anything else |

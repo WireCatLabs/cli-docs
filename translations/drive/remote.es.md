@@ -93,7 +93,7 @@ La dirección para la aplicación es la del túnel con `/mcp` al final, por ejem
 - **ChatGPT o Codex web:** abre **Plugins**, elige **+ Add custom MCP server** y crea un plugin con la dirección `/mcp` y OAuth siguiendo la [guía de OpenAI](https://developers.openai.com/api/docs/guides/custom-mcp-server). Elige el registro dinámico de clientes (DCR) cuando se ofrezca e instala el plugin antes de usarlo en una conversación.
 - **Claude:** añade un conector personalizado con esa dirección siguiendo [la guía de Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
 
-La aplicación abre la página de acceso de `drive`. Comprueba adónde vuelve el inicio de sesión: debe ser la aplicación que conectas, como `chatgpt.com` o `claude.ai`. Después introduce el código del terminal. Caduca a los diez minutos y se genera otro tras cada acceso. Cinco códigos incorrectos bloquean la página hasta reiniciar el servidor. La aplicación conserva la sesión mientras use la conexión al menos una vez cada 30 días.
+La aplicación abre la página de acceso de `drive`. Comprueba adónde vuelve el inicio de sesión: debe ser la aplicación que conectas, como `chatgpt.com` o `claude.ai`. Después introduce el código del terminal. Caduca a los diez minutos y se genera otro tras cada acceso. Tras cinco códigos incorrectos, la página rechaza todo intento durante 30 segundos; después se genera un código nuevo y el anterior deja de valer. La aplicación conserva la sesión mientras use la conexión al menos una vez cada 30 días.
 
 El servidor ofrece las mismas tres herramientas que la conexión local: `drive_tools_search`, `drive_read` y `drive_write`. El texto de los documentos son datos, nunca instrucciones.
 
@@ -119,6 +119,6 @@ Las aplicaciones tendrán que iniciar sesión con un código nuevo. Esto no desc
 ## Si no funciona
 
 - **La aplicación no se conecta:** abre `https://<device>.<network>.ts.net/.well-known/oauth-protected-resource/mcp` en el navegador. Debe mostrar un JSON breve. Si no aparece, Funnel no funciona, no está permitido en tu red de Tailscale o apunta a otro puerto.
-- **La página muestra "Too many wrong codes":** reinicia `drive personal mcp serve --http`. Si no los introdujiste tú, alguien encontró la dirección: considera cambiar el nombre del dispositivo en Tailscale.
+- **La página muestra "Too many wrong codes":** espera 30 segundos y escribe el código nuevo del terminal o de `drive personal mcp server status`. Si no los introdujiste tú, alguien encontró la dirección: considera cambiar el nombre del dispositivo en Tailscale.
 - **"port 8765 is in use":** otro servidor ocupa el puerto; elige otro con `--port` y dirige el túnel hacia él.
 - **Leer funciona, escribir no:** comprueba los permisos del perfil, las opciones `--permission` y el permiso de escritura de Google. `deny` y `readonly` bloquean la escritura aunque la aplicación la apruebe.
