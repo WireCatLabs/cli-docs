@@ -109,6 +109,76 @@ tg personal tags add work --chat "Book club"
 
 `drive` importa documentos a su almacén local configurado. Un documento puede llevar etiquetas, notas, hechos y recuerdos, y vincularse con una persona (`drive personal relationships`, `drive personal tags`). `drive personal documents list person:7` lista los documentos vinculados a esa persona.
 
+## Relaciones de negocio
+
+Una relación de negocio dice qué son dos de tus registros el uno para el otro: Alice es un contacto de Acme Ltd, Emma
+depende de Dana, Acme Ltd le compra a tu empresa. `memo` y una herramienta de CRM como `b24` guardan estas relaciones
+en el almacén compartido. Así tu agente, `memo` y WireCat Desktop leen la misma respuesta, con la fuente de cada
+relación.
+
+### Tipos y roles
+
+| Tipo | Desde → hacia | Roles | Leída desde el otro extremo |
+| --- | --- | --- | --- |
+| `member-of` | una persona → una organización o un proyecto | en una organización `employee`, `contractor`, `founder`, `owner`, `manager`, `adviser`, `contact`. En un proyecto `owner`, `manager`, `contributor`, `client-contact`, `approver` | las personas de la organización o del proyecto |
+| `reports-to` | una persona → una persona | ninguno | `manages` |
+| `customer-of` | una persona o una organización → una organización | ninguno | proveedor (supplier of) |
+| `partner-of` | una organización ↔ una organización | ninguno | igual en los dos sentidos |
+| `related-to` | una negociación o un prospecto → una persona | `owner`, `contact`, `decision-maker`, `influencer` | las negociaciones y prospectos de la persona |
+
+Cada relación tiene un solo nombre. El almacén guarda un sentido, y una respuesta leída desde el otro extremo muestra
+el nombre inverso, como `manages` para `reports-to`. No hay un segundo nombre que guardar, así que una relación no
+puede estar dos veces con dos nombres. Un chat también puede ser `member-of` de un proyecto, y `related-to` une
+personas, organizaciones, proyectos y tareas cuando ningún otro tipo encaja.
+
+Un rol dice qué es la persona en ese sitio, y sale de la lista de arriba. El cargo es otra cosa: se guarda junto al
+rol, por ejemplo `--position "Procurement manager"`, y nunca es un rol. Una persona puede tener varios roles en la
+misma organización. `memo` rechaza un rol que no está en la lista y muestra la lista. Un rol guardado antes de que
+existieran las listas se queda como estaba, y `relationships list` lo marca como `custom`.
+
+### Qué tan segura es una relación
+
+Cada relación de una respuesta tiene un estado (standing):
+
+| Estado | Significa |
+| --- | --- |
+| `confirmed` | La escribiste tú o la confirmaste. |
+| `reported` | Lo dice una cuenta de CRM y nadie lo confirmó. La respuesta nombra la cuenta. |
+| `proposed` | La sugirió tu agente o un análisis del almacén. Te espera en `memo review`. |
+| `ended` | Existió y ya no existe. La terminaste tú, o la fuente dejó de informarla. |
+
+Tu palabra manda. Una sincronización del CRM nunca cambia ni termina una relación que tú creaste o confirmaste, y
+nunca vuelve a escribir una que quitaste o rechazaste. Si el CRM informa otro rol para el mismo par, es una segunda
+relación junto a la tuya, con su propio estado. Cuando el CRM deja de informar una relación, por ejemplo porque un
+contacto dejó una empresa, la sincronización la termina. Se queda en el almacén como `ended` y nunca se borra. El
+almacén también guarda cada cambio de una relación: cuándo se añadió, cambió, terminó, se confirmó, se rechazó, la
+retiró su fuente, se volvió a informar o se quitó.
+
+### Del CRM a personas y organizaciones
+
+Una sincronización del CRM convierte sus registros en las personas y organizaciones que ya tienes:
+
+- **Una empresa** pasa a ser una organización. Una empresa con el mismo nombre que una tuya sigue siendo otra
+  organización, porque los nombres nunca se comparan.
+- **Un contacto** pasa a ser una persona. Se une a una persona que ya tienes solo cuando la dirección de correo es
+  exactamente la misma. Un nombre nunca basta. Si separaste dos identidades, siguen separadas tras cada
+  sincronización.
+- **Tu propia empresa** en el CRM queda marcada como tuya. Una empresa que es `customer-of` tu empresa es un
+  `client`, y una de la que tu empresa es `customer-of` es un `supplier`. Estas categorías se calculan a partir de
+  las relaciones cada vez que preguntas. Un tipo de empresa del CRM, como `CUSTOMER`, hace cliente a una empresa solo
+  cuando tú dices qué significa ese tipo.
+- **Un empleado** de la cuenta del CRM pasa a ser una persona, miembro de tu empresa con el rol `employee`.
+- **Las líneas de mando** salen de los departamentos: cada empleado depende del jefe de su departamento, y un jefe
+  del jefe del departamento superior. La respuesta dice que esta línea se dedujo de los jefes de departamento.
+
+Hay cosas que un CRM no puede decir, así que solo vienen de ti. En Bitrix24 son el papel de un contacto en una
+negociación (quien decide o quien influye), de quién depende un contacto, la empresa matriz de una empresa y las
+fechas en que una relación empezó o terminó. La sección «Quién es quién» de la [guía de Bitrix24](./b24/usage.md)
+dice qué lee `b24` y qué ajustes lo cambian, por ejemplo para que cada nueva relación del CRM espere tu revisión.
+
+Para ver las relaciones de una persona, una empresa o una negociación, con ejemplos: [Clientes, colegas y
+negociaciones](./people.md#clientes-colegas-y-negociaciones).
+
 ## Quién crea un vínculo
 
 | Vínculo | Lo crea |

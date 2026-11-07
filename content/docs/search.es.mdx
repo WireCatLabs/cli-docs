@@ -54,6 +54,68 @@ Cada resultado indica si es un mensaje o una nota. `tg` y `max` no buscan en el 
 `memo search mail`, y `memo search all invoice` busca en mensajes, correo y notas a la vez. Las secciones
 siguientes buscan en un solo tipo.
 
+## Buscar negociaciones del CRM y separar el trabajo
+
+`memo search all` también encuentra las negociaciones y los prospectos que guardó una herramienta de CRM como
+[`b24`](./b24/usage.md), por las palabras de su título. `--only crm` busca solo entre ellos:
+
+```sh
+memo search all 'renewal' --only crm
+```
+
+Las personas y las empresas no están en `search all`. Encuéntralas con `memo search people` y
+`memo organizations list`. Cuando los [permisos](./memo/configuration.md#permissions) de memo niegan las
+negociaciones o los prospectos, `search all` los deja fuera y lo dice.
+
+Una pregunta sobre quién es alguien, o sobre cómo se relacionan una persona, una empresa y una negociación, se
+responde mejor desde su contexto que con una búsqueda. Pide a tu agente que siga este orden:
+
+1. Encontrar el registro: `memo search people`, `memo organizations list` o `memo deals list`.
+2. Leer su contexto: `memo context person:<id>`, `memo organizations context <ref>` o
+   `memo deals context <ref> --brief`.
+3. Seguir solo las relaciones que pide la pregunta, por ejemplo
+   `memo relationships list kind:reports-to 'to:"person:12"'`.
+4. Buscar las pruebas después, con `memo search all`.
+5. Citar las referencias y nombrar cada hueco que la respuesta lista en «Not read». Una relación `reported` es solo
+   la palabra del CRM.
+
+[Clientes, colegas y negociaciones](./people.md#clientes-colegas-y-negociaciones) muestra estas respuestas con
+ejemplos.
+
+### Grupos de cuentas
+
+Un grupo separa tus cuentas de trabajo de las personales. Si no nombras un grupo, la orden lee todas las cuentas: es
+el grupo `all`, que siempre existe y nunca deja nada fuera. `personal`, `work` y cualquier otro grupo los guardas
+tú. Pon la cuenta del CRM y tu mensajería de trabajo en `work`, nombra el grupo como primera palabra, y la orden lee
+solo sus cuentas:
+
+```sh
+memo groups add work bitrix24:example.bitrix24.com
+memo groups add work tg:work
+memo groups list
+memo work search all 'renewal'
+memo work context person:3
+```
+
+Una cuenta puede estar en dos grupos, por ejemplo en `work` y en `personal`. `memo groups list` la muestra en los
+dos y resalta esos duplicados. También muestra los nombres de perfil de cada cuenta en cada herramienta, como
+`tg work` y `b24 work`. Un perfil que se llama como un grupo es solo una sugerencia y nunca mete una cuenta en ese
+grupo. `memo groups remove work telegram:102` saca una cuenta de un grupo, y
+`memo groups move telegram:102 personal work` la mueve en una sola escritura: primero la cuenta, luego el grupo que
+deja y luego el grupo al que entra. `MEMO_GROUP=work` funciona como la primera palabra para cada orden.
+
+Un grupo acota los mensajes, correos, eventos de calendario, registros del CRM y personas que lee una orden. Lo que
+creas tú en `memo` no pertenece a ninguna cuenta, así que está en todos los grupos: tus notas, proyectos, tareas,
+facturas, recuerdos y hechos.
+
+Una orden que no nombra grupo sigue leyendo todas las cuentas. Para mantener a un agente dentro de un grupo, arranca
+su `memo` con `MEMO_GROUP_LOCK`, por ejemplo `MEMO_GROUP_LOCK=work memo mcp serve`. Con el bloqueo, memo rechaza los
+mensajes, correos, eventos de calendario, registros del CRM y personas de cuentas fuera del grupo. También rechaza
+otro grupo, `--source all` y una cuenta fuera del grupo, y el agente no puede quitar el bloqueo. Una orden que no
+sabe mantenerse en un grupo se rechaza entera, así que el bloqueo falla cerrado.
+
+Qué órdenes funcionan con el bloqueo: [el servidor MCP de memo](./memo/mcp.md).
+
 ## Encontrar una palabra o frase
 
 Empieza por pedir al agente. Para MAX, escribe «max CLI» en lugar de «tg CLI»:

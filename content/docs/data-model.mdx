@@ -187,6 +187,35 @@ hold inherits it: a chat takes its account's scope unless it sets its own, and a
 scope of its evidence. A question asked for work reads only work data, so it never pulls in a
 private chat.
 
+## Business relationships in the store
+
+A business relationship is a link between two canonical records: a person, an organization, a project, a deal or a
+lead. Its kind comes from a fixed list (`member-of`, `reports-to`, `customer-of`, `partner-of`, `related-to`), and
+the list also says which ends each kind joins and which roles it takes. Only one direction is stored. An inverse
+such as `manages` or "supplier of" is a label that an answer shows when it reads the link from the other end.
+
+Each relationship link also keeps:
+
+- the account that reported it, such as one CRM account. It is empty for yours and for your agent's.
+- the day it started and the day it ended, when someone gave them. A CRM that gives no dates leaves them empty,
+  and the store never guesses them.
+- when its source stopped reporting it. The link stays, and an answer shows it as ended.
+- the source's own details, such as a job title or how a reporting line was derived.
+
+One pair of records holds at most one link per kind, role and reporting account. So your link and a CRM's link for
+the same pair stay apart, and a person can hold two roles in one organization. Every change to a relationship link
+writes a row to its history in the same write: added, changed, ended, confirmed, withdrawn, restored, rejected or
+removed. A removed link keeps its history.
+
+The standing of a relationship (`confirmed`, `reported`, `proposed` or `ended`) is not stored. It is worked out
+each time you read, from whether you confirmed the link, which account reported it, whether it ended, and the
+proposals waiting for you. The categories of an organization (`client`, `supplier`, `partner`, `employer`) are
+worked out the same way, from its relationships with your own organizations.
+
+What a column already holds is never a link too: a deal's client organization, a deal's project, the deal a lead
+became, and the people on a task with their roles. What each standing means for a reader, and who makes each
+relationship: [How things are linked](./how-things-are-linked.md#business-relationships).
+
 ## How search finds context
 
 Finding context for an agent is three steps, in this order.

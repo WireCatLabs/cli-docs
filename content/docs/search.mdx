@@ -55,6 +55,66 @@ Each result says whether it is a message or a note. `tg` and `max` do not search
 does, and `memo search all invoice` searches messages, mail and notes at once. The sections below search one
 kind.
 
+## Search CRM deals and keep work apart
+
+`memo search all` also finds the deals and leads a CRM tool such as [`b24`](./b24/usage.md) stored, by the words of
+their title. `--only crm` searches them alone:
+
+```sh
+memo search all 'renewal' --only crm
+```
+
+People and companies are not in `search all`. Find them with `memo search people` and `memo organizations list`.
+When memo's [permissions](./memo/configuration.md#permissions) deny deals or leads, `search all` leaves them out and
+says so.
+
+A question about who someone is, or how a person, a company and a deal relate, is better answered from their
+context than from search. Ask your agent to work in this order:
+
+1. Find the one record: `memo search people`, `memo organizations list` or `memo deals list`.
+2. Read its context: `memo context person:<id>`, `memo organizations context <ref>` or
+   `memo deals context <ref> --brief`.
+3. Follow only the relationships the question needs, for example
+   `memo relationships list kind:reports-to 'to:"person:12"'`.
+4. Search for the evidence after that, with `memo search all`.
+5. Cite the references, and name every gap the answer lists under "Not read". A `reported` relationship is only
+   the CRM's word.
+
+[Clients, colleagues and deals](./people.md#clients-colleagues-and-deals) shows these answers with examples.
+
+### Groups of accounts
+
+A group keeps your work accounts apart from your personal ones. With no group named, a run reads every account:
+that is the group `all`, which always exists and never leaves anything out. `personal`, `work` and any other group
+are groups you save yourself. Put the CRM account and your work messenger in `work`, then name the group first, and
+the run reads only its accounts:
+
+```sh
+memo groups add work bitrix24:example.bitrix24.com
+memo groups add work tg:work
+memo groups list
+memo work search all 'renewal'
+memo work context person:3
+```
+
+An account can be in two groups, for example in `work` and in `personal`. `memo groups list` shows it in both and
+highlights these duplicates. It also shows each account's profile names in every tool, such as `tg work` and
+`b24 work`. A profile named like a group is only a suggestion and never puts an account in that group.
+`memo groups remove work telegram:102` takes an account out of a group, and
+`memo groups move telegram:102 personal work` moves it in one write: first the account, then the group it leaves,
+then the group it joins. `MEMO_GROUP=work` works like the first word for every command.
+
+A group narrows the messages, mail, calendar events, CRM records and people a run reads. What you make yourself in
+`memo` belongs to no account, so it is in every group: your notes, projects, tasks, invoices, memories and facts.
+
+A run that names no group still reads every account. To keep an agent inside one group, start its `memo` with
+`MEMO_GROUP_LOCK`, for example `MEMO_GROUP_LOCK=work memo mcp serve`. Under the lock, memo refuses the messages,
+mail, calendar events, CRM records and people of accounts outside the group. It also refuses another group,
+`--source all` and an account outside the group, and the agent cannot lift the lock. A command that cannot keep to
+a group is refused as a whole, so the lock fails closed.
+
+Which commands run under the lock: [Lock an agent to a group](./memo/mcp.md#lock-an-agent-to-a-group).
+
 ## Find a word or phrase
 
 Start by asking your agent. For MAX, write “max CLI” instead of “tg CLI”:

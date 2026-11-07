@@ -208,6 +208,185 @@ your agent shows you. Setup is in [Telegram auto-replies](./tg/replies.md) and
 Once you know the context, ask for a [draft reply](./prompting.mdx#draft-a-reply-then-decide-whether-to-send)
 and review the wording before authorising a send.
 
+## Clients, colleagues and deals
+
+Before a call with a client, you want one picture of them: their company, their part in a deal, whom they report
+to, and what you discussed. `memo` builds that picture from your CRM, your chats, your mail and your calendar. Each
+relationship in it says how sure it is, and the answer names what it could not read. Your CRM must be synced first,
+for example with [`b24`](./b24/usage.md), so its contacts, companies and deals are in the local store.
+
+```text prompt
+Use memo CLI. Before my call with Alice from Acme Ltd, show her company, her role in our open deals, whom she
+reports to and what we discussed last month. Say which facts only the CRM reports, and what you could not read.
+```
+
+The agent finds the person, then reads their context. You can run the same commands yourself:
+
+```sh
+memo search people alice
+memo context person:3
+memo organizations context organization:1
+memo deals context deal:1 --brief
+memo relationships list kind:reports-to 'to:"person:12"'
+```
+
+- `memo context person:<id>` reads every account that saw the person: the CRM, Telegram, mail and calendars. It
+  works for a person known only from the CRM, and for a name you added with `memo people add`.
+- `memo organizations context <ref>` shows an organization's people by role, its customers, suppliers and partners,
+  its projects, open deals and leads, its invoices and payments as stored, and its open tasks.
+  `memo organizations list category:client` lists your clients, and `supplier`, `partner` and `employer` work the
+  same way.
+- `memo deals context <ref>` shows one deal: its stages, client, people with their roles, owner, project, money,
+  and the messages, mail and meetings of its people while it was open. `--brief` is the short form for an agent.
+  `memo leads context` does the same for a lead.
+- `memo relationships list` filters by `kind:`, `role:`, `standing:`, `from:`, `to:` and `at:<day>` (held on that
+  day). It leaves out ended relationships unless you add `include:ended`. With `about:<ref>`, each row also shows
+  its direction and the inverse name.
+
+What each kind, role and standing means: [Business relationships](./how-things-are-linked.md#business-relationships).
+To keep work accounts apart from personal ones: [Search CRM deals and keep work apart](./search.mdx#search-crm-deals-and-keep-work-apart).
+
+### Examples
+
+The examples below use a sample store. Your own company is Northstar Consulting, its CRM is Bitrix24 at
+`example.bitrix24.com`, and Acme Ltd is a client. Alice and Bob are Acme's contacts, and Emma and Dana work at
+Northstar. Your numbers and names will differ.
+
+**A person known only from the CRM.** Emma is a Northstar employee with no messenger account. Her context still
+answers, from the CRM and your calendar:
+
+```text
+$ memo context person:7
+Emma  person:7
+  email:emma@northstar.example
+  bitrix24:example.bitrix24.com/user/u1  Emma
+...
+Business
+Organizations
+  Northstar Consulting  organization:2  member-of employee (Sales owner) reported by bitrix24:example.bitrix24.com
+Reports to
+  Dana  person:12  reports-to reported by bitrix24:example.bitrix24.com
+Deals and leads
+  Acme renewal · New  deal:1  related-to owner reported by bitrix24:example.bitrix24.com
+Categories  employer
+...
+Not read: messages — no messenger identity is linked to them
+Read: bitrix24:example.bitrix24.com, google-calendar:owner@northstar.example
+```
+
+"Sales owner" is her job title. Her role is `employee`. "Not read" says that her messages could not be read,
+because no messenger account is linked to her.
+
+**The same person in the CRM and in Telegram.** Alice is a CRM contact and writes to you in Telegram. Once her
+Telegram account and her CRM contact are one person, one context holds both:
+
+```text
+$ memo context person:3
+Alice  person:3
+  email:alice@acme.example
+  bitrix24:example.bitrix24.com/contact/7  Alice
+  telegram:201  Alice
+
+Last from them   2026-10-04 00:00  telegram  Alice: Can we renew Atlas before December?  msg:telegram/100/201/1
+...
+Business
+Organizations
+  Acme Ltd  organization:1  member-of contact (Procurement manager) reported by bitrix24:example.bitrix24.com
+Deals and leads
+  Acme renewal · New  deal:1  related-to contact reported by bitrix24:example.bitrix24.com
+Categories  client
+...
+Read: bitrix24:example.bitrix24.com, google-calendar:owner@northstar.example, telegram:100
+```
+
+Her CRM contact joined her mail address because the address is the same. The Telegram account joined because you
+linked it, for example with `tg personal contacts link`. A matching name never joins two accounts.
+
+**An organization with employees and customers.** Your own company shows its people and its customers:
+
+```text
+$ memo organizations context organization:2
+Northstar Consulting  organization:2  (your own)
+Categories  employer
+People
+  Emma  person:7  member-of employee (Sales owner) reported by bitrix24:example.bitrix24.com
+  person:1  person:1  member-of founder confirmed
+  Dana  person:12  member-of employee (Head of sales) reported by bitrix24:example.bitrix24.com
+Customers
+  Acme Ltd  organization:1  customer-of confirmed
+Written by its people  0 messages, 0 emails, 1 meetings
+Read: bitrix24:example.bitrix24.com, google-calendar:owner@northstar.example
+Not read: messages — no messenger identity is linked to them
+```
+
+`person:1` is you. The employees come from the CRM, so they are `reported`. Acme Ltd is a customer because you said
+so, so it is `confirmed`. `memo organizations context organization:1` shows the same from Acme's side: Alice and Bob,
+Northstar under Suppliers, the open deal, the invoice and the open task.
+
+**A deal with a decision-maker and a related meeting.** The CRM knows Alice as the deal's contact and Emma as its
+owner. Bob as the decision-maker comes from you, because Bitrix24 keeps no role for a deal's contact:
+
+```text
+$ memo deals context deal:1 --brief
+Acme renewal  deal:1  Example sales/New  open
+client Acme Ltd; owner Emma; project Atlas
+  Alice  person:3  contact  reported
+  Emma  person:7  owner  reported
+  Bob  person:5  decision-maker  confirmed
+stages ∅ → New
+invoiced issued 1200.00 EUR; paid none
+1 messages, 1 emails, 1 meetings (proposed); 1 open tasks
+```
+
+The meeting is the call with all three of them while the deal was open. It is marked `proposed`, because it shares
+people with the deal and nothing links it to the deal. The invoice is issued and nothing is paid. A stage named Won
+is not a payment either: money is what the invoices and payments say. Without `--brief`, the answer lists the
+meeting, the mail and the message with their references.
+
+**A reporting line with its source.** Emma reports to Dana. Ask for the source fields to see where this came from:
+
+```text
+$ memo relationships list 'about:"person:7"' --json=id,from,to,kind,standing,account,derived
+{"items":[...,{"id":"9","from":"person:7","to":"person:12","kind":"reports-to","standing":"reported",
+"account":"bitrix24:example.bitrix24.com","derived":"department-head"}],...}
+```
+
+The CRM account reported it, and `derived` says that it was worked out from the head of Emma's department. Nobody
+confirmed it. Read from Dana's side, the same row says `manages`:
+
+```text
+$ memo relationships list 'about:"person:12"'
+9  Person «Emma» → Person «Dana»  manages  reported by bitrix24:example.bitrix24.com
+10  Person «Dana» → Organization «Northstar Consulting»  member-of as employee (Head of sales)  reported by bitrix24:example.bitrix24.com
+```
+
+A reporting line your agent adds is only a suggestion until you confirm it:
+
+```text
+$ memo relationships list 'about:"person:5"' kind:reports-to
+1  Person «Alice» → Person «Bob»  manages  proposed by claude-code
+```
+
+**A relationship that changed and waits for review.** You set the CRM account's links to `review`. Then two things
+change in the CRM: Alice leaves Acme Ltd, and Bob is added as a contact on the deal. After the next sync:
+
+```text
+$ memo relationships list 'about:"person:3"' include:ended
+4  Deal «Acme renewal · New» (Atlas) → Person «Alice»  related-to as contact  reported by bitrix24:example.bitrix24.com
+1  Person «Alice» → Person «Bob»  reports-to  proposed by claude-code
+1  Person «Alice» → Organization «Acme Ltd»  member-of as contact (Procurement manager)  ended by bitrix24:example.bitrix24.com
+
+$ memo review list kind:relationship
+2  relationship  Deal «Acme renewal · New» (Atlas) → Person «Bob» as contact  bitrix24  11-07
+   reported by bitrix24:example.bitrix24.com
+1  relationship  Person «Alice» → Person «Bob»  claude-code  11-07
+   Alice said so on the renewal call
+```
+
+Alice's membership is `ended`, and it is still there with its history. Bob's new role waits in `memo review`, and
+his `decision-maker` role from you stays as it was. `memo review confirm 2` makes the new role yours, and
+`memo review reject 2 --reason "not on this deal"` turns it down, so the sync does not suggest it again.
+
 ## Phones, links, names and addresses
 
 Find where someone sent a phone number, every link to one site, every chat that mentions a document, or every message
