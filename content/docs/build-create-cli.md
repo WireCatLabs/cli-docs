@@ -129,8 +129,7 @@ each one reads and writes, and the commands Desktop runs to check, set up, sync 
 A tool made with cli-template 0.19.0 or later has all of this from `new`:
 
 - The bin calls `wcatStart` before the program loads, with `DESKTOP` from `src/identity.ts`: the docs link, the tagline
-  (`--tagline`, made from the description when left out) and sign-in texts made from your `--sign-in` answer. Rewrite
-  the texts in your own words. `src/wcat.ts` adds each command's permission key and exports it all as `WCAT`.
+  (made from the description) and sign-in texts made from your `--sign-in` answer. Rewrite both in your own words. `src/wcat.ts` adds each command's permission key and exports it all as `WCAT`.
 - `package.json` names the program twice: the command word (`acme-crm`) and `wcat-acme-crm`, which `wcat acme-crm`
   runs.
 - `pnpm generate` writes `contracts/wirecat.json` with `cli-dev manifest`, and `pnpm contracts:check` checks it.
@@ -190,16 +189,16 @@ and no such package exists. Use your own scope and service.
 
    ```sh
    npx @wirecat/cli-template new acme-crm-cli --command acme-crm --package @leemour/acme-crm-cli --owner leemour \
-     --category crm --tagline "Your Acme CRM deals, searchable on your computer"
+     --category crm
    cd acme-crm-cli && pnpm install
    ```
 
 2. **Add a command with your agent.** Open the folder with your AI agent and ask: "Add `deals list`: it lists my
    deals from the Acme CRM API, docs at https://example.com/api. It only reads." Try it on your account
    after `pnpm build`: `node dist/bin/acme-crm.js personal deals list`.
-3. **Check what Desktop will show.** Rewrite the sign-in texts in `DESKTOP` in `src/identity.ts`, for example
-   `gives: "your Acme CRM contacts and deals"` and `asks: "an Acme CRM API token"`. `appName` is already
-   `leemour-acme-crm-cli`.
+3. **Check what Desktop will show.** Rewrite the tagline and the sign-in texts in `DESKTOP` in `src/identity.ts`, for
+   example `tagline: "Your Acme CRM deals, searchable on your computer"`, `gives: "your Acme CRM contacts and deals"`
+   and `asks: "an Acme CRM API token"`. `appName` is already `leemour-acme-crm-cli`.
 4. **Generate and commit.** `pnpm generate` builds the tool and rewrites its contracts, the manifest
    `contracts/wirecat.json` among them:
 
@@ -240,15 +239,14 @@ source code and your pages, are never touched. `--dry-run` lists what would chan
 
 For when you or your agent need the exact options.
 
-### The eight questions
+### The seven questions
 
-Each answer except the tagline and the languages is a choice from a short list, and also takes `other:<your answer>`. Without a
+Each answer except the languages is a choice from a short list, and also takes `other:<your answer>`. Without a
 terminal, for example in a script or an agent's shell, pass them as flags. A missing one is then an error that lists
 the choices; nothing is guessed.
 
 | Question | Flag | Choices (several are comma-separated) |
 | --- | --- | --- |
-| What line should WireCat Desktop show? | `--tagline` | at most 55 characters; left out, it is made from the description |
 | What kind of tool is it? | `--category` | `messenger`, `mail`, `notes`, `files`, `meetings`, `calendar`, `crm` |
 | Which languages is the content in? | `--content-lang` | language codes, several allowed: `en,ru` |
 | How does a person sign in? | `--sign-in` | `oauth`, `token`, `session` (phone code, QR), `none` |

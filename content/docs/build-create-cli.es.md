@@ -143,8 +143,8 @@ herramienta. Necesita `@wirecat/cli-base` 0.81.0 o posterior.
 Una herramienta creada con cli-template 0.19.0 o posterior trae todo esto desde `new`:
 
 - El bin llama a `wcatStart` antes de cargar el programa, con `DESKTOP` de `src/identity.ts`: el enlace a la
-  documentación, la frase para Desktop (`--tagline`, hecha a partir de la descripción si no la das) y los textos de
-  inicio de sesión según tu respuesta a `--sign-in`. Reescribe los textos con tus palabras. `src/wcat.ts` añade la clave
+  documentación, la frase para Desktop (hecha a partir de la descripción) y los textos de inicio de sesión según tu
+  respuesta a `--sign-in`. Reescríbelos con tus palabras. `src/wcat.ts` añade la clave
   de permiso de cada comando y exporta todo como `WCAT`.
 - `package.json` nombra el programa dos veces: con la palabra del comando (`acme-crm`) y como `wcat-acme-crm`, que
   ejecuta `wcat acme-crm`.
@@ -207,16 +207,16 @@ ejemplo, y ese paquete no existe. Usa tu propio ámbito y tu servicio.
 
    ```sh
    npx @wirecat/cli-template new acme-crm-cli --command acme-crm --package @leemour/acme-crm-cli --owner leemour \
-     --category crm --tagline "Your Acme CRM deals, searchable on your computer"
+     --category crm
    cd acme-crm-cli && pnpm install
    ```
 
 2. **Añade un comando con tu agente.** Abre la carpeta con tu agente de IA y pídele: «Añade `deals list`: lista mis
    acuerdos de la API de Acme CRM, documentación en https://example.com/api. Solo lee». Pruébalo con tu cuenta tras
    `pnpm build`: `node dist/bin/acme-crm.js personal deals list`.
-3. **Revisa lo que mostrará Desktop.** Reescribe los textos de inicio de sesión en `DESKTOP` en `src/identity.ts`, por
-   ejemplo `gives: "your Acme CRM contacts and deals"` y `asks: "an Acme CRM API token"`. `appName` ya es
-   `leemour-acme-crm-cli`.
+3. **Revisa lo que mostrará Desktop.** Reescribe la frase y los textos de inicio de sesión en `DESKTOP` en
+   `src/identity.ts`, por ejemplo `tagline: "Your Acme CRM deals, searchable on your computer"`, `gives: "your Acme
+   CRM contacts and deals"` y `asks: "an Acme CRM API token"`. `appName` ya es `leemour-acme-crm-cli`.
 4. **Genera y haz commit.** `pnpm generate` compila la herramienta y reescribe sus contratos, entre ellos el
    manifiesto `contracts/wirecat.json`:
 
@@ -257,15 +257,14 @@ solo puso una vez, como tu código y tus páginas, nunca se tocan. `--dry-run` l
 
 Para cuando tú o tu agente necesitéis las opciones exactas.
 
-### Las ocho preguntas
+### Las siete preguntas
 
-Cada respuesta, salvo la frase para Desktop y los idiomas, es una opción de una lista corta, y también admite `other:<tu respuesta>`. Sin
+Cada respuesta, salvo los idiomas, es una opción de una lista corta, y también admite `other:<tu respuesta>`. Sin
 terminal, por ejemplo en un script o en la shell de un agente, pásalas como opciones. Entonces una respuesta que falta
 es un error que lista las opciones; no se adivina nada.
 
 | Pregunta | Opción | Valores (varios, separados por comas) |
 | --- | --- | --- |
-| ¿Qué frase debe mostrar WireCat Desktop? | `--tagline` | 55 caracteres como mucho; si falta, se hace a partir de la descripción |
 | ¿Qué tipo de herramienta es? | `--category` | `messenger`, `mail`, `notes`, `files`, `meetings`, `calendar`, `crm` |
 | ¿En qué idiomas está el contenido? | `--content-lang` | códigos de idioma, se admiten varios: `en,ru` |
 | ¿Cómo inicia sesión una persona? | `--sign-in` | `oauth`, `token`, `session` (código por teléfono, QR), `none` |

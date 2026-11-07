@@ -139,8 +139,8 @@ Desktop). Прежде чем что-то установить, он читае�
 В инструменте, созданном cli-template 0.19.0 или новее, всё это `new` делает сам:
 
 - bin до загрузки программы вызывает `wcatStart` с `DESKTOP` из `src/identity.ts`: ссылкой на документацию, строкой
-  для Desktop (`--tagline`, а без него — из описания) и текстами входа по вашему ответу на `--sign-in`. Перепишите
-  тексты своими словами. `src/wcat.ts` добавляет ключ разрешения каждой команды и экспортирует всё как `WCAT`.
+  для Desktop (её делают из описания) и текстами входа по вашему ответу на `--sign-in`. Перепишите их своими
+  словами. `src/wcat.ts` добавляет ключ разрешения каждой команды и экспортирует всё как `WCAT`.
 - `package.json` называет программу дважды: словом команды (`acme-crm`) и `wcat-acme-crm`, которую запускает
   `wcat acme-crm`.
 - `pnpm generate` пишет `contracts/wirecat.json` через `cli-dev manifest`, а `pnpm contracts:check` его проверяет.
@@ -201,16 +201,16 @@ Desktop запускает эту команду один раз и отказы
 
    ```sh
    npx @wirecat/cli-template new acme-crm-cli --command acme-crm --package @leemour/acme-crm-cli --owner leemour \
-     --category crm --tagline "Your Acme CRM deals, searchable on your computer"
+     --category crm
    cd acme-crm-cli && pnpm install
    ```
 
 2. **Добавьте команду с агентом.** Откройте папку с ИИ-агентом и попросите: «Добавь `deals list`: она показывает мои
    сделки из API Acme CRM, документация — https://example.com/api. Она только читает». Проверьте на своём аккаунте
    после `pnpm build`: `node dist/bin/acme-crm.js personal deals list`.
-3. **Проверьте, что покажет Desktop.** Перепишите тексты входа в `DESKTOP` в `src/identity.ts`, например
-   `gives: "your Acme CRM contacts and deals"` и `asks: "an Acme CRM API token"`. `appName` уже равен
-   `leemour-acme-crm-cli`.
+3. **Проверьте, что покажет Desktop.** Перепишите строку для Desktop и тексты входа в `DESKTOP` в `src/identity.ts`,
+   например `tagline: "Your Acme CRM deals, searchable on your computer"`, `gives: "your Acme CRM contacts and deals"`
+   и `asks: "an Acme CRM API token"`. `appName` уже равен `leemour-acme-crm-cli`.
 4. **Сгенерируйте и закоммитьте.** `pnpm generate` собирает инструмент и переписывает его контракты, среди них
    манифест `contracts/wirecat.json`:
 
@@ -251,15 +251,14 @@ npx @wirecat/cli-template upgrade
 
 Для случаев, когда вам или агенту нужны точные параметры.
 
-### Восемь вопросов
+### Семь вопросов
 
-Каждый ответ, кроме строки для Desktop и языков, — выбор из короткого списка, и каждый также принимает `other:<ваш ответ>`. Без терминала,
+Каждый ответ, кроме языков, — выбор из короткого списка, и каждый также принимает `other:<ваш ответ>`. Без терминала,
 например в скрипте или в оболочке агента, передайте ответы флагами. Тогда пропущенный ответ — ошибка со списком
 вариантов; ничего не угадывается.
 
 | Вопрос | Флаг | Варианты (несколько — через запятую) |
 | --- | --- | --- |
-| Какую строку показывать в WireCat Desktop? | `--tagline` | не длиннее 55 символов; без него строка делается из описания |
 | Что это за инструмент? | `--category` | `messenger`, `mail`, `notes`, `files`, `meetings`, `calendar`, `crm` |
 | На каких языках содержимое? | `--content-lang` | коды языков, можно несколько: `en,ru` |
 | Как человек входит в сервис? | `--sign-in` | `oauth`, `token`, `session` (код по телефону, QR), `none` |
