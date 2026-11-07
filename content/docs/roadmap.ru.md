@@ -48,6 +48,7 @@ WireCat собирает ваш контекст в одном месте. Со�
 - [Планы Google Drive](./drive/roadmap.md)
 - [Планы Google Calendar](./gcal/roadmap.md)
 - [Планы Mail](./mail/roadmap.md)
+- [Планы Битрикс24](./b24/roadmap.md)
 - [Планы Memo](./memo/roadmap.md)
 - [Планы WhatsApp](./wa/roadmap.md)
 

@@ -79,6 +79,7 @@ export const sidebarIcons = {
   drive: FolderOpen,
   email: Mail,
   mail: Mail,
+  b24: Handshake,
   notes: StickyNote,
   tags: Tag,
   tasks: ListTodo,
