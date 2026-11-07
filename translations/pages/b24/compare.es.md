@@ -98,8 +98,8 @@ Notas sobre la columna de `b24`:
   por su nombre o su código, y la opción de una lista por su nombre. Negociaciones y prospectos leen los nombres que
   guardó el último `sync`.
 - **Una escritura se envía una vez.** Una escritura sin respuesta no se envía de nuevo: termina como
-  `outcome_unknown` con su `operation_id`, que Bitrix24 recibe como su `Idempotency-Key`. Revisa el portal antes de
-  repetirla.
+  `outcome_unknown` con su `operation_id`. Revisa el portal antes de repetirla: Bitrix24 hace una escritura repetida
+  por segunda vez.
 - **Solo una llamada.** `api call` queda para ti en una terminal; ninguna herramienta MCP la ofrece.
 - **ChatGPT o Claude en el navegador.** `mcp serve --http` sirve la herramienta detrás de un túnel HTTPS que tú
   configuras y mantienes, así que esta fila es en parte. Consulta el [uso](./usage.md#agents).

@@ -92,7 +92,7 @@ Notes on the `b24` column:
 - **Custom fields by label.** Deals, leads, contacts and companies take a custom field by its label or code, and a
   list field's option by its label. Deals and leads read the labels that the last `sync` stored.
 - **A write is sent once.** A write that got no answer is not sent again: it ends as `outcome_unknown` with its
-  `operation_id`, which Bitrix24 receives as its `Idempotency-Key`. Check the portal before you repeat it.
+  `operation_id`. Check the portal before you write it again: Bitrix24 makes a repeated write a second time.
 - **Only one call.** `api call` is kept for you at a terminal; no MCP tool offers it.
 - **ChatGPT or Claude in the browser.** `mcp serve --http` serves the tool behind an HTTPS tunnel that you set up and
   keep running yourself, so this row is partly. See [usage](./usage.md#agents).
