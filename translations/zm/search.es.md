@@ -102,7 +102,7 @@ Se mantienen las reglas de continuación y cobertura.
 
 Si una reunión aún no está vinculada a un proyecto ni etiquetada, busca palabras y revisa
 las fuentes antes de organizarla con [los registros compartidos de Memo](https://wirecat.dev/en/docs/memo/usage).
-Por MCP, ejecuta `search meetings` mediante `zm_write`: actualiza el índice de palabras antes de buscar.
+Por MCP, `search meetings` es una lectura: ejecútalo mediante `zm_read`. Actualiza el índice de palabras antes de buscar.
 Usa los mismos filtros y la misma sintaxis de tiempo que la CLI, en el perfil elegido por el servidor.
 
 `meetings people <query>` busca observaciones guardadas de participantes por nombre o correo en la cuenta elegida.
@@ -134,7 +134,8 @@ zm personal meetings task-proposal meeting:3/15/20/0 --type promise --json
 
 Para otras fuentes indica `--only messages,mail,notes,meetings`. Los mensajes pertenecen a la cuenta
 local elegida; el correo incluye cuentas guardadas y las notas son globales al almacén compartido.
-Las reuniones usan prefijos de palabras; la sintaxis no admitida y las consultas exactas se marcan como
+Las notas se encuentran por cualquier parte de una palabra, sin importar mayúsculas, títulos incluidos; una búsqueda
+de notas de uno o dos caracteres se rechaza con "search needs at least three characters". Las reuniones usan prefijos de palabras; la sintaxis no admitida y las consultas exactas se marcan como
 omitidas. Continúa la lista mediante `--page`. JSONL emite cada coincidencia en un registro item,
 seguido del registro end. Las fuentes omitidas dejan `meta.complete` en false y aparecen en `issues`,
 con el motivo por stderr; la búsqueda termina con código cero.
@@ -202,7 +203,7 @@ silenciosamente a la nueva versión. Para rechazar una línea modificada, pasa e
 anterior con `--expected-fingerprint`. JSON conserva las líneas estructuradas y sus huellas; Markdown
 cita el texto de la transcripción. `--json=items.ref,items.start_ms,items.speaker_name,items.text` conserva solo esos campos.
 
-Por MCP (`zm personal mcp`) un agente ejecuta el mismo `meetings passage` mediante `zm_read`, con los mismos
+Por MCP (`zm personal mcp serve`) un agente ejecuta el mismo `meetings passage` mediante `zm_read`, con los mismos
 argumentos; el servidor fija el perfil. Pide al agente que cite el contexto antes de sugerir
 un hecho o una tarea de seguimiento.
 

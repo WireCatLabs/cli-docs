@@ -45,12 +45,13 @@ fuera de la cuenta del desarrollador. Pide acceso al dueño o administrador; cre
 política de empresa. [Reutilizar una app](./zoom-app.md#use-an-app-you-already-created) muestra los ajustes.
 Puedes importar VTT autorizados sin la API.
 
-### El login informa un error del almacén de contraseñas
+### El login dice que no pudo llegar al almacén de contraseñas del sistema
 
-El almacén debe estar instalado, activo y accesible para este usuario. Conecta desde el mismo
-usuario/sesión del sistema donde esté disponible; un entorno sin escritorio puede carecer de él.
-No se guarda el token en un archivo de texto. Tras repararlo, repite login y comprueba
-`zm personal session status --json`.
+El almacén de contraseñas del sistema está bloqueado, no se está ejecutando o no es accesible desde esta
+sesión (una máquina sin escritorio, el shell de un agente, `ssh`). El login funciona igual: guarda los tokens
+en `credentials.json` en la carpeta de configuración de zm, que solo tú puedes leer, y responde
+`credential_storage: "file"`. Para devolverlos, desbloquea el almacén y vuelve a ejecutar `session start` desde
+una sesión de escritorio.
 
 ### Las órdenes terminan con "Zoom token request failed"
 

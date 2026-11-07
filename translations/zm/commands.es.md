@@ -28,10 +28,11 @@ These options apply to every command.
 | `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
 | `--brief` | found items as reference, title, time, author and excerpt only. |
 | `--full` | found items with their whole text and every provider field. |
+| `--compact` | one line per item for an agent: reference first, text last, paging and next steps as # lines. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
-| `--record` | keep this run — ids and timings, never content. |
-| `--no-record` | do not keep it, whatever the configuration says. |
+| `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
+| `--no-record` | do not keep this run, even if it fails. |
 
 ## `zm runs`
 
@@ -54,7 +55,7 @@ zm runs list [query] [options]
 | `--limit <n>` | how many to show. Default: `20`. |
 | `--page <n>` | which page, starting at 1. Default: `1`. |
 
-**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 20 more; every field: zm commands info runs list
+**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: zm commands info runs list
 
 **Example:** `zm runs list --limit 10`
 
@@ -74,7 +75,7 @@ zm runs show <run-id> [options]
 |---|---|
 | `--problems` | only failed responses, warnings and crashes. |
 
-**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 19 more; every field: zm commands info runs show
+**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 22 more; every field: zm commands info runs show
 
 **Example:** `zm runs show run-101`
 
@@ -93,6 +94,181 @@ zm runs path <run-id>
 **Returns:** run location — path; every field: zm commands info runs path
 
 **Example:** `zm runs path run-101`
+
+## `zm doctor`
+
+the state this installation is in, without connecting unless --online
+
+```sh
+zm doctor [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--online` | also connect once and read the account; sends nothing. |
+
+**Returns:** the state this installation is in, without connecting unless --online
+
+**Example:** `zm doctor`, `zm doctor --json`
+
+## `zm mcp`
+
+serve this profile to an agent over MCP and set it up — `claude mcp add zm -- zm <profile> mcp serve`
+
+### `zm mcp serve`
+
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add zm -- zm <profile> mcp serve`; `zm mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
+
+**Changes remote Zoom data.**
+
+```sh
+zm mcp serve [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--permission <key=level>` | make a permission stricter for this server only, like remote-meetings=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+| `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
+| `--port <port>` | the local port for --http (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+
+**Returns:** serve this profile's commands to an AI agent
+
+**Example:** `zm personal mcp serve`, `zm personal mcp serve --profiles work,personal`, `zm personal mcp serve --http --public-url https://laptop.example.ts.net`
+
+### `zm mcp revoke`
+
+forget every login `mcp serve --http` gave a browser app, of this profile or of the server `--profiles` names; each app must log in again
+
+**Changes local data.**
+
+```sh
+zm mcp revoke [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+
+**Returns:** forget every login given to a browser app
+
+**Example:** `zm personal mcp revoke`, `zm personal mcp revoke --profiles all`
+
+### `zm mcp server`
+
+start, stop and check `mcp serve --http` in the background; status shows the login code for a browser app
+
+#### `zm mcp server start`
+
+start `mcp serve --http` apart from this shell and answer once it listens, with its login code
+
+**Changes local data.**
+
+```sh
+zm mcp server start [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--port <port>` | the local port (default 8765). |
+| `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
+| `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** start the HTTP MCP server in the background
+
+**Example:** `zm personal mcp server start --public-url https://laptop.example.ts.net`
+
+#### `zm mcp server stop`
+
+stop `mcp serve --http` — only one that `mcp server start` started
+
+**Changes local data.**
+
+```sh
+zm mcp server stop [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** stop the background HTTP MCP server
+
+**Example:** `zm personal mcp server stop`
+
+#### `zm mcp server status`
+
+whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
+
+```sh
+zm mcp server status [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
+
+**Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
+
+**Example:** `zm personal mcp server status --json`
+
+### `zm mcp config`
+
+print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes nothing
+
+```sh
+zm mcp config [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--permission <key=level>` | make a permission stricter for this server only, like remote-meetings=deny; it never loosens the profile; repeat for more keys. |
+| `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
+
+**Returns:** print the local MCP configuration of this profile, or of those --profiles names
+
+**Example:** `zm personal mcp config`, `zm personal mcp config --profiles all`
+
+### `zm mcp add`
+
+add this profile's local MCP server to Codex or Claude Code
+
+**Changes local data.**
+
+```sh
+zm mcp add <client> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `client` | required | codex or claude-code. |
+
+| Option | What it does |
+|---|---|
+| `--allow-writes` | acknowledge that this profile offers writing tools. |
+| `--permission <key=level>` | make a permission stricter for this server only, like remote-meetings=deny; it never loosens the profile; repeat for more keys. |
+
+**Returns:** add this profile's local MCP server to Codex or Claude Code
+
+**Example:** `zm personal mcp add codex --allow-writes`
+
+### `zm mcp check`
+
+check this profile's local MCP handshake and tool list
+
+```sh
+zm mcp check [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--permission <key=level>` | make a permission stricter for this server only, like remote-meetings=deny; it never loosens the profile; repeat for more keys. |
+
+**Returns:** check this profile's local MCP handshake and tool list
+
+**Example:** `zm personal mcp check`
 
 ## `zm config`
 
@@ -146,6 +322,20 @@ zm config unset <key>
 **Returns:** remove a setting, or a part of the file doctor reports a problem in
 
 **Example:** `zm config unset files.folder`
+
+### `zm config migrate`
+
+write each setting the file lacks at its default, keeping yours
+
+**Changes local data.**
+
+```sh
+zm config migrate
+```
+
+**Returns:** write each setting the file lacks at its default, keeping yours
+
+**Example:** `zm config migrate`
 
 ## `zm meetings`
 
@@ -338,6 +528,26 @@ zm meetings import <folder> [options]
 **Returns:** meeting ingestion — meetings, participants, transcript_rows, summaries, warnings, timezone; every field: zm commands info meetings import
 
 **Example:** `zm personal meetings import ./downloaded-transcripts --json`
+
+### `zm meetings repair`
+
+preview filling in what older builds left out of stored transcripts (their language); --yes stores it
+
+**Changes local data.**
+
+```sh
+zm meetings repair [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | one JSON value. |
+| `--jsonl` | one JSON object per item. |
+| `--yes` | store the detected languages; otherwise only preview. |
+
+**Returns:** meeting repair — account_id, applied, transcripts, languages; every field: zm commands info meetings repair
+
+**Example:** `zm personal meetings repair --json`
 
 ### `zm meetings scheduled`
 
@@ -678,7 +888,7 @@ zm events list [query] [options]
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 
-**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 7 more; every field: zm commands info events list
+**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 13 more; every field: zm commands info events list
 
 **Example:** `zm personal events list --json`
 
@@ -734,18 +944,6 @@ zm complete [words]
 
 **Example:** `zm complete -- meetings s`
 
-## `zm doctor`
-
-check local runtime and public config without a login or database
-
-```sh
-zm doctor
-```
-
-**Returns:** check local runtime and public config without a login or database
-
-**Example:** `zm doctor --json`
-
 ## `zm session`
 
 the saved Zoom login, separate from local data profiles
@@ -779,6 +977,9 @@ zm session start [options]
 | Option | What it does |
 |---|---|
 | `--browser <program>` | browser program. |
+| `--client-id <id>` | the Public Client ID of your Zoom app; saved as zoom.client_id once you sign in. |
+| `--credential-storage <storage>` | where the login is kept: keyring (the default, which falls back to a private file by itself when no keyring works), or file, not recommended. Default: `keyring`. |
+| `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
 
 **Returns:** log in to Zoom through your browser
 
@@ -800,7 +1001,7 @@ zm upgrade [options]
 
 **Returns:** upgrade zm with the package manager that installed it; --check only looks
 
-**Example:** `zm upgrade --check`, `zm upgrade`
+**Example:** `zm upgrade --check`
 
 ## `zm models`
 
@@ -1321,13 +1522,79 @@ zm remote-meetings cancel <meeting> [options]
 
 **Example:** `zm personal remote-meetings cancel 123456789 --dry-run --json`
 
+## `zm contacts`
+
+your Zoom contacts, read live: company colleagues and external contacts
+
+### `zm contacts list`
+
+list your company and external Zoom contacts
+
+```sh
+zm contacts list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: zm commands info contacts list
+
+**Next usually:** `zm meetings context <person>`
+
+**Example:** `zm personal contacts list --json`, `zm personal contacts list type:external name:alice`
+
+### `zm contacts show`
+
+one contact with their phone numbers
+
+```sh
+zm contacts show <contact>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `contact` | required | their member id from `contacts list`, Zoom user id or email. |
+
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: zm commands info contacts show
+
+**Next usually:** `zm meetings context <person>`
+
+**Example:** `zm personal contacts show alice@example.com --json`
+
+## `zm zoom`
+
+Zoom's own live search: chat, docs and meetings zm does not archive
+
+### `zm zoom search`
+
+search your Zoom workspace live; without words, list recent records
+
+```sh
+zm zoom search [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | words Zoom matches in the content; it does not widen word forms. |
+
+| Option | What it does |
+|---|---|
+| `--only <resources>` | comma list of meetings, calendar, chat, channels, docs, notes, calls, sms, voicemail (default Zoom's own choice). |
+| `--limit <n>` | Zoom results per resource, 1 through 100 (default 10); one chat result holds its matching messages. |
+| `--cursor <cursor>` | continue from the previous page's page.next_cursor, with the same query and --only. |
+
+**Returns:** zoom search hit — source, id, title, time, text, url, people, container_id, and 1 more; every field: zm commands info zoom search
+
+**Example:** `zm personal zoom search "budget" --only chat,docs --json`, `zm personal zoom search --only meetings --limit 50`
+
 ## `zm skill`
 
 the instructions an agent is given for this tool
 
 ### `zm skill show`
 
-print SKILL.md — `zm skill install` puts it where Claude Code, Codex and Gemini CLI look for it; --for prints the copy already there
+print SKILL.md — `zm skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
 
 ```sh
 zm skill show [options]
@@ -1343,7 +1610,7 @@ zm skill show [options]
 
 ### `zm skill install`
 
-write SKILL.md to \~/.claude/skills/zoom-cli/ (Claude Code) and \~/.agents/skills/zoom-cli/ (Codex, Gemini CLI)
+write SKILL.md to \~/.claude/skills/zoom-cli/ (Claude Code) and \~/.agents/skills/zoom-cli/ (Codex, Gemini CLI, OpenClaw); --for hermes also has Hermes read \~/.agents/skills, which changes Hermes's own settings, so all leaves it out
 
 **Changes local data.**
 
@@ -1353,7 +1620,7 @@ zm skill install [options]
 
 | Option | What it does |
 |---|---|
-| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `all`. Default: `all`. |
+| `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
 
 **Returns:** install the tool's instructions for AI agents
 
@@ -1361,7 +1628,7 @@ zm skill install [options]
 
 ### `zm skill status`
 
-for each place `zm skill install` writes to: the path, the version installed there, and whether it is current, stale, missing or unversioned
+for each place `zm skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
 
 ```sh
 zm skill status
@@ -1370,20 +1637,6 @@ zm skill status
 **Returns:** whether the installed instructions for AI agents match this version
 
 **Example:** `zm skill status`, `zm skill status --json`
-
-## `zm mcp`
-
-serve zm's commands to an MCP agent over stdio, as the named profile allows them
-
-**Changes local data.**
-
-```sh
-zm mcp
-```
-
-**Returns:** serve zm's commands to an MCP agent over stdio, as the named profile allows them
-
-**Example:** `zm personal mcp`
 
 ## `zm search`
 
@@ -1409,7 +1662,7 @@ zm search all <query> [options]
 | `--max-meetings <n>` | most meetings to look through, newest first, or all (default 100). |
 | `--exact` | request exact matching; unsupported meeting queries are reported as skipped. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 6 more; every field: zm commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 13 more; every field: zm commands info search all
 
 **Example:** `zm personal search all "example plan" --json`
 
@@ -1449,7 +1702,7 @@ zm search meetings <query> [options]
 | `--max-rows <n>` | by meaning: most transcript lines to read, 1 through 100000. |
 | `--max-text-bytes <bytes>` | by meaning: most transcript text to read (default 4 MiB). |
 
-**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, match, corrections, and 1 more; every field: zm commands info search meetings
+**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, language, line, and 5 more; every field: zm commands info search meetings
 
 **Next usually:** `zm meetings show <meeting>`, `zm meetings transcript <meeting>`, `zm meetings summary <meeting>`
 
@@ -1472,7 +1725,7 @@ zm search recordings <directory> <query> [options]
 |---|---|
 | `--limit <n>` | how many hits, 1 through 1000 (default 100). |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 6 more; every field: zm commands info search recordings
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 13 more; every field: zm commands info search recordings
 
 **Example:** `zm personal search recordings ./zoom-archive "example plan" --limit 100 --offline --json`
 
@@ -1482,7 +1735,7 @@ numbers about the stored meetings
 
 ### `zm stats meetings`
 
-talk time, lines and words, by speaker and by week
+talk time by speaker and week; meetings and minutes by day, week or series
 
 #### `zm stats meetings show`
 
@@ -1528,6 +1781,29 @@ zm stats meetings top [options]
 **Returns:** meeting speaker — key, name, person_id, identity_id, meetings, lines, words, talk_ms, and 1 more; every field: zm commands info stats meetings top
 
 **Example:** `zm personal stats meetings top --project RES --limit 5 --json`
+
+#### `zm stats meetings history`
+
+meetings, minutes and meetings with a transcript, per day, week or series; reads meetings only
+
+```sh
+zm stats meetings history [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | meetings starting at or after this date or time (ISO 8601, or 30d ago). |
+| `--until-time <time>` | meetings starting at or before this date or time; a date alone is that whole day. |
+| `--timezone <zone>` | the IANA zone dates and weeks are read in (default: this computer's). |
+| `--event-id <id>` | only meetings linked to this stored event. |
+| `--project <project>` | meetings confirmed in this project, by name, key or alias. |
+| `--topic-name <name>` | meetings with this topic label, by name or alias. |
+| `--by <group>` | one row per day, week, series. |
+| `--limit <n>` | the newest days or weeks, or the busiest series (default 100). |
+
+**Returns:** meeting counts — by, meetings, minutes, mean_minutes, transcripts, rows, has_more; every field: zm commands info stats meetings history
+
+**Example:** `zm personal stats meetings history --by week --since-time 90d --json`
 
 ## `zm review`
 
@@ -1631,7 +1907,7 @@ zm searches run <name>
 |---|---|---|
 | `name` | required | a saved search's name. |
 
-**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, match, corrections, and 1 more; every field: zm commands info searches run
+**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, language, line, and 5 more; every field: zm commands info searches run
 
 **Next usually:** `zm meetings show <meeting>`, `zm meetings transcript <meeting>`, `zm meetings summary <meeting>`
 
@@ -1746,6 +2022,7 @@ Use the shared exit code rather than matching diagnostic text.
 | `12` | `provider_unavailable` |
 | `13` | `invalid_response` |
 | `14` | `outcome_unknown` |
+| `15` | `conflict` |
 | `130` | `cancelled` |
 | `1` | anything else |
 

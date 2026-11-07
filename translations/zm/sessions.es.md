@@ -23,7 +23,11 @@ retorno llega a un receptor de aquí. `--quiet` conserva la URL.
 
 Omite `--browser firefox` para usar el navegador predeterminado. Zoom muestra los permisos solicitados;
 entra en la cuenta correcta y aprueba. Los tokens se guardan en el almacén de contraseñas del sistema,
-no en la configuración pública. Si ese almacén no está disponible, la conexión falla.
+no en la configuración pública. Si ese almacén no está disponible, el inicio
+de sesión los guarda en `credentials.json` en la carpeta de configuración de zm, que solo tú puedes leer, lo avisa una
+vez en stderr y responde `credential_storage: "file"`; nunca pregunta. `--credential-storage file` elige el archivo
+directamente. El almacén del sistema es más seguro, así que no lo recomendamos. El siguiente `session start` que llegue
+al almacén devuelve allí los tokens.
 
 Si iniciaste sesión por última vez con zm 0.34 o anterior, vuelve a ejecutar `zm <profile> session start`: ese acceso antiguo ya no se usa.
 

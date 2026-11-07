@@ -26,18 +26,18 @@ La instalación no ocurre al iniciar un comando normal.
 
 ## El servidor MCP
 
-`zm personal mcp` ofrece los comandos de zm por el protocolo stdio de MCP como tres herramientas, las mismas tres que
+`zm personal mcp serve` ofrece los comandos de zm por el protocolo stdio de MCP como tres herramientas, las mismas tres que
 ofrecen todas las CLI de WireCat:
 
 | Herramienta | Qué hace |
 |---|---|
 | `zm_tools_search` | encuentra el comando para una tarea ("meetings list", "search", "prepare") con sus argumentos |
 | `zm_read` | ejecuta un comando que no cambia nada: `{ "command": "meetings list", "arguments": {} }` |
-| `zm_write` | ejecuta un comando que cambia algo, como `remote-meetings create`, o `search meetings`, que primero actualiza el índice de palabras |
+| `zm_write` | ejecuta un comando que cambia algo, como `remote-meetings create` |
 
 Una llamada ejecuta la propia línea de comandos, así que responde y falla exactamente como
 `zm personal <command> --json`. El servidor habla por el perfil nombrado en sus `args`; el cliente no
-puede cambiarlo. `watch`, `complete` y el propio servidor no se ofrecen. El inventario compartido
+puede cambiarlo. `watch` y el propio servidor no se ofrecen. El inventario compartido
 (`meetings scheduled`), el examen de proyectos y la actualización están disponibles según los permisos
 del perfil. El acceso interactivo (`session start`) se hace en la terminal.
 
@@ -60,7 +60,7 @@ En el formato `mcpServers` de
 ```json
 {
   "mcpServers": {
-    "zoom": { "command": "zm", "args": ["personal", "mcp"] }
+    "zoom": { "command": "zm", "args": ["personal", "mcp", "serve"] }
   }
 }
 ```
@@ -70,6 +70,42 @@ Una app puede no ver el `PATH` de la terminal; un servidor stdio hereda parte de
 completa de `command -v zm` en Linux/macOS o `where.exe zm` en Windows como comando. Si configuraste
 `ZM_CONFIG_DIR` o `MESSAGING_STORE`, pasa los mismos valores en `env` de la entrada; de lo contrario el servidor
 leerá otro perfil o base. Reserva stdout para el protocolo: omite `--json` y `--jsonl`.
+
+### Hacer más estricto un servidor
+
+`zm personal mcp serve --permission meetings=deny` hace más estricto un permiso solo para ese servidor, y se repite
+para más claves. Nunca relaja el perfil: un valor que lo haría se rechaza al iniciar el servidor, igual que una clave
+que no nombra ningún comando. `zm personal mcp config` y `zm personal mcp add` aceptan la misma opción, y `mcp add` y
+`mcp check` configuran y prueban la entrada para Codex o Claude Code.
+
+### Apps de navegador por HTTP
+
+`zm personal mcp serve --http --public-url https://<name>.ts.net` sirve en `127.0.0.1` para apps de IA en un
+navegador, detrás de tu propio túnel; `--port` cambia el puerto local (8765 por defecto). Las escrituras siguen los
+permisos del perfil, igual que por stdio. Una app de navegador inicia sesión una vez con un código que el servidor
+imprime en stderr (`mcp server status` lo vuelve a mostrar); su acceso dura una hora y su renovación 30 días.
+`zm personal mcp revoke` cierra todas las sesiones. `zm personal mcp server start`, `stop` y `status` ejecutan ese
+servidor en segundo plano, y `--profiles` funciona con todos ellos.
+
+### Varios perfiles desde un servidor
+
+`zm mcp serve --profiles work,personal` sirve los perfiles que nombra desde un servidor, y `zm mcp serve --profiles
+all` sirve todos los perfiles de este equipo, así que una app de IA necesita una sola entrada de Zoom, no una por
+perfil. Cada herramienta pide entonces un `profile` obligatorio, y se indica al agente que pregunte si no nombraste
+ninguno. Una llamada se ejecuta en el propio `zm <profile> mcp serve` de ese perfil, con sus permisos. El servidor
+nombra en stderr los perfiles que sirve al iniciar.
+
+Un servidor siempre nombra lo que sirve: `zm mcp serve` sin perfil y sin `--profiles` se detiene y enumera los
+perfiles de este equipo, y lo mismo hacen un perfil junto con `--profiles` y un nombre que no es un perfil de aquí.
+Con `ZM_PROFILE_LOCK`, `--profiles` solo puede nombrar el perfil bloqueado.
+
+```json
+{
+  "mcpServers": {
+    "zoom": { "command": "zm", "args": ["mcp", "serve", "--profiles", "all"] }
+  }
+}
+```
 
 ## Prueba la conexión
 

@@ -2219,8 +2219,8 @@
     "replacements": {
       "en": [
         {
-          "before": "If that password store is unavailable, login fails.\n",
-          "after": "If that password store is unavailable, login fails.\n\nIf you last signed in with zm 0.34 or earlier, run `zm <profile> session start` again: that older login is no longer used.\n"
+          "before": "The next `session start` that reaches the keyring moves the tokens back.\n",
+          "after": "The next `session start` that reaches the keyring moves the tokens back.\n\nIf you last signed in with zm 0.34 or earlier, run `zm <profile> session start` again: that older login is no longer used.\n"
         }
       ]
     }
@@ -2557,6 +2557,21 @@
         {
           "before": "title: \"b24\"",
           "after": "title: \"Bitrix24\""
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "search",
+    "phase": "before-translation",
+    "source": "https://github.com/WireCatLabs/zoom-cli/blob/v0.67.0/CHANGELOG.md",
+    "reason": "Released 0.61.0 makes search meetings a read over MCP (zm_read, not zm_write), as the CHANGELOG and docs/mcp.md say; docs/search.md still names zm_write.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Over MCP, run `search meetings` through `zm_write`: it updates the word index before searching.",
+          "after": "Over MCP, `search meetings` is a read: run it through `zm_read`. It updates the word index before searching."
         }
       ]
     }
