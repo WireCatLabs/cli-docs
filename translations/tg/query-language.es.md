@@ -139,7 +139,7 @@ El texto se normaliza antes de indexarlo y buscarlo: minúsculas y sin tildes. U
 
 `text:/pay/` coincide con la palabra completa pay, no con payment. `body:/pay/` coincide solo con un mensaje cuyo texto entero es pay, distinguiendo mayúsculas; para encontrarla en cualquier parte, usa `body:/.*pay.*/`. Es la sintaxis de expresiones regulares de Lucene, sin anticipaciones de JavaScript, referencias hacia atrás, anclas ni opciones.
 
-En un archivo grande, un prefijo corto como `a*` puede ampliarse a más de 10.000 palabras y se rechaza; alargarlo. Las consultas largas, el anidamiento profundo, los patrones grandes y los escaneos lentos se rechazan con `query_limit`, no se acortan: limita el chat, las fechas o el patrón.
+En un archivo grande, un prefijo corto como `a*` puede ampliarse a más de 10.000 palabras y se rechaza; alargarlo. Las consultas largas, el anidamiento profundo y los patrones grandes se rechazan con `query_limit`, no se acortan. Una búsqueda que supera su límite de 2 segundos se detiene con `timeout` (motivo `query.time-limit`): la consulta es válida, así que limita el chat, las fechas o el patrón.
 
 ## La respuesta
 

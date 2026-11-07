@@ -31,6 +31,34 @@ browser`** abre [my.telegram.org/apps](https://my.telegram.org/apps). Inicie ses
 
 La aplicación solo se guarda después de que Telegram acepte el inicio de sesión.
 
+### Crear la aplicación a mano
+
+Sigue estos pasos con `--app browser`, o cuando `--app auto` falle. Se hace una vez por cada cuenta de Telegram.
+
+1. **Inicia sesión en [my.telegram.org](https://my.telegram.org/apps).** Elige tu país, escribe tu número de teléfono y pulsa **Next**.
+
+   ![La página de inicio de sesión de my.telegram.org con los campos de país y número de teléfono](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-1-sign-in.png)
+
+   Telegram envía un código de confirmación como mensaje en tu aplicación de Telegram, no por SMS. Escríbelo en la página y pulsa **Sign in**. No le des este código a nadie y nunca lo escribas en un chat con el agente.
+
+   ![La página del código de confirmación de my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-2-code.png)
+
+2. **Abre Development Tools** y elige **Create new application**.
+
+   ![La página principal de my.telegram.org con la tarjeta Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-3-development-tools.png)
+
+   Rellena el formulario. El título (title) necesita al menos 5 caracteres. El nombre corto (short name) solo admite letras y dígitos, de 5 a 32 caracteres. Evita la palabra "Telegram" en ambos. Elige una plataforma, por ejemplo **Desktop**. La URL y la descripción son opcionales. Después pulsa **Create application**.
+
+   ![El formulario Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-4-create-application.png)
+
+3. **Copia `api_id` y `api_hash`** de la sección Credentials. Mantén el hash en privado: quien lo tenga puede usar la cuota de tu aplicación.
+
+   ![La sección Credentials con App api_id y App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-5-credentials.png)
+
+4. **Da ambos valores a `tg`** cuando pida `App api_id` y `App api_hash`. El hash no se muestra mientras escribes.
+
+El número de teléfono y los datos de la aplicación de estas capturas son ejemplos.
+
 ## Iniciar sesión
 
 ```sh
@@ -39,7 +67,7 @@ tg personal session start phone  # a phone number, the code Telegram sends, and 
 tg personal session start phone --sms  # the same, asking Telegram for the code by SMS
 ```
 
-**QR:** escanea el código en la aplicación Telegram: Configuración → Dispositivos → Vincular dispositivo de escritorio. El código se renueva mientras esperas.
+**QR:** escanea el código en la aplicación Telegram, como describe la sección siguiente. El código se renueva mientras esperas.
 
 **Teléfono:** escriba el número en formato internacional, luego el código de inicio de sesión. Si la cuenta tiene una contraseña de nube (2FA), `tg` la solicita sin mostrar lo que escribe. Con `--app auto`, el número de teléfono se solicita solo una vez. El código suele llegar a la aplicación Telegram; `--sms` solicita un SMS en su lugar, pero Telegram elige y `tg` dice de qué manera se envió. Cuando Telegram no tiene SMS para la cuenta, `tg` lo dice y pide el código desde la app.
 
@@ -60,9 +88,33 @@ Su agente de IA puede iniciar el inicio de sesión por usted. Sin terminal, `tg`
 tg personal session start qr
 ```
 
-El agente lo ejecuta en segundo plano, porque el comando espera el escaneo y una herramienta de shell no muestra nada hasta que el comando termina. Lee la salida y pega el bloque QR en el chat como bloque de código, tal como se imprimió. Cuando Telegram renueva el código, se imprime un bloque nuevo: el agente lo pega y dice que el anterior caducó. Con `--json`, cada código también es una línea en stderr, `{"event":"qr","qr":{"text":…,"expires_at":…,"scan":…}}`.
+El agente lo ejecuta en segundo plano, porque el comando espera el escaneo y una herramienta de shell no muestra nada hasta que el comando termina. Lee la salida y pega el bloque QR en el chat como bloque de código, tal como se imprimió. Cuando Telegram renueva el código, se imprime un bloque nuevo: el agente lo pega y dice que el anterior caducó. Con `--json`, cada código también es una línea en stderr, `{"event":"qr","qr":{"text":…,"expires_at":…,"scan":…}}`. Una vez escaneado el código, tg dice `scan accepted, finishing sign-in`, y con `--json`, `{"event":"progress","step":"scanned","message":…}`: Telegram puede tardar diez segundos o más en terminar.
 
 El código está dibujado para un tema de terminal oscuro. Sin terminal, esto funciona sólo cuando el perfil ya tiene su aplicación y la cuenta no tiene contraseña 2FA: cualquier otra cosa tienes que escribirla tú mismo. Un programa que muestra las preguntas en su propia ventana, como WireCat Desktop, ejecuta `tg personal session start phone --json --answer-stdin`: cada pregunta es una línea `needs` en stderr y se responde con una línea en stdin. `tg personal setup` funciona igual. El inicio de sesión no se ofrece como herramienta MCP: un agente que solo tiene MCP le pide que ejecute el comando, o lo ejecuta desde su shell.
+
+### Vincular un dispositivo con un código QR
+
+Telegram llama a esto vincular un dispositivo de escritorio. `tg` muestra un código QR en el terminal y lo escaneas con la aplicación de Telegram en tu teléfono. Usa el escáner del propio Telegram, no la aplicación de cámara.
+
+#### Android
+
+1. Abre Telegram y ve a **Ajustes** y después a **Dispositivos**.
+2. Pulsa el botón para añadir un dispositivo (Add Device) y permite el acceso a la cámara si Telegram lo pide.
+3. Apunta la cámara al código QR de tu terminal.
+
+![Telegram para Android, Ajustes y Dispositivos, con el botón para añadir un dispositivo](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-android-add-device.png)
+
+#### iPhone y iPad
+
+1. Abre Telegram y ve a **Ajustes** y después a **Dispositivos**.
+2. Pulsa el botón para vincular un dispositivo de escritorio (Link Desktop Device) y permite el acceso a la cámara si Telegram lo pide.
+3. Apunta la cámara al código QR de tu terminal.
+
+Si tu cuenta tiene una contraseña de verificación en dos pasos (2FA), `tg` la pide después del escaneo. El terminal no muestra lo que escribes.
+
+**Intentos de inicio de sesión incompletos.** Si escaneaste el código pero no introdujiste la contraseña 2FA, el intento aparece en **Dispositivos**, en la lista de intentos incompletos (Incomplete login attempts). No tiene acceso a tus mensajes. Termina el inicio de sesión en `tg` o cierra el intento en esa misma lista.
+
+![La lista de intentos de inicio de sesión incompletos en la pantalla Dispositivos de Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-android-incomplete-login.png)
 
 ## Comprobar la cuenta y cerrar sesión
 

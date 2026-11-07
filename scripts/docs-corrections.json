@@ -2575,5 +2575,35 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "permissions",
+    "phase": "before-translation",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.117.0/docs/permissions.md",
+    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "permissions, but since 0.113.0 it can never\nloosen one",
+          "after": "permissions, but it can never\nloosen one"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "mcp",
+    "phase": "before-translation",
+    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.117.0/docs/mcp.md",
+    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "outside the agent: since 0.113.0 a `config set` run in an agent's shell",
+          "after": "outside the agent: a `config set` run in an agent's shell"
+        }
+      ]
+    }
   }
 ]

@@ -73,7 +73,10 @@ tg work config set permissions.mcp.authority allow
 
 Para el servidor de un bot, añade `--bot`: `tg support config set permissions.mcp.authority allow --bot`.
 El valor por defecto es `deny`; tanto `allow` como `ask` permiten ejecutar esos comandos. Mantén `deny` en el perfil
-que entregues a un agente: al habilitarlo, el agente podrá aflojar sus propios permisos. No puede cambiar
+que entregues a un agente. Con la clave abierta, el agente puede cambiar sus otros ajustes y endurecer sus permisos,
+pero nunca puede aflojar ninguno: un agente, por MCP o en su propia shell, solo puede bajar un nivel
+(`readonly` a `deny`), y quitar un permiso o cambiar `--defaults` solo acepta `deny`. Los aflojas tú, en tu propia
+terminal. No puede cambiar
 la clave mediante `config set`, porque esa misma clave controla el comando. Consulta el [servidor MCP](./mcp.md#commands-that-change-what-a-later-run-may-do).
 
 ## Llamadas directas a Bot API

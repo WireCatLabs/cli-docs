@@ -131,6 +131,8 @@ tg personal messages sync --all --since-time 365d  # every chat, back to a year 
 
 **Cada página es una petición desde tu cuenta**, de hasta 100 mensajes. La ejecución se detiene al alcanzar `--limit` mensajes (1000 por defecto); `--page-size` define los mensajes por petición (100 por defecto) y `--pause` separa las páginas (1 segundo por defecto; `500ms`, `30s`, `2m`). Si Telegram exige una espera corta, el comando espera; si supera cinco minutos, se detiene para que lo ejecutes más tarde. Consulta primero `--dry-run`: calcula a partir del archivo y no envía peticiones.
 
+**Respeta los límites del historial.** Por defecto omite un grupo de más de 50 personas y lee un grupo 365 días atrás y un chat individual 1095 días atrás; la respuesta indica lo que dejó fuera en `limited`, y `tg personal store status` muestra esos chats. `tg personal messages sync "Book club" --full-history` lee un chat más allá de los límites y lo guarda completo a partir de entonces; los ajustes `history_*` cambian los límites para todos los chats ([configuración](./configuration-reference.md)). Los mensajes en directo de `serve` se guardan igualmente.
+
 Para buscar y llenar los espacios vacíos dentro del historial guardado de un chat y preparar la búsqueda de temas inmediatamente después de una búsqueda (`--catch-up`), consulte [cuando no se encuentra nada](./search.md#when-nothing-is-found).
 
 ### En segundo plano
@@ -275,7 +277,7 @@ Si el perfil todavía no ha leído nada, falla con código de salida `6`: "nothi
 
 ## Mantenerlo actualizado: `serve`
 
-`tg personal serve` escucha hasta que lo detienes y guarda cada mensaje, edición, eliminación y reacción. Al iniciarse, recupera primero lo que llegó mientras estaba detenido. Solo puede ejecutarse un `serve` por perfil; un segundo se rechaza. **Nada lo inicia por ti.**
+`tg personal serve` escucha hasta que lo detienes y guarda cada mensaje, edición, eliminación y reacción. Al iniciarse, recupera primero lo que llegó mientras estaba detenido. Tras una parada larga, Telegram puede considerar el hueco demasiado grande para enviarlo, así que 30 segundos después de conectarse `serve` también vuelve a leer cada chat que tenga mensajes más nuevos de los que guardaba el archivo al iniciarse: como máximo 7 días atrás, 500 mensajes por chat y 5 minutos en total. Tras más de una semana sin conexión, o para un chat muy activo, ejecuta una vez `tg personal messages sync --all`. Un archivo vacío se deja a ese comando. Solo puede ejecutarse un `serve` por perfil; un segundo se rechaza. **Nada lo inicia por ti.**
 
 `tg personal watch` es diferente: imprime mensajes nuevos a partir de ahora y no se pone al día con lo que se perdió ([mensajes nuevos a medida que llegan](./usage.md#new-messages-as-they-arrive)).
 
@@ -306,7 +308,7 @@ tg personal server restart
 Para mantenerlo activo entre inicios de sesión, instálalo como servicio de usuario: unidad de usuario systemd en Linux o agente launchd en macOS.
 
 ```sh
-tg personal server install  # writes ~/.config/systemd/user/tg-serve-<profile>.service; starts nothing
+tg personal server install  # writes ~/.config/systemd/user/tg-serve-<profile>.service and enables it; starts nothing
 ```
 
 ```sh
@@ -314,17 +316,17 @@ tg personal server start  # starts it — through the unit, now that there is on
 ```
 
 ```sh
-tg personal server status
-systemctl --user enable tg-serve-personal    # only if it should start at every login
+tg personal server status  # starts_at_login says whether it starts at the next login
 ```
 
-En macOS, el agente se guarda en `~/Library/LaunchAgents/`.
+En macOS, el agente se guarda en `~/Library/LaunchAgents/`. `install` habilita la unidad, así que se inicia en cada inicio de sesión y tras un reinicio; una unidad instalada por un tg anterior no queda habilitada hasta que vuelvas a ejecutar `server install`. Una unidad instalada desde una copia de desarrollo (con sus propias carpetas `TG_*_DIR`) se escribe, pero no se habilita.
 
 - La unidad ejecuta el `node` y el `tg` usados al instalarla. Vuelve a instalarla si cambias su ubicación, por ejemplo al cambiar de versión de Node.
 - Recibe el perfil y las variables `TG_*_DIR` y `MESSAGING_STORE` de la terminal que ejecutó `server install`, y ninguna otra.
 - **Compruébalo después de `server start`:** `tg personal server logs`. El servicio obtiene la aplicación del llavero. Si este permanece bloqueado hasta iniciar sesión, el servicio falla; systemd lo reintenta cada 30 s y los registros indican la causa.
 - **Una sesión ya revocada impide el inicio.** `serve` lo comprueba antes de indicar que está listo y termina con el código 4; la unidad instalada queda detenida. Inicia sesión con `tg personal session start` y después ejecuta `tg personal server start`. Si la sesión se revoca mientras el servicio funciona, también termina con el código 4, en unos 15 minutos. Si las credenciales de la aplicación no están disponibles y existe una sesión guardada, serve termina con el código 12 y systemd lo reintenta. En macOS, el agente no se reinicia tras ningún fallo, porque launchd no puede excluir un código de salida concreto; vuelve a iniciarlo con `tg personal server start`. Ejecuta de nuevo `tg personal server install` para actualizar una unidad antigua.
-- `tg personal server uninstall` elimina la unidad. Detén el servicio primero.
+- `tg personal server uninstall` deshabilita y elimina la unidad. Detén el servicio primero.
+- En macOS, `server stop` descarga el agente hasta el próximo inicio de sesión, igual que en Linux; `server uninstall` evita que vuelva a iniciarse.
 - `tg upgrade` reinicia el servidor activo para que no siga usando la versión anterior.
 
 Las respuestas automáticas de `serve` a cuentas de prueba se describen en [respuestas automáticas](./replies.md).

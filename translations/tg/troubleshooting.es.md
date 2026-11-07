@@ -108,7 +108,7 @@ Código `4`. La sesión existe, pero no se puede acceder al llavero. Ocurre con 
 XDG_RUNTIME_DIR=/run/user/$(id -u) tg personal chats list
 ```
 
-Para cron, consulte [ejecución programada](./recipes.md#running-on-a-schedule). El llavero también puede estar bloqueado hasta que inicie sesión en la computadora.
+Para cron, consulte [ejecución programada](./recipes.md#running-on-a-schedule). El llavero también puede estar bloqueado hasta que inicie sesión en la computadora. En ese caso, `serve` y una ejecución de `tg personal schedule` terminan con el código `12` (`provider_unavailable`): el servicio vuelve a intentarlo cada 30 s, y una programación diaria o única espera al inicio de sesión y reintenta durante hasta 12 horas.
 
 ### "not logged in, or the session was ended — run `tg session start`"
 
