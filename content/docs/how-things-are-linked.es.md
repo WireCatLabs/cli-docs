@@ -135,7 +135,7 @@ rol, por ejemplo `--position "Procurement manager"`, y nunca es un rol. Una pers
 misma organización. `memo` rechaza un rol que no está en la lista y muestra la lista. Un rol guardado antes de que
 existieran las listas se queda como estaba, y `relationships list` lo marca como `custom`.
 
-Las listas son tuyas. Añade un rol propio cuando los de serie no encajen, y quítalo mientras ninguna relación lo
+Las listas son tuyas. Añade un rol propio cuando los de serie no encajen, y quita ese rol mientras ninguna relación lo
 tenga. Un rol de serie no se puede quitar, y solo tú cambias las listas, nunca tu agente:
 
 ```sh
