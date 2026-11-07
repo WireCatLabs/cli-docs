@@ -9,6 +9,6 @@ negociaciones y prospectos al almacén local de WireCat, del que leen `deals`, `
 sin conexión; los contactos, las empresas, los productos y los empleados se leen del portal.
 
 Inicia sesión con un webhook entrante del portal y actúa con los derechos del empleado que creó ese webhook.
-`b24 <profile> session status --check` dice quién es.
+`b24 work session status --check` dice quién es, para el perfil `work`.
 
 Empieza por la [instalación](./installation.md) y sigue con el [uso](./usage.md).

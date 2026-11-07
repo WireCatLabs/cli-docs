@@ -105,17 +105,16 @@ Para `people` y `organizations`, `--field "<label or code>=<value>"` también re
 valores recibe `--field` una vez por valor; `--body` recibe los demás campos con los nombres de la REST 3.0 de
 Bitrix24.
 
-Cada escritura responde un `operation_id`, que Bitrix24 recibe como su `Idempotency-Key`. Si una escritura termina con
-`outcome_unknown`, mira primero el elemento (`sync` y luego `show`). La documentación de Bitrix24 dice que una
-repetición con `--operation-id <that id>` se responde con lo que guardó del primer intento en lugar de hacerse otra
-vez; eso aún no se ha comprobado en un portal real. `--dry-run` no envía nada y nombra cada clave de permiso que
+Cada escritura responde un `operation_id`, que guarda el diario de la ejecución. Una escritura se envía una vez. Si
+termina con `outcome_unknown`, puede que el portal la hiciera: mira primero el elemento (`sync` y luego `show`) y
+repítela solo si no está, porque Bitrix24 haría la repetición por segunda vez. `--dry-run` no envía nada y nombra cada clave de permiso que
 comprueba el comando, con la opción que añade cada una: las claves de mover y cerrar de una etapa, y
 `crm.assign-others` para otro responsable. Asignar un elemento a otro empleado se rechaza hasta que lo permitas,
 porque Bitrix24 avisa a ese empleado: `b24 work config set permissions.crm.assign-others allow`.
 
-`b24 work api call <method> --body <json>` llama a cualquier otro método de Bitrix24. Comprueba los mismos permisos
+`b24 work api call crm.deal.get --body '{"id":12}'` llama a cualquier otro método de Bitrix24, aquí una lectura de la negociación 12. Comprueba los mismos permisos
 que el comando que hace lo mismo, y rechaza las escrituras que envían mensajes, ponen en marcha la automatización del
-portal o crean tareas hasta que las permitas. `b24 api list` y `b24 api show <method>` muestran qué comprueba cada
+portal o crean tareas hasta que las permitas. `b24 api list` y `b24 api show crm.deal.update` muestran qué comprueba cada
 método.
 
 ## Salida para scripts

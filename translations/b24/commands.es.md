@@ -208,7 +208,6 @@ b24 deals create [options]
 
 | Option | What it does |
 |---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 | `--title <title>` | the deal's title. |
 | `--pipeline <pipeline>` | pipeline:<id>, or a name only one of the CRM's pipelines has. |
 | `--stage <stage>` | a stage of its pipeline, by the CRM's id or name; checks the move key too, and the close key for a won or lost stage. |
@@ -238,7 +237,6 @@ b24 deals update <ref> [options]
 
 | Option | What it does |
 |---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 | `--title <title>` | the deal's title. |
 | `--pipeline <pipeline>` | pipeline:<id>, or a name only one of the CRM's pipelines has. |
 | `--stage <stage>` | a stage of its pipeline, by the CRM's id or name; checks the move key too, and the close key for a won or lost stage. |
@@ -259,17 +257,13 @@ move a deal to another stage of its pipeline; a won or lost stage checks the clo
 **Changes something in the service.**
 
 ```sh
-b24 deals move <ref> <stage> [options]
+b24 deals move <ref> <stage>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `ref` | required | deal:<id>, as a list shows it. |
 | `stage` | required | the stage, by the CRM's id or a name only one stage of its pipeline has. |
-
-| Option | What it does |
-|---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 
 **Returns:** crm write — operation_id, untrusted, deal, lead; every field: b24 commands info deals move
 
@@ -292,7 +286,6 @@ b24 deals close <ref> <outcome> [options]
 
 | Option | What it does |
 |---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 | `--reason <text>` | why, in a few words; kept with it. |
 
 **Returns:** crm write — operation_id, untrusted, deal, lead; every field: b24 commands info deals close
@@ -306,16 +299,12 @@ delete a deal in the CRM; asks first unless allowed
 **Changes something in the service.**
 
 ```sh
-b24 deals delete <ref> [options]
+b24 deals delete <ref>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `ref` | required | deal:<id>, as a list shows it. |
-
-| Option | What it does |
-|---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 
 **Returns:** crm removal — operation_id, ref, removed; every field: b24 commands info deals delete
 
@@ -374,7 +363,6 @@ b24 leads create [options]
 
 | Option | What it does |
 |---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 | `--title <title>` | the lead's title. |
 | `--pipeline <pipeline>` | pipeline:<id>, or a name only one of the CRM's pipelines has. |
 | `--stage <stage>` | a stage of its pipeline, by the CRM's id or name; checks the move key too, and the close key for a won or lost stage. |
@@ -404,7 +392,6 @@ b24 leads update <ref> [options]
 
 | Option | What it does |
 |---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 | `--title <title>` | the lead's title. |
 | `--pipeline <pipeline>` | pipeline:<id>, or a name only one of the CRM's pipelines has. |
 | `--stage <stage>` | a stage of its pipeline, by the CRM's id or name; checks the move key too, and the close key for a won or lost stage. |
@@ -425,17 +412,13 @@ move a lead to another stage of its pipeline; a won or lost stage checks the clo
 **Changes something in the service.**
 
 ```sh
-b24 leads move <ref> <stage> [options]
+b24 leads move <ref> <stage>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `ref` | required | lead:<id>, as a list shows it. |
 | `stage` | required | the stage, by the CRM's id or a name only one stage of its pipeline has. |
-
-| Option | What it does |
-|---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 
 **Returns:** crm write — operation_id, untrusted, deal, lead; every field: b24 commands info leads move
 
@@ -458,7 +441,6 @@ b24 leads close <ref> <outcome> [options]
 
 | Option | What it does |
 |---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 | `--reason <text>` | why, in a few words; kept with it. |
 
 **Returns:** crm write — operation_id, untrusted, deal, lead; every field: b24 commands info leads close
@@ -472,16 +454,12 @@ delete a lead in the CRM; asks first unless allowed
 **Changes something in the service.**
 
 ```sh
-b24 leads delete <ref> [options]
+b24 leads delete <ref>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `ref` | required | lead:<id>, as a list shows it. |
-
-| Option | What it does |
-|---|---|
-| `--operation-id <id>` | the operation_id a write that ended in outcome_unknown named: the CRM answers the repeat from its record. |
 
 **Returns:** crm removal — operation_id, ref, removed; every field: b24 commands info leads delete
 
@@ -658,7 +636,6 @@ b24 people create [options]
 | `--last-name <name>` | the person's last name. |
 | `--body <json>` | the other fields to set, as JSON with Bitrix24's own field names, such as {"post":"Buyer","assignedById":7}; naming another employee as the one responsible checks crm.assign-others. |
 | `--field <key=value>` | a custom field, by its label or code as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field. Over --body for the same field; --dry-run does not look the names up. |
-| `--operation-id <id>` | the operation_id an outcome_unknown named: a retry Bitrix24 will not run twice. |
 
 **Returns:** create one person on the portal
 
@@ -684,7 +661,6 @@ b24 people update <id> [options]
 | `--last-name <name>` | the person's last name. |
 | `--body <json>` | the other fields to set, as JSON with Bitrix24's own field names, such as {"post":"Buyer","assignedById":7}; naming another employee as the one responsible checks crm.assign-others. |
 | `--field <key=value>` | a custom field, by its label or code as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field. Over --body for the same field; --dry-run does not look the names up. |
-| `--operation-id <id>` | the operation_id an outcome_unknown named: a retry Bitrix24 will not run twice. |
 
 **Returns:** change one person on the portal; options left out keep their values
 
@@ -747,7 +723,6 @@ b24 organizations create [options]
 | `--name <name>` | the name. |
 | `--body <json>` | the other fields to set, as JSON with Bitrix24's own field names, such as {"post":"Buyer","assignedById":7}; naming another employee as the one responsible checks crm.assign-others. |
 | `--field <key=value>` | a custom field, by its label or code as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field. Over --body for the same field; --dry-run does not look the names up. |
-| `--operation-id <id>` | the operation_id an outcome_unknown named: a retry Bitrix24 will not run twice. |
 
 **Returns:** create one organization on the portal
 
@@ -772,7 +747,6 @@ b24 organizations update <id> [options]
 | `--name <name>` | the name. |
 | `--body <json>` | the other fields to set, as JSON with Bitrix24's own field names, such as {"post":"Buyer","assignedById":7}; naming another employee as the one responsible checks crm.assign-others. |
 | `--field <key=value>` | a custom field, by its label or code as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field. Over --body for the same field; --dry-run does not look the names up. |
-| `--operation-id <id>` | the operation_id an outcome_unknown named: a retry Bitrix24 will not run twice. |
 
 **Returns:** change one organization on the portal; options left out keep their values
 
@@ -915,7 +889,6 @@ b24 api call <method> [options]
 | Option | What it does |
 |---|---|
 | `--body <json>` | the method's parameters, as a JSON object. |
-| `--operation-id <id>` | the operation_id an outcome_unknown named: a retry Bitrix24 will not run twice. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
 **Returns:** call one Bitrix24 method by name with JSON parameters

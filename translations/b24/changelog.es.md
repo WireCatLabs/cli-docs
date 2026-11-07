@@ -4,7 +4,7 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
-## Sin publicar
+## 0.5.0 — 07.11.2026
 
 ### Añadido
 
@@ -18,7 +18,9 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
   `--owner`; los prospectos aceptan lo mismo salvo `--close-date`. Una etapa comprueba la clave de mover, y una ganada o
   perdida también la de cerrar.
 - `search all` encuentra las negociaciones y los prospectos guardados junto a los mensajes, las notas y los eventos de
-  las demás herramientas de WireCat.
+  las demás herramientas de WireCat. Con `deals.list: deny` deja fuera las negociaciones y las nombra en `missing` y en
+  stderr, y lo mismo con los prospectos; si se niegan todos los tipos que se le pidieron, se rechaza
+  (`search.all-denied`).
 - `b24 --help` y un `b24` sin más empiezan con para qué sirve `b24`, qué probar primero y por dónde empezar.
 
 ### Cambios — pueden romper scripts
@@ -39,7 +41,12 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 - Las escrituras de negociaciones y prospectos no tienen `--body`. `--field <label or code>=<value>` fija un campo
   personalizado según las definiciones que guardó el último `sync`: un campo de lista recibe la etiqueta o el id de su
   opción, un campo múltiple un `--field` por valor, y un valor vacío lo vacía. Se rechaza un código que nombra un campo
-  estándar (`stageId`, `categoryId`, `assignedById`, el `STATUS_ID` de un prospecto).
+  estándar (`stageId`, `categoryId`, `assignedById`, el `STATUS_ID` de un prospecto), y también un `--field` sin clave
+  antes de su `=`.
+- La etiqueta de un campo personalizado y la de una opción de lista se comparan como cli-core compara los nombres, en
+  cada `--field` y consulta: `е` encuentra `ё`, y una letra escrita con dos puntos de código encuentra la misma letra
+  escrita con uno. `people show` y `organizations show` comparan un nombre con las coincidencias del portal de la
+  misma forma. Una etiqueta que coincidía con un campo puede coincidir ahora con dos, y entonces se rechaza con ambos.
 - `fields list <deals|leads|people|organizations>` es el de cli-core: lee las definiciones que guardó `sync`, así que
   ejecuta antes `sync`, y cada campo nombra sus partes `untrusted`.
 - `api.crm.deal.update` (y las demás claves `api.*` de negociaciones y prospectos) en `ask` ahora también pregunta en
@@ -54,27 +61,38 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
   (o `leads.close`) además de `deals.move`.
 - `mcp` y `doctor` son los comandos compartidos de cli-core: `mcp` añade `config`, `add` y `check`, y `--profiles` y
   `--permission` en `serve`; `doctor` añade `--online`.
-- Se rechaza `--body` cuando nombra un campo dos veces con cualquier grafía, cuando `entityTypeId` no es un número
-  simple o cuando su `fields` no es un objeto; `api call` rechaza un método con cualquier sufijo que no sea un único
-  `.json`, y un método `crm.item` sin `entityTypeId`.
-- Las lecturas de `api call` comprueban las mismas claves que los comandos que leen esos elementos, como ya hacían sus
-  escrituras.
+- Un `--body` o un método de `api call` que se puede leer de más de una forma se rechaza antes de enviar nada: un
+  cuerpo que nombra un campo dos veces con cualquier grafía, un `entityTypeId` que no es un número simple, un `fields`
+  que no es un objeto, un método con cualquier sufijo que no sea un único `.json` y un método `crm.item` sin
+  `entityTypeId`. Envía cada campo una vez, con una sola grafía.
+- `--operation-id` desaparece de todas las escrituras. En un portal real, una creación repetida con el mismo id creó un
+  segundo elemento, así que una repetición nunca es segura: tras un `outcome_unknown`, haz `sync` y `show` del
+  elemento y vuelve a escribirlo solo si no está. Una escritura de negociación o prospecto con `--operation-id` se
+  rechaza antes de enviar nada.
 
 ### Corregido
 
+- Un `sync` después del primero funciona. Pedía al portal los cambios con una hora que el portal rechaza, así que cada
+  tipo fallaba y no se copiaba nada nuevo. Las horas de un filtro van ahora en segundos enteros con un desfase, y eso
+  también corrige `updated_at:` y `created_at:` en `people list` y `organizations list`.
 - Una escritura que recibe como respuesta un fallo del servidor o de la pasarela (500, 502, 504) es `outcome_unknown`,
   no `provider_unavailable`: puede que el portal la hiciera. Una escritura que corta una cancelación también es
   `outcome_unknown`, nunca `cancelled`.
 - Las etapas se leen página a página: un directorio de más de las 50 primeras filas de REST 2 perdía sus últimas
   etapas.
-- Las comprobaciones de permisos de `api call` y de las escrituras de `people` y `organizations` ahora leen un cuerpo
-  exactamente como se envía.
 - Un id o un responsable que no es un número se rechaza antes de enviar nada; antes salía vacío.
 - `--body` conserva tal como se escribieron los enteros mayores de 2^53; `api call --body -` lee el cuerpo de stdin.
 - Una petición que no recibe respuesta se corta a los 10 segundos, no a los 30, para que una lectura se pueda volver a
   intentar antes de que se agoten los 30 s propios de un comando de una sola ejecución.
 - `show` de contactos y empresas falla cuando las etiquetas de campos del portal fallan por un motivo distinto de la
   falta de derechos, en lugar de mostrar el elemento sin sus etiquetas.
+
+### Seguridad
+
+- Las comprobaciones de permisos de `api call` y de las escrituras de `people` y `organizations` leen un cuerpo
+  exactamente como se envía, así que la clave que comprueban es la que necesita la escritura.
+- Las lecturas de `api call` comprueban las mismas claves que los comandos que leen esos elementos, como ya hacían sus
+  escrituras.
 
 ## 0.4.0 — 06.11.2026
 

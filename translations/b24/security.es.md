@@ -28,6 +28,10 @@ comprueba; una etapa ganada o perdida, y `close`, comprueban además `deals.clos
 responsable. Borrar una negociación o un prospecto pregunta antes. `api.crm.deal.update: deny` también detiene
 `deals update`, `move` y `close`, y en `ask` también preguntan.
 
+`search all` lee lo que permiten las claves de las listas: con `deals.list: deny` deja fuera las negociaciones, con
+`leads.list: deny` los prospectos, y nombra cada tipo que dejó fuera en `missing` y en stderr. Si se le niegan todos
+los tipos que se le pidieron, se rechaza.
+
 `api call` funciona con una lista de permitidos. Permite las lecturas de CRM, catálogo y usuarios que hace el propio
 `b24`, y las escrituras de negociaciones, prospectos, contactos y empresas. Tanto las lecturas como las escrituras
 comprueban la clave del comando que lee o escribe los mismos elementos: `api call crm.deal.list` comprueba
@@ -41,7 +45,7 @@ enlaces públicos a archivos, `event.bind` y `batch`. También se rechazan sus l
 correos y tareas. `api show <method>` indica el nivel de un método. `api call` no se ofrece por MCP.
 
 Una escritura que no recibió respuesta no se vuelve a enviar: queda como `outcome_unknown` con su `operation_id`.
-Comprueba el portal y repítela con `--operation-id` solo si el cambio no está.
+Comprueba el portal y repítela solo si el cambio no está: Bitrix24 haría la repetición por segunda vez.
 
 `b24 personal mcp serve --http` escucha solo en `127.0.0.1`, para aplicaciones del navegador que llegan a él a través
 de tu propio túnel. Cada aplicación inicia sesión con un código de un solo uso, y el servidor guarda un hash de cada
