@@ -14,8 +14,9 @@ without it.
 
 [Download WireCat Desktop](/en/download) for macOS (Apple silicon and Intel), Windows (64-bit) or Linux
 (AppImage, .deb or .rpm). The download page picks the file for your computer. The macOS app is signed and
-checked by Apple. The Windows installer is not yet signed with a Microsoft developer certificate, so its
-first start needs one confirmation; the [first-start steps](/en/download#first-launch) show where to click.
+checked by Apple. The Windows installer is signed with an Open Source Developer certificate from Certum, and
+Windows names Open Source Developer Viacheslav Ptsarev as its publisher. Windows may still ask you to confirm the
+first start; the [first-start steps](/en/download#first-launch) show where to click.
 
 The app itself needs nothing else. The tools run on <DocTerm term="nodejs" lang="en" label="Node.js" />
 22.16 or later within 22.x, or 24 or later, with npm. If Node.js is missing, too old, or npm needs
@@ -49,6 +50,8 @@ sidebar opens it again at the step you reached.
    tool starts, with the time so far and an estimate of what is left. A tool usually takes a minute or
    two, longer on a slow connection. While you wait, short tips show what each tool is for. The installs
    keep going if you move to the next step, and each one is also shown on the **Tools** page with its full log.
+   Each install first runs the same storage check as the [Tools](#tools) page, and a warning waits in the tool's
+   row for your answer.
 5. **Agents:** the app gives each AI agent it finds the tool's <DocTerm term="skill" lang="en" label="skill" />:
    a short guide to the tool's commands. It knows where Claude Code, Codex, Cursor, Gemini CLI, OpenCode,
    Hermes Agent and OpenClaw read skills. With a skill you ask your agent in plain words, for example
@@ -91,6 +94,13 @@ Every tool has a status lamp. Green means installed and current, amber means an 
 but it does not start, and a hollow ring means not installed. Each row has one button:
 **Install**, **Update to** a version, **Fix** or **Manage**.
 
+All tools keep your messages and notes in one shared storage, and a new version of a tool can move it to a newer
+format. Before **Install** or **Update to**, the app checks this. When another installed tool needs its own new
+version to keep reading the storage, the app updates that tool too, right after the one you chose, and the progress
+line says so. A warning appears only when that other tool has no such version yet, or when the new version cannot
+open your storage. Then you choose **Not now** or **Update anyway**. A tool that does not say which format it reads,
+such as Zoom, is left out of the check.
+
 <DesktopShot
   shot="tools"
   folder="desktop/docs"
@@ -109,8 +119,15 @@ but it does not start, and a hollow ring means not installed. Each row has one b
 - **Sync now:** copies the new messages, files or meetings of a profile to this computer.
 - **Permissions:** what agents may do with each group of commands, set per profile: **Allow**, **Ask first**,
   **Read only** or **Block**.
+- **Background service** (Telegram, MAX and WhatsApp): the tool gets new messages only while its service runs.
+  Each account shows whether it runs and whether it starts when you log in. **Start and keep running** starts it
+  and sets it to start at login, **Stop** stops it, and **Stop starting at login** removes it from login. When it
+  fails, one sentence says why and offers one fix, such as **Sign in**. WhatsApp also needs your
+  phone online.
 - **MCP server (or connect web):** lets ChatGPT or Claude in the browser use the tool. The
   [Tailscale Funnel](./tailscale-funnel.mdx) guide publishes the server, or you use a Cloudflare tunnel.
+- **Run on a schedule** (Email only): starts Memo's mail agent. It reads new mail every 5 minutes and proposes
+  tasks, invoices, orders and facts for you to accept, and it never sends anything. It needs Memo and Claude Code.
 - **Uninstall:** removes the tool. Its data stays on this computer until you delete it, and the dialog
   offers **Uninstall and delete data**.
 
@@ -197,7 +214,8 @@ The tabs are **Review**, **In use**, **Rejected** and **All**. Each entry shows 
 - **Edit** it, with the pencil or from **More**. Your correction is saved as yours and approved; the agent's
   version stays under **Rejected**.
 - Take back what you decided. **More** has the undo that fits the entry: **Reject**, **No longer true** or
-  **Undo approval**. WireCat can undo the approval of a decision only; to change a fact, edit it.
+  **Undo approval**. **Undo approval** works for a decision and for a fact an agent wrote, which goes back to
+  **Review**. A fact you wrote yourself has **Edit** and **Erase…** instead.
 - **Erase…** it, also in **More**. WireCat erases it from this computer, and agents stop finding it. The
   messages, notes and meetings it rests on stay, and a backup made before still holds it.
 
@@ -286,7 +304,8 @@ report when you send one.
 
 On macOS, Windows and with the AppImage, the app updates itself: it offers a new version at the top of
 the window, then installs it and restarts. A .deb or .rpm copy downloads the new package
-itself and opens your system's installer, and also shows the `apt` or `dnf` command. Your accounts and data
+itself and opens your system's installer, and also shows the `apt` or `dnf` command. **Open in terminal** runs
+that command in your terminal: type your password there, then restart WireCat when the install ends. Your accounts and data
 will not be deleted. [Updates](/en/download#updates) and [uninstall](/en/download#uninstall) on the download page give the
 steps for each system. Removing the app leaves the tools and their data in place.
 
@@ -298,7 +317,7 @@ Find the message you see, then follow the fix. If none fits, [Report a problem](
 
 ### Windows says "Windows protected your PC"
 
-The Windows installer is not yet signed with a Microsoft developer certificate, so Windows asks you to confirm the first start. Select **More info**, then **Run anyway**. If **Smart App Control** is on, Windows blocks every unsigned app and offers no way to allow one; WireCat cannot start on that computer until it is signed. The [first-start steps](/en/download#first-launch) show where to click.
+The installer is signed, but SmartScreen trusts a signed app only after enough people have installed it, and the certificate is new, so Windows may still ask you to confirm the first start. Select **More info**, check that the publisher is **Open Source Developer Viacheslav Ptsarev**, then select **Run anyway**. If the publisher is different or missing, do not run the file: download it again from the [download page](/en/download). **Smart App Control** lets an app with a valid signature run; an older, unsigned version of WireCat is blocked when it is on. The [first-start steps](/en/download#first-launch) show where to click.
 
 ### The AppImage says "AppImages require FUSE to run"
 
@@ -330,7 +349,7 @@ A missing or extra comma, a comment, single quotes or an unclosed bracket in a t
 
 ### A tool "can't read storage"
 
-Another WireCat tool moved the shared storage to a newer format than this tool reads. Update the tool on the Tools page; [Storage](#storage) lists which tools need it. If no newer version is out yet, the page says so.
+Another WireCat tool moved the shared storage to a newer format than this tool reads. Update the tool on the Tools page; [Storage](#storage) lists which tools need it. If no newer version is out yet, the page says so. The app checks this before it installs or updates a tool, so you usually see this only after **Update anyway**, or after a tool was updated outside the app, for example with npm in a terminal.
 
 ### "The update could not be installed"
 
