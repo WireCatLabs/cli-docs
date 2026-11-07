@@ -2710,5 +2710,19 @@
         }
       ]
     }
+  },
+  {
+    "tool": "b24",
+    "slug": "index",
+    "source": "https://github.com/WireCatLabs/bitrix24-cli/blob/main/docs/index.md",
+    "reason": "The overview page's sidebar label is its title. b24's overview is titled with the command name; the other tools' overview pages carry the product name. Drop this once the release's own heading is Bitrix24.",
+    "replacements": {
+      "en": [
+        {
+          "before": "title: \"b24\"",
+          "after": "title: \"Bitrix24\""
+        }
+      ]
+    }
   }
 ]

@@ -101,5 +101,20 @@
     },
     "docsRef": "v0.131.12",
     "profile": false
+  },
+  {
+    "name": "b24",
+    "displayName": "Bitrix24",
+    "repo": "WireCatLabs/bitrix24-cli",
+    "package": "@wirecat/bitrix24-cli",
+    "lang": "en",
+    "docsRef": "v0.5.0",
+    "tier": "extra",
+    "category": "crm",
+    "summary": {
+      "en": "Read and change your Bitrix24 CRM from the terminal or your AI agent: deals, leads, contacts and companies, with a local copy to search offline.",
+      "ru": "Читайте и меняйте CRM Битрикс24 из терминала или через ИИ-агента: сделки, лиды, контакты и компании, с локальной копией для поиска без интернета.",
+      "es": "Lee y cambia tu CRM de Bitrix24 desde la terminal o con tu agente de IA: negociaciones, prospectos, contactos y empresas, con una copia local para buscar sin conexión."
+    }
   }
 ]

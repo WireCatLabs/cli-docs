@@ -182,5 +182,37 @@
     "id": "mail-upkeep",
     "pages": ["mail/configuration.md", "mail/troubleshooting.md"],
     "families": { "mail": ["config", "doctor", "runs", "upgrade"] }
+  },
+  {
+    "id": "crm-connect",
+    "pages": ["b24/installation.md", "b24/usage.md", "b24/security.md"],
+    "families": { "b24": ["session", "skill", "mcp"] }
+  },
+  {
+    "id": "crm-read-change",
+    "pages": ["b24/usage.md", "b24/commands.md"],
+    "families": {
+      "b24": [
+        "sync",
+        "store",
+        "deals",
+        "leads",
+        "pipelines",
+        "stages",
+        "fields",
+        "search",
+        "people",
+        "organizations",
+        "products",
+        "users",
+        "api",
+        "commands"
+      ]
+    }
+  },
+  {
+    "id": "crm-upkeep",
+    "pages": ["b24/configuration.md", "b24/troubleshooting.md"],
+    "families": { "b24": ["config", "doctor", "runs", "upgrade"] }
   }
 ]

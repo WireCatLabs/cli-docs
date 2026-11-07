@@ -49,6 +49,7 @@ what comes next.
 - [Google Drive roadmap](./drive/roadmap.md)
 - [Google Calendar roadmap](./gcal/roadmap.md)
 - [Mail roadmap](./mail/roadmap.md)
+- [Bitrix24 roadmap](./b24/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
 - [WhatsApp roadmap](./wa/roadmap.md)
 
