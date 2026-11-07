@@ -47,11 +47,11 @@ const toolPrompts: Record<string, Record<string, (pkg: string) => string>> = {
   en: {
     wa: (pkg) => `Install wa with npm install -g ${pkg}. First check Node.js 22.16+ (22.x) or 24+ and npm.
 Read https://wirecat.dev/en/docs/wa/installation and wa personal setup --help. Explain device linking and help me choose an account and profile name before running setup; personal is an example.
-I will scan the QR code from WhatsApp on my phone under Linked devices. Allow about five minutes for recent history to arrive.
-After linking, run wa personal doctor with the profile I chose and offer to install the wa skill for my agent. Do not send messages.`,
+I will scan the QR code from WhatsApp on my phone under Linked devices. The phone sends history in parts for a few minutes, only while WhatsApp is open on it: keep it open, and right after linking run wa personal server install and wa personal server start so serve saves the later parts.
+Then run wa personal doctor with the profile I chose and offer to install the wa skill for my agent. Do not send messages.`,
     drive: (pkg) => `Install drive with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
 Read drive personal session start --help (personal is a profile name; any name works), then help me run it.
-Warn me first: Google may show an "unverified app" screen. Read https://wirecat.dev/en/docs/drive/installation for what to do.
+Warn me first: Google may refuse the sign-in through the WireCat app or stop it with a warning; then I use my own Google app. Read https://wirecat.dev/en/docs/drive/installation for what to do.
 Check that the profile was saved with drive session list --json.
 Then help me choose a first folder (drive personal folders --help) and import it with drive personal sync.`,
     memo: (pkg) => `Install memo with npm install -g ${pkg}. Before that, check Node.js 22.16+ (22.x) or 24+ and npm.
@@ -65,13 +65,13 @@ At the end, offer to install the zm skill for my agent: zm skill install --for a
   ru: {
     wa: (pkg) => `Установи wa через npm install -g ${pkg}. Сначала проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
 Прочитай https://wirecat.dev/ru/docs/wa/installation и wa personal setup --help. Объясни привязку устройства и помоги выбрать аккаунт и имя профиля до запуска настройки; personal — пример.
-Я отсканирую QR-код в WhatsApp на телефоне, в разделе связанных устройств. На получение недавней истории отведи около пяти минут.
-После подключения выполни wa personal doctor с выбранным мной профилем и предложи установить навык wa для моего агента. Ничего не отправляй.`,
+Я отсканирую QR-код в WhatsApp на телефоне, в разделе связанных устройств. Телефон присылает историю частями несколько минут и только пока на нём открыт WhatsApp: я держу его открытым, а сразу после связывания выполни wa personal server install и wa personal server start, чтобы serve сохранил остальные части.
+Затем выполни wa personal doctor с выбранным мной профилем и предложи установить навык wa для моего агента. Ничего не отправляй.`,
     drive: (
       pkg,
     ) => `Установи drive через npm install -g ${pkg}. Перед этим проверь Node.js 22.16+ (ветка 22.x) или 24+ и npm.
 Прочитай drive personal session start --help (personal — имя профиля, подойдёт любое), затем помоги выполнить эту команду.
-Сначала предупреди: Google может показать экран «непроверенное приложение». Что делать — на https://wirecat.dev/ru/docs/drive/installation.
+Сначала предупреди: Google может отказать во входе через приложение WireCat или остановить его предупреждением; тогда я использую своё приложение Google. Что делать — на https://wirecat.dev/ru/docs/drive/installation.
 Проверь, что профиль сохранён: drive session list --json.
 Затем помоги выбрать первую папку (drive personal folders --help) и импортировать её командой drive personal sync.`,
     memo: (
@@ -87,11 +87,11 @@ At the end, offer to install the zm skill for my agent: zm skill install --for a
   es: {
     wa: (pkg) => `Instala wa con npm install -g ${pkg}. Primero comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
 Lee https://wirecat.dev/es/docs/wa/installation y wa personal setup --help. Explica la vinculación del dispositivo y ayúdame a elegir cuenta y nombre de perfil antes de configurar; personal es un ejemplo.
-Escanearé el QR desde Dispositivos vinculados en WhatsApp en mi teléfono. Deja unos cinco minutos para recibir el historial reciente.
-Después ejecuta wa personal doctor con el perfil que elegí y ofrece instalar el skill de wa para mi agente. No envíes mensajes.`,
+Escanearé el QR desde Dispositivos vinculados en WhatsApp en mi teléfono. El teléfono envía el historial por partes durante unos minutos y solo mientras WhatsApp está abierto: lo mantendré abierto, y justo después de vincular ejecuta wa personal server install y wa personal server start para que serve guarde las partes que llegan después.
+Luego ejecuta wa personal doctor con el perfil que elegí y ofrece instalar el skill de wa para mi agente. No envíes mensajes.`,
     drive: (pkg) => `Instala drive con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.
 Lee drive personal session start --help (personal es un nombre de perfil; sirve cualquiera) y ayúdame a ejecutarlo.
-Avísame antes: Google puede mostrar una pantalla de «aplicación no verificada». Qué hacer: https://wirecat.dev/es/docs/drive/installation.
+Avísame antes: Google puede rechazar el acceso con la aplicación de WireCat o detenerlo con una advertencia; entonces uso mi propia aplicación de Google. Qué hacer: https://wirecat.dev/es/docs/drive/installation.
 Comprueba que el perfil se guardó con drive session list --json.
 Después ayúdame a elegir una primera carpeta (drive personal folders --help) e importarla con drive personal sync.`,
     memo: (pkg) => `Instala memo con npm install -g ${pkg}. Antes, comprueba Node.js 22.16+ (rama 22.x) o 24+ y npm.

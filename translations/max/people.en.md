@@ -199,6 +199,8 @@ max personal contacts show "Борис Пример" --with-notes
 max personal contacts list notes:квартира                     # люди, в чьих заметках есть этот текст
 ```
 
+A `notes:` search finds part of a word in any letter case, Cyrillic included: `notes:КВАРТ` finds «квартира». A query shorter than three characters is refused with the error «search needs at least three characters».
+
 Aliases and notes stay in the local archive and never go to MAX. An alias applies only to the account you are using; a person's note is visible in every `max` login profile on this computer that encounters that person. `contacts rename` changes the name in the MAX address book, which is different. Commands resolve your alias unless it matches another person's name; then use an id. `--revision` prevents changing a note that has changed since you read it. Refreshing contacts keeps notes and aliases, and linking people does not merge them.
 
 ## Next steps

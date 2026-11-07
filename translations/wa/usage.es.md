@@ -8,6 +8,7 @@ Aquí aprenderás cómo se construye un comando de `wa` y de dónde proceden sus
 wa <profile> <resource> <verb> [arguments] [options]
 wa personal chats list
 wa personal messages list "Book club" --limit 20
+wa personal messages list "Book club" 'date>=2026-10-01 date<2026-10-20'   # a window, oldest first
 wa personal search messages "dinner"
 ```
 
@@ -34,7 +35,7 @@ wa personal session start          # a QR code to scan in WhatsApp > Settings > 
 wa personal session start phone    # type your number, then a pairing code on the phone
 ```
 
-Justo después de vincular, el teléfono envía tu historial una vez. `session start` lo guarda en el almacén local y termina cuando el teléfono deja de enviar datos. Después, `wa personal server install` sigue recibiendo en segundo plano. `wa personal session end` desvincula el dispositivo y elimina sus claves de este ordenador.
+Justo después de vincular, el teléfono envía tu historial una vez, por partes, mientras WhatsApp está abierto en él. `session start` lo guarda en el almacén local y termina cuando el teléfono deja de enviar datos. Después, instala `serve` para que también se guarden las partes que lleguen más tarde ([después de vincular](./installation.md#after-linking-keep-serve-running)). `wa personal session end` desvincula el dispositivo y elimina sus claves de este ordenador.
 
 Solo un comando de `wa` puede conectar un perfil a la vez: WhatsApp cortaría la primera conexión. Mientras funciona `serve`, los envíos del mismo perfil pasan por él y utilizan su conexión. Allí no puede preguntar, así que con el nivel de permiso `ask` necesita `--yes` ([una conexión por dispositivo](./sessions.md#one-connection-per-device)).
 

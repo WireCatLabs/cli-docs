@@ -108,7 +108,9 @@ What each part does:
 | Linux and macOS | `~/.config/max-cli/config.json` |
 | Windows | `%APPDATA%\max-cli\Config\config.json` |
 
-`max config show` prints this computer's actual path and each effective setting. In PowerShell, use `max.cmd` instead of `max`. An existing file is never replaced with the initial file.
+`max config show` prints this computer's actual path and each setting with its value, where the value came from, the built-in value, and what the setting does. In PowerShell, use `max.cmd` instead of `max`. An existing file is never replaced with the initial file.
+
+`max config migrate` adds to `defaults` every setting missing from the file, with its built-in value, so every setting is visible and editable right in the file. Your values, their order, and unknown keys stay as they are. Any write by `max` to the file, such as `config set`, does the same; `config unset` does not write the removed setting back.
 
 ## Three ways to set a value
 

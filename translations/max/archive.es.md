@@ -247,8 +247,8 @@ max personal server status           # работает ли, с какого в
 max personal server restart          # остановить и запустить снова — например, после обновления max
 max personal server stop             # остановить сервер профиля, как бы он ни был запущен
 max personal server logs             # последние строки его журнала; --limit 200 — больше
-max personal server install          # служба systemd (Linux) или launchd (macOS) для профиля; ничего не запускает
-max personal server uninstall        # убрать службу; сначала max personal server stop
+max personal server install          # служба systemd (Linux) или launchd (macOS) для профиля, включена; ничего не запускает
+max personal server uninstall        # выключить и убрать службу; сначала max personal server stop
 max personal watch                   # в другом: новые сообщения по мере прихода
 max personal watch --jsonl           # для скрипта: записи item/data и завершающая end
 max personal watch --jsonl | ./on-message.sh
@@ -258,7 +258,9 @@ max personal watch --events --jsonl  # ещё правки, удаления, р
 En `watch --jsonl`, cada registro de datos tiene la forma `{"type":"item","data":…}`. El mensaje o evento está en `data`, con nombres de campos snake_case. `watch --json` se niega antes de conectarse: para un flujo hace falta `--jsonl`. Un registro independiente `{"type":"end",…}` indica si el flujo está completo. Un fallo del origen lo termina como incompleto y devuelve un código de error. Comprueba `type` antes de leer los datos.
 
 - **Tras actualizar `max`**, el servidor automático se sustituye solo. Uno manual mantiene la versión hasta reiniciar; `max personal server status` lo muestra y `max personal server restart` lo resuelve.
-- **Usar un servicio.** Después de `max personal server install`, `max personal server start` inicia el servidor mediante systemd o launchd y `max personal server stop` lo detiene allí. El servicio ejecuta `max personal serve`, un servidor iniciado manualmente sin cierre por inactividad. Si MAX rechaza el inicio de sesión, el servicio **no** reinicia el servidor: cada reintento supondría otro inicio de sesión. `max personal server status` muestra el servicio y la ubicación de su registro.
+- **Usar un servicio.** Después de `max personal server install`, `max personal server start` inicia el servidor mediante systemd o launchd y `max personal server stop` lo detiene allí. El servicio ejecuta `max personal serve`, un servidor iniciado manualmente sin cierre por inactividad. Si MAX rechaza el inicio de sesión, el servicio **no** reinicia el servidor: cada reintento supondría otro inicio de sesión. Si el llavero aún está bloqueado (justo después de arrancar, antes de iniciar sesión en el sistema), el servidor sale con el código 12 y el servicio lo vuelve a intentar cada 30 segundos. `max personal server status` muestra el servicio, dónde está su registro y `starts_at_login`.
+- **El servicio queda habilitado.** `max personal server install` lo habilita, y el servidor arranca en cada inicio de sesión y después de reiniciar el equipo. Para habilitar un servicio que instaló una versión anterior de `max`, repita `max personal server install`. Un servicio de una copia de trabajo del código de max (con sus propias carpetas `MAX_*_DIR`) se escribe, pero no se habilita.
+- **Tras un tiempo parado, el servidor recupera lo que se perdió.** 30 segundos después de conectarse, lee los chats que tienen mensajes más nuevos que los que había en la copia local cuando arrancó: no más de 7 días atrás, hasta 500 mensajes por chat y durante 5 minutos como máximo. Si estuvo parado más de una semana, ejecute una vez `max personal messages sync --all`.
 - **Uno por perfil.** Un segundo `max personal serve` rechaza iniciarse. El socket junto al estado tiene 600, accesible solo al propietario.
 - **Su comportamiento en la red es como el de una pestaña de web.max.ru:** un ping cada 30 segundos, respuestas a los pings de MAX y confirmaciones de recepción de cada mensaje entrante. **No marca nada como leído** ni envía mensajes.
 - **Si MAX desconecta**, reintenta tras 1, 2, 4… segundos, hasta un minuto de espera; `max personal watch` lo indica en stderr. Un token rechazado detiene con error de autenticación.

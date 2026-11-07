@@ -46,7 +46,7 @@ max [профиль] [опции] <ресурс> <действие> [аргум�
 |¿Qué espera una respuesta?|no leído por otros; lo que prometiste y lo que se revela| `max personal inbox`, `max personal review` |
 |Voz|convertir voz en texto en esta computadora| `max personal messages transcribe` |
 |Archivos|descargar archivos adjuntos de mensajes o el chat completo; chat de medios| `max personal messages download`, `max personal chats media` |
-|Gente|contactos, sus nombres y notas, perfil de persona, verificación de bots| `max personal contacts list`, `max personal contacts info` |
+|Gente|contactos, sus nombres y notas, perfil de persona, verificación de bots| `max personal contacts list`, `max personal contacts show` |
 |Buscar|mensajes, archivos, fechas, personas; discusiones sobre el significado| `max personal search messages`, `max personal search conversations` |
 |Despacho|texto, archivos, voz, respuestas, mensajes retrasados| `max personal messages send` |
 |Cambiar|editar, reenviar, fijar, eliminar, reacciones, encuestas, marcar como leído| `max personal messages edit`, `max personal reactions add` |
@@ -553,7 +553,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 El JSON es `{item}` con la descripción del gráfico y, al guardar la imagen, también `file` con ruta y tamaño. La imagen se escribe solo en un archivo nuevo, sin sobrescribirla. Una fecha que falta sigue siendo un vacío y se indican datos incompletos en la descripción y la imagen. `membership` requiere eventos de chat en línea y no está disponible con `--offline`. A través de MCP `max_read` (`command: "stats charts"`) devuelve JSON desde el almacenamiento local, sin conectarse ni escribir archivos; `format: "png"` agrega una imagen PNG y JSON con `chart` y tamaño `image`. Las entradas y salidas no están disponibles en el mismo. La lectura está sujeta al permiso `messages`. `--jsonl` y la imagen de salida estándar no están disponibles.
 
-![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.86.0/docs/images/stats-charts.png)
+![Gráfico sobre datos ficticios](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.103.0/docs/images/stats-charts.png)
 
 Clasificaciones de mensajes y autores: [métricas, puntuaciones y evidence](./rankings.md).
 

@@ -4,6 +4,303 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.61.0 — 06.11.2026
+
+### Added
+
+- **`session start --client-id <id>` and the `google_client_id` setting choose your own Google app** (WC-SECR-25):
+  `--client-file` or `--client-id`, then `DRIVE_GOOGLE_CLIENT_ID`, then the profile's or the defaults'
+  `google_client_id`, then WireCat's app. The secret comes from `DRIVE_GOOGLE_CLIENT_SECRET`, never the settings file,
+  and `session start` warns before the browser opens when your app has none. `doctor` reports `"source": "config"`
+  for the defaults' setting. An agent over MCP cannot change `google_client_id`.
+
+### Fixed
+
+- **`files download` and `files export` stream to disk, so large files download.** Files over 50 MB failed with
+  `provider_unavailable` because the whole file was read into memory. The bytes now go to a temporary file next to
+  `--output`, which replaces the target only when the download is complete. There is no size limit; a download stops
+  only after a minute with no data.
+- **The Google sign-in notes no longer describe WireCat's review status.** They say that making a shared Google app
+  public for Drive is complex, so Google may refuse the sign-in, and point to your own Google app. No behaviour changes.
+- **Signing a profile in again keeps its settings:** mirrors, `max_text_chars`, `picture_search` and the rest stayed
+  only as the principal, folders and storage before.
+
+### Changed — may break callers
+
+- **`doctor`'s `oauth_client` says where the Google app comes from:** `{ "client": "wirecat", "source": "constants" }`,
+  or `"own"` with `"flag"` (`--client-file`) or `"env"` (`DRIVE_GOOGLE_CLIENT_ID`). WireCat's app now comes from
+  cli-core's `constants.json` instead of drive's source; the order is unchanged.
+- **`DRIVE_GOOGLE_CLIENT_SECRET` without `DRIVE_GOOGLE_CLIENT_ID` fails with reason `sign-in.secret-without-id`.**
+- **drive runs on cli-base 0.77.1 and cli-core 0.566.0.** A failure can now be `conflict` (exit 15); the MCP tools'
+  error codes list it.
+
+## 0.60.0 — 05.11.2026
+
+### Changed — may break callers
+
+- **Error reasons use the names cli-core and gcal share.** `sign-in.expired` is now `oauth.expired`,
+  `sign-in.scope-missing` is `oauth.scope-missing`, `sign-in.declined` is `oauth.declined`, `sign-in.not-saved` is
+  `oauth.not-saved`, `google-api.disabled` is `api.disabled`, `oauth-client.rejected` is `sign-in.client-rejected`,
+  `file.not-file` is `file.not-a-file` and `profile.lock-refused` is `profile.locked`. A sign-in that fails keeps the
+  shared sign-in's own reason (`oauth.failed`, `oauth.unavailable`, …) and its code, in place of one `sign-in.failed`;
+  the message still names no credential detail.
+- **cli-core 0.565.0.** The store stays at schema 48.
+
+### Added
+
+- **`drive config migrate` writes each setting the file lacks at its default, and every write drive makes to the
+  file adds them too.** You then find and edit `max_text_chars`, `limit`, `record` and the rest in `config.json`
+  without the docs. Your values, their order and keys drive does not know stay. `config unset` does not put back what
+  it removed; a plain read never rewrites the file (cli-core 0.563.0).
+- **`drive config show` lists each setting under `settings`** with its value, its default, whether the file sets it
+  and what it does.
+
+### Fixed
+
+- **`session start` opens no browser under `--json`, `--no-input` or `CI`.** It prints the address to open instead.
+- **A config file that is not valid JSON no longer suggests `drive config repair`**, which drive does not have
+  ([cli-core#2461](https://github.com/WireCatLabs/cli-core/issues/2461)).
+
+## 0.59.0 — 03.11.2026
+
+### Added
+
+- **Every command that takes a document takes its `document:<n>` ref too**: `documents context`, `tags`,
+  `relationships`, `notes`, `memories` and `facts`, as `documents show` and `documents export` already did. The ref is
+  looked up in the selected profile's local copy, so it works with `--offline`.
+- **`--compact` prints one line per document**: `documents list` gives `ref · name · modified`, plus how many days
+  since the last sync when the copy is old; `catalog` answers give `ref · name · kind · modified`. 200 documents fit
+  in a few KiB instead of a JSON answer over a megabyte.
+- **drive writes its entry into the shared store on every run**, so other WireCat tools (`memo show`, a search hit)
+  can print `drive <profile> documents show document:<n>` for a document ref.
+
+### Changed — may break callers
+
+- **A bare number that is one of this profile's document refs is refused** with `ref.bare-number` and names the ref
+  (`413` → `document:413`), instead of being read as a Google file ID and answering "not imported".
+- **An agent over MCP no longer writes or decides as the owner.** Its relationships stay suggestions, its facts and
+  memories stay proposed, and its confirm, stale, reverse and relationship remove are refused unless the owner turned
+  agent decisions on. At a terminal nothing changes.
+- **cli-core 0.561.0 and cli-base 0.75.2.** drive now opens the shared store at schema 48. `doctor` on a settings file
+  with broken JSON suggests `drive config repair`, which drive does not have yet
+  ([cli-core#2461](https://github.com/WireCatLabs/cli-core/issues/2461)).
+
+## 0.58.0 — 03.11.2026
+
+### Added
+
+- **`wcat drive` runs drive, and `wcat --help` lists it.** The package installs `wcat-drive` beside `drive`, and
+  `wcat-drive --wcat-describe` prints the tool's name, version and description for `wcat`. `drive` keeps working.
+
+## 0.57.0 — 02.11.2026
+
+### Changed — may break callers
+
+- **drive 0.56.0 moved the shared store to schema 43 (from 40): an older tg, max, memo or wa refuses it until it is
+  upgraded.** After drive 0.56.0 has opened a profile's store, run `<cli> upgrade` for every other WireCat CLI that
+  shares it, as drive's own message says ("the store moved to schema 43; every other WireCat CLI that uses it needs a
+  version that speaks it"). Until then those CLIs fail on that store instead of reading it.
+
+### Fixed
+
+- **`docs/remote.md` says what five wrong login codes do.** It said they lock the login page until the server
+  restarts; the page refuses for 30 seconds and then takes a new code, so a restart is not needed.
+- **A bad `--client-file` now carries the reason `sign-in.client-file-invalid`**, as gcal and mail already report, so a
+  caller can tell it from other configuration errors. The message and the code (`configuration_error`) are unchanged.
+
+## 0.56.0 — 02.11.2026
+
+### Changed — may break callers
+
+- **`--client-file` refuses a file that other users of the computer can read**, as gcal and mail already do. Run
+  `chmod 600` on the file and sign in again. The file shapes and the error for a file that is not a Desktop client JSON
+  are unchanged. The reader now comes from `@wirecat/cli-core` 0.546.0, which needs `@wirecat/cli-base` 0.73.0.
+- **A busy profile lock now reports the reason `profile.busy`**, not `profile.locked`: cli-core uses `profile.locked`
+  for a profile lock that pins a process to its own account. The code (`provider_unavailable`) is the same.
+- **`notes add` and `notes edit` keep every word after `--` as note text**, as cli-core 0.545.0 now lifts an option
+  that stands after `--` in other commands.
+- **A fact of any type can correct an ordinary fact** (it supersedes it), as cli-core now allows; drive used to refuse.
+
+### Fixed
+
+- **Moved from cli-core 0.507.0 to 0.546.0 and cli-base 0.68.1 to 0.73.0**, with the command reference and the MCP tool
+  snapshot regenerated.
+
+## 0.55.0 — 01.11.2026
+
+### Added
+
+- **`documents show` and `documents export` take a search hit's `ref`** (`document:42`), as well as a Google ID or Docs
+  URL. The ref is looked up in the selected profile's local copy, so it works with `--offline`; a ref the profile has
+  not imported is `not_found`.
+
+## 0.54.3 — 01.11.2026
+
+### Changed — may break callers
+
+- **`documents check` exits 0 when the document changed in Google since the last download.** The change shows only in
+  the answer: `changed: true`, `remote_modified_at`, `local_modified_at`, `missing`, `next` and `meta.complete: false`.
+  Before, it exited 1, so a script took a valid answer for a failure. Real failures (not found, not signed in, network
+  error) still exit non-zero.
+
+## 0.54.2 — 01.11.2026
+
+### Fixed
+
+- **`documents show`, `list` and `export` exit 0 on a copy older than a day.** The answer is still the stored copy,
+  with `meta.complete: false`, `missing` and the `sync` step saying it may be stale; before, it also exited 1, so a
+  script or an agent chaining commands took a valid answer for a failure.
+
+## 0.54.1 — 31.10.2026
+
+### Added
+
+- **`drive doctor --online`**, from cli-core 0.507.0: also connects once, sending nothing, and says whether npm has a
+  newer drive (`online.version`). Without the flag `doctor` is as before and connects to nothing. Its summary is now
+  the one every WireCat CLI shares.
+
+## 0.54.0 — 31.10.2026
+
+### Added
+
+- **`drive doctor --online`**, from cli-core 0.507.0: also connects once and reads the account, sending nothing.
+  Without the flag `doctor` is as before and connects to nothing.
+
+### Fixed
+
+- **The keyring's file fallback now comes from cli-base 0.68.0 and cli-core 0.507.0**, with no glue of drive's own. A
+  sign-in in the private file is read from there and its refreshes stay there; the next `session start` that reaches
+  the keyring moves it back and removes the file copy. Answers and the profile's `storage` are as in 0.53.0, and the
+  keyring warning still comes once per run.
+
+## 0.53.0 — 31.10.2026
+
+### Changed — may break callers
+
+- **drive runs on cli-core's shared program, with its `mcp`, `doctor` and `skill` commands**, as gcal, zoom and the
+  messengers do (cli-base#390). The command tree, help, failures and run records now come from cli-core 0.501.0.
+- **`mcp serve --tools` is gone.** `drive <profile> commands --json` lists every command with its availability for
+  the profile, and `drive <profile> mcp check` starts the server once and counts the tools it offers. `mcp` gains
+  `config`, `add` and `check`; `mcp serve` keeps `--profiles`, `--permission`, `--http`, `--port` and `--public-url`.
+- **Browser logins of `mcp serve --http` are kept in a new place** (`<state>/mcp-http/<profile>.json`), so a browser
+  app logs in again once. Stop a server started with `mcp server start` before upgrading: the new `mcp server stop`
+  does not find it.
+- **`doctor --json`** says `oauth_client` where it said `oauth_application`, lists `profiles` as names, and drops
+  `login`; each profile's selected folders and sign-in storage are in `drive session list`.
+- **Failures and parse errors are cli-core's**: `--profile` is refused as an unknown option, an unknown command says
+  `validation_error` with Commander's suggestion, and an expired sign-in no longer carries the `owner.sign-in` step.
+- **`--json id,name` with a space no longer picks catalog and document fields**; write `--json=id,name`.
+- **New global options from cli-core**: `-v`, `--trace`, `--no-input`, `--max-input-bytes`, `--brief`, `--full`.
+  Once a day an agent may see `agents: drive skill install installs this tool's guide`;
+  `drive <profile> config set --defaults skill_hint false` turns it off.
+- `mcp serve --read-only` makes every tool call read-only, as `DRIVE_READ_ONLY=1` does. An agent's `documents export`,
+  `files download` and `files export` still take only a file name, written in the profile's export folder.
+
+Settings files and keyring entries written by drive 0.51 load unchanged (checked by `contracts:upgrade`).
+
+## 0.52.1 — 31.10.2026
+
+### Fixed
+
+- **`session start` falls back to a private file when the keyring fails, and never asks** (WC-SECR-4). It used to
+  stop with `sign-in.not-saved`. Now it signs in, says once on stderr that it used the private file, records
+  `storage: "file"` for the profile and answers it. `--credential-storage file` still chooses the file outright;
+  the keyring is still the default and the safer choice. `sign-in.not-saved` now means the file cannot be read.
+
+## 0.52.0 — 31.10.2026
+
+### Added
+
+- **`search` says how many documents match in all: `total`.** The answer carries `total: { value, relation }`, shaped
+  as Elasticsearch's `hits.total`: `eq` is the exact count, `gte` a lower bound (counting stops at 10,000). It counts
+  the documents the words find and those found by meaning, every page together.
+
+### Fixed
+
+- **Search by meaning inside a filter finds the filter's own documents.** With a filter of at most 2,000 documents,
+  every one of them is ranked by meaning, instead of the 50 nearest overall cut to the filter: `budget date>=30d`
+  went from 7 hits to a full page on the owner's store (cli-core 0.501.0). drive requires cli-base 0.67.0.
+
+## 0.51.0 — 31.10.2026
+
+### Fixed
+
+- **`search` keeps the query's fields for documents found by meaning.** `tag:work` or `date>=30d` without `--exact`
+  returned about 20 documents that matched neither; now every field and every excluded word holds for every hit, and
+  a query of fields alone lists the matching documents, newest first. `date:` reads a document's last edit on Google
+  Drive, the time its hit shows as `updated_at`, where it read when drive last imported it (cli-core 0.496.0).
+
+## 0.50.0 — 31.10.2026
+
+### Security
+
+- **A run with moved folders never removes the owner's Google sign-in.** A run with a different `HOME` or XDG folder
+  now counts as moved, as one with `DRIVE_*_DIR` overrides already did (cli-base 0.65.5, WC-SECR-24): it reads the
+  owner's keyring entry, saves a new sign-in only to a temporary entry, and keeps a refreshed token in memory instead
+  of writing it (cli-core 0.494.0). drive requires cli-base 0.65.5 and cli-core 0.494.0.
+
+### Changed — may break callers
+
+- **`session end` in a run with moved folders says when it kept the owner's sign-in.** It removes only the run's
+  temporary entry; when the owner's sign-in is still there it answers `signed_out: false` and
+  `kept: "owners-sign-in"`, where it said `signed_out: true`.
+
+## 0.49.0 — 31.10.2026
+
+### Changed — may break callers
+
+- **The first screen (`drive --help`) lists `gcal` under "Works with"**, and `setup` offers to install
+  `@wirecat/gcal-cli`. This comes with cli-core 0.481.0.
+- **Searching a document's notes (`notes list <document> text:review`) finds part of a word, in any letter case, and
+  looks in the title too.** A mixed-case Cyrillic word is no longer missed, and the answer comes in milliseconds. A
+  search of one or two characters is refused with "search needs at least three characters"; an empty one still
+  filters nothing. This comes with cli-core 0.491.0 (store version 40). Notes already saved are indexed in batches,
+  and matched as before until then. Every WireCat CLI that shares the store must run cli-core 0.490.0 or later, or it
+  does not index the notes it writes: update them together. A caller that searched notes by one or two characters
+  must send three or more.
+
+### Added
+
+- **`drive <profile> documents check <document>` asks Google whether one stored document changed.** It makes one
+  live read of the document's `modifiedTime` and compares it with the modified time the store kept when the document
+  was synced. The answer has `changed`, `remote_modified_at` and `local_modified_at` (`null` when the copy kept none,
+  which counts as changed). When `changed` is `true` it also has `missing` (`modified_at`), `next`
+  (`drive <profile> sync`) and `meta.complete: false`; exit code stays 0. Unlike `synced_at` on `documents show`, this
+  is per document, not the profile's last sync. It needs the network, so `--offline` refuses it, and a document that
+  is not imported fails with `document.not-imported`.
+
+### Fixed
+
+- **Every `next[].line` starts with the profile the command ran with.** `drive personal documents list --limit 1`
+  gave `drive documents list --page 2 --limit 1` and `drive sync`, and running such a line failed with
+  `profile.required`. Now the lines read `drive personal documents list --page 2 --limit 1` and `drive personal sync`,
+  for every step, in answers and in errors.
+
+## 0.47.0 — 31.10.2026
+
+### Changed — may break callers
+
+- **`documents show`, `list` and `export` say when the local copy was made, and warn when it is old.** Each answer
+  now carries `synced_at` (the profile's last sync, `null` if it has none) and `age_days`: on `show` and `export`
+  inside `item`, on `list` on every row. When the copy is older than a day, or has no sync time, the answer also has
+  `missing` (`synced_at`, with the age), `next` (`drive <profile> sync`) and `meta.complete: false`; exit code stays 0.
+  A caller that treated `meta.complete` as always `true` here must read `missing` and `next`. Drive still reads only
+  the local store; it does not ask Google whether the document changed.
+
+### Fixed
+
+- **`drive mcp revoke`, `mcp server stop` and `mcp server status` with no profile say what the profile is for.** They
+  refused with "name the profiles to serve", the words of `mcp serve`. Now: "name the profiles whose browser logins
+  to forget", "… whose server to stop", "… whose server to check". Same exit 2 and `details.profiles`.
+
+## 0.46.0 — 29.10.2026
+
+### Changed — may break callers
+
+- **The agent skill is listed on ClawHub as `wirecat-drive`.** Install it with
+  `openclaw skills install @wirecat/wirecat-drive`. The `drive-cli` listing is no longer updated.
+  `drive skill install` still writes `skills/drive-cli/`.
+
 ## 0.45.1 — 29.10.2026
 
 ### Fixed

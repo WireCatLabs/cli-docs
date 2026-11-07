@@ -200,6 +200,7 @@ cron не имеет терминала и часто не имеет `XDG_RUNTI
 | `tg personal topics show <chat> <id>` | одна тема: заголовок, закрыта или закреплена, количество непрочитанных, последняя активность |
 | `tg personal topics enable <chat>` | включить форум; базовая группа требует `--upgrade --yes` и возвращает новый идентификатор чата |
 | `tg personal topics create <chat> <title>` | создать тему; после неизвестного результата проверьте `topics list` вместо повторения |
+| `tg personal topics edit <chat> <id> --emoji <emoji>` | задать теме значок из `topics icons list`; `--emoji none` убирает его; `topics create` тоже принимает `--emoji` |
 | `tg personal messages send <chat> <text> --topic <id>`, `tg personal polls create <chat> <question> <answers> --topic <id>` | отправить сообщение или провести опрос в теме форума |
 | `tg personal messages forward <chat> <message> --to <forum> --topic <id>` | переслать сообщение в тему форума `--to` |
 | `tg personal chats inspect <link>` | куда ведет приглашение или публичная ссылка; никуда не вступает |

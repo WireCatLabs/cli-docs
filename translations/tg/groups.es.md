@@ -196,6 +196,7 @@ cron no tiene terminal y, a menudo, no tiene `XDG_RUNTIME_DIR`, sin el cual `tg`
 | `tg personal topics show <chat> <id>` | un tema: título, cerrado o fijado, recuento de no leídos, última actividad |
 | `tg personal topics enable <chat>` | habilitar un foro; un grupo básico requiere `--upgrade --yes` y devuelve una nueva identificación de chat |
 | `tg personal topics create <chat> <title>` | crear un tema; después de un resultado desconocido marque `topics list` en lugar de repetir |
+| `tg personal topics edit <chat> <id> --emoji <emoji>` | dar a un tema un icono de `topics icons list`; `--emoji none` lo quita; `topics create` también acepta `--emoji` |
 | `tg personal messages send <chat> <text> --topic <id>`, `tg personal polls create <chat> <question> <answers> --topic <id>` | enviar un mensaje o encuesta sobre un tema del foro |
 | `tg personal messages forward <chat> <message> --to <forum> --topic <id>` | reenviar un mensaje a un tema del foro `--to` |
 | `tg personal chats inspect <link>` | adónde conduce una invitación o un enlace público; no se une a nada |

@@ -175,8 +175,10 @@ siguen visibles en el descubrimiento con sus argumentos. Solo se pueden ejecutar
 `permissions.mcp.authority` en `allow` o `ask`. El valor por defecto es `deny`: el descubrimiento los marca
 como no disponibles, nombra el permiso y explica el motivo; la llamada se rechaza. De otro modo, un agente limitado a leer
 podría habilitar cambios en una ejecución posterior. El agente no puede establecer la clave por sí mismo,
-porque también controla `config set`. Cámbiala desde una terminal, solo para un perfil cuyo agente pueda
-gestionar sus propios límites:
+porque también controla `config set`. Cámbiala desde tu propia
+terminal, fuera del agente: un `config set` ejecutado en la shell de un agente (donde está definida
+`AI_AGENT`, `CLAUDECODE` u `OPENCLAW_SHELL=exec`) también se rechaza para esta clave. Hazlo solo en un perfil cuyo
+agente sea de confianza:
 
 ```sh
 tg agent config set permissions.mcp.authority allow

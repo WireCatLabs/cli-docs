@@ -10,7 +10,7 @@ Abre esta página para vincular `wa` por primera vez, añadir una segunda cuenta
 Primero, las palabras que utiliza esta página:
 
 - **Dispositivo vinculado**: `wa` en esta computadora, tal como lo ve WhatsApp. Lo vincula desde el teléfono, de la misma manera que vincula WhatsApp Web, y el teléfono lo enumera en Configuración → Dispositivos vinculados. Sus claves se encuentran en un archivo en esta computadora. Quien tenga ese archivo puede leerlo y enviarlo como ti, así que trátelo como su contraseña.
-- **History push**: la copia de tus chats recientes que el teléfono envía una vez, segundos después de vincularse. `wa` se queda con lo que llega; Los mensajes más antiguos de un chat se pueden solicitar al teléfono más tarde ([historial anterior](./archive.md#older-history-from-your-phone)).
+- **Envío del historial**: la copia de tus chats que el teléfono envía una vez después de vincularse, por partes, durante varios minutos y solo mientras WhatsApp está abierto en él. `wa` se queda con lo que llega; los mensajes más antiguos de un chat se pueden solicitar al teléfono más tarde ([historial anterior](./archive.md#older-history-from-your-phone)).
 - **Perfil**: un nombre para un dispositivo vinculado en esta computadora, con sus propias claves y configuraciones. Cada comando que usa una cuenta le asigna un nombre, por lo que elige un nombre en la configuración (`wa personal setup`) y lo usa a partir de ese momento ([perfiles](#profiles)).
 
 ## Primera ejecución
@@ -27,6 +27,8 @@ wa personal session start phone    # your number, typed in the terminal, then a 
 **QR:** escanea el código en WhatsApp en el teléfono: Ajustes → Dispositivos vinculados → Vincular un dispositivo. El código se renueva mientras esperas.**Teléfono:** escribe tu número en formato internacional cuando `wa` te lo solicite. `wa` muestra un código de emparejamiento de ocho caracteres; en el teléfono, abra Configuración → Dispositivos vinculados → Vincular un dispositivo → Vincular con número de teléfono y escríbalo. El número va al motor en su entrada, nunca como argumento, por lo que otros programas en esta computadora no pueden verlo en la lista de procesos.
 
 Inmediatamente después, el teléfono envía su historial. `session start` mantiene abierta la misma conexión, guarda lo que llega a el almacén local y se detiene cuando el teléfono ha estado en silencio durante 45 segundos o con Ctrl+C. Ctrl+C allí, o `--timeout`, finaliza solo esta espera: el dispositivo permanece vinculado, lo que llegó se guarda y cuenta, y el comando finaliza con el código de salida `0`. `wa personal setup` espera de la misma manera, luego continúa con los pasos restantes dentro del límite de tiempo habitual del comando y comienza de nuevo. Luego siga recibiendo con `wa personal server install` ([el almacén local](./archive.md)).
+
+Mantén WhatsApp abierto en el teléfono hasta que `serve` esté en marcha: el teléfono puede enviar más partes después de que `session start` se detenga. Una parte que llega mientras otro comando está conectado, un envío por ejemplo, se guarda en el archivo del dispositivo y no en el almacén. `serve` la guarda la próxima vez que se conecte.
 
 ### Cuando un agente ejecuta el enlace
 

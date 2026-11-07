@@ -415,7 +415,7 @@ conserva el formato original; no convierte Markdown local en un Google Doc con f
 
 ## Usar un cliente MCP local
 
-Añade `--read-only` si este servidor debe rechazar escrituras.
+Añade `--read-only` si este servidor debe rechazar escrituras: cada llamada a una herramienta se ejecuta entonces como con `DRIVE_READ_ONLY=1`.
 
 Para agentes sin terminal, configura el ejecutable `drive` y los argumentos `personal mcp serve`.
 La cuenta conectada debe estar en el ordenador que ejecuta el servidor. Para dar a un agente
@@ -423,13 +423,16 @@ varias cuentas, usa `mcp serve --profiles work,personal` o `--profiles all`; cad
 indica entonces su perfil. `drive mcp serve` sin perfil se niega y muestra los perfiles.
 
 ```sh
-drive personal mcp serve --tools --json
+drive personal commands --json
+drive personal mcp check
 drive personal mcp serve
 ```
 
 El servidor ofrece tres herramientas: `drive_tools_search` encuentra un comando y muestra sus argumentos,
 y `drive_read` o `drive_write` lo ejecuta con `{ command, arguments }`. El primer comando de arriba
-lista los comandos disponibles: revísalos antes de iniciar el servidor stdio. Los argumentos MCP
+lista esos comandos y su disponibilidad para el perfil; `mcp check` inicia el servidor una vez y cuenta las herramientas
+que ofrece. `drive personal mcp config` imprime la entrada para los ajustes de un agente, y `drive personal mcp add`
+la escribe para Claude Code, Codex o Gemini CLI. Los argumentos MCP
 usan snake_case, por ejemplo `file_id`; la opción CLI correspondiente es `--file-id`.
 El servidor usa el mismo árbol, perfil y controles. Los comandos denegados y sus argumentos siguen
 visibles: `availability.available: false` incluye el motivo y la clave de permiso necesaria. La herramienta

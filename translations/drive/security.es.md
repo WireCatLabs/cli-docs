@@ -33,8 +33,10 @@ El ID de cliente Desktop OAuth y el client secret incluido identifican la aplica
 WireCat. No conceden acceso a una cuenta. Google trata las aplicaciones instaladas como clientes
 públicos que no pueden mantener confidencial esta identidad; cada usuario concede su propio
 acceso. Los tokens de acceso y actualización son privados y nunca se incluyen en el paquete.
-Un `--client-file` propio tiene prioridad sobre los ajustes de aplicación del entorno, que tienen
-prioridad sobre la identidad incluida de WireCat. Consulta [la explicación de OAuth nativo de Google](https://developers.google.com/identity/protocols/oauth2/native-app).
+`session start` elige la aplicación en este orden: `--client-file` o `--client-id`, luego `DRIVE_GOOGLE_CLIENT_ID`, luego el
+ajuste `google_client_id` del perfil o de los defaults, y por último la identidad incluida de WireCat. `drive doctor` indica
+cuál usaría un perfil sin ajuste propio, como `oauth_client.source`: `flag`, `env`, `config` o `constants`. Se rechaza
+un `--client-file` que otros usuarios del ordenador puedan leer (aplícale antes `chmod 600`). Consulta [la explicación de OAuth nativo de Google](https://developers.google.com/identity/protocols/oauth2/native-app).
 
 | Datos | Ubicación y protección |
 | --- | --- |
@@ -67,7 +69,10 @@ la [Política de privacidad](https://wirecat.dev/en/privacy) para datos de Googl
 drive personal session end
 ```
 
-Elimina las credenciales locales del perfil y conserva ajustes y documentos. Quita la aplicación
+Elimina las credenciales locales del perfil y conserva ajustes y documentos.
+Una ejecución con carpetas movidas (`DRIVE_CONFIG_DIR` y las demás variables `DRIVE_*_DIR`, o un `HOME` o carpeta XDG
+distintos) usa tu propio acceso pero nunca lo elimina: ahí `session end` responde `signed_out: false` y
+`kept: "owners-sign-in"`, y solo elimina un acceso hecho en esa ejecución. Quita la aplicación
 de las [conexiones de Google](https://myaccount.google.com/connections) para revocar su acceso.
 Quitar una raíz y sincronizar elimina las fuentes gestionadas y sus copias; las notas, recuerdos,
 exportaciones y copias de seguridad independientes pueden permanecer.

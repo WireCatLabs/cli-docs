@@ -225,7 +225,12 @@ zm personal meetings prepare 123456789 --context-source project-notes --context-
 ```sh
 zm personal stats meetings show --since-time 30d --json
 zm personal stats meetings top --project RES --limit 5 --json
+zm personal stats meetings history --by week --since-time 90d --json
 ```
+
+`stats meetings history` считает встречи, их минуты и встречи с расшифровкой по дням, неделям (с понедельника) или
+сериям, только по самим встречам. Встреча без конца считается встречей, но не добавляет минут. При `--by series`
+первой идёт самая загруженная серия, а все встречи вне серий делят одну строку `no-series`.
 
 `show` выдаёт встречи, строки, слова и время речи в выборке по неделям (неделя начинается с понедельника в
 `--timezone`, по умолчанию в поясе компьютера) и десять говоривших больше всех. `top` перечисляет говорящих по
@@ -291,7 +296,7 @@ zm personal mentions list started_at>=30d --json
 | `session start [--browser <program>]` | разрешить доступ через браузер |
 | `commands --json` | показать аргументы, параметры и примеры |
 | `complete -- <words...>` | ответить на дополнение команд |
-| `doctor` | проверить среду и публичные настройки без входа или базы |
+| `doctor` | проверить установку: версию, пути, проблемы настроек, профили, хранилище; без хранилища секретов, входа и сети |
 | `session status` | проверить OAuth отдельно от профилей данных |
 | `meetings import <folder>` | импортировать расшифровки `.vtt` или `.txt` из zoom-searcher в выбранный профиль; называет пояс, в котором прочитано время файлов |
 | `meetings sync [--since-time <time>]` | загрузить встречи из настроенного источника |
@@ -325,8 +330,9 @@ zm personal mentions list started_at>=30d --json
 | `recordings archive import <directory>` | проверить VTT и добавить к сохранённым встречам |
 | `remote-meetings list\|show\|invitation` | прочитать будущие встречи и приглашения |
 | `remote-meetings create\|update\|cancel` | простое изменение встречи Zoom с предварительным вопросом; `--dry-run` показывает план |
-| `mcp` | предоставить команды zm агенту MCP через stdio в рамках разрешений профиля |
+| `mcp serve [--profiles a,b\|all]` | предоставить команды zm агенту MCP через stdio в рамках разрешений профиля |
 | `stats meetings show\|top` | время речи, строки и слова по говорящим и по неделям |
+| `stats meetings history` | встречи, минуты и расшифровки по дням, неделям или сериям |
 | `skill show`, `skill install --for agents` | показать или явно установить инструкции агенту |
 
 `meetings` использует локальные ID, `remote-meetings` — числовые ID Zoom.
@@ -346,6 +352,18 @@ zm personal mentions list started_at>=30d --json
 Сведения о встрече — в `item`, расшифровки и резюме —
 в `items`. Сведения учитывают текущие расшифровки; `meetings transcript <meeting> --history`
 читает сохранённые старые редакции.
+
+`ref` попадания встречи в `search all` — это сама встреча. Попадание в расшифровке также содержит `cue_ref` — найденную
+реплику, `sender_name` — кто её произнёс, `language` — язык расшифровки (`ru`, `en`…, `null`, если неизвестен), и
+`line` из `lines_total` — где в расшифровке это прозвучало; попадания `search meetings` тоже несут три последних
+поля. У попаданий в чате и сводке их нет. Откройте место попадания так:
+
+```sh
+zm personal meetings passage CUE_REF --before-n 3 --after-n 3 --json
+```
+
+У расшифровок, сохранённых старой версией, нет языка. `zm personal meetings repair --json` перечисляет, что он для них
+найдёт, а `--yes` сохраняет это.
 
 `--jsonl` выдаёт записи с типом: каждый результат — `{"type":"item","data":...}`, затем
 `{"type":"end","complete":true,"page":...}`. Даже пустой список завершается записью end.

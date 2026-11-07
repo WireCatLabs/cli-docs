@@ -18,7 +18,20 @@ npm también instala el motor, un programa separado que se comunica con WhatsApp
 
 Luego vincule un perfil e instale la skill del agente con `wa personal setup` (consulte [uso](./usage.md)).
 
-La instalación en sí no escribe nada en las carpetas de sus agentes. Para instalar la skill del agente sin vincularla, ejecute `wa skill install` (`--for claude` o `--for agents` para una carpeta). Para que la instalación lo haga, configure `WA_INSTALL_AGENT` en `all`, `claude`, `codex`, `cursor` o `gemini`: `WA_INSTALL_AGENT=all npm install --global @wirecat/whatsapp-cli`.
+## Después de vincular: mantén `serve` en marcha
+
+El teléfono envía tu historial por partes, durante varios minutos después de vincular, y solo mientras WhatsApp está abierto en él. Solo un `serve` en ejecución guarda las partes que llegan después de que termine `setup` o `session start`. Así que, justo después de vincular, mantén WhatsApp abierto en el teléfono e instala `serve` como servicio:
+
+```sh
+wa personal server install                               # writes the unit and enables it at login; starts nothing
+wa personal server start
+```
+
+En macOS, omite la línea de `systemctl`: `server install` escribe un agente de launchd en su lugar. Detalles: [`serve` como servicio](./archive.md#as-a-service).
+
+La instalación en sí no escribe nada en las carpetas de sus agentes. Para instalar la skill del agente sin vincularla, ejecute `wa skill install` (`--for claude` o `--for agents` para una carpeta). Para que la instalación lo haga, configure `WA_INSTALL_AGENT` en `all`, `claude`, `codex`, `cursor` o `gemini`: `WA_INSTALL_AGENT=all npm install --global --allow-scripts=@wirecat/whatsapp-cli @wirecat/whatsapp-cli`.
+
+npm 12 bloquea los scripts de instalación no aprobados. Si muestra `npm warn install-scripts` y dice que el paquete tiene `install scripts blocked because they are not covered by allowScripts`, `wa` se instala igualmente, pero el script de `WA_INSTALL_AGENT` no se ejecuta. La opción `--allow-scripts=@wirecat/whatsapp-cli` de arriba, limitada a este paquete, permite ese script para esta instalación global. Si no, deja los scripts bloqueados y ejecuta `wa skill install` después. Consulta [la política de npm sobre scripts de instalación](https://docs.npmjs.com/cli/v12/commands/npm-install/#allow-scripts).
 
 
 ## De la fuente

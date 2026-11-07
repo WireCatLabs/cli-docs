@@ -86,6 +86,9 @@ tg shop config show --bot
 | `color` | из терминала | цвет в виде таблицы | нет; без настроек `NO_COLOR` отключает его |
 | `sender_colors` | `false` | цвет для каждого отправителя в таблице сообщений | нет |
 | `search_catch_up` | `false` | `messages sync` и `store gaps repair` также подготавливают полученный чат для локального поиска: его граф обсуждений и, если он установлен, его векторы. Никогда не загружает модели и не вызывает внешних провайдеров | `--catch-up`, `--no-catch-up` |
+| `history_dialog_days` | `1095` | на сколько дней назад `messages sync` читает личный чат, от 1 до 1095 | `messages sync --full-history` |
+| `history_group_days` | `365` | на сколько дней назад `messages sync` читает группу, от 1 до 1095 | `messages sync --full-history` |
+| `history_group_members_max` | `50` | `messages sync` не читает историю группы, где людей больше; `store status` показывает, что пропущено. Новые сообщения от `serve` сохраняются в любом случае | `messages sync --full-history` |
 | `picture_search` | `false` | поиск сохранённых картинок по тому, что на них изображено. `images embed` читает сохранённые картинки, когда модель загружена, и тогда `search messages` также возвращает список `pictures` ([картинки](./search.md#pictures-by-what-they-show)) | нет |
 | `search_reranker` | `mmarco` | модель, которая переупорядочивает первые 50 результатов `search messages --discover`: `mmarco` (136 МБ), `bge-reranker-v2-m3` (588 МБ) или `off`. Незагруженная модель пропускается, и поиск об этом сообщает; `tg models download mmarco` загружает её | нет |
 | `record` | `true` | сохранять каждый запуск; `false` сохраняет только неудачные запуски ([диагностика](./diagnostics.md)) | `--record`, `--no-record` (не сохраняет ничего) |
@@ -283,6 +286,8 @@ tg personal setup
 |---|---|---|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | целое число ≥ 1 | профиль |
 | `requests_per_minute` | целое число ≥ 0 | профиль |
+| `history_dialog_days`, `history_group_days` | целое число от 1 до 1095 | профиль |
+| `history_group_members_max` | целое число ≥ 1 | профиль |
 | `color`, `sender_colors`, `search_catch_up`, `record`, `record_input` | логическое | профиль |
 | `permissions` | объект путей команд и уровней `deny`, `readonly`, `ask`, `allow` | профиль |
 | `read_other_bots` | логическое значение или массив имен профилей | только бот |

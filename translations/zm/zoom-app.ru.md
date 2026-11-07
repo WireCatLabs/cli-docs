@@ -35,7 +35,12 @@ zm personal session start
 
 У zm нет встроенного client ID. Приложение WireCat пока недоступно другим аккаунтам Zoom:
 каждому пользователю нужно своё General app, пока приложение владельца не пройдёт проверку
-Zoom Marketplace. Оно находится в Development и работает только с аккаунтом своего создателя.
+Zoom Marketplace. Оно находится в Development и работает только с аккаунтом своего создателя. `zm doctor --json` сообщает об этом в
+`oauth_client`, пока вы не настроите своё.
+
+Вместо настройки можно один раз передать ID через `zm personal session start --client-id <public-client-id>`
+(успешный вход сохраняет его как `zoom.client_id`) или задать `ZM_ZOOM_CLIENT_ID`, которая важнее настройки. См.
+[какое приложение использует zm](./configuration.md#which-zoom-app-zm-uses).
 
 <a id="use-a-wirecat-or-team-app" />
 
@@ -128,6 +133,9 @@ Zoom Marketplace. Оно находится в Development и работает �
 | `meeting:write:meeting` | Создать встречу |
 | `meeting:update:meeting` | Изменить встречу |
 | `meeting:delete:meeting` | Отменить встречу |
+| `team_chat:read:list_contacts` | Показать контакты компании и внешние контакты через `contacts list` |
+| `team_chat:read:contact` | Показать один контакт и его телефоны через `contacts show` |
+| `agentic_search:read:search` | Искать в чате, документах и встречах напрямую в Zoom через `zm personal zoom search` |
 
 Для архива не нужны права изменения встреч. Изменения сначала показывают план; `--yes` выполняет
 один запрос. После выдачи прав переходите к [архиву записей](./archive.md#archive-cloud-recordings)

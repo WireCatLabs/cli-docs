@@ -128,7 +128,7 @@ No hace falta `max shop session start`, salvo que también quieras una cuenta pe
 
 ### «no token found for profile "personal", although it has logged in on this machine»
 
-Código de retorno `4`. Ya se ha iniciado sesión en el perfil de esta computadora, pero el token no se puede leer. Casi siempre se trata de un almacenamiento de contraseña al que `max` no ha llegado: el comando se lanzó desde cron, vía ssh o desde otro entorno sin `XDG_RUNTIME_DIR`. **No vuelvas a iniciar sesión**: esto agregará otro dispositivo a tu cuenta y la próxima vez desde el mismo entorno, el token no se volverá a leer. `max personal doctor` mostrará si ve el token; cómo configurar cron - en la sección [ejecutar según lo programado](./recipes.md#как-запускать-по-расписанию).
+Código de retorno `4`; en `max serve` y en una ejecución programada es `12` con el motivo `credentials.unreachable`: lo vuelven a intentar más tarde. Ya se ha iniciado sesión en el perfil de esta computadora, pero el token no se puede leer. Casi siempre se trata de un almacenamiento de contraseña al que `max` no ha llegado: el comando se lanzó desde cron, vía ssh o desde otro entorno sin `XDG_RUNTIME_DIR`. **No vuelvas a iniciar sesión**: esto agregará otro dispositivo a tu cuenta y la próxima vez desde el mismo entorno, el token no se volverá a leer. `max personal doctor` mostrará si ve el token; cómo configurar cron - en la sección [ejecutar según lo programado](./recipes.md#как-запускать-по-расписанию).
 
 ### «MAX refused this profile's last login for too many attempts»
 
@@ -315,7 +315,7 @@ Código `2`: solo un `serve` por perfil. `max personal server status` muestra pr
 
 ### El servidor no se inicia en segundo plano.
 
-El motivo lo mostrará `max personal server logs`. El motivo habitual del servicio es el llavero: el servicio comienza antes de que se abra el llavero, o sin `XDG_RUNTIME_DIR`. Si transfirió Node o `max`, ejecute `max personal server install` nuevamente: el servicio ejecuta las rutas con las que se instaló ([servidor en segundo plano](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch)).
+El motivo lo mostrará `max personal server logs`. El motivo habitual del servicio es el llavero: el servicio comienza antes de que se abra el llavero, o sin `XDG_RUNTIME_DIR`. Mientras el llavero está bloqueado, `serve` sale con el código `12`, y systemd lo vuelve a iniciar a los 30 segundos. Si transfirió Node o `max`, ejecute `max personal server install` nuevamente: el servicio ejecuta las rutas con las que se instaló ([servidor en segundo plano](./archive.md#новые-сообщения-сразу-max-serve-и-max-watch)).
 
 ## Informar de un problema
 

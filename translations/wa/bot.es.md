@@ -20,6 +20,9 @@ title: "Un número de WhatsApp Business como bot"
 | `bot media download <id> --output <file>` | Guarda un archivo que alguien envió, con el ID de medio `bot watch --jsonl` impreso. |
 | `bot api <operation>` | Cada operación de Cloud API que mantiene `wa` se genera a partir del archivo OpenAPI de Meta. |
 | `bot mcp serve` | Los comandos del bot como herramientas MCP para un agente. |
+| `bot list` | Cada perfil de bot de este ordenador que tiene un token; `--check` pregunta a Meta qué número es cada uno. No necesita la palabra del perfil. |
+
+Un perfil de bot no es una de tus cuentas: `wa account list` omite un nombre que solo usa un bot, y marca con `bot: true` un nombre que es tu cuenta y también un bot.
 
 Un chat es el número de teléfono de la persona en dígitos, como `70000000001`. Meta nombra a algunas personas solo mediante una identificación de usuario de ámbito empresarial; `bot watch` muestra ese chat como `user:<id>` y lo envías de la misma manera.
 
@@ -56,7 +59,7 @@ Realiza estos pasos una vez, en el Panel de aplicaciones de Meta. `wa` no puede 
    El token de verificación es cualquier cadena que elijas. Escribe la misma cadena en el Panel de la aplicación en el paso 6.
 6. Abre un túnel e inicia el receptor ([recibir mensajes](#receive-messages)). Luego, en WhatsApp → Configuración, introduce la dirección del túnel como URL de devolución de llamada con el mismo token de verificación y suscríbete al campo `messages`.
 
-Compruébalo: `wa cloudtest bot me` indica el número de prueba y `wa cloudtest bot templates send <your verified number> hello_world` llega a tu teléfono.
+Compruébalo: `wa bot list` nombra `cloudtest`, `wa cloudtest bot me` indica el número de prueba y `wa cloudtest bot templates send <your verified number> hello_world` llega a tu teléfono.
 
 ## Recibir mensajes
 

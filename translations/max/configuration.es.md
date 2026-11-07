@@ -111,7 +111,9 @@ Qué hace cada parte:
 | Linux y macOS | `~/.config/max-cli/config.json` |
 | Windows | `%APPDATA%\max-cli\Config\config.json` |
 
-`max config show` imprime la ruta que esta computadora realmente usa y cada configuración con un valor. En PowerShell, escriba `max.cmd` en lugar de `max`. Un archivo existente nunca se reemplaza por el inicial.
+`max config show` imprime la ruta que esta computadora realmente usa y cada configuración con su valor, de dónde salió ese valor, el valor integrado y lo que hace la configuración. En PowerShell, escriba `max.cmd` en lugar de `max`. Un archivo existente nunca se reemplaza por el inicial.
+
+`max config migrate` añade a `defaults` cada configuración que falta en el archivo, con su valor integrado, para que todas las configuraciones se vean y se editen directamente en el archivo. Sus valores, su orden y las claves desconocidas quedan como están. Cualquier escritura de `max` en el archivo, por ejemplo `config set`, hace lo mismo; `config unset` no vuelve a escribir la configuración eliminada.
 
 ## Tres formas de establecer un valor
 

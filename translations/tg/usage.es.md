@@ -377,7 +377,7 @@ tg personal contacts context @example_user --chat "Book club"  # their latest me
 tg personal contacts check @example_user  # does the account look like a bot or a spammer
 ```
 
-`contacts list` son las personas con las que tienes una conversación individual. `contacts sync` también incluye el resto de tu lista de contactos de Telegram. `name:` y `notes:` buscan entre las personas que guarda el almacén local, así que antes necesitan un `contacts sync` (o mensajes ya leídos); si no hay nada guardado, la consulta se rechaza. `contacts lookup` nunca toma el número como argumento: introdúzcalo o escríbalo cuando se le solicite. El perfil de una persona, sus mensajes recientes, el bot check y lo que envía a dónde: [personas](./people.md).
+`contacts list` son las personas con las que tienes una conversación individual. `contacts sync` también incluye el resto de tu lista de contactos de Telegram. `name:` y `notes:` buscan entre las personas que guarda el almacén local, así que antes necesitan un `contacts sync` (o mensajes ya leídos); si no hay nada guardado, la consulta se rechaza. `notes:` y `search notes` encuentran cualquier parte de una palabra, sin distinguir mayúsculas, también en el título; una consulta de uno o dos caracteres se rechaza ("search needs at least three characters"). `contacts lookup` nunca toma el número como argumento: introdúzcalo o escríbalo cuando se le solicite. El perfil de una persona, sus mensajes recientes, el bot check y lo que envía a dónde: [personas](./people.md).
 
 Para cambiar contactos y tu perfil:
 
@@ -877,7 +877,7 @@ Todos estos sólo leen. `events` lee los mensajes de servicio del chat: quién h
 
 Estos cambian algo y las personas en el chat lo ven.
 
-Para un foro, utilice `tg personal topics enable <chat>` y `tg personal topics create <chat> <title>`. Un grupo básico requiere `--upgrade --yes`; mantenga la nueva identificación de chat devuelta por la actualización. Lea `topics list` después de un resultado de creación desconocido en lugar de repetir la creación. Enviar a su id con `tg personal messages send <chat> <text> --topic <id>` o `tg personal polls create <chat> <question> <answers> --topic <id>`. `tg personal topics edit <chat> <id> --title <new>` cambia el nombre de un tema, `--closed on`/`--closed off` lo cierra a nuevos mensajes o lo vuelve a abrir, `--pinned on`/`--pinned off` lo fija en la parte superior o lo desancla, y en el tema General (id 1) `--hidden on`/`--hidden off` lo oculta de la lista de temas o lo muestra nuevamente. `tg personal topics order <chat> <id...>` coloca los temas fijados en ese orden; no fija ni desancla nada. Repetir cualquiera de estos es seguro. `tg personal topics delete <chat> <id>` elimina un tema y todos los mensajes que contiene, para todos; no se puede deshacer, por lo que pregunta primero de forma predeterminada; un `topics.delete: allow` o `--allow-dangerous` explícito omite la pregunta. El tema general no se puede eliminar.
+Para un foro, utilice `tg personal topics enable <chat>` y `tg personal topics create <chat> <title>`. Un grupo básico requiere `--upgrade --yes`; mantenga la nueva identificación de chat devuelta por la actualización. Lea `topics list` después de un resultado de creación desconocido en lugar de repetir la creación. Enviar a su id con `tg personal messages send <chat> <text> --topic <id>` o `tg personal polls create <chat> <question> <answers> --topic <id>`. `tg personal topics edit <chat> <id> --title <new>` cambia el nombre de un tema, `--closed on`/`--closed off` lo cierra a nuevos mensajes o lo vuelve a abrir, `--pinned on`/`--pinned off` lo fija en la parte superior o lo desancla, y en el tema General (id 1) `--hidden on`/`--hidden off` lo oculta de la lista de temas o lo muestra nuevamente. `--emoji <emoji>` da al tema un icono, en `topics edit` y en `topics create`. El emoji debe estar en el conjunto predeterminado de iconos de temas de Telegram, que cualquier cuenta puede usar; `tg personal topics icons list` lo muestra, y otro emoji se rechaza junto con la lista. `topics edit --emoji none` quita el icono. `tg personal topics order <chat> <id...>` coloca los temas fijados en ese orden; no fija ni desancla nada. Repetir cualquiera de estos es seguro. `tg personal topics delete <chat> <id>` elimina un tema y todos los mensajes que contiene, para todos; no se puede deshacer, por lo que pregunta primero de forma predeterminada; un `topics.delete: allow` o `--allow-dangerous` explícito omite la pregunta. El tema general no se puede eliminar.
 
 ```sh
 tg personal chats create "Hiking 2027" @olga 12345  # a supergroup; the people added are told
@@ -1074,7 +1074,7 @@ tg personal server status
 ```
 
 ```sh
-tg personal server install  # a systemd user unit or a launchd agent; starts nothing
+tg personal server install  # a systemd user unit or a launchd agent that starts at every login; starts nothing now
 ```
 
 ## Qué hizo un comando

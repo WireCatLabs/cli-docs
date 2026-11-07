@@ -227,7 +227,13 @@ Si el esquema es demasiado antiguo, actualízalo normalmente antes de repetir la
 ```sh
 zm personal stats meetings show --since-time 30d --json
 zm personal stats meetings top --project RES --limit 5 --json
+zm personal stats meetings history --by week --since-time 90d --json
 ```
+
+`stats meetings history` cuenta las reuniones, sus minutos y las reuniones con transcripción por día, semana (su
+lunes) o serie, solo a partir de las reuniones. Una reunión sin fin cuenta como reunión pero no suma minutos. Con
+`--by series` la serie con más reuniones va primero, y todas las reuniones fuera de una serie comparten una fila
+`no-series`.
 
 `show` da las reuniones, líneas, palabras y tiempo de palabra de la selección, por semana (las semanas empiezan el
 lunes en `--timezone`, por defecto la zona del ordenador), con los diez oradores que más hablaron. `top` enumera los
@@ -294,7 +300,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `session start [--browser <program>]` | autorizar acceso en el navegador |
 | `commands --json` | descubrir argumentos, opciones y ejemplos |
 | `complete -- <words...>` | responder a autocompletado |
-| `doctor` | inspeccionar entorno y configuración sin acceso ni base |
+| `doctor` | inspeccionar la instalación: versión, rutas, problemas de configuración, perfiles, almacén; sin almacén de contraseñas, login ni red |
 | `session status` | comprobar OAuth aparte de perfiles locales |
 | `meetings import <folder>` | importar transcripciones `.vtt` o `.txt` de zoom-searcher al perfil elegido; indica la zona en que se leyeron las horas de los archivos |
 | `meetings sync [--since-time <time>]` | descargar reuniones del origen configurado |
@@ -328,8 +334,9 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `recordings archive import <directory>` | verificar VTT y añadirlo a reuniones guardadas |
 | `remote-meetings list\|show\|invitation` | leer próximas reuniones e invitaciones |
 | `remote-meetings create\|update\|cancel` | un cambio simple en Zoom, con confirmación previa; `--dry-run` lo revisa |
-| `mcp` | servir los comandos de zm a un agente MCP por stdio, según los permisos del perfil |
+| `mcp serve [--profiles a,b\|all]` | servir los comandos de zm a un agente MCP por stdio, según los permisos del perfil |
 | `stats meetings show\|top` | tiempo de palabra, líneas y palabras por orador y por semana |
+| `stats meetings history` | reuniones, minutos y transcripciones por día, semana o serie |
 | `skill show`, `skill install --for agents` | mostrar o instalar instrucciones del agente |
 
 `meetings` usa IDs locales; `remote-meetings`, IDs numéricos de Zoom.
@@ -349,6 +356,19 @@ indica que no hay enlace al documento; el enlace para entrar a la llamada no es 
 Los detalles están
 en `item`; transcripciones y resúmenes, en `items`. Los detalles cuentan transcripciones actuales;
 `meetings transcript <meeting> --history` lee revisiones anteriores conservadas.
+
+El `ref` de un resultado de reunión en `search all` es la reunión. Un resultado de transcripción también tiene
+`cue_ref`, la intervención encontrada, `sender_name`, quién la dijo, `language`, el de la transcripción (`ru`, `en`…,
+`null` si se desconoce), y `line` de `lines_total`, dónde se dijo en la transcripción; los resultados de
+`search meetings` llevan también los tres últimos. Los resultados de chat y resumen no tienen ninguno. Abre el lugar de
+un resultado con:
+
+```sh
+zm personal meetings passage CUE_REF --before-n 3 --after-n 3 --json
+```
+
+Las transcripciones guardadas por una versión anterior no tienen idioma. `zm personal meetings repair --json` enumera
+lo que encontraría para ellas, y `--yes` lo guarda.
 
 `--jsonl` emite registros con tipo: cada resultado es `{"type":"item","data":...}`, seguido de
 `{"type":"end","complete":true,"page":...}`. Las listas vacías también emiten el registro end.

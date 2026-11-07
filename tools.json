@@ -9,7 +9,7 @@
       "ru": "MAX в терминале: боты через официальный Bot API и ваш личный аккаунт.",
       "es": "MAX Messenger desde la terminal: bots con la Bot API oficial y tu cuenta personal."
     },
-    "docsRef": "v0.86.0"
+    "docsRef": "v0.103.0"
   },
   {
     "name": "tg",
@@ -21,7 +21,7 @@
       "ru": "Клиент Telegram для терминала и ИИ-агентов, с вашим собственным аккаунтом.",
       "es": "Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta."
     },
-    "docsRef": "v0.106.0"
+    "docsRef": "v0.117.0"
   },
   {
     "name": "wa",
@@ -29,7 +29,7 @@
     "repo": "WireCatLabs/whatsapp-cli",
     "package": "@wirecat/whatsapp-cli",
     "lang": "en",
-    "docsRef": "v0.21.0",
+    "docsRef": "v0.30.0",
     "summary": {
       "en": "Your WhatsApp chats, files and group context from the terminal and through your AI agent.",
       "ru": "Ваши чаты WhatsApp, файлы и контекст групп — в терминале и через ИИ-агента.",
@@ -42,7 +42,7 @@
     "repo": "WireCatLabs/drive-cli",
     "package": "@wirecat/drive-cli",
     "lang": "en",
-    "docsRef": "v0.45.1",
+    "docsRef": "v0.61.0",
     "summary": {
       "en": "Import selected Google folders, search documents locally and keep tags, notes and source-backed memories.",
       "ru": "Импортируйте выбранные папки Google, ищите документы локально и сохраняйте теги, заметки и записи памяти с источниками.",
@@ -82,7 +82,7 @@
     "repo": "WireCatLabs/zoom-cli",
     "package": "@wirecat/zoom-cli",
     "lang": "en",
-    "docsRef": "v0.48.0",
+    "docsRef": "v0.67.0",
     "summary": {
       "en": "Keep Zoom transcripts and recordings, search meeting evidence and give your agent context for the next call.",
       "ru": "Сохраняйте расшифровки и записи Zoom, ищите обсуждения и давайте агенту контекст для следующего созвона.",

@@ -73,7 +73,7 @@ Cuando esas comprobaciones funcionen, sigue con el [paso 2](#connect-your-accoun
 
 Con la aplicación Google de WireCat no necesitas crear un proyecto Google Cloud ni descargar un
 archivo de credenciales. Cada usuario autoriza su propia cuenta en el navegador. Antes de empezar,
-lee sobre [el aviso de Google «aplicación no verificada»](#google-shows-an-unverified-app-warning).
+lee [qué hacer si Google rechaza el acceso](#google-shows-an-unverified-app-warning).
 
 Si prefieres tu propia aplicación Google, completa primero la [configuración opcional de la app](#prepare-google-sign-in).
 Su último comando inicia el acceso con tu archivo de cliente y te devuelve a la aprobación en
@@ -92,20 +92,14 @@ drive personal session start
 
 <a id="google-shows-an-unverified-app-warning"></a>
 
-### Google muestra el aviso «aplicación no verificada»
+### Si Google rechaza el acceso
 
-Google aún no ha terminado de revisar los permisos de Drive que pide la aplicación de WireCat.
-Hasta que termine, Google puede mostrar una pantalla de «aplicación no verificada» antes de la
-pantalla de permisos. La pantalla es de Google y dice que Google no ha verificado la aplicación.
+Hacer pública para Drive una aplicación Google compartida es complejo, así que Google puede rechazar el acceso
+con la aplicación de WireCat o detenerlo con una pantalla de aviso. Si ocurre, usa
+[tu propia aplicación Google](#prepare-google-sign-in): lleva unos minutos y no cuesta nada.
 
-- Para continuar, usa el enlace de la pantalla de Google que sigue hacia la aplicación y después
-  aprueba el acceso como se indica abajo. Hazlo solo si confías a drive el acceso de lectura a tu Drive.
-- Si prefieres no hacerlo, o si Google bloquea el acceso, detente y usa
-  [tu propia aplicación Google](#prepare-google-sign-in).
-- Google limita una aplicación no verificada a 100 usuarios nuevos en total. Cuando la aplicación
-  de WireCat llegue a ese límite, los usuarios nuevos no podrán acceder con ella hasta que Google
-  termine la revisión. Tu propia aplicación tiene sus propios límites, aparte.
-
+Si Google muestra «Google hasn't verified this app» para tu propia aplicación, es lo esperado: es tu propia
+app. Usa el enlace de la pantalla de Google que sigue hacia ella y después aprueba el acceso como se indica abajo.
 Consulta [la página de Google sobre aplicaciones no verificadas](https://support.google.com/cloud/answer/7454865).
 
 ### Aprobar el acceso en el navegador
@@ -176,8 +170,8 @@ Las secciones de abajo son configuración opcional y mantenimiento, no más paso
 ## Reparar la conexión
 
 Las credenciales suelen guardarse en el llavero del sistema operativo, su almacén privado de
-contraseñas. Si no está disponible, añade `--credential-storage file` al comando de acceso para
-seleccionar almacenamiento privado en archivo. Para otra cuenta, repite el paso 2 con otro perfil, como `work`.
+contraseñas. Si no está disponible, el acceso las guarda por sí mismo en un archivo privado, lo avisa una vez y responde
+`storage: "file"`. `--credential-storage file` elige el archivo directamente; el llavero es más seguro, así que no lo recomendamos. Para otra cuenta, repite el paso 2 con otro perfil, como `work`.
 
 Si Google bloquea el acceso, revisa el error mostrado y las políticas del administrador Workspace.
 Para tu propia app en Testing, asegúrate de que la cuenta sea un usuario de prueba. Consulta
@@ -290,6 +284,17 @@ el paso 2 y ejecuta:
 ```sh
 drive personal session start --client-file /absolute/path/to/desktop-client.json
 ```
+
+O indica solo el client ID, con su secret en el entorno para esa ejecución:
+
+```sh
+DRIVE_GOOGLE_CLIENT_SECRET=… drive personal session start --client-id 1234-abc.apps.googleusercontent.com
+```
+
+Para seguir usando tu app en cada acceso posterior, guarda su ID una vez con
+`drive config set google_client_id '"1234-abc.apps.googleusercontent.com"' --defaults`, o para un perfil sin
+`--defaults`. El secret nunca se guarda en el archivo de ajustes: define `DRIVE_GOOGLE_CLIENT_SECRET` cada vez que
+accedas, porque Google rechaza una app Desktop sin él.
 
 Vuelve a [Conectar tu cuenta](#connect-your-account) desde
 [Aprobar el acceso en el navegador](#approve-access-in-your-browser), comprueba el perfil guardado

@@ -4,6 +4,167 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.117.0 — 07.11.2026
+
+### Changed — may break callers
+
+- **`schedule agent` y `schedule command` aceptan `--deliver-to <route>`, ya no `--to <route>`.** En tg, `--to` ya nombra al destinatario de un mensaje. `schedule list` llama a las rutas `deliver_to`; las programaciones guardadas con `--to` siguen entregando (cli-core 0.600.0).
+
+### Fixed
+
+- **Abrir el almacén ya no suelta los bloqueos de archivo de SQLite.** Antes abría el archivo truncándolo, lo que liberaba los bloqueos POSIX de otros procesos, y dos escrituras podían solaparse (cli-core 0.599.0).
+- **Una escritura que Ctrl-C o un fallo del propio servidor de Telegram corta termina como `outcome_unknown`.** La escritura de un bot cortada por una parada decía `cancelled`, y una respondida con HTTP 5xx decía `provider_unavailable`, igual que una escritura de la cuenta en la que Telegram falló con un error interno. Telegram pudo haber realizado cada una, y quien recibía "cancelled" podía enviar el mensaje dos veces. Una lectura mantiene `cancelled` y `provider_unavailable`.
+- **Una escritura de la cuenta en la que Telegram falla con un error interno se envía una vez, no una y otra vez.** mtcute repetía sin límite cada petición que Telegram respondía con 500, -500 o -503, así que una creación, unión, edición o eliminación podía realizarse dos veces. Ahora una escritura se envía una vez y termina como `outcome_unknown`; una lectura se vuelve a pedir, y un `FLOOD_WAIT` se sigue esperando. Un -500 o -503 ahora se lee como `provider_unavailable`, no como un rechazo.
+- **La petición rechazada de un bot ya no repite el texto del propio Telegram.** Ese texto puede citar el título de un chat o el mensaje de alguien, así que el error ahora dice lo ocurrido con palabras fijas, elegidas por el código de error de Telegram, y nombra un nuevo id de supergrupo o una espera solo a partir de los campos documentados de Telegram. "chat not found" ahora es `validation_error`, porque Telegram lo responde con 400; antes era `not_found`, elegido por las palabras.
+- **`tg account update` en el que Telegram falló con un error interno termina como `outcome_unknown`.** El nombre, la biografía o la foto pudieron cambiar, y decía `provider_unavailable`.
+
+## 0.116.0 — 05.11.2026
+
+### Fixed
+
+- **Una llamada a la Bot API ya no mantiene en memoria el comando terminado durante 30 segundos.** Su límite de tiempo era un temporizador que llegaba hasta el final incluso después de que Telegram respondiera, y retenía todo lo que el comando había cargado. Un proceso que hace muchas llamadas seguidas, como `tg bot watch` o `tg bot mcp`, crecía megabytes por llamada.
+- **`tg account list` ya no muestra un bot como una cuenta sin sesión iniciada.** Un nombre que solo usa el lado del bot se omite; un nombre que es tu cuenta y también un bot muestra `bot: true`. `tg mcp serve --profiles all` omite los bots de la misma manera (cli-core 0.567.0).
+- **Un inicio de sesión por QR indica cuándo se escaneó el código.** Después, Telegram tarda diez segundos o más en mover el inicio de sesión al centro de datos de la cuenta, y tg no imprimía nada hasta pedir la contraseña 2FA o terminar. Ahora imprime `scan accepted, finishing sign-in`, y con `--json` la línea de stderr `{"event":"progress","step":"scanned","message":"scan accepted, finishing sign-in"}`, que muestra WireCat Desktop.
+
+### Added
+
+- **`tg config migrate` escribe en `defaults` cada ajuste que falta en el archivo, con su valor predeterminado, y cada escritura que tg hace en el archivo también los añade.** Así encuentras y editas `limit`, `sends_per_hour`, `record` y los demás en `config.json` sin la documentación. Tus valores, su orden y las claves que tg no conoce se mantienen; `config unset` no vuelve a poner lo que quitó, y una simple lectura nunca reescribe el archivo. `tg config show` da el valor predeterminado de cada ajuste y lo que hace (cli-core 0.563.0).
+- **Desde cli-core 0.563.0:** `config repair` repara la sintaxis JSON del archivo de ajustes; `stats messages responses` y `stats messages waiting`; `tasks status`, `tasks review` y `tasks acknowledge`; `tasks add --open-new`.
+- **Desde cli-core 0.564.0–0.567.0:** `store chats status` cuenta los chats que el archivo guarda hasta el primer mensaje, en parte o en absoluto; `stats tasks show` acepta una consulta y cuenta las tareas abiertas y cerradas en un periodo (`-- created>=30d`); `has:transcript` encuentra mensajes de voz que tienen transcripción.
+- **`tg bot list` no necesita la palabra del perfil** (`tg <profile> bot list` sigue funcionando; cli-core 0.567.0).
+
+### Changed — may break callers
+
+- **Un nuevo código de error, `conflict` (salida 15), está en `tg commands --json` y en el esquema de errores de las herramientas MCP** (cli-base 0.77.1). Significa que se rechazó una escritura porque lo que cambia se modificó después de leerlo. Un cambio en una tarea que otra persona modificó después de que la leyeras ahora falla con él, no con `configuration_error` (salida 3); el motivo sigue siendo `task.stale` (cli-core 0.567.0).
+- **`search all` ordena todas las fuentes en una sola lista, busca también en el correo por significado y encuentra registros para una pregunta escrita como frase** (cli-core 0.564.0). Antes, los resultados de cada fuente se turnaban, y una pregunta solo encontraba registros que contenían todas sus palabras.
+
+## 0.115.0 — 03.11.2026
+
+### Added
+
+- **`wcat tg` ejecuta la herramienta, y `wcat --help` la muestra.** El paquete instala `wcat-tg` junto a `tg`, y `wcat-tg --wcat-describe` imprime para `wcat` el nombre, la versión y la descripción de la herramienta.
+
+Las entradas siguientes se publicaron en 0.114.0 y faltaban en sus notas, o se describían allí de forma incorrecta.
+
+### Changed — may break callers
+
+- **`server install` falla donde `systemctl --user` (o `launchctl enable`) no funciona**, después de escribir la unidad, en lugar de responder con éxito. En macOS, `server stop` solo descarga el agente: vuelve a iniciarse en el próximo inicio de sesión, como una unidad de systemd; `server uninstall` lo impide. (cli-core 0.552.0)
+
+### Fixed
+
+- **Las notas de 0.114.0 decían que `--full-history` lee más allá de los límites del historial durante una ejecución.** Lee un chat nombrado: `messages sync <chat> --full-history` lee ese chat más allá de los límites y lo guarda completo a partir de entonces.
+- **`search messages --brief` conserva solo la referencia, el chat, la hora, el remitente, el fragmento y la puntuación.** Imprimía todos los campos. (cli-core 0.551.0)
+- **Una llamada MCP cuya respuesta nombra un paso que solo la persona puede dar ya no falla como un error del programa.** (cli-core 0.551.0)
+
+## 0.114.0 — 02.11.2026
+
+### Added
+
+- **`projects evidence` y `projects status` aceptan `--purpose`** para elegir los chats vinculados que leen: `--purpose sales,work` o `--purpose all`. Un chat omitido aparece con su número de mensajes y el comando que lo lee. (cli-core 0.553.0)
+- **`projects evidence --include-proposed`** también lee chats y miembros propuestos para el proyecto y aún no confirmados, y marca lo que aportaron. `--compact` ahora imprime filas para `projects evidence`. (cli-core 0.553.0)
+- **`serve` vuelve a leer lo que llegó mientras estaba apagado.** La recuperación propia de Telegram abandona un hueco que considera demasiado grande tras una parada larga. 30 segundos después de conectarse, `serve` ahora vuelve a leer cada chat que tenga mensajes más nuevos de los que guardaba el almacén al iniciarse: como máximo 7 días atrás, 500 mensajes por chat y 5 minutos en total. Tras más de una semana sin conexión, ejecuta una vez `tg <profile> messages sync --all`. (cli-core 0.552.0)
+- **`server install` habilita el servicio**, así que `serve` se inicia en cada inicio de sesión y tras un reinicio. Un servicio instalado por un tg anterior no está habilitado: vuelve a ejecutar `tg <profile> server install`. `server status` indica `starts_at_login`. Un servicio instalado desde una copia de desarrollo se escribe, pero no se habilita. (cli-core 0.552.0)
+- **`messages sync` respeta los límites del historial**: por defecto omite un grupo de más de 50 personas (`history_group_members_max`) y lee un grupo 365 días atrás y un chat individual 1095 días atrás (`history_group_days`, `history_dialog_days`), e indica lo que dejó fuera en `limited`. `--full-history` lee más allá de ellos durante una ejecución; sube los ajustes para seguir leyendo grupos grandes. Los mensajes en directo nunca se pierden. (cli-core 0.551.0)
+- **`tg <profile> projects status <project>`** dice en qué punto está un proyecto, solo a partir del almacén. (cli-core 0.551.0)
+- **`--compact`** imprime una línea por elemento para un agente, a partir de la misma respuesta que imprime `--json`. (cli-core 0.550.0)
+- **`messages list` lee una ventana limitada por ambos lados**, también sin conexión. (cli-core 0.547.0)
+- **Un comando que acepta un chat o un mensaje también acepta la referencia que imprimen otras herramientas de WireCat** (`msg:…`, `chat:…`). (cli-core 0.546.0)
+
+### Changed — may break callers
+
+- **`projects evidence` y `projects status` leen por defecto solo chats de trabajo.** Un chat vinculado sin propósito cuenta como de trabajo; uno vinculado para `sales`, `support` u `other` ahora se omite salvo que `--purpose` lo nombre o se indique `--purpose all`. (cli-core 0.553.0)
+- **Una búsqueda que se queda sin tiempo falla con `timeout` y el motivo `query.time-limit`**, en unos 2 s, en lugar de `validation_error` / `query.too-large` tras ejecutarse mucho más allá del límite. La consulta era válida; añade `chat:` o `date:` para buscar en menos parte del almacén. (cli-core 0.552.0)
+- **Un texto de la forma `<kind>:<no spaces>` dado como chat se lee como una referencia**, y una referencia a otra cuenta o servicio de mensajería se rechaza con su propio motivo. Una opción después de `--` se lee como opción. (cli-core 0.546.0)
+
+### Fixed
+
+- **Una sincronización cuyo lector de salida desaparece termina su trabajo.** Antes, una tubería cerrada la abortaba. (cli-core 0.552.0)
+- **`messages delete` sin id de mensaje se rechaza antes de conectarse.** (cli-core 0.551.0)
+- **`page.next` de `messages list` se ejecuta tal como está escrito, y un inicio inclusivo conserva un mensaje enviado exactamente en ese momento.** (cli-core 0.547.0)
+- **Una ejecución por temporizador que encuentra el llavero bloqueado es temporal, no un inicio de sesión fallido.** Una programación que se ponía al día al arrancar, antes de que el inicio de sesión desbloqueara el llavero, terminaba con `authentication_error` (salida 4), como si el propietario tuviera que volver a iniciar sesión. Una ejecución bajo un temporizador (`TG_SCHEDULED`) ahora termina como `serve`: `provider_unavailable` (salida 12) con el motivo `credentials.unreachable`, que `schedule exec` (cli-core) reintenta hasta el inicio de sesión. Un comando escrito a mano sigue respondiendo `authentication_error`, y un perfil que nunca inició sesión aquí sigue saliendo con 4.
+
+## 0.113.0 — 02.11.2026
+
+### Added
+
+- **`tg <profile> messages download --offline` copia un archivo que este equipo ya tiene**, sin conectarse; `--attachment <n>` elige un archivo de un mensaje, y un localizador `msg:` puede sustituir al chat y al mensaje. (cli-core 0.532.0)
+- **La primera ejecución de una versión nueva actualiza las instrucciones del agente que instaló una anterior.** Una copia desactualizada de `SKILL.md` (Claude Code, `~/.agents/skills`, Hermes) se reescribe una vez, con una línea en stderr; una copia ausente, sin versión o enlazada simbólicamente se deja como está. `TG_NO_SKILL_REFRESH=1` lo desactiva. (cli-core 0.544.0)
+
+### Security
+
+- **Un agente ya no puede aflojar los permisos desde su propia shell.** `tg <profile> config set|unset permissions…` ejecutado por un agente (Hermes, OpenClaw, Claude Code y otros que marcan su shell) solo puede endurecer un nivel, nunca aflojarlo, y `mcp.authority` y `bot.api` siguen siendo del propietario. Así se mantiene el modo de solo lectura que fija la aplicación de escritorio, aunque un mensaje del chat convenza al agente de ejecutar `config set`. Cambia los permisos en una terminal fuera del agente. (cli-core 0.544.0)
+
+## 0.112.0 — 01.11.2026
+
+### Added
+
+- **El icono de un tema de foro: `topics create --emoji <emoji>` y `topics edit --emoji <emoji>`.** El emoji debe estar en el conjunto predeterminado de iconos de temas de Telegram, que cualquier cuenta puede usar, con Premium o sin él; `tg <profile> topics icons list` lo muestra. Otro emoji se rechaza, y el error enumera el conjunto. `topics edit --emoji none` quita el icono, y el tema vuelve a mostrar su icono de color predeterminado. (cli-core 0.531.0)
+- **Las tareas llevan `project_key`, `project_name` y `created_by`**, y los comandos `schedule` ganan ejemplos reales y ayuda de argumentos. (cli-core 0.531.0)
+
+## 0.111.0 — 01.11.2026
+
+### Added
+
+- **`projects evidence --json` da el comando de sincronización de cada chat vinculado** en `linked_chats[].sync_command`: la línea que el texto muestra para sincronizar un chat guardado en parte, o null. (cli-core 0.517.0)
+
+### Fixed
+
+- **`projects evidence` ya no dice "held from <date> only"** para un chat que llega hasta su primer mensaje: dice "held from its first message, behind since <date>", o "with gaps". El progreso de `messages sync` indica hasta dónde llegó con una fecha ("back to <date>"), no con una clave de mensaje. (cli-core 0.517.0)
+- **La skill del agente empieza una búsqueda con `search messages`, y añade notas y documentos de Drive solo cuando el propietario lo pide** (`search all`). También dice que por MCP `ask` no pregunta: el propietario activa la aprobación de escrituras en su cliente. La revisión de ClawHub señaló ambas cosas en la skill 1.0.1.
+
+## 0.110.0 — 01.11.2026
+
+### Added
+
+- **`tg <profile> projects evidence <project>`** (cli-core `projectsCommand`). Muestra lo que los mensajes guardados de esta cuenta contienen sobre un proyecto: su nombre, clave, alias, palabras, contactos, miembros confirmados y chats vinculados confirmados. **`--sync-first`** (desactivado por defecto, no disponible por MCP) primero sincroniza, uno a uno, los chats vinculados que el almacén no guarda hasta `--since-time`, dentro de `--sync-time` (3 minutos en total). Un chat que el tiempo corta queda parcial, con su `missing` y `next`. Lo protege el permiso `messages`. (cli-core 0.511.0)
+- **`messages sync --json` imprime su progreso en stderr**, solo recuentos (cli-core 0.507.0). tg ahora necesita `@wirecat/cli-base` 0.68.1, como pide cli-core 0.507.0.
+
+### Changed — may break callers
+
+- **`search messages --discover` busca por significado cuando la consulta usa `-`, `NOT`, `OR`, grupos, frases o `exact:`** (cli-core 0.506.0). Una consulta así solo ejecutaba la búsqueda estricta. Ahora sus palabras siguen coincidiendo con toda la consulta (`discovery.method: "lexical-strict"`), y se les suman mensajes cercanos en significado a sus palabras buscadas. Cada resultado encontrado por significado, y cada respuesta y seguimiento añadidos, coincide con cada campo de la consulta y con cada palabra excluida.
+
+### Fixed
+
+- **`search messages --discover` con un filtro estrecho (`chat:`, `date:`) ordena por significado los mensajes del propio filtro** cuando contiene como máximo 100.000 mensajes, en lugar de los 100 más cercanos en general, así que llena su página (cli-core 0.506.0).
+- **`search messages --discover` funciona con un almacén de solo lectura** (cli-core 0.506.0).
+- **Una reconstrucción larga en un proceso ya no hace que la escritura de otro proceso falle con "database is locked"** (cli-core 0.506.0).
+
+## 0.109.0 — 31.10.2026
+
+### Added
+
+- **`search messages` y `search notes` dicen cuántos coinciden en total: `page.total`** (cli-core 0.501.0). `--json` añade `page.total: { value, relation }`, con la forma de `hits.total` de Elasticsearch: `eq` es el recuento exacto, `gte` un límite inferior (el recuento se detiene en 10.000). El terminal añade `showing 1–20 of 144` debajo de los resultados.
+- **`search messages --discover` muestra seguimientos**, mensajes posteriores que pueden cancelar o cambiar un resultado, y ya no falla con una pregunta que lleva una hora o una proporción ("until 22:00?") (cli-core 0.492.0, 0.496.0).
+- **`messages list --offline`, `search messages` y `search all` indican cuándo el almacén guarda un chat solo en parte**, con el paso de `messages sync` que lo completaría (cli-core 0.493.0).
+- **OpenAI puede transcribir los mensajes de voz: `transcribeWith: "openai"`**, con la clave de `models keys set openai` (cli-core 0.499.0).
+
+### Changed — may break callers
+
+- **tg requiere cli-base 0.67.0** (cli-core 0.501.0).
+- **`search messages`, `search all` y `messages list --offline` responden `meta.complete: false`** cuando un chat que leen se guarda solo en parte, con `missing` y `next` que lo nombran (cli-core 0.493.0). Un script que leía `meta.complete` como "todas las fuentes respondieron" ahora también ve los huecos del archivo.
+- **Un `transcribeWith` desconocido en un perfil rechaza transcribir** con `validation_error` y nombra los cuatro valores; antes, cualquier valor distinto de `local` significaba preguntar primero a Telegram (cli-core 0.499.0).
+
+### Fixed
+
+- **`search notes` conserva los campos de la consulta para las notas encontradas por significado, y ordena por significado las notas del propio filtro estrecho** (cli-core 0.496.0, 0.501.0).
+
+### Security
+
+- **Una ejecución con carpetas movidas ya no copia el inicio de sesión del propietario en el llavero cuando renueva un token** (cli-core 0.494.0).
+
+## 0.108.0 — 31.10.2026
+
+### Changed — may break callers
+
+- **Las notas, documentos, anotaciones y notas de contactos se encuentran por parte de una palabra, sin distinguir mayúsculas.** `tg personal
+  search notes 'ontra'` ahora encuentra «Contract», y una palabra cirílica con mayúsculas y minúsculas mezcladas ya no se pierde. También se busca en el título, no solo en el texto, y una búsqueda responde en milisegundos. Una consulta de uno o dos caracteres se rechaza con "search needs at least three characters", como en la búsqueda de mensajes. La primera ejecución tras la actualización actualiza el almacén (versión 40) y llena el nuevo índice por lotes; hasta entonces, las notas antiguas coinciden como antes. Un `tg` anterior no indexa las notas nuevas en un almacén actualizado, así que actualiza todas las CLI que lo comparten (cli-core 0.491.0).
+
+## 0.107.0 — 30.10.2026
+
+### Fixed
+
+- **Los títulos de chats y los nombres de contactos coinciden sin distinguir mayúsculas y en cualquier alfabeto.** `tg personal chats list 'title:*ТАРТ*'` ahora encuentra «Тартус»; antes, solo las letras latinas ignoraban las mayúsculas. Lo mismo vale para los nombres de contactos y para los nombres de proyectos, etiquetas, asuntos de correo, buzones y etiquetas de correo que guarda el almacén compartido. La primera ejecución tras la actualización actualiza el almacén (versión 38) y llena las nuevas copias en minúsculas de lo que ya contiene. Un `tg` anterior sigue funcionando con el almacén actualizado y te pide que actualices (cli-core 0.484.0).
+
 ## 0.106.0 — 29.10.2026
 
 ### Added

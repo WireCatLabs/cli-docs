@@ -379,7 +379,7 @@ tg personal contacts check @example_user  # does the account look like a bot or 
 ```
 
 `contacts list` — это люди, с которыми вы общаетесь один на один. `contacts sync` также добавляет остальную часть вашего списка контактов Telegram. `name:` и `notes:` ищут людей, которых хранит локальное хранилище, поэтому сначала нужен
-`contacts sync` (или ранее прочитанные сообщения); если ничего не сохранено, запрос отклоняется. `contacts lookup` никогда не принимает число в качестве аргумента: передавайте его по конвейеру или вводите по запросу. Профиль человека, его последние сообщения, проверка бота и что он куда отправляет: [люди](./people.md).
+`contacts sync` (или ранее прочитанные сообщения); если ничего не сохранено, запрос отклоняется. `notes:` и `search notes` находят любую часть слова, в любом регистре, в том числе в заголовке; запрос из одного или двух символов отклоняется ("search needs at least three characters"). `contacts lookup` никогда не принимает число в качестве аргумента: передавайте его по конвейеру или вводите по запросу. Профиль человека, его последние сообщения, проверка бота и что он куда отправляет: [люди](./people.md).
 
 Изменение контактов и собственного профиля:
 
@@ -879,7 +879,7 @@ tg personal review 'chat:Hiking' --unanswered    # questions nobody answered
 
 Это что-то меняет, и люди в чате это видят.
 
-Для форума используйте `tg personal topics enable <chat>` и `tg personal topics create <chat> <title>`. Базовая группа требует `--upgrade --yes`; сохраните новый идентификатор чата, возвращенный обновлением. Прочитайте `topics list` после неизвестного результата создания вместо повторения создания. Отправьте на его идентификатор с помощью `tg personal messages send <chat> <text> --topic <id>` или `tg personal polls create <chat> <question> <answers> --topic <id>`. `tg personal topics edit <chat> <id> --title <new>` переименовывает тему, `--closed on`/`--closed off` закрывает ее для новых сообщений или открывает заново, `--pinned on`/`--pinned off` закрепляет ее вверху или открепляет, а на общей теме (id 1) `--hidden on`/`--hidden off` скрывает ее из списка тем или возвращает её в список. `tg personal topics order <chat> <id...>` размещает закрепленные темы в указанном порядке; он ничего не закрепляет и не открепляет. Повторение любого из этих действий безопасно. `tg personal topics delete <chat> <id>` удаляет тему и каждое сообщение в ней для всех; его нельзя отменить, поэтому по умолчанию он сначала запрашивает; явный `topics.delete: allow` или `--allow-dangerous` пропускает вопрос. Общая тема не может быть удалена.
+Для форума используйте `tg personal topics enable <chat>` и `tg personal topics create <chat> <title>`. Базовая группа требует `--upgrade --yes`; сохраните новый идентификатор чата, возвращенный обновлением. Прочитайте `topics list` после неизвестного результата создания вместо повторения создания. Отправьте на его идентификатор с помощью `tg personal messages send <chat> <text> --topic <id>` или `tg personal polls create <chat> <question> <answers> --topic <id>`. `tg personal topics edit <chat> <id> --title <new>` переименовывает тему, `--closed on`/`--closed off` закрывает ее для новых сообщений или открывает заново, `--pinned on`/`--pinned off` закрепляет ее вверху или открепляет, а на общей теме (id 1) `--hidden on`/`--hidden off` скрывает ее из списка тем или возвращает её в список. `--emoji <emoji>` задаёт теме значок, в `topics edit` и в `topics create`. Эмодзи должен входить в стандартный набор значков тем Telegram, доступный любому аккаунту; `tg personal topics icons list` показывает его, а другой эмодзи отклоняется вместе с этим списком. `topics edit --emoji none` убирает значок. `tg personal topics order <chat> <id...>` размещает закрепленные темы в указанном порядке; он ничего не закрепляет и не открепляет. Повторение любого из этих действий безопасно. `tg personal topics delete <chat> <id>` удаляет тему и каждое сообщение в ней для всех; его нельзя отменить, поэтому по умолчанию он сначала запрашивает; явный `topics.delete: allow` или `--allow-dangerous` пропускает вопрос. Общая тема не может быть удалена.
 
 ```sh
 tg personal chats create "Hiking 2027" @olga 12345  # a supergroup; the people added are told
@@ -1078,7 +1078,7 @@ tg personal server status
 ```
 
 ```sh
-tg personal server install  # a systemd user unit or a launchd agent; starts nothing
+tg personal server install  # a systemd user unit or a launchd agent that starts at every login; starts nothing now
 ```
 
 ## Что сделала команда

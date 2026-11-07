@@ -9,25 +9,49 @@ Esta referencia enumera claves aceptadas y valores predeterminados.
 ## Ajustes
 
 Configura con `zm config set <key> <value>`, quita un ajuste con `zm config unset <key>` y consulta los valores con
-`zm config show`.
+`zm config show`. En `settings` enumera `source`, `record`, `record_input`, `keep_runs_for_days`,
+`keep_successful_runs_for_days` y `runs_size_limit_mb` con el valor, el valor predeterminado y si el archivo lo fija.
+
+`zm config migrate` escribe cada uno de ellos que falte en el archivo con su valor predeterminado, para que los veas y
+los edites en el archivo. Tus valores, su orden y las claves que zm no conoce quedan como están. Cada escritura de zm
+en el archivo, incluidos `config set` y un primer inicio de sesión, también los añade; `config unset` no devuelve el
+ajuste que quitó. El ID de cliente, la carpeta de archivos y la zona horaria no se escriben: sin valor, significan
+«ninguno aún» y «la zona de este ordenador».
 
 | Clave | Significado |
 |---|---|
-| `zoom.client_id` | Public Client ID de [app existente o nueva](./zoom-app.md); sin valor inicial, necesario para API |
+| `zoom.client_id` | Public Client ID de [app existente o nueva](./zoom-app.md); sin valor inicial. El inicio de sesión por API lo necesita, o `ZM_ZOOM_CLIENT_ID` o `--client-id` ([qué app](#which-zoom-app-zm-uses)) |
 | `source` | Fuente de `meetings sync` y `watch`: `api` predeterminada o `files` |
 | `files.folder` | Carpeta para obtención/observación de archivos; sin valor inicial |
 | `context.sources` | Array JSON de cuentas de mensajes/correo o carpetas de documentos elegidas para este perfil; vacío por defecto ([configuración abajo](#select-communications-for-preparation)) |
 | `files.timezone` | Zona IANA de nombres, por ejemplo `Europe/Madrid`; sin valor: la zona de este ordenador |
-| `record` | `true` guarda cada ejecución en el [registro de ejecuciones](#run-log), `false` ninguna, ni siquiera un fallo; sin valor: solo las fallidas |
-| `keep_runs_for_days` | cuántos días se conserva una ejecución guardada antes de borrarla; 30 por defecto |
+| `record` | `false` guarda solo las ejecuciones fallidas en el [registro de ejecuciones](#run-log); sin valor o `true`: cada ejecución |
+| `record_input` | `false` escribe como `[redacted]` cada valor escrito que pueda ser contenido; `failed` lo hace solo en una ejecución correcta; sin valor o `true`: el comando tal como se escribió, con los secretos ocultos |
+| `keep_runs_for_days` | cuántos días se conserva una ejecución fallida antes de borrarla; 30 por defecto |
+| `keep_successful_runs_for_days` | cuántos días se conserva una ejecución correcta; 7 por defecto |
+| `runs_size_limit_mb` | lo máximo que puede ocupar el registro de ejecuciones; las ejecuciones correctas más antiguas se borran primero; 200 por defecto |
 
 Comprueba `zm config show` tras editar. El perfil no es un ajuste: es la primera palabra de cada comando
-([perfiles](./sessions.md#select-a-local-profile)). Otro ID selecciona otra entrada del almacén; autoriza esa app antes de usar API. `ZOOM_CLIENT_ID`
-no es un ajuste de la orden instalada `zm`; usa `zm config set zoom.client_id` en vez de la variable
-copiada de una sonda de desarrollo.
+([perfiles](./sessions.md#select-a-local-profile)). Otro ID selecciona otra entrada del almacén; autoriza esa app antes de usar API.
+
+### Qué app de Zoom usa zm
+
+WireCat aún no tiene una app de Zoom, así que traes la tuya ([crea una](./zoom-app.md)). zm toma la primera de estas
+que indique una:
+
+1. `zm <profile> session start --client-id <id>`. Un inicio de sesión correcto guarda el ID como `zoom.client_id`,
+   para que los comandos siguientes encuentren la sesión que creó;
+2. la variable de entorno `ZM_ZOOM_CLIENT_ID`;
+3. el ajuste `zoom.client_id`;
+4. la app de WireCat, vacía por ahora.
+
+`zm doctor --json` muestra la elección en `oauth_client`: `{ "client": "own", "source": "env" }` o `"config"`, y sin
+ninguna `{ "client": null, "source": null, "reason": "WireCat has no Zoom app yet; …" }`. La entrada del almacén es
+`<client id>:<profile>`, así que un ID en `ZM_ZOOM_CLIENT_ID` usa la sesión creada con ese ID. Un archivo programado
+conserva el ID con el que se guardó y se niega a ejecutarse con otro.
 
 El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone`, `source`, `context_sources`,
-`record` y `keep_runs_for_days`, y los perfiles de este ordenador en `profiles`. Cualquier otra clave es un problema
+`record`, `record_input`, `keep_runs_for_days`, `keep_successful_runs_for_days` y `runs_size_limit_mb`, y los perfiles de este ordenador en `profiles`. Cualquier otra clave es un problema
 del archivo.
 
 ## Problemas en el archivo
@@ -96,10 +120,11 @@ Un agente MCP no puede cambiar los permisos del perfil. Consulta [MCP y skills](
 
 ## Registro de ejecuciones
 
-`zm` guarda un comando fallido como ejecución: las palabras del comando, el perfil, cómo terminó y un evento por cada
-petición a Zoom con su método, ruta (cada id oculto como `:id`), estado y duración. Nunca guarda argumentos, contenido
-de reuniones, nombres, correos ni tokens. `--record` guarda también una ejecución correcta, `--no-record` no guarda
-nada de ese comando, y el ajuste `record` cambia el comportamiento predeterminado. `zm runs list`,
+`zm` guarda cada comando como ejecución: las palabras del comando, el perfil, cómo terminó y un evento por cada
+petición a Zoom con su método, ruta (cada id oculto como `:id`), estado, duración, intento (2 o más en un reintento) y
+la espera antes de un reintento. Nunca guarda contenido de reuniones, nombres, correos ni tokens. Una ejecución correcta
+se conserva 7 días y una fallida 30. `record false` guarda solo las fallidas, `--record` guarda esta ejecución de todos
+modos y `--no-record` no guarda nada de ese comando. `zm runs list`,
 `zm runs show <run-id>` y `zm runs path <run-id>` leen el registro sin perfil; el `meta.run_id` de una respuesta es
 el id que acepta `runs show`.
 

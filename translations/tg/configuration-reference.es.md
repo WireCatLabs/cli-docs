@@ -86,6 +86,9 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `color` | desde la terminal | color en la vista de tabla | ninguno; sin configuración, `NO_COLOR` lo apaga |
 | `sender_colors` | `false` | un color por remitente en la vista de tabla de mensajes | ninguno |
 | `search_catch_up` | `false` | `messages sync` y `store gaps repair` también preparan el chat recuperado para búsqueda local: su gráfico y, si está instalado, sus vectores. Nunca descarga modelos ni llama a proveedores remotos | `--catch-up`, `--no-catch-up` |
+| `history_dialog_days` | `1095` | cuántos días atrás lee `messages sync` un chat individual, de 1 a 1095 | `messages sync --full-history` |
+| `history_group_days` | `365` | cuántos días atrás lee `messages sync` un grupo, de 1 a 1095 | `messages sync --full-history` |
+| `history_group_members_max` | `50` | `messages sync` no lee el historial de un grupo con más personas; `store status` muestra lo que quedó fuera. Los mensajes en directo de `serve` se guardan igualmente | `messages sync --full-history` |
 | `picture_search` | `false` | busca las imágenes guardadas por lo que muestran. `images embed` lee las imágenes guardadas una vez descargado el modelo, y entonces `search messages` también devuelve una lista `pictures` ([imágenes](./search.md#pictures-by-what-they-show)) | ninguno |
 | `search_reranker` | `mmarco` | el modelo que reordena los 50 primeros resultados de `search messages --discover`: `mmarco` (136 MB), `bge-reranker-v2-m3` (588 MB) u `off`. Un reordenador que no está descargado se omite, y el descubrimiento lo indica; `tg models download mmarco` lo descarga | ninguno |
 | `record` | `true` | mantener cada ejecución; `false` mantiene solo las ejecuciones fallidas ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` (no mantiene nada) |
@@ -282,6 +285,8 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 |---|---|---|
 | `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | entero ≥ 1 | perfil |
 | `requests_per_minute` | entero ≥ 0 | perfil |
+| `history_dialog_days`, `history_group_days` | entero de 1 a 1095 | perfil |
+| `history_group_members_max` | entero ≥ 1 | perfil |
 | `color`, `sender_colors`, `search_catch_up`, `record`, `record_input` | booleano | perfil |
 | `permissions` | objeto de rutas de comando y niveles `deny`, `readonly`, `ask`, `allow` | perfil |
 | `read_other_bots` | booleano o conjunto de nombres de perfil | solo bot |

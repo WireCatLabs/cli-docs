@@ -101,6 +101,8 @@ max personal session end              # выйти из MAX и забыть то
 
 If MAX does not respond, the token is kept so you can retry the command. A token MAX no longer accepts is erased immediately: there is no remaining session to end.
 
+A run with moved folders (`MAX_CONFIG_DIR` and the related variables, a different `HOME` or an XDG folder) uses the owner's sign-in but does not end it: there, `session end` erases nothing, does not sign out of MAX, and answers `"kept": "owners-sign-in"`. A sign-in made in such a run itself is ended by `session end` as usual.
+
 ## How long does a session last?
 
 The token's lifetime is unknown: MAX does not report it. It continues working after the web.max.ru tab is closed. When MAX stops accepting it, log in again with `max personal session start`.

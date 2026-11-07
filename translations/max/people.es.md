@@ -203,6 +203,8 @@ max personal contacts show "Борис Пример" --with-notes
 max personal contacts list notes:квартира                     # люди, в чьих заметках есть этот текст
 ```
 
+La búsqueda `notes:` encuentra parte de una palabra sin importar mayúsculas o minúsculas, también en cirílico: `notes:КВАРТ` encuentra «квартира». Una consulta de menos de tres caracteres se rechaza con el error «search needs at least three characters».
+
 Los apodos y las notas se guardan en una archivo local y nunca van a MAX. El apodo es válido sólo en la cuenta con la que estás trabajando; una nota sobre una persona es visible en cada perfil de inicio de sesión `max` en esa computadora donde aparece esa persona. `contacts rename` cambia el nombre en la libreta de direcciones MAX, eso es diferente. El comando busca una persona que usa su apodo si el apodo no coincide con el nombre de otra persona; de lo contrario necesitas una identificación. `--revision` no le permite cambiar una nota si se cambió después de leerla. Actualizar los contactos conserva las notas y los apodos, y vincular personas no los fusiona.
 
 ## ¿Qué sigue?

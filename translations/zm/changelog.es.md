@@ -4,6 +4,318 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.67.0 — 05.11.2026
+
+### Añadido
+
+- **`zm personal stats meetings history --by day|week|series`** cuenta reuniones, minutos, minutos medios y reuniones
+  con transcripción, en total y por día, semana o serie, con los mismos filtros que `stats meetings show`. Lee solo
+  las reuniones, así que no tiene límite de líneas de transcripción. Una reunión sin fin cuenta como reunión, no en minutos.
+  De cli-core 0.570.0.
+- **`zm config migrate` escribe cada ajuste que falta en el archivo con su valor predeterminado, y cada escritura de zm
+  en el archivo también los añade**: `source`, `record`, `record_input`, `keep_runs_for_days`, `keep_successful_runs_for_days` y
+  `runs_size_limit_mb`. Así los encuentras y editas en `config.json` sin la documentación. Tus valores, su orden y las
+  claves que zm no conoce se conservan; `config unset` no devuelve lo que quitó, y una simple lectura nunca reescribe el
+  archivo (cli-core 0.563.0).
+- **`zm config show` enumera cada uno de ellos en `settings`** con su valor, su valor predeterminado, si el archivo lo
+  fija y qué hace.
+- **`zm <profile> session start --client-id <id>` inicia sesión con esa app de Zoom** y, cuando el inicio de sesión
+  funciona, la guarda como `zoom.client_id`, para que los comandos siguientes encuentren la sesión que creó.
+- **`ZM_ZOOM_CLIENT_ID` nombra la app de Zoom** y tiene prioridad sobre `zoom.client_id`; `--client-id` tiene prioridad
+  sobre ambos (WC-SECR-25). WireCat sigue sin app de Zoom, así que el inicio de sesión por API necesita uno de los tres.
+
+### Cambiado — puede romper la compatibilidad
+
+- **`zm doctor --json` informa `oauth_client` como `{ client, source }`**: `{ "client": "own", "source": "env" }` o
+  `"config"`, y sin app `{ "client": null, "source": null, "reason": "WireCat has no Zoom app yet; …" }`. Antes era
+  `{ "client": "own" }` o `{ "client": null, "error": "zoom.client_id is not set" }`. De cli-core 0.566.0
+  (antes 0.563.0) y cli-base 0.77.1 (antes 0.75.0).
+- **Los códigos de error incluyen `conflict`, salida 15** (cli-base 0.76.0), en la referencia de comandos y en la lista
+  de errores de las herramientas MCP. zm aún no lo emite.
+
+## 0.66.0 — 03.11.2026
+
+### Añadido
+
+- **`wcat zm` ejecuta la herramienta y `wcat --help` la enumera.** El paquete instala `wcat-zm` junto a `zm`, y
+  `wcat-zm --wcat-describe` imprime para `wcat` el nombre, la versión y la descripción de la herramienta.
+
+## 0.65.0 — 02.11.2026
+
+### Añadido
+
+- **La transcripción de una reunión registra su idioma.** `meetings import` de un archivo descargado, `meetings sync` y
+  `meetings transcribe` guardan `ru`, `en`… en lugar de nada: `gigaam-v3` escribe ruso, el idioma de cualquier otra
+  transcripción se deduce de sus letras, y una mixta o corta queda como desconocida. Una reunión mayormente en ruso
+  con unas pocas líneas en inglés es rusa. `meetings show` lo muestra por transcripción.
+- **Los resultados de búsqueda en reuniones indican el idioma y la línea**: `language`, `line` y `lines_total` en los
+  resultados de transcripción de `search meetings` y `search all` ("line 161 of 192").
+- **`zm personal meetings repair`** muestra el idioma de las transcripciones guardadas que no lo tienen; `--yes` lo guarda.
+  De cli-core 0.552.0 (antes 0.533.0) y cli-base 0.75.0 (antes 0.71.0).
+
+### Cambiado — puede romper la compatibilidad
+
+- **Una búsqueda que se queda sin tiempo falla con `timeout` y motivo `query.time-limit`**, en unos 2 s, en lugar de
+  `validation_error` / `query.too-large` tras pasarse mucho del límite. La consulta era válida; acota las fechas o
+  la reunión para buscar en menos parte del almacén. (cli-core 0.552.0)
+
+## 0.64.0 — 01.11.2026
+
+### Añadido
+
+- **Un resultado de reunión de `search all` dice dónde está y quién habló**: un resultado de transcripción gana `cue_ref`,
+  la intervención encontrada, y `sender_name`, quien la dijo. `zm personal meetings passage <cue_ref> --before-n 3 --after-n 3 --json`
+  abre las líneas de alrededor. `ref` sigue siendo la reunión; los resultados de chat y resumen no tienen `cue_ref`. De
+  cli-core 0.533.0 (antes 0.507.0) y cli-base 0.71.0 (antes 0.68.1).
+
+## 0.63.0 — 31.10.2026
+
+### Añadido
+
+- **`zm doctor --online` también dice si hay publicada una `@wirecat/zoom-cli` más nueva**, con una lectura del registro
+  de npm. Sin `--online`, `doctor` no se conecta a nada.
+
+## 0.62.0 — 31.10.2026
+
+### Añadido
+
+- **`zm doctor --online`**, de cli-core 0.507.0: también se conecta una vez y lee la cuenta, sin enviar nada.
+  Sin la opción, `doctor` funciona como antes y no se conecta a nada.
+
+### Correcciones
+
+- **El archivo de respaldo del almacén de contraseñas viene ahora de cli-base 0.68.1 y cli-core 0.507.0**, sin código
+  propio de zoom. Una sesión guardada en el archivo privado se lee de ahí y sus renovaciones se quedan ahí; el siguiente
+  `session start` que llega al almacén la devuelve allí y borra la copia del archivo. `session start --credential-storage file`
+  también borra una copia antigua del almacén, para que no vuelva. Las respuestas y `credential_storage` son como en
+  0.61.0, y el aviso del almacén sigue saliendo una vez por ejecución.
+
+## 0.61.0 — 31.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **`mcp` y `doctor` son los comandos compartidos de cli-core** (cli-core 0.503.0, antes 0.491.0; cli-base 0.67.0, antes 0.65.0), como en
+  `mail`, `gcal` y `drive`, así que `zm` ya no se diferencia de ellos en esos caminos.
+  - `mcp serve` gana `--http`, `--port`, `--public-url` y `--permission <key=level>`, y `mcp` gana `revoke`,
+    `server start|stop|status`, `config`, `add` y `check`. Por HTTP el servidor sigue WC-MCP-12: escucha en
+    `127.0.0.1`, una app de navegador inicia sesión con un código de un solo uso y las escrituras siguen los permisos
+    del perfil. `--permission` solo hace un nivel más estricto; uno que lo relajaría, o que no nombra ningún comando,
+    se rechaza al iniciar.
+  - `zm mcp serve --profiles all` en un equipo sin perfiles sale con 3 (error de configuración), donde salía con 2.
+  - Por MCP, `search meetings` es una lectura: llámalo con `zm_read`, no con `zm_write`. `complete` se ofrece ahora
+    como herramienta. `config unset permissions…` se rechaza por MCP, como ya ocurría con `config set permissions`.
+  - `doctor --json` tiene ahora `paths`, `store`, `oauth_client`, `read_only`, `profile_lock` y `runtime.platform`.
+    Ya no tiene `authentication` ni `database`, y ya no prueba el almacén de contraseñas; `oauth_client` dice
+    `own` o `zoom.client_id is not set`.
+  - Un rechazo por los permisos de un perfil o por `ZM_READ_ONLY` nombra el comando: `profile work denies meetings.list`,
+    `this process is read-only (ZM_READ_ONLY) — it cannot run remote-meetings create`.
+
+## 0.60.1 — 31.10.2026
+
+### Correcciones
+
+- **`session start` recurre a un archivo privado cuando falla el almacén de contraseñas, y nunca pregunta** (WC-SECR-4).
+  Antes el inicio de sesión fallaba con "could not save login to the system keyring". Ahora guarda los tokens en
+  `credentials.json` en la carpeta de configuración de zm (modo 600), lo avisa una vez en stderr y responde
+  `credential_storage: "file"`; cada comando posterior los lee y renueva ahí. `--credential-storage file` elige el
+  archivo directamente, no recomendado; el siguiente `session start` que llega al almacén los devuelve allí. La entrada
+  del almacén conserva su nombre, así que nadie vuelve a iniciar sesión.
+
+## 0.60.0 — 31.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **cli-core 0.491.0** (antes 0.473.0; cli-base sigue en 0.65.0). Las notas, documentos y anotaciones del almacén
+  compartido se encuentran por cualquier parte de una palabra, sin importar mayúsculas, y también se busca en el título
+  (versión 40 del almacén). `search all
+  --only notes` con una consulta de uno o dos caracteres se rechaza con "search
+  needs at least three characters". Un almacén en la versión 40 necesita todas las CLI en este cli-core, o las notas
+  nuevas no se encuentran por parte de una palabra. `zm --help` enumera `gcal` en "Works with", y los resultados de
+  contactos y de búsqueda llevan más campos (`zm commands info search all`).
+
+## 0.59.1 — 30.10.2026
+
+### Correcciones
+
+- **Un archivo de configuración con `profiles` escrito como lista es un error de configuración, no un fallo.** Cada
+  comando lo rechazaba con "the command failed; this is a bug" (salida 1); ahora sale con 3 y "setting profiles has to
+  be an object keyed by profile name" y la corrección `zm config unset profiles`, como ya pasaba con un `profiles` de
+  cualquier otro tipo incorrecto.
+
+## 0.59.0 — 29.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **La skill del agente aparece en ClawHub como `wirecat-zoom`.** Instálala con
+  `openclaw skills install @wirecat/wirecat-zoom`. La ficha `zoom-cli` ya no se actualiza.
+  `zm skill install` sigue escribiendo `skills/zoom-cli/`.
+
+## 0.58.0 — 29.10.2026
+
+### Añadido
+
+- **cli-core 0.473.0** (cli-base sigue en 0.65.0). `zm runs show` de una ejecución fallida tiene `error.cause_code` cuando
+  el fallo de conexión traía uno (`ETIMEDOUT`, un código de respuesta del servidor), y `zm --help` enumera la CLI `mail`
+  en "Works with". zm conserva su propio `mcp serve` solo por stdio; la nueva opción `--profiles` de cli-core en el
+  contrato compartido de `mcp serve` se declara como de zoom, sin cambios.
+
+## 0.57.0 — 27.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **cli-core 0.469.0 y cli-base 0.65.0.** cli-core 0.469 solo acepta cli-base 0.65, así que ambas versiones cambian juntas.
+  cli-base 0.65 conoce los verbos `serve` y `revoke`, así que sus entradas en la lista base del linter desaparecen, y su
+  `cli-dev bundle` encuentra un servidor iniciado con una opción antes de `mcp serve`. Desde cli-core 0.468, un servidor
+  MCP ofrece por su herramienta de lectura un comando que solo descarga al almacén.
+- **`zm mcp serve` nombra lo que sirve (WC-MCP-9).** Sin perfil ya no sirve todos los perfiles:
+  se detiene con `validation_error` (salida 2) y enumera los perfiles de este equipo. Sirve uno con `zm <profile> mcp serve`,
+  varios con `zm mcp serve --profiles work,personal`, o todos con `zm mcp serve --profiles all`; cambia una entrada de
+  cliente MCP `["mcp", "serve"]` por `["mcp", "serve", "--profiles", "all"]`. Un perfil junto con
+  `--profiles`, un nombre que no es un perfil de aquí, o `all` dentro de una lista se rechazan con `validation_error`; con
+  `ZM_PROFILE_LOCK`, `--profiles` solo puede nombrar el perfil bloqueado (`permission_error`, salida 5). El servidor
+  nombra en stderr los perfiles que sirve al iniciar. La entrada del MCP Registry inicia ahora `zm mcp serve --profiles all`.
+
+### Correcciones
+
+- **`zm` arranca en la mitad de tiempo aproximadamente: el paquete se ejecuta desde un bundle.** Un comando cargaba
+  unos mil archivos de módulos antes de hacer nada; ahora carga unas pocas decenas con el mismo código, construidas con
+  `cli-dev bundle` de cli-base. `zm meetings list --help` en caliente pasó de 422 a 186 ms, `zm --version` de 38 a 19 ms.
+  La salida no cambia. Un `zm mcp serve` en marcha carga todo su código poco después de arrancar, así que actualizar `zm`
+  en su sitio no lo rompe. El paquete es mayor: 2,8 MB de descarga en lugar de 0,26 MB.
+
+## 0.56.0 — 27.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **cli-core 0.467.0 y cli-base 0.64.0.** cli-core solo acepta cli-base 0.64, así que ambas versiones cambian juntas.
+- **Cada resultado de búsqueda marca el texto que escribió otra persona (cli-core 0.464.0).** `zm search all`, `search meetings` y
+  la evidencia de reuniones de un proyecto llevan `untrusted` en cada resultado (`["title", "excerpt"]`, y un resultado de mensaje o
+  correo también `sender_name`), para que un agente lea ese texto como datos. Un cliente que compara los resultados con una copia
+  antigua y estricta de su forma rechaza el campo nuevo.
+- **El servidor MCP es ahora `zm <profile> mcp serve`; `zm mcp` solo muestra la ayuda (cli-core 0.463.0).** Todas las CLI de WireCat
+  nombran ahora su servidor igual. Cambia las entradas de clientes MCP de `["personal", "mcp"]` a
+  `["personal", "mcp", "serve"]`, y `claude mcp add zm -- zm personal mcp serve`. Sin perfil, `zm mcp serve`
+  sirve todos los perfiles, como hacía `zm mcp`. La entrada del MCP Registry y la imagen Docker inician `zm mcp serve`. Zoom
+  no tiene servidor HTTP, así que no tiene `mcp revoke`.
+- **El almacén compartido pasa a la versión 35 (cli-core 0.463.0).** El primer comando `zm` tras la actualización añade
+  una columna para las series del calendario. Las demás CLI de WireCat que abren el mismo almacén necesitan entonces una
+  versión que lo entienda; `zm` lo dice una vez y nombra `<cli> upgrade`.
+- **Ahora se guarda cada ejecución, también las correctas (cli-core record-every-run).** Antes solo se guardaban las
+  fallidas, salvo con `--record` o `record true`. Una ejecución correcta se conserva 7 días (`keep_successful_runs_for_days`),
+  una fallida 30 (`keep_runs_for_days`), y el registro de ejecuciones se mantiene bajo `runs_size_limit_mb` (200 MB; las
+  correctas más antiguas se borran primero). `record false` guarda ahora las fallidas (antes: nada); `--no-record` sigue sin
+  guardar nada. `zm watch` y `zm mcp
+  serve` guardan una ejecución correcta solo con `--record`. Una ejecución guardada
+  contiene las palabras que escribiste (un id de reunión, una búsqueda), en un archivo local que solo tú puedes leer;
+  `zm config set record_input failed` las guarda solo en una ejecución fallida, `false` las oculta en todas.
+- **Vuelve a ejecutar `zm mcp add` o `zm mcp config`** tras esta actualización, para que tu app de IA inicie `zm mcp serve`.
+- **`zm skill show`, `skill status` y `skill install` responden a `--json` como `{ item, meta }` (cli-core 0.462.0).**
+  Lo que era toda la respuesta está ahora en `item`, como en cualquier otra respuesta de un solo objeto.
+- **Por MCP, `--resume`/`--no-resume` es un único booleano (cli-core 0.459.0).** Un agente envía `resume: false`;
+  `no_resume` se rechaza como argumento desconocido.
+- **`zm search all` lee también eventos del calendario (cli-core 0.453.0, 0.460.0)** cuando gcal los guardó en el
+  almacén compartido: resultados de tipo `event` con una referencia `event:<id>` y `untrusted: ["title", "excerpt"]`,
+  `--only events`, y `events` en `searched`. Un almacén sin calendario responde como antes.
+- **Una ejecución dice quién la pidió (cli-core).** `run.json` gana `via` (`cli`, `mcp-stdio`, `mcp-http`, `desktop`),
+  `mcp` (ids de herramienta, petición y conexión) y `agent.client` (nombre y versión de la app de IA). Un lector que
+  compara una ejecución con una copia antigua de su forma rechaza los campos nuevos.
+
+### Añadido
+
+- **Cada petición a Zoom de una ejecución indica su intento y la espera antes de un reintento.** Una línea de petición
+  lleva ahora el método, la ruta con cada id como `:id`, `transport: "http"`, `attempt` (2 o más en un reintento) y
+  `wait_ms`, la espera previa por Retry-After o por backoff; una descarga de grabación reintentada también cuenta sus
+  intentos. Una respuesta rechazada nombra el código de error de Zoom (`zoom.429`, `zoom.3001`), leído de un cuerpo de
+  error de 4 KB como mucho, nunca su mensaje. Un 429 aparece como respuesta de error y luego el reintento. Nunca la URL
+  tal como se envió, su query ni ninguna otra parte de un cuerpo.
+- **`zm config set keep_successful_runs_for_days <days>`, `runs_size_limit_mb <MB>` y `record_input
+  true|false|failed`.**
+- **`zm upgrade` nombra las sesiones MCP que siguen en la versión antigua** (cli-core): tras una instalación enumera los
+  procesos `zm mcp serve` de esta instalación como `stale_sessions` y pide reiniciarlos desde tu app de IA.
+
+## 0.55.0 — 27.10.2026
+
+### Añadido
+
+- **Sin sesión iniciada, el error y las instrucciones MCP ofrecen también WireCat Desktop.** Una sesión que falta, no
+  es válida o fue rechazada dice ahora: ejecuta `zm <profile> session start` en una terminal, o inicia sesión desde
+  WireCat Desktop (Tools → Zoom → Manage). Por MCP se indica al agente que nunca pida códigos ni contraseñas.
+
+## 0.54.0 — 27.10.2026
+
+### Correcciones
+
+- **La búsqueda por significado usa ONNX Runtime nativo también en Windows (cli-core 0.451.0).** Tras `zm models
+  download`, los modelos de texto y el reordenador usan la biblioteca nativa en Windows x64 y arm64, como ya hacían en
+  Linux y macOS: 2–3 veces más rápido que WebAssembly. La descarga toma `onnxruntime.dll` del paquete npm `onnxruntime-node`
+  (113,5 MB, una vez, comprobado con sha256). Los resultados son los mismos.
+
+## 0.53.0 — 27.10.2026
+
+### Añadido
+
+- **`zm mcp` sin perfil sirve todos los perfiles por stdio (cli-core 0.450.0).** Una app de IA necesita un solo conector
+  para Zoom, no uno por perfil. Cada herramienta pide un `profile` obligatorio (cada perfil de aquí, sin valor
+  predeterminado) y se indica al agente que pregunte si no nombraste la cuenta; la llamada se ejecuta en el propio
+  `zm <profile> mcp` de ese perfil, con sus permisos. `zm <profile> mcp` no cambia. La entrada del MCP Registry inicia
+  `zm mcp` sin perfil.
+
+### Correcciones
+
+- **Cada comando tarda menos en prepararse (cli-base 0.62.0, cli-core 0.449.0).** La comprobación de los comandos
+  compartidos describe ahora cada comando una vez, no de nuevo por cada grupo por encima. Era alrededor del 60% de la
+  preparación de cada comando; en tg un `run(["--version"])` en caliente pasó de 49 a 29 ms. Detecta los mismos cambios que antes.
+- **`bin/release` ya no dice que una publicación falló mientras su ejecución sigue en marcha.** `gh run watch` también se
+  detiene con un error cuando falla una de sus propias peticiones a GitHub; el script vuelve ahora a vigilar la ejecución
+  y decide por su resultado.
+
+## 0.52.0 — 26.10.2026
+
+### Correcciones
+
+- **La búsqueda por significado va 2–3 veces más rápido en Linux y en Mac con Apple silicon tras el siguiente `zm models download` (cli-core
+  0.448.0).** La descarga instala un ONNX Runtime nativo y los modelos se ejecutan en él; sin él funcionan como antes.
+
+## 0.51.0 — 26.10.2026
+
+### Añadido
+
+- **`zm <profile> session start --json --answer-stdin` inicia sesión desde WireCat Desktop (cli-core 0.443.0).** La página
+  de Zoom que hay que aprobar es una línea `open_url` en stderr en lugar de la simple, y el pegado de respaldo de la
+  dirección en la que terminó el navegador es una línea `needs` que se responde con una línea en stdin; cuando el
+  retorno del navegador llega antes, la pregunta se retira. Sin `--answer-stdin` nada cambia.
+- zm se construye ahora sobre cli-core 0.443.0 y cli-base 0.59.0, el rango que necesita cli-core 0.443.0.
+- **`contacts list` y `contacts show` leen tus contactos de Zoom** en directo desde Zoom: compañeros de la empresa y
+  contactos externos, con nombre y correo, y teléfonos en `show`. `name:`, `email:` y `type:company|external` acotan
+  la lista. Cada contacto es el tipo compartido `contact`, identificado por el id de miembro de Zoom. Necesitan los
+  permisos `team_chat:read:list_contacts` y `team_chat:read:contact` y un nuevo `session start`.
+- Las comprobaciones de respuestas de Zoom se generan a partir de la descripción publicada de la Chat API de Zoom (`spec/zoom/`, `pnpm zoom:generate`).
+- `zoom search` busca en directo en tu espacio de trabajo de Zoom con la propia búsqueda de Zoom: mensajes de chat, chats, documentos de Canvas, reuniones y el resto de lo que guarda tu cuenta, elegido con `--only`. Necesita el permiso `agentic_search:read:search`; las respuestas `ask` de Zoom no se ofrecen.
+
+## 0.50.1 — 26.10.2026
+
+### Correcciones
+
+- **La skill `zoom-cli` dice que `zm <profile> mcp` es para clientes que no pueden ejecutar comandos**, como apps de chat y
+  agentes remotos, y pide a un agente que sí puede ejecutarlos que los use. Las llamadas MCP mantienen los permisos del perfil, como antes.
+
+## 0.50.0 — 26.10.2026
+
+### Añadido
+
+- **La skill `zoom-cli` indica a OpenClaw y ClawHub que necesita `zm` y cómo instalarlo** (`metadata.openclaw`: `requires.bins` y el paquete npm `@wirecat/zoom-cli`). Si `zm` no está en PATH, OpenClaw marca la skill como no lista y ofrece instalar el paquete. Claude Code y Codex ignoran el bloque.
+
+## 0.49.0 — 26.10.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **cli-core 0.435.0 lleva el almacén compartido a la versión 34**, que guarda un índice para la búsqueda por significado (sqlite-vec, incluido en `@wirecat/cli-core-sqlite` 1.1.0). En cuanto zm, o cualquier CLI de WireCat en cli-core 0.434.0 o posterior, ha abierto el almacén, zm 0.48 y anteriores lo rechazan y piden actualizarse, así que actualiza todas las CLI de WireCat a la vez.
+- **La ayuda de `zm upgrade` muestra solo `zm upgrade --check` como ejemplo.** Copiado y ejecutado, el ejemplo simple `zm upgrade` actualizaba zm.
+
+### Correcciones
+
+- **Una ejecución sin perfil ya no registra `"profile": ""`.** Un error de uso antes de cualquier comando (`zm models`) y el registro de tokens de Zoom omiten ahora `profile` en `runs list` y `runs show`, como las ejecuciones de cli-core.
+
 ## 0.48.0 — 25.10.2026
 
 ### Correcciones

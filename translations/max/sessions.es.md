@@ -107,6 +107,8 @@ max personal session end              # выйти из MAX и забыть то
 
 Si MAX no responde, se conserva el token para que puedas repetir el comando. Un token que MAX ya no acepta se borra de inmediato: ya no queda una sesión que cerrar.
 
+Una ejecución con carpetas movidas (`MAX_CONFIG_DIR` y las variables relacionadas, otro `HOME` o una carpeta XDG) usa el inicio de sesión del propietario, pero no lo cierra: ahí `session end` no borra nada, no cierra la sesión en MAX y responde `"kept": "owners-sign-in"`. Un inicio de sesión hecho en esa misma ejecución, `session end` lo cierra como siempre.
+
 ## ¿Cuánto dura una sesión?
 
 Su duración es desconocida: MAX no la comunica. Sigue funcionando después de cerrar la pestaña de web.max.ru. Cuando MAX deje de aceptarlo, vuelve a iniciar sesión con `max personal session start`.

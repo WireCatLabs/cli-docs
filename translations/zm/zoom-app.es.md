@@ -34,7 +34,11 @@ los permisos y aprueba. Espera `logged_in: true` en el terminal. Si sigue espera
 
 zm no incluye un client ID. Hasta que la app del propietario supere la revisión de Zoom Marketplace,
 no hay ninguna app de WireCat disponible para otras cuentas de Zoom. Esa app está en Development y
-solo funciona para la cuenta de su creador.
+solo funciona para la cuenta de su creador. `zm doctor --json` lo indica en `oauth_client` hasta que configures una.
+
+En lugar del ajuste, puedes pasar el ID una vez con `zm personal session start --client-id <public-client-id>`
+(un inicio de sesión correcto lo guarda como `zoom.client_id`) o fijar `ZM_ZOOM_CLIENT_ID`, que tiene prioridad sobre
+el ajuste. Consulta [qué app usa zm](./configuration.md#which-zoom-app-zm-uses).
 
 <a id="use-a-wirecat-or-team-app" />
 
@@ -125,6 +129,9 @@ emitidos no ganan permisos automáticamente. Comprueba lo realmente concedido co
 | `meeting:write:meeting` | Crear reunión |
 | `meeting:update:meeting` | Actualizar reunión |
 | `meeting:delete:meeting` | Cancelar reunión |
+| `team_chat:read:list_contacts` | Listar tus contactos de la empresa y externos con `contacts list` |
+| `team_chat:read:contact` | Mostrar un contacto y sus teléfonos con `contacts show` |
+| `agentic_search:read:search` | Buscar en directo en chat, documentos y reuniones con `zm personal zoom search` |
 
 Archivar no requiere permisos de escritura de reuniones. Los cambios muestran un plan;
 `--yes` aplica una solicitud. Tras concederlos, sigue con [archivo de grabaciones](./archive.md#archive-cloud-recordings)

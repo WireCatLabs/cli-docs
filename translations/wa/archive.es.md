@@ -17,7 +17,7 @@ Términos utilizados en esta página:
 
 WhatsApp no tiene solicitud de "chats". Tres cosas llenan el almacén local y nada más:
 
-- **El envío del historial** justo después de vincular. `wa <profile> session start` y `setup` mantienen la conexión abierta y la guardan hasta que el teléfono haya estado en silencio durante 45 segundos.
+- **El envío del historial** después de vincular. `wa <profile> session start` y `setup` mantienen la conexión abierta y la guardan hasta que el teléfono haya estado en silencio durante 45 segundos. El teléfono puede enviar más partes después; `serve` las guarda, y una parte que otro comando oyó primero espera en el archivo del dispositivo hasta que `serve` se conecte. El teléfono decide cuánto envía: normalmente cada chat con sus últimos mensajes, y los últimos meses completos.
 - **`serve`**, mientras se ejecuta: mensajes nuevos, ediciones, eliminaciones y reacciones, y los mensajes que envías. Una edición mantiene el tiempo, la respuesta y las reacciones del mensaje; solo la edición de un mensaje que falta en el almacén local se guarda con el tiempo de edición. Un chat que lees por teléfono obtiene un recuento de no leídos de 0 y cada mensaje nuevo de otra persona agrega uno. Se guardan archivar, silenciar (con su fin) y marcar un chat como no leído en el teléfono; fijar, eliminar o borrar un chat no lo es.
 - **`messages sync <chat>`**: mensajes antiguos de un chat, solicitados en tu teléfono ([abajo](#older-history-from-your-phone)).
 
@@ -25,7 +25,9 @@ Entonces, un chat contiene lo que el teléfono presionó y lo que llegó mientra
 
 ### Historial más antiguo desde tu teléfono
 
-WhatsApp no ​​guarda ninguna copia de tus chats en sus servidores: la única copia completa está en tu teléfono. Así que no hay descarga, sólo una petición al teléfono: "mándame los 50 mensajes de este chat antes de este". `wa` cuenta hacia atrás desde el mensaje más antiguo del chat que el almacén local ya contiene, por lo que no se puede preguntar sobre un chat del que el almacén local no tiene nada.
+WhatsApp no ​​guarda ninguna copia de tus chats en sus servidores: la única copia completa está en tu teléfono. Así que no hay descarga, sólo una petición al teléfono: "mándame los 50 mensajes de este chat antes de este". `wa` cuenta hacia atrás desde el mensaje más antiguo del chat que el almacén local ya contiene, por lo que no se puede preguntar sobre un chat del que el almacén local no tiene nada. Ese chat se llena a partir de su siguiente mensaje: en cuanto `serve` ha guardado uno, `messages sync` cuenta hacia atrás desde él.
+
+**El teléfono solo responde con el historial reciente.** Cuando se le piden los mensajes anteriores a uno, envía lo que tiene a mano: en una prueba del 2026-11-02 respondió con los días anteriores al mensaje más reciente de un chat y nada de un año antes, aunque el historial enviado al vincular sí tenía esos mensajes. El historial más antiguo llega una sola vez, en el envío del historial cuando se vincula el dispositivo. Así que lo que los límites del historial dejaron fuera vuelve al vincular de nuevo, no con `messages sync`.
 
 **Primero abre WhatsApp en tu teléfono.** El teléfono responde mientras la aplicación está abierta; en segundo plano mantiene la solicitud y responde la próxima vez que la abra. Una solicitud que no responde en 25 segundos falla con `timeout`; la respuesta tardía aún llega y un `serve` en ejecución la guarda, por lo que no se pierde nada. Una respuesta vacía significa que el chat comienza allí.
 
@@ -110,7 +112,7 @@ wa personal server restart
 Para que siga funcionando en todos los inicios de sesión, instálelo como un servicio de usuario: una unidad de usuario systemd en Linux, un agente de lanzamiento en macOS.
 
 ```sh
-wa personal server install  # writes the unit for this profile; starts nothing
+wa personal server install  # writes the unit for this profile and enables it; starts nothing
 ```
 
 ```sh
@@ -118,10 +120,10 @@ wa personal server start  # starts it — through the unit, now that there is on
 ```
 
 ```sh
-wa personal server status
+wa personal server status  # starts_at_login says whether it starts at the next login
 ```
 
-En Linux, `systemctl --user enable` con el nombre de la unidad hace que se inicie cada vez que inicia sesión. En macOS, el agente ingresa a `~/Library/LaunchAgents/`.
+`server install` habilita la unidad, así que se inicia en cada inicio de sesión y después de reiniciar. Una unidad que instaló un `wa` más antiguo no queda habilitada hasta que vuelvas a ejecutar `server install`; una unidad instalada desde una copia de desarrollo (con sus propias carpetas `WA_*_DIR`) se escribe pero no se habilita. En macOS, el agente va a `~/Library/LaunchAgents/`.
 
 - La unidad ejecuta el `node` y el `wa` que lo instaló. Instálelo nuevamente después de mover cualquiera de los dos, por ejemplo, después de cambiar las versiones de Node.
 - Obtiene el perfil y las variables `WA_*_DIR` y `MESSAGING_STORE` del shell que ejecutó `server install`, y nada más.

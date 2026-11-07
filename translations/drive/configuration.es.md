@@ -37,6 +37,7 @@ antes de moverlos o borrarlos.
 | `keep_runs_for_days` | Cuántos días se conserva una ejecución fallida; predeterminado `30` | Solo `defaults` |
 | `keep_successful_runs_for_days` | Cuántos días se conserva una ejecución correcta; predeterminado `7` | Solo `defaults` |
 | `runs_size_limit_mb` | El tamaño máximo del registro de ejecuciones; primero se borran las ejecuciones correctas más antiguas; predeterminado `200` | Solo `defaults` |
+| `google_client_id` | El client ID de tu propia aplicación Desktop de Google; `session start` lo usa en lugar de la de WireCat. Su secret viene de `DRIVE_GOOGLE_CLIENT_SECRET`, nunca de este archivo. Solo tú lo cambias en una terminal: a un agente por MCP se le rechaza | Perfil o `defaults` |
 | `picture_search` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
 | `models.memories.provider` | Proveedor de IA para la extracción solicitada explícitamente | Perfil o `defaults` |
 | `models.memories.model` | Identificador del modelo del proveedor | Perfil o `defaults` |
@@ -77,7 +78,13 @@ drive config show --json
 ```
 
 La primera línea cambia el valor compartido; la segunda lo sustituye para `work`. La última
-imprime ambas secciones, no una lista combinada de valores efectivos.
+imprime ambas secciones, no una lista combinada de valores efectivos, y en `settings` cada ajuste de
+`defaults` con su valor, su valor predeterminado y si el archivo lo define.
+
+`drive config migrate` escribe cada ajuste que falta en `defaults` con su valor predeterminado, para que los veas y
+edites todos en el archivo. Tus valores, su orden y las claves que drive no conoce se quedan como están; no se crea
+ningún perfil. Cada escritura de drive en el archivo, incluidos `config set` y `folders add`, también los añade;
+`config unset` no devuelve el ajuste que quitó.
 
 `drive personal config set picture_search true` activa imágenes solo para `personal`.
 Descarga primero el modelo local compartido `clip-b32` (unos 160 MB) y escribe consultas en inglés. La descarga no
@@ -141,7 +148,7 @@ Afectan al proceso que ejecuta Drive; `config set` no las guarda.
 | `DRIVE_CACHE_DIR` | Mover la caché de la herramienta; no mueve las copias de documentos |
 | `MESSAGING_STORE` | Elegir el archivo de la base compartida en lugar de la base WireCat predeterminada |
 | `WIRECAT_STATE_DIR` | Mueve la carpeta WireCat con la base y los modelos compartidos; por defecto `~/.local/share/WireCat/` |
-| `DRIVE_GOOGLE_CLIENT_ID`, `DRIVE_GOOGLE_CLIENT_SECRET` | Usar tu aplicación Desktop OAuth en lugar de la incluida de WireCat; configura el ID antes de su secret |
+| `DRIVE_GOOGLE_CLIENT_ID`, `DRIVE_GOOGLE_CLIENT_SECRET` | Usar tu aplicación Desktop OAuth en lugar de la incluida de WireCat; configura el ID antes de su secret. El ID tiene prioridad sobre `google_client_id`; el secret sirve también con `--client-id` y `google_client_id` |
 | `DRIVE_MODELS_MEMORIES_PROVIDER`, `DRIVE_MODELS_MEMORIES_MODEL`, `DRIVE_MODELS_MEMORIES_BASE_URL` | Sustituir los ajustes de extracción de recuerdos para el proceso |
 | `DRIVE_OPENAI_API_KEY`, `DRIVE_ANTHROPIC_API_KEY` | Proporcionar la clave del proveedor; también se acepta la variable correspondiente sin prefijo |
 

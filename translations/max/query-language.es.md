@@ -151,6 +151,7 @@ En un archivo grande, un prefijo corto como `к*` puede abarcar más de 10 000 p
 - `next`: los comandos que lo corrigen (`messages.sync`, `store.migrate`, `models.download-image`) y `page.next`, la página siguiente con la misma consulta.
 - `meta.accounts`: en qué cuentas se buscó.
 - `page.has_more` se refiere a la página, no a si MAX tiene más.
+- `page.total` es cuántos mensajes coinciden en total: `{ "value": 144, "relation": "eq" }`. `eq` es un número exacto, `gte` significa «como mínimo»: el conteo se detiene en 10 000. En la terminal se ve lo mismo como `showing 1–20 of 144`.
 
 Un error incluye la posición del problema en la consulta y una pista.
 

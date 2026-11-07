@@ -22,7 +22,7 @@ For command-line control:
 max personal search messages 'Во сколько ежедневная выгрузка проекта Маяк? chat:990' --discover --json
 ```
 
-This searches the local archive only. Chat, sender and date filters stay in force. In MCP, pass `discover: true` to the message-search tool. `items[].discovery.missing_terms` lists missing words, and `parent` links a reply to its matching parent. A high score is not answer confidence: a question, proposal or old decision can rank first. Read the evidence and check [archive coverage](./archive.md) before concluding that a fact is absent.
+This searches the local archive only. Chat, sender and date filters stay in force. In MCP, pass `discover: true` to the message-search tool. `items[].discovery.missing_terms` lists missing words, and `parent` links a reply to its matching parent. For the first five results, `items[].follow_ups` holds up to two later messages that share a rare word, shown as a snippet like the result itself (in the terminal, lines `later, shares a rare word`; in full with `messages context <ref>`): they often show that a decision was later cancelled or changed, even when the cancellation was not a reply. A high score is not answer confidence: a question, proposal or old decision can rank first. Read the evidence and check [archive coverage](./archive.md) before concluding that a fact is absent.
 
 Without `--discover`, strict search remains the default. Boolean syntax, quoted phrases, wildcards, AST, `--exact` and `--newest` keep strict semantics. Discovery cannot combine with `--backend server`. Meaning-based conversation search stays a separate [topic-search option](./topic-search.md).
 

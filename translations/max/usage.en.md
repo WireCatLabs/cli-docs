@@ -28,7 +28,7 @@ max [профиль] [опции] <ресурс> <действие> [аргум�
 | Replies and commitments | Unread messages, promises and open matters | `max personal inbox`, `max personal review` |
 | Voice | Transcribe locally | `max personal messages transcribe` |
 | Files | Download attachments or chat files; browse media | `max personal messages download`, `max personal chats media` |
-| People | Contacts, aliases, notes, profiles and bot signals | `max personal contacts list`, `max personal contacts info` |
+| People | Contacts, aliases, notes, profiles and bot signals | `max personal contacts list`, `max personal contacts show` |
 | Search | Messages, files, dates, people and discussions by meaning | `max personal search messages`, `max personal search conversations` |
 | Sending | Text, files, voice, replies and scheduled messages | `max personal messages send` |
 | Changes | Edit, forward, pin, delete, react, vote and mark read | `max personal messages edit`, `max personal reactions add` |
@@ -536,7 +536,7 @@ max personal stats charts synthetic-group --chart-kind messages --by day --timez
 
 The JSON is `{item}` with the chart description; when the image is saved, it also has `file` with path and size. The image is written only to a new file, without overwriting. A missing date remains a gap and incomplete data is noted in the description and image. `membership` requires online chat events and is not available with `--offline`. Via MCP `max_read` (`command: "stats charts"`) returns JSON from local storage, without connecting and writing files; `format: "png"` adds a PNG and JSON image with `chart` and size `image`. Entries and exits are not available in it. Reading is subject to permission `messages`. `--jsonl` and stdout image are not available.
 
-![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.86.0/docs/images/stats-charts.png)
+![Graph on fictitious data](https://raw.githubusercontent.com/WireCatLabs/max-cli/v0.103.0/docs/images/stats-charts.png)
 
 Message and author rankings: [metrics, scores and evidence](./rankings.md).
 

@@ -8,13 +8,14 @@ de importar más datos o cambiar permisos. Guarda el código de error y el perfi
 
 | Síntoma | Qué hacer |
 | --- | --- |
-| No sabes qué está configurado | Ejecuta `drive doctor`: versión, cada problema del archivo de ajustes con el comando que lo corrige, un archivo o carpeta de ajustes que otros usuarios pueden leer con el `chmod` que lo corrige, los perfiles existentes y las rutas. No necesita perfil y no lee el llavero ni el almacén. |
+| No sabes qué está configurado | Ejecuta `drive doctor`: versión, cada problema del archivo de ajustes con el comando que lo corrige, un archivo o carpeta de ajustes que otros usuarios pueden leer con el `chmod` que lo corrige, los perfiles existentes, el cliente OAuth y las rutas. No necesita perfil y no lee el llavero ni el almacén. `drive session list` muestra las carpetas seleccionadas de cada perfil y dónde se guarda su acceso. |
 | Un comando falló antes y necesitas saber qué hizo | Ejecuta `drive runs list status:failed` y luego `drive runs show <run-id>`: las llamadas a Google que hizo, su estado y duración, y su código de error. No necesita perfil; nunca se guardan nombres, ids ni texto de documentos. |
 | No se encuentra `drive` | Reabre la terminal/agente, comprueba que el directorio de comandos globales de npm está en PATH y repite [instalación](./installation.md). |
 | Google bloquea el acceso | Revisa el error mostrado por Google y las políticas Workspace. Con tu propio cliente, comprueba también APIs, consentimiento y usuarios de prueba. |
-| `google-api.disabled` | El propietario del proyecto OAuth debe habilitar la API solicitada; consulta [configuración de API](#google-api-is-disabled). Reconectar o conceder escritura no la habilita. |
+| `api.disabled` | El propietario del proyecto OAuth debe habilitar la API solicitada; consulta [configuración de API](#google-api-is-disabled). Reconectar o conceder escritura no la habilita. |
 | El acceso ha caducado | Repite `drive personal session start`. Añade `--client-file` solo para tu propia aplicación. Los permisos External Testing suelen caducar a los siete días. |
-| No hay llavero del sistema | Conecta con `--credential-storage file` explícito si el almacenamiento privado en archivo es adecuado. |
+| "could not reach the OS keyring" | El llavero está bloqueado o no se está ejecutando. El acceso sigue funcionando: drive lo guarda en un archivo privado y responde `storage: "file"`. Desbloquea el llavero y vuelve a acceder para devolverlo allí. |
+| `oauth.not-saved` | El archivo privado de credenciales no se puede leer. Apártalo y vuelve a acceder. |
 | Búsqueda vacía | Ejecuta `status`, comprueba raíces con `folders list` y luego `sync`. Prueba una palabra conocida con `search --exact`. |
 | Se omitió un archivo | Revisa tipo y permiso de descarga. Se importan Docs, Sheets, Markdown/TXT, PDF, `.docx`, `.xlsx` y CSV; PDF escaneados, Slides y accesos directos no se leen. |
 | Sync se detuvo con errores | Repítelo: se reanuda el trabajo pendiente. No trates una importación parcial como completa. |
@@ -52,16 +53,16 @@ Necesitas JSON Desktop, no clave API ni de cuenta de servicio.
 Publicar la aplicación no autoriza tu cuenta ni este ordenador. Sigue el paso de
 [conexión de la cuenta](./installation.md#connect-your-account) y aprueba el acceso en el navegador.
 Con el cliente incluido de WireCat, los usuarios no repiten la configuración de Google
-Cloud. Un cliente Desktop propio sigue siendo una alternativa. Google aún no ha terminado de revisar
-la aplicación de WireCat, así que muestra un aviso de "aplicación no verificada" y la limita a 100
-usuarios nuevos en total; consulta [el aviso](./installation.md#google-shows-an-unverified-app-warning).
+Cloud. Un cliente Desktop propio sigue siendo una alternativa. Hacer pública para Drive una aplicación
+Google compartida es complejo, así que Google puede rechazar el acceso con la aplicación de WireCat;
+consulta [qué hacer](./installation.md#google-shows-an-unverified-app-warning).
 Las políticas de Workspace también pueden limitar cuentas o autorizaciones disponibles.
 
 ## Google API está deshabilitada
 
 La conexión puede ser válida aunque una API esté deshabilitada en el proyecto Google Cloud de
 la aplicación. Por ejemplo, importar Sheets mediante la exportación XLSX de Drive puede funcionar
-mientras fallan los comandos actuales `sheets`. `google-api.disabled` distingue este problema de
+mientras fallan los comandos actuales `sheets`. `api.disabled` distingue este problema de
 configuración del acceso al archivo o permisos OAuth. No confirma que exista una hoja concreta.
 
 Con la aplicación incluida de WireCat, comunica a WireCat el comando y el error sin datos sensibles;
