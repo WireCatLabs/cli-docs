@@ -5,6 +5,137 @@ title: "Historial de cambios"
 Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest first; versions follow
 [semantic versioning](https://semver.org), so before `1.0.0` the command interface may still change.
 
+## 0.30.0 — 07.11.2026
+
+### Fixed
+
+- **Abrir el almacén ya no suelta los bloqueos de archivo de SQLite.** Antes abría el archivo con truncado, lo que liberaba los bloqueos POSIX que tenían otros procesos, así que dos escritores podían solaparse (cli-core 0.599.0).
+
+## 0.29.0 — 05.11.2026
+
+### Added
+
+- **`wa config migrate` escribe en `defaults` cada ajuste que le falta al archivo, con su valor predeterminado, y cada escritura de wa en el archivo también los añade.** Así encuentras y editas `limit`, `sends_per_hour`, `record` y los demás en `config.json` sin la documentación. Tus valores, su orden y las claves que wa no conoce se mantienen; `config unset` no vuelve a poner lo que quitó, y una simple lectura nunca reescribe el archivo. `wa config show` da el valor predeterminado de cada ajuste y lo que hace (cli-core 0.563.0).
+- **Desde cli-core 0.563.0:** `config repair` repara la sintaxis JSON del archivo de ajustes; `stats messages responses` y `stats messages waiting`; `tasks status`, `tasks review` y `tasks acknowledge`; `tasks add --open-new`.
+- **Desde cli-core 0.564.0–0.567.0:** `store chats status` cuenta los chats que el archivo guarda hasta el primer mensaje, en parte o nada; `stats tasks show` acepta una consulta y cuenta las tareas abiertas y cerradas en un periodo (`-- created>=30d`); `has:transcript` encuentra mensajes de voz que tienen transcripción.
+- **`wa bot list` no necesita la palabra del perfil** (`wa <profile> bot list` sigue funcionando; cli-core 0.567.0).
+
+### Changed — may break callers
+
+- **Un nuevo código de error, `conflict` (salida 15), está en `wa commands --json` y en el esquema de errores de las herramientas MCP** (cli-base 0.77.1). Significa que se rechazó una escritura porque lo que cambia ha cambiado desde que se leyó. Un cambio en una tarea que otra persona cambió después de que la leyeras ahora falla con él, no con `configuration_error` (salida 3); el motivo sigue siendo `task.stale` (cli-core 0.567.0).
+- **`search all` ordena todas las fuentes en una sola lista, busca también el correo por significado y encuentra registros para una pregunta escrita como una frase** (cli-core 0.564.0). Antes, los resultados de cada fuente se turnaban, y una pregunta solo encontraba registros que tenían todas sus palabras.
+
+### Fixed
+
+- **`wa account list` ya no muestra un bot como una cuenta personal sin sesión iniciada.** Un nombre que solo usa la parte del bot (`config set --bot …`, `bot auth set`) se omite; un nombre que es tu cuenta y también un bot indica `bot: true`. `wa mcp serve --profiles all` omite los bots de la misma manera (cli-core 0.567.0).
+- **`wa <profile> config set --bot phone_number_id 100000000000001` funciona como muestra `docs/bot.md`.** El identificador se leía como un número y se rechazaba; ahora se guarda con los dígitos tal como se escribieron (cli-core 0.567.0).
+
+## 0.28.0 — 03.11.2026
+
+### Added
+
+- **`wcat wa` ejecuta la herramienta, y `wcat --help` la muestra en la lista.** El paquete instala `wcat-wa` junto a `wa`, y `wcat-wa --wcat-describe` imprime para `wcat` el nombre, la versión y la descripción de la herramienta.
+
+## 0.27.0 — 02.11.2026
+
+### Added
+
+- **`messages sync` también respeta los límites del historial** (cli-core 0.551.0): a un chat individual se le piden como mucho `history_dialog_days`, a un grupo `history_group_days`, y a un grupo de más de `history_group_members_max` personas no se le pide nada; `--full-history` quita el límite para un chat, y la respuesta dice lo que dejó fuera (`limited`).
+- **`--compact`: una línea por elemento** para un agente, a partir de la misma respuesta que imprime `--json`: `#<id> · time · sender ·
+  text`, con la paginación y los siguientes pasos como líneas `#`; aproximadamente la mitad de bytes que el JSON (cli-core 0.550.0).
+- **`server install` habilita el servicio**, así que `serve` se inicia en cada inicio de sesión y después de reiniciar. Un servicio que instaló un `wa` más antiguo no queda habilitado hasta que vuelvas a ejecutar `wa <profile> server install`; `server status` indica `starts_at_login` (cli-core 0.552.0).
+- **`messages list` lee una ventana con un inicio y un final**: `'date>=2026-10-01 date<2026-10-20'`. Un inicio lee hacia adelante, del más antiguo al más reciente, y se detiene en el final; un final solo lee hacia atrás desde él, como antes (cli-core 0.547.0).
+
+### Changed — may break callers
+
+- **whatsapp-cli requiere cli-base 0.75.0** (cli-core 0.551.0).
+- **Una búsqueda que se queda sin tiempo se detiene en su límite de tiempo y dice que fue el tiempo, no la consulta.** Falla con `timeout` y motivo `query.time-limit` en unos 2 s. En un almacén grande antes seguía más de 90 s, más allá de `--timeout`, o fallaba con `validation_error` / `query.too-large`, como si la consulta estuviera mal. La consulta era válida: añade `chat:` o `date:` para buscar en menos parte del almacén. Un script que cambiaba la consulta ante `query.too-large` debe tratar `query.time-limit` como «acótala», no como «corrígela» (cli-core 0.552.0).
+- **`server install` falla donde el gestor de servicios no responde** (`systemctl --user`, o `launchctl` en macOS), después de escribir la unidad. En macOS, `server stop` solo descarga el agente: vuelve a iniciarse en el siguiente inicio de sesión; `server uninstall` lo impide (cli-core 0.552.0).
+- **Desde la 0.26.0, un chat indicado como `<kind>:<text>` se lee como una referencia** (cli-core 0.546.0, anotado aquí después de la publicación): `chat:whatsapp/…` y `msg:whatsapp/…`, tal como los imprimen otras herramientas de WireCat, funcionan dondequiera que se nombre un chat o un mensaje. Un chat cuyo título parece `note:plan` ya no se encuentra por ese título; indica su identificador o una parte del título. Una referencia a otra cuenta u otro servicio de mensajería se rechaza y nombra el perfil o la herramienta que la abre.
+- **Desde la 0.26.0, una opción después de `--` se lee como la opción** (cli-core 0.546.0, anotado aquí después de la publicación): `messages sync -- <chat> --json` responde en JSON. Los comandos que aceptan texto libre, como `messages send` y `messages edit`, conservan como texto cada palabra después de `--`.
+
+### Fixed
+
+- **`messages delete` sin identificador de mensaje se rechaza con `validation_error`** antes de conectarse. Un identificador vacío llegaba antes a WhatsApp como un borrado de nada y respondía con éxito (cli-core 0.551.0).
+- **Una sincronización cuyo lector desaparece termina su trabajo.** Cuando el programa que leía su salida (la aplicación de escritorio, una tubería) se cerraba antes, un `messages sync` largo terminaba con `write EPIPE`; ahora termina y su registro de ejecución dice cómo (cli-core 0.552.0).
+- **`--brief` ahora acorta un resultado de `search messages`** a su referencia, chat, hora, remitente, extracto y puntuación (cli-core 0.550.0).
+- **`messages list`**: un inicio como `date>=2026-10-01` incluye un mensaje enviado exactamente en ese momento, y el comando `page.next` de una respuesta funciona tal como está escrito (cli-core 0.547.0).
+- **Una llamada MCP cuya respuesta nombra un paso que solo tú puedes dar** ya no falla como un error del programa; el paso se conserva (cli-core 0.551.0).
+
+### Security
+
+- **Desde la 0.25.0, un agente ya no puede aflojar los permisos** (cli-core 0.544.0, anotado aquí después de la publicación). `wa <profile> config set|unset permissions…` ejecutado por un agente, por MCP o en su propio shell (Hermes, OpenClaw, Claude Code y otros que lo marcan con `AI_AGENT`, `CLAUDECODE` u `OPENCLAW_SHELL=exec`), solo puede bajar un nivel, nunca subirlo. Así, el modo de solo lectura que configura la aplicación de escritorio se mantiene, incluso cuando un mensaje de un chat convence al agente de ejecutar `config set`. Afloja los permisos en tu propio terminal. Desde la misma versión, la primera ejecución de una versión nueva también actualiza un `SKILL.md` desactualizado que instaló una anterior (`WA_NO_SKILL_REFRESH=1` lo desactiva).
+
+## 0.26.0 — 02.11.2026
+
+### Fixed
+
+- **El «History: … kept» de una vinculación cuenta solo lo que llegó al almacén** (cli-core 0.546.0). La 0.25.0 ya contaba así; ahora está incluido el cli-core que le dice qué partes se guardaron.
+- **`wa upgrade` ya no reinicia `serve` en una versión sin su motor.** Justo después de una publicación, el gestor de paquetes puede instalar la CLI y omitir el paquete del motor sin avisar; el `serve` reiniciado se detenía entonces con «the WhatsApp engine is not installed». Ahora comprueba primero el motor, no reinicia nada cuando falta y dice que ejecutes `wa upgrade` de nuevo.
+
+## 0.25.0 — 02.11.2026
+
+### Added
+
+- **Límites del historial según el tipo de chat** (cli-core 0.545.0). El historial que envía el teléfono se guarda 3 años en los chats individuales (`history_dialog_days`), 1 año en los grupos de más de 2 personas (`history_group_days`) y nada en un grupo de más de 50 personas (`history_group_members_max`). Lo que quedó fuera se registra por chat: `store status` lo muestra, y `search messages`, `search all` y `messages list --offline` responden `meta.complete: false` con una entrada `history_limits` y el paso que lo descarga. `messages sync <chat> --full-history` conserva un chat completo. Los mensajes nuevos y lo que ya está guardado nunca se descartan.
+
+### Changed — may break callers
+
+- **Al vincular se pide al teléfono el ajuste de historial más largo, 3 años de forma predeterminada**, en lugar de 10.
+
+### Fixed
+
+- **Una vinculación cuenta solo lo que llegó al almacén**: «History: N chats, M messages kept» ya no cuenta mensajes que un almacén que no podía escribir nunca guardó.
+
+## 0.24.0 — 02.11.2026
+
+### Changed — may break callers
+
+- **whatsapp-cli requiere cli-base 0.73.0** (cli-core 0.543.0).
+
+### Fixed
+
+- **La sincronización del correo ya no carga en cada ronda todos los correos guardados de una cuenta**, lo que ralentizaba cada comando que comparte el almacén (cli-core 0.541.0).
+- **El historial que el teléfono envía después de vincular se conserva hasta que el almacén local lo tiene.** Una vinculación mientras no se podía escribir en el almacén (un archivo dañado) marcaba cada parte del historial como hecha, la borraba del servidor de WhatsApp e informaba de que los mensajes se habían guardado. Ahora una parte cuenta como hecha solo cuando cli-core la ha guardado; hasta entonces se queda en el archivo del dispositivo y en el servidor de WhatsApp, y el siguiente `serve` la vuelve a entregar.
+
+## 0.23.0 — 01.11.2026
+
+### Added
+
+- **Un resultado de mensaje nombra sus archivos**: los resultados de `search messages` y `search all` llevan `attachments` (posición, tipo, nombre, tamaño) (cli-core 0.532.0).
+- **`messages download --offline`** copia los archivos que este ordenador ya tiene y nunca se conecta; `--attachment
+  <n>` elige uno. `messages download` también acepta un localizador `msg:` en lugar del chat y el identificador (cli-core 0.532.0).
+- **`messages link` muestra los archivos de un mensaje** (`files`); WhatsApp no da a ningún archivo su propio enlace, así que cada `url` es null con el motivo `unsupported_provider` (cli-core 0.532.0).
+- **`doctor` dice cuándo estuvo el teléfono en línea por última vez, y avisa a partir de 12 días.** WhatsApp desvincula un dispositivo cuyo teléfono está ausente unas dos semanas. El motor anota los propios recibos de lectura y respuestas de archivos del teléfono en una marca junto a las claves; `doctor` responde `whatsapp.phone: { last_seen, days_away, warning? }`.
+
+### Changed — may break callers
+
+- **whatsapp-cli requiere cli-base 0.71.0** (cli-core 0.529.0).
+
+### Fixed
+
+- **Una unidad de `serve` sobrevive al siguiente `wa upgrade` con pnpm** (cli-core 0.534.0). `server install` escribía una carpeta con versión del almacén de pnpm que la actualización elimina; ahora escribe el enlace al que pnpm vuelve a apuntar. Ejecuta `wa <profile> server
+  install` una vez después de esta actualización.
+- **Una sincronización de ajustes rota se repara sola.** Cuando los ajustes sincronizados de WhatsApp (silencios, archivados, fijados, etiquetas, la libreta de direcciones) no se aplican, el motor ejecuta una sincronización completa de esa colección y, si también falla, pide al teléfono que la reconstruya, como mucho cada 48 horas. Antes, la colección seguía desactualizada hasta que se volvía a vincular el dispositivo.
+- **Un mensaje que este dispositivo no pudo descifrar se pide al teléfono.** Si el remitente no lo reenvía en 5 segundos, el motor lo pide al teléfono del propietario (`AutomaticMessageRerequestFromPhone` de whatsmeow), y la respuesta se guarda como cualquier mensaje. Antes, ese mensaje se perdía.
+- **El rechazo de WhatsApp a un mensaje para un contacto nuevo lo dice, y hasta cuándo.** El código de envío 463 responde `permission_error` con el motivo `account.reachout-restricted` y, cuando WhatsApp anunció la restricción, su final (`until`); los códigos 421 y 479 responden `message.rejected`. Antes, ambos eran un simple «WhatsApp refused the request».
+- **Un mensaje enviado desde un comando puntual se puede volver a enviar cuando el teléfono del destinatario lo pide.** El motor guarda una copia de cada mensaje enviado en el archivo del dispositivo durante 7 días (`UseRetryMessageStore` de whatsmeow); antes, solo un proceso en ejecución podía responder a esa petición, y el mensaje seguía ilegible para ese destinatario.
+
+## 0.22.0 — 01.11.2026
+
+### Added
+
+- **`doctor` cuenta las advertencias del motor del último día en `provider_log`** (cli-core 0.528.0). Ahora siempre se guardan, con los números de teléfono enmascarados, en un archivo privado por perfil de 1 MB como máximo con un archivo anterior; `decrypt` cuenta los mensajes que no se pudieron leer. `WA_ENGINE_LOG` ahora solo mueve el archivo.
+
+### Fixed
+
+- **El historial que el teléfono envía después de vincular ya no se pierde por un comando que no lo guarda.** El teléfono envía su historial por partes, durante minutos. Un envío, una descarga o un `messages sync` conectados en ese tiempo descargaban una parte, la descartaban y le decían a WhatsApp que había llegado. Ahora cada parte anunciada se escribe en el archivo del dispositivo antes de confirmarla, y solo `serve` o una vinculación la descargan; una parte que oyó otro comando espera hasta que `serve` se conecte. Una parte que no se puede escribir queda sin confirmar, así que WhatsApp la vuelve a enviar.
+- **Una vinculación nueva ya no pierde los avisos de historial del teléfono por un archivo del dispositivo ocupado.** Dos mensajes descifrados a la vez fallaban con `database is locked`, y el teléfono no los volvía a enviar. Ahora se esperan el uno al otro.
+- **Al vincular se piden al teléfono hasta diez años de historial.** Sin límite, la sincronización completa del teléfono cubre un año; los chats más antiguos solo tenían su último mensaje, y `messages sync` no podía contar hacia atrás más allá de ese año. Un perfil vinculado antes conserva su año hasta que se vuelva a vincular.
+- **`messages sync` en un chat del que no hay nada guardado dice cuándo volver a intentarlo**: en cuanto `serve` haya guardado su siguiente mensaje. Su progreso indica hasta qué fecha llegó, y un chat sincronizado hasta su primer mensaje ya no se lee como «held from <date> only» (cli-core 0.517.0).
+- **`conversations list` y `conversations show` ya no confunden un almacén que falla con «nada guardado»**, y la ayuda de `search messages` ya no dirige las búsquedas de correo a `wa` (cli-core 0.526.0).
+- **La documentación dice que mantengas `serve` en marcha después de vincular**, y en Linux que habilites su unidad al iniciar sesión: `server install` la escribe pero no la habilita ([después de vincular](./installation.md#after-linking-keep-serve-running)).
+
 ## 0.21.0 — 31.10.2026
 
 ### Added

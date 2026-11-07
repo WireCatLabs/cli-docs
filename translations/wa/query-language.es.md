@@ -121,7 +121,7 @@ El texto se pliega antes de indexarlo y buscarlo: minúsculas, sin acentos. Un e
 
 `text:/pay/` coincide con la palabra pago completa, no pago. `body:/pay/` coincide sólo con un mensaje cuyo texto completo es pago, distingue entre mayúsculas y minúsculas; para encontrarlo en cualquier lugar utilice `body:/.*pay.*/`. Esta es la sintaxis de expresión regular de Lucene, sin búsquedas de JavaScript, referencias inversas, anclajes o banderas.
 
-En una tienda grande, un prefijo corto como `a*` puede ampliarse a más de 10.000 palabras y se rechaza; alargarlo. Las consultas largas, el anidamiento profundo, los patrones grandes y los escaneos lentos se rechazan con `validation_error`, motivo `query.too-large`, no se acorta: limita el chat, las fechas o el patrón.
+En una tienda grande, un prefijo corto como `a*` puede ampliarse a más de 10.000 palabras y se rechaza; alargarlo. Las consultas largas, el anidamiento profundo y los patrones grandes se rechazan con `validation_error`, motivo `query.too-large`, no se recortan. Una búsqueda que supera su límite de 2 segundos se detiene con `timeout`, motivo `query.time-limit`: la consulta es válida, así que limita el chat, las fechas o el patrón.
 
 ## La respuesta
 

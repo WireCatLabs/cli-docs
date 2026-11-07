@@ -8,6 +8,7 @@ title: "Использование wa"
 wa <profile> <resource> <verb> [arguments] [options]
 wa personal chats list
 wa personal messages list "Book club" --limit 20
+wa personal messages list "Book club" 'date>=2026-10-01 date<2026-10-20'   # a window, oldest first
 wa personal search messages "dinner"
 ```
 
@@ -34,7 +35,7 @@ wa personal session start          # a QR code to scan in WhatsApp > Settings > 
 wa personal session start phone    # type your number, then a pairing code on the phone
 ```
 
-Сразу после привязки телефон один раз передаёт историю. `session start` сохраняет её в локальное хранилище и завершается, когда телефон перестаёт присылать данные. Затем `wa personal server install` поддерживает получение сообщений в фоне. `wa personal session end` отвязывает устройство и удаляет его ключи с компьютера.
+Сразу после привязки телефон один раз передаёт историю, частями, пока на нём открыт WhatsApp. `session start` сохраняет её в локальное хранилище и завершается, когда телефон перестаёт присылать данные. Затем установите `serve`, чтобы части, которые придут позже, тоже сохранились ([после связывания](./installation.md#after-linking-keep-serve-running)). `wa personal session end` отвязывает устройство и удаляет его ключи с компьютера.
 
 К одному профилю одновременно может подключаться только одна команда `wa`: иначе WhatsApp разорвёт первое соединение. Пока работает `serve`, отправка от того же профиля проходит через него, используя его соединение. Там нельзя задать вопрос, поэтому при уровне разрешений `ask` нужен `--yes` ([одно соединение на устройство](./sessions.md#one-connection-per-device)).
 

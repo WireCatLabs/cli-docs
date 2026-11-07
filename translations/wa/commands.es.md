@@ -34,6 +34,7 @@ wa [profile] [options] <resource> <verb> [arguments]
 | `--max-output-bytes <bytes>` | maximum machine output bytes (default: 4194304; 0 disables). |
 | `--brief` | found messages as reference, title, time, sender and excerpt only. |
 | `--full` | found messages with their whole text and every provider field. |
+| `--compact` | one line per item for an agent: reference first, text last, paging and next steps as # lines. |
 | `--dry-run` | preview parsed arguments and permissions before running the action. |
 | `--yes` | go ahead without the question an ask level puts before a write. |
 | `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
@@ -88,7 +89,7 @@ the logged-in account
 
 ### `wa account list`
 
-every profile on this computer, and the account each is logged in as; asks the messenger nothing
+every account profile on this computer, and the account each is logged in as; a name that is only a bot is left out (`bot list` has it), one that is a bot too says `bot: true`; asks the messenger nothing
 
 ```sh
 wa account list [query]
@@ -1285,7 +1286,7 @@ wa messages list <chat> [query] [options]
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
-| `query` | optional | where to start: id<42, date>2026-10-01; starred:true keeps the ones you starred. |
+| `query` | optional | where to start or which window: id<42, date>=2026-10-01 date<2026-10-20; starred:true keeps the ones you starred. |
 
 | Opción | Qué hace |
 |---|---|
@@ -1361,7 +1362,7 @@ wa messages context <chat> [message] [options]
 
 ### `wa messages download`
 
-save a message's photos, files, videos and voice notes to a folder — or a whole chat's with --all
+save a message's photos, files, videos and voice notes to a folder — or a whole chat's with --all; with --offline, copy the ones this computer already holds, one by --attachment
 
 **Changes something on this computer only.**
 
@@ -1371,12 +1372,13 @@ wa messages download <chat> [message] [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
-| `message` | optional | the message id; left out with --all. |
+| `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter); or a msg: locator, with no message id after it. |
+| `message` | optional | the message id; left out with --all or a locator. |
 
 | Opción | Qué hace |
 |---|---|
 | `--output-dir <dir>` | where to save them; created if missing. Default: `.`. |
+| `--attachment <n>` | which file of the message, from 1; needed when it has more than one. |
 | `--all` | every file of the chat, newest first; run it again to continue where it stopped. |
 | `--pause <duration>` | with --all, a pause between pages, to stay under the provider's limits. Default: `2s`. |
 | `--extract` | read text layers from the files this download maps into the local content index. |
@@ -1570,7 +1572,7 @@ wa messages links <chat> <message>
 
 ### `wa messages sync`
 
-bring a chat's history in the local store up to date, newest first; run it again to continue; --all syncs every chat
+bring a chat's history in the local store up to date, newest first; run it again to continue; --all syncs every chat; with --json, stderr carries progress lines: {"event":"progress","step":"sync","chats","chats_done","fetched"}, counts only
 
 **Changes something on this computer only.**
 
@@ -1595,6 +1597,7 @@ wa messages sync [chat] [options]
 | `--catch-up-chunks <n>` | at most this many local vector chunks. |
 | `--catch-up-messages <n>` | skip a graph rebuild larger than this many messages. |
 | `--catch-up-time <duration>` | local preparation time budget, 30s by default. |
+| `--full-history` | read and keep this chat's history in full from now on, past the history limits (history_* settings). |
 | `--background` | run as a job that outlives this command; `store jobs show` follows it. |
 | `--dry-run` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
@@ -1913,7 +1916,7 @@ wa server logs [options]
 
 ### `wa server install`
 
-write a systemd user unit or a launchd agent for this profile; starts nothing
+write a systemd user unit or a launchd agent for this profile and have it start at every login; starts nothing now
 
 **Changes something on this computer only.**
 
@@ -1923,7 +1926,7 @@ wa server install
 
 ### `wa server uninstall`
 
-remove this profile's unit; stop it first
+remove this profile's unit, so it no longer starts at login; stop it first
 
 **Changes something on this computer only.**
 
@@ -1946,6 +1949,18 @@ wa store status [chat]
 | Argumento | | Qué es |
 |---|---|---|
 | `chat` | optional | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
+
+### `wa store chats`
+
+the account's chats as the store holds them
+
+#### `wa store chats status`
+
+over this account's searchable chats of every kind, channels included: fetched (back to the first message, up to date, no gaps), partial, never (no fetch recorded and no message held), and the oldest message held; reads the store only
+
+```sh
+wa store chats status
+```
 
 ### `wa store gaps`
 
@@ -2164,7 +2179,7 @@ wa store backup <file> [options]
 
 ### `wa store restore`
 
-put a backup in place of the store; the store it replaces is kept beside it, never deleted
+put a backup in place of the store; the store it replaces is kept beside it, never deleted. Given a rollback copy (backups/<store>-rollback-schema-<version>-<time>.db, kept for a day before an upgrade older tools cannot open), put its tables back in the store and return it to that version instead
 
 **Changes something on this computer only.**
 
@@ -2174,7 +2189,7 @@ wa store restore <file>
 
 | Argumento | | Qué es |
 |---|---|---|
-| `file` | required | a file `store backup` wrote; one written with --encrypt asks for its password. |
+| `file` | required | a file `store backup` wrote, or a rollback copy; one written with --encrypt asks for its password. |
 
 ### `wa store decrypt`
 
@@ -2256,6 +2271,20 @@ wa store tables list [query]
 | Argumento | | Qué es |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+### `wa store recover`
+
+check every page and search index of the store, say what is damaged, what it means and the commands that recover it; changes nothing
+
+#### `wa store recover run`
+
+copy every readable row into a new file with the sqlite3 program, rebuild the search indexes, mentions and vector index, check it, and put it in place of the store; the damaged file is kept beside it. Refuses while a WireCat timer or process has the store
+
+**Changes something on this computer only.**
+
+```sh
+wa store recover run
+```
 
 ## `wa conversations`
 
@@ -3132,6 +3161,42 @@ wa stats messages discussion [query] [options]
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--limit <n>` | report rows, 1–100; 20 if not given. |
 
+#### `wa stats messages responses`
+
+how long the owner took to answer (--who me), or the other side took to answer the owner (--who others), in one-to-one chats — the local store only. Several messages in a row followed by one answer count as one reply, timed from the first unanswered message; the day of a row is the day of the reply
+
+```sh
+wa stats messages responses [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | optional | date:, chat: and kind: terms, AND-ed — date>=30d, date:[60d TO 30d]; none reads all time. |
+
+| Opción | Qué hace |
+|---|---|
+| `--who <side>` | whose replies: the owner's or the other side's. One of: `me`, `others`. |
+| `--by <group>` | one row per calendar day of the reply, or none. One of: `day`, `total`. |
+| `--timezone <zone>` | the IANA timezone for calendar days and date: bounds. |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all. |
+
+#### `wa stats messages waiting`
+
+how many chats wait on the owner — the local store only: a one-to-one chat whose newest message is a question, or a group whose newest message mentions the owner or replies to them. Muted or archived one-to-one chats are left out, as inbox leaves them out; date: bounds the newest message's time
+
+```sh
+wa stats messages waiting [query] [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | optional | date:, chat: and kind: terms, AND-ed — date>=30d, date:[60d TO 30d]; none reads all time. |
+
+| Opción | Qué hace |
+|---|---|
+| `--timezone <zone>` | the IANA timezone for date: bounds. |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all. |
+
 #### `wa stats messages top`
 
 rank stored messages by a measure or explainable score; counters are snapshots with per-field observation freshness
@@ -3310,16 +3375,22 @@ task statistics
 
 #### `wa stats tasks show`
 
-per chat: how many tasks are open, the oldest open one, the median time to close
+tasks per chat, meeting or project: open now, and opened and closed in the period (created: in the query), with the median time to close and the mean age of the open ones
 
 ```sh
-wa stats tasks show [options]
+wa stats tasks show [query] [options]
 ```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Opción | Qué hace |
 |---|---|
+| `--by <group>` | chat (default) or meeting: this account's tasks; project: the owner's project tasks, every project. |
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--type <type>` | only this type: question, request, mention or promise. |
+| `--timezone <zone>` | the IANA timezone for calendar days in the period, such as created>=today. |
 
 ### `wa stats charts`
 
@@ -3383,6 +3454,7 @@ wa tasks add <message> [options]
 | `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …. |
 | `--into <id>` | when tasks add listed tasks that may be the same job: link the message to this one instead of opening a task. |
 | `--new` | when tasks add listed tasks that may be the same job: open the task anyway. |
+| `--open-new` | open a task from a message the chat's task point already passed (a read again with tasks review --since-time); without it such a read only updates and closes tasks. |
 | `--title <title>` | one line: the action and its object — send Alex the API token. |
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
 | `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
@@ -3406,7 +3478,7 @@ wa tasks update <task> [options]
 | Opción | Qué hace |
 |---|---|
 | `--category <name>` | what it is about, from the list tasks categories prints: money, documents, meeting, …; a change is kept in the task's history. |
-| `--priority <n>` | priority from 0 (urgent) through 4 (low). |
+| `--priority <n>` | low, medium, high, critical or none; 0 (urgent) … 4 (low) still read as before. |
 | `--parent <id>` | parent task in the same project; none clears it. |
 | `--title <title>` | one line: the action and its object — send Alex the API token. |
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
@@ -3589,6 +3661,54 @@ wa tasks scan <chat> [options]
 | Opción | Qué hace |
 |---|---|
 | `--last <n>` | read the newest n stored messages of each chat (default 50, at most 1000). |
+
+### `wa tasks status`
+
+every chat that can hold your tasks — not a channel or Saved Messages — with the point its messages were read for tasks through, who read them, how many stored messages wait after it, and how many arrived late inside the stretch already read (history fetched afterwards). Its own point: reading a chat, marking it read, inbox --new and review --new never move it; tasks acknowledge does. Reads only the local store
+
+```sh
+wa tasks status [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | how many chats. |
+
+### `wa tasks review`
+
+the stored messages after the chat's task point, oldest first, and the chat's open tasks, so one read can open new tasks and update or close the old ones. A chat never read starts 14 days back. Moves nothing: when done, tasks acknowledge <chat> <through> records it. Reads only the local store; messages sync or backfill fetch what it lacks
+
+```sh
+wa tasks review <chat> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
+
+| Opción | Qué hace |
+|---|---|
+| `--limit <n>` | how many messages (default 100, 1000 with --since-time; at most 1000). |
+| `--since-time <time>` | read again from this ISO 8601 time, or 30d ago, whatever the point says; what the point already passed only updates and closes tasks, unless tasks add is given --open-new. |
+
+### `wa tasks acknowledge`
+
+moves the chat's task point to this message once its tasks are opened, updated or closed; it never moves back. With --since-time, the read started there: a read again from the start of the stretch clears what arrived late inside it
+
+**Changes something on this computer only.**
+
+```sh
+wa tasks acknowledge <chat> <message> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
+| `message` | required | the id of the last message read, as tasks review shows it. |
+
+| Opción | Qué hace |
+|---|---|
+| `--since-time <time>` | where the read started, when tasks review was given --since-time. |
 
 ### `wa tasks claim`
 
@@ -4050,7 +4170,7 @@ wa config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Opción | Qué hace |
@@ -4071,13 +4191,37 @@ wa config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
 
 | Opción | Qué hace |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
 | `--personal` | only for personal accounts — the personal section of the file. |
 | `--bot` | only for bots — the bot section of the file. |
+
+### `wa config migrate`
+
+write each setting the file lacks at its default, keeping yours
+
+**Changes something on this computer only.**
+
+```sh
+wa config migrate
+```
+
+### `wa config repair`
+
+fix broken JSON syntax in the settings file — comments, a missing or extra comma, unquoted keys, single quotes, missing closing brackets at the end — keeping every value, with a backup beside it; refuses anything with more than one reading and changes nothing then
+
+**Changes something on this computer only.**
+
+```sh
+wa config repair [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--dry-run` | say what it would fix, and change nothing. |
 
 ## `wa doctor`
 
@@ -6059,6 +6203,7 @@ Branch on the code, not on the text: the text can change, the code does not.
 | `12` | `provider_unavailable` |
 | `13` | `invalid_response` |
 | `14` | `outcome_unknown` |
+| `15` | `conflict` |
 | `130` | `cancelled` |
 | `1` | anything else |
 

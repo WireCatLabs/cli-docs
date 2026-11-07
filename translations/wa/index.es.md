@@ -25,6 +25,8 @@ En cada página aparecen tres términos:
 | Mira qué preguntas nadie respondió en tus grupos | [Grupos](./groups.md) |
 | Usa WhatsApp desde una app sin terminal, o desde un chat en el navegador | [El servidor MCP](./mcp.md), [Desde el navegador](./remote.md) |
 
+En qué se diferencia `wa` de otras herramientas: [comparación con otras herramientas](./compare.md).
+
 Cada comando hace una cosa, da la misma forma de respuesta cada vez y tiene un código de salida fijo para cada tipo de falla. Es por eso que los scripts y los agentes pueden confiar en él.
 
 `wa` sigue en desarrollo: lo que viene después está en la [hoja de ruta](./roadmap.md).
@@ -59,4 +61,5 @@ Espere unos cinco minutos para la configuración: tu teléfono envía tus chats 
 | [Diagnóstico](./diagnostics.md) | ¿Qué hizo una orden y qué nunca se registra? |
 | [Solución de problemas](./troubleshooting.md) | Algo no funciona: qué dice la pantalla y qué hacer |
 | [Seguridad](./security.md) | ¿Qué guarda `wa` en mi computadora y qué puede salir mal? |
+| [Comparación con otras herramientas](./compare.md) | ¿Cómo se compara `wa` con wacli, whatsapp-mcp, mudslide y la Cloud API? |
 | [Hoja de ruta](./roadmap.md) | ¿Qué viene después? |

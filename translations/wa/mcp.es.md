@@ -39,7 +39,7 @@ Para ChatGPT o Claude **en el navegador**, use `wa personal mcp serve --http`; c
 
 Las herramientas utilizan el mismo catálogo que `tg` y `max`. Los comandos que un dispositivo vinculado de WhatsApp no puede realizar, como cerrar otras sesiones o eliminar contactos, están ocultos. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.
 
-Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.
+Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Configúralas desde tu propio terminal, fuera del agente: un `config set` ejecutado por MCP o en el shell de un agente solo puede restringir un permiso, y estas dos claves quedan en manos del propietario. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.
 
 ## Conectar
 

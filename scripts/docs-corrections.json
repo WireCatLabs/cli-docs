@@ -1675,24 +1675,24 @@
     "tool": "wa",
     "slug": "mcp",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md",
-    "reason": "Name the commands the released personal MCP server never offers. whatsapp-cli v0.8.0 marks session, setup, complete and mcp as mcp:false, and cli-core 0.411 toolsFromCommands drops any command with a lifetime (watch, serve) and excludes the bot group, which bot mcp serves. Every other command is listed with its availability (includeUnavailable); authority-changing commands need mcp.authority. Re-checked for v0.10.0 (cli-core 0.428.0): the same six commands are mcp:false or have a lifetime, and mcp/server.js still uses includeUnavailable: true with exclude [[\"bot\"]].",
+    "reason": "Name the commands the released personal MCP server never offers. whatsapp-cli v0.8.0 marks session, setup, complete and mcp as mcp:false, and cli-core 0.411 toolsFromCommands drops any command with a lifetime (watch, serve) and excludes the bot group, which bot mcp serves. Every other command is listed with its availability (includeUnavailable); authority-changing commands need mcp.authority. Re-checked for v0.10.0 (cli-core 0.428.0): the same six commands are mcp:false or have a lifetime, and mcp/server.js still uses includeUnavailable: true with exclude [[\"bot\"]]. Re-checked for v0.30.0 from its commands --json contract: session, setup, complete and mcp are mcp:false, watch and serve are persistent; bot mcp still serves the bot group.",
     "replacements": {
       "en": [
         {
-          "before": "Commands that change future permissions or automation require `permissions.mcp.authority` set to `allow`; raw\nCloud API calls require `permissions.bot.api` set to `allow`. Both keys default to `deny` over MCP. Other writes\nremain subject to their command permissions, recipient lists and send limits.",
-          "after": "Commands that change future permissions or automation require `permissions.mcp.authority` set to `allow`; raw\nCloud API calls require `permissions.bot.api` set to `allow`. Both keys default to `deny` over MCP. Other writes\nremain subject to their command permissions, recipient lists and send limits.\n\n<details>\n<summary>Commands kept in the terminal</summary>\n\nThe personal-account MCP server never offers `wa session`, `wa setup`, `wa complete` or `wa mcp` and their subcommands, nor the long-running `wa watch` and `wa serve`, which never return an answer to an agent. Business-bot commands (`wa bot …`) are served by their own server, `wa bot mcp`. Every other command is listed with its availability.\n\n</details>"
+          "before": "remain subject to their command permissions, recipient lists and send limits.",
+          "after": "remain subject to their command permissions, recipient lists and send limits.\n\n<details>\n<summary>Commands kept in the terminal</summary>\n\nThe personal-account MCP server never offers `wa session`, `wa setup`, `wa complete` or `wa mcp` and their subcommands, nor the long-running `wa watch` and `wa serve`, which never return an answer to an agent. Business-bot commands (`wa bot …`) are served by their own server, `wa bot mcp`. Every other command is listed with its availability.\n\n</details>"
         }
       ],
       "ru": [
         {
-          "before": "Командам, которые меняют будущие разрешения или автоматизацию, нужен `permissions.mcp.authority` со значением `allow`; прямым вызовам Cloud API нужен `permissions.bot.api` со значением `allow`. Через MCP оба ключа по умолчанию равны `deny`. Остальные изменения по-прежнему подчиняются разрешениям своих команд, спискам получателей и лимитам отправки.",
-          "after": "Командам, которые меняют будущие разрешения или автоматизацию, нужен `permissions.mcp.authority` со значением `allow`; прямым вызовам Cloud API нужен `permissions.bot.api` со значением `allow`. Через MCP оба ключа по умолчанию равны `deny`. Остальные изменения по-прежнему подчиняются разрешениям своих команд, спискам получателей и лимитам отправки.\n\n<details>\n<summary>Команды для терминала</summary>\n\nMCP-сервер личного аккаунта никогда не предлагает `wa session`, `wa setup`, `wa complete` и `wa mcp` с их подкомандами, а также долгоиграющие `wa watch` и `wa serve`, которые никогда не возвращают агенту ответ. Команды бизнес-бота (`wa bot …`) обслуживает отдельный сервер, `wa bot mcp`. Все остальные команды перечислены вместе с их доступностью.\n\n</details>"
+          "before": "Остальные изменения по-прежнему подчиняются разрешениям своих команд, спискам получателей и лимитам отправки.",
+          "after": "Остальные изменения по-прежнему подчиняются разрешениям своих команд, спискам получателей и лимитам отправки.\n\n<details>\n<summary>Команды для терминала</summary>\n\nMCP-сервер личного аккаунта никогда не предлагает `wa session`, `wa setup`, `wa complete` и `wa mcp` с их подкомандами, а также долгоиграющие `wa watch` и `wa serve`, которые никогда не возвращают агенту ответ. Команды бизнес-бота (`wa bot …`) обслуживает отдельный сервер, `wa bot mcp`. Все остальные команды перечислены вместе с их доступностью.\n\n</details>"
         }
       ],
       "es": [
         {
-          "before": "Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.",
-          "after": "Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.\n\n<details>\n<summary>Comandos que quedan en el terminal</summary>\n\nEl servidor MCP de la cuenta personal nunca ofrece `wa session`, `wa setup`, `wa complete` ni `wa mcp` con sus subcomandos, ni los comandos de larga duración `wa watch` y `wa serve`, que nunca devuelven una respuesta al agente. Los comandos del bot comercial (`wa bot …`) los sirve su propio servidor, `wa bot mcp`. Todos los demás comandos aparecen con su disponibilidad.\n\n</details>"
+          "before": "Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.",
+          "after": "Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.\n\n<details>\n<summary>Comandos que quedan en el terminal</summary>\n\nEl servidor MCP de la cuenta personal nunca ofrece `wa session`, `wa setup`, `wa complete` ni `wa mcp` con sus subcomandos, ni los comandos de larga duración `wa watch` y `wa serve`, que nunca devuelven una respuesta al agente. Los comandos del bot comercial (`wa bot …`) los sirve su propio servidor, `wa bot mcp`. Todos los demás comandos aparecen con su disponibilidad.\n\n</details>"
         }
       ]
     }
@@ -2602,6 +2602,36 @@
         {
           "before": "outside the agent: since 0.113.0 a `config set` run in an agent's shell",
           "after": "outside the agent: a `config set` run in an agent's shell"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "mcp",
+    "phase": "before-translation",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.30.0/docs/mcp.md",
+    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "outside the agent: since 0.25.0 a `config set` run over MCP",
+          "after": "outside the agent: a `config set` run over MCP"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "permissions",
+    "phase": "before-translation",
+    "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.30.0/docs/permissions.md",
+    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Since 0.25.0 an agent can only tighten these settings",
+          "after": "An agent can only tighten these settings"
         }
       ]
     }

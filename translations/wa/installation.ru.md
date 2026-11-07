@@ -18,7 +18,20 @@ npm также устанавливает движок — отдельную п
 
 Затем свяжите профиль и установите навык агента с помощью `wa personal setup` (см. [использование](./usage.md)).
 
-Сама установка ничего не записывает в папки ваших агентов. Чтобы установить навык агента без привязки, запустите `wa skill install` (`--for claude` или `--for agents` для одной папки). Чтобы навык устанавливался вместе с пакетом, задайте для `WA_INSTALL_AGENT` значение `all`, `claude`, `codex`, `cursor` или `gemini`: `WA_INSTALL_AGENT=all npm install --global @wirecat/whatsapp-cli`.
+## После связывания: держите `serve` запущенным
+
+Телефон присылает вашу историю частями, в течение нескольких минут после связывания, и только пока на нём открыт WhatsApp. Только запущенный `serve` сохраняет части, которые приходят после окончания `setup` или `session start`. Поэтому сразу после связывания держите WhatsApp открытым на телефоне и установите `serve` как службу:
+
+```sh
+wa personal server install                               # writes the unit and enables it at login; starts nothing
+wa personal server start
+```
+
+В macOS пропустите строку `systemctl`: `server install` вместо этого записывает агент launchd. Подробнее: [`serve` как служба](./archive.md#as-a-service).
+
+Сама установка ничего не записывает в папки ваших агентов. Чтобы установить навык агента без привязки, запустите `wa skill install` (`--for claude` или `--for agents` для одной папки). Чтобы навык устанавливался вместе с пакетом, задайте для `WA_INSTALL_AGENT` значение `all`, `claude`, `codex`, `cursor` или `gemini`: `WA_INSTALL_AGENT=all npm install --global --allow-scripts=@wirecat/whatsapp-cli @wirecat/whatsapp-cli`.
+
+npm 12 блокирует неодобренные скрипты установки. Если он выводит `npm warn install-scripts` и сообщает, что у пакета `install scripts blocked because they are not covered by allowScripts`, `wa` всё равно устанавливается, но скрипт `WA_INSTALL_AGENT` не запускается. Флаг `--allow-scripts=@wirecat/whatsapp-cli` выше, ограниченный этим пакетом, разрешает этот скрипт для этой глобальной установки. Или оставьте скрипты заблокированными и потом запустите `wa skill install`. См. [правила npm для скриптов установки](https://docs.npmjs.com/cli/v12/commands/npm-install/#allow-scripts).
 
 
 ## Из исходного кода

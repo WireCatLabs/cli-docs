@@ -28,6 +28,9 @@ Cinco, el valor predeterminado incorporado
 | `timeout_ms` | ninguno | cuánto tiempo puede esperar **una** solicitud, en milisegundos; para todo el comando utilice `--timeout` | ninguno |
 | `color` | desde la terminal | color en la vista de tabla | ninguno; sin configuración, `NO_COLOR` lo apaga |
 | `sender_colors` | `false` | un color por remitente en la vista de tabla de mensajes | ninguno |
+| `history_dialog_days` | `1095` | cuántos días atrás se guarda el historial de un chat individual que envía el teléfono, de 1 a 1095; al vincular se pide al teléfono el mayor entre este valor y `history_group_days` | `messages sync <chat> --full-history` |
+| `history_group_days` | `365` | cuántos días atrás se guarda el historial de un grupo de más de 2 personas, de 1 a 1095 | `messages sync <chat> --full-history` |
+| `history_group_members_max` | `50` | un grupo con más personas no guarda nada de su historial enviado; `store status` muestra lo que quedó fuera | `messages sync <chat> --full-history` |
 | `search_catch_up` | `false` | preparar chats recién almacenados para búsqueda local: su gráfico y, cuando estén instalados, sus vectores | `--catch-up`, `--no-catch-up` |
 | `picture_search` | `false` | buscar imágenes almacenadas por lo que muestran, una vez descargado el modelo | ninguno |
 | `search_reranker` | `mmarco` | el modelo que reordena los primeros 50 resultados de `search messages --discover`: `mmarco` (136 MB), `bge-reranker-v2-m3` (588 MB) o `off`. Un reranker que no está descargado se omite, y el descubrimiento lo dice; `wa models download mmarco` lo descarga | ninguno |
@@ -80,7 +83,7 @@ Un número de WhatsApp Business en la Cloud API de Meta (`wa <profile> bot …`)
 | `WIRECAT_STATE_DIR` | la carpeta WireCat que comparte cada CLI: el almacén local y los modelos de voz |
 | `WA_READ_ONLY` | `1` hace que este proceso sea de solo lectura: todo cambio, vinculación y desvinculación del dispositivo incluido, se rechaza |
 | `WA_ENGINE` | la ruta de un programa de motor a ejecutar en lugar del instalado |
-| `WA_ENGINE_LOG` | un archivo al que el motor añade sus advertencias, números de teléfono enmascarados; desarmado, no registra nada |
+| `WA_ENGINE_LOG` | dónde el motor añade sus advertencias, con los números de teléfono enmascarados; sin definir, el registro del proveedor del perfil, que `doctor` cuenta (`provider_log`) |
 | `WA_NO_UPDATE_CHECK` | `1` desactiva la línea diaria "Existe una versión más nueva" |
 | `NO_COLOR` | sin color en la vista de tabla |
 | `WA_EMBEDDING_*`, `WA_MODELS_*` | configuración del modelo |

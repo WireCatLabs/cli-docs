@@ -8,7 +8,7 @@ La [página de seguridad compartida](https://wirecat.dev/en/docs/security) expli
 
 ## Qué guarda `wa`
 
-- **Las claves del dispositivo vinculado**, en `~/.local/share/whatsapp-cli/profiles/<profile>/private.db` (en Windows, `%LOCALAPPDATA%\whatsapp-cli\Data\profiles\<profile>\private.db`). Quien copie el archivo podrá leer y enviar como tú hasta que desconectes el dispositivo desde Ajustes → Dispositivos vinculados en el teléfono. Solo tu usuario del sistema puede leer el archivo.
+- **Las claves del dispositivo vinculado**, en `~/.local/share/whatsapp-cli/profiles/<profile>/private.db` (en Windows, `%LOCALAPPDATA%\whatsapp-cli\Data\profiles\<profile>\private.db`). Quien copie el archivo podrá leer y enviar como tú hasta que desconectes el dispositivo desde Ajustes → Dispositivos vinculados en el teléfono. Solo tu usuario del sistema puede leer el archivo. También guarda una copia de cada mensaje que envías durante 7 días, para que un destinatario cuyo teléfono no pudo descifrarlo pueda pedirlo de nuevo.
 - **Tus chats y mensajes**, en el almacén WireCat compartido con tg y max.
 - **Los ajustes**, en `~/.config/whatsapp-cli/`, sin secretos.
 
