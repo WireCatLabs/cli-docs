@@ -692,7 +692,15 @@
     "WireCat Desktop, the Search page: a result opened with the messages around it": "WireCat Desktop, страница «Поиск»: открытый результат с сообщениями вокруг него",
     "Open any result to see the conversation around it.": "Откройте результат и увидите переписку вокруг него.",
     "WireCat Desktop, the Tools page: Telegram synced and WhatsApp opened with its signed-in account": "WireCat Desktop, страница «Инструменты»: Telegram и MAX синхронизированы, у WhatsApp открыт подключённый аккаунт",
-    "Your agent coordinates the tools you connect, so it answers from your whole personal context, not one app at a time. WireCat supplies the tools for chats, mail, meetings, documents, calendars and notes; Markdown notes can live in Obsidian or another editor.": "Ваш агент координирует подключённые инструменты и отвечает с учётом всего вашего личного контекста, а не одного приложения. WireCat предоставляет инструменты для переписки, почты, встреч, документов, календарей и заметок; Markdown-заметки могут находиться в Obsidian или другом редакторе."
+    "Your agent coordinates the tools you connect, so it answers from your whole personal context, not one app at a time. WireCat supplies the tools for chats, mail, meetings, documents, calendars and notes; Markdown notes can live in Obsidian or another editor.": "Ваш агент координирует подключённые инструменты и отвечает с учётом всего вашего личного контекста, а не одного приложения. WireCat предоставляет инструменты для переписки, почты, встреч, документов, календарей и заметок; Markdown-заметки могут находиться в Obsidian или другом редакторе.",
+    "Start here": "Начните здесь",
+    "First tasks": "Первые задачи",
+    "Configuration": "Настройки",
+    "Searching": "Поиск",
+    "Roadmap": "Планы",
+    "How to phrase requests": "Как формулировать запросы",
+    "Use from web or mobile": "В браузере или на телефоне",
+    "Community on Discord": "Сообщество в Discord"
   },
   "es": {
     "Personal chats": "Chats personales",
@@ -1386,6 +1394,14 @@
     "WireCat Desktop, the Search page: a result opened with the messages around it": "WireCat Desktop, la página Búsqueda: un resultado abierto con los mensajes que lo rodean",
     "Open any result to see the conversation around it.": "Abre cualquier resultado y ve la conversación que lo rodea.",
     "WireCat Desktop, the Tools page: Telegram synced and WhatsApp opened with its signed-in account": "WireCat Desktop, la página Herramientas: Telegram sincronizado y WhatsApp abierto con su cuenta conectada",
-    "Your agent coordinates the tools you connect, so it answers from your whole personal context, not one app at a time. WireCat supplies the tools for chats, mail, meetings, documents, calendars and notes; Markdown notes can live in Obsidian or another editor.": "Tu agente coordina las herramientas conectadas, así que responde con todo tu contexto personal, no con una sola app. WireCat aporta las herramientas para chats, correo, reuniones, documentos, calendarios y notas; las notas Markdown pueden estar en Obsidian u otro editor."
+    "Your agent coordinates the tools you connect, so it answers from your whole personal context, not one app at a time. WireCat supplies the tools for chats, mail, meetings, documents, calendars and notes; Markdown notes can live in Obsidian or another editor.": "Tu agente coordina las herramientas conectadas, así que responde con todo tu contexto personal, no con una sola app. WireCat aporta las herramientas para chats, correo, reuniones, documentos, calendarios y notas; las notas Markdown pueden estar en Obsidian u otro editor.",
+    "Start here": "Empieza aquí",
+    "First tasks": "Primeras tareas",
+    "Configuration": "Configuración",
+    "Searching": "Buscar",
+    "Roadmap": "Hoja de ruta",
+    "How to phrase requests": "Cómo formular peticiones",
+    "Use from web or mobile": "Usar desde la web o el móvil",
+    "Community on Discord": "Comunidad en Discord"
   }
 }
