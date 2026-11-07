@@ -54,7 +54,9 @@ configuración; **Terminar la configuración** en la barra lateral la abre de nu
    y comprobar que arranca, con el tiempo transcurrido y una estimación de lo que falta. Una herramienta suele
    tardar uno o dos minutos, más con una conexión lenta. Mientras esperas, unos consejos breves explican para
    qué sirve cada herramienta. Las instalaciones siguen aunque pases al siguiente paso, y cada una aparece
-   también en la página **Herramientas** con su registro completo.
+   también en la página **Herramientas** con su registro completo. Cada instalación pasa antes la misma
+   comprobación del almacenamiento que la página [Herramientas](#herramientas), y un aviso espera tu respuesta en
+   la fila de la herramienta.
 5. **Agentes:** la aplicación da a cada agente de IA que encuentra la
    <DocTerm term="skill" lang="es" label="skill" /> de la herramienta: una guía breve de sus comandos. Sabe
    dónde leen las skills Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Hermes Agent y OpenClaw. Con una
@@ -127,6 +129,11 @@ formato lee, como Zoom, queda fuera de la comprobación.
 - **Sincronizar ahora:** copia a este ordenador los mensajes, archivos o reuniones nuevos de un perfil.
 - **Permisos:** lo que los agentes pueden hacer con cada grupo de comandos, por perfil: **Permitir**,
   **Preguntar antes**, **Solo lectura** o **Bloquear**.
+- **Servicio en segundo plano** (Telegram, MAX y WhatsApp): la herramienta recibe mensajes nuevos solo mientras su
+  servicio funciona. Cada cuenta muestra si funciona y si se inicia al entrar en tu sesión. **Iniciar y mantener**
+  lo inicia y hace que arranque al entrar, **Detener** lo detiene y **No iniciar al entrar** lo quita del inicio.
+  Si falla, una frase dice por qué y ofrece un solo arreglo, como **Iniciar sesión**. WhatsApp
+  además necesita el teléfono conectado.
 - **Servidor MCP (o conectar la web):** deja que ChatGPT o Claude en el navegador usen la herramienta. La guía de
   [Tailscale Funnel](./tailscale-funnel.mdx) publica el servidor, o puedes usar un túnel de Cloudflare.
 - **Ejecutar con horario** (solo Email): activa el agente de correo de Memo. Lee el correo nuevo cada 5 minutos

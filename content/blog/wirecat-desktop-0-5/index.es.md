@@ -10,9 +10,10 @@ draft: false
 ---
 
 WireCat Desktop es la app que instala las herramientas de WireCat, inicia sesión por ti y le da a tu agente de IA tus
-chats, correo, reuniones, documentos y notas, todo guardado en tu ordenador. La 0.5 es una versión pequeña con dos
-cosas que quería desde hace tiempo. El instalador de Windows ahora está firmado, y antes de una actualización la app
-comprueba que no va a romper tus otras herramientas.
+chats, correo, reuniones, documentos y notas, todo guardado en tu ordenador. La 0.5 es una versión pequeña con cosas
+que quería desde hace tiempo. El instalador de Windows ahora está firmado, y antes de una actualización la app
+comprueba que no va a romper tus otras herramientas. Y el servicio en segundo plano de Telegram y WhatsApp por fin
+tiene sus propios controles.
 
 ## Un instalador firmado en Windows
 
@@ -50,8 +51,21 @@ un día.
 
 ![El panel de instalación de Google Drive en Comprobando requisitos, con un aviso de que Google Drive aún no puede abrir tus mensajes y notas guardados, y los botones Ahora no e Instalar de todos modos](./warning-es.webp "No se instala nada hasta que eliges.")
 
-La comprobación pide a npm directamente la versión más nueva de cada herramienta, así que no trabaja con una lista
-vieja.
+La misma comprobación se hace en la configuración inicial, donde se instalan la mayoría de las herramientas. Pide a
+npm directamente la versión más nueva de cada herramienta, así que no trabaja con una lista vieja.
+
+## El servicio en segundo plano, con controles
+
+Telegram y WhatsApp reciben mensajes nuevos solo mientras su herramienta funciona en segundo plano. Antes, la página
+Herramientas solo te decía que no estaba funcionando, con un botón para iniciarlo. Ahora cada una tiene una sección
+**Servicio en segundo plano** en sus detalles. Lista todas las cuentas, muestra si el servicio funciona y si se
+inicia al entrar en tu sesión, y tiene **Iniciar**, **Detener** y **No iniciar al entrar**.
+
+![La sección Servicio en segundo plano de Telegram, con la cuenta personal funcionando y configurada para iniciarse al entrar, y los botones Detener y No iniciar al entrar](./background-service-es.webp "Una fila por cuenta, con lo que está haciendo ahora.")
+
+Si el servicio falla, la sección dice por qué en una frase y ofrece un solo arreglo, por ejemplo **Iniciar sesión**
+cuando la sesión de la cuenta caducó. Para WhatsApp además te recuerda mantener el teléfono conectado, porque tus
+mensajes llegan a través de él.
 
 ## Actualizaciones desde un .deb o .rpm
 

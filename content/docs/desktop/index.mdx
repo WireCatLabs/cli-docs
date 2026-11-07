@@ -50,6 +50,8 @@ sidebar opens it again at the step you reached.
    tool starts, with the time so far and an estimate of what is left. A tool usually takes a minute or
    two, longer on a slow connection. While you wait, short tips show what each tool is for. The installs
    keep going if you move to the next step, and each one is also shown on the **Tools** page with its full log.
+   Each install first runs the same storage check as the [Tools](#tools) page, and a warning waits in the tool's
+   row for your answer.
 5. **Agents:** the app gives each AI agent it finds the tool's <DocTerm term="skill" lang="en" label="skill" />:
    a short guide to the tool's commands. It knows where Claude Code, Codex, Cursor, Gemini CLI, OpenCode,
    Hermes Agent and OpenClaw read skills. With a skill you ask your agent in plain words, for example
@@ -115,6 +117,11 @@ such as Zoom, is left out of the check.
 - **Sync now:** copies the new messages, files or meetings of a profile to this computer.
 - **Permissions:** what agents may do with each group of commands, set per profile: **Allow**, **Ask first**,
   **Read only** or **Block**.
+- **Background service** (Telegram, MAX and WhatsApp): the tool gets new messages only while its service runs.
+  Each account shows whether it runs and whether it starts when you log in. **Start and keep running** starts it
+  and sets it to start at login, **Stop** stops it, and **Stop starting at login** removes it from login. When it
+  fails, one sentence says why and offers one fix, such as **Sign in**. WhatsApp also needs your
+  phone online.
 - **MCP server (or connect web):** lets ChatGPT or Claude in the browser use the tool. The
   [Tailscale Funnel](./tailscale-funnel.mdx) guide publishes the server, or you use a Cloudflare tunnel.
 - **Run on a schedule** (Email only): starts Memo's mail agent. It reads new mail every 5 minutes and proposes

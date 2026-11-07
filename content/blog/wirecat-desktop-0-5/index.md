@@ -10,8 +10,9 @@ draft: false
 ---
 
 WireCat Desktop is the app that installs the WireCat tools, signs you in and gives your AI agent your chats, mail,
-meetings, documents and notes, all kept on your computer. 0.5 is a small release with two things I wanted for a while.
-The Windows installer is signed now, and the app checks before an update that it won't break your other tools.
+meetings, documents and notes, all kept on your computer. 0.5 is a small release with things I wanted for a while.
+The Windows installer is signed now, and the app checks before an update that it won't break your other tools. And
+the background service of Telegram and WhatsApp finally has its own controls.
 
 ## A signed installer on Windows
 
@@ -48,7 +49,21 @@ WireCat's own tools a fixed version usually comes out within a day.
 
 ![Google Drive's install panel at Checking requirements, with a warning that Google Drive can't open your saved messages and notes yet, and Not now and Install anyway](./warning-en.webp "Nothing is installed until you choose.")
 
-The check asks npm directly for each tool's newest version, so it doesn't work from a stale list.
+The same check runs in the first-run setup, where most installs happen. It asks npm directly for each tool's newest
+version, so it doesn't work from a stale list.
+
+## The background service, with controls
+
+Telegram and WhatsApp get new messages only while their tool runs in the background. In 0.4 the Tools page only told
+you when it wasn't running, and had one button to start it. Now each of them has a **Background service**
+section in its details. It lists every account, shows whether the service runs and whether it starts when you log
+in, and has **Start**, **Stop** and **Stop starting at login**.
+
+![The Background service section for Telegram, with the personal account running and set to start at login, and the buttons Stop and Stop starting at login](./background-service-en.webp "One row per account, with what it's doing right now.")
+
+When the service fails, the section says why in one sentence and offers one fix, for example **Sign in** when the
+account was signed out. For WhatsApp it also reminds you to keep your phone online, because your messages come
+through it.
 
 ## Updates from a .deb or .rpm
 
