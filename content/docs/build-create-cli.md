@@ -81,8 +81,9 @@ node dist/bin/acme.js personal doctor
    Run them, and tell the agent what looks wrong or what is missing.
 4. **Make it searchable.** Ask the agent to save what the service returns into WireCat, so search and your agents find
    it next to your chats and mail. [Add a source](./build-concepts.md#add-a-source) shows how.
-5. **Share it, if you want.** When the built-in checks pass, publish the tool on npm, and others install it like any
-   other WireCat tool.
+5. **Share it, if you want.** When the built-in checks pass, publish the tool on npm. Others install it with npm in a
+   terminal, or add it in WireCat Desktop by its npm name:
+   [Make it addable in WireCat Desktop](#make-it-addable-in-wirecat-desktop).
 
 ## If you get stuck
 
@@ -98,8 +99,150 @@ A tool outside WireCatLabs can appear here in the "Community tools" group. Open 
 [cli-docs](https://github.com/WireCatLabs/cli-docs) that adds it to `tools.json` with `"community": true`. Its pages
 are then copied from its repository at a reviewed release tag, like ours. The
 [review list](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools) says what we check.
-A community tool keeps its own npm scope: the `@wirecat` scope and the name "WireCat" stay ours.
+A community tool keeps its own npm scope: the `@wirecat` scope and the name "WireCat" stay ours. A listed tool
+with a `desktop` entry also appears in WireCat Desktop, with the **Community** badge, for people who turn on
+**Enable community tools**. Until it is listed, anyone can add it by its npm name, as an unchecked tool.
 [List your tool in WireCat](./build-list-tool.md) has every step, from the pull request to WireCat Desktop.
+
+## Make it addable in WireCat Desktop
+
+WireCat Desktop can add a tool that WireCat has not checked, by its npm name
+([Add your own tool](./desktop/index.mdx#add-your-own-tool); coming in the next WireCat Desktop release). Before it
+installs anything, it reads three things from npm: the package's details, the record of where npm built it, and the
+file `contracts/wirecat.json` out of the package. It never runs the package to find out what the tool is. So your
+tool needs that file, a data folder named after its package, and a release npm can tie to your repository.
+
+### The manifest
+
+`contracts/wirecat.json` is the manifest: what your tool tells WireCat about itself. It lists the commands with what
+each one reads and writes, and the commands Desktop runs to check, set up, sync and connect the tool. It needs
+`@wirecat/cli-base` 0.81.0 or later.
+
+- **It is generated, never typed.** `cli-dev manifest` writes it from your built program and an identity you export.
+  You type only what code cannot know: a `tagline` (at most 55 characters), the sign-in texts `signIn.gives` and
+  `signIn.asks`, and, with a `sync` command, `syncs` (what it copies, at most 40 characters).
+- **It is committed and shipped.** Commit the file, and list `contracts/wirecat.json` in `files` in `package.json`, so
+  it is inside the package on npm.
+- **CI keeps it current.** `cli-dev manifest … --check` fails when the file no longer matches the program.
+- **It holds no version.** Desktop reads the version from npm, so a release does not change the file.
+
+cli-template 0.18.0, the current release, does not set this up yet. In a tool made from it, add it once:
+
+1. Export the identity for the manifest, in a new file `src/wcat.ts`:
+
+   ```ts
+   import type { ManifestIdentity } from "@wirecat/cli-base/wcat/manifest"
+   import { IDENTITY } from "./identity.js"
+
+   export const WCAT: ManifestIdentity = {
+     ...IDENTITY,
+     docs: "https://github.com/leemour/acme-crm-cli#readme",
+     tagline: "Your Acme CRM deals, searchable on your computer",
+     signIn: { gives: "your Acme CRM contacts and deals", asks: "an Acme CRM API token" },
+   }
+   ```
+
+2. Start the bin with `wcatStart`, before the program loads, and pass it `WCAT` so the two never differ:
+
+   ```ts
+   import { wcatStart } from "@wirecat/cli-base/wcat/start"
+   import { WCAT } from "../wcat.js"
+
+   const { code } = await wcatStart(WCAT)
+   if (code !== undefined) process.exitCode = code
+   else {
+     // the bin's existing start
+   }
+   ```
+
+3. Name the program `wcat-<command>` in `package.json`, for example `"bin": { "wcat-acme-crm": "dist/bin/acme-crm.js" }`.
+   `cli-dev lint` warns about a name without `wcat-`.
+4. Write the file after each build, and check it in CI:
+
+   ```sh
+   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js
+   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js --check
+   ```
+
+With the file shipped, `wcat-acme-crm --wcat-describe` answers format 2: the name, version, description and docs link
+with `"wcat_describe": 2`, plus the file's `desktop` part and `manifest_sha256`, the hash of the file. After the
+install, Desktop runs it once and refuses the tool when the hash differs from the file it showed in the review. The
+[cli-base rule WC-CMD-29](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/commands.md#wc-cmd-29--answer---wcat-describe-and-take-no-name-wirecat-reserves)
+has the exact format.
+
+### The data folder
+
+Desktop's **Uninstall and delete data** deletes only folders named after the tool, so the name must belong to your
+tool. For a package `@<scope>/<name>`, the identity's `appName`, in lower case, is `<scope>-<name>` or starts with
+`<scope>-<name>-`. Every `.` and `_` of the package name becomes `-`, and the whole name has at most 64 characters:
+`@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. cli-template 0.18.0 writes `appName` without the scope
+(`acme-crm-cli`), so change it in `src/identity.ts` before your first release. Desktop refuses a manifest that breaks
+this rule.
+
+### Publish under your own scope
+
+Publish under your own npm scope, such as `@leemour/acme-crm-cli`. The `@wirecat` scope, the name "WireCat" and the
+names WireCat reserves for its tools, such as `tg`, `mail` or `wcat`, stay ours.
+
+1. **Make the repository public.** npm makes no record of where it built a package from a private repository, and
+   WireCat Desktop shows that record in its review.
+2. **Publish the first version by hand** with `bin/release --local`. npm sets a trusted publisher only for a package
+   that already exists.
+3. **Set the trusted publisher** on npmjs.com, as npm's [Trusted publishing](https://docs.npmjs.com/trusted-publishers)
+   page says: your GitHub owner and repository, the workflow file `release.yml` (case matters) and the environment
+   `npm`. Trusted publishing needs npm 11.5.1 or later.
+4. **Release with `bin/release`** from then on. It starts `release.yml`, which publishes with no npm token, and npm
+   records where it built each version.
+
+### Add it in Desktop, then list it
+
+1. **Add it on your own computer.** In WireCat Desktop, turn on **Allow tools WireCat has not checked** in Settings,
+   then use **Add your own tool** on the Tools page with your npm name. Your tool appears with the **Not checked**
+   badge. A tool from a private repository can only be added this way.
+2. **Ask for a listing,** if you want everyone to find it. A listed tool shows on wirecat.dev and, with the
+   **Community** badge, in WireCat Desktop. Listing is for approved publishers:
+   [List your tool in WireCat](./build-list-tool.md) has the steps and what we check.
+
+## End to end, with an example
+
+This walk-through makes `@leemour/acme-crm-cli`, a made-up tool for a made-up Acme CRM: the names are an example,
+and no such package exists. Use your own scope and service.
+
+1. **Make the tool.**
+
+   ```sh
+   npx @wirecat/cli-template new acme-crm-cli --command acme-crm --package @leemour/acme-crm-cli --owner leemour
+   cd acme-crm-cli && pnpm install
+   ```
+
+2. **Add a command with your agent.** Open the folder with your AI agent and ask: "Add `deals list`: it lists my
+   deals from the Acme CRM API, docs at https://example.com/api. It only reads." Try it on your account
+   after `pnpm build`: `node dist/bin/acme-crm.js personal deals list`.
+3. **Make it addable.** Set it up once as [Make it addable in WireCat Desktop](#make-it-addable-in-wirecat-desktop)
+   says, with `appName` set to `leemour-acme-crm-cli`.
+4. **Generate and check.** `pnpm generate` builds the tool and rewrites its command contracts. Then write the
+   manifest, and commit it with the contracts:
+
+   ```sh
+   pnpm generate
+   pnpm exec cli-dev manifest --program dist/program.js --identity dist/wcat.js
+   git add contracts && git commit -m "feat: deals list"
+   ```
+
+5. **Publish.** The first time with `bin/release --local`, then set the trusted publisher and use `bin/release`, as
+   [Publish under your own scope](#publish-under-your-own-scope) says.
+6. **Add it in Desktop.** Turn on **Allow tools WireCat has not checked**, click **Add your own tool**, type
+   `@leemour/acme-crm-cli`, read the review, then **Add** and **Install and run**. After **Restart now**, open
+   **Manage** on its row, add the profile `personal` and sign in.
+7. **Connect your agent.** On the Agents page, **Connect** gives Claude Code the tool's skill. In a terminal, the same
+   is:
+
+   ```sh
+   wcat-acme-crm skill install --for claude
+   ```
+
+8. **Ask your agent.** In Claude Code: "Use acme-crm with the profile personal: which of my deals close this month,
+   and who is the contact on each?"
 
 ## Keep it current
 
@@ -152,10 +295,9 @@ The template has no sample code. Your agent learns from the WireCat tool closest
 | files and documents | [`drive-cli`](https://github.com/WireCatLabs/drive-cli) |
 | meetings | [`zoom-cli`](https://github.com/WireCatLabs/zoom-cli) |
 | notes | [`cli-memo`](https://github.com/WireCatLabs/cli-memo) |
-| mail, calendar, other | none yet: choose the nearest one with your agent |
-
-For now, search shows your tool's records as messages. Once cli-core can register a new kind of source, your tool can
-register its own.
+| calendar | [`gcal-cli`](https://github.com/WireCatLabs/gcal-cli) |
+| mail | [`mail-cli`](https://github.com/WireCatLabs/mail-cli) |
+| other | none yet: choose the nearest one with your agent |
 
 ### Four steps that need a person
 
@@ -163,7 +305,9 @@ register its own.
 
 1. Create the repository and protect its `main` branch, as the
    [New CLI checklist](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/new-cli.md) says.
-2. Set npm trusted publishing for your package, naming `release.yml`, and add any secrets the tool needs.
+2. Publish the first version by hand with `bin/release --local`: npm offers trusted publishing only for a package
+   that already exists. Then set npm trusted publishing for your package, naming `release.yml`, and add any secrets
+   the tool needs. [Publish under your own scope](#publish-under-your-own-scope) has the details.
 3. Choose a day of the month for the monthly checks that no other of your repositories uses. The template's
    `.github/workflows/monthly.yml` holds a placeholder that CI rejects until you do.
 4. **WireCatLabs tools only:** add the tool to cli-base's parity groups, cli-core's list of WireCat tools and this

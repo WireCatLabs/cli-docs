@@ -70,6 +70,10 @@ see its CLAUDE.md), with the sample data of `?showcase`. The language comes from
 | `storage` | Storage page with folders, backups and tables | `?showcase&section=storage` | Missing |
 | `settings` | Settings page: language, interface size, a tool's settings | `?showcase&section=settings` | Missing |
 
+Own tools (`own-settings`, `own-name`, `own-review`, `own-confirm`, `own-tools-list`, `own-refused`): English only,
+copied from wirecat-desktop `docs/images/own-*.webp` (1280 wide, not 16:10). Russian and Spanish pages show the English
+capture until `{shot}-{light,dark}-{ru,es}.webp` exist.
+
 Existing and used: `tools`, `agents`, `search-hit`, `tasks`, `memory`, `connect`. At least `tools` and `memory`
 predate 0.4: the sidebar has no Analytics, and Memory has no Edit or More menu. Recapture them when convenient
 with `?showcase`, `?showcase&section=agents`, `?showcase&search=tg`, `?showcase&view=board`,
