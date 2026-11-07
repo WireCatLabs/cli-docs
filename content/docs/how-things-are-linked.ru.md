@@ -169,16 +169,21 @@ organization  board-member  Board member  (yours)
 
 Ваше слово главнее. Синхронизация CRM никогда не меняет и не завершает связь, которую вы создали или подтвердили, и
 не записывает заново ту, что вы удалили или отклонили. Если CRM сообщает другую роль для той же пары, это вторая
-связь рядом с вашей, со своим статусом. Так же, если вы меняете роль связи, о которой сообщила CRM, у вас появляется своя связь
-`confirmed` рядом со связью CRM, а связь CRM остается `reported`. Bob из [примеров](./people.md#примеры) контакт
-Acme Ltd в CRM, и вы делаете его руководителем компании:
+связь рядом с вашей, со своим статусом. Если вы меняете роль или должность в связи, о которой сообщила CRM, у вас появляется одна своя
+связь `confirmed`, и пока она есть, строка CRM скрыта. Следующие правки меняют вашу связь на месте.
+`memo relationships end` для связи CRM завершает вашу, а если вашу удалить, строка CRM снова видна. Bob из
+[примеров](./people.md#примеры) контакт Acme Ltd в CRM, и вы делаете его руководителем компании:
 
 ```text
 $ memo relationships update 2 --role manager --position CEO
 ...
-$ memo relationships list 'about:"person:5"' kind:member-of
-2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
+$ memo relationships list 'about:"person:5"' kind:member-of include:ended
 11  Person «Bob» → Organization «Acme Ltd»  member-of as manager (CEO)  confirmed
+
+$ memo relationships remove 11
+...
+$ memo relationships list 'about:"person:5"' kind:member-of include:ended
+2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
 ```
 
 Когда CRM перестает сообщать о связи, например контакт ушел из компании,

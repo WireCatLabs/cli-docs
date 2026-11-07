@@ -169,16 +169,22 @@ Every relationship in an answer has a standing:
 
 Your word wins. A CRM sync never changes or ends a relationship you made or confirmed, and it never writes again
 one you removed or rejected. When the CRM reports a different role for the same pair, that is a second relationship
-next to yours, with its own standing. In the same way, when you change the role of a relationship the CRM reported,
-you get your own `confirmed` relationship beside the CRM's, and the CRM's stays `reported`. Bob from the [examples](./people.md#examples) is a CRM contact of Acme Ltd, and you
-make him its manager:
+next to yours, with its own standing. When you change the role or the job title of a relationship the CRM reported, you get one
+relationship of your own, `confirmed`, and it hides the CRM's row while it exists. A later edit changes your
+relationship in place. `memo relationships end` on the CRM's relationship ends yours, and removing yours shows the
+CRM's row again. Bob from the [examples](./people.md#examples) is a CRM contact of Acme Ltd, and you make him its
+manager:
 
 ```text
 $ memo relationships update 2 --role manager --position CEO
 ...
-$ memo relationships list 'about:"person:5"' kind:member-of
-2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
+$ memo relationships list 'about:"person:5"' kind:member-of include:ended
 11  Person «Bob» → Organization «Acme Ltd»  member-of as manager (CEO)  confirmed
+
+$ memo relationships remove 11
+...
+$ memo relationships list 'about:"person:5"' kind:member-of include:ended
+2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
 ```
 
 When the CRM stops reporting a relationship, for example a contact left a

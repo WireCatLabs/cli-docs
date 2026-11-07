@@ -143,8 +143,9 @@ $ MEMO_GROUP_LOCK=work memo personal search all renewal
 {"error":{"code":"permission_error","reason":"access.denied","message":"this process is locked to group work (MEMO_GROUP_LOCK) — group \"personal\" (first word) is refused","retry":{"safe":false}}}
 ```
 
-То, что есть в группе, по-прежнему отвечает. Контекст Alice под замком читает только аккаунт CRM и называет
-остальное, а ваши собственные задачи видны:
+То, что есть в группе, по-прежнему отвечает. Контекст Alice под замком читает только аккаунт CRM и считает
+аккаунты, которые он не прочитал, не называя их. Воспоминания и факты не показывают подтверждения и источники вне
+группы и считают их как `out_of_scope`. Ваши собственные задачи видны:
 
 ```text
 $ MEMO_GROUP_LOCK=work memo context person:3
@@ -154,8 +155,7 @@ Business
 Organizations
   Acme Ltd  organization:1  member-of contact (Procurement manager) reported by bitrix24:example.bitrix24.com
 ...
-Not read: google-calendar:owner@northstar.example — outside the accounts asked for
-Not read: telegram:100 — outside the accounts asked for
+Not read: other accounts — 2 outside group work
 Read: bitrix24:example.bitrix24.com
 
 $ MEMO_GROUP_LOCK=work memo tasks list project:ATLA

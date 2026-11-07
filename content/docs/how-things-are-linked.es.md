@@ -169,16 +169,21 @@ Cada relación de una respuesta tiene un estado (standing):
 
 Tu palabra manda. Una sincronización del CRM nunca cambia ni termina una relación que tú creaste o confirmaste, y
 nunca vuelve a escribir una que quitaste o rechazaste. Si el CRM informa otro rol para el mismo par, es una segunda
-relación junto a la tuya, con su propio estado. Del mismo modo, cuando cambias el rol de una relación que informó el CRM, tienes tu propia
-relación `confirmed` junto a la del CRM, y la del CRM sigue `reported`. Bob, de los [ejemplos](./people.md#ejemplos),
-es un contacto de Acme Ltd en el CRM, y lo haces su manager:
+relación junto a la tuya, con su propio estado. Cuando cambias el rol o el cargo de una relación que informó el CRM, tienes una sola relación
+propia, `confirmed`, que oculta la fila del CRM mientras existe. Una edición posterior cambia tu relación en el sitio.
+`memo relationships end` sobre la relación del CRM termina la tuya, y si quitas la tuya vuelve a verse la fila del
+CRM. Bob, de los [ejemplos](./people.md#ejemplos), es un contacto de Acme Ltd en el CRM, y lo haces su manager:
 
 ```text
 $ memo relationships update 2 --role manager --position CEO
 ...
-$ memo relationships list 'about:"person:5"' kind:member-of
-2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
+$ memo relationships list 'about:"person:5"' kind:member-of include:ended
 11  Person «Bob» → Organization «Acme Ltd»  member-of as manager (CEO)  confirmed
+
+$ memo relationships remove 11
+...
+$ memo relationships list 'about:"person:5"' kind:member-of include:ended
+2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
 ```
 
 Cuando el CRM deja de informar una relación, por ejemplo porque un
