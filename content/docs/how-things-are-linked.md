@@ -135,6 +135,27 @@ is kept beside the role, for example `--position "Procurement manager"`, and it 
 hold several roles in the same organization. `memo` refuses a role that is not on the list and names the list. A
 role saved before the lists existed stays as written, and `relationships list` marks it `custom`.
 
+The lists belong to you. Add a role of your own when the built-in ones do not fit, and remove it again while no
+relationship holds it. A built-in role cannot be removed, and only you change the lists, never your agent:
+
+```sh
+memo relationships roles list list:organization
+memo relationships roles add organization board-member --label 'Board member'
+memo relationships roles remove organization board-member
+```
+
+```text
+$ memo relationships roles list list:organization
+organization  employee
+organization  contractor
+organization  founder
+organization  owner
+organization  manager
+organization  adviser
+organization  contact
+organization  board-member  Board member  (yours)
+```
+
 ### How sure a relationship is
 
 Every relationship in an answer has a standing:
@@ -148,7 +169,19 @@ Every relationship in an answer has a standing:
 
 Your word wins. A CRM sync never changes or ends a relationship you made or confirmed, and it never writes again
 one you removed or rejected. When the CRM reports a different role for the same pair, that is a second relationship
-next to yours, with its own standing. When the CRM stops reporting a relationship, for example a contact left a
+next to yours, with its own standing. In the same way, when you change the role of a relationship the CRM reported,
+you get your own `confirmed` relationship beside the CRM's, and the CRM's stays `reported`. Bob from the [examples](./people.md#examples) is a CRM contact of Acme Ltd, and you
+make him its manager:
+
+```text
+$ memo relationships update 2 --role manager --position CEO
+...
+$ memo relationships list 'about:"person:5"' kind:member-of
+2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
+11  Person «Bob» → Organization «Acme Ltd»  member-of as manager (CEO)  confirmed
+```
+
+When the CRM stops reporting a relationship, for example a contact left a
 company, the sync ends it. It stays in the store as `ended` and is never deleted. The store also keeps a record of
 every change to a relationship: when it was added, changed, ended, confirmed, rejected, withdrawn by its source,
 reported again or removed.

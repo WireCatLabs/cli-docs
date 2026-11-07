@@ -135,6 +135,27 @@ Acme Ltd покупает у вашей компании. `memo` и CRM-инст
 ролей в одной организации. Роль не из списка `memo` не примет и покажет список. Роль, сохраненная до появления
 списков, остается как была, а `relationships list` помечает ее `custom`.
 
+Списки принадлежат вам. Если встроенных ролей не хватает, добавьте свою, и уберите ее, пока ни одна связь ее не
+держит. Встроенную роль убрать нельзя, и списки меняете только вы, агент их не меняет:
+
+```sh
+memo relationships roles list list:organization
+memo relationships roles add organization board-member --label 'Board member'
+memo relationships roles remove organization board-member
+```
+
+```text
+$ memo relationships roles list list:organization
+organization  employee
+organization  contractor
+organization  founder
+organization  owner
+organization  manager
+organization  adviser
+organization  contact
+organization  board-member  Board member  (yours)
+```
+
 ### Насколько связь надежна
 
 У каждой связи в ответе есть статус (standing):
@@ -148,7 +169,19 @@ Acme Ltd покупает у вашей компании. `memo` и CRM-инст
 
 Ваше слово главнее. Синхронизация CRM никогда не меняет и не завершает связь, которую вы создали или подтвердили, и
 не записывает заново ту, что вы удалили или отклонили. Если CRM сообщает другую роль для той же пары, это вторая
-связь рядом с вашей, со своим статусом. Когда CRM перестает сообщать о связи, например контакт ушел из компании,
+связь рядом с вашей, со своим статусом. Так же, если вы меняете роль связи, о которой сообщила CRM, у вас появляется своя связь
+`confirmed` рядом со связью CRM, а связь CRM остается `reported`. Bob из [примеров](./people.md#примеры) контакт
+Acme Ltd в CRM, и вы делаете его руководителем компании:
+
+```text
+$ memo relationships update 2 --role manager --position CEO
+...
+$ memo relationships list 'about:"person:5"' kind:member-of
+2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
+11  Person «Bob» → Organization «Acme Ltd»  member-of as manager (CEO)  confirmed
+```
+
+Когда CRM перестает сообщать о связи, например контакт ушел из компании,
 синхронизация ее завершает. Связь остается в хранилище как `ended` и никогда не удаляется. Хранилище помнит каждое
 изменение связи: когда ее добавили, изменили, завершили, подтвердили, отклонили, когда источник ее отозвал, сообщил
 о ней снова или ее удалили.

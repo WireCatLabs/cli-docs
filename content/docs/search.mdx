@@ -86,32 +86,81 @@ context than from search. Ask your agent to work in this order:
 
 A group keeps your work accounts apart from your personal ones. With no group named, a run reads every account:
 that is the group `all`, which always exists and never leaves anything out. `personal`, `work` and any other group
-are groups you save yourself. Put the CRM account and your work messenger in `work`, then name the group first, and
+are groups you save yourself. Put the CRM account and your work mailbox in `work`, then name the group first, and
 the run reads only its accounts:
 
 ```sh
 memo groups add work bitrix24:example.bitrix24.com
-memo groups add work tg:work
+memo groups add work email:owner@northstar.example
+memo groups add personal telegram:100
+memo groups add personal email:owner@northstar.example
 memo groups list
 memo work search all 'renewal'
-memo work context person:3
 ```
 
-An account can be in two groups, for example in `work` and in `personal`. `memo groups list` shows it in both and
-highlights these duplicates. It also shows each account's profile names in every tool, such as `tg work` and
-`b24 work`. A profile named like a group is only a suggestion and never puts an account in that group.
-`memo groups remove work telegram:102` takes an account out of a group, and
+An account can be in two groups. `memo groups list` shows each saved group, then `all`, and marks every account that
+another group holds too. Duplicates are allowed, and the list ends with them. It also shows each account's profile
+names in every tool, such as `tg work` and `b24 work`, once those tools have run. A profile named like a group is only
+a suggestion and never puts an account in that group.
+
+```text
+$ memo groups list
+work
+  bitrix24:example.bitrix24.com
+  email:owner@northstar.example  also in personal
+personal
+  telegram:100
+  email:owner@northstar.example  also in work
+all
+  bitrix24:example.bitrix24.com  all  also in work
+  email:owner@northstar.example  all  also in work, personal
+  google-calendar:owner@northstar.example  all
+  telegram:100  all  also in personal
+duplicate: email:owner@northstar.example is in work, personal
+```
+
+`memo groups remove work telegram:102` takes an account out of a group, and `all` still reads it.
 `memo groups move telegram:102 personal work` moves it in one write: first the account, then the group it leaves,
-then the group it joins. `MEMO_GROUP=work` works like the first word for every command.
+then the group it joins. `MEMO_GROUP=work` works like the first word for every command. `--source personal` means
+your own messenger accounts and not the group `personal`.
 
 A group narrows the messages, mail, calendar events, CRM records and people a run reads. What you make yourself in
 `memo` belongs to no account, so it is in every group: your notes, projects, tasks, invoices, memories and facts.
+`memo work search all 'renewal'` finds the deal and the mail, and `memo personal search all 'renewal'` finds only the
+mail.
 
 A run that names no group still reads every account. To keep an agent inside one group, start its `memo` with
 `MEMO_GROUP_LOCK`, for example `MEMO_GROUP_LOCK=work memo mcp serve`. Under the lock, memo refuses the messages,
 mail, calendar events, CRM records and people of accounts outside the group. It also refuses another group,
-`--source all` and an account outside the group, and the agent cannot lift the lock. A command that cannot keep to
-a group is refused as a whole, so the lock fails closed.
+`--source all`, an account outside the group and a change to the groups, and the agent cannot lift the lock. A
+command that cannot keep to a group is refused as a whole, so the lock fails closed:
+
+```text
+$ MEMO_GROUP_LOCK=work memo messages show msg:telegram/100/201/1
+{"error":{"code":"permission_error","reason":"access.denied","message":"this process is locked to group work (MEMO_GROUP_LOCK) — msg:telegram/100/201/1 belongs to an account outside it","details":{"reference":"msg:telegram/100/201/1"},"retry":{"safe":false}}}
+
+$ MEMO_GROUP_LOCK=work memo personal search all renewal
+{"error":{"code":"permission_error","reason":"access.denied","message":"this process is locked to group work (MEMO_GROUP_LOCK) — group \"personal\" (first word) is refused","retry":{"safe":false}}}
+```
+
+What the group holds still answers. Alice's context under the lock reads only the CRM account and names the rest,
+and your own tasks stay visible:
+
+```text
+$ MEMO_GROUP_LOCK=work memo context person:3
+Alice  person:3
+...
+Business
+Organizations
+  Acme Ltd  organization:1  member-of contact (Procurement manager) reported by bitrix24:example.bitrix24.com
+...
+Not read: google-calendar:owner@northstar.example — outside the accounts asked for
+Not read: telegram:100 — outside the accounts asked for
+Read: bitrix24:example.bitrix24.com
+
+$ MEMO_GROUP_LOCK=work memo tasks list project:ATLA
+ATLA-1 · open · chore · ATLA · Follow up on the Acme renewal
+```
 
 Which commands run under the lock: [Lock an agent to a group](./memo/mcp.md#lock-an-agent-to-a-group).
 

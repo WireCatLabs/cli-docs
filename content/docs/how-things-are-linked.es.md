@@ -135,6 +135,27 @@ rol, por ejemplo `--position "Procurement manager"`, y nunca es un rol. Una pers
 misma organización. `memo` rechaza un rol que no está en la lista y muestra la lista. Un rol guardado antes de que
 existieran las listas se queda como estaba, y `relationships list` lo marca como `custom`.
 
+Las listas son tuyas. Añade un rol propio cuando los de serie no encajen, y quítalo mientras ninguna relación lo
+tenga. Un rol de serie no se puede quitar, y solo tú cambias las listas, nunca tu agente:
+
+```sh
+memo relationships roles list list:organization
+memo relationships roles add organization board-member --label 'Board member'
+memo relationships roles remove organization board-member
+```
+
+```text
+$ memo relationships roles list list:organization
+organization  employee
+organization  contractor
+organization  founder
+organization  owner
+organization  manager
+organization  adviser
+organization  contact
+organization  board-member  Board member  (yours)
+```
+
 ### Qué tan segura es una relación
 
 Cada relación de una respuesta tiene un estado (standing):
@@ -148,7 +169,19 @@ Cada relación de una respuesta tiene un estado (standing):
 
 Tu palabra manda. Una sincronización del CRM nunca cambia ni termina una relación que tú creaste o confirmaste, y
 nunca vuelve a escribir una que quitaste o rechazaste. Si el CRM informa otro rol para el mismo par, es una segunda
-relación junto a la tuya, con su propio estado. Cuando el CRM deja de informar una relación, por ejemplo porque un
+relación junto a la tuya, con su propio estado. Del mismo modo, cuando cambias el rol de una relación que informó el CRM, tienes tu propia
+relación `confirmed` junto a la del CRM, y la del CRM sigue `reported`. Bob, de los [ejemplos](./people.md#ejemplos),
+es un contacto de Acme Ltd en el CRM, y lo haces su manager:
+
+```text
+$ memo relationships update 2 --role manager --position CEO
+...
+$ memo relationships list 'about:"person:5"' kind:member-of
+2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
+11  Person «Bob» → Organization «Acme Ltd»  member-of as manager (CEO)  confirmed
+```
+
+Cuando el CRM deja de informar una relación, por ejemplo porque un
 contacto dejó una empresa, la sincronización la termina. Se queda en el almacén como `ended` y nunca se borra. El
 almacén también guarda cada cambio de una relación: cuándo se añadió, cambió, terminó, se confirmó, se rechazó, la
 retiró su fuente, se volvió a informar o se quitó.
