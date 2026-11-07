@@ -4,6 +4,55 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.21.0 — 07.11.2026
+
+### Añadido
+
+- **`schedule command` y `schedule agent` aceptan `--notify-on always|failures|never` y `--deliver-to <route>`**, y
+  `schedule agent` acepta `--model` y `--max-cost-per-day`. `schedule list` muestra el `notify` y el `deliver_to` de
+  cada programación. De cli-core 0.600.0 (antes 0.566.0) y cli-base 0.80.8 (antes 0.77.1).
+- **`session start --client-id <id>` y el ajuste `google_client_id` eligen tu propia aplicación de Google**:
+  `--client-file` o `--client-id`, luego `GCAL_GOOGLE_CLIENT_ID`, luego el `google_client_id` del perfil o de los
+  valores por defecto, y luego la aplicación de WireCat. El secreto sale de `GCAL_GOOGLE_CLIENT_SECRET`, nunca del
+  archivo de ajustes, y `session start` avisa antes de abrir el navegador cuando tu aplicación no lo tiene. `doctor`
+  indica `"source": "config"` para el ajuste de los valores por defecto. `config set` le niega `google_client_id` a un
+  agente.
+
+### Cambios — pueden romper scripts
+
+- **Una escritura cortada con Ctrl-C termina como `outcome_unknown` (código de salida 14), nunca como `cancelled`
+  (código de salida 130).** Puede que Google la haya hecho, y quien llama, si oye «cancelado», podría hacer el cambio
+  dos veces. Cubre una parada mientras la petición estaba en camino y una parada mientras gcal leía la respuesta. Una
+  lectura sigue terminando como `cancelled`.
+
+### Seguridad
+
+- **Los comandos `api` ahora también responden al permiso del comando `events` que hace el mismo trabajo.** Una llamada
+  con `gcal api` solo comprobaba su propia clave `api.*`, así que aún podía hacer lo que un comando `events` denegado no
+  podía. Cada método de eventos, lecturas incluidas, comprueba ahora también la clave de ese comando, en todos los
+  caminos: `--dry-run`, `api show` y MCP. Una importación de eventos con `api` ahora pregunta, como `events import`.
+
+### Corregido
+
+- **Una llamada a Google ya no retiene en memoria el comando terminado durante 30 segundos.** Su límite de tiempo era
+  un temporizador que seguía hasta el final aunque Google ya hubiera respondido, como descubrió tg-cli. `gcal mcp serve`
+  y `gcal schedule`, que hacen muchas llamadas en un mismo proceso, crecían con cada llamada.
+- **`mcp serve --permission api.<method>=deny` ahora detiene las escrituras de eventos que llaman a ese método.**
+  `events create`, `update`, `delete`, `respond`, `move` e `import` comprobaban sus claves `api.calendar.events.*`, y
+  las claves compartidas del calendario como `events.notify`, con los niveles guardados del perfil e ignoraban los que
+  fijaba la entrada del servidor del agente, así que un agente aún podía escribir. Ahora usan los niveles de la
+  ejecución.
+- **Las notas sobre el inicio de sesión con Google ya no describen el estado de revisión de WireCat.** Dicen que hacer
+  pública para Calendar una aplicación de Google compartida es complejo, así que Google puede rechazar el inicio de
+  sesión, y remiten a tu propia aplicación de Google. El comportamiento no cambia.
+- **Las notas de 0.20.0 nombraban dos motivos de error con sus nombres antiguos.** Un perfil mal escrito responde con
+  el motivo `oauth.missing`, no `profile.not-signed-in`, y el límite de uso de Calendar de Google es
+  `provider.usage-limit`, no `google.usage-limit`. 0.20.0 ya respondía con estos nombres. Solo sus notas estaban mal.
+- **Las guías dicen que todos los paquetes incluyen la aplicación de Google de WireCat.** La instalación, la solución
+  de problemas, la hoja de ruta y `session start --help` decían que las versiones podían no incluirla. Ahora dicen que
+  Google aún no la ha verificado: Google puede mostrar una página «unverified app», y la aplicación admite 100 usuarios
+  en total, compartidos con drive. Tu propia aplicación siempre gana y es la salida cuando se alcanza ese límite.
+
 ## 0.20.0 — 05.11.2026
 
 ### Cambios — pueden romper scripts

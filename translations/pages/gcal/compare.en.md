@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.20.0, its commands and its source, checked on 5 November 2026;
+your job. The marks for `gcal` come from its release 0.21.0, its commands and its source, checked on 7 November 2026;
 they are checked again at each release. The marks for the other tools come from their own
 READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
@@ -144,7 +144,8 @@ Notes on the `gcal` column:
   it to another account stay refused until you allow them. To be asked, or to stop writes, set the profile's
   permissions to `ask`, `deny` or `readonly` (for example
   `permissions.events.create ask` or `permissions.api.calendar.acl deny`), or start the server with
-  `mcp serve --permission` to make one key stricter for that server.
+  `mcp serve --permission` to make one key stricter for that server. Since 0.21.0 the raw `api` methods for events
+  answer to the same `events` keys, so a key you deny cannot be reached through `api` either.
 - **Text from invitations.** Anyone can send you an invitation, so its title, notes and place are someone else's
   words. Each answer with events lists these fields under `untrusted`, and the MCP server and the agent instructions
   tell the agent they are data, not instructions. The text itself is not changed.

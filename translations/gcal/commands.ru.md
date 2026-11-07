@@ -73,14 +73,15 @@ gcal session start [options]
 
 | Option | What it does |
 |---|---|
-| `--client-file <file>` | your own Desktop app OAuth client JSON; without it, WireCat's app when this package has one. |
+| `--client-file <file>` | your own Desktop app OAuth client JSON; without it, WireCat's app. |
+| `--client-id <id>` | your own Desktop app OAuth client ID, used instead of WireCat's; its secret comes from GCAL_GOOGLE_CLIENT_SECRET. |
 | `--no-browser` | print the sign-in URL instead of opening a browser. |
 | `--credential-storage <storage>` | where the sign-in is kept: keyring, which falls back to a private file, or file. Default: `keyring`. |
 | `--grant <scopes>` | also ask for these, comma-separated: write, sharing. |
 
 **Returns:** sign in to Google in the browser; read-only unless you pass --grant write
 
-**Example:** `gcal personal session start --client-file ~/client_secret.json`, `gcal personal session start --no-browser`, `gcal personal session start --grant write,sharing`
+**Example:** `gcal personal session start --client-file ~/client_secret.json`, `gcal personal session start --client-id 1234-abc.apps.googleusercontent.com`, `gcal personal session start --grant write,sharing`
 
 ### `gcal session status`
 
@@ -1944,7 +1945,7 @@ gcal config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, google_client_id, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1967,7 +1968,7 @@ gcal config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, google_client_id, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
 
 | Option | What it does |
 |---|---|
@@ -2094,6 +2095,8 @@ gcal schedule command <name> <args> [options]
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
 | `--at <HH:MM>` | every day at this local time. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
 
 **Returns:** run gcal <args…> on a timer — reads save what they read, so this is how a…
 
@@ -2117,14 +2120,18 @@ gcal schedule agent <name> <harness> <prompt> [options]
 
 | Option | What it does |
 |---|---|
+| `--model <model>` | the model it runs on: an alias such as sonnet, or a model id; "" for the harness's default (default sonnet for claude, codex's own for codex, or the config file's). |
 | `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--max-cost-per-day <usd>` | claude only: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
 | `--at <HH:MM>` | every day at this local time. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
 
 **Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
 
-**Example:** `gcal personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `gcal personal schedule agent triage codex "list what needs an answer today" --every 2h --max-cost 1`
+**Example:** `gcal personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `gcal personal schedule agent triage codex "list what needs an answer today" --every 2h --max-cost 1`, `gcal personal schedule agent weekly claude "review the week's open threads" --at 09:00 --model opus`
 
 ### `gcal schedule list`
 
@@ -2138,7 +2145,7 @@ gcal schedule list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** scheduled job — name, kind, when, last; every field: gcal commands info schedule list
+**Returns:** scheduled job — name, kind, when, last, notify, deliver_to, spent_today_usd, max_cost_usd, and 1 more; every field: gcal commands info schedule list
 
 **Example:** `gcal personal schedule list`, `gcal personal schedule list kind:agent`
 

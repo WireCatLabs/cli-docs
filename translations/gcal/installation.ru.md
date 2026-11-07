@@ -23,30 +23,27 @@ gcal doctor
 `gcal` входит через приложение Google, которое называют клиентом OAuth. Через это приложение Google спрашивает вас,
 какой доступ дать `gcal`. Получить его можно двумя способами.
 
-**Приложение WireCat.** Пакет `gcal` может содержать собственное приложение Google от WireCat. В текущих выпусках его
-пока нет, поэтому сейчас каждый пользователь создаёт своё приложение. Проверьте командой `gcal doctor --json`: если
-`oauth_client.client` равно `wirecat`, приложение в пакете есть, и вы входите без своего проекта Google Cloud:
+**Приложение WireCat.** Каждый пакет `gcal` содержит собственное приложение Google от WireCat, поэтому можно войти без
+своего проекта Google Cloud. `gcal doctor --json` тогда показывает `oauth_client.client` равным `wirecat`:
 
 ```sh
 gcal personal session start
 ```
 
-Пока Google не закончил проверку приложения WireCat, сначала может появиться страница «unverified app» (непроверенное
-приложение). Чтобы продолжить, нажмите на ней ссылку, ведущую дальше к приложению, затем разрешите чтение Календаря.
-Google ограничивает непроверенное приложение 100 новыми пользователями всего; когда приложение WireCat дойдёт до этого
-предела, используйте своё приложение, как описано ниже. См.
-[страницу Google о непроверенных приложениях](https://support.google.com/cloud/answer/7454865).
+Сделать общее приложение Google открытым для Календаря сложно, поэтому Google может не пустить вас через приложение
+WireCat. Тогда используйте своё приложение, как описано ниже. Иначе разрешите чтение Календаря, когда Google спросит.
 
-**Своё приложение.** Если `oauth_client.client` равно `null`, в пакете нет приложения WireCat, и `session start` нужно
-ваше. [Создайте своё приложение Google](#make-your-own-google-app) один раз, это займёт около десяти минут, затем
+**Своё приложение.** Оно нужно, если Google не пускает через приложение WireCat или если вы не хотите входить через
+него. [Создайте своё приложение Google](#make-your-own-google-app) один раз, это займёт около десяти минут, затем
 передайте его файл:
 
 ```sh
 gcal personal session start --client-file ~/client_secret.json
 ```
 
-Ваше приложение важнее приложения WireCat, даже если оно есть в пакете: передайте `--client-file` или задайте
-`GCAL_GOOGLE_CLIENT_ID` и `GCAL_GOOGLE_CLIENT_SECRET`.
+Ваше приложение всегда важнее приложения WireCat: передайте `--client-file` или `--client-id`, задайте
+`GCAL_GOOGLE_CLIENT_ID` и `GCAL_GOOGLE_CLIENT_SECRET` или сохраните ID в настройке `google_client_id`
+([порядок](./configuration.md#your-own-google-client)).
 
 ## Создайте своё приложение Google
 
@@ -170,7 +167,15 @@ gcal personal session start --client-file ~/client_secret.json --grant write
 ```
 
 Вместо файла можно задать `GCAL_GOOGLE_CLIENT_ID` и `GCAL_GOOGLE_CLIENT_SECRET` — значения `client_id` и
-`client_secret` из него. `--client-file` важнее этих переменных.
+`client_secret` из него, или передать ID через `--client-id`, а секрет держать в `GCAL_GOOGLE_CLIENT_SECRET`.
+`--client-file` и `--client-id` важнее переменных окружения. Чтобы ваше приложение использовалось при каждом следующем
+входе, сохраните его ID один раз:
+
+```sh
+gcal config set --defaults google_client_id 1234-abc.apps.googleusercontent.com
+```
+
+Секрет никогда не попадает в файл настроек: задайте `GCAL_GOOGLE_CLIENT_SECRET`, когда входите.
 
 `gcal` хранит клиент вместе со входом, в системном хранилище ключей. Следующие команды и каждое обновление входа файл
 больше не читают, поэтому его можно убрать в надёжное место. Он нужен только для нового `session start`.

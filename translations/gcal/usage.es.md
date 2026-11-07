@@ -34,8 +34,8 @@ gcal personal session start --grant write
 gcal personal session start --grant write,sharing
 ```
 
-Sin `--client-file`, `gcal` inicia sesión con la aplicación de Google de WireCat cuando el paquete trae una, y si no
-con la tuya: consulta [conecta tu cuenta de Google](./installation.md#connect-your-google-account). Añade
+Sin `--client-file` ni `--client-id`, `gcal` inicia sesión con tu propia aplicación cuando `GCAL_GOOGLE_CLIENT_ID` o
+el ajuste `google_client_id` la nombran, y si no con la aplicación de Google de WireCat: consulta [conecta tu cuenta de Google](./installation.md#connect-your-google-account). Añade
 `--no-browser` para recibir la dirección de inicio de sesión en stderr y abrirla en cualquier navegador de este
 ordenador.
 

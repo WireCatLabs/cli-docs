@@ -2497,184 +2497,6 @@
   },
   {
     "tool": "gcal",
-    "slug": "installation",
-    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.20.0/CHANGELOG.md",
-    "reason": "gcal v0.20.0 carries WireCat's Google app in every package (cli-core constants.json, CHANGELOG 0.20.0 Changed), but its docs/installation.md still says current releases do not carry it and that oauth_client.client can be null. Google has not verified the app yet (the owner checked that a sign-in through it and the Calendar API work): it shows the unverified app page and allows 100 users in total, shared with drive (docs/dev/google-app-verification.md at v0.20.0). Remove when gcal's own installation page is current.",
-    "replacements": {
-      "en": [
-        {
-          "before": "**WireCat's app.** A `gcal` package can carry WireCat's own Google app. The current releases do not carry it yet,\nso for now every user makes an app of their own. Check with `gcal doctor --json`: if `oauth_client.client` is\n`wirecat`, the package has the app, and you sign in with no Google Cloud project of your own:",
-          "after": "**WireCat's app.** Every `gcal` package carries WireCat's own Google app, so you can sign in with no Google Cloud\nproject of your own. `gcal doctor --json` then shows `oauth_client.client` as `wirecat`:"
-        },
-        {
-          "before": "Until Google finishes its review of WireCat's app, Google may show an \"unverified app\" page first. To go on, use the\nlink on that page that goes on to the app, then allow read access to Calendar. Google limits an unverified app to 100\nnew users in total; when WireCat's app reaches that limit, use your own app below.",
-          "after": "Google has not verified WireCat's app yet, so Google may show an \"unverified app\" page first. To go on, use the\nlink on that page that goes on to the app, then allow read access to Calendar. Google limits an unverified app to 100\nnew users in total, and WireCat's other Google tools, such as drive, share those 100. When WireCat's app reaches that\nlimit, use your own app below."
-        },
-        {
-          "before": "**Your own app.** If `oauth_client.client` is `null`, the package has no WireCat app, so `session start` needs one of\nyours. [Make your own Google app](#make-your-own-google-app) once, in about ten minutes, then pass its file:",
-          "after": "**Your own app.** Use one when WireCat's app has reached its limit, or when you would rather not sign in through it.\n[Make your own Google app](#make-your-own-google-app) once, in about ten minutes, then pass its file:"
-        },
-        {
-          "before": "Your own app also wins when the package has WireCat's:",
-          "after": "Your own app always wins over WireCat's:"
-        }
-      ],
-      "ru": [
-        {
-          "before": "**Приложение WireCat.** Пакет `gcal` может содержать собственное приложение Google от WireCat. В текущих выпусках его\nпока нет, поэтому сейчас каждый пользователь создаёт своё приложение. Проверьте командой `gcal doctor --json`: если\n`oauth_client.client` равно `wirecat`, приложение в пакете есть, и вы входите без своего проекта Google Cloud:",
-          "after": "**Приложение WireCat.** Каждый пакет `gcal` содержит собственное приложение Google от WireCat, поэтому вы входите\nбез своего проекта Google Cloud. `gcal doctor --json` тогда показывает `oauth_client.client` равным\n`wirecat`:"
-        },
-        {
-          "before": "Пока Google не закончил проверку приложения WireCat, сначала может появиться страница «unverified app» (непроверенное\nприложение). Чтобы продолжить, нажмите на ней ссылку, ведущую дальше к приложению, затем разрешите чтение Календаря.\nGoogle ограничивает непроверенное приложение 100 новыми пользователями всего; когда приложение WireCat дойдёт до этого\nпредела, используйте своё приложение, как описано ниже.",
-          "after": "Google ещё не проверил приложение WireCat, поэтому сначала может появиться страница «unverified app» (непроверенное\nприложение). Чтобы продолжить, нажмите на ней ссылку, ведущую дальше к приложению, затем разрешите чтение Календаря.\nGoogle ограничивает непроверенное приложение 100 новыми пользователями всего, и эти 100 делят с ним другие инструменты\nWireCat для Google, например drive. Когда приложение WireCat дойдёт до этого предела,\nиспользуйте своё приложение, как описано ниже."
-        },
-        {
-          "before": "**Своё приложение.** Если `oauth_client.client` равно `null`, в пакете нет приложения WireCat, и `session start` нужно\nваше. [Создайте своё приложение Google](#make-your-own-google-app) один раз, это займёт около десяти минут, затем\nпередайте его файл:",
-          "after": "**Своё приложение.** Оно нужно, если приложение WireCat дошло до своего предела или вы не хотите входить через него.\n[Создайте своё приложение Google](#make-your-own-google-app) один раз, это займёт около десяти минут, затем передайте\nего файл:"
-        },
-        {
-          "before": "Ваше приложение важнее приложения WireCat, даже если оно есть в пакете:",
-          "after": "Ваше приложение всегда важнее приложения WireCat:"
-        }
-      ],
-      "es": [
-        {
-          "before": "**La aplicación de WireCat.** Un paquete de `gcal` puede incluir la aplicación de Google de WireCat. Las versiones\nactuales todavía no la incluyen, así que por ahora cada usuario crea la suya. Compruébalo con `gcal doctor --json`: si\n`oauth_client.client` es `wirecat`, el paquete trae la aplicación e inicias sesión sin un proyecto de Google Cloud\npropio:",
-          "after": "**La aplicación de WireCat.** Cada paquete de `gcal` incluye la aplicación de Google de WireCat, así que inicias\nsesión sin un proyecto de Google Cloud propio. `gcal doctor --json` muestra entonces `oauth_client.client` como\n`wirecat`:"
-        },
-        {
-          "before": "Hasta que Google termine de revisar la aplicación de WireCat, puede mostrar antes una página «unverified app»\n(aplicación no verificada). Para seguir, usa el enlace de esa página que lleva a la aplicación y luego permite la\nlectura de Calendar. Google limita una aplicación no verificada a 100 usuarios nuevos en total; cuando la aplicación de\nWireCat llegue a ese límite, usa tu propia aplicación, como se explica abajo.",
-          "after": "Google todavía no ha verificado la aplicación de WireCat, así que puede mostrar antes una página «unverified app»\n(aplicación no verificada). Para seguir, usa el enlace de esa página que lleva a la aplicación y luego permite la\nlectura de Calendar. Google limita una aplicación no verificada a 100 usuarios nuevos en total, y las otras\nherramientas de WireCat para Google, como drive, comparten esos 100. Cuando la aplicación de WireCat llegue a ese límite,\nusa tu propia aplicación, como se explica abajo."
-        },
-        {
-          "before": "**Tu propia aplicación.** Si `oauth_client.client` es `null`, el paquete no trae la aplicación de WireCat y\n`session start` necesita una tuya. [Crea tu propia aplicación de Google](#make-your-own-google-app) una vez, en unos diez\nminutos, y pasa su archivo:",
-          "after": "**Tu propia aplicación.** Úsala si la aplicación de WireCat llegó a su límite, o si prefieres no iniciar sesión con ella.\n[Crea tu propia aplicación de Google](#make-your-own-google-app) una vez, en unos diez minutos, y pasa su archivo:"
-        },
-        {
-          "before": "Tu aplicación también gana cuando el paquete trae la de WireCat:",
-          "after": "Tu aplicación siempre gana sobre la de WireCat:"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "gcal",
-    "slug": "configuration",
-    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.20.0/CHANGELOG.md",
-    "reason": "gcal v0.20.0 docs/configuration.md says current releases do not carry WireCat's app; since 0.20.0 every package carries it (CHANGELOG 0.20.0 Changed).",
-    "replacements": {
-      "en": [
-        {
-          "before": "Either one wins over WireCat's app, which the current\nreleases do not carry yet.",
-          "after": "Either one wins over WireCat's app, which `gcal` uses\nwhen you give neither."
-        }
-      ],
-      "ru": [
-        {
-          "before": "И то, и другое важнее приложения\nWireCat, которого в текущих выпусках пока нет.",
-          "after": "И то, и другое важнее приложения\nWireCat, через которое `gcal` входит, если вы не дали ни того, ни другого."
-        }
-      ],
-      "es": [
-        {
-          "before": "Cualquiera de los dos gana sobre la\naplicación de WireCat, que las versiones actuales todavía no incluyen.",
-          "after": "Cualquiera de los dos gana sobre la\naplicación de WireCat, que `gcal` usa cuando no das ninguno."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "gcal",
-    "slug": "usage",
-    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.20.0/CHANGELOG.md",
-    "reason": "gcal v0.20.0 docs/usage.md says gcal uses WireCat's app only when the package carries one; since 0.20.0 every package carries it, and the order is --client-file, then GCAL_GOOGLE_CLIENT_ID, then WireCat's app (CHANGELOG 0.20.0 Changed).",
-    "replacements": {
-      "en": [
-        {
-          "before": "Without `--client-file`, `gcal` signs in through WireCat's Google app when the package carries one, and through\nyours otherwise:",
-          "after": "Without `--client-file` or `GCAL_GOOGLE_CLIENT_ID`, `gcal` signs in through WireCat's Google app, which every\npackage carries:"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Без `--client-file` `gcal` входит через приложение Google от WireCat, если оно есть в пакете, а иначе через ваше:",
-          "after": "Без `--client-file` или `GCAL_GOOGLE_CLIENT_ID` `gcal` входит через приложение Google от WireCat, которое есть в\nкаждом пакете:"
-        }
-      ],
-      "es": [
-        {
-          "before": "Sin `--client-file`, `gcal` inicia sesión con la aplicación de Google de WireCat cuando el paquete trae una, y si no\ncon la tuya:",
-          "after": "Sin `--client-file` ni `GCAL_GOOGLE_CLIENT_ID`, `gcal` inicia sesión con la aplicación de Google de WireCat, que\ntrae cada paquete:"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "gcal",
-    "slug": "troubleshooting",
-    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.20.0/CHANGELOG.md",
-    "reason": "gcal v0.20.0 removed sign-in.no-client and sign-in.bundled-client-invalid and always has WireCat's app (CHANGELOG 0.20.0 Changed), so the rows for an unreadable bundled client, no client set up and oauth_client.client null describe errors 0.20.0 cannot give. A secret without an id is now sign-in.secret-without-id, whose message is cli-core 0.566.0's.",
-    "replacements": {
-      "en": [
-        {
-          "before": "| \"the WireCat Google client in this gcal package cannot be read\" | The package is damaged. Install `gcal` again, or pass `--client-file` with your own client. |\n",
-          "after": ""
-        },
-        {
-          "before": "| \"no Google OAuth client is set up\" | The package carries no WireCat app, and you gave no client. Pass `--client-file` with your Desktop app client file, or set `GCAL_GOOGLE_CLIENT_ID` and `GCAL_GOOGLE_CLIENT_SECRET`. |\n| `doctor` shows `oauth_client.client: null` | No client is in the environment, and the package carries no WireCat app. A profile signed in with `--client-file` still works: its sign-in keeps the client. Only a new `session start` needs one. |\n",
-          "after": "| \"GCAL_GOOGLE_CLIENT_SECRET is set without a client id\" (`sign-in.secret-without-id`) | Set `GCAL_GOOGLE_CLIENT_ID` too, or unset `GCAL_GOOGLE_CLIENT_SECRET` to sign in with WireCat's app. |\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "| «the WireCat Google client in this gcal package cannot be read» | Пакет повреждён. Установите `gcal` заново или передайте `--client-file` со своим клиентом. |\n",
-          "after": ""
-        },
-        {
-          "before": "| «no Google OAuth client is set up» | В пакете нет приложения WireCat, а вы не указали клиент. Передайте `--client-file` с файлом своего клиента Desktop app или задайте `GCAL_GOOGLE_CLIENT_ID` и `GCAL_GOOGLE_CLIENT_SECRET`. |\n| `doctor` показывает `oauth_client.client: null` | В окружении нет клиента, и в пакете нет приложения WireCat. Профиль, вошедший с `--client-file`, продолжает работать: его вход хранит клиент. Клиент нужен только для нового `session start`. |\n",
-          "after": "| «GCAL_GOOGLE_CLIENT_SECRET is set without a client id» (`sign-in.secret-without-id`) | Задайте ещё `GCAL_GOOGLE_CLIENT_ID` или уберите `GCAL_GOOGLE_CLIENT_SECRET`, чтобы войти через приложение WireCat. |\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "| \"the WireCat Google client in this gcal package cannot be read\" | El paquete está dañado. Instala `gcal` de nuevo o pasa `--client-file` con tu propio cliente. |\n",
-          "after": ""
-        },
-        {
-          "before": "| \"no Google OAuth client is set up\" | El paquete no trae la aplicación de WireCat y no indicaste ningún cliente. Pasa `--client-file` con el archivo de tu cliente Desktop app, o define `GCAL_GOOGLE_CLIENT_ID` y `GCAL_GOOGLE_CLIENT_SECRET`. |\n| `doctor` muestra `oauth_client.client: null` | No hay ningún cliente en el entorno y el paquete no trae la aplicación de WireCat. Un perfil que inició sesión con `--client-file` sigue funcionando: su sesión guarda el cliente. Solo un nuevo `session start` lo necesita. |\n",
-          "after": "| \"GCAL_GOOGLE_CLIENT_SECRET is set without a client id\" (`sign-in.secret-without-id`) | Define también `GCAL_GOOGLE_CLIENT_ID`, o quita `GCAL_GOOGLE_CLIENT_SECRET` para iniciar sesión con la aplicación de WireCat. |\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "gcal",
-    "slug": "roadmap",
-    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.20.0/docs/dev/google-app-verification.md",
-    "reason": "gcal v0.20.0 docs/roadmap.md lists sign-in without your own Google client as next, but 0.20.0 ships it (CHANGELOG 0.20.0 Changed). What is still open is Google's review of WireCat's app: until then Google shows the unverified app page and allows 100 users in total (docs/dev/google-app-verification.md at v0.20.0).",
-    "replacements": {
-      "en": [
-        {
-          "before": "- **Sign-in without your own Google client.** `gcal` uses WireCat's shared Google app once Google has reviewed it for\n  Calendar. Until then, [make your own Google app](./installation.md#make-your-own-google-app).",
-          "after": "- **Google's review of WireCat's app.** Since 0.20.0, `gcal` signs in through WireCat's shared Google app with no\n  client of your own. Google has not verified that app for Calendar yet, so it may show an \"unverified app\" page and\n  allows 100 users in total. After the review, the page and the limit go away. Until then, if WireCat's app has\n  reached that limit, [make your own Google app](./installation.md#make-your-own-google-app)."
-        }
-      ],
-      "ru": [
-        {
-          "before": "- **Вход без собственного клиента Google.** `gcal` будет использовать общее приложение Google от WireCat, когда Google\n  проверит его для Календаря. А пока [создайте своё приложение Google](./installation.md#make-your-own-google-app).",
-          "after": "- **Проверка приложения WireCat в Google.** С версии 0.20.0 `gcal` входит через общее приложение Google от WireCat,\n  без вашего собственного клиента. Google ещё не проверил это приложение для Календаря, поэтому может показать\n  страницу «unverified app» и пускает всего 100 пользователей. После проверки страница и предел уйдут. А пока, если\n  приложение WireCat дошло до этого предела, [создайте своё приложение Google](./installation.md#make-your-own-google-app)."
-        }
-      ],
-      "es": [
-        {
-          "before": "- **Iniciar sesión sin un cliente de Google propio.** `gcal` usará la aplicación de Google compartida de WireCat en\n  cuanto Google la haya revisado para Calendar. Hasta entonces, [crea tu propia aplicación de Google](./installation.md#make-your-own-google-app).",
-          "after": "- **La revisión de Google de la aplicación de WireCat.** Desde la versión 0.20.0, `gcal` inicia sesión con la\n  aplicación de Google compartida de WireCat, sin un cliente propio. Google todavía no ha verificado esa aplicación para\n  Calendar, así que puede mostrar una página «unverified app» y admite 100 usuarios en total. Tras la revisión, la\n  página y el límite desaparecen. Hasta entonces, si la aplicación de WireCat llegó a ese límite,\n  [crea tu propia aplicación de Google](./installation.md#make-your-own-google-app)."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "gcal",
     "slug": "changelog",
     "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.20.0/src/commands/calendar.ts#L98",
     "reason": "gcal v0.20.0 CHANGELOG's Fixed section names two reasons by their old names, which the same release's Changed section renamed: the released code answers oauth.missing for an unknown profile (src/commands/calendar.ts#L98) and provider.usage-limit for Google's quotaExceeded (src/errors.ts#L58). Readers copy reason names into scripts.",
@@ -2707,6 +2529,20 @@
         {
           "before": "Ahora es `google.usage-limit`, no se repite,",
           "after": "Ahora es `provider.usage-limit`, no se repite,"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "gcal",
+    "slug": "troubleshooting",
+    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.21.0/docs/troubleshooting.md",
+    "reason": "gcal v0.21.0 docs/troubleshooting.md says \"unset the secret to use WireCat's app\", which scripts/check-doc-versions.mjs reads as the editorial phrase \"Use WireCat\". Same meaning, worded so the check passes.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Set the ID too, or unset the secret to use WireCat's app.",
+          "after": "Set the ID too, or unset the secret so that `gcal` signs in through WireCat's app."
         }
       ]
     }

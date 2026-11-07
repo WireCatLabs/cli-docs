@@ -7,8 +7,8 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.20.0, sus comandos y su código, revisados
-el 5 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.21.0, sus comandos y su código, revisados
+el 7 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
 propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
 
@@ -155,7 +155,9 @@ Notas sobre la columna de `gcal`:
   calendario entero o dárselo a otra cuenta siguen rechazados hasta que los permitas. Para que te pregunte o para
   impedir escrituras, pon los permisos del perfil en `ask`, `deny`
   o `readonly` (por ejemplo `permissions.events.create ask` o `permissions.api.calendar.acl deny`), o inicia el
-  servidor con `mcp serve --permission` para endurecer una clave solo en ese servidor.
+  servidor con `mcp serve --permission` para endurecer una clave solo en ese servidor. Desde la versión 0.21.0, los
+  métodos de eventos del `api` en bruto responden a las mismas claves `events`, así que una clave que niegas tampoco se
+  alcanza con `api`.
 - **Texto de las invitaciones.** Cualquiera puede enviarte una invitación, así que su título, notas y lugar son
   palabras de otra persona. Cada respuesta con eventos lista esos campos en `untrusted`, y el servidor MCP y las
   instrucciones del agente le dicen que son datos, no instrucciones. El texto en sí no cambia.
