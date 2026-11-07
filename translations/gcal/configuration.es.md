@@ -15,11 +15,23 @@ gcal personal config unset limit
 
 ## Tu propio cliente de Google
 
-`session start` inicia sesión a través de una aplicación de Google tuya: pasa el archivo de su cliente Desktop app con
-`--client-file`, o define `GCAL_GOOGLE_CLIENT_ID` y `GCAL_GOOGLE_CLIENT_SECRET`. Cualquiera de los dos gana sobre la
-aplicación de WireCat, que las versiones actuales todavía no incluyen. `gcal` rechaza un archivo de cliente que puedan
-leer otros usuarios del ordenador. El cliente solo hace falta al iniciar sesión: `gcal` lo guarda junto con el inicio de
-sesión, así que los comandos siguientes funcionan sin el archivo.
+`session start` inicia sesión con la aplicación de Google de WireCat salvo que indiques una tuya. Gana la primera de
+estas:
+
+1. `--client-file <file>`, el archivo de tu cliente Desktop app, o `--client-id <id>`, su ID de cliente;
+2. `GCAL_GOOGLE_CLIENT_ID`;
+3. el ajuste `google_client_id` del perfil, y luego el de los valores por defecto:
+   `gcal config set --defaults google_client_id 1234-abc.apps.googleusercontent.com`;
+4. la aplicación de WireCat.
+
+Con 1 a 3, el secreto sale de `GCAL_GOOGLE_CLIENT_SECRET`, nunca del archivo de ajustes. Google rechaza una aplicación
+Desktop app sin su secreto, así que `session start` avisa antes de abrir el navegador cuando no lo tiene. Solo tú
+cambias `google_client_id`: `config set` se lo niega a un agente. `gcal doctor` muestra como `oauth_client` la
+aplicación que usaría un perfil sin ajuste propio, con `source` `flag`, `env`, `config` o `constants`.
+
+`gcal` rechaza un archivo de cliente que puedan leer otros usuarios del ordenador. El cliente solo hace falta al iniciar
+sesión: `gcal` lo guarda junto con el inicio de sesión, así que los comandos siguientes y las renovaciones usan la misma
+aplicación, incluso después de que cambies el ajuste.
 
 [Crea tu propia aplicación de Google](./installation.md#make-your-own-google-app) recorre Google Cloud Console paso a
 paso.
@@ -71,7 +83,11 @@ evento completo), `api.calendar.events.delete` para `delete`, `api.calendar.even
 hace que `events create` pregunte. El `ask` predeterminado de `api.calendar.events.delete` vale solo para los comandos
 `api`: `events delete` pregunta con su propia clave. Una sola pregunta cubre todas las claves de una escritura.
 
-Los comandos `api` responden a las mismas claves. Un método que hace que Google envíe un correo a los asistentes
+Los comandos `api` responden a las mismas claves. Un método de eventos necesita además la clave del comando `events`
+que hace el mismo trabajo, también para leer: `events.list` para `calendar.events.list` e `instances`, `events.show`
+para `get`, `events.create` para `insert` y `quickAdd`, `events.import` para `import` (así que pregunta, como
+`events import`), `events.update` para `patch` y `update`, `events.delete` para `delete` y para un cambio a
+`cancelled`, `events.move` para `move`. `gcal api show <method>` las lista en `also_checks`. Un método que hace que Google envíe un correo a los asistentes
 (`--send-updates` distinto de `none`, o `--send-notifications true`) también necesita `events.notify`. Borrar un
 evento, o cambiarlo a `cancelled`, también necesita `events.delete.series` cuando el evento es periódico: `gcal` lee
 antes el evento de Google para saberlo. Compartir un calendario (`calendar.acl.insert`, `patch`, `update`) también

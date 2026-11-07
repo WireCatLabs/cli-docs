@@ -35,8 +35,8 @@ gcal personal session start --grant write
 gcal personal session start --grant write,sharing
 ```
 
-Без `--client-file` `gcal` входит через приложение Google от WireCat, если оно есть в пакете, а иначе через ваше:
-см. [подключите аккаунт Google](./installation.md#connect-your-google-account). Добавьте `--no-browser`, чтобы
+Без `--client-file` и `--client-id` `gcal` входит через ваше приложение, если его называет `GCAL_GOOGLE_CLIENT_ID` или
+настройка `google_client_id`, а иначе через приложение Google от WireCat: см. [подключите аккаунт Google](./installation.md#connect-your-google-account). Добавьте `--no-browser`, чтобы
 получить адрес входа в stderr, и откройте его в любом браузере на этом компьютере.
 
 Один аккаунт Google принадлежит одному профилю. Вход в профиль с другим аккаунтом отклоняется, как и второй профиль

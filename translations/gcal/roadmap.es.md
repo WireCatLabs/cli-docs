@@ -26,9 +26,4 @@ escriben archivos `.ics`. `calendars add <url>` sigue un calendario publicado co
 método de la API de Google Calendar por su nombre. Todos los comandos están en la
 [referencia de comandos](./commands.md).
 
-## Siguiente
-
-- **Iniciar sesión sin un cliente de Google propio.** `gcal` usará la aplicación de Google compartida de WireCat en
-  cuanto Google la haya revisado para Calendar. Hasta entonces, [crea tu propia aplicación de Google](./installation.md#make-your-own-google-app).
-
 Lo que cambió en cada versión publicada está en el [historial de cambios](./changelog.md).
