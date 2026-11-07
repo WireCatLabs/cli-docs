@@ -2534,6 +2534,20 @@
     }
   },
   {
+    "tool": "gcal",
+    "slug": "troubleshooting",
+    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.21.0/docs/troubleshooting.md",
+    "reason": "gcal v0.21.0 docs/troubleshooting.md says \"unset the secret to use WireCat's app\", which scripts/check-doc-versions.mjs reads as the editorial phrase \"Use WireCat\". Same meaning, worded so the check passes.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Set the ID too, or unset the secret to use WireCat's app.",
+          "after": "Set the ID too, or unset the secret so that `gcal` signs in through WireCat's app."
+        }
+      ]
+    }
+  },
+  {
     "tool": "b24",
     "slug": "index",
     "source": "https://github.com/WireCatLabs/bitrix24-cli/blob/main/docs/index.md",

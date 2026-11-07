@@ -26,4 +26,9 @@ escriben archivos `.ics`. `calendars add <url>` sigue un calendario publicado co
 método de la API de Google Calendar por su nombre. Todos los comandos están en la
 [referencia de comandos](./commands.md).
 
+## Siguiente
+
+- **Todavía no hay nada nuevo previsto.** Todo lo que esta página listaba ya está publicado. Pide lo que eches en falta
+  en un [issue en GitHub](https://github.com/WireCatLabs/gcal-cli/issues).
+
 Lo que cambió en cada versión publicada está en el [historial de cambios](./changelog.md).
