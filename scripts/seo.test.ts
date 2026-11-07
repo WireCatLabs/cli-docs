@@ -105,6 +105,12 @@ describe("localized SEO", () => {
       expect(descriptions.size).toBe(36)
     }
   })
+  it("describes every page a tool publishes, the roadmap included, in every locale", () => {
+    const pages = ["index", "installation", "usage", "commands", "configuration", "security", "troubleshooting"]
+    for (const lang of seoLocales)
+      for (const slug of [...pages, "roadmap", "changelog"])
+        expect(() => documentationDescription(lang, ["b24", slug]), `${lang} b24/${slug}`).not.toThrow()
+  })
   it("renders the newly released Memo comparison metadata in every locale", () => {
     for (const lang of seoLocales) {
       expect(documentationDescription(lang, ["memo", "compare"])).toContain("Memo")
