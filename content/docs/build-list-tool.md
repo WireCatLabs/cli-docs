@@ -171,17 +171,18 @@ the next deploy publishes a list without it.
 
 ## Try it before listing
 
-You can see your tool in WireCat Desktop before anyone reviews it. It then carries a **Not checked** badge.
+You can add your tool in WireCat Desktop before anyone reviews it. It then carries a **Not checked** badge. This is
+coming in the next WireCat Desktop release.
 
-- **Today, for developers.** Start the app with the environment variable `WIRECAT_EXTRA_TOOLS=1`, and put your entry
-  in the file `extra-tools.json` in the app's data folder. The app checks the entry with the same rules and shows
-  every refusal in its console. The desktop
-  [notes on community tools](https://github.com/WireCatLabs/wirecat-desktop/blob/main/docs/dev/cli-registry.md#your-own-tools-not-checked)
-  show the file's shape.
-- **Planned, for everyone.** Turn on "Allow tools WireCat has not checked" in Settings and confirm the warning. The
-  Agents page then has an "Add your own tool" button that takes an npm package name. It warns that the tool gets
-  access to all your personal data in WireCat, that you should add it only if you trust its authors completely, and
-  that WireCat takes no responsibility. One more confirmation comes before the install.
+1. In Settings, turn on **Allow tools WireCat has not checked** and confirm the warning with **Allow**.
+2. On the Tools page, click **Add your own tool**, at the top next to **Check again**. Type your package's npm name
+   and click **Check package**. WireCat reads npm only: nothing is installed yet.
+3. The review screen shows the publisher, the repository, the version, where npm built it and what the tool asks
+   for. Click **Add**, then **Install and run** in the second question.
+
+Desktop reads the tool's manifest, `contracts/wirecat.json`, out of the npm package, so your tool must ship it
+([Create your CLI](./build-create-cli.md)). A tool from a private repository can be added this way, but never listed.
+The [WireCat Desktop page](./desktop/index.mdx) shows every screen and what each refusal means.
 
 ## Where to go next
 

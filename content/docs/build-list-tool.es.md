@@ -29,7 +29,7 @@ aún no están abiertas. Para preguntar, abre un issue en [cli-docs](https://git
   ejemplo, texto de ayuda y página.
 - **Su repositorio es público.** npm no genera registro de procedencia para un paquete construido en un repositorio
   privado, y no podemos revisar código que no vemos. Una herramienta de un repositorio privado solo se puede añadir en
-  tu propio ordenador, como herramienta sin comprobar.
+  tu propio ordenador, como herramienta sin revisar.
 - **Publica en npm desde GitHub Actions con trusted publishing.** La publicación se ejecuta desde `release.yml` en el
   repositorio de la propia herramienta, en la rama `main`. WireCat Desktop comprueba la procedencia en npm
   (provenance) de cada versión, un registro firmado de dónde npm construyó el paquete. Rechaza una versión cuyo
@@ -175,18 +175,19 @@ Retiramos una herramienta cuando incumple las reglas de arriba o cuando su autor
 
 ## Prueba tu herramienta antes de pedir la inclusión
 
-Puedes ver tu herramienta en WireCat Desktop antes de cualquier revisión. Lleva entonces la insignia **Sin comprobar**.
+Puedes añadir tu herramienta en WireCat Desktop antes de cualquier revisión. Lleva entonces la etiqueta **Sin
+revisar**. Llega en la próxima versión de WireCat Desktop.
 
-- **Hoy, para desarrolladores.** Inicia la app con la variable de entorno `WIRECAT_EXTRA_TOOLS=1` y pon tu entrada en
-  el archivo `extra-tools.json` de la carpeta de datos de la app. La app comprueba la entrada con las mismas reglas y
-  escribe cada rechazo en su consola. Las
-  [notas de la app sobre herramientas de la comunidad](https://github.com/WireCatLabs/wirecat-desktop/blob/main/docs/dev/cli-registry.md#your-own-tools-not-checked)
-  muestran el formato del archivo.
-- **Previsto, para todos.** Activa «Permitir herramientas que WireCat no ha comprobado» en Ajustes y confirma el
-  aviso. La página Agentes tendrá entonces un botón «Añadir tu propia herramienta» que acepta un nombre de paquete de
-  npm. Avisa de que la herramienta tendrá acceso a todos tus datos personales en WireCat, de que solo debes añadirla si
-  confías por completo en sus autores, y de que WireCat no se hace responsable. Antes de instalar llega una
-  confirmación más.
+1. En Ajustes, activa **Permitir herramientas que WireCat no ha revisado** y confirma el aviso con **Permitir**.
+2. En la página Herramientas, pulsa **Añadir tu propia herramienta**, arriba junto a **Comprobar de nuevo**. Escribe
+   el nombre de tu paquete en npm y pulsa **Comprobar paquete**. WireCat solo lee npm: todavía no se instala nada.
+3. La pantalla de revisión muestra quién lo publica, el repositorio, la versión, dónde lo compiló npm y qué pide.
+   Pulsa **Añadir** y luego **Instalar y ejecutar** en la segunda pregunta.
+
+Desktop lee el manifiesto de la herramienta, `contracts/wirecat.json`, del paquete en npm, así que tu herramienta debe
+incluirlo ([Crea tu CLI](./build-create-cli.md)). Una herramienta de un repositorio privado se puede añadir así, pero
+nunca entrar en la lista. La [página de WireCat Desktop](./desktop/index.mdx) muestra cada pantalla y qué significa
+cada rechazo.
 
 ## Siguientes pasos
 
