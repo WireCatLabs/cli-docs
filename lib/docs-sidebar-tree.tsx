@@ -26,6 +26,7 @@ import {
   GitMerge,
   Globe,
   GlobeLock,
+  Handshake,
   History,
   KeyRound,
   Layers,
@@ -162,6 +163,7 @@ const folderIcons = {
   gcal: CalendarDays,
   mail: Mail,
   memo: NotebookPen,
+  b24: Handshake,
   zm: Video,
   desktop: Monitor,
 }
@@ -258,7 +260,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|gcal|mail|memo|zm)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|gcal|mail|memo|zm|b24)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText

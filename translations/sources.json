@@ -325,5 +325,21 @@
   "gcal/remote.ru": "cfdf534bd7082be352a472f49f9d50c23b4afd08370fd63de0a42d67744a031a",
   "gcal/remote.es": "cfdf534bd7082be352a472f49f9d50c23b4afd08370fd63de0a42d67744a031a",
   "mail/outlook.ru": "c1288b70761db65eb23942d53c360552f6974496270c2df5cdaea8f6dd4fe82c",
-  "mail/outlook.es": "c1288b70761db65eb23942d53c360552f6974496270c2df5cdaea8f6dd4fe82c"
+  "mail/outlook.es": "c1288b70761db65eb23942d53c360552f6974496270c2df5cdaea8f6dd4fe82c",
+  "b24/index.ru": "8dffdcd3923b8921651a5971b08facbde6423f52b973cc766f668cd778785ca4",
+  "b24/index.es": "8dffdcd3923b8921651a5971b08facbde6423f52b973cc766f668cd778785ca4",
+  "b24/installation.ru": "2acc0c9da359a2ad3d04e72a29d697d6622a96be01b11ac3ebb0e309a1d8699a",
+  "b24/installation.es": "2acc0c9da359a2ad3d04e72a29d697d6622a96be01b11ac3ebb0e309a1d8699a",
+  "b24/usage.ru": "beae9c984c075f54c7e417f0943b985abb099cc26322b2b97f922aeb3716c47f",
+  "b24/usage.es": "beae9c984c075f54c7e417f0943b985abb099cc26322b2b97f922aeb3716c47f",
+  "b24/configuration.ru": "2cc5bd3615e0b6139f03dd36cf301dea70abbed4b555629eb1940f3457850e7a",
+  "b24/configuration.es": "2cc5bd3615e0b6139f03dd36cf301dea70abbed4b555629eb1940f3457850e7a",
+  "b24/security.ru": "e4e4321a3956f36493c110609fbf2f1b0da1e4916c7e43fc0e94dafebd8960dc",
+  "b24/security.es": "e4e4321a3956f36493c110609fbf2f1b0da1e4916c7e43fc0e94dafebd8960dc",
+  "b24/troubleshooting.ru": "0346e04b34debe432b06c8a0a14cd1bf33b422d7efad397f2a98110de75bdc4b",
+  "b24/troubleshooting.es": "0346e04b34debe432b06c8a0a14cd1bf33b422d7efad397f2a98110de75bdc4b",
+  "b24/commands.ru": "e8b9f1de1edd95b389717ca282af6febe6b4d6a9e9740d966369d01c0de6ee1a",
+  "b24/commands.es": "e8b9f1de1edd95b389717ca282af6febe6b4d6a9e9740d966369d01c0de6ee1a",
+  "b24/changelog.ru": "bf46fbe2c32669d36c96157bed997106d7c8d4f686a818092fdf94710d299d81",
+  "b24/changelog.es": "bf46fbe2c32669d36c96157bed997106d7c8d4f686a818092fdf94710d299d81"
 }

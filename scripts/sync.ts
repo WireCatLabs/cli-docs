@@ -31,6 +31,10 @@ export type Tool = {
   distribution?: "source"
   /** `false` when the tool's commands take no leading profile, as its `guide` command is told. */
   profile?: boolean
+  /** The desktop catalog's block: `core` shown at once, `extra` under "More tools" (CRM, telephony). */
+  tier?: "core" | "extra"
+  /** One of cli-template's interview categories (`kit/src/interview.ts`). */
+  category?: string
   /** An outside tool, reviewed against docs/REVIEWING.md#community-tools; an entry without it is one of ours. */
   community?: true
   /** A community tool's catalog entry for WireCat Desktop, published signed by the deploy (desktop-registry.ts). */
