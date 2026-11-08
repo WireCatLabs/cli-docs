@@ -393,7 +393,8 @@ his `decision-maker` role from you stays as it was. `memo review confirm 2` make
 
 In a sales team's CRM most deals belong to other people. So a sync copies only your own deals and leads: those whose
 responsible person is the CRM user the tool signs in as (in Bitrix24, the webhook's user). Contacts and companies are
-always copied whole. A manager who wants every deal sets the account's `scope` to `all`, and `mine` goes back:
+always copied whole. A manager who wants every deal sets the account's `scope` to `all`, and `mine` goes back.
+[Whose deals and leads](./b24/usage.md#whose-deals-and-leads) has the Bitrix24 details:
 
 ```sh
 b24 work config set crm.bitrix24:example.bitrix24.com.scope all
@@ -438,8 +439,8 @@ mistake. It is not a security boundary: an agent that can run any command on you
 ### Base stages
 
 Each CRM, and each pipeline in it, names its stages its own way. Base stages are your own list of stages, one for
-deals and one for leads. A board shows them as its columns for every pipeline and every CRM, and every other stage is
-mapped onto one of them. Memo suggests the mapping, and you confirm it.
+deals and one for leads: the columns your deals are sorted into across every pipeline and every CRM. Every other
+stage is mapped onto one of them. Memo suggests the mapping, and you confirm it.
 
 ```sh
 memo stages show deal
@@ -452,8 +453,8 @@ memo deals move deal:5 stage:3
 - `memo stages show deal` makes the list on first use and shows each base stage with its open deals and the stages
   mapped onto it. It also shows what is unsorted: stages not mapped yet, or only suggested. If you have exactly one
   pipeline of your own for deals and it has open, won and lost stages, it becomes the list. Otherwise memo makes
-  New, Qualification, Proposal, Negotiation, Won and Lost, named in your first language (`owner_languages`). Your
-  own `Leads` pipeline becomes the list for leads.
+  New, Qualification, Proposal, Negotiation, Won and Lost, in the first language of `owner_languages` (Russian until
+  you set it). Your own `Leads` pipeline becomes the list for leads.
 - `memo stages create`, `rename`, `move` and `remove` edit a list. Each list keeps at least one open, one won and one
   lost stage, and a stage that your own deals or leads stand in, or stood in, cannot be removed.
 - `memo stages list` shows every other stage, of a CRM or of your own pipelines, with its base stage and whether it

@@ -404,8 +404,9 @@ y su rol `decision-maker`, que le diste tú, sigue igual. `memo review confirm 2
 
 En el CRM de un equipo de ventas, la mayoría de las negociaciones son de otras personas. Por eso una sincronización
 copia solo tus negociaciones y prospectos: aquellos cuyo responsable es el usuario del CRM con el que entra la
-herramienta (en Bitrix24, el usuario del webhook). Los contactos y las empresas se copian siempre enteros. Un
-responsable de equipo que quiere todas las negociaciones pone el `scope` de la cuenta en `all`, y `mine` vuelve atrás:
+herramienta (en Bitrix24, el usuario del webhook). Los contactos y las empresas se copian siempre enteros. Un jefe de
+ventas que quiere todas las negociaciones pone el `scope` de la cuenta en `all`, y `mine` vuelve atrás. Los detalles
+de Bitrix24 están en la [guía de `b24`](./b24/usage.md):
 
 ```sh
 b24 work config set crm.bitrix24:example.bitrix24.com.scope all
@@ -452,8 +453,8 @@ saltárselo.
 ### Etapas base
 
 Cada CRM, y cada embudo dentro de él, llama a sus etapas a su manera. Las etapas base son tu propia lista de etapas,
-una para negociaciones y otra para prospectos. Un tablero las muestra como columnas para todos los embudos y todos los
-CRM, y cada otra etapa se asigna a una de ellas. Memo sugiere la asignación y tú la confirmas.
+una para negociaciones y otra para prospectos: las columnas en las que se ordenan tus negociaciones en todos los
+embudos y todos los CRM. Cada otra etapa se asigna a una de ellas. Memo sugiere la asignación y tú la confirmas.
 
 ```sh
 memo stages show deal
@@ -466,8 +467,8 @@ memo deals move deal:5 stage:3
 - `memo stages show deal` crea la lista la primera vez y muestra cada etapa base con sus negociaciones abiertas y
   las etapas asignadas a ella. También muestra lo que está sin ordenar: etapas aún sin asignar o solo sugeridas. Si
   tienes exactamente un embudo propio de negociaciones y tiene etapas abiertas, ganadas y perdidas, ese embudo es la
-  lista. Si no, memo crea New, Qualification, Proposal, Negotiation, Won y Lost en tu primer idioma
-  (`owner_languages`). Tu propio embudo `Leads` pasa a ser la lista de prospectos.
+  lista. Si no, memo crea las etapas en el primer idioma de `owner_languages` (ruso hasta que lo pongas); en español
+  son «Nuevo», «Calificación», «Propuesta», «Negociación», «Ganado» y «Perdido». Tu propio embudo `Leads` pasa a ser la lista de prospectos.
 - `memo stages create`, `rename`, `move` y `remove` editan una lista. Cada lista conserva al menos una etapa
   abierta, una ganada y una perdida, y no se puede quitar una etapa en la que están o estuvieron tus propias
   negociaciones o prospectos.
