@@ -30,6 +30,8 @@ jobs:
       - run: pnpm standards:check
       - run: pnpm lint
       - run: pnpm docs:lint
+      # The deploy refuses release numbers in current guides; a pull request learns it here, not after merge.
+      - run: pnpm docs:versions
       - name: Early bug checks
         timeout-minutes: 2
         run: pnpm run --if-present ci:quick
