@@ -4,6 +4,25 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.7.0 — 08.11.2026
+
+### Añadido
+
+- El paquete también instala el comando como `wcat-b24`, así que `wcat b24` lo ejecuta y `wcat --help` lo muestra.
+  `b24 --wcat-describe` imprime qué es la herramienta, su versión y su página de documentación.
+- `config set owner_languages` indica los idiomas que lee el propietario.
+
+### Cambiado — puede romper llamadas
+
+- Una búsqueda sin ninguna letra ni dígito se rechaza (`validation_error`). `""`, un `?` solo o un emoji solo no
+  encontraban nada y no decían nada. Un `*` solo sigue leyéndose como comodín.
+
+### Corregido
+
+- La primera sincronización de un portal grande es aproximadamente el doble de rápida. Ya no se ralentiza con cada
+  negociación que guarda: con datos sintéticos de 10 responsables de negociaciones, 20 000 negociaciones, 10 000
+  leads y 20 000 contactos se sincronizan en 30 s en lugar de 61 s.
+
 ## 0.6.0 — 08.11.2026
 
 ### Añadido
