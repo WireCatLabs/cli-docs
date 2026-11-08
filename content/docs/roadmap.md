@@ -32,6 +32,8 @@ Everything that works today is in [features](./features.mdx).
 - **Clients**: a page for the people and companies you work with and your deals with them, with the chats, mail
   and meetings about each one.
 - **Notes**: read and write your notes in the app and link them to people and messages.
+- **Backup in one click**: save a copy of everything WireCat keeps on your computer and restore it from the app.
+- **Community tools**: the first tool made by someone outside WireCat, listed in the app next to ours.
 
 ### Search and memory
 

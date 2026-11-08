@@ -33,6 +33,10 @@ Todo lo que funciona hoy está en [funciones](./features.mdx).
 - **Clientes**: una página con las personas y empresas con las que trabajas y tus acuerdos con ellas, junto a los
   chats, el correo y las reuniones de cada una.
 - **Notas**: leer y escribir tus notas en la aplicación y enlazarlas con personas y mensajes.
+- **Copia de seguridad en un clic**: guardar una copia de todo lo que WireCat guarda en tu ordenador y restaurarla
+  desde la aplicación.
+- **Herramientas de la comunidad**: la primera herramienta hecha por alguien fuera de WireCat, en la aplicación junto
+  a las nuestras.
 
 ### Búsqueda y memoria
 
