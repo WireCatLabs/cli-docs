@@ -54,7 +54,9 @@
   }
   const DATE = /^\d{4}-\d{2}-\d{2}$/
   const DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/
-  const PARTS_AFTER_KIND = new Map([["msg", [4]], ["chat", [3]], ["task", [1]], ["proposal", [1]], ["sync", [1, 2]]])
+  const PARTS_AFTER_KIND = new Map([
+    ["msg", [4]], ["chat", [3]], ["task", [1]], ["person", [1]], ["project", [1]], ["proposal", [1]], ["sync", [1, 2]],
+  ])
   const isMoment = (text, pattern) => pattern.test(text) && !Number.isNaN(Date.parse(text))
   const accepts = ([kind, ...rest]) => {
     if (kind === "tasks")
