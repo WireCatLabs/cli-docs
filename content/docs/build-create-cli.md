@@ -115,8 +115,8 @@ tool needs that file, a data folder named after its package, and a release npm c
 ### The manifest
 
 `contracts/wirecat.json` is the manifest: what your tool tells WireCat about itself. It lists the commands with what
-each one reads and writes, and the commands Desktop runs to check, set up, sync and connect the tool. It needs
-`@wirecat/cli-base` 0.81.0 or later.
+each one reads and writes, and the commands Desktop runs to check, set up, sync and connect the tool. It needs a
+current `@wirecat/cli-base`.
 
 - **It is generated, never typed.** `cli-dev manifest` writes it from your built program and an identity you export.
   You type only what code cannot know: a `tagline` (at most 55 characters), the sign-in texts `signIn.gives` and
@@ -126,7 +126,7 @@ each one reads and writes, and the commands Desktop runs to check, set up, sync 
 - **CI keeps it current.** `pnpm contracts:check` fails when the file no longer matches the program.
 - **It holds no version.** Desktop reads the version from npm, so a release does not change the file.
 
-A tool made with cli-template 0.19.0 or later has all of this from `new`:
+A tool made with the current cli-template has all of this from `new`:
 
 - The bin calls `wcatStart` before the program loads, with `DESKTOP` from `src/identity.ts`: the docs link, the tagline
   (made from the description) and sign-in texts made from your `--sign-in` answer. Rewrite both in your own words. `src/wcat.ts` adds each command's permission key and exports it all as `WCAT`.
@@ -134,11 +134,11 @@ A tool made with cli-template 0.19.0 or later has all of this from `new`:
   runs.
 - `pnpm generate` writes `contracts/wirecat.json` with `cli-dev manifest`, and `pnpm contracts:check` checks it.
 
-**For a CLI made before 0.19.0:** add these by hand, since `src/` and `package.json` are yours and `upgrade` does not
+**For an older CLI, one with no `contracts/wirecat.json`:** add these by hand, since `src/` and `package.json` are yours and `upgrade` does not
 change them. Add the `wcatStart` call in the bin, `DESKTOP` in `src/identity.ts`, `src/wcat.ts`, the `wcat-<command>`
 program name, and `cli-dev manifest --program dist/program.js --identity dist/wcat.js` (with `--check` for the
-checks) in the `generate`, `generate:check` and `contracts:check` scripts. Move to `@wirecat/cli-base` 0.82.0. A new
-CLI made with 0.19.0 shows each file.
+checks) in the `generate`, `generate:check` and `contracts:check` scripts, and move to the current `@wirecat/cli-base`.
+A new CLI made with the current template shows each file.
 
 With the file shipped, `wcat-acme-crm --wcat-describe` answers format 2: the name, version, description and docs link
 with `"wcat_describe": 2`, plus the file's `desktop` part and `manifest_sha256`, the hash of the file. After the
@@ -151,9 +151,9 @@ has the exact format.
 Desktop's **Uninstall and delete data** deletes only folders named after the tool, so the name must belong to your
 tool. For a package `@<scope>/<name>`, the identity's `appName`, in lower case, is `<scope>-<name>` or starts with
 `<scope>-<name>-`. Every `.` and `_` of the package name becomes `-`, and the whole name has at most 64 characters:
-`@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. cli-template 0.19.0 and later write it this way for every package
-outside `@wirecat`, and use the same name for the skill and the keyring entries; keep it when you rename the tool. A
-CLI made before 0.19.0 has `appName` without the scope (`acme-crm-cli`): change it in `src/identity.ts` before its
+`@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. The current cli-template writes it this way for every package
+outside `@wirecat`, and use the same name for the skill and the keyring entries; keep it when you rename the tool. An
+older CLI has `appName` without the scope (`acme-crm-cli`): change it in `src/identity.ts` before its
 first release. Desktop refuses a manifest that breaks this rule.
 
 ### Publish under your own scope
