@@ -99,7 +99,9 @@ jobs:
       - run: node --experimental-strip-types scripts/desktop-registry.ts --out registry-out/desktop-tools.json
       - name: Install minisign
         run: |
-          curl -fsSL -o "$RUNNER_TEMP/minisign.tgz" "$MINISIGN_URL"
+          # Release downloads fail with 5xx or hang at times.
+          curl -fsSL --retry 5 --retry-all-errors --retry-delay 5 --connect-timeout 20 --max-time 60 --retry-max-time 120 \
+            -o "$RUNNER_TEMP/minisign.tgz" "$MINISIGN_URL"
           echo "$MINISIGN_SHA256  $RUNNER_TEMP/minisign.tgz" | sha256sum -c -
           tar -xzf "$RUNNER_TEMP/minisign.tgz" -C "$RUNNER_TEMP" minisign-linux/x86_64/minisign
           echo "$RUNNER_TEMP/minisign-linux/x86_64" >> "$GITHUB_PATH"
