@@ -19,32 +19,14 @@ decidimos qué viene después.
 
 ## Novedades
 
-Lo más reciente primero.
-
-- **[Bitrix24](./b24/usage.md)**: acuerdos, leads, contactos y empresas de tu portal. Se copian a tu ordenador, y
-  una búsqueda en todas tus fuentes los encuentra junto a los mensajes y las notas.
-- **[WireCat Desktop](./desktop/index.mdx) 0.5**: el instalador de Windows está firmado. La aplicación revisa el
-  almacén compartido antes de instalar o actualizar una herramienta, y puede mantener Telegram, MAX y WhatsApp en
-  segundo plano.
-- **[El correo](./mail/usage.md) como herramienta propia**: inicio de sesión con Outlook y Microsoft 365, un repaso
-  de lo nuevo y de lo que te falta responder, archivos de Gmail desde Google Takeout y deshacer un solo cambio.
-- **WireCat Desktop 0.4**: una página de estadísticas, editar u olvidar lo que WireCat recuerda en la página de
-  memoria, añadir un bot y pasos de inicio de sesión que dicen a qué accede cada herramienta.
-- **Tu propia aplicación de inicio de sesión**: Google Drive, Google Calendar y Zoom pueden iniciar sesión con una
-  aplicación que creaste tú.
 - **[Google Calendar](./gcal/usage.md)**: recordatorios de reuniones, seguir cualquier calendario por su dirección y
   una sola búsqueda en reuniones, chats y notas.
-- **Archivos de Telegram, MAX y WhatsApp**: el servicio en segundo plano arranca al iniciar sesión y recupera lo que
-  llegó mientras estaba apagado.
-- **Las transcripciones de Zoom** guardan su idioma, y un resultado de búsqueda dice quién habló y dónde.
-- **Tareas en Memo**: comentarios, fechas límite y tareas de proyecto, y recuerdos que pertenecen a un proyecto.
-- **WireCat Desktop**: la aplicación instala las herramientas, te ayuda a iniciar sesión y las conecta con tus
-  agentes sin terminal.
-- **OpenClaw y Hermes**: OpenClaw lee la skill que instala cada herramienta y encuentra las skills de WireCat en
-  ClawHub. Hermes las instala desde el índice de skills de este sitio. Consulta los [agentes](./agents.mdx).
+- **[OpenClaw](./agents.mdx#openclaw) y [Hermes](./agents.mdx#hermes)**: OpenClaw encuentra las skills de WireCat
+  en ClawHub, y Hermes las instala desde el índice de skills de este sitio.
+- **[Bitrix24](./b24/usage.md)**: acuerdos, leads, contactos y empresas de tu portal. Una búsqueda en todas tus
+  fuentes los encuentra junto a los mensajes y las notas.
 
-Antes: las reuniones de [Zoom](./zm/meetings.md), los documentos de [Google Drive](./drive/index.md) y los chats y
-bots de [WhatsApp](./wa/index.md). Todo lo que funciona hoy está en [funciones](./features.mdx).
+Todo lo que funciona hoy está en [funciones](./features.mdx).
 
 ## A continuación
 

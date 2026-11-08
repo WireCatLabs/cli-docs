@@ -18,29 +18,14 @@ what comes next.
 
 ## Recently added
 
-Newest first.
-
-- **[Bitrix24](./b24/usage.md)**: deals, leads, contacts and companies from your portal. They are copied to your
-  computer, and a search across all your sources finds them next to messages and notes.
-- **[WireCat Desktop](./desktop/index.mdx) 0.5**: the Windows installer is signed. The app checks the shared store
-  before it installs or updates a tool, and it can keep Telegram, MAX and WhatsApp running in the background.
-- **[Email](./mail/usage.md) as its own tool**: Outlook and Microsoft 365 sign-in, a review of what is new and what
-  you owe a reply, Gmail archives from Google Takeout, and undo for a single change.
-- **WireCat Desktop 0.4**: an Analytics page, editing or forgetting what WireCat remembers on the Memory page,
-  adding a bot, and sign-in steps that say what each tool can access.
-- **Your own sign-in app**: Google Drive, Google Calendar and Zoom can sign in with an app you created yourself.
 - **[Google Calendar](./gcal/usage.md)**: meeting reminders, following any calendar feed by its address, and one
   search over meetings, chats and notes.
-- **Telegram, MAX and WhatsApp archives**: the background service starts at login and catches up on what arrived
-  while it was off.
-- **Zoom transcripts** record their language, and a search hit says who spoke and where.
-- **Memo tasks**: comments, due dates and project tasks, and memories that belong to a project.
-- **WireCat Desktop**: the app installs the tools, signs you in and connects them to your agents without a terminal.
-- **OpenClaw and Hermes**: OpenClaw reads the skill each tool installs and finds the WireCat skills on ClawHub.
-  Hermes installs them from this site's skill index. See [agents](./agents.mdx).
+- **[OpenClaw](./agents.mdx#openclaw) and [Hermes](./agents.mdx#hermes)**: OpenClaw finds the WireCat skills on
+  ClawHub, and Hermes installs them from this site's skill index.
+- **[Bitrix24](./b24/usage.md)**: deals, leads, contacts and companies from your portal. A search across all your
+  sources finds them next to messages and notes.
 
-Earlier: [Zoom](./zm/meetings.md) meetings, [Google Drive](./drive/index.md) documents and [WhatsApp](./wa/index.md)
-chats and bots. Everything that works today is in [features](./features.mdx).
+Everything that works today is in [features](./features.mdx).
 
 ## Next
 
