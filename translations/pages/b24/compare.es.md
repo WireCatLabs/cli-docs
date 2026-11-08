@@ -10,8 +10,8 @@ prospectos, contactos, empresas, embudos, productos y empleados. Esta página lo
 con las que un agente de IA lee y cambia un CRM de Bitrix24, para que veas cuál encaja con tu trabajo. Las marcas de
 `b24` salen de su versión 0.6.0, sus comandos y su código, revisados el 8 de noviembre de 2026; se revisan de nuevo en
 cada versión. Las marcas de las demás herramientas salen de su propia documentación, sus fichas en catálogos y su
-código, revisados el 7 de noviembre de 2026. No se inició sesión en ninguna ni se probó en vivo, y una herramienta
-puede hacer más de lo que dicen sus páginas.
+código, revisados el 7 de noviembre de 2026, y la exportación a CSV el 8 de noviembre de 2026. No se inició sesión en
+ninguna ni se probó en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
 
 Las herramientas:
 
@@ -45,6 +45,7 @@ La app de Zapier también funciona solo con planes de pago ([su ficha](https://w
 | Una búsqueda en las negociaciones y en los mensajes y notas de tus otras herramientas | ✅ | ➖ | ➖ | ➖ | ➖ |
 | Los campos propios del portal, con sus nombres y opciones | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/) | ➖ | ➖ |
 | Leer productos y empleados | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L805) |
+| Exportar negociaciones, prospectos, contactos o empresas a un archivo CSV para una hoja de cálculo | ✅ | ➖ | ➖ | ➖ | ➖ |
 | **Cambiar el CRM** | | | | | |
 | Crear y cambiar una negociación o un prospecto | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/apps/bitrix24-crm-new/integrations) | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L79-L147) |
 | Crear y cambiar contactos y empresas | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/apps/bitrix24-crm-new/integrations) | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L6-L78) |
@@ -94,6 +95,9 @@ Notas sobre la columna de `b24`:
 - **Una búsqueda.** `search all` encuentra negociaciones y prospectos por las palabras del título, junto a los mensajes,
   notas y eventos que otras herramientas de WireCat guardaron en el mismo ordenador, sin internet. Con
   `deals.list: deny` deja fuera las negociaciones, con `leads.list: deny` los prospectos, y nombra lo que dejó fuera.
+- **CSV.** `deals`, `leads`, `people` y `organizations list --format csv` imprimen una página como tabla para una hoja
+  de cálculo, con cada campo personalizado bajo su nombre; `--json=a,b` elige las columnas. Es para ti en una terminal:
+  ninguna herramienta MCP lo ofrece, y un agente lee la respuesta JSON.
 - **Campos personalizados por nombre.** Negociaciones, prospectos, contactos y empresas aceptan un campo personalizado
   por su nombre o su código, y la opción de una lista por su nombre. Negociaciones y prospectos leen los nombres que
   guardó el último `sync`.

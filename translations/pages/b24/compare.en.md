@@ -6,8 +6,8 @@ title: "Compared with other tools"
 companies, pipelines, products and employees. This page puts it next to the other tools that let an AI agent read
 and change a Bitrix24 CRM, so you can see which one fits your job. The marks for `b24` come from its release 0.6.0,
 its commands and its source, checked on 8 November 2026; they are checked again at each release. The marks for the
-other tools come from their own documentation, listings and source, checked on 7 November 2026. Nothing was signed in
-to or tested live, and a tool may do more than its pages say.
+other tools come from their own documentation, listings and source, checked on 7 November 2026, and for CSV export
+on 8 November 2026. Nothing was signed in to or tested live, and a tool may do more than its pages say.
 
 The tools:
 
@@ -41,6 +41,7 @@ The Zapier app also works with paid plans only ([its listing](https://www.bitrix
 | One search over deals and the messages and notes of your other tools | ✅ | ➖ | ➖ | ➖ | ➖ |
 | See the portal's own fields, with their labels and options | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [🟡](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/) | ➖ | ➖ |
 | Read products and employees | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | ➖ | ➖ | [🟡](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L805) |
+| Export deals, leads, contacts or companies to a CSV file for a spreadsheet | ✅ | ➖ | ➖ | ➖ | ➖ |
 | **Change the CRM** | | | | | |
 | Create and update a deal or a lead | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/apps/bitrix24-crm-new/integrations) | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L79-L147) |
 | Create and update contacts and companies | ✅ | [✅](https://vibecode.bitrix24.com/docs-content-en/mcp.md) | [✅](https://zapier.com/apps/bitrix24-crm-new/integrations) | [🟡](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/) | [✅](https://github.com/gunnit/bitrix24-mcp-server/blob/2544df3b1c6db12ff6e34a819638dff1a3550b92/src/tools/index.ts#L6-L78) |
@@ -89,6 +90,9 @@ Notes on the `b24` column:
 - **One search.** `search all` finds deals and leads by the words of their title, beside the messages, notes and
   events that other WireCat tools on the same computer stored, without the internet. Under `deals.list: deny` it
   leaves deals out, and under `leads.list: deny` leads, and names what it left out.
+- **CSV.** `deals`, `leads`, `people` and `organizations list --format csv` print one page as a table for a spreadsheet,
+  each custom field headed by its label; `--json=a,b` picks the columns. It is for you at a terminal: no MCP tool offers
+  it, and an agent reads the JSON answer.
 - **Custom fields by label.** Deals, leads, contacts and companies take a custom field by its label or code, and a
   list field's option by its label. Deals and leads read the labels that the last `sync` stored.
 - **A write is sent once.** A write that got no answer is not sent again: it ends as `outcome_unknown` with its
