@@ -347,7 +347,7 @@ memo orders show order:1 --json
 memo invoices show invoice:1 --json
 memo records list type:custom:quote --account example-erp:demo --json
 memo records show custom:quote:Q-7 --account example-erp:demo --json
-memo search all "Rental fleet" --only business --json
+memo search all "Rental agreement" --only business --json
 ```
 
 - `review list` shows the four proposals. The owner confirms them, and only then do they count in totals.
