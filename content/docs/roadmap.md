@@ -35,19 +35,23 @@ tool installs and finds the WireCat skills on ClawHub, and Hermes installs them 
 
 ### Search and memory
 
-- **Better search by meaning**: a question asked in your own words finds the right note or document more often,
-  even when it shares no words with it.
-- **Meetings in every search**: what was decided on a call shows up next to the messages and mail about it.
-- **One person across sources**: people with the same email address in Telegram, mail and Zoom become one person,
-  and the app gets a People page. You can always undo a merge.
-- **Links between things**: names, phone numbers and documents mentioned in a message are linked to the person or
-  company they belong to, so your agent can go from a note to a person to their documents.
-- **Topics found for you**: suggested tags for notes, documents and messages, so a topic is found even where you
-  did not tag it by hand.
+Search by meaning already works on your computer for messages, notes, mail and Drive documents, together with word
+search. See [how search works](./search-architecture.mdx). Next it gets better at these.
+
+- **Better answers to questions in your own words**: a reworded question puts the right note, document or message
+  near the top more often. In our note tests that happens for 2 of 5 reworded questions today.
+- **Meetings in every search**: Zoom meetings are searchable in Zoom already. A search across all your sources will
+  show what was decided on a call next to the messages and mail about it.
+- **One person across sources**: you link a person's accounts by hand today. People with the same email address in
+  Telegram, mail and Zoom will become one person, and the app gets a People page. You can always undo a merge.
+- **Links between things**: the tools already find names, phone numbers and documents in messages. Next they link
+  each one to the person or company it belongs to, so your agent can go from a note to a person to their documents.
+- **Topics found for you**: tags you add by hand work today. Suggested tags for notes, documents and messages will
+  find a topic even where you did not tag it.
 - **Automatic digests**: the morning digest in Memo already lists what is new. It becomes a short text in
   your language about your chats, mail and meetings, and it comes to you on the schedule you choose.
-- **Memory that keeps up**: your agent proposes new memories from your sources and marks a memory when the source
-  behind it changes, so you confirm the update.
+- **Memory that keeps up**: memories your agent proposes already wait for your review. Next a memory is marked when
+  the source behind it changes, with an update for you to confirm.
 
 ### New sources
 

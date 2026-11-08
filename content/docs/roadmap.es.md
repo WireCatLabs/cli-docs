@@ -36,20 +36,26 @@ de skills de este sitio. Consulta las [funciones](./features.mdx) y los [agentes
 
 ### Búsqueda y memoria
 
-- **Mejor búsqueda por significado**: una pregunta con tus propias palabras encuentra más a menudo la nota o el
-  documento correcto, aunque no comparta palabras con él.
-- **Reuniones en cada búsqueda**: lo que se decidió en una llamada aparece junto a los mensajes y correos sobre el
-  mismo tema.
-- **Una persona en todas las fuentes**: las personas con la misma dirección de correo en Telegram, el correo y Zoom
-  pasan a ser una sola, y la aplicación tendrá una página de Personas. Siempre puedes deshacer la unión.
-- **Enlaces entre los datos**: los nombres, teléfonos y documentos de un mensaje se enlazan con la persona o la
-  empresa a la que pertenecen. Así tu agente puede pasar de una nota a una persona y a sus documentos.
-- **Temas sin etiquetar a mano**: etiquetas sugeridas para notas, documentos y mensajes, para encontrar un tema
-  también donde no lo etiquetaste tú.
+La búsqueda por significado ya funciona en tu ordenador para mensajes, notas, correo y documentos de Drive, junto con
+la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-architecture.mdx). Ahora mejorará en esto.
+
+- **Mejores respuestas a preguntas con tus propias palabras**: una pregunta formulada de otra manera pone más a
+  menudo la nota, el documento o el mensaje correcto entre los primeros. Hoy, en nuestras pruebas con notas, pasa en 2 de
+  cada 5 preguntas reformuladas.
+- **Reuniones en cada búsqueda**: las reuniones de Zoom ya se buscan en Zoom. Una búsqueda en todas tus fuentes
+  mostrará lo que se decidió en una llamada junto a los mensajes y correos sobre el mismo tema.
+- **Una persona en todas las fuentes**: hoy enlazas a mano las cuentas de una persona. Las personas con la misma
+  dirección de correo en Telegram, el correo y Zoom pasarán a ser una sola, y la aplicación tendrá una página de
+  Personas. Siempre puedes deshacer la unión.
+- **Enlaces entre los datos**: las herramientas ya encuentran nombres, teléfonos y documentos en los mensajes. Ahora
+  enlazarán cada uno con la persona o la empresa a la que pertenece. Así tu agente podrá pasar de una nota a una
+  persona y a sus documentos.
+- **Temas sin etiquetar a mano**: las etiquetas que pones tú ya funcionan. Las etiquetas sugeridas para notas,
+  documentos y mensajes encontrarán un tema también donde no lo etiquetaste.
 - **Resúmenes automáticos**: el resumen de la mañana de Memo ya muestra lo nuevo. Pasará a ser un texto breve en tu
   idioma sobre tus chats, correo y reuniones, y te llegará con la frecuencia que elijas.
-- **Recuerdos al día**: tu agente propone recuerdos nuevos a partir de tus fuentes y marca un recuerdo cuando cambia
-  la fuente en la que se basa. Tú confirmas el cambio.
+- **Recuerdos al día**: los recuerdos que propone tu agente ya esperan tu revisión. Ahora un recuerdo se marcará
+  cuando cambie la fuente en la que se basa, con un cambio que tú confirmas.
 
 ### Nuevas fuentes
 
