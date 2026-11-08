@@ -71,6 +71,11 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Company, team, family or community | organization | организация | organización | The owner's record, not tied to one messenger account. |
 | Stated tie between records | relationship | связь | relación | A person belongs to or relates to an organization or project. It never joins two accounts into one person. |
 | Version number of a note | revision | ревизия | revisión | Increases with each edit; an edit names the current revision so a newer change is not lost. |
+| The one import format | records envelope | конверт записей | sobre de registros | The JSON format (`schema_version: 1`, JSON or JSONL) every import into the local store uses. Developer pages only. |
+| What an import answers | receipt | квитанция | recibo | Counts, proposals, waiting, unmatched and flagged records, and errors with a JSON pointer. |
+| Money waiting for the owner | proposal | предложение | propuesta | An invoice, payment, order, contract with a value, subscription or bank transaction an import or an agent wrote. It counts in no total until the owner confirms it in review. |
+| Tie from a source record | relation | отношение | vínculo | A source record's role pointing at another record or entity. A relation with `as` becomes a relationship. A task relation is the other use of the word. |
+| A source's own object | custom record | собственная запись (`custom:`) | registro propio (`custom:`) | `custom:<name>`: kept as sent with its relations, never turned into an entity and never read for money. |
 
 ## Diagnostics and the desktop app
 

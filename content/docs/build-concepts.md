@@ -75,9 +75,12 @@ feed, write them as source records, let cli-core link them, and keep secrets out
 
 ### Steps
 
-1. **Choose the entity.** Decide what the owner means by your records: a person, an event or a document. Your records
-   are source records of that entity. If nothing fits, the record type is a new core entity and needs a cli-core
-   change, not a table of your own.
+1. **Choose the type.** Decide what the owner means by your records. Use an entity WireCat already has first, such as
+   a person, an event, a document, an organization, a deal or an invoice, and your records are source records of it.
+   A source object WireCat does not model, such as a quote or a ticket, goes in as `custom:<name>` and is kept as you
+   sent it. A new core entity, which needs a cli-core change, is only for a record an owner's question needs rules
+   for, such as totals or matching. Never a table of your own. [Import business data](./build-import-data.md#choose-a-type)
+   has every type.
 2. **Write through cli-core.** Save records through cli-core's store areas, never with your own SQL
    ([WC-STORE-5](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md#wc-store-5--a-cli-writes-no-sql-against-the-shared-store)).
    If an area lacks the method you need, add it to cli-core with its test.

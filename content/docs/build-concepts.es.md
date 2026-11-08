@@ -81,9 +81,13 @@ vincule y mantener fuera los secretos. Supone que conoces los [conceptos](./buil
 
 ### Pasos
 
-1. **Elige la entidad.** Decide qué entiende el propietario por tus registros: una persona, un evento o un documento.
-   Tus registros son registros de origen de esa entidad. Si nada encaja, el tipo de registro es una nueva entidad
-   compartida y necesita un cambio en cli-core, no una tabla propia.
+1. **Elige el tipo.** Decide qué entiende el propietario por tus registros. Usa primero una entidad que WireCat ya
+   tiene, como una persona, un evento, un documento, una organización, una negociación o una factura, y tus registros serán
+   registros de origen de ella. Un objeto de la fuente que WireCat no modela, como un presupuesto o un ticket, entra
+   como `custom:<name>` y se guarda tal como lo enviaste. Una nueva entidad compartida, que necesita un cambio en
+   cli-core, es solo para un registro cuyas preguntas del propietario necesitan reglas propias, como totales o
+   coincidencias. Nunca una tabla propia. [Importar datos de negocio](./build-import-data.md#elige-un-tipo) tiene todos
+   los tipos.
 2. **Escribe a través de cli-core.** Guarda los registros con las áreas del almacén de cli-core, nunca con tu propio SQL
    ([WC-STORE-5](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/store.md#wc-store-5--a-cli-writes-no-sql-against-the-shared-store)).
    Si a un área le falta el método que necesitas, añádelo a cli-core con su prueba.
