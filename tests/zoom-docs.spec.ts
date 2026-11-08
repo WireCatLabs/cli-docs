@@ -71,7 +71,8 @@ for (const lang of ["en", "ru", "es"] as const) {
     expect(markdown.ok()).toBe(true)
     const text = await markdown.text()
     expect(text).toContain('zm personal search meetings "launch" --identity-id 12 --project RES')
-    expect(text).toContain("zm_write")
+    expect(text).toContain("zm_read")
+    expect(text).not.toContain("zm_write")
     expect(text).toContain("zm personal meetings passage meeting:3/15/20/4 --before-n 3 --after-n 4 --format markdown")
     expect(text).toContain("--scan-limit")
     expect(text).toContain("page.has_more")
@@ -344,12 +345,12 @@ for (const lang of ["en", "ru", "es"] as const) {
   test(`${lang}/mcp: one server offers zm's commands through three tools`, async ({ page, request }) => {
     await page.goto(`/${lang}/docs/zm/mcp`)
     const main = page.locator("main")
-    for (const literal of ["zm personal mcp", "zm_tools_search", "zm_read", "zm_write"])
+    for (const literal of ["zm personal mcp serve", "zm_tools_search", "zm_read", "zm_write"])
       await expect(main).toContainText(literal)
     const prefix = lang === "en" ? "" : `${lang}/`
     const response = await request.get(`/llms.mdx/docs/${prefix}zm/mcp/content.md`)
     expect(response.ok()).toBe(true)
     const markdown = await response.text()
-    for (const literal of ["`zm personal mcp`", "`zm_read`", "`zm_write`"]) expect(markdown).toContain(literal)
+    for (const literal of ["`zm personal mcp serve`", "`zm_read`", "`zm_write`"]) expect(markdown).toContain(literal)
   })
 }
