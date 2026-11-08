@@ -8,7 +8,7 @@ title: "Comparado con otras herramientas"
 `b24` es una línea de comandos y un servidor MCP para los datos de ventas de un portal de Bitrix24: negociaciones,
 prospectos, contactos, empresas, embudos, productos y empleados. Esta página lo pone junto a las otras herramientas
 con las que un agente de IA lee y cambia un CRM de Bitrix24, para que veas cuál encaja con tu trabajo. Las marcas de
-`b24` salen de su versión 0.6.0, sus comandos y su código, revisados el 8 de noviembre de 2026; se revisan de nuevo en
+`b24` salen de su versión 0.7.0, sus comandos y su código, revisados el 8 de noviembre de 2026; se revisan de nuevo en
 cada versión. Las marcas de las demás herramientas salen de su propia documentación, sus fichas en catálogos y su
 código, revisados el 7 de noviembre de 2026, y la exportación a CSV el 8 de noviembre de 2026. No se inició sesión en
 ninguna ni se probó en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.

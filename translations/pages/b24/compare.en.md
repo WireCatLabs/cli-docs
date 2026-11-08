@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 `b24` is a command line and an MCP server for the sales data of a Bitrix24 portal: deals, leads, contacts,
 companies, pipelines, products and employees. This page puts it next to the other tools that let an AI agent read
-and change a Bitrix24 CRM, so you can see which one fits your job. The marks for `b24` come from its release 0.6.0,
+and change a Bitrix24 CRM, so you can see which one fits your job. The marks for `b24` come from its release 0.7.0,
 its commands and its source, checked on 8 November 2026; they are checked again at each release. The marks for the
 other tools come from their own documentation, listings and source, checked on 7 November 2026, and for CSV export
 on 8 November 2026. Nothing was signed in to or tested live, and a tool may do more than its pages say.
