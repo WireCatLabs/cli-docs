@@ -64,7 +64,11 @@ sidebar opens it again at the step you reached.
    password made only for this program; [Prepare the mailbox](../mail/providers.md) shows how each provider makes one.
    Memo needs no sign-in.
 7. **Done:** the app lists what is installed and offers three next steps: let ChatGPT or Claude use a tool,
-   see which agents use the tools, or try your first guide.
+   see which agents use the tools, or try your first guide. **Coming in the next WireCat Desktop release:** each
+   tool you set up gets a folded card, "What you can do with" the tool. Open it for the next steps, each of which
+   opens the right place in the app: **Add another account**, **Start a sync**, **Keep it running in the
+   background**, **Give your agents its skill**, **Connect ChatGPT or Claude in the browser**, **See what it ran** and
+   **Read its documentation**. A card lists only what its tool supports.
 
 <DesktopShot
   shot="onboarding-install"
@@ -301,10 +305,11 @@ Tools page can show three kinds of tool:
 | --- | --- | --- |
 | WireCat's own | Built into the app | none |
 | Community | A list that WireCat reviews and signs | **Community** |
-| Your own | Added by you, by its npm name | **Not checked** |
+| Your own | Added by you, by its npm name | **Not verified** |
 
-The second and third kinds are off by default. Settings has one switch for each: **Enable community tools** and
-**Allow tools WireCat has not checked**. A change takes effect at the next start, and the page offers **Restart now**.
+The second and third kinds are off by default. Settings has one switch for each, side by side on a wide window:
+**Enable community tools** and **Allow tools WireCat has not checked**. **Enable community tools** takes effect at the
+next start, and the page offers **Restart now**. **Allow tools WireCat has not checked** takes effect at once.
 
 <DesktopShot
   shot="own-settings"
@@ -322,19 +327,34 @@ built it from the tool's own repository. The review checks how a tool is built a
 No community tool is listed yet. Makers ask for a listing as
 [List your tool in WireCat](../build-list-tool.md) says.
 
+The signed list is valid for 30 days, and the app fetches a new one every day. If it cannot, a notice at the top of
+the app says when the list runs out, once seven days or fewer are left. When the list is out of date, the notice says
+"The list of community tools is out of date, so community tools cannot be installed or updated. Installed ones keep
+working." Until a new list arrives, the row of a community tool says why its **Install** or **Update** does not work.
+Uninstall still works. Your own tools and WireCat's own tools do not use the list. The notice shows only while
+community tools are on.
+
 ### Add a tool by its npm name
 
-1. In Settings, turn on **Allow tools WireCat has not checked**. A warning opens: a tool you add this way gets access
-   to all your personal data that WireCat holds, add only tools whose authors you trust completely, and WireCat takes
-   no responsibility for what they do. Confirm it with **Allow**.
+1. In Settings, turn on **Allow tools WireCat has not checked**. A warning opens: a tool you add this way runs as you
+   on this computer, so it can read everything WireCat keeps, add only tools whose authors you trust completely, and
+   WireCat takes no responsibility for what they do. Confirm it with **Allow**.
 2. On the Tools page, click **Add your own tool**, at the top next to **Check again**. Type the npm name, such as
    `@scope/name`, and click **Check package**. WireCat only reads npm. Nothing is installed, and no code of the
    package runs.
 3. Read the review screen (below), then click **Add**.
-4. A second question asks: "Install and run `@scope/name`? Its install scripts and first run use your permissions."
+4. WireCat asks "Check `@scope/name` before you install it?" and offers your AI agent first. There is one
+   **Check it with** button for each agent it can open, such as **Check it with Claude Code** or **Check it with
+   Codex**. The agent opens in a terminal with a prepared request: download exactly the package file you reviewed,
+   check its sha512, read the code, compare it with the repository at the release commit, and report the servers it
+   contacts, what it reads and writes on this computer, and anything suspicious. It never installs or runs the
+   package. **What your agent is asked** shows the whole request. With no agent found, click **Copy the check** and
+   paste it into yours. Read the agent's report, then click **Continue to install**, or **Skip and install** without
+   the check.
+5. A second question asks: "Install and run `@scope/name`? Its install scripts and first run use your permissions."
    Only **Install and run** installs the package. **Back** returns to the review.
-5. After the install, WireCat checks that the program describes itself as the review showed. Click **Restart now**.
-   The tool then appears on the Tools page with the **Not checked** badge.
+6. After the install, WireCat checks that the program describes itself as the review showed. The tool is on the Tools
+   page at once, with the **Not verified** badge. No restart is needed.
 
 Only some packages work. The package must have a scope (`@scope/name`, not `@wirecat/`), be written in TypeScript on
 [cli-base](https://github.com/WireCatLabs/cli-base), and ship its manifest `contracts/wirecat.json`: a file that
@@ -345,40 +365,71 @@ builds such a tool as [Create your CLI](../build-create-cli.md#make-it-addable-i
   shot="own-name"
   folder="desktop/docs"
   lang="en"
-  alt="Add your own tool: the warning and the npm package name"
+  alt="Add your own tool: the red warning and the npm package name"
   caption="The name. WireCat reads npm only."
 />
 
 ### The review screen
 
-Nothing is installed yet when it opens.
+Nothing is installed yet when it opens. From the top:
 
-- **Published by**: the package's maintainers on npm.
-- **Repository**: the GitHub repository the package names, or "No public GitHub repository".
-- **Version**: the version that will be installed.
-- **Where npm built it**: "Built by `<repository>` on GitHub Actions", or "No record of where npm built it".
-- **What it asks for**: the tool's commands, grouped as **Reads your service**, **Changes your service** and
-  **Writes on this computer**. Then its sign-in, whether it syncs into WireCat's store, and how it connects to AI
-  agents.
-- **The warning**: the tool gets access to all your personal data that WireCat holds, WireCat has not checked it, and
-  you should add it only if you trust its authors completely.
+- **Not verified**, beside the tool's name.
+- **A red warning**, true for every tool you add: it runs as you on this computer, so it can read everything WireCat
+  keeps (your messages, mail, notes and files). For a tool built on cli-core, WireCat's own library, the warning adds
+  that it opens that data directly. Add it only if you trust its authors completely.
+- **Published by**, **Repository**, **Version** and **Where npm built it**. Each is a link that opens in your
+  browser: the publisher's npm profile, the repository, the version's page (**On npm**), and, when npm recorded where
+  it built the package, **Release commit**, **Release workflow run** and **Transparency-log entry**. "No record of
+  where npm built it" means nothing ties the package to public source code.
+- **Things to check**: each item with one sentence on why it matters. They come from npm (first published less than
+  30 days ago, few versions, one npm account publishes it, no record of where npm built it), from its GitHub
+  repository (created recently, no change for a long time, archived, few stars, workflows that do not run WireCat's
+  standard checks), from the WireCat libraries it uses or does not use, and from its code (it opens network
+  connections, names servers it does not declare, can start other programs, hides calls, or ships native `.node` or
+  `.wasm` files). When GitHub cannot be reached or is out of checks, the item says "Couldn't check its GitHub
+  repository", and the other checks still apply. With nothing to show it says "Nothing stood out. That does not make
+  it safe."
+- **Servers it contacts**: the servers the tool declares, "It says it contacts no servers", or "It does not say".
+  A server you choose, such as your own mail server, is named too.
+- **What it says it does**: a table of the data the tool works with (Contact, Deal…), with its fields where the
+  tool names them. For each, **With** the service and **On this computer**: **Reads**, **Changes** or **Saves**, or
+  **Nothing**. Then what its sync copies into WireCat's store, and **WireCat's standard commands** in plain words
+  (signs in, checks that it works, installs instructions for your AI agents…). The exact commands are folded under
+  **Commands**; click it to open the list.
 
 What the screen means:
 
+- **Things to check are flags, not a verdict.** None of them stops you from adding the tool, and an empty list does
+  not make it safe. What WireCat reads in the package's code is "found in the code, not proved": the libraries the
+  package bundles are skipped, and code can be written to hide from such a reading.
 - **"Where npm built it" is not a safety check.** npm records which repository built the package. That shows where
-  the code came from, not that it is safe. "No record" means you cannot tell where the code came from. Neither one
-  stops you from adding the tool.
-- **"What it asks for" is what the tool says about itself.** WireCat cannot prove that a tool does only that, so the
-  app says "asks for", never "can only".
-- **Installing runs its code.** npm runs the package's install scripts with your permissions. That is why there are
-  two confirmations.
+  the code came from, not that it is safe.
+- **"What it says it does" is what the tool says about itself.** WireCat cannot prove that a tool does only that.
+- **Installing runs its code.** npm runs the package's install scripts with your permissions. That is why the AI
+  check comes first, and why there are two confirmations.
 
 <DesktopShot
   shot="own-review"
   folder="desktop/docs"
   lang="en"
-  alt="The review screen: publisher, repository, version, where npm built it, and what the tool asks for"
+  alt="The review screen: Not verified, the red warning, linked package details, things to check and what the tool says it does"
   caption="The review. Nothing is installed yet."
+/>
+
+<DesktopShot
+  shot="own-review-risky"
+  folder="desktop/docs"
+  lang="en"
+  alt="A review with many things to check: a new package, one publisher, no record of where npm built it, servers its code names but does not declare"
+  caption="Things to check, each with a reason. None of them blocks the tool."
+/>
+
+<DesktopShot
+  shot="own-check"
+  folder="desktop/docs"
+  lang="en"
+  alt="After Add: Check it with Claude Code, Check it with Codex, Copy the check, or Skip and install"
+  caption="The AI check, offered before the install."
 />
 
 <DesktopShot
@@ -399,8 +450,8 @@ with **Connect**, as for a WireCat tool.
   shot="own-tools-list"
   folder="desktop/docs"
   lang="en"
-  alt="The Tools page with Acme CRM, added by you, marked Not checked"
-  caption="An added tool on the Tools page, marked Not checked."
+  alt="The Tools page with Acme CRM, added by you, marked Not verified"
+  caption="An added tool on the Tools page, marked Not verified."
 />
 
 ### Update it
@@ -408,12 +459,13 @@ with **Connect**, as for a WireCat tool.
 The tool's **Update to** button opens the review again for the new version, every time. It also lists what changed
 since the version you confirmed: the repository, where npm built it, the publishers, new commands, new write access,
 and new or changed parts. When anything changed, or the tool does not describe what it asks for, tick
-**I accept these changes** before you can go on. The second question follows, as for a new tool.
+**I accept these changes** before you can go on. The AI check and the second question follow, as for a new tool.
 
 ### Remove it
 
-- **Remove from WireCat**, in the tool's details (click its name), deletes the tool's entry. It disappears at the
-  next start. The program stays installed, and the app offers **Uninstall it too**.
+- **Remove from WireCat**, in the tool's details (click its name), deletes the tool's entry, and the tool leaves the
+  Tools page at once. No restart is needed. When the program is installed, the question offers **Uninstall it
+  first**; otherwise the program stays installed, and the Tools page says what stays on the computer.
 - **Uninstall** removes the program. **Uninstall and delete data** also deletes the tool's own data folders: only the
   folders named after its package (`@scope/name` → `scope-name`). It never deletes the store your other tools share.
   A folder with that name that already existed before you added the tool is listed with "This folder existed before
@@ -422,8 +474,8 @@ and new or changed parts. When anything changed, or the tool does not describe w
 ### Without the internet
 
 Checking a package, adding it and updating it read npm, so they need the internet. Without it the dialog says
-"WireCat could not reach npm". A tool you already added stays on the Tools page offline: WireCat keeps its entry on
-this computer and does not ask npm again at start. Whether the tool itself works offline depends on the tool and its
+"Couldn't reach npm". A tool you already added stays on the Tools page offline: WireCat keeps its entry on this
+computer and does not ask npm again at start. Whether the tool itself works offline depends on the tool and its
 service.
 
 ## The tools stay command-line tools
@@ -492,14 +544,24 @@ Another WireCat tool moved the shared storage to a newer format than this tool r
 
 Select **Try again**, or get WireCat from the [download page](/en/download). If the message says the download "did not match WireCat's signature", WireCat did not open it and saved nothing. A .deb or .rpm copy opens your system's installer, which asks for your password. A copy that WireCat cannot recognize cannot update itself: install the new version the way you installed this one. Your accounts and data will not be deleted. More in [Updates and removal](#updates-and-removal).
 
+### "The list of community tools is out of date"
+
+**Coming in the next WireCat Desktop release.** The list of [community tools](#community-tools) that WireCat signs has
+run out, and the app could not fetch a new one. Until it does, community tools cannot be installed or updated.
+Installed ones keep working, and your own tools are not affected. Check your internet connection or proxy. The app
+tries again every day, and the notice goes away once a new list arrives.
+
 ### WireCat refuses a tool you add
 
-When you [add your own tool](#add-your-own-tool), the dialog says what went wrong and what to do. Nothing is installed
-before the second question, except in the last two rows.
+When you [add your own tool](#add-your-own-tool), the dialog names the problem in a headline, such as **Tool not
+found**, then says what went wrong and what to do. **Try again** returns to the name field with the name kept and
+selected, so you can correct it. When npm could not be reached, the package is too large or something unexpected went
+wrong, **Try again** reads the same name again. Nothing is installed before the second question, except in the last
+two rows.
 
 | The dialog says | What to do |
 | --- | --- |
-| npm has no package with this name. | Check the spelling, including the scope: `@scope/name`. |
+| Tool not found: npm has no package named … | Check the spelling, including the scope: `@scope/name`. |
 | Only scoped package names work here, such as @scope/name. | Ask the tool's author for its full npm name. |
 | This name belongs to WireCat's own tools. | WireCat's own tools are already on the Tools page. Install them there. |
 | This tool does not describe itself to WireCat. | Paste its `desktop` object from the tool's documentation into the field below the message, and click **Check with this object**. Or ask its author to publish a version with a manifest. |
@@ -510,6 +572,7 @@ before the second question, except in the last two rows.
 | WireCat could not reach npm. | Check your internet connection or proxy, then try again. |
 | The … is larger than WireCat reads. | Ask the tool's author to make the package smaller. |
 | Something went wrong reading npm: … | Try again. If it happens again, report a problem. |
+| WireCat could not show this tool: … | Ask the tool's author to fix it and publish a new version. |
 | The package is installed, but WireCat did not add it. | The program does not match the review. Click **Uninstall it**. |
 | bun installed this tool, and bun cannot be told which registry your own tools come from. | Shown when you update a tool you added that bun installed. Uninstall it, then add it again: WireCat installs it with npm. |
 
@@ -517,7 +580,7 @@ before the second question, except in the last two rows.
   shot="own-refused"
   folder="desktop/docs"
   lang="en"
-  alt="A refusal: Telegram already uses this tool's name, program or data folder"
+  alt="A refusal: Tool not found, npm has no package named @leemour/acme-crm-clis, and Try again"
   caption="A refusal names the reason and what to do."
 />
 
