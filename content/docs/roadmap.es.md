@@ -22,8 +22,9 @@ decidimos qué viene después.
 Ya funcionan las reuniones de [Zoom](./zm/meetings.md), los documentos de [Google Drive](./drive/index.md), los
 eventos de [Google Calendar](./gcal/usage.md), el [correo](./mail/usage.md) y [Bitrix24](./b24/usage.md). También
 están disponibles los chats de [WhatsApp](./wa/index.md) y los bots empresariales. [WireCat Desktop](./desktop/index.mdx)
-instala las herramientas, te ayuda a iniciar sesión y las conecta con tus agentes sin terminal. Consulta las
-[funciones](./features.mdx).
+instala las herramientas, te ayuda a iniciar sesión y las conecta con tus agentes sin terminal. OpenClaw lee la
+skill que instala cada herramienta y encuentra las skills de WireCat en ClawHub, y Hermes las instala desde el índice
+de skills de este sitio. Consulta las [funciones](./features.mdx) y los [agentes](./agents.mdx).
 
 ## A continuación
 
@@ -62,12 +63,13 @@ instala las herramientas, te ayuda a iniciar sesión y las conecta con tus agent
   la revisión de cada empresa. Google dejará de mostrar su pantalla de aviso, y Zoom ya no necesitará una aplicación
   propia.
 
-## Más adelante
+### Después
 
 - **Más mensajería y reuniones**: Microsoft Teams y Slack, tanto mensajes como reuniones.
-- **Plataformas de agentes**: integraciones nativas con OpenClaw y Hermes, más allá de la skill que
-  [ambos ya pueden usar](./agents.mdx).
 - **GitHub**: descripciones de pull requests, issues y proyectos.
+
+## Más adelante
+
 - **Código en GitHub**: búsqueda por significado en el propio código y, por separado, en el propósito de cada cambio.
 - **Confluence.**
 - **Gestores de tareas**: Jira, Linear, Todoist y TickTick.
