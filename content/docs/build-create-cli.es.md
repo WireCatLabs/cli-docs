@@ -129,7 +129,7 @@ pueda vincular a tu repositorio.
 
 `contracts/wirecat.json` es el manifiesto: lo que tu herramienta dice de sí misma a WireCat. Lista los comandos con lo
 que lee y escribe cada uno, y los comandos con los que Desktop comprueba, configura, sincroniza y conecta la
-herramienta. Necesita `@wirecat/cli-base` 0.81.0 o posterior.
+herramienta. Necesita un `@wirecat/cli-base` actual.
 
 - **Se genera, nunca se escribe a mano.** `cli-dev manifest` lo escribe a partir del programa compilado y de una
   identidad que exportas. Tú escribes solo lo que el código no puede saber: un `tagline` (55 caracteres como mucho),
@@ -140,7 +140,7 @@ herramienta. Necesita `@wirecat/cli-base` 0.81.0 o posterior.
 - **CI lo mantiene al día.** `pnpm contracts:check` falla cuando el archivo ya no coincide con el programa.
 - **No lleva versión.** Desktop lee la versión de npm, así que una versión nueva no cambia el archivo.
 
-Una herramienta creada con cli-template 0.19.0 o posterior trae todo esto desde `new`:
+Una herramienta creada con el cli-template actual trae todo esto desde `new`:
 
 - El bin llama a `wcatStart` antes de cargar el programa, con `DESKTOP` de `src/identity.ts`: el enlace a la
   documentación, la frase para Desktop (hecha a partir de la descripción) y los textos de inicio de sesión según tu
@@ -150,11 +150,11 @@ Una herramienta creada con cli-template 0.19.0 o posterior trae todo esto desde 
   ejecuta `wcat acme-crm`.
 - `pnpm generate` escribe `contracts/wirecat.json` con `cli-dev manifest`, y `pnpm contracts:check` lo comprueba.
 
-**Para un CLI creado antes de 0.19.0:** añádelo a mano, porque `src/` y `package.json` son tuyos y `upgrade` no los
+**Para un CLI antiguo, sin `contracts/wirecat.json`:** añádelo a mano, porque `src/` y `package.json` son tuyos y `upgrade` no los
 cambia. Añade la llamada a `wcatStart` en el bin, `DESKTOP` en `src/identity.ts`, `src/wcat.ts`, el nombre de programa
 `wcat-<comando>` y `cli-dev manifest --program dist/program.js --identity dist/wcat.js` (con `--check` para las
-comprobaciones) en los scripts `generate`, `generate:check` y `contracts:check`. Pasa a `@wirecat/cli-base` 0.82.0. Un
-CLI nuevo creado con 0.19.0 muestra cada archivo.
+comprobaciones) en los scripts `generate`, `generate:check` y `contracts:check`. Pasa al `@wirecat/cli-base` actual.
+Un CLI nuevo creado con la plantilla actual muestra cada archivo.
 
 Con el archivo en el paquete, `wcat-acme-crm --wcat-describe` responde en el formato 2: el nombre, la versión, la
 descripción y el enlace a la documentación con `"wcat_describe": 2`, más la parte `desktop` del archivo y
@@ -168,9 +168,9 @@ tiene el formato exacto.
 **Desinstalar y borrar datos** en Desktop borra solo las carpetas con el nombre de la herramienta, así que ese nombre
 debe ser de tu herramienta. Para un paquete `@<scope>/<name>`, el `appName` de la identidad, en minúsculas, es
 `<scope>-<name>` o empieza por `<scope>-<name>-`. Cada `.` y `_` del nombre del paquete pasa a ser `-`, y el nombre
-entero tiene 64 caracteres como mucho: `@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. cli-template 0.19.0 y posteriores lo
-escriben así para todo paquete fuera de `@wirecat`, y dan el mismo nombre a la skill y a las entradas del llavero;
-consérvalo si renombras la herramienta. Un CLI creado antes de 0.19.0 tiene `appName` sin el ámbito (`acme-crm-cli`):
+entero tiene 64 caracteres como mucho: `@leemour/acme-crm-cli` → `leemour-acme-crm-cli`. El cli-template actual lo
+escribe así para todo paquete fuera de `@wirecat`, y dan el mismo nombre a la skill y a las entradas del llavero;
+consérvalo si renombras la herramienta. Un CLI antiguo tiene `appName` sin el ámbito (`acme-crm-cli`):
 cámbialo en `src/identity.ts` antes de su primera versión. Desktop rechaza un manifiesto que incumple esta regla.
 
 ### Publica con tu propio ámbito
