@@ -16,36 +16,35 @@ mensajes, correo y notas a la vez.
 | De dónde viene | Quién lo pone en el almacén local |
 |---|---|
 | Mensajes de Telegram, MAX y WhatsApp | tg, max y wa, cuando descargan tus chats |
-| Correo | La CLI [mail](https://github.com/WireCatLabs/mail-cli), con `mail <profile> sync`. La importación antigua con Himalaya se ejecuta con `memo sync --only mail` y se eliminará en una versión posterior |
+| Correo | La CLI [mail](https://github.com/WireCatLabs/mail-cli), con `mail <profile> sync` |
 | Archivos de tus carpetas de notas | `memo sync --only notes` o `memo sync` |
 | Tus propias notas, etiquetas, tareas, recuerdos y hechos | Memo, cuando tú o tu agente los añadís |
 
-La importación deja los originales intactos: los archivos no cambian y el buzón se abre solo para lectura.
-El almacén local conserva una copia del texto. Memo nunca cambia un buzón: la [limpieza de Gmail](./mail.md#clean-up-gmail)
-es un comando del programa independiente `mail`.
+La importación deja los originales intactos: los archivos no cambian. El almacén local conserva una copia del texto.
+Memo nunca abre un buzón: leerlo y limpiarlo son comandos del programa independiente `mail`.
 
 ## Qué hace una importación
 
-Una importación lee tus carpetas y tus cuentas de correo y pone al día el almacén local.
+Una importación lee tus carpetas de notas y pone al día el almacén local.
 
 - **Solo se lee lo que ha cambiado.** Un archivo con el mismo tamaño y la misma hora de cambio que la
-  última vez se omite. El correo que ya está guardado se omite. Una segunda importación es rápida.
+  última vez se omite. Una segunda importación es rápida.
 - **Las ediciones conservan el historial.** Cuando editas un archivo de notas, el almacén local
   guarda el texto antiguo como una versión anterior.
 - **Los traslados lo conservan todo.** Un archivo que mueves dentro de su carpeta conserva sus
   enlaces y sus etiquetas.
-- **Se respetan los borrados.** Cuando borras un archivo o un correo, su texto sale del almacén local
-  en la siguiente importación.
+- **Se respetan los borrados.** Cuando borras un archivo, su texto sale del almacén local en la siguiente importación. Un
+  correo borrado sale en el siguiente `mail <profile> sync`.
 - **Una parada de seguridad.** Si una importación descubre que de repente falta la mayor parte de una
-  carpeta o de un buzón (por ejemplo, un disco que no está conectado), no borra nada y te avisa.
+  carpeta (por ejemplo, un disco que no está conectado), no borra nada y te avisa.
 - **Se prepara la búsqueda por significado.** Si el modelo de búsqueda está en tu ordenador, la
-  importación también prepara el texto nuevo para la búsqueda por significado. `--no-embed` se salta
+  importación también prepara el texto nuevo para la búsqueda por significado, incluido el correo que guardó `mail`. `--no-embed` se salta
   este paso.
 
 Dos importaciones de Memo nunca se ejecutan a la vez, y una fuente que falla no detiene las demás.
 
-Una importación se puede detener en cualquier momento con Ctrl-C o `kill <pid>` (SIGTERM). Se detiene en el siguiente
-lote de correos o en la siguiente carpeta, conserva lo que leyó y el siguiente `memo sync` continúa desde ahí. `--timeout 10m`
+Una importación se puede detener en cualquier momento con Ctrl-C o `kill <pid>` (SIGTERM). Se detiene en la siguiente
+carpeta, conserva lo que leyó y el siguiente `memo sync` continúa desde ahí. `--timeout 10m`
 la detiene del mismo modo a los diez minutos; sin `--timeout` no tiene límite de tiempo.
 
 ## Carpetas en más de un ordenador
@@ -120,10 +119,25 @@ Tu agente puede añadir tres tipos de registros:
 
 Los recuerdos y los hechos registrados directamente mediante el [servidor MCP](./mcp.md) empiezan como **propuestos**. Las herramientas de comandos MCP pueden confirmar recuerdos, aceptar hechos y aprobar acciones si lo permiten los permisos guardados. Cada comando que llega al ejecutor de Memo se escribe en el registro de agentes (`memo agents list`), sin los detalles enviados.
 
-Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
+Las propuestas de proyecto tienen un flujo aparte. Por defecto solo las decides tú. Leer y proponer siguen disponibles.
+Configura [`agent_decisions: true`](./configuration.md#agent_decisions) para que un agente las decida con un motivo
+registrado. Así puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
 
-El comando `memo` reconoce el terminal de un agente por `AI_AGENT` o `CLAUDECODE`, variables que establecen agentes como Claude Code. Allí, un hecho registrado directamente, recuerdo o vínculo se atribuye al agente y empieza como propuesto. Sin ellas, o con `--as-owner`, se atribuye a ti: los recuerdos y vínculos se confirman y los hechos se aceptan al instante. Las acciones propuestas siguen esperando aprobación. Las variables y `--as-owner` son etiquetas, no un bloqueo: un agente puede establecerlas y escribir como tú.
+El comando `memo` sabe quién lo ejecuta. Una llamada por [MCP](./mcp.md) es del agente. Un terminal de agente, reconocido por
+`AI_AGENT` o `CLAUDECODE` (las variables que establecen agentes como Claude Code), es del agente. Sin ninguno de los dos, la
+ejecución es tuya solo cuando su entrada y su salida son un terminal. Una ejecución sin terminal y sin agente nombrado se registra
+como el bot desatendido `unattended`, que propone y nunca decide. Lo que el agente escribe ahí, un hecho, un
+recuerdo o un vínculo, empieza como propuesto. Lo tuyo se confirma o se acepta al instante. Las acciones propuestas siguen esperando
+aprobación. En un terminal de agente, `--as-owner` hace tuyo un comando solo después de que respondas y en el
+terminal. Nunca pregunta con `--json` ni sin terminal, y en ese caso rechaza el comando con el código de salida 7. WireCat Desktop pasa
+`--from-app` en cada decisión que tomas en la aplicación: entonces la ejecución es tuya sin pregunta. Es la palabra de la aplicación
+de que hiciste clic, no una comprobación (consulta [Seguridad](./security.md)).
+
+Cada vía para confirmar, rechazar o quitar, por CLI y por MCP, comprueba quién decide. Un agente solo decide con
+`--reason`, nunca sobre una propuesta de su propio bot, nunca sobre la de una regla o la de un vínculo sin confirmar, y solo cuando
+[`agent_decisions`](./configuration.md#agent_decisions) es `true`. La pregunta y/N es un freno, no un
+bloqueo: un agente que maneja su propio terminal puede responderla.
 
 ## Qué puede salir de tu ordenador
 
-El envío de fuentes a un proveedor de IA requiere tu autorización. Por defecto, `memo answers create` prepara fuentes para tu agente. Envía texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a uno remoto solo con `--allow-remote` además. Lo que tu agente hace con el texto depende de él. Las comprobaciones automáticas de actualizaciones y dominios de remitentes también pueden hacer peticiones de red; [Seguridad](./security.md) explica qué envían y qué ajustes se aplican.
+El envío de fuentes a un proveedor de IA requiere tu autorización. Por defecto, `memo answers create` prepara fuentes para tu agente. Envía texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a uno remoto solo con `--allow-remote` además. Lo que tu agente hace con el texto depende de él. La comprobación diaria de actualizaciones también puede hacer una petición de red. [Seguridad](./security.md) explica qué envía y cómo desactivarla.

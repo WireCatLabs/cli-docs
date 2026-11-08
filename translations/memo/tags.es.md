@@ -71,6 +71,21 @@ memo tags list                              # every tag, up to 100
 `memo tags list` muestra 100 etiquetas cada vez; añade `--limit 500` para ver más. `type:note` o
 `type:person` muestra solo un tipo.
 
+## La lista de seguimiento
+
+La etiqueta `watch` marca lo que el resumen de la mañana nunca debe pasar por alto. `memo review agenda` muestra todo lo nuevo en un
+chat o hilo de correo seguido, cada chat en el que escribió una persona seguida, cada proyecto seguido aunque no haya tenido actividad, y
+las reuniones de la serie de una reunión seguida. También muestra las respuestas que debes a personas (se dejan fuera los bots y los chats de servicios),
+las tareas creadas desde el último resumen de la mañana y las vencidas o que vencen hoy o mañana, y cada cuenta
+cuya sincronización falló, que nada sincroniza o que lleva más tiempo de lo normal sin actividad.
+
+```sh
+memo tags add watch --chat 12345 --account telegram:1   # a chat or a mail thread
+memo tags add watch --person 01J8…                      # a person, in every account
+memo tags add watch --project HRB                       # a project
+memo review agenda --compact                            # the digest an agent reads
+```
+
 ## Quitar una etiqueta
 
 ```sh

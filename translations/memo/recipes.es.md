@@ -155,10 +155,9 @@ completo que quieres aceptar antes de confirmar; deja abierto un lote si quedan 
 `memo projects context HRB` muestra hechos aceptados, documentos clave y tareas numeradas abiertas;
 `projects actions list HRB status:reviewed` muestra decisiones anteriores sobre lotes.
 
-De forma predeterminada, un agente puede decidir propuestas del proyecto con un motivo registrado.
-La petición anterior deja explícitamente esa decisión en tus manos. Para exigir decisiones del propietario
-en este recorrido, establece [`agent_decisions` en `false`](./configuration.md#agent_decisions): rechaza
-las confirmaciones y rechazos del agente por CLI y MCP. Leer y preparar propuestas sigue disponible.
+De forma predeterminada, solo tú decides las propuestas del proyecto: las confirmaciones y rechazos de un agente se rechazan
+por CLI y MCP, y leer y preparar propuestas sigue disponible. Para que un agente las decida con un motivo
+registrado, establece [`agent_decisions` en `true`](./configuration.md#agent_decisions).
 Las decisiones de reuniones mediante MCP necesitan permisos explícitos del propietario.
 
 Después, [prepara una agenda con el contexto aceptado del proyecto](#prepare-for-a-meeting-with-someone).

@@ -72,6 +72,20 @@ tg personal contacts link 'Kai Sample' email:kai@example.com
 
 Как выбрать главную заметку о человеке, см. в разделе [Главная заметка о человеке](./notes.md#the-note-about-a-person).
 
+## Загрузите контакты телефона
+
+Выгрузите контакты из телефона в файл vCard (`.vcf`) и импортируйте их под именем телефона:
+
+```sh
+memo records check contacts.vcf --account phone:pixel --region ru
+memo records import contacts.vcf --account phone:pixel --region ru
+```
+
+Контакт связывается с человеком, у которого уже есть один из его адресов e-mail или номеров телефона, или становится
+новым человеком. Номер без `+`, например `8 900 000-00-02`, читается в стране, которую называет `--region` (`ru`,
+`gb`, `de` и так далее, в любом регистре). Без `--region` такой номер сохраняется, но не сопоставляется, и контакт
+может стать второй записью человека, который у вас уже есть. Импорт называет такие карточки.
+
 ## Организации и проекты
 
 Организации и проекты принадлежат вам и не привязаны к одному аккаунту мессенджера.
@@ -82,12 +96,18 @@ tg personal contacts link 'Kai Sample' email:kai@example.com
 
 ```sh
 memo organizations add 'Synthetic Studio' --kind company
+memo organizations list 'name:*studio*'
+memo organizations show organization:1
+memo organizations rename organization:1 'Synthetic Studio Ltd'
 memo projects add 'Harbour' --key HRB --scope work --organization organization:1
 memo projects list
 memo projects context HRB
 ```
 
-`--scope` принимает значение `personal` или `work`. `projects context` принимает ключ, номер, `project:<id>`,
+`--scope` принимает значение `personal` или `work`. `name:` не учитывает регистр, а `*` означает любой текст,
+поэтому `name:*studio*` находит каждое название, в котором есть это слово. `organizations add` и
+`organizations rename` от агента записываются сразу, как и ваши. Ограничивают их настройки `permissions` в memo.
+`projects context` принимает ключ, номер, `project:<id>`,
 точное название или псевдоним. `projects context` и `organizations context` показывают людей, связанных с проектом или
 организацией, заметки о них или со ссылками на них и их теги. Для проекта вид также группирует ожидающие ключевые
 документы, связи, факты и поручения со встреч в разделе `review`, отдельно от существующих открытых
@@ -121,11 +141,15 @@ memo projects key-documents remove HRB document:3
 **Связь** означает, что человек входит в организацию или работает над проектом:
 
 ```sh
-memo relationships add person:PERSON_UID organization:1 --kind member-of
-memo relationships add person:PERSON_UID project:1 --kind related-to --role author
+memo relationships add person:PERSON_UID organization:1 --kind member-of --role employee
+memo relationships add person:PERSON_UID project:1 --kind related-to --role contributor
 memo relationships list 'about:"project:1"'
 memo relationships remove 4
 ```
+
+Роль человека как участника выбирается из списка. В организации: employee, contractor, founder, owner,
+manager, adviser или contact. В проекте: owner, manager, contributor, client-contact или approver. Любую
+другую роль memo отклоняет (`relationship.role-unknown`).
 
 Чат тоже может быть чатом проекта, тогда `memo projects evidence` читает его целиком, а не только сообщения, которые
 называют проект. Ссылка называет аккаунт чата, поэтому аккаунт не угадывается:
@@ -136,16 +160,33 @@ memo relationships add chat:telegram/1/123 project:1
 
 Для чата разрешено только отношение `member-of` проекта.
 
-Отношения — ваши утверждения. Они не объединяют два аккаунта в одного человека. Отношение, добавленное из терминала агента, ждёт подтверждения; `provenance` называет агента (`agent:claude-code`). Подтвердите через `memo relationships confirm`; `--as-owner` сразу делает запись вашей.
+Отношения — ваши утверждения. Они не объединяют два аккаунта в одного человека. Отношение, добавленное из терминала агента, становится не связью, а предложением для вас, и называет агента. `--as-owner` делает запись вашей,
+после того как вы ответите y в терминале.
 
-Memo может предложить связи на основе почты: люди, которые пишут вам с одного и того же домена компании.
+Memo может предложить чаты, почтовые переписки и людей, которые похожи на относящихся к проекту: его название или
+псевдонимы в названиях чатов и в сообщениях, группы и диалоги его подтверждённых участников, люди, которые пишут в
+его подтверждённых чатах. Без проекта Memo предлагает людей, которые пишут вам с одного и того же домена компании.
 
 ```sh
-memo relationships scan --source email:you@example.com
-memo relationships confirm 4
+memo relationships scan HRB --source all        # lists them, writes nothing
+memo relationships scan HRB --source all --yes  # proposes them for review
+memo review kind:relationship
 ```
 
-Предложения ждут, пока вы их не подтвердите, и до этого не появляются в контексте человека.
+Если человека предложили потому, что он пишет в группе проекта, предложение называет группу и объём: "wrote 40 messages in
+«Sales» (25 people)". Когда сканирование предлагает двух или больше отправителей из одной группы, оно выводит команду,
+которая показывает их вместе. Так можно решить по людям этой группы за один раз, отдельно от людей, с которыми вы
+работаете напрямую:
+
+```sh
+memo review list via:chat:max/1/-100                # that group's senders; next names the confirm command
+memo review confirm 17070-17074                     # all of them
+memo review reject 17070-17074 --reason "not this project"
+```
+
+Предложения ждут, пока вы не подтвердите их в `memo review`, и до этого не появляются в контексте человека. Пару,
+которую вы отклонили, Memo больше никогда не предлагает. Людей сопоставляют по аккаунту, который написал, и никогда по
+имени в тексте.
 Распространённые бесплатные почтовые домены, например Gmail, никогда не используются для предложений.
 
 ## Встречи в проекте

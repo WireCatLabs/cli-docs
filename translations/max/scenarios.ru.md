@@ -147,3 +147,4 @@ title: "Пошаговые сценарии"
 Эти сценарии Memo тоже используют `max`:
 
 - [Один человек во всех инструментах](https://wirecat.dev/en/docs/memo/scenarios#person-brief): `memo guide person-brief`
+- [Где сейчас проект](https://wirecat.dev/en/docs/memo/scenarios#project-state): `memo guide project-state`

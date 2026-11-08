@@ -14,6 +14,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     people: "See a person's messages, mail and notes in one answer, and record organizations and projects.",
     mail: "Search the mail that the mail tool syncs, beside your notes and messages.",
     tasks: "Track requests, promises and project work, decide what can start and schedule local reminders.",
+    business:
+      "Track products, contracts, subscriptions, bank accounts and their transactions, and import them from a file.",
     memories: "Keep memories and facts with their evidence, and approve or reject actions an agent proposes.",
     mcp: "Connect an agent to Memo commands, open cited sources and control writes with saved permissions.",
     archive: "Import changed notes and mail by hand or on a Linux timer, reading only what changed.",
@@ -40,6 +42,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     people: "Смотрите сообщения, письма и заметки о человеке в одном ответе, ведите организации и проекты.",
     mail: "Ищите в почте, которую синхронизирует инструмент mail, рядом с заметками и сообщениями.",
     tasks: "Следите за просьбами, обещаниями и задачами проектов и ставьте локальные напоминания.",
+    business: "Ведите товары, договоры, подписки, банковские счета и их операции и импортируйте их из файла.",
     memories: "Храните память и факты с доказательствами и решайте, что делать с действиями агента.",
     mcp: "Подключите агента к командам Memo, открывайте источники и ограничивайте запись разрешениями.",
     archive: "Импортируйте изменённые заметки и почту вручную или по таймеру в Linux.",
@@ -67,6 +70,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     people: "Ve los mensajes, correos y notas de una persona en una respuesta, y registra organizaciones y proyectos.",
     mail: "Busca en el correo que sincroniza la herramienta mail, junto a tus notas y mensajes.",
     tasks: "Sigue peticiones, promesas y trabajo de proyectos, y programa recordatorios locales.",
+    business:
+      "Lleva productos, contratos, suscripciones, cuentas bancarias y sus movimientos, e impórtalos desde un archivo.",
     memories: "Guarda recuerdos y hechos con su evidencia, y aprueba o rechaza las acciones que propone un agente.",
     mcp: "Conecta un agente a los comandos de Memo, abre las fuentes citadas y limita escrituras con permisos.",
     archive: "Importa notas y correo cambiados a mano o con un temporizador en Linux.",

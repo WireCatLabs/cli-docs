@@ -30,6 +30,7 @@ Tres palabras aparecen en todas las páginas:
 | Ver todo sobre una persona: mensajes, correo y notas | [Personas y proyectos](./people.md) |
 | Traer tu correo junto a tus notas y mensajes | [Correo](./mail.md) |
 | Llevar la cuenta de lo que debes a otras personas y recibir recordatorios | [Tareas y recordatorios](./tasks.md) |
+| Guardar productos, contratos, suscripciones, cuentas bancarias y una importación de otro sistema | [Datos de negocio](./business.md) |
 | Dejar que tu agente recuerde lo que aprendió, y decidir tú qué se queda | [Recuerdos y hechos](./memories.md) |
 | Usar Memo desde una aplicación sin terminal, como Claude Desktop | [El servidor MCP](./mcp.md) |
 | Conectar una app del navegador o teléfono | [Conexión remota](./remote.md) |
@@ -39,11 +40,11 @@ Tres palabras aparecen en todas las páginas:
 1. **Tú eliges tus fuentes.** Añades una carpeta de notas, conectas una cuenta de correo o usas tg, max
    y wa para guardar tus chats. No se lee nada hasta que tú lo eliges.
 2. **Memo copia el texto en el almacén local.** La importación deja archivos y correo intactos.
-   En Linux, un temporizador puede repetir la importación. La [limpieza de Gmail](./mail.md#clean-up-gmail) es un comando del
+   En Linux, un temporizador puede repetir la importación. La [limpieza de Gmail](./mail.md#commands-that-moved-to-mail) es un comando del
    programa independiente `mail`.
 3. **Tú o tu agente preguntáis.** Memo responde con el texto que coincide y una referencia a cada
    fuente, para que puedas abrir el original y comprobarlo.
-4. **Tú controlas las decisiones del proyecto.** Los nuevos recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas esperan revisión. Por defecto, el agente puede decidir propuestas de proyecto con un motivo registrado; [exige decisiones del propietario](./configuration.md#agent_decisions) si quieres revisar cada una. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos. Memo nunca envía mensajes ni correos.
+4. **Tú controlas las decisiones del proyecto.** Los nuevos recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas esperan revisión. Por defecto, solo tú decides las propuestas de proyecto. Si quieres, [deja que un agente las decida](./configuration.md#agent_decisions) con un motivo registrado. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos. Memo nunca envía mensajes ni correos.
 
 Memo conserva el almacén en tu ordenador. Memo envía tu texto a un proveedor de IA solo cuando configuras uno y
 lo permites para esa petición. [Cómo funciona Memo](./how-it-works.md) lo explica con más detalle.

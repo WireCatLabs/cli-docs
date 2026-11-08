@@ -148,6 +148,26 @@
     }
   },
   {
+    "id": "memo-business",
+    "pages": ["memo/business.md", "memo/usage.md", "memo/commands.md"],
+    "families": {
+      "memo": [
+        "records",
+        "products",
+        "contracts",
+        "subscriptions",
+        "wallets",
+        "transactions",
+        "invoices",
+        "payments",
+        "orders",
+        "deals",
+        "leads",
+        "pipelines"
+      ]
+    }
+  },
+  {
     "id": "memo-upkeep",
     "pages": ["memo/archive.md", "memo/configuration.md", "memo/commands.md"],
     "families": {

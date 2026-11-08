@@ -31,9 +31,12 @@ explica cómo.
 Para un lote de hechos y tareas con citas de reuniones, usa la [revisión de conclusiones de reuniones](#meeting-findings) de abajo.
 
 Para fuentes reunidas en un proyecto, usa la [revisión de propuestas de proyecto](./recipes.md#review-project-facts-and-follow-ups).
-Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
+Por defecto solo tú decides esas propuestas. Configura [`agent_decisions: true`](./configuration.md#agent_decisions)
+para que un agente las decida con un motivo registrado, creando hechos aceptados y tareas numeradas. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
 
-**Qué espera tu decisión.** Una acción propuesta siempre espera aprobación o rechazo. Un recuerdo o hecho registrado directamente espera cuando lo añade un agente: mediante [MCP](./mcp.md) o `memo` en su terminal (con `AI_AGENT` o `CLAUDECODE`), que registra al agente como autor. Tu recuerdo se confirma y tu hecho se acepta al instante; en un terminal de agente, `--as-owner` lo atribuye a ti. El agente también puede pasar `--as-owner`; indícale que no lo haga.
+**Qué espera tu decisión.** Una acción propuesta siempre espera aprobación o rechazo. Un recuerdo o hecho registrado directamente espera cuando lo añade un agente: mediante [MCP](./mcp.md) o `memo` en su terminal (con `AI_AGENT` o `CLAUDECODE`), que registra al agente como autor. Si lo añades tú en un terminal, el recuerdo se confirma y el hecho se acepta al instante. En un terminal de agente, `--as-owner`
+lo hace tuyo después de que respondas y en el terminal. WireCat Desktop pasa `--from-app`, que registra como tuyo lo que
+haces en la aplicación.
 
 ## Recuerdos
 

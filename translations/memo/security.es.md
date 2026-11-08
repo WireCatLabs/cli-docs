@@ -2,7 +2,7 @@
 title: "Seguridad"
 ---
 
-Aquí verás qué lee y escribe Memo y qué puede salir del ordenador, para elegir tus fuentes. La importación las deja intactas; los comandos de limpieza de Gmail pueden mover correo con `--yes`. Memo guarda sus registros en tu ordenador y envía texto a un proveedor de IA solo cuando lo configuras y lo permites.
+Aquí verás qué lee y escribe Memo y qué puede salir del ordenador, para elegir tus fuentes. La importación las deja intactas y Memo nunca cambia un buzón: la limpieza de Gmail es un comando del programa independiente `mail`. Memo guarda sus registros en tu ordenador y envía texto a un proveedor de IA solo cuando lo configuras y lo permites.
 
 <a id="your-sources-are-only-read"></a>
 <a id="tus-fuentes-solo-se-leen"></a>
@@ -12,7 +12,8 @@ Aquí verás qué lee y escribe Memo y qué puede salir del ordenador, para eleg
 - Las **carpetas de notas** solo se leen. Las carpetas ocultas como `.obsidian` se omiten. La exportación
   de notas escribe en la carpeta elegida y nunca sobrescribe un archivo que editaste. La exportación
   de anotaciones seleccionadas crea un archivo privado nuevo en la ruta elegida, como se explica abajo.
-- **La importación de correo** abre el buzón solo para lectura y no marca correo como leído. Memo nunca envía correo ni cambia un buzón: la [limpieza de Gmail](./mail.md#clean-up-gmail) es un comando del programa independiente `mail`.
+- **Correo**: Memo nunca abre un buzón, ni envía correo, ni cambia un buzón. La sincronización y la
+  [limpieza de Gmail](./mail.md#commands-that-moved-to-mail) son comandos del programa independiente `mail`.
 - Las **etiquetas** dejan tus archivos, las etiquetas de Gmail y los indicadores del buzón tal como
   están.
 
@@ -25,9 +26,10 @@ ordenador que los pide, nunca a un servicio de mensajería ni a un buzón de cor
 
 ## Se respetan los borrados
 
-Cuando borras un archivo de nota o un correo, su texto sale del almacén local en la siguiente
-importación. Si una importación detecta que falta de golpe una parte inusualmente grande de una
-carpeta o de un buzón, no borra nada y te avisa.
+Cuando borras un archivo de nota, su texto sale del almacén local en la siguiente importación. Cuando borras un correo,
+su texto sale del almacén cuando `mail <profile> sync` vuelve a comprobar los borrados del buzón. Si una importación o
+una sincronización detecta que falta de golpe una parte inusualmente grande de una carpeta o de un buzón, no borra
+nada y te avisa.
 
 <a id="agents-suggest-you-decide"></a>
 <a id="los-agentes-sugieren-tú-decides"></a>
@@ -35,8 +37,20 @@ carpeta o de un buzón, no borra nada y te avisa.
 ## Controlar las decisiones del agente
 
 - Los recuerdos del agente, los hechos registrados directamente y las propuestas de acciones en cuentas externas empiezan como propuestos. MCP también ofrece comandos para decidir, limitados por los [permisos](./configuration.md#permissions) guardados.
-- Por defecto, un agente puede confirmar o rechazar propuestas de proyecto con un motivo registrado: confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un documento clave. Configura [`agent_decisions: false`](./configuration.md#agent_decisions) para que solo el propietario decida las propuestas de proyecto. Leer y proponer siguen disponibles. Las decisiones sobre hallazgos de reuniones requieren permisos explícitos.
-- Un hecho, recuerdo o vínculo añadido con `memo` registra al autor. En un terminal de agente (`AI_AGENT` o `CLAUDECODE` definido), el agente es el autor y el hecho registrado directamente, recuerdo o vínculo nuevo espera revisión. Los recuerdos y vínculos del propietario se confirman y los hechos se aceptan al instante; en el terminal de un agente, añade `--as-owner`. Es una etiqueta, no un bloqueo: el agente también puede pasarla, así que indícale que nunca lo haga.
+- Las propuestas de proyecto tienen un flujo de revisión aparte. Por defecto solo tú las confirmas o rechazas. Leer y
+  proponer siguen disponibles. Configura [`agent_decisions: true`](./configuration.md#agent_decisions) para que un agente
+  las decida con un motivo registrado. Confirmarlas puede crear hechos aceptados y tareas numeradas o confirmar un
+  documento clave. Las decisiones sobre reuniones requieren permisos explícitos.
+- Un hecho, recuerdo o vínculo añadido con `memo` registra al autor.
+  Cuando lo ejecuta un terminal de agente (`AI_AGENT` o `CLAUDECODE` definido), o nada indica que haya una persona en un
+  terminal, el agente es el autor y el registro espera revisión. Lo tuyo se confirma o se acepta al instante.
+- Cada decisión indica quién decide. Un agente nunca decide la propuesta de su propio bot, necesita `--reason` y se
+  le rechaza toda decisión salvo que `agent_decisions` sea `true`. En un terminal de agente, `--as-owner` pregunta y/N en
+  el terminal antes de actuar como tú. Sin terminal o con `--json`, rechaza el comando con el código de salida 7.
+- WireCat Desktop ejecuta memo sin terminal, así que pasa `--from-app` en cada decisión que tomas en la aplicación,
+  y memo registra la decisión como tuya. La opción dice que actuaste en la aplicación. No es una comprobación de seguridad. Memo
+  le cree siempre, incluso con `AI_AGENT` o `CLAUDECODE` definido, así que cualquier cosa que pueda ejecutar memo como tú puede pasarla.
+  Desktop quita las variables de agente de sus ejecuciones. Por MCP la opción no se ofrece.
 - Aprobar una acción la convierte en una tarea para ti. Memo no envía mensajes ni correos.
 - La [exportación y comprobación de anotaciones seleccionadas](./recipes.md#keep-selected-project-annotations)
   leen las fuentes y el destino sin restaurarlos. La exportación crea un archivo privado nuevo y
@@ -54,5 +68,4 @@ carpeta o de un buzón, no borra nada y te avisa.
 
 - `memo answers create` prepara fuentes para tu agente. Solo las envía a un proveedor con `--analyze` y, si es externo al equipo, también `--allow-remote`. La respuesta generada debe comprobarse con las fuentes.
 - Lo que tu agente haga con el texto depende de él y su proveedor; Memo no puede controlarlo. Dale acceso solo a fuentes que quieras compartir.
-- La sincronización del correo pregunta por sí sola a los registros de dominios cuándo se registró el dominio de un remitente: como mucho una vez al día, para remitentes a los que nunca escribiste y de los que recibiste correo en los últimos dos años. `memo mail inspect --domain-age` pregunta por los grupos que muestra. Cada consulta comunica un nombre de dominio a un registro; se hace una sola vez y la respuesta se guarda en tu ordenador. Nunca se pregunta por grandes proveedores de correo como gmail.com. No hay ajuste para desactivarlo; consulta [cómo se comprueban los dominios de remitentes](./mail.md#choose-what-to-import).
 - Una vez al día Memo pregunta a npm si hay una versión nueva. Desactívalo con `"update_check": false` en los ajustes o con `MEMO_NO_UPDATE_CHECK=1`. Memo nunca se actualiza solo.

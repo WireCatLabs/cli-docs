@@ -164,11 +164,66 @@ Qué mirar:
 
 En la terminal: `memo guide prepare-meeting`
 
+<a id="project-state" />
+
+## En qué punto está este proyecto
+
+Responde quién debe qué, a quién le toca en cada chat y qué se ha quedado en silencio, a partir del almacén, y después prepara lo que confirmaste para el propietario.
+
+1. ```sh
+   memo projects context HRB
+   ```
+
+   documentos clave, chats y personas enlazados, y lo que ya espera la revisión del propietario
+
+2. ```sh
+   memo projects status HRB --context-query 1C
+   ```
+
+   por cada chat, el último mensaje, a quién le toca, las preguntas abiertas, los importes con su sentido y qué chats leer después
+
+3. ```sh
+   memo projects status HRB --compact
+   ```
+
+   la misma respuesta, una línea por fila, cuando va al contexto de un agente
+
+4. ```sh
+   max personal messages list --compact -- -900 "date>=2026-10-19"
+   ```
+
+   lee solo los chats que nombra next, desde la fecha que da, una línea por mensaje
+
+5. ```sh
+   memo projects evidence HRB --source all --context-query "1 200"
+   ```
+
+   la huella de cada mensaje que vas a citar, que la preparación necesita
+
+6. ```sh
+   memo projects actions add -
+   ```
+
+   prepara los pagos y las promesas que leíste, cada uno citando su mensaje, por stdin. Uno pagado nombra en supersedes la factura que liquida
+
+Qué mirar:
+
+- un importe o una promesa marcados como pattern se encontraron por palabras. Lee el mensaje citado antes de prepararlo
+- un chat que el almacén guarda solo en parte recibe una línea de sincronización en next. Ejecútala antes de fiarte de que no hay nada abierto
+- next nombra como mucho dos chats. Lee esos, no todos los chats
+- el texto de los mensajes se queda en la respuesta. Nunca lo escribas en un archivo
+
+`projects status` lee cada cuenta en la que están sus chats enlazados y las muestra en `meta.accounts`. No elige ningún
+perfil de mensajería: cuando hay varios con sesión iniciada en la cuenta de un chat, el paso dice `<profile>` y `missing` los
+nombra. `--sync-profile max=<profile>` elige uno. Todos los pasos leen, salvo el último, que solo propone.
+
+En la terminal: `memo guide project-state`
+
 <a id="set-up" />
 
 ## Configurar memo
 
-Lleva notas y correo al almacén local, mantenlo al día y deja que tu agente lo lea.
+Lleva tus notas al almacén local, mantenlo al día y deja que tu agente las lea junto con el correo que sincroniza el CLI mail.
 
 1. ```sh
    memo folders add ~/notes
@@ -180,13 +235,13 @@ Lleva notas y correo al almacén local, mantenlo al día y deja que tu agente lo
    memo sync --only notes
    ```
 
-   importa las notas ahora; las cuentas de correo salen del ajuste mail.accounts
+   importa las notas ahora. El CLI mail sincroniza el correo en el mismo almacén (mail &lt;profile> sync)
 
 3. ```sh
    memo jobs start
    ```
 
-   sincroniza notas y correo cada 5 minutos a partir de ahora
+   sincroniza las notas y prepara el correo nuevo para la búsqueda cada 5 minutos a partir de ahora
 
 4. ```sh
    memo doctor

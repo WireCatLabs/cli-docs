@@ -63,6 +63,7 @@ import {
   UserRoundCog,
   Users,
   Video,
+  Wallet,
   Webhook,
   Wrench,
 } from "lucide-react"
@@ -84,6 +85,7 @@ export const sidebarIcons = {
   tags: Tag,
   tasks: ListTodo,
   memories: Brain,
+  business: Wallet,
   "how-it-works": Lightbulb,
   meetings: Video,
   zm: Video,

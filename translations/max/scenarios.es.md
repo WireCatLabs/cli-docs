@@ -147,3 +147,4 @@ En la terminal: `max guide post-as-a-bot`
 Estos escenarios de Memo también usan `max`:
 
 - [Una persona en todas las herramientas](https://wirecat.dev/en/docs/memo/scenarios#person-brief): `memo guide person-brief`
+- [En qué punto está este proyecto](https://wirecat.dev/en/docs/memo/scenarios#project-state): `memo guide project-state`

@@ -23,7 +23,7 @@ notes /path/to/notes: 24 notes, 2 changed, 0 moved, 0 gone
 | Opción | Qué hace |
 |---|---|
 | `--only notes` | Solo carpetas de notas |
-| `--only mail` | Solo cuentas de correo |
+| `--only mail` | Solo la preparación del correo guardado para la búsqueda por significado. `mail <profile> sync` trae el correo |
 | `--no-embed` | Omite la preparación para la búsqueda por significado |
 
 Los mensajes de Telegram, MAX y WhatsApp los mantienen al día tg, max y wa, no `memo sync`.
@@ -42,8 +42,8 @@ Mientras fallen las ejecuciones del temporizador, cada comando memo escribe una 
 systemd, el gestor de servicios de la mayoría de los sistemas Linux. En macOS y Windows, ejecuta
 `memo sync` tú mismo o desde tu propio programador de tareas.
 
-El temporizador ejecuta `memo sync` con los ajustes de la terminal desde la que lo activaste, así que
-encuentra Himalaya y tus contraseñas de la misma forma. `memo jobs start` y `stop` escriben `auto` en el
+El temporizador ejecuta `memo sync` con los ajustes de la terminal desde la que lo activaste.
+`memo jobs start` y `stop` escriben `auto` en el
 archivo de configuración; si lo editas allí, el temporizador lo sigue en su siguiente ejecución.
 
 ## Qué lee una importación

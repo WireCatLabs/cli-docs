@@ -74,6 +74,20 @@ coincide nunca basta para enlazar cuentas.
 
 Para elegir la nota principal sobre la persona, consulta [la nota sobre una persona](./notes.md#the-note-about-a-person).
 
+## Importar los contactos de un teléfono
+
+Exporta los contactos de tu teléfono como un archivo vCard (`.vcf`) e impórtalos con el nombre del teléfono:
+
+```sh
+memo records check contacts.vcf --account phone:pixel --region ru
+memo records import contacts.vcf --account phone:pixel --region ru
+```
+
+Un contacto se vincula a la persona que ya tiene una de sus direcciones de e-mail o números de teléfono, o se crea
+como persona nueva. Un número escrito sin `+`, como `8 900 000-00-02`, se lee en el país que nombra `--region` (`ru`,
+`gb`, `de`, etc., en mayúsculas o minúsculas). Sin `--region`, ese número se guarda pero no se busca, así que el
+contacto puede convertirse en una segunda entrada de alguien que ya tienes. La importación dice qué tarjetas son.
+
 ## Organizaciones y proyectos
 
 Las organizaciones y los proyectos son tuyos, no están ligados a una cuenta de un servicio de
@@ -85,12 +99,17 @@ mensajería.
 
 ```sh
 memo organizations add 'Synthetic Studio' --kind company
+memo organizations list 'name:*studio*'
+memo organizations show organization:1
+memo organizations rename organization:1 'Synthetic Studio Ltd'
 memo projects add 'Harbour' --key HRB --scope work --organization organization:1
 memo projects list
 memo projects context HRB
 ```
 
-`--scope` es `personal` o `work`. `projects context` recibe una clave, un número, `project:<id>`, el nombre exacto o un alias.
+`--scope` es `personal` o `work`. `name:` no distingue mayúsculas y toma `*` como cualquier texto, así que `name:*studio*` encuentra todos los nombres
+que contienen la palabra. `organizations add` y `organizations rename` de un agente se escriben al instante, como los tuyos.
+Los ajustes `permissions` de memo son los que los limitan. `projects context` recibe una clave, un número, `project:<id>`, el nombre exacto o un alias.
 `projects context` y `organizations context` muestran las personas enlazadas al proyecto o a
 la organización, las notas que tratan sobre él o que enlazan a él, y sus etiquetas. Para un proyecto, la vista también agrupa los documentos clave, las relaciones, los hechos y los seguimientos de reuniones pendientes
 bajo `review`, separados de las tareas numeradas abiertas que ya existen. No confirma nada. La vista de texto muestra
@@ -123,11 +142,15 @@ Una etiqueta global como `key` (`memo tags add key --note document:3`) no identi
 Una **relación** indica que una persona pertenece a una organización o trabaja en un proyecto:
 
 ```sh
-memo relationships add person:PERSON_UID organization:1 --kind member-of
-memo relationships add person:PERSON_UID project:1 --kind related-to --role author
+memo relationships add person:PERSON_UID organization:1 --kind member-of --role employee
+memo relationships add person:PERSON_UID project:1 --kind related-to --role contributor
 memo relationships list 'about:"project:1"'
 memo relationships remove 4
 ```
+
+El rol de una persona como miembro sale de una lista: en una organización, employee, contractor, founder, owner,
+manager, adviser o contact. En un proyecto, owner, manager, contributor, client-contact o approver. memo rechaza
+cualquier otro rol (`relationship.role-unknown`).
 
 Un chat también puede ser de un proyecto, así `memo projects evidence` lo lee entero, no solo los mensajes que nombran
 el proyecto. La referencia nombra la cuenta del chat, así que no se adivina ninguna cuenta:
@@ -138,18 +161,33 @@ memo relationships add chat:telegram/1/123 project:1
 
 Para un chat solo se permite `member-of` un proyecto.
 
-Los vínculos son afirmaciones tuyas. No unen dos cuentas en una persona. Uno añadido desde el terminal de un agente queda sin confirmar, con el agente en `provenance` (`agent:claude-code`), hasta `memo relationships confirm`; `--as-owner` lo atribuye a ti al instante.
+Las relaciones son afirmaciones tuyas. No unen dos cuentas en una persona. Una que añade un agente en su terminal
+es una propuesta para ti, con el nombre del agente, no una relación. `--as-owner` la hace tuya
+después de que respondas «y» en el terminal.
 
-Memo puede sugerir relaciones a partir del correo: personas que te escriben desde el mismo dominio de
-empresa.
+Memo puede proponer los chats, hilos de correo y personas que parecen de un proyecto: su nombre o sus alias en títulos de chats
+y en mensajes, grupos y diálogos de sus miembros confirmados, personas que escriben en sus chats confirmados. Sin proyecto,
+propone personas que te escriben desde el mismo dominio de empresa.
 
 ```sh
-memo relationships scan --source email:you@example.com
-memo relationships confirm 4
+memo relationships scan HRB --source all        # lists them, writes nothing
+memo relationships scan HRB --source all --yes  # proposes them for review
+memo review kind:relationship
 ```
 
-Las sugerencias esperan hasta que las confirmes, y antes de eso no aparecen en el contexto de una
-persona. Los dominios de correo gratuito habituales, como Gmail, nunca se usan para sugerencias.
+Una persona propuesta porque escribe en un grupo del proyecto dice qué grupo y cuánto: "wrote 40 messages in
+«Sales» (25 people)". Cuando un análisis propone dos o más remitentes de un grupo, muestra el comando que los lista
+juntos, para que decidas sobre las personas de ese grupo de una vez, aparte de las personas con las que trabajas directamente:
+
+```sh
+memo review list via:chat:max/1/-100                # that group's senders; next names the confirm command
+memo review confirm 17070-17074                     # all of them
+memo review reject 17070-17074 --reason "not this project"
+```
+
+Las propuestas esperan hasta que las confirmes en `memo review`, y antes de eso no aparecen en el contexto de una persona. Un
+par que rechazaste nunca se vuelve a proponer. Las personas se identifican por la cuenta que escribió, nunca por un nombre en un texto.
+Los dominios de correo gratuito habituales, como Gmail, nunca se usan para propuestas.
 
 ## Reuniones en un proyecto
 
@@ -160,7 +198,7 @@ memo projects meetings link HRB 5 --account zoom:ACCOUNT
 memo projects meetings list HRB --source zoom:ACCOUNT
 ```
 
-Nombra exactamente la cuenta de la reunión. `confirmed:false` muestra los enlaces que sugirió un agente;
+Nombra exactamente la cuenta de la reunión. `confirmed:false` muestra los enlaces que propuso un agente;
 para confirmar uno, repite `link` con el valor `--fingerprint` que aparece en esa lista.
 
 ## Otros nombres para proyectos y etiquetas
