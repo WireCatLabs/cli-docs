@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+<title>WireCat</title>
+<style>
+  :root { color-scheme: light dark; --ink: #182822; --soft: #4c5e55; --wall: #f1f4f2; --brand: #4b53f0; }
+  @media (prefers-color-scheme: dark) { :root { --ink: #e9eeec; --soft: #a7b1ae; --wall: #131718; } }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--wall); color: var(--ink);
+    font: 17px/1.6 system-ui, sans-serif; text-align: center; }
+  main { max-width: 32rem; padding: 0 16px; }
+  #open { display: inline-block; margin: 8px 0 16px; padding: 12px 28px; border-radius: 999px; background: var(--brand);
+    color: #fff; font-weight: 600; text-decoration: none; }
+  #offer p { margin: 0; color: var(--soft); }
+  #offer a:not(#open) { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+<p id="status"></p>
+<div id="offer" hidden>
+  <a id="open" href="/en/download">Open in WireCat</a>
+  <p><span id="no-app">No app?</span> <a id="download" href="/en/download">Download WireCat</a></p>
+</div>
+</main>
+<script>
+  // The same grammar as cli-core's src/domain/links.ts (parseLink): change both together, with test/fixtures/links-v1.json.
+  const WORDS = {
+    en: {
+      opening: "Opening WireCat. If nothing happens, press the button.",
+      open: "Open in WireCat",
+      noApp: "No app?",
+      download: "Download WireCat",
+      invalid: "This is not a WireCat link.",
+    },
+    ru: {
+      opening: "Открываем WireCat. Если ничего не происходит, нажмите кнопку.",
+      open: "Открыть в WireCat",
+      noApp: "Нет приложения?",
+      download: "Скачать WireCat",
+      invalid: "Это не ссылка WireCat.",
+    },
+    es: {
+      opening: "Abriendo WireCat. Si no pasa nada, pulsa el botón.",
+      open: "Abrir en WireCat",
+      noApp: "¿No tienes la app?",
+      download: "Descargar WireCat",
+      invalid: "Este no es un enlace de WireCat.",
+    },
+  }
+  const DATE = /^\d{4}-\d{2}-\d{2}$/
+  const DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/
+  const PARTS_AFTER_KIND = new Map([["msg", [4]], ["chat", [3]], ["task", [1]], ["proposal", [1]], ["sync", [1, 2]]])
+  const isMoment = (text, pattern) => pattern.test(text) && !Number.isNaN(Date.parse(text))
+  const accepts = ([kind, ...rest]) => {
+    if (kind === "tasks")
+      return rest.length === 1
+        ? ["overdue", "today", "tomorrow"].includes(rest[0])
+        : rest.length === 2 && rest[0] === "new" && (isMoment(rest[1], DATE) || isMoment(rest[1], DATE_TIME))
+    if (kind === "digest") return rest.length === 1 && isMoment(rest[0], DATE)
+    return PARTS_AFTER_KIND.get(kind)?.includes(rest.length) ?? false
+  }
+  const appLink = (fragment) => {
+    const path = fragment.trim()
+    if (path.length > 512 || !path.startsWith("/v1/")) return null
+    const raw = path.split("?")[0].slice("/v1/".length).split("/")
+    if (raw.length + 1 > 6 || raw.includes("")) return null
+    let parts
+    try {
+      parts = raw.map(decodeURIComponent)
+    } catch {
+      return null
+    }
+    // Rebuilt from the decoded parts, so the app gets the canonical path and never the raw text from the address bar.
+    return accepts(parts) ? `wirecat://open/v1/${parts.map(encodeURIComponent).join("/")}` : null
+  }
+
+  const lang =
+    [...(navigator.languages ?? []), navigator.language]
+      .map((tag) => String(tag).split("-")[0].toLowerCase())
+      .find((code) => Object.hasOwn(WORDS, code)) ?? "en"
+  const words = WORDS[lang]
+  const element = (id) => document.getElementById(id)
+  document.documentElement.lang = lang
+  const app = appLink(location.hash.slice(1))
+  if (app) {
+    element("status").textContent = words.opening
+    element("open").textContent = words.open
+    element("open").href = app
+    element("no-app").textContent = words.noApp
+    element("download").textContent = words.download
+    element("download").href = `/${lang}/download`
+    element("offer").hidden = false
+    location.href = app
+  } else {
+    element("status").textContent = words.invalid
+  }
+</script>
+</body>
+</html>
