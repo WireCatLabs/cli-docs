@@ -59,7 +59,7 @@
   const accepts = ([kind, ...rest]) => {
     if (kind === "tasks")
       return rest.length === 1
-        ? ["overdue", "today", "tomorrow"].includes(rest[0])
+        ? ["overdue", "today", "tomorrow", "undated"].includes(rest[0])
         : rest.length === 2 && rest[0] === "new" && (isMoment(rest[1], DATE) || isMoment(rest[1], DATE_TIME))
     if (kind === "digest") return rest.length === 1 && isMoment(rest[0], DATE)
     return PARTS_AFTER_KIND.get(kind)?.includes(rest.length) ?? false
