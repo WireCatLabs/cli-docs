@@ -576,7 +576,7 @@ b24 search all <query> [options]
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 13 more; every field: b24 commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 15 more; every field: b24 commands info search all
 
 **Example:** `b24 work search all Example LLC`, `b24 work search all website --only crm --json`
 

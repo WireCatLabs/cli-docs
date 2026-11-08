@@ -4,6 +4,24 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.8.0 — 08.11.2026
+
+### Añadido
+
+- El paquete incluye `contracts/wirecat.json`, así que WireCat Desktop puede leer qué hace `b24`, cómo iniciar sesión
+  y qué copia `sync` antes de instalarlo. `b24 --wcat-describe` ahora responde en el formato 2, con la sección Desktop
+  de ese archivo y su SHA-256.
+
+### Corregido
+
+- La primera sincronización de un portal grande usa mucha menos memoria y tarda un tercio menos: con datos sintéticos
+  de 20.000 negociaciones, el pico baja de 3,7 GB a 0,55 GB.
+- `session start` vuelve a pedir el webhook cuando no llegó nada. Un Enter vacío en la entrada oculta, como tras un
+  Ctrl+V que no pegó nada en una terminal de Linux, fallaba al momento con "no webhook address was given". Ahora
+  indica pegar con Ctrl+Shift+V (Cmd+V en macOS) y vuelve a preguntar, hasta tres veces.
+- Un fallo al arrancar `b24`, o en un paso esperado, termina con código 1 y el error de fallo de b24
+  (`command.crashed` en JSON cuando stdout no es una terminal). Antes imprimía la pila de Node sin procesar.
+
 ## 0.7.0 — 08.11.2026
 
 ### Añadido
