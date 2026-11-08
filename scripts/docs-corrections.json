@@ -2337,7 +2337,7 @@
   {
     "tool": "memo",
     "slug": "mail",
-    "reason": "The removed memo mail commands are named as old commands, not as runnable examples.",
+    "reason": "The removed memo mail commands are named as old commands, not as runnable examples, and a memo command written without memo is named in full.",
     "replacements": {
       "en": [
         {
@@ -2351,6 +2351,22 @@
         {
           "before": "`memo mail runs list <account>`",
           "after": "`memo mail runs list …`"
+        },
+        {
+          "before": "`memo mail add <account> <address>`",
+          "after": "`memo mail add …`"
+        },
+        {
+          "before": "`memo mail check <account>`",
+          "after": "`memo mail check …`"
+        },
+        {
+          "before": "`memo mail inspect <account>`",
+          "after": "`memo mail inspect …`"
+        },
+        {
+          "before": "`mail findings add`",
+          "after": "`memo mail findings add`"
         }
       ],
       "ru": [
@@ -2365,6 +2381,22 @@
         {
           "before": "`memo mail runs list <account>`",
           "after": "`memo mail runs list …`"
+        },
+        {
+          "before": "`memo mail add <account> <address>`",
+          "after": "`memo mail add …`"
+        },
+        {
+          "before": "`memo mail check <account>`",
+          "after": "`memo mail check …`"
+        },
+        {
+          "before": "`memo mail inspect <account>`",
+          "after": "`memo mail inspect …`"
+        },
+        {
+          "before": "`mail findings add`",
+          "after": "`memo mail findings add`"
         }
       ],
       "es": [
@@ -2379,6 +2411,22 @@
         {
           "before": "`memo mail runs list <account>`",
           "after": "`memo mail runs list …`"
+        },
+        {
+          "before": "`memo mail add <account> <address>`",
+          "after": "`memo mail add …`"
+        },
+        {
+          "before": "`memo mail check <account>`",
+          "after": "`memo mail check …`"
+        },
+        {
+          "before": "`memo mail inspect <account>`",
+          "after": "`memo mail inspect …`"
+        },
+        {
+          "before": "`mail findings add`",
+          "after": "`memo mail findings add`"
         }
       ]
     }
@@ -2607,6 +2655,81 @@
         {
           "before": "Since 0.25.0 an agent can only tighten these settings",
           "after": "An agent can only tighten these settings"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "business",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:contract gives the same answer on 0.131.64.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`memo review kind:contract`",
+          "after": "`memo review list kind:contract`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`memo review kind:contract`",
+          "after": "`memo review list kind:contract`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`memo review kind:contract`",
+          "after": "`memo review list kind:contract`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "people",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:relationship gives the same answer on 0.131.64.",
+    "replacements": {
+      "en": [
+        {
+          "before": "memo review kind:relationship\n",
+          "after": "memo review list kind:relationship\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "memo review kind:relationship\n",
+          "after": "memo review list kind:relationship\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "memo review kind:relationship\n",
+          "after": "memo review list kind:relationship\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "usage",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:invoice,payment gives the same answer on 0.131.64.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`memo review kind:invoice,payment`",
+          "after": "`memo review list kind:invoice,payment`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`memo review kind:invoice,payment`",
+          "after": "`memo review list kind:invoice,payment`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`memo review kind:invoice,payment`",
+          "after": "`memo review list kind:invoice,payment`"
         }
       ]
     }

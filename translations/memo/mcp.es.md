@@ -30,7 +30,7 @@ La clave es una ruta con puntos, como `notes.edit`; una clave superior como `not
 `deny` marca el comando como no disponible, `readonly` permite lecturas y `ask` o `allow` permite escrituras.
 Por MCP, `ask` se ejecuta sin una pregunta en el terminal; las preguntas de aprobación dependen de la aplicación cliente. Las escrituras sin nivel guardado usan `ask`.
 Los cambios en carpetas de origen necesitan `mcp.authority`, cuyo valor inicial es `deny`.
-Las decisiones sobre hallazgos de reuniones (`meetings.actions.confirm` y `meetings.actions.reject`) y
+Las decisiones sobre hallazgos de reuniones (`meetings.actions.confirm` y `meetings.actions.reject`), `messages.reset` y
 `projects.annotations.restore` también tienen `deny`: el propietario debe permitir expresamente cada operación.
 Guarda los permisos en la configuración; la búsqueda y la siguiente llamada leen los niveles actuales.
 Los permisos y el límite compartido de WireCat de solo lectura se comprueban en cada llamada.
@@ -43,16 +43,21 @@ La búsqueda conserva los comandos bloqueados con su `availability` actual y el 
 Las exclusiones reservadas a CLI son los comandos `mcp`, `upgrade`, `skill install`, `jobs start` y `jobs stop`: inician otro
 servidor, sustituyen el programa, instalan instrucciones en otras aplicaciones o gestionan un temporizador.
 
+`notes add` y `notes edit` reciben la nota como `text`. `--text-file` y `--export` no se ofrecen, y una ejecución por MCP
+los rechaza antes de guardar nada. Así un agente no puede hacer que Memo lea un archivo de este equipo o la propia entrada
+del servidor, ni que escriba un archivo en una carpeta que elija.
+
 `memories add`, `facts add`, `actions add`, `meetings actions add` y `projects actions add` guardan propuestas.
-Por defecto, `projects actions confirm` y `projects actions reject` pueden decidir propuestas de proyecto con un
-motivo registrado. [`agent_decisions: false`](./configuration.md#agent_decisions) exige decisiones del propietario
-tanto por CLI como por MCP. Memo nunca envía mensajes ni correo.
+Por defecto solo el propietario decide las propuestas de proyecto. `projects actions confirm` y `projects actions reject` rechazan
+a un agente. Configura [`agent_decisions: true`](./configuration.md#agent_decisions) para que puedan decidir con un motivo registrado
+por CLI y por MCP. Memo nunca envía mensajes ni correo. `--as-owner` y `--from-app` no se ofrecen por
+MCP: una llamada por MCP siempre es del agente.
 
 ## Abrir una fuente citada
 
 Pasa el `ref` del resultado a `notes show` como `note`, o una referencia de mensaje o correo a `messages show`
 como `message`. `notes show` devuelve la nota completa; `messages show`, el mensaje o correo guardado, y con
-`full: true` todo el texto de los adjuntos. `memo mail inspect` lee cabeceras de una cuenta explícita y `tags list`
+`full: true` todo el texto de los adjuntos. `tags list`
 lista etiquetas. Los mensajes usan la cuenta y el chat de la referencia; no se consulta al proveedor.
 
 ## Conectar una aplicación
@@ -112,7 +117,7 @@ por obsoleto. `projects actions list` recorre por páginas las propuestas de un 
 (`key:<n>`) y lotes de hallazgos—, cada una con su evidencia: si el texto cambió (`state`), el texto y los mensajes
 de alrededor salvo con `brief`; los documentos citados incluyen párrafos cercanos. Si un texto cambió desde que se preparó el lote, solo impide confirmar los hallazgos que lo citan. Decide los que tengas claros con `projects actions confirm` (los ID de hallazgos que
 crear) o `projects actions reject`, siempre con un `reason`, que se guarda con la decisión; pregunta al propietario por
-el resto. Un lote necesita su `fingerprint`. Si el propietario fija `agent_decisions: false`, las decisiones se
+el resto. Un lote necesita su `fingerprint`. Salvo que el propietario fije `agent_decisions: true`, las decisiones se
 rechazan y solo decide el propietario, con `memo projects actions confirm` o `reject`.
 
 Las sugerencias de documentos clave no tienen una huella de texto guardada y devuelven `state: "untracked"`;

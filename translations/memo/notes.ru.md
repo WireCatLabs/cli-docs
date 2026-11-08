@@ -52,7 +52,28 @@ memo sync --only notes --no-embed
 Запускайте `memo sync --only notes` снова после того, как добавите или измените файлы; читаются только
 изменения.
 
+С `--json` команда `memo sync` также пишет в stderr по одной строке о ходе работы, пока читает каждую папку, не
+больше двух в секунду. В строке только счётчики, никогда не имя файла:
+
+```json
+{"event":"progress","step":"notes","done":120,"total":480,"unit":"files","label":"1"}
+```
+
+`label` это ID папки.
+
 Можно добавить несколько папок. `memo folders list` показывает их все.
+
+### Удалите папку
+
+```sh
+memo folders remove /path/to/notes               # memo stops reading it; its notes stay searchable
+memo folders remove 1 --allow-delete --yes       # also deletes its notes from the store
+```
+
+Без `--allow-delete` заметки остаются в хранилище, а `memo folders list` показывает, что папки нет на этом
+компьютере. С этим параметром memo удаляет заметки папки и их текст из хранилища. Ваши файлы memo никогда не
+трогает, поэтому `memo folders add` снова их прочитает. Без `--yes` memo сообщает, сколько заметок удалит, и
+ничего не меняет. Хранилище сохраняет ID папки, поэтому `memo folders update` может подключить её снова.
 
 ### Markdown или Obsidian
 
@@ -159,8 +180,8 @@ memo notes list 'about:"telegram:Kai Sample"'
 
 ```sh
 memo notes show note:12
-memo notes edit 12 --revision 1 --text 'Prefers early morning meetings'
-memo notes remove 12
+memo notes edit note:12 --revision 1 --text 'Prefers early morning meetings'
+memo notes remove note:12
 ```
 
 У каждой заметки есть номер **ревизии**, который растёт с каждой правкой. `memo notes edit` запрашивает

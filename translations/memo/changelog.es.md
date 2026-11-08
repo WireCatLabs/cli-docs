@@ -10,6 +10,1035 @@ Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las
 
 ## Unreleased
 
+## 0.131.64 — 08.11.2026
+
+### Fixed
+
+- **`relationships add --role` help no longer suggests `cto`.** A person's role in an organization or a project
+  comes from that relationship's list, so the help, the example and `docs/people.md` now name valid roles
+  (employee, contributor).
+- **`memo records link custom:quote:Q-7` reads the type `custom:quote`.** A record key was split at its first colon,
+  so a custom type was read as `custom`.
+- **`memo records import` streams JSONL** from a file or stdin a record at a time instead of reading the whole file
+  first, and its text receipt names the review kinds of what it proposed, the records left unmatched, the values kept
+  as data only, and when a list stopped at 1000 entries. Every refusal is also printed on stderr as it happens, one
+  line each, including those past the receipt's 1000.
+- **`memo records import --json` gives a valid answer for an empty file, a JSON array or a refusal with no place in
+  the file**: its issue names `/`, the envelope's root, where it named an empty pointer the answer schema refuses.
+- **A missing or unreadable records file is `not_found` (`records.file-missing`) or `validation_error`
+  (`records.file-unreadable`)**, not a system error.
+
+### Added
+
+- **`memo show` and each business `show` list where an entry came from** (`sources`): the source records mapped to
+  it and the records whose relations name it, such as a quote `quoted-for` a deal. This covers products, contracts,
+  subscriptions, wallets, transactions, invoices, payments, orders, deals, leads and pipelines. The title of one an
+  import or a CRM made is the source's words, so `memo show` marks it `untrusted`. An MCP client denied
+  `records.show` gets no `sources`, as `records show` would refuse it.
+- **`memo show` opens invoices, payments, orders, deals, leads, pipelines, products, contracts, subscriptions, wallets
+  and transactions** with memo's own `show`: its `open` names `memo invoices show invoice:4` and the like, where it
+  said nothing opens them.
+- **Products, contracts, subscriptions, wallets and transactions.** `memo products` (list, show, add, update) keeps
+  the goods and services you sell or buy with their prices, written directly by anyone. `memo contracts` (list, show,
+  add, update) keeps their dates, renewal and notice, and `show` gives the last day to give notice; one with an amount
+  from an agent waits for your review. `memo subscriptions` (list, show, add, update, cancel, and `prices add`) keeps
+  who supplies and who pays, how often (`--every 1-month`) and every price it had; a new price is a row of its own and
+  an agent's is a proposal of its own. `memo wallets` (list, show, add, update) keeps bank accounts, cards and cash in
+  one currency each; `show` computes the balance from the opening balance and the confirmed, booked transactions, with
+  what is pending beside it, and only you set the opening balance. `memo transactions` (list, show, add, update, and
+  `splits add`/`remove`) keeps what a statement shows moving, the payment it settles and its categories. Every list
+  filters with query words, and every write from an agent that feeds money totals waits as a proposal; `memo review`
+  lists and decides `contract`, `subscription`, `subscription_price` and `transaction`. Over MCP, `wallets update`
+  is refused by default, as it carries the opening balance; `wallets show` gives an imported wallet's opening balance
+  as its source sent it (`source_says`) until you set one. A contract's parties come later, with cli-core's
+  relationships: `contracts add` takes no `--organization`, `--person` or `--role` yet.
+- **`memo orders lines` and `memo invoices lines` (add, remove).** An order or an invoice is made of lines, each a
+  quantity at a price given as `--amount`, and its total is their sum; `--product` copies the product's name and price,
+  so a later price change leaves the line as it is, and `--amount` overrides its price. `orders show` and
+  `invoices show` list the lines in their text.
+- **`memo payments add --refund-of <payment>`** records a refund: a payment going the other way, never more than the
+  payment it gives back for.
+- **`memo records show`, `records delete` and `records match`.** `show` prints one record as its source said it;
+  `delete` marks it deleted as an import's delete does, keeping the entry made from it flagged for you; `match` links
+  every waiting person, organization and project of a source to the one entry its identifiers name, or makes one.
+  `records list` takes `unmatched:`, `entity:` (the records mapped to one of your entries), `batch:` and `deleted:`,
+  and `records show` lists the records that name the record (`incoming`).
+- **`memo records import` and `records check` take a vCard address book** (`.vcf`, `BEGIN:VCARD`) as a phone's
+  contacts, under `--account phone:<device>`; what the converter kept without matching is printed as a notice.
+- **`memo events list` lists the calendar events of every account in the store, phone calls included.** A call
+  imported with `memo records import` showed only in `search all`; it is now listed with no query, beside the
+  calendars gcal stored. Without `starts_at` the list covers the last 30 days and the next 7, latest first, and names
+  each account it read. `account:`, `calendar:`, `event_type:` and `starts_at` narrow it. `memo events show event:42`
+  opens one, and `memo show event:42` now names it. Over MCP, `events.list` set to `deny` also leaves events out of
+  `search all`, and `events.show` refuses `memo show` of an event.
+
+### Changed — may break callers
+
+- **`memo records check` is a write for MCP** (asked by default): a dry run holds the store's write lock and grows
+  the write-ahead log for its length, so `MEMO_READ_ONLY` refuses it too.
+- **A person, organization or project a records file names is matched or made on import** (cli-core's records
+  envelope): one exact e-mail, phone or other identifier links it, none makes it, two or more leave it waiting for
+  `memo records link`. A record that waited for `records link` before is matched or made on its next import, so its
+  invoice or payment becomes a proposal at once. Run `memo records check` on a file before its next import to see it.
+
+## 0.131.63 — 08.11.2026
+
+### Added
+
+- **`memo show` opens invoices, payments, orders, deals, leads and pipelines** with memo's own `show`: its `open`
+  names `memo invoices show invoice:4` and the like, where it said nothing opens them.
+
+### Security
+
+- **`memo show` over MCP refuses a reference whose own command the server denies.** A server whose permissions denied
+  `invoices` (or `invoices.show`) refused `invoices show`, yet `memo show invoice:4` gave the agent the invoice's
+  number, amount and counterparty, and the same for an order, a lead and a pipeline. It is now a `permission_error`
+  naming the key, for every kind memo opens, whether the key is passed with `--permission` or saved in the config file.
+- **`search all` over MCP no longer shows deals or leads an agent may not list.** A server denying `deals.list` or
+  `leads.list` refused those lists but still showed deal and lead titles in `search all`; those hits are now left out,
+  with a `permission_error` issue for source `crm`. `crm.list` leaves the whole CRM lane out. `--only crm` and
+  `--only business` name those lanes, and are refused when the lane may not be read.
+
+## 0.131.62 — 08.11.2026
+
+### Added
+
+- **`memo review agenda` says what it read and which accounts need a sync.** `scope` gives the window, each source
+  with its number of accounts, and how many chats, personal mail threads, tasks and meetings it read; `tasks` counts
+  the overdue, today, tomorrow and new tasks and gives `new_since`; `health` names each account whose sync needs a
+  look: `sync-failed` (its scheduled sync fails: since when and the failure's reason id), `no-schedule` (no schedule
+  and no running `serve` syncs it) or `quiet` (it syncs, but nothing new for longer than three of its usual gaps,
+  and at least three days). Each account is named by its name, username or address, never its id. `--compact` prints
+  the three as JSON lines that the morning-digest skill copies into the report.
+
+### Changed — may break callers
+
+- **The agenda's `tasks` section is the open tasks created since the last morning-digest run** (a day back when it
+  never ran; the start of the failures while it fails) **and those overdue, due today or due tomorrow**, by the local
+  day, project tasks included. Each says which of these it is, who asked, who does it and its due date. Tasks only to
+  check, and the "open tasks without a date left out" note, are gone.
+- **`owed` lists people only.** Dialogs the messenger marks as a bot, and Telegram's service notifications, are left
+  out.
+- **`coverage[].stale` is gone**, and the `coverage:` line no longer prints STALE: when the store last saved
+  something says nothing about the sync. `health` says it instead.
+- The morning-digest skill copies `scope`, `tasks` and `health` from the agenda into the report, writes one `task`
+  item per agenda task with its `task:` reference, and lists only people as owed replies.
+
+### Security
+
+- **`search all` over MCP no longer shows business data an agent may not list.** A server whose permissions deny
+  `invoices.list`, `payments.list` or `orders.list` (or their group) refused those lists but still showed their
+  titles in `search all`; those hits are now left out, with a `permission_error` issue for source `business`. The new
+  key `business.list` leaves the whole business lane out, and `--permission` and the config file accept it. A page
+  of `--limit` hits reads on past the hidden ones, up to five more pages, so it is not cut short by them.
+
+## 0.131.61 — 08.11.2026
+
+### Added
+
+- cli-core 0.612.0.
+- **Write-time enrichment, off by default** (cli-core's `models consents`): `memo models consents show`,
+  `set <openai|anthropic> --model <m>` (a preview until `--yes`) and `revoke`. With it on, `memo sync` sends the notes,
+  documents and mail not yet enriched to the chosen provider, up to 600 of each a run, before it embeds.
+- **`memo sync` reports what enrichment sent**, notes and mail together, so a failure is not silent:
+  `enrichment: {status, provider, model, sent, enriched, failed, left, input_tokens, output_tokens, cost_usd,
+  reason}` in `--json`, and a line in the text. It is there even when the embedding model is missing. Absent while
+  enrichment is off.
+- memo reads the provider key from its keyring entry (`cli-memo` / `embeddings:<provider>`, then `cli-memo` /
+  `<provider>`) after `OPENAI_API_KEY` / `ANTHROPIC_API_KEY`, so a desktop started from the launcher finds it.
+
+## 0.131.60 — 08.11.2026
+
+### Fixed
+
+- **An exact word that only word search finds stays on the page of `search all`.** After the first hit of each
+  source, hits were ordered by the search model's score, and a hit only words found had none, so it sorted behind
+  every hit the model found. It now takes the score of the hit above it in its own source (cli-core 0.611.0).
+
+## 0.131.59 — 08.11.2026
+
+### Added
+
+- **A project's group senders can be decided together.** A person `relationships scan` proposes because they write
+  in a project's group now says which group and how much ("wrote 40 messages in «Sales» (25 people)"), and the
+  proposal's evidence leads with the group. When a scan proposes two or more senders of one group, its answer lists
+  the group under `groups`, with the command to review them: `memo review list via:<chat>` lists the proposals whose
+  evidence holds that reference, and its `next` step confirms them all in one `memo review confirm`. A pending
+  proposal takes the new reason on the next scan (cli-core 0.610.0's `chat-senders@3`).
+- **`search all` also finds invoices, payments, orders, contracts, subscriptions, products and wallets** by the words
+  of their numbers and names, as the `business` source (cli-core 0.610.0). Like deals, it reads title words only, so
+  a query with `?`, `-` or `*` leaves it out with the reason.
+
+## 0.131.58 — 08.11.2026
+
+### Changed — may break callers
+
+- **The morning digest answers with one `wirecat.report/1` JSON document** instead of text: sections and typed
+  items (reply, question, task, fact, risk, money, decision, meeting) with who, topic and what to do, and a list of
+  stale sources. WireCat renders it per channel with the owner's headings, emoji and layout (cli-core's report
+  renderer, 0.609.0), so the agent no longer writes any of them.
+
+## 0.131.57 — 08.11.2026
+
+### Fixed
+
+- **memo embeds and searches with the model chosen by `memo models set`.** A downloaded EmbeddingGemma or
+  e5-large was never used: memo embedded and searched with e5-small whatever was chosen, and `embedding_model` was
+  not a memo setting. The next `memo sync` runs give your notes and mail vectors from the new model a part at a time;
+  the old model's vectors are kept, so going back is instant.
+- **The missing-model message names the model that is missing** and the exact download, with `--accept-terms` for a
+  model that needs it; it always named e5-small.
+- **A sync with a slower model embeds fewer chunks a run**, so a timer run still ends within its five minutes.
+- `memo doctor` reports the search model in use, not always e5-small.
+
+## 0.131.56 — 08.11.2026
+
+### Fixed
+
+- **A question with a time in it finds what its words hold again, with no search model downloaded.** "When is the
+  steering committee meeting? Answer as HH:MM" and `steering committee 10:30` found nothing: the time made the
+  question look like syntax, so every word had to be in one record. When nothing holds every word of a short search,
+  `search all` now names the word no record holds (cli-core 0.609.0).
+- **`search all` gives the page to the best hits of every source.** Mail and notes took turns, five each, however
+  weak one source's hits were, and mail asked the search model a different question than notes did. A hit only words
+  found keeps its place among its source's hits (cli-core 0.609.0).
+
+### Added
+
+- **`memo models set` and `memo models add`** come with cli-core 0.609.0; memo itself still embeds and searches with
+  e5-small until it follows the chosen model.
+
+## 0.131.55 — 08.11.2026
+
+### Fixed
+
+- **Over MCP, `notes add` and `notes edit` no longer read `--text-file` or write `--export`.** `-` read the MCP
+  server's own stdin, a path read any file of the computer memo runs on into a note an agent could read back (a
+  remote client's included), and `--export` wrote a file into any folder the agent named. Both options are left out
+  of the MCP catalogue, and a run over MCP refuses them with `permission_error` before the note is saved; an agent
+  gives the note as `text`.
+
+## 0.131.54 — 08.11.2026
+
+### Fixed
+
+- **The scheduled mail triage no longer acknowledges mail its input left out.** The input was cut at 60,000
+  characters mid-text while the cursor printed with it covered the whole batch, so the mark could move past emails
+  the agent never saw. memo now builds the input under that cap, leaves whole emails out in store order, and gives
+  each mailbox the cursor and findings key of the last email shown; the next run starts at the first one left out.
+  When even the first email, or a group of held emails that share one cursor, does not fit, their texts are
+  shortened to fit (`text_cut: true`, with a hint to read them whole), in any mailbox; past the first mailbox not
+  below 300 characters, else the mailbox waits unacknowledged for the next run (cli-core 0.606.0's
+  `email.cursor`).
+
+## 0.131.53 — 08.11.2026
+
+### Fixed
+
+- **The morning digest is written in the owner's language, without references, commands or Gaps and Coverage
+  sections.** The `morning-digest` skill now asks for plain text in the sections and line shapes of the digest
+  format; the agent keeps what the agenda missed out of the report. One line says a source has not synced for over
+  24 hours.
+- **cli-core 0.606.0: the mail triage agent no longer repeats the same batch all day.** A batch of held emails only
+  reused the findings key of the run that set the mark, so staging was refused (`mail-findings.key-used`), the mark
+  never moved and every scheduled run paid for the same emails again. It now takes a key of its own. Each email in
+  `review --holder` also carries the cursor that ends the batch at it.
+
+## 0.131.52 — 08.11.2026
+
+### Fixed
+
+- **`memo sync` names a damaged store instead of a bug.** "database disk image is malformed" or "file is not a
+  database" from the shared store was `internal_error (command.crashed)`, "the command failed; this is a bug", in the
+  sync's summary and the scheduled sync's failure banner. It is now `configuration_error (store.damaged)`: the store
+  file is damaged, and `memo store recover` says what is lost and how to recover it (cli-core 0.605.0).
+- **A `memo sync` source that finds the store damaged stops later writes.** Its failure leaves the damage mark beside
+  the store, as a failed command already does, so the next sync and every other tool's write refuse with
+  `store.damaged` until `memo store recover` (cli-core 0.605.0). `memo doctor --deep` records memo's version in the
+  store's health mark.
+
+## 0.131.51 — 07.11.2026
+
+### Fixed
+
+- **WireCat Desktop can decide as you.** Desktop runs memo with no terminal, so memo refused every confirm, reject and
+  forget from its Memory page with `decision.decider-unknown`. Every command that decides or writes as you now takes
+  `--from-app`, which Desktop passes: the run is recorded as yours with no question. It is the app's word that you
+  acted there, not a security check; it is not offered over MCP.
+- **cli-base 0.82.0.** Its shared flag vocabulary knows `--from-app` and `--status`, so memo's command lint takes
+  them from there: the three `--status` overrides on `tasks add`, `update` and `move` are gone, and the override
+  budget is 13, down from 16.
+
+## 0.131.50 — 07.11.2026
+
+### Fixed
+
+- **A note is dated by its file, not by the moment memo imported it.** `search all`'s `timestamp`, `search notes`'
+  `updated_at`, `date:` and the order of notes about a person read the note's front matter `date` (a bare day is
+  midnight where you are), else the file's modification time. An agent asked when "9 days from today" falls counted
+  from the import day. The next `memo sync` dates the notes already stored, without reading or embedding them again
+  (cli-core 0.604.0, `dateFileNotes`).
+
+## 0.131.49 — 07.11.2026
+
+### Added
+
+- **`memo folders remove <id|path>`** stops reading a notes folder on this computer; its notes stay in the store.
+  With `--allow-delete --yes` it also deletes the folder's notes and their text from the store; without `--yes` it
+  says how many it would delete (`confirmation_required`). The files are never touched.
+- **`memo sync --json` writes progress lines to stderr** while it reads a notes folder:
+  `{"event":"progress","step":"notes","done","total","unit":"files","label":<folder id>}`, counts only, at most two a
+  second, so an app can draw a bar.
+- **`memo search all --json` says why it skipped a source.** Each entry of `meta.issues` carries `reason`, a dotted
+  id such as `query.unknown-value` for `kind:nonsense`, as cli-core's `search all` does (cli-core 0.604.0).
+
+### Changed — may break callers
+
+- **A `?` that ends a word in a search is a question mark, not a wildcard.** `memo search all 'ready?'` and
+  `'что с бюджетом?'` find "ready" and "бюджет"; before, `?` asked for one more character, so the word itself was
+  missed. A `?` inside a word (`inv?ice`) is still one character (cli-core 0.604.0).
+
+### Fixed
+
+- **Any memo command, a read too, no longer starts or enables the sync timer.** After each command memo points the
+  timer at the memo that just ran, and it rewrote the whole unit with the caller's PATH, then ran
+  `systemctl --user enable --now`. A program with another PATH, like the WireCat app reading a status, so started a
+  timer the owner had stopped by hand. Now memo changes only the program line, when the install moved, and reloads
+  systemd without starting anything.
+
+- **A search for text with a colon or another special character finds what holds it** (#674). `memo search all
+  'meeting at 10:30'`, `'Answer as HH:MM'` and `'a:b'` read the word before the colon as a field, every source refused
+  the query, and the answer was empty. `search all`, `search messages`, `search mail`, `search notes`,
+  `search memories` and `meetings search` now read such a word as text, and the same for a URL, an unbalanced
+  quote or bracket, `^`, `~`, `[]`, `{}` and `<>`. A lone emoji beside other words no longer empties the answer. Field
+  queries (`content:invoice`, `from:`) and Boolean operators keep their meaning (cli-core 0.602.0).
+
+- **cli-core 0.604.0.** In `search all`, a question's hit that both the words and the meaning found keeps the better
+  of its two ranks (#2620).
+
+## 0.131.48 — 07.11.2026
+
+### Fixed
+
+- **cli-core 0.602.0.** A search with a colon, a URL or other syntax characters in plain text is read as words
+  (#2607), a recovery refuses while another runs and clears invalid JSON values (#2619), and `foldName` folds ё into е.
+
+### Changed — may break callers
+
+- **`memo schedule agent` and `memo schedule command` take `--deliver-to <route>`, no longer `--to <route>`**
+  (cli-core 0.600.0, cli-base 0.80.8). `--to` names who a message is for in every CLI, so the route flag got its own
+  name. `memo schedule list` names the routes `deliver_to`. A schedule saved with `--to` goes on delivering. memo's
+  command lint now takes `--notify-on`, `--deliver-to`, `--max-cost-per-day`, the deal, lead and pipeline groups and
+  `store recover` from the shared vocabulary: four overrides and four baseline entries are gone, and the override
+  budget is 16, down from 20.
+
+## 0.131.47 — 07.11.2026
+
+### Added
+
+- **`memo store recover`** says whether the shared store is damaged, what that means and what to run;
+  **`memo store recover run`** rebuilds a damaged store from every row it can read and keeps the damaged file beside
+  it. **`memo doctor --deep`** reads every page of the store; without it doctor checks the header and schema, and a
+  damaged store is a problem with its fix (cli-core 0.599.0).
+
+### Fixed
+
+- **Opening the shared store twice in one memo process no longer drops the first connection's locks** (cli-core
+  0.599.0). Another process could then delete the write-ahead log under a writer still using it, which can damage
+  the store.
+
+## 0.131.46 — 07.11.2026
+
+### Changed — may break callers
+
+- **The scheduled mail-triage agent starts with its skill and each mailbox's review on its stdin** (cli-core 0.597.0
+  `agentInput`). It no longer spends model turns on `memo skill show` and `memo mail review`; on the real store a dry
+  run took 5 turns and 0.04 USD instead of 11 turns and 0.08 USD. The skill tells it to stage a mailbox in one
+  `memo mail findings add` call and what a `duplicates` answer means. Recreate the schedule with the prompt
+  `Follow the input above.`; `memo skill show mail-triage` works as before.
+
+## 0.131.45 — 06.11.2026
+
+### Added
+
+- **`memo schedule agent` and `memo schedule command` take `--notify-on always|failures|never` and `--to <route>`**
+  (cli-core 0.592.0). `--notify-on` says when a run shows a desktop notice; `--to` also sends the result, when
+  `--notify-on` says so, to `telegram-bot:<profile>/<chat>` or `email:<profile>/<address>`; repeat it for more.
+- **`memo mail findings add` (and `--dry-run`) leaves out duplicates and stages the rest.** A finding whose order,
+  invoice, payment, task or fact is stored, already waits in a proposed batch or came earlier in the same batch is not
+  staged. The answer lists it in `duplicates` with `duplicate_of` (the reference that holds it, such as `order:7` or
+  `<batch>/<finding>`) and reason `findings.duplicate`. Same means: order by shop and number or `source_url`; invoice
+  by counterparty and number; payment by amount, currency, date and party; task by `external_id` or `source_url`; fact
+  by its text and subject. A batch of only duplicates stages nothing (`staged: false`). A rejected record holds
+  nothing.
+
+### Fixed
+
+- **`memo search messages` finds a short reply by a question about it.** A question typed as a sentence now searches
+  as `memo search all` does: records holding some of its words, and a direct reply by the message it answers, so
+  "let us leave it until summer" is found by "when will the price sync be done?". Plain words still must all be in
+  the message. `search all` finds mail by meaning through the vector index (cli-core 0.593.0): 3.9 s instead of
+  9.5 s warm, and far less on a cold disk, on a large mailbox.
+- **`memo search all` names a source it skipped** instead of printing `undefined not searched`.
+
+### Changed — may break callers
+
+- **memo runs on cli-core 0.593.0.** `deal`, `lead` and `pipeline` answers use cli-core's shared entities, so
+  `--json=<field>` is checked against them. `memo review agenda` asks cli-core which senders you have written to
+  instead of reading the store with its own SQL.
+- **`memo review agenda` lists owed mail only from senders you know.** A known sender is linked to a person with
+  other identities, or an address you have written to before (any mailbox). Owed mail from other senders, mostly
+  automated, is one line: how many, with a `next:` command that lists them. Owed messenger chats are unchanged. JSON
+  `owed` gains `unknown: { count, next[] }` when any were counted, and its `total` counts the listed items only.
+
+## 0.131.44 — 06.11.2026
+
+### Changed — may break callers
+
+- **memo runs on cli-core 0.590.0: `projects status` calls a money request found by words `asked`, not `open`.** The
+  `amounts` signal (version 3) gives `state: "asked"` and `next` says `money asked`. A word match cannot tell a real
+  request from a price you quoted, and "open" read as a debt.
+- **An agent's `memo organizations add` and `memo organizations rename` write at once**, as the owner's do and as deals
+  do. They no longer leave an `organization_add` or `organization_rename` proposal in `memo review`; only memo's
+  `permissions` settings limit them. `--reason` and `--as-owner` are gone from both commands. Proposals already in a
+  store stay listed and decidable in `memo review`.
+
+### Fixed
+
+- **`memo context person:<id> --source <account>` no longer rejects the account it suggests** when the person has
+  several identities on that one account (the owner with two Telegram ids). The waiting proposals' `next` and text
+  name `project:<key>`, not `project:project:<id>`.
+
+### Added
+
+- **`memo context` and `memo projects context` break the waiting proposals down by kind.** `proposals` (person) and
+  `review.waiting` (project) carry `kinds` next to `count`, and the person's answer names `next`: `review list`.
+- **`memo review agenda`: the morning digest in one read, no model call.** In a fixed order it lists everything new
+  in what you tagged `watch` (chats, mail threads, people, projects, a meeting's series: `memo tags add watch …`),
+  replies you owe in messengers and personal mail over the last 7 days, new personal mail, meetings that ended,
+  tasks due or overdue, projects that moved and proposals waiting. Each item has its reference, who, when, one line
+  of text and why; a section cut by `--limit` or `--max-output-bytes` counts what it left out and names the command
+  that reads it. `coverage` says how fresh each account is. `--compact` is the agent's form.
+- **The `morning-digest` skill** (`memo skill show morning-digest`) reads the agenda, follows only what it points at
+  and reports as gaps what it found that the agenda missed. It is not scheduled for you.
+
+## 0.131.43 — 06.11.2026
+
+### Added
+
+- **`memo search all` also finds deals and leads (cli-core 0.589.0)**, yours and every CRM account's copies, by the
+  words of their title; `meta.accounts` names `crm:internal` among the accounts read.
+
+### Changed — may break callers
+
+- **`memo projects status` states money only from the books (cli-core 0.589.0).** `money` sums what confirmed open
+  invoices still owe and never an amount found by words in messages, so a project with no confirmed invoices answers
+  `money: []`. When the project or a child has a confirmed invoice or payment, `amounts` is left out: its word match
+  also found your own quotes, product prices and deposits and called them open. Billed, paid and owed stay in
+  `finance`. A project with no books still lists `amounts`, marked `basis: pattern`.
+
+## 0.131.42 — 06.11.2026
+
+### Added
+
+- **`memo deals`, `memo leads` and `memo pipelines`: sales pipelines and what is in them (cli-core 0.588.0, store
+  version 52).** `memo deals add <title> <stage> [amount] [currency]` and `memo leads add <title> [stage]` record one
+  with `--organization`, `--person` and `--role` (owner, contact, decision-maker), `--due` and `--project`; `list`,
+  `show`, `move <ref> <stage>` and `close <ref> won|lost [--reason]` follow. Memo starts with one lead pipeline,
+  `Leads` (new, contacted, qualified, won, lost). `memo pipelines add <name> <stage...> [--kind lead]` makes one
+  (stages named won or lost end a deal), `memo pipelines list` lists them, and `memo pipelines show <pipeline>` gives
+  per stage the open rows, how many reached it and the conversion to the next, with won, lost and the win rate. A
+  pipeline is named by `pipeline:<id>` or by a name only one has. An agent writes all of this as you do, at once; the
+  `permissions` keys limit it over MCP. `memo projects status` lists up to five open deals of the project (`deals`).
+
+## 0.131.41 — 06.11.2026
+
+### Added
+
+- **`memo invoices list number:<number>`** lists the invoice with that printed number, as `memo orders list
+  number:` does for orders. Before, `number:` was refused as an unknown field.
+
+### Changed — may break callers
+
+- **Every mail finding needs `reason`, a fact, a memory and a new contact too.** The mail-triage skill said invoices
+  and orders take none while the check refused them without one. `memo mail findings add --help` now lists each
+  kind's fields from the check itself, and a missing one is refused by name (`finding.missing-field`).
+
+### Fixed
+
+- **A mail task with a due date stages.** The skill and `--help` show the form the check takes,
+  `"due_at":"2026-11-09T09:00:00Z","due_evidence":["<ref>"]`, and each refusal names what is wrong.
+- **`memo messages reset` to where the mark already is counts as a reset.** It says "mark unchanged … counted as a
+  reset" and gives `resets`, and the next mail-triage run gets a new findings key instead of being refused.
+- **`memo mail review --holder` gives no findings step when there is no new mail.**
+- **`memo review status --json` has a real output schema.** `memo commands info review status` described a generic
+  list; it now describes the answer: `item.mail[]` (account, threads, owed, waiting, the agents' marks),
+  `item.proposed` and `item.waiting` (count, kinds, complete), `item.quiet`.
+- **`memo schedule list` gives an agent schedule's cost caps, and its schema lists what it prints.** `max_cost_usd`
+  (one run's cap, null when none) and `max_cost_per_day_usd` (the daily cap in force) join `spent_today_usd`, which
+  the strict output schema refused before; the text says `today $0.84 of $5.00`.
+
+## 0.131.40 — 06.11.2026
+
+### Changed — may break callers
+
+- **`memo projects status` has room under its size limits again (cli-core 0.583.0).** On the E7 fixture JSON
+  goes from 3,998 to 3,644 bytes (limit 4,096) and `--compact` from 1,511 to 1,363 (limit 1,536). `item.window` is
+  gone (read `meta.window`); a listed item leaves out `chat` when its `ref` is a message of that chat, `basis` when
+  it is `store`, and a promise's `data.source`; `who.name` and a chat's `role` are left out instead of `null`. The
+  `next_command` gaps are one `missing` entry, their reasons joined by `; `. Compact prints the days and zone once
+  above the first section. The text form is unchanged.
+- **Every mail finding needs `reason` (cli-core 0.583.0).** A `new_contact`, a `fact` or a `memory` without one is
+  refused (`finding.missing-field`); the mail-triage skill says so. `memo mail review --holder` gives no
+  `mail-findings.add` step when it gives no emails.
+- **A `--compact` list in time order says each day once (cli-core 0.583.0).** When its days hold three rows on
+  average, a `# YYYY-MM-DD` line opens each day and its rows print only `HH:MM`.
+
+## 0.131.39 — 05.11.2026
+
+### Added
+
+- **`memo organizations rename <organization> <name>` renames an organization.** Run by you it renames at once. An
+  agent's rename is a proposal (`status: proposed`): the organization keeps its name until you confirm it in
+  `memo review`; `--reason` says why (cli-core 0.582.0).
+
+### Fixed
+
+- **`memo organizations list name:*acme*` works.** The help listed `name`, but the list failed on it. It ignores
+  case in any script, and `*` stands for any text (cli-core 0.582.0).
+
+## 0.131.38 — 05.11.2026
+
+### Fixed
+
+- **A scheduled mail-triage agent reads the whole skill again.** 0.131.37 grew `memo skill show mail-triage` to
+  16.7 KB, and Claude Code saved that output to a file the scheduled agent may not read, so a run stopped at the
+  first lines. The skill is back under 14.7 KB, and a test keeps it there.
+
+## 0.131.37 — 05.11.2026
+
+### Added
+
+- **`memo mail findings add --key <key>`** stages the batch under the key `memo mail review --holder` gave in its
+  `mail-findings.add` step; the JSON may leave `key` out, and a different one there is refused
+  (`findings.key-mismatch`). The review now hands on that step before the acknowledge step.
+
+### Fixed
+
+- **A mail-triage run after `memo messages reset` stages its findings.** The key of a mark moved back ends in
+  `-r<n>` (cli-core 0.581.0), so the run no longer reaches the key of a batch staged before the reset and still
+  waiting (`mail-findings.key-used`), and its mark moves on.
+- **The mail-triage skill gives the key, the fields and the list terms.** It passes `--key` from the review's step
+  instead of building the key from the cursor, lists the fields each finding kind takes (`title` is a task's alone),
+  and looks up invoices with `field:value` terms, such as `memo invoices list number:FACT-2026-00012`.
+
+## 0.131.36 — 05.11.2026
+
+### Added
+
+- **`memo mail findings add --dry-run` checks a batch and stages nothing.** It makes every check staging makes,
+  invoices, payments and orders tried and rolled back, and answers `valid` with `problems`: each refused finding's
+  id, kind and message, and the batch's own (`mail-findings.key-used`). It runs under `MEMO_READ_ONLY`. The
+  mail-triage skill builds the whole batch, checks it, fixes every problem and then stages it once.
+- **Mail findings name a party the store does not hold yet.** An invoice takes `counterparty_name`, a payment
+  `payer_name` and `payee_name`, an order `customer_name`, each with an optional `<party>_email` from the cited mail;
+  your accept finds the organization or makes one (cli-core 0.580.0).
+
+### Fixed
+
+- **An unknown finding field is named**, with its finding's id and kind and the fields that kind takes.
+- **An order is not proposed twice**: one already waiting in a proposed batch is refused (`order.proposed`), and the
+  skill sends an `order_update` only when the stored order's status changed.
+- **The mail-triage skill no longer shows a `|` inside a command** and says that each Bash call is one memo command
+  with nothing before or after it, which is all `Bash(memo:*)` allows.
+
+## 0.131.35 — 05.11.2026
+
+### Added
+
+- **`memo organizations show organization:<id>` prints one organization.** `organizations context` still adds its
+  relationships, notes and tags. Together with `organizations list [query]` the owner finds the id that `memo records
+  link <external> organization:<id>` needs without reading the store.
+
+### Changed — may break callers
+
+- **An agent's `memo organizations add` is a proposal, not an organization.** It answers the proposal (`status:
+  proposed`) and the organization exists once you confirm it in `memo review`; `--reason` says why. Run by the
+  owner it still writes directly, and `--as-owner` follows the same rule as the other writes (cli-core 0.579.0).
+
+### Fixed
+
+- **The lint baseline no longer lists `invoices`, `orders`, `payments`, `records` and `payments allocate`:** cli-base
+  0.78.0 has the words.
+
+## 0.131.34 — 05.11.2026
+
+### Changed — may break callers
+
+- **`memo projects status --json` fits in 4 KB again, and `--compact` in 1.5 KB (cli-core 0.578.0).** The
+  `last_message`, `reply_next` and `coverage` lists are gone: each chat row carries `last`, `next`, `waiting_since`,
+  `addressed`, `overdue` and, for a chat held in part, `held` and `sync_command`. Others' questions in a group with no
+  role, and others' word-found promises in a group, are counted on the row as `unlisted` instead of listed. Items no
+  longer carry a `title`; `finance` is left out when empty. "Your move since" counts from their first unanswered
+  message. The text form is unchanged.
+
+## 0.131.33 — 05.11.2026
+
+### Added
+
+- **A task keeps its id in an outside service and the page it is about.** `memo tasks add --external-id
+  avito:4512345678 --source-url https://www.avito.ru/…`; `tasks show`, `tasks list` and `tasks add` answer
+  `external_id` and `source_url`. The id is `<service>:<id>`, so ids of two services never collide; the page is an
+  http or https address only (`task.external-id`, `task.source-url`). Mail findings take both on a `task` and
+  `source_url` on an `order` (the order's page at the shop), and `memo review confirm` keeps them. Needs cli-core's
+  store version 51.
+- **`memo messages reset` moves the mail agent's mark back, for the owner only.** `--holder mail-triage --last 8` or
+  `--since-time 2026-11-04T00:00:00Z`, with `--source email:<account>`; `--dry-run` only counts. The answer says how
+  many emails the agent reads whole again, how many bulk ones come again as excerpts and how many are skipped again.
+  An agent, a scheduled run and `MEMO_READ_ONLY` are refused, and MCP lists it as unavailable (`messages.reset` is
+  `deny`, like the other owner operations).
+- **The `mail-triage` skill turns marketplace messages into tasks.** An email saying a person wrote to the owner or
+  asks him to call back (Avito, Cian, Yandex Go, auto.ru, hh.ru) is always a task "Reply on <platform> to <name>",
+  one per counterpart per day, with `source_url` set to the conversation or listing link and `external_id` to the
+  platform's id when the email shows one. Pure listing alerts and ads stay dropped. A new hard rule: copy every
+  `msg:` ref whole, never shortened.
+
+### Fixed
+
+- **`memo mail findings add <path>` with no such file answers `not_found` (`findings.file-missing`)**, not
+  `command.crashed`; `meetings actions add` and `projects actions add` too. A path that is a folder is a
+  `validation_error`.
+- **The mail page names the example profile `personal`, not `ya`**, as the mail CLI's own docs do. No behaviour
+  changes.
+
+## 0.131.32 — 05.11.2026
+
+### Fixed
+
+- **The scheduled mail-triage agent can stage its findings again.** Claude Code refused its
+  `memo mail findings add - … <<'JSON'` call in `dontAsk` mode once the JSON held real mail text. `mail findings add`,
+  `meetings actions add` and `projects actions add` now also take the findings JSON itself as the argument: one
+  that starts with `{` is the JSON, `-` is stdin and anything else a file, as before; the 65536-byte limit is the same.
+  The `mail-triage` skill passes the JSON as one single-quoted argument and writes an apostrophe inside it as ’.
+
+## 0.131.31 — 05.11.2026
+
+### Added
+
+- **The mail-triage agent sees orders, invoices and site lead forms that carry an unsubscribe link.**
+  `memo mail review --holder` left out every email sent to many; now only surely-newsletters stay out, counted under
+  `missing`, and the rest comes after the other mail as its subject and first lines (`email.excerpt_only`). The
+  agent reads one whole with `memo messages show <ref> --trimmed` when it looks like an order, an invoice or a
+  request; the `mail-triage` skill says how. The config file gets the settings, with their defaults:
+  `mail_bulk_excerpts`, `mail_bulk_excerpts_per_read`, `mail_bulk_excerpt_chars`, `mail_bulk_newsletter_score`,
+  `mail_bulk_newsletter_words`, `mail_bulk_newsletter_senders`, `mail_bulk_order_words`. The `--on-new-mail`
+  schedule counts these excerpts as waiting mail.
+
+## 0.131.30 — 05.11.2026
+
+### Added
+
+- **`memo orders list|show|add`.** An order says for whom (you, or `--person`/`--organization`) and why
+  (`--kind personal|business|client|other`), the shop, its number (`--title`), amount and currency, and its status
+  (`placed`, `shipped`, `delivered`, `cancelled`, `returned`; a later mail moves it on). Yours is confirmed at once;
+  an agent's waits in `memo review` (`kind:order`). `orders list number:<n> supplier:<shop>` finds one shop's order.
+- **Mail findings carry invoices, payments and orders.** `memo mail findings add` takes the kinds `invoice`,
+  `payment`, `order` and `order_update` (a later mail's status for a stored order). Accepting one records it as yours,
+  citing the mail.
+
+### Fixed
+
+- **The mail-triage agent keeps invoices, receipts, orders, deliveries and account or certificate data.** Its skill
+  turns them into findings (certificate and account data as facts) and drops only ads, news and pure social
+  notifications. It runs one memo command per call.
+
+## 0.131.29 — 05.11.2026
+
+### Changed — may break callers
+
+- **memo runs on cli-core 0.573.0.**
+
+### Added
+
+- **`memo payments unlink <payment> <invoice>` takes back what a payment settles of an invoice**, so a payment split
+  wrongly across invoices is set right: unlink, then `payments allocate` the right amounts. You correct a confirmed
+  payment's split too; an agent's run is refused there, and an agent unlinks only a still-proposed payment it proposed.
+
+## 0.131.28 — 05.11.2026
+
+### Changed — may break callers
+
+- **memo runs on cli-core 0.572.0.** `memo commands --json` gives every command its permission `level` and key under
+  a named profile, not only the denied ones.
+- **The skill an agent reads every session is 3 KB, not 22 KB.** It opens with how to answer a question (`memo search
+  all '<key words>' --limit 10 --compact`, search again in other words, cite each reference) and the rules every
+  agent keeps. The rest is unchanged and printed on request: `memo skill show search`, `projects`, `meetings`,
+  `mail`, `proposals`, `money`, `mcp` or `vocabulary`. On the 50-question benchmark this was most of what an agent
+  paid for using memo.
+
+### Added
+
+- **`memo facts revoke <ref>`** takes back your approval of a fact an agent proposed, of any kind: it waits as
+  proposed again, for `memo review` or `facts confirm`. Only you can run it, as with `facts reverse`; an agent is
+  refused. It refuses a fact that is not accepted, a fact you wrote yourself (correct it with `facts add --supersedes`
+  or remove it), and an accepted correction, because the fact it replaced cannot be put back as it was. The fact keeps
+  a note of the approval it took back. `--json` prints the fact.
+
+## 0.131.27 — 05.11.2026
+
+### Fixed
+
+- **memo runs on cli-core 0.571.0: an imported payment split across invoices settles each by its own amount.**
+  `memo records import` reads an optional `amount` on a `settles` relation, refuses amounts that add up to more than
+  the payment (`record.over-payment`), and no longer lets one import cover an invoice twice. A changed import updates
+  the split of a payment the owner has not decided yet.
+
+## 0.131.26 — 05.11.2026
+
+### Changed — may break callers
+
+- **memo runs on cli-core 0.569.0.**
+- **The mail-triage schedule waits for a batch of mail and stops for the day at a cost cap.** `memo schedule agent
+  --on-new-mail` starts the agent once 10 emails wait or the oldest has waited 30 minutes, and no run starts for the
+  rest of the day once the day's runs cost 5 US dollars. Change them per schedule with `--mail-wait`, `--mail-batch`
+  and `--max-cost-per-day`, or for every schedule with `schedule_mail_wait`, `schedule_mail_batch` and
+  `schedule_max_cost_per_day` in the config file; `memo config migrate` writes them. `memo schedule list` shows the
+  day's spend and why a run was skipped.
+- **An agent schedule runs on Sonnet and starts lean.** `memo schedule agent` takes `--model <model>`; without it a
+  claude schedule runs on `sonnet` and a codex one on codex's own default. A new claude schedule starts without your
+  MCP servers, skills, settings and CLAUDE.md. `schedule_model_claude`, `schedule_model_codex` and
+  `schedule_lean_start` in the config file change that for every new schedule; `memo config show` lists them.
+- **`memo messages acknowledge` moves only the mark of the holder a scheduled run was started for.** An agent's run,
+  or one under `MEMO_READ_ONLY`, without `--on-new-mail` is refused; you move any. A cursor past the newest stored
+  email is refused.
+
+### Fixed
+
+- **`memo actions confirm` and `reject` honour `--fingerprint` for a mail findings batch.** Confirm ignored it, and
+  reject refused it as not a findings batch. A fingerprint other than the batch's is refused as stale.
+- **`memo mail review`, `messages acknowledge` and `mail findings` name a missing or ambiguous mailbox** the way every
+  other one-account option does.
+
+### Security
+
+- **The mail-triage agent reads each email's own text in the thread and the sender's earlier mail too.** `memo
+  messages show --trimmed` and `memo context --trimmed` leave out quoted earlier mail and the signature, as `memo mail
+  review --holder` does; the skill passes `--trimmed`. Fingerprints still cover the stored email, and the owner's
+  reads (`messages show`, `context`, `review show`) keep the whole text. `--trimmed` is refused with `--full`.
+- **The mail-triage skill puts no sender text into a shell line unchecked.** A name or address goes in single quotes,
+  and only when it holds letters, digits, spaces and `. _ + - @`; new senders are looked up only for emails kept by
+  triage with `new_sender: true`, not for every sender seen once.
+
+## 0.131.25 — 05.11.2026
+
+### Changed — may break callers
+
+- **A write on a task that changed since you read it fails with `conflict`, exit 15.** It was
+  `configuration_error`, exit 3. The reason is still `task.stale`, with the task's current `revision` in `details`.
+- **memo runs on cli-base 0.77.1 and cli-core 0.567.0.** A failure can now be `conflict` (exit 15): a write refused
+  because what it would change moved on since you read it; read it again and decide on the new copy. The MCP tools'
+  error codes list it.
+- **memo no longer imports mail: the [mail](https://github.com/WireCatLabs/mail-cli) CLI does.** For each mailbox
+  memo used to import, run `mail <profile> session start --address <address>`, then `mail <profile> sync`; the mail
+  already in the store stays and is still found, and the sync goes on from it. `memo doctor` names the addresses your
+  config listed. The Himalaya import, `bin/mail-password` and the Google Takeout (`mode: "mbox"`) import are gone;
+  a Takeout file is `mail <profile> messages import <file.mbox>`.
+- **`memo mail add`, `memo mail check` and `memo mail inspect` moved to the mail CLI**: `mail <profile> session
+  start`, `mail <profile> account check` and `mail <profile> account inspect`. The old paths change nothing and name
+  the new command (`mail.moved-to-mail-cli`). Sender scoring with domain ages now runs in `mail <profile> sync`.
+- **`memo sync` and its timer read notes only, and embed the mail already stored for search by meaning.** Its mail
+  options `--source`, `--since-time`, `--limit`, `--retry-attachments` and `--rescan` are gone; `--only mail` now
+  only embeds stored mail. Its answer has `mailEmbedded` in place of `mail`.
+- **The config's `mail` section is retired.** An old config with `mail.accounts`, `"import": false` or the mail
+  limits still loads and nothing reads it; `memo doctor` reports it and `memo config unset mail` removes it, and
+  `memo sync` says so on stderr until then. `config migrate` no longer writes the mail limits.
+- **`--source email:<name>` takes the mailbox's address only**, since names lived in `mail.accounts`. `memo doctor`
+  no longer reports mail accounts or Himalaya; the error reasons `mail.throttled` and `mail.invalid-imap` are gone.
+
+## 0.131.24 — 05.11.2026
+
+### Changed — may break callers
+
+- **`memo search all` finds records for a question typed as a sentence** (cli-core 0.564.0). A question in plain
+  language, without `--exact`, finds messages, mail, notes and events that hold some of its words, where before every
+  word had to be in one record and a question found nothing. Mail is searched by meaning too once its threads have
+  vectors, and hits from different sources at the same rank are ordered by how close their meaning is to the
+  question. Plain words, query syntax and `--exact` are searched strictly, as before.
+
+### Added
+
+- **`memo stats tasks show` counts by chat, meeting or project over a period** (cli-core 0.564.0). It takes a query
+  (`created>=30d`), `--by chat|meeting|project` and `--timezone`, and answers what is open now, what was opened and
+  closed in the period, the median time to close and the mean age of the open tasks.
+
+### Security
+
+- **`memo mail review --holder` gives each email's own text**, without quoted earlier mail or the signature
+  (cli-core 0.564.0), so an agent reading the queue does not read earlier mail as if it were new.
+
+## 0.131.23 — 05.11.2026
+
+### Added
+
+- **`memo config show` lists every setting with its value, its default and whether the file sets it, and `memo config
+  migrate` writes the missing ones into the file at their defaults.** You then find and edit every setting in
+  `config.json`, `"agent_decisions": false` included, without the docs. Your values, their order and keys memo does
+  not know stay. Every write memo already makes to the file (`folders add`, `mail add`, `jobs start`, mail rules) adds
+  the missing settings too; a plain read never rewrites the file.
+
+### Fixed
+
+- **`memo mail review` names memo's own commands in its next steps**: `memo messages acknowledge … --source
+  email:<account>`, so an agent runs the step as given. It offers no whole-thread read, which memo does not mount.
+
+### Changed — may break callers
+
+- **Only you decide meeting and mail findings, on every path, whatever `agent_decisions` and `permissions` say**
+  (cli-core 0.563.0). An agent's `meetings actions confirm` or `reject`, `review confirm` or `actions confirm` of a
+  batch is refused with `proposal.owner-only`, its own batch included.
+- **`memo tasks update <task> --project <key>` moves the task's subtasks with it** instead of refusing; each takes a
+  new key there and the old keys still find them (cli-core 0.563.0). A subtask still moves alone only with
+  `--parent none`.
+
+## 0.131.22 — 03.11.2026
+
+### Added
+
+- **`memo relationships scan <project|all> --source <accounts|all>`** lists the chats, mail threads and people that
+  look like a project's, scored from the store by cli-core's link scorers (the name and aliases in chat titles and
+  messages, confirmed members' groups, dialogs and threads, who writes in its confirmed chats). It writes nothing;
+  `--yes` writes them as proposals by the rule bot `memo-scan`, which only you decide in `memo review`. A pair you
+  rejected is never proposed again. `meta.accounts` names the accounts read.
+- **`memo projects context` and `memo projects evidence` name the scan as a next step** while the project has fewer
+  than two confirmed chats.
+
+### Changed — may break callers
+
+- **`memo relationships scan` writes nothing without `--yes`**, and `--source` is required (`all` reads every
+  account). With no project it still proposes people who share a company mail domain, now as proposals in
+  `memo review` instead of unconfirmed relationships, and the answer is `{ written, scans }`, not a list.
+
+## 0.131.21 — 03.11.2026
+
+### Added
+
+- **`wcat memo` runs memo, and `wcat --help` lists it.** The package installs `wcat-memo` beside `memo`, and
+  `wcat-memo --wcat-describe` prints the tool's name, version and description for `wcat`. `memo` keeps working.
+- **An agent can read new mail and propose what it asks of you.** `memo schedule agent mail-triage claude 'Run memo
+  skill show mail-triage and follow it.' --every 5m --on-new-mail mail-triage --max-cost 1` starts the agent only
+  when a sync stored mail past its mark. It stages cited tasks, closes and updates of open tasks, facts, memories,
+  links and new contacts for `memo review`; it never sends, changes mail or decides. `memo skill show mail-triage`
+  is its prompt.
+- **`memo mail review`**: cli-core's mail review over one mailbox (`--source email:<account>`): new threads,
+  `--unanswered`, `--waiting`, and `--holder <name>` for what is stored past that holder's mark.
+- **`memo messages acknowledge --holder <name> --cursor <cursor>`** moves a holder's mark after it processed what
+  review gave.
+- **`memo mail findings add|show|list`**: stage one mailbox's cited findings; only the owner confirms them in
+  `memo review`. `add` and `messages acknowledge` are the only writes `MEMO_READ_ONLY` allows.
+- **`memo messages show` gives an email's `fingerprint`**, the one a finding cites it by.
+
+### Changed — may break callers
+
+- **Agents no longer decide for you by default.** An agent's confirm or reject of a fact, a memory, an action, a link
+  or a project proposal is now refused with `proposals.agent-decisions-off` unless your config says
+  `"agent_decisions": true`; before, a missing key let an agent decide with `--reason`. To restore the old behaviour,
+  add `"agent_decisions": true` to memo's `config.json`. Meeting findings keep their
+  own permissions.
+
+### Fixed
+
+- **`memo actions confirm` on a mail findings batch** goes through the owner-only review: an agent's confirm is
+  refused instead of turning the batch into a task.
+- **Built on cli-core 0.560.0** (the propose tier, mail findings, the new-mail gate; agents no longer decide for the
+  owner by default).
+
+## 0.131.20 — 02.11.2026
+
+### Added
+
+- **`memo records list --account <provider>:<account>`** lists a source's records; `waiting:true` shows those whose
+  invoice or payment waits for a party, `flagged:true` those changed at the source after their entry was made.
+- **`memo records link <type>:<external_id> <ref> --account <provider>:<account>`** says which of your entries a
+  source's record is (`organization:client` is `organization:3`). Never by name. Only you link; an agent is refused,
+  and MCP does not offer it. The invoices and payments that waited for it become proposals in `memo review`.
+- **`memo records import` and `check` take `--account <provider>:<account>`** too, as `list` and `link` do; the
+  account alone still works.
+
+## 0.131.19 — 02.11.2026
+
+### Added
+
+- **`memo records import <file|-> --account <account> [--dry-run]`** brings a source's records into the store from a
+  v1 records envelope, as JSON or JSONL (a header line, then a record per line), and prints the receipt: created,
+  updated, unchanged, deleted, refused, the proposals made, what waits for a mapping, and each error with its JSON
+  pointer and code. The same file twice changes nothing and a lower revision is refused. An invoice or a payment
+  becomes a proposal for `memo review`: an import never writes confirmed money.
+- **`memo records check`** gives the same receipt and writes nothing. It is a read, so MCP offers it without the
+  owner's permission; `records import` is a write and needs it.
+
+### Fixed
+
+- **Built on cli-core 0.559.0** (store version 47: source records and the import envelope).
+
+## 0.131.18 — 02.11.2026
+
+### Added
+
+- **`memo review` shows everything that waits for you in one list**: besides facts, memories, links, key documents,
+  project findings and actions, it now lists meeting findings, task close suggestions (`close:<task key>`) and the
+  coming mail findings, grouped by the project or account they came from, newest first, each batch with its
+  findings under it. Each row says `source` and `owner_only`. `memo review confirm 17080/f1` accepts those findings
+  of the batch and rejects the rest; `memo review confirm close:Q-15` closes the task as suggested, `reject`
+  clears the suggestion.
+- **`memo review status`**: since yesterday (`--since-time`), per mail account the threads with new mail, the
+  threads you owe an answer and wait for, and how far each agent's processing mark has read; then what was proposed
+  and what waits, by kind. With nothing to say it says so. No model call.
+- **`memo review show`** marks every evidence item `untrusted`, and for an email gives the `sender`: its address,
+  score and signals, and whether the address is `known` (its person has another identity).
+- **`memo schedule command|agent|list|run|remove`** runs a memo command or an agent on a timer (cli-core's shared
+  schedule): `memo schedule command digest --at 08:30 -- review status`. An agent is allowed only `memo`, under
+  `MEMO_READ_ONLY`. Not offered over MCP.
+- **`memo context <person>` and `memo projects context <project>` count the proposals waiting** about them.
+- **`invoices list|show|add` and `payments list|show|add|allocate`** manage money as typed rows (cli-core's finance
+  tables). Amounts are decimal strings and totals stay per currency, never converted. Your own `add` is confirmed at
+  once; an agent's, or one with nobody at the terminal, waits as a proposal. `payments allocate <payment> <invoice>
+  <amount>` settles part of an invoice and is refused beyond the payment or the invoice.
+- **`memo review` lists and decides invoice and payment proposals** (`kind:invoice,payment`); only you confirm money.
+- **`projects status` adds `finance`**: billed, paid and owed per direction and currency from the project's confirmed
+  invoices and payments, with their refs, beside the amounts found in chats.
+- **`invoices add` and `payments add` take `--evidence`**, up to 8 references the row was read from.
+
+### Changed — may break callers
+
+- Meeting findings, task close suggestions and mail findings are the owner's to decide: `memo review confirm` and
+  `reject` refuse an agent on them, with or without `--reason`. Mail findings cannot be decided by this build yet
+  (`proposal.kind-unsupported`); they are listed so nothing turns them into tasks by mistake.
+
+### Fixed
+
+- **Built on cli-core 0.558.0** (store version 46). Money is no longer a fact: `facts add --kind payment` is gone, and
+  a confirmed payment finding writes a `payment:` row (paid), an `invoice:` (expected; it needs a `person:` or
+  `organization:` counterparty) or voids the invoice it supersedes (cancelled). A payment finding's `supersedes`
+  names an `invoice:`, and `paid_at` dates a paid one. `projects status` lists payments and open invoices with
+  status `confirmed` (was `accepted`); a proposed invoice does not count as owed. 0.556.0 added per-reader
+  processing marks for mail (`mail review --holder`); memo shows them in `review status`.
+
+## 0.131.17 — 02.11.2026
+
+### Fixed
+
+- **`tasks agenda --source email:<address>` lists mail threads you owe an answer and wait for one.** `owed`,
+  `waiting` and `stale` were empty for mail; now a thread is owed when its newest email came to you in To or Cc and
+  you have not answered, waiting when you wrote last (cli-core 0.555.0). Scheduled runs keep their own `--new` points.
+
+## 0.131.16 — 02.11.2026
+
+### Added
+
+- **`relationships update <id> --role --purpose`** sets a relationship's role, or what a chat is for in a project.
+  Yours applies at once; an agent's waits for you in `memo review`. `projects evidence` names this command when one
+  chat with no purpose fills most of a run.
+- **`projects evidence --purpose` and `projects status --purpose`** read the linked chats of the purposes asked:
+  `work`, `sales`, `support`, `other`, or `all`. A chat left out is one `missing` row with its message count and the
+  command that reads it. **`projects evidence --include-proposed`** also reads chats and members proposed for the
+  project, after the confirmed ones, each marked `proposed`.
+- **`--reason` on every decide command**: `facts confirm`, `reject`, `reverse` and `remove`, `memories confirm`,
+  `invalidate` and `remove`, `relationships confirm` and `remove`, `actions reject` for any action. An agent
+  decides only with one. `--as-owner` on these and on `projects key-documents remove` and `meetings actions`.
+- **`memo review`**: every pending proposal across projects in one list (relationships, key documents, facts,
+  memories, findings batches, actions), each with a readable title, who proposed it, the reason, score, signals and
+  evidence. Filters `project:`, `kind:`, `by:` (`agent`, `rule` or a bot), `status:`; `--compact` prints one line each.
+- **`memo review show <id>`**, **`review confirm <ids>`** and **`review reject <ids> --reason`**: ids and ranges such
+  as `17070-17079,fact:500-502,17080/f1`. Each id is decided on its own; a refusal is listed, the others stay
+  decided, and the exit code is not 0. Over MCP they are owner permissions `review.confirm` and `review.reject`.
+- **`relationships list confirmed:false`** lists the relationships waiting for you, as `review kind:relationship`
+  does; `confirmed:true` lists links only. Every row has `from_title` and `to_title`, and the text shows the purpose.
+- **`projects status <project>`: where a project stands, from the store.** It reads every chat linked to the
+  project and its child projects, in every account those links name (`meta.accounts`), and says per chat who wrote
+  last, whose move it is, open questions, promises, and amounts with their direction. `--context-query`,
+  `--since-time`, `--before-time`, `--compact`, `--sync-profile`. Cited refs carry a title. `next` names at most two
+  chats to read, with the tg or max command, and never picks a profile for you. Over MCP too.
+- **A `project-state` guide scenario** (`memo guide project-state`): context, status, read the chats it names with
+  `--compact`, stage what you confirmed. The skill says the same.
+- **`memo show <ref...>`** tells what 1 to 100 references name, in the order given: title, kind, where it is,
+  state and the command that opens it (`open.argv`, `open.line`). It never picks a profile: with none or several
+  signed in, the command keeps `<profile>` and `open.profiles` lists the choices. Also an MCP tool.
+- **`--compact`** prints one line per item, reference first and text last, with paging, missing data and next steps
+  as `#` lines. memo declares rows for search hits, notes, facts, memories, people, organizations, projects,
+  relationships, tasks, messages and `projects evidence`. Refused with `--json` or `--brief`; MCP stays JSON.
+
+### Changed — may break callers
+
+- **`projects evidence` and `projects status` read only `work` chats unless `--purpose` asks for more.** A linked
+  chat with no purpose counts as `work`; one linked for `sales`, `support` or `other` is counted, not read.
+- **Built on `@wirecat/cli-core` 0.553.0 and `@wirecat/cli-base` 0.75.0.** Store version 44 moves an agent's or a
+  rule's unconfirmed link into a proposal on first open; `relationships list` no longer shows those.
+- **An agent's `relationships add` answers a `relationship` proposal**, not an unconfirmed relationship.
+- **A run with no agent named and no terminal is not the owner**: its writes are proposals of the bot
+  `unattended`, and its decisions refuse with `confirmation_required` (`decision.decider-unknown`, exit 7).
+- **`--as-owner` in an agent's terminal asks y/N at the terminal**; without one, or under `--json`, it refuses
+  with `confirmation_required` (`decision.owner-unconfirmed`, exit 7). Over MCP it is refused.
+- **`projects.agent-decisions-off` is now cli-core's `proposals.agent-decisions-off`**, and covers every decision.
+- **Words after `--` stay text** in `notes add`, `notes edit`, `facts add`, `memories add`, `tasks comments add`,
+  `people add`, `organizations add`, `projects add` and `answers create`.
+- **An agent's `projects key-documents add` writes a `key_document` proposal**, decided in `memo review`; its `id` is
+  the proposal's. `projects actions list` and `projects context` list these, and `projects actions confirm` takes
+  the proposal number as well as `key:<id>`.
+- **Old decide commands go through the review's check**: `facts confirm` and `reject`, `memories confirm` and
+  `invalidate` on a proposed memory, `relationships confirm` and `remove` on a suggestion, `actions confirm` and
+  `reject`, `projects actions confirm` and `reject`. A decided proposal now refuses with `proposal.wrong-state`.
+- **A bare number is refused where several kinds fit**: `notes show|edit|remove`, `projects key-documents
+  add|remove`, `tasks add <source>` and `show` answer `"1473" is a bare number; did you mean note:1473?`
+  (`ref.bare-number`), naming only references that exist. A file named `1473` is read as `./1473`.
+- **`notes add`, `notes edit` and `notes remove` print the note's reference** (`note:12`), not its bare id.
+- **Text without `--json` is drawn by cli-core's generic row** where a command has no view of its own: `·` between
+  columns, `# more: raise --limit` for more.
+- **The sync command memo prints and runs puts no `--` before a chat id**: a negative group id needs none.
+
+### Security
+
+- **An agent can no longer decide its own proposal through memo.** Every confirm, reject and remove
+  path, CLI and MCP, passes the real decider to cli-core, which refuses an agent's own bot's proposal
+  (`proposal.own`), a rule's or an unconfirmed link's (`proposal.owner-only`), one without `--reason`
+  (`proposal.reason-required`), and every agent decision when `agent_decisions` is `false`. Before, an agent over
+  MCP could confirm a fact, memory, relationship or action it had proposed itself.
+- **A missing agent variable no longer proves the owner.** The owner decides only at a terminal (stdin and stdout),
+  or with `--as-owner` after a y/N answer there; a saved meetings permission lets an MCP agent decide as itself.
+
+## 0.131.15 — 02.11.2026
+
+### Added
+
+- **`messages show` gives each email a `ref`**, as it does each messenger message and as search hits do, so a
+  caller can match the emails of a thread to the hit it opened.
+
+## 0.131.14 — 01.11.2026
+
+### Added
+
+- **Actions carry the parts of their line**, so a reader can write it in its own language: `verb` (the kind, or
+  `create` for a findings batch), `target_name` (a project, person, task or the chat of a message, by name),
+  `chat_name` (for a message or chat target), `text` (the whole reply or title, never cut) and, for a findings
+  batch, `counts: { facts, tasks }`. `summary` now names the target instead of printing its reference.
+- **`tasks list parent:<key>`** lists a task's subtasks; `parent:none` and `parent:any`.
+
+### Fixed
+
+- **A findings batch can be confirmed after another batch of the same project was decided**; only a change in its
+  own cited sources refuses it.
+
+### Changed — may break callers
+
+- **`tasks update <key> --project <key>` refuses a subtask** (`task.is-subtask`, details `parent`) unless
+  `--parent none` detaches it in the same command. It used to drop the parent without saying so.
+
+## 0.131.13 — 01.11.2026
+
+### Fixed
+
+- **Built on cli-core 0.535.0.** Message search hits now list `attachments.name` among their untrusted fields. The
+  security page says memo never changes a mailbox.
+
 ## 0.131.12 — 01.11.2026
 
 ### Removed

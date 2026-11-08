@@ -10,7 +10,7 @@ not say which finds better answers, because nobody has measured that here.
 
 The marks come from each project's own documentation and source, checked on 24 October 2026; a tool may do more
 than its documentation says. Each mark for another tool links to the page it comes from. The marks for `memo` were
-checked against version 0.131.12 on 1 November 2026.
+checked against version 0.131.64 on 8 November 2026.
 
 The tools:
 
@@ -42,6 +42,7 @@ The tools:
 | **Know a person or a project** | | | | | | |
 | People, organizations and projects with links between them | ✅ | ✅ [↗][hs-core] | 🟡 [↗][m0-price] | ✅ [↗][gr] | ✅ [↗][cg] | ✅ [↗][bm] |
 | Tasks, agenda and reminders built in | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
+| Contracts, invoices, payments and bank lines, with money waiting for your review | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Remember** | | | | | | |
 | An agent saves a fact or memory over MCP | ✅ | ✅ [↗][hs-mcp] | ✅ [↗][m0-mcp] | ✅ [↗][gr-mcp] | ✅ [↗][cg-mcp] | ✅ [↗][bm] |
 | Facts and memories are found in conversations and text without anyone saving them | ❌ | ✅ [↗][hs-core] | ✅ [↗][m0] | ✅ [↗][gr] | ✅ [↗][cg] | 🟡 [↗][bm] |
@@ -67,8 +68,8 @@ Notes on `memo`:
 
 - **Sources.** Telegram, MAX, WhatsApp, Zoom meetings and Google Drive reach the store through the sister tools
   `tg`, `max`, `wa`, `zm` and `drive`. `memo` reads that store. The [mail](../mail/index.md) program fills the store with your mailbox and
-  `memo` searches it; an older import through [Himalaya](https://github.com/pimalaya/himalaya) still works and will be removed. `search all` covers messages, mail and notes;
-  meetings have their own `search meetings`.
+  `memo` searches it; an older import through [Himalaya](https://github.com/pimalaya/himalaya) still works and will be removed. `search all` covers messages, mail, notes, calendar events and phone calls, deals and leads, and business data.
+  Meetings have their own `search meetings`.
 - **Search.** All six tools search by words and by meaning. This page does not rank them. In `memo`, search by
   meaning uses a local model that `memo models download` fetches; without it, word search still works.
 - **No LLM key.** Sync and search need no remote language-model API key; meaning search uses a local model. `answers create --analyze` calls a model you configure, and only if you ask.

@@ -28,11 +28,13 @@ cada una con `memo notes show` o en la aplicación original.
 | Mensajes de Telegram o MAX | `memo search messages 'budget'` |
 | Transcripciones y resúmenes de reuniones guardados | `memo search meetings 'budget' --source zoom:work` |
 | Una persona, por nombre, usuario o alias | `memo search people kai` |
+| Facturas, contratos, productos y otros datos de negocio | `memo search all 'budget' --only business` |
 
-`search all` busca en mensajes, correo, notas y eventos de calendario a la vez. Los eventos vienen de cada calendario
+`search all` busca en mensajes, correo, notas, eventos de calendario, negociaciones y leads, y
+[datos de negocio](./business.md#find-it-again) a la vez. Los eventos vienen de cada calendario
 que gcal guardó; la respuesta nombra cada calendario que leyó, y `--only events` busca solo en ellos. El título, la descripción y el lugar de un evento
-los escribe quien envió la invitación, y `--json` nombra esos campos en `untrusted` del resultado. Memo no puede abrir una referencia `event:`;
-lo hace `gcal <profile> events show <ref>`. No busca reuniones, personas, recuerdos, proyectos ni
+los escribe quien envió la invitación, y `--json` nombra esos campos en `untrusted` del resultado. `memo events show <ref>` abre una referencia `event:`,
+y `memo events list` muestra los eventos de cada cuenta de calendario, también las llamadas de teléfono. No busca reuniones, personas, recuerdos, proyectos ni
 tareas; para eso usa `memo search people`, `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
 está algo, su propia búsqueda es mejor, porque entiende más palabras de búsqueda.
 
@@ -72,7 +74,9 @@ memo search notes 'budget' --filter 'date:2026-10-08'    # and a second conditio
 
 Un campo en la consulta funciona como `--filter`: `memo search notes 'budget tag:work'` busca por significado solo en las notas
 etiquetadas `work`. Solo las palabras se buscan por significado, así que `memo search notes 'date:today'` lista solo las notas de hoy, las más recientes primero.
-Para un documento de Google Drive, `date:` y la fecha que muestra un resultado son su última edición en Drive.
+Para un documento de Google Drive, `date:` y la fecha que muestra un resultado son su última edición en Drive. Para un archivo de nota,
+son el `date` de su front matter (un día sin hora es la medianoche donde estás) o, si no, la hora de modificación del archivo. El siguiente
+`memo sync` pone fecha a una nota importada antes de este cambio.
 
 ## Buscar en el correo
 
@@ -83,8 +87,8 @@ memo search mail 'budget' --source email:you@example.com
 ```
 
 `mailbox:` encuentra una carpeta de correo o una etiqueta de Gmail, como `inbox`, `important` o
-`starred`. Sin `--source`, Memo busca en todas las cuentas de correo; `--source email:work,email:personal`
-busca en esas dos. También se busca el texto dentro de los adjuntos en el correo de la importación anterior con Himalaya (`filename:` y `content:`). El correo sincronizado por `mail` conserva solo texto y cabeceras, así que no tiene texto de adjuntos.
+`starred`. Sin `--source`, Memo busca en todos los buzones. `--source email:a@example.com,email:b@example.com`
+busca en esos dos. También se busca el texto dentro de los adjuntos en el correo que importaron versiones anteriores de Memo (`filename:` y `content:`). El correo sincronizado por `mail` conserva solo texto y cabeceras, así que no tiene texto de adjuntos.
 
 ## Buscar en reuniones guardadas
 
@@ -210,6 +214,32 @@ memo models download e5-small
 El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo sync` para que tus notas
 queden preparadas para él. Cada resultado indica si se encontró por palabras, por significado o de
 las dos formas. Sin el modelo, Memo dice "Searched by words only" y busca por palabras en las notas guardadas.
+
+### Elegir un modelo más grande
+
+Hay tres modelos de búsqueda. `memo models list` los muestra, con su tamaño en disco y cuál está en uso:
+
+| Modelo | Tamaño | En disco | Licencia | Velocidad |
+| --- | --- | --- | --- | --- |
+| `e5-small` | pequeño, el predeterminado | 135 MB | MIT | rápido |
+| `embeddinggemma` | mediano | 218 MB | Gemma Terms of Use | unas 15 veces más lento, el que mejor lee los chats |
+| `e5-large` | grande | 579 MB | MIT | unas 8 veces más lento |
+
+Para usar otro, descárgalo y después elígelo:
+
+```sh
+memo models download e5-large
+memo models set e5-large
+```
+
+La elección es compartida: tg, max y las demás herramientas de WireCat usan el mismo modelo. Memo dice entonces cuántos
+fragmentos de texto le quedan por leer al nuevo modelo y cuánto tardará más o menos. Las siguientes ejecuciones de `memo sync`
+hacen ese trabajo por partes. Hasta que terminan, la búsqueda por significado encuentra solo lo que el nuevo
+modelo ha leído, y la búsqueda por palabras encuentra el resto. El trabajo del modelo anterior se conserva, así que volver a
+él con `memo models set e5-small` es instantáneo.
+
+`memo models add` añade un modelo tuyo de Hugging Face. `memo models add --help` muestra lo que
+necesita.
 
 ## Qué muestra un resultado
 

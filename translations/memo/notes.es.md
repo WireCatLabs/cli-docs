@@ -52,7 +52,28 @@ dice cuántas ha encontrado:
 de búsqueda para empezar. Vuelve a ejecutar `memo sync --only notes` después de añadir o editar archivos;
 solo se leen los cambios.
 
+Con `--json`, `memo sync` también escribe en stderr una línea de progreso cada vez mientras lee cada carpeta, como mucho dos por
+segundo. Solo contiene recuentos, nunca un nombre de archivo:
+
+```json
+{"event":"progress","step":"notes","done":120,"total":480,"unit":"files","label":"1"}
+```
+
+`label` es el ID de la carpeta.
+
 Puedes añadir más de una carpeta. `memo folders list` las muestra todas.
+
+### Quitar una carpeta
+
+```sh
+memo folders remove /path/to/notes               # memo stops reading it; its notes stay searchable
+memo folders remove 1 --allow-delete --yes       # also deletes its notes from the store
+```
+
+Sin `--allow-delete`, las notas se quedan en el almacén y `memo folders list` muestra que la carpeta no está en este
+ordenador. Con esa opción, memo borra del almacén las notas de la carpeta y su texto. Tus archivos nunca se tocan, así que
+`memo folders add` los vuelve a leer. Sin `--yes`, memo dice cuántas notas borraría y no cambia nada.
+El almacén conserva el ID de la carpeta, así que `memo folders update` puede volver a conectarla.
 
 ### Markdown u Obsidian
 
@@ -161,8 +182,8 @@ mensaje o la nota ya tienen que estar en el almacén local.
 
 ```sh
 memo notes show note:12
-memo notes edit 12 --revision 1 --text 'Prefers early morning meetings'
-memo notes remove 12
+memo notes edit note:12 --revision 1 --text 'Prefers early morning meetings'
+memo notes remove note:12
 ```
 
 Cada nota tiene un número de **revisión** que sube con cada edición. `memo notes edit` pide la

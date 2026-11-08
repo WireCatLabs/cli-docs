@@ -47,17 +47,20 @@ carpeta se añadió en otro ordenador, conéctala en su lugar: `memo folders lis
 
 ## Una importación no borró nada y mostró un aviso
 
-La importación detectó que faltaba de golpe la mayor parte de una carpeta o de un buzón y se detuvo
-para proteger tus datos. Comprueba que la carpeta o el disco están ahí y que la cuenta de correo
-funciona, y luego importa de nuevo.
+La importación detectó que faltaba de golpe la mayor parte de una carpeta y se detuvo
+para proteger tus datos. Comprueba que la carpeta o el disco están ahí y luego importa de nuevo.
 
-## Aparece "no mail account" o la importación de correo pide una cuenta
+## Aparece "no mail account"
 
-`no mail account` significa que el archivo de configuración no tiene cuentas para la importación anterior con Himalaya. Para traer correo, usa
-[correo](./mail.md#bring-mail-in-with-mail): `mail <profile> sync` llena el almacén y `memo search mail` lo encuentra, sin cuenta en la configuración de Memo. Solo para la importación anterior, ejecuta `memo mail add <account> <address>` tras configurar
-Himalaya o añade una en `mail.accounts` ([correo](./mail.md#add-the-account-to-memo)).
+`no mail account` significa que el almacén no tiene correo de esa dirección. Memo no importa correo: lo hace el CLI
+[mail](./mail.md#bring-mail-in-with-mail), con `mail <profile> sync`, y después `memo search mail` lo encuentra.
+`--source email:<address>` recibe la dirección del buzón. Si es incorrecta, Memo enumera las que tiene el almacén.
 
-`memo sync --source email:work` acepta el nombre de cuenta: el `name` de `mail.accounts` en los ajustes. Si es incorrecto, Memo enumera las cuentas conocidas. Sin `--source`, lee todas.
+## Aparece "memo sync no longer imports mail"
+
+La configuración aún tiene los antiguos ajustes `mail` de Memo, que nada lee. `memo doctor` nombra los buzones que enumeran:
+sincroniza cada uno con `mail <profile> session start --address <address>` y después `mail <profile> sync`. El correo que
+importó Memo se queda en el almacén. `memo config unset mail` elimina los ajustes antiguos y el mensaje.
 
 ## Se rechaza la edición de una nota
 

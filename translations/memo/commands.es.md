@@ -17,10 +17,11 @@ These options work with the `memo` command itself.
 | `--debug` | on failure, show the full error record: cause and stack. |
 | `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
 | `--no-record` | do not keep this run, even if it fails. |
+| `--compact` | one line per item for an agent: reference first, text last, paging and next steps as # lines. |
 
 ## `memo context`
 
-messages, mail, notes and events about a person, each with a link to its source
+messages, mail, notes and events about a person, each with a link to its source; `proposals` counts what waits for you about them, by kind (`complete: false` means at least), and `next` names the command that lists them
 
 ```sh
 memo context <person> [options]
@@ -35,10 +36,31 @@ memo context <person> [options]
 | `--limit <n>` | most messages, notes and events of each kind. Default: `20`. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--source <accounts>` | the account to read, as provider:account; required when the store holds several of that messenger. |
+| `--trimmed` | each email's own text, without quoted earlier mail or the signature — for an agent's reads. |
 
 **Returns:** messages, mail, notes and events about a person, each with a link to its source
 
 **Example:** `memo context telegram:'Kai Sample'`, `memo context email:kai@example.com --limit 5 --json`
+
+## `memo show`
+
+what any reference names, and the command that opens it
+
+```sh
+memo show <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | 1 to 100 references any WireCat CLI printed: chat:, msg:, note:, document:, person:, task:…. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** what any reference names, and the command that opens it
+
+**Example:** `memo show chat:max/500/-1001 document:413`, `memo show note:12 msg:telegram/1/77/42 --json`, `memo show contract:2 invoice:4 --json`
 
 ## `memo notes`
 
@@ -132,7 +154,7 @@ memo notes edit <id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required | note:<id> or its id. |
+| `id` | required | note:<id>. |
 
 | Option | What it does |
 |---|---|
@@ -161,7 +183,7 @@ memo notes remove <id> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `id` | required | note:<id> or its id. |
+| `id` | required | note:<id>. |
 
 | Option | What it does |
 |---|---|
@@ -233,6 +255,7 @@ memo notes links add <identity> <path> [options]
 | Option | What it does |
 |---|---|
 | `--json` | print the standard JSON answer. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 
 **Returns:** link an imported note file to a person
 
@@ -255,6 +278,7 @@ memo notes links clear <identity> [options]
 | Option | What it does |
 |---|---|
 | `--json` | print the standard JSON answer. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 
 **Returns:** remove the owner's note-file links for a person
 
@@ -311,6 +335,30 @@ memo folders update <id> <path> [options]
 
 **Example:** `memo folders update 1 ~/notes`
 
+### `memo folders remove`
+
+stop reading a notes folder here; its notes stay unless --allow-delete
+
+This command changes the local store or your files.
+
+```sh
+memo folders remove <folder> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | required | the folder's id or its path, as memo folders list prints them. |
+
+| Option | What it does |
+|---|---|
+| `--allow-delete` | also delete the folder's notes from the store, their text included. |
+| `--yes` | confirm --allow-delete. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** stop reading a notes folder here; its notes stay unless --allow-delete
+
+**Example:** `memo folders remove 1`, `memo folders remove 1 --allow-delete --yes`
+
 ### `memo folders list`
 
 folders of notes on this computer, and those the store knows from another
@@ -352,83 +400,159 @@ memo messages show <message> [options]
 | `--before-n <n>` | also this many earlier emails of its thread. Default: `0`. |
 | `--after-n <n>` | also this many later emails of its thread. Default: `0`. |
 | `--full` | whole attachment text, not the first 4000 characters of each, and the HTML and AMP versions of the body. |
+| `--trimmed` | each email's own text, without quoted earlier mail or the signature — for an agent's reads. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Returns:** one stored message or email whole, with optional stored neighbours
 
 **Example:** `memo messages show 'msg:email/me%40example.com/thread/42' --before-n 2 --after-n 2`
 
-## `memo mail`
+### `memo messages acknowledge`
 
-look at a mail account before importing it
-
-### `memo mail add`
-
-add an explicit account after matching its Himalaya email
+record that a holder — an agent or a pipeline — processed the mail `review --holder` gave it, with the cursor that review gave; the mark only moves forward, and mail still partial waits for the next review
 
 This command changes the local store or your files.
 
 ```sh
-memo mail add [account] [address] [options]
+memo messages acknowledge [options]
 ```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | optional | one Himalaya account name; omission lists choices and changes nothing. |
-| `address` | optional | must match the email configured for this Himalaya account. |
 
 | Option | What it does |
 |---|---|
-| `--kind <kind>` | gmail or imap. Default: `gmail`. |
-| `--folder <folder>` | mail folder to import; repeat for several. |
-| `--json` | print the added account as JSON. |
-
-**Returns:** add an explicit account after matching its Himalaya email
-
-**Example:** `memo mail add work you@example.test --kind imap`
-
-### `memo mail check`
-
-check one Memo account against Himalaya's configured identity
-
-```sh
-memo mail check [account] [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | optional | one Memo account name; omission lists choices and changes nothing. |
-
-| Option | What it does |
-|---|---|
-| `--json` | print the checked account as JSON. |
-
-**Returns:** check one Memo account against Himalaya's configured identity
-
-**Example:** `memo mail check work`
-
-### `memo mail inspect`
-
-group an account's mail by sender and list, to decide what to keep or skip
-
-```sh
-memo mail inspect <account> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `account` | required | the account's name in mail.accounts, or its address. |
-
-| Option | What it does |
-|---|---|
-| `--since-time <time>` | only mail from this time, ISO 8601 or 30d ago (default: all mail). |
-| `--limit <n>` | show this many of the largest groups. Default: `50`. |
-| `--domain-age` | ask each shown sender domain's registry when it was registered (RDAP); tells each registry its domain. |
+| `--holder <name>` | whose mark: lower-case letters, digits and dashes, such as mail-triage. |
+| `--cursor <cursor>` | the cursor `review --holder` gave. |
+| `--source <accounts>` | the one mailbox: email:<address>, email or group:<name>; may be left out when the store holds one mailbox. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
-**Returns:** group an account's mail by sender and list, to decide what to keep or skip
+**Returns:** mail mark — holder, through_id, through_received_at, held, read, skipped, updated_at; every field: memo commands info messages acknowledge
 
-**Example:** `memo mail inspect personal --limit 30`, `memo mail inspect work --since-time 365d --json`
+**Example:** `memo messages acknowledge --holder mail-triage --cursor 9123.1762090000000 --source email:work`, `memo messages acknowledge --holder mail-triage --cursor 9123.1762090000000 --source email:me@example.com --json`, `memo messages acknowledge --holder backfill --cursor 870.1762090000000 --source email:personal`
+
+### `memo messages reset`
+
+the owner moves a holder's mark back past the mail received since --since-time, or past the last --last emails it was given; its next reviews give that mail again. The answer says how many emails it reads again. Every reset counts, even one that leaves the mark where it is, so the holder's next findings key is new. An agent cannot: a holder only moves its own mark forward, with `messages acknowledge`
+
+This command changes the local store or your files.
+
+```sh
+memo messages reset [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--holder <name>` | whose mark: lower-case letters, digits and dashes, such as mail-triage. |
+| `--since-time <time>` | read again what was received since this ISO 8601 time, or 2d ago. |
+| `--last <n>` | read again the last n emails the holder was given. |
+| `--dry-run` | count what would be read again, and move nothing. |
+| `--source <accounts>` | the one mailbox: email:<address>, email or group:<name>; may be left out when the store holds one mailbox. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** mail mark reset — mark, from_id, again, bulk, skipped, resets, dry_run; every field: memo commands info messages reset
+
+**Example:** `memo messages reset --holder mail-triage --last 8 --dry-run --source email:me@example.com`, `memo messages reset --holder mail-triage --since-time 2026-11-04T00:00:00Z --source email:work --json`
+
+## `memo mail`
+
+mail the mail CLI stored: review new mail for an agent, stage what it found
+
+### `memo mail findings`
+
+cited tasks, task updates, facts, memories, links, contacts, invoices, payments and orders an agent read in new mail
+
+#### `memo mail findings add`
+
+stage one mailbox's findings for the owner; nothing is created until the owner confirms
+
+This command changes the local store or your files.
+
+```sh
+memo mail findings add <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the findings JSON itself (starts with {), a JSON file, or - for stdin; at most 65536 UTF-8 bytes. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+| `--source <accounts>` | the one mailbox: email:<address>, email or group:<name>; may be left out when the store holds one mailbox. |
+| `--key <key>` | the findings key `mail review --holder` gave in its mail-findings.add step. |
+| `--dry-run` | check the batch as staging would, invoices, payments and orders tried and rolled back, and stage nothing; answers valid and every finding's problem at once. |
+
+**Returns:** mail findings — id, account, input, fingerprint, status, author, decided_by, decided_at, and 2 more; every field: memo commands info mail findings add
+
+**Example:** `memo mail findings add findings.json --source email:work`, `memo mail findings add findings.json --source email:work --key mail-triage:9123 --dry-run --json`, `memo mail findings add '{"schema_version":1,"key":"mail-triage:9123","extractor":"mail-triage/1","findings":[…]}' --source email:me@example.com --json`
+
+#### `memo mail findings show`
+
+one findings batch: its findings with their evidence, earlier decisions and the review receipt
+
+```sh
+memo mail findings show <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the batch id `mail findings add` or `list` gave. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+
+**Returns:** mail findings — id, account, input, fingerprint, status, author, decided_by, decided_at, and 2 more; every field: memo commands info mail findings show
+
+**Example:** `memo mail findings show 41`, `memo mail findings show 41 --json`, `memo mail findings show 41 --json=id,input.findings`
+
+#### `memo mail findings list`
+
+mail findings batches, newest first; status:proposed is what waits for the owner
+
+```sh
+memo mail findings list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,status keeps only those fields. |
+| `--source <accounts>` | only this mailbox's batches: email:<address>. |
+| `--limit <n>` | batches per page, at most 50. Default: `20`. |
+| `--page <n>` | which page, from 1. Default: `1`. |
+
+**Returns:** mail findings — id, account, input, fingerprint, status, author, decided_by, decided_at, and 2 more; every field: memo commands info mail findings list
+
+**Example:** `memo mail findings list status:proposed`, `memo mail findings list --source email:work --json`, `memo mail findings list status:reviewed --limit 50 --page 2`
+
+### `memo mail review`
+
+every stored email, yours too, in threads that changed since a point — for reviewing who owes what. It reads what sync stored, so it asks the mail server nothing
+
+```sh
+memo mail review [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | where the last review ended: date>2h; 3 days ago if no date. |
+
+| Option | What it does |
+|---|---|
+| `--unanswered [duration]` | only threads whose newest email came to you, in To or Cc, with no answer for this long — 4h, 1d; 24h if not given. |
+| `--waiting [duration]` | only threads where you wrote last and nobody answered for this long — 3d; 7d if not given. |
+| `--holder <name>` | read for this holder — an agent or a pipeline — what is stored past its processing mark, by store order; newsletters, envelopes, drafts, suspicious senders and partial mail left out; other bulk mail after the rest, as its subject and first lines (excerpt_only); each text without quoted earlier mail or the signature; `messages acknowledge` moves the mark. |
+| `--new` | what changed since the last `review --new` of this mailbox, a point per thread — for scheduled runs. |
+| `--source <accounts>` | the one mailbox: email:<address>, email or group:<name>; may be left out when the store holds one mailbox. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 4 more; every field: memo commands info mail review
+
+**Next usually:** `memo messages show <message>`
+
+**Example:** `memo mail review --holder mail-triage --source email:work --json`, `memo mail review --unanswered 1d --source email:personal`, `memo mail review 'date>2h' --source email:me@example.com`
 
 ## `memo people`
 
@@ -667,12 +791,14 @@ memo tasks add [source] [options]
 | `--due <time>` | a project task: when it must be done, an ISO 8601 time or 2h, 3d from now. |
 | `--status <state>` | a project task: its state from the start, open, todo, in_progress, done, dismissed. |
 | `--agent <agent>` | a project task: the agent working on it, apart from its assignees. |
+| `--external-id <service:id>` | its id in an outside service, such as avito:4512345678 for an Avito chat. |
+| `--source-url <url>` | the http or https page it is about, such as the Avito ad or conversation. |
 | `--into <id>` | link the source to this task instead of opening one that may be the same job. |
 | `--new` | open the task even when one like it is open or was closed in the last 14 days. |
 
 **Returns:** add a task from a message, note or document, or one of your own in a project
 
-**Example:** `memo tasks add 'msg:telegram/1/77/42' --account telegram:1 --type request`, `memo tasks add --project HRB --title 'Draft the budget' --type feature`
+**Example:** `memo tasks add 'msg:telegram/1/77/42' --account telegram:1 --type request`, `memo tasks add --project HRB --title 'Draft the budget' --type feature`, `memo tasks add --project INBOX --title 'Reply on Avito to Ivan' --external-id avito:4512345678 --source-url https://www.avito.ru/4512345678`
 
 ### `memo tasks list`
 
@@ -695,7 +821,7 @@ memo tasks list [query] [options]
 | `--desc` | project tasks: the --sort order reversed. |
 | `--cursor <cursor>` | project tasks: the next page, from page.next_cursor, with the same query and order. |
 
-**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 24 more; every field: memo commands info tasks list
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 26 more; every field: memo commands info tasks list
 
 **Next usually:** `memo tasks links <task>`, `memo tasks status <task>`, `memo tasks show <task>`
 
@@ -717,7 +843,7 @@ memo tasks counts [query] [options]
 |---|---|
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
-**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 24 more; every field: memo commands info tasks counts
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 26 more; every field: memo commands info tasks counts
 
 **Next usually:** `memo tasks links <task>`, `memo tasks status <task>`, `memo tasks show <task>`
 
@@ -811,7 +937,7 @@ memo tasks close <id> [options]
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--as <state>` | done or dismissed. Default: `done`. |
 | `--reason <text>` | why it is closed. |
-| `--revision <n>` | refuse the write unless the task is still at this revision (task.stale, exit 3). |
+| `--revision <n>` | refuse the write unless the task is still at this revision (conflict, task.stale, exit 15). |
 
 **Returns:** close a task as done or dismissed
 
@@ -836,7 +962,7 @@ memo tasks assign <id> <person> [options]
 |---|---|
 | `--role <role>` | assignee, reviewer, watcher. Default: `assignee`. |
 | `--clear` | take the person off the task in that role, instead of adding them. |
-| `--revision <n>` | refuse the write unless the task is still at this revision (task.stale, exit 3). |
+| `--revision <n>` | refuse the write unless the task is still at this revision (conflict, task.stale, exit 15). |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Returns:** name who works on a task, or with --clear take them off it
@@ -862,7 +988,7 @@ memo tasks move <id> [options]
 | `--status <state>` | move it to this column too: open, todo, in_progress, done, dismissed; with --before or --after it must be that task's column. |
 | `--before <id>` | the task it goes just above. |
 | `--after <id>` | the task it goes just below. |
-| `--revision <n>` | refuse the write unless the task is still at this revision (task.stale, exit 3). |
+| `--revision <n>` | refuse the write unless the task is still at this revision (conflict, task.stale, exit 15). |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Returns:** put a project task before or after another in its board column
@@ -922,12 +1048,12 @@ memo tasks update <task> [options]
 | `--account <account>` | the account it acts as: telegram:<account>, email:<account>, notes:<id>. |
 | `--json` | print JSON. |
 | `--agent <agent>` | a project task: the agent working on it, apart from its assignees; none clears it. |
-| `--project <project>` | a project task: move it to another project, by key or project:<id>; it takes a new key there, and the old key still finds it. |
+| `--project <project>` | a project task: move it to another project, by key or project:<id>; it and its subtasks take new keys there, and the old keys still find them. A subtask moves alone only with --parent none. |
 | `--type <type>` | a project task's kind: bug, feature, chore. |
-| `--revision <n>` | refuse the write unless the task is still at this revision (task.stale, exit 3). |
+| `--revision <n>` | refuse the write unless the task is still at this revision (conflict, task.stale, exit 15). |
 | `--status <state>` | a project task's state: open, todo, in_progress, done, dismissed; a closed one reopens. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 24 more; every field: memo commands info tasks update
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: memo commands info tasks update
 
 **Example:** `memo tasks update HRB-1 --title 'Send the budget' --priority high --account telegram:1`, `memo tasks update 1a2b3c4d --due 2d --title 'Send the revised budget' --account telegram:1`
 
@@ -948,7 +1074,7 @@ memo tasks show <task> [options]
 | `--source <accounts>` | the account: telegram:<account>, email:<account>, notes:<id>, or group:<name> of one. |
 | `--json` | print JSON. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 24 more; every field: memo commands info tasks show
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: memo commands info tasks show
 
 **Example:** `memo tasks show 1a2b3c4d --source telegram:1 --json`
 
@@ -974,7 +1100,7 @@ memo tasks link <task> [targets] [options]
 | `--account <account>` | the account it acts as: telegram:<account>, email:<account>, notes:<id>. |
 | `--json` | print JSON. |
 
-**Returns:** task links — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: memo commands info tasks link
+**Returns:** task links — id, ref, key, project, project_key, project_name, created_by, title, and 28 more; every field: memo commands info tasks link
 
 **Example:** `memo tasks link HRB-2 HRB-1 --kind blocked-by`
 
@@ -999,7 +1125,7 @@ memo tasks claim <task> [options]
 | `--account <account>` | the account it acts as: telegram:<account>, email:<account>, notes:<id>. |
 | `--json` | print JSON. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 24 more; every field: memo commands info tasks claim
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: memo commands info tasks claim
 
 **Example:** `memo tasks claim HRB-1 --lease 2h --account telegram:1`
 
@@ -1023,7 +1149,7 @@ memo tasks release <task> [options]
 | `--account <account>` | the account it acts as: telegram:<account>, email:<account>, notes:<id>. |
 | `--json` | print JSON. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 24 more; every field: memo commands info tasks release
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: memo commands info tasks release
 
 **Example:** `memo tasks release HRB-1 --account telegram:1`
 
@@ -1037,20 +1163,28 @@ task statistics
 
 #### `memo stats tasks show`
 
-per chat: how many tasks are open, the oldest open one, the median time to close
+tasks per chat, meeting or project: open now, and opened and closed in the period (created: in the query), with the median time to close and the mean age of the open ones
 
 ```sh
-memo stats tasks show [options]
+memo stats tasks show [query] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 | Option | What it does |
 |---|---|
+| `--by <group>` | chat (default) or meeting: this account's tasks; project: the owner's project tasks, every project. |
 | `--chat <chat>` | only this chat; a stored chat, by its id or title. |
 | `--type <type>` | only this type: question, request, mention or promise. |
+| `--timezone <zone>` | the IANA timezone for calendar days in the period, such as created>=today. |
 | `--source <accounts>` | the account: telegram:<account>, email:<account>, notes:<id>, or group:<name> of one. |
 | `--json` | print JSON. |
 
-**Returns:** task stats — open, rows; every field: memo commands info stats tasks show
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 26 more; every field: memo commands info stats tasks show
+
+**Next usually:** `memo tasks links <task>`, `memo tasks status <task>`, `memo tasks show <task>`
 
 **Example:** `memo stats tasks show --source telegram:1`, `memo stats tasks show --type question --source telegram:1 --json`
 
@@ -1060,7 +1194,7 @@ companies, teams, families and communities of yours
 
 ### `memo organizations add`
 
-add an organization of yours: a company, team, family or community
+add an organization of yours: a company, team, family or community; it is written at once, whoever runs it
 
 This command changes the local store or your files.
 
@@ -1078,9 +1212,52 @@ memo organizations add <name> [options]
 | `--scope <scope>` | personal, work. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
-**Returns:** add an organization of yours: a company, team, family or community
+**Returns:** add an organization
 
-**Example:** `memo organizations add 'Harbour Studio' --kind company --scope work`
+**Example:** `memo organizations add 'Harbour Studio' --kind company --scope work`, `memo organizations add 'Harbour Family' --kind family`
+
+### `memo organizations rename`
+
+rename an organization of yours; it is written at once, whoever runs it
+
+This command changes the local store or your files.
+
+```sh
+memo organizations rename <organization> <name> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `organization` | required | its id or organization:<id>. |
+| `name` | required | the new name. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** rename an organization
+
+**Example:** `memo organizations rename organization:1 'Harbour Studio Ltd'`, `memo organizations rename 1 'Harbour Studio Ltd' --json`
+
+### `memo organizations show`
+
+one organization by its id or organization:<id>, without its relationships, notes and tags
+
+```sh
+memo organizations show <organization> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `organization` | required | its id or organization:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** one organization
+
+**Example:** `memo organizations show organization:1`
 
 ### `memo organizations list`
 
@@ -1100,7 +1277,7 @@ memo organizations list [query] [options]
 
 **Returns:** organization — id, ref, kind, name, scope, created_at; every field: memo commands info organizations list
 
-**Example:** `memo organizations list --json`
+**Example:** `memo organizations list name:*harbour*`, `memo organizations list --json`
 
 ### `memo organizations context`
 
@@ -1228,7 +1405,7 @@ memo projects list [query] [options]
 
 ### `memo projects context`
 
-one project by its id, project:<id>, key, exact name or alias: its key documents first, then its relationships, notes, tags, pending findings and open tasks. Review proposals together; nothing is confirmed
+one project by its id, project:<id>, key, exact name or alias: its key documents first, then its relationships, notes, tags, pending findings and open tasks. Review proposals together; nothing is confirmed. `review.waiting` counts what waits for you, by kind, and `next` names the command that lists them
 
 ```sh
 memo projects context <project> [options]
@@ -1277,11 +1454,39 @@ memo projects evidence <project> [options]
 | `--sync-first` | first sync the linked chats the store does not hold back to --since-time, through their messenger CLI; off by default. |
 | `--sync-time <duration>` | time for all of --sync-first's syncs together. Default: `3m`. |
 | `--sync-profile <tool=profile>` | the messenger profile to sync as when several are signed in to a chat's account, such as max=default; repeat for another tool. It must be signed in to that account. |
+| `--purpose <purpose>` | the linked chats' purposes to read, comma-separated: work, sales, support, other, or all; default work. |
+| `--include-proposed` | also read chats and members proposed for the project, after the confirmed ones. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Returns:** find what the store holds about a project: names, words, people, linked chats
 
 **Example:** `memo projects evidence SYH --source telegram:1,email:personal --contact 'Alice Example'`, `memo projects evidence SYH --source all --context-query 'crane tender' --since-time 180d --json`
+
+### `memo projects status`
+
+where a project stands, from the stored messages of every chat confirmed as the project's or its child projects', in every account those links name (meta.accounts lists them): the last message, who replies next, open questions both ways, promises, amounts found by words with their direction (only when the project has no confirmed invoice or payment), payments recorded, billed, paid and owed per currency from confirmed invoices and payments (finance), up to five open confirmed deals (deals), how long each --context-query has been quiet on their side, and how much of each chat is held. Amounts, directions and promises found by words are marked pattern: read the cited message before trusting one. Others' questions in a group with no role, and others' word-found promises in a group, are counted on the chat's row as unlisted, not listed. next names at most two chats to read, with the messenger command that reads them. No model call; nothing leaves this machine
+
+```sh
+memo projects status <project> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `project` | required | an existing project's id, project:<id>, key, exact name or alias. |
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | how far back: days (60d, at most 730d) or a start date (2026-09-01). Default: `60d`. |
+| `--before-time <time>` | fixed exclusive end: ISO 8601 timestamp with UTC offset; days back count from it. |
+| `--context-query <words>` | words that all appear in one text; reports their last mention per side. Repeat for another. Default: ``. |
+| `--sync-profile <tool=profile>` | the messenger profile the next steps name when several are signed in to a chat's account, such as max=default; repeat for another tool. |
+| `--purpose <purpose>` | the linked chats' purposes to read, comma-separated: work, sales, support, other, or all; default work. |
+| `--compact` | one line per signal, chat and next step, for an agent. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** project status — project, key, name, signals, money, chats, purposes, out_of_scope, and 7 more; every field: memo commands info projects status
+
+**Example:** `memo projects status HRB --context-query 1C`, `memo projects status HRB --compact`
 
 ### `memo projects actions`
 
@@ -1299,7 +1504,7 @@ memo projects actions add <file> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required | JSON findings file, or - for stdin; at most 65536 UTF-8 bytes. |
+| `file` | required | the findings JSON itself (starts with {), a JSON file, or - for stdin; at most 65536 UTF-8 bytes. |
 
 | Option | What it does |
 |---|---|
@@ -1337,7 +1542,7 @@ memo projects actions list <project> [query] [options]
 
 #### `memo projects actions confirm`
 
-confirm a suggested key document, or create the named findings of a batch and reject its other new ones; an agent decides for you only with --reason, unless agent_decisions is false
+confirm a suggested key document, or create the named findings of a batch and reject its other new ones; an agent decides for you only when agent_decisions is true, and with --reason
 
 This command changes the local store or your files.
 
@@ -1354,7 +1559,8 @@ memo projects actions confirm <project> <id> [findings] [options]
 | Option | What it does |
 |---|---|
 | `--json` | print JSON; --json=id,status keeps only those fields. |
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--fingerprint <hash>` | a findings batch's fingerprint, as projects actions list gives it. |
 | `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
@@ -1380,7 +1586,8 @@ memo projects actions reject <project> <id> [options]
 | Option | What it does |
 |---|---|
 | `--json` | print JSON; --json=id,status keeps only those fields. |
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--fingerprint <hash>` | a findings batch's fingerprint, as projects actions list gives it. |
 | `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
@@ -1511,7 +1718,8 @@ memo projects key-documents add <project> <reference> [options]
 |---|---|
 | `--reason <text>` | why it is key, in a few words. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 
 **Returns:** mark a note:, document: or msg: reference as a key document of the project
 
@@ -1519,7 +1727,7 @@ memo projects key-documents add <project> <reference> [options]
 
 #### `memo projects key-documents remove`
 
-unmark a key document; the note, file or message stays
+unmark a key document; the note, file or message stays. Only you remove one
 
 This command changes the local store or your files.
 
@@ -1535,8 +1743,10 @@ memo projects key-documents remove <project> <reference> [options]
 | Option | What it does |
 |---|---|
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 
-**Returns:** unmark a key document; the note, file or message stays
+**Returns:** unmark a key document; the note, file or message stays. Only you remove one
 
 **Example:** `memo projects key-documents remove HRB note:12`
 
@@ -1582,19 +1792,20 @@ memo relationships add <from> <to> [options]
 
 | Option | What it does |
 |---|---|
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--kind <kind>` | member-of or related-to. Default: `member-of`. |
-| `--role <role>` | the role it has there, in a few words, such as cto. |
+| `--role <role>` | the role it has there; a person's role in an organization or a project is one from its list, such as employee or contributor. |
 | `--reason <text>` | why you think so, in a sentence. |
 
 **Returns:** state that a person, organization, project or chat belongs or relates to another
 
-**Example:** `memo relationships add person:3 organization:1 --role cto`, `memo relationships add project:2 organization:1 --kind related-to --reason 'same client'`
+**Example:** `memo relationships add person:3 organization:1 --role employee`, `memo relationships add project:2 organization:1 --kind related-to --reason 'same client'`
 
 ### `memo relationships list`
 
-relationships, all or those of one reference
+relationships, all or those of one reference, with titles; confirmed:false lists the proposals waiting for you, as memo review kind:relationship does
 
 ```sh
 memo relationships list [query] [options]
@@ -1608,13 +1819,40 @@ memo relationships list [query] [options]
 |---|---|
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
-**Returns:** relationship — id, from, to, kind, role, evidence, confirmed, provenance, and 2 more; every field: memo commands info relationships list
+**Returns:** relationship — id, from, to, kind, role, purpose, evidence, confirmed, and 7 more; every field: memo commands info relationships list
 
-**Example:** `memo relationships list about:"person:3"`
+**Example:** `memo relationships list about:"person:3"`, `memo relationships list confirmed:false`
+
+### `memo relationships update`
+
+set what a relationship is: its role, or what a chat is for in a project (work, sales, support, other); an agent's change waits for you in memo review
+
+This command changes the local store or your files.
+
+```sh
+memo relationships update <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the relationship's id, as relationships list gives it. |
+
+| Option | What it does |
+|---|---|
+| `--role <role>` | the role it has there, from the same list as relationships add; an empty value clears it. |
+| `--purpose <purpose>` | what the chat is for in the project: work, sales, support or other. |
+| `--reason <text>` | why, in a sentence. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+
+**Returns:** set a relationship's role or a chat's purpose in a project
+
+**Example:** `memo relationships update 12 --purpose sales`, `memo relationships update 12 --role contractor --reason 'builds the site'`
 
 ### `memo relationships remove`
 
-remove a relationship
+remove a relationship; removing a suggested one rejects it
 
 This command changes the local store or your files.
 
@@ -1629,8 +1867,11 @@ memo relationships remove <id> [options]
 | Option | What it does |
 |---|---|
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
-**Returns:** remove a relationship
+**Returns:** remove a relationship; removing a suggested one rejects it
 
 **Example:** `memo relationships remove 4`
 
@@ -1651,6 +1892,9 @@ memo relationships confirm <id> [options]
 | Option | What it does |
 |---|---|
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
 **Returns:** confirm a suggested relationship
 
@@ -1658,21 +1902,29 @@ memo relationships confirm <id> [options]
 
 ### `memo relationships scan`
 
-suggest relationships between email contacts of one domain; you confirm each
+chats, mail threads and people that look like a project's, scored from the store: its name and aliases in titles and messages, the chats and threads of its members in every messenger, spreading from what it finds. With no project, people who share a company mail domain. Lists them and writes nothing; --yes writes them as proposals by memo-scan for you to decide in memo review. Never confirms, and never proposes again what you rejected
+
+This command changes the local store or your files.
 
 ```sh
-memo relationships scan [options]
+memo relationships scan [project] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `project` | optional | a project's id, key, exact name or alias, or all; left out, people by mail domain. |
 
 | Option | What it does |
 |---|---|
-| `--source <accounts>` | the one account: provider:account (telegram:500, email:personal), or a provider or group:<name> that holds only one. |
+| `--source <accounts>` | where to look, or all: which accounts, separated by commas: provider:account (email:personal), a provider (email), a kind (mail, notes, documents) or group:<name>. |
+| `--since-time <time>` | how far back messages count: days (90d, at most 730d) or a date. Default: `90d`. |
+| `--limit <n>` | new proposals per project at most, up to 50. Default: `20`. |
+| `--yes` | write the proposals; without it nothing is written. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
-| `--limit <n>` | most suggestions, at most 100. Default: `20`. |
 
-**Returns:** suggest relationships between email contacts of one domain; you confirm each
+**Returns:** propose chats and people for a project; nothing is written without --yes
 
-**Example:** `memo relationships scan --source email:me@example.com --limit 10`
+**Example:** `memo relationships scan HRB --source all`, `memo relationships scan HRB --source telegram:1,email:personal --yes`, `memo relationships scan --source email:me@example.com`
 
 ## `memo reminders`
 
@@ -2014,7 +2266,8 @@ memo memories add <text> [options]
 
 | Option | What it does |
 |---|---|
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--kind <kind>` | summary, digest, preference. |
 | `--scope <scope>` | personal or work. |
 | `--evidence <ref...>` | what shows it: msg:, note:, meeting:, person: or another reference. |
@@ -2108,7 +2361,10 @@ memo memories confirm <ref> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
 **Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 12 more; every field: memo commands info memories confirm
 
@@ -2130,7 +2386,10 @@ memo memories invalidate <ref> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
 **Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 12 more; every field: memo commands info memories invalidate
 
@@ -2152,7 +2411,10 @@ memo memories remove <ref> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
 **Returns:** forget a memory: erase its text, its links to sources and its search entry
 
@@ -2224,7 +2486,8 @@ memo mentions confirm <id> [person] [options]
 |---|---|
 | `--source <accounts>` | the mailboxes a mail mention may be in: email:<account>, email or group:<name>. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 
 **Returns:** say what a mention is, everywhere its value is written
 
@@ -2248,7 +2511,8 @@ memo mentions reject <id> [options]
 |---|---|
 | `--source <accounts>` | the mailboxes a mail mention may be in: email:<account>, email or group:<name>. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 
 **Returns:** dismiss a mention's value everywhere, and on later imports
 
@@ -2274,7 +2538,8 @@ memo facts add <statement> [options]
 
 | Option | What it does |
 |---|---|
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--kind <kind>` | fact, statement, question, decision, promise. |
 | `--evidence <ref...>` | what shows it: msg:, note:, meeting:, person: or another reference. |
 | `--project <project>` | the project it belongs to: its key or project:<id>. |
@@ -2332,7 +2597,7 @@ memo facts show <ref> [options]
 
 ### `memo facts confirm`
 
-stand behind a fact an agent proposed; a fact it supersedes stops holding
+stand behind a fact an agent proposed; a fact it supersedes stops holding. memo review confirm decides many
 
 This command changes the local store or your files.
 
@@ -2346,11 +2611,39 @@ memo facts confirm <ref> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
 **Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 13 more; every field: memo commands info facts confirm
 
 **Example:** `memo facts confirm fact:4`
+
+### `memo facts revoke`
+
+take back your approval of an agent's fact; it waits as proposed again. Not for a correction or your own fact
+
+This command changes the local store or your files.
+
+```sh
+memo facts revoke <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | fact:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
+
+**Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 13 more; every field: memo commands info facts revoke
+
+**Example:** `memo facts revoke fact:4`
 
 ### `memo facts reverse`
 
@@ -2368,7 +2661,10 @@ memo facts reverse <ref> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
 **Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 13 more; every field: memo commands info facts reverse
 
@@ -2390,7 +2686,10 @@ memo facts reject <ref> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
 **Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 13 more; every field: memo commands info facts reject
 
@@ -2412,11 +2711,1547 @@ memo facts remove <ref> [options]
 
 | Option | What it does |
 |---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
 **Returns:** forget a fact: erase its text, its links to sources and its tags
 
 **Example:** `memo facts remove fact:4`
+
+## `memo invoices`
+
+invoices you issued or received, with their lines and what paid them; amounts per currency
+
+### `memo invoices list`
+
+invoices, newest first; review:proposed lists what waits for you
+
+```sh
+memo invoices list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most invoices, up to 500. Default: `100`. |
+
+**Returns:** invoices, newest first; review:proposed lists what waits for you
+
+**Example:** `memo invoices list project:HRB open:true`, `memo invoices list review:proposed --json`
+
+### `memo invoices show`
+
+one invoice with its lines and the payments allocated to it
+
+```sh
+memo invoices show <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | invoice:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** one invoice with its lines and the payments allocated to it
+
+**Example:** `memo invoices show invoice:4`
+
+### `memo invoices add`
+
+record an invoice of one line, and add more with invoices lines add; yours is confirmed at once; an agent's waits as proposed for you in memo review
+
+This command changes the local store or your files.
+
+```sh
+memo invoices add <amount> <currency> <description> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `amount` | required | a decimal, such as 50000.00. |
+| `currency` | required | ISO 4217, such as RUB. |
+| `description` | required | what it bills, in a few words. |
+
+| Option | What it does |
+|---|---|
+| `--person <uid>` | the person billed or billing: person:<id>. |
+| `--organization <organization>` | the organization billed or billing: organization:<id>. |
+| `--kind <kind>` | receivable (you bill them) or payable (they bill you). |
+| `--title <title>` | the invoice's number, as printed on it. |
+| `--occurred-time <time>` | the day it was issued, such as 2026-11-01. |
+| `--due <time>` | the day it is due, such as 2026-11-15. |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
+| `--reason <text>` | why an agent proposes it, for the owner who decides. |
+| `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** record an invoice; an agent's waits for your review
+
+**Example:** `memo invoices add 50000.00 RUB Bed rental, November --kind receivable --organization organization:3 --project HRB`, `memo invoices add 1200.50 EUR Hosting --kind payable --person person:7 --title 2026-118 --due 2026-11-15`
+
+### `memo invoices lines`
+
+the lines of an invoice, each a quantity at a price; its total is their sum. you change any invoice's lines; an agent only those of an invoice it proposed that is still proposed
+
+#### `memo invoices lines add`
+
+add a line at the end of an invoice that is not void; the total never falls below what confirmed payments settled: quantity × price, and the total becomes the sum of the lines. With --product its name and price are copied, so a later price change leaves the line as it is, and --amount sets another price; without --product, --amount is needed. you change any invoice's lines; an agent only those of an invoice it proposed that is still proposed
+
+This command changes the local store or your files.
+
+```sh
+memo invoices lines add <invoice> <quantity> [description] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `invoice` | required | invoice:<id>. |
+| `quantity` | required | how many, a decimal such as 12 or 1.5. |
+| `description` | optional | what the line is, in a few words; the product's name when left out. |
+
+| Option | What it does |
+|---|---|
+| `--product <product>` | the product or service it is: its name and price are copied onto the line. |
+| `--amount <decimal>` | the price of one, such as 10000.00; the product's when left out with --product. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** add a line to an invoice
+
+**Example:** `memo invoices lines add invoice:4 1 --product product:4`, `memo invoices lines add invoice:4 2 Delivery --amount 1500.00`
+
+#### `memo invoices lines remove`
+
+take a line off an invoice; the others keep their positions, and the last line stays. you change any invoice's lines; an agent only those of an invoice it proposed that is still proposed
+
+This command changes the local store or your files.
+
+```sh
+memo invoices lines remove <invoice> <position> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `invoice` | required | invoice:<id>. |
+| `position` | required | the line's position, from 1, as invoices show lists it. |
+
+| Option | What it does |
+|---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** take a line off an invoice
+
+**Example:** `memo invoices lines remove invoice:4 2`
+
+## `memo payments`
+
+money paid to you or by you, and the invoices each payment settles; amounts per currency
+
+### `memo payments list`
+
+payments, newest first; review:proposed lists what waits for you
+
+```sh
+memo payments list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most payments, up to 500. Default: `100`. |
+
+**Returns:** payments, newest first; review:proposed lists what waits for you
+
+**Example:** `memo payments list project:HRB direction:in`, `memo payments list review:proposed --json`
+
+### `memo payments show`
+
+one payment with the invoices it is allocated to
+
+```sh
+memo payments show <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | payment:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** one payment with the invoices it is allocated to
+
+**Example:** `memo payments show payment:9`
+
+### `memo payments add`
+
+record a payment, or with --refund-of a refund of one; yours is confirmed at once; an agent's waits as proposed for you in memo review. payments allocate matches it to an invoice
+
+This command changes the local store or your files.
+
+```sh
+memo payments add <amount> <currency> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `amount` | required | a decimal, such as 50000.00. |
+| `currency` | required | ISO 4217, such as RUB. |
+
+| Option | What it does |
+|---|---|
+| `--person <uid>` | the person who paid or was paid: person:<id>. |
+| `--organization <organization>` | the organization who paid or was paid: organization:<id>. |
+| `--kind <kind>` | in (paid to you) or out (paid by you). |
+| `--title <title>` | the payment's reference, such as the bank's purpose line. |
+| `--occurred-time <time>` | the day it was paid, such as 2026-11-01; today when left out. |
+| `--refund-of <payment>` | the payment this one gives money back for, going the other way: payment:<id>. |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
+| `--reason <text>` | why an agent proposes it, for the owner who decides. |
+| `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** record a payment; an agent's waits for your review
+
+**Example:** `memo payments add 25000.00 RUB --kind in --organization organization:3 --occurred-time 2026-11-01 --project HRB`, `memo payments add 5000.00 RUB --kind out --organization organization:3 --refund-of payment:9`
+
+### `memo payments allocate`
+
+settle part of an invoice with part of a payment, in their one currency, never beyond either; an agent allocates only a payment it proposed
+
+This command changes the local store or your files.
+
+```sh
+memo payments allocate <payment> <invoice> <amount> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `payment` | required | payment:<id>. |
+| `invoice` | required | invoice:<id>. |
+| `amount` | required | a decimal, such as 25000.00. |
+
+| Option | What it does |
+|---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** settle part of an invoice with part of a payment
+
+**Example:** `memo payments allocate payment:9 invoice:4 25000.00`
+
+### `memo payments unlink`
+
+take back what a payment settles of an invoice, to allocate it again; you set right a confirmed payment's wrong split, and an agent unlinks only a still-proposed payment it proposed
+
+This command changes the local store or your files.
+
+```sh
+memo payments unlink <payment> <invoice> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `payment` | required | payment:<id>. |
+| `invoice` | required | invoice:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** take back a payment's allocation to an invoice
+
+**Example:** `memo payments unlink payment:9 invoice:4`
+
+## `memo orders`
+
+orders you placed or took, for whom, from which shop, and how far delivery got
+
+### `memo orders list`
+
+orders, newest first; review:proposed is what waits for you
+
+```sh
+memo orders list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most orders, up to 500. Default: `100`. |
+
+**Returns:** orders, newest first; review:proposed is what waits for you
+
+**Example:** `memo orders list status:shipped`, `memo orders list number:A-1042 'supplier:"Shop One"' --json`
+
+### `memo orders show`
+
+one order with its customer, shop, amount, status and the mail it was read from
+
+```sh
+memo orders show <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | order:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** one order with its customer, shop, amount, status and the mail it was read from
+
+**Example:** `memo orders show order:3`
+
+### `memo orders add`
+
+record a placed order; yours is confirmed at once, an agent's waits as proposed for you in memo review
+
+This command changes the local store or your files.
+
+```sh
+memo orders add <shop> [amount] [currency] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `shop` | required | the shop or supplier, as its mail names it. |
+| `amount` | optional | the order's amount, a decimal such as 2499.00. |
+| `currency` | optional | ISO 4217, such as RUB; given with the amount. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | why it was ordered: personal, business, client, other. |
+| `--person <uid>` | whom it is for, when not you: person:<id>. |
+| `--organization <organization>` | whom it is for, when not you: organization:<id>. |
+| `--title <title>` | the shop's order number. |
+| `--occurred-time <time>` | the day it was ordered, such as 2026-11-01. |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
+| `--reason <text>` | why an agent proposes it, for the owner who decides. |
+| `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** record an order; an agent's waits for your review
+
+**Example:** `memo orders add 'Shop One' 2499.00 RUB --kind personal --title A-1042`, `memo orders add 'Office Supply' --kind client --organization organization:3`
+
+### `memo orders lines`
+
+the lines of an order, each a quantity at a price; its total is their sum. you change any order's lines; an agent only those of an order it proposed that is still proposed
+
+#### `memo orders lines add`
+
+add a line at the end of an order that has a currency (orders add with an amount): quantity × price, and the total becomes the sum of the lines. With --product its name and price are copied, so a later price change leaves the line as it is, and --amount sets another price; without --product, --amount is needed. you change any order's lines; an agent only those of an order it proposed that is still proposed
+
+This command changes the local store or your files.
+
+```sh
+memo orders lines add <order> <quantity> [description] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `order` | required | order:<id>. |
+| `quantity` | required | how many, a decimal such as 12 or 1.5. |
+| `description` | optional | what the line is, in a few words; the product's name when left out. |
+
+| Option | What it does |
+|---|---|
+| `--product <product>` | the product or service it is: its name and price are copied onto the line. |
+| `--amount <decimal>` | the price of one, such as 10000.00; the product's when left out with --product. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** add a line to an order
+
+**Example:** `memo orders lines add order:3 12 --product product:4`, `memo orders lines add order:3 1 Rental, first week --product product:4 --amount 2000.00`, `memo orders lines add order:3 2 Helmet --amount 2500.00`
+
+#### `memo orders lines remove`
+
+take a line off an order; the others keep their positions, and the last line stays. you change any order's lines; an agent only those of an order it proposed that is still proposed
+
+This command changes the local store or your files.
+
+```sh
+memo orders lines remove <order> <position> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `order` | required | order:<id>. |
+| `position` | required | the line's position, from 1, as orders show lists it. |
+
+| Option | What it does |
+|---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** take a line off an order
+
+**Example:** `memo orders lines remove order:3 2`
+
+## `memo pipelines`
+
+sales pipelines: the stages a deal or a lead goes through, in order, and how many get through each
+
+### `memo pipelines list`
+
+every pipeline with its stages in order and how many open deals or leads stand in each
+
+```sh
+memo pipelines list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** pipeline — id, ref, name, kind, account, external_id, stages, created_at, and 3 more; every field: memo commands info pipelines list
+
+**Example:** `memo pipelines list`, `memo pipelines list kind:lead --json`
+
+### `memo pipelines show`
+
+one pipeline's funnel: per stage the open deals or leads in it, how many reached it, and the share that went on to the next stage; then won, lost and the win rate
+
+```sh
+memo pipelines show <pipeline> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `pipeline` | required | pipeline:<id>, or a name only one pipeline has. |
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | count only deals or leads made since this day, such as 2026-09-01. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** pipeline — id, ref, name, kind, account, external_id, stages, created_at, and 3 more; every field: memo commands info pipelines show
+
+**Example:** `memo pipelines show pipeline:2`, `memo pipelines show Sales --since-time 2026-09-01`
+
+### `memo pipelines add`
+
+make a pipeline with its stages in order; a stage named won or lost (any letter case) ends a deal or lead as that
+
+This command changes the local store or your files.
+
+```sh
+memo pipelines add <name> <stage> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the pipeline's name, such as Sales. |
+| `stage` | required | its stages in order, such as Call Quote Contract won lost. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | what it holds: deal or lead; deal by default. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** make a pipeline with its stages
+
+**Example:** `memo pipelines add Sales Call Quote Contract won lost`, `memo pipelines add Inbound new called --kind lead`
+
+## `memo deals`
+
+deals you hope to win: the client, the expected amount, the stage and whether it was won or lost
+
+### `memo deals list`
+
+deals, newest first; status:open is what is still in play
+
+```sh
+memo deals list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most deals, up to 500. Default: `100`. |
+
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info deals list
+
+**Example:** `memo deals list status:open project:HRB`, `memo deals list stage:Quote --json`
+
+### `memo deals show`
+
+one deal with its pipeline, stage, status, amount, the people on it and what it was read from
+
+```sh
+memo deals show <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | deal:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info deals show
+
+**Example:** `memo deals show deal:5`
+
+### `memo deals add`
+
+record a deal in a stage; it is written at once, whoever runs it
+
+This command changes the local store or your files.
+
+```sh
+memo deals add <title> <stage> [amount] [currency] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `title` | required | what you hope to sell, such as 'Site for the clinic'. |
+| `stage` | required | the stage it is in; Sales/Quote or pipeline:3/Quote names the pipeline when two have that stage. |
+| `amount` | optional | the expected amount, a decimal such as 500000.00. |
+| `currency` | optional | ISO 4217, such as RUB; given with the amount. |
+
+| Option | What it does |
+|---|---|
+| `--organization <organization>` | the client: organization:<id>. |
+| `--person <uid>` | a person on the deal: person:<id>; repeat for another, up to 20. |
+| `--role <role>` | what those people are on it: owner, contact, decision-maker, influencer; contact by default. |
+| `--due <time>` | the day you expect it to close, such as 2026-12-01. |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
+| `--reason <text>` | why an agent records it, kept with it. |
+| `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info deals add
+
+**Example:** `memo deals add 'Site for the clinic' Call 500000.00 RUB --organization organization:3 --project HRB`, `memo deals add 'Support contract' Sales/Quote --person person:7 --role decision-maker --due 2026-12-01`
+
+### `memo deals move`
+
+move a deal to another stage of its pipeline; a won or lost stage closes it, an open one reopens it
+
+This command changes the local store or your files.
+
+```sh
+memo deals move <ref> <stage> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | deal:<id>. |
+| `stage` | required | a stage of the deal's pipeline. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info deals move
+
+**Example:** `memo deals move deal:5 Quote`
+
+### `memo deals close`
+
+close a deal as won or lost; it moves to its pipeline's won or lost stage when there is one
+
+This command changes the local store or your files.
+
+```sh
+memo deals close <ref> <outcome> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | deal:<id>. |
+| `outcome` | required | won or lost. |
+
+| Option | What it does |
+|---|---|
+| `--occurred-time <time>` | the day it closed, such as 2026-11-20; today when left out. |
+| `--reason <text>` | why it was won or lost, kept with it. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info deals close
+
+**Example:** `memo deals close deal:5 won`, `memo deals close deal:6 lost --reason 'chose a cheaper studio'`
+
+## `memo leads`
+
+leads: first contacts in a lead pipeline, before they are deals
+
+### `memo leads list`
+
+leads, newest first; status:open is what is still in play
+
+```sh
+memo leads list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most leads, up to 500. Default: `100`. |
+
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info leads list
+
+**Example:** `memo leads list status:open`
+
+### `memo leads show`
+
+one lead with its pipeline, stage, status, amount, the people on it and what it was read from
+
+```sh
+memo leads show <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | lead:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info leads show
+
+**Example:** `memo leads show lead:3`
+
+### `memo leads add`
+
+record a lead in a stage; it is written at once, whoever runs it
+
+This command changes the local store or your files.
+
+```sh
+memo leads add <title> [stage] [amount] [currency] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `title` | required | who or what came in, such as 'Call from the site'. |
+| `stage` | optional | the stage it is in; the first stage of the only lead pipeline when left out. |
+| `amount` | optional | the expected amount, a decimal such as 500000.00. |
+| `currency` | optional | ISO 4217, such as RUB; given with the amount. |
+
+| Option | What it does |
+|---|---|
+| `--organization <organization>` | the client: organization:<id>. |
+| `--person <uid>` | a person on the lead: person:<id>; repeat for another, up to 20. |
+| `--role <role>` | what those people are on it: owner, contact, decision-maker, influencer; contact by default. |
+| `--due <time>` | the day you expect it to close, such as 2026-12-01. |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
+| `--reason <text>` | why an agent records it, kept with it. |
+| `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info leads add
+
+**Example:** `memo leads add 'Call from the site'`, `memo leads add 'Clinic in Kazan' contacted --person person:9`
+
+### `memo leads move`
+
+move a lead to another stage of its pipeline; a won or lost stage closes it, an open one reopens it
+
+This command changes the local store or your files.
+
+```sh
+memo leads move <ref> <stage> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | lead:<id>. |
+| `stage` | required | a stage of the lead's pipeline. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info leads move
+
+**Example:** `memo leads move lead:3 qualified`
+
+### `memo leads close`
+
+close a lead as won or lost; it moves to its pipeline's won or lost stage when there is one
+
+This command changes the local store or your files.
+
+```sh
+memo leads close <ref> <outcome> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | lead:<id>. |
+| `outcome` | required | won or lost. |
+
+| Option | What it does |
+|---|---|
+| `--occurred-time <time>` | the day it closed, such as 2026-11-20; today when left out. |
+| `--reason <text>` | why it was won or lost, kept with it. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: memo commands info leads close
+
+**Example:** `memo leads close lead:3 lost --reason 'no budget'`
+
+## `memo products`
+
+goods and services you sell or buy, with their prices; a line that names one copies its price, so a later price change leaves the line as it was
+
+### `memo products list`
+
+products and services, by name; archived:true lists those no longer sold
+
+```sh
+memo products list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most products, up to 500. Default: `100`. |
+
+**Returns:** products and services, by name; archived:true lists those no longer sold
+
+**Example:** `memo products list kind:service`, `memo products list archived:true --json`
+
+### `memo products show`
+
+one product or service with its price, unit, supplier and stock code
+
+```sh
+memo products show <product> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `product` | required | product:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** one product or service with its price, unit, supplier and stock code
+
+**Example:** `memo products show product:4`
+
+### `memo products add`
+
+add a product or service you sell or buy; anyone adds one directly, as a price feeds no total
+
+This command changes the local store or your files.
+
+```sh
+memo products add <name> [amount] [currency] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | its name, as an invoice or order line prints it. |
+| `amount` | optional | the price of one unit, a decimal such as 10000.00. |
+| `currency` | optional | ISO 4217, such as RUB; given with the amount. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | product or service; product when left out. |
+| `--unit <text>` | what one of it is counted in, such as hour or month. |
+| `--sku <code>` | the stock code the seller gives it. |
+| `--supplier <party>` | who supplies it, when not you: person:<uid> or organization:<id>. |
+| `--description <text>` | what it is, in a sentence. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** add a product or service
+
+**Example:** `memo products add 'Bike rental, month' 10000.00 RUB --kind service --unit month`, `memo products add 'Helmet' 2500.00 RUB --sku H-12 --supplier organization:3`
+
+### `memo products update`
+
+change a product's price, name, unit or description, or archive it; lines already written keep theirs
+
+This command changes the local store or your files.
+
+```sh
+memo products update <product> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `product` | required | product:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--amount <decimal>` | the new price of one unit, such as 12000.00; give --currency with it. |
+| `--currency <code>` | an ISO 4217 code, such as RUB. |
+| `--title <title>` | its new name. |
+| `--unit <text>` | what one of it is counted in, such as hour or month. |
+| `--description <text>` | what it is, in a sentence. |
+| `--archived <on\|off>` | on: no longer sold, and lines and subscriptions keep pointing at it; off: sold again. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** change or archive a product
+
+**Example:** `memo products update product:4 --amount 12000.00 --currency RUB`, `memo products update product:4 --archived on`
+
+## `memo contracts`
+
+contracts you work under: their kind, dates, renewal, notice and what they are worth
+
+### `memo contracts list`
+
+contracts, newest first; expires:2026-12-31 lists those that end by then
+
+```sh
+memo contracts list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most contracts, up to 500. Default: `100`. |
+
+**Returns:** contracts, newest first; expires:2026-12-31 lists those that end by then
+
+**Example:** `memo contracts list status:active`, `memo contracts list expires:2026-12-31 --json`
+
+### `memo contracts show`
+
+one contract with its dates, renewal and the last day to give notice
+
+```sh
+memo contracts show <contract> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `contract` | required | contract:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** one contract with its dates, renewal and the last day to give notice
+
+**Example:** `memo contracts show contract:2`
+
+### `memo contracts add`
+
+record a contract; one with no amount is written as it is, by anyone; with an amount yours is confirmed at once and an agent's waits as proposed for you in memo review
+
+This command changes the local store or your files.
+
+```sh
+memo contracts add <name> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | what it is called, such as 'Rental agreement'. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | what it is: sale, purchase, service, lease, employment, nda, license, other. |
+| `--status <state>` | draft, active, ended, terminated; active when left out. |
+| `--start-date <date>` | the first day it is in force, YYYY-MM-DD. |
+| `--end-date <date>` | the last day it is in force, YYYY-MM-DD; left out, it runs until ended. |
+| `--auto-renew <on\|off>` | it renews by itself at its end, or it does not. |
+| `--notice-days <days>` | how many days before its end a party must say it will not go on. |
+| `--amount <decimal>` | what it is worth, such as 120000.00, in --currency; with it, an agent's waits for you. |
+| `--currency <code>` | an ISO 4217 code, such as RUB. |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
+| `--reason <text>` | why an agent proposes it, for the owner who decides. |
+| `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** record a contract
+
+**Example:** `memo contracts add 'Rental agreement' --kind service --start-date 2026-11-01 --end-date 2027-10-31 --auto-renew on --notice-days 30 --amount 120000.00 --currency RUB`, `memo contracts add 'NDA with the studio' --kind nda --project HRB`
+
+### `memo contracts update`
+
+change a contract's dates, status, terms or worth; you change any, an agent only one it proposed that is still proposed, and a confirmed contract's worth only you
+
+This command changes the local store or your files.
+
+```sh
+memo contracts update <contract> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `contract` | required | contract:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | what it is: sale, purchase, service, lease, employment, nda, license, other. |
+| `--status <state>` | draft, active, ended, terminated; active when left out. |
+| `--start-date <date>` | the first day it is in force, YYYY-MM-DD. |
+| `--end-date <date>` | the last day it is in force, YYYY-MM-DD; left out, it runs until ended. |
+| `--auto-renew <on\|off>` | it renews by itself at its end, or it does not. |
+| `--notice-days <days>` | how many days before its end a party must say it will not go on. |
+| `--amount <decimal>` | what it is worth, such as 120000.00, in --currency; with it, an agent's waits for you. |
+| `--currency <code>` | an ISO 4217 code, such as RUB. |
+| `--title <title>` | its new name. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** change a contract
+
+**Example:** `memo contracts update contract:2 --status terminated`, `memo contracts update contract:2 --end-date 2027-12-31`
+
+## `memo subscriptions`
+
+subscriptions you bill or pay: who supplies it, who pays, how often, and every price it had; a price is never changed, a new one is added
+
+### `memo subscriptions list`
+
+subscriptions, newest first; renews:2026-12-01 lists those that renew by then
+
+```sh
+memo subscriptions list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most subscriptions, up to 500. Default: `100`. |
+
+**Returns:** subscriptions, newest first; renews:2026-12-01 lists those that renew by then
+
+**Example:** `memo subscriptions list status:active direction:payable`, `memo subscriptions list renews:2026-12-01 --json`
+
+### `memo subscriptions show`
+
+one subscription with its parties, dates, current price and every price it had
+
+```sh
+memo subscriptions show <subscription> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `subscription` | required | subscription:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** one subscription with its parties, dates, current price and every price it had
+
+**Example:** `memo subscriptions show subscription:5`
+
+### `memo subscriptions add`
+
+record a subscription and its first price; yours is confirmed at once; an agent's waits as proposed for you in memo review
+
+This command changes the local store or your files.
+
+```sh
+memo subscriptions add <name> <amount> <currency> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | what it is, such as Hosting. |
+| `amount` | required | its price for one period, a decimal such as 990.00. |
+| `currency` | required | ISO 4217, such as RUB. |
+
+| Option | What it does |
+|---|---|
+| `--status <state>` | trial, active, paused, cancelled, ended; trial needs --trial-end-date. |
+| `--supplier <party>` | who supplies it: person:<uid> or organization:<id>; you, when you bill it. |
+| `--customer <party>` | who receives it and pays for it: person:<uid> or organization:<id>; you, when you pay. |
+| `--product <product>` | the product or service it is for: product:<id>. |
+| `--contract <contract>` | the contract it runs under: contract:<id>. |
+| `--every <count-unit>` | how often it is charged: a count and a unit, such as 1-month or 1-year. |
+| `--start-date <date>` | the first day it runs, YYYY-MM-DD. |
+| `--trial-end-date <date>` | the day its free trial ends, YYYY-MM-DD. |
+| `--kind <kind>` | receivable (you bill it) or payable (you pay it). |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
+| `--reason <text>` | why an agent proposes it, for the owner who decides. |
+| `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** record a subscription; an agent's waits for your review
+
+**Example:** `memo subscriptions add Hosting 990.00 RUB --kind payable --supplier organization:3 --every 1-month --start-date 2026-11-01`, `memo subscriptions add 'Bike rental' 10000.00 RUB --kind receivable --customer organization:3 --every 1-month --trial-end-date 2026-11-14 --status trial`
+
+### `memo subscriptions update`
+
+change a subscription's status, schedule, dates or parties; pause it with --status paused. You change any, an agent only one it proposed that is still proposed. A new price is subscriptions prices add
+
+This command changes the local store or your files.
+
+```sh
+memo subscriptions update <subscription> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `subscription` | required | subscription:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--status <state>` | trial, active, paused, cancelled, ended; trial needs --trial-end-date. |
+| `--supplier <party>` | who supplies it: person:<uid> or organization:<id>; you, when you bill it. |
+| `--customer <party>` | who receives it and pays for it: person:<uid> or organization:<id>; you, when you pay. |
+| `--product <product>` | the product or service it is for: product:<id>. |
+| `--contract <contract>` | the contract it runs under: contract:<id>. |
+| `--every <count-unit>` | how often it is charged: a count and a unit, such as 1-month or 1-year. |
+| `--start-date <date>` | the first day it runs, YYYY-MM-DD. |
+| `--trial-end-date <date>` | the day its free trial ends, YYYY-MM-DD. |
+| `--title <title>` | its new name. |
+| `--end-date <date>` | the last day it runs, YYYY-MM-DD. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** change a subscription
+
+**Example:** `memo subscriptions update subscription:5 --status paused`, `memo subscriptions update subscription:5 --every 1-year`
+
+### `memo subscriptions cancel`
+
+mark a subscription cancelled on a day; it stays, with its prices
+
+This command changes the local store or your files.
+
+```sh
+memo subscriptions cancel <subscription> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `subscription` | required | subscription:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--occurred-time <time>` | the day it was cancelled, such as 2026-11-01; today when left out. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** cancel a subscription
+
+**Example:** `memo subscriptions cancel subscription:5 --occurred-time 2026-11-30`
+
+### `memo subscriptions prices`
+
+the prices a subscription had, each from a day on; one is never changed, a new one is added
+
+#### `memo subscriptions prices add`
+
+add a price from a day on; the earlier ones stay as they were. yours is confirmed at once; an agent's waits as proposed for you in memo review, and the subscription stays as it is
+
+This command changes the local store or your files.
+
+```sh
+memo subscriptions prices add <subscription> <amount> <currency> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `subscription` | required | subscription:<id>. |
+| `amount` | required | the price for one period, a decimal such as 1190.00. |
+| `currency` | required | ISO 4217, such as RUB. |
+
+| Option | What it does |
+|---|---|
+| `--start-date <date>` | the first day the price holds, YYYY-MM-DD; the subscription's start when left out. |
+| `--reason <text>` | why an agent proposes it, for the owner who decides. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** add a subscription's new price
+
+**Example:** `memo subscriptions prices add subscription:5 1190.00 RUB --start-date 2027-01-01`
+
+## `memo wallets`
+
+bank accounts, cards and cash you keep money in, one currency each; a balance is the opening balance plus confirmed, booked transactions, computed each time
+
+### `memo wallets list`
+
+wallets with their balances today; kind:card lists the cards
+
+```sh
+memo wallets list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most wallets, up to 500. Default: `100`. |
+
+**Returns:** wallets with their balances today; kind:card lists the cards
+
+**Example:** `memo wallets list`, `memo wallets list kind:card --json`
+
+### `memo wallets show`
+
+one wallet with its balance, and beside it what is pending or proposed and not counted yet; for an imported wallet whose opening balance you have not set, source_says gives the one its source sent
+
+```sh
+memo wallets show <wallet> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `wallet` | required | wallet:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--until-time <time>` | the balance up to and including this day, such as 2026-10-31; today when left out. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** one wallet with its balance and what is pending
+
+**Example:** `memo wallets show wallet:2`, `memo wallets show wallet:2 --until-time 2026-10-31`
+
+### `memo wallets add`
+
+add a wallet in one currency; anyone adds one directly, and only you set its opening balance, with wallets update
+
+This command changes the local store or your files.
+
+```sh
+memo wallets add <name> <currency> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | what you call it, such as 'Main card'. |
+| `currency` | required | ISO 4217, such as RUB; a bank account in two currencies is two wallets. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | bank, card, cash, wallet, other; bank when left out. |
+| `--institution <text>` | the bank or other company that holds it, by name. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** add a bank account, card or cash wallet
+
+**Example:** `memo wallets add 'Main card' RUB --kind card --institution 'Bank One'`
+
+### `memo wallets update`
+
+rename a wallet, or set the opening balance its balance counts from; the opening balance is yours alone, an agent is refused
+
+This command changes the local store or your files.
+
+```sh
+memo wallets update <wallet> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `wallet` | required | wallet:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | its new name. |
+| `--institution <text>` | the bank or other company that holds it, by name. |
+| `--opening-balance <decimal>` | what it held on --opening-date, such as 1500.50; only you set it. |
+| `--opening-date <date>` | the day of the opening balance, YYYY-MM-DD. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** rename a wallet or set its opening balance
+
+**Example:** `memo wallets update wallet:2 --opening-balance 15000.00 --opening-date 2026-01-01`
+
+## `memo transactions`
+
+money a wallet's statement shows moving in or out, the payment it settles, and the categories it is split into
+
+### `memo transactions list`
+
+transactions, newest first; uncategorized:true lists those not fully split into categories
+
+```sh
+memo transactions list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+| `--limit <n>` | most transactions, up to 500. Default: `100`. |
+
+**Returns:** transactions, newest first
+
+**Example:** `memo transactions list 'wallet:"wallet:2"' status:pending`, `memo transactions list uncategorized:true --json`
+
+### `memo transactions show`
+
+one transaction with its wallet, payment, splits and what is not categorized
+
+```sh
+memo transactions show <transaction> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `transaction` | required | transaction:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** one transaction with its wallet, payment, splits and what is not categorized
+
+**Example:** `memo transactions show transaction:12`
+
+### `memo transactions add`
+
+record what a wallet's statement shows moved, in the wallet's currency; yours is confirmed at once; an agent's waits as proposed for you in memo review
+
+This command changes the local store or your files.
+
+```sh
+memo transactions add <wallet> <amount> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `wallet` | required | wallet:<id>. |
+| `amount` | required | a decimal above 0, such as 500.00. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | in (money came in) or out (money went out). |
+| `--occurred-time <time>` | the day the statement shows, such as 2026-11-01; today when left out. |
+| `--description <text>` | what the statement says, as it says it. |
+| `--status <state>` | pending or booked; only a booked one counts in a balance; booked when left out. |
+| `--payment <payment>` | the payment it settles, same amount, currency and direction: payment:<id>. |
+| `--project <project>` | the project it belongs to: its key or project:<id>. |
+| `--reason <text>` | why an agent proposes it, for the owner who decides. |
+| `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** record a transaction; an agent's waits for your review
+
+**Example:** `memo transactions add wallet:2 500.00 --kind out --occurred-time 2026-11-14 --description 'Coffee shop'`, `memo transactions add wallet:2 10000.00 --kind in --payment payment:9`
+
+### `memo transactions update`
+
+book a pending transaction, link it to the payment it settles, or fix its text; you change any, an agent only one it proposed that is still proposed
+
+This command changes the local store or your files.
+
+```sh
+memo transactions update <transaction> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `transaction` | required | transaction:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--status <state>` | pending or booked; only a booked one counts in a balance. |
+| `--payment <payment>` | the payment it settles, same amount, currency and direction: payment:<id>. |
+| `--description <text>` | what the statement says, as it says it. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** book a transaction or link it to its payment
+
+**Example:** `memo transactions update transaction:12 --status booked`, `memo transactions update transaction:12 --payment payment:9`
+
+### `memo transactions splits`
+
+the categories a transaction's amount is split into; together never more than the amount, the rest is uncategorized
+
+#### `memo transactions splits add`
+
+put part of a transaction's amount under a category; you split any transaction; an agent only one it proposed that is still proposed
+
+This command changes the local store or your files.
+
+```sh
+memo transactions splits add <transaction> <amount> <category> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `transaction` | required | transaction:<id>. |
+| `amount` | required | a decimal above 0, such as 120.00. |
+| `category` | required | the category, in a word or a few, such as Rent. |
+
+| Option | What it does |
+|---|---|
+| `--project <project>` | the project this part belongs to: its key or project:<id>. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** put part of a transaction under a category
+
+**Example:** `memo transactions splits add transaction:12 300.00 Rent --project HRB`
+
+#### `memo transactions splits remove`
+
+take a split off a transaction; its amount is uncategorized again. you split any transaction; an agent only one it proposed that is still proposed
+
+This command changes the local store or your files.
+
+```sh
+memo transactions splits remove <transaction> <position> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `transaction` | required | transaction:<id>. |
+| `position` | required | the split's position, from 1, as transactions show lists it. |
+
+| Option | What it does |
+|---|---|
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** take a split off a transaction
+
+**Example:** `memo transactions splits remove transaction:12 1`
+
+## `memo records`
+
+what a source said, kept per account; what it says about money waits for your review
+
+### `memo records import`
+
+bring a source's records into the store, once: the same file twice changes nothing, a lower revision is refused, and anything that feeds money totals becomes a proposal for you, never confirmed money. Each refusal is also printed on stderr as it happens, one line each, past the receipt's 1000
+
+This command changes the local store or your files.
+
+```sh
+memo records import <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | a records envelope as JSON, JSONL (a header line, then a record per line, read as it streams) or a vCard address book (.vcf, into phone:<device>); - for stdin. |
+
+| Option | What it does |
+|---|---|
+| `--dry-run` | check and plan the import; write nothing. a dry run holds the store's write lock and grows the write-ahead log for its length. |
+| `--account <account>` | the source the envelope is for: <provider>:<account> (sheet:rentals) or its source.account alone; phone:<device> for a vCard file. |
+| `--json` | print JSON; --json=created,errors keeps only those fields. |
+
+**Returns:** import a source's records; money waits for your review
+
+**Example:** `memo records import payments.jsonl --account rentals --dry-run`, `memo records import envelope.json --account rentals --json`, `memo records import contacts.vcf --account phone:pixel`
+
+### `memo records check`
+
+what records import would do with the file, as its receipt, writing nothing; a dry run holds the store's write lock and grows the write-ahead log for its length
+
+This command changes the local store or your files.
+
+```sh
+memo records check <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | a records envelope as JSON, JSONL (a header line, then a record per line, read as it streams) or a vCard address book (.vcf, into phone:<device>); - for stdin. |
+
+| Option | What it does |
+|---|---|
+| `--account <account>` | the source the envelope is for: <provider>:<account> (sheet:rentals) or its source.account alone; phone:<device> for a vCard file. |
+| `--json` | print JSON; --json=created,errors keeps only those fields. |
+
+**Returns:** check a records file against the store; write nothing
+
+**Example:** `memo records check - --account rentals`
+
+### `memo records list`
+
+a source's records, newest first; waiting:true lists those that wait for a record they name, unmatched:true the people, organizations and projects whose identifiers fit more than one of yours, entity: those mapped to one of your entries
+
+```sh
+memo records list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--account <account>` | the source, <provider>:<account> as the envelope's source names it, such as sheet:rentals. |
+| `--limit <n>` | most records, up to 500. Default: `100`. |
+| `--json` | print JSON; --json=type,external_id,entity keeps only those fields. |
+
+**Returns:** a source's records; waiting:true lists what needs records link
+
+**Example:** `memo records list waiting:true --account sheet:rentals`, `memo records list type:organization --account sheet:rentals --json`, `memo records list 'entity:"organization:3"' deleted:false --account sheet:rentals`
+
+### `memo records link`
+
+say which of your entries a source's record is (organization:client is organization:3); never done by name. Records that waited for it become proposals in memo review. Only you link; an agent is refused
+
+This command changes the local store or your files.
+
+```sh
+memo records link <record> <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `record` | required | <type>:<external_id> as the source names it, such as organization:client or custom:quote:Q-7. |
+| `ref` | required | your entry of the same type: person:<id>, organization:<id> or project:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--account <account>` | the source, <provider>:<account> as the envelope's source names it, such as sheet:rentals. |
+| `--json` | print JSON; --json=type,external_id,entity keeps only those fields. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+
+**Returns:** say which of your entries a source's record is
+
+**Example:** `memo records link organization:client organization:3 --account sheet:rentals`
+
+### `memo records show`
+
+one record as its source said it: its fields, the records it names, the records that name it (incoming, the first 100) and the entry made from it
+
+```sh
+memo records show <record> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `record` | required | <type>:<external_id> as the source names it, such as organization:client or custom:quote:Q-7. |
+
+| Option | What it does |
+|---|---|
+| `--account <account>` | the source, <provider>:<account> as the envelope's source names it, such as sheet:rentals. |
+| `--json` | print JSON; --json=fields,relations,incoming,entity keeps only those fields. |
+
+**Returns:** one record as its source said it
+
+**Example:** `memo records show custom:quote:Q-7 --account example-erp:demo`, `memo records show organization:client --account sheet:rentals --json`
+
+### `memo records delete`
+
+say a source no longer has a record, as an import's delete does: the record is kept as deleted, and the entry made from it stays, flagged for you to reject or keep
+
+This command changes the local store or your files.
+
+```sh
+memo records delete <record> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `record` | required | <type>:<external_id> as the source names it, such as organization:client or custom:quote:Q-7. |
+
+| Option | What it does |
+|---|---|
+| `--account <account>` | the source, <provider>:<account> as the envelope's source names it, such as sheet:rentals. |
+| `--json` | print JSON; --json=deleted,flagged,errors keeps only those fields. |
+
+**Returns:** mark a source's record deleted
+
+**Example:** `memo records delete payment:sheet-12 --account sheet:rentals`
+
+### `memo records match`
+
+link every waiting person, organization and project of a source to the one entry its e-mail, phone or other identifier names, or make one, as an import does; never by name. Two or more fits wait for records link
+
+This command changes the local store or your files.
+
+```sh
+memo records match [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--account <account>` | the source, <provider>:<account> as the envelope's source names it, such as sheet:rentals. |
+| `--json` | print JSON; --json=linked,created,unmatched keeps only those fields. |
+
+**Returns:** match a source's waiting people and organizations
+
+**Example:** `memo records match --account sheet:rentals`
 
 ## `memo meetings`
 
@@ -2438,7 +4273,7 @@ memo meetings actions add <file> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `file` | required | JSON proposal file, or - for stdin; at most 65536 UTF-8 bytes. |
+| `file` | required | the findings JSON itself (starts with {), a JSON file, or - for stdin; at most 65536 UTF-8 bytes. |
 
 | Option | What it does |
 |---|---|
@@ -2513,6 +4348,8 @@ memo meetings actions confirm <id> <ids> [options]
 | `--account <account>` | the meeting account it acts as: provider:account, such as zoom:me@example.com. |
 | `--json` | print JSON; --json=id,status keeps only those fields. |
 | `--fingerprint <hash>` | the exact fingerprint shown in the preview. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 
 **Returns:** meeting findings — id, account, input, fingerprint, status, author, decided_by, decided_at, and 2 more; every field: memo commands info meetings actions confirm
 
@@ -2537,6 +4374,8 @@ memo meetings actions reject <id> [options]
 | `--account <account>` | the meeting account it acts as: provider:account, such as zoom:me@example.com. |
 | `--json` | print JSON; --json=id,status keeps only those fields. |
 | `--fingerprint <hash>` | the exact fingerprint shown in the preview. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 
 **Returns:** meeting findings — id, account, input, fingerprint, status, author, decided_by, decided_at, and 2 more; every field: memo commands info meetings actions reject
 
@@ -2623,7 +4462,8 @@ memo actions add <kind> [options]
 
 | Option | What it does |
 |---|---|
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--reason <text>` | why it should be done. |
 | `--account <account>` | the account that would act: provider:account, such as telegram:1. |
 | `--target <ref>` | what it acts on: msg:, chat:, contact:, person:, task:, …. |
@@ -2693,9 +4533,10 @@ memo actions confirm <id> [findings] [options]
 
 | Option | What it does |
 |---|---|
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--fingerprint <hash>` | a findings batch: the fingerprint actions show gives. |
-| `--reason <text>` | a findings batch: why, in a few words; required when an agent decides for you. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Returns:** confirm it: a task to act on, or a findings batch's facts and tasks
@@ -2718,14 +4559,155 @@ memo actions reject <id> [options]
 
 | Option | What it does |
 |---|---|
-| `--as-owner` | record it as yours although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set). |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
 | `--fingerprint <hash>` | a findings batch: the fingerprint actions show gives. |
-| `--reason <text>` | a findings batch: why, in a few words; required when an agent decides for you. |
+| `--reason <text>` | why, in a few words; required when an agent decides for you. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Returns:** reject it; nothing is done. For a findings batch, every new finding
 
 **Example:** `memo actions reject 5`
+
+## `memo review`
+
+every proposal waiting for your decision, across projects: links, key documents, facts, invoices, payments and more
+
+### `memo review list`
+
+what waits for the owner's decision, newest first, with titles, who proposed it, why and the evidence
+
+```sh
+memo review list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--limit <n>` | proposals per page, at most 50. Default: `20`. |
+| `--page <n>` | which page, from 1. Default: `1`. |
+| `--compact` | one line per proposal. |
+
+**Returns:** memo proposal — id, kind, status, title, project, project_title, source, owner_only, and 11 more; every field: memo commands info review list
+
+**Example:** `memo review list project:HRB`, `memo review list kind:relationship,fact by:agent`, `memo review list via:chat:max/1/-100`
+
+### `memo review show`
+
+one proposal with its titles, signals and the text around each piece of evidence
+
+```sh
+memo review show <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the proposal's id, as review lists it: 17070, fact:512, memory:88, link:17, payment:4, close:Q-15. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--brief` | only references and their titles, without excerpts or nearby text. |
+| `--before-n <n>` | messages or document paragraphs before the evidence, at most 5. Default: `2`. |
+| `--after-n <n>` | messages or document paragraphs after the evidence, at most 5. Default: `2`. |
+| `--compact` | one line, as review prints it. |
+
+**Returns:** one proposal with its titles, signals and the text around each piece of evidence
+
+**Example:** `memo review show 17079`, `memo review show 17080 --brief --json`
+
+### `memo review confirm`
+
+confirm proposals by id or range (17070-17079,fact:500-502,17080/f1); each is decided on its own, so a refusal leaves the others decided. An agent decides only with --reason, never its own or a scan's
+
+This command changes the local store or your files.
+
+```sh
+memo review confirm <ids> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ids` | required | ids or ranges as review lists them; 17080/f1 accepts that finding and rejects the batch's others. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--reason <text>` | why, in a few words; required when an agent decides. |
+| `--compact` | one line per decision. |
+
+**Returns:** confirm proposals by id or range; each on its own
+
+**Example:** `memo review confirm 17078-17081`, `memo review confirm 17080/f1,17080/f3`, `memo review confirm close:Q-15`
+
+### `memo review reject`
+
+turn proposals down by id or range, with why; each is decided on its own
+
+This command changes the local store or your files.
+
+```sh
+memo review reject <ids> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ids` | required | ids or ranges as review lists them; a batch is turned down whole. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--reason <text>` | why it is turned down, in a few words. |
+| `--compact` | one line per decision. |
+
+**Returns:** turn proposals down, with why
+
+**Example:** `memo review reject 17081 --reason "not this project"`, `memo review reject close:Q-15 --reason 'still open'`
+
+### `memo review agenda`
+
+the morning digest, from the store alone with no model call: everything new in what you tagged watch (chats, mail threads, people, projects, a meeting's series), replies you owe to people in messengers and personal mail (not bots or service chats), new personal mail, meetings that ended, tasks, projects that moved, proposals waiting. Tasks are the open ones created since the last morning-digest run (a day back when none ran) and those overdue, due today or due tomorrow, each with who asked and who does it. Replies owed reach back 7 days; owed mail lists only senders you know (linked to a person with other identities, or written to before), and mail from new senders is one count with the command that lists it. Each item has its reference, who, when, one line of text and why it is there; a section cut by --limit or --max-output-bytes says how many it left out and the command that reads them. `scope` says what was read (the window, sources, counts), `tasks` counts each task group, and `health` names each account whose sync failed, that nothing syncs, or that is quiet for longer than usual, so an unsynced account does not read as a quiet day
+
+```sh
+memo review agenda [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | how far back: hours or days (12h, 7d) or a start date (2026-11-01). Default: `1d`. |
+| `--limit <n>` | items per section before the size budget. Default: `25`. |
+| `--max-output-bytes <bytes>` | the text answer's size budget in bytes; 40000 with --compact, else 80000. |
+| `--compact` | one line per item, shorter excerpts, the smaller budget: for an agent. |
+| `--json` | print JSON. |
+
+**Returns:** the morning digest: watch list, owed replies, mail, meetings, tasks, projects
+
+**Example:** `memo review agenda --compact`, `memo review agenda --since-time 3d --json`
+
+### `memo review status`
+
+the owner's daily look, with no model call: per mail account the threads with new mail, what you owe and wait for, and how far each agent's processing mark has read; then what was proposed and what waits
+
+```sh
+memo review status [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+| `--since-time <time>` | how far back: hours or days (12h, 7d) or a start date (2026-11-01). Default: `1d`. |
+
+**Returns:** review status — since, at, mail, proposed, waiting, quiet; every field: memo commands info review status
+
+**Example:** `memo review status`, `memo review status --since-time 7d --json`
 
 ## `memo agents`
 
@@ -2874,9 +4856,9 @@ memo models list [query] [options]
 |---|---|
 | `--json` | print JSON. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: memo commands info models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: memo commands info models list
 
-**Next usually:** `memo models download <model>`
+**Next usually:** `memo models download <model>`, `memo models set <model>`
 
 **Example:** `memo models list kind:text --json`
 
@@ -2900,9 +4882,124 @@ memo models download <model> [options]
 | `--accept-terms` | accept the model's licence terms, for a model that has its own. |
 | `--json` | print JSON. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: memo commands info models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: memo commands info models download
 
-**Example:** `memo models download e5-small`
+**Next usually:** `memo models set <model>`
+
+**Example:** `memo models download e5-small`, `memo models download e5-large`
+
+### `memo models set`
+
+make a downloaded text model the one every embed and every search by meaning uses, in every WireCat CLI. Each model keeps its own vectors: the next syncs embed what the new one lacks, and switching back is instant
+
+This command changes the local store or your files.
+
+```sh
+memo models set <model> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `model` | required | a downloaded text model id from models list. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON. |
+
+**Returns:** model chosen — id, kind, title, languages, size_bytes, downloaded, default, path, and 9 more; every field: memo commands info models set
+
+**Next usually:** `memo models download <model>`
+
+**Example:** `memo models set e5-large`
+
+### `memo models add`
+
+add an ONNX embedding model from Hugging Face, pinned and checked by sha256
+
+This command changes the local store or your files.
+
+```sh
+memo models add <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the id to give it: a-z, 0-9, . _ -. |
+
+| Option | What it does |
+|---|---|
+| `--payload <json>` | where the model is and how to run it, as JSON (below). |
+| `--offline` | refuse a call that needs the network. |
+| `--json` | print JSON. |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: memo commands info models add
+
+**Next usually:** `memo models download <model>`, `memo models set <model>`
+
+**Example:** `memo models add e5-base --payload '{"repository":"Xenova/multilingual-e5-base","onnx":"onnx/model_quantized.onnx","dims":768,"pooling":"mean","prefix":{"query":"query: ","passage":"passage: "}}'`
+
+### `memo models consents`
+
+consent to send stored notes, documents and mail to a hosted model that rewrites them for search; off by default
+
+#### `memo models consents show`
+
+whether enrichment is on, with which provider and model, how many records it covers and the cost
+
+```sh
+memo models consents show [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON. |
+
+**Returns:** whether enrichment is on, with which provider and model, how many records it…
+
+**Example:** `memo models consents show --json`
+
+#### `memo models consents set`
+
+turn enrichment on for one provider and model; without --yes, say what would be sent and change nothing
+
+This command changes the local store or your files.
+
+```sh
+memo models consents set <provider> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `provider` | required | the provider that receives the records: openai or anthropic. |
+
+| Option | What it does |
+|---|---|
+| `--model <model>` | the provider's model name, such as gpt-4o-mini or claude-haiku-5-5. |
+| `--base-url <url>` | the address of an OpenAI-compatible model API, or the Anthropic API root. |
+| `--yes` | agree that the records go to this provider, and turn enrichment on. |
+| `--json` | print JSON. |
+
+**Returns:** turn enrichment on for one provider and model; without --yes, say what would…
+
+**Example:** `memo models consents set openai --model gpt-4o-mini`, `memo models consents set openai --model gpt-4o-mini --yes`
+
+#### `memo models consents revoke`
+
+turn enrichment off and delete what the model wrote; search reads only the records' own text again
+
+This command changes the local store or your files.
+
+```sh
+memo models consents revoke [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON. |
+
+**Returns:** turn enrichment off and delete what the model wrote; search reads only the…
+
+**Example:** `memo models consents revoke`
 
 ## `memo search`
 
@@ -2910,7 +5007,7 @@ search messages, mail, notes, memories and people; search all when unsure where
 
 ### `memo search all`
 
-messages, mail, notes and calendar events ranked together; not people, memories, projects or decisions. A kind you know reads better with its own search, with all its fields
+messages, mail, notes, calendar events, deals, leads and business data ranked together; not people, memories, projects or decisions. A kind you know reads better with its own search, with all its fields
 
 ```sh
 memo search all <query> [options]
@@ -2926,13 +5023,13 @@ memo search all <query> [options]
 | `--exact` | words as written; skip meaning search. |
 | `--timezone <zone>` | IANA timezone for calendar date boundaries. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
-| `--only <resources>` | messages,mail,notes,events, separated by commas. |
+| `--only <resources>` | messages,mail,notes,events,crm,business, separated by commas. |
 | `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 | `--project <project>` | rank the key documents of this project (id, project:<id>, key, exact name or alias) first; nothing is left out. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 8 more; every field: memo commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 15 more; every field: memo commands info search all
 
-**Example:** `memo search all 'budget harbour'`, `memo search all 'content:invoice' --only mail,notes --json`
+**Example:** `memo search all 'budget harbour'`, `memo search all 'content:invoice' --only mail,notes --json`, `memo search all 'Rental agreement' --only business`
 
 ### `memo search messages`
 
@@ -2955,7 +5052,7 @@ memo search messages <query> [options]
 | `--brief` | each message as reference, time, sender and excerpt only. |
 | `--full` | each message with its whole text; --json still gives the excerpt. |
 
-**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 8 more; every field: memo commands info search messages
+**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 9 more; every field: memo commands info search messages
 
 **Next usually:** `memo messages show <message>`
 
@@ -2981,10 +5078,10 @@ memo search mail <query> [options]
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--brief` | each email as reference, time, sender and excerpt only. |
 | `--full` | each email with its whole text; --json still gives the excerpt. |
-| `--source <accounts>` | the mailboxes to search (default: every one): email:<account> (its name in mail.accounts or its address), email or group:<name>. |
+| `--source <accounts>` | the mailboxes to search (default: every one): email:<address>, email or group:<name>. |
 | `--plain-order` | best first by the words alone, without moving mail from suspicious senders down. |
 
-**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 8 more; every field: memo commands info search mail
+**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 9 more; every field: memo commands info search mail
 
 **Next usually:** `memo messages show <message>`
 
@@ -3093,9 +5190,54 @@ memo search meetings <query> [options]
 | `--source <accounts>` | the meeting account: provider:account (zoom:me@example.com), or a provider that has one. |
 | `--json` | print the standard JSON answer. |
 
-**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, match, corrections, and 2 more; every field: memo commands info search meetings
+**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, language, line, and 5 more; every field: memo commands info search meetings
 
 **Example:** `memo search meetings budget --source zoom:me@example.com --project Harbour --since-time 2026-10-01 --limit 10 --json`
+
+## `memo events`
+
+calendar events of every account in the store, phone calls included
+
+### `memo events list`
+
+events of every calendar account in the store, latest start first: calendars and imported phone calls
+
+```sh
+memo events list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | events at most, 1–1000. Default: `100`. |
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 13 more; every field: memo commands info events list
+
+**Example:** `memo events list event_type:call`, `memo events list account:phone:pixel 'starts_at:[2026-11-02 TO 2026-11-07}' --json`
+
+### `memo events show`
+
+one event: its time, the accounts and calendars that hold it, and its attendees
+
+```sh
+memo events show <ref> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `ref` | required | event:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=ref,title keeps only those fields. |
+
+**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 13 more; every field: memo commands info events show
+
+**Example:** `memo events show event:42`
 
 ## `memo answers`
 
@@ -3129,7 +5271,7 @@ memo answers create <question> [query] [options]
 
 ## `memo sync`
 
-bring notes and mail up to date in the store, only what changed. Every configured folder and mail account unless narrowed; a notes option syncs notes only, a mail option mail only, unless both are given
+bring notes up to date in the store, only what changed, and embed the mail already stored for search by meaning; the mail CLI syncs the mail itself (mail <profile> sync). Every configured folder unless narrowed
 
 This command changes the local store or your files.
 
@@ -3139,21 +5281,16 @@ memo sync [options]
 
 | Option | What it does |
 |---|---|
-| `--only <resources>` | notes,mail, separated by commas. |
+| `--only <resources>` | notes,mail, separated by commas; mail embeds stored mail only. |
 | `--folder <folder>` | notes: only this configured folder, by its id or path; repeat for more. |
 | `--ignore <path>` | notes: leave this file or folder alone this run, a path or a glob; repeat for more. |
-| `--source <accounts>` | mail: only these mailboxes: email:<account> (its name in mail.accounts or its address), email or group:<name>. |
-| `--since-time <time>` | mail: read from this time, ISO 8601 or 30d ago (default: 30d). |
-| `--limit <n>` | mail: most new emails to read per account this run (default: 200). |
-| `--retry-attachments` | mail: reread stored emails' attachments that an older memo or a broken install left unread. |
-| `--rescan` | mail: list every message again, not only mail an earlier run left; also checks deletions. |
 | `--no-embed` | skip embedding notes and mail for search by meaning this run. |
 | `--timeout <duration>` | stop after this long, e.g. 10m; progress so far is kept (default: no limit). |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
-**Returns:** bring notes and mail up to date in the store, only what changed
+**Returns:** bring notes up to date in the store, and make stored mail searchable by meaning
 
-**Example:** `memo sync`, `memo sync --source email:work --since-time 2026-09-01`, `memo sync --only notes --folder ~/notes --no-embed`
+**Example:** `memo sync`, `memo sync --only mail`, `memo sync --only notes --folder ~/notes --no-embed`
 
 ## `memo store`
 
@@ -3174,6 +5311,36 @@ memo store info [options]
 **Returns:** store info — path, exists, schema, opens, error, bytes, journal_mode, pages, and 12 more; every field: memo commands info store info
 
 **Example:** `memo store info`, `memo store info --json`
+
+### `memo store recover`
+
+check every page and search index of the store, say what is damaged, what it means and the commands that recover it; changes nothing
+
+```sh
+memo store recover [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+#### `memo store recover run`
+
+copy every readable row into a new file with the sqlite3 program, rebuild the search indexes, mentions and vector index, check it, and put it in place of the store; the damaged file is kept beside it. Refuses while a WireCat timer or process has the store
+
+This command changes the local store or your files.
+
+```sh
+memo store recover run [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** rebuild a damaged store from every row it can read
+
+**Example:** `memo store recover run`
 
 ## `memo jobs`
 
@@ -3231,6 +5398,40 @@ memo jobs status [options]
 
 memo's settings file
 
+### `memo config show`
+
+every setting, its value, its default and whether the file sets it
+
+```sh
+memo config show [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** every setting, its value, its default and whether the file sets it
+
+**Example:** `memo config show`, `memo config show --json`
+
+### `memo config migrate`
+
+write each setting the file lacks at its default, keeping yours
+
+This command changes the local store or your files.
+
+```sh
+memo config migrate [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Returns:** write each setting the file lacks at its default, keeping yours
+
+**Example:** `memo config migrate`
+
 ### `memo config unset`
 
 remove one setting from the config file, even one memo does not know
@@ -3264,6 +5465,7 @@ memo doctor [options]
 | Option | What it does |
 |---|---|
 | `--online` | also connect once and read the account; sends nothing. |
+| `--deep` | also read every page of the store and check every search index (about 30 s for 6 GB); without it, only the file header and schema. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Returns:** the state this installation is in, without connecting unless --online
@@ -3288,6 +5490,159 @@ memo upgrade [options]
 **Returns:** upgrade memo with the package manager that installed it; --check only looks
 
 **Example:** `memo upgrade --check`
+
+## `memo schedule`
+
+run a memo command or an agent later or on a timer (systemd, launchd, Task Scheduler); an agent cannot send
+
+### `memo schedule command`
+
+run memo <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
+
+This command changes the local store or your files.
+
+```sh
+memo schedule command <name> <args> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `args` | required | the memo command after its name, e.g. -- messages list <chat> --limit 50. |
+
+| Option | What it does |
+|---|---|
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
+| `--json` | print JSON. |
+
+**Returns:** run memo <args…> on a timer — reads save what they read, so this is how a…
+
+**Example:** `memo schedule command digest --at 08:30 -- review status`, `memo schedule command mail-sync --every 1h -- sync --only mail`
+
+### `memo schedule agent`
+
+start an agent (claude or codex) with a prompt on a timer; it runs with MEMO_READ_ONLY=1, so it reads and drafts and cannot send — its answer is kept and you are notified
+
+This command changes the local store or your files.
+
+```sh
+memo schedule agent <name> <harness> <prompt> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `harness` | required | the agent to start. One of: `claude`, `codex`. |
+| `prompt` | required | what to do, e.g. "summarize what came in during the last day: memo personal search messages 'date>1d' --newest --limit 20". |
+
+| Option | What it does |
+|---|---|
+| `--model <model>` | the model it runs on: an alias such as sonnet, or a model id; "" for the harness's default (default sonnet for claude, codex's own for codex, or the config file's). |
+| `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--max-cost-per-day <usd>` | claude only: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
+| `--on-new-mail <holder>` | run only when mail is stored past this holder's mark — after a sync brought new mail; may check every 5m. |
+| `--mail-wait <duration>` | with --on-new-mail: start once the oldest waiting email has waited this long (default 30m, or the config file's). |
+| `--mail-batch <n>` | with --on-new-mail: or once this many emails wait (default 10, or the config file's). |
+| `--json` | print JSON. |
+
+**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
+
+**Example:** `memo schedule agent triage claude 'read memo review status and list what needs me today' --at 08:45 --max-cost 1`, `memo schedule agent mail-triage claude 'Run memo skill show mail-triage and follow it.' --every 5m --on-new-mail mail-triage --mail-wait 1h --mail-batch 20 --max-cost 1 --max-cost-per-day 5`, `memo schedule agent weekly claude 'read memo review status and sum up the week' --at 09:00 --model opus`
+
+### `memo schedule list`
+
+the schedules, when they run and how their last run went
+
+```sh
+memo schedule list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON. |
+
+**Returns:** scheduled job — name, kind, when, last, notify, deliver_to, spent_today_usd, max_cost_usd, and 1 more; every field: memo commands info schedule list
+
+**Example:** `memo schedule list`, `memo schedule list kind:agent --json`
+
+### `memo schedule run`
+
+run a schedule now, as its timer would, and wait for it
+
+This command changes the local store or your files.
+
+```sh
+memo schedule run <name> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON. |
+
+**Returns:** run a schedule now, as its timer would, and wait for it
+
+**Example:** `memo schedule run digest`
+
+### `memo schedule remove`
+
+stop a schedule and remove its timer; its past output stays
+
+This command changes the local store or your files.
+
+```sh
+memo schedule remove <name> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON. |
+
+**Returns:** stop a schedule and remove its timer; its past output stays
+
+**Example:** `memo schedule remove digest`
+
+### `memo schedule exec`
+
+what a timer runs, given the schedule's file; to run one by hand, use run
+
+This command changes the local store or your files.
+
+```sh
+memo schedule exec <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the schedule's schedule.json in the state folder, as the timer passes it. |
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON. |
+
+**Returns:** what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Example:** `memo schedule exec ~/.local/state/cli-memo/schedules/digest/schedule.json`
 
 ## `memo commands`
 
@@ -3334,8 +5689,12 @@ the instructions an agent is given for this tool
 print SKILL.md — `memo skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
 
 ```sh
-memo skill show [options]
+memo skill show [name] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | optional | one of the skills shipped for a task: search, projects, meetings, mail, proposals, money, mcp, vocabulary, mail-triage, morning-digest. |
 
 | Option | What it does |
 |---|---|
@@ -3488,5 +5847,6 @@ Failures use the shared WireCat error contract.
 | `12` | `provider_unavailable` |
 | `13` | `invalid_response` |
 | `14` | `outcome_unknown` |
+| `15` | `conflict` |
 | `130` | `cancelled` |
 | `1` | anything else |

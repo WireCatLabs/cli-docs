@@ -77,6 +77,18 @@ Un `memo tasks list` sin más muestra solo las tareas de tus cuentas; las tareas
 
 Para crear antes el proyecto, consulta [organizaciones y proyectos](./people.md#organizations-and-projects).
 
+### Mover una tarea a otro proyecto
+
+```sh
+memo tasks update HRB-1 --project OPS
+```
+
+La tarea toma la siguiente clave de ese proyecto, y también cada una de sus subtareas, hasta el último nivel. Conservan
+sus tareas padre. La respuesta nombra las subtareas que se movieron, con la clave antigua y la nueva, en `moved_subtasks`
+(`[{ "from": "HRB-2", "to": "OPS-4" }]`). Las claves antiguas todavía las encuentran. Una subtarea se mueve sola solo si la separas
+en el mismo comando: `memo tasks update HRB-2 --project OPS --parent none`. Sin `--parent none` se rechaza
+con el motivo `task.is-subtask`.
+
 ## Prioridad y orden
 
 Una prioridad es un número de 0 a 1, de mayor a menor, y la ves como una de cuatro etiquetas por cuartos: `low`
@@ -139,7 +151,8 @@ cuántas coinciden. Cada tarea lleva sus `assignments`, `ready` y `blocked_by`, 
 ## Cambiada en otro sitio
 
 Un agente puede editar una tarea mientras la miras. Pasa la `revision` que leíste y Memo rechaza la escritura si la
-tarea cambió desde entonces, con el motivo `task.stale` y el código de salida 3:
+tarea cambió desde entonces, con el código `conflict`, el motivo `task.stale` y el código de salida 15. El campo
+`details.revision` del error es la revisión actual de la tarea. Vuelve a leer la tarea y decide sobre la copia nueva:
 
 ```sh
 memo tasks update HRB-1 --title 'Book the hall' --revision 4
