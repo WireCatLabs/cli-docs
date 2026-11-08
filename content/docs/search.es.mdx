@@ -119,9 +119,12 @@ all
 duplicate: email:owner@northstar.example is in work, personal
 ```
 
-`memo groups remove work telegram:102` saca una cuenta de un grupo, y `all` la sigue leyendo.
-`memo groups move telegram:102 personal work` la mueve en una sola escritura: primero la cuenta, luego el grupo que
-deja y luego el grupo al que entra. `MEMO_GROUP=work` funciona como la primera palabra para cada orden.
+`memo groups remove personal email:owner@northstar.example` saca el buzón de `personal`, así que ya no es un
+duplicado, y `all` lo sigue leyendo. `memo groups move telegram:100 personal work` mueve una cuenta en una sola
+escritura: primero la cuenta, luego el grupo que deja y luego el grupo al que entra. Un grupo que nunca guardaste no
+existe: una orden que lo nombra se rechaza, y la respuesta lista tus grupos y los perfiles con ese nombre. Tras la
+primera sincronización de una cuenta de CRM que ningún grupo guardado lista, la respuesta de la sincronización sugiere
+`memo groups add work` con esa cuenta. `MEMO_GROUP=work` funciona como la primera palabra para cada orden.
 `--source personal` son tus propias cuentas de mensajería y no el grupo `personal`.
 
 Un grupo acota los mensajes, correos, eventos de calendario, registros del CRM y personas que lee una orden. Lo que
@@ -145,7 +148,8 @@ $ MEMO_GROUP_LOCK=work memo personal search all renewal
 
 Lo que el grupo tiene sigue respondiendo. El contexto de Alice con el bloqueo lee solo la cuenta del CRM y cuenta
 las cuentas que dejó fuera sin nombrarlas. Los recuerdos y los hechos dejan fuera las pruebas y fuentes de fuera del
-grupo y las cuentan como `out_of_scope`. Tus propias tareas siguen visibles:
+grupo y dicen cuántas dejaron fuera. `memo relationships list` deja fuera una fila con un extremo que solo vio una
+cuenta de fuera del grupo. Tus propias tareas siguen visibles:
 
 ```text
 $ MEMO_GROUP_LOCK=work memo context person:3

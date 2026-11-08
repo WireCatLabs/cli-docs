@@ -135,8 +135,9 @@ is kept beside the role, for example `--position "Procurement manager"`, and it 
 hold several roles in the same organization. `memo` refuses a role that is not on the list and names the list. A
 role saved before the lists existed stays as written, and `relationships list` marks it `custom`.
 
-The lists belong to you. Add a role of your own when the built-in ones do not fit, and remove it again while no
-relationship holds it. A built-in role cannot be removed, and only you change the lists, never your agent:
+The lists belong to you. Add a role of your own when the built-in ones do not fit. Remove it again while no
+relationship holds it and no suggestion that waits for your review names it. A relationship that its source stopped
+reporting does not count. A built-in role cannot be removed, and only you change the lists, never your agent:
 
 ```sh
 memo relationships roles list list:organization
@@ -169,10 +170,11 @@ Every relationship in an answer has a standing:
 
 Your word wins. A CRM sync never changes or ends a relationship you made or confirmed, and it never writes again
 one you removed or rejected. When the CRM reports a different role for the same pair, that is a second relationship
-next to yours, with its own standing. When you change the role or the job title of a relationship the CRM reported, you get one
-relationship of your own, `confirmed`, and it hides the CRM's row while it exists. A later edit changes your
-relationship in place. `memo relationships end` on the CRM's relationship ends yours, and removing yours shows the
-CRM's row again. Bob from the [examples](./people.md#examples) is a CRM contact of Acme Ltd, and you make him its
+next to yours, with its own standing. When you change the role or the job title of a relationship the CRM reported,
+you get one relationship of your own, `confirmed`, and it hides the CRM's row while it exists. The next sync keeps
+both: yours stays the answer, and the CRM's row stays hidden behind it. A later edit changes your relationship in
+place. `memo relationships end` on the CRM's relationship ends yours, and removing yours shows the CRM's row again.
+Bob from the [examples](./people.md#examples) is a CRM contact of Acme Ltd, and you make him its
 manager:
 
 ```text
@@ -187,8 +189,7 @@ $ memo relationships list 'about:"person:5"' kind:member-of include:ended
 2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
 ```
 
-When the CRM stops reporting a relationship, for example a contact left a
-company, the sync ends it. It stays in the store as `ended` and is never deleted. The store also keeps a record of
+When the CRM stops reporting a relationship, for example a contact left a company, the sync ends it. It stays in the store as `ended` and is never deleted. The store also keeps a record of
 every change to a relationship: when it was added, changed, ended, confirmed, rejected, withdrawn by its source,
 reported again or removed.
 

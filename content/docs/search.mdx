@@ -119,9 +119,11 @@ all
 duplicate: email:owner@northstar.example is in work, personal
 ```
 
-`memo groups remove work telegram:102` takes an account out of a group, and `all` still reads it.
-`memo groups move telegram:102 personal work` moves it in one write: first the account, then the group it leaves,
-then the group it joins. `MEMO_GROUP=work` works like the first word for every command. `--source personal` means
+`memo groups remove personal email:owner@northstar.example` takes the mailbox out of `personal`, so it is no longer
+a duplicate, and `all` still reads it. `memo groups move telegram:100 personal work` moves an account in one write:
+first the account, then the group it leaves, then the group it joins. A group you never saved does not exist: a run
+that names it is refused, and the answer lists your groups and the profiles named like it. After the first sync of a
+CRM account that no saved group lists, the sync's answer suggests `memo groups add work` with that account. `MEMO_GROUP=work` works like the first word for every command. `--source personal` means
 your own messenger accounts and not the group `personal`.
 
 A group narrows the messages, mail, calendar events, CRM records and people a run reads. What you make yourself in
@@ -145,7 +147,8 @@ $ MEMO_GROUP_LOCK=work memo personal search all renewal
 
 What the group holds still answers. Alice's context under the lock reads only the CRM account and counts the
 accounts it kept out without naming them. Memories and facts leave out evidence and sources outside the group and
-count them as `out_of_scope`. Your own tasks stay visible:
+say how many they left out. `memo relationships list` leaves out a row whose end only an outside account saw. Your
+own tasks stay visible:
 
 ```text
 $ MEMO_GROUP_LOCK=work memo context person:3

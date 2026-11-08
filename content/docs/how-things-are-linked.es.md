@@ -135,8 +135,8 @@ rol, por ejemplo `--position "Procurement manager"`, y nunca es un rol. Una pers
 misma organización. `memo` rechaza un rol que no está en la lista y muestra la lista. Un rol guardado antes de que
 existieran las listas se queda como estaba, y `relationships list` lo marca como `custom`.
 
-Las listas son tuyas. Añade un rol propio cuando los de serie no encajen, y quita ese rol mientras ninguna relación lo
-tenga. Un rol de serie no se puede quitar, y solo tú cambias las listas, nunca tu agente:
+Las listas son tuyas. Añade un rol propio cuando los de serie no encajen. Quita ese rol mientras ninguna relación lo
+tenga y ninguna sugerencia que espera tu revisión lo nombre. Una relación que su fuente dejó de informar no cuenta. Un rol de serie no se puede quitar, y solo tú cambias las listas, nunca tu agente:
 
 ```sh
 memo relationships roles list list:organization
@@ -169,8 +169,10 @@ Cada relación de una respuesta tiene un estado (standing):
 
 Tu palabra manda. Una sincronización del CRM nunca cambia ni termina una relación que tú creaste o confirmaste, y
 nunca vuelve a escribir una que quitaste o rechazaste. Si el CRM informa otro rol para el mismo par, es una segunda
-relación junto a la tuya, con su propio estado. Cuando cambias el rol o el cargo de una relación que informó el CRM, tienes una sola relación
-propia, `confirmed`, que oculta la fila del CRM mientras existe. Una edición posterior cambia tu relación en el sitio.
+relación junto a la tuya, con su propio estado. Cuando cambias el rol o el cargo de una relación que informó el CRM,
+tienes una sola relación propia, `confirmed`, que oculta la fila del CRM mientras existe. La siguiente sincronización
+conserva las dos: la tuya sigue siendo la respuesta y la fila del CRM sigue oculta detrás. Una edición posterior cambia tu relación en el
+sitio.
 `memo relationships end` sobre la relación del CRM termina la tuya, y si quitas la tuya vuelve a verse la fila del
 CRM. Bob, de los [ejemplos](./people.md#ejemplos), es un contacto de Acme Ltd en el CRM, y lo haces su manager:
 
