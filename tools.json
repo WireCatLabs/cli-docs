@@ -109,7 +109,7 @@
     "repo": "WireCatLabs/bitrix24-cli",
     "package": "@wirecat/bitrix24-cli",
     "lang": "en",
-    "docsRef": "v0.5.0",
+    "docsRef": "v0.6.0",
     "tier": "extra",
     "category": "crm",
     "summary": {

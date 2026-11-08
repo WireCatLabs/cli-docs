@@ -12,13 +12,14 @@ para algo que falta: puede que ya esté en camino. El orden es aproximado y pued
 contactos (`people`) y empresas (`organizations`), mueve y cierra negociaciones y prospectos, y lee embudos, etapas,
 productos y empleados (`users`). `fields list` muestra los campos propios del portal con sus opciones. `sync` copia
 embudos, empresas, contactos, negociaciones y prospectos al almacén local de WireCat, así que `deals`, `leads`,
-`pipelines` y `stages` también funcionan sin conexión, y `search all` busca en ellos. `b24 api` llega a cualquier
-método del portal por su nombre. Todos los comandos están en la [referencia de comandos](./commands.md).
+`pipelines` y `stages` también funcionan sin conexión, y `search all` busca en ellos. `pipelines show` es el tablero
+del embudo de ventas: las negociaciones o los prospectos de cada etapa, con su número y su total en cada moneda.
+`deals list`, `leads list`, `people list` y `organizations list` imprimen una página como tabla CSV para una hoja de
+cálculo con `--format csv`. `b24 api` llega a cualquier método del portal por su nombre. Todos los comandos están en
+la [referencia de comandos](./commands.md).
 
 ## Siguiente
 
-- **Un tablero del embudo de ventas.** Negociaciones agrupadas por etapa, con el número de negociaciones y su total en
-  cada moneda por etapa.
 - **Contactos y empresas desde el almacén local.** `people` y `organizations` pasan al mismo modelo compartido que las
   negociaciones y los prospectos, así que leen del almacén local y funcionan sin conexión.
 - **Campos propios de los contactos guardados en local.** Los valores de los campos propios de tu portal en los
@@ -32,7 +33,7 @@ método del portal por su nombre. Todos los comandos están en la [referencia de
 - **Presupuestos, facturas inteligentes y procesos inteligentes.**
 - **Una comprobación de duplicados antes de crear.** `b24` avisa cuando ya existe un contacto, una empresa o un
   prospecto parecido al nuevo.
-- **Importación y exportación CSV.**
+- **Importación CSV.** La exportación ya está: `--format csv` en las listas.
 - **Una página de negociaciones en la aplicación de escritorio de WireCat.**
 
 Lo que cambió en cada versión publicada está en el [historial de cambios](./changelog.md).

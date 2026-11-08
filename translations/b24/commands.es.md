@@ -135,7 +135,7 @@ b24 sync [options]
 | `--rescan` | list everything again, every id too, dropping a round in progress. |
 | `--max-pages <pages>` | at most this many requests to the CRM in this run. |
 
-**Returns:** crm sync — provider, account, pipelines, synced, issues, complete, state, progress, and 2 more; every field: b24 commands info sync
+**Returns:** crm sync — provider, account, pipelines, skipped_owner_rejected, synced, issues, complete, state, and 4 more; every field: b24 commands info sync
 
 **Example:** `b24 work sync`, `b24 work sync --rescan`, `b24 work sync --max-pages 20`
 
@@ -175,10 +175,11 @@ b24 deals list [query] [options]
 |---|---|
 | `--limit <n>` | deals per page, 1–500. Default: `50`. |
 | `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
 
 **Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: b24 commands info deals list
 
-**Example:** `b24 work deals list status:open --json`, `b24 work deals list stage:"Quote sent"`
+**Example:** `b24 work deals list status:open --json`, `b24 work deals list stage:"Quote sent"`, `b24 work deals list status:open --format csv > deals.csv`
 
 ### `b24 deals show`
 
@@ -330,10 +331,11 @@ b24 leads list [query] [options]
 |---|---|
 | `--limit <n>` | leads per page, 1–500. Default: `50`. |
 | `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
 
 **Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: b24 commands info leads list
 
-**Example:** `b24 work leads list status:open --json`, `b24 work leads list stage:"Quote sent"`
+**Example:** `b24 work leads list status:open --json`, `b24 work leads list stage:"Quote sent"`, `b24 work leads list status:open --format csv > leads.csv`
 
 ### `b24 leads show`
 
@@ -487,19 +489,19 @@ b24 pipelines list [query]
 
 ### `b24 pipelines show`
 
-one pipeline with its funnel: how many reached each stage, how many went on, and the win rate
+one pipeline as a board and a funnel: how many stand in each stage and their sum per currency, never converted, how many reached it and went on, and the win rate; won and lost stages are marked by outcome
 
 ```sh
-b24 pipelines show <pipeline>
+b24 pipelines show [pipeline]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `pipeline` | required | pipeline:<id>, or a name only one of the CRM's pipelines has. |
+| `pipeline` | optional | pipeline:<id>, or a name only one of the CRM's pipelines has; needed unless the CRM has one pipeline in all. |
 
 **Returns:** pipeline — id, ref, name, kind, account, external_id, stages, created_at, and 3 more; every field: b24 commands info pipelines show
 
-**Example:** `b24 work pipelines show pipeline:3`
+**Example:** `b24 work pipelines show pipeline:3`, `b24 work pipelines show Sales --json`
 
 ## `b24 stages`
 
@@ -517,7 +519,7 @@ b24 stages list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** stage — name, position, outcome, external_id, open, pipeline, pipeline_name, kind, and 3 more; every field: b24 commands info stages list
+**Returns:** stage — name, position, outcome, external_id, open, pipeline, pipeline_name, kind, and 5 more; every field: b24 commands info stages list
 
 **Example:** `b24 work stages list --json`, `b24 work stages list kind:lead`
 
@@ -599,10 +601,11 @@ b24 people list [query] [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
+| `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
 
 **Returns:** crm person — id, name, first_name, last_name, position, organization_ids, assigned_to, created_at, and 5 more; every field: b24 commands info people list
 
-**Example:** `b24 work people list`, `b24 work people list name:ivan*`
+**Example:** `b24 work people list`, `b24 work people list name:ivan*`, `b24 work people list --format csv > people.csv`
 
 ### `b24 people show`
 
@@ -687,10 +690,11 @@ b24 organizations list [query] [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
+| `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
 
 **Returns:** crm organization — id, name, type_id, industry_id, revenue, currency, person_ids, assigned_to, and 6 more; every field: b24 commands info organizations list
 
-**Example:** `b24 work organizations list`, `b24 work organizations list name:acme*`
+**Example:** `b24 work organizations list`, `b24 work organizations list name:acme*`, `b24 work organizations list --format csv > organizations.csv`
 
 ### `b24 organizations show`
 
@@ -1166,7 +1170,7 @@ b24 config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1189,7 +1193,7 @@ b24 config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
 
 | Option | What it does |
 |---|---|
