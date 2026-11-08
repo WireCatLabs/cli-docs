@@ -19,12 +19,10 @@ decidimos qué viene después.
 
 ## Novedades
 
-- **[Google Calendar](./gcal/usage.md)**: recordatorios de reuniones, seguir cualquier calendario por su dirección y
-  una sola búsqueda en reuniones, chats y notas.
-- **[OpenClaw](./agents.mdx#openclaw) y [Hermes](./agents.mdx#hermes)**: OpenClaw encuentra las skills de WireCat
-  en ClawHub, y Hermes las instala desde el índice de skills de este sitio.
-- **[Bitrix24](./b24/usage.md)**: acuerdos, leads, contactos y empresas de tu portal. Una búsqueda en todas tus
-  fuentes los encuentra junto a los mensajes y las notas.
+- **[Google Calendar](./gcal/usage.md)**: tu agente ve tus eventos, te recuerda las reuniones y las encuentra junto a
+  los chats y las notas sobre ellas.
+- **[OpenClaw y Hermes](./agents.mdx#openclaw)**: los dos agentes usan las herramientas de WireCat con sus skills.
+- **[Bitrix24](./b24/usage.md)**: tus acuerdos, leads, contactos y empresas, en la búsqueda junto a tus mensajes.
 
 Todo lo que funciona hoy está en [funciones](./features.mdx).
 
