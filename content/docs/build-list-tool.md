@@ -182,7 +182,7 @@ coming in the next WireCat Desktop release.
 
 Desktop reads the tool's manifest, `contracts/wirecat.json`, out of the npm package, so your tool must ship it
 ([Create your CLI](./build-create-cli.md)). A tool from a private repository can be added this way, but never listed.
-The [WireCat Desktop page](./desktop/index.mdx) shows every screen and what each refusal means.
+The [WireCat Desktop page](./desktop/index.mdx#add-your-own-tool) shows every screen and what each refusal means.
 
 ## Where to go next
 

@@ -186,7 +186,7 @@ revisar**. Llega en la próxima versión de WireCat Desktop.
 
 Desktop lee el manifiesto de la herramienta, `contracts/wirecat.json`, del paquete en npm, así que tu herramienta debe
 incluirlo ([Crea tu CLI](./build-create-cli.md)). Una herramienta de un repositorio privado se puede añadir así, pero
-nunca entrar en la lista. La [página de WireCat Desktop](./desktop/index.mdx) muestra cada pantalla y qué significa
+nunca entrar en la lista. La [página de WireCat Desktop](./desktop/index.mdx#añadir-tu-propia-herramienta) muestra cada pantalla y qué significa
 cada rechazo.
 
 ## Siguientes pasos
