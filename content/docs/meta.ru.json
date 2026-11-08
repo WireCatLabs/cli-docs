@@ -37,6 +37,7 @@
     "build-create-cli",
     "build-concepts",
     "build-sign-in",
+    "build-list-tool",
     "---Справочник и устройство---",
     "architecture",
     "code-design",

@@ -99,6 +99,7 @@ A tool outside WireCatLabs can appear here in the "Community tools" group. Open 
 are then copied from its repository at a reviewed release tag, like ours. The
 [review list](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools) says what we check.
 A community tool keeps its own npm scope: the `@wirecat` scope and the name "WireCat" stay ours.
+[List your tool in WireCat](./build-list-tool.md) has every step, from the pull request to WireCat Desktop.
 
 ## Keep it current
 

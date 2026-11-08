@@ -150,6 +150,7 @@ export const sidebarIcons = {
   "build-add-source": Cable,
   "build-own-data": Database,
   "build-sign-in": KeyRound,
+  "build-list-tool": Store,
   "build-stay-compliant": ShieldCheck,
   desktop: Monitor,
   logs: ScrollText,

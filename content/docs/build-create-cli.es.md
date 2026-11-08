@@ -111,6 +111,7 @@ Sus páginas se copian entonces desde su repositorio en una etiqueta de versión
 [lista de revisión](https://github.com/WireCatLabs/cli-docs/blob/main/docs/REVIEWING.md#community-tools) dice qué
 comprobamos. Una herramienta de la comunidad publica en su propio ámbito de npm: `@wirecat` y el nombre «WireCat»
 siguen siendo nuestros.
+[Añade tu herramienta a WireCat](./build-list-tool.md) explica cada paso, del pull request a WireCat Desktop.
 
 ## Recibe las mejoras de la plantilla
 
