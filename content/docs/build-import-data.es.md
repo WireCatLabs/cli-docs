@@ -224,8 +224,10 @@ teléfono una vez.
 
 - Un SMS es un `message` con `kind: "sms"`. Se escribe en un chat por conversación, y la búsqueda lo lee como los
   mensajes de un servicio de mensajería.
-- Una llamada es un `event` con `kind: "call"`. Nunca cuenta como ocupado, y un `events list` normal la muestra junto
-  a las reuniones.
+- Una llamada es un `event` con `kind: "call"`, guardado en el calendario `Calls` propio de la cuenta del teléfono.
+  Nunca cuenta como ocupado. Ningún comando la lista por sí solo: el `events list` de una herramienta de calendario
+  muestra solo la cuenta de esa herramienta. Una llamada se encuentra por su número con
+  `memo search all "+447700900123" --only events`.
 - La persona del otro lado es un registro `person` que envía la fuente, uno por número. El vínculo `counterpart` la
   nombra.
 

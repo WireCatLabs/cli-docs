@@ -218,8 +218,9 @@ records, the SMS and the calls all stay under that account, so an account group 
 
 - An SMS is a `message` with `kind: "sms"`. It is written into one chat per thread, and search reads it like a
   messenger's messages.
-- A call is an `event` with `kind: "call"`. It never counts as busy, and a plain `events list` shows it beside the
-  meetings.
+- A call is an `event` with `kind: "call"`, kept in the phone account's own `Calls` calendar. It never counts as
+  busy. No command lists it on its own: a calendar tool's `events list` shows only that tool's account. Find a call
+  by its number with `memo search all "+447700900123" --only events`.
 - The person on the other side is a `person` record that the source sends, one per number. The relation
   `counterpart` names it.
 
