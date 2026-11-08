@@ -134,7 +134,7 @@ Never by name.
   identifiers.
 
 An e-mail is compared trimmed and in lower case. A phone number is compared in its international form, such as
-`+34600111222`. A number written without `+` or `00` is read only with a region: the store's `phone_countries`
+`+447700900123`. A number written without `+` or `00` is read only with a region: the store's `phone_countries`
 setting, or the `region` of a vCard import. Without one, it is no identifier, so the record makes a new person instead
 of matching. Send numbers with `+` when you have them.
 
@@ -208,30 +208,34 @@ again is safe.
 
 ## Phone data: SMS, calls and contacts
 
-A phone export is one envelope of one source account, JSON or JSONL:
+A phone export is one envelope of one phone, JSON or JSONL, imported under one account such as `phone:pixel`. The
+records, the SMS and the calls all stay under that account, so an account group lists the phone once.
 
 - An SMS is a `message` with `kind: "sms"`. It is written into one chat per thread, and search reads it like a
   messenger's messages.
-- A call is an `event` with `kind: "call"`. It becomes an event in a `calls` calendar that never counts as busy.
-- The person on the other side is a `person` record with the number, named by the relation `counterpart`.
+- A call is an `event` with `kind: "call"`. It never counts as busy, and a plain `events list` shows it beside the
+  meetings.
+- The person on the other side is a `person` record that the source sends, one per number. The relation
+  `counterpart` names it.
 
 ```json
 { "key": "sms-1", "type": "message", "external_id": "sms-1",
-  "fields": { "kind": "sms", "direction": "in", "phone": "+34600111222", "name": "Иван Петров",
+  "fields": { "kind": "sms", "direction": "in", "phone": "+447700900123", "name": "Иван Петров",
               "body": "Буду в 10", "sent_at": "2026-11-01T09:12:00+01:00", "read": true },
-  "relations": [{ "role": "counterpart", "type": "person", "external_id": "+34600111222" }] }
+  "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
 { "key": "call-1", "type": "event", "external_id": "call-1",
-  "fields": { "kind": "call", "direction": "missed", "phone": "+34600111222", "started_at": "2026-11-01T10:00:00Z",
+  "fields": { "kind": "call", "direction": "missed", "phone": "+447700900123", "started_at": "2026-11-01T10:00:00Z",
               "duration": 0 },
-  "relations": [{ "role": "counterpart", "type": "person", "external_id": "+34600111222" }] }
+  "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
 ```
 
-The counterpart is matched as any person is: one exact number links, none makes a person, two or more leave the SMS
-or call waiting for the owner. A contacts file in vCard format (`.vcf`) is converted to the same envelope:
+An SMS or a call links to a person only through that person record. The person record is matched as any person is:
+one exact number links, none makes a person, two or more leave the SMS or call waiting for the owner. A record with
+no `counterpart` keeps only the number. A contacts file in vCard format (`.vcf`) is converted to the same envelope:
 `ingestVcard` in `@wirecat/cli-core/services` reads it and imports it in one call, with a `region` for national
 numbers.
 
-<!-- verify against released cli-core: phone records come from cli-core feat/phone-records, not merged yet -->
+<!-- verify against released cli-core: phone records come from cli-core feat/phone-records, not merged yet. Owner ruling 2026-11-08: one account per phone, no sms: or calls: accounts -->
 
 ## A complete example
 

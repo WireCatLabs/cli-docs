@@ -138,7 +138,7 @@ identificador fuerte. Nunca por el nombre.
   identificadores del registro.
 
 Un e-mail se compara sin espacios en los extremos y en minúsculas. Un número de teléfono se compara en su forma
-internacional, como `+34600111222`. Un número escrito sin `+` ni `00` solo se lee con una región: el ajuste
+internacional, como `+447700900123`. Un número escrito sin `+` ni `00` solo se lee con una región: el ajuste
 `phone_countries` del almacén, o la `region` de una importación vCard. Sin región no es un identificador, y el
 registro crea una persona nueva en lugar de encontrar la que existe. Envía los números con `+` cuando los tengas.
 
@@ -212,31 +212,35 @@ escritos, y volver a ejecutarla es seguro.
 
 ## Datos del teléfono: SMS, llamadas y contactos
 
-Una exportación del teléfono es un sobre de una cuenta de origen, JSON o JSONL:
+Una exportación del teléfono es un sobre de un teléfono, JSON o JSONL, que se importa en una sola cuenta, como
+`phone:pixel`. Los registros, los SMS y las llamadas quedan en esa cuenta, así que un grupo de cuentas muestra el
+teléfono una vez.
 
 - Un SMS es un `message` con `kind: "sms"`. Se escribe en un chat por conversación, y la búsqueda lo lee como los
   mensajes de un servicio de mensajería.
-- Una llamada es un `event` con `kind: "call"`. Se convierte en un evento de un calendario `calls` que nunca cuenta
-  como ocupado.
-- La persona del otro lado es un registro `person` con el número, al que apunta el vínculo `counterpart`.
+- Una llamada es un `event` con `kind: "call"`. Nunca cuenta como ocupado, y un `events list` normal la muestra junto
+  a las reuniones.
+- La persona del otro lado es un registro `person` que envía la fuente, uno por número. El vínculo `counterpart` la
+  nombra.
 
 ```json
 { "key": "sms-1", "type": "message", "external_id": "sms-1",
-  "fields": { "kind": "sms", "direction": "in", "phone": "+34600111222", "name": "Иван Петров",
+  "fields": { "kind": "sms", "direction": "in", "phone": "+447700900123", "name": "Иван Петров",
               "body": "Буду в 10", "sent_at": "2026-11-01T09:12:00+01:00", "read": true },
-  "relations": [{ "role": "counterpart", "type": "person", "external_id": "+34600111222" }] }
+  "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
 { "key": "call-1", "type": "event", "external_id": "call-1",
-  "fields": { "kind": "call", "direction": "missed", "phone": "+34600111222", "started_at": "2026-11-01T10:00:00Z",
+  "fields": { "kind": "call", "direction": "missed", "phone": "+447700900123", "started_at": "2026-11-01T10:00:00Z",
               "duration": 0 },
-  "relations": [{ "role": "counterpart", "type": "person", "external_id": "+34600111222" }] }
+  "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
 ```
 
-El interlocutor se busca como cualquier persona: un número exacto vincula, ninguno crea una persona, dos o más dejan
-el SMS o la llamada esperando al propietario. Un archivo de contactos en formato vCard (`.vcf`) se convierte en el
+Un SMS o una llamada se vincula a una persona solo a través de ese registro de persona. Ese registro se busca como
+cualquier persona: un número exacto vincula, ninguno crea una persona, dos o más dejan el SMS o la llamada esperando
+al propietario. Un registro sin `counterpart` guarda solo el número. Un archivo de contactos en formato vCard (`.vcf`) se convierte en el
 mismo sobre: `ingestVcard` de `@wirecat/cli-core/services` lo lee y lo importa en una sola llamada, con una `region`
 para los números nacionales.
 
-<!-- verify against released cli-core: phone records come from cli-core feat/phone-records, not merged yet -->
+<!-- verify against released cli-core: phone records come from cli-core feat/phone-records, not merged yet. Owner ruling 2026-11-08: one account per phone, no sms: or calls: accounts -->
 
 ## Un ejemplo completo
 
