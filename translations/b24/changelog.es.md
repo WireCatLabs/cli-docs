@@ -4,6 +4,30 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.6.0 — 08.11.2026
+
+### Añadido
+
+- `people list --format csv` y `organizations list --format csv` imprimen una página como tabla CSV para una hoja de
+  cálculo, como ahora también `deals list` y `leads list`. stdout lleva la tabla y nada más; el camino a la página
+  siguiente va a stderr. Las columnas son los campos propios del registro y luego cada campo personalizado del portal
+  por su etiqueta: un campo de dinero como `<label> amount` y `<label> currency`, y dos campos con la misma
+  etiqueta se distinguen por su código. `--json=a,b` a su lado elige las columnas, un campo personalizado como
+  `provider_metadata.<code>`. Una celda con la que una hoja de cálculo empezaría una fórmula recibe un `'` delante.
+  `--jsonl`, un `--json` sin campos y `--compact` se rechazan con `output.conflict`, y los agentes no reciben la opción.
+- `pipelines show` es el tablero del embudo de ventas: cada etapa da sus negociaciones o prospectos y su total en cada
+  moneda, y en una terminal imprime una tabla de las etapas con el total abierto, las ganadas, las perdidas y la tasa
+  de éxito. El embudo se puede omitir cuando el portal tiene solo uno.
+
+### Cambiado — puede romper llamadas
+
+- Un campo personalizado que el portal no tiene, nombrado en la consulta de una lista o en `--json`, se rechaza con
+  `param` igual a `--query` o `--json`, donde antes decía `--field`.
+- Un comando en un perfil sin webhook se rechaza con el motivo `session.missing`, donde antes decía `webhook.missing`:
+  el único «no has iniciado sesión» que da cada herramienta de WireCat con un token de API. El webhook se lee y se
+  guarda donde estaba, `B24_TOKEN`, luego la entrada `token:<profile>` del llavero bajo `bitrix24-cli`, luego un archivo
+  privado, ahora con el almacén de tokens compartido de cli-core.
+
 ## 0.5.0 — 07.11.2026
 
 ### Añadido
