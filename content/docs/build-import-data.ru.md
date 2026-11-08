@@ -159,8 +159,6 @@ E-mail сравнивается без пробелов по краям и в н
 
 ## Квитанция и ошибки
 
-<!-- verify against released memo: records import and records check print this receipt -->
-
 `ingest` и `ingestLines` возвращают эту квитанцию. С `--json` команды `records import` и `records check` печатают ее
 под `item`, с именами в snake case: `dry_run` и `batch_id`.
 
@@ -222,9 +220,9 @@ E-mail сравнивается без пробелов по краям и в н
 - SMS это `message` с `kind: "sms"`. Оно записывается в отдельный чат для каждой переписки, и поиск читает его как
   сообщения мессенджера.
 - Звонок это `event` с `kind: "call"` в собственном календаре `Calls` аккаунта телефона. Он никогда не считается
-  занятым временем. Отдельной команды, которая его перечисляет, нет: `events list` календарного инструмента
-  показывает только аккаунт этого инструмента. Звонок находят по номеру через
-  `memo search all "+447700900123" --only events`.
+  занятым временем. `memo events list` показывает его рядом со встречами всех календарных аккаунтов, по умолчанию за
+  последние 30 дней и следующие 7. `memo events list event_type:call` оставляет только звонки. Чтобы найти звонок
+  по номеру, используйте `memo search all "+447700900123" --only events`.
 - Человек на другой стороне это запись `person`, которую присылает источник, одна на номер. На нее указывает
   отношение `counterpart`.
 
@@ -252,8 +250,6 @@ memo records import contacts.vcf --account phone:pixel --json
 Из вашего кода `ingestVcard` из `@wirecat/cli-core/services` читает и импортирует его за один вызов, с `region` в
 нижнем регистре, например `gb`, для национальных номеров. Без региона национальный номер сохраняется, но не сопоставляется, и об этом говорит список
 `vcard` в квитанции.
-
-<!-- verify against released memo: phone records and ingestVcard are in released cli-core, one account per phone. memo records import of them and of .vcf is checked on memo PR 8's build only -->
 
 ## Полный пример
 
@@ -286,8 +282,6 @@ memo records import contacts.vcf --account phone:pixel --json
 
 Сначала проверьте файл, потом импортируйте его. `--account` называет источник как `<provider>:<account>`:
 
-<!-- verify against released memo -->
-
 ```sh
 memo records check erp.jsonl --account example-erp:demo --json
 memo records import erp.jsonl --account example-erp:demo --json
@@ -317,8 +311,6 @@ memo records import erp.jsonl --account example-erp:demo --json
 }
 ```
 
-<!-- verify against released memo: memo PR 8's build prints the receipt under item, in snake_case, as above -->
-
 Что произошло:
 
 - Организация и Анна созданы, потому что в хранилище не было ни этого ИНН, ни этого e-mail.
@@ -346,8 +338,6 @@ const receipt = await ingestLines(store, jsonlLines(input), {
 console.log(JSON.stringify(receipt))
 ```
 
-<!-- verify against released cli-core: jsonlLines is the new name of linesOf -->
-
 - `account` это `source.account` конверта. Другое значение отклоняется с кодом `envelope.account-mismatch`.
 - `onIssue` получает каждый отказ сразу, в том числе те, что не попали в первые 1000 квитанции.
 - `dryRun: true` проверяет и ничего не записывает. `chunk` меняет число записей в транзакции, по умолчанию 1000.
@@ -358,7 +348,7 @@ console.log(JSON.stringify(receipt))
 Агенту не нужно знать вашу ERP. Он спрашивает memo. Сначала что ждет владельца, потом сделку, договор, собственную
 запись и поиск по бизнес-записям:
 
-<!-- verify against released memo -->
+<!-- verify against released cli-core: needs cli-core #2668 (import relationships). organizations context lists no people yet, deals show has people: [] instead of Anna as decision-maker, and contracts show names no parties. The rest of this block is verified on the released memo -->
 
 ```sh
 memo review list kind:invoice,payment,order,contract --json

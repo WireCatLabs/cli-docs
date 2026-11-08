@@ -161,8 +161,6 @@ Un dominio de correo gratuito como `gmail.com` se rechaza como `domain` de una o
 
 ## El recibo y los errores
 
-<!-- verify against released memo: records import and records check print this receipt -->
-
 `ingest` e `ingestLines` devuelven este recibo. Con `--json`, `records import` y `records check` lo imprimen dentro de
 `item`, con los nombres en snake case: `dry_run` y `batch_id`.
 
@@ -225,9 +223,9 @@ teléfono una vez.
 - Un SMS es un `message` con `kind: "sms"`. Se escribe en un chat por conversación, y la búsqueda lo lee como los
   mensajes de un servicio de mensajería.
 - Una llamada es un `event` con `kind: "call"`, guardado en el calendario `Calls` propio de la cuenta del teléfono.
-  Nunca cuenta como ocupado. Ningún comando la lista por sí solo: el `events list` de una herramienta de calendario
-  muestra solo la cuenta de esa herramienta. Una llamada se encuentra por su número con
-  `memo search all "+447700900123" --only events`.
+  Nunca cuenta como ocupado. `memo events list` la muestra junto a las reuniones de todas las cuentas de calendario,
+  por defecto de los últimos 30 días y los 7 siguientes. `memo events list event_type:call` deja solo las llamadas.
+  Para encontrar una llamada por su número, usa `memo search all "+447700900123" --only events`.
 - La persona del otro lado es un registro `person` que envía la fuente, uno por número. El vínculo `counterpart` la
   nombra.
 
@@ -256,8 +254,6 @@ memo records import contacts.vcf --account phone:pixel --json
 Desde tu propio código, `ingestVcard` de `@wirecat/cli-core/services` lo lee y lo importa en una sola llamada, con una
 `region` en minúsculas, como `gb`, para los números nacionales. Sin región, un número nacional se guarda pero no se busca, y la lista `vcard`
 del recibo lo dice.
-
-<!-- verify against released memo: phone records and ingestVcard are in released cli-core, one account per phone. memo records import of them and of .vcf is checked on memo PR 8's build only -->
 
 ## Un ejemplo completo
 
@@ -291,8 +287,6 @@ El mismo archivo viene con cli-core como `@wirecat/cli-core/schemas/examples/rec
 
 Revisa primero el archivo y luego impórtalo. `--account` nombra la fuente como `<provider>:<account>`:
 
-<!-- verify against released memo -->
-
 ```sh
 memo records check erp.jsonl --account example-erp:demo --json
 memo records import erp.jsonl --account example-erp:demo --json
@@ -322,8 +316,6 @@ El recibo de la primera importación:
 }
 ```
 
-<!-- verify against released memo: memo PR 8's build prints the receipt under item, in snake_case, as above -->
-
 Qué pasó:
 
 - Se crearon la organización y Anna, porque el almacén no tenía ese número fiscal ni ese e-mail.
@@ -351,8 +343,6 @@ const receipt = await ingestLines(store, jsonlLines(input), {
 console.log(JSON.stringify(receipt))
 ```
 
-<!-- verify against released cli-core: jsonlLines is the new name of linesOf -->
-
 - `account` es el `source.account` del sobre. Otro valor se rechaza con `envelope.account-mismatch`.
 - `onIssue` recibe cada rechazo en el momento, también los que pasan de los primeros 1000 del recibo.
 - `dryRun: true` revisa y no escribe nada. `chunk` cambia los 1000 registros por transacción.
@@ -363,7 +353,7 @@ console.log(JSON.stringify(receipt))
 Un agente no necesita conocer tu ERP. Le pregunta a memo. Primero qué espera al propietario, luego la negociación, el
 contrato, el registro propio y una búsqueda en los registros de negocio:
 
-<!-- verify against released memo -->
+<!-- verify against released cli-core: needs cli-core #2668 (import relationships). organizations context lists no people yet, deals show has people: [] instead of Anna as decision-maker, and contracts show names no parties. The rest of this block is verified on the released memo -->
 
 ```sh
 memo review list kind:invoice,payment,order,contract --json

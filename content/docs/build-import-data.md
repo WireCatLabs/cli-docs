@@ -156,8 +156,6 @@ A free-mail domain such as `gmail.com` is refused as an organization's `domain` 
 
 ## The receipt and errors
 
-<!-- verify against released memo: records import and records check print this receipt -->
-
 `ingest` and `ingestLines` return this receipt. With `--json`, `records import` and `records check` print it under
 `item`, with the names in snake case: `dry_run` and `batch_id`.
 
@@ -219,8 +217,9 @@ records, the SMS and the calls all stay under that account, so an account group 
 - An SMS is a `message` with `kind: "sms"`. It is written into one chat per thread, and search reads it like a
   messenger's messages.
 - A call is an `event` with `kind: "call"`, kept in the phone account's own `Calls` calendar. It never counts as
-  busy. No command lists it on its own: a calendar tool's `events list` shows only that tool's account. Find a call
-  by its number with `memo search all "+447700900123" --only events`.
+  busy. `memo events list` shows it beside the meetings of every calendar account, by default from the last 30 days
+  and the next 7. `memo events list event_type:call` keeps only the calls. To find a call by its number, use
+  `memo search all "+447700900123" --only events`.
 - The person on the other side is a `person` record that the source sends, one per number. The relation
   `counterpart` names it.
 
@@ -248,8 +247,6 @@ memo records import contacts.vcf --account phone:pixel --json
 From your own code, `ingestVcard` in `@wirecat/cli-core/services` reads it and imports it in one call, with a `region`
 in lower case, such as `gb`, for national numbers. Without a region, a national number is kept but not matched, and the receipt's `vcard` list
 says so.
-
-<!-- verify against released memo: phone records and ingestVcard are in released cli-core, one account per phone. memo records import of them and of .vcf is checked on memo PR 8's build only -->
 
 ## A complete example
 
@@ -282,8 +279,6 @@ The same file ships with cli-core as `@wirecat/cli-core/schemas/examples/records
 
 Check the file first, then import it. `--account` names the source as `<provider>:<account>`:
 
-<!-- verify against released memo -->
-
 ```sh
 memo records check erp.jsonl --account example-erp:demo --json
 memo records import erp.jsonl --account example-erp:demo --json
@@ -313,8 +308,6 @@ The receipt of the first import:
 }
 ```
 
-<!-- verify against released memo: memo PR 8's build prints the receipt under item, in snake_case, as above -->
-
 What happened:
 
 - The organization and Anna were made, since nothing in the store had that tax id or that e-mail.
@@ -342,8 +335,6 @@ const receipt = await ingestLines(store, jsonlLines(input), {
 console.log(JSON.stringify(receipt))
 ```
 
-<!-- verify against released cli-core: jsonlLines is the new name of linesOf -->
-
 - `account` is the envelope's `source.account`. Another value is refused with `envelope.account-mismatch`.
 - `onIssue` gets every refusal as it happens, also those past the receipt's first 1000.
 - `dryRun: true` checks and writes nothing. `chunk` changes the 1000 records per transaction.
@@ -354,7 +345,7 @@ console.log(JSON.stringify(receipt))
 An agent needs no knowledge of your ERP. It asks memo. First what waits for the owner, then the deal, the contract,
 the custom record and a search across business records:
 
-<!-- verify against released memo -->
+<!-- verify against released cli-core: needs cli-core #2668 (import relationships). organizations context lists no people yet, deals show has people: [] instead of Anna as decision-maker, and contracts show names no parties. The rest of this block is verified on the released memo -->
 
 ```sh
 memo review list kind:invoice,payment,order,contract --json
