@@ -22,7 +22,7 @@ mail personal sync
 mail personal status
 ```
 
-`ya` es un nombre de perfil que eliges para un buzón. `session start` inicia sesión, `sync` lee los últimos 30 días
+`personal` es un nombre de perfil que eliges para un buzón. `session start` inicia sesión, `sync` lee los últimos 30 días
 al almacén compartido y `status` muestra cuánto ha avanzado un buzón grande. Ejecuta `mail personal sync` otra vez para traer
 correo nuevo. Memo no necesita ningún ajuste para este correo: lee el mismo almacén.
 
@@ -69,7 +69,7 @@ el resto del correo que omitiría no cuentan. Cuando las ejecuciones del día ha
 ninguna hasta el día siguiente. `memo schedule list` muestra el gasto del día y por qué se omitió una ejecución. Cambia estos valores
 para una programación con `--mail-wait 1h`, `--mail-batch 20` y `--max-cost-per-day 2`, o para todas en el archivo de
 configuración: `schedule_mail_wait`, `schedule_mail_batch` y `schedule_max_cost_per_day` (`memo config show` los lista, y una
-opción gana al archivo). Si no, inicia `claude` con Sonnet, con solo `memo` permitido, bajo `MEMO_READ_ONLY` y sin tus
+opción gana al archivo). Cuando espera suficiente correo y el presupuesto del día lo permite, inicia `claude` con Sonnet, con solo `memo` permitido, bajo `MEMO_READ_ONLY` y sin tus
 servidores MCP, skills, ajustes ni CLAUDE.md: una ejecución empieza con unos 4.700 tokens en lugar de 38.000. `--model opus`
 elige otro modelo para una programación, y `schedule_model_claude` en el archivo de configuración para cada programación nueva.
 `schedule_lean_start: false` carga tu configuración. Los dos se aplican cuando se añade la programación, así que vuelve a

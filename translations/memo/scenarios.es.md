@@ -208,8 +208,8 @@ Responde quién debe qué, a quién le toca en cada chat y qué se ha quedado en
 
 Qué mirar:
 
-- el dinero marcado como pattern es una coincidencia de palabras. Lee el mensaje citado antes de prepararlo
-- un chat guardado solo en parte. Sincronízalo con la línea que da next antes de fiarte de "nada abierto"
+- un importe o una promesa marcados como pattern se encontraron por palabras. Lee el mensaje citado antes de prepararlo
+- un chat que el almacén guarda solo en parte recibe una línea de sincronización en next. Ejecútala antes de fiarte de que no hay nada abierto
 - next nombra como mucho dos chats. Lee esos, no todos los chats
 - el texto de los mensajes se queda en la respuesta. Nunca lo escribas en un archivo
 

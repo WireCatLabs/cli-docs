@@ -100,7 +100,7 @@ una que haya propuesto su propio bot:
 Las conclusiones de reuniones mantienen sus propios permisos, diga lo que diga esta clave.
 
 Añade la clave a tu configuración existente en vez de sustituir tus ajustes de notas y temporizador
-por este breve ejemplo. Tanto CLI como MCP rechazan entonces toda decisión de un agente. Leer y preparar propuestas sigue disponible.
+por este breve ejemplo. Si la clave falta o es `false`, CLI y MCP rechazan toda decisión de un agente. Leer y preparar propuestas sigue disponible.
 Las decisiones del propietario siguen disponibles en el terminal. En el terminal de un agente, `--as-owner` pregunta y/N en el terminal
 antes de que una decisión cuente como tuya. El ajuste no cambia el permiso separado para confirmar conclusiones de reuniones
 ni sustituye las demás comprobaciones de permisos de la herramienta.

@@ -26,9 +26,10 @@ ordenador que los pide, nunca a un servicio de mensajería ni a un buzón de cor
 
 ## Se respetan los borrados
 
-Cuando borras un archivo de nota o un correo, su texto sale del almacén local en la siguiente
-importación. Si una importación detecta que falta de golpe una parte inusualmente grande de una
-carpeta o de un buzón, no borra nada y te avisa.
+Cuando borras un archivo de nota, su texto sale del almacén local en la siguiente importación. Cuando borras un correo,
+su texto sale del almacén cuando `mail <profile> sync` vuelve a comprobar los borrados del buzón. Si una importación o
+una sincronización detecta que falta de golpe una parte inusualmente grande de una carpeta o de un buzón, no borra
+nada y te avisa.
 
 <a id="agents-suggest-you-decide"></a>
 <a id="los-agentes-sugieren-tú-decides"></a>

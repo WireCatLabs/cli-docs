@@ -10,7 +10,7 @@ not say which finds better answers, because nobody has measured that here.
 
 The marks come from each project's own documentation and source, checked on 24 October 2026; a tool may do more
 than its documentation says. Each mark for another tool links to the page it comes from. The marks for `memo` were
-checked against version 0.131.64 on 8 November 2026.
+checked against version 0.131.66 on 8 November 2026.
 
 The tools:
 

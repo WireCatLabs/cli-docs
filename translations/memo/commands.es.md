@@ -3725,7 +3725,7 @@ memo subscriptions add <name> <amount> <currency> [options]
 | `--customer <party>` | who receives it and pays for it: person:<uid> or organization:<id>; you, when you pay. |
 | `--product <product>` | the product or service it is for: product:<id>. |
 | `--contract <contract>` | the contract it runs under: contract:<id>. |
-| `--every <count-unit>` | how often it is charged: a count and a unit, such as 1-month or 1-year. |
+| `--period <count-unit>` | how often it is charged: a count and a unit, such as 1-month or 1-year. |
 | `--start-date <date>` | the first day it runs, YYYY-MM-DD. |
 | `--trial-end-date <date>` | the day its free trial ends, YYYY-MM-DD. |
 | `--kind <kind>` | receivable (you bill it) or payable (you pay it). |
@@ -3738,7 +3738,7 @@ memo subscriptions add <name> <amount> <currency> [options]
 
 **Returns:** record a subscription; an agent's waits for your review
 
-**Example:** `memo subscriptions add Hosting 990.00 RUB --kind payable --supplier organization:3 --every 1-month --start-date 2026-11-01`, `memo subscriptions add 'Bike rental' 10000.00 RUB --kind receivable --customer organization:3 --every 1-month --trial-end-date 2026-11-14 --status trial`
+**Example:** `memo subscriptions add Hosting 990.00 RUB --kind payable --supplier organization:3 --period 1-month --start-date 2026-11-01`, `memo subscriptions add 'Bike rental' 10000.00 RUB --kind receivable --customer organization:3 --period 1-month --trial-end-date 2026-11-14 --status trial`
 
 ### `memo subscriptions update`
 
@@ -3761,7 +3761,7 @@ memo subscriptions update <subscription> [options]
 | `--customer <party>` | who receives it and pays for it: person:<uid> or organization:<id>; you, when you pay. |
 | `--product <product>` | the product or service it is for: product:<id>. |
 | `--contract <contract>` | the contract it runs under: contract:<id>. |
-| `--every <count-unit>` | how often it is charged: a count and a unit, such as 1-month or 1-year. |
+| `--period <count-unit>` | how often it is charged: a count and a unit, such as 1-month or 1-year. |
 | `--start-date <date>` | the first day it runs, YYYY-MM-DD. |
 | `--trial-end-date <date>` | the day its free trial ends, YYYY-MM-DD. |
 | `--title <title>` | its new name. |
@@ -3772,7 +3772,7 @@ memo subscriptions update <subscription> [options]
 
 **Returns:** change a subscription
 
-**Example:** `memo subscriptions update subscription:5 --status paused`, `memo subscriptions update subscription:5 --every 1-year`
+**Example:** `memo subscriptions update subscription:5 --status paused`, `memo subscriptions update subscription:5 --period 1-year`
 
 ### `memo subscriptions cancel`
 
@@ -4113,11 +4113,12 @@ memo records import <file> [options]
 |---|---|
 | `--dry-run` | check and plan the import; write nothing. a dry run holds the store's write lock and grows the write-ahead log for its length. |
 | `--account <account>` | the source the envelope is for: <provider>:<account> (sheet:rentals) or its source.account alone; phone:<device> for a vCard file. |
+| `--region <country>` | a vCard file's country for phone numbers without +, such as ru or gb; without it they are kept, not matched. |
 | `--json` | print JSON; --json=created,errors keeps only those fields. |
 
 **Returns:** import a source's records; money waits for your review
 
-**Example:** `memo records import payments.jsonl --account rentals --dry-run`, `memo records import envelope.json --account rentals --json`, `memo records import contacts.vcf --account phone:pixel`
+**Example:** `memo records import payments.jsonl --account rentals --dry-run`, `memo records import envelope.json --account rentals --json`, `memo records import contacts.vcf --account phone:pixel --region gb`
 
 ### `memo records check`
 
@@ -4136,6 +4137,7 @@ memo records check <file> [options]
 | Option | What it does |
 |---|---|
 | `--account <account>` | the source the envelope is for: <provider>:<account> (sheet:rentals) or its source.account alone; phone:<device> for a vCard file. |
+| `--region <country>` | a vCard file's country for phone numbers without +, such as ru or gb; without it they are kept, not matched. |
 | `--json` | print JSON; --json=created,errors keeps only those fields. |
 
 **Returns:** check a records file against the store; write nothing
@@ -4674,7 +4676,7 @@ memo review reject <ids> [options]
 
 ### `memo review agenda`
 
-the morning digest, from the store alone with no model call: everything new in what you tagged watch (chats, mail threads, people, projects, a meeting's series), replies you owe to people in messengers and personal mail (not bots or service chats), new personal mail, meetings that ended, tasks, projects that moved, proposals waiting. Tasks are the open ones created since the last morning-digest run (a day back when none ran) and those overdue, due today or due tomorrow, each with who asked and who does it. Replies owed reach back 7 days; owed mail lists only senders you know (linked to a person with other identities, or written to before), and mail from new senders is one count with the command that lists it. Each item has its reference, who, when, one line of text and why it is there; a section cut by --limit or --max-output-bytes says how many it left out and the command that reads them. `scope` says what was read (the window, sources, counts), `tasks` counts each task group, and `health` names each account whose sync failed, that nothing syncs, or that is quiet for longer than usual, so an unsynced account does not read as a quiet day
+the morning digest, from the store alone with no model call: everything new in what you tagged watch (chats, mail threads, people, projects, a meeting's series), replies you owe to people in messengers and personal mail (not bots or service chats), new personal mail, meetings that ended, tasks, projects that moved, proposals waiting. Tasks are the open ones created since the last morning-digest run (a day back when none ran) and those overdue, due today or due tomorrow, each with who asked and who does it. Replies owed reach back 7 days; owed mail lists only senders you know (linked to a person with other identities, or written to before), and mail from new senders is one count with the command that lists it. Each item has its reference, who, when, one line of text and why it is there; a section cut by --limit or --max-output-bytes says how many it left out and the command that reads them. `scope` says what was read (the window, sources, counts), `tasks` counts each task group and, as `undated`, every open task with no due date, and `health` names each account whose sync failed, that nothing syncs, or that is quiet for longer than usual, so an unsynced account does not read as a quiet day; an account stored or synced within a day is never named
 
 ```sh
 memo review agenda [options]

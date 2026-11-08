@@ -140,4 +140,4 @@ bloqueo: un agente que maneja su propio terminal puede responderla.
 
 ## Qué puede salir de tu ordenador
 
-El envío de fuentes a un proveedor de IA requiere tu autorización. Por defecto, `memo answers create` prepara fuentes para tu agente. Envía texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a uno remoto solo con `--allow-remote` además. Lo que tu agente hace con el texto depende de él. Las comprobaciones automáticas de actualizaciones y dominios de remitentes también pueden hacer peticiones de red; [Seguridad](./security.md) explica qué envían y qué ajustes se aplican.
+El envío de fuentes a un proveedor de IA requiere tu autorización. Por defecto, `memo answers create` prepara fuentes para tu agente. Envía texto a un proveedor de IA solo cuando configuras uno y añades `--analyze`, y a uno remoto solo con `--allow-remote` además. Lo que tu agente hace con el texto depende de él. La comprobación diaria de actualizaciones también puede hacer una petición de red. [Seguridad](./security.md) explica qué envía y cómo desactivarla.

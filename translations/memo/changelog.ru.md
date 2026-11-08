@@ -10,6 +10,36 @@ title: "История изменений"
 
 ## Unreleased
 
+## 0.131.66 — 08.11.2026
+
+### Added
+
+- **`memo records import` and `records check` take `--region <country>` for a vCard file** (`ru`, `gb`, in any
+  case): a phone number written without `+` is read in that country, so the contact matches the person the number
+  already names instead of becoming a second one. An envelope names its region in `options.phone_region` instead.
+
+### Changed — may break callers
+
+- **`memo subscriptions add` and `subscriptions update` take `--period <count-unit>` (`1-month`, `1-year`) instead of
+  `--every`**, which shipped in 0.131.64. `--every` in every WireCat tool is a timer's `<duration>`, such as `5m`, and
+  one flag with two kinds of value failed the shared audit. `--every` on subscriptions is now an unknown option, with
+  no alias: rename it in scripts and agents' prompts. The JSON answer's `interval` is unchanged.
+
+## 0.131.65 — 08.11.2026
+
+### Fixed
+
+- **`review agenda` no longer names a synced account as having no sync schedule.** An account stored or synced
+  within a day gets no `health` line at all; a tool's schedule counts for the profile it runs as, by its
+  `<PREFIX>_PROFILE` or its first argument (`tg second messages sync`); a running `serve` counts for its profile's
+  account; and an account that no profile of its tool holds gets no line, since memo cannot tell what syncs it. A
+  `no-schedule` account with nothing new in 30 days is stale since its last stored message, not for 0 hours.
+
+### Added
+
+- **`review agenda`'s `tasks` counts `undated`**: every open task with no due date, however old, in `--json` and
+  `--compact`; the morning-digest report copies it as `tasks.undated`.
+
 ## 0.131.64 — 08.11.2026
 
 ### Fixed

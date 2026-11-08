@@ -74,6 +74,20 @@ coincide nunca basta para enlazar cuentas.
 
 Para elegir la nota principal sobre la persona, consulta [la nota sobre una persona](./notes.md#the-note-about-a-person).
 
+## Importar los contactos de un teléfono
+
+Exporta los contactos de tu teléfono como un archivo vCard (`.vcf`) e impórtalos con el nombre del teléfono:
+
+```sh
+memo records check contacts.vcf --account phone:pixel --region ru
+memo records import contacts.vcf --account phone:pixel --region ru
+```
+
+Un contacto se vincula a la persona que ya tiene una de sus direcciones de e-mail o números de teléfono, o se crea
+como persona nueva. Un número escrito sin `+`, como `8 900 000-00-02`, se lee en el país que nombra `--region` (`ru`,
+`gb`, `de`, etc., en mayúsculas o minúsculas). Sin `--region`, ese número se guarda pero no se busca, así que el
+contacto puede convertirse en una segunda entrada de alguien que ya tienes. La importación dice qué tarjetas son.
+
 ## Organizaciones y proyectos
 
 Las organizaciones y los proyectos son tuyos, no están ligados a una cuenta de un servicio de
@@ -173,7 +187,7 @@ memo review reject 17070-17074 --reason "not this project"
 
 Las propuestas esperan hasta que las confirmes en `memo review`, y antes de eso no aparecen en el contexto de una persona. Un
 par que rechazaste nunca se vuelve a proponer. Las personas se identifican por la cuenta que escribió, nunca por un nombre en un texto.
-Los dominios de correo gratuito habituales, como Gmail, nunca se usan para sugerencias.
+Los dominios de correo gratuito habituales, como Gmail, nunca se usan para propuestas.
 
 ## Reuniones en un proyecto
 
@@ -184,7 +198,7 @@ memo projects meetings link HRB 5 --account zoom:ACCOUNT
 memo projects meetings list HRB --source zoom:ACCOUNT
 ```
 
-Nombra exactamente la cuenta de la reunión. `confirmed:false` muestra los enlaces que sugirió un agente;
+Nombra exactamente la cuenta de la reunión. `confirmed:false` muestra los enlaces que propuso un agente;
 para confirmar uno, repite `link` con el valor `--fingerprint` que aparece en esa lista.
 
 ## Otros nombres para proyectos y etiquetas

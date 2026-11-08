@@ -59,7 +59,7 @@ memo contracts list expires:2026-12-31
 и никогда не заменяет старую.
 
 ```sh
-memo subscriptions add Hosting 990.00 RUB --kind payable --supplier organization:3 --every 1-month --start-date 2026-11-01
+memo subscriptions add Hosting 990.00 RUB --kind payable --supplier organization:3 --period 1-month --start-date 2026-11-01
 memo subscriptions prices add subscription:5 1190.00 RUB --start-date 2027-01-01
 memo subscriptions show subscription:5
 ```
