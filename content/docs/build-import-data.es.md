@@ -55,6 +55,7 @@ Un sobre JSON tiene `schema_version`, `source` y `records`. En JSONL, la primera
 - `options.lines` con el valor `products` lee el `product` de una línea como el id externo de un registro de producto.
   Con el valor por defecto, `text`, en una línea de factura es un dato más. Las líneas de pedido siempre lo leen como
   producto.
+- `options.phone_region`, un país de dos letras como `GB`, es el país en que se lee el teléfono de una persona sin `+`.
 
 ## Elige un tipo
 
@@ -110,7 +111,7 @@ Un registro apunta a otros registros con `relations`. Cada vínculo tiene un `ro
 El tipo decide qué roles conoce. Una factura tiene `issuer`, `counterparty`, `project`, `contract` y `subscription`.
 Un pago tiene `payer`, `payee`, `settles` (con un `amount`, su parte de esa factura) y `refund_of`. Una negociación
 tiene `organization`, `person` y `project`. Un rol que se toma una vez, como el `counterparty` de una factura, se
-rechaza si llega dos veces (`record.relation-ambiguous`).
+rechaza si apunta a dos destinos distintos (`record.relation-ambiguous`).
 
 - **`as`** dice qué papel tiene una persona u organización, como `"as": "decision-maker"` en la `person` de una
   negociación o `"as": "customer"` en la `party` de un contrato.
@@ -138,8 +139,9 @@ identificador fuerte. Nunca por el nombre.
   identificadores del registro.
 
 Un e-mail se compara sin espacios en los extremos y en minúsculas. Un número de teléfono se compara en su forma
-internacional, como `+447700900123`. Un número escrito sin `+` ni `00` solo se lee con una región: el ajuste
-`phone_countries` del almacén, o la `region` de una importación vCard. Sin región no es un identificador, y el
+internacional, como `+447700900123`. Un número escrito sin `+` ni `00` solo se lee con una región: el
+`options.phone_region` del sobre, o si no el ajuste `phone_countries` del almacén cuando exactamente uno de sus países
+lo lee como válido. Sin región no es un identificador. El recibo lo muestra en `ignored` (`record.phone-region`), y el
 registro crea una persona nueva en lugar de encontrar la que existe. Envía los números con `+` cuando los tengas.
 
 Un dominio de correo gratuito como `gmail.com` se rechaza como `domain` de una organización (`record.identifier`).
@@ -153,14 +155,16 @@ Un dominio de correo gratuito como `gmail.com` se rechaza como `domain` de una o
 - **Un registro cambiado** actualiza lo que se escribió directamente. Una propuesta que hizo la importación se
   actualiza mientras espera al propietario. Cuando el propietario ya decidió, el cambio solo se **marca** en el recibo,
   y su decisión se mantiene. Las facturas siempre se marcan, como en la primera versión del formato.
-- **Los borrados son suaves.** `"operation": "delete"` marca el registro como borrado. Su entidad se queda, y una
-  entidad propuesta o confirmada aparece como marcada, para que el propietario decida qué hacer con ella.
+- **Los borrados son suaves.** `"operation": "delete"` marca el registro como borrado. Su entidad se queda y aparece
+  en `flagged`, para que el propietario decida qué hacer con ella. Un registro propio no tiene entidad, así que no se
+  marca nada.
 
 ## El recibo y los errores
 
 <!-- verify against released memo: records import and records check print this receipt -->
 
-`ingest` e `ingestLines` devuelven este recibo, y `records import` y `records check` lo imprimen:
+`ingest` e `ingestLines` devuelven este recibo. Con `--json`, `records import` y `records check` lo imprimen dentro de
+`item`, con los nombres en snake case: `dry_run` y `batch_id`.
 
 | Miembro | Qué contiene |
 | --- | --- |
@@ -170,6 +174,7 @@ Un dominio de correo gratuito como `gmail.com` se rechaza como `domain` de una o
 | `proposed` | las propuestas creadas o cambiadas, como `invoice:1` |
 | `waiting` | registros con un destino que falta: `key`, `pointer`, los roles en `missing` |
 | `unmatched` | registros con dos o más candidatos: `key`, `pointer`, `reason`, `candidates` |
+| `ignored` | valores que parecen un identificador y se guardaron solo como datos: `key`, `pointer`, `reason` |
 | `flagged` | registros cambiados o borrados cuya entidad no se tocó |
 | `errors` | rechazos: `pointer`, `code`, `message`, `key` |
 | `truncated` | `true` cuando una lista se detuvo en 1000 elementos. Las cuentas siguen siendo exactas |
@@ -184,7 +189,7 @@ Este es el recibo de un archivo con un tipo desconocido y un pago cuya factura t
 {
   "dryRun": false,
   "source": { "provider": "example-erp", "account": "demo2", "batchId": "b2" },
-  "created": 2,
+  "created": 1,
   "updated": 0,
   "unchanged": 0,
   "deleted": 0,
@@ -193,11 +198,12 @@ Este es el recibo de un archivo con un tipo desconocido y un pago cuya factura t
   "waiting": [{ "key": "p", "pointer": "/records/1/relations", "missing": ["settles"] }],
   "flagged": [],
   "unmatched": [],
+  "ignored": [],
   "errors": [
     {
       "pointer": "/records/0/type",
       "code": "record.type",
-      "message": "a type is one of invoice, payment, person, organization, project, order, product, contract, subscription, wallet, transaction, deal, lead, pipeline or custom:<name>",
+      "message": "a type is one of invoice, payment, person, organization, project, order, product, contract, subscription, wallet, transaction, deal, lead, message, event, pipeline or custom:<name>",
       "key": "t"
     }
   ],
@@ -224,11 +230,11 @@ teléfono una vez.
   nombra.
 
 ```json
-{ "key": "sms-1", "type": "message", "external_id": "sms-1",
+{ "key": "sms-1", "type": "message", "external_id": "sms-1", "operation": "upsert",
   "fields": { "kind": "sms", "direction": "in", "phone": "+447700900123", "name": "Иван Петров",
               "body": "Буду в 10", "sent_at": "2026-11-01T09:12:00+01:00", "read": true },
   "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
-{ "key": "call-1", "type": "event", "external_id": "call-1",
+{ "key": "call-1", "type": "event", "external_id": "call-1", "operation": "upsert",
   "fields": { "kind": "call", "direction": "missed", "phone": "+447700900123", "started_at": "2026-11-01T10:00:00Z",
               "duration": 0 },
   "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
@@ -236,11 +242,20 @@ teléfono una vez.
 
 Un SMS o una llamada se vincula a una persona solo a través de ese registro de persona. Ese registro se busca como
 cualquier persona: un número exacto vincula, ninguno crea una persona, dos o más dejan el SMS o la llamada esperando
-al propietario. Un registro sin `counterpart` guarda solo el número. Un archivo de contactos en formato vCard (`.vcf`) se convierte en el
-mismo sobre: `ingestVcard` de `@wirecat/cli-core/services` lo lee y lo importa en una sola llamada, con una `region`
-para los números nacionales.
+al propietario. Un registro sin `counterpart` guarda solo el número.
 
-<!-- verify against released cli-core: phone records come from cli-core feat/phone-records, not merged yet. Owner ruling 2026-11-08: one account per phone, no sms: or calls: accounts -->
+Un archivo de contactos en formato vCard (`.vcf`) se convierte en el mismo sobre. memo lo importa en la cuenta del
+teléfono:
+
+```sh
+memo records import contacts.vcf --account phone:pixel --json
+```
+
+Desde tu propio código, `ingestVcard` de `@wirecat/cli-core/services` lo lee y lo importa en una sola llamada, con una
+`region` en minúsculas, como `gb`, para los números nacionales. Sin región, un número nacional se guarda pero no se busca, y la lista `vcard`
+del recibo lo dice.
+
+<!-- verify against released memo: phone records and ingestVcard are in released cli-core, one account per phone. memo records import of them and of .vcf is checked on memo PR 8's build only -->
 
 ## Un ejemplo completo
 
@@ -285,23 +300,27 @@ El recibo de la primera importación:
 
 ```json
 {
-  "dryRun": false,
-  "source": { "provider": "example-erp", "account": "demo", "batchId": "2026-11-07" },
-  "created": 10,
-  "updated": 0,
-  "unchanged": 0,
-  "deleted": 0,
-  "refused": 0,
-  "proposed": ["contract:1", "order:1", "invoice:1", "payment:1"],
-  "waiting": [],
-  "flagged": [],
-  "unmatched": [],
-  "errors": [],
-  "truncated": false
+  "item": {
+    "dry_run": false,
+    "source": { "provider": "example-erp", "account": "demo", "batch_id": "2026-11-07" },
+    "created": 10,
+    "updated": 0,
+    "unchanged": 0,
+    "deleted": 0,
+    "refused": 0,
+    "proposed": ["contract:1", "order:1", "invoice:1", "payment:1"],
+    "waiting": [],
+    "flagged": [],
+    "unmatched": [],
+    "ignored": [],
+    "errors": [],
+    "truncated": false
+  },
+  "meta": { "run_id": "20261108T181443Z-process-620b48", "duration_ms": 42, "complete": true }
 }
 ```
 
-<!-- verify against released memo: the receipt above is what cli-core's ingestLines returns. memo's --json output may wrap it -->
+<!-- verify against released memo: memo PR 8's build prints the receipt under item, in snake_case, as above -->
 
 Qué pasó:
 
@@ -359,7 +378,7 @@ memo search all "Rental agreement" --only business --json
 - `review list` muestra las cuatro propuestas. El propietario las confirma, y solo entonces cuentan en los totales.
 - `deals show` da la negociación con su organización, Anna como quien decide, y sus registros de origen, entre ellos
   el presupuesto.
-- `contracts show` da las fechas, el valor, el plazo de aviso (30 días antes del 31 de octubre de 2027) y la
+- `contracts show` da las fechas, el valor, el plazo de aviso (1 de octubre de 2027, 30 días antes del 31 de octubre) y la
   negociación que cerró.
 - `records show` da los campos del presupuesto tal como llegaron, con el JSON anidado, y su vínculo con la
   negociación.

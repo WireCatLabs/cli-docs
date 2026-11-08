@@ -52,6 +52,7 @@ and written every 1000 records, so a file of any length never sits in memory who
   `relations`.
 - `options.lines` set to `products` reads a line's `product` as the external id of a product record. The default,
   `text`, keeps it as plain data on an invoice line. Order lines always read it as a product.
+- `options.phone_region`, a two-letter country such as `GB`, is the country a person's phone without `+` is read in.
 
 ## Choose a type
 
@@ -106,7 +107,7 @@ A record points at other records with `relations`. Each relation has a `role` an
 The type decides which roles it knows. An invoice has `issuer`, `counterparty`, `project`, `contract` and
 `subscription`. A payment has `payer`, `payee`, `settles` (with an `amount`, its share of that invoice) and
 `refund_of`. A deal has `organization`, `person` and `project`. A role taken once, such as an invoice's
-`counterparty`, is refused when it is given twice (`record.relation-ambiguous`).
+`counterparty`, is refused when it names two different targets (`record.relation-ambiguous`).
 
 - **`as`** says what part a person or organization plays, such as `"as": "decision-maker"` on a deal's `person` or
   `"as": "customer"` on a contract's `party`.
@@ -134,9 +135,10 @@ Never by name.
   identifiers.
 
 An e-mail is compared trimmed and in lower case. A phone number is compared in its international form, such as
-`+447700900123`. A number written without `+` or `00` is read only with a region: the store's `phone_countries`
-setting, or the `region` of a vCard import. Without one, it is no identifier, so the record makes a new person instead
-of matching. Send numbers with `+` when you have them.
+`+447700900123`. A number written without `+` or `00` is read only with a region: the envelope's
+`options.phone_region`, or else the store's `phone_countries` setting when exactly one of its countries reads the
+number as valid. Without one, it is no identifier. The receipt lists it under `ignored` (`record.phone-region`), and the
+record makes a new person instead of matching. Send numbers with `+` when you have them.
 
 A free-mail domain such as `gmail.com` is refused as an organization's `domain` (`record.identifier`).
 
@@ -149,14 +151,15 @@ A free-mail domain such as `gmail.com` is refused as an organization's `domain` 
 - **A changed record** updates what was written directly. A proposal the import made is updated while it still waits
   for the owner. Once the owner has decided, the change is only **flagged** in the receipt, and the owner's decision
   stays. Invoices are always flagged, as in the first version of the format.
-- **Deletes are soft.** `"operation": "delete"` marks the record as deleted. Its entity stays, and a proposed or
-  confirmed entity is reported as flagged, so the owner decides what to do with it.
+- **Deletes are soft.** `"operation": "delete"` marks the record as deleted. Its entity stays and is listed under
+  `flagged`, so the owner decides what to do with it. A custom record has no entity, so nothing is flagged.
 
 ## The receipt and errors
 
 <!-- verify against released memo: records import and records check print this receipt -->
 
-`ingest` and `ingestLines` return this receipt, and `records import` and `records check` print it:
+`ingest` and `ingestLines` return this receipt. With `--json`, `records import` and `records check` print it under
+`item`, with the names in snake case: `dry_run` and `batch_id`.
 
 | Member | What it holds |
 | --- | --- |
@@ -166,6 +169,7 @@ A free-mail domain such as `gmail.com` is refused as an organization's `domain` 
 | `proposed` | the proposals made or changed, such as `invoice:1` |
 | `waiting` | records with a missing target: `key`, `pointer`, `missing` roles |
 | `unmatched` | records with two or more candidates: `key`, `pointer`, `reason`, `candidates` |
+| `ignored` | values that look like an identifier and were kept as data only: `key`, `pointer`, `reason` |
 | `flagged` | changed or deleted records whose entity was left alone |
 | `errors` | refusals: `pointer`, `code`, `message`, `key` |
 | `truncated` | `true` when a list stopped at 1000 entries. The counts stay exact |
@@ -180,7 +184,7 @@ Here is a receipt for a file with an unknown type and a payment whose invoice ha
 {
   "dryRun": false,
   "source": { "provider": "example-erp", "account": "demo2", "batchId": "b2" },
-  "created": 2,
+  "created": 1,
   "updated": 0,
   "unchanged": 0,
   "deleted": 0,
@@ -189,11 +193,12 @@ Here is a receipt for a file with an unknown type and a payment whose invoice ha
   "waiting": [{ "key": "p", "pointer": "/records/1/relations", "missing": ["settles"] }],
   "flagged": [],
   "unmatched": [],
+  "ignored": [],
   "errors": [
     {
       "pointer": "/records/0/type",
       "code": "record.type",
-      "message": "a type is one of invoice, payment, person, organization, project, order, product, contract, subscription, wallet, transaction, deal, lead, pipeline or custom:<name>",
+      "message": "a type is one of invoice, payment, person, organization, project, order, product, contract, subscription, wallet, transaction, deal, lead, message, event, pipeline or custom:<name>",
       "key": "t"
     }
   ],
@@ -219,11 +224,11 @@ records, the SMS and the calls all stay under that account, so an account group 
   `counterpart` names it.
 
 ```json
-{ "key": "sms-1", "type": "message", "external_id": "sms-1",
+{ "key": "sms-1", "type": "message", "external_id": "sms-1", "operation": "upsert",
   "fields": { "kind": "sms", "direction": "in", "phone": "+447700900123", "name": "Иван Петров",
               "body": "Буду в 10", "sent_at": "2026-11-01T09:12:00+01:00", "read": true },
   "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
-{ "key": "call-1", "type": "event", "external_id": "call-1",
+{ "key": "call-1", "type": "event", "external_id": "call-1", "operation": "upsert",
   "fields": { "kind": "call", "direction": "missed", "phone": "+447700900123", "started_at": "2026-11-01T10:00:00Z",
               "duration": 0 },
   "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
@@ -231,11 +236,19 @@ records, the SMS and the calls all stay under that account, so an account group 
 
 An SMS or a call links to a person only through that person record. The person record is matched as any person is:
 one exact number links, none makes a person, two or more leave the SMS or call waiting for the owner. A record with
-no `counterpart` keeps only the number. A contacts file in vCard format (`.vcf`) is converted to the same envelope:
-`ingestVcard` in `@wirecat/cli-core/services` reads it and imports it in one call, with a `region` for national
-numbers.
+no `counterpart` keeps only the number.
 
-<!-- verify against released cli-core: phone records come from cli-core feat/phone-records, not merged yet. Owner ruling 2026-11-08: one account per phone, no sms: or calls: accounts -->
+A contacts file in vCard format (`.vcf`) is converted to the same envelope. memo imports it into the phone's account:
+
+```sh
+memo records import contacts.vcf --account phone:pixel --json
+```
+
+From your own code, `ingestVcard` in `@wirecat/cli-core/services` reads it and imports it in one call, with a `region`
+in lower case, such as `gb`, for national numbers. Without a region, a national number is kept but not matched, and the receipt's `vcard` list
+says so.
+
+<!-- verify against released memo: phone records and ingestVcard are in released cli-core, one account per phone. memo records import of them and of .vcf is checked on memo PR 8's build only -->
 
 ## A complete example
 
@@ -279,23 +292,27 @@ The receipt of the first import:
 
 ```json
 {
-  "dryRun": false,
-  "source": { "provider": "example-erp", "account": "demo", "batchId": "2026-11-07" },
-  "created": 10,
-  "updated": 0,
-  "unchanged": 0,
-  "deleted": 0,
-  "refused": 0,
-  "proposed": ["contract:1", "order:1", "invoice:1", "payment:1"],
-  "waiting": [],
-  "flagged": [],
-  "unmatched": [],
-  "errors": [],
-  "truncated": false
+  "item": {
+    "dry_run": false,
+    "source": { "provider": "example-erp", "account": "demo", "batch_id": "2026-11-07" },
+    "created": 10,
+    "updated": 0,
+    "unchanged": 0,
+    "deleted": 0,
+    "refused": 0,
+    "proposed": ["contract:1", "order:1", "invoice:1", "payment:1"],
+    "waiting": [],
+    "flagged": [],
+    "unmatched": [],
+    "ignored": [],
+    "errors": [],
+    "truncated": false
+  },
+  "meta": { "run_id": "20261108T181443Z-process-620b48", "duration_ms": 42, "complete": true }
 }
 ```
 
-<!-- verify against released memo: the receipt above is what cli-core's ingestLines returns. memo's --json output may wrap it -->
+<!-- verify against released memo: memo PR 8's build prints the receipt under item, in snake_case, as above -->
 
 What happened:
 
@@ -353,7 +370,7 @@ memo search all "Rental agreement" --only business --json
 - `review list` shows the four proposals. The owner confirms them, and only then do they count in totals.
 - `deals show` gives the deal with its organization, Anna as decision-maker, and its source records, the quote among
   them.
-- `contracts show` gives the dates, the value, the notice deadline (30 days before 31 October 2027) and the deal it
+- `contracts show` gives the dates, the value, the notice deadline (1 October 2027, 30 days before 31 October 2027) and the deal it
   closed.
 - `records show` gives the quote's fields as they were sent, nested JSON included, and its relation to the deal.
 - `search all --only business` searches the titles of invoices, payments, orders, contracts, subscriptions, products

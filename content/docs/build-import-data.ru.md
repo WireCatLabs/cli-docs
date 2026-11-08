@@ -53,6 +53,7 @@ description: "Один формат JSON приносит в хранилище 
   больше 100 `relations`.
 - `options.lines` со значением `products` читает `product` в строке как внешний id записи товара. По умолчанию, при
   `text`, в строке счета это просто данные. Строки заказа всегда читают его как товар.
+- `options.phone_region`, страна из двух букв, например `GB`, в которой читается телефон человека без `+`.
 
 ## Выберите тип
 
@@ -109,7 +110,7 @@ description: "Один формат JSON приносит в хранилище 
 Какие роли бывают, решает тип. У счета есть `issuer`, `counterparty`, `project`, `contract` и `subscription`. У
 платежа есть `payer`, `payee`, `settles` (с `amount`, долей платежа в этом счете) и `refund_of`. У сделки есть
 `organization`, `person` и `project`. Роль, которая берется один раз, например `counterparty` счета, отклоняется, если
-ее дали дважды (`record.relation-ambiguous`).
+она указывает на две разные цели (`record.relation-ambiguous`).
 
 - **`as`** говорит, какую часть играет человек или организация, например `"as": "decision-maker"` у `person` сделки
   или `"as": "customer"` у `party` договора.
@@ -137,9 +138,10 @@ description: "Один формат JSON приносит в хранилище 
   записи.
 
 E-mail сравнивается без пробелов по краям и в нижнем регистре. Номер телефона сравнивается в международном виде,
-например `+447700900123`. Номер без `+` или `00` читается только с регионом: настройкой хранилища `phone_countries` или
-`region` при импорте vCard. Без региона это не идентификатор, и запись создает нового человека, а не находит
-существующего. Присылайте номера с `+`, когда они у вас есть.
+например `+447700900123`. Номер без `+` или `00` читается только с регионом: `options.phone_region` конверта, а без
+него настройкой хранилища `phone_countries`, если ровно одна ее страна считает номер верным. Без региона это не
+идентификатор. Квитанция показывает его под `ignored` (`record.phone-region`), и запись создает нового человека, а не
+находит существующего. Присылайте номера с `+`, когда они у вас есть.
 
 Домен бесплатной почты, например `gmail.com`, отклоняется как `domain` организации (`record.identifier`).
 
@@ -152,14 +154,15 @@ E-mail сравнивается без пробелов по краям и в н
 - **Измененная запись** обновляет то, что было записано сразу. Предложение, которое создал импорт, обновляется, пока
   оно ждет владельца. Когда владелец уже решил, изменение только **помечается** в квитанции, а его решение остается.
   Счета помечаются всегда, как в первой версии формата.
-- **Удаление мягкое.** `"operation": "delete"` помечает запись как удаленную. Ее сущность остается, а предложенная или
-  подтвержденная сущность попадает в помеченные, чтобы владелец решил, что с ней делать.
+- **Удаление мягкое.** `"operation": "delete"` помечает запись как удаленную. Ее сущность остается и попадает в
+  `flagged`, чтобы владелец решил, что с ней делать. У собственной записи сущности нет, поэтому ничего не помечается.
 
 ## Квитанция и ошибки
 
 <!-- verify against released memo: records import and records check print this receipt -->
 
-`ingest` и `ingestLines` возвращают эту квитанцию, а `records import` и `records check` ее печатают:
+`ingest` и `ingestLines` возвращают эту квитанцию. С `--json` команды `records import` и `records check` печатают ее
+под `item`, с именами в snake case: `dry_run` и `batch_id`.
 
 | Поле | Что в нем |
 | --- | --- |
@@ -169,6 +172,7 @@ E-mail сравнивается без пробелов по краям и в н
 | `proposed` | созданные или измененные предложения, например `invoice:1` |
 | `waiting` | записи без цели: `key`, `pointer`, недостающие роли в `missing` |
 | `unmatched` | записи с двумя или больше кандидатами: `key`, `pointer`, `reason`, `candidates` |
+| `ignored` | значения, похожие на идентификатор, которые сохранены только как данные: `key`, `pointer`, `reason` |
 | `flagged` | измененные или удаленные записи, чью сущность не тронули |
 | `errors` | отказы: `pointer`, `code`, `message`, `key` |
 | `truncated` | `true`, если список остановился на 1000 элементах. Числа при этом точные |
@@ -183,7 +187,7 @@ E-mail сравнивается без пробелов по краям и в н
 {
   "dryRun": false,
   "source": { "provider": "example-erp", "account": "demo2", "batchId": "b2" },
-  "created": 2,
+  "created": 1,
   "updated": 0,
   "unchanged": 0,
   "deleted": 0,
@@ -192,11 +196,12 @@ E-mail сравнивается без пробелов по краям и в н
   "waiting": [{ "key": "p", "pointer": "/records/1/relations", "missing": ["settles"] }],
   "flagged": [],
   "unmatched": [],
+  "ignored": [],
   "errors": [
     {
       "pointer": "/records/0/type",
       "code": "record.type",
-      "message": "a type is one of invoice, payment, person, organization, project, order, product, contract, subscription, wallet, transaction, deal, lead, pipeline or custom:<name>",
+      "message": "a type is one of invoice, payment, person, organization, project, order, product, contract, subscription, wallet, transaction, deal, lead, message, event, pipeline or custom:<name>",
       "key": "t"
     }
   ],
@@ -222,11 +227,11 @@ E-mail сравнивается без пробелов по краям и в н
   отношение `counterpart`.
 
 ```json
-{ "key": "sms-1", "type": "message", "external_id": "sms-1",
+{ "key": "sms-1", "type": "message", "external_id": "sms-1", "operation": "upsert",
   "fields": { "kind": "sms", "direction": "in", "phone": "+447700900123", "name": "Иван Петров",
               "body": "Буду в 10", "sent_at": "2026-11-01T09:12:00+01:00", "read": true },
   "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
-{ "key": "call-1", "type": "event", "external_id": "call-1",
+{ "key": "call-1", "type": "event", "external_id": "call-1", "operation": "upsert",
   "fields": { "kind": "call", "direction": "missed", "phone": "+447700900123", "started_at": "2026-11-01T10:00:00Z",
               "duration": 0 },
   "relations": [{ "role": "counterpart", "type": "person", "external_id": "+447700900123" }] }
@@ -234,11 +239,19 @@ E-mail сравнивается без пробелов по краям и в н
 
 SMS или звонок связывается с человеком только через эту запись человека. Она сопоставляется как любой человек: один
 точный номер связывает, ни одного создает человека, два или больше оставляют SMS или звонок ждать владельца. Запись
-без `counterpart` хранит только номер. Файл контактов в формате vCard (`.vcf`) превращается в такой же конверт:
-`ingestVcard` из `@wirecat/cli-core/services` читает и импортирует его за один вызов, с `region` для национальных
-номеров.
+без `counterpart` хранит только номер.
 
-<!-- verify against released cli-core: phone records come from cli-core feat/phone-records, not merged yet. Owner ruling 2026-11-08: one account per phone, no sms: or calls: accounts -->
+Файл контактов в формате vCard (`.vcf`) превращается в такой же конверт. memo импортирует его в аккаунт телефона:
+
+```sh
+memo records import contacts.vcf --account phone:pixel --json
+```
+
+Из вашего кода `ingestVcard` из `@wirecat/cli-core/services` читает и импортирует его за один вызов, с `region` в
+нижнем регистре, например `gb`, для национальных номеров. Без региона национальный номер сохраняется, но не сопоставляется, и об этом говорит список
+`vcard` в квитанции.
+
+<!-- verify against released memo: phone records and ingestVcard are in released cli-core, one account per phone. memo records import of them and of .vcf is checked on memo PR 8's build only -->
 
 ## Полный пример
 
@@ -282,23 +295,27 @@ memo records import erp.jsonl --account example-erp:demo --json
 
 ```json
 {
-  "dryRun": false,
-  "source": { "provider": "example-erp", "account": "demo", "batchId": "2026-11-07" },
-  "created": 10,
-  "updated": 0,
-  "unchanged": 0,
-  "deleted": 0,
-  "refused": 0,
-  "proposed": ["contract:1", "order:1", "invoice:1", "payment:1"],
-  "waiting": [],
-  "flagged": [],
-  "unmatched": [],
-  "errors": [],
-  "truncated": false
+  "item": {
+    "dry_run": false,
+    "source": { "provider": "example-erp", "account": "demo", "batch_id": "2026-11-07" },
+    "created": 10,
+    "updated": 0,
+    "unchanged": 0,
+    "deleted": 0,
+    "refused": 0,
+    "proposed": ["contract:1", "order:1", "invoice:1", "payment:1"],
+    "waiting": [],
+    "flagged": [],
+    "unmatched": [],
+    "ignored": [],
+    "errors": [],
+    "truncated": false
+  },
+  "meta": { "run_id": "20261108T181443Z-process-620b48", "duration_ms": 42, "complete": true }
 }
 ```
 
-<!-- verify against released memo: the receipt above is what cli-core's ingestLines returns. memo's --json output may wrap it -->
+<!-- verify against released memo: memo PR 8's build prints the receipt under item, in snake_case, as above -->
 
 Что произошло:
 
@@ -356,7 +373,7 @@ memo search all "Rental agreement" --only business --json
 - `review list` показывает четыре предложения. Владелец их подтверждает, и только после этого они входят в суммы.
 - `deals show` дает сделку с организацией, Анной, которая принимает решение, и записями источников, среди них
   коммерческое предложение.
-- `contracts show` дает даты, сумму, срок уведомления (за 30 дней до 31 октября 2027 года) и сделку, которую договор
+- `contracts show` дает даты, сумму, срок уведомления (1 октября 2027 года, за 30 дней до 31 октября) и сделку, которую договор
   закрыл.
 - `records show` дает поля коммерческого предложения такими, какими их прислали, вместе с вложенным JSON, и его
   отношение к сделке.
