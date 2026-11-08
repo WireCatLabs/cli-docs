@@ -389,6 +389,102 @@ Alice's membership is `ended`, and it is still there with its history. Bob's new
 his `decision-maker` role from you stays as it was. `memo review confirm 2` makes the new role yours, and
 `memo review reject 2 --reason "not on this deal"` turns it down, so the sync does not suggest it again.
 
+### Whose deals are copied
+
+In a sales team's CRM most deals belong to other people. So a sync copies only your own deals and leads: those whose
+responsible person is the CRM user the tool signs in as (in Bitrix24, the webhook's user). Contacts and companies are
+always copied whole. A manager who wants every deal sets the account's `scope` to `all`, and `mine` goes back:
+
+```sh
+b24 work config set crm.bitrix24:example.bitrix24.com.scope all
+b24 work config set crm.bitrix24:example.bitrix24.com.scope mine
+```
+
+A deal can also belong to nobody yet, for example one that a website form creates. Bitrix24 has no such deals: every
+deal has a responsible person, by default the user who created it
+([Bitrix24 REST docs](https://github.com/bitrix24/b24restdocs/blob/833b39804f03dd4eb0ab758cbf7c1ddf1fac4663/api-reference/crm/universal/crm-item-add.md#L186-L189)).
+So you name the users whose deals count as nobody's, such as the user your website form creates them as, and the
+sync copies their deals and leads too:
+
+```sh
+b24 work config set crm.bitrix24:example.bitrix24.com.unassigned 15,31
+```
+
+What happens when the scope changes:
+
+- A deal given to another user leaves the copy at the next sync, and comes back if it is given back to you.
+- Switching to `all` reads every deal and lead again. Switching to `mine` works from the copy alone and asks the CRM
+  nothing.
+- A deal outside the scope leaves your lists and search, in `b24` and in `memo`. Its earlier copy still stays in the
+  store file on your computer.
+- If you never set `scope`, and the first narrowing to `mine` would remove more than half of the stored deals or
+  leads, the sync keeps them and says so (`crm.narrowing-held`). This happens when the sync's user holds few deals.
+  The copy stays as it is until you set `scope` to `mine` or `all`.
+
+`b24 work store status` shows, for deals and for leads, the saved `scope`, whether you set it, the scope the last
+sync applied, and whether a narrowing is held.
+
+One account's copy belongs to one CRM user. The first sync remembers that user in `crm.<provider>:<account>.self`, and
+a sync that signs in as another user is refused. To hand the copy over, unset it, and the next sync remembers the new
+user:
+
+```sh
+b24 work config unset crm.bitrix24:example.bitrix24.com.self
+```
+
+Only you change `scope`, `unassigned` and `self`: an agent that tries is refused. This guards against an agent's
+mistake. It is not a security boundary: an agent that can run any command on your computer can get around it.
+
+### Base stages
+
+Each CRM, and each pipeline in it, names its stages its own way. Base stages are your own list of stages, one for
+deals and one for leads. A board shows them as its columns for every pipeline and every CRM, and every other stage is
+mapped onto one of them. Memo suggests the mapping, and you confirm it.
+
+```sh
+memo stages show deal
+memo stages list confirmed:false
+memo stages set stage:41 Proposal
+memo stages confirm --pipeline pipeline:3
+memo deals move deal:5 stage:3
+```
+
+- `memo stages show deal` makes the list on first use and shows each base stage with its open deals and the stages
+  mapped onto it. It also shows what is unsorted: stages not mapped yet, or only suggested. If you have exactly one
+  pipeline of your own for deals and it has open, won and lost stages, it becomes the list. Otherwise memo makes
+  New, Qualification, Proposal, Negotiation, Won and Lost, named in your first language (`owner_languages`). Your
+  own `Leads` pipeline becomes the list for leads.
+- `memo stages create`, `rename`, `move` and `remove` edit a list. Each list keeps at least one open, one won and one
+  lost stage, and a stage that your own deals or leads stand in, or stood in, cannot be removed.
+- `memo stages list` shows every other stage, of a CRM or of your own pipelines, with its base stage and whether it
+  is `confirmed`. A CRM's stages are suggested at each sync, by outcome and by their place in the pipeline. A
+  confirmed mapping is never changed by a sync.
+- `memo stages set` maps one stage. `memo stages confirm --pipeline <pipeline>` confirms one pipeline's suggestions,
+  and `memo stages confirm --all` confirms all of them.
+- `memo deals move` and `memo leads move` take a base stage's `stage:<id>` and move your own deal to the one stage
+  of its pipeline that is mapped there. When several stages are, the answer is `stage.choice-required` with the
+  candidates: move again to one of them by its `stage:<id>`. When none is, the answer is `stage.unmapped`: map a
+  stage first. A deal copied from a CRM moves on the CRM, with the tool its `writes_with` names (see below).
+- In `--json`, each row of `memo deals list` and `memo leads list` has `base_stage`. It stays `null` until you
+  confirm the mapping of the row's stage.
+
+Your agent may suggest a mapping: its `memo stages set` stays a suggestion until you confirm it. Editing the lists
+and `memo stages confirm` are refused to an agent. As with the CRM scope, this guards against mistakes and is not a
+security boundary.
+
+### Change a CRM deal
+
+A deal, lead or pipeline copied from a CRM is changed on the CRM, not in memo, or the next sync would undo the change.
+In `--json`, each such row of `memo deals list`, `memo leads list` and `memo pipelines list` has `writes_with`: the
+tool that changes it (`tool`, such as `b24`), the row's `account`, and the `profile` to run that tool as. For
+example, the agent reads `memo deals list status:open --json`, then runs `b24` as that profile, such as
+`b24 work deals move deal:12 "Quote sent"`.
+
+`profile` is set only when exactly one profile of that tool has run on the account. Otherwise it is `null`,
+`profiles` lists the candidates and `why` says what to choose: your agent asks you which one to use and never picks
+one. In a group, a profile on an account outside the group is never named. Your own deals have `"writes_with":
+null`, because memo changes them itself.
+
 ## Phones, links, names and addresses
 
 Find where someone sent a phone number, every link to one site, every chat that mentions a document, or every message

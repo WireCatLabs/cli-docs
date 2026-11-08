@@ -65,8 +65,17 @@ memo search all 'renewal' --only crm
 ```
 
 People and companies are not in `search all`. Find them with `memo search people` and `memo organizations list`.
-When memo's [permissions](./memo/configuration.md#permissions) deny deals or leads, `search all` leaves them out and
-says so.
+A deal outside the CRM account's [sync scope](./people.md#whose-deals-are-copied) is not found either.
+
+An agent that uses memo's MCP server sees in `search all` only what its [permissions](./memo/configuration.md#permissions)
+let it list. When the server denies `deals.list` or `leads.list`, those hits are left out, and the answer says so in an
+issue for `crm`. `crm.list` leaves the whole CRM part out, and `business.list` leaves out invoices, payments, orders,
+contracts, subscriptions, products and wallets. `--only crm` and `--only business` search one part alone, and are
+refused when that part is denied. These permissions do not limit a search you run yourself in a terminal.
+
+```sh
+memo search all 'renewal' --only business
+```
 
 A question about who someone is, or how a person, a company and a deal relate, is better answered from their
 context than from search. Ask your agent to work in this order:

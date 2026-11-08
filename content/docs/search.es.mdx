@@ -64,8 +64,19 @@ memo search all 'renewal' --only crm
 ```
 
 Las personas y las empresas no están en `search all`. Encuéntralas con `memo search people` y
-`memo organizations list`. Cuando los [permisos](./memo/configuration.md#permissions) de memo niegan las
-negociaciones o los prospectos, `search all` los deja fuera y lo dice.
+`memo organizations list`. Una negociación fuera del [alcance de la sincronización](./people.md#de-quién-son-las-negociaciones-que-se-copian)
+de la cuenta del CRM tampoco aparece.
+
+Un agente que usa el servidor MCP de memo solo ve en `search all` lo que sus
+[permisos](./memo/configuration.md#permissions) le dejan listar. Cuando el servidor niega `deals.list` o
+`leads.list`, esos resultados quedan fuera y la respuesta lo dice en un aviso para `crm`. `crm.list` deja fuera toda
+la parte del CRM, y `business.list` deja fuera facturas, pagos, pedidos, contratos, suscripciones, productos y
+monederos. `--only crm` y `--only business` buscan solo en una parte, y se rechazan cuando esa parte está negada.
+Estos permisos no limitan una búsqueda que haces tú mismo en una terminal.
+
+```sh
+memo search all 'renewal' --only business
+```
 
 Una pregunta sobre quién es alguien, o sobre cómo se relacionan una persona, una empresa y una negociación, se
 responde mejor desde su contexto que con una búsqueda. Pide a tu agente que siga este orden:

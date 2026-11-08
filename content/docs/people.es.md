@@ -400,6 +400,108 @@ La pertenencia de Alice está `ended`, y sigue ahí con su historial. El nuevo r
 y su rol `decision-maker`, que le diste tú, sigue igual. `memo review confirm 2` hace tuyo el nuevo rol, y
 `memo review reject 2 --reason "not on this deal"` lo rechaza, así que la sincronización no lo vuelve a sugerir.
 
+### De quién son las negociaciones que se copian
+
+En el CRM de un equipo de ventas, la mayoría de las negociaciones son de otras personas. Por eso una sincronización
+copia solo tus negociaciones y prospectos: aquellos cuyo responsable es el usuario del CRM con el que entra la
+herramienta (en Bitrix24, el usuario del webhook). Los contactos y las empresas se copian siempre enteros. Un
+responsable de equipo que quiere todas las negociaciones pone el `scope` de la cuenta en `all`, y `mine` vuelve atrás:
+
+```sh
+b24 work config set crm.bitrix24:example.bitrix24.com.scope all
+b24 work config set crm.bitrix24:example.bitrix24.com.scope mine
+```
+
+Una negociación también puede no ser de nadie todavía, por ejemplo una que crea un formulario de tu web. Bitrix24 no
+tiene negociaciones así: cada una tiene un responsable, por defecto el usuario que la creó
+([documentación REST de Bitrix24](https://github.com/bitrix24/b24restdocs/blob/833b39804f03dd4eb0ab758cbf7c1ddf1fac4663/api-reference/crm/universal/crm-item-add.md#L186-L189)).
+Así que nombras tú a los usuarios cuyas negociaciones cuentan como de nadie, como el usuario con el que las crea el
+formulario de tu web, y la sincronización copia también sus negociaciones y prospectos:
+
+```sh
+b24 work config set crm.bitrix24:example.bitrix24.com.unassigned 15,31
+```
+
+Qué pasa cuando cambia el alcance:
+
+- Una negociación que se da a otro usuario sale de la copia en la siguiente sincronización, y vuelve si te la
+  devuelven.
+- Pasar a `all` vuelve a leer todas las negociaciones y prospectos. Pasar a `mine` trabaja solo con la copia y no
+  pregunta nada al CRM.
+- Una negociación fuera del alcance sale de tus listas y de la búsqueda, en `b24` y en `memo`. Su copia anterior
+  sigue en el archivo del almacén de tu ordenador.
+- Si nunca pusiste `scope` y el primer paso a `mine` quitaría más de la mitad de las negociaciones o prospectos
+  guardados, la sincronización los mantiene y lo dice (`crm.narrowing-held`). Pasa cuando el usuario de la
+  sincronización tiene pocas negociaciones. La copia sigue igual hasta que pongas `scope` en `mine` o `all`.
+
+`b24 work store status` muestra, para las negociaciones y para los prospectos, el `scope` guardado, si lo pusiste
+tú, el alcance que aplicó la última sincronización y si hay un paso a `mine` retenido.
+
+La copia de una cuenta pertenece a un usuario del CRM. La primera sincronización lo recuerda en
+`crm.<provider>:<account>.self`, y una sincronización que entra con otro usuario se rechaza. Para pasar la copia a
+otro, quita ese ajuste, y la siguiente sincronización recuerda al nuevo usuario:
+
+```sh
+b24 work config unset crm.bitrix24:example.bitrix24.com.self
+```
+
+Solo tú cambias `scope`, `unassigned` y `self`: a un agente que lo intenta se le rechaza. Esto protege contra un
+error del agente. No es un límite de seguridad: un agente que puede ejecutar cualquier comando en tu ordenador puede
+saltárselo.
+
+### Etapas base
+
+Cada CRM, y cada embudo dentro de él, llama a sus etapas a su manera. Las etapas base son tu propia lista de etapas,
+una para negociaciones y otra para prospectos. Un tablero las muestra como columnas para todos los embudos y todos los
+CRM, y cada otra etapa se asigna a una de ellas. Memo sugiere la asignación y tú la confirmas.
+
+```sh
+memo stages show deal
+memo stages list confirmed:false
+memo stages set stage:41 Proposal
+memo stages confirm --pipeline pipeline:3
+memo deals move deal:5 stage:3
+```
+
+- `memo stages show deal` crea la lista la primera vez y muestra cada etapa base con sus negociaciones abiertas y
+  las etapas asignadas a ella. También muestra lo que está sin ordenar: etapas aún sin asignar o solo sugeridas. Si
+  tienes exactamente un embudo propio de negociaciones y tiene etapas abiertas, ganadas y perdidas, ese embudo es la
+  lista. Si no, memo crea New, Qualification, Proposal, Negotiation, Won y Lost en tu primer idioma
+  (`owner_languages`). Tu propio embudo `Leads` pasa a ser la lista de prospectos.
+- `memo stages create`, `rename`, `move` y `remove` editan una lista. Cada lista conserva al menos una etapa
+  abierta, una ganada y una perdida, y no se puede quitar una etapa en la que están o estuvieron tus propias
+  negociaciones o prospectos.
+- `memo stages list` muestra todas las demás etapas, de un CRM o de tus propios embudos, con su etapa base y si está
+  `confirmed`. Las etapas de un CRM se sugieren en cada sincronización, por resultado y por su lugar en el embudo.
+  Una sincronización nunca cambia una asignación confirmada.
+- `memo stages set` asigna una etapa. `memo stages confirm --pipeline <pipeline>` confirma las sugerencias de un
+  embudo, y `memo stages confirm --all` las confirma todas.
+- `memo deals move` y `memo leads move` aceptan el `stage:<id>` de una etapa base y mueven tu propia negociación a la
+  única etapa de su embudo asignada ahí. Cuando hay varias, la respuesta es `stage.choice-required` con las
+  candidatas: vuelve a moverla a una de ellas por su `stage:<id>`. Cuando no hay ninguna, la respuesta es
+  `stage.unmapped`: asigna antes una etapa. Una negociación copiada de un CRM se mueve en el CRM, con la herramienta
+  que nombra su `writes_with` (ver abajo).
+- En `--json`, cada fila de `memo deals list` y `memo leads list` tiene `base_stage`. Sigue en `null` hasta que
+  confirmes la asignación de la etapa de esa fila.
+
+Tu agente puede sugerir una asignación: su `memo stages set` sigue siendo una sugerencia hasta que la confirmes.
+Editar las listas y `memo stages confirm` se le rechazan a un agente. Como con el alcance del CRM, esto protege contra
+errores y no es un límite de seguridad.
+
+### Cambiar una negociación del CRM
+
+Una negociación, un prospecto o un embudo copiados de un CRM se cambian en el CRM, no en memo, o la siguiente
+sincronización desharía el cambio. En `--json`, cada una de esas filas de `memo deals list`, `memo leads list` y
+`memo pipelines list` tiene `writes_with`: la herramienta que la cambia (`tool`, como `b24`), la `account` de la
+fila y el `profile` con el que ejecutar esa herramienta. Por ejemplo, el agente lee
+`memo deals list status:open --json` y luego ejecuta `b24` con ese perfil, como
+`b24 work deals move deal:12 "Quote sent"`.
+
+`profile` solo tiene valor cuando exactamente un perfil de esa herramienta se ha ejecutado en la cuenta. Si no, es
+`null`, `profiles` lista los candidatos y `why` dice qué elegir: tu agente te pregunta cuál usar y nunca elige uno.
+En un grupo nunca se nombra un perfil de una cuenta fuera del grupo. Tus propias negociaciones tienen
+`"writes_with": null`, porque memo las cambia él mismo.
+
 ## Teléfonos, enlaces, nombres y direcciones
 
 Encuentra dónde alguien envió un número de teléfono, todos los enlaces a un sitio, todos los chats que mencionan un
