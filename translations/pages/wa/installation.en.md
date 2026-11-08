@@ -91,6 +91,19 @@ Ask your agent to show the terminal or paste the text QR into the chat. Use What
 
 ## Advanced installation and maintenance
 
+## After linking: keep `serve` running
+
+The phone sends your history in parts, over several minutes after the link, and only while WhatsApp is open on it.
+Only a running `serve` saves the parts that come after `setup` or `session start` ends. So right after linking, keep
+WhatsApp open on the phone and install `serve` as a service:
+
+```sh
+wa personal server install                               # writes the unit and enables it at login; starts nothing
+wa personal server start
+```
+
+On macOS, `server install` writes a launchd agent. Details: [`serve` as a service](./archive.md#as-a-service).
+
 ## From source
 
 To run `wa` from a checkout of the repository instead:

@@ -93,6 +93,21 @@ wa personal chats list --limit 5
 
 <a id="from-source" />
 
+<a id="after-linking-keep-serve-running" />
+
+## После связывания: держите `serve` запущенным
+
+Телефон присылает вашу историю частями, в течение нескольких минут после связывания, и только пока на нем открыт
+WhatsApp. Только запущенный `serve` сохраняет части, которые приходят после окончания `setup` или `session start`.
+Поэтому сразу после связывания держите WhatsApp открытым на телефоне и установите `serve` как службу:
+
+```sh
+wa personal server install                               # writes the unit and enables it at login; starts nothing
+wa personal server start
+```
+
+В macOS `server install` записывает агент launchd. Подробнее: [`serve` как служба](./archive.md#as-a-service).
+
 ## Из исходного кода
 
 Вместо этого, чтобы запустить `wa` из локальной копии репозитория:

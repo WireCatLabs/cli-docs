@@ -93,6 +93,22 @@ Pide al agente que muestre el terminal o pegue el QR de texto en el chat. Usa el
 
 <a id="from-source" />
 
+<a id="after-linking-keep-serve-running" />
+
+## Después de vincular: mantén `serve` en marcha
+
+El teléfono envía tu historial por partes, durante varios minutos después de vincular, y solo mientras WhatsApp está
+abierto en él. Solo un `serve` en ejecución guarda las partes que llegan después de que termine `setup` o
+`session start`. Así que, justo después de vincular, mantén WhatsApp abierto en el teléfono e instala `serve` como
+servicio:
+
+```sh
+wa personal server install                               # writes the unit and enables it at login; starts nothing
+wa personal server start
+```
+
+En macOS, `server install` escribe un agente de launchd. Detalles: [`serve` como servicio](./archive.md#as-a-service).
+
 ## De la fuente
 
 Para ejecutar `wa` desde el repositorio:
