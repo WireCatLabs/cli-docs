@@ -157,7 +157,9 @@ E-mail сравнивается без пробелов по краям и в н
 
 ## Квитанция и ошибки
 
-`records import`, `records check`, `ingest` и `ingestLines` отвечают одной и той же квитанцией:
+<!-- verify against released memo: records import and records check print this receipt -->
+
+`ingest` и `ingestLines` возвращают эту квитанцию, а `records import` и `records check` ее печатают:
 
 | Поле | Что в нем |
 | --- | --- |

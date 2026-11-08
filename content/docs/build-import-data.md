@@ -154,7 +154,9 @@ A free-mail domain such as `gmail.com` is refused as an organization's `domain` 
 
 ## The receipt and errors
 
-`records import`, `records check`, `ingest` and `ingestLines` all answer with the same receipt:
+<!-- verify against released memo: records import and records check print this receipt -->
+
+`ingest` and `ingestLines` return this receipt, and `records import` and `records check` print it:
 
 | Member | What it holds |
 | --- | --- |

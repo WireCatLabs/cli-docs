@@ -158,7 +158,9 @@ Un dominio de correo gratuito como `gmail.com` se rechaza como `domain` de una o
 
 ## El recibo y los errores
 
-`records import`, `records check`, `ingest` e `ingestLines` responden con el mismo recibo:
+<!-- verify against released memo: records import and records check print this receipt -->
+
+`ingest` e `ingestLines` devuelven este recibo, y `records import` y `records check` lo imprimen:
 
 | Miembro | Qué contiene |
 | --- | --- |
