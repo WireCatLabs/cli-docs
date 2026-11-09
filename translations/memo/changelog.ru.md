@@ -10,6 +10,235 @@ title: "История изменений"
 
 ## Unreleased
 
+## 0.131.72 — 09.11.2026
+
+### Added
+
+- **`memo sources suggest <ref>` has the reader you chose propose facts from a source.** Each fact comes with the
+  exact words it rests on, checked against the stored text; a fact whose quote is not there is dropped, and one
+  already stored from the source is named as `duplicate_of`. The rest wait as one findings batch citing the source,
+  staged by `memo-reader`, that only you confirm (`memo actions confirm`), even with `agent_decisions` on. The same
+  text read again by the same reader answers `reused: true` without asking it; `--rescan` asks again.
+- **`memo sources readers list` and `memo sources readers set <reader> [--model]`.** The readers are Claude Code and
+  Codex (your own sign-in, tools off, an empty folder), Ollama on this computer, and the OpenAI and Anthropic APIs
+  with the key `memo models keys set` keeps. The list says for each whether it is ready, whether the text leaves this
+  computer and whether it could read files; only you choose one, kept as `sources.reader` and `sources.model`, and
+  memo never picks one. Over MCP, `sources suggest`, `sources readers set` and `models keys` are not offered.
+- **`memo people show`, `review`, `scan`, `link`, `unlink` and `unmerge`: who is who across sources.** `show` gives a
+  person's identities by source, the accounts that saw each with their scope, the merges and the open matches, naming
+  the people as they are now; each match says its `signal`, the `identity` and `with` it names, and whether confirming
+  `joins` the two people or moves one identity. `scan`, and every `memo sync` (`--only people`), joins people on the
+  same email address in any scope when no third person has it and it is not a role address (`info@`, `support@` …),
+  and on a phone number exactly two people have when one has it in Telegram, MAX or WhatsApp. A role address only
+  proposes a match, and a no-reply address neither joins nor proposes anyone. A pair the owner rejected is never
+  joined, but new evidence about it proposes it again; the rejected evidence never does. Other shared numbers and
+  addresses, and a meeting guest's typed address, wait in `review`, which says `has_more` when `--limit` cuts it.
+  `link` links for the owner; an agent's link waits for the owner as an `identity_link` match and needs `--reason`.
+  `unlink` (one identity, or several to one new person, each by its exact id: a name is refused with
+  `identity.not-found`) and `unmerge` are the owner's alone: an agent is refused (`identity.owner-only`), MCP does not
+  offer them, and WireCat Desktop passes `--from-app`. `memo review kind:identity_link` lists the matches. They are
+  owner-only, so an agent's `review confirm` is refused. `memo skill show proposals` is the agent's guide.
+
+## 0.131.71 — 09.11.2026
+
+### Added
+
+- **Base stages: `memo stages show|create|rename|move|remove|list|set|confirm`.** The owner's own stages
+  of deals and of leads, the columns of a board across every pipeline and CRM, and every other stage mapped onto
+  them, suggested by memo and confirmed by the owner. Each command takes `--json`. In a group they count and list only
+  the group's pipelines and the owner's own. Editing the base set and `confirm` are the owner's own
+  (`stage.owner-only`). An agent's `stages set` stays a suggestion. `deals move` and `leads move` take a base stage's
+  `stage:<id>`: the owner's deal moves to the one stage of its pipeline mapped there. Several give
+  `stage.choice-required` with `candidates`, none gives `stage.unmapped`, and a CRM's copy gives `stage.crm-copy`
+  with its `writes_with`. Rows of `deals list` and `leads list` gain `base_stage`, `null` until confirmed. Needs the
+  cli-core release with base stages (store version 60).
+- **`writes_with` on CRM rows of `deals list`, `leads list` and `pipelines list`**: the CLI that changes the row on
+  its CRM (`tool`), the row's `account`, and the `profile`, named only when exactly one profile of that CLI is on the
+  account; otherwise `null`, with `profiles` and `why`. In a group, a profile on an account outside it is never named.
+  The owner's own rows have `null`. WireCat Desktop's Clients board reads it to move a card's stage through b24.
+- **`memo relationships roles list [list:<list>] | add <list> <role> [--label] | remove <list> <role>`**: the roles a
+  relationship may take, built in and your own (cli-core's role lists). Only you change them; one still held is kept.
+- **`memo search people` finds a person you added by name only.**
+- **`memo relationships add --kind reports-to|customer-of|partner-of`, `--position` (the job title), `--start-date`,
+  `--end-date`**, and `relationships update --position --start-date`. `memo relationships end <id> --end-date <date>` says
+  a relationship ended; it stays, as `ended`.
+- **`memo organizations context <ref>` is the organization's whole picture** (cli-core's `organizationContext`): its
+  people by role, customers, suppliers and partners, projects, open deals and leads, invoices, payments and orders as
+  stored, how much its people wrote, open tasks, categories and `coverage`, then its notes and tags.
+- **`memo deals context <ref>` and `memo leads context <ref>`, `--brief` for an agent** (cli-core's `dealContext`):
+  stages, client, people with roles and standing, owner, project, money reached by project or client, its people's
+  messages, mail and meetings in its lifetime marked `proposed`, open tasks and `coverage`.
+- **`memo deals update <ref> --project <key>`** (and `leads update`) sets the project a deal belongs to, a CRM's copy
+  too; an empty value clears it.
+- **`memo organizations list category:client`**, and `supplier`, `partner`, `employer`: read from relationships.
+- **`memo relationships list` filters `kind:`, `role:`, `standing:`, `from:`, `to:`, `at:<day>`, `include:ended`**
+  and pages with `--limit` and `--page`, the pending proposals with them (cli-core's `listRelations`). `about:` gives
+  each row its `direction` (`outgoing` or `incoming`) and an incoming one its `inverse` (`manages` for `reports-to`). Every row shows its `standing` and the account that reported it; a role
+  saved before the role lists is kept and marked `custom`.
+- **`memo search all --only crm`** searches deals and leads alone; `search all` names them in its help.
+- **Account groups: `memo <group> …`, `MEMO_GROUP` and `MEMO_GROUP_LOCK` (WC-ACCT-13).** Memo reads every account
+  by default (`all`, also `memo all …`); a group is an opt-in list you save. A first word that is no command is a
+  group: `memo work search all "renewal"` reads only its accounts. Without `--source` a read takes the group; a given
+  one is narrowed to it, and an outside `--account` is refused. A command that reads one kind, such as `search mail`,
+  takes the group's accounts of that kind. A word that is neither a command nor a group names the groups. What you
+  made yourself (notes, projects, tasks, invoices, memories, facts) shows in every group. `MEMO_GROUP_LOCK=work` pins
+  the process, `memo mcp serve` included, and fails closed: only the commands that keep to a group run, and a
+  reference or a bare id of account data outside it, another group, `all` and every group change are
+  `permission_error`. Under the lock, evidence, sources, proposals and actions of an outside account are left out
+  and counted, never shown or decided, and a context counts the accounts it kept out instead of naming them.
+  `pipelines list` and `pipelines show` keep to the group too: in a group, a name means the group's pipeline of that
+  name. Needs cli-core with the group lock (cli-core#2632).
+- **`memo groups list | add <group> <source> | remove <group> <source> | move <source> <from> <to>`.** The
+  list shows each account with its profiles in every app, why it is in, `also_in`, the duplicates and the
+  profile-name suggestions. `memo groups add work <provider>:<account>` is the command a CRM sync's `group_hint`
+  names.
+- **`memo models keys set|remove <provider>`**: the key write-time enrichment sends, read from stdin or a hidden
+  prompt (never an argument) into memo's keyring entry `embeddings:<provider>`. `--json` answers
+  `{ provider, stored: true, source: "keyring" | "file" }` and `{ provider, removed, from }`; the key is never printed.
+- **`reason_id` beside `reason` in `item.enrichment`** of `memo sync --json`: `enrichment.no-key`, `key-rejected`,
+  `unreachable`, `rate-limited`, `bad-replies`, `cancelled` or `error`, so a window can word it itself.
+
+### Changed — may break callers
+
+- **`memo context person:<id>` reads every account that saw the person** (cli-core's `canonicalPersonContext`): two
+  accounts no longer ask for `--source`, and a CRM-only or name-only person answers too. Every context has
+  `business` (organizations, reporting lines, deals, projects and categories, each relationship with its `standing`);
+  `person:` answers carry `coverage`. `relationships` now holds a CRM's `reported` links beside yours, each with its
+  `standing`, where before it held confirmed links only.
+- **`memo relationships list` gives each row's `status` as its standing**: `confirmed`, `reported`, `proposed` or
+  `ended`. A CRM's link said `proposed` before, though no proposal waited for it. `projects context` gives each
+  relationship its `standing` too.
+- **`memo organizations context` answers cli-core's organization context**: `people`, `customers` and the other
+  sections replace `relationships`; `notes` and `tags` stay.
+- **A role is one from the registry's lists** (cli-core#2629): `--role cto` is refused with the list.
+  memo's own examples and tests now use list roles.
+- **EmbeddingGemma is memo's default search model** (cli-core 0.619.0). With no `memo models set`, sync embeds and
+  search by meaning use it; a machine that has e5-small and not EmbeddingGemma keeps e5-small. `memo models download
+  embeddinggemma` asks for no terms: the download writes the Gemma notice beside the model, and `THIRD_PARTY_NOTICES`
+  names it. A timer run embeds fewer chunks with it, so it still ends in time.
+- **`item.enrichment` is the only enrichment report of `memo sync --json`**: `notes_embedded.enrichment` and
+  `mail_embedded.enrichment`, which repeated its parts, are gone.
+- **A sync that sent records and got none back enriched says `failed`**, with its reason, not `done`. Notes failed
+  beside mail enriched reads `stopped`.
+
+### Fixed
+
+- **`memo search all` leaves deals and leads out when memo's permissions deny them**. It showed their
+  titles under `search all`; now it names what it left out.
+- **`memo projects status` help no longer promises "confirmed" deals**: a deal has no confirmation.
+
+## 0.131.70 — 09.11.2026
+
+### Added
+
+- **`memo digest brief show | edit | reset`: your own instructions on what the morning digest collects.** Write
+  which projects, people and topics matter, what to skip and how many items you want; `memo skill show
+  morning-digest` then ends with a section "The owner's brief" holding your text, and says the brief adds to the
+  skill and wins where it contradicts one of its rules. The run itself does not change: it stays read only, with
+  memo as its only tool and the schedule's cost cap. `edit` opens `$EDITOR`, or takes `--file <file>` (`-` reads
+  stdin); `--undo` puts back the body your last change replaced, and `reset` removes the brief, which `edit --undo`
+  brings back. At most 4000 characters, because every morning run reads it (`brief.too-long`). Only you change it:
+  an agent is refused (`brief.owner-only`), and so is any change under `MEMO_READ_ONLY`. `show --json` answers
+  `{ body, chars, limit, updated_at, updated_by, history }`. It is kept in the shared store beside the digest's
+  templates. Without a brief, the skill reads as before.
+
+## 0.131.69 — 09.11.2026
+
+### Added
+
+- **An engagement level on a person's membership of a project.** `memo relationships add` and
+  `memo relationships update <id>` take `--engagement none|low|medium|high`: how much you deal with that person
+  yourself, not how active they are. Without one it is unknown; `--engagement ''` clears it. It is shown in
+  `relationships list`, `review show` of a change, `projects context` and every relationship answer
+  (`engagement`). `projects context` and `relationships list` put people in the order high, medium, unknown, low,
+  none. A low member stays a member, so `projects evidence` still reads what they write.
+- **A role note beside the role.** `--role-note <text>` on `relationships add` and `relationships update` keeps what
+  the role means here in your words (`role_note`), while `--role` stays one of its list.
+- cli-core 0.618.0.
+
+## 0.131.68 — 09.11.2026
+
+### Added
+
+- **The scheduled mail triage files a sender as envelopes itself.** A `memo schedule agent` run may now run `mail`
+  too, under `MAIL_READ_ONLY`: it reads mail and adds `mail <profile> rules add --sender|--list-id … --do envelope`
+  for a sender it is sure only sends newsletters, promotions or notices, at most 5 per run, and lists the others for
+  you. mail refuses it any other rule and any other change; this needs a mail release that has the narrowed
+  `rules add`, and until then the triage only lists the rules. A schedule saved by an older memo allows only `memo`;
+  add it again to replace it.
+- **`memo digest backfill --from <date> --to <date> [--yes] [--json]`: the morning digests of past days.** For each
+  day without a digest, the morning-digest schedule's agent runs as its timer does (the same skill, harness flags and
+  per-run cap), reading the agenda as of that day's run time, and the run is kept as that day's in the schedule's
+  `runs/`, with `"backfill": true` in its `.report.json`, for WireCat Desktop's digests screen. It is never sent to
+  Telegram or mail, and the last run, `latest.md` and `latest.txt` stay as they were. Without `--yes` it prints the
+  days it would build, the days skipped and the estimate (the days times the last run's cost): `--json` answers
+  `{ days, skipped, estimate_usd }`; with `--yes` also `built` (`date`, `at`, `exit_code`, `cost_usd`), `left` and
+  `cost_usd`. Each run counts in today's spend, and no day starts once it reaches the schedule's daily cap or a day
+  fails; the days it leaves are in `left`. Only the owner runs it: an agent is refused (`backfill.owner-only`), and
+  so is `MEMO_READ_ONLY`; WireCat Desktop passes `--from-app`.
+- **`review agenda --before-time <time>`** builds the agenda as of a past ISO time or date: `--since-time` counts back
+  from it, items dated later are left out, and the tasks "new since" start at the digest report before it. The store
+  keeps only what holds now, so a chat or thread answered since reads as answered.
+- **The morning-digest skill puts `person:<id>` and `project:<key>` refs on items** where memo printed them, after the
+  ref of where the item happened, so Desktop and the digest's links open the person or the project; and for a past
+  day's run (`backfill:` in its input) it reads the agenda with the window given and writes from the agenda alone.
+- cli-core 0.618.0.
+- **A pull request adds its changelog entries as a fragment, `changes/<branch>.md`.** Open pull requests no longer
+  conflict under `## Unreleased`. `pnpm docs:check` checks each fragment, and `bin/release` collects them into the
+  version's section. An entry under `## Unreleased` still works during the move.
+
+## 0.131.67 — 09.11.2026
+
+### Added
+
+- **`memo templates`: the owner's own templates of the morning digest, per channel and language.**
+  `memo templates list [query...] | show | edit | preview | reset <key> --channel telegram|email|text
+  [--locale ru|en]`, from cli-core's `templates` group, kept in the shared store; `templates list channel:telegram
+  source:stored` narrows the list by `key`, `channel`, `language` and `source`. `edit` opens `$EDITOR` or takes
+  `--file <file>`, and checks the template against a synthetic report and the last real digest before it saves
+  anything; `edit --undo` puts back the body the last change replaced, and `reset` returns to the shipped template.
+  `edit` and `reset` are the owner's alone: `MEMO_READ_ONLY` and an agent's run are refused. `memo commands` lists
+  the group under Automate. The digest's task line gains "без срока: N · открыть" for open tasks with no due date.
+- cli-core 0.616.0.
+- **`memo sources add <path|url|->` keeps one file, web page or pasted text as a document of its own**, searchable
+  and citable like a folder document, with `--title`, `--subject` (repeatable), `--keep-copy` and `--max-chars`. A
+  file is read by cli-core's readers, a link once from this computer as a public page (no cookies, no private
+  addresses, 50 MiB, 30 s, 5 redirects), and `-` reads stdin. Only the text is kept unless `--keep-copy` copies the
+  file into memo's data folder. Adding the same source again changes only its subjects; content already in a folder
+  or Drive is answered as `duplicate_of`. The answer says what was read and kept, and whether it is searchable by
+  meaning; refusals keep cli-core's `source.*` reasons with what to do next. An agent's subjects wait unconfirmed.
+- **`memo sources show`, `memo sources mentions` and `memo sources remove`.** Show gives a source's text (bounded by
+  `--bytes`), what it is (kind, address, type, size), its subjects and the facts, memories and findings batches citing it; mentions lists the known people
+  and organizations named in it; remove (yours only) deletes the source and its kept copy and names what cites it.
+- **Folder import reads web pages saved as `.html` and `.htm`.** A watched folder that holds them imports them on
+  the next `memo sync`.
+- **Over MCP, `sources add` takes text only**, so an agent cannot make memo read a file or open an address;
+  `sources remove` is not offered.
+- **Memories and facts follow their sources.** When a cited source changes, goes, is replaced or is contradicted,
+  memo opens a source review (`memory_source_review`) and marks the record; its status never changes on its own.
+  - `memo memories check [--limit N]` looks again, and `memo sync` does it as its last step, "memories follow
+    sources"; a failure there is reported as `source_check_failed` and never fails the sync. `check --json` answers
+    `checked`, `baselined`, `raised`, `refreshed`, `closed` and `changed_refs`, the changed sources no findings
+    batch reads yet, for an agent to read again with `projects actions add`. A run names a change once; with
+    `--since-time` it also lists what earlier runs, such as the timer's sync, found changed since then.
+  - `memo memories challenge` and `memo facts challenge <ref> --evidence … --reason … [--suggest …]` say a record no
+    longer holds. An agent may run them; they only open or add to the owner's review.
+  - `--quote <ref>=<words>` on `memories add` and `facts add` keeps the words a record rests on, so an edit that
+    keeps them raises nothing. A quote the source does not say is refused (`evidence.quote-not-found`), and one that
+    names no `--evidence` reference too (`evidence.quote-unmatched`).
+  - `memo review` lists `kind:memory_source_review`. `review show` gives each source as cited and as it is now, the
+    challenges and suggestions, and the command for each answer. `review confirm` says it still holds, `review
+    reject` dismisses it; both are the owner's alone, and `--from-app` counts as the owner. Correct with `memories
+    add --supersedes`, withdraw with `memories invalidate` or `facts reverse`.
+  - `memories list/show` and `facts list/show` carry `source_review`: the open review's `id` and `cause`, or `null`.
+  - `memo review agenda` has a `sources` section: the source reviews raised since `--since-time`, and the sources
+    found changed since then that no review or findings batch names. A review that only grew in place is not listed
+    again.
+- **An agent may propose a correction of a memory.** `memo memories add --supersedes memory:<id>` from an agent, or
+  `memories add` with `supersedes` through the MCP server, no longer fails with "only the owner corrects a memory". The
+  correction waits as proposed, and the memory it corrects stays as it is until you confirm the correction; rejecting
+  or removing it leaves that memory. Yours still applies at once (cli-core 0.616.0).
+
 ## 0.131.66 — 08.11.2026
 
 ### Added

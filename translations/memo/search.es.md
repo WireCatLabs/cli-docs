@@ -30,8 +30,12 @@ cada una con `memo notes show` o en la aplicación original.
 | Una persona, por nombre, usuario o alias | `memo search people kai` |
 | Facturas, contratos, productos y otros datos de negocio | `memo search all 'budget' --only business` |
 
-`search all` busca en mensajes, correo, notas, eventos de calendario, negociaciones y leads, y
-[datos de negocio](./business.md#find-it-again) a la vez. Los eventos vienen de cada calendario
+`search all` busca en mensajes, correo, notas, eventos de calendario, negociaciones y leads del CRM, y
+[datos de negocio](./business.md#find-it-again) a la vez. Las negociaciones y los leads se encuentran por las palabras
+de su título, y `--only crm` busca solo en ellos. Cuando los [`permissions`](./configuration.md#permissions) de memo
+niegan `deals` o `leads`, `search all` los deja fuera y lo dice. Una pregunta sobre quién es alguien o cómo se
+relacionan las cosas se responde mejor primero con `memo context person:<id>`, `memo organizations context` o
+`memo relationships list`, y después buscas las pruebas. Los eventos vienen de cada calendario
 que gcal guardó; la respuesta nombra cada calendario que leyó, y `--only events` busca solo en ellos. El título, la descripción y el lugar de un evento
 los escribe quien envió la invitación, y `--json` nombra esos campos en `untrusted` del resultado. `memo events show <ref>` abre una referencia `event:`,
 y `memo events list` muestra los eventos de cada cuenta de calendario, también las llamadas de teléfono. No busca reuniones, personas, recuerdos, proyectos ni
@@ -208,35 +212,37 @@ Con el modelo de búsqueda en tu ordenador, Memo también busca por significado,
 puede encontrar una nota sobre unas vacaciones. tg o max descarga el modelo una vez:
 
 ```sh
-memo models download e5-small
+memo models download embeddinggemma
 ```
 
 El modelo se ejecuta en tu ordenador. Después de la descarga, ejecuta `memo sync` para que tus notas
 queden preparadas para él. Cada resultado indica si se encontró por palabras, por significado o de
 las dos formas. Sin el modelo, Memo dice "Searched by words only" y busca por palabras en las notas guardadas.
 
-### Elegir un modelo más grande
+### Elegir otro modelo
 
 Hay tres modelos de búsqueda. `memo models list` los muestra, con su tamaño en disco y cuál está en uso:
 
 | Modelo | Tamaño | En disco | Licencia | Velocidad |
 | --- | --- | --- | --- | --- |
-| `e5-small` | pequeño, el predeterminado | 135 MB | MIT | rápido |
-| `embeddinggemma` | mediano | 218 MB | Gemma Terms of Use | unas 15 veces más lento, el que mejor lee los chats |
+| `embeddinggemma` | mediano, el predeterminado | 218 MB | [Gemma Terms of Use](https://ai.google.dev/gemma/terms) | el que más encuentra dicho con otras palabras |
+| `e5-small` | pequeño | 135 MB | MIT | unas 6 veces más rápido |
 | `e5-large` | grande | 579 MB | MIT | unas 8 veces más lento |
 
 Para usar otro, descárgalo y después elígelo:
 
 ```sh
-memo models download e5-large
-memo models set e5-large
+memo models download e5-small
+memo models set e5-small
 ```
 
 La elección es compartida: tg, max y las demás herramientas de WireCat usan el mismo modelo. Memo dice entonces cuántos
 fragmentos de texto le quedan por leer al nuevo modelo y cuánto tardará más o menos. Las siguientes ejecuciones de `memo sync`
 hacen ese trabajo por partes. Hasta que terminan, la búsqueda por significado encuentra solo lo que el nuevo
 modelo ha leído, y la búsqueda por palabras encuentra el resto. El trabajo del modelo anterior se conserva, así que volver a
-él con `memo models set e5-small` es instantáneo.
+él con `memo models set embeddinggemma` es instantáneo. Un ordenador que tenía e5-small antes de que EmbeddingGemma
+fuera el predeterminado lo sigue usando hasta que se descarga EmbeddingGemma. Después la búsqueda por significado lee el
+trabajo de e5-small hasta que EmbeddingGemma haya leído más.
 
 `memo models add` añade un modelo tuyo de Hugging Face. `memo models add --help` muestra lo que
 necesita.

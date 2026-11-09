@@ -62,6 +62,17 @@ migrate` записывает каждую настройку, которой н
 `memo jobs start` и `memo jobs stop` записывают эти значения. Если вы измените их вручную, таймер учтёт
 это при следующем запуске. См. [импорт по таймеру](./archive.md#import-on-a-timer-linux).
 
+## `sources`
+
+```json
+"sources": { "reader": "ollama", "model": "llama3.2:latest" }
+```
+
+Читатель, которому `memo sources suggest` отправляет текст источника, и его модель. `memo sources readers set <reader>
+[--model <model>]` записывает оба значения. Если не задано ни одно, `sources suggest` отказывает. Claude Code и Codex
+используют свою модель, когда `model` не задан, а Ollama и читателям API модель нужна.
+[Читатель предлагает факты](./sources.md#have-a-reader-propose-facts) перечисляет читателей.
+
 ## `update_check`
 
 `false` отключает ежедневную проверку новой версии memo. `MEMO_NO_UPDATE_CHECK=1` делает то же для одной оболочки.

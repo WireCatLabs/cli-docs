@@ -28,7 +28,7 @@ Cada fuente necesita algo más, solo cuando vayas a utilizarla:
 |---|---|
 | Notas y documentos | Ninguno: [archivos compatibles](./notes.md#files-memo-can-read) |
 | Mensajes de Telegram o MAX | [tg](https://github.com/WireCatLabs/tg-cli) o [max](https://github.com/WireCatLabs/max-cli). Guardan los chats en el almacén local; Memo no inicia sesión en un servicio de mensajería |
-| Búsqueda por significado | Un modelo de búsqueda en el equipo, de unos 135 MB. Descárgalo una vez: `memo models download e5-small`. Sin él, Memo busca por palabras |
+| Búsqueda por significado | Un modelo de búsqueda en el equipo, de unos 220 MB. Descárgalo una vez: `memo models download embeddinggemma`. Sin él, Memo busca por palabras |
 | Correo | La CLI [mail](https://github.com/WireCatLabs/mail-cli). Copia tu buzón al almacén local y Memo busca en él ([correo](./mail.md#bring-mail-in-with-mail)). |
 | Sincronización periódica (`memo jobs`) | Linux con systemd. En macOS y Windows, ejecuta `memo sync` personalmente o con tu planificador ([mantener Memo al día](./archive.md)) |
 

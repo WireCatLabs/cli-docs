@@ -77,13 +77,91 @@ memo facts remove fact:4
 ```
 
 - **Corregir**: añade el recuerdo correcto con `--supersedes`. El antiguo queda marcado `superseded`, así que conservas
-  el registro del error. Solo tú corriges un recuerdo; el `--supersedes` de un agente se rechaza.
+  el registro del error. Tu corrección se aplica al instante. La corrección de un agente espera como propuesta hasta
+  que la confirmes, y el recuerdo que corrige sigue igual hasta entonces. Si rechazas o quitas la corrección, el
+  recuerdo se queda como estaba. Un recuerdo solo se sustituye una vez.
 - **Ya no es cierto**: `invalidate` marca un recuerdo como `stale`; `facts reverse` lo hace con una decisión aceptada y
   `facts reject` rechaza un hecho que propuso un agente. Cada uno conserva el registro.
 - **Olvidar**: `remove` borra el registro: su texto, sus vínculos con las fuentes y su entrada en la búsqueda de Memo. Los
   mensajes, notas y reuniones que cita se quedan. Una copia de seguridad del almacén hecha antes lo conserva hasta que se borre esa copia.
 
-Un agente no puede olvidar ni rechazar a través del servidor MCP, y tampoco puede corregir allí un recuerdo.
+Un agente no puede olvidar ni rechazar a través del servidor MCP. Una corrección que propone allí te espera como
+cualquier otra.
+
+## Cuando cambia una fuente
+
+Un recuerdo o un hecho se apoya en sus fuentes. Cuando una de ellas cambia, desaparece o alguien la contradice, Memo
+abre para ti una **revisión de la fuente** y marca el registro, pero nunca cambia su estado. Sigue confirmado o
+aceptado hasta que decidas.
+
+**Verlo.** `memo sync` termina con el paso «memories follow sources», así que el temporizador lo comprueba por ti.
+Para comprobarlo ahora:
+
+```sh
+memo memories check
+memo review list kind:memory_source_review
+memo memories show memory:3
+```
+
+`memories show`, `memories list`, `facts show` y `facts list` tienen el campo `source_review`. Contiene el número de
+la revisión abierta y su causa, o `null`. Las causas, de la más leve a la más grave:
+
+- `changed`: alguien editó una fuente, y las palabras en las que se apoya el registro ya no están o nunca se citaron.
+- `outdated`: un recuerdo o un hecho citado fue sustituido o retirado. La revisión dice qué lo sustituyó.
+- `deleted`: se borró una fuente.
+- `contradicted`: tú o un agente ejecutasteis `challenge` con una evidencia que dice otra cosa.
+
+Una fuente que cambió pero sigue diciendo las palabras citadas no abre nada. Un registro escrito antes de que Memo
+guardara firmas de las fuentes abre una revisión solo si su fuente cambió después de citarla. `memo review agenda`
+lista en su sección `sources` las revisiones abiertas dentro de `--since-time` (un día si no indicas otra cosa) y las
+fuentes que cambiaron en ese tiempo y que ninguna revisión nombra. Una revisión que solo creció no vuelve a aparecer.
+
+**Decidir.**
+
+```sh
+memo review show 17090
+memo review confirm 17090
+memo review reject 17090 --reason 'the edit is a typo fix'
+```
+
+`review show` muestra cada fuente tal como se citó y tal como está ahora, la cita, cada objeción con su evidencia y su
+motivo y la redacción sugerida si la hay. Después da el comando para cada respuesta:
+
+- **Sigue siendo cierto**: `review confirm`. El recuerdo cuenta como comprobado ahora.
+- **Descartar**: `review reject --reason`.
+- **Corregir o sustituir**: añade el correcto con `memories add … --supersedes memory:3` o `facts add …
+  --supersedes fact:4`, como en [Corregir u olvidar](#correct-or-forget).
+- **Retirar**: `memories invalidate memory:3` o `facts reverse fact:4`.
+
+Confirm y reject vuelven a firmar las fuentes tal como están ahora, así que el mismo cambio no vuelve. Solo tú decides
+una revisión de la fuente. WireCat Desktop pasa `--from-app`, que registra la decisión como tuya.
+
+**Encontrar la evidencia original.** `memories show memory:3 --sources` vuelve a leer cada fuente citada tal como está
+ahora y dice `missing: true` cuando una ya no existe. `review show` añade el texto tal como se citó, para notas,
+documentos y mensajes.
+
+**Para agentes.** Un agente puede mirar y proponer, nunca decidir:
+
+```sh
+memo memories check --json
+memo memories challenge memory:3 --evidence note:15 --reason 'the later note moves delivery to the 30th' --suggest 'Delivery is on the 30th'
+memo facts challenge fact:4 --evidence 'msg:telegram/1/77/50' --reason 'the decision was reversed in chat'
+memo memories add 'Delivery is on the 28th' --kind preference --scope work --evidence note:12 --quote 'note:12=delivery on the 28th'
+```
+
+- `memories check --json` responde con `checked`, `baselined`, `raised`, `refreshed`, `closed` y `changed_refs`. El
+  último lista las fuentes cambiadas que todavía no lee ningún lote de hallazgos. Vuelve a leerlas y añade lo nuevo
+  con `memo projects actions add`. Una ejecución nombra un cambio una sola vez, y normalmente `memo sync` lo encuentra
+  primero, así que `memories check --since-time 1d` también lista lo que ejecuciones anteriores encontraron cambiado
+  desde entonces. La sección `sources` de la agenda también los lista.
+- `challenge` abre la revisión de la fuente del registro, o añade a la que está abierta, la evidencia, el motivo y, si
+  quieres, `--suggest`. No cambia nada más.
+- `--quote <ref>=<words>` en `memories add` y `facts add` guarda las palabras de una referencia `--evidence` en las que
+  se apoya el registro. Así, una edición posterior que las mantiene no abre nada. Memo rechaza una cita que la fuente
+  no dice (`evidence.quote-not-found`) y también una que no nombra ninguna referencia `--evidence`
+  (`evidence.quote-unmatched`).
+- `review confirm` y `review reject` rechazan a un agente en una revisión de la fuente (`proposal.owner-only`), digan
+  lo que digan sus permisos y `agent_decisions`.
 
 ## Hechos
 

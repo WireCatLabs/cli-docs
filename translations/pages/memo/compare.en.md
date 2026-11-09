@@ -45,7 +45,7 @@ The tools:
 | Contracts, invoices, payments and bank lines, with money waiting for your review | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Remember** | | | | | | |
 | An agent saves a fact or memory over MCP | ✅ | ✅ [↗][hs-mcp] | ✅ [↗][m0-mcp] | ✅ [↗][gr-mcp] | ✅ [↗][cg-mcp] | ✅ [↗][bm] |
-| Facts and memories are found in conversations and text without anyone saving them | ❌ | ✅ [↗][hs-core] | ✅ [↗][m0] | ✅ [↗][gr] | ✅ [↗][cg] | 🟡 [↗][bm] |
+| Facts and memories are found in conversations and text without anyone saving them | 🟡 | ✅ [↗][hs-core] | ✅ [↗][m0] | ✅ [↗][gr] | ✅ [↗][cg] | 🟡 [↗][bm] |
 | A fact that changed is replaced and the old one kept with its dates | 🟡 | 🟡 [↗][hs-core] | 🟡 [↗][m0] | ✅ [↗][gr] | ➖ | ➖ |
 | **Agents and safety** | | | | | | |
 | An agent can read but not write unless you allow it | ✅ | ➖ | ➖ | ➖ | ➖ | 🟡 [↗][bm] |
@@ -82,8 +82,9 @@ Notes on `memo`:
   until you confirm them. Decisions on project proposals are the exception: an agent may make them, with a
   recorded reason, until you set `agent_decisions` to `false`.
 - **Knowledge.** `memo` stores messages and the facts and links you or your agent record, each with the message,
-  note or meeting that shows it. It does not find facts in text by itself. A fact takes the date it happened, and a
-  decision can be marked as replacing an earlier one. Nothing ends a fact by itself when the world changes.
+  note or meeting that shows it. It finds facts in a text only when you run `memo sources suggest` on a source, and
+  you confirm each fact. A fact takes the date it happened, and a decision can be marked as replacing an earlier one.
+  When a source of a fact or memory changes, `memo` opens a review for you and changes nothing until you decide.
 - **Platforms.** Tested on Linux only; macOS and Windows are not tested yet.
 - **Benchmark.** No memory benchmark result for `memo` is published. The scores the other tools publish come from
   their own tests on their own data and are not comparable with each other.

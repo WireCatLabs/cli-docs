@@ -35,10 +35,13 @@ Tell me what is still open between us, with the source of each point.
 memo context telegram:'Kai Sample'
 memo context email:kai@example.com
 memo context max:'Kai Sample' --limit 50
+memo context person:7
 ```
 
 Nombra a la persona por su cuenta: `telegram:` o `max:` con un nombre o un ID, o `email:` con una
-dirección. La respuesta reúne:
+dirección, o como `person:<id>` (lo da `memo search people`). `person:<id>` lee cada cuenta que la vio, también un
+contacto del CRM o un nombre que solo añadiste tú (`memo people add`), y `coverage` nombra cada cuenta que leyó y cada
+fuente que no leyó, con el motivo. La respuesta reúne:
 
 - todas las cuentas que enlazaste a la persona;
 - el último mensaje en cada sentido, los mensajes recientes en chats directos y grupos, y los chats
@@ -51,26 +54,67 @@ dirección. La respuesta reúne:
 - las tareas abiertas que tratan sobre ella o que tiene asignadas.
 - los archivos de Google Drive que posee o que editó por última vez, tal como los indica Google. No has revisado estos
   vínculos: vienen del propio registro de archivos de Google, no de una suposición.
+- `business`: las organizaciones a las que pertenece con su rol y su cargo, a quién reporta y quién le reporta, las
+  oportunidades y los leads en los que está, sus proyectos y categorías como `client`. Cada relación tiene un
+  `standing`: `confirmed` (tuya), `reported` (lo dice una cuenta del CRM, que queda nombrada, y nadie lo confirmó),
+  `proposed` (te espera en `memo review`) o `ended`.
 
 Una nota que solo menciona el nombre en su texto no se incluye; solo cuentan los enlaces
 ([por qué](./how-it-works.md#links-between-notes-and-people)). Si una parte no dio nada, la respuesta
 dice por qué. `--limit` muestra más de 20 elementos de cada tipo, y `--json` da la respuesta a un
 agente.
 
-Si tienes varias cuentas en el mismo servicio de mensajería, añade `--source`, por ejemplo
-`memo context telegram:101 --source telegram:1`.
+Si tienes varias cuentas en el mismo servicio de mensajería, añade `--source` a una referencia `<messenger>:<name>`,
+por ejemplo `memo context telegram:101 --source telegram:1`. Para `person:<id>`, `--source` solo limita las cuentas
+que se leen.
 
 ## Enlazar las cuentas de una persona
 
-Una persona puede tener una cuenta de Telegram, una cuenta de MAX y una dirección de correo. Enlázalas
-en tg o max para que Memo las trate como una sola persona:
+Una persona puede tener una cuenta de Telegram, una cuenta de MAX, un contacto del CRM y una dirección de correo.
+Memo las trata como una sola persona cuando:
+
+- tienen la **misma dirección de correo**, en cualquier cuenta, de trabajo o personal, y ninguna tercera persona la
+  tiene. Una dirección de rol como `info@` o `support@` solo sugiere un vínculo.
+- tienen el **mismo número de teléfono**, nadie más lo tiene, y una de ellas lo tiene en Telegram, MAX o WhatsApp.
+
+Las une `memo sync`, y también `memo people scan`. Un nombre, un usuario o un dominio de correo que coinciden nunca
+bastan, y una dirección sin respuesta como `noreply@` no une ni sugiere a nadie. Un par que rechazaste nunca se une.
+Una prueba nueva, como la misma dirección de correo después de rechazar una coincidencia por teléfono, lo vuelve a
+sugerir. La prueba que rechazaste nunca lo hace.
+
+Algunas señales solo sugieren un vínculo. Por ejemplo, un número de teléfono que solo comparten contactos del CRM o
+tarjetas, un número de teléfono o una dirección que comparten tres o más personas, una dirección que un invitado a una reunión escribió para sí mismo o una suposición de un agente. Estas esperan como
+coincidencias:
 
 ```sh
-tg personal contacts link 'Kai Sample' email:kai@example.com
+memo people review
+memo review kind:identity_link
+memo review confirm 17090
 ```
 
-Después, `memo context` para cualquiera de las cuentas muestra todo lo de todas ellas. Un nombre que
-coincide nunca basta para enlazar cuentas.
+Enlaza tú mismo dos cuentas o mira a una persona:
+
+```sh
+memo people link max:Kai telegram:Kai
+memo people show telegram:Kai
+```
+
+`memo people show` lista las identidades de la persona por fuente, las cuentas que vieron cada una, las fusiones que
+las unieron (`merge:12-34`) y las coincidencias que esperan. `memo context` para cualquiera de las cuentas muestra
+todo lo de todas ellas.
+
+### Deshacer un vínculo
+
+- `memo people unmerge merge:12-34` devuelve las identidades de una fusión a la persona de la que venían.
+- `memo people unlink telegram:12345` vuelve a dar a una identidad una persona propia.
+- `memo people unlink email:kai@example.com max:6789` mueve varias identidades de una persona a una sola persona
+  nueva.
+
+`unlink` toma cada identidad por su id exacto, tal como lo lista `memo people show`, nunca por un nombre.
+
+Solo tú puedes hacerlo, en un terminal o en WireCat Desktop. Después, ninguna coincidencia automática vuelve a unir a
+esas personas. Un agente solo puede proponer un vínculo con `memo people link … --reason`. Tú lo confirmas o lo
+rechazas en `memo review`.
 
 Para elegir la nota principal sobre la persona, consulta [la nota sobre una persona](./notes.md#the-note-about-a-person).
 
@@ -110,8 +154,14 @@ memo projects context HRB
 `--scope` es `personal` o `work`. `name:` no distingue mayúsculas y toma `*` como cualquier texto, así que `name:*studio*` encuentra todos los nombres
 que contienen la palabra. `organizations add` y `organizations rename` de un agente se escriben al instante, como los tuyos.
 Los ajustes `permissions` de memo son los que los limitan. `projects context` recibe una clave, un número, `project:<id>`, el nombre exacto o un alias.
-`projects context` y `organizations context` muestran las personas enlazadas al proyecto o a
-la organización, las notas que tratan sobre él o que enlazan a él, y sus etiquetas. Para un proyecto, la vista también agrupa los documentos clave, las relaciones, los hechos y los seguimientos de reuniones pendientes
+`projects context` muestra las personas enlazadas al proyecto, las notas que tratan sobre él o que enlazan a él, y sus
+etiquetas. `organizations context` muestra las personas de la organización por rol, sus clientes, proveedores y socios,
+sus proyectos, las oportunidades y los leads abiertos, las facturas, los pagos y los pedidos tal como están guardados
+(totales por estado y moneda, solo filas confirmadas), cuánto te escribieron sus personas, las tareas abiertas de sus
+proyectos, sus categorías, las notas sobre ella y sus etiquetas. Cada relación indica su estado, y `coverage` lo que
+no se leyó. `memo organizations list category:client` lista las organizaciones que son clientes de una de las tuyas, y
+`supplier`, `partner` y `employer` funcionan igual. Una categoría se lee de las relaciones cada vez y nunca se guarda.
+Para un proyecto, la vista también agrupa los documentos clave, las relaciones, los hechos y los seguimientos de reuniones pendientes
 bajo `review`, separados de las tareas numeradas abiertas que ya existen. No confirma nada. La vista de texto muestra
 las referencias de las propuestas; `--json` incluye la evidencia, el alcance de las fuentes y los comandos de continuación. Las vistas previas
 de hechos y tareas contienen 20 registros cada una. Las vistas previas de reuniones leen como máximo cinco lotes propuestos por cada cuenta
@@ -139,18 +189,55 @@ Una etiqueta global como `key` (`memo tags add key --note document:3`) no identi
 
 ## Quién pertenece a dónde
 
-Una **relación** indica que una persona pertenece a una organización o trabaja en un proyecto:
+Una **relación** indica que una persona pertenece a una organización o trabaja en un proyecto, que reporta a
+alguien, o que una organización es cliente o socia de otra:
 
 ```sh
-memo relationships add person:PERSON_UID organization:1 --kind member-of --role employee
-memo relationships add person:PERSON_UID project:1 --kind related-to --role contributor
+memo relationships add person:PERSON_UID organization:1 --role employee --position CTO --start-date 2026-01-01
+memo relationships add person:PERSON_UID project:1 --role contributor
+memo relationships add person:PERSON_UID person:OTHER_UID --kind reports-to
+memo relationships add organization:2 organization:1 --kind customer-of
 memo relationships list 'about:"project:1"'
+memo relationships list kind:reports-to 'to:"person:5"'
+memo relationships list standing:reported include:ended --limit 50
+memo relationships end 4 --end-date 2026-09-30
 memo relationships remove 4
 ```
 
-El rol de una persona como miembro sale de una lista: en una organización, employee, contractor, founder, owner,
-manager, adviser o contact. En un proyecto, owner, manager, contributor, client-contact o approver. memo rechaza
-cualquier otro rol (`relationship.role-unknown`).
+`--position` guarda el cargo aparte del rol, y `--start-date` y `--end-date` (el último día) dicen cuándo estuvo
+vigente. `memo relationships end <id> --end-date <date>` dice que ya no está vigente. La relación se queda, como
+`ended`.
+
+Tipos: `member-of`, `reports-to`, `customer-of` (leído al revés, proveedor de), `partner-of` y `related-to`. Un rol
+sale de una lista. En una organización `employee`, `contractor`, `founder`, `owner`, `manager`, `adviser`, `contact`.
+En un proyecto `owner`, `manager`, `contributor`, `client-contact`, `approver`. En una oportunidad o un lead `owner`,
+`contact`, `decision-maker`, `influencer`. Un cargo no es un rol, indícalo con `--position`.
+`memo relationships roles list` muestra las listas. `memo relationships roles add organization board-member --label 'Board member'`
+añade un rol tuyo, y `remove` lo quita mientras ninguna relación lo use. Solo tú cambias las listas. Un rol guardado
+antes de estas listas se queda como estaba escrito, y `relationships list` lo marca como `custom`.
+
+`relationships list` filtra por `kind:`, `role:`, `standing:`, `from:`, `to:` y `at:<day>` (vigente ese día), y pagina
+con `--limit` y `--page`. `at:<day>` significa vigente al inicio de ese día UTC. Deja fuera las que terminaron salvo
+que añadas `include:ended`, y lista las propuestas que te esperan con `standing:proposed`. Con `about:<ref>` cada fila
+indica su `direction` (`outgoing` o `incoming`) y, si es entrante, su `inverse`, como `manages` para `reports-to` leído
+al revés. Cada fila muestra su estado y, si viene de un CRM, la cuenta que la informó.
+
+Lo que significa el rol aquí va al lado, con tus palabras, en `--role-note`. Un rol de texto libre de antes de las
+listas se sigue leyendo. Para cambiarlo, pon un rol de la lista y guarda las palabras antiguas como nota:
+`memo relationships update 4 --role client-contact --role-note '<the old words>'`.
+
+Una persona en un proyecto también tiene un **nivel de implicación**: cuánto tratas tú con ella, no cuánta actividad
+tiene. Es `none`, `low`, `medium` o `high`, y sin él es desconocido. Alguien que escribe en el grupo del cliente pero
+a quien rara vez respondes sigue siendo miembro, con `low`:
+
+```sh
+memo relationships update 4 --engagement low
+memo relationships update 4 --role approver --role-note 'signs the acts'
+memo relationships update 4 --engagement ''    # back to unknown
+```
+
+`memo projects context` y `memo relationships list` ordenan a las personas del proyecto así: high, medium, unknown,
+low, none.
 
 Un chat también puede ser de un proyecto, así `memo projects evidence` lo lee entero, no solo los mensajes que nombran
 el proyecto. La referencia nombra la cuenta del chat, así que no se adivina ninguna cuenta:

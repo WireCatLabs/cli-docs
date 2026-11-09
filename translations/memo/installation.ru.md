@@ -28,7 +28,7 @@ title: "Установка"
 |---|---|
 | Заметки и документы | Ничего: [форматы файлов](./notes.md#files-memo-can-read) |
 | Сообщения Telegram или MAX | [tg](https://github.com/WireCatLabs/tg-cli) или [max](https://github.com/WireCatLabs/max-cli). Они сохраняют чаты в локальном хранилище; Memo не входит в мессенджер |
-| Поиск по смыслу | Модель поиска на компьютере, около 135 МБ. Скачайте её один раз: `memo models download e5-small`. Без неё Memo ищет по словам |
+| Поиск по смыслу | Модель поиска на компьютере, около 220 МБ. Скачайте ее один раз: `memo models download embeddinggemma`. Без неё Memo ищет по словам |
 | Почта | CLI [mail](https://github.com/WireCatLabs/mail-cli). Он копирует ваш почтовый ящик в локальное хранилище, а Memo ищет по нему ([почта](./mail.md#bring-mail-in-with-mail)). |
 | Синхронизация по таймеру (`memo jobs`) | Linux с systemd. На macOS и Windows запускайте `memo sync` сами или своим планировщиком ([обновление архива](./archive.md)) |
 

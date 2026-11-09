@@ -106,6 +106,7 @@ trabajo. Memo omite las carpetas ocultas, como `.obsidian`.
 | Tablas | `.csv`, `.tsv`, `.xlsx`, `.ods` | Los valores de las celdas, con la hoja, la fila y la columna |
 | Documentos, presentaciones y libros electrónicos | `.odt`, `.pptx`, `.epub` | El texto, sin el diseño |
 | PDF y Word | `.pdf`, `.docx`, `.doc` | El texto, con los números de página del PDF |
+| Páginas web guardadas como archivos | `.html`, `.htm` | El texto principal y el título de la página |
 
 Algunos archivos no se pueden leer: los PDF escaneados (imágenes de páginas, sin texto dentro), los
 archivos antiguos `.xls` y los archivos de más de 50 MiB. Memo guarda hasta 200 000 caracteres de cada
@@ -146,6 +147,9 @@ memo notes show document:3
 Cada resultado muestra el archivo y la primera línea que coincide. `memo notes show` muestra una nota
 con sus etiquetas, las notas a las que enlaza y las notas que enlazan a ella. Consulta
 [Búsqueda](./search.md) para ver más palabras de búsqueda.
+
+Para guardar un archivo, una página web o un texto pegado que no está en una carpeta, añádelo como fuente:
+[Fuentes que añades a mano](./sources.md).
 
 ## Escribir tus propias notas
 

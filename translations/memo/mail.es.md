@@ -53,8 +53,10 @@ mensajes. Hay más palabras de búsqueda en [Encontrar tu correo](#find-your-mai
 
 memo puede ejecutar un agente después de cada sincronización que guardó correo nuevo. Lee solo el correo que está más allá de
 su propia marca, y solo prepara propuestas: tareas, cierres y cambios de tareas abiertas, hechos, recuerdos, vínculos y
-contactos nuevos. No se crea nada hasta que lo confirmas en `memo review`. El agente nunca envía, redacta, mueve ni borra
-correo, y nunca decide por ti.
+contactos nuevos. No se crea nada hasta que lo confirmas en `memo review`. Lo único que hace por sí mismo es archivar
+como sobres a un remitente que está seguro de que solo envía boletines, promociones o avisos (`mail <profile> rules add`),
+y la siguiente sincronización guarda el correo de ese remitente sin su texto. El agente nunca envía, redacta, mueve ni
+borra correo, nunca cambia ni elimina una regla, y nunca decide por ti.
 
 Actívalo una vez:
 
@@ -69,12 +71,13 @@ el resto del correo que omitiría no cuentan. Cuando las ejecuciones del día ha
 ninguna hasta el día siguiente. `memo schedule list` muestra el gasto del día y por qué se omitió una ejecución. Cambia estos valores
 para una programación con `--mail-wait 1h`, `--mail-batch 20` y `--max-cost-per-day 2`, o para todas en el archivo de
 configuración: `schedule_mail_wait`, `schedule_mail_batch` y `schedule_max_cost_per_day` (`memo config show` los lista, y una
-opción gana al archivo). Cuando espera suficiente correo y el presupuesto del día lo permite, inicia `claude` con Sonnet, con solo `memo` permitido, bajo `MEMO_READ_ONLY` y sin tus
+opción gana al archivo). Cuando espera suficiente correo y el presupuesto del día lo permite, inicia `claude` con Sonnet, con solo `memo` y `mail` permitidos, bajo `MEMO_READ_ONLY` y `MAIL_READ_ONLY` y sin tus
 servidores MCP, skills, ajustes ni CLAUDE.md: una ejecución empieza con unos 4.700 tokens en lugar de 38.000. `--model opus`
 elige otro modelo para una programación, y `schedule_model_claude` en el archivo de configuración para cada programación nueva.
 `schedule_lean_start: false` carga tu configuración. Los dos se aplican cuando se añade la programación, así que vuelve a
 añadirla después de cambiarlos. Esa ejecución solo puede mover la marca `mail-triage`. Las instrucciones que sigue son
-`memo skill show mail-triage`. Su primera ejecución empieza desde ahora y no lee el correo anterior.
+`memo skill show mail-triage`. Su primera ejecución empieza desde ahora y no lee el correo anterior. Una
+programación guardada por un memo anterior solo permite `memo`: ejecuta de nuevo la línea de arriba para sustituirla.
 
 Qué hace, en cada buzón:
 
@@ -96,6 +99,12 @@ Qué hace, en cada buzón:
    que aún espera tu decisión.
 5. Después, y solo entonces, `memo messages acknowledge --holder mail-triage --cursor <cursor> --source email:<account>`
    mueve su marca. Una ejecución que falla antes de este paso vuelve a leer el mismo correo. El mismo lote no se prepara dos veces.
+6. Para un remitente que no está enlazado a una persona, sin tareas abiertas, y cuyos correos de la ejecución fueron
+   todos boletines, promociones o avisos, añade `mail <profile> rules add --sender <address> --do envelope` (o
+   `--list-id`), como mucho 5 por ejecución, con la dirección tomada de los campos de la revisión, nunca del texto del
+   correo. Bajo `MAIL_READ_ONLY` mail solo acepta eso: `--sender` o `--list-id` con `--do envelope`, nunca una regla
+   que sustituya a otra, registrada con `source: agent` (`mail <profile> rules list source:agent`). El informe lista las
+   reglas que añadió y las que no tenía claras, para que las ejecutes tú.
 
 | Comando | Qué hace |
 |---|---|
@@ -178,8 +187,9 @@ lo encuentra.
 
 ## El correo y las personas
 
-Para incluir el correo de una persona en [su contexto](./people.md#everything-about-a-person), vincula
-la dirección a esa persona en tg o max: `tg personal contacts link 'Kai Sample' email:kai@example.com`.
+Una dirección que ya tiene el contacto de una persona se une a esa persona por sí sola. Otra dirección se une cuando
+la enlazas: `memo people link email:kai@example.com telegram:Kai`. Entonces su correo forma parte de
+[su contexto](./people.md#everything-about-a-person).
 
 ## Teléfonos y enlaces en el correo
 

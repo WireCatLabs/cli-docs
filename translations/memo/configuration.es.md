@@ -62,6 +62,17 @@ nombra los buzones que enumera, y `memo config unset mail` la elimina.
 `memo jobs start` y `memo jobs stop` escriben estos valores. Si los editas a mano, el temporizador los
 sigue en su siguiente ejecución. Consulta [importar con un temporizador](./archive.md#import-on-a-timer-linux).
 
+## `sources`
+
+```json
+"sources": { "reader": "ollama", "model": "llama3.2:latest" }
+```
+
+El lector al que `memo sources suggest` envía el texto de una fuente, y su modelo. `memo sources readers set <reader>
+[--model <model>]` escribe los dos. Si no hay ninguno, `sources suggest` se niega. Claude Code y Codex usan su propio
+modelo cuando `model` no está definido, y Ollama y los lectores de API necesitan uno.
+[Un lector propone hechos](./sources.md#have-a-reader-propose-facts) lista los lectores.
+
 ## `update_check`
 
 `false` desactiva la comprobación diaria de nuevas versiones de memo. `MEMO_NO_UPDATE_CHECK=1` hace lo mismo para una sesión de terminal.

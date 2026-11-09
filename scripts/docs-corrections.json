@@ -2687,24 +2687,36 @@
   {
     "tool": "memo",
     "slug": "people",
-    "reason": "memo review takes a query only through review list in the command contract; review list kind:relationship gives the same answer on 0.131.64.",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:relationship gives the same answer on 0.131.64. The same holds for review list kind:identity_link in 0.131.72.",
     "replacements": {
       "en": [
         {
           "before": "memo review kind:relationship\n",
           "after": "memo review list kind:relationship\n"
+        },
+        {
+          "before": "memo review kind:identity_link\n",
+          "after": "memo review list kind:identity_link\n"
         }
       ],
       "ru": [
         {
           "before": "memo review kind:relationship\n",
           "after": "memo review list kind:relationship\n"
+        },
+        {
+          "before": "memo review kind:identity_link\n",
+          "after": "memo review list kind:identity_link\n"
         }
       ],
       "es": [
         {
           "before": "memo review kind:relationship\n",
           "after": "memo review list kind:relationship\n"
+        },
+        {
+          "before": "memo review kind:identity_link\n",
+          "after": "memo review list kind:identity_link\n"
         }
       ]
     }
@@ -2712,24 +2724,86 @@
   {
     "tool": "memo",
     "slug": "usage",
-    "reason": "memo review takes a query only through review list in the command contract; review list kind:invoice,payment gives the same answer on 0.131.64.",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:invoice,payment gives the same answer on 0.131.64. In 0.131.72's account groups, `tg work` and `b24 work` name a profile, not a runnable command, so they are written as the start of one.",
     "replacements": {
       "en": [
         {
           "before": "`memo review kind:invoice,payment`",
           "after": "`memo review list kind:invoice,payment`"
+        },
+        {
+          "before": "(`tg work`, `b24 work`)",
+          "after": "(`tg work …`, `b24 work …`)"
         }
       ],
       "ru": [
         {
           "before": "`memo review kind:invoice,payment`",
           "after": "`memo review list kind:invoice,payment`"
+        },
+        {
+          "before": "(`tg work`, `b24 work`)",
+          "after": "(`tg work …`, `b24 work …`)"
         }
       ],
       "es": [
         {
           "before": "`memo review kind:invoice,payment`",
           "after": "`memo review list kind:invoice,payment`"
+        },
+        {
+          "before": "(`tg work`, `b24 work`)",
+          "after": "(`tg work …`, `b24 work …`)"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "commands",
+    "reason": "The site's guide check reads \"the owner confirmed\" as an editorial artifact. memo 0.131.72's `stages list` help says whether the owner confirmed a stage mapping, so the line is reworded without changing its meaning.",
+    "replacements": {
+      "en": [
+        {
+          "before": "and whether the owner confirmed that or it is the store's suggestion",
+          "after": "and whether the owner has confirmed that or it is the store's suggestion"
+        }
+      ],
+      "ru": [
+        {
+          "before": "and whether the owner confirmed that or it is the store's suggestion",
+          "after": "and whether the owner has confirmed that or it is the store's suggestion"
+        }
+      ],
+      "es": [
+        {
+          "before": "and whether the owner confirmed that or it is the store's suggestion",
+          "after": "and whether the owner has confirmed that or it is the store's suggestion"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "troubleshooting",
+    "reason": "memo 0.131.72 points a sign-in page to `drive documents add`, which is not in a drive release yet (drive-cli CHANGELOG, Unreleased). Until it ships, the page gives the released way: save the page as a file and add it with memo sources add.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Add it through your signed-in Google account: `drive documents add <url> --profiles <names\\|all>` (or `drive <profile> documents add <url>`)",
+          "after": "Save the page as a file and add that file with `memo sources add <path>`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Добавьте ее через ваш аккаунт Google, где вы вошли: `drive documents add <url> --profiles <names\\|all>` (или `drive <profile> documents add <url>`)",
+          "after": "Сохраните страницу в файл и добавьте этот файл командой `memo sources add <path>`"
+        }
+      ],
+      "es": [
+        {
+          "before": "Añádela con tu cuenta de Google con la sesión iniciada: `drive documents add <url> --profiles <names\\|all>` (o `drive <profile> documents add <url>`)",
+          "after": "Guarda la página como archivo y añade ese archivo con `memo sources add <path>`"
         }
       ]
     }

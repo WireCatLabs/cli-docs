@@ -70,10 +70,12 @@ las palabras que contiene.
 
 ## Una persona, varias cuentas
 
-La misma persona puede tener una cuenta de Telegram, una cuenta de MAX y una dirección de correo.
-Memo las trata como una sola persona solo después de que tú las enlaces, con `tg personal contacts link` o
-`max personal contacts link`. Un nombre o un dominio de correo que coinciden nunca bastan. Así los mensajes de
-una persona no se mezclan con los de otra.
+La misma persona puede tener una cuenta de Telegram, una cuenta de MAX y una dirección de correo. Memo las trata
+como una sola persona cuando comparten exactamente la misma dirección de correo y ninguna tercera persona la tiene,
+o un número de teléfono que nadie más tiene y que una de ellas tiene en Telegram, MAX o WhatsApp, o después de que
+tú las enlaces con `memo people link`, `tg personal contacts link` o `max personal contacts link`. Un nombre, un
+usuario o un dominio de correo que coinciden nunca bastan. Una señal más débil, o una suposición de un agente, te
+espera como coincidencia en `memo people review`. Toda fusión se puede deshacer ([cómo](./people.md#undo-a-link)).
 
 ## Referencias
 
