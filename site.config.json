@@ -19,8 +19,8 @@
     "telegramGroup": "https://t.me/wirecatdev"
   },
   "newsletter": {
-    "apiUrl": "",
-    "turnstileSiteKey": ""
+    "apiUrl": "https://api.wirecat.dev",
+    "turnstileSiteKey": "0x4AAAAAAFxVm2o60kHrSHhk"
   },
   "ideas": {
     "apiUrl": "https://api.wirecat.dev",
