@@ -109,6 +109,114 @@ tg personal tags add work --chat "Book club"
 
 `drive` imports documents into its configured local store. A document can carry tags, notes, facts and memories, and link to a person (`drive personal relationships`, `drive personal tags`). `drive personal documents list person:7` lists the documents linked to that person.
 
+## Business relationships
+
+A business relationship says how two of your records stand to each other: Alice is a contact of Acme Ltd, Emma
+reports to Dana, Acme Ltd buys from your company. `memo` and a CRM tool such as `b24` keep these relationships in
+the shared store. So your agent and `memo` read the same answer, with the source of each relationship.
+
+### Kinds and roles
+
+| Kind | From → to | Roles | Read from the other end |
+| --- | --- | --- | --- |
+| `member-of` | a person → an organization or a project | organization: `employee`, `contractor`, `founder`, `owner`, `manager`, `adviser`, `contact`. Project: `owner`, `manager`, `contributor`, `client-contact`, `approver` | the organization's or project's people |
+| `reports-to` | a person → a person | none | `manages` |
+| `customer-of` | a person or an organization → an organization | none | supplier of |
+| `partner-of` | an organization ↔ an organization | none | the same both ways |
+| `related-to` | a deal or a lead → a person | `owner`, `contact`, `decision-maker`, `influencer` | the person's deals and leads |
+
+Each relationship has one name. The store keeps one direction, and an answer read from the other end shows the
+inverse name, such as `manages` for `reports-to`. There is no second name to store, so a relationship cannot exist
+twice under two names. A chat can also be `member-of` a project, and `related-to` can join people, organizations,
+projects and tasks when no other kind fits.
+
+A role says what the person is in that place, and it comes from the list above. A job title is something else: it
+is kept beside the role, for example `--position "Procurement manager"`, and it is never a role. One person can
+hold several roles in the same organization. `memo` refuses a role that is not on the list and names the list. A
+role saved before the lists existed stays as written, and `relationships list` marks it `custom`.
+
+The lists belong to you. Add a role of your own when the built-in ones do not fit. Remove it again while no
+relationship holds it and no suggestion that waits for your review names it. A relationship that its source stopped
+reporting does not count. A built-in role cannot be removed, and only you change the lists, never your agent:
+
+```sh
+memo relationships roles list list:organization
+memo relationships roles add organization board-member --label 'Board member'
+memo relationships roles remove organization board-member
+```
+
+```text
+$ memo relationships roles list list:organization
+organization  employee
+organization  contractor
+organization  founder
+organization  owner
+organization  manager
+organization  adviser
+organization  contact
+organization  board-member  Board member  (yours)
+```
+
+### How sure a relationship is
+
+Every relationship in an answer has a standing:
+
+| Standing | Means |
+| --- | --- |
+| `confirmed` | You wrote it, or you confirmed it. |
+| `reported` | A CRM account says so, and nobody confirmed it. The answer names the account. |
+| `proposed` | Your agent, a scan, or a CRM account whose links are set to `review` suggested it. It waits for you in `memo review`. |
+| `ended` | It held, and it does not hold now. You ended it, or the source stopped reporting it. |
+
+Your word wins. A CRM sync never changes or ends a relationship you made or confirmed, and it never writes again
+one you removed or rejected. When the CRM reports a different role for the same pair, that is a second relationship
+next to yours, with its own standing. When you change the role or the job title of a relationship the CRM reported,
+you get one relationship of your own, `confirmed`, and it hides the CRM's row while it exists. The next sync keeps
+both: yours stays the answer, and the CRM's row stays hidden behind it. A later edit changes your relationship in
+place. `memo relationships end` on the CRM's relationship ends yours, and removing yours shows the CRM's row again.
+Bob from the [examples](./people.md#examples) is a CRM contact of Acme Ltd, and you make him its
+manager:
+
+```text
+$ memo relationships update 2 --role manager --position CEO
+...
+$ memo relationships list 'about:"person:5"' kind:member-of include:ended
+11  Person «Bob» → Organization «Acme Ltd»  member-of as manager (CEO)  confirmed
+
+$ memo relationships remove 11
+...
+$ memo relationships list 'about:"person:5"' kind:member-of include:ended
+2  Person «Bob» → Organization «Acme Ltd»  member-of as contact  reported by bitrix24:example.bitrix24.com
+```
+
+When the CRM stops reporting a relationship, for example a contact left a company, the sync ends it. It stays in the store as `ended` and is never deleted. The store also keeps a record of
+every change to a relationship: when it was added, changed, ended, confirmed, rejected, withdrawn by its source,
+reported again or removed.
+
+### From a CRM to people and organizations
+
+A CRM sync turns its records into the people and organizations you already have:
+
+- **A company** becomes an organization. A company with the same name as one of yours stays a separate
+  organization, because names are never matched.
+- **A contact** becomes a person. It joins a person you already have only when the e-mail address is exactly the
+  same. A name is never enough. If you separated two identities, they stay separate after every sync.
+- **Your own company** in the CRM is marked as your own. A company that is `customer-of` your own company is a
+  `client`, and one your own company is `customer-of` is a `supplier`. These categories are worked out from the
+  relationships each time you ask. A CRM company type, such as `CUSTOMER`, makes a company a customer only when you
+  say what the type means.
+- **An employee** of the CRM account becomes a person, a member of your own company with the role `employee`.
+- **Reporting lines** come from departments: each employee reports to the head of their department, and a head to
+  the head of the parent department. The answer says this line was derived from department heads.
+
+Some things a CRM cannot tell, so they come only from you. In Bitrix24 these are a deal contact's part (decision-maker
+or influencer), whom a contact reports to, a company's parent company and the dates when a relationship started or
+ended. [Who is who in Bitrix24](./b24/usage.md#who-is-who) lists what `b24` reads and the settings that change it,
+for example to have every new CRM relationship wait for your review.
+
+To see the relationships of a person, a company or a deal, with examples: [Clients, colleagues and
+deals](./people.md#clients-colleagues-and-deals).
+
 ## Who makes a link
 
 | Link | Made by |

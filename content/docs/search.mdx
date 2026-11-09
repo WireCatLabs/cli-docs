@@ -55,6 +55,127 @@ Each result says whether it is a message or a note. `tg` and `max` do not search
 does, and `memo search all invoice` searches messages, mail and notes at once. The sections below search one
 kind.
 
+## Search CRM deals and keep work apart
+
+`memo search all` also finds the deals and leads a CRM tool such as [`b24`](./b24/usage.md) stored, by the words of
+their title. `--only crm` searches them alone:
+
+```sh
+memo search all 'renewal' --only crm
+```
+
+People and companies are not in `search all`. Find them with `memo search people` and `memo organizations list`.
+A deal outside the CRM account's [sync scope](./people.md#whose-deals-are-copied) is not found either.
+
+An agent that uses memo's MCP server sees in `search all` only what its [permissions](./memo/configuration.md#permissions)
+let it list. When the server denies `deals.list` or `leads.list`, those hits are left out, and the answer says so in an
+issue for `crm`. `crm.list` leaves the whole CRM part out, and `business.list` leaves out invoices, payments, orders,
+contracts, subscriptions, products and wallets. `--only crm` and `--only business` search one part alone, and are
+refused when that part is denied. These permissions do not limit a search you run yourself in a terminal.
+
+```sh
+memo search all 'renewal' --only business
+```
+
+A question about who someone is, or how a person, a company and a deal relate, is better answered from their
+context than from search. Ask your agent to work in this order:
+
+1. Find the one record: `memo search people`, `memo organizations list` or `memo deals list`.
+2. Read its context: `memo context person:<id>`, `memo organizations context <ref>` or
+   `memo deals context <ref> --brief`.
+3. Follow only the relationships the question needs, for example
+   `memo relationships list kind:reports-to 'to:"person:12"'`.
+4. Search for the evidence after that, with `memo search all`.
+5. Cite the references, and name every gap the answer lists under "Not read". A `reported` relationship is only
+   the CRM's word.
+
+[Clients, colleagues and deals](./people.md#clients-colleagues-and-deals) shows these answers with examples.
+
+### Groups of accounts
+
+A group keeps your work accounts apart from your personal ones. With no group named, a run reads every account:
+that is the group `all`, which always exists and never leaves anything out. `personal`, `work` and any other group
+are groups you save yourself. Put the CRM account and your work mailbox in `work`, then name the group first, and
+the run reads only its accounts:
+
+```sh
+memo groups add work bitrix24:example.bitrix24.com
+memo groups add work email:owner@northstar.example
+memo groups add personal telegram:100
+memo groups add personal email:owner@northstar.example
+memo groups list
+memo work search all 'renewal'
+```
+
+An account can be in two groups. `memo groups list` shows each saved group, then `all`, and marks every account that
+another group holds too. Duplicates are allowed, and the list ends with them. It also shows each account's profile
+names in every tool, such as `tg work` and `b24 work`, once those tools have run. A profile named like a group is only
+a suggestion and never puts an account in that group.
+
+```text
+$ memo groups list
+work
+  bitrix24:example.bitrix24.com
+  email:owner@northstar.example  also in personal
+personal
+  telegram:100
+  email:owner@northstar.example  also in work
+all
+  bitrix24:example.bitrix24.com  all  also in work
+  email:owner@northstar.example  all  also in work, personal
+  google-calendar:owner@northstar.example  all
+  telegram:100  all  also in personal
+duplicate: email:owner@northstar.example is in work, personal
+```
+
+`memo groups remove personal email:owner@northstar.example` takes the mailbox out of `personal`, so it is no longer
+a duplicate, and `all` still reads it. `memo groups move telegram:100 personal work` moves an account in one write:
+first the account, then the group it leaves, then the group it joins. A group you never saved does not exist: a run
+that names it is refused, and the answer lists your groups and the profiles named like it. After the first sync of a
+CRM account that no saved group lists, the sync's answer suggests `memo groups add work` with that account. `MEMO_GROUP=work` works like the first word for every command. `--source personal` means
+your own messenger accounts and not the group `personal`.
+
+A group narrows the messages, mail, calendar events, CRM records and people a run reads. What you make yourself in
+`memo` belongs to no account, so it is in every group: your notes, projects, tasks, invoices, memories and facts.
+`memo work search all 'renewal'` finds the deal and the mail, and `memo personal search all 'renewal'` finds only the
+mail.
+
+A run that names no group still reads every account. To keep an agent inside one group, start its `memo` with
+`MEMO_GROUP_LOCK`, for example `MEMO_GROUP_LOCK=work memo mcp serve`. Under the lock, memo refuses the messages,
+mail, calendar events, CRM records and people of accounts outside the group. It also refuses another group,
+`--source all`, an account outside the group and a change to the groups, and the agent cannot lift the lock. A
+command that cannot keep to a group is refused as a whole, so the lock fails closed:
+
+```text
+$ MEMO_GROUP_LOCK=work memo messages show msg:telegram/100/201/1
+{"error":{"code":"permission_error","reason":"access.denied","message":"this process is locked to group work (MEMO_GROUP_LOCK) — msg:telegram/100/201/1 belongs to an account outside it","details":{"reference":"msg:telegram/100/201/1"},"retry":{"safe":false}}}
+
+$ MEMO_GROUP_LOCK=work memo personal search all renewal
+{"error":{"code":"permission_error","reason":"access.denied","message":"this process is locked to group work (MEMO_GROUP_LOCK) — group \"personal\" (first word) is refused","retry":{"safe":false}}}
+```
+
+What the group holds still answers. Alice's context under the lock reads only the CRM account and counts the
+accounts it kept out without naming them. Memories and facts leave out evidence and sources outside the group and
+say how many they left out. `memo relationships list` leaves out a row whose end only an outside account saw. Your
+own tasks stay visible:
+
+```text
+$ MEMO_GROUP_LOCK=work memo context person:3
+Alice  person:3
+...
+Business
+Organizations
+  Acme Ltd  organization:1  member-of contact (Procurement manager) reported by bitrix24:example.bitrix24.com
+...
+Not read: other accounts — 2 outside group work
+Read: bitrix24:example.bitrix24.com
+
+$ MEMO_GROUP_LOCK=work memo tasks list project:ATLA
+ATLA-1 · open · chore · ATLA · Follow up on the Acme renewal
+```
+
+Which commands run under the lock: [Lock an agent to a group](./memo/mcp.md#lock-an-agent-to-a-group).
+
 ## Find a word or phrase
 
 Start by asking your agent. For MAX, write “max CLI” instead of “tg CLI”:

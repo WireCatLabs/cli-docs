@@ -200,6 +200,37 @@ que contienen lo hereda: un chat toma el ámbito de su cuenta salvo que fije el 
 toma el ámbito de sus pruebas. Una pregunta hecha para el trabajo lee solo datos de trabajo, así que
 nunca trae un chat privado.
 
+## Relaciones de negocio en el almacén
+
+Una relación de negocio es un vínculo entre dos registros canónicos: una persona, una organización, un proyecto, una
+negociación o un prospecto. Su tipo sale de una lista cerrada (`member-of`, `reports-to`, `customer-of`,
+`partner-of`, `related-to`), y esa lista también dice qué extremos une cada tipo y qué roles admite. Solo se guarda un
+sentido. Un nombre inverso, como `manages` o «proveedor», es una etiqueta que la respuesta muestra cuando lee el
+vínculo desde el otro extremo.
+
+Cada vínculo de relación guarda además:
+
+- la cuenta que lo informó, por ejemplo una cuenta de CRM. Está vacía en los tuyos y en los de tu agente.
+- el día en que empezó y el día en que terminó, cuando alguien los dio. Un CRM sin fechas los deja vacíos, y el
+  almacén nunca los adivina.
+- cuándo su fuente dejó de informarlo. El vínculo se queda, y una respuesta lo muestra como terminado.
+- los datos propios de la fuente, como un cargo o cómo se dedujo una línea de mando.
+
+Un par de registros tiene como mucho un vínculo por tipo, rol y cuenta que lo informó. Así tu vínculo y el de un CRM
+para el mismo par no se mezclan, y una persona puede tener dos roles en una organización. Cada cambio de un vínculo
+de relación escribe una fila en su historial en la misma escritura: añadido, cambiado, terminado, confirmado,
+retirado, restaurado, rechazado o quitado. Un vínculo quitado conserva su historial.
+
+El estado de una relación (`confirmed`, `reported`, `proposed` o `ended`) no se guarda. Se calcula en cada lectura, a
+partir de si confirmaste el vínculo, qué cuenta lo informó, si terminó y qué propuestas te esperan. Las categorías de
+una organización (`client`, `supplier`, `partner`, `employer`) se calculan igual, a partir de sus relaciones con tus
+propias organizaciones.
+
+Lo que ya guarda una columna nunca es también un vínculo: la organización cliente de una negociación, el proyecto de
+una negociación, la negociación en que se convirtió un prospecto y las personas de una tarea con sus roles. Qué
+significa cada estado para quien lee y quién crea cada relación: [Relaciones de
+negocio](./how-things-are-linked.md#relaciones-de-negocio).
+
 ## Cómo la búsqueda encuentra contexto
 
 Encontrar contexto para un agente son tres pasos, en este orden.

@@ -211,6 +211,289 @@ tg personal contacts link @example_user email:rin@example.test
 Когда контекст понятен, попросите [черновик ответа](./prompting.mdx#подготовить-ответ)
 и проверьте текст перед разрешением на отправку.
 
+## Клиенты, коллеги и сделки
+
+Перед звонком клиенту хочется видеть всю картину: его компанию, его роль в сделке, кому он подчиняется и о чем вы
+говорили. `memo` собирает эту картину из CRM, чатов, почты и календаря. У каждой связи в ней указано, насколько она
+надежна, а ответ называет то, что прочитать не удалось. Сначала синхронизируйте CRM, например через
+[`b24`](./b24/usage.md), чтобы ее контакты, компании и сделки попали в локальное хранилище.
+
+```text prompt
+Используй memo CLI. Перед звонком с Alice из Acme Ltd покажи ее компанию, ее роль в наших открытых сделках, кому
+она подчиняется и о чем мы говорили в прошлом месяце. Скажи, что известно только из CRM и что прочитать не удалось.
+```
+
+Агент находит человека и читает его контекст. Те же команды можно запустить самому:
+
+```sh
+memo search people alice
+memo context person:3
+memo organizations context organization:1
+memo deals context deal:1 --brief
+memo relationships list kind:reports-to 'to:"person:12"'
+```
+
+- `memo context person:<id>` читает все аккаунты, которые видели человека: CRM, Telegram, почту и календари. Он
+  работает и для человека, который есть только в CRM, и для имени, которое вы добавили через `memo people add`.
+- `memo organizations context <ref>` показывает людей организации по ролям, ее клиентов, поставщиков и партнеров,
+  проекты, открытые сделки и лиды, счета и платежи как они сохранены, и открытые задачи.
+  `memo organizations list category:client` показывает ваших клиентов, а `supplier`, `partner` и `employer`
+  работают так же.
+- `memo deals context <ref>` показывает одну сделку: ее стадии, клиента, людей с ролями, ответственного, проект,
+  деньги, а также сообщения, письма и встречи ее людей, пока сделка была открыта. `--brief` дает короткую форму для
+  агента. `memo leads context` делает то же для лида.
+- `memo relationships list` фильтрует по `kind:`, `role:`, `standing:`, `from:`, `to:` и `at:<day>` (связь
+  действовала в этот день). Завершенные связи он не показывает, пока вы не добавите `include:ended`. С `about:<ref>`
+  каждая строка показывает еще и направление, и обратное название.
+
+Что значит каждый вид, роль и статус: [Деловые связи](./how-things-are-linked.md#деловые-связи). Как держать рабочие
+аккаунты отдельно от личных: [Поиск по сделкам CRM и работа отдельно](./search.mdx#поиск-по-сделкам-crm-и-работа-отдельно).
+
+### Примеры
+
+В примерах ниже учебное хранилище. Ваша компания Northstar Consulting, ее CRM это Битрикс24 по адресу
+`example.bitrix24.com`, а Acme Ltd ваш клиент. Alice и Bob контакты Acme, Emma и Dana работают в Northstar. У вас
+номера и имена будут другими.
+
+**Человек, который есть только в CRM.** Emma сотрудница Northstar, аккаунта в мессенджере у нее нет. Ее контекст
+все равно отвечает, по данным CRM и вашего календаря:
+
+```text
+$ memo context person:7
+Emma  person:7
+  email:emma@northstar.example
+  bitrix24:example.bitrix24.com/user/u1  Emma
+...
+Business
+Organizations
+  Northstar Consulting  organization:2  member-of employee (Sales owner) reported by bitrix24:example.bitrix24.com
+Reports to
+  Dana  person:12  reports-to reported by bitrix24:example.bitrix24.com
+Deals and leads
+  Acme renewal · New  deal:1  related-to owner reported by bitrix24:example.bitrix24.com
+Categories  employer
+...
+Not read: messages — no messenger identity is linked to them
+Read: bitrix24:example.bitrix24.com, google-calendar:owner@northstar.example
+```
+
+«Sales owner» это ее должность, а роль `employee`. «Not read» говорит, что ее сообщения прочитать не удалось:
+к ней не привязан ни один аккаунт мессенджера.
+
+**Один человек в CRM и в Telegram.** Alice контакт в CRM и пишет вам в Telegram. Когда ее аккаунт Telegram и
+контакт в CRM стали одним человеком, один контекст показывает и то, и другое:
+
+```text
+$ memo context person:3
+Alice  person:3
+  email:alice@acme.example
+  bitrix24:example.bitrix24.com/contact/7  Alice
+  telegram:201  Alice
+
+Last from them   2026-10-04 00:00  telegram  Alice: Can we renew Atlas before December?  msg:telegram/100/201/1
+...
+Business
+Organizations
+  Acme Ltd  organization:1  member-of contact (Procurement manager) reported by bitrix24:example.bitrix24.com
+Deals and leads
+  Acme renewal · New  deal:1  related-to contact reported by bitrix24:example.bitrix24.com
+Categories  client
+...
+Read: bitrix24:example.bitrix24.com, google-calendar:owner@northstar.example, telegram:100
+```
+
+Контакт из CRM соединился с ее почтой, потому что адрес тот же. Аккаунт Telegram соединился, потому что вы его
+связали, например через `tg personal contacts link`. Совпадение имени никогда не соединяет два аккаунта.
+
+**Организация с сотрудниками и клиентами.** Ваша компания показывает своих людей и своих клиентов:
+
+```text
+$ memo organizations context organization:2
+Northstar Consulting  organization:2  (your own)
+Categories  employer
+People
+  Emma  person:7  member-of employee (Sales owner) reported by bitrix24:example.bitrix24.com
+  person:1  person:1  member-of founder confirmed
+  Dana  person:12  member-of employee (Head of sales) reported by bitrix24:example.bitrix24.com
+Customers
+  Acme Ltd  organization:1  customer-of confirmed
+Written by its people  0 messages, 0 emails, 1 meetings
+Read: bitrix24:example.bitrix24.com, google-calendar:owner@northstar.example
+Not read: messages — no messenger identity is linked to them
+```
+
+`person:1` это вы. Сотрудники пришли из CRM, поэтому они `reported`. Acme Ltd клиент, потому что так сказали вы,
+поэтому связь `confirmed`. `memo organizations context organization:1` показывает то же со стороны Acme: Alice и
+Bob, Northstar в разделе Suppliers, открытую сделку, счет и открытую задачу.
+
+**Сделка с тем, кто принимает решение, и связанная встреча.** CRM знает Alice как контакт сделки, а Emma как
+ответственную. То, что решение принимает Bob, известно от вас, потому что Битрикс24 не хранит роль контакта в
+сделке:
+
+```text
+$ memo deals context deal:1 --brief
+Acme renewal  deal:1  Example sales/New  open
+client Acme Ltd; owner Emma; project Atlas
+  Alice  person:3  contact  reported
+  Emma  person:7  owner  reported
+  Bob  person:5  decision-maker  confirmed
+stages ∅ → New
+invoiced issued 1200.00 EUR; paid none
+1 messages, 1 emails, 1 meetings (proposed); 1 open tasks
+```
+
+Встреча это звонок со всеми тремя, пока сделка была открыта. Она помечена `proposed`: у нее со сделкой общие люди,
+и больше их ничего не связывает. Счет выставлен, ничего не оплачено. Стадия с названием Won тоже не платеж: деньги
+это то, что говорят счета и платежи. Без `--brief` ответ перечисляет встречу, письмо и сообщение со ссылками на
+них.
+
+**Подчинение и его источник.** Emma подчиняется Dana. Запросите поля источника, чтобы увидеть, откуда это
+известно:
+
+```text
+$ memo relationships list 'about:"person:7"' --json=id,from,to,kind,standing,account,derived
+{"items":[...,{"id":"9","from":"person:7","to":"person:12","kind":"reports-to","standing":"reported",
+"account":"bitrix24:example.bitrix24.com","derived":"department-head"}],...}
+```
+
+Об этом сообщил аккаунт CRM, а `derived` говорит, что связь выведена из руководителя отдела Emma. Никто ее не
+подтверждал. Со стороны Dana та же строка называется `manages`:
+
+```text
+$ memo relationships list 'about:"person:12"'
+9  Person «Emma» → Person «Dana»  manages  reported by bitrix24:example.bitrix24.com
+10  Person «Dana» → Organization «Northstar Consulting»  member-of as employee (Head of sales)  reported by bitrix24:example.bitrix24.com
+```
+
+Подчинение, которое добавил агент, остается предложением, пока вы его не подтвердите:
+
+```text
+$ memo relationships list 'about:"person:5"' kind:reports-to
+1  Person «Alice» → Person «Bob»  manages  proposed by claude-code
+```
+
+**Связь изменилась и ждет проверки.** Вы переключили связи аккаунта CRM в `review`. Потом в CRM меняются две
+вещи: Alice уходит из Acme Ltd, а Bob становится контактом сделки. После следующей синхронизации:
+
+```text
+$ memo relationships list 'about:"person:3"' include:ended
+4  Deal «Acme renewal · New» (Atlas) → Person «Alice»  related-to as contact  reported by bitrix24:example.bitrix24.com
+1  Person «Alice» → Person «Bob»  reports-to  proposed by claude-code
+1  Person «Alice» → Organization «Acme Ltd»  member-of as contact (Procurement manager)  ended by bitrix24:example.bitrix24.com
+
+$ memo review list kind:relationship
+no project or account
+2  relationship  Deal «Acme renewal · New» (Atlas) → Person «Bob» as contact  bitrix24  11-07
+   reported by bitrix24:example.bitrix24.com
+1  relationship  Person «Alice» → Person «Bob»  claude-code  11-07
+   Alice said so on the renewal call
+2 shown
+```
+
+Участие Alice в Acme `ended`, и оно осталось вместе с историей. Новая роль Bob ждет в `memo review`, а его роль
+`decision-maker`, которую дали вы, не изменилась. `memo review confirm 2` делает новую роль вашей, а
+`memo review reject 2 --reason "not on this deal"` отклоняет ее, и синхронизация больше ее не предложит.
+
+### Чьи сделки копируются
+
+В CRM отдела продаж большинство сделок принадлежит другим людям. Поэтому синхронизация копирует только ваши сделки
+и лиды: те, где ответственный — пользователь CRM, от имени которого входит инструмент (в Битрикс24 — пользователь
+вебхука). Контакты и компании всегда копируются целиком. Руководитель, которому нужны все сделки, ставит `scope`
+аккаунта в `all`, а `mine` возвращает обратно. Подробности для Битрикс24 — в [руководстве `b24`](./b24/usage.md):
+
+```sh
+b24 work config set crm.bitrix24:example.bitrix24.com.scope all
+b24 work config set crm.bitrix24:example.bitrix24.com.scope mine
+```
+
+Сделка может еще ничьей не быть, например созданная формой на сайте. В Битрикс24 таких сделок нет: у каждой сделки
+есть ответственный, по умолчанию пользователь, который ее создал
+([документация REST Битрикс24](https://github.com/bitrix24/b24restdocs/blob/833b39804f03dd4eb0ab758cbf7c1ddf1fac4663/api-reference/crm/universal/crm-item-add.md#L186-L189)).
+Поэтому вы сами называете пользователей, чьи сделки считаются ничьими, например того, от имени которого их создает
+форма на сайте, и синхронизация копирует и их сделки и лиды:
+
+```sh
+b24 work config set crm.bitrix24:example.bitrix24.com.unassigned 15,31
+```
+
+Что происходит, когда область меняется:
+
+- Сделка, отданная другому пользователю, уходит из копии при следующей синхронизации и возвращается, если ее отдадут
+  вам обратно.
+- Переход на `all` заново читает все сделки и лиды. Переход на `mine` работает только по копии и ничего не
+  спрашивает у CRM.
+- Сделка вне области уходит из списков и поиска, в `b24` и в `memo`. Ее прежняя копия при этом остается в файле
+  хранилища на вашем компьютере.
+- Если вы ни разу не задавали `scope`, а первое сужение до `mine` убрало бы больше половины сохраненных сделок или
+  лидов, синхронизация их оставляет и говорит об этом (`crm.narrowing-held`). Так бывает, когда у пользователя
+  синхронизации мало сделок. Копия остается как есть, пока вы не поставите `scope` в `mine` или `all`.
+
+`b24 work store status` показывает для сделок и для лидов сохраненный `scope`, задали ли его вы, область, которую
+применила последняя синхронизация, и удерживается ли сужение.
+
+Копия одного аккаунта принадлежит одному пользователю CRM. Первая синхронизация запоминает его в
+`crm.<provider>:<account>.self`, а синхронизация от имени другого пользователя отклоняется. Чтобы передать копию,
+сбросьте эту настройку, и следующая синхронизация запомнит нового пользователя:
+
+```sh
+b24 work config unset crm.bitrix24:example.bitrix24.com.self
+```
+
+`scope`, `unassigned` и `self` меняете только вы: агенту в этом отказывают. Это защита от ошибки агента, а не граница
+безопасности: агент, который может запускать любые команды на вашем компьютере, может ее обойти.
+
+### Базовые стадии
+
+Каждая CRM и каждая воронка в ней называет свои стадии по-своему. Базовые стадии — ваш собственный список стадий,
+один для сделок и один для лидов: колонки, по которым раскладываются ваши сделки во всех воронках и всех CRM. Каждая
+другая стадия сопоставляется с одной из них. Memo предлагает сопоставление, а вы его подтверждаете.
+
+```sh
+memo stages show deal
+memo stages list confirmed:false
+memo stages set stage:41 Proposal
+memo stages confirm --pipeline pipeline:3
+memo deals move deal:5 stage:3
+```
+
+- `memo stages show deal` создает список при первом обращении и показывает каждую базовую стадию с ее открытыми
+  сделками и сопоставленными с ней стадиями. Еще он показывает, что не разобрано: стадии, которые не сопоставлены
+  или только предложены. Если у вас ровно одна своя воронка сделок и в ней есть открытые, успешные и проваленные
+  стадии, списком становится она. Иначе memo создает стадии на первом языке из `owner_languages` (русском, пока вы
+  его не задали): «Новая», «Квалификация», «Предложение», «Переговоры», «Выиграна» и «Проиграна». Списком для лидов становится ваша собственная воронка `Leads`.
+- `memo stages create`, `rename`, `move` и `remove` правят список. В каждом списке остается хотя бы одна открытая,
+  одна успешная и одна проваленная стадия, а стадию, на которой стоят или стояли ваши собственные сделки или лиды,
+  удалить нельзя.
+- `memo stages list` показывает все остальные стадии, из CRM и из ваших воронок, с их базовой стадией и признаком
+  `confirmed`. Стадии CRM предлагаются при каждой синхронизации, по исходу и по месту в воронке. Подтвержденное
+  сопоставление синхронизация никогда не меняет.
+- `memo stages set` сопоставляет одну стадию. `memo stages confirm --pipeline <pipeline>` подтверждает предложения
+  одной воронки, а `memo stages confirm --all` — все.
+- `memo deals move` и `memo leads move` принимают `stage:<id>` базовой стадии и переносят вашу собственную сделку на
+  ту единственную стадию ее воронки, которая с ней сопоставлена. Если таких стадий несколько, ответ —
+  `stage.choice-required` с кандидатами: перенесите еще раз на одну из них по ее `stage:<id>`. Если ни одной, ответ —
+  `stage.unmapped`: сначала сопоставьте стадию. Сделка, скопированная из CRM, переносится в самой CRM, инструментом,
+  который называет ее `writes_with` (см. ниже).
+- В `--json` у каждой строки `memo deals list` и `memo leads list` есть `base_stage`. Он остается `null`, пока вы не
+  подтвердите сопоставление стадии этой строки.
+
+Агент может предложить сопоставление: его `memo stages set` остается предложением, пока вы его не подтвердите.
+Правка списков и `memo stages confirm` агенту запрещены. Как и с областью CRM, это защита от ошибок, а не граница
+безопасности.
+
+### Изменить сделку из CRM
+
+Сделку, лид или воронку, скопированные из CRM, меняют в самой CRM, а не в memo, иначе следующая синхронизация
+отменит изменение. В `--json` у каждой такой строки `memo deals list`, `memo leads list` и `memo pipelines list` есть
+`writes_with`: инструмент, который ее меняет (`tool`, например `b24`), `account` строки и `profile`, под которым
+этот инструмент запускать. Например, агент читает `memo deals list status:open --json`, а затем запускает `b24` с
+этим профилем, например `b24 work deals move deal:12 "Quote sent"`.
+
+`profile` задан, только если на этом аккаунте работал ровно один профиль этого инструмента. Иначе он `null`,
+`profiles` перечисляет кандидатов, а `why` говорит, что выбрать: агент спрашивает вас, какой профиль взять, и никогда
+не выбирает сам. В группе профиль аккаунта вне группы никогда не называется. У ваших собственных сделок
+`"writes_with": null`, потому что их меняет сам memo.
+
 ## Телефоны, ссылки, имена и адреса
 
 Найдите, где кто-то прислал номер телефона, все ссылки на один сайт, все чаты, где упоминается документ, или все
