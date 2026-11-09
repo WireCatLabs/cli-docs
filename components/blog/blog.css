@@ -7,9 +7,9 @@
   --blog-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   background: var(--bg);
 }
+/* Width comes from .wrap, the same frame as the header, footer and every other public page. */
 .wirecat-blog .blog-page {
   position: relative;
-  width: min(1180px, calc(100% - 2 * clamp(16px, 2.7vw, 48px)));
   padding-block: clamp(24px, 3vw, 40px) 56px;
 }
 .wirecat-editorial .wirecat-blog h1 {
@@ -95,7 +95,8 @@
 .wirecat-blog .blog-margin {
   display: none;
 }
-@media (width >= 110rem) {
+/* The page is .wrap's 1320px; the 200px margin and its 40px gap fit beside it from 1800px. */
+@media (width >= 112.5rem) {
   .wirecat-blog .blog-margin {
     position: absolute;
     top: 0;
@@ -1167,6 +1168,14 @@ html.dark .wirecat-blog .blog-code pre span {
 }
 .wirecat-blog .blog-newsletter {
   grid-column: 1 / -1;
+}
+.wirecat-editorial .wirecat-blog .blog-newsletter h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  line-height: 1.3;
+}
+.wirecat-blog .blog-newsletter p {
+  margin: 0;
 }
 .wirecat-blog .blog-newsletter label {
   display: block;

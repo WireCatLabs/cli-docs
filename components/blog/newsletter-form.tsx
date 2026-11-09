@@ -5,7 +5,18 @@ import { blogWords } from "@/lib/blog-words"
 import { loadTurnstile } from "@/lib/turnstile"
 
 /** Rendered only when `newsletter.apiUrl` and `newsletter.turnstileSiteKey` are set in site.config.json. */
-export function NewsletterForm({ lang, apiUrl, siteKey }: { lang: string; apiUrl: string; siteKey: string }) {
+export function NewsletterForm({
+  lang,
+  apiUrl,
+  siteKey,
+  titled = true,
+}: {
+  lang: string
+  apiUrl: string
+  siteKey: string
+  /** False inside a sidebar widget, whose own heading already names it. */
+  titled?: boolean
+}) {
   const words = blogWords(lang).newsletter
   const [state, setState] = useState<"idle" | "sending" | "done" | "failed">("idle")
   const [token, setToken] = useState("")
@@ -20,6 +31,8 @@ export function NewsletterForm({ lang, apiUrl, siteKey }: { lang: string; apiUrl
         widgetId.current = turnstile.render(widget.current, {
           sitekey: siteKey,
           language: lang,
+          // Shows the box only when Cloudflare wants a click; most visitors never see it.
+          appearance: "interaction-only",
           callback: (value: string) => setToken(value),
           "expired-callback": () => setToken(""),
           "error-callback": () => setToken(""),
@@ -52,8 +65,12 @@ export function NewsletterForm({ lang, apiUrl, siteKey }: { lang: string; apiUrl
   }
 
   return (
-    <section className="blog-newsletter" aria-labelledby="blog-newsletter">
-      <h2 id="blog-newsletter">{words.title}</h2>
+    <section
+      className="blog-newsletter"
+      aria-label={titled ? undefined : words.title}
+      aria-labelledby={titled ? "blog-newsletter" : undefined}
+    >
+      {titled && <h2 id="blog-newsletter">{words.title}</h2>}
       <p>{words.text}</p>
       {state === "done" ? (
         <p role="status">{words.done}</p>
