@@ -4,8 +4,8 @@ title: "Compared with other tools"
 
 `b24` is a command line and an MCP server for the sales data of a Bitrix24 portal: deals, leads, contacts,
 companies, pipelines, products and employees. This page puts it next to the other tools that let an AI agent read
-and change a Bitrix24 CRM, so you can see which one fits your job. The marks for `b24` come from its release 0.8.0,
-its commands and its source, checked on 8 November 2026; they are checked again at each release. The marks for the
+and change a Bitrix24 CRM, so you can see which one fits your job. The marks for `b24` come from its release 0.11.0,
+its commands and its source, checked on 10 November 2026; they are checked again at each release. The marks for the
 other tools come from their own documentation, listings and source, checked on 7 November 2026, and for CSV export
 on 8 November 2026. Nothing was signed in to or tested live, and a tool may do more than its pages say.
 
@@ -86,7 +86,8 @@ Notes on the `b24` column:
   refused until you set `crm.assign-others` to `allow`.
 - **Without the internet.** `sync` copies pipelines, deals, leads, contacts and companies into the local store, and
   `deals`, `leads`, `pipelines` and `stages` read it, with `--offline` too. `people`, `organizations`, `products` and
-  `users` always ask the portal.
+  `users` always ask the portal. It copies the webhook user's own deals, leads and clients; only a Bitrix24
+  administrator copies the whole CRM.
 - **One search.** `search all` finds deals and leads by the words of their title, beside the messages, notes and
   events that other WireCat tools on the same computer stored, without the internet. Under `deals.list: deny` it
   leaves deals out, and under `leads.list: deny` leads, and names what it left out.
@@ -97,7 +98,8 @@ Notes on the `b24` column:
   list field's option by its label. Deals and leads read the labels that the last `sync` stored.
 - **A write is sent once.** A write that got no answer is not sent again: it ends as `outcome_unknown` with its
   `operation_id`. Check the portal before you write it again: Bitrix24 makes a repeated write a second time.
-- **Only one call.** `api call` is kept for you at a terminal; no MCP tool offers it.
+- **Only one call.** `api call` is kept for you at a terminal; no MCP tool offers it. It reads contacts and companies
+  for a Bitrix24 administrator only.
 - **ChatGPT or Claude in the browser.** `mcp serve --http` serves the tool behind an HTTPS tunnel that you set up and
   keep running yourself, so this row is partly. See [usage](./usage.md#agents).
 - **Speed and cost against a browser agent.** `b24` calls the portal's REST API and reads its own copy; it opens no

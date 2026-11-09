@@ -8,7 +8,7 @@ title: "Comparado con otras herramientas"
 `b24` es una línea de comandos y un servidor MCP para los datos de ventas de un portal de Bitrix24: negociaciones,
 prospectos, contactos, empresas, embudos, productos y empleados. Esta página lo pone junto a las otras herramientas
 con las que un agente de IA lee y cambia un CRM de Bitrix24, para que veas cuál encaja con tu trabajo. Las marcas de
-`b24` salen de su versión 0.8.0, sus comandos y su código, revisados el 8 de noviembre de 2026; se revisan de nuevo en
+`b24` salen de su versión 0.11.0, sus comandos y su código, revisados el 10 de noviembre de 2026; se revisan de nuevo en
 cada versión. Las marcas de las demás herramientas salen de su propia documentación, sus fichas en catálogos y su
 código, revisados el 7 de noviembre de 2026, y la exportación a CSV el 8 de noviembre de 2026. No se inició sesión en
 ninguna ni se probó en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
@@ -91,7 +91,8 @@ Notas sobre la columna de `b24`:
   niega hasta que pongas `crm.assign-others` en `allow`.
 - **Sin internet.** `sync` copia embudos, negociaciones, prospectos, contactos y empresas al almacén local, y `deals`,
   `leads`, `pipelines` y `stages` lo leen, también con `--offline`. `people`, `organizations`, `products` y `users`
-  siempre preguntan al portal.
+  siempre preguntan al portal. Copia solo las negociaciones, los prospectos y los clientes del usuario del webhook;
+  solo un administrador de Bitrix24 copia todo el CRM.
 - **Una búsqueda.** `search all` encuentra negociaciones y prospectos por las palabras del título, junto a los mensajes,
   notas y eventos que otras herramientas de WireCat guardaron en el mismo ordenador, sin internet. Con
   `deals.list: deny` deja fuera las negociaciones, con `leads.list: deny` los prospectos, y nombra lo que dejó fuera.
@@ -104,7 +105,8 @@ Notas sobre la columna de `b24`:
 - **Una escritura se envía una vez.** Una escritura sin respuesta no se envía de nuevo: termina como
   `outcome_unknown` con su `operation_id`. Revisa el portal antes de repetirla: Bitrix24 hace una escritura repetida
   por segunda vez.
-- **Solo una llamada.** `api call` queda para ti en una terminal; ninguna herramienta MCP la ofrece.
+- **Solo una llamada.** `api call` queda para ti en una terminal; ninguna herramienta MCP la ofrece. Lee contactos y
+  empresas solo para un administrador de Bitrix24.
 - **ChatGPT o Claude en el navegador.** `mcp serve --http` sirve la herramienta detrás de un túnel HTTPS que tú
   configuras y mantienes, así que esta fila es en parte. Consulta el [uso](./usage.md#agents).
 - **Velocidad y coste frente a un agente de navegador.** `b24` llama a la API REST del portal y lee su propia copia;
