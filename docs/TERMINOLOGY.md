@@ -76,6 +76,10 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Money waiting for the owner | proposal | предложение | propuesta | An invoice, payment, order, contract with a value, subscription or bank transaction an import or an agent wrote. It counts in no total until the owner confirms it in review. |
 | Tie from a source record | relation | отношение | vínculo | A source record's role pointing at another record or entity. A relation with `as` becomes a relationship. A task relation is the other use of the word. |
 | A source's own object | custom record | собственная запись (`custom:`) | registro propio (`custom:`) | `custom:<name>`: kept as sent with its relations, never turned into an entity and never read for money. |
+| Bank account, card or cash | wallet | кошелек | cartera | `wallet:<id>`, in one currency. Its balance is worked out from confirmed, booked transactions, and only the owner sets the opening balance. Not an integration account. |
+| One line of a bank statement | transaction | операция | movimiento | `transaction:<id>`: what the statement shows. It meets a payment only with the same currency, direction and amount. Not a store transaction. |
+| Part of a transaction by category | split | часть разбивки | parte del reparto | A category, an amount and an optional project inside one transaction. The splits never add up to more than the transaction, and the rest is uncategorized. |
+| Money paid back | refund | возврат | devolución | A payment that names the payment it returns (`refund_of`), in the other direction and the same currency. Paid on an invoice is net of confirmed refunds. |
 
 ## Diagnostics and the desktop app
 

@@ -110,7 +110,8 @@ The type decides which roles it knows. An invoice has `issuer`, `counterparty`, 
 `counterparty`, is refused when it names two different targets (`record.relation-ambiguous`).
 
 - **`as`** says what part a person or organization plays, such as `"as": "decision-maker"` on a deal's `person` or
-  `"as": "customer"` on a contract's `party`.
+  `"as": "customer"` on a contract's `party`. It becomes a business relationship reported by your account. The
+  owner's own relationship for the same pair wins, and deleting the record withdraws it.
 - **A role the type does not list** is your source's own word, such as `quoted-for` or `parent-ticket`. It is kept as
   you sent it and resolved record to record, and never turned into anything else.
 - **A target that is not there yet** keeps the record **waiting**. A payment that settles an invoice you send
@@ -168,6 +169,8 @@ A free-mail domain such as `gmail.com` is refused as an organization's `domain` 
 | `waiting` | records with a missing target: `key`, `pointer`, `missing` roles |
 | `unmatched` | records with two or more candidates: `key`, `pointer`, `reason`, `candidates` |
 | `ignored` | values that look like an identifier and were kept as data only: `key`, `pointer`, `reason` |
+| `relationships` | the business relationships the account reports: `added`, `kept`, `restored`, `withdrawn`, `proposed`, and those skipped because the owner rejected them |
+| `notices` | records taken, but not as sent, such as a relationship word off its role list (`relationship.role-unlisted`) |
 | `flagged` | changed or deleted records whose entity was left alone |
 | `errors` | refusals: `pointer`, `code`, `message`, `key` |
 | `truncated` | `true` when a list stopped at 1000 entries. The counts stay exact |
@@ -192,6 +195,8 @@ Here is a receipt for a file with an unknown type and a payment whose invoice ha
   "flagged": [],
   "unmatched": [],
   "ignored": [],
+  "relationships": { "added": 0, "kept": 0, "restored": 0, "withdrawn": 0, "proposed": 0, "skippedOwnerRejected": 0 },
+  "notices": [],
   "errors": [
     {
       "pointer": "/records/0/type",
@@ -301,10 +306,14 @@ The receipt of the first import:
     "flagged": [],
     "unmatched": [],
     "ignored": [],
+    "relationships": {
+      "added": 3, "kept": 0, "restored": 0, "withdrawn": 0, "proposed": 0, "skipped_owner_rejected": 0
+    },
+    "notices": [],
     "errors": [],
     "truncated": false
   },
-  "meta": { "run_id": "20261108T181443Z-process-620b48", "duration_ms": 42, "complete": true }
+  "meta": { "run_id": "20261109T131039Z-process-5827f3", "duration_ms": 85, "complete": true }
 }
 ```
 
@@ -314,8 +323,11 @@ What happened:
 - The pipeline, the deal and the service were written.
 - The contract, order, invoice and payment are proposals, and the payment is allocated to the invoice.
 - The quote is kept as a record, and its `quoted-for` relation points at the deal's record.
+- Anna's place in the organization, her part on the deal and the customer on the contract are three business
+  relationships reported by `example-erp:demo` (`relationships.added: 3`).
 
-Run the same import again and every record is `unchanged`: `created: 0`, `unchanged: 10`, `proposed: []`.
+Run the same import again and every record is `unchanged`: `created: 0`, `unchanged: 10`, `proposed: []`, and
+`relationships.kept: 3`.
 
 ### Import from your own command-line tool
 
@@ -345,13 +357,12 @@ console.log(JSON.stringify(receipt))
 An agent needs no knowledge of your ERP. It asks memo. First what waits for the owner, then the deal, the contract,
 the custom record and a search across business records:
 
-<!-- verify against released cli-core: needs cli-core #2668 (import relationships). organizations context lists no people yet, deals show has people: [] instead of Anna as decision-maker, and contracts show names no parties. The rest of this block is verified on the released memo -->
-
 ```sh
 memo review list kind:invoice,payment,order,contract --json
 memo organizations context organization:1
 memo deals show deal:1 --json
 memo contracts show contract:1 --json
+memo relationships list 'about:"contract:1"'
 memo orders show order:1 --json
 memo invoices show invoice:1 --json
 memo records list type:custom:quote --account example-erp:demo --json
@@ -359,11 +370,15 @@ memo records show custom:quote:Q-7 --account example-erp:demo --json
 memo search all "Rental agreement" --only business --json
 ```
 
+- `organizations context` gives the organization with Anna among its people, `member-of` and reported by
+  `example-erp:demo`, and its open deal, invoice, payment and order.
 - `review list` shows the four proposals. The owner confirms them, and only then do they count in totals.
 - `deals show` gives the deal with its organization, Anna as decision-maker, and its source records, the quote among
   them.
 - `contracts show` gives the dates, the value, the notice deadline (1 October 2027, 30 days before 31 October 2027) and the deal it
   closed.
+- `relationships list 'about:"contract:1"'` gives the contract's party: ООО Пример as `customer`, reported by
+  `example-erp:demo`.
 - `records show` gives the quote's fields as they were sent, nested JSON included, and its relation to the deal.
 - `search all --only business` searches the titles of invoices, payments, orders, contracts, subscriptions, products
   and wallets. Each hit names the source it came from. Bank transactions and custom records are not in it, so reach

@@ -114,7 +114,8 @@ tiene `organization`, `person` y `project`. Un rol que se toma una vez, como el 
 rechaza si apunta a dos destinos distintos (`record.relation-ambiguous`).
 
 - **`as`** dice qué papel tiene una persona u organización, como `"as": "decision-maker"` en la `person` de una
-  negociación o `"as": "customer"` en la `party` de un contrato.
+  negociación o `"as": "customer"` en la `party` de un contrato. Se convierte en una relación de negocio que
+  informa tu cuenta. La relación propia del propietario para el mismo par gana, y borrar el registro la retira.
 - **Un rol que el tipo no tiene** es una palabra propia de tu fuente, como `quoted-for` o `parent-ticket`. Se guarda
   tal como lo enviaste, se resuelve de registro a registro y nunca se convierte en otra cosa.
 - **Un destino que todavía no está** deja el registro **en espera**. Un pago de una factura que envías mañana espera,
@@ -173,6 +174,8 @@ Un dominio de correo gratuito como `gmail.com` se rechaza como `domain` de una o
 | `waiting` | registros con un destino que falta: `key`, `pointer`, los roles en `missing` |
 | `unmatched` | registros con dos o más candidatos: `key`, `pointer`, `reason`, `candidates` |
 | `ignored` | valores que parecen un identificador y se guardaron solo como datos: `key`, `pointer`, `reason` |
+| `relationships` | las relaciones de negocio que informa la cuenta: `added`, `kept`, `restored`, `withdrawn`, `proposed` y las omitidas porque el propietario las rechazó |
+| `notices` | registros aceptados, pero no como llegaron, como una palabra de relación fuera de su lista de roles (`relationship.role-unlisted`) |
 | `flagged` | registros cambiados o borrados cuya entidad no se tocó |
 | `errors` | rechazos: `pointer`, `code`, `message`, `key` |
 | `truncated` | `true` cuando una lista se detuvo en 1000 elementos. Las cuentas siguen siendo exactas |
@@ -197,6 +200,8 @@ Este es el recibo de un archivo con un tipo desconocido y un pago cuya factura t
   "flagged": [],
   "unmatched": [],
   "ignored": [],
+  "relationships": { "added": 0, "kept": 0, "restored": 0, "withdrawn": 0, "proposed": 0, "skippedOwnerRejected": 0 },
+  "notices": [],
   "errors": [
     {
       "pointer": "/records/0/type",
@@ -309,10 +314,14 @@ El recibo de la primera importación:
     "flagged": [],
     "unmatched": [],
     "ignored": [],
+    "relationships": {
+      "added": 3, "kept": 0, "restored": 0, "withdrawn": 0, "proposed": 0, "skipped_owner_rejected": 0
+    },
+    "notices": [],
     "errors": [],
     "truncated": false
   },
-  "meta": { "run_id": "20261108T181443Z-process-620b48", "duration_ms": 42, "complete": true }
+  "meta": { "run_id": "20261109T131039Z-process-5827f3", "duration_ms": 85, "complete": true }
 }
 ```
 
@@ -322,8 +331,11 @@ Qué pasó:
 - Se escribieron el pipeline, la negociación y el servicio.
 - El contrato, el pedido, la factura y el pago son propuestas, y el pago está asignado a la factura.
 - El presupuesto se guarda como registro, y su vínculo `quoted-for` apunta al registro de la negociación.
+- El lugar de Anna en la organización, su papel en la negociación y el cliente del contrato son tres relaciones de
+  negocio que informa `example-erp:demo` (`relationships.added: 3`).
 
-Ejecuta otra vez la misma importación y cada registro queda `unchanged`: `created: 0`, `unchanged: 10`, `proposed: []`.
+Ejecuta otra vez la misma importación y cada registro queda `unchanged`: `created: 0`, `unchanged: 10`, `proposed: []` y
+`relationships.kept: 3`.
 
 ### Importar desde tu propia herramienta de línea de comandos
 
@@ -353,13 +365,12 @@ console.log(JSON.stringify(receipt))
 Un agente no necesita conocer tu ERP. Le pregunta a memo. Primero qué espera al propietario, luego la negociación, el
 contrato, el registro propio y una búsqueda en los registros de negocio:
 
-<!-- verify against released cli-core: needs cli-core #2668 (import relationships). organizations context lists no people yet, deals show has people: [] instead of Anna as decision-maker, and contracts show names no parties. The rest of this block is verified on the released memo -->
-
 ```sh
 memo review list kind:invoice,payment,order,contract --json
 memo organizations context organization:1
 memo deals show deal:1 --json
 memo contracts show contract:1 --json
+memo relationships list 'about:"contract:1"'
 memo orders show order:1 --json
 memo invoices show invoice:1 --json
 memo records list type:custom:quote --account example-erp:demo --json
@@ -367,11 +378,15 @@ memo records show custom:quote:Q-7 --account example-erp:demo --json
 memo search all "Rental agreement" --only business --json
 ```
 
+- `organizations context` da la organización con Anna entre sus personas, `member-of` e informada por
+  `example-erp:demo`, y su negociación abierta, factura, pago y pedido.
 - `review list` muestra las cuatro propuestas. El propietario las confirma, y solo entonces cuentan en los totales.
 - `deals show` da la negociación con su organización, Anna como quien decide, y sus registros de origen, entre ellos
   el presupuesto.
 - `contracts show` da las fechas, el valor, el plazo de aviso (1 de octubre de 2027, 30 días antes del 31 de octubre) y la
   negociación que cerró.
+- `relationships list 'about:"contract:1"'` da la parte del contrato: ООО Пример como `customer`, informada por
+  `example-erp:demo`.
 - `records show` da los campos del presupuesto tal como llegaron, con el JSON anidado, y su vínculo con la
   negociación.
 - `search all --only business` busca en los títulos de facturas, pagos, pedidos, contratos, suscripciones, productos y

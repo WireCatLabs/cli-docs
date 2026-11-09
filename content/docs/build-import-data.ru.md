@@ -113,7 +113,8 @@ description: "Один формат JSON приносит в хранилище 
 она указывает на две разные цели (`record.relation-ambiguous`).
 
 - **`as`** говорит, какую часть играет человек или организация, например `"as": "decision-maker"` у `person` сделки
-  или `"as": "customer"` у `party` договора.
+  или `"as": "customer"` у `party` договора. Такое отношение становится деловой связью, о которой сообщает ваш
+  аккаунт. Своя связь владельца для той же пары важнее, а удаление записи отзывает связь.
 - **Роль, которой нет у типа**, это собственное слово вашего источника, например `quoted-for` или `parent-ticket`. Она
   хранится так, как вы ее прислали, разрешается от записи к записи и ни во что другое не превращается.
 - **Цель, которой еще нет**, оставляет запись **ждать**. Платеж по счету, который вы пришлете завтра, ждет и
@@ -171,6 +172,8 @@ E-mail сравнивается без пробелов по краям и в н
 | `waiting` | записи без цели: `key`, `pointer`, недостающие роли в `missing` |
 | `unmatched` | записи с двумя или больше кандидатами: `key`, `pointer`, `reason`, `candidates` |
 | `ignored` | значения, похожие на идентификатор, которые сохранены только как данные: `key`, `pointer`, `reason` |
+| `relationships` | деловые связи, о которых сообщает аккаунт: `added`, `kept`, `restored`, `withdrawn`, `proposed` и пропущенные, потому что владелец их отклонил |
+| `notices` | записи, принятые не так, как их прислали, например слово связи не из списка ролей (`relationship.role-unlisted`) |
 | `flagged` | измененные или удаленные записи, чью сущность не тронули |
 | `errors` | отказы: `pointer`, `code`, `message`, `key` |
 | `truncated` | `true`, если список остановился на 1000 элементах. Числа при этом точные |
@@ -195,6 +198,8 @@ E-mail сравнивается без пробелов по краям и в н
   "flagged": [],
   "unmatched": [],
   "ignored": [],
+  "relationships": { "added": 0, "kept": 0, "restored": 0, "withdrawn": 0, "proposed": 0, "skippedOwnerRejected": 0 },
+  "notices": [],
   "errors": [
     {
       "pointer": "/records/0/type",
@@ -304,10 +309,14 @@ memo records import erp.jsonl --account example-erp:demo --json
     "flagged": [],
     "unmatched": [],
     "ignored": [],
+    "relationships": {
+      "added": 3, "kept": 0, "restored": 0, "withdrawn": 0, "proposed": 0, "skipped_owner_rejected": 0
+    },
+    "notices": [],
     "errors": [],
     "truncated": false
   },
-  "meta": { "run_id": "20261108T181443Z-process-620b48", "duration_ms": 42, "complete": true }
+  "meta": { "run_id": "20261109T131039Z-process-5827f3", "duration_ms": 85, "complete": true }
 }
 ```
 
@@ -317,8 +326,11 @@ memo records import erp.jsonl --account example-erp:demo --json
 - Воронка, сделка и услуга записаны.
 - Договор, заказ, счет и платеж стали предложениями, и платеж распределен на счет.
 - Коммерческое предложение хранится как запись, и его отношение `quoted-for` указывает на запись сделки.
+- Место Анны в организации, ее роль в сделке и покупатель по договору стали тремя деловыми связями, о которых
+  сообщает `example-erp:demo` (`relationships.added: 3`).
 
-Запустите тот же импорт снова, и каждая запись будет `unchanged`: `created: 0`, `unchanged: 10`, `proposed: []`.
+Запустите тот же импорт снова, и каждая запись будет `unchanged`: `created: 0`, `unchanged: 10`, `proposed: []` и
+`relationships.kept: 3`.
 
 ### Импорт из вашего инструмента командной строки
 
@@ -348,13 +360,12 @@ console.log(JSON.stringify(receipt))
 Агенту не нужно знать вашу ERP. Он спрашивает memo. Сначала что ждет владельца, потом сделку, договор, собственную
 запись и поиск по бизнес-записям:
 
-<!-- verify against released cli-core: needs cli-core #2668 (import relationships). organizations context lists no people yet, deals show has people: [] instead of Anna as decision-maker, and contracts show names no parties. The rest of this block is verified on the released memo -->
-
 ```sh
 memo review list kind:invoice,payment,order,contract --json
 memo organizations context organization:1
 memo deals show deal:1 --json
 memo contracts show contract:1 --json
+memo relationships list 'about:"contract:1"'
 memo orders show order:1 --json
 memo invoices show invoice:1 --json
 memo records list type:custom:quote --account example-erp:demo --json
@@ -362,11 +373,15 @@ memo records show custom:quote:Q-7 --account example-erp:demo --json
 memo search all "Rental agreement" --only business --json
 ```
 
+- `organizations context` дает организацию с Анной среди ее людей, `member-of` от `example-erp:demo`, и ее
+  открытую сделку, счет, платеж и заказ.
 - `review list` показывает четыре предложения. Владелец их подтверждает, и только после этого они входят в суммы.
 - `deals show` дает сделку с организацией, Анной, которая принимает решение, и записями источников, среди них
   коммерческое предложение.
 - `contracts show` дает даты, сумму, срок уведомления (1 октября 2027 года, за 30 дней до 31 октября) и сделку, которую договор
   закрыл.
+- `relationships list 'about:"contract:1"'` дает сторону договора: ООО Пример как `customer`, от
+  `example-erp:demo`.
 - `records show` дает поля коммерческого предложения такими, какими их прислали, вместе с вложенным JSON, и его
   отношение к сделке.
 - `search all --only business` ищет по названиям счетов, платежей, заказов, договоров, подписок, товаров и кошельков.
