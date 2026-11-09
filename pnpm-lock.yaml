@@ -102,11 +102,11 @@ importers:
         specifier: 1.7.5
         version: 1.7.5
       '@wirecat/cli-base':
-        specifier: 0.76.0
-        version: 0.76.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))
+        specifier: 0.80.0
+        version: 0.80.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))
       '@wirecat/cli-core':
-        specifier: 0.563.0
-        version: 0.563.0(@wirecat/cli-base@0.76.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))))(commander@15.0.0)(supports-color@7.2.0)(typescript@7.0.2)(zod@4.6.7)
+        specifier: 0.590.0
+        version: 0.590.0(@wirecat/cli-base@0.80.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))))(commander@15.0.0)(supports-color@7.2.0)(typescript@7.0.2)(zod@4.6.7)
       ajv:
         specifier: 8.20.0
         version: 8.20.0
@@ -1711,8 +1711,8 @@ packages:
   '@wasm-audio-decoders/opus-ml@0.0.3':
     resolution: {integrity: sha512-SEeTmk0eb3q5etJA/NHCRWW6BivTx9tqvNTmG0kg2ynuATEQRUZnwQE6Ibvl1BBvqIGHqI57+qyJMWmJBwb5XQ==}
 
-  '@wirecat/cli-base@0.76.0':
-    resolution: {integrity: sha512-RzGecKZ3aPLJ+SDwuk0nHjFcXgqZoX2nCnnKKgRvTkyLNj2p8t0C77dsuIkXmUVv/ooNIeEWuWaMb0A93zXRFA==}
+  '@wirecat/cli-base@0.80.0':
+    resolution: {integrity: sha512-gevf5s+P/2OgE9dVEv03vv21rZyLesc3qD/kLfCysYEDLna1W6jc/PIQIxCy4ei4WfT3hRNsJ2p7EMs/dJbl7g==}
     engines: {node: '>=22'}
     hasBin: true
     peerDependencies:
@@ -1733,13 +1733,13 @@ packages:
   '@wirecat/cli-core-sqlite@1.1.0':
     resolution: {integrity: sha512-GpGlh/dAIX/nblBYCdT6DfWSLFxav9mxxeELQAfEuw+QZdT9unKxbi5xa02s/s4JS1P7n0PQx2sCABj4FlMRNw==}
 
-  '@wirecat/cli-core@0.563.0':
-    resolution: {integrity: sha512-0eyrR+2f04K4BstrGKwB8eoHLycSjlQfp5I2uYlMk6sCx0/ZQeoEemdyRG3yocNfvjz75XIJbb2aZo0q7BB4qA==}
+  '@wirecat/cli-core@0.590.0':
+    resolution: {integrity: sha512-yCHQCTN5tT/jOCQKeE14d687AikYqhxYN8abE9ZtaEfOfPYnKHtCZ2G8xdUYdlRWVHCq36JkdL+/zG5HYVDMrA==}
     engines: {node: ^22.16.0 || >=24}
     hasBin: true
     peerDependencies:
       '@napi-rs/canvas': '>=0.1.69 <2'
-      '@wirecat/cli-base': '>=0.75.0 <0.76.0'
+      '@wirecat/cli-base': '>=0.76.0 <0.81.0'
       commander: '>=15'
     peerDependenciesMeta:
       '@napi-rs/canvas':
@@ -5595,7 +5595,7 @@ snapshots:
     dependencies:
       '@wasm-audio-decoders/common': 9.0.7
 
-  '@wirecat/cli-base@0.76.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))':
+  '@wirecat/cli-base@0.80.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))':
     dependencies:
       '@valibot/to-json-schema': 1.8.0(valibot@1.5.0(typescript@7.0.2))
       cli-table3: 0.6.5
@@ -5615,7 +5615,7 @@ snapshots:
 
   '@wirecat/cli-core-sqlite@1.1.0': {}
 
-  '@wirecat/cli-core@0.563.0(@wirecat/cli-base@0.76.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))))(commander@15.0.0)(supports-color@7.2.0)(typescript@7.0.2)(zod@4.6.7)':
+  '@wirecat/cli-core@0.590.0(@wirecat/cli-base@0.80.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))))(commander@15.0.0)(supports-color@7.2.0)(typescript@7.0.2)(zod@4.6.7)':
     dependencies:
       '@anthropic-ai/sdk': 1.3.0(zod@4.6.7)
       '@bomb.sh/tab': 0.0.22(commander@15.0.0)
@@ -5625,7 +5625,7 @@ snapshots:
       '@valibot/to-json-schema': 1.8.0(valibot@1.5.0(typescript@7.0.2))
       '@wasm-audio-decoders/flac': 0.2.11
       '@wasm-audio-decoders/ogg-vorbis': 0.1.20
-      '@wirecat/cli-base': 0.76.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))
+      '@wirecat/cli-base': 0.80.0(commander@15.0.0)(esbuild@0.28.2)(typescript@7.0.2)(vitest@5.0.5(@opentelemetry/api@1.10.0)(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))
       '@wirecat/cli-core-onnx': 1.2.0
       '@wirecat/cli-core-sqlite': 1.1.0
       '@xmldom/xmldom': 0.9.12
