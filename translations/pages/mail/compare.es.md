@@ -106,11 +106,12 @@ sesión. El correo a cualquiera que no seas tú pregunta primero, cada destinata
 defecto), y una copia va a Enviados y al almacén. `--file` rechaza carpetas de credenciales y de WireCat salvo que el
 propietario pase `--allow-any-file`.
 
-⁸ Por defecto `mail` inicia sesión en Gmail con una contraseña de aplicación y lee «Todos los mensajes». Un dominio de
-Google Workspace que desactiva las contraseñas de aplicación, o una cuenta sin verificación en dos pasos, inicia sesión
-con OAuth. Ese inicio de sesión usa la aplicación de Google de WireCat salvo que indiques la tuya. Google puede rechazar
-la aplicación de WireCat para el correo, y entonces se entra con una aplicación de Google que creas tú
-([pasos](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)) o con una contraseña de aplicación.
+⁸ `mail` lee «Todos los mensajes» en Gmail. Desde la 0.22.0, `session start --method oauth` conecta un perfil nuevo
+de Gmail con la aplicación de Google de WireCat, sin crear nada antes. Sin `--method oauth`, un perfil nuevo de Gmail
+sigue usando una contraseña de aplicación. Hasta que Google termine de revisar la aplicación de WireCat, puede mostrar
+una pantalla de "aplicación no verificada" y deja entrar a 100 usuarios nuevos, compartidos con `gcal` y `drive`.
+También sirve una aplicación de Google que creas tú
+([pasos](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)) o una contraseña de aplicación.
 
 ⁹ Outlook.com y Microsoft 365 aceptan solo OAuth para IMAP y SMTP. `mail session start` abre el navegador, inicias
 sesión y apruebas el acceso, sin escribir ninguna contraseña. La aplicación de Microsoft de WireCat viene incluida, así

@@ -101,10 +101,11 @@ password. Mail to anyone but you asks first, each recipient counts toward an hou
 copy goes to Sent and into the store. `--file` refuses credential and WireCat folders unless the owner passes
 `--allow-any-file`.
 
-⁸ `mail` signs in to Gmail with an app password by default and reads All Mail. A Google Workspace domain that turns app
-passwords off, or an account without 2-Step Verification, signs in with OAuth. That sign-in uses WireCat's Google app
-unless you name your own. Google may refuse WireCat's app for mail, and then a Google app you create yourself
-([steps](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)) or an app password is the way in.
+⁸ `mail` reads All Mail in Gmail. Since 0.22.0, `session start --method oauth` signs a new Gmail profile in with
+WireCat's Google app, and nothing has to be made first. Without `--method oauth`, a new Gmail profile still uses an app
+password. Until Google finishes reviewing WireCat's app, it may show an "unverified app" screen and lets 100 new users
+in, shared with `gcal` and `drive`. A Google app you create yourself
+([steps](https://github.com/WireCatLabs/mail-cli/blob/main/docs/oauth-google.md)) or an app password also works.
 
 ⁹ Outlook.com and Microsoft 365 take only OAuth for IMAP and SMTP. `mail session start` opens the browser, you sign in
 and approve access, and no password is typed. WireCat's Microsoft app is built in, so there is nothing to register

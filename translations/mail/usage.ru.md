@@ -257,7 +257,7 @@ mail personal folders create Receipts                                  # also fo
 - **Сначала предпросмотр.** Удаление, изменение, выбранное через `--filter`, и изменение более чем 20 писем отвечают тем,
   что изменится, и той же командой с `--yes` в `next`; до этого ничего не меняется. `--dry-run` всегда только показывает.
   Флаг или перемещение одного письма выполняются сразу.
-- **Отмена.** Каждое изменение отвечает id запуска (`run`). Перед обращением к серверу запуск записывает место каждого
+- **Отмена.** Каждое изменение отвечает полем `run_id`. Перед обращением к серверу запуск записывает место каждого
   письма, флаги и метки Gmail; `messages restore --run <id>` возвращает то, что всё ещё там, где его оставил запуск: корзину
   в папку, перемещение обратно, копию убирает, флаги как были. Каждая запись запуска на сервер указана в `writes` со
   своим `operation_id`, и `--write <id>` отменяет только эту запись. Запуски старого `memo mail delete` восстанавливаются здесь
@@ -333,6 +333,7 @@ mail personal messages send --reply-to 'msg:email/me%40example.com/thread-1/%3Ci
 mail personal messages send --reply-to 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --reply-all "Thanks, all."   # also to the original's To and Cc, not you
 mail personal messages forward 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E' --to bob@example.com "FYI"           # the original attached whole
 mail personal messages send --to ann@example.com --subject Hi "Hello" --dry-run   # build it, send nothing
+mail personal messages send --to me@example.com --subject Digest --html < digest.html   # HTML, with a plain-text alternative made from it
 mail personal drafts send 5b0e1c2a@example.com                                     # send a saved draft, then remove it
 ```
 

@@ -1,18 +1,35 @@
 ---
-title: "Gmail con tu propia aplicación de Google"
+title: "Gmail con inicio de sesión de Google"
 ---
 
-Gmail funciona con una contraseña de aplicación, y `mail` usa una por defecto. Usa OAuth en su lugar cuando no puedas
-crear una contraseña de aplicación: la cuenta no tiene verificación en dos pasos, o un dominio de Google Workspace
-desactiva las contraseñas de aplicación.
+Iniciar sesión con Google (OAuth) es la forma recomendada de entrar en Gmail. Un perfil nuevo inicia sesión con la
+aplicación de Google de WireCat, sin crear nada antes:
+
+```sh
+mail gm session start --address me@gmail.com --method oauth
+```
+
+Se abre la página de Google en el navegador. Elige la cuenta y permite el acceso. `mail` comprueba la dirección y
+entra en IMAP antes de guardar nada.
+
+- **Google puede mostrar una pantalla de "aplicación no verificada".** Google aún no ha terminado de revisar la
+  aplicación de WireCat. Usa el enlace de esa pantalla que lleva a la aplicación, o detente y usa tu propia aplicación
+  (abajo). Consulta la [página de Google sobre aplicaciones no verificadas](https://support.google.com/cloud/answer/7454865).
+- **Hasta que termine la revisión, Google deja entrar a 100 usuarios nuevos en total.** `mail`, `gcal` y `drive`
+  comparten la aplicación de WireCat, así que comparten ese límite. Cuando se alcanza, los usuarios nuevos no pueden
+  iniciar sesión con la aplicación de WireCat. Tu propia aplicación tiene sus propios límites.
+- **Un administrador de Google Workspace puede bloquear la aplicación** en el dominio. En ese caso usa tu propia
+  aplicación, creada en ese dominio, o una contraseña de aplicación.
+
+Una contraseña de aplicación es la otra forma. Necesita la verificación en dos pasos en la cuenta, y un administrador de
+Google Workspace puede desactivar las contraseñas de aplicación. Se salta las pantallas de Google, así que `mail` sigue
+usando una por defecto para un perfil nuevo de Gmail sin `--method oauth`.
 
 Un inicio de sesión de Gmail con OAuth usa la aplicación de Google de WireCat, salvo que indiques la tuya. Gana la
 primera coincidencia: `--client-file <Desktop client JSON>`, luego `MAIL_GOOGLE_CLIENT_ID` (con
 `MAIL_GOOGLE_CLIENT_SECRET`), luego el ajuste `google_client_id` del perfil (su secreto sigue viniendo de
 `MAIL_GOOGLE_CLIENT_SECRET`) y, por último, la aplicación de WireCat. `mail doctor` muestra cuál usa un perfil en
-`oauth_client`. Hacer pública una aplicación de Google compartida para el correo es
-complejo, así que Google puede rechazar el inicio de sesión con la aplicación de WireCat. Si lo hace, crea tu propia
-aplicación como se indica abajo (lleva unos 20 minutos y no cuesta nada) o usa una contraseña de aplicación.
+`oauth_client`. Para crear tu propia aplicación (unos 20 minutos, sin coste), sigue los pasos de abajo.
 
 ## 1. Un proyecto de Google Cloud solo para el correo
 

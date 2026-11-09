@@ -17,7 +17,7 @@ sus pantallas; la página de ayuda es la fuente de verdad.
 1. Cuenta de Google personal: IMAP siempre está activado, no hay nada que cambiar. Google Workspace: lo controla el administrador, y puede faltar la pestaña "Forwarding and POP/IMAP" en Ajustes de Gmail, "See all settings".
 2. Activa la verificación en dos pasos de la cuenta de Google.
 3. Abre <https://myaccount.google.com/apppasswords> y crea una contraseña de aplicación. La página de ayuda de Google no lista las etiquetas de esa pantalla, así que aquí no se cita ninguna.
-4. Copia la contraseña de 16 dígitos y úsala en lugar de la contraseña de la cuenta.
+4. Copia la contraseña de 16 letras y úsala en lugar de la contraseña de la cuenta.
 
 - No se ofrecen contraseñas de aplicación si la verificación en dos pasos solo está configurada con llaves de seguridad, en una cuenta de trabajo o de centro educativo, o con la Protección avanzada activada.
 
