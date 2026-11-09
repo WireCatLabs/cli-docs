@@ -62,7 +62,7 @@ keep this profile's app password in the OS keyring
 
 ### `mail session start`
 
-sign this profile in. A new profile needs its mailbox: --address, or it is asked at a terminal; the server is found (built-in providers, the MX record, ISPDB, the domain's autoconfig; all providers: https://github.com/WireCatLabs/mail-cli/blob/main/docs/providers.md); for a domain the built-in table does not know, the domain, never the address, goes to the DNS resolver, autoconfig.thunderbird.net and autoconfig.<domain>, and --provider or --host skips those lookups; the steps to prepare the mailbox are shown, the app password is asked (hidden) or read from MAIL_PASSWORD, checked against the server, and only then the profile and the keyring entry are saved. Outlook.com and Microsoft 365 sign in with OAuth instead, and Gmail with your own Google app (--client-file): the browser opens the provider's page, and the token is checked against the server before it is kept. An existing profile only asks for the password, or signs in, again. Without a terminal nothing is asked: a missing --address or password is a validation error
+sign this profile in. A new profile needs its mailbox: --address, or it is asked at a terminal; the server is found (built-in providers, the MX record, ISPDB, the domain's autoconfig; all providers: https://github.com/WireCatLabs/mail-cli/blob/main/docs/providers.md); for a domain the built-in table does not know, the domain, never the address, goes to the DNS resolver, autoconfig.thunderbird.net and autoconfig.<domain>, and --provider or --host skips those lookups; the steps to prepare the mailbox are shown, the app password is asked (hidden) or read from MAIL_PASSWORD, checked against the server, and only then the profile and the keyring entry are saved. Outlook.com and Microsoft 365 sign in with OAuth instead, and Gmail too with --method oauth, --client-file or once auth is oauth (WireCat's Google app unless --client-file, MAIL_GOOGLE_CLIENT_ID or google_client_id names yours): the browser opens the provider's page, and the token is checked against the server before it is kept. An existing profile only asks for the password, or signs in, again. Without a terminal nothing is asked: a missing --address or password is a validation error
 
 **Changes something on this computer only.**
 
@@ -80,12 +80,14 @@ mail session start [options]
 | `--login <login>` | the login name, when it is not the full address. |
 | `--folder <folder>` | sync only this folder; repeat it for more. Default: ``. |
 | `--no-browser` | OAuth: print the sign-in link instead of opening the browser. |
+| `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
 | `--client-file <file>` | Gmail over OAuth: your own Google Desktop app client JSON (chmod 600). |
+| `--method <method>` | how a new profile signs in: oauth or app-password (default: what the provider takes). |
 | `--credential-storage <storage>` | where the password is kept: keyring (the default, which falls back to a private file by itself when no keyring works), or file, not recommended. Default: `keyring`. |
 
 **Returns:** sign in; a new profile is created first
 
-**Example:** `mail personal session start --address me@example.com`, `mail work session start --address me@outlook.com`, `mail gm session start --address me@gmail.com --client-file ~/client.json`
+**Example:** `mail personal session start --address me@example.com`, `mail work session start --address me@outlook.com`, `mail gm session start --address me@gmail.com --method oauth`
 
 ### `mail session status`
 
@@ -167,6 +169,26 @@ mail account inspect [options]
 **Returns:** mail account inspect — address, folders, emails, bytes, sent, without_headers, groups, items, and 3 more; every field: mail commands info account inspect
 
 **Example:** `mail gm account inspect`, `mail gm account inspect --since-time 2025-01-01 --limit 20 --domain-age`
+
+### `mail account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes something in the service.**
+
+```sh
+mail account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: mail commands info account remove
+
+**Example:** `mail personal account remove --keep-data --dry-run`, `mail personal account remove --delete-data --yes`
 
 ## `mail folders`
 
@@ -332,7 +354,7 @@ mail rules remove [options]
 | `--filter <query>` | from:<address, domain or word>, to:<address>, subject:<word> (or a bare word), older:<n>d, larger:<size> (5MB, 300KB), has:attachment, label:<name> (label:"Two words"), is:unread, is:bulk, score:<n> (at least); all must hold. |
 | `--kind <kind>` | a built-in kind of mail. One of: `social`, `newsletters`, `developer`, `shopping`, `alerts`. |
 
-**Returns:** drop the rule with exactly these conditions
+**Returns:** mail rule change — removed; every field: mail commands info rules remove
 
 **Example:** `mail personal rules remove --domain shop.example`, `mail personal rules remove --filter "older:365d larger:5MB"`
 
@@ -351,7 +373,7 @@ mail rules apply [options]
 | `--since-time <time>` | only mail from this time, ISO 8601 or 30d ago (default: all mail). |
 | `--dry-run` | only say what would change, even with --yes; the read-only lock lets this through. |
 
-**Returns:** cut stored mail an envelope rule matches to its envelope; dry run unless --yes
+**Returns:** mail rules apply — account, applied, listed, envelopes, bytes, skip_matched, protected_kept, tagged, and 1 more; every field: mail commands info rules apply
 
 **Example:** `mail personal rules apply`, `mail personal rules apply --since-time 2026-01-01 --yes`
 
@@ -385,7 +407,7 @@ mail rules import <file> [options]
 |---|---|
 | `--format <format>` | the file's format: mail (memo's export is the same file) or gmail. One of: `mail`, `memo`, `gmail`. Default: `mail`. |
 
-**Returns:** import saved rules, or preview Gmail filters
+**Returns:** mail rule import — match, action, decided_at, id, tags, reason, protected, source, and 4 more; every field: mail commands info rules import
 
 **Example:** `mail personal rules import rules.json`, `mail personal rules import Filters.json --format gmail`, `mail personal rules import Filters.json --format gmail --yes`
 
@@ -803,7 +825,7 @@ mail messages restore [options]
 
 **Returns:** mail restore — run_id, restored_run_id, applied, command, logged, restorable, missing, restored, and 3 more; every field: mail commands info messages restore
 
-**Example:** `mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c`, `mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c --yes`, `mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c --write <id> --yes`
+**Example:** `mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c`, `mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c --yes`, `mail personal messages restore --run 20261101T101500Z-messages-delete-1a2b3c --write 4823901783465112048 --yes`
 
 ### `mail messages send`
 
@@ -832,10 +854,11 @@ mail messages send [text] [options]
 | `--subject <text>` | the subject; a reply takes the original's with Re:. |
 | `--reply-to <message>` | answer this msg:email/… reference: In-Reply-To, References, Re: and the quote. |
 | `--reply-all` | with --reply-to, also to everyone the original went to, except you. |
+| `--html` | the text is HTML; the plain-text alternative is made from it. |
 
-**Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 10 more; every field: mail commands info messages send
+**Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 11 more; every field: mail commands info messages send
 
-**Example:** `mail personal messages send --to ann@example.com --subject "Lunch" "See you at noon."`, `mail personal messages send --reply-to 'msg:email/me%40example.com/thread-1/1001' "Thanks, done."`, `mail personal messages send --to ann@example.com --subject Report --file ./report.pdf "The report."`
+**Example:** `mail personal messages send --to ann@example.com --subject "Lunch" --html "<p>See you at <b>noon</b>.</p>"`, `mail personal messages send --reply-to 'msg:email/me%40example.com/thread-1/1001' "Thanks, done."`, `mail personal messages send --to ann@example.com --subject Report --file ./report.pdf "The report."`
 
 ### `mail messages forward`
 
@@ -864,7 +887,7 @@ mail messages forward <message> [text] [options]
 | `--dry-run` | build the message and show what would go; send nothing. |
 | `--subject <text>` | the subject instead of the original's with Fwd:. |
 
-**Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 10 more; every field: mail commands info messages forward
+**Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 11 more; every field: mail commands info messages forward
 
 **Example:** `mail personal messages forward 'msg:email/me%40example.com/thread-1/1001' --to bob@example.com`, `mail personal messages forward 'msg:email/me%40example.com/thread-1/1001' --to bob@example.com "FYI"`
 
@@ -1116,7 +1139,7 @@ mail drafts send <draft> [options]
 | `--yes` | answer the question before sending to anyone but you. |
 | `--dry-run` | show what would go; send nothing. |
 
-**Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 10 more; every field: mail commands info drafts send
+**Returns:** mail send — sent, operation_id, message_id, from, to, cc, bcc, subject, and 11 more; every field: mail commands info drafts send
 
 **Example:** `mail personal drafts send 5b0e1c2a@example.com`
 
@@ -1461,7 +1484,7 @@ mail config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1484,7 +1507,7 @@ mail config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
 
 | Option | What it does |
 |---|---|
@@ -1611,6 +1634,8 @@ mail schedule command <name> <args> [options]
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
 | `--at <HH:MM>` | every day at this local time. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
 
 **Returns:** run mail <args…> on a timer — reads save what they read, so this is how a…
 
@@ -1640,6 +1665,8 @@ mail schedule agent <name> <harness> <prompt> [options]
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
 | `--at <HH:MM>` | every day at this local time. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
 
 **Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
 
@@ -1657,7 +1684,7 @@ mail schedule list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** scheduled job — name, kind, when, last, spent_today_usd, max_cost_usd, max_cost_per_day_usd; every field: mail commands info schedule list
+**Returns:** scheduled job — name, kind, when, last, notify, deliver_to, spent_today_usd, max_cost_usd, and 1 more; every field: mail commands info schedule list
 
 **Example:** `mail personal schedule list`, `mail personal schedule list kind:agent`
 

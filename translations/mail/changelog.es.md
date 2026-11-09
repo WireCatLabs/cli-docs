@@ -4,6 +4,103 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.23.1 — 08.11.2026
+
+### Añadido
+
+- **`MAIL_READ_ONLY` deja pasar `rules add`, de forma acotada**, para que la revisión programada del correo en memo
+  pueda archivar a un remitente como sobres: solo `--sender` o `--list-id` con `--do envelope`, solo donde no existe
+  una regla con esas condiciones, y queda registrado con `source: agent`. `--domain`, `--filter`, `--kind`, cualquier
+  otra acción o una etiqueta, una regla reemplazada, `rules remove|import|apply` y todo cambio en el servidor de correo
+  siguen rechazados.
+
+### Corregido
+
+- **Un `sync --rescan` que se detiene en su límite de peticiones ahora lo dice y explica cómo seguir.** `--timeout`
+  fija el límite (unas 85 peticiones por defecto) y `--max-pages` solo puede bajarlo, así que un `--max-pages` alto
+  parecía ignorado. Repetir el mismo `--rescan` empieza otra vez por el correo más nuevo y nunca llega al más antiguo.
+  La pista y el siguiente paso ahora nombran el límite y piden ejecutar `sync` sin `--rescan`, que sigue desde donde
+  se detuvo la ejecución.
+- **cli-core 0.618.0 (antes 0.614.0).** Tras `store recover run` (desde memo, tg, max o wa), el almacén recuperado
+  hace que cada carpeta de correo olvide los UID que listó después de su último correo guardado, desde un día antes de
+  la última comprobación profunda que pasó. Así el siguiente `mail sync` normal vuelve a leer ese correo, y ya no hace
+  falta `--rescan` para ello.
+
+## 0.22.0 — 08.11.2026
+
+### Añadido
+
+- **`session start --method oauth` conecta un perfil nuevo de Gmail con la aplicación de Google de WireCat.** No hace
+  falta un cliente propio de Google Cloud, y `--client-file` sigue indicando el tuyo. Google puede mostrar una pantalla
+  de "aplicación no verificada" hasta que termine su revisión. `--method app-password` pide la contraseña de
+  aplicación, la opción por defecto en Gmail. `--method` fija solo el modo de un perfil nuevo. Uno existente se cambia
+  con `config set auth`.
+- **`mail <profile> account remove --keep-data|--delete-data`** quita un perfil de este ordenador: cierra la sesión
+  (un inicio de sesión de Gmail con OAuth también se revoca en Google, lo que puede cerrar otras sesiones de la misma
+  aplicación de Google, como hace `session end --revoke`), borra la contraseña de aplicación o el inicio de sesión del
+  llavero, olvida el perfil en los ajustes y su registro de inicio de sesión y, con `--delete-data`, borra su correo
+  guardado y sus registros de cambios. `--keep-data` deja el correo disponible para buscar. La antigua entrada de
+  Himalaya en el llavero no se toca, y los demás perfiles quedan como están.
+
+### Corregido
+
+- **`account remove` ya no revoca un acceso de Gmail que usa otro perfil.** Google termina un acceso para toda la
+  cuenta de Google y la aplicación, así que cuando otro perfil entra en la misma dirección (con cualquier mayúscula o
+  minúscula) con Google OAuth, la revocación se omite: la respuesta da `revoked: false` y dice "Google access kept:
+  profile <name> uses the same address".
+- **Las pistas de Gmail llevan a la página de contraseñas de aplicación y dicen que la contraseña tiene 16 letras.**
+  `session start` ahora enlaza <https://myaccount.google.com/apppasswords> en lugar del artículo de ayuda (que queda
+  en "Sources") y dice "16-letter password", porque las contraseñas de aplicación de Gmail son letras.
+
+## 0.21.0 — 08.11.2026
+
+### Añadido
+
+- **`messages send --html` envía un mensaje en HTML.** El texto (argumento o stdin) es HTML. La alternativa en texto
+  plano se crea a partir de él, y el correo sale como `multipart/alternative`. La respuesta da `html_chars`. Una
+  respuesta a un correo sigue en texto plano: `--html` con `--reply-to` se rechaza.
+
+## 0.20.0 — 08.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **mail funciona sobre cli-core 0.608.0, y el almacén compartido pasa a la versión 57.** Una herramienta de WireCat
+  con un cli-core anterior a 0.606.0 rechaza entonces el almacén y pide actualizarse, así que actualiza todos los CLI
+  de WireCat a la vez. Las personas de los tratos y los leads de un CRM se guardan como informadas, no confirmadas por
+  el dueño, y `config set` acepta `crm.<provider>:<account>.links` y `crm.<provider>:<account>.company-types`.
+
+## 0.19.0 — 08.11.2026
+
+### Añadido
+
+- **`session start --json --answer-stdin` inicia sesión desde la ventana de WireCat Desktop.** Cada pregunta es una
+  línea `needs` en stderr y su respuesta una línea en stdin: la dirección (salvo que la dé `--address`), los
+  servidores IMAP y SMTP solo cuando la detección no encuentra ninguno, y la contraseña de aplicación como secreto,
+  con una pista que nombra la página del proveedor para crearla. Las líneas `progress` dicen cuándo se busca el
+  servidor y se comprueba el acceso. Outlook, Microsoft 365 y Gmail con OAuth envían una línea `open_url`. Una
+  comprobación rechazada o fallida lleva un motivo: `mail.login-refused`, `mail.app-password-required` y
+  `mail.imap-disabled` (ambos según las propias palabras de Gmail), `mail.host-unreachable`. En una terminal no cambia
+  nada.
+
+### Corregido
+
+- cli-core actualizado a 0.604.0.
+
+## 0.18.0 — 07.11.2026
+
+### Corregido
+
+- **La documentación de deshacer nombra el campo real.** Un cambio responde con `run_id`, y el ejemplo de
+  `messages restore --write` muestra un id de operación real.
+- **mail funciona sobre cli-core 0.600.0.** `status` abre el almacén en solo lectura incluso cuando una herramienta de
+  WireCat más antigua lo dejó en un esquema anterior: ahora cli-core lo pone al día primero, así que mail ya no lo
+  hace por su cuenta. El almacén compartido pasa a la versión 54 (embudos de CRM separados por cuenta, definiciones
+  de campos de CRM), y una herramienta de WireCat más antigua sigue leyéndolo. `schedule list` da el ajuste `notify`
+  de cada programación.
+- **`schedule agent` y `schedule command` envían el resultado de una ejecución con `--deliver-to <route>`**
+  (`telegram-bot:<profile>/<chat>` o `email:<profile>/<address>`, se puede repetir), y `schedule list` muestra las
+  rutas como `deliver_to`. `--to` mantiene un solo significado en mail: la dirección a la que va un mensaje.
+
 ## 0.17.0 — 06.11.2026
 
 ### Añadido

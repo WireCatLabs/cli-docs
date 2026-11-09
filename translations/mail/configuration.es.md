@@ -44,7 +44,10 @@ aplicación inicias sesión, y `permissions.messages.send.others`, que permite a
 
 `permissions` decide qué puede hacer un comando para este perfil: `allow`, `ask`, `readonly` o `deny`, por cada clave
 de permiso. Por MCP no hay nadie a quien preguntar, así que `ask` deja ejecutar el comando. `MAIL_READ_ONLY=1` rechaza toda escritura, diga lo que diga
-`permissions`.
+`permissions`, salvo una: `rules add --sender` o `--list-id` con `--do envelope`, para un remitente o una lista que aún
+no tiene regla, que ejecuta la revisión programada del correo en memo. Queda registrada con `source: agent`
+(`rules list source:agent`). Una regla reemplazada, `--domain`, `--filter`, `--kind`, cualquier otra acción y una
+etiqueta siguen rechazadas, igual que `rules remove`, `rules import` y `rules apply`.
 
 La clave de un comando es su ruta: `messages.move`, `folders.delete`. De fábrica, un cambio que se puede deshacer sigue
 adelante (marcas, movimientos, copias, carpetas creadas o renombradas, borradores guardados), y estos preguntan:
