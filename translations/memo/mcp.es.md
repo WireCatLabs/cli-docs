@@ -40,12 +40,53 @@ No puede ampliar los permisos guardados, incluidas las claves más específicas.
 `MEMO_READ_ONLY=1` marca todos los comandos de escritura como no disponibles y los rechaza en una conexión abierta.
 La búsqueda conserva los comandos bloqueados con su `availability` actual y el motivo, como hace cli-core.
 
+## Limita un agente a un grupo
+
+`MEMO_GROUP_LOCK=work memo mcp serve` sirve solo el grupo `work` (consulta [grupos](./usage.md#groups-of-accounts)),
+y ante cualquier fallo el bloqueo cierra el acceso en lugar de abrirlo. Con él funcionan estos comandos:
+
+| Grupo | Comandos |
+|---|---|
+| lecturas | `context`, `show`, `messages show`, `search all`, `messages`, `mail`, `notes` y `people` |
+| grupos | `groups list`. `groups add`, `remove` y `move` se rechazan |
+| CRM | todos los comandos `deals` y `leads`, todos los comandos `organizations`, `pipelines list` y `pipelines show` |
+| personas y notas | `people list`, `people add`, `notes list`, `notes show` |
+| lo tuyo | todos los comandos `memories`, `facts`, `actions`, `review` y `tasks`. `projects list`, `add`, `context`, `status` y `key-documents` |
+| etiquetas y vínculos | `tags add`, `tags remove`, `relationships list`, `relationships add`, `relationships roles list` |
+| servidor | `mcp serve` |
+
+Cualquier otro comando se rechaza con `permission_error`. Entre ellos están `projects gather`, `evidence`,
+`annotations` y `actions`, que todavía leen los chats vinculados sin tener en cuenta el grupo. También se rechazan
+`relationships update`, `end`, `remove` y `confirm`, porque reciben solo el número de una relación, que el bloqueo
+no puede atar a una cuenta. `relationships roles add` y `remove` son solo del propietario.
+
+En los comandos que funcionan, las lecturas toman solo las cuentas del grupo, y una lista deja fuera lo que pertenece
+a una cuenta de fuera. Lo que creaste tú (notas, proyectos, tareas, facturas, recuerdos, hechos) no pertenece a
+ninguna cuenta y se ve en todos los grupos. Una referencia de fuera del grupo se rechaza con `permission_error`, en un
+argumento o en una opción, y también el número solo de una de ellas (`organizations show 3`). Eso cubre un mensaje,
+un chat, un evento de calendario, un trato o una organización que trajo un CRM de fuera del grupo, y una persona
+que no tiene ninguna cuenta en él. Otro grupo, `--source all`, y un `--source` o un `--account` de fuera del grupo
+también se rechazan. `projects status` cuenta en `missing` un chat vinculado de fuera del grupo, y no lo nombra. La
+evidencia y las fuentes de fuera se dejan fuera y se cuentan en `out_of_scope` (una lista lo dice en `missing`). El
+`coverage` de un contexto cuenta las cuentas que dejó fuera en lugar de nombrarlas. Una propuesta o un seguimiento de
+fuera del grupo no se lista, no se muestra y no se decide.
+
+Pon el bloqueo en el entorno del proceso que inicia la aplicación. El agente no puede quitarlo.
+
 Las exclusiones reservadas a CLI son los comandos `mcp`, `upgrade`, `skill install`, `jobs start` y `jobs stop`: inician otro
 servidor, sustituyen el programa, instalan instrucciones en otras aplicaciones o gestionan un temporizador.
 
 `notes add` y `notes edit` reciben la nota como `text`. `--text-file` y `--export` no se ofrecen, y una ejecución por MCP
 los rechaza antes de guardar nada. Así un agente no puede hacer que Memo lea un archivo de este equipo o la propia entrada
 del servidor, ni que escriba un archivo en una carpeta que elija.
+
+`sources add` recibe la fuente solo como `text`. Un agente no puede nombrar un archivo de este ordenador ni una
+dirección para que Memo la abra, así que no tiene forma de leer archivos locales ni de llegar a una red privada a
+través de Memo. Una ruta o un enlace se añaden desde la línea de comandos ([Fuentes que añades a mano](./sources.md)).
+Los temas que indica un agente esperan a que los confirmes. `sources remove` no se ofrece, porque solo tú quitas
+una fuente que añadiste. Tampoco se ofrece `sources suggest`, así que un agente no puede enviar el texto de una
+fuente fuera de este ordenador. Ni `sources readers set`, ni `models keys set` y `remove`, porque solo tú eliges
+el lector y le das su clave. `sources readers list` sí se ofrece.
 
 `memories add`, `facts add`, `actions add`, `meetings actions add` y `projects actions add` guardan propuestas.
 Por defecto solo el propietario decide las propuestas de proyecto. `projects actions confirm` y `projects actions reject` rechazan
@@ -107,6 +148,13 @@ pasajes con `meetings passage` y que después prepare un lote con `meetings acti
 que `memo meetings actions add --help`. Cada hallazgo necesita referencias exactas a fragmentos de la transcripción
 y sus huellas, y un vínculo confirmado con el proyecto. Las fechas y responsables desconocidos se dejan vacíos; los
 seguimientos deducidos se marcan como tales. Un reintento idéntico reutiliza la clave; una entrada distinta necesita una clave nueva.
+
+Algunas propuestas solo las decide el propietario, digan lo que digan los permisos y `agent_decisions`. Son los
+lotes de hallazgos de correo y de reuniones, el cierre de tareas y las revisiones de fuentes
+(`memory_source_review`). `review confirm` y `review reject` rechazan a un agente en ellas (`proposal.owner-only`).
+Para un recuerdo o un hecho cuyas fuentes cambiaron, un agente puede ejecutar `memories check`, `memories challenge`
+y `facts challenge`, que solo abren tu revisión o añaden a ella. También puede citar lo que dice una fuente con
+`quote` en `memories add` y `facts add`. Nunca decide la revisión ([Cuando cambia una fuente](./memories.md#when-a-source-changes)).
 
 `meetings actions show` y `meetings actions list` reciben un `source` explícito. El propietario revisa los
 lotes con `memo meetings actions confirm` o `reject`, o permite explícitamente las herramientas MCP correspondientes. Preparar un lote no crea hechos ni tareas numeradas.

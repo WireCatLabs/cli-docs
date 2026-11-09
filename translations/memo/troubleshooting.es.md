@@ -29,7 +29,7 @@ todas las notas que contienen tus palabras. Para buscar también por significado
 con tg o max y luego importa:
 
 ```sh
-memo models download e5-small
+memo models download embeddinggemma
 memo sync
 ```
 
@@ -61,6 +61,47 @@ para proteger tus datos. Comprueba que la carpeta o el disco están ahí y luego
 La configuración aún tiene los antiguos ajustes `mail` de Memo, que nada lee. `memo doctor` nombra los buzones que enumeran:
 sincroniza cada uno con `mail <profile> session start --address <address>` y después `mail <profile> sync`. El correo que
 importó Memo se queda en el almacén. `memo config unset mail` elimina los ajustes antiguos y el mensaje.
+
+## Añadir una fuente
+
+`memo sources add` se niega con un motivo en `--json` (`error.reason`) y dice qué hacer después. Cuando se niega, no
+se guarda nada.
+
+| Motivo | Qué pasó | Qué hacer |
+|---|---|---|
+| `source.unsupported` | Ningún lector acepta este tipo de archivo o página | Guárdalo como PDF, Word o texto plano y añade ese archivo |
+| `source.no-text` | El archivo, la página o el texto pegado no tienen texto | Añade un archivo con texto o pega el texto con `memo sources add -` |
+| `source.unreadable` | El lector no pudo leerlo, está dañado o bloqueado | Ábrelo, guárdalo de nuevo o como PDF o texto plano y añade ese |
+| `source.engine-missing` | El lector de este tipo de archivo no está instalado | Reinstala Memo: `npm install -g @wirecat/cli-memo` |
+| `source.too-large` | Pasa de 50 MiB, o de lo que lee su lector | Añade una parte más pequeña o guarda solo su texto y añádelo |
+| `source.url-refused` | No es una dirección `http` o `https` de internet público. Por ejemplo `localhost`, una dirección de la red de casa, un enlace `file:`, un enlace con usuario o contraseña o una redirección de `https` a `http` sin cifrar | Da la dirección de una página pública |
+| `source.url-status` | El sitio respondió con un error, como 404 | Comprueba la dirección en un navegador. Si solo se abre para ti, guarda la página como archivo y añádelo |
+| `source.url-timeout` | La página no llegó en 30 segundos | Inténtalo más tarde o guarda la página como archivo y añádelo |
+| `source.url-redirects` | El sitio reenvió la petición más de 5 veces | Abre la dirección en un navegador y añade la dirección en la que termina |
+| `source.url-unreachable` | No se pudo encontrar ni alcanzar el sitio | Comprueba la dirección y la conexión, o guarda la página como archivo |
+| `source.needs-sign-in` | La página pide iniciar sesión, como un Google Doc privado | Añádela con tu cuenta de Google con la sesión iniciada: `drive documents add <url> --profiles <names\|all>` (o `drive <profile> documents add <url>`) |
+
+Un PDF escaneado o una imagen no se rechazan. Se guardan por su título y sus temas, con `read: "no-text"`.
+
+## Leer una fuente para sacar hechos
+
+`memo sources suggest` y `memo sources readers set` se niegan con estos motivos. Cuando se niegan, no se añade nada.
+
+| Motivo | Qué pasó | Qué hacer |
+|---|---|---|
+| `reader.none-chosen` | No hay lector elegido. La negativa los lista | `memo sources readers set <reader>` |
+| `reader.unknown` | Memo no conoce ese lector | Da uno de los que lista `memo sources readers list` |
+| `reader.owner-picks` | Un agente nombró un lector o un modelo, o intentó elegir uno | Solo tú eliges. El agente lee con tu lector |
+| `reader.model-missing` | Ollama o un lector de API no tienen modelo, o Ollama no tiene ese | `memo sources readers set <reader> --model <model>`, y para Ollama `ollama pull <model>` |
+| `reader.unavailable` | Claude Code o Codex no están instalados | Instálalo o elige otro lector |
+| `reader.failed` | El lector falló. Sin sesión iniciada, versión antigua, clave rechazada o cuenta sin saldo | `memo sources readers list` nombra el problema. Inicia sesión, actualiza o ejecuta `memo models keys set <provider>` |
+| `reader.no-key` | No hay clave guardada para el lector de API | `memo models keys set <provider>` |
+| `reader.not-running` | Ollama no se está ejecutando en este ordenador | `ollama serve` y vuelve a intentarlo |
+| `reader.limit` | Se alcanzó el límite del proveedor | Inténtalo más tarde |
+| `reader.timeout` | El lector no respondió en 10 minutos | Vuelve a intentarlo o añade una parte más pequeña de la fuente |
+| `reader.unusable-answer` | La respuesta no era el JSON que pidió Memo | Vuelve a intentarlo con `--rescan` o con otro modelo |
+
+Un lote sin hechos significa que se descartaron todos los hechos propuestos. `dropped` dice por qué en cada uno.
 
 ## Se rechaza la edición de una nota
 

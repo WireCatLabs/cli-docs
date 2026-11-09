@@ -142,6 +142,53 @@ claves de [`permissions`](./configuration.md#permissions), como `"deals": "reado
 pipeline llamado Sales: nombra uno por su referencia, `pipeline:3`. `pipelines show` cuenta, por etapa, cuántas negociaciones
 llegaron a ella y qué parte pasó a la siguiente. `projects status` muestra hasta cinco negociaciones abiertas del proyecto.
 
+`memo deals context deal:5` da una negociación entera: cómo cambió su etapa, el cliente, sus personas con sus roles y
+su posición, el propietario, el proyecto, las facturas y los pagos de su proyecto y de su cliente, cada uno diciendo
+cómo se llegó a él, los mensajes, el correo y las reuniones de sus personas mientras estuvo abierta, y sus tareas
+abiertas. Esos mensajes comparten personas con la negociación, pero nada los vincula, así que se marcan `proposed`.
+Una etapa llamada Won no es un pago. El dinero es lo que dicen las facturas y los pagos. `--brief` es la forma corta
+para un agente, y `memo leads context` hace lo mismo para un lead. `memo deals update deal:5 --project HRB` fija el
+proyecto de una negociación, también de la copia de un CRM. La sincronización nunca lo cambia.
+
+Una negociación copiada de una cuenta de CRM (`b24 <profile> sync`) y las personas en ella son `reported`: lo dice el
+CRM y tú no lo confirmaste. Pon la cuenta del CRM en un grupo (`memo groups add work bitrix24:<portal>`), y una
+ejecución de otro grupo no lee ninguna de sus negociaciones, personas ni relaciones.
+
+En `--json`, cada fila de `deals list`, `leads list` y `pipelines list` copiada de un CRM tiene `writes_with`: la CLI
+que la cambia en el CRM (`tool`, como `b24`), la `account` de la fila y el `profile` con el que ejecutarla. El perfil
+se indica solo cuando exactamente un perfil de esa CLI se ha ejecutado en la cuenta. Si no, es `null`, `profiles`
+lista los candidatos y `why` dice qué elegir. En un grupo nunca se nombra un perfil de una cuenta fuera del grupo.
+Tus propias filas tienen `"writes_with": null`, porque memo las cambia él mismo.
+
+### Etapas base
+
+Cada CRM y cada uno de tus embudos llama a sus etapas a su manera. Las etapas base son una lista tuya para las
+negociaciones y otra para los leads, las columnas de un tablero en todos los embudos. Cualquier otra etapa se asigna a
+una de ellas. Memo sugiere la asignación y tú la confirmas.
+
+```sh
+memo stages show deal
+memo stages list confirmed:false
+memo stages set stage:41 stage:3
+memo stages confirm --pipeline pipeline:3
+memo deals move deal:5 stage:3
+```
+
+`stages show deal` crea la lista de negociaciones la primera vez, en tu primer idioma (`owner_languages`, ruso
+mientras no esté definido). La lista de leads es el embudo `Leads` propio de memo tal cual: New, Contacted,
+Qualified, Won, Lost. `stages show` da cada columna con sus negociaciones o leads abiertos y sus etapas asignadas, y lo
+que está sin ordenar: etapas aún no asignadas o solo sugeridas. `stages create`, `rename`, `move` y
+`remove` editan la lista, y cada lista conserva al menos una etapa abierta, una ganada y una perdida. `stages list`
+muestra todas las demás etapas con su etapa base y `confirmed`. `stages set` asigna una etapa. `stages confirm --all`
+confirma todas las sugerencias. Solo tú editas la lista y confirmas. El `stages set` de tu agente sigue siendo una
+sugerencia hasta que lo confirmes.
+
+`deals move` y `leads move` aceptan el `stage:<id>` de una etapa base. Mueven tu propia negociación a la única etapa
+de su embudo asignada a ella. Cuando hay varias, la respuesta es `stage.choice-required` con `candidates`: muévela a
+una de ellas por su `stage:<id>`. Cuando no hay ninguna, es `stage.unmapped`. La copia de un CRM se mueve en su CRM,
+con la CLI de su `writes_with`. En `--json`, una fila de `deals list` y `leads list` tiene `base_stage`, que sigue en
+`null` hasta que confirmes su asignación. En un grupo, `stages` cuenta y lista solo los embudos del grupo y los tuyos.
+
 ## Respuestas para scripts y agentes
 
 Añade `--json` a la mayoría de los comandos para obtener una respuesta que un programa pueda leer.
@@ -176,3 +223,27 @@ Un comando que cambia algo, como añadir una tarea o un recordatorio, actúa com
 Memo te dice qué cuentas existen.
 
 Las lecturas usan `--source`; las escrituras de una cuenta usan `--account provider:account`. Se rechazan las opciones de selección retiradas.
+
+### Grupos de cuentas
+
+Memo lee todas las cuentas por defecto. Eso es `all`, y `memo all …` lo dice en voz alta. Un grupo es una lista de
+cuentas que guardas tú, sobre todo para limitar a un agente a los datos de trabajo. Pon una cuenta en uno con
+`memo groups add work
+bitrix24:acme` y lee solo ese grupo nombrándolo primero: `memo work search all "renewal"`, `memo work context
+person:5`. `MEMO_GROUP=work` hace lo mismo en cada comando. En un grupo, una lectura toma solo las cuentas del grupo.
+Un `--source` explícito acota dentro de él, y una cuenta fuera de él se rechaza, igual que el `--account` de una
+escritura. Un comando que lee un solo tipo, como `search mail`, toma las cuentas del grupo de ese tipo. Lo que hiciste
+tú (tus notas, proyectos, tareas, facturas, recuerdos y hechos) no pertenece a ninguna cuenta, así que todos los
+grupos lo muestran.
+
+`memo groups list` muestra cada grupo guardado y luego `all`, con sus cuentas, los nombres de perfil de cada app para
+cada una (`tg work`, `b24 work`) y los otros grupos que también tienen esa cuenta. Una cuenta puede estar en varios, y
+la lista nombra esos duplicados. Un perfil que se llama como un grupo es solo una sugerencia y nunca pone una cuenta en
+un grupo. `personal` es un grupo como cualquier otro, vacío hasta que lo guardes. `--source personal` no es ese
+grupo: son tus propias cuentas de mensajería, no los bots.
+
+`memo groups remove work telegram:102` saca una cuenta, y `all` la sigue leyendo. `memo groups move telegram:102
+personal work` la mueve en una sola escritura: la cuenta, luego el grupo que deja y luego el grupo al que entra. Sin
+un bloqueo, un grupo es una comodidad y no un límite: las referencias (`msg:…`, `deal:5`) no se comprueban, y una
+ejecución sin el nombre del grupo lee todas las cuentas. Para fijar un proceso a un grupo, consulta
+[el bloqueo de MCP](./mcp.md#lock-an-agent-to-a-group).
