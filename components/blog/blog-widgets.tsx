@@ -8,10 +8,10 @@ import { formatMonth } from "./blog-meta"
 import { NewsletterForm } from "./newsletter-form"
 
 /** The newsletter form, or nothing until `newsletter.apiUrl` and `newsletter.turnstileSiteKey` are set. */
-export function NewsletterBlock({ lang }: { lang: string }) {
+export function NewsletterBlock({ lang, titled }: { lang: string; titled?: boolean }) {
   const { apiUrl, turnstileSiteKey } = siteConfig.newsletter
   if (!apiUrl || !turnstileSiteKey) return null
-  return <NewsletterForm lang={lang} apiUrl={apiUrl} siteKey={turnstileSiteKey} />
+  return <NewsletterForm lang={lang} apiUrl={apiUrl} siteKey={turnstileSiteKey} titled={titled} />
 }
 
 export const newsletterReady = () => !!(siteConfig.newsletter.apiUrl && siteConfig.newsletter.turnstileSiteKey)

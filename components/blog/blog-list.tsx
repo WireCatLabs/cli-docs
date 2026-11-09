@@ -48,7 +48,7 @@ export function BlogList({
       <ArchiveWidget lang={lang} />
       {newsletterReady() && (
         <BlogWidget title={words.newsletter.title}>
-          <NewsletterBlock lang={lang} />
+          <NewsletterBlock lang={lang} titled={false} />
         </BlogWidget>
       )}
       <BlogWidget title={words.follow} icon={<Rss aria-hidden="true" />}>
