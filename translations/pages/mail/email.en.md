@@ -140,7 +140,7 @@ Each sync also scores the senders of
 stored mail, at most once a day, and a search hit in `--json` carries its sender's `sender_score`. Mail from a
 sender with signs of fraud, such as a brand name sent from another domain or a domain registered in the last
 six months, comes after the other results; a domain you have written to is never moved, and `--plain-order`
-keeps the plain order. A score from mail you never open only marks a newsletter. See [what each signal means](../memo/mail.md#choose-what-to-import).
+keeps the plain order. A score from mail you never open only marks a newsletter. See [what each signal means](../memo/mail.md#find-your-mail).
 
 ## Label emails and keep notes about them
 

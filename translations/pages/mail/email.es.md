@@ -145,7 +145,7 @@ también a los remitentes del correo guardado, como mucho una vez al día, y un 
 `--json` lleva el `sender_score` de su remitente. El correo de un
 remitente con indicios de fraude, como una marca en el nombre enviada desde otro dominio o un dominio registrado
 en los últimos seis meses, aparece después del resto; un dominio al que has escrito nunca se mueve, y
-`--plain-order` mantiene el orden normal. Una puntuación por correo que nunca abres solo indica un boletín. Consulta [qué significa cada señal](../memo/mail.md#choose-what-to-import).
+`--plain-order` mantiene el orden normal. Una puntuación por correo que nunca abres solo indica un boletín. Consulta [qué significa cada señal](../memo/mail.md#encontrar-tu-correo).
 
 ## Etiqueta correos y guarda notas sobre ellos
 
