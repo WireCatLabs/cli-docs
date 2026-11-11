@@ -45,6 +45,7 @@ import {
   Mic,
   Monitor,
   Network,
+  Newspaper,
   NotebookPen,
   Paperclip,
   PenLine,
@@ -161,6 +162,11 @@ export const sidebarIcons = {
   desktop: Monitor,
   logs: ScrollText,
   "tailscale-funnel": GlobeLock,
+  contacts: ContactRound,
+  clients: Handshake,
+  digests: Newspaper,
+  memory: Brain,
+  "ai-model": BrainCircuit,
 }
 
 const folderIcons = {

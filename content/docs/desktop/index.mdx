@@ -44,7 +44,7 @@ sidebar opens it again at the step you reached.
 2. **Your computer:** the app checks the system, Node.js and npm. **Check again** repeats the check after
    you fix something.
 3. **Choose tools:** pick the services your agent should reach: Telegram, MAX, WhatsApp, Zoom,
-   Google Drive, Memo or Email. You can add or remove tools later on the **Tools** page.
+   Google Drive, Google Calendar, Memo, Email or Bitrix24. You can add or remove tools later on the **Tools** page.
 4. **Install:** each tool is installed from npm and checked that it starts. One install runs at a time.
    A bar shows the progress: looking up packages, downloading, unpacking, setting up and checking that the
    tool starts, with the time so far and an estimate of what is left. A tool usually takes a minute or
@@ -56,19 +56,14 @@ sidebar opens it again at the step you reached.
    a short guide to the tool's commands. It knows where Claude Code, Codex, Cursor, Gemini CLI, OpenCode,
    Hermes Agent and OpenClaw read skills. With a skill you ask your agent in plain words, for example
    "What did Anna send me yesterday?", and the agent knows which tool can answer.
-6. **Sign in:** signing in connects a tool to your account, so your agent can reach it. The app does it in its
-   own window for Telegram (a QR code or your phone number), MAX and WhatsApp (a QR code), and opens your browser for
-   Zoom and Google Drive. Where a tool has no sign-in window, **Open terminal to sign in** opens a terminal
-   that runs the tool's own setup. Email asks for your mail address in its own window. For a Microsoft account it
-   then opens Microsoft's sign-in in your browser. For Gmail and other mail servers it asks for an app password, a
-   password made only for this program; [Prepare the mailbox](../mail/providers.md) shows how each provider makes one.
+6. **Sign in:** signing in connects a tool to your account, so your agent can reach it. See
+   [Sign in to a tool](#sign-in-to-a-tool). **Add a bot** is here too, for Telegram, MAX and WhatsApp.
    Memo needs no sign-in.
-7. **Done:** the app lists what is installed and offers three next steps: let ChatGPT or Claude use a tool,
-   see which agents use the tools, or try your first guide. **Coming in the next WireCat Desktop release:** each
-   tool you set up gets a folded card, "What you can do with" the tool. Open it for the next steps, each of which
-   opens the right place in the app: **Add another account**, **Start a sync**, **Keep it running in the
-   background**, **Give your agents its skill**, **Connect ChatGPT or Claude in the browser**, **See what it ran** and
-   **Read its documentation**. A card lists only what its tool supports.
+7. **Done:** each tool you set up gets a folded card, "What you can do with" the tool. Open it for the next steps,
+   each of which opens the right place in the app: **Add an account** (or **Add another account**), **Start a sync**,
+   **Keep it running in the background**, **Give your agents its skill**, **Connect ChatGPT or Claude in the
+   browser**, **See what it ran** and **Read its documentation**. A card lists only what its tool supports. **Show
+   me around** starts a short tour of the window, and **Open Tools** goes to the Tools page.
 
 <DesktopShot
   shot="onboarding-install"
@@ -80,14 +75,44 @@ sidebar opens it again at the step you reached.
 
 Terminals and AI apps that were already open see the new tools only after you restart them.
 
-The question mark at the top (**Help**) has **Take the tour**, a short tour of the window, and **Show the
-welcome again**. The version number at the bottom left opens the same menu.
+The question mark at the top (**Help**) has **WireCat documentation**, **Take the tour**, a short tour of the window,
+**Show the welcome again**, **Privacy**, **Check for updates** and **About WireCat**. The version number at the bottom
+left opens the same menu.
+
+## Sign in to a tool
+
+Signing in grants this computer access to one of your accounts. Every tool signs in the same way, in a guided window:
+
+- **Before you start** says what to have at hand, such as your phone or a browser signed in to the service.
+- The steps are listed on the left, with **Back** under each step after the first. Every link has a copy button
+  beside it.
+- A failure says what happened, the likely cause and one fix, such as **Try again** or **Show a new code**. The
+  tool's own text is under **Details**.
+
+The ways in, by tool:
+
+| Tool | How it signs in |
+| --- | --- |
+| Telegram | A QR code or your phone number |
+| MAX | A QR code, or a token copied from the web version of MAX |
+| WhatsApp | A QR code, or your phone number and a code you type on the phone |
+| Zoom | Your browser. The first time, a checklist walks you through making your own Zoom app |
+| Google Drive, Google Calendar | Your browser |
+| Email | Your mail address first. Gmail signs in with Google (**Sign in with Google**, recommended), with no Google Cloud setup of your own. A Microsoft account opens Microsoft's sign-in. Other mail servers, and Gmail under **Other ways**, use an app password, a password made only for this program, with guided steps. [Prepare the mailbox](../mail/providers.md) shows how each provider makes one |
+| Bitrix24 | A webhook address from your portal |
+
+Where a tool has no sign-in window, **Open terminal** opens a terminal that runs the tool's own setup.
 
 ## What you can do in the app
 
-The sidebar lists the pages in this order: **Tools**, **Agents**, **Search**, **Tasks**, **Guides**,
-**Memory** and **Analytics**. **Storage**, **Logs** and **Settings** sit below, apart, because they are about
-data and the app itself. The top of the window has **Report a problem**, **Notifications** (security fixes,
+The sidebar lists the pages in this order: **Tools**, **Agents**, **Search**, **Tasks**, **Digests**, **Clients**,
+**Guides**, **Memory**, **Contacts** and **Analytics**. **Storage**, **Logs** and **Settings** sit below, apart,
+because they are about data and the app itself. Tasks, Digests, Clients, Memory and Contacts are marked beta: a β
+beside the name means the section is new and lightly tested.
+
+When a page needs a tool that is missing, too old or signed out, it says so in the same words everywhere, with one
+button that goes to the fix, such as **Install Memo** or **Update Memo**. A button that needs a value you have not
+filled in stays clickable: click it, and the field says what is missing. The top of the window has **Report a problem**, **Notifications** (security fixes,
 updates and news from WireCat) and **Help**; when a new version is ready, an update button joins them.
 **Help** also holds **Privacy**, **About WireCat** and the settings of the Node.js that WireCat set up.
 
@@ -96,7 +121,8 @@ updates and news from WireCat) and **Help**; when a new version is ready, an upd
 You use this page to install the tools and to connect each one to your account.
 Every tool has a status lamp. Green means installed and current, amber means an update is ready, red means installed
 but it does not start, and a hollow ring means not installed. Each row has one button:
-**Install**, **Update to** a version, **Fix** or **Manage**.
+**Install**, **Update to** a version, **Fix** or **Manage**, and a tool that syncs also has **Sync**. Each service
+shows its logo, with its name in a tooltip.
 
 All tools keep your messages and notes in one shared storage, and a new version of a tool can move it to a newer
 format. Before **Install** or **Update to**, the app checks this. When another installed tool needs its own new
@@ -116,24 +142,44 @@ such as Zoom, is left out of the check.
 **Manage** opens the tool's details:
 
 - **Accounts:** add an account by name, such as `personal` or `work`, and sign in with **Sign in here** or
-  **Open terminal**. The app never picks an account for you.
-- **Check health:** runs the tool's own health check for the profile and explains each problem in plain words.
-  When the tool's settings file is broken, such as a missing comma, **Repair the file** asks the tool to mend it.
-  The tool keeps the file as it was, and changes nothing it cannot fix safely.
-- **Sync now:** copies the new messages, files or meetings of a profile to this computer.
+  **Open terminal**. The app never picks an account for you. Each account is one row, the same everywhere: its
+  status, when it last synced, and **Sync now**. **Sync on a schedule** syncs it on a timer while you are logged in,
+  even with WireCat closed; when it is on, the button reads **Change schedule**. The row's menu has:
+  - **Check:** runs the tool's own health check for the account and explains each problem in plain words. When
+    the tool's settings file is broken, such as a missing comma, **Repair the file** asks the tool to mend it. The
+    tool keeps the file as it was, and changes nothing it cannot fix safely. When the tool's message store is
+    damaged, the check shows what happened and the steps to fix it, with **Run** beside each safe one.
+  - **Choose folders** (Google Drive): which folders to copy, also after sign-in.
+  - **Settings:** the account's own settings.
+  - **Sign in** or **Reconnect**: when a sign-in has ended, the row says so and offers **Reconnect**. The tool's
+    own text is under **Details**.
+  - **Remove account:** see [Remove an account](#remove-an-account).
+- **Bots** (Telegram, MAX and WhatsApp): **Add a bot** connects a bot by its token; Telegram's token step has **New
+  bot** and **Existing bot**. Each bot shows whether its token works, with **Reconnect** and **Remove bot**, which
+  asks first. On a wide window the bots stand in a column beside the accounts.
 - **Permissions:** what agents may do with each group of commands, set per profile: **Allow**, **Ask first**,
   **Read only** or **Block**.
 - **Background service** (Telegram, MAX and WhatsApp): the tool gets new messages only while its service runs.
   Each account shows whether it runs and whether it starts when you log in. **Start and keep running** starts it
-  and sets it to start at login, **Stop** stops it, and **Stop starting at login** removes it from login. When it
-  fails, one sentence says why and offers one fix, such as **Sign in**. WhatsApp also needs your
-  phone online.
+  and sets it to start at login, **Stop** stops it, and **Stop starting at login**, shown when it starts at login,
+  removes it from login. When it fails, one sentence says why and offers one fix, such as **Sign in**. WhatsApp also
+  needs your phone online.
 - **MCP server (or connect web):** lets ChatGPT or Claude in the browser use the tool. The
   [Tailscale Funnel](./tailscale-funnel.mdx) guide publishes the server, or you use a Cloudflare tunnel.
-- **Run on a schedule** (Email only): starts Memo's mail agent. It reads new mail every 5 minutes and proposes
-  tasks, invoices, orders and facts for you to accept, and it never sends anything. It needs Memo and Claude Code.
+- **Mail agent** (Email only): a switch that starts Memo's mail agent. It reads new mail every 5 minutes and proposes
+  tasks, invoices, orders and facts for you to accept on the [Memory](./memory.mdx) page, and it never sends anything.
+  One run costs at most $1. It needs Memo and Claude Code.
+- **Set up your notes**, **Rewrite records for better search** and **Search harder** (Memo only): see
+  [AI model and better search](./ai-model.mdx).
 - **Uninstall:** removes the tool. Its data stays on this computer until you delete it, and the dialog
   offers **Uninstall and delete data**.
+
+#### Remove an account
+
+**Remove account** in an account's menu removes one account and keeps the tool. Choose **Remove, keep its data
+(search still finds it)** or **Remove and delete its data**. The dialog then lists what goes and what stays, and
+nothing happens until you confirm. **Keep the account** cancels. This works for MAX, WhatsApp, Email, Google Drive,
+Zoom and Google Calendar. A Telegram account is only signed out for now.
 
 <DesktopShot
   shot="connect"
@@ -163,9 +209,14 @@ anything.
 ### Search
 
 You use this page to look through what one tool keeps on this computer. Choose a **Tool** and a **Profile**,
-then type what to look for. The search reads the local copy only and never asks the service, so what was
-never synced is not found. Open a result to see the messages around it, the whole mail thread or the
+then type what to look for. The empty search bar suggests the filters people use most, then ready queries. The
+search reads the local copy only and never asks the service, so what was never synced is not found. One line under
+the results says how much was searched. Open a result to see the messages around it, the whole mail thread or the
 meeting's transcript.
+
+A search in Telegram, MAX or WhatsApp may take up to 30 seconds. One that runs out of time says the query is fine and
+offers **Try again**. For Memo, **Search harder** can reorder the top results with an AI model, once you allow it in
+[AI model and better search](./ai-model.mdx#search-harder).
 
 <DesktopShot
   shot="search-hit"
@@ -178,9 +229,20 @@ meeting's transcript.
 ### Tasks
 
 What you and your agents plan to do. Agents read and change the same list, so a task you ask for in your
-agent's chat appears here. Switch between **Table** and **Board**, add one with **New task**, and search
-with filters such as `project:HRB priority:high when:overdue`. A board column is a state: **Open**, **Todo**,
-**Progress**, **Done** or **Dismissed**. Memo keeps the tasks; the page says so if Memo is not installed.
+agent's chat appears here. Switch between **Table** and **Board**, and search with filters such as
+`project:HRB priority:high when:overdue`, or with **Only mine**, project, assignee, priority, due date and agent.
+A board column is a state: **Open**, **Todo**, **Progress**, **Done** or **Dismissed**. A column shows its first
+cards; **Show more** shows the rest, and Done and Dismissed show the last 14 days. Memo keeps the tasks; the page
+says so if Memo is not installed.
+
+**New task** opens a dialog: a title, a project, a priority, a due date and an assignee, whom you find by name. Open
+a task to change it. **Save** says Saved, and a close or a link warns before it drops what you typed. If the task
+changed while you edited it, your text stays, and you choose to save or cancel.
+
+Memo also finds tasks in your chats and mail. They show with "From messages" and the service, and **Source** filters
+them apart from your projects. Such a task shows the message it came from, with **Open in the chat** or **Open the
+email**. It has only three states, **Open**, **Done** and **Dismissed**, and no priority, type, agent or project: a
+note beside each says why. On the board, drop it on Done or Dismissed to close it.
 
 <DesktopShot
   shot="tasks"
@@ -189,6 +251,16 @@ with filters such as `project:HRB priority:high when:overdue`. A board column is
   alt="The Tasks board with open, in-progress and done tasks shared with agents"
   caption="One task list that you and your agents share."
 />
+
+### Digests
+
+One short summary of your chats, mail, meetings and tasks every morning or every week, in the app, in Telegram or by
+mail, with a cost limit you set. [Digests](./digests.mdx) shows how to set one up.
+
+### Clients
+
+Your CRM deals and leads as a table or as a board by stage. A move to another stage goes to Bitrix24 too.
+[Clients](./clients.mdx) shows how to import them and map each CRM's stages onto yours.
 
 ### Guides
 
@@ -208,36 +280,36 @@ when you are online.
 
 ### Memory
 
-You use this page to decide what your agents may remember about you and the people you talk to. An agent
+You use this page to decide what your agents may take as true about you and the people you talk to. An agent
 connected to WireCat saves what it learns, such as "Kai prefers Friday calls", with the messages that show it.
-Nothing it writes counts, and nothing it proposes happens, until you approve it. Memo keeps the memory.
-
-The tabs are **Review**, **In use**, **Rejected** and **All**. Each entry shows the messages and notes it rests on. For each entry you can:
-
-- **Approve** it, or **Reject** it.
-- **Edit** it, with the pencil or from **More**. Your correction is saved as yours and approved; the agent's
-  version stays under **Rejected**.
-- Take back what you decided. **More** has the undo that fits the entry: **Reject**, **No longer true** or
-  **Undo approval**. **Undo approval** works for a decision and for a fact an agent wrote, which goes back to
-  **Review**. A fact you wrote yourself has **Edit** and **Erase…** instead.
-- **Erase…** it, also in **More**. WireCat erases it from this computer, and agents stop finding it. The
-  messages, notes and meetings it rests on stay, and a backup made before still holds it.
+Nothing it suggests counts until you approve it. **Add to memory** keeps a note, a link, a file or a picture you give
+it, and the facts you tick. [Memory](./memory.mdx) walks through the page.
 
 <DesktopShot
   shot="memory"
   folder="desktop/docs"
   lang="en"
-  alt="The Memory page: facts and decisions from your agents waiting for your approval"
+  alt="The Memory page: the three steps, the tabs Waiting for you, In use, Rejected and All, and suggestions grouped by who they are about"
   caption="Nothing an agent remembers counts until you approve it."
 />
+
+### Contacts
+
+Who is who across your messengers, mail, meetings and CRM, one row per person. Join two entries that are one person,
+undo a wrong join, and answer your agents' doubts. [Contacts](./contacts.mdx) shows how.
 
 ### Analytics
 
 What WireCat keeps and how it is used. The page is read-only. Choose a period (**7 days**, **30 days**,
 **90 days** or **All time**) and read: **What WireCat keeps** (messages, chats, emails, documents, meetings,
 attachments and accounts, with the space on disk), messages over time, **Who you hear from**, projects, tasks,
-memory, and **How WireCat helps**, which counts what your agents did with the tools. **Explore** builds your own
-chart. **Hide names** hides the people and chat names, for example before you share your screen.
+meeting hours, memory, and **How WireCat helps**, which counts what your agents did with the tools. The chart of when
+you talk shows everyone or only you, and all messengers or one. A muted chat counts as a chat, but its messages do
+not count. **Explore** builds your own chart. **Hide names** hides the people and chat names, for example before you
+share your screen.
+
+When a number cannot be shown, its card says why and offers the fix: install or update a tool, sign in, or try
+again.
 
 <DesktopShot
   shot="analytics"
@@ -257,6 +329,12 @@ messages, mail, documents and notes) with its counts, and a **Tables** view of w
   The page shows how to restore a copy.
 - **Clear storage…:** deletes every message, chat, email, document and meeting in the shared storage. Settings
   and sign-ins stay. The dialog backs up first, unless you untick it.
+- **Import from a file:** add records from a spreadsheet or another system, such as invoices, payments or
+  organizations, from a CSV or JSON file. Choose the type and format, then **Download template** and fill it in. Name
+  the **Source**, such as `sheet:rentals`: importing the same source again updates its records instead of adding
+  copies. **Choose file**, then **Check**: it counts what is new, updated, unchanged and refused, and lists each
+  refused record with its line and column. **Import** adds them. Changes that need your review wait on the
+  [Memory](./memory.mdx) page.
 - **Delete:** removes a tool's folders once no installed tool uses them. **Delete all leftover data** removes
   all of them. Sign-in tokens in your system keyring are not touched.
 
@@ -270,22 +348,31 @@ messages, mail, documents and notes) with its counts, and a **Tables** view of w
 
 ### Logs
 
-[Search what the tools recorded about their runs](./logs.mdx) when something failed.
+[Search what the tools recorded about their runs](./logs.mdx) when something failed. Filters include the tool,
+status, command, profile, kind of run and store table.
 
 ### Settings
 
 **Language** and **Interface size** of the app are at the top: Ctrl and + or − change the size anywhere in the
 app, and Ctrl and 0 resets it (Cmd on macOS). Tool names, commands and what the tools print are not translated.
-Below, **Tools** shows the settings of each tool and of WireCat itself, as a list or as **JSON**. The app
-reads them from the tool and saves them through the tool's own `config` command, so the tool checks every value
-before it is written.
+From the top, the page has:
+
+- **Enable community tools** and **Allow tools WireCat has not checked**: see [Add your own tool](#add-your-own-tool).
+- **AI model** and **Reading for facts**: one model and key for the features that need one. See
+  [AI model and better search](./ai-model.mdx).
+- **Tools:** the settings of each tool and of WireCat itself, as a list or as **JSON**. The app reads them from the
+  tool and saves them through the tool's own `config` command, so the tool checks every value before it is written.
+- **Account groups:** a board that sorts your accounts into groups, such as personal and work. Drag an account to a
+  group; hold Alt or Ctrl while you drop to copy it there. **New group** adds one. Each account also has a
+  **Personal** or **Work** switch: work views, work agents and the work mark on contacts read only work accounts.
+  Account groups need Memo.
 
 <DesktopShot
   shot="settings"
   folder="desktop/docs"
   lang="en"
-  alt="The Settings page: language, interface size, the two tool switches and what reads a source for facts"
-  caption="Settings: how the app looks, and which tools it can show."
+  alt="The Settings page: language, interface size, the two tool switches, the AI model and Reading for facts"
+  caption="Settings: how the app looks, which tools it can show, and the AI model."
 />
 
 ### Report a problem
@@ -294,9 +381,6 @@ before it is written.
 details hidden. Nothing is sent until you send it. **Privacy** in the **Help** menu lists what the app sends and when.
 
 ## Add your own tool
-
-**Coming in the next WireCat Desktop release:** everything in this section. The current release shows WireCat's own
-tools only.
 
 You use this to add a tool that WireCat does not make: your own, a colleague's, or one from a private repository. The
 Tools page can show three kinds of tool:
@@ -489,10 +573,19 @@ Your data stays where the tools keep it, on this computer. The app goes online t
 npm, to download Node.js when it sets one up, to check GitHub for its own new version and to send a bug
 report when you send one.
 
+## Open WireCat from a link
+
+A `wirecat://` link opens its item in the running app: a chat or a message, a task, a list of tasks, a memory to
+review or a digest. Agents and digests write such links. A chat or a message opens in a read-only screen, with the
+linked message marked; WireCat sends nothing from it. A link to something that is not on this computer says so, with
+**Copy the reference**. When a web link cannot open in your browser, a dialog shows the address to copy. Right-click
+any web link in the app to copy it.
+
 ## Updates and removal
 
 On macOS, Windows and with the AppImage, the app updates itself: it offers a new version at the top of
-the window, then installs it and restarts. A .deb or .rpm copy downloads the new package
+the window, then installs it and restarts. To check at any time, choose **Check for updates** in the **Help** menu. It
+says WireCat is up to date, offers the new version, or says why the check failed, with **Try again**. A .deb or .rpm copy downloads the new package
 itself and opens your system's installer, and also shows the `apt` or `dnf` command. **Open in terminal** runs
 that command in your terminal: type your password there, then restart WireCat when the install ends. Your accounts and data
 will not be deleted. [Updates](/en/download#updates) and [uninstall](/en/download#uninstall) on the download page give the
@@ -530,7 +623,8 @@ The tool's lamp is red and its button says **Fix**. **Fix** opens **Fix with an 
 
 ### Sign-in does not finish
 
-**Sign in here** waits for you to finish in the browser or on the phone. A code or QR code expires after a few seconds, and a new one appears by itself; use the latest one. A messenger can take a minute to send its history: keep it open on the phone, or select **Stop and keep what came**. If the message says the version "cannot sign in here yet", update the tool on the Tools page or use **Open terminal**. If WireCat finds no terminal program, run the command it shows yourself, then select **Check sign-in**.
+**Sign in here** waits for you to finish in the browser or on the phone. If the browser does not come back to
+WireCat on its own, copy the address or code the browser shows and paste it into the field the sign-in offers. A code or QR code expires after a few seconds, and a new one appears by itself; use the latest one. A messenger can take a minute to send its history: keep it open on the phone, or select **Stop and keep what came**. If the message says the version "cannot sign in here yet", update the tool on the Tools page or use **Open terminal**. If WireCat finds no terminal program, run the command it shows yourself, then select **Check sign-in**.
 
 ### Check health reports a broken settings file
 
@@ -546,7 +640,7 @@ Select **Try again**, or get WireCat from the [download page](/en/download). If 
 
 ### "The list of community tools is out of date"
 
-**Coming in the next WireCat Desktop release.** The list of [community tools](#community-tools) that WireCat signs has
+The list of [community tools](#community-tools) that WireCat signs has
 run out, and the app could not fetch a new one. Until it does, community tools cannot be installed or updated.
 Installed ones keep working, and your own tools are not affected. Check your internet connection or proxy. The app
 tries again every day, and the notice goes away once a new list arrives.

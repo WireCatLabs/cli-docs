@@ -34,6 +34,10 @@ const docsScreens = [
   "analytics",
   "storage",
   "settings",
+  "contacts",
+  "clients",
+  "digests",
+  "memory-add",
 ]
 const docs = process.argv.includes("--docs")
 const full = { left: 0, top: 0, width: 1440, height: 900 }
