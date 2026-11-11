@@ -394,7 +394,7 @@ his `decision-maker` role from you stays as it was. `memo review confirm 2` make
 In a sales team's CRM most deals belong to other people. So a sync copies only your own deals and leads: those whose
 responsible person is the CRM user the tool signs in as (in Bitrix24, the webhook's user). Contacts and companies are
 always copied whole. A manager who wants every deal sets the account's `scope` to `all`, and `mine` goes back.
-[Whose deals and leads](./b24/usage.md#whose-deals-and-leads) has the Bitrix24 details:
+[Whose deals and leads](./b24/usage.md#sync) has the Bitrix24 details:
 
 ```sh
 b24 work config set crm.bitrix24:example.bitrix24.com.scope all
