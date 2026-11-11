@@ -1,82 +1,194 @@
 ---
 title: Usar WireCat con modelos locales
-description: Mantén tus mensajes, notas, imágenes y documentos lejos de los servicios de IA en la nube. Qué funciones de WireCat pueden usar hoy un modelo en tu propio ordenador, cómo configurar cada una y qué sigue saliendo.
+description: Paso a paso, mantén tus mensajes, correo, notas e imágenes lejos de los servicios de IA en la nube. Pon un modelo en tu ordenador, apunta a él cada función de WireCat y tu agente, y mira qué sigue saliendo.
 ---
 
-WireCat guarda tus mensajes, correo, notas y archivos en tu ordenador. Algunas funciones además envían texto o imágenes
-a un modelo de IA, y por defecto ese modelo puede ser un servicio en la nube. Esta guía muestra cómo apuntar cada una de
-esas funciones a un modelo que funciona en tu propio ordenador, para que nada de lo que leen salga de él. Necesitas un
-servidor de modelos local, como Ollama u otro servidor que hable la interfaz de OpenAI. Hoy hacen falta unos cuantos
-ajustes en sitios distintos, y algunas funciones aún salen fuera. Las dos cosas están en la lista de abajo. WireCat
-está preparando un solo interruptor «solo local» para todo ello.
+WireCat guarda tus mensajes, correo, notas y archivos en tu ordenador. Algunas funciones además envían texto, imágenes
+o una pregunta de búsqueda a un modelo de IA, y lo mismo hace el agente que conectas a WireCat. Cuando ese modelo es un
+servicio en la nube, tu texto privado llega a esa empresa. Esta guía muestra paso a paso cómo poner un modelo en tu
+propio ordenador y apuntar a él cada función y tu agente, para que lo que leen se quede contigo. Necesitas un ordenador
+que pueda mover un modelo, mejor con tarjeta gráfica. Algunas partes de WireCat aún no pueden usar un modelo local, y
+el final de la página las enumera.
 
-## Ya es local
+## 1. Pon un modelo en tu ordenador
 
-La **búsqueda por significado** y la **búsqueda de imágenes** funcionan en tu ordenador por defecto. No envían nada.
+[Ollama](https://docs.ollama.com/quickstart) es lo más fácil para empezar, y WireCat Desktop lo conoce por su nombre.
 
-## El modelo de IA en Ajustes
+1. Instala Ollama y descarga un modelo con `ollama pull <model>`. Para leer imágenes, elige un modelo que las vea, como
+   `llava`.
+2. Ollama escucha en `127.0.0.1:11434`, que es lo que espera WireCat. Deja esa dirección.
+3. Desactiva los modelos en la nube de Ollama. Un modelo cuyo nombre termina en `cloud` funciona en los servidores de
+   Ollama, y su búsqueda web también sale. Las
+   [preguntas frecuentes de Ollama](https://docs.ollama.com/faq#how-do-i-disable-ollamas-cloud-features) describen el
+   modo solo local: pon `"disable_ollama_cloud": true` en `~/.ollama/server.json`, o `OLLAMA_NO_CLOUD=1`, y reinicia
+   Ollama.
+4. Si vas a usar un agente con él, dale al modelo más memoria para el texto. La
+   [página de longitud de contexto](https://docs.ollama.com/context-length) de Ollama pide al menos 64000 tokens para
+   agentes y herramientas de programación:
+
+   ```sh
+   OLLAMA_CONTEXT_LENGTH=64000 ollama serve
+   ```
+
+También sirve cualquier otro servidor que hable la interfaz de OpenAI. WireCat necesita su dirección, y la documentación
+de cada servidor da la de por defecto:
+
+| Servidor | Dirección para WireCat |
+| --- | --- |
+| [Ollama](https://docs.ollama.com/api/openai-compatibility) | `http://127.0.0.1:11434/v1` |
+| [LM Studio](https://lmstudio.ai/docs/developer/openai-compat), servidor iniciado en la pestaña Developer | `http://localhost:1234/v1` |
+| [Servidor de llama.cpp](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md), `llama-server` | `http://127.0.0.1:9931/v1` |
+| [vLLM](https://docs.vllm.ai/en/latest/getting_started/quickstart/), `vllm serve` | `http://localhost:8000/v1` |
+
+Usa el puerto en el que tu servidor escucha de verdad. WireCat acepta `http://` sin cifrar solo para una dirección en
+este ordenador.
+
+## 2. Lo que ya es local
+
+No tienes que cambiar nada para esto:
+
+- La **búsqueda por significado** y la **búsqueda de imágenes** usan modelos que WireCat descarga en tu ordenador.
+- Las **grabaciones de reuniones** se transcriben en tu ordenador.
+- **Enlazar chats, los borradores de respuesta y leer el texto de los adjuntos con un modelo de IA** siguen apagados
+  hasta que tú les asignas un modelo.
+
+## 3. El modelo de IA en Ajustes
 
 Este modelo lee el texto de las imágenes que añades a la memoria, y puede leer fuentes para proponer hechos. En
-WireCat Desktop, abre **Ajustes**, **Modelo de IA**.
+WireCat Desktop, abre **Ajustes**, **Modelo de IA**. [Modelo de IA y mejor búsqueda](./ai-model.mdx) explica cada
+campo.
 
 **Con Ollama:**
 
-1. Instala Ollama y descarga un modelo que pueda leer imágenes, como `llava`. Ollama debe escuchar en su dirección
-   habitual, `127.0.0.1:11434`.
-2. Como **Proveedor**, elige **Ollama en este ordenador (beta)** y elige el modelo.
-3. Marca **Leer imágenes con este modelo**, guarda y pulsa **Comprobar**.
+1. Como **Proveedor**, elige **Ollama en este ordenador (beta)** y elige el modelo de la lista.
+2. Marca **Leer imágenes con este modelo** si quieres que lea imágenes. La nota de debajo dice que las imágenes se
+   quedan en este ordenador.
+3. Guarda y pulsa **Comprobar**.
 
-Lo mismo desde una terminal: `memo models ai set ollama --model llava`.
+Lo mismo desde una terminal. Aquí `--allow-remote` es lo que deja que las imágenes vayan al modelo, aunque el modelo
+esté en tu ordenador:
 
-**Con otro servidor en tu ordenador** que hable la interfaz de OpenAI:
+```sh
+memo models ai set ollama --model llava --allow-remote
+```
+
+**Con otro servidor en tu ordenador:**
 
 1. Como **Proveedor**, elige **OpenAI o compatible**.
-2. En **Dirección (base URL)**, escribe la dirección del servidor en este ordenador, por ejemplo
-   `http://127.0.0.1:8080/v1`. Usa el puerto en el que escucha tu servidor.
-3. Escribe el nombre del modelo. En **Clave de API**, escribe cualquier valor: hoy WireCat necesita una clave incluso
-   para un servidor en tu ordenador.
-4. Guarda y pulsa **Comprobar**.
+2. En **Dirección (base URL)**, escribe la dirección de tu servidor de la tabla de arriba.
+3. Escribe el nombre del modelo tal como lo muestra tu servidor.
+4. En **Clave de API**, escribe cualquier valor. WireCat pide una clave incluso para un servidor en tu ordenador, y el
+   servidor la ignora.
+5. Guarda y pulsa **Comprobar**.
 
-## Lectura de hechos
+## 4. Lectura de hechos
 
-En **Ajustes**, **Lectura de hechos**, elige **Modelo de IA**, que ahora es tu modelo local, u **Ollama**. Pulsa
-**Usar este lector**. Después, [Añadir a la memoria](./memory.mdx#añadir-a-la-memoria) propone hechos con ese modelo.
+En **Ajustes**, **Lectura de hechos**, elige **Modelo de IA**, que ahora es tu modelo local, u **Ollama**. Cada lector
+dice si el texto sale de este ordenador. Claude Code y Codex lo envían a su propio modelo. Pulsa **Usar este lector**.
+Después, [Añadir a la memoria](./memory.mdx#añadir-a-la-memoria) propone hechos con ese modelo.
 
-## Mejor búsqueda
+## 5. Buscar a fondo y reescribir registros para buscar
 
-Las dos ayudas de búsqueda están en los detalles de Memo: en la página Herramientas, pulsa **Gestionar** en la fila de
-Memo.
+Las dos ayudas están apagadas por defecto. Están en los detalles de Memo: en la página Herramientas, pulsa
+**Gestionar** en la fila de Memo.
 
-- **Reescribir registros para buscar mejor:** déjala desactivada en WireCat Desktop, que para ella solo ofrece modelos
-  en la nube. Desde una terminal puedes apuntarla a un servidor local:
+**Buscar a fondo** reordena los primeros resultados de una búsqueda cuando pulsas el botón. Pulsa **Permitir**, elige
+**OpenAI**, escribe el nombre de tu modelo local en **Modelo** y pon `http://127.0.0.1:11434/v1` en **Dirección de otro
+servicio compatible con OpenAI**. Después acepta con el botón que nombra el proveedor. Espera la respuesta solo 5
+segundos, así que un modelo sin tarjeta gráfica probablemente se quedará sin tiempo, y la búsqueda mantendrá su propio
+orden.
 
-  ```sh
-  memo models consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
-  ```
+**Reescribir registros para buscar mejor** añade otras palabras a tus notas, documentos y correos. WireCat Desktop solo
+ofrece modelos en la nube para esto, así que déjalo apagado ahí. Desde una terminal puedes apuntarlo a tu servidor
+local:
 
-- **Buscar a fondo:** elige OpenAI con la dirección `http://127.0.0.1:11434/v1`. Espera la respuesta solo 5 segundos,
-  así que un modelo que funciona en el procesador, sin tarjeta gráfica, probablemente se quedará sin tiempo. Entonces
-  la búsqueda mantiene su propio orden.
+```sh
+memo models consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
+```
 
-## Mensajes de voz
+Buscar a fondo acepta la misma dirección desde una terminal:
 
-Un mensaje de voz lo transcribe primero el servicio de voz del propio servicio de mensajería, cuando tiene uno. Para
-que el audio se quede en tu ordenador, añade `--local` al comando `messages transcribe` de la herramienta, por ejemplo
-en Telegram. Usa un modelo que descargaste.
+```sh
+memo models search-consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
+```
 
-## Lo que sigue saliendo
+## 6. Mensajes de voz
 
-Estas partes usan un agente de IA, no el modelo de arriba. Solo son locales si apuntas ese agente a un modelo local en
-los ajustes del propio agente:
+Un mensaje de voz va primero al servicio de voz del propio servicio de mensajería cuando tiene uno, como Telegram
+Premium. Para transcribirlo en tu ordenador con un modelo que descargaste, añade `--local`:
 
-- **Los resúmenes** los escribe Claude Code.
-- **El agente de correo** de WireCat Desktop ejecuta Claude Code. Un agente programado que se inicia desde una terminal
-  puede ejecutar Codex.
-- **Cada agente conectado por MCP**, como ChatGPT, Claude o Codex, usa su propio modelo para todo lo que lee a través
-  de WireCat.
+```sh
+tg <profile> messages transcribe <chat> <message> --local
+```
 
-WireCat está preparando un solo interruptor «solo local» que mantenga todas las funciones en tu ordenador y muestre qué
-es local y qué no.
+Cuando tu agente pide una transcripción, puede que no añada `--local`. Pídeselo, o usa el comando tú mismo.
+
+## 7. Tu agente con un modelo local
+
+El agente que conectas a WireCat por MCP o en una terminal lee tus mensajes y notas a través de WireCat y después los
+envía a su propio modelo. Para que eso se quede en tu ordenador, usa el agente con tu modelo local. WireCat Desktop
+funciona con Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Hermes y OpenClaw.
+[Conectar tu agente de IA](../agents.mdx) muestra cómo conectar uno.
+
+Ollama abre cinco de ellos con un modelo local con un solo comando, `ollama launch <agent>`. Lo describen las páginas
+de Ollama para [Codex](https://docs.ollama.com/integrations/codex),
+[Claude Code](https://docs.ollama.com/integrations/claude-code), [OpenCode](https://docs.ollama.com/integrations/opencode),
+[Hermes](https://docs.ollama.com/integrations/hermes) y [OpenClaw](https://docs.ollama.com/integrations/openclaw).
+Cuando pida un modelo, elige uno que descargaste, no uno que termine en `cloud`.
+
+```sh
+ollama launch codex
+```
+
+Sin `ollama launch`:
+
+- **Codex.** La [configuración avanzada de Codex](https://learn.chatgpt.com/docs/config-file/config-advanced) describe
+  `--oss` para un Ollama o LM Studio local, y `oss_provider` en `~/.codex/config.toml` para elegir uno por defecto. La
+  página de Ollama da `codex --oss -m <model>`.
+- **Claude Code.** La [página de Ollama sobre Claude Code](https://docs.ollama.com/integrations/claude-code) pone
+  `ANTHROPIC_BASE_URL=http://localhost:11434`, `ANTHROPIC_AUTH_TOKEN=ollama` y un `ANTHROPIC_API_KEY` vacío, y después
+  ejecuta `claude --model <model>`. Los ajustes de Claude Code pueden pisar estas variables, así que compruébalo con
+  `/status`. [LM Studio](https://lmstudio.ai/docs/developer/anthropic-compat) describe lo mismo con su propia
+  dirección. Anthropic [no da soporte](https://code.claude.com/docs/en/llm-gateway) a Claude Code con modelos que no
+  son Claude.
+- **OpenCode.** La [página de proveedores de OpenCode](https://opencode.ai/docs/providers/) dice que encuentra solo
+  Ollama, LM Studio y vLLM en este ordenador. Inicia el servidor y elige el modelo en OpenCode.
+- **Hermes.** Ejecuta `hermes model` y elige una dirección propia (custom endpoint) con la de tu servidor, como muestra
+  la [página de proveedores de Hermes](https://hermes-agent.nousresearch.com/docs/integrations/providers).
+- **OpenClaw.** Ejecuta `openclaw onboard` y elige Ollama, después **Local only**, como muestra la
+  [página de OpenClaw sobre Ollama](https://docs.openclaw.ai/providers/ollama). Usa la dirección de Ollama sin `/v1`.
+
+**Cursor** y **Gemini CLI** no tienen en su documentación ninguna forma de usar el propio agente con un modelo en tu
+ordenador.
+
+Toda esta documentación pide un modelo que sepa llamar a herramientas y un contexto de al menos 64000 tokens. Un modelo
+pequeño en un portátil responde despacio y se equivoca más con los comandos de WireCat que un modelo en la nube.
+
+## 8. Resúmenes y el agente de correo
+
+Los [resúmenes](./digests.mdx) y el agente de correo de WireCat Desktop ejecutan Claude Code con el modelo de
+Anthropic. Arrancan sin tus ajustes de Claude Code, así que los pasos de arriba no les llegan. Hoy envían a Anthropic el
+correo y los mensajes que leen. Si quieres que todo sea local, no los actives.
+
+## Lista: todo local
+
+1. Ollama u otro servidor de modelos funciona en este ordenador, y los modelos en la nube de Ollama están apagados.
+2. **Ajustes**, **Modelo de IA** es Ollama o una dirección en este ordenador.
+3. **Lectura de hechos** usa el modelo de IA u Ollama.
+4. **Buscar a fondo** está apagado o apunta a tu servidor local. **Reescribir registros para buscar mejor** está
+   apagado o configurado desde una terminal con tu servidor local.
+5. Los mensajes de voz se transcriben con `--local`.
+6. Tu agente usa un modelo local, o no conectas ningún agente.
+7. Los resúmenes y el agente de correo están apagados.
+
+## Lo que aún sale de tu ordenador
+
+- Los resúmenes y el agente de correo, que ejecutan Claude Code con el modelo de Anthropic.
+- Los mensajes de voz transcritos sin `--local`, cuando el servicio de mensajería tiene servicio de voz.
+- Todo lo que lee tu agente, cuando el agente usa un modelo en la nube.
+
+WireCat está preparando un solo interruptor que mantenga todas las funciones en tu ordenador y muestre qué es local y
+qué no.
 
 ## Siguiente paso
 
