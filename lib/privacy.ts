@@ -8,7 +8,7 @@ export const privacyCopy: Record<
     title: "Privacy Policy",
     intro:
       "How WireCat handles Google, Microsoft, Zoom and email account data, local documents, optional AI processing, WireCat Desktop's update and news checks and bug reports, and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
-    updated: "Last updated: 5 November 2026",
+    updated: "Last updated: 11 November 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
@@ -30,6 +30,13 @@ export const privacyCopy: Record<
           "We use this access to keep a searchable local archive of your meetings, show who said what and when, help you prepare for upcoming meetings and run the meeting commands you ask for. zm calls Zoom’s API directly from your computer. Zoom tokens, meetings and transcripts are never sent to a WireCat server.",
           "The login returns through wirecat.dev/zoom-callback. That page is static: a script in your browser passes the one-time code to zm on your computer and removes it from the address bar. The code works only once and only with the key that stays on your computer. wirecat.dev does not store it; Cloudflare, which serves the page, receives the request like any other page view.",
           "To disconnect, remove the WireCat CLI app in the Zoom App Marketplace under Manage → Added Apps. This stops all further access. WireCat holds no Zoom data on its servers, so there is nothing for us to delete; meetings already copied to your computer stay there until you delete zm’s local store.",
+        ],
+      },
+      {
+        id: "b24-access",
+        title: "Bitrix24 sign-in through a local application (b24)",
+        paragraphs: [
+          "When b24 signs in through a local application you created in your Bitrix24 portal, the sign-in returns through wirecat.dev/b24-callback. That page is static: a script in your browser passes the one-time code to b24 on your computer and removes it from the address bar. The code works once, for 30 seconds, and only with the application’s secret key, which stays on your computer. wirecat.dev does not store it; Cloudflare, which serves the page, receives the request like any other page view.",
         ],
       },
       {
@@ -169,7 +176,7 @@ export const privacyCopy: Record<
     title: "Политика конфиденциальности",
     intro:
       "Как WireCat обрабатывает данные аккаунтов Google, Microsoft, Zoom и почты, локальные документы, дополнительные ИИ-запросы, проверку обновлений и новостей и отчёты об ошибках в WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
-    updated: "Обновлено: 5 ноября 2026 г.",
+    updated: "Обновлено: 11 ноября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
@@ -191,6 +198,13 @@ export const privacyCopy: Record<
           "Доступ используется, чтобы вести локальный архив встреч с поиском, показывать, кто что и когда сказал, помогать готовиться к предстоящим встречам и выполнять команды, которые вы запускаете. zm обращается к API Zoom прямо с вашего компьютера. Токены Zoom, встречи и расшифровки никогда не отправляются на сервер WireCat.",
           "Вход возвращается через wirecat.dev/zoom-callback. Это статическая страница: скрипт в вашем браузере передаёт одноразовый код zm на вашем компьютере и убирает его из адресной строки. Код срабатывает один раз и только вместе с ключом, который остаётся на вашем компьютере. wirecat.dev его не сохраняет; Cloudflare, который отдаёт страницу, получает запрос как любой другой просмотр страницы.",
           "Чтобы отключиться, удалите приложение WireCat CLI в Zoom App Marketplace в разделе Manage → Added Apps. Это прекращает любой дальнейший доступ. WireCat не хранит данные Zoom на своих серверах, поэтому удалять с нашей стороны нечего; встречи, уже скопированные на ваш компьютер, остаются там, пока вы не удалите локальное хранилище zm.",
+        ],
+      },
+      {
+        id: "b24-access",
+        title: "Вход в Битрикс24 через локальное приложение (b24)",
+        paragraphs: [
+          "Когда вы входите в b24 через локальное приложение, созданное в вашем портале Битрикс24, вход возвращается через wirecat.dev/b24-callback. Это статическая страница: скрипт в вашем браузере передаёт одноразовый код b24 на вашем компьютере и убирает его из адресной строки. Код срабатывает один раз, в течение 30 секунд, и только вместе с секретным ключом приложения, который остаётся на вашем компьютере. wirecat.dev его не сохраняет; Cloudflare, который отдаёт страницу, получает запрос как любой другой просмотр страницы.",
         ],
       },
       {
@@ -330,7 +344,7 @@ export const privacyCopy: Record<
     title: "Política de privacidad",
     intro:
       "Cómo WireCat trata los datos de cuentas de Google, Microsoft, Zoom y correo, los documentos locales, el procesamiento opcional con IA, las comprobaciones de actualizaciones y novedades y los informes de errores de WireCat Desktop, y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
-    updated: "Última actualización: 5 de noviembre de 2026",
+    updated: "Última actualización: 11 de noviembre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
@@ -352,6 +366,13 @@ export const privacyCopy: Record<
           "Usamos este acceso para mantener un archivo local de tus reuniones con búsqueda, mostrar quién dijo qué y cuándo, ayudarte a preparar las próximas reuniones y ejecutar los comandos que pidas. zm llama a la API de Zoom directamente desde tu ordenador. Los tokens de Zoom, las reuniones y las transcripciones nunca se envían a un servidor de WireCat.",
           "El inicio de sesión vuelve a través de wirecat.dev/zoom-callback. Es una página estática: un script en tu navegador pasa el código de un solo uso a zm en tu ordenador y lo quita de la barra de direcciones. El código funciona una sola vez y solo junto con la clave que se queda en tu ordenador. wirecat.dev no lo guarda; Cloudflare, que sirve la página, recibe la petición como cualquier otra visita.",
           "Para desconectar, elimina la aplicación WireCat CLI en Zoom App Marketplace, en Manage → Added Apps. Esto detiene todo acceso posterior. WireCat no guarda datos de Zoom en sus servidores, así que no tenemos nada que borrar; las reuniones ya copiadas en tu ordenador se quedan allí hasta que borres el almacén local de zm.",
+        ],
+      },
+      {
+        id: "b24-access",
+        title: "Inicio de sesión en Bitrix24 con una aplicación local (b24)",
+        paragraphs: [
+          "Cuando inicias sesión en b24 con una aplicación local que creaste en tu portal de Bitrix24, el inicio de sesión vuelve a través de wirecat.dev/b24-callback. Es una página estática: un script en tu navegador pasa el código de un solo uso a b24 en tu ordenador y lo quita de la barra de direcciones. El código funciona una sola vez, durante 30 segundos, y solo junto con la clave secreta de la aplicación, que se queda en tu ordenador. wirecat.dev no lo guarda; Cloudflare, que sirve la página, recibe la petición como cualquier otra visita.",
         ],
       },
       {
