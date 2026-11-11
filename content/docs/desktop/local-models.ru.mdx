@@ -29,6 +29,9 @@ WireCat хранит ваши сообщения, почту, заметки и 
    OLLAMA_CONTEXT_LENGTH=64000 ollama serve
    ```
 
+   Если Ollama уже работает в фоне, задайте переменную так, как описано в
+   [настройках сервера Ollama](https://docs.ollama.com/faq#how-do-i-configure-ollama-server) для вашей системы.
+
 Подойдет и любой другой сервер, который говорит на языке OpenAI. WireCat нужен его адрес, а адрес по умолчанию есть в
 документации каждого сервера:
 
@@ -39,8 +42,8 @@ WireCat хранит ваши сообщения, почту, заметки и 
 | [Сервер llama.cpp](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md), `llama-server` | `http://127.0.0.1:9931/v1` |
 | [vLLM](https://docs.vllm.ai/en/latest/getting_started/quickstart/), `vllm serve` | `http://localhost:8000/v1` |
 
-Укажите порт, который ваш сервер слушает на самом деле. Обычный `http://` WireCat принимает только для адреса на этом
-компьютере.
+Укажите порт, который ваш сервер слушает на самом деле, и адрес на этом компьютере, например `127.0.0.1` или
+`localhost`.
 
 ## 2. Что уже работает локально
 
@@ -111,8 +114,8 @@ memo models search-consents set openai --model <model> --base-url http://127.0.0
 
 ## 6. Голосовые сообщения
 
-Голосовое сообщение сначала уходит в речевой сервис самого мессенджера, если он есть, например в Telegram Premium.
-Чтобы расшифровать его на вашем компьютере скачанной моделью, добавьте `--local`:
+По умолчанию текст голосового делает сам мессенджер из своей копии сообщения, если у него есть речевой сервис,
+например Telegram Premium. Чтобы текст делался на вашем компьютере скачанной моделью, добавьте `--local`:
 
 ```sh
 tg <profile> messages transcribe <chat> <message> --local
@@ -127,7 +130,8 @@ tg <profile> messages transcribe <chat> <message> --local
 работает с Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Hermes и OpenClaw. Как подключить агента, описано на
 странице [Подключение ИИ-агента](../agents.mdx).
 
-Пятерых из них Ollama запускает на локальной модели одной командой, `ollama launch <agent>`. Это описано на страницах
+Пятерых из них Ollama запускает на локальной модели одной командой, `ollama launch <agent>`, где агент это `codex`, `claude`, `opencode`,
+`hermes` или `openclaw`. Это описано на страницах
 Ollama для [Codex](https://docs.ollama.com/integrations/codex),
 [Claude Code](https://docs.ollama.com/integrations/claude-code), [OpenCode](https://docs.ollama.com/integrations/opencode),
 [Hermes](https://docs.ollama.com/integrations/hermes) и [OpenClaw](https://docs.ollama.com/integrations/openclaw).
@@ -180,7 +184,6 @@ Anthropic. Если нужно, чтобы все было локально, н�
 ## Что пока уходит с компьютера
 
 - Сводки и почтовый агент, они запускают Claude Code на модели Anthropic.
-- Голосовые, расшифрованные без `--local`, если у мессенджера есть речевой сервис.
 - Все, что читает агент, если он работает на облачной модели.
 
 WireCat делает один переключатель, который оставит каждую функцию на вашем компьютере и покажет, что локально, а что
