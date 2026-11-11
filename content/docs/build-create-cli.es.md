@@ -119,8 +119,7 @@ cualquiera puede añadirla por su nombre en npm, como herramienta sin revisar.
 ## Prepárala para WireCat Desktop
 
 WireCat Desktop puede añadir una herramienta que WireCat no ha revisado, por su nombre en npm
-([Añadir tu propia herramienta](./desktop/index.mdx#añadir-tu-propia-herramienta); llega en la próxima versión de
-WireCat Desktop). Antes de instalar nada, lee tres cosas de npm: los datos del paquete, el registro de dónde lo compiló
+([Añadir tu propia herramienta](./desktop/own-tools.mdx)). Antes de instalar nada, lee tres cosas de npm: los datos del paquete, el registro de dónde lo compiló
 npm y el archivo `contracts/wirecat.json` del propio paquete. Nunca ejecuta el paquete para saber qué herramienta es.
 Por eso tu herramienta necesita ese archivo, una carpeta de datos con el nombre de su paquete y una versión que npm
 pueda vincular a tu repositorio.
@@ -193,7 +192,7 @@ nombres que WireCat reserva para sus herramientas, como `tg`, `mail` o `wcat`, s
 
 1. **Añádela en tu propio ordenador.** En WireCat Desktop, activa **Permitir herramientas que WireCat no ha revisado**
    en Ajustes y usa **Añadir tu propia herramienta** en la página Herramientas con tu nombre de npm. Tu herramienta
-   aparece con la etiqueta **Sin revisar**. Una herramienta de un repositorio privado solo se puede añadir así.
+   aparece con la etiqueta **Sin verificar**. Una herramienta de un repositorio privado solo se puede añadir así.
 2. **Pide entrar en la lista,** si quieres que la encuentre todo el mundo. Una herramienta de la lista aparece en
    wirecat.dev y, con la etiqueta **Comunidad**, en WireCat Desktop. La lista es para editores aprobados:
    [Añade tu herramienta a WireCat](./build-list-tool.md) explica los pasos y qué comprobamos.

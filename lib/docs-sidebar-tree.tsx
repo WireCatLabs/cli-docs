@@ -47,6 +47,7 @@ import {
   Network,
   Newspaper,
   NotebookPen,
+  PackagePlus,
   Paperclip,
   PenLine,
   Reply,
@@ -167,6 +168,7 @@ export const sidebarIcons = {
   digests: Newspaper,
   memory: Brain,
   "ai-model": BrainCircuit,
+  "own-tools": PackagePlus,
 }
 
 const folderIcons = {

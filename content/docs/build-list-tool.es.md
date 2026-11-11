@@ -151,8 +151,8 @@ La revisión comprueba cómo se construye y publica tu herramienta. No comprueba
 - **Cada instalación se comprueba.** Antes de instalar tu herramienta, la app comprueba que npm construyó esa versión
   desde `release.yml` de tu repositorio en `main`.
 
-El sitio ya construye y firma la lista de escritorio. WireCat Desktop empezará a leerla en una próxima versión. Hasta
-entonces, una herramienta incluida aparece solo en el sitio.
+El sitio construye y firma la lista de escritorio, y WireCat Desktop la lee mientras **Activar herramientas de la
+comunidad** está activado.
 
 ## Actualizaciones
 
@@ -176,7 +176,7 @@ Retiramos una herramienta cuando incumple las reglas de arriba o cuando su autor
 ## Prueba tu herramienta antes de pedir la inclusión
 
 Puedes añadir tu herramienta en WireCat Desktop antes de cualquier revisión. Lleva entonces la etiqueta **Sin
-revisar**. Llega en la próxima versión de WireCat Desktop.
+verificar**.
 
 1. En Ajustes, activa **Permitir herramientas que WireCat no ha revisado** y confirma el aviso con **Permitir**.
 2. En la página Herramientas, pulsa **Añadir tu propia herramienta**, arriba junto a **Comprobar de nuevo**. Escribe
@@ -186,8 +186,7 @@ revisar**. Llega en la próxima versión de WireCat Desktop.
 
 Desktop lee el manifiesto de la herramienta, `contracts/wirecat.json`, del paquete en npm, así que tu herramienta debe
 incluirlo ([Crea tu CLI](./build-create-cli.md)). Una herramienta de un repositorio privado se puede añadir así, pero
-nunca entrar en la lista. La [página de WireCat Desktop](./desktop/index.mdx#añadir-tu-propia-herramienta) muestra cada pantalla y qué significa
-cada rechazo.
+nunca entrar en la lista. [Añadir tu propia herramienta](./desktop/own-tools.mdx) muestra cada pantalla y qué significa cada rechazo.
 
 ## Siguientes pasos
 

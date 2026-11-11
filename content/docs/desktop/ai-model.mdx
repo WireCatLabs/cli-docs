@@ -13,11 +13,12 @@ agent does this work when you ask it.
 Open **Settings**. The **AI model** section is below the tool switches.
 
 1. Choose the provider: **Anthropic (Claude)**, **OpenAI or compatible**, or **Ollama on this computer**, which is in
-   beta. **No model (use your agent)** turns it off. For OpenRouter or another service that works like OpenAI, choose
-   **OpenAI or compatible** and enter its address, such as `https://openrouter.ai/api/v1`.
+   beta. **No model (use your agent)** turns it off. With **OpenAI or compatible**, **Address (base URL)** is where
+   WireCat sends its requests. Leave it empty for OpenAI itself, or see
+   [Keep it on your computer](#keep-it-on-your-computer) for other addresses.
 2. Choose the **Model**. Ollama and OpenRouter list their models. Anthropic and OpenAI show their list only with your
    key, so type the model's name as the provider writes it.
-3. Enter the **API key**. It is kept in your system's password store and never shown again. Where there is no password
+3. Enter the **API key**, if your provider needs one. It is kept in your system's password store and never shown again. Where there is no password
    store, it is kept in a file only your user can read. The section says which.
 4. Save, then click **Check**. It sends one short request, billed by your provider, and says in plain words whether it
    works, with the model and how fast it answered, or what to fix.
@@ -25,6 +26,17 @@ Open **Settings**. The **AI model** section is below the tool switches.
 **Read pictures with this model** lets **Add to memory** send pictures to this model to read their text. The note
 under it says what reads pictures now. A model on your computer is usually slower and less accurate. A change applies
 only to pictures you add after it.
+
+### Keep it on your computer
+
+**Address (base URL)** takes the address of any server that speaks the OpenAI interface. That can be a hosted service,
+such as OpenRouter at `https://openrouter.ai/api/v1`, or a model you run yourself. Run a model on this computer with a
+server that speaks the OpenAI interface, and enter its address, for example `http://localhost:8080/v1`. Then the
+pictures and texts the model reads never leave your computer. A model on your company's server keeps them inside the
+company. The address must start with `https://`; plain `http://` works only for a server on this computer. The key is
+optional: leave it empty when your server asks for none. Your key is sent only to this address.
+
+**Ollama on this computer** also keeps everything on your computer, and lists the models you downloaded.
 
 ### Reading for facts
 
