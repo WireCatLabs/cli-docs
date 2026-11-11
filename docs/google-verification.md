@@ -138,8 +138,21 @@ Google's pages disagree here:
   ([Security Assessment](https://support.google.com/cloud/answer/13465431)).
 
 WireCat stores Google data only on the user's computer, so it may be exempt. Only Google's reviewer decides. State the
-data flow plainly in the submission. One exception to "only on the computer": drive's optional AI memory extraction
-sends document text to the AI provider the user configured. Say so in the submission.
+data flow plainly in the submission. The exceptions to "only on the computer" are four AI features. Each is off until
+the user turns it on, and each sends text to the AI provider the user chose, with the user's own key:
+
+| Feature | Command | What it sends | Source |
+| --- | --- | --- | --- |
+| Search enrichment | `memo models consents set <provider> --yes`, or the Desktop switch | The text of every note, document and email in the store, then each new one at sync | cli-core `src/cli/enrichment-consents-command.ts` |
+| Search harder | `memo search all --harder`, or the Desktop button, after `memo models search-consents set` | The question and its first 30 hits | memo `docs/commands.md` |
+| Memory extraction | `drive <profile> memories extract` | One document the user names, after a preview | drive `docs/configuration.md` |
+| Analysed answers | `memo answers create --analyze --allow-remote` | The sources of one answer | memo `docs/security.md` |
+
+Documents from Drive and mail from Gmail are in the store, so all four can carry Google data. Name each in the
+submission and on the privacy page ([drafts](google-verification-drafts.md#data-flow-note)). Google allows a transfer
+that powers a feature the user sees and asked for
+([User Data Policy](https://developers.google.com/terms/api-services-user-data-policy)). Checked against the main
+branches on 2026-11-11.
 
 If Google asks for an assessment: it is done by a lab Google approves ([CASA](https://appdefensealliance.dev/casa)) and
 repeats at least every 12 months. Google's pages give no price. Web search results quote TAC Security plans from $540 to
@@ -165,12 +178,14 @@ approval: the "unverified app" page stays until Google approves the scopes.
 
 ## Decisions for the owner
 
-1. **Gmail in the same review?** mail-cli main (`5f645b0`, 2026-11-05) signs in to Gmail with WireCat's app by default.
-   Add `https://mail.google.com/` now, or keep mail on the user's own app until a later review.
-2. **CASA budget.** Accept a lab fee (TAC lists $540 to $855 per app) every year if Google asks, or drop restricted
-   scopes.
-3. **App name.** The consent screen says `WireCat Drive`, but the app also asks for Calendar and Gmail. Rename to
-   `WireCat`. A rename starts a new brand check, which usually takes minutes.
-4. **Optional Drive grants.** Keep `drive`, `drive.activity.readonly` and `drive.apps.readonly` in the shared app, or
-   drop some of them to shorten the review.
-5. **Support email.** Confirm `hello@wirecat.dev` can be selected in Branding, or name another address.
+Answered on 2026-11-11 (journals: cli-private `2026-11-05-google-verification.md` NEED-2220 to NEED-2222, product
+`2026-11-11-product-repo.md` NEED-6, NEED-8 to NEED-11):
+
+1. **Gmail in the same review:** yes. Declare `https://mail.google.com/` now.
+2. **CASA budget:** submit with the plain data flow. Pay a lab only if Google asks.
+3. **App name:** `WireCat`, home page `https://wirecat.dev/`.
+4. **Optional Drive grants:** keep `drive`, `drive.activity.readonly` and `drive.apps.readonly` in the shared app.
+5. **Calendar:** stays in the same app as Drive and Gmail, so gcal waits for the whole review.
+6. **AI features with Google data:** keep all four as they are, and disclose each in the submission and on the privacy
+   page. If Google objects, send Gmail and Drive records only to a local model.
+7. **Support email.** Open: confirm `hello@wirecat.dev` can be selected in Branding, or name another address.
