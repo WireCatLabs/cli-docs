@@ -1,0 +1,80 @@
+---
+title: Run WireCat on local models
+description: Keep your messages, notes, pictures and documents away from cloud AI services. Which WireCat features can run on a model on your own computer today, how to set each one, and what still goes out.
+---
+
+WireCat keeps your messages, mail, notes and files on your computer. Some features also send text or pictures to an AI
+model, and by default that model can be a cloud service. This guide shows how to point each of those features at a
+model that runs on your own computer, so that nothing they read leaves it. You need a local model server, such as
+Ollama or another server that speaks the OpenAI interface. Today this takes a few settings in different places, and a
+few features still go out. Both are listed below. WireCat is working on one "local only" switch for all of it.
+
+## Already local
+
+**Search by meaning** and **picture search** run on your computer by default. They send nothing.
+
+## The AI model in Settings
+
+This model reads the text in pictures you add to memory, and can read sources for facts. In WireCat Desktop open
+**Settings**, **AI model**.
+
+**With Ollama:**
+
+1. Install Ollama and download a model that can read pictures, such as `llava`. Ollama must listen on its usual
+   address, `127.0.0.1:11434`.
+2. As **Provider**, choose **Ollama on this computer (beta)**, and pick the model.
+3. Tick **Read pictures with this model**, then save and click **Check**.
+
+The same from a terminal: `memo models ai set ollama --model llava`.
+
+**With another server on your computer** that speaks the OpenAI interface:
+
+1. As **Provider**, choose **OpenAI or compatible**.
+2. In **Address (base URL)**, enter the server's address on this computer, for example `http://127.0.0.1:8080/v1`.
+   Use the port your server listens on.
+3. Type the model's name. In **API key**, type any value: WireCat needs a key today even for a server on your
+   computer.
+4. Save and click **Check**.
+
+## Reading for facts
+
+In **Settings**, **Reading for facts**, choose **AI model**, which is now your local model, or **Ollama**. Click
+**Use this reader**. [Add to memory](./memory.mdx#add-to-memory) then suggests facts with that model.
+
+## Better search
+
+The two search helpers are in Memo's details: on the Tools page, click **Manage** on Memo's row.
+
+- **Rewrite records for better search:** leave it off in WireCat Desktop, which offers only cloud models for it. From
+  a terminal you can point it at a local server:
+
+  ```sh
+  memo models consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
+  ```
+
+- **Search harder:** choose OpenAI with the address `http://127.0.0.1:11434/v1`. It waits only 5 seconds for an
+  answer, so a model that runs on the processor, without a graphics card, will likely run out of time. Then the search
+  keeps its own order.
+
+## Voice messages
+
+A voice message is transcribed by the messenger's own speech service first, when it has one. To keep the audio on your
+computer, add `--local` to the tool's `messages transcribe` command, for example in Telegram. It uses a model you
+downloaded.
+
+## What still goes out
+
+These parts use an AI agent, not the model above. They are local only if you point that agent at a local model in the
+agent's own settings:
+
+- **Digests** are written by Claude Code.
+- **The mail agent** in WireCat Desktop runs Claude Code. A schedule agent started from a terminal can run Codex.
+- **Every agent connected over MCP**, such as ChatGPT, Claude or Codex, uses its own model for everything it reads
+  through WireCat.
+
+WireCat is working on one "local only" switch that keeps every feature on your computer and shows what is local and
+what is not.
+
+## Next
+
+[AI model and better search](./ai-model.mdx) explains each setting in more detail.

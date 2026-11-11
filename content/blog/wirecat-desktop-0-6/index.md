@@ -15,7 +15,10 @@ the first release. WireCat stops being a set of my tools and becomes a place whe
 ## Add any tool to WireCat
 
 Say your company runs its own CRM, or a helpdesk nobody else uses. You or your agent can now build a command-line tool
-for it on WireCat's libraries, publish it to npm and add it to the app by its name. WireCat then installs it, signs
+for it on WireCat's libraries, publish it to npm and add it to the app by its name. The quickest start is the
+[template](https://github.com/WireCatLabs/cli-template): `npx @wirecat/cli-template new <name>-cli --command <word>
+--package <npm name> --owner <github owner>` gives you a working tool with storage, search, the skill for your agents
+and an MCP server, and it passes every WireCat standards check. WireCat then installs it, signs
 it in, syncs it and gives it to your agents like Telegram or Gmail. No restart.
 
 Such a tool runs as you on your computer and can read everything WireCat keeps. So before anything installs, the app
@@ -37,9 +40,9 @@ key for everything. **Check** tells you in plain words if it works.
 
 The part I care about most is that the model doesn't have to be in someone else's cloud. Choose **OpenAI or
 compatible** and give it the address of any server that speaks the OpenAI interface. That can be a model running on
-your own computer, or on your company's server. Then the pictures and texts it reads stay with you, and the key is
-optional. Ollama on your computer works too. Anthropic, OpenAI and services like OpenRouter are there if you prefer
-them. [AI model and better search](/en/docs/desktop/ai-model) shows how to set it up.
+your own computer, or on your company's server. Then the pictures and texts it reads stay with you. Ollama on your computer works too. Anthropic, OpenAI and services like OpenRouter are there if you prefer
+them. [Run WireCat on local models](/en/docs/desktop/local-models) shows how to set it up for each feature, and what still
+goes out.
 
 Two search helpers can use the same model, and both are off until you agree. One adds other words to your notes and
 emails, so a question in different words finds them. The other reorders the top results of one search when you press

@@ -1,0 +1,83 @@
+---
+title: Usar WireCat con modelos locales
+description: Mantén tus mensajes, notas, imágenes y documentos lejos de los servicios de IA en la nube. Qué funciones de WireCat pueden usar hoy un modelo en tu propio ordenador, cómo configurar cada una y qué sigue saliendo.
+---
+
+WireCat guarda tus mensajes, correo, notas y archivos en tu ordenador. Algunas funciones además envían texto o imágenes
+a un modelo de IA, y por defecto ese modelo puede ser un servicio en la nube. Esta guía muestra cómo apuntar cada una de
+esas funciones a un modelo que funciona en tu propio ordenador, para que nada de lo que leen salga de él. Necesitas un
+servidor de modelos local, como Ollama u otro servidor que hable la interfaz de OpenAI. Hoy hacen falta unos cuantos
+ajustes en sitios distintos, y algunas funciones aún salen fuera. Las dos cosas están en la lista de abajo. WireCat
+está preparando un solo interruptor «solo local» para todo ello.
+
+## Ya es local
+
+La **búsqueda por significado** y la **búsqueda de imágenes** funcionan en tu ordenador por defecto. No envían nada.
+
+## El modelo de IA en Ajustes
+
+Este modelo lee el texto de las imágenes que añades a la memoria, y puede leer fuentes para proponer hechos. En
+WireCat Desktop, abre **Ajustes**, **Modelo de IA**.
+
+**Con Ollama:**
+
+1. Instala Ollama y descarga un modelo que pueda leer imágenes, como `llava`. Ollama debe escuchar en su dirección
+   habitual, `127.0.0.1:11434`.
+2. Como **Proveedor**, elige **Ollama en este ordenador (beta)** y elige el modelo.
+3. Marca **Leer imágenes con este modelo**, guarda y pulsa **Comprobar**.
+
+Lo mismo desde una terminal: `memo models ai set ollama --model llava`.
+
+**Con otro servidor en tu ordenador** que hable la interfaz de OpenAI:
+
+1. Como **Proveedor**, elige **OpenAI o compatible**.
+2. En **Dirección (base URL)**, escribe la dirección del servidor en este ordenador, por ejemplo
+   `http://127.0.0.1:8080/v1`. Usa el puerto en el que escucha tu servidor.
+3. Escribe el nombre del modelo. En **Clave de API**, escribe cualquier valor: hoy WireCat necesita una clave incluso
+   para un servidor en tu ordenador.
+4. Guarda y pulsa **Comprobar**.
+
+## Lectura de hechos
+
+En **Ajustes**, **Lectura de hechos**, elige **Modelo de IA**, que ahora es tu modelo local, u **Ollama**. Pulsa
+**Usar este lector**. Después, [Añadir a la memoria](./memory.mdx#añadir-a-la-memoria) propone hechos con ese modelo.
+
+## Mejor búsqueda
+
+Las dos ayudas de búsqueda están en los detalles de Memo: en la página Herramientas, pulsa **Gestionar** en la fila de
+Memo.
+
+- **Reescribir registros para buscar mejor:** déjala desactivada en WireCat Desktop, que para ella solo ofrece modelos
+  en la nube. Desde una terminal puedes apuntarla a un servidor local:
+
+  ```sh
+  memo models consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
+  ```
+
+- **Buscar a fondo:** elige OpenAI con la dirección `http://127.0.0.1:11434/v1`. Espera la respuesta solo 5 segundos,
+  así que un modelo que funciona en el procesador, sin tarjeta gráfica, probablemente se quedará sin tiempo. Entonces
+  la búsqueda mantiene su propio orden.
+
+## Mensajes de voz
+
+Un mensaje de voz lo transcribe primero el servicio de voz del propio servicio de mensajería, cuando tiene uno. Para
+que el audio se quede en tu ordenador, añade `--local` al comando `messages transcribe` de la herramienta, por ejemplo
+en Telegram. Usa un modelo que descargaste.
+
+## Lo que sigue saliendo
+
+Estas partes usan un agente de IA, no el modelo de arriba. Solo son locales si apuntas ese agente a un modelo local en
+los ajustes del propio agente:
+
+- **Los resúmenes** los escribe Claude Code.
+- **El agente de correo** de WireCat Desktop ejecuta Claude Code. Un agente programado que se inicia desde una terminal
+  puede ejecutar Codex.
+- **Cada agente conectado por MCP**, como ChatGPT, Claude o Codex, usa su propio modelo para todo lo que lee a través
+  de WireCat.
+
+WireCat está preparando un solo interruptor «solo local» que mantenga todas las funciones en tu ordenador y muestre qué
+es local y qué no.
+
+## Siguiente paso
+
+[Modelo de IA y mejor búsqueda](./ai-model.mdx) explica cada ajuste con más detalle.

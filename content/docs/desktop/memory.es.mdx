@@ -1,0 +1,99 @@
+---
+title: Memoria en WireCat Desktop
+description: Decide qué pueden tomar como cierto tus agentes sobre ti y las personas de tu entorno, ve de dónde viene cada hecho y añade tú mismo a la memoria una nota, un enlace, un archivo o una imagen.
+---
+
+Los agentes conectados a WireCat guardan lo que aprenden, como «Kai prefiere las llamadas del viernes», con los
+mensajes que lo muestran. En la página **Memoria** de WireCat Desktop decides qué cuenta. Nada de lo que sugiere un
+agente se toma como cierto hasta que lo apruebas. También puedes añadir a la memoria tú mismo: pega una nota, da un
+enlace, un archivo o una imagen, y quédate con los hechos que quieras. Memo guarda la memoria; sin él, la página lo
+dice y ofrece instalarlo.
+
+Memoria está marcada como beta: ves una β junto a su nombre. La sección es nueva y está poco probada.
+
+## Cómo funciona
+
+Una franja arriba de la página muestra los tres pasos:
+
+1. **Un agente propone**, a partir de un chat, un correo, un documento o una reunión.
+2. **Tú lo revisas:** mira de dónde viene, corrígelo si hace falta, y apruébalo o recházalo.
+3. **Los agentes lo usan:** lo que aprobaste, los agentes lo toman como cierto cuando te responden.
+
+<DesktopShot
+  shot="memory"
+  folder="desktop/docs"
+  lang="es"
+  alt="La página Memoria: los tres pasos, las pestañas Pendiente, En uso, Rechazado y Todo, y sugerencias agrupadas por sobre quién son"
+  caption="Memoria: lo que te espera, agrupado por sobre quién es."
+/>
+
+## Revisar lo que te espera
+
+Las pestañas son **Pendiente**, **En uso**, **Rechazado** y **Todo**. Cada fila se lee como una frase, con una palabra
+de tipo (Preferencia, Decisión, Vínculo…) y su estado. Las filas se agrupan por quién o qué tratan, y cada grupo tiene
+**Aprobar todo** y **Rechazar todo**.
+
+Pulsa una fila para abrirla. Muestra **Lo que sabrán los agentes**, **De dónde viene**, las fuentes en las que se basa
+y qué cambia cada opción:
+
+- **Aprobar:** los agentes lo toman como cierto cuando te responden.
+- **Rechazar:** los agentes no lo usan. Pasa a **Rechazado**, donde aún puedes verlo.
+- **Editar:** cambia el texto, su tipo o sobre quién es, y luego **Guardar** o **Guardar y aprobar**. También puedes
+  pulsar el texto de la fila para editarlo.
+
+Los hallazgos de un agente llegan como una sola fila, por ejemplo las tareas, facturas, pedidos y contactos nuevos que
+encontró en tu correo. **Revisar** abre la lista. Cada hallazgo muestra su tipo, por qué lo cree el agente y el correo
+que leyó, que puedes abrir. Aprobar conserva solo los hallazgos que marcaste.
+
+## Deshacer una decisión
+
+En una fila en uso, **Más** tiene el paso atrás que corresponde: **Rechazar**, **Ya no es cierto** o **Deshacer
+aprobación**. **Deshacer aprobación** devuelve un hecho a **Pendiente**. Un hecho que escribiste tú tiene **Editar** y
+**Borrar…** en su lugar.
+
+**Borrar…** quita la fila de este ordenador, y los agentes dejan de encontrarla. Los mensajes, notas y reuniones en
+los que se basa se quedan, y una copia de seguridad hecha antes aún la conserva.
+
+Cuando la fuente de una fila en uso cambia o desaparece, la fila lleva una marca, por ejemplo «La fuente cambió», y
+muestra la fuente como estaba al guardarla y como está ahora. Responde con **Sigue siendo cierto**, **Editar** o **Ya
+no es cierto**.
+
+## Vínculos entre personas, empresas y documentos
+
+Un vínculo dice cómo se relacionan dos cosas, como «Kai Moreno es quien decide en Northstar Consulting». Su rol sale de
+una lista en tu idioma; **Añadir un rol** añade uno tuyo. Un vínculo a un documento muestra el título del documento, su
+carpeta, su último cambio y **Abrir**. Un vínculo que vino de una fuente, como tu CRM, lleva la marca **De una
+fuente**, y uno que ya terminó, la marca **Terminada**. **Quitar vínculo** hace que los agentes dejen de usarlo; las
+personas y el documento se quedan.
+
+Memoria lista solo lo que puedes decidir aquí, primero tus propios vínculos. Si dos cuentas son una persona se decide
+en la página [Contactos](./contacts.mdx).
+
+## Añadir a la memoria
+
+Pulsa **Añadir a la memoria** arriba de la página.
+
+<DesktopShot
+  shot="memory-add"
+  folder="desktop/docs"
+  lang="es"
+  alt="Añadir a la memoria: la elección entre Texto, Enlace o Archivo, un título, un campo de texto y Guardar"
+  caption="Añadir a la memoria: una nota, un enlace o un archivo. Tus agentes pueden encontrarlo después."
+/>
+
+1. Elige **Texto** (pega una nota, con un título opcional), **Enlace** (una página web o un documento público) o
+   **Archivo** (PDF, Word, texto, una página web guardada o una imagen, hasta 50 MB). Pulsa **Guardar**. WireCat lo
+   guarda como un documento en el que puedes buscar, aunque no recuerdes sus palabras exactas.
+2. **Proponer hechos** lo lee y lista los hechos que encontró, y las personas y organizaciones que nombra. **Guardar
+   sin hechos** se detiene aquí.
+3. Marca los hechos que quieres conservar, o **Marcar todos**, y pulsa **Guardar** con el número. Entran en la memoria
+   como tuyos.
+
+Una imagen se puede buscar por su contenido solo si la lee un modelo de IA. Configura uno en
+[Modelo de IA y mejor búsqueda](./ai-model.mdx); si no, la imagen se guarda por su nombre. Antes de guardar, el panel
+dice qué modelo lee la imagen y adónde se envía.
+
+## Siguiente paso
+
+Pregunta a tu agente algo que ahora debería saber, como «¿Cuándo prefiere Kai las llamadas?». Responde a partir de lo
+que aprobaste.

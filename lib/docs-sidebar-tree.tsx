@@ -14,6 +14,7 @@ import {
   CalendarDays,
   ChartColumn,
   ContactRound,
+  Cpu,
   Database,
   Download,
   FileChartColumn,
@@ -169,6 +170,7 @@ export const sidebarIcons = {
   memory: Brain,
   "ai-model": BrainCircuit,
   "own-tools": PackagePlus,
+  "local-models": Cpu,
 }
 
 const folderIcons = {

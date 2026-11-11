@@ -1,4 +1,15 @@
 {
   "title": "WireCat Desktop",
-  "pages": ["index", "contacts", "clients", "digests", "memory", "ai-model", "own-tools", "logs", "tailscale-funnel"]
+  "pages": [
+    "index",
+    "contacts",
+    "clients",
+    "digests",
+    "memory",
+    "ai-model",
+    "local-models",
+    "own-tools",
+    "logs",
+    "tailscale-funnel"
+  ]
 }

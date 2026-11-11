@@ -246,6 +246,15 @@ WireCat's library for command-line tools, written in TypeScript. The quickest st
 [Create your CLI](../build-create-cli.md) makes a tool with everything below already in place.
 [Make it addable in WireCat Desktop](../build-create-cli.md#make-it-addable-in-wirecat-desktop) has the exact steps.
 
+Start from the [template](https://github.com/WireCatLabs/cli-template):
+
+```sh
+npx @wirecat/cli-template new <name>-cli --command <word> --package <npm name> --owner <github owner>
+```
+
+It gives a working tool with local storage, search, the skill for AI agents and an MCP server, and it passes every
+WireCat standards check from the start. Then you add the commands for your service.
+
 What WireCat checks before it adds a tool:
 
 - **A scoped npm name** of your own, such as `@scope/name`. The `@wirecat` scope and the names WireCat keeps for its
