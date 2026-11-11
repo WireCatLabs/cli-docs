@@ -8,10 +8,9 @@ draft: false
 ---
 
 WireCat Desktop es la app que instala las herramientas de WireCat, inicia sesión por ti y le da a tu agente de IA tus
-chats, correo, reuniones, documentos y notas, todo guardado en tu ordenador. Hasta ahora solo podía instalar las
-herramientas que hago yo. Con la 0.6 puedes añadir cualquier herramienta hecha para WireCat, tuya, de un colega o de
-cualquier otra persona. Para mí es el mayor cambio desde la primera versión. WireCat deja de ser un conjunto de mis
-herramientas y pasa a ser un sitio donde también funcionan las herramientas de otros.
+chats, correo, reuniones, documentos y notas, todo guardado en tu ordenador. Con la 0.6 puedes añadir cualquier
+herramienta hecha para WireCat, tuya, de un colega o de cualquier otra persona, y creo que es el mayor cambio desde la
+primera versión. WireCat es ahora una plataforma, y las herramientas de otros funcionan en ella igual que las mías.
 
 ## Añade cualquier herramienta a WireCat
 
