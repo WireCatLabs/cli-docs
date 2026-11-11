@@ -36,7 +36,7 @@ export const privacyCopy: Record<
         id: "b24-access",
         title: "Bitrix24 sign-in through a local application (b24)",
         paragraphs: [
-          "When b24 signs in through a local application you created in your Bitrix24 portal, the sign-in returns through wirecat.dev/b24-callback. That page is static: a script in your browser passes the one-time code to b24 on your computer and removes it from the address bar. The code works once, for 30 seconds, and only with the application’s secret key, which stays on your computer. wirecat.dev does not store it; Cloudflare, which serves the page, receives the request like any other page view.",
+          "When b24 signs in through a local application you created in your Bitrix24 portal, the sign-in returns through wirecat.dev/webhooks/apps/b24-callback. That page is static: a script in your browser passes the one-time code to b24 on your computer and removes it from the address bar. The code works once, for 30 seconds, and only with the application’s secret key, which stays on your computer. wirecat.dev does not store it; Cloudflare, which serves the page, receives the request like any other page view.",
         ],
       },
       {
@@ -204,7 +204,7 @@ export const privacyCopy: Record<
         id: "b24-access",
         title: "Вход в Битрикс24 через локальное приложение (b24)",
         paragraphs: [
-          "Когда вы входите в b24 через локальное приложение, созданное в вашем портале Битрикс24, вход возвращается через wirecat.dev/b24-callback. Это статическая страница: скрипт в вашем браузере передаёт одноразовый код b24 на вашем компьютере и убирает его из адресной строки. Код срабатывает один раз, в течение 30 секунд, и только вместе с секретным ключом приложения, который остаётся на вашем компьютере. wirecat.dev его не сохраняет; Cloudflare, который отдаёт страницу, получает запрос как любой другой просмотр страницы.",
+          "Когда вы входите в b24 через локальное приложение, созданное в вашем портале Битрикс24, вход возвращается через wirecat.dev/webhooks/apps/b24-callback. Это статическая страница: скрипт в вашем браузере передаёт одноразовый код b24 на вашем компьютере и убирает его из адресной строки. Код срабатывает один раз, в течение 30 секунд, и только вместе с секретным ключом приложения, который остаётся на вашем компьютере. wirecat.dev его не сохраняет; Cloudflare, который отдаёт страницу, получает запрос как любой другой просмотр страницы.",
         ],
       },
       {
@@ -372,7 +372,7 @@ export const privacyCopy: Record<
         id: "b24-access",
         title: "Inicio de sesión en Bitrix24 con una aplicación local (b24)",
         paragraphs: [
-          "Cuando inicias sesión en b24 con una aplicación local que creaste en tu portal de Bitrix24, el inicio de sesión vuelve a través de wirecat.dev/b24-callback. Es una página estática: un script en tu navegador pasa el código de un solo uso a b24 en tu ordenador y lo quita de la barra de direcciones. El código funciona una sola vez, durante 30 segundos, y solo junto con la clave secreta de la aplicación, que se queda en tu ordenador. wirecat.dev no lo guarda; Cloudflare, que sirve la página, recibe la petición como cualquier otra visita.",
+          "Cuando inicias sesión en b24 con una aplicación local que creaste en tu portal de Bitrix24, el inicio de sesión vuelve a través de wirecat.dev/webhooks/apps/b24-callback. Es una página estática: un script en tu navegador pasa el código de un solo uso a b24 en tu ordenador y lo quita de la barra de direcciones. El código funciona una sola vez, durante 30 segundos, y solo junto con la clave secreta de la aplicación, que se queda en tu ordenador. wirecat.dev no lo guarda; Cloudflare, que sirve la página, recibe la petición como cualquier otra visita.",
         ],
       },
       {
