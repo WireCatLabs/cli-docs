@@ -59,7 +59,20 @@ Then add this paragraph after it. It states the four Limited Use rules in plain 
 > not use it for advertising, and do not sell it. Nobody at WireCat reads your Google data. The only exceptions are
 > when you ask us to and send it to us yourself, for security reasons, or when the law requires it.
 
-Update "Last updated" at the top of the page.
+Then, in the same section, replace the paragraph that starts "When you explicitly request AI memory extraction" with
+these two:
+
+> Four optional features send text to the AI provider you chose, with your own key. Each is off until you turn it on.
+> Search enrichment in memo sends the text of your notes, documents and email, including Google Drive documents and
+> Gmail messages, so the model can write facts and questions that stay on your computer and help search; turning it off deletes them.
+> Search harder in memo sends one search's question and first 30 results. Memory extraction in drive sends one
+> document you name. Analysed answers in memo send one answer's sources, only with `--allow-remote`.
+>
+> That provider's processing, retention and data-use settings apply. Choose a provider and settings that do not use
+> Google data to train general-purpose models, or a local model, which keeps the text on your computer. Local keyword
+> search and local embeddings do not need any of these features.
+
+Translate both into Spanish and Russian in the same sections. Update "Last updated" at the top of the page.
 
 ## Terms of service
 
@@ -131,11 +144,26 @@ Check before you submit: that `calendar.events.owned` really fails for these use
 > `gmail.send` work only with the Gmail API, not with IMAP and SMTP. Mail is sent or changed only when the user, or an
 > agent the user connected, gives the command.
 
+<a id="data-flow-note"></a>
+
 **Data flow note** (for the restricted scopes, and for any question about a security assessment):
 
-> WireCat has no server that receives Google data. Tokens are kept in the operating system's keyring. One user-chosen
-> exception: drive can send the text of a document the user picks to an AI provider the user configured, with the
-> user's own key, to extract notes. This runs only when the user gives that command.
+> WireCat has no server that receives Google data. Tokens are kept in the operating system's keyring. Google data goes
+> to another party only through four optional AI features. Each is off until the user turns it on, and each sends text
+> to the AI provider the user chose, with the user's own key:
+>
+> - Search enrichment (memo): after the user agrees, the text of the user's notes, documents and email, including
+>   Drive documents and Gmail messages, goes to the model, which writes facts and questions that stay on the computer and help search.
+>   Turning it off deletes what the model wrote.
+> - Search harder (memo): one search the user starts sends its question and first 30 results to the model, which
+>   reorders them.
+> - Memory extraction (drive): the text of one document the user names goes to the model, which proposes notes the
+>   user reviews before saving.
+> - Analysed answers (memo): the sources of one answer go to the model only when the user adds both `--analyze` and
+>   `--allow-remote`.
+>
+> A local model (Ollama on the same computer) can replace the provider for memory extraction, and then nothing leaves
+> the computer. WireCat does not use Google data to train AI models.
 
 ## Demo video script
 
